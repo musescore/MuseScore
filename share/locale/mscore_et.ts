@@ -15550,19 +15550,19 @@ This plugin requires an open score to run.</source>
     <name>Ms::PreferenceDialog</name>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="77"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="663"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="664"/>
         <source>Light</source>
         <translation>Hele</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="78"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="664"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="665"/>
         <source>Dark</source>
         <translation>Tume</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="81"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="667"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="668"/>
         <source>System</source>
         <translation>Süsteem</translation>
     </message>
@@ -15718,163 +15718,163 @@ This plugin requires an open score to run.</source>
         <translation>Kaks lehekülge</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="812"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="813"/>
         <source>Action: %1; Shortcut: %2</source>
         <translation>Toiming: %1; Kiirklahv: %2</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="814"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="815"/>
         <source>No shortcut defined</source>
         <translation>Kiirklahv määramata</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="859"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="860"/>
         <source>Save Shortcuts</source>
         <translation>Salvesta kiirklahvid</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="859"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="870"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="860"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="871"/>
         <source>MuseScore Shortcuts File</source>
         <translation>MuseScore kiirklahvide fail</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="870"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="871"/>
         <source>Load Shortcuts</source>
         <translation>Lae kiirklahvid</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="946"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="947"/>
         <source>Choose Notepaper</source>
         <translation>Noodipaberi valimine</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="959"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="960"/>
         <source>Choose Background Wallpaper</source>
         <translation>Vali tapeet</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="972"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="973"/>
         <source>Choose Default Style</source>
         <translation>Vali vaikimisi stiil</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="983"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="984"/>
         <source>Choose Default Style for Parts</source>
         <translation>Vali vaikimisi stiil partiidele</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="996"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1014"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="997"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1015"/>
         <source>Choose Instrument List</source>
         <translation>Vali muusikariistade nimekiri</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="998"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1016"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="999"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1017"/>
         <source>Instrument List</source>
         <translation>Muusikariistade nimekiri</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1032"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1050"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1033"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1051"/>
         <source>Choose Score Order List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1034"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1052"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1035"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1053"/>
         <source>Score Order List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1078"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1079"/>
         <source>Choose Starting Score</source>
         <translation>Vali käivitamisel avatav partituur</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1080"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1081"/>
         <source>MuseScore Files</source>
         <translation>MuseScore failid</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1080"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1081"/>
         <source>All</source>
         <translation>Kõik</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1379"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1380"/>
         <source>Applying…</source>
         <translation>Rakendamine…</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1472"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1473"/>
         <source>Possible MIDI Loopback</source>
         <translation>Võimalik MIDI tagasiheli</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1474"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1475"/>
         <source>Warning: You used the same CoreMIDI IAC bus for input and output. This will cause problematic loopback, whereby MuseScore&apos;s output MIDI messages will be sent back to MuseScore as input, causing confusion. To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore&apos;s MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore&apos;s MIDI output. Other programs may then use that dedicated virtual port to receive MuseScore&apos;s MIDI output.</source>
         <translation>Hoiatus. Kasutasite sama CoreMIDI IAC siini nii sisendi kui väljundi jaoks. See põhjustab problemaatilist tagasiulatuvust, mille käigus MIDI-teated saadetakse MuseScore väljundist taasi MuseScore sisendisse, põhjustades segadust. Selle probleemi vältimiseks avage Spotlighti kaudu Audio MIDI häälestus, et luua spetsiaalne virtuaalne port MuseScore MIDI väljundile, taaskäivitage MuseScore, naaske jaotisse Eelistused ja valige oma uus virtuaalne port MuseScore MIDI väljundiks. Muud programmid võivad seejärel MuseScore MIDI väljundina kasutada seda spetsiaalset virtuaalset porti.</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1514"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1515"/>
         <source>Apply</source>
         <translation>Rakenda</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1542"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1543"/>
         <source>Choose Default Style for Imports</source>
         <translation>Vali vaikimisi stiil importimisel</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1628"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1629"/>
         <source>Choose Score Folder</source>
         <translation>Vali partituuri kaust</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1644"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1645"/>
         <source>Choose Style Folder</source>
         <translation>Vali stiili kaust</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1660"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1661"/>
         <source>Choose Score Fonts Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1676"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1677"/>
         <source>Choose Template Folder</source>
         <translation>Vali malli kaust</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1692"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1693"/>
         <source>Choose Plugin Folder</source>
         <translation>Vali plugina kaust</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1708"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1709"/>
         <source>Choose Image Folder</source>
         <translation>Vali pildi kaust</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1723"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1724"/>
         <source>SoundFont Folders</source>
         <translation>Helipankade kaustad</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1737"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1738"/>
         <source>Choose Extensions Folder</source>
         <translation>Vali laienduste kaust</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1798"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1838"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1799"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1839"/>
         <source>MuseScore Shortcuts</source>
         <translation>MuseScore kiirklahvid</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1802"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1803"/>
         <source>Print Shortcuts</source>
         <translation>Trüki kiirklahvid</translation>
     </message>
@@ -21112,8 +21112,8 @@ Külasta %1MuseScore veebilehte%2 , et hankida värskeim versioon.</translation>
         <location filename="../../libmscore/barline.cpp" line="1777"/>
         <location filename="../../libmscore/chordrest.cpp" line="1216"/>
         <location filename="../../libmscore/chordrest.cpp" line="1226"/>
-        <location filename="../../libmscore/note.cpp" line="3186"/>
-        <location filename="../../libmscore/note.cpp" line="3195"/>
+        <location filename="../../libmscore/note.cpp" line="3184"/>
+        <location filename="../../libmscore/note.cpp" line="3193"/>
         <source>%1 Start of %2</source>
         <translation>%1 %2 algus</translation>
     </message>
@@ -21121,8 +21121,8 @@ Külasta %1MuseScore veebilehte%2 , et hankida värskeim versioon.</translation>
         <location filename="../../libmscore/barline.cpp" line="1779"/>
         <location filename="../../libmscore/chordrest.cpp" line="1218"/>
         <location filename="../../libmscore/chordrest.cpp" line="1228"/>
-        <location filename="../../libmscore/note.cpp" line="3189"/>
-        <location filename="../../libmscore/note.cpp" line="3202"/>
+        <location filename="../../libmscore/note.cpp" line="3187"/>
+        <location filename="../../libmscore/note.cpp" line="3200"/>
         <source>%1 End of %2</source>
         <translation>%1 %2 lõpp</translation>
     </message>
@@ -21276,51 +21276,51 @@ Külasta %1MuseScore veebilehte%2 , et hankida värskeim versioon.</translation>
         <translation>Noot</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3123"/>
-        <location filename="../../libmscore/note.cpp" line="3153"/>
+        <location filename="../../libmscore/note.cpp" line="3121"/>
+        <location filename="../../libmscore/note.cpp" line="3151"/>
         <location filename="../../libmscore/rest.cpp" line="896"/>
         <location filename="../../libmscore/rest.cpp" line="908"/>
         <source>Voice: %1</source>
         <translation>Hääl: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3130"/>
+        <location filename="../../libmscore/note.cpp" line="3128"/>
         <source> (on %1‰ off %2‰)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3134"/>
+        <location filename="../../libmscore/note.cpp" line="3132"/>
         <source>Beat slash</source>
         <translation>Löögi kaldkriips</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3134"/>
+        <location filename="../../libmscore/note.cpp" line="3132"/>
         <source>Rhythm slash</source>
         <translation>Rütmi kaldkriips</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3138"/>
-        <location filename="../../libmscore/note.cpp" line="3161"/>
+        <location filename="../../libmscore/note.cpp" line="3136"/>
+        <location filename="../../libmscore/note.cpp" line="3159"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3141"/>
+        <location filename="../../libmscore/note.cpp" line="3139"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3157"/>
+        <location filename="../../libmscore/note.cpp" line="3155"/>
         <source>Beat Slash</source>
         <translation>Löögi kaldkriips</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3157"/>
+        <location filename="../../libmscore/note.cpp" line="3155"/>
         <source>Rhythm Slash</source>
         <translation>Rütmi kaldkriips</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3165"/>
+        <location filename="../../libmscore/note.cpp" line="3163"/>
         <source>%1 head %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21879,17 +21879,17 @@ Külasta %1MuseScore veebilehte%2 , et hankida värskeim versioon.</translation>
         <translation>%1, lisatud %2, eemaldatud %3</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1213"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1214"/>
         <source>Use local OMR engine</source>
         <translation>Kasuta kohalikku OMR mootorit</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1215"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1216"/>
         <source>Installed</source>
         <translation>Paigaldatud</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1217"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1218"/>
         <source>Not installed, needs internet connection for installing</source>
         <translation type="unfinished"></translation>
     </message>

@@ -15552,19 +15552,19 @@ This plugin requires an open score to run.</source>
     <name>Ms::PreferenceDialog</name>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="77"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="663"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="664"/>
         <source>Light</source>
         <translation>Açık</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="78"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="664"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="665"/>
         <source>Dark</source>
         <translation>Koyu</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="81"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="667"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="668"/>
         <source>System</source>
         <translation>Sistem</translation>
     </message>
@@ -15720,163 +15720,163 @@ This plugin requires an open score to run.</source>
         <translation>İki Sayfa</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="812"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="813"/>
         <source>Action: %1; Shortcut: %2</source>
         <translation>Eylem: %1; Kısayol: %2</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="814"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="815"/>
         <source>No shortcut defined</source>
         <translation>Kısayol tanımlanmadı</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="859"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="860"/>
         <source>Save Shortcuts</source>
         <translation>Kısayolları Kaydet</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="859"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="870"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="860"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="871"/>
         <source>MuseScore Shortcuts File</source>
         <translation>MuseScore Kısayolları Dosyası</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="870"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="871"/>
         <source>Load Shortcuts</source>
         <translation>Kısayolları Yükle</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="946"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="947"/>
         <source>Choose Notepaper</source>
         <translation>Nota Kağıdını Seçiniz</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="959"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="960"/>
         <source>Choose Background Wallpaper</source>
         <translation>Arkaplan Duvarkağıdını Seçiniz</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="972"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="973"/>
         <source>Choose Default Style</source>
         <translation>Varsayılan Stili Seçin</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="983"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="984"/>
         <source>Choose Default Style for Parts</source>
         <translation>Bölümler İçin Varsayılan Stili Seçin</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="996"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1014"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="997"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1015"/>
         <source>Choose Instrument List</source>
         <translation>Çalgı Listesi Seçiniz</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="998"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1016"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="999"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1017"/>
         <source>Instrument List</source>
         <translation>Enstruman Listesi</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1032"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1050"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1033"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1051"/>
         <source>Choose Score Order List</source>
         <translation>Partisyon Sıralaması Listesini Seçin</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1034"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1052"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1035"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1053"/>
         <source>Score Order List</source>
         <translation>Partisyon Sıralama Listesi</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1078"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1079"/>
         <source>Choose Starting Score</source>
         <translation>Başlangıç Eseri Seçiniz</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1080"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1081"/>
         <source>MuseScore Files</source>
         <translation>MuseScore Dosyaları</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1080"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1081"/>
         <source>All</source>
         <translation>Hepsi</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1379"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1380"/>
         <source>Applying…</source>
         <translation>Uygulanıyor…</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1472"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1473"/>
         <source>Possible MIDI Loopback</source>
         <translation>Olası MIDI Geri Döngüsü</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1474"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1475"/>
         <source>Warning: You used the same CoreMIDI IAC bus for input and output. This will cause problematic loopback, whereby MuseScore&apos;s output MIDI messages will be sent back to MuseScore as input, causing confusion. To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore&apos;s MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore&apos;s MIDI output. Other programs may then use that dedicated virtual port to receive MuseScore&apos;s MIDI output.</source>
         <translation>Uyarı: Giriş ve çıkış için aynı CoreMIDI IAC veri yolunu kullandınız. Bu, sorunlu geri dönüşe neden olur ve MuseScore&apos;un çıkış MIDI mesajları giriş olarak MuseScore&apos;a geri gönderilir ve bu da kafa karışıklığına neden olur. Bu sorunu önlemek için, MuseScore&apos;un MIDI çıkışı için özel bir sanal bağlantı noktası oluşturmak üzere Spotlight aracılığıyla Audio MIDI Kurulumuna erişin, MuseScore&apos;u yeniden başlatın, Tercihler&apos;e dönün ve MuseScore&apos;un MIDI çıkışı için yeni sanal bağlantı noktanızı seçin. Diğer programlar daha sonra MuseScore&apos;un MIDI çıkışını almak için bu ayrılmış sanal bağlantı noktasını kullanabilir.</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1514"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1515"/>
         <source>Apply</source>
         <translation>Uygula</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1542"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1543"/>
         <source>Choose Default Style for Imports</source>
         <translation>İçe Aktarmalar için Varsayılan Stili Seçin</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1628"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1629"/>
         <source>Choose Score Folder</source>
         <translation>Partisyon Klasörünü Seçin</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1644"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1645"/>
         <source>Choose Style Folder</source>
         <translation>Stil klasörünü seçin</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1660"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1661"/>
         <source>Choose Score Fonts Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1676"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1677"/>
         <source>Choose Template Folder</source>
         <translation>Şablon Klasörünü Seçin</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1692"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1693"/>
         <source>Choose Plugin Folder</source>
         <translation>Eklenti Klasörünü Seçin</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1708"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1709"/>
         <source>Choose Image Folder</source>
         <translation>Resim Klasörünü Seçin</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1723"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1724"/>
         <source>SoundFont Folders</source>
         <translation>SoundFont Klasörleri</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1737"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1738"/>
         <source>Choose Extensions Folder</source>
         <translation>Uzantılar Klasörünü Seçin</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1798"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1838"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1799"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1839"/>
         <source>MuseScore Shortcuts</source>
         <translation>MuseScore Kısayolları</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1802"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1803"/>
         <source>Print Shortcuts</source>
         <translation>Kısayolları Yazdır</translation>
     </message>
@@ -21103,8 +21103,8 @@ En son sürümü edinmek için %1MuseScore web sitesini %2 ziyaret edin.</transl
         <location filename="../../libmscore/barline.cpp" line="1777"/>
         <location filename="../../libmscore/chordrest.cpp" line="1216"/>
         <location filename="../../libmscore/chordrest.cpp" line="1226"/>
-        <location filename="../../libmscore/note.cpp" line="3186"/>
-        <location filename="../../libmscore/note.cpp" line="3195"/>
+        <location filename="../../libmscore/note.cpp" line="3184"/>
+        <location filename="../../libmscore/note.cpp" line="3193"/>
         <source>%1 Start of %2</source>
         <translation>%1 Başlangıcı %2</translation>
     </message>
@@ -21112,8 +21112,8 @@ En son sürümü edinmek için %1MuseScore web sitesini %2 ziyaret edin.</transl
         <location filename="../../libmscore/barline.cpp" line="1779"/>
         <location filename="../../libmscore/chordrest.cpp" line="1218"/>
         <location filename="../../libmscore/chordrest.cpp" line="1228"/>
-        <location filename="../../libmscore/note.cpp" line="3189"/>
-        <location filename="../../libmscore/note.cpp" line="3202"/>
+        <location filename="../../libmscore/note.cpp" line="3187"/>
+        <location filename="../../libmscore/note.cpp" line="3200"/>
         <source>%1 End of %2</source>
         <translation>%1 Sonu %2</translation>
     </message>
@@ -21267,51 +21267,51 @@ En son sürümü edinmek için %1MuseScore web sitesini %2 ziyaret edin.</transl
         <translation>Nota</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3123"/>
-        <location filename="../../libmscore/note.cpp" line="3153"/>
+        <location filename="../../libmscore/note.cpp" line="3121"/>
+        <location filename="../../libmscore/note.cpp" line="3151"/>
         <location filename="../../libmscore/rest.cpp" line="896"/>
         <location filename="../../libmscore/rest.cpp" line="908"/>
         <source>Voice: %1</source>
         <translation>Ses: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3130"/>
+        <location filename="../../libmscore/note.cpp" line="3128"/>
         <source> (on %1‰ off %2‰)</source>
         <translation>&#xa0;(Açık %1‰ kapalı %2‰)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3134"/>
+        <location filename="../../libmscore/note.cpp" line="3132"/>
         <source>Beat slash</source>
         <translation>Vuruş Eğik çizgi</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3134"/>
+        <location filename="../../libmscore/note.cpp" line="3132"/>
         <source>Rhythm slash</source>
         <translation>Ritim eğik çizgi</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3138"/>
-        <location filename="../../libmscore/note.cpp" line="3161"/>
+        <location filename="../../libmscore/note.cpp" line="3136"/>
+        <location filename="../../libmscore/note.cpp" line="3159"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Tel: %2; Perde: %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3141"/>
+        <location filename="../../libmscore/note.cpp" line="3139"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Perdesi: %2; Süresi: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3157"/>
+        <location filename="../../libmscore/note.cpp" line="3155"/>
         <source>Beat Slash</source>
         <translation>Vuruş Eğik çizgi</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3157"/>
+        <location filename="../../libmscore/note.cpp" line="3155"/>
         <source>Rhythm Slash</source>
         <translation>Ritim Eğik çizgi</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3165"/>
+        <location filename="../../libmscore/note.cpp" line="3163"/>
         <source>%1 head %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21868,17 +21868,17 @@ En son sürümü edinmek için %1MuseScore web sitesini %2 ziyaret edin.</transl
         <translation>%1, eklendi %2, silindi %3</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1213"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1214"/>
         <source>Use local OMR engine</source>
         <translation>Yerel OMR motorunu kullanın</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1215"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1216"/>
         <source>Installed</source>
         <translation>Kuruldu</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1217"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1218"/>
         <source>Not installed, needs internet connection for installing</source>
         <translation>Yüklenmedi, yükleme için internet bağlantısı gerekiyor</translation>
     </message>

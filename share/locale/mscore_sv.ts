@@ -15567,19 +15567,19 @@ This plugin requires an open score to run.</source>
     <name>Ms::PreferenceDialog</name>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="77"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="663"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="664"/>
         <source>Light</source>
         <translation>Ljust</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="78"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="664"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="665"/>
         <source>Dark</source>
         <translation>Mörkt</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="81"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="667"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="668"/>
         <source>System</source>
         <translation>Operativsystem</translation>
     </message>
@@ -15735,163 +15735,163 @@ This plugin requires an open score to run.</source>
         <translation>Två sidor</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="812"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="813"/>
         <source>Action: %1; Shortcut: %2</source>
         <translation>Åtgärd: %1; Snabbkommando: %2</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="814"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="815"/>
         <source>No shortcut defined</source>
         <translation>Inget snabbkommando har definierats</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="859"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="860"/>
         <source>Save Shortcuts</source>
         <translation>Spara genvägar</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="859"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="870"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="860"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="871"/>
         <source>MuseScore Shortcuts File</source>
         <translation>MuseScore-genvägsfil</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="870"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="871"/>
         <source>Load Shortcuts</source>
         <translation>Läs in genvägar</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="946"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="947"/>
         <source>Choose Notepaper</source>
         <translation>Välj notpapper</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="959"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="960"/>
         <source>Choose Background Wallpaper</source>
         <translation>Välj bakgrundsgrafik</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="972"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="973"/>
         <source>Choose Default Style</source>
         <translation>Välj standardstil</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="983"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="984"/>
         <source>Choose Default Style for Parts</source>
         <translation>Välj standardstil för stämmor</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="996"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1014"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="997"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1015"/>
         <source>Choose Instrument List</source>
         <translation>Välj instrumentlista</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="998"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1016"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="999"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1017"/>
         <source>Instrument List</source>
         <translation>Instrumentlista</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1032"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1050"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1033"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1051"/>
         <source>Choose Score Order List</source>
         <translation>Välj partiturordningslista</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1034"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1052"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1035"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1053"/>
         <source>Score Order List</source>
         <translation>Partiturordningslista</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1078"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1079"/>
         <source>Choose Starting Score</source>
         <translation>Välj startpartitur</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1080"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1081"/>
         <source>MuseScore Files</source>
         <translation>MuseScore-filer</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1080"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1081"/>
         <source>All</source>
         <translation>Alla</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1379"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1380"/>
         <source>Applying…</source>
         <translation>Verkställer…</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1472"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1473"/>
         <source>Possible MIDI Loopback</source>
         <translation>Möjlig MIDI-bakåtslinga</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1474"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1475"/>
         <source>Warning: You used the same CoreMIDI IAC bus for input and output. This will cause problematic loopback, whereby MuseScore&apos;s output MIDI messages will be sent back to MuseScore as input, causing confusion. To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore&apos;s MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore&apos;s MIDI output. Other programs may then use that dedicated virtual port to receive MuseScore&apos;s MIDI output.</source>
         <translation>Varning: Du använde samma CoreMIDI IAC-buss för indata och utdata. Detta kommer orsaka en problematisk bakåtslinga, där MuseScores MIDI-utdatameddelanden kommer skickas tillbaka till MuseScore som indata, vilket leder till förvirring. För att undvika det här problemet, gå till Ljud MIDI-inställningar via Spotlight för att skapa en särskild virtuell port för MuseScores MIDI-utdata, starta om MuseScore, gå tillbaka till Inställningar, och välj din nya virtuella port för MuseScores MIDI-utdata. Andra program kan sedan använda den särskilda virtuella porten för att ta emot MuseScores MIDI-utdata.</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1514"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1515"/>
         <source>Apply</source>
         <translation>Verkställ</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1542"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1543"/>
         <source>Choose Default Style for Imports</source>
         <translation>Välj standardstil för importer</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1628"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1629"/>
         <source>Choose Score Folder</source>
         <translation>Välj partiturmapp</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1644"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1645"/>
         <source>Choose Style Folder</source>
         <translation>Välj stilmapp</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1660"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1661"/>
         <source>Choose Score Fonts Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1676"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1677"/>
         <source>Choose Template Folder</source>
         <translation>Välj mallmapp</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1692"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1693"/>
         <source>Choose Plugin Folder</source>
         <translation>Välj mapp för insticksprogram</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1708"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1709"/>
         <source>Choose Image Folder</source>
         <translation>Välj bildmapp</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1723"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1724"/>
         <source>SoundFont Folders</source>
         <translation>SoundFont-mappar</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1737"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1738"/>
         <source>Choose Extensions Folder</source>
         <translation>Välj mapp för utökningar</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1798"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1838"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1799"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1839"/>
         <source>MuseScore Shortcuts</source>
         <translation>MuseScore kortkommandon</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1802"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1803"/>
         <source>Print Shortcuts</source>
         <translation>Skriv ut kortkommandon</translation>
     </message>
@@ -21131,8 +21131,8 @@ Gå till %1MuseScores webbsida%2 för att hämta den senaste versionen.</transla
         <location filename="../../libmscore/barline.cpp" line="1777"/>
         <location filename="../../libmscore/chordrest.cpp" line="1216"/>
         <location filename="../../libmscore/chordrest.cpp" line="1226"/>
-        <location filename="../../libmscore/note.cpp" line="3186"/>
-        <location filename="../../libmscore/note.cpp" line="3195"/>
+        <location filename="../../libmscore/note.cpp" line="3184"/>
+        <location filename="../../libmscore/note.cpp" line="3193"/>
         <source>%1 Start of %2</source>
         <translation>%1 Start för %2</translation>
     </message>
@@ -21140,8 +21140,8 @@ Gå till %1MuseScores webbsida%2 för att hämta den senaste versionen.</transla
         <location filename="../../libmscore/barline.cpp" line="1779"/>
         <location filename="../../libmscore/chordrest.cpp" line="1218"/>
         <location filename="../../libmscore/chordrest.cpp" line="1228"/>
-        <location filename="../../libmscore/note.cpp" line="3189"/>
-        <location filename="../../libmscore/note.cpp" line="3202"/>
+        <location filename="../../libmscore/note.cpp" line="3187"/>
+        <location filename="../../libmscore/note.cpp" line="3200"/>
         <source>%1 End of %2</source>
         <translation>%1 Slut för %2</translation>
     </message>
@@ -21295,51 +21295,51 @@ Gå till %1MuseScores webbsida%2 för att hämta den senaste versionen.</transla
         <translation>Not</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3123"/>
-        <location filename="../../libmscore/note.cpp" line="3153"/>
+        <location filename="../../libmscore/note.cpp" line="3121"/>
+        <location filename="../../libmscore/note.cpp" line="3151"/>
         <location filename="../../libmscore/rest.cpp" line="896"/>
         <location filename="../../libmscore/rest.cpp" line="908"/>
         <source>Voice: %1</source>
         <translation>Stämma: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3130"/>
+        <location filename="../../libmscore/note.cpp" line="3128"/>
         <source> (on %1‰ off %2‰)</source>
         <translation> (på %1‰ av %2‰)</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3134"/>
+        <location filename="../../libmscore/note.cpp" line="3132"/>
         <source>Beat slash</source>
         <translation>Slagstreck</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3134"/>
+        <location filename="../../libmscore/note.cpp" line="3132"/>
         <source>Rhythm slash</source>
         <translation>Rytmstreck</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3138"/>
-        <location filename="../../libmscore/note.cpp" line="3161"/>
+        <location filename="../../libmscore/note.cpp" line="3136"/>
+        <location filename="../../libmscore/note.cpp" line="3159"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Sträng: %2; Band: %3</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3141"/>
+        <location filename="../../libmscore/note.cpp" line="3139"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Tonhöjd: %2; Värde: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3157"/>
+        <location filename="../../libmscore/note.cpp" line="3155"/>
         <source>Beat Slash</source>
         <translation>Slagstreck</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3157"/>
+        <location filename="../../libmscore/note.cpp" line="3155"/>
         <source>Rhythm Slash</source>
         <translation>Rytmstreck</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3165"/>
+        <location filename="../../libmscore/note.cpp" line="3163"/>
         <source>%1 head %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21898,17 +21898,17 @@ Gå till %1MuseScores webbsida%2 för att hämta den senaste versionen.</transla
         <translation>%1, lade till %2, tog bort %3</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1213"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1214"/>
         <source>Use local OMR engine</source>
         <translation>Använd lokal OMR-motor</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1215"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1216"/>
         <source>Installed</source>
         <translation>Installerad</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1217"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1218"/>
         <source>Not installed, needs internet connection for installing</source>
         <translation>Inte installerad, behöver internetanslutning för att installera</translation>
     </message>

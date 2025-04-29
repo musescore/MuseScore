@@ -15557,19 +15557,19 @@ This plugin requires an open score to run.</source>
     <name>Ms::PreferenceDialog</name>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="77"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="663"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="664"/>
         <source>Light</source>
         <translation>Claro</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="78"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="664"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="665"/>
         <source>Dark</source>
         <translation>Escuro</translation>
     </message>
     <message>
         <location filename="../../mscore/prefsdialog.cpp" line="81"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="667"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="668"/>
         <source>System</source>
         <translation>Sistemas</translation>
     </message>
@@ -15725,163 +15725,163 @@ This plugin requires an open score to run.</source>
         <translation>Dúas páxinas</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="812"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="813"/>
         <source>Action: %1; Shortcut: %2</source>
         <translation>Acción: %1; Atallo: %2</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="814"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="815"/>
         <source>No shortcut defined</source>
         <translation>Non hai ningún atallo definido</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="859"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="860"/>
         <source>Save Shortcuts</source>
         <translation>Gardar os atallos</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="859"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="870"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="860"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="871"/>
         <source>MuseScore Shortcuts File</source>
         <translation>Ficheiro de atallos do MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="870"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="871"/>
         <source>Load Shortcuts</source>
         <translation>Cargar atallos</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="946"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="947"/>
         <source>Choose Notepaper</source>
         <translation>Escoller caderno</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="959"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="960"/>
         <source>Choose Background Wallpaper</source>
         <translation>Escoller o papel de fondo</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="972"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="973"/>
         <source>Choose Default Style</source>
         <translation>Escoller o estilo predeterminado</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="983"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="984"/>
         <source>Choose Default Style for Parts</source>
         <translation>Escoller o estilo predeterminado para as partes</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="996"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1014"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="997"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1015"/>
         <source>Choose Instrument List</source>
         <translation>Escoller a lista de instrumentos</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="998"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1016"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="999"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1017"/>
         <source>Instrument List</source>
         <translation>Lista de instrumentos</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1032"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1050"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1033"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1051"/>
         <source>Choose Score Order List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1034"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1052"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1035"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1053"/>
         <source>Score Order List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1078"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1079"/>
         <source>Choose Starting Score</source>
         <translation>Escolle a partitura inicial</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1080"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1081"/>
         <source>MuseScore Files</source>
         <translation>Ficheiros di MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1080"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1081"/>
         <source>All</source>
         <translation>Todo</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1379"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1380"/>
         <source>Applying…</source>
         <translation>A aplicar…</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1472"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1473"/>
         <source>Possible MIDI Loopback</source>
         <translation>Posíbel loopback de MIDI</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1474"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1475"/>
         <source>Warning: You used the same CoreMIDI IAC bus for input and output. This will cause problematic loopback, whereby MuseScore&apos;s output MIDI messages will be sent back to MuseScore as input, causing confusion. To avoid this problem, access Audio MIDI Setup via Spotlight to create a dedicated virtual port for MuseScore&apos;s MIDI output, restart MuseScore, return to Preferences, and select your new virtual port for MuseScore&apos;s MIDI output. Other programs may then use that dedicated virtual port to receive MuseScore&apos;s MIDI output.</source>
         <translation>Advertencia. Empregou o mesmo bus IAC de CoreMIDI para a saída que para a entrada. Isto ha provocar retroalimentación problemática, de xeito que as mensaxes de saída de MIDI do MuseScore son enviadas de volta ao MuseScore como entrada, provocando confusión. Para evitar este problema, acceda á configuración de son MIDI mediante Spotlight para crear un porto virtual dedicado para a saída de MIDI do MuseScore, reinicie o MuseScore, volva ás Preferencias e seleccione o novo porto virtual para a saída MIDI do MuseScore. A partir de entón, outros programas poderán usar ese porto virtual para recibir a saída MIDI do MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1514"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1515"/>
         <source>Apply</source>
         <translation>Aplicar</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1542"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1543"/>
         <source>Choose Default Style for Imports</source>
         <translation>Escoller o estilo predeterminado para as importacións</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1628"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1629"/>
         <source>Choose Score Folder</source>
         <translation>Escoller o cartafol das partituras</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1644"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1645"/>
         <source>Choose Style Folder</source>
         <translation>Escoller o cartafol dos estilos</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1660"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1661"/>
         <source>Choose Score Fonts Folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1676"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1677"/>
         <source>Choose Template Folder</source>
         <translation>Escoller o cartafol dos modelos</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1692"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1693"/>
         <source>Choose Plugin Folder</source>
         <translation>Escoller o cartafol dos engadidos</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1708"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1709"/>
         <source>Choose Image Folder</source>
         <translation>Escoller o cartafol das imaxes</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1723"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1724"/>
         <source>SoundFont Folders</source>
         <translation>Cartafoles de fontes de son</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1737"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1738"/>
         <source>Choose Extensions Folder</source>
         <translation>Escolla o cartafol das extensións</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1798"/>
-        <location filename="../../mscore/prefsdialog.cpp" line="1838"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1799"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1839"/>
         <source>MuseScore Shortcuts</source>
         <translation>Atallos do MuseScore</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1802"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1803"/>
         <source>Print Shortcuts</source>
         <translation>Atallos de impresión</translation>
     </message>
@@ -21111,8 +21111,8 @@ Visite o %1sitio web do MuseScore%2 para obter a versión máis recente.</transl
         <location filename="../../libmscore/barline.cpp" line="1777"/>
         <location filename="../../libmscore/chordrest.cpp" line="1216"/>
         <location filename="../../libmscore/chordrest.cpp" line="1226"/>
-        <location filename="../../libmscore/note.cpp" line="3186"/>
-        <location filename="../../libmscore/note.cpp" line="3195"/>
+        <location filename="../../libmscore/note.cpp" line="3184"/>
+        <location filename="../../libmscore/note.cpp" line="3193"/>
         <source>%1 Start of %2</source>
         <translation>%1 Inicio de %2</translation>
     </message>
@@ -21120,8 +21120,8 @@ Visite o %1sitio web do MuseScore%2 para obter a versión máis recente.</transl
         <location filename="../../libmscore/barline.cpp" line="1779"/>
         <location filename="../../libmscore/chordrest.cpp" line="1218"/>
         <location filename="../../libmscore/chordrest.cpp" line="1228"/>
-        <location filename="../../libmscore/note.cpp" line="3189"/>
-        <location filename="../../libmscore/note.cpp" line="3202"/>
+        <location filename="../../libmscore/note.cpp" line="3187"/>
+        <location filename="../../libmscore/note.cpp" line="3200"/>
         <source>%1 End of %2</source>
         <translation>%1 Fin de %2</translation>
     </message>
@@ -21275,51 +21275,51 @@ Visite o %1sitio web do MuseScore%2 para obter a versión máis recente.</transl
         <translation>Nota</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3123"/>
-        <location filename="../../libmscore/note.cpp" line="3153"/>
+        <location filename="../../libmscore/note.cpp" line="3121"/>
+        <location filename="../../libmscore/note.cpp" line="3151"/>
         <location filename="../../libmscore/rest.cpp" line="896"/>
         <location filename="../../libmscore/rest.cpp" line="908"/>
         <source>Voice: %1</source>
         <translation>Voz: %1</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3130"/>
+        <location filename="../../libmscore/note.cpp" line="3128"/>
         <source> (on %1‰ off %2‰)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3134"/>
+        <location filename="../../libmscore/note.cpp" line="3132"/>
         <source>Beat slash</source>
         <translation>Barra de golpe</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3134"/>
+        <location filename="../../libmscore/note.cpp" line="3132"/>
         <source>Rhythm slash</source>
         <translation>Barra de ritmo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3138"/>
-        <location filename="../../libmscore/note.cpp" line="3161"/>
+        <location filename="../../libmscore/note.cpp" line="3136"/>
+        <location filename="../../libmscore/note.cpp" line="3159"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3141"/>
+        <location filename="../../libmscore/note.cpp" line="3139"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3157"/>
+        <location filename="../../libmscore/note.cpp" line="3155"/>
         <source>Beat Slash</source>
         <translation>Barra de golpe</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3157"/>
+        <location filename="../../libmscore/note.cpp" line="3155"/>
         <source>Rhythm Slash</source>
         <translation>Barra de ritmo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/note.cpp" line="3165"/>
+        <location filename="../../libmscore/note.cpp" line="3163"/>
         <source>%1 head %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21878,17 +21878,17 @@ Visite o %1sitio web do MuseScore%2 para obter a versión máis recente.</transl
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1213"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1214"/>
         <source>Use local OMR engine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1215"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1216"/>
         <source>Installed</source>
         <translation>Instalado</translation>
     </message>
     <message>
-        <location filename="../../mscore/prefsdialog.cpp" line="1217"/>
+        <location filename="../../mscore/prefsdialog.cpp" line="1218"/>
         <source>Not installed, needs internet connection for installing</source>
         <translation type="unfinished"></translation>
     </message>

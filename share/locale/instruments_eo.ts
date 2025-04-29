@@ -1548,7 +1548,7 @@
         <translation>Tamburaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1044"/>
+        <location filename="../instruments/instrumentsxml.h" line="1046"/>
         <source>Snare Drum</source>
         <translation>Drattamburo</translation>
     </message>
@@ -1578,403 +1578,398 @@
         <translation>Tablaoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="957"/>
-        <source>Cuica</source>
-        <translation>Kuiko</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="959"/>
+        <location filename="../instruments/instrumentsxml.h" line="961"/>
         <source>Finger Cymbals</source>
         <translation>Ziloj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="961"/>
+        <location filename="../instruments/instrumentsxml.h" line="963"/>
         <source>Hi-hat</source>
         <translation>Ĉarlestono</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="965"/>
+        <location filename="../instruments/instrumentsxml.h" line="967"/>
         <source>Sleigh Bells</source>
         <translation>Tintiloj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="967"/>
+        <location filename="../instruments/instrumentsxml.h" line="969"/>
         <source>Bell Plate</source>
         <translation>Platsonorilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="969"/>
+        <location filename="../instruments/instrumentsxml.h" line="971"/>
         <source>Bowl Gongs</source>
         <translation>Kantapelvoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="971"/>
+        <location filename="../instruments/instrumentsxml.h" line="973"/>
         <source>Tubo</source>
         <translation>Tubofono</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="975"/>
+        <location filename="../instruments/instrumentsxml.h" line="977"/>
         <source>Metal Castanets</source>
         <translation>Metal-kastanjetoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="977"/>
+        <location filename="../instruments/instrumentsxml.h" line="979"/>
         <source>Automobile Brake Drums</source>
         <translation>Aŭtaj bremsotamburoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="979"/>
+        <location filename="../instruments/instrumentsxml.h" line="981"/>
         <source>Iron Pipes</source>
         <translation>Feraj tuboj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="981"/>
+        <location filename="../instruments/instrumentsxml.h" line="983"/>
         <source>Chains</source>
         <translation>Ĉenoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="983"/>
+        <location filename="../instruments/instrumentsxml.h" line="985"/>
         <source>Anvil</source>
         <translation>Amboso</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="985"/>
+        <location filename="../instruments/instrumentsxml.h" line="987"/>
         <source>Wood Blocks</source>
         <translation>Lignoblokoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="987"/>
+        <location filename="../instruments/instrumentsxml.h" line="989"/>
         <source>Temple Blocks</source>
         <translation>Temploblokoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="989"/>
+        <location filename="../instruments/instrumentsxml.h" line="991"/>
         <source>Triangle</source>
         <translation>Triangulo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="991"/>
+        <location filename="../instruments/instrumentsxml.h" line="993"/>
         <source>Cymbal</source>
         <translation>Cimbalo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="993"/>
+        <location filename="../instruments/instrumentsxml.h" line="995"/>
         <source>Ride Cymbal</source>
         <translation>Rajda cimbalo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="995"/>
+        <location filename="../instruments/instrumentsxml.h" line="997"/>
         <source>Chinese Cymbal</source>
         <translation>Ĉina cimbalo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="997"/>
+        <location filename="../instruments/instrumentsxml.h" line="999"/>
         <source>Crash Cymbal</source>
         <translation>Kraŝa cimbalo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="999"/>
+        <location filename="../instruments/instrumentsxml.h" line="1001"/>
         <source>Splash Cymbal</source>
         <translation>Ŝpruca cimbalo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1001"/>
+        <location filename="../instruments/instrumentsxml.h" line="1003"/>
         <source>Cowbell</source>
         <translation>Bovsonorilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1003"/>
+        <location filename="../instruments/instrumentsxml.h" line="1005"/>
         <source>Claves</source>
         <translation>Klaveoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1005"/>
+        <location filename="../instruments/instrumentsxml.h" line="1007"/>
         <source>Castanets</source>
         <translation>Kastanjetoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1009"/>
+        <location filename="../instruments/instrumentsxml.h" line="1011"/>
         <source>Maracas</source>
         <translation>Marakoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1011"/>
+        <location filename="../instruments/instrumentsxml.h" line="1013"/>
         <source>Cabasa</source>
         <translation>Kabaso</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1013"/>
+        <location filename="../instruments/instrumentsxml.h" line="1015"/>
         <source>Quijada</source>
         <translation>Makzelosto</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1015"/>
+        <location filename="../instruments/instrumentsxml.h" line="1017"/>
         <source>Vibraslap</source>
         <translation>Vibra batilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1017"/>
+        <location filename="../instruments/instrumentsxml.h" line="1019"/>
         <source>Slit Drum</source>
         <translation>Fendotamburo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1019"/>
+        <location filename="../instruments/instrumentsxml.h" line="1021"/>
         <source>Whip</source>
         <translation>Duobla frapilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1021"/>
+        <location filename="../instruments/instrumentsxml.h" line="1023"/>
         <source>Ratchet</source>
         <translation>Knarilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1023"/>
+        <location filename="../instruments/instrumentsxml.h" line="1025"/>
         <source>Thundersheet</source>
         <translation>Tondrilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1025"/>
+        <location filename="../instruments/instrumentsxml.h" line="1027"/>
         <source>Sandpaper Blocks</source>
         <translation>Abraziaj blokoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1027"/>
+        <location filename="../instruments/instrumentsxml.h" line="1029"/>
         <source>Wooden Wind Chimes</source>
         <translation>Ligna ventotubaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1029"/>
+        <location filename="../instruments/instrumentsxml.h" line="1031"/>
         <source>Bamboo Wind Chimes</source>
         <translation>Bambua ventotubaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1031"/>
+        <location filename="../instruments/instrumentsxml.h" line="1033"/>
         <source>Metal Wind Chimes</source>
         <translation>Metala ventotubaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1033"/>
+        <location filename="../instruments/instrumentsxml.h" line="1035"/>
         <source>Glass Wind Chimes</source>
         <translation>Vitra ventotubaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1035"/>
+        <location filename="../instruments/instrumentsxml.h" line="1037"/>
         <source>Shell Wind Chimes</source>
         <translation>Konka ventotubaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1037"/>
+        <location filename="../instruments/instrumentsxml.h" line="1039"/>
         <source>Stones</source>
         <translation>Litofono</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1053"/>
+        <location filename="../instruments/instrumentsxml.h" line="1055"/>
         <source>Finger Snap</source>
         <translation>Fingroklako</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1055"/>
+        <location filename="../instruments/instrumentsxml.h" line="1057"/>
         <source>Hand Clap</source>
         <translation>Manaplaŭdo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1057"/>
+        <location filename="../instruments/instrumentsxml.h" line="1059"/>
         <source>Slap</source>
         <translation>Frapo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1059"/>
+        <location filename="../instruments/instrumentsxml.h" line="1061"/>
         <source>Stamp</source>
         <translation>Stamfo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1039"/>
+        <location filename="../instruments/instrumentsxml.h" line="1041"/>
         <source>Tambourine</source>
         <translation>Tamburino</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1046"/>
+        <location filename="../instruments/instrumentsxml.h" line="1048"/>
         <source>Tenor Drums</source>
         <translation>Tenora tamburo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1048"/>
+        <location filename="../instruments/instrumentsxml.h" line="1050"/>
         <source>Bass Drums</source>
         <translation>Basa tamburo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1050"/>
+        <location filename="../instruments/instrumentsxml.h" line="1052"/>
         <source>Cymbals</source>
         <translation>Cimbaloj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1061"/>
+        <location filename="../instruments/instrumentsxml.h" line="1063"/>
         <source>Vocals</source>
         <translation>Kantaĵo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1062"/>
+        <location filename="../instruments/instrumentsxml.h" line="1064"/>
         <source>Voice</source>
         <translation>Voĉo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1064"/>
+        <location filename="../instruments/instrumentsxml.h" line="1066"/>
         <source>Boy Soprano</source>
         <translation>Knabosoprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1066"/>
         <location filename="../instruments/instrumentsxml.h" line="1068"/>
-        <location filename="../instruments/instrumentsxml.h" line="1099"/>
+        <location filename="../instruments/instrumentsxml.h" line="1070"/>
+        <location filename="../instruments/instrumentsxml.h" line="1101"/>
         <source>Soprano</source>
         <translation>Soprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1071"/>
         <location filename="../instruments/instrumentsxml.h" line="1073"/>
+        <location filename="../instruments/instrumentsxml.h" line="1075"/>
         <source>Mezzo-soprano</source>
         <translation>Mezosoprano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1076"/>
         <location filename="../instruments/instrumentsxml.h" line="1078"/>
-        <location filename="../instruments/instrumentsxml.h" line="1100"/>
+        <location filename="../instruments/instrumentsxml.h" line="1080"/>
+        <location filename="../instruments/instrumentsxml.h" line="1102"/>
         <source>Alto</source>
         <translation>Aldo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1081"/>
+        <location filename="../instruments/instrumentsxml.h" line="1083"/>
         <source>Contralto</source>
         <translation>Kontraldo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1083"/>
+        <location filename="../instruments/instrumentsxml.h" line="1085"/>
         <source>Countertenor</source>
         <translation>Kontratenoro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1085"/>
         <location filename="../instruments/instrumentsxml.h" line="1087"/>
-        <location filename="../instruments/instrumentsxml.h" line="1103"/>
+        <location filename="../instruments/instrumentsxml.h" line="1089"/>
+        <location filename="../instruments/instrumentsxml.h" line="1105"/>
         <source>Tenor</source>
         <translation>Tenoro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1090"/>
         <location filename="../instruments/instrumentsxml.h" line="1092"/>
+        <location filename="../instruments/instrumentsxml.h" line="1094"/>
         <source>Baritone</source>
         <translation>Baritono</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1095"/>
-        <location filename="../instruments/instrumentsxml.h" line="1104"/>
+        <location filename="../instruments/instrumentsxml.h" line="1097"/>
+        <location filename="../instruments/instrumentsxml.h" line="1106"/>
         <source>Bass</source>
         <translation>Baso</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1105"/>
+        <location filename="../instruments/instrumentsxml.h" line="1107"/>
         <source>Kazoo</source>
         <translation>Mirlitono</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="88"/>
-        <location filename="../instruments/instrumentsxml.h" line="1107"/>
+        <location filename="../instruments/instrumentsxml.h" line="1109"/>
         <source>Keyboards</source>
         <translation>Klavaroj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1108"/>
+        <location filename="../instruments/instrumentsxml.h" line="1110"/>
         <source>Piano</source>
         <translation>Piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1110"/>
+        <location filename="../instruments/instrumentsxml.h" line="1112"/>
         <source>Grand Piano</source>
         <translation>Horizontala piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1112"/>
+        <location filename="../instruments/instrumentsxml.h" line="1114"/>
         <source>Upright Piano</source>
         <translation>Vertikala piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1114"/>
+        <location filename="../instruments/instrumentsxml.h" line="1116"/>
         <source>Honky Tonk Piano</source>
         <translation>Honkitonka piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1116"/>
+        <location filename="../instruments/instrumentsxml.h" line="1118"/>
         <source>Toy Piano</source>
         <translation>Ludila piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1118"/>
+        <location filename="../instruments/instrumentsxml.h" line="1120"/>
         <source>Clavichord</source>
         <translation>Klavikordo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1120"/>
+        <location filename="../instruments/instrumentsxml.h" line="1122"/>
         <source>Harpsichord</source>
         <translation>Klaviceno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1122"/>
+        <location filename="../instruments/instrumentsxml.h" line="1124"/>
         <source>Virginal</source>
         <translation>Tabloklaviceno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1124"/>
+        <location filename="../instruments/instrumentsxml.h" line="1126"/>
         <source>Celesta</source>
         <translation>Celesto</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1126"/>
+        <location filename="../instruments/instrumentsxml.h" line="1128"/>
         <source>Electric Piano</source>
         <translation>Elektrona piano</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1128"/>
+        <location filename="../instruments/instrumentsxml.h" line="1130"/>
         <source>Clavinet</source>
         <translation>Elektrona klavikordo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1130"/>
+        <location filename="../instruments/instrumentsxml.h" line="1132"/>
         <source>Organ</source>
         <translation>Orgeno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1132"/>
+        <location filename="../instruments/instrumentsxml.h" line="1134"/>
         <source>Percussive Organ</source>
         <translation>Perkuta orgeno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1134"/>
+        <location filename="../instruments/instrumentsxml.h" line="1136"/>
         <source>Hammond Organ</source>
         <translation>Hamond-orgeno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1136"/>
+        <location filename="../instruments/instrumentsxml.h" line="1138"/>
         <source>Rotary Organ</source>
         <translation>Rotorgeno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1138"/>
         <location filename="../instruments/instrumentsxml.h" line="1140"/>
+        <location filename="../instruments/instrumentsxml.h" line="1142"/>
         <source>Pipe Organ</source>
         <translation>Tuborgeno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1141"/>
+        <location filename="../instruments/instrumentsxml.h" line="1143"/>
         <source>Harmonium</source>
         <translation>Harmoniumo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1143"/>
+        <location filename="../instruments/instrumentsxml.h" line="1145"/>
         <source>Reed Organ</source>
         <translation>Anĉorgeno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1146"/>
+        <location filename="../instruments/instrumentsxml.h" line="1148"/>
         <source>Effect Synthesizer</source>
         <translation>Sintezilo de efektoj</translation>
     </message>
@@ -3502,16 +3497,16 @@
         <location filename="../instruments/instrumentsxml.h" line="775"/>
         <location filename="../instruments/instrumentsxml.h" line="779"/>
         <location filename="../instruments/instrumentsxml.h" line="783"/>
-        <location filename="../instruments/instrumentsxml.h" line="1262"/>
         <location filename="../instruments/instrumentsxml.h" line="1266"/>
         <location filename="../instruments/instrumentsxml.h" line="1270"/>
-        <location filename="../instruments/instrumentsxml.h" line="1275"/>
-        <location filename="../instruments/instrumentsxml.h" line="1288"/>
+        <location filename="../instruments/instrumentsxml.h" line="1274"/>
+        <location filename="../instruments/instrumentsxml.h" line="1279"/>
         <location filename="../instruments/instrumentsxml.h" line="1292"/>
-        <location filename="../instruments/instrumentsxml.h" line="1301"/>
+        <location filename="../instruments/instrumentsxml.h" line="1296"/>
         <location filename="../instruments/instrumentsxml.h" line="1305"/>
-        <location filename="../instruments/instrumentsxml.h" line="1310"/>
-        <location filename="../instruments/instrumentsxml.h" line="1315"/>
+        <location filename="../instruments/instrumentsxml.h" line="1309"/>
+        <location filename="../instruments/instrumentsxml.h" line="1314"/>
+        <location filename="../instruments/instrumentsxml.h" line="1319"/>
         <source>open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3576,16 +3571,16 @@
         <location filename="../instruments/instrumentsxml.h" line="776"/>
         <location filename="../instruments/instrumentsxml.h" line="780"/>
         <location filename="../instruments/instrumentsxml.h" line="784"/>
-        <location filename="../instruments/instrumentsxml.h" line="1263"/>
         <location filename="../instruments/instrumentsxml.h" line="1267"/>
         <location filename="../instruments/instrumentsxml.h" line="1271"/>
-        <location filename="../instruments/instrumentsxml.h" line="1276"/>
-        <location filename="../instruments/instrumentsxml.h" line="1289"/>
+        <location filename="../instruments/instrumentsxml.h" line="1275"/>
+        <location filename="../instruments/instrumentsxml.h" line="1280"/>
         <location filename="../instruments/instrumentsxml.h" line="1293"/>
-        <location filename="../instruments/instrumentsxml.h" line="1302"/>
+        <location filename="../instruments/instrumentsxml.h" line="1297"/>
         <location filename="../instruments/instrumentsxml.h" line="1306"/>
-        <location filename="../instruments/instrumentsxml.h" line="1311"/>
-        <location filename="../instruments/instrumentsxml.h" line="1316"/>
+        <location filename="../instruments/instrumentsxml.h" line="1310"/>
+        <location filename="../instruments/instrumentsxml.h" line="1315"/>
+        <location filename="../instruments/instrumentsxml.h" line="1320"/>
         <source>mute</source>
         <translation>dampita</translation>
     </message>
@@ -4689,1382 +4684,1409 @@
         <translation>Tbj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="958"/>
-        <source>Cu.</source>
-        <comment>Cuica</comment>
-        <translation>Kui</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="960"/>
+        <location filename="../instruments/instrumentsxml.h" line="962"/>
         <source>Fi. Cym.</source>
         <comment>Finger Cymbals</comment>
         <translation>Zil</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="962"/>
+        <location filename="../instruments/instrumentsxml.h" line="964"/>
         <source>Hi-hat</source>
         <comment>Hi-hat</comment>
         <translation>Ĉarlestono</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="963"/>
+        <location filename="../instruments/instrumentsxml.h" line="965"/>
         <source>Tam-Tam</source>
         <translation>Tamtama gongo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="964"/>
+        <location filename="../instruments/instrumentsxml.h" line="966"/>
         <source>Tam</source>
         <comment>Tam-Tam</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1460"/>
+        <location filename="../instruments/instrumentsxml.h" line="1464"/>
         <source>Fiddle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1461"/>
+        <location filename="../instruments/instrumentsxml.h" line="1465"/>
         <source>Fdl.</source>
         <comment>Fiddle</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1541"/>
-        <location filename="../instruments/instrumentsxml.h" line="1546"/>
+        <location filename="../instruments/instrumentsxml.h" line="1545"/>
+        <location filename="../instruments/instrumentsxml.h" line="1550"/>
         <source>Bass Viol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1542"/>
-        <location filename="../instruments/instrumentsxml.h" line="1547"/>
+        <location filename="../instruments/instrumentsxml.h" line="1546"/>
+        <location filename="../instruments/instrumentsxml.h" line="1551"/>
         <source>B. Vl.</source>
         <comment>Bass Viol</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1548"/>
+        <location filename="../instruments/instrumentsxml.h" line="1552"/>
         <source>Bass Viol (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1554"/>
+        <location filename="../instruments/instrumentsxml.h" line="1558"/>
         <source>G Violone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1555"/>
+        <location filename="../instruments/instrumentsxml.h" line="1559"/>
         <source>G Vne.</source>
         <comment>G Violone</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="966"/>
+        <location filename="../instruments/instrumentsxml.h" line="968"/>
         <source>Sle. Be.</source>
         <comment>Sleigh Bells</comment>
         <translation>Tnt-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="968"/>
+        <location filename="../instruments/instrumentsxml.h" line="957"/>
+        <source>Cajón</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="958"/>
+        <source>Cjn.</source>
+        <comment>Cajón</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="959"/>
+        <source>Cuíca</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="960"/>
+        <source>Cu.</source>
+        <comment>Cuíca</comment>
+        <translation type="unfinished">Kui</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="970"/>
         <source>Be. Pla.</source>
         <comment>Bell Plate</comment>
         <translation>Pla Son</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="970"/>
+        <location filename="../instruments/instrumentsxml.h" line="972"/>
         <source>Bw. Gon.</source>
         <comment>Bowl Gongs</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="972"/>
+        <location filename="../instruments/instrumentsxml.h" line="974"/>
         <source>Tu.</source>
         <comment>Tubo</comment>
         <translation>Tu</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="973"/>
+        <location filename="../instruments/instrumentsxml.h" line="975"/>
         <source>Shaker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="974"/>
+        <location filename="../instruments/instrumentsxml.h" line="976"/>
         <source>Sh.</source>
         <comment>Shaker</comment>
         <translation>Ŝam</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="976"/>
+        <location filename="../instruments/instrumentsxml.h" line="978"/>
         <source>Met. Cst.</source>
         <comment>Metal Castanets</comment>
         <translation>Met Kst-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="978"/>
+        <location filename="../instruments/instrumentsxml.h" line="980"/>
         <source>Aut. Brk. Dr.</source>
         <comment>Automobile Brake Drums</comment>
         <translation>Aŭt Br Tmb-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="980"/>
+        <location filename="../instruments/instrumentsxml.h" line="982"/>
         <source>Ir. Pi.</source>
         <comment>Iron Pipes</comment>
         <translation>Fe Tu-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="982"/>
+        <location filename="../instruments/instrumentsxml.h" line="984"/>
         <source>Chn.</source>
         <comment>Chains</comment>
         <translation>Ĉnj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="984"/>
+        <location filename="../instruments/instrumentsxml.h" line="986"/>
         <source>Anv.</source>
         <comment>Anvil</comment>
         <translation>Amb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="986"/>
+        <location filename="../instruments/instrumentsxml.h" line="988"/>
         <source>Wd. Bl.</source>
         <comment>Wood Blocks</comment>
         <translation>Lig Bl-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="988"/>
+        <location filename="../instruments/instrumentsxml.h" line="990"/>
         <source>Tmp. Bl.</source>
         <comment>Temple Blocks</comment>
         <translation>Tmp Bl-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="990"/>
+        <location filename="../instruments/instrumentsxml.h" line="992"/>
         <source>Trgl.</source>
         <comment>Triangle</comment>
         <translation>Trgl</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="992"/>
+        <location filename="../instruments/instrumentsxml.h" line="994"/>
         <source>Cym.</source>
         <comment>Cymbal</comment>
         <translation>Cimb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="994"/>
+        <location filename="../instruments/instrumentsxml.h" line="996"/>
         <source>R. Cym.</source>
         <comment>Ride Cymbal</comment>
         <translation>Rjd Cimb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="996"/>
+        <location filename="../instruments/instrumentsxml.h" line="998"/>
         <source>Ch. Cym.</source>
         <comment>Chinese Cymbal</comment>
         <translation>Ĉn Cimb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="998"/>
+        <location filename="../instruments/instrumentsxml.h" line="1000"/>
         <source>Cr. Cym.</source>
         <comment>Crash Cymbal</comment>
         <translation>Krŝ Cimb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1000"/>
+        <location filename="../instruments/instrumentsxml.h" line="1002"/>
         <source>Sp. Cym.</source>
         <comment>Splash Cymbal</comment>
         <translation>Spr Cimb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1002"/>
+        <location filename="../instruments/instrumentsxml.h" line="1004"/>
         <source>Cwb.</source>
         <comment>Cowbell</comment>
         <translation>Bovs</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1004"/>
+        <location filename="../instruments/instrumentsxml.h" line="1006"/>
         <source>Clv.</source>
         <comment>Claves</comment>
         <translation>Klvj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1006"/>
+        <location filename="../instruments/instrumentsxml.h" line="1008"/>
         <source>Cst.</source>
         <comment>Castanets</comment>
         <translation>Kst-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1007"/>
+        <location filename="../instruments/instrumentsxml.h" line="1009"/>
         <source>Güiro</source>
         <translation>Guiro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1008"/>
+        <location filename="../instruments/instrumentsxml.h" line="1010"/>
         <source>Gro.</source>
         <comment>Güiro</comment>
         <translation>Gro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1010"/>
+        <location filename="../instruments/instrumentsxml.h" line="1012"/>
         <source>Mrcs.</source>
         <comment>Maracas</comment>
         <translation>Mrkj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1012"/>
+        <location filename="../instruments/instrumentsxml.h" line="1014"/>
         <source>Cabs.</source>
         <comment>Cabasa</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1014"/>
+        <location filename="../instruments/instrumentsxml.h" line="1016"/>
         <source>Qui.</source>
         <comment>Quijada</comment>
         <translation>Makz</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1016"/>
+        <location filename="../instruments/instrumentsxml.h" line="1018"/>
         <source>Vibslp.</source>
         <comment>Vibraslap</comment>
         <translation>Vib Bat</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1018"/>
+        <location filename="../instruments/instrumentsxml.h" line="1020"/>
         <source>Slt. Dr.</source>
         <comment>Slit Drum</comment>
         <translation>Fnd Tmb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1020"/>
+        <location filename="../instruments/instrumentsxml.h" line="1022"/>
         <source>Wh.</source>
         <comment>Whip</comment>
         <translation>Du Frp</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1022"/>
+        <location filename="../instruments/instrumentsxml.h" line="1024"/>
         <source>Rat.</source>
         <comment>Ratchet</comment>
         <translation>Knr</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1024"/>
+        <location filename="../instruments/instrumentsxml.h" line="1026"/>
         <source>Thu.</source>
         <comment>Thundersheet</comment>
         <translation>Tnd</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1026"/>
+        <location filename="../instruments/instrumentsxml.h" line="1028"/>
         <source>Sa. Bl.</source>
         <comment>Sandpaper Blocks</comment>
         <translation>Abr Bl-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1028"/>
+        <location filename="../instruments/instrumentsxml.h" line="1030"/>
         <source>Wd. Wn. Ch.</source>
         <comment>Wooden Wind Chimes</comment>
         <translation>Lig Vnt-o</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1030"/>
+        <location filename="../instruments/instrumentsxml.h" line="1032"/>
         <source>Bam. Wn. Ch.</source>
         <comment>Bamboo Wind Chimes</comment>
         <translation>Mab Vnt-o</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1032"/>
+        <location filename="../instruments/instrumentsxml.h" line="1034"/>
         <source>Met. Wn Ch.</source>
         <comment>Metal Wind Chimes</comment>
         <translation>Met Vnt-o</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1034"/>
+        <location filename="../instruments/instrumentsxml.h" line="1036"/>
         <source>Gl. Wn Ch.</source>
         <comment>Glass Wind Chimes</comment>
         <translation>Vit Vnt-o</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1036"/>
+        <location filename="../instruments/instrumentsxml.h" line="1038"/>
         <source>Sh. Wn Ch.</source>
         <comment>Shell Wind Chimes</comment>
         <translation>Knk Vnt-o</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1038"/>
+        <location filename="../instruments/instrumentsxml.h" line="1040"/>
         <source>Sto.</source>
         <comment>Stones</comment>
         <translation>Lit</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1040"/>
+        <location filename="../instruments/instrumentsxml.h" line="1042"/>
         <source>Tamb.</source>
         <comment>Tambourine</comment>
         <translation>Tamb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1041"/>
+        <location filename="../instruments/instrumentsxml.h" line="1043"/>
         <source>Percussion</source>
         <translation>Perkutado</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1042"/>
+        <location filename="../instruments/instrumentsxml.h" line="1044"/>
         <source>Perc.</source>
         <comment>Percussion</comment>
         <translation>Perk</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1043"/>
+        <location filename="../instruments/instrumentsxml.h" line="1045"/>
         <source>Percussion - Marching</source>
         <translation>Perkuto marŝa</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1045"/>
+        <location filename="../instruments/instrumentsxml.h" line="1047"/>
         <source>S.D.</source>
         <comment>Snare Drum</comment>
         <translation>Dr Tm-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1047"/>
+        <location filename="../instruments/instrumentsxml.h" line="1049"/>
         <source>T.D.</source>
         <comment>Tenor Drums</comment>
         <translation>T Tm-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1049"/>
+        <location filename="../instruments/instrumentsxml.h" line="1051"/>
         <source>B.D.</source>
         <comment>Bass Drums</comment>
         <translation>B Tm-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1051"/>
+        <location filename="../instruments/instrumentsxml.h" line="1053"/>
         <source>Cym.</source>
         <comment>Cymbals</comment>
         <translation>Cimb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1052"/>
+        <location filename="../instruments/instrumentsxml.h" line="1054"/>
         <source>Percussion - Body</source>
         <translation>Perkuto korpa</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1054"/>
+        <location filename="../instruments/instrumentsxml.h" line="1056"/>
         <source>Fi. Sna.</source>
         <comment>Finger Snap</comment>
         <translation>Fi Klk</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1056"/>
+        <location filename="../instruments/instrumentsxml.h" line="1058"/>
         <source>Hd. Clp.</source>
         <comment>Hand Clap</comment>
         <translation>Mn Plaŭ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1058"/>
+        <location filename="../instruments/instrumentsxml.h" line="1060"/>
         <source>Sla.</source>
         <comment>Slap</comment>
         <translation>Frp</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1060"/>
+        <location filename="../instruments/instrumentsxml.h" line="1062"/>
         <source>Sta.</source>
         <comment>Stamp</comment>
         <translation>Sta</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1063"/>
+        <location filename="../instruments/instrumentsxml.h" line="1065"/>
         <source>Vo.</source>
         <comment>Voice</comment>
         <translation>Vo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1065"/>
+        <location filename="../instruments/instrumentsxml.h" line="1067"/>
         <source>B. S.</source>
         <comment>Boy Soprano</comment>
         <translation>Kn Sop</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1067"/>
         <location filename="../instruments/instrumentsxml.h" line="1069"/>
+        <location filename="../instruments/instrumentsxml.h" line="1071"/>
         <source>S.</source>
         <comment>Soprano</comment>
         <translation>Sop</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1070"/>
+        <location filename="../instruments/instrumentsxml.h" line="1072"/>
         <source>Soprano (C Clef)</source>
         <translation>Soprano (C-kleo)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1072"/>
         <location filename="../instruments/instrumentsxml.h" line="1074"/>
+        <location filename="../instruments/instrumentsxml.h" line="1076"/>
         <source>Mzs.</source>
         <comment>Mezzo-soprano</comment>
         <translation>Mz-sop</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1075"/>
+        <location filename="../instruments/instrumentsxml.h" line="1077"/>
         <source>Mezzo-soprano (C Clef)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1077"/>
         <location filename="../instruments/instrumentsxml.h" line="1079"/>
+        <location filename="../instruments/instrumentsxml.h" line="1081"/>
         <source>A.</source>
         <comment>Alto</comment>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1080"/>
+        <location filename="../instruments/instrumentsxml.h" line="1082"/>
         <source>Alto (C Clef)</source>
         <translation>Aldo (C-kleo)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1082"/>
+        <location filename="../instruments/instrumentsxml.h" line="1084"/>
         <source>Contr.</source>
         <comment>Contralto</comment>
         <translation>Kontr</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1084"/>
+        <location filename="../instruments/instrumentsxml.h" line="1086"/>
         <source>Ct.</source>
         <comment>Countertenor</comment>
         <translation>K-t</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1086"/>
         <location filename="../instruments/instrumentsxml.h" line="1088"/>
+        <location filename="../instruments/instrumentsxml.h" line="1090"/>
         <source>T.</source>
         <comment>Tenor</comment>
         <translation>T</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1089"/>
+        <location filename="../instruments/instrumentsxml.h" line="1091"/>
         <source>Tenor (C Clef)</source>
         <translation>Tenoro (C-kleo)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1091"/>
         <location filename="../instruments/instrumentsxml.h" line="1093"/>
+        <location filename="../instruments/instrumentsxml.h" line="1095"/>
         <source>Bar.</source>
         <comment>Baritone</comment>
         <translation>Bar</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1094"/>
+        <location filename="../instruments/instrumentsxml.h" line="1096"/>
         <source>Baritone (C Clef)</source>
         <translation>Baritono (C-kleo)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1096"/>
+        <location filename="../instruments/instrumentsxml.h" line="1098"/>
         <source>B.</source>
         <comment>Bass</comment>
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1097"/>
+        <location filename="../instruments/instrumentsxml.h" line="1099"/>
         <source>Women</source>
         <translation>Virinoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1098"/>
+        <location filename="../instruments/instrumentsxml.h" line="1100"/>
         <source>W.</source>
         <comment>Women</comment>
         <translation>V-noj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1101"/>
+        <location filename="../instruments/instrumentsxml.h" line="1103"/>
         <source>Men</source>
         <translation>Viroj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1102"/>
+        <location filename="../instruments/instrumentsxml.h" line="1104"/>
         <source>M.</source>
         <comment>Men</comment>
         <translation>V-oj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1106"/>
+        <location filename="../instruments/instrumentsxml.h" line="1108"/>
         <source>Kaz.</source>
         <comment>Kazoo</comment>
         <translation>Mir</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1109"/>
+        <location filename="../instruments/instrumentsxml.h" line="1111"/>
         <source>Pno.</source>
         <comment>Piano</comment>
         <translation>Pno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1111"/>
+        <location filename="../instruments/instrumentsxml.h" line="1113"/>
         <source>Pno.</source>
         <comment>Grand Piano</comment>
         <translation>Pno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1113"/>
+        <location filename="../instruments/instrumentsxml.h" line="1115"/>
         <source>Pno.</source>
         <comment>Upright Piano</comment>
         <translation>Pno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1115"/>
+        <location filename="../instruments/instrumentsxml.h" line="1117"/>
         <source>Hnk. Pno.</source>
         <comment>Honky Tonk Piano</comment>
         <translation>Hnk Pno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1117"/>
+        <location filename="../instruments/instrumentsxml.h" line="1119"/>
         <source>Toy Pno.</source>
         <comment>Toy Piano</comment>
         <translation>Lud Pno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1119"/>
+        <location filename="../instruments/instrumentsxml.h" line="1121"/>
         <source>Cch.</source>
         <comment>Clavichord</comment>
         <translation>Klk</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1121"/>
+        <location filename="../instruments/instrumentsxml.h" line="1123"/>
         <source>Hch.</source>
         <comment>Harpsichord</comment>
         <translation>Klc</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1123"/>
+        <location filename="../instruments/instrumentsxml.h" line="1125"/>
         <source>Vir.</source>
         <comment>Virginal</comment>
         <translation>Tklc</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1125"/>
+        <location filename="../instruments/instrumentsxml.h" line="1127"/>
         <source>Cel.</source>
         <comment>Celesta</comment>
         <translation>Cel</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1127"/>
+        <location filename="../instruments/instrumentsxml.h" line="1129"/>
         <source>El. Pno.</source>
         <comment>Electric Piano</comment>
         <translation>El Pno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1129"/>
+        <location filename="../instruments/instrumentsxml.h" line="1131"/>
         <source>Clav.</source>
         <comment>Clavinet</comment>
         <translation>El Klk</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1131"/>
+        <location filename="../instruments/instrumentsxml.h" line="1133"/>
         <source>Org.</source>
         <comment>Organ</comment>
         <translation>Org</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1133"/>
+        <location filename="../instruments/instrumentsxml.h" line="1135"/>
         <source>Perc. Org.</source>
         <comment>Percussive Organ</comment>
         <translation>Perk Org</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1135"/>
+        <location filename="../instruments/instrumentsxml.h" line="1137"/>
         <source>Hm. Org.</source>
         <comment>Hammond Organ</comment>
         <translation>Hm Org</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1137"/>
+        <location filename="../instruments/instrumentsxml.h" line="1139"/>
         <source>Rot. Org.</source>
         <comment>Rotary Organ</comment>
         <translation>Rot Org</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1139"/>
+        <location filename="../instruments/instrumentsxml.h" line="1141"/>
         <source>Org.</source>
         <comment>Pipe Organ</comment>
         <translation>Org</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1142"/>
+        <location filename="../instruments/instrumentsxml.h" line="1144"/>
         <source>Harm.</source>
         <comment>Harmonium</comment>
         <translation>Harm</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1144"/>
+        <location filename="../instruments/instrumentsxml.h" line="1146"/>
         <source>Rd. Org.</source>
         <comment>Reed Organ</comment>
         <translation>Anĉ Org</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1145"/>
+        <location filename="../instruments/instrumentsxml.h" line="1147"/>
         <source>Electronic</source>
         <translation>Elektronika</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1147"/>
+        <location filename="../instruments/instrumentsxml.h" line="1149"/>
         <source>Synth.</source>
         <comment>Effect Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1148"/>
+        <location filename="../instruments/instrumentsxml.h" line="1150"/>
         <source>rain</source>
         <translation>pluvo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1149"/>
+        <location filename="../instruments/instrumentsxml.h" line="1151"/>
         <source>soundtrack</source>
         <translation>sonostreko</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1150"/>
+        <location filename="../instruments/instrumentsxml.h" line="1152"/>
         <source>crystal</source>
         <translation>kristalo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1151"/>
+        <location filename="../instruments/instrumentsxml.h" line="1153"/>
         <source>atmosphere</source>
         <translation>atmosfero</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1152"/>
+        <location filename="../instruments/instrumentsxml.h" line="1154"/>
         <source>brightness</source>
         <translation>heleco</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1153"/>
+        <location filename="../instruments/instrumentsxml.h" line="1155"/>
         <source>goblins</source>
         <translation>koboldoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1154"/>
+        <location filename="../instruments/instrumentsxml.h" line="1156"/>
         <source>echoes</source>
         <translation>eĥoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1155"/>
+        <location filename="../instruments/instrumentsxml.h" line="1157"/>
         <source>scifi</source>
         <translation>scifio</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1156"/>
+        <location filename="../instruments/instrumentsxml.h" line="1158"/>
         <source>Atmosphere Synthesizer</source>
         <translation>Atmosfera sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1157"/>
+        <location filename="../instruments/instrumentsxml.h" line="1159"/>
         <source>Synth.</source>
         <comment>Atmosphere Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1158"/>
+        <location filename="../instruments/instrumentsxml.h" line="1160"/>
         <source>Brightness Synthesizer</source>
         <translation>Heleca sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1159"/>
+        <location filename="../instruments/instrumentsxml.h" line="1161"/>
         <source>Synth.</source>
         <comment>Brightness Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1160"/>
+        <location filename="../instruments/instrumentsxml.h" line="1162"/>
         <source>Crystal Synthesizer</source>
         <translation>Kristal-sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1161"/>
+        <location filename="../instruments/instrumentsxml.h" line="1163"/>
         <source>Synth.</source>
         <comment>Crystal Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1162"/>
+        <location filename="../instruments/instrumentsxml.h" line="1164"/>
         <source>Echoes Synthesizer</source>
         <translation>Eĥo-sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1163"/>
+        <location filename="../instruments/instrumentsxml.h" line="1165"/>
         <source>Synth.</source>
         <comment>Echoes Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1164"/>
+        <location filename="../instruments/instrumentsxml.h" line="1166"/>
         <source>Goblins Synthesizer</source>
         <translation>Kobolda sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1165"/>
+        <location filename="../instruments/instrumentsxml.h" line="1167"/>
         <source>Synth.</source>
         <comment>Goblins Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1166"/>
+        <location filename="../instruments/instrumentsxml.h" line="1168"/>
         <source>Rain Synthesizer</source>
         <translation>Pluvsintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1167"/>
+        <location filename="../instruments/instrumentsxml.h" line="1169"/>
         <source>Synth.</source>
         <comment>Rain Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1168"/>
+        <location filename="../instruments/instrumentsxml.h" line="1170"/>
         <source>Sci-fi Synthesizer</source>
         <translation>Scifi-sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1169"/>
+        <location filename="../instruments/instrumentsxml.h" line="1171"/>
         <source>Synth.</source>
         <comment>Sci-fi Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1170"/>
+        <location filename="../instruments/instrumentsxml.h" line="1172"/>
         <source>Soundtrack Synthesizer</source>
         <translation>Sonostrek-sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1171"/>
+        <location filename="../instruments/instrumentsxml.h" line="1173"/>
         <source>Synth.</source>
         <comment>Soundtrack Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1172"/>
+        <location filename="../instruments/instrumentsxml.h" line="1174"/>
         <source>Pad Synthesizer</source>
         <translation>Daŭrosintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1173"/>
+        <location filename="../instruments/instrumentsxml.h" line="1175"/>
         <source>Synth.</source>
         <comment>Pad Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1174"/>
+        <location filename="../instruments/instrumentsxml.h" line="1176"/>
         <source>new age</source>
         <translation>novepoka</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1175"/>
+        <location filename="../instruments/instrumentsxml.h" line="1177"/>
         <source>warm</source>
         <translation>varma</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1176"/>
+        <location filename="../instruments/instrumentsxml.h" line="1178"/>
         <source>polysynth</source>
         <translation>polifonsinteza</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1177"/>
+        <location filename="../instruments/instrumentsxml.h" line="1179"/>
         <source>choir</source>
         <translation>ĥora</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1178"/>
+        <location filename="../instruments/instrumentsxml.h" line="1180"/>
         <source>bowed</source>
         <translation>arĉota</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1179"/>
+        <location filename="../instruments/instrumentsxml.h" line="1181"/>
         <source>metallic</source>
         <translation>metala</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1180"/>
+        <location filename="../instruments/instrumentsxml.h" line="1182"/>
         <source>halo</source>
         <translation>haloa</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1181"/>
+        <location filename="../instruments/instrumentsxml.h" line="1183"/>
         <source>sweep</source>
         <translation>broŝa</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1182"/>
+        <location filename="../instruments/instrumentsxml.h" line="1184"/>
         <source>New Age Synthesizer</source>
         <translation>Novepoka sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1183"/>
+        <location filename="../instruments/instrumentsxml.h" line="1185"/>
         <source>Synth.</source>
         <comment>New Age Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1184"/>
+        <location filename="../instruments/instrumentsxml.h" line="1186"/>
         <source>Warm Synthesizer</source>
         <translation>Varma sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1185"/>
+        <location filename="../instruments/instrumentsxml.h" line="1187"/>
         <source>Synth.</source>
         <comment>Warm Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1186"/>
+        <location filename="../instruments/instrumentsxml.h" line="1188"/>
         <source>Poly Synthesizer</source>
         <translation>Polifonia sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1187"/>
+        <location filename="../instruments/instrumentsxml.h" line="1189"/>
         <source>Synth.</source>
         <comment>Poly Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1188"/>
+        <location filename="../instruments/instrumentsxml.h" line="1190"/>
         <source>Choir Synthesizer</source>
         <translation>Ĥora sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1189"/>
+        <location filename="../instruments/instrumentsxml.h" line="1191"/>
         <source>Synth.</source>
         <comment>Choir Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1190"/>
+        <location filename="../instruments/instrumentsxml.h" line="1192"/>
         <source>Bowed Synthesizer</source>
         <translation>Arĉa sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1191"/>
+        <location filename="../instruments/instrumentsxml.h" line="1193"/>
         <source>Synth.</source>
         <comment>Bowed Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1192"/>
+        <location filename="../instruments/instrumentsxml.h" line="1194"/>
         <source>Metallic Synthesizer</source>
         <translation>Metal-sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1193"/>
+        <location filename="../instruments/instrumentsxml.h" line="1195"/>
         <source>Synth.</source>
         <comment>Metallic Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1194"/>
+        <location filename="../instruments/instrumentsxml.h" line="1196"/>
         <source>Halo Synthesizer</source>
         <translation>Halo-sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1195"/>
+        <location filename="../instruments/instrumentsxml.h" line="1197"/>
         <source>Synth.</source>
         <comment>Halo Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1196"/>
+        <location filename="../instruments/instrumentsxml.h" line="1198"/>
         <source>Sweep Synthesizer</source>
         <translation>Broŝa sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1197"/>
+        <location filename="../instruments/instrumentsxml.h" line="1199"/>
         <source>Synth.</source>
         <comment>Sweep Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1198"/>
+        <location filename="../instruments/instrumentsxml.h" line="1200"/>
         <source>Saw Synthesizer</source>
         <translation>Segila sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1199"/>
+        <location filename="../instruments/instrumentsxml.h" line="1201"/>
         <source>Synth.</source>
         <comment>Saw Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1200"/>
+        <location filename="../instruments/instrumentsxml.h" line="1202"/>
         <source>Sine Synthesizer</source>
         <translation>Sinusoida sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1201"/>
+        <location filename="../instruments/instrumentsxml.h" line="1203"/>
         <source>Synth.</source>
         <comment>Sine Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1202"/>
+        <location filename="../instruments/instrumentsxml.h" line="1204"/>
         <source>Square Synthesizer</source>
         <translation>Rektoida sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1203"/>
+        <location filename="../instruments/instrumentsxml.h" line="1205"/>
         <source>Synth.</source>
         <comment>Square Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1204"/>
+        <location filename="../instruments/instrumentsxml.h" line="1206"/>
         <source>Ondes Martenot</source>
         <translation>Ondoj de Marteno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1369"/>
+        <location filename="../instruments/instrumentsxml.h" line="1224"/>
+        <source>Cannon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1225"/>
+        <source>Cn.</source>
+        <comment>Cannon</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1373"/>
         <source>Thb.</source>
         <comment>Theorbo</comment>
         <translation>Tb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1371"/>
+        <location filename="../instruments/instrumentsxml.h" line="1375"/>
         <source>Mdn.</source>
         <comment>Mandolin</comment>
         <translation>Mdn</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1372"/>
+        <location filename="../instruments/instrumentsxml.h" line="1376"/>
         <source>Mandolin (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1374"/>
+        <location filename="../instruments/instrumentsxml.h" line="1378"/>
         <source>Mda.</source>
         <comment>Mandola</comment>
         <translation>Mdl</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1380"/>
+        <location filename="../instruments/instrumentsxml.h" line="1384"/>
         <source>Mncl.</source>
         <comment>Mandocello</comment>
         <translation>Mdn Ĉel</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1382"/>
+        <location filename="../instruments/instrumentsxml.h" line="1386"/>
         <source>OM.</source>
         <comment>Octave Mandolin</comment>
         <translation>Ok Mdn</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1384"/>
+        <location filename="../instruments/instrumentsxml.h" line="1388"/>
         <source>Sh.</source>
         <comment>Shamisen</comment>
         <translation>Ŝam</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1386"/>
+        <location filename="../instruments/instrumentsxml.h" line="1390"/>
         <source>Si.</source>
         <comment>Sitar</comment>
         <translation>Sit</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1388"/>
+        <location filename="../instruments/instrumentsxml.h" line="1392"/>
         <source>Uk.</source>
         <comment>Ukulele</comment>
         <translation>Uku</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1389"/>
+        <location filename="../instruments/instrumentsxml.h" line="1393"/>
         <source>Ukulele (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1390"/>
+        <location filename="../instruments/instrumentsxml.h" line="1394"/>
         <source>Ukulele (Low G)</source>
         <translation>G-malakuta ukulelo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1391"/>
+        <location filename="../instruments/instrumentsxml.h" line="1395"/>
         <source>Uk.</source>
         <comment>Ukulele (Low G)</comment>
         <translation>Uku</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1393"/>
+        <location filename="../instruments/instrumentsxml.h" line="1397"/>
         <source>Ten. Uk.</source>
         <comment>Tenor Ukulele</comment>
         <translation>T Uku</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1395"/>
+        <location filename="../instruments/instrumentsxml.h" line="1399"/>
         <source>Bar. Uk.</source>
         <comment>Baritone Ukulele</comment>
         <translation>Bar Uku</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1397"/>
+        <location filename="../instruments/instrumentsxml.h" line="1401"/>
         <source>B. Guit.</source>
         <comment>Bass Guitar</comment>
         <translation>B Git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1398"/>
-        <location filename="../instruments/instrumentsxml.h" line="1404"/>
-        <location filename="../instruments/instrumentsxml.h" line="1410"/>
-        <location filename="../instruments/instrumentsxml.h" line="1415"/>
+        <location filename="../instruments/instrumentsxml.h" line="1402"/>
+        <location filename="../instruments/instrumentsxml.h" line="1408"/>
+        <location filename="../instruments/instrumentsxml.h" line="1414"/>
         <location filename="../instruments/instrumentsxml.h" line="1419"/>
-        <location filename="../instruments/instrumentsxml.h" line="1425"/>
-        <location filename="../instruments/instrumentsxml.h" line="1430"/>
+        <location filename="../instruments/instrumentsxml.h" line="1423"/>
+        <location filename="../instruments/instrumentsxml.h" line="1429"/>
+        <location filename="../instruments/instrumentsxml.h" line="1434"/>
         <source>slap</source>
         <translation>frapo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1399"/>
-        <location filename="../instruments/instrumentsxml.h" line="1405"/>
-        <location filename="../instruments/instrumentsxml.h" line="1411"/>
-        <location filename="../instruments/instrumentsxml.h" line="1416"/>
+        <location filename="../instruments/instrumentsxml.h" line="1403"/>
+        <location filename="../instruments/instrumentsxml.h" line="1409"/>
+        <location filename="../instruments/instrumentsxml.h" line="1415"/>
         <location filename="../instruments/instrumentsxml.h" line="1420"/>
-        <location filename="../instruments/instrumentsxml.h" line="1426"/>
-        <location filename="../instruments/instrumentsxml.h" line="1431"/>
+        <location filename="../instruments/instrumentsxml.h" line="1424"/>
+        <location filename="../instruments/instrumentsxml.h" line="1430"/>
+        <location filename="../instruments/instrumentsxml.h" line="1435"/>
         <source>pop</source>
         <translation>frapopinĉado</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1400"/>
+        <location filename="../instruments/instrumentsxml.h" line="1404"/>
         <source>Bass Guitar (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1409"/>
+        <location filename="../instruments/instrumentsxml.h" line="1413"/>
         <source>El. B.</source>
         <comment>Electric Bass</comment>
         <translation>El B</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1412"/>
+        <location filename="../instruments/instrumentsxml.h" line="1416"/>
         <source>Electric Bass (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1414"/>
+        <location filename="../instruments/instrumentsxml.h" line="1418"/>
         <source>Frtl. El. B.</source>
         <comment>Fretless Electric Bass</comment>
         <translation>Sfrt El B</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1418"/>
-        <location filename="../instruments/instrumentsxml.h" line="1423"/>
+        <location filename="../instruments/instrumentsxml.h" line="1422"/>
+        <location filename="../instruments/instrumentsxml.h" line="1427"/>
         <source>El. B.</source>
         <comment>5-str. Electric Bass</comment>
         <translation>El B</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1421"/>
+        <location filename="../instruments/instrumentsxml.h" line="1425"/>
         <source>5-str. Electric Bass (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1424"/>
+        <location filename="../instruments/instrumentsxml.h" line="1428"/>
         <source>5-str. Electric Bass (High C/Tenor)</source>
         <translation>5-kord. Elektra basgitaro (tenora)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1427"/>
+        <location filename="../instruments/instrumentsxml.h" line="1431"/>
         <source>5-str. Electric Bass (High C/Tenor) (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1428"/>
+        <location filename="../instruments/instrumentsxml.h" line="1432"/>
         <source>6-str. Electric Bass</source>
         <translation>6-kord. Elektra Basgitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1429"/>
+        <location filename="../instruments/instrumentsxml.h" line="1433"/>
         <source>El. B.</source>
         <comment>6-str. Electric Bass</comment>
         <translation>El B</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1432"/>
+        <location filename="../instruments/instrumentsxml.h" line="1436"/>
         <source>6-str. Electric Bass (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1433"/>
+        <location filename="../instruments/instrumentsxml.h" line="1437"/>
         <source>Prim</source>
         <translation>Primo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1434"/>
+        <location filename="../instruments/instrumentsxml.h" line="1438"/>
         <source>Pr.</source>
         <comment>Prim</comment>
         <translation>Pr t-rico</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1435"/>
+        <location filename="../instruments/instrumentsxml.h" line="1439"/>
         <source>Brač</source>
         <translation>Basprima tamburico</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1436"/>
+        <location filename="../instruments/instrumentsxml.h" line="1440"/>
         <source>Br.</source>
         <comment>Brač</comment>
         <translation>B-pr t-rico</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1437"/>
+        <location filename="../instruments/instrumentsxml.h" line="1441"/>
         <source>Čelo</source>
         <translation>Ĉela tamburico</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1438"/>
+        <location filename="../instruments/instrumentsxml.h" line="1442"/>
         <source>Č.</source>
         <comment>Čelo</comment>
         <translation>Ĉ t-rico</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1439"/>
+        <location filename="../instruments/instrumentsxml.h" line="1443"/>
         <source>Bugarija</source>
         <translation>Kontra tamburico</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1440"/>
+        <location filename="../instruments/instrumentsxml.h" line="1444"/>
         <source>Bu.</source>
         <comment>Bugarija</comment>
         <translation>Buk-o</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1441"/>
+        <location filename="../instruments/instrumentsxml.h" line="1445"/>
         <source>Berda</source>
         <translation>Basa tamburico</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1442"/>
+        <location filename="../instruments/instrumentsxml.h" line="1446"/>
         <source>Be.</source>
         <comment>Berda</comment>
         <translation>B t-rico</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1443"/>
+        <location filename="../instruments/instrumentsxml.h" line="1447"/>
         <source>Bandurria</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1444"/>
+        <location filename="../instruments/instrumentsxml.h" line="1448"/>
         <source>Band.</source>
         <comment>Bandurria</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1445"/>
+        <location filename="../instruments/instrumentsxml.h" line="1449"/>
         <source>Bandurria (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1446"/>
+        <location filename="../instruments/instrumentsxml.h" line="1450"/>
         <source>Laúd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1447"/>
+        <location filename="../instruments/instrumentsxml.h" line="1451"/>
         <source>Laúd</source>
         <comment>Laúd</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1448"/>
+        <location filename="../instruments/instrumentsxml.h" line="1452"/>
         <source>Laúd (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1449"/>
+        <location filename="../instruments/instrumentsxml.h" line="1453"/>
         <source>Strings - Bowed</source>
         <translation>Kordaro - arĉota</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1456"/>
+        <location filename="../instruments/instrumentsxml.h" line="1460"/>
         <source>Eh.</source>
         <comment>Erhu</comment>
         <translation>Erh</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1465"/>
+        <location filename="../instruments/instrumentsxml.h" line="1469"/>
         <source>Nyckelharpa</source>
         <translation>Nikelharpo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1466"/>
+        <location filename="../instruments/instrumentsxml.h" line="1470"/>
         <source>Nyh.</source>
         <comment>Nyckelharpa</comment>
         <translation>Nih</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1471"/>
+        <location filename="../instruments/instrumentsxml.h" line="1475"/>
         <source>Vln.</source>
         <comment>Violin</comment>
         <translation>Vln</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1475"/>
+        <location filename="../instruments/instrumentsxml.h" line="1479"/>
         <source>Violins</source>
         <translation>Violonoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1476"/>
+        <location filename="../instruments/instrumentsxml.h" line="1480"/>
         <source>Vlns.</source>
         <comment>Violins</comment>
         <translation>Vlnj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1480"/>
-        <location filename="../instruments/instrumentsxml.h" line="1491"/>
-        <location filename="../instruments/instrumentsxml.h" line="1502"/>
-        <location filename="../instruments/instrumentsxml.h" line="1513"/>
+        <location filename="../instruments/instrumentsxml.h" line="1484"/>
+        <location filename="../instruments/instrumentsxml.h" line="1495"/>
+        <location filename="../instruments/instrumentsxml.h" line="1506"/>
+        <location filename="../instruments/instrumentsxml.h" line="1517"/>
         <source>solo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1482"/>
+        <location filename="../instruments/instrumentsxml.h" line="1486"/>
         <source>Vla.</source>
         <comment>Viola</comment>
         <translation>Vlo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1486"/>
+        <location filename="../instruments/instrumentsxml.h" line="1490"/>
         <source>Violas</source>
         <translation>Violoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1487"/>
+        <location filename="../instruments/instrumentsxml.h" line="1491"/>
         <source>Vlas.</source>
         <comment>Violas</comment>
         <translation>Vloj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1493"/>
+        <location filename="../instruments/instrumentsxml.h" line="1497"/>
         <source>Vc.</source>
         <comment>Violoncello</comment>
         <translation>Vĉ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1497"/>
+        <location filename="../instruments/instrumentsxml.h" line="1501"/>
         <source>Violoncellos</source>
         <translation>Violonĉeloj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1498"/>
+        <location filename="../instruments/instrumentsxml.h" line="1502"/>
         <source>Vcs.</source>
         <comment>Violoncellos</comment>
         <translation>Vĉ-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1504"/>
+        <location filename="../instruments/instrumentsxml.h" line="1508"/>
         <source>Cb.</source>
         <comment>Contrabass</comment>
         <translation>Kb</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1508"/>
+        <location filename="../instruments/instrumentsxml.h" line="1512"/>
         <source>Contrabasses</source>
         <translation>Kontrabasoj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1509"/>
+        <location filename="../instruments/instrumentsxml.h" line="1513"/>
         <source>Cbs.</source>
         <comment>Contrabasses</comment>
         <translation>Kb-j</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1522"/>
+        <location filename="../instruments/instrumentsxml.h" line="1526"/>
         <source>Pds. v.</source>
         <comment>Pardessus de viole</comment>
         <translation>Pds Vjl</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1527"/>
+        <location filename="../instruments/instrumentsxml.h" line="1531"/>
         <source>Tr. Vl.</source>
         <comment>Treble Viol</comment>
         <translation>G Vjl</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1532"/>
+        <location filename="../instruments/instrumentsxml.h" line="1536"/>
         <source>A. Vl.</source>
         <comment>Alto Viol</comment>
         <translation>A Vjl</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1537"/>
+        <location filename="../instruments/instrumentsxml.h" line="1541"/>
         <source>T. Vl.</source>
         <comment>Tenor Viol</comment>
         <translation>T Vjl</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1560"/>
+        <location filename="../instruments/instrumentsxml.h" line="1564"/>
         <source>D Vne.</source>
         <comment>D Violone</comment>
         <translation>D-Vno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1206"/>
+        <location filename="../instruments/instrumentsxml.h" line="1208"/>
         <source>Mallet Synthesizer</source>
         <translation>Malea sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1208"/>
+        <location filename="../instruments/instrumentsxml.h" line="1210"/>
         <source>Bass Synthesizer</source>
         <translation>Basosintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1209"/>
+        <location filename="../instruments/instrumentsxml.h" line="1211"/>
         <source>Synth.</source>
         <comment>Bass Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1210"/>
+        <location filename="../instruments/instrumentsxml.h" line="1212"/>
         <source>synth-bass-1</source>
         <translation>sinteza baso-1</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1211"/>
+        <location filename="../instruments/instrumentsxml.h" line="1213"/>
         <source>synth-bass-2</source>
         <translation>sinteza baso-2</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1212"/>
+        <location filename="../instruments/instrumentsxml.h" line="1214"/>
         <source>Brass Synthesizer</source>
         <translation>Latun-sintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1213"/>
+        <location filename="../instruments/instrumentsxml.h" line="1215"/>
         <source>Synth.</source>
         <comment>Brass Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1214"/>
+        <location filename="../instruments/instrumentsxml.h" line="1216"/>
         <source>synth-brass-1</source>
         <translation>sinteza latunilo-1</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1215"/>
+        <location filename="../instruments/instrumentsxml.h" line="1217"/>
         <source>synth-brass-2</source>
         <translation>sinteza latunilo-2</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1216"/>
+        <location filename="../instruments/instrumentsxml.h" line="1218"/>
         <source>String Synthesizer</source>
         <translation>Kordosintezilo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1217"/>
+        <location filename="../instruments/instrumentsxml.h" line="1219"/>
         <source>Synth.</source>
         <comment>String Synthesizer</comment>
         <translation>Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1218"/>
+        <location filename="../instruments/instrumentsxml.h" line="1220"/>
         <source>synth-string-1</source>
         <translation>sinteza kordilo-1</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1219"/>
+        <location filename="../instruments/instrumentsxml.h" line="1221"/>
         <source>synth-string-2</source>
         <translation>sinteza kordilo-2</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1220"/>
+        <location filename="../instruments/instrumentsxml.h" line="1222"/>
         <source>Theremin</source>
         <translation>Teremino</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1222"/>
+        <location filename="../instruments/instrumentsxml.h" line="1226"/>
         <source>Percussion Synthesizer</source>
         <translation>Perkuta sintezilo</translation>
     </message>
@@ -6074,208 +6096,208 @@
         <translation>Plukaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1205"/>
+        <location filename="../instruments/instrumentsxml.h" line="1207"/>
         <source>O.M.</source>
         <comment>Ondes Martenot</comment>
         <translation>O Mrt</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1207"/>
+        <location filename="../instruments/instrumentsxml.h" line="1209"/>
         <source>Mal. Syn.</source>
         <comment>Mallet Synthesizer</comment>
         <translation>Mal Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1221"/>
+        <location filename="../instruments/instrumentsxml.h" line="1223"/>
         <source>Thmn.</source>
         <comment>Theremin</comment>
         <translation>Trmn</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1223"/>
+        <location filename="../instruments/instrumentsxml.h" line="1227"/>
         <source>Perc. Syn.</source>
         <comment>Percussion Synthesizer</comment>
         <translation>Perk Sint</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1224"/>
+        <location filename="../instruments/instrumentsxml.h" line="1228"/>
         <source>Strings - Plucked</source>
         <translation>Kordaro - plukota</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1225"/>
+        <location filename="../instruments/instrumentsxml.h" line="1229"/>
         <source>Banjo</source>
         <translation>Banĝo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1228"/>
+        <location filename="../instruments/instrumentsxml.h" line="1232"/>
         <source>Tenor Banjo</source>
         <translation>Tenora banĝo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1233"/>
-        <location filename="../instruments/instrumentsxml.h" line="1235"/>
+        <location filename="../instruments/instrumentsxml.h" line="1237"/>
+        <location filename="../instruments/instrumentsxml.h" line="1239"/>
         <source>Balalaika</source>
         <translation>Balalajko</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1236"/>
-        <location filename="../instruments/instrumentsxml.h" line="1238"/>
+        <location filename="../instruments/instrumentsxml.h" line="1240"/>
+        <location filename="../instruments/instrumentsxml.h" line="1242"/>
         <source>Piccolo Balalaika</source>
         <translation>Fluteta balalajko</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1239"/>
-        <location filename="../instruments/instrumentsxml.h" line="1241"/>
+        <location filename="../instruments/instrumentsxml.h" line="1243"/>
+        <location filename="../instruments/instrumentsxml.h" line="1245"/>
         <source>Prima Balalaika</source>
         <translation>Prima balalajko</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1242"/>
-        <location filename="../instruments/instrumentsxml.h" line="1244"/>
+        <location filename="../instruments/instrumentsxml.h" line="1246"/>
+        <location filename="../instruments/instrumentsxml.h" line="1248"/>
         <source>Secunda Balalaika</source>
         <translation>Sekunda balalajko</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1245"/>
-        <location filename="../instruments/instrumentsxml.h" line="1247"/>
+        <location filename="../instruments/instrumentsxml.h" line="1249"/>
+        <location filename="../instruments/instrumentsxml.h" line="1251"/>
         <source>Alto Balalaika</source>
         <translation>Alda balalajko</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1248"/>
-        <location filename="../instruments/instrumentsxml.h" line="1250"/>
+        <location filename="../instruments/instrumentsxml.h" line="1252"/>
+        <location filename="../instruments/instrumentsxml.h" line="1254"/>
         <source>Bass Balalaika</source>
         <translation>Basa balalajko</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1251"/>
-        <location filename="../instruments/instrumentsxml.h" line="1253"/>
+        <location filename="../instruments/instrumentsxml.h" line="1255"/>
+        <location filename="../instruments/instrumentsxml.h" line="1257"/>
         <source>Contrabass Balalaika</source>
         <translation>Kontrabasa balalajko</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1254"/>
-        <location filename="../instruments/instrumentsxml.h" line="1257"/>
+        <location filename="../instruments/instrumentsxml.h" line="1258"/>
+        <location filename="../instruments/instrumentsxml.h" line="1261"/>
         <source>Bouzouki</source>
         <translation>Buzuko</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1256"/>
+        <location filename="../instruments/instrumentsxml.h" line="1260"/>
         <source>Bouzouki (3-course)</source>
         <translation>Buzuko (3-para)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1259"/>
+        <location filename="../instruments/instrumentsxml.h" line="1263"/>
         <source>Bouzouki (4-course)</source>
         <translation>Buzuko (4-para)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1260"/>
+        <location filename="../instruments/instrumentsxml.h" line="1264"/>
         <source>Soprano Guitar</source>
         <translation>Soprana gitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1264"/>
+        <location filename="../instruments/instrumentsxml.h" line="1268"/>
         <source>Alto Guitar</source>
         <translation>Alda gitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1268"/>
+        <location filename="../instruments/instrumentsxml.h" line="1272"/>
         <source>Classical Guitar</source>
         <translation>Klasika gitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1290"/>
+        <location filename="../instruments/instrumentsxml.h" line="1294"/>
         <source>Acoustic Guitar</source>
         <translation>Akustika gitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1299"/>
+        <location filename="../instruments/instrumentsxml.h" line="1303"/>
         <source>11-string Alto Guitar</source>
         <translation>11-korda Alda gitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1303"/>
+        <location filename="../instruments/instrumentsxml.h" line="1307"/>
         <source>12-string Guitar</source>
         <translation>12-korda Gitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1308"/>
+        <location filename="../instruments/instrumentsxml.h" line="1312"/>
         <source>Pedal Steel Guitar</source>
         <translation>Perpedala ŝtalgitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1313"/>
-        <location filename="../instruments/instrumentsxml.h" line="1321"/>
+        <location filename="../instruments/instrumentsxml.h" line="1317"/>
+        <location filename="../instruments/instrumentsxml.h" line="1325"/>
         <source>Electric Guitar</source>
         <translation>Elektrona gitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1325"/>
+        <location filename="../instruments/instrumentsxml.h" line="1329"/>
         <source>Harp</source>
         <translation>Harpo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1329"/>
+        <location filename="../instruments/instrumentsxml.h" line="1333"/>
         <source>Koto</source>
         <translation>Kotoo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1342"/>
-        <location filename="../instruments/instrumentsxml.h" line="1345"/>
-        <location filename="../instruments/instrumentsxml.h" line="1348"/>
-        <location filename="../instruments/instrumentsxml.h" line="1351"/>
-        <location filename="../instruments/instrumentsxml.h" line="1354"/>
-        <location filename="../instruments/instrumentsxml.h" line="1357"/>
-        <location filename="../instruments/instrumentsxml.h" line="1360"/>
-        <location filename="../instruments/instrumentsxml.h" line="1363"/>
+        <location filename="../instruments/instrumentsxml.h" line="1346"/>
+        <location filename="../instruments/instrumentsxml.h" line="1349"/>
+        <location filename="../instruments/instrumentsxml.h" line="1352"/>
+        <location filename="../instruments/instrumentsxml.h" line="1355"/>
+        <location filename="../instruments/instrumentsxml.h" line="1358"/>
+        <location filename="../instruments/instrumentsxml.h" line="1361"/>
+        <location filename="../instruments/instrumentsxml.h" line="1364"/>
+        <location filename="../instruments/instrumentsxml.h" line="1367"/>
         <source>Lute</source>
         <translation>Liuto</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1347"/>
+        <location filename="../instruments/instrumentsxml.h" line="1351"/>
         <source>Lute 5-course</source>
         <translation>Liuto 5-para</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1350"/>
+        <location filename="../instruments/instrumentsxml.h" line="1354"/>
         <source>Lute 6-course</source>
         <translation>Liuto 6-para</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1353"/>
+        <location filename="../instruments/instrumentsxml.h" line="1357"/>
         <source>Lute 7-course</source>
         <translation>Liuto 7-para</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1356"/>
+        <location filename="../instruments/instrumentsxml.h" line="1360"/>
         <source>Lute 8-course</source>
         <translation>Liuto 8-para</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1359"/>
+        <location filename="../instruments/instrumentsxml.h" line="1363"/>
         <source>Lute 9-course</source>
         <translation>Liuto 9-para</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1362"/>
+        <location filename="../instruments/instrumentsxml.h" line="1366"/>
         <source>Lute 10-course</source>
         <translation>Liuto 10-para</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1365"/>
+        <location filename="../instruments/instrumentsxml.h" line="1369"/>
         <source>Lute 13-course</source>
         <translation>Liuto 13-para</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1417"/>
-        <location filename="../instruments/instrumentsxml.h" line="1422"/>
+        <location filename="../instruments/instrumentsxml.h" line="1421"/>
+        <location filename="../instruments/instrumentsxml.h" line="1426"/>
         <source>5-str. Electric Bass</source>
         <translation>5-korda Elektrobaso</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1366"/>
+        <location filename="../instruments/instrumentsxml.h" line="1370"/>
         <source>Archlute</source>
         <translation>Arĉoliuto</translation>
     </message>
@@ -6291,628 +6313,628 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1226"/>
+        <location filename="../instruments/instrumentsxml.h" line="1230"/>
         <source>Bj.</source>
         <comment>Banjo</comment>
         <translation> Bnĝ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1227"/>
+        <location filename="../instruments/instrumentsxml.h" line="1231"/>
         <source>Banjo (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1229"/>
+        <location filename="../instruments/instrumentsxml.h" line="1233"/>
         <source>T. Bj.</source>
         <comment>Tenor Banjo</comment>
         <translation>T Bnĝ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1230"/>
+        <location filename="../instruments/instrumentsxml.h" line="1234"/>
         <source>Irish Tenor Banjo</source>
         <translation>Irlanda tenora banĝo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1231"/>
+        <location filename="../instruments/instrumentsxml.h" line="1235"/>
         <source>ITB</source>
         <comment>Irish Tenor Banjo</comment>
         <translation>Ir Tbĝ</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1232"/>
+        <location filename="../instruments/instrumentsxml.h" line="1236"/>
         <source>Irish Tenor Banjo (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1234"/>
+        <location filename="../instruments/instrumentsxml.h" line="1238"/>
         <source>Bal.</source>
         <comment>Balalaika</comment>
         <translation>Bal</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1237"/>
+        <location filename="../instruments/instrumentsxml.h" line="1241"/>
         <source>Pic. Bal.</source>
         <comment>Piccolo Balalaika</comment>
         <translation>Fl-eta Bal</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1240"/>
+        <location filename="../instruments/instrumentsxml.h" line="1244"/>
         <source>Pr. Bal.</source>
         <comment>Prima Balalaika</comment>
         <translation>Pr Bal</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1243"/>
+        <location filename="../instruments/instrumentsxml.h" line="1247"/>
         <source>Sec. Bal.</source>
         <comment>Secunda Balalaika</comment>
         <translation>Sek Bal</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1246"/>
+        <location filename="../instruments/instrumentsxml.h" line="1250"/>
         <source>Al. Bal.</source>
         <comment>Alto Balalaika</comment>
         <translation>A Bal</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1249"/>
+        <location filename="../instruments/instrumentsxml.h" line="1253"/>
         <source>B. Bal.</source>
         <comment>Bass Balalaika</comment>
         <translation>B Bal</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1252"/>
+        <location filename="../instruments/instrumentsxml.h" line="1256"/>
         <source>Cb. Bal.</source>
         <comment>Contrabass Balalaika</comment>
         <translation>Kb Bal</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1255"/>
-        <location filename="../instruments/instrumentsxml.h" line="1258"/>
+        <location filename="../instruments/instrumentsxml.h" line="1259"/>
+        <location filename="../instruments/instrumentsxml.h" line="1262"/>
         <source>Bou.</source>
         <comment>Bouzouki</comment>
         <translation>Buz</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1261"/>
+        <location filename="../instruments/instrumentsxml.h" line="1265"/>
         <source>S. Guit.</source>
         <comment>Soprano Guitar</comment>
         <translation>Sop Git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1265"/>
+        <location filename="../instruments/instrumentsxml.h" line="1269"/>
         <source>A. Guit.</source>
         <comment>Alto Guitar</comment>
         <translation>A git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1269"/>
+        <location filename="../instruments/instrumentsxml.h" line="1273"/>
         <source>Guit.</source>
         <comment>Classical Guitar</comment>
         <translation>Git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1272"/>
-        <location filename="../instruments/instrumentsxml.h" line="1295"/>
+        <location filename="../instruments/instrumentsxml.h" line="1276"/>
+        <location filename="../instruments/instrumentsxml.h" line="1299"/>
         <source>Guitar</source>
         <translation>Gitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1273"/>
-        <location filename="../instruments/instrumentsxml.h" line="1296"/>
+        <location filename="../instruments/instrumentsxml.h" line="1277"/>
+        <location filename="../instruments/instrumentsxml.h" line="1300"/>
         <source>Guit.</source>
         <comment>Guitar</comment>
         <translation>Git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1274"/>
+        <location filename="../instruments/instrumentsxml.h" line="1278"/>
         <source>Guitar (Treble Clef)</source>
         <translation>Gitaro (treblaĵa)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1277"/>
+        <location filename="../instruments/instrumentsxml.h" line="1281"/>
         <source>Classical Guitar (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1278"/>
+        <location filename="../instruments/instrumentsxml.h" line="1282"/>
         <source>7-string Guitar</source>
         <translation>7-korda Gitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1279"/>
+        <location filename="../instruments/instrumentsxml.h" line="1283"/>
         <source>Guit.</source>
         <comment>7-string Guitar</comment>
         <translation>Git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1280"/>
+        <location filename="../instruments/instrumentsxml.h" line="1284"/>
         <source>7-string Guitar (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1281"/>
+        <location filename="../instruments/instrumentsxml.h" line="1285"/>
         <source>Cavaquinho</source>
         <translation>Kavakinjo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1282"/>
+        <location filename="../instruments/instrumentsxml.h" line="1286"/>
         <source>Cava.</source>
         <comment>Cavaquinho</comment>
         <translation>Kav-o</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1283"/>
+        <location filename="../instruments/instrumentsxml.h" line="1287"/>
         <source>Cavaquinho (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1284"/>
+        <location filename="../instruments/instrumentsxml.h" line="1288"/>
         <source>Baritone Guitar</source>
         <translation>Baritona gitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1285"/>
+        <location filename="../instruments/instrumentsxml.h" line="1289"/>
         <source>Bar. Guit.</source>
         <comment>Baritone Guitar</comment>
         <translation>Bar. Git.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1286"/>
+        <location filename="../instruments/instrumentsxml.h" line="1290"/>
         <source>Contra Guitar</source>
         <translation>Kontragitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1287"/>
+        <location filename="../instruments/instrumentsxml.h" line="1291"/>
         <source>C. Guit.</source>
         <comment>Contra Guitar</comment>
         <translation>Kl git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1291"/>
+        <location filename="../instruments/instrumentsxml.h" line="1295"/>
         <source>Guit.</source>
         <comment>Acoustic Guitar</comment>
         <translation>Git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1294"/>
-        <location filename="../instruments/instrumentsxml.h" line="1307"/>
-        <location filename="../instruments/instrumentsxml.h" line="1312"/>
-        <location filename="../instruments/instrumentsxml.h" line="1317"/>
+        <location filename="../instruments/instrumentsxml.h" line="1298"/>
+        <location filename="../instruments/instrumentsxml.h" line="1311"/>
+        <location filename="../instruments/instrumentsxml.h" line="1316"/>
+        <location filename="../instruments/instrumentsxml.h" line="1321"/>
         <source>jazz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1297"/>
+        <location filename="../instruments/instrumentsxml.h" line="1301"/>
         <source>Acoustic Guitar (Treble Clef)</source>
         <translation>Akustika Gitaro (Diskanta Kleo)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1298"/>
+        <location filename="../instruments/instrumentsxml.h" line="1302"/>
         <source>Acoustic Guitar (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1300"/>
+        <location filename="../instruments/instrumentsxml.h" line="1304"/>
         <source>11-str. A. Guit.</source>
         <comment>11-string Alto Guitar</comment>
         <translation>11-kd A Git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1304"/>
+        <location filename="../instruments/instrumentsxml.h" line="1308"/>
         <source>12-str. Guit.</source>
         <comment>12-string Guitar</comment>
         <translation>12-kd Git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1309"/>
+        <location filename="../instruments/instrumentsxml.h" line="1313"/>
         <source>Ped. St. Guit.</source>
         <comment>Pedal Steel Guitar</comment>
         <translation>Pped Ŝt Git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1314"/>
-        <location filename="../instruments/instrumentsxml.h" line="1322"/>
+        <location filename="../instruments/instrumentsxml.h" line="1318"/>
+        <location filename="../instruments/instrumentsxml.h" line="1326"/>
         <source>El. Guit.</source>
         <comment>Electric Guitar</comment>
         <translation>El Git</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1318"/>
+        <location filename="../instruments/instrumentsxml.h" line="1322"/>
         <source>harmonics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1319"/>
+        <location filename="../instruments/instrumentsxml.h" line="1323"/>
         <source>distortion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1320"/>
+        <location filename="../instruments/instrumentsxml.h" line="1324"/>
         <source>overdriven</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1323"/>
+        <location filename="../instruments/instrumentsxml.h" line="1327"/>
         <source>Electric Guitar (Treble Clef)</source>
         <translation>Elektra Gitaro (Diskanta Kleo)</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1324"/>
+        <location filename="../instruments/instrumentsxml.h" line="1328"/>
         <source>Electric Guitar (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1326"/>
+        <location filename="../instruments/instrumentsxml.h" line="1330"/>
         <source>Hrp.</source>
         <comment>Harp</comment>
         <translation>Hrp</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1327"/>
+        <location filename="../instruments/instrumentsxml.h" line="1331"/>
         <source>staccato</source>
         <translation>stakate</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1328"/>
+        <location filename="../instruments/instrumentsxml.h" line="1332"/>
         <source>flageoletti</source>
         <translation>flaĝolete</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1330"/>
+        <location filename="../instruments/instrumentsxml.h" line="1334"/>
         <source>Ko.</source>
         <comment>Koto</comment>
         <translation>Ko</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1331"/>
+        <location filename="../instruments/instrumentsxml.h" line="1335"/>
         <source>Mtn. Dulcimer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1332"/>
+        <location filename="../instruments/instrumentsxml.h" line="1336"/>
         <source>Mtn. Dc.</source>
         <comment>Mtn. Dulcimer</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1333"/>
+        <location filename="../instruments/instrumentsxml.h" line="1337"/>
         <source>Mtn. Dulcimer (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1334"/>
+        <location filename="../instruments/instrumentsxml.h" line="1338"/>
         <source>Mtn. Dulcimer - Baritone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1335"/>
+        <location filename="../instruments/instrumentsxml.h" line="1339"/>
         <source>Bar. M.D.</source>
         <comment>Mtn. Dulcimer - Baritone</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1336"/>
+        <location filename="../instruments/instrumentsxml.h" line="1340"/>
         <source>Mtn. Dulcimer - Baritone (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1337"/>
+        <location filename="../instruments/instrumentsxml.h" line="1341"/>
         <source>Mtn. Dulcimer - Bass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1338"/>
+        <location filename="../instruments/instrumentsxml.h" line="1342"/>
         <source>Bs. M.D.</source>
         <comment>Mtn. Dulcimer - Bass</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1339"/>
+        <location filename="../instruments/instrumentsxml.h" line="1343"/>
         <source>Mtn. Dulcimer - Bass (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1340"/>
+        <location filename="../instruments/instrumentsxml.h" line="1344"/>
         <source>Oud</source>
         <translation>Udo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1341"/>
+        <location filename="../instruments/instrumentsxml.h" line="1345"/>
         <source>O.</source>
         <comment>Oud</comment>
         <translation>Ud</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1343"/>
-        <location filename="../instruments/instrumentsxml.h" line="1346"/>
-        <location filename="../instruments/instrumentsxml.h" line="1349"/>
-        <location filename="../instruments/instrumentsxml.h" line="1352"/>
-        <location filename="../instruments/instrumentsxml.h" line="1355"/>
-        <location filename="../instruments/instrumentsxml.h" line="1358"/>
-        <location filename="../instruments/instrumentsxml.h" line="1361"/>
-        <location filename="../instruments/instrumentsxml.h" line="1364"/>
+        <location filename="../instruments/instrumentsxml.h" line="1347"/>
+        <location filename="../instruments/instrumentsxml.h" line="1350"/>
+        <location filename="../instruments/instrumentsxml.h" line="1353"/>
+        <location filename="../instruments/instrumentsxml.h" line="1356"/>
+        <location filename="../instruments/instrumentsxml.h" line="1359"/>
+        <location filename="../instruments/instrumentsxml.h" line="1362"/>
+        <location filename="../instruments/instrumentsxml.h" line="1365"/>
+        <location filename="../instruments/instrumentsxml.h" line="1368"/>
         <source>Lt.</source>
         <comment>Lute</comment>
         <translation>Lt</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1344"/>
+        <location filename="../instruments/instrumentsxml.h" line="1348"/>
         <source>Lute (Tablature)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1367"/>
+        <location filename="../instruments/instrumentsxml.h" line="1371"/>
         <source>A. Lt.</source>
         <comment>Archlute</comment>
         <translation>A Lt</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1368"/>
+        <location filename="../instruments/instrumentsxml.h" line="1372"/>
         <source>Theorbo</source>
         <translation>Teorbo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1370"/>
+        <location filename="../instruments/instrumentsxml.h" line="1374"/>
         <source>Mandolin</source>
         <translation>Mandolino</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1373"/>
+        <location filename="../instruments/instrumentsxml.h" line="1377"/>
         <source>Mandola</source>
         <translation>Mandolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1375"/>
+        <location filename="../instruments/instrumentsxml.h" line="1379"/>
         <source>Alto Mandola</source>
         <translation>Alda mandolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1376"/>
+        <location filename="../instruments/instrumentsxml.h" line="1380"/>
         <source>A. Mda.</source>
         <comment>Alto Mandola</comment>
         <translation>A. Mdlo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1377"/>
+        <location filename="../instruments/instrumentsxml.h" line="1381"/>
         <source>Tenor Mandola</source>
         <translation>Tenora mandolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1378"/>
+        <location filename="../instruments/instrumentsxml.h" line="1382"/>
         <source>T. Mda.</source>
         <comment>Tenor Mandola</comment>
         <translation>T. Mdlo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1379"/>
+        <location filename="../instruments/instrumentsxml.h" line="1383"/>
         <source>Mandocello</source>
         <translation>Mandoĉelo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1381"/>
+        <location filename="../instruments/instrumentsxml.h" line="1385"/>
         <source>Octave Mandolin</source>
         <translation>Oktava mandolino</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1383"/>
+        <location filename="../instruments/instrumentsxml.h" line="1387"/>
         <source>Shamisen</source>
         <translation>Ŝamiseno</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1385"/>
+        <location filename="../instruments/instrumentsxml.h" line="1389"/>
         <source>Sitar</source>
         <translation>Sitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1387"/>
+        <location filename="../instruments/instrumentsxml.h" line="1391"/>
         <source>Ukulele</source>
         <translation>Ukulelo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1392"/>
+        <location filename="../instruments/instrumentsxml.h" line="1396"/>
         <source>Tenor Ukulele</source>
         <translation>Tenora ukulelo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1394"/>
+        <location filename="../instruments/instrumentsxml.h" line="1398"/>
         <source>Baritone Ukulele</source>
         <translation>Baritona ukulelo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1396"/>
+        <location filename="../instruments/instrumentsxml.h" line="1400"/>
         <source>Bass Guitar</source>
         <translation>Basa gitaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1401"/>
+        <location filename="../instruments/instrumentsxml.h" line="1405"/>
         <source>Acoustic Bass</source>
         <translation>Akustika baso</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1402"/>
+        <location filename="../instruments/instrumentsxml.h" line="1406"/>
         <source>Bass</source>
         <comment>Acoustic Bass</comment>
         <translation>Baso</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1403"/>
-        <location filename="../instruments/instrumentsxml.h" line="1453"/>
-        <location filename="../instruments/instrumentsxml.h" line="1458"/>
-        <location filename="../instruments/instrumentsxml.h" line="1463"/>
-        <location filename="../instruments/instrumentsxml.h" line="1468"/>
-        <location filename="../instruments/instrumentsxml.h" line="1473"/>
-        <location filename="../instruments/instrumentsxml.h" line="1478"/>
-        <location filename="../instruments/instrumentsxml.h" line="1484"/>
-        <location filename="../instruments/instrumentsxml.h" line="1489"/>
-        <location filename="../instruments/instrumentsxml.h" line="1495"/>
-        <location filename="../instruments/instrumentsxml.h" line="1500"/>
-        <location filename="../instruments/instrumentsxml.h" line="1506"/>
-        <location filename="../instruments/instrumentsxml.h" line="1511"/>
-        <location filename="../instruments/instrumentsxml.h" line="1519"/>
-        <location filename="../instruments/instrumentsxml.h" line="1524"/>
-        <location filename="../instruments/instrumentsxml.h" line="1529"/>
-        <location filename="../instruments/instrumentsxml.h" line="1534"/>
-        <location filename="../instruments/instrumentsxml.h" line="1539"/>
-        <location filename="../instruments/instrumentsxml.h" line="1544"/>
-        <location filename="../instruments/instrumentsxml.h" line="1552"/>
-        <location filename="../instruments/instrumentsxml.h" line="1557"/>
-        <location filename="../instruments/instrumentsxml.h" line="1562"/>
-        <source>pizzicato</source>
-        <translation>plukita</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="1406"/>
-        <location filename="../instruments/instrumentsxml.h" line="1452"/>
+        <location filename="../instruments/instrumentsxml.h" line="1407"/>
         <location filename="../instruments/instrumentsxml.h" line="1457"/>
         <location filename="../instruments/instrumentsxml.h" line="1462"/>
         <location filename="../instruments/instrumentsxml.h" line="1467"/>
         <location filename="../instruments/instrumentsxml.h" line="1472"/>
         <location filename="../instruments/instrumentsxml.h" line="1477"/>
-        <location filename="../instruments/instrumentsxml.h" line="1483"/>
+        <location filename="../instruments/instrumentsxml.h" line="1482"/>
         <location filename="../instruments/instrumentsxml.h" line="1488"/>
-        <location filename="../instruments/instrumentsxml.h" line="1494"/>
+        <location filename="../instruments/instrumentsxml.h" line="1493"/>
         <location filename="../instruments/instrumentsxml.h" line="1499"/>
-        <location filename="../instruments/instrumentsxml.h" line="1505"/>
+        <location filename="../instruments/instrumentsxml.h" line="1504"/>
         <location filename="../instruments/instrumentsxml.h" line="1510"/>
-        <location filename="../instruments/instrumentsxml.h" line="1518"/>
+        <location filename="../instruments/instrumentsxml.h" line="1515"/>
         <location filename="../instruments/instrumentsxml.h" line="1523"/>
         <location filename="../instruments/instrumentsxml.h" line="1528"/>
         <location filename="../instruments/instrumentsxml.h" line="1533"/>
         <location filename="../instruments/instrumentsxml.h" line="1538"/>
         <location filename="../instruments/instrumentsxml.h" line="1543"/>
-        <location filename="../instruments/instrumentsxml.h" line="1551"/>
+        <location filename="../instruments/instrumentsxml.h" line="1548"/>
         <location filename="../instruments/instrumentsxml.h" line="1556"/>
         <location filename="../instruments/instrumentsxml.h" line="1561"/>
+        <location filename="../instruments/instrumentsxml.h" line="1566"/>
+        <source>pizzicato</source>
+        <translation>plukita</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="1410"/>
+        <location filename="../instruments/instrumentsxml.h" line="1456"/>
+        <location filename="../instruments/instrumentsxml.h" line="1461"/>
+        <location filename="../instruments/instrumentsxml.h" line="1466"/>
+        <location filename="../instruments/instrumentsxml.h" line="1471"/>
+        <location filename="../instruments/instrumentsxml.h" line="1476"/>
+        <location filename="../instruments/instrumentsxml.h" line="1481"/>
+        <location filename="../instruments/instrumentsxml.h" line="1487"/>
+        <location filename="../instruments/instrumentsxml.h" line="1492"/>
+        <location filename="../instruments/instrumentsxml.h" line="1498"/>
+        <location filename="../instruments/instrumentsxml.h" line="1503"/>
+        <location filename="../instruments/instrumentsxml.h" line="1509"/>
+        <location filename="../instruments/instrumentsxml.h" line="1514"/>
+        <location filename="../instruments/instrumentsxml.h" line="1522"/>
+        <location filename="../instruments/instrumentsxml.h" line="1527"/>
+        <location filename="../instruments/instrumentsxml.h" line="1532"/>
+        <location filename="../instruments/instrumentsxml.h" line="1537"/>
+        <location filename="../instruments/instrumentsxml.h" line="1542"/>
+        <location filename="../instruments/instrumentsxml.h" line="1547"/>
+        <location filename="../instruments/instrumentsxml.h" line="1555"/>
+        <location filename="../instruments/instrumentsxml.h" line="1560"/>
+        <location filename="../instruments/instrumentsxml.h" line="1565"/>
         <source>arco</source>
         <translation>arĉita</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1407"/>
-        <location filename="../instruments/instrumentsxml.h" line="1454"/>
-        <location filename="../instruments/instrumentsxml.h" line="1459"/>
-        <location filename="../instruments/instrumentsxml.h" line="1464"/>
-        <location filename="../instruments/instrumentsxml.h" line="1469"/>
-        <location filename="../instruments/instrumentsxml.h" line="1474"/>
-        <location filename="../instruments/instrumentsxml.h" line="1479"/>
-        <location filename="../instruments/instrumentsxml.h" line="1485"/>
-        <location filename="../instruments/instrumentsxml.h" line="1490"/>
-        <location filename="../instruments/instrumentsxml.h" line="1496"/>
-        <location filename="../instruments/instrumentsxml.h" line="1501"/>
-        <location filename="../instruments/instrumentsxml.h" line="1507"/>
-        <location filename="../instruments/instrumentsxml.h" line="1512"/>
-        <location filename="../instruments/instrumentsxml.h" line="1520"/>
-        <location filename="../instruments/instrumentsxml.h" line="1525"/>
-        <location filename="../instruments/instrumentsxml.h" line="1530"/>
-        <location filename="../instruments/instrumentsxml.h" line="1535"/>
-        <location filename="../instruments/instrumentsxml.h" line="1540"/>
-        <location filename="../instruments/instrumentsxml.h" line="1545"/>
-        <location filename="../instruments/instrumentsxml.h" line="1553"/>
-        <location filename="../instruments/instrumentsxml.h" line="1558"/>
-        <location filename="../instruments/instrumentsxml.h" line="1563"/>
+        <location filename="../instruments/instrumentsxml.h" line="1411"/>
+        <location filename="../instruments/instrumentsxml.h" line="1458"/>
+        <location filename="../instruments/instrumentsxml.h" line="1463"/>
+        <location filename="../instruments/instrumentsxml.h" line="1468"/>
+        <location filename="../instruments/instrumentsxml.h" line="1473"/>
+        <location filename="../instruments/instrumentsxml.h" line="1478"/>
+        <location filename="../instruments/instrumentsxml.h" line="1483"/>
+        <location filename="../instruments/instrumentsxml.h" line="1489"/>
+        <location filename="../instruments/instrumentsxml.h" line="1494"/>
+        <location filename="../instruments/instrumentsxml.h" line="1500"/>
+        <location filename="../instruments/instrumentsxml.h" line="1505"/>
+        <location filename="../instruments/instrumentsxml.h" line="1511"/>
+        <location filename="../instruments/instrumentsxml.h" line="1516"/>
+        <location filename="../instruments/instrumentsxml.h" line="1524"/>
+        <location filename="../instruments/instrumentsxml.h" line="1529"/>
+        <location filename="../instruments/instrumentsxml.h" line="1534"/>
+        <location filename="../instruments/instrumentsxml.h" line="1539"/>
+        <location filename="../instruments/instrumentsxml.h" line="1544"/>
+        <location filename="../instruments/instrumentsxml.h" line="1549"/>
+        <location filename="../instruments/instrumentsxml.h" line="1557"/>
+        <location filename="../instruments/instrumentsxml.h" line="1562"/>
+        <location filename="../instruments/instrumentsxml.h" line="1567"/>
         <source>tremolo</source>
         <translation>tremsona</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1408"/>
+        <location filename="../instruments/instrumentsxml.h" line="1412"/>
         <source>Electric Bass</source>
         <translation>Elektrobaso</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1413"/>
+        <location filename="../instruments/instrumentsxml.h" line="1417"/>
         <source>Fretless Electric Bass</source>
         <translation>Senfreta elektrobaso</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1450"/>
+        <location filename="../instruments/instrumentsxml.h" line="1454"/>
         <source>Strings</source>
         <translation>Kordaro</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1451"/>
+        <location filename="../instruments/instrumentsxml.h" line="1455"/>
         <source>St.</source>
         <comment>Strings</comment>
         <translation>Kd</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1455"/>
+        <location filename="../instruments/instrumentsxml.h" line="1459"/>
         <source>Erhu</source>
         <translation>Erhuo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1470"/>
+        <location filename="../instruments/instrumentsxml.h" line="1474"/>
         <source>Violin</source>
         <translation>Violono</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1481"/>
+        <location filename="../instruments/instrumentsxml.h" line="1485"/>
         <source>Viola</source>
         <translation>Violo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1492"/>
+        <location filename="../instruments/instrumentsxml.h" line="1496"/>
         <source>Violoncello</source>
         <translation>Violonĉelo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1503"/>
+        <location filename="../instruments/instrumentsxml.h" line="1507"/>
         <source>Contrabass</source>
         <translation>Kontrabaso</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1514"/>
+        <location filename="../instruments/instrumentsxml.h" line="1518"/>
         <source>Double Bass</source>
         <translation>Duobla baso</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1515"/>
+        <location filename="../instruments/instrumentsxml.h" line="1519"/>
         <source>Db.</source>
         <comment>Double Bass</comment>
         <translation>Du B</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1516"/>
+        <location filename="../instruments/instrumentsxml.h" line="1520"/>
         <source>Octobass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1517"/>
+        <location filename="../instruments/instrumentsxml.h" line="1521"/>
         <source>Otb.</source>
         <comment>Octobass</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1521"/>
+        <location filename="../instruments/instrumentsxml.h" line="1525"/>
         <source>Pardessus de viole</source>
         <translation>Pardesua vjolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1526"/>
+        <location filename="../instruments/instrumentsxml.h" line="1530"/>
         <source>Treble Viol</source>
         <translation>G-klea vjolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1531"/>
+        <location filename="../instruments/instrumentsxml.h" line="1535"/>
         <source>Alto Viol</source>
         <translation>Alda vjolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1536"/>
+        <location filename="../instruments/instrumentsxml.h" line="1540"/>
         <source>Tenor Viol</source>
         <translation>Tenora vjolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1549"/>
+        <location filename="../instruments/instrumentsxml.h" line="1553"/>
         <source>Baryton</source>
         <translation>Baritonvjolo</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1550"/>
+        <location filename="../instruments/instrumentsxml.h" line="1554"/>
         <source>Bary.</source>
         <comment>Baryton</comment>
         <translation>Bar vj</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1559"/>
+        <location filename="../instruments/instrumentsxml.h" line="1563"/>
         <source>D Violone</source>
         <translation>D Basviolono</translation>
     </message>
@@ -6920,57 +6942,57 @@
 <context>
     <name>OrderXML</name>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1564"/>
+        <location filename="../instruments/instrumentsxml.h" line="1568"/>
         <source>Orchestral</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1565"/>
+        <location filename="../instruments/instrumentsxml.h" line="1569"/>
         <source>Choir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1566"/>
+        <location filename="../instruments/instrumentsxml.h" line="1570"/>
         <source>Marching Band</source>
         <translation>Marŝanta bando</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1567"/>
+        <location filename="../instruments/instrumentsxml.h" line="1571"/>
         <source>Big Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1568"/>
+        <location filename="../instruments/instrumentsxml.h" line="1572"/>
         <source>Jazz Combo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1569"/>
+        <location filename="../instruments/instrumentsxml.h" line="1573"/>
         <source>Rock Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1570"/>
+        <location filename="../instruments/instrumentsxml.h" line="1574"/>
         <source>Concert Band</source>
         <translation>Koncerta bando</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1571"/>
+        <location filename="../instruments/instrumentsxml.h" line="1575"/>
         <source>Brass Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1572"/>
+        <location filename="../instruments/instrumentsxml.h" line="1576"/>
         <source>Woodwind Ensemble</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1573"/>
+        <location filename="../instruments/instrumentsxml.h" line="1577"/>
         <source>Brass Ensemble</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="1574"/>
+        <location filename="../instruments/instrumentsxml.h" line="1578"/>
         <source>String Ensemble</source>
         <translation type="unfinished"></translation>
     </message>
