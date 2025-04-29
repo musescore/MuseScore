@@ -156,6 +156,7 @@ RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
         return Promise<Val>::Result::unchecked();
     }, PromiseType::AsyncByBody);
 
+<<<<<<< HEAD
     promise.onResolve(this, [&rv, &loop](const Val& val) {
         rv = RetVal<Val>::make_ok(val);
         loop.quit();
@@ -239,6 +240,25 @@ Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q, const QVaria
             } else {
                 openedRet.ret = make_ret(Ret::Code::UnknownError);
             }
+=======
+    ContainerMeta openMeta = uriRegister()->meta(q.uri());
+    LOGALEX() << "openMeta.type: " << openMeta.type;
+    switch (openMeta.type) {
+    case ContainerType::QWidgetDialog:
+        openedRet = openWidgetDialog(q);
+        break;
+    case ContainerType::PrimaryPage:
+    case ContainerType::QmlDialog:
+        openedRet = openQml(q);
+        break;
+    case ContainerType::Undefined: {
+        //! NOTE Not found default, try extension
+        extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
+        if (ext.isValid()) {
+            openedRet = openExtensionDialog(q);
+        } else {
+            openedRet.ret = make_ret(Ret::Code::UnknownError);
+>>>>>>> bf73a1dda1 (sync master changes)
         }
         }
 
