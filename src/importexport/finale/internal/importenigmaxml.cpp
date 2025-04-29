@@ -219,6 +219,42 @@ Err importEnigmaXml(MasterScore* score, const QString& name)
     return importEnigmaXmlfromBuffer(score, std::move(data));
 }
 
+static ClefType clefTypeFromClefType(ClefIndex clef)
+{
+    // For now, base this on the default clef defintions.
+    // A future todo could be to infer the clef from the actual
+    // clef definition record in the Musx document's clef options.
+
+    using MusxClef = musx::DefaultClefType;
+
+    switch (DefaultClefType(clef)) {
+    case DefaultClefType::Treble:         return ClefType::G;
+    case DefaultClefType::Alto:           return ClefType::C3;
+    case DefaultClefType::Tenor:          return ClefType::C4;
+    case DefaultClefType::Bass:           return ClefType::F;
+    case DefaultClefType::Percussion:     return ClefType::PERC;
+    case DefaultClefType::Treble8vb:      return ClefType::G8_VB;
+    case DefaultClefType::Bass8vb:        return ClefType::F8_VB;
+    case DefaultClefType::Baritone:       return ClefType::F_B;
+    case DefaultClefType::FrenchViolin:   return ClefType::G_1;
+    case DefaultClefType::BaritoneC:      return ClefType::C5;
+    case DefaultClefType::MezzoSoprano:   return ClefType::C2;
+    case DefaultClefType::Soprano:        return ClefType::C1;
+    case DefaultClefType::AltPercussion:  return ClefType::PERC2;
+    case DefaultClefType::Treble8va:      return ClefType::G8_VA;
+    case DefaultClefType::Bass8va:        return ClefType::F_8VA;
+    case DefaultClefType::Blank:          return ClefType::INVALID;
+    case DefaultClefType::Tab1:
+    case DefaultClefType::Tab2:           return ClefType::TAB;
+    default:                       return ClefType::INVALID;
+    }
+}
+
+static ClefTypeList clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
+{
+
+}
+
 static std::string trimNewLineFromString(const std::string& src)
 {
     size_t pos = src.find('\n');
@@ -251,6 +287,7 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset, musxStaff->customStaff.has_value(), true));
     s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset, musxStaff->customStaff.has_value(), false));
     s->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
+    s->setDefaultClefType(ClefTypeList(ClefType::F, ClefType::C3));
     m_staff2Inst.emplace(m_score->nstaves(), InstCmper(musxStaff->getCmper()));
     m_score->appendStaff(s);
     return s;
@@ -307,12 +344,12 @@ void EnigmaXmlImporter::importMeasures()
         for (mu::engraving::Staff* staff : m_score->staves()) {
             mu::engraving::staff_idx_t staffIdx = staff->idx();
             // for now, add a full measure rest.
-            mu::engraving::Segment* seg = measure->getSegment(mu::engraving::SegmentType::ChordRest, tick);
-            Rest* rest = mu::engraving::Factory::createRest(seg, mu::engraving::TDuration(mu::engraving::DurationType::V_MEASURE));
+            mu::engraving::Segment* restSeg = measure->getSegment(mu::engraving::SegmentType::ChordRest, tick);
+            Rest* rest = mu::engraving::Factory::createRest(restSeg, mu::engraving::TDuration(mu::engraving::DurationType::V_MEASURE));
             rest->setScore(m_score);
             rest->setTicks(measure->ticks());
             rest->setTrack(staffIdx * VOICES);
-            seg->add(rest);
+            restSeg->add(rest);
         }
         if (++counter >= 100) break; //DBG
     }
