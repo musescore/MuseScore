@@ -1764,7 +1764,7 @@ void ChordList::read(XmlReader& e, int mscVersion)
             readRenderList(e.readText(), renderListRoot);
         } else if (tag == "renderFunction") {
             readRenderList(e.readText(), renderListFunction);
-        } else if (tag == "renderBase") {
+        } else if ((tag == "renderBase" && mscVersion < 460) || tag == "renderBass") {
             readRenderList(e.readText(), renderListBass);
         } else {
             e.unknown();
