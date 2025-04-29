@@ -266,6 +266,8 @@ RetVal<Val> Interactive::open(const UriQuery& uri) const
         newQuery.addParam("sync", Val(true));
     }
 
+    LOGALEX();
+
     return provider()->open(newQuery);
 }
 

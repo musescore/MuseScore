@@ -55,6 +55,7 @@ SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock, const mod
 
 void SequencePlayer::play(const secs_t delay)
 {
+    LOGALEX();
     ONLY_AUDIO_WORKER_THREAD;
 
     m_clock->setCountDown(secsToMicrosecs(delay));
