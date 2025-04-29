@@ -33,6 +33,7 @@
 #include <QJsonArray>
 
 #ifdef Q_OS_WIN
+#include <winrt/Windows.Foundation.h>
 #include <QOperatingSystemVersion>
 #endif
 
@@ -72,12 +73,12 @@ void UiConfiguration::init()
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(false));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val(defaultFontFamily()));
-    settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(defaultFontSize()));
+    settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_FAMILY_KEY, Val("Leland"));
     settings()->setDefaultValue(UI_MUSICAL_FONT_SIZE_KEY, Val(24));
     settings()->setDefaultValue(UI_MUSICAL_TEXT_FONT_FAMILY_KEY, Val("Leland Text"));
-    settings()->setDefaultValue(UI_MUSICAL_TEXT_FONT_SIZE_KEY, Val(defaultFontSize()));
+    settings()->setDefaultValue(UI_MUSICAL_TEXT_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_THEMES_KEY, Val(""));
 
     settings()->valueChanged(UI_THEMES_KEY).onReceive(this, [this](const Val&) {
@@ -118,6 +119,14 @@ void UiConfiguration::init()
     m_uiArrangement.stateChanged(WINDOW_GEOMETRY_KEY).onNotify(this, [this]() {
         m_windowGeometryChanged.notify();
     });
+
+#ifdef Q_OS_WIN
+    using namespace winrt::Windows::Foundation;
+    using namespace winrt::Windows::UI::ViewManagement;
+    uiSettings.TextScaleFactorChanged([this](UISettings, IInspectable const&) {
+        m_defaultFontChanged.notify();
+    });
+#endif
 
     correctUserFontIfNeeded();
 
@@ -578,21 +587,22 @@ Notification UiConfiguration::musicalTextFontChanged() const
 
 std::string UiConfiguration::defaultFontFamily() const
 {
-#ifdef Q_OS_WIN
-    static const QString defaultWinFamily = "Segoe UI";
-
-    if (QFontDatabase::hasFamily(defaultWinFamily)) {
-        return defaultWinFamily.toStdString();
-    }
-#endif
-
-    return QFontDatabase::systemFont(QFontDatabase::GeneralFont).family().toStdString();
+    return defaultFont().family().toStdString();
 }
 
-int UiConfiguration::defaultFontSize() const
+QFont UiConfiguration::defaultFont() const
 {
-    return 12;
+    return QFontDatabase::systemFont(QFontDatabase::GeneralFont);
 }
+
+#ifdef Q_OS_WIN
+
+muse::async::Notification UiConfiguration::defaultFontChanged() const
+{
+    return m_defaultFontChanged;
+}
+
+#endif
 
 void UiConfiguration::resetFonts()
 {

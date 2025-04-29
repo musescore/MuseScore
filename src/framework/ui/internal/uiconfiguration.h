@@ -24,6 +24,10 @@
 
 #include "iuiconfiguration.h"
 
+#ifdef Q_OS_WIN
+#include <winrt/Windows.UI.ViewManagement.h>
+#endif
+
 #include "iglobalconfiguration.h"
 #include "global/types/config.h"
 #include "modularity/ioc.h"
@@ -91,8 +95,11 @@ public:
     int musicalTextFontSize() const override;
     async::Notification musicalTextFontChanged() const override;
 
-    std::string defaultFontFamily() const override;
-    int defaultFontSize() const override;
+    std::string defaultFontFamily() const;
+    QFont defaultFont() const override;
+#ifdef Q_OS_WIN
+    async::Notification defaultFontChanged() const override;
+#endif
 
     void resetFonts() override;
 
@@ -155,11 +162,18 @@ private:
 
     UiArrangement m_uiArrangement;
 
+#ifdef Q_OS_WIN
+    winrt::Windows::UI::ViewManagement::UISettings uiSettings;
+#endif
+
     async::Notification m_currentThemeChanged;
     async::Notification m_fontChanged;
     async::Notification m_musicalFontChanged;
     async::Notification m_musicalTextFontChanged;
     async::Notification m_iconsFontChanged;
+#ifdef Q_OS_WIN
+    async::Notification m_defaultFontChanged;
+#endif
     async::Notification m_windowGeometryChanged;
 
     ValNt<bool> m_isFollowSystemTheme;

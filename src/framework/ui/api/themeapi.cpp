@@ -363,6 +363,50 @@ void ThemeApi::initUiFonts()
         setupUiFonts();
         update();
     });
+
+#ifdef Q_OS_WIN
+    configuration()->defaultFontChanged().onNotify(this, [this]() {
+        // We receive the change notification from Windows immediately after the user changes
+        // the text scaling setting, but for some reason it takes time (70-100ms) for MuseScore
+        // to read the updated font size. So we must poll until we see the change or give up after some time.
+        if (m_pollTimer) {
+            return;
+        }
+        m_pollTimer = new QTimer(this);
+
+        QFont oldDefaultFont = configuration()->defaultFont();
+        int pollCount = 0;
+
+        auto readNewFontAndUpdate = [this, oldDefaultFont, pollCount]() mutable {
+            QFont newDefaultFont = configuration()->defaultFont();
+
+            bool fontChanged = newDefaultFont.pointSizeF() != oldDefaultFont.pointSizeF()
+                               || newDefaultFont.pixelSize() != oldDefaultFont.pixelSize();
+
+            if (!fontChanged) {
+                pollCount++;
+                if (pollCount < 5) {
+                    m_pollTimer->setInterval(m_pollTimer->interval() * 2);
+                    m_pollTimer->start();
+                    return;
+                }
+            }
+
+            delete m_pollTimer;
+            m_pollTimer = nullptr;
+
+            if (fontChanged) {
+                setupUiFonts();
+                update();
+            }
+        };
+
+        m_pollTimer->setSingleShot(true);
+        m_pollTimer->setInterval(100);
+        m_pollTimer->callOnTimeout(this, readNewFontAndUpdate);
+        m_pollTimer->start();
+    });
+#endif
 }
 
 void ThemeApi::initIconsFont()
@@ -418,8 +462,13 @@ void ThemeApi::setupUiFonts()
         font->setWeight(fontConfig.weight);
     }
 
-    m_defaultFont.setFamily(QString::fromStdString(configuration()->defaultFontFamily()));
-    m_defaultFont.setPixelSize(configuration()->defaultFontSize());
+    QFont defaultFont = configuration()->defaultFont();
+    m_defaultFont.setFamily(defaultFont.family());
+    if (defaultFont.pointSizeF() > 0) {
+        m_defaultFont.setPointSizeF(defaultFont.pointSizeF());
+    } else {
+        m_defaultFont.setPixelSize(defaultFont.pixelSize());
+    }
 }
 
 void ThemeApi::setupIconsFont()
