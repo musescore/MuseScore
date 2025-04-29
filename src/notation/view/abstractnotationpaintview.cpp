@@ -674,6 +674,7 @@ void AbstractNotationPaintView::onNotationSetup()
     });
 
     playbackController()->currentPlaybackPositionChanged().onReceive(this, [this](audio::secs_t, midi::tick_t tick) {
+        // LOGALEX() << "trick onReceive param: lambda function ";
         movePlaybackCursor(tick);
     });
 
@@ -1371,6 +1372,7 @@ bool AbstractNotationPaintView::isInited() const
 
 void AbstractNotationPaintView::onPlayingChanged()
 {
+    LOGALEX();
     TRACEFUNC;
 
     if (!notationPlayback()) {

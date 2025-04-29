@@ -651,7 +651,8 @@ void PlaybackController::play()
             delay = playbackDelay(countInDuration);
         }
     }
-
+    
+    LOGALEX();
     currentPlayer()->play(delay);
 }
 
