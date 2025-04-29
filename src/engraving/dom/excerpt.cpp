@@ -934,6 +934,11 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                     continue;
                 }
 
+                // TimeSig and KeySig announce should never be cloned
+                if (oseg->isTimeSigAnnounceType() || oseg->isKeySigAnnounceType()) {
+                    continue;
+                }
+
                 //There are probably more destination tracks for the same source
                 std::vector<track_idx_t> t = muse::values(trackList, srcTrack);
 
