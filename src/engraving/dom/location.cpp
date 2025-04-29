@@ -236,6 +236,9 @@ int Location::note(const EngravingItem* e)
 
 PropertyValue Location::getLocationProperty(Pid pid, const EngravingItem* start, const EngravingItem* end)
 {
+    if (!start || !end) {
+        return 0;
+    }
     switch (pid) {
     case Pid::LOCATION_STAVES:
         return (track(start) / VOICES) - (track(end) / VOICES);

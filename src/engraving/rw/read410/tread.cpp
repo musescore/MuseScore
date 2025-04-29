@@ -3210,9 +3210,9 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "base") {
-            h->setBaseTpc(e.readInt());
+            h->setBassTpc(e.readInt());
         } else if (tag == "baseCase") {
-            h->setBaseCase(static_cast<NoteCaseType>(e.readInt()));
+            h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
             h->setId(e.readInt());
         } else if (tag == "name") {

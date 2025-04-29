@@ -23,7 +23,6 @@
 #pragma once
 
 #include "dom/note.h"
-#include "dom/partialtie.h"
 #include "dom/repeatlist.h"
 
 #include "playback/renderingcontext.h"
@@ -100,8 +99,8 @@ inline PartiallyTiedNoteInfo findIncomingNoteInNextRepeat(const Note* outgoingNo
     }
 
     const Note* incomingNote = toChord(firstChordRest)->findNote(outgoingNote->pitch());
-    const PartialTie* partialTie = incomingNote ? incomingNote->incomingPartialTie() : nullptr;
-    if (partialTie && partialTie->playSpanner()) {
+    const Tie* tie = incomingNote ? incomingNote->tieBack() : nullptr;
+    if (tie && tie->playSpanner()) {
         return { nextRepeat, incomingNote };
     }
 

@@ -1686,9 +1686,9 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
     if (item->leftParen()) {
         xml.tag("leftParen");
     }
-    if (item->rootTpc() != Tpc::TPC_INVALID || item->baseTpc() != Tpc::TPC_INVALID) {
+    if (item->rootTpc() != Tpc::TPC_INVALID || item->bassTpc() != Tpc::TPC_INVALID) {
         int rRootTpc = item->rootTpc();
-        int rBaseTpc = item->baseTpc();
+        int rBaseTpc = item->bassTpc();
         if (item->staff()) {
             // parent can be a fret diagram
             Segment* segment = item->getParentSeg();
@@ -1696,7 +1696,7 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
             const Interval& interval = item->staff()->transpose(tick);
             if (ctx.clipboardmode() && !item->score()->style().styleB(Sid::concertPitch) && interval.chromatic) {
                 rRootTpc = transposeTpc(item->rootTpc(), interval, true);
-                rBaseTpc = transposeTpc(item->baseTpc(), interval, true);
+                rBaseTpc = transposeTpc(item->bassTpc(), interval, true);
             }
         }
         if (rRootTpc != Tpc::TPC_INVALID) {
@@ -1720,8 +1720,8 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
 
         if (rBaseTpc != Tpc::TPC_INVALID) {
             xml.tag("base", rBaseTpc);
-            if (item->baseCase() != NoteCaseType::CAPITAL) {
-                xml.tag("baseCase", static_cast<int>(item->baseCase()));
+            if (item->bassCase() != NoteCaseType::CAPITAL) {
+                xml.tag("baseCase", static_cast<int>(item->bassCase()));
             }
         }
         for (const HDegree& hd : item->degreeList()) {

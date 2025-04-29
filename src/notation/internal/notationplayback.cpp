@@ -76,6 +76,7 @@ void NotationPlayback::init()
 
     m_playbackModel.setPlayRepeats(configuration()->isPlayRepeatsEnabled());
     m_playbackModel.setPlayChordSymbols(configuration()->isPlayChordSymbolsEnabled());
+    m_playbackModel.setIsMetronomeEnabled(configuration()->isMetronomeEnabled());
 
     m_playbackModel.load(score());
 
@@ -97,6 +98,13 @@ void NotationPlayback::init()
         if (playChordSymbols != m_playbackModel.isPlayChordSymbolsEnabled()) {
             m_playbackModel.setPlayChordSymbols(playChordSymbols);
             m_playbackModel.reload();
+        }
+    });
+
+    configuration()->isMetronomeEnabledChanged().onNotify(this, [this]() {
+        bool metronomeEnabled = configuration()->isMetronomeEnabled();
+        if (metronomeEnabled != m_playbackModel.isMetronomeEnabled()) {
+            m_playbackModel.setIsMetronomeEnabled(metronomeEnabled);
         }
     });
 
@@ -135,9 +143,16 @@ void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingIt
     m_playbackModel.triggerEventsForItems(items);
 }
 
-void NotationPlayback::triggerMetronome(int tick)
+void NotationPlayback::triggerMetronome(muse::midi::tick_t tick)
 {
     m_playbackModel.triggerMetronome(tick);
+}
+
+void NotationPlayback::triggerCountIn(muse::midi::tick_t tick, muse::secs_t& totalCountInDuration)
+{
+    muse::mpe::duration_t durationInMicrosecs = 0;
+    m_playbackModel.triggerCountIn(tick, durationInMicrosecs);
+    totalCountInDuration = audio::microsecsToSecs(durationInMicrosecs);
 }
 
 InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const
@@ -320,33 +335,16 @@ Notification NotationPlayback::loopBoundariesChanged() const
     return m_loopBoundariesChanged;
 }
 
-const Tempo& NotationPlayback::tempo(tick_t tick) const
+const Tempo& NotationPlayback::multipliedTempo(tick_t tick) const
 {
     if (!score()) {
         static Tempo empty;
         return empty;
     }
 
-    m_currentTempo.valueBpm = static_cast<int>(std::round(score()->tempomap()->tempo(tick).toBPM().val));
+    m_currentTempo.valueBpm = static_cast<int>(std::round(score()->tempomap()->multipliedTempo(tick).toBPM().val));
 
     return m_currentTempo;
-}
-
-const mu::engraving::TempoText* NotationPlayback::tempoText(int _tick) const
-{
-    Fraction tick = Fraction::fromTicks(_tick);
-    mu::engraving::TempoText* result = nullptr;
-
-    mu::engraving::SegmentType segmentType = mu::engraving::SegmentType::All;
-    for (const mu::engraving::Segment* segment = score()->firstSegment(segmentType); segment; segment = segment->next1(segmentType)) {
-        for (mu::engraving::EngravingItem* element: segment->annotations()) {
-            if (element && element->isTempoText() && element->tick() <= tick) {
-                result = mu::engraving::toTempoText(element);
-            }
-        }
-    }
-
-    return result;
 }
 
 MeasureBeat NotationPlayback::beat(tick_t tick) const
@@ -354,11 +352,16 @@ MeasureBeat NotationPlayback::beat(tick_t tick) const
     MeasureBeat measureBeat;
 
     if (score() && score()->checkHasMeasures()) {
-        int dummy = 0;
-        score()->sigmap()->tickValues(tick, &measureBeat.measureIndex, &measureBeat.beatIndex, &dummy);
+        int ticks = 0;
+        int beatIndex = 0;
+        score()->sigmap()->tickValues(tick, &measureBeat.measureIndex, &beatIndex, &ticks);
 
+        const TimeSigFrac timeSig = score()->sigmap()->timesig(Fraction::fromTicks(tick)).timesig();
+        const int ticksB = ticks_beat(timeSig.denominator());
+
+        measureBeat.beat = beatIndex + ticks / static_cast<float>(ticksB);
         measureBeat.maxMeasureIndex = score()->measures()->size() - 1;
-        measureBeat.maxBeatIndex = score()->sigmap()->timesig(Fraction::fromTicks(tick)).timesig().numerator() - 1;
+        measureBeat.maxBeatIndex = timeSig.numerator() - 1;
     }
 
     return measureBeat;

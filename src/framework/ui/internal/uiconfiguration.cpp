@@ -329,17 +329,6 @@ ThemeList UiConfiguration::themes() const
     return m_themes;
 }
 
-QStringList UiConfiguration::possibleFontFamilies() const
-{
-    QStringList allFonts = QFontDatabase::families();
-    QStringList smuflFonts
-        = { "Bravura", "Campania", "Edwin", "Finale Broadway", "Finale Maestro", "Gootville", "Leland", "MScore", "MuseJazz", "Petaluma" };
-    for (const QString& font : smuflFonts) {
-        allFonts.removeAll(font);
-    }
-    return allFonts;
-}
-
 QStringList UiConfiguration::possibleAccentColors() const
 {
     static const QStringList lightAccentColors {
@@ -367,6 +356,20 @@ QStringList UiConfiguration::possibleAccentColors() const
     }
 
     return lightAccentColors;
+}
+
+QStringList UiConfiguration::possibleFontFamilies() const
+{
+    QStringList allFonts = QFontDatabase::families();
+    for (const QString& fontFamily : m_nonTextFonts) {
+        allFonts.removeAll(fontFamily);
+    }
+    return allFonts;
+}
+
+void UiConfiguration::setNonTextFonts(const QStringList& fontFamilies)
+{
+    m_nonTextFonts = fontFamilies;
 }
 
 void UiConfiguration::resetThemes()

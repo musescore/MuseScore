@@ -50,6 +50,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationsolomutestate.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationnoteinput.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationselectionfilter.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationundostack.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationstyle.h
@@ -90,6 +91,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationnoteinput.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationselectionfilter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationselectionfilter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselectionrange.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselectionrange.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationelements.cpp
@@ -123,6 +126,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontscontroller.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.h
@@ -182,8 +187,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/percussionnotepopupcontentmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/percussionnotepopupcontentmodel.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/abstractselectionfiltermodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/abstractselectionfiltermodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/voicesselectionfiltermodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/voicesselectionfiltermodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/elementsselectionfiltermodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/elementsselectionfiltermodel.h
+
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.h
 

@@ -480,6 +480,7 @@ MenuItem* AppMenuModel::makeDiagnosticsMenu()
             makeMenuItem("show-skylines"),
             makeMenuItem("show-system-bounding-rects"),
             makeMenuItem("show-element-masks"),
+            makeMenuItem("show-line-attach-points"),
             makeMenuItem("mark-corrupted-measures"),
             makeMenuItem("check-for-score-corruptions")
         };

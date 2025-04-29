@@ -342,6 +342,8 @@ PropertyValue TempoText::getProperty(Pid propertyId) const
         return m_tempo;
     case Pid::TEMPO_FOLLOW_TEXT:
         return m_followText;
+    case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
+        return m_alignRightOfRehearsalMark;
     default:
         return TextBase::getProperty(propertyId);
     }
@@ -364,6 +366,9 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::TEMPO_FOLLOW_TEXT:
         setFollowText(v.toBool());
+        break;
+    case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
+        m_alignRightOfRehearsalMark = v.toBool();
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
@@ -390,6 +395,8 @@ PropertyValue TempoText::propertyDefault(Pid id) const
         return BeatsPerSecond(2.0);
     case Pid::TEMPO_FOLLOW_TEXT:
         return false;
+    case Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK:
+        return true;
     default:
         return TextBase::propertyDefault(id);
     }

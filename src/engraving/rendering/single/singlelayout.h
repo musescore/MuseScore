@@ -86,6 +86,7 @@ class MeasureNumber;
 class MeasureRepeat;
 
 class NoteHead;
+class NoteLine;
 
 class Ornament;
 class Ottava;
@@ -199,6 +200,7 @@ public:
     static void layout(Lyrics* item, const Context& ctx);
 
     static void layout(NoteHead* item, const Context& ctx);
+    static void layout(NoteLine* item, const Context& ctx);
 
     static void layout(Marker* item, const Context& ctx);
     static void layout(MeasureNumber* item, const Context& ctx);

@@ -1411,9 +1411,11 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
     if (t1 < t2) {
         Segment* s1 = tick2rightSegment(t1);
         Segment* s2 = tick2rightSegment(t2);
-        typedef SelectionFilterType Sel;
+
+        SelectionFilter filter;
         // chord symbols can exist without chord/rest so they should not be removed
-        constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
+        filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
+
         deleteAnnotationsFromRange(s1, s2, track, track + 1, filter);
         deleteSlursFromRange(t1, t2, track, track + 1, filter);
     }
@@ -1455,9 +1457,11 @@ bool Score::makeGap1(const Fraction& baseTick, staff_idx_t staffIdx, const Fract
 
         if (newLen > Fraction(0, 1)) {
             const Fraction endTick = tick + newLen;
-            typedef SelectionFilterType Sel;
+
+            SelectionFilter filter;
             // chord symbols can exist without chord/rest so they should not be removed
-            constexpr Sel filter = static_cast<Sel>(int(Sel::ALL) & ~int(Sel::CHORD_SYMBOL));
+            filter.setFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL, false);
+
             deleteAnnotationsFromRange(tick2rightSegment(tick), tick2rightSegment(endTick), track, track + 1, filter);
             deleteOrShortenOutSpannersFromRange(tick, endTick, track, track + 1, filter);
         }
@@ -4284,7 +4288,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
             if (!concertPitch) {
                 offset = interval.chromatic;
             }
-            notes = r.generateNotes(h->rootTpc(), h->baseTpc(),
+            notes = r.generateNotes(h->rootTpc(), h->bassTpc(),
                                     literal, voicing, offset);
         }
 

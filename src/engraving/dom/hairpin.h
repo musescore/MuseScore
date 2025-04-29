@@ -107,7 +107,7 @@ class Hairpin final : public TextLineBase
     DECLARE_CLASSOF(ElementType::HAIRPIN)
 
 public:
-    Hairpin(Segment* parent);
+    Hairpin(EngravingItem* parent);
 
     Hairpin* clone() const override { return new Hairpin(*this); }
 
@@ -120,7 +120,6 @@ public:
     HairpinType hairpinType() const { return m_hairpinType; }
     void setHairpinType(HairpinType val);
 
-    Segment* segment() const { return (Segment*)explicitParent(); }
     LineSegment* createLineSegment(System* parent) override;
 
     bool hairpinCircledTip() const { return m_hairpinCircledTip; }

@@ -305,19 +305,9 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             continue;
                         }
                         ChordRest* cr = toChordRest(e2);
-                        if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
+                        if (BeamLayout::isStartOfCrossBeam(cr)) {                           // layout cross staff beams
                             TLayout::layoutBeam(cr->beam(), ctx);
                             BeamLayout::checkCrossPosAndStemConsistency(cr->beam(), ctx);
-                            for (EngravingItem* item : cr->beam()->elements()) {
-                                if (!item || !item->isRest()) {
-                                    continue;
-                                }
-                                Rest* rest = toRest(item);
-                                Beam* beam = rest->beam();
-                                if (beam && beam->fullCross() && rest->staffMove()) {
-                                    BeamLayout::verticalAdjustBeamedRests(rest, beam, ctx);
-                                }
-                            }
                         }
                         if (TupletLayout::notTopTuplet(cr)) {
                             // fix layout of tuplets

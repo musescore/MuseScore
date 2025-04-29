@@ -179,7 +179,9 @@ void mu::notation::PartialTiePopupModel::onClosed()
         return;
     }
 
-    if (tieItem->allJumpPointsInactive()) {
+    Note* startNote = tieItem->startNote();
+
+    if (tieItem->allJumpPointsInactive() && startNote && startNote->tieFor() == tieItem) {
         Score* score = tieItem->score();
         beginCommand(TranslatableString("engraving", "Remove partial tie"));
         score->undoRemoveElement(tieItem);

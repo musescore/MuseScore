@@ -266,7 +266,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
     const qreal w = gpaletteScore->style().spatium() * 8;
 
     for (HairpinType hairpinType : hairpins) {
-        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy());
         hairpin->setHairpinType(hairpinType);
         hairpin->setLen(w);
         qreal mag = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DECRESC_LINE) ? 1 : 0.9;
@@ -1067,17 +1067,17 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
     sp->setYOffset(1.0);
 
     static const std::vector<ClefType> clefsDefault  {
-        ClefType::G,     ClefType::G8_VA,  ClefType::G15_MA,  ClefType::G8_VB,    ClefType::C3,
-        ClefType::C4, ClefType::F,   ClefType::F_8VA,
+        ClefType::G, ClefType::G8_VA, ClefType::G15_MA, ClefType::G8_VB, ClefType::C3,
+        ClefType::C4, ClefType::F, ClefType::F_8VA,
         ClefType::F8_VB, ClefType::PERC, ClefType::TAB, ClefType::TAB4
     };
     static const std::vector<ClefType> clefsMaster  {
-        ClefType::G,     ClefType::G8_VA,  ClefType::G15_MA,  ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
-        ClefType::G8_VB_P,    ClefType::G_1,  ClefType::C1,  ClefType::C2,    ClefType::C3,
-        ClefType::C4,    ClefType::C4_8VB,    ClefType::C5,  ClefType::C_19C, ClefType::C1_F18C, ClefType::C3_F18C, ClefType::C4_F18C,
+        ClefType::G, ClefType::G8_VA, ClefType::G15_MA, ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
+        ClefType::G8_VB_C, ClefType::G8_VB_P, ClefType::G_1, ClefType::C1, ClefType::C2, ClefType::C3,
+        ClefType::C4, ClefType::C4_8VB, ClefType::C5, ClefType::C_19C, ClefType::C1_F18C, ClefType::C3_F18C, ClefType::C4_F18C,
         ClefType::C1_F20C, ClefType::C3_F20C, ClefType::C4_F20C,
-        ClefType::F,   ClefType::F_8VA, ClefType::F_15MA,
-        ClefType::F8_VB,    ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,
+        ClefType::F, ClefType::F_8VA, ClefType::F_15MA,
+        ClefType::F8_VB, ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,
         ClefType::PERC,
         ClefType::PERC2, ClefType::TAB, ClefType::TAB4, ClefType::TAB_SERIF, ClefType::TAB4_SERIF
     };
@@ -1153,13 +1153,13 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     };
 
     for (HairpinType hairpinType : hairpins) {
-        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy());
         hairpin->setHairpinType(hairpinType);
         hairpin->setLen(w);
         sp->appendElement(hairpin, hairpin->subtypeUserName());
     }
 
-    auto gabel = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+    auto gabel = Factory::makeHairpin(gpaletteScore->dummy());
     gabel->setHairpinType(HairpinType::CRESC_HAIRPIN);
     gabel->setBeginText(u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
     gabel->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
@@ -1494,7 +1494,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     sp->appendElement(tempoPrimoTxt, tempoPrimoStr, 1.3);
 
     auto stxt = makeElement<SystemText>(gpaletteScore);
-    stxt->setTextStyleType(TextStyleType::TEMPO);
+    stxt->initTextStyleType(TextStyleType::TEMPO);
     stxt->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Swing")));
     stxt->setSwing(true);
     PaletteCellPtr cell = sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "Swing"), 1.3);
@@ -1502,7 +1502,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     cell->setElementTranslated(true);
 
     stxt = makeElement<SystemText>(gpaletteScore);
-    stxt->setTextStyleType(TextStyleType::TEMPO);
+    stxt->initTextStyleType(TextStyleType::TEMPO);
     /*: System text to switch from swing rhythm back to straight rhythm */
     stxt->setXmlText(QT_TRANSLATE_NOOP("palette", "Straight"));
     // need to be true to enable the "Off" option

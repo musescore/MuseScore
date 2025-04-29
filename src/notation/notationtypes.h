@@ -90,7 +90,7 @@ using TransposeMode = mu::engraving::TransposeMode;
 using TransposeDirection = mu::engraving::TransposeDirection;
 using Fraction = mu::engraving::Fraction;
 using ElementPattern = mu::engraving::ElementPattern;
-using SelectionFilterType = mu::engraving::SelectionFilterType;
+using SelectionFilterTypesVariant = mu::engraving::SelectionFilterTypesVariant;
 using Chord = mu::engraving::Chord;
 using ChordRest = mu::engraving::ChordRest;
 using Harmony = mu::engraving::Harmony;
@@ -533,7 +533,7 @@ struct MeasureBeat
 {
     int measureIndex = 0;
     int maxMeasureIndex = 0;
-    int beatIndex = 0;
+    float beat = 0.f;
     int maxBeatIndex = 0;
 };
 

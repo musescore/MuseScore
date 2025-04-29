@@ -201,7 +201,6 @@ public:
     bool isEndOfSystemLock() const;
 
 protected:
-
     MeasureBase(const ElementType& type, System* system = 0);
     MeasureBase(const MeasureBase&);
 
@@ -216,7 +215,6 @@ private:
     Fraction m_tick = Fraction(0, 1);
     int m_no = 0;                         // Measure number, counting from zero
     int m_noOffset = 0;                   // Offset to measure number
-    double m_oldWidth = 0.0;              // Used to restore layout during recalculations in Score::collectSystem()
 };
 
 //---------------------------------------------------------

@@ -1358,7 +1358,7 @@ void SystemLayout::createSkylines(const ElementsToLayout& elementsToLayout, Layo
                         // add beams to skline
                         if (e->isChordRest()) {
                             ChordRest* cr = toChordRest(e);
-                            if (BeamLayout::isTopBeam(cr)) {
+                            if (BeamLayout::isStartOfNonCrossBeam(cr)) {
                                 Beam* b = cr->beam();
                                 b->addSkyline(skyline);
                             }
@@ -1719,8 +1719,9 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                     continue;
                 }
                 for (Chord* grace : toChord(e)->graceNotes()) {
-                    if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
-                        ChordLayout::computeUp(grace, ctx);
+                    if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())
+                        && grace->beam()->elements().front() == grace) {
+                        BeamLayout::layout(grace->beam(), ctx);
                     }
                 }
             }
@@ -1741,11 +1742,12 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                     continue;
                 }
                 Chord* chord = toChord(e);
-                if (chord->beam() && (chord->beam()->cross() || chord->beam()->userModified())) {
+                if (chord->beam() && (chord->beam()->cross() || chord->beam()->userModified())
+                    && chord->beam()->elements().front() == chord) {
                     bool prevUp = chord->up();
                     Stem* stem = chord->stem();
                     double prevStemLength = stem ? stem->length() : 0.0;
-                    ChordLayout::computeUp(chord, ctx);
+                    BeamLayout::layout(chord->beam(), ctx);
                     if (chord->up() != prevUp || (stem && stem->length() != prevStemLength)) {
                         // If the chord has changed direction needs to be re-laid out
                         ChordLayout::layoutChords1(ctx, &seg, chord->vStaffIdx());

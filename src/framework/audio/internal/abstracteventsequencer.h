@@ -89,6 +89,20 @@ public:
         }
     }
 
+    void flushOffstream()
+    {
+        if (m_offStreamEvents.empty()) {
+            return;
+        }
+
+        m_offStreamEvents.clear();
+        updateOffSequenceIterator();
+
+        if (m_onOffStreamFlushed) {
+            m_onOffStreamFlushed();
+        }
+    }
+
     void setActive(const bool active)
     {
         if (m_isActive == active) {
@@ -158,19 +172,25 @@ public:
         EventSequenceMap result;
 
         if (!m_isActive) {
-            result.emplace(0, EventSequence());
-            handleOffStream(result, nextMsecs);
+            result.emplace(m_offstreamPosition, EventSequence());
+
+            if (m_currentOffSequenceIt == m_offStreamEvents.cend()) {
+                return result;
+            }
+
+            m_offstreamPosition += nextMsecs;
+            handleOffStream(result);
+
             return result;
         }
 
         // Empty sequence means to continue the previous sequence
         result.emplace(m_playbackPosition, EventSequence());
+        m_playbackPosition += nextMsecs;
 
         if (m_currentMainSequenceIt == m_mainStreamEvents.cend()) {
             return result;
         }
-
-        m_playbackPosition += nextMsecs;
 
         handleMainStream(result);
         handleDynamicChanges(result);
@@ -198,6 +218,7 @@ protected:
     void updateOffSequenceIterator()
     {
         m_currentOffSequenceIt = m_offStreamEvents.cbegin();
+        m_offstreamPosition = 0;
     }
 
     void updateDynamicChangesIterator()
@@ -205,22 +226,22 @@ protected:
         m_currentDynamicsIt = m_dynamicEvents.lower_bound(m_playbackPosition);
     }
 
-    void handleOffStream(EventSequenceMap& result, const msecs_t nextMsecs)
+    void handleOffStream(EventSequenceMap& result)
     {
-        if (m_offStreamEvents.empty() || m_currentOffSequenceIt == m_offStreamEvents.cend()) {
+        if (m_offStreamEvents.empty()) {
             return;
         }
 
-        if (m_currentOffSequenceIt->first <= nextMsecs) {
-            while (m_currentOffSequenceIt != m_offStreamEvents.end()
-                   && m_currentOffSequenceIt->first <= nextMsecs) {
-                result.insert_or_assign(m_currentOffSequenceIt->first, std::move(m_currentOffSequenceIt->second));
-                m_currentOffSequenceIt = m_offStreamEvents.erase(m_currentOffSequenceIt);
-            }
-        } else {
-            auto node = m_offStreamEvents.extract(m_currentOffSequenceIt);
-            node.key() -= nextMsecs;
-            m_offStreamEvents.insert(std::move(node));
+        while (m_currentOffSequenceIt != m_offStreamEvents.end()
+               && m_currentOffSequenceIt->first <= m_offstreamPosition) {
+            EventSequence& sequence = result[m_currentOffSequenceIt->first];
+            sequence.insert(m_currentOffSequenceIt->second.cbegin(),
+                            m_currentOffSequenceIt->second.cend());
+            m_currentOffSequenceIt = std::next(m_currentOffSequenceIt);
+        }
+
+        if (m_currentOffSequenceIt == m_offStreamEvents.end()) {
+            m_offStreamEvents.clear();
             updateOffSequenceIterator();
         }
     }
@@ -252,6 +273,7 @@ protected:
     }
 
     mutable msecs_t m_playbackPosition = 0;
+    mutable msecs_t m_offstreamPosition = 0;
 
     SequenceIterator m_currentMainSequenceIt;
     SequenceIterator m_currentOffSequenceIt;

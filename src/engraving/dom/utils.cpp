@@ -1668,12 +1668,21 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
     if (!firstSeg || !secondSeg) {
         return false;
     }
+    const MasterScore* master = firstSeg->masterScore();
+
     Measure* firstMeasure = firstSeg->measure();
     Measure* secondMeasure = secondSeg->measure();
 
     if (firstMeasure == secondMeasure) {
         return true;
     }
+
+    const MeasureBase* firstMasterMeasureBase = master->measure(firstMeasure->index());
+    const Measure* firstMasterMeasure = firstMasterMeasureBase
+                                        && firstMasterMeasureBase->isMeasure() ? toMeasure(firstMasterMeasureBase) : nullptr;
+    const MeasureBase* secondMasterMeasureBase = master->measure(secondMeasure->index());
+    const Measure* secondMasterMeasure = secondMasterMeasureBase
+                                         && secondMasterMeasureBase->isMeasure() ? toMeasure(secondMasterMeasureBase) : nullptr;
 
     Score* score = firstSeg->score();
 
@@ -1686,12 +1695,12 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
         const auto nextSegIt = std::next(it);
 
         // Check if measures are in the same repeat segment
-        if (rs->containsMeasure(firstMeasure) && rs->containsMeasure(secondMeasure)) {
+        if (rs->containsMeasure(firstMasterMeasure) && rs->containsMeasure(secondMasterMeasure)) {
             return true;
         }
 
         // Continue to build list of measures at the start of following repeat segments
-        if (!rs->endsWithMeasure(firstMeasure) || nextSegIt == repeatList.end()) {
+        if (!rs->endsWithMeasure(firstMasterMeasure) || nextSegIt == repeatList.end()) {
             continue;
         }
 
@@ -1707,7 +1716,7 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
 
     // Check if second segment is in a following measure in the repeat structure
     for (const Measure* m : measures) {
-        if (m == secondSeg->measure()) {
+        if (m == secondMasterMeasure) {
             return true;
         }
     }
@@ -1720,12 +1729,21 @@ bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment
     if (!firstSeg || !secondSeg) {
         return false;
     }
+    const MasterScore* master = firstSeg->masterScore();
+
     Measure* firstMeasure = firstSeg->measure();
     Measure* secondMeasure = secondSeg->measure();
 
     if (firstMeasure == secondMeasure) {
         return false;
     }
+
+    const MeasureBase* firstMasterMeasureBase = master->measure(firstMeasure->index());
+    const Measure* firstMasterMeasure = firstMasterMeasureBase
+                                        && firstMasterMeasureBase->isMeasure() ? toMeasure(firstMasterMeasureBase) : nullptr;
+    const MeasureBase* secondMasterMeasureBase = master->measure(secondMeasure->index());
+    const Measure* secondMasterMeasure = secondMasterMeasureBase
+                                         && secondMasterMeasureBase->isMeasure() ? toMeasure(secondMasterMeasureBase) : nullptr;
 
     Score* score = firstSeg->score();
 
@@ -1736,7 +1754,7 @@ bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment
     for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
         const RepeatSegment* rs = *it;
 
-        if (!rs->containsMeasure(firstMeasure) || !rs->containsMeasure(secondMeasure)) {
+        if (!rs->containsMeasure(firstMasterMeasure) || !rs->containsMeasure(secondMasterMeasure)) {
             return true;
         }
     }

@@ -48,6 +48,7 @@ class QDrag;
 namespace mu::notation {
 class Notation;
 class NotationSelection;
+class NotationSelectionFilter;
 class NotationInteraction : public INotationInteraction, public muse::Injectable, public muse::async::Asyncable
 {
     muse::Inject<INotationConfiguration> configuration = { this };
@@ -97,8 +98,7 @@ public:
     EngravingItem* contextItem() const override;
 
     // SelectionFilter
-    bool isSelectionTypeFiltered(SelectionFilterType type) const override;
-    void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) override;
+    INotationSelectionFilterPtr selectionFilter() const override;
 
     // Drag
     bool isDragStarted() const override;
@@ -117,8 +117,8 @@ public:
     bool startDropSingle(const QByteArray& edata) override;
     bool startDropRange(const QByteArray& data) override;
     bool startDropImage(const QUrl& url) override;
-    bool isDropSingleAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
-    bool isDropRangeAccepted(const muse::PointF& pos) override;
+    bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool updateDropRange(const muse::PointF& pos) override;
     bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
@@ -495,6 +495,8 @@ private:
 
     std::shared_ptr<NotationSelection> m_selection = nullptr;
     muse::async::Notification m_selectionChanged;
+
+    std::shared_ptr<NotationSelectionFilter> m_selectionFilter = nullptr;
 
     DragData m_dragData;
     muse::async::Notification m_dragChanged;

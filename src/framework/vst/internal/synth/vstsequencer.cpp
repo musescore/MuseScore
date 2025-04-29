@@ -59,12 +59,7 @@ void VstSequencer::init(ParamsMapping&& mapping, bool useDynamicEvents)
 
 void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList&)
 {
-    m_offStreamEvents.clear();
-
-    if (m_onOffStreamFlushed) {
-        m_onOffStreamFlushed();
-    }
-
+    flushOffstream();
     updatePlaybackEvents(m_offStreamEvents, events);
     updateOffSequenceIterator();
 }

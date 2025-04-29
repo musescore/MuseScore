@@ -64,6 +64,7 @@ static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomP
 static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
+static const Settings::Key USER_MUSIC_FONTS_PATH(module_name, "application/paths/myMusicFonts");
 
 static const Settings::Key DEFAULT_NOTE_INPUT_METHOD(module_name, "score/defaultInputMethod");
 
@@ -137,8 +138,7 @@ void NotationConfiguration::init()
         m_backgroundChanged.notify();
     });
 
-    uiConfiguration()->currentThemeChanged().onNotify(this, [this]()
-    {
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         m_backgroundChanged.notify();
     });
 
@@ -227,6 +227,11 @@ void NotationConfiguration::init()
 #endif
     }
 
+    settings()->setDefaultValue(USER_MUSIC_FONTS_PATH, Val(io::path_t {}));
+    settings()->valueChanged(USER_MUSIC_FONTS_PATH).onReceive(this, [this](const Val& val) {
+        m_userMusicFontsPathChanged.send(val.toString());
+    });
+
     settings()->setDefaultValue(DEFAULT_NOTE_INPUT_METHOD, Val(BY_NOTE_NAME_INPUT_METHOD));
     settings()->valueChanged(DEFAULT_NOTE_INPUT_METHOD).onReceive(this, [this](const Val&) {
         m_defaultNoteInputMethodChanged.notify();
@@ -254,7 +259,12 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
+
     settings()->setDefaultValue(IS_METRONOME_ENABLED, Val(false));
+    settings()->valueChanged(IS_METRONOME_ENABLED).onReceive(this, [this](const Val&) {
+        m_isMetronomeEnabledChanged.notify();
+    });
+
     settings()->setDefaultValue(IS_COUNT_IN_ENABLED, Val(false));
 
     settings()->setDefaultValue(PLAYBACK_SMOOTH_PANNING, Val(false));
@@ -742,6 +752,21 @@ async::Channel<muse::io::path_t> NotationConfiguration::partStyleFilePathChanged
     return engravingConfiguration()->partStyleFilePathChanged();
 }
 
+muse::io::path_t NotationConfiguration::userMusicFontsPath() const
+{
+    return settings()->value(USER_MUSIC_FONTS_PATH).toPath();
+}
+
+void NotationConfiguration::setUserMusicFontsPath(const muse::io::path_t& path)
+{
+    settings()->setSharedValue(USER_MUSIC_FONTS_PATH, Val(path));
+}
+
+muse::async::Channel<muse::io::path_t> NotationConfiguration::userMusicFontsPathChanged() const
+{
+    return m_userMusicFontsPathChanged;
+}
+
 NoteInputMethod NotationConfiguration::defaultNoteInputMethod() const
 {
     std::string str = settings()->value(DEFAULT_NOTE_INPUT_METHOD).toString();
@@ -878,6 +903,11 @@ bool NotationConfiguration::isMetronomeEnabled() const
 void NotationConfiguration::setIsMetronomeEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_METRONOME_ENABLED, Val(enabled));
+}
+
+muse::async::Notification NotationConfiguration::isMetronomeEnabledChanged() const
+{
+    return m_isMetronomeEnabledChanged;
 }
 
 bool NotationConfiguration::isCountInEnabled() const

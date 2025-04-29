@@ -2562,6 +2562,7 @@ static const std::vector<MusicXmlClefInfo> CLEF_INFOS = {
     { ClefType::TAB4_SERIF, "TAB", 0 },
 
     { ClefType::C4_8VB,     "C", -1 },
+    { ClefType::G8_VB_C,    "G", -1 },
 };
 
 static const MusicXmlClefInfo findClefInfoByType(const ClefType& v)
@@ -4759,7 +4760,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
             }
         }           // if (pel && ...
 
-        if (el->systemFlag()) {
+        if (el->systemFlag() && !ExportMusicXml::configuration()->exportMu3Compat()) {
             tagname += u" system=\"only-top\"";
         }
     }
@@ -5048,7 +5049,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
 
     XmlWriter::Attributes tempoAttrs;
     tempoAttrs = { { "placement", (text->placement() == PlacementV::BELOW) ? "below" : "above" } };
-    if (text->systemFlag()) {
+    if (text->systemFlag() && !ExportMusicXml::configuration()->exportMu3Compat()) {
         tempoAttrs.emplace_back(std::make_pair("system", text->isLinked() ? "also-top" : "only-top"));
     }
 
@@ -8834,7 +8835,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             }
             m_xml.tagRaw(s, h->xmlKind());
 
-            int baseTpc = h->baseTpc();
+            int baseTpc = h->bassTpc();
             if (baseTpc != Tpc::TPC_INVALID) {
                 m_xml.startElement("bass");
                 m_xml.tag("bass-step", tpc2stepName(baseTpc));
@@ -8893,7 +8894,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 m_xml.tag("kind", { { "text", h->extensionName() } }, "");
             }
 
-            int baseTpc = h->baseTpc();
+            int baseTpc = h->bassTpc();
             if (baseTpc != Tpc::TPC_INVALID) {
                 m_xml.startElement("bass");
                 m_xml.tag("bass-step", tpc2stepName(baseTpc));

@@ -70,6 +70,7 @@ const std::unordered_map<ActionCode, bool EngravingDebuggingOptions::*> Notation
     { "show-skylines", &EngravingDebuggingOptions::showSkylines },
     { "show-system-bounding-rects", &EngravingDebuggingOptions::showSystemBoundingRects },
     { "show-element-masks", &EngravingDebuggingOptions::showElementMasks },
+    { "show-line-attach-points", &EngravingDebuggingOptions::showLineAttachPoints },
     { "mark-corrupted-measures", &EngravingDebuggingOptions::markCorruptedMeasures }
 };
 
@@ -1103,7 +1104,7 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
     case MoveDirection::Left:
         if (playbackController()->isPlaying()) {
             MeasureBeat beat = playbackController()->currentBeat();
-            int targetBeatIdx = beat.beatIndex;
+            int targetBeatIdx = static_cast<int>(beat.beat);
             int targetMeasureIdx = beat.measureIndex;
             int increment = (direction == MoveDirection::Right ? 1 : -1);
 

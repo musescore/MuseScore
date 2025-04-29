@@ -40,7 +40,6 @@
 #include "containers.h"
 
 #include "draw/painter.h"
-#include "draw/types/painterpath.h"
 #include "draw/types/pen.h"
 
 // TODO: Don't include from engraving/internal
@@ -68,7 +67,6 @@
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/lyrics.h"
-#include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
@@ -98,6 +96,7 @@
 #include "notation.h"
 #include "notationnoteinput.h"
 #include "notationselection.h"
+#include "notationselectionfilter.h"
 #include "scorecallbacks.h"
 
 #include "utilities/scorerangeutilities.h"
@@ -224,6 +223,10 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
 {
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack, iocContext());
     m_selection = std::make_shared<NotationSelection>(notation);
+
+    m_selectionFilter = std::make_shared<NotationSelectionFilter>(notation, [this]() {
+        notifyAboutSelectionChangedIfNeed();
+    });
 
     m_noteInput->stateChanged().onNotify(this, [this]() {
         if (!m_noteInput->isNoteInputMode()) {
@@ -1035,18 +1038,9 @@ muse::async::Notification NotationInteraction::selectionChanged() const
     return m_selectionChanged;
 }
 
-bool NotationInteraction::isSelectionTypeFiltered(SelectionFilterType type) const
+INotationSelectionFilterPtr NotationInteraction::selectionFilter() const
 {
-    return score()->selectionFilter().isFiltered(type);
-}
-
-void NotationInteraction::setSelectionTypeFiltered(SelectionFilterType type, bool filtered)
-{
-    score()->selectionFilter().setFiltered(type, filtered);
-    if (selection()->isRange()) {
-        score()->selection().updateSelectedElements();
-        notifyAboutSelectionChangedIfNeed();
-    }
+    return m_selectionFilter;
 }
 
 bool NotationInteraction::isDragStarted() const
@@ -1287,12 +1281,14 @@ bool NotationInteraction::isOutgoingDragElementAllowed(const EngravingItem* elem
     case ElementType::HBOX:
     case ElementType::TBOX:
     case ElementType::FBOX:
-    // TODO: Bends can't be copy-dragged until corresponding SingleLayout::layout and SingleDraw::draw methods have been implemented
+    // TODO: Bends & NoteLines can't be copy-dragged until corresponding SingleLayout::layout and SingleDraw::draw methods have been implemented
     case ElementType::GUITAR_BEND:
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GUITAR_BEND_HOLD:
     case ElementType::GUITAR_BEND_HOLD_SEGMENT:
     case ElementType::GUITAR_BEND_TEXT:
+    case ElementType::NOTELINE:
+    case ElementType::NOTELINE_SEGMENT:
         return false;
     default: return true;
     }
@@ -1472,7 +1468,7 @@ bool NotationInteraction::startDropImage(const QUrl& url)
 }
 
 //! NOTE Copied from ScoreView::dragMoveEvent
-bool NotationInteraction::isDropSingleAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
 {
     if (!m_dropData.elementDropData.has_value()) {
         return false;
@@ -1579,11 +1575,24 @@ bool NotationInteraction::isDropSingleAccepted(const PointF& pos, Qt::KeyboardMo
     return false;
 }
 
-static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLength, staff_idx_t numStaves, staff_idx_t* staffIdx,
-                              Segment** segment)
+static Segment* rangeEndSegment(Score* score, const Fraction& endTick)
+{
+    Segment* endSegment = score->tick2rightSegment(endTick,
+                                                   true,
+                                                   Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+
+    if (endSegment && !endSegment->enabled()) {
+        endSegment = endSegment->next1MMenabled();
+    }
+
+    return endSegment ? endSegment : score->lastSegmentMM();
+}
+
+static bool dropRangePosition(Score* score, const PointF& pos, Fraction tickLength, staff_idx_t numStaves, staff_idx_t* staffIdx,
+                              Segment** segment, const Segment** endSegment = nullptr, ShowAnchors* showAnchors = nullptr)
 {
     IF_ASSERT_FAILED(score && staffIdx && segment) {
-        return;
+        return false;
     }
 
     static constexpr double spacingFactor = 0.5;
@@ -1592,7 +1601,7 @@ static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLeng
     // First, get an approximate location
     score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
     if (*staffIdx == muse::nidx || !*segment) {
-        return;
+        return false;
     }
 
     // Determine the measures range
@@ -1601,7 +1610,7 @@ static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLeng
 
     Measure* startMeasure = (*segment)->measure();
     if (!startMeasure) {
-        return;
+        return false;
     }
 
     Measure* endMeasure = score->tick2measure(endTick);
@@ -1609,12 +1618,12 @@ static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLeng
         endMeasure = score->lastMeasure();
 
         if (!endMeasure) {
-            return;
+            return false;
         }
     }
 
     IF_ASSERT_FAILED(startMeasure == endMeasure || startMeasure->isBefore(endMeasure)) {
-        return;
+        return false;
     }
 
     const staff_idx_t endStaffIdx = std::min(*staffIdx + numStaves, score->nstaves());
@@ -1632,38 +1641,28 @@ static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLeng
     // Get precise location using the newly created time tick anchors
     score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
     if (*staffIdx == muse::nidx || !*segment) {
-        return;
+        return false;
     }
 
     startTick = (*segment)->tick();
     endTick = startTick + tickLength;
 
-    score->setShowAnchors(ShowAnchors(0, *staffIdx, *staffIdx + numStaves, startTick, endTick,
-                                      startMeasure->tick(), endMeasure->endTick()));
-
-    // Invalidate BSP tree of affected pages
-    System* lastSeenSystem = nullptr;
-    Page* lastSeenPage = nullptr;
-    for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
-        System* s = mb->system();
-        if (!s || s == lastSeenSystem) {
-            continue;
+    if (endSegment) {
+        *endSegment = rangeEndSegment(score, endTick);
+        if (!*endSegment) {
+            return false;
         }
-
-        lastSeenSystem = s;
-
-        Page* p = s->page();
-        if (!p || p == lastSeenPage) {
-            continue;
-        }
-
-        lastSeenPage = p;
-
-        p->invalidateBspTree();
     }
+
+    if (showAnchors) {
+        *showAnchors = ShowAnchors(0, *staffIdx, *staffIdx + numStaves, startTick, endTick,
+                                   startMeasure->tick(), endMeasure->endTick());
+    }
+
+    return true;
 }
 
-bool NotationInteraction::isDropRangeAccepted(const PointF& pos)
+bool NotationInteraction::updateDropRange(const PointF& pos)
 {
     IF_ASSERT_FAILED(m_dropData.rangeDropData.has_value()) {
         return false;
@@ -1673,40 +1672,56 @@ bool NotationInteraction::isDropRangeAccepted(const PointF& pos)
 
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
+    const Segment* endSegment = nullptr;
+    ShowAnchors showAnchors;
 
-    dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
-    if (staffIdx == muse::nidx || !segment) {
-        return false;
+    const bool ok = dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment, &endSegment, &showAnchors);
+
+    if (showAnchors != score()->showAnchors()) {
+        score()->setShowAnchors(showAnchors);
+
+        // Invalidate BSP tree of affected pages
+        System* lastSeenSystem = nullptr;
+        Page* lastSeenPage = nullptr;
+        for (MeasureBase* mb = score()->tick2measureBase(showAnchors.startTickExtendedRegion);
+             mb && mb->tick() <= showAnchors.endTickExtendedRegion;
+             mb = mb->next()) {
+            System* s = mb->system();
+            if (!s || s == lastSeenSystem) {
+                continue;
+            }
+
+            lastSeenSystem = s;
+
+            Page* p = s->page();
+            if (!p || p == lastSeenPage) {
+                continue;
+            }
+
+            lastSeenPage = p;
+
+            p->invalidateBspTree();
+        }
     }
 
-    rdd.targetSegment = segment;
-    rdd.targetStaffIdx = staffIdx;
+    if (ok) {
+        rdd.targetSegment = segment;
+        rdd.targetStaffIdx = staffIdx;
 
-    const Segment* endSegment = score()->tick2rightSegment(segment->tick() + rdd.tickLength,
-                                                           true,
-                                                           Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        const staff_idx_t endStaffIdx = std::min(staffIdx + rdd.numStaves, score()->nstaves());
 
-    if (endSegment && !endSegment->enabled()) {
-        endSegment = endSegment->next1MMenabled();
+        rdd.dropRects = ScoreRangeUtilities::boundingArea(score(),
+                                                          segment, endSegment,
+                                                          staffIdx, endStaffIdx);
+    } else {
+        rdd.targetSegment = nullptr;
+        rdd.targetStaffIdx = muse::nidx;
+        rdd.dropRects.clear();
     }
-
-    if (!endSegment) {
-        endSegment = score()->lastSegmentMM();
-    }
-
-    if (!endSegment) {
-        return false;
-    }
-
-    const staff_idx_t endStaffIdx = std::min(staffIdx + rdd.numStaves, score()->nstaves());
-
-    rdd.dropRects = ScoreRangeUtilities::boundingArea(score(),
-                                                      segment, endSegment,
-                                                      staffIdx, endStaffIdx);
 
     notifyAboutDragChanged();
 
-    return true;
+    return ok;
 }
 
 //! NOTE Copied from ScoreView::dropEvent
@@ -1976,8 +1991,8 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
 
-    dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
-    if (staffIdx == muse::nidx || !segment) {
+    const bool ok = dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
+    if (!ok) {
         return false;
     }
 
@@ -2004,15 +2019,7 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
             sourceStartSegment = sourceStartSegment->next1MMenabled();
         }
 
-        Segment* sourceEndSegment = score()->tick2rightSegment(rdd.sourceTick + rdd.tickLength,
-                                                               true,
-                                                               Segment::CHORD_REST_OR_TIME_TICK_TYPE);
-        if (sourceEndSegment && !sourceEndSegment->enabled()) {
-            sourceEndSegment = sourceEndSegment->next1MMenabled();
-        }
-        if (!sourceEndSegment) {
-            sourceEndSegment = score()->lastSegmentMM();
-        }
+        Segment* sourceEndSegment = rangeEndSegment(score(), rdd.sourceTick + rdd.tickLength);
 
         if (sourceStartSegment && sourceEndSegment) {
             score()->deleteRange(sourceStartSegment, sourceEndSegment,
@@ -2788,9 +2795,10 @@ void NotationInteraction::endDrop()
 {
     score()->hideAnchors();
     score()->setUpdateAll();
-    setDropTarget(nullptr);
+    setDropTarget(nullptr, /*notify=*/ false);
     resetDropData();
     score()->update();
+    notifyAboutDragChanged();
 }
 
 muse::async::Notification NotationInteraction::dropChanged() const

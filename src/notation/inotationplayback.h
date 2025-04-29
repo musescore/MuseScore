@@ -46,7 +46,8 @@ public:
 
     virtual const muse::mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void triggerEventsForItems(const std::vector<const EngravingItem*>& items) = 0;
-    virtual void triggerMetronome(int tick) = 0;
+    virtual void triggerMetronome(muse::midi::tick_t tick) = 0;
+    virtual void triggerCountIn(muse::midi::tick_t tick, muse::secs_t& totalCountInDuration) = 0;
 
     virtual engraving::InstrumentTrackIdSet existingTrackIdSet() const = 0;
     virtual muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
@@ -73,7 +74,7 @@ public:
     virtual const LoopBoundaries& loopBoundaries() const = 0;
     virtual muse::async::Notification loopBoundariesChanged() const = 0;
 
-    virtual const Tempo& tempo(muse::midi::tick_t tick) const = 0;
+    virtual const Tempo& multipliedTempo(muse::midi::tick_t tick) const = 0;
     virtual MeasureBeat beat(muse::midi::tick_t tick) const = 0;
     virtual muse::midi::tick_t beatToRawTick(int measureIndex, int beatIndex) const = 0;
 
