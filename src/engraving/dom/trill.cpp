@@ -431,16 +431,6 @@ muse::TranslatableString Trill::subtypeUserName() const
     return TConv::userName(trillType());
 }
 
-muse::TranslatableString TrillSegment::subtypeUserName() const
-{
-    return trill()->subtypeUserName();
-}
-
-int TrillSegment::subtype() const
-{
-    return trill()->subtype();
-}
-
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
@@ -452,6 +442,6 @@ String Trill::accessibleInfo() const
 
 void Trill::doComputeEndElement()
 {
-    setEndElement(score()->findChordRestEndingBeforeTickInStaff(tick2(), track2staff(track2())));
+    setEndElement(score()->findChordRestEndingBeforeTickInStaffAndVoice(tick2(), track2staff(track2()), voice()));
 }
 }

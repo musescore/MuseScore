@@ -190,6 +190,7 @@ class VoltaSegment;
 class WhammyBar;
 class WhammyBarSegment;
 class FretCircle;
+class ShadowNote;
 
 class LinkedObjects;
 
@@ -292,7 +293,7 @@ protected:
     void addChild(EngravingObject* o);
     void removeChild(EngravingObject* o);
 
-    const ElementStyle* m_elementStyle {& EMPTY_STYLE };
+    const ElementStyle* m_elementStyle { &EMPTY_STYLE };
     PropertyFlags* m_propertyFlagsList = nullptr;
     LinkedObjects* m_links = nullptr;
     Score* m_score = nullptr;
@@ -367,7 +368,6 @@ public:
     CONVERT(Lyrics,        LYRICS)
     CONVERT(Stem,          STEM)
     CONVERT(Beam,          BEAM)
-    CONVERT(BeamSegment,   BEAM_SEGMENT)
     CONVERT(Hook,          HOOK)
     CONVERT(StemSlash,     STEM_SLASH)
     CONVERT(SlurSegment,   SLUR_SEGMENT)
@@ -456,6 +456,7 @@ public:
     CONVERT(StringTunings, STRING_TUNINGS)
     CONVERT(TimeTickAnchor, TIME_TICK_ANCHOR)
     CONVERT(Parenthesis, PARENTHESIS)
+    CONVERT(ShadowNote, SHADOW_NOTE)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -781,7 +782,6 @@ CONVERT(System)
 CONVERT(Lyrics)
 CONVERT(Stem)
 CONVERT(Beam)
-CONVERT(BeamSegment)
 CONVERT(Hook)
 CONVERT(StemSlash)
 CONVERT(LineSegment)
@@ -871,5 +871,6 @@ CONVERT(PartialTie)
 CONVERT(PartialLyricsLine)
 CONVERT(PartialLyricsLineSegment)
 CONVERT(Parenthesis)
+CONVERT(ShadowNote)
 #undef CONVERT
 }

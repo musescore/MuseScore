@@ -291,7 +291,13 @@ Shortcut ShortcutsRegister::readShortcut(deprecated::XmlReader& reader) const
         }
     }
 
-    shortcut.context = uiactionsRegister()->action(shortcut.action).scCtx;
+    auto action = uiactionsRegister()->action(shortcut.action);
+    if (!action.isValid()) {
+        LOGW() << "ignoring shortcut for invalid action: " << shortcut.action;
+        return Shortcut();
+    }
+
+    shortcut.context = action.scCtx;
 
     return shortcut;
 }

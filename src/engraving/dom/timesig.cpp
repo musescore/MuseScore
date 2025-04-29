@@ -72,7 +72,7 @@ void TimeSig::setParent(Segment* parent)
 
 double TimeSig::mag() const
 {
-    return staff() ? staff()->staffMag(tick()) : 1.0;
+    return timeSigPlacement() == TimeSigPlacement::NORMAL && staff() ? staff()->staffMag(tick()) : 1.0;
 }
 
 //---------------------------------------------------------
@@ -109,11 +109,28 @@ EngravingItem* TimeSig::drop(EditData& data)
         // change timesig applies to all staves, can't simply set subtype
         // for this one only
         // ownership of e is transferred to cmdAddTimeSig
-        score()->cmdAddTimeSig(measure(), staffIdx(), toTimeSig(e), false);
-        return 0;
+
+        if (tick() != measure()->endTick()) {
+            score()->cmdAddTimeSig(measure(), staffIdx(), toTimeSig(e), false);
+            return nullptr;
+        }
+
+        // This is a timesig at the end of a measure.
+        if (*toTimeSig(e) == *this) {
+            delete e;
+            return nullptr;
+        }
+
+        if (!measure()->nextMeasure()) {
+            return nullptr;
+        }
+
+        // Apply change to next measure
+        score()->cmdAddTimeSig(measure()->nextMeasure(), staffIdx(), toTimeSig(e), false);
+        return nullptr;
     }
     delete e;
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------

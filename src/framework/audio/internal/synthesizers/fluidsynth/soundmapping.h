@@ -651,6 +651,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Cuica,  {} }, { midi::Program(128, 0) } },
 
         { { mpe::SoundId::Drumset,  {} }, { midi::Program(128, 0) } },
+        { { mpe::SoundId::Drumset,  { mpe::SoundSubCategory::FourPiece } }, { midi::Program(128, 0) } },
+        { { mpe::SoundId::Drumset,  { mpe::SoundSubCategory::FivePiece } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Drumset,  { mpe::SoundSubCategory::Orchestral } }, { midi::Program(128, 48) } },
 
         { { mpe::SoundId::Drum,  { mpe::SoundSubCategory::Bass } }, { midi::Program(128, 48) } },
@@ -717,7 +719,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Guiro,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(128, 0) } },
 
         { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Wooden,
-                                    mpe::SoundSubCategory::Temple } }, { midi::Program(128, 0) } },
+                                    mpe::SoundSubCategory::Temple } }, { midi::Program(1, 115) } },
         { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Sandpaper } }, { midi::Program(128, 0) } },
 
@@ -750,6 +752,8 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Clap,  { mpe::SoundSubCategory::Hand } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Slap,  { mpe::SoundSubCategory::Hand } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Stamp,  { mpe::SoundSubCategory::Foot } }, { midi::Program(128, 0) } },
+
+        { { mpe::SoundId::Taiko, {} }, { midi::Program(128, 0) } },
 
         { { mpe::SoundId::Synthesizer,  { mpe::SoundSubCategory::Electric,
                                           mpe::SoundSubCategory::Percussive } }, { midi::Program(128, 0) } }

@@ -68,6 +68,7 @@ public:
     virtual void setInputNotes(const NoteValList& notes) = 0;
     virtual void moveInputNotes(bool up, PitchMode mode) = 0;
 
+    virtual void setRestMode(bool rest) = 0;
     virtual void setAccidental(AccidentalType accidentalType) = 0;
     virtual void setArticulation(SymbolId articulationSymbolId) = 0;
     virtual void setDrumNote(int note) = 0;

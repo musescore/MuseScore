@@ -35,17 +35,17 @@ void PlaybackLoadingModel::load()
 {
     Progress progress = playbackController()->loadingProgress();
 
-    progress.started.onNotify(this, [this]() {
+    progress.started().onNotify(this, [this]() {
         emit started();
     });
 
-    progress.progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string& title) {
+    progress.progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string& title) {
         setCurrentProgress(current);
         setTotalProgress(total);
         setProgressTitle(QString::fromStdString(title));
     });
 
-    progress.finished.onReceive(this, [this](const ProgressResult& res) {
+    progress.finished().onReceive(this, [this](const ProgressResult& res) {
         const Ret& ret = res.ret;
 
         if (!ret && !ret.text().empty()) {

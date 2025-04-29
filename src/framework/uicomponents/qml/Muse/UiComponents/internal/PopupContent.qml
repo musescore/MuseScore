@@ -43,6 +43,7 @@ FocusScope {
     property int arrowX: 0
     property bool opensUpward: false
     property bool isOpened: false
+    property bool useDropShadow: true
 
     property bool animationEnabled: false
 
@@ -95,6 +96,8 @@ FocusScope {
         ItemWithDropShadow {
             anchors.fill: parent
             shadow.radius: root.padding
+
+            shadow.visible: root.useDropShadow
 
             Rectangle {
                 id: contentBackground

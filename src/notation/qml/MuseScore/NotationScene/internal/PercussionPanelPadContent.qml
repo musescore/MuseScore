@@ -32,16 +32,22 @@ Column {
 
     property int panelMode: -1
     property bool useNotationPreview: false
+    property alias notationPreviewNumStaffLines: notationPreview.numStaffLines
 
     property alias footerHeight: footerArea.height
 
     property bool padSwapActive: false
 
-    function openFooterContextMenu() {
+    function openContextMenu(pos) {
         if (!root.padModel) {
             return
         }
-        menuLoader.toggleOpened(root.padModel.footerContextMenuItems)
+
+        if (!pos) {
+            pos = menuLoader.parent.mapFromItem(root, 0, root.height)
+        }
+
+        menuLoader.show(pos, root.padModel.contextMenuItems)
     }
 
     Item {
@@ -57,14 +63,22 @@ Column {
             enabled: mainContentArea.enabled
             hoverEnabled: true
 
-            onPressed: {
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+            onPressed: function(event) {
                 ui.tooltip.hide(root)
 
                 if (!Boolean(root.padModel)) {
                     return
                 }
 
-                root.padModel.triggerPad()
+                if (event.button === Qt.RightButton) {
+                    let pos = menuLoader.parent.mapFromItem(mouseArea, event.x, event.y)
+                    root.openContextMenu(pos)
+                    return
+                }
+
+                root.padModel.triggerPad(event.modifiers)
             }
 
             onContainsMouseChanged: {
@@ -167,9 +181,13 @@ Column {
 
             anchors.fill: parent
             enabled: root.panelMode !== PanelMode.EDIT_LAYOUT
+            hoverEnabled: true
 
-            onClicked: {
-                root.openFooterContextMenu()
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+            onPressed: function(event) {
+                let pos = menuLoader.parent.mapFromItem(footerMouseArea, event.x, event.y)
+                root.openContextMenu(pos)
             }
         }
 
@@ -209,13 +227,32 @@ Column {
 
             text: Boolean(root.padModel) ? root.padModel.midiNote : ""
         }
+    }
 
-        StyledMenuLoader {
-            id: menuLoader
+    ContextMenuLoader {
+        id: menuLoader
 
-            onHandleMenuItem: function(itemId) {
-                root.padModel.handleMenuItem(itemId)
-            }
+        onHandleMenuItem: function(itemId) {
+            root.padModel.handleMenuItem(itemId)
         }
+
+        states: [
+            State {
+                name: "MOUSE_HOVERED"
+                when: footerMouseArea.containsMouse && !footerMouseArea.pressed
+                PropertyChanges {
+                    target: footerArea
+                    color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHover)
+                }
+            },
+            State {
+                name: "MOUSE_HIT"
+                when: footerMouseArea.pressed
+                PropertyChanges {
+                    target: footerArea
+                    color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHit)
+                }
+            }
+        ]
     }
 }

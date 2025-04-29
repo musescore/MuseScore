@@ -26,6 +26,8 @@
 
 #include "modularity/imoduleinterface.h"
 
+#include "tourstypes.h"
+
 namespace muse::tours {
 class IToursService : MODULE_EXPORT_INTERFACE
 {
@@ -33,6 +35,8 @@ class IToursService : MODULE_EXPORT_INTERFACE
 
 public:
     virtual ~IToursService() = default;
+
+    virtual void registerTour(const String& eventCode, const Tour& tour) = 0;
 
     virtual void onEvent(const String& eventCode) = 0;
 };

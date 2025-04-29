@@ -427,6 +427,12 @@ void NotationConfigurationStub::setIsMetronomeEnabled(bool)
 {
 }
 
+muse::async::Notification NotationConfigurationStub::isMetronomeEnabledChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
 bool NotationConfigurationStub::isCountInEnabled() const
 {
     return false;
@@ -624,6 +630,21 @@ void NotationConfigurationStub::setUseNewPercussionPanel(bool)
 }
 
 muse::async::Notification NotationConfigurationStub::useNewPercussionPanelChanged() const
+{
+    static muse::async::Notification n;
+    return n;
+}
+
+bool NotationConfigurationStub::percussionPanelUseNotationPreview() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setPercussionPanelUseNotationPreview(bool)
+{
+}
+
+muse::async::Notification NotationConfigurationStub::percussionPanelUseNotationPreviewChanged() const
 {
     static muse::async::Notification n;
     return n;

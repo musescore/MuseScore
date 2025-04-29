@@ -202,7 +202,7 @@ ListItemBlank {
             id: secondaryIconLabel
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: 16
-            color: root.modelData.iconColor ? root.modelData.iconColor : ui.theme.fontPrimaryColor
+            color: Boolean(root.modelData) && Boolean(root.modelData.iconColor) ? root.modelData.iconColor : ui.theme.fontPrimaryColor
             iconCode: root.modelData?.icon ?? IconCode.NONE
             visible: root.iconAndCheckMarkMode === StyledMenuItem.ShowBoth
         }

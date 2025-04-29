@@ -64,27 +64,27 @@ bool UpdateScenario::isCheckStarted() const
 void UpdateScenario::doCheckForUpdate(bool manual)
 {
     m_checkProgressChannel = std::make_shared<Progress>();
-    m_checkProgressChannel->started.onNotify(this, [this]() {
+    m_checkProgressChannel->started().onNotify(this, [this]() {
         m_checkProgress = true;
     });
 
-    m_checkProgressChannel->finished.onReceive(this, [this, manual](const ProgressResult& res) {
+    m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
         DEFER {
             m_checkProgress = false;
         };
 
-        if (!res.ret) {
+        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
+        if (!noUpdate && !res.ret) {
             LOGE() << "Unable to check for update, error: " << res.ret.toString();
 
             if (manual) {
-                processUpdateResult(res.ret.code());
+                showServerErrorMsg();
             }
 
             return;
         }
 
         ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
-        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
         if (!manual) {
             bool shouldIgnoreUpdate = info.version == configuration()->skippedReleaseVersion();
             if (noUpdate || shouldIgnoreUpdate) {
@@ -103,7 +103,7 @@ void UpdateScenario::doCheckForUpdate(bool manual)
 
 void UpdateScenario::th_checkForUpdate()
 {
-    m_checkProgressChannel->started.notify();
+    m_checkProgressChannel->start();
 
     RetVal<ReleaseInfo> retVal = service()->checkForUpdate();
 
@@ -111,7 +111,7 @@ void UpdateScenario::th_checkForUpdate()
     result.ret = retVal.ret;
     result.val = Val(releaseInfoToValMap(retVal.val));
 
-    m_checkProgressChannel->finished.send(result);
+    m_checkProgressChannel->finish(result);
 }
 
 void UpdateScenario::processUpdateResult(int errorCode)
@@ -138,7 +138,7 @@ void UpdateScenario::processUpdateResult(int errorCode)
 void UpdateScenario::showNoUpdateMsg()
 {
     QString str = muse::qtrc("update", "You already have the latest version of MuseScore Studio. "
-                                       "Please visit <a href=\"%1\">musescore.org</a> for news on what’s coming next.")
+                                       "Please visit <a href=\"%1\">MuseScore.org</a> for news on what’s coming next.")
                   .arg(QString::fromStdString(configuration()->museScoreUrl()));
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);

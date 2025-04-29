@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.50">
+  <Score>
+    <Division>480</Division>
+    <Style>
+      <spatium>1.74978</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">K. Rettinghaus</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="meiHead">&lt;meiHead&gt;&lt;fileDesc&gt;&lt;titleStmt&gt;&lt;title type=&quot;main&quot;&gt;Staff type properties&lt;/title&gt;&lt;respStmt&gt;&lt;persName role=&quot;composer&quot;&gt;K. Rettinghaus&lt;/persName&gt;&lt;/respStmt&gt;&lt;/titleStmt&gt;&lt;pubStmt&gt;&lt;date isodate=&quot;2025-02-14T09:54:48&quot;/&gt;&lt;/pubStmt&gt;&lt;/fileDesc&gt;&lt;/meiHead&gt;</metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Staff type properties</metaTag>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          <mag>0.7</mag>
+          </StaffType>
+        </Staff>
+      <trackName></trackName>
+      <Instrument id="violin">
+        <longName>Violin</longName>
+        <shortName>Vln.</shortName>
+        <trackName></trackName>
+        <instrumentId>strings.violin</instrumentId>
+        <Channel>
+          <program value="40"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="2">
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          <invisible>1</invisible>
+          </StaffType>
+        <invisible>1</invisible>
+        <bracket type="1" span="2" col="0" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff id="3">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          <color r="51" g="255" b="0" a="255"/>
+          </StaffType>
+        <color r="51" g="255" b="0" a="255"/>
+        </Staff>
+      <trackName></trackName>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName></trackName>
+        <instrumentId>keyboard.piano</instrumentId>
+        <Channel>
+          <program value="0"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>title</style>
+          <text>Staff type properties</text>
+          </Text>
+        <Text>
+          <style>composer</style>
+          <text>K. Rettinghaus</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="3">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            <isHeader>1</isHeader>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

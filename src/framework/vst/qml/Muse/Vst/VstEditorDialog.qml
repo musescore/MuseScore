@@ -28,7 +28,7 @@ StyledDialogView {
 
     property alias instanceId: editor.instanceId
 
-    title: editor.title
+    title: "[quick] " + editor.title
 
     contentHeight: editor.implicitHeight
     contentWidth: editor.implicitWidth

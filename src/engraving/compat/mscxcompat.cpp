@@ -35,7 +35,7 @@ using namespace muse;
 using namespace muse::io;
 using namespace mu::engraving;
 
-Ret mu::engraving::compat::mscxToMscz(const String& mscxFilePath, ByteArray* msczData)
+Ret mu::engraving::compat::mscxToMscz(const io::path_t& mscxFilePath, ByteArray* msczData)
 {
     File mscxFile(mscxFilePath);
     if (!mscxFile.open(IODevice::ReadOnly)) {
@@ -56,16 +56,18 @@ Ret mu::engraving::compat::mscxToMscz(const String& mscxFilePath, ByteArray* msc
     return muse::make_ok();
 }
 
-Ret mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& path, bool ignoreVersionError)
+Ret mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const io::path_t& path, bool ignoreVersionError)
 {
+    std::string suffix = io::suffix(path);
+
     ByteArray msczData;
-    if (path.endsWith(u".mscx", muse::CaseInsensitive)) {
+    if (suffix == MSCX) {
         //! NOTE Convert mscx -> mscz
         Ret ret = mscxToMscz(path, &msczData);
         if (!ret) {
             return ret;
         }
-    } else if (path.endsWith(u".mscz", muse::CaseInsensitive)) {
+    } else if (suffix == MSCZ) {
         File msczFile(path);
         if (!msczFile.open(IODevice::ReadOnly)) {
             return make_ret(Err::FileOpenError, path);
@@ -92,18 +94,18 @@ Ret mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& path
     return scoreReader.loadMscz(score, reader, audioSettings, ignoreVersionError);
 }
 
-Ret mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const String& path, bool ignoreVersionError)
+Ret mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const io::path_t& path, bool ignoreVersionError)
 {
-    ByteArray msczData;
-    String filePath = path;
-    if (path.endsWith(u".mscx", muse::CaseInsensitive)) {
-        //! NOTE Convert mscx -> mscz
+    std::string suffix = io::suffix(path);
 
+    ByteArray msczData;
+    if (suffix == MSCX) {
+        //! NOTE Convert mscx -> mscz
         Ret ret = mscxToMscz(path, &msczData);
         if (!ret) {
             return ret;
         }
-    } else if (path.endsWith(u".mscz", muse::CaseInsensitive)) {
+    } else if (suffix == MSCZ) {
         File msczFile(path);
         if (!msczFile.open(IODevice::ReadOnly)) {
             return make_ret(Err::FileOpenError, path);
@@ -119,7 +121,7 @@ Ret mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const Str
     Buffer msczBuf(&msczData);
     MscReader::Params params;
     params.device = &msczBuf;
-    params.filePath = filePath;
+    params.filePath = path;
     params.mode = MscIoMode::Zip;
 
     MscReader reader(params);

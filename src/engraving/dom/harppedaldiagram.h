@@ -20,17 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_HARPPEDALDIAGRAM_H
-#define MU_ENGRAVING_HARPPEDALDIAGRAM_H
+#pragma once
 
-#include "pitchspelling.h"
 #include "textbase.h"
-#include "pitchspelling.h"
 
 using namespace mu;
 
 namespace mu::engraving {
-enum class PedalPosition : char {
+enum class PedalPosition : unsigned char {
     FLAT,
     NATURAL,
     SHARP,
@@ -39,7 +36,7 @@ enum class PedalPosition : char {
 };
 
 // Use for indexes of _pedalState
-enum HarpStringType : char {
+enum HarpStringType : unsigned char {
     D, C, B, E, F, G, A
 };
 
@@ -94,6 +91,4 @@ private:
 
     bool m_isDiagram = true;
 };
-} // namespace mu::engraving
-
-#endif // MU_ENGRAVING_HARPPEDALDIAGRAM_H
+}

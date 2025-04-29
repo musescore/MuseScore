@@ -55,7 +55,7 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::NOTE][ElementType::BAR_LINE] = style.styleMM(Sid::noteBarDistance);
     table[ElementType::NOTE][ElementType::KEYSIG] = 0.75 * spatium;
     table[ElementType::NOTE][ElementType::TIMESIG] = 0.75 * spatium;
-    table[ElementType::NOTE][ElementType::PARENTHESIS] = 0.35 * spatium;
+    table[ElementType::NOTE][ElementType::PARENTHESIS] = style.styleMM(Sid::noteBarDistance);
 
     table[ElementType::LEDGER_LINE][ElementType::NOTE] = table[ElementType::NOTE][ElementType::LEDGER_LINE];
     table[ElementType::LEDGER_LINE][ElementType::LEDGER_LINE] = ledgerPad;
@@ -108,7 +108,7 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::REST][ElementType::BAR_LINE] = 1.65 * spatium;
     table[ElementType::REST][ElementType::KEYSIG] = 1.5 * spatium;
     table[ElementType::REST][ElementType::TIMESIG] = 1.5 * spatium;
-    table[ElementType::REST][ElementType::PARENTHESIS] = 0.35 * spatium;
+    table[ElementType::REST][ElementType::PARENTHESIS] = table[ElementType::NOTE][ElementType::PARENTHESIS];
 
     table[ElementType::CLEF][ElementType::NOTE] = style.styleMM(Sid::clefKeyRightMargin);
     table[ElementType::CLEF][ElementType::LEDGER_LINE]
@@ -190,6 +190,9 @@ void PaddingTable::createTable(const MStyle& style)
     // Harmony
     table[ElementType::BAR_LINE][ElementType::HARMONY] = 0.5 * style.styleMM(Sid::minHarmonyDistance);
     table[ElementType::HARMONY][ElementType::HARMONY] = style.styleMM(Sid::minHarmonyDistance);
+    table[ElementType::HARMONY][ElementType::FRET_DIAGRAM] = 0.3 * spatium;
+    table[ElementType::FRET_DIAGRAM][ElementType::HARMONY] = 0.3 * spatium;
+    table[ElementType::FRET_DIAGRAM][ElementType::FRET_DIAGRAM] = 0.25 * spatium;
 
     // Chordlines
     table[ElementType::CHORDLINE].fill(0.35 * spatium);
@@ -245,8 +248,8 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::PARENTHESIS][ElementType::TIMESIG] = 0.2 * spatium;
     table[ElementType::PARENTHESIS][ElementType::CLEF] = 0.2 * spatium;
     table[ElementType::PARENTHESIS][ElementType::STEM] = 0.35 * spatium;
-    table[ElementType::PARENTHESIS][ElementType::NOTE] = 0.35 * spatium;
-    table[ElementType::PARENTHESIS][ElementType::REST] = 0.35 * spatium;
+    table[ElementType::PARENTHESIS][ElementType::NOTE] = style.styleMM(Sid::barNoteDistance);
+    table[ElementType::PARENTHESIS][ElementType::REST] = table[ElementType::PARENTHESIS][ElementType::NOTE];
     table[ElementType::PARENTHESIS][ElementType::NOTEDOT] = 0.35 * spatium;
     table[ElementType::PARENTHESIS][ElementType::HOOK] = 0.35 * spatium;
     table[ElementType::PARENTHESIS][ElementType::PARENTHESIS] = 1.0 * spatium;

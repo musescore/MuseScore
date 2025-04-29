@@ -196,11 +196,11 @@ muse::RetVal<muse::io::path_t> AppUpdateService::downloadRelease()
     QBuffer buff;
     QUrl fileUrl = QUrl::fromUserInput(QString::fromStdString(m_lastCheckResult.fileUrl));
 
-    m_updateProgress.started.notify();
+    m_updateProgress.start();
 
     m_networkManager = networkManagerCreator()->makeNetworkManager();
-    m_networkManager->progress().progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string&) {
-        m_updateProgress.progressChanged.send(
+    m_networkManager->progress().progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string&) {
+        m_updateProgress.progress(
             current, total,
 
             //: Means that the download is currently in progress.
@@ -332,8 +332,7 @@ PrevReleasesNotesList AppUpdateService::previousReleasesNotes(const Version& upd
     PrevReleasesNotesList result;
 
     QBuffer buff;
-    Ret getPreviousReleaseNotes = m_networkManager->get(QString::fromStdString(configuration()->previousAppReleasesNotesUrl()), &buff,
-                                                        configuration()->updateHeaders());
+    Ret getPreviousReleaseNotes = m_networkManager->get(QString::fromStdString(configuration()->previousAppReleasesNotesUrl()), &buff);
     if (!getPreviousReleaseNotes) {
         LOGE() << "failed to get previous release notes: " << getPreviousReleaseNotes.toString();
         return result;

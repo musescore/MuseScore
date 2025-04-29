@@ -109,8 +109,10 @@ private:
     static void removeRepeatCourtesyParenthesesSegment(Segment* seg, const track_idx_t track,
                                                        const DirectionH direction = DirectionH::AUTO);
     static void addRepeatCourtesyParentheses(Measure* m, const bool continuation,  LayoutContext& ctx);
-    static void placeParentheses(const Segment* segment, track_idx_t trackIdx, LayoutContext& ctx);
+    static void placeParentheses(Segment* segment, track_idx_t trackIdx, LayoutContext& ctx);
     static void addRepeatCourtesies(Measure* m, LayoutContext& ctx);
+    static void removeRepeatCourtesies(Measure* m);
     static void addRepeatContinuationCourtesies(Measure* m, LayoutContext& ctx);
+    static void removeRepeatContinuationCourtesies(Measure* m);
 };
 }

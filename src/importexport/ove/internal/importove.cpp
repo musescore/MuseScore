@@ -1627,7 +1627,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 if (clefType == ovebase::ClefType::Percussion1 || clefType == ovebase::ClefType::Percussion2) {
                     Drumset* drumset = getDrumset(m_score, part);
                     if (drumset != 0) {
-                        if (!drumset->isValid(pitch) || pitch == -1) {
+                        if (!drumset->isValid(pitch)) {
                             LOGD("unmapped drum note 0x%02x %d", note->pitch(), note->pitch());
                         } else {
                             note->setHeadGroup(drumset->noteHead(pitch));
@@ -2107,7 +2107,7 @@ void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int tr
             && (harmonyPtr->getBass() != harmonyPtr->getRoot()
                 || (harmonyPtr->getBass() == harmonyPtr->getRoot()
                     && harmonyPtr->getAlterBass() != harmonyPtr->getAlterRoot()))) {
-            harmony->setBaseTpc(step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass())));
+            harmony->setBassTpc(step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass())));
         }
         const ChordDescription* d = harmony->fromXml(harmonyPtr->getHarmonyType());
         if (d != 0) {

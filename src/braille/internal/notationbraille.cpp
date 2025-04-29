@@ -573,8 +573,8 @@ void NotationBraille::setKeys(const QString& sequence)
             if (brailleInput()->longSlurStart()) {
                 if (brailleInput()->longSlurStartNote() == NULL) {
                     if (currentEngravingItem() != NULL && currentEngravingItem()->isNote()) {
-                        Note* note = toNote(currentEngravingItem());
-                        brailleInput()->setLongSlurStartNote(note);
+                        Note* currentNote = toNote(currentEngravingItem());
+                        brailleInput()->setLongSlurStartNote(currentNote);
                     }
                 }
             }
@@ -617,6 +617,8 @@ void NotationBraille::setKeys(const QString& sequence)
             if (!ok) {
                 return;
             }
+
+            interaction()->noteInput()->addNote(params, NoteAddingMode::CurrentChord);
 
             if (brailleInput()->addedOctave() != -1) {
                 if (brailleInput()->addedOctave() < brailleInput()->octave()) {

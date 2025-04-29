@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ISCORERENDERER_H
-#define MU_ENGRAVING_ISCORERENDERER_H
+#pragma once
 
 #include <variant>
 
@@ -56,11 +55,13 @@ class EngravingItem;
 
 class FiguredBassItem;
 
+class FretDiagram;
+
 class Harmony;
 
 class Image;
 
-enum class KerningType;
+enum class KerningType : unsigned char;
 class KeySig;
 
 class LedgerLine;
@@ -135,6 +136,7 @@ public:
                                    Clef*,
                                    Dynamic*,
                                    FiguredBassItem*,
+                                   FretDiagram*,
                                    Harmony*,
                                    Image*,
                                    KeySig*,
@@ -201,5 +203,3 @@ private:
     virtual void doDrawItem(const EngravingItem* item, muse::draw::Painter* p) = 0;
 };
 }
-
-#endif // MU_ENGRAVING_ISCORERENDERER_H

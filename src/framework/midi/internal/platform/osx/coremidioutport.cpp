@@ -35,11 +35,19 @@
 using namespace muse;
 using namespace muse::midi;
 
+//#define DEBUG_COREMIDIOUTPORT
+#ifdef DEBUG_COREMIDIOUTPORT
+#define LOG_MIDI_D LOGD
+#define LOG_MIDI_W LOGW
+#else
+#define LOG_MIDI_D LOGN
+#define LOG_MIDI_W LOGN
+#endif
+
 struct muse::midi::CoreMidiOutPort::Core {
     MIDIClientRef client = 0;
     MIDIPortRef outputPort = 0;
     MIDIEndpointRef destinationId = 0;
-    MIDIProtocolID destinationProtocolId = kMIDIProtocol_1_0;
     int deviceID = -1;
 };
 
@@ -69,15 +77,6 @@ void CoreMidiOutPort::deinit()
 
     if (m_core->client) {
         MIDIClientDispose(m_core->client);
-    }
-}
-
-void CoreMidiOutPort::getDestinationProtocolId()
-{
-    if (__builtin_available(macOS 11.0, *)) {
-        SInt32 protocol = 0;
-        OSStatus err = MIDIObjectGetIntegerProperty(m_core->destinationId, kMIDIPropertyProtocolID, &protocol);
-        m_core->destinationProtocolId = err == noErr ? (MIDIProtocolID)protocol : kMIDIProtocol_1_0;
     }
 }
 
@@ -132,11 +131,6 @@ void CoreMidiOutPort::initCore()
             if (CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyDisplayName, 0) == kCFCompareEqualTo
                 || CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyName, 0) == kCFCompareEqualTo) {
                 self->availableDevicesChanged().notify();
-            } else if (__builtin_available(macOS 11.0, *)) {
-                if (CFStringCompare(propertyChangeNotification->propertyName, kMIDIPropertyProtocolID, 0) == kCFCompareEqualTo
-                    && self->isConnected() && propertyChangeNotification->object == self->m_core->destinationId) {
-                    self->getDestinationProtocolId();
-                }
             }
         } break;
 
@@ -238,8 +232,6 @@ Ret CoreMidiOutPort::connect(const MidiDeviceID& deviceID)
 
         m_core->deviceID = std::stoi(deviceID);
         m_core->destinationId = (MIDIEndpointRef)obj;
-
-        getDestinationProtocolId();
     }
 
     m_deviceID = deviceID;
@@ -289,55 +281,65 @@ bool CoreMidiOutPort::supportsMIDI20Output() const
     return false;
 }
 
-static ByteCount packetListSize(const std::vector<Event>& events)
-{
-    if (events.empty()) {
-        return 0;
-    }
-
-    // TODO: should be dynamic per type of event
-    constexpr size_t eventSize = sizeof(Event().to_MIDI10Package());
-
-    return offsetof(MIDIPacketList, packet) + events.size() * (offsetof(MIDIPacket, data) + eventSize);
-}
-
 Ret CoreMidiOutPort::sendEvent(const Event& e)
 {
     if (!isConnected()) {
         return make_ret(Err::MidiNotConnected);
     }
 
-    OSStatus result;
+    OSStatus result = noErr;
     MIDITimeStamp timeStamp = AudioGetCurrentHostTime();
 
-    if (__builtin_available(macOS 11.0, *)) {
-        MIDIProtocolID protocolId = configuration()->useMIDI20Output() ? m_core->destinationProtocolId : kMIDIProtocol_1_0;
+    // Note: there could be three cases: MIDI2+MIDIEventList, MIDI1+MIDIEventList, MIDI1+MIDIPacketList.
+    //       But we only maintain 2 code paths and may drop configuration()->useMIDI20Output() and MIDIPacketList later.
 
-        MIDIEventList eventList;
-        MIDIEventPacket* packet = MIDIEventListInit(&eventList, protocolId);
-        // TODO: Replace '4' with something specific for the type of element?
-        MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, 4, e.rawData());
+    if (supportsMIDI20Output() && configuration()->useMIDI20Output()) {
+        if (__builtin_available(macOS 11.0, *)) {
+            MIDIProtocolID protocolId = kMIDIProtocol_2_0;
 
-        result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
+            ByteCount wordCount = e.midi20WordCount();
+            if (wordCount == 0) {
+                LOG_MIDI_W() << "Failed to send message for event: " << e.to_string();
+                return make_ret(Err::MidiSendError, "failed send message. unknown word count");
+            }
+            LOG_MIDI_D() << "Sending MIDIEventList event: " << e.to_string();
+
+            MIDIEventList eventList;
+            MIDIEventPacket* packet = MIDIEventListInit(&eventList, protocolId);
+
+            if (e.messageType() == Event::MessageType::ChannelVoice20 && e.opcode() == muse::midi::Event::Opcode::NoteOn
+                && e.velocity() < 128) {
+                LOG_MIDI_W() << "Detected low MIDI 2.0 ChannelVoiceMessage velocity.";
+            }
+
+            MIDIEventListAdd(&eventList, sizeof(eventList), packet, timeStamp, wordCount, e.rawData());
+
+            result = MIDISendEventList(m_core->outputPort, m_core->destinationId, &eventList);
+        } else {
+            __builtin_unreachable();
+        }
     } else {
         const std::vector<Event> events = e.toMIDI10();
 
-        ByteCount packetListSize = ::packetListSize(events);
-        if (packetListSize == 0) {
+        if (events.empty()) {
             return make_ret(Err::MidiSendError, "midi 1.0 messages list was empty");
         }
 
         MIDIPacketList packetList;
+        // packetList has one packet of 256 bytes by default, which is more than enough for one midi 2.0 event.
         MIDIPacket* packet = MIDIPacketListInit(&packetList);
+        ByteCount packetListSize = sizeof(packetList);
+        Byte bytesPackage[4];
 
         for (const Event& event : events) {
-            uint32_t msg = event.to_MIDI10Package();
-
-            if (!msg) {
-                return make_ret(Err::MidiSendError, "message wasn't converted");
+            int length = event.to_MIDI10BytesPackage(bytesPackage);
+            assert(length <= 3);
+            if (length == 0) {
+                LOG_MIDI_W() << "Failed Sending MIDIPacketList event: " << event.to_string();
+            } else {
+                LOG_MIDI_D() << "Sending MIDIPacketList event: " << event.to_string();
+                packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, length, bytesPackage);
             }
-
-            packet = MIDIPacketListAdd(&packetList, packetListSize, packet, timeStamp, sizeof(msg), reinterpret_cast<Byte*>(&msg));
         }
 
         result = MIDISend(m_core->outputPort, m_core->destinationId, &packetList);

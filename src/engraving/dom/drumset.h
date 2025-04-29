@@ -20,14 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_DRUMSET_H
-#define MU_ENGRAVING_DRUMSET_H
+#pragma once
 
-#include "mscore.h"
 #include "pitchspelling.h"
 #include "../types/types.h"
 
-#include "editdata.h"
+#include <array>
 
 namespace mu::engraving {
 class XmlWriter;
@@ -70,9 +68,9 @@ struct DrumInstrument {
     std::list<DrumInstrumentVariant> variants;
 
     DrumInstrument() {}
-    DrumInstrument(const char* s, NoteHeadGroup nh, int l, DirectionV d,
+    DrumInstrument(const String& n, NoteHeadGroup nh, int l, DirectionV d,
                    int pr = -1, int pc = -1, int v = 0, String sc = String())
-        : name(String::fromUtf8(s)), notehead(nh), line(l), stemDirection(d), panelRow(pr), panelColumn(pc), voice(v), shortcut(sc) {}
+        : name(n), notehead(nh), line(l), stemDirection(d), panelRow(pr), panelColumn(pc), voice(v), shortcut(sc) {}
 
     void addVariant(DrumInstrumentVariant v) { variants.push_back(v); }
 
@@ -102,7 +100,7 @@ static const int DRUM_INSTRUMENTS = 128;
 class Drumset
 {
 public:
-    bool isValid(int pitch) const { return !m_drums[pitch].name.empty(); }
+    bool isValid(int pitch) const;
     NoteHeadGroup noteHead(int pitch) const { return m_drums[pitch].notehead; }
     SymId noteHeads(int pitch, NoteHeadType t) const { return m_drums[pitch].noteheads[int(t)]; }
     int line(int pitch) const { return m_drums[pitch].line; }
@@ -116,6 +114,10 @@ public:
     int panelColumn(int pitch) const { return m_drums[pitch].panelColumn; }
 
     int pitchForShortcut(const String& shortcut) const;
+
+    // defaultPitchForLine tries to find the pitch of a normal notehead at "line". If a normal notehead can't be found it will
+    // instead return the "first valid pitch" (i.e. the lowest used midi note)
+    int defaultPitchForLine(int line) const;
 
     void save(XmlWriter&) const;
     void load(XmlReader&);
@@ -152,4 +154,3 @@ private:
 
 extern Drumset* smDrumset;
 } // namespace mu::engraving
-#endif

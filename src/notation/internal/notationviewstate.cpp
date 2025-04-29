@@ -125,14 +125,17 @@ muse::async::Channel<Transform, NotationPaintView*> NotationViewState::matrixCha
 
 void NotationViewState::setMatrix(const Transform& matrix, NotationPaintView* sender)
 {
-    int newZoomPercentage = configuration()->zoomPercentageFromScaling(matrix.m11());
-    if (m_matrix == matrix && m_zoomPercentage.val == newZoomPercentage) {
+    if (m_matrix == matrix) {
         return;
     }
 
     m_matrix = matrix;
     m_matrixChanged.send(matrix, sender);
-    m_zoomPercentage.set(newZoomPercentage);
+
+    int newZoomPercentage = configuration()->zoomPercentageFromScaling(matrix.m11());
+    if (m_zoomPercentage.val != newZoomPercentage) {
+        m_zoomPercentage.set(newZoomPercentage);
+    }
 }
 
 ValCh<int> NotationViewState::zoomPercentage() const

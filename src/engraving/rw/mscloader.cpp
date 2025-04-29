@@ -26,6 +26,8 @@
 #include "global/io/buffer.h"
 #include "global/types/retval.h"
 
+#include "../engravingerrors.h"
+
 #include "../types/types.h"
 
 #include "../dom/masterscore.h"
@@ -184,8 +186,7 @@ Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, Se
                 break;
             }
 
-            Err err = reader.val->readScore(partScore, xml, &partReadInData);
-            ret =  make_ret(err);
+            ret = reader.val->readScore(partScore, xml, &partReadInData);
             if (!ret) {
                 break;
             }
@@ -258,15 +259,15 @@ Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignoreVers
                 score->checkChordList();
             }
 
-            Err err = reader.val->readScore(score, e, out);
+            Ret ret = reader.val->readScore(score, e, out);
 
             score->setExcerptsChanged(false);
 
-            return make_ret(err);
+            return ret;
         } else {
             e.unknown();
         }
     }
 
-    return Ret(static_cast<int>(Err::FileCorrupted), e.errorString().toStdString());
+    return make_ret(Err::FileCriticallyCorrupted, e.errorString());
 }

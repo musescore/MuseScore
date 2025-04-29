@@ -143,6 +143,14 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
+    <SystemObjects>
+      <Instance staffId="1" barNumbers="false"/>
+      <Instance staffId="4" barNumbers="false"/>
+      <Instance staffId="8" barNumbers="false"/>
+      <Instance staffId="11" barNumbers="false"/>
+      <Instance staffId="14" barNumbers="false"/>
+      <Instance staffId="17" barNumbers="false"/>
+      </SystemObjects>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
@@ -1398,7 +1406,7 @@
           </Drum>
         <Drum pitch="41">
           <head>normal</head>
-          <line>5</line>
+          <line>6</line>
           <voice>0</voice>
           <name>Low Floor Tom</name>
           <stem>1</stem>
@@ -1416,7 +1424,7 @@
           </Drum>
         <Drum pitch="43">
           <head>normal</head>
-          <line>6</line>
+          <line>5</line>
           <voice>0</voice>
           <name>High Floor Tom</name>
           <stem>1</stem>
@@ -2038,7 +2046,7 @@
           </Drum>
         <Drum pitch="41">
           <head>normal</head>
-          <line>5</line>
+          <line>6</line>
           <voice>0</voice>
           <name>Low Floor Tom</name>
           <stem>1</stem>
@@ -2056,7 +2064,7 @@
           </Drum>
         <Drum pitch="43">
           <head>normal</head>
-          <line>6</line>
+          <line>5</line>
           <voice>0</voice>
           <name>High Floor Tom</name>
           <stem>1</stem>

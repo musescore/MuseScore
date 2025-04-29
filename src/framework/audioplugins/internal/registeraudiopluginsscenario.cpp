@@ -39,7 +39,7 @@ void RegisterAudioPluginsScenario::init()
 {
     TRACEFUNC;
 
-    m_progress.cancelRequested.onNotify(this, [this]() {
+    m_progress.canceled().onNotify(this, [this]() {
         m_aborted = true;
     });
 
@@ -55,7 +55,7 @@ Ret RegisterAudioPluginsScenario::registerNewPlugins()
 
     io::paths_t newPluginPaths;
 
-    for (IAudioPluginsScannerPtr scanner : scannerRegister()->scanners()) {
+    for (const IAudioPluginsScannerPtr& scanner : scannerRegister()->scanners()) {
         io::paths_t paths = scanner->scanPlugins();
 
         for (const io::path_t& path : paths) {
@@ -83,7 +83,7 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
     }
 
     m_aborted = false;
-    m_progress.started.notify();
+    m_progress.start();
 
     std::string appPath = globalConfiguration()->appBinPath().toStdString();
     int64_t pluginCount = static_cast<int64_t>(pluginPaths.size());
@@ -96,7 +96,7 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
         const io::path_t& pluginPath = pluginPaths[i];
         std::string pluginPathStr = pluginPath.toStdString();
 
-        m_progress.progressChanged.send(i, pluginCount, io::filename(pluginPath).toStdString());
+        m_progress.progress(i, pluginCount, io::filename(pluginPath).toStdString());
         qApp->processEvents();
 
         LOGD() << "--register-audio-plugin " << pluginPathStr;
@@ -110,7 +110,7 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
         }
     }
 
-    m_progress.finished.send(muse::make_ok());
+    m_progress.finish(muse::make_ok());
 }
 
 Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPath)
@@ -174,7 +174,7 @@ Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginP
 
 IAudioPluginMetaReaderPtr RegisterAudioPluginsScenario::metaReader(const io::path_t& pluginPath) const
 {
-    for (IAudioPluginMetaReaderPtr reader : metaReaderRegister()->readers()) {
+    for (const IAudioPluginMetaReaderPtr& reader : metaReaderRegister()->readers()) {
         if (reader->canReadMeta(pluginPath)) {
             return reader;
         }

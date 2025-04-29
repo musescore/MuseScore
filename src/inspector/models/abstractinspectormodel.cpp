@@ -21,12 +21,13 @@
  */
 #include "abstractinspectormodel.h"
 #include "engraving/dom/dynamic.h"
+#include "engraving/dom/property.h"
 
 #include "shortcuts/shortcutstypes.h"
 
 #include "types/texttypes.h"
 
-#include "dom/tempotext.h"
+#include "engraving/dom/tempotext.h"
 
 #include "log.h"
 
@@ -82,6 +83,7 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::TBOX, InspectorModelType::TYPE_TEXT_FRAME },// text frame
     { mu::engraving::ElementType::VBOX, InspectorModelType::TYPE_VERTICAL_FRAME },// vertical frame
     { mu::engraving::ElementType::HBOX, InspectorModelType::TYPE_HORIZONTAL_FRAME },// horizontal frame
+    { mu::engraving::ElementType::FBOX, InspectorModelType::TYPE_FRET_FRAME },// fret diagram legend
     { mu::engraving::ElementType::ARTICULATION, InspectorModelType::TYPE_ARTICULATION },
     { mu::engraving::ElementType::ORNAMENT, InspectorModelType::TYPE_ORNAMENT },
     { mu::engraving::ElementType::TRILL, InspectorModelType::TYPE_ORNAMENT },
@@ -376,7 +378,7 @@ void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingIt
         return;
     }
 
-    beginCommand(TranslatableString("undoableAction", "Edit element property"));
+    beginCommand(TranslatableString("undoableAction", "Edit %1").arg(propertyUserName(pid)));
 
     for (mu::engraving::EngravingItem* item : items) {
         IF_ASSERT_FAILED(item) {

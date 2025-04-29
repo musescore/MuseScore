@@ -36,7 +36,6 @@
 #include "engraving/dom/utils.h"
 
 #include "mscoreerrorscontroller.h"
-#include "scorecallbacks.h"
 
 #include "log.h"
 
@@ -57,26 +56,18 @@ NotationNoteInput::NotationNoteInput(const IGetScore* getScore, INotationInterac
                                      , const modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx), m_getScore(getScore), m_interaction(interaction), m_undoStack(undoStack)
 {
-    m_scoreCallbacks = new ScoreCallbacks();
-    m_scoreCallbacks->setNotationInteraction(interaction);
-
     m_interaction->selectionChanged().onNotify(this, [this]() {
         if (!isNoteInputMode()) {
             updateInputState();
         } else if (shouldSetupInputNote()) {
             const NoteInputState& is = state();
-            const staff_idx_t prevStaffIdx = mu::engraving::staff2track(is.prevTrack());
+            const staff_idx_t prevStaffIdx = mu::engraving::track2staff(is.prevTrack());
 
             if (prevStaffIdx != is.staffIdx()) {
                 setupInputNote();
             }
         }
     });
-}
-
-NotationNoteInput::~NotationNoteInput()
-{
-    delete m_scoreCallbacks;
 }
 
 bool NotationNoteInput::isNoteInputMode() const
@@ -419,6 +410,10 @@ void NotationNoteInput::setNoteInputMethod(NoteInputMethod method)
     }
 
     is.setNoteEntryMethod(method);
+    if (shouldSetupInputNote()) {
+        setupInputNote();
+    }
+
     notifyAboutStateChanged();
 }
 
@@ -426,13 +421,17 @@ void NotationNoteInput::addNote(const NoteInputParams& params, NoteAddingMode ad
 {
     TRACEFUNC;
 
-    mu::engraving::EditData editData(m_scoreCallbacks);
-
-    startEdit(TranslatableString("undoableAction", "Enter note"));
-
     bool addToUpOnCurrentChord = addingMode == NoteAddingMode::CurrentChord;
     bool insertNewChord = addingMode == NoteAddingMode::InsertChord;
-    score()->cmdAddPitch(editData, params, addToUpOnCurrentChord, insertNewChord);
+
+    if (addToUpOnCurrentChord) {
+        startEdit(TranslatableString("undoableAction", "Add note to chord"));
+    } else if (insertNewChord) {
+        startEdit(TranslatableString("undoableAction", "Insert note"));
+    } else {
+        startEdit(TranslatableString("undoableAction", "Enter note"));
+    }
+    score()->cmdAddPitch(params, addToUpOnCurrentChord, insertNewChord);
 
     apply();
 
@@ -444,6 +443,8 @@ void NotationNoteInput::addNote(const NoteInputParams& params, NoteAddingMode ad
     notifyAboutStateChanged();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+
+    m_interaction->showItem(state().cr());
 }
 
 void NotationNoteInput::padNote(const Pad& pad)
@@ -453,6 +454,13 @@ void NotationNoteInput::padNote(const Pad& pad)
     startEdit(TranslatableString("undoableAction", "Pad note"));
     score()->padToggle(pad);
     apply();
+
+    if (pad >= Pad::NOTE00 && pad <= Pad::NOTE1024) {
+        const NoteInputState& is = score()->inputState();
+        if (!is.rest() && isNoteInputMode() && is.usingNoteEntryMethod(NoteInputMethod::BY_DURATION)) {
+            score()->toggleAccidental(AccidentalType::NONE);
+        }
+    }
 
     notifyAboutStateChanged();
 
@@ -541,7 +549,7 @@ void NotationNoteInput::setInputNotes(const NoteValList& notes)
         if (const Drumset* drumset = is.drumset()) {
             const int pitch = notes.front().pitch;
             is.setDrumNote(pitch);
-            is.setTrack(is.track() + drumset->voice(pitch));
+            is.setVoice(drumset->voice(pitch));
         }
     }
 
@@ -565,11 +573,10 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
 
     for (const NoteVal& val : is.notes()) {
         NoteVal newVal;
-        newVal.pitch = val.pitch;
 
         if (staff->isDrumStaff(tick)) {
             if (const Drumset* drumset = is.drumset()) {
-                newVal.pitch = up ? drumset->nextPitch(newVal.pitch) : drumset->prevPitch(newVal.pitch);
+                newVal.pitch = up ? drumset->nextPitch(val.pitch) : drumset->prevPitch(val.pitch);
 
                 if (drumset->isValid(newVal.pitch)) {
                     newVal.headGroup = drumset->noteHead(newVal.pitch);
@@ -581,7 +588,7 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
 
         switch (mode) {
         case PitchMode::CHROMATIC:
-            newVal.pitch += up ? 1 : -1;
+            newVal.pitch = val.pitch + (up ? 1 : -1);
             break;
         case PitchMode::DIATONIC: {
             const int oldLine = mu::engraving::noteValToLine(val, is.staff(), is.tick());
@@ -589,6 +596,7 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
             newVal = noteValForLine(newLine);
         } break;
         case PitchMode::OCTAVE:
+            newVal = val;
             newVal.pitch += up ? mu::engraving::PITCH_DELTA_OCTAVE : -mu::engraving::PITCH_DELTA_OCTAVE;
             break;
         }
@@ -598,6 +606,17 @@ void NotationNoteInput::moveInputNotes(bool up, PitchMode mode)
     }
 
     setInputNotes(notes);
+}
+
+void NotationNoteInput::setRestMode(bool rest)
+{
+    mu::engraving::InputState& is = score()->inputState();
+    if (is.rest() == rest) {
+        return;
+    }
+
+    is.setRest(rest);
+    notifyAboutStateChanged();
 }
 
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)
@@ -647,23 +666,9 @@ void NotationNoteInput::setCurrentVoice(voice_idx_t voiceIndex)
 {
     TRACEFUNC;
 
-    if (!isVoiceIndexValid(voiceIndex)) {
-        return;
-    }
-
     mu::engraving::InputState& inputState = score()->inputState();
-
-    // TODO: Inserting notes to a new voice in the middle of a tuplet is not yet supported. In this case
-    // we'll move the input to the start of the tuplet...
-    if (const Segment* prevSeg = inputState.segment()) {
-        const ChordRest* prevCr = prevSeg->cr(inputState.track());
-        //! NOTE: if there's an existing ChordRest at the new voiceIndex, we don't need to move the cursor
-        if (prevCr && prevCr->topTuplet() && !prevSeg->cr(voiceIndex)) {
-            Segment* newSeg = score()->tick2segment(prevCr->topTuplet()->tick());
-            if (newSeg) {
-                inputState.setSegment(newSeg);
-            }
-        }
+    if (!isVoiceIndexValid(voiceIndex) || voiceIndex == inputState.voice()) {
+        return;
     }
 
     inputState.setVoice(voiceIndex);
@@ -858,7 +863,14 @@ void NotationNoteInput::updateInputState()
 {
     TRACEFUNC;
 
-    score()->inputState().update(score()->selection());
+    NoteInputState& is = score()->inputState();
+    is.update(score()->selection());
+
+    if (!configuration()->addAccidentalDotsArticulationsToNextNoteEntered()) {
+        is.setAccidentalType(AccidentalType::NONE);
+        is.setDots(0);
+        is.setArticulationIds({});
+    }
 
     notifyAboutStateChanged();
 }

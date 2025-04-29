@@ -159,17 +159,17 @@ void PageSettings::updateValues()
 
     blockSignals(true);
 
-    const char* suffix;
+    QString suffix;
     double singleStepSize;
     double singleStepScale;
     if (mm) {
-        suffix = "mm";
+        suffix = muse::qtrc("global", "mm");
         singleStepSize = 1.0;
-        singleStepScale = 0.2;
+        singleStepScale = 0.05;
     } else {
-        suffix = "in";
+        suffix = muse::qtrc("global", "in", /*disambiguation*/ "abbreviation of inch");
         singleStepSize = 0.05;
-        singleStepScale = 0.005;
+        singleStepScale = 0.002;
     }
     for (auto w : { oddPageTopMargin, oddPageBottomMargin, oddPageLeftMargin, oddPageRightMargin, evenPageTopMargin,
                     evenPageBottomMargin, evenPageLeftMargin, evenPageRightMargin, spatiumEntry, pageWidth, pageHeight }) {
@@ -261,10 +261,8 @@ void PageSettings::orientationClicked()
 
 void PageSettings::on_resetPageStyleButton_clicked()
 {
-    for (auto styleId : pageStyles()) {
-        globalContext()->currentNotation()->style()->resetStyleValue(styleId);
-    }
-
+    score()->undoChangePageNumberOffset(0);
+    globalContext()->currentNotation()->style()->resetStyleValues(pageStyles());
     updateValues();
 }
 
@@ -473,8 +471,8 @@ void PageSettings::spatiumChanged(double val)
 
 void PageSettings::pageOffsetChanged(int val)
 {
-    // TODO: Cancel does not work when page offset is changed?
-    score()->setPageNumberOffset(val - 1);
+    score()->undoChangePageNumberOffset(val - 1);
+    globalContext()->currentNotation()->notationChanged().notify();
 }
 
 void PageSettings::pageHeightChanged(double val)

@@ -73,6 +73,7 @@ if(CC_IS_MSVC)
 
     add_compile_options("/EHsc")
     add_compile_options("/utf-8")
+    add_compile_options("/MP")
 
     add_compile_definitions(WIN32 _WINDOWS)
     add_compile_definitions(_UNICODE UNICODE)

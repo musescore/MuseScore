@@ -27,8 +27,6 @@
 
 #include "measure.h"
 
-#include <cmath>
-
 #include "accidental.h"
 #include "actionicon.h"
 #include "anchors.h"
@@ -61,7 +59,6 @@
 #include "segment.h"
 #include "select.h"
 #include "sig.h"
-#include "slur.h"
 #include "spacer.h"
 #include "staff.h"
 #include "stafflines.h"
@@ -72,7 +69,6 @@
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
-
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "tuplet.h"
@@ -840,9 +836,9 @@ void Measure::add(EngravingItem* e)
     break;
     case ElementType::JUMP:
     case ElementType::MARKER:
-        if (e && (e->isJump() || muse::contains(Marker::RIGHT_MARKERS, toMarker(e)->markerType()))) {
+        if (e && (e->isJump() || (e->isMarker() && toMarker(e)->isRightMarker()))) {
             // "To coda" markings act like jumps
-            setRepeatJump(true);
+            setProperty(Pid::REPEAT_JUMP, true);
         }
         el().push_back(e);
         break;
@@ -943,9 +939,11 @@ void Measure::remove(EngravingItem* e)
         break;
 
     case ElementType::JUMP:
-        setRepeatJump(false);
-    // fall through
     case ElementType::MARKER:
+        if (e->isJump() || (e->isMarker() && toMarker(e)->isRightMarker())) {
+            setProperty(Pid::REPEAT_JUMP, false);
+        }
+        [[fallthrough]];
     case ElementType::HBOX:
         if (!el().remove(e)) {
             LOGD("Measure(%p)::remove(%s,%p) not found", this, e->typeName(), e);
@@ -1342,12 +1340,10 @@ bool Measure::acceptDrop(EditData& data) const
 
     //! NOTE: Should match NotationInteraction::dragMeasureAnchorElement
     switch (e->type()) {
-    case ElementType::MEASURE_LIST:
     case ElementType::MEASURE_NUMBER:
     case ElementType::JUMP:
     case ElementType::MARKER:
     case ElementType::LAYOUT_BREAK:
-    case ElementType::STAFF_LIST:
         // Always drop to all staves
         viewer->setDropRectangle(canvasBoundingRect());
         return true;
@@ -1442,14 +1438,6 @@ EngravingItem* Measure::drop(EditData& data)
     //bool fromPalette = (e->track() == -1);
 
     switch (e->type()) {
-    case ElementType::MEASURE_LIST:
-        delete e;
-        break;
-
-    case ElementType::STAFF_LIST:
-        delete e;
-        break;
-
     case ElementType::MARKER:
     case ElementType::JUMP:
         e->setParent(this);
@@ -2425,6 +2413,9 @@ bool Measure::isCutawayClef(staff_idx_t staffIdx) const
             break;
         }
     }
+    while (s && s->isTimeTickType()) {
+        s = s->prev();
+    }
     if (!s) {
         return false;
     }
@@ -2544,7 +2535,7 @@ bool Measure::isOnlyDeletedRests(track_idx_t track) const
 //   stretchedLen
 //---------------------------------------------------------
 
-Fraction Measure::stretchedLen(Staff* staff) const
+Fraction Measure::stretchedLen(const Staff* staff) const
 {
     return ticks() * staff->timeStretch(tick());
 }
@@ -2907,7 +2898,7 @@ Measure* Measure::mmRestLast() const
 //    otherwise, return the measure itself.
 //---------------------------------------------------------
 
-const Measure* Measure::coveringMMRestOrThis() const
+Measure* Measure::coveringMMRestOrThis()
 {
     if (!style().styleB(Sid::createMultiMeasureRests)) {
         return this;
@@ -2931,6 +2922,11 @@ const Measure* Measure::coveringMMRestOrThis() const
     }
 
     return 0;
+}
+
+const Measure* Measure::coveringMMRestOrThis() const
+{
+    return const_cast<Measure*>(this)->coveringMMRestOrThis();
 }
 
 int Measure::measureRepeatCount(staff_idx_t staffIdx) const

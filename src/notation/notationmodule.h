@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONMODULE_H
-#define MU_NOTATION_NOTATIONMODULE_H
+#pragma once
 
 #include <memory>
 
@@ -32,6 +31,7 @@ class NotationActionController;
 class NotationUiActions;
 class MidiInputOutputController;
 class InstrumentsRepository;
+class EngravingFontsController;
 class NotationModule : public muse::modularity::IModuleSetup
 {
 public:
@@ -49,7 +49,6 @@ private:
     std::shared_ptr<NotationUiActions> m_notationUiActions;
     std::shared_ptr<MidiInputOutputController> m_midiInputOutputController;
     std::shared_ptr<InstrumentsRepository> m_instrumentsRepository;
+    std::shared_ptr<EngravingFontsController> m_engravingFontsController;
 };
 }
-
-#endif // MU_NOTATION_NOTATIONMODULE_H

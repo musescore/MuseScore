@@ -48,7 +48,11 @@ public:
     virtual Ret setWorkspaces(const IWorkspacePtrList& workspaces) = 0;
     virtual async::Notification workspacesListChanged() const = 0;
 
-    virtual IWorkspacePtr newWorkspace(const std::string& workspaceName) const = 0;
+    virtual IWorkspacePtr cloneWorkspace(const IWorkspacePtr& workspace, const std::string& newWorkspaceName) const = 0;
+
+    virtual void changeCurrentWorkspace(const std::string& newWorkspaceName) = 0;
+    virtual void createAndAppendNewWorkspace() = 0;
+    virtual void openConfigureWorkspacesDialog() = 0;
 };
 }
 

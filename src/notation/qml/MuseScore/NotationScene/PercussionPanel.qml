@@ -47,10 +47,14 @@ Item {
         panelWidth: root.width
     }
 
+    function resizePanelToContentHeight() {
+        var newHeight = (Math.min(padGrid.numRows, 2) * padGrid.cellHeight) + (soundTitleLabel.height * 2)
+        root.resizeRequested(root.width, newHeight)
+    }
+
     Component.onCompleted: {
         padGrid.model.init()
-        var newHeight = (padGrid.numRows * padGrid.cellHeight) + (soundTitleLabel.height * 2)
-        root.resizeRequested(root.width, newHeight)
+        root.resizePanelToContentHeight()
     }
 
     PercussionPanelModel {
@@ -111,7 +115,7 @@ Item {
         width: Math.min(rowLayout.width, parent.width)
 
         contentWidth: rowLayout.width
-        contentHeight: rowLayout.height
+        contentHeight: rowLayout.height + rowLayout.anchors.topMargin
 
         StyledScrollBar.vertical: verticalScrollBar
 
@@ -148,6 +152,8 @@ Item {
             }
 
             height: padGrid.cellHeight * padGrid.numRows
+            anchors.top: parent.top
+            anchors.topMargin: Math.max((flickable.height - height) / 2, 0)
             spacing: padGrid.spacing / 2
 
             NavigationPanel {
@@ -162,7 +168,7 @@ Item {
                 onNavigationEvent: {
                     // Use the last known "pad navigation row" and tab to the associated delete button if it exists
                     var padNavigationRow = navigationPrv.currentPadNavigationIndex[0]
-                    if (padGrid.model.rowIsEmpty(padNavigationRow)) {
+                    if (padGrid.numRows > 1) {
                         event.setData("controlIndex", [padNavigationRow, 0])
                     }
                 }
@@ -196,7 +202,7 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
 
-                            visible: padGrid.numRows > 1 && padGrid.model.rowIsEmpty(model.index)
+                            visible: padGrid.numRows > 1
 
                             icon: IconCode.DELETE_TANK
                             backgroundRadius: deleteButton.width / 2
@@ -209,17 +215,6 @@ Item {
 
                             onClicked: {
                                 padGrid.model.deleteRow(model.index)
-                            }
-
-                            Connections {
-                                target: padGrid.model
-
-                                function onRowIsEmptyChanged(row, isEmpty) {
-                                    if (row !== model.index) {
-                                        return
-                                    }
-                                    deleteButton.visible = padGrid.numRows > 1 && isEmpty
-                                }
                             }
                         }
                     }
@@ -236,10 +231,8 @@ Item {
                 property Item swapOriginPad: null
                 property bool isKeyboardSwapActive: false
 
-                Layout.alignment: Qt.AlignTop
-                Layout.fillHeight: true
-
                 width: cellWidth * numColumns
+                Layout.fillHeight: true
 
                 interactive: false
 
@@ -292,6 +285,7 @@ Item {
                         panelEnabled: percModel.enabled
                         panelMode: percModel.currentPanelMode
                         useNotationPreview: percModel.useNotationPreview
+                        notationPreviewNumStaffLines: percModel.notationPreviewNumStaffLines
 
                         // When swapping, only show the outline for the swap origin  and the swap target...
                         showEditOutline: percModel.currentPanelMode === PanelMode.EDIT_LAYOUT
@@ -310,7 +304,9 @@ Item {
                             padGrid.swapOriginPad = pad
                             padGrid.isKeyboardSwapActive = isKeyboardSwap
                             padGrid.model.startPadSwap(index)
-                            pad.padNavigation.requestActive()
+                            if (isKeyboardSwap) {
+                                pad.padNavigation.requestActive()
+                            }
                         }
 
                         onEndPadSwapRequested: {
@@ -339,12 +335,15 @@ Item {
                                 if (index !== padIndex) {
                                     return
                                 }
-                                pad.padNavigation.requestActive()
+
+                                // Focus pad only if keyboard navigation has started
+                                if (root.navigationSection.active) {
+                                    pad.padNavigation.requestActive()
+                                }
                             }
 
                             function onNumPadsChanged() {
-                                var newHeight = (padGrid.numRows * padGrid.cellHeight) + (soundTitleLabel.height * 2)
-                                root.resizeRequested(root.width, newHeight)
+                                root.resizePanelToContentHeight()
                             }
                         }
                     }
@@ -418,7 +417,7 @@ Item {
                 drawFocusBorderInsideRect: true
 
                 onClicked: {
-                    padGrid.model.addEmptyRow()
+                    padGrid.model.addEmptyRow(/*focusFirstInNewRow*/ true)
                     flickable.goToBottom()
                 }
             }
@@ -430,6 +429,7 @@ Item {
             visible: !percModel.enabled
 
             anchors.centerIn: parent
+            anchors.verticalCenterOffset: rowLayout.anchors.topMargin / 2
 
             font: ui.theme.bodyFont
             text: qsTrc("notation/percussion", "Select an unpitched percussion staff to see available sounds")

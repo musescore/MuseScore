@@ -49,7 +49,7 @@ TEST_F(DoubleInputValidatorTests, Validate) {
     {
         QString str;
         QValidator::State expectedState;
-        QString fixedStr;
+        QString fixedStr = {};
     };
 
     m_validator->setTop(100.0);

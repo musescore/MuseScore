@@ -48,7 +48,6 @@ static constexpr int FORBIDDEN_CODE = 403;
 static constexpr int NOT_FOUND_STATUS_CODE = 404;
 static constexpr int CONFLICT_STATUS_CODE = 409;
 
-QString userAgent();
 int generateFileNameNumber();
 
 class OAuthHttpServerReplyHandler;
@@ -108,13 +107,15 @@ protected:
 
     virtual Ret downloadAccountInfo() = 0;
 
+    network::RequestHeaders defaultHeaders() const;
+
     QString logoColor() const;
 
     void setAccountInfo(const AccountInfo& info);
 
     RetVal<QUrl> prepareUrlForRequest(QUrl apiUrl, const QVariantMap& params = QVariantMap()) const;
 
-    using RequestCallback = std::function<Ret()>;
+    using RequestCallback = std::function<Ret ()>;
     Ret executeRequest(const RequestCallback& requestCallback);
 
     Ret uploadingDownloadingRetFromRawRet(const Ret& rawRet, bool isAlreadyUploaded = false) const;
@@ -140,8 +141,6 @@ private:
     io::path_t tokensFilePath() const;
 
     void openUrl(const QUrl& url);
-
-    network::RequestHeaders headers() const;
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     OAuthHttpServerReplyHandler* m_replyHandler = nullptr;

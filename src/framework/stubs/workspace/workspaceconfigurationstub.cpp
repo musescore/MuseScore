@@ -29,9 +29,19 @@ io::paths_t WorkspaceConfigurationStub::workspacePaths() const
     return io::paths_t();
 }
 
+io::paths_t WorkspaceConfigurationStub::builtinWorkspacesFilePaths() const
+{
+    return io::paths_t();
+}
+
 io::path_t WorkspaceConfigurationStub::userWorkspacesPath() const
 {
     return io::path_t();
+}
+
+std::string WorkspaceConfigurationStub::defaultWorkspaceName() const
+{
+    return std::string();
 }
 
 std::string WorkspaceConfigurationStub::currentWorkspaceName() const

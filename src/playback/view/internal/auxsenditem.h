@@ -20,12 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PLAYBACK_AUXSENDITEM_H
-#define MU_PLAYBACK_AUXSENDITEM_H
+#pragma once
 
 #include <QObject>
-
-#include "audio/audiotypes.h"
 
 namespace mu::playback {
 class AuxSendItem : public QObject
@@ -59,5 +56,3 @@ private:
     int m_audioSignalPercentage = 0;
 };
 }
-
-#endif // MU_PLAYBACK_AUXSENDITEM_H

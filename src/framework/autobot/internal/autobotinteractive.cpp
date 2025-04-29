@@ -215,6 +215,11 @@ ValCh<Uri> AutobotInteractive::currentUri() const
     return m_real->currentUri();
 }
 
+RetVal<bool> AutobotInteractive::isCurrentUriDialog() const
+{
+    return m_real->isCurrentUriDialog();
+}
+
 std::vector<Uri> AutobotInteractive::stack() const
 {
     return m_real->stack();

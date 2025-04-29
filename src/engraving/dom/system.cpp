@@ -215,7 +215,7 @@ void System::removeLastMeasure()
 Box* System::vbox() const
 {
     if (!m_ml.empty()) {
-        if (m_ml[0]->isVBox() || m_ml[0]->isTBox()) {
+        if (m_ml[0]->isVBox() || m_ml[0]->isTBox() || m_ml[0]->isFBox()) {
             return toBox(m_ml[0]);
         }
     }

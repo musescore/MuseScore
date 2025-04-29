@@ -89,22 +89,24 @@ InspectorSectionView {
         StyledTextLabel {
             Layout.fillWidth: true
             Layout.topMargin: 12
-            visible: model.scoreIsInPageView
+            visible: root.model ? model.scoreIsInPageView : false
             horizontalAlignment: Qt.AlignLeft
             text: qsTrc("inspector", "Move to system")
         }
 
         RowLayout {
+            id: moveSystemLayout
+
             Layout.topMargin: 8
             visible: model.scoreIsInPageView
 
-            Layout.fillWidth: true
+            width: parent.width
             spacing: 4
 
             FlatButton {
                 id: upSystem
 
-                Layout.fillWidth: true
+                Layout.preferredWidth: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "SystemUp"
@@ -123,7 +125,7 @@ InspectorSectionView {
             FlatButton {
                 id: downSystem
 
-                Layout.fillWidth: true
+                Layout.preferredWidth: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "SystemDown"
@@ -172,7 +174,8 @@ InspectorSectionView {
 
         FlatButton {
             id: makeIntoOneSystem
-            enabled: model.isMakeIntoSystemAvailable
+            visible: model.scoreIsInPageView
+            enabled: root.model ? model.isMakeIntoSystemAvailable : false
 
             Layout.topMargin: 4
             Layout.fillWidth: true

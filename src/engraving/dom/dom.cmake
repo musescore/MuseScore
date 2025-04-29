@@ -269,6 +269,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/segment.h
     ${CMAKE_CURRENT_LIST_DIR}/segmentlist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/segmentlist.h
+    ${CMAKE_CURRENT_LIST_DIR}/selectionfilter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/selectionfilter.h
     ${CMAKE_CURRENT_LIST_DIR}/select.cpp
     ${CMAKE_CURRENT_LIST_DIR}/select.h
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.cpp

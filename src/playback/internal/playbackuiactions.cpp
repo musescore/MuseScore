@@ -141,14 +141,14 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              IconCode::Code::PAN_SCORE,
              Checkable::Yes
              ),
-//    UiAction("countin",                                      // See #14807
-//             mu::context::UiCtxAny,
-//             mu::context::CTX_ANY,
-//             TranslatableString("action", "Enable count-in when playing"),
-//             TranslatableString("action", "Enable count-in when playing"),
-//             IconCode::Code::COUNT_IN,
-//             Checkable::Yes
-//             ),
+    UiAction("countin",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Enable count-in when playing"),
+             TranslatableString("action", "Enable count-in when playing"),
+             IconCode::Code::COUNT_IN,
+             Checkable::Yes
+             ),
 };
 
 const UiActionList PlaybackUiActions::m_loopBoundaryActions = {
@@ -166,6 +166,14 @@ const UiActionList PlaybackUiActions::m_loopBoundaryActions = {
              TranslatableString("action", "Set loop marker right"),
              IconCode::Code::LOOP_OUT
              ),
+};
+
+const UiActionList PlaybackUiActions::m_diagnosticActions = {
+    UiAction("playback-reload-cache",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Reload playback cache")
+             )
 };
 
 PlaybackUiActions::PlaybackUiActions(std::shared_ptr<PlaybackController> controller)
@@ -199,6 +207,7 @@ const UiActionList& PlaybackUiActions::actionsList() const
         alist.insert(alist.end(), m_midiInputPitchActions.cbegin(), m_midiInputPitchActions.cend());
         alist.insert(alist.end(), m_settingsActions.cbegin(), m_settingsActions.cend());
         alist.insert(alist.end(), m_loopBoundaryActions.cbegin(), m_loopBoundaryActions.cend());
+        alist.insert(alist.end(), m_diagnosticActions.cbegin(), m_diagnosticActions.cend());
     }
     return alist;
 }

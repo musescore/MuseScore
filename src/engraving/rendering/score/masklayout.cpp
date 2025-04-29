@@ -39,31 +39,23 @@ using namespace mu::engraving::rendering::score;
 
 void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
 {
-    std::vector<staff_idx_t> tabStaves;
-    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        const Staff* staff = ctx.dom().staff(staffIdx);
-        if (staff->isTabStaff(Fraction())) {
-            tabStaves.push_back(staffIdx);
-        }
-    }
+    TRACEFUNC;
 
     bool maskBarlines = ctx.conf().styleB(Sid::maskBarlinesForText);
 
     for (const System* system : page->systems()) {
+        std::vector<TextBase*> allSystemText = collectAllSystemText(system);
+
         for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {
                 continue;
             }
             Measure* measure = toMeasure(mb);
 
-            for (staff_idx_t staffIdx : tabStaves) {
-                maskTABStringLinesForFrets(measure, staffIdx, ctx);
-            }
-
             if (maskBarlines) {
                 for (const Segment& seg : measure->segments()) {
                     if (seg.isType(SegmentType::BarLineType)) {
-                        computeBarlineMasks(&seg, system, ctx);
+                        computeBarlineMasks(&seg, system, allSystemText, ctx);
                     }
                 }
             }
@@ -71,7 +63,8 @@ void MaskLayout::computeMasks(LayoutContext& ctx, Page* page)
     }
 }
 
-void MaskLayout::computeBarlineMasks(const Segment* barlineSement, const System* system, LayoutContext& ctx)
+void MaskLayout::computeBarlineMasks(const Segment* barlineSement, const System* system, const std::vector<TextBase*>& allSystemText,
+                                     LayoutContext& ctx)
 {
     if (barlineSement->measure()->isLastInSystem() && barlineSement == barlineSement->measure()->lastEnabled()) {
         return;
@@ -90,13 +83,13 @@ void MaskLayout::computeBarlineMasks(const Segment* barlineSement, const System*
         if (!barline || barline->spanStaff() == 0) {
             continue;
         }
-        maskBarlineForText(barline, staffIdx, barlineSement, system);
+        maskBarlineForText(barline, allSystemText);
     }
 }
 
-void MaskLayout::maskBarlineForText(BarLine* barline, staff_idx_t staffIdx, const Segment* segment, const System* system)
+void MaskLayout::maskBarlineForText(BarLine* barline, const std::vector<TextBase*>& allSystemText)
 {
-    std::vector<TextBase*> possibleIntersectingText = collectPossibleIntersectingText(staffIdx, segment, system);
+    TRACEFUNC;
 
     PointF barlinePos = barline->pagePos();
     Shape barlineShape = barline->shape().translated(barlinePos);
@@ -104,13 +97,19 @@ void MaskLayout::maskBarlineForText(BarLine* barline, staff_idx_t staffIdx, cons
     Shape mask;
     const double spatium = barline->spatium();
 
-    for (TextBase* text : possibleIntersectingText) {
-        const double xHeight = text->fontMetrics().xHeight();
-        const double collisionPadding = 0.25 * xHeight;
-        const double maskPadding = std::clamp(0.5 * xHeight, 0.1 * spatium, spatium);
+    for (TextBase* text : allSystemText) {
+        const double fontSizeScaleFactor = text->size() / 10.0;
+        const double collisionPadding = 0.2 * spatium * fontSizeScaleFactor;
+        const bool hasFrame = text->frameType() != FrameType::NO_FRAME;
+        const bool useHighResShape = !text->isDynamic() && !text->hasFrame();
+        const double maskPadding = hasFrame ? 0.0 : std::clamp(0.5 * spatium * fontSizeScaleFactor, 0.1 * spatium, spatium);
 
         PointF textPos = text->pagePos();
-        Shape textShape = (text->isDynamic() ? text->ldata()->shape() : text->ldata()->highResShape()).translated(textPos);
+        if (!barlineShape.intersects(text->ldata()->bbox().translated(textPos).padded(collisionPadding))) {
+            continue;
+        }
+
+        Shape textShape = (useHighResShape ? text->ldata()->highResShape() : text->ldata()->shape()).translated(textPos);
 
         Shape filteredTextShape;
         filteredTextShape.elements().reserve(textShape.elements().size());
@@ -129,6 +128,11 @@ void MaskLayout::maskBarlineForText(BarLine* barline, staff_idx_t staffIdx, cons
         mask.add(filteredTextShape.translate(-barlinePos));
     }
 
+    if (mask.empty()) {
+        barline->mutldata()->setMask(mask);
+        return;
+    }
+
     // Ensure that we don't leave tiny barline fragments. If two masking
     // elements are too close to each other we extend them to join.
     barlineShape.translate(-barlinePos);
@@ -140,7 +144,7 @@ void MaskLayout::maskBarlineForText(BarLine* barline, staff_idx_t staffIdx, cons
 
 void MaskLayout::cleanupMask(const Shape& itemShape, Shape& mask, double minFragmentLength)
 {
-    for (int i = 0; i < mask.size(); ++i) {
+    for (size_t i = 0; i < mask.size(); ++i) {
         ShapeElement& el = mask.elements()[i];
 
         if (el.top() - itemShape.top() < minFragmentLength) {
@@ -157,7 +161,7 @@ void MaskLayout::cleanupMask(const Shape& itemShape, Shape& mask, double minFrag
             el.adjust(0.0, 0.0, minFragmentLength, 0.0);
         }
 
-        for (int j = i + 1; j < mask.size(); ++j) {
+        for (size_t j = i + 1; j < mask.size(); ++j) {
             ShapeElement& otherEl = mask.elements()[j];
             if (intersects(el.left(), el.right(), otherEl.left(), otherEl.right())) {
                 bool otherIsBelow = otherEl.y() > el.y();
@@ -177,93 +181,64 @@ void MaskLayout::cleanupMask(const Shape& itemShape, Shape& mask, double minFrag
     }
 }
 
-std::vector<TextBase*> MaskLayout::collectPossibleIntersectingText(staff_idx_t staffIdx, const Segment* segment, const System* system)
+std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
 {
-    std::vector<TextBase*> possibleIntersectingText;
+    TRACEFUNC;
 
-    Measure* thisMeasure = segment->measure();
+    std::vector<TextBase*> allText;
 
-    Measure* prevMeasure = thisMeasure->prevMeasure();
-    Measure* startMeasure = prevMeasure && prevMeasure->system() == system ? prevMeasure : thisMeasure;
-
-    Measure* nextMeasure = thisMeasure->nextMeasure();
-    Measure* endMeasure = nextMeasure && nextMeasure->system() == system ? nextMeasure : thisMeasure;
-
-    staff_idx_t nextStaff = system->nextVisibleStaff(staffIdx);
-    track_idx_t startTrack = staff2track(staffIdx);
-    track_idx_t endTrack = nextStaff != muse::nidx ? staff2track(nextStaff) + VOICES : startTrack + VOICES;
-
-    for (Segment* s = segment->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); s && s->measure()->isAfterOrEqual(startMeasure);
-         s = s->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
-        for (EngravingItem* annotation : s->annotations()) {
-            if (annotation->isTextBase() && annotation->visible()
-                && annotation->track() >= startTrack && annotation->track() < endTrack) {
-                possibleIntersectingText.push_back(toTextBase(annotation));
-            }
-        }
-        if (!s->isChordRestType()) {
+    for (const MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
             continue;
         }
-        for (track_idx_t track = startTrack; track < endTrack; ++track) {
-            ChordRest* cr = toChordRest(s->element(track));
-            if (!cr) {
+        for (const Segment& s : toMeasure(mb)->segments()) {
+            if (!s.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE) || !s.enabled()) {
                 continue;
             }
-            for (Lyrics* lyr : cr->lyrics()) {
-                if (lyr->visible()) {
-                    possibleIntersectingText.push_back(lyr);
+            for (EngravingItem* annotation : s.annotations()) {
+                if (annotation->isTextBase() && annotation->visible() && system->staff(annotation->staffIdx())->show()) {
+                    allText.push_back(toTextBase(annotation));
                 }
             }
-        }
-    }
-
-    for (Segment* s = segment->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); s && s->measure()->isBeforeOrEqual(endMeasure);
-         s = s->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
-        for (EngravingItem* annotation : s->annotations()) {
-            if (annotation->isTextBase() && annotation->visible()
-                && annotation->track() >= startTrack && annotation->track() < endTrack) {
-                possibleIntersectingText.push_back(toTextBase(annotation));
-            }
-        }
-        if (!s->isChordRestType()) {
-            continue;
-        }
-        for (track_idx_t track = startTrack; track < endTrack; ++track) {
-            ChordRest* cr = toChordRest(s->element(track));
-            if (!cr) {
+            if (!s.isChordRestType()) {
                 continue;
             }
-            for (Lyrics* lyr : cr->lyrics()) {
-                if (lyr->visible()) {
-                    possibleIntersectingText.push_back(lyr);
+            for (EngravingItem* chordRest : s.elist()) {
+                if (!chordRest || !system->staff(chordRest->staffIdx())->show()) {
+                    continue;
+                }
+                for (Lyrics* lyr : toChordRest(chordRest)->lyrics()) {
+                    if (lyr->visible()) {
+                        allText.push_back(lyr);
+                    }
                 }
             }
         }
     }
 
     for (SpannerSegment* spannerSegment : system->spannerSegments()) {
-        if (!spannerSegment->isTextLineBaseSegment()) {
+        if (!spannerSegment->isTextLineBaseSegment() || !system->staff(spannerSegment->staffIdx())->show()) {
             continue;
         }
         TextLineBaseSegment* textLineBaseSegment = static_cast<TextLineBaseSegment*>(spannerSegment);
         Text* beginText = textLineBaseSegment->text();
         Text* endText = textLineBaseSegment->endText();
         if (beginText && !beginText->empty()) {
-            possibleIntersectingText.push_back(beginText);
+            allText.push_back(beginText);
         }
         if (endText && !endText->empty()) {
-            possibleIntersectingText.push_back(endText);
+            allText.push_back(endText);
         }
     }
 
-    return possibleIntersectingText;
+    return allText;
 }
 
-void MaskLayout::maskTABStringLinesForFrets(Measure* measure, staff_idx_t staffIdx, const LayoutContext& ctx)
+void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const LayoutContext& ctx)
 {
+    staff_idx_t staffIdx = staffLines->staffIdx();
     bool linesThrough = ctx.dom().staff(staffIdx)->staffType(Fraction())->linesThrough();
 
-    StaffLines* staffLines = measure->staffLines(staffIdx);
     PointF staffLinesPos = staffLines->pagePos();
 
     double padding = ctx.conf().styleMM(Sid::tabFretPadding);
@@ -283,6 +258,7 @@ void MaskLayout::maskTABStringLinesForFrets(Measure* measure, staff_idx_t staffI
         }
     };
 
+    const Measure* measure = staffLines->measure();
     for (Segment* seg = measure->first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
         for (track_idx_t track = startTrack; track < endTrack; ++track) {
             EngravingItem* el = seg->element(track);

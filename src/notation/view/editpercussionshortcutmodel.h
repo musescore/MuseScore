@@ -37,6 +37,8 @@ class EditPercussionShortcutModel : public QObject, public muse::Injectable
     Q_PROPERTY(QString newShortcutText READ newShortcutText NOTIFY newShortcutTextChanged)
     Q_PROPERTY(QString informationText READ informationText NOTIFY newShortcutTextChanged)
 
+    Q_PROPERTY(bool cleared READ cleared NOTIFY clearedChanged)
+
     Inject<muse::IInteractive> interactive = { this };
 
 public:
@@ -44,6 +46,7 @@ public:
 
     Q_INVOKABLE void load(const QVariant& originDrum, const QVariantList& drumsWithShortcut, const QVariantList& applicationShortcuts);
     Q_INVOKABLE void inputKey(Qt::Key key);
+    Q_INVOKABLE void clear();
     Q_INVOKABLE bool trySave();
 
     Q_INVOKABLE int conflictDrumPitch() const;
@@ -52,15 +55,20 @@ public:
     QString newShortcutText() const;
     QString informationText() const;
 
+    bool cleared() const { return m_cleared; }
+
 signals:
     void originShortcutTextChanged();
     void newShortcutTextChanged();
+    void clearedChanged();
 
 private:
     bool checkDrumShortcutsForConflict();
     bool checkApplicationShortcutsForConflict();
 
     QString getConflictWarningText() const;
+
+    bool needIgnoreKey(const Qt::Key& key) const;
 
     QVariantMap m_originDrum;
 
@@ -71,5 +79,6 @@ private:
     QVariantList m_applicationShortcuts;
 
     bool m_conflictInAppShortcuts = false;
+    bool m_cleared = false;
 };
 }

@@ -271,10 +271,17 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         return ClefToBarlinePosition::AUTO;
     };
 
-    Measure* nextMeasure = measure->nextMeasure();
+    MeasureBase* nextMb = measure->next();
+
+    if (!nextMb || !nextMb->isMeasure()) {
+        return;
+    }
+
+    Measure* nextMeasure = toMeasure(nextMb);
 
     const bool sigsShouldBeInThisMeasure = ((measure->repeatEnd() && ctx.conf().styleB(Sid::changesBeforeBarlineRepeats))
                                             || (measure->repeatJump() && ctx.conf().styleB(Sid::changesBeforeBarlineOtherJumps)));
+    std::vector<Segment*> segsToRemove;
 
     std::vector<Segment*> segsToMoveToNextMeasure;
     for (Segment& seg : measure->segments()) {
@@ -308,7 +315,12 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         }
 
         // Move key sigs and time sigs at the end of this measure into the next measure
-        if ((seg.isKeySigType() || seg.isTimeSigType()) && (!sigsShouldBeInThisMeasure || !changeAppliesToRepeatAndContinuation(seg))) {
+        if ((seg.isKeySigType() || seg.isTimeSigType()) && !seg.header() && !seg.trailer()
+            && (!sigsShouldBeInThisMeasure || !changeAppliesToRepeatAndContinuation(seg))) {
+            if (nextMeasure && nextMeasure->findSegmentR(seg.segmentType(), Fraction(0, 1))) {
+                segsToRemove.push_back(&seg);
+                continue;
+            }
             segsToMoveToNextMeasure.push_back(&seg);
         }
     }
@@ -352,9 +364,19 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         }
 
         // Move key sigs and time sigs at the start of the next measure to the end of this measure
-        if ((seg.isTimeSigType() || seg.isKeySigType()) && sigsShouldBeInThisMeasure && changeAppliesToRepeatAndContinuation(seg)) {
+        if ((seg.isTimeSigType() || seg.isKeySigType()) && !seg.header() && !seg.trailer()
+            && sigsShouldBeInThisMeasure && changeAppliesToRepeatAndContinuation(seg)) {
+            if (measure->findSegmentR(seg.segmentType(), measure->ticks())) {
+                segsToRemove.push_back(&seg);
+                continue;
+            }
             segsToMoveToThisMeasure.push_back(&seg);
         }
+    }
+
+    for (Segment* seg : segsToRemove) {
+        // Don't add duplicate segs to a measure
+        ctx.mutDom().doUndoRemoveElement(seg);
     }
 
     for (Segment* seg : segsToMoveToNextMeasure) {
@@ -379,7 +401,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
     // Sort segments at start of first measure
     Measure* prevMeasure = measure->prevMeasure();
     if (prevMeasure && prevMeasure == ctx.dom().firstMeasure()) {
-        ModifyDom::removeAndAddBeginSegments(prevMeasure);
+        removeAndAddBeginSegments(prevMeasure);
     }
 }
 

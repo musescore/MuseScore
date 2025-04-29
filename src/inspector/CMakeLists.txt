@@ -26,6 +26,7 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/view/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inspectormodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/inspectormodule.h
+
     ${CMAKE_CURRENT_LIST_DIR}/types/accidentaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ambitustypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/articulationtypes.h
@@ -49,6 +50,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolobartypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/voicetypes.h
+
     ${CMAKE_CURRENT_LIST_DIR}/models/iinspectormodelcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelcreator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectormodelcreator.h
@@ -86,8 +88,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/measures/measuressettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreappearancesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreappearancesettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreaccessibilitysettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/score/scoreaccessibilitysettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoredisplaysettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoredisplaysettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/internal/pagetypelistmodel.cpp
@@ -136,6 +136,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/textframesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/verticalframesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/verticalframesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/glissandosettingsmodel.cpp
@@ -228,12 +230,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/interfaces/ielementrepositoryservice.h
     )
-
-set(MODULE_UI ${inspector_UI} )
-
-if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
-endif (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
 
 set(MODULE_LINK
     muse::uicomponents

@@ -215,7 +215,7 @@ public:
     static void layoutHBox2(HBox* item, const LayoutContext& ctx);
     static void layoutVBox(const VBox* item, VBox::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutFBox(const FBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
-    static void layoutTBox(const TBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
+    static void layoutTBox(const TBox* item, TBox::LayoutData* ldata, const LayoutContext& ctx);
 
     static void layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutBreath(const Breath* item, Breath::LayoutData* ldata, const LayoutConfiguration& conf);
@@ -278,6 +278,7 @@ public:
     static void layoutMeasureNumber(const MeasureNumber* item, MeasureNumber::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata, const LayoutContext& ctx); // base class
     static void layoutMeasureRepeat(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutContext& ctx);
+    static void layoutMeasureRepeatExtender(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutMMRestRange(const MMRestRange* item, MMRestRange::LayoutData* ldata, const LayoutContext& ctx);
 
@@ -366,7 +367,7 @@ public:
 
     static void layoutWhammyBarSegment(WhammyBarSegment* item, LayoutContext& ctx);
 
-    static RectF layoutRect(const BarLine* item, LayoutContext& ctx);
+    static void updateBarlineShape(const BarLine* item, BarLine::LayoutData* ldata, const LayoutContext& ctx);
 
     // layoutSystem;
     static SpannerSegment* layoutSystem(Spanner* item, System* system, LayoutContext& ctx); // factory
@@ -386,9 +387,10 @@ private:
                                                       std::function<SpannerSegment* (System* parent)> createSegment);
 
     static Shape textLineBaseSegmentShape(const TextLineBaseSegment* item);
-    static void layoutDynamicToEndOfPrevious(const Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf);
 
     static void manageHairpinSnapping(HairpinSegment* item, LayoutContext& ctx);
+
+    static void checkRehearsalMarkVSBigTimeSig(const RehearsalMark* item, RehearsalMark::LayoutData* ldata);
 };
 }
 

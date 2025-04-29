@@ -99,14 +99,16 @@ public:
 
 public slots:
     void setId(const QString& id);
-    void setTitle(const TranslatableString& title);
+    void setTitle(const muse::TranslatableString& title);
     void setSection(const QString& section);
-    void setState(const ui::UiActionState& state);
+    void setState(const muse::ui::UiActionState& state);
     void setSelectable(bool selectable);
     void setSelected(bool selected);
+    void setCheckable(bool checkable);
+    void setChecked(bool checked);
     void setRole(muse::uicomponents::MenuItemRole role);
     void setSubitems(const QList<uicomponents::MenuItem*>& subitems);
-    void setAction(const ui::UiAction& action);
+    void setAction(const muse::ui::UiAction& action);
     void setArgs(const muse::actions::ActionData& args);
     void setQuery(const muse::actions::ActionQuery& query);
 

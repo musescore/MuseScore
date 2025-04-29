@@ -950,7 +950,7 @@ void TRead::read(TremoloBar* b, XmlReader& e, ReadContext& ctx)
         } else if (tag == "play") {
             b->setPlay(e.readInt());
         } else if (TRead::readProperty(b, tag, e, ctx, Pid::LINE_WIDTH)) {
-        } else {
+        } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
     }
@@ -2309,7 +2309,19 @@ void TRead::read(VBox* b, XmlReader& xml, ReadContext& ctx)
 
 void TRead::read(FBox* b, XmlReader& xml, ReadContext& ctx)
 {
-    TRead::read(static_cast<Box*>(b), xml, ctx);
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_TEXT_SCALE)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_DIAGRAM_SCALE)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_COLUMN_GAP)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_ROW_GAP)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_CHORDS_PER_ROW)) {
+        } else if (readProperty(b, tag, xml, ctx, Pid::FRET_FRAME_H_ALIGN)) {
+        } else if (TRead::readProperties(static_cast<Box*>(b), xml, ctx)) {
+        } else {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(TBox* b, XmlReader& e, ReadContext& ctx)
@@ -3027,7 +3039,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "text") {
-            g->setShowText(true);
             textRead = true;
             TRead::readProperty(g, e, ctx, Pid::GLISS_TEXT);
         } else if (tag == "isHarpGliss" && ctx.pasteMode()) {
@@ -3199,9 +3210,9 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "base") {
-            h->setBaseTpc(e.readInt());
+            h->setBassTpc(e.readInt());
         } else if (tag == "baseCase") {
-            h->setBaseCase(static_cast<NoteCaseType>(e.readInt()));
+            h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
             h->setId(e.readInt());
         } else if (tag == "name") {

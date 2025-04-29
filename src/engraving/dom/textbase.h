@@ -122,7 +122,7 @@ private:
 class TextCursor
 {
 public:
-    enum class MoveOperation {
+    enum class MoveOperation : unsigned char {
         Start,
         Up,
         StartOfLine,
@@ -135,7 +135,7 @@ public:
         Right
     };
 
-    enum class MoveMode {
+    enum class MoveMode : unsigned char {
         MoveAnchor,
         KeepAnchor
     };
@@ -345,11 +345,13 @@ public:
     virtual bool allowTimeAnchor() const override { return hasParentSegment(); }
     virtual void startEdit(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;
+    virtual bool supportsNonTextualEdit() const;
     virtual bool edit(EditData&) override;
     virtual void editCut(EditData&) override;
     virtual void editCopy(EditData&) override;
     virtual void endEdit(EditData&) override;
     virtual void editDrag(EditData&) override;
+    virtual void endDrag(EditData&) override;
     void movePosition(EditData&, TextCursor::MoveOperation);
 
     virtual void undoMoveSegment(Segment* newSeg, Fraction tickDiff);
@@ -510,8 +512,9 @@ protected:
     virtual bool isTextualEditAllowed(EditData&) const;
     bool nudge(const EditData& ed);
 
-    bool moveSegment(const EditData&);
+    virtual bool moveSegment(const EditData&);
     void moveSnappedItems(Segment* newSeg, Fraction tickDiff) const;
+    void shiftInitOffset(EditData& ed, const PointF& offsetShift);
 
     void insertSym(EditData& ed, SymId id);
     void prepareFormat(const String& token, TextCursor& cursor);
@@ -541,8 +544,6 @@ private:
     void notifyAboutTextCursorChanged();
     void notifyAboutTextInserted(int startPosition, int endPosition, const String& text);
     void notifyAboutTextRemoved(int startPosition, int endPosition, const String& text);
-
-    void shiftInitOffset(EditData& ed, const PointF& offsetShift);
 
     Align m_align;
 

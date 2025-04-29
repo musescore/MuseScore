@@ -45,6 +45,7 @@ public:
     MOCK_METHOD(Ret, writeFile, (const io::path_t& filePath, const ByteArray& data), (const, override));
 
     MOCK_METHOD(Ret, makePath, (const io::path_t&), (const, override));
+    MOCK_METHOD(Ret, makeLink, (const io::path_t& targetPath, const io::path_t& linkPath), (const, override));
 
     MOCK_METHOD(RetVal<io::paths_t>, scanFiles, (const io::path_t&, const std::vector<std::string>&, ScanMode), (const, override));
 

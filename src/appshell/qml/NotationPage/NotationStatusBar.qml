@@ -52,10 +52,6 @@ Item {
         section: navSec
     }
 
-    Component.onCompleted: {
-        model.load()
-    }
-
     RowLayout {
         id: statusBarRow
 
@@ -110,6 +106,9 @@ Item {
             Layout.preferredHeight: 28
 
             text: model.currentWorkspaceItem.title
+            icon: IconCode.WORKSPACE
+            orientation: Qt.Horizontal
+
             transparent: true
             visible: statusBarRow.remainingSpace > width + concertPitchControl.width
 
@@ -117,7 +116,17 @@ Item {
             navigation.order: 1
 
             onClicked: {
-                Qt.callLater(model.selectWorkspace)
+                menuLoader.toggleOpened(model.currentWorkspaceItem.subitems)
+            }
+
+            StyledMenuLoader {
+                id: menuLoader
+
+                menuAnchorItem: ui.rootItem
+
+                onHandleMenuItem: function(itemId) {
+                    Qt.callLater(model.handleWorkspacesMenuItem, itemId)
+                }
             }
         }
 
@@ -224,7 +233,7 @@ Item {
                     model.handleAction(model.concertPitchItem.code)
                     break
                 case model.currentWorkspaceItem.id:
-                    model.handleAction(model.concertPitchItem.code)
+                    model.handleAction(model.currentWorkspaceItem.code)
                     break
                 }
             }

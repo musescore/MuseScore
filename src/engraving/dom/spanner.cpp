@@ -143,6 +143,9 @@ EngravingItem* SpannerSegment::propertyDelegate(Pid pid)
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
     case Pid::POSITION_LINKED_TO_MASTER:
     case Pid::APPEARANCE_LINKED_TO_MASTER:
+    case Pid::SPANNER_TICK:
+    case Pid::SPANNER_TICKS:
+    case Pid::SPANNER_TRACK2:
         return spanner();
     default: break;
     }
@@ -421,6 +424,16 @@ bool SpannerSegment::allowTimeAnchor() const
     return spanner()->allowTimeAnchor();
 }
 
+int SpannerSegment::subtype() const
+{
+    return spanner()->subtype();
+}
+
+TranslatableString SpannerSegment::subtypeUserName() const
+{
+    return spanner()->subtypeUserName();
+}
+
 //---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------
@@ -521,7 +534,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 
     // check spanner start and end point
     if (len > Fraction(0, 1)) {            // adding time
-        if (tick() > fromTick) {          // start after insertion point: shift start to right
+        if (tick() >= fromTick) {          // start after insertion point: shift start to right
             newTick1 += len;
         }
         if (tick2() > fromTick) {         // end after insertion point: shift end to right
@@ -846,6 +859,20 @@ void Spanner::doComputeEndElement()
     }
 }
 
+bool Spanner::canBeCrossStaff() const
+{
+    switch (type()) {
+    case ElementType::SLUR:
+    case ElementType::TIE:
+    case ElementType::ARPEGGIO:
+    case ElementType::GLISSANDO:
+    case ElementType::NOTELINE:
+        return true;
+    default:
+        return false;
+    }
+}
+
 //---------------------------------------------------------
 //   startElementFromSpanner
 //
@@ -932,14 +959,21 @@ void Spanner::setNoteSpan(Note* startNote, Note* endNote)
         return;
     }
 
-    setScore(startNote->score());
-    setParent(startNote);
+    Score* score = startNote ? startNote->score() : endNote->score();
+    Note* parent = startNote ? startNote : endNote;
+    Fraction tick = startNote ? startNote->tick() : endNote->tick();
+    Fraction endTick = endNote ? endNote->tick() : startNote->tick();
+    track_idx_t track = startNote ? startNote->track() : endNote->track();
+    track_idx_t endTrack = endNote ? endNote->track() : startNote->track();
+
+    setScore(score);
+    setParent(parent);
     setStartElement(startNote);
     setEndElement(endNote);
-    setTick(startNote->chord()->tick());
-    setTick2(endNote->chord()->tick());
-    setTrack(startNote->track());
-    setTrack2(endNote->track());
+    setTick(tick);
+    setTick2(endTick);
+    setTrack(track);
+    setTrack2(endTrack);
 }
 
 //---------------------------------------------------------
@@ -1405,6 +1439,25 @@ bool Spanner::isVoiceSpecific() const
     };
 
     return VOICE_SPECIFIC_SPANNERS.find(type()) != VOICE_SPECIFIC_SPANNERS.end();
+}
+
+track_idx_t Spanner::track2() const
+{
+    return canBeCrossStaff() ? m_track2 : m_track;
+}
+
+void Spanner::setTrack2(track_idx_t v)
+{
+    if (!canBeCrossStaff()) {
+        return;
+    }
+
+    m_track2 = v;
+}
+
+track_idx_t Spanner::effectiveTrack2() const
+{
+    return canBeCrossStaff() && m_track2 != muse::nidx ? m_track2 : m_track;
 }
 
 //---------------------------------------------------------

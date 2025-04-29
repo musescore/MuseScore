@@ -797,7 +797,7 @@ void TWrite::writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx)
         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
         Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE, Pid::SIZE_SPATIUM_DEPENDENT
     }) {
-        bool force = (item->isVBox() && id == Pid::BOX_HEIGHT) || (item->isHBox() && id == Pid::BOX_WIDTH);
+        bool force = ((item->isVBox() || item->isFBox()) && id == Pid::BOX_HEIGHT) || (item->isHBox() && id == Pid::BOX_WIDTH);
         writeProperty(item, xml, id, force);
     }
     writeItemProperties(item, xml, ctx);
@@ -826,7 +826,18 @@ void TWrite::write(const VBox* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const FBox* item, XmlWriter& xml, WriteContext& ctx)
 {
-    write(static_cast<const Box*>(item), xml, ctx);
+    xml.startElement(item);
+
+    writeProperty(item, xml, Pid::FRET_FRAME_TEXT_SCALE);
+    writeProperty(item, xml, Pid::FRET_FRAME_DIAGRAM_SCALE);
+    writeProperty(item, xml, Pid::FRET_FRAME_COLUMN_GAP);
+    writeProperty(item, xml, Pid::FRET_FRAME_ROW_GAP);
+    writeProperty(item, xml, Pid::FRET_FRAME_CHORDS_PER_ROW);
+    writeProperty(item, xml, Pid::FRET_FRAME_H_ALIGN);
+
+    writeProperties(static_cast<const Box*>(item), xml, ctx);
+
+    xml.endElement();
 }
 
 void TWrite::write(const TBox* item, XmlWriter& xml, WriteContext& ctx)
@@ -1017,9 +1028,15 @@ void TWrite::writeProperties(const ChordRest* item, XmlWriter& xml, WriteContext
             continue;
         }
 
-        if (s->startElement() == item) {
+        const bool isPartialSlur = toSlur(s)->partialSpannerDirection() != PartialSpannerDirection::NONE;
+        const bool writeStart = s->startElement() == item && (s->endElement() != item || isPartialSlur);
+        const bool writeEnd = s->endElement() == item && (s->startElement() != item || isPartialSlur);
+
+        if (writeStart) {
             writeSpannerStart(s, xml, ctx, item, item->track());
-        } else if (s->endElement() == item) {
+        }
+
+        if (writeEnd) {
             writeSpannerEnd(s, xml, ctx, item, item->track());
         }
     }
@@ -1490,9 +1507,8 @@ void TWrite::write(const Glissando* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
-    if (item->showText() && !item->text().isEmpty()) {
-        xml.tagProperty("text", item->text(), item->propertyDefault(Pid::GLISS_TEXT));
-    }
+
+    xml.tagProperty("text", item->text(), item->propertyDefault(Pid::GLISS_TEXT));
 
     if (ctx.clipboardmode() && item->isHarpGliss().has_value()) {
         xml.tagProperty("isHarpGliss", PropertyValue(item->isHarpGliss().value()));
@@ -1670,9 +1686,9 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
     if (item->leftParen()) {
         xml.tag("leftParen");
     }
-    if (item->rootTpc() != Tpc::TPC_INVALID || item->baseTpc() != Tpc::TPC_INVALID) {
+    if (item->rootTpc() != Tpc::TPC_INVALID || item->bassTpc() != Tpc::TPC_INVALID) {
         int rRootTpc = item->rootTpc();
-        int rBaseTpc = item->baseTpc();
+        int rBaseTpc = item->bassTpc();
         if (item->staff()) {
             // parent can be a fret diagram
             Segment* segment = item->getParentSeg();
@@ -1680,7 +1696,7 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
             const Interval& interval = item->staff()->transpose(tick);
             if (ctx.clipboardmode() && !item->score()->style().styleB(Sid::concertPitch) && interval.chromatic) {
                 rRootTpc = transposeTpc(item->rootTpc(), interval, true);
-                rBaseTpc = transposeTpc(item->baseTpc(), interval, true);
+                rBaseTpc = transposeTpc(item->bassTpc(), interval, true);
             }
         }
         if (rRootTpc != Tpc::TPC_INVALID) {
@@ -1704,8 +1720,8 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
 
         if (rBaseTpc != Tpc::TPC_INVALID) {
             xml.tag("base", rBaseTpc);
-            if (item->baseCase() != NoteCaseType::CAPITAL) {
-                xml.tag("baseCase", static_cast<int>(item->baseCase()));
+            if (item->bassCase() != NoteCaseType::CAPITAL) {
+                xml.tag("baseCase", static_cast<int>(item->bassCase()));
             }
         }
         for (const HDegree& hd : item->degreeList()) {
@@ -2118,6 +2134,10 @@ void TWrite::write(const KeySig* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("mode", TConv::toXml(item->mode()));
     }
 
+    if (item->isCourtesy()) {
+        xml.tag("isCourtesy", item->isCourtesy());
+    }
+
     if (!item->showCourtesy()) {
         xml.tag("showCourtesySig", item->showCourtesy());
     }
@@ -2284,11 +2304,11 @@ void TWrite::write(const Note* item, XmlWriter& xml, WriteContext& ctx)
         write(item->laissezVib(), xml, ctx);
     }
 
-    if (item->incomingPartialTie() && !ctx.clipboardmode()) {
+    if (item->incomingPartialTie()) {
         write(item->incomingPartialTie(), xml, ctx);
     }
 
-    if (item->outgoingPartialTie() && !ctx.clipboardmode()) {
+    if (item->outgoingPartialTie()) {
         write(item->outgoingPartialTie(), xml, ctx);
     }
 
@@ -2589,10 +2609,8 @@ void TWrite::write(const Slur* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("stemArr", Slur::calcStemArrangement(item->startElement(), item->endElement()));
     }
 
-    // We don't know if the paste destination has the correct repeat structure for partial slurs to be permitted
-    if (!ctx.clipboardmode()) {
-        writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
-    }
+    writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
+
     writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
     xml.endElement();
 }
@@ -3156,7 +3174,7 @@ void TWrite::write(const TremoloTwoChord* item, XmlWriter& xml, WriteContext& ct
     xml.endElement();
 }
 
-void TWrite::write(const TremoloBar* item, XmlWriter& xml, WriteContext&)
+void TWrite::write(const TremoloBar* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
     writeProperty(item, xml, Pid::MAG);
@@ -3165,6 +3183,7 @@ void TWrite::write(const TremoloBar* item, XmlWriter& xml, WriteContext&)
     for (const PitchValue& v : item->points()) {
         xml.tag("point", { { "time", v.time }, { "pitch", v.pitch }, { "vibrato", v.vibrato } });
     }
+    writeItemProperties(item, xml, ctx);
     xml.endElement();
 }
 

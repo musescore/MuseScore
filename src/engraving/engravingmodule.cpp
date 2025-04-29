@@ -41,6 +41,7 @@
 
 #include "engraving/style/defaultstyle.h"
 
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/drumset.h"
@@ -182,7 +183,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         // MusicSymbol[Text]
         auto addMusicFont = [this, fdb](const std::string& name, const FontDataKey& fontDataKey, const muse::io::path_t& filePath){
             fdb->addFont(FontDataKey(fontDataKey), filePath);
-            m_engravingfonts->addFont(name, fontDataKey.family().id().toStdString(), filePath);
+            m_engravingfonts->addInternalFont(name, fontDataKey.family().id().toStdString(), filePath);
         };
 
         addMusicFont("Bravura", FontDataKey(u"Bravura"), ":/fonts/bravura/Bravura.otf");

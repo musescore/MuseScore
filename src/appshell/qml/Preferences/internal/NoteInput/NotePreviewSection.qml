@@ -30,16 +30,21 @@ BaseSection {
     id: root
 
     property alias playNotesWhenEditing: playNotesToggle.checked
-    property alias playPreviewNotesInInputByDuration: playPreviewNotesInInputByDurationBox.checked
     property alias playChordWhenEditing: playChordBox.checked
     property alias playChordSymbolWhenEditing: playChordSymbolBox.checked
+    property alias playPreviewNotesInInputByDuration: playPreviewNotesInInputByDurationBox.checked
     property alias notePlayDurationMilliseconds: notePlayDurationControl.currentValue
 
+    property alias playNotesOnMidiInput: playNotesOnMidiInputBox.checked
+    property alias playNotesOnMidiInputBoxEnabled: playNotesOnMidiInputBox.enabled
+
     signal playNotesWhenEditingChangeRequested(bool play)
-    signal playPreviewNotesInInputByDurationChangeRequested(bool play)
     signal playChordWhenEditingChangeRequested(bool play)
     signal playChordSymbolWhenEditingChangeRequested(bool play)
+    signal playPreviewNotesInInputByDurationChangeRequested(bool play)
     signal notePlayDurationChangeRequested(int duration)
+
+    signal playNotesOnMidiInputChangeRequested(bool play)
 
     title: qsTrc("appshell/preferences", "Note preview")
 
@@ -56,35 +61,21 @@ BaseSection {
             navigation.panel: root.navigation
             navigation.row: 0
 
+            navigation.accessible.name: playNotesBoxLabel.text
+
             onToggled: {
                 root.playNotesWhenEditingChangeRequested(!checked)
             }
         }
 
         StyledTextLabel {
-            height: parent.height
+            id: playNotesBoxLabel
 
+            anchors.verticalCenter: parent.verticalCenter
             horizontalAlignment: Text.AlignLeft
-            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.Wrap
 
             text: qsTrc("appshell/preferences", "Hear playback when adding, editing, and selecting notes")
-        }
-    }
-
-    CheckBox {
-        id: playPreviewNotesInInputByDurationBox
-        width: parent.width
-
-        text: qsTrc("appshell/preferences", "Include preview notes in playback (input by duration only)")
-
-        enabled: root.playNotesWhenEditing
-
-        navigation.name: "PlayPreviewNotesInInputByDurationBox"
-        navigation.panel: root.navigation
-        navigation.row: 1
-
-        onClicked: {
-            root.playPreviewNotesInInputByDurationChangeRequested(!checked)
         }
     }
 
@@ -103,7 +94,7 @@ BaseSection {
 
         navigation.name: "NotePlayDurationControl"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 1
 
         onValueEdited: function(newValue) {
             root.notePlayDurationChangeRequested(newValue)
@@ -120,7 +111,7 @@ BaseSection {
 
         navigation.name: "PlayChordBox"
         navigation.panel: root.navigation
-        navigation.row: 3
+        navigation.row: 2
 
         onClicked: {
             root.playChordWhenEditingChangeRequested(!checked)
@@ -137,10 +128,42 @@ BaseSection {
 
         navigation.name: "PlayChordSymbolBox"
         navigation.panel: root.navigation
-        navigation.row: 4
+        navigation.row: 3
 
         onClicked: {
             root.playChordSymbolWhenEditingChangeRequested(!checked)
+        }
+    }
+
+    CheckBox {
+        id: playPreviewNotesInInputByDurationBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Play when setting pitch (input by duration mode only)")
+
+        enabled: root.playNotesWhenEditing
+
+        navigation.name: "PlayPreviewNotesInInputByDurationBox"
+        navigation.panel: root.navigation
+        navigation.row: 4
+
+        onClicked: {
+            root.playPreviewNotesInInputByDurationChangeRequested(!checked)
+        }
+    }
+
+    CheckBox {
+        id: playNotesOnMidiInputBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Play MIDI input")
+
+        navigation.name: "PlayNotesOnMidiInputBox"
+        navigation.panel: root.navigation
+        navigation.row: 5
+
+        onClicked: {
+            root.playNotesOnMidiInputChangeRequested(!checked)
         }
     }
 }

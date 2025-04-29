@@ -361,7 +361,7 @@ TEST_F(Engraving_CopyPasteTests, copypasteOnlySecondVoice)
 
     score->select(m1, SelectType::RANGE, 0);
 
-    score->selectionFilter().setFiltered(SelectionFilterType::FIRST_VOICE, false);
+    score->selectionFilter().setFiltered(VoicesSelectionFilterTypes::FIRST_VOICE, false);
 
     EXPECT_TRUE(score->selection().canCopy());
     String mimeType = score->selection().mimeType();
@@ -371,7 +371,7 @@ TEST_F(Engraving_CopyPasteTests, copypasteOnlySecondVoice)
 
     //paste to second measure
     score->deselectAll();
-    score->selectionFilter().setFiltered(SelectionFilterType::FIRST_VOICE, true);
+    score->selectionFilter().setFiltered(VoicesSelectionFilterTypes::FIRST_VOICE, true);
     score->select(m2, SelectType::RANGE);
 
     score->startCmd(TranslatableString::untranslatable("Copy/paste tests"));

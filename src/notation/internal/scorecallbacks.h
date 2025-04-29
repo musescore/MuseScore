@@ -24,23 +24,16 @@
 
 #include "engraving/dom/mscoreview.h"
 
-#include "notation/inotationconfiguration.h"
-#include "modularity/ioc.h"
-
 namespace mu::notation {
 class INotationInteraction;
-class IGetScore;
 class ScoreCallbacks : public mu::engraving::MuseScoreView
 {
-    INJECT(INotationConfiguration, configuration)
-
 public:
     ScoreCallbacks() = default;
 
     void dataChanged(const muse::RectF&) override;
     void updateAll() override;
     void drawBackground(muse::draw::Painter*, const muse::RectF&) const override;
-    const muse::Rect geometry() const override;
     qreal selectionProximity() const override;
     void setDropTarget(mu::engraving::EngravingItem* dropTarget) override;
     void setDropRectangle(const muse::RectF& rect) override;

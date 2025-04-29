@@ -114,6 +114,7 @@ public:
     void closeAllDialogs() override;
 
     ValCh<Uri> currentUri() const override;
+    RetVal<bool> isCurrentUriDialog() const override;
     std::vector<Uri> stack() const override;
 
     Ret openUrl(const std::string& url) const override;

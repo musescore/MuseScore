@@ -104,7 +104,8 @@ public:
         bool showSkylines = false;
         bool showSystemBoundingRects = false;
         bool showElementMasks = false;
-        bool showCorruptedMeasures = true;
+        bool showLineAttachPoints = false;
+        bool markCorruptedMeasures = true;
 
         bool anyEnabled() const
         {
@@ -115,9 +116,8 @@ public:
                    || showSkylines
                    || showSystemBoundingRects
                    || showElementMasks
-#ifndef NDEBUG
-                   || showCorruptedMeasures
-#endif
+                   || showLineAttachPoints
+                   || markCorruptedMeasures
             ;
         }
     };

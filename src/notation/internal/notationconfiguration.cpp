@@ -64,6 +64,7 @@ static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomP
 static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
+static const Settings::Key USER_MUSIC_FONTS_PATH(module_name, "application/paths/myMusicFonts");
 
 static const Settings::Key DEFAULT_NOTE_INPUT_METHOD(module_name, "score/defaultInputMethod");
 
@@ -108,7 +109,9 @@ static const Settings::Key NEED_TO_SHOW_ADD_GUITAR_BEND_ERROR_MESSAGE_KEY(module
 static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
 
 static const Settings::Key USE_NEW_PERCUSSION_PANEL_KEY(module_name,  "ui/useNewPercussionPanel");
-static const Settings::Key AUTO_SHOW_PERCUSSION_PANEL_KEY(module_name,  "ui/autoShowPercussionPanel");
+static const Settings::Key PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY(module_name,  "ui/percussionPanelUseNotationPreview");
+static const Settings::Key PERCUSSION_PANEL_AUTO_SHOW_MODE_KEY(module_name,  "ui/percussionPanelAutoShowMode");
+static const Settings::Key AUTO_CLOSE_PERCUSSION_PANEL_KEY(module_name, "ui/autoClosePercussionPanel");
 static const Settings::Key SHOW_PERCUSSION_PANEL_SWAP_DIALOG(module_name,  "ui/showPercussionPanelPadSwapDialog");
 static const Settings::Key PERCUSSION_PANEL_MOVE_MIDI_NOTES_AND_SHORTCUTS(module_name,  "ui/percussionPanelMoveMidiNotesAndShortcuts");
 
@@ -135,8 +138,7 @@ void NotationConfiguration::init()
         m_backgroundChanged.notify();
     });
 
-    uiConfiguration()->currentThemeChanged().onNotify(this, [this]()
-    {
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         m_backgroundChanged.notify();
     });
 
@@ -212,7 +214,23 @@ void NotationConfiguration::init()
 
     if (!userStylesPath().empty()) {
         fileSystem()->makePath(userStylesPath());
+
+#if !defined(Q_OS_LINUX)
+        // Create shortcut or symlink to global styles folder. Doesn't overwrite an existing file
+        // or link, which means it won't work on Linux because the global styles folder is inside
+        // the AppImage, and the AppImage mountpoint changes on each run. TODO: Check for existing
+        // link, read it, and if necessary update it. This would make it work on Linux too.
+        fileSystem()->makeLink(
+            globalConfiguration()->appDataPath() + "/styles",
+            userStylesPath() + "/Built-in styles"
+            );
+#endif
     }
+
+    settings()->setDefaultValue(USER_MUSIC_FONTS_PATH, Val(io::path_t {}));
+    settings()->valueChanged(USER_MUSIC_FONTS_PATH).onReceive(this, [this](const Val& val) {
+        m_userMusicFontsPathChanged.send(val.toString());
+    });
 
     settings()->setDefaultValue(DEFAULT_NOTE_INPUT_METHOD, Val(BY_NOTE_NAME_INPUT_METHOD));
     settings()->valueChanged(DEFAULT_NOTE_INPUT_METHOD).onReceive(this, [this](const Val&) {
@@ -241,7 +259,12 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
+
     settings()->setDefaultValue(IS_METRONOME_ENABLED, Val(false));
+    settings()->valueChanged(IS_METRONOME_ENABLED).onReceive(this, [this](const Val&) {
+        m_isMetronomeEnabledChanged.notify();
+    });
+
     settings()->setDefaultValue(IS_COUNT_IN_ENABLED, Val(false));
 
     settings()->setDefaultValue(PLAYBACK_SMOOTH_PANNING, Val(false));
@@ -253,7 +276,7 @@ void NotationConfiguration::init()
         m_isPlayChordSymbolsChanged.notify();
     });
 
-    settings()->setDefaultValue(IS_PLAY_PREVIEW_NOTES_IN_INPUT_BY_DURATION_ENABLED, Val(false));
+    settings()->setDefaultValue(IS_PLAY_PREVIEW_NOTES_IN_INPUT_BY_DURATION_ENABLED, Val(true));
     settings()->valueChanged(IS_PLAY_PREVIEW_NOTES_IN_INPUT_BY_DURATION_ENABLED).onReceive(nullptr, [this](const Val&) {
         m_isPlayNotesPreviewInInputByDurationChanged.notify();
     });
@@ -320,14 +343,24 @@ void NotationConfiguration::init()
         m_midiInputUseWrittenPitch.set(val.toBool());
     });
 
-    settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(false)); // TODO: true when new percussion panel is ready
+    settings()->setDefaultValue(USE_NEW_PERCUSSION_PANEL_KEY, Val(true));
     settings()->valueChanged(USE_NEW_PERCUSSION_PANEL_KEY).onReceive(this, [this](const Val&) {
         m_useNewPercussionPanelChanged.notify();
     });
 
-    settings()->setDefaultValue(AUTO_SHOW_PERCUSSION_PANEL_KEY, Val(true));
-    settings()->valueChanged(AUTO_SHOW_PERCUSSION_PANEL_KEY).onReceive(this, [this](const Val&) {
-        m_autoShowPercussionPanelChanged.notify();
+    settings()->setDefaultValue(PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY, Val(false));
+    settings()->valueChanged(PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY).onReceive(this, [this](const Val&) {
+        m_percussionPanelUseNotationPreviewChanged.notify();
+    });
+
+    settings()->setDefaultValue(PERCUSSION_PANEL_AUTO_SHOW_MODE_KEY, Val(PercussionPanelAutoShowMode::UNPITCHED_STAFF));
+    settings()->valueChanged(PERCUSSION_PANEL_AUTO_SHOW_MODE_KEY).onReceive(this, [this](const Val&) {
+        m_percussionPanelAutoShowModeChanged.notify();
+    });
+
+    settings()->setDefaultValue(AUTO_CLOSE_PERCUSSION_PANEL_KEY, Val(true));
+    settings()->valueChanged(AUTO_CLOSE_PERCUSSION_PANEL_KEY).onReceive(this, [this](const Val&) {
+        m_autoClosePercussionPanelChanged.notify();
     });
 
     settings()->setDefaultValue(SHOW_PERCUSSION_PANEL_SWAP_DIALOG, Val(true));
@@ -719,6 +752,21 @@ async::Channel<muse::io::path_t> NotationConfiguration::partStyleFilePathChanged
     return engravingConfiguration()->partStyleFilePathChanged();
 }
 
+muse::io::path_t NotationConfiguration::userMusicFontsPath() const
+{
+    return settings()->value(USER_MUSIC_FONTS_PATH).toPath();
+}
+
+void NotationConfiguration::setUserMusicFontsPath(const muse::io::path_t& path)
+{
+    settings()->setSharedValue(USER_MUSIC_FONTS_PATH, Val(path));
+}
+
+muse::async::Channel<muse::io::path_t> NotationConfiguration::userMusicFontsPathChanged() const
+{
+    return m_userMusicFontsPathChanged;
+}
+
 NoteInputMethod NotationConfiguration::defaultNoteInputMethod() const
 {
     std::string str = settings()->value(DEFAULT_NOTE_INPUT_METHOD).toString();
@@ -855,6 +903,11 @@ bool NotationConfiguration::isMetronomeEnabled() const
 void NotationConfiguration::setIsMetronomeEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_METRONOME_ENABLED, Val(enabled));
+}
+
+muse::async::Notification NotationConfiguration::isMetronomeEnabledChanged() const
+{
+    return m_isMetronomeEnabledChanged;
 }
 
 bool NotationConfiguration::isCountInEnabled() const
@@ -1146,19 +1199,49 @@ Notification NotationConfiguration::useNewPercussionPanelChanged() const
     return m_useNewPercussionPanelChanged;
 }
 
-bool NotationConfiguration::autoShowPercussionPanel() const
+bool NotationConfiguration::percussionPanelUseNotationPreview() const
 {
-    return settings()->value(AUTO_SHOW_PERCUSSION_PANEL_KEY).toBool();
+    return settings()->value(PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY).toBool();
 }
 
-void NotationConfiguration::setAutoShowPercussionPanel(bool autoShow)
+void NotationConfiguration::setPercussionPanelUseNotationPreview(bool use)
 {
-    settings()->setSharedValue(AUTO_SHOW_PERCUSSION_PANEL_KEY, Val(autoShow));
+    settings()->setSharedValue(PERCUSSION_PANEL_USE_NOTATION_PREVIEW_KEY, Val(use));
 }
 
-Notification NotationConfiguration::autoShowPercussionPanelChanged() const
+Notification NotationConfiguration::percussionPanelUseNotationPreviewChanged() const
 {
-    return m_autoShowPercussionPanelChanged;
+    return m_percussionPanelUseNotationPreviewChanged;
+}
+
+PercussionPanelAutoShowMode NotationConfiguration::percussionPanelAutoShowMode() const
+{
+    return settings()->value(PERCUSSION_PANEL_AUTO_SHOW_MODE_KEY).toEnum<PercussionPanelAutoShowMode>();
+}
+
+void NotationConfiguration::setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode autoShowMode)
+{
+    settings()->setSharedValue(PERCUSSION_PANEL_AUTO_SHOW_MODE_KEY, Val(autoShowMode));
+}
+
+Notification NotationConfiguration::percussionPanelAutoShowModeChanged() const
+{
+    return m_percussionPanelAutoShowModeChanged;
+}
+
+bool NotationConfiguration::autoClosePercussionPanel() const
+{
+    return settings()->value(AUTO_CLOSE_PERCUSSION_PANEL_KEY).toBool();
+}
+
+void NotationConfiguration::setAutoClosePercussionPanel(bool autoClose)
+{
+    settings()->setSharedValue(AUTO_CLOSE_PERCUSSION_PANEL_KEY, Val(autoClose));
+}
+
+Notification NotationConfiguration::autoClosePercussionPanelChanged() const
+{
+    return m_autoClosePercussionPanelChanged;
 }
 
 bool NotationConfiguration::showPercussionPanelPadSwapDialog() const

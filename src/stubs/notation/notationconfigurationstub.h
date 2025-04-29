@@ -150,6 +150,7 @@ public:
 
     bool isMetronomeEnabled() const override;
     void setIsMetronomeEnabled(bool enabled)  override;
+    muse::async::Notification isMetronomeEnabledChanged() const override;
 
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled)  override;
@@ -212,9 +213,13 @@ public:
     void setUseNewPercussionPanel(bool use) override;
     muse::async::Notification useNewPercussionPanelChanged() const override;
 
-    bool autoShowPercussionPanel() const override;
-    void setAutoShowPercussionPanel(bool autoShow) override;
-    muse::async::Notification autoShowPercussionPanelChanged() const override;
+    bool percussionPanelUseNotationPreview() const override;
+    void setPercussionPanelUseNotationPreview(bool use);
+    muse::async::Notification percussionPanelUseNotationPreviewChanged() const override;
+
+    PercussionPanelAutoShowMode percussionPanelAutoShowMode() const override;
+    void setPercussionPanelAutoShowMode(PercussionPanelAutoShowMode autoShowMode) override;
+    muse::async::Notification percussionPanelAutoShowModeChanged() const override;
 
     bool showPercussionPanelPadSwapDialog() const override;
     void setShowPercussionPanelPadSwapDialog(bool show);

@@ -29,7 +29,8 @@
 #include <QGuiApplication>
 #include <QWindow>
 
-#include "containers.h"
+#include "global/containers.h"
+#include "diagnostics/diagnosticutils.h"
 
 #include "log.h"
 
@@ -345,6 +346,9 @@ void InteractiveProvider::closeAllDialogs()
 {
     for (const ObjectInfo& objectInfo: allOpenObjects()) {
         UriQuery uriQuery = objectInfo.uriQuery;
+        if (muse::diagnostics::isDiagnosticsUri(uriQuery.uri())) {
+            continue;
+        }
         ContainerMeta openMeta = uriRegister()->meta(uriQuery.uri());
         if (openMeta.type == ContainerType::QWidgetDialog || openMeta.type == ContainerType::QmlDialog) {
             closeObject(objectInfo);
@@ -523,6 +527,20 @@ ValCh<Uri> InteractiveProvider::currentUri() const
     }
     v.ch = m_currentUriChanged;
     return v;
+}
+
+RetVal<bool> InteractiveProvider::isCurrentUriDialog() const
+{
+    if (m_stack.empty()) {
+        return RetVal<bool>::make_ok(false);
+    }
+
+    const ObjectInfo& last = m_stack.last();
+    if (!last.window) {
+        return RetVal<bool>::make_ok(false);
+    }
+
+    return RetVal<bool>::make_ok(last.window != mainWindow()->qWindow());
 }
 
 async::Notification InteractiveProvider::currentUriAboutToBeChanged() const

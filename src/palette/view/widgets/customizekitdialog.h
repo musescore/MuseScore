@@ -65,9 +65,13 @@ private slots:
     void defineShortcut();
 
 private:
+    void initDrumsetAndKey();
+
     void apply();
     void cancel();
-    void loadPitchesList();
+
+    QTreeWidgetItem* loadPitchesList(); // Returns a tree item to select, if applicable...
+
     void updateExample();
 
     void fillCustomNoteheadsDataFromComboboxes(int pitch);

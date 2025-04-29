@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_INOTATIONINTERACTION_H
-#define MU_NOTATION_INOTATIONINTERACTION_H
+#pragma once
 
 #include <functional>
 
@@ -29,7 +28,7 @@
 #include "notationtypes.h"
 #include "inotationnoteinput.h"
 #include "inotationselection.h"
-#include "actions/actiontypes.h"
+#include "inotationselectionfilter.h"
 
 class QKeyEvent;
 class QInputMethodEvent;
@@ -44,9 +43,11 @@ public:
     virtual INotationNoteInputPtr noteInput() const = 0;
 
     // Shadow note
+    virtual mu::engraving::ShadowNote* shadowNote() const = 0;
     virtual bool showShadowNote(const muse::PointF& pos) = 0;
     virtual void hideShadowNote() = 0;
     virtual muse::RectF shadowNoteRect() const = 0;
+    virtual muse::async::Notification shadowNoteChanged() const = 0;
 
     // Visibility
     virtual void toggleVisible() = 0;
@@ -83,9 +84,10 @@ public:
     virtual muse::async::Notification selectionChanged() const = 0;
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
 
+    virtual EngravingItem* contextItem() const = 0;
+
     // SelectionFilter
-    virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;
-    virtual void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) = 0;
+    virtual INotationSelectionFilterPtr selectionFilter() const = 0;
 
     // Drag
     using IsDraggable = std::function<bool (const EngravingItem*)>;
@@ -95,17 +97,21 @@ public:
     virtual void endDrag() = 0;
     virtual muse::async::Notification dragChanged() const = 0;
 
-    virtual bool isDragCopyStarted() const = 0;
-    virtual bool dragCopyAllowed(const EngravingItem* element) const = 0;
-    virtual void startDragCopy(const EngravingItem* element, QObject* dragSource) = 0;
-    virtual void endDragCopy() = 0;
+    virtual bool isOutgoingDragElementAllowed(const EngravingItem* element) const = 0;
+    virtual void startOutgoingDragElement(const EngravingItem* element, QObject* dragSource) = 0;
+    virtual void startOutgoingDragRange(QObject* dragSource) = 0;
+    virtual bool isOutgoingDragStarted() const = 0;
+    virtual void endOutgoingDrag() = 0;
 
     // Drop
     //! TODO Change KeyboardModifiers to modes
-    virtual void startDrop(const QByteArray& edata) = 0;
-    virtual bool startDrop(const QUrl& url) = 0;
-    virtual bool isDropAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
-    virtual bool drop(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
+    virtual bool startDropSingle(const QByteArray& edata) = 0;
+    virtual bool startDropRange(const QByteArray& data) = 0;
+    virtual bool startDropImage(const QUrl& url) = 0;
+    virtual bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
+    virtual bool updateDropRange(const muse::PointF& pos) = 0;
+    virtual bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
+    virtual bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) = 0;
     virtual void setDropTarget(EngravingItem* item, bool notify = true) = 0;
     virtual void setDropRect(const muse::RectF& rect) = 0;
     virtual void endDrop() = 0;
@@ -181,12 +187,13 @@ public:
     virtual void swapSelection() = 0;
     virtual void deleteSelection() = 0;
     virtual void flipSelection() = 0;
+    virtual void flipSelectionHorizontally() = 0;
     virtual void addTieToSelection() = 0;
     virtual void addTiedNoteToChord() = 0;
     virtual void addLaissezVibToSelection() = 0;
     virtual void addSlurToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
-    virtual void addHairpinOnGripDrag(engraving::Dynamic* dynamic, bool isLeftGrip) = 0;
+    virtual void addHairpinOnGripDrag(engraving::EditData& ed, bool isLeftGrip) = 0;
     virtual void addHairpinsToSelection(HairpinType type) = 0;
     virtual void putRestToSelection() = 0;
     virtual void putRest(Duration duration) = 0;
@@ -201,6 +208,9 @@ public:
 
     virtual void increaseDecreaseDuration(int steps, bool stepByDots) = 0;
 
+    virtual void autoFlipHairpinsType(engraving::Dynamic* selDyn) = 0;
+
+    virtual void toggleDynamicPopup() = 0;
     virtual bool toggleLayoutBreakAvailable() const = 0;
     virtual void toggleLayoutBreak(LayoutBreakType breakType) = 0;
     virtual void moveMeasureToPrevSystem() = 0;
@@ -314,8 +324,4 @@ public:
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
-
-EngravingItem* contextItem(INotationInteractionPtr);
 }
-
-#endif // MU_NOTATION_INOTATIONINTERACTION_H

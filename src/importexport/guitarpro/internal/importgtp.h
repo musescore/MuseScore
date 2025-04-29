@@ -20,25 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTGTP_H__
-#define __IMPORTGTP_H__
+#pragma once
 
-#include <vector>
 #include <map>
+#include <vector>
 
-#include "io/file.h"
-#include "engraving/dom/measurebase.h"
-
-#include "gtp/gp67dombuilder.h"
-#include "continiouselementsbuilder.h"
-#include "guitarbendimport/guitarbendimporter.h"
-#include "engraving/types/types.h"
-#include "engraving/engravingerrors.h"
-
+#include "io/iodevice.h"
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
+#include "types/bytearray.h"
+#include "types/string.h"
 
-#include "guitarprodrumset.h"
+#include "engraving/dom/measurebase.h"
+#include "engraving/engravingerrors.h"
+#include "engraving/iengravingconfiguration.h"
+#include "engraving/types/types.h"
+
+#include "continiouselementsbuilder.h"
+#include "gtp/igpdombuilder.h"
+#include "guitarbendimport/guitarbendimporter.h"
 
 namespace mu::engraving {
 class Chord;
@@ -417,7 +416,7 @@ class GuitarPro5 : public GuitarPro
     int readBeatEffects(int track, mu::engraving::Segment* segment) override;
     ReadNoteResult readNote(int string, Note* note);
     bool readMixChange(Measure* measure) override;
-    void readMeasure(Measure* measure, int staffIdx, mu::engraving::Tuplet*[], bool mixChange);
+    void readMeasure(Measure * measure, int staffIdx, mu::engraving::Tuplet*[], bool mixChange);
     bool readTracks();
     void readMeasures(int startingTempo);
     Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, mu::engraving::Tuplet** tuplets, bool mixChange);
@@ -496,5 +495,4 @@ public:
     bool read(muse::io::IODevice*) override;
     GPProperties readProperties(muse::ByteArray* data);
 };
-} // namespace mu::iex::guitarpro
-#endif
+}

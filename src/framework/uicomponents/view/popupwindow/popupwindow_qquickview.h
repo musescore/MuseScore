@@ -72,6 +72,7 @@ public:
     void forceActiveFocus() override;
 
     void setOnHidden(const std::function<void()>& callback) override;
+    void setTakeFocusOnClick(bool takeFocusOnClick) override;
 
 private:
     bool eventFilter(QObject* watched, QEvent* event) override;
@@ -82,6 +83,7 @@ private:
     bool m_resizable = false;
     std::function<void()> m_onHidden;
     bool m_activeFocusOnParentOnClose = false;
+    bool m_takeFocusOnClick = true;
 
     QWindow* m_parentWindow = nullptr;
 };

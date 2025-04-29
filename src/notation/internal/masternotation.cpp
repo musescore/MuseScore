@@ -388,7 +388,6 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
                 nm->setExcludeFromOtherParts(false);
                 nm->setNext(measure);
                 score->measures()->add(nm);
-                measure = nm;
             } else if (nvb) {
                 delete nvb;
             }
@@ -497,7 +496,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
 
 void MasterNotation::unloadExcerpts(ExcerptNotationList& excerpts)
 {
-    for (IExcerptNotationPtr ptr : excerpts) {
+    for (const IExcerptNotationPtr& ptr : excerpts) {
         Excerpt* excerpt = get_impl(ptr)->excerpt();
         if (!excerpt) {
             continue;
@@ -514,7 +513,7 @@ void MasterNotation::unloadExcerpts(ExcerptNotationList& excerpts)
 
 void MasterNotation::initExcerpts(const ExcerptNotationList& excerpts)
 {
-    for (IExcerptNotationPtr excerptNotation : excerpts) {
+    for (const IExcerptNotationPtr& excerptNotation : excerpts) {
         ExcerptNotation* impl = get_impl(excerptNotation);
 
         masterScore()->initExcerpt(impl->excerpt());
@@ -538,7 +537,7 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
     undoStack()->prepareChanges(TranslatableString("undoableAction", "Add/remove parts"));
 
     // Delete old excerpts (that are not included in the new list)
-    for (IExcerptNotationPtr excerptNotation : m_excerpts) {
+    for (const IExcerptNotationPtr& excerptNotation : m_excerpts) {
         auto it = std::find(excerpts.begin(), excerpts.end(), excerptNotation);
         if (it != excerpts.end()) {
             continue;
@@ -663,7 +662,7 @@ void MasterNotation::updateExcerpts()
     const std::vector<mu::engraving::Excerpt*>& excerpts = masterScore()->excerpts();
 
     // exclude notations for old excerpts
-    for (IExcerptNotationPtr excerptNotation : m_excerpts) {
+    for (const IExcerptNotationPtr& excerptNotation : m_excerpts) {
         ExcerptNotation* impl = get_impl(excerptNotation);
 
         if (muse::contains(excerpts, impl->excerpt())) {

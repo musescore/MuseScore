@@ -63,6 +63,7 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     // dialog
     if (isDialogMode) {
         m_view->setFlags(Qt::Dialog);
+        m_view->setIcon(QIcon(uiConfiguration()->appIconPath().toString()));
 
         if (isFrameless) {
             m_view->setColor(QColor(Qt::transparent));
@@ -259,6 +260,11 @@ void PopupWindow_QQuickView::setOnHidden(const std::function<void()>& callback)
     m_onHidden = callback;
 }
 
+void PopupWindow_QQuickView::setTakeFocusOnClick(bool takeFocusOnClick)
+{
+    m_takeFocusOnClick = takeFocusOnClick;
+}
+
 bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == m_view) {
@@ -272,7 +278,7 @@ bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
             m_view->rootObject()->forceActiveFocus();
         }
 
-        if (event->type() == QEvent::MouseButtonPress) {
+        if (m_takeFocusOnClick && event->type() == QEvent::MouseButtonPress) {
             forceActiveFocus();
         }
     }

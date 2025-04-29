@@ -135,6 +135,13 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::IMAGE_WIDTH,             false, "imageWidth",            P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "imageWidth") },
     { Pid::IMAGE_FRAMED,            false, "imageFramed",           P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "imageFramed") },
 
+    { Pid::FRET_FRAME_TEXT_SCALE,               false, "fretFrameTextScale",            P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "text scale") },
+    { Pid::FRET_FRAME_DIAGRAM_SCALE,            false, "fretFrameDiagramScale",         P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "diagram scale") },
+    { Pid::FRET_FRAME_COLUMN_GAP,               false, "fretFrameColumnGap",            P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "column gap") },
+    { Pid::FRET_FRAME_ROW_GAP,                  false, "fretFrameRowGap",               P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "row gap") },
+    { Pid::FRET_FRAME_CHORDS_PER_ROW,           false, "fretFrameChordsPerRow",         P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "chords per row") },
+    { Pid::FRET_FRAME_H_ALIGN,                  false, "fretFrameHorizontalAlign",      P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "horizontal alignment") },
+
     { Pid::SCALE,                   false, "scale",                 P_TYPE::SCALE,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "scale") },
     { Pid::LOCK_ASPECT_RATIO,       false, "lockAspectRatio",       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "aspect ratio locked") },
     { Pid::SIZE_IS_SPATIUM,         false, "sizeIsSpatium",         P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "size is spatium") },
@@ -151,6 +158,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SPACE,                   false, "space",                 P_TYPE::MILLIMETRE,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "space") },
     { Pid::TEMPO,                   true,  "tempo",                 P_TYPE::TEMPO,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tempo") },
     { Pid::TEMPO_FOLLOW_TEXT,       true,  "followText",            P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "following text") },
+    { Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK, false, "tempoAlignRightOfRehearsalMark", P_TYPE::BOOL, PropertyGroup::APPEARANCE, DUMMY_QT_TR_NOOP("propertyName", "tempo align right of rehearsal mark") },
     { Pid::ACCIDENTAL_BRACKET,      false, "bracket",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bracket") },
     { Pid::ACCIDENTAL_TYPE,         true,  "subtype",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "type") },
     { Pid::ACCIDENTAL_STACKING_ORDER_OFFSET, true, "stackingOrderOffset", P_TYPE::INT,          PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "stacking order offset") },
@@ -200,8 +208,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::MEASURE_NUMBER_MODE,     false, "measureNumberMode",     P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "measure number mode") },
 
     { Pid::GLISS_TYPE,              false, "subtype",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "subtype") },
-    { Pid::GLISS_TEXT,              false, 0,                       P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "text") },
-    { Pid::GLISS_SHOW_TEXT,         false, 0,                       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "showing text") },
+    { Pid::GLISS_TEXT,              false, "text",                  P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "text") },
+    { Pid::GLISS_SHOW_TEXT,         false, "glissandoShowText",     P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "showing text") },
     { Pid::GLISS_STYLE,             true,  "glissandoStyle",        P_TYPE::GLISS_STYLE,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "glissando style") },
     { Pid::GLISS_SHIFT,             false, "glissandoShift",        P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "glissando shift") },
     { Pid::GLISS_EASEIN,            false, "easeInSpin",            P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName","ease in") },
@@ -492,6 +500,23 @@ bool propertyLink(Pid id)
 {
     assert(propertyList[int(id)].id == id);
     return propertyList[int(id)].link;
+}
+
+//---------------------------------------------------------
+//   propertyLinkSameScore
+//---------------------------------------------------------
+
+bool propertyLinkSameScore(Pid id)
+{
+    assert(id < Pid::END);
+    switch (id) {
+    case Pid::STAFF_BARLINE_SPAN:
+    case Pid::STAFF_BARLINE_SPAN_FROM:
+    case Pid::STAFF_BARLINE_SPAN_TO:
+        return false;
+    default:
+        return true;
+    }
 }
 
 //---------------------------------------------------------

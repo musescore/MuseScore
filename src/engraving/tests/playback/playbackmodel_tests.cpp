@@ -845,6 +845,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     model.load(score);
 
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
+    EXPECT_EQ(result.originEvents.size(), expectedChangedEventsCount);
 
     // [THEN] Updated events map will match our expectations
     result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&,
@@ -852,13 +853,23 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
         EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
     });
 
-    // [WHEN] Notation has been changed
+    // [WHEN] Score has been changed: the range starts ouside the repeat and ends inside it
     ScoreChangesRange range;
-    range.tickFrom = 480; // 2nd note of the 1st measure
+    range.tickFrom = 480; // 2nd note of the 1st measure (outside the repeat)
     range.tickTo = 3840; // 1st note of the 3rd measure (inside the repeat)
     range.staffIdxFrom = 0;
     range.staffIdxTo = 0;
     range.changedTypes = { ElementType::NOTE };
+
+    score->changesChannel().send(range);
+
+    // [WHEN] Score has been changed: the range is inside the repeat and tickTo == the end tick of the repeat
+    // See: https://github.com/musescore/MuseScore/issues/25899
+    range.tickFrom = 4800; // 3rd note of the 3rd measure (inside the repeat)
+    range.tickTo = 5760; // end tick of the repeat
+    range.staffIdxFrom = 0;
+    range.staffIdxTo = 0;
+    range.changedTypes = { ElementType::PEDAL };
 
     score->changesChannel().send(range);
 }
@@ -1010,15 +1021,27 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_4_4)
     // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
-    // [WHEN] The playback model requested to be loaded
+    // [WHEN] The playback model requested to be loaded with Metronome enabled
     PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
+    model.setIsMetronomeEnabled(true);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
+    const PlaybackEventsMap& eventsWhenMetronomeEnabled = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
 
     // [THEN] Amount of events does match expectations
-    EXPECT_EQ(result.size(), expectedSize);
+    EXPECT_EQ(eventsWhenMetronomeEnabled.size(), expectedSize);
+
+    // [WHEN] The playback model requested to be loaded with Metronome disabled
+    model.setIsMetronomeEnabled(false);
+    model.reload();
+
+    const PlaybackEventsMap& eventsWhenMetronomeDisabled = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
+
+    // [THEN] No Metronome events
+    EXPECT_TRUE(eventsWhenMetronomeDisabled.empty());
+
+    delete score;
 }
 
 /**
@@ -1048,12 +1071,15 @@ TEST_F(Engraving_PlaybackModelTests, Metronome_6_4_Repeat)
     // [WHEN] The playback model requested to be loaded
     PlaybackModel model(modularity::globalCtx());
     model.profilesRepository.set(m_repositoryMock);
+    model.setIsMetronomeEnabled(true);
     model.load(score);
 
     const PlaybackEventsMap& result = model.resolveTrackPlaybackData(model.metronomeTrackId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
+
+    delete score;
 }
 
 /**

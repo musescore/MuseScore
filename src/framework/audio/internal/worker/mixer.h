@@ -82,7 +82,7 @@ private:
     using TracksData = std::map<TrackId, std::vector<float> >;
 
     void processTrackChannels(size_t outBufferSize, size_t samplesPerChannel, TracksData& outTracksData);
-    void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount, bool& outBufferIsSilent);
+    void mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsigned int samplesCount) const;
     void prepareAuxBuffers(size_t outBufferSize);
     void writeTrackToAuxBuffers(const float* trackBuffer, const AuxSendsParams& auxSends, samples_t samplesPerChannel);
     void processAuxChannels(float* buffer, samples_t samplesPerChannel);

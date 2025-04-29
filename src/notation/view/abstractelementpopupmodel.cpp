@@ -22,6 +22,8 @@
 
 #include "abstractelementpopupmodel.h"
 #include "internal/partialtiepopupmodel.h"
+#include "internal/shadownotepopupmodel.h"
+#include "engraving/dom/property.h"
 #include "log.h"
 
 using namespace mu::notation;
@@ -33,7 +35,8 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::SOUND_FLAG, PopupModelType::TYPE_SOUND_FLAG },
     { mu::engraving::ElementType::DYNAMIC, PopupModelType::TYPE_DYNAMIC },
     { mu::engraving::ElementType::TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
-    { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE }
+    { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, PopupModelType::TYPE_PARTIAL_TIE },
+    { mu::engraving::ElementType::SHADOW_NOTE, PopupModelType::TYPE_SHADOW_NOTE }
 };
 
 static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDENT_ELEMENT_TYPES = {
@@ -74,6 +77,8 @@ bool AbstractElementPopupModel::supportsPopup(const EngravingItem* element)
     switch (modelType) {
     case PopupModelType::TYPE_PARTIAL_TIE:
         return PartialTiePopupModel::canOpen(element);
+    case PopupModelType::TYPE_SHADOW_NOTE:
+        return ShadowNotePopupModel::canOpen(element);
     default:
         return true;
     }
@@ -156,7 +161,7 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
         flags = mu::engraving::PropertyFlags::UNSTYLED;
     }
 
-    beginCommand(muse::TranslatableString("undoableAction", "Edit element property"));
+    beginCommand(muse::TranslatableString("undoableAction", "Edit %1").arg(mu::engraving::propertyUserName(id)));
     m_item->undoChangeProperty(id, value, flags);
     endCommand();
     updateNotation();
@@ -168,7 +173,7 @@ void AbstractElementPopupModel::changeItemProperty(mu::engraving::Pid id, const 
         return;
     }
 
-    beginCommand(muse::TranslatableString("undoableAction", "Edit element property"));
+    beginCommand(muse::TranslatableString("undoableAction", "Edit %1").arg(mu::engraving::propertyUserName(id)));
     m_item->undoChangeProperty(id, value, flags);
     endCommand();
     updateNotation();
@@ -232,7 +237,7 @@ const mu::engraving::ElementTypeSet& AbstractElementPopupModel::dependentElement
 
 void AbstractElementPopupModel::updateItemRect()
 {
-    QRect rect = m_item ? fromLogical(m_item->canvasBoundingRect()).toQRect() : QRect();
+    const QRect rect = m_item ? fromLogical(m_item->canvasBoundingRect()).toQRect() : QRect();
 
     if (m_itemRect != rect) {
         m_itemRect = rect;

@@ -442,6 +442,10 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
 
 bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline)
 {
+    if (itemInSkyline->isText() && itemInSkyline->explicitParent() && itemInSkyline->parent()->isSLineSegment()) {
+        return itemsShouldIgnoreEachOther(itemToAutoplace, itemInSkyline->parentItem());
+    }
+
     ElementType type1 = itemToAutoplace->type();
     ElementType type2 = itemInSkyline->type();
 
@@ -449,12 +453,21 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         return type2 != ElementType::KEYSIG;
     }
 
+    if (type1 == ElementType::FRET_DIAGRAM && type2 == ElementType::HARMONY) {
+        return true;
+    }
+
+    if ((type1 == ElementType::DYNAMIC || type1 == ElementType::HAIRPIN_SEGMENT)
+        && (type2 == ElementType::DYNAMIC || type2 == ElementType::HAIRPIN_SEGMENT)) {
+        return true;
+    }
+
     if (type1 == type2) {
         // Items of same type should ignore each other in most cases
         static const std::set<ElementType> TEXT_BASED_TYPES_WHICH_IGNORE_EACH_OTHER {
             ElementType::DYNAMIC,
             ElementType::EXPRESSION,
-            ElementType::STICKING,
+            ElementType::STICKING
         };
         return !itemToAutoplace->isTextBase() || muse::contains(TEXT_BASED_TYPES_WHICH_IGNORE_EACH_OTHER, type1);
     }
@@ -470,6 +483,11 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         const Score* score = itemToAutoplace->score();
         const bool outOfStaff = score ? !score->style().styleB(Sid::tupletOutOfStaff) : false;
         return outOfStaff;
+    }
+
+    if ((type1 == ElementType::FIGURED_BASS || type1 == ElementType::FIGURED_BASS_ITEM)
+        && (type2 == ElementType::FIGURED_BASS || type2 == ElementType::FIGURED_BASS_ITEM)) {
+        return true;
     }
 
     return itemToAutoplace->ldata()->itemSnappedBefore() == itemInSkyline || itemToAutoplace->ldata()->itemSnappedAfter() == itemInSkyline;

@@ -76,7 +76,7 @@ class StaffType;
 //   OffsetChange
 //---------------------------------------------------------
 
-enum class OffsetChange {
+enum class OffsetChange : signed char {
     RELATIVE_OFFSET   = -1,
     NONE              =  0,
     ABSOLUTE_OFFSET   =  1
@@ -127,7 +127,7 @@ enum class ElementFlag {
 typedef muse::Flags<ElementFlag> ElementFlags;
 DECLARE_OPERATORS_FOR_FLAGS(ElementFlags)
 
-enum class KerningType
+enum class KerningType : unsigned char
 {
     KERNING,
     NON_KERNING,
@@ -453,7 +453,7 @@ public:
     double symWidth(const SymIdList&) const;
     RectF symBbox(SymId id) const;
     RectF symBbox(const SymIdList&) const;
-    Shape symShapeWithCutouts(SymId id) const;
+    virtual Shape symShapeWithCutouts(SymId id) const;
 
     PointF symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const;
 

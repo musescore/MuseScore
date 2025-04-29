@@ -50,7 +50,12 @@ enum class Err {
     IgnoreError = 2012
 };
 
-inline muse::Ret make_ret(Err err, const muse::io::path_t& filePath = "")
+inline muse::Ret make_ret(Err err, const muse::String& text)
+{
+    return muse::Ret(static_cast<int>(err), text.toStdString());
+}
+
+inline muse::Ret make_ret(Err err, const muse::io::path_t& filePath = {})
 {
     muse::String text;
 
@@ -81,7 +86,8 @@ inline muse::Ret make_ret(Err err, const muse::io::path_t& filePath = "")
         break;
     case Err::FileTooNew:
         text = muse::mtrc("engraving", "This file was saved using a newer version of MuseScore Studio. "
-                                       "Please visit <a href=\"https://musescore.org\">musescore.org</a> to obtain the latest version.");
+                                       "Please visit <a href=\"%1\">MuseScore.org</a> to obtain the latest version.")
+               .arg(u"https://musescore.org");
         break;
     case Err::FileOld300Format:
         text = muse::mtrc("engraving", "This file was last saved in a development version of 3.0.");

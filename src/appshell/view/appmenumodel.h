@@ -111,5 +111,7 @@ private:
 
     mu::notation::INotationUndoStackPtr undoStack() const;
     void updateUndoRedoItems();
+
+    std::shared_ptr<muse::uicomponents::AbstractMenuModel> m_workspacesMenuModel;
 };
 }

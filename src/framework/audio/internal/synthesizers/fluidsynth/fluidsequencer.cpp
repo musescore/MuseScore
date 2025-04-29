@@ -61,12 +61,7 @@ int FluidSequencer::naturalExpressionLevel() const
 
 void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const PlaybackParamList&)
 {
-    m_offStreamEvents.clear();
-
-    if (m_onOffStreamFlushed) {
-        m_onOffStreamFlushed();
-    }
-
+    flushOffstream();
     updatePlaybackEvents(m_offStreamEvents, events);
     updateOffSequenceIterator();
 }
@@ -100,6 +95,11 @@ const ChannelMap& FluidSequencer::channels() const
     return m_channels;
 }
 
+int FluidSequencer::lastStaff() const
+{
+    return m_lastStaff;
+}
+
 void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)
 {
     SostenutoTimeAndDurations sostenutoTimeAndDurations;
@@ -114,6 +114,9 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
 
             timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
             timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
+            // Assumption: 1:1 mapping between staff and instrument and FluidSynth and FluidSequencer instances.
+            // So staffLayerIndex is constant. It changes only when moving staffs.
+            m_lastStaff = noteEvent.arrangementCtx().staffLayerIndex;
 
             channel_t channelIdx = channel(noteEvent);
             note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
@@ -135,8 +138,8 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
 
             destination[timestampTo].emplace(std::move(noteOff));
 
-            for (const auto& pair : noteEvent.expressionCtx().articulations) {
-                const mpe::ArticulationMeta& meta = pair.second.meta;
+            for (const auto& artPair : noteEvent.expressionCtx().articulations) {
+                const mpe::ArticulationMeta& meta = artPair.second.meta;
 
                 if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
                     appendPitchBend(destination, noteEvent, meta, channelIdx);
@@ -295,7 +298,7 @@ tuning_t FluidSequencer::noteTuning(const mpe::NoteEvent& noteEvent, const int n
 
 velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
 {
-    static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = 127;
+    static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = std::numeric_limits<midi::velocity_t>::max();
 
     const mpe::ExpressionContext& expressionCtx = noteEvent.expressionCtx();
 
@@ -310,7 +313,7 @@ velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
     }
 
     dynamic_level_t dynamicLevel = expressionCtx.expressionCurve.maxAmplitudeLevel();
-    return expressionLevel(dynamicLevel);
+    return expressionLevel(dynamicLevel) << 9; // midi::Event::scaleUp(7,16)
 }
 
 int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const

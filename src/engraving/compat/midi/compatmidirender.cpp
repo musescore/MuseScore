@@ -1,10 +1,42 @@
 #include "compatmidirender.h"
 
+#include <cmath>
+#include <tuple>
+
 #include "global/realfn.h"
 
+#include "types/constants.h"
+
+#include "dom/arpeggio.h"
+#include "dom/articulation.h"
+#include "dom/chord.h"
+#include "dom/durationtype.h"
+#include "dom/dynamic.h"
+#include "dom/easeInOut.h"
+#include "dom/glissando.h"
+#include "dom/instrument.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/measurerepeat.h"
+#include "dom/navigate.h"
+#include "dom/note.h"
+#include "dom/noteevent.h"
+#include "dom/part.h"
+#include "dom/repeatlist.h"
+#include "dom/score.h"
+#include "dom/segment.h"
+#include "dom/slur.h"
+#include "dom/staff.h"
+#include "dom/swing.h"
+#include "dom/synthesizerstate.h"
+#include "dom/tempo.h"
+#include "dom/tie.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
-#include "dom/navigate.h"
+#include "dom/trill.h"
+#include "dom/undo.h"
+#include "dom/utils.h"
+#include "dom/volta.h"
 
 namespace mu::engraving {
 static int slideTicks(const Chord* chord);
@@ -274,7 +306,7 @@ void CompatMidiRender::renderArpeggio(Chord* chord, std::vector<NoteEventList>& 
         NoteEventList* events = &(ell)[i];
         events->clear();
 
-        auto tempoRatio = chord->score()->tempomap()->tempo(chord->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
+        auto tempoRatio = chord->score()->tempomap()->multipliedTempo(chord->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
         int ot = (l * j * 1000) / chord->upNote()->playTicks()
                  * tempoRatio * chord->arpeggio()->Stretch();
         ot = std::clamp(ot + ontime, ot, 1000);
@@ -522,7 +554,7 @@ void CompatMidiRender::createGraceNotesPlayEvents(const Score* score, const Frac
 
     int graceDuration = 0;
     bool drumset = (CompatMidiRender::getDrumset(chord) != nullptr);
-    const double ticksPerSecond = score->tempo(tick).val * Constants::DIVISION;
+    const double ticksPerSecond = score->multipliedTempo(tick).val * Constants::DIVISION;
     const double chordTimeMS = (chord->actualTicks().ticks() / ticksPerSecond) * 1000;
     if (drumset) {
         int flamDuration = 15;         //ms
@@ -661,7 +693,7 @@ bool CompatMidiRender::renderNoteArticulation(NoteEventList* events, Note* note,
     }
 
     Fraction tick = chord->tick();
-    BeatsPerSecond tempo = chord->score()->tempo(tick);
+    BeatsPerSecond tempo = chord->score()->multipliedTempo(tick);
     int ticksPerSecond = tempo.val * Constants::DIVISION;
 
     int minTicksPerNote = int(ticksPerSecond / fastestFreq);

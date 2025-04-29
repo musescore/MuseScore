@@ -23,9 +23,11 @@
 
 #ifndef NO_QT_SUPPORT
 #include <QCoreApplication>
+#include <QString>
 #endif
 
 #include "types/bytearray.h"
+#include "types/string.h"
 
 #include "log.h"
 

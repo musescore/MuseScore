@@ -130,7 +130,6 @@ Ret MasterScore::sanityCheck()
     if (accumulatedErrors.empty()) {
         return muse::make_ok();
     }
-
     return Ret(static_cast<int>(Err::FileCorrupted), accumulatedErrors);
 }
 
@@ -150,6 +149,8 @@ Ret Score::sanityCheckLocal()
         return muse::mtrc("engraving", "Part score: %1").arg(name());
     };
 
+    setHasCorruptedMeasures(false);
+
     for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
         Fraction mLen = m->ticks();
         size_t endStaff  = staves().size();
@@ -158,9 +159,8 @@ Ret Score::sanityCheckLocal()
             Rest* fmrest0 = nullptr; // full measure rest in voice 0
             Fraction voices[VOICES];
 
-#ifndef NDEBUG
             m->setCorrupted(staffIdx, false);
-#endif
+            setHasCorruptedMeasures(true);
 
             for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
                 for (voice_idx_t v = 0; v < VOICES; ++v) {
@@ -190,18 +190,16 @@ Ret Score::sanityCheckLocal()
             if (!repeatsIsValid) {
                 errors << muse::mtrc("engraving", "<b>Corrupted measure</b>: %1, measure %2, staff %3.")
                     .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1);
-#ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
-#endif
+                setHasCorruptedMeasures(true);
             }
 
             if (voices[0] != mLen) {
                 //: %1 describes in which score the corruption is (either `Full score` or `"[part name]" part score`)
                 errors << muse::mtrc("engraving", "<b>Incomplete measure</b>: %1, measure %2, staff %3. Found: %4. Expected: %5.")
                     .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(voices[0].toString(), mLen.toString());
-#ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
-#endif
+                setHasCorruptedMeasures(true);
                 // try to fix a bad full measure rest
                 if (fmrest0) {
                     // fmrest0->setDuration(mLen * fmrest0->staff()->timeStretch(fmrest0->tick()));
@@ -214,9 +212,8 @@ Ret Score::sanityCheckLocal()
                     //: %1 describes in which score the corruption is (either `Full score` or `"[part name]" part score`)
                     errors << muse::mtrc("engraving", "<b>Voice too long</b>: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.")
                         .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(voices[v].toString(), mLen.toString());
-#ifndef NDEBUG
                     m->setCorrupted(staffIdx, true);
-#endif
+                    setHasCorruptedMeasures(true);
                 }
             }
         }

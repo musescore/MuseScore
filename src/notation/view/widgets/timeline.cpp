@@ -30,7 +30,6 @@
 #include <QTextDocument>
 
 #include "translation.h"
-#include "types/translatablestring.h"
 
 #include "engraving/dom/barline.h"
 #include "engraving/dom/jump.h"
@@ -1078,16 +1077,7 @@ void Timeline::drawGrid(int globalRows, int globalCols, int startMeasure, int en
     int xPos = 0;
 
     // Create stagger array if _collapsedMeta is false
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    int staggerArr[numMetas];
-    for (unsigned row = 0; row < numMetas; row++) {
-        staggerArr[row] = 0;
-    }
-#else
-    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-    // heap allocation is slow, an optimization might be used.
     std::vector<int> staggerArr(numMetas, 0);    // Default initialized, loop not required
-#endif
 
     bool noKey = true;
     std::get<4>(_repeatInfo) = false;

@@ -101,12 +101,13 @@ void PlaybackController::init()
     dispatcher()->reg(this, PLAY_CHORD_SYMBOLS_CODE, this, &PlaybackController::togglePlayChordSymbols);
     dispatcher()->reg(this, PAN_CODE, this, &PlaybackController::toggleAutomaticallyPan);
     dispatcher()->reg(this, METRONOME_CODE, this, &PlaybackController::toggleMetronome);
+    dispatcher()->reg(this, COUNT_IN_CODE, this, &PlaybackController::toggleCountIn);
     dispatcher()->reg(this, MIDI_ON_CODE, this, &PlaybackController::toggleMidiInput);
     dispatcher()->reg(this, INPUT_WRITTEN_PITCH, [this]() { PlaybackController::setMidiUseWrittenPitch(true); });
     dispatcher()->reg(this, INPUT_SOUNDING_PITCH, [this]() { PlaybackController::setMidiUseWrittenPitch(false); });
-    dispatcher()->reg(this, COUNT_IN_CODE, this, &PlaybackController::toggleCountIn);
     dispatcher()->reg(this, PLAYBACK_SETUP, this, &PlaybackController::openPlaybackSetupDialog);
     dispatcher()->reg(this, TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE, this, &PlaybackController::toggleHearPlaybackWhenEditing);
+    dispatcher()->reg(this, "playback-reload-cache", this, &PlaybackController::reloadPlaybackCache);
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
@@ -121,7 +122,7 @@ void PlaybackController::init()
             return;
         }
 
-        m_loadingProgress.started.notify();
+        m_loadingProgress.start();
 
         playback()->addSequence().onResolve(this, [this](const TrackSequenceId& sequenceId) {
             setupNewCurrentSequence(sequenceId);
@@ -132,6 +133,10 @@ void PlaybackController::init()
         updateCurrentTempo();
 
         updateLoop();
+    });
+
+    notationConfiguration()->isMidiInputEnabledChanged().onNotify(this, [this]() {
+        notifyActionCheckedChanged(MIDI_ON_CODE);
     });
 
     configuration()->playNotesWhenEditingChanged().onNotify(this, [this]() {
@@ -147,7 +152,7 @@ void PlaybackController::updateCurrentTempo()
         return;
     }
 
-    const Tempo& newTempo = notationPlayback()->tempo(m_currentTick);
+    const Tempo& newTempo = notationPlayback()->multipliedTempo(m_currentTick);
 
     if (newTempo == m_currentTempo) {
         return;
@@ -312,13 +317,13 @@ void PlaybackController::setTrackSoloMuteState(const InstrumentTrackId& trackId,
     m_notation->soloMuteState()->setTrackSoloMuteState(trackId, state);
 }
 
-void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements)
+void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements, bool isMidi)
 {
     IF_ASSERT_FAILED(notationPlayback()) {
         return;
     }
 
-    if (!configuration()->playNotesWhenEditing()) {
+    if ((!configuration()->playNotesWhenEditing()) || (isMidi && !configuration()->playNotesOnMidiInput())) {
         return;
     }
 
@@ -571,7 +576,11 @@ void PlaybackController::onPartChanged(const Part* part)
 
 void PlaybackController::onSelectionChanged()
 {
-    INotationSelectionPtr selection = this->selection();
+    const INotationSelectionPtr selection = this->selection();
+    if (!selection || !m_player) {
+        return;
+    }
+
     bool selectionTypeChanged = m_isRangeSelection && !selection->isRange();
     m_isRangeSelection = selection->isRange();
 
@@ -590,7 +599,7 @@ void PlaybackController::onSelectionChanged()
         return;
     }
 
-    currentPlayer()->resetLoop();
+    m_player->resetLoop();
 
     seekRangeSelection();
     updateSoloMuteStates();
@@ -634,7 +643,16 @@ void PlaybackController::play()
         seek(startSecs);
     }
 
-    currentPlayer()->play();
+    secs_t delay = 0.;
+    if (notationConfiguration()->isCountInEnabled()) {
+        if (INotationPlaybackPtr notationPlay = notationPlayback()) {
+            secs_t countInDuration = 0.;
+            notationPlay->triggerCountIn(m_currentTick, countInDuration);
+            delay = playbackDelay(countInDuration);
+        }
+    }
+
+    currentPlayer()->play(delay);
 }
 
 void PlaybackController::rewind(const ActionData& args)
@@ -671,7 +689,16 @@ void PlaybackController::resume()
         return;
     }
 
-    currentPlayer()->resume();
+    secs_t delay = 0.;
+    if (notationConfiguration()->isCountInEnabled()) {
+        if (INotationPlaybackPtr notationPlay = notationPlayback()) {
+            secs_t countInDuration = 0.;
+            notationPlay->triggerCountIn(m_currentTick, countInDuration);
+            delay = playbackDelay(countInDuration);
+        }
+    }
+
+    currentPlayer()->resume(delay);
 }
 
 secs_t PlaybackController::playbackStartSecs() const
@@ -696,6 +723,23 @@ secs_t PlaybackController::playbackStartSecs() const
 secs_t PlaybackController::playbackEndSecs() const
 {
     return notationPlayback() ? notationPlayback()->totalPlayTime() : secs_t { 0 };
+}
+
+secs_t PlaybackController::playbackDelay(const secs_t countInDuration) const
+{
+    if (!notationConfiguration()->isMetronomeEnabled()) {
+        return countInDuration;
+    }
+
+    const MeasureBeat beat = currentBeat();
+    const secs_t closestMainBeatPosition = beatToSecs(beat.measureIndex, std::ceil(beat.beat));
+    const secs_t playbackPosition = currentPlayer()->playbackPosition();
+    const secs_t delay = countInDuration - (closestMainBeatPosition - playbackPosition);
+    IF_ASSERT_FAILED(!delay.is_negative()) {
+        return 0.;
+    }
+
+    return delay;
 }
 
 InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() const
@@ -755,17 +799,29 @@ void PlaybackController::toggleAutomaticallyPan()
 void PlaybackController::toggleMetronome()
 {
     bool metronomeEnabled = notationConfiguration()->isMetronomeEnabled();
+    bool countInEnabled = notationConfiguration()->isCountInEnabled();
+
     notationConfiguration()->setIsMetronomeEnabled(!metronomeEnabled);
     notifyActionCheckedChanged(METRONOME_CODE);
 
-    setTrackActivity(notationPlayback()->metronomeTrackId(), !metronomeEnabled);
+    setTrackActivity(notationPlayback()->metronomeTrackId(), !metronomeEnabled || countInEnabled);
+}
+
+void PlaybackController::toggleCountIn()
+{
+    bool metronomeEnabled = notationConfiguration()->isMetronomeEnabled();
+    bool countInEnabled = notationConfiguration()->isCountInEnabled();
+
+    notationConfiguration()->setIsCountInEnabled(!countInEnabled);
+    notifyActionCheckedChanged(COUNT_IN_CODE);
+
+    setTrackActivity(notationPlayback()->metronomeTrackId(), metronomeEnabled || !countInEnabled);
 }
 
 void PlaybackController::toggleMidiInput()
 {
-    bool midiInputEnabled = notationConfiguration()->isMidiInputEnabled();
-    notationConfiguration()->setIsMidiInputEnabled(!midiInputEnabled);
-    notifyActionCheckedChanged(MIDI_ON_CODE);
+    bool wasMidiInputEnabled = notationConfiguration()->isMidiInputEnabled();
+    notationConfiguration()->setIsMidiInputEnabled(!wasMidiInputEnabled);
 }
 
 void PlaybackController::setMidiUseWrittenPitch(bool useWrittenPitch)
@@ -773,13 +829,6 @@ void PlaybackController::setMidiUseWrittenPitch(bool useWrittenPitch)
     notationConfiguration()->setMidiUseWrittenPitch(useWrittenPitch);
     notifyActionCheckedChanged(INPUT_WRITTEN_PITCH);
     notifyActionCheckedChanged(INPUT_SOUNDING_PITCH);
-}
-
-void PlaybackController::toggleCountIn()
-{
-    bool countInEnabled = notationConfiguration()->isCountInEnabled();
-    notationConfiguration()->setIsCountInEnabled(!countInEnabled);
-    notifyActionCheckedChanged(COUNT_IN_CODE);
 }
 
 void PlaybackController::toggleLoopPlayback()
@@ -818,6 +867,14 @@ void PlaybackController::toggleHearPlaybackWhenEditing()
 {
     bool wasPlayNotesWhenEditing = configuration()->playNotesWhenEditing();
     configuration()->setPlayNotesWhenEditing(!wasPlayNotesWhenEditing);
+}
+
+void PlaybackController::reloadPlaybackCache()
+{
+    INotationPlaybackPtr nPlayback = notationPlayback();
+    if (nPlayback) {
+        nPlayback->reload();
+    }
 }
 
 void PlaybackController::openPlaybackSetupDialog()
@@ -1115,7 +1172,7 @@ AudioOutputParams PlaybackController::trackOutputParams(const InstrumentTrackId&
     AudioOutputParams result = audioSettings()->trackOutputParams(instrumentTrackId);
 
     if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
-        result.muted = !notationConfiguration()->isMetronomeEnabled();
+        result.muted = !notationConfiguration()->isMetronomeEnabled() && !notationConfiguration()->isCountInEnabled();
         return result;
     }
 
@@ -1294,10 +1351,10 @@ void PlaybackController::setupSequenceTracks()
         m_loadingTrackCount--;
 
         size_t current = trackCount - m_loadingTrackCount;
-        m_loadingProgress.progressChanged.send(current, trackCount, title);
+        m_loadingProgress.progress(current, trackCount, title);
 
         if (m_loadingTrackCount == 0) {
-            m_loadingProgress.finished.send(muse::make_ok());
+            m_loadingProgress.finish(muse::make_ok());
             m_isPlayAllowedChanged.notify();
         }
     };
@@ -1310,7 +1367,7 @@ void PlaybackController::setupSequenceTracks()
         addAuxTrack(idx, onAddFinished);
     }
 
-    m_loadingProgress.progressChanged.send(0, trackCount, title);
+    m_loadingProgress.progress(0, trackCount, title);
 
     notationPlayback()->trackAdded().onReceive(this, [this, onAddFinished](const InstrumentTrackId& instrumentTrackId) {
         addTrack(instrumentTrackId, onAddFinished);

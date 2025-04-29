@@ -74,7 +74,7 @@ bool ConverterApi::batch(const QString& outDir, const QString& job, const QStrin
     }
 
     muse::ProgressPtr progress = std::make_shared<muse::Progress>();
-    progress->progressChanged.onReceive(this, [progressCallback](int64_t current, int64_t total, const std::string& title) {
+    progress->progressChanged().onReceive(this, [progressCallback](int64_t current, int64_t total, const std::string& title) {
         QCoreApplication::processEvents();
         if (progressCallback.isCallable()) {
             QJSValueList args;

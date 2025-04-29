@@ -183,6 +183,10 @@ TEST_F(Mei_Tests, mei_hairpin_01) {
     meiReadTest("hairpin-01");
 }
 
+TEST_F(Mei_Tests, mei_harp_01) {
+    meiReadTest("harp-01");
+}
+
 TEST_F(Mei_Tests, mei_jump_01) {
     meiReadTest("jump-01");
 }
@@ -277,6 +281,10 @@ TEST_F(Mei_Tests, mei_score_01) {
 
 TEST_F(Mei_Tests, mei_score_02) {
     meiReadTest("score-02");
+}
+
+TEST_F(Mei_Tests, mei_score_03) {
+    meiReadTest("score-03");
 }
 
 TEST_F(Mei_Tests, mei_slur_01) {

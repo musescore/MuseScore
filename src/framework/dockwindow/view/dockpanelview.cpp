@@ -210,6 +210,13 @@ void DockPanelView::componentComplete()
             dockWidget->setProperty(TOOLBAR_COMPONENT_PROPERTY, QVariant::fromValue(m_toolbarComponent));
         }
     });
+
+    connect(this, &DockBase::frameCurrentWidgetChanged, this, [this, dockWidget](){
+        const KDDockWidgets::Frame* frame = dockWidget ? dockWidget->frame() : nullptr;
+        if (frame && frame->currentDockWidget() == dockWidget) {
+            emit panelShown();
+        }
+    });
 }
 
 AbstractMenuModel* DockPanelView::contextMenuModel() const
@@ -277,6 +284,10 @@ bool DockPanelView::isTabAllowed(const DockPanelView* tab) const
     }
 
     if (m_groupName.isEmpty() || tab->m_groupName.isEmpty()) {
+        return false;
+    }
+
+    if (tab->location() != location()) {
         return false;
     }
 

@@ -21,6 +21,8 @@
 declare_module(muse_workspace)
 set(MODULE_ALIAS muse::workspace)
 
+set(MODULE_QRC workspace.qrc)
+
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/workspacemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/workspacemodule.h
@@ -45,6 +47,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceactioncontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceactioncontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceutils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/workspaceutils.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/view/workspacelistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/workspacelistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/newworkspacemodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/newworkspacemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/workspacesmenumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/workspacesmenumodel.h
     )
 
 if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)

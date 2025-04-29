@@ -79,6 +79,9 @@ public:
 
     double absoluteFromSpatium(const Spatium& sp) const override;
 
+protected:
+    virtual void rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, System* sys);
+
 private:
     Segment* findNewAnchorSegment(const EditData& ed, const Segment* curSeg);
     void undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, Segment* s1, Segment* s2);
@@ -90,7 +93,6 @@ private:
     static PointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg);
     static Fraction lastSegmentEndTick(const Segment* lastSeg, const Spanner* s);
     LineSegment* rebaseAnchor(Grip grip, Segment* newSeg);
-    void rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, System* sys);
     void rebaseAnchors(EditData&, Grip);
 };
 

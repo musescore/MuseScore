@@ -116,11 +116,7 @@ void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSamp
 
 void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events, const PlaybackParamList& params)
 {
-    m_offStreamEvents.clear();
-
-    if (m_onOffStreamFlushed) {
-        m_onOffStreamFlushed();
-    }
+    flushOffstream();
 
     parseOffStreamParams(params, m_offStreamCache);
 

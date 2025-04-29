@@ -47,11 +47,11 @@ void GeneralPreferencesModel::load()
     });
 
     configuration()->startupModeTypeChanged().onNotify(this, [this]() {
-        emit startupModesChanged();
+        emit currentStartupModeChanged();
     });
 
     configuration()->startupScorePathChanged().onNotify(this, [this]() {
-        emit startupModesChanged();
+        emit startupScorePathChanged();
     });
 }
 
@@ -61,11 +61,11 @@ void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
 
     m_languageUpdateProgress = languagesService()->update(languageCode);
 
-    m_languageUpdateProgress.progressChanged.onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
+    m_languageUpdateProgress.progressChanged().onReceive(this, [this](int64_t current, int64_t total, const std::string& status) {
         emit receivingUpdateForCurrentLanguage(current, total, QString::fromStdString(status));
     });
 
-    m_languageUpdateProgress.finished.onReceive(this, [this, languageCode](const ProgressResult& res) {
+    m_languageUpdateProgress.finished().onReceive(this, [this, languageCode](const ProgressResult& res) {
         if (res.ret.code() == static_cast<int>(Err::AlreadyUpToDate)) {
             QString msg = muse::qtrc("appshell/preferences", "Your version of %1 is up to date.")
                           .arg(languagesService()->language(languageCode).name);
@@ -180,77 +180,66 @@ void GeneralPreferencesModel::setIsNeedRestart(bool newIsNeedRestart)
 
 QVariantList GeneralPreferencesModel::startupModes() const
 {
-    QVariantList result;
-
-    for (const StartMode& mode: allStartupModes()) {
-        QVariantMap obj;
-        obj["title"] = mode.title;
-        obj["checked"] = mode.checked;
-        obj["canSelectScorePath"] = mode.canSelectScorePath;
-        obj["scorePath"] = mode.scorePath;
-
-        result << obj;
-    }
+    const QVariantList result {
+        QVariantMap {
+            { "title", muse::qtrc("appshell/preferences", "Start empty") },
+            { "value", static_cast<int>(StartupModeType::StartEmpty) },
+        },
+        QVariantMap {
+            { "title", muse::qtrc("appshell/preferences", "Continue last session") },
+            { "value", static_cast<int>(StartupModeType::ContinueLastSession) },
+        },
+        QVariantMap {
+            { "title", muse::qtrc("appshell/preferences", "Start with new score") },
+            { "value", static_cast<int>(StartupModeType::StartWithNewScore) },
+        },
+        QVariantMap {
+            { "title", muse::qtrc("appshell/preferences", "Start with score:") },
+            { "value", static_cast<int>(StartupModeType::StartWithScore) },
+            { "isStartWithScore", true },
+        },
+    };
 
     return result;
 }
 
-GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes() const
+int GeneralPreferencesModel::currentStartupMode() const
 {
-    static const QMap<StartupModeType, QString> modeTitles {
-        { StartupModeType::StartEmpty,  muse::qtrc("appshell/preferences", "Start empty") },
-        { StartupModeType::ContinueLastSession, muse::qtrc("appshell/preferences", "Continue last session") },
-        { StartupModeType::StartWithNewScore, muse::qtrc("appshell/preferences", "Start with new score") },
-        { StartupModeType::StartWithScore, muse::qtrc("appshell/preferences", "Start with score:") }
-    };
+    return static_cast<int>(configuration()->startupModeType());
+}
 
-    StartModeList modes;
-
-    for (StartupModeType type : modeTitles.keys()) {
-        bool canSelectScorePath = (type == StartupModeType::StartWithScore);
-
-        StartMode mode;
-        mode.type = type;
-        mode.title = modeTitles[type];
-        mode.checked = configuration()->startupModeType() == type;
-        mode.scorePath = canSelectScorePath ? configuration()->startupScorePath().toQString() : QString();
-        mode.canSelectScorePath = canSelectScorePath;
-
-        modes << mode;
+void GeneralPreferencesModel::setCurrentStartupMode(int modeIndex)
+{
+    if (modeIndex < 0 || modeIndex >= 4) {
+        return;
     }
 
-    return modes;
+    StartupModeType selectedType = static_cast<StartupModeType>(modeIndex);
+    if (selectedType == configuration()->startupModeType()) {
+        return;
+    }
+
+    configuration()->setStartupModeType(selectedType);
+    emit currentStartupModeChanged();
+}
+
+QString GeneralPreferencesModel::startupScorePath() const
+{
+    return configuration()->startupScorePath().toQString();
+}
+
+void GeneralPreferencesModel::setStartupScorePath(const QString& scorePath)
+{
+    if (scorePath.isEmpty() || scorePath == startupScorePath()) {
+        return;
+    }
+
+    configuration()->setStartupScorePath(scorePath);
+    emit startupScorePathChanged();
 }
 
 QStringList GeneralPreferencesModel::scorePathFilter() const
 {
     return { muse::qtrc("appshell/preferences", "MuseScore file") + " (*.mscz)",
              muse::qtrc("appshell/preferences", "All") + " (*)" };
-}
-
-void GeneralPreferencesModel::setCurrentStartupMode(int modeIndex)
-{
-    StartModeList modes = allStartupModes();
-
-    if (modeIndex < 0 || modeIndex >= modes.size()) {
-        return;
-    }
-
-    StartupModeType selectedType = modes[modeIndex].type;
-    if (selectedType == configuration()->startupModeType()) {
-        return;
-    }
-
-    configuration()->setStartupModeType(selectedType);
-    emit startupModesChanged();
-}
-
-void GeneralPreferencesModel::setStartupScorePath(const QString& scorePath)
-{
-    if (scorePath.isEmpty() || scorePath == configuration()->startupScorePath().toQString()) {
-        return;
-    }
-
-    configuration()->setStartupScorePath(scorePath);
-    emit startupModesChanged();
 }

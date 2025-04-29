@@ -1154,36 +1154,18 @@
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
-            <Instrument id="g-soprano-ocarina">
+            <Instrument id="c-soprano-ocarina">
                   <family>ocarinas</family>
                   <trackName>Soprano Ocarina</trackName>
-                  <longName>G Soprano Ocarina</longName>
-                  <shortName>G S. Oc.</shortName>
-                  <traitName type="tuning">G</traitName>
-                  <description>Soprano ocarina pitched in G.</description>
+                  <longName>Soprano Ocarina</longName>
+                  <shortName>S. Oc.</shortName>
+                  <traitName type="transposition">*C</traitName>
+                  <description>Soprano ocarina in C.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>79-93</aPitchRange>
-                  <pPitchRange>79-95</pPitchRange>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
-                        <program value="79"/> <!--Ocarina-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
-            <Instrument id="f-soprano-ocarina">
-                  <family>ocarinas</family>
-                  <trackName>Soprano Ocarina</trackName>
-                  <longName>F Soprano Ocarina</longName>
-                  <shortName>F S. Oc.</shortName>
-                  <traitName type="tuning">F</traitName>
-                  <description>Soprano ocarina pitched in F.</description>
-                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>77-91</aPitchRange>
-                  <pPitchRange>77-93</pPitchRange>
+                  <aPitchRange>84-101</aPitchRange>
+                  <pPitchRange>81-101</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -1192,30 +1174,12 @@
             </Instrument>
             <Instrument id="ocarina">
                   <family>ocarinas</family>
-                  <description>Soprano ocarina pitched in C.</description>
+                  <description>Soprano ocarina in C.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-86</aPitchRange>
-                  <pPitchRange>72-88</pPitchRange>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
-                        <program value="79"/> <!--Ocarina-->
-                  </Channel>
-                  <genre>world</genre>
-            </Instrument>
-            <Instrument id="c-soprano-ocarina">
-                  <family>ocarinas</family>
-                  <trackName>Soprano Ocarina</trackName>
-                  <longName>C Soprano Ocarina</longName>
-                  <shortName>C S. Oc.</shortName>
-                  <traitName type="tuning">*C</traitName>
-                  <description>Soprano ocarina pitched in C.</description>
-                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-86</aPitchRange>
-                  <pPitchRange>72-88</pPitchRange>
+                  <aPitchRange>84-101</aPitchRange>
+                  <pPitchRange>81-101</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -1225,51 +1189,57 @@
             <Instrument id="bb-soprano-ocarina">
                   <family>ocarinas</family>
                   <trackName>Soprano Ocarina</trackName>
-                  <longName>B♭ Soprano Ocarina</longName>
-                  <shortName>B♭ S. Oc.</shortName>
-                  <traitName type="tuning">B♭</traitName>
-                  <description>Soprano ocarina pitched in B♭.</description>
+                  <longName>Soprano Ocarina</longName>
+                  <shortName>S. Oc.</shortName>
+                  <traitName type="transposition">B♭</traitName>
+                  <description>Soprano ocarina in B♭.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G8va</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>70-84</aPitchRange>
-                  <pPitchRange>70-86</pPitchRange>
+                  <aPitchRange>82-99</aPitchRange>
+                  <pPitchRange>79-99</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-            <Instrument id="g-alto-ocarina">
+            <Instrument id="g-soprano-ocarina">
                   <family>ocarinas</family>
-                  <trackName>Alto Ocarina</trackName>
-                  <longName>G Alto Ocarina</longName>
-                  <shortName>G A. Oc.</shortName>
-                  <traitName type="tuning">G</traitName>
-                  <description>Alto ocarina pitched in G.</description>
+                  <trackName>Soprano Ocarina</trackName>
+                  <longName>Soprano Ocarina</longName>
+                  <shortName>S. Oc.</shortName>
+                  <traitName type="transposition">G</traitName>
+                  <description>Soprano ocarina in G.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>67-81</aPitchRange>
-                  <pPitchRange>67-83</pPitchRange>
+                  <aPitchRange>79-96</aPitchRange>
+                  <pPitchRange>76-96</pPitchRange>
+                  <transposeDiatonic>-3</transposeDiatonic>
+                  <transposeChromatic>-5</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
                   </Channel>
                   <genre>world</genre>
             </Instrument>
-            <Instrument id="f-alto-ocarina">
+            <Instrument id="f-soprano-ocarina">
                   <family>ocarinas</family>
-                  <trackName>Alto Ocarina</trackName>
-                  <longName>F Alto Ocarina</longName>
-                  <shortName>F A. Oc.</shortName>
-                  <traitName type="tuning">F</traitName>
-                  <description>Alto ocarina pitched in F.</description>
+                  <trackName>Soprano Ocarina</trackName>
+                  <longName>Soprano Ocarina</longName>
+                  <shortName>S. Oc.</shortName>
+                  <traitName type="transposition">F</traitName>
+                  <description>Soprano ocarina in F.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G15ma</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>65-79</aPitchRange>
-                  <pPitchRange>65-81</pPitchRange>
+                  <aPitchRange>77-94</aPitchRange>
+                  <pPitchRange>74-94</pPitchRange>
+                  <transposeDiatonic>-4</transposeDiatonic>
+                  <transposeChromatic>-7</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -1279,15 +1249,15 @@
             <Instrument id="c-alto-ocarina">
                   <family>ocarinas</family>
                   <trackName>Alto Ocarina</trackName>
-                  <longName>C Alto Ocarina</longName>
-                  <shortName>C A. Oc.</shortName>
-                  <traitName type="tuning">*C</traitName>
-                  <description>Alto ocarina pitched in C.</description>
+                  <longName>Alto Ocarina</longName>
+                  <shortName>A. Oc.</shortName>
+                  <traitName type="transposition">*C</traitName>
+                  <description>Alto (sometimes called tenor) ocarina in C.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>60-74</aPitchRange>
-                  <pPitchRange>60-76</pPitchRange>
+                  <aPitchRange>72-89</aPitchRange>
+                  <pPitchRange>69-89</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -1297,15 +1267,57 @@
             <Instrument id="bb-alto-ocarina">
                   <family>ocarinas</family>
                   <trackName>Alto Ocarina</trackName>
-                  <longName>B♭ Alto Ocarina</longName>
-                  <shortName>B♭ A. Oc.</shortName>
-                  <traitName type="tuning">B♭</traitName>
-                  <description>Alto ocarina pitched in B♭.</description>
+                  <longName>Alto Ocarina</longName>
+                  <shortName>A. Oc.</shortName>
+                  <traitName type="transposition">B♭</traitName>
+                  <description>Alto (sometimes called tenor) ocarina in B♭.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>G</clef>
+                  <clef>G8va</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>58-72</aPitchRange>
-                  <pPitchRange>58-74</pPitchRange>
+                  <aPitchRange>70-87</aPitchRange>
+                  <pPitchRange>67-87</pPitchRange>
+                  <transposeDiatonic>-1</transposeDiatonic>
+                  <transposeChromatic>-2</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
+                        <program value="79"/> <!--Ocarina-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="g-alto-ocarina">
+                  <family>ocarinas</family>
+                  <trackName>Alto Ocarina</trackName>
+                  <longName>Alto Ocarina</longName>
+                  <shortName>A. Oc.</shortName>
+                  <traitName type="transposition">G</traitName>
+                  <description>Alto (sometimes called tenor) ocarina in G.</description>
+                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
+                  <clef>G8va</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>67-84</aPitchRange>
+                  <pPitchRange>64-84</pPitchRange>
+                  <transposeDiatonic>-3</transposeDiatonic>
+                  <transposeChromatic>-5</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
+                        <program value="79"/> <!--Ocarina-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="f-alto-ocarina">
+                  <family>ocarinas</family>
+                  <trackName>Alto Ocarina</trackName>
+                  <longName>Alto Ocarina</longName>
+                  <shortName>A. Oc.</shortName>
+                  <traitName type="transposition">F</traitName>
+                  <description>Alto (sometimes called tenor) ocarina in F.</description>
+                  <musicXMLid>wind.flutes.ocarina</musicXMLid>
+                  <clef>G8va</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>65-82</aPitchRange>
+                  <pPitchRange>62-82</pPitchRange>
+                  <transposeDiatonic>-4</transposeDiatonic>
+                  <transposeChromatic>-7</transposeChromatic>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -1315,15 +1327,15 @@
             <Instrument id="c-bass-ocarina">
                   <family>ocarinas</family>
                   <trackName>Bass Ocarina</trackName>
-                  <longName>C Bass Ocarina</longName>
-                  <shortName>C B. Oc.</shortName>
-                  <traitName type="tuning">*C</traitName>
-                  <description>Bass ocarina pitched in C.</description>
+                  <longName>Bass Ocarina</longName>
+                  <shortName>B. Oc.</shortName>
+                  <traitName type="transposition">*C</traitName>
+                  <description>Bass ocarina in C.</description>
                   <musicXMLid>wind.flutes.ocarina</musicXMLid>
-                  <clef>F</clef>
+                  <clef>G</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>48-62</aPitchRange>
-                  <pPitchRange>48-64</pPitchRange>
+                  <aPitchRange>60-77</aPitchRange>
+                  <pPitchRange>57-77</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 79; MS General: Ocarina-->
                         <program value="79"/> <!--Ocarina-->
@@ -7003,7 +7015,7 @@
                         <voice>0</voice>
                         <name>High Bongo</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -7013,7 +7025,7 @@
                         <voice>0</voice>
                         <name>Low Bongo</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -7108,7 +7120,7 @@
                         <voice>0</voice>
                         <name>Side Stick</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -7118,7 +7130,7 @@
                         <voice>0</voice>
                         <name>Snare</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -7151,7 +7163,7 @@
                         <voice>0</voice>
                         <name>Tom 6</name>
                         <stem>1</stem>
-                        <shortcut>F</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -7161,7 +7173,7 @@
                         <voice>0</voice>
                         <name>Tom 5</name>
                         <stem>1</stem>
-                        <shortcut>E</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -7171,7 +7183,7 @@
                         <voice>0</voice>
                         <name>Tom 4</name>
                         <stem>1</stem>
-                        <shortcut>D</shortcut>
+                        <shortcut>C</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>2</panelColumn>
                   </Drum>
@@ -7181,7 +7193,7 @@
                         <voice>0</voice>
                         <name>Tom 3</name>
                         <stem>1</stem>
-                        <shortcut>C</shortcut>
+                        <shortcut>D</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>3</panelColumn>
                   </Drum>
@@ -7191,7 +7203,7 @@
                         <voice>0</voice>
                         <name>Tom 2</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>E</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>4</panelColumn>
                   </Drum>
@@ -7201,7 +7213,7 @@
                         <voice>0</voice>
                         <name>Tom 1</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>F</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>5</panelColumn>
                   </Drum>
@@ -7339,7 +7351,7 @@
                         <voice>1</voice>
                         <name>Bass Drum 1</name>
                         <stem>2</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -7358,7 +7370,7 @@
                         <voice>0</voice>
                         <name>Acoustic Snare</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -7386,7 +7398,7 @@
                         <voice>0</voice>
                         <name>Closed Hi-Hat</name>
                         <stem>1</stem>
-                        <shortcut>G</shortcut>
+                        <shortcut>C</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>2</panelColumn>
                   </Drum>
@@ -7396,6 +7408,7 @@
                         <voice>0</voice>
                         <name>High Floor Tom</name>
                         <stem>1</stem>
+                        <shortcut>H</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>7</panelColumn>
                   </Drum>
@@ -7405,7 +7418,6 @@
                         <voice>1</voice>
                         <name>Pedal Hi-Hat</name>
                         <stem>2</stem>
-                        <shortcut>F</shortcut>
                         <panelRow>1</panelRow>
                         <panelColumn>2</panelColumn>
                   </Drum>
@@ -7424,6 +7436,7 @@
                         <voice>0</voice>
                         <name>Open Hi-Hat</name>
                         <stem>1</stem>
+                        <shortcut>D</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>3</panelColumn>
                   </Drum>
@@ -7442,6 +7455,7 @@
                         <voice>0</voice>
                         <name>Hi-Mid Tom</name>
                         <stem>1</stem>
+                        <shortcut>G</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>6</panelColumn>
                   </Drum>
@@ -7451,7 +7465,7 @@
                         <voice>0</voice>
                         <name>Crash Cymbal 1</name>
                         <stem>1</stem>
-                        <shortcut>C</shortcut>
+                        <shortcut>E</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>4</panelColumn>
                   </Drum>
@@ -7461,7 +7475,6 @@
                         <voice>0</voice>
                         <name>High Tom</name>
                         <stem>1</stem>
-                        <shortcut>E</shortcut>
                         <panelRow>1</panelRow>
                         <panelColumn>4</panelColumn>
                   </Drum>
@@ -7471,7 +7484,7 @@
                         <voice>0</voice>
                         <name>Ride Cymbal 1</name>
                         <stem>1</stem>
-                        <shortcut>D</shortcut>
+                        <shortcut>F</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>5</panelColumn>
                   </Drum>
@@ -7574,7 +7587,7 @@
                         <voice>1</voice>
                         <name>Bass Drum</name>
                         <stem>2</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -7593,7 +7606,7 @@
                         <voice>0</voice>
                         <name>Snare</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -7603,6 +7616,7 @@
                         <voice>0</voice>
                         <name>Floor Tom</name>
                         <stem>1</stem>
+                        <shortcut>H</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>7</panelColumn>
                   </Drum>
@@ -7612,7 +7626,7 @@
                         <voice>0</voice>
                         <name>Closed Hi-Hat</name>
                         <stem>1</stem>
-                        <shortcut>G</shortcut>
+                        <shortcut>C</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>2</panelColumn>
                   </Drum>
@@ -7622,7 +7636,6 @@
                         <voice>1</voice>
                         <name>Pedal Hi-Hat</name>
                         <stem>2</stem>
-                        <shortcut>F</shortcut>
                         <panelRow>1</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -7632,6 +7645,7 @@
                         <voice>0</voice>
                         <name>Open Hi-Hat</name>
                         <stem>1</stem>
+                        <shortcut>D</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>3</panelColumn>
                   </Drum>
@@ -7641,7 +7655,7 @@
                         <voice>0</voice>
                         <name>Crash Cymbal</name>
                         <stem>1</stem>
-                        <shortcut>C</shortcut>
+                        <shortcut>E</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>4</panelColumn>
                   </Drum>
@@ -7651,7 +7665,7 @@
                         <voice>0</voice>
                         <name>Tom</name>
                         <stem>1</stem>
-                        <shortcut>E</shortcut>
+                        <shortcut>G</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>6</panelColumn>
                   </Drum>
@@ -7661,7 +7675,7 @@
                         <voice>0</voice>
                         <name>Ride Cymbal</name>
                         <stem>1</stem>
-                        <shortcut>D</shortcut>
+                        <shortcut>F</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>5</panelColumn>
                   </Drum>
@@ -7713,7 +7727,7 @@
                         <voice>1</voice>
                         <name>Bass Drum</name>
                         <stem>2</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -7732,7 +7746,7 @@
                         <voice>0</voice>
                         <name>Snare</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -7742,6 +7756,7 @@
                         <voice>0</voice>
                         <name>Floor Tom</name>
                         <stem>1</stem>
+                        <shortcut>H</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>7</panelColumn>
                   </Drum>
@@ -7751,7 +7766,7 @@
                         <voice>0</voice>
                         <name>Closed Hi-Hat</name>
                         <stem>1</stem>
-                        <shortcut>G</shortcut>
+                        <shortcut>C</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>2</panelColumn>
                   </Drum>
@@ -7761,7 +7776,6 @@
                         <voice>1</voice>
                         <name>Pedal Hi-Hat</name>
                         <stem>2</stem>
-                        <shortcut>F</shortcut>
                         <panelRow>1</panelRow>
                         <panelColumn>3</panelColumn>
                   </Drum>
@@ -7771,6 +7785,7 @@
                         <voice>0</voice>
                         <name>Open Hi-Hat</name>
                         <stem>1</stem>
+                        <shortcut>D</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>3</panelColumn>
                   </Drum>
@@ -7789,7 +7804,7 @@
                         <voice>0</voice>
                         <name>Crash Cymbal</name>
                         <stem>1</stem>
-                        <shortcut>C</shortcut>
+                        <shortcut>E</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>4</panelColumn>
                   </Drum>
@@ -7799,7 +7814,7 @@
                         <voice>0</voice>
                         <name>High Tom</name>
                         <stem>1</stem>
-                        <shortcut>E</shortcut>
+                        <shortcut>G</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>6</panelColumn>
                   </Drum>
@@ -7809,7 +7824,7 @@
                         <voice>0</voice>
                         <name>Ride Cymbal</name>
                         <stem>1</stem>
-                        <shortcut>D</shortcut>
+                        <shortcut>F</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>5</panelColumn>
                   </Drum>
@@ -7884,7 +7899,7 @@
                         <voice>0</voice>
                         <name>Side Stick</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -7894,7 +7909,7 @@
                         <voice>0</voice>
                         <name>Snare</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -7951,7 +7966,7 @@
                         <voice>0</voice>
                         <name>Side Stick</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -7961,7 +7976,7 @@
                         <voice>0</voice>
                         <name>Snare</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -8017,7 +8032,7 @@
                         <voice>0</voice>
                         <name>High Tabla</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -8027,7 +8042,7 @@
                         <voice>0</voice>
                         <name>Low Tabla</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -8056,7 +8071,7 @@
                         <voice>0</voice>
                         <name>High Timbale</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -8066,7 +8081,7 @@
                         <voice>0</voice>
                         <name>Low Timbale</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -8432,7 +8447,7 @@
                         <voice>0</voice>
                         <name>Closed Hi-Hat</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -8442,7 +8457,7 @@
                         <voice>1</voice>
                         <name>Pedal Hi-Hat</name>
                         <stem>2</stem>
-                        <shortcut>F</shortcut>
+                        <shortcut>C</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>2</panelColumn>
                   </Drum>
@@ -8452,7 +8467,7 @@
                         <voice>0</voice>
                         <name>Open Hi-Hat</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -8885,7 +8900,7 @@
                         <voice>0</voice>
                         <name>Short Güiro</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -8916,34 +8931,64 @@
                   <description>Temple blocks, sometimes known as Chinese temple blocks or wooden bells.</description>
                   <musicXMLid>wood.temple-block</musicXMLid>
                   <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
                   <drumset>1</drumset>
                   <singleNoteDynamics>0</singleNoteDynamics>
-                  <Drum pitch="76"> <!--High Woodblock-->
+                  <Drum pitch="58"> <!--Vibra Slap-->
                         <head>normal</head>
-                        <line>-1</line>
-                        <voice>0</voice>
-                        <name>High Temple Block</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
-                        <panelRow>0</panelRow>
-                        <panelColumn>1</panelColumn>
-                  </Drum>
-                  <Drum pitch="77"> <!--Low Woodblock-->
-                        <head>normal</head>
-                        <line>1</line>
+                        <line>8</line>
                         <voice>0</voice>
                         <name>Low Temple Block</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
+                  <Drum pitch="59"> <!--Ride Cymbal 2-->
+                        <head>normal</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Low-Mid Temple Block</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="60"> <!--High Bongo-->
+                        <head>normal</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Mid Temple Block</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="61"> <!--Low Bongo-->
+                        <head>normal</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>High-Mid Temple Block</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="62"> <!--Mute High Conga-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>High Temple Block</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
                   <Channel>
-                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
-                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
-                        <program value="0"/> <!--Standard Kit-->
+                        <!--MIDI: Bank 1, Prog 115; MS General: Temple Blocks-->
+                        <controller ctrl="32" value="1"/> <!--Bank LSB-->
+                        <program value="115"/> <!--Non-GS drum kit-->
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
@@ -8967,7 +9012,7 @@
                         <voice>0</voice>
                         <name>High Wood Block</name>
                         <stem>1</stem>
-                        <shortcut>A</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -8977,7 +9022,7 @@
                         <voice>0</voice>
                         <name>Low Wood Block</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -9327,7 +9372,7 @@
                         <voice>0</voice>
                         <name>Mute High Conga</name>
                         <stem>1</stem>
-                        <shortcut>B</shortcut>
+                        <shortcut>C</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>2</panelColumn>
                   </Drum>
@@ -9337,7 +9382,7 @@
                         <voice>0</voice>
                         <name>High Conga</name>
                         <stem>1</stem>
-                        <shortcut>C</shortcut>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -9347,7 +9392,7 @@
                         <voice>0</voice>
                         <name>Low Conga</name>
                         <stem>1</stem>
-                        <shortcut>D</shortcut>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
@@ -9507,14 +9552,15 @@
                         <voice>1</voice>
                         <name>Bass Drum</name>
                         <stem>2</stem>
+                        <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>0</panelColumn>
                   </Drum>
                   <Drum pitch="37"> <!--Side Stick-->
-                        <head>slashed1</head>
+                        <head>cross</head>
                         <line>3</line>
                         <voice>0</voice>
-                        <name>Side Stick</name>
+                        <name>Snare Rim</name>
                         <stem>1</stem>
                         <panelRow>1</panelRow>
                         <panelColumn>1</panelColumn>
@@ -9525,6 +9571,7 @@
                         <voice>0</voice>
                         <name>Snare</name>
                         <stem>1</stem>
+                        <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>1</panelColumn>
                   </Drum>
@@ -9534,6 +9581,7 @@
                         <voice>0</voice>
                         <name>Tambourine</name>
                         <stem>1</stem>
+                        <shortcut>G</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>6</panelColumn>
                   </Drum>
@@ -9561,6 +9609,7 @@
                         <voice>0</voice>
                         <name>Suspended Cymbal</name>
                         <stem>1</stem>
+                        <shortcut>E</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>4</panelColumn>
                   </Drum>
@@ -9579,6 +9628,7 @@
                         <voice>0</voice>
                         <name>Hand Cymbals</name>
                         <stem>1</stem>
+                        <shortcut>F</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>5</panelColumn>
                   </Drum>
@@ -9729,6 +9779,7 @@
                         <voice>0</voice>
                         <name>Claves</name>
                         <stem>1</stem>
+                        <shortcut>H</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>7</panelColumn>
                   </Drum>
@@ -9774,6 +9825,7 @@
                         <voice>0</voice>
                         <name>Mute Triangle</name>
                         <stem>1</stem>
+                        <shortcut>D</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>3</panelColumn>
                   </Drum>
@@ -9783,6 +9835,7 @@
                         <voice>0</voice>
                         <name>Triangle</name>
                         <stem>1</stem>
+                        <shortcut>C</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>2</panelColumn>
                   </Drum>
@@ -9919,7 +9972,7 @@
                         <line>-1</line>
                         <voice>0</voice>
                         <name>Stick Click</name>
-                        <shortcut>E</shortcut>
+                        <shortcut>G</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>6</panelColumn>
                   </Drum>
@@ -9928,7 +9981,7 @@
                         <line>1</line>
                         <voice>0</voice>
                         <name>Stick Shot</name>
-                        <shortcut>F</shortcut>
+                        <shortcut>E</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>4</panelColumn>
                   </Drum>
@@ -9937,7 +9990,7 @@
                         <line>2</line>
                         <voice>0</voice>
                         <name>Shell</name>
-                        <shortcut>G</shortcut>
+                        <shortcut>H</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>7</panelColumn>
                   </Drum>
@@ -9946,6 +9999,7 @@
                         <line>1</line>
                         <voice>0</voice>
                         <name>Backstick</name>
+                        <shortcut>F</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>5</panelColumn>
                   </Drum>
@@ -10044,17 +10098,17 @@
                         <voice>0</voice>
                         <name>Drum 4 Shell</name>
                         <stem>1</stem>
-                        <panelRow>4</panelRow>
-                        <panelColumn>1</panelColumn>
+                        <panelRow>3</panelRow>
+                        <panelColumn>4</panelColumn>
                   </Drum>
                   <Drum pitch="43"> <!--High Floor Tom-->
-                        <head>diamond</head>
+                        <head>plus</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>sticks</name>
-                        <stem>2</stem>
-                        <panelRow>4</panelRow>
-                        <panelColumn>0</panelColumn>
+                        <name>Stick Click</name>
+                        <stem>1</stem>
+                        <panelRow>3</panelRow>
+                        <panelColumn>6</panelColumn>
                   </Drum>
                   <Drum pitch="48"> <!--Hi-Mid Tom-->
                         <head>normal</head>
@@ -10099,8 +10153,8 @@
                         <voice>0</voice>
                         <name>Drum 3 Shell</name>
                         <stem>1</stem>
-                        <panelRow>4</panelRow>
-                        <panelColumn>2</panelColumn>
+                        <panelRow>3</panelRow>
+                        <panelColumn>5</panelColumn>
                   </Drum>
                   <Drum pitch="60"> <!--High Bongo-->
                         <head>normal</head>
@@ -10264,7 +10318,7 @@
                         <head>normal</head>
                         <line>7</line>
                         <voice>0</voice>
-                        <name>Bass Drum 5</name>
+                        <name>Drum 5</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
@@ -10274,7 +10328,7 @@
                         <head>cross</head>
                         <line>7</line>
                         <voice>0</voice>
-                        <name>Bass Drum 5 Rim Knock</name>
+                        <name>Drum 5 Rim</name>
                         <stem>1</stem>
                         <panelRow>1</panelRow>
                         <panelColumn>0</panelColumn>
@@ -10283,7 +10337,7 @@
                         <head>normal</head>
                         <line>5</line>
                         <voice>0</voice>
-                        <name>Bass Drum 4</name>
+                        <name>Drum 4</name>
                         <stem>1</stem>
                         <shortcut>B</shortcut>
                         <panelRow>0</panelRow>
@@ -10293,7 +10347,7 @@
                         <head>cross</head>
                         <line>5</line>
                         <voice>0</voice>
-                        <name>Bass Drum 4 Rim Knock</name>
+                        <name>Drum 4 Rim</name>
                         <stem>1</stem>
                         <panelRow>1</panelRow>
                         <panelColumn>1</panelColumn>
@@ -10302,7 +10356,7 @@
                         <head>normal</head>
                         <line>3</line>
                         <voice>0</voice>
-                        <name>Bass Drum 3</name>
+                        <name>Drum 3</name>
                         <stem>1</stem>
                         <shortcut>C</shortcut>
                         <panelRow>0</panelRow>
@@ -10312,7 +10366,7 @@
                         <head>cross</head>
                         <line>3</line>
                         <voice>0</voice>
-                        <name>Bass Drum 3 Rim Knock</name>
+                        <name>Drum 3 Rim</name>
                         <stem>1</stem>
                         <panelRow>1</panelRow>
                         <panelColumn>2</panelColumn>
@@ -10321,7 +10375,7 @@
                         <head>normal</head>
                         <line>1</line>
                         <voice>0</voice>
-                        <name>Bass Drum 2</name>
+                        <name>Drum 2</name>
                         <stem>1</stem>
                         <shortcut>D</shortcut>
                         <panelRow>0</panelRow>
@@ -10331,7 +10385,7 @@
                         <head>cross</head>
                         <line>1</line>
                         <voice>0</voice>
-                        <name>Bass Drum 2 Rim Knock</name>
+                        <name>Drum 2 Rim</name>
                         <stem>1</stem>
                         <panelRow>1</panelRow>
                         <panelColumn>3</panelColumn>
@@ -10340,7 +10394,7 @@
                         <head>normal</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>Bass Drum 1</name>
+                        <name>Drum 1</name>
                         <stem>1</stem>
                         <shortcut>E</shortcut>
                         <panelRow>0</panelRow>
@@ -10350,7 +10404,7 @@
                         <head>cross</head>
                         <line>-1</line>
                         <voice>0</voice>
-                        <name>Bass Drum 1 Rim Knock</name>
+                        <name>Drum 1 Rim</name>
                         <stem>1</stem>
                         <panelRow>1</panelRow>
                         <panelColumn>4</panelColumn>
@@ -10359,7 +10413,7 @@
                         <head>slash</head>
                         <line>4</line>
                         <voice>0</voice>
-                        <name>Simultaneous Hit</name>
+                        <name>Unison</name>
                         <stem>1</stem>
                         <shortcut>F</shortcut>
                         <panelRow>0</panelRow>
@@ -10395,7 +10449,7 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="72"> <!--Long Whistle-->
                         <head>normal</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Full Crash</name>
                         <shortcut>A</shortcut>
@@ -10404,7 +10458,7 @@
                   </Drum>
                   <Drum pitch="74"> <!--Long Guiro-->
                         <head>normal</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Half Crash</name>
                         <shortcut>B</shortcut>
@@ -10413,16 +10467,16 @@
                   </Drum>
                   <Drum pitch="76"> <!--High Woodblock-->
                         <head>cross</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
-                        <name>High Hat</name>
+                        <name>Hi-Hat</name>
                         <shortcut>C</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>2</panelColumn>
                   </Drum>
                   <Drum pitch="77"> <!--Low Woodblock-->
                         <head>normal</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Sizzle</name>
                         <shortcut>D</shortcut>
@@ -10431,7 +10485,7 @@
                   </Drum>
                   <Drum pitch="79"> <!--Open Cuica-->
                         <head>normal</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Crash-Choke</name>
                         <shortcut>E</shortcut>
@@ -10440,25 +10494,25 @@
                   </Drum>
                   <Drum pitch="81"> <!--Open Triangle-->
                         <head>do</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
-                        <name>Normal Tap</name>
+                        <name>Tap</name>
                         <shortcut>F</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>5</panelColumn>
                   </Drum>
                   <Drum pitch="83"> <!--Jingle Bell-->
                         <head>do</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
-                        <name>Normal Tap-Choke</name>
+                        <name>Tap-Choke</name>
                         <shortcut>G</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>6</panelColumn>
                   </Drum>
                   <Drum pitch="84"> <!--Belltree-->
                         <head>diamond</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Bell Tap</name>
                         <panelRow>1</panelRow>
@@ -10466,7 +10520,7 @@
                   </Drum>
                   <Drum pitch="86"> <!--Mute Surdo-->
                         <head>diamond</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Bell Tap-Choke</name>
                         <panelRow>1</panelRow>
@@ -10474,9 +10528,10 @@
                   </Drum>
                   <Drum pitch="88">
                         <head>plus</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Muted Tap</name>
+                        <shortcut>H</shortcut>
                         <panelRow>0</panelRow>
                         <panelColumn>7</panelColumn>
                   </Drum>
@@ -10488,7 +10543,7 @@
                               <whole>noteheadXOrnate</whole>
                               <breve>noteheadXOrnate</breve>
                         </noteheads>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Smash</name>
                         <panelRow>1</panelRow>
@@ -10496,7 +10551,7 @@
                   </Drum>
                   <Drum pitch="91">
                         <head>slashed1</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Zing</name>
                         <panelRow>1</panelRow>
@@ -10504,7 +10559,7 @@
                   </Drum>
                   <Drum pitch="93">
                         <head>normal</head>
-                        <line>0</line>
+                        <line>1</line>
                         <voice>0</voice>
                         <name>Roll</name>
                         <panelRow>1</panelRow>
@@ -14785,9 +14840,6 @@
                   <longName>Bass Viol</longName>
                   <shortName>B. Vl.</shortName>
                   <description>Bass viola da gamba (tablature). Third lowest member of the viol family.</description>
-                  <StringData>
-                        <frets>13</frets>
-                  </StringData>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
                   <genre>earlymusic</genre>
             </Instrument>

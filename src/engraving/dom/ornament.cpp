@@ -237,7 +237,7 @@ bool Ornament::hasFullIntervalChoice() const
 bool Ornament::showCueNote()
 {
     if (m_showCueNote == AutoOnOff::AUTO) {
-        return style().styleB(Sid::trillAlwaysShowCueNote) || _intervalAbove.step != IntervalStep::SECOND;
+        return (hasFullIntervalChoice() && style().styleB(Sid::trillAlwaysShowCueNote)) || _intervalAbove.step != IntervalStep::SECOND;
     }
 
     return m_showCueNote == AutoOnOff::ON;

@@ -30,6 +30,7 @@ public:
     NotationPlaybackStub();
 
     void init() override;
+    void reload() override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;
     engraving::InstrumentTrackId chordSymbolsTrackId(const muse::ID& partId) const override;
@@ -37,7 +38,8 @@ public:
 
     const muse::mpe::PlaybackData& trackPlaybackData(const engraving::InstrumentTrackId& trackId) const override;
     void triggerEventsForItems(const std::vector<const EngravingItem*>& items) override;
-    void triggerMetronome(int tick) override;
+    void triggerMetronome(muse::midi::tick_t tick) override;
+    void triggerCountIn(muse::midi::tick_t tick, muse::secs_t& totalCountInDuration) override;
 
     engraving::InstrumentTrackIdSet existingTrackIdSet() const override;
     muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const override;

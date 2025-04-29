@@ -73,6 +73,8 @@ signals:
     void titleBarChanged();
     void toolbarComponentChanged();
 
+    void panelShown();
+
 private:
     void componentComplete() override;
 

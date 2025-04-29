@@ -19,16 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_TEMPO_H
-#define MU_ENGRAVING_TEMPO_H
+#pragma once
 
 #include <map>
 #include <unordered_map>
 
 #include "global/allocator.h"
-#include "types/bps.h"
 #include "types/flags.h"
+
+#include "../types/bps.h"
 
 namespace mu::engraving {
 enum class TempoType : char {
@@ -78,6 +77,7 @@ public:
     void dump() const;
 
     BeatsPerSecond tempo(int tick) const;
+    BeatsPerSecond multipliedTempo(int tick) const;
     double pauseSecs(int tick) const;
 
     double tick2time(int tick, int* sn = 0) const;
@@ -104,5 +104,4 @@ private:
 
     std::unordered_map<int, double> m_pauses;
 };
-} // namespace mu::engraving
-#endif
+}

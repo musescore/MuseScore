@@ -25,13 +25,7 @@
 #include <cmath>
 
 #include "importptb.h"
-
-#include "realfn.h"
-
-#include "engraving/types/typesconv.h"
-#include "engraving/types/symid.h"
-
-#include "engraving/rw/xmlwriter.h"
+#include "internal/guitarprodrumset.h"
 
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
@@ -73,6 +67,8 @@
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
+#include "engraving/rw/xmlwriter.h"
+#include "engraving/types/symid.h"
 
 #include "log.h"
 
@@ -923,6 +919,11 @@ void GuitarPro::createMeasures()
         //            m->setRepeatFlags(bars[i].repeatFlags);
         m->setRepeatCount(bars[i].repeats);           // supported in gp5
 
+        if (bars[i].repeatFlags == (mu::engraving::Repeat::START | mu::engraving::Repeat::END)) {
+            m->setRepeatEnd(true);
+            m->setRepeatStart(true);
+            voltaSequence = 1;
+        }
         // reset the volta sequence if we have an opening repeat
         if (bars[i].repeatFlags == mu::engraving::Repeat::START) {
             voltaSequence = 1;

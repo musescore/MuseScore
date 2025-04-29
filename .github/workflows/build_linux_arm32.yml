@@ -1,0 +1,173 @@
+name: 'Build: Linux arm32'
+
+on:
+  # pull_request:
+  workflow_dispatch:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel, nightly, testing, stable'
+        default: 'devel'
+        required: true
+      publish:
+        description: 'Publish to FTP: on - publish'
+        default: 'off'
+        required: false
+      sentry_project:
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
+        default: ''
+        required: false
+  workflow_call:
+    inputs:
+      build_mode:
+        description: 'Build mode: devel, nightly, testing, stable'
+        default: 'devel'
+        type: string
+        required: true
+      publish:
+        description: 'Publish to FTP: on - publish'
+        default: 'off'
+        type: string
+        required: false
+      sentry_project:
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
+        default: ''
+        type: string
+        required: false
+
+jobs:
+  linux_arm32:
+    runs-on: ubuntu-22.04-arm
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v4
+    - name: Setup QEMU
+      run: |
+        sudo apt-get update
+        sudo apt-get install qemu-user-static -y
+    - name: Configure workflow
+      env:
+        pull_request_title: ${{ github.event.pull_request.title }}
+        SENTRY_SERVER_MU4_KEY: ${{ secrets.SENTRY_SERVER_MU4_KEY }}
+        SENTRY_SERVER_SANDBOX_KEY: ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }}
+        SENTRY_PROJECT: ${{ inputs.sentry_project }}
+      run: |
+        bash ./buildscripts/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ inputs.build_mode }}
+        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+        bash ./buildscripts/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
+
+        DO_UPDATE_TS='false'
+        if [[ "$BUILD_MODE" == "testing" || "$BUILD_MODE" == "stable" ]]; then
+          DO_UPDATE_TS='true'
+          if [ -z "${{ secrets.TRANSIFEX_API_TOKEN }}" ]; then
+            echo "::warning::TRANSIFEX_API_TOKEN is empty; updating .ts files disabled"
+            DO_UPDATE_TS='false'
+          fi
+        fi
+
+        DO_PLACEHOLDER_TRANSLATIONS='false'
+        if [[ "$BUILD_MODE" == "nightly" || "$BUILD_MODE" == "devel" ]]; then
+          DO_PLACEHOLDER_TRANSLATIONS='true'
+        fi
+
+        DO_UPLOAD_SYMBOLS='false'
+        SENTRY_URL=""
+
+        if [ "$SENTRY_SERVER_MU4_KEY" != "" ]; then
+          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable" ]; then
+            SENTRY_PROJECT="mu4"
+          fi
+
+          if [ "$SENTRY_PROJECT" == "mu4" ]; then
+            DO_UPLOAD_SYMBOLS='true'
+            SENTRY_URL=https://sentry.musescore.org/api/4/minidump/?sentry_key=$SENTRY_SERVER_MU4_KEY
+          fi
+        fi
+
+        if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "nightly" ]; then
+          SENTRY_PROJECT="sandbox"
+        fi
+
+        if [ "$SENTRY_PROJECT" == "sandbox" ] && [ "$SENTRY_SERVER_SANDBOX_KEY" != "" ]; then
+          DO_UPLOAD_SYMBOLS='true'
+          SENTRY_URL=https://sentry.musescore.org/api/3/minidump/?sentry_key=$SENTRY_SERVER_SANDBOX_KEY
+        fi
+
+        DO_PUBLISH='false'
+        if [ ${{ inputs.publish }} == "on" ]; then
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
+            echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
+            DO_PUBLISH='false'
+          fi
+        fi
+
+        ADD_INFO="_${GITHUB_REF#refs/heads/}"
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
+        fi
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"MU4_${BUILD_NUMBER}_Lin_armv7l${ADD_INFO}")"
+
+        echo "github.repository: ${{ github.repository }}"
+        echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+        echo "DO_UPDATE_TS=$DO_UPDATE_TS" | tee -a $GITHUB_ENV
+        echo "DO_PLACEHOLDER_TRANSLATIONS=$DO_PLACEHOLDER_TRANSLATIONS" | tee -a $GITHUB_ENV
+        echo "DO_UPLOAD_SYMBOLS=$DO_UPLOAD_SYMBOLS" | tee -a $GITHUB_ENV
+        echo "SENTRY_PROJECT=$SENTRY_PROJECT" | tee -a $GITHUB_ENV
+        echo "SENTRY_URL=$SENTRY_URL" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
+
+    # - name: Generate _en.ts files
+    #   env:
+    #     LUPDATE_ARGS: ""
+    #     POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
+    #   run: |
+    #     bash ./buildscripts/ci/translation/run_lupdate.sh
+    - name: Update .ts files (tx pull)
+      if: env.DO_UPDATE_TS == 'true'
+      uses: transifex/cli-action@v2
+      with:
+        token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+        args: "pull -f"
+
+    - name: Register gcc problem matcher
+      run: echo "::add-matcher::.github/problem_matchers/gcc.json"
+  
+    - name: Setup, Generate _en.ts files, Build AppImage, Package, Checksum
+      env: # For lupdate
+        LUPDATE_ARGS: ""
+        POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
+      run: |
+        C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
+        sudo docker run --platform linux/arm -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "arm32v7/ubuntu:jammy" /bin/bash -c "\
+          cd /MuseScore && \
+          bash /MuseScore/buildscripts/ci/linux/setup.sh --arch armv7l && \
+          bash /MuseScore/buildscripts/ci/translation/run_lupdate.sh && \
+          bash /MuseScore/buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --arch armv7l && \
+          bash /MuseScore/buildscripts/ci/linux/package.sh --arch armv7l && \
+          bash /MuseScore/buildscripts/ci/tools/checksum.sh \
+        "
+    - name: Generate and upload dump symbols
+      if: env.DO_UPLOAD_SYMBOLS == 'true'
+      run: |
+        APP_BIN=$(find "$(pwd)/build.release/src/app/" -type f -name "mscore4portable*" -print -quit)
+        ARCH=armv7l
+        cmake -DAPP_BIN=${APP_BIN} \
+              -DARCH=${ARCH} \
+              -DSENTRY_URL=https://sentry.musescore.org \
+              -DSENTRY_ORG=musescore \
+              -DSENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }} \
+              -DSENTRY_PROJECT=${SENTRY_PROJECT} \
+              -P buildscripts/ci/crashdumps/ci_generate_and_upload.cmake
+    - name: Publish to OSUOSL
+      if: env.DO_PUBLISH == 'true'
+      run: |
+        bash ./buildscripts/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux --arch armv7l -v 4
+    - name: Upload artifacts on GitHub
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
+        path: ./build.artifacts/

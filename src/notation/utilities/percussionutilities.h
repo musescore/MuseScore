@@ -28,6 +28,7 @@
 #include "iinteractive.h"
 
 #include "engraving/rendering/isinglerenderer.h"
+#include "engraving/rw/xmlreader.h"
 
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
@@ -45,8 +46,9 @@ class PercussionUtilities
     INJECT_STATIC(mu::engraving::rendering::ISingleRenderer, engravingRender)
 
 public:
+    static void readDrumset(const muse::ByteArray& drumMapping, mu::engraving::Drumset& drumset);
     static std::shared_ptr<mu::engraving::Chord> getDrumNoteForPreview(const mu::engraving::Drumset* drumset, int pitch);
-    static void editPercussionShortcut(mu::engraving::Drumset& drumset, int originPitch);
+    static bool editPercussionShortcut(mu::engraving::Drumset& drumset, int originPitch);
 
 private:
     static muse::RetVal<muse::Val> openPercussionShortcutDialog(const mu::engraving::Drumset& drumset, int originPitch);

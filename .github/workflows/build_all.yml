@@ -58,22 +58,22 @@ jobs:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
 
-  linux_arm:
-    name: Linux ARM
-    uses: ./.github/workflows/build_linux_arm.yml
+  linux_arm32:
+    name: Linux ARM32
+    if: ${{ contains(inputs.platforms, 'linux_arm32') }}
+    uses: ./.github/workflows/build_linux_arm32.yml
     secrets: inherit
     with:
-      platforms: ${{ inputs.platforms }}
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
 
-  linux_x64:
-    name: Linux x64
-    if: ${{ contains(inputs.platforms, 'linux_x64') }}
+  linux:
+    name: Linux
     uses: ./.github/workflows/build_linux.yml
     secrets: inherit
     with:
+      platforms: ${{ inputs.platforms }}
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
@@ -107,8 +107,7 @@ jobs:
         # Expose edge cases like different command versions, CRLF line endings, etc.
         # Use same OS versions as used in real build workflows.
         os:
-        - ubuntu-20.04 # linux_x64, backend
-        - ubuntu-22.04 # linux_arm32, linux_arm64
+        - ubuntu-22.04 # linux_x64, backend, linux_arm32, linux_arm64
         - macos-latest
         - windows-2022 # windows_x64, windows_portable
     runs-on: ${{ matrix.os }}

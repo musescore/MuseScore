@@ -568,14 +568,14 @@ Note::~Note()
     m_rightParenthesis = nullptr;
 }
 
-std::vector<const Note*> Note::compoundNotes() const
+std::vector<Note*> Note::compoundNotes() const
 {
-    std::vector<const Note*> elements;
-    if (const Note* note = firstTiedNote()) {
+    std::vector<Note*> elements;
+    if (Note* note = firstTiedNote()) {
         elements.push_back(note);
     }
 
-    if (const Note* note = lastTiedNote()) {
+    if (Note* note = lastTiedNote()) {
         elements.push_back(note);
     }
 
@@ -1642,7 +1642,7 @@ class NoteEditData : public ElementEditData
 {
     OBJECT_ALLOCATOR(engraving, NoteEditData)
 public:
-    enum EditMode {
+    enum EditMode : unsigned char {
         EditMode_ChangePitch = 0,
         EditMode_AddSpacing,
         EditMode_Undefined,
@@ -2363,14 +2363,28 @@ void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
 void Note::setTrack(track_idx_t val)
 {
     EngravingItem::setTrack(val);
-    if (m_tieFor) {
+    if (tieForNonPartial()) {
         m_tieFor->setTrack(val);
         for (SpannerSegment* seg : m_tieFor->spannerSegments()) {
             seg->setTrack(val);
         }
     }
-    if (m_tieBack) {
+    if (tieBackNonPartial()) {
         m_tieBack->setTrack2(val);
+    }
+    if (laissezVib() || outgoingPartialTie()) {
+        m_tieFor->setTrack(val);
+        m_tieFor->setTrack2(val);
+        for (SpannerSegment* seg : m_tieFor->spannerSegments()) {
+            seg->setTrack(val);
+        }
+    }
+    if (incomingPartialTie()) {
+        m_tieBack->setTrack(val);
+        m_tieBack->setTrack2(val);
+        for (SpannerSegment* seg : m_tieBack->spannerSegments()) {
+            seg->setTrack(val);
+        }
     }
     for (Spanner* s : m_spannerFor) {
         s->setTrack(val);
@@ -2511,7 +2525,13 @@ PartialTie* Note::outgoingPartialTie() const
 
 void Note::setTieFor(Tie* t)
 {
+    if (!t) {
+        m_jumpPoints.clear();
+    }
     m_tieFor = t;
+    if (m_tieFor && !m_tieFor->isLaissezVib()) {
+        m_tieFor->updatePossibleJumpPoints();
+    }
 }
 
 void Note::setTieBack(Tie* t)
@@ -2718,7 +2738,8 @@ RectF Note::drag(EditData& ed)
         noteEditData->mode = NoteEditData::editModeByDragDirection(delta.x(), delta.y());
     }
 
-    if (noteEditData->mode == NoteEditData::EditMode_AddSpacing) {
+    bool isSingleNoteSelection = score()->getSelectedElement() == this;
+    if (noteEditData->mode == NoteEditData::EditMode_AddSpacing && isSingleNoteSelection && !(ed.modifiers & ControlModifier)) {
         horizontalDrag(ed);
     } else if (noteEditData->mode == NoteEditData::EditMode_ChangePitch) {
         verticalDrag(ed);
@@ -3708,7 +3729,7 @@ EngravingItem* Note::prevSegmentElement()
 //   lastTiedNote
 //---------------------------------------------------------
 
-const Note* Note::lastTiedNote(bool ignorePlayback) const
+Note* Note::lastTiedNote(bool ignorePlayback) const
 {
     std::vector<const Note*> notes;
     const Note* note = this;
@@ -3723,7 +3744,7 @@ const Note* Note::lastTiedNote(bool ignorePlayback) const
         note = note->tieFor()->endNote();
         notes.push_back(note);
     }
-    return note;
+    return const_cast<Note*>(note);
 }
 
 //---------------------------------------------------------
@@ -3989,7 +4010,7 @@ bool Note::hasAnotherStraightAboveOrBelow(bool above) const
 
 PointF Note::posInStaffCoordinates()
 {
-    double X = x() + chord()->x() + chord()->segment()->x() + chord()->measure()->x() + headWidth() / 2;
+    double X = x() + chord()->x() + chord()->segment()->x() + chord()->measure()->x();
     return PointF(X, y());
 }
 

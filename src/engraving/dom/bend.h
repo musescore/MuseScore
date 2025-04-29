@@ -42,7 +42,7 @@ class Factory;
  *    replaced by the GuitarBend class.
  *********************************************************/
 
-enum class BendType {
+enum class BendType : unsigned char {
     BEND = 0,
     BEND_RELEASE,
     BEND_RELEASE_BEND,

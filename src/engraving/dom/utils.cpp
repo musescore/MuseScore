@@ -27,6 +27,7 @@
 
 #include "containers.h"
 
+#include "accidental.h"
 #include "chord.h"
 #include "chordrest.h"
 #include "clef.h"
@@ -45,6 +46,7 @@
 #include "sig.h"
 #include "staff.h"
 #include "system.h"
+#include "spanner.h"
 #include "tuplet.h"
 #include "drumset.h"
 
@@ -773,24 +775,6 @@ int diatonicUpDown(Key k, int pitch, int steps)
     return pitch;
 }
 
-Volta* findVolta(const Segment* seg, const Score* score)
-{
-    if (!seg) {
-        return nullptr;
-    }
-
-    const Measure* measure = seg->measure();
-    const Fraction tick = measure->tick() + Fraction::eps();
-    auto spanners = score->spannerMap().findOverlapping(tick.ticks(), tick.ticks());
-    for (auto& spanner : spanners) {
-        if (!spanner.value->isVolta()) {
-            continue;
-        }
-        return toVolta(spanner.value);
-    }
-    return nullptr;
-}
-
 //---------------------------------------------------------
 //   searchTieNote
 //    search Note to tie to "note"
@@ -1133,6 +1117,23 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
     return halfsteps;
 }
 
+static void noteValToEffectivePitchAndTpc(const NoteVal& nval, const Staff* staff, const Fraction& tick, int& epitch, int& tpc)
+{
+    const bool concertPitch = staff->concertPitch();
+
+    if (concertPitch) {
+        epitch = nval.pitch;
+    } else {
+        const int pitchOffset = staff->part()->instrument(tick)->transpose().chromatic;
+        epitch = nval.pitch - pitchOffset;
+    }
+
+    tpc = nval.tpc(concertPitch);
+    if (tpc == static_cast<int>(mu::engraving::Tpc::TPC_INVALID)) {
+        tpc = pitch2tpc(epitch, staff->key(tick), mu::engraving::Prefer::NEAREST);
+    }
+}
+
 int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick)
 {
     if (staff->isDrumStaff(tick)) {
@@ -1142,16 +1143,32 @@ int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick)
         }
     }
 
-    const bool concertPitch = staff->concertPitch();
-    const int pitchOffset = concertPitch ? 0 : staff->part()->instrument(tick)->transpose().chromatic;
-    const int epitch = nval.pitch - pitchOffset;
-
-    int tpc = nval.tpc(concertPitch);
-    if (tpc == static_cast<int>(mu::engraving::Tpc::TPC_INVALID)) {
-        tpc = pitch2tpc(epitch, staff->key(tick), mu::engraving::Prefer::NEAREST);
+    if (nval.isRest()) {
+        return staff->middleLine(tick);
     }
 
+    int epitch = nval.pitch;
+    int tpc = static_cast<int>(mu::engraving::Tpc::TPC_INVALID);
+    noteValToEffectivePitchAndTpc(nval, staff, tick, epitch, tpc);
+
     return relStep(epitch, tpc, staff->clef(tick));
+}
+
+AccidentalVal noteValToAccidentalVal(const NoteVal& nval, const Staff* staff, const Fraction& tick)
+{
+    if (nval.isRest()) {
+        return AccidentalVal::NATURAL;
+    }
+
+    if (staff->isDrumStaff(tick)) {
+        return AccidentalVal::NATURAL;
+    }
+
+    int epitch = nval.pitch;
+    int tpc = static_cast<int>(mu::engraving::Tpc::TPC_INVALID);
+    noteValToEffectivePitchAndTpc(nval, staff, tick, epitch, tpc);
+
+    return tpc2alter(tpc);
 }
 
 int compareNotesPos(const Note* n1, const Note* n2)
@@ -1424,6 +1441,82 @@ void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::
     }
 }
 
+std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::vector<Staff*>& staves)
+{
+    TRACEFUNC;
+
+    std::vector<EngravingItem*> result;
+
+    const TimeSigPlacement timeSigPlacement = score->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>();
+    const bool isOnStaffTimeSig = timeSigPlacement != TimeSigPlacement::NORMAL;
+
+    for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (EngravingItem* measureElement : measure->el()) {
+            if (!measureElement || !measureElement->systemFlag() || measureElement->isLayoutBreak()) {
+                continue;
+            }
+            if (!staves.empty()) {
+                if (muse::contains(staves, measureElement->staff())) {
+                    result.push_back(measureElement);
+                }
+            } else if (measureElement->isTopSystemObject()) {
+                result.push_back(measureElement);
+            }
+        }
+
+        for (const Segment& seg : measure->segments()) {
+            if (seg.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+                for (EngravingItem* annotation : seg.annotations()) {
+                    if (!annotation || !annotation->systemFlag()) {
+                        continue;
+                    }
+
+                    if (!staves.empty()) {
+                        if (muse::contains(staves, annotation->staff())) {
+                            result.push_back(annotation);
+                        }
+                    } else if (annotation->isTopSystemObject()) {
+                        result.push_back(annotation);
+                    }
+                }
+            }
+
+            if (isOnStaffTimeSig && seg.isType(SegmentType::TimeSigType)) {
+                for (EngravingItem* item : seg.elist()) {
+                    if (!item || !item->isTimeSig()) {
+                        continue;
+                    }
+
+                    if (!staves.empty()) {
+                        if (muse::contains(staves, item->staff())) {
+                            result.push_back(item);
+                        }
+                    } else if (item->staffIdx() == 0) {
+                        result.push_back(item);
+                    }
+                }
+            }
+        }
+    }
+
+    for (const auto& pair : score->spanner()) {
+        Spanner* spanner = pair.second;
+        if (!spanner->systemFlag()) {
+            continue;
+        }
+
+        if (!staves.empty()) {
+            if (muse::contains(staves, spanner->staff())) {
+                result.push_back(spanner);
+            }
+        } else if (spanner->isTopSystemObject()) {
+            result.push_back(spanner);
+        }
+    }
+
+    return result;
+}
+
 String formatUniqueExcerptName(const String& baseName, const StringList& allExcerptLowerNames)
 {
     String result = baseName;
@@ -1530,7 +1623,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
 
     std::vector<Measure*> measures;
 
-    for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
+    for (auto it = repeatList.begin() + 1; it != repeatList.end(); it++) {
         const RepeatSegment* rs = *it;
         const auto prevSegIt = std::prev(it);
         if (!rs->startsWithMeasure(masterMeasure) || prevSegIt == repeatList.end()) {
@@ -1575,26 +1668,97 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
     if (!firstSeg || !secondSeg) {
         return false;
     }
-    // Disallow inputting ties between unrelated voltas
-    // This visually adjacent segment is never the next to be played
-    Score* score = firstSeg->score();
-    Volta* startVolta = findVolta(firstSeg, score);
-    Volta* endVolta = findVolta(secondSeg, score);
+    const MasterScore* master = firstSeg->masterScore();
 
-    if (startVolta && endVolta && startVolta != endVolta) {
-        return false;
+    Measure* firstMeasure = firstSeg->measure();
+    Measure* secondMeasure = secondSeg->measure();
+
+    if (firstMeasure == secondMeasure) {
+        return true;
     }
 
-    // Disallow inputting ties across codas
-    // This visually adjacent segment is never the next to be played
-    if (secondSeg->measure() != firstSeg->measure()) {
-        for (const EngravingItem* el : secondSeg->measure()->el()) {
-            if (el->isMarker() && toMarker(el)->isCoda()) {
-                return false;
-            }
+    const MeasureBase* firstMasterMeasureBase = master->measure(firstMeasure->index());
+    const Measure* firstMasterMeasure = firstMasterMeasureBase
+                                        && firstMasterMeasureBase->isMeasure() ? toMeasure(firstMasterMeasureBase) : nullptr;
+    const MeasureBase* secondMasterMeasureBase = master->measure(secondMeasure->index());
+    const Measure* secondMasterMeasure = secondMasterMeasureBase
+                                         && secondMasterMeasureBase->isMeasure() ? toMeasure(secondMasterMeasureBase) : nullptr;
+
+    Score* score = firstSeg->score();
+
+    const RepeatList& repeatList = score->repeatList(true, false);
+
+    std::vector<const Measure*> measures;
+
+    for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
+        const RepeatSegment* rs = *it;
+        const auto nextSegIt = std::next(it);
+
+        // Check if measures are in the same repeat segment
+        if (rs->containsMeasure(firstMasterMeasure) && rs->containsMeasure(secondMasterMeasure)) {
+            return true;
+        }
+
+        // Continue to build list of measures at the start of following repeat segments
+        if (!rs->endsWithMeasure(firstMasterMeasure) || nextSegIt == repeatList.end()) {
+            continue;
+        }
+
+        // Get next segment
+        const RepeatSegment* nextSeg = *nextSegIt;
+        const Measure* nextSegFirstMeasure = nextSeg->firstMeasure();
+        if (!nextSegFirstMeasure) {
+            continue;
+        }
+
+        measures.push_back(nextSegFirstMeasure);
+    }
+
+    // Check if second segment is in a following measure in the repeat structure
+    for (const Measure* m : measures) {
+        if (m == secondMasterMeasure) {
+            return true;
         }
     }
 
-    return true;
+    return false;
+}
+
+bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment* secondSeg)
+{
+    if (!firstSeg || !secondSeg) {
+        return false;
+    }
+    const MasterScore* master = firstSeg->masterScore();
+
+    Measure* firstMeasure = firstSeg->measure();
+    Measure* secondMeasure = secondSeg->measure();
+
+    if (firstMeasure == secondMeasure) {
+        return false;
+    }
+
+    const MeasureBase* firstMasterMeasureBase = master->measure(firstMeasure->index());
+    const Measure* firstMasterMeasure = firstMasterMeasureBase
+                                        && firstMasterMeasureBase->isMeasure() ? toMeasure(firstMasterMeasureBase) : nullptr;
+    const MeasureBase* secondMasterMeasureBase = master->measure(secondMeasure->index());
+    const Measure* secondMasterMeasure = secondMasterMeasureBase
+                                         && secondMasterMeasureBase->isMeasure() ? toMeasure(secondMasterMeasureBase) : nullptr;
+
+    Score* score = firstSeg->score();
+
+    const RepeatList& repeatList = score->repeatList(true, false);
+
+    std::vector<const Measure*> measures;
+
+    for (auto it = repeatList.begin(); it != repeatList.end(); it++) {
+        const RepeatSegment* rs = *it;
+
+        if (!rs->containsMeasure(firstMasterMeasure) || !rs->containsMeasure(secondMasterMeasure)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 }

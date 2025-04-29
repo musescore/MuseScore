@@ -55,6 +55,8 @@ public:
     // Svg
     virtual bool exportSvgWithTransparentBackground() const = 0;
     virtual void setExportSvgWithTransparentBackground(bool transparent) = 0;
+    virtual bool exportSvgWithIllustratorCompat() const = 0;
+    virtual void setExportSvgWithIllustratorCompat(bool compat) = 0;
 
     virtual int trimMarginPixelSize() const = 0;
     virtual void setTrimMarginPixelSize(std::optional<int> pixelSize) = 0;

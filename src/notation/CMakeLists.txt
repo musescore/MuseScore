@@ -50,6 +50,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationsolomutestate.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationnoteinput.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationselectionfilter.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationundostack.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationstyle.h
@@ -90,6 +91,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationnoteinput.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselection.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationselectionfilter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationselectionfilter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselectionrange.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationselectionrange.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationelements.cpp
@@ -123,6 +126,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontscontroller.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.h
@@ -176,8 +181,19 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/dynamicpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/partialtiepopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/partialtiepopupmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/shadownotepopupmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/shadownotepopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/percussionnotepopupcontentmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/percussionnotepopupcontentmodel.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/abstractselectionfiltermodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/abstractselectionfiltermodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/voicesselectionfiltermodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/voicesselectionfiltermodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/elementsselectionfiltermodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/elementsselectionfiltermodel.h
+
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.h
 
@@ -203,13 +219,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/utilities/engravingitempreviewpainter.h
     ${CMAKE_CURRENT_LIST_DIR}/utilities/percussionutilities.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utilities/percussionutilities.h
+    ${CMAKE_CURRENT_LIST_DIR}/utilities/scorerangeutilities.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/utilities/scorerangeutilities.h
 
     ${WIDGETS_SRC}
     ${STYLEDIALOG_SRC}
-    )
-
-set(MODULE_UI
-    ${WIDGETS_UI}
     )
 
 set(MODULE_LINK
@@ -227,5 +241,9 @@ endif()
 if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
 endif (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
+
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+endif (MSVC)
 
 setup_module()

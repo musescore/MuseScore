@@ -69,32 +69,35 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/IconAndTextButtonSelector.qml</file>
         <file>qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartialTiePopup.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-above_staves.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-across_staves.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-hang.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-right_align.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-on_all_staves.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-create_space.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyledImage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartialTieMenuRowItem.qml</file>
         <file>qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-cancel-3.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-cancel-2.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-cancel-1.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-cancel-3.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-cancel-2.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-cancel-1.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/end-start-repeats-4.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/end-start-repeats-3.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/end-start-repeats-2.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/end-start-repeats-1.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clef-before-true.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clef-before-false.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-3.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-2.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeat-1.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-3.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-2.png</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other-jump-1.png</file>
+        <file>qml/MuseScore/NotationScene/internal/ShadowNotePopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PercussionNotePopupContent.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-above_staves.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-across_staves.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-hang.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-inset.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-right_align.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-on_all_staves.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_other-off.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_other-on-parens.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_other-on.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_repeat-off.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_repeat-on-parens.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_repeat-on.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-after_repeat-allow_changes.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-after_repeat-disallow_changes.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-after_repeat.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-before_repeat-allow_changes.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-before_repeat-disallow_changes.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-before_repeat.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other_jumps-off.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other_jumps-on-parens.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other_jumps-on.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeats-off.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeats-on-parens.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeats-on.png</file>
+        <file>qml/MuseScore/NotationScene/internal/SelectionFilterSection.qml</file>
     </qresource>
 </RCC>

@@ -175,10 +175,12 @@ StyledFlickable {
                     }
 
                     StyledImage {
-                        forceHeight: 120
+                        forceHeight: 144
+                        horizontalPadding: 0
+                        verticalPadding: 0
                         source: pageModel.timeSigPlacement.value === 0 ? "timeSigImages/timesig-on_all_staves.png"
                               : pageModel.timeSigPlacement.value === 1 ? "timeSigImages/timesig-above_staves.png"
-                                                                              : "timeSigImages/timesig-across_staves.png"
+                                                                       : "timeSigImages/timesig-across_staves.png"
                     }
                 }
 
@@ -247,7 +249,7 @@ StyledFlickable {
                                 Layout.preferredWidth: styleGroupBox.labelWidth
                                 horizontalAlignment: Text.AlignLeft
                                 text: pageModel.timeSigPlacement.value === 1 ? qsTrc("notation/editstyle/timesignatures", "Alignment with barlines:")
-                                                                                    : qsTrc("notation/editstyle/timesignatures", "Alignment across staves:")
+                                                                             : qsTrc("notation/editstyle/timesignatures", "Alignment across staves:")
                             }
 
                             RadioButtonGroup {
@@ -298,6 +300,7 @@ StyledFlickable {
                                     decimals: 2
                                     measureUnitsSymbol: 'x'
                                     prefixIcon: IconCode.HORIZONTAL
+                                    minValue: 1.0
 
                                     currentValue: root.timeSigScale.value.width
                                     onValueEdited: function(newValue) {
@@ -314,6 +317,7 @@ StyledFlickable {
                                     decimals: 2
                                     measureUnitsSymbol: 'x'
                                     prefixIcon: IconCode.VERTICAL
+                                    minValue: 1.0
 
                                     currentValue: root.timeSigScale.value.height
                                     onValueEdited: function(newValue) {
@@ -431,10 +435,12 @@ StyledFlickable {
                         }
 
                         StyledImage {
-                            forceWidth: 120
+                            forceHeight: 94
+                            horizontalPadding: 0
+                            verticalPadding: 0
                             source: root.timeSigVsMargin.value === 0 ? "timeSigImages/timesig-courtesy-hang.png"
                                   : root.timeSigVsMargin.value === 1 ? "timeSigImages/timesig-courtesy-right_align.png"
-                                                                     : "timeSigImages/timesig-courtesy-create_space.png"
+                                                                     : "timeSigImages/timesig-courtesy-inset.png"
                         }
                     }
                 }
@@ -479,7 +485,8 @@ StyledFlickable {
 
         StyledGroupBox {
             Layout.fillWidth: true
-            title: qsTrc("notation/editstyle/timesignatures", "Clef, key & time signatures at repeats and jumps")
+            title: qsTrc("notation/editstyle/timesignatures", "Clefs, key & time signatures at repeats and jumps")
+
             component CourtesyShowAndParenToggle: GridLayout {
                 required property StyleItem showStyleItem
                 required property StyleItem parensStyleItem
@@ -529,31 +536,19 @@ StyledFlickable {
                     enabled: toggleButton.checked
                 }
 
-                Rectangle {
+                StyledImage {
+                    id: image
+
                     Layout.row: 0
                     Layout.column: 1
                     Layout.rowSpan: 3
                     Layout.alignment: Qt.AlignRight
 
-                    id: display
-                    width: image.width + 25
-                    height: image.height + 20
+                    forceHeight: 96
+                    horizontalPadding: 0
+                    verticalPadding: 0
 
-                    color: "#ffffff"
-                    border.color: ui.theme.strokeColor
-                    radius: ui.theme.borderWidth
-
-                    Image {
-                        id: image
-
-                        width: 370
-                        height: 98
-                        anchors.centerIn: parent
-                        mipmap: true
-
-                        fillMode: Image.PreserveAspectFit
-                        source: toggleButton.checked ? (parensCheckbox.checked ? imageParens : imageON) : imageOFF
-                    }
+                    source: toggleButton.checked ? (parensCheckbox.checked ? imageParens : imageON) : imageOFF
                 }
             }
 
@@ -561,20 +556,27 @@ StyledFlickable {
                 spacing: 12
                 anchors.fill: parent
 
-                StyledTextLabel {
-                    text: qsTrc("notation/editstyle/timesignatures", "Place all changes before the barline")
-                }
+                StyledGroupBox {
+                    Layout.fillWidth: true
 
-                CheckBox {
-                    text: qsTrc("notation/editstyle/timesignatures", "At repeats")
-                    checked: pageModel.changesBeforeBarlineRepeats.value === true
-                    onClicked: pageModel.changesBeforeBarlineRepeats.value = !pageModel.changesBeforeBarlineRepeats.value
-                }
+                    title: qsTrc("notation/editstyle/timesignatures", "Changes that apply to both the repeat/jump and the subsequent measure")
 
-                CheckBox {
-                    text: qsTrc("notation/editstyle/timesignatures", "At all other jumps")
-                    checked: pageModel.changesBeforeBarlineOtherJumps.value === true
-                    onClicked: pageModel.changesBeforeBarlineOtherJumps.value = !pageModel.changesBeforeBarlineOtherJumps.value
+                    ColumnLayout {
+                        spacing: 8
+                        anchors.fill: parent
+
+                        CheckBox {
+                            text: qsTrc("notation/editstyle/timesignatures", "At repeats, only show changes before the barline")
+                            checked: pageModel.changesBeforeBarlineRepeats.value === true
+                            onClicked: pageModel.changesBeforeBarlineRepeats.value = !pageModel.changesBeforeBarlineRepeats.value
+                        }
+
+                        CheckBox {
+                            text: qsTrc("notation/editstyle/timesignatures", "At all other jumps, only show changes before the barline")
+                            checked: pageModel.changesBeforeBarlineOtherJumps.value === true
+                            onClicked: pageModel.changesBeforeBarlineOtherJumps.value = !pageModel.changesBeforeBarlineOtherJumps.value
+                        }
+                    }
                 }
 
                 StyledGroupBox {
@@ -604,31 +606,17 @@ StyledFlickable {
                             onToggled: pageModel.placeClefsBeforeRepeats.value = false
                         }
 
-                        Rectangle {
+                        StyledImage {
+                            id: clefBeforeImage
                             Layout.row: 0
                             Layout.column: 1
                             Layout.rowSpan: 2
                             Layout.alignment: Qt.AlignRight
 
-                            id: clefBeforeDisplay
-                            width: clefBeforeImage.width + 25
-                            height: clefBeforeImage.height + 20
-
-                            color: "#ffffff"
-                            border.color: ui.theme.strokeColor
-                            radius: ui.theme.borderWidth
-
-                            Image {
-                                id: clefBeforeImage
-
-                                width: 136
-                                height: 68
-                                anchors.centerIn: parent
-                                mipmap: true
-
-                                fillMode: Image.PreserveAspectFit
-                                source: clefBeforeRepeatsButton.checked ? "courtesyImages/clef-before-true.png" : "courtesyImages/clef-before-false.png"
-                            }
+                            forceHeight: 64
+                            horizontalPadding: 0
+                            verticalPadding: 0
+                            source: clefBeforeRepeatsButton.checked ? "courtesyImages/clefs-before_repeat.png" : "courtesyImages/clefs-after_repeat.png"
                         }
 
                         CheckBox {
@@ -640,36 +628,22 @@ StyledFlickable {
                             onClicked: pageModel.changesBetweenEndStartRepeat.value = !pageModel.changesBetweenEndStartRepeat.value
                         }
 
-                        Rectangle {
+                        StyledImage {
+                            id: endStartRepeatImage
                             Layout.row: 2
                             Layout.column: 1
                             Layout.rowSpan: 2
                             Layout.alignment: Qt.AlignRight
 
-                            id: endStartRepeatDisplay
-                            width: endStartRepeatImage.width + 25
-                            height: endStartRepeatImage.height + 20
+                            forceHeight: 64
+                            horizontalPadding: 0
+                            verticalPadding: 0
 
-                            color: "#ffffff"
-                            border.color: ui.theme.strokeColor
-                            radius: ui.theme.borderWidth
-
-                            Image {
-                                id: endStartRepeatImage
-
-                                width: 136
-                                height: 68
-                                anchors.centerIn: parent
-                                mipmap: true
-
-                                fillMode: Image.PreserveAspectFit
-                                source: clefBeforeRepeatsButton.checked ? (betweenRepeatsCheckbox.checked ? "courtesyImages/end-start-repeats-4"
-                                                                                                          : "courtesyImages/end-start-repeats-3")
-                                                                        : (betweenRepeatsCheckbox.checked ? "courtesyImages/end-start-repeats-1"
-                                                                                                          : "courtesyImages/end-start-repeats-2")
-                            }
+                            source: clefBeforeRepeatsButton.checked ? (betweenRepeatsCheckbox.checked ? "courtesyImages/clefs-before_repeat-allow_changes"
+                                                                                                      : "courtesyImages/clefs-before_repeat-disallow_changes")
+                                                                    : (betweenRepeatsCheckbox.checked ? "courtesyImages/clefs-after_repeat-allow_changes"
+                                                                                                      : "courtesyImages/clefs-after_repeat-disallow_changes")
                         }
-
                     }
                 }
 
@@ -686,9 +660,9 @@ StyledFlickable {
                             showStyleItem: pageModel.showCourtesiesRepeats
                             parensStyleItem: pageModel.useParensRepeatCourtesies
 
-                            imageON: "courtesyImages/repeat-2"
-                            imageOFF: "courtesyImages/repeat-1"
-                            imageParens: "courtesyImages/repeat-3"
+                            imageON: "courtesyImages/repeats-on"
+                            imageOFF: "courtesyImages/repeats-off"
+                            imageParens: "courtesyImages/repeats-on-parens"
 
                             text: qsTrc("notation/editstyle/timesignatures", "Show at repeats")
                         }
@@ -697,9 +671,9 @@ StyledFlickable {
                             showStyleItem: pageModel.showCourtesiesOtherJumps
                             parensStyleItem: pageModel.useParensOtherJumpCourtesies
 
-                            imageON: "courtesyImages/other-jump-2"
-                            imageOFF: "courtesyImages/other-jump-1"
-                            imageParens: "courtesyImages/other-jump-3"
+                            imageON: "courtesyImages/other_jumps-on"
+                            imageOFF: "courtesyImages/other_jumps-off"
+                            imageParens: "courtesyImages/other_jumps-on-parens"
 
                             text: qsTrc("notation/editstyle/timesignatures", "Show at all other jumps")
                         }
@@ -708,22 +682,22 @@ StyledFlickable {
                             showStyleItem: pageModel.showCourtesiesAfterCancellingRepeats
                             parensStyleItem: pageModel.useParensRepeatCourtesiesAfterCancelling
 
-                            imageON: "courtesyImages/repeat-cancel-2"
-                            imageOFF: "courtesyImages/repeat-cancel-1"
-                            imageParens: "courtesyImages/repeat-cancel-3"
+                            imageON: "courtesyImages/cancel_repeat-on"
+                            imageOFF: "courtesyImages/cancel_repeat-off"
+                            imageParens: "courtesyImages/cancel_repeat-on-parens"
 
-                            text: qsTrc("notation/editstyle/timesignatures", "Show when cancelling a change before repeats")
+                            text: qsTrc("notation/editstyle/timesignatures", "Show when cancelling a courtesy before repeats")
                         }
 
                         CourtesyShowAndParenToggle {
                             showStyleItem: pageModel.showCourtesiesAfterCancellingOtherJumps
                             parensStyleItem: pageModel.useParensOtherJumpCourtesiesAfterCancelling
 
-                            imageON: "courtesyImages/other-jump-cancel-2"
-                            imageOFF: "courtesyImages/other-jump-cancel-1"
-                            imageParens: "courtesyImages/other-jump-cancel-3"
+                            imageON: "courtesyImages/cancel_other-on"
+                            imageOFF: "courtesyImages/cancel_other-off"
+                            imageParens: "courtesyImages/cancel_other-on-parens"
 
-                            text: qsTrc("notation/editstyle/timesignatures", "Show when cancelling a change before all other jumps")
+                            text: qsTrc("notation/editstyle/timesignatures", "Show when cancelling a courtesy before all other jumps")
                         }
 
                         CheckBox {

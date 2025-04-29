@@ -46,10 +46,14 @@ ColumnLayout {
 
     spacing: 0
 
-    onImplicitHeightChanged: {
+    function resizePanelToContentHeight() {
         if (contentColumn.completed) {
-            resizeRequested(width, implicitHeight)
+            root.resizeRequested(width, implicitHeight)
         }
+    }
+
+    onImplicitHeightChanged: {
+        root.resizePanelToContentHeight()
     }
 
     QtObject {

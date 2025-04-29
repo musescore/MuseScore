@@ -36,6 +36,10 @@ void NotationPlaybackStub::init()
 {
 }
 
+void NotationPlaybackStub::reload()
+{
+}
+
 const engraving::InstrumentTrackId& NotationPlaybackStub::metronomeTrackId() const
 {
     static const engraving::InstrumentTrackId dummy;
@@ -63,7 +67,11 @@ void NotationPlaybackStub::triggerEventsForItems(const std::vector<const Engravi
 {
 }
 
-void NotationPlaybackStub::triggerMetronome(int)
+void NotationPlaybackStub::triggerMetronome(muse::midi::tick_t)
+{
+}
+
+void NotationPlaybackStub::triggerCountIn(muse::midi::tick_t, muse::secs_t&)
 {
 }
 

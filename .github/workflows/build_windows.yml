@@ -132,6 +132,9 @@ jobs:
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
+    - name: Register msvc problem matcher
+      run: echo "::add-matcher::.github/problem_matchers/msvc.json"
+
     - name: Setup environment
       run: |
         buildscripts\ci\windows\setup.bat
@@ -147,12 +150,12 @@ jobs:
         POSTPROCESS_LAUNCHER: "python3 -X utf8"
       run: |
         bash ./buildscripts/ci/translation/run_lupdate.sh
-    - name: Update .ts files
+    - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
-      shell: bash
-      run: |
-        bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s windows
-        bash ./buildscripts/ci/translation/tx_pull.sh
+      uses: cbjeukendrup/cli-action@windows
+      with:
+        token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+        args: "pull -f"
     - name: Build
       shell: cmd
       run: |
@@ -268,12 +271,12 @@ jobs:
         POSTPROCESS_LAUNCHER: "python3 -X utf8"
       run: |
         bash ./buildscripts/ci/translation/run_lupdate.sh
-    - name: Update .ts files
+    - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
-      shell: bash
-      run: |
-        bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s windows
-        bash ./buildscripts/ci/translation/tx_pull.sh
+      uses: cbjeukendrup/cli-action@windows
+      with:
+        token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+        args: "pull -f"
     - name: Build
       shell: cmd
       run: |

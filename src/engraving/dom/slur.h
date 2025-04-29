@@ -46,7 +46,6 @@ public:
     SlurSegment(const SlurSegment& ss);
 
     SlurSegment* clone() const override { return new SlurSegment(*this); }
-    int subtype() const override { return static_cast<int>(spanner()->type()); }
 
     bool isEdited() const;
     bool isEndPointsEdited() const;
@@ -88,7 +87,7 @@ public:
     };
 
     /// temporary HACK for correct guitar pro import
-    enum ConnectedElement {
+    enum ConnectedElement : unsigned char {
         NONE,
         GLISSANDO,
         HAMMER_ON
@@ -123,12 +122,17 @@ public:
 
     void undoSetIncoming(bool incoming);
     void undoSetOutgoing(bool outgoing);
+    void setIncoming(bool incoming);
+    void setOutgoing(bool outgoing);
     bool isIncoming() const;
     bool isOutgoing() const;
 private:
     M_PROPERTY2(int, sourceStemArrangement, setSourceStemArrangement, -1)
     M_PROPERTY2(ConnectedElement, connectedElement, setConnectedElement, ConnectedElement::NONE)
     M_PROPERTY2(PartialSpannerDirection, partialSpannerDirection, setPartialSpannerDirection, PartialSpannerDirection::NONE)
+
+    PartialSpannerDirection calcIncomingDirection(bool incoming);
+    PartialSpannerDirection calcOutgoingDirection(bool outgoing);
 
     friend class Factory;
     Slur(EngravingItem* parent);

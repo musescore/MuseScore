@@ -35,6 +35,7 @@
 #include "select.h"
 #include "staff.h"
 #include "stem.h"
+#include "tuplet.h"
 
 using namespace mu;
 
@@ -138,11 +139,53 @@ void InputState::setDots(int n)
 
 void InputState::setVoice(voice_idx_t v)
 {
-    if (v >= VOICES || m_track == muse::nidx) {
+    const Score* score = m_segment ? m_segment->score() : nullptr;
+
+    if (!score || v >= VOICES || v == voice() || m_track == muse::nidx) {
         return;
     }
 
-    setTrack((m_track / VOICES) * VOICES + v);
+    const track_idx_t newTrack = (m_track / VOICES) * VOICES + v;
+    Segment* currSeg = segment();
+    if (!currSeg || currSeg->cr(newTrack)) {
+        setTrack(newTrack);
+        return;
+    }
+
+    // If we haven't returned early - it means that currSeg doesn't have a valid ChordRest for the desired voice. If
+    // tuplets are involved, we may need to move the input position backwards to the last valid ChordRest...
+    Segment* candidateSeg = currSeg;
+
+    // First thing to check - is currSeg part of a tuplet? If so, move candidateSeg to the start of that tuplet...
+    const ChordRest* currCR = currSeg->cr(track());
+    const Tuplet* currTuplet = currCR ? currCR->topTuplet() : nullptr;
+    if (currTuplet) {
+        candidateSeg = score->tick2segment(currTuplet->tick());
+        IF_ASSERT_FAILED(candidateSeg) {
+            setSegment(currSeg->measure()->first());
+            setTrack(newTrack);
+            return;
+        }
+    }
+
+    // If candidateSeg still doesn't have a valid ChordRest for the desired voice, we'll now check whether it is
+    // within the range of a tuplet at our desired voice. If so, move candidateSeg to the start of that tuplet...
+    const ChordRest* nextCR = candidateSeg->nextChordRest(newTrack, /*backwards*/ true, /*stopAtMeasureBoundary*/ true);
+    const Tuplet* nextTuplet = nextCR ? nextCR->topTuplet() : nullptr;
+    if (!candidateSeg->cr(newTrack) && nextTuplet) {
+        candidateSeg = score->tick2segment(nextTuplet->tick());
+        IF_ASSERT_FAILED(candidateSeg) {
+            setSegment(currSeg->measure()->first());
+            setTrack(newTrack);
+            return;
+        }
+    }
+
+    if (candidateSeg != currSeg) {
+        setSegment(candidateSeg);
+    }
+
+    setTrack(newTrack);
 }
 
 //---------------------------------------------------------

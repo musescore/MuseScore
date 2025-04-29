@@ -151,7 +151,7 @@ const std::vector<Part*>& DomAccessor::parts() const
     return score()->parts();
 }
 
-int DomAccessor::visiblePartCount() const
+size_t DomAccessor::visiblePartCount() const
 {
     IF_ASSERT_FAILED(score()) {
         return 0;
@@ -234,6 +234,14 @@ size_t DomAccessor::ntracks() const
         return 0;
     }
     return score()->ntracks();
+}
+
+size_t DomAccessor::nmeasures() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return 0;
+    }
+    return score()->nmeasures();
 }
 
 const Measure* DomAccessor::tick2measure(const Fraction& tick) const

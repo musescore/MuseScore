@@ -347,6 +347,10 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         ts = textStyle(ss);
     }
     for (const auto& i : *ts) {
+        if (ctx.shouldSkipProperty(i.pid)) {
+            continue;
+        }
+
         PropertyValue value;
         if (i.sid == Sid::NOSTYLE) {
             break;
@@ -2343,7 +2347,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
             case SymId::fermataLongBelow:
             case SymId::fermataVeryLongAbove:
             case SymId::fermataVeryLongBelow: {
-                Fermata* fe = Factory::createFermata(ctx.dummy());
+                Fermata* fe = Factory::createFermata(ctx.dummy()->segment());
                 fe->setSymIdAndTimeStretch(sym);
                 el = fe;
             } break;
@@ -2381,7 +2385,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, Re
     }
     // Special case for "no type" = ufermata, with missing subtype tag
     if (!el) {
-        Fermata* f = Factory::createFermata(ctx.dummy());
+        Fermata* f = Factory::createFermata(ctx.dummy()->segment());
         f->setSymIdAndTimeStretch(sym);
         el = f;
     }
@@ -3419,7 +3423,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
     return true;
 }
 
-Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+Ret Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     ReadContext ctx(score);
     if (out) {
@@ -3444,7 +3448,10 @@ Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             score->setMscoreRevision(e.readInt(nullptr, 16));
         } else if (tag == "Score") {
             if (!readScore206(score, e, ctx)) {
-                return Err::FileBadFormat;
+                if (e.error() == muse::XmlStreamReader::CustomError) {
+                    return make_ret(Err::FileCriticallyCorrupted, e.errorString());
+                }
+                return make_ret(Err::FileBadFormat, e.errorString());
             }
 
             if (ctx.overrideSpatium() && out) {
@@ -3504,7 +3511,7 @@ Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 
     compat::CompatUtils::doCompatibilityConversions(score->masterScore());
 
-    return Err::NoError;
+    return make_ok();
 }
 
 bool Read206::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)

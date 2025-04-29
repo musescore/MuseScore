@@ -8,7 +8,6 @@
     <showUnprintable>1</showUnprintable>
     <showFrames>1</showFrames>
     <showMargins>0</showMargins>
-    <open>1</open>
     <metaTag name="arranger"></metaTag>
     <metaTag name="audioComUrl"></metaTag>
     <metaTag name="composer">Composer / arranger</metaTag>
@@ -112,9 +111,6 @@
         </VBox>
       <Measure>
         <voice>
-          <KeySig>
-            <concertKey>0</concertKey>
-            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>

@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
+#include "languages/ilanguagesconfiguration.h"
 #include "itoursprovider.h"
 #include "itoursconfiguration.h"
 
@@ -37,12 +38,15 @@ class ToursService : public IToursService, public Injectable, public async::Asyn
     Inject<IInteractive> interactive = { this };
     Inject<IToursProvider> toursProvider = { this };
     Inject<IToursConfiguration> toursConfiguration = { this };
+    Inject<languages::ILanguagesConfiguration> languagesConfiguration = { this };
 
 public:
     ToursService(const muse::modularity::ContextPtr& ctx)
         : Injectable(ctx) {}
 
     void init();
+
+    void registerTour(const String& eventCode, const Tour& tour) override;
 
     void onEvent(const String& eventCode) override;
 

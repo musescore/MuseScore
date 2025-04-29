@@ -1312,194 +1312,170 @@
         <defaultClef>PERC</defaultClef>
         <barLineSpan>2</barLineSpan>
         </Staff>
-      <trackName>Large Drum Kit</trackName>
+      <trackName>Drum Kit</trackName>
       <Instrument id="drumset">
         <longName>Drum Kit</longName>
         <shortName>D. Kit</shortName>
-        <trackName>Large Drum Kit</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
-        <Drum pitch="35">
-          <head>normal</head>
-          <line>7</line>
-          <voice>1</voice>
-          <name>Acoustic Bass Drum</name>
-          <stem>2</stem>
+          <Drum pitch="35">
+            <head>normal</head>
+            <line>8</line>
+            <voice>1</voice>
+            <name>Bass Drum 2</name>
+            <stem>2</stem>
+            <panelRow>1</panelRow>
+            <panelColumn>0</panelColumn>
           </Drum>
-        <Drum pitch="36">
-          <head>normal</head>
-          <line>7</line>
-          <voice>1</voice>
-          <name>Bass Drum 1</name>
-          <stem>2</stem>
-          <shortcut>B</shortcut>
+          <Drum pitch="36">
+            <head>normal</head>
+            <line>7</line>
+            <voice>1</voice>
+            <name>Bass Drum</name>
+            <stem>2</stem>
+            <shortcut>A</shortcut>
+            <panelRow>0</panelRow>
+            <panelColumn>0</panelColumn>
           </Drum>
-        <Drum pitch="37">
-          <head>cross</head>
-          <line>3</line>
-          <voice>0</voice>
-          <name>Side Stick</name>
-          <stem>1</stem>
+          <Drum pitch="37">
+            <head>slashed1</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Cross-stick</name>
+            <stem>1</stem>
+            <panelRow>1</panelRow>
+            <panelColumn>1</panelColumn>
           </Drum>
-        <Drum pitch="38">
-          <head>normal</head>
-          <line>3</line>
-          <voice>0</voice>
-          <name>Acoustic Snare</name>
-          <stem>1</stem>
-          <shortcut>A</shortcut>
+          <Drum pitch="38">
+            <head>normal</head>
+            <line>3</line>
+            <voice>0</voice>
+            <name>Snare</name>
+            <stem>1</stem>
+            <shortcut>B</shortcut>
+            <panelRow>0</panelRow>
+            <panelColumn>1</panelColumn>
           </Drum>
-        <Drum pitch="40">
-          <head>normal</head>
-          <line>3</line>
-          <voice>0</voice>
-          <name>Electric Snare</name>
-          <stem>1</stem>
+          <Drum pitch="41">
+            <head>normal</head>
+            <line>5</line>
+            <voice>0</voice>
+            <name>Floor Tom</name>
+            <stem>1</stem>
+            <shortcut>H</shortcut>
+            <panelRow>0</panelRow>
+            <panelColumn>7</panelColumn>
           </Drum>
-        <Drum pitch="41">
-          <head>normal</head>
-          <line>5</line>
-          <voice>0</voice>
-          <name>Low Floor Tom</name>
-          <stem>1</stem>
+          <Drum pitch="42">
+            <head>cross</head>
+            <line>-1</line>
+            <voice>0</voice>
+            <name>Closed Hi-Hat</name>
+            <stem>1</stem>
+            <shortcut>C</shortcut>
+            <panelRow>0</panelRow>
+            <panelColumn>2</panelColumn>
           </Drum>
-        <Drum pitch="42">
-          <head>cross</head>
-          <line>-1</line>
-          <voice>0</voice>
-          <name>Closed Hi-Hat</name>
-          <stem>1</stem>
-          <shortcut>G</shortcut>
+          <Drum pitch="44">
+            <head>cross</head>
+            <line>9</line>
+            <voice>1</voice>
+            <name>Pedal Hi-Hat</name>
+            <stem>2</stem>
+            <shortcut>F</shortcut>
+            <panelRow>1</panelRow>
+            <panelColumn>3</panelColumn>
           </Drum>
-        <Drum pitch="43">
-          <head>normal</head>
-          <line>5</line>
-          <voice>1</voice>
-          <name>High Floor Tom</name>
-          <stem>2</stem>
+          <Drum pitch="46">
+            <head>xcircle</head>
+            <line>-1</line>
+            <voice>0</voice>
+            <name>Open Hi-Hat</name>
+            <stem>1</stem>
+            <shortcut>D</shortcut>
+            <panelRow>0</panelRow>
+            <panelColumn>3</panelColumn>
           </Drum>
-        <Drum pitch="44">
-          <head>cross</head>
-          <line>9</line>
-          <voice>1</voice>
-          <name>Pedal Hi-Hat</name>
-          <stem>2</stem>
-          <shortcut>F</shortcut>
+          <Drum pitch="47">
+            <head>normal</head>
+            <line>2</line>
+            <voice>0</voice>
+            <name>Low Tom</name>
+            <stem>1</stem>
+            <panelRow>1</panelRow>
+            <panelColumn>6</panelColumn>
           </Drum>
-        <Drum pitch="45">
-          <head>normal</head>
-          <line>2</line>
-          <voice>0</voice>
-          <name>Low Tom</name>
-          <stem>1</stem>
+          <Drum pitch="49">
+            <head>cross</head>
+            <line>-2</line>
+            <voice>0</voice>
+            <name>Crash Cymbal</name>
+            <stem>1</stem>
+            <shortcut>E</shortcut>
+            <panelRow>0</panelRow>
+            <panelColumn>4</panelColumn>
           </Drum>
-        <Drum pitch="46">
-          <head>cross</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Open Hi-Hat</name>
-          <stem>1</stem>
+          <Drum pitch="50">
+            <head>normal</head>
+            <line>1</line>
+            <voice>0</voice>
+            <name>High Tom</name>
+            <stem>1</stem>
+            <shortcut>G</shortcut>
+            <panelRow>0</panelRow>
+            <panelColumn>6</panelColumn>
           </Drum>
-        <Drum pitch="47">
-          <head>normal</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Low-Mid Tom</name>
-          <stem>1</stem>
+          <Drum pitch="51">
+            <head>cross</head>
+            <line>0</line>
+            <voice>0</voice>
+            <name>Ride Cymbal</name>
+            <stem>1</stem>
+            <shortcut>F</shortcut>
+            <panelRow>0</panelRow>
+            <panelColumn>5</panelColumn>
           </Drum>
-        <Drum pitch="48">
-          <head>normal</head>
-          <line>0</line>
-          <voice>0</voice>
-          <name>Hi-Mid Tom</name>
-          <stem>1</stem>
+          <Drum pitch="52">
+            <head>normal</head>
+            <noteheads>
+                  <quarter>noteheadHeavyXHat</quarter>
+                  <half>noteheadHeavyXHat</half>
+                  <whole>noteheadHeavyXHat</whole>
+                  <breve>noteheadHeavyXHat</breve>
+            </noteheads>
+            <line>-3</line>
+            <voice>0</voice>
+            <name>China Cymbal</name>
+            <stem>1</stem>
+            <panelRow>1</panelRow>
+            <panelColumn>7</panelColumn>
           </Drum>
-        <Drum pitch="49">
-          <head>cross</head>
-          <line>-2</line>
-          <voice>0</voice>
-          <name>Crash Cymbal 1</name>
-          <stem>1</stem>
-          <shortcut>C</shortcut>
+          <Drum pitch="53">
+            <head>diamond</head>
+            <line>0</line>
+            <voice>0</voice>
+            <name>Ride Bell</name>
+            <stem>1</stem>
+            <panelRow>1</panelRow>
+            <panelColumn>5</panelColumn>
           </Drum>
-        <Drum pitch="50">
-          <head>normal</head>
-          <line>0</line>
-          <voice>0</voice>
-          <name>High Tom</name>
-          <stem>1</stem>
-          <shortcut>E</shortcut>
+          <Drum pitch="55">
+            <head>cross</head>
+            <line>-4</line>
+            <voice>0</voice>
+            <name>Splash Cymbal</name>
+            <stem>1</stem>
+            <panelRow>1</panelRow>
+            <panelColumn>2</panelColumn>
           </Drum>
-        <Drum pitch="51">
-          <head>cross</head>
-          <line>0</line>
-          <voice>0</voice>
-          <name>Ride Cymbal 1</name>
-          <stem>1</stem>
-          <shortcut>D</shortcut>
-          </Drum>
-        <Drum pitch="52">
-          <head>cross</head>
-          <line>-3</line>
-          <voice>0</voice>
-          <name>Chinese Cymbal</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="53">
-          <head>diamond</head>
-          <line>0</line>
-          <voice>0</voice>
-          <name>Ride Bell</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="54">
-          <head>diamond</head>
-          <line>2</line>
-          <voice>0</voice>
-          <name>Tambourine</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="55">
-          <head>cross</head>
-          <line>-3</line>
-          <voice>0</voice>
-          <name>Splash Cymbal</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="56">
-          <head>triangle-down</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Cowbell</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="57">
-          <head>cross</head>
-          <line>-3</line>
-          <voice>0</voice>
-          <name>Crash Cymbal 2</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="59">
-          <head>cross</head>
-          <line>2</line>
-          <voice>0</voice>
-          <name>Ride Cymbal 2</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="63">
-          <head>cross</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Open Hi Conga</name>
-          <stem>1</stem>
-          </Drum>
-        <Drum pitch="64">
-          <head>cross</head>
-          <line>6</line>
-          <voice>0</voice>
-          <name>Low Conga</name>
-          <stem>1</stem>
+          <Drum pitch="57">
+            <head>cross</head>
+            <line>-3</line>
+            <voice>0</voice>
+            <name>Crash Cymbal 2</name>
+            <stem>1</stem>
+            <panelRow>1</panelRow>
+            <panelColumn>4</panelColumn>
           </Drum>
         <clef>PERC</clef>
         <Articulation>
@@ -1564,161 +1540,405 @@
         <longName>Auxiliary Percussion 1</longName>
         <shortName>Aux. 1</shortName>
         <trackName>Percussion</trackName>
-        <instrumentId>drum.group.set</instrumentId>
+        <instrumentId>drum.group</instrumentId>
         <useDrumset>1</useDrumset>
-        <Drum pitch="27">
-          <head>cross</head>
-          <line>-1</line>
-          <voice>0</voice>
-          <name>Closed Hi-Hat</name>
-          <stem>1</stem>
-          <shortcut>G</shortcut>
+          <Drum pitch="27">
+        <head>cross</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Closed Hi-Hat</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>5</panelColumn>
           </Drum>
-        <Drum pitch="28">
-          <head>cross</head>
-          <line>9</line>
-          <voice>1</voice>
-          <name>Pedal Hi-Hat</name>
-          <stem>2</stem>
-          <shortcut>F</shortcut>
+          <Drum pitch="28">
+        <head>cross</head>
+        <line>9</line>
+        <voice>1</voice>
+        <name>Pedal Hi-Hat</name>
+        <stem>2</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>7</panelColumn>
           </Drum>
-        <Drum pitch="29">
-          <head>cross</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Open Hi-Hat</name>
-          <stem>1</stem>
-          <shortcut>E</shortcut>
+          <Drum pitch="29">
+        <head>xcircle</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Open Hi-Hat</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>6</panelColumn>
           </Drum>
-        <Drum pitch="30">
-          <head>cross</head>
-          <line>0</line>
-          <voice>0</voice>
-          <name>Ride</name>
-          <stem>1</stem>
+          <Drum pitch="30">
+        <head>cross</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Ride Cymbal</name>
+        <stem>1</stem>
+        <panelRow>5</panelRow>
+        <panelColumn>0</panelColumn>
           </Drum>
-        <Drum pitch="36">
-          <head>normal</head>
-          <line>7</line>
-          <voice>1</voice>
-          <name>Concert Bass Drum</name>
-          <stem>2</stem>
-          <shortcut>B</shortcut>
+          <Drum pitch="31">
+        <head>plus</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Stick Click</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>4</panelColumn>
           </Drum>
-        <Drum pitch="37">
-          <head>cross</head>
-          <line>3</line>
-          <voice>0</voice>
-          <name>Snare Side Stick</name>
-          <stem>1</stem>
+          <Drum pitch="36">
+        <head>normal</head>
+        <line>7</line>
+        <voice>1</voice>
+        <name>Bass Drum</name>
+        <stem>2</stem>
+        <shortcut>A</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>0</panelColumn>
           </Drum>
-        <Drum pitch="38">
-          <head>normal</head>
-          <line>3</line>
-          <voice>0</voice>
-          <name>Concert Snare Drum</name>
-          <stem>1</stem>
-          <shortcut>A</shortcut>
+          <Drum pitch="37">
+        <head>cross</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Snare Rim</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>1</panelColumn>
           </Drum>
-        <Drum pitch="39">
-          <head>normal</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Castanets</name>
-          <stem>1</stem>
+          <Drum pitch="38">
+        <head>normal</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Snare</name>
+        <stem>1</stem>
+        <shortcut>B</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>1</panelColumn>
           </Drum>
-        <Drum pitch="54">
-          <head>diamond</head>
-          <line>2</line>
-          <voice>0</voice>
-          <name>Tambourine</name>
-          <stem>1</stem>
+          <Drum pitch="54">
+        <head>diamond</head>
+        <line>6</line>
+        <voice>0</voice>
+        <name>Tambourine</name>
+        <stem>1</stem>
+        <shortcut>G</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>6</panelColumn>
           </Drum>
-        <Drum pitch="55">
-          <head>cross</head>
-          <line>-3</line>
-          <voice>0</voice>
-          <name>Splash Cymbal</name>
-          <stem>1</stem>
+          <Drum pitch="55">
+        <head>cross</head>
+        <line>-4</line>
+        <voice>0</voice>
+        <name>Splash Cymbal</name>
+        <stem>1</stem>
+        <panelRow>5</panelRow>
+        <panelColumn>1</panelColumn>
           </Drum>
-        <Drum pitch="56">
-          <head>triangle-down</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Cowbell</name>
-          <stem>1</stem>
+          <Drum pitch="56">
+        <head>triangle-down</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Cowbell</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>7</panelColumn>
           </Drum>
-        <Drum pitch="58">
-          <head>diamond</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Vibraslap</name>
-          <stem>1</stem>
+          <Drum pitch="57">
+        <head>cross</head>
+        <line>-2</line>
+        <voice>0</voice>
+        <name>Suspended Cymbal</name>
+        <stem>1</stem>
+        <shortcut>E</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>4</panelColumn>
           </Drum>
-        <Drum pitch="59">
-          <head>cross</head>
-          <line>-2</line>
-          <voice>0</voice>
-          <name>Concert Cymbal</name>
-          <stem>1</stem>
-          <shortcut>C</shortcut>
+          <Drum pitch="58">
+        <head>ti</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Vibraslap</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>3</panelColumn>
           </Drum>
-        <Drum pitch="62">
-          <head>cross</head>
-          <line>2</line>
-          <voice>0</voice>
-          <name>Mute High Conga </name>
-          <stem>1</stem>
+          <Drum pitch="59">
+        <head>cross</head>
+        <line>4</line>
+        <voice>0</voice>
+        <name>Hand Cymbals</name>
+        <stem>1</stem>
+        <shortcut>F</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>5</panelColumn>
           </Drum>
-        <Drum pitch="63">
-          <head>cross</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Open High Conga</name>
-          <stem>1</stem>
+          <Drum pitch="60">
+        <head>normal</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Hi Bongo</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>6</panelColumn>
           </Drum>
-        <Drum pitch="64">
-          <head>cross</head>
-          <line>6</line>
-          <voice>0</voice>
-          <name>Low Conga</name>
-          <stem>1</stem>
+          <Drum pitch="61"> 
+        <head>normal</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Lo Bongo</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>5</panelColumn>
           </Drum>
-        <Drum pitch="70">
-          <head>normal</head>
-          <line>2</line>
-          <voice>0</voice>
-          <name>Maracas</name>
-          <stem>1</stem>
+          <Drum pitch="62"> 
+        <head>normal</head>
+        <noteheads>
+          <quarter>noteheadXOrnate</quarter>
+          <half>noteheadXOrnate</half>
+          <whole>noteheadXOrnate</whole>
+          <breve>noteheadXOrnate</breve>
+        </noteheads>
+        <line>1</line>
+        <voice>0</voice>
+        <name>Mute Hi Conga</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>4</panelColumn>
           </Drum>
-        <Drum pitch="75">
-          <head>normal</head>
-          <line>0</line>
-          <voice>0</voice>
-          <name>Claves</name>
-          <stem>1</stem>
+          <Drum pitch="63"> 
+        <head>normal</head>
+        <line>1</line>
+        <voice>0</voice>
+        <name>Hi Conga</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>3</panelColumn>
           </Drum>
-        <Drum pitch="81">
-          <head>diamond</head>
-          <line>0</line>
-          <voice>0</voice>
-          <name>Triangle</name>
-          <stem>1</stem>
-          <shortcut>D</shortcut>
+          <Drum pitch="64"> 
+        <head>normal</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Lo Conga</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>2</panelColumn>
           </Drum>
-        <Drum pitch="82">
-          <head>normal</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Shaker</name>
-          <stem>1</stem>
+          <Drum pitch="65"> 
+        <head>normal</head>
+        <line>5</line>
+        <voice>0</voice>
+        <name>Hi Timbale</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>1</panelColumn>
           </Drum>
-        <Drum pitch="84">
-          <head>cross</head>
-          <line>2</line>
-          <voice>0</voice>
-          <name>Mark Tree</name>
-          <stem>1</stem>
+          <Drum pitch="66"> 
+        <head>normal</head>
+        <line>7</line>
+        <voice>0</voice>
+        <name>Lo Timbale</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>0</panelColumn>
+          </Drum>
+          <Drum pitch="67"> 
+        <head>triangle-down</head>
+        <line>-2</line>
+        <voice>0</voice>
+        <name>Hi Agogô</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>7</panelColumn>
+          </Drum>
+          <Drum pitch="68"> 
+        <head>triangle-down</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Lo Agogô</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>6</panelColumn>
+          </Drum>
+          <Drum pitch="69"> 
+        <head>diamond</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Cabasa</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>6</panelColumn>
+          </Drum>
+          <Drum pitch="70"> 
+        <head>diamond</head>
+        <line>4</line>
+        <voice>0</voice>
+        <name>Maracas</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>5</panelColumn>
+          </Drum>
+          <Drum pitch="71"> 
+        <head>ti</head>
+        <line>-3</line>
+        <voice>0</voice>
+        <name>Long Whistle</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>2</panelColumn>
+          </Drum>
+          <Drum pitch="72"> 
+        <head>cross</head>
+        <line>-3</line>
+        <voice>0</voice>
+        <name>Short Whistle</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>3</panelColumn>
+          </Drum>
+          <Drum pitch="73"> 
+        <head>cross</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Short Güiro</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>5</panelColumn>
+          </Drum>
+          <Drum pitch="74"> 
+        <head>slashed1</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Long Güiro</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>4</panelColumn>
+          </Drum>
+          <Drum pitch="75"> 
+        <head>la</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Claves</name>
+        <stem>1</stem>
+        <shortcut>H</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>7</panelColumn>
+          </Drum>
+          <Drum pitch="76"> 
+        <head>la</head>
+        <line>5</line>
+        <voice>0</voice>
+        <name>Hi Woodblock</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>3</panelColumn>
+          </Drum>
+          <Drum pitch="77"> 
+        <head>la</head>
+        <line>7</line>
+        <voice>0</voice>
+        <name>Lo Woodblock</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>2</panelColumn>
+          </Drum>
+          <Drum pitch="78"> 
+        <head>cross</head>
+        <line>8</line>
+        <voice>0</voice>
+        <name>Mute Cuica</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>1</panelColumn>
+          </Drum>
+          <Drum pitch="79"> 
+        <head>slashed2</head>
+        <line>8</line>
+        <voice>0</voice>
+        <name>Open Cuica</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>0</panelColumn>
+          </Drum>
+          <Drum pitch="80"> 
+        <head>cross</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Mute Triangle</name>
+        <stem>1</stem>
+        <shortcut>D</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>3</panelColumn>
+          </Drum>
+          <Drum pitch="81"> 
+        <head>triangle-up</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Triangle</name>
+        <stem>1</stem>
+        <shortcut>C</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>2</panelColumn>
+          </Drum>
+          <Drum pitch="82"> 
+        <head>diamond</head>
+        <line>5</line>
+        <voice>0</voice>
+        <name>Shaker</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>4</panelColumn>
+          </Drum>
+          <Drum pitch="83"> 
+        <head>triangle-down</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Sleigh Bells</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>2</panelColumn>
+          </Drum>
+          <Drum pitch="84"> 
+        <head>ti</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Mark Tree</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>0</panelColumn>
+          </Drum>
+          <Drum pitch="85"> 
+        <head>la</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Castanets</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>7</panelColumn>
+          </Drum>
+          <Drum pitch="86"> 
+        <head>normal</head>
+        <noteheads>
+          <quarter>noteheadSlashX</quarter>
+          <half>noteheadSlashX</half>
+          <whole>noteheadSlashX</whole>
+          <breve>noteheadSlashX</breve>
+        </noteheads>
+        <line>4</line>
+        <voice>0</voice>
+        <name>Mute Surdo</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>1</panelColumn>
+          </Drum>
+          <Drum pitch="87"> 
+        <head>slash</head>
+        <line>4</line>
+        <voice>0</voice>
+        <name>Surdo</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>0</panelColumn>
           </Drum>
         <clef>PERC</clef>
         <Articulation>
@@ -1782,161 +2002,405 @@
         <longName>Auxiliary Percussion 2</longName>
         <shortName>Aux. 2</shortName>
         <trackName>Percussion</trackName>
-        <instrumentId>drum.group.set</instrumentId>
+        <instrumentId>drum.group</instrumentId>
         <useDrumset>1</useDrumset>
-        <Drum pitch="27">
-          <head>cross</head>
-          <line>-1</line>
-          <voice>0</voice>
-          <name>Closed Hi-Hat</name>
-          <stem>1</stem>
-          <shortcut>G</shortcut>
+            <Drum pitch="27">
+        <head>cross</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Closed Hi-Hat</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>5</panelColumn>
           </Drum>
-        <Drum pitch="28">
-          <head>cross</head>
-          <line>9</line>
-          <voice>1</voice>
-          <name>Pedal Hi-Hat</name>
-          <stem>2</stem>
-          <shortcut>F</shortcut>
+          <Drum pitch="28">
+        <head>cross</head>
+        <line>9</line>
+        <voice>1</voice>
+        <name>Pedal Hi-Hat</name>
+        <stem>2</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>7</panelColumn>
           </Drum>
-        <Drum pitch="29">
-          <head>cross</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Open Hi-Hat</name>
-          <stem>1</stem>
-          <shortcut>E</shortcut>
+          <Drum pitch="29">
+        <head>xcircle</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Open Hi-Hat</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>6</panelColumn>
           </Drum>
-        <Drum pitch="30">
-          <head>cross</head>
-          <line>0</line>
-          <voice>0</voice>
-          <name>Ride</name>
-          <stem>1</stem>
+          <Drum pitch="30">
+        <head>cross</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Ride Cymbal</name>
+        <stem>1</stem>
+        <panelRow>5</panelRow>
+        <panelColumn>0</panelColumn>
           </Drum>
-        <Drum pitch="36">
-          <head>normal</head>
-          <line>7</line>
-          <voice>1</voice>
-          <name>Concert Bass Drum</name>
-          <stem>2</stem>
-          <shortcut>B</shortcut>
+          <Drum pitch="31">
+        <head>plus</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Stick Click</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>4</panelColumn>
           </Drum>
-        <Drum pitch="37">
-          <head>cross</head>
-          <line>3</line>
-          <voice>0</voice>
-          <name>Snare Side Stick</name>
-          <stem>1</stem>
+          <Drum pitch="36">
+        <head>normal</head>
+        <line>7</line>
+        <voice>1</voice>
+        <name>Bass Drum</name>
+        <stem>2</stem>
+        <shortcut>A</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>0</panelColumn>
           </Drum>
-        <Drum pitch="38">
-          <head>normal</head>
-          <line>3</line>
-          <voice>0</voice>
-          <name>Concert Snare Drum</name>
-          <stem>1</stem>
-          <shortcut>A</shortcut>
+          <Drum pitch="37">
+        <head>slashed1</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Snare Rim</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>1</panelColumn>
           </Drum>
-        <Drum pitch="39">
-          <head>normal</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Castanets</name>
-          <stem>1</stem>
+          <Drum pitch="38">
+        <head>normal</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Snare</name>
+        <stem>1</stem>
+        <shortcut>B</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>1</panelColumn>
           </Drum>
-        <Drum pitch="54">
-          <head>diamond</head>
-          <line>2</line>
-          <voice>0</voice>
-          <name>Tambourine</name>
-          <stem>1</stem>
+          <Drum pitch="54">
+        <head>diamond</head>
+        <line>6</line>
+        <voice>0</voice>
+        <name>Tambourine</name>
+        <stem>1</stem>
+        <shortcut>G</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>6</panelColumn>
           </Drum>
-        <Drum pitch="55">
-          <head>cross</head>
-          <line>-3</line>
-          <voice>0</voice>
-          <name>Splash Cymbal</name>
-          <stem>1</stem>
+          <Drum pitch="55">
+        <head>cross</head>
+        <line>-4</line>
+        <voice>0</voice>
+        <name>Splash Cymbal</name>
+        <stem>1</stem>
+        <panelRow>5</panelRow>
+        <panelColumn>1</panelColumn>
           </Drum>
-        <Drum pitch="56">
-          <head>triangle-down</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Cowbell</name>
-          <stem>1</stem>
+          <Drum pitch="56">
+        <head>triangle-down</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Cowbell</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>7</panelColumn>
           </Drum>
-        <Drum pitch="58">
-          <head>diamond</head>
-          <line>1</line>
-          <voice>0</voice>
-          <name>Vibraslap</name>
-          <stem>1</stem>
+          <Drum pitch="57">
+        <head>cross</head>
+        <line>-2</line>
+        <voice>0</voice>
+        <name>Suspended Cymbal</name>
+        <stem>1</stem>
+        <shortcut>E</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>4</panelColumn>
           </Drum>
-        <Drum pitch="59">
-          <head>cross</head>
-          <line>-2</line>
-          <voice>0</voice>
-          <name>Concert Cymbal</name>
-          <stem>1</stem>
-          <shortcut>C</shortcut>
+          <Drum pitch="58">
+        <head>ti</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Vibraslap</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>3</panelColumn>
           </Drum>
-        <Drum pitch="62">
-          <head>cross</head>
-          <line>2</line>
-          <voice>0</voice>
-          <name>Mute High Conga </name>
-          <stem>1</stem>
+          <Drum pitch="59">
+        <head>cross</head>
+        <line>4</line>
+        <voice>0</voice>
+        <name>Hand Cymbals</name>
+        <stem>1</stem>
+        <shortcut>F</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>5</panelColumn>
           </Drum>
-        <Drum pitch="63">
-          <head>cross</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Open High Conga</name>
-          <stem>1</stem>
+          <Drum pitch="60">
+        <head>normal</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Hi Bongo</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>6</panelColumn>
           </Drum>
-        <Drum pitch="64">
-          <head>cross</head>
-          <line>6</line>
-          <voice>0</voice>
-          <name>Low Conga</name>
-          <stem>1</stem>
+          <Drum pitch="61"> 
+        <head>normal</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Lo Bongo</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>5</panelColumn>
           </Drum>
-        <Drum pitch="70">
-          <head>normal</head>
-          <line>2</line>
-          <voice>0</voice>
-          <name>Maracas</name>
-          <stem>1</stem>
+          <Drum pitch="62"> 
+        <head>normal</head>
+        <noteheads>
+          <quarter>noteheadXOrnate</quarter>
+          <half>noteheadXOrnate</half>
+          <whole>noteheadXOrnate</whole>
+          <breve>noteheadXOrnate</breve>
+        </noteheads>
+        <line>1</line>
+        <voice>0</voice>
+        <name>Mute Hi Conga</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>4</panelColumn>
           </Drum>
-        <Drum pitch="75">
-          <head>normal</head>
-          <line>0</line>
-          <voice>0</voice>
-          <name>Claves</name>
-          <stem>1</stem>
+          <Drum pitch="63"> 
+        <head>normal</head>
+        <line>1</line>
+        <voice>0</voice>
+        <name>Hi Conga</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>3</panelColumn>
           </Drum>
-        <Drum pitch="81">
-          <head>diamond</head>
-          <line>0</line>
-          <voice>0</voice>
-          <name>Triangle</name>
-          <stem>1</stem>
-          <shortcut>D</shortcut>
+          <Drum pitch="64"> 
+        <head>normal</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Lo Conga</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>2</panelColumn>
           </Drum>
-        <Drum pitch="82">
-          <head>normal</head>
-          <line>4</line>
-          <voice>0</voice>
-          <name>Shaker</name>
-          <stem>1</stem>
+          <Drum pitch="65"> 
+        <head>normal</head>
+        <line>5</line>
+        <voice>0</voice>
+        <name>Hi Timbale</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>1</panelColumn>
           </Drum>
-        <Drum pitch="84">
-          <head>cross</head>
-          <line>2</line>
-          <voice>0</voice>
-          <name>Mark Tree</name>
-          <stem>1</stem>
+          <Drum pitch="66"> 
+        <head>normal</head>
+        <line>7</line>
+        <voice>0</voice>
+        <name>Lo Timbale</name>
+        <stem>1</stem>
+        <panelRow>2</panelRow>
+        <panelColumn>0</panelColumn>
+          </Drum>
+          <Drum pitch="67"> 
+        <head>triangle-down</head>
+        <line>-2</line>
+        <voice>0</voice>
+        <name>Hi Agogô</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>7</panelColumn>
+          </Drum>
+          <Drum pitch="68"> 
+        <head>triangle-down</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Lo Agogô</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>6</panelColumn>
+          </Drum>
+          <Drum pitch="69"> 
+        <head>diamond</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Cabasa</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>6</panelColumn>
+          </Drum>
+          <Drum pitch="70"> 
+        <head>diamond</head>
+        <line>4</line>
+        <voice>0</voice>
+        <name>Maracas</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>5</panelColumn>
+          </Drum>
+          <Drum pitch="71"> 
+        <head>ti</head>
+        <line>-3</line>
+        <voice>0</voice>
+        <name>Long Whistle</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>2</panelColumn>
+          </Drum>
+          <Drum pitch="72"> 
+        <head>cross</head>
+        <line>-3</line>
+        <voice>0</voice>
+        <name>Short Whistle</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>3</panelColumn>
+          </Drum>
+          <Drum pitch="73"> 
+        <head>cross</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Short Güiro</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>5</panelColumn>
+          </Drum>
+          <Drum pitch="74"> 
+        <head>slashed1</head>
+        <line>-1</line>
+        <voice>0</voice>
+        <name>Long Güiro</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>4</panelColumn>
+          </Drum>
+          <Drum pitch="75"> 
+        <head>la</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Claves</name>
+        <stem>1</stem>
+        <shortcut>H</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>7</panelColumn>
+          </Drum>
+          <Drum pitch="76"> 
+        <head>la</head>
+        <line>5</line>
+        <voice>0</voice>
+        <name>Hi Woodblock</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>3</panelColumn>
+          </Drum>
+          <Drum pitch="77"> 
+        <head>la</head>
+        <line>7</line>
+        <voice>0</voice>
+        <name>Lo Woodblock</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>2</panelColumn>
+          </Drum>
+          <Drum pitch="78"> 
+        <head>cross</head>
+        <line>8</line>
+        <voice>0</voice>
+        <name>Mute Cuica</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>1</panelColumn>
+          </Drum>
+          <Drum pitch="79"> 
+        <head>slashed2</head>
+        <line>8</line>
+        <voice>0</voice>
+        <name>Open Cuica</name>
+        <stem>1</stem>
+        <panelRow>4</panelRow>
+        <panelColumn>0</panelColumn>
+          </Drum>
+          <Drum pitch="80"> 
+        <head>cross</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Mute Triangle</name>
+        <stem>1</stem>
+        <shortcut>D</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>3</panelColumn>
+          </Drum>
+          <Drum pitch="81"> 
+        <head>triangle-up</head>
+        <line>0</line>
+        <voice>0</voice>
+        <name>Triangle</name>
+        <stem>1</stem>
+        <shortcut>C</shortcut>
+        <panelRow>0</panelRow>
+        <panelColumn>2</panelColumn>
+          </Drum>
+          <Drum pitch="82"> 
+        <head>diamond</head>
+        <line>5</line>
+        <voice>0</voice>
+        <name>Shaker</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>4</panelColumn>
+          </Drum>
+          <Drum pitch="83"> 
+        <head>triangle-down</head>
+        <line>3</line>
+        <voice>0</voice>
+        <name>Sleigh Bells</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>2</panelColumn>
+          </Drum>
+          <Drum pitch="84"> 
+        <head>ti</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Mark Tree</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>0</panelColumn>
+          </Drum>
+          <Drum pitch="85"> 
+        <head>la</head>
+        <line>2</line>
+        <voice>0</voice>
+        <name>Castanets</name>
+        <stem>1</stem>
+        <panelRow>1</panelRow>
+        <panelColumn>7</panelColumn>
+          </Drum>
+          <Drum pitch="86"> 
+        <head>normal</head>
+        <noteheads>
+          <quarter>noteheadSlashX</quarter>
+          <half>noteheadSlashX</half>
+          <whole>noteheadSlashX</whole>
+          <breve>noteheadSlashX</breve>
+        </noteheads>
+        <line>4</line>
+        <voice>0</voice>
+        <name>Mute Surdo</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>1</panelColumn>
+          </Drum>
+          <Drum pitch="87"> 
+        <head>slash</head>
+        <line>4</line>
+        <voice>0</voice>
+        <name>Surdo</name>
+        <stem>1</stem>
+        <panelRow>3</panelRow>
+        <panelColumn>0</panelColumn>
           </Drum>
         <clef>PERC</clef>
         <Articulation>
@@ -2010,83 +2474,101 @@
           <line>1</line>
           <voice>0</voice>
           <name>Buzz</name>
-          <stem>1</stem>
           <shortcut>B</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
         </Drum>
-          <Drum pitch="50">
+        <Drum pitch="50">
           <head>normal</head>
           <line>1</line>
           <voice>0</voice>
           <name>Battery Snare</name>
-          <stem>1</stem>
           <shortcut>A</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
         </Drum>
         <Drum pitch="52">
-          <head>xcircle</head>
+          <head>normal</head>
+          <noteheads>
+          <quarter>noteheadXOrnate</quarter>
+          <half>noteheadXOrnate</half>
+          <whole>noteheadXOrnate</whole>
+          <breve>noteheadXOrnate</breve>
+          </noteheads>
           <line>1</line>
           <voice>0</voice>
           <name>Rim Shot</name>
-          <stem>1</stem>
           <shortcut>C</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>2</panelColumn>
         </Drum>
         <Drum pitch="53">
           <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Rim Click</name>
-          <stem>1</stem>
           <shortcut>D</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>3</panelColumn>
         </Drum>
         <Drum pitch="55">
           <head>plus</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Stick Click</name>
-          <stem>1</stem>
           <shortcut>E</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>6</panelColumn>
         </Drum>
         <Drum pitch="57">
           <head>slashed1</head>
           <line>1</line>
           <voice>0</voice>
           <name>Stick Shot</name>
-          <stem>1</stem>
           <shortcut>F</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>4</panelColumn>
         </Drum>
         <Drum pitch="59">
           <head>cross</head>
           <line>2</line>
           <voice>0</voice>
           <name>Shell</name>
-          <stem>1</stem>
           <shortcut>G</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>7</panelColumn>
         </Drum>
         <Drum pitch="60">
           <head>ti</head>
           <line>1</line>
           <voice>0</voice>
-          <name>Visual (BS,X-Over,Etc)</name>
-          <stem>1</stem>
+          <name>Backstick</name>
+          <panelRow>0</panelRow>
+          <panelColumn>5</panelColumn>
         </Drum>
         <Drum pitch="72">
           <head>cross</head>
           <line>-2</line>
           <voice>0</voice>
           <name>Ride Cymbal 1</name>
+          <panelRow>1</panelRow>
+          <panelColumn>2</panelColumn>
         </Drum>
         <Drum pitch="74">
-          <head>cross</head>
+          <head>xcircle</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Open Hi-Hat</name>
-          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>1</panelColumn>
         </Drum>
         <Drum pitch="76">
           <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Closed Hi-Hat</name>
-          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
         </Drum>
         <clef>PERC</clef>
         <Articulation>
@@ -2164,6 +2646,8 @@
           <name>Drum 4</name>
           <stem>1</stem>
           <shortcut>A</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
         </Drum>
         <Drum pitch="37">
           <head>cross</head>
@@ -2171,34 +2655,44 @@
           <voice>0</voice>
           <name>Drum 4 Rim</name>
           <stem>1</stem>
-         </Drum>
+          <panelRow>2</panelRow>
+          <panelColumn>0</panelColumn>
+        </Drum>
         <Drum pitch="38">
           <head>normal</head>
           <line>7</line>
           <voice>0</voice>
           <name>Drum 4 Buzz</name>
           <stem>1</stem>
-         </Drum>
-       <Drum pitch="39">
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
+        </Drum>
+        <Drum pitch="39">
           <head>plus</head>
           <line>7</line>
           <voice>0</voice>
           <name>Drum 4 Muted</name>
           <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>0</panelColumn>
         </Drum>
-       <Drum pitch="40">
+        <Drum pitch="40">
           <head>la</head>
           <line>7</line>
           <voice>0</voice>
           <name>Drum 4 Shell</name>
           <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>4</panelColumn>
         </Drum>
         <Drum pitch="43">
-          <head>diamond</head>
+          <head>plus</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>sticks</name>
-          <stem>2</stem>
+          <name>Stick Click</name>
+          <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>6</panelColumn>
         </Drum>
         <Drum pitch="48">
           <head>normal</head>
@@ -2207,136 +2701,174 @@
           <name>Drum 3</name>
           <stem>1</stem>
           <shortcut>B</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
         </Drum>
-          <Drum pitch="49">
+        <Drum pitch="49">
           <head>cross</head>
           <line>5</line>
           <voice>0</voice>
           <name>Drum 3 Rim</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>1</panelColumn>
         </Drum>
-          <Drum pitch="50">
+        <Drum pitch="50">
           <head>normal</head>
           <line>5</line>
           <voice>0</voice>
           <name>Drum 3 Buzz</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>1</panelColumn>
         </Drum>
-          <Drum pitch="51">
+        <Drum pitch="51">
           <head>plus</head>
           <line>5</line>
           <voice>0</voice>
           <name>Drum 3 Muted</name>
           <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>1</panelColumn>
         </Drum>
-          <Drum pitch="52">
+        <Drum pitch="52">
           <head>la</head>
           <line>5</line>
           <voice>0</voice>
           <name>Drum 3 Shell</name>
           <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>5</panelColumn>
         </Drum>
-          <Drum pitch="60">
+        <Drum pitch="60">
           <head>normal</head>
           <line>3</line>
           <voice>0</voice>
           <name>Drum 2</name>
           <stem>1</stem>
           <shortcut>C</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>2</panelColumn>
         </Drum>
-          <Drum pitch="61">
+        <Drum pitch="61">
           <head>cross</head>
           <line>3</line>
           <voice>0</voice>
           <name>Drum 2 Rim</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>2</panelColumn>
         </Drum>
-          <Drum pitch="62">
+        <Drum pitch="62">
           <head>normal</head>
           <line>3</line>
           <voice>0</voice>
           <name>Drum 2 Buzz</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>2</panelColumn>
         </Drum>
-          <Drum pitch="63">
+        <Drum pitch="63">
           <head>plus</head>
           <line>3</line>
           <voice>0</voice>
           <name>Drum 2 Muted</name>
           <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>2</panelColumn>
         </Drum>
-          <Drum pitch="72">
+        <Drum pitch="72">
           <head>normal</head>
           <line>1</line>
           <voice>0</voice>
           <name>Drum 1</name>
           <stem>1</stem>
           <shortcut>D</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>3</panelColumn>
         </Drum>
-          <Drum pitch="73">
+        <Drum pitch="73">
           <head>cross</head>
           <line>1</line>
           <voice>0</voice>
           <name>Drum 1 Rim</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>3</panelColumn>
         </Drum>
-          <Drum pitch="74">
+        <Drum pitch="74">
           <head>normal</head>
           <line>1</line>
           <voice>0</voice>
           <name>Drum 1 Buzz</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>3</panelColumn>
         </Drum>
-          <Drum pitch="75">
+        <Drum pitch="75">
           <head>plus</head>
           <line>1</line>
           <voice>0</voice>
           <name>Drum 1 Muted</name>
           <stem>1</stem>
+          <panelRow>3</panelRow>
+          <panelColumn>3</panelColumn>
         </Drum>
-          <Drum pitch="84">
+        <Drum pitch="84">
           <head>normal</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Spock 1</name>
           <stem>1</stem>
           <shortcut>E</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>4</panelColumn>
         </Drum>
-          <Drum pitch="85">
+        <Drum pitch="85">
           <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Spock 1 Rim</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>4</panelColumn>
         </Drum>
-          <Drum pitch="86">
+        <Drum pitch="86">
           <head>normal</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Spock 1 Buzz</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>4</panelColumn>
         </Drum>
-          <Drum pitch="96">
+        <Drum pitch="96">
           <head>normal</head>
           <line>-2</line>
           <voice>0</voice>
           <name>Spock 2</name>
           <stem>1</stem>
           <shortcut>F</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>5</panelColumn>
         </Drum>
-          <Drum pitch="97">
+        <Drum pitch="97">
           <head>cross</head>
           <line>-2</line>
           <voice>0</voice>
           <name>Spock 2 Rim</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>5</panelColumn>
         </Drum>
-          <Drum pitch="98">
+        <Drum pitch="98">
           <head>normal</head>
           <line>-2</line>
           <voice>0</voice>
           <name>Spock 2 Buzz</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>5</panelColumn>
         </Drum>
         <clef>PERC</clef>
         <Articulation>
@@ -2407,88 +2939,110 @@
         <trackName>Marching Bass Drums</trackName>
         <instrumentId>drum.bass-drum</instrumentId>
         <useDrumset>1</useDrumset>
-        <Drum pitch="37">
+          <Drum pitch="37">
           <head>normal</head>
           <line>7</line>
           <voice>0</voice>
-          <name>Bass Drum 5</name>
+          <name>Drum 5</name>
           <stem>1</stem>
           <shortcut>A</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
         </Drum>
         <Drum pitch="39">
           <head>cross</head>
           <line>7</line>
           <voice>0</voice>
-          <name>Bass Drum 5 Rim Knock</name>
+          <name>Drum 5 Rim</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
         </Drum>
         <Drum pitch="49">
           <head>normal</head>
           <line>5</line>
           <voice>0</voice>
-          <name>Bass Drum 4</name>
+          <name>Drum 4</name>
           <stem>1</stem>
           <shortcut>B</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
         </Drum>
         <Drum pitch="51">
           <head>cross</head>
           <line>5</line>
           <voice>0</voice>
-          <name>Bass Drum 4 Rim Knock</name>
+          <name>Drum 4 Rim</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>1</panelColumn>
         </Drum>
         <Drum pitch="61">
           <head>normal</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Bass Drum 3</name>
+          <name>Drum 3</name>
           <stem>1</stem>
           <shortcut>C</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>2</panelColumn>
         </Drum>
         <Drum pitch="63">
           <head>cross</head>
           <line>3</line>
           <voice>0</voice>
-          <name>Bass Drum 3 Rim Knock</name>
+          <name>Drum 3 Rim</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>2</panelColumn>
         </Drum>
         <Drum pitch="73">
           <head>normal</head>
           <line>1</line>
           <voice>0</voice>
-          <name>Bass Drum 2</name>
+          <name>Drum 2</name>
           <stem>1</stem>
           <shortcut>D</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>3</panelColumn>
         </Drum>
         <Drum pitch="75">
           <head>cross</head>
           <line>1</line>
           <voice>0</voice>
-          <name>Bass Drum 2 Rim Knock</name>
+          <name>Drum 2 Rim</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>3</panelColumn>
         </Drum>
         <Drum pitch="85">
           <head>normal</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Bass Drum 1</name>
+          <name>Drum 1</name>
           <stem>1</stem>
           <shortcut>E</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>4</panelColumn>
         </Drum>
         <Drum pitch="87">
           <head>cross</head>
           <line>-1</line>
           <voice>0</voice>
-          <name>Bass Drum 1 Rim Knock</name>
+          <name>Drum 1 Rim</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>4</panelColumn>
         </Drum>
         <Drum pitch="90">
           <head>slash</head>
           <line>4</line>
           <voice>0</voice>
-          <name>Simultaneous Hit</name>
+          <name>Unison</name>
           <stem>1</stem>
           <shortcut>F</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>5</panelColumn>
         </Drum>
         <clef>PERC</clef>
         <Articulation>
@@ -2561,101 +3115,120 @@
         <useDrumset>1</useDrumset>
         <Drum pitch="72">
           <head>normal</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Full Crash</name>
-          <stem>1</stem>
           <shortcut>A</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
         </Drum>
         <Drum pitch="74">
           <head>normal</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Half Crash</name>
-          <stem>1</stem>
           <shortcut>B</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
         </Drum>
         <Drum pitch="76">
           <head>cross</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
-          <name>High Hat</name>
-          <stem>1</stem>
+          <name>Hi-Hat</name>
           <shortcut>C</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>2</panelColumn>
         </Drum>
         <Drum pitch="77">
           <head>normal</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Sizzle</name>
-          <stem>1</stem>
           <shortcut>D</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>3</panelColumn>
         </Drum>
         <Drum pitch="79">
           <head>normal</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Crash-Choke</name>
-          <stem>1</stem>
           <shortcut>E</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>4</panelColumn>
         </Drum>
         <Drum pitch="81">
           <head>do</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
-          <name>Normal Tap</name>
-          <stem>1</stem>
+          <name>Tap</name>
           <shortcut>F</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>5</panelColumn>
         </Drum>
         <Drum pitch="83">
           <head>do</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
-          <name>Normal Tap-Choke</name>
-          <stem>1</stem>
+          <name>Tap-Choke</name>
           <shortcut>G</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>6</panelColumn>
         </Drum>
         <Drum pitch="84">
-          <head>do</head>
-          <line>0</line>
+          <head>diamond</head>
+          <line>1</line>
           <voice>0</voice>
           <name>Bell Tap</name>
-          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
         </Drum>
         <Drum pitch="86">
-          <head>do</head>
-          <line>0</line>
+          <head>diamond</head>
+          <line>1</line>
           <voice>0</voice>
           <name>Bell Tap-Choke</name>
-          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>1</panelColumn>
         </Drum>
         <Drum pitch="88">
-          <head>do</head>
-          <line>0</line>
+          <head>plus</head>
+          <line>1</line>
           <voice>0</voice>
           <name>Muted Tap</name>
-          <stem>1</stem>
+          <panelRow>0</panelRow>
+          <panelColumn>7</panelColumn>
         </Drum>
         <Drum pitch="89">
-          <head>cross</head>
-          <line>0</line>
+          <head>normal</head>
+          <noteheads>
+                <quarter>noteheadXOrnate</quarter>
+                <half>noteheadXOrnate</half>
+                <whole>noteheadXOrnate</whole>
+                <breve>noteheadXOrnate</breve>
+          </noteheads>
+          <line>1</line>
           <voice>0</voice>
           <name>Smash</name>
-          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>2</panelColumn>
         </Drum>
         <Drum pitch="91">
           <head>slashed1</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Zing</name>
-          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>3</panelColumn>
         </Drum>
         <Drum pitch="93">
           <head>normal</head>
-          <line>0</line>
+          <line>1</line>
           <voice>0</voice>
           <name>Roll</name>
-          <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>4</panelColumn>
         </Drum>
         <clef>PERC</clef>
         <Articulation>

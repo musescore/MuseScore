@@ -92,7 +92,7 @@ public:
     Q_INVOKABLE void forceFocusIn();
 
     Q_INVOKABLE void onContextMenuIsOpenChanged(bool open);
-    Q_INVOKABLE void onElementPopupIsOpenChanged(bool open);
+    Q_INVOKABLE void onElementPopupIsOpenChanged(const PopupModelType& popupType = PopupModelType::TYPE_UNDEFINED);
 
     Q_INVOKABLE void setPlaybackCursorItem(QQuickItem* cursor);
 
@@ -123,8 +123,10 @@ public:
     void hideContextMenu() override;
 
     void showElementPopup(const ElementType& elementType, const muse::RectF& elementRect) override;
-    void hideElementPopup() override;
+    void hideElementPopup(const ElementType& elementType = ElementType::INVALID) override;
     void toggleElementPopup(const ElementType& elementType, const muse::RectF& elementRect) override;
+
+    bool elementPopupIsOpen(const ElementType& elementType) const override;
 
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
@@ -283,7 +285,7 @@ private:
     bool m_autoScrollEnabled = true;
     QTimer m_enableAutoScrollTimer;
 
-    bool m_isPopupOpen = false;
+    PopupModelType m_currentElementPopupType = PopupModelType::TYPE_UNDEFINED;
     bool m_isContextMenuOpen = false;
 
     muse::RectF m_shadowNoteRect;

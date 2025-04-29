@@ -2031,7 +2031,7 @@ void TextBase::layoutFrame(LayoutData* ldata) const
     double _spatium = spatium();
     double w = (paddingWidth() + frameWidth() * .5f).val() * _spatium;
     ldata->frame.adjust(-w, -w, w, w);
-    w = frameWidth().val() * _spatium;
+    w = 0.5 * frameWidth().val() * _spatium;
     ldata->setBbox(ldata->frame.adjusted(-w, -w, w, w));
 }
 
@@ -2797,7 +2797,7 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
 
 bool TextBase::setProperty(Pid pid, const PropertyValue& v)
 {
-    if (m_textInvalid) {
+    if (m_textInvalid && ldata() && ldata()->isValid()) {
         genText();
     }
 
@@ -3252,10 +3252,17 @@ void TextBase::editDrag(EditData& ed)
     score()->dragPosition(canvasPos(), &si, &newSeg, spacingFactor, allowTimeAnchor());
     if (newSeg && (newSeg != segment || staffIdx() != si)) {
         undoMoveSegment(newSeg, newSeg->tick() - segment->tick());
-        double deltaX = newSeg->pageX() - segment->pageX();
-        PointF offsetShift = PointF(deltaX, 0.0);
+        PointF offsetShift = newSeg->pagePos() - segment->pagePos();
         shiftInitOffset(ed, offsetShift);
     }
+}
+
+void TextBase::endDrag(EditData& ed)
+{
+    if (m_cursor->editing()) {
+        return;
+    }
+    EngravingItem::endDrag(ed);
 }
 
 void TextBase::shiftInitOffset(EditData& ed, const PointF& offsetShift)
@@ -3280,6 +3287,11 @@ void TextBase::shiftInitOffset(EditData& ed, const PointF& offsetShift)
             }
         }
     }
+}
+
+bool TextBase::supportsNonTextualEdit() const
+{
+    return hasParentSegment() && !m_text.empty();
 }
 
 void TextBase::startEditNonTextual(EditData& ed)
@@ -3356,7 +3368,9 @@ bool TextBase::isNonTextualEditAllowed(EditData& ed) const
         Key_Down
     };
 
-    return muse::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key));
+    bool altKeyWithoutShift = (ed.modifiers & AltModifier) && !(ed.modifiers & ShiftModifier);
+
+    return muse::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key)) && !altKeyWithoutShift;
 }
 
 void TextBase::checkMeasureBoundariesAndMoveIfNeed()
@@ -3427,6 +3441,24 @@ bool TextBase::moveSegment(const EditData& ed)
 
 void TextBase::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
 {
+    // NOTE: when creating mmRests, we clone text elements from the underlying measure onto the
+    // mmRest measure. This creates lots of additional linked copies which are hard to manage
+    // and can result in duplicates. Here we need to remove copies on mmRests because they are invalidated
+    // when moving segments (and if needed will be recreated at the next layout). In future we need to
+    // change approach and *move* elements onto the mmRests, not clone them. [M.S.]
+    std::list<EngravingObject*> linkedElements = linkList();
+    for (EngravingObject* linkedElement : linkedElements) {
+        if (linkedElement == this) {
+            continue;
+        }
+        Segment* curParent = toSegment(linkedElement->parent());
+        bool isOnMMRest = curParent->parent() && toMeasure(curParent->parent())->isMMRest();
+        if (isOnMMRest) {
+            linkedElement->undoUnlink();
+            score()->undoRemoveElement(static_cast<EngravingItem*>(linkedElement));
+        }
+    }
+
     score()->undoChangeParent(this, newSeg, staffIdx());
     moveSnappedItems(newSeg, tickDiff);
 }
@@ -3449,7 +3481,7 @@ void TextBase::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
         if (itemBefore->isTextBase() && itemBefore->parent() != newSeg) {
             score()->undoChangeParent(itemBefore, newSeg, itemBefore->staffIdx());
             toTextBase(itemBefore)->moveSnappedItems(newSeg, tickDiff);
-        } else if (itemBefore->isTextLineSegment()) {
+        } else if (itemBefore->isTextLineBaseSegment()) {
             TextLineBase* textLine = ((TextLineBaseSegment*)itemBefore)->textLineBase();
             if (textLine->tick2() != newSeg->tick()) {
                 textLine->undoMoveEnd(tickDiff);
@@ -3805,12 +3837,18 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
         return;
     }
 
+    score()->undo(new ChangeTextProperties(m_cursor, id, v, ps));
+
+    if (m_cursor->editing()) {
+        // If we're in edit mode, changes will be propagated later when
+        // propagating the Pid::TEXT property, so don't propagate now.
+        return;
+    }
+
     const std::list<EngravingObject*> linkedObjects = linkListForPropertyPropagation();
     for (EngravingObject* linkedObject : linkedObjects) {
         TextBase* linkedText = toTextBase(linkedObject);
         if (linkedText == this) {
-            // can't use standard change property as Undo might set to "undefined"
-            score()->undo(new ChangeTextProperties(m_cursor, id, v, ps));
             continue;
         }
 

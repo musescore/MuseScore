@@ -68,7 +68,7 @@ void PercussionPanelPadListModel::init()
     addEmptyRow();
 }
 
-void PercussionPanelPadListModel::addEmptyRow()
+void PercussionPanelPadListModel::addEmptyRow(bool focusFirstInNewRow)
 {
     for (size_t i = 0; i < NUM_COLUMNS; ++i) {
         m_padModels.append(nullptr);
@@ -76,13 +76,25 @@ void PercussionPanelPadListModel::addEmptyRow()
     emit layoutChanged();
     emit numPadsChanged();
 
-    const int indexToFocus = numPads() - NUM_COLUMNS;
-    emit padFocusRequested(indexToFocus);
+    if (focusFirstInNewRow) {
+        const int indexToFocus = numPads() - NUM_COLUMNS;
+        emit padFocusRequested(indexToFocus);
+    }
 }
 
 void PercussionPanelPadListModel::deleteRow(int row)
 {
+    // Update the drumset...
+    const int startIdx = row * NUM_COLUMNS;
+    for (int i = startIdx; i < startIdx + NUM_COLUMNS; ++i) {
+        if (const PercussionPanelPadModel* model = m_padModels.at(i)) {
+            m_drumset->setDrum(model->pitch(), mu::engraving::DrumInstrument());
+        }
+    }
+
+    // Then remove the row...
     m_padModels.remove(row * NUM_COLUMNS, NUM_COLUMNS);
+
     emit layoutChanged();
     emit numPadsChanged();
 }
@@ -93,7 +105,8 @@ void PercussionPanelPadListModel::removeEmptyRows()
     const int lastRowIndex = numPads() / NUM_COLUMNS - 1;
     for (int i = lastRowIndex; i >= 0; --i) {
         const int numRows = numPads() / NUM_COLUMNS;
-        if (rowIsEmpty(i) && numRows > 1) { // never delete the first row
+        const bool rowIsEmpty = numEmptySlotsAtRow(i) == NUM_COLUMNS;
+        if (rowIsEmpty && numRows > 1) { // never delete the first row
             m_padModels.remove(i * NUM_COLUMNS, NUM_COLUMNS);
             rowsRemoved = true;
         }
@@ -102,11 +115,6 @@ void PercussionPanelPadListModel::removeEmptyRows()
         emit layoutChanged();
         emit numPadsChanged();
     }
-}
-
-bool PercussionPanelPadListModel::rowIsEmpty(int row) const
-{
-    return numEmptySlotsAtRow(row) == NUM_COLUMNS;
 }
 
 void PercussionPanelPadListModel::startPadSwap(int startIndex)
@@ -130,38 +138,9 @@ void PercussionPanelPadListModel::endPadSwap(int endIndex)
 
     movePad(m_padSwapStartIndex, endIndex);
 
-    if (!m_padModels.at(m_padSwapStartIndex) || !m_padModels.at(endIndex)) {
-        // Swapping with an empty pad - no extra options...
-        endSwap();
-        return;
-    }
-
-    // Give Qt a chance to process pending UI updates before opening the options dialog...
-    QMetaObject::invokeMethod(this, [this, endSwap, endIndex]() {
-        bool moveMidiNotesAndShortcuts = configuration()->percussionPanelMoveMidiNotesAndShortcuts();
-
-        if (configuration()->showPercussionPanelPadSwapDialog()) {
-            const muse::RetVal<muse::Val> rv = openPadSwapDialog();
-            if (!rv.ret) {
-                // Cancelled, revert the swap...
-                movePad(m_padSwapStartIndex, endIndex);
-                endSwap();
-                return;
-            }
-
-            const QVariantMap vals = rv.val.toQVariant().toMap();
-            moveMidiNotesAndShortcuts = vals["moveMidiNotesAndShortcuts"].toBool();
-        }
-
-        if (moveMidiNotesAndShortcuts) {
-            // MIDI notes and shortcuts were moved with the pad itself, so we can return...
-            endSwap();
-            return;
-        }
-
-        swapMidiNotesAndShortcuts(m_padSwapStartIndex, endIndex);
-        endSwap();
-    }, Qt::QueuedConnection);
+    //! NOTE: "Pad swap options" and the associated dialog were dropped from percussion panel MVP (version 4.5).
+    //! See PR #25810 when re-implementing...
+    endSwap();
 }
 
 void PercussionPanelPadListModel::setDrumset(const engraving::Drumset* drumset)
@@ -179,7 +158,7 @@ void PercussionPanelPadListModel::setDrumset(const engraving::Drumset* drumset)
     removeEmptyRows();
 }
 
-mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const engraving::Drumset* defaultDrumset) const
+mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const engraving::Drumset& defaultDrumset) const
 {
     //! NOTE: The idea of this method is take a "default" (template) drumset, find matching drums in the current drumset, and evaluate/return
     //! the default panel layout based on this information. The reason we can't simply revert to the default drumset in its entirety is that
@@ -192,20 +171,20 @@ mu::engraving::Drumset PercussionPanelPadListModel::constructDefaultLayout(const
     QList<int /*pitch*/> noTemplateFound;
 
     for (int pitch = 0; pitch < mu::engraving::DRUM_INSTRUMENTS; ++pitch) {
-        if (defaultDrumset->isValid(pitch) && !defaultLayout.isValid(pitch)) {
+        if (defaultDrumset.isValid(pitch) && !defaultLayout.isValid(pitch)) {
             // Pitch was deleted - restore it...
-            defaultLayout.drum(pitch) = defaultDrumset->drum(pitch);
+            defaultLayout.drum(pitch) = defaultDrumset.drum(pitch);
             continue;
         }
         //! NOTE: Pitch + drum name isn't exactly the most robust identifier, but this will probably change with the new percussion ID system
-        if (!defaultDrumset->isValid(pitch) || defaultLayout.name(pitch) != defaultDrumset->name(pitch)) {
+        if (!defaultDrumset.isValid(pitch) || defaultLayout.name(pitch) != defaultDrumset.name(pitch)) {
             // Drum is valid, but we can't find a template for it. Set the position chromatically later...
             noTemplateFound.emplaceBack(pitch);
             continue;
         }
 
-        const int templateRow = defaultDrumset->drum(pitch).panelRow;
-        const int templateColumn = defaultDrumset->drum(pitch).panelColumn;
+        const int templateRow = defaultDrumset.drum(pitch).panelRow;
+        const int templateColumn = defaultDrumset.drum(pitch).panelColumn;
 
         defaultLayout.drum(pitch).panelRow = templateRow;
         defaultLayout.drum(pitch).panelColumn = templateColumn;
@@ -351,7 +330,7 @@ PercussionPanelPadModel* PercussionPanelPadListModel::createPadModelForPitch(int
 
     PercussionPanelPadModel* model = new PercussionPanelPadModel(this);
 
-    model->setPadName(m_drumset->name(pitch));
+    model->setPadName(m_drumset->translatedName(pitch));
     model->setKeyboardShortcut(m_drumset->shortcut(pitch));
     model->setPitch(pitch);
 
@@ -451,23 +430,8 @@ int PercussionPanelPadListModel::getModelIndexForPitch(int pitch) const
 
 void PercussionPanelPadListModel::movePad(int fromIndex, int toIndex)
 {
-    const int fromRow = fromIndex / NUM_COLUMNS;
-    const int toRow = toIndex / NUM_COLUMNS;
-
-    // fromRow will become empty if there's only 1 "occupied" slot, toRow will no longer be empty if it was previously...
-    const bool fromRowEmptyChanged = numEmptySlotsAtRow(fromRow) == NUM_COLUMNS - 1;
-    const bool toRowEmptyChanged = rowIsEmpty(toRow);
-
     m_padModels.swapItemsAt(fromIndex, toIndex);
     emit layoutChanged();
-
-    if (fromRowEmptyChanged) {
-        emit rowIsEmptyChanged(fromRow, /*isEmpty*/ true);
-    }
-
-    if (toRowEmptyChanged) {
-        emit rowIsEmptyChanged(toRow, /*isEmpty*/ false);
-    }
 }
 
 int PercussionPanelPadListModel::numEmptySlotsAtRow(int row) const

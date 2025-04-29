@@ -22,11 +22,13 @@
 
 #include "exportmidi.h"
 
+#include "engraving/dom/chordrest.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/lyrics.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/sig.h"
 #include "engraving/dom/staff.h"
@@ -62,14 +64,12 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
 
         muse::ByteArray partName = staff->partName().toUtf8();
         size_t len = partName.size() + 1;
-        unsigned char* data = new unsigned char[len];
-
-        memcpy(data, partName.constData(), len);
+        std::vector<unsigned char> data(partName.constData(), partName.constData() + len);
 
         MidiEvent ev;
         ev.setType(ME_META);
         ev.setMetaType(META_TRACK_NAME);
-        ev.setEData(data);
+        ev.setEData(std::move(data));
         ev.setLen(static_cast<int>(len));
 
         track1.insert(0, ev);
@@ -91,10 +91,8 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
         auto es = sigmap->lower_bound(endTick);
 
         for (auto is = bs; is != es; ++is) {
-            SigEvent se   = is->second;
-            unsigned char* data = new unsigned char[4];
+            SigEvent se = is->second;
             Fraction ts(se.timesig());
-            data[0] = ts.numerator();
             int n;
             switch (ts.denominator()) {
             case 1:  n = 0;
@@ -115,15 +113,15 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
                      qPrintable(ts.toString()));
                 break;
             }
-            data[1] = n;
-            data[2] = 24;
-            data[3] = 8;
 
             MidiEvent ev;
             ev.setType(ME_META);
             ev.setMetaType(META_TIME_SIGNATURE);
-            ev.setEData(data);
             ev.setLen(4);
+            ev.setEData({ static_cast<unsigned char>(ts.numerator()),
+                          static_cast<unsigned char>(n),
+                          24,
+                          8 });
             track.insert(CompatMidiRender::tick(context, is->first + tickOffset), ev);
         }
     }
@@ -153,10 +151,7 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
                 Key key = ik->second.concertKey();           // -7 -- +7
                 ev.setMetaType(META_KEY_SIGNATURE);
                 ev.setLen(2);
-                unsigned char* data = new unsigned char[2];
-                data[0] = int(key);
-                data[1] = 0;          // major
-                ev.setEData(data);
+                ev.setEData({ static_cast<unsigned char>(key), 0 /* major */ });
                 int tick = ik->first + tickOffset;
                 track1.insert(CompatMidiRender::tick(context, tick), ev);
                 if (tick == 0) {
@@ -169,13 +164,9 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
         if (!initialKeySigFound) {
             MidiEvent ev;
             ev.setType(ME_META);
-            int key = 0;
             ev.setMetaType(META_KEY_SIGNATURE);
             ev.setLen(2);
-            unsigned char* data = new unsigned char[2];
-            data[0]   = key;
-            data[1]   = 0;        // major
-            ev.setEData(data);
+            ev.setEData({ 0 /* key */, 0 /* major */ });
             track1.insert(0, ev);
         }
 
@@ -203,11 +194,9 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
 
         ev.setMetaType(META_TEMPO);
         ev.setLen(3);
-        unsigned char* data = new unsigned char[3];
-        data[0]   = tempo >> 16;
-        data[1]   = tempo >> 8;
-        data[2]   = tempo;
-        ev.setEData(data);
+        ev.setEData({ static_cast<unsigned char>(tempo >> 16),
+                      static_cast<unsigned char>(tempo >> 8),
+                      static_cast<unsigned char>(tempo) });
         track.insert(it->first, ev);
     }
 }
@@ -236,7 +225,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
 
     EventsHolder events;
     CompatMidiRendererInternal::Context context;
-    context.eachStringHasChannel = true;
+    context.eachStringHasChannel = false;
     context.instrumentsHaveEffects = false;
     context.harmonyChannelSetting = CompatMidiRendererInternal::HarmonyChannelSetting::DEFAULT;
     context.sndController = CompatMidiRender::getControllerForSnd(m_score, synthState.ccToUse());
@@ -301,9 +290,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                     ev.setType(ME_META);
                     ev.setMetaType(META_PORT_CHANGE);
                     ev.setLen(1);
-                    unsigned char* data = new unsigned char[1];
-                    data[0] = int(track.outPort());
-                    ev.setEData(data);
+                    ev.setEData({ static_cast<unsigned char>(track.outPort()) });
                     track.insert(0, ev);
                 }
 
@@ -372,31 +359,61 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
             }
         }
 
-        // Export lyrics
+        // Export lyrics and RehearsalMarks as Meta events
         for (const RepeatSegment* rs : m_score->repeatList()) {
             int startTick  = rs->tick;
             int endTick    = startTick + rs->len();
             int tickOffset = rs->utick - rs->tick;
 
+            // export Lyrics
             SegmentType st = SegmentType::ChordRest;
             for (Segment* seg = rs->firstMeasure()->first(st); seg && seg->tick().ticks() < endTick; seg = seg->next1(st)) {
                 for (track_idx_t i = part->startTrack(); i < part->endTrack(); ++i) {
                     ChordRest* cr = toChordRest(seg->element(i));
                     if (cr) {
                         for (const auto& lyric : cr->lyrics()) {
+                            LyricsSyllabic syllabic = lyric->syllabic();
                             muse::ByteArray lyricText = lyric->plainText().toUtf8();
-                            size_t len = lyricText.size() + 1;
-                            unsigned char* data = new unsigned char[len];
+                            if ((syllabic == LyricsSyllabic::SINGLE || syllabic == LyricsSyllabic::END)
+                                && (lyricText.empty() || lyricText[lyricText.size() - 1] != ' ')) {
+                                lyricText.push_back(' ');
+                            }
 
-                            memcpy(data, lyricText.constData(), len);
+                            size_t len = lyricText.size() + 1;
+                            std::vector<unsigned char> data(lyricText.constData(), lyricText.constData() + len);
 
                             MidiEvent ev;
                             ev.setType(ME_META);
                             ev.setMetaType(META_LYRIC);
-                            ev.setEData(data);
+                            ev.setEData(std::move(data));
                             ev.setLen(static_cast<int>(len));
 
                             int tick = cr->tick().ticks() + tickOffset;
+                            track.insert(CompatMidiRender::tick(context, tick), ev);
+                        }
+                    }
+                }
+            }
+
+            // export RehearsalMarks only for first track
+            if (staffIdx == 0) {
+                for (Segment* seg = rs->firstMeasure()->first(Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+                     seg && seg->tick().ticks() < endTick;
+                     seg = seg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+                    for (EngravingItem* e : seg->annotations()) {
+                        if (e->isRehearsalMark()) {
+                            RehearsalMark* r = toRehearsalMark(e);
+                            muse::ByteArray rText = r->plainText().toUtf8();
+                            size_t len = rText.size() + 1;
+                            std::vector<unsigned char> data(rText.constData(), rText.constData() + len);
+
+                            MidiEvent ev;
+                            ev.setType(ME_META);
+                            ev.setMetaType(META_MARKER);
+                            ev.setEData(std::move(data));
+                            ev.setLen(static_cast<int>(len));
+
+                            int tick = r->segment()->tick().ticks() + tickOffset;
                             track.insert(CompatMidiRender::tick(context, tick), ev);
                         }
                     }

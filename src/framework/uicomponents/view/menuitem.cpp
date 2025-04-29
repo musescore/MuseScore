@@ -181,6 +181,26 @@ void MenuItem::setSelected(bool selected)
     emit selectedChanged(m_selected);
 }
 
+void MenuItem::setCheckable(bool checkable)
+{
+    const Checkable actionCeckable = checkable ? Checkable::Yes : Checkable::No;
+    if (m_action.checkable == actionCeckable) {
+        return;
+    }
+
+    m_action.checkable = actionCeckable;
+}
+
+void MenuItem::setChecked(bool checked)
+{
+    if (m_state.checked == checked) {
+        return;
+    }
+
+    m_state.checked = checked;
+    emit stateChanged();
+}
+
 void MenuItem::setRole(MenuItemRole role)
 {
     if (m_role == role) {

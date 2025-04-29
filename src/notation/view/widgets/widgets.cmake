@@ -1,25 +1,3 @@
-
-set (WIDGETS_UI
-    ${CMAKE_CURRENT_LIST_DIR}/measureproperties.ui
-    ${CMAKE_CURRENT_LIST_DIR}/editstyle.ui
-    ${CMAKE_CURRENT_LIST_DIR}/align_select.ui
-    ${CMAKE_CURRENT_LIST_DIR}/font_style_select.ui
-    ${CMAKE_CURRENT_LIST_DIR}/offset_select.ui
-    ${CMAKE_CURRENT_LIST_DIR}/editstaff.ui
-    ${CMAKE_CURRENT_LIST_DIR}/editstafftype.ui
-    ${CMAKE_CURRENT_LIST_DIR}/editstringdata.ui
-    ${CMAKE_CURRENT_LIST_DIR}/editpitch.ui
-    ${CMAKE_CURRENT_LIST_DIR}/breaksdialog.ui
-    ${CMAKE_CURRENT_LIST_DIR}/pagesettings.ui
-    ${CMAKE_CURRENT_LIST_DIR}/transposedialog.ui
-    ${CMAKE_CURRENT_LIST_DIR}/selectnotedialog.ui
-    ${CMAKE_CURRENT_LIST_DIR}/selectdialog.ui
-    ${CMAKE_CURRENT_LIST_DIR}/tupletdialog.ui
-    ${CMAKE_CURRENT_LIST_DIR}/voicing_select.ui
-    ${CMAKE_CURRENT_LIST_DIR}/stafftextpropertiesdialog.ui
-    ${CMAKE_CURRENT_LIST_DIR}/realizeharmonydialog.ui
-    )
-
 set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/measureproperties.cpp
     ${CMAKE_CURRENT_LIST_DIR}/measureproperties.h

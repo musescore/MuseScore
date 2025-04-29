@@ -99,6 +99,7 @@ public:
     void closeAllDialogs() override;
 
     ValCh<Uri> currentUri() const override;
+    RetVal<bool> isCurrentUriDialog() const override;
     async::Notification currentUriAboutToBeChanged() const override;
     std::vector<Uri> stack() const override;
 

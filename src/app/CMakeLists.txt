@@ -75,7 +75,7 @@ elseif(OS_IS_MAC)
     if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
         list(PREPEND CMAKE_INSTALL_RPATH "${MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH}/lib")
     endif()
-    
+
     message("MACOSX_BUNDLE_VERSION: ${MACOSX_BUNDLE_LONG_VERSION_STRING}.${MACOSX_BUNDLE_BUNDLE_VERSION}")
 
 elseif(OS_IS_WASM)
@@ -136,7 +136,6 @@ set(LINK_LIB
     context
     muse::shortcuts
     muse::workspace
-    workspacescene
     muse::audio
     muse::mpe
     muse::midi
@@ -151,6 +150,7 @@ set(LINK_LIB
     instrumentsscene
     muse::vst
     muse::update
+    musesounds
     )
 
 if (MUSE_MODULE_UI)
@@ -175,10 +175,6 @@ if (MUE_BUILD_APPSHELL_MODULE)
     list(APPEND LINK_LIB appshell)
 endif()
 
-if (MUE_BUILD_MUSESOUNDS_MODULE)
-    list(APPEND LINK_LIB musesounds)
-endif()
-
 if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB muse::cloud)
     list(APPEND LINK_LIB muse::languages)
@@ -189,7 +185,7 @@ if (NOT CC_IS_EMSCRIPTEN)
     endif()
 
     if (MUE_BUILD_IMPORTEXPORT_MODULE)
-        set(LINK_LIB ${LINK_LIB}
+        list(APPEND LINK_LIB
             iex_musicxml
             iex_bb
             iex_bww
@@ -304,6 +300,26 @@ if (OS_IS_WASM)
     set_target_properties(MuseScoreStudio PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS}")
 endif(OS_IS_WASM)
 
+###########################################
+# Includes
+###########################################
+
+target_include_directories(MuseScoreStudio PRIVATE
+    ${PROJECT_BINARY_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
+
+    ${PROJECT_SOURCE_DIR}/src
+
+    ${MUSE_FRAMEWORK_PATH}
+    ${MUSE_FRAMEWORK_PATH}/framework
+    ${MUSE_FRAMEWORK_PATH}/framework/global
+
+    # compat
+    ${MUSE_FRAMEWORK_PATH}/src
+    ${MUSE_FRAMEWORK_PATH}/src/framework
+    ${MUSE_FRAMEWORK_PATH}/src/framework/global
+    # end compat
+)
 
 ###########################################
 # Link
@@ -507,11 +523,11 @@ if (MSVC)
     set(CMAKE_SKIP_PACKAGE_ALL_DEPENDENCY true)
 
     # Set the startup project to "MuseScoreStudio".
-    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT MuseScoreStudio)
+    set_property(DIRECTORY "${PROJECT_SOURCE_DIR}" PROPERTY VS_STARTUP_PROJECT MuseScoreStudio)
 
     # Set the debugging properties for the "MuseScoreStudio" project.
     file(TO_NATIVE_PATH "${CMAKE_INSTALL_PREFIX}/bin" VS_DEBUGGER_WORKING_DIRECTORY)
-    set_target_properties(MuseScoreStudio PROPERTIES VS_DEBUGGER_COMMAND "${VS_DEBUGGER_WORKING_DIRECTORY}\\${MUSESCORE_EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
+    set_target_properties(MuseScoreStudio PROPERTIES VS_DEBUGGER_COMMAND "${VS_DEBUGGER_WORKING_DIRECTORY}\\${EXECUTABLE_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
     set_target_properties(MuseScoreStudio PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${VS_DEBUGGER_WORKING_DIRECTORY}")
     set_target_properties(MuseScoreStudio PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--debug")
 endif (MSVC)

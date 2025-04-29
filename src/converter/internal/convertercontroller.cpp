@@ -44,6 +44,7 @@ using namespace muse::io;
 static const std::string PDF_SUFFIX = "pdf";
 static const std::string PNG_SUFFIX = "png";
 static const std::string SVG_SUFFIX = "svg";
+static const std::string MP3_SUFFIX = "mp3";
 
 Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, const muse::io::path_t& stylePath, bool forceMode,
                                       const String& soundProfile, const muse::UriQuery& extensionUri, muse::ProgressPtr progress)
@@ -51,14 +52,14 @@ Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, cons
     TRACEFUNC;
 
     if (progress) {
-        progress->started.notify();
+        progress->start();
     }
 
     RetVal<BatchJob> batchJob = parseBatchJob(batchJobFile);
     if (!batchJob.ret) {
         LOGE() << "failed parse batch job file, err: " << batchJob.ret.toString();
         if (progress) {
-            progress->finished.send(ProgressResult(batchJob.ret));
+            progress->finish(ProgressResult(batchJob.ret));
         }
         return batchJob.ret;
     }
@@ -70,7 +71,7 @@ Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, cons
     for (const Job& job : batchJob.val) {
         if (progress) {
             ++current;
-            progress->progressChanged.send(current, total, job.in.toStdString());
+            progress->progress(current, total, job.in.toStdString());
         }
 
         Ret ret = fileConvert(job.in, job.out, stylePath, forceMode, soundProfile, extensionUri, job.transposeOptions);
@@ -88,7 +89,7 @@ Ret ConverterController::batchConvert(const muse::io::path_t& batchJobFile, cons
     }
 
     if (progress) {
-        progress->finished.send(ProgressResult(ret));
+        progress->finish(ProgressResult(ret));
     }
 
     return ret;
@@ -131,12 +132,6 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
         return make_ret(Err::UnknownError);
     }
 
-    std::string suffix = io::suffix(out);
-    auto writer = writers()->writer(suffix);
-    if (!writer) {
-        return make_ret(Err::ConvertTypeUnknown);
-    }
-
     Ret ret = notationProject->load(in, stylePath, forceMode);
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
@@ -157,6 +152,19 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
     }
 
     globalContext()->setCurrentProject(notationProject);
+
+    // Check if this is a part conversion job
+    QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
+    if (baseName.contains('*')) {
+        return convertScoreParts(in, out, stylePath, forceMode);
+    }
+
+    std::string suffix = io::suffix(out);
+
+    auto writer = writers()->writer(suffix);
+    if (!writer) {
+        return make_ret(Err::ConvertTypeUnknown);
+    }
 
     // use a extension for convert
     if (extensionUri.isValid()) {
@@ -215,6 +223,8 @@ Ret ConverterController::convertScoreParts(const muse::io::path_t& in, const mus
         ret = convertScorePartsToPdf(writer, notationProject->masterNotation(), out);
     } else if (suffix == PNG_SUFFIX) {
         ret = convertScorePartsToPngs(writer, notationProject->masterNotation(), out);
+    } else if (suffix == MP3_SUFFIX) {
+        ret = convertScorePartsToMp3(writer, notationProject->masterNotation(), out);
     } else {
         ret = make_ret(Ret::Code::NotSupported);
     }
@@ -233,40 +243,53 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
         return rv;
     }
 
-    QByteArray data = file.readAll();
+    const QByteArray data = file.readAll();
+
     QJsonParseError err;
-    QJsonDocument doc = QJsonDocument::fromJson(data, &err);
+    const QJsonDocument doc = QJsonDocument::fromJson(data, &err);
     if (err.error != QJsonParseError::NoError || !doc.isArray()) {
         rv.ret = make_ret(Err::BatchJobFileFailedParse, err.errorString().toStdString());
         return rv;
     }
 
-    QJsonArray arr = doc.array();
+    const QJsonArray arr = doc.array();
 
     auto correctUserInputPath = [](const QString& path) -> QString {
         return io::Dir::fromNativeSeparators(path).toQString();
     };
 
-    for (const QJsonValue& v : arr) {
-        QJsonObject obj = v.toObject();
-
+    for (const QJsonValueRef obj : arr) {
         Job job;
-        job.in = correctUserInputPath(obj["in"].toString());
-        job.out = correctUserInputPath(obj["out"].toString());
+        job.in = correctUserInputPath(obj[u"in"].toString());
 
-        QJsonObject transposeOptionsObj = obj["transpose"].toObject();
+        QJsonObject transposeOptionsObj = obj[u"transpose"].toObject();
         if (!transposeOptionsObj.isEmpty()) {
             RetVal<TransposeOptions> transposeOptions = ConverterUtils::parseTransposeOptions(transposeOptionsObj);
             if (!transposeOptions.ret) {
                 rv.ret = transposeOptions.ret;
                 return rv;
             }
-
             job.transposeOptions = transposeOptions.val;
         }
 
-        if (!job.in.empty() && !job.out.empty()) {
+        const QJsonValue outValue = obj[u"out"];
+        if (outValue.isString()) {
+            job.out = correctUserInputPath(outValue.toString());
             rv.val.push_back(std::move(job));
+        } else if (outValue.isArray()) {
+            const QJsonArray outArray = outValue.toArray();
+            for (const QJsonValueRef outItem : outArray) {
+                Job partJob = job; // Copy the input path
+                if (outItem.isString()) {
+                    partJob.out = correctUserInputPath(outItem.toString());
+                } else if (outItem.isArray() && outItem.toArray().size() == 2) {
+                    const QJsonArray partOutArray = outItem.toArray();
+                    const QString prefix = correctUserInputPath(partOutArray[0].toString());
+                    const QString suffix = partOutArray[1].toString();
+                    partJob.out = prefix + "*" + suffix; // Use "*" as a placeholder for part names
+                }
+                rv.val.push_back(std::move(partJob));
+            }
         }
     }
 
@@ -368,28 +391,32 @@ Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, IMast
     TRACEFUNC;
 
     INotationPtrList notations;
-    notations.push_back(masterNotation->notation());
-
-    for (IExcerptNotationPtr e : masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& e : masterNotation->excerpts()) {
         notations.push_back(e->notation());
     }
 
-    File file(out);
-    if (!file.open(File::WriteOnly)) {
-        return make_ret(Err::OutFileFailedOpen);
+    for (size_t i = 0; i < notations.size(); ++i) {
+        QString partName = notations[i]->name();
+        QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
+        muse::io::path_t partOut = io::dirpath(out) + "/" + baseName.replace("*", partName).toStdString() + ".pdf";
+
+        File file(partOut);
+        if (!file.open(File::WriteOnly)) {
+            return make_ret(Err::OutFileFailedOpen);
+        }
+
+        INotationWriter::Options options {
+            { INotationWriter::OptionKey::UNIT_TYPE, Val(INotationWriter::UnitType::PER_PART) },
+        };
+
+        Ret ret = writer->write(notations[i], file, options);
+        if (!ret) {
+            LOGE() << "failed write, err: " << ret.toString() << ", path: " << partOut;
+            return make_ret(Err::OutFileFailedWrite);
+        }
+
+        file.close();
     }
-
-    INotationWriter::Options options {
-        { INotationWriter::OptionKey::UNIT_TYPE, Val(INotationWriter::UnitType::MULTI_PART) },
-    };
-
-    Ret ret = writer->writeList(notations, file, options);
-    if (!ret) {
-        LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
-        return make_ret(Err::OutFileFailedWrite);
-    }
-
-    file.close();
 
     return make_ret(Ret::Code::Ok);
 }
@@ -399,23 +426,55 @@ Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, mu::
 {
     TRACEFUNC;
 
-    Ret ret = convertPageByPage(writer, masterNotation->notation(), out);
-    if (!ret) {
-        return ret;
+    INotationPtrList notations;
+    for (const IExcerptNotationPtr& e : masterNotation->excerpts()) {
+        notations.push_back(e->notation());
     }
 
-    INotationPtrList excerpts;
-    for (IExcerptNotationPtr e : masterNotation->excerpts()) {
-        excerpts.push_back(e->notation());
-    }
-
-    muse::io::path_t pngFilePath = io::dirpath(out) + "/" + muse::io::path_t(io::completeBasename(out) + "-excerpt.png");
-
-    for (size_t i = 0; i < excerpts.size(); i++) {
-        Ret ret2 = convertPageByPage(writer, excerpts[i], pngFilePath);
+    for (size_t i = 0; i < notations.size(); i++) {
+        QString partName = notations[i]->name();
+        QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
+        muse::io::path_t pngFilePath = io::dirpath(out) + "/" + baseName.replace("*", partName).toStdString() + ".png";
+        Ret ret2 = convertPageByPage(writer, notations[i], pngFilePath);
         if (!ret2) {
             return ret2;
         }
+    }
+
+    return make_ret(Ret::Code::Ok);
+}
+
+Ret ConverterController::convertScorePartsToMp3(INotationWriterPtr writer, IMasterNotationPtr masterNotation,
+                                                const muse::io::path_t& out) const
+{
+    TRACEFUNC;
+
+    INotationPtrList notations;
+    for (const IExcerptNotationPtr& e : masterNotation->excerpts()) {
+        notations.push_back(e->notation());
+    }
+
+    for (size_t i = 0; i < notations.size(); ++i) {
+        QString partName = notations[i]->name();
+        QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
+        muse::io::path_t partOut = io::dirpath(out) + "/" + baseName.replace("*", partName).toStdString() + ".mp3";
+
+        File file(partOut);
+        if (!file.open(File::WriteOnly)) {
+            return make_ret(Err::OutFileFailedOpen);
+        }
+
+        INotationWriter::Options options {
+            { INotationWriter::OptionKey::UNIT_TYPE, Val(INotationWriter::UnitType::PER_PART) },
+        };
+        file.setMeta("file_path", partOut.toStdString());
+        Ret ret = writer->write(notations[i], file, options);
+        if (!ret) {
+            LOGE() << "failed write, err: " << ret.toString() << ", path: " << partOut;
+            return make_ret(Err::OutFileFailedWrite);
+        }
+
+        file.close();
     }
 
     return make_ret(Ret::Code::Ok);

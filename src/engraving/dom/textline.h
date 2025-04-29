@@ -42,6 +42,8 @@ public:
 
     TextLineSegment* clone() const override { return new TextLineSegment(*this); }
 
+    void initStyle();
+
     virtual EngravingItem* propertyDelegate(Pid) override;
 
     TextLine* textLine() const { return toTextLine(spanner()); }

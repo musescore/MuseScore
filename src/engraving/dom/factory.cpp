@@ -153,7 +153,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::HARMONIC_MARK:     return new HarmonicMark(parent);
     case ElementType::PICK_SCRAPE:       return new PickScrape(parent);
     case ElementType::PEDAL:             return new Pedal(parent);
-    case ElementType::HAIRPIN:           return new Hairpin(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::HAIRPIN:           return new Hairpin(parent);
     case ElementType::CLEF:              return new Clef(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::KEYSIG:            return new KeySig(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TIMESIG:           return new TimeSig(parent->isSegment() ? toSegment(parent) : dummy->segment());
@@ -258,7 +258,6 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::STEM_SLASH:
     case ElementType::PAGE:
     case ElementType::BEAM:
-    case ElementType::BEAM_SEGMENT:
     case ElementType::HOOK:
     case ElementType::HAIRPIN_SEGMENT:
     case ElementType::OTTAVA_SEGMENT:
@@ -282,18 +281,12 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::SHADOW_NOTE:
     case ElementType::SEGMENT:
     case ElementType::SYSTEM:
-    case ElementType::COMPOUND:
-    case ElementType::ELEMENT:
-    case ElementType::ELEMENT_LIST:
-    case ElementType::STAFF_LIST:
-    case ElementType::MEASURE_LIST:
     case ElementType::MAXTYPE:
     case ElementType::INVALID:
     case ElementType::PART:
     case ElementType::STAFF:
     case ElementType::SCORE:
     case ElementType::BRACKET_ITEM:
-    case ElementType::OSSIA:
     case ElementType::GRACE_NOTES_GROUP:
     case ElementType::ROOT_ITEM:
     case ElementType::FIGURED_BASS_ITEM:
@@ -415,8 +408,8 @@ MAKE_ITEM_IMPL(Clef, Segment)
 CREATE_ITEM_IMPL(DeadSlapped, ElementType::DEAD_SLAPPED, Rest, isAccessibleEnabled)
 COPY_ITEM_IMPL(DeadSlapped)
 
-CREATE_ITEM_IMPL(Fermata, ElementType::FERMATA, EngravingItem, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Fermata, EngravingItem)
+CREATE_ITEM_IMPL(Fermata, ElementType::FERMATA, Segment, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Fermata, Segment)
 
 CREATE_ITEM_IMPL(FiguredBass, ElementType::FIGURED_BASS, Segment, isAccessibleEnabled)
 MAKE_ITEM_IMPL(FiguredBass, Segment)
@@ -665,8 +658,8 @@ MAKE_ITEM_IMPL(TremoloBar, EngravingItem)
 CREATE_ITEM_IMPL(Tuplet, ElementType::TUPLET, Measure, isAccessibleEnabled)
 COPY_ITEM_IMPL(Tuplet)
 
-CREATE_ITEM_IMPL(Hairpin, ElementType::HAIRPIN, Segment, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Hairpin, Segment)
+CREATE_ITEM_IMPL(Hairpin, ElementType::HAIRPIN, EngravingItem, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Hairpin, EngravingItem)
 
 CREATE_ITEM_IMPL(Glissando, ElementType::GLISSANDO, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Glissando, EngravingItem)

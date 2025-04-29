@@ -143,6 +143,13 @@ enum class Pid {
     IMAGE_WIDTH,
     IMAGE_FRAMED,
 
+    FRET_FRAME_TEXT_SCALE,
+    FRET_FRAME_DIAGRAM_SCALE,
+    FRET_FRAME_COLUMN_GAP,
+    FRET_FRAME_ROW_GAP,
+    FRET_FRAME_CHORDS_PER_ROW,
+    FRET_FRAME_H_ALIGN,
+
     SCALE,
     LOCK_ASPECT_RATIO,
     SIZE_IS_SPATIUM,
@@ -159,6 +166,7 @@ enum class Pid {
     SPACE,            // used for spacer
     TEMPO,
     TEMPO_FOLLOW_TEXT,
+    TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK,
     ACCIDENTAL_BRACKET,
     ACCIDENTAL_TYPE,
     ACCIDENTAL_STACKING_ORDER_OFFSET,
@@ -463,14 +471,14 @@ enum class Pid {
 };
 
 // Determines propagation of properties between score and parts
-enum class PropertyPropagation {
+enum class PropertyPropagation : unsigned char {
     NONE,
     PROPAGATE,
     UNLINK,
 };
 
 // Each group can be propagated differently between score and parts
-enum class PropertyGroup {
+enum class PropertyGroup : unsigned char {
     POSITION,
     TEXT,
     APPEARANCE,
@@ -484,6 +492,7 @@ extern String propertyToString(Pid, const PropertyValue& value, bool mscx);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
+extern bool propertyLinkSameScore(Pid id);
 extern PropertyGroup propertyGroup(Pid id);
 extern Pid propertyId(const muse::AsciiStringView& name);
 extern String propertyUserName(Pid);

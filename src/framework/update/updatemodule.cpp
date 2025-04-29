@@ -35,9 +35,6 @@
 #include "internal/updateuiactions.h"
 #include "internal/appupdateservice.h"
 
-#include "internal/musesoundscheckupdatescenario.h"
-#include "internal/musesoundscheckupdateservice.h"
-
 #include "view/updatemodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
@@ -63,15 +60,9 @@ void UpdateModule::registerExports()
     m_actionController = std::make_shared<UpdateActionController>(iocContext());
     m_appUpdateService = std::make_shared<AppUpdateService>(iocContext());
 
-    m_museSoundsCheckUpdateScenario = std::make_shared<MuseSoundsCheckUpdateScenario>(iocContext());
-    m_museSamplerUpdateService = std::make_shared<MuseSoundsCheckUpdateService>(iocContext());
-
     ioc()->registerExport<IUpdateScenario>(moduleName(), m_scenario);
     ioc()->registerExport<IUpdateConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IAppUpdateService>(moduleName(), m_appUpdateService);
-
-    ioc()->registerExport<IMuseSoundsCheckUpdateScenario>(moduleName(), m_museSoundsCheckUpdateScenario);
-    ioc()->registerExport<IMuseSoundsCheckUpdateService>(moduleName(), m_museSamplerUpdateService);
 }
 
 void UpdateModule::resolveImports()
@@ -85,7 +76,6 @@ void UpdateModule::resolveImports()
     if (ir) {
         ir->registerQmlUri(Uri("muse://update/appreleaseinfo"), "Muse/Update/AppReleaseInfoDialog.qml");
         ir->registerQmlUri(Uri("muse://update"), "Muse/Update/UpdateProgressDialog.qml");
-        ir->registerQmlUri(Uri("muse://update/musesoundsreleaseinfo"), "Muse/Update/MuseSoundsReleaseInfoDialog.qml");
     }
 }
 
@@ -115,5 +105,4 @@ void UpdateModule::onInit(const IApplication::RunMode& mode)
 void UpdateModule::onDelayedInit()
 {
     m_scenario->delayedInit();
-    m_museSoundsCheckUpdateScenario->delayedInit();
 }

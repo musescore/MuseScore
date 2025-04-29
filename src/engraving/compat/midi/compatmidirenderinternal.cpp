@@ -631,8 +631,8 @@ static int calculateTieLength(const Note* note)
     const Note* n = note;
     while (n) {
         // Process ties or bends
-        Tie* tieFor = n->tieFor();
-        GuitarBend* bendFor = n->bendFor();
+        const Tie* tieFor = n->tieForNonPartial();
+        const GuitarBend* bendFor = n->bendFor();
 
         if (tieFor && tieFor->endNote() != n) {
             n = tieFor->endNote();
@@ -642,10 +642,14 @@ static int calculateTieLength(const Note* note)
             break;
         }
 
-        NoteEventList nel = n->playEvents();
+        IF_ASSERT_FAILED(n) {
+            break;
+        }
+
+        const NoteEventList& nel = n->playEvents();
 
         if (!nel.empty()) {
-            tieLen += n->playEvents()[0].len() * n->chord()->actualTicks().ticks() / NoteEvent::NOTE_LENGTH;
+            tieLen += nel[0].len() * n->chord()->actualTicks().ticks() / NoteEvent::NOTE_LENGTH;
         }
     }
 
@@ -706,7 +710,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
         int off = on + (ticks * e.len()) / 1000 - 1;
 
         if (note->deadNote()) {
-            const double ticksPerSecond = chord->score()->tempo(chord->tick()).val * Constants::DIVISION;
+            const double ticksPerSecond = chord->score()->multipliedTempo(chord->tick()).val * Constants::DIVISION;
             constexpr double deadNoteDurationInSec = 0.05;
             const double deadNoteDurationInTicks = ticksPerSecond * deadNoteDurationInSec;
             if (off - on > deadNoteDurationInTicks) {

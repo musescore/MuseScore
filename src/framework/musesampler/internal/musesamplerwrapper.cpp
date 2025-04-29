@@ -149,6 +149,7 @@ AudioSourceType MuseSamplerWrapper::type() const
 
 void MuseSamplerWrapper::flushSound()
 {
+    m_sequencer.flushOffstream();
     m_allNotesOffRequested = true;
 }
 
@@ -244,23 +245,22 @@ bool MuseSamplerWrapper::isActive() const
     return m_sequencer.isActive();
 }
 
-void MuseSamplerWrapper::setIsActive(bool arg)
+void MuseSamplerWrapper::setIsActive(bool active)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
     }
 
-    if (isActive() == arg) {
+    if (isActive() == active) {
         return;
     }
 
-    m_sequencer.setActive(arg);
-
-    m_samplerLib->setPlaying(m_sampler, arg);
-
-    if (arg) {
+    if (active) {
         m_samplerLib->setPosition(m_sampler, m_currentPosition);
     }
+
+    m_sequencer.setActive(active);
+    m_samplerLib->setPlaying(m_sampler, active);
 }
 
 bool MuseSamplerWrapper::initSampler(const sample_rate_t sampleRate, const samples_t blockSize)

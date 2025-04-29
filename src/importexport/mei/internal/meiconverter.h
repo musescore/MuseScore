@@ -25,6 +25,7 @@
 
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/interval.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
@@ -116,6 +117,9 @@ public:
 
     struct StaffStruct {
         int lines;
+        bool invisible;
+        double scale;
+        engraving::Color color;
         engraving::Interval interval;
     };
 
@@ -226,6 +230,12 @@ public:
 
     static void harmFromMEI(engraving::Harmony* harmony, const muse::StringList& meiLines, const libmei::Harm& meiHarm, bool& warning);
     static libmei::Harm harmToMEI(const engraving::Harmony* harmony, muse::StringList& meiLines);
+
+    static void harpPedalFromMEI(engraving::HarpPedalDiagram* harpPedalDiagram, const libmei::HarpPedal& meiHarpPedal, bool& warning);
+    static libmei::HarpPedal harpPedalToMEI(const engraving::HarpPedalDiagram* harpPedalDiagram);
+
+    static engraving::PedalPosition harpPedalPositionFromMEI(const libmei::data_HARPPEDALPOSITION& pedalPosition);
+    static libmei::data_HARPPEDALPOSITION harpPedalPositionToMEI(const engraving::PedalPosition& pedalPosition);
 
     static void layerIdentFromMEI(engraving::EngravingItem* item, const libmei::Element& meiElement);
     static void layerIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
