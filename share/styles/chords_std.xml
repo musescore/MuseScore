@@ -28,7 +28,7 @@
 =====================================================================
 -->
 
-<museScore version="1.24">
+<museScore version="4.60">
 
 <!--
       Part I: font list
@@ -419,7 +419,7 @@
 
   <renderRoot>:n :a m:0.5:0</renderRoot>
   <renderFunction>:a m:0.5:0 :n</renderFunction>
-  <renderBase>m:-0.2:0 / m:0.2:0 :n :a</renderBase>
+  <renderBass>m:-0.2:0 / m:0.2:0 :n :a</renderBass>
 
 <!--
       Part III: chord list
