@@ -52,15 +52,17 @@ public:
 private:
     void importParts();
     void importMeasures();
+    void importBrackets();
 
     engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff);
 
     engraving::Score* m_score;
-    const std::shared_ptr<const musx::dom::Document> m_doc;
+    const std::shared_ptr<musx::dom::Document> m_doc;
 
     std::unordered_map<QString, std::vector<musx::dom::InstCmper>> m_part2Inst;
     std::unordered_map<musx::dom::InstCmper, QString> m_inst2Part;
-    std::unordered_map<musx::dom::InstCmper, size_t> m_staff2Inst;
+    std::unordered_map<size_t, musx::dom::InstCmper> m_staff2Inst;
+    std::unordered_map<size_t, musx::dom::InstCmper> m_inst2Staff;
 };
 
 }
