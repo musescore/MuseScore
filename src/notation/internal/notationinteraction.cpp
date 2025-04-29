@@ -938,6 +938,7 @@ void NotationInteraction::findAndSelectChordRest(const Fraction& tick)
 
 void NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
 {
+    LOGALEX();
     TRACEFUNC;
 
     const mu::engraving::Selection& selection = score()->selection();

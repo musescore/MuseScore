@@ -609,8 +609,11 @@ bool AbstractNotationPaintView::elementPopupIsOpen(const ElementType& elementTyp
     return m_currentElementPopupType == modelType;
 }
 
+// first - UiContextResolver::matchWithCurrent, get target notationpaintview
+// second - invoke target notationpaintview::paint
 void AbstractNotationPaintView::paint(QPainter* qp)
 {
+    LOGALEX(); 
     TRACEFUNC;
 
     RectF rect = RectF::fromQRectF(qp->clipBoundingRect());
