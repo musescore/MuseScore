@@ -14,7 +14,7 @@ while [[ "$#" -gt 0 ]]; do
         --signsecret) SIGN_CERTIFICATE_ENCRYPT_SECRET="$2"; shift ;;
         --signpass) SIGN_CERTIFICATE_PASSWORD="$2"; shift ;;
         --developer_name) DEVELOPER_NAME="$2"; shift ;;
-        --arch) BUILD=ARCH="$2"; shift ;;
+        --arch) BUILD_ARCH="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
