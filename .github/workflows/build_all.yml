@@ -1,8 +1,10 @@
 name: 'Build: All'
 
 on:
-  # scheduled workflows will only run on the default branch
-  # push.inputs field does not exist, use gen1 below
+  # schedule: # scheduled workflows will only run on the default branch. edit default values under gen1 below
+  #   - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
+  # push: # push.inputs field does not exist, use gen1 below
+  # pull_request: # pull_request.inputs field does not exist, edit gen1 below
   workflow_dispatch: # triggered by github web ui run "build all" workflow button
     inputs:
       platforms:
@@ -53,7 +55,7 @@ on:
         type: string
         required: false
       publish:
-        description: 'Publish to FTP: on - publish  (obsolette)'
+        description: 'Publish to FTP: on - publish (obsolete)'
         default: 'off'
         type: string
         required: false
@@ -97,7 +99,29 @@ jobs:
     - id: gen1
       name: empty inputs on push workaround
       run: |
-        if [[ "${{ github.event_name }}" == "push" ]] && [[ "${{ inputs.execfrompubdevpush }}" != "true" ]]; then
+        if [[ "${{ github.event_name }}" == "pull_request" ]];  then
+
+          echo "triggered by on.pull_request"
+
+          echo "platforms=linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_x32_portable windows_x64_portable" >> "$GITHUB_OUTPUT"
+          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "runtest=off" >> "$GITHUB_OUTPUT"
+          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "runtestjob=off" >> "$GITHUB_OUTPUT"
+          echo "execfrompubdevpush=false" >> "$GITHUB_OUTPUT"
+
+        elif [[ "${{ github.event_name }}" == "schedule" ]];  then
+
+          echo "triggered by on.schedule"
+
+          echo "platforms=linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_x32_portable windows_x64_portable" >> "$GITHUB_OUTPUT"
+          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "runtest=off" >> "$GITHUB_OUTPUT"
+          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "runtestjob=off" >> "$GITHUB_OUTPUT"
+          echo "execfrompubdevpush=false" >> "$GITHUB_OUTPUT"
+
+        elif [[ "${{ github.event_name }}" == "push" ]] && [[ "${{ inputs.execfrompubdevpush }}" != "true" ]]; then
 
           echo "triggered by on.push of build all" 
 

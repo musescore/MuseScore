@@ -1,7 +1,7 @@
 name: 'Build: macOS'
 
 on:
-  schedule: # scheduled workflows will only run on the default branch
+  schedule: # scheduled workflows will only run on the default branch. edit default values under gen1 below
     - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   push: # push.inputs field does not exist, use gen1 below
     branches:
@@ -20,7 +20,7 @@ on:
         type: string
         required: true
       publish:
-        description: 'Publish to FTP: on - publish'
+        description: 'Publish to FTP: on - publish (obsolete)'
         default: 'off'
         type: string
         required: false
@@ -42,7 +42,7 @@ on:
         type: string
         required: true
       publish:
-        description: 'Publish to FTP: on - publish (obsolette)'
+        description: 'Publish to FTP: on - publish (obsolete)'
         default: 'off'
         type: string
         required: false
@@ -81,7 +81,23 @@ jobs:
     - id: gen1
       name: empty inputs on push workaround
       run: |
-        if [[ "${{ github.event_name }}" == "push" ]] && [[ "${{ inputs.execfrompubdevpush }}" != "true" ]]; then
+        if [[ "${{ github.event_name }}" == "pull_request" ]];  then
+
+          echo "triggered by on.pull_request"
+
+          echo "platforms=macos_intel macos_apple" >> "$GITHUB_OUTPUT"
+          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "publish=off" >> "$GITHUB_OUTPUT"
+
+        elif [[ "${{ github.event_name }}" == "schedule" ]];  then
+
+          echo "triggered by on.schedule"
+
+          echo "platforms=macos_intel macos_apple" >> "$GITHUB_OUTPUT"
+          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "publish=off" >> "$GITHUB_OUTPUT"
+          
+        elif [[ "${{ github.event_name }}" == "push" ]] && [[ "${{ inputs.execfrompubdevpush }}" != "true" ]]; then
 
           echo "triggered by on.push of build macos" 
 

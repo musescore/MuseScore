@@ -1,11 +1,14 @@
 name: Build and draft release
 
+# tag and release name format edit id: gen2 below
+
 on:
-  # schedule: # scheduled workflows will only run on the default branch
+  # schedule: # scheduled workflows will only run on the default branch. edit default values under gen1 and gen2 below
   #   - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   push: # push.inputs field does not exist, use gen1 and gen2 below
     branches:
     - temp23
+  # pull_request: # pull_request.inputs field does not exist, edit gen1 below
   workflow_dispatch: # triggered by github web ui run "Build and draft release" workflow button
     inputs:
       manual_name:
@@ -34,11 +37,11 @@ on:
         type: string
         required: true
       publish:
-        description: 'Publish to FTP: on - publish (obsolette)'
+        description: 'Publish to FTP: on - publish (obsolete)'
         default: 'off'
         type: string
         required: true
-
+  # workflow_call: # triggered by "uses" from other yml files.
 
 defaults:
   run:
@@ -69,7 +72,31 @@ jobs:
     - id: gen1
       name: empty inputs on push workaround
       run: |
-        if [[ "${{ github.event_name }}" == "push" ]]; then
+        if [[ "${{ github.event_name }}" == "pull_request" ]];  then
+
+          echo "triggered by on.pull_request"
+
+          echo "manual_name=default" >> "$GITHUB_OUTPUT"
+          echo "manual_tag=default" >> "$GITHUB_OUTPUT"
+          echo "platforms=linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_portable_x64 windows_portable_x32" >> "$GITHUB_OUTPUT"
+          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "runtest=off" >> "$GITHUB_OUTPUT"
+          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "execfrompubdevpush=true" >> "$GITHUB_OUTPUT"
+
+        elif [[ "${{ github.event_name }}" == "schedule" ]];  then
+
+          echo "triggered by on.schedule"
+
+          echo "manual_name=default" >> "$GITHUB_OUTPUT"
+          echo "manual_tag=default" >> "$GITHUB_OUTPUT"
+          echo "platforms=linux_x64 macos_intel macos_apple windows_x64 windows_x32 windows_portable_x64 windows_portable_x32" >> "$GITHUB_OUTPUT"
+          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "runtest=off" >> "$GITHUB_OUTPUT"
+          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "execfrompubdevpush=true" >> "$GITHUB_OUTPUT"
+
+        elif [[ "${{ github.event_name }}" == "push" ]]; then
 
           echo "triggered by 1. on.push of publishdev or 2. on.push of others that triggers on.workflow_call of publishdev" 
 
