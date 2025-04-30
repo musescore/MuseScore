@@ -170,6 +170,7 @@ endif(MUE_DOWNLOAD_SOUNDFONT)
 if (MUSE_ENABLE_UNIT_TESTS)
     enable_testing()
     message(STATUS "Enabled testing")
+    file(WRITE "${CMAKE_BINARY_DIR}/Testing/Temporary/failed_test_reference_files.txt" "")
 endif()
 
 add_subdirectory(share)
