@@ -139,6 +139,7 @@ DockPage {
 
             separatorsVisible: false
             alignment: DockToolBarAlignment.Right
+            resizable: !floating
 
             contentBottomPadding: floating ? 8 : 2
             contentTopPadding: floating ? 8 : 0
@@ -251,6 +252,7 @@ DockPage {
             ]
 
             thickness: orientation === Qt.Horizontal ? 40 : 76
+            resizable: !floating
 
             navigationSection: root.noteInputKeyNavSec
 

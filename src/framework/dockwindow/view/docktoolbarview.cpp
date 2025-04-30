@@ -161,10 +161,6 @@ void DockToolBarView::componentComplete()
     DockBase::componentComplete();
 
     m_draggableArea->setDockWidget(dockWidget());
-
-    connect(this, &DockBase::floatingChanged, this, [this]() {
-        setResizable(!floating());
-    });
 }
 
 void DockToolBarView::init()

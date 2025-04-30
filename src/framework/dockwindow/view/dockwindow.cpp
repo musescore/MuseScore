@@ -111,7 +111,9 @@ void DockWindow::componentComplete()
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
     connect(this, &QQuickItem::windowChanged, this, &DockWindow::windowPropertyChanged);
 
-    connect(this, &QQuickItem::widthChanged, this, &DockWindow::adjustContentForAvailableSpace);
+    connect(this, &QQuickItem::widthChanged, this, [this]() {
+        adjustContentForAvailableSpace(m_currentPage);
+    });
 }
 
 void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -548,6 +550,11 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
     newPage->setParams(params);
 
     m_currentPage = newPage;
+
+    connect(m_currentPage, &DockPageView::layoutRequested, this, [this](){
+        m_mainWindow->layoutEqually();
+    }, Qt::UniqueConnection);
+
     m_currentPage->setVisible(true);
 
     return true;
@@ -700,6 +707,9 @@ void DockWindow::initDocks(DockPageView* page)
 {
     TRACEFUNC;
 
+    //! before init we should correct toolbars sizes
+    adjustContentForAvailableSpace(page);
+
     for (DockToolBarView* toolbar : m_toolBars.list()) {
         toolbar->init();
     }
@@ -726,9 +736,9 @@ void DockWindow::initDocks(DockPageView* page)
     }
 }
 
-void DockWindow::adjustContentForAvailableSpace()
+void DockWindow::adjustContentForAvailableSpace(DockPageView* page)
 {
-    if (!m_currentPage) {
+    if (!page) {
         return;
     }
 
@@ -757,8 +767,8 @@ void DockWindow::adjustContentForAvailableSpace()
                 if (!dock->isCompact()) {
                     dock->setIsCompact(true);
 
-                    //! NOTE: as soon as we have compacted the first found dock - we finish the work so that the view is redrawn
-                    break;
+                    width -= dock->nonCompactWidth();
+                    width += dock->width();
                 }
             }
         } else {
@@ -781,7 +791,7 @@ void DockWindow::adjustContentForAvailableSpace()
 
     QList<DockBase*> topLevelToolBarsDocks;
 
-    for (DockToolBarView* toolBar : topLevelToolBars(m_currentPage)) {
+    for (DockToolBarView* toolBar : topLevelToolBars(page)) {
         if (!toolBar->dockWidget()->isFloating()) {
             topLevelToolBarsDocks << toolBar;
         }
