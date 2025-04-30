@@ -1131,8 +1131,6 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
 {
     ChordList* chordList = score()->chordList();
     std::stack<PointF> stack;
-    double _spatium = spatium();
-    double mag      = magS();
 
 // LOGD("===");
     for (const RenderAction& a : renderList) {
@@ -1153,8 +1151,9 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
             m_textList.push_back(ts);
             x += ts->width();
         } else if (a.type == RenderAction::RenderActionType::MOVE) {
-            x += a.movex * mag * _spatium * .2;
-            y += a.movey * mag * _spatium * .2;
+            FontMetrics fm = FontMetrics(font());
+            x += a.movex * fm.height();
+            y += a.movey * fm.height();
         } else if (a.type == RenderAction::RenderActionType::PUSH) {
             stack.push(PointF(x, y));
         } else if (a.type == RenderAction::RenderActionType::POP) {
