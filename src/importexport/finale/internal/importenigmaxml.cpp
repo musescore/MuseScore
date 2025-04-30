@@ -276,11 +276,15 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     Staff* s = Factory::createStaff(part);
     /// @todo This staffLines setting will move to wherever we parse staff styles
     /// @todo Need to intialize the staff type from presets?
+
+    // # of staff lines
     if (musxStaff->staffLines.has_value()) {
         s->setLines(Fraction(0, 1), musxStaff->staffLines.value());
     } else if (musxStaff->customStaff.has_value()) {
         s->setLines(Fraction(0, 1), musxStaff->customStaff.value().size());
     }
+
+    // barline vertical offsets relative to staff
     auto calcBarlineOffsetHalfSpaces = [](Evpu offset, int numLines, bool forTop) -> int {
         if (numLines == 1) {
             // This works for single-line staves. Needs more testing for other non-standard scenarios.
@@ -295,7 +299,11 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     };
     s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset, s->lines(Fraction(0, 1)), true));
     s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset, s->lines(Fraction(0, 1)), false));
+
+    // hide when empty
     s->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
+
+    // clefs
     if (auto defaultClefs = clefTypeListFromMusxStaff(musxStaff)) {
         s->setDefaultClefType(defaultClefs.value());
     } else {
@@ -357,6 +365,7 @@ void EnigmaXmlImporter::importMeasures()
         measure->setTimesig(scoreTimeSig);
         measure->setTicks(scoreTimeSig);
         m_score->measures()->add(measure);
+
         // for now, add a full measure rest to each staff for the measure.
         for (mu::engraving::Staff* staff : m_score->staves()) {
             mu::engraving::staff_idx_t staffIdx = staff->idx();
@@ -367,7 +376,7 @@ void EnigmaXmlImporter::importMeasures()
             rest->setTrack(staffIdx * VOICES);
             restSeg->add(rest);
         }
-        if (++counter >= 100) break; //DBG
+        if (++counter >= 100) break; // DBG
     }
 
     /// @todo maybe move this to separate function
@@ -419,6 +428,7 @@ void EnigmaXmlImporter::importParts()
         QString id = QString("P%1").arg(++partNumber);
         part->setId(id);
 
+        // names of part
         auto fullBaseName = staff->getFullInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
         if (!fullBaseName.empty()) {
             part->setPartName(QString::fromStdString(trimNewLineFromString(fullBaseName)));
