@@ -3101,9 +3101,7 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
                 mergedRest->mutldata()->moveY(yMove);
             }
             if (isWholeOrHalf) {
-                double y = rest->pos().y();
-                int line = y < 0 ? floor(y / lineDistance) : floor(y / lineDistance);
-                rest->updateSymbol(line, lines, rest->mutldata()); // Because it may need to use the symbol with ledger line now
+                rest->updateSymbol(); // Because it may need to use the symbol with ledger line now
             }
         }
     }
@@ -3233,20 +3231,12 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
 
         bool rest1IsWholeOrHalf = rest1->isWholeRest() || rest1->durationType() == DurationType::V_HALF;
         bool rest2IsWholeOrHalf = rest2->isWholeRest() || rest2->durationType() == DurationType::V_HALF;
-        double y = 0.0;
-        int line = 0;
 
         if (rest1IsWholeOrHalf) {
-            Rest::LayoutData* rest1LayoutData = rest1->mutldata();
-            y = rest1->pos().y();
-            line = y < 0 ? floor(y / lineDistance) : floor(y / lineDistance);
-            rest1->updateSymbol(line, lines, rest1LayoutData);
+            rest1->updateSymbol();
         }
         if (rest2IsWholeOrHalf) {
-            Rest::LayoutData* rest2LayoutData = rest2->mutldata();
-            y = rest2->pos().y();
-            line = y < 0 ? floor(y / lineDistance) : floor(y / lineDistance);
-            rest2->updateSymbol(line, lines, rest2LayoutData);
+            rest2->updateSymbol();
         }
     }
 }

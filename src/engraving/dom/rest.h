@@ -141,7 +141,7 @@ public:
     int computeWholeOrBreveRestOffset(int voiceOffset, int lines) const;
 
     SymId getSymbol(DurationType type, int line, int lines) const;
-    void updateSymbol(int line, int lines, LayoutData* ldata) const;
+    void updateSymbol();
     double symWidthNoLedgerLines(LayoutData* ldata) const;
 
 protected:
