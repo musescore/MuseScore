@@ -520,11 +520,7 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
     const AsciiStringView tag(e.name());
 
     if (tag == "eid") {
-        AsciiStringView s = e.readAsciiText();
-        EID eid = EID::fromStdString(s);
-        if (eid.isValid()) {
-            item->setEID(eid);
-        }
+        readItemEID(item, e);
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::SIZE_SPATIUM_DEPENDENT)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::OFFSET)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::MIN_DISTANCE)) {
@@ -538,13 +534,7 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
     } else if (tag == "selected") { // obsolete
         e.readInt();
     } else if (tag == "linkedTo") {
-        AsciiStringView s = e.readAsciiText();
-        EID eid = EID::fromStdString(s);
-        DO_ASSERT(eid.isValid());
-        EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
-        EngravingObject* mainElement = eidRegister->itemFromEID(eid);
-        DO_ASSERT(mainElement && mainElement->type() == item->type());
-        item->linkTo(mainElement);
+        readItemLink(item, e, ctx);
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::POSITION_LINKED_TO_MASTER)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::APPEARANCE_LINKED_TO_MASTER)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::EXCLUDE_FROM_OTHER_PARTS)) {
@@ -566,6 +556,28 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
         return false;
     }
     return true;
+}
+
+void TRead::readItemEID(EngravingObject* item, XmlReader& xml)
+{
+    AsciiStringView s = xml.readAsciiText();
+    EID eid = EID::fromStdString(s);
+    IF_ASSERT_FAILED(eid.isValid()) {
+        return;
+    }
+
+    item->setEID(eid);
+}
+
+void TRead::readItemLink(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
+{
+    AsciiStringView s = xml.readAsciiText();
+    EID eid = EID::fromStdString(s);
+    DO_ASSERT(eid.isValid());
+    EIDRegister* eidRegister = ctx.score()->masterScore()->eidRegister();
+    EngravingObject* mainElement = eidRegister->itemFromEID(eid);
+    DO_ASSERT(mainElement && mainElement->type() == item->type());
+    item->linkTo(mainElement);
 }
 
 void TRead::read(TextBase* t, XmlReader& xml, ReadContext& ctx)
@@ -4219,26 +4231,10 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "mag") {
         /*_userMag =*/
         e.readDouble(0.1, 10.0);
+    } else if (tag == "eid") {
+        readItemEID(s, e);
     } else if (tag == "linkedTo") {
-        int v = e.readInt() - 1;
-        Staff* st = s->score()->masterScore()->staff(v);
-        if (s->links()) {
-            LOGD("Staff::readProperties: multiple <linkedTo> tags");
-            if (!st || s->isLinked(st)) {     // maybe we don't need actually to relink...
-                return true;
-            }
-            // not using unlink() here as it may delete _links
-            // a pointer to which is stored also in XmlReader.
-            s->links()->remove(s);
-            s->setLinks(nullptr);
-        }
-        if (st && st != s) {
-            s->linkTo(st);
-        } else if (!s->score()->isMaster() && !st) {
-            // if it is a master score it is OK not to find
-            // a staff which is going after the current one.
-            LOGD("staff %d not found in parent", v);
-        }
+        readItemLink(s, e, ctx);
     } else if (tag == "color") {
         s->staffType(Fraction(0, 1))->setColor(e.readColor());
     } else if (tag == "transposeDiatonic") {

@@ -376,6 +376,9 @@ public:
 
     static void readSystemLocks(Score* score, XmlReader& e);
 
+    static void readItemEID(EngravingObject* item, XmlReader& xml);
+    static void readItemLink(EngravingItem* item, XmlReader& xml, ReadContext& ctx);
+
 private:
     static bool readProperties(Box* b, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(HBox* b, XmlReader& xml, ReadContext& ctx);

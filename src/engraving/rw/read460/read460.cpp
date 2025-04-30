@@ -121,11 +121,7 @@ bool Read460::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
         ctx.setTrack(muse::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "eid") {
-            AsciiStringView s = e.readAsciiText();
-            EID eid = EID::fromStdString(s);
-            if (eid.isValid()) {
-                score->setEID(eid);
-            }
+            TRead::readItemEID(score, e);
         } else if (tag == "Staff") {
             StaffRead::readStaff(score, e, ctx);
         } else if (tag == "Omr") {
