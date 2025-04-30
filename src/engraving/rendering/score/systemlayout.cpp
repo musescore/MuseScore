@@ -991,6 +991,9 @@ void SystemLayout::alignRests(const ElementsToLayout& elementsToLayout, LayoutCo
                 yResult = alignUpwards ? yCur - restVertClearance : yCur + restVertClearance;
             }
             rest->mutldata()->setPosY(yResult);
+            if (rest->isWholeRest() || rest->durationType() == DurationType::V_HALF) {
+                rest->updateSymbol();
+            }
         }
     }
 }

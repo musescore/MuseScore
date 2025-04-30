@@ -326,9 +326,17 @@ SymId Rest::getSymbol(DurationType type, int line, int lines) const
     }
 }
 
-void Rest::updateSymbol(int line, int lines, LayoutData* ldata) const
+void Rest::updateSymbol()
 {
-    ldata->sym = getSymbol(durationType().type(), line, lines);
+    Fraction t = tick();
+    Staff* st = staff();
+    double lineDistance = st->lineDistance(t) * spatium();
+    int lines = st->lines(t);
+
+    double y = pos().y();
+    int line = floor(y / lineDistance);
+
+    mutldata()->sym = getSymbol(durationType().type(), line, lines);
 }
 
 double Rest::symWidthNoLedgerLines(LayoutData* ldata) const
