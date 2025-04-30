@@ -3300,6 +3300,12 @@ static String symIdToTechn(const SymId sid)
         return u"hole";
     case SymId::guitarGolpe:
         return u"golpe";
+    case SymId::guitarClosePedal:
+        return u"stopped smufl=\"guitarClosePedal\"";
+    case SymId::guitarHalfOpenPedal:
+        return u"half-muted smufl=\"guitarHalfOpenPedal\"";
+    case SymId::guitarOpenPedal:
+        return u"open smufl=\"guitarOpenPedal\"";
     case SymId::handbellsBelltree:
         return u"belltree";
     case SymId::handbellsDamp3:
