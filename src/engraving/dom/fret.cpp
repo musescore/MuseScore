@@ -286,10 +286,8 @@ void FretDiagram::setStrings(int n)
             if (it->startString + difference < 0) {
                 it = bVect.erase(it);
             } else {
-                int startString = std::max(0, it->startString + difference);
-                int endString = it->endString == -1 ? -1 : it->endString + difference;
-                it->startString = startString;
-                it->endString = endString;
+                it->startString = std::max(0, it->startString + difference);
+                it->endString = it->endString == -1 ? -1 : it->endString + difference;
                 it++;
             }
         }
@@ -679,13 +677,9 @@ FretItem::Marker FretDiagram::marker(int s) const
 //   barre
 //---------------------------------------------------------
 
-std::vector<FretItem::Barre>& FretDiagram::getBarres(int f)
+std::vector<FretItem::Barre>& FretDiagram::getBarres(int fret)
 {
-    if (m_barres.find(f) != m_barres.end()) {
-        return m_barres[f];
-    }
-    m_barres[f] = std::vector<FretItem::Barre> { };
-    return m_barres[f];
+    return m_barres[fret];
 }
 
 std::vector<FretItem::Barre> FretDiagram::barre(int fret) const
