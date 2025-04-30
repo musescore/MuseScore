@@ -281,21 +281,16 @@ void FretDiagram::setStrings(int n)
     m_markers = tempMarkers;
 
     for (int fret = 1; fret <= m_frets; ++fret) {
-        if (!barre(fret).empty()) {
-            for (auto& b : m_barres[fret]) {
-                if (b.startString + difference <= 0) {
-                    removeBarre(fret);
-                    break;
-                }
-            }
-            
-            for (auto& b: m_barres[fret]) {
-                if (b.startString + difference <= 0) {
-                    int startString = std::max(0, b.startString + difference);
-                    int endString   = b.endString == -1 ? -1 : b.endString + difference;
-                    FretItem::Barre newBarre(startString, endString);
-                    m_barres[fret].push_back(newBarre);
-                }
+        std::vector<FretItem::Barre>& bVect = getBarres(fret); 
+        for (auto it = bVect.begin(); it != bVect.end();) {
+            if (it->startString + difference < 0) {
+                it = bVect.erase(it);
+            } else {
+                int startString = std::max(0, it->startString + difference);
+                int endString = it->endString == -1 ? -1 : it->endString + difference;
+                it->startString = startString;
+                it->endString = endString;
+                it++;
             }
         }
     }
@@ -426,22 +421,18 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
     UNUSED(add);
     std::vector<FretItem::Barre>& bVect = getBarres(fret);
 
-    if (bVect.size() == 1 && bVect[0].endString == -1 && bVect[0].startString == -1) { // if there are no existing barres
-        bVect[0] = FretItem::Barre(string, -1);
-        removeDotsMarkers(string, -1, fret);
-        return;
-    }
-
-    for (auto it = bVect.begin(); it != bVect.end(); ++it) {
-        if (string < it->startString) {
-            it->startString = string;
-            removeDotsMarkers(it->startString, string, fret);
-            return;
-        }
-        if ((string > it->startString && it->endString == -1) || (string > it->startString && it->endString > string)) {
-            it->endString = string;
-            removeDotsMarkers(it->startString, string, fret);
-            return;
+    if (!bVect.empty()) {
+        for (auto it = bVect.begin(); it != bVect.end(); ++it) {
+            if (string < it->startString) {
+                it->startString = string;
+                removeDotsMarkers(it->startString, string, fret);
+                return;
+            }
+            if ((string > it->startString && it->endString == -1) || (string > it->startString && it->endString > string)) {
+                it->endString = string;
+                removeDotsMarkers(it->startString, string, fret);
+                return;
+            }
         }
     }
 
