@@ -27,6 +27,7 @@
 
 #include "types/constants.h"
 
+#include "rw/compat/compatutils.h"
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
 
@@ -335,7 +336,7 @@ void HChord::add(const std::vector<HDegree>& degreeList)
 //   readRenderList
 //---------------------------------------------------------
 
-static void readRenderList(String val, std::list<RenderAction>& renderList)
+static void readRenderList(String val, std::list<RenderAction>& renderList, int mscVersion)
 {
     renderList.clear();
     StringList sl = val.split(u' ', muse::SkipEmptyParts);
@@ -348,6 +349,12 @@ static void readRenderList(String val, std::list<RenderAction>& renderList)
                 a.type = RenderAction::RenderActionType::MOVE;
                 a.movex = ssl[1].toDouble();
                 a.movey = ssl[2].toDouble();
+
+                if (mscVersion < 460) {
+                    a.movex = compat::CompatUtils::convertChordExtModUnits(a.movex);
+                    a.movey = compat::CompatUtils::convertChordExtModUnits(a.movey);
+                }
+
                 renderList.push_back(a);
             }
         } else if (s == u":push") {
@@ -408,7 +415,7 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderAction>& al, c
 //  read
 //---------------------------------------------------------
 
-void ChordToken::read(XmlReader& e)
+void ChordToken::read(XmlReader& e, int mscVersion)
 {
     String c = e.attribute("class");
     if (c == "quality") {
@@ -425,7 +432,7 @@ void ChordToken::read(XmlReader& e)
         if (tag == "name") {
             names << e.readText();
         } else if (tag == "render") {
-            readRenderList(e.readText(), renderList);
+            readRenderList(e.readText(), renderList, mscVersion);
         }
     }
 }
@@ -1594,7 +1601,7 @@ void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
 //   read
 //---------------------------------------------------------
 
-void ChordDescription::read(XmlReader& e)
+void ChordDescription::read(XmlReader& e, int mscVersion)
 {
     int ni = 0;
     id = e.attribute("id").toInt();
@@ -1611,7 +1618,7 @@ void ChordDescription::read(XmlReader& e)
         } else if (tag == "voicing") {
             chord = HChord(e.readText());
         } else if (tag == "render") {
-            readRenderList(e.readText(), renderList);
+            readRenderList(e.readText(), renderList, mscVersion);
             renderListGenerated = false;
         } else {
             e.unknown();
@@ -1737,7 +1744,7 @@ void ChordList::read(XmlReader& e, int mscVersion)
             m_autoAdjust = e.readBool();
         } else if (tag == "token") {
             ChordToken t;
-            t.read(e);
+            t.read(e, mscVersion);
             chordTokenList.push_back(t);
         } else if (tag == "chord") {
             int id = e.intAttribute("id");
@@ -1751,7 +1758,7 @@ void ChordList::read(XmlReader& e, int mscVersion)
             // record updated id
             id = cd.id;
             // read rest of description
-            cd.read(e);
+            cd.read(e, mscVersion);
             // restore updated id
             cd.id = id;
             // throw away previously parsed chords
@@ -1761,11 +1768,11 @@ void ChordList::read(XmlReader& e, int mscVersion)
             // add to list
             insert({ id, cd });
         } else if (tag == "renderRoot") {
-            readRenderList(e.readText(), renderListRoot);
+            readRenderList(e.readText(), renderListRoot, mscVersion);
         } else if (tag == "renderFunction") {
-            readRenderList(e.readText(), renderListFunction);
+            readRenderList(e.readText(), renderListFunction, mscVersion);
         } else if ((tag == "renderBase" && mscVersion < 460) || tag == "renderBass") {
-            readRenderList(e.readText(), renderListBass);
+            readRenderList(e.readText(), renderListBass, mscVersion);
         } else {
             e.unknown();
         }
