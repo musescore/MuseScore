@@ -192,6 +192,7 @@ private:
     static void layoutParenthesisAndBigTimeSigs(const ElementsToLayout& elementsToLayout);
 
     static void alignRests(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
+    static void checkFullMeasureRestCollisions(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
 };
 }
 
