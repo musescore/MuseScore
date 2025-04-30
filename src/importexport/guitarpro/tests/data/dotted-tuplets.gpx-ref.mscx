@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -50,30 +52,38 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <KeySig>
+            <eid>E_E</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>1.666667</tempo>
+            <eid>G_G</eid>
             <text>Moderate <sym>metNoteQuarterUp</sym> = 100</text>
             </Tempo>
           <Rest>
+            <eid>H_H</eid>
             <durationType>half</durationType>
             </Rest>
           <Rest>
+            <eid>I_I</eid>
             <durationType>16th</durationType>
             </Rest>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <eid>J_J</eid>
             </Dynamic>
           <Tuplet>
+            <eid>K_K</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>16th</baseNote>
@@ -83,13 +93,16 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>L_L</eid>
             <l1>16</l1>
             <l2>14</l2>
             </Beam>
           <Chord>
+            <eid>M_M</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
+              <eid>N_N</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -97,9 +110,11 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>O_O</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
+              <eid>P_P</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <fret>8</fret>
@@ -107,11 +122,14 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>Q_Q</eid>
             <dots>1</dots>
             <durationType>eighth</durationType>
             <Note>
+              <eid>R_R</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>S_S</eid>
                   </Tie>
                 <next>
                   <location>
@@ -127,8 +145,10 @@
             </Chord>
           <endTuplet/>
           <Chord>
+            <eid>T_T</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>U_U</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -145,18 +165,22 @@
           </voice>
         <voice>
           <Rest>
+            <eid>V_V</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>W_W</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>X_X</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>Y_Y</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>

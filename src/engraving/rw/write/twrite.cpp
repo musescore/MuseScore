@@ -444,7 +444,7 @@ void TWrite::writeSystemLocks(const Score* score, XmlWriter& xml)
 
 void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (MScore::testMode || ctx.configuration()->doNotSaveEIDsForBackCompat() || item->score()->isPaletteScore() || ctx.clipboardmode()) {
+    if (ctx.configuration()->doNotSaveEIDsForBackCompat() || item->score()->isPaletteScore() || ctx.clipboardmode()) {
         return;
     }
 
@@ -453,6 +453,20 @@ void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteCont
         eid = item->assignNewEID();
     }
     xml.tag("eid", eid.toStdString());
+}
+
+void TWrite::writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!item->links() || item->links()->size() <= 1 || ctx.clipboardmode()) {
+        return;
+    }
+
+    EngravingItem* mainElement = static_cast<EngravingItem*>(item->links()->mainElement());
+    if (mainElement != item) {
+        EID eidOfMainElement = mainElement->eid();
+        DO_ASSERT(eidOfMainElement.isValid());
+        xml.tag("linkedTo", mainElement->eid().toStdString());
+    }
 }
 
 void TWrite::writeSystemLock(const SystemLock* systemLock, XmlWriter& xml)
@@ -474,7 +488,7 @@ void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 
 void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
-    TWrite::writeItemEid(item, xml, ctx);
+    writeItemEid(item, xml, ctx);
 
     bool autoplaceEnabled = item->score()->style().styleB(Sid::autoplaceEnabled);
     if (!autoplaceEnabled) {
@@ -485,53 +499,8 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         writeProperty(item, xml, Pid::AUTOPLACE);
     }
 
-    // copy paste should not keep links
-    if (item->links() && (item->links()->size() > 1) && !ctx.clipboardmode()) {
-        if (MScore::debugMode) {
-            xml.tag("lid", item->links()->lid());
-        }
+    writeItemLink(item, xml, ctx);
 
-        EngravingItem* me = static_cast<EngravingItem*>(item->links()->mainElement());
-        DO_ASSERT(item->type() == me->type());
-        Staff* s = item->staff();
-        if (!s) {
-            s = item->score()->staff(ctx.curTrack() / VOICES);
-            if (!s) {
-                LOGW("EngravingItem::writeProperties: linked element's staff not found (%s)", item->typeName());
-            }
-        }
-        Location loc = Location::positionForElement(item);
-        if (me == item) {
-            xml.tag("linkedMain");
-            int index = ctx.assignLocalIndex(loc);
-            ctx.setLidLocalIndex(item->links()->lid(), index);
-        } else {
-            if (s && s->links()) {
-                Staff* linkedStaff = toStaff(s->links()->mainElement());
-                loc.setStaff(static_cast<int>(linkedStaff->idx()));
-            }
-            xml.startElement("linked");
-            if (!me->score()->isMaster()) {
-                if (me->score() == item->score()) {
-                    xml.tag("score", "same");
-                } else {
-                    LOGW(
-                        "EngravingItem::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)",
-                        item->typeName(), item->links()->lid());
-                }
-            }
-
-            Location mainLoc = Location::positionForElement(me);
-            const int guessedLocalIndex = ctx.assignLocalIndex(mainLoc);
-            if (loc != mainLoc) {
-                mainLoc.toRelative(loc);
-                write(&mainLoc, xml, ctx);
-            }
-            const int indexDiff = ctx.lidLocalIndex(item->links()->lid()) - guessedLocalIndex;
-            xml.tag("indexDiff", indexDiff, 0);
-            xml.endElement();       // </linked>
-        }
-    }
     if ((ctx.writeTrack() || item->track() != ctx.curTrack())
         && (item->track() != muse::nidx) && !item->isBeam() && !item->isTuplet()) {
         // Writing track number for beams and tuplets is redundant as it is calculated
@@ -2669,17 +2638,10 @@ void TWrite::write(const Spacer* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
 {
-    xml.startElement(item, { { "id", item->idx() + 1 } });
+    xml.startElement(item);
 
-    if (item->links()) {
-        Score* s = item->masterScore();
-        for (auto le : *item->links()) {
-            Staff* staff = toStaff(le);
-            if ((staff->score() == s) && (staff != item)) {
-                xml.tag("linkedTo", static_cast<int>(staff->idx() + 1));
-            }
-        }
-    }
+    writeItemEid(item, xml, ctx);
+    writeItemLink(item, xml, ctx);
 
     // for copy/paste we need to know the actual transposition
     if (ctx.clipboardmode()) {

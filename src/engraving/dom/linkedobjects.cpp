@@ -30,29 +30,6 @@
 
 using namespace mu::engraving;
 
-LinkedObjects::LinkedObjects(Score* score)
-{
-    m_lid = score->linkId();   // create new unique id
-}
-
-LinkedObjects::LinkedObjects(Score* score, int id)
-{
-    m_lid = id;
-    if (m_lid != -1) {
-        score->linkId(id);          // remember used id
-    }
-}
-
-//---------------------------------------------------------
-//   setLid
-//---------------------------------------------------------
-
-void LinkedObjects::setLid(Score* score, int id)
-{
-    m_lid = id;
-    score->linkId(id);
-}
-
 bool LinkedObjects::contains(const EngravingObject* o) const
 {
     return std::find(this->begin(), this->end(), o) != this->end();

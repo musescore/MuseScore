@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>mhHGVe39sbN_YFUuTNn9+3G</eid>
     <Division>480</Division>
     <Style>
       <spatium>1.74978</spatium>
@@ -23,7 +24,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>5gvtj2Use0P_5gvtj2Use0P</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -62,21 +64,26 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>cWsQD7onVE_Gs5pFKkR/TI</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>1KfZKNk+7TC_JLDe3W+NHuO</eid>
             </Clef>
           <TimeSig>
+            <eid>ReHwU5Vs5QP_wx36zcFa7BO</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
             <root>14</root>
             <name>7</name>
+            <eid>2ouZKn46kzN_2172r0PQ70D</eid>
             </Harmony>
           <Rest>
+            <eid>4gvtj2Use0P_3iQgVo0IDHL</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -86,16 +93,20 @@
           <Harmony>
             <root>16</root>
             <name>7</name>
+            <eid>Yuk10ASKBUP_+8ntsO5rYwM</eid>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
+        <eid>t2EsgAFlRbG_srWFIAFV8IB</eid>
         <voice>
           <Harmony>
             <root>18</root>
             <name>7</name>
+            <eid>HNKUAccN1ZN_5AYEroiqw3D</eid>
             </Harmony>
           <Rest>
+            <eid>dqnnO/H8InC_sxlIm2Js3bF</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -105,16 +116,20 @@
           <Harmony>
             <root>13</root>
             <name>7</name>
+            <eid>Hdip2tX7V0N_7mfGwsTDwZH</eid>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
+        <eid>4a3b0e0Oc1J_QsDOmoNugxK</eid>
         <voice>
           <Harmony>
             <root>14</root>
             <name>7</name>
+            <eid>im85bCtlrwG_QQ5EaQrMipM</eid>
             </Harmony>
           <Rest>
+            <eid>bSX1x3cz8sH_WGWEIhVXfnE</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -124,16 +139,20 @@
           <Harmony>
             <root>16</root>
             <name>7</name>
+            <eid>fk9LxBOi21G_WPlD2rUsy1N</eid>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
+        <eid>fjri3bmfkuG_C0evuyjKplC</eid>
         <voice>
           <Harmony>
             <root>18</root>
             <name>7</name>
+            <eid>FDE8UGsR3gB_YMm5Ha0LORJ</eid>
             </Harmony>
           <Rest>
+            <eid>QJYHRr1fToB_DxJrSR1N2v</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -143,16 +162,20 @@
           <Harmony>
             <root>13</root>
             <name>7</name>
+            <eid>tz1D8nKuwGN_T05YsupAVRM</eid>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
+        <eid>1O6i8tCHkQI_OARryzikM1K</eid>
         <voice>
           <Harmony>
             <root>14</root>
             <name>7</name>
+            <eid>6gvtj2Use0P_6gvtj2Use0P</eid>
             </Harmony>
           <Rest>
+            <eid>yhVZXkuNQPE_MiVwn5F0r1H</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -162,16 +185,20 @@
           <Harmony>
             <root>16</root>
             <name>7</name>
+            <eid>7gvtj2Use0P_7gvtj2Use0P</eid>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
+        <eid>ls5bzWgvaEF_Zi0FPX5PY4K</eid>
         <voice>
           <Harmony>
             <root>18</root>
             <name>7</name>
+            <eid>8gvtj2Use0P_8gvtj2Use0P</eid>
             </Harmony>
           <Rest>
+            <eid>Pr39mxiCIq_6UA+GxZNKBD</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -181,16 +208,20 @@
           <Harmony>
             <root>13</root>
             <name>7</name>
+            <eid>9gvtj2Use0P_9gvtj2Use0P</eid>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
+        <eid>EOFWN6iNyd_0MKatBZXHgC</eid>
         <voice>
           <Harmony>
             <root>14</root>
             <name>7</name>
+            <eid>+gvtj2Use0P_+gvtj2Use0P</eid>
             </Harmony>
           <Rest>
+            <eid>+mo6KQBkZ4L_tSa13YEiBRL</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -200,16 +231,20 @@
           <Harmony>
             <root>16</root>
             <name>7</name>
+            <eid>/gvtj2Use0P_/gvtj2Use0P</eid>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
+        <eid>E/CpwHN3vhK_epOEbf1IRfP</eid>
         <voice>
           <Harmony>
             <root>18</root>
             <name>7</name>
+            <eid>Ahvtj2Use0P_Ahvtj2Use0P</eid>
             </Harmony>
           <Rest>
+            <eid>qe8Wd91AqTI_vXrOCU/qTPK</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -219,6 +254,7 @@
           <Harmony>
             <root>13</root>
             <name>7</name>
+            <eid>Bhvtj2Use0P_Bhvtj2Use0P</eid>
             </Harmony>
           </voice>
         </Measure>

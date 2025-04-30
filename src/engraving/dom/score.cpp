@@ -4460,24 +4460,6 @@ void Score::undo(UndoCommand* cmd, EditData* ed) const
 }
 
 //---------------------------------------------------------
-//   linkId
-//---------------------------------------------------------
-
-int Score::linkId()
-{
-    return (masterScore()->m_linkId)++;
-}
-
-// val is a used link id
-void Score::linkId(int val)
-{
-    Score* s = masterScore();
-    if (val >= s->m_linkId) {
-        s->m_linkId = val + 1;       // update unused link id
-    }
-}
-
-//---------------------------------------------------------
 //   scoreList
 //    return a list of scores containing the root score
 //    and all part scores (if there are any)

@@ -1003,7 +1003,7 @@ double System::firstNoteRestSegmentX(bool leading) const
             break;
         }
     }
-    LOGD("firstNoteRestSegmentX: did not find segment");
+
     return margin;
 }
 

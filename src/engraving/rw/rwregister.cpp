@@ -28,6 +28,7 @@
 #include "read302/read302.h"
 #include "read400/read400.h"
 #include "read410/read410.h"
+#include "read460/read460.h"
 
 #include "write/writer.h"
 
@@ -48,9 +49,11 @@ IReaderPtr RWRegister::reader(int version)
         return std::make_shared<read302::Read302>();
     } else if (version < 410) {
         return std::make_shared<read400::Read400>();
+    } else if (version < 460) {
+        return std::make_shared<read410::Read410>();
     }
 
-    return std::make_shared<read410::Read410>();
+    return std::make_shared<read460::Read460>();
 }
 
 IWriterPtr RWRegister::writer(const muse::modularity::ContextPtr& iocCtx)
