@@ -43,6 +43,7 @@ public:
     static void assignInitialPartToExcerpts(const std::vector<Excerpt*>& excerpts);
     static void doCompatibilityConversions(MasterScore* masterScore);
     static ArticulationAnchor translateToNewArticulationAnchor(int anchor);
+    static double convertChordExtModUnits(double val);
     static const std::set<SymId> ORNAMENT_IDS;
 
 private:

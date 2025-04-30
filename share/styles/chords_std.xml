@@ -38,7 +38,7 @@
 -->
 
 <!-- allow style to control mag and position adjustments -->
-  <autoAdjust mag="0.8" adjust="-4.0">1</autoAdjust>
+  <autoAdjust mag="0.8" adjust="-0.4">1</autoAdjust>
 
   <font>
 
@@ -158,7 +158,7 @@
 
   <token>
     <name>69</name>
-    <render>:push m:0:-6 696 :pop m:0:2 699 m:0:-2</render>
+    <render>:push m:0:-0.6 696 :pop m:0:0.2 699 m:0:-0.2</render>
     </token>
 
   <token class="extension">
@@ -417,9 +417,9 @@
     <render>stype</render>
     </token>
 
-  <renderRoot>:n :a m:0.5:0</renderRoot>
-  <renderFunction>:a m:0.5:0 :n</renderFunction>
-  <renderBass>m:-0.2:0 / m:0.2:0 :n :a</renderBass>
+  <renderRoot>:n :a m:0.05:0</renderRoot>
+  <renderFunction>:a m:0.05:0 :n</renderFunction>
+  <renderBass>m:-0.02:0 / m:0.02:0 :n :a</renderBass>
 
 <!--
       Part III: chord list
@@ -449,18 +449,6 @@
                   if omitted, chord will be rendered directly from the first name listed above
                   so you can get all major seventh chords to render as "ma7" by creating a chord definition
                   with no id or render tag, and just the single name "ma7"
--->
-
-<!--
-    <chord>
-      <name>6/9</name>
-      <render>m:0:-4 e6 e/ e9 m:0:4</render>
-      </chord>
-
-    <chord>
-      <name>6,9</name>
-      <render>m:0:-4 e6 e, e9 m:0:4</render>
-      </chord>
 -->
 
   </museScore>

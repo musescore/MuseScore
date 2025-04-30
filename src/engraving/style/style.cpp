@@ -564,6 +564,10 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             if (e.readBool()) {
                 set(Sid::chordSymbolSpelling, NoteSpellingType::FRENCH);
             }
+        } else if (tag == "chordModifierAdjust") {
+            set(Sid::chordModifierAdjust, compat::CompatUtils::convertChordExtModUnits(e.readDouble()));
+        } else if (tag == "chordExtensionAdjust") {
+            set(Sid::chordExtensionAdjust, compat::CompatUtils::convertChordExtModUnits(e.readDouble()));
         } else if (!readProperties(e)) {
             e.unknown();
         }
