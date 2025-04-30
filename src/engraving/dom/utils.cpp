@@ -1385,15 +1385,6 @@ void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::
             if (chordEndTick <= curTick) {
                 continue;
             }
-            Measure* measure = segment->measure();
-            Segment* endSegment = measure->findSegmentR(SegmentType::ChordRest, chordEndTick);
-            if (!endSegment) {
-                continue;
-            }
-            EngravingItem* endItem = endSegment->elementAt(track);
-            if (!endItem || !endItem->isChord()) {
-                continue;
-            }
 
             chords.push_back(chord);
         }
