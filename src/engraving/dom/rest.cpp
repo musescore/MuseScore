@@ -506,60 +506,6 @@ int Rest::computeWholeOrBreveRestOffset(int voiceOffset, int lines) const
         lineMove = 1;
     }
 
-    if (!isFullMeasureRest() || !measure()) {
-        return lineMove;
-    }
-
-    track_idx_t startTrack = staffIdx() * VOICES;
-    track_idx_t endTrack = startTrack + VOICES;
-    track_idx_t thisTrack = track();
-    bool hasNotesAbove = false;
-    bool hasNotesBelow = false;
-    double topY = 10000.0;
-    double bottomY = -10000.0;
-    for (Segment& segment : measure()->segments()) {
-        for (track_idx_t track = startTrack; track < endTrack; ++track) {
-            EngravingItem* item = segment.elementAt(track);
-            if (!item || !item->isChord()) {
-                continue;
-            }
-            Chord* chord = toChord(item);
-            Shape chordShape = chord->shape().translate(chord->pos());
-            chordShape.removeInvisibles();
-            if (chordShape.empty()) {
-                continue;
-            }
-            if (track < thisTrack) {
-                hasNotesAbove = true;
-                bottomY = std::max(bottomY, chordShape.bottom());
-            } else if (track > thisTrack) {
-                hasNotesBelow = true;
-                topY = std::min(topY, chordShape.top());
-            }
-        }
-    }
-
-    if (hasNotesAbove == hasNotesBelow) {
-        return lineMove; // Don't do anything
-    }
-
-    double lineDistance = staff()->lineDistance(tick()) * spatium();
-    int centerLine = floor(double(lines) / 2);
-
-    if (hasNotesAbove) {
-        int bottomLine = floor(bottomY / lineDistance);
-        lineMove = std::max(lineMove, bottomLine - centerLine);
-    }
-
-    if (hasNotesBelow) {
-        int topLine = floor(topY / lineDistance);
-        lineMove = std::min(lineMove, topLine - centerLine);
-    }
-
-    if (isBreveRest()) {
-        lineMove++;
-    }
-
     return lineMove;
 }
 
