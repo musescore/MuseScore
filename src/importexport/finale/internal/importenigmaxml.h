@@ -29,9 +29,10 @@
 #include "musx/musx.h"
 
 namespace mu::engraving {
+class InstrumentTemplate;
 class MasterScore;
-class Score;
 class Part;
+class Score;
 class Staff;
 }
 
@@ -54,7 +55,8 @@ private:
     void importMeasures();
     void importBrackets();
 
-    engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff);
+    engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
+                                  const engraving::InstrumentTemplate* it = nullptr);
 
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
