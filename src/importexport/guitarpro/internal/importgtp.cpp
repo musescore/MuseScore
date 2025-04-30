@@ -2919,11 +2919,6 @@ static Err importScore(MasterScore* score, muse::io::IODevice* io, const muse::m
         return Err::FileOpenError;
     }
 
-    score->loadStyle(u":/engraving/styles/gp-style.mss");
-    if (experimental) {
-        score->loadStyle(u":/engraving/styles/gp-style-experimental.mss");
-    }
-
     score->checkChordList();
     io->seek(0);
     char header[5];
