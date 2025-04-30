@@ -281,7 +281,7 @@ void FretDiagram::setStrings(int n)
     m_markers = tempMarkers;
 
     for (int fret = 1; fret <= m_frets; ++fret) {
-        std::vector<FretItem::Barre>& bVect = getBarres(fret); 
+        std::vector<FretItem::Barre>& bVect = getBarres(fret);
         for (auto it = bVect.begin(); it != bVect.end();) {
             if (it->startString + difference < 0) {
                 it = bVect.erase(it);
