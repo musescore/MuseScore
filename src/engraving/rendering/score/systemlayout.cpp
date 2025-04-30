@@ -959,7 +959,8 @@ void SystemLayout::alignRests(const ElementsToLayout& elementsToLayout, LayoutCo
                 RestGroup restGroup;
                 for (const Segment& segment : measure->segments()) {
                     EngravingItem* element = segment.element(track);
-                    if (element && element->isRest() && toRest(element)->staffMove() == 0) {
+                    if (element && element->isRest() && element->visible() && toRest(element)->staffMove() == 0
+                        && !toRest(element)->isGap()) {
                         restGroup.push_back(toRest(element));
                     }
                 }
