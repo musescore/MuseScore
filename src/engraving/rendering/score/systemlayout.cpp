@@ -1021,6 +1021,66 @@ void SystemLayout::alignRests(const ElementsToLayout& elementsToLayout, LayoutCo
     }
 }
 
+void SystemLayout::checkFullMeasureRestCollisions(const ElementsToLayout& elementsToLayout, LayoutContext& ctx)
+{
+    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+        for (Measure* measure : elementsToLayout.measures) {
+            if (!measure->hasVoices(staffIdx)) {
+                continue;
+            }
+
+            Rest* fullMeasureRest = nullptr;
+
+            Segment* firstCRSeg = measure->first(SegmentType::ChordRest);
+            IF_ASSERT_FAILED(firstCRSeg) {
+                continue;
+            }
+            track_idx_t startTrack = staff2track(staffIdx);
+            track_idx_t endTrack = startTrack + VOICES;
+            for (track_idx_t track = startTrack; track < endTrack; ++track) {
+                EngravingItem* item = firstCRSeg->element(track);
+                if (item && item->isRest() && toRest(item)->isFullMeasureRest()) {
+                    fullMeasureRest = toRest(item);
+                    break;
+                }
+            }
+
+            if (!fullMeasureRest) {
+                continue;
+            }
+
+            double xRest = fullMeasureRest->pagePos().x() - elementsToLayout.system->pagePos().x();
+            Shape restShape = fullMeasureRest->shape().translate(PointF(xRest, fullMeasureRest->y()));
+
+            Shape measureShape;
+            for (const Segment& segment : measure->segments()) {
+                double xSegment = segment.pagePos().x() - elementsToLayout.system->pagePos().x();
+                measureShape.add(segment.staffShape(staffIdx).translated(PointF(xSegment, 0.0)));
+            }
+            measureShape.remove_if([fullMeasureRest] (const ShapeElement& shapeEl) {
+                return shapeEl.item() == fullMeasureRest;
+            });
+
+            const double spatium = fullMeasureRest->spatium();
+            const double lineDist = fullMeasureRest->staff()->lineDistance(fullMeasureRest->tick()) * spatium;
+            const double minHorizontalDistance = 4 * spatium;
+            const double minVertClearance = 0.75 * spatium;
+
+            bool alignAbove = fullMeasureRest->voice() == 0;
+            double verticalClearance = alignAbove ? restShape.verticalClearance(measureShape, minHorizontalDistance)
+                                       : -measureShape.minVerticalDistance(restShape, minHorizontalDistance);
+
+            if (verticalClearance < minVertClearance) {
+                double diff = minVertClearance - verticalClearance;
+                int stepMoves = std::ceil(diff / lineDist);
+                double yMove = stepMoves * lineDist;
+                fullMeasureRest->mutldata()->moveY(alignAbove ? -yMove : yMove);
+                fullMeasureRest->updateSymbol();
+            }
+        }
+    }
+}
+
 void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 {
     TRACEFUNC;
@@ -1066,6 +1126,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     alignRests(elementsToLayout, ctx);
+    checkFullMeasureRestCollisions(elementsToLayout, ctx);
 
     for (BarLine* bl : elementsToLayout.barlines) {
         TLayout::updateBarlineShape(bl, bl->mutldata(), ctx);

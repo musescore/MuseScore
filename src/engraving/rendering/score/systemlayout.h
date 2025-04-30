@@ -214,5 +214,6 @@ private:
     static void layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, bool verticalAlign, LayoutContext& ctx);
 
     static void alignRests(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
+    static void checkFullMeasureRestCollisions(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
 };
 }
