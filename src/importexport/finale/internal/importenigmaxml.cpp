@@ -249,12 +249,15 @@ static ClefType clefTypeFromClefType(ClefIndex clef)
     }
 }
 
-static ClefTypeList clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
+static std::optional<ClefTypeList> clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
 {
     ClefType concertClef = clefTypeFromClefType(musxStaff->calcFirstClefIndex());
     ClefType transposeClef = concertClef;
     if (musxStaff->transposition && musxStaff->transposition->setToClef) {
         transposeClef = clefTypeFromClefType(musxStaff->transposedClef);
+    }
+    if (concertClef == ClefType::INVALID || transposeClef == ClefType::INVALID) {
+        return std::nullopt;
     }
     return ClefTypeList(concertClef, transposeClef);
 }
@@ -272,6 +275,7 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
 {
     Staff* s = Factory::createStaff(part);
     /// @todo This staffLines setting will move to wherever we parse staff styles
+    /// @todo Need to intialize the staff type from presets?
     if (musxStaff->staffLines.has_value()) {
         s->setLines(Fraction(0, 1), musxStaff->staffLines.value());
     } else if (musxStaff->customStaff.has_value()) {
@@ -292,7 +296,11 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset, s->lines(Fraction(0, 1)), true));
     s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset, s->lines(Fraction(0, 1)), false));
     s->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
-    s->setDefaultClefType(clefTypeListFromMusxStaff(musxStaff));
+    if (auto defaultClefs = clefTypeListFromMusxStaff(musxStaff)) {
+        s->setDefaultClefType(defaultClefs.value());
+    } else {
+        s->staffType(Fraction(0, 1))->setGenClef(false);
+    }
     m_staff2Inst.emplace(m_score->nstaves(), InstCmper(musxStaff->getCmper()));
     m_inst2Staff.emplace(InstCmper(musxStaff->getCmper()), m_score->nstaves());
     m_score->appendStaff(s);
