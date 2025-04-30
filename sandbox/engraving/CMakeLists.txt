@@ -22,23 +22,9 @@ set(CMAKE_MODULE_PATH
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
 
-set(QT_MIN_VERSION "6.2.4")
-find_package(Qt6Core ${QT_MIN_VERSION} REQUIRED)
-find_package(Qt6Gui ${QT_MIN_VERSION} REQUIRED)
-# find_package(Qt6Svg ${QT_MIN_VERSION} REQUIRED)
-# find_package(Qt6Widgets ${QT_MIN_VERSION} REQUIRED)
-set(QT_LIBRARIES
-    Qt6::Core
-    Qt6::Gui
-    # Qt6::Svg
-    # Qt6::Widgets
-)
+find_package(Qt6 6.2.4 REQUIRED COMPONENTS Core Gui)
 
 include_directories(
-    ${Qt6Core_INCLUDE_DIRS}
-    ${Qt6Gui_INCLUDE_DIRS}
-    # ${Qt6Svg_INCLUDE_DIRS}
-    # ${Qt6Widgets_INCLUDE_DIRS}
     ${CMAKE_CURRENT_LIST_DIR}
     ${MU_ROOT}/thirdparty/dtl
 )
@@ -80,7 +66,8 @@ target_include_directories(engraving_app PUBLIC
 )
 
 target_link_libraries(engraving_app
-    ${QT_LIBRARIES}
     global
     engraving
+    Qt6::Core
+    Qt6::Gui
 )

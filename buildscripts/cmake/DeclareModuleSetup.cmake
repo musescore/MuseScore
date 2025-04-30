@@ -30,6 +30,7 @@
 # set(MODULE_DEF ...)                         - set definitions
 # set(MODULE_SRC ...)                         - set sources and headers files
 # set(MODULE_LINK ...)                        - set libraries for link
+# set(MODULE_LINK_PUBLIC ...)                 - set libraries for link and transitive link
 # set(MODULE_LINK_GLOBAL ON/OFF)              - set whether to link with `global` module (default ON)
 # set(MODULE_QRC somename.qrc)                - set resource (qrc) file
 # set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
@@ -53,6 +54,7 @@ macro(declare_module name)
     unset(MODULE_DEF)
     unset(MODULE_SRC)
     unset(MODULE_LINK)
+    unset(MODULE_LINK_PUBLIC)
     set(MODULE_LINK_GLOBAL ON)
     set(MODULE_USE_QT ON)
     unset(MODULE_QRC)
@@ -87,7 +89,6 @@ endmacro()
 
 
 macro(setup_module)
-
     if (MODULE_IS_STUB)
         message(STATUS "Configuring ${MODULE} <${MODULE_ALIAS}> [stub]")
     else()
@@ -186,7 +187,6 @@ macro(setup_module)
         ${MUSE_FRAMEWORK_PATH}/src/framework/testing/thirdparty/googletest/googletest/include
         # end compat
 
-
         ${MODULE_INCLUDE_PRIVATE}
     )
 
@@ -206,6 +206,7 @@ macro(setup_module)
     endif()
 
     target_link_libraries(${MODULE}
-        PRIVATE ${MODULE_LINK} ${CMAKE_DL_LIBS} ${QT_LIBRARIES} ${COVERAGE_FLAGS}
+        PRIVATE ${MODULE_LINK} ${COVERAGE_FLAGS}
+        PUBLIC ${MODULE_LINK_PUBLIC}
     )
 endmacro()

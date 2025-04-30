@@ -27,6 +27,7 @@ set(MODULE_TEST_SRC
 
 set(MODULE_TEST_LINK
     muse_update
+    Qt::Network
 )
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})

@@ -234,6 +234,7 @@ set(MODULE_SRC
 set(MODULE_LINK
     muse::uicomponents
     engraving
+    Qt::Quick
     )
 
 setup_module()

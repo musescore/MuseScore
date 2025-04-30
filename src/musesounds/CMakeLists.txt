@@ -47,4 +47,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/musesoundslistmodel.h
     )
 
+set(MODULE_LINK Qt::Concurrent)
+
 setup_module()
