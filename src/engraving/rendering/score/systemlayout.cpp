@@ -953,25 +953,47 @@ void SystemLayout::alignRests(const ElementsToLayout& elementsToLayout, LayoutCo
             if (!measure->hasVoices(staffIdx)) {
                 continue;
             }
+
             track_idx_t sTrack = staffIdx * VOICES;
             track_idx_t eTrack = sTrack + VOICES;
-            for (track_idx_t track = sTrack; track < eTrack; ++track) {
-                RestGroup restGroup;
-                for (const Segment& segment : measure->segments()) {
-                    EngravingItem* element = segment.element(track);
-                    if (element && element->isRest() && element->visible() && toRest(element)->staffMove() == 0
-                        && !toRest(element)->isGap()) {
-                        restGroup.push_back(toRest(element));
+
+            std::vector<Fraction> voiceInterruptionPoints;
+            for (const Segment* segment = measure->last(SegmentType::ChordRest); segment; segment = segment->prev(SegmentType::ChordRest)) {
+                for (track_idx_t track = sTrack; track < eTrack; ++track) {
+                    EngravingItem* item = segment->element(track);
+                    if (item && item->isRest() && toRest(item)->isGap()) {
+                        voiceInterruptionPoints.push_back(segment->rtick() + segment->ticks());
+                        break;
                     }
                 }
-                if (restGroup.size() > 0) {
-                    restGroups.push_back(restGroup);
+            }
+
+            for (track_idx_t track = sTrack; track < eTrack; ++track) {
+                restGroups.push_back(RestGroup());
+                for (const Segment* segment = measure->first(SegmentType::ChordRest); segment;
+                     segment = segment->next(SegmentType::ChordRest)) {
+                    if (voiceInterruptionPoints.size() > 0 && segment->rtick() >= voiceInterruptionPoints.back()) {
+                        restGroups.push_back(RestGroup());
+                        voiceInterruptionPoints.pop_back();
+                    }
+                    EngravingItem* item = segment->element(track);
+                    if (!(item && item->isRest() && item->visible())) {
+                        continue;
+                    }
+                    Rest* rest = toRest(item);
+                    if (rest->staffMove() == 0 && !rest->isGap()) {
+                        restGroups.back().push_back(rest);
+                    }
                 }
             }
         }
     }
 
     for (RestGroup& group : restGroups) {
+        if (group.size() == 0) {
+            continue;
+        }
+
         Rest* firstRest = group.front();
         const bool alignUpwards = firstRest->voice() == 0;
         const double lineDist = firstRest->staff()->lineDistance(firstRest->tick()) * firstRest->spatium();
