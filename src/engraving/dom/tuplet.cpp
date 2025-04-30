@@ -164,13 +164,6 @@ Fraction Tuplet::rtick() const
     return tick() - measure()->tick();
 }
 
-bool Tuplet::isInRange(const Fraction& startTick, const Fraction& endTick) const
-{
-    const bool startsInRange = tick() >= startTick;
-    const bool endsInRange = tick() + actualTicks() <= endTick;
-    return startsInRange && endsInRange;
-}
-
 //---------------------------------------------------------
 //   resetNumberProperty
 //   reset number properties to default values
