@@ -153,7 +153,7 @@
               <eid>S_S</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>1</fret>
+              <fret>3</fret>
               <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
@@ -182,7 +182,7 @@
                 </Symbol>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>3</fret>
+              <fret>1</fret>
               <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
@@ -211,8 +211,8 @@
                 </Accidental>
               <pitch>64</pitch>
               <tpc>18</tpc>
-              <fret>1</fret>
-              <string>1</string>
+              <fret>0</fret>
+              <string>0</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
