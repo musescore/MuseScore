@@ -688,12 +688,12 @@ std::vector<FretItem::Barre>& FretDiagram::getBarres(int f)
     return m_barres[f];
 }
 
-std::vector<FretItem::Barre> FretDiagram::barre(int f) const
+std::vector<FretItem::Barre> FretDiagram::barre(int fret) const
 {
-    if (m_barres.find(f) != m_barres.end()) {
-        return m_barres.at(f);
+    if (m_barres.find(fret) != m_barres.end()) {
+        return m_barres.at(fret);
     }
-    return { FretItem::Barre(-1, -1) };
+    return {};
 }
 
 Font FretDiagram::fretNumFont() const

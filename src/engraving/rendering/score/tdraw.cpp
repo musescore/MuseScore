@@ -1401,7 +1401,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     // Draw barres
     for (auto const& i : item->barres()) {
         int fret = i.first;
-        for (const Barre& barre : i.second) {
+        for (const FretItem::Barre& barre : i.second) {
             int startString = barre.startString;
             int endString   = barre.endString;
 
