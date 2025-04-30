@@ -149,7 +149,7 @@ public:
     ChordTokenClass tokenClass;
     StringList names;
     std::list<RenderAction> renderList;
-    void read(XmlReader&);
+    void read(XmlReader&, int mscVersion);
     void write(XmlWriter&) const;
 };
 
@@ -235,7 +235,7 @@ struct ChordDescription {
     ChordDescription(const String&);
     String quality() const { return m_quality; }
     void complete(ParsedChord* pc, const ChordList*);
-    void read(XmlReader&);
+    void read(XmlReader&, int mscVersion);
     void write(XmlWriter&) const;
 
 private:
@@ -310,8 +310,8 @@ private:
 
     std::map<String, ChordSymbol> m_symbols;
     bool m_autoAdjust = false;
-    double m_nmag = 1.0, m_nadjust = 0.0;
-    double m_emag = 1.0, m_eadjust = 0.0;
+    double m_nmag = 1.0, m_nadjust = 0.0;   // adjust values are measured in percentage
+    double m_emag = 1.0, m_eadjust = 0.0;   // (which is then applied to the height of the font)
     double m_mmag = 1.0, m_madjust = 0.0;
 
     bool m_customChordList = false; // if true, chordlist will be saved as part of score
