@@ -7665,7 +7665,6 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
                 hiddenInstrName = true;
             }
         }
-        // const bool hidePartName = hiddenInstrName || (score->style().styleV(Sid::firstSystemInstNameVisibility).value<InstrumentLabelVisibility>() == InstrumentLabelVisibility::HIDE);
         if (hiddenInstrName) {
             longInstrumentAttributes.push_back({ "print-object", "no" });
             shortInstrumentAttributes.push_back({ "print-object", "no" });
