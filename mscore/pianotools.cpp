@@ -219,6 +219,8 @@ void HPiano::changeSelection(const Selection& selection)
             }
       for (PianoKeyItem* key : qAsConst(keys))
             key->update();
+      // Force redraw
+      scene()->invalidate();
       }
 
 // used when currentScore() is NULL; same as above except the for loop
@@ -229,6 +231,8 @@ void HPiano::clearSelection()
             key->setSelected(false);
             key->update();
             }
+      // Force redraw
+      scene()->invalidate();
       }
 
 //---------------------------------------------------------
@@ -242,6 +246,8 @@ void HPiano::updateAllKeys()
                             || _pressedPlaybackPitches.contains(key->pitch()));
             key->update();
             }
+      // Force redraw
+      scene()->invalidate();
       }
 
 void HPiano::setMaximum(bool top_level) {
