@@ -87,6 +87,16 @@ macro(add_qml_import_path input_var)
     endif()
 endmacro()
 
+function(target_precompile_headers_clang_ccache target)
+    target_precompile_headers(${target} ${ARGN})
+
+    # https://discourse.cmake.org/t/ccache-clang-and-fno-pch-timestamp/7253
+    if (CC_IS_CLANG AND CCACHE_PROGRAM)
+        target_compile_options(${target} PRIVATE 
+            "$<$<COMPILE_LANGUAGE:CXX>:SHELL:-Xclang -fno-pch-timestamp>"
+        )
+    endif()
+endfunction()
 
 macro(setup_module)
     if (MODULE_IS_STUB)
@@ -137,12 +147,12 @@ macro(setup_module)
 
     if (MUSE_COMPILE_USE_PCH AND MODULE_USE_PCH)
         if (${MODULE} STREQUAL muse_global)
-            target_precompile_headers(${MODULE} PRIVATE ${MUSE_FRAMEWORK_PATH}/buildscripts/pch/pch.h)
+            target_precompile_headers_clang_ccache(${MODULE} PRIVATE ${MUSE_FRAMEWORK_PATH}/buildscripts/pch/pch.h)
         else()
             if (DEFINED MODULE_OVERRIDDEN_PCH)
-                target_precompile_headers(${MODULE} PRIVATE ${MODULE_OVERRIDDEN_PCH})
+                target_precompile_headers_clang_ccache(${MODULE} PRIVATE ${MODULE_OVERRIDDEN_PCH})
             else()
-                target_precompile_headers(${MODULE} REUSE_FROM muse_global)
+                target_precompile_headers_clang_ccache(${MODULE} REUSE_FROM muse_global)
                 target_compile_definitions(${MODULE} PRIVATE muse_global_EXPORTS=1)
             endif()
 
