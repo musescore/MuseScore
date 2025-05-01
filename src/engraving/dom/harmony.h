@@ -53,8 +53,6 @@ struct TextSegment {
     PointF pos() const { return PointF(x, y) + offset; }
 
     TextSegment() { select = false; x = y = 0.0; }
-    TextSegment(const muse::draw::Font& f, double _x, double _y)
-        : m_font(f), x(_x), y(_y), select(false) {}
     TextSegment(const String&, const muse::draw::Font&, double x, double y);
     void set(const String&, const muse::draw::Font&, double x, double y, PointF offset);
     void setText(const String& t) { text = t; }
@@ -202,7 +200,8 @@ private:
 
     void render(const String&, double&, double&);
     void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
-                NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
+                NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO,
+                double noteMag = 1.0);
     Sid getPropertyStyle(Pid) const override;
 
     Harmony* findInSeg(Segment* seg) const;

@@ -278,6 +278,7 @@ public:
     std::list<RenderAction> renderListRoot;
     std::list<RenderAction> renderListFunction;
     std::list<RenderAction> renderListBass;
+    std::list<RenderAction> renderListBassOffset;
     std::list<ChordToken> chordTokenList;
     static int privateID;
 

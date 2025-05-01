@@ -1773,6 +1773,8 @@ void ChordList::read(XmlReader& e, int mscVersion)
             readRenderList(e.readText(), renderListFunction, mscVersion);
         } else if ((tag == "renderBase" && mscVersion < 460) || tag == "renderBass") {
             readRenderList(e.readText(), renderListBass, mscVersion);
+        } else if (tag == "renderBassOffset") {
+            readRenderList(e.readText(), renderListBassOffset, mscVersion);
         } else {
             e.unknown();
         }
@@ -1816,7 +1818,10 @@ void ChordList::write(XmlWriter& xml) const
         writeRenderList(xml, renderListFunction, "renderFunction");
     }
     if (!renderListBass.empty()) {
-        writeRenderList(xml, renderListBass, "renderBase");
+        writeRenderList(xml, renderListBass, "renderBass");
+    }
+    if (!renderListBassOffset.empty()) {
+        writeRenderList(xml, renderListBassOffset, "renderBassOffset");
     }
     for (const auto& p : *this) {
         const ChordDescription& cd = p.second;

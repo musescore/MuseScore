@@ -1156,7 +1156,7 @@ void Harmony::render(const String& s, double& x, double& y)
 //---------------------------------------------------------
 
 void Harmony::render(const std::list<RenderAction>& renderList, double& x, double& y, int tpc, NoteSpellingType noteSpelling,
-                     NoteCaseType noteCase)
+                     NoteCaseType noteCase, double noteMag)
 {
     ChordList* chordList = score()->chordList();
     std::stack<PointF> stack;
@@ -1165,14 +1165,11 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
     for (const RenderAction& a : renderList) {
 // a.print();
         if (a.type == RenderAction::RenderActionType::SET) {
-            TextSegment* ts = new TextSegment(m_fontList.front(), x, y);
             ChordSymbol cs = chordList->symbol(a.text);
-            if (cs.isValid()) {
-                ts->m_font = m_fontList[cs.fontIdx];
-                ts->setText(cs.value);
-            } else {
-                ts->setText(a.text);
-            }
+            String text = cs.isValid() ? cs.value : a.text;
+            muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
+
+            TextSegment* ts = new TextSegment(text, font, x, y);
             if (m_harmonyType == HarmonyType::NASHVILLE) {
                 double nmag = chordList->nominalMag();
                 ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * nmag);
@@ -1202,18 +1199,16 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
             } else if (m_function.size() > 0) {
                 c = m_function.at(m_function.size() - 1);
             }
-            TextSegment* ts = new TextSegment(m_fontList.front(), x, y);
             String lookup = u"note" + c;
             ChordSymbol cs = chordList->symbol(lookup);
             if (!cs.isValid()) {
                 cs = chordList->symbol(c);
             }
-            if (cs.isValid()) {
-                ts->m_font = m_fontList[cs.fontIdx];
-                ts->setText(cs.value);
-            } else {
-                ts->setText(c);
-            }
+            String text = cs.isValid() ? cs.value : c;
+            muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
+            font.setPointSizeF(font.pointSizeF() * noteMag);
+
+            TextSegment* ts = new TextSegment(text, font, x, y);
             m_textList.push_back(ts);
             x += ts->width();
         } else if (a.type == RenderAction::RenderActionType::ACCIDENTAL) {
@@ -1231,18 +1226,16 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
                 context = u"german_B";
             }
             if (!acc.empty()) {
-                TextSegment* ts = new TextSegment(m_fontList.front(), x, y);
                 String lookup = context + acc;
                 ChordSymbol cs = chordList->symbol(lookup);
                 if (!cs.isValid()) {
                     cs = chordList->symbol(acc);
                 }
-                if (cs.isValid()) {
-                    ts->m_font = m_fontList[cs.fontIdx];
-                    ts->setText(cs.value);
-                } else {
-                    ts->setText(acc);
-                }
+                String text = cs.isValid() ? cs.value : c;
+                muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
+                font.setPointSizeF(font.pointSizeF() * noteMag);
+
+                TextSegment* ts = new TextSegment(text, font, x, y);
                 m_textList.push_back(ts);
                 x += ts->width();
             }
@@ -1313,7 +1306,9 @@ void Harmony::render()
 
     // render bass
     if (m_bassTpc != Tpc::TPC_INVALID) {
-        render(chordList->renderListBass, x, y, m_bassTpc, m_bassSpelling, m_bassRenderCase);
+        std::list<RenderAction>& bassNoteChordList
+            = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
+        render(bassNoteChordList, x, y, m_bassTpc, m_bassSpelling, m_bassRenderCase, style().styleD(Sid::chordBassNoteScale));
     }
 
     if (m_rootTpc != Tpc::TPC_INVALID && capo > 0 && capo < 12) {
@@ -1351,7 +1346,9 @@ void Harmony::render()
         }
 
         if (capoBassTpc != Tpc::TPC_INVALID) {
-            render(chordList->renderListBass, x, y, capoBassTpc, m_bassSpelling, m_bassRenderCase);
+            std::list<RenderAction>& bassNoteChordList
+                = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
+            render(bassNoteChordList, x, y, capoBassTpc, m_bassSpelling, m_bassRenderCase, style().styleD(Sid::chordBassNoteScale));
         }
         render(u")", x, y);
     }

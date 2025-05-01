@@ -63,8 +63,12 @@
     <sym class="accidental" name="s"/>
 <!-- change value of "code" attribute to "0x200b" (zero width space) to force Bb to render as B in German -->
     <sym class="german_B" code="0x266d" name="b"/>
-
     </font>
+
+<font family="Bravura">
+<sym code="0xE87C" name="dslash"/>
+</font>
+
 
   <font class="extension">
 <!--  <mag>0.9</mag> -->
@@ -420,6 +424,7 @@
   <renderRoot>:n :a m:0.05:0</renderRoot>
   <renderFunction>:a m:0.05:0 :n</renderFunction>
   <renderBass>m:-0.02:0 / m:0.02:0 :n :a</renderBass>
+  <renderBassOffset>m:-0.4:0.5 dslash m:-0.5:0.4 :n :a m:0:-0.9</renderBassOffset>
 
 <!--
       Part III: chord list
