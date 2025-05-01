@@ -143,7 +143,8 @@ const ElementStyle chordSymbolStyle {
     { Sid::minHarmonyDistance, Pid::MIN_DISTANCE },
     { Sid::harmonyVoiceLiteral, Pid::HARMONY_VOICE_LITERAL },
     { Sid::harmonyVoicing, Pid::HARMONY_VOICING },
-    { Sid::harmonyDuration, Pid::HARMONY_DURATION }
+    { Sid::harmonyDuration, Pid::HARMONY_DURATION },
+    { Sid::verticallyAlignChordSymbols, Pid::VERTICAL_ALIGN }
 };
 
 //---------------------------------------------------------
@@ -1747,6 +1748,8 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     case Pid::PLAY:
         v = true;
         break;
+    case Pid::VERTICAL_ALIGN:
+        return true;
     case Pid::OFFSET:
         if (explicitParent() && explicitParent()->isFretDiagram()) {
             v = PropertyValue::fromValue(PointF(0.0, 0.0));

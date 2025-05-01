@@ -883,6 +883,19 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
     }
 }
 
+void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, LayoutContext& ctx)
+{
+    for (Harmony* harmony : harmonies) {
+        TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
+        Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
+    }
+
+    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
+        std::vector<EngravingItem*> harmonyItems(harmonies.begin(), harmonies.end());
+        AlignmentLayout::alignItemsForSystem(harmonyItems, system);
+    }
+}
+
 void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 {
     TRACEFUNC;
@@ -1005,8 +1018,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     bool hasFretDiagram = elementsToLayout.fretDiagrams.size() > 0;
     if (!hasFretDiagram) {
-        HarmonyLayout::autoplaceHarmonies(sl);
-        HarmonyLayout::alignHarmonies(system, sl, true, ctx.conf().maxChordShiftAbove(), ctx.conf().maxChordShiftBelow());
+        layoutHarmonies(elementsToLayout.harmonies, system, ctx);
     }
 
     for (StaffText* st : elementsToLayout.staffText) {
@@ -1032,8 +1044,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
         }
 
-        HarmonyLayout::autoplaceHarmonies(sl);
-        HarmonyLayout::alignHarmonies(system, sl, false, ctx.conf().maxFretShiftAbove(), ctx.conf().maxFretShiftBelow());
+        layoutHarmonies(elementsToLayout.harmonies, system, ctx);
     }
 
     layoutVoltas(elementsToLayout, ctx);
@@ -1192,6 +1203,9 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                 break;
             case ElementType::PARENTHESIS:
                 elements.parenthesis.push_back(toParenthesis(item));
+                break;
+            case ElementType::HARMONY:
+                elements.harmonies.push_back(toHarmony(item));
                 break;
             default:
                 break;
