@@ -129,6 +129,7 @@ private:
         std::vector<TempoText*> tempoText;
         std::vector<Image*> images;
         std::vector<Parenthesis*> parenthesis;
+        std::vector<Harmony*> harmonies;
 
         std::vector<Spanner*> slurs;
         std::vector<Spanner*> trills;
@@ -190,6 +191,8 @@ private:
     static void layoutDynamicExpressionAndHairpins(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
 
     static void layoutParenthesisAndBigTimeSigs(const ElementsToLayout& elementsToLayout);
+
+    static void layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, LayoutContext& ctx);
 };
 }
 

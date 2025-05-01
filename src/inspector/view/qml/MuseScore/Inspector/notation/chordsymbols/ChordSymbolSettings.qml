@@ -78,6 +78,7 @@ Column {
     }
 
     DropdownPropertyView {
+        id: durationSection
         titleText: qsTrc("inspector", "Duration")
         propertyItem: root.model ? root.model.durationType : null
 
@@ -89,5 +90,16 @@ Column {
             { text: qsTrc("inspector", "Until the end of the measure"), value: ChordSymbolTypes.DURATION_STOP_AT_MEASURE_END },
             { text: qsTrc("inspector", "Until the end of the attached duration"), value: ChordSymbolTypes.DURATION_SEGMENT_DURATION }
         ]
+    }
+
+    PropertyCheckBox {
+        id: hideNoteheadCheckBox
+
+        text: qsTrc("inspector", "Vertically align with symbols on the same system")
+        propertyItem: root.model ? root.model.verticalAlign : null
+
+        navigation.name: "Vertically align with symbols on the same system"
+        navigation.panel: root.navigationPanel
+        navigation.row: durationSection.navigationRowEnd + 1
     }
 }
