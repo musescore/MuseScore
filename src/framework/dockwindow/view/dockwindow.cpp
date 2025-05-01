@@ -567,9 +567,8 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
 
     m_currentPage = newPage;
 
-    connect(m_currentPage, &DockPageView::layoutRequested, this, [this](){
-        m_mainWindow->layoutEqually();
-    }, Qt::UniqueConnection);
+    connect(m_currentPage, &DockPageView::layoutRequested,
+            this, &DockWindow::forceLayout, Qt::UniqueConnection);
 
     m_currentPage->setVisible(true);
 
@@ -685,6 +684,11 @@ bool DockWindow::checkLayoutIsCorrupted() const
     }
 
     return false;
+}
+
+void DockWindow::forceLayout()
+{
+    m_mainWindow->layoutEqually();
 }
 
 QByteArray DockWindow::windowState() const
