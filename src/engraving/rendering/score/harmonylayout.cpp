@@ -39,17 +39,6 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-void HarmonyLayout::autoplaceHarmonies(const std::vector<Segment*>& sl)
-{
-    for (const Segment* s : sl) {
-        for (EngravingItem* e : s->annotations()) {
-            if (e->isHarmony()) {
-                Autoplace::autoplaceSegmentElement(e, e->mutldata());
-            }
-        }
-    }
-}
-
 // Help class.
 // Contains harmonies/fretboard per segment.
 class HarmonyList : public std::vector<EngravingItem*>
