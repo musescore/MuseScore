@@ -661,8 +661,8 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     ctx.event = event;
 
     // Grip
-    bool handled = tryHandleClickGrip(ctx);
-    if (handled) {
+    bool consumed = mousePress_considerGrip(ctx);
+    if (consumed) {
         return;
     }
 
@@ -672,17 +672,17 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     }
 
     // Drag outgoing: element
-    handled = tryHandleClickDragOutgoingElement(ctx);
-    if (handled) {
+    consumed = mousePress_considerDragOutgoingElement(ctx);
+    if (consumed) {
         return;
     }
 
     // Select
-    handleClickSelect(ctx);
+    mousePress_considerSelect(ctx);
 
     // Drag outgoing: range
-    handled = tryHandleClickDragOutgoingRange(ctx);
-    if (handled) {
+    consumed = mousePress_considerDragOutgoingRange(ctx);
+    if (consumed) {
         return;
     }
 
@@ -709,7 +709,7 @@ void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event)
     dispatcher()->dispatch("put-note", ActionData::make_arg3<PointF, bool, bool>(logicPos, replace, insert));
 }
 
-bool NotationViewInputController::tryHandleClickGrip(const ClickContext& ctx)
+bool NotationViewInputController::mousePress_considerGrip(const ClickContext& ctx)
 {
     if (ctx.isHitGrip && ctx.event->button() == Qt::LeftButton) {
         viewInteraction()->startEditGrip(ctx.logicClickPos);
@@ -721,7 +721,7 @@ bool NotationViewInputController::tryHandleClickGrip(const ClickContext& ctx)
     return false;
 }
 
-bool NotationViewInputController::tryHandleClickDragOutgoingElement(const ClickContext& ctx)
+bool NotationViewInputController::mousePress_considerDragOutgoingElement(const ClickContext& ctx)
 {
     if (ctx.event->button() != Qt::LeftButton
         || ctx.event->modifiers() != (Qt::ShiftModifier | Qt::ControlModifier)) {
@@ -737,19 +737,17 @@ bool NotationViewInputController::tryHandleClickDragOutgoingElement(const ClickC
     return true;
 }
 
-void NotationViewInputController::handleClickSelect(const ClickContext& ctx)
+void NotationViewInputController::mousePress_considerSelect(const ClickContext& ctx)
 {
     if (!ctx.hitElement) {
         return;
     }
 
-    INotationSelectionPtr selection = viewInteraction()->selection();
-
     if (ctx.event->button() == Qt::LeftButton) {
         if (ctx.event->modifiers() & Qt::ControlModifier) {
-            std::vector<EngravingItem*> overlappingHitElements = viewInteraction()->hitElements(ctx.logicClickPos, hitWidth());
+            const std::vector<EngravingItem*> overlappingHitElements = viewInteraction()->hitElements(ctx.logicClickPos, hitWidth());
             if (overlappingHitElements.size() > 1) {
-                cycleThroughOverlappingHitElements(overlappingHitElements, ctx.hitStaff);
+                cycleOverlappingHitElements(overlappingHitElements, ctx.hitStaff);
                 return;
             }
         } else if (ctx.hitElement->selected()) {
@@ -768,6 +766,8 @@ void NotationViewInputController::handleClickSelect(const ClickContext& ctx)
     } else if (ctx.event->modifiers() & Qt::ControlModifier) {
         selectType = SelectType::ADD;
     } else {
+        const INotationSelectionPtr selection = viewInteraction()->selection();
+
         if (selection->isRange() && selection->range()->containsItem(ctx.hitElement, ctx.hitStaff)) {
             return;
         }
@@ -776,10 +776,10 @@ void NotationViewInputController::handleClickSelect(const ClickContext& ctx)
     viewInteraction()->select({ ctx.hitElement }, selectType, ctx.hitStaff);
 }
 
-void NotationViewInputController::cycleThroughOverlappingHitElements(const std::vector<EngravingItem*>& hitElements,
-                                                                     staff_idx_t hitStaffIndex)
+void NotationViewInputController::cycleOverlappingHitElements(const std::vector<EngravingItem*>& hitElements,
+                                                              staff_idx_t hitStaffIndex)
 {
-    size_t numHitElements = hitElements.size();
+    const size_t numHitElements = hitElements.size();
     size_t currTop = numHitElements - 1;
     EngravingItem* e = hitElements[currTop];
     std::set<EngravingItem*> selectedAtPosition;
@@ -810,14 +810,14 @@ void NotationViewInputController::cycleThroughOverlappingHitElements(const std::
     }
 }
 
-bool NotationViewInputController::tryHandleClickDragOutgoingRange(const ClickContext& ctx)
+bool NotationViewInputController::mousePress_considerDragOutgoingRange(const ClickContext& ctx)
 {
     if (ctx.event->button() != Qt::LeftButton) {
         return false;
     }
 
     if (!ctx.hitElement || ctx.hitElement->isMeasure()) {
-        INotationSelectionPtr selection = viewInteraction()->selection();
+        const INotationSelectionPtr selection = viewInteraction()->selection();
 
         if (selection->isRange() && selection->range()->containsPoint(ctx.logicClickPos)) {
             m_mouseDownInfo.dragAction = MouseDownInfo::DragOutgoingRange;
@@ -834,11 +834,11 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
         return;
     }
 
-    INotationSelectionPtr selection = viewInteraction()->selection();
+    const INotationSelectionPtr selection = viewInteraction()->selection();
+    const bool needStartEditing = ctx.hitElement->selected()
+                                  && ctx.hitElement->needStartEditingAfterSelecting();
 
-    if (!selection->isRange()
-        && ctx.hitElement->selected()
-        && ctx.hitElement->needStartEditingAfterSelecting()) {
+    if (!selection->isRange() && needStartEditing) {
         if (ctx.hitElement->hasGrips() && !ctx.hitElement->isImage() && selection->elements().size() == 1) {
             viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->defaultGrip());
         } else {
