@@ -39,7 +39,6 @@
 # set(MODULE_USE_PCH ON/OFF)                  - set whether to use precompiled headers for this module (default ON)
 # set(MODULE_USE_UNITY ON/OFF)                - set whether to use unity build for this module (default ON)
 # set(MODULE_USE_COVERAGE ON)                 - set whether to use coverage for this module (default ON)
-# set(MODULE_OVERRIDDEN_PCH ...)              - set additional precompiled headers required for module
 # set(MODULE_IS_STUB ON)                      - set a mark that the module is stub
 
 # After all the settings you need to do:
@@ -63,7 +62,6 @@ macro(declare_module name)
     unset(MODULE_QMLEXT_IMPORT)
     set(MODULE_USE_PCH ON)
     set(MODULE_USE_UNITY ON)
-    unset(MODULE_OVERRIDDEN_PCH)
     unset(MODULE_IS_STUB)
     set(MODULE_USE_COVERAGE ON)
 endmacro()
@@ -149,12 +147,8 @@ macro(setup_module)
         if (${MODULE} STREQUAL muse_global)
             target_precompile_headers_clang_ccache(${MODULE} PRIVATE ${MUSE_FRAMEWORK_PATH}/buildscripts/pch/pch.h)
         else()
-            if (DEFINED MODULE_OVERRIDDEN_PCH)
-                target_precompile_headers_clang_ccache(${MODULE} PRIVATE ${MODULE_OVERRIDDEN_PCH})
-            else()
-                target_precompile_headers_clang_ccache(${MODULE} REUSE_FROM muse_global)
-                target_compile_definitions(${MODULE} PRIVATE muse_global_EXPORTS=1)
-            endif()
+            target_precompile_headers_clang_ccache(${MODULE} REUSE_FROM muse_global)
+            target_compile_definitions(${MODULE} PRIVATE muse_global_EXPORTS=1)
 
             set(MODULE_LINK_GLOBAL ON)
         endif()
