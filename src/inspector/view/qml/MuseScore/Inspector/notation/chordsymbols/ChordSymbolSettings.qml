@@ -79,7 +79,6 @@ Column {
 
     DropdownPropertyView {
         id: durationSection
-
         titleText: qsTrc("inspector", "Duration")
         propertyItem: root.model ? root.model.durationType : null
 
@@ -111,5 +110,16 @@ Column {
                 root.model.addFretboardDiagram()
             }
         }
+    }
+
+    PropertyCheckBox {
+        id: hideNoteheadCheckBox
+
+        text: qsTrc("inspector", "Vertically align with symbols on the same system")
+        propertyItem: root.model ? root.model.verticalAlign : null
+
+        navigation.name: "Vertically align with symbols on the same system"
+        navigation.panel: root.navigationPanel
+        navigation.row: durationSection.navigationRowEnd + 1
     }
 }

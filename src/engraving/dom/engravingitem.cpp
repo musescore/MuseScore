@@ -101,6 +101,7 @@ EngravingItem::EngravingItem(const EngravingItem& e)
     m_z          = e.m_z;
     m_color      = e.m_color;
     m_minDistance = e.m_minDistance;
+    m_verticalAlign = e.m_verticalAlign;
     itemDiscovered = false;
 
     m_accessibleEnabled = e.m_accessibleEnabled;
@@ -1131,6 +1132,8 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
         return _isAppearanceLinkedToMaster;
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
         return _excludeFromOtherParts;
+    case Pid::VERTICAL_ALIGN:
+        return m_verticalAlign;
     default:
         if (explicitParent()) {
             return explicitParent()->getProperty(propertyId);
@@ -1206,6 +1209,9 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
         setExcludeFromOtherParts(v.toBool());
+        break;
+    case Pid::VERTICAL_ALIGN:
+        setVerticalAlign(v.toBool());
         break;
     default:
         if (explicitParent()) {
@@ -1541,6 +1547,8 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         return true;
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
+        return false;
+    case Pid::VERTICAL_ALIGN:
         return false;
     default: {
         PropertyValue v = EngravingObject::propertyDefault(pid);

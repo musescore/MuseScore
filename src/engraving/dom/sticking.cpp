@@ -46,6 +46,7 @@ Sticking::Sticking(Segment* parent)
     : TextBase(ElementType::STICKING, parent, TextStyleType::STICKING, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&stickingStyle);
+    setVerticalAlign(true);
 }
 
 bool Sticking::isEditAllowed(EditData& ed) const
@@ -75,6 +76,8 @@ engraving::PropertyValue Sticking::propertyDefault(Pid id) const
     switch (id) {
     case Pid::TEXT_STYLE:
         return TextStyleType::STICKING;
+    case Pid::VERTICAL_ALIGN:
+        return true;
     default:
         return TextBase::propertyDefault(id);
     }

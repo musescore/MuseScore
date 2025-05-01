@@ -39,6 +39,7 @@ void ChordSymbolSettingsModel::createProperties()
     m_isLiteral = buildPropertyItem(mu::engraving::Pid::HARMONY_VOICE_LITERAL);
     m_voicingType = buildPropertyItem(mu::engraving::Pid::HARMONY_VOICING);
     m_durationType = buildPropertyItem(mu::engraving::Pid::HARMONY_DURATION);
+    m_verticalAlign = buildPropertyItem(mu::engraving::Pid::VERTICAL_ALIGN);
 }
 
 void ChordSymbolSettingsModel::requestElements()
@@ -55,6 +56,7 @@ void ChordSymbolSettingsModel::loadProperties()
 
     loadPropertyItem(m_durationType);
     updateIsDurationAvailable();
+    loadPropertyItem(m_verticalAlign);
 }
 
 void ChordSymbolSettingsModel::resetProperties()
@@ -62,6 +64,7 @@ void ChordSymbolSettingsModel::resetProperties()
     m_isLiteral->resetToDefault();
     m_voicingType->resetToDefault();
     m_durationType->resetToDefault();
+    m_verticalAlign->resetToDefault();
 }
 
 PropertyItem* ChordSymbolSettingsModel::isLiteral() const
@@ -126,4 +129,9 @@ void ChordSymbolSettingsModel::updateIsDurationAvailable()
     }
 
     m_durationType->setIsVisible(available);
+}
+
+PropertyItem* ChordSymbolSettingsModel::verticalAlign() const
+{
+    return m_verticalAlign;
 }
