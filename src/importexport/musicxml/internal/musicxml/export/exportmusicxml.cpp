@@ -7581,6 +7581,10 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
 
 static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrMap)
 {
+    const Color longInstrumentColor = score->style().styleV(Sid::longInstrumentColor).value<Color>();
+    const Color shortInstrumentColor = score->style().styleV(Sid::shortInstrumentColor).value<Color>();
+    bool hiddenInstrName = (score->style().styleB(Sid::hideInstrumentNameIfOneInstrument));
+
     xml.startElement("part-list");
     size_t staffCount = 0;                          // count sum of # staves in parts
     const auto& parts = score->parts();
@@ -7638,7 +7642,6 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
         XmlWriter::Attributes longInstrumentAttributes;
         XmlWriter::Attributes shortInstrumentAttributes;
         // by default export the parts long name as part-name
-        bool hiddenInstrName = (score->style().styleB(Sid::hideInstrumentNameIfOneInstrument) && parts.size() == 1);
         String partName = part->longName();
         // use the track name if no part long name
         if (partName.empty()) {
@@ -7647,12 +7650,11 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
                 hiddenInstrName = true;
             }
         }
-        if (hiddenInstrName) {
+        if (hiddenInstrName && parts.size() == 1) {
             longInstrumentAttributes.push_back({ "print-object", "no" });
             shortInstrumentAttributes.push_back({ "print-object", "no" });
         }
-        if (score->style().styleV(Sid::longInstrumentColor) != engravingConfiguration()->defaultColor()) {
-            const Color longInstrumentColor = score->style().styleV(Sid::longInstrumentColor).value<Color>();
+        if (longInstrumentColor != engravingConfiguration()->defaultColor()) {
             longInstrumentAttributes.push_back({ "color", String::fromStdString(longInstrumentColor.toString()) });
         }
         xml.tag("part-name", longInstrumentAttributes,
@@ -7663,8 +7665,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
             xml.endElement();
         }
         if (!part->shortName().isEmpty()) {
-            if (score->style().styleV(Sid::shortInstrumentColor) != engravingConfiguration()->defaultColor()) {
-                const Color shortInstrumentColor = score->style().styleV(Sid::shortInstrumentColor).value<Color>();
+            if (shortInstrumentColor != engravingConfiguration()->defaultColor()) {
                 shortInstrumentAttributes.push_back({ "color", String::fromStdString(shortInstrumentColor.toString()) });
             }
             xml.tag("part-abbreviation", shortInstrumentAttributes,
