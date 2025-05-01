@@ -3398,29 +3398,28 @@ void Score::cmdExtendToNextNote()
     staff_idx_t endStaff = selection().staffEnd();
 
     for (EngravingItem* el : selection().elements()) {
-        if (el->isNote() || el->isChord()) {
-            Note* on = toNote(el);
-            ChordRest* ocr = toChordRest(on->chord());
-            ChordRest* nextCR = nextChordRest(ocr);
+        if (!el->isNote()) {
+            continue;
+        }
+        Note* on = toNote(el);
+        ChordRest* ocr = toChordRest(on->chord());
+        ChordRest* nextCR = nextChordRest(ocr);
 
-            while (nextCR->type() == ElementType::REST) {
-                Rest* r = toRest(nextCR);
+        while (nextCR->isRest()) {
+            Rest* r = toRest(nextCR);
+            ocr = prevChordRest(toChordRest(r));
+            if (ocr->tuplet() || r->tuplet()) {
+                addChord(r->tick(), r->ticks(), toChord(ocr), true, r->tuplet());
+            } else {
                 ocr = prevChordRest(toChordRest(r));
-                if (ocr->tuplet() || r->tuplet()) {
-                    addChord(r->tick(), r->ticks(), toChord(ocr), true, r->tuplet());
-                } else {
-                    ocr = prevChordRest(toChordRest(r));
-                    auto num = r->ticks().denominator() * ocr->ticks().numerator() + ocr->ticks().denominator() * r->ticks().numerator();
-                    auto den = ocr->ticks().denominator() * r->ticks().denominator();
-                    changeCRlen(ocr, Fraction(num, den));
-                }
-                if (!nextChordRest(nextCR)) {
-                    return;
-                }
-                nextCR = nextChordRest(nextCR);
-                if (nextCR->tick() > endTick) {
-                    endTick = nextCR->tick();
-                }
+                changeCRlen(ocr, ocr->ticks() + r->ticks());
+            }
+            if (!nextChordRest(nextCR)) {
+                break;
+            }
+            nextCR = nextChordRest(nextCR);
+            if (nextCR->tick() > endTick) {
+                endTick = nextCR->tick();
             }
         }
     }
