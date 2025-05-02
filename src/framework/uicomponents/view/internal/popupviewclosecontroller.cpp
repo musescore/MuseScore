@@ -87,16 +87,6 @@ void PopupViewCloseController::setWindow(QWindow* window)
     m_popupWindow = window;
 }
 
-bool PopupViewCloseController::popupHasFocus() const
-{
-    return m_popupHasFocus;
-}
-
-void PopupViewCloseController::setPopupHasFocus(bool hasFocus)
-{
-    m_popupHasFocus = hasFocus;
-}
-
 void PopupViewCloseController::setIsCloseOnPressOutsideParent(bool close)
 {
     m_isCloseOnPressOutsideParent = close;
@@ -111,16 +101,10 @@ bool PopupViewCloseController::eventFilter(QObject* watched, QEvent* event)
 {
     if (QEvent::Close == event->type() && watched == parentWindow()) {
         notifyAboutClose();
-    }
-
-    if (!m_popupHasFocus) {
-        if (QEvent::MouseButtonPress == event->type()) {
-            doFocusOut(static_cast<QMouseEvent*>(event)->globalPosition());
-        }
-    } else {
-        if (QEvent::FocusOut == event->type() && watched == popupWindow()) {
-            doFocusOut(QCursor::pos());
-        }
+    } else if (QEvent::MouseButtonPress == event->type()) {
+        doFocusOut(static_cast<QMouseEvent*>(event)->globalPosition());
+    } else if (QEvent::FocusOut == event->type() && watched == popupWindow()) {
+        doFocusOut(QCursor::pos());
     }
 
     return QObject::eventFilter(watched, event);
