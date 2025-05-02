@@ -573,6 +573,11 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         }
     }
 
+    if (m_version < 460) {
+        AlignH horizontalAlign = value(Sid::chordSymbolAAlign).value<Align>().horizontal;
+        set(Sid::chordAlignmentToNotehead, (int)horizontalAlign);
+    }
+
     if (m_version < 450) {
         // Didn't exist before 4.5. Default to false for compatibility.
         set(Sid::scaleRythmicSpacingForSmallNotes, false);

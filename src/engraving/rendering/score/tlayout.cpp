@@ -3447,7 +3447,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
             }
 
             double xx = 0.0;
-            switch (item->align().horizontal) {
+            switch (ctx.conf().styleV(Sid::chordAlignmentToNotehead).value<AlignH>()) {
             case AlignH::LEFT:
                 xx = -bb.left();
                 break;
@@ -3483,7 +3483,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
         }
 
         if (fd) {
-            switch (item->align().horizontal) {
+            switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
             case AlignH::LEFT:
                 newPosX = 0.0;
                 break;
@@ -3495,7 +3495,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
                 break;
             }
         } else {
-            switch (item->align().horizontal) {
+            switch (ctx.conf().styleV(Sid::chordAlignmentToNotehead).value<AlignH>()) {
             case AlignH::LEFT:
                 newPosX = 0.0;
                 break;
