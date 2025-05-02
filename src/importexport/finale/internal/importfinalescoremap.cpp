@@ -381,7 +381,9 @@ void EnigmaXmlImporter::importBrackets()
         m_score->staff(startStaffIdx)->addBracket(bi);
         if (groupInfo.info.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::ThroughStaves) {
             for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
-                m_score->staff(idx)->setBarLineSpan(true);
+                Staff* s = m_score->staff(idx);
+                s->setBarLineTo(0);
+                s->setBarLineSpan(true);
             }
         }
     }
