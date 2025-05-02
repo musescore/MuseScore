@@ -272,6 +272,7 @@ void PopupView::doOpen()
         m_window->setResizable(m_resizable);
     }
 
+    resolveParentWindow();
     resolveNavigationParentControl();
 
     QScreen* screen = resolveScreen();
@@ -328,11 +329,6 @@ void PopupView::toggleOpened()
     } else {
         open();
     }
-}
-
-void PopupView::setParentWindow(QWindow* window)
-{
-    m_window->setParentWindow(window);
 }
 
 bool PopupView::isOpened() const
@@ -734,10 +730,30 @@ void PopupView::setErrCode(Ret::Code code)
     setRet(ret);
 }
 
+QWindow* PopupView::parentWindow() const
+{
+    return m_window->parentWindow();
+}
+
+void PopupView::setParentWindow(QWindow* window)
+{
+    m_window->setParentWindow(window);
+}
+
+void PopupView::resolveParentWindow()
+{
+    if (QQuickItem* parent = parentItem()) {
+        if (QWindow* window = parent->window()) {
+            setParentWindow(window);
+            return;
+        }
+    }
+    setParentWindow(mainWindow()->qWindow());
+}
+
 QScreen* PopupView::resolveScreen() const
 {
-    const QQuickItem* parent = parentItem();
-    const QWindow* parentWindow = parent ? parent->window() : nullptr;
+    const QWindow* parentWindow = this->parentWindow();
     QScreen* screen = parentWindow ? parentWindow->screen() : nullptr;
 
     if (!screen) {
@@ -860,8 +876,6 @@ void PopupView::resolveNavigationParentControl()
         connect(qmlCtrl, &QObject::destroyed, this, [this]() {
             setNavigationParentControl(nullptr);
         });
-
-        setParentWindow(ctrl->window());
     }
 }
 

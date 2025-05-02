@@ -69,14 +69,16 @@ private slots:
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void doFocusOut();
+    void doFocusOut(const QPointF& mousePos);
     virtual void doUpdateEventFilters();
 
-    bool isMouseWithinBoundaries(const QPoint& mousePos) const;
+    bool isMouseWithinBoundaries(const QPointF& mousePos) const;
 
     void notifyAboutClose();
 
 private:
+    QWindow* parentWindow() const;
+
     bool m_active = false;
 
     QQuickItem* m_parentItem = nullptr;
