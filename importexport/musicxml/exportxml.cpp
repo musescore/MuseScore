@@ -3042,7 +3042,6 @@ static QString symIdToTechn(const SymId sid)
             case SymId::brassSmear:
                   return "smear";
             case SymId::brassMuteOpen:
-                  //return "open-string";
                   return "open";
             case SymId::brassMuteHalfClosed:
                   return "half-muted";
@@ -3059,6 +3058,16 @@ static QString symIdToTechn(const SymId sid)
                   return "hole";
             case SymId::guitarGolpe:
                   return "golpe";
+            case SymId::guitarClosePedal:
+            case SymId::pictOpenRimShot:
+                  return QString("stopped smufl=\"%1\"").arg(Sym::id2name(sid));
+            case SymId::guitarHalfOpenPedal:
+            case SymId::pictHalfOpen1:
+            case SymId::pictHalfOpen2:
+                  return QString("half-muted smufl=\"%1\"").arg(Sym::id2name(sid));
+            case SymId::guitarOpenPedal:
+            case SymId::pictOpen:
+                  return QString("open smufl=\"%1\"").arg(Sym::id2name(sid));
             case SymId::handbellsBelltree:
                   return "belltree";
             case SymId::handbellsDamp3:

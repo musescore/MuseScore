@@ -7909,7 +7909,15 @@ void MusicXMLParserNotations::technical()
       {
       while (_e.readNextStartElement()) {
             SymId id = SymId::noSym;
-            if (convertArticulationToSymId(_e.name().toString(), id)) {
+            const QString smufl = _e.attributes().value("smufl").toString();
+            if (!smufl.isEmpty()) {
+                id = Sym::name2id(smufl);
+                Notation notation = Notation::notationWithAttributes(_e.name().toString(),
+                                                                     _e.attributes(), "technical", id);
+                _notations.push_back(notation);
+                _e.skipCurrentElement();
+            }
+            else if (convertArticulationToSymId(_e.name().toString(), id)) {
                   Notation notation = Notation::notationWithAttributes(_e.name().toString(),
                                                                        _e.attributes(), "technical", id);
                   _notations.push_back(notation);
@@ -7949,18 +7957,7 @@ void MusicXMLParserNotations::technical()
 
 void MusicXMLParserNotations::otherTechnical()
       {
-      const QString smufl = _e.attributes().value("smufl").toString();
       const QColor color = _e.attributes().value("color").toString();
-
-      if (!smufl.isEmpty()) {
-            SymId id = Sym::name2id(smufl);
-            Notation notation = Notation::notationWithAttributes(_e.name().toString(),
-                                                               _e.attributes(), "technical", id);
-            _notations.push_back(notation);
-            _e.skipCurrentElement();
-            return;
-            }
-
       const QString text = _e.readElementText();
 
       if (text == "z") {
