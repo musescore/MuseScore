@@ -125,20 +125,13 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     }
 
     // barline vertical offsets relative to staff
-    auto calcBarlineOffsetHalfSpaces = [](Evpu offset, int numLines, bool forTop) -> int {
-        if (numLines == 1) {
-            // This works for single-line staves. Needs more testing for other non-standard scenarios.
-            if (forTop) {
-                offset -= 48;
-            } else {
-                offset += 48;
-            }
-        }
-        double halfSpaces = (double(offset) * 2.0) / EVPU_PER_SPACE;
+    auto calcBarlineOffsetHalfSpaces = [](Evpu offset) -> int {
+        // Finale and MuseScore use opposite signs for up/down
+        double halfSpaces = (double(-offset) * 2.0) / EVPU_PER_SPACE;
         return int(std::lround(halfSpaces));
     };
-    s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset, s->lines(eventTick), true));
-    s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset, s->lines(eventTick), false));
+    s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset));
+    s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset));
 
     // hide when empty
     s->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
