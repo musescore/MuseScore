@@ -606,3 +606,32 @@ TEST_F(Engraving_MeasureTests, measureSplit) {
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measureSplit.mscx", MEASURE_DATA_DIR + u"measureSplit-ref.mscx"));
 }
+
+TEST_F(Engraving_MeasureTests, MMRestEndOfMeasureTS) {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + u"mmrEndOfMeasureTimeSig.mscz");
+    EXPECT_TRUE(score);
+
+    Measure* m3 = score->crMeasure(2);
+    EXPECT_TRUE(m3 && !m3->isMMRest());
+    Segment* tsSeg = m3->findSegmentR(SegmentType::TimeSig, m3->ticks());
+    EXPECT_TRUE(tsSeg);
+    EngravingItem* tsItem = tsSeg->element(0);
+    EXPECT_TRUE(tsItem && tsItem->isTimeSig());
+
+    score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
+    score->setLayoutAll();
+    score->endCmd();
+
+    Measure* m3MMR = m3->mmRest();
+    EXPECT_TRUE(m3MMR && m3MMR->isMMRest());
+    Segment* tsSegMMR = m3MMR->findSegmentR(SegmentType::TimeSig, m3MMR->ticks());
+    EXPECT_TRUE(tsSegMMR && tsSegMMR->endOfMeasureChange());
+    EngravingItem* tsItemMMR = tsSeg->element(0);
+    EXPECT_TRUE(tsItemMMR && tsItemMMR->isTimeSig());
+
+    MScore::useRead302InTestMode = use302;
+}

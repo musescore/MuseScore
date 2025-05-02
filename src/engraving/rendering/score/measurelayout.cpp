@@ -395,6 +395,38 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     }
 
     //
+    // check for end of measure time signature
+    //
+    underlyingSeg = lastMeasure->findSegmentR(SegmentType::TimeSig, lastMeasure->ticks());
+    mmrSeg = mmrMeasure->findSegmentR(SegmentType::TimeSig, mmrMeasure->ticks());
+    if (underlyingSeg) {
+        if (mmrSeg == 0) {
+            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::TimeSig, mmrMeasure->ticks());
+        }
+        mmrSeg->setEnabled(underlyingSeg->enabled());
+        mmrSeg->setHeader(underlyingSeg->header());
+        mmrSeg->setEndOfMeasureChange(underlyingSeg->endOfMeasureChange());
+        for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+            track_idx_t track = staffIdx * VOICES;
+            TimeSig* underlyingTimeSig = toTimeSig(underlyingSeg->element(track));
+            if (underlyingTimeSig) {
+                TimeSig* mmrTimeSig = toTimeSig(mmrSeg->element(track));
+                if (!mmrTimeSig) {
+                    mmrTimeSig = underlyingTimeSig->generated() ? underlyingTimeSig->clone() : toTimeSig(
+                        underlyingTimeSig->linkedClone());
+                    mmrTimeSig->setParent(mmrSeg);
+                    ctx.mutDom().doUndoAddElement(mmrTimeSig);
+                } else {
+                    TLayout::layoutTimeSig(mmrTimeSig, mmrTimeSig->mutldata(), ctx);
+                }
+            }
+        }
+    } else if (mmrSeg) {
+        // TODO: remove elements from mmrSeg?
+        ctx.mutDom().doUndoRemoveElement(mmrSeg);
+    }
+
+    //
     // check for ambitus
     //
     underlyingSeg = firstMeasure->findSegmentR(SegmentType::Ambitus, Fraction(0, 1));
