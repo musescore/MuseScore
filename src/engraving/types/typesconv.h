@@ -24,6 +24,8 @@
 
 #include "types.h"
 
+#include "engraving/dom/tremolobar.h"
+
 namespace mu::engraving {
 class TConv
 {
@@ -171,6 +173,9 @@ public:
     static const TranslatableString& userName(TremoloType v);
     static AsciiStringView toXml(TremoloType v);
     static TremoloType fromXml(const AsciiStringView& str, TremoloType def);
+
+    static AsciiStringView toXml(TremoloBarType v);
+    static TremoloBarType fromXml(const AsciiStringView& str, TremoloBarType def);
 
     static const TranslatableString& userName(BracketType v);
     static String translatedUserName(BracketType v);
