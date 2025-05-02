@@ -104,6 +104,10 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     // initialise MuseScore's default values
     if (it) {
         s->init(it, 0, 0);
+        // don't load bracket from template, we add it later (if it exists)
+        s->setBracketType(0, BracketType::NO_BRACKET);
+        s->setBracketSpan(0, 0);
+        s->setBarLineSpan(0);
     }
     /// @todo This staffLines setting will move to wherever we parse staff styles
     /// @todo Need to intialize the staff type from presets?
@@ -255,29 +259,25 @@ void EnigmaXmlImporter::importParts()
 
         Part* part = new Part(m_score);
 
-        QString id = QString("P%1").arg(++partNumber);
-        part->setId(id);
-
-        // names of part
-        auto fullBaseName = staff->getFullInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
-        if (!fullBaseName.empty()) {
-            part->setPartName(QString::fromStdString(trimNewLineFromString(fullBaseName)));
-        }
-        auto fullEffectiveName = compositeStaff->getFullInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
-        if (!fullEffectiveName.empty()) {
-            part->setLongName(QString::fromStdString(trimNewLineFromString(fullEffectiveName)));
-        }
-        auto abrvName = compositeStaff->getAbbreviatedInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
-        if (!abrvName.empty()) {
-            part->setShortName(QString::fromStdString(trimNewLineFromString(abrvName)));
-        }
-
         // load default part settings
         // to-do: overwrite most of these settings later
         const InstrumentTemplate* it = searchTemplate(FinaleTConv::instrTemplateIdfromUuid(compositeStaff->instUuid));
         if (it) {
             part->initFromInstrTemplate(it);
         }
+
+        QString id = QString("P%1").arg(++partNumber);
+        part->setId(id);
+
+        // names of part
+        auto fullBaseName = staff->getFullInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
+        part->setPartName(QString::fromStdString(trimNewLineFromString(fullBaseName)));
+
+        auto fullEffectiveName = compositeStaff->getFullInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
+        part->setLongName(QString::fromStdString(trimNewLineFromString(fullEffectiveName)));
+
+        auto abrvName = compositeStaff->getAbbreviatedInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
+        part->setShortName(QString::fromStdString(trimNewLineFromString(abrvName)));
 
         if (multiStaffInst) {
             m_part2Inst.emplace(id, multiStaffInst->staffNums);
