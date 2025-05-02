@@ -1993,6 +1993,10 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     int tpc1 = mu::engraving::transposeTpc(pitchSt.tpc2, interval, true);
     note->setPitch(pitchSt.pitch, tpc1, pitchSt.tpc2);
 
+    if (meiNote.HasVel()) {
+        note->setUserVelocity(meiNote.GetVel());
+    }
+
     Accidental* accid = Factory::createAccidental(note);
     Convert::colorFromMEI(accid, meiAccid);
     this->readXmlId(accid, meiAccid.m_xmlId);
