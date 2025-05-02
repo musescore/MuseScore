@@ -348,6 +348,7 @@ public:
     bool hasTremolo() const { return m_hasTremolo; }
     muse::String tremoloType() const { return m_tremoloType; }
     muse::String tremoloSmufl() const { return m_tremoloSmufl; }
+    engraving::Color tremoloColor() const { return m_tremoloColor; }
     int tremoloNr() const { return m_tremoloNr; }
     bool mustStopGraceAFter() const { return m_slurStop || m_wavyLineStop; }
 private:
@@ -384,6 +385,7 @@ private:
     muse::String m_tremoloType;
     int m_tremoloNr = 0;
     muse::String m_tremoloSmufl;
+    engraving::Color m_tremoloColor;
     muse::String m_wavyLineType;
     int m_wavyLineNo = 0;
     muse::String m_arpeggioType;
