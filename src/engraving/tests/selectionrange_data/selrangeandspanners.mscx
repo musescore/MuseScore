@@ -3547,7 +3547,7 @@ SLURS:</text>
             <minDistance>-2.77067</minDistance>
             <size>6</size>
             <offset x="0" y="-1.2"/>
-            <text><font size="6"></font>Start within, end within (expect false):</text>
+            <text><font size="6"></font>Start within, end within (expect true):</text>
             </StaffText>
           <Chord>
             <eid>zcMcIHlt3tN_d74ihiZSQmK</eid>
@@ -3589,8 +3589,7 @@ SLURS:</text>
               <eid>7p923eFzUWP_Hnih8UpnmVH</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              <head>cross</head>
-              <dead>1</dead>
+              <head>plus</head>
               </Note>
             </Chord>
           <Chord>
@@ -3600,8 +3599,7 @@ SLURS:</text>
               <eid>m2DCzvoNxuB_fIfQvHUhVYB</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
-              <head>cross</head>
-              <dead>1</dead>
+              <head>plus</head>
               </Note>
             </Chord>
           <Chord>
