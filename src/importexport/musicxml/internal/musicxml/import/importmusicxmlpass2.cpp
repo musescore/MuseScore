@@ -8400,7 +8400,14 @@ void MusicXmlParserNotations::technical()
 {
     while (m_e.readNextStartElement()) {
         SymId id { SymId::noSym };
-        if (convertArticulationToSymId(String::fromAscii(m_e.name().ascii()), id)) {
+        const String smufl = m_e.attribute("smufl");
+        if (!smufl.empty()) {
+            id = SymNames::symIdByName(smufl, SymId::noSym);
+            Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                                 m_e.attributes(), u"technical", id);
+            m_notations.push_back(notation);
+            m_e.skipCurrentElement();
+        } else if (convertArticulationToSymId(String::fromAscii(m_e.name().ascii()), id)) {
             Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
                                                                  m_e.attributes(), u"technical", id);
             m_notations.push_back(notation);
@@ -8437,17 +8444,6 @@ void MusicXmlParserNotations::technical()
 void MusicXmlParserNotations::otherTechnical()
 {
     const Color color = Color::fromString(m_e.attribute("color"));
-    const String smufl = m_e.attribute("smufl");
-
-    if (!smufl.empty()) {
-        SymId id = SymNames::symIdByName(smufl, SymId::noSym);
-        Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
-                                                             m_e.attributes(), u"technical", id);
-        m_notations.push_back(notation);
-        m_e.skipCurrentElement();
-        return;
-    }
-
     const String text = m_e.readText();
 
     if (text == u"z") {
