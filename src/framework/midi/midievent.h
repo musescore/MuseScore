@@ -89,7 +89,7 @@ struct Event {
     };
 
     enum class UtilityStatus {
-        NoOperation        = 0x00,
+        NoOperation = 0x00,
         JRClock     = 0x01,
         JRTimestamp = 0x02
     };
@@ -108,7 +108,7 @@ struct Event {
     static Event NOOP() { return Event(); }
 
     //! from standard MIDI1.0 (specification 1996)
-    static Event fromMIDI10Package(uint32_t data)
+    static Event fromMidi10Package(uint32_t data)
     {
         Event e;
         union {
@@ -116,6 +116,7 @@ struct Event {
             uint32_t full;
         } u;
         u.full = data;
+
         if ((u.byte[0] >= 0x80)
             && (u.byte[0] < 0xF0)
             ) {
@@ -125,7 +126,7 @@ struct Event {
         return e;
     }
 
-    uint32_t to_MIDI10Package() const
+    uint32_t toMidi10Package() const
     {
         if (messageType() == MessageType::ChannelVoice10) {
             union {
@@ -140,41 +141,51 @@ struct Event {
         return 0;
     }
 
-    static Event fromMIDI10BytePackage(const unsigned char* pointer, int length)
+    static Event fromMidi10Bytes(const unsigned char* pointer, size_t length)
     {
         Event e;
         uint32_t val = 0;
         assert(length <= 3);
-        for (int i=0; i < length; i++) {
+        for (size_t i = 0; i < length; ++i) {
             uint32_t byteVal = static_cast<uint32_t>(pointer[i]);
             val |= byteVal << ((2 - i) * 8);
         }
-        e.m_data[0]=val;
+        e.m_data[0] = val;
         e.setMessageType(MessageType::ChannelVoice10);
         return e;
     }
 
-    int to_MIDI10BytesPackage(unsigned char* pointer) const
+    size_t toMidi10Bytes(unsigned char* pointer) const
     {
         if (messageType() == MessageType::ChannelVoice10) {
             auto val = m_data[0];
-            int c = Event::midi10ByteCountForOpcode(opcode());
+            size_t c = Event::midi10ByteCountForOpcode(opcode());
             assert(c <= 3);
-            for (int i=0; i < c; i++) {
-                auto byteVal = (val >> ((2 - i) * 8)) & 0xff;
-                pointer[i]=static_cast<unsigned char>(byteVal);
+            for (size_t i = 0; i < c; ++i) {
+                uint32_t byteVal = (val >> ((2 - i) * 8)) & 0xff;
+                pointer[i] = static_cast<unsigned char>(byteVal);
             }
             return c;
         }
         return 0;
     }
 
-    static Event fromRawData(const uint32_t* data, size_t count)
+    static Event fromMidi20Words(const uint32_t* data, size_t count)
     {
         Event e;
         size_t numBytes = std::min(count, e.m_data.size()) * sizeof(uint32_t);
         memcpy(e.m_data.data(), data, numBytes);
         return e;
+    }
+
+    const uint32_t* midi20Words() const
+    {
+        return m_data.data();
+    }
+
+    size_t midi20WordCount() const
+    {
+        return Event::wordCountForMessageType(messageType());
     }
 
     bool operator ==(const Event& other) const { return m_data == other.m_data; }
@@ -354,52 +365,67 @@ struct Event {
         setAttribute(attribute);
     }
 
-    uint16_t velocity() const
+    uint8_t velocity7() const
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
-        if (messageType() == MessageType::ChannelVoice20) {
-            return static_cast<uint16_t>(m_data[1] >> 16);
+
+        switch (messageType()) {
+        case MessageType::ChannelVoice10: return m_data[0] & 0x7F;
+        case MessageType::ChannelVoice20: return scaleDown(m_data[1] >> 16, 16, 7);
+        default: assert(false);
         }
-        return m_data[0] & 0x7F;
+        return 0;
     }
 
-    //!maximum available velocity value for current messageType
-    uint16_t maxVelocity() const
+    void setVelocity7(uint8_t value)
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
-        if (messageType() == MessageType::ChannelVoice20) {
-            return 0xFFFF;
+        assert(value < 128);
+
+        switch (messageType()) {
+        case MessageType::ChannelVoice10: {
+            uint32_t mask = value & 0x7F;
+            m_data[0] &= 0xFFFFFF00;
+            m_data[0] |= mask;
+        } break;
+        case MessageType::ChannelVoice20: {
+            uint32_t mask = scaleUp(value, 7, 16) << 16;
+            m_data[1] &= 0x0000FFFF;
+            m_data[1] |= mask;
+        } break;
+        default: assert(false);
         }
-        return 0x7F;
     }
 
-    void setVelocity(uint16_t value)
+    uint16_t velocity16() const
     {
         assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
 
-        if (messageType() == MessageType::ChannelVoice20) {
+        switch (messageType()) {
+        case MessageType::ChannelVoice10: return scaleUp(m_data[0] & 0x7F, 7, 16);
+        case MessageType::ChannelVoice20: return static_cast<uint16_t>(m_data[1] >> 16);
+        default: assert(false);
+        }
+        return 0;
+    }
+
+    void setVelocity16(uint16_t value)
+    {
+        assertOpcode({ Opcode::NoteOn, Opcode::NoteOff });
+
+        switch (messageType()) {
+        case MessageType::ChannelVoice10: {
+            uint32_t mask = scaleDown(value, 16, 7);
+            m_data[0] &= 0xFFFFFF00;
+            m_data[0] |= mask;
+        } break;
+        case MessageType::ChannelVoice20: {
             uint32_t mask = value << 16;
             m_data[1] &= 0x0000FFFF;
             m_data[1] |= mask;
-            return;
+        } break;
+        default: assert(false);
         }
-        assert(value < 128);
-        uint32_t mask = value & 0x7F;
-        m_data[0] &= 0xFFFFFF00;
-        m_data[0] |= mask;
-    }
-
-    //! set velocity as a fraction of 1. Will automatically scale.
-    void setVelocityFraction(float value)
-    {
-        assert(value >= 0.f && value <= 1.f);
-        setVelocity(value * maxVelocity());
-    }
-
-    //!return velocity in range [0.f, 1.f] independent from message type
-    float velocityFraction() const
-    {
-        return velocity() / static_cast<float>(maxVelocity());
     }
 
     uint32_t data() const
@@ -493,9 +519,28 @@ struct Event {
         }
     }
 
-    const uint32_t* rawData() const
+    uint8_t data7() const
     {
-        return m_data.data();
+        uint32_t val = data();
+        if (messageType() == MessageType::ChannelVoice20) {
+            return scaleDown(val, 32, 7);
+        }
+        return val;
+    }
+
+    uint32_t data14() const
+    {
+        uint32_t val = data();
+        if (messageType() == MessageType::ChannelVoice20) {
+            return scaleDown(val, 32, 14);
+        }
+        return val;
+    }
+
+    uint32_t pitchBend14() const
+    {
+        assert(isChannelVoice() && opcode() == Opcode::PitchBend);
+        return data14();
     }
 
     /*! return signed value:
@@ -791,8 +836,8 @@ struct Event {
             case Opcode::NoteOn:
             case Opcode::NoteOff:
                 event.setNote(note());
-                event.setVelocity(static_cast<uint16_t>(scaleUp(velocity(), 7, 16)));
-                if (velocity() == 0) {
+                event.setVelocity7(velocity7());
+                if (velocity7() == 0) {
                     event.setOpcode(Opcode::NoteOff);
                 }
                 break;
@@ -904,7 +949,7 @@ struct Event {
             case Opcode::NoteOn:
             case Opcode::NoteOff:
                 str += " note: " + std::to_string(note())
-                       + " velocity: " + std::to_string(velocity());
+                       + " velocity: " + std::to_string(velocity7());
                 break;
             case Opcode::PolyPressure:
                 str += " note: " + std::to_string(note())
@@ -935,7 +980,7 @@ struct Event {
             case Opcode::NoteOff:
             case Opcode::NoteOn:
                 str += " note: " + std::to_string(note())
-                       + " velocity: " + std::to_string(velocity())
+                       + " velocity: " + std::to_string(velocity16())
                        + " attr type: " + std::to_string(static_cast<uint32_t>(attributeType()))
                        + " attr value: " + std::to_string(attribute());
                 if (attributeType() == AttributeType::Pitch) {
@@ -1008,56 +1053,13 @@ struct Event {
         return str;
     }
 
-    uint8_t velocity7() const
+    static size_t wordCountForMessageType(MessageType messageType)
     {
-        uint16_t val = velocity();
-        if (isChannelVoice20()) {
-            return static_cast<uint8_t>(scaleDown(val, 16, 7));
-        }
-        return static_cast<uint8_t>(val);
-    }
-
-    void setVelocity7(uint8_t value)
-    {
-        if (isChannelVoice20()) {
-            uint16_t scaled = scaleUp(value, 7, 16);
-            setVelocity(scaled);
-            return;
-        }
-        setVelocity(value);
-    }
-
-    uint8_t data7() const
-    {
-        uint32_t val = data();
-        if (messageType() == MessageType::ChannelVoice20) {
-            return scaleDown(val, 32, 7);
-        }
-        return val;
-    }
-
-    uint32_t data14() const
-    {
-        uint32_t val = data();
-        if (messageType() == MessageType::ChannelVoice20) {
-            return scaleDown(val, 32, 14);
-        }
-        return val;
-    }
-
-    uint32_t pitchBend14() const
-    {
-        assert(isChannelVoice() && opcode() == Opcode::PitchBend);
-        return data14();
-    }
-
-    int midi20WordCount() const
-    {
-        return Event::wordCountForMessageType(messageType());
-    }
-
-    static int wordCountForMessageType(MessageType messageType)
-    {
+        // MIDI Association Document: M2-104-UM
+        // Document Version 1.1.2
+        // Draft Date 2023-10-27
+        // Published 2023-11-10
+        // Section 2.1.4
         switch (messageType) {
         case MessageType::Utility: return 1;
         case MessageType::SystemRealTime: return 1;
@@ -1066,10 +1068,25 @@ struct Event {
         case MessageType::ChannelVoice20: return 2;
         case MessageType::Data: return 4;
         }
-        return 0; // reserved
+
+        // reserved
+        switch (uint32_t(messageType)) {
+        case 0x6: return 1;
+        case 0x7: return 1;
+        case 0x8: return 2;
+        case 0x9: return 2;
+        case 0xa: return 2;
+        case 0xb: return 3;
+        case 0xc: return 3;
+        case 0xd: return 4;
+        case 0xe: return 4;
+        case 0xf: return 4;
+        }
+
+        return 0;
     }
 
-    static int midi10ByteCountForOpcode(Opcode opcode)
+    static size_t midi10ByteCountForOpcode(Opcode opcode)
     {
         switch (opcode) {
         case Opcode::RegisteredPerNoteController:
@@ -1099,23 +1116,24 @@ struct Event {
     }
 
 private:
-    //!Note Temporarily disabled until the end of the investigation, looks like we're not supporting some 'custom' messages from MU3
-    //! v.pereverzev@wsmgroup.ru
     void assertMessageType(const std::set<MessageType>& supportedTypes) const
     {
+#ifdef NDEBUG
         UNUSED(supportedTypes);
-        //assert(isMessageTypeIn(supportedTypes));
+#else
+        assert(isMessageTypeIn(supportedTypes));
+#endif
     }
 
-    //!Note Temporarily disabled until the end of the investigation, looks like we're not supporting some 'custom' messages from MU3
-    //! v.pereverzev@wsmgroup.ru
-    void assertChannelVoice() const { /*assert(isChannelVoice());*/ }
+    void assertChannelVoice() const { assert(isChannelVoice()); }
 
-    //!Note Temporarily disabled until the end of the investigation, looks like we're not supporting some 'custom' messages from MU3
-    //! v.pereverzev@wsmgroup.ru
     void assertOpcode(const std::set<Opcode>& supportedOpcodes) const
     {
-        UNUSED(supportedOpcodes); /*assert(isOpcodeIn(supportedOpcodes));*/
+#ifdef NDEBUG
+        UNUSED(supportedOpcodes);
+#else
+        assert(isOpcodeIn(supportedOpcodes));
+#endif
     }
 
     static uint32_t scaleUp(uint32_t srcVal, size_t srcBits, size_t dstBits)
