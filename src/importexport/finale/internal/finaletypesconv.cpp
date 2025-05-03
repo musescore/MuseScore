@@ -67,8 +67,8 @@ ClefType FinaleTConv::toMuseScoreClefType(ClefIndex clef)
 String FinaleTConv::instrTemplateIdfromUuid(std::string uuid)
 {
     // keep in sync with 'id' property of https://docs.google.com/spreadsheets/d/1SwqZb8lq5rfv5regPSA10drWjUAoi65EuMoYtG-4k5s/edit
-    // todo: Add (sensible) defaults: woodwinds-end
-    // todo: Detect midi program
+    /// @todo Add (sensible) defaults: woodwinds-end
+    /// @todo Detect midi program (and if percussion, don't fallback to piano)
     static const std::unordered_map<std::string_view, String> uuidTable = {
         // General
         { uuid::BlankStaff,                u"piano" }, // 'sensible' different default
@@ -877,7 +877,6 @@ String FinaleTConv::instrTemplateIdfromUuid(std::string uuid)
         { uuid::Udu,                       u"percussion" },
         { uuid::Zills,                     u"percussion" },
     };
-    // todo: different fallback for unpitched percussion
     return muse::value(uuidTable, uuid, u"piano");
 }
 

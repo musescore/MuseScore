@@ -87,6 +87,7 @@ extern int step2tpc(const String& stepName, AccidentalVal alter);
 extern int step2tpc(int step);
 extern int step2tpc(int step, AccidentalVal alter);
 extern int step2tpcByKey(int step, Key);
+extern int step2tpcByKeyAndAccAlteration(int step, Key key, int alter);
 extern int tpc2pitch(int tpc);
 extern int tpc2step(int tpc);
 extern int tpc2stepByKey(int tpc, Key, int& alter);

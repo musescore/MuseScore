@@ -107,6 +107,12 @@ int step2tpcByKey(int step, Key key)
     return tpcByStepAndKey[int(key) - int(Key::MIN)][step % STEP_DELTA_OCTAVE];
 }
 
+int step2tpcByKeyAndAccAlteration(int step, Key key, int alter)
+{
+    int tpc = step2tpcByKey(step, key) + alter * TPCS_PER_STEP;
+	return tpcIsValid(tpc) ? tpc : Tpc::TPC_INVALID;
+}
+
 //---------------------------------------------------------
 //   tpc2step
 //---------------------------------------------------------

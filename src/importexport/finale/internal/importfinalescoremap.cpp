@@ -30,6 +30,7 @@
 
 #include "types/string.h"
 
+#include "engraving/dom/accidental.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/bracketItem.h"
 #include "engraving/dom/chord.h"
@@ -70,6 +71,7 @@ void EnigmaXmlImporter::import()
     importParts();
     importBrackets();
     importMeasures();
+    importEntries();
 }
 
 static std::optional<ClefTypeList> clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
@@ -98,7 +100,7 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
 {
     Staff* s = Factory::createStaff(part);
 
-    // todo: staff settings can change at any tick
+    /// @todo staff settings can change at any tick
     Fraction eventTick{0, 1};
 
     // initialise MuseScore's default values
@@ -134,6 +136,7 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset));
 
     // hide when empty
+    /// @todo inherit
     s->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
 
     // clefs
@@ -171,7 +174,7 @@ void EnigmaXmlImporter::importMeasures()
     m_score->sigmap()->add(0, currTimeSig);
 
     auto musxMeasures = m_doc->getOthers()->getArray<others::Measure>(SCORE_PARTID);
-    int counter = 0; // DBG
+    // int counter = 0; // DBG
     for (const auto& musxMeasure : musxMeasures) {
         Fraction tick{ 0, 1 };
         auto lastMeasure = m_score->measures()->last();
@@ -182,28 +185,29 @@ void EnigmaXmlImporter::importMeasures()
         Measure* measure = Factory::createMeasure(m_score->dummy()->system());
         measure->setTick(tick);
         /// @todo eventually we need to import all the TimeSig features we can. Right now it's just the simplified case.
-        auto musxTimeSig = musxMeasure->createTimeSignature()->calcSimplified();
-        auto scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig);
+        auto musxTimeSig = musxMeasure->createTimeSignature();
+        auto scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified());
         if (scoreTimeSig != currTimeSig) {
             m_score->sigmap()->add(tick.ticks(), scoreTimeSig);
             currTimeSig = scoreTimeSig;
         }
-        measure->setTick(tick);
         measure->setTimesig(scoreTimeSig);
         measure->setTicks(scoreTimeSig);
         m_score->measures()->add(measure);
 
+        /// @todo key signature
+
         // for now, add a full measure rest to each staff for the measure.
-        for (mu::engraving::Staff* staff : m_score->staves()) {
-            mu::engraving::staff_idx_t staffIdx = staff->idx();
-            mu::engraving::Segment* restSeg = measure->getSegment(mu::engraving::SegmentType::ChordRest, tick);
-            Rest* rest = mu::engraving::Factory::createRest(restSeg, mu::engraving::TDuration(mu::engraving::DurationType::V_MEASURE));
+        /*for (Staff* staff : m_score->staves()) {
+            staff_idx_t staffIdx = staff->idx();
+            Segment* restSeg = measure->getSegment(SegmentType::ChordRest, tick);
+            Rest* rest = Factory::createRest(restSeg, TDuration(DurationType::V_MEASURE));
             rest->setScore(m_score);
             rest->setTicks(measure->ticks());
             rest->setTrack(staffIdx * VOICES);
             restSeg->add(rest);
-        }
-        if (++counter >= 100) break; // DBG
+        }*/
+        // if (++counter >= 100) break; // DBG
     }
 
     /// @todo maybe move this to separate function
@@ -253,14 +257,14 @@ void EnigmaXmlImporter::importParts()
         Part* part = new Part(m_score);
 
         // load default part settings
-        // to-do: overwrite most of these settings later
+        /// @todo overwrite most of these settings later
         const InstrumentTemplate* it = searchTemplate(FinaleTConv::instrTemplateIdfromUuid(compositeStaff->instUuid));
         if (it) {
             part->initFromInstrTemplate(it);
         }
 
-        QString id = QString("P%1").arg(++partNumber);
-        part->setId(id);
+        QString partId = String("P%1").arg(++partNumber);
+        part->setId(partId);
 
         // names of part
         auto fullBaseName = staff->getFullInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
@@ -273,17 +277,17 @@ void EnigmaXmlImporter::importParts()
         part->setShortName(QString::fromStdString(trimNewLineFromString(abrvName)));
 
         if (multiStaffInst) {
-            m_part2Inst.emplace(id, multiStaffInst->staffNums);
+            m_part2Inst.emplace(partId, multiStaffInst->staffNums);
             for (auto inst : multiStaffInst->staffNums) {
                 if (auto instStaff = others::StaffComposite::createCurrent(m_doc, SCORE_PARTID, inst, 1, 0)) {
                     createStaff(part, instStaff, it);
-                    m_inst2Part.emplace(inst, id);
+                    m_inst2Part.emplace(inst, partId);
                 }
             }
         } else {
             createStaff(part, compositeStaff, it);
-            m_part2Inst.emplace(id, std::vector<InstCmper>({ InstCmper(staff->getCmper()) }));
-            m_inst2Part.emplace(staff->getCmper(), id);
+            m_part2Inst.emplace(partId, std::vector<InstCmper>({ InstCmper(staff->getCmper()) }));
+            m_inst2Part.emplace(staff->getCmper(), partId);
         }
         m_score->appendPart(part);
     }
@@ -307,14 +311,18 @@ void EnigmaXmlImporter::importBrackets()
 
         for (size_t i = 0; i < n; ++i) {
             const auto& gi = result[i].info;
-            if (!gi.startSlot || !gi.endSlot)
+            if (!gi.startSlot || !gi.endSlot) {
                 continue;
+            }
 
             for (size_t j = 0; j < n; ++j) {
-                if (i == j) continue;
-                const auto& gj = result[j].info;
-                if (!gj.startSlot || !gj.endSlot)
+                if (i == j) {
                     continue;
+                }
+                const auto& gj = result[j].info;
+                if (!gj.startSlot || !gj.endSlot) {
+                    continue;
+                }
 
                 if (*gi.startSlot >= *gj.startSlot && *gi.endSlot <= *gj.endSlot &&
                     (*gi.startSlot > *gj.startSlot || *gi.endSlot < *gj.endSlot)) {
@@ -324,10 +332,12 @@ void EnigmaXmlImporter::importBrackets()
         }
 
         std::sort(result.begin(), result.end(), [](const StaffGroupLayer& a, const StaffGroupLayer& b) {
-            if (a.layer != b.layer)
+            if (a.layer != b.layer) {
                 return a.layer < b.layer;
-            if (!a.info.startSlot || !b.info.startSlot)
+            }
+            if (!a.info.startSlot || !b.info.startSlot) {
                 return static_cast<bool>(b.info.startSlot);
+            }
             return *a.info.startSlot < *b.info.startSlot;
         });
 
@@ -380,6 +390,119 @@ void EnigmaXmlImporter::importBrackets()
             }
         }
     }
+}
+
+static std::optional<Fraction> musxFractionToFraction(musx::util::Fraction count)
+{
+    if (count.remainder()) {
+        LOGE() << "Fraction has fractional portion that could not be reduced.";
+        return std::nullopt;
+    }
+    return Fraction(count.numerator(), count.denominator());
+}
+
+void EnigmaXmlImporter::importEntries()
+{
+    using MusxNote = musx::dom::Note;
+    auto currentEntry = m_doc->getEntries()->get<Entry>(0);
+    if (!currentEntry) {
+        LOGE() << "Couldn't find first entry.";
+        return;
+    }
+
+    auto harmLev2pitch = [&](int harmLev, MusxNote::NoteName tonic, Key key) -> int {
+        int absStep = 35 /*middle C*/ + int(tonic) + harmLev;
+        return absStep2pitchByKey(absStep, key);
+    };
+
+    Segment* s = m_score->firstSegment(SegmentType::ChordRest);
+    Fraction tickEnd{0, 1};
+
+    do {
+        /// @todo use calcNoteInfo() instead
+        auto duration = musxFractionToFraction(currentEntry->calcFraction());
+        if (!duration) {
+            continue;
+        }
+        TDuration d;
+        d.setVal(duration.value().ticks());
+
+        ChordRest* cr;
+        bool chordIsCrossStaff = true;
+        if (currentEntry->isNote) {
+            Chord* chord = Factory::createChord(s);
+
+            for (auto n : currentEntry->notes) {
+                // calculate pitch, accidentals and transposition
+                NoteVal nval;
+                nval.pitch = harmLev2pitch(n->harmLev, MusxNote::NoteName::C, Key::C) + n->harmAlt; /// @todo use real keysig and tonic
+
+                // Finale supports up to 7 alterations (relative to keysig), MuseScore only 3 (up to 3# or 3b).
+                // If the alteration is too large, we keep the pitch but rewrite the note on a new line
+                /// @todo Do we need to set tpc1 if we're in a transposition?
+                /// @todo Is the pitch value stored in the entry tranposed? Code assumes pitch stored is absolute 
+                nval.tpc1 = step2tpcByKeyAndAccAlteration(n->harmLev + MusxNote::NoteName::C, Key::C, n->harmAlt); /// @todo use real keysig, need to add NoteNamevalue?
+                if (!tpcIsValid(nval.tpc1)) {
+                    nval.tpc1 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST); // concert pitch
+                }
+                AccidentalVal accVal = tpc2alter(nval.tpc1);
+
+                if (false /*currently in a transposition*/) {
+                    // nval.pitch += m_score->staff(size_t(0))->part()->instrument(s->tick())->transpose().chromatic;
+                    nval.pitch = harmLev2pitch(n->harmLev, MusxNote::NoteName::C, Key::C) + n->harmAlt; /// @todo use real transposed tonic and keysig
+                    /// @todo use real transposed keysig, need to add NoteNamevalue? is this method correct?
+                    nval.tpc2 = step2tpcByKeyAndAccAlteration(n->harmLev + MusxNote::NoteName::C, /*transposed key*/ Key::C, n->harmAlt);
+                    if (!tpcIsValid(nval.tpc2)) {
+                        nval.tpc2 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST); // pitch is now transposed
+                    }
+                    accVal = tpc2alter(nval.tpc2);
+                } else {
+                    nval.tpc2 = nval.tpc1; // needed?
+                }
+
+                engraving::Note* note = Factory::createNote(chord);
+                note->setParent(chord);
+                note->setTrack(chord->track());
+                note->setNval(nval);
+
+                // Add accidental if needed
+                if (n->freezeAcci || n->harmAlt == 0) {
+                    AccidentalType at = Accidental::value2subtype(accVal);
+                    Accidental* a = Factory::createAccidental(note);
+                    a->setAccidentalType(at);
+                    a->setRole(AccidentalRole::USER);
+                    a->setParent(note);
+                    note->add(a);
+                }
+
+                // MuseScore doesn't support individual cross-staff notes, either move the whole chord or nothing
+                chordIsCrossStaff = chordIsCrossStaff && n->crossStaff;
+            }
+            cr = toChordRest(chord);
+        } else {
+            Rest* rest = Factory::createRest(s, d);
+            rest->setScore(m_score); // needed?
+            cr = toChordRest(rest);
+            
+            for (auto n : currentEntry->notes) {
+                //todo: calculate y-offset here (remember is also staff-dependent)
+                chordIsCrossStaff = chordIsCrossStaff && n->crossStaff;
+            }
+        }
+
+        cr->setDurationType(d);
+        cr->setTicks(duration.value());
+        cr->setTrack(0);
+        s->add(cr);
+
+        /// @todo use score->setRests to fill measure (if it suddenly ends and is not filled, to avoid corruptions)
+        //Rest* r = setRest(s->tick() + duration.value().ticks(), 0, Fraction length, false, nullptr);
+
+        tickEnd += duration.value();
+    } while (
+        (currentEntry = currentEntry->getNext())
+        && (s = m_score->tick2measure(tickEnd)->getSegment(SegmentType::ChordRest, tickEnd))
+    );
 }
 
 }
