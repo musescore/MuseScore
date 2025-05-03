@@ -5656,9 +5656,9 @@
             </Instrument>
             <Instrument id="tubular-bells">
                   <family>pitched-percussion</family>
-                  <longName>Chimes</longName>
-                  <shortName>Cme.</shortName>
-                  <description>Chimes or Tubular Bells</description>
+                  <longName>Tubular Bells</longName>
+                  <shortName>T. B.</shortName>
+                  <description>Tubular Bells or Chimes</description>
                   <musicXMLid>pitched-percussion.tubular-bells</musicXMLid>
                   <clef>G</clef>
                   <barlineSpan>1</barlineSpan>

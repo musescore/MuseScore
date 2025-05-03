@@ -4357,17 +4357,6 @@
         <translation>O. B. Met.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="866"/>
-        <source>Chimes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="867"/>
-        <source>Cme.</source>
-        <comment>Chimes</comment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="869"/>
         <source>St. Dr.</source>
         <comment>Steel Drums</comment>
@@ -4751,6 +4740,17 @@
         <source>Sle. Be.</source>
         <comment>Sleigh Bells</comment>
         <translation>Sle. Be.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="866"/>
+        <source>Tubular Bells</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="867"/>
+        <source>T. B.</source>
+        <comment>Tubular Bells</comment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="957"/>

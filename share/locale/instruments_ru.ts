@@ -4358,17 +4358,6 @@
         <translation>Б.-мет. Ор.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="866"/>
-        <source>Chimes</source>
-        <translation>Бар Чаймс</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="867"/>
-        <source>Cme.</source>
-        <comment>Chimes</comment>
-        <translation>Б. Чмс.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="869"/>
         <source>St. Dr.</source>
         <comment>Steel Drums</comment>
@@ -4687,6 +4676,17 @@
         <location filename="../instruments/instrumentsxml.h" line="937"/>
         <source>Piccolo Snare</source>
         <translation>Малый барабан-пикколо</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="866"/>
+        <source>Tubular Bells</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="867"/>
+        <source>T. B.</source>
+        <comment>Tubular Bells</comment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="938"/>

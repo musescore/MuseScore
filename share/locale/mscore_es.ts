@@ -15229,7 +15229,7 @@ internet activada</translation>
 <context>
     <name>Ms::PianoTools</name>
     <message>
-        <location filename="../../mscore/pianotools.cpp" line="462"/>
+        <location filename="../../mscore/pianotools.cpp" line="468"/>
         <source>Piano Keyboard</source>
         <translation>Teclado de piano</translation>
     </message>

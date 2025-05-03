@@ -4357,17 +4357,6 @@
         <translation>Mét. B. O.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="866"/>
-        <source>Chimes</source>
-        <translation>Tubular Bells</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="867"/>
-        <source>Cme.</source>
-        <comment>Chimes</comment>
-        <translation>Tu. Be.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="869"/>
         <source>St. Dr.</source>
         <comment>Steel Drums</comment>
@@ -4612,35 +4601,35 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="957"/>
         <source>Cajón</source>
-        <translation type="unfinished"></translation>
+        <translation>Cajón</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="958"/>
         <source>Cjn.</source>
         <comment>Cajón</comment>
-        <translation type="unfinished"></translation>
+        <translation>Cjn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="959"/>
         <source>Cuíca</source>
-        <translation type="unfinished"></translation>
+        <translation>Cuíca</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="960"/>
         <source>Cu.</source>
         <comment>Cuíca</comment>
-        <translation type="unfinished">Cu.</translation>
+        <translation>Cu.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1224"/>
         <source>Cannon</source>
-        <translation type="unfinished"></translation>
+        <translation>Canon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1225"/>
         <source>Cn.</source>
         <comment>Cannon</comment>
-        <translation type="unfinished"></translation>
+        <translation>Cn.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1464"/>
@@ -4686,6 +4675,17 @@
         <location filename="../instruments/instrumentsxml.h" line="937"/>
         <source>Piccolo Snare</source>
         <translation>Caisse claire Piccolo</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="866"/>
+        <source>Tubular Bells</source>
+        <translation>Tubular Bells</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="867"/>
+        <source>T. B.</source>
+        <comment>Tubular Bells</comment>
+        <translation>Tu. Be.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="938"/>

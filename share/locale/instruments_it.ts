@@ -4357,17 +4357,6 @@
         <translation>Met. b. O.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="866"/>
-        <source>Chimes</source>
-        <translation>Campane tubolari</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="867"/>
-        <source>Cme.</source>
-        <comment>Chimes</comment>
-        <translation>Camp.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="869"/>
         <source>St. Dr.</source>
         <comment>Steel Drums</comment>
@@ -4686,6 +4675,17 @@
         <location filename="../instruments/instrumentsxml.h" line="937"/>
         <source>Piccolo Snare</source>
         <translation>Tamburo militare piccolo</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="866"/>
+        <source>Tubular Bells</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="867"/>
+        <source>T. B.</source>
+        <comment>Tubular Bells</comment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="938"/>

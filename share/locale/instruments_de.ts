@@ -4363,17 +4363,6 @@
         <translation>O. B. Met.</translation>
     </message>
     <message>
-        <location filename="../instruments/instrumentsxml.h" line="866"/>
-        <source>Chimes</source>
-        <translation>Röhrenglocken</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="867"/>
-        <source>Cme.</source>
-        <comment>Chimes</comment>
-        <translation>Rgl.</translation>
-    </message>
-    <message>
         <location filename="../instruments/instrumentsxml.h" line="869"/>
         <source>St. Dr.</source>
         <comment>Steel Drums</comment>
@@ -4692,6 +4681,17 @@
         <location filename="../instruments/instrumentsxml.h" line="937"/>
         <source>Piccolo Snare</source>
         <translation>Piccolo Snare</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="866"/>
+        <source>Tubular Bells</source>
+        <translation>Röhrenglocken</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="867"/>
+        <source>T. B.</source>
+        <comment>Tubular Bells</comment>
+        <translation>Rgl.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="938"/>
