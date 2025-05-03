@@ -2220,7 +2220,7 @@ void MusicXmlParserPass2::part()
     if (!isLikelyIncorrectPartName(partName)) {
         part->setLongNameAll(partName);
     } else {
-        m_pass1.getPart(id)->setLongNameAll(u"");
+        part->setLongNameAll(u"");
     }
     if (!mxmlPart.getAbbr().empty()) {
         part->setPlainShortNameAll(mxmlPart.getAbbr());
@@ -2229,7 +2229,7 @@ void MusicXmlParserPass2::part()
             part->setLongNameAll(u"");
         }
     } else {
-        m_pass1.getPart(id)->setPlainShortNameAll(u"");
+        part->setPlainShortNameAll(u"");
     }
     // set the parts first instrument
     // try to prevent an empty track name
