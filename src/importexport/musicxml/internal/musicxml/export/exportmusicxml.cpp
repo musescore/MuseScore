@@ -7599,9 +7599,10 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
 
 static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrMap)
 {
+    const auto& parts = score->parts();
     const Color longInstrumentColor = score->style().styleV(Sid::longInstrumentColor).value<Color>();
     const Color shortInstrumentColor = score->style().styleV(Sid::shortInstrumentColor).value<Color>();
-    bool hiddenInstrName = (score->style().styleB(Sid::hideInstrumentNameIfOneInstrument));
+    bool hiddenInstrName = score->style().styleB(Sid::hideInstrumentNameIfOneInstrument) && parts.size() == 1;
 
     xml.startElement("part-list");
     size_t staffCount = 0;                          // count sum of # staves in parts
@@ -7668,7 +7669,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
                 hiddenInstrName = true;
             }
         }
-        if (hiddenInstrName && parts.size() == 1) {
+        if (hiddenInstrName) {
             longInstrumentAttributes.push_back({ "print-object", "no" });
             shortInstrumentAttributes.push_back({ "print-object", "no" });
         }
