@@ -73,11 +73,11 @@ bool ScoreComp::compareFiles(const String& fullPath1, const String& fullPath2)
         QTextStream outputText(stdout);
         outputText << String(ba);
         outputText << String("   <diff -u %1 %2 failed, code: %3 \n").arg(fullPath1, fullPath2).arg(code);
-        
+
         QFile file(QStringLiteral(BINARY_DIR) + "/Testing/Temporary/failed_test_reference_files.txt");
-        if (!file.open(QIODevice::Append))
+        if (!file.open(QIODevice::Append)) {
             return false;
-    
+        }
         QTextStream out(&file);
         QString pathToPrint = fullPath1.contains(QStringLiteral("_ref")) ? fullPath1 : fullPath2;
         // Extract only the portion after "/src"
