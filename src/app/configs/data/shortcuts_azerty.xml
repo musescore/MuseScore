@@ -165,6 +165,10 @@
     <seq>Ctrl+Shift+W</seq>
     </SC>
   <SC>
+    <key>extend-to-next-note</key>
+    <seq>Alt+W</seq>
+    </SC>
+  <SC>
     <key>notation-swap</key>
     <seq>Ctrl+Shift+X</seq>
     </SC>

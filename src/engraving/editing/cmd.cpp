@@ -3397,24 +3397,39 @@ void Score::cmdExtendToNextNote()
     staff_idx_t startStaff = selection().staffStart();
     staff_idx_t endStaff = selection().staffEnd();
 
+    std::vector<ChordRest*> crList;
+    std::string selType = m_selection.isList() ? "list" : "range";
+
     for (EngravingItem* el : selection().elements()) {
         if (!el->isNote()) {
             continue;
         }
         Note* on = toNote(el);
         ChordRest* ocr = toChordRest(on->chord());
+        crList.push_back(ocr);
+
+        if (!nextChordRest(ocr)) {
+            continue;
+        }
         ChordRest* nextCR = nextChordRest(ocr);
 
         while (nextCR->isRest()) {
             Rest* r = toRest(nextCR);
             ocr = prevChordRest(toChordRest(r));
             if (ocr->tuplet() || r->tuplet()) {
-                addChord(r->tick(), r->ticks(), toChord(ocr), true, r->tuplet());
+                Chord* nc = addChord(r->tick(), r->ticks(), toChord(ocr), true, r->tuplet());
+                ocr = toChordRest(nc);
             } else {
-                ocr = prevChordRest(toChordRest(r));
                 changeCRlen(ocr, ocr->ticks() + r->ticks());
             }
+            if (ocr->tick() > crList.back()->tick()) {
+                crList.push_back(ocr);
+            }
             if (!nextChordRest(nextCR)) {
+                endTick = lastMeasure()->endTick();
+                if (nextChordRest(ocr)) {
+                    crList.push_back(nextChordRest(ocr));
+                }
                 break;
             }
             nextCR = nextChordRest(nextCR);
@@ -3422,9 +3437,22 @@ void Score::cmdExtendToNextNote()
                 endTick = nextCR->tick();
             }
         }
+        if (prevChordRest(nextCR)->tick() > crList.back()->tick()) {
+            crList.push_back(prevChordRest(nextCR));
+        }
     }
-    selection().setRangeTicks(startTick, endTick, startStaff, endStaff);
-    selection().updateSelectedElements();
+
+    if (selType == "range") {
+        selection().setRangeTicks(startTick, endTick, startStaff, endStaff);
+        selection().updateSelectedElements();
+    } else {
+        for (ChordRest* cr : crList) {
+            std::vector<Note*> notes = toChord(cr)->notes();
+            for (Note* n : notes) {
+                select(n, SelectType::ADD);
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------
