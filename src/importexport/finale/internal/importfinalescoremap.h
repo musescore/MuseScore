@@ -49,18 +49,30 @@ private:
     void importParts();
     void importMeasures();
     void importBrackets();
-    void importEntries();
 
     engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
                                   const engraving::InstrumentTemplate* it = nullptr);
+
+    struct ReadableTuplet
+    {
+        Fraction absBegin;
+        Fraction absDuration;
+        std::shared_ptr<const details::TupletDef> musxTuplet; // actual tuplet object. used for writing properties
+        engraving::Tuplet* scoreTuplet; // to be created tuplet object.
+        int layer{}; // for nested tuplets. 0 = outermost
+        bool valid; // DBG
+    };
+
+    bool processEntryInfo(const std::shared_ptr<const musx::dom::EntryInfo> entryInfo, track_idx_t curTrackIdx,
+                          Segment** segment, std::vector<ReadableTuplet>* tupletMap, size_t* lastAddedTupletIndex);
 
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
 
     std::unordered_map<QString, std::vector<musx::dom::InstCmper>> m_part2Inst;
     std::unordered_map<musx::dom::InstCmper, QString> m_inst2Part;
-    std::unordered_map<size_t, musx::dom::InstCmper> m_staff2Inst;
-    std::unordered_map<size_t, musx::dom::InstCmper> m_inst2Staff;
+    std::unordered_map<staff_idx_t, musx::dom::InstCmper> m_staff2Inst;
+    std::unordered_map<musx::dom::InstCmper, staff_idx_t> m_inst2Staff;
 };
 
 }

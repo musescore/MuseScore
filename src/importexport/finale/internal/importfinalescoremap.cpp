@@ -71,7 +71,6 @@ void EnigmaXmlImporter::import()
     importParts();
     importBrackets();
     importMeasures();
-    importEntries();
 }
 
 static std::optional<ClefTypeList> clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
@@ -145,10 +144,202 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     } else {
         s->staffType(eventTick)->setGenClef(false);
     }
-    m_staff2Inst.emplace(m_score->nstaves(), InstCmper(musxStaff->getCmper()));
-    m_inst2Staff.emplace(InstCmper(musxStaff->getCmper()), m_score->nstaves());
+    m_staff2Inst.emplace(s->idx(), InstCmper(musxStaff->getCmper()));
+    m_inst2Staff.emplace(InstCmper(musxStaff->getCmper()), s->idx());
     m_score->appendStaff(s);
     return s;
+}
+
+static ChordRest* importEntry(const std::shared_ptr<const musx::dom::EntryInfo> entryInfo, Segment** segment)
+{
+    using MusxNote = musx::dom::Note;
+
+    // Retrieve entry from entryInfo
+    Entry currentEntry = entryInfo->getEntry();
+    if (!currentEntry) {
+        return nullptr;
+    }
+
+    // durationType
+    std::pair<musx::dom::NoteType, int> noteInfo = currentEntry->calcNoteInfo();
+    TDuration d = FinaleTConv::noteTypeToDurationType(noteInfo.first);
+    if (d == DurationType::V_INVALID) {
+        LOGE() << "ChordRest duration not supported in MuseScore";
+        return nullptr;
+    }
+
+    ChordRest* cr;
+    bool chordIsCrossStaff = true;
+
+    auto harmLev2pitch = [&](int harmLev, MusxNote::NoteName tonic, Key key) -> int {
+        int absStep = 35 /*middle C*/ + int(tonic) + harmLev;
+        return absStep2pitchByKey(absStep, key);
+    };
+
+    if (currentEntry->isNote) {
+        Chord* chord = Factory::createChord(s);
+
+        for (MusxNote n : currentEntry->notes) {
+            // calculate pitch, accidentals and transposition
+            NoteVal nval;
+            nval.pitch = harmLev2pitch(n->harmLev, MusxNote::NoteName::C, Key::C) + n->harmAlt; /// @todo use real keysig and tonic
+
+            // Finale supports up to 7 alterations (relative to keysig), MuseScore only 3 (up to 3# or 3b).
+            // If the alteration is too large, we keep the pitch but rewrite the note on a new line
+            /// @todo Do we need to set tpc1 if we're in a transposition?
+            /// @todo Is the pitch value stored in the entry tranposed? Code assumes pitch stored is absolute
+            nval.tpc1 = step2tpcByKeyAndAccAlteration(n->harmLev + int(MusxNote::NoteName::C), Key::C, n->harmAlt); /// @todo use real keysig, need to add NoteNamevalue?
+            if (!tpcIsValid(nval.tpc1)) {
+                nval.tpc1 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST); // concert pitch
+            }
+            AccidentalVal accVal = tpc2alter(nval.tpc1);
+
+            if (false /*currently in a transposition*/) {
+                // nval.pitch += m_score->staff(size_t(0))->part()->instrument(s->tick())->transpose().chromatic;
+                nval.pitch = harmLev2pitch(n->harmLev, MusxNote::NoteName::C, Key::C) + n->harmAlt; /// @todo use real transposed tonic and keysig
+                /// @todo use real transposed keysig, need to add NoteNamevalue? is this method correct?
+                nval.tpc2 = step2tpcByKeyAndAccAlteration(n->harmLev + int(MusxNote::NoteName::C), /*transposed key*/ Key::C, n->harmAlt);
+                if (!tpcIsValid(nval.tpc2)) {
+                    nval.tpc2 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST); // pitch is now transposed
+                }
+                accVal = tpc2alter(nval.tpc2);
+            } else {
+                nval.tpc2 = nval.tpc1; // needed?
+            }
+
+            engraving::Note* note = Factory::createNote(chord);
+            note->setParent(chord);
+            note->setTrack(chord->track());
+            note->setNval(nval);
+
+            // Add accidental if needed
+            if (n->freezeAcci || n->harmAlt == 0) {
+                AccidentalType at = Accidental::value2subtype(accVal);
+                Accidental* a = Factory::createAccidental(note);
+                a->setAccidentalType(at);
+                a->setRole(AccidentalRole::USER);
+                a->setParent(note);
+                note->add(a);
+            }
+
+            // MuseScore doesn't support individual cross-staff notes, either move the whole chord or nothing
+            chordIsCrossStaff = chordIsCrossStaff && n->crossStaff;
+        }
+        cr = toChordRest(chord);
+    } else {
+        Rest* rest = Factory::createRest(s, d);
+        cr = toChordRest(rest);
+
+        for (MusxNote n : currentEntry->notes) {
+            //todo: calculate y-offset here (remember is also staff-dependent)
+            chordIsCrossStaff = chordIsCrossStaff && n->crossStaff;
+        }
+    }
+
+    cr->setDurationType(d);
+    cr->setDots(static_cast<int>(noteInfo.second));
+    return cr;
+}
+
+static std::optional<Fraction> musxFractionToFraction(musx::util::Fraction count)
+{
+    if (count.remainder()) {
+        LOGE() << "Fraction has fractional portion that could not be reduced.";
+        return std::nullopt;
+    }
+    return Fraction(count.numerator(), count.denominator());
+}
+
+bool processEntryInfo(const std::shared_ptr<const musx::dom::EntryInfo> entryInfo, track_idx_t curTrackIdx,
+                      Segment** segment, std::vector<ReadableTuplet>* tupletMap, size_t* lastAddedTupletIndex);
+{
+    Fraction currentEntryInfoStart = musxFractionToFraction(entryInfo->elapsedDuration);
+    if (!currentEntryInfoStart || !segment) {
+        LOGW() << "Position in measure unknown";
+        return false;
+    }
+
+    if (entryInfo->graceIndex != 0) {
+        LOGW() << "Grace notes not yet supported";
+        return true;
+    }
+
+    if (entryInfo->v2Launch) {
+        LOGW() << "voice 2 unspported";
+    }
+
+    if (segment->rTick() != currentEntryInfoStart.value()) {
+        if (segment->rTick() < currentEntryInfoStart.value()) {
+            // invisible fill with rests up to start
+        } else {
+            LOGW() << "Incorrect position in measure";
+            return false;
+        }
+    }
+
+    // create Tuplets as needed, starting with the outermost
+    for (size_t i = 0; i < tupletMap.size(); ++i) {
+        if (!tupletMap[i].valid) {
+            continue;
+        }
+        if (tupletMap[i].absBegin == currentEntryInfoStart.value()) {
+            tupletMap[i].scoreTuplet = Factory::createTuplet(segment->measure());
+            tupletMap[i].scoreTuplet->setTrack(curTrackIdx);
+            tupletMap[i].scoreTuplet->setTick(segment->tick());
+            tupletMap[i].scoreTuplet->setParent(segment->measure());
+            /// @todo set tuplet duration, ratio, number, styled properties
+            if (i != 0 && tupletMap[i-1].layer < tupletMap[i].layer) {
+                tupletMap[i-1].scoreTuplet->add(tupletMap[i].scoreTuplet);
+            }
+            lastTupletIndex = i;
+        } else if (tupletMap[i].absBegin > currentEntryInfoStart.value()) {
+            break;
+        }
+    }
+    // locate current tuplet to parent the ChordRests to (if it exists)
+    Tuplet* parentTuplet = nullptr;
+    if (tupletMap[lastTupletIndex].scoreTuplet) {
+        do {
+            if (tupletMap[lastTupletIndex].absBegin + tupletMap[i].absDuration >= currentEntryInfoStart.value()) {
+                break;
+            }
+        } while (lastAddedTupletIndex > 0 && --lastAddedTupletIndex);
+        parentTuplet = tupletMap[lastTupletIndex].scoreTuplet;
+    }
+
+    // load entry
+    ChordRest* cr = importEntry(entryInfo, segment);
+    if (cr) {
+        cr->setTicks(/*entryInfo->actualDuration does it need global duration here, or the written duration in the tuplet*/);
+        cr->setTrack(curTrackIdx);
+        s->add(cr);
+        if (parentTuplet) {
+            parentTuplet->add(cr);
+        }
+    } else {
+        LOGW() << "Failed to read entry contents";
+        // Fill space with invisible rests
+    }
+
+    // add clef change
+    ClefType entryClefType = FinaleTConv::toMuseScoreClefType(entryInfo->clefIndex);
+    if (entryClefType != ClefType::INVALID) {
+        /// @todo visibility options
+        Clef* clef = Factory::createClef(m_score->dummy()->segment());
+        clef->setTrack(curTrackIdx);
+        clef->setConcertClef(entryClefType);
+        // c->setTransposingClef(entryClefType);
+        // c->setShowCourtesy();
+        // c->setForInstrumentChange();
+        clef->setGenerated(false);
+        clef->setIsHeader(false); /// @todo is this correct?
+        // clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
+
+        segment = measure->getSegment(false ? SegmentType::HeaderClef : SegmentType::Clef, segment->tick());
+        segment->add(clef);
+    }
+
+    segment = m_score->tick2measure(tickEnd)->getSegment(SegmentType::ChordRest, tickEnd)
 }
 
 static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig)
@@ -164,6 +355,55 @@ static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction
         }
     }
     return Fraction(count.quotient(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
+}
+
+static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo)
+{
+    const size_t n = tupletInfo.size();
+    std::vector<ReadableTuplet> result;
+    result.reserve(n);
+
+    for (EntryFrame::TupletInfo tuplet : tupletInfo) {
+        std::optional<Fraction> absBegin = musxFractionToFraction(tuplet->startDura);
+        std::optional<Fraction> absDuration = musxFractionToFraction(tuplet->endDura - tuplet->startDura);
+        result.emplace_back({
+            absBegin ? absBegin.value() : Fraction(-1, 1),
+            absDuration ? absDuration.value() : Fraction(-1, 1),
+            tuplet->tuplet,
+            nullptr,
+            0,
+            absBegin && absDuration
+        });
+    }
+
+   for (size_t i = 0; i < n; ++i) {
+        if (!result[i].valid) {
+            continue;
+        }
+
+        for (size_t j = 0; j < n; ++j) {
+            if(i == j || !result[j].valid) {
+                continue;
+            }
+
+            if (result[i].absBegin >= result[j].absBegin
+                && result[i].absBegin + result[i].absDuration <= result[j].absBegin + result[j].absDuration
+                && (result[i].absBegin > result[j].absBegin
+                || result[i].absBegin + result[i].absDuration < result[j].absBegin + result[j].absDuration)
+            ) {
+                result[i].layer = std::max(result[i].layer, result[j].layer + 1);
+            }
+        }
+    }
+
+    std::sort(result.begin(), result.end(), [](const ReadableTuplet& a, const ReadableTuplet& b) {
+        if (a.absBegin != b.absBegin) {
+            return a.absBegin < b.absBegin;
+        }
+        return a.layer < b.layer;
+    });
+
+    return result;
 }
 
 void EnigmaXmlImporter::importMeasures()
@@ -196,18 +436,6 @@ void EnigmaXmlImporter::importMeasures()
         m_score->measures()->add(measure);
 
         /// @todo key signature
-
-        // for now, add a full measure rest to each staff for the measure.
-        /*for (Staff* staff : m_score->staves()) {
-            staff_idx_t staffIdx = staff->idx();
-            Segment* restSeg = measure->getSegment(SegmentType::ChordRest, tick);
-            Rest* rest = Factory::createRest(restSeg, TDuration(DurationType::V_MEASURE));
-            rest->setScore(m_score);
-            rest->setTicks(measure->ticks());
-            rest->setTrack(staffIdx * VOICES);
-            restSeg->add(rest);
-        }*/
-        // if (++counter >= 100) break; // DBG
     }
 
     /// @todo maybe move this to separate function
@@ -230,6 +458,56 @@ void EnigmaXmlImporter::importMeasures()
         }
         if (newTimeSig != se.timesig()) {     // was a pickup measure - skip next timesig
             ++is;
+        }
+    }
+
+    // Add entries (notes, rests, tuplets)
+    auto musxStaves = m_doc->getOthers()->getArray<others::Staff>(SCORE_PARTID);
+    Segment* segment = nullptr;
+    for (const auto& musxStaff : musxStaves) {
+        staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxStaff->getCmper()), muse::nidx);
+        if (curStaffIdx == muse::nidx) {
+            continue;
+        }
+        segment = m_score->firstSegment(SegmentType::ChordRest);
+        for (const auto& musxMeasure : musxMeasures) {
+            auto GFHold = musxMeasure->getDocument()->getDetails()->get<details::GFrameHold>(
+                musxMeasure->getPartId(), musxStaff->getCmper(), musxMeasure->getCmper());
+            if (!GFHold) {
+                continue;
+            }
+            if (segment) {
+                Segment* measureStartSegment = segment;
+            }
+            for (LayerIndex layer = 0; layer < MAX_LAYERS; layer++) {
+                auto entryFrame = GFHold->createEntryFrame(layer, /*forWrittenPitch*/ false)
+                if (!entryFrame) {
+                    continue;
+                }
+                auto entries = entryFrame->getEntries();
+                if (entries.empty()) {
+                    continue;
+                }
+
+                /// @todo load (measure-specific) key signature from entryFrame->keySignature
+
+                track_idx_t curTrackIdx = curStaffIdx * VOICES + static_cast<voice_idx_t>(layer);
+                segment = measureStartSegment;
+                std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo);
+                size_t lastAddedTupletIndex = 0;
+                for (const auto& entryInfo : entries) {
+                    if (!processEntryInfo(entryInfo, curTrackIdx, &segment, &tupletMap, &lastAddedTupletIndex)) {
+                        // fill expected duration with (invisible) rests using entryInfo->elapsedDuration
+                        /// @todo sometimes we need to fill up to the start of the entry, sometimes we need to fill from the entry to the end of the entry (because of gaps).
+                        // const std::vector<Rest*> rests = m_score->setRests(segment->tick(), curTrackIdx,
+                                                                           // entryInfo->actualDuration, false, /*Tuplet, should be true sometimes*/nullptr);
+                        // for (Rest* r : rests) {
+                            // r->setVisible(false);
+                        // }
+                        break; // DBG
+                    }
+                }
+            }
         }
     }
 }
@@ -390,119 +668,6 @@ void EnigmaXmlImporter::importBrackets()
             }
         }
     }
-}
-
-static std::optional<Fraction> musxFractionToFraction(musx::util::Fraction count)
-{
-    if (count.remainder()) {
-        LOGE() << "Fraction has fractional portion that could not be reduced.";
-        return std::nullopt;
-    }
-    return Fraction(count.numerator(), count.denominator());
-}
-
-void EnigmaXmlImporter::importEntries()
-{
-    using MusxNote = musx::dom::Note;
-    auto currentEntry = m_doc->getEntries()->get<Entry>(0);
-    if (!currentEntry) {
-        LOGE() << "Couldn't find first entry.";
-        return;
-    }
-
-    auto harmLev2pitch = [&](int harmLev, MusxNote::NoteName tonic, Key key) -> int {
-        int absStep = 35 /*middle C*/ + int(tonic) + harmLev;
-        return absStep2pitchByKey(absStep, key);
-    };
-
-    Segment* s = m_score->firstSegment(SegmentType::ChordRest);
-    Fraction tickEnd{0, 1};
-
-    do {
-        /// @todo use calcNoteInfo() instead
-        auto duration = musxFractionToFraction(currentEntry->calcFraction());
-        if (!duration) {
-            continue;
-        }
-        TDuration d;
-        d.setVal(duration.value().ticks());
-
-        ChordRest* cr;
-        bool chordIsCrossStaff = true;
-        if (currentEntry->isNote) {
-            Chord* chord = Factory::createChord(s);
-
-            for (auto n : currentEntry->notes) {
-                // calculate pitch, accidentals and transposition
-                NoteVal nval;
-                nval.pitch = harmLev2pitch(n->harmLev, MusxNote::NoteName::C, Key::C) + n->harmAlt; /// @todo use real keysig and tonic
-
-                // Finale supports up to 7 alterations (relative to keysig), MuseScore only 3 (up to 3# or 3b).
-                // If the alteration is too large, we keep the pitch but rewrite the note on a new line
-                /// @todo Do we need to set tpc1 if we're in a transposition?
-                /// @todo Is the pitch value stored in the entry tranposed? Code assumes pitch stored is absolute 
-                nval.tpc1 = step2tpcByKeyAndAccAlteration(n->harmLev + MusxNote::NoteName::C, Key::C, n->harmAlt); /// @todo use real keysig, need to add NoteNamevalue?
-                if (!tpcIsValid(nval.tpc1)) {
-                    nval.tpc1 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST); // concert pitch
-                }
-                AccidentalVal accVal = tpc2alter(nval.tpc1);
-
-                if (false /*currently in a transposition*/) {
-                    // nval.pitch += m_score->staff(size_t(0))->part()->instrument(s->tick())->transpose().chromatic;
-                    nval.pitch = harmLev2pitch(n->harmLev, MusxNote::NoteName::C, Key::C) + n->harmAlt; /// @todo use real transposed tonic and keysig
-                    /// @todo use real transposed keysig, need to add NoteNamevalue? is this method correct?
-                    nval.tpc2 = step2tpcByKeyAndAccAlteration(n->harmLev + MusxNote::NoteName::C, /*transposed key*/ Key::C, n->harmAlt);
-                    if (!tpcIsValid(nval.tpc2)) {
-                        nval.tpc2 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST); // pitch is now transposed
-                    }
-                    accVal = tpc2alter(nval.tpc2);
-                } else {
-                    nval.tpc2 = nval.tpc1; // needed?
-                }
-
-                engraving::Note* note = Factory::createNote(chord);
-                note->setParent(chord);
-                note->setTrack(chord->track());
-                note->setNval(nval);
-
-                // Add accidental if needed
-                if (n->freezeAcci || n->harmAlt == 0) {
-                    AccidentalType at = Accidental::value2subtype(accVal);
-                    Accidental* a = Factory::createAccidental(note);
-                    a->setAccidentalType(at);
-                    a->setRole(AccidentalRole::USER);
-                    a->setParent(note);
-                    note->add(a);
-                }
-
-                // MuseScore doesn't support individual cross-staff notes, either move the whole chord or nothing
-                chordIsCrossStaff = chordIsCrossStaff && n->crossStaff;
-            }
-            cr = toChordRest(chord);
-        } else {
-            Rest* rest = Factory::createRest(s, d);
-            rest->setScore(m_score); // needed?
-            cr = toChordRest(rest);
-            
-            for (auto n : currentEntry->notes) {
-                //todo: calculate y-offset here (remember is also staff-dependent)
-                chordIsCrossStaff = chordIsCrossStaff && n->crossStaff;
-            }
-        }
-
-        cr->setDurationType(d);
-        cr->setTicks(duration.value());
-        cr->setTrack(0);
-        s->add(cr);
-
-        /// @todo use score->setRests to fill measure (if it suddenly ends and is not filled, to avoid corruptions)
-        //Rest* r = setRest(s->tick() + duration.value().ticks(), 0, Fraction length, false, nullptr);
-
-        tickEnd += duration.value();
-    } while (
-        (currentEntry = currentEntry->getNext())
-        && (s = m_score->tick2measure(tickEnd)->getSegment(SegmentType::ChordRest, tickEnd))
-    );
 }
 
 }

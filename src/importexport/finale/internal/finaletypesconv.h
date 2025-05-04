@@ -31,8 +31,9 @@ class FinaleTConv
 public:
     FinaleTConv() = default;
 
-    static engraving::String instrTemplateIdfromUuid(std::string uuid);
+    static engraving::DurationType noteTypeToDurationType(musx::dom::NoteType noteType);
     static engraving::ClefType toMuseScoreClefType(musx::dom::ClefIndex clef);
+    static engraving::String instrTemplateIdfromUuid(std::string uuid);
     static engraving::BracketType toMuseScoreBracketType(musx::dom::details::StaffGroup::BracketStyle);    
 };
 
