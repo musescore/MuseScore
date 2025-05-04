@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "importfinalescoremap.h"
-#include "finaletypesconv.h"
+#include "internal/importfinalescoremap.h"
+#include "internal/importfinalelogger.h"
+#include "internal/finaletypesconv.h"
 #include "dom/sig.h"
 
 #include <vector>
@@ -342,7 +343,7 @@ bool processEntryInfo(const std::shared_ptr<const musx::dom::EntryInfo> entryInf
     segment = m_score->tick2measure(tickEnd)->getSegment(SegmentType::ChordRest, tickEnd)
 }
 
-static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig)
+static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, const FinaleLogger& logger)
 {
     auto [count, noteType] = simpleMusxTimeSig;
     if (count.remainder()) {
@@ -350,7 +351,7 @@ static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction
             noteType = musx::dom::NoteType(Edu(noteType) / count.denominator());
             count *= count.denominator();
         } else {
-            LOGE() << "Time signature has fractional portion that could not be reduced.";
+            logger.logWarning(String::fromUtf8("Time signature has fractional portion that could not be reduced."));
             return Fraction(4, 4);
         }
     }
@@ -426,7 +427,7 @@ void EnigmaXmlImporter::importMeasures()
         measure->setTick(tick);
         /// @todo eventually we need to import all the TimeSig features we can. Right now it's just the simplified case.
         auto musxTimeSig = musxMeasure->createTimeSignature();
-        auto scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified());
+        auto scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
         if (scoreTimeSig != currTimeSig) {
             m_score->sigmap()->add(tick.ticks(), scoreTimeSig);
             currTimeSig = scoreTimeSig;
@@ -624,7 +625,7 @@ void EnigmaXmlImporter::importBrackets()
 
     auto scorePartInfo = m_doc->getOthers()->get<others::PartDefinition>(SCORE_PARTID, SCORE_PARTID);
     if (!scorePartInfo) {
-        LOGE() << "Unable to read PartDefinition for score";
+        throw std::logic_error("Unable to read PartDefinition for score");
         return;
     }
     auto scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
@@ -633,13 +634,13 @@ void EnigmaXmlImporter::importBrackets()
     auto groupsByLayer = computeStaffGroupLayers(staffGroups);
     for (const auto& groupInfo : groupsByLayer) {
         IF_ASSERT_FAILED(groupInfo.info.startSlot && groupInfo.info.endSlot) {
-            LOGE() << "Group info encountered without start or end slot information";
+            logger().logWarning(String::fromUtf8("Group info encountered without start or end slot information"));
             continue;
         }
         auto musxStartStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.startSlot.value());
         auto musxEndStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.endSlot.value());
         IF_ASSERT_FAILED(musxStartStaff && musxEndStaff) {
-            LOGE() << "Group info encountered without start or end slot information";
+            logger().logWarning(String::fromUtf8("Group info encountered missing start or end staff information"));
             continue;
         }
         auto getStaffIdx = [&](InstCmper inst) -> std::optional<size_t> {

@@ -37,13 +37,19 @@ class Staff;
 }
 
 namespace mu::iex::finale {
+class FinaleLogger;
 class EnigmaXmlImporter
 {
 public:
-    EnigmaXmlImporter(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc)
-        : m_score(score), m_doc(doc) {}
+    EnigmaXmlImporter(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, const std::shared_ptr<FinaleLogger>& logger)
+        : m_score(score), m_doc(doc), m_logger(logger) {}
 
     void import();
+
+    const engraving::Score* score() const { return m_score; }
+    std::shared_ptr<musx::dom::Document> musxDocument() const { return m_doc; }
+
+    FinaleLogger& logger() const { return *m_logger; }
 
 private:
     void importParts();
@@ -68,6 +74,7 @@ private:
 
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
+    const std::shared_ptr<FinaleLogger> m_logger;
 
     std::unordered_map<QString, std::vector<musx::dom::InstCmper>> m_part2Inst;
     std::unordered_map<musx::dom::InstCmper, QString> m_inst2Part;

@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "importenigmaxml.h"
-#include "importfinalescoremap.h"
+#include "internal/importenigmaxml.h"
+#include "internal/importfinalescoremap.h"
+#include "internal/importfinalelogger.h"
 
 #include <zlib.h>
-#include <vector>
 #include <exception>
 
 #include <QFile>
@@ -125,15 +125,23 @@ static bool gunzipBuffer(const ByteArray& gzDataInput, ByteArray& output)
 
 Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
 {
-    auto doc = musx::factory::DocumentFactory::create<musx::xml::qt::Document>(data.constChar(), data.size());
+    auto logger = std::make_shared<FinaleLogger>();
+    logger->setLoggingLevel(FinaleLogger::Level::MUSX_TRACE); // for now
 
-    data.clear(); // free up data now that it isn't needed
+    try {
+        auto doc = musx::factory::DocumentFactory::create<musx::xml::qt::Document>(data.constChar(), data.size());
 
-    EnigmaXmlImporter importer(score, doc);
-    importer.import();
+        data.clear(); // free up data now that it isn't needed
 
-    score->setUpTempoMap(); //??
-    return engraving::Err::NoError;
+        EnigmaXmlImporter importer(score, doc, logger);
+        importer.import();
+
+        score->setUpTempoMap(); //??
+        return engraving::Err::NoError;
+    } catch (const std::exception& ex) {
+        logger->logError(String::fromUtf8(ex.what()));
+    }
+    return engraving::Err::FileBadFormat;
 }
 
 static bool extractScoreFile(const String& name, ByteArray& data)
