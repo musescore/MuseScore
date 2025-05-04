@@ -37,7 +37,7 @@ using namespace musx::dom;
 namespace mu::iex::finale {
 DurationType FinaleTConv::noteTypeToDurationType(musx::dom::NoteType noteType)
 {
-    static const std::unordered_map<NoteType, DurationType> noteTypeTable = {
+    static const std::unordered_map<musx::dom::NoteType, DurationType> noteTypeTable = {
         { musx::dom::NoteType::Maxima,     DurationType::V_INVALID },
         { musx::dom::NoteType::Longa,      DurationType::V_LONG },
         { musx::dom::NoteType::Breve,      DurationType::V_BREVE },
@@ -903,7 +903,7 @@ String FinaleTConv::instrTemplateIdfromUuid(std::string uuid)
     return muse::value(uuidTable, uuid, u"piano");
 }
 
-BracketType FinaleTConv::toMuseScoreBracketType(details::StaffGroup::BracketStyle style)
+BracketType FinaleTConv::toMuseScoreBracketType(details::StaffGroup::BracketStyle bracketStyle)
 {
     using MusxBracketStyle = details::StaffGroup::BracketStyle;
     static const std::unordered_map<MusxBracketStyle, BracketType> bracketTypeTable = {
@@ -914,7 +914,20 @@ BracketType FinaleTConv::toMuseScoreBracketType(details::StaffGroup::BracketStyl
         { MusxBracketStyle::BracketCurvedHooks,   BracketType::NORMAL },
         { MusxBracketStyle::DeskBracket,          BracketType::SQUARE },
     };
-    return muse::value(bracketTypeTable, style, BracketType::NO_BRACKET);
+    return muse::value(bracketTypeTable, bracketStyle, BracketType::NO_BRACKET);
+}
+
+TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle)
+{
+    using MusxTupletNumberType = options::TupletOptions::NumberStyle;
+    static const std::unordered_map<MusxTupletNumberType, TupletNumberType> tupletNumberTypeTable = {
+        { MusxTupletNumberType::Nothing,                  TupletNumberType::NO_TEXT },
+        { MusxTupletNumberType::Number,                   TupletNumberType::SHOW_NUMBER },
+        { MusxTupletNumberType::UseRatio,                 TupletNumberType::SHOW_RELATION },
+        { MusxTupletNumberType::RatioPlusDenominatorNote, TupletNumberType::SHOW_RELATION }, // not supported
+        { MusxTupletNumberType::RatioPlusBothNotes,       TupletNumberType::SHOW_RELATION }, // not supported
+    };
+    return muse::value(tupletNumberTypeTable, numberStyle, TupletNumberType::SHOW_NUMBER);
 }
 
 }
