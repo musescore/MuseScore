@@ -8,6 +8,9 @@ declare_module(iex_finale)
 
 include(FetchContent)
 
+# temporary for reference and debugging
+set(MUSX_DISPLAY_NODE_NAMES ON CACHE BOOL "Log node names to trace as they are processed" FORCE)
+
 set(MUSX_USE_QTXML ON CACHE BOOL "Enable Qt xml parsing classes" FORCE)
 set(musx_BUILD_TESTING OFF CACHE BOOL "Do not build tests for musx")
 FetchContent_Declare(
@@ -25,6 +28,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/finaletypesconv.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importenigmaxml.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importenigmaxml.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalelogger.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalelogger.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalescoremap.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalescoremap.h
     ${CMAKE_CURRENT_LIST_DIR}/finalemodule.cpp
@@ -34,6 +39,6 @@ set(MODULE_SRC
 set(MODULE_LINK
     musx              # Link your MusxDom library
     engraving         # MuseScore expects importers to link to "engraving" usually
-    )
+)
 
 setup_module()
