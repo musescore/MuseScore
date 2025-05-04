@@ -81,9 +81,12 @@ jobs:
             file_path=$(echo ${line/data\/})
             file_path=$(echo ${file_path/src\//"build.debug/src/"})
             file_path=$(echo ${file_path/_ref/""})
+
+            echo "Copy this file:   \${buildDir}/${file_path}"
+            echo "To this location: \${artifact}/${line}"
+
+            file_path=$(echo ${{ github.workspace }}/${file_path})
             files_to_zip+="${file_path} "
-            echo "Copy this file:   " ${file_path}
-            echo "To this location: " ${line}
           done < ${{ github.workspace }}/build.debug/Testing/Temporary/failed_test_reference_files.txt
           zip failed_unit_tests.zip "${files_to_zip}"
         fi
