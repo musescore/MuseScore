@@ -75,19 +75,19 @@ jobs:
     - name: Zip failed test output files
       if: failure()
       run: |
-        if [[ -f ${{ github.workspace }}/build.debug/Testing/Temporary/failed_test_reference_files.txt ]]; then
+        cd build.debug
+        if [[ -f ./Testing/Temporary/failed_test_reference_files.txt ]]; then
           files_to_zip=""
           while IFS= read -r line; do
             file_path=$(echo ${line/data\/})
-            file_path=$(echo ${file_path/src\//"build.debug/src/"})
             file_path=$(echo ${file_path/_ref/""})
 
             echo "Copy this file:   \${buildDir}${file_path}"
             echo "To this location: \${artifact}${line}"
 
-            file_path=$(echo ${{ github.workspace }}${file_path})
+            file_path=$(echo ./${file_path})
             files_to_zip+="${file_path} "
-          done < ${{ github.workspace }}/build.debug/Testing/Temporary/failed_test_reference_files.txt
+          done < ./Testing/Temporary/failed_test_reference_files.txt
           zip failed_unit_tests.zip ${files_to_zip}
         fi
     - name: Upload unit test result
