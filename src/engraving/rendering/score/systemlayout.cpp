@@ -1059,7 +1059,8 @@ void SystemLayout::checkFullMeasureRestCollisions(const ElementsToLayout& elemen
                 measureShape.add(segment.staffShape(staffIdx).translated(PointF(xSegment, 0.0)));
             }
             measureShape.remove_if([fullMeasureRest] (const ShapeElement& shapeEl) {
-                return shapeEl.item() == fullMeasureRest;
+                const EngravingItem* shapeItem = shapeEl.item();
+                return shapeItem && (shapeItem == fullMeasureRest || shapeItem->isBarLine());
             });
 
             const double spatium = fullMeasureRest->spatium();
@@ -1069,7 +1070,7 @@ void SystemLayout::checkFullMeasureRestCollisions(const ElementsToLayout& elemen
 
             bool alignAbove = fullMeasureRest->voice() == 0;
             double verticalClearance = alignAbove ? restShape.verticalClearance(measureShape, minHorizontalDistance)
-                                       : -measureShape.minVerticalDistance(restShape, minHorizontalDistance);
+                                       : measureShape.verticalClearance(restShape, minHorizontalDistance);
 
             if (verticalClearance < minVertClearance) {
                 double diff = minVertClearance - verticalClearance;
