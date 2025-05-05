@@ -193,33 +193,21 @@ RetVal<io::path_t> InteractiveProvider::selectSavingFile(const std::string& titl
         return fileInfo.ret;
     }
 
-    std::regex regex(R"(\*\.(\w+))");
-    std::vector<std::string> filterExtensions;
-    for (const std::string& filterItem : filter) {
-        std::smatch match;
-        if (std::regex_search(filterItem, match, regex)) {
-            filterExtensions.push_back(match[1]);
-        }
-    }
-
     std::string suffix = muse::io::suffix(fileInfo.val.path);
-    if (find(filterExtensions.begin(), filterExtensions.end(), suffix) != filterExtensions.end()) {
+    if (muse::contains(fileInfo.val.allowedExtensions, suffix)
+        || muse::contains(fileInfo.val.allowedExtensions, ALL_FILES_FILTER)
+        || muse::contains(fileInfo.val.allowedExtensions, WINDOWS_NO_EXTENSION_FILTER)) {
         return RetVal<io::path_t>::make_ok(fileInfo.val.path);
     }
 
-    io::path_t filePath = fileInfo.val.path;
-    if ((fileInfo.val.extension != ALL_FILES_FILTER) && (fileInfo.val.extension != WINDOWS_NO_EXTENSION_FILTER)) {
-        filePath += "." + fileInfo.val.extension;
-    }
-
+    io::path_t filePath = fileInfo.val.path + "." + fileInfo.val.allowedExtensions[0];
     return RetVal<io::path_t>::make_ok(filePath);
 }
 
 RetVal<io::path_t> InteractiveProvider::selectDirectory(const std::string& title, const io::path_t& dir)
 {
     RetVal<InteractiveProvider::FileInfo> fileInfo = openFileDialog(FileDialogType::SelectDirectory, title, dir);
-    return fileInfo.ret.code()
-           == int(Ret::Code::Ok) ? RetVal<io::path_t>::make_ok(fileInfo.val.path) : RetVal<io::path_t>(fileInfo.ret);
+    return fileInfo.ret ? RetVal<io::path_t>::make_ok(fileInfo.val.path) : fileInfo.ret;
 }
 
 RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const QString& title)
@@ -833,11 +821,16 @@ RetVal<InteractiveProvider::FileInfo> InteractiveProvider::openFileDialog(FileDi
         if (rv.ret.valid()) {
             result.ret = rv.ret;
             if (rv.ret) {
-                QVariantMap resultMap = rv.val.toQVariant().toMap();
+                const QVariantMap resultMap = rv.val.toQVariant().toMap();
 
-                io::path_t selectedPath = QUrl::fromUserInput(resultMap["path"].toString()).toLocalFile();
-                std::string extension = resultMap["extension"].toString().toStdString();
-                result.val = { selectedPath, extension };
+                const io::path_t selectedPath = QUrl::fromUserInput(resultMap["path"].toString()).toLocalFile();
+                const QStringList allowedExtensions = resultMap["extensions"].toStringList();
+
+                result.val.path = selectedPath;
+
+                for (const QString& ext : allowedExtensions) {
+                    result.val.allowedExtensions.push_back(ext.toStdString());
+                }
             }
         }
     }

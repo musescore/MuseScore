@@ -143,7 +143,7 @@ private:
     struct FileInfo
     {
         io::path_t path;
-        std::string extension;
+        std::vector<std::string> allowedExtensions;
     };
 
     void raiseWindowInStack(QObject* newActiveWindow);

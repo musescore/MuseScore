@@ -42,7 +42,7 @@ QtPlatform.FileDialog {
             "errcode": 0,
             "value": {
                 "path": root.currentFile.toString(),
-                "extension": root.selectedNameFilter.extensions[0],
+                "extensions": root.selectedNameFilter.extensions
             }
         }
         root.close()
