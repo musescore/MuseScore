@@ -453,7 +453,7 @@ void RestLayout::alignRests(const System* system, LayoutContext& ctx)
                         continue;
                     }
                     Rest* rest = toRest(item);
-                    if (rest->staffMove() == 0 && !rest->isGap()) {
+                    if (rest->staffMove() == 0 && !rest->isGap() && rest->alignWithOtherRests()) {
                         restGroups.back().push_back(rest);
                     }
                 }
