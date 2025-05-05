@@ -679,6 +679,8 @@ PropertyValue Rest::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::GAP:
         return false;
+    case Pid::ALIGN_WITH_OTHER_RESTS:
+        return true;
     default:
         return ChordRest::propertyDefault(propertyId);
     }
@@ -703,6 +705,8 @@ PropertyValue Rest::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::GAP:
         return m_gap;
+    case Pid::ALIGN_WITH_OTHER_RESTS:
+        return alignWithOtherRests();
     default:
         return ChordRest::getProperty(propertyId);
     }
@@ -717,11 +721,9 @@ bool Rest::setProperty(Pid propertyId, const PropertyValue& v)
     switch (propertyId) {
     case Pid::GAP:
         m_gap = v.toBool();
-        triggerLayout();
         break;
     case Pid::VISIBLE:
         setVisible(v.toBool());
-        triggerLayout();
         break;
     case Pid::OFFSET:
         score()->addRefresh(canvasBoundingRect());
@@ -733,11 +735,14 @@ bool Rest::setProperty(Pid propertyId, const PropertyValue& v)
         if (measure() && durationType().type() == DurationType::V_MEASURE) {
             measure()->triggerLayout();
         }
-        triggerLayout();
+        break;
+    case Pid::ALIGN_WITH_OTHER_RESTS:
+        setAlignWithOtherRests(v.toBool());
         break;
     default:
         return ChordRest::setProperty(propertyId, v);
     }
+    triggerLayout();
     return true;
 }
 

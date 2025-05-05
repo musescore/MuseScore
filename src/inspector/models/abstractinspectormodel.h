@@ -135,6 +135,7 @@ public:
         TYPE_LYRICS,
         TYPE_REST,
         TYPE_REST_BEAM,
+        TYPE_REST_REST,
         TYPE_STRING_TUNINGS,
         TYPE_SYMBOL,
         TYPE_NOTELINE,

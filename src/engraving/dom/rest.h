@@ -116,6 +116,9 @@ public:
     double rightEdge() const override;
     double centerX() const;
 
+    bool alignWithOtherRests() const { return m_alignWithOtherRests; }
+    void setAlignWithOtherRests(bool v) { m_alignWithOtherRests = v; }
+
     void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
@@ -169,6 +172,8 @@ private:
     DeadSlapped* m_deadSlapped = nullptr;
 
     RestVerticalClearance m_verticalClearance;
+
+    bool m_alignWithOtherRests = true;
 };
 } // namespace mu::engraving
 #endif
