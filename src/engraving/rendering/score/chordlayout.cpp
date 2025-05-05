@@ -3066,7 +3066,7 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
                             : chordShape.verticalClearance(restShape);
             } else {
                 Note* limitNote = restAbove ? chord->upNote() : chord->downNote();
-                Shape noteShape = limitNote->shape().translate(limitNote->pos());
+                RectF noteShape = limitNote->symBbox(limitNote->noteHead()).translated(limitNote->pos());
                 clearance = restAbove ? noteShape.top() - restShape.bottom() : restShape.top() - noteShape.bottom();
                 minRestToChordClearance = 0.0;
             }
