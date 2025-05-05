@@ -963,6 +963,7 @@ void SystemLayout::alignRests(const ElementsToLayout& elementsToLayout, LayoutCo
                     EngravingItem* item = segment->element(track);
                     if (item && item->isRest() && toRest(item)->isGap()) {
                         voiceInterruptionPoints.push_back(segment->rtick() + segment->ticks());
+                        voiceInterruptionPoints.push_back(segment->rtick());
                         break;
                     }
                 }
