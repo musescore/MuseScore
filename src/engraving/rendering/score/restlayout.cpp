@@ -202,12 +202,13 @@ void RestLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord
     int lines = staff->lines(tick);
     double spatium = staff->spatium(tick);
     double lineDistance = staff->lineDistance(tick) * spatium;
-    double minRestToChordClearance = 0.35 * spatium;
 
     for (Rest* rest : rests) {
         if (!rest->visible() || !rest->autoplace()) {
             continue;
         }
+        bool isWholeOrHalf = rest->isWholeRest() || rest->durationType() == DurationType::V_HALF;
+        double minRestToChordClearance = isWholeOrHalf ? 0.55 * spatium : 0.35 * spatium;
         RestVerticalClearance& restVerticalClearance = rest->verticalClearance();
         for (Chord* chord : chords) {
             if (!chord->visible() || !chord->autoplace()) {
@@ -252,7 +253,6 @@ void RestLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chord
             }
 
             rest->verticalClearance().setLocked(true);
-            bool isWholeOrHalf = rest->isWholeRest() || rest->durationType() == DurationType::V_HALF;
             bool outAboveStaff = restAbove && restShape.bottom() + margin < minRestToChordClearance;
             bool outBelowStaff = !restAbove && restShape.top() - margin > (lines - 1) * lineDistance - minRestToChordClearance;
             bool useHalfSpaceSteps = (outAboveStaff || outBelowStaff) && !isWholeOrHalf;
