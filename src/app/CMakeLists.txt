@@ -443,6 +443,20 @@ endif()
 # Miscellaneous Microsoft Visual Studio settings
 #################################################
 if (MSVC)
+    # Add a post-build event to deploy the application to the output folder. Same as building the INSTALL target.
+    STRING(TOUPPER ${CMAKE_GENERATOR} UPPER_CMAKE_GENERATOR)
+    if (${UPPER_CMAKE_GENERATOR} MATCHES "VISUAL STUDIO")
+        # We want $(Configuration) passed verbatim. Note the round brackets.
+        set(CONFIG_STR "$(Configuration)")
+
+        add_custom_command(
+            TARGET MuseScoreStudio POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -DBUILD_TYPE=${CONFIG_STR} -P cmake_install.cmake
+            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+            VERBATIM
+        )
+    endif()
+
     # Force the "install" and "package" targets not to depend on the "all" target.
     set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
     set(CMAKE_SKIP_PACKAGE_ALL_DEPENDENCY true)
