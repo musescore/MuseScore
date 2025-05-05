@@ -49,6 +49,7 @@
 #include "chordlayout.h"
 #include "beamtremololayout.h"
 #include "tremololayout.h"
+#include "restlayout.h"
 
 #include "log.h"
 
@@ -929,8 +930,8 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
         std::vector<Chord*> chords;
         std::vector<Rest*> rests;
         collectChordsAndRest(segment, staffIdx, chords, rests);
-        ChordLayout::resolveRestVSChord(rests, chords, staff, segment);
-        ChordLayout::resolveRestVSRest(rests, staff, segment, ctx, /*considerBeams*/ true);
+        RestLayout::resolveRestVSChord(rests, chords, staff, segment);
+        RestLayout::resolveRestVSRest(rests, staff, segment, ctx, /*considerBeams*/ true);
     }
 
     TLayout::layoutBeam(beam, ctx);
