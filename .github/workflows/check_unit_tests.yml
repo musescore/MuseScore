@@ -96,7 +96,7 @@ jobs:
       with:
         name: unit_test
         path: |
-          ${{ github.workspace }}/failed_unit_tests.zip
+          ${{ github.workspace }}/build.debug/failed_unit_tests.zip
     - name: Code coverage
       if: github.event_name == 'schedule' || inputs.code_coverage == 'true'
       run: |
