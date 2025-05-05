@@ -32,8 +32,7 @@ var testCase = {
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
             api.dispatcher.dispatch("file-close")
-            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
-            //api.autobot.pause()
+            Home.goToHome()
         }},
         {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()

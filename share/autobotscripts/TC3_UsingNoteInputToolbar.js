@@ -22,6 +22,7 @@
 
 var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
+var Home = require("steps/Home.js")
 
 var testCase = {
     name: "TC3: Using hote input toolbar",
@@ -29,7 +30,7 @@ var testCase = {
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
             api.dispatcher.dispatch("file-close")
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Home.goToHome()
         }},
         {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()
@@ -141,13 +142,10 @@ var testCase = {
             api.dispatcher.dispatch("file-close")
         }},
         {name: "Home", func: function() {
-            // Go Home
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Home.goToHome()
         }},
         {name: "Open last", func: function() {
-            api.navigation.goToControl("RecentScores", "RecentScores", "New score")
-            api.navigation.right()
-            api.navigation.trigger()
+            Home.openLastProject()
         }}
     ]
 };
