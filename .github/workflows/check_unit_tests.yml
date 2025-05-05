@@ -88,7 +88,7 @@ jobs:
             file_path=$(echo ${{ github.workspace }}${file_path})
             files_to_zip+="${file_path} "
           done < ${{ github.workspace }}/build.debug/Testing/Temporary/failed_test_reference_files.txt
-          zip failed_unit_tests.zip "${files_to_zip}"
+          zip failed_unit_tests.zip ${files_to_zip}
         fi
     - name: Upload unit test result
       if: failure()
