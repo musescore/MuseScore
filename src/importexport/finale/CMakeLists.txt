@@ -33,6 +33,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalelogger.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalescoremap.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalescoremap.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalestyles.cpp
     ${CMAKE_CURRENT_LIST_DIR}/finalemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/finalemodule.h
 )

@@ -71,6 +71,7 @@ void EnigmaXmlImporter::import()
     importParts();
     importBrackets();
     importMeasures();
+    importStyles(m_score->style(), SCORE_PARTID); /// @todo do this for all excerpts
 }
 
 static std::optional<ClefTypeList> clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
