@@ -74,6 +74,7 @@
 #include "notation/instrumentname/instrumentnamesettingsmodel.h"
 #include "notation/lyrics/lyricssettingsmodel.h"
 #include "notation/rests/beams/restbeamsettingsmodel.h"
+#include "notation/rests/restsettingsmodel.h"
 #include "notation/rests/restsettingsproxymodel.h"
 #include "notation/dynamics/dynamicsettingsmodel.h"
 #include "notation/expressions/expressionsettingsmodel.h"
@@ -210,6 +211,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new RestSettingsProxyModel(parent, repository);
     case InspectorModelType::TYPE_REST_BEAM:
         return new RestBeamSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_REST_REST:
+        return new RestSettingsModel(parent, repository);
     case InspectorModelType::TYPE_DYNAMIC:
         return new DynamicsSettingsModel(parent, repository);
     case InspectorModelType::TYPE_EXPRESSION:

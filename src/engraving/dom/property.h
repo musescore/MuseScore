@@ -475,6 +475,8 @@ enum class Pid {
 
     SHOW_MEASURE_NUMBERS,
 
+    ALIGN_WITH_OTHER_RESTS,
+
     END
 };
 
