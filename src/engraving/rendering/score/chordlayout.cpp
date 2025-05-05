@@ -3119,7 +3119,7 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
     double spatium = staff->spatium(tick);
     double lineDistance = staff->lineDistance(tick) * spatium;
     int lines = staff->lines(tick);
-    const double minRestToRestClearance = 0.35 * spatium;
+    const double minRestToRestClearance = 0.55 * spatium;
 
     for (size_t i = 0; i < rests.size() - 1; ++i) {
         Rest* rest1 = rests[i];
