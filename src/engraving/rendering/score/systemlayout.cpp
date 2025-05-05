@@ -72,6 +72,7 @@
 #include "lyricslayout.h"
 #include "measurelayout.h"
 #include "tupletlayout.h"
+#include "restlayout.h"
 #include "slurtielayout.h"
 #include "horizontalspacing.h"
 #include "dynamicslayout.h"
@@ -941,148 +942,6 @@ void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System
     }
 }
 
-void SystemLayout::alignRests(const ElementsToLayout& elementsToLayout, LayoutContext& ctx)
-{
-    using RestGroup = std::vector<Rest*>;
-    using RestGroups = std::vector<RestGroup>;
-
-    RestGroups restGroups;
-
-    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        for (const Measure* measure : elementsToLayout.measures) {
-            if (!measure->hasVoices(staffIdx)) {
-                continue;
-            }
-
-            track_idx_t sTrack = staffIdx * VOICES;
-            track_idx_t eTrack = sTrack + VOICES;
-
-            std::vector<Fraction> voiceInterruptionPoints;
-            for (const Segment* segment = measure->last(SegmentType::ChordRest); segment; segment = segment->prev(SegmentType::ChordRest)) {
-                for (track_idx_t track = sTrack; track < eTrack; ++track) {
-                    EngravingItem* item = segment->element(track);
-                    if (item && item->isRest() && toRest(item)->isGap()) {
-                        voiceInterruptionPoints.push_back(segment->rtick() + segment->ticks());
-                        voiceInterruptionPoints.push_back(segment->rtick());
-                        break;
-                    }
-                }
-            }
-
-            for (track_idx_t track = sTrack; track < eTrack; ++track) {
-                restGroups.push_back(RestGroup());
-                for (const Segment* segment = measure->first(SegmentType::ChordRest); segment;
-                     segment = segment->next(SegmentType::ChordRest)) {
-                    if (voiceInterruptionPoints.size() > 0 && segment->rtick() >= voiceInterruptionPoints.back()) {
-                        restGroups.push_back(RestGroup());
-                        voiceInterruptionPoints.pop_back();
-                    }
-                    EngravingItem* item = segment->element(track);
-                    if (!(item && item->isRest() && item->visible())) {
-                        continue;
-                    }
-                    Rest* rest = toRest(item);
-                    if (rest->staffMove() == 0 && !rest->isGap()) {
-                        restGroups.back().push_back(rest);
-                    }
-                }
-            }
-        }
-    }
-
-    for (RestGroup& group : restGroups) {
-        if (group.size() == 0) {
-            continue;
-        }
-
-        Rest* firstRest = group.front();
-        const bool alignUpwards = firstRest->voice() == 0;
-        const double lineDist = firstRest->staff()->lineDistance(firstRest->tick()) * firstRest->spatium();
-
-        double yOuterRest = alignUpwards ? DBL_MAX : -DBL_MAX;
-        for (Rest* rest : group) {
-            double yRest = rest->ldata()->pos().y();
-            yOuterRest = alignUpwards ? std::min(yOuterRest, yRest) : std::max(yOuterRest, yRest);
-        }
-        for (Rest* rest : group) {
-            double yCur = rest->ldata()->pos().y();
-            double yResult = yOuterRest;
-            double restVertClearance = lineDist * (alignUpwards ? rest->verticalClearance().above() : rest->verticalClearance().below());
-            double vertPadding = lineDist;
-            restVertClearance = std::max(0.0, restVertClearance - vertPadding);
-            double requiredMove = yOuterRest - yCur;
-            if (std::abs(requiredMove) > restVertClearance) {
-                yResult = alignUpwards ? yCur - restVertClearance : yCur + restVertClearance;
-            }
-            rest->mutldata()->setPosY(yResult);
-            if (rest->isWholeRest() || rest->durationType() == DurationType::V_HALF) {
-                rest->updateSymbol();
-            }
-        }
-    }
-}
-
-void SystemLayout::checkFullMeasureRestCollisions(const ElementsToLayout& elementsToLayout, LayoutContext& ctx)
-{
-    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        for (Measure* measure : elementsToLayout.measures) {
-            if (!measure->hasVoices(staffIdx)) {
-                continue;
-            }
-
-            Rest* fullMeasureRest = nullptr;
-
-            Segment* firstCRSeg = measure->first(SegmentType::ChordRest);
-            IF_ASSERT_FAILED(firstCRSeg) {
-                continue;
-            }
-            track_idx_t startTrack = staff2track(staffIdx);
-            track_idx_t endTrack = startTrack + VOICES;
-            for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                EngravingItem* item = firstCRSeg->element(track);
-                if (item && item->isRest() && toRest(item)->isFullMeasureRest()) {
-                    fullMeasureRest = toRest(item);
-                    break;
-                }
-            }
-
-            if (!fullMeasureRest) {
-                continue;
-            }
-
-            double xRest = fullMeasureRest->pagePos().x() - elementsToLayout.system->pagePos().x();
-            Shape restShape = fullMeasureRest->shape().translate(PointF(xRest, fullMeasureRest->y()));
-
-            Shape measureShape;
-            for (const Segment& segment : measure->segments()) {
-                double xSegment = segment.pagePos().x() - elementsToLayout.system->pagePos().x();
-                measureShape.add(segment.staffShape(staffIdx).translated(PointF(xSegment, 0.0)));
-            }
-            measureShape.remove_if([fullMeasureRest] (const ShapeElement& shapeEl) {
-                const EngravingItem* shapeItem = shapeEl.item();
-                return shapeItem && (shapeItem == fullMeasureRest || shapeItem->isBarLine());
-            });
-
-            const double spatium = fullMeasureRest->spatium();
-            const double lineDist = fullMeasureRest->staff()->lineDistance(fullMeasureRest->tick()) * spatium;
-            const double minHorizontalDistance = 4 * spatium;
-            const double minVertClearance = 0.75 * spatium;
-
-            bool alignAbove = fullMeasureRest->voice() == 0;
-            double verticalClearance = alignAbove ? restShape.verticalClearance(measureShape, minHorizontalDistance)
-                                       : measureShape.verticalClearance(restShape, minHorizontalDistance);
-
-            if (verticalClearance < minVertClearance) {
-                double diff = minVertClearance - verticalClearance;
-                int stepMoves = std::ceil(diff / lineDist);
-                double yMove = stepMoves * lineDist;
-                fullMeasureRest->mutldata()->moveY(alignAbove ? -yMove : yMove);
-                fullMeasureRest->updateSymbol();
-            }
-        }
-    }
-}
-
 void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 {
     TRACEFUNC;
@@ -1127,8 +986,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         BeamLayout::layoutNonCrossBeams(cr, ctx);
     }
 
-    alignRests(elementsToLayout, ctx);
-    checkFullMeasureRestCollisions(elementsToLayout, ctx);
+    RestLayout::alignRests(elementsToLayout.system, ctx);
+    RestLayout::checkFullMeasureRestCollisions(elementsToLayout.system, ctx);
 
     for (BarLine* bl : elementsToLayout.barlines) {
         TLayout::updateBarlineShape(bl, bl->mutldata(), ctx);

@@ -326,19 +326,6 @@ SymId Rest::getSymbol(DurationType type, int line, int lines) const
     }
 }
 
-void Rest::updateSymbol()
-{
-    Fraction t = tick();
-    Staff* st = staff();
-    double lineDistance = st->lineDistance(t) * spatium();
-    int lines = st->lines(t);
-
-    double y = pos().y();
-    int line = floor(y / lineDistance);
-
-    mutldata()->sym = getSymbol(durationType().type(), line, lines);
-}
-
 double Rest::symWidthNoLedgerLines(LayoutData* ldata) const
 {
     if (ldata->sym == SymId::restHalfLegerLine) {
@@ -417,98 +404,6 @@ int Rest::getDotline(DurationType durationType)
     return dl;
 }
 
-//---------------------------------------------------------
-//   computeLineOffset
-//---------------------------------------------------------
-
-int Rest::computeVoiceOffset(int lines, LayoutData* ldata) const
-{
-    UNUSED(lines);
-    ldata->mergedRests.clear();
-    Segment* s = segment();
-    bool offsetVoices = s && measure() && (voice() > 0 || measure()->hasVoices(staffIdx(), tick(), actualTicks()));
-    if (offsetVoices && voice() == 0) {
-        // do not offset voice 1 rest if there exists a matching invisible rest in voice 2;
-        EngravingItem* e = s->element(track() + 1);
-        if (e && e->isRest() && !e->visible() && !toRest(e)->isGap()) {
-            Rest* r = toRest(e);
-            if (r->globalTicks() == globalTicks()) {
-                offsetVoices = false;
-            }
-        }
-    }
-
-    if (offsetVoices && voice() < 2) {
-        // in slash notation voices 1 and 2 are not offset outside the staff
-        // if the staff contains slash notation then only offset rests in voices 3 and 4
-        track_idx_t baseTrack = staffIdx() * VOICES;
-        for (voice_idx_t v = 0; v < VOICES; ++v) {
-            EngravingItem* e = s->element(baseTrack + v);
-            if (e && e->isChord() && toChord(e)->slash()) {
-                offsetVoices = false;
-                break;
-            }
-        }
-    }
-
-    if (offsetVoices && staff()->shouldMergeMatchingRests()) {
-        // automatically merge matching rests if nothing in any other voice
-        // this is not always the right thing to do do, but is useful in choral music
-        // and can be enabled via a staff property
-        bool matchFound = false;
-        track_idx_t baseTrack = staffIdx() * VOICES;
-        for (voice_idx_t v = 0; v < VOICES; ++v) {
-            if (v == voice()) {
-                continue;
-            }
-            EngravingItem* e = s->element(baseTrack + v);
-            // try to find match in any other voice
-            if (e) {
-                if (e->isRest()) {
-                    Rest* r = toRest(e);
-                    if (r->globalTicks() == globalTicks() && r->durationType() == durationType()) {
-                        matchFound = true;
-                        ldata->mergedRests.push_back(r);
-                        continue;
-                    }
-                }
-                // no match found; no sense looking for anything else
-                matchFound = false;
-                break;
-            }
-        }
-        if (matchFound) {
-            offsetVoices = false;
-        }
-    }
-
-    if (!offsetVoices) {
-        return 0;
-    }
-
-    bool up = voice() == 0 || voice() == 2;
-    int upSign = up ? -1 : 1;
-    int voiceLineOffset = style().styleB(Sid::multiVoiceRestTwoSpaceOffset) ? 2 : 1;
-
-    return voiceLineOffset * upSign;
-}
-
-int Rest::computeWholeOrBreveRestOffset(int voiceOffset, int lines) const
-{
-    int lineMove = 0;
-    if (isWholeRest()) {
-        bool moveToLineAbove = (lines > 5)
-                               || ((lines > 1 || voiceOffset == -1 || voiceOffset == 2) && !(voiceOffset == -2 || voiceOffset == 1));
-        if (moveToLineAbove) {
-            lineMove = -1;
-        }
-    } else if (isBreveRest() && lines == 1) {
-        lineMove = 1;
-    }
-
-    return lineMove;
-}
-
 bool Rest::isWholeRest() const
 {
     TDuration durType = durationType();
@@ -521,12 +416,6 @@ bool Rest::isBreveRest() const
     TDuration durType = durationType();
     return durType == DurationType::V_BREVE
            || (durType == DurationType::V_MEASURE && measure() && measure()->ticks() >= Fraction(2, 1));
-}
-
-int Rest::computeNaturalLine(int lines) const
-{
-    int line = (lines % 2) ? floor(double(lines) / 2) : ceil(double(lines) / 2);
-    return line;
 }
 
 //---------------------------------------------------------
