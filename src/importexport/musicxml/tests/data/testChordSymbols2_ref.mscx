@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.50197</pageWidth>
@@ -44,7 +45,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -109,30 +111,38 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>testChordSymbols2</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>composer</style>
           <text>James M</text>
           </Text>
         </VBox>
       <HBox>
         <width>5</width>
+        <eid>G_G</eid>
         </HBox>
       <Measure>
+        <eid>H_H</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>I_I</eid>
             </Clef>
           <TimeSig>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <FretDiagram>
+            <eid>K_K</eid>
             <fretDiagram>
               <string no="0">
                 <marker>cross</marker>
@@ -176,10 +186,13 @@
             <root>13</root>
             <name>add9</name>
             <base>17</base>
+            <eid>L_L</eid>
             </Harmony>
           <Chord>
+            <eid>M_M</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>N_N</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -187,8 +200,10 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>O_O</eid>
         <voice>
           <FretDiagram>
+            <eid>P_P</eid>
             <fretDiagram>
               <string no="0">
                 <marker>cross</marker>
@@ -225,10 +240,13 @@
             </FretDiagram>
           <Harmony>
             <root>12</root>
+            <eid>Q_Q</eid>
             </Harmony>
           <Chord>
+            <eid>R_R</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>S_S</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -236,20 +254,25 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>T_T</eid>
         <voice>
           <Harmony>
             <root>14</root>
             <name>maj7(no3rd)</name>
+            <eid>U_U</eid>
             </Harmony>
           <Chord>
+            <eid>V_V</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>W_W</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>X_X</eid>
             </BarLine>
           </voice>
         </Measure>

@@ -142,7 +142,7 @@ static void CALLBACK process(HMIDIIN hMidiIn, UINT wMsg, DWORD_PTR dwInstance, D
 
 void WinMidiInPort::doProcess(uint32_t message, tick_t timing)
 {
-    auto e = Event::fromMIDI10Package(message).toMIDI20();
+    auto e = Event::fromMidi10Package(message).toMIDI20();
     if (e) {
         m_eventReceived.send(timing, e);
     }

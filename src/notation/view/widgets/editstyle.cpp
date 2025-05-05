@@ -459,6 +459,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::keyBarlineDistance,      false, keyBarlineDistance,      resetKeyBarlineDistance },
         { StyleId::systemHeaderDistance,    false, systemHeaderDistance,    resetSystemHeaderDistance },
         { StyleId::systemHeaderTimeSigDistance, false, systemHeaderTimeSigDistance, resetSystemHeaderTimeSigDistance },
+        { StyleId::systemHeaderMinStartOfSystemDistance, false, systemHeaderMinStartOfSystemDistance,
+          resetSystemHeaderMinStartOfSystemDistance },
 
         { StyleId::clefBarlineDistance,     false, clefBarlineDistance,     resetClefBarlineDistance },
         { StyleId::timesigBarlineDistance,  false, timesigBarlineDistance,  resetTimesigBarlineDistance },

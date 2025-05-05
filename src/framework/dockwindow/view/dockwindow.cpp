@@ -86,6 +86,22 @@ static void clearRegistry()
 }
 }
 
+class DockWindow::UniqueConnectionHolder : public QObject
+{
+    Q_OBJECT
+public:
+    UniqueConnectionHolder(DockPageView* page, DockWindow* parent)
+        : QObject(parent), m_page(page) {}
+
+    void alignTopLevelToolBars()
+    {
+        static_cast<DockWindow*>(parent())->alignTopLevelToolBars(m_page);
+    }
+
+private:
+    DockPageView* m_page = nullptr;
+};
+
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this)),
     m_toolBars(this),
@@ -111,7 +127,9 @@ void DockWindow::componentComplete()
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
     connect(this, &QQuickItem::windowChanged, this, &DockWindow::windowPropertyChanged);
 
-    connect(this, &QQuickItem::widthChanged, this, &DockWindow::adjustContentForAvailableSpace);
+    connect(this, &QQuickItem::widthChanged, this, [this]() {
+        adjustContentForAvailableSpace(m_currentPage);
+    });
 }
 
 void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -552,6 +570,10 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
     newPage->setParams(params);
 
     m_currentPage = newPage;
+
+    connect(m_currentPage, &DockPageView::layoutRequested,
+            this, &DockWindow::forceLayout, Qt::UniqueConnection);
+
     m_currentPage->setVisible(true);
 
     return true;
@@ -668,6 +690,11 @@ bool DockWindow::checkLayoutIsCorrupted() const
     return false;
 }
 
+void DockWindow::forceLayout()
+{
+    m_mainWindow->layoutEqually();
+}
+
 QByteArray DockWindow::windowState() const
 {
     TRACEFUNC;
@@ -704,6 +731,9 @@ void DockWindow::initDocks(DockPageView* page)
 {
     TRACEFUNC;
 
+    //! before init we should correct toolbars sizes
+    adjustContentForAvailableSpace(page);
+
     for (DockToolBarView* toolbar : m_toolBars.list()) {
         toolbar->init();
     }
@@ -715,24 +745,27 @@ void DockWindow::initDocks(DockPageView* page)
 
     alignTopLevelToolBars(page);
 
+    if (!m_pageConnections.contains(page)) {
+        m_pageConnections[page] = new UniqueConnectionHolder(page, this);
+    }
+
+    UniqueConnectionHolder* holder = m_pageConnections[page];
+
     for (DockToolBarView* toolbar : topLevelToolBars(page)) {
-        connect(toolbar, &DockToolBarView::floatingChanged, this, [this, page]() {
-            alignTopLevelToolBars(page);
-        }, Qt::UniqueConnection);
+        connect(toolbar, &DockToolBarView::floatingChanged,
+                holder, &UniqueConnectionHolder::alignTopLevelToolBars, Qt::UniqueConnection);
 
-        connect(toolbar, &DockToolBarView::contentSizeChanged, this, [this, page]() {
-            alignTopLevelToolBars(page);
-        }, Qt::UniqueConnection);
+        connect(toolbar, &DockToolBarView::contentSizeChanged,
+                holder, &UniqueConnectionHolder::alignTopLevelToolBars, Qt::UniqueConnection);
 
-        connect(toolbar, &DockToolBarView::visibleChanged, this, [this, page]() {
-            alignTopLevelToolBars(page);
-        }, Qt::UniqueConnection);
+        connect(toolbar, &DockToolBarView::visibleChanged,
+                holder, &UniqueConnectionHolder::alignTopLevelToolBars, Qt::UniqueConnection);
     }
 }
 
-void DockWindow::adjustContentForAvailableSpace()
+void DockWindow::adjustContentForAvailableSpace(DockPageView* page)
 {
-    if (!m_currentPage) {
+    if (!page) {
         return;
     }
 
@@ -761,8 +794,8 @@ void DockWindow::adjustContentForAvailableSpace()
                 if (!dock->isCompact()) {
                     dock->setIsCompact(true);
 
-                    //! NOTE: as soon as we have compacted the first found dock - we finish the work so that the view is redrawn
-                    break;
+                    width -= dock->nonCompactWidth();
+                    width += dock->width();
                 }
             }
         } else {
@@ -785,7 +818,7 @@ void DockWindow::adjustContentForAvailableSpace()
 
     QList<DockBase*> topLevelToolBarsDocks;
 
-    for (DockToolBarView* toolBar : topLevelToolBars(m_currentPage)) {
+    for (DockToolBarView* toolBar : topLevelToolBars(page)) {
         if (!toolBar->dockWidget()->isFloating()) {
             topLevelToolBarsDocks << toolBar;
         }
@@ -833,3 +866,5 @@ QList<DockToolBarView*> DockWindow::topLevelToolBars(const DockPageView* page) c
 
     return toolBars;
 }
+
+#include "dockwindow.moc"

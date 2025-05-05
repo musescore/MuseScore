@@ -280,6 +280,13 @@ std::vector<HorizontalSpacing::SegmentPosition> HorizontalSpacing::spaceSegments
         placedSegments.back().xPosInSystemCoords += leadingSpace;
 
         if (curSeg->isChordRestType()) {
+            bool isFirstCROfSystem = curSeg->rtick().isZero() && curSeg->measure()->isFirstInSystem();
+            if (isFirstCROfSystem) {
+                double xMinSystemHeaderDist = ctx.system->leftMargin() + curSeg->style().styleMM(Sid::systemHeaderMinStartOfSystemDistance);
+                placedSegments.back().xPosInSystemCoords = std::max(placedSegments.back().xPosInSystemCoords, xMinSystemHeaderDist);
+                ctx.xCur = std::max(ctx.xCur, xMinSystemHeaderDist);
+            }
+
             double chordRestSegWidth = chordRestSegmentNaturalWidth(curSeg, ctx);
 
             Segment* nextSeg = i < segList.size() - 1 ? segList[i + 1] : nullptr;
@@ -879,11 +886,13 @@ HorizontalSpacing::CrossBeamSpacing HorizontalSpacing::computeCrossBeamSpacing(S
         if (!thisCR->visible() || thisCR->isFullMeasureRest() || (thisCR->isRest() && toRest(thisCR)->isGap())) {
             continue;
         }
-        if (!thisCR->beam()) {
+        Beam* beam = thisCR->beam();
+        if (!beam && thisCR->actualTicks() <= thisSeg->ticks()) {
             canBeAdjusted = false;
+        }
+        if (!beam || (beam->elements().size() == 2 && thisCR->up())) {
             continue;
         }
-        Beam* beam = thisCR->beam();
         for (EngravingItem* ee : nextSeg->elist()) {
             if (!ee || !ee->isChordRest() || !ee->staff()->visible()) {
                 continue;
@@ -1109,6 +1118,7 @@ double HorizontalSpacing::getFirstSegmentXPos(Segment* segment, HorizontalSpacin
         Shape leftBarrier(RectF(0.0, -0.5 * DBL_MAX, 0.0, DBL_MAX));
         x = minLeft(segment, leftBarrier);
         x += style.styleMM(segment->hasAccidentals() ? Sid::barAccidentalDistance : Sid::barNoteDistance);
+        x = std::max(x, style.styleMM(Sid::systemHeaderMinStartOfSystemDistance).val());
         break;
     }
     case SegmentType::Clef:

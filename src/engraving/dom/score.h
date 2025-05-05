@@ -82,6 +82,10 @@ namespace mu::engraving::read410 {
 class Read410;
 }
 
+namespace mu::engraving::read460 {
+class Read460;
+}
+
 namespace mu::engraving::write {
 class Writer;
 }
@@ -923,10 +927,6 @@ public:
     PlayMode playMode() const { return m_playMode; }
     void setPlayMode(PlayMode v) { m_playMode = v; }
 
-    int linkId();
-    void linkId(int);
-    int getLinkId() const { return m_linkId; }
-
     std::list<Score*> scoreList();
 
     //@ appends to the score a number of measures
@@ -1076,6 +1076,7 @@ private:
     friend class read302::Read302;
     friend class read400::Read400;
     friend class read410::Read410;
+    friend class read460::Read460;
     friend class write::Writer;
 
     static std::set<Score*> validScores;
@@ -1141,7 +1142,6 @@ private:
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
     Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
 
-    int m_linkId = 0;
     MasterScore* m_masterScore = nullptr;
     std::list<MuseScoreView*> m_viewer;
     Excerpt* m_excerpt = nullptr;

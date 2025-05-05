@@ -71,7 +71,7 @@ void* openSoundFont(const char* filename)
         return search->second.fileStream;
     }
 
-    std::FILE* stream = std::fopen(filename, "r");
+    std::FILE* stream = std::fopen(filename, "rb");
 
     SoundFontData sfData;
     sfData.fileStream = stream;

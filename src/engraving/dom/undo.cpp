@@ -3044,11 +3044,7 @@ Link::Link(EngravingObject* e1, EngravingObject* e2)
     assert(e1->links() == nullptr);
     le = e2->links();
     if (!le) {
-        if (e1->isStaff()) {
-            le = new LinkedObjects(e1->score(), -1);
-        } else {
-            le = new LinkedObjects(e1->score());
-        }
+        le = new LinkedObjects();
         le->push_back(e2);
     }
     e = e1;

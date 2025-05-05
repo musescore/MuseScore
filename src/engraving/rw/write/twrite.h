@@ -313,6 +313,7 @@ public:
     static void writeSystemLocks(const Score* score, XmlWriter& xml);
 
     static void writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx);
 
 private:
 

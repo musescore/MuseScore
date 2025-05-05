@@ -60,17 +60,12 @@ endif()
 
 # Mac-specific
 if(OS_IS_MAC)
-    set(MACOSX_DEPLOYMENT_TARGET 10.14)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14)
+    set(MACOSX_DEPLOYMENT_TARGET 10.15)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
 endif(OS_IS_MAC)
 
 # MSVC-specific
 if(CC_IS_MSVC)
-    # TODO: remove this
-    # It is necessary because of the following line in src/app/CMakeLists.txt:
-    # `set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")`
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL") # i.e. not MultiThreaded$<$<CONFIG:Debug>:Debug>DLL
-
     add_compile_options("/EHsc")
     add_compile_options("/utf-8")
     add_compile_options("/MP")
@@ -80,6 +75,8 @@ if(CC_IS_MSVC)
     add_compile_definitions(_UNICODE UNICODE)
     add_compile_definitions(_USE_MATH_DEFINES)
     add_compile_definitions(NOMINMAX)
+    
+    add_link_options("/NODEFAULTLIB:LIBCMT")
 endif()
 
 # MinGW-specific
@@ -116,3 +113,8 @@ endif(CC_IS_EMSCRIPTEN)
 
 # Warnings
 include(SetupCompileWarnings)
+
+# User overrides
+if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SetupBuildEnvironment.user.cmake")
+    include(${CMAKE_CURRENT_LIST_DIR}/SetupBuildEnvironment.user.cmake)
+endif()

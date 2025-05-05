@@ -46,6 +46,9 @@ SET "QT_URL=https://github.com/cbjeukendrup/musescore_build_qt/releases/download
 CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"
 CALL "7z" x -y "%TEMP_DIR%\%Qt_ARCHIVE%" "-o%QT_DIR%"
 
+SET PATH=%QT_DIR%\bin;%PATH%
+ECHO %QT_DIR%\bin>>%GITHUB_PATH%
+
 :: Install dependencies
 ECHO "=== Install dependencies ==="
 CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/musescore_dependencies_win32.7z" -O %TEMP_DIR%\musescore_dependencies_win32.7z

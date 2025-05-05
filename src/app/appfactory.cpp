@@ -107,6 +107,12 @@
 #include "framework/stubs/workspace/workspacestubmodule.h"
 #endif
 
+#ifdef MUSE_MODULE_EXTENSIONS
+#include "framework/extensions/extensionsmodule.h"
+#else
+#include "framework/stubs/extensions/extensionsstubmodule.h"
+#endif
+
 // Modules
 #include "appshell/appshellmodule.h"
 
@@ -183,11 +189,9 @@
 #include "stubs/playback/playbackstubmodule.h"
 #endif
 
-#ifdef MUSE_MODULE_EXTENSIONS
-#include "extensions/extensionsmodule.h"
-#endif
-
+#ifdef MUE_BUILD_PRINT_MODULE
 #include "print/printmodule.h"
+#endif
 
 #ifdef MUE_BUILD_PROJECT_MODULE
 #include "project/projectmodule.h"
@@ -310,10 +314,11 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new mu::notation::NotationModule());
     app->addModule(new mu::palette::PaletteModule());
     app->addModule(new mu::playback::PlaybackModule());
-#ifdef MUSE_MODULE_EXTENSIONS
     app->addModule(new muse::extensions::ExtensionsModule());
-#endif
+
+#ifdef MUE_BUILD_PRINT_MODULE
     app->addModule(new mu::print::PrintModule());
+#endif
     app->addModule(new mu::project::ProjectModule());
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
@@ -425,10 +430,11 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new mu::notation::NotationModule());
     app->addModule(new mu::palette::PaletteModule());
     app->addModule(new mu::playback::PlaybackModule());
-#ifdef MUSE_MODULE_EXTENSIONS
     app->addModule(new muse::extensions::ExtensionsModule());
-#endif
+
+#ifdef MUE_BUILD_PRINT_MODULE
     app->addModule(new mu::print::PrintModule());
+#endif
     app->addModule(new mu::project::ProjectModule());
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());

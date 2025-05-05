@@ -106,6 +106,7 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
         { "tom-toms", { SoundId::TomToms, SoundCategory::Percussions } },
         { "congas", { SoundId::Conga, SoundCategory::Percussions } },
         { "cuica", { SoundId::Cuica, SoundCategory::Percussions } },
+        { "cajon", { SoundId::Cajon, SoundCategory::Percussions } },
         { "drumset", { SoundId::Drumset, SoundCategory::Percussions } },
         { "drum-kit-4", { SoundId::Drumset, SoundCategory::Percussions, { SoundSubCategory::FourPiece } } },
         { "drum-kit-5", { SoundId::Drumset, SoundCategory::Percussions, { SoundSubCategory::FivePiece } } },
@@ -178,6 +179,7 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
         { "tubo", { SoundId::Tubo, SoundCategory::Percussions } },
         { "vibraslap", { SoundId::Vibraslap, SoundCategory::Percussions } },
         { "whip", { SoundId::Whip, SoundCategory::Percussions } },
+        { "cannon", { SoundId::Cannon, SoundCategory::Percussions } },
 
         { "marching-snare", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Marching,
                                                                            SoundSubCategory::Snare } } },

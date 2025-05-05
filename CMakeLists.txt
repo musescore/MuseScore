@@ -16,9 +16,9 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22) # Min. required by Qt 6.9
 
 project(MuseScore LANGUAGES C CXX)
 
@@ -46,6 +46,7 @@ set(MUSESCORE_BUILD_CONFIGURATION "app" CACHE STRING "Build configuration")
 # Possible MUSESCORE_BUILD_CONFIGURATION values:
 # - app             - for desktop app
 # - app-portable    - for desktop portable app (Windows build for PortableApps.com)
+# - app-web         - for web app (experimental for internal use)
 # - vtest           - for visual tests (for CI)
 # - utest           - for unit tests (for CI)
 
@@ -79,6 +80,7 @@ option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ON)
 option(MUE_BUILD_PALETTE_MODULE "Build palette module" ON)
 option(MUE_BUILD_PLAYBACK_MODULE "Build playback module" ON)
 option(MUE_BUILD_PLAYBACK_TESTS "Build playback tests" ON)
+option(MUE_BUILD_PRINT_MODULE "Build print module" ON)
 option(MUE_BUILD_PROJECT_MODULE "Build project module" ON)
 option(MUE_BUILD_PROJECT_TESTS "Build project tests" ON)
 
@@ -152,7 +154,6 @@ if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
     set(MUE_COMPILE_USE_SYSTEM_OPUS ON)
 endif()
 
-set(QT_MIN_VERSION "6.2.4")
 set(QT_ADD_STATEMACHINE ON)
 if (MUSE_MODULE_NETWORK_WEBSOCKET)
     set(QT_ADD_WEBSOCKET ON)

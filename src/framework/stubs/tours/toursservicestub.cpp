@@ -23,6 +23,10 @@
 
 using namespace muse::tours;
 
+void ToursServiceStub::registerTour(const String&, const Tour&)
+{
+}
+
 void ToursServiceStub::onEvent(const String&)
 {
 }

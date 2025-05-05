@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27</pageWidth>
@@ -22,7 +23,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">x</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -97,22 +99,29 @@
       <VBox>
         <height>10</height>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <eid>D_D</eid>
         </VBox>
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
+            <eid>F_F</eid>
             <concertKey>-2</concertKey>
             <actualKey>0</actualKey>
             </KeySig>
           <TimeSig>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>I_I</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>WB_WB</eid>
                 </Accidental>
               <pitch>58</pitch>
               <tpc>24</tpc>
@@ -120,10 +129,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>L_L</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>XB_XB</eid>
                 </Accidental>
               <pitch>59</pitch>
               <tpc>7</tpc>
@@ -131,10 +143,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>O_O</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>YB_YB</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>26</tpc>
@@ -142,10 +157,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>R_R</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>ZB_ZB</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>9</tpc>
@@ -155,12 +173,16 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>T_T</eid>
         <voice>
           <Chord>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>V_V</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>aB_aB</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>28</tpc>
@@ -168,10 +190,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>X_X</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>Y_Y</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>bB_bB</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>23</tpc>
@@ -179,10 +204,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>b_b</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>cB_cB</eid>
                 </Accidental>
               <pitch>64</pitch>
               <tpc>6</tpc>
@@ -190,10 +218,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>d_d</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>e_e</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>dB_dB</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>25</tpc>
@@ -203,12 +234,16 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>g_g</eid>
         <voice>
           <Chord>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>i_i</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>eB_eB</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>8</tpc>
@@ -216,10 +251,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>k_k</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>l_l</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>fB_fB</eid>
                 </Accidental>
               <pitch>67</pitch>
               <tpc>27</tpc>
@@ -227,10 +265,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>n_n</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>o_o</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>gB_gB</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>10</tpc>
@@ -238,10 +279,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>q_q</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>r_r</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>hB_hB</eid>
                 </Accidental>
               <pitch>69</pitch>
               <tpc>29</tpc>
@@ -251,12 +295,16 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>t_t</eid>
         <voice>
           <Chord>
+            <eid>u_u</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>v_v</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>iB_iB</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>24</tpc>
@@ -264,9 +312,11 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>x_x</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>y_y</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

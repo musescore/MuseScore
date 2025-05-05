@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -51,7 +53,8 @@
         </Instrument>
       </Part>
     <Part id="2">
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -82,30 +85,38 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
+            <eid>F_F</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>H_H</eid>
             </Dynamic>
           <Harmony>
             <root>18</root>
             <name>m</name>
+            <eid>I_I</eid>
             </Harmony>
           <Tempo>
             <tempo>2</tempo>
+            <eid>J_J</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
+            <eid>K_K</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>L_L</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -113,18 +124,23 @@
               </Note>
             </Chord>
           <BarLine>
+            <eid>M_M</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
+        <eid>N_N</eid>
         <voice>
           <Harmony>
             <root>17</root>
             <name>m</name>
+            <eid>O_O</eid>
             </Harmony>
           <Chord>
+            <eid>P_P</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>Q_Q</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -132,18 +148,23 @@
               </Note>
             </Chord>
           <BarLine>
+            <eid>R_R</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
+        <eid>S_S</eid>
         <voice>
           <Harmony>
             <root>18</root>
             <name>m</name>
+            <eid>T_T</eid>
             </Harmony>
           <Chord>
+            <eid>U_U</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>V_V</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -157,20 +178,25 @@
       <Measure>
         <voice>
           <KeySig>
+            <eid>W_W</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
+            <eid>X_X</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>Y_Y</eid>
             </Dynamic>
           <Chord>
+            <eid>Z_Z</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>a_a</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -178,14 +204,17 @@
               </Note>
             </Chord>
           <BarLine>
+            <eid>b_b</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Chord>
+            <eid>c_c</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>d_d</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -193,14 +222,17 @@
               </Note>
             </Chord>
           <BarLine>
+            <eid>e_e</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
         <voice>
           <Chord>
+            <eid>f_f</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>g_g</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>

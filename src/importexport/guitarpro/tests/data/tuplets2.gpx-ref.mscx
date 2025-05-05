@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -49,58 +51,73 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Nardis</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>subtitle</style>
           <text>Ralph Towner
 solo concert</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>composer</style>
           <text>Music by Miles Davis</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>H_H</eid>
         <voice>
           <KeySig>
+            <eid>I_I</eid>
             <concertKey>1</concertKey>
             <mode>major</mode>
             </KeySig>
           <StaffText>
+            <eid>J_J</eid>
             <text>Free time</text>
             </StaffText>
           <TimeSig>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2.666667</tempo>
+            <eid>L_L</eid>
             <text><sym>metNoteQuarterUp</sym> = 160</text>
             </Tempo>
           <Rest>
+            <eid>M_M</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>dashed</subtype>
+            <eid>N_N</eid>
             </BarLine>
           </voice>
         <voice>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>O_O</eid>
             </Dynamic>
           <Beam>
+            <eid>P_P</eid>
             <l1>22</l1>
             <l2>26</l2>
             </Beam>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>R_R</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -108,8 +125,10 @@ solo concert</text>
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>T_T</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -117,8 +136,10 @@ solo concert</text>
               </Note>
             </Chord>
           <Chord>
+            <eid>U_U</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>V_V</eid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -126,8 +147,10 @@ solo concert</text>
               </Note>
             </Chord>
           <Chord>
+            <eid>W_W</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>X_X</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -135,12 +158,15 @@ solo concert</text>
               </Note>
             </Chord>
           <Beam>
+            <eid>Y_Y</eid>
             <l1>30</l1>
             <l2>34</l2>
             </Beam>
           <Chord>
+            <eid>Z_Z</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>a_a</eid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -148,8 +174,10 @@ solo concert</text>
               </Note>
             </Chord>
           <Chord>
+            <eid>b_b</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>c_c</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -157,8 +185,10 @@ solo concert</text>
               </Note>
             </Chord>
           <Chord>
+            <eid>d_d</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>e_e</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -166,10 +196,13 @@ solo concert</text>
               </Note>
             </Chord>
           <Chord>
+            <eid>f_f</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>g_g</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>h_h</eid>
                   </Tie>
                 <next>
                   <location>
@@ -187,21 +220,26 @@ solo concert</text>
           </voice>
         </Measure>
       <Measure>
+        <eid>i_i</eid>
         <voice>
           <Rest>
+            <eid>j_j</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           <BarLine>
             <subtype>dashed</subtype>
+            <eid>k_k</eid>
             </BarLine>
           </voice>
         <voice>
           <Chord>
+            <eid>l_l</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>m_m</eid>
                 </Slur>
               <next>
                 <location>
@@ -210,6 +248,7 @@ solo concert</text>
                 </next>
               </Spanner>
             <Note>
+              <eid>n_n</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -228,12 +267,14 @@ solo concert</text>
             <fractions>-1/8</fractions>
             </location>
           <StaffText>
+            <eid>o_o</eid>
             <text>P</text>
             </StaffText>
           <location>
             <fractions>1/8</fractions>
             </location>
           <Tuplet>
+            <eid>p_p</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -243,10 +284,12 @@ solo concert</text>
               </Number>
             </Tuplet>
           <Beam>
+            <eid>q_q</eid>
             <l1>40</l1>
             <l2>44</l2>
             </Beam>
           <Chord>
+            <eid>r_r</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <prev>
@@ -256,6 +299,7 @@ solo concert</text>
                 </prev>
               </Spanner>
             <Note>
+              <eid>s_s</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -263,9 +307,11 @@ solo concert</text>
               </Note>
             </Chord>
           <Chord>
+            <eid>t_t</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>u_u</eid>
                 </Slur>
               <next>
                 <location>
@@ -274,6 +320,7 @@ solo concert</text>
                 </next>
               </Spanner>
             <Note>
+              <eid>v_v</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -284,12 +331,14 @@ solo concert</text>
             <fractions>-1/24</fractions>
             </location>
           <StaffText>
+            <eid>w_w</eid>
             <text>P</text>
             </StaffText>
           <location>
             <fractions>1/24</fractions>
             </location>
           <Chord>
+            <eid>x_x</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <prev>
@@ -299,6 +348,7 @@ solo concert</text>
                 </prev>
               </Spanner>
             <Note>
+              <eid>y_y</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -307,6 +357,7 @@ solo concert</text>
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>z_z</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -316,13 +367,16 @@ solo concert</text>
               </Number>
             </Tuplet>
           <Beam>
+            <eid>0_0</eid>
             <l1>52</l1>
             <l2>56</l2>
             </Beam>
           <Chord>
+            <eid>1_1</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>2_2</eid>
                 </Slur>
               <next>
                 <location>
@@ -331,8 +385,10 @@ solo concert</text>
                 </next>
               </Spanner>
             <Note>
+              <eid>3_3</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
+                <eid>4_4</eid>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>13</tpc>
@@ -344,14 +400,17 @@ solo concert</text>
             <fractions>-1/24</fractions>
             </location>
           <StaffText>
+            <eid>5_5</eid>
             <text>P</text>
             </StaffText>
           <location>
             <fractions>1/24</fractions>
             </location>
           <Chord>
+            <eid>6_6</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>7_7</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -362,12 +421,14 @@ solo concert</text>
             <fractions>-1/24</fractions>
             </location>
           <StaffText>
+            <eid>8_8</eid>
             <text>P</text>
             </StaffText>
           <location>
             <fractions>1/24</fractions>
             </location>
           <Chord>
+            <eid>9_9</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <prev>
@@ -377,6 +438,7 @@ solo concert</text>
                 </prev>
               </Spanner>
             <Note>
+              <eid>+_+</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>0</fret>
@@ -385,6 +447,7 @@ solo concert</text>
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>/_/</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -394,13 +457,16 @@ solo concert</text>
               </Number>
             </Tuplet>
           <Beam>
+            <eid>AB_AB</eid>
             <l1>64</l1>
             <l2>68</l2>
             </Beam>
           <Chord>
+            <eid>BB_BB</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>CB_CB</eid>
                 </Slur>
               <next>
                 <location>
@@ -409,6 +475,7 @@ solo concert</text>
                 </next>
               </Spanner>
             <Note>
+              <eid>DB_DB</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
@@ -419,14 +486,17 @@ solo concert</text>
             <fractions>-1/24</fractions>
             </location>
           <StaffText>
+            <eid>EB_EB</eid>
             <text>P</text>
             </StaffText>
           <location>
             <fractions>1/24</fractions>
             </location>
           <Chord>
+            <eid>FB_FB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>GB_GB</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -437,12 +507,14 @@ solo concert</text>
             <fractions>-1/24</fractions>
             </location>
           <StaffText>
+            <eid>HB_HB</eid>
             <text>P</text>
             </StaffText>
           <location>
             <fractions>1/24</fractions>
             </location>
           <Chord>
+            <eid>IB_IB</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <prev>
@@ -452,6 +524,7 @@ solo concert</text>
                 </prev>
               </Spanner>
             <Note>
+              <eid>JB_JB</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -462,29 +535,36 @@ solo concert</text>
           </voice>
         </Measure>
       <Measure>
+        <eid>KB_KB</eid>
         <voice>
           <TimeSig>
+            <eid>LB_LB</eid>
             <sigN>5</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>MB_MB</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>5/4</duration>
             </Rest>
           <BarLine>
             <subtype>dashed</subtype>
+            <eid>NB_NB</eid>
             </BarLine>
           </voice>
         <voice>
           <Beam>
+            <eid>OB_OB</eid>
             <l1>76</l1>
             <l2>80</l2>
             </Beam>
           <Chord>
+            <eid>PB_PB</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>QB_QB</eid>
                 </Slur>
               <next>
                 <location>
@@ -493,6 +573,7 @@ solo concert</text>
                 </next>
               </Spanner>
             <Note>
+              <eid>RB_RB</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -503,12 +584,14 @@ solo concert</text>
             <fractions>-1/16</fractions>
             </location>
           <StaffText>
+            <eid>SB_SB</eid>
             <text>P</text>
             </StaffText>
           <location>
             <fractions>1/16</fractions>
             </location>
           <Chord>
+            <eid>TB_TB</eid>
             <durationType>eighth</durationType>
             <Spanner type="Slur">
               <prev>
@@ -518,6 +601,7 @@ solo concert</text>
                 </prev>
               </Spanner>
             <Note>
+              <eid>UB_UB</eid>
               <pitch>42</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -525,8 +609,10 @@ solo concert</text>
               </Note>
             </Chord>
           <Chord>
+            <eid>VB_VB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>WB_WB</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -534,26 +620,32 @@ solo concert</text>
               </Note>
             </Chord>
           <Rest>
+            <eid>XB_XB</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
+            <eid>YB_YB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>ZB_ZB</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>aB_aB</eid>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <fret>4</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>bB_bB</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>cB_cB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -563,32 +655,40 @@ solo concert</text>
           </voice>
         </Measure>
       <Measure>
+        <eid>dB_dB</eid>
         <voice>
           <TimeSig>
+            <eid>eB_eB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>fB_fB</eid>
             </Dynamic>
           <Chord>
+            <eid>gB_gB</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>hB_hB</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>iB_iB</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
               <string>3</string>
               </Note>
             <Note>
+              <eid>jB_jB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>kB_kB</eid>
                 </Accidental>
               <pitch>58</pitch>
               <tpc>24</tpc>
@@ -597,16 +697,20 @@ solo concert</text>
               </Note>
             </Chord>
           <Chord>
+            <eid>lB_lB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>mB_mB</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
               <string>4</string>
               </Note>
             <Note>
+              <eid>nB_nB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>oB_oB</eid>
                 </Accidental>
               <pitch>51</pitch>
               <tpc>23</tpc>
@@ -614,8 +718,10 @@ solo concert</text>
               <string>3</string>
               </Note>
             <Note>
+              <eid>pB_pB</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
+                <eid>qB_qB</eid>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>17</tpc>
@@ -624,22 +730,28 @@ solo concert</text>
               </Note>
             </Chord>
           <Rest>
+            <eid>rB_rB</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         <voice>
           <Rest>
+            <eid>sB_sB</eid>
             <durationType>half</durationType>
             </Rest>
           <Rest>
+            <eid>tB_tB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <StaffText>
+            <eid>uB_uB</eid>
             <text>Arm.12</text>
             </StaffText>
           <Chord>
+            <eid>vB_vB</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>wB_wB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <head>diamond</head>

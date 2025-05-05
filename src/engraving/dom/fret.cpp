@@ -39,8 +39,8 @@
 #include "system.h"
 #include "undo.h"
 
-#include "rw/read410/tread.h"
-#include "rw/read410/harmonytodiagramreader.h"
+#include "rw/read460/tread.h"
+#include "rw/read460/harmonytodiagramreader.h"
 
 #include "log.h"
 
@@ -195,10 +195,10 @@ void FretDiagram::updateDiagram(const String& harmonyName)
 
     clear();
 
-    read410::ReadContext ctx;
+    read460::ReadContext ctx;
     XmlReader reader(diagramXml.toUtf8());
 
-    read410::TRead::read(this, reader, ctx);
+    read460::TRead::read(this, reader, ctx);
 
     triggerLayout();
 }
@@ -1054,7 +1054,7 @@ void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath)
 
     XmlReader reader(&file);
 
-    s_harmonyToDiagramMap = read410::HarmonyToDiagramReader::read(reader);
+    s_harmonyToDiagramMap = read460::HarmonyToDiagramReader::read(reader);
 }
 
 //---------------------------------------------------------

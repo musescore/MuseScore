@@ -17,7 +17,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.22)
 
 project(app LANGUAGES C CXX)
 
@@ -25,12 +25,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-g")
 
-set(QT_MIN_VERSION "6.2.4")
-find_package(Qt6Core ${QT_MIN_VERSION} REQUIRED)
-
-include_directories(
-    ${Qt6Core_INCLUDE_DIRS}
-)
+find_package(Qt6Core 6.2.4 REQUIRED)
 
 add_executable(app
     main.cpp

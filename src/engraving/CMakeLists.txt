@@ -158,6 +158,21 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/harmonytodiagramreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/harmonytodiagramreader.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/read460.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/read460.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/staffread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/staffread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/measureread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/measureread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/readcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/readcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/tread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/tread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/connectorinforeader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/connectorinforeader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/harmonytodiagramreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/harmonytodiagramreader.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.cpp
@@ -295,6 +310,10 @@ endif()
 
 if (MUE_BUILD_ENGRAVING_DEVTOOLS)
     set(MODULE_DEF ${MODULE_DEF} -DMUE_BUILD_ENGRAVING_DEVTOOLS)
+endif()
+
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Quick)
 endif()
 
 set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
