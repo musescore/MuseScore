@@ -7651,7 +7651,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
             longInstrumentAttributes.push_back({ "color", String::fromStdString(longInstrumentColor.toString()) });
         }
         xml.tag("part-name", longInstrumentAttributes,
-                MScoreTextToMusicXml::toPlainText(partName).replace(u"♭", u"b").replace(u"♯", u"#"));
+                MScoreTextToMusicXml::toPlainText(partName).replace(u'♭', 'b').replace(u'♯', '#'));
         if (partName.contains(acc)) {
             xml.startElement("part-name-display", longInstrumentAttributes);
             writeDisplayName(xml, partName);
@@ -7662,7 +7662,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
                 shortInstrumentAttributes.push_back({ "color", String::fromStdString(shortInstrumentColor.toString()) });
             }
             xml.tag("part-abbreviation", shortInstrumentAttributes,
-                    MScoreTextToMusicXml::toPlainText(part->shortName()).replace(u"♭", u"b").replace(u"♯", u"#"));
+                    MScoreTextToMusicXml::toPlainText(part->shortName()).replace(u'♭', 'b').replace(u'♯', '#'));
             if (part->shortName().contains(acc)) {
                 xml.startElement("part-abbreviation-display", shortInstrumentAttributes);
                 writeDisplayName(xml, part->shortName());
