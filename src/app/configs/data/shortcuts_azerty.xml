@@ -21,12 +21,10 @@
     <SC>
         <key>nav-next-section</key>
         <seq>F6</seq>
-        <seq>`</seq>
     </SC>
     <SC>
         <key>nav-prev-section</key>
         <seq>Shift+F6</seq>
-        <seq>Shift+`</seq>
     </SC>
     <SC>
         <key>nav-next-panel</key>
@@ -621,12 +619,12 @@
     <seq>Ctrl+D</seq>
     </SC>
   <SC>
-    <key>add-hairpin</key>
-    <seq>Shift+,</seq>
+    <key>add-hairpin</key><!-- crescendo -->
+    <seq>&lt;</seq>
     </SC>
   <SC>
-    <key>add-hairpin-reverse</key>
-    <seq>Shift+.</seq>
+    <key>add-hairpin-reverse</key><!-- diminuendo -->
+    <seq>&gt;</seq>
     </SC>
   <SC>
     <key>time-delete</key>

@@ -6,11 +6,11 @@
         },
         {
             "command": "command://navigation/next-section",
-            "sequences": ["F6", "`"]
+            "sequences": ["F6"]
         },
         {
             "command": "command://navigation/prev-section",
-            "sequences": ["Shift+F6", "Shift+`"]
+            "sequences": ["Shift+F6"]
         },
         {
             "command": "command://navigation/next-panel",
