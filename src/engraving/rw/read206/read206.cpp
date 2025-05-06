@@ -3100,7 +3100,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 readMeasure206(measure, staff, e, ctx);
                 measure->checkMeasure(staff);
                 if (!measure->isMMRest()) {
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                     if (m && m->mmRest()) {
                         m->mmRest()->setNext(measure);
                     }
@@ -3121,7 +3121,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 Box* b = toBox(Factory::createItemByName(tag, score->dummy()));
                 readBox(b, e, ctx);
                 b->setTick(ctx.tick());
-                score->measures()->add(b);
+                score->measures()->append(b);
 
                 // If it's the first box, and comes before any measures, reset to
                 // 301 default.
@@ -3150,7 +3150,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                     LOGD("Score::readStaff(): missing measure!");
                     measure = Factory::createMeasure(score->dummy()->system());
                     measure->setTick(ctx.tick());
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                 }
                 ctx.setTick(measure->tick());
                 readMeasure206(measure, staff, e, ctx);

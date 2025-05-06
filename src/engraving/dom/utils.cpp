@@ -77,20 +77,7 @@ Measure* Score::tick2measure(const Fraction& tick) const
         return firstMeasure();
     }
 
-    Measure* lm = 0;
-    for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-        if (tick < m->tick()) {
-            assert(lm);
-            return lm;
-        }
-        lm = m;
-    }
-    // check last measure
-    if (lm && (tick >= lm->tick()) && (tick <= lm->endTick())) {
-        return lm;
-    }
-    LOGD("tick2measure %d (max %d) not found", tick.ticks(), lm ? lm->tick().ticks() : -1);
-    return 0;
+    return m_measures.measureByTick(tick.ticks());
 }
 
 //---------------------------------------------------------
@@ -107,21 +94,17 @@ Measure* Score::tick2measureMM(const Fraction& t) const
         tick = Fraction(0, 1);
     }
 
-    Measure* lm = 0;
+    Measure* measure = m_measures.measureByTick(t.ticks());
+    if (!measure) {
+        LOGD("tick2measureMM %d not found", tick.ticks());
+        return nullptr;
+    }
 
-    for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
-        if (tick < m->tick()) {
-            assert(lm);
-            return lm;
-        }
-        lm = m;
+    if (measure->hasMMRest()) {
+        return measure->mmRest();
     }
-    // check last measure
-    if (lm && (tick >= lm->tick()) && (tick <= lm->endTick())) {
-        return lm;
-    }
-    LOGD("tick2measureMM %d (max %d) not found", tick.ticks(), lm ? lm->tick().ticks() : -1);
-    return 0;
+
+    return measure;
 }
 
 //---------------------------------------------------------
@@ -130,15 +113,17 @@ Measure* Score::tick2measureMM(const Fraction& t) const
 
 MeasureBase* Score::tick2measureBase(const Fraction& tick) const
 {
-    for (MeasureBase* mb = first(); mb; mb = mb->next()) {
+    std::vector<MeasureBase*> mbList = m_measures.measureBasesAtTick(tick.ticks());
+    for (MeasureBase* mb : mbList) {
         Fraction st = mb->tick();
         Fraction l  = mb->ticks();
         if (tick >= st && tick < (st + l)) {
             return mb;
         }
     }
-//      LOGD("tick2measureBase %d not found", tick);
-    return 0;
+
+    LOGD("tick2measureBase %d not found", tick.ticks());
+    return nullptr;
 }
 
 //---------------------------------------------------------

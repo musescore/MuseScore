@@ -886,7 +886,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     currentMB = ctx.mutState().curMeasure();
 
     if (!currentMB->isMeasure()) {
-        currentMB->setTick(ctx.state().tick());
+        assert(currentMB->tick() == ctx.state().tick());
         return;
     }
 

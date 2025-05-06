@@ -450,6 +450,8 @@ void Score::setUpTempoMap()
         tick += measureTicks;
     }
 
+    m_measures.updateTickIndex();
+
     if (isMaster()) {
         for (const auto& pair : spanner()) {
             const Spanner* spannerItem = pair.second;
@@ -1472,7 +1474,7 @@ Measure* Score::getCreateMeasure(const Fraction& tick)
             m->setTick(lastTick);
             m->setTimesig(ts);
             m->setTicks(ts);
-            measures()->add(toMeasureBase(m));
+            measures()->append(toMeasureBase(m));
             lastTick += Fraction::fromTicks(ts.ticks());
         }
     }
@@ -2179,7 +2181,6 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
 bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick)
 {
     Fraction tickOfAppend = last()->endTick();
-    MeasureBase* pmb = last();
     TieMap tieMap;
 
     MeasureBase* fmb = score->tick2measureBase(startTick);
@@ -2195,13 +2196,8 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
             nmb = static_cast<MeasureBase*>(cmb->clone());
         }
 
-        addMeasure(nmb, 0);
-        nmb->setNext(0);
-        nmb->setPrev(pmb);
         nmb->setScore(this);
-
-        pmb->setNext(nmb);
-        pmb = nmb;
+        measures()->append(nmb);
     }
 
     Measure* firstAppendedMeasure = tick2measure(tickOfAppend);
