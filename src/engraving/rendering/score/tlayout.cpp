@@ -4515,7 +4515,7 @@ void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)
     }
 
     ChordLayout::layoutChords3({ cueNoteChord }, { cueNote }, item->staff(), ctx);
-    ChordLayout::layoutLedgerLines({ cueNoteChord });
+    ChordLayout::layoutLedgerLines({ cueNoteChord }, ctx);
     AccidentalsLayout::layoutAccidentals({ cueNoteChord }, ctx);
     layoutChord(cueNoteChord, ctx);
 

@@ -786,7 +786,7 @@ void SingleLayout::layout(Chord* item, const Context& ctx)
     ChordLayout::computeUp(item, tctx);
     ChordLayout::layout(item, tctx);
     ChordLayout::layoutStem(item, tctx);
-    ChordLayout::layoutLedgerLines({ item });
+    ChordLayout::layoutLedgerLines({ item }, tctx);
 }
 
 void SingleLayout::layout(ChordLine* item, const Context& ctx)

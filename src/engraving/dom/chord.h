@@ -123,8 +123,8 @@ public:
     void setIsUiItem(bool val) { m_isUiItem = val; }
 
     const std::vector<LedgerLine*>& ledgerLines() const { return m_ledgerLines; }
+    std::vector<LedgerLine*>& ledgerLines() { return m_ledgerLines; }
     void resizeLedgerLinesTo(size_t newSize);
-    void updateLedgerLines();
 
     double defaultStemLength() const { return m_defaultStemLength; }
     void setDefaultStemLength(double l) { m_defaultStemLength = l; }
