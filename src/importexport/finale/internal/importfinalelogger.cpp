@@ -34,7 +34,7 @@ namespace mu::iex::finale {
 FinaleLogger::FinaleLogger()
 {
     musx::util::Logger::setCallback([this](musx::util::Logger::LogLevel logLevel, const std::string& msg) {
-        String msgStr = String::fromUtf8(msg.c_str());
+        String msgStr = String::fromStdString(msg);
         switch (logLevel) {
         default:
         case musx::util::Logger::LogLevel::Info:
@@ -72,7 +72,7 @@ static String musxLocation(const DocumentPtr& musxDocument, MeasCmper currMusxSt
             }
             return "Staff " + std::to_string(currMusxStaff);
         }();
-        loc = String::fromUtf8(("[" + staffName + " m" + std::to_string(currMusxMeas) + "] ").c_str());
+        loc = String::fromStdString("[" + staffName + " m" + std::to_string(currMusxMeas) + "] ");
     }
     return loc;
 }

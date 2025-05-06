@@ -150,7 +150,7 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     return s;
 }
 
-static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, const FinaleLogger& logger)
+static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, const std::shared_ptr<FinaleLogger>& logger)
 {
     auto [count, noteType] = simpleMusxTimeSig;
     if (count.remainder()) {
@@ -158,7 +158,7 @@ static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction
             noteType = musx::dom::NoteType(Edu(noteType) / count.denominator());
             count *= count.denominator();
         } else {
-            logger.logWarning(String::fromUtf8("Time signature has fractional portion that could not be reduced."));
+            logger->logWarning(String::fromUtf8("Time signature has fractional portion that could not be reduced."));
             return Fraction(4, 4);
         }
     }
@@ -347,13 +347,13 @@ void EnigmaXmlImporter::importBrackets()
     auto groupsByLayer = computeStaffGroupLayers(staffGroups);
     for (const auto& groupInfo : groupsByLayer) {
         IF_ASSERT_FAILED(groupInfo.info.startSlot && groupInfo.info.endSlot) {
-            logger().logWarning(String::fromUtf8("Group info encountered without start or end slot information"));
+            logger()->logWarning(String::fromUtf8("Group info encountered without start or end slot information"));
             continue;
         }
         auto musxStartStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.startSlot.value());
         auto musxEndStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.endSlot.value());
         IF_ASSERT_FAILED(musxStartStaff && musxEndStaff) {
-            logger().logWarning(String::fromUtf8("Group info encountered missing start or end staff information"));
+            logger()->logWarning(String::fromUtf8("Group info encountered missing start or end staff information"));
             continue;
         }
         auto getStaffIdx = [&](InstCmper inst) -> std::optional<size_t> {

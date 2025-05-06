@@ -49,7 +49,7 @@ public:
     const engraving::Score* score() const { return m_score; }
     std::shared_ptr<musx::dom::Document> musxDocument() const { return m_doc; }
 
-    FinaleLogger& logger() const { return *m_logger; }
+    std::shared_ptr<FinaleLogger> logger() const { return m_logger; }
 
 private:
     void importParts();
