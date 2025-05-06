@@ -119,7 +119,6 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     }
 
     Part* part = m_orgStaff->part();
-    mu::engraving::Score* score = part->score();
 
     auto it = muse::findLessOrEqual(part->instruments(), tick.ticks());
     if (it == part->instruments().cend()) {
