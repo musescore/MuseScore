@@ -169,13 +169,13 @@ static void resetTextProperties(void*, EngravingItem* e)
         Pid::FONT_SIZE,
         Pid::FONT_STYLE,
         Pid::SIZE_SPATIUM_DEPENDENT,
-        Pid::FRAME_TYPE,
+        Pid::BORDER_TYPE,
         Pid::TEXT_LINE_SPACING,
-        Pid::FRAME_FG_COLOR,
-        Pid::FRAME_BG_COLOR,
-        Pid::FRAME_WIDTH,
-        Pid::FRAME_PADDING,
-        Pid::FRAME_ROUND,
+        Pid::BORDER_FG_COLOR,
+        Pid::BORDER_BG_COLOR,
+        Pid::BORDER_WIDTH,
+        Pid::BORDER_PADDING,
+        Pid::BORDER_ROUND,
         Pid::ALIGN
     };
 
