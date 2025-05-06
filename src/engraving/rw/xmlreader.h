@@ -54,7 +54,7 @@ public:
 
     void unknown();
 
-    bool readBool() { return XmlStreamReader::readInt(); }
+    bool readBool(bool* ok = nullptr) { return XmlStreamReader::readBool(ok); }
     double readDouble(bool* ok = nullptr) { return XmlStreamReader::readDouble(ok); }
     double readDouble(double min, double max);
 

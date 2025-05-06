@@ -460,6 +460,16 @@ AsciiStringView XmlStreamReader::readAsciiText()
     return AsciiStringView();
 }
 
+bool XmlStreamReader::readBool(bool* ok)
+{
+    AsciiStringView s = readAsciiText();
+    if (s.empty()) {
+        // if (ok) *ok = false;
+        return true;
+    }
+    return s.toInt(ok, 2) != 0;
+}
+
 int XmlStreamReader::readInt(bool* ok, int base)
 {
     AsciiStringView s = readAsciiText();
