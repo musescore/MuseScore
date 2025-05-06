@@ -32,6 +32,7 @@ set(qt_components
     Quick
     QuickControls2
     QuickWidgets
+    Multimedia
     Xml
     Svg
     PrintSupport
