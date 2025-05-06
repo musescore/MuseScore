@@ -281,14 +281,15 @@ void FretDiagram::setStrings(int n)
     m_markers = tempMarkers;
 
     for (int fret = 1; fret <= m_frets; ++fret) {
-        if (barre(fret).exists()) {
-            if (m_barres[fret].startString + difference <= 0) {
-                removeBarre(fret);
-                continue;
+        std::vector<FretItem::Barre>& bVect = getBarres(fret);
+        for (auto it = bVect.begin(); it != bVect.end();) {
+            if (it->startString + difference < 0) {
+                it = bVect.erase(it);
+            } else {
+                it->startString = std::max(0, it->startString + difference);
+                it->endString = it->endString == -1 ? -1 : it->endString + difference;
+                it++;
             }
-
-            m_barres[fret].startString = std::max(0, m_barres[fret].startString + difference);
-            m_barres[fret].endString   = m_barres[fret].endString == -1 ? -1 : m_barres[fret].endString + difference;
         }
     }
 
@@ -401,34 +402,39 @@ void FretDiagram::setBarre(int startString, int endString, int fret)
     if (startString == -1) {
         removeBarre(fret);
     } else if (startString >= 0 && endString >= -1 && startString < m_strings && endString < m_strings) {
-        m_barres[fret] = FretItem::Barre(startString, endString);
+        m_barres[fret].push_back(FretItem::Barre(startString, endString + 1));
     }
 }
 
 //---------------------------------------------------------
-//    This version is for clicks on a dot with shift.
+//    Multiple Barres are supported, but Barres can only be set from the left to right.
 //    If there is no barre at fret, then add one with the string as the start.
 //    If there is a barre with a -1 end string, set the end string to string.
-//    If there is a barre with a set start and end, remove it.
+//    If existing barres are on the left, add barre with string as start to the last string.
 //    Add may be used in the future if we decide to add dots as default with barres.
 //---------------------------------------------------------
 
 void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
 {
     UNUSED(add);
+    std::vector<FretItem::Barre>& bVect = getBarres(fret);
 
-    FretItem::Barre b = barre(fret);
-    if (!b.exists()) {
-        if (string < m_strings - 1) {
-            m_barres[fret] = FretItem::Barre(string, -1);
-            removeDotsMarkers(string, -1, fret);
+    if (!bVect.empty()) {
+        for (auto it = bVect.begin(); it != bVect.end(); ++it) {
+            if (string < it->startString) {
+                it->startString = string;
+                removeDotsMarkers(it->startString, string, fret);
+                return;
+            }
+            if ((string > it->startString && it->endString == -1) || (string > it->startString && it->endString > string)) {
+                it->endString = string;
+                removeDotsMarkers(it->startString, string, fret);
+                return;
+            }
         }
-    } else if (b.endString == -1 && b.startString < string) {
-        m_barres[fret].endString = string;
-    } else {
-        removeDotsMarkers(b.startString, b.endString, fret);
-        removeBarre(fret);
     }
+
+    m_barres[fret].push_back(FretItem::Barre(string, -1));
 }
 
 //---------------------------------------------------------
@@ -489,17 +495,19 @@ void FretDiagram::removeBarres(int string, int fret /*= 0*/)
     auto iter = m_barres.begin();
     while (iter != m_barres.end()) {
         int bfret = iter->first;
-        FretItem::Barre b = iter->second;
-
-        if (b.exists() && b.startString <= string && (b.endString >= string || b.endString == -1)) {
-            if (fret > 0 && fret != bfret) {
-                ++iter;
-            } else {
-                iter = m_barres.erase(iter);
-            }
-        } else {
+        if (fret > 0 && fret != bfret) {
             ++iter;
+            continue;
         }
+        std::vector<FretItem::Barre>& bVect = iter->second;
+        for (auto it = bVect.begin(); it != bVect.end(); ++it) {
+            if (it->exists() && it->startString <= string
+                && (it->endString >= string || it->endString == -1)) {
+                bVect.erase(it);
+                break;
+            }
+        }
+        ++iter;
     }
 }
 
@@ -669,12 +677,17 @@ FretItem::Marker FretDiagram::marker(int s) const
 //   barre
 //---------------------------------------------------------
 
-FretItem::Barre FretDiagram::barre(int f) const
+std::vector<FretItem::Barre>& FretDiagram::getBarres(int fret)
 {
-    if (m_barres.find(f) != m_barres.end()) {
-        return m_barres.at(f);
+    return m_barres[fret];
+}
+
+std::vector<FretItem::Barre> FretDiagram::barre(int fret) const
+{
+    if (m_barres.find(fret) != m_barres.end()) {
+        return m_barres.at(fret);
     }
-    return FretItem::Barre(-1, -1);
+    return {};
 }
 
 Font FretDiagram::fretNumFont() const
@@ -995,27 +1008,28 @@ String FretDiagram::screenReaderInfo() const
 
     String barreInfo;
     for (auto const& iter : m_barres) {
-        const FretItem::Barre& b = iter.second;
-        if (!b.exists()) {
+        const std::vector<FretItem::Barre>& bVect = iter.second;
+        if (bVect.empty()) {
             continue;
         }
 
-        String fretInfo = muse::mtrc("engraving", "fret %1").arg(iter.first);
+        for (auto& b : bVect) {
+            String fretInfo = muse::mtrc("engraving", "fret %1").arg(iter.first);
+            String newBarreInfo;
+            if (b.startString == 0 && (b.endString == -1 || b.endString == m_strings - 1)) {
+                newBarreInfo = muse::mtrc("engraving", "barré %1").arg(fretInfo);
+            } else {
+                String startPart = muse::mtrc("engraving", "beginning string %1").arg(b.startString + 1);
+                String endPart;
+                if (b.endString != -1) {
+                    endPart = muse::mtrc("engraving", "and ending string %1").arg(b.endString + 1);
+                }
 
-        String newBarreInfo;
-        if (b.startString == 0 && (b.endString == -1 || b.endString == m_strings - 1)) {
-            newBarreInfo = muse::mtrc("engraving", "barré %1").arg(fretInfo);
-        } else {
-            String startPart = muse::mtrc("engraving", "beginning string %1").arg(b.startString + 1);
-            String endPart;
-            if (b.endString != -1) {
-                endPart = muse::mtrc("engraving", "and ending string %1").arg(b.endString + 1);
+                newBarreInfo = muse::mtrc("engraving", "partial barré %1 %2 %3").arg(fretInfo, startPart, endPart);
             }
 
-            newBarreInfo = muse::mtrc("engraving", "partial barré %1 %2 %3").arg(fretInfo, startPart, endPart);
+            barreInfo = String(u"%1 %2").arg(barreInfo, newBarreInfo);
         }
-
-        barreInfo = String(u"%1 %2").arg(barreInfo, newBarreInfo);
     }
 
     detailedInfo = String(u"%1 %2").arg(detailedInfo, barreInfo);
