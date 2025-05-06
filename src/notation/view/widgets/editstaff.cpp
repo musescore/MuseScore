@@ -160,7 +160,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     }
 
     // set dlg controls
-    spinExtraDistance->setValue(s->userDist() / score->style().spatium());
+    spinExtraDistance->setValue(s->userDist().val());
     invisible->setChecked(stt->invisible());
     isSmallCheckbox->setChecked(stt->isSmall());
     color->setColor(stt->color().toQColor());
@@ -502,7 +502,7 @@ void EditStaff::applyStaffProperties()
     StaffConfig config;
     config.visible = m_orgStaff->visible();
 
-    config.userDistance = spinExtraDistance->value() * m_orgStaff->style().spatium();
+    config.userDistance = Spatium(spinExtraDistance->value());
     config.cutaway = cutaway->isChecked();
     config.showIfEmpty = showIfEmpty->isChecked();
     config.hideSystemBarline = hideSystemBarLine->isChecked();

@@ -2470,7 +2470,6 @@ void Read206::readTie206(XmlReader& e, ReadContext& ctx, Tie* t)
 static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx)
 {
     Segment* segment = 0;
-    double _spatium = m->spatium();
 
     std::vector<Chord*> graceNotes;
     ctx.tuplets().clear();
@@ -2967,7 +2966,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerDown(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
+            m->vspacerDown(staffIdx)->setGap(Spatium(e.readDouble()));
         } else if (tag == "vspacer" || tag == "vspacerUp") {
             if (!m->vspacerUp(staffIdx)) {
                 Spacer* spacer = Factory::createSpacer(m);
@@ -2975,7 +2974,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerUp(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
+            m->vspacerUp(staffIdx)->setGap(Spatium(e.readDouble()));
         } else if (tag == "visible") {
             m->setStaffVisible(staffIdx, e.readInt());
         } else if (tag == "slashStyle") {
