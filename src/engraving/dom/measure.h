@@ -304,7 +304,7 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue& newValue);
     void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
 
-    bool hasMMRest() const { return m_mmRest != 0; }
+    bool hasMMRest() const { return m_mmRest != nullptr; }
     bool isMMRest() const { return m_mmRestCount > 0; }
     Measure* mmRest() const { return m_mmRest; }
     Measure* coveringMMRestOrThis();
