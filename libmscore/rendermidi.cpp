@@ -504,7 +504,12 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
                           /  .                   midi pitch is 12/16384 semitones
                          A....
                        tickDelta   */
-                  for (int i = lastPointTick; i <= nextPointTick; i += 16) {
+                  // We need to be careful to add the final event at nextPointTick exactly -- even if
+                  // it's not on a multiple of 16 -- or else the bend might be left slightly unfinished
+                  for (int i = lastPointTick; i <= nextPointTick + 15; i += 16) {
+                        if (i > nextPointTick)
+                              i = nextPointTick;
+
                         double dx = ((i-lastPointTick) * 60) / noteLen;
                         int p = pitch + dx * pitchDelta / tickDelta;
 
