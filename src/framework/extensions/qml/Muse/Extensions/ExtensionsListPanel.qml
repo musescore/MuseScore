@@ -187,6 +187,7 @@ Item {
         background: flickable
 
         isEnabled: Boolean(selectedPlugin) ? selectedPlugin.enabled : false
+        isRemovable: Boolean(selectedPlugin) ? selectedPlugin.isRemovable : false
 
         additionalInfoModel: [
             {"title": qsTrc("extensions", "Version:"), "value": Boolean(selectedPlugin) ? selectedPlugin.version : "" },
@@ -196,6 +197,12 @@ Item {
 
         onExecPointSelected: function(index) {
             extensionsModel.selectExecPoint(selectedPlugin.uri, index)
+        }
+
+        onRemoveRequest: function() {
+            extensionsModel.removeExtension(selectedPlugin.uri)
+            prv.resetSelectedPlugin()
+            panel.close()
         }
 
         onEditShortcutRequested: {
