@@ -31,14 +31,14 @@ std::string WasmTestModule::moduleName() const
 
 void WasmTestModule::onStartApp()
 {
-    Ms::Score score;
-    auto notation = notationCreator()->newMasterNotation();
-    Ret ret = notation->load("/files/test3.mscz");
+    // Ms::Score score;
+    // auto notation = notationCreator()->newMasterNotation();
+    // Ret ret = notation->load("/files/test3.mscz");
 
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
+    // if (!ret) {
+    //     LOGE() << ret.toString();
+    // }
 
-    context()->addMasterNotation(notation);
-    context()->setCurrentMasterNotation(notation);
+    // context()->addMasterNotation(notation);
+    // context()->setCurrentMasterNotation(notation);
 }

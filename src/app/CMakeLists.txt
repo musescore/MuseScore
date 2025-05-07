@@ -80,34 +80,8 @@ elseif(OS_IS_MAC)
 
 elseif(OS_IS_WASM)
 
-    include_directories(${MODULE} PUBLIC
-        ${PROJECT_BINARY_DIR}
-        ${CMAKE_CURRENT_BINARY_DIR}
-        ${PROJECT_SOURCE_DIR}
-        ${PROJECT_SOURCE_DIR}/src
-        ${PROJECT_SOURCE_DIR}/src/framework
-        ${PROJECT_SOURCE_DIR}/src/framework/global
-    )
-    set(EMCC_LINKER_FLAGS "\
-        -s WASM=1 \
-        -s FULL_ES2=1 \
-        -s FULL_ES3=1 \
-        -s USE_WEBGL2=1 \
-        -s USE_ZLIB=1 \
-        -s EXIT_RUNTIME=1 \
-        -s \"EXTRA_EXPORTED_RUNTIME_METHODS=['UTF16ToString', 'stringToUTF16']\" \
-        --bind \
-        -s FETCH=1 \
-        -s FORCE_FILESYSTEM=1 \
-        -g \
-        -s ASSERTIONS=2 \
-        -s DEMANGLE_SUPPORT=1 \
-        -s GL_DEBUG=0 \
-        -s ALLOW_MEMORY_GROWTH=1 \
-        -s TOTAL_MEMORY=33554432 \
-        -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
-        -O3 \
-    ")
+    set(EXECUTABLE_NAME MuseScoreStudio)
+
 elseif(OS_IS_FBSD)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L /usr/local/lib -lasound -lpthread")
 
@@ -209,17 +183,6 @@ if (OS_IS_WIN)
     list(APPEND MSCORE_APPEND_SRC ${WINDOWS_ICONS_RC})
 endif()
 
-if (CC_IS_EMSCRIPTEN)
-    list(APPEND LINK_LIB wasmtest)
-
-    foreach(link ${LINK_LIB} )
-        list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:${link}>)
-    endforeach()
-
-    list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:sndfile>)
-    list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:fluidsynth>)
-endif()
-
 ###########################################
 # Resources
 ###########################################
@@ -232,7 +195,7 @@ endif()
 # Executable declaration
 ###########################################
 
-add_executable(MuseScoreStudio
+qt_add_executable(MuseScoreStudio
     WIN32 MACOSX_BUNDLE
     ${APP_RCC_SOURCES}
     ${MSCORE_APPEND_SRC}
@@ -280,10 +243,6 @@ if (CC_IS_MSVC)
     target_link_options(MuseScoreStudio PRIVATE /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup)
 endif(CC_IS_MSVC)
 
-if (OS_IS_WASM)
-    set_target_properties(MuseScoreStudio PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS}")
-endif(OS_IS_WASM)
-
 ###########################################
 # Includes
 ###########################################
@@ -309,15 +268,7 @@ target_include_directories(MuseScoreStudio PRIVATE
 # Link
 ###########################################
 
-if (NOT CC_IS_EMSCRIPTEN)
-    target_link_libraries(MuseScoreStudio ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
-else()
-    target_link_libraries(MuseScoreStudio PRIVATE ${QT_LIBRARIES})
-
-    find_package(Qt6QmlImportScanner REQUIRED)
-    qt_import_qml_plugins(MuseScoreStudio PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
-endif()
-
+target_link_libraries(MuseScoreStudio PRIVATE ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
 
 ###########################################
 # INSTALL
@@ -425,14 +376,9 @@ elseif(OS_IS_MAC)
 ###########################################
 elseif(OS_IS_WASM)
 
-    function(copy_html_js_launch_files target)
-        set(APPNAME ${target})
-        configure_file("${_qt6Core_install_prefix}/plugins/platforms/wasm_shell.html" "public_html/${target}.qt.html")
-        configure_file("${_qt6Core_install_prefix}/plugins/platforms/qtloader.js" public_html/qtloader.js COPYONLY)
-        configure_file("${_qt6Core_install_prefix}/plugins/platforms/qtlogo.svg" public_html/qtlogo.svg COPYONLY)
-    endfunction()
-
-    copy_html_js_launch_files(MuseScoreStudio)
+    configure_file("${CMAKE_CURRENT_BINARY_DIR}/MuseScoreStudio.html" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MuseScoreStudio.html" COPYONLY)
+    configure_file("${CMAKE_CURRENT_BINARY_DIR}/qtloader.js" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtloader.js" COPYONLY)
+    configure_file("${CMAKE_CURRENT_BINARY_DIR}/qtlogo.svg" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtlogo.svg" COPYONLY)
 
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")

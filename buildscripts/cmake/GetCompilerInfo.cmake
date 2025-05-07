@@ -29,7 +29,7 @@ include(GetPlatformInfo)
 
 if (OS_IS_WASM)
 
-    set(CC_IS_EMSCRIPTEN 1)
+    set(CC_IS_EMCC 1)
 
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
 
