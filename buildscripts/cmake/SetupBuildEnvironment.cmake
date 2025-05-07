@@ -75,6 +75,8 @@ if(CC_IS_MSVC)
     add_compile_definitions(_UNICODE UNICODE)
     add_compile_definitions(_USE_MATH_DEFINES)
     add_compile_definitions(NOMINMAX)
+    
+    add_link_options("/NODEFAULTLIB:LIBCMT")
 endif()
 
 # MinGW-specific
@@ -111,3 +113,8 @@ endif(CC_IS_EMSCRIPTEN)
 
 # Warnings
 include(SetupCompileWarnings)
+
+# User overrides
+if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SetupBuildEnvironment.user.cmake")
+    include(${CMAKE_CURRENT_LIST_DIR}/SetupBuildEnvironment.user.cmake)
+endif()

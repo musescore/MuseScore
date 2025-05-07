@@ -199,6 +199,11 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                             lscore->undo(new Link(lbl, sbl));
                         } else if (lbl != sbl && generated && lbl->isLinked(sbl)) {
                             lscore->undo(new Unlink(lbl));
+                            while (EngravingItem* linkedOnCoveringMMRest = sbl->findLinkedInScore(lscore)) {
+                                // Edge case: an additional link of this barline exists on the covering mmRest of lbl's measure
+                                lscore->undo(new Unlink(linkedOnCoveringMMRest));
+                                lscore->doUndoRemoveElement(linkedOnCoveringMMRest);
+                            }
                         }
                     }
                 }

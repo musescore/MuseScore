@@ -912,10 +912,11 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 //   createAndAddVBoxForCreditWords
 //---------------------------------------------------------
 
-VBox* MusicXmlParserPass1::createAndAddVBoxForCreditWords(Score* score)
+VBox* MusicXmlParserPass1::createAndAddVBoxForCreditWords(Score* score, Fraction tick)
 {
     VBox* vbox = Factory::createTitleVBox(score->dummy()->system());
-    score->measures()->add(vbox);
+    vbox->setTick(tick);
+    score->measures()->append(vbox);
     return vbox;
 }
 
@@ -996,9 +997,10 @@ static void inferFromTitle(String& title, String& inferredSubtitle, String& infe
 //---------------------------------------------------------
 
 static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const Size& pageSize,
-                            const bool top, const bool isSibeliusScore)
+                            Fraction tick, const bool isSibeliusScore)
 {
     VBox* vbox = nullptr;
+    const bool top = tick.isZero();
 
     std::vector<const CreditWords*> headerWords;
     std::vector<const CreditWords*> footerWords;
@@ -1035,7 +1037,8 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const 
             const Align align = alignForCreditWords(w, pageSize.width(), tid);
             double yoffs = tid == TextStyleType::COMPOSER ? 0.0 : (maxy - w->defaultY) * score->style().spatium() / 10;
             if (!vbox) {
-                vbox = MusicXmlParserPass1::createAndAddVBoxForCreditWords(score);
+                Fraction vBoxTick = top ? Fraction(0, 1) : tick;
+                vbox = MusicXmlParserPass1::createAndAddVBoxForCreditWords(score, vBoxTick);
             }
             addText2(vbox, score, w->words, tid, align, yoffs);
         } else if (w->type == u"rights" && score->metaTag(u"copyright").empty()) {
@@ -1101,7 +1104,7 @@ void MusicXmlParserPass1::createDefaultHeader(Score* score)
         strTranslator = metaTranslator;
     }
 
-    VBox* const vbox = MusicXmlParserPass1::createAndAddVBoxForCreditWords(score);
+    VBox* const vbox = MusicXmlParserPass1::createAndAddVBoxForCreditWords(score, Fraction(0, 1));
     vbox->setExcludeFromOtherParts(false);
     addText(vbox, score, strTitle.toXmlEscaped(),      TextStyleType::TITLE);
     addText(vbox, score, strSubTitle.toXmlEscaped(),   TextStyleType::SUBTITLE);
@@ -1139,7 +1142,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
             ++pageNr;
 
             if (pageNr == 1) {
-                vbox = addCreditWords(score, crWords, pageSize, true, sibOrDolet());
+                vbox = addCreditWords(score, crWords, pageSize, Fraction(0, 0), sibOrDolet());
                 if (i == 0 && vbox) {
                     vbox->setExcludeFromOtherParts(false);
                 }
@@ -1151,7 +1154,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
         measure->setTick(ms.at(i));
         measure->setTicks(ml.at(i));
         measure->setNo(int(i));
-        score->measures()->add(measure);
+        score->measures()->append(measure);
 
         // add break to previous measure or vbox
         MeasureBase* mb = vbox;
@@ -1166,7 +1169,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
 
         // add a footer vbox if the next measure is on a new page or end of score has been reached
         if ((pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) && pageNr == 1) {
-            addCreditWords(score, crWords, pageSize, false, sibOrDolet());
+            addCreditWords(score, crWords, pageSize, measure->tick() + measure->ticks(), sibOrDolet());
         }
     }
 }

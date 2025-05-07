@@ -328,7 +328,7 @@ void OveToMScore::createStructure()
         int tick = m_mtt->getTick(i, 0);
         measure->setTick(Fraction::fromTicks(tick));
         measure->setNo(i);
-        m_score->measures()->add(measure);
+        m_score->measures()->append(measure);
     }
 }
 
@@ -403,7 +403,7 @@ void OveToMScore::convertHeader()
 
     if (vbox) {
         vbox->setTick(Fraction(0, 1));
-        m_score->measures()->add(vbox);
+        m_score->measures()->append(vbox);
     }
 }
 
