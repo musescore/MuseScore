@@ -435,6 +435,17 @@ Segment* Segment::prev(SegmentType types) const
     return 0;
 }
 
+Segment* Segment::prevWithElementsOnTrack(track_idx_t trackIdx, SegmentType segType) const
+{
+    Segment* prevSeg = prev(segType);
+
+    while (prevSeg && !prevSeg->element(trackIdx)) {
+        prevSeg = prevSeg->prev(segType);
+    }
+
+    return prevSeg;
+}
+
 //---------------------------------------------------------
 //   prev1
 ///   return previous \a Segment, don’t stop searching at

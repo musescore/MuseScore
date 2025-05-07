@@ -147,6 +147,7 @@ public:
 
     Segment* prev() const { return m_prev; }
     Segment* prev(SegmentType) const;
+    Segment* prevWithElementsOnTrack(track_idx_t trackIdx, SegmentType segType = SegmentType::ChordRest) const;
     Segment* prevActive() const;
     Segment* prevEnabled() const;
     void setPrev(Segment* e) { m_prev = e; }
