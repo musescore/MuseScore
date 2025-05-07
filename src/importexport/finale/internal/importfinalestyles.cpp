@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "dom/mscore.h"
+#include "dom/textbase.h"
 #include "dom/types.h"
 #include "internal/importfinalelogger.h"
 #include "internal/importfinalescoremap.h"
@@ -207,13 +208,12 @@ void writeLinePrefs(MStyle& style,
 static void writeFramePrefs(MStyle& style, const std::string& namePrefix, const others::Enclosure* enclosure = nullptr)
 {
     if (!enclosure || enclosure->shape == others::Enclosure::Shape::NoEnclosure || enclosure->lineWidth == 0) {
-        style.set(styleIdx(namePrefix + "FrameType"), 0);
-        return; // Do not override any other defaults if no enclosure shape
-    }
-    if (enclosure->shape == others::Enclosure::Shape::Ellipse) {
-        style.set(styleIdx(namePrefix + "FrameType"), 2);
+        style.set(styleIdx(namePrefix + "FrameType"), int(FrameType::NO_FRAME));
+        if (!enclosure) return; // Do not override any other defaults if no enclosure
+    } else if (enclosure->shape == others::Enclosure::Shape::Ellipse) {
+        style.set(styleIdx(namePrefix + "FrameType"), int(FrameType::CIRCLE));
     } else {
-        style.set(styleIdx(namePrefix + "FrameType"), 1);
+        style.set(styleIdx(namePrefix + "FrameType"), int(FrameType::SQUARE));
     }
     style.set(styleIdx(namePrefix + "FramePadding"), enclosure->xMargin / EVPU_PER_SPACE);
     style.set(styleIdx(namePrefix + "FrameWidth"), enclosure->lineWidth / EFIX_PER_SPACE);
