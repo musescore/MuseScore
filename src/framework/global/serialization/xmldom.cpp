@@ -161,7 +161,7 @@ String XmlDomAttribute::value() const
         return String();
     }
     const tinyxml2::XMLAttribute* a = attribute_const(m_attribute);
-    return String(a->Value());
+    return String::fromUtf8(a->Value());
 }
 
 XmlDomAttribute XmlDomAttribute::nextAttribute() const
