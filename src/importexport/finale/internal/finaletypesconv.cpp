@@ -35,6 +35,9 @@ using namespace muse;
 using namespace musx::dom;
 
 namespace mu::iex::finale {
+ID createPartId(int partNumber) { return "P" + std::to_string(partNumber); }
+ID createStaffId(musx::dom::InstCmper staffId) { return std::to_string(staffId); }
+
 ClefType FinaleTConv::toMuseScoreClefType(ClefIndex clef)
 {
     // For now, base this on the default clef definitions.

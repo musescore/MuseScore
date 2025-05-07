@@ -22,7 +22,7 @@
 #pragma once
 
 #include "musx/musx.h"
-#include "types/string.h"
+#include "types/types.h"
 #include "engraving/types/types.h"
 
 namespace mu::iex::finale {
@@ -33,7 +33,10 @@ public:
 
     static engraving::String instrTemplateIdfromUuid(std::string uuid);
     static engraving::ClefType toMuseScoreClefType(musx::dom::ClefIndex clef);
-    static engraving::BracketType toMuseScoreBracketType(musx::dom::details::StaffGroup::BracketStyle);    
+    static engraving::BracketType toMuseScoreBracketType(musx::dom::details::StaffGroup::BracketStyle);
+
+    static engraving::ID createPartId(int partNumber);
+    static engraving::ID createStaffId(musx::dom::InstCmper staffId);
 };
 
 }
