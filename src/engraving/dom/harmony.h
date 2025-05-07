@@ -186,11 +186,9 @@ public:
     double mag() const override;
     void setUserMag(double m) { m_userMag = m; }
 
-    //! HACK Temporary hack
-    bool isDrawEditMode() const { return m_isDrawEditMode; }
-    void setIsDrawEditMode(bool val) { m_isDrawEditMode = val; }
-
     void undoMoveSegment(Segment* newSeg, Fraction tickDiff) override;
+
+    Color curColor() const override;
 
     struct LayoutData : public TextBase::LayoutData {
         ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };           // used for calculating the height is frame while editing.
@@ -238,8 +236,6 @@ private:
     NoteCaseType m_bassCase = NoteCaseType::AUTO;                // case as typed
     NoteCaseType m_rootRenderCase = NoteCaseType::AUTO;
     NoteCaseType m_bassRenderCase = NoteCaseType::AUTO;           // case to render
-
-    bool m_isDrawEditMode = false;
 
     std::optional<double> m_userMag;
 };

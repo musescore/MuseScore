@@ -356,7 +356,7 @@ public:
 
     virtual void setColor(const Color& c);
     virtual Color color() const;
-    Color curColor() const;
+    virtual Color curColor() const;
     Color curColor(bool isVisible) const;
     Color curColor(bool isVisible, Color normalColor) const;
 
