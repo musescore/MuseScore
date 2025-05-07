@@ -190,7 +190,6 @@ Harmony::Harmony(const Harmony& h)
     m_parsedForm = h.m_parsedForm ? new ParsedChord(*h.m_parsedForm) : 0;
     m_harmonyType = h.m_harmonyType;
     m_textName   = h.m_textName;
-    m_userName   = h.m_userName;
     m_function   = h.m_function;
     m_play       = h.m_play;
     m_realizedHarmony = h.m_realizedHarmony;
@@ -259,34 +258,32 @@ void Harmony::afterRead()
 //   determineRootBassSpelling
 //---------------------------------------------------------
 
-void Harmony::determineRootBassSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase,
-                                        NoteSpellingType& bassSpelling, NoteCaseType& bassCase)
+void Harmony::determineRootBassSpelling()
 {
     // spelling
-
-    rootSpelling = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
-    bassSpelling = rootSpelling;
+    m_rootSpelling = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
+    m_bassSpelling = m_rootSpelling;
 
     // case
     // always use case as typed if automatic capitalization is off
     if (!style().styleB(Sid::automaticCapitalization)) {
-        rootCase = m_rootCase;
-        bassCase = m_bassCase;
+        m_rootRenderCase = m_rootCase;
+        m_bassRenderCase = m_bassCase;
         return;
     }
 
     // set default
     if (style().styleB(Sid::allCapsNoteNames)) {
-        rootCase = NoteCaseType::UPPER;
-        bassCase = NoteCaseType::UPPER;
+        m_rootRenderCase = NoteCaseType::UPPER;
+        m_bassRenderCase = NoteCaseType::UPPER;
     } else {
-        rootCase = NoteCaseType::CAPITAL;
-        bassCase = NoteCaseType::CAPITAL;
+        m_rootRenderCase = NoteCaseType::CAPITAL;
+        m_bassRenderCase = NoteCaseType::CAPITAL;
     }
 
     // override for bass note
     if (style().styleB(Sid::lowerCaseBassNotes)) {
-        bassCase = NoteCaseType::LOWER;
+        m_bassRenderCase = NoteCaseType::LOWER;
     }
 
     // override for minor chords
@@ -313,19 +310,9 @@ void Harmony::determineRootBassSpelling(NoteSpellingType& rootSpelling, NoteCase
             m_parsedForm = 0;
         }
         if (quality == "minor" || quality == "diminished" || quality == "half-diminished") {
-            rootCase = NoteCaseType::LOWER;
+            m_rootRenderCase = NoteCaseType::LOWER;
         }
     }
-}
-
-//---------------------------------------------------------
-//   determineRootBassSpelling
-//---------------------------------------------------------
-
-void Harmony::determineRootBassSpelling()
-{
-    determineRootBassSpelling(m_rootSpelling, m_rootRenderCase,
-                              m_bassSpelling, m_bassRenderCase);
 }
 
 //---------------------------------------------------------
@@ -349,7 +336,6 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int& root, int& 
     }
 
     if (m_harmonyType == HarmonyType::ROMAN) {
-        m_userName = ss;
         m_textName = ss;
         root = Tpc::TPC_INVALID;
         bass = Tpc::TPC_INVALID;
@@ -399,7 +385,6 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int& root, int& 
                 idx = 0;
             } else {
                 LOGD("failed <%s>", muPrintable(ss));
-                m_userName = s;
                 m_textName = s;
                 return 0;
             }
@@ -425,7 +410,6 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int& root, int& 
         }
     }
 
-    m_userName = s;
     const ChordList* cl = score()->chordList();
     const ChordDescription* cd = 0;
     if (useLiteral) {
@@ -578,7 +562,7 @@ void Harmony::endEditTextual(EditData& ed)
     bool textChanged = ted != nullptr && ted->oldXmlText != harmonyName();
 
     if (textChanged) {
-        Segment* parentSegment = getParentSeg();
+        Segment* parentSegment = toSegment(findAncestor(ElementType::SEGMENT));
         if (parentSegment) {
             EngravingItem* fretDiagramItem = parentSegment->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
             if (fretDiagramItem) {
@@ -613,7 +597,7 @@ void Harmony::endEditTextual(EditData& ed)
             // we may now need to change the TPC's and the text, and re-render
             if (style().styleB(Sid::concertPitch) != h->style().styleB(Sid::concertPitch)) {
                 Staff* staffDest = h->staff();
-                Segment* segment = getParentSeg();
+                Segment* segment = toSegment(findAncestor(ElementType::SEGMENT));
                 Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
                 Interval interval = staffDest->transpose(tick);
                 if (!interval.isZero()) {
@@ -735,24 +719,6 @@ Harmony* Harmony::findInSeg(Segment* seg) const
 }
 
 //---------------------------------------------------------
-//   getParentSeg
-///   gets the parent segment of this harmony
-//---------------------------------------------------------
-
-Segment* Harmony::getParentSeg() const
-{
-    Segment* seg = nullptr;
-    if (explicitParent()->isFretDiagram()) {
-        // When this harmony is the child of a fret diagram, we need to go up twice
-        // to get to the parent seg.
-        seg = toFretDiagram(explicitParent())->segment();
-    } else {
-        seg = toSegment(explicitParent());
-    }
-    return seg;
-}
-
-//---------------------------------------------------------
 //   findNext
 ///   find the next Harmony in the score
 ///
@@ -761,7 +727,7 @@ Segment* Harmony::getParentSeg() const
 
 Harmony* Harmony::findNext() const
 {
-    Segment* segment = getParentSeg();
+    const Segment* segment = toSegment(findAncestor(ElementType::SEGMENT));
     Segment* cur = segment ? segment->next1() : nullptr;
     while (cur) {
         Harmony* h = findInSeg(cur);
@@ -782,8 +748,8 @@ Harmony* Harmony::findNext() const
 
 Harmony* Harmony::findPrev() const
 {
-    Segment* segment = getParentSeg();
-    Segment* cur = segment ? segment->prev1() : nullptr;
+    const Segment* segment = toSegment(findAncestor(ElementType::SEGMENT));
+    Segment* cur = segment ? segment->next1() : nullptr;
     while (cur) {
         Harmony* h = findInSeg(cur);
         if (h) {
@@ -805,7 +771,7 @@ Harmony* Harmony::findPrev() const
 //---------------------------------------------------------
 Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
 {
-    Segment* seg = getParentSeg();
+    const Segment* seg = toSegment(findAncestor(ElementType::SEGMENT));
     if (!seg) {
         return Fraction(-1, 1);
     }
