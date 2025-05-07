@@ -167,7 +167,7 @@ static ChordRest* importEntry(/*const std::shared_ptr<const musx::dom::EntryInfo
     std::pair<musx::dom::NoteType, int> noteInfo = currentEntry->calcNoteInfo();
     TDuration d = FinaleTConv::noteTypeToDurationType(noteInfo.first);
     if (d == DurationType::V_INVALID) {
-        LOGE() << "ChordRest duration not supported in MuseScore";
+        logger()->logWarning(String(u"Given ChordRest duration not supported in MuseScore"));
         return nullptr;
     }
 
@@ -257,21 +257,21 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
     if (musxTuplet->autoBracketStyle != options::TupletOptions::AutoBracketStyle::Always) {
         // Can't be determined until we write all the notes/beams
         /// @todo write this setting on a second pass
-        LOGW() << "Unsupported";
+        logger()->logWarning(String(u"Unsupported"));
     }
     if (musxTuplet->avoidStaff) {
         // supported globally as a style: Sid::tupletOutOfStaff
-        LOGW() << "Unsupported";
+        logger()->logWarning(String(u"Unsupported"));
     }
     if (musxTuplet->metricCenter) {
         // center number using duration
         /// @todo approximate?
-        LOGW() << "Unsupported";
+        logger()->logWarning(String(u"Unsupported"));
     }
     if (musxTuplet->fullDura) {
         // extend bracket to full duration
         /// @todo wait until added to MuseScore (soon)
-        LOGW() << "Unsupported";
+        logger()->logWarning(String(u"Unsupported"));
     }
     // at the end
     if (musxTuplet->alwaysFlat) {
@@ -295,7 +295,7 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
 static std::optional<Fraction> musxFractionToFraction(musx::util::Fraction count)
 {
     if (count.remainder()) {
-        LOGE() << "Fraction has fractional portion that could not be reduced.";
+        logger()->logWarning(String(u"Fraction has fractional portion that could not be reduced."));
         return std::nullopt;
     }
     return Fraction(count.numerator(), count.denominator());
@@ -306,30 +306,45 @@ bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ Entr
 {
     std::optional<Fraction> currentEntryInfoStart = musxFractionToFraction(entryInfo->elapsedDuration);
     if (!currentEntryInfoStart.has_value() || !segment) {
-        LOGW() << "Position in measure unknown";
+        logger()->logWarning(String(u"Position in measure unknown"));
         return false;
     }
 
     std::optional<Fraction> currentEntryActualDuration = musxFractionToFraction(entryInfo->actualDuration);
     if (!currentEntryActualDuration.has_value()) {
-        LOGW() << "Duration for this entry is invalid";
+        logger()->logWarning(String(u"Duration for this entry is invalid"));
         return false;
     }
 
     if (entryInfo->graceIndex != 0) {
-        LOGW() << "Grace notes not yet supported";
+        logger()->logWarning(String(u"Grace notes not yet supported"));
         return true;
     }
 
     if (entryInfo->v2Launch) {
-        LOGW() << "voice 2 unspported";
+        logger()->logWarning(String(u"voice 2 currently unspported"));
     }
 
-    if (segment->rTick() < currentEntryInfoStart.value()) {
-        // invisible fill with rests up to start
+    Fraction tickEnd = segment->tick();
+
+    if (segment->rTick().reduced() < currentEntryInfoStart.value().reduced()) {
+        // The entry starts further into the measure than expected (perfectly normal and caused by gaps)
+        // Simply fill with invisible rests up to the starting point
+        Fraction tickDifference = currentEntryInfoStart.value() - segment->rTick();
+        fillWithInvisibleRests(segment->tick(), curTrackIdx, tickDifference, tupletMap);
+        tickEnd += tickDifference;
     } else if (segment->rTick() > currentEntryInfoStart.value()) {
-        LOGW() << "Incorrect position in measure";
-        return false;
+        // edge case: current entry is at the beginning of the measure
+        /// @todo this method needs a different location. tuplet map is from the previous measure
+        Fraction tickDifference = segment->measure()->ticks() - segment->rTick();
+        if (currentEntryInfoStart.value() = Fraction(0, 1)) {
+            fillWithInvisibleRests(segment->tick(), curTrackIdx, tickDifference, tupletMap);
+            tickEnd += tickDifference;
+            segment = m_score->tick2measure(tickEnd)->getSegment(SegmentType::ChordRest, tickEnd);
+        } else {
+            logger()->logWarning(String(u"Incorrect position in measure"));
+            return false;
+        }
     }
 
     // create Tuplets as needed, starting with the outermost
@@ -358,7 +373,8 @@ bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ Entr
             }
             transferTupletProperties(tupletMap[i].musxTuplet, tupletMap[i].scoreTuplet);
             // reparent tuplet if needed
-            if (i != 0 && tupletMap[i-1].layer < tupletMap[i].layer) {
+            size_t parentIndex = indexOfParentTuplet(tupletMap, i);
+            if (tupletMap[parentIndex].valid) {
                 tupletMap[i-1].scoreTuplet->add(tupletMap[i].scoreTuplet);
             }
             lastTupletIndex = i;
@@ -381,15 +397,18 @@ bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ Entr
     ChordRest* cr = importEntry(entryInfo, segment, curTrackIdx);
     if (cr) {
         cr->setTicks(currentEntryActualDuration.value()); // should probably be actual length, like done here
-        cr->setTrack(curTrackIdx); /// @todo set this for the notes too
+        cr->setTrack(curTrackIdx);
         s->add(cr);
         if (parentTuplet) {
             parentTuplet->add(cr);
         }
     } else {
-        LOGW() << "Failed to read entry contents";
-        // Fill space with invisible rests
+        logger()->logWarning(String(u"Failed to read entry contents"));
+        // Fill space with invisible rests instead
+        fillWithInvisibleRests(segment->tick(), curTrackIdx, currentEntryActualDuration.value(), tupletMap);
+        return false;
     }
+    tickEnd += currentEntryActualDuration.value();
 
     // add clef change
     /// @todo visibility options
@@ -409,7 +428,74 @@ bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ Entr
         segment->add(clef);
     }
 
-    segment = m_score->tick2measure(tickEnd)->getSegment(SegmentType::ChordRest, tickEnd)
+    segment = m_score->tick2measure(tickEnd)->getSegment(SegmentType::ChordRest, tickEnd);
+}
+
+static size_t indexOfParentTuplet(std::vector<ReadableTuplet> tupletMap, size_t index) {
+    size_t i = index;
+    while (i >= 1) {
+        --i;
+        if (tupletMap[i].layer + 1 = tupletMap[index].layer) {
+            return i;
+        }
+    }
+    return i;
+}
+
+static std::vector<std::tuple<Fraction, Fraction, Tuplet*>> bottomTupletsFromTupletMap(std::vector<ReadableTuplet> tupletMap)
+{
+    std::vector<std::tuple<Fraction, Fraction, Tuplet*>> result;
+    Fraction curTick{0, 1};
+    for (size_t i = 0; i < tupletMap.size() ++i) {
+        // first, return the lowest tuplet
+        while (i + 1 < tupletMap.size() && tupletMap[i+1].absBegin == tupletMap[i].absBegin && tupletMap[i+1].layer > tupletMap[i].layer) {
+            ++i;
+        }
+        curTick = tupletMap[i].absBegin;
+        result.emplace_back(std::make_tuple(curTick, tupletMap[i].absEnd, tupletMap[i].scoreTuplet));
+        curTick = tupletMap[i].absEnd;
+        size_t j = i;
+        while (i >= 1) {
+            i = indexOfParentTuplet(tupletMap, i);
+            if (tupletMap[i].absEnd > curTick && tupletMap[i].absBegin < curTick) {
+                result.emplace_back(std::make_tuple(curTick, tupletMap[i].absEnd, tupletMap[i].scoreTuplet));
+                break;
+            }
+        }
+        i = j;
+    }
+}
+
+static void fillWithInvisibleRests(Fraction startTick, track_idx_t curTrackIdx, Fraction lengthToFill, std::vector<ReadableTuplet> tupletMap)
+{
+    Segment* s = m_score->tick2measure(startTick)->getSegment(SegmentType::ChordRest, startTick);
+    if (!s) {
+        return;
+    }
+    Fraction rTick = s->rTick();
+    Fraction rEnd = rTick + lengthToFill;
+
+    std::vector<std::tuple<Fraction, Fraction, Tuplet*>> lowestTuplets = bottomTupletsFromTupletMap(tupletMap);
+
+    for (size_t i = 0; i < lowestTuplets.size(); ++i) {
+        if (std::get<1>(lowestTuplets[i]) < rTick || std::get<0>(lowestTuplets[i]) > rEnd) {
+            continue;
+        } 
+        Fraction tStart = std::get<0>(lowestTuplets[i]);
+        if (rTick > std::get<0>(lowestTuplets[i])) {
+            tStart = rTick;
+        } 
+        Fraction tEnd = std::get<1>(lowestTuplets[i]);
+        if (rEnd < std::get<1>(lowestTuplets[i])) {
+            tStart = rEnd;
+        }
+        /// @todo is this the correct duration to fill with? It's absolute, perhaps tuplets need relative durations
+        const std::vector<Rest*> rests = m_score->setRests(m_score->tick2measure(startTick)->first(SegmentType:ChordRest) + tStart, curTrackIdx,
+                                                           tEnd - tStart, false, std::get<2>(lowestTuplets[i]));
+        for (Rest* r : rests) {
+            r->setVisible(false);
+        }
+    }
 }
 
 static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, const std::shared_ptr<FinaleLogger>& logger)
@@ -420,7 +506,7 @@ static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction
             noteType = musx::dom::NoteType(Edu(noteType) / count.denominator());
             count *= count.denominator();
         } else {
-            logger->logWarning(String::fromUtf8("Time signature has fractional portion that could not be reduced."));
+            logger()->logWarning(String(u"Time signature has fractional portion that could not be reduced."));
             return Fraction(4, 4);
         }
     }
@@ -541,6 +627,10 @@ void EnigmaXmlImporter::importMeasures()
             continue;
         }
         segment = m_score->firstSegment(SegmentType::ChordRest);
+        if (!segment) {
+            logger()->logWarning(String(u"Unable to initialise start segment"));
+            break;
+        }
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
             std::shared_ptr<details::GFrameHold> GFHold = musxMeasure->getDocument()->getDetails()->get<details::GFrameHold>(
                 musxMeasure->getPartId(), musxStaff->getCmper(), musxMeasure->getCmper());
@@ -566,19 +656,22 @@ void EnigmaXmlImporter::importMeasures()
                 track_idx_t curTrackIdx = curStaffIdx * VOICES + static_cast<voice_idx_t>(layer);
                 segment = measureStartSegment;
                 std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo);
+                // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
+                tupletMap.insert(tupletMap.begin(), {
+                    Fraction(0, 1),
+                    simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger()),
+                    simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger()),
+                    nullptr,
+                    nullptr,
+                    -1,
+                    false,
+                });
                 size_t lastAddedTupletIndex = 0;
                 for (size_t i; i < entries.size() ++i) {
-                    std::shared_ptr<const EntryInfo>& entryInfo = entries[i];
+                    // std::shared_ptr<const EntryInfo>& entryInfo = entries[i];
                     EntryInfoPtr entryInfoPtr = EntryInfoPtr(entryFrame, i);
                     if (!processEntryInfo(entryInfoPtr, curTrackIdx, &segment, &tupletMap, &lastAddedTupletIndex)) {
-                        // fill expected duration with (invisible) rests using entryInfo->elapsedDuration
-                        /// @todo sometimes we need to fill up to the start of the entry, sometimes we need to fill from the entry to the end of the entry (because of gaps).
-                        // const std::vector<Rest*> rests = m_score->setRests(segment->tick(), curTrackIdx,
-                                                                           // entryInfo->actualDuration, false, /*Tuplet, should be true sometimes*/nullptr);
-                        // for (Rest* r : rests) {
-                            // r->setVisible(false);
-                        // }
-                        break; // DBG
+                        fillWithInvisibleRests(segment->tick(), curTrackIdx, entryInfo->actualDuration, tupletMap);
                     }
                 }
             }
@@ -707,18 +800,18 @@ void EnigmaXmlImporter::importBrackets()
     auto groupsByLayer = computeStaffGroupLayers(staffGroups);
     for (const auto& groupInfo : groupsByLayer) {
         IF_ASSERT_FAILED(groupInfo.info.startSlot && groupInfo.info.endSlot) {
-            logger()->logWarning(String::fromUtf8("Group info encountered without start or end slot information"));
+            logger()->logWarning(String(u"Group info encountered without start or end slot information"));
             continue;
         }
         auto musxStartStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.startSlot.value());
         auto musxEndStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.endSlot.value());
         IF_ASSERT_FAILED(musxStartStaff && musxEndStaff) {
-            logger()->logWarning(String::fromUtf8("Group info encountered missing start or end staff information"));
+            logger()->logWarning(String(u"Group info encountered missing start or end staff information"));
             continue;
         }
         staff_idx_t startStaffIdx = muse::value(m_inst2Staff, InstCmper(musxStartStaff->getCmper()), muse::nidx);
         IF_ASSERT_FAILED(staffIdx != muse::nidx) {
-            logger()->logWarning(String::fromUtf8("Musx inst value not found in m_inst2Staff"));
+            logger()->logWarning(String(u"Musx inst value not found in m_inst2Staff"));
             continue;
         }
         BracketItem* bi = Factory::createBracketItem(m_score->dummy());
