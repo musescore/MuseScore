@@ -355,7 +355,7 @@ void GuitarPro6::unhandledNode(String nodeName)
 XmlDomNode GuitarPro6::getNode(const String& id, XmlDomNode currentDomNode)
 {
     while (!(currentDomNode).isNull()) {
-        String currentId = currentDomNode.attribute("id");
+        String currentId = currentDomNode.toElement().attribute("id").value();
         if (currentId == id) {
             return currentDomNode;
         }
