@@ -73,6 +73,7 @@ void EnigmaXmlImporter::import()
     importParts();
     importBrackets();
     importMeasures();
+    importStyles(m_score->style(), SCORE_PARTID); /// @todo do this for all excerpts
 }
 
 static std::optional<ClefTypeList> clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
@@ -411,7 +412,7 @@ bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ Entr
     segment = m_score->tick2measure(tickEnd)->getSegment(SegmentType::ChordRest, tickEnd)
 }
 
-static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, const FinaleLogger& logger)
+static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, const std::shared_ptr<FinaleLogger>& logger)
 {
     auto [count, noteType] = simpleMusxTimeSig;
     if (count.remainder()) {
@@ -419,7 +420,7 @@ static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction
             noteType = musx::dom::NoteType(Edu(noteType) / count.denominator());
             count *= count.denominator();
         } else {
-            logger.logWarning(String::fromUtf8("Time signature has fractional portion that could not be reduced."));
+            logger->logWarning(String::fromUtf8("Time signature has fractional portion that could not be reduced."));
             return Fraction(4, 4);
         }
     }
@@ -485,7 +486,6 @@ void EnigmaXmlImporter::importMeasures()
     m_score->sigmap()->add(0, currTimeSig);
 
     std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(SCORE_PARTID);
-    // int counter = 0; // DBG
     for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
         Fraction tick{ 0, 1 };
         Measure* lastMeasure = m_score->measures()->last();
@@ -707,18 +707,18 @@ void EnigmaXmlImporter::importBrackets()
     auto groupsByLayer = computeStaffGroupLayers(staffGroups);
     for (const auto& groupInfo : groupsByLayer) {
         IF_ASSERT_FAILED(groupInfo.info.startSlot && groupInfo.info.endSlot) {
-            logger().logWarning(String::fromUtf8("Group info encountered without start or end slot information"));
+            logger()->logWarning(String::fromUtf8("Group info encountered without start or end slot information"));
             continue;
         }
         auto musxStartStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.startSlot.value());
         auto musxEndStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.endSlot.value());
         IF_ASSERT_FAILED(musxStartStaff && musxEndStaff) {
-            logger().logWarning(String::fromUtf8("Group info encountered missing start or end staff information"));
+            logger()->logWarning(String::fromUtf8("Group info encountered missing start or end staff information"));
             continue;
         }
         staff_idx_t startStaffIdx = muse::value(m_inst2Staff, InstCmper(musxStartStaff->getCmper()), muse::nidx);
         IF_ASSERT_FAILED(staffIdx != muse::nidx) {
-            logger().logWarning(String::fromUtf8("Musx inst value not found in m_inst2Staff"));
+            logger()->logWarning(String::fromUtf8("Musx inst value not found in m_inst2Staff"));
             continue;
         }
         BracketItem* bi = Factory::createBracketItem(m_score->dummy());

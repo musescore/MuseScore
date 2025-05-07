@@ -30,6 +30,7 @@
 #include <QFileInfo>
 
 #include "musx/musx.h"
+#include "third_party/musx/TinyXmlImpl.h"
 
 #include "global/io/file.h"
 #include "global/serialization/zipreader.h"
@@ -129,7 +130,7 @@ Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
     logger->setLoggingLevel(FinaleLogger::Level::MUSX_TRACE); // for now
 
     try {
-        auto doc = musx::factory::DocumentFactory::create<musx::xml::qt::Document>(data.constChar(), data.size());
+        const std::shared_ptr<musx::dom::Document>& doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(data.constChar(), data.size());
 
         data.clear(); // free up data now that it isn't needed
 

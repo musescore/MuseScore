@@ -34,8 +34,8 @@ public:
     static engraving::DurationType noteTypeToDurationType(musx::dom::NoteType noteType);
     static engraving::ClefType toMuseScoreClefType(musx::dom::ClefIndex clef);
     static engraving::String instrTemplateIdfromUuid(std::string uuid);
-    static engraving::BracketType toMuseScoreBracketType(musx::dom::details::StaffGroup::BracketStyle bracketStyle);  
-    static engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle);	
+    static engraving::BracketType toMuseScoreBracketType(musx::dom::details::StaffGroup::BracketStyle bracketStyle);
+    static engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle);
 };
 
 }

@@ -25,7 +25,9 @@
 #include <unordered_map>
 #include <memory>
 
-#include "engraving/engravingerrors.h"
+
+// #include "engraving/engravingerrors.h"
+#include "style/style.h"
 
 #include "musx/musx.h"
 
@@ -61,18 +63,19 @@ public:
     const engraving::Score* score() const { return m_score; }
     std::shared_ptr<musx::dom::Document> musxDocument() const { return m_doc; }
 
-    FinaleLogger& logger() const { return *m_logger; }
+    std::shared_ptr<FinaleLogger> logger() const { return m_logger; }
 
 private:
     void importParts();
     void importMeasures();
     void importBrackets();
-
-    engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
-                                  const engraving::InstrumentTemplate* it = nullptr);
+    void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);
 
     bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx,
                           Segment** segment, std::vector<ReadableTuplet> tupletMap, size_t* lastAddedTupletIndex);
+
+    engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
+                                  const engraving::InstrumentTemplate* it = nullptr);
 
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
