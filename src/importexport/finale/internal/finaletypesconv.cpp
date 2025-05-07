@@ -35,6 +35,17 @@ using namespace muse;
 using namespace musx::dom;
 
 namespace mu::iex::finale {
+
+ID createPartId(int partNumber)
+{
+    return "P" + std::to_string(partNumber);
+}
+
+ID createStaffId(musx::dom::InstCmper staffId)
+{
+    return std::to_string(staffId);
+}
+
 DurationType FinaleTConv::noteTypeToDurationType(musx::dom::NoteType noteType)
 {
     static const std::unordered_map<musx::dom::NoteType, DurationType> noteTypeTable = {
