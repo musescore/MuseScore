@@ -41,7 +41,6 @@ public:
     static engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle);
     static engraving::Align justifyToAlignment(musx::dom::others::NamePositioning::AlignJustify alignJustify);
     static engraving::CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines);
-
 };
 
 }

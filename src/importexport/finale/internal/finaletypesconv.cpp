@@ -36,12 +36,12 @@ using namespace musx::dom;
 
 namespace mu::iex::finale {
 
-ID createPartId(int partNumber)
+ID FinaleTConv::createPartId(int partNumber)
 {
     return "P" + std::to_string(partNumber);
 }
 
-ID createStaffId(musx::dom::InstCmper staffId)
+ID FinaleTConv::createStaffId(musx::dom::InstCmper staffId)
 {
     return std::to_string(staffId);
 }
@@ -928,7 +928,7 @@ BracketType FinaleTConv::toMuseScoreBracketType(details::StaffGroup::BracketStyl
     return muse::value(bracketTypeTable, bracketStyle, BracketType::NO_BRACKET);
 }
 
-TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle)
+TupletNumberType FinaleTConv::toMuseScoreTupletNumberType(options::TupletOptions::NumberStyle numberStyle)
 {
     using MusxTupletNumberType = options::TupletOptions::NumberStyle;
     static const std::unordered_map<MusxTupletNumberType, TupletNumberType> tupletNumberTypeTable = {
@@ -941,7 +941,7 @@ TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::
     return muse::value(tupletNumberTypeTable, numberStyle, TupletNumberType::SHOW_NUMBER);
 }
 
-Align justifyToAlignment(others::NamePositioning::AlignJustify alignJustify)
+Align FinaleTConv::justifyToAlignment(others::NamePositioning::AlignJustify alignJustify)
 {
     static const std::unordered_map<others::NamePositioning::AlignJustify, Align> alignTable = {
         { others::NamePositioning::AlignJustify::Left,   Align(AlignH::LEFT, AlignV::VCENTER) },
@@ -951,7 +951,7 @@ Align justifyToAlignment(others::NamePositioning::AlignJustify alignJustify)
     return muse::value(alignTable, alignJustify, Align(AlignH::HCENTER, AlignV::VCENTER));
 }
 
-CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines);
+CourtesyBarlineMode FinaleTConv::boolToCourtesyBarlineMode(bool useDoubleBarlines)
 {
     static const std::unordered_map<bool, CourtesyBarlineMode> courtesyBarlineModeTable = {
         { false, CourtesyBarlineMode::ALWAYS_SINGLE },
