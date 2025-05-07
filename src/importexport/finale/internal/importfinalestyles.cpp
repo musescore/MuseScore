@@ -23,6 +23,7 @@
 #include "dom/types.h"
 #include "internal/importfinalelogger.h"
 #include "internal/importfinalescoremap.h"
+#include "internal/finaletypesconv.h"
 #include "musx/musx.h"
 
 using namespace mu::engraving;
@@ -367,8 +368,9 @@ void writeLineMeasurePrefs(MStyle& style, const FinalePreferences& prefs)
     style.set(Sid::genCourtesyKeysig, prefs.keyOptions->cautionaryKeyChanges);
     style.set(Sid::genCourtesyClef, prefs.clefOptions->cautionaryClefChanges);
 
-    style.set(Sid::keySigCourtesyBarlineMode, int(prefs.barlineOptions->drawDoubleBarlineBeforeKeyChanges));
-    style.set(Sid::timeSigCourtesyBarlineMode, 0);  // Hard-coded as 0 in Finale
+    style.set(Sid::keySigCourtesyBarlineMode,
+              int(FinaleTConv::boolToCourtesyBarlineMode(prefs.barlineOptions->drawDoubleBarlineBeforeKeyChanges)));
+    style.set(Sid::timeSigCourtesyBarlineMode, int(CourtesyBarlineMode::ALWAYS_SINGLE));  // Hard-coded as 0 in Finale
     style.set(Sid::hideEmptyStaves, !prefs.forPartId);
 }
 
@@ -387,6 +389,7 @@ void writeMusicSpacingPrefs(MStyle& style, const FinalePreferences& prefs)
     style.set(Sid::minMeasureWidth, prefs.musicSpacing->minWidth / EVPU_PER_SPACE);
     style.set(Sid::minNoteDistance, prefs.musicSpacing->minDistance / EVPU_PER_SPACE);
     style.set(Sid::measureSpacing, prefs.musicSpacing->scalingFactor);
+    /// @todo find a conversion for note distance to tie length.
     style.set(Sid::minTieLength, prefs.musicSpacing->minDistTiedNotes / EVPU_PER_SPACE);
 }
 
@@ -405,6 +408,8 @@ void writeNoteRelatedPrefs(MStyle& style, const FinalePreferences& prefs)
     style.set(Sid::dotMag, museMagVal(prefs, options::FontOptions::FontType::AugDots));
     style.set(Sid::dotNoteDistance, prefs.augDotOptions->dotNoteOffset / EVPU_PER_SPACE);
     style.set(Sid::dotRestDistance, prefs.augDotOptions->dotNoteOffset / EVPU_PER_SPACE); // Same value as dotNoteDistance
+    /// @todo Finale's value is calculated relative to the rightmost point of the previous dot, MuseScore the leftmost.(Observed behavior)
+    /// We need to add on the symbol width of one dot for the correct value.
     style.set(Sid::dotDotDistance, prefs.augDotOptions->dotOffset / EVPU_PER_SPACE);
     style.set(Sid::articulationMag, museMagVal(prefs, options::FontOptions::FontType::Articulation));
     style.set(Sid::graceNoteMag, prefs.graceOptions->gracePerc / 100.0);
@@ -432,6 +437,7 @@ void writeSmartShapePrefs(MStyle& style, const FinalePreferences& prefs)
     style.set(Sid::tieEndWidth, prefs.tieOptions->tieTipWidth / EVPU_PER_SPACE);
     style.set(Sid::tieDottedWidth, prefs.smartShapeOptions->smartLineWidth / EFIX_PER_SPACE);
     style.set(Sid::tiePlacementSingleNote, prefs.tieOptions->useOuterPlacement ? TiePlacement::OUTSIDE : TiePlacement::INSIDE);
+	// Note: Finale's 'outer placement' for notes within chords is much closer to inside placement. But outside placement is closer overall.
     style.set(Sid::tiePlacementChord, prefs.tieOptions->useOuterPlacement ? TiePlacement::OUTSIDE : TiePlacement::INSIDE);
 
     // Ottava settings
@@ -560,17 +566,7 @@ void writeTupletPrefs(MStyle& style, const FinalePreferences& prefs)
         break;
     }
 
-    switch (tupletOptions->numStyle) {
-    case TupletOptions::NumberStyle::Nothing:
-        style.set(Sid::tupletNumberType, int(TupletNumberType::NO_TEXT));
-        break;
-    case TupletOptions::NumberStyle::Number:
-        style.set(Sid::tupletNumberType, int(TupletNumberType::SHOW_NUMBER));
-        break;
-    default:
-        style.set(Sid::tupletNumberType, int(TupletNumberType::SHOW_RELATION));
-        break;
-    }
+    style.set(Sid::tupletNumberType, int(FinaleTConv::toMuseScoreTupletNumberType(tupletOptions->numStyle)));
 
     if (tupletOptions->brackStyle == TupletOptions::BracketStyle::Nothing) {
         style.set(Sid::tupletBracketType, int(TupletBracketType::SHOW_NO_BRACKET));
@@ -634,24 +630,14 @@ void writeMarkingPrefs(MStyle& style, const FinalePreferences& prefs)
     if (!fullPosition) {
         throw std::invalid_argument("unable to find default full name positioning for staves");
     }
-    auto justifyToAlignment = [](const std::shared_ptr<others::NamePositioning>& position) -> Align {
-        switch (position->justify) {
-        case others::NamePositioning::AlignJustify::Left:
-            return Align(AlignH::LEFT, AlignV::VCENTER);
-        case others::NamePositioning::AlignJustify::Right:
-            return Align(AlignH::RIGHT, AlignV::VCENTER);
-        default:
-            return Align(AlignH::HCENTER, AlignV::VCENTER);
-        }
-    };
-    style.set(Sid::longInstrumentAlign, justifyToAlignment(fullPosition));
+    style.set(Sid::longInstrumentAlign, FinaleTConv::justifyToAlignment(fullPosition->justify));
 
     writeDefaultFontPref(style, prefs, "shortInstrument", FontType::AbbrvStaffNames);
     const auto abbreviatedPosition = prefs.staffOptions->namePosAbbrv;
     if (!abbreviatedPosition) {
         throw std::invalid_argument("unable to find default abbreviated name positioning for staves");
     }
-    style.set(Sid::shortInstrumentAlign, justifyToAlignment(abbreviatedPosition));
+    style.set(Sid::shortInstrumentAlign, FinaleTConv::justifyToAlignment(abbreviatedPosition->justify));
 
     writeDefaultFontPref(style, prefs, "partInstrument", FontType::StaffNames);
     writeCategoryTextFontPref(style, prefs, "dynamics", CategoryType::Dynamics);

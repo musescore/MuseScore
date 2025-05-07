@@ -930,4 +930,23 @@ TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::
     return muse::value(tupletNumberTypeTable, numberStyle, TupletNumberType::SHOW_NUMBER);
 }
 
+Align justifyToAlignment(others::NamePositioning::AlignJustify alignJustify)
+{
+    static const std::unordered_map<others::NamePositioning::AlignJustify, Align> alignTable = {
+        { others::NamePositioning::AlignJustify::Left,   Align(AlignH::LEFT, AlignV::VCENTER) },
+        { others::NamePositioning::AlignJustify::Right,  Align(AlignH::RIGHT, AlignV::VCENTER) },
+        { others::NamePositioning::AlignJustify::Center, Align(AlignH::HCENTER, AlignV::VCENTER) },
+    };
+    return muse::value(alignTable, alignJustify, Align(AlignH::HCENTER, AlignV::VCENTER));
+}
+
+CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines);
+{
+    static const std::unordered_map<bool, CourtesyBarlineMode> courtesyBarlineModeTable = {
+        { false, CourtesyBarlineMode::ALWAYS_SINGLE },
+        { true,  CourtesyBarlineMode::ALWAYS_DOUBLE },
+    };
+    return muse::value(courtesyBarlineModeTable, useDoubleBarlines, CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY);
+}
+
 }
