@@ -412,57 +412,10 @@ void RestLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staff
 
 void RestLayout::alignRests(const System* system, LayoutContext& ctx)
 {
-    using RestGroup = std::vector<Rest*>;
-    using RestGroups = std::vector<RestGroup>;
-
-    RestGroups restGroups;
-
-    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        for (const MeasureBase* mb : system->measures()) {
-            if (!(mb->isMeasure() && toMeasure(mb)->hasVoices(staffIdx))) {
-                continue;
-            }
-
-            const Measure* measure = toMeasure(mb);
-
-            track_idx_t sTrack = staffIdx * VOICES;
-            track_idx_t eTrack = sTrack + VOICES;
-
-            std::vector<Fraction> voiceInterruptionPoints;
-            for (const Segment* segment = measure->last(SegmentType::ChordRest); segment; segment = segment->prev(SegmentType::ChordRest)) {
-                for (track_idx_t track = sTrack; track < eTrack; ++track) {
-                    EngravingItem* item = segment->element(track);
-                    if (item && item->isRest() && toRest(item)->isGap()) {
-                        voiceInterruptionPoints.push_back(segment->rtick() + segment->ticks());
-                        voiceInterruptionPoints.push_back(segment->rtick());
-                        break;
-                    }
-                }
-            }
-
-            for (track_idx_t track = sTrack; track < eTrack; ++track) {
-                restGroups.push_back(RestGroup());
-                for (const Segment* segment = measure->first(SegmentType::ChordRest); segment;
-                     segment = segment->next(SegmentType::ChordRest)) {
-                    if (voiceInterruptionPoints.size() > 0 && segment->rtick() >= voiceInterruptionPoints.back()) {
-                        restGroups.push_back(RestGroup());
-                        voiceInterruptionPoints.pop_back();
-                    }
-                    EngravingItem* item = segment->element(track);
-                    if (!(item && item->isRest() && item->visible())) {
-                        continue;
-                    }
-                    Rest* rest = toRest(item);
-                    if (rest->staffMove() == 0 && !rest->isGap() && rest->alignWithOtherRests()) {
-                        restGroups.back().push_back(rest);
-                    }
-                }
-            }
-        }
-    }
+    RestGroups restGroups = computeRestGroups(system, ctx);
 
     for (RestGroup& group : restGroups) {
-        if (group.size() == 0) {
+        if (group.size() <= 1) {
             continue;
         }
 
@@ -491,6 +444,129 @@ void RestLayout::alignRests(const System* system, LayoutContext& ctx)
             }
         }
     }
+}
+
+RestGroups RestLayout::computeRestGroups(const System* system, LayoutContext& ctx)
+{
+    RestGroups restGroups;
+
+    for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+        for (const MeasureBase* mb : system->measures()) {
+            if (!(mb->isMeasure() && toMeasure(mb)->hasVoices(staffIdx))) {
+                continue;
+            }
+
+            const Measure* measure = toMeasure(mb);
+            track_idx_t sTrack = staff2track(staffIdx);
+
+            InterruptionPoints interruptionPoints = computeInterruptionPoints(measure, staffIdx);
+
+            for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+                restGroups.push_back(RestGroup());
+
+                std::list<Fraction>& interruptionPointsOnThisVoice = interruptionPoints[voice];
+                track_idx_t track = sTrack + voice;
+
+                for (const Segment* segment = measure->first(SegmentType::ChordRest); segment;
+                     segment = segment->next(SegmentType::ChordRest)) {
+                    if (interruptionPointsOnThisVoice.size() > 0 && segment->rtick() >= interruptionPointsOnThisVoice.front()) {
+                        restGroups.push_back(RestGroup());
+                        interruptionPointsOnThisVoice.pop_front();
+                    }
+
+                    EngravingItem* item = segment->element(track);
+                    if (!(item && item->isRest() && item->visible())) {
+                        continue;
+                    }
+                    Rest* rest = toRest(item);
+                    if (rest->staffMove() == 0 && !rest->isGap() && rest->alignWithOtherRests()) {
+                        restGroups.back().push_back(rest);
+                    }
+                }
+            }
+        }
+    }
+
+    return restGroups;
+}
+
+InterruptionPoints RestLayout::computeInterruptionPoints(const Measure* measure, staff_idx_t staffIdx)
+{
+    // Start with sets to get automatic uniqueness and ordering
+    std::array<std::set<Fraction>, VOICES> interruptionPointSets;
+
+    track_idx_t sTrack = staffIdx * VOICES;
+    track_idx_t eTrack = sTrack + VOICES;
+
+    // Gap rests interrupt all voices
+    for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+        for (track_idx_t track = sTrack; track < eTrack; ++track) {
+            EngravingItem* item = segment->element(track);
+            if (item && item->isRest() && toRest(item)->isGap()) {
+                for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+                    interruptionPointSets[voice].insert(segment->rtick());
+                    interruptionPointSets[voice].insert(segment->rtick() + segment->ticks());
+                }
+                break;
+            }
+        }
+    }
+
+    auto interruptHere = [&](ChordRest* chordRest) {
+        Fraction crTicks = chordRest->ticks();
+        if (crTicks > Fraction(1, 8)) {
+            return true;
+        }
+
+        BeamMode beamModeChordRest = Groups::endBeam(chordRest);
+        switch (beamModeChordRest) {
+        case BeamMode::BEGIN:
+            // Beam certainly starts here
+            return true;
+        case BeamMode::BEGIN16:
+        case BeamMode::BEGIN32:
+        case BeamMode::MID:
+        case BeamMode::END:
+            // Beam certainly doesn not start here
+            return false;
+        default:
+            break;
+        }
+
+        // If BeamMode is AUTO or NONE check measure beaming
+        const Groups& groups = chordRest->staff()->group(chordRest->tick());
+        BeamMode beamModeMeasure = groups.beamMode(chordRest->rtick().ticks(), chordRest->durationType().type());
+        return beamModeMeasure == BeamMode::BEGIN;
+    };
+
+    // Compute voice-spefic interruptions
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+        track_idx_t track = sTrack + voice;
+        for (const Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+            if (ChordRest* thisCR = toChordRest(segment->element(track))) {
+                if (thisCR->isRest()) {
+                    const Segment* prevSegment = segment->prevWithElementsOnTrack(track);
+                    bool hasAdjacentRest = prevSegment && prevSegment->element(track)->isRest();
+                    if (hasAdjacentRest) {
+                        continue;
+                    }
+                }
+                if (interruptHere(thisCR)) {
+                    interruptionPointSets[voice].insert(segment->rtick());
+                }
+            } else {
+            }
+        }
+    }
+
+    // Convert sets to lists
+    InterruptionPoints interruptionPoints;
+    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+        const std::set<Fraction>& set = interruptionPointSets[voice];
+        interruptionPoints[voice] = std::list(set.begin(), set.end());
+    }
+
+    return interruptionPoints;
 }
 
 void RestLayout::checkFullMeasureRestCollisions(const System* system, LayoutContext& ctx)
