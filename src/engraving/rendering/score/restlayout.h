@@ -32,6 +32,10 @@ class MMRest;
 }
 
 namespace mu::engraving::rendering::score {
+using RestGroup = std::vector<Rest*>;
+using RestGroups = std::vector<RestGroup>;
+using InterruptionPoints = std::array<std::list<Fraction>, VOICES>;
+
 class RestLayout
 {
 public:
@@ -55,5 +59,8 @@ private:
     static int computeWholeOrBreveRestOffset(const Rest* item, int voiceOffset, int lines);
 
     static void updateSymbol(const Rest* item, Rest::LayoutData* ldata);
+
+    static RestGroups computeRestGroups(const System* system, LayoutContext& ctx);
+    static InterruptionPoints computeInterruptionPoints(const Measure* measure, staff_idx_t staffIdx);
 };
 }
