@@ -81,6 +81,11 @@ void AbstractNotationPaintView::load()
 
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
+
+    // alex::
+    QObject::connect(m_playbackCursor.get(), SIGNAL(lingeringCursorUpdate(double, double, double, double)),
+                     this, SLOT(handleLingeringCursorUpdate(double, double, double, double)));
+
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(configuration()->thinNoteInputCursor());
     m_ruler = std::make_unique<NotationRuler>(iocContext());
@@ -114,6 +119,17 @@ void AbstractNotationPaintView::load()
     });
 
     scheduleRedraw();
+}
+
+void AbstractNotationPaintView::handleLingeringCursorUpdate(double x, double y, double width, double height) {
+    // std::cout << "x:: " << x << ", y:: " << y << ", width:: " << width << ", height:: " << height << std::endl;
+    if (playbackController()->isPlaying()) {
+        if (x <= 1) {
+            scheduleRedraw();
+        } else {
+            scheduleRedraw(muse::RectF(x, y, width, height));
+        }
+    }
 }
 
 void AbstractNotationPaintView::initBackground()
@@ -610,7 +626,7 @@ bool AbstractNotationPaintView::elementPopupIsOpen(const ElementType& elementTyp
 // second - invoke target notationpaintview::paint
 void AbstractNotationPaintView::paint(QPainter* qp)
 {
-    LOGALEX(); 
+    // LOGALEX(); 
     TRACEFUNC;
 
     RectF rect = RectF::fromQRectF(qp->clipBoundingRect());
@@ -1544,6 +1560,8 @@ void AbstractNotationPaintView::setPlaybackCursorItem(QQuickItem* cursor)
         m_playbackCursorItem->setVisible(playbackController()->isPlaying());
         m_playbackCursorItem->setEnabled(false); // ignore mouse & keyboard events
         m_playbackCursorItem->setProperty("color", configuration()->playbackCursorColor());
+
+
 
         connect(m_playbackCursorItem, &QObject::destroyed, this, [this]() {
             m_playbackCursorItem = nullptr;
