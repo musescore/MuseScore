@@ -520,7 +520,7 @@ void Selection::appendChord(Chord* chord)
         if (endElement && endElement->isNote()) {
             const Note* endNote = toNote(endElement);
             const Segment* endSeg = endNote->chord()->segment();
-            if (!endSeg || endSeg->tick() < tickEnd()) {
+            if (!endSeg || endSeg->tick() <= tickEnd()) {
                 for (SpannerSegment* spannerSeg : note->tieFor()->spannerSegments()) {
                     appendFiltered(spannerSeg);
                 }
@@ -533,7 +533,7 @@ void Selection::appendChord(Chord* chord)
             }
             const Note* endNote = toNote(sp->endElement());
             const Segment* endSeg = endNote->chord()->segment();
-            if (!endSeg || endSeg->tick() < tickEnd()) {
+            if (!endSeg || endSeg->tick() <= tickEnd()) {
                 if (sp->isGuitarBend()) {
                     appendGuitarBend(toGuitarBend(sp));
                     continue;
@@ -684,42 +684,38 @@ void Selection::updateSelectedElements()
             }
         }
     }
-    Fraction stick = tickStart();
-    Fraction etick = tickEnd();
+    const Fraction rangeStart = tickStart();
+    const Fraction rangeEnd = tickEnd();
 
+    //! NOTE: Ties are NOT handled in here - these are note anchored and handled in appendChord...
     for (auto i = m_score->spanner().begin(); i != m_score->spanner().end(); ++i) {
         Spanner* sp = (*i).second;
         // ignore spanners belonging to other tracks
         if (sp->track() < startTrack || sp->track() >= endTrack) {
             continue;
         }
-        if (!canSelectVoice(sp->track())) {
+
+        if (!canSelectVoice(sp->track()) || sp->isVolta()) {
             continue;
         }
-        // ignore voltas
-        if (sp->isVolta()) {
+
+        // ignore if start & end elements are not calculated yet, or if spanner is outside selection range
+        const bool isInRange = rangeStart < sp->tick2() && rangeEnd > sp->tick();
+        const bool startAndEndCalculated = sp->startElement() && sp->endElement();
+        if (!isInRange || !startAndEndCalculated) {
             continue;
         }
-        if (sp->isSlur() || sp->isHairpin() || sp->isOttava() || sp->isPedal() || sp->isTrill() || sp->isTextLine() || sp->isLetRing()
-            || sp->isPalmMute()) {
-            // ignore if start & end elements not calculated yet
-            if (!sp->startElement() || !sp->endElement()) {
-                continue;
+
+        const EngravingItem* startCR = sp->startCR();
+        const EngravingItem* endCR = sp->endCR();
+
+        const bool canSelectStart = sp->startElement()->isTimeTickAnchor() || sp->startElement()->isSegment() || canSelect(startCR);
+        const bool canSelectEnd = sp->endElement()->isTimeTickAnchor() || sp->endElement()->isSegment() || canSelect(endCR);
+
+        if (canSelectStart && canSelectEnd) {
+            for (auto seg : sp->spannerSegments()) {
+                appendFiltered(seg);
             }
-            if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() <= etick)) {
-                EngravingItem* startCR = sp->startCR();
-                EngravingItem* endCR = sp->endCR();
-                const bool canSelectStart
-                    = (sp->startElement()->isTimeTickAnchor() || sp->startElement()->isSegment() || canSelect(startCR));
-                const bool canSelectEnd = (sp->endElement()->isTimeTickAnchor() || sp->endElement()->isSegment() || canSelect(endCR));
-                if (canSelectStart && canSelectEnd) {
-                    for (auto seg : sp->spannerSegments()) {
-                        appendFiltered(seg);               // spanner with start or end in range selection
-                    }
-                }
-            }
-        } else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() <= etick)) {
-            appendFiltered(sp);       // spanner with start and end in range selection
         }
     }
     update();
