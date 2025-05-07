@@ -202,7 +202,7 @@ public:
     void setShowNut(bool val) { m_showNut = val; }
     double userMag() const { return m_userMag; }
     void setUserMag(double m) { m_userMag = m; }
-    int numPos() const { return m_numPos; }
+    int numPos() const;
 
     Orientation orientation() const { return m_orientation; }
 
@@ -309,7 +309,6 @@ private:
     Harmony* m_harmony = nullptr;
 
     double m_userMag = 1.0;                 // allowed 0.1 - 10.0
-    int m_numPos = 0;
 
     bool m_showFingering = false;
     std::vector<int> m_fingering = std::vector<int>(m_strings, 0);

@@ -1306,7 +1306,6 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         Pid::FRET_STRINGS,
         Pid::FRET_NUT,
         Pid::MAG,
-        Pid::FRET_NUM_POS,
         Pid::ORIENTATION,
         Pid::FRET_SHOW_FINGERINGS,
         Pid::FRET_FINGERING,
