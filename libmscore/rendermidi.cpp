@@ -475,13 +475,14 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
 
             double noteLen = note->playTicks();
             int lastPointTick = tick1;
+            int lastPitch = INT_MAX;
             for (int pitchIndex = 0; pitchIndex < pitchSize-1; pitchIndex++) {
                   PitchValue pitchValue = points[pitchIndex];
                   PitchValue nextPitch  = points[pitchIndex+1];
                   int nextPointTick = tick1 + nextPitch.time / 60.0 * noteLen;
                   int pitch = pitchValue.pitch;
 
-                  if (pitchIndex == 0 && (pitch == nextPitch.pitch)) {
+                  if (pitchIndex == 0 && (pitch == nextPitch.pitch) && (pitch != lastPitch)) {
                         int midiPitch = (pitch * 16384) / 1200 + 8192;
                         int msb = midiPitch / 128;
                         int lsb = midiPitch % 128;
@@ -489,6 +490,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
                         ev.setOriginatingStaff(staffIdx);
                         events->insert(std::pair<int, NPlayEvent>(lastPointTick, ev));
                         lastPointTick = nextPointTick;
+                        lastPitch = pitch;
                         continue;
                         }
                   if (pitch == nextPitch.pitch && !(pitchIndex == 0 && pitch != 0)) {
@@ -513,14 +515,17 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
                         double dx = ((i-lastPointTick) * 60) / noteLen;
                         int p = pitch + dx * pitchDelta / tickDelta;
 
-                        // We don't support negative pitch, but Midi does. Let's center by adding 8192.
-                        int midiPitch = (p * 16384) / 1200 + 8192;
-                        // Representing pitch as two bytes
-                        int msb = midiPitch / 128;
-                        int lsb = midiPitch % 128;
-                        NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
-                        ev.setOriginatingStaff(staffIdx);
-                        events->insert(std::pair<int, NPlayEvent>(i, ev));
+                        if (p != lastPitch) {
+                              // We don't support negative pitch, but Midi does. Let's center by adding 8192.
+                              int midiPitch = (p * 16384) / 1200 + 8192;
+                              // Representing pitch as two bytes
+                              int msb = midiPitch / 128;
+                              int lsb = midiPitch % 128;
+                              NPlayEvent ev(ME_PITCHBEND, channel, lsb, msb);
+                              ev.setOriginatingStaff(staffIdx);
+                              events->insert(std::pair<int, NPlayEvent>(i, ev));
+                              lastPitch = p;
+                              }
                         }
                   lastPointTick = nextPointTick;
                   }
