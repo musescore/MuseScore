@@ -109,7 +109,6 @@ public:
     Harmony* findNext() const;
     Harmony* findPrev() const;
     Fraction ticksTillNext(int utick, bool stopAtMeasureEnd = false) const;
-    Segment* getParentSeg() const;
 
     const ChordDescription* descr() const;
     const ChordDescription* descr(const String&, const ParsedChord* pc = 0) const;
@@ -119,9 +118,6 @@ public:
 
     RealizedHarmony& realizedHarmony();
     const RealizedHarmony& getRealizedHarmony() const;
-
-    void determineRootBassSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase, NoteSpellingType& bassSpelling,
-                                   NoteCaseType& bassCase);
 
     bool isEditable() const override { return !isInFretBox(); }
     void startEditTextual(EditData&) override;
@@ -149,11 +145,9 @@ public:
     const std::vector<TextSegment*>& textList() const { return m_textList; }
 
     void afterRead();
-    String harmonyName() const;
     void render();
 
-    const ChordDescription* parseHarmony(const String& s, int& root, int& bass, bool syntaxOnly = false);
-
+    String harmonyName() const;
     const String& extensionName() const;
 
     String xmlKind() const;
@@ -161,11 +155,10 @@ public:
     String xmlSymbols() const;
     String xmlParens() const;
     StringList xmlDegrees() const;
-
-    double baseLine() const override;
-
     const ChordDescription* fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&);
     const ChordDescription* fromXml(const String& s);
+
+    double baseLine() const override;
     void spatiumChanged(double oldValue, double newValue) override;
     void localSpatiumChanged(double oldValue, double newValue) override;
     void setHarmony(const String& s);
@@ -196,6 +189,8 @@ public:
 
 private:
 
+    const ChordDescription* parseHarmony(const String& s, int& root, int& bass, bool syntaxOnly = false);
+
     void determineRootBassSpelling();
 
     void render(const String&, double&, double&);
@@ -208,12 +203,12 @@ private:
 
     int m_rootTpc = Tpc::TPC_INVALID;               // root note for chord
     int m_bassTpc = Tpc::TPC_INVALID;               // bass note or chord bass; used for "slash" chords
-    // or notation of bass note in chord
+                                                    // or notation of bass note in chord
     int m_id = -1;                    // >0 = id of matched chord from chord list, if applicable
     // -1 = invalid chord
     // <-10000 = private id of generated chord or matched chord with no id
-    String m_function;          // numeric representation of root for RNA or Nashville
-    String m_userName;          // name as typed by user if applicable
+
+    String m_function;          // numeric representation of root for Nashville
     String m_textName;          // name recognized from chord list, read from score file, or constructed from imported source
     mutable ParsedChord* m_parsedForm = nullptr;   // parsed form of chord
     bool m_isMisspelled = false; // show spell check warning
