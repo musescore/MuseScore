@@ -1654,6 +1654,8 @@ void AbstractNotationPaintView::setPlaybackCursorItem(QQuickItem* cursor)
         m_playbackCursorItem->setEnabled(false); // ignore mouse & keyboard events
         m_playbackCursorItem->setProperty("color", configuration()->playbackCursorColor());
 
+
+
         connect(m_playbackCursorItem, &QObject::destroyed, this, [this]() {
             m_playbackCursorItem = nullptr;
         });
