@@ -22,20 +22,21 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+if (OS_IS_WASM)
+    set(QT_IS_STATIC ON)
+endif()
+
 set(qt_components
     Core
     Gui
     Widgets
     Network
-    NetworkAuth
     Qml
     Quick
     QuickControls2
     QuickWidgets
     Xml
     Svg
-    PrintSupport
-    LinguistTools
 
     Core5Compat
 )
@@ -45,26 +46,37 @@ set(QT_LIBRARIES
     Qt::Gui
     Qt::Widgets
     Qt::Network
-    Qt::NetworkAuth
     Qt::Qml
     Qt::Quick
     Qt::QuickControls2
     Qt::QuickWidgets
     Qt::Xml
     Qt::Svg
-    Qt::PrintSupport
 
     Qt::Core5Compat
 )
 
 if(NOT OS_IS_WASM)
-    list(APPEND qt_components Concurrent)
-    list(APPEND QT_LIBRARIES Qt::Concurrent)
+
+    list(APPEND qt_components NetworkAuth)
+    list(APPEND QT_LIBRARIES Qt::NetworkAuth)
+
+    list(APPEND qt_components PrintSupport)
+    list(APPEND QT_LIBRARIES Qt::PrintSupport)
 endif()
 
 if(OS_IS_LIN)
     list(APPEND qt_components DBus)
     list(APPEND QT_LIBRARIES Qt::DBus)
+endif()
+
+if (QT_ADD_CONCURRENT)
+    list(APPEND qt_components Concurrent)
+    list(APPEND QT_LIBRARIES Qt::Concurrent)
+endif()
+
+if (QT_ADD_LINGUISTTOOLS)
+    list(APPEND qt_components LinguistTools)
 endif()
 
 if (QT_ADD_STATEMACHINE)
@@ -82,3 +94,14 @@ endif()
 find_package(Qt6 6.2.4 REQUIRED COMPONENTS ${qt_components})
 
 include(QtInstallPaths)
+
+if (CC_IS_EMCC)
+    # see SetupBuildEnvironment.cmake
+    set_target_properties(Qt6::Platform PROPERTIES INTERFACE_LINK_OPTIONS "${EMCC_LINKER_FLAGS}")
+endif()
+
+if (QT_IS_STATIC)
+    qt_add_library(all_qml_plugins STATIC)
+    qt_import_qml_plugins(all_qml_plugins)
+    list(APPEND QT_LIBRARIES all_qml_plugins)
+endif()

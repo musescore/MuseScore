@@ -174,8 +174,9 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         restoreLastSession();
         break;
     case StartupModeType::StartWithScore: {
-        project::ProjectFile file
-            = m_startupScoreFile.isValid() ? m_startupScoreFile : project::ProjectFile(configuration()->startupScorePath());
+        project::ProjectFile file = m_startupScoreFile.isValid()
+                                    ? m_startupScoreFile
+                                    : project::ProjectFile(configuration()->startupScorePath());
         openScore(file);
     } break;
     }

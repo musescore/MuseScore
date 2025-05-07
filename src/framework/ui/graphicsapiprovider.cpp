@@ -63,6 +63,13 @@ static const std::vector<GraphicsApi > ALLOWED_APIS = {
 };
 #endif
 
+#ifdef Q_OS_WASM
+static const std::vector<GraphicsApi > ALLOWED_APIS = {
+    GraphicsApi::OpenGL,
+    GraphicsApi::Software
+};
+#endif
+
 static const std::vector<std::string> BAD_MESSAGES = {
     "Failed to build graphics pipeline state",
     "Failed to create RHI",

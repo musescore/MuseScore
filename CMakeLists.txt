@@ -122,6 +122,13 @@ option(MUE_ENABLE_ENGRAVING_LD_PASSES "Enable engraving layout by passes" OFF)
 # Setup Configure
 ###########################################
 
+# default
+set(QT_ADD_STATEMACHINE ON)
+set(QT_ADD_LINGUISTTOOLS ON)
+set(QT_ADD_CONCURRENT ON)
+set(QT_ADD_WEBSOCKET OFF)
+set(QT_QPROCESS_SUPPORTED ON)
+
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake")
     include(${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake)
 else()
@@ -152,11 +159,6 @@ if (MUE_COMPILE_MACOS_PRECOMPILED_DEPS_PATH)
     # These are included in the precompiled dependencies, so let's use them from there
     set(MUE_COMPILE_USE_SYSTEM_FLAC ON)
     set(MUE_COMPILE_USE_SYSTEM_OPUS ON)
-endif()
-
-set(QT_ADD_STATEMACHINE ON)
-if (MUSE_MODULE_NETWORK_WEBSOCKET)
-    set(QT_ADD_WEBSOCKET ON)
 endif()
 
 include(SetupQt6)
