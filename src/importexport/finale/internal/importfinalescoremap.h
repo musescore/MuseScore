@@ -72,7 +72,10 @@ private:
     void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);
 
     bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx,
-                          Segment** segment, std::vector<ReadableTuplet> tupletMap, size_t* lastAddedTupletIndex);
+                          Segment* segment, std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex);
+
+    void fillWithInvisibleRests(Fraction startTick, track_idx_t curTrackIdx, Fraction lengthToFill,
+                                std::vector<ReadableTuplet> tupletMap);
 
     engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
                                   const engraving::InstrumentTemplate* it = nullptr);
