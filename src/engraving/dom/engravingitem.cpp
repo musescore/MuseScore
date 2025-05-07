@@ -808,13 +808,6 @@ bool EngravingItem::hitShapeIntersects(const RectF& rr) const
     return hitShape().intersects(rr.translated(-pagePos()));
 }
 
-void EngravingItem::drawAt(muse::draw::Painter* p, const PointF& pt) const
-{
-    p->translate(pt);
-    renderer()->drawItem(this, p);
-    p->translate(-pt);
-}
-
 //---------------------------------------------------------
 //   remove
 ///   Remove \a el from the list. Return true on success.
@@ -863,20 +856,6 @@ Compound::Compound(const Compound& c)
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void Compound::draw(Painter* painter) const
-{
-    for (EngravingItem* e : m_elements) {
-        PointF pt(e->pos());
-        painter->translate(pt);
-        renderer()->drawItem(e, painter);
-        painter->translate(-pt);
-    }
-}
-
-//---------------------------------------------------------
 //   addElement
 //---------------------------------------------------------
 
@@ -889,16 +868,6 @@ void Compound::addElement(EngravingItem* e, double x, double y)
     e->setPos(x, y);
     e->setParent(this);
     m_elements.push_back(e);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Compound::layout()
-{
-    UNREACHABLE;
-    setbbox(RectF());
 }
 
 //---------------------------------------------------------
