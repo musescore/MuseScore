@@ -37,32 +37,9 @@
 
 #include "types/string.h"
 
-#include "engraving/dom/box.h"
-#include "engraving/dom/bracketItem.h"
-#include "engraving/dom/chord.h"
-#include "engraving/dom/chordlist.h"
-#include "engraving/dom/drumset.h"
-#include "engraving/dom/factory.h"
-#include "engraving/dom/harmony.h"
-#include "engraving/dom/instrument.h"
-#include "engraving/dom/instrtemplate.h"
-#include "engraving/dom/key.h"
-#include "engraving/dom/keysig.h"
-#include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/masterscore.h"
-#include "engraving/dom/measure.h"
-#include "engraving/dom/mscore.h"
-#include "engraving/dom/note.h"
-#include "engraving/dom/part.h"
-#include "engraving/dom/pitchspelling.h"
-#include "engraving/dom/rest.h"
-#include "engraving/dom/segment.h"
-#include "engraving/dom/slur.h"
-#include "engraving/dom/staff.h"
-#include "engraving/dom/text.h"
-#include "engraving/dom/tie.h"
-#include "engraving/dom/timesig.h"
-#include "engraving/dom/utils.h"
+// #include "engraving/dom/mscore.h"
+// #include "engraving/dom/utils.h"
 #include "engraving/engravingerrors.h"
 
 #include "log.h"
@@ -138,11 +115,11 @@ Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
         importer.import();
 
         score->setUpTempoMap(); //??
-        return engraving::Err::NoError;
+        return Err::NoError;
     } catch (const std::exception& ex) {
         logger->logError(String::fromUtf8(ex.what()));
     }
-    return engraving::Err::FileBadFormat;
+    return Err::FileBadFormat;
 }
 
 static bool extractScoreFile(const String& name, ByteArray& data)

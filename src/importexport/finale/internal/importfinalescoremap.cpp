@@ -153,7 +153,7 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     return s;
 }
 
-static ChordRest* importEntry(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ EntryInfoPtr entryInfo, Segment* segment, track_idx_t curTrackIdx, const std::shared_ptr<FinaleLogger>& logger)
+static ChordRest* importEntry(/*const std::shared_ptr<const EntryInfo>*/ EntryInfoPtr entryInfo, Segment* segment, track_idx_t curTrackIdx, const std::shared_ptr<FinaleLogger>& logger)
 {
     using MusxNote = musx::dom::Note;
 
@@ -369,7 +369,7 @@ void EnigmaXmlImporter::fillWithInvisibleRests(Fraction startTick, track_idx_t c
     }
 }
 
-bool EnigmaXmlImporter::processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ EntryInfoPtr entryInfo, track_idx_t curTrackIdx,
+bool EnigmaXmlImporter::processEntryInfo(/*const std::shared_ptr<const EntryInfo>*/ EntryInfoPtr entryInfo, track_idx_t curTrackIdx,
                                          Segment* segment, std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex)
 {
     std::optional<Fraction> currentEntryInfoStart = musxFractionToFraction(entryInfo->elapsedDuration);
@@ -395,16 +395,16 @@ bool EnigmaXmlImporter::processEntryInfo(/*const std::shared_ptr<const musx::dom
 
     Fraction tickEnd = segment->tick();
 
-    if (segment->rTick().reduced() < currentEntryInfoStart.value().reduced()) {
+    if (segment->rtick().reduced() < currentEntryInfoStart.value().reduced()) {
         // The entry starts further into the measure than expected (perfectly normal and caused by gaps)
         // Simply fill with invisible rests up to the starting point
-        Fraction tickDifference = currentEntryInfoStart.value() - segment->rTick();
+        Fraction tickDifference = currentEntryInfoStart.value() - segment->rtick();
         fillWithInvisibleRests(segment->tick(), curTrackIdx, tickDifference, tupletMap);
         tickEnd += tickDifference;
-    } else if (segment->rTick() > currentEntryInfoStart.value()) {
+    } else if (segment->rtick() > currentEntryInfoStart.value()) {
         // edge case: current entry is at the beginning of the measure
         /// @todo this method needs a different location. tuplet map is from the previous measure
-        Fraction tickDifference = segment->measure()->ticks() - segment->rTick();
+        Fraction tickDifference = segment->measure()->ticks() - segment->rtick();
         if (currentEntryInfoStart.value() == Fraction(0, 1)) {
             fillWithInvisibleRests(segment->tick(), curTrackIdx, tickDifference, tupletMap);
             tickEnd += tickDifference;
@@ -497,6 +497,7 @@ bool EnigmaXmlImporter::processEntryInfo(/*const std::shared_ptr<const musx::dom
     }
 
     segment = m_score->tick2measure(tickEnd)->getSegment(SegmentType::ChordRest, tickEnd);
+    return true;
 }
 
 static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, const std::shared_ptr<FinaleLogger>& logger)
@@ -524,14 +525,14 @@ static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::Tuple
         std::optional<Fraction> absBegin = musxFractionToFraction(tuplet.startDura);
         std::optional<Fraction> absDuration = musxFractionToFraction(tuplet.endDura - tuplet.startDura);
         std::optional<Fraction> absEnd = musxFractionToFraction(tuplet.endDura);
-        result.emplace_back({
-            absBegin.has_value() ? absBegin.value() : Fraction(-1, 1),
-            absDuration.has_value() ? absDuration.value() : Fraction(-1, 1),
-            absEnd.has_value() ? absEnd.value() : Fraction(-1, 1),
-            tuplet.tuplet,
-            nullptr,
-            0,
-            absBegin.has_value() && absDuration.has_value()
+        result.emplace_back(ReadableTuplet {
+            absBegin: (absBegin.has_value() ? absBegin.value() : Fraction(-1, 1)),
+            absDuration: (absDuration.has_value() ? absDuration.value() : Fraction(-1, 1)),
+            absEnd: (absEnd.has_value() ? absEnd.value() : Fraction(-1, 1)),
+            musxTuplet: tuplet.tuplet,
+            scoreTuplet: nullptr,
+            layer: 0,
+            valid: absBegin.has_value() && absDuration.has_value()
         });
     }
 
@@ -653,20 +654,20 @@ void EnigmaXmlImporter::importMeasures()
                 segment = measureStartSegment;
                 std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo);
                 // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
-                tupletMap.insert(tupletMap.begin(), {
-                    Fraction(0, 1),
-                    simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger()),
-                    simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger()),
-                    nullptr,
-                    nullptr,
-                    -1,
-                    false,
+                tupletMap.insert(tupletMap.begin(), ReadableTuplet {
+                    absBegin: Fraction(0, 1),
+                    absDuration: simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger()),
+                    absEnd: simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger()),
+                    musxTuplet: nullptr,
+                    scoreTuplet: nullptr,
+                    layer: -1,
+                    valid: false
                 });
                 size_t lastAddedTupletIndex = 0;
-                for (size_t i; i < entries.size(); ++i) {
+                for (size_t i = 0; i < entries.size(); ++i) {
                     // std::shared_ptr<const EntryInfo>& entryInfo = entries[i];
                     EntryInfoPtr entryInfoPtr = EntryInfoPtr(entryFrame, i);
-                    processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex));
+                    processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex);
                 }
             }
         }
@@ -810,7 +811,7 @@ void EnigmaXmlImporter::importBrackets()
         }
         BracketItem* bi = Factory::createBracketItem(m_score->dummy());
         bi->setBracketType(FinaleTConv::toMuseScoreBracketType(groupInfo.info.group->bracket->style));
-        int groupSpan = groupInfo.info.endSlot.value() - groupInfo.info.startSlot.value() + 1;
+        int groupSpan = int(groupInfo.info.endSlot.value() - groupInfo.info.startSlot.value() + 1);
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(groupInfo.layer));
         m_score->staff(startStaffIdx)->addBracket(bi);
