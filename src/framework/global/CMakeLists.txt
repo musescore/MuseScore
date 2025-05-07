@@ -239,7 +239,7 @@ if (CC_IS_MSVC)
     include(FindZlibStatic)
     set(Z_LIB zlibstat)
     set(Z_INCLUDE ${DEPENDENCIES_INC}/zlib)
-elseif (CC_IS_EMSCRIPTEN)
+elseif (CC_IS_EMCC)
     #zlib included in main linker
 else ()
     set(Z_LIB z)
