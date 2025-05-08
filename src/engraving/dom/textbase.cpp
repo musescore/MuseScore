@@ -3173,12 +3173,27 @@ void TextBase::initTextStyleType(TextStyleType tid, bool preserveDifferent)
 {
     if (!preserveDifferent) {
         initTextStyleType(tid);
-    } else {
-        setTextStyleType(tid);
-        for (const auto& p : *textStyle(tid)) {
-            if (getProperty(p.pid) == propertyDefault(p.pid)) {
-                setProperty(p.pid, styleValue(p.pid, p.sid));
-            }
+        return;
+    }
+
+    const LayoutData* ldata = this->ldata();
+    if (!ldata || ldata->layoutInvalid) {
+        createBlocks();
+    }
+
+    // Before setting the new style - check if any fragments contain custom formatting. If they do, preserve
+    // the old values for face, size, and style...
+    const bool hadCustomFragments = hasCustomFormatting();
+
+    setTextStyleType(tid);
+
+    for (const auto& p : *textStyle(tid)) {
+        const bool isFragmentStyle = p.pid == Pid::FONT_FACE || p.pid == Pid::FONT_SIZE || p.pid == Pid::FONT_STYLE;
+        if (isFragmentStyle && hadCustomFragments) {
+            continue;
+        }
+        if (getProperty(p.pid) == propertyDefault(p.pid)) {
+            setProperty(p.pid, styleValue(p.pid, p.sid));
         }
     }
 }

@@ -808,6 +808,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     l->setSyllabic(LyricsSyllabic::BEGIN);
                 }
                 l->setNo(v.num);
+                l->initTextStyleType(l->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
                 chord->add(l);
             }
 
