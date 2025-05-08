@@ -38,6 +38,7 @@
       <nashvilleNumberFontSize>11.9365</nashvilleNumberFontSize>
       <smallNoteMag>0.75</smallNoteMag>
       <graceNoteMag>0.6</graceNoteMag>
+      <hideInstrumentNameIfOneInstrument>0</hideInstrumentNameIfOneInstrument>
       <slurEndWidth>0.0625</slurEndWidth>
       <slurMidWidth>0.15625</slurMidWidth>
       <tieEndWidth>0.0625</tieEndWidth>
