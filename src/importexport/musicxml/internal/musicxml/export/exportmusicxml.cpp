@@ -3283,7 +3283,6 @@ static String symIdToTechn(const SymId sid)
     case SymId::brassSmear:
         return u"smear";
     case SymId::brassMuteOpen:
-        // return u"open-string";
         return u"open";
     case SymId::brassMuteHalfClosed:
         return u"half-muted";
