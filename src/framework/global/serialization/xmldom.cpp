@@ -34,7 +34,7 @@ using namespace muse;
 struct muse::XmlDomImplData
 {
     tinyxml2::XMLDocument doc;
-    tinyxml2::XMLError err;
+    tinyxml2::XMLError err = tinyxml2::XML_SUCCESS;
 };
 
 // ================================================
