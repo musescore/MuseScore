@@ -51,6 +51,7 @@ public:
         TYPE_STRING_TUNINGS,
         TYPE_SOUND_FLAG,
         TYPE_DYNAMIC,
+        TYPE_TEXT,
         TYPE_PARTIAL_TIE,
         TYPE_SHADOW_NOTE
     };

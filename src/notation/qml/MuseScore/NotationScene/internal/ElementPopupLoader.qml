@@ -24,8 +24,9 @@ import QtQuick.Controls 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import MuseScore.NotationScene 1.0
 
+import MuseScore.Inspector 1.0
+import MuseScore.NotationScene 1.0
 import MuseScore.Playback 1.0
 
 Item {
@@ -54,6 +55,7 @@ Item {
             case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
             case Notation.TYPE_SOUND_FLAG: return soundFlagComp
             case Notation.TYPE_DYNAMIC: return dynamicComp
+            case Notation.TYPE_TEXT: return textStyleComp
             case Notation.TYPE_PARTIAL_TIE: return partialTieComp
             case Notation.TYPE_SHADOW_NOTE: return shadowNoteComp
             }
@@ -158,6 +160,12 @@ Item {
     Component {
         id: dynamicComp
         DynamicPopup {
+        }
+    }
+
+    Component {
+        id: textStyleComp
+        TextStylePopup {
         }
     }
 
