@@ -87,6 +87,8 @@ void AbstractNotationPaintView::load()
     // alex::
     QObject::connect(m_playbackCursor.get(), SIGNAL(lingeringCursorUpdate(double, double, double, double)),
                      this, SLOT(handleLingeringCursorUpdate(double, double, double, double)));
+    QObject::connect(m_playbackCursor.get(), SIGNAL(lingeringCursorUpdate1()),
+                     this, SLOT(handleLingeringCursorUpdate1()));
 
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(configuration()->thinNoteInputCursor());
@@ -131,6 +133,12 @@ void AbstractNotationPaintView::handleLingeringCursorUpdate(double x, double y, 
         } else {
             scheduleRedraw(muse::RectF(x, y, width, height));
         }
+    }
+}
+
+void AbstractNotationPaintView::handleLingeringCursorUpdate1() {
+    if (playbackController()->isPlaying()) {
+        scheduleRedraw();
     }
 }
 
