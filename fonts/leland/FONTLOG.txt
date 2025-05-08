@@ -33,7 +33,7 @@ https://musescore.com/contact
 Change log
 ----------
 
-February 2025 (Martin Keary & Simon Smith) Leland Version 0.78
+8 May 2025 (Martin Keary & Simon Smith) Leland Version 0.78
 - Metadata
   - Updated engravingDefaults (new values for slurEndpointThickness, tieEndpointThickness, legerLineExtension, thinThickBarlineSeparation, bracketThickness, hBarThickness)
   - Cutouts for clefs and accidentals
