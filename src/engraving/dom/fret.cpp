@@ -90,7 +90,6 @@ FretDiagram::FretDiagram(const FretDiagram& f)
     m_fretOffset = f.m_fretOffset;
     m_maxFrets   = f.m_maxFrets;
     m_userMag    = f.m_userMag;
-    m_numPos     = f.m_numPos;
     m_dots       = f.m_dots;
     m_markers    = f.m_markers;
     m_barres     = f.m_barres;
@@ -115,7 +114,6 @@ void FretDiagram::initDefaultValues()
     m_orientation = Orientation::VERTICAL;
 
     m_userMag = 1.0;
-    m_numPos = 0;
 
     m_showFingering = false;
     m_fingering = std::vector<int>(m_strings, 0);
@@ -632,6 +630,11 @@ void FretDiagram::undoFretClear()
     }
 }
 
+int FretDiagram::numPos() const
+{
+    return style().styleI(Sid::fretNumPos);
+}
+
 //---------------------------------------------------------
 //   dot
 //    take fret value of zero to mean all dots
@@ -818,8 +821,6 @@ PropertyValue FretDiagram::getProperty(Pid propertyId) const
         return showNut();
     case Pid::FRET_OFFSET:
         return fretOffset();
-    case Pid::FRET_NUM_POS:
-        return m_numPos;
     case Pid::ORIENTATION:
         return m_orientation;
     case Pid::FRET_SHOW_FINGERINGS:
@@ -852,9 +853,6 @@ bool FretDiagram::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::FRET_OFFSET:
         setFretOffset(v.toInt());
-        break;
-    case Pid::FRET_NUM_POS:
-        m_numPos = v.toInt();
         break;
     case Pid::ORIENTATION:
         m_orientation = v.value<Orientation>();
@@ -1169,7 +1167,6 @@ FretUndoData::FretUndoData(FretDiagram* fd)
     m_orientation = m_diagram->m_orientation;
 
     m_userMag = m_diagram->m_userMag;
-    m_numPos = m_diagram->m_numPos;
 
     m_showFingering = m_diagram->m_showFingering;
 }
@@ -1199,7 +1196,6 @@ void FretUndoData::updateDiagram()
     m_diagram->m_orientation = m_orientation;
 
     m_diagram->m_userMag = m_userMag;
-    m_diagram->m_numPos = m_numPos;
 
     m_diagram->m_showFingering = m_showFingering;
 }
