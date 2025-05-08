@@ -24,6 +24,8 @@
 #include "musx/musx.h"
 #include "types/types.h"
 #include "engraving/types/types.h"
+#include "engraving/dom/tuplet.h"
+#include "engraving/dom/mscore.h"
 
 namespace mu::iex::finale {
 class FinaleTConv
