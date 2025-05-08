@@ -159,6 +159,7 @@ private:
 
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
+    RetVal<QVariant> toRetQVariant(const QVariant& jsrv) const;
 
     RetVal<OpenData> openExtensionDialog(const UriQuery& q);
     RetVal<OpenData> openWidgetDialog(const UriQuery& q);
@@ -188,7 +189,7 @@ private:
 
     async::Channel<Uri> m_currentUriChanged;
     async::Notification m_currentUriAboutToBeChanged;
-    QMap<QString, RetVal<Val> > m_retvals;
+    QMap<QString, RetVal<QVariant> > m_retvals;
     async::Channel<Uri> m_opened;
 
     QEventLoop m_fileDialogEventLoop;

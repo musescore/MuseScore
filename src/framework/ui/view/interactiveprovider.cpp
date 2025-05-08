@@ -166,7 +166,7 @@ Ret InteractiveProvider::showProgress(const std::string& title, Progress* progre
     }
 
     if (!objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectId);
+        RetVal<QVariant> rv = m_retvals.take(objectId);
         if (rv.ret.valid()) {
             return rv.ret;
         }
@@ -283,9 +283,10 @@ RetVal<Val> InteractiveProvider::open(const UriQuery& q)
     RetVal<Val> returnedRV;
     returnedRV.ret = make_ret(Ret::Code::Ok);
     if (openedRet.val.sync && !openedRet.val.objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(openedRet.val.objectId);
+        RetVal<QVariant> rv = m_retvals.take(openedRet.val.objectId);
         if (rv.ret.valid()) {
-            returnedRV = rv;
+            returnedRV.ret = rv.ret;
+            returnedRV.val = Val::fromQVariant(rv.val);
         }
     }
 
@@ -669,6 +670,25 @@ RetVal<Val> InteractiveProvider::toRetVal(const QVariant& jsrv) const
     return rv;
 }
 
+RetVal<QVariant> InteractiveProvider::toRetQVariant(const QVariant& jsrv) const
+{
+    RetVal<QVariant> rv;
+    QVariantMap jsobj = jsrv.toMap();
+
+    IF_ASSERT_FAILED(jsobj.contains("errcode")) {
+        rv.ret = make_ret(Ret::Code::UnknownError);
+        return rv;
+    }
+
+    int errcode = jsobj.value("errcode").toInt();
+    QVariant val = jsobj.value("value");
+
+    rv.ret.setCode(errcode);
+    rv.val = val;
+
+    return rv;
+}
+
 RetVal<InteractiveProvider::OpenData> InteractiveProvider::openExtensionDialog(const UriQuery& q)
 {
     notifyAboutCurrentUriWillBeChanged();
@@ -788,9 +808,10 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const s
     }
 
     if (!objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectId);
+        RetVal<QVariant> rv = m_retvals.take(objectId);
         if (rv.ret.valid()) {
-            result = rv;
+            result.ret = rv.ret;
+            result.val = Val::fromQVariant(rv.val);
         }
     }
 
@@ -817,11 +838,11 @@ RetVal<InteractiveProvider::FileInfo> InteractiveProvider::openFileDialog(FileDi
     delete data;
 
     if (!objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectId);
+        RetVal<QVariant> rv = m_retvals.take(objectId);
         if (rv.ret.valid()) {
             result.ret = rv.ret;
             if (rv.ret) {
-                const QVariantMap resultMap = rv.val.toQVariant().toMap();
+                const QVariantMap resultMap = rv.val.toMap();
 
                 const io::path_t selectedPath = QUrl::fromUserInput(resultMap["path"].toString()).toLocalFile();
                 const QStringList allowedExtensions = resultMap["extensions"].toStringList();
@@ -891,7 +912,7 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
 
 void InteractiveProvider::onClose(const QString& objectId, const QVariant& jsrv)
 {
-    m_retvals[objectId] = toRetVal(jsrv);
+    m_retvals[objectId] = toRetQVariant(jsrv);
 
     bool found = false;
     for (int i = 0; i < m_stack.size(); ++i) {
