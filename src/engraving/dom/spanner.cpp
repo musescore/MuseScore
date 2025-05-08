@@ -1309,7 +1309,7 @@ Spanner* Spanner::nextSpanner(EngravingItem* e, staff_idx_t activeStaff)
                     if (s->startSegment() == toSpanner(e)->startSegment()) {
                         if (st->staffIdx() == activeStaff) {
                             return s;
-                        } else if (st->isMeasure() && activeStaff == 0) {
+                        } else if ((st->isMeasure() && activeStaff == 0) || (st->isSegment() && s->isGradualTempoChange())) {
                             return s;
                         }
                     }
@@ -1342,7 +1342,7 @@ Spanner* Spanner::prevSpanner(EngravingItem* e, staff_idx_t activeStaff)
                     if (s->startSegment() == toSpanner(e)->startSegment()) {
                         if (st->staffIdx() == activeStaff) {
                             return s;
-                        } else if (st->isMeasure() && activeStaff == 0) {
+                        } else if ((st->isMeasure() && activeStaff == 0) || (st->isSegment() && s->isGradualTempoChange())) {
                             return s;
                         }
                     }
