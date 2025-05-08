@@ -70,7 +70,7 @@ String Harmony::harmonyName() const
 
     if (m_rootTpc != Tpc::TPC_INVALID) {
         r = tpc2name(m_rootTpc, m_rootSpelling, m_rootCase);
-    } else if (m_harmonyType != HarmonyType::STANDARD) {
+    } else if (m_harmonyType == HarmonyType::NASHVILLE) {
         r = m_function;
     }
 
@@ -82,7 +82,7 @@ String Harmony::harmonyName() const
     } else if (!m_degreeList.empty()) {
         hc.add(m_degreeList);
         // try to find the chord in chordList
-        const ChordDescription* newExtension = 0;
+        const ChordDescription* newExtension = nullptr;
         const ChordList* cl = score()->chordList();
         for (const auto& p : *cl) {
             const ChordDescription& cd = p.second;
@@ -339,7 +339,7 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int& root, int& 
         m_textName = ss;
         root = Tpc::TPC_INVALID;
         bass = Tpc::TPC_INVALID;
-        return 0;
+        return nullptr;
     }
 
     // pre-process for parentheses
@@ -354,7 +354,7 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int& root, int& 
         s = s.simplified();         // in case of spaces inside parentheses
     }
     if (s.isEmpty()) {
-        return 0;
+        return nullptr;
     }
 
     // pre-process for lower case minor chords
@@ -639,7 +639,7 @@ void Harmony::setHarmony(const String& s)
         setBassTpc(b);
         render();
     } else {
-        // unparseable chord, render as plain text
+        // unparseable chord or roman numeral, render as plain text
         for (const TextSegment* ts : m_textList) {
             delete ts;
         }
@@ -1052,6 +1052,22 @@ Color Harmony::curColor() const
     return EngravingItem::curColor();
 }
 
+void Harmony::renderRomanNumeral()
+{
+    m_textList.clear();
+    double x = 0.0, y = 0.0;
+
+    if (m_leftParen) {
+        render(u"( ", x, y);
+    }
+
+    render(m_textName, x, y);
+
+    if (m_rightParen) {
+        render(u" )", x, y);
+    }
+}
+
 //---------------------------------------------------------
 //   TextSegment
 //---------------------------------------------------------
@@ -1219,6 +1235,12 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
 
 void Harmony::render()
 {
+    if (m_harmonyType == HarmonyType::ROMAN) {
+        renderRomanNumeral();
+        return;
+    }
+
+    // Render standard or Nashville chords
     int capo = style().styleI(Sid::capoPosition);
 
     ChordList* chordList = score()->chordList();

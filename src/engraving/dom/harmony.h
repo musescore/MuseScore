@@ -193,6 +193,7 @@ private:
 
     void determineRootBassSpelling();
 
+    void renderRomanNumeral();
     void render(const String&, double&, double&);
     void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
                 NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO,
@@ -210,6 +211,7 @@ private:
 
     String m_function;          // numeric representation of root for Nashville
     String m_textName;          // name recognized from chord list, read from score file, or constructed from imported source
+                                // Also stores the whole RNA string to be rendered
     mutable ParsedChord* m_parsedForm = nullptr;   // parsed form of chord
     bool m_isMisspelled = false; // show spell check warning
     HarmonyType m_harmonyType = HarmonyType::STANDARD;   // used to control rendering, transposition, export, etc.
