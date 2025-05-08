@@ -273,33 +273,21 @@ Measure* MeasureBase::prevMeasure() const
         }
         m = m->prev();
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
-//   prevMeasure
+//   prevMeasureMM
 //---------------------------------------------------------
 
 Measure* MeasureBase::prevMeasureMM() const
 {
-    MeasureBase* m = prev();
-    while (m) {
-        if (m->isMeasure()) {
-            Measure* mm = toMeasure(m);
-            if (style().styleB(Sid::createMultiMeasureRests)) {
-                if (mm->mmRestCount() >= 0) {
-                    if (mm->hasMMRest()) {
-                        return mm->mmRest();
-                    }
-                    return mm;
-                }
-            } else {
-                return mm;
-            }
-        }
-        m = m->prev();
+    Measure* m = prevMeasure();
+    if (m) {
+        return m->coveringMMRestOrThis();
     }
-    return 0;
+
+    return nullptr;
 }
 
 //---------------------------------------------------------

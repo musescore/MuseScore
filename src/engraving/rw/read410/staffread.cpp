@@ -56,11 +56,10 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 // inherit timesig from previous measure
                 //
                 Measure* m = ctx.lastMeasure();             // measure->prevMeasure();
-                Fraction f(ctx.timeSigForNextMeasure() != Fraction(0, 1) ? ctx.timeSigForNextMeasure()
-                           : m ? m->timesig() : Fraction(4, 4));
+                Fraction timeSigForThisMeasure = ctx.timeSigForNextMeasure();
+                Fraction f(timeSigForThisMeasure != Fraction(0, 1) ? ctx.timeSigForNextMeasure() : m ? m->timesig() : Fraction(4, 4));
                 measure->setTicks(f);
                 measure->setTimesig(f);
-                ctx.setTimeSigForNextMeasure(Fraction(0, 1));
 
                 MeasureRead::readMeasure(measure, e, ctx, staff);
                 measure->checkMeasure(staff);
@@ -72,6 +71,9 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                     score->checkSpanner(ctx.tick(), ctx.tick() + measure->ticks(), /*removeOrphans*/ false);
                     ctx.setLastMeasure(measure);
                     ctx.setTick(measure->tick() + measure->ticks());
+                    if (timeSigForThisMeasure != Fraction(0, 1) && ctx.timeSigForNextMeasure() == timeSigForThisMeasure) {
+                        ctx.setTimeSigForNextMeasure(Fraction(0, 1));
+                    }
                 } else {
                     // this is a multi measure rest
                     // always preceded by the first measure it replaces

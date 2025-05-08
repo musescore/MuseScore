@@ -209,6 +209,8 @@ void ModifyDom::setTrackForChordGraceNotes(Measure* measure, const DomAccessor& 
 
 void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
 {
+    measure = measure->coveringMMRestOrThis();
+
     // Move segments between measure which need to move
 
     // Move key and time signature segments to the correct measure.
@@ -221,7 +223,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         // Check if the change applies to the beginning of the repeat section as well as the continuation
         const std::vector<Measure*> measures = findFollowingRepeatMeasures(measure);
         for (const Measure* repeatMeasure : measures) {
-            if (repeatMeasure == measure->nextMeasure()) {
+            if (repeatMeasure == measure->nextMeasureMM()) {
                 continue;
             }
             const Fraction startTick = repeatMeasure->tick();
@@ -271,7 +273,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
         return ClefToBarlinePosition::AUTO;
     };
 
-    MeasureBase* nextMb = measure->next();
+    MeasureBase* nextMb = measure->nextMM();
 
     if (!nextMb || !nextMb->isMeasure()) {
         return;
@@ -339,7 +341,7 @@ void ModifyDom::sortMeasureSegments(Measure* measure, LayoutContext& ctx)
             continue;
         }
 
-        // Move clefs at the beginning of this measure into the previous measure
+        // Move clefs at the beginning of the next measure into this measure
         if (seg.isClefType()) {
             ClefToBarlinePosition pos = clefSegBarlinePosition(seg);
             // Clef position explicitly set by user
