@@ -158,7 +158,6 @@ private:
                             const std::vector<std::string>& filter = {}, bool confirmOverwrite = true) const;
 
     Ret toRet(const QVariant& jsr) const;
-    RetVal<Val> toRetVal(const QVariant& jsrv) const;
     RetVal<QVariant> toRetQVariant(const QVariant& jsrv) const;
 
     RetVal<OpenData> openExtensionDialog(const UriQuery& q);

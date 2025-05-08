@@ -651,25 +651,6 @@ Ret InteractiveProvider::toRet(const QVariant& jsr) const
     return ret;
 }
 
-RetVal<Val> InteractiveProvider::toRetVal(const QVariant& jsrv) const
-{
-    RetVal<Val> rv;
-    QVariantMap jsobj = jsrv.toMap();
-
-    IF_ASSERT_FAILED(jsobj.contains("errcode")) {
-        rv.ret = make_ret(Ret::Code::UnknownError);
-        return rv;
-    }
-
-    int errcode = jsobj.value("errcode").toInt();
-    QVariant val = jsobj.value("value");
-
-    rv.ret.setCode(errcode);
-    rv.val = Val::fromQVariant(val);
-
-    return rv;
-}
-
 RetVal<QVariant> InteractiveProvider::toRetQVariant(const QVariant& jsrv) const
 {
     RetVal<QVariant> rv;
