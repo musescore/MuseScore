@@ -35,9 +35,11 @@
 
 #include "cloud/clouderrors.h"
 #include "cloud/cloudqmltypes.h"
+#include "engraving/iengraving.h"
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
 
+#include "inotationwriter.h"
 #include "projecterrors.h"
 #include "projectextensionpoints.h"
 
@@ -46,6 +48,7 @@
 using namespace mu;
 using namespace mu::project;
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace muse;
 using namespace muse::actions;
 
@@ -1899,4 +1902,62 @@ QUrl ProjectActionsController::scoreManagerUrl() const
 void ProjectActionsController::openProjectProperties()
 {
     interactive()->open(PROJECT_PROPERTIES_URI);
+}
+
+std::optional<INotationWriter::UnitType> ProjectActionsController::determineWriterUnitType(const std::string& ext) const
+{
+    const INotationWriterPtr writer = writers()->writer(ext);
+
+    if (!writer) {
+        return std::nullopt;
+    }
+
+    project::INotationWriter::UnitType unitType;
+
+    if (writer->supportsUnitType(project::INotationWriter::UnitType::PER_PAGE)) {
+        unitType = project::INotationWriter::UnitType::PER_PAGE;
+    } else if (writer->supportsUnitType(project::INotationWriter::UnitType::PER_PART)) {
+        unitType = project::INotationWriter::UnitType::PER_PART;
+    } else {
+        unitType = project::INotationWriter::UnitType::MULTI_PART;
+    }
+
+    return unitType;
+}
+
+bool ProjectActionsController::APIwriteScore(const QString& name, const QString& ext)
+{
+    const INotationPtr notation = globalContext()->currentNotation();
+
+    if (!notation) {
+        LOGW("PluginAPI::writeScore: no notation found");
+        return false;
+    }
+
+    const auto unitType = determineWriterUnitType(ext.toStdString());
+
+    if (!unitType) {
+        LOGW("PluginAPI::writeScore: '%s' format is not supported", ext.toUtf8().constData());
+        return false;
+    }
+
+    const QString outPath = name.endsWith(ext) ? name : (name + '.' + ext);
+    return exportProjectScenario()->exportScores({ notation }, outPath, *unitType, /* openDestinationFolderOnExport */ false);
+}
+
+Score* ProjectActionsController::APIreadScore(const QString& name)
+{
+    const muse::io::path_t path(name);
+    const ProjectFile file(path);
+    const Ret ret = projectFilesController()->openProject(file);
+
+    if (ret.success() && globalContext()->currentNotation()) {
+        return globalContext()->currentNotation()->elements()->msScore();
+    }
+    return nullptr;
+}
+
+void ProjectActionsController::APIcloseScore()
+{
+    projectFilesController()->closeOpenedProject();
 }
