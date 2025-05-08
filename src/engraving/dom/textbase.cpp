@@ -74,7 +74,7 @@ static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
 /// return true if (r1,c1) is at or before (r2,c2)
 //---------------------------------------------------------
 
-static bool isSorted(size_t r1, size_t c1, size_t r2, size_t c2)
+bool TextBase::isSorted(size_t r1, size_t c1, size_t r2, size_t c2)
 {
     if (r1 < r2) {
         return true;
@@ -92,7 +92,7 @@ static bool isSorted(size_t r1, size_t c1, size_t r2, size_t c2)
 /// swap (r1,c1) with (r2,c2)
 //---------------------------------------------------------
 
-static void swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
+void TextBase::swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 {
     std::swap(r1, r2);
     std::swap(c1, c2);
@@ -103,7 +103,7 @@ static void swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 /// swap (r1,c1) with (r2,c2) if they are not sorted
 //---------------------------------------------------------
 
-static void sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
+void TextBase::sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2)
 {
     if (!isSorted(r1, c1, r2, c2)) {
         swap(r1, c1, r2, c2);
@@ -332,7 +332,7 @@ void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
     size_t c1 = selectColumn();
     size_t c2 = column();
 
-    sort(r1, c1, r2, c2);
+    TextBase::sort(r1, c1, r2, c2);
 
     for (size_t row = 0; row < ldata->blocks.size(); ++row) {
         TextBlock& t = ldata->blocks[row];
@@ -453,7 +453,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
                 size_t c1 = m_selectColumn;
                 size_t c2 = m_column;
 
-                sort(r1, c1, r2, c2);
+                TextBase::sort(r1, c1, r2, c2);
                 clearSelection();
                 m_row    = r1;
                 m_column = c1;
@@ -475,7 +475,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
                 size_t c1 = m_selectColumn;
                 size_t c2 = m_column;
 
-                sort(r1, c1, r2, c2);
+                TextBase::sort(r1, c1, r2, c2);
                 clearSelection();
                 m_row    = r2;
                 m_column = c2;
@@ -661,7 +661,7 @@ String TextCursor::selectedText(bool withFormat) const
     size_t r2 = m_row;
     size_t c1 = selectColumn();
     size_t c2 = column();
-    sort(r1, c1, r2, c2);
+    TextBase::sort(r1, c1, r2, c2);
     return extractText(static_cast<int>(r1), static_cast<int>(c1), static_cast<int>(r2), static_cast<int>(c2), withFormat);
 }
 
@@ -677,7 +677,7 @@ String TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) 
         return String();
     }
 
-    assert(isSorted(r1, c1, r2, c2));
+    assert(TextBase::isSorted(r1, c1, r2, c2));
     const std::vector<TextBlock>& tb = ldata->blocks;
 
     if (r1 == r2) {

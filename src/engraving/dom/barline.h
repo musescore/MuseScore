@@ -56,6 +56,19 @@ struct BarLineTableItem {
 };
 
 //---------------------------------------------------------
+//   BarLineEditData
+//---------------------------------------------------------
+
+class BarLineEditData : public ElementEditData
+{
+    OBJECT_ALLOCATOR(engraving, BarLineEditData)
+public:
+    double yoff1;
+    double yoff2;
+    virtual EditDataType type() override { return EditDataType::BarLineEditData; }
+};
+
+//---------------------------------------------------------
 //   @@ BarLine
 //
 //   @P barLineType  enum  (BarLineType.NORMAL, .DOUBLE, .START_REPEAT, .END_REPEAT, .BROKEN, .END, .END_START_REPEAT, .DOTTED)

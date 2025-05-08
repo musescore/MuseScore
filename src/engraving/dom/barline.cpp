@@ -272,19 +272,6 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
 }
 
 //---------------------------------------------------------
-//   BarLineEditData
-//---------------------------------------------------------
-
-class BarLineEditData : public ElementEditData
-{
-    OBJECT_ALLOCATOR(engraving, BarLineEditData)
-public:
-    double yoff1;
-    double yoff2;
-    virtual EditDataType type() override { return EditDataType::BarLineEditData; }
-};
-
-//---------------------------------------------------------
 //   BarLineTable
 //---------------------------------------------------------
 
