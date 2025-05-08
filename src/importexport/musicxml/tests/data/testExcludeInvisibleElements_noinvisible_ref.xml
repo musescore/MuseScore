@@ -173,6 +173,7 @@
         <type>quarter</type>
         <stem>up</stem>
         </note>
+      <sound tempo="90"/>
       <note>
         <pitch>
           <step>D</step>
