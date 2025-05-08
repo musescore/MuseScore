@@ -24,12 +24,15 @@
 #define MU_NOTATION_MSCNOTATIONWRITER_H
 
 #include "project/inotationwriter.h"
+#include "project/inotationwritersregister.h"
 
 #include "engraving/infrastructure/mscio.h"
 
 namespace mu::notation {
 class MscNotationWriter : public project::INotationWriter
 {
+    INJECT(project::INotationWritersRegister, writers)
+
 public:
 
     explicit MscNotationWriter(engraving::MscIoMode mode);
