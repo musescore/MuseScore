@@ -62,12 +62,10 @@ public:
     void setHitMeasureNo(int m_no);
     void setSegNoteDurationTree(int m_tree);
     void pushSegRecords(EngravingItem* item);
-    void pushSegVectRecords(std::vector<EngravingItem*> vect_record);
     void pushStaffindexCurrAtSegindexRecords(int m_seg_index);
     void updateStaffindexCurrAtSegindex(int m_staffindex, int m_seg_atindex);
 
     void highlightAt(int seg_index, int step, int seg_track_index, bool is_highlight);
-    void highlightAt1(int seg_index, int seg_track_index, bool is_highlight);
 
     void clearSegRecords();
 
@@ -92,11 +90,6 @@ private:
     int m_hit_measure_no = -1;
     int m_seg_note_duration_tree = 0;
     std::vector<int> m_staffindex_curr_at_segindex_records;
-    std::vector<Fraction> tick_records;
-
-    std::vector<EngravingItem*> m_el_array[10];
-    int m_el_count = 0;
-    int m_el_size = 10;
 };
 }
 
