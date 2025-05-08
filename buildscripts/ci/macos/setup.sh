@@ -36,16 +36,4 @@ mkdir -p $HOME/musescore_deps_macos
 tar xf musescore_deps_macos.tar.gz -C $HOME/musescore_deps_macos
 rm musescore_deps_macos.tar.gz
 
-# Qt
-export QT_SHORT_VERSION=6.2.4
-echo "Download Qt $QT_SHORT_VERSION"
-export QT_PATH=$HOME/Qt/$QT_SHORT_VERSION/
-export PATH=$PATH:$QT_PATH/macos/bin
-echo "PATH=$PATH" >> $GITHUB_ENV
-# r2 - added websocket support
-wget -nv -O qt.7z https://s3.amazonaws.com/utils.musescore.org/Qt624_mac_r2.7z
-mkdir -p $QT_PATH
-7z x -y qt.7z -o$QT_PATH
-rm qt.7z
-
 echo "Setup script done"

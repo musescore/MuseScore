@@ -36,19 +36,6 @@ IF ERRORLEVEL 1 ( choco install -y 7zip.install )
 SET TEMP_DIR="c:\TEMP\musescore"
 MKDIR %TEMP_DIR%
 
-:: Install Qt
-ECHO "=== Install Qt ==="
-
-SET "Qt_ARCHIVE=Qt-6.2.11-Windows-amd64.zip"
-SET "QT_DIR=C:\Qt\6.2.11"
-SET "QT_URL=https://github.com/cbjeukendrup/musescore_build_qt/releases/download/v12861016856/%Qt_ARCHIVE%"
-
-CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"
-CALL "7z" x -y "%TEMP_DIR%\%Qt_ARCHIVE%" "-o%QT_DIR%"
-
-SET PATH=%QT_DIR%\bin;%PATH%
-ECHO %QT_DIR%\bin>>%GITHUB_PATH%
-
 :: Install dependencies
 ECHO "=== Install dependencies ==="
 CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/musescore_dependencies_win32.7z" -O %TEMP_DIR%\musescore_dependencies_win32.7z
