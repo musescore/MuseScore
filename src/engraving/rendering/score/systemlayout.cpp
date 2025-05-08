@@ -1198,8 +1198,13 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
 
 void SystemLayout::collectSpannersToLayout(ElementsToLayout& elements, const LayoutContext& ctx)
 {
-    Fraction stick = elements.measures.front()->tick();
-    Fraction etick = elements.measures.back()->endTick();
+    const System* system = elements.system;
+
+    // NOTE: in continuous view, this means we layout spanners for the entire score.
+    // TODO: find way to optimize this and only layout where necessary.
+    Fraction stick = system->measures().front()->tick();
+    Fraction etick = system->measures().back()->endTick();
+
     auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
     std::sort(spanners.begin(), spanners.end(), [](const auto& sp1, const auto& sp2) {
         return sp1.value->tick() < sp2.value->tick();
@@ -1210,8 +1215,6 @@ void SystemLayout::collectSpannersToLayout(ElementsToLayout& elements, const Lay
     for (auto item : spanners) {
         allSpanners.push_back(item.value);
     }
-
-    const System* system = elements.system;
 
     for (Spanner* spanner : allSpanners) {
         if (!spanner->systemFlag() && !system->staff(spanner->staffIdx())->show()) {
