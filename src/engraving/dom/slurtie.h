@@ -123,8 +123,6 @@ public:
     Grip defaultGrip() const override { return Grip::DRAG; }
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
-    virtual void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
-
     virtual double endWidth() const = 0;
     virtual double midWidth() const = 0;
     virtual double dottedWidth() const = 0;

@@ -585,25 +585,6 @@ bool BarLine::isBottom() const
 }
 
 //---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void BarLine::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
-{
-    EngravingItem::drawEditMode(p, ed, currentViewScaling);
-    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
-    BarLine::LayoutData* ldata = mutldata();
-    ldata->y1 += bed->yoff1;
-    ldata->y2 += bed->yoff2;
-    PointF pos(canvasPos());
-    p->translate(pos);
-    renderer()->drawItem(this, p);
-    p->translate(-pos);
-    ldata->y1 -= bed->yoff1;
-    ldata->y2 -= bed->yoff2;
-}
-
-//---------------------------------------------------------
 //   playTick
 //---------------------------------------------------------
 

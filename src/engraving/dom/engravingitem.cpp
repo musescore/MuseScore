@@ -2064,25 +2064,6 @@ void EditData::addData(std::shared_ptr<ElementEditData> ed)
 }
 
 //---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void EngravingItem::drawEditMode(Painter* p, EditData& ed, double /*currentViewScaling*/)
-{
-    using namespace muse::draw;
-    Pen pen(configuration()->defaultColor(), 0.0);
-    p->setPen(pen);
-    for (int i = 0; i < ed.grips; ++i) {
-        if (Grip(i) == ed.curGrip) {
-            p->setBrush(configuration()->scoreGreyColor());
-        } else {
-            p->setBrush(BrushStyle::NoBrush);
-        }
-        p->drawRect(ed.grip[i]);
-    }
-}
-
-//---------------------------------------------------------
 //   startDrag
 //---------------------------------------------------------
 

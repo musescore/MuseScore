@@ -1067,15 +1067,6 @@ Color Harmony::curColor() const
 }
 
 //---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void Harmony::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
-{
-    TextBase::drawEditMode(p, ed, currentViewScaling);
-}
-
-//---------------------------------------------------------
 //   TextSegment
 //---------------------------------------------------------
 

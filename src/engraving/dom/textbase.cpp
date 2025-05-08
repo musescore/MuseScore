@@ -1742,21 +1742,6 @@ TextBase::~TextBase()
 }
 
 //---------------------------------------------------------
-//   drawSelection
-//---------------------------------------------------------
-
-void TextBase::drawSelection(Painter* p, const RectF& r) const
-{
-    Brush bg(configuration()->selectionColor());
-    p->setCompositionMode(CompositionMode::HardLight);
-    p->setBrush(bg);
-    p->setNoPen();
-    p->drawRect(r);
-    p->setCompositionMode(CompositionMode::SourceOver);
-    p->setPen(textColor());
-}
-
-//---------------------------------------------------------
 //   textColor
 //---------------------------------------------------------
 
@@ -3558,79 +3543,6 @@ TextCursor* TextBase::cursorFromEditData(const EditData& ed)
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     assert(ted);
     return ted->cursor();
-}
-
-//---------------------------------------------------------
-//   drawEditMode
-//    draw edit mode decorations
-//---------------------------------------------------------
-
-void TextBase::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
-{
-    using namespace muse::draw;
-    PointF pos(canvasPos());
-    p->translate(pos);
-
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
-    if (!ted) {
-        LOGD("ted not found");
-        return;
-    }
-    TextCursor* cursor = ted->cursor();
-
-    const LayoutData* ldata = this->ldata();
-    IF_ASSERT_FAILED(ldata) {
-        return;
-    }
-
-    if (cursor->hasSelection()) {
-        p->setBrush(BrushStyle::NoBrush);
-        p->setPen(textColor());
-        size_t r1 = cursor->selectLine();
-        size_t r2 = cursor->row();
-        size_t c1 = cursor->selectColumn();
-        size_t c2 = cursor->column();
-
-        sort(r1, c1, r2, c2);
-        size_t row = 0;
-        for (const TextBlock& t : ldata->blocks) {
-            t.draw(p, this);
-            if (row >= r1 && row <= r2) {
-                RectF br;
-                if (row == r1 && r1 == r2) {
-                    br = t.boundingRect(static_cast<int>(c1), static_cast<int>(c2), this);
-                } else if (row == r1) {
-                    br = t.boundingRect(static_cast<int>(c1), static_cast<int>(t.columns()), this);
-                } else if (row == r2) {
-                    br = t.boundingRect(0, static_cast<int>(c2), this);
-                } else {
-                    br = t.boundingRect();
-                }
-                br.translate(0.0, t.y());
-                drawSelection(p, br);
-            }
-            ++row;
-        }
-    }
-    p->setBrush(curColor());
-    Pen pen(curColor());
-    pen.setJoinStyle(PenJoinStyle::MiterJoin);
-    p->setPen(pen);
-
-    // Don't draw cursor if there is a selection
-    if (!cursor->hasSelection()) {
-        p->drawRect(cursor->cursorRect());
-    }
-
-    p->translate(-pos);
-    p->setPen(Pen(configuration()->frameColor(), 2.0 / currentViewScaling)); // 2 pixel pen size
-    p->setBrush(BrushStyle::NoBrush);
-
-    double m = spatium();
-    RectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
-
-    p->drawRect(r);
-    pen = Pen(configuration()->defaultColor(), 0.0);
 }
 
 //---------------------------------------------------------

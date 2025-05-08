@@ -305,11 +305,10 @@ public:
 
     Text& operator=(const Text&) = delete;
 
-    virtual void drawEditMode(muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
-    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
-
     Align align() const { return m_align; }
     void setAlign(Align a) { m_align = a; }
+
+    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
 
     static String plainToXmlText(const String& s) { return s.toXmlEscaped(); }
     void setPlainText(const String& t) { setXmlText(plainToXmlText(t)); }
@@ -528,8 +527,6 @@ protected:
     bool m_layoutToParentWidth = false;
 
 private:
-
-    void drawSelection(muse::draw::Painter*, const RectF&) const;
     void insert(TextCursor*, char32_t code, LayoutData* ldata) const;
     String genText(const LayoutData* ldata) const;
 

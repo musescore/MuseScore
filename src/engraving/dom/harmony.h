@@ -199,7 +199,6 @@ private:
 
     void determineRootBassSpelling();
 
-    void drawEditMode(muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
     void render(const String&, double&, double&);
     void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
                 NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);

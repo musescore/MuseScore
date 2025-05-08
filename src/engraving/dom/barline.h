@@ -170,8 +170,6 @@ private:
     BarLine(Segment* parent);
     BarLine(const BarLine&);
 
-    void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
-
     int m_spanStaff = 0;         // span barline to next staff if true, values > 1 are used for importing from 2.x
     int m_spanFrom = 0;         // line number on start and end staves
     int m_spanTo = 0;
