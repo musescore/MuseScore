@@ -93,7 +93,10 @@ extern int absStep2pitchByKey(int step, Key);
 extern int tpc2degree(int tpc, Key key);
 extern int tpcInterval(int startTpc, int interval, int alter);
 extern int step2pitchInterval(int step, int alter);
+extern String tpc2Function(int tpc, Key key);
+extern void tpc2Function(int tpc, Key key, String& accName, String& stepName);
 extern int function2Tpc(const String& s, Key key);
+extern int function2Tpc(const String& s, Key key, size_t& idx);
 extern int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& noteCase, size_t& idx);
 
 //---------------------------------------------------------
