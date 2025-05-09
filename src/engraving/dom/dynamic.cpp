@@ -586,19 +586,6 @@ String Dynamic::screenReaderInfo() const
 }
 }
 
-//---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void Dynamic::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
-{
-    if (ed.editTextualProperties) {
-        TextBase::drawEditMode(p, ed, currentViewScaling);
-    } else {
-        EngravingItem::drawEditMode(p, ed, currentViewScaling);
-    }
-}
-
 bool Dynamic::isTextualEditAllowed(EditData& ed) const
 {
     if (ed.key == Key_Tab) {

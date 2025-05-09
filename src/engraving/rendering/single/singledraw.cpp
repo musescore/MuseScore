@@ -1780,11 +1780,6 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    if (item->isDrawEditMode()) {
-        drawTextBase(item, painter);
-        return;
-    }
-
     if (item->textList().empty()) {
         drawTextBase(item, painter);
         return;

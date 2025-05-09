@@ -50,6 +50,7 @@
 
 #include "rendering/score/scorerenderer.h"
 #include "rendering/single/singlerenderer.h"
+#include "rendering/editmode/editmoderenderer.h"
 
 #include "compat/scoreaccess.h"
 
@@ -117,6 +118,7 @@ void EngravingModule::registerExports()
     // internal
     ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::score::ScoreRenderer());
     ioc()->registerExport<rendering::ISingleRenderer>(moduleName(), new rendering::single::SingleRenderer());
+    ioc()->registerExport<rendering::IEditModeRenderer>(moduleName(), new rendering::editmode::EditModeRenderer());
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
     ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
