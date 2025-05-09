@@ -157,8 +157,6 @@ void Bracket::editDrag(EditData& ed)
     double bracketHeight = ldata()->bracketHeight();
     bracketHeight += ed.delta.y();
     mutldata()->bracketHeight.set_value(bracketHeight);
-
-    renderer()->layoutItem(this);
 }
 
 //---------------------------------------------------------

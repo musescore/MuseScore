@@ -99,11 +99,11 @@ void Stem::editDrag(EditData& ed)
 {
     double yDelta = up() ? -ed.delta.y() : ed.delta.y();
     m_userLength += Spatium::fromMM(yDelta, spatium());
-    renderer()->layoutItem(this);
     Chord* c = chord();
     if (c->hook()) {
         c->hook()->move(PointF(0.0, ed.delta.y()));
     }
+    triggerLayout();
 }
 
 void Stem::reset()
