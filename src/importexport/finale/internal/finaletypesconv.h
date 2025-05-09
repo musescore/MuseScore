@@ -24,6 +24,7 @@
 #include "musx/musx.h"
 #include "types/types.h"
 #include "engraving/types/types.h"
+#include "engraving/dom/noteval.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/mscore.h"
 
@@ -43,6 +44,7 @@ public:
     static engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle);
     static engraving::Align justifyToAlignment(musx::dom::others::NamePositioning::AlignJustify alignJustify);
     static engraving::CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines);
+    static engraving::NoteVal notePropertiesToNoteVal(std::tuple<musx::dom::Note::NoteName, int, int, int> noteProperties);
 };
 
 }

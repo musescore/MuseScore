@@ -28,6 +28,8 @@
 
 #include "types/string.h"
 
+#include "engraving/dom/noteval.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -958,6 +960,22 @@ CourtesyBarlineMode FinaleTConv::boolToCourtesyBarlineMode(bool useDoubleBarline
         { true,  CourtesyBarlineMode::ALWAYS_DOUBLE },
     };
     return muse::value(courtesyBarlineModeTable, useDoubleBarlines, CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY);
+}
+
+NoteVal FinaleTConv::notePropertiesToNoteVal(std::tuple<musx::dom::Note::NoteName, int, int, int> noteProperties)
+{
+    NoteVal nval;
+    int absStep = 35 /*middle C*/ + int(std::get<0>(noteProperties))
+                  + (std::get<1>(noteProperties) - 4) * STEP_DELTA_OCTAVE;
+    nval.pitch = absStep2pitchByKey(absStep, Key::C) + std::get<2>(noteProperties); //assume EDO division is semitone
+    if (std::get<2>(noteProperties) < int(AccidentalVal::MIN) || std::get<2>(noteProperties) > int(AccidentalVal::MAX)
+        || nval.pitch < 0 || nval.pitch > 127) {
+        nval.pitch = std::clamp(nval.pitch, 0, 127);
+        nval.tpc1 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST); ///@todo inherit keysig
+    } else {
+        nval.tpc1 = step2tpc(int(std::get<0>(noteProperties)), AccidentalVal(std::get<2>(noteProperties)));
+    }
+    return nval;
 }
 
 }
