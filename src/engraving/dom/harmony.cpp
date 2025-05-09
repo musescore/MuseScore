@@ -68,10 +68,12 @@ String Harmony::harmonyName() const
         s = u"(";
     }
 
-    if (m_rootTpc != Tpc::TPC_INVALID) {
+    if (m_harmonyType == HarmonyType::STANDARD && tpcIsValid(m_rootTpc)) {
         r = tpc2name(m_rootTpc, m_rootSpelling, m_rootCase);
-    } else if (m_harmonyType == HarmonyType::NASHVILLE) {
-        r = m_function;
+    } else if (m_harmonyType == HarmonyType::NASHVILLE && tpcIsValid(m_rootTpc)) {
+        const Staff* st = staff();
+        Key key = st ? st->key(tick()) : Key::INVALID;
+        r = tpc2Function(m_rootTpc, key);
     }
 
     if (!m_textName.empty()) {
@@ -101,7 +103,7 @@ String Harmony::harmonyName() const
         }
     }
 
-    if (m_bassTpc != Tpc::TPC_INVALID) {
+    if (tpcIsValid(m_bassTpc)) {
         b = u"/" + tpc2name(m_bassTpc, m_bassSpelling, m_bassCase);
     }
 
@@ -116,8 +118,28 @@ String Harmony::harmonyName() const
 
 bool Harmony::isRealizable() const
 {
-    return (m_rootTpc != Tpc::TPC_INVALID)
-           || (m_harmonyType == HarmonyType::NASHVILLE);        // unable to fully check at for nashville at the moment
+    return tpcIsValid(m_rootTpc);
+}
+
+String Harmony::hFunction(Key key) const
+{
+    if (!tpcIsValid(m_rootTpc)) {
+        return String();
+    }
+    if (key == Key::INVALID) {
+        const Staff* st = staff();
+        key = st ? st->key(tick()) : Key::INVALID;
+    }
+    return tpc2Function(m_rootTpc, key);
+}
+
+void Harmony::setTpcFromFunction(const String& s, Key key)
+{
+    if (key == Key::INVALID) {
+        const Staff* st = staff();
+        key = st ? st->key(tick()) : Key::INVALID;
+    }
+    m_rootTpc = function2Tpc(s, key);
 }
 
 bool Harmony::isInFretBox() const
@@ -190,7 +212,6 @@ Harmony::Harmony(const Harmony& h)
     m_parsedForm = h.m_parsedForm ? new ParsedChord(*h.m_parsedForm) : 0;
     m_harmonyType = h.m_harmonyType;
     m_textName   = h.m_textName;
-    m_function   = h.m_function;
     m_play       = h.m_play;
     m_realizedHarmony = h.m_realizedHarmony;
     m_realizedHarmony.setHarmony(this);
@@ -222,7 +243,7 @@ void Harmony::afterRead()
     // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0
     // or constructed in the Chord Symbol Properties dialog.
 
-    if (m_rootTpc != Tpc::TPC_INVALID) {
+    if (tpcIsValid(m_rootTpc)) {
         if (m_id > 0) {
             // positive id will happen only for scores that were created with explicit chord lists
             // lookup id in chord list and generate new description if necessary
@@ -365,49 +386,49 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int& root, int& 
         preferMinor = false;
     }
 
-    if (m_harmonyType == HarmonyType::NASHVILLE) {
-        int n = 0;
-        if (s.at(0).isDigit()) {
-            n = 1;
-        } else if (s.at(1).isDigit()) {
-            n = 2;
-        }
-        m_function = s.mid(0, n);
-        s = s.mid(n);
-        root = Tpc::TPC_INVALID;
-        bass = Tpc::TPC_INVALID;
-    } else {
-        determineRootBassSpelling();
-        size_t idx;
-        int r = convertNote(s, m_rootSpelling, m_rootCase, idx);
-        if (r == Tpc::TPC_INVALID) {
-            if (s.at(0) == '/') {
-                idx = 0;
-            } else {
-                LOGD("failed <%s>", muPrintable(ss));
-                m_textName = s;
-                return 0;
-            }
-        }
-        root = r;
-        bass = Tpc::TPC_INVALID;
-        size_t slash = s.lastIndexOf(u'/');
-        if (slash != muse::nidx) {
-            String bs = s.mid(slash + 1).simplified();
-            s = s.mid(idx, slash - idx).simplified();
-            size_t idx2;
-            bass = convertNote(bs, m_bassSpelling, m_bassCase, idx2);
-            if (idx2 != bs.size()) {
-                bass = Tpc::TPC_INVALID;
-            }
-            if (bass == Tpc::TPC_INVALID) {
-                // if what follows after slash is not (just) a TPC
-                // then reassemble chord and try to parse with the slash
-                s = s + u"/" + bs;
-            }
+    determineRootBassSpelling();
+    size_t idx = 0;
+    const Staff* st = staff();
+    Key key = st ? st->key(tick()) : Key::INVALID;
+
+    int r = Tpc::TPC_INVALID;
+    if (m_harmonyType == HarmonyType::STANDARD) {
+        r = convertNote(s, m_rootSpelling, m_rootCase, idx);
+    } else if (m_harmonyType == HarmonyType::NASHVILLE) {
+        r = function2Tpc(s, key, idx);
+    }
+    if (!tpcIsValid(r)) {
+        if (s.at(0) == '/') {
+            idx = 0;
         } else {
-            s = s.mid(idx);         // don't simplify; keep leading space before extension if present
+            LOGD("failed <%s>", muPrintable(ss));
+            m_textName = s;
+            return 0;
         }
+    }
+    root = r;
+    bass = Tpc::TPC_INVALID;
+    size_t slash = s.lastIndexOf(u'/');
+    if (slash != muse::nidx) {
+        String bs = s.mid(slash + 1).simplified();
+        s = s.mid(idx, slash - idx).simplified();
+        size_t idx2 = 0;
+        if (m_harmonyType == HarmonyType::STANDARD) {
+            bass = convertNote(bs, m_bassSpelling, m_bassCase, idx2);
+        } else if (m_harmonyType == HarmonyType::NASHVILLE) {
+            bass = function2Tpc(bs, key, idx2);
+        }
+
+        if (idx2 != bs.size()) {
+            bass = Tpc::TPC_INVALID;
+        }
+        if (!tpcIsValid(bass)) {
+            // if what follows after slash is not (just) a TPC
+            // then reassemble chord and try to parse with the slash
+            s = s + u"/" + bs;
+        }
+    } else {
+        s = s.mid(idx);             // don't simplify; keep leading space before extension if present
     }
 
     const ChordList* cl = score()->chordList();
@@ -506,7 +527,7 @@ bool Harmony::editTextual(EditData& ed)
     String str = xmlText();
     m_isMisspelled = !str.isEmpty()
                      && !parseHarmony(str, root, bass, true)
-                     && root == TPC_INVALID
+                     && !tpcIsValid(root)
                      && m_harmonyType == HarmonyType::STANDARD;
     if (m_isMisspelled) {
         LOGD("bad spell");
@@ -990,26 +1011,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
         offset += interval.chromatic;
     }
 
-    //Adjust for Nashville Notation, might be temporary
-    // TODO: set dirty on add/remove of keysig
-    if (m_harmonyType == HarmonyType::NASHVILLE && !m_realizedHarmony.valid()) {
-        Key key = st->key(tick);
-
-        //parse root
-        int rootTpc = function2Tpc(m_function, key);
-
-        //parse bass
-        size_t slash = m_textName.lastIndexOf('/');
-        int bassTpc;
-        if (slash == muse::nidx) {
-            bassTpc = Tpc::TPC_INVALID;
-        } else {
-            bassTpc = function2Tpc(m_textName.mid(slash + 1), key);
-        }
-        m_realizedHarmony.update(rootTpc, bassTpc, offset);
-    } else {
-        m_realizedHarmony.update(m_rootTpc, m_bassTpc, offset);
-    }
+    m_realizedHarmony.update(m_rootTpc, m_bassTpc, offset);
 
     return m_realizedHarmony;
 }
@@ -1144,6 +1146,9 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
     ChordList* chordList = score()->chordList();
     std::stack<PointF> stack;
 
+    const Staff* st = staff();
+    Key key = st ? st->key(tick()) : Key::INVALID;
+
 // LOGD("===");
     for (const RenderAction& a : renderList) {
 // a.print();
@@ -1177,10 +1182,11 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
         } else if (a.type == RenderAction::RenderActionType::NOTE) {
             String c;
             AccidentalVal acc;
-            if (tpcIsValid(tpc)) {
+            if (m_harmonyType == HarmonyType::STANDARD && tpcIsValid(tpc)) {
                 tpc2name(tpc, noteSpelling, noteCase, c, acc);
-            } else if (m_function.size() > 0) {
-                c = m_function.at(m_function.size() - 1);
+            } else if (m_harmonyType == HarmonyType::NASHVILLE && tpcIsValid(tpc)) {
+                String accStr;
+                tpc2Function(tpc, key, accStr, c);
             }
             String lookup = u"note" + c;
             ChordSymbol cs = chordList->symbol(lookup);
@@ -1198,10 +1204,10 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
             String c;
             String acc;
             String context = u"accidental";
-            if (tpcIsValid(tpc)) {
+            if (m_harmonyType == HarmonyType::STANDARD && tpcIsValid(tpc)) {
                 tpc2name(tpc, noteSpelling, noteCase, c, acc);
-            } else if (m_function.size() > 1) {
-                acc = m_function.at(0);
+            } else if (m_harmonyType == HarmonyType::NASHVILLE && tpcIsValid(tpc)) {
+                tpc2Function(tpc, key, acc, c);
             }
             // German spelling - use special symbol for accidental in TPC_B_B
             // to allow it to be rendered as either Bb or B
@@ -1271,7 +1277,7 @@ void Harmony::render()
         render(u"( ", x, y);
     }
 
-    if (m_rootTpc != Tpc::TPC_INVALID) {
+    if (m_harmonyType == HarmonyType::STANDARD && tpcIsValid(m_rootTpc)) {
         // render root
         render(chordList->renderListRoot, x, y, m_rootTpc, m_rootSpelling, m_rootRenderCase);
         // render extension
@@ -1279,7 +1285,7 @@ void Harmony::render()
         if (cd) {
             render(cd->renderList, x, y, 0);
         }
-    } else if (m_harmonyType == HarmonyType::NASHVILLE) {
+    } else if (m_harmonyType == HarmonyType::NASHVILLE && tpcIsValid(m_rootTpc)) {
         // render function
         render(chordList->renderListFunction, x, y, m_rootTpc, m_rootSpelling, m_rootRenderCase);
         double adjust = chordList->nominalAdjust();
@@ -1294,18 +1300,18 @@ void Harmony::render()
     }
 
     // render bass
-    if (m_bassTpc != Tpc::TPC_INVALID) {
+    if (tpcIsValid(m_bassTpc)) {
         std::list<RenderAction>& bassNoteChordList
             = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
         render(bassNoteChordList, x, y, m_bassTpc, m_bassSpelling, m_bassRenderCase, style().styleD(Sid::chordBassNoteScale));
     }
 
-    if (m_rootTpc != Tpc::TPC_INVALID && capo > 0 && capo < 12) {
+    if (tpcIsValid(m_rootTpc) && capo > 0 && capo < 12) {
         int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
         int capoRootTpc = m_rootTpc + tpcOffset[capo];
         int capoBassTpc = m_bassTpc;
 
-        if (capoBassTpc != Tpc::TPC_INVALID) {
+        if (tpcIsValid(capoBassTpc)) {
             capoBassTpc += tpcOffset[capo];
         }
 
@@ -1313,14 +1319,14 @@ void Harmony::render()
          * For guitarists, avoid x and bb in Root or Bass,
          * and also avoid E#, B#, Cb and Fb in Root.
          */
-        if (capoRootTpc < 8 || (capoBassTpc != Tpc::TPC_INVALID && capoBassTpc < 6)) {
+        if (capoRootTpc < 8 || (tpcIsValid(capoBassTpc) && capoBassTpc < 6)) {
             capoRootTpc += 12;
-            if (capoBassTpc != Tpc::TPC_INVALID) {
+            if (tpcIsValid(capoBassTpc)) {
                 capoBassTpc += 12;
             }
-        } else if (capoRootTpc > 24 || (capoBassTpc != Tpc::TPC_INVALID && capoBassTpc > 26)) {
+        } else if (capoRootTpc > 24 || (tpcIsValid(capoBassTpc) && capoBassTpc > 26)) {
             capoRootTpc -= 12;
-            if (capoBassTpc != Tpc::TPC_INVALID) {
+            if (tpcIsValid(capoBassTpc)) {
                 capoBassTpc -= 12;
             }
         }
@@ -1334,7 +1340,7 @@ void Harmony::render()
             render(cd->renderList, x, y, 0);
         }
 
-        if (capoBassTpc != Tpc::TPC_INVALID) {
+        if (tpcIsValid(capoBassTpc)) {
             std::list<RenderAction>& bassNoteChordList
                 = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
             render(bassNoteChordList, x, y, capoBassTpc, m_bassSpelling, m_bassRenderCase, style().styleD(Sid::chordBassNoteScale));
@@ -1567,14 +1573,17 @@ String Harmony::generateScreenReaderInfo() const
         }
     }
         return rez;
-    case HarmonyType::NASHVILLE:
-        if (!m_function.isEmpty()) {
-            rez = String(u"%1 %2").arg(rez, m_function);
+    case HarmonyType::NASHVILLE: {
+        if (tpcIsValid(m_rootTpc)) {
+            const Staff* st = staff();
+            Key key = st ? st->key(tick()) : Key::INVALID;
+            rez = String(u"%1 %2").arg(rez, tpc2Function(m_rootTpc, key));
         }
         break;
+    }
     case HarmonyType::STANDARD:
     default:
-        if (m_rootTpc != Tpc::TPC_INVALID) {
+        if (tpcIsValid(m_rootTpc)) {
             rez = String(u"%1 %2").arg(rez, tpc2name(m_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
         }
     }
@@ -1595,7 +1604,7 @@ String Harmony::generateScreenReaderInfo() const
         rez = String(u"%1 %2").arg(rez, hTextName());
     }
 
-    if (m_bassTpc != Tpc::TPC_INVALID) {
+    if (tpcIsValid(m_bassTpc)) {
         rez = String(u"%1 / %2").arg(rez, tpc2name(m_bassTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
     }
 

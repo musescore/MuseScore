@@ -8844,7 +8844,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
     }
     addColorAttr(h, harmonyAttrs);
     m_xml.startElement("harmony", harmonyAttrs);
-    if (rootTpc != Tpc::TPC_INVALID) {
+    if (h->harmonyType() == HarmonyType::STANDARD && tpcIsValid(rootTpc)) {
         m_xml.startElement("root");
         m_xml.tag("root-step", tpc2stepName(rootTpc));
         int alter = int(tpc2alter(rootTpc));
