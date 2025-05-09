@@ -3,9 +3,9 @@ name: 'Check: Visual Tests (vtests)'
 on:
   # schedule: # scheduled workflows will only run on the default branch. edit default values under gen1 below
   #   - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
-  push: # push.inputs field does not exist, use gen1 below
-    branches:
-    - 3.x
+  #push: # push.inputs field does not exist, use gen1 below
+  #  branches:
+  #  - 3.x
   pull_request:
   # workflow_dispatch: # triggered by github web ui run "Check: Visual Tests (vtest)" workflow button.
   workflow_call: # triggered by "uses" from other yml files.
