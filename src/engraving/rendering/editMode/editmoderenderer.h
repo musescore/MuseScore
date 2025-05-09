@@ -23,13 +23,37 @@
 
 #include "../ieditmoderenderer.h"
 
+namespace muse::draw {
+class Painter;
+}
+
+namespace mu::engraving {
+class MStyle;
+class IEngravingFont;
+class Score;
+class EngravingItem;
+class EditData;
+
+class BarLine;
+class Dynamic;
+class SlurTieSegment;
+class TextBase;
+}
+
 namespace mu::engraving::rendering::editmode {
 class EditModeRenderer : public IEditModeRenderer
 {
 public:
     EditModeRenderer() = default;
 
-protected:
-    void doDrawItem(const EngravingItem* item, muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
+    void drawItem(EngravingItem* item, muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
+
+private:
+    static void drawEngravingItem(EngravingItem* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling);
+
+    static void drawBarline(BarLine* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling);
+    static void drawDynamic(Dynamic* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling);
+    static void drawSlurTieSegment(SlurTieSegment* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling);
+    static void drawTextBase(TextBase* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling);
 };
 }

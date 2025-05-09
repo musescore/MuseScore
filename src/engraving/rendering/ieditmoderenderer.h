@@ -38,12 +38,6 @@ class IEditModeRenderer : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IEditModeRenderer() = default;
 
-    void drawItem(const EngravingItem* item, muse::draw::Painter* p, EditData& ed, double currentViewScaling)
-    {
-        doDrawItem(item, p, ed, currentViewScaling);
-    }
-
-protected:
-    virtual void doDrawItem(const EngravingItem* item, muse::draw::Painter* p, EditData& ed, double currentViewScaling) = 0;
+    virtual void drawItem(EngravingItem* item, muse::draw::Painter* p, EditData& ed, double currentViewScaling) = 0;
 };
 }
