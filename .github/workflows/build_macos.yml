@@ -20,7 +20,7 @@ on:
         type: string
         required: true
       publish:
-        description: 'Publish to FTP: on - publish (obsolete)'
+        description: 'Publish to FTP when nightly generated (obsolete)'
         default: 'off'
         type: string
         required: false
@@ -29,12 +29,12 @@ on:
         default: 'on'
         type: string
         required: true
-      execfrompubdevpush:
+      execfrom:
         description: 'workflow github.event_name workaround, leave as is'
         default: 'false'
         type: string
         required: true
-  workflow_call: # triggered by "uses" from other yml files. copy paste of workflow_dispatch for simplicity. "default" fields under non workflow_dispatch are ignored (unsure)
+  workflow_call: # triggered by "uses" from other yml files. copy paste of workflow_dispatch for simplicity. "default" fields ignored (unsure)
     inputs:
       platforms:
         description: 'Platforms to build:'
@@ -47,7 +47,7 @@ on:
         type: string
         required: true
       publish:
-        description: 'Publish to FTP: on - publish (obsolete)'
+        description: 'Publish to FTP when nightly generated (obsolete)'
         default: 'off'
         type: string
         required: false
@@ -56,7 +56,7 @@ on:
         default: 'on'
         type: string
         required: true
-      execfrompubdevpush:
+      execfrom:
         description: 'workflow github.event_name workaround, leave as is'
         default: 'false'
         type: string
@@ -66,18 +66,8 @@ env:
   DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
 
 jobs:
-  debugbefore:
-    name: debug before (macos yml)
-    runs-on: ubuntu-latest
-    steps:
-    - name: debug before # ${{ inputs.platforms }} empty on push
-      run: |
-        echo "github.event_name=${{github.event_name}}"
-        echo "inputs.platforms=${{ inputs.platforms }}"
-        echo "inputs.execfrompubdevpush=${{ inputs.execfrompubdevpush }}"
-
   plan:
-    name: generate strings (macos yml)
+    name: setup (macos yml)
     runs-on: ubuntu-latest
     outputs:
       platforms: ${{ steps.gen1.outputs.platforms }}
@@ -85,54 +75,59 @@ jobs:
       publish: ${{ steps.gen1.outputs.publish }}
       notarize: ${{ steps.gen1.outputs.notarize }}
     steps:
-    - name: debug passing buildmacosyml  # ${{ inputs.platforms }} empty on push
-      run: |
-        echo "github.event_name=${{github.event_name}}"
-        echo "inputs.platforms=${{ inputs.platforms }}"
     - id: gen1
-      name: empty inputs on push workaround
+      name: Set or pass values
       run: |
-        if [[ "${{ inputs.execfrompubdevpush }}" == "true" ]]; then
+        if [[ "${{ inputs.execfrom }}" == "publishdev" ]]; then
 
           echo "triggered by on.push/pull_request/schedule of publishdev , on.workflow_call of build macos"
 
-          echo "platforms=${{ inputs.platforms }}" >> "$GITHUB_OUTPUT"
-          echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
-          echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
+          echo "platforms=${{ inputs.platforms }}" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=${{ inputs.build_mode }}" | tee -a "$GITHUB_OUTPUT"
+          echo "publish=${{ inputs.publish }}" | tee -a "$GITHUB_OUTPUT"
+          NR=${{ inputs.notarize }}
+
+        elif [[ "${{ inputs.execfrom }}" == "buildall" ]]; then
+
+          echo "triggered by on.push/pull_request/schedule of buildall , on.workflow_call of build macos"
+
+          echo "platforms=${{ inputs.platforms }}" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=${{ inputs.build_mode }}" | tee -a "$GITHUB_OUTPUT"
+          echo "publish=${{ inputs.publish }}" | tee -a "$GITHUB_OUTPUT"
           NR=${{ inputs.notarize }}
 
         elif [[ "${{ github.event_name }}" == "pull_request" ]];  then
 
-          echo "triggered by 1. on.pull_request of build macos or 2. on.pull_request of workflows other than publishdev that triggers on.workflow_call of build macos"
+          echo "triggered by 1. on.pull_request of build macos or 2. on.pull_request of workflows other than publishdev and buildall that triggers on.workflow_call of build macos"
 
-          echo "platforms=macos_intel macos_apple" >> "$GITHUB_OUTPUT"
-          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
-          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "platforms=macos_intel macos_apple" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=devel" | tee -a "$GITHUB_OUTPUT"  # copied from make_build_mode_env.sh
+          echo "publish=off" | tee -a "$GITHUB_OUTPUT"
           NR="off"                                      # pull_request notarize off
 
         elif [[ "${{ github.event_name }}" == "schedule" ]];  then
 
-          echo "triggered by 1. on.schedule of build macos or 2. on.schedule of workflows other than publishdev that triggers on.workflow_call of build macos"
+          echo "triggered by 1. on.schedule of build macos or 2. on.schedule of workflows other than publishdev and buildall that triggers on.workflow_call of build macos"
 
-          echo "platforms=macos_intel macos_apple" >> "$GITHUB_OUTPUT"
-          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
-          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "platforms=macos_intel macos_apple" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=nightly" | tee -a "$GITHUB_OUTPUT"  # copied from make_build_mode_env.sh
+          echo "publish=off" | tee -a "$GITHUB_OUTPUT"
           NR="on"
           
         elif [[ "${{ github.event_name }}" == "push" ]]; then
 
-          echo "triggered by 1. on.push of build macos or 2. on.push of workflows other than publishdev that triggers on.workflow_call of build macos"
+          echo "triggered by 1. on.push of build macos or 2. on.push of workflows other than publishdev and buildall that triggers on.workflow_call of build macos"
 
-          echo "platforms=macos_intel macos_apple" >> "$GITHUB_OUTPUT"
-          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
-          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "platforms=macos_intel macos_apple" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=devel" | tee -a "$GITHUB_OUTPUT"  # copied from make_build_mode_env.sh
+          echo "publish=off" | tee -a "$GITHUB_OUTPUT"
           NR="on"
 
         else
 
-          echo "platforms=${{ inputs.platforms }}" >> "$GITHUB_OUTPUT"
-          echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
-          echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
+          echo "platforms=${{ inputs.platforms }}" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=${{ inputs.build_mode }}" | tee -a "$GITHUB_OUTPUT"
+          echo "publish=${{ inputs.publish }}" | tee -a "$GITHUB_OUTPUT"
           NR=${{ inputs.notarize }}
 
         fi
@@ -140,27 +135,17 @@ jobs:
         if [[ ${NR} == "on" ]]; then
           if [ -z "${{ secrets.APPLE_USERNAME }}" ]; then
             echo "::warning::APPLE_USERNAME is empty; notarization disabled"
-            echo "notarize=false" >> "$GITHUB_OUTPUT"
+            echo "notarize=false" | tee -a "$GITHUB_OUTPUT"
           elif [ -z "${{ secrets.APPLE_PASSWORD }}" ]; then
             echo "::warning::APPLE_PASSWORD is empty, notarization disabled"
-            echo "notarize=false" >> "$GITHUB_OUTPUT"
+            echo "notarize=false" | tee -a "$GITHUB_OUTPUT"
           else
-            echo "notarize=true" >> "$GITHUB_OUTPUT"
+            echo "notarize=true" | tee -a "$GITHUB_OUTPUT"
           fi
         else
-          echo "notarize=false" >> "$GITHUB_OUTPUT"
+          echo "notarize=false" | tee -a "$GITHUB_OUTPUT"
         fi
 
-  debugafter:
-    name: debug after (macos yml)
-    needs:
-      - plan
-    runs-on: ubuntu-latest
-    steps:
-    - name: debug after # confirm use "needs.plan.outputs." in replace of "inputs."
-      run: |
-        echo "needs.plan.outputs.platforms=${{ needs.plan.outputs.platforms }}"
-        
   macos_apple:
     if: contains(needs.plan.outputs.platforms, 'macos_apple')
     needs:
@@ -184,7 +169,7 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [[ "${{ needs.plan.outputs.publish }}" == "on" || ("${{ github.event_name }}" == "schedule" && "$BUILD_MODE" == "nightly") ]]; then
+        if [[ "${{ needs.plan.outputs.publish }}" == "on" && "$BUILD_MODE" == "nightly" ]]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
             echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
@@ -273,7 +258,7 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [[ "${{ needs.plan.outputs.publish }}" == "on" || ("${{ github.event_name }}" == "schedule" && "$BUILD_MODE" == "nightly") ]]; then
+        if [[ "${{ needs.plan.outputs.publish }}" == "on" && "$BUILD_MODE" == "nightly" ]]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
             echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"

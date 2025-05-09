@@ -11,7 +11,7 @@ on:
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'linux_x64'
+        default: 'linux_x64 linux_armhf linux_arm64'
         type: string
         required: true
       build_mode:
@@ -25,20 +25,20 @@ on:
         type: string
         required: false
       publish:
-        description: 'Publish to FTP: on - publish (obsolete)'
+        description: 'Publish to FTP when nightly generated (obsolete)'
         default: 'off'
         type: string
         required: false
-      execfrompubdevpush:
+      execfrom:
         description: 'workflow github.event_name workaround, leave as is'
         default: 'false'
         type: string
         required: true
-  workflow_call: # triggered by "uses" from other yml files. copy paste of workflow_dispatch for simplicity. "default" fields under non workflow_dispatch are ignored (unsure)
+  workflow_call: # triggered by "uses" from other yml files. copy paste of workflow_dispatch for simplicity. "default" fields ignored (unsure)
     inputs:
       platforms:
         description: 'Platforms to build:'
-        default: 'linux_x64'
+        default: 'linux_x64 linux_armhf linux_arm64'
         type: string
         required: true
       build_mode:
@@ -52,29 +52,19 @@ on:
         type: string
         required: false
       publish:
-        description: 'Publish to FTP: on - publish (obsolete)'
+        description: 'Publish to FTP when nightly generated (obsolete)'
         default: 'off'
         type: string
         required: false
-      execfrompubdevpush:
+      execfrom:
         description: 'workflow github.event_name workaround, leave as is'
         default: 'false'
         type: string
         required: true
 
 jobs:
-  debugbefore:
-    name: debug before (linux yml)
-    runs-on: ubuntu-latest
-    steps:
-    - name: debug before # ${{ inputs.platforms }} empty on push
-      run: |
-        echo "github.event_name=${{github.event_name}}"
-        echo "inputs.platforms=${{ inputs.platforms }}"
-        echo "inputs.execfrompubdevpush=${{ inputs.execfrompubdevpush }}"
-
   plan:
-    name: generate strings (linux yml)
+    name: setup (linux yml)
     runs-on: ubuntu-latest
     outputs:
       platforms: ${{ steps.gen1.outputs.platforms }}
@@ -82,73 +72,73 @@ jobs:
       runtest: ${{ steps.gen1.outputs.runtest }}
       publish: ${{ steps.gen1.outputs.publish }}
     steps:
-    - name: debug passing buildlinuxyml  # ${{ inputs.platforms }} empty on push
-      run: |
-        echo "github.event_name=${{github.event_name}}"
-        echo "inputs.platforms=${{ inputs.platforms }}"
     - id: gen1
-      name: empty inputs on push workaround
+      name: Set or pass values
       run: |
-        if [[ "${{ inputs.execfrompubdevpush }}" == "true" ]]; then
+        if [[ "${{ inputs.execfrom }}" == "publishdev" ]]; then
 
           echo "triggered by on.push/pull_request/schedule of publishdev , on.workflow_call of build linux"
 
-          echo "platforms=${{ inputs.platforms }}" >> "$GITHUB_OUTPUT"
-          echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
+          echo "platforms=${{ inputs.platforms }}" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=${{ inputs.build_mode }}" | tee -a "$GITHUB_OUTPUT"
           echo "runtest=${{ inputs.runtest }}" >> "$GITHUB_OUTPUT"
-          echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
+          echo "publish=${{ inputs.publish }}" | tee -a "$GITHUB_OUTPUT"
+
+        elif [[ "${{ inputs.execfrom }}" == "buildall" ]]; then
+
+          echo "triggered by on.push/pull_request/schedule of buildall , on.workflow_call of build linux"
+
+          echo "platforms=${{ inputs.platforms }}" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=${{ inputs.build_mode }}" | tee -a "$GITHUB_OUTPUT"
+          echo "runtest=on" >> "$GITHUB_OUTPUT"
+          echo "publish=${{ inputs.publish }}" | tee -a "$GITHUB_OUTPUT"
 
         elif [[ "${{ github.event_name }}" == "pull_request" ]];  then
 
-          echo "triggered by 1. on.pull_request of build linux or 2. on.pull_request of workflows other than publishdev that triggers on.workflow_call of build linux"
+          echo "triggered by 1. on.pull_request of build linux or 2. on.pull_request of workflows other than publishdev and buildall that triggers on.workflow_call of build linux"
 
-          echo "platforms=linux_x64" >> "$GITHUB_OUTPUT"
-          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "platforms=linux_x64 linux_armhf linux_arm64" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=devel" | tee -a "$GITHUB_OUTPUT"  # copied from make_build_mode_env.sh
           echo "runtest=on" >> "$GITHUB_OUTPUT"
-          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "publish=off" | tee -a "$GITHUB_OUTPUT"
 
         elif [[ "${{ github.event_name }}" == "schedule" ]];  then
 
-          echo "triggered by 1. on.schedule of build linux or 2. on.schedule of workflows other than publishdev that triggers on.workflow_call of build linux"
+          echo "triggered by 1. on.schedule of build linux or 2. on.schedule of workflows other than publishdev and buildall that triggers on.workflow_call of build linux"
           
-          echo "platforms=linux_x64" >> "$GITHUB_OUTPUT"
-          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "platforms=linux_x64 linux_armhf linux_arm64" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=nightly" | tee -a "$GITHUB_OUTPUT"  # copied from make_build_mode_env.sh
           echo "runtest=on" >> "$GITHUB_OUTPUT"
-          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "publish=off" | tee -a "$GITHUB_OUTPUT"
 
         elif [[ "${{ github.event_name }}" == "push" ]]; then
 
-          echo "triggered 1. by on.push of build linux or 2. on.push of workflows other than publishdev that triggers on.workflow_call of build linux"
+          echo "triggered 1. by on.push of build linux or 2. on.push of workflows other than publishdev and buildall that triggers on.workflow_call of build linux"
 
-          echo "platforms=linux_x64" >> "$GITHUB_OUTPUT"
-          echo "build_mode=devel" >> "$GITHUB_OUTPUT"
+          echo "platforms=linux_x64 linux_armhf linux_arm64" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=devel" | tee -a "$GITHUB_OUTPUT"  # copied from make_build_mode_env.sh
           echo "runtest=on" >> "$GITHUB_OUTPUT"
-          echo "publish=off" >> "$GITHUB_OUTPUT"
+          echo "publish=off" | tee -a "$GITHUB_OUTPUT"
 
         else
 
-          echo "platforms=${{ inputs.platforms }}" >> "$GITHUB_OUTPUT"
-          echo "build_mode=${{ inputs.build_mode }}" >> "$GITHUB_OUTPUT"
+          echo "platforms=${{ inputs.platforms }}" | tee -a "$GITHUB_OUTPUT"
+          echo "build_mode=${{ inputs.build_mode }}" | tee -a "$GITHUB_OUTPUT"
           echo "runtest=${{ inputs.runtest }}" >> "$GITHUB_OUTPUT"
-          echo "publish=${{ inputs.publish }}" >> "$GITHUB_OUTPUT"
+          echo "publish=${{ inputs.publish }}" | tee -a "$GITHUB_OUTPUT"
 
         fi
 
-  debugafter:
-    name: debug after (linux yml)
-    needs:
-      - plan
-    runs-on: ubuntu-latest
-    steps:
-    - name: debug after # confirm use "needs.plan.outputs." in replace of "inputs."
-      run: |
-        echo "needs.plan.outputs.platforms=${{ needs.plan.outputs.platforms }}"
-        
+# linux_x64, linux_armhf and linux_arm64 are identical copies (May 2025), except for "if", "runs-on" and, "env" fields.
+
   linux_x64:
     if: ${{ contains(needs.plan.outputs.platforms, 'linux_x64') }}
+    runs-on: ubuntu-22.04
+    env:
+      ARCH: x86_64
+    ##
     needs:
       - plan
-    runs-on: ubuntu-22.04
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1
@@ -157,8 +147,6 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v4
     - name: Configure workflow
-      env:
-        pull_request_title: ${{ github.event.pull_request.title }}
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ needs.plan.outputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
@@ -167,7 +155,7 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [[ "${{ needs.plan.outputs.publish }}" == "on" || ("${{ github.event_name }}" == "schedule" && "$BUILD_MODE" == "nightly") ]]; then
+        if [[ "${{ needs.plan.outputs.publish }}" == "on" && "$BUILD_MODE" == "nightly" ]]; then
           DO_PUBLISH='true'
           if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
             echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
@@ -177,29 +165,217 @@ jobs:
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "pull_request" ]; then
-          ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"
+          ADD_INFO="_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}"
         fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin${ADD_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_$ARCH${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
         echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
-
-    - name: Setup environment
+    - name: Setup environment (x86_64)
+      if: env.ARCH == 'x86_64'
       run: |
-        bash ./build/ci/linux/setup.sh
-    - name: Build
+        bash ./build/ci/linux/setup.sh --arch $ARCH --is_calling_without_sudo true
+    - name: Build (x86_64)
+      if: env.ARCH == 'x86_64'
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
-        bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID
-    - name: Package
+        bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode $BUILD_MODE --telemetry $T_ID
+    - name: Package (x86_64)
+      if: env.ARCH == 'x86_64'
       run: |
-        bash ./build/ci/linux/package.sh
-    - name: Checksum
+        bash ./build/ci/linux/package.sh --arch $ARCH 
+    - name: Checksum (x86_64)
+      if: env.ARCH == 'x86_64'
       run: |
         bash ./build/ci/tools/checksum.sh
+    - name: Setup, build, package, checksum (ARM)
+      if: env.ARCH == 'armv7l' || env.ARCH == 'aarch64'
+      run: |
+        # QEMU for binfmt issue make_appimage.sh https://github.com/AppImage/AppImageKit/issues/965
+        sudo apt-get update
+        sudo apt-get install qemu-user-static -y
+
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
+        sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "$DOCKERIMAGE" /bin/bash -c "cd /MuseScore && \
+        bash /MuseScore/build/ci/linux/setup.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode $BUILD_MODE --telemetry $T_ID && \
+        bash /MuseScore/build/ci/linux/package.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/tools/checksum.sh"
+    - name: Publish to OSUOSL
+      if: env.DO_PUBLISH == 'true'
+      run: |
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v 3
+    - name: Upload artifacts on GitHub
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
+        path: ./build.artifacts/
+
+
+  linux_armhf:
+    if: ${{ contains(needs.plan.outputs.platforms, 'linux_armhf') }}
+    runs-on: ubuntu-22.04-arm
+    env:
+      ARCH: armv7l
+      DOCKERIMAGE: arm32v7/ubuntu:focal
+    ##
+    needs:
+      - plan
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.12.1
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v4
+    - name: Configure workflow
+      run: |
+        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ needs.plan.outputs.build_mode }}
+        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+        bash ./build/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
+
+        DO_PUBLISH='false'
+        if [[ "${{ needs.plan.outputs.publish }}" == "on" && "$BUILD_MODE" == "nightly" ]]; then
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
+            echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
+            DO_PUBLISH='false'
+          fi
+        fi
+
+        ADD_INFO="_${GITHUB_REF#refs/heads/}"
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          ADD_INFO="_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}"
+        fi
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_$ARCH${ADD_INFO}")"
+
+        echo "github.repository: ${{ github.repository }}"
+        echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
+    - name: Setup environment (x86_64)
+      if: env.ARCH == 'x86_64'
+      run: |
+        bash ./build/ci/linux/setup.sh --arch $ARCH --is_calling_without_sudo true
+    - name: Build (x86_64)
+      if: env.ARCH == 'x86_64'
+      run: |
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
+        bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode $BUILD_MODE --telemetry $T_ID
+    - name: Package (x86_64)
+      if: env.ARCH == 'x86_64'
+      run: |
+        bash ./build/ci/linux/package.sh --arch $ARCH 
+    - name: Checksum (x86_64)
+      if: env.ARCH == 'x86_64'
+      run: |
+        bash ./build/ci/tools/checksum.sh
+    - name: Setup, build, package, checksum (ARM)
+      if: env.ARCH == 'armv7l' || env.ARCH == 'aarch64'
+      run: |
+        # QEMU for binfmt issue make_appimage.sh https://github.com/AppImage/AppImageKit/issues/965
+        sudo apt-get update
+        sudo apt-get install qemu-user-static -y
+
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
+        sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "$DOCKERIMAGE" /bin/bash -c "cd /MuseScore && \
+        bash /MuseScore/build/ci/linux/setup.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode $BUILD_MODE --telemetry $T_ID && \
+        bash /MuseScore/build/ci/linux/package.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/tools/checksum.sh"
+    - name: Publish to OSUOSL
+      if: env.DO_PUBLISH == 'true'
+      run: |
+        bash ./build/ci/tools/osuosl/publish.sh -s ${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }} --os linux -v 3
+    - name: Upload artifacts on GitHub
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.UPLOAD_ARTIFACT_NAME }}
+        path: ./build.artifacts/
+
+
+  linux_arm64:
+    if: ${{ contains(needs.plan.outputs.platforms, 'linux_arm64') }}
+    runs-on: ubuntu-22.04-arm
+    env:
+      ARCH: aarch64
+      DOCKERIMAGE: arm64v8/ubuntu:focal
+    ##
+    needs:
+      - plan
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.12.1
+      with:
+        access_token: ${{ github.token }}
+    - name: Clone repository
+      uses: actions/checkout@v4
+    - name: Configure workflow
+      run: |
+        bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ needs.plan.outputs.build_mode }}
+        BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
+
+        bash ./build/ci/tools/make_build_number.sh
+        BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
+
+        DO_PUBLISH='false'
+        if [[ "${{ needs.plan.outputs.publish }}" == "on" && "$BUILD_MODE" == "nightly" ]]; then
+          DO_PUBLISH='true'
+          if [ -z "${{ secrets.OSUOSL_SSH_ENCRYPT_SECRET }}" ]; then
+            echo "::warning::OSUOSL_SSH_ENCRYPT_SECRET is empty; not publishing to OSUOSL"
+            DO_PUBLISH='false'
+          fi
+        fi
+
+        ADD_INFO="_${GITHUB_REF#refs/heads/}"
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          ADD_INFO="_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}"
+        fi
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_$ARCH${ADD_INFO}")"
+
+        echo "github.repository: ${{ github.repository }}"
+        echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
+        echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" | tee -a $GITHUB_ENV
+    - name: Setup environment (x86_64)
+      if: env.ARCH == 'x86_64'
+      run: |
+        bash ./build/ci/linux/setup.sh --arch $ARCH --is_calling_without_sudo true
+    - name: Build (x86_64)
+      if: env.ARCH == 'x86_64'
+      run: |
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
+        bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode $BUILD_MODE --telemetry $T_ID
+    - name: Package (x86_64)
+      if: env.ARCH == 'x86_64'
+      run: |
+        bash ./build/ci/linux/package.sh --arch $ARCH 
+    - name: Checksum (x86_64)
+      if: env.ARCH == 'x86_64'
+      run: |
+        bash ./build/ci/tools/checksum.sh
+    - name: Setup, build, package, checksum (ARM)
+      if: env.ARCH == 'armv7l' || env.ARCH == 'aarch64'
+      run: |
+        # QEMU for binfmt issue make_appimage.sh https://github.com/AppImage/AppImageKit/issues/965
+        sudo apt-get update
+        sudo apt-get install qemu-user-static -y
+
+        T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
+        sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "$DOCKERIMAGE" /bin/bash -c "cd /MuseScore && \
+        bash /MuseScore/build/ci/linux/setup.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode $BUILD_MODE --telemetry $T_ID && \
+        bash /MuseScore/build/ci/linux/package.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/tools/checksum.sh"
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
       run: |
@@ -212,14 +388,10 @@ jobs:
         path: ./build.artifacts/
 
   run_mtests:
-    if: needs.plan.outputs.runtest != 'off'
+    if: needs.plan.outputs.runtest == 'on'
     needs:
       - plan
     runs-on: ubuntu-22.04
-    env:
-        # Enable AddressSanitizer in the mtest build
-        CFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
-        CXXFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
     steps:
     - name: Clone repository
       uses: actions/checkout@v4
@@ -229,10 +401,10 @@ jobs:
         sudo rm -rf /usr/local/lib/android
     - name: Setup environment
       run: |
-        bash ./build/ci/linux/setup.sh
+        bash ./build/ci/linux/setup.sh --is_calling_without_sudo true --cflags '-fsanitize=address -fno-omit-frame-pointer' --cxxflags '-fsanitize=address -fno-omit-frame-pointer' 
     - name: Build
       run: |
-        mkdir -p build.artifacts/env
+        mkdir -p build.artifacts/env # = make_build_mode_env.sh in os build scripts
         ./build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode mtests
     - name: Run mtests
       run: |

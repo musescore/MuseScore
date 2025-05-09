@@ -9,6 +9,7 @@ while [[ "$#" -gt 0 ]]; do
         -a|--artifact) ARTIFACT_NAME="$2"; shift ;;
         -s|--secret) OSUOSL_SSH_ENCRYPT_SECRET="$2"; shift ;;
         --os) OS="$2"; shift ;;
+        --arch) PACKARCH="$2"; shift ;;
         -m|--mode) BUILD_MODE="$2"; shift ;;
         -v|--version) BUILD_VERSION="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
@@ -22,9 +23,12 @@ if [ -z "$BUILD_VERSION" ]; then BUILD_VERSION=$(cat $ARTIFACTS_DIR/env/build_ve
 
 MAJOR_VERSION="${BUILD_VERSION%%.*}"
 
+if [ -z "$PACKARCH" ]; then PACKARCH="x86_64"; fi
+
 echo "ARTIFACT_NAME: $ARTIFACT_NAME"
 echo "SECRET: $OSUOSL_SSH_ENCRYPT_SECRET"
 echo "OS: $OS"
+echo "PACKARCH: $PACKARCH"
 echo "BUILD_MODE: $BUILD_MODE"
 echo "BUILD_VERSION: $BUILD_VERSION"
 echo "MAJOR_VERSION: $MAJOR_VERSION"
@@ -59,7 +63,7 @@ chmod 600 $SSH_KEY
 FTP_PATH=${OS}/${MAJOR_VERSION}x/${BUILD_DIR}
 
 file_extension="${ARTIFACT_NAME##*.}"
-LATEST_NAME="MuseScoreNightly-latest-x86_64.${file_extension}"
+LATEST_NAME="MuseScoreNightly-latest-${PACKARCH}.${file_extension}"
 
 echo "Copy ${ARTIFACTS_DIR}/${ARTIFACT_NAME} to $FTP_PATH"
 scp -oStrictHostKeyChecking=no -C -i $SSH_KEY $ARTIFACTS_DIR/$ARTIFACT_NAME musescore-nightlies@ftp-osl.osuosl.org:~/ftp/$FTP_PATH

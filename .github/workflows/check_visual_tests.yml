@@ -1,9 +1,14 @@
 name: 'Check: Visual Tests (vtests)'
 
 on:
-  pull_request:
+  # schedule: # scheduled workflows will only run on the default branch. edit default values under gen1 below
+  #   - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
+  push: # push.inputs field does not exist, use gen1 below
     branches:
     - 3.x
+  pull_request:
+  # workflow_dispatch: # triggered by github web ui run "Check: Visual Tests (vtest)" workflow button.
+  workflow_call: # triggered by "uses" from other yml files.
 
 jobs:
   run_vtests:
@@ -17,50 +22,50 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - name: Retrieve base commit for PR
+    - name: Get base commit for PR
       if: github.event_name == 'pull_request'
       run: |
         export BASEREF=${{ github.event.pull_request.base.sha }}
         if [ -z "$BASEREF" ]; then export found=0; else export found=1; fi
         echo "BASEREF=$BASEREF" >> $GITHUB_ENV
         echo "found=$found" >> $GITHUB_ENV
-    - name: Retrieve base commit for push commit
+    - name: Get base commit for push
       if: github.event_name == 'push'
       run: |
         export BASEREF=$( git show -s --pretty=%P ${{ github.sha }} | head -c 10 )
         if [ -z "$BASEREF" ]; then export found=0; else export found=1; fi
         echo "BASEREF=$BASEREF" >> $GITHUB_ENV
         echo "found=$found" >> $GITHUB_ENV
-    - name: Setup the environment
+    - name: Setup proposed change
       if: contains( env.found, '1')
       run: |
-        bash ./build/ci/linux/setup.sh
-    - name: Build
+        bash ./build/ci/linux/setup.sh -p "software" --is_calling_without_sudo true
+    - name: Build proposed change
       if: contains( env.found, '1')
       run: |
-        source ./../musescore_environment.sh
-        make installdebug CPUS=2 PREFIX="$HOME/software" COVERAGE=ON
-    - name: Build reference branch
+        bash ./build/ci/linux/build.sh -p "software" -n ${{ github.run_id }} --build_mode vtests
+    - name: Setup base
       if: contains( env.found, '1')
       run: |
-        source ./../musescore_environment.sh
-        mkdir -p "$HOME/softwarebase"
+        bash ./build/ci/linux/setup.sh -p "softwarebase" --is_calling_without_sudo true
+    - name: Build current
+      if: contains( env.found, '1')
+      run: |
         git checkout $BASEREF
-        make clean
-        make installdebug CPUS=2 PREFIX="$HOME/softwarebase" COVERAGE=ON 2>/dev/null
-    - name: Run reference vtests
+        bash ./build/ci/linux/build.sh -p "softwarebase" -n ${{ github.run_id }} --build_mode vtests
+    - name: Run vtests using base build
       if: contains( env.found, '1')
       run: |
-        source ./../musescore_environment.sh
+        source $HOME/softwarebase/build_tools/environment.sh
         cd vtest
         export VTEST_MSCORE="$HOME/softwarebase/bin/mscore"
         export VTEST_BROWSER=ls
         export VTEST_DIR=$(pwd)
         xvfb-run ./gen
-    - name: Run vtests
+    - name: Run vtests using proposed change build
       if: contains( env.found, '1')
       run: |
-        source ./../musescore_environment.sh
+        source $HOME/software/build_tools/environment.sh
         git checkout -
         cd vtest
         mkdir -p compare
@@ -73,7 +78,7 @@ jobs:
     - name: Compare vtests
       if: contains( env.found, '1')
       run: |
-        source ./../musescore_environment.sh  
+        source $HOME/softwarebase/build_tools/environment.sh
         cd vtest
         export VTEST_DIR=$(pwd)
         ./gen_compare
@@ -105,6 +110,6 @@ jobs:
           This is an automatic message. This commit appears to change some of the visual tests.
           Please carefully review the new visual test results in the uploaded artifact that can be found
           [here][1]
-          
+
           [1]: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         token: ${{ secrets.GITHUB_TOKEN }}

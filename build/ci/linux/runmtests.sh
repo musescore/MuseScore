@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-
 echo "Run MuseScore mtest"
 trap 'echo Run tests failed; exit 1' ERR
 
 df -h .
 
-source ./../musescore_environment.sh
+BUILD_TOOLS=$HOME/build_tools
+ENV=$BUILD_TOOLS/environment.sh
+source $ENV
 
 cd build.debug/mtest
 
