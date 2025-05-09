@@ -921,31 +921,86 @@ int step2pitchInterval(int step, int alter)
     return intervals[(step - 1) % 7] + alter;
 }
 
+void tpc2Function(int tpc, Key key, String& accName, String& stepName)
+{
+    if (key == Key::INVALID) {
+        LOGD() << "Invalid key";
+        return;
+    }
+    int step = tpc2degree(tpc, key);
+    static const String stepNames = u"1234567";
+    assert(step < (int)stepNames.size());
+    stepName = stepNames.at(step);
+
+    int alter = tpc2alterByKey(tpc, key);
+    int accidentalNo = std::abs(alter);
+    accName = String();
+    bool flat = alter < 0;
+    for (int i = 0; i < accidentalNo; i++) {
+        accName.append(flat ? u"b" : u"#");
+    }
+}
+
+String tpc2Function(int tpc, Key key)
+{
+    String accStr;
+    String stepStr;
+    tpc2Function(tpc, key, accStr, stepStr);
+    return accStr + stepStr;
+}
+
 //----------------------------------------------
 //   function2Tpc
 ///   might be temporary, just used to parse nashville notation now
 ///
 //----------------------------------------------
+
 int function2Tpc(const String& s, Key key)
 {
-    //TODO - PHV: allow for alternate spellings
+    size_t idx = 0;
+    return function2Tpc(s, key, idx);
+}
+
+int function2Tpc(const String& s, Key key, size_t& idx)
+{
+    // TODO - PHV: allow for alternate spellings
     int alter = 0;
     int step;
+
     if (!s.isEmpty() && s.at(0).isDigit()) {
         step = s.at(0).digitValue();
-    } else if (s.size() > 1 && s.at(1).isDigit()) {
-        step = s.at(1).digitValue();
-        if (s.at(0) == u'b') {
+        idx = 1;
+    } else if (s.size() > 1) {
+        constexpr int NUM_LEN = 1;
+        int accIdx = s.size() - NUM_LEN;
+        String acc = s.left(accIdx);
+        String num = s.right(NUM_LEN);
+        if (num.size() > NUM_LEN || num.empty() || !num.at(0).isDigit()) {
+            return Tpc::TPC_INVALID;
+        }
+
+        step = num.at(0).digitValue();
+        idx = NUM_LEN;
+        if (acc.startsWith(u"bb")) {
+            alter = -2;
+            idx += 2;
+        } else if (acc.startsWith(u"b")) {
             alter = -1;
-        } else if (s.at(0) == u'#') {
+            idx += 1;
+        } else if (acc.startsWith(u"#")) {
             alter = 1;
+            idx += 1;
+        } else if (acc.startsWith(u"##")) {
+            alter = 2;
+            idx += 2;
         }
     } else {
         return Tpc::TPC_INVALID;
     }
 
     int keyTpc = int(key) + 14;   //tpc of key (ex. F# major would be Tpc::F_S)
-    return tpcInterval(keyTpc, step, alter);
+    int tpc = tpcInterval(keyTpc, step, alter);
+    return tpc;
 }
 
 //---------------------------------------------------------

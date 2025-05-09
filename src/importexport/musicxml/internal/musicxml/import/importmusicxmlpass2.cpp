@@ -7637,6 +7637,9 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     UNUSED(measure);
     track_idx_t track = m_pass1.trackForPart(partId);
 
+    Staff* staff = m_score->staff(track2staff(track));
+    Key key = staff ? staff->key(sTime) : Key::INVALID;
+
     const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
     const String placement = m_e.attribute("placement");
     const bool printObject = m_e.asciiAttribute("print-object") != "no";
@@ -7695,7 +7698,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
                     const String numeralRoot = m_e.readText();
                     if (functionText.isEmpty() || functionText.at(0).isDigit()) {
                         ha->setHarmonyType(HarmonyType::NASHVILLE);
-                        ha->setFunction(numeralRoot);
+                        ha->setTpcFromFunction(numeralRoot, key);
                     } else {
                         ha->setHarmonyType(HarmonyType::ROMAN);
                     }
@@ -7703,10 +7706,10 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
                     const int alter = m_e.readText().toInt();
                     switch (alter) {
                     case -1:
-                        ha->setFunction(u"b" + ha->hFunction());
+                        ha->setTpcFromFunction(u"b" + ha->hFunction(key), key);
                         break;
                     case 1:
-                        ha->setFunction(u"#" + ha->hFunction());
+                        ha->setTpcFromFunction(u"#" + ha->hFunction(key), key);
                         break;
                     default:
                         break;

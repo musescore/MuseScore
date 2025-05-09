@@ -1746,9 +1746,6 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
     } else {
         xml.tag("name", item->hTextName());
     }
-    if (!item->hFunction().isEmpty()) {
-        xml.tag("function", item->hFunction());
-    }
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, false);
     //Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION
     //written by the above function call because they are part of element style

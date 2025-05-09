@@ -128,14 +128,14 @@ public:
     bool isRealizable() const;
     bool isInFretBox() const;
 
-    String hFunction() const { return m_function; }
+    String hFunction(Key key = Key::INVALID) const;
     String hTextName() const { return m_textName; }
     int bassTpc() const { return m_bassTpc; }
     void setBassTpc(int val) { m_bassTpc = val; }
     int rootTpc() const { return m_rootTpc; }
     void setRootTpc(int val) { m_rootTpc = val; }
     void setTextName(const String& s) { m_textName = s; }
-    void setFunction(const String& s) { m_function = s; }
+    void setTpcFromFunction(const String& s, Key key = Key::INVALID);
     void addDegree(const HDegree& d);
     const std::vector<HDegree>& degreeList() const;
     const ParsedChord* parsedForm() const;
@@ -208,8 +208,6 @@ private:
     int m_id = -1;                    // >0 = id of matched chord from chord list, if applicable
     // -1 = invalid chord
     // <-10000 = private id of generated chord or matched chord with no id
-
-    String m_function;          // numeric representation of root for Nashville
     String m_textName;          // name recognized from chord list, read from score file, or constructed from imported source
                                 // Also stores the whole RNA string to be rendered
     mutable ParsedChord* m_parsedForm = nullptr;   // parsed form of chord

@@ -3182,7 +3182,7 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "function") {
-            h->setFunction(e.readText());
+            h->setTpcFromFunction(e.readText());
         } else if (tag == "degree") {
             int degreeValue = 0;
             int degreeAlter = 0;
