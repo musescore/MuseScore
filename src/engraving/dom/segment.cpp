@@ -2542,7 +2542,7 @@ void Segment::createShape(staff_idx_t staffIdx)
         track_idx_t effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
         if (effectiveTrack >= strack && effectiveTrack < etrack) {
             setVisible(true);
-            if (e->isRest() && toRest(e)->ticks() >= measure()->ticks() && measure()->hasVoices(e->staffIdx())) {
+            if (e->isRest() && toRest(e)->isFullMeasureRest() && measure()->hasVoices(e->staffIdx())) {
                 // A full measure rest in a measure with multiple voices must be ignored
                 continue;
             }
