@@ -7,6 +7,7 @@
 declare_module(iex_finale)
 
 include(FetchContent)
+include(GetCompilerInfo)
 
 # temporary for reference and debugging
 set(MUSX_DISPLAY_NODE_NAMES ON CACHE BOOL "Log node names to trace as they are processed" FORCE)
@@ -19,6 +20,12 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(musx)
+
+if (CC_IS_MSVC)
+    include(FindZlibStatic)
+    set(Z_INCLUDE ${DEPENDENCIES_INC}/zlib)
+    list(APPEND MODULE_INCLUDE_PRIVATE ${Z_INCLUDE})
+endif ()
 
 set(MODULE_SRC
     ${TINYXML_MODULE_SRC}
