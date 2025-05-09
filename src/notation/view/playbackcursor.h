@@ -54,18 +54,18 @@ public:
     // alex::
     std::vector<EngravingItem*>& hit_elements();
     int hit_measure_no();
-    int seg_note_duration_tree();
+    size_t seg_note_duration_tree();
     std::vector<std::vector<EngravingItem*>> seg_records();
-    std::vector<int> staffindex_curr_at_segindex_records();
+    std::vector<size_t> staffindex_curr_at_segindex_records();
 
     void setHitElements(std::vector<EngravingItem*>& el);
     void setHitMeasureNo(int m_no);
-    void setSegNoteDurationTree(int m_tree);
+    void setSegNoteDurationTree(size_t m_tree);
     void pushSegRecords(std::vector<EngravingItem*> item);
-    void pushStaffindexCurrAtSegindexRecords(int m_seg_index);
-    void updateStaffindexCurrAtSegindex(int m_staffindex, int m_seg_atindex);
+    void pushStaffindexCurrAtSegindexRecords(size_t m_seg_index);
+    void updateStaffindexCurrAtSegindex(size_t m_staffindex, size_t m_seg_atindex);
 
-    void highlightAt(int seg_index, int seg_track_index, bool is_highlight);
+    void highlightAt(size_t seg_index, size_t seg_track_index, bool is_highlight);
 
     void clearSegRecords();
 
@@ -89,8 +89,8 @@ private:
     std::vector<EngravingItem*> m_hit_el;
     std::vector<std::vector<EngravingItem*>> m_seg_records;
     int m_hit_measure_no = -1;
-    int m_seg_note_duration_tree = 0;
-    std::vector<int> m_staffindex_curr_at_segindex_records;
+    size_t m_seg_note_duration_tree = 0;
+    std::vector<size_t> m_staffindex_curr_at_segindex_records;
 };
 }
 
