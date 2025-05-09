@@ -47,10 +47,10 @@ struct ReadableTuplet
     engraving::Fraction absBegin;
     engraving::Fraction absDuration;
     engraving::Fraction absEnd;
-    std::shared_ptr<const musx::dom::details::TupletDef> musxTuplet; // actual tuplet object. used for writing properties
-    engraving::Tuplet* scoreTuplet; // to be created tuplet object.
+    std::shared_ptr<const musx::dom::details::TupletDef> musxTuplet = nullptr; // actual tuplet object. used for writing properties
+    engraving::Tuplet* scoreTuplet = nullptr; // to be created tuplet object.
     int layer{}; // for nested tuplets. 0 = outermost
-    bool valid; // DBG
+    bool valid = false; // DBG
 };
 
 class EnigmaXmlImporter
@@ -72,8 +72,11 @@ private:
     void importBrackets();
     void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);
 
-    bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx,
+    bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx,
                           engraving::Segment* segment, std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex);
+
+    engraving::ChordRest* importEntry(musx::dom::EntryInfoPtr entryInfo, engraving::Segment* segment,
+                                      engraving::track_idx_t curTrackIdx);
 
     void fillWithInvisibleRests(engraving::Fraction startTick, engraving::track_idx_t curTrackIdx, engraving::Fraction lengthToFill,
                                 std::vector<ReadableTuplet> tupletMap);
