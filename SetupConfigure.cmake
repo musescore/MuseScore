@@ -107,6 +107,12 @@ endif()
 # CONFIGURE: Web App
 ###########################################
 if(BUILD_CONFIGURATION MATCHES "APP-WEB")
+
+    set(QT_ADD_LINGUISTTOOLS OFF)
+    set(QT_ADD_CONCURRENT OFF)
+
+    set(QT_QPROCESS_SUPPORTED OFF)
+
     set(MUE_GENERAL_APP ON)
     set(MUE_BUILD_APPSHELL_MODULE ON)
     set(MUE_BUILD_PROJECT_MODULE ON)
@@ -146,6 +152,7 @@ if(BUILD_CONFIGURATION MATCHES "APP-WEB")
     set(MUE_BUILD_PLAYBACK_MODULE OFF)
     set(MUE_BUILD_BRAILLE_MODULE OFF)
     set(MUE_BUILD_IMPORTEXPORT_MODULE OFF)
+    set(MUE_BUILD_IMAGESEXPORT_MODULE OFF)
     set(MUE_BUILD_VIDEOEXPORT_MODULE OFF)
 
     set(MUE_INSTALL_SOUNDFONT OFF)
@@ -260,6 +267,14 @@ if (NOT MUSE_MODULE_UI)
     set(MUE_BUILD_APPSHELL_MODULE OFF) # hard dependency
 endif()
 
+if (NOT QT_ADD_LINGUISTTOOLS)
+    set(MUE_RUN_LRELEASE OFF) # hard dependency
+endif()
+
+if (MUSE_MODULE_NETWORK_WEBSOCKET)
+    set(QT_ADD_WEBSOCKET ON)
+endif()
+
 ###########################################
 # Unit tests
 ###########################################
@@ -320,6 +335,14 @@ if (QT_SUPPORT)
     add_compile_definitions(QT_SUPPORT)
     add_compile_definitions(KORS_LOGGER_QT_SUPPORT)
     add_compile_definitions(SCRIPT_INTERFACE)
+
+    if (QT_QPROCESS_SUPPORTED)
+        add_compile_definitions(QT_QPROCESS_SUPPORTED)
+    endif()
+
+    if (QT_ADD_CONCURRENT)
+        add_compile_definitions(QT_CONCURRENT_SUPPORTED)
+    endif()
 else()
     add_compile_definitions(NO_QT_SUPPORT)
 endif()

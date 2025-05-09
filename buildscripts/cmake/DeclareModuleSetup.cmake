@@ -103,11 +103,7 @@ macro(setup_module)
         message(STATUS "Configuring ${MODULE} <${MODULE_ALIAS}>")
     endif()
 
-    if (CC_IS_EMSCRIPTEN)
-        add_library(${MODULE} OBJECT)
-    else()
-        add_library(${MODULE}) # STATIC/SHARED set global in the SetupBuildEnvironment.cmake
-    endif()
+    add_library(${MODULE}) # STATIC/SHARED set global in the SetupBuildEnvironment.cmake
 
     if (MODULE_ALIAS)
         add_library(${MODULE_ALIAS} ALIAS ${MODULE})

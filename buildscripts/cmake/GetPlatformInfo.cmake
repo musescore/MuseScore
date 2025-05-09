@@ -51,6 +51,8 @@ set(archdetect_c_code "
         #endif
     #elif defined(__x86_64) || defined(__x86_64__) || defined(__amd64) || defined(_M_X64)
         #error cmake_ARCH x86_64
+    #elif defined(__EMSCRIPTEN__)
+        #error cmake_ARCH wasm
     #endif
     #error cmake_ARCH unknown
     ")
@@ -87,6 +89,8 @@ elseif(${ARCH} MATCHES "aarch64")
     set(ARCH_IS_AARCH64 1)
 elseif(${ARCH} MATCHES "x86_64")
     set(ARCH_IS_X86_64 1)
+elseif(${ARCH} MATCHES "wasm")
+    set(ARCH_IS_WASM 1)
 else()
     set(ARCH_IS_X86_64 1)
     message(WARNING "Architecture could not be detected. Using x86_64 as a fallback.")

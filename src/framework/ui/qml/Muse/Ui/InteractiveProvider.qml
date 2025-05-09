@@ -35,11 +35,12 @@ Item {
 
     anchors.fill: parent
 
-    Rectangle {
-        width: 100
-        height: 100
-        color: "#440000"
-    }
+    //! NOTE Need for debug
+    // Rectangle {
+    //     width: 100
+    //     height: 100
+    //     color: "#440000"
+    // }
 
     function onPageOpened() {
         root.provider.onOpen(ContainerType.PrimaryPage, {})
