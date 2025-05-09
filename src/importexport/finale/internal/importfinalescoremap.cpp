@@ -147,9 +147,9 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     } else {
         s->staffType(eventTick)->setGenClef(false);
     }
+    m_score->appendStaff(s);
     m_staff2Inst.emplace(s->idx(), InstCmper(musxStaff->getCmper()));
     m_inst2Staff.emplace(InstCmper(musxStaff->getCmper()), s->idx());
-    m_score->appendStaff(s);
     return s;
 }
 
@@ -235,7 +235,7 @@ static ChordRest* importEntry(/*const std::shared_ptr<const EntryInfo>*/ EntryIn
         Rest* rest = Factory::createRest(segment, d);
         cr = toChordRest(rest);
 
-        for (const std::shared_ptr<MusxNote> n : currentEntry->notes) {
+        for (const std::shared_ptr<MusxNote>& n : currentEntry->notes) {
             //todo: calculate y-offset here (remember is also staff-dependent)
             chordIsCrossStaff = chordIsCrossStaff && n->crossStaff;
         }
@@ -401,7 +401,8 @@ bool EnigmaXmlImporter::processEntryInfo(/*const std::shared_ptr<const EntryInfo
         Fraction tickDifference = currentEntryInfoStart.value() - segment->rtick();
         fillWithInvisibleRests(segment->tick(), curTrackIdx, tickDifference, tupletMap);
         tickEnd += tickDifference;
-    } else if (segment->rtick() > currentEntryInfoStart.value()) {
+        segment = m_score->tick2measure(tickEnd)->getSegment(SegmentType::ChordRest, tickEnd);
+    } else if (segment->rtick().reduced() > currentEntryInfoStart.value().reduced()) {
         // edge case: current entry is at the beginning of the measure
         /// @todo this method needs a different location. tuplet map is from the previous measure
         Fraction tickDifference = segment->measure()->ticks() - segment->rtick();
@@ -526,13 +527,13 @@ static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::Tuple
         std::optional<Fraction> absDuration = musxFractionToFraction(tuplet.endDura - tuplet.startDura);
         std::optional<Fraction> absEnd = musxFractionToFraction(tuplet.endDura);
         result.emplace_back(ReadableTuplet {
-            absBegin: (absBegin.has_value() ? absBegin.value() : Fraction(-1, 1)),
-            absDuration: (absDuration.has_value() ? absDuration.value() : Fraction(-1, 1)),
-            absEnd: (absEnd.has_value() ? absEnd.value() : Fraction(-1, 1)),
-            musxTuplet: tuplet.tuplet,
-            scoreTuplet: nullptr,
-            layer: 0,
-            valid: absBegin.has_value() && absDuration.has_value()
+            .absBegin =  (absBegin.has_value() ? absBegin.value() : Fraction(-1, 1)),
+            .absDuration =  (absDuration.has_value() ? absDuration.value() : Fraction(-1, 1)),
+            .absEnd =  (absEnd.has_value() ? absEnd.value() : Fraction(-1, 1)),
+            .musxTuplet =  tuplet.tuplet,
+            .scoreTuplet =  nullptr,
+            .layer =  0,
+            .valid =  absBegin.has_value() && absDuration.has_value()
         });
     }
 
@@ -625,7 +626,7 @@ void EnigmaXmlImporter::importMeasures()
         if (curStaffIdx == muse::nidx) {
             continue;
         }
-        segment = m_score->firstSegment(SegmentType::ChordRest);
+        segment = m_score->firstMeasure()->getSegment(SegmentType::ChordRest, Fraction(0, 1));
         if (!segment) {
             logger()->logWarning(String(u"Unable to initialise start segment"));
             break;
@@ -655,13 +656,13 @@ void EnigmaXmlImporter::importMeasures()
                 std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo);
                 // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
                 tupletMap.insert(tupletMap.begin(), ReadableTuplet {
-                    absBegin: Fraction(0, 1),
-                    absDuration: simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger()),
-                    absEnd: simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger()),
-                    musxTuplet: nullptr,
-                    scoreTuplet: nullptr,
-                    layer: -1,
-                    valid: false
+                    .absBegin =  Fraction(0, 1),
+                    .absDuration =  simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger()),
+                    .absEnd =  simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger()),
+                    .musxTuplet =  nullptr,
+                    .scoreTuplet =  nullptr,
+                    .layer =  -1,
+                    .valid =  false
                 });
                 size_t lastAddedTupletIndex = 0;
                 for (size_t i = 0; i < entries.size(); ++i) {

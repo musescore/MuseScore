@@ -26,9 +26,6 @@
 #include <zlib.h>
 #include <exception>
 
-#include <QFile>
-#include <QFileInfo>
-
 #include "musx/musx.h"
 #include "third_party/musx/TinyXmlImpl.h"
 
