@@ -66,6 +66,7 @@ void Player::init()
         //! NOTE Send initial state
         m_playbackPositionChanged.send(s->player()->playbackPosition());
         s->player()->playbackPositionChanged().onReceive(this, [this](const secs_t newPos) {
+            // LOGALEX() << "m_playbackPositionChanged, newPos: " << newPos;
             m_playbackPositionChanged.send(newPos);
         });
     }, AudioThread::ID);
