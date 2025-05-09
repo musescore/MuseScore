@@ -19,7 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
+#ifndef MU_ENGRAVING_EDITMODERENDERER_H
+#define MU_ENGRAVING_EDITMODERENDERER_H
 
 #include "../ieditmoderenderer.h"
 
@@ -57,3 +58,5 @@ private:
     static void drawTextBase(TextBase* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling);
 };
 }
+
+#endif // MU_ENGRAVING_EDITMODERENDERER_H

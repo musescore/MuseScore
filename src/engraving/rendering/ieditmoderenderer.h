@@ -19,7 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
+#ifndef MU_ENGRAVING_IEDITMODERENDERER_H
+#define MU_ENGRAVING_IEDITMODERENDERER_H
 
 #include "modularity/imoduleinterface.h"
 
@@ -41,3 +42,5 @@ public:
     virtual void drawItem(EngravingItem* item, muse::draw::Painter* p, EditData& ed, double currentViewScaling) = 0;
 };
 }
+
+#endif // MU_ENGRAVING_IEDITMODERENDERER_H
