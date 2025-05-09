@@ -156,20 +156,21 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick)
         return RectF();
     }
 
-    // int seg_note_tree1 = seg_note_duration_tree();
+    // size_t seg_note_tree1 = seg_note_duration_tree();
     std::vector<EngravingItem*> oldHitElements = hit_elements();
-    int len1 = (int)oldHitElements.size();
+    size_t len1 = oldHitElements.size();
 
     // if (seg_note_tree1 != 0 && hit_measure_no() != measureNo) {
-    //     std::vector<int> staffIndexAtSegRecords = staffindex_curr_at_segindex_records();
-    //     for (int i = 0; i < len1 / 4; i++) {
+    //     std::vector<size_t> staffIndexAtSegRecords = staffindex_curr_at_segindex_records();
+    //     for (size_t i = 0; i < len1; i++) {
     //         int atSegIndex = staffIndexAtSegRecords[i];
     //         if ((seg_note_tree1 & (1 << i)) > 0) {
-    //             highlightAt(atSegIndex, 4 * i, false);
+    //             highlightAt(atSegIndex, i, false);
     //         }
     //     }
     //     m_staffindex_curr_at_segindex_records.clear();
     // } 
+  
     // m_seg_records.clear(); 
 
     qreal x = 0.0;
@@ -215,26 +216,24 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick)
 
     // alex:: lingering cursor
     std::vector<EngravingItem*> engravingItemList = s1->elist();
-    int len = (int)engravingItemList.size();
+    size_t len = engravingItemList.size();
     
-    // int seg_note_tree = 0;
-    for (int i = 0; i < len; i++) {
-        EngravingItem* engravingItem = engravingItemList[(track_idx_t)i];
+    // size_t seg_note_tree = 0;
+    for (size_t i = 0; i < len; i++) {
+        EngravingItem* engravingItem = engravingItemList[i];
         
         if (engravingItem == nullptr) {
             continue;
         }
 
-        // if (i % 4 == 0) {
-        //     seg_note_tree |= 1 << (i / 4);
-        // }
+        // seg_note_tree |= (1 << i);
 
         engravingItem->setColor(muse::draw::Color::RED);
     }
 
     if (oldHitElements != engravingItemList) {
-        for (int i = 0; i < len1; i++) {
-            EngravingItem* engravingItem = oldHitElements[(track_idx_t)i];
+        for (size_t i = 0; i < len1; i++) {
+            EngravingItem* engravingItem = oldHitElements[i];
             if (engravingItem == nullptr) {
                 continue;
             }
@@ -244,32 +243,31 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick)
 
         // if (seg_note_tree1 == 0 || hit_measure_no() != measureNo) {
         //     setSegNoteDurationTree(seg_note_tree);
-        //     for (int i = 0; i < len1 / 4; i++) {
+        //     for (size_t i = 0; i < len1; i++) {
         //         pushStaffindexCurrAtSegindexRecords(0);
         //     }
         //     setHitMeasureNo(measureNo);
         // } else {
-        //     int xorResult = seg_note_tree1 ^ seg_note_tree;
+        //     size_t xorResult = seg_note_tree1 ^ seg_note_tree;
 
         //     std::vector<std::vector<EngravingItem*>> segRecords = seg_records();
-        //     int segRecordsLen = (int)segRecords.size();
+        //     size_t segRecordsLen = segRecords.size();
 
-        //     std::vector<int> staffIndexAtSegRecords = staffindex_curr_at_segindex_records();
+        //     std::vector<size_t> staffIndexAtSegRecords = staffindex_curr_at_segindex_records();
             
-        //     for (int i = 0; i < len1 / 4; i++) {
+        //     for (size_t i = 0; i < len1; i++) {
         //         if ((xorResult & (1 << i)) > 0) {
-        //             int atSegIndex = staffIndexAtSegRecords[(size_t)i];
+        //             size_t atSegIndex = staffIndexAtSegRecords[i];
         //             bool highlight_flag = false;
-        //             int _atSegIndex = atSegIndex;
+        //             size_t _atSegIndex = atSegIndex;
         //             if ((seg_note_tree1 & (1 << i)) > 0) {
         //                 highlight_flag = true;
         //             } else {
-        //                 highlight_flag = false;
         //                 atSegIndex = segRecordsLen - 1;
         //                 updateStaffindexCurrAtSegindex(i, atSegIndex);
         //             }
                     
-        //             highlightAt(_atSegIndex, 4 * i, highlight_flag);
+        //             highlightAt(_atSegIndex, i, highlight_flag);
         //         }
         //     }
 
@@ -283,7 +281,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick)
         // }
         emit lingeringCursorUpdate1();
     }
-    
 
     if (!s) {
         return RectF();
@@ -340,9 +337,9 @@ std::vector<EngravingItem*>& PlaybackCursor::hit_elements() {
     return m_hit_el;
 }
 int PlaybackCursor::hit_measure_no() { return m_hit_measure_no; }
-int PlaybackCursor::seg_note_duration_tree() { return m_seg_note_duration_tree; }
+size_t PlaybackCursor::seg_note_duration_tree() { return m_seg_note_duration_tree; }
 std::vector<std::vector<EngravingItem*>> PlaybackCursor::seg_records() { return m_seg_records; }
-std::vector<int> PlaybackCursor::staffindex_curr_at_segindex_records() { return m_staffindex_curr_at_segindex_records; }
+std::vector<size_t> PlaybackCursor::staffindex_curr_at_segindex_records() { return m_staffindex_curr_at_segindex_records; }
 
 void PlaybackCursor::setHitElements(std::vector<EngravingItem*>& el) { 
     m_hit_el = el;
@@ -350,30 +347,30 @@ void PlaybackCursor::setHitElements(std::vector<EngravingItem*>& el) {
 void PlaybackCursor::setHitMeasureNo(int m_no) { 
     m_hit_measure_no = m_no; 
 }
-void PlaybackCursor::setSegNoteDurationTree(int m_tree) { 
+void PlaybackCursor::setSegNoteDurationTree(size_t m_tree) { 
     m_seg_note_duration_tree = m_tree; 
 }
 void PlaybackCursor::pushSegRecords(std::vector<EngravingItem*> item) { 
     m_seg_records.push_back(item); 
 }
-void PlaybackCursor::pushStaffindexCurrAtSegindexRecords(int m_seg_index) { 
+void PlaybackCursor::pushStaffindexCurrAtSegindexRecords(size_t m_seg_index) { 
     m_staffindex_curr_at_segindex_records.push_back(m_seg_index); 
 }
-void PlaybackCursor::updateStaffindexCurrAtSegindex(int m_staffindex, int m_seg_atindex) { 
+void PlaybackCursor::updateStaffindexCurrAtSegindex(size_t m_staffindex, size_t m_seg_atindex) { 
     m_staffindex_curr_at_segindex_records[m_staffindex] = m_seg_atindex; 
 }
 
-void PlaybackCursor::highlightAt(int seg_index, int seg_track_index, bool is_highlight) {
+void PlaybackCursor::highlightAt(size_t seg_index, size_t seg_track_index, bool is_highlight) {
     if (seg_index < 0) {
         return;
     }
     if (seg_track_index < 0) {
         return;
     }
-    if (seg_index >= (int)m_seg_records.size()) {
+    if (seg_index >= m_seg_records.size()) {
         return;
     }
-    if (seg_track_index >= (int)m_seg_records[seg_index].size()) {
+    if (seg_track_index >= m_seg_records[seg_index].size()) {
         return;
     }
     if (m_seg_records[seg_index][seg_track_index] != nullptr) {
