@@ -71,6 +71,7 @@
 #include "lyricslayout.h"
 #include "measurelayout.h"
 #include "tupletlayout.h"
+#include "restlayout.h"
 #include "slurtielayout.h"
 #include "horizontalspacing.h"
 #include "dynamicslayout.h"
@@ -922,6 +923,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     for (ChordRest* cr : elementsToLayout.chordRests) {
         BeamLayout::layoutNonCrossBeams(cr, ctx);
     }
+
+    RestLayout::alignRests(elementsToLayout.system, ctx);
+    RestLayout::checkFullMeasureRestCollisions(elementsToLayout.system, ctx);
 
     for (BarLine* bl : elementsToLayout.barlines) {
         TLayout::updateBarlineShape(bl, bl->mutldata(), ctx);
