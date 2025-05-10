@@ -51,3 +51,7 @@ set(MODULE_LINK
 )
 
 setup_module()
+
+if (MUE_BUILD_IMPORTEXPORT_TESTS)
+    add_subdirectory(tests)
+endif()
