@@ -1,0 +1,62 @@
+name: 'Deploy: Backend'
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_major_minor:
+        description: 'MuseScore version'
+        required: true
+      is_default:
+        description: 'Set this version as default'
+        default: 'false'
+  workflow_call:
+    inputs:
+      version_major_minor:
+        description: 'MuseScore version'
+        required: true
+        type: string
+      is_default:
+        description: 'Set this version as default'
+        default: 'false'
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.repository == 'musescore/MuseScore'
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.12.1
+      with:
+        access_token: ${{ github.token }}
+
+    - name: Clone repository
+      uses: actions/checkout@v4
+
+    - name: "Configure workflow"
+      run: |
+        pip install jenkinsapi
+
+    - name: Build and deploy to musescore.com
+      run: |
+        # for the first deploy of the current version we need to first build
+
+        WITH_BUILD="false"
+        if [ "${{ inputs.is_default }}" = "false" ]; then
+            WITH_BUILD="true"
+        fi
+
+        python3 ./buildscripts/ci/backend/deploy.py \
+            --mu_version ${{ inputs.version_major_minor }} \
+            --with_build $WITH_BUILD \
+            --deploy_stage "musescore.com prod" \
+            --is_default ${{ inputs.is_default }} \
+            --api_token ${{ secrets.JENKINS_API_TOKEN }}
+
+    - name: Deploy to museclass.com
+      run: |
+        python3 ./buildscripts/ci/backend/deploy.py \
+            --mu_version ${{ inputs.version_major_minor }} \
+            --deploy_stage "museclass.com prod" \
+            --is_default ${{ inputs.is_default }}  \
+            --api_token ${{ secrets.JENKINS_API_TOKEN }}
