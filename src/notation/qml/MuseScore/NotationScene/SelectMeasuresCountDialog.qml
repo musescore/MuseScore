@@ -82,6 +82,15 @@ StyledDialogView {
                 onValueEdited: function(newValue) {
                     root.measuresCount = newValue
                 }
+
+                onAccepted: {
+                    root.ret = { errcode: 0, value: root.measuresCount }
+                    root.hide()
+                }
+
+                onEscaped: {
+                    root.reject()
+                }
             }
         }
 
