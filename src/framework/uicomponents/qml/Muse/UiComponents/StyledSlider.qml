@@ -32,7 +32,7 @@ Slider {
     implicitWidth: vertical ? prv.handleSize : prv.defaultLength
     implicitHeight: vertical ? prv.defaultLength : prv.handleSize
 
-    hoverEnabled: root.enabled
+    hoverEnabled: true
     wheelEnabled: true
 
     QtObject {
@@ -105,7 +105,7 @@ Slider {
             states: [
                 State {
                     name: "HOVERED"
-                    when: root.hovered && !root.pressed
+                    when: root.hovered && !root.pressed && root.enabled
 
                     PropertyChanges {
                         target: handleBorder
@@ -115,7 +115,7 @@ Slider {
 
                 State {
                     name: "PRESSED"
-                    when: root.pressed
+                    when: root.pressed && root.enabled
 
                     PropertyChanges {
                         target: handleBorder
