@@ -16586,7 +16586,7 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1621"/>
         <source>Harmonics</source>
-        <translation>Harmonics</translation>
+        <translation>Harmoniques</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1622"/>
@@ -26373,7 +26373,7 @@ les portées :</translation>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1582"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1844"/>
         <source>harmonics</source>
-        <translation>harmonics</translation>
+        <translation>harmoniques</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1583"/>
