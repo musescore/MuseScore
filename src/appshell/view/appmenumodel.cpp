@@ -404,6 +404,9 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem("enh-both"),
         makeMenuItem("enh-current"),
         makeMenuItem("pitch-spell"),
+        makeMenuItem("pitch-spell-sharps"),
+        makeMenuItem("pitch-spell-flats"),
+        makeSeparator(),
         makeMenuItem("reset-groupings"),
         makeMenuItem("resequence-rehearsal-marks"),
         /*
