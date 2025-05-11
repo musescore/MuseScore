@@ -468,6 +468,18 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Respell &pitches"),
              TranslatableString("action", "Respell pitches")
              ),
+    UiAction("pitch-spell-sharps",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Respell pitches with &sharps"),
+             TranslatableString("action", "Respell pitches with sharps")
+             ),
+    UiAction("pitch-spell-flats",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Respell pitches with &flats"),
+             TranslatableString("action", "Respell pitches with flats")
+             ),
     UiAction("reset-groupings",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

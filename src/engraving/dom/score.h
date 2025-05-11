@@ -693,6 +693,8 @@ public:
     void setIsOpen(bool open);
 
     void spell();
+    void spellWithSharps();
+    void spellWithFlats();
     void changeEnharmonicSpelling(bool both);
 
     Fraction nextSeg(const Fraction& tick, int track);

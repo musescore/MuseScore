@@ -258,6 +258,8 @@ public:
 
     virtual void changeEnharmonicSpelling(bool both) = 0;
     virtual void spellPitches() = 0;
+    virtual void spellPitchesWithSharps() = 0;
+    virtual void spellPitchesWithFlats() = 0;
     virtual void regroupNotesAndRests() = 0;
     virtual void resequenceRehearsalMarks() = 0;
 

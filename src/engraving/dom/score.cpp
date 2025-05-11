@@ -99,6 +99,7 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
+#include "pitchspelling.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -896,6 +897,60 @@ void Score::spell()
             }
         }
         spellNotelist(notes);
+    }
+}
+
+static std::vector<Note*> allNotesInScore(Score* score)
+{
+    std::vector<Note*> notes;
+    for (staff_idx_t i = 0; i < score->nstaves(); ++i) {
+        for (Segment* s = score->firstSegment(SegmentType::All); s; s = s->next1()) {
+            track_idx_t strack = i * VOICES;
+            track_idx_t etrack = strack + VOICES;
+            for (track_idx_t track = strack; track < etrack; ++track) {
+                EngravingItem* e = s->element(track);
+                if (e && e->type() == ElementType::CHORD) {
+                    Chord* c = toChord(e);
+                    notes.insert(notes.end(), c->notes().begin(), c->notes().end());
+                    for (Chord* g : c->graceNotes()) {
+                        notes.insert(notes.end(), g->notes().begin(), g->notes().end());
+                    }
+                }
+            }
+        }
+    }
+    return notes;
+}
+
+void Score::spellWithSharps()
+{
+    std::vector<Note*> notes = (selection().isNone()) ? allNotesInScore(this) : selection().noteList();
+    for (Note* n : notes) {
+        Key concertKey = n->staff()->concertKey(n->chord()->tick());
+        int tpc1 = pitch2tpc(n->pitch(), concertKey, Prefer::SHARPS);
+        int tpc2 = n->transposeTpc(tpc1);
+        n->undoChangeProperty(Pid::TPC1, tpc1);
+        n->undoChangeProperty(Pid::TPC2, tpc2);
+        for (Note* tied : n->tiedNotes()) {
+            tied->undoChangeProperty(Pid::TPC1, tpc1);
+            tied->undoChangeProperty(Pid::TPC2, tpc2);
+        }
+    }
+}
+
+void Score::spellWithFlats()
+{
+    std::vector<Note*> notes = (selection().isNone()) ? allNotesInScore(this) : selection().noteList();
+    for (Note* n : notes) {
+        Key concertKey = n->staff()->concertKey(n->chord()->tick());
+        int tpc1 = pitch2tpc(n->pitch(), concertKey, Prefer::FLATS);
+        int tpc2 = n->transposeTpc(tpc1);
+        n->undoChangeProperty(Pid::TPC1, tpc1);
+        n->undoChangeProperty(Pid::TPC2, tpc2);
+        for (Note* tied : n->tiedNotes()) {
+            tied->undoChangeProperty(Pid::TPC1, tpc1);
+            tied->undoChangeProperty(Pid::TPC2, tpc2);
+        }
     }
 }
 
