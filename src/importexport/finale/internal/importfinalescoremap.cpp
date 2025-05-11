@@ -645,7 +645,6 @@ void EnigmaXmlImporter::importMeasures()
 
     // Add entries (notes, rests, tuplets)
     std::vector<std::shared_ptr<others::Staff>> musxStaves = m_doc->getOthers()->getArray<others::Staff>(SCORE_PARTID);
-    Segment* segment = nullptr;
     for (const std::shared_ptr<others::Staff>& musxStaff : musxStaves) {
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxStaff->getCmper()), muse::nidx);
         if (curStaffIdx == muse::nidx) {
@@ -655,7 +654,7 @@ void EnigmaXmlImporter::importMeasures()
         if (m_score->firstMeasure()) {
             continue;
         }
-        segment = m_score->firstMeasure()->getSegment(SegmentType::ChordRest, Fraction(0, 1));
+        Segment* segment = m_score->firstMeasure()->getSegment(SegmentType::ChordRest, m_score->firstMeasure()->tick());
         if (!segment) {
             logger()->logWarning(String(u"Unable to initialise start segment"));
             break;
