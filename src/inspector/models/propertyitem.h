@@ -77,6 +77,7 @@ signals:
     void isModifiedChanged(bool isModified);
 
     void propertyModified(mu::engraving::Pid propertyId, QVariant newValue);
+    void propertyReset(mu::engraving::Pid propertyId);
     void applyToStyleRequested(mu::engraving::Sid styledId, QVariant newStyleValue);
 
 private:
