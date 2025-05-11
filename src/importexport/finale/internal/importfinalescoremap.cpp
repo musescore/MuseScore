@@ -651,7 +651,7 @@ void EnigmaXmlImporter::importMeasures()
             logger()->logWarning(String(u"Musx inst value not found in m_inst2Staff"));
             continue;
         }
-        if (m_score->firstMeasure()) {
+        if (!m_score->firstMeasure()) {
             continue;
         }
         Segment* segment = m_score->firstMeasure()->getSegment(SegmentType::ChordRest, m_score->firstMeasure()->tick());
