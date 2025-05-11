@@ -712,8 +712,6 @@ public:
     void setIsOpen(bool open);
 
     void spell();
-    void spell(staff_idx_t startStaff, staff_idx_t endStaff, Segment* startSegment, Segment* endSegment);
-    void spell(Note*);
     void changeEnharmonicSpelling(bool both);
 
     Fraction nextSeg(const Fraction& tick, int track);
