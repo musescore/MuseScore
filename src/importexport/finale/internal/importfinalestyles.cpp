@@ -219,7 +219,7 @@ static void writeFramePrefs(MStyle& style, const std::string& namePrefix, const 
     style.set(styleIdx(namePrefix + "FramePadding"), enclosure->xMargin / EVPU_PER_SPACE);
     style.set(styleIdx(namePrefix + "FrameWidth"), enclosure->lineWidth / EFIX_PER_SPACE);
     style.set(styleIdx(namePrefix + "FrameRound"),
-              enclosure->roundCorners ? enclosure->cornerRadius / EFIX_PER_EVPU : 0.0);
+              enclosure->roundCorners ? int(lround(enclosure->cornerRadius / EFIX_PER_EVPU)) : 0);
 }
 
 static void writeCategoryTextFontPref(MStyle& style, const FinalePreferences& prefs, const std::string& namePrefix, others::MarkingCategory::CategoryType categoryType)
