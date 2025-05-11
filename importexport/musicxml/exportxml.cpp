@@ -7595,7 +7595,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
             writeInstrumentDetails(part->instrument(), _score->styleB(Sid::concertPitch));
             }
       else {
-            for (size_t staffIdx : _hiddenStaves) {
+            for (int staffIdx : _hiddenStaves) {
                 _attr.doAttr(_xml, true);
                 QString attributes;
                 if (staves > 1)
