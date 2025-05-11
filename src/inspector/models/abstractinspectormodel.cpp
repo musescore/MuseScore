@@ -450,6 +450,32 @@ void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingIt
     endCommand();
 }
 
+void AbstractInspectorModel::onPropertyValueReset(const mu::engraving::Pid pid)
+{
+    resetPropertyValue(m_elementList, pid);
+    updateProperties();
+}
+
+void AbstractInspectorModel::resetPropertyValue(const QList<engraving::EngravingItem*>& items, const mu::engraving::Pid pid)
+{
+    if (items.empty()) {
+        return;
+    }
+
+    beginCommand(TranslatableString("undoableAction", "Reset %1").arg(propertyUserName(pid)));
+
+    for (mu::engraving::EngravingItem* item : items) {
+        IF_ASSERT_FAILED(item) {
+            continue;
+        }
+
+        item->undoResetProperty(pid);
+    }
+
+    updateNotation();
+    endCommand();
+}
+
 void AbstractInspectorModel::updateProperties()
 {
     requestElements();
@@ -629,22 +655,24 @@ PropertyItem* AbstractInspectorModel::buildPropertyItem(const mu::engraving::Pid
                                                         std::function<void(const mu::engraving::Pid propertyId,
                                                                            const QVariant& newValue)> onPropertyChangedCallBack,
                                                         std::function<void(const mu::engraving::Sid styleId,
-                                                                           const QVariant& newValue)> onStyleChangedCallBack)
+                                                                           const QVariant& newValue)> onStyleChangedCallBack,
+                                                        std::function<void(const mu::engraving::Pid propertyId)> onPropertyResetCallBack)
 {
     PropertyItem* newPropertyItem = new PropertyItem(propertyId, this);
 
-    initPropertyItem(newPropertyItem, onPropertyChangedCallBack, onStyleChangedCallBack);
+    initPropertyItem(newPropertyItem, onPropertyChangedCallBack, onStyleChangedCallBack, onPropertyResetCallBack);
 
     return newPropertyItem;
 }
 
 PointFPropertyItem* AbstractInspectorModel::buildPointFPropertyItem(const mu::engraving::Pid& propertyId,
                                                                     std::function<void(const mu::engraving::Pid propertyId,
-                                                                                       const QVariant& newValue)> onPropertyChangedCallBack)
+                                                                                       const QVariant& newValue)> onPropertyChangedCallBack,
+                                                                    std::function<void(const mu::engraving::Pid propertyId)> onPropertyResetCallBack)
 {
     PointFPropertyItem* newPropertyItem = new PointFPropertyItem(propertyId, this);
 
-    initPropertyItem(newPropertyItem, onPropertyChangedCallBack);
+    initPropertyItem(newPropertyItem, onPropertyChangedCallBack, nullptr, onPropertyResetCallBack);
 
     return newPropertyItem;
 }
@@ -653,7 +681,8 @@ void AbstractInspectorModel::initPropertyItem(PropertyItem* propertyItem,
                                               std::function<void(const mu::engraving::Pid propertyId,
                                                                  const QVariant& newValue)> onPropertyChangedCallBack,
                                               std::function<void(const mu::engraving::Sid styleId,
-                                                                 const QVariant& newValue)> onStyleChangedCallBack)
+                                                                 const QVariant& newValue)> onStyleChangedCallBack,
+                                              std::function<void(const mu::engraving::Pid propertyId)> onPropertyResetCallBack)
 {
     auto propertyCallback = onPropertyChangedCallBack;
     if (!propertyCallback) {
@@ -671,8 +700,16 @@ void AbstractInspectorModel::initPropertyItem(PropertyItem* propertyItem,
         };
     }
 
+    auto resetCallback = onPropertyResetCallBack;
+    if (!resetCallback) {
+        resetCallback = [this](const mu::engraving::Pid propertyId) {
+            onPropertyValueReset(propertyId);
+        };
+    }
+
     connect(propertyItem, &PropertyItem::propertyModified, this, propertyCallback);
     connect(propertyItem, &PropertyItem::applyToStyleRequested, this, styleCallback);
+    connect(propertyItem, &PropertyItem::propertyReset, this, resetCallback);
 }
 
 void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, ConvertPropertyValueFunc convertElementPropertyValueFunc)
