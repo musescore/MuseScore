@@ -12502,7 +12502,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Annotations:</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1226"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1231"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1094"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1105"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3415"/>
@@ -12512,7 +12512,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Start of %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1229"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1234"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1097"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1107"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3419"/>
@@ -12657,9 +12657,9 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Tab. 10-str. simple</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/rw/read400/measurerw.cpp" line="94"/>
-        <location filename="../../src/engraving/rw/read410/measureread.cpp" line="92"/>
-        <location filename="../../src/engraving/rw/read460/measureread.cpp" line="92"/>
+        <location filename="../../src/engraving/rw/read400/measurerw.cpp" line="93"/>
+        <location filename="../../src/engraving/rw/read410/measureread.cpp" line="91"/>
+        <location filename="../../src/engraving/rw/read460/measureread.cpp" line="91"/>
         <source>MSCX error at line %1: invalid measure length: %2</source>
         <translation type="unfinished">MSCX error at line %1: invalid measure length: %2</translation>
     </message>
@@ -14239,37 +14239,37 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Value %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1628"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1625"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="170"/>
         <source>Start measure: %1</source>
         <translation type="unfinished">Start measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1631"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1628"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="172"/>
         <source>Start displayed measure: %1</source>
         <translation type="unfinished">Start displayed measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1634"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1631"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="174"/>
         <source>Start beat: %1</source>
         <translation type="unfinished">Start beat: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1641"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1638"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="177"/>
         <source>End measure: %1</source>
         <translation type="unfinished">End measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1644"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1641"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="179"/>
         <source>End displayed measure: %1</source>
         <translation type="unfinished">End displayed measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1647"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1644"/>
         <location filename="../../src/notation/internal/notationaccessibility.cpp" line="181"/>
         <source>End beat: %1</source>
         <translation type="unfinished">End beat: %1</translation>
@@ -14336,7 +14336,7 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Toggle partial tie</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="186"/>
+        <location filename="../../src/notation/view/internal/partialtiepopupmodel.cpp" line="192"/>
         <source>Remove partial tie</source>
         <translation type="unfinished">Remove partial tie</translation>
     </message>
@@ -16650,17 +16650,17 @@ Fret %1 on strings %2</translation>
 <context>
     <name>engraving/spacertype</name>
     <message>
-        <location filename="../../src/engraving/dom/spacer.cpp" line="237"/>
+        <location filename="../../src/engraving/dom/spacer.cpp" line="176"/>
         <source>Staff spacer up</source>
         <translation type="unfinished">Staff spacer up</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spacer.cpp" line="239"/>
+        <location filename="../../src/engraving/dom/spacer.cpp" line="178"/>
         <source>Staff spacer down</source>
         <translation type="unfinished">Staff spacer down</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spacer.cpp" line="241"/>
+        <location filename="../../src/engraving/dom/spacer.cpp" line="180"/>
         <source>Staff spacer fixed down</source>
         <translation type="unfinished">Staff spacer fixed down</translation>
     </message>
@@ -24799,7 +24799,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 <context>
     <name>notation/editstaff</name>
     <message>
-        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="209"/>
+        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="208"/>
         <source>Unknown</source>
         <translation type="unfinished">Unknown</translation>
     </message>
@@ -25570,12 +25570,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 <context>
     <name>notation/staffpartproperties</name>
     <message>
-        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="525"/>
+        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="524"/>
         <source>Invalid instrument name</source>
         <translation type="unfinished">Invalid instrument name</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="526"/>
+        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="525"/>
         <source>The instrument name is invalid.</source>
         <translation type="unfinished">The instrument name is invalid.</translation>
     </message>
