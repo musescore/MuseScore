@@ -978,4 +978,10 @@ NoteVal FinaleTConv::notePropertiesToNoteVal(std::tuple<musx::dom::Note::NoteNam
     return nval;
 }
 
+Fraction FinaleTConv::musxFractionToFraction(musx::util::Fraction fraction)
+{
+    // unlike with time signatures, remainder does not need to be accounted for
+    return Fraction(fraction.numerator(), fraction.denominator());
+}
+
 }

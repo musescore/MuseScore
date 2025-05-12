@@ -50,7 +50,6 @@ struct ReadableTuplet
     std::shared_ptr<const musx::dom::details::TupletDef> musxTuplet = nullptr; // actual tuplet object. used for writing properties
     engraving::Tuplet* scoreTuplet = nullptr; // to be created tuplet object.
     int layer{}; // for nested tuplets. 0 = outermost
-    bool valid = false; // DBG
 };
 
 class EnigmaXmlImporter

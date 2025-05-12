@@ -46,6 +46,7 @@ public:
     static engraving::Align justifyToAlignment(musx::dom::others::NamePositioning::AlignJustify alignJustify);
     static engraving::CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines);
     static engraving::NoteVal notePropertiesToNoteVal(std::tuple<musx::dom::Note::NoteName, int, int, int> noteProperties, engraving::Key key = engraving::Key::C);
+    static engraving::Fraction musxFractionToFraction(musx::util::Fraction fraction);
 };
 
 }
