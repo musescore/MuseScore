@@ -395,6 +395,38 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     }
 
     //
+    // check for end of measure time signature
+    //
+    underlyingSeg = lastMeasure->findSegmentR(SegmentType::TimeSig, lastMeasure->ticks());
+    mmrSeg = mmrMeasure->findSegmentR(SegmentType::TimeSig, mmrMeasure->ticks());
+    if (underlyingSeg) {
+        if (mmrSeg == 0) {
+            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::TimeSig, mmrMeasure->ticks());
+        }
+        mmrSeg->setEnabled(underlyingSeg->enabled());
+        mmrSeg->setHeader(underlyingSeg->header());
+        mmrSeg->setEndOfMeasureChange(underlyingSeg->endOfMeasureChange());
+        for (staff_idx_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+            track_idx_t track = staffIdx * VOICES;
+            TimeSig* underlyingTimeSig = toTimeSig(underlyingSeg->element(track));
+            if (underlyingTimeSig) {
+                TimeSig* mmrTimeSig = toTimeSig(mmrSeg->element(track));
+                if (!mmrTimeSig) {
+                    mmrTimeSig = underlyingTimeSig->generated() ? underlyingTimeSig->clone() : toTimeSig(
+                        underlyingTimeSig->linkedClone());
+                    mmrTimeSig->setParent(mmrSeg);
+                    ctx.mutDom().doUndoAddElement(mmrTimeSig);
+                } else {
+                    TLayout::layoutTimeSig(mmrTimeSig, mmrTimeSig->mutldata(), ctx);
+                }
+            }
+        }
+    } else if (mmrSeg) {
+        // TODO: remove elements from mmrSeg?
+        ctx.mutDom().doUndoRemoveElement(mmrSeg);
+    }
+
+    //
     // check for ambitus
     //
     underlyingSeg = firstMeasure->findSegmentR(SegmentType::Ambitus, Fraction(0, 1));
@@ -1678,7 +1710,7 @@ void MeasureLayout::setCourtesyTimeSig(Measure* m, const Fraction& refSigTick, c
     // Find original element
     const size_t nstaves = ctx.dom().nstaves();
     const Fraction courtesySigRTick = courtesySigTick - m->tick();
-    const Measure* prevMeasure = m->prevMeasure();
+    const Measure* prevMeasure = m->prevMeasureMM();
 
     const bool isTrailer = courtesySegType == SegmentType::TimeSigAnnounce;
     const bool isContinuationCourtesy = courtesySegType == SegmentType::TimeSigStartRepeatAnnounce;
@@ -1796,7 +1828,7 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
     // Find original element
     const size_t nstaves = ctx.dom().nstaves();
     const Fraction courtesySigRTick = courtesySigTick - m->tick();
-    const Measure* prevMeasure = m->prevMeasure();
+    const Measure* prevMeasure = m->prevMeasureMM();
 
     const bool isTrailer = courtesySegType == SegmentType::KeySigAnnounce;
     const bool isContinuationCourtesy = courtesySegType == SegmentType::KeySigStartRepeatAnnounce;
@@ -1821,7 +1853,7 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
         // Find reference signature
         const Staff* staff = ctx.dom().staff(track2staff(track));
         const Fraction refSigElementTick = staff->currentKeyTick(refSigTick);
-        const Measure* refMeasure = ctx.dom().tick2measure(refSigElementTick);
+        const Measure* refMeasure = ctx.dom().tick2measureMM(refSigElementTick);
         const Segment* actualKeySigSeg
             = refMeasure ? refMeasure->findSegmentR(SegmentType::KeySig, refSigElementTick - refMeasure->tick()) : nullptr;
         const EngravingItem* el = actualKeySigSeg ? actualKeySigSeg->element(track) : nullptr;
@@ -1834,8 +1866,8 @@ void MeasureLayout::setCourtesyKeySig(Measure* m, const Fraction& refSigTick, co
         const bool needsCourtesy = isContinuationCourtesy ? shouldShowContCourtesy && prevCourtesySegment && prevCourtesySegment->elementAt(
             track) : sigsDifferent;
         // Only show key sig changes on pitched staves
-        const bool staffIsPitchedAtNextMeas = ctx.dom().lastMeasure() == m
-                                              || (m->nextMeasure() && staff->isPitchedStaff(m->nextMeasure()->tick()));
+        const bool staffIsPitchedAtNextMeas = ctx.dom().lastMeasureMM() == m
+                                              || (m->nextMeasureMM() && staff->isPitchedStaff(m->nextMeasureMM()->tick()));
         // If there is a real key sig at this tick (in this bar or the previous), don't create a courtesy
         const bool hasSigAtTick = ksSegAtCourtesyTick && ksSegAtCourtesyTick->enabled() && ksSegAtCourtesyTick->element(track);
         // Only show courtesy if its real signature has courtesies enabled
@@ -1916,7 +1948,7 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
     // Find original element
     const size_t nstaves = ctx.dom().nstaves();
     const Fraction courtesyClefRTick = courtesyClefTick - m->tick();
-    const Measure* prevMeasure = m->prevMeasure();
+    const Measure* prevMeasure = m->prevMeasureMM();
 
     const bool isContinuationCourtesy = courtesySegType == SegmentType::ClefStartRepeatAnnounce;
 
@@ -1933,13 +1965,13 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
     for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
         const Staff* staff = ctx.dom().staff(track2staff(track));
         const Fraction refClefElementTick = staff->currentClefTick(refClefTick);
-        const Measure* refMeasure = ctx.dom().tick2measure(refClefElementTick);
+        const Measure* refMeasure = ctx.dom().tick2measureMM(refClefElementTick);
         const Segment* actualClefSeg
             = refMeasure ? refMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef,
                                                     refClefElementTick - refMeasure->tick()) : nullptr;
-        if (!actualClefSeg && refMeasure && refMeasure->prevMeasure()) {
+        if (!actualClefSeg && refMeasure && refMeasure->prevMeasureMM()) {
             // Check previous measure
-            Measure* refPrevMeasure = refMeasure->prevMeasure();
+            Measure* refPrevMeasure = refMeasure->prevMeasureMM();
             actualClefSeg
                 = refPrevMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef, refClefElementTick - refPrevMeasure->tick());
         }
