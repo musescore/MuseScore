@@ -34,7 +34,6 @@ class PropertyItem : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
-    Q_PROPERTY(QVariant defaultValue READ defaultValue NOTIFY defaultValueChanged)
     Q_PROPERTY(bool isUndefined READ isUndefined NOTIFY isUndefinedChanged)
     Q_PROPERTY(bool isVisible READ isVisible NOTIFY isVisibleChanged)
     Q_PROPERTY(bool isEnabled READ isEnabled NOTIFY isEnabledChanged)
@@ -44,7 +43,7 @@ class PropertyItem : public QObject
 public:
     explicit PropertyItem(const mu::engraving::Pid propertyId, QObject* parent = nullptr);
 
-    void fillValues(const QVariant& currentValue, const QVariant& defaultValue);
+    void fillValues(const QVariant& currentValue);
     void updateCurrentValue(const QVariant& currentValue);
 
     Q_INVOKABLE void resetToDefault();
@@ -52,7 +51,6 @@ public:
 
     mu::engraving::Pid propertyId() const;
     QVariant value() const;
-    QVariant defaultValue() const;
     bool isUndefined() const;
     bool isEnabled() const;
     bool isVisible() const;
@@ -63,13 +61,12 @@ public:
 
 public slots:
     void setValue(const QVariant& value);
-    void setDefaultValue(const QVariant& defaultValue);
     void setIsEnabled(bool isEnabled);
     void setIsVisible(bool isVisible);
+    void setIsModified(bool isModified);
 
 signals:
     void valueChanged();
-    void defaultValueChanged(QVariant defaultValue);
     void isUndefinedChanged(bool isUndefined);
     void isEnabledChanged(bool isEnabled);
     void isStyledChanged();
@@ -85,10 +82,10 @@ private:
     mu::engraving::Pid m_propertyId = mu::engraving::Pid::END;
     mu::engraving::Sid m_styleId = mu::engraving::Sid::NOSTYLE;
 
-    QVariant m_defaultValue;
     QVariant m_currentValue;
     bool m_isEnabled = false;
     bool m_isVisible = false;
+    bool m_isModified = false;
 };
 }
 
