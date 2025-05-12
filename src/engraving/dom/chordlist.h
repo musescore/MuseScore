@@ -140,7 +140,7 @@ struct RenderAction {
 //---------------------------------------------------------
 
 enum class ChordTokenClass : char {
-    ALL, QUALITY, EXTENSION, MODIFIER, ALTERATION, ADJUST, MODE, SUSPENSION, ADDITION, SUBTRACTION
+    ALL, QUALITY, EXTENSION, MODIFIER, TYPE
 };
 
 class ChordToken

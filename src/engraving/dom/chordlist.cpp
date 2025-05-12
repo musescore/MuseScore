@@ -424,6 +424,8 @@ void ChordToken::read(XmlReader& e, int mscVersion)
         tokenClass = ChordTokenClass::EXTENSION;
     } else if (c == "modifier") {
         tokenClass = ChordTokenClass::MODIFIER;
+    } else if (c == "type") {
+        tokenClass = ChordTokenClass::TYPE;
     } else {
         tokenClass = ChordTokenClass::ALL;
     }
@@ -453,6 +455,9 @@ void ChordToken::write(XmlWriter& xml) const
         break;
     case ChordTokenClass::MODIFIER:
         attrs.push_back({ "class", "modifier" });
+        break;
+    case ChordTokenClass::TYPE:
+        attrs.push_back({ "class", "type" });
         break;
     default:
         break;
@@ -642,6 +647,35 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
     // eat trailing parens and commas
     while (i < len && trailing.contains(s.at(i))) {
         addToken(String(s.at(i++)), ChordTokenClass::QUALITY);
+    }
+
+    int prevIdx = i;
+
+    // Get type - either "typen" or "III"
+    // Eat up to first number
+    for (tok1 = u""; i < len; ++i) {
+        if (s.at(i).isDigit()) {
+            break;
+        }
+        tok1.append(s.at(i));
+    }
+
+    if (tok1 == "type") {
+        addToken(tok1, ChordTokenClass::TYPE);
+        // Read number
+        for (tok1 = u""; i < len; ++i) {
+            if (!s.at(i).isDigit()) {
+                break;
+            }
+            addToken(s.at(i), ChordTokenClass::TYPE);
+        }
+    } else if (tok1.contains(std::wregex(L"[IVX]+"))) {
+        // Get roman numerals
+        for (i = 0; i < tok1.size(); i++) {
+            addToken(tok1.at(i), ChordTokenClass::TYPE);
+        }
+    } else {
+        i = prevIdx;
     }
 
     lastLeadingToken = m_tokenList.size();
@@ -1455,6 +1489,7 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     bool adjust = cl ? cl->autoAdjust() : false;
     for (const ChordToken& tok : m_tokenList) {
         String n = tok.names.front();
+        LOGI() << "n: " << n;
         std::list<RenderAction> rl;
         std::list<ChordToken> definedTokens;
         bool found = false;

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE museScore [
+  <!-- superscript adjust -->
+  <!ENTITY super "0.5">
+  ]>
 <!--
 =====================================================================
     SPDX-License-Identifier: GPL-3.0-only
@@ -125,7 +128,6 @@
     <sym code="sus" name="ssus"/>
     <sym code="no" name="sno"/>
     <sym code="omit" name="somit"/>
-    <sym code="type" name="stype"/>
     </font>
 
   <font>
@@ -133,6 +135,25 @@
     <sym value="6" name="696"/>
     <sym value="9" name="699"/>
     </font>
+
+<font class="type">
+    <mag>0.75</mag>
+    <sym value="0" name="t0"/>
+    <sym value="1" name="t1"/>
+    <sym value="2" name="t2"/>
+    <sym value="3" name="t3"/>
+    <sym value="4" name="t4"/>
+    <sym value="5" name="t5"/>
+    <sym value="6" name="t6"/>
+    <sym value="7" name="t7"/>
+    <sym value="8" name="t8"/>
+    <sym value="9" name="t9"/>
+
+    <sym value="I" name="tI"/>
+    <sym value="V" name="tV"/>
+    <sym value="X" name="tX"/>
+    <sym code="type" name="ttype"/>
+</font>
 
 <!--
       Part II: token list
@@ -416,9 +437,74 @@
     <render>somit</render>
     </token>
 
-  <token class="modifier">
+  <token class="type">
     <name>type</name>
-    <render>stype</render>
+    <render>m:0:-&super; ttype m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>0</name>
+    <render>m:0:-&super; t0 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>1</name>
+    <render>m:0:-&super; t1 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>2</name>
+    <render>m:0:-&super; t2 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>3</name>
+    <render>m:0:-&super; t3 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>4</name>
+    <render>m:0:-&super; t4 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>5</name>
+    <render>m:0:-&super; t5 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>6</name>
+    <render>m:0:-&super; t6 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>7</name>
+    <render>m:0:-&super; t7 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>8</name>
+    <render>m:0:-&super; t8 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>9</name>
+    <render>m:0:-&super; t9 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>I</name>
+    <render>m:0:-&super; tI m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>V</name>
+    <render>m:0:-&super; tV m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>X</name>
+    <render>m:0:-&super; tX m:0:&super;</render>
     </token>
 
   <renderRoot>:n :a m:0.05:0</renderRoot>
