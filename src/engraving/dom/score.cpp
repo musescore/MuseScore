@@ -884,8 +884,14 @@ void Score::spell()
             for (track_idx_t track = strack; track < etrack; ++track) {
                 EngravingItem* e = s->element(track);
                 if (e && e->type() == ElementType::CHORD) {
-                    std::copy_if(toChord(e)->notes().begin(), toChord(e)->notes().end(),
+                    Chord* c = toChord(e);
+                    std::copy_if(c->notes().begin(), c->notes().end(),
                                  std::back_inserter(notes), [this](EngravingItem* ce) { return selection().isNone() || ce->selected(); });
+                    for (Chord* g : c->graceNotes()) {
+                        std::copy_if(g->notes().begin(), g->notes().end(),
+                                     std::back_inserter(notes),
+                                     [this](EngravingItem* ce) { return selection().isNone() || ce->selected(); });
+                    }
                 }
             }
         }
