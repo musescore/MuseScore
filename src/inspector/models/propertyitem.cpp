@@ -32,11 +32,9 @@ PropertyItem::PropertyItem(const mu::engraving::Pid propertyId, QObject* parent)
     m_propertyId = propertyId;
 }
 
-void PropertyItem::fillValues(const QVariant& currentValue, const QVariant& defaultValue)
+void PropertyItem::fillValues(const QVariant& currentValue)
 {
     updateCurrentValue(currentValue);
-
-    setDefaultValue(defaultValue);
 
     emit isModifiedChanged(isModified());
 }
@@ -74,11 +72,6 @@ QVariant PropertyItem::value() const
     return m_currentValue;
 }
 
-QVariant PropertyItem::defaultValue() const
-{
-    return m_defaultValue;
-}
-
 bool PropertyItem::isUndefined() const
 {
     return !m_currentValue.isValid();
@@ -101,7 +94,7 @@ bool PropertyItem::isStyled() const
 
 bool PropertyItem::isModified() const
 {
-    return m_currentValue != m_defaultValue;
+    return m_isModified;
 }
 
 void PropertyItem::setStyleId(const mu::engraving::Sid styleId)
@@ -123,17 +116,6 @@ void PropertyItem::setValue(const QVariant& value)
     updateCurrentValue(value);
 
     emit propertyModified(m_propertyId, m_currentValue);
-    emit isModifiedChanged(isModified());
-}
-
-void PropertyItem::setDefaultValue(const QVariant& defaultValue)
-{
-    if (m_defaultValue == defaultValue) {
-        return;
-    }
-
-    m_defaultValue = defaultValue;
-    emit defaultValueChanged(m_defaultValue);
 }
 
 void PropertyItem::setIsEnabled(bool isEnabled)
@@ -154,4 +136,14 @@ void PropertyItem::setIsVisible(bool isVisible)
 
     m_isVisible = isVisible;
     emit isVisibleChanged(isVisible);
+}
+
+void PropertyItem::setIsModified(bool isModified)
+{
+    if (m_isModified == isModified) {
+        return;
+    }
+
+    m_isModified = isModified;
+    emit isModifiedChanged(isModified);
 }

@@ -369,6 +369,7 @@ void AbstractInspectorModel::setModelType(InspectorModelType modelType)
 void AbstractInspectorModel::onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue)
 {
     setPropertyValue(m_elementList, pid, newValue);
+    updateProperties();
 }
 
 void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingItem*>& items, const mu::engraving::Pid pid,
@@ -684,9 +685,9 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
     propertyItem->setStyleId(styleId);
 
     QVariant propertyValue;
-    QVariant defaultPropertyValue;
 
     bool isUndefined = false;
+    bool isModified = false;
 
     for (const mu::engraving::EngravingItem* element : elements) {
         IF_ASSERT_FAILED(element) {
@@ -707,14 +708,18 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
             elementDefaultValue = convertElementPropertyValueFunc(elementDefaultValue);
         }
 
-        if (!(propertyValue.isValid() && defaultPropertyValue.isValid())) {
+        if (!propertyValue.isValid()) {
             propertyValue = elementCurrentValue;
-            defaultPropertyValue = elementDefaultValue;
         }
 
         isUndefined = propertyValue != elementCurrentValue;
 
-        if (isUndefined) {
+        PropertyFlags f = element->propertyFlags(pid);
+        if (f == PropertyFlags::UNSTYLED || elementCurrentValue != elementDefaultValue) {
+            isModified = true;
+        }
+
+        if (isUndefined && isModified) {
             break;
         }
     }
@@ -727,7 +732,8 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, const 
         propertyValue = QVariant();
     }
 
-    propertyItem->fillValues(propertyValue, defaultPropertyValue);
+    propertyItem->fillValues(propertyValue);
+    propertyItem->setIsModified(isModified);
 }
 
 bool AbstractInspectorModel::isNotationExisting() const
