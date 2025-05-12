@@ -63,6 +63,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/soundflag/soundflagsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/onlinesoundsstatusmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/onlinesoundsstatusmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/notationregionsbeingprocessedmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/notationregionsbeingprocessedmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelcontextmenumodel.cpp

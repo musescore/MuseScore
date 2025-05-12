@@ -400,6 +400,15 @@ void NotationConfiguration::init()
     });
 }
 
+QColor NotationConfiguration::notationColor() const
+{
+    if (engravingConfiguration()->scoreInversionEnabled()) {
+        return engravingConfiguration()->scoreInversionColor().toQColor();
+    }
+
+    return engravingConfiguration()->defaultColor().toQColor();
+}
+
 QColor NotationConfiguration::backgroundColor() const
 {
     if (uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE) {

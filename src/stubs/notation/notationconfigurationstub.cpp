@@ -24,6 +24,11 @@
 using namespace mu;
 using namespace mu::notation;
 
+QColor NotationConfigurationStub::notationColor() const
+{
+    return QColor();
+}
+
 QColor NotationConfigurationStub::backgroundColor() const
 {
     return QColor();
