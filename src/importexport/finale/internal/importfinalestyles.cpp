@@ -672,7 +672,7 @@ void writeMarkingPrefs(MStyle& style, const FinalePreferences& prefs)
     }
 }
 
-void EnigmaXmlImporter::importStyles(engraving::MStyle& style, musx::dom::Cmper partId)
+void EnigmaXmlImporter::importStyles(MStyle& style, Cmper partId)
 {
     FinalePreferences prefs = getCurrentPrefs(*this, partId);
     writePagePrefs(style, prefs);

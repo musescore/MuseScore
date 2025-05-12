@@ -962,7 +962,7 @@ CourtesyBarlineMode FinaleTConv::boolToCourtesyBarlineMode(bool useDoubleBarline
     return muse::value(courtesyBarlineModeTable, useDoubleBarlines, CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY);
 }
 
-NoteVal FinaleTConv::notePropertiesToNoteVal(std::tuple<musx::dom::Note::NoteName, int, int, int> noteProperties)
+NoteVal FinaleTConv::notePropertiesToNoteVal(std::tuple<musx::dom::Note::NoteName, int, int, int> noteProperties, Key key)
 {
     NoteVal nval;
     int absStep = 35 /*middle C*/ + int(std::get<0>(noteProperties))
@@ -971,7 +971,7 @@ NoteVal FinaleTConv::notePropertiesToNoteVal(std::tuple<musx::dom::Note::NoteNam
     if (std::get<2>(noteProperties) < int(AccidentalVal::MIN) || std::get<2>(noteProperties) > int(AccidentalVal::MAX)
         || nval.pitch < 0 || nval.pitch > 127) {
         nval.pitch = std::clamp(nval.pitch, 0, 127);
-        nval.tpc1 = pitch2tpc(nval.pitch, Key::C, Prefer::NEAREST); ///@todo inherit keysig
+        nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
     } else {
         nval.tpc1 = step2tpc(int(std::get<0>(noteProperties)), AccidentalVal(std::get<2>(noteProperties)));
     }

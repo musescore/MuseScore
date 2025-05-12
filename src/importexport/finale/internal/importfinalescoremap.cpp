@@ -157,8 +157,6 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
 
 ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segment, track_idx_t curTrackIdx)
 {
-    using MusxNote = musx::dom::Note;
-
     // Retrieve entry from entryInfo
     std::shared_ptr<const Entry> currentEntry = entryInfo->getEntry();
     if (!currentEntry) {
@@ -177,50 +175,47 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
     int crossStaffMove = 0;
     staff_idx_t staffIdx = track2staff(curTrackIdx);
 
-    auto collectCrossStaffing = [&](NoteInfoPtr noteInfoPtr) -> void {
-        // MuseScore doesn't support individual cross-staff notes, either move the whole chord or nothing
+    // because we need the real staff to calculate when to show accidentals,
+    // we have to calculate cross-staffing before pitches
+    for (size_t i = 0; i < currentEntry->notes.size(); ++i) {
+        NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, i);
         if (noteInfoPtr->crossStaff) {
-            staff_idx_t crossStaffIdx = muse::value(m_inst2Staff, InstCmper(noteInfoPtr.calcStaff()), muse::nidx);
+            staff_idx_t crossStaffIdx = muse::value(m_inst2Staff, noteInfoPtr.calcStaff(), muse::nidx);
             IF_ASSERT_FAILED(crossStaffIdx != muse::nidx) {
-                logger()->logWarning(String(u"Musx inst value not found in m_inst2Staff"));
-                return;
+                logger()->logWarning(String(u"Collect cross staffing: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(noteInfoPtr.calcStaff()))));
+                continue;
             }
             int newStaffMove = int(crossStaffIdx) - int(staffIdx);
+            // MuseScore doesn't support individual cross-staff notes, either move the whole chord or nothing
             // When moving, prioritise outermost staves
             if (std::abs(newStaffMove) > std::abs(crossStaffMove)) {
                 crossStaffMove = newStaffMove;
             }
         }
-    };
-
-    // because we need the real staff to calculate when to show accidentals,
-    // we have to calculate cross-staffing before pitches
-    for (size_t i = 0; i < currentEntry->notes.size(); ++i) {
-        NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, i);
-        collectCrossStaffing(noteInfoPtr);
     }
     // check if the calculate cross-staff position is valid
     staff_idx_t idx = static_cast<staff_idx_t>(int(staffIdx) + crossStaffMove);
     const Staff* baseStaff = m_score->staff(staffIdx);
     const StaffType* baseStaffType = baseStaff->staffType(segment->tick());
-    const Staff* targetStaff = score()->staff(idx);
+    const Staff* targetStaff = m_score->staff(idx);
     const StaffType* targetStaffType = targetStaff ? targetStaff->staffType(segment->tick()) : nullptr;
-    staff_idx_t minStaff = baseStaff->part()->startTrack() / VOICES;
-    staff_idx_t maxStaff = baseStaff->part()->endTrack() / VOICES;
+    staff_idx_t minStaff = track2staff(baseStaff->part()->startTrack());
+    staff_idx_t maxStaff = track2staff(baseStaff->part()->endTrack());
     if (!(targetStaff && targetStaff->visible() && idx >= minStaff && idx < maxStaff
           && targetStaffType->group() == baseStaffType->group() && targetStaff->isLinked() == baseStaff->isLinked())) {
         crossStaffMove = 0;
+        targetStaff = baseStaff;
+        idx = staffIdx;
     }
 
     if (currentEntry->isNote) {
         Chord* chord = Factory::createChord(segment);
 
         for (size_t i = 0; i < currentEntry->notes.size(); ++i) {
-            const std::shared_ptr<MusxNote> n = currentEntry->notes[i];
             NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, i);
 
             // calculate pitch & accidentals
-            NoteVal nval = FinaleTConv::notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties());
+            NoteVal nval = FinaleTConv::notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(), baseStaff->concertKey(segment->tick()));
             AccidentalVal accVal = tpc2alter(nval.tpc1);
             ///@todo transposition
             nval.tpc2 = nval.tpc1;
@@ -231,13 +226,12 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
             note->setNval(nval);
 
             // Add accidental if needed
-            AccidentalVal defaultAccVal = accVal;
             bool forceAccidental = noteInfoPtr->freezeAcci;
             if (!forceAccidental) {
                 int line = noteValToLine(nval, targetStaff, segment->tick());
                 bool error = false;
                 Segment* startSegment = note->firstTiedNote()->chord()->segment();
-                defaultAccVal = startSegment->measure()->findAccidental(startSegment, idx, line, error);
+                AccidentalVal defaultAccVal = startSegment->measure()->findAccidental(startSegment, idx, line, error);
                 if (error) {
                     defaultAccVal = Accidental::subtype2value(AccidentalType::NONE); // needed?
                 }
@@ -247,7 +241,7 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
                 AccidentalType at = Accidental::value2subtype(accVal);
                 Accidental* a = Factory::createAccidental(note);
                 a->setAccidentalType(at);
-                a->setRole(n->freezeAcci ? AccidentalRole::USER : AccidentalRole::AUTO);
+                a->setRole(noteInfoPtr->freezeAcci ? AccidentalRole::USER : AccidentalRole::AUTO);
                 a->setParent(note);
                 note->add(a);
             }
@@ -257,7 +251,6 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
         Rest* rest = Factory::createRest(segment, d);
 
         for (size_t i = 0; i < currentEntry->notes.size(); ++i) {
-            // const std::shared_ptr<MusxNote> n = currentEntry->notes[i];
             // NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, i);
             /// @todo calculate y-offset here (remember is also staff-dependent)
         }
@@ -318,10 +311,10 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
 
 static std::optional<Fraction> musxFractionToFraction(musx::util::Fraction count)
 {
-    if (count.remainder()) {
+    /*if (count.remainder()) {
         // logger->logWarning(String(u"Fraction has fractional portion that could not be reduced."));
         return std::nullopt;
-    }
+    }*/
     return Fraction(count.numerator(), count.denominator());
 }
 
@@ -405,7 +398,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
 
     std::optional<Fraction> currentEntryActualDuration = musxFractionToFraction(entryInfo->actualDuration);
     if (!currentEntryActualDuration.has_value()) {
-        logger()->logWarning(String(u"Duration for this entry is invalid"));
+        logger()->logWarning(String(u"Duration for this entry is invalid. Track: %1, Tick: %2").arg(String::number(curTrackIdx), String::number(segment->tick().ticks())));
         return false;
     }
 
@@ -482,7 +475,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
             Fraction f = tupletMap[i].scoreTuplet->baseLen().fraction() * tupletMap[i].scoreTuplet->ratio().denominator();
             tupletMap[i].scoreTuplet->setTicks(f.reduced());
             IF_ASSERT_FAILED(tupletMap[i].scoreTuplet->ticks() == tupletMap[i].absDuration.reduced()) {
-                LOGW() << "Tuplet duration is corrupted";
+                logger()->logWarning(String(u"Tuplet duration is corrupted"));
             }
             transferTupletProperties(tupletMap[i].musxTuplet, tupletMap[i].scoreTuplet, logger());
             // reparent tuplet if needed
@@ -499,7 +492,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
     Tuplet* parentTuplet = nullptr;
     if (tupletMap[lastAddedTupletIndex].scoreTuplet) {
         do {
-            if (tupletMap[lastAddedTupletIndex].absEnd >= currentEntryInfoStart.value()) {
+            if (tupletMap[lastAddedTupletIndex].absEnd > currentEntryInfoStart.value()) {
                 break;
             }
         } while (lastAddedTupletIndex > 0 && --lastAddedTupletIndex);
@@ -647,10 +640,12 @@ void EnigmaXmlImporter::importMeasures()
     std::vector<std::shared_ptr<others::Staff>> musxStaves = m_doc->getOthers()->getArray<others::Staff>(SCORE_PARTID);
     for (const std::shared_ptr<others::Staff>& musxStaff : musxStaves) {
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxStaff->getCmper()), muse::nidx);
-        if (curStaffIdx == muse::nidx) {
-            logger()->logWarning(String(u"Musx inst value not found in m_inst2Staff"));
+        if (curStaffIdx == muse::nidx) { //IF_ASSERT_FAILED
+            logger()->logWarning(String(u"Add entries: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(musxStaff->getCmper()))));
             continue;
-        }
+        } else {
+			logger()->logInfo(String(u"Add entries: Successfully read staff_idx_t %1").arg(String::number(curStaffIdx)));
+		}
         if (!m_score->firstMeasure()) {
             continue;
         }
@@ -691,7 +686,6 @@ void EnigmaXmlImporter::importMeasures()
                 tupletMap.insert(tupletMap.begin(), rTuplet);
                 size_t lastAddedTupletIndex = 0;
                 for (size_t i = 0; i < entries.size(); ++i) {
-                    // std::shared_ptr<const EntryInfo>& entryInfo = entries[i];
                     EntryInfoPtr entryInfoPtr = EntryInfoPtr(entryFrame, i);
                     processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex);
                 }
@@ -832,7 +826,7 @@ void EnigmaXmlImporter::importBrackets()
         }
         staff_idx_t startStaffIdx = muse::value(m_inst2Staff, InstCmper(musxStartStaff->getCmper()), muse::nidx);
         IF_ASSERT_FAILED(startStaffIdx != muse::nidx) {
-            logger()->logWarning(String(u"Musx inst value not found in m_inst2Staff"));
+            logger()->logWarning(String(u"Create brackets: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(musxStartStaff->getCmper()))));
             continue;
         }
         BracketItem* bi = Factory::createBracketItem(m_score->dummy());
@@ -845,7 +839,7 @@ void EnigmaXmlImporter::importBrackets()
             for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
                 Staff* s = m_score->staff(idx);
                 s->setBarLineTo(0);
-                s->setBarLineSpan(true);
+                s->setBarLineSpan(1);
             }
         }
     }
