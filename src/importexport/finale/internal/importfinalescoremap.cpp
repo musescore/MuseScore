@@ -660,15 +660,14 @@ void EnigmaXmlImporter::importMeasures()
             break;
         }
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
-            std::shared_ptr<details::GFrameHold> GFHold = musxMeasure->getDocument()->getDetails()->get<details::GFrameHold>(
-                musxMeasure->getPartId(), musxStaff->getCmper(), musxMeasure->getCmper());
+            details::GFrameHoldContext GFHold(musxMeasure->getDocument(), musxMeasure->getPartId(), musxStaff->getCmper(), musxMeasure->getCmper());
             if (!GFHold) {
                 continue;
             }
             Segment* measureStartSegment = segment;
             for (LayerIndex layer = 0; layer < MAX_LAYERS; layer++) {
                 /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
-                std::shared_ptr<const EntryFrame> entryFrame = GFHold->createEntryFrame(layer, /*forWrittenPitch*/ false);
+                std::shared_ptr<const EntryFrame> entryFrame = GFHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
                 if (!entryFrame) {
                     continue;
                 }
