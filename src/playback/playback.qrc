@@ -23,7 +23,9 @@
         <file>qml/MuseScore/Playback/SoundProfilesDialog.qml</file>
         <file>qml/MuseScore/Playback/SoundFlagPopup.qml</file>
         <file>qml/MuseScore/Playback/OnlineSoundsStatusIndicator.qml</file>
+        <file>qml/MuseScore/Playback/NotationRegionsBeingProcessedView.qml</file>
         <file>qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml</file>
         <file>qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml</file>
+        <file>qml/MuseScore/Playback/internal/AudioProcessingProgressBar.qml</file>
     </qresource>
 </RCC>
