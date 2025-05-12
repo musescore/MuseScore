@@ -79,11 +79,21 @@ InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const AudioRe
 
 void MuseSamplerResolver::init()
 {
-    if (doInit(configuration()->userLibraryPath())) {
+    m_libHandler = std::make_shared<MuseSamplerLibHandler>(configuration()->libraryPath(), configuration()->useLegacyAudition());
+
+    if (!m_libHandler->isValid()) {
+        LOGE() << "Incompatible MuseSampler library, ignoring: " << configuration()->libraryPath();
+        m_libHandler.reset();
         return;
     }
 
-    doInit(configuration()->fallbackLibraryPath());
+    if (!m_libHandler->init()) {
+        LOGE() << "Could not init MuseSampler: " << configuration()->libraryPath();
+        m_libHandler.reset();
+        return;
+    }
+
+    LOGI() << "MuseSampler successfully inited: " << configuration()->libraryPath();
 }
 
 bool MuseSamplerResolver::reloadMuseSampler()
@@ -93,25 +103,6 @@ bool MuseSamplerResolver::reloadMuseSampler()
     }
 
     return m_libHandler->reloadAllInstruments() == ms_Result_OK;
-}
-
-bool MuseSamplerResolver::doInit(const io::path_t& libPath)
-{
-    m_libHandler = std::make_shared<MuseSamplerLibHandler>(libPath, configuration()->useLegacyAudition());
-
-    bool ok = m_libHandler->isValid();
-    if (ok) {
-        ok = m_libHandler->init();
-    }
-
-    if (!ok) {
-        LOGE() << "Incompatible MuseSampler library; ignoring";
-        m_libHandler.reset();
-    } else {
-        LOGI() << "MuseSampler successfully inited: " << libPath;
-    }
-
-    return ok;
 }
 
 ISynthesizerPtr MuseSamplerResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params) const
