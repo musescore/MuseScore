@@ -29,7 +29,10 @@ namespace mu::engraving {
 enum class AccidentalType : unsigned char;
 class Articulation;
 class Chord;
+class ChordDescription;
 class Fraction;
+class Harmony;
+class HDegree;
 enum class SymId;
 }
 
@@ -57,4 +60,13 @@ extern engraving::AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const engraving::SymId id);
 extern muse::String errorStringWithLocation(int line, int col, const muse::String& error);
 extern muse::String checkAtEndElement(const muse::XmlStreamReader& e, const muse::String& expName);
+
+extern muse::String harmonyXmlKind(const engraving::Harmony* h);
+extern muse::String harmonyXmlText(const engraving::Harmony* h);
+extern muse::String harmonyXmlSymbols(const engraving::Harmony* h);
+extern muse::String harmonyXmlParens(const engraving::Harmony* h);
+extern muse::StringList harmonyXmlDegrees(const engraving::Harmony* h);
+extern const engraving::ChordDescription* harmonyFromXml(engraving::Harmony* h, const muse::String& kind, const muse::String& kindText,
+                                                         const muse::String& symbols, const muse::String& parens,
+                                                         const std::list<engraving::HDegree>& dl);
 } // namespace Ms

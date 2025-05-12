@@ -1463,9 +1463,9 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
             // default case: look up by name
             // description will be found for any chord already read in this score
             // and we will generate a new one if necessary
-            h->getDescription(h->hTextName());
+            h->getDescription(h->textName());
         }
-    } else if (h->hTextName() == "") {
+    } else if (h->textName() == "") {
         // unrecognized chords prior to 2.0 were stored as text with markup
         // we need to strip away the markup
         // this removes any user-applied formatting,
