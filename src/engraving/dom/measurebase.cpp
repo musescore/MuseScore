@@ -938,10 +938,8 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
 
 void MeasureBaseList::append(MeasureBase* m)
 {
-    MeasureBase* next = m->next();
-    MeasureBase* prev = m->prev();
-    assert(!next);
-    assert(!prev || prev == m_last);
+    assert(!m->next());
+    assert(!m->prev() || m->prev() == m_last);
 
     ++m_size;
     if (m_last) {
