@@ -116,6 +116,8 @@ public:
     const ChordDescription* getDescription(const String&, const ParsedChord* pc = 0);
     const ChordDescription* generateDescription();
 
+    void setParsedForm(ParsedChord* pc) { m_parsedForm = pc; }
+
     RealizedHarmony& realizedHarmony();
     const RealizedHarmony& getRealizedHarmony() const;
 
@@ -129,7 +131,7 @@ public:
     bool isInFretBox() const;
 
     String hFunction(Key key = Key::INVALID) const;
-    String hTextName() const { return m_textName; }
+    String textName() const { return m_textName; }
     int bassTpc() const { return m_bassTpc; }
     void setBassTpc(int val) { m_bassTpc = val; }
     int rootTpc() const { return m_rootTpc; }
@@ -148,15 +150,6 @@ public:
     void render();
 
     String harmonyName() const;
-    const String& extensionName() const;
-
-    String xmlKind() const;
-    String musicXmlText() const;
-    String xmlSymbols() const;
-    String xmlParens() const;
-    StringList xmlDegrees() const;
-    const ChordDescription* fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&);
-    const ChordDescription* fromXml(const String& s);
 
     double baseLine() const override;
     void spatiumChanged(double oldValue, double newValue) override;

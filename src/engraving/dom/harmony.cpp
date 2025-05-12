@@ -867,42 +867,6 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
 }
 
 //---------------------------------------------------------
-//   fromXml
-//    lookup harmony in harmony database
-//    using musicXml "kind" string only
-//---------------------------------------------------------
-
-const ChordDescription* Harmony::fromXml(const String& kind)
-{
-    String lowerCaseKind = kind.toLower();
-    const ChordList* cl = score()->chordList();
-    for (const auto& p : *cl) {
-        const ChordDescription& cd = p.second;
-        if (lowerCaseKind == cd.xmlKind) {
-            return &cd;
-        }
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
-//   fromXml
-//    construct harmony directly from XML
-//    build name first
-//    then generate chord description from that
-//---------------------------------------------------------
-
-const ChordDescription* Harmony::fromXml(const String& kind, const String& kindText, const String& symbols, const String& parens,
-                                         const std::list<HDegree>& dl)
-{
-    ParsedChord* pc = new ParsedChord;
-    m_textName = pc->fromXml(kind, kindText, symbols, parens, dl, score()->chordList());
-    m_parsedForm = pc;
-    const ChordDescription* cd = getDescription(m_textName, pc);
-    return cd;
-}
-
-//---------------------------------------------------------
 //   descr
 //    look up id in chord list
 //    return chord description if found, or null
@@ -1374,65 +1338,6 @@ void Harmony::localSpatiumChanged(double oldValue, double newValue)
 }
 
 //---------------------------------------------------------
-//   extensionName
-//---------------------------------------------------------
-
-const String& Harmony::extensionName() const
-{
-    return m_textName;
-}
-
-//---------------------------------------------------------
-//   xmlKind
-//---------------------------------------------------------
-
-String Harmony::xmlKind() const
-{
-    const ChordDescription* cd = descr();
-    return cd ? cd->xmlKind : String();
-}
-
-//---------------------------------------------------------
-//   musicXmlText
-//---------------------------------------------------------
-
-String Harmony::musicXmlText() const
-{
-    const ChordDescription* cd = descr();
-    return cd ? cd->xmlText : String();
-}
-
-//---------------------------------------------------------
-//   xmlSymbols
-//---------------------------------------------------------
-
-String Harmony::xmlSymbols() const
-{
-    const ChordDescription* cd = descr();
-    return cd ? cd->xmlSymbols : String();
-}
-
-//---------------------------------------------------------
-//   xmlParens
-//---------------------------------------------------------
-
-String Harmony::xmlParens() const
-{
-    const ChordDescription* cd = descr();
-    return cd ? cd->xmlParens : String();
-}
-
-//---------------------------------------------------------
-//   xmlDegrees
-//---------------------------------------------------------
-
-StringList Harmony::xmlDegrees() const
-{
-    const ChordDescription* cd = descr();
-    return cd ? cd->xmlDegrees : StringList();
-}
-
-//---------------------------------------------------------
 //   addDegree
 //---------------------------------------------------------
 
@@ -1588,7 +1493,7 @@ String Harmony::generateScreenReaderInfo() const
         }
     }
 
-    if (const_cast<Harmony*>(this)->parsedForm() && !hTextName().isEmpty()) {
+    if (const_cast<Harmony*>(this)->parsedForm() && !textName().isEmpty()) {
         String aux = const_cast<Harmony*>(this)->parsedForm()->handle();
         aux = aux.replace(u"#", u"♯").replace(u"<", u"");
         String extension;
@@ -1601,7 +1506,7 @@ String Harmony::generateScreenReaderInfo() const
         }
         rez = String(u"%1 %2").arg(rez, extension);
     } else {
-        rez = String(u"%1 %2").arg(rez, hTextName());
+        rez = String(u"%1 %2").arg(rez, textName());
     }
 
     if (tpcIsValid(m_bassTpc)) {
