@@ -57,6 +57,7 @@ MuseSamplerWrapper::~MuseSamplerWrapper()
         return;
     }
 
+    m_sequencer.deinit();
     m_samplerLib->destroy(m_sampler);
 }
 
@@ -175,6 +176,10 @@ void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
     }
 
     m_sequencer.init(m_samplerLib, m_sampler, this, resolveDefaultPresetCode(m_instrument));
+
+    if (m_instrument.isValid() && m_samplerLib->isOnlineInstrument(m_instrument.msInstrument)) {
+        m_sequencer.setRenderingProgress(&m_inputProcessingProgress);
+    }
 }
 
 void MuseSamplerWrapper::setupEvents(const mpe::PlaybackData& playbackData)

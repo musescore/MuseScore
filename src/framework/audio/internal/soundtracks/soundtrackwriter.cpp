@@ -179,5 +179,5 @@ void SoundTrackWriter::sendStepProgress(int step, int64_t current, int64_t total
     int stepRange = step == PREPARE_STEP ? 80 : 20;
     int stepProgressStart = step == PREPARE_STEP ? 0 : 80;
     int stepCurrentProgress = stepProgressStart + ((current * 100 / total) * stepRange) / 100;
-    m_progress.progress(stepCurrentProgress, 100, "");
+    m_progress.progress(stepCurrentProgress, 100);
 }

@@ -24,6 +24,9 @@
 
 #include "apitypes.h"
 
+#include "global/timer.h"
+#include "audio/audioerrors.h"
+
 using namespace muse;
 using namespace muse::musesampler;
 using namespace muse::mpe;
@@ -114,6 +117,24 @@ void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSamp
     m_defaultPresetCode = std::move(defaultPresetCode);
 }
 
+void MuseSamplerSequencer::deinit()
+{
+    if (m_renderingProgress && m_renderingProgress->progress.isStarted()) {
+        m_renderingProgress->progress.cancel();
+    }
+
+    if (m_pollRenderingProgressTimer) {
+        m_pollRenderingProgressTimer->stop();
+    }
+
+    m_renderingProgress = nullptr;
+}
+
+void MuseSamplerSequencer::setRenderingProgress(audio::InputProcessingProgress* progress)
+{
+    m_renderingProgress = progress;
+}
+
 void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events, const PlaybackParamList& params)
 {
     flushOffstream();
@@ -179,6 +200,101 @@ void MuseSamplerSequencer::updateMainStreamEvents(const PlaybackEventsMap& event
     loadDynamicEvents(dynamics);
 
     finalizeAllTracks();
+    pollRenderingProgress();
+}
+
+void MuseSamplerSequencer::pollRenderingProgress()
+{
+    if (!m_renderingProgress) {
+        return;
+    }
+
+    m_renderingInfo.clear();
+
+    if (!m_pollRenderingProgressTimer) {
+        m_pollRenderingProgressTimer = std::make_unique<Timer>(std::chrono::microseconds(500000)); // poll every 500ms
+        m_pollRenderingProgressTimer->onTimeout(this, [this]() {
+            doPollProgress();
+        });
+    }
+
+    m_pollRenderingProgressTimer->start();
+}
+
+void MuseSamplerSequencer::doPollProgress()
+{
+    const bool progressStarted = m_renderingInfo.initialChunksDurationUs > 0;
+
+    int rangeCount = 0;
+    ms_RenderingRangeList ranges = m_samplerLib->getRenderInfo(m_sampler, &rangeCount);
+
+    audio::InputProcessingProgress::ChunkInfoList chunks;
+    long long chunksDurationUs = 0;
+
+    for (int i = 0; i < rangeCount; ++i) {
+        const ms_RenderRangeInfo info = m_samplerLib->getNextRenderProgressInfo(ranges);
+
+        switch (info._state) {
+        case ms_RenderingState_ErrorNetwork:
+            m_renderingInfo.errorCode = static_cast<int>(muse::audio::Err::OnlineSoundsNetworkError);
+            break;
+        case ms_RenderingState_ErrorRendering:
+        case ms_RenderingState_ErrorFileIO:
+        case ms_RenderingState_ErrorTimeOut:
+            m_renderingInfo.errorCode = static_cast<int>(muse::audio::Err::UnknownError);
+            break;
+        case ms_RenderingState_Rendering:
+            break;
+        }
+
+        if (progressStarted && m_renderingInfo.errorCode != 0) {
+            continue;
+        }
+
+        chunksDurationUs += info._end_us - info._start_us;
+        chunks.push_back({ audio::microsecsToSecs(info._start_us), audio::microsecsToSecs(info._end_us) });
+    }
+
+    // Start progress
+    if (!progressStarted) {
+        if (chunksDurationUs <= 0) {
+            if (m_pollRenderingProgressTimer->secondsSinceStart() >= 10.f) { // timeout
+                m_pollRenderingProgressTimer->stop();
+                m_renderingInfo.clear();
+            }
+
+            return;
+        }
+
+        m_renderingInfo.initialChunksDurationUs = chunksDurationUs;
+
+        if (!m_renderingProgress->progress.isStarted()) {
+            m_renderingProgress->progress.start();
+        }
+    }
+
+    // Send chunks
+    if (m_renderingInfo.lastReceivedChunks != chunks) {
+        m_renderingInfo.lastReceivedChunks = chunks;
+
+        if (!chunks.empty()) {
+            m_renderingProgress->chunksBeingProcessedChannel.send(chunks);
+        }
+    }
+
+    // Update percentage
+    const int64_t percentage = std::lround(100.f - (float)chunksDurationUs / (float)m_renderingInfo.initialChunksDurationUs * 100.f);
+    if (percentage != m_renderingInfo.percentage) {
+        m_renderingInfo.percentage = percentage;
+        m_renderingProgress->progress.progress(std::lround(percentage), 100);
+    }
+
+    // Finish progress
+    if (chunksDurationUs <= 0) {
+        m_pollRenderingProgressTimer->stop();
+        m_renderingProgress->progress.finish(Ret(m_renderingInfo.errorCode));
+        m_renderingInfo.clear();
+    }
 }
 
 void MuseSamplerSequencer::clearAllTracks()

@@ -342,6 +342,7 @@ typedef ms_Result (* ms_MuseSampler_add_track_syllable_event)(ms_MuseSampler ms,
 // ------------------------------------------------------------
 
 // Added in 0.101
+typedef bool (* ms_MuseSampler_ready_to_play)(ms_MuseSampler ms);
 typedef bool (* ms_Instrument_is_online)(ms_InstrumentInfo);
 
 typedef enum ms_RenderingState
@@ -365,9 +366,6 @@ typedef void* ms_RenderingRangeList;
 typedef ms_RenderingRangeList (* ms_MuseSampler_get_render_info)(ms_MuseSampler ms, int* num_ranges);
 typedef ms_RenderRangeInfo (* ms_RenderProgressInfo_get_next)(ms_RenderingRangeList range_list);
 // ------------------------------------------------------------
-
-// Added in 0.101
-typedef bool (* ms_MuseSampler_ready_to_play)(ms_MuseSampler ms);
 
 namespace muse::musesampler {
 using track_idx_t = size_t;
