@@ -441,7 +441,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
 
     // create Tuplets as needed, starting with the outermost
     for (size_t i = 0; i < tupletMap.size(); ++i) {
-        if (tupletMap.layer < 0) {
+        if (tupletMap[i].layer < 0) {
             continue;
         }
         if (tupletMap[i].absBegin == currentEntryInfoStart) {
@@ -465,7 +465,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
             // reparent tuplet if needed
             size_t parentIndex = indexOfParentTuplet(tupletMap, i);
             if (tupletMap[parentIndex].layer < 0) {
-                tupletMap[i-1].scoreTuplet->add(tupletMap[i].scoreTuplet);
+                tupletMap[parentIndex].scoreTuplet->add(tupletMap[i].scoreTuplet);
             }
             lastAddedTupletIndex = i;
         } else if (tupletMap[i].absBegin > currentEntryInfoStart) {
