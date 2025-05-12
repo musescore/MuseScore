@@ -6,6 +6,9 @@ INSTALL_DIR="$1" # MuseScore was installed here
 APPIMAGE_NAME="$2" # name for AppImage file (created outside $INSTALL_DIR)
 PACKARCH="$3" # architecture (x86_64, aarch64, armv7l)
 
+# see https://github.com/musescore/MuseScore/pull/27568
+MULTIMEDIA_ADD_MANUALLY=1
+
 if [ -z "$INSTALL_DIR" ]; then echo "error: not set INSTALL_DIR"; exit 1; fi
 if [ -z "$APPIMAGE_NAME" ]; then echo "error: not set APPIMAGE_NAME"; exit 1; fi
 if [ -z "$PACKARCH" ]; then 
@@ -88,7 +91,15 @@ if [[ ! -f $BUILD_TOOLS/linuxdeploy/linuxdeploy-plugin-qt ]]; then
   download_linuxdeploy_component linuxdeploy-plugin-qt
   cd $ORIGIN_DIR
 fi
+
+LINUXDEPLOY_BIN_DIR=$BUILD_TOOLS/linuxdeploy/linuxdeploy-x86_64.AppDir/usr/bin
+if [[ ! -f $LINUXDEPLOY_BIN_DIR/linuxdeploy-plugin-gstreamer.sh ]]; then
+  cp $HERE/linuxdeploy-plugin-gstreamer.sh $LINUXDEPLOY_BIN_DIR/linuxdeploy-plugin-gstreamer.sh
+  chmod +x $LINUXDEPLOY_BIN_DIR/linuxdeploy-plugin-gstreamer.sh
+fi
+
 export PATH="$BUILD_TOOLS/linuxdeploy:$PATH"
+export PATH="$LINUXDEPLOY_BIN_DIR:$PATH"
 linuxdeploy --list-plugins
 
 if [[ ! -d $BUILD_TOOLS/appimageupdatetool ]]; then
@@ -134,7 +145,12 @@ export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so;libqwayland-egl.so;libqwayland-g
 # Qml files can be in different directories, the qmlimportscanner will go through everything recursively.
 export QML_SOURCES_PATHS=./
 
-linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
+if [ $MULTIMEDIA_ADD_MANUALLY -eq 1 ]; then
+  linuxdeploy --appdir "${appdir}" # adds all shared library dependencies
+else
+  linuxdeploy --appdir "${appdir}" --plugin gstreamer # adds all shared library dependencies
+fi 
+
 linuxdeploy-plugin-qt --appdir "${appdir}" # adds all Qt dependencies
 
 # The system must be used
@@ -200,6 +216,16 @@ additional_qt_components=(
   plugins/wayland-graphics-integration-client
   plugins/wayland-shell-integration
 )
+
+if [ $MULTIMEDIA_ADD_MANUALLY -eq 1 ]; then
+  additional_qt_components+=(
+    # QtMultimedia components
+    lib/libQt6Multimedia.so.6
+    lib/libQt6MultimediaQuick.so.6
+    lib/libQt6MultimediaWidgets.so.6
+    qml/QtMultimedia
+  )
+fi
 
 # ADDITIONAL LIBRARIES
 # linuxdeploy may have missed some libraries that we need
