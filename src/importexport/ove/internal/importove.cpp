@@ -2085,6 +2085,19 @@ void OveToMScore::convertLyrics(Measure* measure, int part, int staff, int track
     }
 }
 
+static const ChordDescription* harmonyFromXml(Harmony* h, const muse::String& kind)
+{
+    String lowerCaseKind = kind.toLower();
+    const ChordList* cl = h->score()->chordList();
+    for (const auto& p : *cl) {
+        const ChordDescription& cd = p.second;
+        if (lowerCaseKind == cd.xmlKind) {
+            return &cd;
+        }
+    }
+    return nullptr;
+}
+
 void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int track)
 {
     ovebase::MeasureData* measureData = m_ove->getMeasureData(part, staff, measure->no());
@@ -2109,7 +2122,7 @@ void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int tr
                     && harmonyPtr->getAlterBass() != harmonyPtr->getAlterRoot()))) {
             harmony->setBassTpc(step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass())));
         }
-        const ChordDescription* d = harmony->fromXml(harmonyPtr->getHarmonyType());
+        const ChordDescription* d = harmonyFromXml(harmony, harmonyPtr->getHarmonyType());
         if (d != 0) {
             harmony->setId(d->id);
             harmony->setTextName(d->names.front());

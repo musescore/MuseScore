@@ -7808,7 +7808,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
 
     const ChordDescription* d = nullptr;
     if (ha->rootTpc() != Tpc::TPC_INVALID || ha->harmonyType() == HarmonyType::NASHVILLE) {
-        d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
+        d = harmonyFromXml(ha, kind, kindText, symbols, parens, degreeList);
     }
     if (d) {
         ha->setId(d->id);

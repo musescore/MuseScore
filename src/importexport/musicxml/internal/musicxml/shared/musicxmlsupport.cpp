@@ -25,11 +25,14 @@
  */
 
 #include "musicxmlsupport.h"
+#include "dom/score.h"
 #include "global/serialization/xmlstreamreader.h"
 
 #include "translation.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/chordlist.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/types/symnames.h"
 
 using namespace muse;
@@ -655,5 +658,45 @@ AccidentalType microtonalGuess(double val)
 bool isLaissezVibrer(const SymId id)
 {
     return id == SymId::articLaissezVibrerAbove || id == SymId::articLaissezVibrerBelow;
+}
+
+String harmonyXmlKind(const engraving::Harmony* h)
+{
+    const ChordDescription* cd = h->descr();
+    return cd ? cd->xmlKind : String();
+}
+
+String harmonyXmlText(const engraving::Harmony* h)
+{
+    const ChordDescription* cd = h->descr();
+    return cd ? cd->xmlText : String();
+}
+
+String harmonyXmlSymbols(const engraving::Harmony* h)
+{
+    const ChordDescription* cd = h->descr();
+    return cd ? cd->xmlSymbols : String();
+}
+
+String harmonyXmlParens(const engraving::Harmony* h)
+{
+    const ChordDescription* cd = h->descr();
+    return cd ? cd->xmlParens : String();
+}
+
+StringList harmonyXmlDegrees(const engraving::Harmony* h)
+{
+    const ChordDescription* cd = h->descr();
+    return cd ? cd->xmlDegrees : StringList();
+}
+
+const ChordDescription* harmonyFromXml(engraving::Harmony* h, const muse::String& kind, const muse::String& kindText,
+                                       const muse::String& symbols, const muse::String& parens, const std::list<engraving::HDegree>& dl)
+{
+    ParsedChord* pc = new ParsedChord;
+    h->setTextName(pc->fromXml(kind, kindText, symbols, parens, dl, h->score()->chordList()));
+    h->setParsedForm(pc);
+    const ChordDescription* cd = h->getDescription(h->textName(), pc);
+    return cd;
 }
 }

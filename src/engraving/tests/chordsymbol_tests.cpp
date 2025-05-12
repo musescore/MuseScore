@@ -414,7 +414,7 @@ TEST_F(Engraving_ChordSymbolTests, testNashvilleNumbers) {
         String ext = tpcAndExtension.at(idx).second;
 
         EXPECT_EQ(tpc, h->rootTpc());
-        EXPECT_EQ(ext, h->hTextName());
+        EXPECT_EQ(ext, h->textName());
 
         idx++;
     }

@@ -1707,7 +1707,7 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
         }
         // parser uses leading "=" as a hidden specifier for minor
         // this may or may not currently be incorporated into _textName
-        String writeName = item->hTextName();
+        String writeName = item->textName();
         if (item->parsedForm() && item->parsedForm()->name().startsWith(u'=') && !writeName.startsWith(u'=')) {
             writeName = u"=" + writeName;
         }
@@ -1744,7 +1744,7 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
             }
         }
     } else {
-        xml.tag("name", item->hTextName());
+        xml.tag("name", item->textName());
     }
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, false);
     //Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION

@@ -8853,19 +8853,21 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         }
         m_xml.endElement();
 
-        if (!h->xmlKind().isEmpty()) {
+        const String xmlKind = harmonyXmlKind(h);
+
+        if (!xmlKind.isEmpty()) {
             String s = u"kind";
-            String kindText = h->musicXmlText();
-            if (!h->musicXmlText().empty()) {
+            String kindText = harmonyXmlText(h);
+            if (!harmonyXmlText(h).empty()) {
                 s += u" text=\"" + kindText + u"\"";
             }
-            if (h->xmlSymbols() == u"yes") {
+            if (harmonyXmlSymbols(h) == u"yes") {
                 s += u" use-symbols=\"yes\"";
             }
-            if (h->xmlParens() == u"yes") {
+            if (harmonyXmlParens(h) == u"yes") {
                 s += u" parentheses-degrees=\"yes\"";
             }
-            m_xml.tagRaw(s, h->xmlKind());
+            m_xml.tagRaw(s, xmlKind);
 
             int baseTpc = h->bassTpc();
             if (baseTpc != Tpc::TPC_INVALID) {
@@ -8878,11 +8880,11 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 m_xml.endElement();
             }
 
-            StringList l = h->xmlDegrees();
+            StringList l = harmonyXmlDegrees(h);
             if (!l.empty()) {
                 for (const String& tag : l) {
                     String degreeText;
-                    if (h->xmlKind().startsWith(u"suspended")
+                    if (xmlKind.startsWith(u"suspended")
                         && tag.startsWith(u"add") && tag.at(3).isDigit()
                         && !kindText.isEmpty() && kindText.at(0).isDigit()) {
                         // hack to correct text for suspended chords whose kind text has degree information baked in
@@ -8920,10 +8922,10 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 }
             }
         } else {
-            if (h->extensionName().empty()) {
+            if (h->textName().empty()) {
                 m_xml.tag("kind", "none");
             } else {
-                m_xml.tag("kind", { { "text", h->extensionName() } }, "");
+                m_xml.tag("kind", { { "text", h->textName() } }, "");
             }
 
             int baseTpc = h->bassTpc();
@@ -8951,7 +8953,8 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         // export an unrecognized Chord
         // which may contain arbitrary text
         //
-        const String textName = h->hTextName();
+        const String xmlKind = harmonyXmlKind(h);
+        const String textName = h->textName();
         switch (h->harmonyType()) {
         case HarmonyType::NASHVILLE: {
             String alter;
@@ -8973,19 +8976,19 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 m_xml.tag("numeral-alter", "1");
             }
             m_xml.endElement();
-            if (!h->xmlKind().isEmpty()) {
+            if (!xmlKind.isEmpty()) {
                 String s = u"kind";
-                String kindText = h->musicXmlText();
-                if (!h->musicXmlText().empty()) {
+                String kindText = harmonyXmlText(h);
+                if (!harmonyXmlText(h).empty()) {
                     s += u" text=\"" + kindText + u"\"";
                 }
-                if (h->xmlSymbols() == "yes") {
+                if (harmonyXmlSymbols(h) == "yes") {
                     s += u" use-symbols=\"yes\"";
                 }
-                if (h->xmlParens() == "yes") {
+                if (harmonyXmlParens(h) == "yes") {
                     s += u" parentheses-degrees=\"yes\"";
                 }
-                m_xml.tagRaw(s, h->xmlKind());
+                m_xml.tagRaw(s, xmlKind);
             } else {
                 // default is major
                 m_xml.tag("kind", "major");
