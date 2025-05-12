@@ -113,6 +113,9 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     }
 
     System* system = getNextSystem(ctx);
+    for (SysStaff* staff : system->staves()) {
+        staff->skyline().clear();
+    }
 
     LAYOUT_CALL() << LAYOUT_ITEM_INFO(system);
 

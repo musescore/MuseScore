@@ -1500,6 +1500,10 @@ void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const Engrav
 
 KerningType HorizontalSpacing::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
 {
+    if (item1->isArticulationOrFermata() || item2->isArticulationOrFermata()) {
+        return computeArticulationAndFermataKerning(item1, item2);
+    }
+
     if (ignoreItems(item1, item2)) {
         return KerningType::ALLOW_COLLISION;
     }
@@ -1599,6 +1603,12 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
         return computeStemSlashKerningType(toStemSlash(item1), item2);
     case ElementType::PARENTHESIS:
         return item2->isBarLine() ? KerningType::NON_KERNING : KerningType::KERNING;
+    case ElementType::ARTICULATION:
+        return item2->isArticulation() && toArticulation(item2)->up() == toArticulation(item1)->up()
+               ? KerningType::NON_KERNING : KerningType::ALLOW_COLLISION;
+    case ElementType::FERMATA:
+        return item2->isFermata() && item1->placeAbove() != item2->placeAbove()
+               ? KerningType::ALLOW_COLLISION : KerningType::NON_KERNING;
     default:
         return KerningType::KERNING;
     }
@@ -1681,6 +1691,21 @@ KerningType HorizontalSpacing::computeLyricsKerningType(const Lyrics* lyrics1, c
     }
 
     return KerningType::ALLOW_COLLISION;
+}
+
+KerningType HorizontalSpacing::computeArticulationAndFermataKerning(const EngravingItem* item1, const EngravingItem* item2)
+{
+    if (item1->isArticulationOrFermata()) {
+        if (item2->isArticulationOrFermata()) {
+            bool firstAbove = item1->isArticulationFamily() ? toArticulation(item1)->up() : item1->placeAbove();
+            bool secondAbove = item2->isArticulationFamily() ? toArticulation(item2)->up() : item2->placeAbove();
+            if (firstAbove == secondAbove) {
+                return KerningType::NON_KERNING;
+            }
+        }
+    }
+
+    return KerningType::KERNING;
 }
 
 void HorizontalSpacing::computeHangingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap,

@@ -259,4 +259,14 @@ void PaddingTable::createTable(const MStyle& style)
     for (auto& elem : table) {
         elem[ElementType::MEASURE_REPEAT] = elem[ElementType::NOTE];
     }
+
+    const double articulationAndFermataPadding = 0.35 * spatium;
+    table[ElementType::ARTICULATION].fill(articulationAndFermataPadding);
+    for (auto& elem : table) {
+        elem[ElementType::ARTICULATION] = articulationAndFermataPadding;
+    }
+    table[ElementType::FERMATA].fill(articulationAndFermataPadding);
+    for (auto& elem : table) {
+        elem[ElementType::FERMATA] = articulationAndFermataPadding;
+    }
 }

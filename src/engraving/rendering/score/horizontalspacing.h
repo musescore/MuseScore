@@ -151,6 +151,7 @@ private:
     static KerningType computeNoteKerningType(const Note* note, const EngravingItem* item2);
     static KerningType computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2);
     static KerningType computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2);
+    static KerningType computeArticulationAndFermataKerning(const EngravingItem* item1, const EngravingItem* item2);
 
     static void computeHangingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap,
                                         bool systemEnd);

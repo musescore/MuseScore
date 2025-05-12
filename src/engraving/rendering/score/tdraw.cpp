@@ -1183,7 +1183,7 @@ void TDraw::draw(const Fermata* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor());
-    item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
+    item->drawSymbol(item->symId(), painter);
 }
 
 void TDraw::draw(const FiguredBass* item, Painter* painter)
