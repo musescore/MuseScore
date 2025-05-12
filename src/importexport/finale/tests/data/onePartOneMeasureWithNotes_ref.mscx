@@ -1,9 +1,182 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
     <Division>480</Division>
     <Style>
-      <spatium>1.74978</spatium>
+      <pageWidth>8.5</pageWidth>
+      <pageHeight>11</pageHeight>
+      <pagePrintableWidth>7</pagePrintableWidth>
+      <pageEvenLeftMargin>1</pageEvenLeftMargin>
+      <pageOddLeftMargin>1</pageOddLeftMargin>
+      <pageEvenTopMargin>0.5</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.5</pageEvenBottomMargin>
+      <pageOddTopMargin>0.5</pageOddTopMargin>
+      <pageOddBottomMargin>0.5</pageOddBottomMargin>
+      <pageTwosided>0</pageTwosided>
+      <lyricsOddFontFace>Finale Lyrics</lyricsOddFontFace>
+      <lyricsEvenFontFace>Finale Lyrics</lyricsEvenFontFace>
+      <minMeasureWidth>0</minMeasureWidth>
+      <barWidth>0.10026</barWidth>
+      <doubleBarWidth>0.10026</doubleBarWidth>
+      <endBarWidth>0.5</endBarWidth>
+      <doubleBarDistance>0.5</doubleBarDistance>
+      <endBarDistance>0.5</endBarDistance>
+      <repeatBarlineDotSeparation>0.541667</repeatBarlineDotSeparation>
+      <bracketWidth>0.5</bracketWidth>
+      <bracketDistance>0.5</bracketDistance>
+      <akkoladeBarDistance>0.5</akkoladeBarDistance>
+      <clefLeftMargin>1</clefLeftMargin>
+      <keysigLeftMargin>1</keysigLeftMargin>
+      <timesigLeftMargin>1</timesigLeftMargin>
+      <clefKeyDistance>1</clefKeyDistance>
+      <keyTimesigDistance>1.5</keyTimesigDistance>
+      <keyBarlineDistance>2</keyBarlineDistance>
+      <clefBarlineDistance>2.66667</clefBarlineDistance>
+      <timesigBarlineDistance>2.66667</timesigBarlineDistance>
+      <stemWidth>0.0911458</stemWidth>
+      <shortestStem>2.83333</shortestStem>
+      <measureSpacing>1.6179</measureSpacing>
+      <measureRepeatNumberPos>-0.0208333</measureRepeatNumberPos>
+      <staffLineWidth>0.0911458</staffLineWidth>
+      <ledgerLineWidth>0.110026</ledgerLineWidth>
+      <ledgerLineLength>0.25</ledgerLineLength>
+      <stemSlashThickness>0.09375</stemSlashThickness>
+      <accidentalDistance>0.333333</accidentalDistance>
+      <accidentalNoteDistance>0.333333</accidentalNoteDistance>
+      <keysigAccidentalDistance>0.166667</keysigAccidentalDistance>
+      <keysigNaturalDistance>0.25</keysigNaturalDistance>
+      <beamMinLen>0.932292</beamMinLen>
+      <dotNoteDistance>0.458333</dotNoteDistance>
+      <dotRestDistance>0.458333</dotRestDistance>
+      <dotDotDistance>0.541667</dotDotDistance>
+      <hairpinHeight>1.08333</hairpinHeight>
+      <hairpinLineWidth>0.10026</hairpinLineWidth>
+      <hairpinFontFace>Times New Roman</hairpinFontFace>
+      <hairpinDashLineLen>7.48052</hairpinDashLineLen>
+      <hairpinDashGapLen>7.48052</hairpinDashGapLen>
+      <measureNumberInterval>1</measureNumberInterval>
+      <graceNoteMag>0.6</graceNoteMag>
+      <smallClefMag>0.75</smallClefMag>
+      <keySigCourtesyBarlineMode>1</keySigCourtesyBarlineMode>
+      <multiVoiceRestTwoSpaceOffset>1</multiVoiceRestTwoSpaceOffset>
+      <mergeMatchingRests>1</mergeMatchingRests>
+      <minEmptyMeasures>2</minEmptyMeasures>
+      <minMMRestWidth>15</minMMRestWidth>
+      <mmRestNumberPos>-0.333333</mmRestNumberPos>
+      <mmRestOldStyleMaxMeasures>8</mmRestOldStyleMaxMeasures>
+      <mmRestOldStyleSpacing>2</mmRestOldStyleSpacing>
+      <hideEmptyStaves>1</hideEmptyStaves>
+      <firstSystemIndentationValue>6</firstSystemIndentationValue>
+      <slurDottedWidth>0.0917969</slurDottedWidth>
+      <tieDottedWidth>0.0917969</tieDottedWidth>
+      <minTieLength>2</minTieLength>
+      <musicalSymbolFont>Finale Maestro</musicalSymbolFont>
+      <musicalTextFont>Finale Maestro Text</musicalTextFont>
+      <voltaLineWidth>0.130208</voltaLineWidth>
+      <voltaFontFace>Times New Roman</voltaFontFace>
+      <voltaFontSize>8.33333</voltaFontSize>
+      <voltaFontStyle>0</voltaFontStyle>
+      <ottavaHookAbove>0.5</ottavaHookAbove>
+      <ottavaHookBelow>-0.5</ottavaHookBelow>
+      <ottavaLineWidth>0.0917969</ottavaLineWidth>
+      <ottavaDashLineLen>8.17021</ottavaDashLineLen>
+      <ottavaDashGapLen>8.17021</ottavaDashGapLen>
+      <ottavaNumbersOnly>0</ottavaNumbersOnly>
+      <tupletStemLeftDistance>0</tupletStemLeftDistance>
+      <tupletStemRightDistance>0</tupletStemRightDistance>
+      <tupletBracketWidth>0.10026</tupletBracketWidth>
+      <tupletFontFace>Times New Roman</tupletFontFace>
+      <tupletFontSize>8.33333</tupletFontSize>
+      <tupletFontStyle>3</tupletFontStyle>
+      <tupletBracketHookHeight>0.5</tupletBracketHookHeight>
+      <dynamicsFont>Finale Maestro</dynamicsFont>
+      <defaultFontFace>Times New Roman</defaultFontFace>
+      <titleFontFace>Times New Roman</titleFontFace>
+      <subTitleFontFace>Times New Roman</subTitleFontFace>
+      <composerFontFace>Times New Roman</composerFontFace>
+      <lyricistFontFace>Times New Roman</lyricistFontFace>
+      <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
+      <longInstrumentFontSize>11.6667</longInstrumentFontSize>
+      <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
+      <shortInstrumentFontSize>11.6667</shortInstrumentFontSize>
+      <partInstrumentFontFace>Times New Roman</partInstrumentFontFace>
+      <partInstrumentFontSize>11.6667</partInstrumentFontSize>
+      <partInstrumentFontSpatiumDependent>1</partInstrumentFontSpatiumDependent>
+      <dynamicsFontFace>Times New Roman</dynamicsFontFace>
+      <expressionFontFace>Times New Roman</expressionFontFace>
+      <tempoFontFace>Times New Roman</tempoFontFace>
+      <tempoFontSize>11.6667</tempoFontSize>
+      <tempoChangeFontFace>Times New Roman</tempoChangeFontFace>
+      <tempoChangeFontSize>10</tempoChangeFontSize>
+      <tempoChangeFontStyle>2</tempoChangeFontStyle>
+      <tempoChangeLineWidth>0.0917969</tempoChangeLineWidth>
+      <tempoChangeDashLineLen>8.17021</tempoChangeDashLineLen>
+      <tempoChangeDashGapLen>8.17021</tempoChangeDashGapLen>
+      <metronomeFontFace>Times New Roman</metronomeFontFace>
+      <metronomeFontSize>11.6667</metronomeFontSize>
+      <metronomeFontSpatiumDependent>1</metronomeFontSpatiumDependent>
+      <metronomeFontStyle>1</metronomeFontStyle>
+      <measureNumberFontFace>Times New Roman</measureNumberFontFace>
+      <measureNumberFontSize>8.33333</measureNumberFontSize>
+      <measureNumberFontSpatiumDependent>1</measureNumberFontSpatiumDependent>
+      <mmRestRangeBracketType>2</mmRestRangeBracketType>
+      <mmRestRangeFontFace>Times New Roman</mmRestRangeFontFace>
+      <mmRestRangeFontSize>8.33333</mmRestRangeFontSize>
+      <mmRestRangeFontSpatiumDependent>1</mmRestRangeFontSpatiumDependent>
+      <translatorFontFace>Times New Roman</translatorFontFace>
+      <systemTextFontFace>Times New Roman</systemTextFontFace>
+      <systemTextFontStyle>2</systemTextFontStyle>
+      <staffTextFontFace>Times New Roman</staffTextFontFace>
+      <rehearsalMarkFontFace>Times New Roman</rehearsalMarkFontFace>
+      <rehearsalMarkFontSize>11.6667</rehearsalMarkFontSize>
+      <rehearsalMarkFramePadding>0.375</rehearsalMarkFramePadding>
+      <rehearsalMarkFrameWidth>0.130208</rehearsalMarkFrameWidth>
+      <rehearsalMarkFrameRound>9</rehearsalMarkFrameRound>
+      <repeatLeftFontFace>Times New Roman</repeatLeftFontFace>
+      <repeatLeftFontSize>11.6667</repeatLeftFontSize>
+      <repeatLeftFontStyle>1</repeatLeftFontStyle>
+      <repeatRightFontFace>Times New Roman</repeatRightFontFace>
+      <repeatRightFontSize>11.6667</repeatRightFontSize>
+      <repeatRightFontStyle>1</repeatRightFontStyle>
+      <frameFontFace>Times New Roman</frameFontFace>
+      <frameFontSpatiumDependent>1</frameFontSpatiumDependent>
+      <textLineFontFace>Times New Roman</textLineFontFace>
+      <systemTextLineFontFace>Times New Roman</systemTextLineFontFace>
+      <systemTextLineFontStyle>2</systemTextLineFontStyle>
+      <glissandoFontFace>Times New Roman</glissandoFontFace>
+      <glissandoFontSize>10</glissandoFontSize>
+      <glissandoFontStyle>0</glissandoFontStyle>
+      <bendFontFace>Times New Roman</bendFontFace>
+      <bendFontSize>10</bendFontSize>
+      <headerFontFace>Times New Roman</headerFontFace>
+      <headerFontSize>10</headerFontSize>
+      <headerFontSpatiumDependent>1</headerFontSpatiumDependent>
+      <footerFontFace>Times New Roman</footerFontFace>
+      <footerFontSize>10</footerFontSize>
+      <footerFontSpatiumDependent>1</footerFontSpatiumDependent>
+      <copyrightFontFace>Times New Roman</copyrightFontFace>
+      <copyrightFontSize>10</copyrightFontSize>
+      <copyrightFontSpatiumDependent>1</copyrightFontSpatiumDependent>
+      <pageNumberFontFace>Times New Roman</pageNumberFontFace>
+      <pageNumberFontSize>10</pageNumberFontSize>
+      <pageNumberFontSpatiumDependent>1</pageNumberFontSpatiumDependent>
+      <pageNumberFontStyle>0</pageNumberFontStyle>
+      <instrumentChangeFontFace>Times New Roman</instrumentChangeFontFace>
+      <instrumentChangeFontStyle>0</instrumentChangeFontStyle>
+      <stickingFontFace>Times New Roman</stickingFontFace>
+      <user1FontFace>Times New Roman</user1FontFace>
+      <user2FontFace>Times New Roman</user2FontFace>
+      <user3FontFace>Times New Roman</user3FontFace>
+      <user4FontFace>Times New Roman</user4FontFace>
+      <user5FontFace>Times New Roman</user5FontFace>
+      <user6FontFace>Times New Roman</user6FontFace>
+      <user7FontFace>Times New Roman</user7FontFace>
+      <user8FontFace>Times New Roman</user8FontFace>
+      <user9FontFace>Times New Roman</user9FontFace>
+      <user10FontFace>Times New Roman</user10FontFace>
+      <user11FontFace>Times New Roman</user11FontFace>
+      <user12FontFace>Times New Roman</user12FontFace>
+      <spatium>1.80799</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -19,51 +192,6 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">One part, one Measure, with Notes</metaTag>
-    <Order id="orchestral">
-      <name>Orchestral</name>
-      <instrument id="piano">
-        <family id="keyboards">Keyboards</family>
-        </instrument>
-      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
-        <family>flutes</family>
-        <family>oboes</family>
-        <family>clarinets</family>
-        <family>saxophones</family>
-        <family>bassoons</family>
-        <unsorted group="woodwinds"/>
-        </section>
-      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
-        <family>horns</family>
-        <family>trumpets</family>
-        <family>cornets</family>
-        <family>flugelhorns</family>
-        <family>trombones</family>
-        <family>tubas</family>
-        </section>
-      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
-        <family>timpani</family>
-        </section>
-      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
-        <family>keyboard-percussion</family>
-        <family>drums</family>
-        <family>unpitched-metal-percussion</family>
-        <family>unpitched-wooden-percussion</family>
-        <family>other-percussion</family>
-        </section>
-      <family>keyboards</family>
-      <family>harps</family>
-      <family>organs</family>
-      <family>synths</family>
-      <soloists/>
-      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
-        <family>voices</family>
-        <family>voice-groups</family>
-        </section>
-      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
-        <family>orchestral-strings</family>
-        </section>
-      <unsorted/>
-      </Order>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">

@@ -91,7 +91,7 @@ MasterScore* Finale_Tests::readScore(const String& fileName, bool isAbsolutePath
 
 void Finale_Tests::finaleImportTestRef(const char* file)
 {
-    MScore::debugMode = true; // for now, set to false later
+    MScore::debugMode = false; // for now, set to false later
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(FINALE_IO_DATA_DIR + fileName + u".musx");
@@ -110,7 +110,7 @@ void Finale_Tests::finaleImportTestRef(const char* file)
 
 void Finale_Tests::enigmaXmlImportTestRef(const char* file)
 {
-    MScore::debugMode = true; // for now, set to false later
+    MScore::debugMode = false; // for now, set to false later
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(FINALE_IO_DATA_DIR + fileName + u".enigmaxml");
