@@ -2112,24 +2112,27 @@ void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int tr
         int absTick = m_mtt->getTick(measure->no(), harmonyPtr->getTick());
 
         Harmony* harmony = Factory::createHarmony(m_score->dummy()->segment());
+        HarmonyInfo* info = new HarmonyInfo(measure->score()->chordList());
 
         // TODO - does this need to be key-aware?
         harmony->setTrack(track);
-        harmony->setRootTpc(step2tpc(harmonyPtr->getRoot(), AccidentalVal(harmonyPtr->getAlterRoot())));
+        info->m_rootTpc = step2tpc(harmonyPtr->getRoot(), AccidentalVal(harmonyPtr->getAlterRoot()));
         if (harmonyPtr->getBass() != ovebase::INVALID_NOTE
             && (harmonyPtr->getBass() != harmonyPtr->getRoot()
                 || (harmonyPtr->getBass() == harmonyPtr->getRoot()
                     && harmonyPtr->getAlterBass() != harmonyPtr->getAlterRoot()))) {
-            harmony->setBassTpc(step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass())));
+            info->m_bassTpc = step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass()));
         }
         const ChordDescription* d = harmonyFromXml(harmony, harmonyPtr->getHarmonyType());
         if (d != 0) {
-            harmony->setId(d->id);
-            harmony->setTextName(d->names.front());
+            info->m_id = d->id;
+            info->m_textName = d->names.front();
         } else {
-            harmony->setId(-1);
-            harmony->setTextName(harmonyPtr->getHarmonyType());
+            info->m_id = -1;
+            info->m_textName = harmonyPtr->getHarmonyType();
         }
+
+        harmony->addChord(info);
         harmony->render();
 
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
