@@ -8958,7 +8958,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         switch (h->harmonyType()) {
         case HarmonyType::NASHVILLE: {
             String alter;
-            String functionText = h->hFunction();
+            String functionText = harmonyXmlFunction(h);
             if (functionText.empty()) {
                 // we just dump the text as deprecated function
                 m_xml.tag("function", textName);

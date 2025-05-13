@@ -1386,25 +1386,27 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
         14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19
     };
 
+    HarmonyInfo* info = new HarmonyInfo(ctx.score()->chordList());
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "base") {
             if (ctx.mscVersion() >= 106) {
-                h->setBassTpc(e.readInt());
+                info->m_bassTpc = e.readInt();
             } else {
-                h->setBassTpc(table[e.readInt() - 1]);
+                info->m_bassTpc = table[e.readInt() - 1];
             }
         } else if (tag == "baseCase") {
             h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
-            h->setId(e.readInt());
+            info->m_id = e.readInt();
         } else if (tag == "name") {
-            h->setTextName(e.readText());
+            info->m_textName = e.readText();
         } else if (tag == "root") {
             if (ctx.mscVersion() >= 106) {
-                h->setRootTpc(e.readInt());
+                info->m_rootTpc = e.readInt();
             } else {
-                h->setRootTpc(table[e.readInt() - 1]);
+                info->m_rootTpc = table[e.readInt() - 1];
             }
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
@@ -1449,40 +1451,9 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
         }
     }
 
-    // TODO: now that we can render arbitrary chords,
-    // we could try to construct a full representation from a degree list.
-    // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0
-    // or constructed in the Chord Symbol Properties dialog.
+    h->addChord(info);
 
-    if (h->rootTpc() != Tpc::TPC_INVALID) {
-        if (h->id() > 0) {
-            // positive id will happen only for scores that were created with explicit chord lists
-            // lookup id in chord list and generate new description if necessary
-            h->getDescription();
-        } else {
-            // default case: look up by name
-            // description will be found for any chord already read in this score
-            // and we will generate a new one if necessary
-            h->getDescription(h->textName());
-        }
-    } else if (h->textName() == "") {
-        // unrecognized chords prior to 2.0 were stored as text with markup
-        // we need to strip away the markup
-        // this removes any user-applied formatting,
-        // but we no longer support user-applied formatting for chord symbols anyhow
-        // with any luck, the resulting text will be parseable now, so give it a shot
-//            h->createLayout();
-        String s = h->plainText();
-        if (!s.isEmpty()) {
-            h->setHarmony(s);
-            return;
-        }
-        // empty text could also indicate a root-less slash chord ("/E")
-        // we'll fall through and render it normally
-    }
-
-    // render chord from description (or _textName)
-    h->render();
+    h->afterRead();
 }
 
 //---------------------------------------------------------
