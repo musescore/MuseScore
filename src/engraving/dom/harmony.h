@@ -118,7 +118,7 @@ public:
 
     Harmony* clone() const override { return new Harmony(*this); }
 
-    int id() const;
+    int id() const;// DEPRECATED
 
     bool play() const { return m_play; }
 
@@ -136,8 +136,6 @@ public:
     Harmony* findPrev() const;
     Fraction ticksTillNext(int utick, bool stopAtMeasureEnd = false) const;
 
-    void setParsedForm(ParsedChord* pc);
-
     RealizedHarmony& realizedHarmony();
     const RealizedHarmony& getRealizedHarmony() const;
 
@@ -150,12 +148,11 @@ public:
     bool isRealizable() const;
     bool isInFretBox() const;
 
-    String hFunction(Key key = Key::INVALID) const;// DEPRECATED
     String textName() const;                       // DEPRECATED
     int bassTpc() const;                           // DEPRECATED
     int rootTpc() const;                           // DEPRECATED
-    void setRootTpc(int val);
-    void setBassTpc(int val);
+    void setRootTpc(int val);                      // DEPRECATED
+    void setBassTpc(int val);                      // DEPRECATED
     void setTpcFromFunction(const String& s, Key key = Key::INVALID);
     void addDegree(const HDegree& d);
     const std::vector<HDegree>& degreeList() const;
@@ -164,7 +161,6 @@ public:
 
     const ParsedChord* parsedForm() const;                                             // DEPRECATED
     const ChordDescription* descr() const;                                             // DEPRECATED
-    const ChordDescription* getDescription(const String& s, ParsedChord* pc) const;    // DEPRECATED
 
     const std::vector<TextSegment*>& textList() const { return m_textList; }
 

@@ -244,18 +244,6 @@ bool Harmony::isRealizable() const
     return true;
 }
 
-String Harmony::hFunction(Key key) const
-{
-    if (!tpcIsValid(rootTpc())) {
-        return String();
-    }
-    if (key == Key::INVALID) {
-        const Staff* st = staff();
-        key = st ? st->key(tick()) : Key::INVALID;
-    }
-    return tpc2Function(rootTpc(), key);
-}
-
 String Harmony::textName() const
 {
     if (m_chords.empty()) {
@@ -1119,14 +1107,6 @@ RealizedHarmony& Harmony::realizedHarmony()
     return m_realizedHarmony;
 }
 
-void Harmony::setParsedForm(ParsedChord* pc)
-{
-    if (m_chords.empty()) {
-        return;
-    }
-    m_chords.front()->m_parsedChord = pc;
-}
-
 const ParsedChord* Harmony::parsedForm()const
 {
     if (m_chords.empty()) {
@@ -1141,14 +1121,6 @@ const ChordDescription* Harmony::descr() const
         return nullptr;
     }
     return m_chords.front()->descr();
-}
-
-const ChordDescription* Harmony::getDescription(const String& s, ParsedChord* pc) const
-{
-    if (m_chords.empty()) {
-        return nullptr;
-    }
-    return m_chords.front()->getDescription(s, pc);
 }
 
 Color Harmony::curColor() const
