@@ -41,7 +41,34 @@ foreach(qlib ${qt_libs} )
     endif()
 endforeach()
 
-#set_target_properties(Qt6::Platform PROPERTIES INTERFACE_LINK_OPTIONS "${EMCC_LINKER_FLAGS}SHELL:-s LLD_REPORT_UNDEFINED;")
+if (OS_IS_WASM)
+    qt_add_library(all_qml_plugins STATIC)
+    qt_import_qml_plugins(all_qml_plugins)
+    list(APPEND qt_libs all_qml_plugins)
+endif()
+
+# set(EMCC_LINKER_FLAGS "SHELL:-s ASYNCIFY;SHELL:-s USE_ZLIB=1;SHELL:-s USE_LIBPNG=1;SHELL:-s ENVIRONMENT=web;SHELL:-s WASM=1;SHELL:-s EXIT_RUNTIME=1;SHELL:-s ERROR_ON_UNDEFINED_SYMBOLS=1;SHELL:-s EXTRA_EXPORTED_RUNTIME_METHODS=[UTF16ToString,stringToUTF16];SHELL:-s USE_WEBGL2=1;--bind;SHELL:-s FETCH=1;SHELL:-s INITIAL_MEMORY=32MB;SHELL:-s FULL_ES2=1;SHELL:-s DISABLE_EXCEPTION_CATCHING=1;SHELL:-s ALLOW_MEMORY_GROWTH=1;")
+
+# # debug
+# if (BUILD_IS_DEBUG)
+#     set(EMCC_LINKER_FLAGS "${EMCC_LINKER_FLAGS}SHELL:-s DEMANGLE_SUPPORT=1;SHELL:-s GL_DEBUG=1;SHELL:-s ASSERTIONS=2;--profiling-funcs")
+# # release
+# else()
+#     # 95.1 Mb
+#     set(EMCC_LINKER_FLAGS "${EMCC_LINKER_FLAGS}-O2;-g0;")
+#     # 94.3 Mb
+#     #set(EMCC_LINKER_FLAGS "${EMCC_LINKER_FLAGS}-Oz;-g0;-flto;SHELL:--closure 0;SHELL:-s ASSERTIONS=0")
+# endif()
+
+#   INTERFACE_LINK_OPTIONS "SHELL:-s EXIT_RUNTIME=1;SHELL:-s ERROR_ON_UNDEFINED_SYMBOLS=1;SHELL:-s EXTRA_EXPORTED_RUNTIME_METHODS=[UTF16ToString,stringToUTF16];SHELL:-s USE_WEBGL2=1;--bind;SHELL:-s FETCH=1;SHELL:-s INITIAL_MEMORY=20MB;SHELL:-s FULL_ES2=1;SHELL:-s DISABLE_EXCEPTION_CATCHING=1;SHELL:-s ALLOW_MEMORY_GROWTH=1;\$<\$<CONFIG:Debug>:;SHELL:-s DEMANGLE_SUPPORT=1;SHELL:-s GL_DEBUG=1;SHELL:-s ASSERTIONS=2;--profiling-funcs>"
+#set(EMCC_LINKER_FLAGS "SHELL:-s EXIT_RUNTIME=1;SHELL:-s ERROR_ON_UNDEFINED_SYMBOLS=1;SHELL:-s EXTRA_EXPORTED_RUNTIME_METHODS=[UTF16ToString,stringToUTF16];SHELL:-s USE_WEBGL2=1;--bind;SHELL:-s FETCH=1;SHELL:-s INITIAL_MEMORY=20MB;SHELL:-s FULL_ES2=1;SHELL:-s DISABLE_EXCEPTION_CATCHING=1;SHELL:-s ALLOW_MEMORY_GROWTH=1;\$<\$<CONFIG:Debug>:;SHELL:-s DEMANGLE_SUPPORT=1;SHELL:-s GL_DEBUG=1;SHELL:-s ASSERTIONS=2;--profiling-funcs>")
+
+#set_target_properties(Qt6::Platform PROPERTIES INTERFACE_LINK_OPTIONS "${EMCC_LINKER_FLAGS}")
+
+get_target_property(EMCC_LINKER_FLAGS Qt6::Platform INTERFACE_LINK_OPTIONS)
+#message(STATUS "${EMCC_LINKER_FLAGS}")
+set(EMCC_LINKER_FLAGS "SHELL:-s ASYNCIFY;${EMCC_LINKER_FLAGS}")
+set_target_properties(Qt6::Platform PROPERTIES INTERFACE_LINK_OPTIONS "${EMCC_LINKER_FLAGS}")
 
 include_directories(appweb_sandbox PUBLIC
     ${qt_includes}
@@ -103,11 +130,13 @@ target_link_libraries(appweb_sandbox
     muse::uicomponents
 )
 
-if (OS_IS_WASM)
-    configure_file("${CMAKE_CURRENT_BINARY_DIR}/appweb_sandbox.html" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/appweb_sandbox.html" COPYONLY)
-    configure_file("${CMAKE_CURRENT_BINARY_DIR}/qtloader.js" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtloader.js" COPYONLY)
-    configure_file("${CMAKE_CURRENT_BINARY_DIR}/qtlogo.svg" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtlogo.svg" COPYONLY)
-endif()
+target_link_options(appweb_sandbox PUBLIC "-s ASYNCIFY")
+
+# if (OS_IS_WASM)
+#     configure_file("${CMAKE_CURRENT_BINARY_DIR}/appweb_sandbox.html" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/appweb_sandbox.html" COPYONLY)
+#     configure_file("${CMAKE_CURRENT_BINARY_DIR}/qtloader.js" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtloader.js" COPYONLY)
+#     configure_file("${CMAKE_CURRENT_BINARY_DIR}/qtlogo.svg" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtlogo.svg" COPYONLY)
+# endif()
 
 include(GNUInstallDirs)
 install(TARGETS appweb_sandbox
