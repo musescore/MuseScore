@@ -104,7 +104,7 @@ RetVal<muse::io::path_t> OpenSaveProjectScenario::askLocalPath(INotationProjectP
 
     std::vector<std::string> filter {
         muse::trc("project", "MuseScore file") + " (*.mscz)",
-        muse::trc("project", "Uncompressed MuseScore folder (experimental)")
+        muse::trc("project", "Uncompressed MuseScore folder [experimental]")
 #ifdef Q_OS_MAC
         + " (*)"
 #else
