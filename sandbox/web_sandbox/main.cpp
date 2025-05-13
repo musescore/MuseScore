@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickWindow>
 
 #include "global/globalmodule.h"
 #include "actions/actionsmodule.h"
@@ -8,6 +9,7 @@
 
 #include "global/modularity/ioc.h"
 #include "ui/iuiengine.h"
+#include "ui/iinteractiveuriregister.h"
 
 #include "interactivetestmodel.h"
 
@@ -16,12 +18,14 @@ static void app_init_qrc()
     Q_INIT_RESOURCE(app);
 }
 
+using namespace muse;
+
 int main(int argc, char* argv[])
 {
     QGuiApplication app(argc, argv);
 
     // === Setup ===
-
+    QQuickWindow::setDefaultAlphaBuffer(true);
     app_init_qrc();
 
     QList<muse::modularity::IModuleSetup*> modules = {
@@ -52,6 +56,11 @@ int main(int argc, char* argv[])
 
     for (auto* m : modules) {
         m->onAllInited(mode);
+    }
+
+    auto ir = muse::modularity::globalIoc()->resolve<muse::ui::IInteractiveUriRegister>("app");
+    if (ir) {
+        ir->registerQmlUri(Uri("muse://interactive/sample"), "SampleDialog.qml");
     }
 
     qmlRegisterType<InteractiveTestModel>("Muse.WasmTest", 1, 0, "InteractiveTestModel");

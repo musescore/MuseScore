@@ -14,5 +14,6 @@
         <file>configs/workspaces.cfg</file>
         <file>configs/ui.cfg</file>
         <file>configs/user_agent.cfg</file>
+        <file>qml/SampleDialog.qml</file>
     </qresource>
 </RCC>
