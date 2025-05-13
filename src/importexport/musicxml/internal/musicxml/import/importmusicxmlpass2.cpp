@@ -907,6 +907,7 @@ static void addLyric(MusicXmlLogger* logger, const XmlStreamReader* const xmlrea
         delete l;
     } else {
         l->setNo(lyricNo);
+        l->initTextStyleType(l->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
         cr->add(l);
         extendedLyrics.setExtend(lyricNo, cr->track(), cr->tick(), l);
     }

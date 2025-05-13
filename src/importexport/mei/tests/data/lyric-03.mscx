@@ -114,7 +114,7 @@
               <no>1</no>
               <syllabic>begin</syllabic>
               <eid>P_P</eid>
-              <text>Y<sym>lyricsElision</sym><font face="Edwin"/>aun</text>
+              <text>Y<sym>lyricsElision</sym>aun</text>
               </Lyrics>
             <Lyrics>
               <eid>Q_Q</eid>
@@ -480,7 +480,7 @@
               <no>1</no>
               <syllabic>begin</syllabic>
               <eid>XB_XB</eid>
-              <text>Y<sym>lyricsElision</sym><font face="Edwin"/>aun</text>
+              <text>Y<sym>lyricsElision</sym>aun</text>
               </Lyrics>
             <Note>
               <eid>YB_YB</eid>
