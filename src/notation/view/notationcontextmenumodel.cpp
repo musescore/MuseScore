@@ -192,7 +192,7 @@ MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
 
     const engraving::FretDiagram* fretDiagram = engraving::toFretDiagram(hitElementContext().element);
     if (!fretDiagram->harmony()) {
-        items << makeMenuItem("chord-text", TranslatableString("notation", "Add chord symbol"));
+        items << makeMenuItem("chord-text", TranslatableString("notation", "Add c&hord symbol"));
     }
 
     return items;

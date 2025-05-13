@@ -1786,9 +1786,14 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
         applyUserOffset = true;
         [[fallthrough]];
     case ElementType::DYNAMIC:
-    case ElementType::FRET_DIAGRAM:
     case ElementType::HARMONY:
         accepted = doDropTextBaseAndSymbols(pos, applyUserOffset);
+        break;
+    case ElementType::FRET_DIAGRAM:
+        accepted = doDropTextBaseAndSymbols(pos, applyUserOffset);
+        if (accepted) {
+            doFinishAddFretboardDiagram();
+        }
         break;
     case ElementType::HBOX:
     case ElementType::VBOX:
@@ -2579,6 +2584,10 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
             selectAndStartEditIfNeeded(el);
         }
 
+        if (score->selection().elements().size() == 1) {
+            doFinishAddFretboardDiagram();
+        }
+
         dropData->dropElement = nullptr;
 
         m_notifyAboutDropChanged = true;
@@ -3090,6 +3099,27 @@ void NotationInteraction::resetDropData()
     }
 
     m_dropData = {};
+}
+
+void NotationInteraction::doFinishAddFretboardDiagram()
+{
+    EngravingItem* selectedElement = score()->selection().element();
+    if (!selectedElement || !selectedElement->isFretDiagram()) {
+        return;
+    }
+
+    FretDiagram* fretDiagram = toFretDiagram(selectedElement);
+    if (!fretDiagram->harmonyText().empty()) {
+        return;
+    }
+
+    //! first we need to apply changes
+    apply();
+
+    //! then add harmony
+    mu::engraving::TextBase* text = score()->addText(TextStyleType::HARMONY_A, fretDiagram);
+    doSelect({ text }, SelectType::SINGLE);
+    startEditElement(text, true);
 }
 
 void NotationInteraction::setAnchorLines(const std::vector<LineF>& anchorList)
@@ -6121,8 +6151,26 @@ void NotationInteraction::resetHitElementContext()
 
 bool NotationInteraction::elementsSelected(const std::set<ElementType>& elementsTypes) const
 {
-    const EngravingItem* element = selection()->element();
-    return element && muse::contains(elementsTypes, element->type());
+    auto selection = this->selection();
+    if (!selection || selection->isNone()) {
+        return false;
+    }
+
+    std::vector<EngravingItem*> selectedElements;
+
+    if (EngravingItem* element = selection->element()) {
+        selectedElements = { element };
+    } else {
+        selectedElements = selection->elements();
+    }
+
+    for (const EngravingItem* element: selectedElements) {
+        if (element && muse::contains(elementsTypes, element->type())) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //! NOTE: Copied from ScoreView::lyricsTab
@@ -7455,33 +7503,50 @@ void NotationInteraction::addFretboardDiagram()
         return;
     }
 
-    const Selection& selection = score->selection();
-    if (selection.isNone()) {
+    auto selection = this->selection();
+    if (selection->isNone()) {
         return;
     }
 
-    engraving::EngravingItem* item = selection.element();
-    if (!item || !item->isHarmony()) {
-        return;
+    std::vector<EngravingItem*> selectedElements;
+
+    if (EngravingItem* element = selection->element()) {
+        selectedElements = { element };
+    } else {
+        selectedElements = selection->elements();
     }
 
-    engraving::Harmony* harmony = engraving::toHarmony(item);
-    if (!harmony) {
-        return;
+    std::vector<Harmony*> selectedHarmonies;
+    for (EngravingItem* element : selectedElements) {
+        Harmony* harmony = element && element->isHarmony() ? toHarmony(element) : nullptr;
+        if (harmony && !harmony->explicitParent()->isFretDiagram()) {
+            selectedHarmonies.emplace_back(harmony);
+        }
     }
 
-    engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(harmony->score()->dummy()->segment());
-    diagram->setTrack(harmony->track());
-    diagram->updateDiagram(harmony->plainText());
+    if (selectedHarmonies.empty()) {
+        return;
+    }
 
     startEdit(TranslatableString("undoableAction", "Add fretboard diagram"));
 
-    score->undo(new FretLinkHarmony(diagram, harmony));
-    score->undoAddElement(diagram);
+    engraving::FretDiagram* lastAddedDiagram = nullptr;
+    for (Harmony* harmony : selectedHarmonies) {
+        engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(harmony->score()->dummy()->segment());
+        diagram->setTrack(harmony->track());
+        diagram->updateDiagram(harmony->plainText());
+
+        score->undo(new FretLinkHarmony(diagram, harmony));
+        score->undoAddElement(diagram);
+
+        lastAddedDiagram = diagram;
+    }
 
     apply();
 
-    select({ diagram });
+    if (lastAddedDiagram) {
+        select({ lastAddedDiagram });
+    }
 }
 
 mu::engraving::Harmony* NotationInteraction::editedHarmony() const

@@ -98,6 +98,15 @@ void ChordSymbolSettingsModel::setHasLinkedFretboardDiagram(bool has)
 
 void ChordSymbolSettingsModel::updateHasLinkedFretboardDiagram()
 {
-    engraving::EngravingObject* parent = m_elementList.front()->explicitParent();
-    setHasLinkedFretboardDiagram(parent && parent->isFretDiagram());
+    bool hasHarmonyWhithoutFretboardDiagram = false;
+
+    for (mu::engraving::EngravingItem* item : m_elementList) {
+        engraving::EngravingObject* parent = item->explicitParent();
+        if (parent && !parent->isFretDiagram()) {
+            hasHarmonyWhithoutFretboardDiagram = true;
+            break;
+        }
+    }
+
+    setHasLinkedFretboardDiagram(!hasHarmonyWhithoutFretboardDiagram);
 }

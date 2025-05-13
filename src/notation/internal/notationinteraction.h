@@ -420,6 +420,8 @@ private:
     bool dropCanvas(EngravingItem* e);
     void resetDropData();
 
+    void doFinishAddFretboardDiagram();
+
     bool selectInstrument(mu::engraving::InstrumentChange* instrumentChange);
     void cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const;
 
