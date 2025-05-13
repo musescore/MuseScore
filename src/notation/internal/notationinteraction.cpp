@@ -5625,6 +5625,18 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
         return item && item->isBox() ? muse::make_ok() : make_ret(Err::EmptySelection);
     }
 
+    static const std::set<TextStyleType> harmonyTypes {
+        TextStyleType::HARMONY_A,
+        TextStyleType::HARMONY_ROMAN,
+        TextStyleType::HARMONY_NASHVILLE,
+    };
+
+    if (muse::contains(harmonyTypes, type)) {
+        if (item && item->type() == ElementType::FRET_DIAGRAM) {
+            return muse::make_ok();
+        }
+    }
+
     static const std::set<TextStyleType> needSelectNoteOrRestTypes {
         TextStyleType::SYSTEM,
         TextStyleType::STAFF,

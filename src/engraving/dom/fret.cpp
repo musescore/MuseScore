@@ -73,6 +73,9 @@ static const ElementStyle fretStyle {
 //---------------------------------------------------------
 
 static std::unordered_map<String, String> s_harmonyToDiagramMap;
+static std::unordered_map<String, std::vector<String> > s_diagramPatternToHarmoniesMap;
+
+static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH("://data/harmony_to_diagram.xml");
 
 FretDiagram::FretDiagram(Segment* parent)
     : EngravingItem(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
@@ -160,7 +163,7 @@ std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const S
 void FretDiagram::updateDiagram(const String& harmonyName)
 {
     if (s_harmonyToDiagramMap.empty()) {
-        readHarmonyToDiagramFile("://data/harmony_to_diagram.xml");
+        readHarmonyToDiagramFile(HARMONY_TO_DIAGRAM_FILE_PATH);
     }
 
     String _harmonyName = harmonyName;
@@ -605,6 +608,40 @@ void FretDiagram::applyDiagramPattern(FretDiagram* diagram, const String& patter
     }
 }
 
+String FretDiagram::patternFromDiagram(const FretDiagram* diagram)
+{
+    int strings = diagram->strings();
+    int offset = diagram->fretOffset();
+
+    std::vector<Char> empty(strings, Char('-'));
+    String emptyPattern(empty.data(), empty.size());
+
+    String pattern = emptyPattern;
+
+    const DotMap& dotsMap = diagram->dots();
+
+    for (int i = 0; i < strings; ++i) {
+        FretItem::Marker marker = diagram->marker(i);
+        if (marker.mtype == FretMarkerType::CROSS) {
+            pattern[i] = 'X';
+            continue;
+        } else if (marker.mtype == FretMarkerType::CIRCLE) {
+            pattern[i] = 'O';
+            continue;
+        }
+
+        auto it = dotsMap.find(i);
+        if (it != dotsMap.end() && !it->second.empty()) {
+            const FretItem::Dot& d = it->second.front();
+            if (d.fret >= 0) {
+                pattern[i] = '0' + (d.fret + offset);
+            }
+        }
+    }
+
+    return pattern != emptyPattern ? pattern : String();
+}
+
 void FretDiagram::applyAlignmentToHarmony()
 {
     if (m_harmony->propertyFlags(Pid::OFFSET) == PropertyFlags::STYLED) {
@@ -766,6 +803,20 @@ void FretDiagram::add(EngravingItem* e)
         m_harmony = toHarmony(e);
 
         m_harmony->setTrack(track());
+
+        if (m_harmony->harmonyName().empty()) {
+            if (s_diagramPatternToHarmoniesMap.empty()) {
+                readHarmonyToDiagramFile(HARMONY_TO_DIAGRAM_FILE_PATH);
+            }
+
+            String pattern = patternFromDiagram(this);
+            if (!pattern.empty()) {
+                std::vector<String> matchedHarmonies = muse::value(s_diagramPatternToHarmoniesMap, pattern);
+                if (!matchedHarmonies.empty()) {
+                    m_harmony->setHarmony(matchedHarmonies.front());
+                }
+            }
+        }
 
         applyAlignmentToHarmony();
 
@@ -1082,7 +1133,14 @@ void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath)
 
     XmlReader reader(&file);
 
-    s_harmonyToDiagramMap = read460::HarmonyToDiagramReader::read(reader);
+    std::unordered_map<String,
+                       read460::HarmonyToDiagramReader::FretDiagramInfo> harmonyToDiagramMap
+        = read460::HarmonyToDiagramReader::read(reader);
+
+    for (auto& [key, value] : harmonyToDiagramMap) {
+        s_harmonyToDiagramMap.insert({ key, value.xml });
+        s_diagramPatternToHarmoniesMap[value.pattern].push_back(key);
+    }
 }
 
 //---------------------------------------------------------

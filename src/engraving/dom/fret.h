@@ -291,6 +291,7 @@ private:
     void removeDotsMarkers(int ss, int es, int fret);
 
     static void applyDiagramPattern(FretDiagram* diagram, const String& pattern);
+    static String patternFromDiagram(const FretDiagram* diagram);
 
     void applyAlignmentToHarmony();
 
