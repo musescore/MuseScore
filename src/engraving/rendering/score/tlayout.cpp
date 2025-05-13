@@ -3503,6 +3503,13 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
 
     auto positionPoint = calculateBoundingRect(item, ldata, ctx);
 
+    if (item->isPolychord()) {
+        for (LineF& line : ldata->polychordDividerLines.mut_value()) {
+            line.setP1(PointF(ldata->bbox().left(), line.y1()));
+            line.setP2(PointF(ldata->bbox().right(), line.y2()));
+        }
+    }
+
     if (item->hasFrame()) {
         item->layoutFrame(ldata);
     }

@@ -1826,7 +1826,7 @@ void TDraw::draw(const Harmony* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const TextBase::LayoutData* ldata = item->ldata();
+    const Harmony::LayoutData* ldata = item->ldata();
 
     if (item->textList().empty()) {
         drawTextBase(item, painter);
@@ -1866,6 +1866,16 @@ void TDraw::draw(const Harmony* item, Painter* painter)
         painter->setFont(f);
         painter->drawText(ts->pos(), ts->text);
 #endif
+    }
+
+    if (item->isPolychord()) {
+        Pen pen(painter->pen());
+        pen.setWidthF(item->style().styleS(Sid::polychordDividerThickness).toMM(item->spatium()));
+        pen.setColor(color);
+        painter->setPen(pen);
+        for (LineF line : ldata->polychordDividerLines.value()) {
+            painter->drawLine(line);
+        }
     }
 }
 

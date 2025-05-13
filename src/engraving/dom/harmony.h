@@ -19,12 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_HARMONY_H
-#define MU_ENGRAVING_HARMONY_H
+#pragma once
 
 #include <vector>
 
+#include "chordlist.h"
 #include "draw/types/font.h"
 
 #include "textbase.h"
@@ -58,26 +57,54 @@ struct TextSegment {
     void setText(const String& t) { text = t; }
 };
 
-//---------------------------------------------------------
-//   @@ Harmony
-///    root note and bass note are notated as "tonal pitch class":
-///   <table>
-///         <tr><td>&nbsp;</td><td>bb</td><td> b</td><td> -</td><td> #</td><td>##</td></tr>
-///         <tr><td>C</td>     <td> 0</td><td> 7</td><td>14</td><td>21</td><td>28</td></tr>
-///         <tr><td>D</td>     <td> 2</td><td> 9</td><td>16</td><td>23</td><td>30</td></tr>
-///         <tr><td>E</td>     <td> 4</td><td>11</td><td>18</td><td>25</td><td>32</td></tr>
-///         <tr><td>F</td>     <td>-1</td><td> 6</td><td>13</td><td>20</td><td>27</td></tr>
-///         <tr><td>G</td>     <td> 1</td><td> 8</td><td>15</td><td>22</td><td>29</td></tr>
-///         <tr><td>A</td>     <td> 3</td><td>10</td><td>17</td><td>24</td><td>31</td></tr>
-///         <tr><td>B</td>     <td> 5</td><td>12</td><td>19</td><td>26</td><td>33</td></tr></table>
-//
-//   @P bassTpc   int   bass note as "tonal pitch class"
-//   @P id        int   harmony identifier
-//   @P rootTpc   int   root note as "tonal pitch class"
-//---------------------------------------------------------
-
 struct RenderAction;
 class HDegree;
+
+//---------------------------------------------------------
+//   @@ HarmonyInfo
+//      Contains all identifying information for a chord. The Harmony DOM class an have many of these
+//      as polychords
+//
+//   @P m_bassTpc   int   bass note as "tonal pitch class"
+//   @P m_rootTpc   int   root note as "tonal pitch class"
+//   @P m_id        int   harmony identifier
+//---------------------------------------------------------
+
+struct HarmonyInfo {
+    HarmonyInfo(int id, int rootTpc, int bassTpc, String textName, ParsedChord* pc, ChordList* cl)
+        : m_id(id), m_rootTpc(rootTpc), m_bassTpc(bassTpc), m_textName(textName), m_parsedChord(pc), m_chordList(cl) {}
+    HarmonyInfo(ChordList* cl)
+        : m_chordList(cl) {}
+    HarmonyInfo(const HarmonyInfo& h);
+    ~HarmonyInfo();
+
+    int m_id = -1;                          // >0 = id of matched chord from chord list, if applicable
+                                            // -1 = invalid chord
+                                            // <-10000 = private id of generated chord or matched chord with no id
+    int m_rootTpc = Tpc::TPC_INVALID;       // root note for chord
+    int m_bassTpc = Tpc::TPC_INVALID;       // bass note or chord bass; used for "slash" chords
+                                            // or notation of bass note in chord
+
+    String m_textName;                      // name recognized from chord list, read from score file, or constructed from imported source
+                                            // Also stores the whole RNA string to be rendered
+    ParsedChord* m_parsedChord = nullptr;   // parsed form of chord
+
+    ChordList* m_chordList = nullptr;
+
+    const ChordDescription* descr() const;
+    const ChordDescription* descr(const String&, const ParsedChord* pc = 0) const;
+    const ChordDescription* getDescription();
+    const ChordDescription* getDescription(const String&, const ParsedChord* pc = 0);
+    const ChordDescription* generateDescription();
+
+    ParsedChord* parsedChord();
+};
+
+//---------------------------------------------------------
+//   @@ Harmony
+//      This DOM class represents the chord symbol in the score. It contains the necessary information to
+//      layout standard chords and polychords
+//---------------------------------------------------------
 
 class Harmony final : public TextBase
 {
@@ -91,8 +118,7 @@ public:
 
     Harmony* clone() const override { return new Harmony(*this); }
 
-    void setId(int d) { m_id = d; }
-    int id() const { return m_id; }
+    int id() const;
 
     bool play() const { return m_play; }
 
@@ -110,13 +136,7 @@ public:
     Harmony* findPrev() const;
     Fraction ticksTillNext(int utick, bool stopAtMeasureEnd = false) const;
 
-    const ChordDescription* descr() const;
-    const ChordDescription* descr(const String&, const ParsedChord* pc = 0) const;
-    const ChordDescription* getDescription();
-    const ChordDescription* getDescription(const String&, const ParsedChord* pc = 0);
-    const ChordDescription* generateDescription();
-
-    void setParsedForm(ParsedChord* pc) { m_parsedForm = pc; }
+    void setParsedForm(ParsedChord* pc);
 
     RealizedHarmony& realizedHarmony();
     const RealizedHarmony& getRealizedHarmony() const;
@@ -130,24 +150,30 @@ public:
     bool isRealizable() const;
     bool isInFretBox() const;
 
-    String hFunction(Key key = Key::INVALID) const;
-    String textName() const { return m_textName; }
-    int bassTpc() const { return m_bassTpc; }
-    void setBassTpc(int val) { m_bassTpc = val; }
-    int rootTpc() const { return m_rootTpc; }
-    void setRootTpc(int val) { m_rootTpc = val; }
-    void setTextName(const String& s) { m_textName = s; }
+    String hFunction(Key key = Key::INVALID) const;// DEPRECATED
+    String textName() const;                       // DEPRECATED
+    int bassTpc() const;                           // DEPRECATED
+    int rootTpc() const;                           // DEPRECATED
+    void setRootTpc(int val);
+    void setBassTpc(int val);
     void setTpcFromFunction(const String& s, Key key = Key::INVALID);
     void addDegree(const HDegree& d);
     const std::vector<HDegree>& degreeList() const;
-    const ParsedChord* parsedForm() const;
     HarmonyType harmonyType() const { return m_harmonyType; }
     void setHarmonyType(HarmonyType val);
+
+    const ParsedChord* parsedForm() const;                                             // DEPRECATED
+    const ChordDescription* descr() const;                                             // DEPRECATED
+    const ChordDescription* getDescription(const String& s, ParsedChord* pc) const;    // DEPRECATED
 
     const std::vector<TextSegment*>& textList() const { return m_textList; }
 
     void afterRead();
     void render();
+
+    bool isPolychord() const { return m_chords.size() > 1; }
+    const std::vector<HarmonyInfo*> chords() const { return m_chords; }
+    void addChord(HarmonyInfo* info) { m_chords.push_back(info); }
 
     String harmonyName() const;
 
@@ -177,15 +203,20 @@ public:
 
     struct LayoutData : public TextBase::LayoutData {
         ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };           // used for calculating the height is frame while editing.
+        ld_field<std::vector<LineF> > polychordDividerLines = { "[Harmony] polychordDividerLine", std::vector<LineF>() };
     };
     DECLARE_LAYOUTDATA_METHODS(Harmony)
 
 private:
+    std::vector<HarmonyInfo*> m_chords;
 
-    const ChordDescription* parseHarmony(const String& s, int& root, int& bass, bool syntaxOnly = false);
+    const std::vector<const ChordDescription*> parseHarmony(const String& s, bool syntaxOnly = false);
+    const ChordDescription* parseSingleHarmony(const String& s, HarmonyInfo* info, bool syntaxOnly = false);
 
-    void determineRootBassSpelling();
+    NoteCaseType rootRenderCase(HarmonyInfo* info) const;
+    NoteCaseType bassRenderCase() const;
 
+    void renderSingleHarmony(HarmonyInfo* info, double& x, double& y);
     void renderRomanNumeral();
     void render(const String&, double&, double&);
     void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
@@ -195,36 +226,22 @@ private:
 
     Harmony* findInSeg(Segment* seg) const;
 
-    int m_rootTpc = Tpc::TPC_INVALID;               // root note for chord
-    int m_bassTpc = Tpc::TPC_INVALID;               // bass note or chord bass; used for "slash" chords
-                                                    // or notation of bass note in chord
-    int m_id = -1;                    // >0 = id of matched chord from chord list, if applicable
-    // -1 = invalid chord
-    // <-10000 = private id of generated chord or matched chord with no id
-    String m_textName;          // name recognized from chord list, read from score file, or constructed from imported source
-                                // Also stores the whole RNA string to be rendered
-    mutable ParsedChord* m_parsedForm = nullptr;   // parsed form of chord
-    bool m_isMisspelled = false; // show spell check warning
+    bool m_isMisspelled = false;                         // show spell check warning
     HarmonyType m_harmonyType = HarmonyType::STANDARD;   // used to control rendering, transposition, export, etc.
 
-    mutable RealizedHarmony m_realizedHarmony; // the realized harmony used for playback
+    mutable RealizedHarmony m_realizedHarmony;           // the realized harmony used for playback
 
     std::vector<HDegree> m_degreeList;
-    std::vector<muse::draw::Font> m_fontList; // temp values used in render()
-    std::vector<TextSegment*> m_textList;   // rendered chord
+    std::vector<muse::draw::Font> m_fontList;            // temp values used in render()
+    std::vector<TextSegment*> m_textList;                // rendered chord
 
     bool m_leftParen = false;
-    bool m_rightParen = false;   // include opening and/or closing parenthesis
-    bool m_play = true;                     // whether or not to play back the harmony
+    bool m_rightParen = false;                           // include opening and/or closing parenthesis
+    bool m_play = true;                                  // whether or not to play back the harmony
 
-    NoteSpellingType m_rootSpelling = NoteSpellingType::STANDARD;
-    NoteSpellingType m_bassSpelling = NoteSpellingType::STANDARD;
     NoteCaseType m_rootCase = NoteCaseType::AUTO;
-    NoteCaseType m_bassCase = NoteCaseType::AUTO;                // case as typed
-    NoteCaseType m_rootRenderCase = NoteCaseType::AUTO;
-    NoteCaseType m_bassRenderCase = NoteCaseType::AUTO;           // case to render
+    NoteCaseType m_bassCase = NoteCaseType::AUTO;        // case as typed
 
     std::optional<double> m_userMag;
 };
 } // namespace mu::engraving
-#endif
