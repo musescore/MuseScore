@@ -39,6 +39,7 @@ enum class MusicXmlExporterSoftware : char {
     DOLET8,
     FINALE,
     NOTEFLIGHT,
+    DORICO,
     OTHER
 };
 
