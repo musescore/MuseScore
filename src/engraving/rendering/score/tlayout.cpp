@@ -1114,6 +1114,10 @@ void TLayout::layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, con
         }
     }
 
+    if (!item->segment()) {
+        return;
+    }
+
     if (Fermata* fermata = toFermata(item->segment()->findAnnotation(ElementType::FERMATA, item->track(), item->track() + VOICES))) {
         layoutFermata(fermata, fermata->mutldata(), ctx.conf());
     }
