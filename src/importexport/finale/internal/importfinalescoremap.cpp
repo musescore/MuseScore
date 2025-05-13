@@ -143,6 +143,17 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     /// @todo inherit
     s->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
 
+    // calculate whether to use small staff size from first system
+    if (const auto& firstSystem = musxStaff->getDocument()->getOthers()->get<others::StaffSystem>(SCORE_PARTID, 1)) { /// @todo eventually we do it differently for excerpts
+        if (firstSystem->hasStaffScaling) {
+            if (auto staffSize = musxStaff->getDocument()->getDetails()->get<details::StaffSize>(SCORE_PARTID, 1, musxStaff->getCmper())) {
+                if (staffSize->staffPercent < 100) {
+                    s->staffType(eventTick)->setSmall(true);
+                }
+            }
+        }
+    }
+
     // clefs
     if (std::optional<ClefTypeList> defaultClefs = clefTypeListFromMusxStaff(musxStaff)) {
         s->setDefaultClefType(defaultClefs.value());
