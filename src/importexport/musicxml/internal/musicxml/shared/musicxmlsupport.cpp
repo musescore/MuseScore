@@ -25,7 +25,6 @@
  */
 
 #include "musicxmlsupport.h"
-#include "dom/score.h"
 #include "global/serialization/xmlstreamreader.h"
 
 #include "translation.h"
@@ -33,7 +32,10 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordlist.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
 #include "engraving/types/symnames.h"
+#include "types/types.h"
 
 using namespace muse;
 using namespace mu::engraving;
@@ -690,13 +692,36 @@ StringList harmonyXmlDegrees(const engraving::Harmony* h)
     return cd ? cd->xmlDegrees : StringList();
 }
 
-const ChordDescription* harmonyFromXml(engraving::Harmony* h, const muse::String& kind, const muse::String& kindText,
-                                       const muse::String& symbols, const muse::String& parens, const std::list<engraving::HDegree>& dl)
+const ChordDescription* harmonyFromXml(engraving::HarmonyInfo* info, engraving::Score* score, const muse::String& kind,
+                                       const muse::String& kindText, const muse::String& symbols, const muse::String& parens,
+                                       const std::list<engraving::HDegree>& dl)
 {
     ParsedChord* pc = new ParsedChord;
-    h->setTextName(pc->fromXml(kind, kindText, symbols, parens, dl, h->score()->chordList()));
-    h->setParsedForm(pc);
-    const ChordDescription* cd = h->getDescription(h->textName(), pc);
+    info->m_textName = pc->fromXml(kind, kindText, symbols, parens, dl, score->chordList());
+    info->m_parsedChord = pc;
+    const ChordDescription* cd = info->getDescription(info->m_textName, pc);
     return cd;
+}
+
+String harmonyXmlFunction(const engraving::Harmony* h, engraving::Key key)
+{
+    if (!tpcIsValid(h->rootTpc())) {
+        return String();
+    }
+    if (key == Key::INVALID) {
+        const Staff* st = h->staff();
+        key = st ? st->key(h->tick()) : Key::INVALID;
+    }
+    return tpc2Function(h->rootTpc(), key);
+}
+
+String harmonyXmlFunction(const engraving::Harmony* h)
+{
+    if (!tpcIsValid(h->rootTpc())) {
+        return String();
+    }
+    const Staff* st = h->staff();
+    Key key = st ? st->key(h->tick()) : Key::INVALID;
+    return tpc2Function(h->rootTpc(), key);
 }
 }

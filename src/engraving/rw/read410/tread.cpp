@@ -3167,18 +3167,19 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
 {
+    HarmonyInfo* info = new HarmonyInfo(ctx.score()->chordList());
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "base") {
-            h->setBassTpc(e.readInt());
+            info->m_bassTpc = e.readInt();
         } else if (tag == "baseCase") {
             h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
-            h->setId(e.readInt());
+            info->m_id = e.readInt();
         } else if (tag == "name") {
-            h->setTextName(e.readText());
+            info->m_textName = e.readText();
         } else if (tag == "root") {
-            h->setRootTpc(e.readInt());
+            info->m_rootTpc = e.readInt();
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "function") {
@@ -3229,6 +3230,8 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    h->addChord(info);
 
     h->afterRead();
 }
