@@ -129,6 +129,16 @@ FlatRadioButton {
             }
         }
 
+        MouseArea {
+            anchors.fill: parent
+
+            acceptedButtons: Qt.MiddleButton
+
+            onClicked: {
+                root.closeRequested()
+            }
+        }
+
         states: [
             State {
                 name: "SELECTED"
