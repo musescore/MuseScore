@@ -66,8 +66,10 @@ public:
     MOCK_METHOD(int, musicalFontSize, (), (const, override));
     MOCK_METHOD(async::Notification, musicalFontChanged, (), (const, override));
 
-    MOCK_METHOD(std::string, defaultFontFamily, (), (const, override));
-    MOCK_METHOD(int, defaultFontSize, (), (const, override));
+    MOCK_METHOD(QFont, defaultFont, (), (const, override));
+#ifdef Q_OS_WIN
+    MOCK_METHOD(async::Notification, defaultFontChanged, (), (const, override));
+#endif
 
     MOCK_METHOD(void, resetFonts, (), (override));
 
