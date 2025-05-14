@@ -26,6 +26,7 @@
 #include "dom/chord.h"
 #include "dom/dynamic.h"
 #include "dom/expression.h"
+#include "dom/harmony.h"
 #include "dom/laissezvib.h"
 #include "dom/masterscore.h"
 #include "dom/note.h"
@@ -878,4 +879,12 @@ void CompatUtils::convertLaissezVibArticToTie(MasterScore* masterScore)
 
         delete oldArtic;
     }
+}
+
+void CompatUtils::setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const muse::String& s)
+{
+    Key key = Key::INVALID;
+    const Staff* st = h->staff();
+    key = st ? st->key(h->tick()) : Key::INVALID;
+    info->m_rootTpc = function2Tpc(s, key);
 }

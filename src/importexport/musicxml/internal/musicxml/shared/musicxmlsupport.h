@@ -64,14 +64,16 @@ extern bool isLaissezVibrer(const engraving::SymId id);
 extern muse::String errorStringWithLocation(int line, int col, const muse::String& error);
 extern muse::String checkAtEndElement(const muse::XmlStreamReader& e, const muse::String& expName);
 
-extern muse::String harmonyXmlFunction(const engraving::Harmony* h);
-extern muse::String harmonyXmlFunction(const engraving::Harmony* h, engraving::Key k);
-extern muse::String harmonyXmlKind(const engraving::Harmony* h);
-extern muse::String harmonyXmlText(const engraving::Harmony* h);
-extern muse::String harmonyXmlSymbols(const engraving::Harmony* h);
-extern muse::String harmonyXmlParens(const engraving::Harmony* h);
-extern muse::StringList harmonyXmlDegrees(const engraving::Harmony* h);
+extern muse::String harmonyXmlFunction(const engraving::HarmonyInfo* info, const engraving::Harmony* h);
+extern muse::String harmonyXmlFunction(const engraving::HarmonyInfo* info, const engraving::Harmony* h, engraving::Key k);
+extern muse::String harmonyXmlKind(const engraving::HarmonyInfo* h);
+extern muse::String harmonyXmlText(const engraving::HarmonyInfo* h);
+extern muse::String harmonyXmlSymbols(const engraving::HarmonyInfo* h);
+extern muse::String harmonyXmlParens(const engraving::HarmonyInfo* h);
+extern muse::StringList harmonyXmlDegrees(const engraving::HarmonyInfo* h);
 extern const engraving::ChordDescription* harmonyFromXml(engraving::HarmonyInfo* info, engraving::Score* score, const muse::String& kind,
                                                          const muse::String& kindText, const muse::String& symbols,
                                                          const muse::String& parens, const std::list<engraving::HDegree>& dl);
+extern void setHarmonyRootTpcFromFunction(engraving::HarmonyInfo* info, const engraving::Harmony* h, const muse::String& s,
+                                          engraving::Key key);
 } // namespace Ms
