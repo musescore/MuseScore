@@ -588,9 +588,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Interval interval = staffDest->transpose(tick);
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
-                        int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
-                        int bassTpc = transposeTpc(harmony->bassTpc(), interval, true);
-                        score->undoTransposeHarmony(harmony, rootTpc, bassTpc);
+                        score->undoTransposeHarmony(harmony, interval);
                     }
 
                     // remove pre-existing chords on this track
@@ -954,9 +952,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                     Interval interval = staffDest->transpose(destTick);
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
-                        int rootTpc = transposeTpc(el->rootTpc(), interval, true);
-                        int bassTpc = transposeTpc(el->bassTpc(), interval, true);
-                        score->undoTransposeHarmony(el, rootTpc, bassTpc);
+                        score->undoTransposeHarmony(el, interval);
                     }
                     el->setParent(seg);
                     score->undoAddElement(el);

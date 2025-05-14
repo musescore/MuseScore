@@ -61,7 +61,10 @@ namespace mu::engraving {
 
 const ChordDescription* HarmonyInfo::descr() const
 {
-    return m_chordList->description(m_id);
+    if (!chordList()) {
+        return nullptr;
+    }
+    return chordList()->description(m_id);
 }
 
 //---------------------------------------------------------
@@ -74,10 +77,10 @@ const ChordDescription* HarmonyInfo::descr() const
 const ChordDescription* HarmonyInfo::descr(const String& name, const ParsedChord* pc) const
 {
     const ChordDescription* match = nullptr;
-    if (!m_chordList) {
+    if (!chordList()) {
         return nullptr;
     }
-    for (const auto& p : *m_chordList) {
+    for (const auto& p : *chordList()) {
         const ChordDescription& cd = p.second;
         for (const String& s : cd.names) {
             if (s == name) {
@@ -144,19 +147,19 @@ const ChordDescription* HarmonyInfo::getDescription(const String& name, const Pa
 const ChordDescription* HarmonyInfo::generateDescription()
 {
     ChordDescription cd(m_textName);
-    cd.complete(m_parsedChord, m_chordList);
+    cd.complete(m_parsedChord, chordList());
     // remove parsed chord from description
     // so we will only match it literally in the future
     cd.parsedChords.clear();
-    m_chordList->insert({ cd.id, cd });
-    return &m_chordList->at(cd.id);
+    chordList()->insert({ cd.id, cd });
+    return &chordList()->at(cd.id);
 }
 
 ParsedChord* HarmonyInfo::parsedChord()
 {
     if (!m_parsedChord) {
         m_parsedChord = new ParsedChord();
-        m_parsedChord->parse(m_textName, m_chordList, false);
+        m_parsedChord->parse(m_textName, chordList(), false);
     }
     return m_parsedChord;
 }
@@ -266,22 +269,6 @@ int Harmony::rootTpc() const
         return Tpc::TPC_INVALID;
     }
     return m_chords.front()->m_rootTpc;
-}
-
-void Harmony::setRootTpc(int val)
-{
-    if (m_chords.empty()) {
-        return;
-    }
-    m_chords.front()->m_rootTpc = val;
-}
-
-void Harmony::setBassTpc(int val)
-{
-    if (m_chords.empty()) {
-        return;
-    }
-    m_chords.front()->m_bassTpc = val;
 }
 
 void Harmony::setTpcFromFunction(const String& s, Key key)
@@ -463,7 +450,7 @@ const std::vector<const ChordDescription*> Harmony::parseHarmony(const String& s
         if (subChord.empty()) {
             continue;
         }
-        HarmonyInfo* info = new HarmonyInfo(score()->chordList());
+        HarmonyInfo* info = new HarmonyInfo(score());
         const ChordDescription* cd = parseSingleHarmony(subChord, info, syntaxOnly);
         descriptions.push_back(cd);
         m_chords.push_back(info);
@@ -1319,7 +1306,7 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, double& x, double& y)
 {
     int capo = style().styleI(Sid::capoPosition);
 
-    ChordList* chordList = info->m_chordList;
+    ChordList* chordList = info->chordList();
 
     NoteCaseType rootCase = rootRenderCase(info);
     NoteCaseType bassCase = bassRenderCase();
@@ -1869,6 +1856,7 @@ HarmonyInfo::HarmonyInfo(const HarmonyInfo& h)
     m_bassTpc = h.m_bassTpc;
     m_rootTpc = h.m_rootTpc;
     m_textName = h.m_textName;
+    m_score = h.m_score;
     m_parsedChord = h.m_parsedChord ? new ParsedChord(*h.m_parsedChord) : 0;
 }
 

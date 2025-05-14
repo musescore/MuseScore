@@ -1749,24 +1749,61 @@ void ChangeMeasureLen::flip(EditData*)
 //   TransposeHarmony
 //---------------------------------------------------------
 
-TransposeHarmony::TransposeHarmony(Harmony* h, int rtpc, int btpc)
+TransposeHarmony::TransposeHarmony(Harmony* h, Interval interval, bool doubleSharpsFlats)
 {
-    harmony = h;
-    rootTpc = rtpc;
-    baseTpc = btpc;
+    m_harmony = h;
+    m_interval = interval;
+    m_useDoubleSharpsFlats = doubleSharpsFlats;
 }
 
 void TransposeHarmony::flip(EditData*)
 {
-    harmony->realizedHarmony().setDirty(true);   //harmony should be re-realized after transposition
-    int baseTpc1 = harmony->bassTpc();
-    int rootTpc1 = harmony->rootTpc();
-    harmony->setBassTpc(baseTpc);
-    harmony->setRootTpc(rootTpc);
-    harmony->setXmlText(harmony->harmonyName());
-    harmony->render();
-    rootTpc = rootTpc1;
-    baseTpc = baseTpc1;
+    m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
+
+    for (HarmonyInfo* info : m_harmony->chords()) {
+        info->m_rootTpc = transposeTpc(info->m_rootTpc, m_interval, m_useDoubleSharpsFlats);
+        info->m_bassTpc = transposeTpc(info->m_bassTpc, m_interval, m_useDoubleSharpsFlats);
+    }
+
+    m_harmony->setXmlText(m_harmony->harmonyName());
+    m_harmony->render();
+    m_harmony->triggerLayout();
+    m_interval.flip();
+}
+
+//---------------------------------------------------------
+//   TransposeHarmonyDiatonic
+//---------------------------------------------------------
+
+void TransposeHarmonyDiatonic::flip(EditData*)
+{
+    m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
+
+    Fraction tick = Fraction(0, 1);
+    Segment* seg = toSegment(m_harmony->findAncestor(ElementType::SEGMENT));
+    if (seg) {
+        tick = seg->tick();
+    }
+    Key key = !m_harmony->staff() ? Key::C : m_harmony->staff()->key(tick);
+
+    for (HarmonyInfo* info : m_harmony->chords()) {
+        info->m_rootTpc = transposeTpcDiatonicByKey(info->m_rootTpc, m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats);
+        info->m_bassTpc = transposeTpcDiatonicByKey(info->m_bassTpc, m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats);
+    }
+
+    m_harmony->setXmlText(m_harmony->harmonyName());
+    m_harmony->render();
+    m_harmony->triggerLayout();
+
+    m_interval *= -1;
+}
+
+TransposeHarmonyDiatonic::TransposeHarmonyDiatonic(Harmony* h, int interval, bool useDoubleSharpsFlats, bool transposeKeys)
+{
+    m_harmony = h;
+    m_interval = interval;
+    m_useDoubleSharpsFlats = useDoubleSharpsFlats;
+    m_transposeKeys = transposeKeys;
 }
 
 //---------------------------------------------------------

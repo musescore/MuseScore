@@ -27,6 +27,7 @@
 #include "draw/types/font.h"
 
 #include "textbase.h"
+#include "score.h"
 
 #include "pitchspelling.h"
 #include "realizedharmony.h"
@@ -71,10 +72,10 @@ class HDegree;
 //---------------------------------------------------------
 
 struct HarmonyInfo {
-    HarmonyInfo(int id, int rootTpc, int bassTpc, String textName, ParsedChord* pc, ChordList* cl)
-        : m_id(id), m_rootTpc(rootTpc), m_bassTpc(bassTpc), m_textName(textName), m_parsedChord(pc), m_chordList(cl) {}
-    HarmonyInfo(ChordList* cl)
-        : m_chordList(cl) {}
+    HarmonyInfo(int id, int rootTpc, int bassTpc, String textName, ParsedChord* pc, Score* score)
+        : m_id(id), m_rootTpc(rootTpc), m_bassTpc(bassTpc), m_textName(textName), m_parsedChord(pc), m_score(score) {}
+    HarmonyInfo(Score* score)
+        : m_score(score) {}
     HarmonyInfo(const HarmonyInfo& h);
     ~HarmonyInfo();
 
@@ -89,7 +90,9 @@ struct HarmonyInfo {
                                             // Also stores the whole RNA string to be rendered
     ParsedChord* m_parsedChord = nullptr;   // parsed form of chord
 
-    ChordList* m_chordList = nullptr;
+    Score* m_score = nullptr;
+
+    ChordList* chordList() const { return m_score ? m_score->chordList() : nullptr; }
 
     const ChordDescription* descr() const;
     const ChordDescription* descr(const String&, const ParsedChord* pc = 0) const;
@@ -151,8 +154,6 @@ public:
     String textName() const;                       // DEPRECATED
     int bassTpc() const;                           // DEPRECATED
     int rootTpc() const;                           // DEPRECATED
-    void setRootTpc(int val);                      // DEPRECATED
-    void setBassTpc(int val);                      // DEPRECATED
     void setTpcFromFunction(const String& s, Key key = Key::INVALID);
     void addDegree(const HDegree& d);
     const std::vector<HDegree>& degreeList() const;
