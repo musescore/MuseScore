@@ -11,6 +11,7 @@
       <maxSystemDistance>6</maxSystemDistance>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <chordAlignmentToNotehead>0</chordAlignmentToNotehead>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -110,8 +111,10 @@
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>14</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>F_F</eid>
             </Harmony>
           <Chord>
@@ -162,8 +165,10 @@
         <eid>P_P</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>Q_Q</eid>
             </Harmony>
           <Chord>
@@ -220,8 +225,10 @@
         <eid>b_b</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>c_c</eid>
             </Harmony>
           <Chord>
@@ -273,7 +280,9 @@
         <eid>m_m</eid>
         <voice>
           <Harmony>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>n_n</eid>
             </Harmony>
           <Chord>
@@ -306,8 +315,10 @@
         <eid>t_t</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>u_u</eid>
             </Harmony>
           <Chord>
@@ -364,8 +375,10 @@
         <eid>5_5</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>6_6</eid>
             </Harmony>
           <Chord>
@@ -421,8 +434,10 @@
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>14</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>GB_GB</eid>
             </Harmony>
           <Chord>
@@ -469,8 +484,10 @@
         <eid>PB_PB</eid>
         <voice>
           <Harmony>
-            <root>21</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>21</root>
+              </harmonyInfo>
             <eid>QB_QB</eid>
             </Harmony>
           <Chord>
@@ -516,8 +533,10 @@
         <eid>ZB_ZB</eid>
         <voice>
           <Harmony>
-            <root>21</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>21</root>
+              </harmonyInfo>
             <eid>aB_aB</eid>
             </Harmony>
           <Chord>
@@ -601,8 +620,10 @@
         <eid>rB_rB</eid>
         <voice>
           <Harmony>
-            <root>21</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>21</root>
+              </harmonyInfo>
             <eid>sB_sB</eid>
             </Harmony>
           <Chord>
@@ -662,7 +683,9 @@
         <eid>4B_4B</eid>
         <voice>
           <Harmony>
-            <root>21</root>
+            <harmonyInfo>
+              <root>21</root>
+              </harmonyInfo>
             <eid>5B_5B</eid>
             </Harmony>
           <Chord>
@@ -712,8 +735,10 @@
         <eid>DC_DC</eid>
         <voice>
           <Harmony>
-            <root>21</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>21</root>
+              </harmonyInfo>
             <eid>EC_EC</eid>
             </Harmony>
           <Chord>
@@ -783,8 +808,10 @@
         <eid>SC_SC</eid>
         <voice>
           <Harmony>
-            <root>21</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>21</root>
+              </harmonyInfo>
             <eid>TC_TC</eid>
             </Harmony>
           <Chord>
@@ -838,8 +865,10 @@
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>21</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>21</root>
+              </harmonyInfo>
             <eid>fC_fC</eid>
             </Harmony>
           <Chord>
@@ -909,8 +938,10 @@
         <eid>tC_tC</eid>
         <voice>
           <Harmony>
-            <root>16</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>uC_uC</eid>
             </Harmony>
           <Chord>
@@ -953,8 +984,10 @@
         <eid>2C_2C</eid>
         <voice>
           <Harmony>
-            <root>16</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>3C_3C</eid>
             </Harmony>
           <Chord>
@@ -1011,8 +1044,10 @@
         <eid>CD_CD</eid>
         <voice>
           <Harmony>
-            <root>16</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>DD_DD</eid>
             </Harmony>
           <Chord>
@@ -1063,7 +1098,9 @@
         <eid>ND_ND</eid>
         <voice>
           <Harmony>
-            <root>16</root>
+            <harmonyInfo>
+              <root>16</root>
+              </harmonyInfo>
             <eid>OD_OD</eid>
             </Harmony>
           <Chord>
@@ -1100,8 +1137,10 @@
         <eid>VD_VD</eid>
         <voice>
           <Harmony>
-            <root>16</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>WD_WD</eid>
             </Harmony>
           <Chord>
@@ -1157,8 +1196,10 @@
         <eid>hD_hD</eid>
         <voice>
           <Harmony>
-            <root>16</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>iD_iD</eid>
             </Harmony>
           <Chord>
@@ -1210,8 +1251,10 @@
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>16</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>tD_tD</eid>
             </Harmony>
           <Chord>
@@ -1266,8 +1309,10 @@
         <eid>4D_4D</eid>
         <voice>
           <Harmony>
-            <root>23</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>23</root>
+              </harmonyInfo>
             <eid>5D_5D</eid>
             </Harmony>
           <Chord>
@@ -1323,8 +1368,10 @@
         <eid>EE_EE</eid>
         <voice>
           <Harmony>
-            <root>23</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>23</root>
+              </harmonyInfo>
             <eid>FE_FE</eid>
             </Harmony>
           <Chord>
@@ -1415,8 +1462,10 @@
         <eid>XE_XE</eid>
         <voice>
           <Harmony>
-            <root>23</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>23</root>
+              </harmonyInfo>
             <eid>YE_YE</eid>
             </Harmony>
           <Chord>
@@ -1483,7 +1532,9 @@
         <eid>lE_lE</eid>
         <voice>
           <Harmony>
-            <root>23</root>
+            <harmonyInfo>
+              <root>23</root>
+              </harmonyInfo>
             <eid>mE_mE</eid>
             </Harmony>
           <Chord>
@@ -1536,8 +1587,10 @@
         <eid>wE_wE</eid>
         <voice>
           <Harmony>
-            <root>23</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>23</root>
+              </harmonyInfo>
             <eid>xE_xE</eid>
             </Harmony>
           <Chord>
@@ -1614,8 +1667,10 @@
         <eid>AF_AF</eid>
         <voice>
           <Harmony>
-            <root>23</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>23</root>
+              </harmonyInfo>
             <eid>BF_BF</eid>
             </Harmony>
           <Chord>
@@ -1671,8 +1726,10 @@
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>23</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>23</root>
+              </harmonyInfo>
             <eid>NF_NF</eid>
             </Harmony>
           <Chord>
@@ -1745,8 +1802,10 @@
         <eid>bF_bF</eid>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>cF_cF</eid>
             </Harmony>
           <Chord>
@@ -1788,8 +1847,10 @@
         <eid>kF_kF</eid>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>lF_lF</eid>
             </Harmony>
           <Chord>
@@ -1854,8 +1915,10 @@
         <eid>yF_yF</eid>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>zF_zF</eid>
             </Harmony>
           <Chord>
@@ -1902,7 +1965,9 @@
         <eid>8F_8F</eid>
         <voice>
           <Harmony>
-            <root>18</root>
+            <harmonyInfo>
+              <root>18</root>
+              </harmonyInfo>
             <eid>9F_9F</eid>
             </Harmony>
           <Chord>
@@ -1939,8 +2004,10 @@
         <eid>EG_EG</eid>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>FG_FG</eid>
             </Harmony>
           <Chord>
@@ -1996,8 +2063,10 @@
         <eid>QG_QG</eid>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>RG_RG</eid>
             </Harmony>
           <Chord>
@@ -2048,8 +2117,10 @@
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>cG_cG</eid>
             </Harmony>
           <Chord>
@@ -2106,8 +2177,10 @@
         <eid>nG_nG</eid>
         <voice>
           <Harmony>
-            <root>13</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>13</root>
+              </harmonyInfo>
             <eid>oG_oG</eid>
             </Harmony>
           <Chord>
@@ -2159,8 +2232,10 @@
         <eid>yG_yG</eid>
         <voice>
           <Harmony>
-            <root>13</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>13</root>
+              </harmonyInfo>
             <eid>zG_zG</eid>
             </Harmony>
           <Chord>
@@ -2221,8 +2296,10 @@
         <eid>/G_/G</eid>
         <voice>
           <Harmony>
-            <root>13</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>13</root>
+              </harmonyInfo>
             <eid>AH_AH</eid>
             </Harmony>
           <Chord>
@@ -2274,7 +2351,9 @@
         <eid>KH_KH</eid>
         <voice>
           <Harmony>
-            <root>13</root>
+            <harmonyInfo>
+              <root>13</root>
+              </harmonyInfo>
             <eid>LH_LH</eid>
             </Harmony>
           <Chord>
@@ -2307,8 +2386,10 @@
         <eid>RH_RH</eid>
         <voice>
           <Harmony>
-            <root>13</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>13</root>
+              </harmonyInfo>
             <eid>SH_SH</eid>
             </Harmony>
           <Chord>
@@ -2365,8 +2446,10 @@
         <eid>dH_dH</eid>
         <voice>
           <Harmony>
-            <root>13</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>13</root>
+              </harmonyInfo>
             <eid>eH_eH</eid>
             </Harmony>
           <Chord>
@@ -2423,8 +2506,10 @@
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>13</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>13</root>
+              </harmonyInfo>
             <eid>qH_qH</eid>
             </Harmony>
           <Chord>
@@ -2467,8 +2552,10 @@
         <eid>yH_yH</eid>
         <voice>
           <Harmony>
-            <root>20</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>20</root>
+              </harmonyInfo>
             <eid>zH_zH</eid>
             </Harmony>
           <Chord>
@@ -2514,8 +2601,10 @@
         <eid>8H_8H</eid>
         <voice>
           <Harmony>
-            <root>20</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>20</root>
+              </harmonyInfo>
             <eid>9H_9H</eid>
             </Harmony>
           <Chord>
@@ -2594,8 +2683,10 @@
         <eid>NI_NI</eid>
         <voice>
           <Harmony>
-            <root>20</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>20</root>
+              </harmonyInfo>
             <eid>OI_OI</eid>
             </Harmony>
           <Chord>
@@ -2655,7 +2746,9 @@
         <eid>aI_aI</eid>
         <voice>
           <Harmony>
-            <root>20</root>
+            <harmonyInfo>
+              <root>20</root>
+              </harmonyInfo>
             <eid>bI_bI</eid>
             </Harmony>
           <Chord>
@@ -2705,8 +2798,10 @@
         <eid>lI_lI</eid>
         <voice>
           <Harmony>
-            <root>20</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>20</root>
+              </harmonyInfo>
             <eid>mI_mI</eid>
             </Harmony>
           <Chord>
@@ -2775,8 +2870,10 @@
         <eid>0I_0I</eid>
         <voice>
           <Harmony>
-            <root>20</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>20</root>
+              </harmonyInfo>
             <eid>1I_1I</eid>
             </Harmony>
           <Chord>
@@ -2830,8 +2927,10 @@
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>20</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>20</root>
+              </harmonyInfo>
             <eid>BJ_BJ</eid>
             </Harmony>
           <Chord>
@@ -2901,8 +3000,10 @@
         <eid>PJ_PJ</eid>
         <voice>
           <Harmony>
-            <root>15</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>15</root>
+              </harmonyInfo>
             <eid>QJ_QJ</eid>
             </Harmony>
           <Chord>
@@ -2949,8 +3050,10 @@
         <eid>ZJ_ZJ</eid>
         <voice>
           <Harmony>
-            <root>15</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>15</root>
+              </harmonyInfo>
             <eid>aJ_aJ</eid>
             </Harmony>
           <Chord>
@@ -3003,8 +3106,10 @@
         <eid>kJ_kJ</eid>
         <voice>
           <Harmony>
-            <root>15</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>15</root>
+              </harmonyInfo>
             <eid>lJ_lJ</eid>
             </Harmony>
           <Chord>
@@ -3052,7 +3157,9 @@
         <eid>uJ_uJ</eid>
         <voice>
           <Harmony>
-            <root>15</root>
+            <harmonyInfo>
+              <root>15</root>
+              </harmonyInfo>
             <eid>vJ_vJ</eid>
             </Harmony>
           <Chord>
@@ -3085,8 +3192,10 @@
         <eid>1J_1J</eid>
         <voice>
           <Harmony>
-            <root>15</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>15</root>
+              </harmonyInfo>
             <eid>2J_2J</eid>
             </Harmony>
           <Chord>
@@ -3138,8 +3247,10 @@
         <eid>AK_AK</eid>
         <voice>
           <Harmony>
-            <root>15</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>15</root>
+              </harmonyInfo>
             <eid>BK_BK</eid>
             </Harmony>
           <Chord>
@@ -3195,8 +3306,10 @@
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>15</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>15</root>
+              </harmonyInfo>
             <eid>NK_NK</eid>
             </Harmony>
           <Chord>
@@ -3247,8 +3360,10 @@
         <eid>XK_XK</eid>
         <voice>
           <Harmony>
-            <root>22</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>22</root>
+              </harmonyInfo>
             <eid>YK_YK</eid>
             </Harmony>
           <Chord>
@@ -3298,8 +3413,10 @@
         <eid>iK_iK</eid>
         <voice>
           <Harmony>
-            <root>22</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>22</root>
+              </harmonyInfo>
             <eid>jK_jK</eid>
             </Harmony>
           <Chord>
@@ -3388,8 +3505,10 @@
         <eid>1K_1K</eid>
         <voice>
           <Harmony>
-            <root>22</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>22</root>
+              </harmonyInfo>
             <eid>2K_2K</eid>
             </Harmony>
           <Chord>
@@ -3454,7 +3573,9 @@
         <eid>DL_DL</eid>
         <voice>
           <Harmony>
-            <root>22</root>
+            <harmonyInfo>
+              <root>22</root>
+              </harmonyInfo>
             <eid>EL_EL</eid>
             </Harmony>
           <Chord>
@@ -3505,8 +3626,10 @@
         <eid>OL_OL</eid>
         <voice>
           <Harmony>
-            <root>22</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>22</root>
+              </harmonyInfo>
             <eid>PL_PL</eid>
             </Harmony>
           <Chord>
@@ -3581,8 +3704,10 @@
         <eid>eL_eL</eid>
         <voice>
           <Harmony>
-            <root>22</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>22</root>
+              </harmonyInfo>
             <eid>fL_fL</eid>
             </Harmony>
           <Chord>
@@ -3632,8 +3757,10 @@
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>22</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>22</root>
+              </harmonyInfo>
             <eid>qL_qL</eid>
             </Harmony>
           <Chord>
@@ -3704,8 +3831,10 @@
         <eid>4L_4L</eid>
         <voice>
           <Harmony>
-            <root>17</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>17</root>
+              </harmonyInfo>
             <eid>5L_5L</eid>
             </Harmony>
           <Chord>
@@ -3747,8 +3876,10 @@
         <eid>BM_BM</eid>
         <voice>
           <Harmony>
-            <root>17</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>17</root>
+              </harmonyInfo>
             <eid>CM_CM</eid>
             </Harmony>
           <Chord>
@@ -3809,8 +3940,10 @@
         <eid>OM_OM</eid>
         <voice>
           <Harmony>
-            <root>17</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>17</root>
+              </harmonyInfo>
             <eid>PM_PM</eid>
             </Harmony>
           <Chord>
@@ -3861,7 +3994,9 @@
         <eid>ZM_ZM</eid>
         <voice>
           <Harmony>
-            <root>17</root>
+            <harmonyInfo>
+              <root>17</root>
+              </harmonyInfo>
             <eid>aM_aM</eid>
             </Harmony>
           <Chord>
@@ -3898,8 +4033,10 @@
         <eid>hM_hM</eid>
         <voice>
           <Harmony>
-            <root>17</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>17</root>
+              </harmonyInfo>
             <eid>iM_iM</eid>
             </Harmony>
           <Chord>
@@ -3951,8 +4088,10 @@
         <eid>sM_sM</eid>
         <voice>
           <Harmony>
-            <root>17</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>17</root>
+              </harmonyInfo>
             <eid>tM_tM</eid>
             </Harmony>
           <Chord>
@@ -4003,8 +4142,10 @@
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>17</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>17</root>
+              </harmonyInfo>
             <eid>4M_4M</eid>
             </Harmony>
           <Chord>
@@ -4060,8 +4201,10 @@
         <eid>DN_DN</eid>
         <voice>
           <Harmony>
-            <root>24</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>24</root>
+              </harmonyInfo>
             <eid>EN_EN</eid>
             </Harmony>
           <Chord>
@@ -4117,8 +4260,10 @@
         <eid>PN_PN</eid>
         <voice>
           <Harmony>
-            <root>24</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>24</root>
+              </harmonyInfo>
             <eid>QN_QN</eid>
             </Harmony>
           <Chord>
@@ -4210,8 +4355,10 @@
         <eid>iN_iN</eid>
         <voice>
           <Harmony>
-            <root>24</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>24</root>
+              </harmonyInfo>
             <eid>jN_jN</eid>
             </Harmony>
           <Chord>
@@ -4278,7 +4425,9 @@
         <eid>wN_wN</eid>
         <voice>
           <Harmony>
-            <root>24</root>
+            <harmonyInfo>
+              <root>24</root>
+              </harmonyInfo>
             <eid>xN_xN</eid>
             </Harmony>
           <Chord>
@@ -4331,8 +4480,10 @@
         <eid>7N_7N</eid>
         <voice>
           <Harmony>
-            <root>24</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>24</root>
+              </harmonyInfo>
             <eid>8N_8N</eid>
             </Harmony>
           <Chord>
@@ -4413,8 +4564,10 @@
         <eid>MO_MO</eid>
         <voice>
           <Harmony>
-            <root>24</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>24</root>
+              </harmonyInfo>
             <eid>NO_NO</eid>
             </Harmony>
           <Chord>
@@ -4470,8 +4623,10 @@
           </LayoutBreak>
         <voice>
           <Harmony>
-            <root>24</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>24</root>
+              </harmonyInfo>
             <eid>ZO_ZO</eid>
             </Harmony>
           <Chord>
@@ -4544,8 +4699,10 @@
         <eid>nO_nO</eid>
         <voice>
           <Harmony>
-            <root>19</root>
-            <name>m7(b5)</name>
+            <harmonyInfo>
+              <name>m7(b5)</name>
+              <root>19</root>
+              </harmonyInfo>
             <eid>oO_oO</eid>
             </Harmony>
           <Chord>
@@ -4583,8 +4740,10 @@
         <eid>vO_vO</eid>
         <voice>
           <Harmony>
-            <root>19</root>
-            <name>13</name>
+            <harmonyInfo>
+              <name>13</name>
+              <root>19</root>
+              </harmonyInfo>
             <eid>wO_wO</eid>
             </Harmony>
           <Chord>
@@ -4654,8 +4813,10 @@
         <eid>+O_+O</eid>
         <voice>
           <Harmony>
-            <root>19</root>
-            <name>7(b9)</name>
+            <harmonyInfo>
+              <name>7(b9)</name>
+              <root>19</root>
+              </harmonyInfo>
             <eid>/O_/O</eid>
             </Harmony>
           <Chord>
@@ -4707,7 +4868,9 @@
         <eid>JP_JP</eid>
         <voice>
           <Harmony>
-            <root>19</root>
+            <harmonyInfo>
+              <root>19</root>
+              </harmonyInfo>
             <eid>KP_KP</eid>
             </Harmony>
           <Chord>
@@ -4749,8 +4912,10 @@
         <eid>SP_SP</eid>
         <voice>
           <Harmony>
-            <root>19</root>
-            <name>9(b13)</name>
+            <harmonyInfo>
+              <name>9(b13)</name>
+              <root>19</root>
+              </harmonyInfo>
             <eid>TP_TP</eid>
             </Harmony>
           <Chord>
@@ -4811,8 +4976,10 @@
         <eid>fP_fP</eid>
         <voice>
           <Harmony>
-            <root>19</root>
-            <name>dim7</name>
+            <harmonyInfo>
+              <name>dim7</name>
+              <root>19</root>
+              </harmonyInfo>
             <eid>gP_gP</eid>
             </Harmony>
           <Chord>
@@ -4855,8 +5022,10 @@
         <eid>oP_oP</eid>
         <voice>
           <Harmony>
-            <root>19</root>
-            <name>maj7(#11)</name>
+            <harmonyInfo>
+              <name>maj7(#11)</name>
+              <root>19</root>
+              </harmonyInfo>
             <eid>pP_pP</eid>
             </Harmony>
           <Chord>
