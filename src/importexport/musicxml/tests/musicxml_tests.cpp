@@ -1122,7 +1122,11 @@ TEST_F(MusicXml_Tests, DISABLED_EXCEPT_ON_LINUX(systemDistance)) {
     musicXmlMscxExportTestRef("testSystemDistance", true);
 }
 TEST_F(MusicXml_Tests, DISABLED_EXCEPT_ON_LINUX(systemDividers)) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    musicXmlIoTest("testSystemDividers-Qt68", true);
+#else
     musicXmlIoTest("testSystemDividers", true);
+#endif
 }
 TEST_F(MusicXml_Tests, systemObjectStaves) {
     musicXmlImportTestRef("testSystemObjectStaves");

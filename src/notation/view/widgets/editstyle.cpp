@@ -1074,7 +1074,7 @@ EditStyle::EditStyle(QWidget* parent)
         } else if (auto radioButton = qobject_cast<QRadioButton*>(sw.widget)) {
             connect(radioButton, &QRadioButton::toggled, setSignalMapper, mapFunction);
         } else if (auto checkBox = qobject_cast<QCheckBox*>(sw.widget)) {
-#ifdef QT_USE_IS_69
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
             connect(checkBox, &QCheckBox::checkStateChanged, setSignalMapper, mapFunction);
 #else
             connect(checkBox, &QCheckBox::stateChanged, setSignalMapper, mapFunction);

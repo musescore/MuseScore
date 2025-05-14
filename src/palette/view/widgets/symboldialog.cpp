@@ -107,7 +107,7 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
     m_symbolsWidget->setDrawGrid(true);
     m_symbolsWidget->setSelectable(true);
 
-#ifdef QT_USE_IS_69
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
     connect(systemFlag, &QCheckBox::checkStateChanged, this, &SymbolDialog::systemFlagChanged);
 #else
     connect(systemFlag, &QCheckBox::stateChanged, this, [this](int st) {

@@ -87,21 +87,14 @@ if(QT_ADD_WEBSOCKET)
     list(APPEND QT_LIBRARIES Qt::WebSockets)
 endif()
 
-find_package(Qt6 REQUIRED COMPONENTS ${qt_components})
+find_package(Qt6 6.2 REQUIRED COMPONENTS ${qt_components})
 
 include(QtInstallPaths)
 
-set(QT_USE_IS_69 OFF)
-if(${Qt6_VERSION_MINOR} EQUAL 9)
-    set(QT_USE_IS_69 ON)
-endif()
+message(STATUS "Qt version: ${Qt6_VERSION}")
 
-message(STATUS "Qt version: ${Qt6_VERSION} (QT_USE_IS_69=${QT_USE_IS_69})")
-
-if (QT_USE_IS_69)
+if (${Qt6_VERSION} VERSION_GREATER_EQUAL "6.3.0")
     qt_standard_project_setup(REQUIRES 6.3 SUPPORTS_UP_TO 6.9)
-
-    add_compile_definitions(QT_USE_IS_69)
 else()
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTOMOC ON)
