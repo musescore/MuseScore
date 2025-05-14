@@ -89,7 +89,7 @@ void MuseData::musicalAttribute(QStringView s, Part* part)
                 seg->add(ts);
             }
         } else if (item.startsWith(u"X:")) {
-        } else if (item[0] == 'C') {
+        } else if (item[0] == QChar('C')) {
             int staffIdx = 1;
             int col = 2;
             if (item[1].isDigit()) {
@@ -173,9 +173,9 @@ void MuseData::readChord(Part*, QStringView s)
     int alter = 0;
     int octave = 0;
     for (int i = 2; i < 4; ++i) {
-        if (s[i] == '#') {
+        if (s[i] == QChar('#')) {
             alter += 1;
-        } else if (s[i] == 'f') {
+        } else if (s[i] == QChar('f')) {
             alter -= 1;
         } else if (s[i].isDigit()) {
             octave = s.mid(i, 1).toInt();
@@ -252,9 +252,9 @@ void MuseData::readNote(Part* part, QStringView s)
     int alter = 0;
     int octave = 0;
     for (int i = 1; i < 3; ++i) {
-        if (s[i] == '#') {
+        if (s[i] == QChar('#')) {
             alter += 1;
-        } else if (s[i] == 'f') {
+        } else if (s[i] == QChar('f')) {
             alter -= 1;
         } else if (s[i].isDigit()) {
             octave = s.mid(i, 1).toInt();
@@ -263,9 +263,9 @@ void MuseData::readNote(Part* part, QStringView s)
     }
     DirectionV dir = DirectionV::AUTO;
     if (s.size() >= 23) {
-        if (s[22] == 'u') {
+        if (s[22] == QChar('u')) {
             dir = DirectionV::UP;
-        } else if (s[22] == 'd') {
+        } else if (s[22] == QChar('d')) {
             dir = DirectionV::DOWN;
         }
     }
@@ -294,9 +294,9 @@ void MuseData::readNote(Part* part, QStringView s)
     if (s.size() >= 22) {
         int a = 1;
         int b = 1;
-        if (s[19] != ' ') {
+        if (s[19] != QChar(' ')) {
             a = s[19].toLatin1() - '0';
-            if (a == 3 && s[20] != ':') {
+            if (a == 3 && s[20] != QChar(':')) {
                 b = 2;
             } else {
                 b = s[21].toLatin1() - '0';
@@ -357,74 +357,75 @@ void MuseData::readNote(Part* part, QStringView s)
     QString dynamics;
     QStringView an = s.mid(31, 11);
     for (int i = 0; i < an.size(); ++i) {
-        if (an[i] == '(') {
+        char c = an[i].toLatin1();
+        if (c == '(') {
             openSlur(0, tick, staff, voice, chord);
-        } else if (an[i] == ')') {
+        } else if (c == ')') {
             closeSlur(0, tick, staff, voice, chord);
-        } else if (an[i] == '[') {
+        } else if (c == '[') {
             openSlur(1, tick, staff, voice, chord);
-        } else if (an[i] == ']') {
+        } else if (c == ']') {
             closeSlur(1, tick, staff, voice, chord);
-        } else if (an[i] == '{') {
+        } else if (c == '{') {
             openSlur(2, tick, staff, voice, chord);
-        } else if (an[i] == '}') {
+        } else if (c == '}') {
             closeSlur(2, tick, staff, voice, chord);
-        } else if (an[i] == 'z') {
+        } else if (c == 'z') {
             openSlur(3, tick, staff, voice, chord);
-        } else if (an[i] == 'x') {
+        } else if (c == 'x') {
             closeSlur(3, tick, staff, voice, chord);
-        } else if (an[i] == '.') {
+        } else if (c == '.') {
             Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::articStaccatoAbove);
             chord->add(atr);
-        } else if (an[i] == '_') {
+        } else if (c == '_') {
             Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::articTenutoAbove);
             chord->add(atr);
-        } else if (an[i] == 'v') {
+        } else if (c == 'v') {
             Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::stringsUpBow);
             chord->add(atr);
-        } else if (an[i] == 'n') {
+        } else if (c == 'n') {
             Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::stringsDownBow);
             chord->add(atr);
-        } else if (an[i] == 't') {
+        } else if (c == 't') {
             Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::ornamentTrill);
             chord->add(atr);
-        } else if (an[i] == 'F') {
+        } else if (c == 'F') {
             Articulation* atr = Factory::createArticulation(chord);
             atr->setUp(true);
             atr->setSymId(SymId::fermataAbove);
             chord->add(atr);
-        } else if (an[i] == 'E') {
+        } else if (c == 'E') {
             Articulation* atr = Factory::createArticulation(chord);
             atr->setUp(false);
             atr->setSymId(SymId::fermataBelow);
             chord->add(atr);
-        } else if (an[i] == 'O') {
+        } else if (c == 'O') {
             // Articulation* atr = new Articulation(score);
             // atr->setArticulationType(ArticulationType::Downbow);
             // chord->add(atr);
             LOGD("%06d: open string '%c' not implemented", tick.ticks(), an[i].toLatin1());
-        } else if (an[i] == '&') {
+        } else if (c == '&') {
             // skip editorial level
             if (i <= an.size() && an[i + 1].isDigit()) {
                 ++i;
             }
-        } else if (an[i] == 'p') {
+        } else if (c == 'p') {
             dynamics += "p";
-        } else if (an[i] == 'm') {
+        } else if (c == 'm') {
             dynamics += "m";
-        } else if (an[i] == 'f') {
+        } else if (c == 'f') {
             dynamics += "f";
-        } else if (an[i] == '-') {        // tie
-        } else if (an[i] == '*') {        // start tuplet
-        } else if (an[i] == '!') {        // stop tuplet
-        } else if (an[i] == '+') {        // cautionary accidental
-        } else if (an[i] == 'X') {        // ???
-        } else if (an[i] == ' ') {
+        } else if (c == '-') {        // tie
+        } else if (c == '*') {        // start tuplet
+        } else if (c == '!') {        // stop tuplet
+        } else if (c == '+') {        // cautionary accidental
+        } else if (c == 'X') {        // ???
+        } else if (c == ' ') {
         } else {
             LOGD("%06d: notation '%c' not implemented", tick.ticks(), an[i].toLatin1());
         }
@@ -532,7 +533,7 @@ void MuseData::readRest(Part* part, QStringView s)
 void MuseData::readBackup(QStringView s)
 {
     Fraction ticks = Fraction::fromTicks((s.mid(5, 3).toInt() * Constants::DIVISION + _division / 2) / _division);
-    if (s[0] == 'b') {
+    if (s[0] == QChar('b')) {
         curTick -= ticks;
     } else {
         curTick += ticks;
@@ -581,7 +582,7 @@ void MuseData::readPart(const QStringList& sl, Part* part)
     QString s;
     for (; line < sl.size(); ++line) {
         s = sl[line];
-        if (!s.isEmpty() && s[0] == '$') {
+        if (!s.isEmpty() && s[0] == QChar('$')) {
             break;
         }
     }
@@ -705,17 +706,18 @@ bool MuseData::read(const QString& name)
             }
             continue;
         }
-        if (s[0] == '&') {
+        char c = s[0].toLatin1();
+        if (c == '&') {
             commentMode = !commentMode;
             continue;
         }
         if (commentMode) {
             continue;
         }
-        if (s[0] == '@') {
+        if (c == '@') {
             continue;
         }
-        if (s[0] == '/') {
+        if (c == '/') {
             parts.append(part);
 
             Part* mpart = new Part(score);
@@ -736,7 +738,7 @@ bool MuseData::read(const QString& name)
             part.clear();
             continue;
         }
-        if (s[0] == 'a') {
+        if (c == 'a') {
             part.back().append(s.mid(1));
             continue;
         }

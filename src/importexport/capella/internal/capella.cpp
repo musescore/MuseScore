@@ -334,11 +334,11 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                 SimpleTextObj* st = static_cast<SimpleTextObj*>(bdo);
                 if (st->font().family() == "capella3") {
                     for (const QChar& ch : st->text()) {
-                        if (ch == 'Q') {
+                        if (ch == QChar('Q')) {
                             str += "b";
-                        } else if (ch == 'S') {
+                        } else if (ch == QChar('S')) {
                             str += "#";
-                        } else if (ch == 'R') {
+                        } else if (ch == QChar('R')) {
                             str += "natural";
                         } else {
                             str += ch;
