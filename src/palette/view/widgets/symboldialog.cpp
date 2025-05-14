@@ -107,7 +107,13 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
     m_symbolsWidget->setDrawGrid(true);
     m_symbolsWidget->setSelectable(true);
 
+#ifdef QT_USE_IS_69
     connect(systemFlag, &QCheckBox::checkStateChanged, this, &SymbolDialog::systemFlagChanged);
+#else
+    connect(systemFlag, &QCheckBox::stateChanged, this, [this](int st) {
+        systemFlagChanged(static_cast<Qt::CheckState>(st));
+    });
+#endif
     connect(fontList, &QComboBox::currentIndexChanged, this, &SymbolDialog::systemFontChanged);
 
     symbolsArea->setWidget(m_symbolsWidget);

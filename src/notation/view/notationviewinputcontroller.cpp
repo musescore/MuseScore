@@ -855,7 +855,7 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
     }
 }
 
-void NotationViewInputController::handleRightClick(const ClickContext& ctx)
+void NotationViewInputController::handleRightClick(const ClickContext&)
 {
     m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
 
