@@ -113,7 +113,9 @@
             </TimeSig>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>TBqy0oB+FEP_58ReZ0QuUmI</eid>
             </Harmony>
           <Chord>
@@ -127,7 +129,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>16</root>
+            <harmonyInfo>
+              <root>16</root>
+              </harmonyInfo>
             <eid>6t5kjl5oAuI_C/5EZ0ASyIK</eid>
             </Harmony>
           <Chord>
@@ -141,7 +145,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>18</root>
+            <harmonyInfo>
+              <root>18</root>
+              </harmonyInfo>
             <eid>R3PiWuH5lOD_IP/uGsEq7s</eid>
             </Harmony>
           <Chord>
@@ -155,7 +161,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>13</root>
+            <harmonyInfo>
+              <root>13</root>
+              </harmonyInfo>
             <eid>i4rTXl9SSX_AK0VEXFGrgG</eid>
             </Harmony>
           <Chord>
@@ -178,7 +186,9 @@
             </KeySig>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>16</root>
+            <harmonyInfo>
+              <root>16</root>
+              </harmonyInfo>
             <eid>8Yp+sjCecO_shBOC0UPuUK</eid>
             </Harmony>
           <Chord>
@@ -192,7 +202,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>18</root>
+            <harmonyInfo>
+              <root>18</root>
+              </harmonyInfo>
             <eid>DZ7I54WTvNG_8eFoipm4ueD</eid>
             </Harmony>
           <Chord>
@@ -206,7 +218,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>20</root>
+            <harmonyInfo>
+              <root>20</root>
+              </harmonyInfo>
             <eid>zu0p8+GnTUF_wAmu4QIla/</eid>
             </Harmony>
           <Chord>
@@ -220,7 +234,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>15</root>
+            <harmonyInfo>
+              <root>15</root>
+              </harmonyInfo>
             <eid>O6JORt9tM+K_H+RZ3vtM2iP</eid>
             </Harmony>
           <Chord>
@@ -243,7 +259,9 @@
             </KeySig>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>10</root>
+            <harmonyInfo>
+              <root>10</root>
+              </harmonyInfo>
             <eid>DTbOysCfgHJ_VXlvh7XPjHP</eid>
             </Harmony>
           <Chord>
@@ -261,7 +279,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>12</root>
+            <harmonyInfo>
+              <root>12</root>
+              </harmonyInfo>
             <eid>KPHgtxXotzG_g7YkNRuUglD</eid>
             </Harmony>
           <Chord>
@@ -279,7 +299,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>sRVmnMDDv6C_obKtK1AhTjB</eid>
             </Harmony>
           <Chord>
@@ -297,7 +319,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>9</root>
+            <harmonyInfo>
+              <root>9</root>
+              </harmonyInfo>
             <eid>FNQHNyAvZ6G_UoKbwqwMD3</eid>
             </Harmony>
           <Chord>
@@ -328,7 +352,9 @@
             </KeySig>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>5</root>
+            <harmonyInfo>
+              <root>5</root>
+            </harmonyInfo>
             <eid>fCcyYmjSvIE_Jc3fmqdAUwB</eid>
             </Harmony>
           <Chord>
@@ -346,7 +372,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>7</root>
+            <harmonyInfo>
+              <root>7</root>
+              </harmonyInfo>
             <eid>eFlHWLdNqNF_8NHOmZ8f8QI</eid>
             </Harmony>
           <Chord>
@@ -364,7 +392,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>9</root>
+            <harmonyInfo>
+              <root>9</root>
+              </harmonyInfo>
             <eid>DGj52yuzAfG_V7CCjvO1glB</eid>
             </Harmony>
           <Chord>
@@ -382,7 +412,9 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>4</root>
+            <harmonyInfo>
+              <root>4</root>
+              </harmonyInfo>
             <eid>quf8btTnSFO_BgsgpjZd0tE</eid>
             </Harmony>
           <Chord>
@@ -409,8 +441,10 @@
             </KeySig>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>12</root>
-            <name>m</name>
+            <harmonyInfo>
+              <root>12</root>
+              <name>m</name>
+              </harmonyInfo>
             <eid>aR1osVC/rcO_5xejUIlY6UM</eid>
             </Harmony>
           <Chord>
@@ -424,8 +458,10 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>14</root>
-            <name>o</name>
+            <harmonyInfo>
+              <root>14</root>
+              <name>o</name>
+              </harmonyInfo>
             <eid>Q68cNLj94wK_3fifpCFEviP</eid>
             </Harmony>
           <Chord>
@@ -439,8 +475,10 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>16</root>
-            <name>o7#11</name>
+            <harmonyInfo>
+              <root>16</root>
+              <name>o7#11</name>
+              </harmonyInfo>
             <eid>/OZ/Xv3g9HN_IyHnIOc544M</eid>
             </Harmony>
           <Chord>
@@ -458,8 +496,10 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>14</root>
-            <name>6</name>
+            <harmonyInfo>
+              <root>14</root>
+              <name>6</name>
+            </harmonyInfo>
             <eid>JA8unXaIzmG_ETskLGarcLE</eid>
             </Harmony>
           <Chord>
@@ -482,8 +522,10 @@
             </KeySig>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>14</root>
-            <name>69</name>
+            <harmonyInfo>
+              <root>14</root>
+              <name>69</name>
+              </harmonyInfo>
             <eid>VYDbw2tSOmE_DZkNqZSyWrE</eid>
             </Harmony>
           <Chord>
@@ -497,8 +539,10 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>18</root>
-            <name>sus</name>
+            <harmonyInfo>
+              <root>18</root>
+              <name>sus</name>
+              </harmonyInfo>
             <eid>sEWYS0G0LZC_6zurM4YyajL</eid>
             </Harmony>
           <Chord>
@@ -512,8 +556,10 @@
             </Chord>
           <Harmony>
             <harmonyType>2</harmonyType>
-            <root>13</root>
-            <name>6</name>
+            <harmonyInfo>
+              <root>13</root>
+              <name>6</name>
+              </harmonyInfo>
             <eid>b18R0gAM3nF_1wxPzGZOCtI</eid>
             </Harmony>
           <Chord>
