@@ -533,9 +533,9 @@ void BrailleEngravingItemList::addEngravingItem(EngravingItem* el, const QString
 {
     //braille = braille.replace(QRegularExpression ("/\\/"), "\\\\");
     //Manual doubling slashes '\' because Regex doesn't work. Don't know why.
-    QString txt = QString();
+    QString txt;
     for (int i=0; i < braille.length(); i++) {
-        if (braille.at(i) == '\\') {
+        if (braille.at(i) == QChar('\\')) {
             txt.append(braille.at(i));
         }
         txt.append(braille.at(i));
