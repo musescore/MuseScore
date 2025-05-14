@@ -16,6 +16,10 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         default: ''
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false    
   workflow_call:
     inputs:
       build_mode:
@@ -33,6 +37,11 @@ on:
         default: ''
         type: string
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        type: string
+        required: false   
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_16.3.app/Contents/Developer
@@ -154,7 +163,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.9.*'
+        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
         host: 'mac'
         target: 'desktop'
         arch: 'clang_64'

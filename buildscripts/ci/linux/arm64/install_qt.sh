@@ -22,9 +22,6 @@
 echo "Install Qt"
 trap 'echo Qt installation failed; exit 1' ERR
 
-BUILD_TOOLS=$HOME/build_tools
-ENV_FILE=$BUILD_TOOLS/environment.sh
-
 # TODO: Update to Qt 6.9
 apt_packages_qt6=(
     libqt6core5compat6-dev
@@ -51,10 +48,10 @@ apt_packages_qt6=(
     qt6-wayland
 )
 
-apt-get install -y --no-install-recommends \
+sudo apt-get install -y --no-install-recommends \
     "${apt_packages_qt6[@]}"
 
-qt_dir="/usr/lib/arm-linux-gnueabihf/qt6"
+qt_dir="/usr/lib/aarch64-linux-gnu/qt6"
 
 if [[ ! -d "${qt_dir}" ]]; then
     echo "Qt directory not found: ${qt_dir}"
@@ -62,15 +59,17 @@ if [[ ! -d "${qt_dir}" ]]; then
 fi
 
 export QT_SELECT=qt6
-echo export QT_SELECT=qt6 >>${ENV_FILE}
-echo export QT_ROOT_DIR="${qt_dir}" >>${ENV_FILE}
-echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >>${ENV_FILE}
-echo export QML2_IMPORT_PATH="${qt_dir}/qml" >>${ENV_FILE}
+echo QT_SELECT=qt6 >>${GITHUB_ENV}
+echo QT_ROOT_DIR="${qt_dir}" >>${GITHUB_ENV}
+echo QT_PLUGIN_PATH="${qt_dir}/plugins" >>${GITHUB_ENV}
+echo QML2_IMPORT_PATH="${qt_dir}/qml" >>${GITHUB_ENV}
 # explicitly set QMAKE path for linuxdeploy-plugin-qt
-echo export QMAKE="/usr/bin/qmake6" >>${ENV_FILE}
+echo QMAKE="/usr/bin/qmake6" >>${GITHUB_ENV}
 
-echo export CFLAGS="-Wno-psabi" >>${ENV_FILE}
-echo export CXXFLAGS="-Wno-psabi" >>${ENV_FILE}
+echo "${qt_dir}/bin" >>${GITHUB_PATH}
+
+echo CFLAGS="-Wno-psabi" >>${GITHUB_ENV}
+echo CXXFLAGS="-Wno-psabi" >>${GITHUB_ENV}
 
 # https://askubuntu.com/questions/1460242/ubuntu-22-04-with-qt6-qmake-could-not-find-a-qt-installation-of
 qtchooser -install qt6 $(which qmake6)

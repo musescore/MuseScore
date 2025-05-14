@@ -20,6 +20,10 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         default: ''
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false   
   workflow_call:
     inputs:
       platforms:
@@ -42,6 +46,11 @@ on:
         default: ''
         type: string
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        type: string
+        required: false    
 
 jobs:
   windows_x64:
@@ -150,10 +159,10 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.9.*'
+        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }} 
         host: 'windows'
         target: 'desktop'
-        arch: 'win64_msvc2022_64'
+        arch: ${{ inputs.use_qt69 == 'on' && 'win64_msvc2022_64' || 'win64_msvc2019_64' }} 
         modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |

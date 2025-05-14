@@ -20,6 +20,10 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         default: ''
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false  
   workflow_call:
     inputs:
       platforms:
@@ -42,6 +46,11 @@ on:
         default: ''
         type: string
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        type: string
+        required: false    
 
 jobs:
   build:
@@ -63,11 +72,11 @@ jobs:
             arch: x86_64
             runs-on: ubuntu-22.04
             qt-host: linux
-            qt-arch: linux_gcc_64
+            qt-arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }} 
             dump-symbols-arch: x86-64
           - platform: linux_arm64
             arch: aarch64
-            runs-on: ubuntu-24.04-arm
+            runs-on: ${{ inputs.use_qt69 == 'on' && 'ubuntu-24.04-arm' || 'ubuntu-22.04-arm' }}  
             qt-host: linux_arm64
             qt-arch: linux_gcc_arm64
             dump-symbols-arch: aarch64
@@ -173,12 +182,17 @@ jobs:
     - name: Install Qt
       # TODO: Change back to jurplel/install-qt-action@v4 when it supports arm64
       uses: jdpurcell/install-qt-action@v5 
+      if: ${{ !(matrix.qt-host == 'linux_arm64' && inputs.use_qt69 != 'on') }}
       with:
-        version: '6.9.*'
+        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
         host: ${{ matrix.qt-host }}
         target: 'desktop'
         arch: ${{ matrix.qt-arch }}
         modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
+    - name: Install Qt 6.2.4 arm64
+      if: ${{ matrix.qt-host == 'linux_arm64' && inputs.use_qt69 != 'on' }}  
+      run: |
+        bash ./buildscripts/ci/linux/arm64/install_qt.sh     
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh --arch ${{ matrix.arch }}
@@ -188,7 +202,7 @@ jobs:
         LUPDATE_ARGS: ""
         POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
       run: |
-        bash ./tools/translations/run_lupdate.sh
+        bash ./buildscripts/ci/translation/run_lupdate.sh
     - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
       uses: transifex/cli-action@v2
