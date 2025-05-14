@@ -24,6 +24,10 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         default: ''
         required: false
+      use_qt69:
+          description: 'Use Qt 6.9'
+          default: 'off'
+          required: false   
   workflow_call:
     inputs:
       platforms:
@@ -44,12 +48,18 @@ on:
       deploy_backend:
         description: 'Deploy backend: on - deploy'
         default: 'off'
+        type: string
         required: false
       sentry_project:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         default: ''
         type: string
         required: false
+      use_qt69:
+          description: 'Use Qt 6.9'
+          default: 'off'
+          type: string
+          required: false  
 
 defaults:
   run:
@@ -66,6 +76,7 @@ jobs:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       deploy: ${{ inputs.deploy_backend }}
+      use_qt69: ${{ inputs.use_qt69 }}
 
   linux_arm32:
     name: Linux ARM32
@@ -76,6 +87,7 @@ jobs:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
 
   linux:
     name: Linux
@@ -86,6 +98,7 @@ jobs:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
 
   macos:
     name: macOS
@@ -96,6 +109,7 @@ jobs:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
 
   windows:
     name: Windows
@@ -106,6 +120,7 @@ jobs:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
 
   # Dummy build for testing purposes.
   dummy:

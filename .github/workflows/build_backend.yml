@@ -18,6 +18,11 @@ on:
         description: 'Deploy: on - deploy'
         default: 'off'
         required: false
+      use_qt69:
+          description: 'Use Qt 6.9'
+          default: 'off'
+          required: false   
+
   workflow_call:
     inputs:
       build_mode:
@@ -35,6 +40,11 @@ on:
         default: 'off'
         type: string
         required: false
+      use_qt69:
+          description: 'Use Qt 6.9'
+          default: 'off'
+          type: string
+          required: false  
 
 jobs:
   backend:
@@ -92,7 +102,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.9.*'
+        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
         host: 'linux'
         target: 'desktop'
         arch: 'linux_gcc_64'
