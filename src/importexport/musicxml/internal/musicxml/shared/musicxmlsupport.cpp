@@ -662,31 +662,31 @@ bool isLaissezVibrer(const SymId id)
     return id == SymId::articLaissezVibrerAbove || id == SymId::articLaissezVibrerBelow;
 }
 
-String harmonyXmlKind(const engraving::Harmony* h)
+String harmonyXmlKind(const engraving::HarmonyInfo* h)
 {
     const ChordDescription* cd = h->descr();
     return cd ? cd->xmlKind : String();
 }
 
-String harmonyXmlText(const engraving::Harmony* h)
+String harmonyXmlText(const engraving::HarmonyInfo* h)
 {
     const ChordDescription* cd = h->descr();
     return cd ? cd->xmlText : String();
 }
 
-String harmonyXmlSymbols(const engraving::Harmony* h)
+String harmonyXmlSymbols(const engraving::HarmonyInfo* h)
 {
     const ChordDescription* cd = h->descr();
     return cd ? cd->xmlSymbols : String();
 }
 
-String harmonyXmlParens(const engraving::Harmony* h)
+String harmonyXmlParens(const engraving::HarmonyInfo* h)
 {
     const ChordDescription* cd = h->descr();
     return cd ? cd->xmlParens : String();
 }
 
-StringList harmonyXmlDegrees(const engraving::Harmony* h)
+StringList harmonyXmlDegrees(const engraving::HarmonyInfo* h)
 {
     const ChordDescription* cd = h->descr();
     return cd ? cd->xmlDegrees : StringList();
@@ -703,25 +703,34 @@ const ChordDescription* harmonyFromXml(engraving::HarmonyInfo* info, engraving::
     return cd;
 }
 
-String harmonyXmlFunction(const engraving::Harmony* h, engraving::Key key)
+String harmonyXmlFunction(const engraving::HarmonyInfo* info, const engraving::Harmony* h, engraving::Key key)
 {
-    if (!tpcIsValid(h->rootTpc())) {
+    if (!tpcIsValid(info->m_rootTpc)) {
         return String();
     }
     if (key == Key::INVALID) {
         const Staff* st = h->staff();
         key = st ? st->key(h->tick()) : Key::INVALID;
     }
-    return tpc2Function(h->rootTpc(), key);
+    return tpc2Function(info->m_rootTpc, key);
 }
 
-String harmonyXmlFunction(const engraving::Harmony* h)
+String harmonyXmlFunction(const engraving::HarmonyInfo* info, const engraving::Harmony* h)
 {
-    if (!tpcIsValid(h->rootTpc())) {
+    if (!tpcIsValid(info->m_rootTpc)) {
         return String();
     }
     const Staff* st = h->staff();
     Key key = st ? st->key(h->tick()) : Key::INVALID;
-    return tpc2Function(h->rootTpc(), key);
+    return tpc2Function(info->m_rootTpc, key);
+}
+
+void setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const muse::String& s, engraving::Key key)
+{
+    if (key == Key::INVALID) {
+        const Staff* st = h->staff();
+        key = st ? st->key(h->tick()) : Key::INVALID;
+    }
+    info->m_rootTpc = function2Tpc(s, key);
 }
 }

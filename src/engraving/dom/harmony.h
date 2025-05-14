@@ -151,17 +151,14 @@ public:
     bool isRealizable() const;
     bool isInFretBox() const;
 
-    String textName() const;                       // DEPRECATED
     int bassTpc() const;                           // DEPRECATED
     int rootTpc() const;                           // DEPRECATED
-    void setTpcFromFunction(const String& s, Key key = Key::INVALID);
     void addDegree(const HDegree& d);
     const std::vector<HDegree>& degreeList() const;
     HarmonyType harmonyType() const { return m_harmonyType; }
     void setHarmonyType(HarmonyType val);
 
     const ParsedChord* parsedForm() const;                                             // DEPRECATED
-    const ChordDescription* descr() const;                                             // DEPRECATED
 
     const std::vector<TextSegment*>& textList() const { return m_textList; }
 

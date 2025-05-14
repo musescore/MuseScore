@@ -247,14 +247,6 @@ bool Harmony::isRealizable() const
     return true;
 }
 
-String Harmony::textName() const
-{
-    if (m_chords.empty()) {
-        return String();
-    }
-    return m_chords.front()->m_textName;
-}
-
 int Harmony::bassTpc() const
 {
     if (m_chords.empty()) {
@@ -269,19 +261,6 @@ int Harmony::rootTpc() const
         return Tpc::TPC_INVALID;
     }
     return m_chords.front()->m_rootTpc;
-}
-
-void Harmony::setTpcFromFunction(const String& s, Key key)
-{
-    // MOVE TO COMPAT?
-    if (m_chords.empty()) {
-        return;
-    }
-    if (key == Key::INVALID) {
-        const Staff* st = staff();
-        key = st ? st->key(tick()) : Key::INVALID;
-    }
-    m_chords.front()->m_rootTpc = function2Tpc(s, key);
 }
 
 bool Harmony::isInFretBox() const
@@ -1102,14 +1081,6 @@ const ParsedChord* Harmony::parsedForm()const
     return m_chords.front()->parsedChord();
 }
 
-const ChordDescription* Harmony::descr() const
-{
-    if (m_chords.empty()) {
-        return nullptr;
-    }
-    return m_chords.front()->descr();
-}
-
 Color Harmony::curColor() const
 {
     if (m_isMisspelled) {
@@ -1625,7 +1596,7 @@ String Harmony::generateScreenReaderInfo() const
             rez = String(u"%1 %2").arg(rez, tpc2name(info->m_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
         }
 
-        if (info->m_parsedChord && !textName().isEmpty()) {
+        if (info->m_parsedChord && !info->m_textName.isEmpty()) {
             String aux = info->m_parsedChord->handle();
             aux = aux.replace(u"#", u"♯").replace(u"<", u"");
             String extension;
@@ -1638,7 +1609,7 @@ String Harmony::generateScreenReaderInfo() const
             }
             rez = String(u"%1 %2").arg(rez, extension);
         } else {
-            rez = String(u"%1 %2").arg(rez, textName());
+            rez = String(u"%1 %2").arg(rez, info->m_textName);
         }
 
         if (tpcIsValid(info->m_bassTpc)) {

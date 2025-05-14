@@ -409,12 +409,14 @@ TEST_F(Engraving_ChordSymbolTests, testNashvilleNumbers) {
 
     for (EngravingItem* e : els) {
         Harmony* h = toHarmony(e);
+        EXPECT_FALSE(h->chords().empty());
+        HarmonyInfo* info = h->chords().front();
 
         int tpc = tpcAndExtension.at(idx).first;
         String ext = tpcAndExtension.at(idx).second;
 
-        EXPECT_EQ(tpc, h->rootTpc());
-        EXPECT_EQ(ext, h->textName());
+        EXPECT_EQ(tpc, info->m_rootTpc);
+        EXPECT_EQ(ext, info->m_textName);
 
         idx++;
     }
