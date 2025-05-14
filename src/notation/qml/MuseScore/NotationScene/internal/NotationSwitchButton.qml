@@ -110,14 +110,21 @@ FlatRadioButton {
 
 
         MouseArea {
-            id: rightClickArea
             anchors.fill: parent
 
-            acceptedButtons: Qt.RightButton
+            acceptedButtons: Qt.RightButton | Qt.MiddleButton
 
             onClicked: function(mouse) {
-                contextMenuItemsRequested()
-                contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+                if (mouse.button === Qt.RightButton) {
+                    contextMenuItemsRequested()
+                    contextMenuLoader.show(Qt.point(mouse.x, mouse.y))
+
+                    return
+                }
+
+                if (mouse.button === Qt.MiddleButton) {
+                    root.closeRequested()
+                }
             }
 
             ContextMenuLoader {
