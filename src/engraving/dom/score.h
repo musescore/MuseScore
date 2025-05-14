@@ -465,7 +465,8 @@ public:
     void spellNotelist(std::vector<Note*>& notes);
     void undoChangeTpc(Note* note, int tpc);
     void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
-    void undoTransposeHarmony(Harmony*, int, int);
+    void undoTransposeHarmony(Harmony*, Interval interval, bool doubleSharpFlat = true);
+    void undoTransposeHarmonyDiatonic(Harmony*, int interval, bool doubleSharpFlat, bool transposeKeys);
     void undoExchangeVoice(Measure* measure, voice_idx_t val1, voice_idx_t val2, staff_idx_t staff1, staff_idx_t staff2);
     void undoRemovePart(Part* part, size_t partIdx = muse::nidx);
     void undoInsertPart(Part* part, size_t targetPartIndex);
