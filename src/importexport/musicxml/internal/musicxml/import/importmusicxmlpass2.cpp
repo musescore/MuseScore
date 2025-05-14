@@ -4687,7 +4687,7 @@ void MusicXmlParserDirection::handleNmiCmi(Measure* measure, const Fraction& tic
         return;
     }
     Harmony* ha = new Harmony(m_score->dummy()->segment());
-    HarmonyInfo* info = new HarmonyInfo(m_score->chordList());
+    HarmonyInfo* info = new HarmonyInfo(m_score);
     info->m_rootTpc = Tpc::TPC_INVALID;
     info->m_id = -1;
     info->m_textName = u"N.C.";
@@ -7634,7 +7634,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
 
     FretDiagram* fd = nullptr;
     Harmony* ha = Factory::createHarmony(m_score->dummy()->segment());
-    HarmonyInfo* info = new HarmonyInfo(m_score->chordList());
+    HarmonyInfo* info = new HarmonyInfo(m_score);
     Fraction offset;
     if (!placement.empty()) {
         ha->setPlacement(placement == "below" ? PlacementV::BELOW : PlacementV::ABOVE);
