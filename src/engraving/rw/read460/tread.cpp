@@ -3168,7 +3168,7 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "harmonyInfo") {
-            HarmonyInfo* info = new HarmonyInfo(ctx.score()->chordList());
+            HarmonyInfo* info = new HarmonyInfo(ctx.score());
             readHarmonyInfo(info, e);
             h->addChord(info);
         } else if (tag == "degree") {

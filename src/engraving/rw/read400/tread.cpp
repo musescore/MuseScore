@@ -2734,7 +2734,7 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
 {
-    HarmonyInfo* info = new HarmonyInfo(ctx.score()->chordList());
+    HarmonyInfo* info = new HarmonyInfo(ctx.score());
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "base") {

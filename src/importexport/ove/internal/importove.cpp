@@ -2112,7 +2112,7 @@ void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int tr
         int absTick = m_mtt->getTick(measure->no(), harmonyPtr->getTick());
 
         Harmony* harmony = Factory::createHarmony(m_score->dummy()->segment());
-        HarmonyInfo* info = new HarmonyInfo(measure->score()->chordList());
+        HarmonyInfo* info = new HarmonyInfo(measure->score());
 
         // TODO - does this need to be key-aware?
         harmony->setTrack(track);

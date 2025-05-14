@@ -1386,7 +1386,7 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
         14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19
     };
 
-    HarmonyInfo* info = new HarmonyInfo(ctx.score()->chordList());
+    HarmonyInfo* info = new HarmonyInfo(ctx.score());
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
