@@ -127,7 +127,8 @@ struct RenderAction {
 
     RenderActionType type = RenderActionType::SET;
     double movex = 0.0, movey = 0.0; // MOVE
-    String text;                    // SET
+    String text;                     // SET
+    bool popx = true, popy = true;   // POP
 
     RenderAction() {}
     RenderAction(RenderActionType t)
@@ -285,8 +286,9 @@ public:
     bool autoAdjust() const { return m_autoAdjust; }
     double nominalMag() const { return m_nmag; }
     double nominalAdjust() const { return m_nadjust; }
-    void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0);
-    double position(const StringList& names, ChordTokenClass ctc) const;
+    bool stackModifiers() const { return m_stackModifiers; }
+    void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0, bool stackModifiers = false);
+    double position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx) const;
 
     void checkChordList(const muse::io::path_t& appDataPath, const MStyle& style);
     bool read(const muse::io::path_t& appDataPath, const String& name);
@@ -311,6 +313,7 @@ private:
 
     std::map<String, ChordSymbol> m_symbols;
     bool m_autoAdjust = false;
+    bool m_stackModifiers = false;
     double m_nmag = 1.0, m_nadjust = 0.0;   // adjust values are measured in percentage
     double m_emag = 1.0, m_eadjust = 0.0;   // (which is then applied to the height of the font)
     double m_mmag = 1.0, m_madjust = 0.0;
