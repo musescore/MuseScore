@@ -47,7 +47,7 @@
           <string>64</string>
           </StringData>
         <Channel>
-          <program value="1"/>
+          <program value="0"/>
           <controller ctrl="7" value="101"/>
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>

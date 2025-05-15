@@ -41,7 +41,7 @@
           <string>76</string>
           </StringData>
         <Channel>
-          <program value="27"/>
+          <program value="29"/>
           <controller ctrl="7" value="81"/>
           <controller ctrl="10" value="32"/>
           <midiPort>0</midiPort>

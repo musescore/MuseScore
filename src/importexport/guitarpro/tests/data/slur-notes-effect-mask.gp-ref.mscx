@@ -40,7 +40,7 @@
           <string>55</string>
           </StringData>
         <Channel>
-          <program value="37"/>
+          <program value="36"/>
           <controller ctrl="7" value="74"/>
           <controller ctrl="10" value="79"/>
           </Channel>
