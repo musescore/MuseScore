@@ -19,6 +19,10 @@ on:
         required: true
         type: boolean
         default: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false   
 
 jobs:
   tx_pull:
@@ -68,11 +72,19 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
 
+      - name: Install Qt for lrelease
+        if: env.DO_PUSH_TO_S3 == 'true'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
+          host: 'linux'
+          target: 'desktop'
+          arch: 'linux_gcc_64'
+          archives: 'qttools'
+
       - name: Setup environment for pushing to S3
         if: env.DO_PUSH_TO_S3 == 'true'
         run: |
-          # lrelease
-          bash ./buildscripts/ci/translation/qt_install.sh
           bash ./buildscripts/ci/tools/s3_install.sh --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
 
           bash ./buildscripts/ci/tools/make_build_number.sh

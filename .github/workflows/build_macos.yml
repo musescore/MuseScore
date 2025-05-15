@@ -16,6 +16,10 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         default: ''
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false    
   workflow_call:
     inputs:
       build_mode:
@@ -33,6 +37,11 @@ on:
         default: ''
         type: string
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        type: string
+        required: false   
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_16.3.app/Contents/Developer
@@ -151,15 +160,24 @@ jobs:
         brew install ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
+        host: 'mac'
+        target: 'desktop'
+        arch: 'clang_64'
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/macos/setup.sh
+
     - name: Generate _en.ts files
       env:
         LUPDATE_ARGS: ""
         POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
       run: |
-        bash ./buildscripts/ci/translation/run_lupdate.sh
+        bash ./tools/translations/run_lupdate.sh
     - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
       uses: transifex/cli-action@v2

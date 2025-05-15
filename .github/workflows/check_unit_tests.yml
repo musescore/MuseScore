@@ -8,6 +8,10 @@ on:
         description: 'Enable code coverage'
         required: false
         default: 'false'
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false 
   schedule:
     - cron: "0 3 * * 4" # Every Thursday night at 03:00 for master branch
 
@@ -46,9 +50,18 @@ jobs:
         sudo docker system prune -a -f
         sudo rm -rf /usr/local/lib/android
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
+        host: 'linux'
+        target: 'desktop'
+        arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh
+
     - name: Build
       env:
         GITHUB_EVENT_NAME: ${{ github.event_name }}

@@ -54,6 +54,9 @@ void DockPageView::init()
     TRACEFUNC;
 
     for (DockBase* dock : allDocks()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+        dock->setParentItem(this);
+#endif
         dock->init();
 
         connect(dock, &DockBase::floatingChanged, [this](){

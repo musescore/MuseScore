@@ -2,7 +2,12 @@ name: 'Check: Visual Tests (vtest)'
 
 on:
   pull_request:
-
+  workflow_dispatch:
+    inputs:
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false 
 jobs:
   setup:
     name: "Setup VTests workflow"
@@ -41,9 +46,9 @@ jobs:
       if: github.event_name == 'push'
       run: |
         REFERENCE_SHA=${{ github.event.before }}
-        if [[ -z "$REFERENCE_SHA" || "$REFERENCE_SHA" == 0000000000000000000000000000000000000000 ]]; then 
-          DO_RUN='false' 
-        else 
+        if [[ -z "$REFERENCE_SHA" || "$REFERENCE_SHA" == 0000000000000000000000000000000000000000 ]]; then
+          DO_RUN='false'
+        else
           DO_RUN='true'
         fi
         echo "REFERENCE_SHA=$REFERENCE_SHA" >> $GITHUB_ENV
@@ -79,9 +84,18 @@ jobs:
         sudo apt-get update && sudo apt-get install -y ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
+        host: 'linux'
+        target: 'desktop'
+        arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh
+
     - name: Build and Pack
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh
@@ -117,9 +131,18 @@ jobs:
         sudo apt-get update && sudo apt-get install -y ccache
         bash ./buildscripts/ci/tools/setup_ccache_config.sh
 
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.9.*'
+        host: 'linux'
+        target: 'desktop'
+        arch: 'linux_gcc_64'
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh
+
     - name: Build and Pack
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh

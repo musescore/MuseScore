@@ -18,10 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
 if (OS_IS_WASM)
     set(QT_IS_STATIC ON)
 endif()
@@ -91,9 +87,19 @@ if(QT_ADD_WEBSOCKET)
     list(APPEND QT_LIBRARIES Qt::WebSockets)
 endif()
 
-find_package(Qt6 6.2.4 REQUIRED COMPONENTS ${qt_components})
+find_package(Qt6 6.2 REQUIRED COMPONENTS ${qt_components})
 
 include(QtInstallPaths)
+
+message(STATUS "Qt version: ${Qt6_VERSION}")
+
+if (${Qt6_VERSION} VERSION_GREATER_EQUAL "6.3.0")
+    qt_standard_project_setup(REQUIRES 6.3 SUPPORTS_UP_TO 6.9)
+else()
+    set(CMAKE_AUTOUIC ON)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTORCC ON)
+endif()
 
 if (CC_IS_EMCC)
     # see SetupBuildEnvironment.cmake

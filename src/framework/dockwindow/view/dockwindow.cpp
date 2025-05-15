@@ -731,6 +731,9 @@ void DockWindow::initDocks(DockPageView* page)
     adjustContentForAvailableSpace(page);
 
     for (DockToolBarView* toolbar : m_toolBars.list()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+        toolbar->setParentItem(this);
+#endif
         toolbar->init();
     }
 
