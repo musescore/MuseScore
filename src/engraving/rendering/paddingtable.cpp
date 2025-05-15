@@ -129,7 +129,7 @@ void PaddingTable::createTable(const MStyle& style)
         = std::max(table[ElementType::CLEF][ElementType::NOTE] - ledgerLength / 2, ledgerPad);
     table[ElementType::CLEF][ElementType::ACCIDENTAL] = 0.75 * spatium;
     table[ElementType::CLEF][ElementType::STEM] = 0.75 * spatium;
-    table[ElementType::CLEF][ElementType::REST] = 1.35 * spatium;
+    table[ElementType::CLEF][ElementType::REST] = table[ElementType::CLEF][ElementType::NOTE];
     table[ElementType::CLEF][ElementType::CLEF] = 0.75 * spatium;
     table[ElementType::CLEF][ElementType::ARPEGGIO] = 1.15 * spatium;
     table[ElementType::CLEF][ElementType::BAR_LINE] = style.styleMM(Sid::clefBarlineDistance);
