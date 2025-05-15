@@ -1214,7 +1214,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, PointF& pos, int
             if (!stack.empty()) {
                 PointF pt = stack.top();
                 stack.pop();
-                pos = pt;
+                pos = PointF(a.popx ? pt.x() : pos.x(), a.popy ? pt.y() : pos.y());
             } else {
                 LOGD("RenderAction::RenderActionType::POP: stack empty");
             }
