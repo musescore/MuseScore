@@ -565,6 +565,11 @@ public:
     {
         return isArticulation() || isOrnament();
     }
+
+    bool isArticulationOrFermata() const
+    {
+        return isArticulationFamily() || isFermata();
+    }
 };
 
 //---------------------------------------------------

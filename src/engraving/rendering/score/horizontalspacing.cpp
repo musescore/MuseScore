@@ -1500,6 +1500,10 @@ void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const Engrav
 
 KerningType HorizontalSpacing::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
 {
+    if (item1->isArticulationOrFermata() || item2->isArticulationOrFermata()) {
+        return computeArticulationAndFermataKerning(item1, item2);
+    }
+
     if (ignoreItems(item1, item2)) {
         return KerningType::ALLOW_COLLISION;
     }
@@ -1681,6 +1685,21 @@ KerningType HorizontalSpacing::computeLyricsKerningType(const Lyrics* lyrics1, c
     }
 
     return KerningType::ALLOW_COLLISION;
+}
+
+KerningType HorizontalSpacing::computeArticulationAndFermataKerning(const EngravingItem* item1, const EngravingItem* item2)
+{
+    if (item1->isArticulationOrFermata()) {
+        if (item2->isArticulationOrFermata()) {
+            bool firstAbove = item1->isArticulationFamily() ? toArticulation(item1)->up() : item1->placeAbove();
+            bool secondAbove = item2->isArticulationFamily() ? toArticulation(item2)->up() : item2->placeAbove();
+            if (firstAbove == secondAbove) {
+                return KerningType::NON_KERNING;
+            }
+        }
+    }
+
+    return KerningType::KERNING;
 }
 
 void HorizontalSpacing::computeHangingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap,

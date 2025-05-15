@@ -237,6 +237,7 @@ public:
     Spatium minDistance() const { return m_minDistance; }
     void setMinDistance(Spatium v) { m_minDistance = v; }
 
+    PointF systemPos() const;
     virtual PointF pagePos() const;            ///< position in page coordinates
     virtual PointF canvasPos() const;          ///< position in canvas coordinates
     double pageX() const;

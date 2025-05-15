@@ -1186,8 +1186,16 @@ void MeasureLayout::computePreSpacingItems(Measure* m, LayoutContext& ctx)
 
             ChordLayout::layoutArticulations(chord, ctx);
             ChordLayout::checkStartEndSlurs(chord, ctx);
+            ChordLayout::layoutArticulations2(chord, ctx);
             chord->computeKerningExceptions();
         }
+
+        for (EngravingItem* annotation : seg.annotations()) {
+            if (annotation->isFermata()) {
+                TLayout::layoutItem(annotation, ctx);
+            }
+        }
+
         seg.createShapes();
         isFirstChordInMeasure = false;
     }

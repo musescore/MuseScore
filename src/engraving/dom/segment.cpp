@@ -2554,10 +2554,15 @@ void Segment::createShape(staff_idx_t staffIdx)
             }
             // Non-standard trills display a cue note that we must add to shape here
             if (e->isChord()) {
-                Ornament* orn = toChord(e)->findOrnament();
-                Chord* cueNoteChord = orn ? orn->cueNoteChord() : nullptr;
-                if (cueNoteChord && cueNoteChord->upNote()->visible()) {
-                    s.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
+                for (Articulation* art : toChord(e)->articulations()) {
+                    if (art->isOrnament()) {
+                        Chord* cueNoteChord = toOrnament(art)->cueNoteChord();
+                        if (cueNoteChord && cueNoteChord->upNote()->visible()) {
+                            s.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
+                        }
+                    } else {
+                        s.add(art->shape().translated(art->pos() + e->pos()));
+                    }
                 }
             }
         }
@@ -2597,14 +2602,12 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isTripletFeel()
                    && !e->isInstrumentChange()
                    && !e->isArticulationFamily()
-                   && !e->isFermata()
                    && !e->isStaffText()
                    && !e->isHarpPedalDiagram()
                    && !e->isPlayTechAnnotation()
                    && !e->isCapo()
                    && !e->isStringTunings()) {
             // annotations added here are candidates for collision detection
-            // lyrics, ...
             s.add(e->shape().translate(e->pos() + e->staffOffset()));
         }
     }
@@ -2631,7 +2634,8 @@ void Segment::createShape(staff_idx_t staffIdx)
 double Segment::minRight() const
 {
     double distance = 0.0;
-    for (const Shape& sh : shapes()) {
+    for (Shape sh : shapes()) {
+        sh.remove_if([](ShapeElement& el) { return el.item() && el.item()->isArticulationOrFermata(); });
         distance = std::max(distance, sh.right());
     }
     return distance;
@@ -2640,7 +2644,8 @@ double Segment::minRight() const
 double Segment::minLeft() const
 {
     double distance = -DBL_MAX;
-    for (const Shape& sh : shapes()) {
+    for (Shape sh : shapes()) {
+        sh.remove_if([](ShapeElement& el) { return el.item() && el.item()->isArticulationOrFermata(); });
         double l = sh.left();
         if (l > distance) {
             distance = l;

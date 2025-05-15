@@ -1108,6 +1108,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         if ((layoutOnCrossBeamSide && !a->isOnCrossBeamSide()) || a->isLaissezVib()) {
             continue;
         }
+
         if (a->isStaccato()) {
             stacc = a;
         } else if (stacc && a->isAccent() && stacc->up() == a->up()
@@ -1122,6 +1123,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         } else {
             stacc = nullptr;
         }
+
         if (!a->layoutCloseToNote()) {
             TLayout::layoutItem(a, ctx);
             if (a->up()) {
@@ -1135,30 +1137,19 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
                     staffBotY = a->y() + a->height() + minDist + yOffset;
                 }
             }
-            Autoplace::doAutoplace(a, a->mutldata());
         }
-    }
 
-    for (Articulation* a : item->articulations()) {
-        if (a->addToSkyline() && !a->isOnCrossBeamSide()) {
-            // the segment shape has already been calculated
-            // so measure width and spacing is already determined
-            // in line mode, we cannot add to segment shape without throwing this off
-            // but adding to skyline is always good
-            Segment* s = item->segment();
-            Measure* m = s->measure();
-            Shape sh = a->shape().translate(a->pos() + item->pos() + item->staffOffset());
-            // TODO: limit to width of chord
-            // this avoids "staircase" effect due to space not having been allocated already
-            // ANOTHER alternative is to allocate the space in layoutPitched() / layoutTablature()
-            //double w = std::min(r.width(), width());
-            //r.translate((r.width() - w) * 0.5, 0.0);
-            //r.setWidth(w);
-            if (!ctx.conf().isLineMode()) {
-                s->staffShape(item->staffIdx()).add(sh);
+        if (!a->isOnCrossBeamSide()) {
+            if (a->layoutCloseToNote()) {
+                Measure* meas = a->measure();
+                System* sys = meas->system();
+                if (sys) {
+                    sys->staff(a->vStaffIdx())->skyline().add(a->shape().translate(a->systemPos() + item->staffOffset()));
+                }
+            } else {
+                Autoplace::autoplaceSegmentElement(a, a->mutldata(), a->up(), true);
             }
-            sh.translate(s->pos() + m->pos());
-            m->system()->staff(item->vStaffIdx())->skyline().add(sh);
+            a->segment()->staffShape(a->vStaffIdx()).add(a->shape().translated(a->pos() + item->pos() + item->staffOffset()));
         }
     }
 }

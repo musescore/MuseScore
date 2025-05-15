@@ -639,6 +639,25 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     return normalColor;
 }
 
+PointF EngravingItem::systemPos() const
+{
+    // Returns position in system coordinates. Only applicable to items
+    // that have a System ancestor.
+
+    IF_ASSERT_FAILED(findAncestor(ElementType::SYSTEM)) {
+        return PointF();
+    }
+
+    PointF result = pos();
+    EngravingItem* ancestor = parentItem();
+    while (ancestor && !ancestor->isSystem()) {
+        result += ancestor->pos();
+        ancestor = ancestor->parentItem();
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   pagePos
 //    return position in canvas coordinates
