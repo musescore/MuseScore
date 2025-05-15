@@ -32,7 +32,7 @@ class Chord;
 struct ChordDescription;
 class Fraction;
 class Harmony;
-struct HarmonyInfo;
+class HarmonyInfo;
 class HDegree;
 class Score;
 enum class SymId;

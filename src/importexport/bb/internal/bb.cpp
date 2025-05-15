@@ -512,13 +512,13 @@ Err importBB(MasterScore* score, const QString& name)
         Harmony* h = Factory::createHarmony(s);
         HarmonyInfo* info = new HarmonyInfo(score);
         h->setTrack(0);
-        info->m_rootTpc = table[c.root - 1];
+        info->setRootTpc(table[c.root - 1]);
         if (c.bass > 0) {
-            info->m_bassTpc = table[c.bass - 1];
+            info->setBassTpc(table[c.bass - 1]);
         } else {
-            info->m_bassTpc = Tpc::TPC_INVALID;
+            info->setBassTpc(Tpc::TPC_INVALID);
         }
-        info->m_id = c.extension;
+        info->setId(c.extension);
         h->addChord(info);
 
         h->render();

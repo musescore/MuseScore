@@ -886,5 +886,5 @@ void CompatUtils::setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony
     Key key = Key::INVALID;
     const Staff* st = h->staff();
     key = st ? st->key(h->tick()) : Key::INVALID;
-    info->m_rootTpc = function2Tpc(s, key);
+    info->setRootTpc(function2Tpc(s, key));
 }

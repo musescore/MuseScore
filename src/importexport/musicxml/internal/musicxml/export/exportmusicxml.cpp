@@ -8824,8 +8824,8 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
 {
     // No supprt for polychords at the moment. Export the first chord from the list.
     HarmonyInfo* info = h->chords().empty() ? nullptr : h->chords().front();
-    int rootTpc = info ? info->m_rootTpc : Tpc::TPC_INVALID;
-    int bassTpc = info ? info->m_bassTpc : Tpc::TPC_INVALID;
+    int rootTpc = info ? info->rootTpc() : Tpc::TPC_INVALID;
+    int bassTpc = info ? info->bassTpc() : Tpc::TPC_INVALID;
 
     XmlWriter::Attributes harmonyAttrs;
     if (!h->isStyled(Pid::PLACEMENT)) {
@@ -8914,10 +8914,10 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 }
             }
         } else {
-            if (info->m_textName.empty()) {
+            if (info->textName().empty()) {
                 m_xml.tag("kind", "none");
             } else {
-                m_xml.tag("kind", { { "text", info->m_textName } }, "");
+                m_xml.tag("kind", { { "text", info->textName() } }, "");
             }
 
             if (bassTpc != Tpc::TPC_INVALID) {
@@ -8945,7 +8945,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         // which may contain arbitrary text
         //
         const String xmlKind = harmonyXmlKind(info);
-        const String textName = info->m_textName;
+        const String textName = info->textName();
         switch (h->harmonyType()) {
         case HarmonyType::NASHVILLE: {
             String alter;

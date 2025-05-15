@@ -1674,27 +1674,27 @@ void TWrite::write(const HammerOnPullOffText* item, XmlWriter& xml, WriteContext
 static void writeHarmonyInfo(const HarmonyInfo* item, const Harmony* h, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement("harmonyInfo");
-    if (item->m_rootTpc != Tpc::TPC_INVALID || item->m_bassTpc != Tpc::TPC_INVALID) {
-        int rRootTpc = item->m_rootTpc;
-        int rBassTpc = item->m_bassTpc;
+    if (item->rootTpc() != Tpc::TPC_INVALID || item->bassTpc() != Tpc::TPC_INVALID) {
+        int rRootTpc = item->rootTpc();
+        int rBassTpc = item->bassTpc();
         if (h->staff()) {
             // parent can be a fret diagram
             const Segment* segment = toSegment(h->findAncestor(ElementType::SEGMENT));
             Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
             const Interval& interval = h->staff()->transpose(tick);
             if (ctx.clipboardmode() && !h->score()->style().styleB(Sid::concertPitch) && interval.chromatic) {
-                rRootTpc = transposeTpc(item->m_rootTpc, interval, true);
-                rBassTpc = transposeTpc(item->m_bassTpc, interval, true);
+                rRootTpc = transposeTpc(item->rootTpc(), interval, true);
+                rBassTpc = transposeTpc(item->bassTpc(), interval, true);
             }
         }
 
-        if (item->m_id > 0) {
-            xml.tag("extension", item->m_id);
+        if (item->id() > 0) {
+            xml.tag("extension", item->id());
         }
         // parser uses leading "=" as a hidden specifier for minor
         // this may or may not currently be incorporated into _textName
-        String writeName = item->m_textName;
-        if (item->m_parsedChord && item->m_parsedChord->name().startsWith(u'=') && !writeName.startsWith(u'=')) {
+        String writeName = item->textName();
+        if (item->parsedChord() && item->parsedChord()->name().startsWith(u'=') && !writeName.startsWith(u'=')) {
             writeName = u"=" + writeName;
         }
         if (!writeName.isEmpty()) {
@@ -1707,7 +1707,7 @@ static void writeHarmonyInfo(const HarmonyInfo* item, const Harmony* h, XmlWrite
             xml.tag("bass", rBassTpc);
         }
     } else {
-        xml.tag("name", item->m_textName);
+        xml.tag("name", item->textName());
     }
 
     xml.endElement();

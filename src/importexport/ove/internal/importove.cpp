@@ -2116,20 +2116,20 @@ void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int tr
 
         // TODO - does this need to be key-aware?
         harmony->setTrack(track);
-        info->m_rootTpc = step2tpc(harmonyPtr->getRoot(), AccidentalVal(harmonyPtr->getAlterRoot()));
+        info->setRootTpc(step2tpc(harmonyPtr->getRoot(), AccidentalVal(harmonyPtr->getAlterRoot())));
         if (harmonyPtr->getBass() != ovebase::INVALID_NOTE
             && (harmonyPtr->getBass() != harmonyPtr->getRoot()
                 || (harmonyPtr->getBass() == harmonyPtr->getRoot()
                     && harmonyPtr->getAlterBass() != harmonyPtr->getAlterRoot()))) {
-            info->m_bassTpc = step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass()));
+            info->setBassTpc(step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass())));
         }
         const ChordDescription* d = harmonyFromXml(harmony, harmonyPtr->getHarmonyType());
         if (d != 0) {
-            info->m_id = d->id;
-            info->m_textName = d->names.front();
+            info->setId(d->id);
+            info->setTextName(d->names.front());
         } else {
-            info->m_id = -1;
-            info->m_textName = harmonyPtr->getHarmonyType();
+            info->setId(-1);
+            info->setTextName(harmonyPtr->getHarmonyType());
         }
 
         harmony->addChord(info);

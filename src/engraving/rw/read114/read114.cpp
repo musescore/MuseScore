@@ -1392,21 +1392,21 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
         const AsciiStringView tag(e.name());
         if (tag == "base") {
             if (ctx.mscVersion() >= 106) {
-                info->m_bassTpc = e.readInt();
+                info->setBassTpc(e.readInt());
             } else {
-                info->m_bassTpc = table[e.readInt() - 1];
+                info->setBassTpc(table[e.readInt() - 1]);
             }
         } else if (tag == "baseCase") {
             h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
-            info->m_id = e.readInt();
+            info->setId(e.readInt());
         } else if (tag == "name") {
-            info->m_textName = e.readText();
+            info->setTextName(e.readText());
         } else if (tag == "root") {
             if (ctx.mscVersion() >= 106) {
-                info->m_rootTpc = e.readInt();
+                info->setRootTpc(e.readInt());
             } else {
-                info->m_rootTpc = table[e.readInt() - 1];
+                info->setRootTpc(table[e.readInt() - 1]);
             }
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));

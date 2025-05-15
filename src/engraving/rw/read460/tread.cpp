@@ -3140,13 +3140,13 @@ static void readHarmonyInfo(HarmonyInfo* info, XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "bass") {
-            info->m_bassTpc = e.readInt();
+            info->setBassTpc(e.readInt());
         } else if (tag == "extension") {
-            info->m_id = e.readInt();
+            info->setId(e.readInt());
         } else if (tag == "name") {
-            info->m_textName = e.readText();
+            info->setTextName(e.readText());
         } else if (tag == "root") {
-            info->m_rootTpc = e.readInt();
+            info->setRootTpc(e.readInt());
         } else {
             e.unknown();
         }

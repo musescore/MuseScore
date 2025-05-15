@@ -697,32 +697,32 @@ const ChordDescription* harmonyFromXml(engraving::HarmonyInfo* info, engraving::
                                        const std::list<engraving::HDegree>& dl)
 {
     ParsedChord* pc = new ParsedChord;
-    info->m_textName = pc->fromXml(kind, kindText, symbols, parens, dl, score->chordList());
-    info->m_parsedChord = pc;
-    const ChordDescription* cd = info->getDescription(info->m_textName, pc);
+    info->setTextName(pc->fromXml(kind, kindText, symbols, parens, dl, score->chordList()));
+    info->setParsedChord(pc);
+    const ChordDescription* cd = info->getDescription(info->textName(), pc);
     return cd;
 }
 
 String harmonyXmlFunction(const engraving::HarmonyInfo* info, const engraving::Harmony* h, engraving::Key key)
 {
-    if (!tpcIsValid(info->m_rootTpc)) {
+    if (!tpcIsValid(info->rootTpc())) {
         return String();
     }
     if (key == Key::INVALID) {
         const Staff* st = h->staff();
         key = st ? st->key(h->tick()) : Key::INVALID;
     }
-    return tpc2Function(info->m_rootTpc, key);
+    return tpc2Function(info->rootTpc(), key);
 }
 
 String harmonyXmlFunction(const engraving::HarmonyInfo* info, const engraving::Harmony* h)
 {
-    if (!tpcIsValid(info->m_rootTpc)) {
+    if (!tpcIsValid(info->rootTpc())) {
         return String();
     }
     const Staff* st = h->staff();
     Key key = st ? st->key(h->tick()) : Key::INVALID;
-    return tpc2Function(info->m_rootTpc, key);
+    return tpc2Function(info->rootTpc(), key);
 }
 
 void setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const muse::String& s, engraving::Key key)
@@ -731,6 +731,6 @@ void setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const mu
         const Staff* st = h->staff();
         key = st ? st->key(h->tick()) : Key::INVALID;
     }
-    info->m_rootTpc = function2Tpc(s, key);
+    info->setRootTpc(function2Tpc(s, key));
 }
 }

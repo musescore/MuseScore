@@ -2738,15 +2738,15 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "base") {
-            info->m_bassTpc = e.readInt();
+            info->setBassTpc(e.readInt());
         } else if (tag == "baseCase") {
             h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
-            info->m_id = e.readInt();
+            info->setId(e.readInt());
         } else if (tag == "name") {
-            info->m_textName = e.readText();
+            info->setTextName(e.readText());
         } else if (tag == "root") {
-            info->m_rootTpc = e.readInt();
+            info->setRootTpc(e.readInt());
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "function") {
