@@ -228,12 +228,11 @@ private:
     NoteCaseType rootRenderCase(HarmonyInfo* info) const;
     NoteCaseType bassRenderCase() const;
 
-    void renderSingleHarmony(HarmonyInfo* info, double& x, double& y);
+    void renderSingleHarmony(HarmonyInfo* info, PointF& pos);
     void renderRomanNumeral();
-    void render(const String&, double&, double&);
-    void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
-                NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO,
-                double noteMag = 1.0);
+    void render(const String&, PointF& pos);
+    void render(const std::list<RenderAction>& renderList, PointF& pos, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD,
+                NoteCaseType noteCase = NoteCaseType::AUTO, double noteMag = 1.0);
 
     Sid getPropertyStyle(Pid) const override;
 
