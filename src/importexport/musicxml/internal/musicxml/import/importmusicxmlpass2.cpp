@@ -4705,9 +4705,9 @@ void MusicXmlParserDirection::handleNmiCmi(Measure* measure, const Fraction& tic
     }
     Harmony* ha = new Harmony(m_score->dummy()->segment());
     HarmonyInfo* info = new HarmonyInfo(m_score);
-    info->m_rootTpc = Tpc::TPC_INVALID;
-    info->m_id = -1;
-    info->m_textName = u"N.C.";
+    info->setRootTpc(Tpc::TPC_INVALID);
+    info->setId(-1);
+    info->setTextName(u"N.C.");
     ha->setTrack(m_track);
     ha->addChord(info);
     MusicXmlDelayedDirectionElement* delayedDirection = new MusicXmlDelayedDirectionElement(totalY(), ha, m_track, u"above", measure, tick);
@@ -7683,20 +7683,20 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
                 }
             }
             if (invalidRoot) {
-                info->m_rootTpc = Tpc::TPC_INVALID;
+                info->setRootTpc(Tpc::TPC_INVALID);
             } else {
-                info->m_rootTpc = step2tpc(step, AccidentalVal(alter));
+                info->setRootTpc(step2tpc(step, AccidentalVal(alter)));
             }
         } else if (m_e.name() == "function") {
             // deprecated in MusicXML 4.0
             // attributes: print-style
-            info->m_rootTpc = Tpc::TPC_INVALID;
-            info->m_bassTpc = Tpc::TPC_INVALID;
+            info->setRootTpc(Tpc::TPC_INVALID);
+            info->setBassTpc(Tpc::TPC_INVALID);
             functionText = m_e.readText();
             ha->setHarmonyType(HarmonyType::ROMAN);
         } else if (m_e.name() == "numeral") {
-            info->m_rootTpc = Tpc::TPC_INVALID;
-            info->m_bassTpc = Tpc::TPC_INVALID;
+            info->setRootTpc(Tpc::TPC_INVALID);
+            info->setBassTpc(Tpc::TPC_INVALID);
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "numeral-root") {
                     functionText = m_e.attribute("text");
@@ -7732,7 +7732,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
             parens = m_e.attribute("parentheses-degrees");
             kind = m_e.readText();
             if (kind == "none") {
-                info->m_rootTpc = Tpc::TPC_INVALID;
+                info->setRootTpc(Tpc::TPC_INVALID);
             }
         } else if (m_e.name() == "inversion") {
             const int inversion = m_e.readText().toInt();
@@ -7760,7 +7760,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
                     skipLogCurrElem();
                 }
             }
-            info->m_bassTpc = step2tpc(step, AccidentalVal(alter));
+            info->setBassTpc(step2tpc(step, AccidentalVal(alter)));
         } else if (m_e.name() == "degree") {
             int degreeValue = 0;
             int degreeAlter = 0;
@@ -7812,16 +7812,16 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     }
 
     const ChordDescription* d = nullptr;
-    if (info->m_rootTpc != Tpc::TPC_INVALID || ha->harmonyType() == HarmonyType::NASHVILLE) {
+    if (info->rootTpc() != Tpc::TPC_INVALID || ha->harmonyType() == HarmonyType::NASHVILLE) {
         d = harmonyFromXml(info, m_score, kind, kindText, symbols, parens, degreeList);
     }
     if (d) {
-        info->m_id = d->id;
-        info->m_textName = d->names.front();
+        info->setId(d->id);
+        info->setTextName(d->names.front());
     } else {
-        info->m_id = -1;
+        info->setId(-1);
         String textName = functionText + kindText + inversionText;
-        info->m_textName = textName;
+        info->setTextName(textName);
     }
     ha->render();
 

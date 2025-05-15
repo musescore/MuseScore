@@ -1761,8 +1761,8 @@ void TransposeHarmony::flip(EditData*)
     m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
 
     for (HarmonyInfo* info : m_harmony->chords()) {
-        info->m_rootTpc = transposeTpc(info->m_rootTpc, m_interval, m_useDoubleSharpsFlats);
-        info->m_bassTpc = transposeTpc(info->m_bassTpc, m_interval, m_useDoubleSharpsFlats);
+        info->setRootTpc(transposeTpc(info->rootTpc(), m_interval, m_useDoubleSharpsFlats));
+        info->setBassTpc(transposeTpc(info->bassTpc(), m_interval, m_useDoubleSharpsFlats));
     }
 
     m_harmony->setXmlText(m_harmony->harmonyName());
@@ -1787,8 +1787,8 @@ void TransposeHarmonyDiatonic::flip(EditData*)
     Key key = !m_harmony->staff() ? Key::C : m_harmony->staff()->key(tick);
 
     for (HarmonyInfo* info : m_harmony->chords()) {
-        info->m_rootTpc = transposeTpcDiatonicByKey(info->m_rootTpc, m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats);
-        info->m_bassTpc = transposeTpcDiatonicByKey(info->m_bassTpc, m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats);
+        info->setRootTpc(transposeTpcDiatonicByKey(info->rootTpc(), m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats));
+        info->setBassTpc(transposeTpcDiatonicByKey(info->bassTpc(), m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats));
     }
 
     m_harmony->setXmlText(m_harmony->harmonyName());

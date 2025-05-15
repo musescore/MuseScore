@@ -30,7 +30,7 @@
 namespace mu::engraving {
 class Dynamic;
 class Excerpt;
-struct HarmonyInfo;
+class HarmonyInfo;
 class MasterScore;
 class Score;
 enum class DynamicType : unsigned char;
