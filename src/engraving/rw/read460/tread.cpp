@@ -3134,18 +3134,18 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
     h->styleChanged();
 }
 
-static void readHarmonyInfo(HarmonyInfo* info, Harmony* h, XmlReader& e)
+static void readHarmonyInfo(HarmonyInfo* info, XmlReader& e)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "bass") {
-            info->m_bassTpc = e.readInt();
+            info->setBassTpc(e.readInt());
         } else if (tag == "extension") {
-            info->m_id = e.readInt();
+            info->setId(e.readInt());
         } else if (tag == "name") {
-            info->m_textName = e.readText();
+            info->setTextName(e.readText());
         } else if (tag == "root") {
-            info->m_rootTpc = e.readInt();
+            info->setRootTpc(e.readInt());
         } else {
             e.unknown();
         }
@@ -3168,7 +3168,7 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "harmonyInfo") {
             HarmonyInfo* info = new HarmonyInfo(ctx.score());
-            readHarmonyInfo(info, h, e);
+            readHarmonyInfo(info, e);
             h->addChord(info);
         } else if (tag == "degree") {
             int degreeValue = 0;
