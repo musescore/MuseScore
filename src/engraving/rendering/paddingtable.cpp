@@ -127,7 +127,7 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::CLEF][ElementType::NOTE] = style.styleMM(Sid::clefKeyRightMargin);
     table[ElementType::CLEF][ElementType::LEDGER_LINE]
         = std::max(table[ElementType::CLEF][ElementType::NOTE] - ledgerLength / 2, ledgerPad);
-    table[ElementType::CLEF][ElementType::ACCIDENTAL] = 0.75 * spatium;
+    table[ElementType::CLEF][ElementType::ACCIDENTAL] = 0.6 * spatium;
     table[ElementType::CLEF][ElementType::STEM] = 0.75 * spatium;
     table[ElementType::CLEF][ElementType::REST] = table[ElementType::CLEF][ElementType::NOTE];
     table[ElementType::CLEF][ElementType::CLEF] = 0.75 * spatium;
