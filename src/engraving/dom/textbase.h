@@ -305,11 +305,10 @@ public:
 
     Text& operator=(const Text&) = delete;
 
-    virtual void drawEditMode(muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
-    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
-
     Align align() const { return m_align; }
     void setAlign(Align a) { m_align = a; }
+
+    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
 
     static String plainToXmlText(const String& s) { return s.toXmlEscaped(); }
     void setPlainText(const String& t) { setXmlText(plainToXmlText(t)); }
@@ -428,6 +427,9 @@ public:
     static const String UNDEFINED_FONT_FAMILY;
     static const double UNDEFINED_FONT_SIZE;
 
+    static bool isSorted(size_t r1, size_t c1, size_t r2, size_t c2);
+    static void sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2);
+
     bool bold() const { return fontStyle() & FontStyle::Bold; }
     bool italic() const { return fontStyle() & FontStyle::Italic; }
     bool underline() const { return fontStyle() & FontStyle::Underline; }
@@ -525,8 +527,6 @@ protected:
     bool m_layoutToParentWidth = false;
 
 private:
-
-    void drawSelection(muse::draw::Painter*, const RectF&) const;
     void insert(TextCursor*, char32_t code, LayoutData* ldata) const;
     String genText(const LayoutData* ldata) const;
 
@@ -536,6 +536,8 @@ private:
 
     static String getHtmlStartTag(double, double&, const String&, String&, FontStyle, VerticalAlignment);
     static String getHtmlEndTag(FontStyle, VerticalAlignment);
+
+    static void swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2);
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;

@@ -271,8 +271,6 @@ public:
 
     virtual int subtype() const { return -1; }                    // for select gui
 
-    void drawAt(muse::draw::Painter* p, const PointF& pt) const;
-
 //       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
     virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> /*isDragged*/)
     {
@@ -358,7 +356,7 @@ public:
 
     virtual void setColor(const Color& c);
     virtual Color color() const;
-    Color curColor() const;
+    virtual Color curColor() const;
     Color curColor(bool isVisible) const;
     Color curColor(bool isVisible, Color normalColor) const;
 
@@ -485,7 +483,6 @@ public:
     virtual void triggerLayout() const;
     virtual void triggerLayoutAll() const;
     virtual void triggerLayoutToEnd() const;
-    virtual void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling);
 
     double styleP(Sid idx) const;
 
@@ -809,12 +806,10 @@ public:
     Compound(const ElementType& type, Score*);
     Compound(const Compound&);
 
-    virtual void draw(muse::draw::Painter*) const;
     virtual void addElement(EngravingItem*, double x, double y);
     void clear();
     virtual void setSelected(bool f);
     virtual void setVisible(bool);
-    virtual void layout();
 
 protected:
     const std::list<EngravingItem*>& getElements() const { return m_elements; }

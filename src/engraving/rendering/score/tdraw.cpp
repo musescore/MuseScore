@@ -1891,11 +1891,6 @@ void TDraw::draw(const Harmony* item, Painter* painter)
 
     const TextBase::LayoutData* ldata = item->ldata();
 
-    if (item->isDrawEditMode()) {
-        drawTextBase(item, painter);
-        return;
-    }
-
     if (item->textList().empty()) {
         drawTextBase(item, painter);
         return;

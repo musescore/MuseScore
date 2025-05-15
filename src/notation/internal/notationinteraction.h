@@ -28,6 +28,7 @@
 #include "async/asyncable.h"
 #include "iinteractive.h"
 #include "engraving/rendering/isinglerenderer.h"
+#include "engraving/rendering/ieditmoderenderer.h"
 
 #include "../inotationinteraction.h"
 #include "../inotationconfiguration.h"
@@ -55,6 +56,7 @@ class NotationInteraction : public INotationInteraction, public muse::Injectable
     muse::Inject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
+    muse::Inject<engraving::rendering::IEditModeRenderer> editModeRenderer = { this };
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);

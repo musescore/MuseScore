@@ -3263,7 +3263,7 @@ void NotationInteraction::drawTextEditMode(muse::draw::Painter* painter)
         return;
     }
 
-    m_editData.element->drawEditMode(painter, m_editData, currentScaling(painter));
+    editModeRenderer()->drawItem(m_editData.element, painter, m_editData, currentScaling(painter));
 }
 
 void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
@@ -3332,7 +3332,7 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
     }
 
     editedElement->updateGrips(m_editData);
-    editedElement->drawEditMode(painter, m_editData, scaling);
+    editModeRenderer()->drawItem(editedElement, painter, m_editData, scaling);
 }
 
 void NotationInteraction::drawLasso(muse::draw::Painter* painter)
