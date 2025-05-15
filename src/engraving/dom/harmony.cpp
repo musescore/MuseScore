@@ -1093,20 +1093,20 @@ Color Harmony::curColor() const
 
 void Harmony::renderRomanNumeral()
 {
-    double x = 0.0, y = 0.0;
+    PointF pos(0.0, 0.0);
     if (m_chords.empty()) {
         return;
     }
     HarmonyInfo* info = m_chords.front();
 
     if (m_leftParen) {
-        render(u"( ", x, y);
+        render(u"( ", pos);
     }
 
-    render(info->textName(), x, y);
+    render(info->textName(), pos);
 
     if (m_rightParen) {
-        render(u" )", x, y);
+        render(u" )", pos);
     }
 }
 
@@ -1164,23 +1164,23 @@ void TextSegment::set(const String& s, const Font& f, double _x, double _y, Poin
 //   render
 //---------------------------------------------------------
 
-void Harmony::render(const String& s, double& x, double& y)
+void Harmony::render(const String& s, PointF& pos)
 {
     if (s.isEmpty()) {
         return;
     }
 
     Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList.front() : font();
-    TextSegment* ts = new TextSegment(s, f, x, y);
+    TextSegment* ts = new TextSegment(s, f, pos.x(), pos.y());
     m_textList.push_back(ts);
-    x += ts->width();
+    pos.rx() += ts->width();
 }
 
 //---------------------------------------------------------
 //   render
 //---------------------------------------------------------
 
-void Harmony::render(const std::list<RenderAction>& renderList, double& x, double& y, int tpc, NoteSpellingType noteSpelling,
+void Harmony::render(const std::list<RenderAction>& renderList, PointF& pos, int tpc, NoteSpellingType noteSpelling,
                      NoteCaseType noteCase, double noteMag)
 {
     ChordList* chordList = score()->chordList();
@@ -1197,25 +1197,24 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
             String text = cs.isValid() ? cs.value : a.text;
             muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
 
-            TextSegment* ts = new TextSegment(text, font, x, y);
+            TextSegment* ts = new TextSegment(text, font, pos.x(), pos.y());
             if (m_harmonyType == HarmonyType::NASHVILLE) {
                 double nmag = chordList->nominalMag();
                 ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * nmag);
             }
             m_textList.push_back(ts);
-            x += ts->width();
+            pos.rx() += ts->width();
         } else if (a.type == RenderAction::RenderActionType::MOVE) {
             FontMetrics fm = FontMetrics(font());
-            x += a.movex * fm.height();
-            y += a.movey * fm.height();
+            pos.rx() += a.movex * fm.height();
+            pos.ry() += a.movey * fm.height();
         } else if (a.type == RenderAction::RenderActionType::PUSH) {
-            stack.push(PointF(x, y));
+            stack.push(pos);
         } else if (a.type == RenderAction::RenderActionType::POP) {
             if (!stack.empty()) {
                 PointF pt = stack.top();
                 stack.pop();
-                x = pt.x();
-                y = pt.y();
+                pos = pt;
             } else {
                 LOGD("RenderAction::RenderActionType::POP: stack empty");
             }
@@ -1237,9 +1236,9 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
             muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
             font.setPointSizeF(font.pointSizeF() * noteMag);
 
-            TextSegment* ts = new TextSegment(text, font, x, y);
+            TextSegment* ts = new TextSegment(text, font, pos.x(), pos.y());
             m_textList.push_back(ts);
-            x += ts->width();
+            pos.rx() += ts->width();
         } else if (a.type == RenderAction::RenderActionType::ACCIDENTAL) {
             String c;
             String acc;
@@ -1264,9 +1263,9 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
                 muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
                 font.setPointSizeF(font.pointSizeF() * noteMag);
 
-                TextSegment* ts = new TextSegment(text, font, x, y);
+                TextSegment* ts = new TextSegment(text, font, pos.x(), pos.y());
                 m_textList.push_back(ts);
-                x += ts->width();
+                pos.rx() += ts->width();
             }
         } else {
             LOGD("unknown render action %d", static_cast<int>(a.type));
@@ -1274,7 +1273,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
     }
 }
 
-void Harmony::renderSingleHarmony(HarmonyInfo* info, double& x, double& y)
+void Harmony::renderSingleHarmony(HarmonyInfo* info, PointF& pos)
 {
     int capo = style().styleI(Sid::capoPosition);
 
@@ -1284,38 +1283,38 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, double& x, double& y)
     NoteCaseType bassCase = bassRenderCase();
 
     if (m_leftParen) {
-        render(u"( ", x, y);
+        render(u"( ", pos);
     }
 
     NoteSpellingType spelling = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
 
     if (m_harmonyType == HarmonyType::STANDARD && tpcIsValid(info->rootTpc())) {
         // render root
-        render(chordList->renderListRoot, x, y, info->rootTpc(), spelling, rootCase);
+        render(chordList->renderListRoot, pos, info->rootTpc(), spelling, rootCase);
         // render extension
         const ChordDescription* cd = info->getDescription();
         if (cd) {
-            render(cd->renderList, x, y, 0);
+            render(cd->renderList, pos, 0);
         }
     } else if (m_harmonyType == HarmonyType::NASHVILLE && tpcIsValid(info->rootTpc())) {
         // render function
-        render(chordList->renderListFunction, x, y, info->rootTpc(), spelling, bassCase);
+        render(chordList->renderListFunction, pos, info->rootTpc(), spelling, bassCase);
         double adjust = chordList->nominalAdjust();
-        y += adjust * magS() * spatium() * .2;
+        pos.ry() += adjust * magS() * spatium() * .2;
         // render extension
         const ChordDescription* cd = info->getDescription();
         if (cd) {
-            render(cd->renderList, x, y, 0);
+            render(cd->renderList, pos, 0);
         }
     } else {
-        render(info->textName(), x, y);
+        render(info->textName(), pos);
     }
 
     // render bass
     if (tpcIsValid(info->bassTpc())) {
         std::list<RenderAction>& bassNoteChordList
             = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
-        render(bassNoteChordList, x, y, info->bassTpc(), spelling, bassCase, style().styleD(Sid::chordBassNoteScale));
+        render(bassNoteChordList, pos, info->bassTpc(), spelling, bassCase, style().styleD(Sid::chordBassNoteScale));
     }
 
     if (tpcIsValid(info->rootTpc()) && capo > 0 && capo < 12) {
@@ -1343,25 +1342,25 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, double& x, double& y)
             }
         }
 
-        render(u"(", x, y);
-        render(chordList->renderListRoot, x, y, capoRootTpc, spelling, rootCase);
+        render(u"(", pos);
+        render(chordList->renderListRoot, pos, capoRootTpc, spelling, rootCase);
 
         // render extension
         const ChordDescription* cd = info->getDescription();
         if (cd) {
-            render(cd->renderList, x, y, 0);
+            render(cd->renderList, pos, 0);
         }
 
         if (tpcIsValid(capoBassTpc)) {
             std::list<RenderAction>& bassNoteChordList
                 = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
-            render(bassNoteChordList, x, y, capoBassTpc, spelling, bassCase, style().styleD(Sid::chordBassNoteScale));
+            render(bassNoteChordList, pos, capoBassTpc, spelling, bassCase, style().styleD(Sid::chordBassNoteScale));
         }
-        render(u")", x, y);
+        render(u")", pos);
     }
 
     if (m_rightParen) {
-        render(u" )", x, y);
+        render(u" )", pos);
     }
 }
 
@@ -1400,30 +1399,30 @@ void Harmony::render()
     }
 
     mutldata()->polychordDividerLines.reset();
-    double x = 0.0, y = 0.0;
+    PointF pos(0.0, 0.0);
 
     for (size_t i = m_chords.size(); i > 0; i--) {
         HarmonyInfo* harmony = m_chords.at(i - 1);
-        renderSingleHarmony(harmony, x, y);
+        renderSingleHarmony(harmony, pos);
 
         if (m_chords.size() == 1 || i == 1) {
             break;
         }
 
-        x = 0;
+        pos.rx() = 0;
         for (const TextSegment* ts : m_textList) {
             double top = ts->pos().y() + ts->boundingRect().top();
-            if (top < y) {
-                y = top;
+            if (top < pos.y()) {
+                pos.ry() = top;
             }
         }
 
-        double lineY = y - style().styleS(Sid::polychordDividerSpacing).toMM(spatium());
+        double lineY = pos.y() - style().styleS(Sid::polychordDividerSpacing).toMM(spatium());
         LineF line = LineF(PointF(0.0, lineY), PointF(0.0, lineY));
         mutldata()->polychordDividerLines.mut_value().push_back(line);
 
-        y -= style().styleS(Sid::polychordDividerSpacing).toMM(spatium()) * 2.0;
-        y -= style().styleS(Sid::polychordDividerThickness).toMM(spatium());
+        pos.ry() -= style().styleS(Sid::polychordDividerSpacing).toMM(spatium()) * 2.0;
+        pos.ry() -= style().styleS(Sid::polychordDividerThickness).toMM(spatium());
     }
 }
 
