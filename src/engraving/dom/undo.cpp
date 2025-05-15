@@ -2075,7 +2075,8 @@ static void changeChordStyle(Score* score)
     double eadjust = style.styleD(Sid::chordExtensionAdjust);
     double mmag = style.styleD(Sid::chordModifierMag);
     double madjust = style.styleD(Sid::chordModifierAdjust);
-    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
+    bool mstackModifiers = style.styleB(Sid::verticallyStackModifiers);
+    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust, mstackModifiers);
     if (score->style().styleB(Sid::chordsXmlFile)) {
         score->chordList()->read(score->configuration()->appDataPath(), u"chords.xml");
     }
@@ -2130,7 +2131,8 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
     case Sid::chordExtensionAdjust:
     case Sid::chordModifierMag:
     case Sid::chordModifierAdjust:
-    case Sid::chordDescriptionFile: {
+    case Sid::chordDescriptionFile:
+    case Sid::verticallyStackModifiers: {
         changeChordStyle(score);
     }
     break;

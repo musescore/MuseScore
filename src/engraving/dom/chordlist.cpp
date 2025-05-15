@@ -1187,8 +1187,9 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
 
     // construct handle
     if (!m_modifierList.empty()) {
-        std::sort(m_modifierList.begin(), m_modifierList.end());
-        m_modifiers = u"<" + m_modifierList.join(u"><") + u">";
+        StringList sortedModifiers = m_modifierList;
+        std::sort(sortedModifiers.begin(), sortedModifiers.end());
+        m_modifiers = u"<" + sortedModifiers.join(u"><") + u">";
     }
     m_handle = u"<" + m_quality + u"><" + m_extension + u">" + m_modifiers;
 
@@ -1452,19 +1453,22 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
 //   position
 //---------------------------------------------------------
 
-double ChordList::position(const StringList& names, ChordTokenClass ctc) const
+double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx) const
 {
     String name = names.empty() ? u"" : names.front();
     switch (ctc) {
     case ChordTokenClass::EXTENSION:
         return m_eadjust;
     case ChordTokenClass::MODIFIER: {
+        double yAdj = 0.0;
+        if (m_stackModifiers) {
+            yAdj += modifierIdx * -m_mmag;
+        }
         Char c = name.isEmpty() ? name.at(0) : u'0';
         if (c.isDigit() || c.isPunct()) {
-            return m_madjust;
-        } else {
-            return 0.0;
+            yAdj += m_madjust;
         }
+        return yAdj;
     }
     default:
         if (name == "o" || name == "0") {
@@ -1486,6 +1490,10 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     if (!m_renderList.empty()) {
         m_renderList.clear();
     }
+
+    size_t modIdx = 0;
+    const size_t finalModIdx = m_modifierList.size() - 1;
+
     bool adjust = cl ? cl->autoAdjust() : false;
     for (const ChordToken& tok : m_tokenList) {
         String n = tok.names.front();
@@ -1518,15 +1526,23 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         }
         // check for adjustments
         // stop adjusting when first non-adjusted modifier found
-        double p = adjust ? cl->position(tok.names, ctc) : 0.0;
-        if (tok.tokenClass == ChordTokenClass::MODIFIER && RealIsNull(p)) {
+        double yAdjust = adjust ? cl->position(tok.names, ctc, finalModIdx - modIdx) : 0.0;
+        if (tok.tokenClass == ChordTokenClass::MODIFIER && RealIsNull(yAdjust)) {
             adjust = false;
         }
+
+        // Align vertically stacked modifier's x position by pushing it at the start of every modifier and popping at the end
+        if (tok.tokenClass == ChordTokenClass::MODIFIER && m_modifierList.size() > 1 && cl->stackModifiers()
+            && m_modifierList.at(modIdx).startsWith(n)) {
+            RenderAction pushModX = RenderAction(RenderAction::RenderActionType::PUSH);
+            m_renderList.push_back(pushModX);
+        }
+
         // build render list
-        if (!RealIsNull(p)) {
+        if (!RealIsNull(yAdjust)) {
             RenderAction m1 = RenderAction(RenderAction::RenderActionType::MOVE);
             m1.movex = 0.0;
-            m1.movey = p;
+            m1.movey = yAdjust;
             m_renderList.push_back(m1);
         }
         if (found) {
@@ -1537,13 +1553,25 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             a.text = tok.names.front();
             m_renderList.push_back(a);
         }
-        if (!RealIsNull(p)) {
+        if (!RealIsNull(yAdjust)) {
             RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
             m2.movex = 0.0;
-            m2.movey = -p;
+            m2.movey = -yAdjust;
             m_renderList.push_back(m2);
         }
+
+        if (tok.tokenClass == ChordTokenClass::MODIFIER && !n.empty() && cl->stackModifiers()) {
+            if (m_modifierList.at(modIdx).endsWith(n) && modIdx != finalModIdx) {
+                modIdx++;
+
+                // Restore x position
+                RenderAction popModX = RenderAction(RenderAction::RenderActionType::POP);
+                popModX.popy = false;
+                m_renderList.push_back(popModX);
+            }
+        }
     }
+
     return m_renderList;
 }
 
@@ -1697,8 +1725,9 @@ int ChordList::privateID = -1000;
 //   configureAutoAdjust
 //---------------------------------------------------------
 
-void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust)
+void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust, bool stackModifiers)
 {
+    m_stackModifiers = stackModifiers;
     m_emag = emag;
     m_eadjust = eadjust;
     m_mmag = mmag;
@@ -1997,7 +2026,8 @@ void ChordList::checkChordList(const path_t& appDataPath, const MStyle& style)
         double eadjust = style.value(Sid::chordExtensionAdjust).toReal();
         double mmag = style.value(Sid::chordModifierMag).toReal();
         double madjust = style.value(Sid::chordModifierAdjust).toReal();
-        configureAutoAdjust(emag, eadjust, mmag, madjust);
+        bool stackModifiers = style.value(Sid::verticallyStackModifiers).toBool();
+        configureAutoAdjust(emag, eadjust, mmag, madjust, stackModifiers);
 
         if (style.value(Sid::chordsXmlFile).toBool()) {
             read(appDataPath, u"chords.xml");
@@ -2018,6 +2048,6 @@ void RenderAction::print() const
         "SET", "MOVE", "PUSH", "POP",
         "NOTE", "ACCIDENTAL"
     };
-    LOGD("%10s <%s> %f %f", names[int(type)], muPrintable(text), movex, movey);
+    LOGD("%10s <%s> %f %f, pop x: %i pop y: %i", names[int(type)], muPrintable(text), movex, movey, popx, popy);
 }
 }
