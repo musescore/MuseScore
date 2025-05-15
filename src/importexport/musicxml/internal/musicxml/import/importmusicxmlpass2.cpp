@@ -2718,10 +2718,12 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
             attributes(partId, measure, time + mTime);
         } else if (m_e.name() == "direction") {
             MusicXmlParserDirection dir(m_e, m_score, m_pass1, *this, m_logger);
-            dir.setBpm(tempo);
-            dir.direction(partId, measure, time + mTime, m_spanners, delayedDirections, inferredFingerings, delayedHarmony, measureHasCoda,
-                          m_segnos);
-            tempo = 0.0;
+            if (m_pass1.exporterSoftware() == MusicXmlExporterSoftware::DORICO) {
+                dir.setBpm(tempo);
+                tempo = 0.0;
+            }
+            dir.direction(partId, measure, time + mTime, m_spanners, delayedDirections,
+                          inferredFingerings, delayedHarmony, measureHasCoda, m_segnos);
         } else if (m_e.name() == "figured-bass") {
             FiguredBass* fb = figuredBass();
             if (fb) {
