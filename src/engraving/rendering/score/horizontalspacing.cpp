@@ -835,6 +835,47 @@ void HorizontalSpacing::applyCrossBeamSpacingCorrection(Segment* thisSeg, Segmen
     }
 }
 
+double HorizontalSpacing::minStemDistOnNonAdjacentCross(const Segment* thisSeg, const Segment* nextSeg)
+{
+    // Extreme edge-case of chords that are a) adjacent in a cross-staff beam but b) on non-adjacent segments
+    // (which causes them to escape the previous cross-staff spacing checks) c) stemmed up->down (see #27786)
+    double dist = -DBL_MAX;
+    for (EngravingItem* item : nextSeg->elist()) {
+        if (!item || !item->isChord()) {
+            continue;
+        }
+
+        Chord* chord = toChord(item);
+        if (!chord->stem() || chord->up() || !(chord->beam() && chord->beam()->cross())) {
+            continue;
+        }
+
+        Beam* beam = chord->beam();
+        std::vector<ChordRest*> beamElements = beam->elements();
+        Chord* prevChordOnBeam = nullptr;
+        for (size_t i = 0; i < beamElements.size(); ++i) {
+            if (beamElements[i] == chord) {
+                if (i > 0) {
+                    ChordRest* prevChordRest = beamElements[i - 1];
+                    prevChordOnBeam = prevChordRest->isChord() ? toChord(prevChordRest) : nullptr;
+                }
+                break;
+            }
+        }
+
+        if (!prevChordOnBeam || prevChordOnBeam->parent() != thisSeg || !prevChordOnBeam->up() || !prevChordOnBeam->stem()) {
+            continue;
+        }
+
+        double minStemDist = prevChordOnBeam->x() + prevChordOnBeam->stem()->x() - (chord->x() + chord->stem()->x());
+        minStemDist += chord->score()->paddingTable().at(ElementType::STEM).at(ElementType::STEM);
+
+        dist = std::max(dist, minStemDist);
+    }
+
+    return dist;
+}
+
 HorizontalSpacing::CrossBeamSpacing HorizontalSpacing::computeCrossBeamSpacing(Segment* thisSeg, Segment* nextSeg)
 {
     CrossBeamSpacing crossBeamType;
@@ -1312,6 +1353,7 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
     // These only occur when one segment is a ChordRest and the other isn't
     // Allocate space to ensure minimum length of partial ties
     if (f->isChordRestType() == ns->isChordRestType()) {
+        w = std::max(w, minStemDistOnNonAdjacentCross(f, ns));
         return w;
     }
 
