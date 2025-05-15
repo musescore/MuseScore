@@ -1146,6 +1146,7 @@ double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, 
         if (r2.isNull()) {
             continue;
         }
+
         const EngravingItem* item2 = r2.item();
         double by1 = r2.top();
         double by2 = r2.bottom();
@@ -1153,6 +1154,7 @@ double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, 
             if (r1.isNull()) {
                 continue;
             }
+
             const EngravingItem* item1 = r1.item();
 
             double ay1 = r1.top();
@@ -1167,11 +1169,31 @@ double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, 
                 padding = std::max(padding, absoluteMinPadding);
                 kerningType = computeKerning(item1, item2);
             }
-            if ((intersection && kerningType != KerningType::ALLOW_COLLISION)
+
+            if (kerningType == KerningType::ALLOW_COLLISION) {
+                continue;
+            }
+
+            if (kerningType == KerningType::NON_KERNING
+                || intersection
                 || (r1.width() == 0 || r2.width() == 0)  // Temporary hack: shapes of zero-width are assumed to collide with everyghin
-                || (!item1 && item2 && item2->isLyrics())  // Temporary hack: avoids collision with melisma line
-                || kerningType == KerningType::NON_KERNING) {
+                || (!item1 && item2 && item2->isLyrics())) {
                 dist = std::max(dist, r1.right() - r2.left() + padding);
+                continue;
+            }
+
+            switch (kerningType) {
+            case KerningType::KERN_UNTIL_LEFT_EDGE:
+                dist = std::max(dist, r1.left() - r2.left());
+                break;
+            case KerningType::KERN_UNTIL_CENTER:
+                dist = std::max(dist, r1.left() + 0.5 * r1.width() - r2.left());
+                break;
+            case KerningType::KERN_UNTIL_RIGHT_EDGE:
+                dist = std::max(dist, r1.right() - r2.left());
+                break;
+            default:
+                break;
             }
         }
     }

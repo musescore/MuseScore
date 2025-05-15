@@ -131,10 +131,11 @@ enum class KerningType : unsigned char
 {
     KERNING,
     NON_KERNING,
-    LIMITED_KERNING,
+    KERN_UNTIL_LEFT_EDGE,
+    KERN_UNTIL_CENTER,
+    KERN_UNTIL_RIGHT_EDGE,
     SAME_VOICE_LIMIT,
     ALLOW_COLLISION,
-    NOT_SET,
 };
 
 class EngravingItemList : public std::list<EngravingItem*>
