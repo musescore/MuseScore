@@ -14,6 +14,10 @@ on:
         description: 'Publish: on - publish'
         default: 'off'
         required: false
+      deploy:
+        description: 'Deploy: on - deploy'
+        default: 'off'
+        required: false
   workflow_call:
     inputs:
       build_mode:
@@ -23,6 +27,11 @@ on:
         required: true
       publish:
         description: 'Publish: on - publish'
+        default: 'off'
+        type: string
+        required: false
+      deploy:
+        description: 'Deploy: on - deploy'
         default: 'off'
         type: string
         required: false
@@ -60,6 +69,11 @@ jobs:
           fi
         fi
 
+        DO_DEPLOY='false'
+        if [ "${{ inputs.deploy }}" = "on" ]; then
+            DO_DEPLOY='true'
+        fi
+
         bash ./buildscripts/ci/tools/make_version_env.sh $BUILD_NUMBER
         VERSION=$(cat ./build.artifacts/env/build_version.env)
         GITHUB_ARTIFACT_NAME="MuseScore-${VERSION}"
@@ -70,6 +84,7 @@ jobs:
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
         echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "DO_DEPLOY=$DO_DEPLOY" | tee -a $GITHUB_ENV
         echo "VERSION=$VERSION" | tee -a $GITHUB_ENV
         echo "VERSION_MAJOR_MINOR=$VERSION_MAJOR_MINOR" | tee -a $GITHUB_ENV
         echo "GITHUB_ARTIFACT_NAME=$GITHUB_ARTIFACT_NAME" | tee -a $GITHUB_ENV
@@ -107,7 +122,7 @@ jobs:
         bash ./buildscripts/ci/backend/publish_to_registry.sh --token ${{ secrets.PACKAGES_PAT }}
 
     - name: Deploy to musescore.com
-      if: env.DO_PUBLISH == 'true'
+      if: env.DO_DEPLOY == 'true'
       run: |
         pip install jenkinsapi
         python3 ./buildscripts/ci/backend/deploy.py --mu_version ${{ env.VERSION_MAJOR_MINOR }} --api_token ${{ secrets.JENKINS_API_TOKEN }}

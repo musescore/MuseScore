@@ -60,6 +60,7 @@ jobs:
       platforms: ${{ inputs.platforms }}
       build_mode: ${{ inputs.release_type == 'stable' && 'stable' || 'testing' }}
       publish: ${{ inputs.create_tag && 'on' || 'off' }}
+      deploy_backend: 'on'
       sentry_project: ${{ (inputs.create_tag && inputs.release_type == 'stable') && 'mu4' || 'sandbox' }}
 
   update_learn_playlists:
