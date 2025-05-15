@@ -2634,8 +2634,9 @@ void Note::verticalDrag(EditData &ed)
 
       if (tab) {
             const StringData* strData = staff()->part()->instrument(_tick)->stringData();
+            const int pitchOffset = stf->pitchOffset(_tick);
             int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
-            int nFret   = strData->fret(_pitch, nString, staff(), _tick);
+            int nFret   = strData->fret(_pitch + pitchOffset, nString, staff(), _tick);
 
             if (nFret >= 0) {                    // no fret?
                   if (fret() != nFret || string() != nString) {
