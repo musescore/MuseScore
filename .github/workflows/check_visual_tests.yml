@@ -72,8 +72,8 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ${{ github.workspace }}/.ccache
-        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
-        restore-keys: ${{github.workflow}}-ccache-
+        key: ${{runner.os}}-${{runner.arch}}-tests-ccache-${{ env.CCACHE_TIMESTAMP }}
+        restore-keys: ${{runner.os}}-${{runner.arch}}-tests-ccache-
     - name: Setup ccache
       run: |
         sudo apt-get update && sudo apt-get install -y ccache
@@ -86,7 +86,7 @@ jobs:
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh
         echo "============== ccache ==============="
-        ccache -s
+        ccache -sv
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
@@ -110,8 +110,8 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ${{ github.workspace }}/.ccache
-        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
-        restore-keys: ${{github.workflow}}-ccache-
+        key: ${{runner.os}}-${{runner.arch}}-tests-ccache-${{ env.CCACHE_TIMESTAMP }}
+        restore-keys: ${{runner.os}}-${{runner.arch}}-tests-ccache-
     - name: Setup ccache
       run: |
         sudo apt-get update && sudo apt-get install -y ccache
@@ -124,7 +124,7 @@ jobs:
       run: |
         bash ./buildscripts/ci/vtests/build_and_pack.sh
         echo "============== ccache ==============="
-        ccache -s
+        ccache -sv
     - name: Upload
       uses: actions/upload-artifact@v4
       with:
