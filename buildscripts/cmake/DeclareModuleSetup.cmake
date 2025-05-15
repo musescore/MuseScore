@@ -89,7 +89,7 @@ function(target_precompile_headers_clang_ccache target)
     target_precompile_headers(${target} ${ARGN})
 
     # https://discourse.cmake.org/t/ccache-clang-and-fno-pch-timestamp/7253
-    if (CC_IS_CLANG AND CCACHE_PROGRAM)
+    if (CC_IS_CLANG AND COMPILER_CACHE_PROGRAM)
         target_compile_options(${target} PRIVATE 
             "$<$<COMPILE_LANGUAGE:CXX>:SHELL:-Xclang -fno-pch-timestamp>"
         )
