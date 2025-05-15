@@ -252,6 +252,25 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick)
                     }
                     segment = next_segment;
                 }
+                if (hit_measure() != nullptr && prevMeasure != hit_measure()) {
+                    for (mu::engraving::Segment* segment = hit_measure()->first(mu::engraving::SegmentType::ChordRest); segment;) {
+                        std::vector<EngravingItem*> engravingItemListOfHitMeasure = segment->elist();
+                        size_t hit_len = engravingItemListOfHitMeasure.size();
+                        for (size_t i = 0; i < hit_len; i++) {
+                            EngravingItem* engravingItem = engravingItemListOfHitMeasure[i];
+                            if (engravingItem == nullptr) {
+                                continue;
+                            }
+                            engravingItem->setColor(muse::draw::Color::BLACK);
+                        }
+    
+                        mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ChordRest);
+                        while (next_segment && !next_segment->visible()) {
+                            next_segment = next_segment->next(mu::engraving::SegmentType::ChordRest);
+                        }
+                        segment = next_segment;
+                    }
+                }
             }
 
             setHitMeasureNo(measureNo);
