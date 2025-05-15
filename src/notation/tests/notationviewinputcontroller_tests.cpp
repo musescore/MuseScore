@@ -815,7 +815,11 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     .WillOnce(ReturnRef(selectMeasureContext))
     //! right button click
     .WillOnce(ReturnRef(selectMeasureContext))
-    .WillOnce(ReturnRef(contextMenuOnMeasureContext));
+    .WillOnce(ReturnRef(contextMenuOnMeasureContext))
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
+    .WillOnce(ReturnRef(contextMenuOnMeasureContext)) // for context menu
+#endif
+    ;
 
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
@@ -850,13 +854,19 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu)
     EXPECT_CALL(*m_selection, elements())
     .WillRepeatedly(ReturnRef(selectElements));
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+    //! Note: the context menu itself is shown by AbstractNotationPaintView::event
+#else
+    //! [THEN] Show context menu for measure
+    EXPECT_CALL(m_view, showContextMenu(contextMenuOnMeasureContext.element->type(), _))
+    .Times(1);
+#endif
+
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new measure
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
 
     //! [WHEN] User pressed right mouse button with NoModifier on the selected measure
     m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPoint(100, 100)));
-
-    //! Note: the context menu itself is shown by AbstractNotationPaintView::event
 }
 
 /**
@@ -897,7 +907,11 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     .WillOnce(ReturnRef(selectMeasureContext))
     //! right button click
     .WillOnce(ReturnRef(selectMeasureContext))
-    .WillOnce(ReturnRef(contextMenuOnMeasureContext));
+    .WillOnce(ReturnRef(contextMenuOnMeasureContext))
+#if QT_VERSION < QT_VERSION_CHECK(6, 9, 0)
+    .WillOnce(ReturnRef(contextMenuOnMeasureContext)) // for context menu
+#endif
+    ;
 
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
@@ -936,11 +950,17 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_On_Range_Context_Menu_New_S
     EXPECT_CALL(*m_playbackController, seekElement(contextMenuOnMeasureContext.element))
     .WillOnce(Return());
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+    //! Note: the context menu itself is shown by AbstractNotationPaintView::event
+#else
+    //! [THEN] Show context menu for new measure
+    EXPECT_CALL(m_view, showContextMenu(contextMenuOnMeasureContext.element->type(), _))
+    .Times(1);
+#endif
+
     //! [WHEN] User pressed left mouse button with ShiftModifier on the new measure
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
 
     //! [WHEN] User pressed right mouse button with NoModifier on the selected measure
     m_controller->mousePressEvent(make_mousePressEvent(Qt::RightButton, Qt::NoModifier, QPoint(100, 100)));
-
-    //! Note: the context menu itself is shown by AbstractNotationPaintView::event
 }
