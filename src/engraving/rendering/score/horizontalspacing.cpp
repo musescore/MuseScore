@@ -1603,12 +1603,6 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
         return computeStemSlashKerningType(toStemSlash(item1), item2);
     case ElementType::PARENTHESIS:
         return item2->isBarLine() ? KerningType::NON_KERNING : KerningType::KERNING;
-    case ElementType::ARTICULATION:
-        return item2->isArticulation() && toArticulation(item2)->up() == toArticulation(item1)->up()
-               ? KerningType::NON_KERNING : KerningType::ALLOW_COLLISION;
-    case ElementType::FERMATA:
-        return item2->isFermata() && item1->placeAbove() != item2->placeAbove()
-               ? KerningType::ALLOW_COLLISION : KerningType::NON_KERNING;
     default:
         return KerningType::KERNING;
     }
