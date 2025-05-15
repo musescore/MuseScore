@@ -63,15 +63,19 @@ class HDegree;
 
 //---------------------------------------------------------
 //   @@ HarmonyInfo
-//      Contains all identifying information for a chord. The Harmony DOM class an have many of these
+//      Contains all identifying information for a chord. The Harmony DOM class can have many of these
 //      as polychords
 //
-//   @P m_bassTpc   int   bass note as "tonal pitch class"
-//   @P m_rootTpc   int   root note as "tonal pitch class"
-//   @P m_id        int   harmony identifier
+//   @P m_bassTpc       int             bass note as "tonal pitch class"
+//   @P m_rootTpc       int             root note as "tonal pitch class"
+//   @P m_id            int             harmony identifier
+//   @P m_textName      String          plaintext representation of chord
+//   @P m_parsedChord   ParsedChord*    parsed representation of the plaintext chord
 //---------------------------------------------------------
 
-struct HarmonyInfo {
+class HarmonyInfo
+{
+public:
     HarmonyInfo(int id, int rootTpc, int bassTpc, String textName, ParsedChord* pc, Score* score)
         : m_id(id), m_rootTpc(rootTpc), m_bassTpc(bassTpc), m_textName(textName), m_parsedChord(pc), m_score(score) {}
     HarmonyInfo(Score* score)
@@ -79,6 +83,31 @@ struct HarmonyInfo {
     HarmonyInfo(const HarmonyInfo& h);
     ~HarmonyInfo();
 
+    int id() const { return m_id; }
+    void setId(int v) { m_id = v; }
+
+    int rootTpc() const { return m_rootTpc; }
+    void setRootTpc(int v) { m_rootTpc = v; }
+
+    int bassTpc() const { return m_bassTpc; }
+    void setBassTpc(int v) { m_bassTpc = v; }
+
+    String textName() const { return m_textName; }
+    void setTextName(const String& v) { m_textName = v; }
+
+    ChordList* chordList() const { return m_score ? m_score->chordList() : nullptr; }
+
+    const ChordDescription* descr() const;
+    const ChordDescription* descr(const String&, const ParsedChord* pc = 0) const;
+    const ChordDescription* getDescription();
+    const ChordDescription* getDescription(const String&, const ParsedChord* pc = 0);
+    const ChordDescription* generateDescription();
+
+    void setParsedChord(ParsedChord* v) { m_parsedChord = v; }
+    ParsedChord* parsedChord() const { return m_parsedChord; }
+    ParsedChord* getParsedChord();
+
+private:
     int m_id = -1;                          // >0 = id of matched chord from chord list, if applicable
                                             // -1 = invalid chord
                                             // <-10000 = private id of generated chord or matched chord with no id
@@ -89,18 +118,7 @@ struct HarmonyInfo {
     String m_textName;                      // name recognized from chord list, read from score file, or constructed from imported source
                                             // Also stores the whole RNA string to be rendered
     ParsedChord* m_parsedChord = nullptr;   // parsed form of chord
-
     Score* m_score = nullptr;
-
-    ChordList* chordList() const { return m_score ? m_score->chordList() : nullptr; }
-
-    const ChordDescription* descr() const;
-    const ChordDescription* descr(const String&, const ParsedChord* pc = 0) const;
-    const ChordDescription* getDescription();
-    const ChordDescription* getDescription(const String&, const ParsedChord* pc = 0);
-    const ChordDescription* generateDescription();
-
-    ParsedChord* parsedChord();
 };
 
 //---------------------------------------------------------
@@ -216,6 +234,7 @@ private:
     void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
                 NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO,
                 double noteMag = 1.0);
+
     Sid getPropertyStyle(Pid) const override;
 
     Harmony* findInSeg(Segment* seg) const;
