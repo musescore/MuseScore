@@ -1621,6 +1621,8 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
         : return computeLyricsKerningType(toLyrics(item1), item2);
     case ElementType::NOTE:
         return computeNoteKerningType(toNote(item1), item2);
+    case ElementType::CLEF:
+        return item2->isNote() ? KerningType::KERN_UNTIL_RIGHT_EDGE : KerningType::KERNING;
     case ElementType::STEM_SLASH:
         return computeStemSlashKerningType(toStemSlash(item1), item2);
     case ElementType::PARENTHESIS:
@@ -1632,6 +1634,10 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
 
 KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const EngravingItem* item2)
 {
+    if (item2->isClef()) {
+        return KerningType::KERN_UNTIL_RIGHT_EDGE;
+    }
+
     EngravingItem* nextParent = item2->parentItem(true);
     if (nextParent && nextParent->isNote() && toNote(nextParent)->isTrillCueNote()) {
         return KerningType::NON_KERNING;
