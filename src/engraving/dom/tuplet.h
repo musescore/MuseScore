@@ -121,6 +121,7 @@ public:
     Fraction tick() const override { return m_tick; }
     Fraction rtick() const override;
     void setTick(const Fraction& v) { m_tick = v; }
+    bool isInRange(const Fraction& startTick, const Fraction& endTick) const;
     Fraction elementsDuration();
     void sortElements();
     bool cross() const;

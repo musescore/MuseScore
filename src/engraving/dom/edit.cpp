@@ -117,20 +117,14 @@ static ChordRest* chordOrRest(EngravingItem* el)
     return nullptr;
 }
 
-static Tuplet* topTupletInRange(Tuplet* currentTuplet, const Fraction& startTick, const Fraction& endTick, bool fullMeasure)
+static Tuplet* topTupletInRange(Tuplet* currentTuplet, const Fraction& startTick, const Fraction& endTick)
 {
-    const auto isInRange = [startTick, endTick, fullMeasure](const Tuplet* tuplet) -> bool {
-        const bool startsInRange = tuplet->tick() >= startTick;
-        const bool endsInRange = tuplet->tick() + tuplet->actualTicks() <= endTick || fullMeasure;
-        return startsInRange && endsInRange;
-    };
-
-    if (!currentTuplet || !isInRange(currentTuplet)) {
+    if (!currentTuplet || !currentTuplet->isInRange(startTick, endTick)) {
         return nullptr;
     }
 
     while (Tuplet* nextTuplet = currentTuplet->tuplet()) {
-        if (!isInRange(nextTuplet)) {
+        if (!nextTuplet->isInRange(startTick, endTick)) {
             break;
         }
         currentTuplet = nextTuplet;
@@ -3659,7 +3653,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
                 }
 
                 currentTuplet = cr1->tuplet();
-                if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), startTick, endTick, /*fullMeasure*/ false)) {
+                if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), startTick, endTick)) {
                     cmdDeleteTuplet(topTuplet, false);
                     f += topTuplet->ticks();
                     currentTuplet = topTuplet->tuplet();
@@ -3682,7 +3676,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
                 setRest(tick, track, f, false, currentTuplet);
             }
 
-            if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), startTick, endTick, fullMeasure)) {
+            if (Tuplet* topTuplet = topTupletInRange(cr1->tuplet(), startTick, fullMeasure ? Fraction::max() : endTick)) {
                 cmdDeleteTuplet(topTuplet, false);
                 tick = topTuplet->tick();
                 f = topTuplet->ticks();
