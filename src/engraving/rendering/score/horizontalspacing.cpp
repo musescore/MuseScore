@@ -1442,7 +1442,8 @@ void HorizontalSpacing::computeNotePadding(const Note* note, const EngravingItem
     const MStyle& style = note->style();
 
     bool sameVoiceNoteOrStem = (item2->isNote() || item2->isStem()) && note->track() == item2->track();
-    if (sameVoiceNoteOrStem) {
+    bool areAdjacentByDuration = (note->rtick() + note->chord()->actualTicks()) == item2->rtick();
+    if (sameVoiceNoteOrStem || areAdjacentByDuration) {
         bool intersection = note->shape().translate(note->pos()).intersects(item2->shape().translate(item2->pos()));
         if (intersection) {
             padding = std::max(padding, static_cast<double>(style.styleMM(Sid::minNoteDistance)));
