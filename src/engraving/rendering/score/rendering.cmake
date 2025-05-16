@@ -69,6 +69,8 @@ set(RENDERING_SCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dynamicslayout.h
     ${CMAKE_CURRENT_LIST_DIR}/stemlayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stemlayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/restlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/restlayout.h
 
     ${CMAKE_CURRENT_LIST_DIR}/passbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/passbase.h
