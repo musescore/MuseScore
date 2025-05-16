@@ -376,10 +376,6 @@ elseif(OS_IS_MAC)
 ###########################################
 elseif(OS_IS_WASM)
 
-    configure_file("${CMAKE_CURRENT_BINARY_DIR}/MuseScoreStudio.html" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MuseScoreStudio.html" COPYONLY)
-    configure_file("${CMAKE_CURRENT_BINARY_DIR}/qtloader.js" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtloader.js" COPYONLY)
-    configure_file("${CMAKE_CURRENT_BINARY_DIR}/qtlogo.svg" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtlogo.svg" COPYONLY)
-
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()

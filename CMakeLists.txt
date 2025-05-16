@@ -186,11 +186,6 @@ add_subdirectory(src)
 
 if (OS_IS_LIN)
     include(packaging/Linux+BSD/SetupAppImagePackaging)
-
-target_sources(manpages
-  PRIVATE
-    share/autobotscripts/steps/Home.js
-)
 endif(OS_IS_LIN)
 
 if (OS_IS_WIN)
