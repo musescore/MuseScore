@@ -298,6 +298,10 @@ void DockPageView::reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks
             return false;
         }
 
+        if (dock1 == dock2) {
+            return false;
+        }
+
         QPoint dock1Pos = dock1->globalPosition();
         QPoint dock2Pos = dock2->globalPosition();
 

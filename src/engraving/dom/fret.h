@@ -131,12 +131,9 @@ private:
     int m_fretOffset = 0;
     int m_maxFrets = 0;
     bool m_showNut = true;
-    Orientation m_orientation = Orientation::VERTICAL;
-
-    double m_userMag = 1.0;
-    int m_numPos = 0;
-
     bool m_showFingering = false;
+    Orientation m_orientation = Orientation::VERTICAL;
+    double m_userMag = 1.0;
 };
 
 //---------------------------------------------------------
