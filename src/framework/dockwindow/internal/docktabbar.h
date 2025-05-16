@@ -32,12 +32,18 @@ class DockTabBar : public KDDockWidgets::TabBarQuick
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool currentIndexChangedOnMouseDown READ currentIndexChangedOnMouseDown CONSTANT)
+
 public:
     explicit DockTabBar(KDDockWidgets::TabWidget* parent = nullptr);
 
     Q_INVOKABLE void setDraggableMouseArea(QQuickItem* mouseArea);
 
+    int currentIndexChangedOnMouseDown() const;
+
 private:
+    bool m_currentIndexChangedOnMouseDown;
+
     bool event(QEvent* event) override;
     bool isPositionDraggable(QPoint localPos) const override;
 
