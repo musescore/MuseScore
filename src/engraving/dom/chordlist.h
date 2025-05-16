@@ -122,7 +122,7 @@ private:
 struct RenderAction {
     enum class RenderActionType : char {
         SET, MOVE, PUSH, POP,
-        NOTE, ACCIDENTAL
+        NOTE, ACCIDENTAL, STOPHALIGN
     };
 
     RenderActionType type = RenderActionType::SET;
@@ -287,7 +287,9 @@ public:
     double nominalMag() const { return m_nmag; }
     double nominalAdjust() const { return m_nadjust; }
     bool stackModifiers() const { return m_stackModifiers; }
-    void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0, bool stackModifiers = false);
+    bool excludeModsHAlign() const { return m_excludeModsHAlign; }
+    void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0, bool stackModifiers = false,
+                             bool excludeModsHAlign = false);
     double position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx) const;
 
     void checkChordList(const muse::io::path_t& appDataPath, const MStyle& style);
@@ -314,11 +316,12 @@ private:
     std::map<String, ChordSymbol> m_symbols;
     bool m_autoAdjust = false;
     bool m_stackModifiers = false;
+    bool m_excludeModsHAlign = false;
     double m_nmag = 1.0, m_nadjust = 0.0;   // adjust values are measured in percentage
     double m_emag = 1.0, m_eadjust = 0.0;   // (which is then applied to the height of the font)
     double m_mmag = 1.0, m_madjust = 0.0;
 
-    bool m_customChordList = false; // if true, chordlist will be saved as part of score
+    bool m_customChordList = false;         // if true, chordlist will be saved as part of score
 };
 } // namespace mu::engraving
 #endif
