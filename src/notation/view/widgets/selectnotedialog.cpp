@@ -162,6 +162,10 @@ FilterNotesOptions SelectNoteDialog::noteOptions() const
         options.system = m_note->chord()->segment()->system();
     }
 
+    if (sameChordVoice->isChecked()) {
+        options.chordIndex = m_note->chordIndex();
+    }
+
     return options;
 }
 

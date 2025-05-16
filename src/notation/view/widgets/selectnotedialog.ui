@@ -55,6 +55,13 @@
           </property>
          </widget>
         </item>
+        <item row="9" column="0">
+         <widget class="QCheckBox" name="sameChordVoice">
+          <property name="text">
+           <string>Same chord voice</string>
+          </property>
+         </widget>
+        </item>
         <item row="1" column="0">
          <widget class="QCheckBox" name="samePitch">
           <property name="text">
@@ -160,7 +167,7 @@
           </property>
          </widget>
         </item>
-        <item row="9" column="0">
+        <item row="10" column="0">
          <widget class="QCheckBox" name="sameBeat">
           <property name="text">
            <string>Same beat</string>
@@ -252,8 +259,9 @@
   <tabstop>inSelection</tabstop>
   <tabstop>sameVoice</tabstop>
   <tabstop>sameSystem</tabstop>
-  <tabstop>sameBeat</tabstop>
+  <tabstop>sameChordVoice</tabstop>
   <tabstop>sameMeasure</tabstop>
+  <tabstop>sameBeat</tabstop>
   <tabstop>replace</tabstop>
   <tabstop>add</tabstop>
   <tabstop>subtract</tabstop>

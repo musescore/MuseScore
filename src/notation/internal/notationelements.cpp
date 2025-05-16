@@ -229,6 +229,7 @@ mu::engraving::NotePattern* NotationElements::constructNotePattern(const FilterN
     pattern->system = notesOptions->system;
     pattern->beat = notesOptions->beat;
     pattern->measure = notesOptions->measure;
+    pattern->chordIndex = notesOptions->chordIndex;
 
     return pattern;
 }
