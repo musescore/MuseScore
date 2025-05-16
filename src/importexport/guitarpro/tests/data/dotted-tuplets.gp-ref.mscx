@@ -25,13 +25,13 @@
           </StaffType>
         </Staff>
       <trackName>Bells</trackName>
-      <Instrument id="xylophone">
+      <Instrument id="xylomarimba">
         <longName>Bells</longName>
         <shortName>mar.</shortName>
         <trackName></trackName>
         <transposeDiatonic>7</transposeDiatonic>
         <transposeChromatic>12</transposeChromatic>
-        <instrumentId>pitched-percussion.xylophone</instrumentId>
+        <instrumentId>pitched-percussion.xylomarimba</instrumentId>
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
@@ -43,7 +43,7 @@
           <string>52</string>
           </StringData>
         <Channel>
-          <program value="13"/>
+          <program value="12"/>
           <controller ctrl="7" value="71"/>
           </Channel>
         </Instrument>
