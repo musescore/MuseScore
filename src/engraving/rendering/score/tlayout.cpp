@@ -3432,20 +3432,26 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
             }
         } else {
             RectF bb;
+            RectF hAlignBox;
             for (TextSegment* ts : item->textList()) {
-                bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
+                RectF tsBbox = ts->tightBoundingRect().translated(ts->x, ts->y);
+                bb.unite(tsBbox);
+
+                if (ts->hAlign) {
+                    hAlignBox.unite(tsBbox);
+                }
             }
 
             double xx = 0.0;
             switch (ctx.conf().styleV(Sid::chordAlignmentToNotehead).value<AlignH>()) {
             case AlignH::LEFT:
-                xx = -bb.left();
+                xx = -hAlignBox.left();
                 break;
             case AlignH::HCENTER:
-                xx = -(bb.center().x());
+                xx = -(hAlignBox.center().x());
                 break;
             case AlignH::RIGHT:
-                xx = -bb.right();
+                xx = -hAlignBox.right();
                 break;
             }
 

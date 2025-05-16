@@ -40,21 +40,36 @@ class ParsedChord;
 //   TextSegment
 //---------------------------------------------------------
 
+struct HarmonyRenderCtx {
+    PointF pos = PointF();
+    bool hAlign = true;
+
+    double x() const { return pos.x(); }
+    double y() const { return pos.y(); }
+
+    void setX(double v) { pos.setX(v); }
+    void setY(double v) { pos.setY(v); }
+};
+
+//---------------------------------------------------------
+//   TextSegment
+//---------------------------------------------------------
+
 struct TextSegment {
     muse::draw::Font m_font;
     String text;
     double x, y = 0;         // Position of segments relative to each other.
     PointF offset;       // Offset for placing within the TextBase.
-    bool select = false;
+
+    bool hAlign = true;
 
     double width() const;
     RectF boundingRect() const;
     RectF tightBoundingRect() const;
     PointF pos() const { return PointF(x, y) + offset; }
 
-    TextSegment() { select = false; x = y = 0.0; }
-    TextSegment(const String&, const muse::draw::Font&, double x, double y);
-    void set(const String&, const muse::draw::Font&, double x, double y, PointF offset);
+    TextSegment(const String&, const muse::draw::Font&, double x, double y, bool align);
+    TextSegment(const String&, const muse::draw::Font&, double x, double y, PointF offset, bool align);
     void setText(const String& t) { text = t; }
 };
 
@@ -228,11 +243,12 @@ private:
     NoteCaseType rootRenderCase(HarmonyInfo* info) const;
     NoteCaseType bassRenderCase() const;
 
-    void renderSingleHarmony(HarmonyInfo* info, PointF& pos);
+    void renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx);
     void renderRomanNumeral();
-    void render(const String&, PointF& pos);
-    void render(const std::list<RenderAction>& renderList, PointF& pos, int tpc, NoteSpellingType noteSpelling = NoteSpellingType::STANDARD,
-                NoteCaseType noteCase = NoteCaseType::AUTO, double noteMag = 1.0);
+    void render(const String&, HarmonyRenderCtx& ctx);
+    void render(const std::list<RenderAction>& renderList, HarmonyRenderCtx& ctx, int tpc,
+                NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO,
+                double noteMag = 1.0);
 
     Sid getPropertyStyle(Pid) const override;
 
