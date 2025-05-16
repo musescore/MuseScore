@@ -81,6 +81,9 @@ private:
     bool writeToFile(const ShortcutList& shortcuts, const io::path_t& path) const;
     void writeShortcut(deprecated::XmlWriter& writer, const Shortcut& shortcut) const;
 
+    std::string fromCompatAngledBracketIfNeed(const std::string& sequence) const;
+    std::string toCompatAngledBracketIfNeed(const std::string& sequence) const;
+
     void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;
     void mergeAdditionalShortcuts(ShortcutList& shortcuts);
 

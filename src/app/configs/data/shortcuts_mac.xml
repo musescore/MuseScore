@@ -548,11 +548,11 @@
     </SC>
   <SC>
     <key>add-hairpin</key>
-    <seq>Shift+,</seq>
+    <seq>angledBracketLeft</seq>
     </SC>
   <SC>
     <key>add-hairpin-reverse</key>
-    <seq>Shift+.</seq>
+    <seq>angledBracketRight</seq>
     </SC>
   <SC>
     <key>notation-escape</key>

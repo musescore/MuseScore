@@ -283,7 +283,7 @@ Shortcut ShortcutsRegister::readShortcut(deprecated::XmlReader& reader) const
         } else if (tag == STANDARD_KEY_TAG) {
             shortcut.standardKey = QKeySequence::StandardKey(reader.readInt());
         } else if (tag == SEQUENCE_TAG) {
-            shortcut.sequences.push_back(reader.readString());
+            shortcut.sequences.push_back(fromCompatAngledBracketIfNeed(reader.readString()));
         } else if (tag == AUTOREPEAT_TAG) {
             shortcut.autoRepeat = reader.readInt();
         } else {
@@ -368,10 +368,37 @@ void ShortcutsRegister::writeShortcut(deprecated::XmlWriter& writer, const Short
     }
 
     for (const std::string& seq : shortcut.sequences) {
-        writer.writeTextElement(SEQUENCE_TAG, seq);
+        writer.writeTextElement(SEQUENCE_TAG, toCompatAngledBracketIfNeed(seq));
     }
 
     writer.writeEndElement();
+}
+
+static constexpr std::string_view ANGLED_BRACKET_LEFT("<");
+static constexpr std::string_view ANGLED_BRACKET_RIGHT(">");
+static constexpr std::string_view COMPAT_ANGLED_BRACKET_LEFT("angledBracketLeft");
+static constexpr std::string_view COMPAT_ANGLED_BRACKET_RIGHT("angledBracketRight");
+
+std::string ShortcutsRegister::fromCompatAngledBracketIfNeed(const std::string& sequence) const
+{
+    if (sequence == COMPAT_ANGLED_BRACKET_LEFT) {
+        return std::string(ANGLED_BRACKET_LEFT);
+    } else if (sequence == COMPAT_ANGLED_BRACKET_RIGHT) {
+        return std::string(ANGLED_BRACKET_RIGHT);
+    }
+
+    return sequence;
+}
+
+std::string ShortcutsRegister::toCompatAngledBracketIfNeed(const std::string& sequence) const
+{
+    if (sequence == ANGLED_BRACKET_LEFT) {
+        return std::string(COMPAT_ANGLED_BRACKET_LEFT);
+    } else if (sequence == ANGLED_BRACKET_RIGHT) {
+        return std::string(COMPAT_ANGLED_BRACKET_RIGHT);
+    }
+
+    return sequence;
 }
 
 Notification ShortcutsRegister::shortcutsChanged() const
