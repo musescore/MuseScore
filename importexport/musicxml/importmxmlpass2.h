@@ -407,6 +407,7 @@ public:
                      DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings, HarmonyMap& harmonyMap);
       qreal totalY() const { return _defaultY + _relativeY; }
       QString placement() const;
+      void setBpm(const double bpm) { _tpoSound = bpm; }
 
 private:
       QXmlStreamReader& _e;

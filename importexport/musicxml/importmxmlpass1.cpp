@@ -210,6 +210,8 @@ void MusicXMLParserPass1::setExporterSoftware(QString& exporter)
             else
                   _exporterSoftware = MusicXMLExporterSoftware::SIBELIUS;
             }
+      else if (exporter.contains("dorico"))
+            _exporterSoftware = MusicXMLExporterSoftware::DORICO;
       else if (exporter.contains("finale"))
             _exporterSoftware = MusicXMLExporterSoftware::FINALE;
       else if (exporter.contains("noteflight"))

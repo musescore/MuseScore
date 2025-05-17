@@ -78,11 +78,12 @@ enum class MxmlTupletFlag : char {
       };
 
 enum class MusicXMLExporterSoftware : char {
-      SIBELIUS,
       DOLET6,
       DOLET8,
+      DORICO,
       FINALE,
       NOTEFLIGHT,
+      SIBELIUS,
       OTHER
       };
 

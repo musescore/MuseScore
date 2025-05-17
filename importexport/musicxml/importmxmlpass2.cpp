@@ -857,7 +857,8 @@ static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreade
                       const QSet<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
       {
-      for (const auto& lyricNo : numbrdLyrics.keys()) {
+      const QList<int> keys = numbrdLyrics.keys();
+      for (const auto& lyricNo : keys) {
             Lyrics* const lyric = numbrdLyrics.value(lyricNo);
             addLyric(logger, xmlreader, cr, lyric, lyricNo, extendedLyrics);
             if (extLyrics.contains(lyric))
@@ -868,7 +869,8 @@ static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreade
 static void addGraceNoteLyrics(const QMap<int, Lyrics*>& numberedLyrics, QSet<Lyrics*> extendedLyrics,
                                std::vector<GraceNoteLyrics>& gnLyrics)
       {
-      for (const auto& lyricNo : numberedLyrics.keys()) {
+      const QList<int> keys = numberedLyrics.keys();
+      for (const auto& lyricNo : keys) {
             Lyrics* const lyric = numberedLyrics[lyricNo];
             if (lyric) {
                   bool extend = extendedLyrics.contains(lyric);
@@ -2780,6 +2782,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
       FiguredBassList fbl;               // List of figured bass elements under a single note
       MxmlTupletStates tupletStates;       // Tuplet state for each voice in the current part
       Tuplets tuplets;       // Current tuplet for each voice in the current part
+      QString tempoString;  // helper for Dorico imports
 
       // collect candidates for courtesy accidentals to work out at measure end
       QHash<Note*, int> alterMap;
@@ -2792,6 +2795,10 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   attributes(partId, measure, time + mTime);
             else if (_e.name() == "direction") {
                   MusicXMLParserDirection dir(_e, _score, _pass1, *this, _logger);
+                  if (!tempoString.isEmpty() && _pass1.exporterSoftware() == MusicXMLExporterSoftware::DORICO) {
+                        dir.setBpm(tempoString.toDouble());
+                        tempoString.clear();
+                  }
                   dir.direction(partId, measure, time + mTime, _spanners, delayedDirections, inferredFingerings, delayedHarmony);
                   }
             else if (_e.name() == "figured-bass") {
@@ -2802,6 +2809,31 @@ void MusicXMLParserPass2::measure(const QString& partId,
             else if (_e.name() == "harmony")
                   harmony(partId, measure, time + mTime, delayedHarmony);
             else if (_e.name() == "note") {
+                  if (!tempoString.isEmpty()) {
+                        // sound tempo="..."
+                        // create an invisible default TempoText
+                        // to prevent duplicates, only if none is present yet
+                        Fraction tick = time + mTime;
+
+                        if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
+                              _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
+                              }
+                        else {
+                              double tpo = tempoString.toDouble() / 60;
+                              TempoText* t = new TempoText(_score);
+                              t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER)),
+                                                                   tempoString));
+                              t->setVisible(false);
+                              t->setTempo(tpo);
+                              t->setFollowText(true);
+
+                              _score->setTempo(tick, tpo);
+
+                              addElemOffset(t, _pass1.trackForPart(partId), "above", measure, tick);
+                              }
+                        tempoString.clear();
+                        }
+
                   // Correct delayed ottava tick
                   if (_delayedOttava && _delayedOttava->tick2() < time + mTime) {
                         handleSpannerStop(_delayedOttava, _delayedOttava->track2(), time + mTime, _spanners);
@@ -2861,29 +2893,7 @@ void MusicXMLParserPass2::measure(const QString& partId,
                         }
                   }
             else if (_e.name() == "sound") {
-                  QString tempo = _e.attributes().value("tempo").toString();
-
-                  if (!tempo.isEmpty()) {
-                        // sound tempo="..."
-                        // create an invisible default TempoText
-                        // to prevent duplicates, only if none is present yet
-                        Fraction tick = time + mTime;
-                        if (hasTempoTextAtTick(_score->tempomap(), tick.ticks())) {
-                              _logger->logError(QString("duplicate tempo at tick %1").arg(tick.ticks()), &_e);
-                              }
-                        else {
-                              double tpo = tempo.toDouble() / 60;
-                              TempoText* t = new TempoText(_score);
-                              t->setXmlText(QString("%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(TDuration::DurationType::V_QUARTER)), tempo));
-                              t->setVisible(false);
-                              t->setTempo(tpo);
-                              t->setFollowText(true);
-
-                              _score->setTempo(tick, tpo);
-
-                              addElemOffset(t, _pass1.trackForPart(partId), "above", measure, tick);
-                              }
-                        }
+                  tempoString = _e.attributes().value("tempo").toString();
                   _e.skipCurrentElement();
                   }
             else if (_e.name() == "barline")
