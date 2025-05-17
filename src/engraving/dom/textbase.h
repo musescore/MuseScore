@@ -113,6 +113,12 @@ private:
     String m_fontFamily;
 };
 
+enum class TextFragmentType
+{
+    DEFAULT,
+    PLAIN_DYNAMIC
+};
+
 //---------------------------------------------------------
 //   TextCursor
 //    Contains current position and start of selection
@@ -153,6 +159,9 @@ public:
     CharFormat* format() { return &m_format; }
     const CharFormat* format() const { return &m_format; }
     void setFormat(const CharFormat& f) { m_format = f; }
+
+    TextFragmentType type() { return m_type; }
+    void setType(TextFragmentType type) { m_type = type; }
 
     size_t row() const { return m_row; }
     size_t column() const { return m_column; }
@@ -199,6 +208,7 @@ private:
 
     TextBase* m_text = nullptr;
     CharFormat m_format;
+    TextFragmentType m_type = TextFragmentType::DEFAULT;
     size_t m_row = 0;
     size_t m_column = 0;
     size_t m_selectLine = 0;           // start of selection
@@ -220,10 +230,11 @@ public:
     mutable CharFormat format;
     PointF pos;                    // y is relative to TextBlock->y()
     mutable String text;
+    TextFragmentType type = TextFragmentType::DEFAULT;
 
     TextFragment() = default;
     TextFragment(const String& s);
-    TextFragment(TextCursor*, const String&);
+    TextFragment(TextCursor*, const String&, TextFragmentType = TextFragmentType::DEFAULT);
     TextFragment(const TextFragment& f);
 
     TextFragment& operator =(const TextFragment& f);

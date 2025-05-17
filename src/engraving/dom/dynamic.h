@@ -138,7 +138,12 @@ public:
     Shape symShapeWithCutouts(SymId id) const override;
 
     static Dyn dynInfo(DynamicType type);
+    static String xmlToText(String xml);
+    void styleChanged() override;
+    bool useExpressionTextStyle() const;
 
+    void startEdit(EditData&) override;
+    void endEdit(EditData&) override;
 private:
 
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
