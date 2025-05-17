@@ -167,7 +167,7 @@ jobs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           ADD_INFO="_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}"
         fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_$ARCH${ADD_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_${ARCH}${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
@@ -177,7 +177,7 @@ jobs:
     - name: Setup environment (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
-        bash ./build/ci/linux/setup.sh --arch $ARCH --is_calling_without_sudo true
+        bash ./build/ci/linux/setup.sh --arch ${ARCH} --is_calling_without_sudo true
     - name: Build (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
@@ -186,7 +186,7 @@ jobs:
     - name: Package (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
-        bash ./build/ci/linux/package.sh --arch $ARCH 
+        bash ./build/ci/linux/package.sh --arch ${ARCH} 
     - name: Checksum (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
@@ -200,9 +200,9 @@ jobs:
 
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
         sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "$DOCKERIMAGE" /bin/bash -c "cd /MuseScore && \
-        bash /MuseScore/build/ci/linux/setup.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/linux/setup.sh --arch ${ARCH} && \
         bash /MuseScore/build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode $BUILD_MODE --telemetry $T_ID && \
-        bash /MuseScore/build/ci/linux/package.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/linux/package.sh --arch ${ARCH} && \
         bash /MuseScore/build/ci/tools/checksum.sh"
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
@@ -253,7 +253,7 @@ jobs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           ADD_INFO="_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}"
         fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_$ARCH${ADD_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_${ARCH}${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
@@ -263,7 +263,7 @@ jobs:
     - name: Setup environment (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
-        bash ./build/ci/linux/setup.sh --arch $ARCH --is_calling_without_sudo true
+        bash ./build/ci/linux/setup.sh --arch ${ARCH} --is_calling_without_sudo true
     - name: Build (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
@@ -272,7 +272,7 @@ jobs:
     - name: Package (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
-        bash ./build/ci/linux/package.sh --arch $ARCH 
+        bash ./build/ci/linux/package.sh --arch ${ARCH} 
     - name: Checksum (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
@@ -286,9 +286,9 @@ jobs:
 
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
         sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "$DOCKERIMAGE" /bin/bash -c "cd /MuseScore && \
-        bash /MuseScore/build/ci/linux/setup.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/linux/setup.sh --arch ${ARCH} && \
         bash /MuseScore/build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode $BUILD_MODE --telemetry $T_ID && \
-        bash /MuseScore/build/ci/linux/package.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/linux/package.sh --arch ${ARCH} && \
         bash /MuseScore/build/ci/tools/checksum.sh"
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
@@ -339,7 +339,7 @@ jobs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then
           ADD_INFO="_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}"
         fi
-        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_$ARCH${ADD_INFO}")"
+        UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_${ARCH}${ADD_INFO}")"
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
@@ -349,7 +349,7 @@ jobs:
     - name: Setup environment (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
-        bash ./build/ci/linux/setup.sh --arch $ARCH --is_calling_without_sudo true
+        bash ./build/ci/linux/setup.sh --arch ${ARCH} --is_calling_without_sudo true
     - name: Build (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
@@ -358,7 +358,7 @@ jobs:
     - name: Package (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
-        bash ./build/ci/linux/package.sh --arch $ARCH 
+        bash ./build/ci/linux/package.sh --arch ${ARCH} 
     - name: Checksum (x86_64)
       if: env.ARCH == 'x86_64'
       run: |
@@ -372,9 +372,9 @@ jobs:
 
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
         sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "$DOCKERIMAGE" /bin/bash -c "cd /MuseScore && \
-        bash /MuseScore/build/ci/linux/setup.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/linux/setup.sh --arch ${ARCH} && \
         bash /MuseScore/build/ci/linux/build.sh -n ${{ github.run_id }} --build_mode $BUILD_MODE --telemetry $T_ID && \
-        bash /MuseScore/build/ci/linux/package.sh --arch $ARCH && \
+        bash /MuseScore/build/ci/linux/package.sh --arch ${ARCH} && \
         bash /MuseScore/build/ci/tools/checksum.sh"
     - name: Publish to OSUOSL
       if: env.DO_PUBLISH == 'true'
