@@ -235,7 +235,7 @@ TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollVertical)
 TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollHorizontal)
 {
     //! [THEN] Should be called horizontal scroll with value 120
-    EXPECT_CALL(m_view, moveCanvasHorizontal(120))
+    EXPECT_CALL(m_view, moveCanvas(0, 120))
     .Times(1);
 
     //! [WHEN] User scrolled mouse wheel

@@ -54,9 +54,12 @@ public:
     virtual muse::PointF viewportTopLeft() const = 0;
 
     //! muse::Returns true if the canvas has been moved
-    virtual bool moveCanvas(qreal dx, qreal dy) = 0;
-    virtual void moveCanvasHorizontal(qreal dx) = 0;
-    virtual void moveCanvasVertical(qreal dy) = 0;
+    virtual bool moveCanvas(
+        qreal x,
+        qreal y,
+        CoordinateSystem coordSystem = CoordinateSystem::RELATIVE_COORDS,
+        bool userTriggeredMove = true,
+        bool overrideZoomType = false) = 0;
 
     virtual muse::RectF notationContentRect() const = 0;
     virtual qreal currentScaling() const = 0;
@@ -151,8 +154,8 @@ private:
     void doZoomToWholePage();
     void zoomToTwoPages();
     void doZoomToTwoPages();
-    void moveScreen(int direction);
-    void movePage(int direction);
+    void moveScreen(int direction, bool userTriggeredMove = true);
+    void movePage(int direction, bool userTriggeredMove = true);
 
     int currentZoomIndex() const;
     int currentZoomPercentage() const;

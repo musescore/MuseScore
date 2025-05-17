@@ -106,13 +106,16 @@ public:
     muse::PointF fromLogical(const muse::PointF& point) const override;
     muse::RectF fromLogical(const muse::RectF& rect) const override;
 
-    Q_INVOKABLE bool moveCanvas(qreal dx, qreal dy) override;
-    void moveCanvasVertical(qreal dy) override;
-    void moveCanvasHorizontal(qreal dx) override;
+    Q_INVOKABLE bool moveCanvas(
+        qreal x,
+        qreal y,
+        CoordinateSystem coordSystem = CoordinateSystem::RELATIVE_COORDS,
+        bool userTriggeredMove = true,
+        bool overrideZoomType = false);
 
     qreal currentScaling() const override;
     void setScaling(qreal scaling, const muse::PointF& pos, bool overrideZoomType = true) override;
-    void scale(qreal factor, const muse::PointF& pos, bool overrideZoomType = true);
+    void scale(qreal factor, const muse::PointF& pos, bool overrideZoomType = true, bool userTriggeredMove = true);
 
     Q_INVOKABLE void pinchToZoom(qreal scaleFactor, const QPointF& pos);
 
@@ -177,7 +180,6 @@ protected:
     void setMatrix(const muse::draw::Transform& matrix);
 
     void moveCanvasToCenter();
-    bool moveCanvasToPosition(const muse::PointF& logicPos);
 
     muse::RectF notationContentRect() const override;
 
@@ -210,8 +212,6 @@ private:
     void onCurrentNotationChanged();
     bool isInited() const;
 
-    bool doMoveCanvas(qreal dx, qreal dy);
-
     void scheduleRedraw(const muse::RectF& rect = muse::RectF());
     muse::RectF correctDrawRect(const muse::RectF& rect) const;
 
@@ -235,13 +235,11 @@ private:
 
     bool ensureViewportInsideScrollableArea();
 
-    muse::RectF scrollableAreaRect() const;
-
     qreal horizontalScrollableSize() const;
     qreal verticalScrollableSize() const;
 
-    bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true);
-    bool adjustCanvasPositionSmoothPan(const muse::RectF& cursorRect);
+    bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true, bool userTriggeredMove = true);
+    bool adjustCanvasPositionSmoothPan(const muse::RectF& cursorRect, bool userTriggeredMove = true);
 
     void onNoteInputStateChanged();
 
@@ -261,7 +259,7 @@ private:
     void paintBackground(const muse::RectF& rect, muse::draw::Painter* painter);
 
     muse::PointF canvasCenter() const;
-    std::pair<qreal, qreal> constraintCanvas(qreal dx, qreal dy) const;
+    std::pair<qreal, qreal> constraintCanvas(qreal x, qreal y, CoordinateSystem inputCoordinateSystem) const;
 
     INotationPtr m_notation;
     muse::draw::Transform m_matrix;

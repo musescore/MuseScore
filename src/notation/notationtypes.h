@@ -622,6 +622,11 @@ enum class PercussionPanelAutoShowMode {
     UNPITCHED_STAFF_NOTE_INPUT,
     NEVER,
 };
+
+enum class CoordinateSystem: bool {
+    ABSOLUTE_COORDS,
+    RELATIVE_COORDS,
+};
 }
 
 #endif // MU_NOTATION_NOTATIONTYPES_H
