@@ -35,8 +35,8 @@ namespace muse {
 static constexpr size_t nidx = static_cast<size_t>(-1);
 
 // vector
-template<typename T>
-inline bool contains(const std::vector<T>& vec, const T& v)
+template<typename T, typename U>
+inline bool contains(const std::vector<T>& vec, const U& v)
 {
     return std::find(vec.cbegin(), vec.cend(), v) != vec.cend();
 }
