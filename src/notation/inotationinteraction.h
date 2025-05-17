@@ -82,6 +82,22 @@ public:
     virtual INotationSelectionPtr selection() const = 0;
     virtual void clearSelection() = 0;
     virtual muse::async::Notification selectionChanged() const = 0;
+    virtual muse::async::Notification playbackNotesChanged() const {
+        return muse::async::Notification();
+    }
+    virtual void notifyPianoKeyboardNotesChanged() {
+        
+    }
+    virtual std::vector<mu::engraving::Note *> playbackNotes() const {
+        return {};
+    }
+    virtual void addPlaybackNote(mu::engraving::Note *) {
+
+    }
+    virtual void clearPlaybackNotes() {
+        
+    }
+    
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
     virtual void findAndSelectChordRest(const Fraction& tick) = 0;
 

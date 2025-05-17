@@ -228,6 +228,8 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack, iocContext());
     m_selection = std::make_shared<NotationSelection>(notation);
 
+    m_playback_selection = std::make_shared<NotationSelection>(notation);
+
     m_selectionFilter = std::make_shared<NotationSelectionFilter>(notation, [this]() {
         notifyAboutSelectionChangedIfNeed();
     });
@@ -367,6 +369,13 @@ void NotationInteraction::notifyAboutSelectionChangedIfNeed()
     score()->setSelectionChanged(false);
 
     m_selectionChanged.notify();
+}
+
+void NotationInteraction::notifyAboutPianoKeyboardNotesChanged() {
+    // LOGALEX();
+    TRACEFUNC;
+
+    m_playbackNotesChanged.notify();
 }
 
 void NotationInteraction::notifyAboutNoteInputStateChanged()
@@ -938,7 +947,7 @@ void NotationInteraction::findAndSelectChordRest(const Fraction& tick)
 
 void NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
 {
-    LOGALEX();
+    // LOGALEX() << "staffIndex: " << staffIndex;
     TRACEFUNC;
 
     const mu::engraving::Selection& selection = score()->selection();
@@ -1120,6 +1129,27 @@ muse::async::Notification NotationInteraction::selectionChanged() const
     return m_selectionChanged;
 }
 
+muse::async::Notification NotationInteraction::playbackNotesChanged() const {
+    return m_playbackNotesChanged;
+}
+
+std::vector<mu::engraving::Note *> NotationInteraction::playbackNotes() const {
+    return m_playback_notes;
+}
+
+void NotationInteraction::addPlaybackNote(Note *note) {
+    m_playback_notes.push_back(note);
+}
+
+void NotationInteraction::clearPlaybackNotes() {
+    m_playback_notes.clear();
+}
+
+void NotationInteraction::notifyPianoKeyboardNotesChanged() {
+    // m_playback_selection
+    notifyAboutPianoKeyboardNotesChanged();
+}
+
 INotationSelectionFilterPtr NotationInteraction::selectionFilter() const
 {
     return m_selectionFilter;
@@ -1215,6 +1245,9 @@ void NotationInteraction::endLasso()
     m_lasso->setbbox(RectF());
     score()->lassoSelectEnd();
     score()->update();
+    if (selection()->isNone()) {
+        m_selectionChanged.notify();
+    }
 }
 
 void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragMode mode)
@@ -4952,6 +4985,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
 
 void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool moveSignaturesClef)
 {
+    LOGALEX();
     if (count < 1) {
         return;
     }

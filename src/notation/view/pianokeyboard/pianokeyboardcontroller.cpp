@@ -59,6 +59,30 @@ muse::async::Notification PianoKeyboardController::keyStatesChanged() const
     return m_keyStatesChanged;
 }
 
+KeyState PianoKeyboardController::playbackKeyState(piano_key_t key) const {
+    if (m_righthand_keys.find(key) != m_righthand_keys.cend()) {
+        return KeyState::RightHand;
+    }
+
+    // if (m_lefthand_keys.find(key) != m_lefthand_keys.cend()) {
+    //     return KeyState::LeftHand;
+    // }
+
+    return KeyState::None;
+}
+
+bool PianoKeyboardController::playbackKeyStatesEmpty() const {
+    if (m_righthand_keys.empty()) {
+        return true;
+    }
+    return false;
+}
+
+muse::async::Notification PianoKeyboardController::playbackKeyStatesChanged() const
+{
+    return m_playbackKeyStatesChanged;
+}
+
 bool PianoKeyboardController::isFromMidi() const
 {
     return m_isFromMidi;
@@ -98,6 +122,8 @@ void PianoKeyboardController::onNotationChanged()
 
             auto selection = notation->interaction()->selection();
             if (selection->isNone()) {
+                // If no note is selected, the piano keyboard key stats should be cleared
+                updateNotesKeys({});
                 return;
             }
 
@@ -108,6 +134,20 @@ void PianoKeyboardController::onNotationChanged()
 
             m_isFromMidi = false;
             updateNotesKeys(notes);
+        });
+
+        notation->interaction()->playbackNotesChanged().onNotify(this, [this]() {
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+
+            std::vector<const Note*> notes;
+            for (const mu::engraving::Note* note : notation->interaction()->playbackNotes()) {
+                notes.push_back(note);
+            }
+            m_isFromMidi = false;
+            updatePlaybackNotesKeys(notes);
         });
 
         notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note*>& notes) {
@@ -139,6 +179,25 @@ void PianoKeyboardController::updateNotesKeys(const std::vector<const Note*>& re
         for (const mu::engraving::Note* otherNote : note->chord()->notes()) {
             newOtherNotesInChord.insert(static_cast<piano_key_t>(useWrittenPitch ? otherNote->epitch() : otherNote->ppitch()));
         }
+    }
+}
+
+void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes) {
+    std::unordered_set<piano_key_t> newKeys;
+    std::unordered_set<piano_key_t> newOtherNotesInChord;
+
+    DEFER {
+        if (newKeys != m_righthand_keys) {
+            m_righthand_keys = newKeys;
+        }
+
+        m_playbackKeyStatesChanged.notify();
+    };
+
+    const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
+
+    for (const mu::engraving::Note* note : receivedNotes) {
+        newKeys.insert(static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch()));
     }
 }
 

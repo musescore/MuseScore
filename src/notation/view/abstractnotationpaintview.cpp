@@ -1444,7 +1444,7 @@ void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
     }
 
     RectF oldCursorRect = m_playbackCursor->rect();
-    m_playbackCursor->move(tick);
+    m_playbackCursor->move(tick, playbackController()->isPlaying());
     const RectF& newCursorRect = m_playbackCursor->rect();
 
     if (newCursorRect != oldCursorRect) {

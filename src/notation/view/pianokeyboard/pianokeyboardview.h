@@ -76,6 +76,7 @@ private:
     void adjustKeysAreaPosition();
     void determineOctaveLabelsFont();
     void updateKeyStateColors();
+    void updatePlaybackKeyStateColors();
 
     void paintBackground(QPainter* painter);
 
