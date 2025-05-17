@@ -556,7 +556,7 @@ public:
 
     double totalY() const { return m_defaultY + m_relativeY; }
     muse::String placement() const;
-    const void setBpm(const double bpm) { m_tpoSound = bpm; }
+    void setBpm(const double bpm) { m_tpoSound = bpm; }
 
 private:
     void directionType(std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);
