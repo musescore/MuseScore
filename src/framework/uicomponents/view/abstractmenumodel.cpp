@@ -80,7 +80,7 @@ void AbstractMenuModel::handleMenuItem(const QString& itemId)
     if (menuItem.query().isValid()) {
         dispatch(menuItem.query());
     } else {
-        std::cout << "alex:::::: menuItem.action().code: " << menuItem.action().code << std::endl;
+        // std::cout << "alex:::::: menuItem.action().code: " << menuItem.action().code << std::endl;
         dispatch(menuItem.action().code, menuItem.args());
     }
 }

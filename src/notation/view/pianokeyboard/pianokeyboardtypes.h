@@ -33,7 +33,9 @@ enum class KeyState {
     None,
     OtherInSelectedChord,
     Selected,
-    Played
+    Played,
+    RightHand,
+    LeftHand
 };
 }
 
