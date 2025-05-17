@@ -488,7 +488,7 @@ public:
     double styleP(Sid idx) const;
 
     bool colorsInversionEnabled() const;
-    void setColorsInverionEnabled(bool enabled);
+    void setColorsInversionEnabled(bool enabled);
 
     struct BarBeat
     {
