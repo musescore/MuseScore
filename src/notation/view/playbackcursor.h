@@ -22,6 +22,8 @@
 #ifndef MU_NOTATION_PLAYBACKCURSOR_H
 #define MU_NOTATION_PLAYBACKCURSOR_H
 
+#include <QObject>
+
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "draw/types/geometry.h"
@@ -31,7 +33,7 @@
 class QColor;
 
 namespace mu::notation {
-class PlaybackCursor : public muse::Injectable
+class PlaybackCursor : public QObject, public muse::Injectable
 {
     muse::Inject<INotationConfiguration> configuration = { this };
 
@@ -42,21 +44,42 @@ public:
     void paint(muse::draw::Painter* painter);
 
     void setNotation(INotationPtr notation);
-    void move(muse::midi::tick_t tick);
+    void move(muse::midi::tick_t tick, bool isPlaying = true);
 
     bool visible() const;
     void setVisible(bool arg);
 
     const muse::RectF& rect() const;
 
+    // alex::
+    std::vector<EngravingItem*>& hit_elements();
+    int hit_measure_no();
+    Measure *hit_measure();
+
+    void setHitElements(std::vector<EngravingItem*>& el);
+    void setHitMeasureNo(int m_no);
+    void setHitMeasure(Measure *m);
+
+// alex::
+    Q_OBJECT
+signals:
+    void lingeringCursorUpdate(double x, double y, double width, double height) const;
+    void lingeringCursorUpdate1() const;
+
 private:
     QColor color() const;
     muse::RectF resolveCursorRectByTick(muse::midi::tick_t tick) const;
+    muse::RectF resolveCursorRectByTick1(muse::midi::tick_t tick, bool isPlaying = true);
 
     bool m_visible = false;
     muse::RectF m_rect;
 
     INotationPtr m_notation;
+
+    // alex::
+    std::vector<EngravingItem*> m_hit_el;
+    int m_hit_measure_no = -1;
+    Measure *m_hit_measure = nullptr;
 };
 }
 
