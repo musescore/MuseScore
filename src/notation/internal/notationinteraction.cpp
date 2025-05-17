@@ -5940,6 +5940,20 @@ void NotationInteraction::spellPitches()
     apply();
 }
 
+void NotationInteraction::spellPitchesWithSharps()
+{
+    startEdit(TranslatableString("undoableAction", "Respell pitches with sharps"));
+    score()->spellWithSharps();
+    apply();
+}
+
+void NotationInteraction::spellPitchesWithFlats()
+{
+    startEdit(TranslatableString("undoableAction", "Respell pitches with flats"));
+    score()->spellWithFlats();
+    apply();
+}
+
 void NotationInteraction::regroupNotesAndRests()
 {
     startEdit(TranslatableString("undoableAction", "Regroup rhythms"));
