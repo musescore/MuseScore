@@ -1772,6 +1772,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Add extension line"),
              TranslatableString("action", "Lyrics: enter extension line")
              ),
+    UiAction("add-elision",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_TEXT_EDITING,
+             TranslatableString("action", "Add elision"),
+             TranslatableString("action", "Lyrics: enter elision")
+             ),
     UiAction("add-lyric-verse",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

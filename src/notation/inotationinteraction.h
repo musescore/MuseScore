@@ -271,6 +271,7 @@ public:
     virtual void setScoreConfig(const ScoreConfig& config) = 0;
 
     virtual void addMelisma() = 0;
+    virtual void addElision() = 0;
     virtual void addLyricsVerse() = 0;
 
     virtual muse::Ret canAddGuitarBend() const = 0;
