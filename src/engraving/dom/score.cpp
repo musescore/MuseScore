@@ -3949,6 +3949,9 @@ void Score::collectNoteMatch(void* data, EngravingItem* e)
     if ((p->beat.isValid()) && (p->beat != n->beat())) {
         return;
     }
+    if (p->chordIndex != muse::nidx && p->chordIndex != n->chordIndex()) {
+        return;
+    }
     p->el.push_back(n);
 }
 

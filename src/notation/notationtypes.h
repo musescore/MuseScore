@@ -26,7 +26,8 @@
 #include <QDate>
 #include <unordered_set>
 
-#include "translation.h"
+#include "global/containers.h"
+#include "global/translation.h"
 
 #include "types/id.h"
 #include "types/translatablestring.h"
@@ -38,7 +39,6 @@
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/hook.h"
-#include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/instrument.h"
 #include "engraving/dom/key.h"
@@ -407,6 +407,7 @@ struct FilterNotesOptions : FilterElementsOptions
     mu::engraving::NoteHeadGroup notehead = mu::engraving::NoteHeadGroup::HEAD_INVALID;
     mu::engraving::TDuration durationType = mu::engraving::TDuration();
     mu::engraving::NoteType noteType = mu::engraving::NoteType::INVALID;
+    size_t chordIndex = muse::nidx;
 };
 
 struct StaffConfig

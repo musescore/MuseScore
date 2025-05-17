@@ -699,6 +699,14 @@ void Note::setParent(Chord* ch)
     EngravingItem::setParent(ch);
 }
 
+size_t Note::chordIndex() const
+{
+    if (const Chord* c = chord()) {
+        return muse::indexOf(c->notes(), this);
+    }
+    return muse::nidx;
+}
+
 //---------------------------------------------------------
 //   concertPitchIdx
 //---------------------------------------------------------
