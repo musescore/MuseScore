@@ -2426,9 +2426,9 @@ void ScoreView::cmd(const char* s)
                         mscore->selectElementDialog(e);
                         }
                   }},
-      //      {{"find"}, [](ScoreView* cv, const QByteArray&) {
-      //            ; // TODO:state         sm->postEvent(new CommandEvent(cmd));
-      //            }},
+            {{"find"}, [](ScoreView*, const QByteArray&) {
+                  ; // TODO:state         sm->postEvent(new CommandEvent(cmd));
+                  }},
             {{"scr-prev"}, [](ScoreView* cv, const QByteArray&) {
                   cv->screenPrev();
                   }},
@@ -2723,7 +2723,8 @@ void ScoreView::cmd(const char* s)
                   int n = cmd.mid(8).toInt();
                   std::vector<Note*> nl;
                   if (cv->score()->selection().isRange()) {
-                        for (ChordRest* cr : cv->score()->getSelectedChordRests()) {
+                        const QSet<ChordRest *>crs = cv->score()->getSelectedChordRests();
+                        for (ChordRest* cr : crs) {
                               if (cr->isChord())
                                     nl.push_back(n > 0 ? toChord(cr)->upNote() : toChord(cr)->downNote());
                               }
@@ -4572,11 +4573,13 @@ void ScoreView::changeVoice(int voice)
             // treat as command to move notes to another voice
             score()->changeVoice(voice);
             // modify the input state only if the command was successful
-            for (ChordRest* cr : score()->getSelectedChordRests())
+            const QSet<ChordRest *>crs = score()->getSelectedChordRests();
+            for (ChordRest* cr : crs) {
                   if (cr->voice() == voice) {
                         is->setTrack(track);
                         break;
                         }
+                  }
             }
       }
 
@@ -4596,7 +4599,8 @@ void ScoreView::cmdTuplet(int n)
                   }
             }
       else {
-            for (ChordRest* cr : _score->getSelectedChordRests()) {
+            const QSet<ChordRest *>crs = score()->getSelectedChordRests();
+            for (ChordRest* cr : crs) {
                   if (!cr->isGrace()) {
                         cmdTuplet(n, cr);
                         }
