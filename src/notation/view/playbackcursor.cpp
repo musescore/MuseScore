@@ -40,11 +40,11 @@ void PlaybackCursor::setNotation(INotationPtr notation)
     m_notation = notation;
 }
 
-void PlaybackCursor::move(muse::midi::tick_t tick)
+void PlaybackCursor::move(muse::midi::tick_t tick, bool isPlaying)
 {
     // LOGALEX();
     // m_rect = resolveCursorRectByTick(tick);
-    m_rect = resolveCursorRectByTick1(tick);
+    m_rect = resolveCursorRectByTick1(tick, isPlaying);
 }
 
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
@@ -133,7 +133,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
     return RectF(x, y, w, h);
 }
 
-muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick)
+muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, bool isPlaying)
 {
     if (!m_notation) {
         return RectF();
@@ -156,6 +156,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick)
     qreal x = 0.0;
     mu::engraving::Segment* s = nullptr;
     mu::engraving::Segment* s1 = nullptr;
+    m_notation->interaction()->clearPlaybackNotes();
     for (s = measure->first(mu::engraving::SegmentType::ChordRest); s;) {
         s1 = s;
         Fraction t1 = s->tick();
@@ -164,23 +165,36 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick)
         Fraction t2;
 
         // alex:: check note ticks and duration, compare with current ticks
-        std::vector<EngravingItem*> engravingItemList = s->elist();
-        size_t len = engravingItemList.size();
-        for (size_t i = 0; i < len; i++) {
-            EngravingItem* engravingItem = engravingItemList[i];
-            if (engravingItem == nullptr) {
-                continue;
-            }  
-            ChordRest *chordRest = toChordRest(engravingItem);
-            // mu::engraving::TDuration duration = chordRest->durationType();
-            // int duration_ticks = duration.ticks().ticks();
-            int duration_ticks = chordRest->durationTypeTicks().ticks();
-            // LOGALEX() << "curr_ticks: " << tick.ticks() << ", note ticks: " << t1.ticks() << ", duration_ticks: " << duration_ticks;
-
-            if (t1.ticks() + duration_ticks < tick.ticks()) {
-                engravingItem->setColor(muse::draw::Color::BLACK);
-            } else {
-                engravingItem->setColor(muse::draw::Color::RED);
+        if (isPlaying) {
+            std::vector<EngravingItem*> engravingItemList = s->elist();
+            size_t len = engravingItemList.size();
+            for (size_t i = 0; i < len; i++) {
+                EngravingItem* engravingItem = engravingItemList[i];
+                if (engravingItem == nullptr) {
+                    continue;
+                }  
+                ChordRest *chordRest = toChordRest(engravingItem);
+                // mu::engraving::TDuration duration = chordRest->durationType();
+                // int duration_ticks = duration.ticks().ticks();
+                int duration_ticks = chordRest->durationTypeTicks().ticks();
+                // LOGALEX() << "curr_ticks: " << tick.ticks() << ", note ticks: " << t1.ticks() << ", duration_ticks: " << duration_ticks;
+                
+                if (t1.ticks() + duration_ticks < tick.ticks()) {
+                    engravingItem->setColor(muse::draw::Color::BLACK);
+                } else {
+                    engravingItem->setColor(muse::draw::Color::RED);
+                    EngravingItemList itemList = engravingItem->childrenItems(false);
+                    size_t items_len = itemList.size();
+                    for (size_t j = 0; j < items_len; j++) {
+                        EngravingItem *item = itemList.at(j);
+                        if (item == nullptr) {
+                            continue;
+                        }
+                        if (item->type() == mu::engraving::ElementType::NOTE) {
+                            m_notation->interaction()->addPlaybackNote(toNote(item));
+                        }
+                    }
+                }
             }
         }
 
@@ -214,17 +228,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick)
 
     // alex:: lingering cursor
     std::vector<EngravingItem*> engravingItemList = s1->elist();
-    size_t len = engravingItemList.size();
-    
-    for (size_t i = 0; i < len; i++) {
-        EngravingItem* engravingItem = engravingItemList[i];
-        
-        if (engravingItem == nullptr) {
-            continue;
-        }
-
-        engravingItem->setColor(muse::draw::Color::RED);
-    }
 
     // muse::RectF measureRect = measure->pageBoundingRect();
     int measureNo = measure->no();
@@ -282,6 +285,30 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick)
         // } else {
         //     emit lingeringCursorUpdate(measureRect.x(), measureRect.y(), measureRect.width(), measureRect.height());
         // }
+        emit lingeringCursorUpdate1();
+        
+        m_notation->interaction()->notifyPianoKeyboardNotesChanged();
+    }
+
+    if (tick.ticks() == 0 && !isPlaying) {
+        for (mu::engraving::Segment* segment = score->lastMeasure()->first(mu::engraving::SegmentType::ChordRest); segment;) {
+            std::vector<EngravingItem*> engravingItemListOfHitMeasure = segment->elist();
+            size_t hit_len = engravingItemListOfHitMeasure.size();
+            for (size_t i = 0; i < hit_len; i++) {
+                EngravingItem* engravingItem = engravingItemListOfHitMeasure[i];
+                if (engravingItem == nullptr) {
+                    continue;
+                }
+                engravingItem->setColor(muse::draw::Color::BLACK);
+            }
+
+            mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ChordRest);
+            while (next_segment && !next_segment->visible()) {
+                next_segment = next_segment->next(mu::engraving::SegmentType::ChordRest);
+            }
+            segment = next_segment;
+        }
+
         emit lingeringCursorUpdate1();
     }
 
