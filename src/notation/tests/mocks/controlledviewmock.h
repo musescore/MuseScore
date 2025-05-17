@@ -37,7 +37,6 @@ public:
     MOCK_METHOD(muse::PointF, viewportTopLeft, (), (const, override));
 
     MOCK_METHOD(bool, moveCanvas, (qreal, qreal, CoordinateSystem, bool, bool));
-    MOCK_METHOD(bool, moveCanvas, (qreal, qreal));
 
     MOCK_METHOD(muse::RectF, notationContentRect, (), (const, override));
     MOCK_METHOD(qreal, currentScaling, (), (const, override));

@@ -107,10 +107,7 @@ public:
     muse::RectF fromLogical(const muse::RectF& rect) const override;
 
     Q_INVOKABLE bool moveCanvas(
-        qreal x,
-        qreal y,
-        CoordinateSystem coordSystem = CoordinateSystem::RELATIVE_COORDS,
-        bool userTriggeredMove = true,
+        qreal x, qreal y, CoordinateSystem coordSystem = CoordinateSystem::RELATIVE_COORDS, bool userTriggeredMove = true,
         bool overrideZoomType = false);
 
     qreal currentScaling() const override;

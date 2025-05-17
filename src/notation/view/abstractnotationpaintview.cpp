@@ -938,9 +938,9 @@ bool AbstractNotationPaintView::adjustCanvasPositionSmoothPan(const RectF& curso
 {
     RectF viewRect = viewport();
     qreal newX = cursorRect.x() - (viewRect.width() / 2);
-    qreal newY = viewport().intersects(cursorRect) ?
-        cursorRect.y() - (viewRect.height() / 2)
-        : viewRect.y();
+    qreal newY = viewport().intersects(cursorRect)
+                 ? cursorRect.y() - (viewRect.height() / 2)
+                 : viewRect.y();
     return moveCanvas(newX, newY, CoordinateSystem::ABSOLUTE_COORDS, userTriggeredMove);
 }
 

@@ -201,14 +201,14 @@ public:
 TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollVertical)
 {
     //! [THEN] Should be called vertical scroll with value 180
-    EXPECT_CALL(m_view, moveCanvas(0, 180))
+    EXPECT_CALL(m_view, moveCanvas(0, 180, CoordinateSystem::RELATIVE_COORDS, true, false))
     .Times(1);
 
     //! [WHEN] User scrolled mouse wheel
     m_controller->wheelEvent(make_wheelEvent(QPoint(0, 180), QPoint(0, 120)));
 
     //! [THEN] Should be called vertical scroll with value 80
-    EXPECT_CALL(m_view, moveCanvas(0, 80))
+    EXPECT_CALL(m_view, moveCanvas(0, 80, CoordinateSystem::RELATIVE_COORDS, true, false))
     .Times(1);
 
     //! [WHEN] User scrolled mouse wheel
@@ -218,7 +218,7 @@ TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollVertical)
     //!  dy = (angleDelta.y() * qMax(2.0, m_view->height() / 10.0)) / QWheelEvent::DefaultDeltasPerStep;
 
     //! [THEN] Should be called vertical scroll with value 50  (dy = (120 * 500 / 10) / 120 = 50)
-    EXPECT_CALL(m_view, moveCanvas(0, 50))
+    EXPECT_CALL(m_view, moveCanvas(0, 50, CoordinateSystem::RELATIVE_COORDS, true, false))
     .Times(1);
 
     EXPECT_CALL(m_view, height())
@@ -235,7 +235,7 @@ TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollVertical)
 TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollHorizontal)
 {
     //! [THEN] Should be called horizontal scroll with value 120
-    EXPECT_CALL(m_view, moveCanvas(0, 120))
+    EXPECT_CALL(m_view, moveCanvas(120, 0, CoordinateSystem::RELATIVE_COORDS, true, false))
     .Times(1);
 
     //! [WHEN] User scrolled mouse wheel
