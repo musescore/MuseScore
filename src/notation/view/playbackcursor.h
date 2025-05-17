@@ -44,7 +44,7 @@ public:
     void paint(muse::draw::Painter* painter);
 
     void setNotation(INotationPtr notation);
-    void move(muse::midi::tick_t tick);
+    void move(muse::midi::tick_t tick, bool isPlaying = true);
 
     bool visible() const;
     void setVisible(bool arg);
@@ -69,7 +69,7 @@ signals:
 private:
     QColor color() const;
     muse::RectF resolveCursorRectByTick(muse::midi::tick_t tick) const;
-    muse::RectF resolveCursorRectByTick1(muse::midi::tick_t tick);
+    muse::RectF resolveCursorRectByTick1(muse::midi::tick_t tick, bool isPlaying = true);
 
     bool m_visible = false;
     muse::RectF m_rect;

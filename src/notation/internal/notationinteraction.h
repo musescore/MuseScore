@@ -94,6 +94,11 @@ public:
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
     muse::async::Notification selectionChanged() const override;
+    muse::async::Notification playbackNotesChanged() const override;
+    std::vector<Note *> playbackNotes() const override;
+    void clearPlaybackNotes() override;
+    void addPlaybackNote(Note *note) override;
+    void notifyPianoKeyboardNotesChanged() override;
     void selectTopOrBottomOfChord(MoveDirection d) override;
     void findAndSelectChordRest(const Fraction& tick) override;
     void moveSegmentSelection(MoveDirection d) override;
@@ -373,6 +378,7 @@ private:
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
     void notifyAboutSelectionChangedIfNeed();
+    void notifyAboutPianoKeyboardNotesChanged();
     void notifyAboutNotationChanged();
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
@@ -512,7 +518,11 @@ private:
     muse::async::Notification m_shadowNoteChanged;
 
     std::shared_ptr<NotationSelection> m_selection = nullptr;
+    std::shared_ptr<NotationSelection> m_playback_selection = nullptr;
     muse::async::Notification m_selectionChanged;
+
+    muse::async::Notification m_playbackNotesChanged;
+    std::vector<Note *> m_playback_notes;
 
     std::shared_ptr<NotationSelectionFilter> m_selectionFilter = nullptr;
 
