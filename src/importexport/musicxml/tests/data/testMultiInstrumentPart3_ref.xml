@@ -17,8 +17,8 @@
     </identification>
   <part-list>
     <score-part id="P1">
-      <part-name>A Clarinet</part-name>
-      <part-abbreviation>A Cl.</part-abbreviation>
+      <part-name print-object="no">A Clarinet</part-name>
+      <part-abbreviation print-object="no">A Cl.</part-abbreviation>
       <score-instrument id="P1-I1">
         <instrument-name>A Clarinet</instrument-name>
         </score-instrument>
