@@ -29,6 +29,8 @@
 #include "models/inspectormodelcreator.h"
 #include "models/measures/measuressettingsmodel.h"
 #include "models/notation/notes/noteheads/noteheadgroupsmodel.h"
+#include "models/text/textstylepopupmodel.h"
+
 #include "models/inspectorpopupcontroller.h"
 
 #include "view/widgets/fretcanvas.h"
@@ -90,6 +92,7 @@ void InspectorModule::registerUiTypes()
 
     qmlRegisterUncreatableType<MeasuresSettingsModel>("MuseScore.Inspector", 1, 0, "MeasuresSettingsModel", "Not creatable from QML");
     qmlRegisterType<NoteheadGroupsModel>("MuseScore.Inspector", 1, 0, "NoteheadGroupsModel");
+    qmlRegisterType<TextStylePopupModel>("MuseScore.Inspector", 1, 0, "TextStylePopupModel");
 
     qmlRegisterUncreatableType<DirectionTypes>("MuseScore.Inspector", 1, 0, "DirectionTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<SlurTieTypes>("MuseScore.Inspector", 1, 0, "SlurTieTypes", "Not creatable as it is an enum type");
