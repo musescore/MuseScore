@@ -218,6 +218,7 @@ struct Manifest {
     };
 
     Uri uri;
+    io::path_t path;
     Type type = Type::Undefined;
     String title;
     String description;
@@ -226,6 +227,7 @@ struct Manifest {
     String version;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
+    bool isRemovable = false;
 
     std::vector<Action> actions;
 
