@@ -44,7 +44,7 @@ void PlaybackCursor::move(muse::midi::tick_t tick, bool isPlaying)
 {
     // LOGALEX();
     // m_rect = resolveCursorRectByTick(tick);
-    m_rect = resolveCursorRectByTick1(tick, isPlaying);
+    m_rect = resolveCursorRectByTick(tick, isPlaying);
 }
 
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
@@ -133,7 +133,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
     return RectF(x, y, w, h);
 }
 
-muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, bool isPlaying)
+muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bool isPlaying)
 {
     if (!m_notation) {
         return RectF();
