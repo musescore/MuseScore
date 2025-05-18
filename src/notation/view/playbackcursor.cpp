@@ -1934,7 +1934,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
         qreal x2 = 0.0;
         Fraction t2;
 
-        // alex:: check note ticks and duration, compare with current ticks
+        // check note ticks and duration, compare with current ticks
         if (isPlaying) {
             std::vector<EngravingItem*> engravingItemList = s->elist();
             size_t len = engravingItemList.size();
@@ -1944,10 +1944,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                     continue;
                 }
                 ChordRest *chordRest = toChordRest(engravingItem);
-                // mu::engraving::TDuration duration = chordRest->durationType();
-                // int duration_ticks = duration.ticks().ticks();
                 int duration_ticks = chordRest->durationTypeTicks().ticks();
-                // LOGALEX() << "curr_ticks: " << tick.ticks() << ", note ticks: " << t1.ticks() << ", duration_ticks: " << duration_ticks;
+                
                 if (t1.ticks() + duration_ticks < tick.ticks()) {
                     processCursorNoteRenderRecover(engravingItem, tick.ticks());
                 } else {

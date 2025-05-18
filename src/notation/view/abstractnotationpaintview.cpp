@@ -83,8 +83,7 @@ void AbstractNotationPaintView::load()
     m_loadCalled = true;
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
-
-    // alex::
+    
     QObject::connect(m_playbackCursor.get(), SIGNAL(lingeringCursorUpdate(double,double,double,double)),
                      this, SLOT(handleLingeringCursorUpdate(double,double,double,double)));
     QObject::connect(m_playbackCursor.get(), SIGNAL(lingeringCursorUpdate1()),
@@ -638,7 +637,6 @@ bool AbstractNotationPaintView::elementPopupIsOpen(const ElementType& elementTyp
 // second - invoke target notationpaintview::paint
 void AbstractNotationPaintView::paint(QPainter* qp)
 {
-    // LOGALEX(); 
     TRACEFUNC;
 
     RectF rect = RectF::fromQRectF(qp->clipBoundingRect());
@@ -1469,7 +1467,6 @@ bool AbstractNotationPaintView::isInited() const
 
 void AbstractNotationPaintView::onPlayingChanged()
 {
-    LOGALEX();
     TRACEFUNC;
 
     if (!notationPlayback()) {

@@ -37,9 +37,7 @@ endif()
 # If not MUE_COMPILE_USE_SYSTEM_HARFBUZZ, or if it was not found,
 # download and build harfbuzz
 
-# modified by alex
-# set(REMOTE_ROOT_URL https://raw.githubusercontent.com/musescore/muse_deps/main)
-set(REMOTE_ROOT_URL https://github.com/musescore/muse_deps/tree/main)
+set(REMOTE_ROOT_URL https://raw.githubusercontent.com/musescore/muse_deps/main)
 set(remote_url ${REMOTE_ROOT_URL}/harfbuzz/7.1.0)
 set(local_path ${PROJECT_BINARY_DIR}/_deps/harfbuzz)
 if (NOT EXISTS ${local_path}/harfbuzz.cmake)

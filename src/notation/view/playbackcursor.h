@@ -56,15 +56,13 @@ public:
 
     const bool adjust_nm_rect() const;
     const muse::RectF& nm_rect() const;
-
-    // alex::
+    
     int hit_measure_no();
     Measure* hit_measure();
 
     void setHitMeasureNo(int m_no);
     void setHitMeasure(Measure* m);
 
-// alex::
     Q_OBJECT
 signals:
     void lingeringCursorUpdate(double x, double y, double width, double height) const;
@@ -94,7 +92,6 @@ private:
 
     INotationPtr m_notation;
 
-    // alex::
     int m_hit_measure_no = -1;
     Measure* m_hit_measure = nullptr;
     std::map<const Note*, int> ottava_map;
