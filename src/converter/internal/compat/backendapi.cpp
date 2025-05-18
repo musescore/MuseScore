@@ -268,11 +268,11 @@ QVariantMap BackendApi::readBeatsColors(const muse::io::path_t& filePath)
 
     QVariantMap result;
 
-    for (const QJsonValueConstRef colorObj: colors) {
+    for (const QJsonValueRef colorObj: colors) {
         const QJsonArray beatsIndexes = colorObj[u"beats"].toArray();
         const QColor beatsColor = QColor(colorObj[u"color"].toString());
 
-        for (const QJsonValueConstRef index: beatsIndexes) {
+        for (const QJsonValueRef colorObj: colors) {
             result[index.toString()] = beatsColor;
         }
     }
