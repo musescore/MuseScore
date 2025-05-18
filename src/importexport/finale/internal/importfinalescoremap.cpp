@@ -243,12 +243,15 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
             if (!forceAccidental) {
                 int line = noteValToLine(nval, targetStaff, segment->tick());
                 bool error = false;
-                Segment* startSegment = note->firstTiedNote()->chord()->segment();
-                AccidentalVal defaultAccVal = startSegment->measure()->findAccidental(startSegment, idx, line, error);
-                if (error) {
-                    defaultAccVal = Accidental::subtype2value(AccidentalType::NONE); // needed?
+                if (engraving::Note* firstTiedNote = note->firstTiedNote()) {
+                    if (Segment* startSegment = firstTiedNote->chord()->segment()) {
+                        AccidentalVal defaultAccVal = startSegment->measure()->findAccidental(startSegment, idx, line, error);
+                        if (error) {
+                            defaultAccVal = Accidental::subtype2value(AccidentalType::NONE); // needed?
+                        }
+                        forceAccidental = defaultAccVal != accVal;
+                    }
                 }
-                forceAccidental = defaultAccVal != accVal;
             }
             if (forceAccidental) {
                 AccidentalType at = Accidental::value2subtype(accVal);
@@ -258,6 +261,7 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
                 a->setParent(note);
                 note->add(a);
             }
+            chord->add(note);
         }
         cr = toChordRest(chord);
     } else {
@@ -636,49 +640,69 @@ void EnigmaXmlImporter::importMeasures()
             logger()->logInfo(String(u"Add entries: Successfully read staff_idx_t %1").arg(String::number(curStaffIdx)), m_doc, musxScrollViewItem->staffId, 1);
 		}
         if (!m_score->firstMeasure()) {
+            logger()->logWarning(String(u"Add entries: Score has no first measure."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         }
-        Segment* segment = m_score->firstMeasure()->getSegment(SegmentType::ChordRest, m_score->firstMeasure()->tick());
-        if (!segment) {
-            logger()->logWarning(String(u"Unable to initialise start segment"));
-            break;
+        Fraction currTick = m_score->firstMeasure()->tick();
+        if (currTick < Fraction(0, 1)) {
+            logger()->logWarning(String(u"Add entries: Initial tick does not exist."), m_doc, musxScrollViewItem->staffId, 1);
+            continue;
         }
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
-            details::GFrameHoldContext GFHold(musxMeasure->getDocument(), musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper());
-            if (!GFHold) {
-                continue;
+            Measure* measure = m_score->tick2measure(currTick);
+            if (!measure) {
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                break;
             }
-            Segment* measureStartSegment = segment;
-            for (LayerIndex layer = 0; layer < MAX_LAYERS; layer++) {
-                /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
-                std::shared_ptr<const EntryFrame> entryFrame = GFHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
-                if (!entryFrame) {
-                    continue;
-                }
-                const std::vector<std::shared_ptr<const EntryInfo>>& entries = entryFrame->getEntries();
-                if (entries.empty()) {
-                    continue;
-                }
+            Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
+            if (!segment) {
+                logger()->logWarning(String(u"Unable to initialise start segment"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                break;
+            }
+            bool processedEntries = false;
+            details::GFrameHoldContext gfHold(musxMeasure->getDocument(), musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper());
+            if (gfHold) {
+                for (LayerIndex layer = 0; layer < MAX_LAYERS; layer++) {
+                    /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
+                    std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
+                    if (!entryFrame) {
+                        continue;
+                    }
+                    const std::vector<std::shared_ptr<const EntryInfo>>& entries = entryFrame->getEntries();
+                    if (entries.empty()) {
+                        continue;
+                    }
+                    processedEntries = true;
 
-                /// @todo load (measure-specific) key signature from entryFrame->keySignature
+                    /// @todo load (measure-specific) key signature from entryFrame->keySignature RGP: this todo is probably unnecessary.
+                    /// Key sigs should be handled at the measure/staff level. They can only change on barlines in Finale. The one in entryFrame
+                    /// is provided for convenience and takes into account transposition (when written pitch is requested).
 
-                track_idx_t curTrackIdx = curStaffIdx * VOICES + static_cast<voice_idx_t>(layer);
-                segment = measureStartSegment;
-                std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo);
-                // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
-                ReadableTuplet rTuplet;
-                Fraction mDur = simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
-                rTuplet.absBegin = Fraction(0, 1);
-                rTuplet.absDuration = mDur;
-                rTuplet.absEnd = mDur;
-                rTuplet.layer = -1,
-                tupletMap.insert(tupletMap.begin(), rTuplet);
-                size_t lastAddedTupletIndex = 0;
-                for (size_t i = 0; i < entries.size(); ++i) {
-                    EntryInfoPtr entryInfoPtr = EntryInfoPtr(entryFrame, i);
-                    processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex);
+                    track_idx_t curTrackIdx = curStaffIdx * VOICES + static_cast<voice_idx_t>(layer);
+                    std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo);
+                    // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
+                    ReadableTuplet rTuplet;
+                    Fraction mDur = simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
+                    rTuplet.absBegin = Fraction(0, 1);
+                    rTuplet.absDuration = mDur;
+                    rTuplet.absEnd = mDur;
+                    rTuplet.layer = -1,
+                    tupletMap.insert(tupletMap.begin(), rTuplet);
+                    size_t lastAddedTupletIndex = 0;
+                    for (size_t i = 0; i < entries.size(); ++i) {
+                        EntryInfoPtr entryInfoPtr = EntryInfoPtr(entryFrame, i);
+                        processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex);
+                    }
                 }
             }
+            if (!processedEntries) {
+                Rest* rest = mu::engraving::Factory::createRest(segment, mu::engraving::TDuration(mu::engraving::DurationType::V_MEASURE));
+                rest->setScore(m_score);
+                rest->setTicks(measure->ticks());
+                rest->setTrack(curStaffIdx * VOICES);
+                segment->add(rest);
+            }
+            currTick += measure->ticks();
         }
     }
 }
