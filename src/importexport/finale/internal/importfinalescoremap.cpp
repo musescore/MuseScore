@@ -277,6 +277,8 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
     cr->setDurationType(d);
     cr->setDots(static_cast<int>(noteInfo.second));
     cr->setStaffMove(crossStaffMove);
+    cr->setParent(segment);
+    cr->setTrack(curTrackIdx);
     return cr;
 }
 
