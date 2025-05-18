@@ -626,14 +626,14 @@ void EnigmaXmlImporter::importMeasures()
     }
 
     // Add entries (notes, rests, tuplets)
-    std::vector<std::shared_ptr<others::Staff>> musxStaves = m_doc->getOthers()->getArray<others::Staff>(SCORE_PARTID);
-    for (const std::shared_ptr<others::Staff>& musxStaff : musxStaves) {
-        staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxStaff->getCmper()), muse::nidx);
+    auto musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    for (const auto& musxScrollViewItem : musxScrollView) {
+        staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxScrollViewItem->staffId), muse::nidx);
         if (curStaffIdx == muse::nidx) { //IF_ASSERT_FAILED
-            logger()->logWarning(String(u"Add entries: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(musxStaff->getCmper()))));
+            logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         } else {
-			logger()->logInfo(String(u"Add entries: Successfully read staff_idx_t %1").arg(String::number(curStaffIdx)));
+            logger()->logInfo(String(u"Add entries: Successfully read staff_idx_t %1").arg(String::number(curStaffIdx)), m_doc, musxScrollViewItem->staffId, 1);
 		}
         if (!m_score->firstMeasure()) {
             continue;
@@ -644,7 +644,7 @@ void EnigmaXmlImporter::importMeasures()
             break;
         }
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
-            details::GFrameHoldContext GFHold(musxMeasure->getDocument(), musxMeasure->getPartId(), musxStaff->getCmper(), musxMeasure->getCmper());
+            details::GFrameHoldContext GFHold(musxMeasure->getDocument(), musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper());
             if (!GFHold) {
                 continue;
             }
