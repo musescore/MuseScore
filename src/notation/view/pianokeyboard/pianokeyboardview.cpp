@@ -92,13 +92,11 @@ void PianoKeyboardView::init()
         
     // });
     m_controller->keyStatesChanged().onNotify(this, [this]() {
-        // LOGALEX() << "m_controller->keyStatesChanged().onNotify call back";
         updateKeyStateColors();
         update();
     });
 
     m_controller->playbackKeyStatesChanged().onNotify(this, [this]() {
-        // LOGALEX() << "m_controller->playbackKeyStatesChanged().onNotify call back";
         updatePlaybackKeyStateColors();
         update();
     });

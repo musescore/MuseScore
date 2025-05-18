@@ -105,7 +105,6 @@ Ret NotationProject::load(const muse::io::path_t& path, const muse::io::path_t& 
     std::string format = format_.empty() ? io::suffix(path) : format_;
 
     LOGD() << "try load: " << path << ", format: " << format;
-    LOGALEX() << "try load: " << path << ", format: " << format;
 
     setupProject();
     setPath(path);
