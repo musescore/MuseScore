@@ -234,7 +234,6 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
         return 0;
     }
 
-    // LOGALEX() << "processAuxChannels(outBuffer, samplesPerChannel)";
 
     processAuxChannels(outBuffer, samplesPerChannel);
     completeOutput(outBuffer, samplesPerChannel);

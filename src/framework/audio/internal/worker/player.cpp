@@ -66,7 +66,6 @@ void Player::init()
         //! NOTE Send initial state
         m_playbackPositionChanged.send(s->player()->playbackPosition());
         s->player()->playbackPositionChanged().onReceive(this, [this](const secs_t newPos) {
-            // LOGALEX() << "m_playbackPositionChanged, newPos: " << newPos;
             m_playbackPositionChanged.send(newPos);
         });
     }, AudioThread::ID);
@@ -91,7 +90,6 @@ TrackSequenceId Player::sequenceId() const
 
 void Player::play(const secs_t delay)
 {
-    LOGALEX();
     ONLY_AUDIO_MAIN_THREAD;
 
     Async::call(this, [this, delay]() {

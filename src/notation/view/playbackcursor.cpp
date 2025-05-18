@@ -42,7 +42,7 @@ void PlaybackCursor::setNotation(INotationPtr notation)
 
 void PlaybackCursor::move(muse::midi::tick_t tick, bool isPlaying)
 {
-    // LOGALEX();
+    // Handle the coloring function of playing notes when the playback cursor moves
     // m_rect = resolveCursorRectByTick(tick);
     m_rect = resolveCursorRectByTick(tick, isPlaying);
 }
@@ -164,7 +164,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
         qreal x2 = 0.0;
         Fraction t2;
 
-        // alex:: check note ticks and duration, compare with current ticks
+        // check note ticks and duration, compare with current ticks
         if (isPlaying) {
             std::vector<EngravingItem*> engravingItemList = s->elist();
             size_t len = engravingItemList.size();
@@ -174,10 +174,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                     continue;
                 }  
                 ChordRest *chordRest = toChordRest(engravingItem);
-                // mu::engraving::TDuration duration = chordRest->durationType();
-                // int duration_ticks = duration.ticks().ticks();
                 int duration_ticks = chordRest->durationTypeTicks().ticks();
-                // LOGALEX() << "curr_ticks: " << tick.ticks() << ", note ticks: " << t1.ticks() << ", duration_ticks: " << duration_ticks;
                 
                 if (t1.ticks() + duration_ticks < tick.ticks()) {
                     engravingItem->setColor(muse::draw::Color::BLACK);
@@ -580,7 +577,6 @@ QColor PlaybackCursor::color() const
     return configuration()->playbackCursorColor();
 }
 
-// alex::
 int PlaybackCursor::hit_measure_no() { return m_hit_measure_no; }
 Measure *PlaybackCursor::hit_measure() {
     return m_hit_measure;

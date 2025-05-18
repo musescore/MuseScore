@@ -51,14 +51,12 @@ public:
 
     const muse::RectF& rect() const;
 
-    // alex::
     int hit_measure_no();
     Measure *hit_measure();
 
     void setHitMeasureNo(int m_no);
     void setHitMeasure(Measure *m);
 
-// alex::
     Q_OBJECT
 signals:
     void lingeringCursorUpdate(double x, double y, double width, double height) const;
@@ -74,7 +72,6 @@ private:
 
     INotationPtr m_notation;
 
-    // alex::
     int m_hit_measure_no = -1;
     Measure *m_hit_measure = nullptr;
 

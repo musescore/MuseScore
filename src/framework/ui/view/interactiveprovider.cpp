@@ -236,7 +236,6 @@ RetVal<Val> InteractiveProvider::open(const UriQuery& q)
     //! and if it is found, then open it)
 
     ContainerMeta openMeta = uriRegister()->meta(q.uri());
-    LOGALEX() << "openMeta.type: " << openMeta.type;
     switch (openMeta.type) {
     case ContainerType::QWidgetDialog:
         openedRet = openWidgetDialog(q);
