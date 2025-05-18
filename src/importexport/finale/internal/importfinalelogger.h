@@ -44,10 +44,10 @@ public:
     FinaleLogger(FinaleLogger&&) = delete;
     FinaleLogger& operator=(FinaleLogger&&) = delete;
 
-    void logDebugTrace(const muse::String& trace, const musx::dom::DocumentPtr& musxDocument = nullptr, musx::dom::MeasCmper currMusxStaff = 0, musx::dom::InstCmper currMusxMeas = 0) const;
-    void logInfo(const muse::String& info, const musx::dom::DocumentPtr& musxDocument = nullptr, musx::dom::MeasCmper currMusxStaff = 0, musx::dom::InstCmper currMusxMeas = 0) const;
-    void logWarning(const muse::String& warning, const musx::dom::DocumentPtr& musxDocument = nullptr, musx::dom::MeasCmper currMusxStaff = 0, musx::dom::InstCmper currMusxMeas = 0) const;
-    void logError(const muse::String& error, const musx::dom::DocumentPtr& musxDocument = nullptr, musx::dom::MeasCmper currMusxStaff = 0, musx::dom::InstCmper currMusxMeas = 0) const;
+    void logDebugTrace(const muse::String& trace, const musx::dom::DocumentPtr& musxDocument = nullptr, musx::dom::InstCmper currMusxStaff = 0, musx::dom::MeasCmper currMusxMeas = 0) const;
+    void logInfo(const muse::String& info, const musx::dom::DocumentPtr& musxDocument = nullptr, musx::dom::InstCmper currMusxStaff = 0, musx::dom::MeasCmper currMusxMeas = 0) const;
+    void logWarning(const muse::String& warning, const musx::dom::DocumentPtr& musxDocument = nullptr, musx::dom::InstCmper currMusxStaff = 0, musx::dom::MeasCmper currMusxMeas = 0) const;
+    void logError(const muse::String& error, const musx::dom::DocumentPtr& musxDocument = nullptr, musx::dom::InstCmper currMusxStaff = 0, musx::dom::MeasCmper currMusxMeas = 0) const;
     void setLoggingLevel(const Level level) { m_level = level; }
 private:
     Level m_level = Level::MUSX_INFO;
