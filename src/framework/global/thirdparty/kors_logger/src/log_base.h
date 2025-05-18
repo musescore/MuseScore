@@ -43,14 +43,12 @@ SOFTWARE.
 #define LOGE_T(tag) IF_LOGLEVEL(kors::logger::Level::Normal) LOG_STREAM(kors::logger::Logger::ERRR, tag, kors::logger::Color::Red)
 #define LOGW_T(tag) IF_LOGLEVEL(kors::logger::Level::Normal) LOG_STREAM(kors::logger::Logger::WARN, tag, kors::logger::Color::Yellow)
 #define LOGI_T(tag) IF_LOGLEVEL(kors::logger::Level::Normal) LOG_STREAM(kors::logger::Logger::INFO, tag, kors::logger::Color::Green)
-#define ALEX_LOGI_T(tag) IF_LOGLEVEL(kors::logger::Level::Normal) LOG_STREAM(kors::logger::Logger::INFO, tag, kors::logger::Color::Magenta)
 #define LOGD_T(tag) IF_LOGLEVEL(kors::logger::Level::Debug) LOG_STREAM(kors::logger::Logger::DEBG, tag, kors::logger::Color::None)
 #define LOGDA_T(tag) IF_LOGLEVEL(kors::logger::Level::Debug) LOG_STREAM(kors::logger::Logger::DEBG, tag, kors::logger::Color::Cyan)
 
 #define LOGE LOGE_T(LOG_TAG)
 #define LOGW LOGW_T(LOG_TAG)
 #define LOGI LOGI_T(LOG_TAG)
-#define LOGALEX if (0) ALEX_LOGI_T(LOG_TAG)
 #define LOGD LOGD_T(LOG_TAG)
 #define LOGDA LOGDA_T(LOG_TAG)      // active debug
 #define LOGN if (0) LOGD_T(LOG_TAG) // compiling, but no output

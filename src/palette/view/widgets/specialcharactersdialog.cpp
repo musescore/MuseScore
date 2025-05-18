@@ -713,11 +713,7 @@ void SpecialCharactersDialog::populateUnicode()
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore->dummy());
         fs->setCode(code);
         fs->setFont(m_font);
-        // m_pUnicode->appendElement(fs, QString("0x%1").arg(code, 5, 16, QLatin1Char('0')));
-        // modified by raw master branch, but I stash the alex version
-        // m_pUnicode->appendElement(fs, QString("0x%1").arg(static_cast<int>(code), 5, 16, QLatin1Char('0')));
-        // modified by alex - compiled error: /Users/erlich/Developer/workspace/musescore/MuseScore/src/palette/view/widgets/specialcharactersdialog.cpp:715:55: error: no matching member function for call to 'arg'
-        m_pUnicode->appendElement(fs, QString("0x%1").arg(static_cast<unsigned int>(code), 5, 16, QLatin1Char('0')));
+        m_pUnicode->appendElement(fs, QString("0x%1").arg(static_cast<int>(code), 5, 16, QLatin1Char('0')));
     }
 }
 
