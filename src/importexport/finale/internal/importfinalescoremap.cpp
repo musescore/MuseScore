@@ -439,8 +439,9 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         }
     }
 
-    // add clef change
+    /// @todo clef changes should be handled in a separate loop for clef changes, and not part of the entry loop! (RGP)
     /// @todo visibility options
+    /*
     ClefType entryClefType = FinaleTConv::toMuseScoreClefType(entryInfo->clefIndex);
     if (entryClefType != ClefType::INVALID) {
         Clef* clef = Factory::createClef(m_score->dummy()->segment());
@@ -457,6 +458,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
                            clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, segment->tick());
         clefSeg->add(clef);
     }
+    */
 
     // create Tuplets as needed, starting with the outermost
     for (size_t i = 0; i < tupletMap.size(); ++i) {
