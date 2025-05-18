@@ -69,7 +69,7 @@ signals:
 private:
     QColor color() const;
     muse::RectF resolveCursorRectByTick(muse::midi::tick_t tick) const;
-    muse::RectF resolveCursorRectByTick1(muse::midi::tick_t tick, bool isPlaying = true);
+    muse::RectF resolveCursorRectByTick(muse::midi::tick_t tick, bool isPlaying = true);
 
     bool m_visible = false;
     muse::RectF m_rect;
