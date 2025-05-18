@@ -81,7 +81,7 @@ jobs:
 
           echo "platforms=${{ inputs.platforms }}" | tee -a "$GITHUB_OUTPUT"
           echo "build_mode=${{ inputs.build_mode }}" | tee -a "$GITHUB_OUTPUT"
-          echo "runtest=${{ inputs.runtest }}" >> "$GITHUB_OUTPUT"
+          echo "runtest=${{ inputs.runtest }}" | tee -a "$GITHUB_OUTPUT"
           echo "publish=${{ inputs.publish }}" | tee -a "$GITHUB_OUTPUT"
 
         elif [[ "${{ inputs.execfrom }}" == "buildall" ]]; then
@@ -90,7 +90,7 @@ jobs:
 
           echo "platforms=${{ inputs.platforms }}" | tee -a "$GITHUB_OUTPUT"
           echo "build_mode=${{ inputs.build_mode }}" | tee -a "$GITHUB_OUTPUT"
-          echo "runtest=on" >> "$GITHUB_OUTPUT"
+          echo "runtest=on" | tee -a "$GITHUB_OUTPUT"
           echo "publish=${{ inputs.publish }}" | tee -a "$GITHUB_OUTPUT"
 
         elif [[ "${{ github.event_name }}" == "pull_request" ]];  then
@@ -99,7 +99,7 @@ jobs:
 
           echo "platforms=linux_x64 linux_armhf linux_arm64" | tee -a "$GITHUB_OUTPUT"
           echo "build_mode=devel" | tee -a "$GITHUB_OUTPUT"  # copied from make_build_mode_env.sh
-          echo "runtest=on" >> "$GITHUB_OUTPUT"
+          echo "runtest=on" | tee -a "$GITHUB_OUTPUT"
           echo "publish=off" | tee -a "$GITHUB_OUTPUT"
 
         elif [[ "${{ github.event_name }}" == "schedule" ]];  then
@@ -108,7 +108,7 @@ jobs:
           
           echo "platforms=linux_x64 linux_armhf linux_arm64" | tee -a "$GITHUB_OUTPUT"
           echo "build_mode=nightly" | tee -a "$GITHUB_OUTPUT"  # copied from make_build_mode_env.sh
-          echo "runtest=on" >> "$GITHUB_OUTPUT"
+          echo "runtest=on" | tee -a "$GITHUB_OUTPUT"
           echo "publish=off" | tee -a "$GITHUB_OUTPUT"
 
         elif [[ "${{ github.event_name }}" == "push" ]]; then
@@ -117,14 +117,14 @@ jobs:
 
           echo "platforms=linux_x64 linux_armhf linux_arm64" | tee -a "$GITHUB_OUTPUT"
           echo "build_mode=devel" | tee -a "$GITHUB_OUTPUT"  # copied from make_build_mode_env.sh
-          echo "runtest=on" >> "$GITHUB_OUTPUT"
+          echo "runtest=on" | tee -a "$GITHUB_OUTPUT"
           echo "publish=off" | tee -a "$GITHUB_OUTPUT"
 
         else
 
           echo "platforms=${{ inputs.platforms }}" | tee -a "$GITHUB_OUTPUT"
           echo "build_mode=${{ inputs.build_mode }}" | tee -a "$GITHUB_OUTPUT"
-          echo "runtest=${{ inputs.runtest }}" >> "$GITHUB_OUTPUT"
+          echo "runtest=${{ inputs.runtest }}" | tee -a "$GITHUB_OUTPUT"
           echo "publish=${{ inputs.publish }}" | tee -a "$GITHUB_OUTPUT"
 
         fi
@@ -147,6 +147,8 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v4
     - name: Configure workflow
+      env:
+        PR_TITLE: ${{ github.event.pull_request.title }} # somehow required for correct filename when PR title contains slash inside doublequotes GH#938
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ needs.plan.outputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
@@ -165,7 +167,7 @@ jobs:
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "pull_request" ]; then
-          ADD_INFO="_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}"
+          ADD_INFO="_${{ github.event.pull_request.number }}_$( tr '":<>|*?/\\’' '_' <<< "$PR_TITLE" )"
         fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_${ARCH}${ADD_INFO}")"
 
@@ -233,6 +235,8 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v4
     - name: Configure workflow
+      env:
+        PR_TITLE: ${{ github.event.pull_request.title }} # somehow required for correct filename when PR title contains slash inside doublequotes GH#938
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ needs.plan.outputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
@@ -251,7 +255,7 @@ jobs:
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "pull_request" ]; then
-          ADD_INFO="_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}"
+          ADD_INFO="_${{ github.event.pull_request.number }}_$( tr '":<>|*?/\\’' '_' <<< "$PR_TITLE" )"
         fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_${ARCH}${ADD_INFO}")"
 
@@ -319,6 +323,8 @@ jobs:
     - name: Clone repository
       uses: actions/checkout@v4
     - name: Configure workflow
+      env:
+        PR_TITLE: ${{ github.event.pull_request.title }} # somehow required for correct filename when PR title contains slash inside doublequotes GH#938
       run: |
         bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ needs.plan.outputs.build_mode }}
         BUILD_MODE=$(cat ./build.artifacts/env/build_mode.env)
@@ -337,7 +343,7 @@ jobs:
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
         if [ "${{ github.event_name }}" == "pull_request" ]; then
-          ADD_INFO="_${{ github.event.pull_request.number }}_${{ github.event.pull_request.title }}"
+          ADD_INFO="_${{ github.event.pull_request.number }}_$( tr '":<>|*?/\\’' '_' <<< "$PR_TITLE" )"
         fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\’' '_' <<<"Mu3.7_${BUILD_NUMBER}_Lin_${ARCH}${ADD_INFO}")"
 
