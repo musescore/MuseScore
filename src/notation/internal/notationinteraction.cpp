@@ -369,7 +369,6 @@ void NotationInteraction::notifyAboutSelectionChangedIfNeed()
 
 void NotationInteraction::notifyAboutPianoKeyboardNotesChanged() 
 {
-    // LOGALEX();
     TRACEFUNC;
 
     m_playbackNotesChanged.notify();
@@ -877,7 +876,6 @@ void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
 
 void NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
 {
-    // LOGALEX() << "staffIndex: " << staffIndex;
     TRACEFUNC;
 
     const mu::engraving::Selection& selection = score()->selection();
@@ -5106,7 +5104,6 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
 
 void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool moveSignaturesClef)
 {
-    LOGALEX();
     if (count < 1) {
         return;
     }
