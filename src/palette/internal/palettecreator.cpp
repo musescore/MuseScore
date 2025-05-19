@@ -1735,7 +1735,7 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     };
 
     for (const FretDiagramInfo& fretboardDiagram : fretboardDiagrams) {
-        auto fret = FretDiagram::createFromString(gpaletteScore, fretboardDiagram.diagram);
+        auto fret = FretDiagram::createFromPattern(gpaletteScore, fretboardDiagram.diagram);
         fret->setHarmony(fretboardDiagram.harmony);
 
         if (fretboardDiagram.harmony.empty()) {
