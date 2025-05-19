@@ -1171,7 +1171,7 @@ void Harmony::render(const String& s, HarmonyRenderCtx& ctx)
 
     Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList.front() : font();
     TextSegment* ts = new TextSegment(s, f, ctx.x(), ctx.y(), ctx.hAlign);
-    m_textList.push_back(ts);
+    ctx.textList.push_back(ts);
     ctx.setX(ctx.x() + ts->width());
 }
 
@@ -1201,7 +1201,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, HarmonyRenderCtx
                 double nmag = chordList->nominalMag();
                 ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * nmag);
             }
-            m_textList.push_back(ts);
+            ctx.textList.push_back(ts);
             ctx.setX(ctx.x() + ts->width());
         } else if (a.type == RenderAction::RenderActionType::MOVE) {
             FontMetrics fm = FontMetrics(font());
@@ -1236,7 +1236,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, HarmonyRenderCtx
             font.setPointSizeF(font.pointSizeF() * noteMag);
 
             TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
-            m_textList.push_back(ts);
+            ctx.textList.push_back(ts);
             ctx.setX(ctx.x() + ts->width());
         } else if (a.type == RenderAction::RenderActionType::ACCIDENTAL) {
             String c;
@@ -1263,7 +1263,7 @@ void Harmony::render(const std::list<RenderAction>& renderList, HarmonyRenderCtx
                 font.setPointSizeF(font.pointSizeF() * noteMag);
 
                 TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
-                m_textList.push_back(ts);
+                ctx.textList.push_back(ts);
                 ctx.setX(ctx.x() + ts->width());
             }
         } else if (a.type == RenderAction::RenderActionType::STOPHALIGN) {
@@ -1402,9 +1402,16 @@ void Harmony::render()
     mutldata()->polychordDividerLines.reset();
     HarmonyRenderCtx ctx;
 
+    // Map of text segments and their final width
+    std::map<double, std::vector<TextSegment*> > chordTextSegments;
+
     for (size_t i = m_chords.size(); i > 0; i--) {
         HarmonyInfo* harmony = m_chords.at(i - 1);
         renderSingleHarmony(harmony, ctx);
+
+        chordTextSegments.emplace(std::pair<double, std::vector<TextSegment*> > { ctx.x(), ctx.textList });
+        m_textList.insert(m_textList.end(), ctx.textList.begin(), ctx.textList.end());
+        ctx.textList.clear();
 
         if (m_chords.size() == 1 || i == 1) {
             break;
@@ -1424,6 +1431,41 @@ void Harmony::render()
 
         ctx.setY(ctx.y() - style().styleS(Sid::polychordDividerSpacing).toMM(spatium()) * 2.0);
         ctx.setY(ctx.y() - style().styleS(Sid::polychordDividerThickness).toMM(spatium()));
+    }
+
+    // Align polychords
+
+    AlignH align = AlignH(style().styleI(Sid::chordAlignmentToNotehead));
+
+    if (align == AlignH::LEFT) {
+        return;
+    }
+
+    double longestLine = 0.0;
+    for (double width : muse::keys(chordTextSegments)) {
+        if (width > longestLine) {
+            longestLine = width;
+        }
+    }
+
+    for (auto& textSegs : chordTextSegments) {
+        double width = textSegs.first;
+        std::vector<TextSegment*>& segs = textSegs.second;
+
+        double diff = longestLine - width;
+
+        if (muse::RealIsNull(diff)) {
+            continue;
+        }
+
+        // For centre align adjust by .5* difference, for right align adjust by full difference
+        if (align == AlignH::HCENTER) {
+            diff *= 0.5;
+        }
+
+        for (TextSegment* seg : segs) {
+            seg->x += diff;
+        }
     }
 }
 
