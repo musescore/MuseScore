@@ -1652,6 +1652,15 @@ PropertyValue Chord::propertyDefault(Pid propertyId) const
     }
 }
 
+bool Chord::isUserModified() const
+{
+    if (showStemSlash() != propertyDefault(Pid::SHOW_STEM_SLASH).toBool()) {
+        return true;
+    }
+
+    return EngravingItem::isUserModified();
+}
+
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
