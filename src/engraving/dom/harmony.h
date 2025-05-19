@@ -40,21 +40,6 @@ class ParsedChord;
 //   TextSegment
 //---------------------------------------------------------
 
-struct HarmonyRenderCtx {
-    PointF pos = PointF();
-    bool hAlign = true;
-
-    double x() const { return pos.x(); }
-    double y() const { return pos.y(); }
-
-    void setX(double v) { pos.setX(v); }
-    void setY(double v) { pos.setY(v); }
-};
-
-//---------------------------------------------------------
-//   TextSegment
-//---------------------------------------------------------
-
 struct TextSegment {
     muse::draw::Font m_font;
     String text;
@@ -71,6 +56,22 @@ struct TextSegment {
     TextSegment(const String&, const muse::draw::Font&, double x, double y, bool align);
     TextSegment(const String&, const muse::draw::Font&, double x, double y, PointF offset, bool align);
     void setText(const String& t) { text = t; }
+};
+
+//---------------------------------------------------------
+//   HarmonyRenderCtx
+//---------------------------------------------------------
+
+struct HarmonyRenderCtx {
+    PointF pos = PointF();
+    bool hAlign = true;
+    std::vector<TextSegment*> textList;
+
+    double x() const { return pos.x(); }
+    double y() const { return pos.y(); }
+
+    void setX(double v) { pos.setX(v); }
+    void setY(double v) { pos.setY(v); }
 };
 
 struct RenderAction;
