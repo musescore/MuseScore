@@ -35,7 +35,6 @@ namespace mu::engraving::rendering::score {
 class HarmonyLayout
 {
 public:
-    static void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove,
-                               const double maxShiftBelow);
+    static bool alignHarmonies(const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove, const double maxShiftBelow);
 };
 }

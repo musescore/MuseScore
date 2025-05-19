@@ -39,6 +39,13 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
+//---------------------------------------------------------
+//  Harmony alignment compatibility
+//  For compatibility with pre 4.6 maxChordShiftAbove/Below
+//  we use the old algorithm to find chords which should not
+//  be adjusted
+//---------------------------------------------------------
+
 // Help class.
 // Contains harmonies/fretboard per segment.
 class HarmonyList : public std::vector<EngravingItem*>
@@ -96,59 +103,50 @@ bool HarmonyList::align(bool above, double reference, double maxShift)
     // only the reference elements is used in the algorithm. All other
     // elements will remain their original placement with respect to
     // the reference element.
-    bool moved { false };
+    bool moved = false;
     if (muse::RealIsNull(reference)) {
         return moved;
     }
 
-    for (auto s : muse::keys(elements)) {
+    for (auto segEls : muse::keys(elements)) {
         std::list<EngravingItem*> handled;
-        EngravingItem* be = getReferenceElement(s, above, false);
-        if (!be) {
+        EngravingItem* refEl = getReferenceElement(segEls, above, false);
+        if (!refEl) {
             // If there are only invisible elements, we have to use an invisible
             // element for alignment reference.
-            be = getReferenceElement(s, above, true);
+            refEl = getReferenceElement(segEls, above, true);
         }
-        if (be && ((above && (be->y() < (reference + maxShift))) || ((!above && (be->y() > (reference - maxShift)))))) {
-            double shift = be->ldata()->pos().y();
-            be->mutldata()->setPosY(reference - be->ryoffset());
-            shift -= be->ldata()->pos().y();
-            for (EngravingItem* e : elements[s]) {
-                if ((above && e->placeBelow()) || (!above && e->placeAbove())) {
+
+        if (!refEl) {
+            continue;
+        }
+
+        const bool shouldAdjustAbove = (refEl->y() < (reference + maxShift));
+        const bool shouldAdjustBelow = (refEl->y() > (reference - maxShift));
+        const bool shouldAdjust = above ? shouldAdjustAbove : shouldAdjustBelow;
+
+        if (shouldAdjust) {
+            moved = true;
+            refEl->setVerticalAlign(true);
+            refEl->setPropertyFlags(Pid::VERTICAL_ALIGN, PropertyFlags::STYLED);
+            refEl->triggerLayout();
+            for (EngravingItem* e : elements[segEls]) {
+                if (e == refEl || (above && e->placeBelow()) || (!above && e->placeAbove())) {
                     continue;
                 }
                 modified.push_back(e);
                 handled.push_back(e);
-                moved = true;
-                if (e != be) {
-                    e->mutldata()->moveY(-shift);
-                }
+
+                e->setVerticalAlign(true);
+                e->setPropertyFlags(Pid::VERTICAL_ALIGN, PropertyFlags::STYLED);
+                e->triggerLayout();
             }
             for (auto e : handled) {
-                muse::remove(elements[s], e);
+                muse::remove(elements[segEls], e);
             }
         }
     }
     return moved;
-}
-
-void HarmonyList::addToSkyline(const System* system)
-{
-    for (EngravingItem* e : modified) {
-        const Segment* s = toSegment(e->explicitParent());
-        const MeasureBase* m = toMeasureBase(s->explicitParent());
-        system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));
-        if (!e->isFretDiagram()) {
-            continue;
-        }
-        FretDiagram* fd = toFretDiagram(e);
-        Harmony* h = fd->harmony();
-        if (h) {
-            system->staff(e->staffIdx())->skyline().add(h->shape().translated(h->pos() + fd->pos() + s->pos() + m->pos()));
-        } else {
-            system->staff(e->staffIdx())->skyline().add(fd->shape().translated(fd->pos() + s->pos() + m->pos()));
-        }
-    }
 }
 
 EngravingItem* HarmonyList::getReferenceElement(const Segment* s, bool above, bool visible) const
@@ -173,11 +171,11 @@ EngravingItem* HarmonyList::getReferenceElement(const Segment* s, bool above, bo
     return element;
 }
 
-void HarmonyLayout::alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove,
+bool HarmonyLayout::alignHarmonies(const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove,
                                    const double maxShiftBelow)
 {
     if (muse::RealIsNull(maxShiftAbove) && muse::RealIsNull(maxShiftBelow)) {
-        return;
+        return false;
     }
 
     // Collect all fret diagrams and chord symbol and store them per staff.
@@ -191,21 +189,24 @@ void HarmonyLayout::alignHarmonies(const System* system, const std::vector<Segme
         }
     }
 
+    bool moved = false;
+
     for (staff_idx_t idx : muse::keys(staves)) {
         // Align the objects.
         // Algorithm:
         //    - Find highest placed harmony/fretdiagram.
-        //    - Align all harmony/fretdiagram objects placed between height and height-maxShiftAbove.
+        //    - Exclude from alignment all harmony/fretdiagram objects placed outside height and height-maxShiftAbove.
         //    - Repeat for all harmony/fretdiagram objects below height-maxShiftAbove.
-        bool moved { true };
+        bool movedStaff { true };
         int pass { 0 };
-        while (moved && (pass++ < 10)) {
-            moved = false;
-            moved |= staves[idx].align(true, staves[idx].getReferenceHeight(true), maxShiftAbove);
-            moved |= staves[idx].align(false, staves[idx].getReferenceHeight(false), maxShiftBelow);
+        while (movedStaff && (pass++ < 10)) {
+            movedStaff = false;
+            movedStaff |= staves[idx].align(true, staves[idx].getReferenceHeight(true), maxShiftAbove);
+            movedStaff |= staves[idx].align(false, staves[idx].getReferenceHeight(false), maxShiftBelow);
         }
 
-        // Add all aligned objects to the sky line.
-        staves[idx].addToSkyline(system);
+        moved |= movedStaff;
     }
+
+    return moved;
 }
