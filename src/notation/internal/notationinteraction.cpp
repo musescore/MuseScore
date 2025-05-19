@@ -1141,6 +1141,41 @@ void NotationInteraction::addPlaybackNote(Note *note) {
     m_playback_notes.push_back(note);
 }
 
+void NotationInteraction::notifyClefKeySigsKeysChanged() {
+    m_clefKeySigsKeysChanged.notify();
+}
+
+muse::async::Notification NotationInteraction::clefKeySigsKeysChanged() const {
+    return m_clefKeySigsKeysChanged;
+}
+
+void NotationInteraction::clearClefKeySigsKeys() {
+    m_clefKeySigsKeys.clear();
+}
+
+std::set<uint> NotationInteraction::clefKeySigsKeys() const {
+    return m_clefKeySigsKeys;
+}
+
+void NotationInteraction::addClefKeySigsKeys(uint clefKeySigsKey) {
+    m_clefKeySigsKeys.insert(clefKeySigsKey);
+}
+
+void NotationInteraction::notifyClefKeySigsKeysChange() {
+    if (m_clefKeySigsKeys.empty()) {
+        return;
+    }
+    m_clefKeySigsKeysChanged.notify();
+}
+
+void NotationInteraction::playingChang(bool is_playing) {
+    m_isplaying = is_playing;
+}
+
+bool NotationInteraction::isPlaying() const {
+    return m_isplaying;
+}
+
 void NotationInteraction::clearPlaybackNotes() {
     m_playback_notes.clear();
 }

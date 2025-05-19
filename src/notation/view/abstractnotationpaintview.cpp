@@ -1426,6 +1426,8 @@ void AbstractNotationPaintView::onPlayingChanged()
     m_autoScrollEnabled = true;
     m_enableAutoScrollTimer.stop();
 
+    notation()->interaction()->playingChang(isPlaying);
+
     if (isPlaying) {
         audio::secs_t pos = globalContext()->playbackState()->playbackPosition();
         muse::midi::tick_t tick = notationPlayback()->secToTick(pos);
