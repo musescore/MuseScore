@@ -559,6 +559,31 @@ static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::Tuple
     return result;
 }
 
+static Clef * createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, Measure* measure, Edu musxEduPos, bool afterBarline)
+{
+    ClefType entryClefType = FinaleTConv::toMuseScoreClefType(musxClef);
+    if (entryClefType != ClefType::INVALID) {
+        Clef* clef = Factory::createClef(score->dummy()->segment());
+        clef->setTrack(static_cast<int>(staffIdx) * VOICES);
+        clef->setConcertClef(entryClefType);
+        clef->setTransposingClef(entryClefType);
+        // clef->setShowCourtesy();
+        // clef->setForInstrumentChange();
+        clef->setGenerated(false);
+        clef->setIsHeader(false); /// @todo not sure what to do here
+        if (afterBarline) {
+            clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
+        }
+
+        engraving::Fraction clefTick = measure->tick() + FinaleTConv::musxFractionToFraction(musx::util::Fraction::fromEdu(musxEduPos));
+        Segment* clefSeg = measure->getSegment(
+                           clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
+        clefSeg->add(clef);
+        return clef;
+    }
+    return nullptr;
+}
+
 void EnigmaXmlImporter::importMeasures()
 {
     // add default time signature
@@ -614,7 +639,7 @@ void EnigmaXmlImporter::importMeasures()
     }
 
     // Add entries (notes, rests, tuplets)
-    auto musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    auto musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID); /// @todo eventually SCORE_PARTID may need to be a parameter
     for (const auto& musxScrollViewItem : musxScrollView) {
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxScrollViewItem->staffId), muse::nidx);
         if (curStaffIdx == muse::nidx) { //IF_ASSERT_FAILED
@@ -632,6 +657,7 @@ void EnigmaXmlImporter::importMeasures()
             logger()->logWarning(String(u"Add entries: Initial tick does not exist."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         }
+        ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, SCORE_PARTID, musxScrollViewItem->staffId); /// @todo eventually SCORE_PARTID may need to be a parameter
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
             Measure* measure = m_score->tick2measure(currTick);
             if (!measure) {
@@ -646,25 +672,25 @@ void EnigmaXmlImporter::importMeasures()
             bool processedEntries = false;
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper());
             if (gfHold) {
-
-                /// @todo add clef change and options
-                /*ClefType entryClefType = FinaleTConv::toMuseScoreClefType(entryInfo->clefIndex);
-                if (entryClefType != ClefType::INVALID) {
-                    Clef* clef = Factory::createClef(m_score->dummy()->segment());
-                    clef->setTrack(curTrackIdx);
-                    clef->setConcertClef(entryClefType);
-                    // clef->setTransposingClef(entryClefType);
-                    // clef->setShowCourtesy();
-                    // clef->setForInstrumentChange();
-                    clef->setGenerated(false);
-                    clef->setIsHeader(false); /// @todo is this always correct?
-                    // clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
-
-                    Segment* clefSeg = segment->measure()->getSegment(
-                                       clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, segment->tick());
-                    clefSeg->add(clef);
-                }*/
-
+                /// @todo take into account clefs forced by transposition (in Finale staves or staff styles)
+                if (gfHold->clefId.has_value()) {
+                    if (gfHold->clefId.value() != musxCurrClef) {
+                        if (createClef(m_score, curStaffIdx, gfHold->clefId.value(), measure, 0, gfHold->clefAfterBarline)) {
+                            musxCurrClef = gfHold->clefId.value();
+                        }
+                    }
+                } else {
+                    auto midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(gfHold.getRequestedPartId(), gfHold->clefListId);
+                    for (const auto& midMeasureClef : midMeasureClefs) {
+                        if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef) {
+                            const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
+                            if (Clef* clef = createClef(m_score, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline)) {
+                                /// @todo perhaps populate other fields from midMeasureClef, such as x/y offsets, clef-specific mag, etc.?
+                                musxCurrClef = midMeasureClef->clefIndex;
+                            }
+                        }
+                    }
+                }
                 for (LayerIndex layer = 0; layer < MAX_LAYERS; layer++) {
                     /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
                     std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
