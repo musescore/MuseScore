@@ -98,6 +98,14 @@ public:
     std::vector<Note *> playbackNotes() const override;
     void clearPlaybackNotes() override;
     void addPlaybackNote(Note *note) override;
+    void notifyClefKeySigsKeysChanged() override;
+    muse::async::Notification clefKeySigsKeysChanged() const override;
+    void clearClefKeySigsKeys() override;
+    std::set<uint> clefKeySigsKeys() const override;
+    void addClefKeySigsKeys(uint) override;
+    void notifyClefKeySigsKeysChange() override;
+    void playingChang(bool is_playing) override;
+    bool isPlaying() const override;
     void notifyPianoKeyboardNotesChanged() override;
     void selectTopOrBottomOfChord(MoveDirection d) override;
     void findAndSelectChordRest(const Fraction& tick) override;
@@ -523,6 +531,9 @@ private:
 
     muse::async::Notification m_playbackNotesChanged;
     std::vector<Note *> m_playback_notes;
+    muse::async::Notification m_clefKeySigsKeysChanged;
+    std::set<uint> m_clefKeySigsKeys;
+    bool m_isplaying = false;
 
     std::shared_ptr<NotationSelectionFilter> m_selectionFilter = nullptr;
 
