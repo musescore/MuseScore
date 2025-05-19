@@ -51,6 +51,14 @@ public:
 
     bool isFromMidi() const;
 
+    bool isPlaying() const;
+
+    muse::async::Notification clefKeySigsKeysChanged() const;
+
+    std::set<uint> clefKeySigsKeys() const;
+    
+    void clearClefKeySigsKeys();
+
 private:
     INotationPtr currentNotation() const;
 
@@ -67,6 +75,9 @@ private:
 
     std::unordered_set<piano_key_t> m_righthand_keys;
     std::unordered_set<piano_key_t> m_lefthand_keys;
+
+    std::set<uint> m_clefKeySigsKeys;
+    muse::async::Notification m_clefKeySigsKeysChanged;
 
     bool m_isFromMidi = false;
 
