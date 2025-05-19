@@ -2267,32 +2267,22 @@ qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
                   w = ww + score()->styleP(Sid::clefLeftMargin);
                   }
             else {
-                  bool possibleGap = false;
-                  bool notGap = false;
-                  bool isAdjacent = true;
+                  bool isGap = false;
                   for (int i = 0; i < score()->nstaves() * VOICES; i++) {
                         Element* el = element(i);
                         if (!el)
                               continue;
                         if (el->isRest() && toRest(el)->isGap())
-                              possibleGap = true;
+                              isGap = true;
                         else {
-                              notGap = true;
-                              if (ns && ns->element(i)) {
-                                    isAdjacent = true;
-                                    break;
-                                    }
+                              isGap = false;
+                              break;
                               }
                         }
-                  if (possibleGap && !notGap)
+                  if (isGap)
                         return 0.0;
-                  // minimum distance between notes was one note head width
-                  // this should not be necessary given we are calculating actual segment distances
-                  // also, minNoteDistance is only needed in cases where there are adjacent notes
-                  // in the same voice
-                  //w = qMax(w, score()->noteHeadWidth()) + score()->styleP(Sid::minNoteDistance);
-                  if (isAdjacent)
-                        w = w + score()->styleP(Sid::minNoteDistance);
+                  // minimum distance between notes is one note head width
+                  w = qMax(w, score()->noteHeadWidth()) + score()->styleP(Sid::minNoteDistance);
                   }
             }
       else if (nst == SegmentType::ChordRest) {
