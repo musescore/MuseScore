@@ -674,6 +674,19 @@ void PianoKeyboardController::onNotationChanged()
             m_clefKeySigsKeysChanged.notify();
         });
 
+        notation->interaction()->clefKeySigsKeysChanged().onNotify(this, [this]() {
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+            for (auto key : notation->interaction()->clefKeySigsKeys()) {
+                m_clefKeySigsKeys.insert(key);
+            }
+            notation->interaction()->clearClefKeySigsKeys();
+
+            m_clefKeySigsKeysChanged.notify();
+        });
+
         notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note*>& notes) {
             m_isFromMidi = true;
             updateNotesKeys(notes);
