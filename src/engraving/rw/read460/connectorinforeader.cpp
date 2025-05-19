@@ -256,6 +256,7 @@ void ConnectorInfoReader::readAddConnector(ChordRest* item, ConnectorInfoReader*
     const ElementType type = info->type();
     switch (type) {
     case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF:
     {
         Spanner* spanner = toSpanner(info->connector());
         const Location& l = info->location();

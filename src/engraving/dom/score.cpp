@@ -1528,6 +1528,7 @@ void Score::addElement(EngravingItem* element)
     break;
 
     case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF:
         addLayoutFlags(LayoutFlag::PLAY_EVENTS);
     // fall through
 
@@ -1722,6 +1723,7 @@ void Score::removeElement(EngravingItem* element)
         break;
 
     case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF:
         addLayoutFlags(LayoutFlag::PLAY_EVENTS);
     // fall through
 

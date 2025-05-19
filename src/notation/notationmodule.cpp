@@ -98,6 +98,7 @@
 #include "view/styledialog/glissandosectionmodel.h"
 #include "view/styledialog/notelinesectionmodel.h"
 #include "view/styledialog/clefkeytimesigpagemodel.h"
+#include "view/styledialog/hammeronpullofftappingpagemodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -230,6 +231,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<GlissandoSectionModel>("MuseScore.NotationScene", 1, 0, "GlissandoSectionModel");
     qmlRegisterType<NoteLineSectionModel>("MuseScore.NotationScene", 1, 0, "NoteLineSectionModel");
     qmlRegisterType<ClefKeyTimeSigPageModel>("MuseScore.NotationScene", 1, 0, "ClefKeyTimeSigPageModel");
+    qmlRegisterType<HammerOnPullOffTappingPageModel>("MuseScore.NotationScene", 1, 0, "HammerOnPullOffTappingPageModel");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 

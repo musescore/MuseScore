@@ -115,6 +115,7 @@ private:
     void chordTie();
     void addLaissezVib();
     void addSlur();
+    void addHammerOnPullOff();
     void addFret(int num);
 
     void insertClef(mu::engraving::ClefType type);

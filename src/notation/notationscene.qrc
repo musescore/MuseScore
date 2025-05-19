@@ -99,5 +99,8 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeats-on-parens.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeats-on.png</file>
         <file>qml/MuseScore/NotationScene/internal/SelectionFilterSection.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/hammerOnPullOffImages/hopoShowAll.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/hammerOnPullOffImages/hopoNotShowAll.png</file>
     </qresource>
 </RCC>

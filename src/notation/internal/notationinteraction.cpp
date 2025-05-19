@@ -59,6 +59,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/figuredbass.h"
 #include "engraving/dom/guitarbend.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/image.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/gradualtempochange.h"
@@ -1541,6 +1542,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::REHEARSAL_MARK:
     case ElementType::CHORD:
     case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF:
     case ElementType::HARMONY:
     case ElementType::BAGPIPE_EMBELLISHMENT:
     case ElementType::AMBITUS:
@@ -1852,6 +1854,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     }
     break;
     case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF:
     {
         EngravingItem* el = dropTarget(edd.ed);
         mu::engraving::Slur* dropElement = toSlur(edd.ed.dropElement);
@@ -5026,6 +5029,17 @@ void NotationInteraction::addSlurToSelection()
 
     // Calls `startEdit` internally
     doAddSlur();
+}
+
+void NotationInteraction::addHammerOnPullOffToSelection()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    HammerOnPullOff* hopo = Factory::createHammerOnPullOff(score()->dummy());
+    // Calls `startEdit` internally
+    doAddSlur(hopo);
 }
 
 void NotationInteraction::addOttavaToSelection(OttavaType type)
