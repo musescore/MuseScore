@@ -799,14 +799,24 @@ void FBox::init()
             FretDiagram* fretDiagram = nullptr;
 
             if (item->isHarmony()) {
-                continue; // todo: create new fret diagram and attach harmony
+                Harmony* harmony = toHarmony(item)->clone();
+                harmony->setParent(this);
+
+                fretDiagram = Factory::createFretDiagram(score()->dummy()->segment());
+
+                fretDiagram->setTrack(harmony->track());
+                fretDiagram->updateDiagram(harmony->plainText());
+
+                fretDiagram->linkHarmony(harmony);
             } else if (item->isFretDiagram()) {
                 fretDiagram = toFretDiagram(item)->clone();
                 fretDiagram->harmony()->setAutoplace(false);
                 fretDiagram->setAutoplace(false);
             }
 
-            add(fretDiagram);
+            if (fretDiagram) {
+                add(fretDiagram);
+            }
         }
     }
 }

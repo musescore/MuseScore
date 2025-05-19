@@ -145,6 +145,16 @@ EngravingItem* FretDiagram::linkedClone()
     return e;
 }
 
+Segment* FretDiagram::segment() const
+{
+    EngravingObject* parent = explicitParent();
+    if (!parent || !parent->isSegment()) {
+        return nullptr;
+    }
+
+    return toSegment(explicitParent());
+}
+
 //---------------------------------------------------------
 //   fromString
 ///   Create diagram from string like "XO-123"
@@ -776,7 +786,10 @@ void FretDiagram::linkHarmony(Harmony* harmony)
 
     setParent(harmony->explicitParent());
     harmony->setParent(this);
-    segment()->removeAnnotation(harmony);
+
+    if (Segment* segment = this->segment()) {
+        segment->removeAnnotation(harmony);
+    }
 
     m_harmony->setTrack(track());
 
