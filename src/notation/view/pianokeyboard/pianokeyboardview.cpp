@@ -97,6 +97,14 @@ void PianoKeyboardView::init()
         update();
     });
 
+    m_controller->clefKeySigsKeysChanged().onNotify(this, [this]() {
+        m_clefKeySigsKeys.clear();
+        for (auto key : m_controller->clefKeySigsKeys()) {
+            m_clefKeySigsKeys.insert(key);
+        }
+        m_controller->clearClefKeySigsKeys();
+    });
+
     update();
 }
 
@@ -147,6 +155,16 @@ void PianoKeyboardView::calculateKeyRects()
 
     m_keysAreaRect.setSize(QSizeF(hPos + m_spacing / 2, m_whiteKeyHeight));
     adjustKeysAreaPosition();
+}
+
+bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key) {
+    for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
+        const piano_key_t& _key = m_clefKeySigs[i];
+        if (_key == key) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void PianoKeyboardView::adjustKeysAreaPosition()
@@ -288,6 +306,16 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
 
         QColor fillColor = m_whiteKeyStateColors[m_controller->keyState(key)];
 
+        if (m_controller->keyState(key) == KeyState::None) {
+            if (m_controller->isPlaying()) {
+                for (const uint& keyIndex : m_clefKeySigsKeys) {
+                    if (containsKey(keyIndex, key)) {
+                        fillColor = Qt::green;
+                    }
+                }
+            }
+        }
+
         if (!m_controller->playbackKeyStatesEmpty()) {
             if (m_controller->playbackKeyState(key) == KeyState::RightHand) {
                 fillColor = m_whiteKeyStateColors[m_controller->playbackKeyState(key)];
@@ -389,6 +417,18 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
 
         topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[m_controller->keyState(key)]);
         bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[m_controller->keyState(key)]);
+
+        if (m_controller->keyState(key) == KeyState::None) {
+            if (m_controller->isPlaying()) {
+                for (const uint& keyIndex : m_clefKeySigsKeys) {
+                    if (containsKey(keyIndex, key)) {
+                        // std::cout << "***** key: " << int(key) << ", ";
+                        topPieceGradient.setColorAt(1.0, Qt::green);
+                        bottomPieceGradient.setColorAt(0.0, Qt::green);
+                    }
+                }
+            }
+        }
 
         if (!m_controller->playbackKeyStatesEmpty()) {
             if (m_controller->playbackKeyState(key) == KeyState::RightHand) {
