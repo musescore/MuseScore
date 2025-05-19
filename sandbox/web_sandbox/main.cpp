@@ -22,11 +22,15 @@ using namespace muse;
 
 int main(int argc, char* argv[])
 {
+    qputenv("QT_STYLE_OVERRIDE", "Fusion");
+    qputenv("QML_DISABLE_DISK_CACHE", "true");
+
+    app_init_qrc();
+
     QGuiApplication app(argc, argv);
 
     // === Setup ===
     QQuickWindow::setDefaultAlphaBuffer(true);
-    app_init_qrc();
 
     QList<muse::modularity::IModuleSetup*> modules = {
         new muse::GlobalModule(),

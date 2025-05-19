@@ -152,7 +152,6 @@ add_to_link_if_enabled(${MUE_BUILD_APPSHELL_MODULE} appshell)
 add_to_link_if_enabled(${MUE_BUILD_CONVERTER_MODULE} converter)
 add_to_link_if_enabled(${MUE_BUILD_PRINT_MODULE} print)
 
-
 if (MUE_BUILD_IMPORTEXPORT_MODULE)
     list(APPEND LINK_LIB
         iex_musicxml
@@ -269,6 +268,11 @@ target_include_directories(MuseScoreStudio PRIVATE
 ###########################################
 
 target_link_libraries(MuseScoreStudio PRIVATE ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
+
+if (CC_IS_EMCC)
+    target_link_options(MuseScoreStudio PUBLIC ${EMCC_LINKER_FLAGS})
+endif()
+
 
 ###########################################
 # INSTALL

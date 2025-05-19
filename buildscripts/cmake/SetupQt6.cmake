@@ -101,11 +101,6 @@ else()
     set(CMAKE_AUTORCC ON)
 endif()
 
-if (CC_IS_EMCC)
-    # see SetupBuildEnvironment.cmake
-    # set_target_properties(Qt6::Platform PROPERTIES INTERFACE_LINK_OPTIONS "${EMCC_LINKER_FLAGS}")
-endif()
-
 if (QT_IS_STATIC)
     qt_add_library(all_qml_plugins STATIC)
     qt_import_qml_plugins(all_qml_plugins)

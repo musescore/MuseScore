@@ -31,11 +31,63 @@ Window {
         id: itest
     }
 
-    FlatButton {
-        text: "Open dialog"
-        onClicked: {
-            console.log("onClicked")
-            itest.openDialog()
+    function openSyncDialog() {
+        console.log("onClicked openSyncDialog")
+        itest.openSyncDialog()
+    }
+
+    Column {
+        anchors.fill: parent
+        spacing: 16
+
+        FlatButton {
+            text: "Open async dialog"
+            onClicked: {
+                console.log("onClicked")
+                itest.openAsyncDialog()
+            }
+        }
+
+        FlatButton {
+            text: "Open sync dialog"
+            onClicked: {
+                //Qt.callLater(root.openSyncDialog)
+                root.openSyncDialog()
+            }
+        }
+
+        FlatButton {
+            text: "runLoop"
+            onClicked: {
+                console.log("onClicked runLoop")
+                var ret = itest.runLoop()
+                console.log("Proccess ret: ", ret)
+            }
+        }
+
+        FlatButton {
+            text: "exitLoop"
+            onClicked: {
+                console.log("onClicked exitLoop")
+                itest.exitLoop()
+            }
+        }
+
+        FlatButton {
+            text: "runSleep"
+            onClicked: {
+                console.log("onClicked runSleep")
+                var ret = itest.runSleep()
+                console.log("Proccess ret: ", ret)
+            }
+        }
+
+        FlatButton {
+            text: "exitSleep"
+            onClicked: {
+                console.log("onClicked exitSleep")
+                itest.exitSleep()
+            }
         }
     }
 }
