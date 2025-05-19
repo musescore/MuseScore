@@ -31,9 +31,7 @@ using namespace mu::engraving;
 FretFrameSettingsModel::FretFrameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(InspectorModelType::TYPE_FRET_FRAME);
-    setTitle(muse::qtrc("inspector", "Fretboard diagram legend"));
-    setIcon(muse::ui::IconCode::Code::FRET_FRAME);
+    setModelType(InspectorModelType::TYPE_FRET_FRAME_SETTINGS);
     createProperties();
 }
 
