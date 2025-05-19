@@ -652,7 +652,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         addToken(String(s.at(i++)), ChordTokenClass::QUALITY);
     }
 
-    lastLeadingToken = m_tokenList.size();
+    int prevIdx = i;
 
     // Get type - either "typen" or "III"
     // Eat up to first number
@@ -674,11 +674,11 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         }
     } else if (tok1.contains(std::wregex(L"[IVX]+"))) {
         // Get roman numerals
-        for (size_t i = 0; i < tok1.size(); i++) {
+        for (i = 0; i < tok1.size(); i++) {
             addToken(tok1.at(i), ChordTokenClass::TYPE);
         }
     } else {
-        i = static_cast<int>(lastLeadingToken);
+        i = prevIdx;
     }
 
     lastLeadingToken = m_tokenList.size();
