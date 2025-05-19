@@ -75,6 +75,7 @@ private:
     void calculateKeyRects();
     bool containsKey(uint keyIndex, piano_key_t key);
     void adjustKeysAreaPosition();
+    void checkResponseKeyOccluded(QRectF rect);
     void determineOctaveLabelsFont();
     void updateKeyStateColors();
     void updatePlaybackKeyStateColors();
