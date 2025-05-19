@@ -570,11 +570,12 @@ static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, 
         // clef->setShowCourtesy();
         // clef->setForInstrumentChange();
         clef->setGenerated(false);
-        clef->setIsHeader(false);
+        const bool isHeader = !afterBarline && !measure->prevMeasure() && musxEduPos == 0;
+        clef->setIsHeader(isHeader);
         if (afterBarline) {
             clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
-        } else {
-            clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE); /// @todo leave as auto where appropriate
+        } else if (musxEduPos == 0) {
+            clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
         }
 
         Fraction clefTick = measure->tick() + FinaleTConv::musxFractionToFraction(musx::util::Fraction::fromEdu(musxEduPos));
@@ -671,24 +672,38 @@ void EnigmaXmlImporter::importMeasures()
                 logger()->logWarning(String(u"Unable to initialise start segment"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 break;
             }
+            // The Finale UI requires transposition to be a full-measure staff-style assignment, so checking only the beginning of the bar should be sufficient.
+            // However, it is possible to defeat this requirement using plugins. That said, doing so produces erratic results, so I'm not sure we should support it.
+            // For now, only check the start of the measure.
+            bool transposedClefOverride = false;
+            auto musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
+            if (musxStaffAtMeasureStart && musxStaffAtMeasureStart->transposition && musxStaffAtMeasureStart->transposition->setToClef) {
+                if (musxStaffAtMeasureStart->transposedClef != musxCurrClef) {
+                    if (createClef(m_score, curStaffIdx, musxStaffAtMeasureStart->transposedClef, measure, 0, false)) {
+                        musxCurrClef = musxStaffAtMeasureStart->transposedClef;
+                    }
+                }
+                transposedClefOverride = true;
+            }
             bool processedEntries = false;
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper());
             if (gfHold) {
-                /// @todo take into account clefs forced by transposition (in Finale staves or staff styles)
-                if (gfHold->clefId.has_value()) {
-                    if (gfHold->clefId.value() != musxCurrClef) {
-                        if (createClef(m_score, curStaffIdx, gfHold->clefId.value(), measure, 0, gfHold->clefAfterBarline)) {
-                            musxCurrClef = gfHold->clefId.value();
+                if (!transposedClefOverride) {
+                    if (gfHold->clefId.has_value()) {
+                        if (gfHold->clefId.value() != musxCurrClef) {
+                            if (createClef(m_score, curStaffIdx, gfHold->clefId.value(), measure, 0, gfHold->clefAfterBarline)) {
+                                musxCurrClef = gfHold->clefId.value();
+                            }
                         }
-                    }
-                } else {
-                    std::vector<std::shared_ptr<others::ClefList>> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(gfHold.getRequestedPartId(), gfHold->clefListId);
-                    for (const std::shared_ptr<others::ClefList>& midMeasureClef : midMeasureClefs) {
-                        if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef) {
-                            const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
-                            if (Clef* clef = createClef(m_score, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline)) {
-                                /// @todo perhaps populate other fields from midMeasureClef, such as x/y offsets, clef-specific mag, etc.?
-                                musxCurrClef = midMeasureClef->clefIndex;
+                    } else {
+                        std::vector<std::shared_ptr<others::ClefList>> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(gfHold.getRequestedPartId(), gfHold->clefListId);
+                        for (const std::shared_ptr<others::ClefList>& midMeasureClef : midMeasureClefs) {
+                            if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef) {
+                                const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
+                                if (Clef* clef = createClef(m_score, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline)) {
+                                    /// @todo perhaps populate other fields from midMeasureClef, such as x/y offsets, clef-specific mag, etc.?
+                                    musxCurrClef = midMeasureClef->clefIndex;
+                                }
                             }
                         }
                     }
