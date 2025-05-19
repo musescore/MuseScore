@@ -3202,6 +3202,7 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
                 }
             }
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::POS_ABOVE)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_NOTEHEAD_ALIGN)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_TYPE)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::PLAY)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICE_LITERAL)) {

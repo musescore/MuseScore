@@ -276,6 +276,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::HARMONY_VOICE_LITERAL,   true,  "harmonyVoiceLiteral",   P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony voice literal") },
     { Pid::HARMONY_VOICING,         true,  "harmonyVoicing",        P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony voicing") },
     { Pid::HARMONY_DURATION,        true,  "harmonyDuration",       P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony duration") },
+    { Pid::HARMONY_NOTEHEAD_ALIGN,  true,  "harmonyNoteheadAlign",  P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony notehead align") },
 
     { Pid::SYSTEM_BRACKET,          false, "type",                  P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "type") },
     { Pid::GAP,                     false, 0,                       P_TYPE::BOOL,               PropertyGroup::NONE,      DUMMY_QT_TR_NOOP("propertyName", "gap") },

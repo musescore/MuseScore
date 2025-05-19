@@ -225,6 +225,9 @@ public:
     double mag() const override;
     void setUserMag(double m) { m_userMag = m; }
 
+    AlignH noteheadAlign() const { return m_noteheadAlign; }
+    void setNoteheadAlign(AlignH v) { m_noteheadAlign = v; }
+
     void undoMoveSegment(Segment* newSeg, Fraction tickDiff) override;
 
     Color curColor() const override;
@@ -272,5 +275,6 @@ private:
     NoteCaseType m_bassCase = NoteCaseType::AUTO;        // case as typed
 
     std::optional<double> m_userMag;
+    AlignH m_noteheadAlign = AlignH::HCENTER;
 };
 } // namespace mu::engraving

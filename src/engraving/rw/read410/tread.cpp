@@ -3231,6 +3231,10 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
         }
     }
 
+    h->setNoteheadAlign(h->align().horizontal);
+    if ((int)h->noteheadAlign() != h->propertyDefault(Pid::HARMONY_NOTEHEAD_ALIGN).toInt()) {
+        h->setPropertyFlags(Pid::HARMONY_NOTEHEAD_ALIGN, PropertyFlags::UNSTYLED);
+    }
     h->addChord(info);
 
     h->afterRead();

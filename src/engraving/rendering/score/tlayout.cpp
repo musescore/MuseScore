@@ -3443,7 +3443,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
             }
 
             double xx = 0.0;
-            switch (ctx.conf().styleV(Sid::chordAlignmentToNotehead).value<AlignH>()) {
+            switch (item->noteheadAlign()) {
             case AlignH::LEFT:
                 xx = -hAlignBox.left();
                 break;
@@ -3491,7 +3491,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
                 break;
             }
         } else {
-            switch (ctx.conf().styleV(Sid::chordAlignmentToNotehead).value<AlignH>()) {
+            switch (item->noteheadAlign()) {
             case AlignH::LEFT:
                 newPosX = 0.0;
                 break;
