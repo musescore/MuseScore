@@ -1201,38 +1201,34 @@
             </Tuplet>
           <Rest>
             <eid>MD_MD</eid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <eid>ND_ND</eid>
-            <durationType>eighth</durationType>
+            <durationType>quarter</durationType>
             </Rest>
           <Beam>
-            <eid>OD_OD</eid>
+            <eid>ND_ND</eid>
             <l1>46</l1>
             <l2>42</l2>
             </Beam>
           <Chord>
-            <eid>PD_PD</eid>
+            <eid>OD_OD</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>QD_QD</eid>
+              <eid>PD_PD</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Rest>
-            <eid>RD_RD</eid>
+            <eid>QD_QD</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>SD_SD</eid>
+        <eid>RD_RD</eid>
         <voice>
           <Tuplet>
-            <eid>TD_TD</eid>
+            <eid>SD_SD</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>4</actualNotes>
             <baseNote>16th</baseNote>
@@ -1242,7 +1238,7 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <eid>UD_UD</eid>
+            <eid>TD_TD</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1252,21 +1248,21 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>VD_VD</eid>
+            <eid>UD_UD</eid>
             <l1>60</l1>
             <l2>60</l2>
             </Beam>
           <Chord>
-            <eid>WD_WD</eid>
+            <eid>VD_VD</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>XD_XD</eid>
+              <eid>WD_WD</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>YD_YD</eid>
+            <eid>XD_XD</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>2</actualNotes>
             <baseNote>64th</baseNote>
@@ -1276,7 +1272,7 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <eid>ZD_ZD</eid>
+            <eid>YD_YD</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>5</actualNotes>
             <baseNote>256th</baseNote>
@@ -1286,26 +1282,26 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>aD_aD</eid>
+            <eid>ZD_ZD</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>bD_bD</eid>
+              <eid>aD_aD</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
+          <Rest>
+            <eid>bD_bD</eid>
+            <durationType>64th</durationType>
+            </Rest>
+          <endTuplet/>
           <Rest>
             <eid>cD_cD</eid>
             <durationType>64th</durationType>
             </Rest>
           <endTuplet/>
-          <Rest>
-            <eid>dD_dD</eid>
-            <durationType>64th</durationType>
-            </Rest>
-          <endTuplet/>
           <Tuplet>
-            <eid>eD_eD</eid>
+            <eid>dD_dD</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>2</actualNotes>
             <baseNote>64th</baseNote>
@@ -1315,19 +1311,19 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>fD_fD</eid>
+            <eid>eD_eD</eid>
             <durationType>64th</durationType>
             <Note>
-              <eid>gD_gD</eid>
+              <eid>fD_fD</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>hD_hD</eid>
+            <eid>gD_gD</eid>
             <durationType>64th</durationType>
             <Note>
-              <eid>iD_iD</eid>
+              <eid>hD_hD</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -1335,16 +1331,16 @@
           <endTuplet/>
           <endTuplet/>
           <Chord>
-            <eid>jD_jD</eid>
+            <eid>iD_iD</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>kD_kD</eid>
+              <eid>jD_jD</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>lD_lD</eid>
+            <eid>kD_kD</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1354,35 +1350,35 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>mD_mD</eid>
+            <eid>lD_lD</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>nD_nD</eid>
+              <eid>mD_mD</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>oD_oD</eid>
+            <eid>nD_nD</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>pD_pD</eid>
+              <eid>oD_oD</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>qD_qD</eid>
+            <eid>pD_pD</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>rD_rD</eid>
+              <eid>qD_qD</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>sD_sD</eid>
+            <eid>rD_rD</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1392,28 +1388,28 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>tD_tD</eid>
+            <eid>sD_sD</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>uD_uD</eid>
+              <eid>tD_tD</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>vD_vD</eid>
+            <eid>uD_uD</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>wD_wD</eid>
+              <eid>vD_vD</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>xD_xD</eid>
+            <eid>wD_wD</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>yD_yD</eid>
+              <eid>xD_xD</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -1421,16 +1417,16 @@
           <endTuplet/>
           <endTuplet/>
           <Rest>
-            <eid>zD_zD</eid>
+            <eid>yD_yD</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>0D_0D</eid>
+        <eid>zD_zD</eid>
         <voice>
           <Tuplet>
-            <eid>1D_1D</eid>
+            <eid>0D_0D</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>4</actualNotes>
             <baseNote>16th</baseNote>
@@ -1440,7 +1436,7 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <eid>2D_2D</eid>
+            <eid>1D_1D</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1450,21 +1446,21 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>3D_3D</eid>
+            <eid>2D_2D</eid>
             <l1>60</l1>
             <l2>60</l2>
             </Beam>
           <Chord>
-            <eid>4D_4D</eid>
+            <eid>3D_3D</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>5D_5D</eid>
+              <eid>4D_4D</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>6D_6D</eid>
+            <eid>5D_5D</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>2</actualNotes>
             <baseNote>64th</baseNote>
@@ -1474,7 +1470,7 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <eid>7D_7D</eid>
+            <eid>6D_6D</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>5</actualNotes>
             <baseNote>256th</baseNote>
@@ -1484,72 +1480,72 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>8D_8D</eid>
+            <eid>7D_7D</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>9D_9D</eid>
+              <eid>8D_8D</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>+D_+D</eid>
+            <eid>9D_9D</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>/D_/D</eid>
+              <eid>+D_+D</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>AE_AE</eid>
+            <eid>/D_/D</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>BE_BE</eid>
+              <eid>AE_AE</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>CE_CE</eid>
+            <eid>BE_BE</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>DE_DE</eid>
+              <eid>CE_CE</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>EE_EE</eid>
+            <eid>DE_DE</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>FE_FE</eid>
+              <eid>EE_EE</eid>
               <pitch>79</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Rest>
-            <eid>GE_GE</eid>
+            <eid>FE_FE</eid>
             <durationType>64th</durationType>
             </Rest>
           <endTuplet/>
           <Rest>
-            <eid>HE_HE</eid>
+            <eid>GE_GE</eid>
             <durationType>32nd</durationType>
             </Rest>
           <endTuplet/>
           <Chord>
-            <eid>IE_IE</eid>
+            <eid>HE_HE</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>JE_JE</eid>
+              <eid>IE_IE</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>KE_KE</eid>
+            <eid>JE_JE</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1559,35 +1555,35 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>LE_LE</eid>
+            <eid>KE_KE</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>ME_ME</eid>
+              <eid>LE_LE</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>NE_NE</eid>
+            <eid>ME_ME</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>OE_OE</eid>
+              <eid>NE_NE</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>PE_PE</eid>
+            <eid>OE_OE</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>QE_QE</eid>
+              <eid>PE_PE</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>RE_RE</eid>
+            <eid>QE_QE</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1597,28 +1593,28 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>SE_SE</eid>
+            <eid>RE_RE</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>TE_TE</eid>
+              <eid>SE_SE</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>UE_UE</eid>
+            <eid>TE_TE</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>VE_VE</eid>
+              <eid>UE_UE</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>WE_WE</eid>
+            <eid>VE_VE</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>XE_XE</eid>
+              <eid>WE_WE</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -1626,26 +1622,26 @@
           <endTuplet/>
           <endTuplet/>
           <Rest>
-            <eid>YE_YE</eid>
+            <eid>XE_XE</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>ZE_ZE</eid>
+        <eid>YE_YE</eid>
         <voice>
+          <Tuplet>
+            <eid>ZE_ZE</eid>
+            <normalNotes>4</normalNotes>
+            <actualNotes>4</actualNotes>
+            <baseNote>16th</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>4</text>
+              </Number>
+            </Tuplet>
           <Tuplet>
             <eid>aE_aE</eid>
-            <normalNotes>4</normalNotes>
-            <actualNotes>4</actualNotes>
-            <baseNote>16th</baseNote>
-            <Number>
-              <style>tuplet</style>
-              <text>4</text>
-              </Number>
-            </Tuplet>
-          <Tuplet>
-            <eid>bE_bE</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1655,38 +1651,30 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>cE_cE</eid>
+            <eid>bE_bE</eid>
             <l1>60</l1>
             <l2>60</l2>
             </Beam>
           <Chord>
-            <eid>dE_dE</eid>
+            <eid>cE_cE</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>eE_eE</eid>
+              <eid>dE_dE</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>fE_fE</eid>
-            <durationType>32nd</durationType>
-            </Rest>
-          <Rest>
-            <eid>gE_gE</eid>
-            <durationType>32nd</durationType>
+            <eid>eE_eE</eid>
+            <durationType>16th</durationType>
             </Rest>
           <endTuplet/>
           <Rest>
-            <eid>hE_hE</eid>
-            <durationType>16th</durationType>
-            </Rest>
-          <Rest>
-            <eid>iE_iE</eid>
-            <durationType>16th</durationType>
+            <eid>fE_fE</eid>
+            <durationType>eighth</durationType>
             </Rest>
           <Tuplet>
-            <eid>jE_jE</eid>
+            <eid>gE_gE</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1696,28 +1684,28 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>kE_kE</eid>
+            <eid>hE_hE</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>lE_lE</eid>
+              <eid>iE_iE</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>mE_mE</eid>
+            <eid>jE_jE</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>nE_nE</eid>
+              <eid>kE_kE</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>oE_oE</eid>
+            <eid>lE_lE</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>pE_pE</eid>
+              <eid>mE_mE</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -1725,16 +1713,16 @@
           <endTuplet/>
           <endTuplet/>
           <Rest>
-            <eid>qE_qE</eid>
+            <eid>nE_nE</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>rE_rE</eid>
+        <eid>oE_oE</eid>
         <voice>
           <Tuplet>
-            <eid>sE_sE</eid>
+            <eid>pE_pE</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>4</actualNotes>
             <baseNote>16th</baseNote>
@@ -1744,7 +1732,7 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <eid>tE_tE</eid>
+            <eid>qE_qE</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1754,21 +1742,21 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>uE_uE</eid>
+            <eid>rE_rE</eid>
             <l1>60</l1>
             <l2>60</l2>
             </Beam>
           <Chord>
-            <eid>vE_vE</eid>
+            <eid>sE_sE</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>wE_wE</eid>
+              <eid>tE_tE</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>xE_xE</eid>
+            <eid>uE_uE</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>2</actualNotes>
             <baseNote>64th</baseNote>
@@ -1778,7 +1766,7 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <eid>yE_yE</eid>
+            <eid>vE_vE</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>5</actualNotes>
             <baseNote>256th</baseNote>
@@ -1788,53 +1776,53 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>zE_zE</eid>
+            <eid>wE_wE</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>0E_0E</eid>
+              <eid>xE_xE</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>1E_1E</eid>
+            <eid>yE_yE</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>2E_2E</eid>
+              <eid>zE_zE</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>3E_3E</eid>
+            <eid>0E_0E</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>4E_4E</eid>
+              <eid>1E_1E</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>5E_5E</eid>
+            <eid>2E_2E</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>6E_6E</eid>
+              <eid>3E_3E</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>7E_7E</eid>
+            <eid>4E_4E</eid>
             <durationType>256th</durationType>
             </Rest>
           <endTuplet/>
           <Rest>
-            <eid>8E_8E</eid>
+            <eid>5E_5E</eid>
             <durationType>64th</durationType>
             </Rest>
           <endTuplet/>
           <Tuplet>
-            <eid>9E_9E</eid>
+            <eid>6E_6E</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>2</actualNotes>
             <baseNote>64th</baseNote>
@@ -1844,14 +1832,14 @@
               </Number>
             </Tuplet>
           <Rest>
-            <eid>+E_+E</eid>
+            <eid>7E_7E</eid>
             <durationType>64th</durationType>
             </Rest>
           <Chord>
-            <eid>/E_/E</eid>
+            <eid>8E_8E</eid>
             <durationType>64th</durationType>
             <Note>
-              <eid>AF_AF</eid>
+              <eid>9E_9E</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -1859,54 +1847,54 @@
           <endTuplet/>
           <endTuplet/>
           <Chord>
-            <eid>BF_BF</eid>
+            <eid>+E_+E</eid>
             <durationType>16th</durationType>
+            <Note>
+              <eid>/E_/E</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Tuplet>
+            <eid>AF_AF</eid>
+            <normalNotes>2</normalNotes>
+            <actualNotes>3</actualNotes>
+            <baseNote>32nd</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>3</text>
+              </Number>
+            </Tuplet>
+          <Chord>
+            <eid>BF_BF</eid>
+            <durationType>32nd</durationType>
             <Note>
               <eid>CF_CF</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Tuplet>
+          <Chord>
             <eid>DF_DF</eid>
-            <normalNotes>2</normalNotes>
-            <actualNotes>3</actualNotes>
-            <baseNote>32nd</baseNote>
-            <Number>
-              <style>tuplet</style>
-              <text>3</text>
-              </Number>
-            </Tuplet>
-          <Chord>
-            <eid>EF_EF</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>FF_FF</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>GF_GF</eid>
-            <durationType>32nd</durationType>
-            <Note>
-              <eid>HF_HF</eid>
+              <eid>EF_EF</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>IF_IF</eid>
+            <eid>FF_FF</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>JF_JF</eid>
+              <eid>GF_GF</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>KF_KF</eid>
+            <eid>HF_HF</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1916,28 +1904,28 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>LF_LF</eid>
+            <eid>IF_IF</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>MF_MF</eid>
+              <eid>JF_JF</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>NF_NF</eid>
+            <eid>KF_KF</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>OF_OF</eid>
+              <eid>LF_LF</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>PF_PF</eid>
+            <eid>MF_MF</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>QF_QF</eid>
+              <eid>NF_NF</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -1945,16 +1933,16 @@
           <endTuplet/>
           <endTuplet/>
           <Rest>
-            <eid>RF_RF</eid>
+            <eid>OF_OF</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>SF_SF</eid>
+        <eid>PF_PF</eid>
         <voice>
           <Tuplet>
-            <eid>TF_TF</eid>
+            <eid>QF_QF</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>4</actualNotes>
             <baseNote>16th</baseNote>
@@ -1964,7 +1952,7 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <eid>UF_UF</eid>
+            <eid>RF_RF</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -1974,21 +1962,21 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>VF_VF</eid>
+            <eid>SF_SF</eid>
             <l1>60</l1>
             <l2>60</l2>
             </Beam>
           <Chord>
-            <eid>WF_WF</eid>
+            <eid>TF_TF</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>XF_XF</eid>
+              <eid>UF_UF</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>YF_YF</eid>
+            <eid>VF_VF</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>2</actualNotes>
             <baseNote>64th</baseNote>
@@ -1998,7 +1986,7 @@
               </Number>
             </Tuplet>
           <Tuplet>
-            <eid>ZF_ZF</eid>
+            <eid>WF_WF</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>5</actualNotes>
             <baseNote>256th</baseNote>
@@ -2008,91 +1996,91 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>aF_aF</eid>
+            <eid>XF_XF</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>bF_bF</eid>
+              <eid>YF_YF</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>cF_cF</eid>
+            <eid>ZF_ZF</eid>
             <durationType>256th</durationType>
             <Note>
-              <eid>dF_dF</eid>
+              <eid>aF_aF</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>eF_eF</eid>
+            <eid>bF_bF</eid>
             <durationType>256th</durationType>
             </Rest>
           <Rest>
-            <eid>fF_fF</eid>
+            <eid>cF_cF</eid>
             <durationType>128th</durationType>
             </Rest>
           <endTuplet/>
           <Rest>
-            <eid>gF_gF</eid>
+            <eid>dF_dF</eid>
             <durationType>64th</durationType>
             </Rest>
           <endTuplet/>
           <Rest>
-            <eid>hF_hF</eid>
+            <eid>eF_eF</eid>
             <durationType>32nd</durationType>
             </Rest>
           <endTuplet/>
           <Chord>
-            <eid>iF_iF</eid>
+            <eid>fF_fF</eid>
             <durationType>16th</durationType>
+            <Note>
+              <eid>gF_gF</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Tuplet>
+            <eid>hF_hF</eid>
+            <normalNotes>2</normalNotes>
+            <actualNotes>3</actualNotes>
+            <baseNote>32nd</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>3</text>
+              </Number>
+            </Tuplet>
+          <Chord>
+            <eid>iF_iF</eid>
+            <durationType>32nd</durationType>
             <Note>
               <eid>jF_jF</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Tuplet>
+          <Chord>
             <eid>kF_kF</eid>
-            <normalNotes>2</normalNotes>
-            <actualNotes>3</actualNotes>
-            <baseNote>32nd</baseNote>
-            <Number>
-              <style>tuplet</style>
-              <text>3</text>
-              </Number>
-            </Tuplet>
-          <Chord>
-            <eid>lF_lF</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>mF_mF</eid>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>nF_nF</eid>
-            <durationType>32nd</durationType>
-            <Note>
-              <eid>oF_oF</eid>
+              <eid>lF_lF</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>pF_pF</eid>
+            <eid>mF_mF</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>qF_qF</eid>
+              <eid>nF_nF</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
             </Chord>
           <endTuplet/>
           <Tuplet>
-            <eid>rF_rF</eid>
+            <eid>oF_oF</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -2102,28 +2090,28 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>sF_sF</eid>
+            <eid>pF_pF</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>tF_tF</eid>
+              <eid>qF_qF</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>uF_uF</eid>
+            <eid>rF_rF</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>vF_vF</eid>
+              <eid>sF_sF</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>wF_wF</eid>
+            <eid>tF_tF</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>xF_xF</eid>
+              <eid>uF_uF</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -2131,16 +2119,16 @@
           <endTuplet/>
           <endTuplet/>
           <Rest>
-            <eid>yF_yF</eid>
+            <eid>vF_vF</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>zF_zF</eid>
+        <eid>wF_wF</eid>
         <voice>
           <Tuplet>
-            <eid>0F_0F</eid>
+            <eid>xF_xF</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>4</actualNotes>
             <baseNote>16th</baseNote>
@@ -2150,15 +2138,15 @@
               </Number>
             </Tuplet>
           <Rest>
-            <eid>1F_1F</eid>
-            <durationType>eighth</durationType>
-            </Rest>
-          <Rest>
-            <eid>2F_2F</eid>
+            <eid>yF_yF</eid>
             <durationType>16th</durationType>
             </Rest>
+          <Rest>
+            <eid>zF_zF</eid>
+            <durationType>eighth</durationType>
+            </Rest>
           <Tuplet>
-            <eid>3F_3F</eid>
+            <eid>0F_0F</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>32nd</baseNote>
@@ -2168,33 +2156,33 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>4F_4F</eid>
+            <eid>1F_1F</eid>
             <l1>60</l1>
             <l2>60</l2>
             </Beam>
           <Chord>
-            <eid>5F_5F</eid>
+            <eid>2F_2F</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>6F_6F</eid>
+              <eid>3F_3F</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>7F_7F</eid>
+            <eid>4F_4F</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>8F_8F</eid>
+              <eid>5F_5F</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>9F_9F</eid>
+            <eid>6F_6F</eid>
             <durationType>32nd</durationType>
             <Note>
-              <eid>+F_+F</eid>
+              <eid>7F_7F</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               </Note>
@@ -2202,16 +2190,16 @@
           <endTuplet/>
           <endTuplet/>
           <Rest>
-            <eid>/F_/F</eid>
+            <eid>8F_8F</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>AG_AG</eid>
+        <eid>9F_9F</eid>
         <voice>
           <Tuplet>
-            <eid>BG_BG</eid>
+            <eid>+F_+F</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -2221,21 +2209,21 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>CG_CG</eid>
+            <eid>/F_/F</eid>
             <l1>38</l1>
             <l2>38</l2>
             </Beam>
           <Chord>
-            <eid>DG_DG</eid>
+            <eid>AG_AG</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>EG_EG</eid>
+              <eid>BG_BG</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Tuplet>
-            <eid>FG_FG</eid>
+            <eid>CG_CG</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>2</actualNotes>
             <baseNote>16th</baseNote>
@@ -2245,26 +2233,26 @@
               </Number>
             </Tuplet>
           <Chord>
-            <eid>GG_GG</eid>
+            <eid>DG_DG</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>HG_HG</eid>
+              <eid>EG_EG</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <eid>IG_IG</eid>
+            <eid>FG_FG</eid>
             <durationType>16th</durationType>
             </Rest>
           <endTuplet/>
           <Rest>
-            <eid>JG_JG</eid>
+            <eid>GG_GG</eid>
             <durationType>eighth</durationType>
             </Rest>
           <endTuplet/>
           <Rest>
-            <eid>KG_KG</eid>
+            <eid>HG_HG</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
