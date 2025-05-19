@@ -789,6 +789,8 @@ void FBox::init()
 
     m_fretDiagrams.clear();
 
+    std::set<String /*pattern*/> usedDiagrams;
+
     for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
          segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
         for (EngravingItem* item : segment->annotations()) {
@@ -815,7 +817,17 @@ void FBox::init()
             }
 
             if (fretDiagram) {
+                String pattern = FretDiagram::patternFromDiagram(fretDiagram);
+                if (muse::contains(usedDiagrams, pattern)) {
+                    delete fretDiagram;
+                    fretDiagram = nullptr;
+
+                    continue;
+                }
+
                 add(fretDiagram);
+
+                usedDiagrams.insert(pattern);
             }
         }
     }

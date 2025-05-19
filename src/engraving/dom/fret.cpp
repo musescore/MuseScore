@@ -161,7 +161,7 @@ Segment* FretDiagram::segment() const
 ///   Always assume barre on the first visible fret
 //---------------------------------------------------------
 
-std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const String& s)
+std::shared_ptr<FretDiagram> FretDiagram::createFromPattern(Score* score, const String& s)
 {
     auto fd = Factory::makeFretDiagram(score->dummy()->segment());
 
