@@ -520,13 +520,17 @@ static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction
     return Fraction(count.quotient(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
 }
 
-static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo)
+static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo, int voice)
 {
     const size_t n = tupletInfo.size();
     std::vector<ReadableTuplet> result;
     result.reserve(n);
 
-    for (EntryFrame::TupletInfo tuplet : tupletInfo) {
+    const bool forVoice2 = voice == 2;
+    for (const auto& tuplet : tupletInfo) {
+        if (forVoice2 != tuplet.voice2) {
+            continue;
+        }
         ReadableTuplet rTuplet;
         rTuplet.absBegin    = FinaleTConv::musxFractionToFraction(tuplet.startDura).reduced();
         rTuplet.absDuration = FinaleTConv::musxFractionToFraction(tuplet.endDura - tuplet.startDura).reduced();
@@ -708,36 +712,43 @@ void EnigmaXmlImporter::importMeasures()
                         }
                     }
                 }
-                for (LayerIndex layer = 0; layer < MAX_LAYERS; layer++) {
+                std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
+                voice_idx_t nextTrack = 0;
+                for (const auto& finaleLayer : finaleLayers) {
+                    const LayerIndex layer = finaleLayer.first;
                     /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
                     std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
                     if (!entryFrame) {
+                        logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                         continue;
                     }
-                    const std::vector<std::shared_ptr<const EntryInfo>>& entries = entryFrame->getEntries();
-                    if (entries.empty()) {
-                        continue;
-                    }
-                    processedEntries = true;
+                    const int maxV1V2 = finaleLayer.second ? 2 : 1;
+                    for (int voice = 1; voice <= maxV1V2; voice++) {
+                        if (nextTrack >= (VOICES - 1)) {
+                            logger()->logWarning(String(u"Combination of Finale layers and v1/v2 exceeds the number of MuseScore voices."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                            break;
+                        }
+                        // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
+                        processedEntries = true;
 
-                    /// @todo load (measure-specific) key signature from entryFrame->keySignature RGP: this todo is probably unnecessary.
-                    /// Key sigs should be handled at the measure/staff level. They can only change on barlines in Finale. The one in entryFrame
-                    /// is provided for convenience and takes into account transposition (when written pitch is requested).
+                        /// @todo load (measure-specific) key signature from entryFrame->keySignature RGP: this todo is probably unnecessary.
+                        /// Key sigs should be handled at the measure/staff level. They can only change on barlines in Finale. The one in entryFrame
+                        /// is provided for convenience and takes into account transposition (when written pitch is requested).
 
-                    track_idx_t curTrackIdx = curStaffIdx * VOICES + static_cast<voice_idx_t>(layer);
-                    std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo);
-                    // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
-                    ReadableTuplet rTuplet;
-                    Fraction mDur = simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
-                    rTuplet.absBegin = Fraction(0, 1);
-                    rTuplet.absDuration = mDur;
-                    rTuplet.absEnd = mDur;
-                    rTuplet.layer = -1,
-                    tupletMap.insert(tupletMap.begin(), rTuplet);
-                    size_t lastAddedTupletIndex = 0;
-                    for (size_t i = 0; i < entries.size(); ++i) {
-                        EntryInfoPtr entryInfoPtr = EntryInfoPtr(entryFrame, i);
-                        processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex);
+                        track_idx_t curTrackIdx = curStaffIdx * VOICES + nextTrack++;
+                        std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo, voice);
+                        // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
+                        ReadableTuplet rTuplet;
+                        Fraction mDur = simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
+                        rTuplet.absBegin = Fraction(0, 1);
+                        rTuplet.absDuration = mDur;
+                        rTuplet.absEnd = mDur;
+                        rTuplet.layer = -1,
+                        tupletMap.insert(tupletMap.begin(), rTuplet);
+                        size_t lastAddedTupletIndex = 0;
+                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice)) {
+                            processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex);
+                        }
                     }
                 }
             }
