@@ -182,6 +182,30 @@ void PianoKeyboardView::adjustKeysAreaPosition()
     updateScrollBar();
 }
 
+void PianoKeyboardView::checkResponseKeyOccluded(QRectF rect) {
+    qreal keysAreaTop = (height() - m_keysAreaRect.height()) / 2;
+    
+    if (width() < m_keysAreaRect.width()) {
+        if (m_scrollOffset + rect.x() < 0) {
+            if (rect.width() <= rect.x()) {
+                m_scrollOffset = -rect.x() + rect.width();
+            } else {
+                m_scrollOffset = -rect.x();
+            }
+            m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
+            updateScrollBar();
+        } else if (m_scrollOffset + rect.x() + rect.width() > width()) {
+            qreal offset = m_scrollOffset + rect.x() + rect.width() - width();
+            if (rect.x() + rect.width() <= m_keysAreaRect.width()) {
+                offset += rect.width();
+            } 
+            m_scrollOffset -= offset;
+            m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
+            updateScrollBar();
+        }
+    }
+}
+
 void PianoKeyboardView::determineOctaveLabelsFont()
 {
     m_octaveLabelsFont.setFamily(QString::fromStdString(uiConfiguration()->fontFamily()));
@@ -311,6 +335,7 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
                 for (const uint& keyIndex : m_clefKeySigsKeys) {
                     if (containsKey(keyIndex, key)) {
                         fillColor = Qt::green;
+                        checkResponseKeyOccluded(rect);
                     }
                 }
             }
@@ -319,6 +344,7 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
         if (!m_controller->playbackKeyStatesEmpty()) {
             if (m_controller->playbackKeyState(key) == KeyState::RightHand) {
                 fillColor = m_whiteKeyStateColors[m_controller->playbackKeyState(key)];
+                checkResponseKeyOccluded(rect);
             }
         }
 
@@ -422,9 +448,9 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             if (m_controller->isPlaying()) {
                 for (const uint& keyIndex : m_clefKeySigsKeys) {
                     if (containsKey(keyIndex, key)) {
-                        // std::cout << "***** key: " << int(key) << ", ";
                         topPieceGradient.setColorAt(1.0, Qt::green);
                         bottomPieceGradient.setColorAt(0.0, Qt::green);
+                        checkResponseKeyOccluded(rect);
                     }
                 }
             }
@@ -434,6 +460,7 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             if (m_controller->playbackKeyState(key) == KeyState::RightHand) {
                 topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[m_controller->playbackKeyState(key)]);
                 bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[m_controller->playbackKeyState(key)]);
+                checkResponseKeyOccluded(rect);
             }
         }
 
