@@ -559,23 +559,25 @@ static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::Tuple
     return result;
 }
 
-static Clef * createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, Measure* measure, Edu musxEduPos, bool afterBarline)
+static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, Measure* measure, Edu musxEduPos, bool afterBarline)
 {
     ClefType entryClefType = FinaleTConv::toMuseScoreClefType(musxClef);
     if (entryClefType != ClefType::INVALID) {
         Clef* clef = Factory::createClef(score->dummy()->segment());
-        clef->setTrack(static_cast<int>(staffIdx) * VOICES);
+        clef->setTrack(staffIdx * VOICES);
         clef->setConcertClef(entryClefType);
         clef->setTransposingClef(entryClefType);
         // clef->setShowCourtesy();
         // clef->setForInstrumentChange();
         clef->setGenerated(false);
-        clef->setIsHeader(false); /// @todo not sure what to do here
+        clef->setIsHeader(false);
         if (afterBarline) {
             clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
+        } else {
+            clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE); /// @todo leave as auto where appropriate
         }
 
-        engraving::Fraction clefTick = measure->tick() + FinaleTConv::musxFractionToFraction(musx::util::Fraction::fromEdu(musxEduPos));
+        Fraction clefTick = measure->tick() + FinaleTConv::musxFractionToFraction(musx::util::Fraction::fromEdu(musxEduPos));
         Segment* clefSeg = measure->getSegment(
                            clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
         clefSeg->add(clef);
@@ -639,8 +641,8 @@ void EnigmaXmlImporter::importMeasures()
     }
 
     // Add entries (notes, rests, tuplets)
-    auto musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID); /// @todo eventually SCORE_PARTID may need to be a parameter
-    for (const auto& musxScrollViewItem : musxScrollView) {
+    std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID); /// @todo eventually SCORE_PARTID may need to be a parameter
+    for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxScrollViewItem->staffId), muse::nidx);
         if (curStaffIdx == muse::nidx) { //IF_ASSERT_FAILED
             logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxScrollViewItem->staffId, 1);
@@ -680,8 +682,8 @@ void EnigmaXmlImporter::importMeasures()
                         }
                     }
                 } else {
-                    auto midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(gfHold.getRequestedPartId(), gfHold->clefListId);
-                    for (const auto& midMeasureClef : midMeasureClefs) {
+                    std::vector<std::shared_ptr<others::ClefList>> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(gfHold.getRequestedPartId(), gfHold->clefListId);
+                    for (const std::shared_ptr<others::ClefList>& midMeasureClef : midMeasureClefs) {
                         if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef) {
                             const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
                             if (Clef* clef = createClef(m_score, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline)) {
