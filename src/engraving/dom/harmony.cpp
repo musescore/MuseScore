@@ -284,6 +284,7 @@ bool Harmony::isInFretBox() const
 const ElementStyle chordSymbolStyle {
     { Sid::harmonyPlacement, Pid::PLACEMENT },
     { Sid::minHarmonyDistance, Pid::MIN_DISTANCE },
+    { Sid::chordAlignmentToNotehead, Pid::HARMONY_NOTEHEAD_ALIGN },
     { Sid::harmonyVoiceLiteral, Pid::HARMONY_VOICE_LITERAL },
     { Sid::harmonyVoicing, Pid::HARMONY_VOICING },
     { Sid::harmonyDuration, Pid::HARMONY_DURATION },
@@ -1720,6 +1721,8 @@ PropertyValue Harmony::getProperty(Pid pid) const
     case Pid::HARMONY_TYPE:
         return PropertyValue(int(m_harmonyType));
         break;
+    case Pid::HARMONY_NOTEHEAD_ALIGN:
+        return PropertyValue(int(m_noteheadAlign));
     case Pid::HARMONY_VOICE_LITERAL:
         return m_realizedHarmony.literal();
         break;
@@ -1746,6 +1749,9 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         break;
     case Pid::HARMONY_TYPE:
         setHarmonyType(HarmonyType(v.toInt()));
+        break;
+    case Pid::HARMONY_NOTEHEAD_ALIGN:
+        setNoteheadAlign(AlignH(v.toInt()));
         break;
     case Pid::HARMONY_VOICE_LITERAL:
         m_realizedHarmony.setLiteral(v.toBool());
@@ -1793,7 +1799,9 @@ PropertyValue Harmony::propertyDefault(Pid id) const
             break;
         }
     }
-    break;
+    case Pid::HARMONY_NOTEHEAD_ALIGN:
+        return style().styleV(Sid::chordAlignmentToNotehead).toInt();
+        break;
     case Pid::PLAY:
         v = true;
         break;
