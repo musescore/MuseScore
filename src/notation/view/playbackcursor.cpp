@@ -231,18 +231,33 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
 
     // muse::RectF measureRect = measure->pageBoundingRect();
     int measureNo = measure->no();
-    std::vector<EngravingItem*> oldHitElements = hit_elements();
-    if (oldHitElements != engravingItemList) {
-        setHitElements(engravingItemList);
 
-        if (hit_measure_no() != measureNo || hit_measure() != measure) {
-            Measure* prevMeasure = measure->prevMeasure();
-            if (prevMeasure) {
-                for (mu::engraving::Segment* segment = prevMeasure->first(mu::engraving::SegmentType::ChordRest); segment;) {
-                    std::vector<EngravingItem*> engravingItemListOfPrevMeasure = segment->elist();
-                    size_t prev_len = engravingItemListOfPrevMeasure.size();
-                    for (size_t i = 0; i < prev_len; i++) {
-                        EngravingItem* engravingItem = engravingItemListOfPrevMeasure[i];
+    if (hit_measure_no() != measureNo || hit_measure() != measure) {
+        Measure* prevMeasure = measure->prevMeasure();
+        if (prevMeasure) {
+            for (mu::engraving::Segment* segment = prevMeasure->first(mu::engraving::SegmentType::ChordRest); segment;) {
+                std::vector<EngravingItem*> engravingItemListOfPrevMeasure = segment->elist();
+                size_t prev_len = engravingItemListOfPrevMeasure.size();
+                for (size_t i = 0; i < prev_len; i++) {
+                    EngravingItem* engravingItem = engravingItemListOfPrevMeasure[i];
+                    if (engravingItem == nullptr) {
+                        continue;
+                    }
+                    engravingItem->setColor(muse::draw::Color::BLACK);
+                }
+
+                mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ChordRest);
+                while (next_segment && !next_segment->visible()) {
+                    next_segment = next_segment->next(mu::engraving::SegmentType::ChordRest);
+                }
+                segment = next_segment;
+            }
+            if (hit_measure() != nullptr && prevMeasure != hit_measure()) {
+                for (mu::engraving::Segment* segment = hit_measure()->first(mu::engraving::SegmentType::ChordRest); segment;) {
+                    std::vector<EngravingItem*> engravingItemListOfHitMeasure = segment->elist();
+                    size_t hit_len = engravingItemListOfHitMeasure.size();
+                    for (size_t i = 0; i < hit_len; i++) {
+                        EngravingItem* engravingItem = engravingItemListOfHitMeasure[i];
                         if (engravingItem == nullptr) {
                             continue;
                         }
@@ -255,40 +270,138 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                     }
                     segment = next_segment;
                 }
-                if (hit_measure() != nullptr && prevMeasure != hit_measure()) {
-                    for (mu::engraving::Segment* segment = hit_measure()->first(mu::engraving::SegmentType::ChordRest); segment;) {
-                        std::vector<EngravingItem*> engravingItemListOfHitMeasure = segment->elist();
-                        size_t hit_len = engravingItemListOfHitMeasure.size();
-                        for (size_t i = 0; i < hit_len; i++) {
-                            EngravingItem* engravingItem = engravingItemListOfHitMeasure[i];
-                            if (engravingItem == nullptr) {
-                                continue;
-                            }
-                            engravingItem->setColor(muse::draw::Color::BLACK);
-                        }
-    
-                        mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ChordRest);
-                        while (next_segment && !next_segment->visible()) {
-                            next_segment = next_segment->next(mu::engraving::SegmentType::ChordRest);
-                        }
-                        segment = next_segment;
-                    }
+            }
+        }
+        
+        for (mu::engraving::Segment* segment = measure->first(mu::engraving::SegmentType::ClefType); segment;) {
+            std::vector<EngravingItem*> clefItemList = segment->elist();
+            size_t len = clefItemList.size();
+            for (size_t i = 0; i < len; i++) {
+                EngravingItem* clefItem = clefItemList[i];
+                if (clefItem == nullptr) {
+                    continue;
+                }
+                Clef *clef = toClef(clefItem);
+                ClefType clefType = clef->clefType();
+                if (clefType == ClefType::G || clefType == ClefType::F) {
+                    clefTypes.insert(clefType);
                 }
             }
 
-            setHitMeasureNo(measureNo);
-            setHitMeasure(measure);
+            mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ClefType);
+            segment = next_segment;
         }
-        
-        // if (measureNo < 2) {
-        //     emit lingeringCursorUpdate(0.0, measureRect.y(), measureRect.width(), measureRect.height());
-        // } else {
-        //     emit lingeringCursorUpdate(measureRect.x(), measureRect.y(), measureRect.width(), measureRect.height());
-        // }
-        emit lingeringCursorUpdate1();
-        
-        m_notation->interaction()->notifyPianoKeyboardNotesChanged();
+
+        std::set<mu::engraving::Key> _keySigKeys;
+        for (mu::engraving::Segment* segment = measure->last(mu::engraving::SegmentType::KeySigType); segment;) {
+            std::vector<EngravingItem*> keySigItemList = segment->elist();
+            size_t len = keySigItemList.size();
+            for (size_t i = 0; i < len; i++) {
+                EngravingItem* keySigItem = keySigItemList[i];
+                if (keySigItem == nullptr) {
+                    continue;
+                }
+                
+                if (keySigItem->canvasPos().x() < x) {
+                    mu::engraving::KeySig *keySig = toKeySig(keySigItem);
+                    mu::engraving::Key key = keySig->key();
+                    _keySigKeys.insert(key);
+                }
+            }
+            if (!_keySigKeys.empty()) {
+                break;
+            }
+
+            mu::engraving::Segment* pre_segment = segment->prev(mu::engraving::SegmentType::KeySig);
+            segment = pre_segment;
+        }
+
+        keySigKeys.clear();
+        if (!_keySigKeys.empty()) {
+            for (auto key : _keySigKeys) {
+                keySigKeys.insert(key);
+            }
+        } else {
+            if (measure == system->firstMeasure()) {
+                keySigKeys.insert(mu::engraving::Key::C);
+            } else {
+                for (Measure* _prevMeasure = measure->prevMeasure(); _prevMeasure;) {
+                    if (_prevMeasure) {
+                        for (mu::engraving::Segment* segment = _prevMeasure->last(mu::engraving::SegmentType::KeySigType); segment;) {
+                            std::vector<EngravingItem*> keySigItemList = segment->elist();
+                            size_t len = keySigItemList.size();
+                            for (size_t i = 0; i < len; i++) {
+                                EngravingItem* keySigItem = keySigItemList[i];
+                                if (keySigItem == nullptr) {
+                                    continue;
+                                }
+    
+                                if (keySigItem->canvasPos().x() < x) {
+                                    mu::engraving::KeySig *keySig = toKeySig(keySigItem);
+                                    mu::engraving::Key key = keySig->key();
+                                    _keySigKeys.insert(key);
+                                }
+                            }
+    
+                            if (!_keySigKeys.empty()) {
+                                break;
+                            }
+                
+                            mu::engraving::Segment* prev_segment = segment->prev(mu::engraving::SegmentType::KeySig);
+                            segment = prev_segment;
+                        }
+                        if (!_keySigKeys.empty()) {
+                            break;
+                        }
+                        if (_prevMeasure == system->firstMeasure()) {
+                            break;
+                        }
+                        _prevMeasure = _prevMeasure->prevMeasure();
+                    }
+                }
+                if (!_keySigKeys.empty()) {
+                    for (auto key : _keySigKeys) {
+                        keySigKeys.insert(key);
+                    }
+                } else {
+                    keySigKeys.insert(mu::engraving::Key::C);
+                }
+            }
+                        
+        }
+
+        for (auto clefType : clefTypes) {
+            for (auto key : keySigKeys) {
+                if (clefType == mu::engraving::ClefType::G) {
+                    if ((int)key >= 0) {
+                        m_notation->interaction()->addClefKeySigsKeys((int)key);
+                    } else {
+                        m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 15);
+                    }
+                }
+                if (clefType == mu::engraving::ClefType::F) {
+                    if ((int)key >= 0) {
+                        m_notation->interaction()->addClefKeySigsKeys((int)key + 8);
+                    } else {
+                        m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 22);
+                    }
+                }
+            }
+        }
+        m_notation->interaction()->notifyClefKeySigsKeysChange();
+
+        setHitMeasureNo(measureNo);
+        setHitMeasure(measure);
     }
+    
+    // if (measureNo < 2) {
+    //     emit lingeringCursorUpdate(0.0, measureRect.y(), measureRect.width(), measureRect.height());
+    // } else {
+    //     emit lingeringCursorUpdate(measureRect.x(), measureRect.y(), measureRect.width(), measureRect.height());
+    // }
+    emit lingeringCursorUpdate1();
+    
+    m_notation->interaction()->notifyPianoKeyboardNotesChanged();
 
     if (tick.ticks() == 0 && !isPlaying) {
         for (mu::engraving::Segment* segment = score->lastMeasure()->first(mu::engraving::SegmentType::ChordRest); segment;) {
@@ -363,16 +476,9 @@ QColor PlaybackCursor::color() const
 }
 
 // alex::
-std::vector<EngravingItem*>& PlaybackCursor::hit_elements() { 
-    return m_hit_el;
-}
 int PlaybackCursor::hit_measure_no() { return m_hit_measure_no; }
 Measure *PlaybackCursor::hit_measure() {
     return m_hit_measure;
-}
-
-void PlaybackCursor::setHitElements(std::vector<EngravingItem*>& el) { 
-    m_hit_el = el;
 }
 void PlaybackCursor::setHitMeasureNo(int m_no) { 
     m_hit_measure_no = m_no; 

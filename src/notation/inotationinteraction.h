@@ -94,6 +94,30 @@ public:
     virtual void addPlaybackNote(mu::engraving::Note *) {
 
     }
+    virtual void notifyClefKeySigsKeysChanged() {
+        
+    }
+    virtual muse::async::Notification clefKeySigsKeysChanged() const {
+        return muse::async::Notification();
+    }
+    virtual void clearClefKeySigsKeys() {
+        
+    }
+    virtual std::set<uint> clefKeySigsKeys() const {
+        return {};
+    }
+    virtual void addClefKeySigsKeys(uint) {
+
+    }
+    virtual void notifyClefKeySigsKeysChange() {
+
+    }
+    virtual void playingChang(bool) {
+
+    }
+    virtual bool isPlaying() const {
+        return false;
+    }
     virtual void clearPlaybackNotes() {
         
     }

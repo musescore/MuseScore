@@ -83,9 +83,28 @@ muse::async::Notification PianoKeyboardController::playbackKeyStatesChanged() co
     return m_playbackKeyStatesChanged;
 }
 
+muse::async::Notification PianoKeyboardController::clefKeySigsKeysChanged() const {
+    return m_clefKeySigsKeysChanged;
+}
+
+std::set<uint> PianoKeyboardController::clefKeySigsKeys() const {
+    return m_clefKeySigsKeys;
+}
+
+void PianoKeyboardController::clearClefKeySigsKeys() {
+    m_clefKeySigsKeys.clear();
+}
+
 bool PianoKeyboardController::isFromMidi() const
 {
     return m_isFromMidi;
+}
+
+bool PianoKeyboardController::isPlaying() const {
+    if (auto notation = currentNotation()) {
+        return notation->interaction()->isPlaying();
+    }
+    return false;
 }
 
 std::optional<piano_key_t> PianoKeyboardController::pressedKey() const
@@ -148,6 +167,19 @@ void PianoKeyboardController::onNotationChanged()
             }
             m_isFromMidi = false;
             updatePlaybackNotesKeys(notes);
+        });
+
+        notation->interaction()->clefKeySigsKeysChanged().onNotify(this, [this]() {
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+            for (auto key : notation->interaction()->clefKeySigsKeys()) {
+                m_clefKeySigsKeys.insert(key);
+            }
+            notation->interaction()->clearClefKeySigsKeys();
+
+            m_clefKeySigsKeysChanged.notify();
         });
 
         notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note*>& notes) {
