@@ -358,7 +358,7 @@ void writeLineMeasurePrefs(MStyle& style, const FinalePreferences& prefs)
 
     // Skipped: systemHeaderDistance, systemHeaderTimeSigDistance: these do not translate well from Finale
 
-    style.set(Sid::clefBarlineDistance, prefs.repeatOptions->afterClefSpace / EVPU_PER_SPACE);
+    style.set(Sid::clefBarlineDistance, -prefs.clefOptions->clefChangeOffset / EVPU_PER_SPACE);
     style.set(Sid::timesigBarlineDistance, prefs.repeatOptions->afterClefSpace / EVPU_PER_SPACE);
 
     style.set(Sid::measureRepeatNumberPos, -(prefs.alternateNotationOptions->twoMeasNumLift + 0.5) / EVPU_PER_SPACE);
