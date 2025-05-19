@@ -1453,6 +1453,15 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
 
     h->addChord(info);
 
+    h->setNoteheadAlign(h->align().horizontal);
+    if ((int)h->noteheadAlign() != h->propertyDefault(Pid::HARMONY_NOTEHEAD_ALIGN).toInt()) {
+        h->setPropertyFlags(Pid::HARMONY_NOTEHEAD_ALIGN, PropertyFlags::UNSTYLED);
+    }
+
+    // Migrate vertical alignment later
+    h->setVerticalAlign(false);
+    h->setPropertyFlags(Pid::VERTICAL_ALIGN, PropertyFlags::UNSTYLED);
+
     h->afterRead();
 }
 
