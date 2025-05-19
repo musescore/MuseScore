@@ -243,14 +243,13 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
             if (!forceAccidental) {
                 int line = noteValToLine(nval, targetStaff, segment->tick());
                 bool error = false;
-                if (engraving::Note* firstTiedNote = note->firstTiedNote()) {
-                    if (Segment* startSegment = firstTiedNote->chord()->segment()) {
-                        AccidentalVal defaultAccVal = startSegment->measure()->findAccidental(startSegment, idx, line, error);
-                        if (error) {
-                            defaultAccVal = Accidental::subtype2value(AccidentalType::NONE); // needed?
-                        }
-                        forceAccidental = defaultAccVal != accVal;
+                engraving::Note* startN = note->firstTiedNote() ? note->firstTiedNote() : note;
+                if (Segment* startSegment = startN->chord()->segment()) {
+                    AccidentalVal defaultAccVal = startSegment->measure()->findAccidental(startSegment, idx, line, error);
+                    if (error) {
+                        defaultAccVal = Accidental::subtype2value(AccidentalType::NONE); // needed?
                     }
+                    forceAccidental = defaultAccVal != accVal;
                 }
             }
             if (forceAccidental) {
@@ -277,8 +276,6 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
     cr->setDurationType(d);
     cr->setDots(static_cast<int>(noteInfo.second));
     cr->setStaffMove(crossStaffMove);
-    cr->setParent(segment);
-    cr->setTrack(curTrackIdx);
     return cr;
 }
 
@@ -439,27 +436,6 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         }
     }
 
-    /// @todo clef changes should be handled in a separate loop for clef changes, and not part of the entry loop! (RGP)
-    /// @todo visibility options
-    /*
-    ClefType entryClefType = FinaleTConv::toMuseScoreClefType(entryInfo->clefIndex);
-    if (entryClefType != ClefType::INVALID) {
-        Clef* clef = Factory::createClef(m_score->dummy()->segment());
-        clef->setTrack(curTrackIdx);
-        clef->setConcertClef(entryClefType);
-        // clef->setTransposingClef(entryClefType);
-        // clef->setShowCourtesy();
-        // clef->setForInstrumentChange();
-        clef->setGenerated(false);
-        clef->setIsHeader(false); /// @todo is this always correct?
-        // clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
-
-        Segment* clefSeg = segment->measure()->getSegment(
-                           clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, segment->tick());
-        clefSeg->add(clef);
-    }
-    */
-
     // create Tuplets as needed, starting with the outermost
     for (size_t i = 0; i < tupletMap.size(); ++i) {
         if (tupletMap[i].layer < 0) {
@@ -508,6 +484,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
     ChordRest* cr = importEntry(entryInfo, segment, curTrackIdx);
     if (cr) {
         cr->setTicks(currentEntryActualDuration); // should probably be actual length, like done here
+        cr->setParent(segment);
         cr->setTrack(curTrackIdx);
         segment->add(cr);
         if (parentTuplet) {
@@ -521,7 +498,10 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
     }
 
     tickEnd += currentEntryActualDuration;
-    segment = m_score->tick2measure(tickEnd)->getSegment(SegmentType::ChordRest, tickEnd);
+    Measure* nm = m_score->tick2measure(tickEnd);
+    if (nm) {
+        segment = nm->getSegment(SegmentType::ChordRest, tickEnd);
+    }
     return true;
 }
 
@@ -642,7 +622,7 @@ void EnigmaXmlImporter::importMeasures()
             continue;
         } else {
             logger()->logInfo(String(u"Add entries: Successfully read staff_idx_t %1").arg(String::number(curStaffIdx)), m_doc, musxScrollViewItem->staffId, 1);
-		}
+        }
         if (!m_score->firstMeasure()) {
             logger()->logWarning(String(u"Add entries: Score has no first measure."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
@@ -666,6 +646,25 @@ void EnigmaXmlImporter::importMeasures()
             bool processedEntries = false;
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper());
             if (gfHold) {
+
+                /// @todo add clef change and options
+                /*ClefType entryClefType = FinaleTConv::toMuseScoreClefType(entryInfo->clefIndex);
+                if (entryClefType != ClefType::INVALID) {
+                    Clef* clef = Factory::createClef(m_score->dummy()->segment());
+                    clef->setTrack(curTrackIdx);
+                    clef->setConcertClef(entryClefType);
+                    // clef->setTransposingClef(entryClefType);
+                    // clef->setShowCourtesy();
+                    // clef->setForInstrumentChange();
+                    clef->setGenerated(false);
+                    clef->setIsHeader(false); /// @todo is this always correct?
+                    // clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
+
+                    Segment* clefSeg = segment->measure()->getSegment(
+                                       clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, segment->tick());
+                    clefSeg->add(clef);
+                }*/
+
                 for (LayerIndex layer = 0; layer < MAX_LAYERS; layer++) {
                     /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
                     std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
@@ -700,10 +699,11 @@ void EnigmaXmlImporter::importMeasures()
                 }
             }
             if (!processedEntries) {
-                Rest* rest = mu::engraving::Factory::createRest(segment, mu::engraving::TDuration(mu::engraving::DurationType::V_MEASURE));
+                Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
                 rest->setTicks(measure->ticks());
                 rest->setTrack(curStaffIdx * VOICES);
+                rest->setVisible(false);
                 segment->add(rest);
             }
             currTick += measure->ticks();

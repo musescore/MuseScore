@@ -144,3 +144,11 @@ TEST_F(Finale_Tests, onePartOneMeasure) {
 TEST_F(Finale_Tests, onePartOneMeasureWithNotes) {
     finaleImportTestRef("onePartOneMeasureWithNotes");
 }
+
+TEST_F(Finale_Tests, onePartOneMeasureWithTuplets) {
+    finaleImportTestRef("onePartOneMeasureWithTuplets");
+}
+
+TEST_F(Finale_Tests, onePartOneMeasureWithNestedTuplets) {
+    finaleImportTestRef("onePartOneMeasureWithNestedTuplets");
+}
