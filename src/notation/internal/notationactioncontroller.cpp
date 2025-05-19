@@ -229,6 +229,7 @@ void NotationActionController::init()
     registerAction("chord-tie", &Controller::chordTie);
     registerAction("lv", &Controller::addLaissezVib);
     registerAction("add-slur", &Controller::addSlur);
+    registerAction("hammer-on-pull-off", &Controller::addHammerOnPullOff);
 
     registerAction(UNDO_ACTION_CODE, &Interaction::undo, &Controller::canUndo);
     registerAction(REDO_ACTION_CODE, &Interaction::redo, &Controller::canRedo);
@@ -1388,6 +1389,16 @@ void NotationActionController::addSlur()
     } else {
         interaction->addSlurToSelection();
     }
+}
+
+void NotationActionController::addHammerOnPullOff()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->addHammerOnPullOffToSelection();
 }
 
 void NotationActionController::addFret(int num)

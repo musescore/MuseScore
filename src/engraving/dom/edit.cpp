@@ -44,6 +44,7 @@
 #include "glissando.h"
 #include "guitarbend.h"
 #include "hairpin.h"
+#include "hammeronpulloff.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
@@ -667,8 +668,32 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
         options.disableOverRepeats = true;
         secondChordRest = nextChordRest(firstChordRest, options);
 
-        if (!secondChordRest) {
-            secondChordRest = firstChordRest;
+        if (!secondChordRest || !secondChordRest->isChord()) {
+            if (slurTemplate && slurTemplate->isHammerOnPullOff() && firstChordRest->isChord()) {
+                Note* endNote = GuitarBend::createEndNote(toChord(firstChordRest)->upNote());
+                if (endNote) {
+                    secondChordRest = endNote->chord();
+                }
+            }
+            if (!secondChordRest) {
+                secondChordRest = firstChordRest;
+            }
+        } else if (secondChordRest->isChord()) {
+            bool firstChordRestIsTiedToSecond = firstChordRest->isChord() && toChord(firstChordRest)->allNotesTiedToNext()
+                                                && toChord(firstChordRest)->upNote()->tieFor()->endNote()->parent() == secondChordRest;
+
+            // Follow chain of tied notes and slur until the last
+            while (toChord(secondChordRest)->allNotesTiedToNext()) {
+                secondChordRest = toChord(secondChordRest)->upNote()->tieFor()->endNote()->chord();
+            }
+
+            // If the first chord rest is also tied to this chain, slur to the next non-tied note
+            if (firstChordRestIsTiedToSecond) {
+                ChordRest* nextCandidate = nextChordRest(secondChordRest, options);
+                if (nextCandidate) {
+                    secondChordRest = nextCandidate;
+                }
+            }
         }
     }
 
@@ -687,7 +712,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     slur->setEndElement(secondChordRest);
 
     firstChordRest->score()->undoAddElement(slur);
-    SlurSegment* ss = new SlurSegment(firstChordRest->score()->dummy()->system());
+    SlurTieSegment* ss = slur->newSlurTieSegment(firstChordRest->score()->dummy()->system());
     ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
     if (firstChordRest == secondChordRest && !(slur->isOutgoing() || slur->isIncoming())) {
         ss->setSlurOffset(Grip::END, PointF(3.0 * firstChordRest->style().spatium(), 0.0));
@@ -2603,6 +2628,7 @@ void Score::deleteItem(EngravingItem* el)
         case ElementType::KEYSIG:
         case ElementType::MEASURE_NUMBER:
         case ElementType::SYSTEM_LOCK_INDICATOR:
+        case ElementType::HAMMER_ON_PULL_OFF_TEXT:
             break;
         // All other types cannot be removed if generated
         default:
@@ -3046,6 +3072,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::HARMONIC_MARK_SEGMENT:
     case ElementType::PICK_SCRAPE_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
     {
         el = toSpannerSegment(el)->spanner();
         if (el->isTie()) {
@@ -3060,6 +3087,10 @@ void Score::deleteItem(EngravingItem* el)
         undoRemoveElement(el);
     }
     break;
+
+    case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+        undoRemoveHopoText(toHammerOnPullOffText(el));
+        break;
 
     case ElementType::STEM_SLASH:                   // cannot delete this elements
     case ElementType::HOOK:
@@ -5138,7 +5169,7 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
 
     if (spanner) {
         // Find and add corresponding slurs and hairpins
-        static const std::set<ElementType> SPANNERS_TO_COPY { ElementType::SLUR, ElementType::HAIRPIN };
+        static const std::set<ElementType> SPANNERS_TO_COPY { ElementType::SLUR, ElementType::HAMMER_ON_PULL_OFF, ElementType::HAIRPIN };
         auto spanners = score->spannerMap().findOverlapping(start.ticks(), lTick.ticks());
         for (auto i = spanners.begin(); i < spanners.end(); i++) {
             Spanner* sp      = i->value;
@@ -5996,6 +6027,7 @@ static void undoChangeNoteVisibility(Note* note, bool visible)
         ElementType::NOTE,
         ElementType::LYRICS,
         ElementType::SLUR,
+        ElementType::HAMMER_ON_PULL_OFF,
         ElementType::CHORD, // grace notes
         ElementType::LEDGER_LINE, // temporary objects, impossible to change visibility
     };
@@ -6284,6 +6316,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::CHORDLINE
             && et != ElementType::LYRICS
             && et != ElementType::SLUR
+            && et != ElementType::HAMMER_ON_PULL_OFF
             && et != ElementType::TIE
             && et != ElementType::NOTE
             && et != ElementType::INSTRUMENT_CHANGE
@@ -6355,6 +6388,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ElementType::OTTAVA,
             ElementType::TRILL,
             ElementType::SLUR,
+            ElementType::HAMMER_ON_PULL_OFF,
             ElementType::VIBRATO,
             ElementType::TEXTLINE,
             ElementType::PEDAL,
@@ -7062,6 +7096,72 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
             } else {
                 doUndoRemoveElement(s);
             }
+        }
+    }
+}
+
+void Score::undoRemoveHopoText(HammerOnPullOffText* hopoText)
+{
+    Chord* startChord = hopoText->startChord();
+    Chord* endChord = hopoText->endChord();
+    IF_ASSERT_FAILED(startChord && endChord) {
+        return;
+    }
+
+    HammerOnPullOffSegment* hopoSegment = toHammerOnPullOffSegment(hopoText->parentItem());
+    HammerOnPullOff* hopo = hopoSegment ? hopoSegment->hammerOnPullOff() : nullptr;
+    IF_ASSERT_FAILED(hopo) {
+        return;
+    }
+
+    Chord* hopoStartChord = toChord(hopo->startElement());
+    Chord* hopoEndChord = toChord(hopo->endElement());
+    IF_ASSERT_FAILED(hopoStartChord && hopoEndChord) {
+        return;
+    }
+
+    if (startChord == hopoStartChord && endChord == hopoEndChord) {
+        undoRemoveElement(hopo);
+        return;
+    }
+
+    Fraction hopoStartTick = hopo->tick();
+    Fraction hopoEndTick = hopo->tick2();
+    Fraction hopoTextStartTick = startChord->tick();
+    Fraction hopoTextEndTick = endChord->tick();
+
+    bool shortenFromStart = (hopoTextStartTick - hopoStartTick) < (hopoEndTick - hopoTextEndTick);
+    EditData editData;
+    editData.curGrip = shortenFromStart ? Grip::START : Grip::END;
+
+    if (shortenFromStart) {
+        Fraction newStartTick = hopoTextEndTick;
+        Fraction newTicks = hopoEndTick - newStartTick;
+        hopo->undoChangeProperty(Pid::SPANNER_TICK, newStartTick);
+        hopo->undoChangeProperty(Pid::SPANNER_TICKS, newTicks);
+        hopo->undoChangeStartEndElements(endChord, hopoEndChord);
+        if (startChord != hopoStartChord) {
+            HammerOnPullOff* newHopo = Factory::createHammerOnPullOff(score()->dummy());
+            newHopo->setTrack(hopo->track());
+            newHopo->setTick(hopoStartTick);
+            newHopo->setTick2(hopoTextStartTick);
+            newHopo->setStartElement(hopoStartChord);
+            newHopo->setEndElement(startChord);
+            score()->undoAddElement(newHopo);
+        }
+    } else {
+        Fraction newEndTick = hopoTextStartTick;
+        Fraction newTicks = newEndTick - hopoStartTick;
+        hopo->undoChangeProperty(Pid::SPANNER_TICKS, newTicks);
+        hopo->undoChangeStartEndElements(hopoStartChord, startChord);
+        if (endChord != hopoEndChord) {
+            HammerOnPullOff* newHopo = new HammerOnPullOff(score()->dummy());
+            newHopo->setTrack(hopo->track());
+            newHopo->setTick(hopoTextEndTick);
+            newHopo->setTick2(hopoEndTick);
+            newHopo->setStartElement(endChord);
+            newHopo->setEndElement(hopoEndChord);
+            score()->undoAddElement(newHopo);
         }
     }
 }

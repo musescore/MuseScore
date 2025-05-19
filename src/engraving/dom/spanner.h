@@ -118,7 +118,7 @@ public:
     std::list<EngravingObject*> linkListForPropertyPropagation() const override;
     bool isPropertyLinkedToMaster(Pid id) const override;
 
-    bool isUserModified() const override;
+    virtual bool isUserModified() const override;
 
     bool allowTimeAnchor() const override;
 

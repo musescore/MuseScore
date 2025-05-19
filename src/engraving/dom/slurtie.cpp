@@ -180,6 +180,17 @@ std::vector<PointF> SlurTieSegment::gripsPositions(const EditData&) const
     return grips;
 }
 
+bool SlurTieSegment::isUserModified() const
+{
+    return SpannerSegment::isUserModified() || !(visible() && autoplace()
+                                                 && color() == configuration()->defaultColor()
+                                                 && offset().isNull()
+                                                 && ups(Grip::START).off.isNull()
+                                                 && ups(Grip::BEZIER1).off.isNull()
+                                                 && ups(Grip::BEZIER2).off.isNull()
+                                                 && ups(Grip::END).off.isNull());
+}
+
 //---------------------------------------------------------
 //   startEditDrag
 //---------------------------------------------------------

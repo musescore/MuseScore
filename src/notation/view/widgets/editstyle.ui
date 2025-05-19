@@ -201,6 +201,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Hammer-ons, pull-offs &amp; tapping</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Fermatas</string>
        </property>
       </item>
@@ -11465,6 +11470,15 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="PageHopos">
+       <layout class="QVBoxLayout" name="verticalLayout_59">
+        <item>
+         <widget class="QWidget" name="hoposPageWidget" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_60"/>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="PageFermatas">
        <layout class="QVBoxLayout" name="verticalLayout_53">
         <item>
@@ -14211,8 +14225,8 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>624</width>
+             <height>478</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">

@@ -84,6 +84,9 @@ class GuitarBendText;
 class HBox;
 class Hairpin;
 class HairpinSegment;
+class HammerOnPullOff;
+class HammerOnPullOffSegment;
+class HammerOnPullOffText;
 class HarmonicMark;
 class HarmonicMarkSegment;
 class Harmony;
@@ -346,7 +349,6 @@ public:
     CONVERT(VBox,          VBOX)
     CONVERT(TBox,          TBOX)
     CONVERT(FBox,          FBOX)
-    CONVERT(Slur,          SLUR)
     CONVERT(Glissando,     GLISSANDO)
     CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
     CONVERT(GuitarBend,    GUITAR_BEND)
@@ -370,7 +372,6 @@ public:
     CONVERT(Beam,          BEAM)
     CONVERT(Hook,          HOOK)
     CONVERT(StemSlash,     STEM_SLASH)
-    CONVERT(SlurSegment,   SLUR_SEGMENT)
     CONVERT(LaissezVibSegment,    LAISSEZ_VIB_SEGMENT)
     CONVERT(LaissezVib,    LAISSEZ_VIB)
     CONVERT(PartialTieSegment,    PARTIAL_TIE_SEGMENT)
@@ -457,6 +458,9 @@ public:
     CONVERT(TimeTickAnchor, TIME_TICK_ANCHOR)
     CONVERT(Parenthesis, PARENTHESIS)
     CONVERT(ShadowNote, SHADOW_NOTE)
+    CONVERT(HammerOnPullOff, HAMMER_ON_PULL_OFF)
+    CONVERT(HammerOnPullOffSegment, HAMMER_ON_PULL_OFF_SEGMENT)
+    CONVERT(HammerOnPullOffText, HAMMER_ON_PULL_OFF_TEXT)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -484,6 +488,16 @@ public:
                || isPedalSegment()
                || isVoltaSegment()
                || isNoteLineSegment();
+    }
+
+    bool isSlur() const
+    {
+        return type() == ElementType::SLUR || type() == ElementType::HAMMER_ON_PULL_OFF;
+    }
+
+    bool isSlurSegment() const
+    {
+        return type() == ElementType::SLUR_SEGMENT || type() == ElementType::HAMMER_ON_PULL_OFF_SEGMENT;
     }
 
     bool isLineSegment() const
@@ -626,7 +640,8 @@ static inline SlurTieSegment* toSlurTieSegment(EngravingObject* e)
 {
     assert(
         e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
-        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT || e->type() == ElementType::PARTIAL_TIE_SEGMENT);
+        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT || e->type() == ElementType::PARTIAL_TIE_SEGMENT
+        || e->type() == ElementType::HAMMER_ON_PULL_OFF_SEGMENT);
     return (SlurTieSegment*)e;
 }
 
@@ -634,7 +649,8 @@ static inline const SlurTieSegment* toSlurTieSegment(const EngravingObject* e)
 {
     assert(
         e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
-        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT || e->type() == ElementType::PARTIAL_TIE_SEGMENT);
+        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT || e->type() == ElementType::PARTIAL_TIE_SEGMENT
+        || e->type() == ElementType::HAMMER_ON_PULL_OFF_SEGMENT);
     return (const SlurTieSegment*)e;
 }
 
@@ -877,5 +893,8 @@ CONVERT(PartialLyricsLine)
 CONVERT(PartialLyricsLineSegment)
 CONVERT(Parenthesis)
 CONVERT(ShadowNote)
+CONVERT(HammerOnPullOff)
+CONVERT(HammerOnPullOffSegment)
+CONVERT(HammerOnPullOffText)
 #undef CONVERT
 }

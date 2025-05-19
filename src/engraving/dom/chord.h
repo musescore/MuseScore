@@ -330,6 +330,8 @@ public:
 
     StartEndSlurs& startEndSlurs() { return m_startEndSlurs; }
 
+    bool allNotesTiedToNext() const;
+
 private:
 
     friend class Factory;

@@ -111,6 +111,7 @@
 #include "../../dom/groups.h"
 #include "../../dom/harppedaldiagram.h"
 #include "../../dom/hairpin.h"
+#include "../../dom/hammeronpulloff.h"
 #include "../../dom/keysig.h"
 #include "../../dom/layoutbreak.h"
 #include "../../dom/ledgerline.h"
@@ -215,6 +216,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::GUITAR_BEND: read(item_cast<GuitarBend*>(item), xml, ctx);
         break;
     case ElementType::HAIRPIN: read(item_cast<Hairpin*>(item), xml, ctx);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF: read(item_cast<HammerOnPullOff*>(item), xml, ctx);
         break;
     case ElementType::HARMONY: read(item_cast<Harmony*>(item), xml, ctx);
         break;
@@ -3134,6 +3137,15 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
     h->styleChanged();
 }
 
+void TRead::read(HammerOnPullOff* h, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        if (!readProperties(static_cast<Slur*>(h), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
 void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
@@ -3996,7 +4008,8 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
     if (TRead::readProperty(s, tag, e, ctx, Pid::SLUR_DIRECTION)) {
     } else if (tag == "lineType") {
         s->setStyleType(static_cast<SlurStyleType>(e.readInt()));
-    } else if (tag == "SlurSegment" || tag == "TieSegment" || tag == "LaissezVibSegment" || tag == "PartialTieSegment") {
+    } else if (tag == "SlurSegment" || tag == "TieSegment" || tag == "LaissezVibSegment" || tag == "PartialTieSegment"
+               || tag == "HammerOnPullOffSegment") {
         const int idx = e.intAttribute("no", 0);
         const int n = int(s->spannerSegments().size());
         for (int i = n; i < idx; ++i) {
@@ -4026,10 +4039,30 @@ void TRead::read(SlurTieSegment* s, XmlReader& e, ReadContext& ctx)
             s->ups(Grip::BEZIER2).off = e.readPoint() * _spatium;
         } else if (tag == "o4") {
             s->ups(Grip::END).off = e.readPoint() * _spatium;
+        } else if (tag == "HammerOnPullOffText") {
+            DO_ASSERT(s->isHammerOnPullOffSegment());
+            readHopoText(toHammerOnPullOffSegment(s), e, ctx, e.intAttribute("idx"));
         } else if (!readItemProperties(s, e, ctx)) {
             e.unknown();
         }
     }
+}
+
+void TRead::readHopoText(HammerOnPullOffSegment* hopoSeg, XmlReader& xml, ReadContext& ctx, int idx)
+{
+    int hopoTextCount = static_cast<int>(hopoSeg->hopoText().size());
+    for (int i = hopoTextCount; i < idx; ++i) {
+        hopoSeg->addHopoText(new HammerOnPullOffText(hopoSeg));
+    }
+
+    HammerOnPullOffText* hopoText = new HammerOnPullOffText(hopoSeg);
+    while (xml.readNextStartElement()) {
+        if (!readProperties(toTextBase(hopoText), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+
+    hopoSeg->addHopoText(hopoText);
 }
 
 bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)

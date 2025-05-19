@@ -205,6 +205,9 @@ enum class ElementType : unsigned char {
     TREMOLO_SINGLECHORD,
     TIME_TICK_ANCHOR,
     PARENTHESIS,
+    HAMMER_ON_PULL_OFF,
+    HAMMER_ON_PULL_OFF_SEGMENT,
+    HAMMER_ON_PULL_OFF_TEXT,
 
     ROOT_ITEM,
     DUMMY,
@@ -802,6 +805,7 @@ enum class TextStyleType : unsigned char {
     FINGERING,
     LH_GUITAR_FINGERING,
     RH_GUITAR_FINGERING,
+    HAMMER_ON_PULL_OFF,
     STRING_NUMBER,
     STRING_TUNINGS,
     FRET_DIAGRAM_FINGERING,

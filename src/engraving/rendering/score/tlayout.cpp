@@ -69,6 +69,7 @@
 #include "dom/guitarbend.h"
 
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harppedaldiagram.h"
 #include "dom/harmonicmark.h"
 #include "dom/harmony.h"
@@ -275,6 +276,12 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::HAIRPIN:          layoutHairpin(item_cast<Hairpin*>(item), ctx);
         break;
     case ElementType::HAIRPIN_SEGMENT:  layoutHairpinSegment(item_cast<HairpinSegment*>(item), ctx);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF: layoutHammerOnPullOff(item_cast<HammerOnPullOff*>(item), ctx);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT: layoutHammerOnPullOffSegment(item_cast<HammerOnPullOffSegment*>(item), ctx);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF_TEXT: layoutHammerOnPullOffText(item_cast<HammerOnPullOffText*>(item), ctx);
         break;
     case ElementType::HARP_DIAGRAM:
         layoutHarpPedalDiagram(item_cast<const HarpPedalDiagram*>(item), static_cast<HarpPedalDiagram::LayoutData*>(ldata));
@@ -3240,6 +3247,51 @@ void TLayout::layoutHairpin(Hairpin* item, LayoutContext& ctx)
     LAYOUT_CALL_ITEM(item);
     item->setPos(0.0, 0.0);
     layoutTextLineBase(item, ctx);
+}
+
+void TLayout::layoutHammerOnPullOff(HammerOnPullOff* item, LayoutContext& ctx)
+{
+    layoutSlur(static_cast<Slur*>(item), ctx);
+}
+
+void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutContext& ctx)
+{
+    // The layout of the slur has already been done. Here we layout the H/P letters.
+    item->updateHopoText();
+
+    HammerOnPullOff* hopo = item->hammerOnPullOff();
+    Shape hopoSegmentShape = item->mutldata()->shape();
+
+    for (HammerOnPullOffText* hopoText : item->hopoText()) {
+        Align align;
+        align.vertical = hopo->up() ? AlignV::BASELINE : AlignV::TOP;
+        align.horizontal = AlignH::HCENTER;
+        hopoText->setAlign(align);
+        layoutItem(hopoText, ctx);
+
+        double startX = hopoText->startChord()->systemPos().x() + hopoText->startChord()->upNote()->headWidth();
+        double endX = hopoText->endChord()->systemPos().x();
+        double centerX = 0.5 * (startX + endX);
+
+        double vertPadding = 0.5 * item->spatium();
+        Shape hopoTextShape = hopoText->ldata()->shape().translated(PointF(centerX, 0.0));
+        double y = hopo->up() ? -hopoTextShape.minVerticalDistance(hopoSegmentShape) : hopoSegmentShape.minVerticalDistance(hopoTextShape);
+        y += hopo->up() ? -vertPadding : vertPadding;
+        y = hopo->up() ? std::min(y, -vertPadding) : std::max(y, item->staff()->staffHeight(item->tick()) + vertPadding);
+
+        hopoText->mutldata()->setPos(centerX, y);
+    }
+
+    for (HammerOnPullOffText* hopoText : item->hopoText()) {
+        hopoSegmentShape.add(hopoText->ldata()->shape().translated(hopoText->pos()));
+    }
+
+    item->mutldata()->setShape(hopoSegmentShape);
+}
+
+void TLayout::layoutHammerOnPullOffText(HammerOnPullOffText* item, LayoutContext& ctx)
+{
+    layoutBaseTextBase(item, ctx);
 }
 
 void TLayout::fillHairpinSegmentShape(const HairpinSegment* item, HairpinSegment::LayoutData* ldata)
@@ -7025,7 +7077,7 @@ void TLayout::layoutWhammyBarSegment(WhammyBarSegment* item, LayoutContext& ctx)
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
-using LayoutSystemTypes = rtti::TypeList<LyricsLine, Slur, Volta>;
+using LayoutSystemTypes = rtti::TypeList<LyricsLine, Slur, HammerOnPullOff, Volta>;
 
 class LayoutSystemVisitor : public rtti::Visitor<LayoutSystemVisitor>
 {

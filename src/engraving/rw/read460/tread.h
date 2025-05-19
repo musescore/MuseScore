@@ -81,6 +81,7 @@ class GuitarBendSegment;
 class GuitarBendHold;
 
 class Hairpin;
+class HammerOnPullOff;
 class Harmony;
 class HarmonicMark;
 class HarpPedalDiagram;
@@ -232,6 +233,7 @@ public:
     static void read(GuitarBendHold* h, XmlReader& xml, ReadContext& ctx);
 
     static void read(Hairpin* h, XmlReader& xml, ReadContext& ctx);
+    static void read(HammerOnPullOff* h, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
     static void read(HarpPedalDiagram* h, XmlReader& xml, ReadContext& ctx);
     static void read(HarmonicMark* h, XmlReader& xml, ReadContext& ctx);
@@ -387,5 +389,7 @@ private:
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
 
     static void readSystemLock(Score* score, XmlReader& e);
+
+    static void readHopoText(HammerOnPullOffSegment* hopoSeg, XmlReader& xml, ReadContext& ctx, int idx);
 };
 }
