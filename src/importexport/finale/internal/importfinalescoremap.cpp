@@ -849,6 +849,7 @@ void EnigmaXmlImporter::importMeasures()
                         }
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
                             if (entryInfoPtr.calcIsBeamStart()) {
+                                /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
                                 ChordRest* cr = muse::value(entryMap, entryInfoPtr.getIndexInFrame(), nullptr);
                                 if (cr == nullptr) { // once grace notes are supported, use IF_ASSERT_FAILED(cr != nullptr)
                                     logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
@@ -864,6 +865,7 @@ void EnigmaXmlImporter::importMeasures()
                                     beam->setDirection(DirectionV::AUTO);
                                 }
                                 beam->add(cr);
+                                cr->setBeam(beam);
                                 cr->setBeamMode(BeamMode::BEGIN);
                                 ChordRest* lastCr = nullptr;
                                 for (auto nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
@@ -882,6 +884,7 @@ void EnigmaXmlImporter::importMeasures()
                                         lastCr->setBeamMode(BeamMode::BEGIN32);
                                     }
                                     beam->add(lastCr);
+                                    lastCr->setBeam(beam);
                                 }
                                 if (lastCr) {
                                     lastCr->setBeamMode(BeamMode::END);
