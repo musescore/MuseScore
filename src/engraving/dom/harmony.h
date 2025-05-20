@@ -228,6 +228,9 @@ public:
     AlignH noteheadAlign() const { return m_noteheadAlign; }
     void setNoteheadAlign(AlignH v) { m_noteheadAlign = v; }
 
+    double bassScale() const { return m_bassScale; }
+    void setBassScale(double v) { m_bassScale = v; }
+
     void undoMoveSegment(Segment* newSeg, Fraction tickDiff) override;
 
     Color curColor() const override;
@@ -276,5 +279,6 @@ private:
 
     std::optional<double> m_userMag;
     AlignH m_noteheadAlign = AlignH::HCENTER;
+    double m_bassScale = 1.0;
 };
 } // namespace mu::engraving
