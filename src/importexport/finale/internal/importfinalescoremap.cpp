@@ -73,14 +73,6 @@ namespace mu::iex::finale {
 void EnigmaXmlImporter::import()
 {
     mapLayers();
-    std::cout << "Layer-to-Voice Mapping:\n";
-    for (const auto& [layer, voice] : m_layer2Voice) {
-        std::cout << "  Layer " << int(layer) << " → Voice " << int(voice) << '\n';
-    }
-    std::cout << "Layers requiring forced stems:\n";
-    for (LayerIndex layer : m_layerForceStems) {
-        std::cout << "  Layer " << int(layer) << '\n';
-    }
     importParts();
     importBrackets();
     importMeasures();
