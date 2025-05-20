@@ -689,7 +689,7 @@ void FBox::add(EngravingItem* e)
     if (e->isFretDiagram()) {
         FretDiagram* fd = toFretDiagram(e);
         fd->setFlag(ElementFlag::MOVABLE, false);
-        m_fretDiagrams.push_back(fd);
+        VBox::add(e);
     } else {
         LOGD("FBox::add: element not allowed");
         return;
@@ -783,11 +783,7 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
 
 void FBox::init()
 {
-    for (FretDiagram* fretDiagram : m_fretDiagrams) {
-        fretDiagram->deleteLater();
-    }
-
-    m_fretDiagrams.clear();
+    clearElements();
 
     std::set<String /*pattern*/> usedDiagrams;
 

@@ -39,6 +39,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     void setChordItems(const ItemList& items);
+    void setChordVisible(int index, bool visible);
 
     QItemSelectionModel* selectionModel() const;
 
@@ -48,9 +49,5 @@ private:
     };
 
     FretFrameChordItem* modelIndexToItem(const QModelIndex& index) const;
-
-    void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
-
-    void loadListItems();
 };
 }
