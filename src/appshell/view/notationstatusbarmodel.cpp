@@ -412,6 +412,8 @@ void NotationStatusBarModel::handleWorkspacesMenuItem(const QString& itemId)
 {
 #ifdef MUSE_MODULE_WORKSPACE
     m_workspacesMenuModel->handleMenuItem(itemId);
+#else
+    UNUSED(itemId);
 #endif
 }
 

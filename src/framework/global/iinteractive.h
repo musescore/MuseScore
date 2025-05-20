@@ -207,6 +207,9 @@ public:
     virtual RetVal<Val> open(const std::string& uri) const = 0;
     virtual RetVal<Val> open(const Uri& uri) const = 0;
     virtual RetVal<Val> open(const UriQuery& uri) const = 0;
+    virtual async::Promise<Val> openAsync(const UriQuery& uri) = 0;
+    async::Promise<Val> openAsync(const std::string& uri) { return openAsync(UriQuery(uri)); }
+    async::Promise<Val> openAsync(const Uri& uri) { return openAsync(UriQuery(uri)); }
     virtual RetVal<bool> isOpened(const std::string& uri) const = 0;
     virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
     virtual RetVal<bool> isOpened(const UriQuery& uri) const = 0;
