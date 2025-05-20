@@ -32,6 +32,7 @@
 #include "types/string.h"
 
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/beam.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/bracketItem.h"
 #include "engraving/dom/chord.h"
@@ -309,6 +310,12 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
                 note->add(a);
             }
             chord->add(note);
+        }
+        if (currentEntry->freezeStem || currentEntry->voice2 || entryInfo->v2Launch
+            || m_layerForceStems.find(entryInfo.getLayerIndex()) != m_layerForceStems.end()) {
+            /// @todo beams: this works for non-beamable notes, but beams appear to have their own up/down status
+            DirectionV d = currentEntry->upStem ? DirectionV::UP : DirectionV::DOWN;
+            chord->setStemDirection(d);
         }
         cr = toChordRest(chord);
     } else {
