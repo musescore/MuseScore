@@ -1,5 +1,5 @@
 name: "Build: Nightly"
-run-name: "${{ github.event.schedule == '0 3 * * *' && 'Build: Nightly - master branch' || 'Build: Nightly - current release branch' }}"
+run-name: "${{ format('Build: Nightly - {0}', github.ref_name) }}"
 
 on:
   schedule:

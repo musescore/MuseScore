@@ -48,6 +48,7 @@ on:
       deploy_backend:
         description: 'Deploy backend: on - deploy'
         default: 'off'
+        type: string
         required: false
       sentry_project:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
