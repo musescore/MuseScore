@@ -1,4 +1,4 @@
-name: 'Translate: tx pull translations to S3'
+name: "Translate: tx pull translations to S3"
 
 on:
   schedule:
@@ -20,9 +20,9 @@ on:
         type: boolean
         default: false
       use_qt69:
-        description: 'Use Qt 6.9'
-        default: 'off'
-        required: false   
+        description: "Use Qt 6.9"
+        default: "off"
+        required: false
 
 jobs:
   tx_pull:
@@ -77,10 +77,10 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
-          host: 'linux'
-          target: 'desktop'
-          arch: 'linux_gcc_64'
-          archives: 'qttools'
+          host: "linux"
+          target: "desktop"
+          arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
+          archives: "qttools"
 
       - name: Setup environment for pushing to S3
         if: env.DO_PUSH_TO_S3 == 'true'
