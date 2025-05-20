@@ -1472,9 +1472,18 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
     ldata->setPos(PointF());
 
-    const std::vector<FretDiagram*>& fretDiagrams = item->fretDiagrams();
-    if (fretDiagrams.empty()) {
+    const ElementList& elements = item->el();
+    if (elements.empty()) {
         return;
+    }
+
+    std::vector<FretDiagram*> fretDiagrams;
+    for (EngravingItem* element : elements) {
+        if (!element || !element->isFretDiagram() || !element->visible()) {
+            continue;
+        }
+
+        fretDiagrams.emplace_back(toFretDiagram(element));
     }
 
     //! NOTE: layout fret diagrams and calculate sizes
@@ -1485,10 +1494,6 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
     for (size_t i = 0; i < totalDiagrams; ++i) {
         FretDiagram* fretDiagram = fretDiagrams[i];
-        if (!fretDiagram) {
-            continue;
-        }
-
         fretDiagram->setUserMag(item->diagramScale());
 
         Harmony* harmony = fretDiagram->harmony();
@@ -1552,9 +1557,6 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
     for (size_t i = 0; i < totalDiagrams; ++i) {
         FretDiagram* fretDiagram = fretDiagrams[i];
-        if (!fretDiagram) {
-            continue;
-        }
 
         size_t row = i / chordsPerRow;
         size_t col = i % chordsPerRow;

@@ -60,6 +60,16 @@ void FretFrameChordListModel::setChordItems(const ItemList& items)
     setItems(items);
 }
 
+void FretFrameChordListModel::setChordVisible(int index, bool visible)
+{
+    FretFrameChordItem* item = modelIndexToItem(this->index(index));
+    if (!item) {
+        return;
+    }
+
+    item->setIsVisible(visible);
+}
+
 QItemSelectionModel* FretFrameChordListModel::selectionModel() const
 {
     return muse::uicomponents::SelectableItemListModel::selection();

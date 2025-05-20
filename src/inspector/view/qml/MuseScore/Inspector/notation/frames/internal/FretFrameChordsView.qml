@@ -34,6 +34,7 @@ StyledListView {
 
     spacing: 0
 
+    signal changeChordVisibilityRequested(int index, bool visible)
     signal selectRowRequested(int index)
     signal clearSelectionRequested()
 
@@ -100,7 +101,7 @@ StyledListView {
                 isVisible: itemDelegate.item.isVisible
 
                 onVisibleToggled: {
-                    itemDelegate.item.isVisible = !itemDelegate.item.isVisible
+                    root.changeChordVisibilityRequested(index, !itemDelegate.item.isVisible)
                 }
             }
 

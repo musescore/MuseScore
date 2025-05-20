@@ -22,6 +22,9 @@
 
 #pragma once
 
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+
 #include "uicomponents/view/selectableitemlistmodel.h"
 
 #include "models/abstractinspectormodel.h"
@@ -32,16 +35,20 @@ class FBox;
 }
 
 namespace mu::inspector {
-class FretFrameChordsSettingsModel : public AbstractInspectorModel
+class FretFrameChordsSettingsModel : public AbstractInspectorModel, public muse::Injectable
 {
     Q_OBJECT
 
     Q_PROPERTY(FretFrameChordListModel * chordListModel READ chordListModel CONSTANT)
 
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+
 public:
     explicit FretFrameChordsSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     FretFrameChordListModel* chordListModel() const;
+
+    Q_INVOKABLE void setChordVisible(int index, bool visible);
 
 private:
     engraving::FBox* fretBox() const;

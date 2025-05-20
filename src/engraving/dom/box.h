@@ -181,11 +181,6 @@ public:
 
     void add(EngravingItem*) override;
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
-
     double textScale() const { return m_textScale; }
     void setTextScale(double scale) { m_textScale = scale; }
 
@@ -208,8 +203,6 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& val) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
-    const std::vector<FretDiagram*> fretDiagrams() const { return m_fretDiagrams; }
-
     void init();
 
     struct LayoutData : public VBox::LayoutData {
@@ -226,8 +219,6 @@ public:
 
 private:
     void resolveContentRect();
-
-    std::vector<FretDiagram*> m_fretDiagrams;
 
     double m_textScale = 0.0;
     double m_diagramScale = 0.0;

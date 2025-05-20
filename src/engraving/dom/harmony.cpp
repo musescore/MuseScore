@@ -731,7 +731,7 @@ Segment* Harmony::getParentSeg() const
     if (explicitParent()->isFretDiagram()) {
         // When this harmony is the child of a fret diagram, we need to go up twice
         // to get to the parent seg.
-        seg = toSegment(explicitParent()->explicitParent());
+        seg = toFretDiagram(explicitParent())->segment();
     } else {
         seg = toSegment(explicitParent());
     }

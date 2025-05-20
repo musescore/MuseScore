@@ -89,10 +89,11 @@ void FretFrameChordsSettingsModel::loadListItems()
 
     QList<FretFrameChordListModel::Item*> items;
 
-    for (FretDiagram* diagram : box->fretDiagrams()) {
+    for (EngravingItem* element : box->el()) {
+        FretDiagram* diagram = toFretDiagram(element);
         auto chordItem = new FretFrameChordItem(m_chordListModel.get());
         chordItem->setTitle(diagram->harmony()->plainText());
-        // TODO: set isVisible based on diagram visibility
+        chordItem->setIsVisible(diagram->visible());
 
         items << chordItem;
     }
@@ -103,4 +104,34 @@ void FretFrameChordsSettingsModel::loadListItems()
 FretFrameChordListModel* FretFrameChordsSettingsModel::chordListModel() const
 {
     return m_chordListModel.get();
+}
+
+void FretFrameChordsSettingsModel::setChordVisible(int index, bool visible)
+{
+    FBox* box = fretBox();
+    if (!box) {
+        return;
+    }
+
+    ElementList diagrams = box->el();
+    if (index < 0 || index >= diagrams.size()) {
+        return;
+    }
+
+    notation::INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    const muse::TranslatableString actionName = visible
+                                                ? muse::TranslatableString("undoableAction", "Make chord(s) visible")
+                                                : muse::TranslatableString("undoableAction", "Make chord(s) invisible");
+
+    notation->undoStack()->prepareChanges(actionName);
+
+    box->score()->undoChangeVisible(diagrams[index], visible);
+    m_chordListModel->setChordVisible(index, visible);
+
+    notation->undoStack()->commitChanges();
+    notation->notationChanged().notify();
 }

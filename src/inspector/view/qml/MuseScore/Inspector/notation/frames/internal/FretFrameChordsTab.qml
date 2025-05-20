@@ -55,6 +55,10 @@ FocusableItem {
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart
 
+            onChangeChordVisibilityRequested: function(index, visible) {
+                root.model.setChordVisible(index, visible)
+            }
+
             onSelectRowRequested: function(index) {
                 view.model.selectRow(index)
             }
