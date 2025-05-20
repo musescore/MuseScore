@@ -22,6 +22,8 @@
 
 #pragma once
 #include "abstractstyledialogmodel.h"
+#include "iinteractive.h"
+#include "inotationconfiguration.h"
 
 namespace mu::notation {
 class ChordSymbolsPageModel : public AbstractStyleDialogModel
@@ -58,6 +60,12 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * harmonyVoicing READ harmonyVoicing CONSTANT)
     Q_PROPERTY(StyleItem * harmonyDuration READ harmonyDuration CONSTANT)
     Q_PROPERTY(StyleItem * capoPosition READ capoPosition CONSTANT)
+
+    Q_PROPERTY(bool isCustomXml READ isCustomXml CONSTANT NOTIFY changePreset)
+
+    muse::Inject<mu::notation::INotationConfiguration> configuration = { this };
+    muse::Inject<muse::IInteractive> interactive = { this };
+
 public:
 
     explicit ChordSymbolsPageModel(QObject* parent = nullptr);
@@ -65,6 +73,7 @@ public:
     StyleItem* chordStylePreset() const;
     StyleItem* chordDescriptionFile() const;
     Q_INVOKABLE QVariantList possiblePresetOptions() const;
+    bool isCustomXml() const;
 
     StyleItem* extensionMag() const;
     StyleItem* extensionAdjust() const;
@@ -104,7 +113,11 @@ public:
     StyleItem* harmonyDuration() const;
     StyleItem* capoPosition() const;
 
+signals:
+    void changePreset();
+
 public slots:
     void setChordStyle(mu::engraving::ChordStylePreset);
+    void selectChordDescriptionFile();
 };
 }

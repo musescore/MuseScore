@@ -114,19 +114,34 @@ StyledFlickable {
                 spacing: 12
                 anchors.fill: parent
 
-                StyledDropdown {
+                // TODO - replace with StyledDropdown once this whole dialog is written in QML
+                ComboBoxDropdown {
                     id: presetDropdown
-                    width: 172
-
+                    Layout.preferredWidth: 191
                     model: chordSymbolsModel.possiblePresetOptions()
 
-                    currentIndex: chordSymbolsModel.chordStylePreset && !chordSymbolsModel.chordStylePreset.isUndefined
-                                  ? presetDropdown.indexOfValue(chordSymbolsModel.chordStylePreset.value)
-                                  : -1
+                    styleItem: chordSymbolsModel.chordStylePreset
 
-                    onActivated: function(index, value) {
-                        chordSymbolsModel.chordStylePreset = value
+                    onHandleItem: function(value) {
                         chordSymbolsModel.setChordStyle(value)
+                    }
+                }
+
+                RowLayout {
+                    enabled: chordSymbolsModel.isCustomXml
+                    visible: chordSymbolsModel.isCustomXml
+                    height: 30
+
+                    TextInputField {
+                        id: customXMLField
+                        Layout.preferredWidth: 191
+                        readOnly: true
+                        currentText: chordSymbolsModel.chordDescriptionFile ? chordSymbolsModel.chordDescriptionFile.value : ""
+                    }
+
+                    FlatButton {
+                        icon: IconCode.OPEN_FILE
+                        onClicked: chordSymbolsModel.selectChordDescriptionFile()
                     }
                 }
             }
@@ -733,21 +748,15 @@ StyledFlickable {
                     Item {
                         Layout.preferredWidth: 326
                         Layout.preferredHeight: interpretationDropdown.height
-                        StyledDropdown {
-                            id: interpretationDropdown
-                            width: 172
 
+                        // TODO - replace with StyledDropdown once this whole dialog is written in QML
+                        ComboBoxDropdown {
+                            id: interpretationDropdown
+                            Layout.preferredWidth: 172
                             model: chordSymbolsModel.possibleHarmonyVoiceLiteralOptions()
 
-                            currentIndex: chordSymbolsModel.harmonyVoiceLiteral && !chordSymbolsModel.harmonyVoiceLiteral.isUndefined
-                                          ? interpretationDropdown.indexOfValue(chordSymbolsModel.harmonyVoiceLiteral.value)
-                                          : -1
-
-                            onActivated: function(index, value) {
-                                chordSymbolsModel.harmonyVoiceLiteral.value = value
-                            }
+                            styleItem: chordSymbolsModel.harmonyVoiceLiteral
                         }
-
                     }
 
                     FlatButton {
@@ -772,19 +781,14 @@ StyledFlickable {
                     Item {
                         Layout.preferredWidth: 326
                         Layout.preferredHeight: voicingDropdown.height
-                        StyledDropdown {
+
+                        // TODO - replace with StyledDropdown once this whole dialog is written in QML
+                        ComboBoxDropdown {
                             id: voicingDropdown
                             Layout.preferredWidth: 172
-
                             model: chordSymbolsModel.possibleHarmonyVoicingOptions()
 
-                            currentIndex: chordSymbolsModel.harmonyVoicing && !chordSymbolsModel.harmonyVoicing.isUndefined
-                                          ? voicingDropdown.indexOfValue(chordSymbolsModel.harmonyVoicing.value)
-                                          : -1
-
-                            onActivated: function(index, value) {
-                                chordSymbolsModel.harmonyVoicing.value = value
-                            }
+                            styleItem: chordSymbolsModel.harmonyVoicing
                         }
                     }
                 }
@@ -803,19 +807,13 @@ StyledFlickable {
                     Item {
                         Layout.preferredWidth: 326
                         Layout.preferredHeight: durationDropdown.height
-                        StyledDropdown {
+                        // TODO - replace with StyledDropdown once this whole dialog is written in QML
+                        ComboBoxDropdown {
                             id: durationDropdown
                             Layout.preferredWidth: 172
-
                             model: chordSymbolsModel.possibleHarmonyDurationOptions()
 
-                            currentIndex: chordSymbolsModel.harmonyDuration && !chordSymbolsModel.harmonyDuration.isUndefined
-                                          ? durationDropdown.indexOfValue(chordSymbolsModel.harmonyDuration.value)
-                                          : -1
-
-                            onActivated: function(index, value) {
-                                chordSymbolsModel.harmonyDuration.value = value
-                            }
+                            styleItem: chordSymbolsModel.harmonyDuration
                         }
                     }
                 }

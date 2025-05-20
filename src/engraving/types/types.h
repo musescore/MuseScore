@@ -745,8 +745,7 @@ enum class PartialSpannerDirection : signed char {
     BOTH
 };
 
-enum ChordStylePreset : unsigned char
-{
+enum ChordStylePreset : unsigned char {
     STANDARD,
     JAZZ,
     LEGACY,
