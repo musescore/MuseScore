@@ -271,6 +271,7 @@ const ElementStyle chordSymbolStyle {
     { Sid::harmonyPlacement, Pid::PLACEMENT },
     { Sid::minHarmonyDistance, Pid::MIN_DISTANCE },
     { Sid::chordAlignmentToNotehead, Pid::HARMONY_NOTEHEAD_ALIGN },
+    { Sid::chordBassNoteScale, Pid::HARMONY_BASS_SCALE },
     { Sid::harmonyVoiceLiteral, Pid::HARMONY_VOICE_LITERAL },
     { Sid::harmonyVoicing, Pid::HARMONY_VOICING },
     { Sid::harmonyDuration, Pid::HARMONY_DURATION },
@@ -301,6 +302,8 @@ Harmony::Harmony(const Harmony& h)
     m_bassCase   = h.m_bassCase;
     m_leftParen  = h.m_leftParen;
     m_rightParen = h.m_rightParen;
+    m_noteheadAlign = h.m_noteheadAlign;
+    m_bassScale = h.m_bassScale;
     m_degreeList = h.m_degreeList;
     m_harmonyType = h.m_harmonyType;
     m_play       = h.m_play;
@@ -1287,7 +1290,7 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
     if (tpcIsValid(info->bassTpc())) {
         std::list<RenderAction>& bassNoteChordList
             = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
-        render(bassNoteChordList, ctx, info->bassTpc(), spelling, bassCase, style().styleD(Sid::chordBassNoteScale));
+        render(bassNoteChordList, ctx, info->bassTpc(), spelling, bassCase, m_bassScale);
     }
 
     if (tpcIsValid(info->rootTpc()) && capo > 0 && capo < 12) {
@@ -1327,7 +1330,7 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
         if (tpcIsValid(capoBassTpc)) {
             std::list<RenderAction>& bassNoteChordList
                 = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
-            render(bassNoteChordList, ctx, capoBassTpc, spelling, bassCase, style().styleD(Sid::chordBassNoteScale));
+            render(bassNoteChordList, ctx, capoBassTpc, spelling, bassCase, m_bassScale);
         }
         render(u")", ctx);
     }
@@ -1688,21 +1691,18 @@ PropertyValue Harmony::getProperty(Pid pid) const
     switch (pid) {
     case Pid::PLAY:
         return PropertyValue(m_play);
-        break;
     case Pid::HARMONY_TYPE:
         return PropertyValue(int(m_harmonyType));
-        break;
     case Pid::HARMONY_NOTEHEAD_ALIGN:
         return PropertyValue(int(m_noteheadAlign));
+    case Pid::HARMONY_BASS_SCALE:
+        return m_bassScale;
     case Pid::HARMONY_VOICE_LITERAL:
         return m_realizedHarmony.literal();
-        break;
     case Pid::HARMONY_VOICING:
         return int(m_realizedHarmony.voicing());
-        break;
     case Pid::HARMONY_DURATION:
         return int(m_realizedHarmony.duration());
-        break;
     default:
         return TextBase::getProperty(pid);
     }
@@ -1723,6 +1723,11 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         break;
     case Pid::HARMONY_NOTEHEAD_ALIGN:
         setNoteheadAlign(AlignH(v.toInt()));
+        render();
+        break;
+    case Pid::HARMONY_BASS_SCALE:
+        setBassScale(v.toDouble());
+        render();
         break;
     case Pid::HARMONY_VOICE_LITERAL:
         m_realizedHarmony.setLiteral(v.toBool());
@@ -1771,7 +1776,10 @@ PropertyValue Harmony::propertyDefault(Pid id) const
         }
     }
     case Pid::HARMONY_NOTEHEAD_ALIGN:
-        return style().styleV(Sid::chordAlignmentToNotehead).toInt();
+        v = style().styleV(Sid::chordAlignmentToNotehead).toInt();
+        break;
+    case Pid::HARMONY_BASS_SCALE:
+        v = style().styleV(Sid::chordBassNoteScale).toDouble();
         break;
     case Pid::PLAY:
         v = true;
