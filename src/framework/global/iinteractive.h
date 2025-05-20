@@ -152,7 +152,29 @@ public:
     virtual Result question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
                             int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const = 0;
 
+    virtual async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                                 int defBtn = int(Button::NoButton), const Options& options = {},
+                                                 const std::string& dialogTitle = "") = 0;
+
+    async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const Buttons& buttons,
+                                         int defBtn = int(Button::NoButton), const Options& options = {},
+                                         const std::string& dialogTitle = "")
+    {
+        return questionAsync(contentTitle, text, buttonDataList(buttons), defBtn, options, dialogTitle);
+    }
+
     virtual ButtonData buttonData(Button b) const = 0;
+    inline ButtonDatas buttonDataList(const Buttons& buttons) const
+    {
+        ButtonDatas result;
+        result.reserve(buttons.size());
+
+        for (Button b : buttons) {
+            result.push_back(buttonData(b));
+        }
+
+        return result;
+    }
 
     // info
     virtual Result info(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},

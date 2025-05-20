@@ -54,6 +54,7 @@ public:
     Q_INVOKABLE void closeWidgetDialog();
 
     Q_INVOKABLE void question();
+    Q_INVOKABLE void questionByUri();
     Q_INVOKABLE void customQuestion();
 
     Q_INVOKABLE void information();
