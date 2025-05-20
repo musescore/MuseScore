@@ -72,10 +72,66 @@ namespace mu::iex::finale {
 
 void EnigmaXmlImporter::import()
 {
+    mapLayers();
+    std::cout << "Layer-to-Voice Mapping:\n";
+    for (const auto& [layer, voice] : m_layer2Voice) {
+        std::cout << "  Layer " << int(layer) << " → Voice " << int(voice) << '\n';
+    }
+    std::cout << "Layers requiring forced stems:\n";
+    for (LayerIndex layer : m_layerForceStems) {
+        std::cout << "  Layer " << int(layer) << '\n';
+    }
     importParts();
     importBrackets();
     importMeasures();
     importStyles(m_score->style(), SCORE_PARTID); /// @todo do this for all excerpts
+}
+
+void EnigmaXmlImporter::mapLayers()
+{
+    // This function maps layers to voices based on the layer stem directions and the hardwired MuseScore directions.
+    // MuseScore hardwire voices 0,2 up and voices 1,3 down.
+
+    m_layer2Voice.clear();
+    m_layerForceStems.clear();
+    std::unordered_map<track_idx_t, LayerIndex> reverseMap;
+
+    auto layerAttrs = m_doc->getOthers()->getArray<others::LayerAttributes>(SCORE_PARTID);
+
+    const auto mapLayer = [&](const std::shared_ptr<others::LayerAttributes>& layerAttr) {
+        std::array<track_idx_t, 4> tryOrder;
+        if (!layerAttr->freezeLayer) {
+            tryOrder = { 0, 1, 2, 3 }; // default
+        } else if (layerAttr->freezeStemsUp) {
+            tryOrder = { 0, 2, 1, 3 }; // prefer upstem voices
+        } else {
+            tryOrder = { 1, 3, 0, 2 }; // prefer downstem voices
+        }
+        const LayerIndex layerIndex = layerAttr->getCmper();
+        for (track_idx_t idx : tryOrder) {
+            auto [it, emplaced] = reverseMap.emplace(idx, layerIndex);
+            if (emplaced) {
+                m_layer2Voice.emplace(layerIndex, idx);
+                // If direction is unspecified or mismatched, force stems
+                const bool stemUpVoice = (idx % 2 == 0); // voices 0,2
+                if (!layerAttr->freezeLayer || (layerAttr->freezeStemsUp != stemUpVoice)) {
+                    m_layerForceStems.insert(layerIndex);
+                }
+                return;
+            }
+        }
+        logger()->logWarning(String(u"Unable to map Finale layer %1 to a MuseScore voice due to incompatible layer attributes").arg(int(layerIndex) + 1));
+    };
+    for (const auto& layerAttr : layerAttrs) {
+        if (layerAttr->freezeLayer) {
+            mapLayer(layerAttr);
+        }
+    }
+    for (const auto& layerAttr : layerAttrs) {
+        if (!layerAttr->freezeLayer) {
+            mapLayer(layerAttr);
+        }
+    }
 }
 
 static std::optional<ClefTypeList> clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
