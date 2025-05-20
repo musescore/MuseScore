@@ -4350,7 +4350,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         if (item->ghost()) {
             const_cast<Note*>(item)->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
         } else {
-            const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false);
+            const_cast<Note*>(item)->setHeadHasParentheses(false, /*addToLinked=*/ false, /* generated= */ true);
         }
 
         double w = item->tabHeadWidth(tab);
@@ -4373,7 +4373,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             if (item->ghost()) {
                 const_cast<Note*>(item)->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
             } else {
-                const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false);
+                const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false, /* generated= */ true);
             }
         }
 
