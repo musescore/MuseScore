@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_SLURTIETYPES_H
-#define MU_INSPECTOR_SLURTIETYPES_H
+#pragma once
 
 #include "qobjectdefs.h"
 
@@ -39,5 +38,3 @@ public:
     Q_ENUM(TiePlacement)
 };
 }
-
-#endif // MU_INSPECTOR_SLURTIETYPES_H

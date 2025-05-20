@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_AUDIO_COREAUDIODRIVER_H
-#define MUSE_AUDIO_COREAUDIODRIVER_H
+#pragma once
 
 #include <thread>
 #include <atomic>
@@ -84,5 +83,3 @@ private:
     std::vector<unsigned int> m_bufferSizes;
 };
 }
-
-#endif // MUSE_AUDIO_COREAUDIODRIVER_H
