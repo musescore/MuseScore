@@ -255,15 +255,14 @@ void PartTreeItem::resetAllFormatting()
     std::string title = muse::trc("layoutpanel", "Are you sure you want to reset all formatting?");
     std::string body = muse::trc("layoutpanel", "This action can not be undone");
 
-    IInteractive::Button button = interactive()->question(title, body, {
+    interactive()->questionAsync(title, body, {
         IInteractive::Button::No,
         IInteractive::Button::Yes
-    }).standardButton();
-
-    if (button != IInteractive::Button::Yes) {
-        return;
-    }
-
-    const Part* masterPart = masterNotation()->parts()->part(id());
-    notation()->parts()->replacePart(id(), masterPart->clone());
+    })
+    .onResolve(this, [this](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Yes)) {
+            const Part* masterPart = masterNotation()->parts()->part(id());
+            notation()->parts()->replacePart(id(), masterPart->clone());
+        }
+    });
 }

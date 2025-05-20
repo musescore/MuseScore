@@ -49,6 +49,13 @@ IInteractive::Result AutobotInteractive::question(const std::string& contentTitl
     return m_real->question(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
+async::Promise<IInteractive::Result> AutobotInteractive::questionAsync(const std::string& contentTitle, const Text& text,
+                                                                       const ButtonDatas& buttons, int defBtn,
+                                                                       const Options& options, const std::string& dialogTitle)
+{
+    return m_real->questionAsync(contentTitle, text, buttons, defBtn, options, dialogTitle);
+}
+
 IInteractive::ButtonData AutobotInteractive::buttonData(Button b) const
 {
     return m_real->buttonData(b);
@@ -163,6 +170,11 @@ RetVal<Val> AutobotInteractive::open(const Uri& uri) const
 RetVal<Val> AutobotInteractive::open(const UriQuery& uri) const
 {
     return m_real->open(uri);
+}
+
+async::Promise<Val> AutobotInteractive::openAsync(const UriQuery& uri)
+{
+    return m_real->openAsync(uri);
 }
 
 RetVal<bool> AutobotInteractive::isOpened(const std::string& uri) const

@@ -66,6 +66,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse;
 using namespace muse::io;
 using namespace mu::palette;
 using namespace mu::engraving;
@@ -1138,31 +1139,32 @@ void PaletteWidget::contextMenuEvent(QContextMenuEvent* event)
             std::string question = muse::qtrc("palette", "Are you sure you want to delete palette cell “%1”?")
                                    .arg(cell->name).toStdString();
 
-            muse::IInteractive::Result result = interactive()->question(title, question, {
+            auto promise = interactive()->questionAsync(title, question, {
                 muse::IInteractive::Button::Yes,
                 muse::IInteractive::Button::No
             }, muse::IInteractive::Button::Yes);
 
-            if (result.standardButton() != muse::IInteractive::Button::Yes) {
-                return;
+            promise.onResolve(this, [this, i](const IInteractive::Result& res) {
+                if (res.isButton(IInteractive::Button::Yes)) {
+                    m_palette->takeCell(i);
+                    emit changed();
+                }
+            });
+        }
+    } else {
+        bool sizeChanged = false;
+        for (size_t j = 0; j < cells().size(); ++j) {
+            if (!cellAt(j)) {
+                m_palette->takeCells(i, 1);
+                sizeChanged = true;
             }
-            m_palette->takeCell(i);
-            emit changed();
         }
-    }
-
-    bool sizeChanged = false;
-    for (size_t j = 0; j < cells().size(); ++j) {
-        if (!cellAt(j)) {
-            m_palette->takeCells(i, 1);
-            sizeChanged = true;
+        if (sizeChanged) {
+            setFixedHeight(heightForWidth(width()));
+            updateGeometry();
         }
+        update();
     }
-    if (sizeChanged) {
-        setFixedHeight(heightForWidth(width()));
-        updateGeometry();
-    }
-    update();
 }
 
 // ====================================================

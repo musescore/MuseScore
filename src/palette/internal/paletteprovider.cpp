@@ -393,16 +393,15 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
                                    ? muse::trc("palette", "Do you want to permanently delete this custom palette cell?")
                                    : muse::trc("palette", "Do you want to permanently delete these custom palette cells?");
 
-            IInteractive::Result result = interactive()->question(std::string(), question, {
+            interactive()->questionAsync(std::string(), question, {
                 IInteractive::Button::Yes,
                 IInteractive::Button::No
+            })
+            .onResolve(this, [this, removeIndices](const IInteractive::Result& res) {
+                if (res.isButton(IInteractive::Button::Yes)) {
+                    remove(removeIndices, RemoveAction::DeletePermanently);
+                }
             });
-
-            if (result.standardButton() == IInteractive::Button::Yes) {
-                remove(removeIndices, RemoveAction::DeletePermanently);
-            }
-
-            return;
         }
     } else {
         if (visible) {
@@ -415,9 +414,9 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
         } else {
             action = RemoveAction::Hide;
         }
-    }
 
-    remove(removeIndices, action);
+        remove(removeIndices, action);
+    }
 }
 
 void UserPaletteController::remove(const QModelIndexList& unsortedRemoveIndices,
@@ -830,48 +829,27 @@ bool PaletteProvider::addPalette(const QPersistentModelIndex& index)
     return false;
 }
 
-bool PaletteProvider::removeCustomPalette(const QPersistentModelIndex& index)
+void PaletteProvider::resetPalette(const QModelIndex& index)
 {
     if (!index.isValid()) {
-        return false;
+        return;
     }
 
-    if (index.model() == m_userPaletteModel) {
-        const bool custom = index.data(PaletteTreeModel::CustomRole).toBool();
-        if (!custom) {
-            return false;
+    std::string title = muse::trc("palette",
+                                  "Do you want to restore this palette to its default state? All changes to this palette will be lost.");
+
+    interactive()->questionAsync("", title, {
+        IInteractive::Button::No, IInteractive::Button::Yes
+    })
+    .onResolve(this, [this, index](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Yes)) {
+            doResetPalette(index);
         }
-
-        IInteractive::Result result
-            = interactive()->question("", muse::trc("palette", "Do you want to permanently delete this custom palette?"), {
-            IInteractive::Button::Yes, IInteractive::Button::No
-        });
-
-        if (result.standardButton() == IInteractive::Button::Yes) {
-            return m_userPaletteModel->removeRow(index.row(), index.parent());
-        }
-
-        return false;
-    }
-
-    return false;
+    });
 }
 
-bool PaletteProvider::resetPalette(const QModelIndex& index)
+void PaletteProvider::doResetPalette(const QModelIndex& index)
 {
-    if (!index.isValid()) {
-        return false;
-    }
-
-    IInteractive::Result result
-        = interactive()->question("", muse::trc("palette",
-                                                "Do you want to restore this palette to its default state? All changes to this palette will be lost."), {
-        IInteractive::Button::No, IInteractive::Button::Yes
-    });
-    if (result.standardButton() != IInteractive::Button::Yes) {
-        return false;
-    }
-
     Q_ASSERT(m_defaultPaletteModel != m_userPaletteModel);
 
     QAbstractItemModel* resetModel = nullptr;
@@ -897,7 +875,7 @@ bool PaletteProvider::resetPalette(const QModelIndex& index)
     const bool wasExpanded = index.data(PaletteTreeModel::PaletteExpandedRole).toBool();
 
     if (!m_userPaletteModel->removeRow(row, parent)) {
-        return false;
+        return;
     }
 
     if (resetIndex.isValid()) {
@@ -911,8 +889,6 @@ bool PaletteProvider::resetPalette(const QModelIndex& index)
     const QModelIndex newIndex = m_userPaletteModel->index(row, column, parent);
     m_userPaletteModel->setData(newIndex, wasVisible, PaletteTreeModel::VisibleRole);
     m_userPaletteModel->setData(newIndex, wasExpanded, PaletteTreeModel::PaletteExpandedRole);
-
-    return true;
 }
 
 QString PaletteProvider::getPaletteFilename(bool open, const QString& name) const

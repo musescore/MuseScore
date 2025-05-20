@@ -35,6 +35,9 @@ public:
     MOCK_METHOD(Result, question, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
                                    const std::string&), (const, override));
 
+    MOCK_METHOD(async::Promise<Result>, questionAsync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                                                        const std::string&), (override));
+
     MOCK_METHOD(ButtonData, buttonData, (Button), (const, override));
 
     MOCK_METHOD(Result, info, (const std::string&, const std::string&, const Buttons&, int, const Options&,
@@ -69,6 +72,7 @@ public:
     MOCK_METHOD(RetVal<Val>, open, (const std::string&), (const, override));
     MOCK_METHOD(RetVal<Val>, open, (const Uri&), (const, override));
     MOCK_METHOD(RetVal<Val>, open, (const UriQuery&), (const, override));
+    MOCK_METHOD(async::Promise<Val>, openAsync, (const UriQuery&), (override));
 
     MOCK_METHOD(RetVal<bool>, isOpened, (const std::string&), (const, override));
     MOCK_METHOD(RetVal<bool>, isOpened, (const Uri&), (const, override));

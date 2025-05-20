@@ -162,7 +162,9 @@ async::Promise<IInteractive::Result> Interactive::openStandartAsync(const std::s
             int btn = resultMap["buttonId"].toInt();
             bool showAgain = resultMap["showAgain"].toBool();
             (void)resolve(IInteractive::Result(btn, showAgain));
-        }).onReject(this, [reject](int code, const std::string& err) {
+        }).onReject(this, [resolve, reject](int code, const std::string& err) {
+            //! NOTE To simplify writing the handler
+            (void)resolve(IInteractive::Result((int)IInteractive::Button::Cancel, false));
             (void)reject(code, err);
         });
         return async::Promise<IInteractive::Result>::Result::unchecked();
