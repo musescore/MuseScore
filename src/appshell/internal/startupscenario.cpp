@@ -208,16 +208,18 @@ void StartupScenario::openScore(const project::ProjectFile& file)
 
 void StartupScenario::restoreLastSession()
 {
-    IInteractive::Result result = interactive()->question(muse::trc("appshell", "The previous session quit unexpectedly."),
-                                                          muse::trc("appshell", "Do you want to restore the session?"),
-                                                          { IInteractive::Button::No, IInteractive::Button::Yes });
+    auto promise = interactive()->questionAsync(muse::trc("appshell", "The previous session quit unexpectedly."),
+                                                muse::trc("appshell", "Do you want to restore the session?"),
+                                                { IInteractive::Button::No, IInteractive::Button::Yes });
 
-    if (result.button() == static_cast<int>(IInteractive::Button::Yes)) {
-        sessionsManager()->restore();
-    } else {
-        removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
-        sessionsManager()->reset();
-    }
+    promise.onResolve(this, [this](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Yes)) {
+            sessionsManager()->restore();
+        } else {
+            removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
+            sessionsManager()->reset();
+        }
+    });
 }
 
 void StartupScenario::removeProjectsUnsavedChanges(const io::paths_t& projectsPaths)

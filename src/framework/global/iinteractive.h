@@ -130,6 +130,8 @@ public:
 
         Button standardButton() const { return static_cast<Button>(m_button); }
         int button() const { return m_button; }
+        bool isButton(int b) const { return b == m_button; }
+        bool isButton(Button b) const { return static_cast<int>(b) == m_button; }
 
         bool showAgain() const { return m_showAgain; }
 
@@ -155,6 +157,13 @@ public:
     virtual async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
                                                  int defBtn = int(Button::NoButton), const Options& options = {},
                                                  const std::string& dialogTitle = "") = 0;
+
+    async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const Buttons& buttons,
+                                         Button defBtn, const Options& options = {},
+                                         const std::string& dialogTitle = "")
+    {
+        return questionAsync(contentTitle, text, buttons, (int)defBtn, options, dialogTitle);
+    }
 
     async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const Buttons& buttons,
                                          int defBtn = int(Button::NoButton), const Options& options = {},

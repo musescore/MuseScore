@@ -45,7 +45,7 @@ public:
 
     // question
     Result question(const std::string& contentTitle, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
-                    const Options& options = {}, const std::string& dialogTitle = "") const override;
+                    const Options& options = {}, const std::string& dialogTitle = "") const;
 
     Result question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
                     const Options& options = {}, const std::string& dialogTitle = "") const override;
