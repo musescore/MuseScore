@@ -869,16 +869,22 @@ void EnigmaXmlImporter::importMeasures()
                                 cr->setBeamMode(BeamMode::BEGIN);
                                 ChordRest* lastCr = nullptr;
                                 for (auto nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
+                                    std::shared_ptr<const Entry> currentEntry = nextInBeam->getEntry();
                                     lastCr = muse::value(entryMap, nextInBeam.getIndexInFrame(), nullptr);
                                     IF_ASSERT_FAILED(lastCr != nullptr) {
                                         logger()->logWarning(String(u"Entry %1 was not mapped").arg(nextInBeam->getEntry()->getEntryNumber()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                                         continue;
                                     }
                                     /// @todo fully test secondary beam breaks: can a smaller beam than 32nd be broken?
-                                    unsigned secBeamBreak = nextInBeam.calcLowestBeamStart();
-                                    if (secBeamBreak <= 1) {
+                                    unsigned secBeamStart = 0;
+                                    if (currentEntry->secBeam) {
+                                        if (auto secBeamBreak = m_doc->getDetails()->get<details::SecondaryBeamBreak>(gfHold.getRequestedPartId(), currentEntry->getEntryNumber())) {
+                                            secBeamStart = secBeamBreak->calcLowestBreak();
+                                        }
+                                    }
+                                    if (secBeamStart <= 1) {
                                         lastCr->setBeamMode(BeamMode::MID);
-                                    } else if (secBeamBreak == 2) {
+                                    } else if (secBeamStart == 2) {
                                         lastCr->setBeamMode(BeamMode::BEGIN16);
                                     } else {
                                         lastCr->setBeamMode(BeamMode::BEGIN32);
