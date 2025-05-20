@@ -56,6 +56,7 @@
 #include "notation/frames/verticalframesettingsmodel.h"
 #include "notation/frames/horizontalframesettingsmodel.h"
 #include "notation/frames/fretframesettingsproxymodel.h"
+#include "notation/frames/fretframe/fretframechordssettingsmodel.h"
 #include "notation/frames/fretframe/fretframesettingsmodel.h"
 #include "notation/articulations/articulationsettingsmodel.h"
 #include "notation/ornaments/ornamentsettingsmodel.h"
@@ -169,6 +170,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new HorizontalFrameSettingsModel(parent, repository);
     case InspectorModelType::TYPE_FRET_FRAME:
         return new FretFrameSettingsProxyModel(parent, repository);
+    case InspectorModelType::TYPE_FRET_FRAME_CHORDS:
+        return new FretFrameChordsSettingsModel(parent, repository);
     case InspectorModelType::TYPE_FRET_FRAME_SETTINGS:
         return new FretFrameSettingsModel(parent, repository);
     case InspectorModelType::TYPE_ARTICULATION:

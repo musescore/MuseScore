@@ -140,6 +140,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframesettingsproxymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechordssettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechordssettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechordlistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechordlistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechorditem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/fretframe/fretframechorditem.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/glissandosettingsmodel.cpp

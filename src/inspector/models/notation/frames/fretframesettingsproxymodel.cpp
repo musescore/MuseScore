@@ -35,6 +35,7 @@ FretFrameSettingsProxyModel::FretFrameSettingsProxyModel(QObject* parent, IEleme
     setIcon(muse::ui::IconCode::Code::FRET_FRAME);
 
     QList<AbstractInspectorModel*> models {
+        inspectorModelCreator()->newInspectorModel(InspectorModelType::TYPE_FRET_FRAME_CHORDS, this, repository),
         inspectorModelCreator()->newInspectorModel(InspectorModelType::TYPE_FRET_FRAME_SETTINGS, this, repository)
     };
 

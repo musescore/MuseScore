@@ -20,13 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
 import MuseScore.Inspector 1.0
-
-import "../../../common"
 
 FocusableItem {
     id: root
@@ -37,7 +36,6 @@ FocusableItem {
     property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
-    width: parent.width
 
     Column {
         id: contentColumn
@@ -46,10 +44,24 @@ FocusableItem {
 
         spacing: 12
 
-        Rectangle {
+        FretFrameChordsView {
+            id: view
+
             width: parent.width
-            height: 100
-            color: "red"
+            height: Math.min(contentHeight, 400)
+
+            model: root.model ? root.model.chordListModel : null
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+
+            onSelectRowRequested: function(index) {
+                view.model.selectRow(index)
+            }
+
+            onClearSelectionRequested: {
+                view.model.clearSelection()
+            }
         }
     }
 }
