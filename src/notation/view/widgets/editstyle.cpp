@@ -1052,14 +1052,6 @@ EditStyle::EditStyle(QWidget* parent)
     connect(disableVerticalSpread, &QGroupBox::clicked,         this, &EditStyle::disableVerticalSpreadClicked);
     connect(headerOddEven,         &QCheckBox::toggled,         this, &EditStyle::toggleHeaderOddEven);
     connect(footerOddEven,         &QCheckBox::toggled,         this, &EditStyle::toggleFooterOddEven);
-    // connect(chordDescriptionFileButton, &QToolButton::clicked,  this, &EditStyle::selectChordDescriptionFile);
-    // connect(chordsStandard,        &QRadioButton::toggled,      this, &EditStyle::setChordStyle);
-    // connect(chordsJazz,            &QRadioButton::toggled,      this, &EditStyle::setChordStyle);
-    // connect(chordsCustom,          &QRadioButton::toggled,      this, &EditStyle::setChordStyle);
-    // connect(chordsXmlFile,         &QCheckBox::toggled,         this, &EditStyle::setChordStyle);
-    // connect(chordDescriptionFile,  &QLineEdit::editingFinished, this, [=]() { setChordStyle(true); });
-
-    // WidgetUtils::setWidgetIcon(chordDescriptionFileButton, IconCode::Code::OPEN_FILE);
 
     connect(swingOff,       &QRadioButton::toggled, this, &EditStyle::setSwingParams);
     connect(swingEighth,    &QRadioButton::toggled, this, &EditStyle::setSwingParams);
@@ -2425,20 +2417,6 @@ void EditStyle::setValues()
         swingOff->setChecked(true);
         swingBox->setEnabled(false);
     }
-    // QString s(styleValue(StyleId::chordDescriptionFile).value<String>());
-    // chordDescriptionFile->setText(s);
-    // QString cstyle(styleValue(StyleId::chordStyle).value<String>());
-    // if (cstyle == "std") {
-    //     chordsStandard->setChecked(true);
-    //     chordDescriptionGroup->setEnabled(false);
-    // } else if (cstyle == "jazz") {
-    //     chordsJazz->setChecked(true);
-    //     chordDescriptionGroup->setEnabled(false);
-    // } else {
-    //     chordsCustom->setChecked(true);
-    //     chordDescriptionGroup->setEnabled(true);
-    // }
-    //formattingGroup->setEnabled(lstyle.chordList()->autoAdjust());
 
     // figured bass
     for (int i = 0; i < comboFBFont->count(); i++) {
@@ -2491,27 +2469,6 @@ void EditStyle::setValues()
 
     updateParenthesisIndicatingTiesGroupState();
 }
-
-//---------------------------------------------------------
-//   selectChordDescriptionFile
-//---------------------------------------------------------
-
-// void EditStyle::selectChordDescriptionFile()
-// {
-//     muse::io::path_t dir = configuration()->userStylesPath();
-//     std::vector<std::string> filter = { muse::trc("notation", "MuseScore chord symbol style files") + " (*.xml)" };
-// muse::io::path_t path = interactive()->selectOpeningFileSync(muse::trc("notation", "Load style"), dir, filter);
-// if (path.empty()) {
-//     return;
-// }
-//     muse::io::path_t path = interactive()->selectOpeningFile(muse::qtrc("notation", "Load style"), dir, filter);
-//     if (path.empty()) {
-//         return;
-//     }
-
-//     chordDescriptionFile->setText(path.toQString());
-//     setChordStyle(true);
-// }
 
 //---------------------------------------------------------
 //   setSwingParams
@@ -2577,46 +2534,6 @@ void EditStyle::concertPitchToggled(bool checked)
 {
     setStyleValue(StyleId::concertPitch, checked);
 }
-
-//---------------------------------------------------------
-//   setChordStyle
-//---------------------------------------------------------
-
-// void EditStyle::setChordStyle(bool checked)
-// {
-//     if (!checked) {
-//         return;
-//     }
-//     String val;
-//     String file;
-//     bool chordsXml;
-//     if (chordsStandard->isChecked()) {
-//         val  = u"std";
-//         file = u"chords_std.xml";
-//         chordsXml = false;
-//     } else if (chordsJazz->isChecked()) {
-//         val  = u"jazz";
-//         file = u"chords_jazz.xml";
-//         chordsXml = false;
-//     } else {
-//         val = u"custom";
-//         chordDescriptionGroup->setEnabled(true);
-//         file = chordDescriptionFile->text();
-//         chordsXml = chordsXmlFile->isChecked();
-//     }
-//     if (val != u"custom") {
-//         chordsXmlFile->setChecked(chordsXml);
-//         chordDescriptionGroup->setEnabled(false);
-//         chordDescriptionFile->setText(file);
-//     }
-
-//     setStyleValue(StyleId::chordsXmlFile, chordsXml);
-//     setStyleValue(StyleId::chordStyle, val);
-
-//     if (!file.isEmpty()) {
-//         setStyleValue(StyleId::chordDescriptionFile, file);
-//     }
-// }
 
 //---------------------------------------------------------
 //   toggleHeaderOddEven

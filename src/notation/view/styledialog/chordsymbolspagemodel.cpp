@@ -74,29 +74,49 @@ QVariantList ChordSymbolsPageModel::possiblePresetOptions() const
             { "text", muse::qtrc("notation/editstyle/chordsymbols", "Legacy MuseScore") },
             { "value", mu::engraving::ChordStylePreset::LEGACY } },
         QVariantMap{
-            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Load custom XML...") },
+            { "text", muse::qtrc("notation/editstyle/chordsymbols", "Load custom XML…") },
             { "value", mu::engraving::ChordStylePreset::CUSTOM } },
     };
 
     return options;
 }
 
+bool ChordSymbolsPageModel::isCustomXml() const
+{
+    return chordStylePreset()->value() == mu::engraving::ChordStylePreset::CUSTOM;
+}
+
 void ChordSymbolsPageModel::setChordStyle(mu::engraving::ChordStylePreset selection)
 {
     switch (selection) {
     case mu::engraving::ChordStylePreset::STANDARD:
-        chordDescriptionFile()->setValue("chords_std.xml");
+        chordDescriptionFile()->modifyValue("chords_std.xml");
         break;
     case mu::engraving::ChordStylePreset::JAZZ:
-        chordDescriptionFile()->setValue("chords_jazz.xml");
+        chordDescriptionFile()->modifyValue("chords_jazz.xml");
         break;
     case mu::engraving::ChordStylePreset::LEGACY:
-        chordDescriptionFile()->setValue("chords_legacy.xml");
+        chordDescriptionFile()->modifyValue("chords_legacy.xml");
         break;
     case mu::engraving::ChordStylePreset::CUSTOM:
-        // Get text from text box
+        // Handled on file open
         break;
     }
+
+    emit changePreset();
+}
+
+void ChordSymbolsPageModel::selectChordDescriptionFile()
+{
+    muse::io::path_t dir = configuration()->userStylesPath();
+    std::vector<std::string> filter = { muse::trc("notation", "MuseScore chord symbol style files") + " (*.xml)" };
+
+    muse::io::path_t path = interactive()->selectOpeningFile(muse::qtrc("notation", "Load style"), dir, filter);
+    if (path.empty()) {
+        return;
+    }
+
+    chordDescriptionFile()->modifyValue(path.toQString());
 }
 
 StyleItem* ChordSymbolsPageModel::extensionMag() const { return styleItem(StyleId::chordExtensionMag); }
