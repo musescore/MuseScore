@@ -542,6 +542,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         cr->setTicks(currentEntryActualDuration); // should probably be actual length, like done here
         cr->setParent(segment);
         cr->setTrack(curTrackIdx);
+        cr->setBeamMode(BeamMode::NONE); // this is changed in the next pass to match the beaming.
         segment->add(cr);
         if (parentTuplet) {
             parentTuplet->add(cr);
