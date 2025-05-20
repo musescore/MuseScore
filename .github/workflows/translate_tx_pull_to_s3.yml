@@ -80,7 +80,7 @@ jobs:
           host: "linux"
           target: "desktop"
           arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
-          archives: "qttools qtbase"
+          archives: "qttools qtbase icu"
 
       - name: Setup environment for pushing to S3
         if: env.DO_PUSH_TO_S3 == 'true'
