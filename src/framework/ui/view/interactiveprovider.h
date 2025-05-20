@@ -140,6 +140,12 @@ private:
         SelectDirectory
     };
 
+    struct FileInfo
+    {
+        io::path_t path;
+        std::vector<std::string> allowedExtensions;
+    };
+
     void raiseWindowInStack(QObject* newActiveWindow);
 
     void fillExtData(QmlLaunchData* data, const UriQuery& q) const;
@@ -152,7 +158,7 @@ private:
                             const std::vector<std::string>& filter = {}, bool confirmOverwrite = true) const;
 
     Ret toRet(const QVariant& jsr) const;
-    RetVal<Val> toRetVal(const QVariant& jsrv) const;
+    RetVal<QVariant> toRetQVariant(const QVariant& jsrv) const;
 
     RetVal<OpenData> openExtensionDialog(const UriQuery& q);
     RetVal<OpenData> openWidgetDialog(const UriQuery& q);
@@ -162,8 +168,8 @@ private:
                                    int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
                                    const std::string& dialogTitle = "");
 
-    RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
-                                      const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);
+    RetVal<FileInfo> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
+                                    const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);
 
     void closeObject(const ObjectInfo& obj);
 
@@ -182,7 +188,7 @@ private:
 
     async::Channel<Uri> m_currentUriChanged;
     async::Notification m_currentUriAboutToBeChanged;
-    QMap<QString, RetVal<Val> > m_retvals;
+    QMap<QString, RetVal<QVariant> > m_retvals;
     async::Channel<Uri> m_opened;
 
     QEventLoop m_fileDialogEventLoop;

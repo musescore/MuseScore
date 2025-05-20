@@ -37,6 +37,9 @@
 using namespace muse;
 using namespace muse::ui;
 
+static constexpr auto ALL_FILES_FILTER = "*";
+static constexpr auto WINDOWS_NO_EXTENSION_FILTER = "*.";
+
 class WidgetDialogEventFilter : public QObject
 {
 public:
@@ -163,7 +166,7 @@ Ret InteractiveProvider::showProgress(const std::string& title, Progress* progre
     }
 
     if (!objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectId);
+        RetVal<QVariant> rv = m_retvals.take(objectId);
         if (rv.ret.valid()) {
             return rv.ret;
         }
@@ -175,19 +178,36 @@ Ret InteractiveProvider::showProgress(const std::string& title, Progress* progre
 RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& title, const io::path_t& dir,
                                                           const std::vector<std::string>& filter)
 {
-    return openFileDialog(FileDialogType::SelectOpenningFile, title, dir, filter);
+    RetVal<InteractiveProvider::FileInfo> fileInfo = openFileDialog(FileDialogType::SelectOpenningFile, title, dir, filter);
+    return fileInfo.ret ? RetVal<io::path_t>::make_ok(fileInfo.val.path) : fileInfo.ret;
 }
 
 RetVal<io::path_t> InteractiveProvider::selectSavingFile(const std::string& title, const io::path_t& path,
                                                          const std::vector<std::string>& filter,
                                                          bool confirmOverwrite)
 {
-    return openFileDialog(FileDialogType::SelectSavingFile, title, path, filter, confirmOverwrite);
+    RetVal<InteractiveProvider::FileInfo> fileInfo
+        = openFileDialog(FileDialogType::SelectSavingFile, title, path, filter, confirmOverwrite);
+
+    if (!fileInfo.ret) {
+        return fileInfo.ret;
+    }
+
+    std::string suffix = muse::io::suffix(fileInfo.val.path);
+    if (muse::contains(fileInfo.val.allowedExtensions, suffix)
+        || muse::contains(fileInfo.val.allowedExtensions, ALL_FILES_FILTER)
+        || muse::contains(fileInfo.val.allowedExtensions, WINDOWS_NO_EXTENSION_FILTER)) {
+        return RetVal<io::path_t>::make_ok(fileInfo.val.path);
+    }
+
+    io::path_t filePath = fileInfo.val.path + "." + fileInfo.val.allowedExtensions[0];
+    return RetVal<io::path_t>::make_ok(filePath);
 }
 
 RetVal<io::path_t> InteractiveProvider::selectDirectory(const std::string& title, const io::path_t& dir)
 {
-    return openFileDialog(FileDialogType::SelectDirectory, title, dir);
+    RetVal<InteractiveProvider::FileInfo> fileInfo = openFileDialog(FileDialogType::SelectDirectory, title, dir);
+    return fileInfo.ret ? RetVal<io::path_t>::make_ok(fileInfo.val.path) : fileInfo.ret;
 }
 
 RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const QString& title)
@@ -263,9 +283,10 @@ RetVal<Val> InteractiveProvider::open(const UriQuery& q)
     RetVal<Val> returnedRV;
     returnedRV.ret = make_ret(Ret::Code::Ok);
     if (openedRet.val.sync && !openedRet.val.objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(openedRet.val.objectId);
+        RetVal<QVariant> rv = m_retvals.take(openedRet.val.objectId);
         if (rv.ret.valid()) {
-            returnedRV = rv;
+            returnedRV.ret = rv.ret;
+            returnedRV.val = Val::fromQVariant(rv.val);
         }
     }
 
@@ -498,6 +519,7 @@ void InteractiveProvider::fillFileDialogData(QmlLaunchData* data, FileDialogType
         }
 
         params["nameFilters"] = filterList;
+        params["selectedNameFilter.index"] = 0;
         params["selectExisting"] = type == FileDialogType::SelectOpenningFile;
 
         if (type == FileDialogType::SelectOpenningFile) {
@@ -629,9 +651,9 @@ Ret InteractiveProvider::toRet(const QVariant& jsr) const
     return ret;
 }
 
-RetVal<Val> InteractiveProvider::toRetVal(const QVariant& jsrv) const
+RetVal<QVariant> InteractiveProvider::toRetQVariant(const QVariant& jsrv) const
 {
-    RetVal<Val> rv;
+    RetVal<QVariant> rv;
     QVariantMap jsobj = jsrv.toMap();
 
     IF_ASSERT_FAILED(jsobj.contains("errcode")) {
@@ -643,7 +665,7 @@ RetVal<Val> InteractiveProvider::toRetVal(const QVariant& jsrv) const
     QVariant val = jsobj.value("value");
 
     rv.ret.setCode(errcode);
-    rv.val = Val::fromQVariant(val);
+    rv.val = val;
 
     return rv;
 }
@@ -767,21 +789,23 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const s
     }
 
     if (!objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectId);
+        RetVal<QVariant> rv = m_retvals.take(objectId);
         if (rv.ret.valid()) {
-            result = rv;
+            result.ret = rv.ret;
+            result.val = Val::fromQVariant(rv.val);
         }
     }
 
     return result;
 }
 
-RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
-                                                       const std::vector<std::string>& filter, bool confirmOverwrite)
+RetVal<InteractiveProvider::FileInfo> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title,
+                                                                          const io::path_t& path,
+                                                                          const std::vector<std::string>& filter, bool confirmOverwrite)
 {
     notifyAboutCurrentUriWillBeChanged();
 
-    RetVal<io::path_t> result;
+    RetVal<InteractiveProvider::FileInfo> result;
 
     QmlLaunchData* data = new QmlLaunchData();
     fillFileDialogData(data, type, title, path, filter, confirmOverwrite);
@@ -795,10 +819,21 @@ RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, cons
     delete data;
 
     if (!objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectId);
+        RetVal<QVariant> rv = m_retvals.take(objectId);
         if (rv.ret.valid()) {
             result.ret = rv.ret;
-            result.val = QUrl::fromUserInput(rv.val.toQString()).toLocalFile();
+            if (rv.ret) {
+                const QVariantMap resultMap = rv.val.toMap();
+
+                const io::path_t selectedPath = QUrl::fromUserInput(resultMap["path"].toString()).toLocalFile();
+                const QStringList allowedExtensions = resultMap["extensions"].toStringList();
+
+                result.val.path = selectedPath;
+
+                for (const QString& ext : allowedExtensions) {
+                    result.val.allowedExtensions.push_back(ext.toStdString());
+                }
+            }
         }
     }
 
@@ -858,7 +893,7 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
 
 void InteractiveProvider::onClose(const QString& objectId, const QVariant& jsrv)
 {
-    m_retvals[objectId] = toRetVal(jsrv);
+    m_retvals[objectId] = toRetQVariant(jsrv);
 
     bool found = false;
     for (int i = 0; i < m_stack.size(); ++i) {
