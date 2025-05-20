@@ -84,6 +84,8 @@ private:
     engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
                                   const engraving::InstrumentTemplate* it = nullptr);
 
+    std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, bool>& finaleVoiceMap,
+                                                         musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const;
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
     const std::shared_ptr<FinaleLogger> m_logger;

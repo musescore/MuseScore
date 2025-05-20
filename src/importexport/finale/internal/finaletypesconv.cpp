@@ -48,6 +48,11 @@ ID FinaleTConv::createStaffId(musx::dom::InstCmper staffId)
     return std::to_string(staffId);
 }
 
+int FinaleTConv::createFinaleVoiceId(musx::dom::LayerIndex layerIndex, bool forV2)
+{
+    return (layerIndex * 2 + int(forV2));
+}
+
 DurationType FinaleTConv::noteTypeToDurationType(musx::dom::NoteType noteType)
 {
     static const std::unordered_map<musx::dom::NoteType, DurationType> noteTypeTable = {

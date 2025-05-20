@@ -574,7 +574,7 @@ static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::Tuple
     std::vector<ReadableTuplet> result;
     result.reserve(n);
 
-    const bool forVoice2 = voice == 2;
+    const bool forVoice2 = bool(voice);
     for (const auto& tuplet : tupletInfo) {
         if (forVoice2 != tuplet.voice2) {
             continue;
@@ -639,6 +639,45 @@ static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, 
     return nullptr;
 }
 
+std::unordered_map<int, track_idx_t> EnigmaXmlImporter::mapFinaleVoices(const std::map<LayerIndex, bool>& finaleVoiceMap,
+                                                                        musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const
+{
+    using FinaleVoiceID = int;
+    std::unordered_map<FinaleVoiceID, track_idx_t> result;
+    std::unordered_map<track_idx_t, FinaleVoiceID> reverseMap;
+    for (const auto& [layerIndex, usesV2] : finaleVoiceMap) {
+        const auto& it = m_layer2Voice.find(layerIndex);
+        if (it != m_layer2Voice.end()) {
+            auto [revIt, emplaced] = reverseMap.emplace(it->second, FinaleTConv::createFinaleVoiceId(layerIndex, false));
+            if (emplaced) {
+                result.emplace(revIt->second, revIt->first);
+            } else {
+                logger()->logWarning(String(u"Layer %1 was already mapped to a voice").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
+            }
+        } else {
+            logger()->logWarning(String(u"Layer %1 was not mapped to a voice").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
+        }
+    }
+    for (const auto& [layerIndex, usesV2] : finaleVoiceMap) {
+        if (usesV2) {
+            bool foundVoice = false;
+            for (track_idx_t v : {0, 1, 2, 3}) {
+                auto [revIt, emplaced] = reverseMap.emplace(v, FinaleTConv::createFinaleVoiceId(layerIndex, true));
+                if (emplaced) {
+                    result.emplace(revIt->second, revIt->first);
+                    foundVoice = true;
+                    break;
+                }
+            }
+            if (!foundVoice) {
+                logger()->logWarning(String(u"Voice 2 exceeded available MuseScore voices for layer %1.").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
+                break;
+            }
+        }
+    }
+    return result;
+}
+
 void EnigmaXmlImporter::importMeasures()
 {
     // add default time signature
@@ -697,7 +736,7 @@ void EnigmaXmlImporter::importMeasures()
     std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID); /// @todo eventually SCORE_PARTID may need to be a parameter
     for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxScrollViewItem->staffId), muse::nidx);
-        if (curStaffIdx == muse::nidx) { //IF_ASSERT_FAILED
+        IF_ASSERT_FAILED (curStaffIdx != muse::nidx) {
             logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         } else {
@@ -761,7 +800,7 @@ void EnigmaXmlImporter::importMeasures()
                     }
                 }
                 std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
-                voice_idx_t nextTrack = 0;
+                std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 for (const auto& finaleLayer : finaleLayers) {
                     const LayerIndex layer = finaleLayer.first;
                     /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
@@ -770,12 +809,8 @@ void EnigmaXmlImporter::importMeasures()
                         logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                         continue;
                     }
-                    const int maxV1V2 = finaleLayer.second ? 2 : 1;
-                    for (int voice = 1; voice <= maxV1V2; voice++) {
-                        if (nextTrack >= (VOICES - 1)) {
-                            logger()->logWarning(String(u"Combination of Finale layers and v1/v2 exceeds the number of MuseScore voices."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
-                            break;
-                        }
+                    const int maxV1V2 = finaleLayer.second ? 1 : 0;
+                    for (int voice = 0; voice <= maxV1V2; voice++) {
                         // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
                         processedEntries = true;
 
@@ -783,7 +818,12 @@ void EnigmaXmlImporter::importMeasures()
                         /// Key sigs should be handled at the measure/staff level. They can only change on barlines in Finale. The one in entryFrame
                         /// is provided for convenience and takes into account transposition (when written pitch is requested).
 
-                        track_idx_t curTrackIdx = curStaffIdx * VOICES + nextTrack++;
+                        track_idx_t trackOffset = muse::value(finaleVoiceMap, FinaleTConv::createFinaleVoiceId(layer, bool(voice)), muse::nidx);
+                        IF_ASSERT_FAILED(trackOffset >= 0 && trackOffset < VOICES) {
+                            logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                            continue;
+                        }
+                        track_idx_t curTrackIdx = curStaffIdx * VOICES + trackOffset;
                         std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo, voice);
                         // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
                         ReadableTuplet rTuplet;
@@ -794,7 +834,7 @@ void EnigmaXmlImporter::importMeasures()
                         rTuplet.layer = -1,
                         tupletMap.insert(tupletMap.begin(), rTuplet);
                         size_t lastAddedTupletIndex = 0;
-                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice)) {
+                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
                             processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex);
                         }
                     }
