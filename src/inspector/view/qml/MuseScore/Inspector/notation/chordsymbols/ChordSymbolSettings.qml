@@ -122,4 +122,38 @@ Column {
         navigation.panel: root.navigationPanel
         navigation.row: durationSection.navigationRowEnd + 1
     }
+
+    SpinBoxPropertyView {
+        id: bassNoteScale
+
+        titleText: qsTrc("inspector", "Bass note scale")
+        propertyItem: root.model ? root.model.bassScale : null
+
+        step: 1
+        decimals: 0
+        maxValue: 300
+        minValue: 0
+        measureUnitsSymbol: "%"
+
+        navigationName: "Bass note scale"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: hideNoteheadCheckBox.navigationRowEnd + 1
+    }
+
+    FlatRadioButtonGroupPropertyView {
+        id: alignToNoteheadButtonList
+        titleText: qsTrc("inspector", "Alignment to notehead")
+        propertyItem: root.model ? root.model.noteheadAlign : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: bassNoteScale.navigationRowEnd + 1
+
+        requestIconFontSize: 16
+
+        model: [
+            { iconCode: IconCode.ALIGN_LEFT, value: 0},
+            { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, value: 2},
+            { iconCode: IconCode.ALIGN_RIGHT, value: 1 }
+        ]
+    }
 }
