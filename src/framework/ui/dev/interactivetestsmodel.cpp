@@ -65,6 +65,16 @@ void InteractiveTestsModel::closeSampleDialog()
     LOGI() << "cpp: after close";
 }
 
+void InteractiveTestsModel::openSampleDialogAsyncWithPromise()
+{
+    auto promise = interactive()->openAsync("muse://devtools/interactive/sample?color=#D24358");
+    promise.onResolve(this, [](const Val& val) {
+        LOGI() << "success val: " << val.toString();
+    }).onReject(this, [](int code, const std::string& err) {
+        LOGE() << "faile or cancel code: " << code << ", err: " << err;
+    });
+}
+
 void InteractiveTestsModel::openWidgetDialog()
 {
     LOGI() << "cpp: before open ";

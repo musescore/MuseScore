@@ -88,6 +88,7 @@ public:
     bool isSelectColorOpened() const override;
 
     RetVal<Val> open(const UriQuery& uri) override;
+    async::Promise<Val> openAsync(const UriQuery& uri) override;
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
     async::Channel<Uri> opened() const override;
@@ -121,15 +122,15 @@ signals:
     void fireOpenProgressDialog(muse::ui::QmlLaunchData* data);
 
 private:
-    struct OpenData
-    {
+    struct OpenData {
         bool sync = false;
         QString objectId;
     };
 
-    struct ObjectInfo
-    {
-        UriQuery uriQuery;
+    struct ObjectInfo {
+        UriQuery query;
+        async::Promise<Val>::Resolve resolve;
+        async::Promise<Val>::Reject reject;
         QVariant objectId;
         QObject* window = nullptr;
     };
@@ -175,7 +176,7 @@ private:
     void notifyAboutCurrentUriChanged();
     void notifyAboutCurrentUriWillBeChanged();
 
-    UriQuery m_openingUriQuery;
+    ObjectInfo m_openingObject;
 
     QStack<ObjectInfo> m_stack;
     std::vector<ObjectInfo> m_floatingObjects;

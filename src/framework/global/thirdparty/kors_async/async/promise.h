@@ -39,9 +39,10 @@ class Promise
 public:
     struct Result;
 
-
     struct Resolve
     {
+        Resolve() = default;
+
         Resolve(Promise<T...> _p)
             : p(_p) {}
 
@@ -57,6 +58,8 @@ public:
 
     struct Reject
     {
+        Reject() = default;
+
         Reject(Promise<T...> _p)
             : p(_p) {}
 
@@ -85,13 +88,12 @@ public:
         friend struct Reject;
     };
 
-
     enum class AsynchronyType {
         ProvidedByPromise,
         ProvidedByBody
     };
 
-    using Body = std::function<Result(Resolve, Reject)>;
+    using Body = std::function<Result (Resolve, Reject)>;
 
     Promise(Body body, AsynchronyType type)
     {
@@ -120,6 +122,8 @@ public:
             body(res, rej);
         }, body, th);
     }
+
+    static Promise<T...> make(Body body) { return Promise<T...>(body); }
 
     Promise(const Promise& p)
         : m_ptr(p.ptr()) {}
@@ -251,6 +255,12 @@ private:
 
     mutable std::shared_ptr<PromiseInvoker> m_ptr = nullptr;
 };
+
+template<typename ... T>
+inline Promise<T...> make_promise(typename Promise<T...>::Body f)
+{
+    return Promise<T...>(f);
+}
 }
 
 #endif // KORS_ASYNC_PROMISE_H

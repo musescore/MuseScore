@@ -269,6 +269,11 @@ RetVal<Val> Interactive::open(const UriQuery& uri) const
     return provider()->open(newQuery);
 }
 
+async::Promise<Val> Interactive::openAsync(const UriQuery& uri)
+{
+    return provider()->openAsync(uri);
+}
+
 RetVal<bool> Interactive::isOpened(const std::string& uri) const
 {
     return provider()->isOpened(Uri(uri));
