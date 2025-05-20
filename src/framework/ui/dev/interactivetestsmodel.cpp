@@ -122,6 +122,24 @@ void InteractiveTestsModel::question()
     }
 }
 
+void InteractiveTestsModel::questionByUri()
+{
+    auto promise = interactive()->questionAsync(
+        "Do you really want to delete the 'xxx' workspace?", "",
+        { IInteractive::Button::No, IInteractive::Button::Yes }, 0,
+        IInteractive::Option::WithIcon);
+
+    promise.onResolve(this, [](const IInteractive::Result& res) {
+        if (res.standardButton() == IInteractive::Button::Yes) {
+            LOGI() << "Yes!!";
+        } else {
+            LOGI() << "No!!";
+        }
+    }).onReject(this, [](int code, const std::string& err) {
+        LOGE() << code << err;
+    });
+}
+
 void InteractiveTestsModel::customQuestion()
 {
     int maybeBtn = int(IInteractive::Button::CustomButton) + 1;

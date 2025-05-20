@@ -157,6 +157,14 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
+            navigation.row: 7
+            text: "Question (by uri)"
+            onClicked: testModel.questionByUri()
+        }
+
+        FlatButton {
+            width: 200
+            navigation.panel: navPanel
             navigation.row: 8
             text: "Custom question"
             onClicked: testModel.customQuestion()
