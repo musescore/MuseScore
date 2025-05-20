@@ -36,7 +36,6 @@ FocusableItem {
     property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
-    width: parent.width
 
     Column {
         id: contentColumn

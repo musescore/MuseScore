@@ -46,10 +46,13 @@ Column {
         tabBar.focusOnCurrentTab()
     }
 
+    readonly property QtObject frameChordsModel: model ? model.modelByType(Inspector.TYPE_FRET_FRAME_CHORDS) : null
     readonly property QtObject frameSettingsModel: model ? model.modelByType(Inspector.TYPE_FRET_FRAME_SETTINGS) : null
 
     InspectorTabBar {
         id: tabBar
+
+        property bool isChordsTabActive: currentIndex === 0
 
         InspectorTabButton {
             text: qsTrc("inspector", "Chords")
@@ -69,13 +72,23 @@ Column {
     }
 
     StackLayout {
-        width: parent.width
+        id: stackLayout
+
+        readonly property int sideMargin: -12
+
+        anchors.left: parent.left
+        anchors.leftMargin: tabBar.isChordsTabActive ? sideMargin : 0
+        anchors.right: parent.right
+        anchors.rightMargin: tabBar.isChordsTabActive ? sideMargin : 0
+
         currentIndex: tabBar.currentIndex
 
-        height: itemAt(currentIndex).implicitHeight
+        height: itemAt(currentIndex).height
 
         FretFrameChordsTab {
             height: implicitHeight
+
+            model: root.frameChordsModel
 
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1000
