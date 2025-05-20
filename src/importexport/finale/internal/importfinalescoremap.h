@@ -73,7 +73,8 @@ private:
     void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);
 
     bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx,
-                          engraving::Segment* segment, std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex);
+                          engraving::Segment* segment, std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex,
+                          std::unordered_map<size_t, engraving::ChordRest*>& entryMap);
 
     engraving::ChordRest* importEntry(musx::dom::EntryInfoPtr entryInfo, engraving::Segment* segment,
                                       engraving::track_idx_t curTrackIdx);

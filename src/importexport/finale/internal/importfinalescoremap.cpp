@@ -450,7 +450,8 @@ void EnigmaXmlImporter::fillWithInvisibleRests(Fraction startTick, track_idx_t c
 }
 
 bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrackIdx, Segment* segment,
-                                         std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex)
+                                         std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex,
+                                         std::unordered_map<size_t, ChordRest*>& entryMap)
 {
     if (!segment) {
         logger()->logWarning(String(u"Position in measure unknown"));
@@ -545,6 +546,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         if (parentTuplet) {
             parentTuplet->add(cr);
         }
+        entryMap.emplace(entryInfo.getIndexInFrame(), cr);
     } else {
         logger()->logWarning(String(u"Failed to read entry contents"));
         // Fill space with invisible rests instead
@@ -841,8 +843,43 @@ void EnigmaXmlImporter::importMeasures()
                         rTuplet.layer = -1,
                         tupletMap.insert(tupletMap.begin(), rTuplet);
                         size_t lastAddedTupletIndex = 0;
+                        std::unordered_map<size_t, ChordRest*> entryMap;
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex);
+                            processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex, entryMap);
+                        }
+                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
+                            if (entryInfoPtr.calcIsBeamStart()) {
+                                /// @todo include secondary beam breaks
+                                ChordRest* cr = muse::value(entryMap, entryInfoPtr.getIndexInFrame(), nullptr);
+                                if (cr == nullptr) { // once grace notes are supported, use IF_ASSERT_FAILED(cr != nullptr)
+                                    logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                                    continue;
+                                }
+                                Beam * beam = Factory::createBeam(m_score->dummy()->system());
+                                beam->setTrack(curTrackIdx);
+                                if (entryInfoPtr->getEntry()->isNote) {
+                                    if (Chord* chord = toChord(cr)) {
+                                        beam->setDirection(chord->stemDirection());
+                                    }
+                                } else {
+                                    beam->setDirection(DirectionV::AUTO);
+                                }
+                                beam->add(cr);
+                                cr->setBeamMode(BeamMode::BEGIN);
+                                ChordRest* lastCr = nullptr;
+                                for (auto nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
+                                    lastCr = muse::value(entryMap, nextInBeam.getIndexInFrame(), nullptr);
+                                    IF_ASSERT_FAILED(lastCr != nullptr) {
+                                        logger()->logWarning(String(u"Entry %1 was not mapped").arg(nextInBeam->getEntry()->getEntryNumber()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                                        continue;
+                                    }
+                                    lastCr->setBeamMode(BeamMode::MID);
+                                    beam->add(lastCr);
+                                }
+                                if (lastCr) {
+                                    lastCr->setBeamMode(BeamMode::END);
+                                }
+                            }
                         }
                     }
                 }
