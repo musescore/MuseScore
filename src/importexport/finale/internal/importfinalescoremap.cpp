@@ -849,7 +849,6 @@ void EnigmaXmlImporter::importMeasures()
                         }
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
                             if (entryInfoPtr.calcIsBeamStart()) {
-                                /// @todo include secondary beam breaks
                                 ChordRest* cr = muse::value(entryMap, entryInfoPtr.getIndexInFrame(), nullptr);
                                 if (cr == nullptr) { // once grace notes are supported, use IF_ASSERT_FAILED(cr != nullptr)
                                     logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
@@ -873,7 +872,15 @@ void EnigmaXmlImporter::importMeasures()
                                         logger()->logWarning(String(u"Entry %1 was not mapped").arg(nextInBeam->getEntry()->getEntryNumber()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                                         continue;
                                     }
-                                    lastCr->setBeamMode(BeamMode::MID);
+                                    /// @todo fully test secondary beam breaks: can a smaller beam than 32nd be broken?
+                                    unsigned secBeamBreak = nextInBeam.calcLowestBeamStart();
+                                    if (secBeamBreak <= 1) {
+                                        lastCr->setBeamMode(BeamMode::MID);
+                                    } else if (secBeamBreak == 2) {
+                                        lastCr->setBeamMode(BeamMode::BEGIN16);
+                                    } else {
+                                        lastCr->setBeamMode(BeamMode::BEGIN32);
+                                    }
                                     beam->add(lastCr);
                                 }
                                 if (lastCr) {
