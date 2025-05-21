@@ -55,7 +55,7 @@ struct ReadableTuplet
 class EnigmaXmlImporter
 {
 public:
-    EnigmaXmlImporter(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, const std::shared_ptr<FinaleLogger>& logger)
+    EnigmaXmlImporter(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, FinaleLoggerPtr& logger)
         : m_score(score), m_doc(doc), m_logger(logger) {}
 
     void import();
@@ -63,35 +63,41 @@ public:
     const engraving::Score* score() const { return m_score; }
     std::shared_ptr<musx::dom::Document> musxDocument() const { return m_doc; }
 
-    std::shared_ptr<FinaleLogger> logger() const { return m_logger; }
+    FinaleLoggerPtr logger() const { return m_logger; }
 
 private:
-    void mapLayers();
+    // scoremap
     void importParts();
-    void importMeasures();
-    void importStaffItems();
-    void importEntries();
     void importBrackets();
-    void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);
-
-    bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx,
-                          engraving::Segment* segment, std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex,
-                          std::unordered_map<size_t, engraving::ChordRest*>& entryMap);
-
-    engraving::ChordRest* importEntry(musx::dom::EntryInfoPtr entryInfo, engraving::Segment* segment,
-                                      engraving::track_idx_t curTrackIdx);
-
-    void fillWithInvisibleRests(engraving::Fraction startTick, engraving::track_idx_t curTrackIdx, engraving::Fraction lengthToFill,
-                                std::vector<ReadableTuplet> tupletMap);
+    void importMeasures();
 
     engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
                                   const engraving::InstrumentTemplate* it = nullptr);
+    // entries
+    /// @todo create readContext struct with tick, segment, track, measure, etc
+    void mapLayers();
+    void importStaffItems();
+    void importEntries();
 
     std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, bool>& finaleVoiceMap,
                                                          musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const;
+    bool processEntryInfo(musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx, engraving::Segment* segment,
+                          std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex,
+                          std::unordered_map<size_t, engraving::ChordRest*>& entryMap);
+    engraving::ChordRest* importEntry(musx::dom::EntryInfoPtr entryInfo, engraving::Segment* segment,
+                                      engraving::track_idx_t curTrackIdx);
+    void fillWithInvisibleRests(engraving::Fraction startTick, engraving::track_idx_t curTrackIdx, engraving::Fraction lengthToFill,
+                                std::vector<ReadableTuplet> tupletMap);
+    void importClefs(musx::dom::details::GFrameHoldContext gfHold,
+                     const std::shared_ptr<musx::dom::others::InstrumentUsed>& musxScrollViewItem,
+                     const std::shared_ptr<musx::dom::others::Measure>& musxMeasure,
+                     engraving::Measure* measure, engraving::staff_idx_t curStaffIdx);
+    // styles
+    void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);
+
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
-    const std::shared_ptr<FinaleLogger> m_logger;
+    FinaleLoggerPtr m_logger;
     const musx::dom::Cmper m_currentMusxPartId = musx::dom::SCORE_PARTID; // eventually this may be changed per excerpt/linked part
 
     std::unordered_map<QString, std::vector<musx::dom::InstCmper>> m_part2Inst;

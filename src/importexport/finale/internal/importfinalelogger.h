@@ -52,4 +52,6 @@ public:
 private:
     Level m_level = Level::MUSX_INFO;
 };
+
+using FinaleLoggerPtr = const std::shared_ptr<FinaleLogger>;
 } // namespace Ms
