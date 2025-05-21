@@ -355,7 +355,7 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
     }
     if (musxTuplet->metricCenter) {
         // center number using duration
-        /// @todo approximate?
+        /// @todo wait until added to MuseScore (soon)
         logger->logWarning(String(u"Unsupported"));
     }
     if (musxTuplet->fullDura) {
@@ -880,12 +880,10 @@ void EnigmaXmlImporter::importEntries()
                                     logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                                     continue;
                                 }
-                                Beam * beam = Factory::createBeam(m_score->dummy()->system());
+                                Beam* beam = Factory::createBeam(m_score->dummy()->system());
                                 beam->setTrack(curTrackIdx);
-                                if (entryInfoPtr->getEntry()->isNote) {
-                                    if (Chord* chord = toChord(cr)) {
-                                        beam->setDirection(chord->stemDirection());
-                                    }
+                                if (entryInfoPtr->getEntry()->isNote && cr->isChord()) {
+                                    beam->setDirection(toChord(cr)->stemDirection());
                                 } else {
                                     beam->setDirection(DirectionV::AUTO);
                                 }
@@ -901,6 +899,7 @@ void EnigmaXmlImporter::importEntries()
                                         continue;
                                     }
                                     /// @todo fully test secondary beam breaks: can a smaller beam than 32nd be broken?
+                                    /// XM: No, not currently in MuseScore.
                                     unsigned secBeamStart = 0;
                                     if (currentEntry->secBeam) {
                                         if (auto secBeamBreak = m_doc->getDetails()->get<details::SecondaryBeamBreak>(gfHold.getRequestedPartId(), currentEntry->getEntryNumber())) {
