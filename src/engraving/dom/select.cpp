@@ -451,27 +451,23 @@ void Selection::appendChordRest(ChordRest* cr)
         }
     }
 
-    Tuplet* tuplet = cr->tuplet();
-    if (tuplet) {
-        appendTupletHierarchy(tuplet);
-    }
-
-    if (cr->isChord()) {
-        Chord* chord = toChord(cr);
-        for (Chord* graceNote : chord->graceNotes()) {
-            if (canSelect(graceNote)) {
-                appendChord(graceNote);
-            }
+    if (cr->isRestFamily()) {
+        appendFiltered(cr);
+        Rest* r = toRest(cr);
+        for (int i = 0; i < r->dots(); ++i) {
+            appendFiltered(r->dot(i));
         }
-        appendChord(chord);
         return;
     }
 
-    appendFiltered(cr);
-    Rest* r = toRest(cr);
-    for (int i = 0; i < r->dots(); ++i) {
-        appendFiltered(r->dot(i));
+    Chord* chord = toChord(cr);
+    for (Chord* graceNote : chord->graceNotes()) {
+        if (canSelect(graceNote)) {
+            appendChord(graceNote);
+        }
     }
+
+    appendChord(chord);
 }
 
 void Selection::appendChord(Chord* chord)
@@ -560,6 +556,23 @@ void Selection::appendTupletHierarchy(Tuplet* innermostTuplet)
 {
     if (muse::contains(m_el, static_cast<EngravingItem*>(innermostTuplet))) {
         return;
+    }
+
+    //! NOTE: It's not very efficient to use muse::contains here. It would be nicer to simply use
+    //! de->selected() instead, but the selected flag isn't set until Selection::update...
+    const std::vector<DurationElement*> elements = innermostTuplet->elements();
+    for (DurationElement* de : elements) {
+        if (!de->isChord()) {
+            if (!muse::contains(m_el, static_cast<EngravingItem*>(de))) {
+                return;
+            }
+            continue;
+        }
+        for (Note* note : toChord(de)->notes()) {
+            if (!muse::contains(m_el, static_cast<EngravingItem*>(note))) {
+                return;
+            }
+        }
     }
 
     appendFiltered(innermostTuplet);
@@ -653,6 +666,10 @@ void Selection::updateSelectedElements()
     track_idx_t startTrack = m_staffStart * VOICES;
     track_idx_t endTrack   = m_staffEnd * VOICES;
 
+    //! NOTE: We need to delay the appending of tuplets. We should only display tuplets as selected
+    //! if all of their contained elements are selected...
+    std::unordered_set<Tuplet*> innerTuplets;
+
     for (track_idx_t st = startTrack; st < endTrack; ++st) {
         if (!canSelectVoice(st)) {
             continue;
@@ -677,13 +694,25 @@ void Selection::updateSelectedElements()
             if (!e || e->generated() || e->isTimeSig() || e->isKeySig()) {
                 continue;
             }
-            if (e->isChordRest()) {
-                appendChordRest(toChordRest(e));
-            } else {
+
+            if (!e->isChordRest()) {
                 appendFiltered(e);
+                continue;
             }
+
+            ChordRest* cr = toChordRest(e);
+            if (Tuplet* tuplet = cr->tuplet()) {
+                innerTuplets.emplace(tuplet);
+            }
+
+            appendChordRest(cr);
         }
     }
+
+    for (Tuplet* tuplet : innerTuplets) {
+        appendTupletHierarchy(tuplet);
+    }
+
     const Fraction rangeStart = tickStart();
     const Fraction rangeEnd = tickEnd();
 
