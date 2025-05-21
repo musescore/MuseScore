@@ -498,7 +498,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
             tupletMap[i].scoreTuplet->setTrack(curTrackIdx);
             tupletMap[i].scoreTuplet->setTick(segment->tick());
             tupletMap[i].scoreTuplet->setParent(segment->measure());
-            // musxTuplet::calcRation is the reciprocal of what MuseScore needs
+            // musxTuplet::calcRatio is the reciprocal of what MuseScore needs
             Fraction tupletRatio = FinaleTConv::musxFractionToFraction(tupletMap[i].musxTuplet->calcRatio().reciprocal());
             tupletMap[i].scoreTuplet->setRatio(tupletRatio);
             std::pair<musx::dom::NoteType, unsigned> musxBaseLen = calcNoteInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration);
