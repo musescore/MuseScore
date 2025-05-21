@@ -48,8 +48,6 @@ public:
 
     FretFrameChordListModel* chordListModel() const;
 
-    Q_INVOKABLE void setChordVisible(int index, bool visible);
-
 private:
     engraving::FBox* fretBox() const;
 
@@ -61,8 +59,6 @@ private:
                            const mu::engraving::StyleIdSet& changedStyleIdSet) override;
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
-
-    void loadListItems();
 
     std::shared_ptr<FretFrameChordListModel> m_chordListModel;
 };

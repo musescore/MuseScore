@@ -32,6 +32,8 @@ FocusableItem {
 
     property QtObject model: null
 
+    property int sideMargin: 0
+
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
 
@@ -44,6 +46,31 @@ FocusableItem {
 
         spacing: 12
 
+        FretFrameChordsControlPanel {
+            id: controlPanel
+
+            anchors.left: parent.left
+            anchors.leftMargin: root.sideMargin
+            anchors.right: parent.right
+            anchors.rightMargin: root.sideMargin
+
+            isMovingUpAvailable: view.model ? view.model.isMovingUpAvailable : false
+            isMovingDownAvailable: view.model ? view.model.isMovingDownAvailable : false
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart
+
+            onMoveSelectionUpRequested: {
+                view.model.moveSelectionUp()
+                Qt.callLater(view.positionViewAtSelectedItems)
+            }
+
+            onMoveSelectionDownRequested: {
+                view.model.moveSelectionDown()
+                Qt.callLater(view.positionViewAtSelectedItems)
+            }
+        }
+
         FretFrameChordsView {
             id: view
 
@@ -53,10 +80,10 @@ FocusableItem {
             model: root.model ? root.model.chordListModel : null
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart
+            navigationRowStart: controlPanel.navigationRowEnd + 1
 
             onChangeChordVisibilityRequested: function(index, visible) {
-                root.model.setChordVisible(index, visible)
+                view.model.setChordVisible(index, visible)
             }
 
             onSelectRowRequested: function(index) {

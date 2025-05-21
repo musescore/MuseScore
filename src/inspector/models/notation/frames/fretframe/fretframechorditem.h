@@ -35,6 +35,9 @@ class FretFrameChordItem : public muse::uicomponents::SelectableItemListModel::I
 public:
     explicit FretFrameChordItem(QObject* parent = nullptr);
 
+    QString id() const;
+    void setId(const QString& id);
+
     QString title() const;
     void setTitle(const QString& title);
 
@@ -42,10 +45,12 @@ public:
     void setIsVisible(bool visible);
 
 signals:
+    void idChanged();
     void titleChanged();
     void isVisibleChanged();
 
 private:
+    QString m_id;
     QString m_title;
     bool m_isVisible = false;
 };

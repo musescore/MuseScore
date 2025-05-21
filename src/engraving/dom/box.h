@@ -205,6 +205,8 @@ public:
 
     void init();
 
+    void undoReorderElements(const std::vector<EID>& newOrderElementsIds);
+
     struct LayoutData : public VBox::LayoutData {
         double cellWidth = 0.0;
         double cellHeight = 0.0;

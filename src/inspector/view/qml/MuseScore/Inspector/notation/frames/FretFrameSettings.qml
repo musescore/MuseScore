@@ -90,6 +90,8 @@ Column {
 
             model: root.frameChordsModel
 
+            sideMargin: -stackLayout.sideMargin
+
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigationRowStart + 1000
         }

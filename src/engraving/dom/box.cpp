@@ -829,6 +829,12 @@ void FBox::init()
     }
 }
 
+void FBox::undoReorderElements(const std::vector<EID> &newOrderElementsIds)
+{
+    score()->undo(new ReorderFBox(this, newOrderElementsIds));
+    triggerLayout();
+}
+
 //---------------------------------------------------------
 //   TBox
 //---------------------------------------------------------
