@@ -28,6 +28,7 @@
 
 #include "musx/musx.h"
 #include "third_party/musx/TinyXmlImpl.h"
+#include "third_party/score_encoder.h"
 
 #include "global/io/file.h"
 #include "global/serialization/zipreader.h"
@@ -131,20 +132,7 @@ static bool extractScoreFile(const String& name, ByteArray& data)
         return false;
     }
 
-    constexpr static uint32_t INITIAL_STATE = 0x28006D45; // arbitrary initial value for algorithm
-    constexpr static uint32_t RESET_LIMIT = 0x20000; // reset value corresponding (probably) to an internal Finale buffer size
-
-    uint32_t state = INITIAL_STATE;
-    for (size_t i = 0; i < gzipData.size(); i++) {
-        if (i % RESET_LIMIT == 0) {
-            state = INITIAL_STATE;
-        }
-        // this algorithm is BSD rand()!
-        state = state * 0x41c64e6d + 0x3039;
-        uint16_t upper = state >> 16;
-        uint8_t c = uint8_t(upper + upper / 255);
-        gzipData[i] ^= c;
-    }
+    utils::ScoreFileEncoder::recodeBuffer(gzipData);
 
     if (!gunzipBuffer(gzipData, data)) {
         LOGE() << "unable to extract Enigmaxml from file: " << name;

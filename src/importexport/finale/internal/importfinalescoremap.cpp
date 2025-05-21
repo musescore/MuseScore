@@ -77,7 +77,9 @@ void EnigmaXmlImporter::import()
     importParts();
     importBrackets();
     importMeasures();
-    importStyles(m_score->style(), SCORE_PARTID); /// @todo do this for all excerpts
+    importStaffItems();
+    importEntries();
+    importStyles(m_score->style(), m_currentMusxPartId);
 }
 
 void EnigmaXmlImporter::mapLayers()
@@ -89,7 +91,7 @@ void EnigmaXmlImporter::mapLayers()
     m_layerForceStems.clear();
     std::unordered_map<track_idx_t, LayerIndex> reverseMap;
 
-    auto layerAttrs = m_doc->getOthers()->getArray<others::LayerAttributes>(SCORE_PARTID);
+    auto layerAttrs = m_doc->getOthers()->getArray<others::LayerAttributes>(m_currentMusxPartId);
 
     const auto mapLayer = [&](const std::shared_ptr<others::LayerAttributes>& layerAttr) {
         std::array<track_idx_t, 4> tryOrder;
@@ -193,9 +195,9 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     s->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
 
     // calculate whether to use small staff size from first system
-    if (const auto& firstSystem = musxStaff->getDocument()->getOthers()->get<others::StaffSystem>(SCORE_PARTID, 1)) { /// @todo eventually we do it differently for excerpts
+    if (const auto& firstSystem = musxStaff->getDocument()->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, 1)) {
         if (firstSystem->hasStaffScaling) {
-            if (auto staffSize = musxStaff->getDocument()->getDetails()->get<details::StaffSize>(SCORE_PARTID, 1, musxStaff->getCmper())) {
+            if (auto staffSize = musxStaff->getDocument()->getDetails()->get<details::StaffSize>(m_currentMusxPartId, 1, musxStaff->getCmper())) {
                 if (staffSize->staffPercent < 100) {
                     s->staffType(eventTick)->setSmall(true);
                 }
@@ -536,15 +538,17 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
     // load entry
     ChordRest* cr = importEntry(entryInfo, segment, curTrackIdx);
     if (cr) {
-        cr->setTicks(currentEntryActualDuration); // should probably be actual length, like done here
         cr->setParent(segment);
         cr->setTrack(curTrackIdx);
-        cr->setBeamMode(BeamMode::NONE); // this is changed in the next pass to match the beaming.
+        if (cr->durationTypeTicks() < Fraction(1, 4)) {
+            cr->setBeamMode(BeamMode::NONE); // this is changed in the next pass to match the beaming.
+        }
         segment->add(cr);
         if (parentTuplet) {
             parentTuplet->add(cr);
             cr->setTuplet(parentTuplet);
         }
+        cr->setTicks(cr->durationTypeTicks()); // everything I see in MuseScore generated files suggests this is the correct value here, rather than actual ticks
         entryMap.emplace(entryInfo.getIndexInFrame(), cr);
     } else {
         logger()->logWarning(String(u"Failed to read entry contents"));
@@ -553,7 +557,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         return false;
     }
 
-    tickEnd += currentEntryActualDuration;
+    tickEnd += cr->actualTicks(); /// @todo this seems like the correct value, but it does not produce correct results with tuplets or local time sigs
     Measure* nm = m_score->tick2measure(tickEnd);
     if (nm) {
         segment = nm->getSegment(SegmentType::ChordRest, tickEnd);
@@ -693,7 +697,7 @@ void EnigmaXmlImporter::importMeasures()
     m_score->sigmap()->clear();
     m_score->sigmap()->add(0, currTimeSig);
 
-    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(SCORE_PARTID);
+    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
         Fraction tick{ 0, 1 };
         MeasureBase* lastMeasure = m_score->measures()->last();
@@ -703,7 +707,8 @@ void EnigmaXmlImporter::importMeasures()
 
         Measure* measure = Factory::createMeasure(m_score->dummy()->system());
         measure->setTick(tick);
-        /// @todo eventually we need to import all the TimeSig features we can. Right now it's just the simplified case.
+        m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
+        m_tick2Meas.emplace(tick, musxMeasure->getCmper());
         std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
         Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
         if (scoreTimeSig != currTimeSig) {
@@ -716,32 +721,60 @@ void EnigmaXmlImporter::importMeasures()
 
         /// @todo key signature
     }
+}
 
-    /// @todo maybe move this to separate function
-    const TimeSigMap& sigmap = *m_score->sigmap();
+void EnigmaXmlImporter::importStaffItems()
+{
+    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
+        std::shared_ptr<TimeSignature> currMusxTimeSig;
+        /// @todo handle pickup measures and other measures where display and actual timesigs differ
+        for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
+            Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
+            Measure * measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
+            IF_ASSERT_FAILED(measure) {
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                return;
+            }
+            staff_idx_t staffIdx = muse::value(m_inst2Staff, musxScrollViewItem->staffId, muse::nidx);
+            Staff * staff = staffIdx != muse::nidx ? m_score->staff(staffIdx) : nullptr;
+            IF_ASSERT_FAILED(staff) {
+                logger()->logWarning(String(u"Unable to retrieve staff by idx"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                return;
+            }
+            auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
+            IF_ASSERT_FAILED(currStaff) {
+                logger()->logWarning(String(u"Unable to retrieve composite staff information"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                return;
+            }
+            std::shared_ptr<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
+            std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
+            if (!currMusxTimeSig || !currMusxTimeSig->isSame(*musxTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
+                Fraction timeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
+                Segment* seg = measure->getSegment(SegmentType::TimeSig, currTick);
+                TimeSig* ts = Factory::createTimeSig(seg);
+                ts->setSig(timeSig);
+                ts->setTrack(static_cast<int>(staffIdx) * VOICES);
+                ts->setVisible(musxMeasure->showTime != others::Measure::ShowTimeSigMode::Never);
+                Fraction stretch = Fraction(musxTimeSig->calcTotalDuration().calcEduDuration(), globalTimeSig->calcTotalDuration().calcEduDuration()).reduced();
+                ts->setStretch(stretch);
+                /// @todo other time signature options? Beaming? Composite list?
+                seg->add(ts);
+                staff->addTimeSig(ts);
+            }
+            currMusxTimeSig = musxTimeSig;
 
-    for (auto is = sigmap.cbegin(); is != sigmap.cend(); ++is) {
-        const SigEvent& se = is->second;
-        const int tick = is->first;
-        Measure* m = m_score->tick2measure(Fraction::fromTicks(tick));
-        if (!m) {
-            continue;
-        }
-        Fraction newTimeSig = se.timesig();
-        for (staff_idx_t staffIdx = 0; staffIdx < m_score->nstaves(); ++staffIdx) {
-            Segment* seg = m->getSegment(SegmentType::TimeSig, Fraction::fromTicks(tick));
-            TimeSig* ts = Factory::createTimeSig(seg);
-            ts->setSig(newTimeSig);
-            ts->setTrack(static_cast<int>(staffIdx) * VOICES);
-            seg->add(ts);
-        }
-        if (newTimeSig != se.timesig()) {     // was a pickup measure - skip next timesig
-            ++is;
+            /// @todo key signatures (including independent key sigs)
         }
     }
+}
 
+void EnigmaXmlImporter::importEntries()
+{
     // Add entries (notes, rests, tuplets)
-    std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID); /// @todo eventually SCORE_PARTID may need to be a parameter
+    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxScrollViewItem->staffId), muse::nidx);
         IF_ASSERT_FAILED (curStaffIdx != muse::nidx) {
@@ -754,14 +787,10 @@ void EnigmaXmlImporter::importMeasures()
             logger()->logWarning(String(u"Add entries: Score has no first measure."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         }
-        Fraction currTick = m_score->firstMeasure()->tick();
-        if (currTick < Fraction(0, 1)) {
-            logger()->logWarning(String(u"Add entries: Initial tick does not exist."), m_doc, musxScrollViewItem->staffId, 1);
-            continue;
-        }
-        ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, SCORE_PARTID, musxScrollViewItem->staffId); /// @todo eventually SCORE_PARTID may need to be a parameter
+        ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId);
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
-            Measure* measure = m_score->tick2measure(currTick);
+            Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
+            Measure* measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
             if (!measure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 break;
@@ -775,7 +804,7 @@ void EnigmaXmlImporter::importMeasures()
             // However, it is possible to defeat this requirement using plugins. That said, doing so produces erratic results, so I'm not sure we should support it.
             // For now, only check the start of the measure.
             bool transposedClefOverride = false;
-            auto musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
+            auto musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
             if (musxStaffAtMeasureStart && musxStaffAtMeasureStart->transposition && musxStaffAtMeasureStart->transposition->setToClef) {
                 if (musxStaffAtMeasureStart->transposedClef != musxCurrClef) {
                     if (createClef(m_score, curStaffIdx, musxStaffAtMeasureStart->transposedClef, measure, 0, false)) {
@@ -785,7 +814,7 @@ void EnigmaXmlImporter::importMeasures()
                 transposedClefOverride = true;
             }
             bool processedEntries = false;
-            details::GFrameHoldContext gfHold(musxMeasure->getDocument(), musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper());
+            details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
             if (gfHold) {
                 if (!transposedClefOverride) {
                     if (gfHold->clefId.has_value()) {
@@ -840,7 +869,7 @@ void EnigmaXmlImporter::importMeasures()
                         rTuplet.absDuration = mDur;
                         rTuplet.absEnd = mDur;
                         rTuplet.layer = -1,
-                        tupletMap.insert(tupletMap.begin(), rTuplet);
+                            tupletMap.insert(tupletMap.begin(), rTuplet);
                         size_t lastAddedTupletIndex = 0;
                         std::unordered_map<size_t, ChordRest*> entryMap;
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
@@ -899,21 +928,20 @@ void EnigmaXmlImporter::importMeasures()
                 }
             }
             if (!processedEntries) {
+                Staff* staff = m_score->staff(curStaffIdx);
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
-                rest->setTicks(measure->ticks());
+                rest->setTicks(staff->timeSig(measure->tick())->sig());
                 rest->setTrack(curStaffIdx * VOICES);
-                rest->setVisible(false);
                 segment->add(rest);
             }
-            currTick += measure->ticks();
         }
     }
 }
 
 void EnigmaXmlImporter::importParts()
 {
-    std::vector<std::shared_ptr<others::InstrumentUsed>> scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    std::vector<std::shared_ptr<others::InstrumentUsed>> scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
     int partNumber = 0;
     for (const std::shared_ptr<others::InstrumentUsed>& item : scrollView) {
@@ -921,7 +949,7 @@ void EnigmaXmlImporter::importParts()
         IF_ASSERT_FAILED(staff) {
             continue; // safety check
         }
-        auto compositeStaff = others::StaffComposite::createCurrent(m_doc, SCORE_PARTID, staff->getCmper(), 1, 0);
+        auto compositeStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, staff->getCmper(), 1, 0);
         IF_ASSERT_FAILED(compositeStaff) {
             continue; // safety check
         }
@@ -956,7 +984,7 @@ void EnigmaXmlImporter::importParts()
         if (multiStaffInst) {
             m_part2Inst.emplace(partId, multiStaffInst->staffNums);
             for (auto inst : multiStaffInst->staffNums) {
-                if (auto instStaff = others::StaffComposite::createCurrent(m_doc, SCORE_PARTID, inst, 1, 0)) {
+                if (auto instStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, inst, 1, 0)) {
                     createStaff(part, instStaff, it);
                     m_inst2Part.emplace(inst, partId);
                 }
@@ -1021,12 +1049,12 @@ void EnigmaXmlImporter::importBrackets()
         return result;
     };
 
-    auto scorePartInfo = m_doc->getOthers()->get<others::PartDefinition>(SCORE_PARTID, SCORE_PARTID);
+    auto scorePartInfo = m_doc->getOthers()->get<others::PartDefinition>(SCORE_PARTID, m_currentMusxPartId);
     if (!scorePartInfo) {
         throw std::logic_error("Unable to read PartDefinition for score");
         return;
     }
-    auto scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    auto scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
     auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, scorePartInfo, scrollView);
     auto groupsByLayer = computeStaffGroupLayers(staffGroups);
