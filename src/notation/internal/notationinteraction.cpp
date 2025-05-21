@@ -1141,6 +1141,47 @@ void NotationInteraction::addPlaybackNote(Note *note) {
     m_playback_notes.push_back(note);
 }
 
+void NotationInteraction::addGlissandoNote(mu::engraving::Note *note, int ticks, int duration_ticks) {
+    glissando_endnotes.clear();
+    glissando_note = note;
+    glissando_ticks = ticks;
+    glissando_curr_ticks = ticks;
+    glissando_duration_ticks = duration_ticks;
+}
+void NotationInteraction::addGlissandoEndNote(mu::engraving::Note *note) {
+    glissando_endnotes.push_back(note);
+}
+int NotationInteraction::glissandoNoteTicks() const {
+    return glissando_ticks;
+}
+int NotationInteraction::glissandoNoteDurationticks() const {
+    return glissando_duration_ticks;
+}
+int NotationInteraction::glissandoCurrticks() const {
+    return glissando_curr_ticks;
+}
+void NotationInteraction::glissandoEndNotesUpdate() {
+    m_glissandoEndNotesChanged.notify();
+}
+muse::async::Notification NotationInteraction::glissandoEndNotesChanged() {
+    return m_glissandoEndNotesChanged;
+}
+
+mu::engraving::Note *NotationInteraction::glissandoNote() const {
+    return glissando_note;
+}
+std::vector<mu::engraving::Note *> NotationInteraction::glissandoEndNotes() const {
+    return glissando_endnotes;
+}
+void NotationInteraction::glissandoTick(int ticks) {
+    glissando_curr_ticks = ticks;
+    m_glissandoTickChanged.notify();
+}
+muse::async::Notification NotationInteraction::glissandoTickChanged() {
+    return m_glissandoTickChanged;
+}
+
+
 void NotationInteraction::notifyClefKeySigsKeysChanged() {
     m_clefKeySigsKeysChanged.notify();
 }

@@ -183,7 +183,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                     engravingItem->setColor(muse::draw::Color::BLACK);
                 } else {
                     engravingItem->setColor(muse::draw::Color::RED);
-                    EngravingItemList itemList = engravingItem->childrenItems(false);
+                    EngravingItemList itemList = engravingItem->childrenItems(true);
                     size_t items_len = itemList.size();
                     for (size_t j = 0; j < items_len; j++) {
                         EngravingItem *item = itemList.at(j);
@@ -192,7 +192,34 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                         }
                         if (item->type() == mu::engraving::ElementType::NOTE) {
                             m_notation->interaction()->addPlaybackNote(toNote(item));
+                        } else if (item->type() == mu::engraving::ElementType::GLISSANDO) {
+                            EngravingItem *glissandoNote = item->parentItem();
+                            if (glissandoNote->type() == mu::engraving::ElementType::NOTE) {
+                                if (tick.ticks() < m_notation->interaction()->glissandoNoteTicks() || tick.ticks() > m_notation->interaction()->glissandoNoteTicks() + m_notation->interaction()->glissandoNoteDurationticks()) {
+                                    m_notation->interaction()->addGlissandoNote(toNote(glissandoNote), t1.ticks(), duration_ticks);
+                                    mu::engraving::Segment* _ns = s->next(mu::engraving::SegmentType::ChordRest);
+                                    while (_ns && !_ns->visible()) {
+                                        _ns = _ns->next(mu::engraving::SegmentType::ChordRest);
+                                    }
+                                    if (_ns) {
+                                        EngravingItemList _itemList = _ns->childrenItems(false);
+                                        for (size_t k = 0; k < _itemList.size(); k++) {
+                                            EngravingItem *_item = itemList.at(k);
+                                            if (_item == nullptr) {
+                                                continue;
+                                            }
+                                            if (_item->type() == mu::engraving::ElementType::NOTE) {
+                                                m_notation->interaction()->addGlissandoEndNote(toNote(_item));
+                                            }
+                                        }
+                                        m_notation->interaction()->glissandoEndNotesUpdate();    
+                                    }
+                                } else {
+                                    m_notation->interaction()->glissandoTick(tick.ticks());
+                                }
+                            }
                         }
+                        
                     }
                 }
             }
