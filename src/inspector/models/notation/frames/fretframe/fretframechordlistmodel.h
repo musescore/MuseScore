@@ -22,24 +22,36 @@
 
 #pragma once
 
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+
 #include "uicomponents/view/selectableitemlistmodel.h"
+
+namespace mu::engraving {
+class FBox;
+}
 
 namespace mu::inspector {
 class FretFrameChordItem;
-class FretFrameChordListModel : public muse::uicomponents::SelectableItemListModel
+class FretFrameChordListModel : public muse::uicomponents::SelectableItemListModel, public muse::Injectable
 {
     Q_OBJECT
 
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
 
+    muse::Inject<context::IGlobalContext> globalContext = { this };
+
 public:
     explicit FretFrameChordListModel(QObject* parent);
+
+    void load(engraving::FBox* box);
 
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    void setChordItems(const ItemList& items);
-    void setChordVisible(int index, bool visible);
+    Q_INVOKABLE void setChordVisible(int index, bool visible);
+    Q_INVOKABLE void moveSelectionUp();
+    Q_INVOKABLE void moveSelectionDown();
 
     QItemSelectionModel* selectionModel() const;
 
@@ -49,5 +61,9 @@ private:
     };
 
     FretFrameChordItem* modelIndexToItem(const QModelIndex& index) const;
+
+    void onRowsMoved() override;
+
+    engraving::FBox* m_fretBox = nullptr;
 };
 }

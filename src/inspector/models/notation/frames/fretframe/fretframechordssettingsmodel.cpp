@@ -47,7 +47,8 @@ void FretFrameChordsSettingsModel::createProperties()
 void FretFrameChordsSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(ElementType::FBOX);
-    loadListItems();
+
+    m_chordListModel->load(fretBox());
 }
 
 void FretFrameChordsSettingsModel::loadProperties()
@@ -75,63 +76,9 @@ void FretFrameChordsSettingsModel::onNotationChanged(const engraving::PropertyId
 
 void FretFrameChordsSettingsModel::loadProperties(const engraving::PropertyIdSet& propertyIdSet)
 {
-    loadListItems();
-}
-
-void FretFrameChordsSettingsModel::loadListItems()
-{
-    m_chordListModel->setChordItems({});
-
-    FBox* box = fretBox();
-    if (!box) {
-        return;
-    }
-
-    QList<FretFrameChordListModel::Item*> items;
-
-    for (EngravingItem* element : box->el()) {
-        FretDiagram* diagram = toFretDiagram(element);
-        auto chordItem = new FretFrameChordItem(m_chordListModel.get());
-        chordItem->setTitle(diagram->harmony()->plainText());
-        chordItem->setIsVisible(diagram->visible());
-
-        items << chordItem;
-    }
-
-    m_chordListModel->setChordItems(items);
 }
 
 FretFrameChordListModel* FretFrameChordsSettingsModel::chordListModel() const
 {
     return m_chordListModel.get();
-}
-
-void FretFrameChordsSettingsModel::setChordVisible(int index, bool visible)
-{
-    FBox* box = fretBox();
-    if (!box) {
-        return;
-    }
-
-    ElementList diagrams = box->el();
-    if (index < 0 || index >= diagrams.size()) {
-        return;
-    }
-
-    notation::INotationPtr notation = globalContext()->currentNotation();
-    if (!notation) {
-        return;
-    }
-
-    const muse::TranslatableString actionName = visible
-                                                ? muse::TranslatableString("undoableAction", "Make chord(s) visible")
-                                                : muse::TranslatableString("undoableAction", "Make chord(s) invisible");
-
-    notation->undoStack()->prepareChanges(actionName);
-
-    box->score()->undoChangeVisible(diagrams[index], visible);
-    m_chordListModel->setChordVisible(index, visible);
-
-    notation->undoStack()->commitChanges();
-    notation->notationChanged().notify();
 }

@@ -3482,3 +3482,42 @@ void FretLinkHarmony::redo(EditData*)
         m_fretDiagram->linkHarmony(m_harmony);
     }
 }
+
+ReorderFBox::ReorderFBox(FBox* box, const std::vector<EID>& newOrderElementsIds)
+{
+    m_fBox = box;
+    m_orderElementsIds = newOrderElementsIds;
+}
+
+void ReorderFBox::flip(EditData*)
+{
+    ElementList& elements = m_fBox->el();
+
+    const int n = elements.size();
+    if (n != static_cast<int>(m_orderElementsIds.size())) {
+        return;
+    }
+
+    std::map<std::string, int> eidToIndex;
+    for (int i = 0; i < n; ++i) {
+        eidToIndex[elements[i]->eid().toStdString()] = i;
+    }
+
+    for (int i = 0; i < n; ++i) {
+        const EID& desiredEid = m_orderElementsIds[i];
+
+        int correctIndex = muse::value(eidToIndex, desiredEid.toStdString(), -1);
+        if (correctIndex == -1) {
+            continue;
+        }
+
+        if (correctIndex == i) {
+            continue;
+        }
+
+        eidToIndex[elements[i]->eid().toStdString()] = correctIndex;
+        eidToIndex[elements[correctIndex]->eid().toStdString()] = i;
+
+        std::swap(elements[i], elements[correctIndex]);
+    }
+}

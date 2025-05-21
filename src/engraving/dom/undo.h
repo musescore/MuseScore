@@ -33,6 +33,7 @@
 #include "../compat/midi/midipatch.h"
 
 #include "bend.h"
+#include "box.h"
 #include "bracket.h"
 #include "chord.h"
 #include "drumset.h"
@@ -1660,6 +1661,23 @@ public:
     UNDO_TYPE(CommandType::FretLinkHarmony)
     UNDO_NAME("FretLinkHarmony")
     UNDO_CHANGED_OBJECTS({ m_fretDiagram })
+};
+
+class ReorderFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, ReorderFBox)
+
+    FBox* m_fBox = nullptr;
+    std::vector<EID> m_orderElementsIds;
+
+    void flip(EditData*) override;
+
+public:
+    ReorderFBox(FBox* fbox, const std::vector<EID>& newOrderElementsIds);
+
+    UNDO_TYPE(CommandType::ReorderFBox)
+    UNDO_NAME("ReorderFBox")
+    UNDO_CHANGED_OBJECTS({ m_fBox })
 };
 
 class MoveTremolo : public UndoCommand

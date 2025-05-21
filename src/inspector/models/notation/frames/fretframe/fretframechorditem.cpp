@@ -28,6 +28,21 @@ FretFrameChordItem::FretFrameChordItem(QObject* parent)
 {
 }
 
+QString FretFrameChordItem::id() const
+{
+    return m_id;
+}
+
+void FretFrameChordItem::setId(const QString& id)
+{
+    if (m_id == id) {
+        return;
+    }
+
+    m_id = id;
+    emit idChanged();
+}
+
 QString FretFrameChordItem::title() const
 {
     return m_title;
