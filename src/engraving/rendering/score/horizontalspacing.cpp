@@ -623,7 +623,7 @@ void HorizontalSpacing::moveRightAlignedSegments(std::vector<SegmentPosition>& p
             if (followingSeg->isRightAligned() || followingSeg->hasTimeSigAboveStaves()) {
                 continue;
             }
-            if (followingSeg->measure() != segment->measure()) {
+            if (followingSeg->measure() != segment->measure() && followingSeg->rtick().isNotZero()) {
                 break;
             }
             double followingSegX = segPos.xPosInSystemCoords;
