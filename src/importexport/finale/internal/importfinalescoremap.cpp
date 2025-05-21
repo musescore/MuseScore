@@ -707,6 +707,8 @@ void EnigmaXmlImporter::importMeasures()
 
         Measure* measure = Factory::createMeasure(m_score->dummy()->system());
         measure->setTick(tick);
+        m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
+        m_tick2Meas.emplace(tick, musxMeasure->getCmper());
         /// @todo eventually we need to import all the TimeSig features we can. Right now it's just the simplified case.
         std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
         Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
@@ -729,13 +731,19 @@ void EnigmaXmlImporter::importStaffItems()
     std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
         std::optional<Fraction> currTimeSig;
+        Fraction currTick = m_score->firstMeasure()->tick();
+        if (currTick < Fraction(0, 1)) {
+            logger()->logWarning(String(u"Import staff items: Initial tick does not exist."), m_doc, musxScrollViewItem->staffId, 1);
+            return;
+        }
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
             auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
             std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(s);
 
         }
     }
-*/
+    */
+
     const TimeSigMap& sigmap = *m_score->sigmap();
 
     for (auto is = sigmap.cbegin(); is != sigmap.cend(); ++is) {
@@ -776,14 +784,10 @@ void EnigmaXmlImporter::importEntries()
             logger()->logWarning(String(u"Add entries: Score has no first measure."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         }
-        Fraction currTick = m_score->firstMeasure()->tick();
-        if (currTick < Fraction(0, 1)) {
-            logger()->logWarning(String(u"Add entries: Initial tick does not exist."), m_doc, musxScrollViewItem->staffId, 1);
-            continue;
-        }
         ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId);
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
-            Measure* measure = m_score->tick2measure(currTick);
+            Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
+            Measure* measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
             if (!measure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 break;
@@ -929,7 +933,6 @@ void EnigmaXmlImporter::importEntries()
                 rest->setVisible(false);
                 segment->add(rest);
             }
-            currTick += measure->ticks();
         }
     }
 }
