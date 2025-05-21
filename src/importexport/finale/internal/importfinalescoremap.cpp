@@ -709,7 +709,6 @@ void EnigmaXmlImporter::importMeasures()
         measure->setTick(tick);
         m_meas2Tick.emplace(musxMeasure->getCmper(), tick);
         m_tick2Meas.emplace(tick, musxMeasure->getCmper());
-        /// @todo eventually we need to import all the TimeSig features we can. Right now it's just the simplified case.
         std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature();
         Fraction scoreTimeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
         if (scoreTimeSig != currTimeSig) {
@@ -726,43 +725,44 @@ void EnigmaXmlImporter::importMeasures()
 
 void EnigmaXmlImporter::importStaffItems()
 {
-    /*
     std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
-        std::optional<Fraction> currTimeSig;
-        Fraction currTick = m_score->firstMeasure()->tick();
-        if (currTick < Fraction(0, 1)) {
-            logger()->logWarning(String(u"Import staff items: Initial tick does not exist."), m_doc, musxScrollViewItem->staffId, 1);
-            return;
-        }
+        std::shared_ptr<TimeSignature> currMusxTimeSig;
+        /// @todo handle pickup measures and other measures where display and actual timesigs differ
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
-            auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
-            std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(s);
+            Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
+            Measure * measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
+            IF_ASSERT_FAILED(measure) {
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                return;
+            }
+            staff_idx_t staffIdx = muse::value(m_inst2Staff, musxScrollViewItem->staffId, muse::nidx);
+            Staff * staff = staffIdx != muse::nidx ? m_score->staff(staffIdx) : nullptr;
+            IF_ASSERT_FAILED(staff) {
+                logger()->logWarning(String(u"Unable to retrieve staff by idx"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                return;
+            }
+            auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
+            IF_ASSERT_FAILED(currStaff) {
+                logger()->logWarning(String(u"Unable to retrieve composite staff information"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                return;
+            }
+            std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
+            if (!currMusxTimeSig || !currMusxTimeSig->isSame(*musxTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
+                Fraction timeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
+                Segment* seg = measure->getSegment(SegmentType::TimeSig, currTick);
+                TimeSig* ts = Factory::createTimeSig(seg);
+                ts->setSig(timeSig);
+                ts->setTrack(static_cast<int>(staffIdx) * VOICES);
+                ts->setVisible(musxMeasure->showTime != others::Measure::ShowTimeSigMode::Never);
+                /// @todo other time signature options? Beaming? Composite list?
+                seg->add(ts);
+                staff->addTimeSig(ts);
+            }
+            currMusxTimeSig = musxTimeSig;
 
-        }
-    }
-    */
-
-    const TimeSigMap& sigmap = *m_score->sigmap();
-
-    for (auto is = sigmap.cbegin(); is != sigmap.cend(); ++is) {
-        const SigEvent& se = is->second;
-        const int tick = is->first;
-        Measure* m = m_score->tick2measure(Fraction::fromTicks(tick));
-        if (!m) {
-            continue;
-        }
-        Fraction newTimeSig = se.timesig();
-        for (staff_idx_t staffIdx = 0; staffIdx < m_score->nstaves(); ++staffIdx) {
-            Segment* seg = m->getSegment(SegmentType::TimeSig, Fraction::fromTicks(tick));
-            TimeSig* ts = Factory::createTimeSig(seg);
-            ts->setSig(newTimeSig);
-            ts->setTrack(static_cast<int>(staffIdx) * VOICES);
-            seg->add(ts);
-        }
-        if (newTimeSig != se.timesig()) {     // was a pickup measure - skip next timesig
-            ++is;
+            /// @todo key signatures (including independent key sigs)
         }
     }
 }
