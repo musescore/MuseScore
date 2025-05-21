@@ -144,8 +144,8 @@ void UpdateScenario::showNoUpdateMsg()
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
 
-    interactive()->infoAsync(muse::trc("update", "You’re up to date!"), text, { okBtn }, okBtn.btn,
-                             IInteractive::Option::WithIcon);
+    interactive()->info(muse::trc("update", "You’re up to date!"), text, { okBtn }, okBtn.btn,
+                        IInteractive::Option::WithIcon);
 }
 
 void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
@@ -173,8 +173,8 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 
 void UpdateScenario::showServerErrorMsg()
 {
-    interactive()->errorAsync(muse::trc("update", "Cannot connect to server"),
-                              muse::trc("update", "Sorry - please try again later"));
+    interactive()->error(muse::trc("update", "Cannot connect to server"),
+                         muse::trc("update", "Sorry - please try again later"));
 }
 
 void UpdateScenario::downloadRelease()
@@ -193,10 +193,10 @@ void UpdateScenario::closeAppAndStartInstallation(const muse::io::path_t& instal
     std::string info = muse::trc("update", "MuseScore Studio needs to close to complete the installation. "
                                            "If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.");
     int closeBtn = int(IInteractive::Button::CustomButton) + 1;
-    auto promise = interactive()->infoAsync("", info,
-                                            { interactive()->buttonData(IInteractive::Button::Cancel),
-                                              IInteractive::ButtonData(closeBtn, muse::trc("update", "Close"), true) },
-                                            closeBtn);
+    auto promise = interactive()->info("", info,
+                                       { interactive()->buttonData(IInteractive::Button::Cancel),
+                                         IInteractive::ButtonData(closeBtn, muse::trc("update", "Close"), true) },
+                                       closeBtn);
     promise.onResolve(this, [this, installerPath](const IInteractive::Result& res) {
         if (res.isButton(IInteractive::Button::Cancel)) {
             return;

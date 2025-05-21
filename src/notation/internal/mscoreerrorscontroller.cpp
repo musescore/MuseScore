@@ -156,8 +156,8 @@ void MScoreErrorsController::checkAndShowMScoreError()
         break;
     }
 
-    interactive()->infoAsync(title, message, {}, 0,
-                             IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox)
+    interactive()->info(title, message, {}, 0,
+                        IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox)
     .onResolve(this, [this, err](const IInteractive::Result& res) {
         if (!res.showAgain()) {
             configuration()->setNeedToShowMScoreError(MScore::errorToString(err), false);

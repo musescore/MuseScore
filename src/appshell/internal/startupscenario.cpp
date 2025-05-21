@@ -208,9 +208,9 @@ void StartupScenario::openScore(const project::ProjectFile& file)
 
 void StartupScenario::restoreLastSession()
 {
-    auto promise = interactive()->questionAsync(muse::trc("appshell", "The previous session quit unexpectedly."),
-                                                muse::trc("appshell", "Do you want to restore the session?"),
-                                                { IInteractive::Button::No, IInteractive::Button::Yes });
+    auto promise = interactive()->question(muse::trc("appshell", "The previous session quit unexpectedly."),
+                                           muse::trc("appshell", "Do you want to restore the session?"),
+                                           { IInteractive::Button::No, IInteractive::Button::Yes });
 
     promise.onResolve(this, [this](const IInteractive::Result& res) {
         if (res.isButton(IInteractive::Button::Yes)) {

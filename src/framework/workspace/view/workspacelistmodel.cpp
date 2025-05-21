@@ -225,7 +225,7 @@ void WorkspaceListModel::resetWorkspace(int workspaceIndex)
     std::string question = muse::trc("workspace",
                                      "This action will reset your workspace to its factory default layout and cannot be undone. Do you want to continue?");
 
-    auto promise = interactive()->warningAsync(muse::trc("workspace", "Resetting workspaces"), question, {
+    auto promise = interactive()->warning(muse::trc("workspace", "Resetting workspaces"), question, {
         IInteractive::ButtonData(resetButton, muse::trc("workspace", "Reset workspace"), true, false, IInteractive::ButtonRole::AcceptRole),
         interactive()->buttonData(IInteractive::Button::Cancel)
     });

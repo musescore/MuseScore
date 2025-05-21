@@ -154,7 +154,7 @@ void PartListModel::resetPart(int partIndex)
     if (!m_excerpts[partIndex]->isEmpty()) {
         std::string question = muse::trc("notation", "Are you sure you want to reset this part?");
 
-        interactive()->questionAsync("", question, {
+        interactive()->question("", question, {
             IInteractive::Button::Yes, IInteractive::Button::No
         })
         .onResolve(this, [this, partIndex](const IInteractive::Result& res) {
@@ -187,7 +187,7 @@ void PartListModel::removePart(int partIndex)
     if (!m_excerpts[partIndex]->isEmpty()) {
         std::string question = muse::trc("notation", "Are you sure you want to delete this part?");
 
-        interactive()->questionAsync("", question, {
+        interactive()->question("", question, {
             IInteractive::Button::Yes, IInteractive::Button::No
         })
         .onResolve(this, [this, partIndex](const IInteractive::Result& res) {

@@ -245,7 +245,7 @@ void EditShortcutModel::trySave()
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
 
-    auto promise = interactive()->warningAsync(muse::trc("shortcuts", "Reassign shortcut"), text, {
+    auto promise = interactive()->warning(muse::trc("shortcuts", "Reassign shortcut"), text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         interactive()->buttonData(IInteractive::Button::Ok)
     }, (int)IInteractive::Button::Ok);

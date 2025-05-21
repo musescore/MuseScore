@@ -38,9 +38,9 @@ public:
     Result questionSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
                         const Options& options = {}, const std::string& dialogTitle = "") override;
 
-    async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                                         int defBtn = int(Button::NoButton), const Options& options = {},
-                                         const std::string& dialogTitle = "") override;
+    async::Promise<Result> question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                    int defBtn = int(Button::NoButton), const Options& options = {},
+                                    const std::string& dialogTitle = "") override;
 
     ButtonData buttonData(Button b) const override;
 
@@ -48,25 +48,25 @@ public:
     Result infoSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
                     const Options& options = {}, const std::string& dialogTitle = "") override;
 
-    async::Promise<Result> infoAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                                     int defBtn = int(Button::NoButton), const Options& options = {},
-                                     const std::string& dialogTitle = "") override;
+    async::Promise<Result> info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                int defBtn = int(Button::NoButton), const Options& options = {},
+                                const std::string& dialogTitle = "") override;
 
     // warning
     Result warningSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
                        const Options& options = {}, const std::string& dialogTitle = "") override;
 
-    async::Promise<Result> warningAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                                        int defBtn = int(Button::NoButton), const Options& options = {},
-                                        const std::string& dialogTitle = "") override;
+    async::Promise<Result> warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                   int defBtn = int(Button::NoButton), const Options& options = {},
+                                   const std::string& dialogTitle = "") override;
 
     // error
     Result errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
                      const Options& options = {}, const std::string& dialogTitle = "") override;
 
-    async::Promise<Result> errorAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                                      int defBtn = int(Button::NoButton), const Options& options = {},
-                                      const std::string& dialogTitle = "") override;
+    async::Promise<Result> error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                 int defBtn = int(Button::NoButton), const Options& options = {},
+                                 const std::string& dialogTitle = "") override;
 
     // progress
     Ret showProgress(const std::string& title, Progress* progress) const override;

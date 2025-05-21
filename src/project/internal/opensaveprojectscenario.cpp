@@ -514,7 +514,7 @@ void OpenSaveProjectScenario::showCloudOpenError(const Ret& ret) const
         break;
     }
 
-    interactive()->warningAsync(title, message);
+    interactive()->warning(title, message);
 }
 
 Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublishShare,
@@ -652,7 +652,7 @@ Ret OpenSaveProjectScenario::showAudioCloudShareError(const Ret& ret) const
         break;
     }
 
-    interactive()->warningAsync(title, msg, buttons);
+    interactive()->warning(title, msg, buttons);
 
     return muse::make_ok();
 }

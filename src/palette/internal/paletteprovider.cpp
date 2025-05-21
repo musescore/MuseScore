@@ -101,7 +101,7 @@ void PaletteElementEditor::onElementAdded(const ElementPtr element)
 
     if (!_paletteIndex.isValid()
         || !_paletteIndex.data(PaletteTreeModel::VisibleRole).toBool()) {
-        interactive()->infoAsync("", muse::trc("palette", "The palette was hidden or changed"));
+        interactive()->info("", muse::trc("palette", "The palette was hidden or changed"));
         return;
     }
 
@@ -343,7 +343,7 @@ void UserPaletteController::showHideOrDeleteDialog(const std::string& question,
     int hideButton = int(IInteractive::Button::CustomButton) + 1;
     int deleteButton = hideButton + 1;
 
-    auto result = interactive()->questionAsync(std::string(), question, {
+    auto result = interactive()->question(std::string(), question, {
         IInteractive::ButtonData(hideButton, muse::trc("palette", "Hide")),
         IInteractive::ButtonData(deleteButton, muse::trc("palette", "Delete permanently")),
         interactive()->buttonData(IInteractive::Button::Cancel)
@@ -393,7 +393,7 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
                                    ? muse::trc("palette", "Do you want to permanently delete this custom palette cell?")
                                    : muse::trc("palette", "Do you want to permanently delete these custom palette cells?");
 
-            interactive()->questionAsync(std::string(), question, {
+            interactive()->question(std::string(), question, {
                 IInteractive::Button::Yes,
                 IInteractive::Button::No
             })
@@ -838,7 +838,7 @@ void PaletteProvider::resetPalette(const QModelIndex& index)
     std::string title = muse::trc("palette",
                                   "Do you want to restore this palette to its default state? All changes to this palette will be lost.");
 
-    interactive()->questionAsync("", title, {
+    interactive()->question("", title, {
         IInteractive::Button::No, IInteractive::Button::Yes
     })
     .onResolve(this, [this, index](const IInteractive::Result& res) {

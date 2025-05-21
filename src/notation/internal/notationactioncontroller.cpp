@@ -962,7 +962,7 @@ void NotationActionController::putTuplet(const TupletOptions& options)
     }
 
     if (!interaction->canAddTupletToSelectedChordRests()) {
-        interactive()->errorAsync(muse::trc("notation", "Cannot create tuplet"), muse::trc("notation", "Note value is too short"));
+        interactive()->error(muse::trc("notation", "Cannot create tuplet"), muse::trc("notation", "Note value is too short"));
         return;
     }
 
@@ -1265,7 +1265,7 @@ void NotationActionController::repeatSelection()
     playSelectedElement(true);
 
     if (!ret && !ret.text().empty()) {
-        interactive()->errorAsync("", ret.text());
+        interactive()->error("", ret.text());
     }
 }
 
@@ -1412,8 +1412,8 @@ void NotationActionController::insertClef(mu::engraving::ClefType type)
 
 async::Promise<IInteractive::Result> NotationActionController::showErrorMessage(const std::string& message)
 {
-    return interactive()->infoAsync(message, std::string(), {}, 0,
-                                    IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+    return interactive()->info(message, std::string(), {}, 0,
+                               IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 }
 
 void NotationActionController::addText(TextStyleType type)
@@ -1842,12 +1842,12 @@ void NotationActionController::loadStyle()
     if (!path.empty()) {
         File f(path.toQString());
         if (!f.open(IODevice::ReadOnly) || !mu::engraving::MStyle::isValid(&f)) {
-            interactive()->errorAsync(muse::trc("notation", "The style file could not be loaded."),
-                                      f.errorString());
+            interactive()->error(muse::trc("notation", "The style file could not be loaded."),
+                                 f.errorString());
             return;
         }
         if (!currentNotationStyle()->loadStyle(path.toQString(), false)) {
-            auto promise = interactive()->warningAsync(
+            auto promise = interactive()->warning(
                 muse::trc("notation",
                           "Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly."),
                 muse::trc("notation", "Click OK to load anyway."), { IInteractive::Button::Ok, IInteractive::Button::Cancel },
@@ -1868,8 +1868,8 @@ void NotationActionController::saveStyle()
     auto path = selectStyleFile(false);
     if (!path.empty()) {
         if (!currentNotationStyle()->saveStyle(path)) {
-            interactive()->errorAsync(muse::trc("notation", "The style file could not be saved."),
-                                      muse::trc("notation", "An error occurred."));
+            interactive()->error(muse::trc("notation", "The style file could not be saved."),
+                                 muse::trc("notation", "An error occurred."));
         }
     }
 }
@@ -2309,7 +2309,7 @@ void NotationActionController::checkForScoreCorruptions()
     if (ret) {
         std::string title = muse::mtrc("project", "File “%1” seems not corrupted").arg(fileName).toStdString();
         std::string body = muse::trc("project", "This file does not seem to contain errors.");
-        interactive()->infoAsync(title, body);
+        interactive()->info(title, body);
     } else {
         std::string title = muse::mtrc("project", "File “%1” is corrupted").arg(fileName).toStdString();
         IInteractive::Text text;
@@ -2317,7 +2317,7 @@ void NotationActionController::checkForScoreCorruptions()
                                          "Please fix those at the earliest, to prevent crashes and further corruptions.");
         text.detailedText = ret.text();
 
-        interactive()->warningAsync(title, text);
+        interactive()->warning(title, text);
     }
 }
 

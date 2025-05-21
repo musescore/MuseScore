@@ -72,7 +72,7 @@ void ExtensionsActionController::onExtensionTriggered(const actions::ActionQuery
         return;
     }
 
-    auto promise = interactive()->warningAsync(
+    auto promise = interactive()->warning(
         muse::qtrc("extensions", "The plugin “%1” is currently disabled. Do you want to enable it now?").arg(m.title).toStdString(),
         muse::trc("extensions", "Alternatively, you can enable it at any time from Home > Plugins."),
         { IInteractive::Button::No, IInteractive::Button::Yes });

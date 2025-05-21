@@ -46,7 +46,7 @@ void MuseSamplerActionController::checkLibraryIsDetected()
                  .arg(QString::fromStdString(libVersion)).toStdString();
     }
 
-    interactive()->infoAsync(status, std::string());
+    interactive()->info(status, std::string());
 }
 
 void MuseSamplerActionController::reloadMuseSampler()
@@ -56,6 +56,6 @@ void MuseSamplerActionController::reloadMuseSampler()
     }
 
     if (!m_reloadMuseSampler()) {
-        interactive()->errorAsync("", std::string("Could not reload MuseSampler library"));
+        interactive()->error("", std::string("Could not reload MuseSampler library"));
     }
 }

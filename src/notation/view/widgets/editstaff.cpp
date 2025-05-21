@@ -521,8 +521,8 @@ void EditStaff::applyPartProperties()
     String _sn = shortName->toPlainText();
     String _ln = longName->toPlainText();
     if (!mu::engraving::Text::validateText(_sn) || !mu::engraving::Text::validateText(_ln)) {
-        interactive()->warningAsync(muse::trc("notation/staffpartproperties", "Invalid instrument name"),
-                                    muse::trc("notation/staffpartproperties", "The instrument name is invalid."));
+        interactive()->warning(muse::trc("notation/staffpartproperties", "Invalid instrument name"),
+                               muse::trc("notation/staffpartproperties", "The instrument name is invalid."));
         return;
     }
     QString sn = _sn;

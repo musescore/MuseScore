@@ -327,11 +327,11 @@ void ApplicationActionController::revertToFactorySettings()
     cancelBtn.accent = true;
 
     int revertBtn = int(IInteractive::Button::Apply);
-    auto promise = interactive()->warningAsync(title, question,
-                                               { cancelBtn,
-                                                 IInteractive::ButtonData(revertBtn, muse::trc("appshell", "Revert")) },
-                                               cancelBtn.btn, { muse::IInteractive::Option::WithIcon },
-                                               muse::trc("appshell", "Revert to factory settings"));
+    auto promise = interactive()->warning(title, question,
+                                          { cancelBtn,
+                                            IInteractive::ButtonData(revertBtn, muse::trc("appshell", "Revert")) },
+                                          cancelBtn.btn, { muse::IInteractive::Option::WithIcon },
+                                          muse::trc("appshell", "Revert to factory settings"));
 
     promise.onResolve(this, [this](const IInteractive::Result& res) {
         if (res.isButton(IInteractive::Button::Cancel)) {
@@ -347,10 +347,10 @@ void ApplicationActionController::revertToFactorySettings()
         std::string question = muse::trc("appshell", "MuseScore Studio needs to be restarted for these changes to take effect.");
 
         int restartBtn = int(IInteractive::Button::Apply);
-        auto promise = interactive()->questionAsync(title, question,
-                                                    { interactive()->buttonData(IInteractive::Button::Cancel),
-                                                      IInteractive::ButtonData(restartBtn, muse::trc("appshell", "Restart"), true) },
-                                                    restartBtn);
+        auto promise = interactive()->question(title, question,
+                                               { interactive()->buttonData(IInteractive::Button::Cancel),
+                                                 IInteractive::ButtonData(restartBtn, muse::trc("appshell", "Restart"), true) },
+                                               restartBtn);
 
         promise.onResolve(this, [this](const IInteractive::Result& res) {
             if (!res.isButton(IInteractive::Button::Cancel)) {

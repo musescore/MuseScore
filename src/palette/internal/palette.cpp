@@ -544,7 +544,7 @@ void Palette::showWritingPaletteError(const QString& path) const
 {
     std::string title = muse::trc("palette", "Writing palette file");
     std::string message = muse::qtrc("palette", "Writing palette file\n%1\nfailed.").arg(path).toStdString();
-    interactive()->errorAsync(title, message);
+    interactive()->error(title, message);
 }
 
 Palette::Type Palette::guessType() const
