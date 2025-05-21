@@ -338,27 +338,27 @@ bool UserPaletteController::move(const QModelIndex& sourceParent, int sourceRow,
 }
 
 void UserPaletteController::showHideOrDeleteDialog(const std::string& question,
-                                                   std::function<void(AbstractPaletteController::RemoveAction)> resultHandler)
-const
+                                                   std::function<void(AbstractPaletteController::RemoveAction)> resultHandler) const
 {
     int hideButton = int(IInteractive::Button::CustomButton) + 1;
     int deleteButton = hideButton + 1;
 
-    IInteractive::Result result = interactive()->question(std::string(), question, {
+    auto result = interactive()->questionAsync(std::string(), question, {
         IInteractive::ButtonData(hideButton, muse::trc("palette", "Hide")),
         IInteractive::ButtonData(deleteButton, muse::trc("palette", "Delete permanently")),
         interactive()->buttonData(IInteractive::Button::Cancel)
     });
 
-    RemoveAction action = RemoveAction::NoAction;
+    result.onResolve(this, [deleteButton, hideButton, resultHandler](const IInteractive::Result& res) {
+        RemoveAction action = RemoveAction::NoAction;
+        if (res.isButton(deleteButton)) {
+            action = RemoveAction::DeletePermanently;
+        } else if (res.isButton(hideButton)) {
+            action = RemoveAction::Hide;
+        }
 
-    if (result.button() == deleteButton) {
-        action = RemoveAction::DeletePermanently;
-    } else if (result.button() == hideButton) {
-        action = RemoveAction::Hide;
-    }
-
-    resultHandler(action);
+        resultHandler(action);
+    });
 }
 
 void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, int customCount)

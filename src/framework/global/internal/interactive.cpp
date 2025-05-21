@@ -163,7 +163,7 @@ async::Promise<IInteractive::Result> Interactive::openStandartAsync(const std::s
             bool showAgain = resultMap["showAgain"].toBool();
             (void)resolve(IInteractive::Result(btn, showAgain));
         }).onReject(this, [resolve, reject](int code, const std::string& err) {
-            //! NOTE To simplify writing the handler
+            //! NOTE To simplify writing the handlers
             (void)resolve(IInteractive::Result((int)IInteractive::Button::Cancel, false));
             (void)reject(code, err);
         });
@@ -171,17 +171,8 @@ async::Promise<IInteractive::Result> Interactive::openStandartAsync(const std::s
     });
 }
 
-IInteractive::Result Interactive::question(const std::string& contentTitle, const std::string& text,
-                                           const Buttons& buttons,
-                                           const Button& def,
-                                           const Options& options,
-                                           const std::string& dialogTitle) const
-{
-    return question(contentTitle, Text(text), buttonDataList(buttons), int(def), options, dialogTitle);
-}
-
-IInteractive::Result Interactive::question(const std::string& contentTitle, const Text& text, const ButtonDatas& btns, int defBtn,
-                                           const Options& options, const std::string& dialogTitle) const
+IInteractive::Result Interactive::questionSync(const std::string& contentTitle, const Text& text, const ButtonDatas& btns, int defBtn,
+                                               const Options& options, const std::string& dialogTitle)
 {
     return standardDialogResult(provider()->question(contentTitle, text, btns, defBtn, options, dialogTitle));
 }
