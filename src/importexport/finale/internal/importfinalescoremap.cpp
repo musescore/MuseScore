@@ -77,6 +77,8 @@ void EnigmaXmlImporter::import()
     importParts();
     importBrackets();
     importMeasures();
+    importStaffItems();
+    importEntries();
     importStyles(m_score->style(), SCORE_PARTID); /// @todo do this for all excerpts
 }
 
@@ -539,7 +541,9 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         cr->setTicks(currentEntryActualDuration); // should probably be actual length, like done here
         cr->setParent(segment);
         cr->setTrack(curTrackIdx);
-        cr->setBeamMode(BeamMode::NONE); // this is changed in the next pass to match the beaming.
+        if (cr->durationTypeTicks() < Fraction(1, 4)) {
+            cr->setBeamMode(BeamMode::NONE); // this is changed in the next pass to match the beaming.
+        }
         segment->add(cr);
         if (parentTuplet) {
             parentTuplet->add(cr);
@@ -716,8 +720,10 @@ void EnigmaXmlImporter::importMeasures()
 
         /// @todo key signature
     }
+}
 
-    /// @todo maybe move this to separate function
+void EnigmaXmlImporter::importStaffItems()
+{
     const TimeSigMap& sigmap = *m_score->sigmap();
 
     for (auto is = sigmap.cbegin(); is != sigmap.cend(); ++is) {
@@ -739,8 +745,12 @@ void EnigmaXmlImporter::importMeasures()
             ++is;
         }
     }
+}
 
+void EnigmaXmlImporter::importEntries()
+{
     // Add entries (notes, rests, tuplets)
+    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(SCORE_PARTID);
     std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID); /// @todo eventually SCORE_PARTID may need to be a parameter
     for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxScrollViewItem->staffId), muse::nidx);
@@ -840,7 +850,7 @@ void EnigmaXmlImporter::importMeasures()
                         rTuplet.absDuration = mDur;
                         rTuplet.absEnd = mDur;
                         rTuplet.layer = -1,
-                        tupletMap.insert(tupletMap.begin(), rTuplet);
+                            tupletMap.insert(tupletMap.begin(), rTuplet);
                         size_t lastAddedTupletIndex = 0;
                         std::unordered_map<size_t, ChordRest*> entryMap;
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {

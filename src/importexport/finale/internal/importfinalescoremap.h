@@ -69,6 +69,8 @@ private:
     void mapLayers();
     void importParts();
     void importMeasures();
+    void importStaffItems();
+    void importEntries();
     void importBrackets();
     void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);
 
