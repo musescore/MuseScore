@@ -1394,7 +1394,7 @@ void Harmony::render()
 
         ctx.setX(0);
         for (const TextSegment* ts : m_textList) {
-            double top = ts->pos().y() + ts->boundingRect().top();
+            double top = ts->pos().y() + ts->tightBoundingRect().top();
             if (top < ctx.y()) {
                 ctx.setY(top);
             }
