@@ -105,7 +105,7 @@ void SoundFontRepository::addSoundFont(const SoundFontPath& path)
     std::string title = muse::qtrc("audio", "Do you want to add the SoundFont: %1?")
                         .arg(io::filename(path).toQString()).toStdString();
 
-    interactive()->questionAsync(title, "", {
+    interactive()->question(title, "", {
         IInteractive::Button::No,
         IInteractive::Button::Yes
     })
@@ -127,7 +127,7 @@ void SoundFontRepository::addSoundFont(const SoundFontPath& path)
             std::string body = muse::qtrc("audio", "File path: %1")
                                .arg(newPath.val.toQString()).toStdString();
 
-            interactive()->questionAsync(title, body, {
+            interactive()->question(title, body, {
                 IInteractive::Button::No,
                 IInteractive::Button::Yes
             }, IInteractive::Button::Yes, IInteractive::WithIcon)
@@ -139,9 +139,9 @@ void SoundFontRepository::addSoundFont(const SoundFontPath& path)
 
                 Ret ret = doAddSoundFont(path, newPath.val);
                 if (ret) {
-                    interactive()->infoAsync(muse::trc("audio", "SoundFont installed"),
-                                             muse::trc("audio", "You can assign soundfonts to instruments using the mixer panel."),
-                                             {}, 0, IInteractive::Option::WithIcon);
+                    interactive()->info(muse::trc("audio", "SoundFont installed"),
+                                        muse::trc("audio", "You can assign soundfonts to instruments using the mixer panel."),
+                                        {}, 0, IInteractive::Option::WithIcon);
                 } else {
                     LOGE() << "failed add soundfont, err: " << ret.toString();
                 }

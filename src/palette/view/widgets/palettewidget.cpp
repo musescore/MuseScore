@@ -1139,7 +1139,7 @@ void PaletteWidget::contextMenuEvent(QContextMenuEvent* event)
             std::string question = muse::qtrc("palette", "Are you sure you want to delete palette cell “%1”?")
                                    .arg(cell->name).toStdString();
 
-            auto promise = interactive()->questionAsync(title, question, {
+            auto promise = interactive()->question(title, question, {
                 muse::IInteractive::Button::Yes,
                 muse::IInteractive::Button::No
             }, muse::IInteractive::Button::Yes);

@@ -25,9 +25,10 @@
 #include <QObject>
 #include <QKeySequence>
 
+#include "global/async/asyncable.h"
+
 #include "global/modularity/ioc.h"
 #include "global/iinteractive.h"
-#include "global/async/asyncable.h"
 
 class QKeySequence;
 

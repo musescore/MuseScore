@@ -255,7 +255,7 @@ void PartTreeItem::resetAllFormatting()
     std::string title = muse::trc("layoutpanel", "Are you sure you want to reset all formatting?");
     std::string body = muse::trc("layoutpanel", "This action can not be undone");
 
-    interactive()->questionAsync(title, body, {
+    interactive()->question(title, body, {
         IInteractive::Button::No,
         IInteractive::Button::Yes
     })

@@ -34,25 +34,25 @@ public:
     MOCK_METHOD(Result, questionSync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
                                        const std::string&), (override));
 
-    MOCK_METHOD(async::Promise<Result>, questionAsync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
-                                                        const std::string&), (override));
+    MOCK_METHOD(async::Promise<Result>, question, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                                                   const std::string&), (override));
 
     MOCK_METHOD(ButtonData, buttonData, (Button), (const, override));
 
     MOCK_METHOD(Result, infoSync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
                                    const std::string&), (override));
-    MOCK_METHOD(async::Promise<Result>, infoAsync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
-                                                    const std::string&), (override));
+    MOCK_METHOD(async::Promise<Result>, info, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                                               const std::string&), (override));
 
     MOCK_METHOD(Result, warningSync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
                                       const std::string&), (override));
-    MOCK_METHOD(async::Promise<Result>, warningAsync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
-                                                       const std::string&), (override));
+    MOCK_METHOD(async::Promise<Result>, warning, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                                                  const std::string&), (override));
 
     MOCK_METHOD(Result, errorSync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
                                     const std::string&), (override));
-    MOCK_METHOD(async::Promise<Result>, errorAsync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
-                                                     const std::string&), (override));
+    MOCK_METHOD(async::Promise<Result>, error, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                                                const std::string&), (override));
 
     MOCK_METHOD(Ret, showProgress, (const std::string&, Progress*), (const, override));
 

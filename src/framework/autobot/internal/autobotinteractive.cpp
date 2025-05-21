@@ -42,11 +42,11 @@ IInteractive::Result AutobotInteractive::questionSync(const std::string& content
     return m_real->questionSync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-async::Promise<IInteractive::Result> AutobotInteractive::questionAsync(const std::string& contentTitle, const Text& text,
-                                                                       const ButtonDatas& buttons, int defBtn,
-                                                                       const Options& options, const std::string& dialogTitle)
+async::Promise<IInteractive::Result> AutobotInteractive::question(const std::string& contentTitle, const Text& text,
+                                                                  const ButtonDatas& buttons, int defBtn,
+                                                                  const Options& options, const std::string& dialogTitle)
 {
-    return m_real->questionAsync(contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return m_real->question(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::ButtonData AutobotInteractive::buttonData(Button b) const
@@ -60,11 +60,11 @@ IInteractive::Result AutobotInteractive::infoSync(const std::string& contentTitl
     return m_real->infoSync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-async::Promise<IInteractive::Result> AutobotInteractive::infoAsync(const std::string& contentTitle, const Text& text,
-                                                                   const ButtonDatas& buttons, int defBtn,
-                                                                   const Options& options, const std::string& dialogTitle)
+async::Promise<IInteractive::Result> AutobotInteractive::info(const std::string& contentTitle, const Text& text,
+                                                              const ButtonDatas& buttons, int defBtn,
+                                                              const Options& options, const std::string& dialogTitle)
 {
-    return m_real->infoAsync(contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return m_real->info(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result AutobotInteractive::warningSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
@@ -74,11 +74,11 @@ IInteractive::Result AutobotInteractive::warningSync(const std::string& contentT
     return m_real->warningSync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-async::Promise<IInteractive::Result> AutobotInteractive::warningAsync(const std::string& contentTitle, const Text& text,
-                                                                      const ButtonDatas& buttons, int defBtn,
-                                                                      const Options& options, const std::string& dialogTitle)
+async::Promise<IInteractive::Result> AutobotInteractive::warning(const std::string& contentTitle, const Text& text,
+                                                                 const ButtonDatas& buttons, int defBtn,
+                                                                 const Options& options, const std::string& dialogTitle)
 {
-    return m_real->warningAsync(contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return m_real->warning(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result AutobotInteractive::errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
@@ -88,11 +88,11 @@ IInteractive::Result AutobotInteractive::errorSync(const std::string& contentTit
     return m_real->errorSync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-async::Promise<IInteractive::Result> AutobotInteractive::errorAsync(const std::string& contentTitle, const Text& text,
-                                                                    const ButtonDatas& buttons, int defBtn,
-                                                                    const Options& options, const std::string& dialogTitle)
+async::Promise<IInteractive::Result> AutobotInteractive::error(const std::string& contentTitle, const Text& text,
+                                                               const ButtonDatas& buttons, int defBtn,
+                                                               const Options& options, const std::string& dialogTitle)
 {
-    return m_real->errorAsync(contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return m_real->error(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 Ret AutobotInteractive::showProgress(const std::string& title, Progress* progress) const

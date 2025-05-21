@@ -22,10 +22,10 @@
 #ifndef MU_NOTATION_MSCOREERRORSCONTROLLER_H
 #define MU_NOTATION_MSCOREERRORSCONTROLLER_H
 
-#include "modularity/ioc.h"
-
-#include "global/iinteractive.h"
 #include "global/async/asyncable.h"
+
+#include "modularity/ioc.h"
+#include "global/iinteractive.h"
 #include "inotationconfiguration.h"
 
 namespace mu::notation {

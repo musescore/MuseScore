@@ -124,7 +124,7 @@ void InteractiveTestsModel::question()
 
 void InteractiveTestsModel::questionByUri()
 {
-    auto promise = interactive()->questionAsync(
+    auto promise = interactive()->question(
         "Do you really want to delete the 'xxx' workspace?", "",
         { IInteractive::Button::No, IInteractive::Button::Yes }, IInteractive::Button::NoButton,
         IInteractive::Option::WithIcon);
@@ -157,10 +157,10 @@ void InteractiveTestsModel::customQuestion()
 
 void InteractiveTestsModel::information()
 {
-    auto result = interactive()->infoAsync("Tuplet cannot cross barlines",
-                                           std::string(), {}, 0,
-                                           IInteractive::Option::WithIcon
-                                           | IInteractive::Option::WithDontShowAgainCheckBox)
+    auto result = interactive()->info("Tuplet cannot cross barlines",
+                                      std::string(), {}, 0,
+                                      IInteractive::Option::WithIcon
+                                      | IInteractive::Option::WithDontShowAgainCheckBox)
                   .onResolve(this, [this](const IInteractive::Result& res) {
         LOGD() << interactive()->buttonData(res.standardButton()).text;
     });

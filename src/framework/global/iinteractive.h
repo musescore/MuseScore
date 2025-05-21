@@ -163,48 +163,48 @@ public:
     }
 
     // question
-    virtual async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                                                 int defBtn = int(Button::NoButton), const Options& options = {},
-                                                 const std::string& dialogTitle = "") = 0;
+    virtual async::Promise<Result> question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                            int defBtn = int(Button::NoButton), const Options& options = {},
+                                            const std::string& dialogTitle = "") = 0;
 
-    async::Promise<Result> questionAsync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                         Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    async::Promise<Result> question(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                    Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
     {
-        return questionAsync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+        return question(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     // info
-    virtual async::Promise<Result> infoAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                                             int defBtn = int(Button::NoButton), const Options& options = {},
-                                             const std::string& dialogTitle = "") = 0;
+    virtual async::Promise<Result> info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                        int defBtn = int(Button::NoButton), const Options& options = {},
+                                        const std::string& dialogTitle = "") = 0;
 
-    async::Promise<Result> infoAsync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                     Button defBtn, const Options& options = {}, const std::string& dialogTitle = "")
+    async::Promise<Result> info(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                Button defBtn, const Options& options = {}, const std::string& dialogTitle = "")
     {
-        return infoAsync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+        return info(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     // warning
-    virtual async::Promise<Result> warningAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                                                int defBtn = int(Button::NoButton), const Options& options = {},
-                                                const std::string& dialogTitle = "") = 0;
+    virtual async::Promise<Result> warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                           int defBtn = int(Button::NoButton), const Options& options = {},
+                                           const std::string& dialogTitle = "") = 0;
 
-    async::Promise<Result> warningAsync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                        Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    async::Promise<Result> warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                   Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
     {
-        return infoAsync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+        return warning(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     // error
-    virtual async::Promise<Result> errorAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                                              int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                                              const std::string& dialogTitle = "") = 0;
+    virtual async::Promise<Result> error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                         int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                                         const std::string& dialogTitle = "") = 0;
 
-    async::Promise<Result> errorAsync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                      Button defBtn = Button::NoButton, const Options& options = { WithIcon },
-                                      const std::string& dialogTitle = "")
+    async::Promise<Result> error(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                 Button defBtn = Button::NoButton, const Options& options = { WithIcon },
+                                 const std::string& dialogTitle = "")
     {
-        return infoAsync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+        return error(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     // progress

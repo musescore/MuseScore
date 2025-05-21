@@ -41,7 +41,7 @@ void MessageDialog::doOpen(const QString& contentTitle, const QString& text, con
         IInteractive::Text t;
         t.text = text.toStdString();
         t.detailedText = detailed.toStdString();
-        interactive()->errorAsync(contentTitle.toStdString(), t).onResolve(this, [this](const IInteractive::Result&) {
+        interactive()->error(contentTitle.toStdString(), t).onResolve(this, [this](const IInteractive::Result&) {
             emit accepted();
         });
     }
@@ -53,7 +53,7 @@ void MessageDialog::doOpen(const QString& contentTitle, const QString& text, con
             txt += detailed.toStdString();
         }
 
-        auto promise = interactive()->questionAsync(contentTitle.toStdString(), txt, btns);
+        auto promise = interactive()->question(contentTitle.toStdString(), txt, btns);
         promise.onResolve(this, [this](const IInteractive::Result& res) {
             if (res.isButton(IInteractive::Button::Ok)) {
                 emit accepted();

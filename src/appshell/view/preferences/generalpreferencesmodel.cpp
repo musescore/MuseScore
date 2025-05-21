@@ -69,7 +69,7 @@ void GeneralPreferencesModel::checkUpdateForCurrentLanguage()
         if (res.ret.code() == static_cast<int>(Err::AlreadyUpToDate)) {
             QString msg = muse::qtrc("appshell/preferences", "Your version of %1 is up to date.")
                           .arg(languagesService()->language(languageCode).name);
-            interactive()->infoAsync(msg.toStdString(), std::string());
+            interactive()->info(msg.toStdString(), std::string());
         }
     });
 }
