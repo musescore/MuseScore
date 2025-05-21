@@ -46,7 +46,7 @@ void MuseSamplerActionController::checkLibraryIsDetected()
                  .arg(QString::fromStdString(libVersion)).toStdString();
     }
 
-    interactive()->info(status, std::string());
+    interactive()->infoAsync(status, std::string());
 }
 
 void MuseSamplerActionController::reloadMuseSampler()

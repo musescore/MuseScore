@@ -1410,10 +1410,10 @@ void NotationActionController::insertClef(mu::engraving::ClefType type)
     interaction->insertClef(type);
 }
 
-IInteractive::Result NotationActionController::showErrorMessage(const std::string& message) const
+async::Promise<IInteractive::Result> NotationActionController::showErrorMessage(const std::string& message)
 {
-    return interactive()->info(message,
-                               std::string(), {}, 0, IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+    return interactive()->infoAsync(message, std::string(), {}, 0,
+                                    IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 }
 
 void NotationActionController::addText(TextStyleType type)
@@ -1446,16 +1446,15 @@ void NotationActionController::addText(TextStyleType type)
 
     if (!ret) {
         if (configuration()->needToShowAddTextErrorMessage()) {
-            IInteractive::Result result = showErrorMessage(ret.text());
-            if (!result.showAgain()) {
-                configuration()->setNeedToShowAddTextErrorMessage(false);
-            }
+            showErrorMessage(ret.text()).onResolve(this, [this](const IInteractive::Result& res) {
+                if (!res.showAgain()) {
+                    configuration()->setNeedToShowAddTextErrorMessage(false);
+                }
+            });
         }
-
-        return;
+    } else {
+        interaction->addTextToItem(type, item);
     }
-
-    interaction->addTextToItem(type, item);
 }
 
 void NotationActionController::addImage()
@@ -1495,16 +1494,15 @@ void NotationActionController::addFiguredBass()
     Ret ret = interaction->canAddFiguredBass();
     if (!ret) {
         if (configuration()->needToShowAddFiguredBassErrorMessage()) {
-            IInteractive::Result result = showErrorMessage(ret.text());
-            if (!result.showAgain()) {
-                configuration()->setNeedToShowAddFiguredBassErrorMessage(false);
-            }
+            showErrorMessage(ret.text()).onResolve(this, [this](const IInteractive::Result& res) {
+                if (!res.showAgain()) {
+                    configuration()->setNeedToShowAddFiguredBassErrorMessage(false);
+                }
+            });
         }
-
-        return;
+    } else {
+        interaction->addFiguredBass();
     }
-
-    interaction->addFiguredBass();
 }
 
 void NotationActionController::addGuitarBend(GuitarBendType bendType)
@@ -1519,15 +1517,15 @@ void NotationActionController::addGuitarBend(GuitarBendType bendType)
     Ret ret = interaction->canAddGuitarBend();
     if (!ret) {
         if (configuration()->needToShowAddGuitarBendErrorMessage()) {
-            IInteractive::Result result = showErrorMessage(ret.text());
-            if (!result.showAgain()) {
-                configuration()->setNeedToShowAddGuitarBendErrorMessage(false);
-            }
+            showErrorMessage(ret.text()).onResolve(this, [this](const IInteractive::Result& res) {
+                if (!res.showAgain()) {
+                    configuration()->setNeedToShowAddGuitarBendErrorMessage(false);
+                }
+            });
         }
-        return;
+    } else {
+        interaction->addGuitarBend(bendType);
     }
-
-    interaction->addGuitarBend(bendType);
 }
 
 void NotationActionController::selectAllSimilarElements()
@@ -2306,7 +2304,7 @@ void NotationActionController::checkForScoreCorruptions()
     if (ret) {
         std::string title = muse::mtrc("project", "File “%1” seems not corrupted").arg(fileName).toStdString();
         std::string body = muse::trc("project", "This file does not seem to contain errors.");
-        interactive()->info(title, body);
+        interactive()->infoAsync(title, body);
     } else {
         std::string title = muse::mtrc("project", "File “%1” is corrupted").arg(fileName).toStdString();
         std::string body = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction. "

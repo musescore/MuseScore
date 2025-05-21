@@ -139,9 +139,9 @@ void SoundFontRepository::addSoundFont(const SoundFontPath& path)
 
                 Ret ret = doAddSoundFont(path, newPath.val);
                 if (ret) {
-                    interactive()->info(muse::trc("audio", "SoundFont installed"),
-                                        muse::trc("audio", "You can assign soundfonts to instruments using the mixer panel."),
-                                        {}, 0, IInteractive::Option::WithIcon);
+                    interactive()->infoAsync(muse::trc("audio", "SoundFont installed"),
+                                             muse::trc("audio", "You can assign soundfonts to instruments using the mixer panel."),
+                                             {}, 0, IInteractive::Option::WithIcon);
                 } else {
                     LOGE() << "failed add soundfont, err: " << ret.toString();
                 }

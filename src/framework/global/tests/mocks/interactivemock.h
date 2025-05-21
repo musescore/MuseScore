@@ -39,10 +39,10 @@ public:
 
     MOCK_METHOD(ButtonData, buttonData, (Button), (const, override));
 
-    MOCK_METHOD(Result, info, (const std::string&, const std::string&, const Buttons&, int, const Options&,
-                               const std::string&), (const, override));
-    MOCK_METHOD(Result, info, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
-                               const std::string&), (const, override));
+    MOCK_METHOD(Result, infoSync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                                   const std::string&), (override));
+    MOCK_METHOD(async::Promise<Result>, infoAsync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                                                    const std::string&), (override));
 
     MOCK_METHOD(Result, warning, (const std::string&, const std::string&, const Buttons&, const Button&, const Options&,
                                   const std::string&), (const, override));

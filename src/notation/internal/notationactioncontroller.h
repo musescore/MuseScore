@@ -119,7 +119,7 @@ private:
 
     void insertClef(mu::engraving::ClefType type);
 
-    muse::IInteractive::Result showErrorMessage(const std::string& message) const;
+    muse::async::Promise<muse::IInteractive::Result> showErrorMessage(const std::string& message);
 
     bool isElementsSelected(const std::vector<ElementType>& elementsTypes) const;
 

@@ -184,18 +184,17 @@ async::Promise<IInteractive::Result> Interactive::questionAsync(const std::strin
     return openStandartAsync("QUESTION", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-IInteractive::Result Interactive::info(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                       int defBtn,
-                                       const Options& options,
-                                       const std::string& dialogTitle) const
-{
-    return standardDialogResult(provider()->info(contentTitle, text, buttonDataList(buttons), defBtn, options, dialogTitle));
-}
-
-IInteractive::Result Interactive::info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
-                                       const Options& options, const std::string& dialogTitle) const
+IInteractive::Result Interactive::infoSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
+                                           const Options& options, const std::string& dialogTitle)
 {
     return standardDialogResult(provider()->info(contentTitle, text, buttons, defBtn, options, dialogTitle));
+}
+
+async::Promise<IInteractive::Result> Interactive::infoAsync(const std::string& contentTitle, const Text& text,
+                                                            const ButtonDatas& buttons, int defBtn,
+                                                            const Options& options, const std::string& dialogTitle)
+{
+    return openStandartAsync("INFO", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 Interactive::Result Interactive::warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons,

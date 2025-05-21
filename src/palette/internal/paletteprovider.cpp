@@ -101,7 +101,7 @@ void PaletteElementEditor::onElementAdded(const ElementPtr element)
 
     if (!_paletteIndex.isValid()
         || !_paletteIndex.data(PaletteTreeModel::VisibleRole).toBool()) {
-        interactive()->info("", muse::trc("palette", "The palette was hidden or changed"));
+        interactive()->infoAsync("", muse::trc("palette", "The palette was hidden or changed"));
         return;
     }
 
