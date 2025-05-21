@@ -98,6 +98,17 @@ public:
     std::vector<Note *> playbackNotes() const override;
     void clearPlaybackNotes() override;
     void addPlaybackNote(Note *note) override;
+    void addGlissandoNote(mu::engraving::Note *note, int ticks, int duration_ticks) override;
+    void addGlissandoEndNote(mu::engraving::Note *note) override;
+    int glissandoNoteTicks() const override;
+    int glissandoNoteDurationticks() const override;
+    int glissandoCurrticks() const override;
+    void glissandoEndNotesUpdate() override;
+    muse::async::Notification glissandoEndNotesChanged() override;
+    mu::engraving::Note *glissandoNote() const override;
+    std::vector<mu::engraving::Note *> glissandoEndNotes() const override;
+    void glissandoTick(int ticks) override;
+    muse::async::Notification glissandoTickChanged() override;
     void notifyClefKeySigsKeysChanged() override;
     muse::async::Notification clefKeySigsKeysChanged() const override;
     void clearClefKeySigsKeys() override;
@@ -531,6 +542,15 @@ private:
 
     muse::async::Notification m_playbackNotesChanged;
     std::vector<Note *> m_playback_notes;
+    
+    Note *glissando_note = nullptr;
+    int glissando_ticks = 0;
+    int glissando_duration_ticks = 0;
+    std::vector<Note *> glissando_endnotes;
+    int glissando_curr_ticks = 0;
+    muse::async::Notification m_glissandoEndNotesChanged;
+    muse::async::Notification m_glissandoTickChanged;
+
     muse::async::Notification m_clefKeySigsKeysChanged;
     std::set<uint> m_clefKeySigsKeys;
     bool m_isplaying = false;

@@ -94,6 +94,40 @@ public:
     virtual void addPlaybackNote(mu::engraving::Note *) {
 
     }
+    virtual void addGlissandoNote(mu::engraving::Note *, int, int) {
+
+    }
+    virtual void addGlissandoEndNote(mu::engraving::Note *) {
+
+    }
+    virtual int glissandoNoteTicks() const {
+        return 0;
+    }
+    virtual int glissandoNoteDurationticks() const {
+        return 0;
+    }
+    virtual int glissandoCurrticks() const {
+        return 0;
+    }
+    virtual void glissandoEndNotesUpdate() {
+
+    }
+    virtual muse::async::Notification glissandoEndNotesChanged() {
+        return muse::async::Notification();
+    }
+    virtual mu::engraving::Note *glissandoNote() const {
+        return nullptr;
+    }
+    virtual std::vector<mu::engraving::Note *> glissandoEndNotes() const {
+        return {};
+    }
+    virtual void glissandoTick(int) {
+        
+    }
+    virtual muse::async::Notification glissandoTickChanged() {
+        return muse::async::Notification();
+    }
+    
     virtual void notifyClefKeySigsKeysChanged() {
         
     }
