@@ -225,20 +225,20 @@ void WorkspaceListModel::resetWorkspace(int workspaceIndex)
     std::string question = muse::trc("workspace",
                                      "This action will reset your workspace to its factory default layout and cannot be undone. Do you want to continue?");
 
-    IInteractive::Button btn = interactive()->warning(muse::trc("workspace", "Resetting workspaces"), question, {
+    auto promise = interactive()->warningAsync(muse::trc("workspace", "Resetting workspaces"), question, {
         IInteractive::ButtonData(resetButton, muse::trc("workspace", "Reset workspace"), true, false, IInteractive::ButtonRole::AcceptRole),
         interactive()->buttonData(IInteractive::Button::Cancel)
-    }).standardButton();
+    });
 
-    if (static_cast<int>(btn) != resetButton) {
-        return;
-    }
+    promise.onResolve(this, [this, resetButton, workspaceIndex](const IInteractive::Result& res) {
+        if (res.isButton(resetButton)) {
+            IWorkspacePtr workspace = m_workspaces.at(workspaceIndex);
+            workspace->reset();
 
-    IWorkspacePtr workspace = m_workspaces.at(workspaceIndex);
-    workspace->reset();
-
-    QModelIndex modelIndex = index(workspaceIndex);
-    emit dataChanged(modelIndex, modelIndex);
+            QModelIndex modelIndex = index(workspaceIndex);
+            emit dataChanged(modelIndex, modelIndex);
+        }
+    });
 }
 
 bool WorkspaceListModel::renameWorkspace(int workspaceIndex, const QString& newName)

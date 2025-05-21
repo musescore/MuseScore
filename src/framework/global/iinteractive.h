@@ -112,6 +112,7 @@ public:
     struct Text {
         std::string text;
         TextFormat format = TextFormat::Auto;
+        std::string detailedText;
 
         Text() = default;
         Text(const char* t)
@@ -169,7 +170,7 @@ public:
     async::Promise<Result> questionAsync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
                                          Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
     {
-        return questionAsync(contentTitle, text, buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+        return questionAsync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     // info
@@ -177,24 +178,22 @@ public:
                                              int defBtn = int(Button::NoButton), const Options& options = {},
                                              const std::string& dialogTitle = "") = 0;
 
-    async::Promise<Result> infoAsync(const std::string& contentTitle, const Text& text, const Buttons& buttons,
+    async::Promise<Result> infoAsync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
                                      Button defBtn, const Options& options = {}, const std::string& dialogTitle = "")
     {
-        return infoAsync(contentTitle, text, buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+        return infoAsync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     // warning
-    virtual Result warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
-                           const Button& def = Button::NoButton, const Options& options = { WithIcon },
-                           const std::string& dialogTitle = "") const = 0;
+    virtual async::Promise<Result> warningAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                                int defBtn = int(Button::NoButton), const Options& options = {},
+                                                const std::string& dialogTitle = "") = 0;
 
-    virtual Result warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                           int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                           const std::string& dialogTitle = "") const = 0;
-
-    virtual Result warning(const std::string& contentTitle, const Text& text, const std::string& detailedText,
-                           const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                           const std::string& dialogTitle = "") const = 0;
+    async::Promise<Result> warningAsync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                        Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return infoAsync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
 
     // error
     virtual Result error(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
@@ -274,6 +273,15 @@ public:
 
     Result infoSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
                     const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return infoSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
+
+    virtual Result warningSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                               int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") = 0;
+
+    Result warningSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                       const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
     {
         return infoSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }

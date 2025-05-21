@@ -245,17 +245,17 @@ void EditShortcutModel::trySave()
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
 
-    IInteractive::Button btn = interactive()->warning(muse::trc("shortcuts", "Reassign shortcut"), text, {
+    auto promise = interactive()->warningAsync(muse::trc("shortcuts", "Reassign shortcut"), text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         interactive()->buttonData(IInteractive::Button::Ok)
-    }, (int)IInteractive::Button::Ok).standardButton();
+    }, (int)IInteractive::Button::Ok);
 
-    if (btn != IInteractive::Button::Ok) {
-        return;
-    }
-
-    int conflictShortcutIndex = m_allShortcuts.indexOf(m_conflictShortcut);
-    emit applyNewSequenceRequested(m_originSequence, conflictShortcutIndex);
+    promise.onResolve(this, [this](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Ok)) {
+            int conflictShortcutIndex = m_allShortcuts.indexOf(m_conflictShortcut);
+            emit applyNewSequenceRequested(m_originSequence, conflictShortcutIndex);
+        }
+    });
 }
 
 QString EditShortcutModel::newSequence() const

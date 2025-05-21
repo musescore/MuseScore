@@ -1846,13 +1846,18 @@ void NotationActionController::loadStyle()
                                  f.errorString());
             return;
         }
-        if (!currentNotationStyle()->loadStyle(path.toQString(), false) && interactive()->warning(
+        if (!currentNotationStyle()->loadStyle(path.toQString(), false)) {
+            auto promise = interactive()->warningAsync(
                 muse::trc("notation",
                           "Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly."),
                 muse::trc("notation", "Click OK to load anyway."), { IInteractive::Button::Ok, IInteractive::Button::Cancel },
-                IInteractive::Button::Ok).standardButton()
-            == IInteractive::Button::Ok) {
-            currentNotationStyle()->loadStyle(path.toQString(), true);
+                IInteractive::Button::Ok);
+
+            promise.onResolve(this, [this, path](const IInteractive::Result& res) {
+                if (res.isButton(IInteractive::Button::Ok)) {
+                    currentNotationStyle()->loadStyle(path.toQString(), true);
+                }
+            });
         }
     }
 }
@@ -2307,10 +2312,12 @@ void NotationActionController::checkForScoreCorruptions()
         interactive()->infoAsync(title, body);
     } else {
         std::string title = muse::mtrc("project", "File “%1” is corrupted").arg(fileName).toStdString();
-        std::string body = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction. "
-                                                "Please fix those at the earliest, to prevent crashes and further corruptions.");
+        IInteractive::Text text;
+        text.text = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction. "
+                                         "Please fix those at the earliest, to prevent crashes and further corruptions.");
+        text.detailedText = ret.text();
 
-        interactive()->warning(title, body, ret.text());
+        interactive()->warningAsync(title, text);
     }
 }
 

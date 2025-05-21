@@ -327,33 +327,35 @@ void ApplicationActionController::revertToFactorySettings()
     cancelBtn.accent = true;
 
     int revertBtn = int(IInteractive::Button::Apply);
-    IInteractive::Result result = interactive()->warning(title, question,
-                                                         { cancelBtn,
-                                                           IInteractive::ButtonData(revertBtn, muse::trc("appshell", "Revert")) },
-                                                         cancelBtn.btn, { muse::IInteractive::Option::WithIcon },
-                                                         muse::trc("appshell", "Revert to factory settings"));
-
-    if (result.standardButton() == IInteractive::Button::Cancel) {
-        return;
-    }
-
-    static constexpr bool KEEP_DEFAULT_SETTINGS = false;
-    static constexpr bool NOTIFY_ABOUT_CHANGES = false;
-    static constexpr bool NOTIFY_OTHER_INSTANCES = false;
-    configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES, NOTIFY_OTHER_INSTANCES);
-
-    title = muse::trc("appshell", "Would you like to restart MuseScore Studio now?");
-    question = muse::trc("appshell", "MuseScore Studio needs to be restarted for these changes to take effect.");
-
-    int restartBtn = int(IInteractive::Button::Apply);
-    auto promise = interactive()->questionAsync(title, question,
-                                                { interactive()->buttonData(IInteractive::Button::Cancel),
-                                                  IInteractive::ButtonData(restartBtn, muse::trc("appshell", "Restart"), true) },
-                                                restartBtn);
+    auto promise = interactive()->warningAsync(title, question,
+                                               { cancelBtn,
+                                                 IInteractive::ButtonData(revertBtn, muse::trc("appshell", "Revert")) },
+                                               cancelBtn.btn, { muse::IInteractive::Option::WithIcon },
+                                               muse::trc("appshell", "Revert to factory settings"));
 
     promise.onResolve(this, [this](const IInteractive::Result& res) {
-        if (!res.isButton(IInteractive::Button::Cancel)) {
-            restart();
+        if (res.isButton(IInteractive::Button::Cancel)) {
+            return;
         }
+
+        static constexpr bool KEEP_DEFAULT_SETTINGS = false;
+        static constexpr bool NOTIFY_ABOUT_CHANGES = false;
+        static constexpr bool NOTIFY_OTHER_INSTANCES = false;
+        configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES, NOTIFY_OTHER_INSTANCES);
+
+        std::string title = muse::trc("appshell", "Would you like to restart MuseScore Studio now?");
+        std::string question = muse::trc("appshell", "MuseScore Studio needs to be restarted for these changes to take effect.");
+
+        int restartBtn = int(IInteractive::Button::Apply);
+        auto promise = interactive()->questionAsync(title, question,
+                                                    { interactive()->buttonData(IInteractive::Button::Cancel),
+                                                      IInteractive::ButtonData(restartBtn, muse::trc("appshell", "Restart"), true) },
+                                                    restartBtn);
+
+        promise.onResolve(this, [this](const IInteractive::Result& res) {
+            if (!res.isButton(IInteractive::Button::Cancel)) {
+                restart();
+            }
+        });
     });
 }
