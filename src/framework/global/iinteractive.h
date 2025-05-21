@@ -147,20 +147,21 @@ public:
     };
     DECLARE_FLAGS(Options, Option)
 
-    virtual Result question(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                            const Button& def = Button::NoButton, const Options& options = {},
-                            const std::string& dialogTitle = "") const = 0;
+    virtual Result questionSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") = 0;
 
-    virtual Result question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                            int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const = 0;
+    Result questionSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                        const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return questionSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
 
     virtual async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
                                                  int defBtn = int(Button::NoButton), const Options& options = {},
                                                  const std::string& dialogTitle = "") = 0;
 
     async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const Buttons& buttons,
-                                         Button defBtn, const Options& options = {},
-                                         const std::string& dialogTitle = "")
+                                         Button defBtn, const Options& options = {}, const std::string& dialogTitle = "")
     {
         return questionAsync(contentTitle, text, buttons, (int)defBtn, options, dialogTitle);
     }

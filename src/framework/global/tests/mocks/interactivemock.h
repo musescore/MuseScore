@@ -30,10 +30,9 @@ namespace muse {
 class InteractiveMock : public IInteractive
 {
 public:
-    MOCK_METHOD(Result, question, (const std::string&, const std::string&, const Buttons&, const Button&, const Options&,
-                                   const std::string&), (const, override));
-    MOCK_METHOD(Result, question, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
-                                   const std::string&), (const, override));
+
+    MOCK_METHOD(Result, questionSync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
+                                       const std::string&), (override));
 
     MOCK_METHOD(async::Promise<Result>, questionAsync, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
                                                         const std::string&), (override));

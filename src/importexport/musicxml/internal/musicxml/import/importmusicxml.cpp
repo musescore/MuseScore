@@ -70,11 +70,11 @@ static IInteractive::Button musicXmlImportErrorDialog(const String& text, const 
     msg += '\n';
     msg += detailedText.toStdString();
 
-    IInteractive::Result ret = interactive->question(text.toStdString(),
-                                                     msg,
-                                                     { IInteractive::Button::Yes, IInteractive::Button::No },
-                                                     IInteractive::Button::No
-                                                     );
+    IInteractive::Result ret = interactive->questionSync(text.toStdString(),
+                                                         msg,
+                                                         { IInteractive::Button::Yes, IInteractive::Button::No },
+                                                         IInteractive::Button::No
+                                                         );
 
     return ret.standardButton();
 }

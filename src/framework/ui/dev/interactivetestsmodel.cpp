@@ -109,7 +109,7 @@ QString InteractiveTestsModel::currentUri() const
 
 void InteractiveTestsModel::question()
 {
-    IInteractive::Result result = interactive()->question(
+    IInteractive::Result result = interactive()->questionSync(
         "Do you really want to delete the 'xxx' workspace?", "",
         { interactive()->buttonData(IInteractive::Button::No),
           interactive()->buttonData(IInteractive::Button::Yes) }, 0,
@@ -143,7 +143,7 @@ void InteractiveTestsModel::questionByUri()
 void InteractiveTestsModel::customQuestion()
 {
     int maybeBtn = int(IInteractive::Button::CustomButton) + 1;
-    IInteractive::Result result = interactive()->question("Test", "It works?", {
+    IInteractive::Result result = interactive()->questionSync("Test", "It works?", {
         IInteractive::ButtonData(maybeBtn, "Maybe"),
         interactive()->buttonData(IInteractive::Button::No)
     });

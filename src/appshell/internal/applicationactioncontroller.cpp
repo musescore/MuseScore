@@ -178,10 +178,7 @@ bool ApplicationActionController::onDropEvent(QDropEvent* event)
         case DragTarget::SoundFont: {
             muse::io::path_t filePath = url.toLocalFile();
             async::Async::call(this, [this, filePath]() {
-                    Ret ret = soundFontRepository()->addSoundFont(filePath);
-                    if (!ret) {
-                        LOGE() << ret.toString();
-                    }
+                    soundFontRepository()->addSoundFont(filePath);
                 });
         } break;
         case DragTarget::Extension: {
@@ -349,14 +346,14 @@ void ApplicationActionController::revertToFactorySettings()
     question = muse::trc("appshell", "MuseScore Studio needs to be restarted for these changes to take effect.");
 
     int restartBtn = int(IInteractive::Button::Apply);
-    result = interactive()->question(title, question,
-                                     { interactive()->buttonData(IInteractive::Button::Cancel),
-                                       IInteractive::ButtonData(restartBtn, muse::trc("appshell", "Restart"), true) },
-                                     restartBtn);
+    auto promise = interactive()->questionAsync(title, question,
+                                                { interactive()->buttonData(IInteractive::Button::Cancel),
+                                                  IInteractive::ButtonData(restartBtn, muse::trc("appshell", "Restart"), true) },
+                                                restartBtn);
 
-    if (result.standardButton() == IInteractive::Button::Cancel) {
-        return;
-    }
-
-    restart();
+    promise.onResolve(this, [this](const IInteractive::Result& res) {
+        if (!res.isButton(IInteractive::Button::Cancel)) {
+            restart();
+        }
+    });
 }

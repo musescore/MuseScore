@@ -100,50 +100,63 @@ Notification SoundFontRepository::soundFontsChanged() const
     return m_soundFontsChanged;
 }
 
-Ret SoundFontRepository::addSoundFont(const SoundFontPath& path)
+void SoundFontRepository::addSoundFont(const SoundFontPath& path)
 {
     std::string title = muse::qtrc("audio", "Do you want to add the SoundFont: %1?")
                         .arg(io::filename(path).toQString()).toStdString();
 
-    IInteractive::Button btn = interactive()->question(title, "", {
+    interactive()->questionAsync(title, "", {
         IInteractive::Button::No,
         IInteractive::Button::Yes
-    }).standardButton();
-
-    if (btn == IInteractive::Button::No) {
-        return muse::make_ret(Ret::Code::Cancel);
-    }
-
-    RetVal<SoundFontPath> newPath = resolveInstallationPath(path);
-    if (!newPath.ret) {
-        return newPath.ret;
-    }
-
-    if (fileSystem()->exists(newPath.val)) {
-        title = muse::trc("audio", "File already exists. Do you want to overwrite it?");
-
-        std::string body = muse::qtrc("audio", "File path: %1")
-                           .arg(newPath.val.toQString()).toStdString();
-
-        btn = interactive()->question(title, body, {
-            IInteractive::Button::No,
-            IInteractive::Button::Yes
-        }, IInteractive::Button::Yes, IInteractive::WithIcon).standardButton();
-
-        if (btn == IInteractive::Button::No) {
-            return muse::make_ret(Ret::Code::Cancel);
+    })
+    .onResolve(this, [this, path](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::No)) {
+            LOGI() << "soundfont addition cancelled";
+            return;
         }
-    }
 
-    Ret ret = fileSystem()->copy(path, newPath.val, true /* replace */);
+        RetVal<SoundFontPath> newPath = resolveInstallationPath(path);
+        if (!newPath.ret) {
+            LOGE() << "failed resolve path, err: " << newPath.ret.toString();
+            return;
+        }
+
+        if (fileSystem()->exists(newPath.val)) {
+            std::string title = muse::trc("audio", "File already exists. Do you want to overwrite it?");
+
+            std::string body = muse::qtrc("audio", "File path: %1")
+                               .arg(newPath.val.toQString()).toStdString();
+
+            interactive()->questionAsync(title, body, {
+                IInteractive::Button::No,
+                IInteractive::Button::Yes
+            }, IInteractive::Button::Yes, IInteractive::WithIcon)
+            .onResolve(this, [this, path, newPath](const IInteractive::Result& res) {
+                if (res.isButton(IInteractive::Button::No)) {
+                    LOGI() << "soundfont replacement cancelled";
+                    return;
+                }
+
+                Ret ret = doAddSoundFont(path, newPath.val);
+                if (ret) {
+                    interactive()->info(muse::trc("audio", "SoundFont installed"),
+                                        muse::trc("audio", "You can assign soundfonts to instruments using the mixer panel."),
+                                        {}, 0, IInteractive::Option::WithIcon);
+                } else {
+                    LOGE() << "failed add soundfont, err: " << ret.toString();
+                }
+            });
+        }
+    });
+}
+
+Ret SoundFontRepository::doAddSoundFont(const synth::SoundFontPath& src, const SoundFontPath& dst)
+{
+    Ret ret = fileSystem()->copy(src, dst, true /* replace */);
 
     if (ret) {
-        loadSoundFont(newPath.val);
+        loadSoundFont(dst);
         m_soundFontsChanged.notify();
-
-        interactive()->info(muse::trc("audio", "SoundFont installed"),
-                            muse::trc("audio", "You can assign soundfonts to instruments using the mixer panel."),
-                            {}, 0, IInteractive::Option::WithIcon);
     }
 
     return ret;

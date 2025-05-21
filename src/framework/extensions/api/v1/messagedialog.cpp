@@ -49,13 +49,14 @@ void MessageDialog::doOpen(const QString& contentTitle, const QString& text, con
             txt += detailed.toStdString();
         }
 
-        IInteractive::Result res = interactive()->question(contentTitle.toStdString(), txt, btns);
-
-        if (res.standardButton() == IInteractive::Button::Ok) {
-            emit accepted();
-        } else {
-            emit rejected();
-        }
+        auto promise = interactive()->questionAsync(contentTitle.toStdString(), txt, btns);
+        promise.onResolve(this, [this](const IInteractive::Result& res) {
+            if (res.isButton(IInteractive::Button::Ok)) {
+                emit accepted();
+            } else {
+                emit rejected();
+            }
+        });
     }
 }
 

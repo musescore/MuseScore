@@ -36,17 +36,10 @@ std::shared_ptr<IInteractive> AutobotInteractive::realInteractive() const
     return m_real;
 }
 
-IInteractive::Result AutobotInteractive::question(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                                  const Button& def, const Options& options,
-                                                  const std::string& dialogTitle) const
+IInteractive::Result AutobotInteractive::questionSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                                      int defBtn, const Options& options, const std::string& dialogTitle)
 {
-    return m_real->question(contentTitle, text, buttons, def, options, dialogTitle);
-}
-
-IInteractive::Result AutobotInteractive::question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                                                  int defBtn, const Options& options, const std::string& dialogTitle) const
-{
-    return m_real->question(contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return m_real->questionSync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 async::Promise<IInteractive::Result> AutobotInteractive::questionAsync(const std::string& contentTitle, const Text& text,
