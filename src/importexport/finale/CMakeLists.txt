@@ -37,6 +37,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/finaletypesconv.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importenigmaxml.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importenigmaxml.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/importfinaleentries.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalelogger.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalelogger.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinalescoremap.cpp

@@ -30,6 +30,8 @@
 
 #include "engraving/dom/noteval.h"
 
+#include "importfinalelogger.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -987,6 +989,26 @@ Fraction FinaleTConv::musxFractionToFraction(musx::util::Fraction fraction)
 {
     // unlike with time signatures, remainder does not need to be accounted for
     return Fraction(fraction.numerator(), fraction.denominator());
+}
+
+Fraction FinaleTConv::eduToFraction(Edu edu)
+{
+	return musxFractionToFraction(musx::util::Fraction::fromEdu(edu));
+}
+
+Fraction FinaleTConv::simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger)
+{
+    auto [count, noteType] = simpleMusxTimeSig;
+    if (count.remainder()) {
+        if ((Edu(noteType) % count.denominator()) == 0) {
+            noteType = musx::dom::NoteType(Edu(noteType) / count.denominator());
+            count *= count.denominator();
+        } else {
+            logger->logWarning(String(u"Time signature has fractional portion that could not be reduced."));
+            return Fraction(4, 4);
+        }
+    }
+    return Fraction(count.quotient(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
 }
 
 }
