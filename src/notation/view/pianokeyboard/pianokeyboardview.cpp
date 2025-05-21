@@ -85,6 +85,13 @@ void PianoKeyboardView::init()
         update();
     });
 
+    // m_controller->glissandoEndNotesChanged().onNotify(this, [this]() {
+        
+    // });
+    // m_controller->glissandoTickChanged().onNotify(this, [this]() {
+        
+    // });
+
     m_controller->keyStatesChanged().onNotify(this, [this]() {
         // LOGALEX() << "m_controller->keyStatesChanged().onNotify call back";
         updateKeyStateColors();
@@ -389,6 +396,11 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
             }
         }
 
+        if (m_controller->glissandoKeyState(key) != KeyState::None) {
+            fillColor = m_whiteKeyStateColors[m_controller->glissandoKeyState(key)];
+            m_check_rects.insert({key, rect});
+        }
+
         painter->fillPath(path, fillColor);
 
         if (key % 12 == 0) {
@@ -503,6 +515,12 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
                 bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[m_controller->playbackKeyState(key)]);
                 m_check_rects.insert({key, rect});
             }
+        }
+
+        if (m_controller->glissandoKeyState(key) != KeyState::None) {
+            topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[m_controller->glissandoKeyState(key)]);
+            bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[m_controller->glissandoKeyState(key)]);
+            m_check_rects.insert({key, rect});
         }
 
         painter->translate(rect.topLeft());
