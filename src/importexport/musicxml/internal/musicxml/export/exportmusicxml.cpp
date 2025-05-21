@@ -3283,7 +3283,6 @@ static String symIdToTechn(const SymId sid)
     case SymId::brassSmear:
         return u"smear";
     case SymId::brassMuteOpen:
-        // return u"open-string";
         return u"open";
     case SymId::brassMuteHalfClosed:
         return u"half-muted";
@@ -3324,6 +3323,16 @@ static String symIdToTechn(const SymId sid)
         return u"pluck lift";
     case SymId::handbellsSwing:
         return u"swing";
+    case SymId::guitarClosePedal:
+    case SymId::pictOpenRimShot:
+        return String(u"stopped smufl=\"%1\"").arg(String::fromAscii(SymNames::nameForSymId(sid).ascii()));
+    case SymId::guitarHalfOpenPedal:
+    case SymId::pictHalfOpen1:
+    case SymId::pictHalfOpen2:
+        return String(u"half-muted smufl=\"%1\"").arg(String::fromAscii(SymNames::nameForSymId(sid).ascii()));
+    case SymId::guitarOpenPedal:
+    case SymId::pictOpen:
+        return String(u"open smufl=\"%1\"").arg(String::fromAscii(SymNames::nameForSymId(sid).ascii()));
     default:
         return String(); // nothing
     }
