@@ -4882,8 +4882,6 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
         }
     }
 
-    apply();
-
     if (pastedElement == nullptr) {
         pastedElement = selection()->element();
     }
@@ -4891,6 +4889,8 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     if (pastedElement) {
         selectAndStartEditIfNeeded(pastedElement);
     }
+
+    apply();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
 }
