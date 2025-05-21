@@ -92,6 +92,7 @@ private:
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
     const std::shared_ptr<FinaleLogger> m_logger;
+    const musx::dom::Cmper m_currentMusxPartId = musx::dom::SCORE_PARTID; // eventually this may be changed per excerpt/linked part
 
     std::unordered_map<QString, std::vector<musx::dom::InstCmper>> m_part2Inst;
     std::unordered_map<musx::dom::InstCmper, QString> m_inst2Part;

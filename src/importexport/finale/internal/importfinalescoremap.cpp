@@ -79,7 +79,7 @@ void EnigmaXmlImporter::import()
     importMeasures();
     importStaffItems();
     importEntries();
-    importStyles(m_score->style(), SCORE_PARTID); /// @todo do this for all excerpts
+    importStyles(m_score->style(), m_currentMusxPartId);
 }
 
 void EnigmaXmlImporter::mapLayers()
@@ -91,7 +91,7 @@ void EnigmaXmlImporter::mapLayers()
     m_layerForceStems.clear();
     std::unordered_map<track_idx_t, LayerIndex> reverseMap;
 
-    auto layerAttrs = m_doc->getOthers()->getArray<others::LayerAttributes>(SCORE_PARTID);
+    auto layerAttrs = m_doc->getOthers()->getArray<others::LayerAttributes>(m_currentMusxPartId);
 
     const auto mapLayer = [&](const std::shared_ptr<others::LayerAttributes>& layerAttr) {
         std::array<track_idx_t, 4> tryOrder;
@@ -195,9 +195,9 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     s->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
 
     // calculate whether to use small staff size from first system
-    if (const auto& firstSystem = musxStaff->getDocument()->getOthers()->get<others::StaffSystem>(SCORE_PARTID, 1)) { /// @todo eventually we do it differently for excerpts
+    if (const auto& firstSystem = musxStaff->getDocument()->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, 1)) {
         if (firstSystem->hasStaffScaling) {
-            if (auto staffSize = musxStaff->getDocument()->getDetails()->get<details::StaffSize>(SCORE_PARTID, 1, musxStaff->getCmper())) {
+            if (auto staffSize = musxStaff->getDocument()->getDetails()->get<details::StaffSize>(m_currentMusxPartId, 1, musxStaff->getCmper())) {
                 if (staffSize->staffPercent < 100) {
                     s->staffType(eventTick)->setSmall(true);
                 }
@@ -697,7 +697,7 @@ void EnigmaXmlImporter::importMeasures()
     m_score->sigmap()->clear();
     m_score->sigmap()->add(0, currTimeSig);
 
-    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(SCORE_PARTID);
+    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
         Fraction tick{ 0, 1 };
         MeasureBase* lastMeasure = m_score->measures()->last();
@@ -724,6 +724,18 @@ void EnigmaXmlImporter::importMeasures()
 
 void EnigmaXmlImporter::importStaffItems()
 {
+    /*
+    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
+        std::optional<Fraction> currTimeSig;
+        for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
+            auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
+            std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(s);
+
+        }
+    }
+*/
     const TimeSigMap& sigmap = *m_score->sigmap();
 
     for (auto is = sigmap.cbegin(); is != sigmap.cend(); ++is) {
@@ -750,8 +762,8 @@ void EnigmaXmlImporter::importStaffItems()
 void EnigmaXmlImporter::importEntries()
 {
     // Add entries (notes, rests, tuplets)
-    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(SCORE_PARTID);
-    std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID); /// @todo eventually SCORE_PARTID may need to be a parameter
+    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
+    std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxScrollViewItem->staffId), muse::nidx);
         IF_ASSERT_FAILED (curStaffIdx != muse::nidx) {
@@ -769,7 +781,7 @@ void EnigmaXmlImporter::importEntries()
             logger()->logWarning(String(u"Add entries: Initial tick does not exist."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         }
-        ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, SCORE_PARTID, musxScrollViewItem->staffId); /// @todo eventually SCORE_PARTID may need to be a parameter
+        ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId);
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
             Measure* measure = m_score->tick2measure(currTick);
             if (!measure) {
@@ -785,7 +797,7 @@ void EnigmaXmlImporter::importEntries()
             // However, it is possible to defeat this requirement using plugins. That said, doing so produces erratic results, so I'm not sure we should support it.
             // For now, only check the start of the measure.
             bool transposedClefOverride = false;
-            auto musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
+            auto musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
             if (musxStaffAtMeasureStart && musxStaffAtMeasureStart->transposition && musxStaffAtMeasureStart->transposition->setToClef) {
                 if (musxStaffAtMeasureStart->transposedClef != musxCurrClef) {
                     if (createClef(m_score, curStaffIdx, musxStaffAtMeasureStart->transposedClef, measure, 0, false)) {
@@ -795,7 +807,7 @@ void EnigmaXmlImporter::importEntries()
                 transposedClefOverride = true;
             }
             bool processedEntries = false;
-            details::GFrameHoldContext gfHold(musxMeasure->getDocument(), musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper());
+            details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
             if (gfHold) {
                 if (!transposedClefOverride) {
                     if (gfHold->clefId.has_value()) {
@@ -924,7 +936,7 @@ void EnigmaXmlImporter::importEntries()
 
 void EnigmaXmlImporter::importParts()
 {
-    std::vector<std::shared_ptr<others::InstrumentUsed>> scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    std::vector<std::shared_ptr<others::InstrumentUsed>> scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
     int partNumber = 0;
     for (const std::shared_ptr<others::InstrumentUsed>& item : scrollView) {
@@ -932,7 +944,7 @@ void EnigmaXmlImporter::importParts()
         IF_ASSERT_FAILED(staff) {
             continue; // safety check
         }
-        auto compositeStaff = others::StaffComposite::createCurrent(m_doc, SCORE_PARTID, staff->getCmper(), 1, 0);
+        auto compositeStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, staff->getCmper(), 1, 0);
         IF_ASSERT_FAILED(compositeStaff) {
             continue; // safety check
         }
@@ -967,7 +979,7 @@ void EnigmaXmlImporter::importParts()
         if (multiStaffInst) {
             m_part2Inst.emplace(partId, multiStaffInst->staffNums);
             for (auto inst : multiStaffInst->staffNums) {
-                if (auto instStaff = others::StaffComposite::createCurrent(m_doc, SCORE_PARTID, inst, 1, 0)) {
+                if (auto instStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, inst, 1, 0)) {
                     createStaff(part, instStaff, it);
                     m_inst2Part.emplace(inst, partId);
                 }
@@ -1032,12 +1044,12 @@ void EnigmaXmlImporter::importBrackets()
         return result;
     };
 
-    auto scorePartInfo = m_doc->getOthers()->get<others::PartDefinition>(SCORE_PARTID, SCORE_PARTID);
+    auto scorePartInfo = m_doc->getOthers()->get<others::PartDefinition>(SCORE_PARTID, m_currentMusxPartId);
     if (!scorePartInfo) {
         throw std::logic_error("Unable to read PartDefinition for score");
         return;
     }
-    auto scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID);
+    auto scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
     auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, scorePartInfo, scrollView);
     auto groupsByLayer = computeStaffGroupLayers(staffGroups);
