@@ -454,17 +454,13 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
                                          std::unordered_map<size_t, ChordRest*>& entryMap)
 {
     if (!segment) {
-        logger()->logWarning(String(u"Position in measure unknown"));
+        logger()->logWarning(String(u"Position in measure unknown"), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
         return false;
     }
 
-    if (entryInfo->graceIndex != 0) {
-        logger()->logWarning(String(u"Grace notes not yet supported"));
+    if (entryInfo->getEntry()->graceNote) {
+        logger()->logWarning(String(u"Grace notes not yet supported"), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
         return true;
-    }
-
-    if (entryInfo->v2Launch) {
-        logger()->logWarning(String(u"voice 2 currently unspported"));
     }
 
     Fraction currentEntryInfoStart      = FinaleTConv::musxFractionToFraction(entryInfo->elapsedDuration).reduced();
@@ -502,7 +498,8 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
             tupletMap[i].scoreTuplet->setTrack(curTrackIdx);
             tupletMap[i].scoreTuplet->setTick(segment->tick());
             tupletMap[i].scoreTuplet->setParent(segment->measure());
-            Fraction tupletRatio = FinaleTConv::musxFractionToFraction(tupletMap[i].musxTuplet->calcRatio());
+            // musxTuplet::calcRation is the reciprocal of what MuseScore needs
+            Fraction tupletRatio = FinaleTConv::musxFractionToFraction(tupletMap[i].musxTuplet->calcRatio().reciprocal());
             tupletMap[i].scoreTuplet->setRatio(tupletRatio);
             std::pair<musx::dom::NoteType, unsigned> musxBaseLen = calcNoteInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration);
             TDuration baseLen = FinaleTConv::noteTypeToDurationType(musxBaseLen.first);
@@ -517,7 +514,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
             transferTupletProperties(tupletMap[i].musxTuplet, tupletMap[i].scoreTuplet, logger());
             // reparent tuplet if needed
             size_t parentIndex = indexOfParentTuplet(tupletMap, i);
-            if (tupletMap[parentIndex].layer < 0) {
+            if (tupletMap[parentIndex].layer >= 0) {
                 tupletMap[parentIndex].scoreTuplet->add(tupletMap[i].scoreTuplet);
             }
             lastAddedTupletIndex = i;
@@ -546,6 +543,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         segment->add(cr);
         if (parentTuplet) {
             parentTuplet->add(cr);
+            cr->setTuplet(parentTuplet);
         }
         entryMap.emplace(entryInfo.getIndexInFrame(), cr);
     } else {
