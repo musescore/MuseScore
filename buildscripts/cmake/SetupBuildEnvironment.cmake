@@ -101,8 +101,11 @@ if(CC_IS_EMCC)
     set(EMCC_COMPILE_FLAGS "-s USE_ZLIB=1")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EMCC_COMPILE_FLAGS}")
 
-
-    set(EMCC_LINKER_FLAGS -sASYNCIFY -Os)
+    if(BUILD_IS_DEBUG)
+        set(EMCC_LINKER_FLAGS -sASYNCIFY -O0)
+    else()
+        set(EMCC_LINKER_FLAGS -sASYNCIFY -Os)
+    endif()
 
 endif(CC_IS_EMCC)
 
