@@ -147,32 +147,7 @@ public:
     };
     DECLARE_FLAGS(Options, Option)
 
-    virtual Result questionSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                                int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") = 0;
-
-    Result questionSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                        const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
-    {
-        return questionSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
-    }
-
-    virtual async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                                                 int defBtn = int(Button::NoButton), const Options& options = {},
-                                                 const std::string& dialogTitle = "") = 0;
-
-    async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const Buttons& buttons,
-                                         Button defBtn, const Options& options = {}, const std::string& dialogTitle = "")
-    {
-        return questionAsync(contentTitle, text, buttons, (int)defBtn, options, dialogTitle);
-    }
-
-    async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const Buttons& buttons,
-                                         int defBtn = int(Button::NoButton), const Options& options = {},
-                                         const std::string& dialogTitle = "")
-    {
-        return questionAsync(contentTitle, text, buttonDataList(buttons), defBtn, options, dialogTitle);
-    }
-
+    // buttons data
     virtual ButtonData buttonData(Button b) const = 0;
     inline ButtonDatas buttonDataList(const Buttons& buttons) const
     {
@@ -186,12 +161,27 @@ public:
         return result;
     }
 
-    // info
-    virtual Result info(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
-                        int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const = 0;
+    // question
+    virtual async::Promise<Result> questionAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                                 int defBtn = int(Button::NoButton), const Options& options = {},
+                                                 const std::string& dialogTitle = "") = 0;
 
-    virtual Result info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                        int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const = 0;
+    async::Promise<Result> questionAsync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                         Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return questionAsync(contentTitle, text, buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
+
+    // info
+    virtual async::Promise<Result> infoAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                             int defBtn = int(Button::NoButton), const Options& options = {},
+                                             const std::string& dialogTitle = "") = 0;
+
+    async::Promise<Result> infoAsync(const std::string& contentTitle, const Text& text, const Buttons& buttons,
+                                     Button defBtn, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return infoAsync(contentTitle, text, buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
 
     // warning
     virtual Result warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
@@ -268,6 +258,25 @@ public:
     /// Opens a file browser at the parent directory of filePath,
     /// and selects the file at filePath on OSs that support it
     virtual Ret revealInFileBrowser(const io::path_t& filePath) const = 0;
+
+    //! NOTE Please don't use this
+    virtual Result questionSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") = 0;
+
+    Result questionSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                        const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return questionSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
+
+    virtual Result infoSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                            int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") = 0;
+
+    Result infoSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                    const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return infoSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
 };
 DECLARE_OPERATORS_FOR_FLAGS(IInteractive::Options)
 }

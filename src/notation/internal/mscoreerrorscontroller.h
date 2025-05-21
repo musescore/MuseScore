@@ -24,11 +24,12 @@
 
 #include "modularity/ioc.h"
 
-#include "iinteractive.h"
+#include "global/iinteractive.h"
+#include "global/async/asyncable.h"
 #include "inotationconfiguration.h"
 
 namespace mu::notation {
-class MScoreErrorsController : public muse::Injectable
+class MScoreErrorsController : public muse::Injectable, public muse::async::Asyncable
 {
     muse::Inject<INotationConfiguration> configuration = { this };
     muse::Inject<muse::IInteractive> interactive = { this };

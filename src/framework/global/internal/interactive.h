@@ -54,11 +54,12 @@ public:
     ButtonData buttonData(Button b) const override;
 
     // info
-    Result info(const std::string& contentTitle, const std::string& text, const Buttons& buttons, int defBtn = int(Button::NoButton),
-                const Options& options = {}, const std::string& dialogTitle = "") const override;
+    Result infoSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
+                    const Options& options = {}, const std::string& dialogTitle = "") override;
 
-    Result info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                const Options& options = {}, const std::string& dialogTitle = "") const override;
+    async::Promise<Result> infoAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                     int defBtn = int(Button::NoButton), const Options& options = {},
+                                     const std::string& dialogTitle = "") override;
 
     // warning
     Result warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,

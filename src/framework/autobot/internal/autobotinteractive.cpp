@@ -54,16 +54,17 @@ IInteractive::ButtonData AutobotInteractive::buttonData(Button b) const
     return m_real->buttonData(b);
 }
 
-IInteractive::Result AutobotInteractive::info(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                              int defBtn, const Options& options, const std::string& dialogTitle) const
+IInteractive::Result AutobotInteractive::infoSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
+                                                  const Options& options, const std::string& dialogTitle)
 {
-    return m_real->info(contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return m_real->infoSync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-IInteractive::Result AutobotInteractive::info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
-                                              const Options& options, const std::string& dialogTitle) const
+async::Promise<IInteractive::Result> AutobotInteractive::infoAsync(const std::string& contentTitle, const Text& text,
+                                                                   const ButtonDatas& buttons, int defBtn,
+                                                                   const Options& options, const std::string& dialogTitle)
 {
-    return m_real->info(contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return m_real->infoAsync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result AutobotInteractive::warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons,

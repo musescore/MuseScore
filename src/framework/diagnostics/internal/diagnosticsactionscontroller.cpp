@@ -77,5 +77,5 @@ void DiagnosticsActionsController::saveDiagnosticFiles()
 
 void DiagnosticsActionsController::onActionQuery(const actions::ActionQuery& q)
 {
-    interactive()->info("Test query action", q.toString());
+    interactive()->infoAsync("Test query action", q.toString());
 }

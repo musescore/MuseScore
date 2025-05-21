@@ -1378,12 +1378,13 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
     std::string msg = muse::trc("project/save", "All saved changes will now update to the cloud. "
                                                 "You can manage this file in the score manager on MuseScore.com.");
 
-    int btn = interactive()->info(muse::trc("global", "Success!"), msg, { viewOnlineBtn, okBtn },
-                                  static_cast<int>(IInteractive::Button::Ok)).button();
-
-    if (btn == viewOnlineBtn.btn) {
-        interactive()->openUrl(scoreManagerUrl);
-    }
+    interactive()->infoAsync(muse::trc("global", "Success!"), msg, { viewOnlineBtn, okBtn },
+                             static_cast<int>(IInteractive::Button::Ok))
+    .onResolve(this, [this, viewOnlineBtn, scoreManagerUrl](const IInteractive::Result& res) {
+        if (res.isButton(viewOnlineBtn.btn)) {
+            interactive()->openUrl(scoreManagerUrl);
+        }
+    });
 }
 
 Ret ProjectActionsController::onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl,
