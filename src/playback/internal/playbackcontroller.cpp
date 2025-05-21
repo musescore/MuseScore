@@ -1581,7 +1581,7 @@ void PlaybackController::setupSequencePlayer()
 {
     currentPlayer()->playbackPositionChanged().onReceive(this, [this](const audio::secs_t pos) {
         m_currentTick = notationPlayback()->secToTick(pos);
-        // LOGALEX() << "m_currentPlaybackPositionChanged changed, pos: " << pos << ", m_currentTick: " << m_currentTick;
+        // LOGALEX() << "playbackPositionChanged, currentTick: " <<  m_currentTick << ", pos: " << pos << ", endSecs: " << playbackEndSecs();
         m_currentPlaybackPositionChanged.send(pos, m_currentTick);
 
         updateCurrentTempo();

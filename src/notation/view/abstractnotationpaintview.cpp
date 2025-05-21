@@ -702,7 +702,7 @@ void AbstractNotationPaintView::onNotationSetup()
     });
 
     playbackController()->currentPlaybackPositionChanged().onReceive(this, [this](audio::secs_t, midi::tick_t tick) {
-        // LOGALEX() << "trick onReceive param: lambda function ";
+        // LOGALEX() << "tick: " << tick;
         movePlaybackCursor(tick);
     });
 

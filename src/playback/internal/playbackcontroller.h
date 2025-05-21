@@ -249,6 +249,7 @@ private:
 
     muse::async::Notification m_currentSequenceIdChanged;
     muse::midi::tick_t m_currentTick = 0;
+    muse::audio::secs_t m_currentPos = 0;
     notation::Tempo m_currentTempo;
 
     muse::async::Channel<muse::audio::TrackId> m_trackAdded;

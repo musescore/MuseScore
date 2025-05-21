@@ -75,7 +75,7 @@ private:
     void calculateKeyRects();
     bool containsKey(uint keyIndex, piano_key_t key);
     void adjustKeysAreaPosition();
-    void checkResponseKeyOccluded(QRectF rect);
+    void checkResponseKeyOccluded();
     void determineOctaveLabelsFont();
     void updateKeyStateColors();
     void updatePlaybackKeyStateColors();
@@ -95,6 +95,9 @@ private:
     void mouseReleaseEvent(QMouseEvent* event) override;
 
     std::optional<piano_key_t> keyAt(const QPointF& position) const;
+
+    void shiftCheckRects();
+    bool preRectUnchanged();
 
     static constexpr piano_key_t MIN_KEY = 0;
     static constexpr piano_key_t MAX_NUM_KEYS = 128;
@@ -149,6 +152,10 @@ private:
     std::map<KeyState, QColor> m_whiteKeyStateColors;
     std::map<KeyState, QColor> m_blackKeyTopPieceStateColors;
     std::map<KeyState, QColor> m_blackKeyBottomPieceStateColors;
+
+    std::map<piano_key_t, QRectF> m_check_rects;
+    std::map<piano_key_t, QRectF> m_pre_check_rects;
+    bool playbackkey_state_base = false;
 
     qreal m_keyWidthScaling = 1.0;
     qreal m_scrollOffset = 0.0;

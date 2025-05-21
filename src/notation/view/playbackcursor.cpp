@@ -394,13 +394,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
         setHitMeasure(measure);
     }
     
-    // if (measureNo < 2) {
-    //     emit lingeringCursorUpdate(0.0, measureRect.y(), measureRect.width(), measureRect.height());
-    // } else {
-    //     emit lingeringCursorUpdate(measureRect.x(), measureRect.y(), measureRect.width(), measureRect.height());
-    // }
-    emit lingeringCursorUpdate1();
-    
     m_notation->interaction()->notifyPianoKeyboardNotesChanged();
 
     if (tick.ticks() == 0 && !isPlaying) {
@@ -421,9 +414,14 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
             }
             segment = next_segment;
         }
-
-        emit lingeringCursorUpdate1();
     }
+
+    // if (measureNo < 2) {
+    //     emit lingeringCursorUpdate(0.0, measureRect.y(), measureRect.width(), measureRect.height());
+    // } else {
+    //     emit lingeringCursorUpdate(measureRect.x(), measureRect.y(), measureRect.width(), measureRect.height());
+    // }
+    emit lingeringCursorUpdate1();
 
     if (!s) {
         return RectF();
