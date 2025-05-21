@@ -211,25 +211,17 @@ async::Promise<IInteractive::Result> Interactive::warningAsync(const std::string
     return openStandartAsync("WARNING", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-IInteractive::Result Interactive::error(const std::string& contentTitle, const std::string& text,
-                                        const Buttons& buttons, const Button& defBtn,
-                                        const Options& options, const std::string& dialogTitle) const
+IInteractive::Result Interactive::errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
+                                            const Options& options, const std::string& dialogTitle)
 {
-    return standardDialogResult(provider()->error(contentTitle, text, {}, buttonDataList(buttons), int(defBtn), options, dialogTitle));
+    return standardDialogResult(provider()->error(contentTitle, text, text.detailedText, buttons, defBtn, options, dialogTitle));
 }
 
-IInteractive::Result Interactive::error(const std::string& contentTitle, const Text& text,
-                                        const ButtonDatas& buttons, int defBtn,
-                                        const Options& options, const std::string& dialogTitle) const
+async::Promise<IInteractive::Result> Interactive::errorAsync(const std::string& contentTitle, const Text& text,
+                                                             const ButtonDatas& buttons, int defBtn,
+                                                             const Options& options, const std::string& dialogTitle)
 {
-    return standardDialogResult(provider()->error(contentTitle, text, {}, buttons, defBtn, options, dialogTitle));
-}
-
-IInteractive::Result Interactive::error(const std::string& contentTitle, const Text& text, const std::string& detailedText,
-                                        const ButtonDatas& buttons, int defBtn,
-                                        const Options& options, const std::string& dialogTitle) const
-{
-    return standardDialogResult(provider()->error(contentTitle, text, detailedText, buttons, defBtn, options, dialogTitle));
+    return openStandartAsync("ERROR", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 Ret Interactive::showProgress(const std::string& title, Progress* progress) const

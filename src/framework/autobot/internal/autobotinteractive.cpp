@@ -81,23 +81,18 @@ async::Promise<IInteractive::Result> AutobotInteractive::warningAsync(const std:
     return m_real->warningAsync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-IInteractive::Result AutobotInteractive::error(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                               const Button& def, const Options& options, const std::string& dialogTitle) const
+IInteractive::Result AutobotInteractive::errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                                   int defBtn,
+                                                   const Options& options, const std::string& dialogTitle)
 {
-    return m_real->error(contentTitle, text, buttons, def, options, dialogTitle);
+    return m_real->errorSync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-IInteractive::Result AutobotInteractive::error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                                               int defBtn, const Options& options, const std::string& dialogTitle) const
+async::Promise<IInteractive::Result> AutobotInteractive::errorAsync(const std::string& contentTitle, const Text& text,
+                                                                    const ButtonDatas& buttons, int defBtn,
+                                                                    const Options& options, const std::string& dialogTitle)
 {
-    return m_real->error(contentTitle, text, buttons, defBtn, options, dialogTitle);
-}
-
-IInteractive::Result AutobotInteractive::error(const std::string& contentTitle, const Text& text, const std::string& detailedText,
-                                               const ButtonDatas& buttons, int defBtn, const Options& options,
-                                               const std::string& dialogTitle) const
-{
-    return m_real->error(contentTitle, text, detailedText, buttons, defBtn, options, dialogTitle);
+    return m_real->errorAsync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 Ret AutobotInteractive::showProgress(const std::string& title, Progress* progress) const

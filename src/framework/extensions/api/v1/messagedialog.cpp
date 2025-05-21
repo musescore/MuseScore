@@ -38,8 +38,12 @@ void MessageDialog::doOpen(const QString& contentTitle, const QString& text, con
 
     // info
     if (btns.size() <= 1) {
-        interactive()->error(contentTitle.toStdString(), text.toStdString(), detailed.toStdString());
-        emit accepted();
+        IInteractive::Text t;
+        t.text = text.toStdString();
+        t.detailedText = detailed.toStdString();
+        interactive()->errorAsync(contentTitle.toStdString(), t).onResolve(this, [this](const IInteractive::Result&) {
+            emit accepted();
+        });
     }
     //
     else {
