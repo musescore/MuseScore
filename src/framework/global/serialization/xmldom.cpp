@@ -41,12 +41,12 @@ struct muse::XmlDomImplData
 // XmlDomNode
 // ================================================
 
-static inline const tinyxml2::XMLNode* node_const(uintptr_t p)
+static inline const tinyxml2::XMLNode* node_const(xml_node_ptr p)
 {
     return reinterpret_cast<const tinyxml2::XMLNode*>(p);
 }
 
-XmlDomNode::XmlDomNode(const std::shared_ptr<XmlDomImplData>& xml, uintptr_t node)
+XmlDomNode::XmlDomNode(const std::shared_ptr<XmlDomImplData>& xml, xml_node_ptr node)
     : m_xml(xml), m_node(node)
 {
 }
@@ -72,7 +72,7 @@ XmlDomNode XmlDomNode::firstChild() const
         return XmlDomNode(m_xml, 0);
     }
     const tinyxml2::XMLNode* n = node_const(m_node)->FirstChild();
-    return XmlDomNode(m_xml, reinterpret_cast<uintptr_t>(n));
+    return XmlDomNode(m_xml, reinterpret_cast<xml_node_ptr>(n));
 }
 
 XmlDomElement XmlDomNode::firstChildElement(const char* name) const
@@ -82,7 +82,7 @@ XmlDomElement XmlDomNode::firstChildElement(const char* name) const
     }
 
     const tinyxml2::XMLElement* n = node_const(m_node)->FirstChildElement(name);
-    return XmlDomElement(m_xml, reinterpret_cast<uintptr_t>(n));
+    return XmlDomElement(m_xml, reinterpret_cast<xml_node_ptr>(n));
 }
 
 XmlDomNode XmlDomNode::nextSibling() const
@@ -91,7 +91,7 @@ XmlDomNode XmlDomNode::nextSibling() const
         return XmlDomNode(m_xml, 0);
     }
     const tinyxml2::XMLNode* n = node_const(m_node)->NextSibling();
-    return XmlDomNode(m_xml, reinterpret_cast<uintptr_t>(n));
+    return XmlDomNode(m_xml, reinterpret_cast<xml_node_ptr>(n));
 }
 
 XmlDomNode XmlDomNode::previousSibling() const
@@ -100,7 +100,7 @@ XmlDomNode XmlDomNode::previousSibling() const
         return XmlDomNode(m_xml, 0);
     }
     const tinyxml2::XMLNode* n = node_const(m_node)->PreviousSibling();
-    return XmlDomNode(m_xml, reinterpret_cast<uintptr_t>(n));
+    return XmlDomNode(m_xml, reinterpret_cast<xml_node_ptr>(n));
 }
 
 XmlDomNode XmlDomNode::parent() const
@@ -109,7 +109,7 @@ XmlDomNode XmlDomNode::parent() const
         return XmlDomNode(m_xml, 0);
     }
     const tinyxml2::XMLNode* n = node_const(m_node)->Parent();
-    return XmlDomNode(m_xml, reinterpret_cast<uintptr_t>(n));
+    return XmlDomNode(m_xml, reinterpret_cast<xml_node_ptr>(n));
 }
 
 XmlDomElement XmlDomNode::nextSiblingElement(const char* name) const
@@ -118,7 +118,7 @@ XmlDomElement XmlDomNode::nextSiblingElement(const char* name) const
         return XmlDomElement(m_xml, 0);
     }
     const tinyxml2::XMLElement* e = node_const(m_node)->NextSiblingElement(name);
-    return XmlDomElement(m_xml, reinterpret_cast<uintptr_t>(e));
+    return XmlDomElement(m_xml, reinterpret_cast<xml_node_ptr>(e));
 }
 
 XmlDomElement XmlDomNode::previousSiblingElement(const char* name) const
@@ -127,20 +127,20 @@ XmlDomElement XmlDomNode::previousSiblingElement(const char* name) const
         return XmlDomElement(m_xml, 0);
     }
     const tinyxml2::XMLElement* e = node_const(m_node)->PreviousSiblingElement(name);
-    return XmlDomElement(m_xml, reinterpret_cast<uintptr_t>(e));
+    return XmlDomElement(m_xml, reinterpret_cast<xml_node_ptr>(e));
 }
 
 XmlDomElement XmlDomNode::toElement() const
 {
     const tinyxml2::XMLElement* e = node_const(m_node)->ToElement();
-    return XmlDomElement(m_xml, reinterpret_cast<uintptr_t>(e));
+    return XmlDomElement(m_xml, reinterpret_cast<xml_node_ptr>(e));
 }
 
 // ================================================
 // XmlDomAttribute
 // ================================================
 
-static inline const tinyxml2::XMLAttribute* attribute_const(uintptr_t p)
+static inline const tinyxml2::XMLAttribute* attribute_const(xml_attribute_ptr p)
 {
     return reinterpret_cast<const tinyxml2::XMLAttribute*>(p);
 }
@@ -170,19 +170,19 @@ XmlDomAttribute XmlDomAttribute::nextAttribute() const
         return XmlDomAttribute(0);
     }
     const tinyxml2::XMLAttribute* a = attribute_const(m_attribute);
-    return XmlDomAttribute(reinterpret_cast<uintptr_t>(a->Next()));
+    return XmlDomAttribute(reinterpret_cast<xml_attribute_ptr>(a->Next()));
 }
 
 // ================================================
 // XmlDomElement
 // ================================================
 
-static inline const tinyxml2::XMLElement* el_const(uintptr_t p)
+static inline const tinyxml2::XMLElement* el_const(xml_node_ptr p)
 {
     return reinterpret_cast<const tinyxml2::XMLNode*>(p)->ToElement();
 }
 
-XmlDomElement::XmlDomElement(const std::shared_ptr<XmlDomImplData>& data, uintptr_t node)
+XmlDomElement::XmlDomElement(const std::shared_ptr<XmlDomImplData>& data, xml_node_ptr node)
     : XmlDomNode(data, node)
 {
 }
@@ -211,7 +211,7 @@ XmlDomAttribute XmlDomElement::firstAttribute() const
         return XmlDomAttribute(0);
     }
     if (const tinyxml2::XMLElement* e = el_const(m_node)) {
-        return XmlDomAttribute(reinterpret_cast<uintptr_t>(e->FirstAttribute()));
+        return XmlDomAttribute(reinterpret_cast<xml_attribute_ptr>(e->FirstAttribute()));
     }
     return XmlDomAttribute(0);
 }
@@ -222,7 +222,7 @@ XmlDomAttribute XmlDomElement::attribute(const char* name) const
         return XmlDomAttribute(0);
     }
     if (const tinyxml2::XMLElement* e = el_const(m_node)) {
-        return XmlDomAttribute(reinterpret_cast<uintptr_t>(e->FindAttribute(name)));
+        return XmlDomAttribute(reinterpret_cast<xml_attribute_ptr>(e->FindAttribute(name)));
     }
     return XmlDomAttribute(0);
 }
@@ -249,7 +249,7 @@ void XmlDomDocument::setContent(const ByteArray& data)
 XmlDomElement XmlDomDocument::rootElement() const
 {
     const tinyxml2::XMLElement* e = m_xml->doc.FirstChildElement();
-    return XmlDomElement(m_xml, reinterpret_cast<uintptr_t>(e));
+    return XmlDomElement(m_xml, reinterpret_cast<xml_node_ptr>(e));
 }
 
 bool XmlDomDocument::hasError() const
