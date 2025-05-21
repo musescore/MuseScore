@@ -133,7 +133,7 @@ void MusicXml_Tests::musicXmlIoTest(const char* file, bool exportLayout)
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual));
     setValue(PREF_IMPORT_MUSICXML_IMPORTBREAKS, Val(true));
     setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(exportLayout));
-    setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
+    setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(false));
     setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
@@ -812,14 +812,14 @@ TEST_F(MusicXml_Tests, invalidLayout) {
 TEST_F(MusicXml_Tests, invalidTimesig) {
     musicXmlIoTestRef("testInvalidTimesig");
 }
-TEST_F(MusicXml_Tests, invisibleDirection) {
-    musicXmlIoTest("testInvisibleDirection");
-}
 TEST_F(MusicXml_Tests, invisibleElements) {
     musicXmlIoTest("testInvisibleElements");
 }
 TEST_F(MusicXml_Tests, invisibleNote) {
     musicXmlMscxExportTestRef("testInvisibleNote");
+}
+TEST_F(MusicXml_Tests, invisibleTempo) {
+    musicXmlIoTest("testInvisibleTempo");
 }
 TEST_F(MusicXml_Tests, keysig1) {
     musicXmlIoTest("testKeysig1");

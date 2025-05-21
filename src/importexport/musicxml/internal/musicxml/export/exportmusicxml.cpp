@@ -394,6 +394,7 @@ public:
     void dynamic(Dynamic const* const dyn, staff_idx_t staff);
     void systemText(StaffTextBase const* const text, staff_idx_t staff);
     void tempoText(TempoText const* const text, staff_idx_t staff);
+    void tempoSound(TempoText const* const text);
     void harmony(Harmony const* const, FretDiagram const* const fd, const Fraction& offset = Fraction(0, 1));
     Score* score() const { return m_score; }
     double getTenthsFromInches(double) const;
@@ -5068,6 +5069,12 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
     if (staff) {
         m_xml.tag("staff", static_cast<int>(staff));
     }
+    tempoSound(text);
+    m_xml.endElement();
+}
+
+void ExportMusicXml::tempoSound(TempoText const* const text)
+{
     // Format tempo with maximum 2 decimal places, because in some MuseScore files tempo is stored
     // imprecisely and this could cause rounding errors (e.g. 92 BPM would be saved as 91.9998).
     BeatsPerMinute bpm = text->tempo().toBPM();
@@ -5076,7 +5083,6 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
     }
     double bpmRounded = round(bpm.val * 100) / 100;
     m_xml.tag("sound", { { "tempo", bpmRounded } });
-    m_xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -6461,6 +6467,10 @@ static void measureStyle(XmlWriter& xml, Attributes& attr, const Measure* const 
 static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff_idx_t sstaff)
 {
     if (!exp->canWrite(e)) {
+        // write only tempo
+        if (e->isTempoText()) {
+            exp->tempoSound(toTempoText(e));
+        }
         return false;
     }
 
