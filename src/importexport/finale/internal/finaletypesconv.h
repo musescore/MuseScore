@@ -38,6 +38,8 @@ public:
     static engraving::ID createPartId(int partNumber);
     static engraving::ID createStaffId(musx::dom::InstCmper staffId);
 
+    static int createFinaleVoiceId(musx::dom::LayerIndex layerIndex, bool forV2);
+
     static engraving::DurationType noteTypeToDurationType(musx::dom::NoteType noteType);
     static engraving::ClefType toMuseScoreClefType(musx::dom::ClefIndex clef);
     static engraving::String instrTemplateIdfromUuid(std::string uuid);

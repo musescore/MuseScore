@@ -66,13 +66,15 @@ public:
     std::shared_ptr<FinaleLogger> logger() const { return m_logger; }
 
 private:
+    void mapLayers();
     void importParts();
     void importMeasures();
     void importBrackets();
     void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);
 
     bool processEntryInfo(/*const std::shared_ptr<const musx::dom::EntryInfo>*/ musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx,
-                          engraving::Segment* segment, std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex);
+                          engraving::Segment* segment, std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex,
+                          std::unordered_map<size_t, engraving::ChordRest*>& entryMap);
 
     engraving::ChordRest* importEntry(musx::dom::EntryInfoPtr entryInfo, engraving::Segment* segment,
                                       engraving::track_idx_t curTrackIdx);
@@ -83,6 +85,8 @@ private:
     engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
                                   const engraving::InstrumentTemplate* it = nullptr);
 
+    std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, bool>& finaleVoiceMap,
+                                                         musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const;
     engraving::Score* m_score;
     const std::shared_ptr<musx::dom::Document> m_doc;
     const std::shared_ptr<FinaleLogger> m_logger;
@@ -91,6 +95,8 @@ private:
     std::unordered_map<musx::dom::InstCmper, QString> m_inst2Part;
     std::unordered_map<engraving::staff_idx_t, musx::dom::InstCmper> m_staff2Inst;
     std::unordered_map<musx::dom::InstCmper, engraving::staff_idx_t> m_inst2Staff;
+    std::unordered_map<musx::dom::LayerIndex, engraving::track_idx_t> m_layer2Voice;
+    std::unordered_set<musx::dom::LayerIndex> m_layerForceStems;
 };
 
 }

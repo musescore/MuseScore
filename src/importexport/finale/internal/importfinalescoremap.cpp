@@ -32,6 +32,7 @@
 #include "types/string.h"
 
 #include "engraving/dom/accidental.h"
+#include "engraving/dom/beam.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/bracketItem.h"
 #include "engraving/dom/chord.h"
@@ -72,10 +73,58 @@ namespace mu::iex::finale {
 
 void EnigmaXmlImporter::import()
 {
+    mapLayers();
     importParts();
     importBrackets();
     importMeasures();
     importStyles(m_score->style(), SCORE_PARTID); /// @todo do this for all excerpts
+}
+
+void EnigmaXmlImporter::mapLayers()
+{
+    // This function maps layers to voices based on the layer stem directions and the hardwired MuseScore directions.
+    // MuseScore hardwire voices 0,2 up and voices 1,3 down.
+
+    m_layer2Voice.clear();
+    m_layerForceStems.clear();
+    std::unordered_map<track_idx_t, LayerIndex> reverseMap;
+
+    auto layerAttrs = m_doc->getOthers()->getArray<others::LayerAttributes>(SCORE_PARTID);
+
+    const auto mapLayer = [&](const std::shared_ptr<others::LayerAttributes>& layerAttr) {
+        std::array<track_idx_t, 4> tryOrder;
+        if (!layerAttr->freezeLayer) {
+            tryOrder = { 0, 1, 2, 3 }; // default
+        } else if (layerAttr->freezeStemsUp) {
+            tryOrder = { 0, 2, 1, 3 }; // prefer upstem voices
+        } else {
+            tryOrder = { 1, 3, 0, 2 }; // prefer downstem voices
+        }
+        const LayerIndex layerIndex = layerAttr->getCmper();
+        for (track_idx_t idx : tryOrder) {
+            auto [it, emplaced] = reverseMap.emplace(idx, layerIndex);
+            if (emplaced) {
+                m_layer2Voice.emplace(layerIndex, idx);
+                // If direction is unspecified or mismatched, force stems
+                const bool stemUpVoice = (idx % 2 == 0); // voices 0,2
+                if (!layerAttr->freezeLayer || (layerAttr->freezeStemsUp != stemUpVoice)) {
+                    m_layerForceStems.insert(layerIndex);
+                }
+                return;
+            }
+        }
+        logger()->logWarning(String(u"Unable to map Finale layer %1 to a MuseScore voice due to incompatible layer attributes").arg(int(layerIndex) + 1));
+    };
+    for (const auto& layerAttr : layerAttrs) {
+        if (layerAttr->freezeLayer) {
+            mapLayer(layerAttr);
+        }
+    }
+    for (const auto& layerAttr : layerAttrs) {
+        if (!layerAttr->freezeLayer) {
+            mapLayer(layerAttr);
+        }
+    }
 }
 
 static std::optional<ClefTypeList> clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
@@ -262,6 +311,12 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
             }
             chord->add(note);
         }
+        if (currentEntry->freezeStem || currentEntry->voice2 || entryInfo->v2Launch
+            || m_layerForceStems.find(entryInfo.getLayerIndex()) != m_layerForceStems.end()) {
+            /// @todo beams: this works for non-beamable notes, but beams appear to have their own up/down status
+            DirectionV d = currentEntry->upStem ? DirectionV::UP : DirectionV::DOWN;
+            chord->setStemDirection(d);
+        }
         cr = toChordRest(chord);
     } else {
         Rest* rest = Factory::createRest(segment, d);
@@ -395,20 +450,17 @@ void EnigmaXmlImporter::fillWithInvisibleRests(Fraction startTick, track_idx_t c
 }
 
 bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrackIdx, Segment* segment,
-                                         std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex)
+                                         std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex,
+                                         std::unordered_map<size_t, ChordRest*>& entryMap)
 {
     if (!segment) {
-        logger()->logWarning(String(u"Position in measure unknown"));
+        logger()->logWarning(String(u"Position in measure unknown"), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
         return false;
     }
 
-    if (entryInfo->graceIndex != 0) {
-        logger()->logWarning(String(u"Grace notes not yet supported"));
+    if (entryInfo->getEntry()->graceNote) {
+        logger()->logWarning(String(u"Grace notes not yet supported"), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
         return true;
-    }
-
-    if (entryInfo->v2Launch) {
-        logger()->logWarning(String(u"voice 2 currently unspported"));
     }
 
     Fraction currentEntryInfoStart      = FinaleTConv::musxFractionToFraction(entryInfo->elapsedDuration).reduced();
@@ -446,7 +498,8 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
             tupletMap[i].scoreTuplet->setTrack(curTrackIdx);
             tupletMap[i].scoreTuplet->setTick(segment->tick());
             tupletMap[i].scoreTuplet->setParent(segment->measure());
-            Fraction tupletRatio = FinaleTConv::musxFractionToFraction(tupletMap[i].musxTuplet->calcRatio());
+            // musxTuplet::calcRatio is the reciprocal of what MuseScore needs
+            Fraction tupletRatio = FinaleTConv::musxFractionToFraction(tupletMap[i].musxTuplet->calcRatio().reciprocal());
             tupletMap[i].scoreTuplet->setRatio(tupletRatio);
             std::pair<musx::dom::NoteType, unsigned> musxBaseLen = calcNoteInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration);
             TDuration baseLen = FinaleTConv::noteTypeToDurationType(musxBaseLen.first);
@@ -461,7 +514,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
             transferTupletProperties(tupletMap[i].musxTuplet, tupletMap[i].scoreTuplet, logger());
             // reparent tuplet if needed
             size_t parentIndex = indexOfParentTuplet(tupletMap, i);
-            if (tupletMap[parentIndex].layer < 0) {
+            if (tupletMap[parentIndex].layer >= 0) {
                 tupletMap[parentIndex].scoreTuplet->add(tupletMap[i].scoreTuplet);
             }
             lastAddedTupletIndex = i;
@@ -486,10 +539,13 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         cr->setTicks(currentEntryActualDuration); // should probably be actual length, like done here
         cr->setParent(segment);
         cr->setTrack(curTrackIdx);
+        cr->setBeamMode(BeamMode::NONE); // this is changed in the next pass to match the beaming.
         segment->add(cr);
         if (parentTuplet) {
             parentTuplet->add(cr);
+            cr->setTuplet(parentTuplet);
         }
+        entryMap.emplace(entryInfo.getIndexInFrame(), cr);
     } else {
         logger()->logWarning(String(u"Failed to read entry contents"));
         // Fill space with invisible rests instead
@@ -520,13 +576,17 @@ static Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction
     return Fraction(count.quotient(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
 }
 
-static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo)
+static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo, int voice)
 {
     const size_t n = tupletInfo.size();
     std::vector<ReadableTuplet> result;
     result.reserve(n);
 
-    for (EntryFrame::TupletInfo tuplet : tupletInfo) {
+    const bool forVoice2 = bool(voice);
+    for (const auto& tuplet : tupletInfo) {
+        if (forVoice2 != tuplet.voice2) {
+            continue;
+        }
         ReadableTuplet rTuplet;
         rTuplet.absBegin    = FinaleTConv::musxFractionToFraction(tuplet.startDura).reduced();
         rTuplet.absDuration = FinaleTConv::musxFractionToFraction(tuplet.endDura - tuplet.startDura).reduced();
@@ -570,11 +630,12 @@ static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, 
         // clef->setShowCourtesy();
         // clef->setForInstrumentChange();
         clef->setGenerated(false);
-        clef->setIsHeader(false);
+        const bool isHeader = !afterBarline && !measure->prevMeasure() && musxEduPos == 0;
+        clef->setIsHeader(isHeader);
         if (afterBarline) {
             clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
-        } else {
-            clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE); /// @todo leave as auto where appropriate
+        } else if (musxEduPos == 0) {
+            clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
         }
 
         Fraction clefTick = measure->tick() + FinaleTConv::musxFractionToFraction(musx::util::Fraction::fromEdu(musxEduPos));
@@ -584,6 +645,45 @@ static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, 
         return clef;
     }
     return nullptr;
+}
+
+std::unordered_map<int, track_idx_t> EnigmaXmlImporter::mapFinaleVoices(const std::map<LayerIndex, bool>& finaleVoiceMap,
+                                                                        musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const
+{
+    using FinaleVoiceID = int;
+    std::unordered_map<FinaleVoiceID, track_idx_t> result;
+    std::unordered_map<track_idx_t, FinaleVoiceID> reverseMap;
+    for (const auto& [layerIndex, usesV2] : finaleVoiceMap) {
+        const auto& it = m_layer2Voice.find(layerIndex);
+        if (it != m_layer2Voice.end()) {
+            auto [revIt, emplaced] = reverseMap.emplace(it->second, FinaleTConv::createFinaleVoiceId(layerIndex, false));
+            if (emplaced) {
+                result.emplace(revIt->second, revIt->first);
+            } else {
+                logger()->logWarning(String(u"Layer %1 was already mapped to a voice").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
+            }
+        } else {
+            logger()->logWarning(String(u"Layer %1 was not mapped to a voice").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
+        }
+    }
+    for (const auto& [layerIndex, usesV2] : finaleVoiceMap) {
+        if (usesV2) {
+            bool foundVoice = false;
+            for (track_idx_t v : {0, 1, 2, 3}) {
+                auto [revIt, emplaced] = reverseMap.emplace(v, FinaleTConv::createFinaleVoiceId(layerIndex, true));
+                if (emplaced) {
+                    result.emplace(revIt->second, revIt->first);
+                    foundVoice = true;
+                    break;
+                }
+            }
+            if (!foundVoice) {
+                logger()->logWarning(String(u"Voice 2 exceeded available MuseScore voices for layer %1.").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
+                break;
+            }
+        }
+    }
+    return result;
 }
 
 void EnigmaXmlImporter::importMeasures()
@@ -644,7 +744,7 @@ void EnigmaXmlImporter::importMeasures()
     std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(SCORE_PARTID, BASE_SYSTEM_ID); /// @todo eventually SCORE_PARTID may need to be a parameter
     for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxScrollViewItem->staffId), muse::nidx);
-        if (curStaffIdx == muse::nidx) { //IF_ASSERT_FAILED
+        IF_ASSERT_FAILED (curStaffIdx != muse::nidx) {
             logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         } else {
@@ -671,58 +771,131 @@ void EnigmaXmlImporter::importMeasures()
                 logger()->logWarning(String(u"Unable to initialise start segment"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 break;
             }
+            // The Finale UI requires transposition to be a full-measure staff-style assignment, so checking only the beginning of the bar should be sufficient.
+            // However, it is possible to defeat this requirement using plugins. That said, doing so produces erratic results, so I'm not sure we should support it.
+            // For now, only check the start of the measure.
+            bool transposedClefOverride = false;
+            auto musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
+            if (musxStaffAtMeasureStart && musxStaffAtMeasureStart->transposition && musxStaffAtMeasureStart->transposition->setToClef) {
+                if (musxStaffAtMeasureStart->transposedClef != musxCurrClef) {
+                    if (createClef(m_score, curStaffIdx, musxStaffAtMeasureStart->transposedClef, measure, 0, false)) {
+                        musxCurrClef = musxStaffAtMeasureStart->transposedClef;
+                    }
+                }
+                transposedClefOverride = true;
+            }
             bool processedEntries = false;
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), musxMeasure->getPartId(), musxScrollViewItem->staffId, musxMeasure->getCmper());
             if (gfHold) {
-                /// @todo take into account clefs forced by transposition (in Finale staves or staff styles)
-                if (gfHold->clefId.has_value()) {
-                    if (gfHold->clefId.value() != musxCurrClef) {
-                        if (createClef(m_score, curStaffIdx, gfHold->clefId.value(), measure, 0, gfHold->clefAfterBarline)) {
-                            musxCurrClef = gfHold->clefId.value();
+                if (!transposedClefOverride) {
+                    if (gfHold->clefId.has_value()) {
+                        if (gfHold->clefId.value() != musxCurrClef) {
+                            if (createClef(m_score, curStaffIdx, gfHold->clefId.value(), measure, 0, gfHold->clefAfterBarline)) {
+                                musxCurrClef = gfHold->clefId.value();
+                            }
                         }
-                    }
-                } else {
-                    std::vector<std::shared_ptr<others::ClefList>> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(gfHold.getRequestedPartId(), gfHold->clefListId);
-                    for (const std::shared_ptr<others::ClefList>& midMeasureClef : midMeasureClefs) {
-                        if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef) {
-                            const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
-                            if (Clef* clef = createClef(m_score, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline)) {
-                                /// @todo perhaps populate other fields from midMeasureClef, such as x/y offsets, clef-specific mag, etc.?
-                                musxCurrClef = midMeasureClef->clefIndex;
+                    } else {
+                        std::vector<std::shared_ptr<others::ClefList>> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(gfHold.getRequestedPartId(), gfHold->clefListId);
+                        for (const std::shared_ptr<others::ClefList>& midMeasureClef : midMeasureClefs) {
+                            if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef) {
+                                const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
+                                if (Clef* clef = createClef(m_score, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline)) {
+                                    /// @todo perhaps populate other fields from midMeasureClef, such as x/y offsets, clef-specific mag, etc.?
+                                    musxCurrClef = midMeasureClef->clefIndex;
+                                }
                             }
                         }
                     }
                 }
-                for (LayerIndex layer = 0; layer < MAX_LAYERS; layer++) {
+                std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
+                std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                for (const auto& finaleLayer : finaleLayers) {
+                    const LayerIndex layer = finaleLayer.first;
                     /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
                     std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
                     if (!entryFrame) {
+                        logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                         continue;
                     }
-                    const std::vector<std::shared_ptr<const EntryInfo>>& entries = entryFrame->getEntries();
-                    if (entries.empty()) {
-                        continue;
-                    }
-                    processedEntries = true;
+                    const int maxV1V2 = finaleLayer.second ? 1 : 0;
+                    for (int voice = 0; voice <= maxV1V2; voice++) {
+                        // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
+                        processedEntries = true;
 
-                    /// @todo load (measure-specific) key signature from entryFrame->keySignature RGP: this todo is probably unnecessary.
-                    /// Key sigs should be handled at the measure/staff level. They can only change on barlines in Finale. The one in entryFrame
-                    /// is provided for convenience and takes into account transposition (when written pitch is requested).
+                        /// @todo load (measure-specific) key signature from entryFrame->keySignature RGP: this todo is probably unnecessary.
+                        /// Key sigs should be handled at the measure/staff level. They can only change on barlines in Finale. The one in entryFrame
+                        /// is provided for convenience and takes into account transposition (when written pitch is requested).
 
-                    track_idx_t curTrackIdx = curStaffIdx * VOICES + static_cast<voice_idx_t>(layer);
-                    std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo);
-                    // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
-                    ReadableTuplet rTuplet;
-                    Fraction mDur = simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
-                    rTuplet.absBegin = Fraction(0, 1);
-                    rTuplet.absDuration = mDur;
-                    rTuplet.absEnd = mDur;
-                    rTuplet.layer = -1,
-                    tupletMap.insert(tupletMap.begin(), rTuplet);
-                    size_t lastAddedTupletIndex = 0;
-                    for (size_t i = 0; i < entries.size(); ++i) {
-                        EntryInfoPtr entryInfoPtr = EntryInfoPtr(entryFrame, i);
-                        processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex);
+                        track_idx_t trackOffset = muse::value(finaleVoiceMap, FinaleTConv::createFinaleVoiceId(layer, bool(voice)), muse::nidx);
+                        IF_ASSERT_FAILED(trackOffset >= 0 && trackOffset < VOICES) {
+                            logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                            continue;
+                        }
+                        track_idx_t curTrackIdx = curStaffIdx * VOICES + trackOffset;
+                        std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo, voice);
+                        // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
+                        ReadableTuplet rTuplet;
+                        Fraction mDur = simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
+                        rTuplet.absBegin = Fraction(0, 1);
+                        rTuplet.absDuration = mDur;
+                        rTuplet.absEnd = mDur;
+                        rTuplet.layer = -1,
+                        tupletMap.insert(tupletMap.begin(), rTuplet);
+                        size_t lastAddedTupletIndex = 0;
+                        std::unordered_map<size_t, ChordRest*> entryMap;
+                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
+                            processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex, entryMap);
+                        }
+                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
+                            if (entryInfoPtr.calcIsBeamStart()) {
+                                /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
+                                ChordRest* cr = muse::value(entryMap, entryInfoPtr.getIndexInFrame(), nullptr);
+                                if (cr == nullptr) { // once grace notes are supported, use IF_ASSERT_FAILED(cr != nullptr)
+                                    logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                                    continue;
+                                }
+                                Beam * beam = Factory::createBeam(m_score->dummy()->system());
+                                beam->setTrack(curTrackIdx);
+                                if (entryInfoPtr->getEntry()->isNote) {
+                                    if (Chord* chord = toChord(cr)) {
+                                        beam->setDirection(chord->stemDirection());
+                                    }
+                                } else {
+                                    beam->setDirection(DirectionV::AUTO);
+                                }
+                                beam->add(cr);
+                                cr->setBeam(beam);
+                                cr->setBeamMode(BeamMode::BEGIN);
+                                ChordRest* lastCr = nullptr;
+                                for (auto nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
+                                    std::shared_ptr<const Entry> currentEntry = nextInBeam->getEntry();
+                                    lastCr = muse::value(entryMap, nextInBeam.getIndexInFrame(), nullptr);
+                                    IF_ASSERT_FAILED(lastCr != nullptr) {
+                                        logger()->logWarning(String(u"Entry %1 was not mapped").arg(nextInBeam->getEntry()->getEntryNumber()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                                        continue;
+                                    }
+                                    /// @todo fully test secondary beam breaks: can a smaller beam than 32nd be broken?
+                                    unsigned secBeamStart = 0;
+                                    if (currentEntry->secBeam) {
+                                        if (auto secBeamBreak = m_doc->getDetails()->get<details::SecondaryBeamBreak>(gfHold.getRequestedPartId(), currentEntry->getEntryNumber())) {
+                                            secBeamStart = secBeamBreak->calcLowestBreak();
+                                        }
+                                    }
+                                    if (secBeamStart <= 1) {
+                                        lastCr->setBeamMode(BeamMode::MID);
+                                    } else if (secBeamStart == 2) {
+                                        lastCr->setBeamMode(BeamMode::BEGIN16);
+                                    } else {
+                                        lastCr->setBeamMode(BeamMode::BEGIN32);
+                                    }
+                                    beam->add(lastCr);
+                                    lastCr->setBeam(beam);
+                                }
+                                if (lastCr) {
+                                    lastCr->setBeamMode(BeamMode::END);
+                                }
+                            }
+                        }
                     }
                 }
             }
