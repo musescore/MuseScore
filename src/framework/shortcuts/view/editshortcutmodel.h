@@ -25,13 +25,14 @@
 #include <QObject>
 #include <QKeySequence>
 
-#include "modularity/ioc.h"
-#include "iinteractive.h"
+#include "global/modularity/ioc.h"
+#include "global/iinteractive.h"
+#include "global/async/asyncable.h"
 
 class QKeySequence;
 
 namespace muse::shortcuts {
-class EditShortcutModel : public QObject, public Injectable
+class EditShortcutModel : public QObject, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 

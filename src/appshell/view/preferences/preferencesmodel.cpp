@@ -218,9 +218,9 @@ bool PreferencesModel::askForConfirmationOfPreferencesReset()
     muse::IInteractive::ButtonData resetBtn = interactive()->buttonData(muse::IInteractive::Button::Reset);
     cancelBtn.accent = true;
 
-    muse::IInteractive::Result result = interactive()->warning(title, question, { cancelBtn, resetBtn }, cancelBtn.btn,
-                                                               { muse::IInteractive::Option::WithIcon },
-                                                               muse::trc("appshell", "Reset preferences"));
+    muse::IInteractive::Result result = interactive()->warningSync(title, question, { cancelBtn, resetBtn }, cancelBtn.btn,
+                                                                   { muse::IInteractive::Option::WithIcon },
+                                                                   muse::trc("appshell", "Reset preferences"));
     return result.standardButton() == muse::IInteractive::Button::Reset;
 }
 

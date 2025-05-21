@@ -129,6 +129,7 @@ async::Promise<IInteractive::Result> Interactive::openStandartAsync(const std::s
     .add("contentTitle", contentTitle)
     .add("text", text.text)
     .add("textFormat", (int)format(text.format))
+    .add("detailedText", text.detailedText)
     .add("defaultButtonId", defBtn)
     .add("withIcon", options.testFlag(IInteractive::Option::WithIcon))
     .add("withDontShowAgainCheckBox", options.testFlag(IInteractive::Option::WithDontShowAgainCheckBox))
@@ -197,25 +198,17 @@ async::Promise<IInteractive::Result> Interactive::infoAsync(const std::string& c
     return openStandartAsync("INFO", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-Interactive::Result Interactive::warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                         const Button& defBtn, const Options& options, const std::string& dialogTitle) const
+IInteractive::Result Interactive::warningSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
+                                              const Options& options, const std::string& dialogTitle)
 {
-    return standardDialogResult(provider()->warning(contentTitle, text, {}, buttonDataList(buttons), int(defBtn), options, dialogTitle));
+    return standardDialogResult(provider()->warning(contentTitle, text, text.detailedText, buttons, defBtn, options, dialogTitle));
 }
 
-IInteractive::Result Interactive::warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                                          int defBtn,
-                                          const Options& options,
-                                          const std::string& dialogTitle) const
+async::Promise<IInteractive::Result> Interactive::warningAsync(const std::string& contentTitle, const Text& text,
+                                                               const ButtonDatas& buttons, int defBtn,
+                                                               const Options& options, const std::string& dialogTitle)
 {
-    return standardDialogResult(provider()->warning(contentTitle, text, {}, buttons, defBtn, options, dialogTitle));
-}
-
-IInteractive::Result Interactive::warning(const std::string& contentTitle, const Text& text, const std::string& detailedText,
-                                          const ButtonDatas& buttons, int defBtn,
-                                          const Options& options, const std::string& dialogTitle) const
-{
-    return standardDialogResult(provider()->warning(contentTitle, text, detailedText, buttons, defBtn, options, dialogTitle));
+    return openStandartAsync("WARNING", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result Interactive::error(const std::string& contentTitle, const std::string& text,

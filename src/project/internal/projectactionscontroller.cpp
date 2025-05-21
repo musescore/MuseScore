@@ -736,7 +736,7 @@ IInteractive::Button ProjectActionsController::askAboutSavingScore(INotationProj
 
     std::string body = muse::trc("project", "Your changes will be lost if you don’t save them.");
 
-    IInteractive::Result result = interactive()->warning(title, body, {
+    IInteractive::Result result = interactive()->warningSync(title, body, {
         IInteractive::Button::DontSave,
         IInteractive::Button::Cancel,
         IInteractive::Button::Save
@@ -1453,11 +1453,13 @@ void ProjectActionsController::warnCloudIsNotAvailable()
     std::string title = muse::trc("project/save", "Unable to connect to the cloud");
     std::string msg = muse::trc("project/save", "Your changes will be saved to a local file until the connection resumes.");
 
-    IInteractive::Result result = interactive()->warning(title, msg,
-                                                         { IInteractive::Button::Ok }, IInteractive::Button::Ok,
-                                                         IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+    auto result = interactive()->warningAsync(title, msg,
+                                              { IInteractive::Button::Ok }, IInteractive::Button::Ok,
+                                              IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 
-    configuration()->setShowCloudIsNotAvailableWarning(result.showAgain());
+    result.onResolve(this, [this](const IInteractive::Result& res) {
+        configuration()->setShowCloudIsNotAvailableWarning(res.showAgain());
+    });
 }
 
 bool ProjectActionsController::askIfUserAgreesToSaveProjectWithErrors(const Ret& ret, const SaveLocation& location)
@@ -1609,7 +1611,7 @@ void ProjectActionsController::warnScoreCouldnotBeSaved(const Ret& ret)
 
 void ProjectActionsController::warnScoreCouldnotBeSaved(const std::string& errorText)
 {
-    interactive()->warning(muse::trc("project/save", "Your score could not be saved"), errorText);
+    interactive()->warningAsync(muse::trc("project/save", "Your score could not be saved"), errorText);
 }
 
 int ProjectActionsController::warnScoreHasBecomeCorruptedAfterSave(const Ret& ret)
@@ -1653,27 +1655,29 @@ void ProjectActionsController::revertCorruptedScoreToLastSaved()
     std::string title = muse::trc("project", "Revert to last saved?");
     std::string body = muse::trc("project", "Your changes will be lost. This action cannot be undone.");
 
-    int btn = interactive()->warning(title, body, {
+    auto promise = interactive()->warningAsync(title, body, {
         { IInteractive::Button::No, IInteractive::Button::Yes }
-    }, IInteractive::Button::Yes, IInteractive::Option::WithIcon).button();
+    }, IInteractive::Button::Yes, IInteractive::Option::WithIcon);
 
-    if (btn == static_cast<int>(IInteractive::Button::No)) {
-        return;
-    }
+    promise.onResolve(this, [this](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::No)) {
+            return;
+        }
 
-    auto currentProject = currentNotationProject();
-    muse::io::path_t filePath = currentProject->path();
+        auto currentProject = currentNotationProject();
+        muse::io::path_t filePath = currentProject->path();
 
-    bool hasUnsavedChanges = projectAutoSaver()->projectHasUnsavedChanges(filePath);
-    if (hasUnsavedChanges) {
-        muse::io::path_t autoSavePath = projectAutoSaver()->projectAutoSavePath(filePath);
-        fileSystem()->remove(autoSavePath);
-    }
+        bool hasUnsavedChanges = projectAutoSaver()->projectHasUnsavedChanges(filePath);
+        if (hasUnsavedChanges) {
+            muse::io::path_t autoSavePath = projectAutoSaver()->projectAutoSavePath(filePath);
+            fileSystem()->remove(autoSavePath);
+        }
 
-    Ret ret = doOpenProject(filePath);
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
+        Ret ret = doOpenProject(filePath);
+        if (!ret) {
+            LOGE() << ret.toString();
+        }
+    });
 }
 
 RecentFile ProjectActionsController::makeRecentFile(INotationProjectPtr project)
@@ -1731,7 +1735,7 @@ bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersi
 {
     IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, muse::trc("project", "Open anyway"), true /*accent*/);
 
-    int btn = interactive()->warning(errorText, "", {
+    int btn = interactive()->warningSync(errorText, "", {
         interactive()->buttonData(IInteractive::Button::Cancel),
         openAnywayBtn
     }, openAnywayBtn.btn).button();
@@ -1750,11 +1754,13 @@ void ProjectActionsController::warnFileTooNew(const muse::io::path_t& filepath)
 bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText)
 {
     std::string title = muse::mtrc("project", "File “%1” is corrupted").arg(projectName).toStdString();
-    std::string body = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction.");
+    IInteractive::Text text;
+    text.text = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction.");
+    text.detailedText = errorText;
 
     IInteractive::ButtonData openAnywayBtn(IInteractive::Button::CustomButton, muse::trc("project", "Open anyway"), true /*accent*/);
 
-    int btn = interactive()->warning(title, body, errorText, {
+    int btn = interactive()->warningSync(title, text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         openAnywayBtn
     }, openAnywayBtn.btn).button();
