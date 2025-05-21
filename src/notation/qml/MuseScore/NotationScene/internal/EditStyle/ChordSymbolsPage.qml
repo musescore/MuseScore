@@ -306,7 +306,7 @@ StyledFlickable {
                                 Layout.preferredWidth: 80
 
                                 currentValue: Math.round(chordSymbolsModel.extensionAdjust.value * 100)
-                                minValue: 0
+                                minValue: -999
                                 maxValue: 999
                                 step: 1
                                 decimals: 0
@@ -383,7 +383,7 @@ StyledFlickable {
                                 Layout.preferredWidth: 80
 
                                 currentValue: Math.round(chordSymbolsModel.modifierAdjust.value * 100)
-                                minValue: 0
+                                minValue: -999
                                 maxValue: 999
                                 step: 1
                                 decimals: 0
@@ -596,10 +596,15 @@ StyledFlickable {
                     spacing: 6
                     Layout.fillWidth: true
 
-                    CheckBox {
-                        text: qsTrc("notation/editstyle/chordsymbols", "Vertically align chord symbols on the same system")
-                        checked: chordSymbolsModel.verticallyAlignChordSymbols.value === true
-                        onClicked: chordSymbolsModel.verticallyAlignChordSymbols.value = !chordSymbolsModel.verticallyAlignChordSymbols.value
+                    Item {
+                        Layout.preferredWidth: 452
+                        implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
+
+                        CheckBox {
+                            text: qsTrc("notation/editstyle/chordsymbols", "Vertically align chord symbols on the same system")
+                            checked: chordSymbolsModel.verticallyAlignChordSymbols.value === true
+                            onClicked: chordSymbolsModel.verticallyAlignChordSymbols.value = !chordSymbolsModel.verticallyAlignChordSymbols.value
+                        }
                     }
 
                     FlatButton {
