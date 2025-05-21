@@ -748,6 +748,7 @@ void EnigmaXmlImporter::importStaffItems()
                 logger()->logWarning(String(u"Unable to retrieve composite staff information"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 return;
             }
+            std::shared_ptr<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
             std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
             if (!currMusxTimeSig || !currMusxTimeSig->isSame(*musxTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
                 Fraction timeSig = simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
@@ -756,6 +757,8 @@ void EnigmaXmlImporter::importStaffItems()
                 ts->setSig(timeSig);
                 ts->setTrack(static_cast<int>(staffIdx) * VOICES);
                 ts->setVisible(musxMeasure->showTime != others::Measure::ShowTimeSigMode::Never);
+                Fraction stretch = Fraction(musxTimeSig->calcTotalDuration().calcEduDuration(), globalTimeSig->calcTotalDuration().calcEduDuration()).reduced();
+                ts->setStretch(stretch);
                 /// @todo other time signature options? Beaming? Composite list?
                 seg->add(ts);
                 staff->addTimeSig(ts);
@@ -925,11 +928,11 @@ void EnigmaXmlImporter::importEntries()
                 }
             }
             if (!processedEntries) {
+                Staff* staff = m_score->staff(curStaffIdx);
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
-                rest->setTicks(measure->ticks());
+                rest->setTicks(staff->timeSig(measure->tick())->sig());
                 rest->setTrack(curStaffIdx * VOICES);
-                rest->setVisible(false);
                 segment->add(rest);
             }
         }
