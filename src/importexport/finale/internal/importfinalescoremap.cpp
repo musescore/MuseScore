@@ -538,7 +538,6 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
     // load entry
     ChordRest* cr = importEntry(entryInfo, segment, curTrackIdx);
     if (cr) {
-        cr->setTicks(currentEntryActualDuration); // should probably be actual length, like done here
         cr->setParent(segment);
         cr->setTrack(curTrackIdx);
         if (cr->durationTypeTicks() < Fraction(1, 4)) {
@@ -549,6 +548,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
             parentTuplet->add(cr);
             cr->setTuplet(parentTuplet);
         }
+        cr->setTicks(cr->durationTypeTicks()); // everything I see in MuseScore generated files suggests this is the correct value here, rather than actual ticks
         entryMap.emplace(entryInfo.getIndexInFrame(), cr);
     } else {
         logger()->logWarning(String(u"Failed to read entry contents"));
@@ -557,7 +557,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         return false;
     }
 
-    tickEnd += currentEntryActualDuration;
+    tickEnd += cr->actualTicks(); /// @todo this seems like the correct value, but it does not produce correct results with tuplets or local time sigs
     Measure* nm = m_score->tick2measure(tickEnd);
     if (nm) {
         segment = nm->getSegment(SegmentType::ChordRest, tickEnd);
