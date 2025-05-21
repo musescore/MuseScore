@@ -196,17 +196,16 @@ public:
     }
 
     // error
-    virtual Result error(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
-                         const Button& def = Button::NoButton, const Options& options = { WithIcon },
-                         const std::string& dialogTitle = "") const = 0;
+    virtual async::Promise<Result> errorAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                              int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                                              const std::string& dialogTitle = "") = 0;
 
-    virtual Result error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                         int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                         const std::string& dialogTitle = "") const = 0;
-
-    virtual Result error(const std::string& contentTitle, const Text& text, const std::string& detailedText,
-                         const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
-                         const std::string& dialogTitle = "") const = 0;
+    async::Promise<Result> errorAsync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                                      Button defBtn = Button::NoButton, const Options& options = { WithIcon },
+                                      const std::string& dialogTitle = "")
+    {
+        return infoAsync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
 
     // progress
     virtual Ret showProgress(const std::string& title, Progress* progress) const = 0;
@@ -282,6 +281,16 @@ public:
 
     Result warningSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
                        const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+    {
+        return infoSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+    }
+
+    virtual Result errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                             int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                             const std::string& dialogTitle = "") = 0;
+
+    Result errorSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
+                     const Button& defBtn = Button::NoButton, const Options& options = { WithIcon }, const std::string& dialogTitle = "")
     {
         return infoSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }

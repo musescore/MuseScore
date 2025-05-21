@@ -962,7 +962,7 @@ void NotationActionController::putTuplet(const TupletOptions& options)
     }
 
     if (!interaction->canAddTupletToSelectedChordRests()) {
-        interactive()->error(muse::trc("notation", "Cannot create tuplet"), muse::trc("notation", "Note value is too short"));
+        interactive()->errorAsync(muse::trc("notation", "Cannot create tuplet"), muse::trc("notation", "Note value is too short"));
         return;
     }
 
@@ -1265,7 +1265,7 @@ void NotationActionController::repeatSelection()
     playSelectedElement(true);
 
     if (!ret && !ret.text().empty()) {
-        interactive()->error("", ret.text());
+        interactive()->errorAsync("", ret.text());
     }
 }
 
@@ -1842,8 +1842,8 @@ void NotationActionController::loadStyle()
     if (!path.empty()) {
         File f(path.toQString());
         if (!f.open(IODevice::ReadOnly) || !mu::engraving::MStyle::isValid(&f)) {
-            interactive()->error(muse::trc("notation", "The style file could not be loaded."),
-                                 f.errorString());
+            interactive()->errorAsync(muse::trc("notation", "The style file could not be loaded."),
+                                      f.errorString());
             return;
         }
         if (!currentNotationStyle()->loadStyle(path.toQString(), false)) {
@@ -1868,8 +1868,8 @@ void NotationActionController::saveStyle()
     auto path = selectStyleFile(false);
     if (!path.empty()) {
         if (!currentNotationStyle()->saveStyle(path)) {
-            interactive()->error(muse::trc("notation", "The style file could not be saved."),
-                                 muse::trc("notation", "An error occurred."));
+            interactive()->errorAsync(muse::trc("notation", "The style file could not be saved."),
+                                      muse::trc("notation", "An error occurred."));
         }
     }
 }

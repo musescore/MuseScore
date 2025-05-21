@@ -61,14 +61,12 @@ public:
                                         const std::string& dialogTitle = "") override;
 
     // error
-    Result error(const std::string& contentTitle, const std::string& text, const Buttons& buttons = {},
-                 const Button& def = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "") const override;
+    Result errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
+                     const Options& options = {}, const std::string& dialogTitle = "") override;
 
-    Result error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {}, int defBtn = int(Button::NoButton),
-                 const Options& options = {}, const std::string& dialogTitle = "") const override;
-
-    Result error(const std::string& contentTitle, const Text& text, const std::string& detailedText, const ButtonDatas& buttons = {},
-                 int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") const override;
+    async::Promise<Result> errorAsync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                      int defBtn = int(Button::NoButton), const Options& options = {},
+                                      const std::string& dialogTitle = "") override;
 
     // progress
     Ret showProgress(const std::string& title, Progress* progress) const override;

@@ -655,7 +655,7 @@ void CustomizeKitDialog::save()
     File f(fname);
     if (!f.open(IODevice::WriteOnly)) {
         QString s = muse::qtrc("palette", "Opening file\n%1\nfailed: %2").arg(f.filePath().toQString()).arg(strerror(errno));
-        interactive()->error(muse::trc("palette", "Open file"), s.toStdString());
+        interactive()->errorAsync(muse::trc("palette", "Open file"), s.toStdString());
         return;
     }
     valueChanged();    //save last changes in name
@@ -666,7 +666,7 @@ void CustomizeKitDialog::save()
     xml.endElement();
     if (f.hasError()) {
         QString s = muse::qtrc("palette", "Writing file failed: %1").arg(QString::fromStdString(f.errorString()));
-        interactive()->error(muse::trc("palette", "Write drumset"), s.toStdString());
+        interactive()->errorAsync(muse::trc("palette", "Write drumset"), s.toStdString());
     }
 }
 

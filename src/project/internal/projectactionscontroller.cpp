@@ -1503,9 +1503,12 @@ bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScore(const SaveLoc
 void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std::string& errorText, bool canRevert)
 {
     std::string title = muse::trc("project", "Your score cannot be uploaded to the cloud");
-    std::string body = muse::trc("project", "This score has become corrupted and contains errors. "
-                                            "You can fix the errors manually, or save the score to your computer "
-                                            "and get help for this issue on MuseScore.org.");
+
+    IInteractive::Text text;
+    text.text = muse::trc("project", "This score has become corrupted and contains errors. "
+                                     "You can fix the errors manually, or save the score to your computer "
+                                     "and get help for this issue on MuseScore.org.");
+    text.detailedText = errorText;
 
     IInteractive::ButtonDatas buttons;
     buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
@@ -1523,25 +1526,31 @@ void ProjectActionsController::warnCorruptedScoreCannotBeSavedOnCloud(const std:
         defaultBtn = revertToLastSavedBtn.btn;
     }
 
-    int btn = interactive()->error(title, body, errorText, buttons, defaultBtn).button();
-
-    if (btn == saveCopyBtn.btn) {
-        m_isProjectSaving = false;
-        saveProject(SaveMode::SaveAs, SaveLocationType::Local, true /*force*/);
-    } else if (btn == revertToLastSavedBtn.btn) {
-        revertCorruptedScoreToLastSaved();
-    }
+    interactive()->errorAsync(title, text, buttons, defaultBtn)
+    .onResolve(this, [this, saveCopyBtn, revertToLastSavedBtn](const IInteractive::Result& res) {
+        int btn = res.button();
+        if (btn == saveCopyBtn.btn) {
+            m_isProjectSaving = false;
+            saveProject(SaveMode::SaveAs, SaveLocationType::Local, true /*force*/);
+        } else if (btn == revertToLastSavedBtn.btn) {
+            revertCorruptedScoreToLastSaved();
+        }
+    });
 }
 
 bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreLocally(const std::string& errorText,
                                                                           bool canRevert)
 {
     std::string title = muse::trc("project", "This score has become corrupted and contains errors");
-    std::string body = !canRevert ? muse::trc("project", "You can continue saving it locally, although the file may become unusable. "
-                                                         "You can try to fix the errors manually, or get help for this issue on MuseScore.org.")
-                       : muse::trc("project", "You can continue saving it locally, although the file may become unusable. "
-                                              "To preserve your score, revert to the last saved version, or fix the errors manually. "
-                                              "You can also get help for this issue on MuseScore.org.");
+
+    IInteractive::Text text;
+    text.text = !canRevert
+                ? muse::trc("project", "You can continue saving it locally, although the file may become unusable. "
+                                       "You can try to fix the errors manually, or get help for this issue on MuseScore.org.")
+                : muse::trc("project", "You can continue saving it locally, although the file may become unusable. "
+                                       "To preserve your score, revert to the last saved version, or fix the errors manually. "
+                                       "You can also get help for this issue on MuseScore.org.");
+    text.detailedText = errorText;
 
     IInteractive::ButtonDatas buttons;
     buttons.push_back(interactive()->buttonData(IInteractive::Button::Cancel));
@@ -1558,7 +1567,7 @@ bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreLocally(const 
         defaultBtn = revertToLastSavedBtn.btn;
     }
 
-    int btn = interactive()->error(title, body, errorText, buttons, defaultBtn).button();
+    int btn = interactive()->errorSync(title, text, buttons, defaultBtn).button();
 
     if (btn == revertToLastSavedBtn.btn) {
         revertCorruptedScoreToLastSaved();
@@ -1583,20 +1592,24 @@ bool ProjectActionsController::askIfUserAgreesToSaveCorruptedScoreUponOpenning(c
 
 void ProjectActionsController::showErrCorruptedScoreCannotBeSaved(const SaveLocation& location, const std::string& errorText)
 {
-    std::string title = location.isLocal() ? muse::trc("project", "Your score cannot be saved")
+    std::string title = location.isLocal()
+                        ? muse::trc("project", "Your score cannot be saved")
                         : muse::trc("project", "Your score cannot be uploaded to the cloud");
-    std::string body = muse::trc("project", "This score is corrupted. You can get help for this issue on MuseScore.org.");
+
+    IInteractive::Text text;
+    text.text = muse::trc("project", "This score is corrupted. You can get help for this issue on MuseScore.org.");
+    text.detailedText = errorText;
 
     IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, muse::trc("project", "Get help"));
 
-    int btn = interactive()->error(title, body, errorText, {
+    interactive()->errorAsync(title, text, {
         getHelpBtn,
         interactive()->buttonData(IInteractive::Button::Ok)
-    }).button();
-
-    if (btn == getHelpBtn.btn) {
-        interactive()->openUrl(configuration()->supportForumUrl());
-    }
+    }).onResolve(this, [this, getHelpBtn](const IInteractive::Result& res) {
+        if (res.isButton(getHelpBtn.btn)) {
+            interactive()->openUrl(configuration()->supportForumUrl());
+        }
+    });
 }
 
 void ProjectActionsController::warnScoreCouldnotBeSaved(const Ret& ret)
@@ -1644,8 +1657,8 @@ int ProjectActionsController::warnScoreHasBecomeCorruptedAfterSave(const Ret& re
     IInteractive::ButtonData cancelBtn = interactive()->buttonData(IInteractive::Button::Cancel);
     buttons.push_back(cancelBtn);
 
-    return interactive()->error(title, IInteractive::Text(body, IInteractive::TextFormat::RichText),
-                                buttons, retryBtn.btn).button();
+    return interactive()->errorSync(title, IInteractive::Text(body, IInteractive::TextFormat::RichText),
+                                    buttons, retryBtn.btn).button();
 }
 
 void ProjectActionsController::revertCorruptedScoreToLastSaved()
@@ -1745,10 +1758,10 @@ bool ProjectActionsController::askIfUserAgreesToOpenProjectWithIncompatibleVersi
 
 void ProjectActionsController::warnFileTooNew(const muse::io::path_t& filepath)
 {
-    interactive()->error(muse::qtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toQString()).toStdString(),
-                         muse::mtrc("project", "This file was saved using a newer version of MuseScore Studio. "
-                                               "Please visit <a href=\"%1\">MuseScore.org</a> to obtain the latest version.")
-                         .arg(u"https://musescore.org").toStdString());
+    interactive()->errorAsync(muse::qtrc("project", "Cannot read file %1").arg(io::toNativeSeparators(filepath).toQString()).toStdString(),
+                              muse::mtrc("project", "This file was saved using a newer version of MuseScore Studio. "
+                                                    "Please visit <a href=\"%1\">MuseScore.org</a> to obtain the latest version.")
+                              .arg(u"https://musescore.org").toStdString());
 }
 
 bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const String& projectName, const std::string& errorText)
@@ -1771,18 +1784,20 @@ bool ProjectActionsController::askIfUserAgreesToOpenCorruptedProject(const Strin
 void ProjectActionsController::warnProjectCriticallyCorrupted(const String& projectName, const std::string& errorText)
 {
     std::string title = muse::mtrc("project", "File “%1” is corrupted and cannot be opened").arg(projectName).toStdString();
-    std::string body = muse::trc("project", "Get help for this issue on MuseScore.org.");
+    IInteractive::Text text;
+    text.text = muse::trc("project", "Get help for this issue on MuseScore.org.");
+    text.detailedText = errorText;
 
     IInteractive::ButtonData getHelpBtn(IInteractive::Button::CustomButton, muse::trc("project", "Get help"), true /*accent*/);
 
-    int btn = interactive()->error(title, body, errorText, {
+    interactive()->errorAsync(title, text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         getHelpBtn
-    }, getHelpBtn.btn).button();
-
-    if (btn == getHelpBtn.btn) {
-        interactive()->openUrl(configuration()->supportForumUrl());
-    }
+    }, getHelpBtn.btn).onResolve(this, [this, getHelpBtn](const IInteractive::Result& res) {
+        if (res.isButton(getHelpBtn.btn)) {
+            interactive()->openUrl(configuration()->supportForumUrl());
+        }
+    });
 }
 
 void ProjectActionsController::warnProjectCannotBeOpened(const Ret& ret, const muse::io::path_t& filepath)
@@ -1806,7 +1821,7 @@ void ProjectActionsController::warnProjectCannotBeOpened(const Ret& ret, const m
         }
     }
 
-    interactive()->error(title, body);
+    interactive()->errorAsync(title, body);
 }
 
 void ProjectActionsController::importPdf()

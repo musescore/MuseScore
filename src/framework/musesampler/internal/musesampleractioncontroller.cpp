@@ -56,6 +56,6 @@ void MuseSamplerActionController::reloadMuseSampler()
     }
 
     if (!m_reloadMuseSampler()) {
-        interactive()->error("", std::string("Could not reload MuseSampler library"));
+        interactive()->errorAsync("", std::string("Could not reload MuseSampler library"));
     }
 }

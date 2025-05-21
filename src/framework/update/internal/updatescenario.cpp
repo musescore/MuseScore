@@ -173,8 +173,8 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 
 void UpdateScenario::showServerErrorMsg()
 {
-    interactive()->error(muse::trc("update", "Cannot connect to server"),
-                         muse::trc("update", "Sorry - please try again later"));
+    interactive()->errorAsync(muse::trc("update", "Cannot connect to server"),
+                              muse::trc("update", "Sorry - please try again later"));
 }
 
 void UpdateScenario::downloadRelease()
