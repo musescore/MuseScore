@@ -5260,6 +5260,19 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
     }
     attr += color2xml(rmk);
     attr += positioningAttributes(rmk);
+    if (configuration()->exportLayout()) {
+        switch (rmk->align().horizontal) {
+        case AlignH::LEFT:
+            // default in MusicXML
+            break;
+        case AlignH::HCENTER:
+            attr += u" justify=\"center\"";
+            break;
+        case AlignH::RIGHT:
+            attr += u" justify=\"right\"";
+            break;
+        }
+    }
     // set the default words format
     const MStyle& style = m_score->style();
     const String mtf = style.styleSt(Sid::musicalTextFont);
