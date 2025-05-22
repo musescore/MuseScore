@@ -991,6 +991,11 @@ Fraction FinaleTConv::musxFractionToFraction(musx::util::Fraction fraction)
     return Fraction(fraction.numerator(), fraction.denominator());
 }
 
+Fraction FinaleTConv::eduToFraction(Edu edu)
+{
+	return musxFractionToFraction(musx::util::Fraction::fromEdu(edu));
+}
+
 Fraction FinaleTConv::simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger)
 {
     auto [count, noteType] = simpleMusxTimeSig;

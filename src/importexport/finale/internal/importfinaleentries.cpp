@@ -551,29 +551,29 @@ static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::Tuple
 static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, Measure* measure, Edu musxEduPos, bool afterBarline)
 {
     ClefType entryClefType = FinaleTConv::toMuseScoreClefType(musxClef);
-    if (entryClefType != ClefType::INVALID) {
-        Clef* clef = Factory::createClef(score->dummy()->segment());
-        clef->setTrack(staffIdx * VOICES);
-        clef->setConcertClef(entryClefType);
-        clef->setTransposingClef(entryClefType);
-        // clef->setShowCourtesy();
-        // clef->setForInstrumentChange();
-        clef->setGenerated(false);
-        const bool isHeader = !afterBarline && !measure->prevMeasure() && musxEduPos == 0;
-        clef->setIsHeader(isHeader);
-        if (afterBarline) {
-            clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
-        } else if (musxEduPos == 0) {
-            clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
-        }
-
-        Fraction clefTick = measure->tick() + FinaleTConv::musxFractionToFraction(musx::util::Fraction::fromEdu(musxEduPos));
-        Segment* clefSeg = measure->getSegment(
-                           clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
-        clefSeg->add(clef);
-        return clef;
+    if (entryClefType == ClefType::INVALID) {
+        return nullptr;
     }
-    return nullptr;
+    Clef* clef = Factory::createClef(score->dummy()->segment());
+    clef->setTrack(staffIdx * VOICES);
+    clef->setConcertClef(entryClefType);
+    clef->setTransposingClef(entryClefType);
+    // clef->setShowCourtesy();
+    // clef->setForInstrumentChange();
+    clef->setGenerated(false);
+    const bool isHeader = !afterBarline && !measure->prevMeasure() && musxEduPos == 0;
+    clef->setIsHeader(isHeader);
+    if (afterBarline) {
+        clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
+    } else if (musxEduPos == 0) {
+        clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
+    }
+
+    Fraction clefTick = measure->tick() + FinaleTConv::eduToFraction(musxEduPos);
+    Segment* clefSeg = measure->getSegment(
+                       clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
+    clefSeg->add(clef);
+    return clef;
 }
 
 void EnigmaXmlImporter::importStaffItems()
@@ -625,12 +625,12 @@ void EnigmaXmlImporter::importStaffItems()
 
 void EnigmaXmlImporter::importClefs(details::GFrameHoldContext gfHold,
                                     const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem,
-                                    const std::shared_ptr<others::Measure>& musxMeasure, Measure* measure, staff_idx_t curStaffIdx)
+                                    const std::shared_ptr<others::Measure>& musxMeasure, Measure* measure, staff_idx_t curStaffIdx,
+                                    ClefIndex musxCurrClef)
 {
     // The Finale UI requires transposition to be a full-measure staff-style assignment, so checking only the beginning of the bar should be sufficient.
     // However, it is possible to defeat this requirement using plugins. That said, doing so produces erratic results, so I'm not sure we should support it.
     // For now, only check the start of the measure.
-    ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId);
     bool transposedClefOverride = false;
     auto musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
     if (musxStaffAtMeasureStart && musxStaffAtMeasureStart->transposition && musxStaffAtMeasureStart->transposition->setToClef) {
@@ -681,6 +681,7 @@ void EnigmaXmlImporter::importEntries()
             logger()->logWarning(String(u"Add entries: Score has no first measure."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         }
+        ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId);
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
             Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
             Measure* measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
@@ -697,7 +698,7 @@ void EnigmaXmlImporter::importEntries()
             bool processedEntries = false;
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
             if (gfHold) {
-                importClefs(gfHold, musxScrollViewItem, musxMeasure, measure, curStaffIdx);
+                importClefs(gfHold, musxScrollViewItem, musxMeasure, measure, curStaffIdx, musxCurrClef);
 
                 std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
                 std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxScrollViewItem->staffId, musxMeasure->getCmper());

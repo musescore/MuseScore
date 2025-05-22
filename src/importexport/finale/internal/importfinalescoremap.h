@@ -91,7 +91,8 @@ private:
     void importClefs(musx::dom::details::GFrameHoldContext gfHold,
                      const std::shared_ptr<musx::dom::others::InstrumentUsed>& musxScrollViewItem,
                      const std::shared_ptr<musx::dom::others::Measure>& musxMeasure,
-                     engraving::Measure* measure, engraving::staff_idx_t curStaffIdx);
+                     engraving::Measure* measure, engraving::staff_idx_t curStaffIdx,
+                     musx::dom::ClefIndex musxCurrClef);
     // styles
     void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);
 

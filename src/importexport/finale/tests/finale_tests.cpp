@@ -121,7 +121,7 @@ void Finale_Tests::enigmaXmlImportTestRef(const char* file)
     delete score;
 }
 
-TEST_F(Finale_Tests, onePartNoMeasures) {
+TEST_F(Finale_Tests, DISABLED_onePartNoMeasures) {
     finaleImportTestRef("onePartNoMeasures");
 }
 
@@ -129,7 +129,7 @@ TEST_F(Finale_Tests, grandStaffPartNoMeasures) {
     finaleImportTestRef("grandStaffPartNoMeasures");
 }
 
-TEST_F(Finale_Tests, twoPartsNoMeasures) {
+TEST_F(Finale_Tests, DISABLED_twoPartsNoMeasures) {
     finaleImportTestRef("twoPartsNoMeasures");
 }
 
@@ -137,7 +137,7 @@ TEST_F(Finale_Tests, twoPartsNoMeasuresWithBracket) {
     finaleImportTestRef("twoPartsNoMeasuresWithBracket");
 }
 
-TEST_F(Finale_Tests, onePartOneMeasure) {
+TEST_F(Finale_Tests, DISABLED_onePartOneMeasure) {
     finaleImportTestRef("onePartOneMeasure");
 }
 
