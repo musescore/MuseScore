@@ -60,6 +60,8 @@ namespace mu::iex::finale {
 
 void EnigmaXmlImporter::import()
 {
+    // styles (first, so that spatium and other defaults are correct)
+    importStyles(m_score->style(), m_currentMusxPartId);
     // scoremap
     importParts();
     importBrackets();
@@ -68,8 +70,6 @@ void EnigmaXmlImporter::import()
     mapLayers();
     importStaffItems();
     importEntries();
-    // styles
-    importStyles(m_score->style(), m_currentMusxPartId);
 }
 
 static std::optional<ClefTypeList> clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
