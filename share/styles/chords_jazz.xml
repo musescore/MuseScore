@@ -30,11 +30,11 @@
 -->
 
 <!-- MuseJazz Text extensions are already superscripted; this is how much to move them back down -->
-  <!ENTITY ext "2.5">
+  <!ENTITY ext "1.2">
 <!-- MuseJazz Text modifier digits are already superscripted; this is how much to move everything else up to match -->
-  <!ENTITY mod "4.5">
+  <!ENTITY mod "2.5">
 <!-- this is additional superscripting to apply to modifier digits -->
-  <!ENTITY modn "1">
+  <!ENTITY modn "0.3">
 
   ]>
 
@@ -228,7 +228,7 @@
 
   <token>
     <name>69</name>
-    <render>m:1:-2 s6 m:-4:7 s9 m:0:-5</render>
+    <render>m:0.5:-1 s6 m:-1:3 s9 m:0:-2</render>
     </token>
 
   <token class="extension">
@@ -238,7 +238,7 @@
 
   <token class="extension">
     <name>6/9</name>
-    <render>m:1:-2 s6 m:-2.5:0 s/ m:-2:7 s9 m:0:-5</render>
+    <render>m:0.5:-1 s6 m:-1:0 s/ m:-0.8:3 s9 m:0:-2</render>
     </token>
 
   <token class="quality">
@@ -288,7 +288,7 @@
 
   <token class="modifier">
     <name>(</name>
-    <render>m:1:-&mod; s( m:0:&mod;</render>
+    <render>m:0.5:-&mod; s( m:0:&mod;</render>
     </token>
 
   <token class="modifier">

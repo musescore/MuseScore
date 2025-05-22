@@ -30,7 +30,12 @@
 #include "translation.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chord.h"
+#include "engraving/dom/chordlist.h"
+#include "engraving/dom/harmony.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
 #include "engraving/types/symnames.h"
+#include "types/types.h"
 
 using namespace muse;
 using namespace mu::engraving;
@@ -655,5 +660,98 @@ AccidentalType microtonalGuess(double val)
 bool isLaissezVibrer(const SymId id)
 {
     return id == SymId::articLaissezVibrerAbove || id == SymId::articLaissezVibrerBelow;
+}
+
+String harmonyXmlKind(const engraving::HarmonyInfo* h)
+{
+    if (!h) {
+        return String();
+    }
+    const ChordDescription* cd = h->descr();
+    return cd ? cd->xmlKind : String();
+}
+
+String harmonyXmlText(const engraving::HarmonyInfo* h)
+{
+    if (!h) {
+        return String();
+    }
+    const ChordDescription* cd = h->descr();
+    return cd ? cd->xmlText : String();
+}
+
+String harmonyXmlSymbols(const engraving::HarmonyInfo* h)
+{
+    if (!h) {
+        return String();
+    }
+    const ChordDescription* cd = h->descr();
+    return cd ? cd->xmlSymbols : String();
+}
+
+String harmonyXmlParens(const engraving::HarmonyInfo* h)
+{
+    if (!h) {
+        return String();
+    }
+    const ChordDescription* cd = h->descr();
+    return cd ? cd->xmlParens : String();
+}
+
+StringList harmonyXmlDegrees(const engraving::HarmonyInfo* h)
+{
+    if (!h) {
+        return StringList();
+    }
+    const ChordDescription* cd = h->descr();
+    return cd ? cd->xmlDegrees : StringList();
+}
+
+const ChordDescription* harmonyFromXml(engraving::HarmonyInfo* info, engraving::Score* score, const muse::String& kind,
+                                       const muse::String& kindText, const muse::String& symbols, const muse::String& parens,
+                                       const std::list<engraving::HDegree>& dl)
+{
+    if (!info) {
+        return nullptr;
+    }
+    ParsedChord* pc = new ParsedChord;
+    info->setTextName(pc->fromXml(kind, kindText, symbols, parens, dl, score->chordList()));
+    info->setParsedChord(pc);
+    const ChordDescription* cd = info->getDescription(info->textName(), pc);
+    return cd;
+}
+
+String harmonyXmlFunction(const engraving::HarmonyInfo* info, const engraving::Harmony* h, engraving::Key key)
+{
+    if (!info || !tpcIsValid(info->rootTpc())) {
+        return String();
+    }
+    if (key == Key::INVALID) {
+        const Staff* st = h->staff();
+        key = st ? st->key(h->tick()) : Key::INVALID;
+    }
+    return tpc2Function(info->rootTpc(), key);
+}
+
+String harmonyXmlFunction(const engraving::HarmonyInfo* info, const engraving::Harmony* h)
+{
+    if (!info || !tpcIsValid(info->rootTpc())) {
+        return String();
+    }
+    const Staff* st = h->staff();
+    Key key = st ? st->key(h->tick()) : Key::INVALID;
+    return tpc2Function(info->rootTpc(), key);
+}
+
+void setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const muse::String& s, engraving::Key key)
+{
+    if (!info) {
+        return;
+    }
+    if (key == Key::INVALID) {
+        const Staff* st = h->staff();
+        key = st ? st->key(h->tick()) : Key::INVALID;
+    }
+    info->setRootTpc(function2Tpc(s, key));
 }
 }

@@ -131,12 +131,6 @@ public:
 
     bool firstSystemIndent() const { return styleB(Sid::enableIndentationOnFirstSystem); }
 
-    double maxChordShiftAbove() const { return styleMM(Sid::maxChordShiftAbove); }
-    double maxChordShiftBelow() const { return styleMM(Sid::maxChordShiftBelow); }
-
-    double maxFretShiftAbove() const { return styleMM(Sid::maxFretShiftAbove); }
-    double maxFretShiftBelow() const { return styleMM(Sid::maxFretShiftBelow); }
-
     VerticalAlignRange verticalAlignRange() const { return style().value(Sid::autoplaceVerticalAlignRange).value<VerticalAlignRange>(); }
 
 private:

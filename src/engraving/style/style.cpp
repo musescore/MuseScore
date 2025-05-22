@@ -208,6 +208,12 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::TIMESIG_MARGIN:
                 set(idx, TConv::fromXml(e.readAsciiText(), TimeSigVSMargin::RIGHT_ALIGN_TO_BARLINE));
                 break;
+            case P_TYPE::NOTE_SPELLING_TYPE:
+                set(idx, TConv::fromXml(e.readAsciiText(), NoteSpellingType::STANDARD));
+                break;
+            case P_TYPE::CHORD_PRESET_TYPE:
+                set(idx, TConv::fromXml(e.readAsciiText(), ChordStylePreset::STANDARD));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
@@ -538,9 +544,38 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(Sid::articulationAnchorOther, (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
         } else if (tag == "lineEndToSystemEndDistance") { // renamed in 4.5
             set(Sid::lineEndToBarlineDistance, Spatium(e.readDouble()));
+        } else if (tag == "useStandardNoteNames") {     // These settings were collapsed into one enum in 4.6
+            if (e.readBool()) {
+                set(Sid::chordSymbolSpelling, NoteSpellingType::STANDARD);
+            }
+        } else if (tag == "useGermanNoteNames") {
+            if (e.readBool()) {
+                set(Sid::chordSymbolSpelling, NoteSpellingType::GERMAN);
+            }
+        } else if (tag == "useFullGermanNoteNames") {
+            if (e.readBool()) {
+                set(Sid::chordSymbolSpelling, NoteSpellingType::GERMAN_PURE);
+            }
+        } else if (tag == "useSolfeggioNoteNames") {
+            if (e.readBool()) {
+                set(Sid::chordSymbolSpelling, NoteSpellingType::SOLFEGGIO);
+            }
+        } else if (tag == "useFrenchNoteNames") {
+            if (e.readBool()) {
+                set(Sid::chordSymbolSpelling, NoteSpellingType::FRENCH);
+            }
+        } else if (tag == "chordModifierAdjust") {
+            set(Sid::chordModifierAdjust, compat::CompatUtils::convertChordExtModUnits(e.readDouble()));
+        } else if (tag == "chordExtensionAdjust") {
+            set(Sid::chordExtensionAdjust, compat::CompatUtils::convertChordExtModUnits(e.readDouble()));
         } else if (!readProperties(e)) {
             e.unknown();
         }
+    }
+
+    if (m_version < 460) {
+        AlignH horizontalAlign = value(Sid::chordSymbolAAlign).value<Align>().horizontal;
+        set(Sid::chordAlignmentToNotehead, (int)horizontalAlign);
     }
 
     if (m_version < 450) {
@@ -612,6 +647,10 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigStyle>()));
         } else if (P_TYPE::TIMESIG_MARGIN == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigVSMargin>()));
+        } else if (P_TYPE::CHORD_PRESET_TYPE == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<ChordStylePreset>()));
+        } else if (P_TYPE::NOTE_SPELLING_TYPE == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<NoteSpellingType>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility
