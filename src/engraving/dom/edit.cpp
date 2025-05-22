@@ -117,6 +117,21 @@ static ChordRest* chordOrRest(EngravingItem* el)
     return nullptr;
 }
 
+static String harmonyName(const EngravingItem* harmonyOrFretDiagram)
+{
+    String result;
+    if (harmonyOrFretDiagram->isHarmony()) {
+        result = toHarmony(harmonyOrFretDiagram)->harmonyName();
+    } else {
+        const FretDiagram* fretDiagram = toFretDiagram(harmonyOrFretDiagram);
+        if (fretDiagram->harmony()) {
+            result = fretDiagram->harmony()->harmonyName();
+        }
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   getSelectedNote
 //---------------------------------------------------------
@@ -6557,6 +6572,9 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     }
                 }
             }
+            if (ne->isHarmony() || ne->isFretDiagram()) {
+                score->undoAddChordToFretBox(ne);
+            }
         } else if (element->isSlur()
                    || element->isHairpin()
                    || element->isOttava()
@@ -6927,6 +6945,68 @@ void Score::updateSystemLocksOnCreateMMRests(Measure* first, Measure* last)
     undoAddSystemLock(new SystemLock(startMB, endMB));
 }
 
+FBox* Score::findFretBox() const
+{
+    for (MeasureBase* measure = first(); measure; measure = measure->next()) {
+        if (measure->isFBox()) {
+            return toFBox(measure);
+        }
+    }
+
+    return nullptr;
+}
+
+void Score::undoRenameChordInFretBox(const Harmony* harmony, const String& oldName)
+{
+    FBox* fretBox = findFretBox();
+    if (!fretBox) {
+        return;
+    }
+
+    undo(new RenameChordFBox(fretBox, harmony, oldName));
+    fretBox->triggerLayout();
+}
+
+void Score::undoAddChordToFretBox(const EngravingItem* harmonyOrFretDiagram)
+{
+    IF_ASSERT_FAILED(!harmonyOrFretDiagram || !harmonyOrFretDiagram->isHarmony() || !harmonyOrFretDiagram->isFretDiagram()) {
+        return;
+    }
+
+    FBox* fretBox = findFretBox();
+    if (!fretBox) {
+        return;
+    }
+
+    String chordName = harmonyName(harmonyOrFretDiagram);
+    if (chordName.empty()) {
+        return;
+    }
+
+    undo(new AddChordFBox(fretBox, chordName, harmonyOrFretDiagram->tick()));
+    fretBox->triggerLayout();
+}
+
+void Score::undoRemoveChordFromFretBox(const EngravingItem* harmonyOrFretDiagram)
+{
+    IF_ASSERT_FAILED(!harmonyOrFretDiagram || !harmonyOrFretDiagram->isHarmony() || !harmonyOrFretDiagram->isFretDiagram()) {
+        return;
+    }
+
+    FBox* fretBox = findFretBox();
+    if (!fretBox) {
+        return;
+    }
+
+    String chordName = harmonyName(harmonyOrFretDiagram);
+    if (chordName.empty()) {
+        return;
+    }
+
+    undo(new RemoveChordFBox(fretBox, chordName, harmonyOrFretDiagram->tick()));
+    fretBox->triggerLayout();
+}
+
 //---------------------------------------------------------
 //   undoAddCR
 //---------------------------------------------------------
@@ -7028,6 +7108,10 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
     for (EngravingObject* ee : element->linkList()) {
         EngravingItem* e = static_cast<EngravingItem*>(ee);
         if (e == element || removeLinked) {
+            if (e->isHarmony() || e->isFretDiagram()) {
+                undoRemoveChordFromFretBox(e);
+            }
+
             doUndoRemoveElement(e);
 
             if (e->explicitParent() && (e->explicitParent()->isSegment())) {

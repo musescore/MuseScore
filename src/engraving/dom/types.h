@@ -104,6 +104,9 @@ enum class CommandType : signed char {
 
     // FBox
     ReorderFBox,
+    RenameChordFBox,
+    AddChordFBox,
+    RemoveChordFBox,
 
     // Harmony
     TransposeHarmony,

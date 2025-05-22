@@ -207,6 +207,8 @@ public:
 
     void undoReorderElements(const std::vector<EID>& newOrderElementsIds);
 
+    FretDiagram* makeFretDiagram(const EngravingItem* item);
+
     struct LayoutData : public VBox::LayoutData {
         double cellWidth = 0.0;
         double cellHeight = 0.0;

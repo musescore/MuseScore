@@ -573,7 +573,7 @@ void Harmony::endEditTextual(EditData& ed)
     bool textChanged = ted != nullptr && ted->oldXmlText != harmonyName();
 
     if (textChanged) {
-        Segment* parentSegment = explicitParent() ? getParentSeg() : nullptr;
+        Segment* parentSegment = getParentSeg();
         if (parentSegment) {
             EngravingItem* fretDiagramItem = parentSegment->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
             if (fretDiagramItem) {
@@ -585,6 +585,15 @@ void Harmony::endEditTextual(EditData& ed)
                 score()->endCmd();
             }
         }
+
+        UndoStack* undo = score()->undoStack();
+        undo->reopen();
+        if (ted->oldXmlText.empty()) {
+            score()->undoAddChordToFretBox(this);
+        } else {
+            score()->undoRenameChordInFretBox(this, ted->oldXmlText);
+        }
+        score()->endCmd();
     }
 
     if (links()) {
@@ -727,7 +736,7 @@ Harmony* Harmony::findInSeg(Segment* seg) const
 
 Segment* Harmony::getParentSeg() const
 {
-    Segment* seg;
+    Segment* seg = nullptr;
     if (explicitParent()->isFretDiagram()) {
         // When this harmony is the child of a fret diagram, we need to go up twice
         // to get to the parent seg.
@@ -747,7 +756,8 @@ Segment* Harmony::getParentSeg() const
 
 Harmony* Harmony::findNext() const
 {
-    Segment* cur = getParentSeg()->next1();
+    Segment* segment = getParentSeg();
+    Segment* cur = segment ? segment->next1() : nullptr;
     while (cur) {
         Harmony* h = findInSeg(cur);
         if (h) {
@@ -755,7 +765,7 @@ Harmony* Harmony::findNext() const
         }
         cur = cur->next1();
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -767,7 +777,8 @@ Harmony* Harmony::findNext() const
 
 Harmony* Harmony::findPrev() const
 {
-    Segment* cur = getParentSeg()->prev1();
+    Segment* segment = getParentSeg();
+    Segment* cur = segment ? segment->prev1() : nullptr;
     while (cur) {
         Harmony* h = findInSeg(cur);
         if (h) {
@@ -775,7 +786,7 @@ Harmony* Harmony::findPrev() const
         }
         cur = cur->prev1();
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -790,6 +801,10 @@ Harmony* Harmony::findPrev() const
 Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
 {
     Segment* seg = getParentSeg();
+    if (!seg) {
+        return Fraction(-1, 1);
+    }
+
     Fraction duration = seg->ticks();
 
     const RepeatList& repeats = score()->repeatList();
