@@ -67,6 +67,13 @@ struct HarmonyRenderCtx {
     bool hAlign = true;
     std::vector<TextSegment*> textList;
 
+    // Reset every render() call
+    std::stack<PointF> stack;
+    int tpc = Tpc::TPC_INVALID;
+    NoteSpellingType noteSpelling = NoteSpellingType::STANDARD;
+    NoteCaseType noteCase = NoteCaseType::AUTO;
+    double noteMag = 1.0;
+
     double x() const { return pos.x(); }
     double y() const { return pos.y(); }
 
@@ -253,9 +260,17 @@ private:
     void renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx);
     void renderRomanNumeral();
     void render(const String&, HarmonyRenderCtx& ctx);
-    void render(const std::list<RenderAction>& renderList, HarmonyRenderCtx& ctx, int tpc,
+    void render(const std::list<RenderAction*>& renderList, HarmonyRenderCtx& ctx, int tpc,
                 NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO,
                 double noteMag = 1.0);
+    void renderAction(const RenderAction* a, HarmonyRenderCtx& ctx);
+    void renderAction(const RenderActionSet* a, HarmonyRenderCtx& ctx);
+    void renderAction(const RenderActionMove* a, HarmonyRenderCtx& ctx);
+    void renderAction(const RenderActionPush* a, HarmonyRenderCtx& ctx);
+    void renderAction(const RenderActionPop* a, HarmonyRenderCtx& ctx);
+    void renderAction(const RenderActionNote* a, HarmonyRenderCtx& ctx);
+    void renderAction(const RenderActionAccidental* a, HarmonyRenderCtx& ctx);
+    void renderAction(const RenderActionStopHAlign* a, HarmonyRenderCtx& ctx);
 
     Sid getPropertyStyle(Pid) const override;
 

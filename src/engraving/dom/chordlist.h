@@ -119,21 +119,93 @@ private:
 //   RenderAction
 //---------------------------------------------------------
 
-struct RenderAction {
+struct RenderAction
+{
     enum class RenderActionType : char {
         SET, MOVE, PUSH, POP,
         NOTE, ACCIDENTAL, STOPHALIGN
     };
 
-    RenderActionType type = RenderActionType::SET;
-    double movex = 0.0, movey = 0.0; // MOVE
-    String text;                     // SET
-    bool popx = true, popy = true;   // POP
+    virtual RenderActionType actionType() const = 0;
 
-    RenderAction() {}
-    RenderAction(RenderActionType t)
-        : type(t) {}
-    void print() const;
+    virtual void print() const { print(actionType(), u""); }
+
+    virtual ~RenderAction() {}
+
+protected:
+    void print(RenderActionType type, const String& info) const;
+};
+
+struct RenderActionMove : RenderAction
+{
+    RenderActionMove() {}
+    RenderActionMove(double movex, double movey)
+        : m_movex(movex), m_movey(movey) {}
+
+    RenderActionType actionType() const override { return RenderActionType::MOVE; }
+    void print() const override;
+
+    void setx(double x) { m_movex = x; }
+    void sety(double y) { m_movex = y; }
+    double x() const { return m_movex; }
+    double y() const { return m_movey; }
+private:
+    double m_movex = 0.0, m_movey = 0.0;
+};
+
+struct RenderActionSet : RenderAction
+{
+    RenderActionSet() {}
+    RenderActionSet(String s)
+        : m_text(s) {}
+
+    RenderActionType actionType() const override { return RenderActionType::SET; }
+    void print() const override;
+
+    const String& text() const { return m_text; }
+private:
+    String m_text;
+};
+
+struct RenderActionPush : RenderAction
+{
+    RenderActionPush() {}
+    RenderActionType actionType() const override { return RenderActionType::PUSH; }
+};
+
+struct RenderActionPop : RenderAction
+{
+    RenderActionPop() {}
+    RenderActionPop(bool popx, bool popy)
+        : m_popx(popx), m_popy(popy) {}
+
+    RenderActionType actionType() const override { return RenderActionType::POP; }
+    void print() const override;
+
+    void setPopX(bool popx) { m_popx = popx; }
+    void setPopY(bool popy) { m_popx = popy; }
+    double popX() const { return m_popx; }
+    double popY() const { return m_popy; }
+private:
+    bool m_popx = true, m_popy = true;
+};
+
+struct RenderActionNote : RenderAction
+{
+    RenderActionNote() {}
+    RenderActionType actionType() const override { return RenderActionType::NOTE; }
+};
+
+struct RenderActionAccidental : RenderAction
+{
+    RenderActionAccidental() {}
+    RenderActionType actionType() const override { return RenderActionType::ACCIDENTAL; }
+};
+
+struct RenderActionStopHAlign : RenderAction
+{
+    RenderActionStopHAlign() {}
+    RenderActionType actionType() const override { return RenderActionType::STOPHALIGN; }
 };
 
 //---------------------------------------------------------
@@ -149,7 +221,7 @@ class ChordToken
 public:
     ChordTokenClass tokenClass;
     StringList names;
-    std::list<RenderAction> renderList;
+    std::list<RenderAction*> renderList;
     void read(XmlReader&, int mscVersion);
     void write(XmlWriter&) const;
 };
@@ -165,7 +237,7 @@ public:
 
     bool parse(const String&, const ChordList*, bool syntaxOnly = false, bool preferMinor = false);
     String fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&, const ChordList*);
-    const std::list<RenderAction>& renderList(const ChordList*);
+    const std::list<RenderAction*>& renderList(const ChordList*);
     bool parseable() const { return m_parseable; }
     bool understandable() const { return m_understandable; }
     const String& name() const { return m_name; }
@@ -198,7 +270,7 @@ private:
     String m_modifiers;
     StringList m_modifierList;
     std::list<ChordToken> m_tokenList;
-    std::list<RenderAction> m_renderList;
+    std::list<RenderAction*> m_renderList;
     String m_xmlKind;
     String m_xmlText;
     String m_xmlSymbols;
@@ -226,7 +298,7 @@ struct ChordDescription {
     String xmlParens;        // MusicXML: kind parentheses-degrees=
     StringList xmlDegrees;   // MusicXML: list of degrees (if any)
     HChord chord;             // C based chord
-    std::list<RenderAction> renderList;
+    std::list<RenderAction*> renderList;
     bool generated = false;
     bool renderListGenerated = false;
     bool exportOk = false;
@@ -277,10 +349,10 @@ class ChordList : public std::map<int, ChordDescription>
 
 public:
     std::list<ChordFont> fonts;
-    std::list<RenderAction> renderListRoot;
-    std::list<RenderAction> renderListFunction;
-    std::list<RenderAction> renderListBass;
-    std::list<RenderAction> renderListBassOffset;
+    std::list<RenderAction*> renderListRoot;
+    std::list<RenderAction*> renderListFunction;
+    std::list<RenderAction*> renderListBass;
+    std::list<RenderAction*> renderListBassOffset;
     std::list<ChordToken> chordTokenList;
     static int privateID;
 
