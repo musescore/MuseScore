@@ -43,7 +43,7 @@ class ParsedChord;
 struct TextSegment {
     muse::draw::Font m_font;
     String text;
-    double x, y = 0;         // Position of segments relative to each other.
+    double x, y = 0;     // Position of segments relative to each other.
     PointF offset;       // Offset for placing within the TextBase.
 
     bool hAlign = true;
@@ -72,14 +72,15 @@ struct HarmonyRenderCtx {
     int tpc = Tpc::TPC_INVALID;
     NoteSpellingType noteSpelling = NoteSpellingType::STANDARD;
     NoteCaseType noteCase = NoteCaseType::AUTO;
-    double noteMag = 1.0;
     double scale = 1.0;
 
     double x() const { return pos.x(); }
     double y() const { return pos.y(); }
 
-    void setX(double v) { pos.setX(v); }
-    void setY(double v) { pos.setY(v); }
+    void setx(double v) { pos.setX(v); }
+    void movex(double v) { pos.setX(pos.x() + v); }
+    void sety(double v) { pos.setY(v); }
+    void movey(double v) { pos.setY(pos.y() + v); }
 };
 
 struct RenderAction;
@@ -265,14 +266,14 @@ private:
                 NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO,
                 double noteMag = 1.0);
     void renderAction(const RenderAction* a, HarmonyRenderCtx& ctx);
-    void renderAction(const RenderActionSet* a, HarmonyRenderCtx& ctx);
-    void renderAction(const RenderActionMove* a, HarmonyRenderCtx& ctx);
-    void renderAction(const RenderActionPush* a, HarmonyRenderCtx& ctx);
-    void renderAction(const RenderActionPop* a, HarmonyRenderCtx& ctx);
-    void renderAction(const RenderActionNote* a, HarmonyRenderCtx& ctx);
-    void renderAction(const RenderActionAccidental* a, HarmonyRenderCtx& ctx);
-    void renderAction(const RenderActionStopHAlign* a, HarmonyRenderCtx& ctx);
-    void renderAction(const RenderActionScale* a, HarmonyRenderCtx& ctx);
+    void renderActionSet(const RenderActionSet* a, HarmonyRenderCtx& ctx);
+    void renderActionMove(const RenderActionMove* a, HarmonyRenderCtx& ctx);
+    void renderActionPush(HarmonyRenderCtx& ctx);
+    void renderActionPop(const RenderActionPop* a, HarmonyRenderCtx& ctx);
+    void renderActionNote(HarmonyRenderCtx& ctx);
+    void renderActionAcc(HarmonyRenderCtx& ctx);
+    void renderActionAlign(HarmonyRenderCtx& ctx);
+    void renderActionScale(const RenderActionScale* a, HarmonyRenderCtx& ctx);
 
     Sid getPropertyStyle(Pid) const override;
 
