@@ -336,7 +336,7 @@ void HChord::add(const std::vector<HDegree>& degreeList)
 //   readRenderList
 //---------------------------------------------------------
 
-static void readRenderList(String val, std::list<RenderAction>& renderList, int mscVersion)
+static void readRenderList(String val, std::list<RenderAction*>& renderList, int mscVersion)
 {
     renderList.clear();
     StringList sl = val.split(u' ', muse::SkipEmptyParts);
@@ -345,30 +345,26 @@ static void readRenderList(String val, std::list<RenderAction>& renderList, int 
             StringList ssl = s.split(u':', muse::SkipEmptyParts);
             if (ssl.size() == 3) {
                 // m:x:y
-                RenderAction a;
-                a.type = RenderAction::RenderActionType::MOVE;
-                a.movex = ssl[1].toDouble();
-                a.movey = ssl[2].toDouble();
+                double movex = ssl[1].toDouble();
+                double movey = ssl[2].toDouble();
 
                 if (mscVersion < 460) {
-                    a.movex = compat::CompatUtils::convertChordExtModUnits(a.movex);
-                    a.movey = compat::CompatUtils::convertChordExtModUnits(a.movey);
+                    movex = compat::CompatUtils::convertChordExtModUnits(movex);
+                    movey = compat::CompatUtils::convertChordExtModUnits(movey);
                 }
 
-                renderList.push_back(a);
+                renderList.emplace_back(new RenderActionMove(movex, movey));
             }
         } else if (s == u":push") {
-            renderList.push_back(RenderAction(RenderAction::RenderActionType::PUSH));
+            renderList.emplace_back(new RenderActionPush());
         } else if (s == u":pop") {
-            renderList.push_back(RenderAction(RenderAction::RenderActionType::POP));
+            renderList.emplace_back(new RenderActionPop());
         } else if (s == u":n") {
-            renderList.push_back(RenderAction(RenderAction::RenderActionType::NOTE));
+            renderList.emplace_back(new RenderActionNote());
         } else if (s == u":a") {
-            renderList.push_back(RenderAction(RenderAction::RenderActionType::ACCIDENTAL));
+            renderList.emplace_back(new RenderActionAccidental());
         } else {
-            RenderAction a(RenderAction::RenderActionType::SET);
-            a.text = s;
-            renderList.push_back(a);
+            renderList.emplace_back(new RenderActionSet(s));
         }
     }
 }
@@ -377,23 +373,28 @@ static void readRenderList(String val, std::list<RenderAction>& renderList, int 
 //   writeRenderList
 //---------------------------------------------------------
 
-static void writeRenderList(XmlWriter& xml, const std::list<RenderAction>& al, const AsciiStringView& name)
+static void writeRenderList(XmlWriter& xml, const std::list<RenderAction*>& al, const AsciiStringView& name)
 {
     String s;
 
-    for (const RenderAction& a : al) {
+    for (const RenderAction* a : al) {
         if (!s.isEmpty()) {
             s += u" ";
         }
-        switch (a.type) {
-        case RenderAction::RenderActionType::SET:
-            s += a.text;
+        switch (a->actionType()) {
+        case RenderAction::RenderActionType::SET: {
+            const RenderActionSet* set = dynamic_cast<const RenderActionSet*>(a);
+            s += set->text();
             break;
-        case RenderAction::RenderActionType::MOVE:
-            if (!RealIsNull(a.movex) || !RealIsNull(a.movey)) {
-                s += String(u"m:%1:%2").arg(a.movex).arg(a.movey);
+        }
+        case RenderAction::RenderActionType::MOVE: {
+            const RenderActionMove* move = dynamic_cast<const RenderActionMove*>(a);
+
+            if (!RealIsNull(move->x()) || !RealIsNull(move->y())) {
+                s += String(u"m:%1:%2").arg(move->x()).arg(move->y());
             }
             break;
+        }
         case RenderAction::RenderActionType::PUSH:
             s += u":push";
             break;
@@ -1489,7 +1490,7 @@ double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t 
 //   renderList
 //---------------------------------------------------------
 
-const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
+const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
 {
     // generate anew on each call,
     // in case chord list has changed since last time
@@ -1503,7 +1504,7 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
     bool adjust = cl ? cl->autoAdjust() : false;
     for (const ChordToken& tok : m_tokenList) {
         String n = tok.names.front();
-        std::list<RenderAction> rl;
+        std::list<RenderAction*> rl;
         std::list<ChordToken> definedTokens;
         bool found = false;
         // potential definitions for token
@@ -1532,8 +1533,7 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 
         if (tok.tokenClass == ChordTokenClass::MODIFIER && cl->excludeModsHAlign() && modIdx == 0) {
             // This is the first modifier. Discount subsequent items from horizontal alignment
-            RenderAction stopHAlign = RenderAction(RenderAction::RenderActionType::STOPHALIGN);
-            m_renderList.push_back(stopHAlign);
+            m_renderList.emplace_back(new RenderActionStopHAlign());
         }
 
         // check for adjustments
@@ -1546,30 +1546,21 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
         // Align vertically stacked modifier's x position by pushing it at the start of every modifier and popping at the end
         if (tok.tokenClass == ChordTokenClass::MODIFIER && m_modifierList.size() > 1 && cl->stackModifiers()
             && m_modifierList.at(modIdx).startsWith(n)) {
-            RenderAction pushModX = RenderAction(RenderAction::RenderActionType::PUSH);
-            m_renderList.push_back(pushModX);
+            m_renderList.emplace_back(new RenderActionPush());
         }
 
         // build render list
         if (!RealIsNull(yAdjust)) {
-            RenderAction m1 = RenderAction(RenderAction::RenderActionType::MOVE);
-            m1.movex = 0.0;
-            m1.movey = yAdjust;
-            m_renderList.push_back(m1);
+            m_renderList.emplace_back(new RenderActionMove(0.0, yAdjust));
         }
         if (found) {
             m_renderList.insert(m_renderList.end(), rl.begin(), rl.end());
         } else {
             // no definition for token, so render as literal
-            RenderAction a(RenderAction::RenderActionType::SET);
-            a.text = tok.names.front();
-            m_renderList.push_back(a);
+            m_renderList.emplace_back(new RenderActionSet(tok.names.front()));
         }
         if (!RealIsNull(yAdjust)) {
-            RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
-            m2.movex = 0.0;
-            m2.movey = -yAdjust;
-            m_renderList.push_back(m2);
+            m_renderList.emplace_back(new RenderActionMove(0.0, -yAdjust));
         }
 
         if (tok.tokenClass == ChordTokenClass::MODIFIER && !n.empty() && cl->stackModifiers()) {
@@ -1577,9 +1568,7 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
                 modIdx++;
 
                 // Restore x position
-                RenderAction popModX = RenderAction(RenderAction::RenderActionType::POP);
-                popModX.popy = false;
-                m_renderList.push_back(popModX);
+                m_renderList.emplace_back(new RenderActionPop(/* popx = */ true, /* popy = */ false));
             }
         }
     }
@@ -2060,12 +2049,30 @@ void ChordList::checkChordList(const path_t& appDataPath, const MStyle& style)
 //    only for debugging
 //---------------------------------------------------------
 
-void RenderAction::print() const
+void RenderAction::print(RenderActionType type, const String& info) const
 {
     static const char* names[] = {
         "SET", "MOVE", "PUSH", "POP",
         "NOTE", "ACCIDENTAL"
     };
-    LOGD("%10s <%s> %f %f, pop x: %i pop y: %i", names[int(type)], muPrintable(text), movex, movey, popx, popy);
+    LOGD("%10s %s", names[int(type)], muPrintable(info));
+}
+
+void RenderActionMove::print() const
+{
+    String info = String(u"%f %f").arg(m_movex, m_movey);
+    RenderAction::print(actionType(), info);
+}
+
+void RenderActionSet::print() const
+{
+    String info = String(u"<%s>").arg(m_text);
+    RenderAction::print(actionType(), info);
+}
+
+void RenderActionPop::print() const
+{
+    String info = String(u"pop x: %i pop y: %i").arg(m_popx, m_popy);
+    RenderAction::print(actionType(), info);
 }
 }
