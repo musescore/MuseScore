@@ -1181,6 +1181,72 @@ muse::async::Notification NotationInteraction::glissandoTickChanged() {
     return m_glissandoTickChanged;
 }
 
+bool NotationInteraction::arpeggioNoteTicksExist(muse::PointF point) const {
+    for (muse::PointF _point : arpeggio_points) {
+        if (point.x() == _point.x() && point.y() == _point.y()) {
+            return true;
+        }
+    }
+    return false;
+}
+bool NotationInteraction::arpeggioPointEqual(muse::PointF point) {
+    for (muse::PointF _point : arpeggio_points) {
+        return point.x() == _point.x();
+    }
+    return false;
+}
+void NotationInteraction::addArpeggioPoint(muse::PointF point) {
+    arpeggio_points.push_back(point);
+}
+void NotationInteraction::arpeggioPointClear() {
+    arpeggio_points.clear();
+}
+void NotationInteraction::addArpeggioNote(mu::engraving::Note *note, int ticks, int duration_ticks) {
+    arpeggio_notes.push_back(note);
+    arpeggio_ticks = ticks;
+    arpeggio_curr_ticks = ticks;
+    arpeggio_duration_ticks = duration_ticks;
+}
+void NotationInteraction::addArpeggioNote(mu::engraving::Note *note) {
+    arpeggio_notes.push_back(note);
+}
+int NotationInteraction::arpeggioNoteTicks() const {
+    return arpeggio_ticks;
+}
+int NotationInteraction::arpeggioNoteDurationticks() const {
+    return arpeggio_duration_ticks;
+}
+int NotationInteraction::arpeggioCurrticks() const {
+    return arpeggio_curr_ticks;
+}
+muse::async::Notification NotationInteraction::arpeggioNotesChanged() {
+    return m_arpeggioNotesChanged;
+}
+std::vector<mu::engraving::Note *> NotationInteraction::arpeggioNotes() const {
+    return arpeggio_notes;
+}
+void NotationInteraction::arpeggioNotesUpdate() {
+    m_arpeggioNotesChanged.notify();
+}
+void NotationInteraction::arpeggioTick(int ticks) {
+    if (arpeggio_duration_ticks == 0) {
+        return;
+    }
+    if (ticks < arpeggio_ticks || ticks > arpeggio_ticks + arpeggio_duration_ticks) {
+        arpeggio_curr_ticks = 0;
+        arpeggio_ticks = 0;
+        arpeggio_duration_ticks = 0;
+        arpeggio_points.clear();
+        arpeggio_notes.clear();
+    } else {
+        arpeggio_curr_ticks = ticks;
+    }
+    m_arpeggioTickChanged.notify();
+}
+muse::async::Notification NotationInteraction::arpeggioTickChanged() {
+    return m_arpeggioTickChanged;
+}
+
 
 void NotationInteraction::notifyClefKeySigsKeysChanged() {
     m_clefKeySigsKeysChanged.notify();
