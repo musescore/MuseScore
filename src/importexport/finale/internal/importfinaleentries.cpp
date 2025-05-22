@@ -548,125 +548,6 @@ static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::Tuple
     return result;
 }
 
-static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, Measure* measure, Edu musxEduPos, bool afterBarline, bool visible)
-{
-    ClefType entryClefType = FinaleTConv::toMuseScoreClefType(musxClef);
-    if (entryClefType == ClefType::INVALID) {
-        return nullptr;
-    }
-    Clef* clef = Factory::createClef(score->dummy()->segment());
-    clef->setTrack(staffIdx * VOICES);
-    clef->setConcertClef(entryClefType);
-    clef->setTransposingClef(entryClefType);
-    // clef->setShowCourtesy();
-    // clef->setForInstrumentChange();
-    clef->setVisible(visible);
-    clef->setGenerated(false);
-    const bool isHeader = !afterBarline && !measure->prevMeasure() && musxEduPos == 0;
-    clef->setIsHeader(isHeader);
-    if (afterBarline) {
-        clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
-    } else if (musxEduPos == 0) {
-        clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
-    }
-
-    Fraction clefTick = measure->tick() + FinaleTConv::eduToFraction(musxEduPos);
-    Segment* clefSeg = measure->getSegment(
-                       clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
-    clefSeg->add(clef);
-    return clef;
-}
-
-void EnigmaXmlImporter::importStaffItems()
-{
-    std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
-    std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
-    for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
-        std::shared_ptr<TimeSignature> currMusxTimeSig;
-        /// @todo handle pickup measures and other measures where display and actual timesigs differ
-        for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
-            Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
-            Measure * measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
-            IF_ASSERT_FAILED(measure) {
-                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
-                return;
-            }
-            staff_idx_t staffIdx = muse::value(m_inst2Staff, musxScrollViewItem->staffId, muse::nidx);
-            Staff* staff = staffIdx != muse::nidx ? m_score->staff(staffIdx) : nullptr;
-            IF_ASSERT_FAILED(staff) {
-                logger()->logWarning(String(u"Unable to retrieve staff by idx"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
-                return;
-            }
-            auto currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
-            IF_ASSERT_FAILED(currStaff) {
-                logger()->logWarning(String(u"Unable to retrieve composite staff information"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
-                return;
-            }
-            std::shared_ptr<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
-            std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
-            if (!currMusxTimeSig || !currMusxTimeSig->isSame(*musxTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
-                Fraction timeSig = FinaleTConv::simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
-                Segment* seg = measure->getSegment(SegmentType::TimeSig, currTick);
-                TimeSig* ts = Factory::createTimeSig(seg);
-                ts->setSig(timeSig);
-                ts->setTrack(staffIdx * VOICES);
-                ts->setVisible(musxMeasure->showTime != others::Measure::ShowTimeSigMode::Never);
-                Fraction stretch = Fraction(musxTimeSig->calcTotalDuration().calcEduDuration(), globalTimeSig->calcTotalDuration().calcEduDuration()).reduced();
-                ts->setStretch(stretch);
-                /// @todo other time signature options? Beaming? Composite list?
-                seg->add(ts);
-                staff->addTimeSig(ts);
-            }
-            currMusxTimeSig = musxTimeSig;
-
-            /// @todo key signatures (including independent key sigs)
-        }
-    }
-}
-
-void EnigmaXmlImporter::importClefs(details::GFrameHoldContext gfHold,
-                                    const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem,
-                                    const std::shared_ptr<others::Measure>& musxMeasure, Measure* measure, staff_idx_t curStaffIdx,
-                                    ClefIndex& musxCurrClef)
-{
-    // The Finale UI requires transposition to be a full-measure staff-style assignment, so checking only the beginning of the bar should be sufficient.
-    // However, it is possible to defeat this requirement using plugins. That said, doing so produces erratic results, so I'm not sure we should support it.
-    // For now, only check the start of the measure.
-    auto musxStaffAtMeasureStart = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper(), 0);
-    if (musxStaffAtMeasureStart && musxStaffAtMeasureStart->transposition && musxStaffAtMeasureStart->transposition->setToClef) {
-        if (musxStaffAtMeasureStart->transposedClef != musxCurrClef) {
-            if (createClef(m_score, curStaffIdx, musxStaffAtMeasureStart->transposedClef, measure, /*xEduPos*/ 0, false, true)) {
-                musxCurrClef = musxStaffAtMeasureStart->transposedClef;
-            }
-        }
-        return;
-    }
-    if (gfHold) {
-        if (gfHold->clefId.has_value()) {
-            if (gfHold->clefId.value() != musxCurrClef || gfHold->showClefMode == ShowClefMode::Always) {
-                const bool visible = gfHold->showClefMode != ShowClefMode::Never;
-                if (createClef(m_score, curStaffIdx, gfHold->clefId.value(), measure, /*xEduPos*/ 0, gfHold->clefAfterBarline, visible)) {
-                    musxCurrClef = gfHold->clefId.value();
-                }
-            }
-        } else {
-            std::vector<std::shared_ptr<others::ClefList>> midMeasureClefs = m_doc->getOthers()->getArray<others::ClefList>(gfHold.getRequestedPartId(), gfHold->clefListId);
-            for (const std::shared_ptr<others::ClefList>& midMeasureClef : midMeasureClefs) {
-                if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef || midMeasureClef->clefMode == ShowClefMode::Always) {
-                    const bool visible = midMeasureClef->clefMode != ShowClefMode::Never;
-                    const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
-                    if (Clef * clef = createClef(m_score, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline, visible)) {
-                        // only set y offset because MuseScore automatically calculates the horizontal spacing value
-                        clef->setOffset(0.0, clef->spatium() * (-double(midMeasureClef->yEvpuPos) / EVPU_PER_SPACE));
-                        /// @todo perhaps populate other fields from midMeasureClef, such as clef-specific mag, etc.?
-                        musxCurrClef = midMeasureClef->clefIndex;
-                    }
-                }
-            }
-        }
-    }
-}
-
 void EnigmaXmlImporter::importEntries()
 {
     // Add entries (notes, rests, tuplets)
@@ -684,7 +565,6 @@ void EnigmaXmlImporter::importEntries()
             logger()->logWarning(String(u"Add entries: Score has no first measure."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         }
-        ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId);
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
             Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
             Measure* measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
@@ -700,7 +580,6 @@ void EnigmaXmlImporter::importEntries()
 
             bool processedEntries = false;
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
-            importClefs(gfHold, musxScrollViewItem, musxMeasure, measure, curStaffIdx, musxCurrClef);
             if (gfHold) {
                 std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
                 std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxScrollViewItem->staffId, musxMeasure->getCmper());
