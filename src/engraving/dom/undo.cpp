@@ -2075,9 +2075,10 @@ static void changeChordStyle(Score* score)
     double eadjust = style.styleD(Sid::chordExtensionAdjust);
     double mmag = style.styleD(Sid::chordModifierMag);
     double madjust = style.styleD(Sid::chordModifierAdjust);
+    double stackedmmag = style.styleD(Sid::chordStackedModiferMag);
     bool mstackModifiers = style.styleB(Sid::verticallyStackModifiers);
     bool mexcludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
-    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust, mstackModifiers, mexcludeModsHAlign);
+    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, mstackModifiers, mexcludeModsHAlign);
     if (score->style().styleB(Sid::chordsXmlFile)) {
         score->chordList()->read(score->configuration()->appDataPath(), u"chords.xml");
     }
