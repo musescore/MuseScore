@@ -1533,27 +1533,31 @@ const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
             }
         }
 
-        if (tok.tokenClass == ChordTokenClass::MODIFIER && cl->excludeModsHAlign() && modIdx == 0) {
-            // This is the first modifier. Discount subsequent items from horizontal alignment
-            m_renderList.emplace_back(new RenderActionStopHAlign());
-        }
-
         // check for adjustments
-        // stop adjusting when first non-adjusted modifier found
         double yAdjust = adjust ? cl->position(tok.names, ctc, modIdx, m_modifierList.size()) : 0.0;
-        if (tok.tokenClass == ChordTokenClass::MODIFIER && RealIsNull(yAdjust)) {
-            adjust = false;
-        }
 
-        // Set stacked modifier scale
-        if (tok.tokenClass == ChordTokenClass::MODIFIER && m_modifierList.size() > 1 && cl->stackModifiers()) {
-            m_renderList.emplace_back(new RenderActionScale(cl->stackedModifierMag()));
-        }
+        // Modifier behaviour
+        if (tok.tokenClass == ChordTokenClass::MODIFIER) {
+            // Stop adjusting when first non-adjusted modifier found
+            if (RealIsNull(yAdjust)) {
+                adjust = false;
+            }
 
-        // Align vertically stacked modifier's x position by pushing it at the start of every modifier and popping at the end
-        if (tok.tokenClass == ChordTokenClass::MODIFIER && m_modifierList.size() > 1 && cl->stackModifiers()
-            && m_modifierList.at(modIdx).startsWith(n)) {
-            m_renderList.emplace_back(new RenderActionPush());
+            // This is the first modifier. Discount subsequent items from horizontal alignment
+            if (cl->excludeModsHAlign() && modIdx == 0) {
+                m_renderList.emplace_back(new RenderActionStopHAlign());
+            }
+
+            // Stacked modifiers
+            if (m_modifierList.size() > 1 && cl->stackModifiers()) {
+                // Set scale
+                m_renderList.emplace_back(new RenderActionScale(cl->stackedModifierMag()));
+
+                // Align vertically stacked modifier's x position by pushing it at the start of every modifier and popping at the end
+                if (m_modifierList.at(modIdx).startsWith(n)) {
+                    m_renderList.emplace_back(new RenderActionPush());
+                }
+            }
         }
 
         // build render list
@@ -1566,14 +1570,15 @@ const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
             // no definition for token, so render as literal
             m_renderList.emplace_back(new RenderActionSet(tok.names.front()));
         }
+        // Reset adjust
         if (!RealIsNull(yAdjust)) {
             m_renderList.emplace_back(new RenderActionMove(0.0, -yAdjust));
         }
 
+        // Stacked modifiers
         if (tok.tokenClass == ChordTokenClass::MODIFIER && !n.empty() && cl->stackModifiers()) {
             // Reset scale
-            // HOW DO WE WANT TO DO THIS? If the scale is applied by overwriting this is fine, if it is applied by multiplying, set to 1/m_stackedmmag
-            m_renderList.emplace_back(new RenderActionScale(1.0));
+            m_renderList.emplace_back(new RenderActionScale(1 / cl->stackedModifierMag()));
             if (m_modifierList.at(modIdx).endsWith(n) && modIdx != finalModIdx) {
                 modIdx++;
 
@@ -1810,7 +1815,6 @@ void ChordList::read(XmlReader& e, int mscVersion)
                     f.mag *= m_emag;
                 } else if (f.fontClass == "modifier") {
                     f.mag *= m_mmag;
-                    f.stackedMag = m_mmag;
                 }
             }
             fonts.push_back(f);
@@ -2070,7 +2074,7 @@ void RenderAction::print(RenderActionType type, const String& info) const
 
 void RenderActionMove::print() const
 {
-    String info = String(u"%1 %2").arg(m_movex, m_movey);
+    String info = String(u"%1 %2").arg(m_vec.x(), m_vec.y());
     RenderAction::print(actionType(), info);
 }
 

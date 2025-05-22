@@ -1176,7 +1176,7 @@ void Harmony::render(const String& s, HarmonyRenderCtx& ctx)
     Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList.front() : font();
     TextSegment* ts = new TextSegment(s, f, ctx.x(), ctx.y(), ctx.hAlign);
     ctx.textList.push_back(ts);
-    ctx.setX(ctx.x() + ts->width());
+    ctx.movex(ts->width());
 }
 
 //---------------------------------------------------------
@@ -1190,11 +1190,9 @@ void Harmony::render(const std::list<RenderAction*>& renderList, HarmonyRenderCt
     ctx.tpc = tpc;
     ctx.noteSpelling = noteSpelling;
     ctx.noteCase = noteCase;
-    ctx.noteMag = noteMag;
-    ctx.scale = 1.0;
+    ctx.scale = noteMag;
 
     for (const RenderAction* a : renderList) {
-        a->print();
         renderAction(a, ctx);
     }
 }
@@ -1203,41 +1201,40 @@ void Harmony::renderAction(const RenderAction* a, HarmonyRenderCtx& ctx)
 {
     switch (a->actionType()) {
     case RenderAction::RenderActionType::SET:
-        renderAction(dynamic_cast<const RenderActionSet*>(a), ctx);
+        renderActionSet(dynamic_cast<const RenderActionSet*>(a), ctx);
         break;
     case RenderAction::RenderActionType::MOVE:
-        renderAction(dynamic_cast<const RenderActionMove*>(a), ctx);
+        renderActionMove(dynamic_cast<const RenderActionMove*>(a), ctx);
         break;
     case RenderAction::RenderActionType::PUSH:
-        renderAction(dynamic_cast<const RenderActionPush*>(a), ctx);
+        renderActionPush(ctx);
         break;
     case RenderAction::RenderActionType::POP:
-        renderAction(dynamic_cast<const RenderActionPop*>(a), ctx);
+        renderActionPop(dynamic_cast<const RenderActionPop*>(a), ctx);
         break;
     case RenderAction::RenderActionType::NOTE:
-        renderAction(dynamic_cast<const RenderActionNote*>(a), ctx);
+        renderActionNote(ctx);
         break;
     case RenderAction::RenderActionType::ACCIDENTAL:
-        renderAction(dynamic_cast<const RenderActionAccidental*>(a), ctx);
+        renderActionAcc(ctx);
         break;
     case RenderAction::RenderActionType::STOPHALIGN:
-        renderAction(dynamic_cast<const RenderActionStopHAlign*>(a), ctx);
+        renderActionAlign(ctx);
         break;
     case RenderAction::RenderActionType::SCALE:
-        renderAction(dynamic_cast<const RenderActionScale*>(a), ctx);
+        renderActionScale(dynamic_cast<const RenderActionScale*>(a), ctx);
         break;
     default:
         LOGD("unknown render action %d", static_cast<int>(a->actionType()));
     }
 }
 
-void Harmony::renderAction(const RenderActionPush* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionPush(HarmonyRenderCtx& ctx)
 {
-    UNUSED(a);
     ctx.stack.push(ctx.pos);
 }
 
-void Harmony::renderAction(const RenderActionPop* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionPop(const RenderActionPop* a, HarmonyRenderCtx& ctx)
 {
     if (ctx.stack.empty()) {
         LOGD("RenderAction::RenderActionType::POP: stack empty");
@@ -1249,21 +1246,29 @@ void Harmony::renderAction(const RenderActionPop* a, HarmonyRenderCtx& ctx)
     ctx.pos = PointF(a->popX() ? pt.x() : ctx.x(), a->popY() ? pt.y() : ctx.y());
 }
 
-void Harmony::renderAction(const RenderActionNote* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionNote(HarmonyRenderCtx& ctx)
 {
-    UNUSED(a);
+    if (!tpcIsValid(ctx.tpc)) {
+        return;
+    }
     const ChordList* chordList = score()->chordList();
     const Staff* st = staff();
     const Key key = st ? st->key(tick()) : Key::INVALID;
 
     String c;
     AccidentalVal acc;
-    if (m_harmonyType == HarmonyType::STANDARD && tpcIsValid(ctx.tpc)) {
+
+    if (m_harmonyType == HarmonyType::STANDARD) {
         tpc2name(ctx.tpc, ctx.noteSpelling, ctx.noteCase, c, acc);
-    } else if (m_harmonyType == HarmonyType::NASHVILLE && tpcIsValid(ctx.tpc)) {
+    } else if (m_harmonyType == HarmonyType::NASHVILLE) {
         String accStr;
         tpc2Function(ctx.tpc, key, accStr, c);
     }
+
+    if (c.empty()) {
+        return;
+    }
+
     String lookup = u"note" + c;
     ChordSymbol cs = chordList->symbol(lookup);
     if (!cs.isValid()) {
@@ -1271,16 +1276,18 @@ void Harmony::renderAction(const RenderActionNote* a, HarmonyRenderCtx& ctx)
     }
     String text = cs.isValid() ? cs.value : c;
     muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
-    font.setPointSizeF(font.pointSizeF() * ctx.noteMag * ctx.scale);
+    font.setPointSizeF(font.pointSizeF() * ctx.scale);
 
     TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
     ctx.textList.push_back(ts);
-    ctx.setX(ctx.x() + ts->width());
+    ctx.movex(ts->width());
 }
 
-void Harmony::renderAction(const RenderActionAccidental* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionAcc(HarmonyRenderCtx& ctx)
 {
-    UNUSED(a);
+    if (!tpcIsValid(ctx.tpc)) {
+        return;
+    }
     const ChordList* chordList = score()->chordList();
     const Staff* st = staff();
     const Key key = st ? st->key(tick()) : Key::INVALID;
@@ -1288,66 +1295,67 @@ void Harmony::renderAction(const RenderActionAccidental* a, HarmonyRenderCtx& ct
     String c;
     String acc;
     String context = u"accidental";
-    if (m_harmonyType == HarmonyType::STANDARD && tpcIsValid(ctx.tpc)) {
+
+    if (m_harmonyType == HarmonyType::STANDARD) {
         tpc2name(ctx.tpc, ctx.noteSpelling, ctx.noteCase, c, acc);
-    } else if (m_harmonyType == HarmonyType::NASHVILLE && tpcIsValid(ctx.tpc)) {
+    } else if (m_harmonyType == HarmonyType::NASHVILLE) {
         tpc2Function(ctx.tpc, key, acc, c);
+    }
+
+    if (acc.empty()) {
+        return;
     }
     // German spelling - use special symbol for accidental in TPC_B_B
     // to allow it to be rendered as either Bb or B
     if (ctx.tpc == Tpc::TPC_B_B && ctx.noteSpelling == NoteSpellingType::GERMAN) {
         context = u"german_B";
     }
-    if (!acc.empty()) {
-        String lookup = context + acc;
-        ChordSymbol cs = chordList->symbol(lookup);
-        if (!cs.isValid()) {
-            cs = chordList->symbol(acc);
-        }
-        String text = cs.isValid() ? cs.value : c;
-        muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
-        font.setPointSizeF(font.pointSizeF() * ctx.noteMag * ctx.scale);
 
-        TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
-        ctx.textList.push_back(ts);
-        ctx.setX(ctx.x() + ts->width());
+    String lookup = context + acc;
+    ChordSymbol cs = chordList->symbol(lookup);
+    if (!cs.isValid()) {
+        cs = chordList->symbol(acc);
     }
+    String text = cs.isValid() ? cs.value : c;
+    muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
+    font.setPointSizeF(font.pointSizeF() * ctx.scale);
+
+    TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
+    ctx.textList.push_back(ts);
+    ctx.movex(ts->width());
 }
 
-void Harmony::renderAction(const RenderActionStopHAlign* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionAlign(HarmonyRenderCtx& ctx)
 {
-    UNUSED(a);
     ctx.hAlign = false;
 }
 
-void Harmony::renderAction(const RenderActionScale* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionScale(const RenderActionScale* a, HarmonyRenderCtx& ctx)
 {
-    ctx.scale = a->scale();
+    ctx.scale *= a->scale();
 }
 
-void Harmony::renderAction(const RenderActionSet* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionSet(const RenderActionSet* a, HarmonyRenderCtx& ctx)
 {
-    ChordList* chordList = score()->chordList();
-    ChordSymbol cs = chordList->symbol(a->text());
-    String text = cs.isValid() ? cs.value : a->text();
+    const ChordList* chordList = score()->chordList();
+    const ChordSymbol cs = chordList->symbol(a->text());
+    const String text = cs.isValid() ? cs.value : a->text();
     muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
-
-    TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
-    ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * ctx.scale);
-
+    font.setPointSizeF(font.pointSizeF() * ctx.scale);
     if (m_harmonyType == HarmonyType::NASHVILLE) {
         double nmag = chordList->nominalMag();
-        ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * nmag * ctx.scale);
+        font.setPointSizeF(font.pointSizeF() * nmag);
     }
+
+    TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
     ctx.textList.push_back(ts);
-    ctx.setX(ctx.x() + ts->width());
+    ctx.movex(ts->width());
 }
 
-void Harmony::renderAction(const RenderActionMove* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionMove(const RenderActionMove* a, HarmonyRenderCtx& ctx)
 {
-    FontMetrics fm = FontMetrics(font());
-    ctx.setX(ctx.x() + a->x() * fm.height());
-    ctx.setY(ctx.y() + a->y() * fm.height());
+    const FontMetrics fm = FontMetrics(font());
+    ctx.pos = ctx.pos + a->vec() * fm.height();
 }
 
 void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
@@ -1355,6 +1363,9 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
     int capo = style().styleI(Sid::capoPosition);
 
     ChordList* chordList = info->chordList();
+    if (!chordList) {
+        return;
+    }
 
     NoteCaseType rootCase = rootRenderCase(info);
     NoteCaseType bassCase = bassRenderCase();
@@ -1377,7 +1388,7 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
         // render function
         render(chordList->renderListFunction, ctx, info->rootTpc(), spelling, bassCase);
         double adjust = chordList->nominalAdjust();
-        ctx.setY(ctx.y() + adjust * magS() * spatium() * .2);
+        ctx.movey(adjust * magS() * spatium() * .2);
         // render extension
         const ChordDescription* cd = info->getDescription();
         if (cd) {
@@ -1464,9 +1475,7 @@ void Harmony::render()
     m_fontList.clear();
     for (const ChordFont& cf : chordList->fonts) {
         Font ff(font());
-        const double fontMag = style().styleB(Sid::verticallyStackModifiers)
-                               && !muse::RealIsEqual(cf.stackedMag, 1.0) ? cf.stackedMag : cf.mag;
-        double mag = m_userMag.value_or(fontMag);
+        double mag = m_userMag.value_or(cf.mag);
         ff.setPointSizeF(ff.pointSizeF() * mag);
         if (!(cf.family.isEmpty() || cf.family == "default")) {
             ff.setFamily(cf.family, Font::Type::Harmony);
@@ -1495,11 +1504,11 @@ void Harmony::render()
             break;
         }
 
-        ctx.setX(0);
+        ctx.setx(0);
         for (const TextSegment* ts : m_textList) {
             double top = ts->pos().y() + ts->tightBoundingRect().top();
             if (top < ctx.y()) {
-                ctx.setY(top);
+                ctx.sety(top);
             }
         }
 
@@ -1507,8 +1516,8 @@ void Harmony::render()
         LineF line = LineF(PointF(0.0, lineY), PointF(0.0, lineY));
         mutldata()->polychordDividerLines.mut_value().push_back(line);
 
-        ctx.setY(ctx.y() - style().styleS(Sid::polychordDividerSpacing).toMM(spatium()) * 2.0);
-        ctx.setY(ctx.y() - style().styleS(Sid::polychordDividerThickness).toMM(spatium()));
+        ctx.movey(-style().styleS(Sid::polychordDividerSpacing).toMM(spatium()) * 2.0);
+        ctx.movey(-style().styleS(Sid::polychordDividerThickness).toMM(spatium()));
     }
 
     // Align polychords
