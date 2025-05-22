@@ -98,6 +98,7 @@ public:
     std::vector<Note *> playbackNotes() const override;
     void clearPlaybackNotes() override;
     void addPlaybackNote(Note *note) override;
+
     void addGlissandoNote(mu::engraving::Note *note, int ticks, int duration_ticks) override;
     void addGlissandoEndNote(mu::engraving::Note *note) override;
     int glissandoNoteTicks() const override;
@@ -109,6 +110,22 @@ public:
     std::vector<mu::engraving::Note *> glissandoEndNotes() const override;
     void glissandoTick(int ticks) override;
     muse::async::Notification glissandoTickChanged() override;
+
+    bool arpeggioNoteTicksExist(muse::PointF) const override;
+    bool arpeggioPointEqual(muse::PointF) override;
+    void addArpeggioPoint(muse::PointF) override;
+    void arpeggioPointClear() override;
+    void addArpeggioNote(mu::engraving::Note *, int, int) override;
+    void addArpeggioNote(mu::engraving::Note *) override;
+    int arpeggioNoteTicks() const override;
+    int arpeggioNoteDurationticks() const override;
+    int arpeggioCurrticks() const override;
+    muse::async::Notification arpeggioNotesChanged() override;
+    std::vector<mu::engraving::Note *> arpeggioNotes() const override;
+    void arpeggioNotesUpdate() override;
+    void arpeggioTick(int) override;
+    muse::async::Notification arpeggioTickChanged() override;
+
     void notifyClefKeySigsKeysChanged() override;
     muse::async::Notification clefKeySigsKeysChanged() const override;
     void clearClefKeySigsKeys() override;
@@ -550,6 +567,14 @@ private:
     int glissando_curr_ticks = 0;
     muse::async::Notification m_glissandoEndNotesChanged;
     muse::async::Notification m_glissandoTickChanged;
+
+    std::vector<muse::PointF> arpeggio_points;
+    int arpeggio_ticks = 0;
+    int arpeggio_duration_ticks = 0;
+    std::vector<Note *> arpeggio_notes;
+    int arpeggio_curr_ticks = 0;
+    muse::async::Notification m_arpeggioNotesChanged;
+    muse::async::Notification m_arpeggioTickChanged;
 
     muse::async::Notification m_clefKeySigsKeysChanged;
     std::set<uint> m_clefKeySigsKeys;
