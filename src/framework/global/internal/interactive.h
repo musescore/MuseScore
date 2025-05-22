@@ -94,20 +94,16 @@ public:
     bool isSelectColorOpened() const override;
 
     // custom
-    RetVal<Val> open(const std::string& uri) const override;
-    RetVal<Val> open(const Uri& uri) const override;
-    RetVal<Val> open(const UriQuery& uri) const override;
-    async::Promise<Val> openAsync(const UriQuery& uri) override;
-    RetVal<bool> isOpened(const std::string& uri) const override;
-    RetVal<bool> isOpened(const Uri& uri) const override;
+    RetVal<Val> openSync(const UriQuery& uri) override;
+    async::Promise<Val> open(const UriQuery& uri) override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
+    RetVal<bool> isOpened(const Uri& uri) const override;
     async::Channel<Uri> opened() const override;
 
     void raise(const UriQuery& uri) override;
 
-    void close(const std::string& uri) override;
-    void close(const Uri& uri) override;
     void close(const UriQuery& uri) override;
+    void close(const Uri& uri) override;
     void closeAllDialogs() override;
 
     ValCh<Uri> currentUri() const override;

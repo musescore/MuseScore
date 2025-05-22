@@ -1686,21 +1686,17 @@ void NotationActionController::startEditSelectedText(const ActionData& args)
 void NotationActionController::addMeasures(const ActionData& actionData, AddBoxesTarget target)
 {
     TRACEFUNC;
-    int count = 1;
 
-    if (actionData.empty()) {
-        RetVal<Val> result = interactive()->open("musescore://notation/selectmeasurescount");
-
-        if (result.ret) {
-            count = result.val.toInt();
-        } else {
-            return;
-        }
+    if (!actionData.empty()) {
+        int count = actionData.arg<int>();
+        addBoxes(BoxType::Measure, count, target);
     } else {
-        count = actionData.arg<int>();
+        interactive()->open("musescore://notation/selectmeasurescount")
+        .onResolve(this, [this, target](const Val& v) {
+            int count = v.toInt();
+            addBoxes(BoxType::Measure, count, target);
+        });
     }
-
-    addBoxes(BoxType::Measure, count, target);
 }
 
 void NotationActionController::addBoxes(BoxType boxType, int count, AddBoxesTarget target)

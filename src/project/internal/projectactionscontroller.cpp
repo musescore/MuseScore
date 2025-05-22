@@ -607,7 +607,7 @@ Ret ProjectActionsController::openPageIfNeed(Uri pageUri)
         return make_ret(Ret::Code::Ok);
     }
 
-    return interactive()->open(pageUri).ret;
+    return interactive()->openSync(pageUri).ret;
 }
 
 bool ProjectActionsController::isProjectOpened(const muse::io::path_t& scorePath) const
@@ -662,7 +662,7 @@ void ProjectActionsController::newProject()
         return;
     }
 
-    Ret ret = interactive()->open(NEW_SCORE_URI).ret;
+    Ret ret = interactive()->openSync(NEW_SCORE_URI).ret;
 
     if (ret) {
         extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_CREATED);
@@ -1102,7 +1102,7 @@ void ProjectActionsController::alsoShareAudioCom(const AudioFile& audio)
 
     UriQuery query("musescore://project/alsoshareaudiocom");
     query.addParam("rememberChoice", Val(!configuration()->hasAskedAlsoShareAudioCom()));
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
 
     if (!rv.val.isNull()) {
         QVariantMap vals = rv.val.toQVariant().toMap();
@@ -1122,7 +1122,7 @@ void ProjectActionsController::alsoShareAudioCom(const AudioFile& audio)
 
 Ret ProjectActionsController::askAudioGenerationSettings() const
 {
-    RetVal<Val> res = interactive()->open("musescore://project/audiogenerationsettings");
+    RetVal<Val> res = interactive()->openSync("musescore://project/audiogenerationsettings");
     if (!res.ret) {
         return res.ret;
     }
@@ -1209,9 +1209,7 @@ void ProjectActionsController::showUploadProgressDialog()
         return;
     }
 
-    UriQuery uriQuery(UPLOAD_PROGRESS_URI);
-    uriQuery.addParam("sync", Val(false));
-    interactive()->open(uriQuery);
+    interactive()->open(UPLOAD_PROGRESS_URI);
 }
 
 void ProjectActionsController::closeUploadProgressDialog()
@@ -1852,7 +1850,7 @@ void ProjectActionsController::continueLastSession()
 
 void ProjectActionsController::exportScore()
 {
-    static const std::string EXPORT_URI = "musescore://project/export";
+    static const Uri EXPORT_URI("musescore://project/export");
     if (!interactive()->isOpened(EXPORT_URI).val) {
         interactive()->open(EXPORT_URI);
     }

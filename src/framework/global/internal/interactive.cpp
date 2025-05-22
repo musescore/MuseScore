@@ -265,13 +265,12 @@ io::path_t Interactive::selectDirectory(const QString& title, const io::path_t& 
 io::paths_t Interactive::selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories)
 {
     QString directoriesStr = QString::fromStdString(io::pathsToString(selectedDirectories));
-    QStringList params = {
-        "title=" + title,
-        "selectedDirectories=" + directoriesStr,
-        "startDir=" + dir.toQString()
-    };
+    UriQuery q("muse://interactive/selectmultipledirectories");
+    q.add("title", title.toStdString())
+    .add("selectedDirectories", directoriesStr.toStdString())
+    .add("startDir", dir.toStdString());
 
-    RetVal<Val> result = open("muse://interactive/selectmultipledirectories?" + params.join("&").toStdString());
+    RetVal<Val> result = openSync(q);
     if (!result.ret) {
         return selectedDirectories;
     }
@@ -292,17 +291,7 @@ bool Interactive::isSelectColorOpened() const
     return provider()->isSelectColorOpened();
 }
 
-RetVal<Val> Interactive::open(const std::string& uri) const
-{
-    return open(UriQuery(uri));
-}
-
-RetVal<Val> Interactive::open(const Uri& uri) const
-{
-    return open(UriQuery(uri));
-}
-
-RetVal<Val> Interactive::open(const UriQuery& uri) const
+RetVal<Val> Interactive::openSync(const UriQuery& uri)
 {
     UriQuery newQuery = uri;
     if (!newQuery.contains("sync")) {
@@ -312,22 +301,17 @@ RetVal<Val> Interactive::open(const UriQuery& uri) const
     return provider()->open(newQuery);
 }
 
-async::Promise<Val> Interactive::openAsync(const UriQuery& uri)
+async::Promise<Val> Interactive::open(const UriQuery& uri)
 {
     return provider()->openAsync(uri);
 }
 
-RetVal<bool> Interactive::isOpened(const std::string& uri) const
-{
-    return provider()->isOpened(Uri(uri));
-}
-
-RetVal<bool> Interactive::isOpened(const Uri& uri) const
+RetVal<bool> Interactive::isOpened(const UriQuery& uri) const
 {
     return provider()->isOpened(uri);
 }
 
-RetVal<bool> Interactive::isOpened(const UriQuery& uri) const
+RetVal<bool> Interactive::isOpened(const Uri& uri) const
 {
     return provider()->isOpened(uri);
 }
@@ -342,17 +326,12 @@ void Interactive::raise(const UriQuery& uri)
     provider()->raise(uri);
 }
 
-void Interactive::close(const std::string& uri)
-{
-    provider()->close(Uri(uri));
-}
-
-void Interactive::close(const Uri& uri)
+void Interactive::close(const UriQuery& uri)
 {
     provider()->close(uri);
 }
 
-void Interactive::close(const UriQuery& uri)
+void Interactive::close(const Uri& uri)
 {
     provider()->close(uri);
 }

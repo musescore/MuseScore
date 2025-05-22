@@ -114,6 +114,8 @@ void AbstractNotationPaintView::load()
     });
 
     scheduleRedraw();
+
+    m_loaded = true;
 }
 
 void AbstractNotationPaintView::initBackground()
@@ -1296,10 +1298,13 @@ void AbstractNotationPaintView::dropEvent(QDropEvent* event)
 void AbstractNotationPaintView::setNotation(INotationPtr notation)
 {
     m_notation = notation;
-    m_continuousPanel->setNotation(m_notation);
-    m_playbackCursor->setNotation(m_notation);
-    m_loopInMarker->setNotation(m_notation);
-    m_loopOutMarker->setNotation(m_notation);
+
+    if (m_loaded) {
+        m_continuousPanel->setNotation(m_notation);
+        m_playbackCursor->setNotation(m_notation);
+        m_loopInMarker->setNotation(m_notation);
+        m_loopOutMarker->setNotation(m_notation);
+    }
 }
 
 void AbstractNotationPaintView::setReadonly(bool readonly)

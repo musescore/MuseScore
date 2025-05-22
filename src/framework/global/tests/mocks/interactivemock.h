@@ -64,21 +64,16 @@ public:
     MOCK_METHOD(QColor, selectColor, (const QColor&, const QString&), (override));
     MOCK_METHOD(bool, isSelectColorOpened, (), (const, override));
 
-    MOCK_METHOD(RetVal<Val>, open, (const std::string&), (const, override));
-    MOCK_METHOD(RetVal<Val>, open, (const Uri&), (const, override));
-    MOCK_METHOD(RetVal<Val>, open, (const UriQuery&), (const, override));
-    MOCK_METHOD(async::Promise<Val>, openAsync, (const UriQuery&), (override));
-
-    MOCK_METHOD(RetVal<bool>, isOpened, (const std::string&), (const, override));
-    MOCK_METHOD(RetVal<bool>, isOpened, (const Uri&), (const, override));
+    MOCK_METHOD(RetVal<Val>, openSync, (const UriQuery&), (override));
+    MOCK_METHOD(async::Promise<Val>, open, (const UriQuery&), (override));
     MOCK_METHOD(RetVal<bool>, isOpened, (const UriQuery&), (const, override));
+    MOCK_METHOD(RetVal<bool>, isOpened, (const Uri&), (const, override));
     MOCK_METHOD(async::Channel<Uri>, opened, (), (const, override));
 
     MOCK_METHOD(void, raise, (const UriQuery&), (override));
 
-    MOCK_METHOD(void, close, (const std::string&), (override));
-    MOCK_METHOD(void, close, (const Uri&), (override));
     MOCK_METHOD(void, close, (const UriQuery&), (override));
+    MOCK_METHOD(void, close, (const Uri&), (override));
     MOCK_METHOD(void, closeAllDialogs, (), (override));
 
     MOCK_METHOD(ValCh<Uri>, currentUri, (), (const, override));

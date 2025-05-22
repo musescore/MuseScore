@@ -154,7 +154,7 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     query.addParam("notes", Val(info.notes));
     query.addParam("previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)));
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         LOGD() << rv.ret.toString();
         return;
@@ -179,7 +179,7 @@ void UpdateScenario::showServerErrorMsg()
 
 void UpdateScenario::downloadRelease()
 {
-    RetVal<Val> rv = interactive()->open("muse://update?mode=download");
+    RetVal<Val> rv = interactive()->openSync("muse://update?mode=download");
     if (!rv.ret) {
         processUpdateResult(rv.ret.code());
         return;
