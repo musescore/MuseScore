@@ -127,6 +127,49 @@ public:
     virtual muse::async::Notification glissandoTickChanged() {
         return muse::async::Notification();
     }
+
+    virtual bool arpeggioNoteTicksExist(muse::PointF) const {
+        return false;
+    }
+    virtual bool arpeggioPointEqual(muse::PointF) {
+        return false;
+    }
+    virtual void addArpeggioPoint(muse::PointF) {
+
+    }
+    virtual void arpeggioPointClear() {
+
+    }
+    virtual void addArpeggioNote(mu::engraving::Note *, int, int) {
+
+    }
+    virtual void addArpeggioNote(mu::engraving::Note *) {
+
+    }
+    virtual int arpeggioNoteTicks() const {
+        return 0;
+    }
+    virtual int arpeggioNoteDurationticks() const {
+        return 0;
+    }
+    virtual int arpeggioCurrticks() const {
+        return 0;
+    }
+    virtual muse::async::Notification arpeggioNotesChanged() {
+        return muse::async::Notification();
+    }
+    virtual std::vector<mu::engraving::Note *> arpeggioNotes() const {
+        return {};
+    }
+    virtual void arpeggioNotesUpdate() {
+        
+    }
+    virtual void arpeggioTick(int) {
+        
+    }
+    virtual muse::async::Notification arpeggioTickChanged() {
+        return muse::async::Notification();
+    }
     
     virtual void notifyClefKeySigsKeysChanged() {
         

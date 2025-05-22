@@ -50,6 +50,7 @@ public:
     muse::async::Notification playbackKeyStatesChanged() const;
 
     KeyState glissandoKeyState(piano_key_t key) const;
+    KeyState arpeggioKeyState(piano_key_t key) const;
 
     bool isFromMidi() const;
 
@@ -57,6 +58,9 @@ public:
 
     muse::async::Notification glissandoEndNotesChanged() const;
     muse::async::Notification glissandoTickChanged() const;
+
+    muse::async::Notification arpeggioNotesChanged() const;
+    muse::async::Notification arpeggioTickChanged() const;
 
     muse::async::Notification clefKeySigsKeysChanged() const;
 
@@ -72,6 +76,7 @@ private:
     void updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes);
 
     void updateGlissandoNotesKeys(const std::vector<const Note*>& receivedNotes, const mu::engraving::Note* glissandoNote);
+    void updateArpeggioNotesKeys(const std::vector<const Note*>& receivedNotes);
 
     void sendNoteOn(piano_key_t key);
     void sendNoteOff(piano_key_t key);
@@ -92,6 +97,11 @@ private:
     int m_glissando_curr_ticks;
     muse::async::Notification m_glissandoEndNotesChanged;
     muse::async::Notification m_glissandoTickChanged;
+
+    std::unordered_set<piano_key_t> m_arpeggio_notes_keys;
+    int m_arpeggio_ticks;
+    int m_arpeggio_duration_ticks;
+    int m_arpeggio_curr_ticks;
 
     std::set<uint> m_clefKeySigsKeys;
     muse::async::Notification m_clefKeySigsKeysChanged;

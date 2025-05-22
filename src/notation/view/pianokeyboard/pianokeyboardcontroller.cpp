@@ -98,6 +98,44 @@ KeyState PianoKeyboardController::glissandoKeyState(piano_key_t key) const {
     return KeyState::None;
 }
 
+bool compare_by_note(piano_key_t a, piano_key_t b) {
+    return a < b;
+}
+
+KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const {
+    if (m_arpeggio_curr_ticks > m_arpeggio_ticks && m_arpeggio_curr_ticks < m_arpeggio_ticks + m_arpeggio_duration_ticks) {
+        int left_dis = m_arpeggio_curr_ticks - m_arpeggio_ticks;
+        double ratio = left_dis / static_cast<double>(m_arpeggio_duration_ticks);
+        size_t arpeggio_notes_count = m_arpeggio_notes_keys.size();
+
+        std::vector<piano_key_t> sorted_keys;
+        for (piano_key_t _key : m_arpeggio_notes_keys) {
+            sorted_keys.push_back(_key);
+        }
+        std::sort(sorted_keys.begin(), sorted_keys.end(), compare_by_note);
+
+        int index = 0;
+        for (piano_key_t _key : sorted_keys) {
+            int _ratio_count = static_cast<int>(arpeggio_notes_count * ratio);
+            if (_ratio_count == 0) {
+                if (_ratio_count == index) {
+                    if (key == _key) {
+                        return KeyState::Arpeggio;
+                    }
+                }
+            } else {
+                if (_ratio_count - 1 == index) {
+                    if (key == _key) {
+                        return KeyState::Arpeggio;
+                    }
+                }
+            }
+            ++index;
+        }
+    }
+    return KeyState::None;
+}
+
 bool PianoKeyboardController::playbackKeyStatesEmpty() const {
     if (m_righthand_keys.empty()) {
         return true;
@@ -230,6 +268,29 @@ void PianoKeyboardController::onNotationChanged()
             // m_glissandoTickChanged.notify();
         });
 
+        notation->interaction()->arpeggioNotesChanged().onNotify(this, [this]() {
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+            m_arpeggio_ticks = notation->interaction()->arpeggioNoteTicks();
+            m_arpeggio_duration_ticks = notation->interaction()->arpeggioNoteDurationticks();
+            std::vector<const Note*> notes;
+            for (const mu::engraving::Note* note : notation->interaction()->arpeggioNotes()) {
+                notes.push_back(note);
+            }
+            
+            updateArpeggioNotesKeys(notes);
+        });
+
+        notation->interaction()->arpeggioTickChanged().onNotify(this, [this]() {
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+            m_arpeggio_curr_ticks = notation->interaction()->arpeggioCurrticks();
+        });
+
         notation->interaction()->clefKeySigsKeysChanged().onNotify(this, [this]() {
             auto notation = currentNotation();
             if (!notation) {
@@ -297,7 +358,7 @@ void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const N
     std::unordered_set<piano_key_t> newKeys;
 
     DEFER {
-        if (newKeys != m_righthand_keys) {
+        if (newKeys != m_glissando_endnotes_keys) {
             m_glissando_endnotes_keys = newKeys;
         }
         
@@ -320,6 +381,22 @@ void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const N
     const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
 
     m_glissando_note_key = static_cast<piano_key_t>(useWrittenPitch ? glissandoNote->epitch() : glissandoNote->ppitch());
+
+    for (const mu::engraving::Note* note : receivedNotes) {
+        newKeys.insert(static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch()));
+    }
+}
+
+void PianoKeyboardController::updateArpeggioNotesKeys(const std::vector<const Note*>& receivedNotes) {
+    std::unordered_set<piano_key_t> newKeys;
+
+    DEFER {
+        if (newKeys != m_arpeggio_notes_keys) {
+            m_arpeggio_notes_keys = newKeys;
+        }
+    };
+
+    const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
 
     for (const mu::engraving::Note* note : receivedNotes) {
         newKeys.insert(static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch()));
