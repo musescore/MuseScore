@@ -1191,16 +1191,44 @@ void Harmony::render(const std::list<RenderAction*>& renderList, HarmonyRenderCt
     ctx.noteSpelling = noteSpelling;
     ctx.noteCase = noteCase;
     ctx.noteMag = noteMag;
+    ctx.scale = 1.0;
 
     for (const RenderAction* a : renderList) {
+        a->print();
         renderAction(a, ctx);
     }
 }
 
 void Harmony::renderAction(const RenderAction* a, HarmonyRenderCtx& ctx)
 {
-    UNUSED(ctx);
-    LOGD("unknown render action %d", static_cast<int>(a->actionType()));
+    switch (a->actionType()) {
+    case RenderAction::RenderActionType::SET:
+        renderAction(dynamic_cast<const RenderActionSet*>(a), ctx);
+        break;
+    case RenderAction::RenderActionType::MOVE:
+        renderAction(dynamic_cast<const RenderActionMove*>(a), ctx);
+        break;
+    case RenderAction::RenderActionType::PUSH:
+        renderAction(dynamic_cast<const RenderActionPush*>(a), ctx);
+        break;
+    case RenderAction::RenderActionType::POP:
+        renderAction(dynamic_cast<const RenderActionPop*>(a), ctx);
+        break;
+    case RenderAction::RenderActionType::NOTE:
+        renderAction(dynamic_cast<const RenderActionNote*>(a), ctx);
+        break;
+    case RenderAction::RenderActionType::ACCIDENTAL:
+        renderAction(dynamic_cast<const RenderActionAccidental*>(a), ctx);
+        break;
+    case RenderAction::RenderActionType::STOPHALIGN:
+        renderAction(dynamic_cast<const RenderActionStopHAlign*>(a), ctx);
+        break;
+    case RenderAction::RenderActionType::SCALE:
+        renderAction(dynamic_cast<const RenderActionScale*>(a), ctx);
+        break;
+    default:
+        LOGD("unknown render action %d", static_cast<int>(a->actionType()));
+    }
 }
 
 void Harmony::renderAction(const RenderActionPush* a, HarmonyRenderCtx& ctx)
@@ -1243,7 +1271,7 @@ void Harmony::renderAction(const RenderActionNote* a, HarmonyRenderCtx& ctx)
     }
     String text = cs.isValid() ? cs.value : c;
     muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
-    font.setPointSizeF(font.pointSizeF() * ctx.noteMag);
+    font.setPointSizeF(font.pointSizeF() * ctx.noteMag * ctx.scale);
 
     TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
     ctx.textList.push_back(ts);
@@ -1278,7 +1306,7 @@ void Harmony::renderAction(const RenderActionAccidental* a, HarmonyRenderCtx& ct
         }
         String text = cs.isValid() ? cs.value : c;
         muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
-        font.setPointSizeF(font.pointSizeF() * ctx.noteMag);
+        font.setPointSizeF(font.pointSizeF() * ctx.noteMag * ctx.scale);
 
         TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
         ctx.textList.push_back(ts);
@@ -1292,6 +1320,11 @@ void Harmony::renderAction(const RenderActionStopHAlign* a, HarmonyRenderCtx& ct
     ctx.hAlign = false;
 }
 
+void Harmony::renderAction(const RenderActionScale* a, HarmonyRenderCtx& ctx)
+{
+    ctx.scale = a->scale();
+}
+
 void Harmony::renderAction(const RenderActionSet* a, HarmonyRenderCtx& ctx)
 {
     ChordList* chordList = score()->chordList();
@@ -1300,9 +1333,11 @@ void Harmony::renderAction(const RenderActionSet* a, HarmonyRenderCtx& ctx)
     muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
 
     TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
+    ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * ctx.scale);
+
     if (m_harmonyType == HarmonyType::NASHVILLE) {
         double nmag = chordList->nominalMag();
-        ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * nmag);
+        ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * nmag * ctx.scale);
     }
     ctx.textList.push_back(ts);
     ctx.setX(ctx.x() + ts->width());

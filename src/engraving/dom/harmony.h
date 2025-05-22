@@ -73,6 +73,7 @@ struct HarmonyRenderCtx {
     NoteSpellingType noteSpelling = NoteSpellingType::STANDARD;
     NoteCaseType noteCase = NoteCaseType::AUTO;
     double noteMag = 1.0;
+    double scale = 1.0;
 
     double x() const { return pos.x(); }
     double y() const { return pos.y(); }
@@ -271,6 +272,7 @@ private:
     void renderAction(const RenderActionNote* a, HarmonyRenderCtx& ctx);
     void renderAction(const RenderActionAccidental* a, HarmonyRenderCtx& ctx);
     void renderAction(const RenderActionStopHAlign* a, HarmonyRenderCtx& ctx);
+    void renderAction(const RenderActionScale* a, HarmonyRenderCtx& ctx);
 
     Sid getPropertyStyle(Pid) const override;
 
