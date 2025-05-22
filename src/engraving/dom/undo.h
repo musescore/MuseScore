@@ -1667,7 +1667,7 @@ class ReorderFBox : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ReorderFBox)
 
-    FBox* m_fBox = nullptr;
+    FBox* m_fretBox = nullptr;
     std::vector<EID> m_orderElementsIds;
 
     void flip(EditData*) override;
@@ -1677,7 +1677,77 @@ public:
 
     UNDO_TYPE(CommandType::ReorderFBox)
     UNDO_NAME("ReorderFBox")
-    UNDO_CHANGED_OBJECTS({ m_fBox })
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
+};
+
+class RenameChordFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RenameChordFBox)
+
+    FBox* m_fretBox = nullptr;
+    const Harmony* m_harmony = nullptr;
+    String m_harmonyOldName;
+    bool m_onlyRemove = false;
+
+    std::vector<std::pair<int, FretDiagram*> > m_diagramsForRestore;
+    FretDiagram* m_diagramForRemove = nullptr;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    RenameChordFBox(FBox* box, const Harmony* harmony, const String& oldName);
+
+    UNDO_TYPE(CommandType::RenameChordFBox)
+    UNDO_NAME("RenameChordFBox")
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
+};
+
+class AddChordFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, AddChordFBox)
+
+    FBox* m_fretBox = nullptr;
+    bool m_added = false;
+    Fraction m_tick;
+    String m_chordNewName;
+
+    std::vector<std::pair<int, FretDiagram*> > m_diagramsForRestore;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    AddChordFBox(FBox* box, const String& chordNewName, const Fraction& tick);
+
+    UNDO_TYPE(CommandType::AddChordFBox)
+    UNDO_NAME("AddChordFBox")
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
+};
+
+class RemoveChordFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveChordFBox)
+
+    FBox* m_fretBox = nullptr;
+    bool m_removed = false;
+    Fraction m_tick;
+    String m_chordName;
+
+    FretDiagram* m_removedFretDiagram = nullptr;
+    int m_removedFretDiagramIndex = 0;
+
+    FretDiagram* m_addedFretDiagram = nullptr;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    RemoveChordFBox(FBox* box, const String& chordName, const Fraction& tick);
+
+    UNDO_TYPE(CommandType::RemoveChordFBox)
+    UNDO_NAME("RemoveChordFBox")
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
 };
 
 class MoveTremolo : public UndoCommand

@@ -689,6 +689,11 @@ void FBox::add(EngravingItem* e)
     if (e->isFretDiagram()) {
         FretDiagram* fd = toFretDiagram(e);
         fd->setFlag(ElementFlag::MOVABLE, false);
+
+        if (!e->eid().isValid()) {
+            e->assignNewEID();
+        }
+
         VBox::add(e);
     } else {
         LOGD("FBox::add: element not allowed");
@@ -794,45 +799,59 @@ void FBox::init()
                 continue;
             }
 
-            FretDiagram* fretDiagram = nullptr;
-
-            if (item->isHarmony()) {
-                Harmony* harmony = toHarmony(item)->clone();
-                harmony->setParent(this);
-
-                fretDiagram = Factory::createFretDiagram(score()->dummy()->segment());
-
-                fretDiagram->setTrack(harmony->track());
-                fretDiagram->updateDiagram(harmony->plainText());
-
-                fretDiagram->linkHarmony(harmony);
-            } else if (item->isFretDiagram()) {
-                fretDiagram = toFretDiagram(item)->clone();
-                fretDiagram->harmony()->setAutoplace(false);
-                fretDiagram->setAutoplace(false);
+            FretDiagram* fretDiagram = makeFretDiagram(item);
+            if (!fretDiagram) {
+                continue;
             }
 
-            if (fretDiagram) {
-                String pattern = FretDiagram::patternFromDiagram(fretDiagram);
-                if (muse::contains(usedDiagrams, pattern)) {
-                    delete fretDiagram;
-                    fretDiagram = nullptr;
+            String pattern = FretDiagram::patternFromDiagram(fretDiagram);
+            if (muse::contains(usedDiagrams, pattern)) {
+                delete fretDiagram;
+                fretDiagram = nullptr;
 
-                    continue;
-                }
-
-                add(fretDiagram);
-
-                usedDiagrams.insert(pattern);
+                continue;
             }
+
+            add(fretDiagram);
+
+            usedDiagrams.insert(pattern);
         }
     }
 }
 
-void FBox::undoReorderElements(const std::vector<EID> &newOrderElementsIds)
+void FBox::undoReorderElements(const std::vector<EID>& newOrderElementsIds)
 {
     score()->undo(new ReorderFBox(this, newOrderElementsIds));
     triggerLayout();
+}
+
+FretDiagram* FBox::makeFretDiagram(const EngravingItem* item)
+{
+    FretDiagram* fretDiagram = nullptr;
+
+    if (item->isHarmony() && !item->parentItem()->isFretDiagram()) {
+        Harmony* harmony = toHarmony(item)->clone();
+        harmony->setParent(this);
+
+        fretDiagram = Factory::createFretDiagram(score()->dummy()->segment());
+
+        fretDiagram->setTrack(harmony->track());
+        fretDiagram->updateDiagram(harmony->plainText());
+
+        fretDiagram->linkHarmony(harmony);
+    } else if (item->isHarmony() && item->parentItem()->isFretDiagram()) {
+        fretDiagram = toFretDiagram(item->parentItem())->clone();
+    } else if (item->isFretDiagram()) {
+        fretDiagram = toFretDiagram(item)->clone();
+        if (!fretDiagram->harmony()) {
+            //! generate from diagram and add harmony
+            fretDiagram->add(Factory::createHarmony(score()->dummy()->segment()));
+        }
+    } else {
+        return nullptr;
+    }
+
+    return fretDiagram;
 }
 
 //---------------------------------------------------------

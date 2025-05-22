@@ -457,21 +457,6 @@ void MasterScore::updateExpressive(Synthesizer* synth, bool expressive, bool for
     }
 }
 
-void MasterScore::rebuildFretDiagramLegend()
-{
-    for (MeasureBase* measure = first(); measure; measure = measure->next()) {
-        if (!measure->isFBox()) {
-            continue;
-        }
-
-        FBox* fbox = toFBox(measure);
-        fbox->init();
-        fbox->triggerLayout();
-
-        break;
-    }
-}
-
 //---------------------------------------------------------
 //   rebuildAndUpdateExpressive
 //    implicitly rebuild midi mappings as well. Should be preferred over

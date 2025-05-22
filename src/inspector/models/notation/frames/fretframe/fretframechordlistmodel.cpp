@@ -178,7 +178,3 @@ FretFrameChordItem* FretFrameChordListModel::modelIndexToItem(const QModelIndex&
 {
     return dynamic_cast<FretFrameChordItem*>(item(index));
 }
-
-void FretFrameChordListModel::onRowsMoved()
-{
-}
