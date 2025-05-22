@@ -38,12 +38,15 @@ static bool isFiltered_Impl(const unsigned int& currentFilter, const FilterParam
     return currentFilter & params.otherFilter;
 }
 
-static void setFiltered_Impl(unsigned int& currentFilter, FilterParams& params, bool filtered)
+static void setFiltered_Impl(unsigned int& currentFilter, FilterParams& params, bool filtered, bool forceOthersToFalse)
 {
     if (params.otherFilter == params.noneMask) {
         params.otherFilter = params.allMask;
-        setFiltered_Impl(currentFilter, params, !filtered);
+        setFiltered_Impl(currentFilter, params, !filtered, forceOthersToFalse);
         return;
+    }
+    if (forceOthersToFalse) {
+        currentFilter = 0;
     }
     filtered ? currentFilter |= params.otherFilter : currentFilter &= ~params.otherFilter;
 }
@@ -61,6 +64,15 @@ bool SelectionFilter::isFiltered(const SelectionFilterTypesVariant& variant) con
         return isFiltered_Impl(m_filteredVoicesTypes, params);
     }
     case 1: {
+        const NotesInChordSelectionFilterTypes type = std::get<NotesInChordSelectionFilterTypes>(variant);
+        const FilterParams params {
+            /*otherFilter*/ static_cast<unsigned int>(type),
+            /*noneMask*/ static_cast<unsigned int>(NotesInChordSelectionFilterTypes::NONE),
+            /*allMask*/ static_cast<unsigned int>(NotesInChordSelectionFilterTypes::ALL)
+        };
+        return isFiltered_Impl(m_filteredNotesInChordTypes, params);
+    }
+    case 2: {
         const ElementsSelectionFilterTypes type = std::get<ElementsSelectionFilterTypes>(variant);
         const FilterParams params {
             /*otherFilter*/ static_cast<unsigned int>(type),
@@ -69,14 +81,14 @@ bool SelectionFilter::isFiltered(const SelectionFilterTypesVariant& variant) con
         };
         return isFiltered_Impl(m_filteredElementsTypes, params);
     }
-    default: UNREACHABLE;
+    default: break;
     }
 
     UNREACHABLE;
     return true;
 }
 
-void SelectionFilter::setFiltered(const SelectionFilterTypesVariant& variant, bool filtered)
+void SelectionFilter::setFiltered(const SelectionFilterTypesVariant& variant, bool filtered, bool forceOthersToFalse)
 {
     switch (variant.index()) {
     case 0: {
@@ -86,17 +98,27 @@ void SelectionFilter::setFiltered(const SelectionFilterTypesVariant& variant, bo
             /*noneMask*/ static_cast<unsigned int>(VoicesSelectionFilterTypes::NONE),
             /*allMask*/ static_cast<unsigned int>(VoicesSelectionFilterTypes::ALL)
         };
-        setFiltered_Impl(m_filteredVoicesTypes, params, filtered);
+        setFiltered_Impl(m_filteredVoicesTypes, params, filtered, forceOthersToFalse);
         return;
     }
     case 1: {
+        const NotesInChordSelectionFilterTypes type = std::get<NotesInChordSelectionFilterTypes>(variant);
+        FilterParams params {
+            /*otherFilter*/ static_cast<unsigned int>(type),
+            /*noneMask*/ static_cast<unsigned int>(NotesInChordSelectionFilterTypes::NONE),
+            /*allMask*/ static_cast<unsigned int>(NotesInChordSelectionFilterTypes::ALL)
+        };
+        setFiltered_Impl(m_filteredNotesInChordTypes, params, filtered, forceOthersToFalse);
+        return;
+    }
+    case 2: {
         const ElementsSelectionFilterTypes type = std::get<ElementsSelectionFilterTypes>(variant);
         FilterParams params {
             /*otherFilter*/ static_cast<unsigned int>(type),
             /*noneMask*/ static_cast<unsigned int>(ElementsSelectionFilterTypes::NONE),
             /*allMask*/ static_cast<unsigned int>(ElementsSelectionFilterTypes::ALL)
         };
-        setFiltered_Impl(m_filteredElementsTypes, params, filtered);
+        setFiltered_Impl(m_filteredElementsTypes, params, filtered, forceOthersToFalse);
         return;
     }
     default: break;
@@ -169,6 +191,27 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
 
     if (e->isChord() && toChord(e)->isGrace()) {
         return isFiltered(ElementsSelectionFilterTypes::GRACE_NOTE);
+    }
+
+    return true;
+}
+
+bool SelectionFilter::canSelectNoteIdx(size_t noteIdx, size_t totalNotesInChord) const
+{
+    //! NOTE: Everything above "normal" we handle as top notes...
+    const bool idxIsNormal = noteIdx < NUM_NOTES_IN_CHORD_SELECTION_FILTER_TYPES - 1;
+    if (noteIdx == totalNotesInChord - 1 || !idxIsNormal) {
+        return isFiltered(NotesInChordSelectionFilterTypes::TOP_NOTE);
+    }
+
+    switch (noteIdx) {
+    case 0: return isFiltered(NotesInChordSelectionFilterTypes::BOTTOM_NOTE);
+    case 1: return isFiltered(NotesInChordSelectionFilterTypes::SECOND_NOTE);
+    case 2: return isFiltered(NotesInChordSelectionFilterTypes::THIRD_NOTE);
+    case 3: return isFiltered(NotesInChordSelectionFilterTypes::FOURTH_NOTE);
+    case 4: return isFiltered(NotesInChordSelectionFilterTypes::FIFTH_NOTE);
+    case 5: return isFiltered(NotesInChordSelectionFilterTypes::SIXTH_NOTE);
+    case 6: return isFiltered(NotesInChordSelectionFilterTypes::SEVENTH_NOTE);
     }
 
     return true;

@@ -2534,33 +2534,62 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, boo
         mu::engraving::Segment* startSegment = sel.startSegment();
         mu::engraving::Segment* endSegment = sel.endSegment();           //keep it, it could change during the loop
 
+        //! NOTE: See usage of these variables - we should apply palette elements to single notes if the selection consists solely
+        //! of single notes, even if the "include single notes" filter flag is false...
+        std::unordered_set<Chord*> singleNoteChords;
+        size_t totalChordsFound = 0;
+
+        const auto applyDropPaletteElementToChord = [this, score, element, modifiers](Chord* chord) {
+            const size_t noteCount = chord->notes().size();
+            const bool isSingleNote = noteCount == 1;
+
+            for (size_t noteIdx = 0; noteIdx < noteCount; ++noteIdx) {
+                Note* note = chord->notes().at(noteIdx);
+                if (!note || (!score->selectionFilter().canSelectNoteIdx(noteIdx, noteCount) && !isSingleNote)) {
+                    continue;
+                }
+                applyDropPaletteElement(score, note, element, modifiers);
+                if (!element->isAccidental() && !element->isNoteHead() && !element->isGlissando() && !element->isChordLine()) {
+                    // Only need to apply to one note...
+                    break;
+                }
+            }
+        };
+
         for (mu::engraving::Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
             for (track_idx_t track = track1; track < track2; ++track) {
                 mu::engraving::EngravingItem* e = s->element(track);
-                if (e == 0 || !score->selectionFilter().canSelect(e)
-                    || !score->selectionFilter().canSelectVoice(track)) {
+                if (!e || !score->selectionFilter().canSelect(e) || !score->selectionFilter().canSelectVoice(track)) {
                     continue;
                 }
-                if (e->isChord()) {
-                    mu::engraving::Chord* chord = toChord(e);
-                    for (mu::engraving::Note* n : chord->notes()) {
-                        applyDropPaletteElement(score, n, element, modifiers);
-                        if (!(element->isAccidental() || element->isNoteHead()
-                              || element->isGlissando() || element->isChordLine())) {     // only these need to apply to every note
-                            break;
-                        }
-                    }
-                } else {
+
+                if (!e->isChord()) {
                     // do not apply articulation to barline in a range selection
                     if (!e->isBarLine() || !element->isArticulationFamily()) {
                         applyDropPaletteElement(score, e, element, modifiers);
                     }
+                    continue;
                 }
+
+                Chord* chord = toChord(e);
+                if (chord->notes().size() == 1) {
+                    singleNoteChords.emplace(chord);
+                } else {
+                    applyDropPaletteElementToChord(chord);
+                }
+                ++totalChordsFound;
             }
             if (!element->placeMultiple()) {
                 break;
             }
         }
+
+        if (totalChordsFound == singleNoteChords.size() || score->selectionFilter().includeSingleNotes()) {
+            for (Chord* singleNoteChord : singleNoteChords) {
+                applyDropPaletteElementToChord(singleNoteChord);
+            }
+        }
+
         return;
     }
 

@@ -34,7 +34,10 @@ public:
     NotationSelectionFilter(const IGetScore* getScore, const std::function<void()>& selectionChangedCallback);
 
     bool isSelectionTypeFiltered(const SelectionFilterTypesVariant& variant) const override;
-    void setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered) override;
+    void setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered, bool forceOthersToFalse = false) override;
+
+    bool includeSingleNotes() const override;
+    void setIncludeSingleNotes(bool include) override;
 
 private:
     mu::engraving::Score* score() const;
