@@ -148,7 +148,7 @@ RetVal<SaveLocationType> OpenSaveProjectScenario::askSaveLocationType() const
     bool shouldAsk = configuration()->shouldAskSaveLocationType();
     query.addParam("askAgain", Val(shouldAsk));
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         return rv.ret;
     }
@@ -199,7 +199,7 @@ RetVal<CloudAudioInfo> OpenSaveProjectScenario::askShareAudioLocation(INotationP
         query.addParam("existingScoreOrAudioUrl", Val(uploadUrl.toString()));
     }
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         return rv.ret;
     }
@@ -289,7 +289,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
     query.addParam("existingScoreOrAudioUrl", Val(existingProjectInfo.sourceUrl.toString()));
     query.addParam("cloudCode", Val(cloud::MUSESCORE_COM_CLOUD_CODE));
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         return rv.ret;
     }
