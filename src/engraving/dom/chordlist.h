@@ -140,17 +140,17 @@ struct RenderActionMove : RenderAction
 {
     RenderActionMove() {}
     RenderActionMove(double movex, double movey)
-        : m_movex(movex), m_movey(movey) {}
+        : m_vec(PointF(movex, movey)) {}
 
     RenderActionType actionType() const override { return RenderActionType::MOVE; }
     void print() const override;
 
-    void setx(double x) { m_movex = x; }
-    void sety(double y) { m_movex = y; }
-    double x() const { return m_movex; }
-    double y() const { return m_movey; }
+    double x() const { return m_vec.x(); }
+    double y() const { return m_vec.y(); }
+    PointF vec() const { return m_vec; }
+
 private:
-    double m_movex = 0.0, m_movey = 0.0;
+    PointF m_vec = PointF(0.0, 0.0);
 };
 
 struct RenderActionSet : RenderAction
@@ -182,8 +182,6 @@ struct RenderActionPop : RenderAction
     RenderActionType actionType() const override { return RenderActionType::POP; }
     void print() const override;
 
-    void setPopX(bool popx) { m_popx = popx; }
-    void setPopY(bool popy) { m_popx = popy; }
     double popX() const { return m_popx; }
     double popY() const { return m_popy; }
 private:
@@ -351,7 +349,6 @@ struct ChordFont {
     String family;
     String fontClass;
     double mag = 1.0;
-    double stackedMag = 1.0;
 };
 
 //---------------------------------------------------------
