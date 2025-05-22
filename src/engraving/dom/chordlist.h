@@ -123,7 +123,7 @@ struct RenderAction
 {
     enum class RenderActionType : char {
         SET, MOVE, PUSH, POP,
-        NOTE, ACCIDENTAL, STOPHALIGN
+        NOTE, ACCIDENTAL, STOPHALIGN, SCALE
     };
 
     virtual RenderActionType actionType() const = 0;
@@ -206,6 +206,21 @@ struct RenderActionStopHAlign : RenderAction
 {
     RenderActionStopHAlign() {}
     RenderActionType actionType() const override { return RenderActionType::STOPHALIGN; }
+};
+
+struct RenderActionScale : RenderAction
+{
+    RenderActionScale() {}
+    RenderActionScale(double scale)
+        : m_scale(scale) {}
+    RenderActionType actionType() const override { return RenderActionType::SCALE; }
+
+    double scale() const { return m_scale; }
+
+    void print() const override;
+
+private:
+    double m_scale = 1.0;
 };
 
 //---------------------------------------------------------
@@ -361,6 +376,7 @@ public:
     double nominalAdjust() const { return m_nadjust; }
     bool stackModifiers() const { return m_stackModifiers; }
     bool excludeModsHAlign() const { return m_excludeModsHAlign; }
+    double stackedModifierMag() const { return m_stackedmmag; }
     void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0, double stackedmmag = 0.0,
                              bool stackModifiers = false, bool excludeModsHAlign = false);
     double position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const;
