@@ -3443,16 +3443,30 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
             }
 
             double xx = 0.0;
-            switch (item->noteheadAlign()) {
-            case AlignH::LEFT:
-                xx = -hAlignBox.left();
-                break;
-            case AlignH::HCENTER:
-                xx = -(hAlignBox.center().x());
-                break;
-            case AlignH::RIGHT:
-                xx = -hAlignBox.right();
-                break;
+            if (fd) {
+                switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
+                case AlignH::LEFT:
+                    xx = -hAlignBox.left();
+                    break;
+                case AlignH::HCENTER:
+                    xx = -(hAlignBox.center().x());
+                    break;
+                case AlignH::RIGHT:
+                    xx = -hAlignBox.right();
+                    break;
+                }
+            } else {
+                switch (item->noteheadAlign()) {
+                case AlignH::LEFT:
+                    xx = -hAlignBox.left();
+                    break;
+                case AlignH::HCENTER:
+                    xx = -(hAlignBox.center().x());
+                    break;
+                case AlignH::RIGHT:
+                    xx = -hAlignBox.right();
+                    break;
+                }
             }
 
             double yy = -bb.y();      // Align::TOP
