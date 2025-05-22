@@ -158,12 +158,17 @@ jobs:
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
+      if: ${{ inputs.use_qt69 == 'on' }}
       with:
         version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }} 
         host: 'windows'
         target: 'desktop'
         arch: ${{ inputs.use_qt69 == 'on' && 'win64_msvc2022_64' || 'win64_msvc2019_64' }} 
         modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
+    - name: Install Qt 6.2.11
+      if: ${{ inputs.use_qt69 != 'on' }}
+      run: |
+        buildscripts\ci\windows\install_qt_6_2_11.bat
     - name: Setup environment
       run: |
         buildscripts\ci\windows\setup.bat
