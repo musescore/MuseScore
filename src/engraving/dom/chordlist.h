@@ -264,6 +264,7 @@ struct ChordFont {
     String family;
     String fontClass;
     double mag = 1.0;
+    double stackedMag = 1.0;
 };
 
 //---------------------------------------------------------
@@ -288,9 +289,9 @@ public:
     double nominalAdjust() const { return m_nadjust; }
     bool stackModifiers() const { return m_stackModifiers; }
     bool excludeModsHAlign() const { return m_excludeModsHAlign; }
-    void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0, bool stackModifiers = false,
-                             bool excludeModsHAlign = false);
-    double position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx) const;
+    void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0, double stackedmmag = 0.0,
+                             bool stackModifiers = false, bool excludeModsHAlign = false);
+    double position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const;
 
     void checkChordList(const muse::io::path_t& appDataPath, const MStyle& style);
     bool read(const muse::io::path_t& appDataPath, const String& name);
@@ -319,7 +320,7 @@ private:
     bool m_excludeModsHAlign = false;
     double m_nmag = 1.0, m_nadjust = 0.0;   // adjust values are measured in percentage
     double m_emag = 1.0, m_eadjust = 0.0;   // (which is then applied to the height of the font)
-    double m_mmag = 1.0, m_madjust = 0.0;
+    double m_mmag = 1.0, m_madjust = 0.0, m_stackedmmag = 0.0;
 
     bool m_customChordList = false;         // if true, chordlist will be saved as part of score
 };

@@ -1456,7 +1456,7 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
 //   position
 //---------------------------------------------------------
 
-double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx) const
+double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const
 {
     String name = names.empty() ? u"" : names.front();
     switch (ctc) {
@@ -1465,7 +1465,10 @@ double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t 
     case ChordTokenClass::MODIFIER: {
         double yAdj = 0.0;
         if (m_stackModifiers) {
-            yAdj += modifierIdx * -m_mmag;
+            LOGI() << "stackedmag: " << m_stackedmmag;
+            double base = ((1 / m_stackedmmag) - 1.2 * nmodifiers - 0.2) / 2;
+
+            yAdj += base + (modifierIdx > 0 ? base + modifierIdx + 0.2 : 0.0);
         }
         Char c = name.isEmpty() ? name.at(0) : u'0';
         if (c.isDigit() || c.isPunct()) {
@@ -1535,7 +1538,7 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 
         // check for adjustments
         // stop adjusting when first non-adjusted modifier found
-        double yAdjust = adjust ? cl->position(tok.names, ctc, finalModIdx - modIdx) : 0.0;
+        double yAdjust = adjust ? cl->position(tok.names, ctc, finalModIdx - modIdx, m_modifierList.size()) : 0.0;
         if (tok.tokenClass == ChordTokenClass::MODIFIER && RealIsNull(yAdjust)) {
             adjust = false;
         }
@@ -1734,13 +1737,15 @@ int ChordList::privateID = -1000;
 //   configureAutoAdjust
 //---------------------------------------------------------
 
-void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust, bool stackModifiers, bool excludeModsHAlign)
+void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust, double stackedmmag, bool stackModifiers,
+                                    bool excludeModsHAlign)
 {
     m_stackModifiers = stackModifiers;
     m_excludeModsHAlign = excludeModsHAlign;
     m_emag = emag;
     m_eadjust = eadjust;
     m_mmag = mmag;
+    m_stackedmmag = stackedmmag;
     m_madjust = madjust;
 }
 
@@ -1806,6 +1811,7 @@ void ChordList::read(XmlReader& e, int mscVersion)
                     f.mag *= m_emag;
                 } else if (f.fontClass == "modifier") {
                     f.mag *= m_mmag;
+                    f.stackedMag = m_mmag;
                 }
             }
             fonts.push_back(f);
@@ -2036,9 +2042,10 @@ void ChordList::checkChordList(const path_t& appDataPath, const MStyle& style)
         double eadjust = style.styleD(Sid::chordExtensionAdjust);
         double mmag = style.styleD(Sid::chordModifierMag);
         double madjust = style.styleD(Sid::chordModifierAdjust);
+        double stackedmmag = style.styleD(Sid::chordStackedModiferMag);
         bool stackModifiers = style.styleB(Sid::verticallyStackModifiers);
         bool excludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
-        configureAutoAdjust(emag, eadjust, mmag, madjust, stackModifiers, excludeModsHAlign);
+        configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, stackModifiers, excludeModsHAlign);
 
         if (style.value(Sid::chordsXmlFile).toBool()) {
             read(appDataPath, u"chords.xml");
