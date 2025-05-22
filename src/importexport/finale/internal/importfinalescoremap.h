@@ -32,6 +32,8 @@
 
 #include "musx/musx.h"
 
+#include "importfinalelogger.h"
+
 namespace mu::engraving {
 class InstrumentTemplate;
 class Part;
@@ -40,7 +42,6 @@ class Staff;
 }
 
 namespace mu::iex::finale {
-class FinaleLogger;
 
 struct ReadableTuplet
 {
@@ -92,7 +93,7 @@ private:
                      const std::shared_ptr<musx::dom::others::InstrumentUsed>& musxScrollViewItem,
                      const std::shared_ptr<musx::dom::others::Measure>& musxMeasure,
                      engraving::Measure* measure, engraving::staff_idx_t curStaffIdx,
-                     musx::dom::ClefIndex musxCurrClef);
+                     musx::dom::ClefIndex& musxCurrClef);
     // styles
     void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);
 

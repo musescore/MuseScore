@@ -626,7 +626,7 @@ void EnigmaXmlImporter::importStaffItems()
 void EnigmaXmlImporter::importClefs(details::GFrameHoldContext gfHold,
                                     const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem,
                                     const std::shared_ptr<others::Measure>& musxMeasure, Measure* measure, staff_idx_t curStaffIdx,
-                                    ClefIndex musxCurrClef)
+                                    ClefIndex& musxCurrClef)
 {
     // The Finale UI requires transposition to be a full-measure staff-style assignment, so checking only the beginning of the bar should be sufficient.
     // However, it is possible to defeat this requirement using plugins. That said, doing so produces erratic results, so I'm not sure we should support it.
