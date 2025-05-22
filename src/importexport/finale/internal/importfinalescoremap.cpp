@@ -403,6 +403,7 @@ void EnigmaXmlImporter::importClefs(const std::shared_ptr<others::InstrumentUsed
                 if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef || midMeasureClef->clefMode == ShowClefMode::Always) {
                     const bool visible = midMeasureClef->clefMode != ShowClefMode::Never;
                     const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
+                    /// @todo Test with stretched staff time. (midMeasureClef->xEduPos is in global edu values.)
                     if (Clef * clef = createClef(m_score, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline, visible)) {
                         // only set y offset because MuseScore automatically calculates the horizontal spacing offset
                         clef->setOffset(0.0, clef->spatium() * (-double(midMeasureClef->yEvpuPos) / EVPU_PER_SPACE));
