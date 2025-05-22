@@ -172,6 +172,7 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
         logger()->logWarning(String(u"Given ChordRest duration not supported in MuseScore"));
         return nullptr;
     }
+    d.setDots(static_cast<int>(noteInfo.second));
 
     ChordRest* cr = nullptr;
     int crossStaffMove = 0;
@@ -271,7 +272,6 @@ ChordRest* EnigmaXmlImporter::importEntry(EntryInfoPtr entryInfo, Segment* segme
     }
 
     cr->setDurationType(d);
-    cr->setDots(static_cast<int>(noteInfo.second));
     cr->setStaffMove(crossStaffMove);
     return cr;
 }
