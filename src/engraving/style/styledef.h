@@ -507,6 +507,7 @@ enum class Sid {
     chordModifierMag,
     chordModifierAdjust,
     verticallyStackModifiers,
+    chordStackedModiferMag,
     chordBassNoteStagger,
     chordBassNoteScale,
     polychordDividerThickness,
