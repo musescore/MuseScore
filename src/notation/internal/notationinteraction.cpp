@@ -1149,6 +1149,11 @@ void NotationInteraction::addGlissandoNote(mu::engraving::Note *note, int ticks,
     glissando_duration_ticks = duration_ticks;
 }
 void NotationInteraction::addGlissandoEndNote(mu::engraving::Note *note) {
+    for (Note* ptr : glissando_endnotes) {
+        if (ptr == note) {
+            return;
+        }
+    }
     glissando_endnotes.push_back(note);
 }
 int NotationInteraction::glissandoNoteTicks() const {
