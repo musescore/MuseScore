@@ -74,7 +74,7 @@ KeyState PianoKeyboardController::playbackKeyState(piano_key_t key) const {
 KeyState PianoKeyboardController::glissandoKeyState(piano_key_t key) const {
     if (m_glissando_curr_ticks == m_glissando_ticks) {
         if (key == m_glissando_note_key) {
-            return KeyState::RightHand;
+            return KeyState::Glissando;
         }
     } else {
         if (m_glissando_curr_ticks > m_glissando_ticks && m_glissando_curr_ticks < m_glissando_ticks + m_glissando_duration_ticks) {
@@ -84,13 +84,13 @@ KeyState PianoKeyboardController::glissandoKeyState(piano_key_t key) const {
                 double _key = m_glissando_note_key + (m_glissando_endnote_min_key - m_glissando_note_key) * ratio;
                 _key = static_cast<int>(_key);
                 if (key == (piano_key_t)_key) {
-                    return KeyState::RightHand;
+                    return KeyState::Glissando;
                 }
             } else if (m_glissando_note_key > m_glissando_endnote_max_key) {
                 double _key = m_glissando_note_key - (m_glissando_note_key - m_glissando_endnote_max_key) * ratio;
                 _key = static_cast<int>(_key);
                 if (key == (piano_key_t)_key) {
-                    return KeyState::RightHand;
+                    return KeyState::Glissando;
                 }
             }
         }
@@ -361,14 +361,14 @@ void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const N
         if (newKeys != m_glissando_endnotes_keys) {
             m_glissando_endnotes_keys = newKeys;
         }
+
+        for (const auto& key : m_glissando_endnotes_keys) {
+            m_glissando_endnote_min_key = key;
+            m_glissando_endnote_max_key = key;
+            break;
+        }
         
         for (const auto& key : m_glissando_endnotes_keys) {
-            if (!m_glissando_endnote_min_key) {
-                m_glissando_endnote_min_key = key;
-            }
-            if (!m_glissando_endnote_max_key) {
-                m_glissando_endnote_max_key = key;
-            }
             if (key < m_glissando_endnote_min_key) {
                 m_glissando_endnote_min_key = key;
             } else if (key > m_glissando_endnote_max_key) {
