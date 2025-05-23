@@ -28,6 +28,8 @@
 #include <QStack>
 #include <QEventLoop>
 
+#include "global/async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "../iinteractiveprovider.h"
 #include "../iinteractiveuriregister.h"
@@ -50,7 +52,7 @@ private:
     QVariantMap m_data;
 };
 
-class InteractiveProvider : public QObject, public IInteractiveProvider, public Injectable
+class InteractiveProvider : public QObject, public IInteractiveProvider, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
@@ -88,6 +90,7 @@ public:
     bool isSelectColorOpened() const override;
 
     RetVal<Val> open(const UriQuery& uri) override;
+    RetVal<Val> openSync(const UriQuery& uri) override;
     async::Promise<Val> openAsync(const UriQuery& uri) override;
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
@@ -140,6 +143,8 @@ private:
         SelectSavingFile,
         SelectDirectory
     };
+
+    async::Promise<Val>::Body openFunc(const UriQuery& q);
 
     void raiseWindowInStack(QObject* newActiveWindow);
 
