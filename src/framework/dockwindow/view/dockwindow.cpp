@@ -391,14 +391,28 @@ void DockWindow::loadPanels(const DockPageView* page)
 {
     TRACEFUNC;
 
+    QList<DockPanelView*> loadedPanels;
+    QList<DockPanelView*> hiddenPanels;
     for (DockPanelView* panel : page->panels()) {
-        if (DockPanelView* destinationPanel = findDestinationForPanel(page, panel)) {
-            addPanelAsTab(panel, destinationPanel);
-            continue;
+        if (!panel->isVisible()) {
+            hiddenPanels << panel;
         }
-        const Location location = panel->location();
-        const bool isSideLocation = location == Location::Left || location == Location::Right;
-        addDock(panel, location, isSideLocation ? page->centralDock() : nullptr);
+
+        if (DockPanelView* destinationPanel = findDestinationForPanel(loadedPanels, panel)) {
+            addPanelAsTab(panel, destinationPanel);
+        } else {
+            const Location location = panel->location();
+            const bool isSideLocation = location == Location::Left || location == Location::Right;
+            addDock(panel, location, isSideLocation ? page->centralDock() : nullptr, true);
+        }
+
+        loadedPanels << panel;
+    }
+
+    // We must close the invisible panels in reverse order to preserve their tab indexes.
+    for (auto it = hiddenPanels.rbegin(); it != hiddenPanels.rend(); it++) {
+        DockPanelView* hiddenPanel = *it;
+        hiddenPanel->close();
     }
 
     for (Location location : POSSIBLE_LOCATIONS) {
@@ -462,9 +476,9 @@ void DockWindow::alignTopLevelToolBars(const DockPageView* page)
     lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth() + deltaForLastCentralToolBar);
 }
 
-DockPanelView* DockWindow::findDestinationForPanel(const DockPageView* page, const DockPanelView* panel) const
+DockPanelView* DockWindow::findDestinationForPanel(const QList<DockPanelView*>& panels, const DockPanelView* panel) const
 {
-    for (DockPanelView* destinationPanel : page->panels()) {
+    for (DockPanelView* destinationPanel : panels) {
         if (destinationPanel->isTabAllowed(panel)) {
             return destinationPanel;
         }
@@ -472,7 +486,7 @@ DockPanelView* DockWindow::findDestinationForPanel(const DockPageView* page, con
     return nullptr;
 }
 
-void DockWindow::addDock(DockBase* dock, Location location, const DockBase* relativeTo)
+void DockWindow::addDock(DockBase* dock, Location location, const DockBase* relativeTo, bool forceStartVisible /*= false*/)
 {
     TRACEFUNC;
 
@@ -480,7 +494,7 @@ void DockWindow::addDock(DockBase* dock, Location location, const DockBase* rela
 
     KDDockWidgets::DockWidgetBase* relativeDock = relativeTo ? relativeTo->dockWidget() : nullptr;
 
-    auto visibilityOption = dock->isVisible() ? KDDockWidgets::InitialVisibilityOption::StartVisible
+    auto visibilityOption = forceStartVisible || dock->isVisible() ? KDDockWidgets::InitialVisibilityOption::StartVisible
                             : KDDockWidgets::InitialVisibilityOption::StartHidden;
 
     KDDockWidgets::InitialOption options(visibilityOption, dock->preferredSize());
@@ -492,10 +506,8 @@ void DockWindow::addPanelAsTab(DockPanelView* panel, DockPanelView* destinationP
 {
     registerDock(panel);
 
-    if (panel->isVisible()) {
-        destinationPanel->addPanelAsTab(panel);
-        destinationPanel->setCurrentTabIndex(0);
-    }
+    destinationPanel->addPanelAsTab(panel);
+    destinationPanel->setCurrentTabIndex(0);
 }
 
 void DockWindow::registerDock(DockBase* dock)
@@ -522,9 +534,11 @@ void DockWindow::handleUnknownDock(const DockPageView* page, DockBase* unknownDo
         return;
     }
 
-    if (DockPanelView* destinationPanel = findDestinationForPanel(page, unknownPanel)) {
-        addPanelAsTab(unknownPanel, destinationPanel);
-        return;
+    if (unknownPanel->isVisible()) {
+        if (DockPanelView* destinationPanel = findDestinationForPanel(page->panels(), unknownPanel)) {
+            addPanelAsTab(unknownPanel, destinationPanel);
+            return;
+        }
     }
 
     DockingHolderView* holder = page->holder(DockType::Panel, unknownPanel->location());
