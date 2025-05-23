@@ -196,13 +196,13 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                             EngravingItem *glissandoNote = item->parentItem();
                             if (glissandoNote->type() == mu::engraving::ElementType::NOTE) {
                                 if (tick.ticks() < m_notation->interaction()->glissandoNoteTicks() || tick.ticks() > m_notation->interaction()->glissandoNoteTicks() + m_notation->interaction()->glissandoNoteDurationticks()) {
-                                    m_notation->interaction()->addGlissandoNote(toNote(glissandoNote), t1.ticks(), duration_ticks);
+                                    m_notation->interaction()->addGlissandoNote(toNote(glissandoNote), glissandoNote->tick().ticks(), duration_ticks);
                                     mu::engraving::Segment* _ns = s->next(mu::engraving::SegmentType::ChordRest);
                                     while (_ns && !_ns->visible()) {
                                         _ns = _ns->next(mu::engraving::SegmentType::ChordRest);
                                     }
                                     if (_ns) {
-                                        EngravingItemList _itemList = _ns->childrenItems(false);
+                                        EngravingItemList _itemList = _ns->childrenItems(true);
                                         for (size_t k = 0; k < _itemList.size(); k++) {
                                             EngravingItem *_item = _itemList.at(k);
                                             if (_item == nullptr) {
@@ -214,8 +214,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                         }
                                         m_notation->interaction()->glissandoEndNotesUpdate();    
                                     }
-                                } else {
-                                    m_notation->interaction()->glissandoTick(tick.ticks());
                                 }
                             }
                         } else if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
@@ -243,34 +241,46 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                         int arpeggio_duration_ticks = arpeggioChord->durationTypeTicks().ticks();
                                         if (arpeggioChord->durationType().type() <= mu::engraving::DurationType::V_HALF) {
                                             if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_HALF) {
-                                                arpeggio_duration_ticks /= 2;
+                                                arpeggio_duration_ticks /= 3;
                                             } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_WHOLE) {
-                                                arpeggio_duration_ticks /= 4;
-                                            }
-                                            if (isFermataTag) {
                                                 arpeggio_duration_ticks /= 6;
                                             }
+                                            if (isFermataTag) {
+                                                arpeggio_duration_ticks /= 8;
+                                            } else {
+                                                arpeggio_duration_ticks /= 2;
+                                            }
+                                        } else {
+                                            arpeggio_duration_ticks /= 2;
                                         }
-                                        EngravingItemList _itemList = arpeggio->childrenItems(false);
+
+                                        EngravingItemList _itemList = s->childrenItems(true);
                                         for (size_t k = 0; k < _itemList.size(); k++) {
                                             EngravingItem *_item = _itemList.at(k);
                                             if (_item == nullptr) {
                                                 continue;
                                             }
                                             if (_item->type() == mu::engraving::ElementType::NOTE) {
-                                                if (!m_notation->interaction()->arpeggioNoteTicksExist(item->canvasPos())) {
-                                                    m_notation->interaction()->addArpeggioPoint(item->canvasPos());
-                                                    m_notation->interaction()->addArpeggioNote(toNote(_item), t1.ticks(), arpeggio_duration_ticks);
-                                                } else {
-                                                    m_notation->interaction()->addArpeggioNote(toNote(_item));
+                                                EngravingItem *_itemParent = _item->parentItem();
+                                                if (_itemParent->type() == mu::engraving::ElementType::CHORD) {
+                                                    if (_itemParent->tick().ticks() == t1.ticks()) {
+                                                        mu::engraving::Chord *_itemParentChord = toChord(_itemParent);
+                                                        int _item_duration_ticks = _itemParentChord->durationTypeTicks().ticks();
+                                                        if (tick.ticks() >= _itemParentChord->tick().ticks() && tick.ticks() <= _itemParentChord->tick().ticks() + _item_duration_ticks) {
+                                                            if (!m_notation->interaction()->arpeggioNoteTicksExist(item->canvasPos())) {
+                                                                m_notation->interaction()->addArpeggioPoint(item->canvasPos());
+                                                                m_notation->interaction()->addArpeggioNote(toNote(_item), _itemParentChord->tick().ticks(), arpeggio_duration_ticks);
+                                                            } else {
+                                                                m_notation->interaction()->addArpeggioNote(toNote(_item));
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
                                         m_notation->interaction()->arpeggioNotesUpdate();
                                     }
                                 }
-                            } else {
-                                m_notation->interaction()->arpeggioTick(tick.ticks());
                             }
                         }
                         
@@ -306,8 +316,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
         }
         s = ns;
     }
-
-    m_notation->interaction()->arpeggioTick(tick.ticks());
 
     // alex:: lingering cursor
     std::vector<EngravingItem*> engravingItemList = s1->elist();
@@ -498,6 +506,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
             segment = next_segment;
         }
     }
+    m_notation->interaction()->glissandoTick(tick.ticks());
+    m_notation->interaction()->arpeggioTick(tick.ticks());
 
     // if (measureNo < 2) {
     //     emit lingeringCursorUpdate(0.0, measureRect.y(), measureRect.width(), measureRect.height());
