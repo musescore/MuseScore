@@ -336,6 +336,30 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
                 note->add(a);
             }
             chord->add(note);
+
+            // set up ties
+            if (noteInfoPtr->tieStart) {
+                bool hasEnd = noteInfoPtr.calcTieTo()->tieEnd;
+                Tie* tie = hasEnd ? item_cast<Tie*>(Factory::createLaissezVib(m_score->dummy()->note())) : Factory::createTie(m_score->dummy());
+                tie->setStartNote(note);
+                tie->setTick(note->tick());
+                tie->setTrack(note->track());
+                tie->setParent(note); //needed?
+                note->setTieFor(tie);
+            }
+            if (noteInfoPtr->tieEnd) {
+                engraving::Note* prevTied = muse::value(m_noteInfoPtr2Note, noteInfoPtr.calcTieFrom(), nullptr);
+                Tie* tie = prevTied ? prevTied->tieFor() : nullptr;
+                if (tie) {
+                    tie->setEndNote(note);
+                    tie->setTick2(note->tick());
+                    note->setTieBack(tie);
+                } else {
+                    logger()->logInfo(String(u"Tie does not have starting note. Possibly a partial tie, currently unsupported."));
+                }           
+            }
+            m_noteInfoPtr2Note.emplace(noteInfoPtr, note);
+            /// @todo clear map after each part (ties can be between staves (cross-staff) but not parts)
         }
         if (currentEntry->freezeStem || currentEntry->voice2 || entryInfo->v2Launch
             || m_layerForceStems.find(entryInfo.getLayerIndex()) != m_layerForceStems.end()) {

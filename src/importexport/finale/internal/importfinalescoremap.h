@@ -105,6 +105,7 @@ private:
     std::map<engraving::Fraction, musx::dom::MeasCmper> m_tick2Meas; // use std::map to avoid need for Fraction hash function
     std::unordered_map<musx::dom::LayerIndex, engraving::voice_idx_t> m_layer2Voice;
     std::unordered_set<musx::dom::LayerIndex> m_layerForceStems;
+    std::map<musx::dom::NoteInfoPtr, engraving::Note*> m_noteInfoPtr2Note; // use std::map to avoid need for NoteInfoPtr hash function
 };
 
 }
