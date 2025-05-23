@@ -62,9 +62,9 @@ public:
             m_playbackData.originEvents = events;
             m_playbackData.dynamics = dynamics;
             m_playbackData.params = params;
-            m_shouldUpdateMainStreamEvents = true;
+            m_mainStreamEventsReceived = true;
 
-            if (m_isActive) {
+            if (m_isActive || m_updateMainStreamWhenInactive) {
                 updateMainStream();
             }
         });
@@ -83,10 +83,15 @@ public:
 
     void updateMainStream()
     {
-        if (m_shouldUpdateMainStreamEvents) {
+        if (m_mainStreamEventsReceived) {
             updateMainStreamEvents(m_playbackData.originEvents, m_playbackData.dynamics, m_playbackData.params);
-            m_shouldUpdateMainStreamEvents = false;
+            m_mainStreamEventsReceived = false;
         }
+    }
+
+    void setUpdateMainStreamWhenInactive(bool update)
+    {
+        m_updateMainStreamWhenInactive = update;
     }
 
     void flushOffstream()
@@ -291,7 +296,8 @@ protected:
     OnFlushedCallback m_onMainStreamFlushed;
 
 private:
-    bool m_shouldUpdateMainStreamEvents = false;
+    bool m_mainStreamEventsReceived = false;
+    bool m_updateMainStreamWhenInactive = false;
 };
 }
 
