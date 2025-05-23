@@ -195,8 +195,14 @@ QList<DockPanelView*> DockPageView::findPanelsForDropping(const DockPanelView* p
 
 DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
 {
-    for (DockPanelView* destinationPanel: panels()) {
-        if (destinationPanel->isTabAllowed(tab)
+    return findPanelForTab(tab, panels(), false);
+}
+
+DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab, const QList<DockPanelView*>& panelsToSearch,
+                                             bool searchClosedPanels) const
+{
+    for (DockPanelView* destinationPanel: panelsToSearch) {
+        if (destinationPanel->isTabAllowed(tab, searchClosedPanels)
             && destinationPanel->location() == tab->location()) {
             return destinationPanel;
         }
