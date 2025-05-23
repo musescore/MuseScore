@@ -44,6 +44,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/spacer.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/timesig.h"
@@ -198,9 +199,9 @@ void EnigmaXmlImporter::importMeasures()
     std::vector<std::shared_ptr<others::StaffSystem>> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId, BASE_SYSTEM_ID);
     for (const std::shared_ptr<others::StaffSystem>& staffSystem : staffSystems) {
         //retrieve leftmost and rightmost measures of system
-        Fraction startTick = muse::value(m_meas2Tick, staffSystem->startMeas.getCmper(), Fraction(-1, 1));
+        Fraction startTick = muse::value(m_meas2Tick, staffSystem->startMeas, Fraction(-1, 1));
         Measure* startMeasure = startTick >= Fraction(0, 1)  ? m_score->tick2measure(startTick) : nullptr;
-        Fraction endTick = muse::value(m_meas2Tick, staffSystem->endMeas.getCmper(), Fraction(-1, 1));
+        Fraction endTick = muse::value(m_meas2Tick, staffSystem->endMeas, Fraction(-1, 1));
         Measure* endMeasure = endTick >= Fraction(0, 1)  ? m_score->tick2measure(endTick) : nullptr;
         IF_ASSERT_FAILED(startMeasure && endMeasure) {
             logger()->logWarning(String(u"Unable to retrieve measure(s) by tick for staffsystem"));
@@ -210,24 +211,24 @@ void EnigmaXmlImporter::importMeasures()
         MeasureBase* sysEnd = endMeasure;
         
         // create left and right margins
-        if (!muse::realIsEqual(staffSystem->left, 0.0)) {
+        if (!muse::RealIsEqual(staffSystem->left, 0.0)) {
             HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
             leftBox->setTick(startMeasure->tick());
-            leftBox->setNext(beforeMeasure);
+            //leftBox->setNext(beforeMeasure);
             leftBox->setPrev(startMeasure->prev());
-            leftBox->setBoxWidth(staffSystem->left / EVPU_PER_SPACE);
+            leftBox->setBoxWidth(Spatium(staffSystem->left / EVPU_PER_SPACE));
             leftBox->setSizeIsSpatiumDependent(true); // ideally false, but could have unwanted consequences
             startMeasure->setPrev(leftBox);
             // newMeasureBase->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
             sysStart = leftBox;
         }
-        if (!muse::realIsEqual(staffSystem->right, 0.0)) {
+        if (!muse::RealIsEqual(staffSystem->right, 0.0)) {
             HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
             Fraction rightTick = endMeasure->nextMeasure() ? endMeasure->nextMeasure()->tick() : m_score->last()->endTick();
             rightBox->setTick(rightTick);
             rightBox->setNext(endMeasure->next());
             rightBox->setPrev(endMeasure);
-            rightBox->setBoxWidth(staffSystem->right / EVPU_PER_SPACE);
+            rightBox->setBoxWidth(Spatium(staffSystem->right / EVPU_PER_SPACE));
             rightBox->setSizeIsSpatiumDependent(true); // ideally false, but could have unwanted consequences
             endMeasure->setNext(rightBox);
             // newMeasureBase->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
@@ -240,8 +241,9 @@ void EnigmaXmlImporter::importMeasures()
         bool isFirstSystemOnPage = false;
         bool isLastSystemOnPage = false;
         for (const std::shared_ptr<others::Page>& page : pages) {
-            const std::shared_ptr<others::StaffSystem>& firstPageSystem = page->firstSystem;
-            Fraction pageStartTick = muse::value(m_meas2Tick, firstPageSystem->startMeas.getCmper(), Fraction(-1, 1));
+            /// @todo check for blank pages. check for firstPageSystem is null.
+            const std::shared_ptr<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystem);
+            Fraction pageStartTick = muse::value(m_meas2Tick, firstPageSystem->startMeas, Fraction(-1, 1));
             if (pageStartTick == startTick) {
                 isFirstSystemOnPage = true;
             }
@@ -258,16 +260,16 @@ void EnigmaXmlImporter::importMeasures()
             Spacer* spacer = Factory::createSpacer(startMeasure);
             spacer->setSpacerType(SpacerType::UP);
             spacer->setTrack(0);
-            spacer->setGap((-staffSystem->top + staffSystem->distanceToPrev) / EVPU_PER_SPACE);
+            spacer->setGap(Spatium((-staffSystem->top + staffSystem->distanceToPrev) / EVPU_PER_SPACE));
             /// @todo account for title frames / perhaps header frames
-            measure->add(spacer);
+            //measure->add(spacer);
         }
         if (!isLastSystemOnPage) {
             Spacer* spacer = Factory::createSpacer(startMeasure);
             spacer->setSpacerType(SpacerType::FIXED);
             spacer->setTrack(m_score->nstaves() * VOICES); /// @todo account for invisible staves
-            spacer->setGap((staffSystem->bottom + staffSystem->distanceToPrev) / EVPU_PER_SPACE);
-            measure->add(spacer);
+            spacer->setGap(Spatium((staffSystem->bottom + staffSystem->distanceToPrev) / EVPU_PER_SPACE));
+            //measure->add(spacer);
         }
     }
 }
