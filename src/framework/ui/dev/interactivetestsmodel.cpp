@@ -54,6 +54,26 @@ void InteractiveTestsModel::init()
     });
 }
 
+void InteractiveTestsModel::selectOpeningFile()
+{
+    io::path_t path = interactive()->selectOpeningFile("Sample select file", qApp->applicationDirPath(),
+                                                       { "Text files (*.txt)", "Cmake files (*.cmake)" });
+    LOGI() << "path: " << path;
+}
+
+void InteractiveTestsModel::selectSavingFile()
+{
+    io::path_t path = interactive()->selectSavingFile("Sample select file", qApp->applicationDirPath(),
+                                                      { "Text files (*.txt)", "Cmake files (*.cmake)" });
+    LOGI() << "path: " << path;
+}
+
+void InteractiveTestsModel::selectDirectory()
+{
+    io::path_t path = interactive()->selectDirectory("Sample select file", qApp->applicationDirPath());
+    LOGI() << "path: " << path;
+}
+
 void InteractiveTestsModel::showProgress()
 {
     ProgressData* pd = new ProgressData();
