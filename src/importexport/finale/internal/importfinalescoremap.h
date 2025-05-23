@@ -82,10 +82,14 @@ private:
 
     std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, bool>& finaleVoiceMap,
                                                          musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const;
-    bool processEntryInfo(musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx, engraving::Measure* measure,
-                          std::vector<ReadableTuplet>& tupletMap, std::unordered_map<size_t, engraving::ChordRest*>& entryMap);
-    void importClefs(musx::dom::details::GFrameHoldContext gfHold,
-                     const std::shared_ptr<musx::dom::others::InstrumentUsed>& musxScrollViewItem,
+    bool processEntryInfo(musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx, engraving::Segment* segment,
+                          std::vector<ReadableTuplet>& tupletMap, size_t& lastAddedTupletIndex,
+                          std::unordered_map<size_t, engraving::ChordRest*>& entryMap);
+    engraving::ChordRest* importEntry(musx::dom::EntryInfoPtr entryInfo, engraving::Segment* segment,
+                                      engraving::track_idx_t curTrackIdx);
+    void fillWithInvisibleRests(engraving::Fraction startTick, engraving::track_idx_t curTrackIdx, engraving::Fraction lengthToFill,
+                                std::vector<ReadableTuplet> tupletMap);
+    void importClefs(const std::shared_ptr<musx::dom::others::InstrumentUsed>& musxScrollViewItem,
                      const std::shared_ptr<musx::dom::others::Measure>& musxMeasure,
                      engraving::Measure* measure, engraving::staff_idx_t curStaffIdx,
                      musx::dom::ClefIndex& musxCurrClef);
@@ -103,9 +107,8 @@ private:
     std::unordered_map<musx::dom::InstCmper, engraving::staff_idx_t> m_inst2Staff;
     std::unordered_map<musx::dom::MeasCmper, engraving::Fraction> m_meas2Tick;
     std::map<engraving::Fraction, musx::dom::MeasCmper> m_tick2Meas; // use std::map to avoid need for Fraction hash function
-    std::unordered_map<musx::dom::LayerIndex, engraving::voice_idx_t> m_layer2Voice;
+    std::unordered_map<musx::dom::LayerIndex, engraving::track_idx_t> m_layer2Voice;
     std::unordered_set<musx::dom::LayerIndex> m_layerForceStems;
-    std::map<musx::dom::NoteInfoPtr, engraving::Note*> m_noteInfoPtr2Note; // use std::map to avoid need for NoteInfoPtr hash function
 };
 
 }
