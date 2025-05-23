@@ -191,6 +191,85 @@ void EnigmaXmlImporter::importMeasures()
 
         /// @todo key signature
     }
+
+    // import system layout
+    /// @todo harmonise with coda creation plugin
+    std::vector<std::shared_ptr<others::Page>> pages = m_doc->getOthers()->getArray<others::Page>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    std::vector<std::shared_ptr<others::StaffSystem>> staffSystems = m_doc->getOthers()->getArray<others::StaffSystem>(m_currentMusxPartId, BASE_SYSTEM_ID);
+    for (const std::shared_ptr<others::StaffSystem>& staffSystem : staffSystems) {
+        //retrieve leftmost and rightmost measures of system
+        Fraction startTick = muse::value(m_meas2Tick, staffSystem->startMeas.getCmper(), Fraction(-1, 1));
+        Measure* startMeasure = startTick >= Fraction(0, 1)  ? m_score->tick2measure(startTick) : nullptr;
+        Fraction endTick = muse::value(m_meas2Tick, staffSystem->endMeas.getCmper(), Fraction(-1, 1));
+        Measure* endMeasure = endTick >= Fraction(0, 1)  ? m_score->tick2measure(endTick) : nullptr;
+        IF_ASSERT_FAILED(startMeasure && endMeasure) {
+            logger()->logWarning(String(u"Unable to retrieve measure(s) by tick for staffsystem"));
+            continue;
+        }
+        MeasureBase* sysStart = startMeasure;
+        MeasureBase* sysEnd = endMeasure;
+        
+        // create left and right margins
+        if (!muse::realIsEqual(staffSystem->left, 0.0)) {
+            HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
+            leftBox->setTick(startMeasure->tick());
+            leftBox->setNext(beforeMeasure);
+            leftBox->setPrev(startMeasure->prev());
+            leftBox->setBoxWidth(staffSystem->left / EVPU_PER_SPACE);
+            leftBox->setSizeIsSpatiumDependent(true); // ideally false, but could have unwanted consequences
+            startMeasure->setPrev(leftBox);
+            // newMeasureBase->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
+            sysStart = leftBox;
+        }
+        if (!muse::realIsEqual(staffSystem->right, 0.0)) {
+            HBox* rightBox = Factory::createHBox(m_score->dummy()->system());
+            Fraction rightTick = endMeasure->nextMeasure() ? endMeasure->nextMeasure()->tick() : m_score->last()->endTick();
+            rightBox->setTick(rightTick);
+            rightBox->setNext(endMeasure->next());
+            rightBox->setPrev(endMeasure);
+            rightBox->setBoxWidth(staffSystem->right / EVPU_PER_SPACE);
+            rightBox->setSizeIsSpatiumDependent(true); // ideally false, but could have unwanted consequences
+            endMeasure->setNext(rightBox);
+            // newMeasureBase->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
+            sysEnd = rightBox;
+        }
+        // lock measures in place
+        // we lock all systems to guarantee we end up with the correct measure distribution
+        m_score->addSystemLock(new SystemLock(sysStart, sysEnd));
+
+        bool isFirstSystemOnPage = false;
+        bool isLastSystemOnPage = false;
+        for (const std::shared_ptr<others::Page>& page : pages) {
+            const std::shared_ptr<others::StaffSystem>& firstPageSystem = page->firstSystem;
+            Fraction pageStartTick = muse::value(m_meas2Tick, firstPageSystem->startMeas.getCmper(), Fraction(-1, 1));
+            if (pageStartTick == startTick) {
+                isFirstSystemOnPage = true;
+            }
+            if (pageStartTick == endTick + endMeasure->ticks()) {
+                isLastSystemOnPage = true;
+            }
+            if (isFirstSystemOnPage || isLastSystemOnPage) {
+                break;
+            }
+        }
+
+        // create top and bottom margins
+        if (isFirstSystemOnPage) {
+            Spacer* spacer = Factory::createSpacer(startMeasure);
+            spacer->setSpacerType(SpacerType::UP);
+            spacer->setTrack(0);
+            spacer->setGap((-staffSystem->top + staffSystem->distanceToPrev) / EVPU_PER_SPACE);
+            /// @todo account for title frames / perhaps header frames
+            measure->add(spacer);
+        }
+        if (!isLastSystemOnPage) {
+            Spacer* spacer = Factory::createSpacer(startMeasure);
+            spacer->setSpacerType(SpacerType::FIXED);
+            spacer->setTrack(m_score->nstaves() * VOICES); /// @todo account for invisible staves
+            spacer->setGap((staffSystem->bottom + staffSystem->distanceToPrev) / EVPU_PER_SPACE);
+            measure->add(spacer);
+        }
+    }
 }
 
 void EnigmaXmlImporter::importParts()
