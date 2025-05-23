@@ -131,12 +131,10 @@ std::unordered_map<int, voice_idx_t> EnigmaXmlImporter::mapFinaleVoices(const st
             auto [revIt, emplaced] = reverseMap.emplace(it->second, FinaleTConv::createFinaleVoiceId(layerIndex, false));
             if (emplaced) {
                 result.emplace(revIt->second, revIt->first);
-            } else {
-                logger()->logWarning(String(u"Layer %1 was already mapped to a voice").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
+				continue;
             }
-        } else {
-            logger()->logWarning(String(u"Layer %1 was not mapped to a voice").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
         }
+        logger()->logWarning(String(u"Layer %1 was not mapped to a voice").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
     }
     for (const auto& [layerIndex, usesV2] : finaleVoiceMap) {
         if (usesV2) {
