@@ -3541,12 +3541,12 @@ void MusicXmlParserDirection::direction(const String& partId,
 
         if (t) {
             if (m_enclosure == "circle") {
-                t->setFrameType(FrameType::CIRCLE);
+                t->setBorderType(BorderType::CIRCLE);
             } else if (m_enclosure == "none") {
-                t->setFrameType(FrameType::NO_FRAME);
+                t->setBorderType(BorderType::NO_BORDER);
             } else if (m_enclosure == "rectangle") {
-                t->setFrameType(FrameType::SQUARE);
-                t->setFrameRound(0);
+                t->setBorderType(BorderType::SQUARE);
+                t->setBorderRadius(0);
             }
 
             if (m_color.isValid()) {

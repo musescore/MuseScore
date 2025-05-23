@@ -52,15 +52,15 @@ void DynamicsSettingsModel::createProperties()
     });
     m_centerOnNotehead = buildPropertyItem(Pid::CENTER_ON_NOTEHEAD);
 
-    m_frameType = buildPropertyItem(Pid::FRAME_TYPE, [this](const Pid pid, const QVariant& newValue) {
+    m_borderType = buildPropertyItem(Pid::BORDER_TYPE, [this](const Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
-        updateFramePropertiesAvailability();
+        updateBorderPropertiesAvailability();
     });
-    m_frameBorderColor = buildPropertyItem(Pid::FRAME_FG_COLOR);
-    m_frameFillColor = buildPropertyItem(Pid::FRAME_BG_COLOR);
-    m_frameThickness = buildPropertyItem(Pid::FRAME_WIDTH);
-    m_frameMargin = buildPropertyItem(Pid::FRAME_PADDING);
-    m_frameCornerRadius = buildPropertyItem(Pid::FRAME_ROUND);
+    m_borderColor = buildPropertyItem(Pid::BORDER_FG_COLOR);
+    m_borderFillColor = buildPropertyItem(Pid::BORDER_BG_COLOR);
+    m_borderThickness = buildPropertyItem(Pid::BORDER_WIDTH);
+    m_borderMargin = buildPropertyItem(Pid::BORDER_PADDING);
+    m_borderCornerRadius = buildPropertyItem(Pid::BORDER_ROUND);
 }
 
 void DynamicsSettingsModel::requestElements()
@@ -78,14 +78,14 @@ void DynamicsSettingsModel::loadProperties()
     });
     loadPropertyItem(m_centerOnNotehead);
 
-    loadPropertyItem(m_frameType);
-    loadPropertyItem(m_frameBorderColor);
-    loadPropertyItem(m_frameFillColor);
-    loadPropertyItem(m_frameThickness, formatDoubleFunc);
-    loadPropertyItem(m_frameMargin, formatDoubleFunc);
-    loadPropertyItem(m_frameCornerRadius, formatDoubleFunc);
+    loadPropertyItem(m_borderType);
+    loadPropertyItem(m_borderColor);
+    loadPropertyItem(m_borderFillColor);
+    loadPropertyItem(m_borderThickness, formatDoubleFunc);
+    loadPropertyItem(m_borderMargin, formatDoubleFunc);
+    loadPropertyItem(m_borderCornerRadius, formatDoubleFunc);
 
-    updateFramePropertiesAvailability();
+    updateBorderPropertiesAvailability();
 }
 
 void DynamicsSettingsModel::resetProperties()
@@ -96,12 +96,12 @@ void DynamicsSettingsModel::resetProperties()
     m_dynamicSize->resetToDefault();
     m_centerOnNotehead->resetToDefault();
 
-    m_frameType->resetToDefault();
-    m_frameBorderColor->resetToDefault();
-    m_frameFillColor->resetToDefault();
-    m_frameThickness->resetToDefault();
-    m_frameMargin->resetToDefault();
-    m_frameCornerRadius->resetToDefault();
+    m_borderType->resetToDefault();
+    m_borderColor->resetToDefault();
+    m_borderFillColor->resetToDefault();
+    m_borderThickness->resetToDefault();
+    m_borderMargin->resetToDefault();
+    m_borderCornerRadius->resetToDefault();
 }
 
 PropertyItem* DynamicsSettingsModel::avoidBarLines() const
@@ -119,45 +119,45 @@ PropertyItem* DynamicsSettingsModel::centerOnNotehead() const
     return m_centerOnNotehead;
 }
 
-PropertyItem* DynamicsSettingsModel::frameType() const
+PropertyItem* DynamicsSettingsModel::borderType() const
 {
-    return m_frameType;
+    return m_borderType;
 }
 
-PropertyItem* DynamicsSettingsModel::frameBorderColor() const
+PropertyItem* DynamicsSettingsModel::borderColor() const
 {
-    return m_frameBorderColor;
+    return m_borderColor;
 }
 
-PropertyItem* DynamicsSettingsModel::frameFillColor() const
+PropertyItem* DynamicsSettingsModel::borderFillColor() const
 {
-    return m_frameFillColor;
+    return m_borderFillColor;
 }
 
-PropertyItem* DynamicsSettingsModel::frameThickness() const
+PropertyItem* DynamicsSettingsModel::borderThickness() const
 {
-    return m_frameThickness;
+    return m_borderThickness;
 }
 
-PropertyItem* DynamicsSettingsModel::frameMargin() const
+PropertyItem* DynamicsSettingsModel::borderMargin() const
 {
-    return m_frameMargin;
+    return m_borderMargin;
 }
 
-PropertyItem* DynamicsSettingsModel::frameCornerRadius() const
+PropertyItem* DynamicsSettingsModel::borderCornerRadius() const
 {
-    return m_frameCornerRadius;
+    return m_borderCornerRadius;
 }
 
-void DynamicsSettingsModel::updateFramePropertiesAvailability()
+void DynamicsSettingsModel::updateBorderPropertiesAvailability()
 {
-    bool isFrameVisible = static_cast<TextTypes::FrameType>(m_frameType->value().toInt())
-                          != TextTypes::FrameType::FRAME_TYPE_NONE;
+    bool isBorderVisible = static_cast<TextTypes::BorderType>(m_borderType->value().toInt())
+                           != TextTypes::BorderType::BORDER_TYPE_NONE;
 
-    m_frameThickness->setIsEnabled(isFrameVisible);
-    m_frameBorderColor->setIsEnabled(isFrameVisible);
-    m_frameFillColor->setIsEnabled(isFrameVisible);
-    m_frameMargin->setIsEnabled(isFrameVisible);
-    m_frameCornerRadius->setIsEnabled(
-        static_cast<TextTypes::FrameType>(m_frameType->value().toInt()) == TextTypes::FrameType::FRAME_TYPE_SQUARE);
+    m_borderThickness->setIsEnabled(isBorderVisible);
+    m_borderColor->setIsEnabled(isBorderVisible);
+    m_borderFillColor->setIsEnabled(isBorderVisible);
+    m_borderMargin->setIsEnabled(isBorderVisible);
+    m_borderCornerRadius->setIsEnabled(
+        static_cast<TextTypes::BorderType>(m_borderType->value().toInt()) == TextTypes::BorderType::BORDER_TYPE_SQUARE);
 }

@@ -3415,8 +3415,8 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
 
     auto positionPoint = calculateBoundingRect(item, ldata, ctx);
 
-    if (item->hasFrame()) {
-        item->layoutFrame(ldata);
+    if (item->hasBorder()) {
+        item->layoutBorder(ldata);
     }
 
     ldata->setPos(positionPoint);
@@ -6126,7 +6126,7 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
                 // hack: vertical alignment is always TOP
                 const_cast<TextBase*>(item)->setAlign({ item->align().horizontal, AlignV::TOP });
             } else if (item->explicitParent()->isBox()) {
-                // consider inner margins of frame
+                // consider inner margins of border
                 Box* b = toBox(item->explicitParent());
                 yoff = b->topMargin() * DPMM;
 
@@ -6165,8 +6165,8 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
     shape.translateY(yoff);
     ldata->setShape(shape);
 
-    if (item->hasFrame()) {
-        item->layoutFrame(ldata);
+    if (item->hasBorder()) {
+        item->layoutBorder(ldata);
     }
 
     if (!item->isDynamic() && !(item->explicitParent() && item->parent()->isBox())) {
