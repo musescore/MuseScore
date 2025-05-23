@@ -91,6 +91,9 @@ public:
     bool needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const override;
     void setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool show) override;
 
+    bool needToShowOnlineSoundsConnectionWarning() const override;
+    void setNeedToShowOnlineSoundsConnectionWarning(bool show) override;
+
     bool shouldMeasureInputLag() const override;
 
 private:

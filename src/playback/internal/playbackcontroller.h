@@ -115,6 +115,10 @@ public:
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
+    const std::set<muse::audio::TrackId>& onlineSounds() const override;
+    muse::async::Notification onlineSoundsChanged() const override;
+    muse::Progress onlineSoundsProcessingProgress() const override;
+
 private:
     muse::audio::IPlayerPtr currentPlayer() const;
 
@@ -144,10 +148,10 @@ private:
     void seekListSelection();
     void seekRangeSelection();
 
-    void onAudioResourceChanged(const mu::engraving::InstrumentTrackId& trackId, const muse::audio::AudioResourceMeta& oldMeta,
-                                const muse::audio::AudioResourceMeta& newMeta);
+    void onAudioResourceChanged(const muse::audio::TrackId trackId, const mu::engraving::InstrumentTrackId& instrumentTrackId,
+                                const muse::audio::AudioResourceMeta& oldMeta, const muse::audio::AudioResourceMeta& newMeta);
 
-    bool shouldLoadDrumset(const engraving::InstrumentTrackId& trackId, const muse::audio::AudioResourceMeta& oldMeta,
+    bool shouldLoadDrumset(const engraving::InstrumentTrackId& instrumentTrackId, const muse::audio::AudioResourceMeta& oldMeta,
                            const muse::audio::AudioResourceMeta& newMeta) const;
 
     void addSoundFlagsIfNeed(const std::vector<engraving::EngravingItem*>& selection);
@@ -216,6 +220,12 @@ private:
 
     void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
 
+    void addToOnlineSounds(const muse::audio::TrackId trackId);
+    void removeFromOnlineSounds(const muse::audio::TrackId trackId);
+    void listenOnlineSoundsProcessingProgress(const muse::audio::TrackId trackId);
+    bool shouldShowOnlineSoundsConnectionWarning() const;
+    void showOnlineSoundsConnectionWarning();
+
     muse::audio::secs_t playedTickToSecs(int tick) const;
 
     notation::INotationPtr m_notation;
@@ -252,6 +262,12 @@ private:
     DrumsetLoader m_drumsetLoader;
 
     bool m_measureInputLag = false;
+
+    std::set<muse::audio::TrackId> m_onlineSounds;
+    std::set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;
+    muse::async::Notification m_onlineSoundsChanged;
+    muse::Progress m_onlineSoundsProcessingProgress;
+    int m_onlineSoundsProcessingErrorCode = 0;
 };
 }
 

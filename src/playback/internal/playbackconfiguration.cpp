@@ -57,6 +57,8 @@ static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING(mod
 static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING(moduleName,
                                                                                         "playback/mixer/needToShowAboutResetSoundFlagsWhwnChangePlaybackProfileWarning");
 
+static const Settings::Key ONLINE_SOUNDS_CONNECTION_WARNING(moduleName, "playback/onlineSounds/showConnectionWarning");
+
 static const Settings::Key MUTE_HIDDEN_INSTRUMENTS(moduleName, "playback/mixer/muteHiddenInstruments");
 
 static const Settings::Key DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS(moduleName, "playback/profiles/defaultProfileName");
@@ -144,6 +146,8 @@ void PlaybackConfiguration::init()
             m_isAuxChannelVisibleChanged.send(idx, val.toBool());
         });
     }
+
+    settings()->setDefaultValue(ONLINE_SOUNDS_CONNECTION_WARNING, Val(true));
 }
 
 bool PlaybackConfiguration::playNotesWhenEditing() const
@@ -343,6 +347,16 @@ bool PlaybackConfiguration::needToShowResetSoundFlagsWhenChangePlaybackProfileWa
 void PlaybackConfiguration::setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool show)
 {
     settings()->setSharedValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_WARNING, Val(show));
+}
+
+bool PlaybackConfiguration::needToShowOnlineSoundsConnectionWarning() const
+{
+    return settings()->value(ONLINE_SOUNDS_CONNECTION_WARNING).toBool();
+}
+
+void PlaybackConfiguration::setNeedToShowOnlineSoundsConnectionWarning(bool show)
+{
+    settings()->setSharedValue(ONLINE_SOUNDS_CONNECTION_WARNING, Val(show));
 }
 
 bool PlaybackConfiguration::shouldMeasureInputLag() const
