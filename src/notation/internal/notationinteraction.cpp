@@ -1200,6 +1200,10 @@ void NotationInteraction::addArpeggioPoint(muse::PointF point) {
 }
 void NotationInteraction::arpeggioPointClear() {
     arpeggio_points.clear();
+    arpeggio_notes.clear();
+    arpeggio_curr_ticks = 0;
+    arpeggio_ticks = 0;
+    arpeggio_duration_ticks = 0;
 }
 void NotationInteraction::addArpeggioNote(mu::engraving::Note *note, int ticks, int duration_ticks) {
     arpeggio_notes.push_back(note);
@@ -1208,6 +1212,11 @@ void NotationInteraction::addArpeggioNote(mu::engraving::Note *note, int ticks, 
     arpeggio_duration_ticks = duration_ticks;
 }
 void NotationInteraction::addArpeggioNote(mu::engraving::Note *note) {
+    for (Note* ptr : arpeggio_notes) {
+        if (ptr == note) {
+            return;
+        }
+    }
     arpeggio_notes.push_back(note);
 }
 int NotationInteraction::arpeggioNoteTicks() const {
