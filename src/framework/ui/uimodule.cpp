@@ -124,6 +124,7 @@ void UiModule::resolveImports()
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse/Ui/internal/StandardDialog.qml");
+        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse/Ui/internal/ProgressDialog.qml");
 
         ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
         ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");

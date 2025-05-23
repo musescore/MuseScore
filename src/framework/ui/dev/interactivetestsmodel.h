@@ -64,6 +64,8 @@ public:
 
     Q_INVOKABLE void require();
 
+    Q_INVOKABLE void showProgress();
+
 signals:
     void currentUriChanged(QString currentUri);
 

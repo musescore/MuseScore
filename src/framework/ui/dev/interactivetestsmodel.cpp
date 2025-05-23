@@ -26,9 +26,19 @@
 
 #include "async/async.h"
 
+#include "global/progress.h"
+
 #include "log.h"
 
 using namespace muse::ui;
+
+struct ProgressData
+{
+    muse::Progress progress;
+    QTimer timer;
+    int total = 10;
+    int current = 0;
+};
 
 InteractiveTestsModel::InteractiveTestsModel(QObject* parent)
     : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
@@ -42,6 +52,30 @@ void InteractiveTestsModel::init()
     uri.ch.onReceive(this, [this](const Uri& uri) {
         setCurrentUri(uri);
     });
+}
+
+void InteractiveTestsModel::showProgress()
+{
+    ProgressData* pd = new ProgressData();
+    pd->timer.setInterval(1000);
+    connect(&pd->timer, &QTimer::timeout, [pd]() {
+        pd->current++;
+        pd->progress.progress(pd->current, pd->total, "bla-bla");
+
+        if (pd->current >= pd->total) {
+            pd->timer.stop();
+            pd->progress.finish(ProgressResult::make_ok(Val()));
+
+            async::Async::call(nullptr, [pd]() {
+                delete pd;
+            });
+        }
+    });
+
+    interactive()->showProgress("Progress sample", &pd->progress);
+
+    pd->timer.start();
+    pd->progress.start();
 }
 
 void InteractiveTestsModel::openSampleDialogSync()

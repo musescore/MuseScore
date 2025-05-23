@@ -85,19 +85,6 @@ Item {
             }
         }
 
-        function onFireOpenStandardDialog(data) {
-            var dialog = data.data()
-            var dialogObj = root.createDialog("internal/StandardDialog.qml", dialog.params)
-            data.setValue("ret", dialogObj.ret)
-            data.setValue("objectId", dialogObj.object.objectId)
-
-            if (dialogObj.ret.errcode > 0) {
-                return
-            }
-
-            dialogObj.object.exec()
-        }
-
         function onFireClose(objectId) {
             var obj = root.findObject(objectId)
             if (obj) {
@@ -122,19 +109,6 @@ Item {
                 dialogObj = root.createDialog("internal/FileDialog.qml", dialog.params)
             }
 
-            data.setValue("ret", dialogObj.ret)
-            data.setValue("objectId", dialogObj.object.objectId)
-
-            if (dialogObj.ret.errcode > 0) {
-                return
-            }
-
-            dialogObj.object.open()
-        }
-
-        function onFireOpenProgressDialog(data) {
-            var dialog = data.data()
-            var dialogObj = root.createDialog("internal/ProgressDialog.qml", dialog.params)
             data.setValue("ret", dialogObj.ret)
             data.setValue("objectId", dialogObj.object.objectId)
 
