@@ -108,7 +108,7 @@ private:
     std::unordered_map<musx::dom::InstCmper, engraving::staff_idx_t> m_inst2Staff;
     std::unordered_map<musx::dom::MeasCmper, engraving::Fraction> m_meas2Tick;
     std::map<engraving::Fraction, musx::dom::MeasCmper> m_tick2Meas; // use std::map to avoid need for Fraction hash function
-    std::unordered_map<musx::dom::LayerIndex, engraving::track_idx_t> m_layer2Voice;
+    std::unordered_map<musx::dom::LayerIndex, engraving::voice_idx_t> m_layer2Voice;
     std::unordered_set<musx::dom::LayerIndex> m_layerForceStems;
 };
 

@@ -78,12 +78,12 @@ void EnigmaXmlImporter::mapLayers()
 
     m_layer2Voice.clear();
     m_layerForceStems.clear();
-    std::unordered_map<track_idx_t, LayerIndex> reverseMap;
+    std::unordered_map<voice_idx_t, LayerIndex> reverseMap;
 
     auto layerAttrs = m_doc->getOthers()->getArray<others::LayerAttributes>(m_currentMusxPartId);
 
     const auto mapLayer = [&](const std::shared_ptr<others::LayerAttributes>& layerAttr) {
-        std::array<track_idx_t, 4> tryOrder;
+        std::array<voice_idx_t, 4> tryOrder;
         if (!layerAttr->freezeLayer) {
             tryOrder = { 0, 1, 2, 3 }; // default
         } else if (layerAttr->freezeStemsUp) {
@@ -92,7 +92,7 @@ void EnigmaXmlImporter::mapLayers()
             tryOrder = { 1, 3, 0, 2 }; // prefer downstem voices
         }
         const LayerIndex layerIndex = layerAttr->getCmper();
-        for (track_idx_t idx : tryOrder) {
+        for (voice_idx_t idx : tryOrder) {
             auto [it, emplaced] = reverseMap.emplace(idx, layerIndex);
             if (emplaced) {
                 m_layer2Voice.emplace(layerIndex, idx);
@@ -118,12 +118,12 @@ void EnigmaXmlImporter::mapLayers()
     }
 }
 
-std::unordered_map<int, track_idx_t> EnigmaXmlImporter::mapFinaleVoices(const std::map<LayerIndex, bool>& finaleVoiceMap,
+std::unordered_map<int, voice_idx_t> EnigmaXmlImporter::mapFinaleVoices(const std::map<LayerIndex, bool>& finaleVoiceMap,
                                                                         musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const
 {
     using FinaleVoiceID = int;
-    std::unordered_map<FinaleVoiceID, track_idx_t> result;
-    std::unordered_map<track_idx_t, FinaleVoiceID> reverseMap;
+    std::unordered_map<FinaleVoiceID, voice_idx_t> result;
+    std::unordered_map<voice_idx_t, FinaleVoiceID> reverseMap;
     for (const auto& [layerIndex, usesV2] : finaleVoiceMap) {
         const auto& it = m_layer2Voice.find(layerIndex);
         if (it != m_layer2Voice.end()) {
@@ -140,7 +140,7 @@ std::unordered_map<int, track_idx_t> EnigmaXmlImporter::mapFinaleVoices(const st
     for (const auto& [layerIndex, usesV2] : finaleVoiceMap) {
         if (usesV2) {
             bool foundVoice = false;
-            for (track_idx_t v : {0, 1, 2, 3}) {
+            for (voice_idx_t v : {0, 1, 2, 3}) {
                 auto [revIt, emplaced] = reverseMap.emplace(v, FinaleTConv::createFinaleVoiceId(layerIndex, true));
                 if (emplaced) {
                     result.emplace(revIt->second, revIt->first);
@@ -441,6 +441,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
             tupletMap[i].scoreTuplet->setTick(segment->tick());
             tupletMap[i].scoreTuplet->setParent(segment->measure());
             // musxTuplet::calcRatio is the reciprocal of what MuseScore needs
+            /// @todo skip case where finale numerator is 0: often used for changing beams
             Fraction tupletRatio = FinaleTConv::musxFractionToFraction(tupletMap[i].musxTuplet->calcRatio().reciprocal());
             tupletMap[i].scoreTuplet->setRatio(tupletRatio);
             std::pair<musx::dom::NoteType, unsigned> musxBaseLen = calcNoteInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration);
@@ -449,6 +450,8 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
             tupletMap[i].scoreTuplet->setBaseLen(baseLen);
             Fraction f = tupletMap[i].scoreTuplet->baseLen().fraction() * tupletMap[i].scoreTuplet->ratio().denominator();
             tupletMap[i].scoreTuplet->setTicks(f.reduced());
+            logger()->logInfo(String(u"Detected Tuplet: Starting at %1, duration: %2, ratio: %3").arg(
+                segment->rtick().toString(), f.reduced().toString(), tupletRatio.toString()));
             IF_ASSERT_FAILED(tupletMap[i].scoreTuplet->ticks() == tupletMap[i].absDuration.reduced()) {
                 logger()->logWarning(String(u"Tuplet duration is corrupted"));
                 /// @todo account for tuplets with invalid durations, i.e. durations not attainable in MuseScore
@@ -579,6 +582,7 @@ static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, 
 
 void EnigmaXmlImporter::importStaffItems()
 {
+    /// @todo key signatures, move clefs here
     std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
@@ -586,7 +590,7 @@ void EnigmaXmlImporter::importStaffItems()
         /// @todo handle pickup measures and other measures where display and actual timesigs differ
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
             Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
-            Measure * measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
+            Measure* measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
             IF_ASSERT_FAILED(measure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 return;
@@ -655,7 +659,7 @@ void EnigmaXmlImporter::importClefs(details::GFrameHoldContext gfHold,
                 if (midMeasureClef->xEduPos > 0 || midMeasureClef->clefIndex != musxCurrClef || midMeasureClef->clefMode == ShowClefMode::Always) {
                     const bool visible = midMeasureClef->clefMode != ShowClefMode::Never;
                     const bool afterBarline = midMeasureClef->xEduPos == 0 && midMeasureClef->afterBarline;
-                    if (Clef * clef = createClef(m_score, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline, visible)) {
+                    if (Clef* clef = createClef(m_score, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline, visible)) {
                         // only set y offset because MuseScore automatically calculates the horizontal spacing value
                         clef->setOffset(0.0, clef->spatium() * (-double(midMeasureClef->yEvpuPos) / EVPU_PER_SPACE));
                         /// @todo perhaps populate other fields from midMeasureClef, such as clef-specific mag, etc.?
@@ -717,16 +721,15 @@ void EnigmaXmlImporter::importEntries()
                         // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
                         processedEntries = true;
 
-                        /// @todo load (measure-specific) key signature from entryFrame->keySignature RGP: this todo is probably unnecessary.
-                        /// Key sigs should be handled at the measure/staff level. They can only change on barlines in Finale. The one in entryFrame
-                        /// is provided for convenience and takes into account transposition (when written pitch is requested).
-
-                        track_idx_t trackOffset = muse::value(finaleVoiceMap, FinaleTConv::createFinaleVoiceId(layer, bool(voice)), muse::nidx);
-                        IF_ASSERT_FAILED(int(trackOffset) >= 0 && trackOffset < VOICES) {
+                        // calculate current track
+                        voice_idx_t voiceOff = muse::value(finaleVoiceMap, FinaleTConv::createFinaleVoiceId(layer, bool(voice)), muse::nidx);
+                        IF_ASSERT_FAILED(voiceOff != muse::nidx && voiceOff < VOICES) {
                             logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                             continue;
                         }
-                        track_idx_t curTrackIdx = curStaffIdx * VOICES + trackOffset;
+                        track_idx_t curTrackIdx = curStaffIdx * VOICES + voiceOff;
+
+                        // generate tuplet map
                         std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo, voice);
                         // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
                         ReadableTuplet rTuplet;
@@ -735,12 +738,15 @@ void EnigmaXmlImporter::importEntries()
                         rTuplet.absDuration = mDur;
                         rTuplet.absEnd = mDur;
                         rTuplet.layer = -1,
-                            tupletMap.insert(tupletMap.begin(), rTuplet);
+                        tupletMap.insert(tupletMap.begin(), rTuplet);
                         size_t lastAddedTupletIndex = 0;
+
                         std::unordered_map<size_t, ChordRest*> entryMap;
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
                             processEntryInfo(entryInfoPtr, curTrackIdx, segment, tupletMap, lastAddedTupletIndex, entryMap);
                         }
+
+                        // beams
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
                             if (entryInfoPtr.calcIsBeamStart()) {
                                 /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
@@ -794,6 +800,7 @@ void EnigmaXmlImporter::importEntries()
                 }
             }
             if (!processedEntries) {
+                // fallback to avoid corruptions
                 Staff* staff = m_score->staff(curStaffIdx);
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
