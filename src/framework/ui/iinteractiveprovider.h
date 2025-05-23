@@ -23,10 +23,11 @@
 #define MUSE_UI_IINTERACTIVEPROVIDER_H
 
 #include "global/modularity/imoduleinterface.h"
-#include "global/iinteractive.h"
+
 #include "global/types/uri.h"
 #include "global/types/retval.h"
 #include "global/progress.h"
+#include "global/async/promise.h"
 
 class QWindow;
 
@@ -37,22 +38,6 @@ class IInteractiveProvider : MODULE_EXPORT_INTERFACE
 
 public:
     virtual ~IInteractiveProvider() = default;
-
-    virtual RetVal<Val> question(const std::string& contentTitle, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                                 int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
-                                 const std::string& dialogTitle = "") = 0;
-
-    virtual RetVal<Val> info(const std::string& contentTitle, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                             int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
-                             const std::string& dialogTitle = "") = 0;
-
-    virtual RetVal<Val> warning(const std::string& contentTitle, const IInteractive::Text& text, const std::string& detailedText = {},
-                                const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                                const IInteractive::Options& options = {}, const std::string& dialogTitle = "") = 0;
-
-    virtual RetVal<Val> error(const std::string& contentTitle, const IInteractive::Text& text, const std::string& detailedText = {},
-                              const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                              const IInteractive::Options& options = {}, const std::string& dialogTitle = "") = 0;
 
     virtual Ret showProgress(const std::string& title, Progress* progress) = 0;
 
