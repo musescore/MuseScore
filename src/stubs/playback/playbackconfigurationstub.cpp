@@ -204,6 +204,15 @@ void PlaybackConfigurationStub::setNeedToShowResetSoundFlagsWhenChangePlaybackPr
 {
 }
 
+bool PlaybackConfigurationStub::needToShowOnlineSoundsConnectionWarning() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setNeedToShowOnlineSoundsConnectionWarning(bool)
+{
+}
+
 bool PlaybackConfigurationStub::shouldMeasureInputLag() const
 {
     return false;

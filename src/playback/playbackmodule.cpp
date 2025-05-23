@@ -40,6 +40,7 @@
 #include "view/mixerpanelcontextmenumodel.h"
 #include "view/soundprofilesmodel.h"
 #include "view/internal/soundflag/soundflagsettingsmodel.h"
+#include "view/internal/onlinesoundsstatusmodel.h"
 
 using namespace mu::playback;
 using namespace muse;
@@ -97,6 +98,7 @@ void PlaybackModule::registerUiTypes()
     qmlRegisterType<SoundProfilesModel>("MuseScore.Playback", 1, 0, "SoundProfilesModel");
 
     qmlRegisterType<SoundFlagSettingsModel>("MuseScore.Playback", 1, 0, "SoundFlagSettingsModel");
+    qmlRegisterType<OnlineSoundsStatusModel>("MuseScore.Playback", 1, 0, "OnlineSoundsStatusModel");
 
     qmlRegisterUncreatableType<MixerChannelItem>("MuseScore.Playback", 1, 0, "MixerChannelItem", "Cannot create a MixerChannelItem");
 
