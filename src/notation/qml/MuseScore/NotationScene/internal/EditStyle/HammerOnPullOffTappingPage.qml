@@ -53,7 +53,7 @@ StyledFlickable {
                 spacing: 10
 
                 StyledTextLabel {
-                    text: qsTrc("notation/editstyle/hammeronpulloff", "Show 'H' and 'P' symbols on")
+                    text: qsTrc("notation/editstyle/hammeronpulloff", "Show ‘H’ and ‘P’ symbols on")
                 }
 
                 RowLayout {
@@ -148,8 +148,8 @@ StyledFlickable {
                     spacing: 6
 
                     model: [
-                        {text: qsTrc("notation/editstyle/hammeronpulloff", "Show 'H' or 'P' between each pair of notes"), value: true },
-                        {text: qsTrc("notation/editstyle/hammeronpulloff", "Show 'H' or 'P' once per group of ascending/descending notes"), value: false },
+                        {text: qsTrc("notation/editstyle/hammeronpulloff", "Show ‘H’ or ‘P’ between each pair of notes"), value: true },
+                        {text: qsTrc("notation/editstyle/hammeronpulloff", "Show ‘H’ or ‘P’ once per group of ascending/descending notes"), value: false },
                     ]
 
                     delegate: RoundedRadioButton {

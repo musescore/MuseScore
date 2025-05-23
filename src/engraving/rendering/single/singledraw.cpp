@@ -1774,7 +1774,7 @@ void SingleDraw::draw(const HammerOnPullOffSegment* item, muse::draw::Painter* p
     draw(toSlurSegment(item), painter);
 }
 
-void SingleDraw::draw(const HammerOnPullOffText *item, Painter *painter)
+void SingleDraw::draw(const HammerOnPullOffText* item, Painter* painter)
 {
     drawTextBase(item, painter);
 }
