@@ -126,7 +126,6 @@ void AbstractNotationPaintView::load()
 }
 
 void AbstractNotationPaintView::handleLingeringCursorUpdate(double x, double y, double width, double height) {
-    // std::cout << "x:: " << x << ", y:: " << y << ", width:: " << width << ", height:: " << height << std::endl;
     if (playbackController()->isPlaying()) {
         if (x <= 1) {
             scheduleRedraw();

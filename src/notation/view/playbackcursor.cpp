@@ -194,28 +194,31 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                             m_notation->interaction()->addPlaybackNote(toNote(item));
                         } else if (item->type() == mu::engraving::ElementType::GLISSANDO) {
                             EngravingItem *glissandoNote = item->parentItem();
+                            if (glissandoNote->type() != mu::engraving::ElementType::NOTE && glissandoNote->parentItem()->type() == mu::engraving::ElementType::NOTE) {
+                                glissandoNote = glissandoNote->parentItem();
+                            }
                             if (glissandoNote->type() == mu::engraving::ElementType::NOTE) {
                                 if (tick.ticks() < m_notation->interaction()->glissandoNoteTicks() || tick.ticks() > m_notation->interaction()->glissandoNoteTicks() + m_notation->interaction()->glissandoNoteDurationticks()) {
                                     m_notation->interaction()->addGlissandoNote(toNote(glissandoNote), glissandoNote->tick().ticks(), duration_ticks);
-                                    mu::engraving::Segment* _ns = s->next(mu::engraving::SegmentType::ChordRest);
-                                    while (_ns && !_ns->visible()) {
-                                        _ns = _ns->next(mu::engraving::SegmentType::ChordRest);
-                                    }
-                                    if (_ns) {
-                                        EngravingItemList _itemList = _ns->childrenItems(true);
-                                        for (size_t k = 0; k < _itemList.size(); k++) {
-                                            EngravingItem *_item = _itemList.at(k);
-                                            if (_item == nullptr) {
+
+                                    if (m_notation->interaction()->glissandoEndNotes().size() == 0) {
+                                        EngravingItemList itemList__ = measure->childrenItems(true);
+                                        for (size_t __j = 0; __j < itemList__.size(); __j++) {
+                                            EngravingItem *__item__ = itemList__.at(__j);
+                                            if (__item__ == nullptr) {
                                                 continue;
                                             }
-                                            if (_item->type() == mu::engraving::ElementType::NOTE) {
-                                                m_notation->interaction()->addGlissandoEndNote(toNote(_item));
-                                            }
+                                            if (__item__->type() == mu::engraving::ElementType::NOTE) {
+                                                if (__item__->tick().ticks() >= glissandoNote->tick().ticks() + duration_ticks / 10) {
+                                                    m_notation->interaction()->addGlissandoEndNote(toNote(__item__));
+                                                }
+                                            } 
                                         }
-                                        m_notation->interaction()->glissandoEndNotesUpdate();    
                                     }
+                                    
+                                    m_notation->interaction()->glissandoEndNotesUpdate();
                                 }
-                            }
+                            } 
                         } else if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
                             EngravingItem *arpeggio = item->parentItem();
                             // check Fermata
