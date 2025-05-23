@@ -210,13 +210,8 @@ public:
     FretDiagram* makeFretDiagram(const EngravingItem* item);
 
     struct LayoutData : public VBox::LayoutData {
-        double cellWidth = 0.0;
-        double cellHeight = 0.0;
-
         double totalTableHeight = 0.0;
         double totalTableWidth = 0.0;
-
-        double defaultMargins = 0.0;
     };
 
     DECLARE_LAYOUTDATA_METHODS(FBox)

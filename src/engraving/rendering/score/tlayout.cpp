@@ -1489,7 +1489,6 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
     //! NOTE: layout fret diagrams and calculate sizes
 
     const size_t totalDiagrams = fretDiagrams.size();
-    double maxFretDiagramHeight = 0.0;
     double maxFretDiagramWidth = 0.0;
 
     for (size_t i = 0; i < totalDiagrams; ++i) {
@@ -1502,34 +1501,51 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
         layoutItem(fretDiagram, const_cast<LayoutContext&>(ctx));
 
-        double height = fretDiagram->ldata()->bbox().height() + fretDiagram->harmony()->ldata()->harmonyHeight
-                        + ctx.conf().styleMM(Sid::harmonyFretDist);
         double width = fretDiagram->ldata()->bbox().width();
-
-        maxFretDiagramHeight = std::max(maxFretDiagramHeight, height);
         maxFretDiagramWidth = std::max(maxFretDiagramWidth, width);
     }
 
     //! NOTE: table view layout
 
-    double cellWidth = maxFretDiagramWidth;
-    double cellHeight = maxFretDiagramHeight;
-
-    ldata->cellWidth = cellWidth;
-    ldata->cellHeight = cellHeight;
-
     const double spatium = item->spatium();
-
     const size_t chordsPerRow = item->chordsPerRow();
     const double rowGap = item->rowGap().val() * spatium;
     const double columnGap = item->columnGap().val() * spatium;
 
-    const size_t rows = std::ceil(double(totalDiagrams) / double(chordsPerRow));
+    //! The height of each row is determined by the height of the tallest cell in that row
+    std::vector<double> rowHeights;
+    for (size_t i = 0; i < totalDiagrams; i += chordsPerRow) {
+        size_t itemsInRow = std::min(chordsPerRow, totalDiagrams - i);
+        double maxRowHeight = 0.0;
+
+        for (size_t j = 0; j < itemsInRow; ++j) {
+            FretDiagram* fretDiagram = fretDiagrams[i + j];
+
+            RectF fretRect = fretDiagram->ldata()->bbox();
+
+            const Harmony::LayoutData* harmonyLdata = fretDiagram->harmony()->ldata();
+            RectF harmonyRect = harmonyLdata->bbox();
+            harmonyRect.moveTo(harmonyLdata->pos());
+
+            double height = fretRect.united(harmonyRect).height();
+            maxRowHeight = std::max(maxRowHeight, height);
+        }
+
+        rowHeights.push_back(maxRowHeight);
+    }
+
+    const double cellWidth = maxFretDiagramWidth;
+    const size_t rows = rowHeights.size();
     const size_t columns = std::min(totalDiagrams, chordsPerRow);
 
-    static constexpr double MARGINS = 8.0;
-    const double totalTableHeight = rows * cellHeight + (rows - 1) * rowGap + MARGINS;
-    const double totalTableWidth = cellWidth * columns + (columns - 1) * columnGap + MARGINS;
+    double totalTableHeight = 0.0;
+    for (size_t i = 0; i < rows; ++i) {
+        totalTableHeight += rowHeights[i];
+        if (i > 0) {
+            totalTableHeight += rowGap;
+        }
+    }
+    const double totalTableWidth = cellWidth * columns + (columns - 1) * columnGap;
 
     ldata->totalTableHeight = totalTableHeight;
     ldata->totalTableWidth = totalTableWidth;
@@ -1555,6 +1571,8 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
                           : alignH == AlignH::RIGHT ? item->width() - totalTableWidth : 0.0;
     const double startY = !muse::RealIsNull(topMargin) ? topMargin : -bottomMargin;
 
+    const double shapeMarginAboveDiagram = ctx.conf().styleMM(Sid::harmonyFretDist).val() * 1.5;
+
     for (size_t i = 0; i < totalDiagrams; ++i) {
         FretDiagram* fretDiagram = fretDiagrams[i];
 
@@ -1569,10 +1587,15 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
                             : leftMargin + spatium;
 
         double x = startX + rowOffsetX + col * (cellWidth + columnGap);
-        double y = startY + row * (cellHeight + rowGap);
+
+        double y = startY;
+        for (size_t r = 0; r < row; ++r) {
+            y += rowHeights[r] + rowGap;
+        }
 
         double fretDiagramX = x;
-        double fretDiagramY = y + fretDiagram->harmony()->ldata()->harmonyHeight + ctx.conf().styleMM(Sid::harmonyFretDist);
+        double fretDiagramY = y + fretDiagram->harmony()->ldata()->harmonyHeight + shapeMarginAboveDiagram;
+
         fretDiagram->mutldata()->setPos(PointF(fretDiagramX, fretDiagramY));
     }
 }
