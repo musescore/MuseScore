@@ -143,6 +143,9 @@ public:
     virtual void addArpeggioNote(mu::engraving::Note *, int, int) {
 
     }
+    virtual void updateArpeggioDuration(int) {
+        
+    }
     virtual void addArpeggioNote(mu::engraving::Note *) {
 
     }
