@@ -93,7 +93,8 @@ public:
     DockingHolderView* holder(DockType type, Location location) const;
 
     QList<DockPanelView*> findPanelsForDropping(const DockPanelView* panel) const;
-    DockPanelView* findPanelForTab(const DockPanelView* tab) const;
+    DockPanelView* findPanelForTab(const DockPanelView* tab, const QList<DockPanelView*>& panelsToSearch,
+                                   bool searchClosedPanels = false) const;
 
     bool isDockOpenAndCurrentInFrame(const QString& dockName) const;
     void toggleDock(const QString& dockName);

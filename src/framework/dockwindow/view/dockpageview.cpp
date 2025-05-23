@@ -193,10 +193,11 @@ QList<DockPanelView*> DockPageView::findPanelsForDropping(const DockPanelView* p
     return result;
 }
 
-DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
+DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab, const QList<DockPanelView*>& panelsToSearch,
+                                             bool searchClosedPanels) const
 {
-    for (DockPanelView* destinationPanel: panels()) {
-        if (destinationPanel->isTabAllowed(tab)
+    for (DockPanelView* destinationPanel: panelsToSearch) {
+        if (destinationPanel->isTabAllowed(tab, searchClosedPanels)
             && destinationPanel->location() == tab->location()) {
             return destinationPanel;
         }
@@ -250,7 +251,7 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
         return;
     }
 
-    DockPanelView* destinationPanel = findPanelForTab(panel);
+    DockPanelView* destinationPanel = findPanelForTab(panel, panels());
     if (destinationPanel) {
         destinationPanel->addPanelAsTab(panel);
         panel->makeCurrentTabInFrame();

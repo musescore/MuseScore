@@ -468,6 +468,16 @@ bool DockWidgetBase::hasPreviousDockedLocation() const
     return d->m_lastPositions.isValid();
 }
 
+LastPositions DockWidgetBase::lastPositions() const
+{
+    return d->m_lastPositions;
+}
+
+void DockWidgetBase::restoreToPreviousPosition()
+{
+    d->restoreToPreviousPosition();
+}
+
 QSize DockWidgetBase::lastOverlayedSize() const
 {
     return d->m_lastOverlayedSize;
