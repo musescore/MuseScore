@@ -467,6 +467,8 @@ enum class Pid {
 
     IS_COURTESY,
 
+    ALIGN_WITH_OTHER_RESTS,
+
     END
 };
 
