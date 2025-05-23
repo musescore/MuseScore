@@ -160,6 +160,8 @@ std::unordered_map<int, voice_idx_t> EnigmaXmlImporter::mapFinaleVoices(const st
 static void transferTupletProperties(std::shared_ptr<const details::TupletDef> musxTuplet, Tuplet* scoreTuplet, FinaleLoggerPtr& logger)
 {
     scoreTuplet->setNumberType(FinaleTConv::toMuseScoreTupletNumberType(musxTuplet->numStyle));
+    // actual number object is generated on score layout
+
     // separate bracket/number offset not supported, just add it to the whole tuplet for now
     /// @todo needs to be negated?
     scoreTuplet->setOffset(PointF((musxTuplet->tupOffX + musxTuplet->brackOffX) / EVPU_PER_SPACE,
@@ -167,7 +169,7 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
     scoreTuplet->setVisible(!musxTuplet->hidden);
     if (musxTuplet->autoBracketStyle != options::TupletOptions::AutoBracketStyle::Always) {
         // Can't be determined until we write all the notes/beams
-        /// @todo write this setting on a second pass
+        /// @todo write this setting on a second pass, along with musxTuplet->posStyle
         logger->logWarning(String(u"Unsupported"));
     }
     if (musxTuplet->avoidStaff) {
@@ -176,31 +178,23 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
     }
     if (musxTuplet->metricCenter) {
         // center number using duration
-        /// @todo wait until added to MuseScore (soon)
+        /// @todo will be supported globally as a style
         logger->logWarning(String(u"Unsupported"));
     }
     if (musxTuplet->fullDura) {
         // extend bracket to full duration
-        /// @todo wait until added to MuseScore (soon)
+        /// @todo will be supported globally as a style
         logger->logWarning(String(u"Unsupported"));
     }
-    // at the end
+    // unsupported: breakBracket, ignoreHorzNumOffset, allowHorz, useBottomNote, smartTuplet, leftHookLen / rightHookLen (style for both)
+
+    // bracket extensions
+    /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in musescore. See PR and the related issues
+    scoreTuplet->setUserPoint1(PointF(-musxTuplet->leftHookExt / EVPU_PER_SPACE, 0.0));
+    scoreTuplet->setUserPoint2(PointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj) / EVPU_PER_SPACE);
     if (musxTuplet->alwaysFlat) {
         scoreTuplet->setUserPoint2(PointF(scoreTuplet->userP2().x(), scoreTuplet->userP1().y()));
     }
-
-    /*} else if (tag == "Number") {
-        number = Factory::createText(t, TextStyleType::TUPLET);
-        number->setComposition(true);
-        number->setParent(t);
-        Tuplet::resetNumberProperty(number);
-        TRead::read(number, e, ctx);
-        number->setVisible(t->visible());         //?? override saved property
-        number->setColor(t->color());
-        number->setTrack(t->track());
-        // font settings
-    }
-    t->setNumber(number);*/
 }
 
 static size_t indexOfParentTuplet(std::vector<ReadableTuplet> tupletMap, size_t index) {
@@ -651,7 +645,7 @@ void EnigmaXmlImporter::importEntries()
                             processEntryInfo(entryInfoPtr, curTrackIdx, measure, tupletMap, entryMap);
                         }
 
-                        // beams
+                        // create beams
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
                             if (entryInfoPtr.calcIsBeamStart()) {
                                 /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
