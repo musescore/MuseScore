@@ -185,7 +185,7 @@ void GuiApp::perform()
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     const QString mainQmlFile = "/platform/linux/Main.qml";
 #elif defined(Q_OS_WASM)
-    const QString mainQmlFile = "/platform/linux/Main.qml";//"/Main.wasm.qml";
+    const QString mainQmlFile = "/platform/web/Main.qml";
 #endif
 
 #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE

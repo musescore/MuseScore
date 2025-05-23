@@ -662,17 +662,16 @@ void ProjectActionsController::newProject()
         return;
     }
 
-    Ret ret = interactive()->openSync(NEW_SCORE_URI).ret;
-
-    if (ret) {
+    auto promise = interactive()->open(NEW_SCORE_URI);
+    promise.onResolve(this, [this](const Val&) {
         extensionsProvider()->performPointAsync(EXEC_ONPOST_PROJECT_CREATED);
 
-        ret = doFinishOpenProject();
-    }
+        Ret ret = doFinishOpenProject();
 
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
+        if (!ret) {
+            LOGE() << ret.toString();
+        }
+    });
 }
 
 bool ProjectActionsController::closeOpenedProject(bool quitApp)
