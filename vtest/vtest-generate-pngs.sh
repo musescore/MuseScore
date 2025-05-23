@@ -69,8 +69,12 @@ echo "::endgroup::"
 
 echo "::group::Generating PNG files"
 if [ -z "$STYLE_PATH" ]; then
+    echo "No style path"
+    echo "DPI: $DPI"
     $MSCORE_BIN -j $JSON_FILE -r $DPI 2>&1 | tee $LOG_FILE && SUCCESS="true"
 else
+    echo "Style path: $STYLE_PATH "
+    echo "DPI: $DPI"
     $MSCORE_BIN -S $STYLE_PATH -j $JSON_FILE -r $DPI $GP_LINKED 2>&1 | tee $LOG_FILE && SUCCESS="true"
 fi
 echo "::endgroup::"
