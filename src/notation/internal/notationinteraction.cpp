@@ -1216,6 +1216,9 @@ void NotationInteraction::addArpeggioNote(mu::engraving::Note *note, int ticks, 
     arpeggio_curr_ticks = ticks;
     arpeggio_duration_ticks = duration_ticks;
 }
+void NotationInteraction::updateArpeggioDuration(int duration_ticks) {
+    arpeggio_duration_ticks = duration_ticks;
+}
 void NotationInteraction::addArpeggioNote(mu::engraving::Note *note) {
     for (Note* ptr : arpeggio_notes) {
         if (ptr == note) {

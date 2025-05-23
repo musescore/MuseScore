@@ -116,6 +116,7 @@ public:
     void addArpeggioPoint(muse::PointF) override;
     void arpeggioPointClear() override;
     void addArpeggioNote(mu::engraving::Note *, int, int) override;
+    void updateArpeggioDuration(int) override;
     void addArpeggioNote(mu::engraving::Note *) override;
     int arpeggioNoteTicks() const override;
     int arpeggioNoteDurationticks() const override;

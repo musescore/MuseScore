@@ -240,20 +240,22 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                     if (!m_notation->interaction()->arpeggioPointEqual(item->canvasPos())) {
                                         m_notation->interaction()->arpeggioPointClear();
                                         mu::engraving::Chord *arpeggioChord = toChord(arpeggio);
-                                            
+                                        
+                                        bool arpeggio_whole = false;
                                         int arpeggio_duration_ticks = arpeggioChord->durationTypeTicks().ticks();
                                         if (arpeggioChord->durationType().type() <= mu::engraving::DurationType::V_HALF) {
                                             if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_HALF) {
                                                 arpeggio_duration_ticks /= 3;
                                             } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_WHOLE) {
-                                                arpeggio_duration_ticks /= 6;
+                                                arpeggio_whole = true;
+                                                arpeggio_duration_ticks /= 4;
                                             }
                                             if (isFermataTag) {
                                                 arpeggio_duration_ticks /= 8;
                                             } else {
                                                 arpeggio_duration_ticks /= 2;
                                             }
-                                        } else {
+                                        } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_QUARTER) {
                                             arpeggio_duration_ticks /= 2;
                                         }
 
@@ -275,6 +277,15 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                                 m_notation->interaction()->addArpeggioNote(toNote(_item), _itemParentChord->tick().ticks(), arpeggio_duration_ticks);
                                                             } else {
                                                                 m_notation->interaction()->addArpeggioNote(toNote(_item));
+                                                                if (arpeggio_whole && m_notation->interaction()->arpeggioNotes().size() >= 8) {
+                                                                    if (m_notation->interaction()->arpeggioNotes().size() == 8) {
+                                                                        m_notation->interaction()->updateArpeggioDuration(1.4 * arpeggio_duration_ticks);
+                                                                    } else if (m_notation->interaction()->arpeggioNotes().size() >= 12) {
+                                                                        m_notation->interaction()->updateArpeggioDuration(2 * arpeggio_duration_ticks);
+                                                                    } else if (m_notation->interaction()->arpeggioNotes().size() >= 16) {
+                                                                        m_notation->interaction()->updateArpeggioDuration(2.8 * arpeggio_duration_ticks);
+                                                                    }
+                                                                }
                                                             }
                                                         }
                                                     }
