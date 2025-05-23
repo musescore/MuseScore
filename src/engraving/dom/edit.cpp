@@ -3731,6 +3731,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
 void Score::cmdDeleteSelection()
 {
     std::vector<ChordRest*> crsSelectedAfterDeletion;              // select something after deleting notes
+    EngravingItem* elSelectedAfterDeletion = nullptr;
 
     if (selection().isRange()) {
         crsSelectedAfterDeletion = deleteRange(selection().startSegment(), selection().endSegment(),
@@ -3819,6 +3820,17 @@ void Score::cmdDeleteSelection()
                 continue;
             }
 
+            if (e->isFretDiagram()) {
+                FretDiagram* fretDiagram = toFretDiagram(e);
+                Harmony* harmony = fretDiagram->harmony();
+                if (harmony) {
+                    undo(new FretLinkHarmony(fretDiagram, harmony, true /* unlink */));
+                    elSelectedAfterDeletion = fretDiagram->segment()->findAnnotation(ElementType::HARMONY,
+                                                                                     fretDiagram->track(),
+                                                                                     fretDiagram->track());
+                }
+            }
+
             // delete element if we have not done so already
             if (deletedElements.find(e) == deletedElements.end()) {
                 // do not delete two spanner segments from the same spanner
@@ -3840,7 +3852,10 @@ void Score::cmdDeleteSelection()
                 }
                 deleteItem(e);
             }
-            selectCRAtTickAndTrack(tick, track);
+
+            if (!elSelectedAfterDeletion) {
+                selectCRAtTickAndTrack(tick, track);
+            }
 
             // add these linked elements to list of already-deleted elements
             for (EngravingObject* se : links) {
@@ -3858,7 +3873,9 @@ void Score::cmdDeleteSelection()
             crsSelectedAfterDeletion.push_back(m_is.cr());
         }
     }
-    if (!crsSelectedAfterDeletion.empty()) {
+    if (elSelectedAfterDeletion) {
+        select(elSelectedAfterDeletion);
+    } else if (!crsSelectedAfterDeletion.empty()) {
         std::vector<EngravingItem*> elementsToSelect;
         for (ChordRest* cr : crsSelectedAfterDeletion) {
             if (cr) {

@@ -23,9 +23,9 @@
 
 using namespace mu::engraving::read460;
 
-std::unordered_map<muse::String, muse::String> HarmonyToDiagramReader::read(XmlReader& reader)
+std::unordered_map<muse::String, HarmonyToDiagramReader::FretDiagramInfo> HarmonyToDiagramReader::read(XmlReader& reader)
 {
-    std::unordered_map<String, String> result;
+    std::unordered_map<String, HarmonyToDiagramReader::FretDiagramInfo> result;
 
     while (reader.readNextStartElement()) {
         if (reader.name() != "Data") {
@@ -36,6 +36,7 @@ std::unordered_map<muse::String, muse::String> HarmonyToDiagramReader::read(XmlR
             if (reader.name() == "HarmonyToDiagram") {
                 String harmony;
                 String diagram;
+                String pattern;
                 while (reader.readNextStartElement()) {
                     if (reader.name() == "Harmony") {
                         while (reader.readNextStartElement()) {
@@ -48,13 +49,15 @@ std::unordered_map<muse::String, muse::String> HarmonyToDiagramReader::read(XmlR
                     } else if (reader.name() == "FretDiagram") {
                         diagram = reader.readBody();
                         reader.skipCurrentElement();
+                    } else if (reader.name() == "pattern") {
+                        pattern = reader.readText();
                     } else {
                         reader.unknown();
                     }
                 }
 
                 if (!harmony.isEmpty() && !diagram.isEmpty()) {
-                    result.insert({ std::move(harmony), std::move(diagram) });
+                    result.insert({ std::move(harmony), { std::move(diagram), std::move(pattern) } });
                 }
             } else {
                 reader.unknown();
