@@ -245,9 +245,13 @@ async::Promise<IInteractive::Result> Interactive::error(const std::string& conte
     return openStandartAsync("ERROR", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-Ret Interactive::showProgress(const std::string& title, Progress* progress) const
+void Interactive::showProgress(const std::string& title, Progress* progress)
 {
-    return provider()->showProgress(title, progress);
+    UriQuery q("muse://interactive/progress");
+    q.set("title", title)
+    .set("progress", Val((void*)progress));
+
+    provider()->openAsync(q);
 }
 
 io::path_t Interactive::selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter)

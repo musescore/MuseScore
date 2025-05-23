@@ -54,7 +54,7 @@ public:
     MOCK_METHOD(async::Promise<Result>, error, (const std::string&, const Text&, const ButtonDatas&, int, const Options&,
                                                 const std::string&), (override));
 
-    MOCK_METHOD(Ret, showProgress, (const std::string&, Progress*), (const, override));
+    MOCK_METHOD(void, showProgress, (const std::string&, Progress*), (override));
 
     MOCK_METHOD(io::path_t, selectOpeningFile, (const QString&, const io::path_t&, const std::vector<std::string>&), (override));
     MOCK_METHOD(io::path_t, selectSavingFile, (const QString&, const io::path_t&, const std::vector<std::string>&, bool), (override));

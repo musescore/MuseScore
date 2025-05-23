@@ -163,6 +163,7 @@ QString AdvancedPreferencesModel::typeToString(Val::Type type) const
     case Val::Type::Color: return "Color";
     case Val::Type::List: return "List";
     case Val::Type::Map: return "Map";
+    case Val::Type::Ptr: return "Ptr";
     }
     return "Undefined";
 }

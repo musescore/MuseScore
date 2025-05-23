@@ -63,8 +63,6 @@ class InteractiveProvider : public QObject, public IInteractiveProvider, public 
 public:
     explicit InteractiveProvider(const modularity::ContextPtr& iocCtx);
 
-    Ret showProgress(const std::string& title, Progress* progress) override;
-
     RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
     RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
                                         bool confirmOverwrite) override;
@@ -105,7 +103,6 @@ signals:
     void fireRaise(QVariant data);
 
     void fireOpenFileDialog(muse::ui::QmlLaunchData* data);
-    void fireOpenProgressDialog(muse::ui::QmlLaunchData* data);
 
 private:
     struct OpenData {
