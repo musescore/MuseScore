@@ -98,11 +98,15 @@ if(CC_IS_EMCC)
 
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/public_html)
 
-    set(EMCC_COMPILE_FLAGS "-s USE_ZLIB=1")
+    set(EMCC_COMPILE_FLAGS "-s USE_ZLIB=1 -O2")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EMCC_COMPILE_FLAGS}")
 
+    if (BUILD_IS_DEBUG)
+        set(EMCC_LINKER_FLAGS -O0)
+    else()
+        set(EMCC_LINKER_FLAGS -Os)
+    endif()
 
-    set(EMCC_LINKER_FLAGS -sASYNCIFY -Os)
 
 endif(CC_IS_EMCC)
 
