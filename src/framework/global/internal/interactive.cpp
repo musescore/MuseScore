@@ -125,15 +125,15 @@ async::Promise<IInteractive::Result> Interactive::openStandartAsync(const std::s
     };
 
     UriQuery q("muse://interactive/standard");
-    q.add("type", type)
-    .add("contentTitle", contentTitle)
-    .add("text", text.text)
-    .add("textFormat", (int)format(text.format))
-    .add("detailedText", text.detailedText)
-    .add("defaultButtonId", defBtn)
-    .add("withIcon", options.testFlag(IInteractive::Option::WithIcon))
-    .add("withDontShowAgainCheckBox", options.testFlag(IInteractive::Option::WithDontShowAgainCheckBox))
-    .add("dialogTitle", dialogTitle);
+    q.set("type", type)
+    .set("contentTitle", contentTitle)
+    .set("text", text.text)
+    .set("textFormat", (int)format(text.format))
+    .set("detailedText", text.detailedText)
+    .set("defaultButtonId", defBtn)
+    .set("withIcon", options.testFlag(IInteractive::Option::WithIcon))
+    .set("withDontShowAgainCheckBox", options.testFlag(IInteractive::Option::WithDontShowAgainCheckBox))
+    .set("dialogTitle", dialogTitle);
 
     ValList buttonsList;
     ValList customButtonsList;
@@ -151,8 +151,8 @@ async::Promise<IInteractive::Result> Interactive::openStandartAsync(const std::s
         }
     }
 
-    q.add("buttons", Val(buttonsList))
-    .add("customButtons", Val(customButtonsList));
+    q.set("buttons", Val(buttonsList))
+    .set("customButtons", Val(customButtonsList));
 
     async::Promise<Val> promise = provider()->openAsync(q);
 
@@ -266,9 +266,9 @@ io::paths_t Interactive::selectMultipleDirectories(const QString& title, const i
 {
     QString directoriesStr = QString::fromStdString(io::pathsToString(selectedDirectories));
     UriQuery q("muse://interactive/selectmultipledirectories");
-    q.add("title", title.toStdString())
-    .add("selectedDirectories", directoriesStr.toStdString())
-    .add("startDir", dir.toStdString());
+    q.set("title", title.toStdString())
+    .set("selectedDirectories", directoriesStr.toStdString())
+    .set("startDir", dir.toStdString());
 
     RetVal<Val> result = openSync(q);
     if (!result.ret) {
@@ -298,7 +298,7 @@ RetVal<Val> Interactive::openSync(const UriQuery& uri)
         newQuery.addParam("sync", Val(true));
     }
 
-    return provider()->open(newQuery);
+    return provider()->openSync(newQuery);
 }
 
 async::Promise<Val> Interactive::open(const UriQuery& uri)

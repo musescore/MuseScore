@@ -72,8 +72,8 @@ Rectangle {
             width: 200
             navigation.panel: navPanel
             navigation.row: 0
-            text: "[cpp] Sample dialog"
-            onClicked: testModel.openSampleDialog()
+            text: "[cpp] Sample dialog sync"
+            onClicked: testModel.openSampleDialogSync()
         }
 
         FlatButton {

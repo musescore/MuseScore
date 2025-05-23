@@ -44,7 +44,7 @@ void InteractiveTestsModel::init()
     });
 }
 
-void InteractiveTestsModel::openSampleDialog()
+void InteractiveTestsModel::openSampleDialogSync()
 {
     LOGI() << "cpp: before open";
     RetVal<Val> rv = interactive()->openSync("muse://devtools/interactive/sample?color=#474747");
@@ -54,8 +54,8 @@ void InteractiveTestsModel::openSampleDialog()
 void InteractiveTestsModel::openSampleDialogAsync()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = interactive()->openSync("muse://devtools/interactive/sample?sync=false&color=#D24373");
-    LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
+    interactive()->open("muse://devtools/interactive/sample?sync=false&color=#D24373");
+    LOGI() << "cpp: after open";
 }
 
 void InteractiveTestsModel::closeSampleDialog()

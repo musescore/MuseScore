@@ -44,7 +44,7 @@ public:
 
     Q_INVOKABLE void init();
 
-    Q_INVOKABLE void openSampleDialog();
+    Q_INVOKABLE void openSampleDialogSync();
     Q_INVOKABLE void openSampleDialogAsync();
     Q_INVOKABLE void closeSampleDialog();
     Q_INVOKABLE void openSampleDialogAsyncWithPromise();

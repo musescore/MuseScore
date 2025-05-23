@@ -273,9 +273,48 @@ RetVal<Val> InteractiveProvider::open(const UriQuery& q)
     return returnedRV;
 }
 
+RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
+{
+    UriQuery q = q_;
+    q.set("sync", false);
+
+    RetVal<Val> rv;
+    QEventLoop loop;
+    Promise<Val>::Resolve resolve;
+    Promise<Val>::Reject reject;
+    Promise<Val> promise = make_promise<Val>([&resolve, &reject](auto res, auto rej) {
+        resolve = res;
+        reject = rej;
+        return Promise<Val>::Result::unchecked();
+    }, PromiseType::AsyncByBody);
+
+    promise.onResolve(this, [&rv, &loop](const Val& val) {
+        rv = RetVal<Val>::make_ok(val);
+        loop.quit();
+    });
+
+    promise.onReject(this, [&rv, &loop](int code, const std::string& err) {
+        LOGE() << code << " " << err;
+        rv.ret = make_ret(code, err);
+        loop.quit();
+    });
+
+    auto func = openFunc(q);
+    func(resolve, reject);
+
+    loop.exec();
+
+    return rv;
+}
+
 Promise<Val> InteractiveProvider::openAsync(const UriQuery& q)
 {
-    return make_promise<Val>([this, q](auto resolve, auto reject) {
+    return make_promise<Val>(openFunc(q));
+}
+
+Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q)
+{
+    auto func = [this, q](Promise<Val>::Resolve resolve, Promise<Val>::Reject reject) {
         m_openingObject = { q, resolve, reject, QVariant(), nullptr };
 
         RetVal<OpenData> openedRet;
@@ -287,22 +326,22 @@ Promise<Val> InteractiveProvider::openAsync(const UriQuery& q)
 
         ContainerMeta openMeta = uriRegister()->meta(q.uri());
         switch (openMeta.type) {
-            case ContainerType::QWidgetDialog:
-                openedRet = openWidgetDialog(q);
-                break;
-            case ContainerType::PrimaryPage:
-            case ContainerType::QmlDialog:
-                openedRet = openQml(q);
-                break;
-            case ContainerType::Undefined: {
-                //! NOTE Not found default, try extension
-                extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
-                if (ext.isValid()) {
-                    openedRet = openExtensionDialog(q);
-                } else {
-                    openedRet.ret = make_ret(Ret::Code::UnknownError);
-                }
+        case ContainerType::QWidgetDialog:
+            openedRet = openWidgetDialog(q);
+            break;
+        case ContainerType::PrimaryPage:
+        case ContainerType::QmlDialog:
+            openedRet = openQml(q);
+            break;
+        case ContainerType::Undefined: {
+            //! NOTE Not found default, try extension
+            extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
+            if (ext.isValid()) {
+                openedRet = openExtensionDialog(q);
+            } else {
+                openedRet.ret = make_ret(Ret::Code::UnknownError);
             }
+        }
         }
 
         if (!openedRet.ret) {
@@ -311,7 +350,9 @@ Promise<Val> InteractiveProvider::openAsync(const UriQuery& q)
         }
 
         return Promise<Val>::Result::unchecked();
-    });
+    };
+
+    return func;
 }
 
 RetVal<bool> InteractiveProvider::isOpened(const Uri& uri) const

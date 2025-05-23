@@ -67,6 +67,7 @@ public:
     virtual bool isSelectColorOpened() const = 0;
 
     virtual RetVal<Val> open(const UriQuery& uri) = 0;
+    virtual RetVal<Val> openSync(const UriQuery& uri) = 0;
     virtual async::Promise<Val> openAsync(const UriQuery& uri) = 0;
     virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
     virtual RetVal<bool> isOpened(const UriQuery& uri) const = 0;

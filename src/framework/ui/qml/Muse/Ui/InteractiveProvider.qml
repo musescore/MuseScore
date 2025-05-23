@@ -134,7 +134,7 @@ Item {
 
         function onFireOpenProgressDialog(data) {
             var dialog = data.data()
-            var dialogObj = createDialog("internal/ProgressDialog.qml", dialog.params)
+            var dialogObj = root.createDialog("internal/ProgressDialog.qml", dialog.params)
             data.setValue("ret", dialogObj.ret)
             data.setValue("objectId", dialogObj.object.objectId)
 
