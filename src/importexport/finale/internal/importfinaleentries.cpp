@@ -240,7 +240,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         return true;
     }
 
-    Fraction entryStartTick      = FinaleTConv::musxFractionToFraction(entryInfo->elapsedDuration).reduced();
+    Fraction entryStartTick = FinaleTConv::musxFractionToFraction(entryInfo->elapsedDuration).reduced();
     Segment* segment = measure->getSegment(SegmentType::ChordRest, entryStartTick);
 
     // Retrieve entry from entryInfo

@@ -191,7 +191,7 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">One part, one Measure, with Notes</metaTag>
+    <metaTag name="workTitle">Grand Staff Part, no Measures</metaTag>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
@@ -199,6 +199,12 @@
           </StaffType>
         <bracket type="1" span="2" col="2" visible="1"/>
         <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
@@ -262,60 +268,93 @@
         <height>10</height>
         <Text>
           <style>title</style>
-          <text>One part, one Measure, with Notes</text>
+          <text>One Measure, Cross-staff Notes</text>
           </Text>
         </VBox>
       <Measure>
         <voice>
-          <KeySig>
-            <concertKey>0</concertKey>
-            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <durationType>quarter</durationType>
-            <Note>
-              <Accidental>
-                <subtype>accidentalSharp</subtype>
-                </Accidental>
-              <pitch>78</pitch>
-              <tpc>20</tpc>
-              </Note>
-            </Chord>
+          <Beam>
+            </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <staffMove>1</staffMove>
             <durationType>eighth</durationType>
             <Note>
-              <pitch>71</pitch>
+              <pitch>59</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <BeamMode>mid</BeamMode>
+            <staffMove>1</staffMove>
             <durationType>eighth</durationType>
             <Note>
-              <pitch>72</pitch>
-              <tpc>14</tpc>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
-            <durationType>quarter</durationType>
+            <BeamMode>end</BeamMode>
+            <staffMove>1</staffMove>
+            <durationType>eighth</durationType>
             <Note>
-              <Accidental>
-                <subtype>accidentalFlat</subtype>
-                </Accidental>
-              <pitch>63</pitch>
-              <tpc>11</tpc>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
               </Note>
             </Chord>
+          <Beam>
+            </Beam>
+          <Chord>
+            <BeamMode>begin</BeamMode>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <BeamMode>mid</BeamMode>
+            <staffMove>1</staffMove>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <BeamMode>mid</BeamMode>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Chord>
+            <BeamMode>end</BeamMode>
+            <staffMove>1</staffMove>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
           </voice>
         </Measure>
       </Staff>

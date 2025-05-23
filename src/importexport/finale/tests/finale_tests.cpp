@@ -145,6 +145,10 @@ TEST_F(Finale_Tests, onePartOneMeasureWithNotes) {
     finaleImportTestRef("onePartOneMeasureWithNotes");
 }
 
+TEST_F(Finale_Tests, oneMeasureCrossStaff) {
+    finaleImportTestRef("oneMeasureCrossStaff");
+}
+
 TEST_F(Finale_Tests, onePartOneMeasureWithTuplets) {
     finaleImportTestRef("onePartOneMeasureWithTuplets");
 }
