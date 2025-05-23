@@ -3127,7 +3127,7 @@ prima nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation>Glissando &amp; linee ancorate alla nota</translation>
+        <translation>Glissando e linee ancorate alla nota</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
@@ -26103,7 +26103,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1010"/>
         <source>Arpeggios &amp; glissandos</source>
-        <translation>Arpeggi &amp; glissando</translation>
+        <translation>Arpeggi e glissando</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1312"/>
@@ -28874,7 +28874,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1744"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Questo file è stato salvato utilizzando una versione più recente di MuseScore Studio. Prego, visita&lt;a href=&quot;https://musescore.org&quot;&gt;MuseScore.org&lt;/a&gt; per ottenere l&apos;ultima versione.</translation>
+        <translation>Questo file è stato salvato utilizzando una versione più recente di MuseScore Studio. Prego, visita &lt;a href=&quot;https://musescore.org&quot;&gt;MuseScore.org&lt;/a&gt; per ottenere l&apos;ultima versione.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1766"/>
