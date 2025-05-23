@@ -22,7 +22,8 @@
 #include "pianokeyboardview.h"
 
 #include <QPainter>
-
+#include <QGuiApplication>
+#include <QScreen>
 #include "pianokeyboardcontroller.h"
 
 #include "log.h"
@@ -178,10 +179,22 @@ void PianoKeyboardView::adjustKeysAreaPosition()
 {
     TRACEFUNC;
 
-    qreal keysAreaTop = (height() - m_keysAreaRect.height()) / 2;
+    qreal screenWidth = QGuiApplication::primaryScreen()->geometry().width();
+    qreal screenHeight = QGuiApplication::primaryScreen()->geometry().height();
 
-    qreal minScrollOffset = std::min(width() - m_keysAreaRect.width(), (width() - m_keysAreaRect.width()) / 2);
-    qreal maxScrollOffset = std::max(0.0, (width() - m_keysAreaRect.width()) / 2);
+    qreal _width = width();
+    qreal _height = height();
+    if (_width > screenWidth) {
+        _width = screenWidth;
+    }
+    if (_height > screenHeight) {
+        _height = screenHeight;
+    }
+
+    qreal keysAreaTop = (_height - m_keysAreaRect.height()) / 2;
+
+    qreal minScrollOffset = std::min(_width - m_keysAreaRect.width(), (_width - m_keysAreaRect.width()) / 2);
+    qreal maxScrollOffset = std::max(0.0, (_width - m_keysAreaRect.width()) / 2);
     m_scrollOffset = std::clamp(m_scrollOffset, minScrollOffset, maxScrollOffset);
 
     m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
@@ -190,8 +203,23 @@ void PianoKeyboardView::adjustKeysAreaPosition()
 }
 
 void PianoKeyboardView::checkResponseKeyOccluded() {
+    if (!m_controller->isPlaying()) {
+        return;
+    }
     if (m_check_rects.empty()) {
         return;
+    }
+
+    qreal screenWidth = QGuiApplication::primaryScreen()->geometry().width();
+    qreal screenHeight = QGuiApplication::primaryScreen()->geometry().height();
+
+    qreal _width = width();
+    qreal _height = height();
+    if (_width > screenWidth) {
+        _width = screenWidth;
+    }
+    if (_height > screenHeight) {
+        _height = screenHeight;
     }
     
     // piano_key_t minKey =  m_check_rects.begin()->first;
@@ -202,14 +230,13 @@ void PianoKeyboardView::checkResponseKeyOccluded() {
         if (rect.x() < minRect.x()) {
             // minKey = key;
             minRect = rect;
-        }
-        if (rect.x() > maxRect.x()) {
+        } else if (rect.x() > maxRect.x()) {
             // maxKey = key;
             maxRect = rect;
         }
     }
-    qreal keysAreaTop = (height() - m_keysAreaRect.height()) / 2;
-    if (width() < m_keysAreaRect.width()) {
+    qreal keysAreaTop = (_height - m_keysAreaRect.height()) / 2;
+    if (_width < m_keysAreaRect.width()) {
         if (m_scrollOffset + minRect.x() < 0) {
             if (minRect.width() <= minRect.x()) {
                 m_scrollOffset = -minRect.x() + minRect.width();
@@ -218,15 +245,15 @@ void PianoKeyboardView::checkResponseKeyOccluded() {
             }
             m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
             updateScrollBar();
-        } else if (m_scrollOffset + maxRect.x() + maxRect.width() > width()) {
-            qreal offset = m_scrollOffset + maxRect.x() + maxRect.width() - width();
+        } else if (m_scrollOffset + maxRect.x() + maxRect.width() > _width) {
+            qreal offset = m_scrollOffset + maxRect.x() + maxRect.width() - _width;
             if (maxRect.x() + 2 * maxRect.width() <= m_keysAreaRect.width()) {
                 offset += maxRect.width();
             } 
             m_scrollOffset -= offset;
             m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
             updateScrollBar();
-        }
+        } 
     }
 }
 
@@ -401,7 +428,7 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
                 for (const uint& keyIndex : m_clefKeySigsKeys) {
                     if (containsKey(keyIndex, key)) {
                         fillColor = Qt::green;
-                        m_check_rects.insert({key, rect});
+                        // m_check_rects.insert({key, rect});
                     }
                 }
             }
@@ -417,6 +444,7 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
         if (m_controller->isPlaying()) {
             if (m_controller->arpeggioKeyState(key) != KeyState::None) {
                 fillColor = m_whiteKeyStateColors[m_controller->arpeggioKeyState(key)];
+                m_check_rects.insert({key, rect});
             }
 
             if (m_controller->glissandoKeyState(key) != KeyState::None) {
@@ -527,7 +555,7 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
                     if (containsKey(keyIndex, key)) {
                         topPieceGradient.setColorAt(1.0, Qt::green);
                         bottomPieceGradient.setColorAt(0.0, Qt::green);
-                        m_check_rects.insert({key, rect});
+                        // m_check_rects.insert({key, rect});
                     }
                 }
             }
@@ -545,6 +573,7 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             if (m_controller->arpeggioKeyState(key) != KeyState::None) {
                 topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[m_controller->arpeggioKeyState(key)]);
                 bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[m_controller->arpeggioKeyState(key)]);
+                m_check_rects.insert({key, rect});
             }
 
             if (m_controller->glissandoKeyState(key) != KeyState::None) {
@@ -677,8 +706,15 @@ qreal PianoKeyboardView::scrollBarSize() const
 
 void PianoKeyboardView::updateScrollBar()
 {
+    qreal screenWidth = QGuiApplication::primaryScreen()->geometry().width();
+
+    qreal _width = width();
+    if (_width > screenWidth) {
+        _width = screenWidth;
+    }
+
     qreal newPosition = -m_scrollOffset / m_keysAreaRect.width();
-    qreal newSize = width() / m_keysAreaRect.width();
+    qreal newSize = _width / m_keysAreaRect.width();
 
     if (qFuzzyCompare(newPosition, m_scrollBarPosition)
         && qFuzzyCompare(newSize, m_scrollBarSize)) {
