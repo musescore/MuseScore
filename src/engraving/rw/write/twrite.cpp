@@ -910,7 +910,7 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     if (item->hook() && item->hook()->isUserModified()) {
         write(item->hook(), xml, ctx);
     }
-    if (item->showStemSlash() && item->isUserModified()) {
+    if (item->showStemSlash() && item->showStemSlash() != item->propertyDefault(Pid::SHOW_STEM_SLASH).toBool()) {
         xml.tag("showStemSlash", item->showStemSlash());
     }
     if (item->stemSlash() && item->stemSlash()->isUserModified()) {
