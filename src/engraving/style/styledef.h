@@ -116,6 +116,8 @@ enum class Sid {
     lyricsMelismaMinLength,
     lyricsDashPosAtStartOfSystem,
     lyricsAvoidBarlines,
+    lyricsMaxDashCount,
+    lyricsCenterDashedSyllables,
 
     lyricsOddFontFace,
     lyricsOddFontSize,
