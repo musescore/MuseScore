@@ -31,6 +31,10 @@ QtPlatform.FileDialog {
     signal opened()
     signal closed()
 
+    function show() {
+        root.open()
+    }
+
     onVisibleChanged: {
         if (visible) {
             root.opened()

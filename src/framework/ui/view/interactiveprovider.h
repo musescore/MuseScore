@@ -26,7 +26,6 @@
 #include <QVariant>
 #include <QMap>
 #include <QStack>
-#include <QEventLoop>
 
 #include "global/async/asyncable.h"
 
@@ -63,11 +62,6 @@ class InteractiveProvider : public QObject, public IInteractiveProvider, public 
 public:
     explicit InteractiveProvider(const modularity::ContextPtr& iocCtx);
 
-    RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
-    RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
-                                        bool confirmOverwrite) override;
-    RetVal<io::path_t> selectDirectory(const std::string& title, const io::path_t& dir) override;
-
     RetVal<QColor> selectColor(const QColor& color = Qt::white, const QString& title = "") override;
     bool isSelectColorOpened() const override;
 
@@ -102,8 +96,6 @@ signals:
     void fireClose(QVariant data);
     void fireRaise(QVariant data);
 
-    void fireOpenFileDialog(muse::ui::QmlLaunchData* data);
-
 private:
     struct OpenData {
         bool sync = false;
@@ -118,12 +110,6 @@ private:
         QObject* window = nullptr;
     };
 
-    enum class FileDialogType {
-        SelectOpenningFile,
-        SelectSavingFile,
-        SelectDirectory
-    };
-
     async::Promise<Val>::Body openFunc(const UriQuery& q);
 
     void raiseWindowInStack(QObject* newActiveWindow);
@@ -131,8 +117,6 @@ private:
     void fillExtData(QmlLaunchData* data, const UriQuery& q) const;
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
     void fillData(QObject* object, const UriQuery& q) const;
-    void fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& path,
-                            const std::vector<std::string>& filter = {}, bool confirmOverwrite = true) const;
 
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
@@ -140,9 +124,6 @@ private:
     RetVal<OpenData> openExtensionDialog(const UriQuery& q);
     RetVal<OpenData> openWidgetDialog(const UriQuery& q);
     RetVal<OpenData> openQml(const UriQuery& q);
-
-    RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
-                                      const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);
 
     void closeObject(const ObjectInfo& obj);
 
@@ -161,10 +142,7 @@ private:
 
     async::Channel<Uri> m_currentUriChanged;
     async::Notification m_currentUriAboutToBeChanged;
-    QMap<QString, RetVal<Val> > m_retvals;
     async::Channel<Uri> m_opened;
-
-    QEventLoop m_fileDialogEventLoop;
 
     bool m_isSelectColorOpened = false;
 };

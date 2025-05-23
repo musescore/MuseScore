@@ -101,24 +101,6 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
     }
 }
 
-RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& title, const io::path_t& dir,
-                                                          const std::vector<std::string>& filter)
-{
-    return openFileDialog(FileDialogType::SelectOpenningFile, title, dir, filter);
-}
-
-RetVal<io::path_t> InteractiveProvider::selectSavingFile(const std::string& title, const io::path_t& path,
-                                                         const std::vector<std::string>& filter,
-                                                         bool confirmOverwrite)
-{
-    return openFileDialog(FileDialogType::SelectSavingFile, title, path, filter, confirmOverwrite);
-}
-
-RetVal<io::path_t> InteractiveProvider::selectDirectory(const std::string& title, const io::path_t& dir)
-{
-    return openFileDialog(FileDialogType::SelectDirectory, title, dir);
-}
-
 RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const QString& title)
 {
     if (m_isSelectColorOpened) {
@@ -405,40 +387,6 @@ void InteractiveProvider::fillData(QObject* object, const UriQuery& q) const
     }
 }
 
-void InteractiveProvider::fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& path,
-                                             const std::vector<std::string>& filter, bool confirmOverwrite) const
-{
-    QVariantMap params;
-    params["title"] = QString::fromStdString(title);
-
-    if (type == FileDialogType::SelectOpenningFile || type == FileDialogType::SelectSavingFile) {
-        QStringList filterList;
-        for (const std::string& nameFilter : filter) {
-            filterList << QString::fromStdString(nameFilter);
-        }
-
-        params["nameFilters"] = filterList;
-        params["selectExisting"] = type == FileDialogType::SelectOpenningFile;
-
-        if (type == FileDialogType::SelectOpenningFile) {
-            // see QQuickPlatformFileDialog::FileMode::OpenFile
-            params["fileMode"] = 0;
-            params["folder"] = QUrl::fromLocalFile(path.toQString());
-        } else {
-            // see QQuickPlatformFileDialog::FileMode::SaveFile
-            params["fileMode"] = 2;
-            params["currentFile"] = QUrl::fromLocalFile(path.toQString());
-
-            if (!confirmOverwrite) {
-                params["options"] = QFileDialog::DontConfirmOverwrite;
-            }
-        }
-    }
-
-    data->setValue("params", params);
-    data->setValue("selectFolder", type == FileDialogType::SelectDirectory);
-}
-
 ValCh<Uri> InteractiveProvider::currentUri() const
 {
     ValCh<Uri> v;
@@ -660,35 +608,6 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuer
     return result;
 }
 
-RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
-                                                       const std::vector<std::string>& filter, bool confirmOverwrite)
-{
-    notifyAboutCurrentUriWillBeChanged();
-
-    RetVal<io::path_t> result;
-
-    QmlLaunchData* data = new QmlLaunchData();
-    fillFileDialogData(data, type, title, path, filter, confirmOverwrite);
-
-    emit fireOpenFileDialog(data);
-
-    m_fileDialogEventLoop.exec();
-
-    QString objectId = data->value("objectId").toString();
-
-    delete data;
-
-    if (!objectId.isEmpty()) {
-        RetVal<Val> rv = m_retvals.take(objectId);
-        if (rv.ret.valid()) {
-            result.ret = rv.ret;
-            result.val = QUrl::fromUserInput(rv.val.toQString()).toLocalFile();
-        }
-    }
-
-    return result;
-}
-
 void InteractiveProvider::closeQml(const QVariant& objectId)
 {
     emit fireClose(objectId);
@@ -741,7 +660,6 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
 void InteractiveProvider::onClose(const QString& objectId, const QVariant& jsrv)
 {
     RetVal<Val> rv = toRetVal(jsrv);
-    m_retvals[objectId] = rv;
 
     ObjectInfo obj;
 
@@ -776,8 +694,6 @@ void InteractiveProvider::onClose(const QString& objectId, const QVariant& jsrv)
     if (inStack) {
         notifyAboutCurrentUriChanged();
     }
-
-    m_fileDialogEventLoop.quit();
 }
 
 std::vector<InteractiveProvider::ObjectInfo> InteractiveProvider::allOpenObjects() const

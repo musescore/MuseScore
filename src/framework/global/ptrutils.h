@@ -22,7 +22,6 @@
 #ifndef MUSE_GLOBAL_PTRUTILS_H
 #define MUSE_GLOBAL_PTRUTILS_H
 
-#include "runtime.h"
 #include "stringutils.h"
 #include "log.h"
 
@@ -32,7 +31,7 @@ template<typename T, typename E> T* checked_cast(E* source)
 #ifndef NDEBUG
     T* casted = dynamic_cast<T*>(source);
     if (source && !casted) {
-        Q_ASSERT_X(false, "checked_cast", "bad cast");
+        assert(false && "checked_cast: bad cast");
     }
     return casted;
 #else
@@ -45,7 +44,7 @@ template<typename T, typename E> const T* checked_cast(const E* source)
 #ifndef NDEBUG
     T* casted = dynamic_cast<T*>(source);
     if (source && !casted) {
-        Q_ASSERT_X(false, "checked_cast", "bad cast");
+        assert(false && "checked_cast: bad cast");
     }
     return casted;
 #else

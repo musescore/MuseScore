@@ -99,25 +99,6 @@ Item {
                 obj.raise()
             }
         }
-
-        function onFireOpenFileDialog(data) {
-            var dialog = data.data()
-            var dialogObj = null
-            if (dialog.selectFolder) {
-                dialogObj = root.createDialog("internal/FolderDialog.qml", dialog.params)
-            } else {
-                dialogObj = root.createDialog("internal/FileDialog.qml", dialog.params)
-            }
-
-            data.setValue("ret", dialogObj.ret)
-            data.setValue("objectId", dialogObj.object.objectId)
-
-            if (dialogObj.ret.errcode > 0) {
-                return
-            }
-
-            dialogObj.object.open()
-        }
     }
 
     function createDialog(path, params) {

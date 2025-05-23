@@ -254,26 +254,71 @@ void Interactive::showProgress(const std::string& title, Progress* progress)
     provider()->openAsync(q);
 }
 
+static UriQuery makeSelectFileQuery(int mode, const QString& title, const io::path_t& dir, const std::vector<std::string>& filter,
+                                    bool confirmOverwrite)
+{
+    UriQuery q("muse://interactive/selectfile");
+    q.set("title", title.toStdString());
+
+    ValList filterList;
+    for (const std::string& f : filter) {
+        filterList.push_back(Val(f));
+    }
+
+    q.set("nameFilters", filterList);
+    q.set("selectExisting", true);
+    // see QQuickPlatformFileDialog::FileMode::OpenFile
+    q.set("fileMode", mode);
+    q.set("folder", QUrl::fromLocalFile(dir.toQString()).toLocalFile().toStdString());
+
+    if (!confirmOverwrite) {
+        q.set("options", QFileDialog::DontConfirmOverwrite);
+    }
+
+    return q;
+}
+
 io::path_t Interactive::selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter)
 {
 #ifndef Q_OS_LINUX
     QString result = QFileDialog::getOpenFileName(nullptr, title, dir.toQString(), filterToString(filter));
     return result;
 #else
-    return provider()->selectOpeningFile(title.toStdString(), dir, filter).val;
+
+    // see QQuickPlatformFileDialog::FileMode::OpenFile
+    int mode = 0;
+    UriQuery q = makeSelectFileQuery(mode, title, dir, filter, false);
+
+    RetVal<Val> rv = provider()->openSync(q);
+    if (!rv.ret) {
+        return io::path_t();
+    }
+
+    return QUrl::fromUserInput(rv.val.toQString()).toLocalFile();
 #endif
 }
 
-io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t& path, const std::vector<std::string>& filter,
+io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter,
                                          bool confirmOverwrite)
 {
 #ifndef Q_OS_LINUX
     QFileDialog::Options options;
     options.setFlag(QFileDialog::DontConfirmOverwrite, !confirmOverwrite);
-    QString result = QFileDialog::getSaveFileName(nullptr, title, path.toQString(), filterToString(filter), nullptr, options);
+    QString result = QFileDialog::getSaveFileName(nullptr, title, dir.toQString(), filterToString(filter), nullptr, options);
     return result;
 #else
-    return provider()->selectSavingFile(title.toStdString(), path, filter, confirmOverwrite).val;
+
+    // see QQuickPlatformFileDialog::FileMode::SaveFile
+    int mode = 2;
+    UriQuery q = makeSelectFileQuery(mode, title, dir, filter, confirmOverwrite);
+
+    RetVal<Val> rv = provider()->openSync(q);
+    if (!rv.ret) {
+        return io::path_t();
+    }
+
+    return QUrl::fromUserInput(rv.val.toQString()).toLocalFile();
+
 #endif
 }
 
@@ -283,7 +328,17 @@ io::path_t Interactive::selectDirectory(const QString& title, const io::path_t& 
     QString result = QFileDialog::getExistingDirectory(nullptr, title, dir.toQString());
     return result;
 #else
-    return provider()->selectDirectory(title.toStdString(), dir).val;
+
+    UriQuery q("muse://interactive/selectdir");
+    q.set("title", title.toStdString());
+    q.set("folder", QUrl::fromLocalFile(dir.toQString()).toLocalFile().toStdString());
+
+    RetVal<Val> rv = provider()->openSync(q);
+    if (!rv.ret) {
+        return io::path_t();
+    }
+
+    return QUrl::fromUserInput(rv.val.toQString()).toLocalFile();
 #endif
 }
 
