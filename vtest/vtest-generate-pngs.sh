@@ -27,6 +27,7 @@ SCORES_DIR="$HERE/scores"
 OUTPUT_DIR="./vtest_pngs"
 MSCORE_BIN=build.debug/install/bin/mscore
 DPI=180
+GP_LINKED=""
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -68,7 +69,7 @@ echo "::endgroup::"
 
 echo "::group::Generating PNG files"
 if [ -z "$STYLE_PATH" ]; then
-    $MSCORE_BIN -j $JSON_FILE -r $DPI $GP_LINKED 2>&1 | tee $LOG_FILE && SUCCESS="true"
+    $MSCORE_BIN -j $JSON_FILE -r $DPI 2>&1 | tee $LOG_FILE && SUCCESS="true"
 else
     $MSCORE_BIN -S $STYLE_PATH -j $JSON_FILE -r $DPI $GP_LINKED 2>&1 | tee $LOG_FILE && SUCCESS="true"
 fi
