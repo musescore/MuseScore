@@ -71,6 +71,7 @@ private:
     void importParts();
     void importBrackets();
     void importMeasures();
+    void importPageLayout();
 
     engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
                                   const engraving::InstrumentTemplate* it = nullptr);
