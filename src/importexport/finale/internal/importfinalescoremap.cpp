@@ -22,7 +22,6 @@
 #include "internal/importfinalescoremap.h"
 #include "internal/importfinalelogger.h"
 #include "internal/finaletypesconv.h"
-#include "dom/sig.h"
 
 #include <vector>
 #include <exception>
@@ -45,6 +44,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/sig.h"
 #include "engraving/dom/spacer.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"

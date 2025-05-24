@@ -25,8 +25,6 @@
 #include <unordered_map>
 #include <memory>
 
-
-// #include "engraving/engravingerrors.h"
 #include "style/style.h"
 #include "engraving/dom/tuplet.h"
 
@@ -72,24 +70,25 @@ private:
     void importBrackets();
     void importMeasures();
     void importPageLayout();
+    void importStaffItems();
 
     engraving::Staff* createStaff(engraving::Part* part, const std::shared_ptr<const musx::dom::others::Staff> musxStaff,
                                   const engraving::InstrumentTemplate* it = nullptr);
+    void importClefs(const std::shared_ptr<musx::dom::others::InstrumentUsed>& musxScrollViewItem,
+                     const std::shared_ptr<musx::dom::others::Measure>& musxMeasure,
+                     engraving::Measure* measure, engraving::staff_idx_t curStaffIdx,
+                     musx::dom::ClefIndex& musxCurrClef);
     // entries
     /// @todo create readContext struct with tick, segment, track, measure, etc
     void mapLayers();
-    void importStaffItems();
     void importEntries();
 
     std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, bool>& finaleVoiceMap,
                                                          musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const;
     bool processEntryInfo(musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx, engraving::Measure* measure,
                           std::vector<ReadableTuplet>& tupletMap, std::unordered_map<size_t, engraving::ChordRest*>& entryMap);
-    bool processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx, std::unordered_map<size_t, ChordRest*>& entryMap);
-    void importClefs(const std::shared_ptr<musx::dom::others::InstrumentUsed>& musxScrollViewItem,
-                     const std::shared_ptr<musx::dom::others::Measure>& musxMeasure,
-                     engraving::Measure* measure, engraving::staff_idx_t curStaffIdx,
-                     musx::dom::ClefIndex& musxCurrClef);
+    bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx, std::unordered_map<size_t, engraving::ChordRest*>& entryMap);
+
     // styles
     void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);
 
