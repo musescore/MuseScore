@@ -1264,6 +1264,49 @@ muse::async::Notification NotationInteraction::arpeggioTickChanged() {
     return m_arpeggioTickChanged;
 }
 
+void NotationInteraction::addTrillNote(mu::engraving::Note *note, int ticks, int duration_ticks) {
+    trill_note = note;
+    trill_ticks = ticks;
+    trill_duration_ticks = duration_ticks;
+};
+int NotationInteraction::trillNoteTicks() const {
+    return trill_ticks;
+};
+int NotationInteraction::trillNoteDurationticks() const {
+    return trill_duration_ticks;
+};
+int NotationInteraction::trillCurrticks() const {
+    return trill_curr_ticks;
+}
+void NotationInteraction::trillNoteUpdate() {
+    m_trillNoteChanged.notify();
+};
+mu::engraving::Note* NotationInteraction::trillNote() const {
+    return trill_note;
+};
+bool NotationInteraction::trillTick(int ticks) {
+    if (trill_duration_ticks == 0) {
+        return false;
+    }
+    if (ticks < trill_ticks || ticks > trill_ticks + trill_duration_ticks) {
+        trill_curr_ticks = 0;
+        trill_ticks = 0;
+        trill_duration_ticks = 0;
+        trill_note = nullptr;
+        m_trillTickChanged.notify();
+        return true;
+    } 
+    trill_curr_ticks = ticks;
+    m_trillTickChanged.notify();
+    return false;
+};
+muse::async::Notification NotationInteraction::trillNoteChanged() {
+    return m_trillNoteChanged;
+};
+muse::async::Notification NotationInteraction::trillTickChanged() {
+    return m_trillTickChanged;
+};
+
 
 void NotationInteraction::notifyClefKeySigsKeysChanged() {
     m_clefKeySigsKeysChanged.notify();

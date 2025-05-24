@@ -22,6 +22,9 @@
 #include "playbackcursor.h"
 
 #include "engraving/dom/system.h"
+#include "src/notation/notationtypes.h"
+#include "src/engraving/dom/ornament.h"
+#include "src/engraving/dom/trill.h"
 
 using namespace mu::notation;
 using namespace muse;
@@ -133,14 +136,12 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
     return RectF(x, y, w, h);
 }
 
-muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bool isPlaying)
-{
+muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bool isPlaying) {
     if (!m_notation) {
         return RectF();
     }
 
     mu::engraving::Score* score = m_notation->elements()->msScore();
-
     Fraction tick = Fraction::fromTicks(_tick);
 
     Measure* measure = score->tick2measureMM(tick);
@@ -151,6 +152,25 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
     mu::engraving::System* system = measure->system();
     if (!system) {
         return RectF();
+    }
+
+    if (measure != m_hit_measure) {
+        curr_measure_trill_notes.clear();
+        EngravingItemList measure_children = measure->childrenItems(true);
+        for (size_t m_k = 0; m_k < measure_children.size(); m_k++) {
+            EngravingItem *measure_item = measure_children.at(m_k);
+
+            if (measure_item && measure_item->isOrnament()) {
+                Ornament* orn = toOrnament(measure_item); // subtype 2214(trill)
+                Trill* _trill = toTrill(measure_item);
+                if (_trill) {
+                    Note *note = orn->noteAbove();
+                    if (note) {
+                        curr_measure_trill_notes.push_back(note);
+                    }
+                }
+            }
+        }
     }
 
     qreal x = 0.0;
@@ -192,6 +212,17 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                         }
                         if (item->type() == mu::engraving::ElementType::NOTE) {
                             m_notation->interaction()->addPlaybackNote(toNote(item));
+                            Note *pre_till_note = toNote(item);
+                            for (Note* mnote : curr_measure_trill_notes) {
+                                if (mnote == pre_till_note) {
+                                    if (curr_trill_note != pre_till_note) {
+                                        curr_trill_note = pre_till_note;
+                                        m_notation->interaction()->addTrillNote(curr_trill_note, curr_trill_note->tick().ticks(), duration_ticks);
+                                        m_notation->interaction()->trillNoteUpdate();
+                                    }
+                                    break;
+                                }
+                            }
                         } else if (item->type() == mu::engraving::ElementType::GLISSANDO) {
                             EngravingItem *glissandoNote = item->parentItem();
                             if (glissandoNote->type() != mu::engraving::ElementType::NOTE && glissandoNote->parentItem()->type() == mu::engraving::ElementType::NOTE) {
@@ -279,11 +310,11 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                                 m_notation->interaction()->addArpeggioNote(toNote(_item));
                                                                 if (arpeggio_whole && m_notation->interaction()->arpeggioNotes().size() >= 8) {
                                                                     if (m_notation->interaction()->arpeggioNotes().size() == 8) {
-                                                                        m_notation->interaction()->updateArpeggioDuration(1.4 * arpeggio_duration_ticks);
+                                                                        m_notation->interaction()->updateArpeggioDuration(1.2 * arpeggio_duration_ticks);
                                                                     } else if (m_notation->interaction()->arpeggioNotes().size() >= 12) {
-                                                                        m_notation->interaction()->updateArpeggioDuration(2 * arpeggio_duration_ticks);
+                                                                        m_notation->interaction()->updateArpeggioDuration(2.4 * arpeggio_duration_ticks);
                                                                     } else if (m_notation->interaction()->arpeggioNotes().size() >= 16) {
-                                                                        m_notation->interaction()->updateArpeggioDuration(2.8 * arpeggio_duration_ticks);
+                                                                        m_notation->interaction()->updateArpeggioDuration(4 * arpeggio_duration_ticks);
                                                                     }
                                                                 }
                                                             }
@@ -522,6 +553,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
     }
     m_notation->interaction()->glissandoTick(tick.ticks());
     m_notation->interaction()->arpeggioTick(tick.ticks());
+    if (m_notation->interaction()->trillTick(tick.ticks())) {
+        curr_trill_note = nullptr;
+    }
 
     // if (measureNo < 2) {
     //     emit lingeringCursorUpdate(0.0, measureRect.y(), measureRect.width(), measureRect.height());
