@@ -106,9 +106,9 @@ public:
     muse::PointF fromLogical(const muse::PointF& point) const override;
     muse::RectF fromLogical(const muse::RectF& rect) const override;
 
-    Q_INVOKABLE bool moveCanvas(qreal dx, qreal dy) override;
-    void moveCanvasVertical(qreal dy) override;
-    void moveCanvasHorizontal(qreal dx) override;
+    Q_INVOKABLE bool moveCanvas(
+        qreal x, qreal y, CoordinateSystem coordSystem = CoordinateSystem::RELATIVE_COORDS, bool userTriggeredMove = true,
+        bool overrideZoomType = false);
 
     qreal currentScaling() const override;
     void setScaling(qreal scaling, const muse::PointF& pos, bool overrideZoomType = true) override;
@@ -177,7 +177,6 @@ protected:
     void setMatrix(const muse::draw::Transform& matrix);
 
     void moveCanvasToCenter();
-    bool moveCanvasToPosition(const muse::PointF& logicPos);
 
     muse::RectF notationContentRect() const override;
 
@@ -210,8 +209,6 @@ private:
     void onCurrentNotationChanged();
     bool isInited() const;
 
-    bool doMoveCanvas(qreal dx, qreal dy);
-
     void scheduleRedraw(const muse::RectF& rect = muse::RectF());
     muse::RectF correctDrawRect(const muse::RectF& rect) const;
 
@@ -234,8 +231,6 @@ private:
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
 
     bool ensureViewportInsideScrollableArea();
-
-    muse::RectF scrollableAreaRect() const;
 
     qreal horizontalScrollableSize() const;
     qreal verticalScrollableSize() const;
@@ -261,7 +256,7 @@ private:
     void paintBackground(const muse::RectF& rect, muse::draw::Painter* painter);
 
     muse::PointF canvasCenter() const;
-    std::pair<qreal, qreal> constraintCanvas(qreal dx, qreal dy) const;
+    std::pair<qreal, qreal> constrainedCanvasMoveDelta(qreal x, qreal y, CoordinateSystem inputCoordinateSystem) const;
 
     INotationPtr m_notation;
     muse::draw::Transform m_matrix;
