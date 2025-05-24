@@ -147,6 +147,7 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
     scoreTuplet->setNumberType(FinaleTConv::toMuseScoreTupletNumberType(musxTuplet->numStyle));
     // actual number object is generated on score layout
 
+    scoreTuplet->setAutoplace(musxTuplet->smartTuplet);
     // separate bracket/number offset not supported, just add it to the whole tuplet for now
     /// @todo needs to be negated?
     scoreTuplet->setOffset(PointF((musxTuplet->tupOffX + musxTuplet->brackOffX) / EVPU_PER_SPACE,
@@ -171,7 +172,7 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
         /// @todo will be supported globally as a style
         logger->logWarning(String(u"Tuplet: Bracket filling duration is soon to be supported globally as a style, not for individual elements"));
     }
-    // unsupported: breakBracket, ignoreHorzNumOffset, allowHorz, useBottomNote, smartTuplet, leftHookLen / rightHookLen (style for both)
+    // unsupported: breakBracket, ignoreHorzNumOffset, allowHorz, useBottomNote, leftHookLen / rightHookLen (style for both)
 
     // bracket extensions
     /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in musescore. See PR and the related issues
@@ -182,37 +183,26 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
     }
 }
 
-static size_t indexOfParentTuplet(std::vector<ReadableTuplet> tupletMap, size_t index) {
-    size_t i = index;
-    while (i >= 1) {
-        --i;
+static size_t indexOfParentTuplet(std::vector<ReadableTuplet> tupletMap, size_t index)
+{
+    for (size_t i = index; i > 0; --i) {
         if (tupletMap[i].layer + 1 == tupletMap[index].layer) {
-            return i;
+            if (tupletMap[i].absBegin <= tupletMap[index].absBegin && tupletMap[i].absEnd >= tupletMap[index].absEnd) {
+                return i;
+            }
         }
     }
-    return i;
+    return 0;
 }
 
 static Tuplet* bottomTupletFromTick(std::vector<ReadableTuplet> tupletMap, Fraction pos)
 {
-    for (size_t i = 0; i < tupletMap.size(); ++i) {
-        // first, find the lowest tuplet
-        while (i + 1 < tupletMap.size() && tupletMap[i+1].absBegin == tupletMap[i].absBegin && tupletMap[i+1].layer > tupletMap[i].layer) {
-            ++i;
-        }
-        // return it if the pos is contained within it
+    // return first tuplet the pos is contained within,
+    // starting from the end (bottom layers) and working our way up
+    for (size_t i = tupletMap.size() - 1; i > 0; --i) {
         if (pos >= tupletMap[i].absBegin && pos < tupletMap[i].absEnd) {
             return tupletMap[i].scoreTuplet;
         }
-        // next, iterate backwards through all the parent tuplets (which could be larger) and check if its contained there
-        size_t j = i;
-        while (j >= 1) {
-            j = indexOfParentTuplet(tupletMap, j);
-            if (pos > tupletMap[j].absBegin && pos < tupletMap[j].absEnd) {
-                return tupletMap[j].scoreTuplet;
-            }
-        }
-        // continue after the lowest tuplet (ones preceding it don't contain pos, no need to check them again)
     }
     return nullptr;
 }
@@ -445,11 +435,9 @@ static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::Tuple
             continue;
         }
         ReadableTuplet rTuplet;
-        rTuplet.absBegin    = FinaleTConv::musxFractionToFraction(tuplet.startDura).reduced();
-        rTuplet.absDuration = FinaleTConv::musxFractionToFraction(tuplet.endDura - tuplet.startDura).reduced();
-        rTuplet.absEnd      = FinaleTConv::musxFractionToFraction(tuplet.endDura).reduced();
+        rTuplet.absBegin   = FinaleTConv::musxFractionToFraction(tuplet.startDura).reduced();
+        rTuplet.absEnd     = FinaleTConv::musxFractionToFraction(tuplet.endDura).reduced();
         rTuplet.musxTuplet = tuplet.tuplet;
-        rTuplet.layer = 0;
         result.emplace_back(rTuplet);
     }
 
@@ -460,14 +448,14 @@ static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::Tuple
             }
 
             if (result[i].absBegin >= result[j].absBegin && result[i].absEnd <= result[j].absEnd
-                && (result[i].absBegin > result[j].absBegin || result[i].absEnd < result[j].absEnd)) {
+                && (result[i].absBegin > result[j].absBegin || result[i].absEnd < result[j].absEnd || result[i].layer == result[j].layer)) {
                 result[i].layer = std::max(result[i].layer, result[j].layer + 1);
             }
         }
     }
 
     std::sort(result.begin(), result.end(), [](const ReadableTuplet& a, const ReadableTuplet& b) {
-        if (a.absBegin.reduced() != b.absBegin.reduced()) {
+        if (a.layer == b.layer) {
             return a.absBegin < b.absBegin;
         }
         return a.layer < b.layer;
@@ -495,21 +483,21 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
         TDuration baseLen = FinaleTConv::noteTypeToDurationType(musxBaseLen.first);
         baseLen.setDots(static_cast<int>(musxBaseLen.second));
         tupletMap[i].scoreTuplet->setBaseLen(baseLen);
-        Fraction f = tupletMap[i].scoreTuplet->baseLen().fraction() * tupletMap[i].scoreTuplet->ratio().denominator();
+        Fraction f = baseLen.fraction() * tupletRatio.denominator();
         tupletMap[i].scoreTuplet->setTicks(f.reduced());
         logger->logInfo(String(u"Detected Tuplet: Starting at %1, duration: %2, ratio: %3").arg(
                         tupletMap[i].absBegin.toString(), f.reduced().toString(), tupletRatio.toString()));
-        size_t parentIndex = indexOfParentTuplet(tupletMap, i);
-        if (tupletMap[parentIndex].layer >= 0) {
+        for (size_t ratioIndex = indexOfParentTuplet(tupletMap, i); tupletMap[ratioIndex].layer >= 0; ratioIndex = indexOfParentTuplet(tupletMap, ratioIndex)) {
             // finale value doesn't include parent tuplet ratio, but is global. Our setup should be correct though, so hack the assert
-            f /= tupletMap[parentIndex].scoreTuplet->ratio();
+            f /= tupletMap[ratioIndex].scoreTuplet->ratio();
         }
-        IF_ASSERT_FAILED(f.reduced() == tupletMap[i].absDuration.reduced()) {
+        IF_ASSERT_FAILED(f.reduced() == (tupletMap[i].absEnd - tupletMap[i].absBegin).reduced()) {
             logger->logWarning(String(u"Tuplet duration is corrupted"));
             /// @todo account for tuplets with invalid durations, i.e. durations not attainable in MuseScore
         }
         transferTupletProperties(tupletMap[i].musxTuplet, tupletMap[i].scoreTuplet, logger);
         // reparent tuplet if needed
+        size_t parentIndex = indexOfParentTuplet(tupletMap, i);
         if (tupletMap[parentIndex].layer >= 0) {
             tupletMap[parentIndex].scoreTuplet->add(tupletMap[i].scoreTuplet);
         }
@@ -565,13 +553,11 @@ void EnigmaXmlImporter::importEntries()
 
                         // generate tuplet map and create tuplets
                         std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo, voice);
-                        // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback when filling with rests
-                        /// @todo does this account for local timesigs
+                        // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
+                        /// @todo does this need to account for local timesigs
                         ReadableTuplet rTuplet;
-                        Fraction mDur = FinaleTConv::simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
                         rTuplet.absBegin = Fraction(0, 1);
-                        rTuplet.absDuration = mDur;
-                        rTuplet.absEnd = mDur;
+                        rTuplet.absEnd = FinaleTConv::simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
                         rTuplet.layer = -1,
                         tupletMap.insert(tupletMap.begin(), rTuplet);
                         createTupletsFromMap(measure, curTrackIdx, tupletMap, logger());

@@ -41,14 +41,12 @@ class Staff;
 
 namespace mu::iex::finale {
 
-struct ReadableTuplet
-{
+struct ReadableTuplet {
     engraving::Fraction absBegin;
-    engraving::Fraction absDuration;
     engraving::Fraction absEnd;
     std::shared_ptr<const musx::dom::details::TupletDef> musxTuplet = nullptr; // actual tuplet object. used for writing properties
     engraving::Tuplet* scoreTuplet = nullptr; // to be created tuplet object.
-    int layer{}; // for nested tuplets. 0 = outermost
+    int layer = 0; // for nested tuplets. 0 = outermost
 };
 
 class EnigmaXmlImporter
