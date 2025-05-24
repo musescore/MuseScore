@@ -1449,9 +1449,10 @@ void Convert::fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm&
 {
     warning = false;
 
-    UNUSED(figuredBass);
-    UNUSED(meiHarm);
     UNUSED(meiFb);
+
+    // @color
+    Convert::colorFromMEI(figuredBass, meiHarm);
 }
 
 std::pair<libmei::Harm, libmei::Fb> Convert::fbToMEI(const engraving::FiguredBass* figuredBass)
@@ -1459,7 +1460,8 @@ std::pair<libmei::Harm, libmei::Fb> Convert::fbToMEI(const engraving::FiguredBas
     libmei::Harm meiHarm;
     libmei::Fb meiFb;
 
-    UNUSED(figuredBass);
+    // @color
+    Convert::colorToMEI(figuredBass, meiHarm);
 
     return { meiHarm, meiFb };
 }
