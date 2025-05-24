@@ -173,6 +173,34 @@ public:
     virtual muse::async::Notification arpeggioTickChanged() {
         return muse::async::Notification();
     }
+
+    virtual void addTrillNote(mu::engraving::Note *, int, int) {
+        
+    }
+    virtual int trillNoteTicks() const {
+        return 0;
+    }
+    virtual int trillNoteDurationticks() const {
+        return 0;
+    }
+    virtual int trillCurrticks() const {
+        return 0;
+    }
+    virtual void trillNoteUpdate() {
+        
+    }
+    virtual mu::engraving::Note *trillNote() const {
+        return nullptr;
+    }
+    virtual bool trillTick(int) {
+        return false;
+    }
+    virtual muse::async::Notification trillNoteChanged() {
+        return muse::async::Notification();
+    }
+    virtual muse::async::Notification trillTickChanged() {
+        return muse::async::Notification();
+    }
     
     virtual void notifyClefKeySigsKeysChanged() {
         

@@ -51,6 +51,7 @@ public:
 
     KeyState glissandoKeyState(piano_key_t key) const;
     KeyState arpeggioKeyState(piano_key_t key) const;
+    KeyState trillKeyState(piano_key_t key) const;
 
     bool isFromMidi() const;
 
@@ -102,6 +103,11 @@ private:
     int m_arpeggio_ticks;
     int m_arpeggio_duration_ticks;
     int m_arpeggio_curr_ticks;
+
+    piano_key_t m_trill_note_key;
+    int m_trill_ticks;
+    int m_trill_duration_ticks;
+    int m_trill_curr_ticks;
 
     std::set<uint> m_clefKeySigsKeys;
     muse::async::Notification m_clefKeySigsKeysChanged;

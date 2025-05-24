@@ -103,6 +103,9 @@ bool compare_by_note(piano_key_t a, piano_key_t b) {
 }
 
 KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const {
+    if (m_arpeggio_duration_ticks == 0) {
+        return KeyState::None;
+    }
     if (m_arpeggio_curr_ticks > m_arpeggio_ticks && m_arpeggio_curr_ticks < m_arpeggio_ticks + m_arpeggio_duration_ticks) {
         int left_dis = m_arpeggio_curr_ticks - m_arpeggio_ticks;
         double ratio = left_dis / static_cast<double>(m_arpeggio_duration_ticks);
@@ -131,6 +134,26 @@ KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const {
                 }
             }
             ++index;
+        }
+    }
+    return KeyState::None;
+}
+
+KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const {
+    if (m_trill_duration_ticks == 0) {
+        return KeyState::None;
+    }
+    if (m_trill_curr_ticks >= m_trill_ticks && m_trill_curr_ticks <= m_trill_ticks + m_trill_duration_ticks) {
+        int left_dis = m_trill_curr_ticks - m_trill_ticks;
+        double ratio = left_dis / static_cast<double>(m_trill_duration_ticks);
+
+        int _int_note_key = static_cast<int>(m_trill_note_key);
+        if (ratio < 0.333 || ratio > 0.666) {
+            _int_note_key -= 1;
+        }
+
+        if (key == (piano_key_t)_int_note_key) {
+            return KeyState::Trill;
         }
     }
     return KeyState::None;
@@ -289,6 +312,32 @@ void PianoKeyboardController::onNotationChanged()
                 return;
             }
             m_arpeggio_curr_ticks = notation->interaction()->arpeggioCurrticks();
+        });
+
+        notation->interaction()->trillNoteChanged().onNotify(this, [this]() {
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+            m_trill_ticks = notation->interaction()->trillNoteTicks();
+            m_trill_duration_ticks = notation->interaction()->trillNoteDurationticks();
+            
+            Note *receivedNote = notation->interaction()->trillNote();
+
+            if (receivedNote) {
+                const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
+                m_trill_note_key = static_cast<piano_key_t>(useWrittenPitch ? receivedNote->epitch() : receivedNote->ppitch());
+            } else {
+                m_trill_note_key = static_cast<piano_key_t>(10000);
+            }
+        });
+
+        notation->interaction()->trillTickChanged().onNotify(this, [this]() {
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+            m_trill_curr_ticks = notation->interaction()->trillCurrticks();
         });
 
         notation->interaction()->clefKeySigsKeysChanged().onNotify(this, [this]() {
