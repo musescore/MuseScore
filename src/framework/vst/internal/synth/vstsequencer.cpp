@@ -116,6 +116,10 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
             float velocityFraction = noteVelocityFraction(noteEvent);
             float tuning = noteTuning(noteEvent, noteId);
 
+            if (noteEvent.expressionCtx().articulations.averageDynamicOffsetMap().size() > 0) {
+                velocityFraction = 1.0f;
+            }
+
             destination[timestampFrom].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
             destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
 
