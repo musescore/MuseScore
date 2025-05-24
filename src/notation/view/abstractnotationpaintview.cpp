@@ -81,6 +81,12 @@ void AbstractNotationPaintView::load()
 
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
+
+    QObject::connect(m_playbackCursor.get(), SIGNAL(lingeringCursorUpdate(double, double, double, double)),
+                     this, SLOT(handleLingeringCursorUpdate(double, double, double, double)));
+    QObject::connect(m_playbackCursor.get(), SIGNAL(lingeringCursorUpdate1()),
+                     this, SLOT(handleLingeringCursorUpdate1()));
+
     m_playbackCursor->setVisible(false);
     m_noteInputCursor = std::make_unique<NoteInputCursor>(configuration()->thinNoteInputCursor());
     m_ruler = std::make_unique<NotationRuler>(iocContext());
@@ -116,6 +122,22 @@ void AbstractNotationPaintView::load()
     scheduleRedraw();
 
     m_loaded = true;
+}
+
+void AbstractNotationPaintView::handleLingeringCursorUpdate(double x, double y, double width, double height) {
+    if (playbackController()->isPlaying()) {
+        if (x <= 1) {
+            scheduleRedraw();
+        } else {
+            scheduleRedraw(muse::RectF(x, y, width, height));
+        }
+    }
+}
+
+void AbstractNotationPaintView::handleLingeringCursorUpdate1() {
+    if (playbackController()->isPlaying()) {
+        scheduleRedraw();
+    }
 }
 
 void AbstractNotationPaintView::initBackground()
@@ -608,6 +630,8 @@ bool AbstractNotationPaintView::elementPopupIsOpen(const ElementType& elementTyp
     return m_currentElementPopupType == modelType;
 }
 
+// first - UiContextResolver::matchWithCurrent, get target notationpaintview
+// second - invoke target notationpaintview::paint
 void AbstractNotationPaintView::paint(QPainter* qp)
 {
     TRACEFUNC;
@@ -1387,6 +1411,8 @@ void AbstractNotationPaintView::onPlayingChanged()
     m_autoScrollEnabled = true;
     m_enableAutoScrollTimer.stop();
 
+    notation()->interaction()->playingChang(isPlaying);
+
     if (isPlaying) {
         audio::secs_t pos = globalContext()->playbackState()->playbackPosition();
         muse::midi::tick_t tick = notationPlayback()->secToTick(pos);
@@ -1405,7 +1431,7 @@ void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
     }
 
     RectF oldCursorRect = m_playbackCursor->rect();
-    m_playbackCursor->move(tick);
+    m_playbackCursor->move(tick, playbackController()->isPlaying());
     const RectF& newCursorRect = m_playbackCursor->rect();
 
     if (newCursorRect != oldCursorRect) {
@@ -1544,6 +1570,8 @@ void AbstractNotationPaintView::setPlaybackCursorItem(QQuickItem* cursor)
         m_playbackCursorItem->setVisible(playbackController()->isPlaying());
         m_playbackCursorItem->setEnabled(false); // ignore mouse & keyboard events
         m_playbackCursorItem->setProperty("color", configuration()->playbackCursorColor());
+
+
 
         connect(m_playbackCursorItem, &QObject::destroyed, this, [this]() {
             m_playbackCursorItem = nullptr;

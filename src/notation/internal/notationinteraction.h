@@ -94,6 +94,48 @@ public:
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
     muse::async::Notification selectionChanged() const override;
+    muse::async::Notification playbackNotesChanged() const override;
+    std::vector<Note *> playbackNotes() const override;
+    void clearPlaybackNotes() override;
+    void addPlaybackNote(Note *note) override;
+
+    void addGlissandoNote(mu::engraving::Note *note, int ticks, int duration_ticks) override;
+    void addGlissandoEndNote(mu::engraving::Note *note) override;
+    int glissandoNoteTicks() const override;
+    int glissandoNoteDurationticks() const override;
+    int glissandoCurrticks() const override;
+    void glissandoEndNotesUpdate() override;
+    muse::async::Notification glissandoEndNotesChanged() override;
+    mu::engraving::Note *glissandoNote() const override;
+    std::vector<mu::engraving::Note *> glissandoEndNotes() const override;
+    void glissandoTick(int ticks) override;
+    muse::async::Notification glissandoTickChanged() override;
+
+    bool arpeggioNoteTicksExist(muse::PointF) const override;
+    bool arpeggioPointEqual(muse::PointF) override;
+    void addArpeggioPoint(muse::PointF) override;
+    void arpeggioPointClear() override;
+    void addArpeggioNote(mu::engraving::Note *, int, int) override;
+    void updateArpeggioDuration(int) override;
+    void addArpeggioNote(mu::engraving::Note *) override;
+    int arpeggioNoteTicks() const override;
+    int arpeggioNoteDurationticks() const override;
+    int arpeggioCurrticks() const override;
+    muse::async::Notification arpeggioNotesChanged() override;
+    std::vector<mu::engraving::Note *> arpeggioNotes() const override;
+    void arpeggioNotesUpdate() override;
+    void arpeggioTick(int) override;
+    muse::async::Notification arpeggioTickChanged() override;
+
+    void notifyClefKeySigsKeysChanged() override;
+    muse::async::Notification clefKeySigsKeysChanged() const override;
+    void clearClefKeySigsKeys() override;
+    std::set<uint> clefKeySigsKeys() const override;
+    void addClefKeySigsKeys(uint) override;
+    void notifyClefKeySigsKeysChange() override;
+    void playingChang(bool is_playing) override;
+    bool isPlaying() const override;
+    void notifyPianoKeyboardNotesChanged() override;
     void selectTopOrBottomOfChord(MoveDirection d) override;
     void moveSegmentSelection(MoveDirection d) override;
 
@@ -361,6 +403,7 @@ private:
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
     void notifyAboutSelectionChangedIfNeed();
+    void notifyAboutPianoKeyboardNotesChanged();
     void notifyAboutNotationChanged();
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
@@ -501,7 +544,31 @@ private:
     muse::async::Notification m_shadowNoteChanged;
 
     std::shared_ptr<NotationSelection> m_selection = nullptr;
+    std::shared_ptr<NotationSelection> m_playback_selection = nullptr;
     muse::async::Notification m_selectionChanged;
+
+    muse::async::Notification m_playbackNotesChanged;
+    std::vector<Note *> m_playback_notes;
+    
+    Note *glissando_note = nullptr;
+    int glissando_ticks = 0;
+    int glissando_duration_ticks = 0;
+    std::vector<Note *> glissando_endnotes;
+    int glissando_curr_ticks = 0;
+    muse::async::Notification m_glissandoEndNotesChanged;
+    muse::async::Notification m_glissandoTickChanged;
+
+    std::vector<muse::PointF> arpeggio_points;
+    int arpeggio_ticks = 0;
+    int arpeggio_duration_ticks = 0;
+    std::vector<Note *> arpeggio_notes;
+    int arpeggio_curr_ticks = 0;
+    muse::async::Notification m_arpeggioNotesChanged;
+    muse::async::Notification m_arpeggioTickChanged;
+
+    muse::async::Notification m_clefKeySigsKeysChanged;
+    std::set<uint> m_clefKeySigsKeys;
+    bool m_isplaying = false;
 
     std::shared_ptr<NotationSelectionFilter> m_selectionFilter = nullptr;
 

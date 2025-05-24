@@ -224,6 +224,8 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack, iocContext());
     m_selection = std::make_shared<NotationSelection>(notation);
 
+    m_playback_selection = std::make_shared<NotationSelection>(notation);
+
     m_selectionFilter = std::make_shared<NotationSelectionFilter>(notation, [this]() {
         notifyAboutSelectionChangedIfNeed();
     });
@@ -363,6 +365,12 @@ void NotationInteraction::notifyAboutSelectionChangedIfNeed()
     score()->setSelectionChanged(false);
 
     m_selectionChanged.notify();
+}
+
+void NotationInteraction::notifyAboutPianoKeyboardNotesChanged() {
+    TRACEFUNC;
+
+    m_playbackNotesChanged.notify();
 }
 
 void NotationInteraction::notifyAboutNoteInputStateChanged()
@@ -1038,6 +1046,186 @@ muse::async::Notification NotationInteraction::selectionChanged() const
     return m_selectionChanged;
 }
 
+muse::async::Notification NotationInteraction::playbackNotesChanged() const {
+    return m_playbackNotesChanged;
+}
+
+std::vector<mu::engraving::Note *> NotationInteraction::playbackNotes() const {
+    return m_playback_notes;
+}
+
+void NotationInteraction::addPlaybackNote(Note *note) {
+    m_playback_notes.push_back(note);
+}
+
+void NotationInteraction::addGlissandoNote(mu::engraving::Note *note, int ticks, int duration_ticks) {
+    glissando_endnotes.clear();
+    glissando_note = note;
+    glissando_ticks = ticks;
+    glissando_curr_ticks = ticks;
+    glissando_duration_ticks = duration_ticks;
+}
+void NotationInteraction::addGlissandoEndNote(mu::engraving::Note *note) {
+    for (Note* ptr : glissando_endnotes) {
+        if (ptr == note) {
+            return;
+        }
+    }
+    glissando_endnotes.push_back(note);
+}
+int NotationInteraction::glissandoNoteTicks() const {
+    return glissando_ticks;
+}
+int NotationInteraction::glissandoNoteDurationticks() const {
+    return glissando_duration_ticks;
+}
+int NotationInteraction::glissandoCurrticks() const {
+    return glissando_curr_ticks;
+}
+void NotationInteraction::glissandoEndNotesUpdate() {
+    m_glissandoEndNotesChanged.notify();
+}
+muse::async::Notification NotationInteraction::glissandoEndNotesChanged() {
+    return m_glissandoEndNotesChanged;
+}
+
+mu::engraving::Note *NotationInteraction::glissandoNote() const {
+    return glissando_note;
+}
+std::vector<mu::engraving::Note *> NotationInteraction::glissandoEndNotes() const {
+    return glissando_endnotes;
+}
+void NotationInteraction::glissandoTick(int ticks) {
+    glissando_curr_ticks = ticks;
+    m_glissandoTickChanged.notify();
+}
+muse::async::Notification NotationInteraction::glissandoTickChanged() {
+    return m_glissandoTickChanged;
+}
+
+bool NotationInteraction::arpeggioNoteTicksExist(muse::PointF point) const {
+    for (muse::PointF _point : arpeggio_points) {
+        if (point.x() == _point.x() && point.y() == _point.y()) {
+            return true;
+        }
+    }
+    return false;
+}
+bool NotationInteraction::arpeggioPointEqual(muse::PointF point) {
+    for (muse::PointF _point : arpeggio_points) {
+        return point.x() == _point.x();
+    }
+    return false;
+}
+void NotationInteraction::addArpeggioPoint(muse::PointF point) {
+    arpeggio_points.push_back(point);
+}
+void NotationInteraction::arpeggioPointClear() {
+    arpeggio_points.clear();
+    arpeggio_notes.clear();
+    arpeggio_curr_ticks = 0;
+    arpeggio_ticks = 0;
+    arpeggio_duration_ticks = 0;
+}
+void NotationInteraction::addArpeggioNote(mu::engraving::Note *note, int ticks, int duration_ticks) {
+    arpeggio_notes.push_back(note);
+    arpeggio_ticks = ticks;
+    arpeggio_curr_ticks = ticks;
+    arpeggio_duration_ticks = duration_ticks;
+}
+void NotationInteraction::updateArpeggioDuration(int duration_ticks) {
+    arpeggio_duration_ticks = duration_ticks;
+}
+void NotationInteraction::addArpeggioNote(mu::engraving::Note *note) {
+    for (Note* ptr : arpeggio_notes) {
+        if (ptr == note) {
+            return;
+        }
+    }
+    arpeggio_notes.push_back(note);
+}
+int NotationInteraction::arpeggioNoteTicks() const {
+    return arpeggio_ticks;
+}
+int NotationInteraction::arpeggioNoteDurationticks() const {
+    return arpeggio_duration_ticks;
+}
+int NotationInteraction::arpeggioCurrticks() const {
+    return arpeggio_curr_ticks;
+}
+muse::async::Notification NotationInteraction::arpeggioNotesChanged() {
+    return m_arpeggioNotesChanged;
+}
+std::vector<mu::engraving::Note *> NotationInteraction::arpeggioNotes() const {
+    return arpeggio_notes;
+}
+void NotationInteraction::arpeggioNotesUpdate() {
+    m_arpeggioNotesChanged.notify();
+}
+void NotationInteraction::arpeggioTick(int ticks) {
+    if (arpeggio_duration_ticks == 0) {
+        return;
+    }
+    if (ticks < arpeggio_ticks || ticks > arpeggio_ticks + arpeggio_duration_ticks) {
+        arpeggio_curr_ticks = 0;
+        arpeggio_ticks = 0;
+        arpeggio_duration_ticks = 0;
+        arpeggio_points.clear();
+        arpeggio_notes.clear();
+    } else {
+        arpeggio_curr_ticks = ticks;
+    }
+    m_arpeggioTickChanged.notify();
+}
+muse::async::Notification NotationInteraction::arpeggioTickChanged() {
+    return m_arpeggioTickChanged;
+}
+
+
+void NotationInteraction::notifyClefKeySigsKeysChanged() {
+    m_clefKeySigsKeysChanged.notify();
+}
+
+muse::async::Notification NotationInteraction::clefKeySigsKeysChanged() const {
+    return m_clefKeySigsKeysChanged;
+}
+
+void NotationInteraction::clearClefKeySigsKeys() {
+    m_clefKeySigsKeys.clear();
+}
+
+std::set<uint> NotationInteraction::clefKeySigsKeys() const {
+    return m_clefKeySigsKeys;
+}
+
+void NotationInteraction::addClefKeySigsKeys(uint clefKeySigsKey) {
+    m_clefKeySigsKeys.insert(clefKeySigsKey);
+}
+
+void NotationInteraction::notifyClefKeySigsKeysChange() {
+    if (m_clefKeySigsKeys.empty()) {
+        return;
+    }
+    m_clefKeySigsKeysChanged.notify();
+}
+
+void NotationInteraction::playingChang(bool is_playing) {
+    m_isplaying = is_playing;
+}
+
+bool NotationInteraction::isPlaying() const {
+    return m_isplaying;
+}
+
+void NotationInteraction::clearPlaybackNotes() {
+    m_playback_notes.clear();
+}
+
+void NotationInteraction::notifyPianoKeyboardNotesChanged() {
+    // m_playback_selection
+    notifyAboutPianoKeyboardNotesChanged();
+}
+
 INotationSelectionFilterPtr NotationInteraction::selectionFilter() const
 {
     return m_selectionFilter;
@@ -1133,6 +1321,9 @@ void NotationInteraction::endLasso()
     m_lasso->setbbox(RectF());
     score()->lassoSelectEnd();
     score()->update();
+    if (selection()->isNone()) {
+        m_selectionChanged.notify();
+    }
 }
 
 void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragMode mode)
