@@ -948,6 +948,7 @@ EngravingItem* Score::prevElement()
         case ElementType::OTTAVA_SEGMENT:
         case ElementType::TRILL_SEGMENT:
         case ElementType::VIBRATO_SEGMENT:
+        case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
         case ElementType::PEDAL_SEGMENT: {
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();
