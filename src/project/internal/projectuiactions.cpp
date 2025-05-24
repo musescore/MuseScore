@@ -126,8 +126,8 @@ const UiActionList ProjectUiActions::m_actions = {
     UiAction("clear-recent",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "&Clear recent files"),
-             TranslatableString("action", "Clear recent files")
+             TranslatableString("action", "&Clear list of recent files"),
+             TranslatableString("action", "Clear list of recent files")
              )
 };
 
