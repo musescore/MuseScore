@@ -85,7 +85,7 @@ void NotationActionController::init()
     //! NOTE For historical reasons, the name of the action does not match what needs to be done
     registerAction("notation-escape", &Controller::resetState, &Controller::isNotationPage);
 
-    registerAction("note-input", [this]() { toggleNoteInput(); });
+    registerAction("note-input", &Controller::toggleNoteInput, &Controller::startNoteInputAllowed);
     registerNoteInputAction("note-input-by-note-name", NoteInputMethod::BY_NOTE_NAME);
     registerNoteInputAction("note-input-by-duration", NoteInputMethod::BY_DURATION);
     registerNoteInputAction("note-input-rhythm", NoteInputMethod::RHYTHM);
@@ -829,6 +829,10 @@ void NotationActionController::padNote(const Pad& pad)
     }
 
     if (interaction->selection()->isNone()) {
+        if (!noteInput->isNoteInputMode() && !startNoteInputAllowed()) {
+            return;
+        }
+
         startNoteInput();
     }
 
@@ -902,6 +906,10 @@ void NotationActionController::toggleAccidental(AccidentalType type)
     }
 
     if (interaction->selection()->isNone()) {
+        if (!noteInput->isNoteInputMode() && !startNoteInputAllowed()) {
+            return;
+        }
+
         startNoteInput();
     }
 
@@ -928,6 +936,10 @@ void NotationActionController::toggleArticulation(SymbolId articulationSymbolId)
     }
 
     if (interaction->selection()->isNone()) {
+        if (!noteInput->isNoteInputMode() && !startNoteInputAllowed()) {
+            return;
+        }
+
         startNoteInput();
     }
 
@@ -1234,6 +1246,10 @@ void NotationActionController::changeVoice(voice_idx_t voiceIndex)
     }
 
     if (interaction->selection()->isNone()) {
+        if (!noteInput->isNoteInputMode() && !startNoteInputAllowed()) {
+            return;
+        }
+
         startNoteInput();
     }
 
@@ -2192,10 +2208,24 @@ void NotationActionController::playSelectedElement(bool playChord)
     currentNotationScore()->setPlayNote(false);
 }
 
+bool NotationActionController::startNoteInputAllowed() const
+{
+    if (isEditingElement()) {
+        return false;
+    }
+
+    if (hasSelection() && !noteOrRestSelected()) {
+        return false;
+    }
+
+    const muse::ui::UiContext ctx = uiContextResolver()->currentUiContext();
+    return ctx == muse::ui::UiCtxProjectFocused && QGuiApplication::applicationState() == Qt::ApplicationActive;
+}
+
 void NotationActionController::startNoteInput()
 {
     INotationNoteInputPtr noteInput = currentNotationNoteInput();
-    if (noteInput && !noteInput->isNoteInputMode()) {
+    if (noteInput) {
         noteInput->startNoteInput(configuration()->defaultNoteInputMethod());
     }
 }
@@ -2265,11 +2295,6 @@ bool NotationActionController::canRedo() const
 bool NotationActionController::isNotationPage() const
 {
     return uiContextResolver()->matchWithCurrent(context::UiCtxProjectOpened);
-}
-
-bool NotationActionController::isStandardStaff() const
-{
-    return isNotEditingElement() && !isTablatureStaff();
 }
 
 bool NotationActionController::isTablatureStaff() const
@@ -2369,7 +2394,16 @@ void NotationActionController::registerAction(const ActionCode& code,
 
 void NotationActionController::registerNoteInputAction(const ActionCode& code, NoteInputMethod inputMethod)
 {
-    registerAction(code, [this, inputMethod]() { toggleNoteInputMethod(inputMethod); }, &NotationActionController::isNotEditingElement);
+    registerAction(code, [this, inputMethod]() { toggleNoteInputMethod(inputMethod); }, &NotationActionController::startNoteInputAllowed);
+}
+
+bool NotationActionController::noteInputActionAllowed() const
+{
+    if (!isNoteInputMode() && !startNoteInputAllowed()) {
+        return false;
+    }
+
+    return !isTablatureStaff();
 }
 
 void NotationActionController::registerNoteAction(const ActionCode& code, NoteName noteName, NoteAddingMode addingMode)
@@ -2377,7 +2411,7 @@ void NotationActionController::registerNoteAction(const ActionCode& code, NoteNa
     registerAction(code, [this, noteName, addingMode]()
     {
         handleNoteAction(noteName, addingMode);
-    }, &NotationActionController::isStandardStaff);
+    }, &NotationActionController::noteInputActionAllowed);
 }
 
 void NotationActionController::registerPadNoteAction(const ActionCode& code, Pad padding)
