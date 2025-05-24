@@ -37,11 +37,28 @@ bool NotationSelectionFilter::isSelectionTypeFiltered(const SelectionFilterTypes
     return score()->selectionFilter().isFiltered(variant);
 }
 
-void NotationSelectionFilter::setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered)
+void NotationSelectionFilter::setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered, bool forceOthersToFalse)
 {
     engraving::Selection& selection = score()->selection();
 
-    score()->selectionFilter().setFiltered(variant, filtered);
+    score()->selectionFilter().setFiltered(variant, filtered, forceOthersToFalse);
+
+    if (selection.isRange()) {
+        selection.updateSelectedElements();
+        m_selectionChangedCallback();
+    }
+}
+
+bool NotationSelectionFilter::includeSingleNotes() const
+{
+    return score()->selectionFilter().includeSingleNotes();
+}
+
+void NotationSelectionFilter::setIncludeSingleNotes(bool include)
+{
+    engraving::Selection& selection = score()->selection();
+
+    score()->selectionFilter().setIncludeSingleNotes(include);
 
     if (selection.isRange()) {
         selection.updateSelectedElements();

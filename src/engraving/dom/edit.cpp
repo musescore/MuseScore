@@ -3658,9 +3658,7 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
             continue;
         }
 
-        // TODO: The following logic is redundant for now, but once our "NotesInChords" selection filter is implemented it'll
-        // be possible to have individually de-selected notes/chords within a selection range. Additionally we won't be using
-        // note->selected() (or tuplet->selected() as above) - instead we'll use SelectionFilter for this purpose...
+        // TODO: Don't use note->selected() (or tuplet->selected() above) - use SelectionFilter for this purpose...
         const std::vector<Note*> allNotes = toChord(cr1)->notes();
         std::unordered_set<Note*> notesToRemove;
         for (Note* note : allNotes) {
