@@ -37,7 +37,8 @@ enum class KeyState {
     RightHand,
     LeftHand,
     Arpeggio,
-    Glissando
+    Glissando,
+    Trill
 };
 }
 

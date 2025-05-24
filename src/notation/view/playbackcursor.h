@@ -77,6 +77,8 @@ private:
     // alex::
     int m_hit_measure_no = -1;
     Measure *m_hit_measure = nullptr;
+    std::vector<Note *> curr_measure_trill_notes;
+    Note *curr_trill_note = nullptr;
 
     std::set<ClefType> clefTypes;
     std::set<mu::engraving::Key> keySigKeys;
