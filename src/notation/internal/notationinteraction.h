@@ -127,6 +127,16 @@ public:
     void arpeggioTick(int) override;
     muse::async::Notification arpeggioTickChanged() override;
 
+    void addTrillNote(mu::engraving::Note *, int, int) override;
+    int trillNoteTicks() const override;
+    int trillNoteDurationticks() const override;
+    int trillCurrticks() const override;
+    void trillNoteUpdate() override;
+    mu::engraving::Note *trillNote() const override;
+    bool trillTick(int) override;
+    muse::async::Notification trillNoteChanged() override;
+    muse::async::Notification trillTickChanged() override;
+
     void notifyClefKeySigsKeysChanged() override;
     muse::async::Notification clefKeySigsKeysChanged() const override;
     void clearClefKeySigsKeys() override;
@@ -576,6 +586,13 @@ private:
     int arpeggio_curr_ticks = 0;
     muse::async::Notification m_arpeggioNotesChanged;
     muse::async::Notification m_arpeggioTickChanged;
+
+    Note *trill_note = nullptr;
+    int trill_ticks = 0;
+    int trill_duration_ticks = 0;
+    int trill_curr_ticks = 0;
+    muse::async::Notification m_trillNoteChanged;
+    muse::async::Notification m_trillTickChanged;
 
     muse::async::Notification m_clefKeySigsKeysChanged;
     std::set<uint> m_clefKeySigsKeys;
