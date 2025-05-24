@@ -3104,6 +3104,9 @@ void Convert::tempoFromMEI(engraving::TempoText* tempoText, const StringList& me
         tempoText->setFollowText(true);
     }
 
+    // @color
+    Convert::colorFromMEI(tempoText, meiTempo);
+
     // text
     tempoText->setXmlText(meiLines.join(u"\n"));
 }
@@ -3132,6 +3135,9 @@ libmei::Tempo Convert::tempoToMEI(const engraving::TempoText* tempoText, StringL
 
     // @staff
     Convert::staffIdentToMEI(tempoText, meiTempo);
+
+    // @color
+    Convert::colorToMEI(tempoText, meiTempo);
 
     return meiTempo;
 }
