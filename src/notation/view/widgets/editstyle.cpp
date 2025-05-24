@@ -380,6 +380,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::lyricsMelismaForce,      false, lyricsMelismaForce,   resetLyricsMelismaForce },
         { StyleId::lyricsDashPosAtStartOfSystem, false, lyricsDashStartSystemPlacement, resetLyricsDashStartSystemPlacement },
         { StyleId::lyricsAvoidBarlines, false, lyricsAvoidBarlines, resetLyricsAvoidBarlines },
+        { StyleId::lyricsMaxDashCount, false, lyricsMaxDashCount, resetLyricsMaxDashCount },
+        { StyleId::lyricsCenterDashedSyllables, false, lyricsCenterDashedSyllables, lyricsResetCenterDashedSyllables },
 
         { StyleId::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
         { StyleId::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
