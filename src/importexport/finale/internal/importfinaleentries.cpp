@@ -131,7 +131,7 @@ std::unordered_map<int, voice_idx_t> EnigmaXmlImporter::mapFinaleVoices(const st
             auto [revIt, emplaced] = reverseMap.emplace(it->second, FinaleTConv::createFinaleVoiceId(layerIndex, false));
             if (emplaced) {
                 result.emplace(revIt->second, revIt->first);
-				continue;
+                continue;
             }
         }
         logger()->logWarning(String(u"Layer %1 was not mapped to a voice").arg(int(layerIndex) + 1), m_doc, curStaff, curMeas);
@@ -382,7 +382,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
     cr->setParent(segment);
     cr->setTrack(curTrackIdx);
     if (cr->durationTypeTicks() < Fraction(1, 4)) {
-		cr->setBeamMode(BeamMode::NONE); // this is changed in the next pass to match the beaming.
+        cr->setBeamMode(BeamMode::NONE); // this is changed in the next pass to match the beaming.
     }
     cr->setTicks(cr->actualDurationType().fraction());
     segment->add(cr);
@@ -392,6 +392,60 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         cr->setTuplet(parentTuplet);
     }
     entryMap.emplace(entryInfo.getIndexInFrame(), cr);
+    return true;
+}
+
+bool EnigmaXmlImporter::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx,
+                                     std::unordered_map<size_t, ChordRest*>& entryMap)
+{
+    if (!entryInfoPtr.calcIsBeamStart()) {
+        return true;
+    }
+    /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
+    ChordRest* cr = muse::value(entryMap, entryInfoPtr.getIndexInFrame(), nullptr);
+    if (!cr) { // once grace notes are supported, use IF_ASSERT_FAILED(cr)
+        logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
+        return false;
+    }
+    Beam* beam = Factory::createBeam(m_score->dummy()->system());
+    beam->setTrack(curTrackIdx);
+    if (entryInfoPtr->getEntry()->isNote && cr->isChord()) {
+        beam->setDirection(toChord(cr)->stemDirection());
+    } else {
+        beam->setDirection(DirectionV::AUTO);
+    }
+    beam->add(cr);
+    cr->setBeam(beam);
+    cr->setBeamMode(BeamMode::BEGIN);
+    ChordRest* lastCr = nullptr;
+    for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
+        std::shared_ptr<const Entry> currentEntry = nextInBeam->getEntry();
+        lastCr = muse::value(entryMap, nextInBeam.getIndexInFrame(), nullptr);
+        IF_ASSERT_FAILED(lastCr) {
+            logger()->logWarning(String(u"Entry %1 was not mapped").arg(nextInBeam->getEntry()->getEntryNumber()), m_doc, nextInBeam.getStaff(), nextInBeam.getMeasure());
+            continue;
+        }
+        /// @todo fully test secondary beam breaks: can a smaller beam than 32nd be broken?
+        /// XM: No, not currently in MuseScore.
+        unsigned secBeamStart = 0;
+        if (currentEntry->secBeam) {
+            if (auto secBeamBreak = m_doc->getDetails()->get<details::SecondaryBeamBreak>(nextInBeam.getFrame()->getRequestedPartId(), currentEntry->getEntryNumber())) {
+                secBeamStart = secBeamBreak->calcLowestBreak();
+            }
+        }
+        if (secBeamStart <= 1) {
+            lastCr->setBeamMode(BeamMode::MID);
+        } else if (secBeamStart == 2) {
+            lastCr->setBeamMode(BeamMode::BEGIN16);
+        } else {
+            lastCr->setBeamMode(BeamMode::BEGIN32);
+        }
+        beam->add(lastCr);
+        lastCr->setBeam(beam);
+    }
+    if (lastCr) {
+        lastCr->setBeamMode(BeamMode::END);
+    }
     return true;
 }
 
@@ -546,53 +600,7 @@ void EnigmaXmlImporter::importEntries()
 
                         // create beams
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            if (entryInfoPtr.calcIsBeamStart()) {
-                                /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
-                                ChordRest* cr = muse::value(entryMap, entryInfoPtr.getIndexInFrame(), nullptr);
-                                if (!cr) { // once grace notes are supported, use IF_ASSERT_FAILED(cr)
-                                    logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
-                                    continue;
-                                }
-                                Beam* beam = Factory::createBeam(m_score->dummy()->system());
-                                beam->setTrack(curTrackIdx);
-                                if (entryInfoPtr->getEntry()->isNote && cr->isChord()) {
-                                    beam->setDirection(toChord(cr)->stemDirection());
-                                } else {
-                                    beam->setDirection(DirectionV::AUTO);
-                                }
-                                beam->add(cr);
-                                cr->setBeam(beam);
-                                cr->setBeamMode(BeamMode::BEGIN);
-                                ChordRest* lastCr = nullptr;
-                                for (auto nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
-                                    std::shared_ptr<const Entry> currentEntry = nextInBeam->getEntry();
-                                    lastCr = muse::value(entryMap, nextInBeam.getIndexInFrame(), nullptr);
-                                    IF_ASSERT_FAILED(lastCr) {
-                                        logger()->logWarning(String(u"Entry %1 was not mapped").arg(nextInBeam->getEntry()->getEntryNumber()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
-                                        continue;
-                                    }
-                                    /// @todo fully test secondary beam breaks: can a smaller beam than 32nd be broken?
-                                    /// XM: No, not currently in MuseScore.
-                                    unsigned secBeamStart = 0;
-                                    if (currentEntry->secBeam) {
-                                        if (auto secBeamBreak = m_doc->getDetails()->get<details::SecondaryBeamBreak>(gfHold.getRequestedPartId(), currentEntry->getEntryNumber())) {
-                                            secBeamStart = secBeamBreak->calcLowestBreak();
-                                        }
-                                    }
-                                    if (secBeamStart <= 1) {
-                                        lastCr->setBeamMode(BeamMode::MID);
-                                    } else if (secBeamStart == 2) {
-                                        lastCr->setBeamMode(BeamMode::BEGIN16);
-                                    } else {
-                                        lastCr->setBeamMode(BeamMode::BEGIN32);
-                                    }
-                                    beam->add(lastCr);
-                                    lastCr->setBeam(beam);
-                                }
-                                if (lastCr) {
-                                    lastCr->setBeamMode(BeamMode::END);
-                                }
-                            }
+                            processBeams(entryInfoPtr, curTrackIdx, entryMap);
                         }
                     }
                 }
