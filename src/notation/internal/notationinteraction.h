@@ -293,6 +293,7 @@ public:
     void navigateToNearText(MoveDirection direction) override;
 
     void addMelisma() override;
+    void addElision() override;
     void addLyricsVerse() override;
 
     muse::Ret canAddGuitarBend() const override;
