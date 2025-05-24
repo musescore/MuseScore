@@ -31,6 +31,11 @@ SOFTWARE.
 #include "async.h"
 
 namespace kors::async {
+enum class PromiseType {
+    AsyncByPromise,
+    AsyncByBody
+};
+
 template<typename ... T>
 class Promise;
 template<typename ... T>
@@ -88,26 +93,21 @@ public:
         friend struct Reject;
     };
 
-    enum class AsynchronyType {
-        ProvidedByPromise,
-        ProvidedByBody
-    };
-
     using Body = std::function<Result (Resolve, Reject)>;
 
-    Promise(Body body, AsynchronyType type)
+    Promise(Body body, PromiseType type)
     {
         Resolve res(*this);
         Reject rej(*this);
 
         switch (type) {
-        case AsynchronyType::ProvidedByPromise:
+        case PromiseType::AsyncByPromise:
             Async::call(nullptr, [res, rej](Body body) mutable {
                 body(res, rej);
             }, body);
             break;
 
-        case AsynchronyType::ProvidedByBody:
+        case PromiseType::AsyncByBody:
             body(res, rej);
             break;
         }
@@ -122,8 +122,6 @@ public:
             body(res, rej);
         }, body, th);
     }
-
-    static Promise<T...> make(Body body) { return Promise<T...>(body); }
 
     Promise(const Promise& p)
         : m_ptr(p.ptr()) {}
@@ -257,9 +255,9 @@ private:
 };
 
 template<typename ... T>
-inline Promise<T...> make_promise(typename Promise<T...>::Body f)
+inline Promise<T...> make_promise(typename Promise<T...>::Body f, PromiseType type = PromiseType::AsyncByPromise)
 {
-    return Promise<T...>(f);
+    return Promise<T...>(f, type);
 }
 }
 

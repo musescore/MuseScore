@@ -67,13 +67,44 @@ Rectangle {
         spacing: 16
         columns: 2
 
+        FlatButton {
+            width: 200
+            navigation.panel: navPanel
+            navigation.row: 0
+            text: "[cpp] selectOpeningFile"
+            onClicked: testModel.selectOpeningFile()
+        }
 
         FlatButton {
             width: 200
             navigation.panel: navPanel
             navigation.row: 0
-            text: "[cpp] Sample dialog"
-            onClicked: testModel.openSampleDialog()
+            text: "[cpp] selectSavingFile"
+            onClicked: testModel.selectSavingFile()
+        }
+
+        FlatButton {
+            width: 200
+            navigation.panel: navPanel
+            navigation.row: 0
+            text: "[cpp] selectDirectory"
+            onClicked: testModel.selectDirectory()
+        }
+
+        FlatButton {
+            width: 200
+            navigation.panel: navPanel
+            navigation.row: 0
+            text: "[cpp] showProgress"
+            onClicked: testModel.showProgress()
+        }
+
+        FlatButton {
+            width: 200
+            navigation.panel: navPanel
+            navigation.row: 0
+            text: "[cpp] Sample dialog sync"
+            onClicked: testModel.openSampleDialogSync()
         }
 
         FlatButton {

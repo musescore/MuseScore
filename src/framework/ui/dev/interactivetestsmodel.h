@@ -44,7 +44,11 @@ public:
 
     Q_INVOKABLE void init();
 
-    Q_INVOKABLE void openSampleDialog();
+    Q_INVOKABLE void selectOpeningFile();
+    Q_INVOKABLE void selectSavingFile();
+    Q_INVOKABLE void selectDirectory();
+
+    Q_INVOKABLE void openSampleDialogSync();
     Q_INVOKABLE void openSampleDialogAsync();
     Q_INVOKABLE void closeSampleDialog();
     Q_INVOKABLE void openSampleDialogAsyncWithPromise();
@@ -63,6 +67,8 @@ public:
     Q_INVOKABLE void criticalWithDetailedText();
 
     Q_INVOKABLE void require();
+
+    Q_INVOKABLE void showProgress();
 
 signals:
     void currentUriChanged(QString currentUri);

@@ -78,7 +78,7 @@ public:
                                  const std::string& dialogTitle = "") override;
 
     // progress
-    Ret showProgress(const std::string& title, Progress* progress) const override;
+    void showProgress(const std::string& title, Progress* progress) override;
 
     // files
     io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
@@ -120,9 +120,17 @@ public:
     Ret revealInFileBrowser(const io::path_t& filePath) const override;
 
 private:
+    UriQuery makeQuery(const std::string& type, const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
+                       const Options& options, const std::string& dialogTitle) const;
+
+    IInteractive::Result makeResult(const Val& val) const;
+
     async::Promise<IInteractive::Result> openStandartAsync(const std::string& type, const std::string& contentTitle, const Text& text,
                                                            const ButtonDatas& buttons, int defBtn, const Options& options,
                                                            const std::string& dialogTitle);
+
+    IInteractive::Result openStandartSync(const std::string& type, const std::string& contentTitle, const Text& text,
+                                          const ButtonDatas& buttons, int defBtn, const Options& options, const std::string& dialogTitle);
 };
 }
 

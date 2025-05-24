@@ -28,6 +28,8 @@
 #include <QMetaType>
 #endif
 
+#include "../ptrutils.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -55,6 +57,9 @@ Val::Val(const char* str)
 
 Val::Val(const io::path_t& path)
     : m_val(path.toStdString()), m_type(Type::String) {}
+
+Val::Val(void* ptr)
+    : m_val(ptr::ptr_to_string(ptr)), m_type(Type::Ptr) {}
 
 Val::Val(const ValList& list)
     : m_val(list), m_type(Type::List) {}
@@ -195,8 +200,10 @@ std::string Val::toString() const
     switch (valueType()) {
     case Type::Bool: return toBool() ? VAL_TRUE : VAL_FALSE;
     case Type::Int: return std::to_string(toInt());
+    case Type::Int64: return std::to_string(toInt64());
     case Type::Double: return doubleToString(toDouble());
     case Type::String: return std::get<std::string>(m_val);
+    case Type::Ptr: return std::get<std::string>(m_val);
     default:
         break;
     }
@@ -209,6 +216,14 @@ io::path_t Val::toPath() const
         return std::get<std::string>(m_val);
     }
     return std::string();
+}
+
+void* Val::toPtr() const
+{
+    if (valueType() == Type::Ptr) {
+        return ptr::ptr_from_string(std::get<std::string>(m_val));
+    }
+    return nullptr;
 }
 
 ValList Val::toList() const
@@ -245,6 +260,7 @@ bool Val::operator <(const Val& v) const
     case Type::Int64: return toInt64() < v.toInt64();
     case Type::Double: return toDouble() < v.toDouble();
     case Type::String: return toString() < v.toString();
+    case Type::Ptr: return toPtr() < v.toPtr();
     case Type::List: return toList() < v.toList();
     case Type::Map: return toMap() < v.toMap();
 #ifndef NO_QT_SUPPORT
@@ -282,6 +298,7 @@ QVariant Val::toQVariant() const
     case Val::Type::Double: return QVariant(toDouble());
     case Val::Type::String: return QVariant(toQString());
     case Val::Type::Color: return QVariant(toQColor());
+    case Val::Type::Ptr: return QVariant::fromValue(toString());
     case Val::Type::List: {
         QVariantList vl;
         ValList l = toList();
@@ -316,6 +333,7 @@ Val Val::fromQVariant(const QVariant& var)
     case QMetaType::ULongLong: return Val(static_cast<int64_t>(var.toLongLong()));
     case QMetaType::Double: return Val(var.toDouble());
     case QMetaType::QString: return Val(var.toString().toStdString());
+    case QMetaType::VoidStar: return Val(var.value<void*>());
     case QMetaType::QVariantList: {
         ValList l;
         QVariantList vl = var.toList();

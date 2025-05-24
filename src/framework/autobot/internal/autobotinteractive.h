@@ -69,7 +69,7 @@ public:
                                  const std::string& dialogTitle = "") override;
 
     // progress
-    Ret showProgress(const std::string& title, Progress* progress) const override;
+    void showProgress(const std::string& title, Progress* progress) override;
 
     // files
     io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;

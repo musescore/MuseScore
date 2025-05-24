@@ -208,7 +208,7 @@ public:
     }
 
     // progress
-    virtual Ret showProgress(const std::string& title, Progress* progress) const = 0;
+    virtual void showProgress(const std::string& title, Progress* progress) = 0;
 
     // files
     virtual io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) = 0;

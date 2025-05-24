@@ -50,6 +50,7 @@ public:
         Int64,
         Double,
         String,
+        Ptr,
         List,
         Map,
 #ifndef NO_QT_SUPPORT
@@ -65,6 +66,7 @@ public:
     explicit Val(const std::string& str);
     explicit Val(const char* str);
     explicit Val(const io::path_t& path);
+    explicit Val(void* ptr);
     explicit Val(const ValList& list);
     explicit Val(const ValMap& map);
 
@@ -85,6 +87,7 @@ public:
     float toFloat() const;
     std::string toString() const;
     io::path_t toPath() const;
+    void* toPtr() const;
     ValList toList() const;
     ValMap toMap() const;
 
