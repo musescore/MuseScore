@@ -81,7 +81,8 @@ public:
     Color highlightSelectionColor(voice_idx_t voice = 0) const override;
 
     bool scoreInversionEnabled() const override;
-    void setScoreInversionEnabled(bool value) override;
+    ScoreInversionMode scoreInversionMode() const override;
+    void setScoreInversionMode(ScoreInversionMode mode) override;
 
     bool dynamicsApplyToAllVoices() const override;
     void setDynamicsApplyToAllVoices(bool v) override;
