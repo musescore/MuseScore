@@ -151,8 +151,8 @@ private:
     void doZoomToWholePage();
     void zoomToTwoPages();
     void doZoomToTwoPages();
-    void moveScreen(int direction, bool userTriggeredMove = true);
-    void movePage(int direction, bool userTriggeredMove = true);
+    void moveScreen(int direction);
+    void movePage(int direction);
 
     int currentZoomIndex() const;
     int currentZoomPercentage() const;

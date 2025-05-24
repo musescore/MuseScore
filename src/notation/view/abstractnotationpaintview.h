@@ -112,7 +112,7 @@ public:
 
     qreal currentScaling() const override;
     void setScaling(qreal scaling, const muse::PointF& pos, bool overrideZoomType = true) override;
-    void scale(qreal factor, const muse::PointF& pos, bool overrideZoomType = true, bool userTriggeredMove = true);
+    void scale(qreal factor, const muse::PointF& pos, bool overrideZoomType = true);
 
     Q_INVOKABLE void pinchToZoom(qreal scaleFactor, const QPointF& pos);
 
@@ -235,8 +235,8 @@ private:
     qreal horizontalScrollableSize() const;
     qreal verticalScrollableSize() const;
 
-    bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true, bool userTriggeredMove = true);
-    bool adjustCanvasPositionSmoothPan(const muse::RectF& cursorRect, bool userTriggeredMove = true);
+    bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true);
+    bool adjustCanvasPositionSmoothPan(const muse::RectF& cursorRect);
 
     void onNoteInputStateChanged();
 
@@ -256,7 +256,7 @@ private:
     void paintBackground(const muse::RectF& rect, muse::draw::Painter* painter);
 
     muse::PointF canvasCenter() const;
-    std::pair<qreal, qreal> constraintCanvas(qreal x, qreal y, CoordinateSystem inputCoordinateSystem) const;
+    std::pair<qreal, qreal> constrainedCanvasMoveDelta(qreal x, qreal y, CoordinateSystem inputCoordinateSystem) const;
 
     INotationPtr m_notation;
     muse::draw::Transform m_matrix;
