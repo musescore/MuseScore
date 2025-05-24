@@ -138,6 +138,7 @@ public:
         TEXT_ABOVE_STAFF = 0xEF61,
         GLISSANDO = 0xEF62,
         EDIT = 0xEF63,
+        NORMAL_MODE = 0xEFA2,
         TIME_SIGNATURE = 0xEF64,
         PEDAL_MARKING = 0xEF65,
         MARKER = 0xEF66,
