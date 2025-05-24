@@ -199,6 +199,7 @@ public:
     void addLaissezVibToSelection() override;
     void addTiedNoteToChord() override;
     void addSlurToSelection() override;
+    void addHammerOnPullOffToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinOnGripDrag(engraving::EditData& ed, bool isLeftGrip) override;
     void addHairpinsToSelection(HairpinType type) override;

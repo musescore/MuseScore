@@ -134,6 +134,8 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
         return isFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL);
     case ElementType::SLUR:
     case ElementType::SLUR_SEGMENT:
+    case ElementType::HAMMER_ON_PULL_OFF:
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
         return isFiltered(ElementsSelectionFilterTypes::SLUR);
     case ElementType::FIGURED_BASS:
         return isFiltered(ElementsSelectionFilterTypes::FIGURED_BASS);

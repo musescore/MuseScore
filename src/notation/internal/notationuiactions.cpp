@@ -2525,6 +2525,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Slight bend"),
              IconCode::Code::GUITAR_SLIGHT_BEND
              ),
+    UiAction("hammer-on-pull-off",
+             mu::context::UiCtxProjectFocused,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Hammer-on/pull-off"),
+             TranslatableString("action", "Add hammer-on/pull-off")
+             )
 };
 
 const UiActionList NotationUiActions::m_scoreConfigActions = {
