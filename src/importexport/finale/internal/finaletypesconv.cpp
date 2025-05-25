@@ -216,100 +216,100 @@ String FinaleTConv::instrTemplateIdfromUuid(std::string uuid)
         { uuid::VocalPercussion,           u"voice" }, //
 
         // Woodwinds
-        { uuid::Piccolo,                   u"flute" },
+        { uuid::Piccolo,                   u"piccolo" },
         { uuid::Flute,                     u"flute" },
-        { uuid::AltoFlute,                 u"flute" },
-        { uuid::Oboe,                      u"flute" },
-        { uuid::OboeDAmore,                u"flute" },
-        { uuid::EnglishHorn,               u"flute" },
-        { uuid::ClarinetBFlat,             u"flute" },
-        { uuid::ClarinetA,                 u"flute" },
-        { uuid::ClarinetEFlat,             u"flute" },
-        { uuid::AltoClarinet,              u"flute" },
-        { uuid::ContraltoClarinet,         u"flute" },
-        { uuid::BassClarinet,              u"flute" },
-        { uuid::ContrabassClarinet,        u"flute" },
-        { uuid::Bassoon,                   u"flute" },
-        { uuid::Contrabassoon,             u"flute" },
-        { uuid::WindSection,               u"flute" },
-        { uuid::SopranoSax,                u"flute" },
-        { uuid::AltoSax,                   u"flute" },
-        { uuid::TenorSax,                  u"flute" },
-        { uuid::BaritoneSax,               u"flute" },
-        { uuid::SopranoRecorder,           u"flute" },
-        { uuid::SopraninoRecorder,         u"flute" },
-        { uuid::AltoRecorder,              u"flute" },
-        { uuid::TenorRecorder,             u"flute" },
-        { uuid::BassRecorder,              u"flute" },
-        { uuid::DescantRecorder,           u"flute" },
-        { uuid::Ocarina,                   u"flute" },
-        { uuid::PennyWhistle,              u"flute" },
-        { uuid::PennyWhistleD,             u"flute" },
-        { uuid::PennyWhistleG,             u"flute" },
-        { uuid::LowIrishWhistle,           u"flute" },
-        { uuid::TinWhistleBFlat,           u"flute" },
-        { uuid::Harmonica,                 u"flute" },
-        { uuid::BassHarmonica,             u"flute" },
-        { uuid::Concertina,                u"flute" },
-        { uuid::Bandoneon,                 u"flute" },
-        { uuid::HornF_WWQuintet,           u"flute" },
-        { uuid::Bagpipes,                  u"flute" },
-        { uuid::UilleannPipes,             u"flute" },
-        { uuid::GaidaPipes,                u"flute" },
-        { uuid::ContraAltoFlute,           u"flute" },
-        { uuid::BassFlute,                 u"flute" },
-        { uuid::ContrabassFlute,           u"flute" },
-        { uuid::DoubleContrabassFlute,     u"flute" },
-        { uuid::HyperbassFlute,            u"flute" },
-        { uuid::PanPipes,                  u"flute" },
-        { uuid::Fife,                      u"flute" },
-        { uuid::BottleBlow,                u"flute" },
-        { uuid::Jug,                       u"flute" },
-        { uuid::PiccoloOboe,               u"flute" },
-        { uuid::PiccoloHeckelphone,        u"flute" },
-        { uuid::Heckelphone,               u"flute" },
-        { uuid::BassOboe,                  u"flute" },
-        { uuid::BassetClarinet,            u"flute" },
-        { uuid::BassetHorn,                u"flute" },
-        { uuid::Hornpipe,                  u"flute" },
-        { uuid::PiccoloClarinet,           u"flute" },
-        { uuid::Saxonette,                 u"flute" },
-        { uuid::SopraninoSax,              u"flute" },
-        { uuid::MezzoSopranoSax,           u"flute" },
-        { uuid::Sopranino,                 u"flute" },
-        { uuid::CMelodySax,                u"flute" },
-        { uuid::Aulochrome,                u"flute" },
-        { uuid::Xaphoon,                   u"flute" },
-        { uuid::BassSax,                   u"flute" },
-        { uuid::ContrabassSax,             u"flute" },
-        { uuid::SubContrabassSax,          u"flute" },
-        { uuid::Tubax,                     u"flute" },
-        { uuid::Bansuri,                   u"flute" },
-        { uuid::Danso,                     u"flute" },
-        { uuid::Dizi,                      u"flute" },
-        { uuid::DilliKaval,                u"flute" },
-        { uuid::Diple,                     u"flute" },
-        { uuid::DoubleFlute,               u"flute" },
-        { uuid::Dvojnice,                  u"flute" },
-        { uuid::DvojniceDrone,             u"flute" },
-        { uuid::Flageolet,                 u"flute" },
-        { uuid::Fujara,                    u"flute" },
-        { uuid::Gemshorn,                  u"flute" },
-        { uuid::Hocchiku,                  u"flute" },
-        { uuid::Hun,                       u"flute" },
-        { uuid::IrishFlute,                u"flute" },
-        { uuid::Kaval,                     u"flute" },
-        { uuid::Khlui,                     u"flute" },
-        { uuid::KnotweedFlute,             u"flute" },
-        { uuid::KoncovkaAltoFlute,         u"flute" },
-        { uuid::Koudi,                     u"flute" },
-        { uuid::Ney,                       u"flute" },
-        { uuid::Nohkan,                    u"flute" },
-        { uuid::NoseFlute,                 u"flute" },
-        { uuid::Palendag,                  u"flute" },
-        { uuid::Quena,                     u"flute" },
-        { uuid::Ryuteki,                   u"flute" },
-        { uuid::Shakuhachi,                u"flute" },
+        { uuid::AltoFlute,                 u"alto-flute" },
+        { uuid::Oboe,                      u"oboe" },
+        { uuid::OboeDAmore,                u"oboe-d'amore" },
+        { uuid::EnglishHorn,               u"english-horn" },
+        { uuid::ClarinetBFlat,             u"bb-clarinet" },
+        { uuid::ClarinetA,                 u"a-clarinet" },
+        { uuid::ClarinetEFlat,             u"eb-clarinet" },
+        { uuid::AltoClarinet,              u"alto-clarinet" },
+        { uuid::ContraltoClarinet,         u"contra-alto-clarinet" },
+        { uuid::BassClarinet,              u"bass-clarinet" },
+        { uuid::ContrabassClarinet,        u"contrabass-clarinet" },
+        { uuid::Bassoon,                   u"bassoon" },
+        { uuid::Contrabassoon,             u"contrbassoon" },
+        { uuid::WindSection,               u"winds" },
+        { uuid::SopranoSax,                u"soprano-saxophone" },
+        { uuid::AltoSax,                   u"alto-saxophone" },
+        { uuid::TenorSax,                  u"tenor-saxophone" },
+        { uuid::BaritoneSax,               u"baritone-saxophone" },
+        { uuid::SopranoRecorder,           u"soprano-recorder" },
+        { uuid::SopraninoRecorder,         u"sopranino-recorder" },
+        { uuid::AltoRecorder,              u"alto-recorder" },
+        { uuid::TenorRecorder,             u"tenor-recorder" },
+        { uuid::BassRecorder,              u"bass-recorder" },
+        { uuid::DescantRecorder,           u"soprano-recorder" }, //
+        { uuid::Ocarina,                   u"ocarina" },
+        { uuid::PennyWhistle,              u"c-tin-whistle" }, //
+        { uuid::PennyWhistleD,             u"d-tin-whistle" }, //
+        { uuid::PennyWhistleG,             u"c-tin-whistle" }, //
+        { uuid::LowIrishWhistle,           u"c-tin-whistle" }, //
+        { uuid::TinWhistleBFlat,           u"bflat-tin-whistle" },
+        { uuid::Harmonica,                 u"harmonica" },
+        { uuid::BassHarmonica,             u"bass-harmonica" },
+        { uuid::Concertina,                u"concertina" },
+        { uuid::Bandoneon,                 u"bandoneon" },
+        { uuid::HornF_WWQuintet,           u"horn" }, //
+        { uuid::Bagpipes,                  u"bagpipe" },
+        { uuid::UilleannPipes,             u"bagpipe" }, //
+        { uuid::GaidaPipes,                u"bagpipe" }, //
+        { uuid::ContraAltoFlute,           u"contra-alto-flute" },
+        { uuid::BassFlute,                 u"bass-flute" },
+        { uuid::ContrabassFlute,           u"contrabass-flute" },
+        { uuid::DoubleContrabassFlute,     u"double-contrabass-flute" },
+        { uuid::HyperbassFlute,            u"hyperbass-flute" },
+        { uuid::PanPipes,                  u"pan-flute" },
+        { uuid::Fife,                      u"fife" },
+        { uuid::BottleBlow,                u"flute" }, //
+        { uuid::Jug,                       u"flute" }, //
+        { uuid::PiccoloOboe,               u"piccolo-oboe" },
+        { uuid::PiccoloHeckelphone,        u"piccolo-heckelphone" },
+        { uuid::Heckelphone,               u"heckelphone" },
+        { uuid::BassOboe,                  u"bass-oboe" },
+        { uuid::BassetClarinet,            u"basset-clarinet" },
+        { uuid::BassetHorn,                u"basset-horn" },
+        { uuid::Hornpipe,                  u"english-horn" }, //
+        { uuid::PiccoloClarinet,           u"piccolo-clarinet" },
+        { uuid::Saxonette,                 u"c-clarinet" }, //
+        { uuid::SopraninoSax,              u"sopranino-saxophone" },
+        { uuid::MezzoSopranoSax,           u"mezzo-soprano-saxophone" },
+        { uuid::Sopranino,                 u"sopranino-saxophone" }, //
+        { uuid::CMelodySax,                u"melody-saxophone" },
+        { uuid::Aulochrome,                u"aulochrome" },
+        { uuid::Xaphoon,                   u"xaphoon" },
+        { uuid::BassSax,                   u"bass-saxophone" },
+        { uuid::ContrabassSax,             u"contrabass-saxophone" },
+        { uuid::SubContrabassSax,          u"subcontrabass-saxophone" },
+        { uuid::Tubax,                     u"contrabass-saxophone" }, //
+        { uuid::Bansuri,                   u"flute" }, //
+        { uuid::Danso,                     u"danso" },
+        { uuid::Dizi,                      u"g-dizi" },
+        { uuid::DilliKaval,                u"flute" }, //
+        { uuid::Diple,                     u"flute" }, //
+        { uuid::DoubleFlute,               u"flute" }, //
+        { uuid::Dvojnice,                  u"flute" }, //
+        { uuid::DvojniceDrone,             u"flute" }, //
+        { uuid::Flageolet,                 u"flageolet" },
+        { uuid::Fujara,                    u"contrabass-flute" }, //
+        { uuid::Gemshorn,                  u"gemshorn" },
+        { uuid::Hocchiku,                  u"shakuhachi" }, //
+        { uuid::Hun,                       u"flute" }, //
+        { uuid::IrishFlute,                u"irish-flute" },
+        { uuid::Kaval,                     u"flute" }, //
+        { uuid::Khlui,                     u"flute" }, //
+        { uuid::KnotweedFlute,             u"flute" }, //
+        { uuid::KoncovkaAltoFlute,         u"alto-flute" }, //
+        { uuid::Koudi,                     u"flute" }, //
+        { uuid::Ney,                       u"flute" }, //
+        { uuid::Nohkan,                    u"flute" }, //
+        { uuid::NoseFlute,                 u"flute" }, //
+        { uuid::Palendag,                  u"flute" }, //
+        { uuid::Quena,                     u"flute" }, //
+        { uuid::Ryuteki,                   u"flute" }, //
+        { uuid::Shakuhachi,                u"shakuhachi" },
         { uuid::ShepherdsPipe,             u"flute" },
         { uuid::Shinobue,                  u"flute" },
         { uuid::ShivaWhistle,              u"flute" },
