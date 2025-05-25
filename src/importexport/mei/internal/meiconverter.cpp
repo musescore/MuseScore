@@ -1074,6 +1074,9 @@ void Convert::dirFromMEI(engraving::TextBase* textBase, const StringList& meiLin
     // @type
     // already process in Convert::elementTypeFor called for determining the factory to call in MeiImporter
 
+    // @color
+    Convert::colorFromMEI(textBase, meiDir);
+
     // text
     textBase->setXmlText(meiLines.join(u"\n"));
 }
@@ -1139,6 +1142,9 @@ libmei::Dir Convert::dirToMEI(const engraving::TextBase* textBase, StringList& m
         }
         meiDir.SetType(dirType);
     }
+
+    // @color
+    Convert::colorToMEI(textBase, meiDir);
 
     // text content - only split lines
     meiLines = String(textBase->plainText()).split(u"\n");
