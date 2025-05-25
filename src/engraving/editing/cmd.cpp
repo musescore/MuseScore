@@ -3404,41 +3404,38 @@ void Score::cmdExtendToNextNote()
         if (!el->isNote()) {
             continue;
         }
-        Note* on = toNote(el);
-        ChordRest* ocr = toChordRest(on->chord());
-        crList.push_back(ocr);
+        Note* n = toNote(el);
+        ChordRest* cr = toChordRest(n->chord());
+        Fraction crts = cr->ticks();
+        crList.push_back(cr);
 
-        if (!nextChordRest(ocr)) {
-            continue;
-        }
-        ChordRest* nextCR = nextChordRest(ocr);
+        while ((nextChordRest(cr) && nextChordRest(cr)->isRest())
+        || (nextChordRest(cr) && nextChordRest(cr)->tick() > (cr->tick() + cr->ticks()))) {
 
-        while (nextCR->isRest()) {
-            Rest* r = toRest(nextCR);
-            ocr = prevChordRest(toChordRest(r));
-            if (ocr->tuplet() || r->tuplet()) {
-                Chord* nc = addChord(r->tick(), r->ticks(), toChord(ocr), true, r->tuplet());
-                ocr = toChordRest(nc);
+            ChordRest* ncr = nextChordRest(cr);
+            Rest* r = toRest(ncr);
+
+            if (cr->tuplet() || r->tuplet()) {
+                Chord* nc = addChord(r->tick(), r->ticks(), toChord(cr), true, r->tuplet());
+                cr = toChordRest(nc);
+                crList.push_back(cr);
             } else {
-                changeCRlen(ocr, ocr->ticks() + r->ticks());
-            }
-            if (ocr->tick() > crList.back()->tick()) {
-                crList.push_back(ocr);
-            }
-            if (!nextChordRest(nextCR)) {
-                endTick = lastMeasure()->endTick();
-                if (nextChordRest(ocr)) {
-                    crList.push_back(nextChordRest(ocr));
+                changeCRlen(cr, cr->ticks() + r->ticks());
+                if (cr->ticks() == crts) {
+                    cr = nextChordRest(cr);
+                    crts = cr->ticks();
+                    crList.push_back(cr);
+                } else {
+                    crts = cr->ticks();
                 }
-                break;
             }
-            nextCR = nextChordRest(nextCR);
-            if (nextCR->tick() > endTick) {
-                endTick = nextCR->tick();
-            }
+            endTick = cr->tick() + cr->ticks() >= endTick ? cr->tick() + cr->ticks() : endTick;
         }
-        if (prevChordRest(nextCR)->tick() > crList.back()->tick()) {
-            crList.push_back(prevChordRest(nextCR));
+        while ((!nextChordRest(cr) && cr->voice() > 0 && cr->measure() != score()->lastMeasure())) {
+            changeCRlen(cr, cr->ticks() + cr->measure()->ticks());
+            cr = nextChordRest(cr);
+            crList.push_back(cr);
+            endTick = score()->endTick();
         }
     }
 
