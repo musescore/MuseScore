@@ -135,7 +135,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
 
     return RectF(x, y, w, h);
 }
-
+bool compare_by_chord_x(Chord* a, Chord* b) {
+    return a->canvasPos().x() < b->canvasPos().x();
+}
 muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bool isPlaying) {
     if (!m_notation) {
         return RectF();
@@ -201,6 +203,22 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 
                 if (t1.ticks() + duration_ticks < tick.ticks()) {
                     engravingItem->setColor(muse::draw::Color::BLACK);
+                    EngravingItemList itemList = engravingItem->childrenItems(true);
+                    size_t items_len = itemList.size();
+                    for (size_t j = 0; j < items_len; j++) {
+                        EngravingItem *item = itemList.at(j);
+                        if (item == nullptr) {
+                            continue;
+                        }
+                        if (item->type() == mu::engraving::ElementType::NOTE) {
+                            Note *_pre_note = toNote(item);
+                            // check grace
+                            bool is_grace = _pre_note->isGrace();
+                            if (is_grace) {
+                                _pre_note->setColor(muse::draw::Color::BLACK);
+                            }
+                        }
+                    }
                 } else {
                     engravingItem->setColor(muse::draw::Color::RED);
                     EngravingItemList itemList = engravingItem->childrenItems(true);
@@ -211,18 +229,114 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                             continue;
                         }
                         if (item->type() == mu::engraving::ElementType::NOTE) {
-                            m_notation->interaction()->addPlaybackNote(toNote(item));
-                            Note *pre_till_note = toNote(item);
+                            // m_notation->interaction()->addPlaybackNote(toNote(item));
+                            Note *_pre_note = toNote(item);
                             for (Note* mnote : curr_measure_trill_notes) {
-                                if (mnote == pre_till_note) {
-                                    if (curr_trill_note != pre_till_note) {
-                                        curr_trill_note = pre_till_note;
+                                if (mnote == _pre_note) {
+                                    if (curr_trill_note != _pre_note) {
+                                        curr_trill_note = _pre_note;
                                         m_notation->interaction()->addTrillNote(curr_trill_note, curr_trill_note->tick().ticks(), duration_ticks);
                                         m_notation->interaction()->trillNoteUpdate();
                                     }
                                     break;
                                 }
                             }
+                        
+                            // check grace
+                            bool is_grace = _pre_note->isGrace();
+                            if (is_grace) {
+                                
+                            } else {
+                                std::vector<Chord*>& _graceChords = _pre_note->chord()->graceNotes();
+
+                                size_t gracechords_size = _graceChords.size();
+                                if (gracechords_size > 0) {
+                                    bool grace_before = true;
+                                    if (_graceChords[0]->canvasPos().x() > _pre_note->canvasPos().x()) {
+                                        grace_before = false;
+                                    }
+                                    int grace_duration_ticks = _pre_note->chord()->durationTypeTicks().ticks();
+                                    if (_pre_note->chord()->durationType().type() == mu::engraving::DurationType::V_WHOLE) {
+                                        grace_duration_ticks /= 16;
+                                    } else if (_pre_note->chord()->durationType().type() == mu::engraving::DurationType::V_HALF) {
+                                        grace_duration_ticks /= 8;
+                                    } else if (_pre_note->chord()->durationType().type() == mu::engraving::DurationType::V_QUARTER) {
+                                        grace_duration_ticks /= 4;
+                                    } else if (_pre_note->chord()->durationType().type() == mu::engraving::DurationType::V_EIGHTH) {
+                                        grace_duration_ticks /= 2;
+                                    } else if (_pre_note->chord()->durationType().type() == mu::engraving::DurationType::V_16TH) {
+                                        grace_duration_ticks /= 2;
+                                    } else if (_pre_note->chord()->durationType().type() == mu::engraving::DurationType::V_32ND) {
+                                        grace_duration_ticks /= 2;
+                                    } else if (_pre_note->chord()->durationType().type() >= mu::engraving::DurationType::V_64TH) {
+                                        grace_duration_ticks /= 2;
+                                    } 
+                                    
+                                    std::vector<Chord*> graceChords;
+                                    for (auto& _g : _graceChords) {
+                                        graceChords.push_back(_g);
+                                    }
+                                    std::sort(graceChords.begin(), graceChords.end(), compare_by_chord_x);
+                                    int ticks_dis = tick.ticks() - _pre_note->tick().ticks();
+                                    int single_grace_duration_ticks = grace_duration_ticks / gracechords_size;
+                                    if (grace_before) {
+                                        if (ticks_dis < grace_duration_ticks) {
+                                            for (size_t grace_i = 0; grace_i < gracechords_size; ++grace_i) {
+                                                if (ticks_dis >= single_grace_duration_ticks * grace_i && ticks_dis <= single_grace_duration_ticks * (grace_i + 1)) {
+                                                    graceChords[grace_i]->setColor(muse::draw::Color::RED);
+                                                    EngravingItemList pre_notesList = graceChords[grace_i]->childrenItems(false);
+                                                    size_t pre_notes_len = pre_notesList.size();
+                                                    for (size_t pre_j = 0; pre_j < pre_notes_len; pre_j++) {
+                                                        EngravingItem *pre_note_item = pre_notesList.at(pre_j);
+                                                        if (pre_note_item->type() == mu::engraving::ElementType::NOTE) {
+                                                            m_notation->interaction()->addPlaybackNote(toNote(pre_note_item));
+                                                        }
+                                                    }
+                                                } else {
+                                                    graceChords[grace_i]->setColor(muse::draw::Color::BLACK);
+                                                }
+                                            }
+                                            _pre_note->setColor(muse::draw::Color::BLACK);
+                                        } else {
+                                            for (Chord *_chord : _graceChords) {
+                                                _chord->setColor(muse::draw::Color::BLACK);
+                                            }
+                                            _pre_note->setColor(muse::draw::Color::RED);
+                                            m_notation->interaction()->addPlaybackNote(_pre_note);
+                                        }
+                                    } else {
+                                        int _pre_note_duration_ticks = _pre_note->chord()->durationTypeTicks().ticks();
+                                        if (ticks_dis + grace_duration_ticks > _pre_note_duration_ticks) {
+                                            for (size_t grace_i = 0; grace_i < gracechords_size; ++grace_i) {
+                                                if (ticks_dis >= _pre_note_duration_ticks - single_grace_duration_ticks * (gracechords_size - grace_i) && ticks_dis <= _pre_note_duration_ticks - single_grace_duration_ticks * (gracechords_size - grace_i - 1)) {
+                                                    graceChords[grace_i]->setColor(muse::draw::Color::RED);
+                                                    EngravingItemList pre_notesList = graceChords[grace_i]->childrenItems(false);
+                                                    size_t pre_notes_len = pre_notesList.size();
+                                                    for (size_t pre_j = 0; pre_j < pre_notes_len; pre_j++) {
+                                                        EngravingItem *pre_note_item = pre_notesList.at(pre_j);
+                                                        if (pre_note_item->type() == mu::engraving::ElementType::NOTE) {
+                                                            m_notation->interaction()->addPlaybackNote(toNote(pre_note_item));
+                                                        }
+                                                    }
+                                                } else {
+                                                    graceChords[grace_i]->setColor(muse::draw::Color::BLACK);
+                                                }
+                                            }
+                                            _pre_note->setColor(muse::draw::Color::BLACK);
+                                        } else {
+                                            for (Chord *_chord : _graceChords) {
+                                                _chord->setColor(muse::draw::Color::BLACK);
+                                            }
+                                            _pre_note->setColor(muse::draw::Color::RED);
+                                            m_notation->interaction()->addPlaybackNote(_pre_note);
+                                        }
+                                    }
+                                    
+                                } else {
+                                    m_notation->interaction()->addPlaybackNote(toNote(item));
+                                }
+                            }
+                            
                         } else if (item->type() == mu::engraving::ElementType::GLISSANDO) {
                             EngravingItem *glissandoNote = item->parentItem();
                             if (glissandoNote->type() != mu::engraving::ElementType::NOTE && glissandoNote->parentItem()->type() == mu::engraving::ElementType::NOTE) {
