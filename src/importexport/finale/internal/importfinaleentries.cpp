@@ -159,17 +159,17 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
     }
     if (musxTuplet->avoidStaff) {
         // supported globally as a style: Sid::tupletOutOfStaff
-        logger->logWarning(String(u"Unsupported"));
+        logger->logWarning(String(u"Tuplet: Avoiding staves is supported globally as a style, not for individual elements"));
     }
     if (musxTuplet->metricCenter) {
         // center number using duration
         /// @todo will be supported globally as a style
-        logger->logWarning(String(u"Unsupported"));
+        logger->logWarning(String(u"Tuplet: Centering number metrically is soon to be supported globally as a style, not for individual elements"));
     }
     if (musxTuplet->fullDura) {
         // extend bracket to full duration
         /// @todo will be supported globally as a style
-        logger->logWarning(String(u"Unsupported"));
+        logger->logWarning(String(u"Tuplet: Bracket filling duration is soon to be supported globally as a style, not for individual elements"));
     }
     // unsupported: breakBracket, ignoreHorzNumOffset, allowHorz, useBottomNote, smartTuplet, leftHookLen / rightHookLen (style for both)
 
@@ -376,6 +376,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
     if (parentTuplet) {
         parentTuplet->add(cr);
     }
+    logger()->logInfo(String(u"Adding entry of duration %2 at tick %1").arg(entryStartTick.toString(), cr->durationTypeTicks().toString()));
     entryMap.emplace(entryInfo.getIndexInFrame(), cr);
     return true;
 }
@@ -589,6 +590,7 @@ void EnigmaXmlImporter::importEntries()
                 }
             }
             // Avoid corruptions: fill in any gaps in existing voices...
+            logger()->logInfo(String(u"Fixing corruptions for measure at staff %1, tick %2").arg(String::number(curStaffIdx), currTick.toString()));
             measure->checkMeasure(curStaffIdx);
             // ...and make sure voice 1 exists.
             if (!measure->hasVoice(curStaffIdx * VOICES)) {
