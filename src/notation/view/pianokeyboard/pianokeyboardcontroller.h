@@ -104,6 +104,7 @@ private:
     int m_arpeggio_duration_ticks;
     int m_arpeggio_curr_ticks;
 
+    Note *receive_note = nullptr;
     piano_key_t m_trill_note_key;
     int m_trill_ticks;
     int m_trill_duration_ticks;

@@ -143,17 +143,30 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const {
     if (m_trill_duration_ticks == 0) {
         return KeyState::None;
     }
+
     if (m_trill_curr_ticks >= m_trill_ticks && m_trill_curr_ticks <= m_trill_ticks + m_trill_duration_ticks) {
         int left_dis = m_trill_curr_ticks - m_trill_ticks;
         double ratio = left_dis / static_cast<double>(m_trill_duration_ticks);
 
-        int _int_note_key = static_cast<int>(m_trill_note_key);
-        if (ratio < 0.333 || ratio > 0.666) {
-            _int_note_key -= 1;
-        }
-
-        if (key == (piano_key_t)_int_note_key) {
-            return KeyState::Trill;
+        if (receive_note && receive_note->chord()->durationType().type() <= mu::engraving::DurationType::V_QUARTER) {
+            for (int index = 0; index < 48; index++) {
+                int _ratio_count = static_cast<int>(48 * ratio);
+                int _int_note_key = static_cast<int>(m_trill_note_key);
+                if (_ratio_count % 2 == 0) {
+                    _int_note_key -= 1;
+                } 
+                if (key == (piano_key_t)_int_note_key) {
+                    return KeyState::Trill;
+                }
+            }
+        } else {
+            int _int_note_key = static_cast<int>(m_trill_note_key);
+            if (ratio < 0.333 || ratio > 0.666) {
+                _int_note_key -= 1;
+            }
+            if (key == (piano_key_t)_int_note_key) {
+                return KeyState::Trill;
+            }
         }
     }
     return KeyState::None;
@@ -324,6 +337,7 @@ void PianoKeyboardController::onNotationChanged()
             
             Note *receivedNote = notation->interaction()->trillNote();
 
+            receive_note = receivedNote;
             if (receivedNote) {
                 const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
                 m_trill_note_key = static_cast<piano_key_t>(useWrittenPitch ? receivedNote->epitch() : receivedNote->ppitch());
