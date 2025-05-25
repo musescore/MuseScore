@@ -83,6 +83,7 @@ private:
     void addParamChange(const ParamChangeEvent& param);
 
     bool m_isActive = false;
+    bool m_pluginHandlesVolume = true;
     muse::audio::gain_t m_volumeGain = 1.f; // 0.0 - 1.0
 
     IVstPluginInstancePtr m_pluginPtr = nullptr;
