@@ -39,6 +39,7 @@ ListView {
     clip: true
     boundsBehavior: Flickable.StopAtBounds
     maximumFlickVelocity: ui.theme.flickableMaxVelocity
+    flickDeceleration: ui.theme.flickableDeceleration
 
     ScrollBar.vertical: root.arrowControlsAvailable ? null : scrollBarComp.createObject(root)
     ScrollBar.horizontal: root.arrowControlsAvailable ? null : scrollBarComp.createObject(root)
