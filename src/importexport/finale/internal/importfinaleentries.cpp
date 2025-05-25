@@ -226,13 +226,11 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
     }
 
     // durationType
-    std::pair<musx::dom::NoteType, int> noteInfo = currentEntry->calcNoteInfo();
-    TDuration d = FinaleTConv::noteTypeToDurationType(noteInfo.first);
-    if (d == DurationType::V_INVALID) {
+    TDuration d = FinaleTConv::noteInfoToDuration(currentEntry->calcNoteInfo());
+    if (!d.isValid()) {
         logger()->logWarning(String(u"Given ChordRest duration not supported in MuseScore"));
         return false;
     }
-    d.setDots(static_cast<int>(noteInfo.second));
 
     ChordRest* cr = nullptr;
     int crossStaffMove = 0;
@@ -339,8 +337,8 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
         if (currentEntry->freezeStem || currentEntry->voice2 || entryInfo->v2Launch
             || m_layerForceStems.find(entryInfo.getLayerIndex()) != m_layerForceStems.end()) {
             /// @todo beams: this works for non-beamable notes, but beams appear to have their own up/down status
-            DirectionV d = currentEntry->upStem ? DirectionV::UP : DirectionV::DOWN;
-            chord->setStemDirection(d);
+            DirectionV dir = currentEntry->upStem ? DirectionV::UP : DirectionV::DOWN;
+            chord->setStemDirection(dir);
         }
         cr = toChordRest(chord);
     } else {
@@ -471,6 +469,11 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
         if (tupletMap[i].layer < 0) {
             continue;
         }
+        TDuration baseLen = FinaleTConv::noteInfoToDuration(calcNoteInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration));
+        if (!baseLen.isValid()) {
+            logger->logWarning(String(u"Given Tuplet duration not supported in MuseScore"));
+            continue;
+        }
         tupletMap[i].scoreTuplet = Factory::createTuplet(measure);
         tupletMap[i].scoreTuplet->setTrack(curTrackIdx);
         tupletMap[i].scoreTuplet->setTick(measure->tick() + tupletMap[i].absBegin);
@@ -479,9 +482,6 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
         /// @todo skip case where finale numerator is 0: often used for changing beams
         Fraction tupletRatio = FinaleTConv::musxFractionToFraction(tupletMap[i].musxTuplet->calcRatio().reciprocal());
         tupletMap[i].scoreTuplet->setRatio(tupletRatio);
-        std::pair<musx::dom::NoteType, unsigned> musxBaseLen = calcNoteInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration);
-        TDuration baseLen = FinaleTConv::noteTypeToDurationType(musxBaseLen.first);
-        baseLen.setDots(static_cast<int>(musxBaseLen.second));
         tupletMap[i].scoreTuplet->setBaseLen(baseLen);
         Fraction f = baseLen.fraction() * tupletRatio.denominator();
         tupletMap[i].scoreTuplet->setTicks(f.reduced());
