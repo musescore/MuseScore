@@ -49,6 +49,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/updatemodel.h
     )
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Concurrent Qt::Qml)
+endif()
+
 setup_module()
 
 if (MUSE_MODULE_UPDATE_TESTS)

@@ -1,0 +1,3 @@
+module Muse.Extensions
+ExtensionsToolBar 1.0 ExtensionsToolBar.qml
+ExtensionsListPanel 1.0 ExtensionsListPanel.qml

@@ -118,8 +118,8 @@ mv "${appdir}/bin/findlib" "${appdir}/../findlib"
 # Remove Qt plugins for MySQL and PostgreSQL to prevent
 # linuxdeploy-plugin-qt from failing due to missing dependencies.
 # SQLite plugin alone should be enough for our AppImage.
-# rm -f ${QT_PATH}/plugins/sqldrivers/libqsql{mysql,psql}.so
-qt_sql_drivers_path="${QT_PATH}/plugins/sqldrivers"
+# rm -f ${QT_ROOT_DIR}/plugins/sqldrivers/libqsql{mysql,psql}.so
+qt_sql_drivers_path="${QT_ROOT_DIR}/plugins/sqldrivers"
 qt_sql_drivers_tmp="/tmp/qtsqldrivers"
 mkdir -p "$qt_sql_drivers_tmp"
 [ -f "${qt_sql_drivers_path}/libqsqlmysql.so" ] && mv "${qt_sql_drivers_path}/libqsqlmysql.so" "${qt_sql_drivers_tmp}/libqsqlmysql.so"
@@ -249,7 +249,7 @@ for file in "${additional_qt_components[@]}"; do
     continue
   fi
   mkdir -p "${appdir}/$(dirname "${file}")"
-  cp -Lr "${QT_PATH}/${file}" "${appdir}/${file}"
+  cp -Lr "${QT_ROOT_DIR}/${file}" "${appdir}/${file}"
 done
 
 for lib in "${additional_libraries[@]}"; do
@@ -289,27 +289,48 @@ done
 
 # Bundle libnss3 and friends as fallback libraries. Needed on Chromebook.
 # See discussion at https://github.com/probonopd/linuxdeployqt/issues/35
-libnss3_files=(
-  # https://packages.ubuntu.com/xenial/amd64/libnss3/filelist
-  libnss3.so
-  libnssutil3.so
-  libsmime3.so
-  libssl3.so
-  nss/libfreebl3.chk
-  nss/libfreebl3.so
-  nss/libfreeblpriv3.chk
-  nss/libfreeblpriv3.so
-  nss/libnssckbi.so
-  nss/libnssdbm3.chk
-  nss/libnssdbm3.so
-  nss/libsoftokn3.chk
-  nss/libsoftokn3.so
-)
-
 libnss3_system_path="$(dirname "$(find_library libnss3.so)")"
 libnss3_appdir_path="${appdir}/fallback/libnss3.so" # directory named like library
 
-mkdir -p "${libnss3_appdir_path}/nss"
+mkdir -p "${libnss3_appdir_path}"
+
+if [ -d "${libnss3_system_path}/nss" ]; then
+  mkdir -p "${libnss3_appdir_path}/nss"
+
+  libnss3_files=(
+    # https://packages.ubuntu.com/jammy/amd64/libnss3/filelist
+    libnss3.so
+    libnssutil3.so
+    libsmime3.so
+    libssl3.so
+    nss/libfreebl3.chk
+    nss/libfreebl3.so
+    nss/libfreeblpriv3.chk
+    nss/libfreeblpriv3.so
+    nss/libnssckbi.so
+    nss/libnssdbm3.chk
+    nss/libnssdbm3.so
+    nss/libsoftokn3.chk
+    nss/libsoftokn3.so
+  )
+else
+  libnss3_files=(
+    # https://packages.ubuntu.com/noble/amd64/libnss3/filelist
+    libfreebl3.chk
+    libfreebl3.so
+    libfreeblpriv3.chk
+    libfreeblpriv3.so
+    libnss3.so
+    libnssckbi.so
+    libnssdbm3.chk
+    libnssdbm3.so
+    libnssutil3.so
+    libsmime3.so
+    libsoftokn3.chk
+    libsoftokn3.so
+    libssl3.so
+  )
+fi
 
 for file in "${libnss3_files[@]}"; do
   cp -L "${libnss3_system_path}/${file}" "${libnss3_appdir_path}/${file}"

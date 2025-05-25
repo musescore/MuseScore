@@ -39,6 +39,10 @@ namespace mu::engraving::read410 {
 class MeasureRead;
 }
 
+namespace mu::engraving::read460 {
+class MeasureRead;
+}
+
 namespace mu::engraving::write {
 class MeasureWrite;
 }
@@ -300,7 +304,7 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue& newValue);
     void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
 
-    bool hasMMRest() const { return m_mmRest != 0; }
+    bool hasMMRest() const { return m_mmRest != nullptr; }
     bool isMMRest() const { return m_mmRestCount > 0; }
     Measure* mmRest() const { return m_mmRest; }
     Measure* coveringMMRestOrThis();
@@ -359,6 +363,7 @@ private:
     friend class Factory;
     friend class read400::MeasureRead;
     friend class read410::MeasureRead;
+    friend class read460::MeasureRead;
     friend class write::MeasureWrite;
 
     Measure(System* parent = 0);

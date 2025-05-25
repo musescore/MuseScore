@@ -20,6 +20,10 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         default: ''
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false  
   workflow_call:
     inputs:
       platforms:
@@ -42,6 +46,11 @@ on:
         default: ''
         type: string
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        type: string
+        required: false    
 
 jobs:
   build:
@@ -50,22 +59,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: ${{ 
-          (github.event_name != 'workflow_dispatch' 
-           || (contains(inputs.platforms, 'linux_x64') && contains(inputs.platforms, 'linux_arm64'))) 
-          && fromJson('["linux_x64","linux_arm64"]') 
-          || (contains(inputs.platforms, 'linux_x64') && fromJson('["linux_x64"]') 
-          || (contains(inputs.platforms, 'linux_arm64') && fromJson('["linux_arm64"]') 
-          || fromJson('[]'))) 
+        platform: ${{
+          (github.event_name != 'workflow_dispatch'
+           || (contains(inputs.platforms, 'linux_x64') && contains(inputs.platforms, 'linux_arm64')))
+          && fromJson('["linux_x64","linux_arm64"]')
+          || (contains(inputs.platforms, 'linux_x64') && fromJson('["linux_x64"]')
+          || (contains(inputs.platforms, 'linux_arm64') && fromJson('["linux_arm64"]')
+          || fromJson('[]')))
           }}
         include:
           - platform: linux_x64
             arch: x86_64
             runs-on: ubuntu-22.04
+            qt-host: linux
+            qt-arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }} 
             dump-symbols-arch: x86-64
           - platform: linux_arm64
             arch: aarch64
-            runs-on: ubuntu-22.04-arm
+            runs-on: ${{ inputs.use_qt69 == 'on' && 'ubuntu-24.04-arm' || 'ubuntu-22.04-arm' }}  
+            qt-host: linux_arm64
+            qt-arch: linux_gcc_arm64
             dump-symbols-arch: aarch64
     steps:
     - name: Cancel Previous Runs
@@ -156,8 +169,8 @@ jobs:
       uses: actions/cache@v4
       with:
         path: ${{ github.workspace }}/.ccache
-        key: ${{github.workflow}}-ccache-${{ env.CCACHE_TIMESTAMP }}
-        restore-keys: ${{github.workflow}}-ccache-
+        key: ${{runner.os}}-${{runner.arch}}-ccache-${{ env.CCACHE_TIMESTAMP }}
+        restore-keys: ${{runner.os}}-${{runner.arch}}-ccache-
     - name: Setup ccache
       run: |
         sudo apt-get update && sudo apt-get install -y ccache
@@ -165,16 +178,31 @@ jobs:
 
     - name: Register gcc problem matcher
       run: echo "::add-matcher::.github/problem_matchers/gcc.json"
-  
+
+    - name: Install Qt
+      # TODO: Change back to jurplel/install-qt-action@v4 when it supports arm64
+      uses: jdpurcell/install-qt-action@v5 
+      if: ${{ !(matrix.qt-host == 'linux_arm64' && inputs.use_qt69 != 'on') }}
+      with:
+        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
+        host: ${{ matrix.qt-host }}
+        target: 'desktop'
+        arch: ${{ matrix.qt-arch }}
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
+    - name: Install Qt 6.2.4 arm64
+      if: ${{ matrix.qt-host == 'linux_arm64' && inputs.use_qt69 != 'on' }}  
+      run: |
+        bash ./buildscripts/ci/linux/arm64/install_qt.sh     
     - name: Setup environment
       run: |
         bash ./buildscripts/ci/linux/setup.sh --arch ${{ matrix.arch }}
+
     - name: Generate _en.ts files
       env:
         LUPDATE_ARGS: ""
         POSTPROCESS_ARGS: ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}
       run: |
-        bash ./buildscripts/ci/translation/run_lupdate.sh
+        bash ./tools/translations/run_lupdate.sh
     - name: Update .ts files (tx pull)
       if: env.DO_UPDATE_TS == 'true'
       uses: transifex/cli-action@v2
@@ -186,7 +214,7 @@ jobs:
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
         bash ./buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --arch ${{ matrix.arch }}
         echo "============== ccache ==============="
-        ccache -s
+        ccache -sv
     - name: Package
       run: |
         bash ./buildscripts/ci/linux/package.sh --arch ${{ matrix.arch }}

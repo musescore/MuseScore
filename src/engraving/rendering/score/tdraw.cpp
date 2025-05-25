@@ -1183,7 +1183,7 @@ void TDraw::draw(const Fermata* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor());
-    item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
+    item->drawSymbol(item->symId(), painter);
 }
 
 void TDraw::draw(const FiguredBass* item, Painter* painter)
@@ -1890,11 +1890,6 @@ void TDraw::draw(const Harmony* item, Painter* painter)
     TRACE_DRAW_ITEM;
 
     const TextBase::LayoutData* ldata = item->ldata();
-
-    if (item->isDrawEditMode()) {
-        drawTextBase(item, painter);
-        return;
-    }
 
     if (item->textList().empty()) {
         drawTextBase(item, painter);
@@ -2665,7 +2660,7 @@ void TDraw::draw(const Spacer* item, Painter* painter)
 
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
-    painter->drawPath(item->path());
+    painter->drawPath(item->ldata()->path);
 }
 
 void TDraw::draw(const StaffLines* item, Painter* painter)

@@ -99,6 +99,14 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
+            navigation.row: 2
+            text: "[cpp] Sample dialog async with promise"
+            onClicked: testModel.openSampleDialogAsyncWithPromise()
+        }
+
+        FlatButton {
+            width: 200
+            navigation.panel: navPanel
             navigation.row: 3
             text: "[qml] Sample dialog sync"
             onClicked: {
@@ -144,6 +152,14 @@ Rectangle {
             navigation.row: 7
             text: "Question"
             onClicked: testModel.question()
+        }
+
+        FlatButton {
+            width: 200
+            navigation.panel: navPanel
+            navigation.row: 7
+            text: "Question (by uri)"
+            onClicked: testModel.questionByUri()
         }
 
         FlatButton {

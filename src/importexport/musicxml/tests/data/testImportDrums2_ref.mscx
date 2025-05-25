@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.50197</pageWidth>
@@ -44,7 +45,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -339,47 +341,59 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         </VBox>
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <Clef>
             <concertClefType>PERC</concertClefType>
             <transposingClefType>PERC</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>F_F</eid>
             </Clef>
           <TimeSig>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>I_I</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>K_K</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>M_M</eid>
               <pitch>51</pitch>
               <tpc>11</tpc>
               <head>cross</head>
               </Note>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>O_O</eid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               <head>cross</head>
@@ -388,35 +402,44 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>P_P</eid>
         <voice>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>R_R</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>T_T</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>V_V</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>W_W</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>X_X</eid>
               <pitch>81</pitch>
               <tpc>17</tpc>
               </Note>
@@ -424,32 +447,40 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>Y_Y</eid>
         <voice>
           <Chord>
+            <eid>Z_Z</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>a_a</eid>
               <pitch>49</pitch>
               <tpc>21</tpc>
               <head>cross</head>
               </Note>
             </Chord>
           <Rest>
+            <eid>b_b</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>c_c</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>d_d</eid>
         <voice>
           <Rest>
+            <eid>e_e</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>f_f</eid>
             </BarLine>
           </voice>
         </Measure>

@@ -730,15 +730,31 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
     ns->styleChanged();
 }
 
-static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* m, track_idx_t track)
+static void updateSpatium(void* oldElement, EngravingItem* newElement)
 {
+    double oldSpatium = static_cast<EngravingItem*>(oldElement)->spatium();
+    double newSpatium = newElement->spatium();
+    if (!muse::RealIsEqual(oldSpatium, newSpatium)) {
+        newElement->spatiumChanged(oldSpatium, newSpatium);
+    }
+}
+
+static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* nm, track_idx_t track)
+{
+    const auto handleTuplet = [&](Tuplet* tuplet) {
+        tuplet->clear();
+        tuplet->setTrack(track);
+        tuplet->setParent(nm);
+        tuplet->styleChanged();
+        tuplet->scanElements(ot, updateSpatium);
+    };
+
     ot->setTrack(ocr->track());
+
     Tuplet* nt = tupletMap.findNew(ot);
-    if (nt == 0) {
+    if (!nt) {
         nt = toTuplet(ot->linkedClone());
-        nt->setTrack(track);
-        nt->setParent(m);
-        nt->setScore(ncr->score());
+        handleTuplet(nt);
         tupletMap.add(ot, nt);
 
         Tuplet* nt1 = nt;
@@ -746,9 +762,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
             Tuplet* nt2 = tupletMap.findNew(ot->tuplet());
             if (nt2 == 0) {
                 nt2 = toTuplet(ot->tuplet()->linkedClone());
-                nt2->setTrack(track);
-                nt2->setParent(m);
-                nt2->setScore(ncr->score());
+                handleTuplet(nt2);
                 tupletMap.add(ot->tuplet(), nt2);
             }
             nt2->add(nt1);
@@ -855,14 +869,20 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
 
     if (mb->isHBox()) {
         nmb = Factory::createHBox(score->dummy()->system());
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
     } else if (mb->isVBox()) {
         if (toBox(mb)->isTitleFrame()) {
             nmb = Factory::createTitleVBox(score->dummy()->system());
         } else {
             nmb = Factory::createVBox(score->dummy()->system());
         }
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
     } else if (mb->isTBox()) {
         nmb = Factory::createTBox(score->dummy()->system());
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
         Text* text = toTBox(mb)->text();
         EngravingItem* ne = text->linkedClone();
         ne->setScore(score);
@@ -931,6 +951,11 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
 
                 //If track is not mapped skip the following
                 if (muse::value(trackList, srcTrack, muse::nidx) == muse::nidx) {
+                    continue;
+                }
+
+                // TimeSig and KeySig announce should never be cloned
+                if (oseg->isTimeSigAnnounceType() || oseg->isKeySigAnnounceType()) {
                     continue;
                 }
 
@@ -1151,7 +1176,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
             continue;
         }
         MeasureBase* newMeasure = cloneMeasure(mb, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
-        measures->add(newMeasure);
+        measures->append(newMeasure);
     }
 
     size_t n = sourceStavesIndexes.size();
@@ -1216,7 +1241,7 @@ void Excerpt::cloneMeasures(Score* oscore, Score* score)
 
     for (MeasureBase* mb = oscore->firstMeasure(); mb; mb = mb->next()) {
         MeasureBase* newMeasure = cloneMeasure(mb, score, oscore, {}, {}, tieMap);
-        measures->add(newMeasure);
+        measures->append(newMeasure);
     }
 
     collectTieEndPoints(tieMap);
@@ -1482,15 +1507,6 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         score->undoAddElement(element, false /*addToLinkedStaves*/);
     };
 
-    auto updateSpatium = [](void* oldElement, EngravingItem* newElement)
-    {
-        double oldSpatium = static_cast<EngravingItem*>(oldElement)->spatium();
-        double newSpatium = newElement->spatium();
-        if (!muse::RealIsEqual(oldSpatium, newSpatium)) {
-            newElement->spatiumChanged(oldSpatium, newSpatium);
-        }
-    };
-
     for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
@@ -1576,21 +1592,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 if (oe->isChordRest()) {
                     ChordRest* ocr = toChordRest(oe);
                     ChordRest* ncr = toChordRest(ne);
-                    Tuplet* ot     = ocr->tuplet();
+                    Tuplet* ot = ocr->tuplet();
                     if (ot) {
-                        Tuplet* nt = tupletMap.findNew(ot);
-                        if (nt == 0) {
-                            // nt = new Tuplet(*ot);
-                            nt = toTuplet(ot->linkedClone());
-                            nt->clear();
-                            nt->setTrack(dstTrack);
-                            nt->setParent(nm);
-                            nt->styleChanged();
-                            nt->scanElements(ot, updateSpatium);
-                            tupletMap.add(ot, nt);
-                        }
-                        ncr->setTuplet(nt);
-                        nt->add(ncr);
+                        cloneTuplets(ocr, ncr, ot, tupletMap, nm, dstTrack);
                     }
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);

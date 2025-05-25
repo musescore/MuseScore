@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.49891</pageWidth>
@@ -143,7 +144,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -151,7 +153,8 @@
         <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -217,35 +220,44 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>E_E</eid>
         <Text>
+          <eid>F_F</eid>
           <style>poet</style>
           <align>left,top</align>
           <text><font size="12"/>Score</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
             <followText>1</followText>
+            <eid>J_J</eid>
             <visible>0</visible>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>L_L</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>M_M</eid>
                   <up>up</up>
                   </Tie>
                 <next>
@@ -260,23 +272,28 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>N_N</eid>
             <offset x="0" y="-3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>O_O</eid>
             <offset x="0" y="-3"/>
             <durationType>half</durationType>
             </Rest>
           </voice>
         <voice>
           <Rest>
+            <eid>P_P</eid>
             <offset x="0" y="3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>R_R</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -290,19 +307,24 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>S_S</eid>
             <offset x="0" y="3"/>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>T_T</eid>
         <voice>
           <Chord>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>V_V</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>W_W</eid>
                   <up>up</up>
                   </Tie>
                 <next>
@@ -317,26 +339,32 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>X_X</eid>
             <offset x="0" y="-3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>Y_Y</eid>
             <offset x="0" y="-3"/>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>Z_Z</eid>
             </BarLine>
           </voice>
         <voice>
           <Rest>
+            <eid>a_a</eid>
             <offset x="0" y="3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>b_b</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>c_c</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -350,6 +378,7 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>d_d</eid>
             <offset x="0" y="3"/>
             <durationType>half</durationType>
             </Rest>
@@ -363,12 +392,15 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>e_e</eid>
             </Clef>
           <TimeSig>
+            <eid>f_f</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>g_g</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
@@ -377,17 +409,21 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>h_h</eid>
             <offset x="0" y="-3"/>
             <durationType>half</durationType>
             </Rest>
           <Rest>
+            <eid>i_i</eid>
             <offset x="0" y="-3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>j_j</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>k_k</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -402,23 +438,29 @@
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>l_l</eid>
             </BarLine>
           </voice>
         <voice>
           <Rest>
+            <eid>m_m</eid>
             <offset x="0" y="3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>n_n</eid>
             <offset x="0" y="3"/>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>o_o</eid>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>p_p</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>q_q</eid>
                   <up>down</up>
                   </Tie>
                 <next>
@@ -433,6 +475,7 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>r_r</eid>
             <offset x="0" y="3"/>
             <durationType>quarter</durationType>
             </Rest>

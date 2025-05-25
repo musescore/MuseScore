@@ -583,7 +583,7 @@ void CustomizeKitDialog::updateExample()
     chord->add(note);
     Stem* stem = Factory::createStem(chord.get());
     stem->setParent(chord.get());
-    stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * gpaletteScore->style().spatium()));
+    stem->setBaseLength(Spatium(up ? -3.0 : 3.0));
     engravingRenderer()->layoutItem(stem);
     chord->add(stem);
     drumNote->appendElement(chord, m_editedDrumset.translatedName(pitch));
@@ -613,7 +613,7 @@ void CustomizeKitDialog::load()
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
             if (e.attribute("version") != Constants::MSC_VERSION_STR) {
-                auto result = interactive()->warning(
+                auto result = interactive()->warningSync(
                     muse::trc("palette", "Drumset file too old"),
                     muse::trc("palette", "MuseScore Studio may not be able to load this drumset file."), {
                     muse::IInteractive::Button::Cancel,

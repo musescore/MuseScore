@@ -1014,7 +1014,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="260"/>
         <source>Show time signature</source>
-        <translation>Afișează metru măsură</translation>
+        <translation>Afișează metrică</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="240"/>
@@ -1417,7 +1417,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="195"/>
         <source>Show time signature</source>
-        <translation>Afișează metru măsură</translation>
+        <translation>Afișează metrică</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="202"/>
@@ -2758,18 +2758,18 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4242"/>
         <source>Barline to time signature:</source>
-        <translation>Bara de măsură și metru măsură:</translation>
+        <translation>Bara de măsură și metrică:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4265"/>
         <source>Key signature to time signature:</source>
-        <translation>Armură și metru măsură:</translation>
+        <translation>Armură și metrică:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4285"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6504"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
-        <translation>Resetează valoarea pentru „Distanță metru măsură - bară măsură”</translation>
+        <translation>Resetează valoarea pentru „Distanță metrică - bară de măsură”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4305"/>
@@ -2779,7 +2779,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4331"/>
         <source>Reset &apos;Time signature left margin&apos; value</source>
-        <translation>Resetează valoarea pentru „Marginea din stânga a metrului de măsură”</translation>
+        <translation>Resetează valoarea pentru „Marginea din stânga a metricii”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4361"/>
@@ -2789,12 +2789,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4371"/>
         <source>Time signature to barline:</source>
-        <translation>Metru măsură și bara de măsură:</translation>
+        <translation>Metrică și bara de măsură:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4384"/>
         <source>Reset &apos;Clef to time signature distance&apos; value</source>
-        <translation>Resetează valoarea pentru „Distanță cheie - metru măsură”</translation>
+        <translation>Resetează valoarea pentru „Distanță cheie - metrică”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4397"/>
@@ -2884,7 +2884,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4718"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
-        <translation>Resetează valoarea pentru „Distanță armură - metru măsură”</translation>
+        <translation>Resetează valoarea pentru „Distanță armură - metrică”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4744"/>
@@ -2894,7 +2894,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4780"/>
         <source>Clef to time signature:</source>
-        <translation>Cheie și metru măsură:</translation>
+        <translation>Cheie și metrică:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4226"/>
@@ -3164,7 +3164,7 @@ prima notă a sistemului</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4848"/>
         <source>Time signature to first note:</source>
-        <translation>Metru măsură și prima notă:</translation>
+        <translation>Metrică și prima notă:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4871"/>
@@ -3174,7 +3174,7 @@ prima notă a sistemului</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4884"/>
         <source>Reset &apos;System header with time signature distance&apos; value</source>
-        <translation>Resetează valoarea pentru „Distanță antet sistem - metru măsură”</translation>
+        <translation>Resetează valoarea pentru „Distanță antet sistem - metrică”</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4897"/>
@@ -3769,12 +3769,12 @@ prima notă a sistemului</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5940"/>
         <source>Fixed, based on time signature of:</source>
-        <translation>Fix, bazat pe metru măsură de:</translation>
+        <translation>Fixă, bazată pe metrica de:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5845"/>
         <source>Proportional to time signature</source>
-        <translation>Proporțional cu metru măsură</translation>
+        <translation>Proporțională cu metrica</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5926"/>
@@ -5227,7 +5227,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="131"/>
         <source>Add time signature to master palette</source>
-        <translation>Adaugă metru măsură în paleta principală</translation>
+        <translation>Adaugă metrica în paleta principală</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="134"/>
@@ -5881,7 +5881,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="41"/>
         <source>Create time signature</source>
-        <translation>Crează metru măsură</translation>
+        <translation>Creează metrică</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="57"/>
@@ -5938,7 +5938,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="293"/>
         <source>Add time signature to master palette</source>
-        <translation>Adaugă metru măsură în paleta principală</translation>
+        <translation>Adaugă metrica în paleta principală</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="296"/>
@@ -5952,7 +5952,7 @@ text x-height):</source>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="14"/>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="34"/>
         <source>Time Signature Properties</source>
-        <translation>Proprietăți Metru Măsură</translation>
+        <translation>Proprietăți metrică</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="49"/>
@@ -7266,7 +7266,7 @@ text x-height):</source>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="53"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="54"/>
         <source>Time signature properties…</source>
-        <translation>Proprietăți metru măsură...</translation>
+        <translation>Proprietăți metrică...</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="59"/>
@@ -12742,7 +12742,7 @@ unde vei găsi tutoriale pentru a te pune pe picioare
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="193"/>
         <source>Time signature</source>
-        <translation>Metru măsură</translation>
+        <translation>Metrică</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="194"/>
@@ -19729,7 +19729,7 @@ Tasta %1 pe coardele %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="556"/>
         <source>Time signature</source>
-        <translation>Metru măsură</translation>
+        <translation>Metrică</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="616"/>
@@ -21526,12 +21526,12 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature</source>
-        <translation>Arată metru măsură de curtoazie</translation>
+        <translation>Arată metrică de curtoazie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
         <source>Time signature properties</source>
-        <translation>Proprietăți metru măsură</translation>
+        <translation>Proprietăți metrică</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="57"/>
@@ -22196,7 +22196,7 @@ anacruzele</translation>
     <message>
         <location filename="../../src/inspector/models/notation/timesignatures/timesignaturesettingsmodel.cpp" line="35"/>
         <source>Time signature</source>
-        <translation>Metru măsură</translation>
+        <translation>Metrică</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tremolobars/tremolobarsettingsmodel.cpp" line="35"/>
@@ -25200,7 +25200,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="426"/>
         <source>Inset time signature</source>
-        <translation>Inserează metru măsură</translation>
+        <translation>Inserează metrică</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="431"/>
@@ -25539,7 +25539,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1203"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2534"/>
         <source>Time signature</source>
-        <translation>Metru măsură</translation>
+        <translation>Metrică</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="768"/>
@@ -26576,7 +26576,7 @@ Mai mult, „Aprofundare MuseScore” are o comunitate primitoare de muzicieni, 
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="73"/>
         <source>Create time signature</source>
-        <translation>Crează metru măsură</translation>
+        <translation>Creează metrică</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="104"/>
@@ -29704,7 +29704,7 @@ a eșuat.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="129"/>
         <source>Time signature</source>
-        <translation>Metru măsură</translation>
+        <translation>Metrică</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/AdditionalInfoView.qml" line="164"/>
@@ -31669,7 +31669,7 @@ a eșuat.</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5793"/>
         <source>Add time signature</source>
-        <translation>Adaugă metru măsură</translation>
+        <translation>Adaugă metrică</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5804"/>

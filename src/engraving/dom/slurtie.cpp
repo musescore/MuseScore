@@ -310,36 +310,6 @@ void SlurTieSegment::undoChangeProperty(Pid pid, const PropertyValue& val, Prope
 }
 
 //---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void SlurTieSegment::drawEditMode(Painter* p, EditData& ed, double /*currentViewScaling*/)
-{
-    using namespace muse::draw;
-    PolygonF polygon(7);
-    polygon[0] = PointF(ed.grip[int(Grip::START)].center());
-    polygon[1] = PointF(ed.grip[int(Grip::BEZIER1)].center());
-    polygon[2] = PointF(ed.grip[int(Grip::SHOULDER)].center());
-    polygon[3] = PointF(ed.grip[int(Grip::BEZIER2)].center());
-    polygon[4] = PointF(ed.grip[int(Grip::END)].center());
-    polygon[5] = PointF(ed.grip[int(Grip::DRAG)].center());
-    polygon[6] = PointF(ed.grip[int(Grip::START)].center());
-    p->setPen(Pen(configuration()->scoreGreyColor(), 0.0));
-    p->drawPolyline(polygon);
-
-    p->setPen(Pen(configuration()->defaultColor(), 0.0));
-    for (int i = 0; i < ed.grips; ++i) {
-        // Can't use ternary operator, because we want different overloads of `setBrush`
-        if (Grip(i) == ed.curGrip) {
-            p->setBrush(configuration()->scoreGreyColor());
-        } else {
-            p->setBrush(BrushStyle::NoBrush);
-        }
-        p->drawRect(ed.grip[i]);
-    }
-}
-
-//---------------------------------------------------------
 //   SlurTie
 //---------------------------------------------------------
 

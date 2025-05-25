@@ -459,6 +459,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::keyBarlineDistance,      false, keyBarlineDistance,      resetKeyBarlineDistance },
         { StyleId::systemHeaderDistance,    false, systemHeaderDistance,    resetSystemHeaderDistance },
         { StyleId::systemHeaderTimeSigDistance, false, systemHeaderTimeSigDistance, resetSystemHeaderTimeSigDistance },
+        { StyleId::systemHeaderMinStartOfSystemDistance, false, systemHeaderMinStartOfSystemDistance,
+          resetSystemHeaderMinStartOfSystemDistance },
 
         { StyleId::clefBarlineDistance,     false, clefBarlineDistance,     resetClefBarlineDistance },
         { StyleId::timesigBarlineDistance,  false, timesigBarlineDistance,  resetTimesigBarlineDistance },
@@ -1072,7 +1074,11 @@ EditStyle::EditStyle(QWidget* parent)
         } else if (auto radioButton = qobject_cast<QRadioButton*>(sw.widget)) {
             connect(radioButton, &QRadioButton::toggled, setSignalMapper, mapFunction);
         } else if (auto checkBox = qobject_cast<QCheckBox*>(sw.widget)) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+            connect(checkBox, &QCheckBox::checkStateChanged, setSignalMapper, mapFunction);
+#else
             connect(checkBox, &QCheckBox::stateChanged, setSignalMapper, mapFunction);
+#endif
         } else if (auto button = qobject_cast<QAbstractButton*>(sw.widget)) {
             connect(button, &QAbstractButton::toggled, setSignalMapper, mapFunction);
         } else if (auto groupBox = qobject_cast<QGroupBox*>(sw.widget)) {

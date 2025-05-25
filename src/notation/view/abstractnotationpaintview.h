@@ -266,6 +266,7 @@ private:
     INotationPtr m_notation;
     muse::draw::Transform m_matrix;
 
+    bool m_loaded = false;
     std::unique_ptr<NotationViewInputController> m_inputController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;

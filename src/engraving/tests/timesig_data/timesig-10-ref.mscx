@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27</pageWidth>
@@ -33,7 +34,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Title</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -96,26 +98,32 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <TimeSig>
             <subtype>2</subtype>
+            <eid>E_E</eid>
             <sigN>2</sigN>
             <sigD>2</sigD>
             </TimeSig>
           <Rest>
+            <eid>F_F</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <TimeSig>
             <subtype>1</subtype>
+            <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>I_I</eid>
             <durationType>measure</durationType>
             <duration>2/2</duration>
             </Rest>

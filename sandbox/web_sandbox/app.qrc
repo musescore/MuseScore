@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>configs/update.cfg</file>
+        <file>configs/languages.cfg</file>
+        <file>configs/learn.cfg</file>
+        <file>configs/light.cfg</file>
+        <file>configs/dark.cfg</file>
+        <file>configs/high_contrast_black.cfg</file>
+        <file>configs/high_contrast_white.cfg</file>
+        <file>configs/shortcuts.cfg</file>
+        <file>configs/data/shortcuts.xml</file>
+        <file>configs/data/shortcuts_mac.xml</file>
+        <file>configs/data/shortcuts_azerty.xml</file>
+        <file>configs/workspaces.cfg</file>
+        <file>configs/ui.cfg</file>
+        <file>configs/user_agent.cfg</file>
+        <file>qml/SampleDialog.qml</file>
+    </qresource>
+</RCC>

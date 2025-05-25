@@ -7650,7 +7650,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="540"/>
         <source>Find / Go to</source>
-        <translation>Suche / Gehe zu</translation>
+        <translation>Finde / Gehe zu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="545"/>
@@ -23289,7 +23289,7 @@ Darüber hinaus bietet Mastering MuseScore eine unterstützende Community von Mu
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/SearchPopup.qml" line="102"/>
         <source>Find / Go to:</source>
-        <translation>Suche / Gehe zu:</translation>
+        <translation>Finde / Gehe zu:</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>

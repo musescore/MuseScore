@@ -29,7 +29,7 @@
 #include "notation/iselectinstrumentscenario.h"
 
 namespace mu::instrumentsscene {
-class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Injectable
+class PartTreeItem : public AbstractLayoutPanelTreeItem, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 

@@ -1020,6 +1020,7 @@ ChordRest* Spanner::startCR()
 {
     assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
     if (!m_startElement || m_startElement->score() != score()) {
+        // TODO: This is a bit weird and prevents this method from being const...
         m_startElement = findStartCR();
     }
     return (m_startElement && m_startElement->isChordRest()) ? toChordRest(m_startElement) : nullptr;
@@ -1033,6 +1034,7 @@ ChordRest* Spanner::endCR()
 {
     assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
     if ((!m_endElement || m_endElement->score() != score())) {
+        // TODO: This is a bit weird and prevents this method from being const...
         m_endElement = findEndCR();
     }
     return (m_endElement && m_endElement->isChordRest()) ? toChordRest(m_endElement) : nullptr;
@@ -1283,9 +1285,6 @@ void Spanner::setEndElement(EngravingItem* e)
     }
 #endif
     m_endElement = e;
-    if (e && ticks() == Fraction() && m_tick >= Fraction()) {
-        setTicks(std::max(e->tick() - m_tick, Fraction()));
-    }
 }
 
 //---------------------------------------------------------

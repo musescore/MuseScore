@@ -430,7 +430,7 @@ Err importBB(MasterScore* score, const QString& name)
         Fraction ts = score->sigmap()->timesig(tick.ticks()).timesig();
         measure->setTimesig(ts);
         measure->setTicks(ts);
-        score->measures()->add(measure);
+        score->measures()->append(measure);
     }
 
     //---------------------------------------------------
@@ -488,7 +488,7 @@ Err importBB(MasterScore* score, const QString& name)
     if (measureB->type() != ElementType::VBOX) {
         measureB = Factory::createTitleVBox(score->dummy()->system());
         measureB->setNext(score->first());
-        score->measures()->add(measureB);
+        score->measures()->append(measureB);
     }
     measureB->add(text);
 

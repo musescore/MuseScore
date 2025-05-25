@@ -80,34 +80,8 @@ elseif(OS_IS_MAC)
 
 elseif(OS_IS_WASM)
 
-    include_directories(${MODULE} PUBLIC
-        ${PROJECT_BINARY_DIR}
-        ${CMAKE_CURRENT_BINARY_DIR}
-        ${PROJECT_SOURCE_DIR}
-        ${PROJECT_SOURCE_DIR}/src
-        ${PROJECT_SOURCE_DIR}/src/framework
-        ${PROJECT_SOURCE_DIR}/src/framework/global
-    )
-    set(EMCC_LINKER_FLAGS "\
-        -s WASM=1 \
-        -s FULL_ES2=1 \
-        -s FULL_ES3=1 \
-        -s USE_WEBGL2=1 \
-        -s USE_ZLIB=1 \
-        -s EXIT_RUNTIME=1 \
-        -s \"EXTRA_EXPORTED_RUNTIME_METHODS=['UTF16ToString', 'stringToUTF16']\" \
-        --bind \
-        -s FETCH=1 \
-        -s FORCE_FILESYSTEM=1 \
-        -g \
-        -s ASSERTIONS=2 \
-        -s DEMANGLE_SUPPORT=1 \
-        -s GL_DEBUG=0 \
-        -s ALLOW_MEMORY_GROWTH=1 \
-        -s TOTAL_MEMORY=33554432 \
-        -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
-        -O3 \
-    ")
+    set(EXECUTABLE_NAME MuseScoreStudio)
+
 elseif(OS_IS_FBSD)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L /usr/local/lib -lasound -lpthread")
 
@@ -123,117 +97,89 @@ endif()
 # Dependency library declaration
 ###########################################
 set(LINK_LIB
+
+    # Always needed by everyone
     ${QT_LIBRARIES}
     muse::global
     muse::draw
-    muse::network
-
-    braille
-    muse::diagnostics
-    engraving
     muse::actions
+
+    # have stub, links real or stub
+    muse::network
+    muse::vst
+    muse::update
     muse::accessibility
-    context
     muse::shortcuts
     muse::workspace
     muse::audio
     muse::mpe
     muse::midi
     muse::learn
+    muse::tours
+    muse::multiinstances
+    muse::cloud
+    muse::languages
+    muse::extensions
+
+    braille
+    muse::diagnostics
+    engraving
+    context
     notation
     project
-    print
     commonscene
     palette
     inspector
     playback
     instrumentsscene
-    muse::vst
-    muse::update
     musesounds
     )
 
-if (MUSE_MODULE_UI)
-    list(APPEND LINK_LIB muse::ui)
-    list(APPEND LINK_LIB muse::uicomponents)
-    list(APPEND LINK_LIB muse::dockwindow)
-endif()
-
-if (MUSE_MODULE_TOURS)
-    list(APPEND LINK_LIB muse::tours)
-endif()
-
-if (MUSE_MODULE_AUDIOPLUGINS)
-    list(APPEND LINK_LIB muse::audioplugins)
-endif()
-
-if (MUE_BUILD_CONVERTER_MODULE)
-    list(APPEND LINK_LIB converter)
-endif()
-
-if (MUE_BUILD_APPSHELL_MODULE)
-    list(APPEND LINK_LIB appshell)
-endif()
-
-if (NOT CC_IS_EMSCRIPTEN)
-    list(APPEND LINK_LIB muse::cloud)
-    list(APPEND LINK_LIB muse::languages)
-    list(APPEND LINK_LIB muse::multiinstances)
-
-    if (MUSE_MODULE_EXTENSIONS)
-        list(APPEND LINK_LIB muse::extensions)
+macro(add_to_link_if_enabled opt lib)
+    if (${opt})
+        list(APPEND LINK_LIB ${lib})
     endif()
+endmacro()
 
-    if (MUE_BUILD_IMPORTEXPORT_MODULE)
-        list(APPEND LINK_LIB
-            iex_musicxml
-            iex_bb
-            iex_bww
-            iex_capella
-            iex_guitarpro
-            iex_midi
-            iex_musedata
-            iex_ove
-            iex_audioexport
-            iex_imagesexport
-            iex_mei
-        )
+add_to_link_if_enabled(${MUSE_MODULE_AUTOBOT} muse::autobot)
+add_to_link_if_enabled(${MUSE_MODULE_AUDIOPLUGINS} muse::audioplugins)
+add_to_link_if_enabled(${MUSE_MODULE_MUSESAMPLER} muse::musesampler)
+add_to_link_if_enabled(${MUSE_MODULE_UI} muse::ui)
+add_to_link_if_enabled(${MUSE_MODULE_UI} muse::uicomponents)
+add_to_link_if_enabled(${MUSE_MODULE_UI} muse::dockwindow)
 
-        if (MUE_BUILD_VIDEOEXPORT_MODULE)
-            list(APPEND LINK_LIB iex_videoexport)
-        endif()
-    else()
-        if (MUE_BUILD_IMAGESEXPORT_MODULE)
-            list(APPEND LINK_LIB iex_imagesexport)
-        endif()
+add_to_link_if_enabled(${MUE_BUILD_APPSHELL_MODULE} appshell)
+add_to_link_if_enabled(${MUE_BUILD_CONVERTER_MODULE} converter)
+add_to_link_if_enabled(${MUE_BUILD_PRINT_MODULE} print)
+
+if (MUE_BUILD_IMPORTEXPORT_MODULE)
+    list(APPEND LINK_LIB
+        iex_musicxml
+        iex_bb
+        iex_bww
+        iex_capella
+        iex_guitarpro
+        iex_midi
+        iex_musedata
+        iex_ove
+        iex_audioexport
+        iex_imagesexport
+        iex_mei
+    )
+
+    if (MUE_BUILD_VIDEOEXPORT_MODULE)
+        list(APPEND LINK_LIB iex_videoexport)
     endif()
-
-endif()
-
-
-if (MUSE_MODULE_AUTOBOT)
-    list(APPEND LINK_LIB muse::autobot)
-endif()
-
-if (MUSE_MODULE_MUSESAMPLER)
-    list(APPEND LINK_LIB muse::musesampler)
+else()
+    if (MUE_BUILD_IMAGESEXPORT_MODULE)
+        list(APPEND LINK_LIB iex_imagesexport)
+    endif()
 endif()
 
 set (MSCORE_APPEND_SRC)
 
 if (OS_IS_WIN)
     list(APPEND MSCORE_APPEND_SRC ${WINDOWS_ICONS_RC})
-endif()
-
-if (CC_IS_EMSCRIPTEN)
-    list(APPEND LINK_LIB wasmtest)
-
-    foreach(link ${LINK_LIB} )
-        list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:${link}>)
-    endforeach()
-
-    list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:sndfile>)
-    list(APPEND MSCORE_APPEND_SRC $<TARGET_OBJECTS:fluidsynth>)
 endif()
 
 ###########################################
@@ -248,7 +194,7 @@ endif()
 # Executable declaration
 ###########################################
 
-add_executable(MuseScoreStudio
+qt_add_executable(MuseScoreStudio
     WIN32 MACOSX_BUNDLE
     ${APP_RCC_SOURCES}
     ${MSCORE_APPEND_SRC}
@@ -296,10 +242,6 @@ if (CC_IS_MSVC)
     target_link_options(MuseScoreStudio PRIVATE /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup)
 endif(CC_IS_MSVC)
 
-if (OS_IS_WASM)
-    set_target_properties(MuseScoreStudio PROPERTIES LINK_FLAGS "${EMCC_LINKER_FLAGS}")
-endif(OS_IS_WASM)
-
 ###########################################
 # Includes
 ###########################################
@@ -325,13 +267,10 @@ target_include_directories(MuseScoreStudio PRIVATE
 # Link
 ###########################################
 
-if (NOT CC_IS_EMSCRIPTEN)
-    target_link_libraries(MuseScoreStudio ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
-else()
-    target_link_libraries(MuseScoreStudio PRIVATE ${QT_LIBRARIES})
+target_link_libraries(MuseScoreStudio PRIVATE ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
 
-    find_package(Qt6QmlImportScanner REQUIRED)
-    qt_import_qml_plugins(MuseScoreStudio PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
+if (CC_IS_EMCC)
+    target_link_options(MuseScoreStudio PUBLIC ${EMCC_LINKER_FLAGS})
 endif()
 
 
@@ -361,65 +300,6 @@ if (OS_IS_WIN)
                DESTINATION bin)
 
     endif(CC_IS_MINGW)
-
-    # Install Qt
-    foreach (QtLibrary ${QT_LIBRARIES})
-        #message(STATUS "Library ${QtLibrary}")
-        # always use release libs
-        # TODO: remove this
-        # That's not trivial, because for the libraries that are installed manually
-        # below, we would need to manually specify the correct debug/release names.
-        # The real solution would be to use windeployqt.
-        set_target_properties(${QtLibrary} PROPERTIES MAP_IMPORTED_CONFIG_DEBUG "RELEASE")
-        get_target_property(QtSharedLibrary ${QtLibrary} LOCATION_RELEASE)
-        if (EXISTS ${QtSharedLibrary})
-            list (APPEND QtInstallLibraries ${QtSharedLibrary})
-        endif (EXISTS ${QtSharedLibrary})
-    endforeach (QtLibrary ${QT_LIBRARIES})
-    list(REMOVE_DUPLICATES QtInstallLibraries)
-
-    install(FILES
-            ${QtInstallLibraries}
-            #${QT_INSTALL_BINS}/libEGL.dll
-            #${QT_INSTALL_BINS}/libGLESv2.dll
-            ${QT_INSTALL_BINS}/opengl32sw.dll
-            ${QT_INSTALL_BINS}/d3dcompiler_47.dll
-            ${QT_INSTALL_BINS}/Qt6QuickControls2Impl.dll
-            ${QT_INSTALL_BINS}/Qt6QuickLayouts.dll
-            ${QT_INSTALL_BINS}/Qt6QmlModels.dll
-            ${QT_INSTALL_BINS}/Qt6QmlWorkerScript.dll
-            DESTINATION bin)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/iconengines/qsvgicon.dll
-            DESTINATION bin/iconengines)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/imageformats/qjpeg.dll
-            ${QT_INSTALL_PLUGINS}/imageformats/qsvg.dll
-            DESTINATION bin/imageformats)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
-            ${QT_INSTALL_PLUGINS}/platforms/qoffscreen.dll
-            DESTINATION bin/platforms)
-
-    install(FILES
-            ${QT_INSTALL_PLUGINS}/tls/qcertonlybackend.dll
-            ${QT_INSTALL_PLUGINS}/tls/qopensslbackend.dll
-            ${QT_INSTALL_PLUGINS}/tls/qschannelbackend.dll
-            DESTINATION bin/tls)
-
-    install(DIRECTORY
-            ${QT_INSTALL_QML}
-            DESTINATION .
-            REGEX ".*d\\.dll" EXCLUDE
-            REGEX ".pdb" EXCLUDE
-            REGEX ".*QtMultimedia.*" EXCLUDE
-            REGEX ".*QtSensors.*" EXCLUDE
-            REGEX ".*QtTest.*" EXCLUDE
-            REGEX ".*QtWebkit.*" EXCLUDE
-            )
 
     if (SNDFILE_DLL)
         install(FILES ${SNDFILE_DLL} DESTINATION bin)
@@ -500,15 +380,6 @@ elseif(OS_IS_MAC)
 ###########################################
 elseif(OS_IS_WASM)
 
-    function(copy_html_js_launch_files target)
-        set(APPNAME ${target})
-        configure_file("${_qt6Core_install_prefix}/plugins/platforms/wasm_shell.html" "public_html/${target}.qt.html")
-        configure_file("${_qt6Core_install_prefix}/plugins/platforms/qtloader.js" public_html/qtloader.js COPYONLY)
-        configure_file("${_qt6Core_install_prefix}/plugins/platforms/qtlogo.svg" public_html/qtlogo.svg COPYONLY)
-    endfunction()
-
-    copy_html_js_launch_files(MuseScoreStudio)
-
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
@@ -518,6 +389,20 @@ endif()
 # Miscellaneous Microsoft Visual Studio settings
 #################################################
 if (MSVC)
+    # Add a post-build event to deploy the application to the output folder. Same as building the INSTALL target.
+    STRING(TOUPPER ${CMAKE_GENERATOR} UPPER_CMAKE_GENERATOR)
+    if (${UPPER_CMAKE_GENERATOR} MATCHES "VISUAL STUDIO")
+        # We want $(Configuration) passed verbatim. Note the round brackets.
+        set(CONFIG_STR "$(Configuration)")
+
+        add_custom_command(
+            TARGET MuseScoreStudio POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -DBUILD_TYPE=${CONFIG_STR} -P cmake_install.cmake
+            WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+            VERBATIM
+        )
+    endif()
+
     # Force the "install" and "package" targets not to depend on the "all" target.
     set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY true)
     set(CMAKE_SKIP_PACKAGE_ALL_DEPENDENCY true)

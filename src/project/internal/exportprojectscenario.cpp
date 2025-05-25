@@ -359,7 +359,7 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
         constexpr int Skip = static_cast<int>(IInteractive::Button::CustomButton) + 3;
         constexpr int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
 
-        IInteractive::Result result = interactive()->question(
+        IInteractive::Result result = interactive()->questionSync(
             muse::trc("project/export", "File already exists"),
             muse::qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
             .arg(filename).toStdString(), {
@@ -388,7 +388,7 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
 
 bool ExportProjectScenario::askForRetry(const QString& filename) const
 {
-    IInteractive::Result result = interactive()->question(
+    IInteractive::Result result = interactive()->questionSync(
         muse::trc("project/export", "Error"),
         muse::qtrc("project/export", "An error occurred while writing the file %1. Do you want to retry?")
         .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });

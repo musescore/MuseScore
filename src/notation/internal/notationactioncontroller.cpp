@@ -312,6 +312,7 @@ void NotationActionController::init()
     registerAction("measure-properties", &Controller::openMeasurePropertiesDialog);
     registerAction("config-raster", &Controller::openEditGridSizeDialog);
     registerAction("realize-chord-symbols", &Controller::openRealizeChordSymbolsDialog);
+    registerAction("add-fretboard-diagram", &Controller::addFretboardDiagram);
 
     registerAction("load-style", &Controller::loadStyle);
     registerAction("save-style", &Controller::saveStyle);
@@ -1410,10 +1411,10 @@ void NotationActionController::insertClef(mu::engraving::ClefType type)
     interaction->insertClef(type);
 }
 
-IInteractive::Result NotationActionController::showErrorMessage(const std::string& message) const
+async::Promise<IInteractive::Result> NotationActionController::showErrorMessage(const std::string& message)
 {
-    return interactive()->info(message,
-                               std::string(), {}, 0, IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+    return interactive()->info(message, std::string(), {}, 0,
+                               IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 }
 
 void NotationActionController::addText(TextStyleType type)
@@ -1446,16 +1447,15 @@ void NotationActionController::addText(TextStyleType type)
 
     if (!ret) {
         if (configuration()->needToShowAddTextErrorMessage()) {
-            IInteractive::Result result = showErrorMessage(ret.text());
-            if (!result.showAgain()) {
-                configuration()->setNeedToShowAddTextErrorMessage(false);
-            }
+            showErrorMessage(ret.text()).onResolve(this, [this](const IInteractive::Result& res) {
+                if (!res.showAgain()) {
+                    configuration()->setNeedToShowAddTextErrorMessage(false);
+                }
+            });
         }
-
-        return;
+    } else {
+        interaction->addTextToItem(type, item);
     }
-
-    interaction->addTextToItem(type, item);
 }
 
 void NotationActionController::addImage()
@@ -1495,16 +1495,15 @@ void NotationActionController::addFiguredBass()
     Ret ret = interaction->canAddFiguredBass();
     if (!ret) {
         if (configuration()->needToShowAddFiguredBassErrorMessage()) {
-            IInteractive::Result result = showErrorMessage(ret.text());
-            if (!result.showAgain()) {
-                configuration()->setNeedToShowAddFiguredBassErrorMessage(false);
-            }
+            showErrorMessage(ret.text()).onResolve(this, [this](const IInteractive::Result& res) {
+                if (!res.showAgain()) {
+                    configuration()->setNeedToShowAddFiguredBassErrorMessage(false);
+                }
+            });
         }
-
-        return;
+    } else {
+        interaction->addFiguredBass();
     }
-
-    interaction->addFiguredBass();
 }
 
 void NotationActionController::addGuitarBend(GuitarBendType bendType)
@@ -1519,15 +1518,33 @@ void NotationActionController::addGuitarBend(GuitarBendType bendType)
     Ret ret = interaction->canAddGuitarBend();
     if (!ret) {
         if (configuration()->needToShowAddGuitarBendErrorMessage()) {
-            IInteractive::Result result = showErrorMessage(ret.text());
-            if (!result.showAgain()) {
-                configuration()->setNeedToShowAddGuitarBendErrorMessage(false);
-            }
+            showErrorMessage(ret.text()).onResolve(this, [this](const IInteractive::Result& res) {
+                if (!res.showAgain()) {
+                    configuration()->setNeedToShowAddGuitarBendErrorMessage(false);
+                }
+            });
         }
+    } else {
+        interaction->addGuitarBend(bendType);
+    }
+}
+
+void NotationActionController::addFretboardDiagram()
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
         return;
     }
 
-    interaction->addGuitarBend(bendType);
+    Ret ret = interaction->canAddFretboardDiagram();
+    if (!ret) {
+        showErrorMessage(ret.text());
+        return;
+    }
+
+    interaction->addFretboardDiagram();
 }
 
 void NotationActionController::selectAllSimilarElements()
@@ -1688,21 +1705,17 @@ void NotationActionController::startEditSelectedText(const ActionData& args)
 void NotationActionController::addMeasures(const ActionData& actionData, AddBoxesTarget target)
 {
     TRACEFUNC;
-    int count = 1;
 
-    if (actionData.empty()) {
-        RetVal<Val> result = interactive()->open("musescore://notation/selectmeasurescount");
-
-        if (result.ret) {
-            count = result.val.toInt();
-        } else {
-            return;
-        }
+    if (!actionData.empty()) {
+        int count = actionData.arg<int>();
+        addBoxes(BoxType::Measure, count, target);
     } else {
-        count = actionData.arg<int>();
+        interactive()->open("musescore://notation/selectmeasurescount")
+        .onResolve(this, [this, target](const Val& v) {
+            int count = v.toInt();
+            addBoxes(BoxType::Measure, count, target);
+        });
     }
-
-    addBoxes(BoxType::Measure, count, target);
 }
 
 void NotationActionController::addBoxes(BoxType boxType, int count, AddBoxesTarget target)
@@ -1848,13 +1861,18 @@ void NotationActionController::loadStyle()
                                  f.errorString());
             return;
         }
-        if (!currentNotationStyle()->loadStyle(path.toQString(), false) && interactive()->warning(
+        if (!currentNotationStyle()->loadStyle(path.toQString(), false)) {
+            auto promise = interactive()->warning(
                 muse::trc("notation",
                           "Since this style file is from a different version of MuseScore Studio, your score is not guaranteed to display correctly."),
                 muse::trc("notation", "Click OK to load anyway."), { IInteractive::Button::Ok, IInteractive::Button::Cancel },
-                IInteractive::Button::Ok).standardButton()
-            == IInteractive::Button::Ok) {
-            currentNotationStyle()->loadStyle(path.toQString(), true);
+                IInteractive::Button::Ok);
+
+            promise.onResolve(this, [this, path](const IInteractive::Result& res) {
+                if (res.isButton(IInteractive::Button::Ok)) {
+                    currentNotationStyle()->loadStyle(path.toQString(), true);
+                }
+            });
         }
     }
 }
@@ -2309,10 +2327,12 @@ void NotationActionController::checkForScoreCorruptions()
         interactive()->info(title, body);
     } else {
         std::string title = muse::mtrc("project", "File “%1” is corrupted").arg(fileName).toStdString();
-        std::string body = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction. "
-                                                "Please fix those at the earliest, to prevent crashes and further corruptions.");
+        IInteractive::Text text;
+        text.text = muse::trc("project", "This file contains errors that could cause MuseScore Studio to malfunction. "
+                                         "Please fix those at the earliest, to prevent crashes and further corruptions.");
+        text.detailedText = ret.text();
 
-        interactive()->warning(title, body, ret.text());
+        interactive()->warning(title, text);
     }
 }
 

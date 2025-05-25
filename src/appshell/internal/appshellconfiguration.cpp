@@ -78,7 +78,11 @@ void AppShellConfiguration::init()
 
 bool AppShellConfiguration::hasCompletedFirstLaunchSetup() const
 {
+#ifdef Q_OS_WASM
+    return true;
+#else
     return settings()->value(HAS_COMPLETED_FIRST_LAUNCH_SETUP).toBool();
+#endif
 }
 
 void AppShellConfiguration::setHasCompletedFirstLaunchSetup(bool has)

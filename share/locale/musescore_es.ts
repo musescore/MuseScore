@@ -4475,12 +4475,12 @@ altura del texto):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8043"/>
         <source>Minimum hanging tie length:</source>
-        <translation type="unfinished"/>
+        <translation>Longitud mínima de la ligadura de prolongación abierta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8081"/>
         <source>Reset &apos;Minimum hanging tie length&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Resetear valor de &apos;Longitud mínima de ligadura de prolongación abierta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8116"/>
@@ -9265,7 +9265,7 @@ entrada por nombre de nota</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="97"/>
         <source>Input written pitch</source>
-        <translation type="unfinished"/>
+        <translation>Introducir afinación escrita</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="104"/>
@@ -9275,7 +9275,7 @@ entrada por nombre de nota</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="105"/>
         <source>Input sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>Introducir afinación como suena</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="123"/>
@@ -11877,7 +11877,7 @@ Publicado bajo la &lt;a href=&quot;%1&quot;&gt;Licencia Pública General de GNU 
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="41"/>
         <source>Toggle track mute by showing/hiding instruments in the Layout panel</source>
-        <translation type="unfinished"/>
+        <translation>Silenciar pistas mostrando/ocultando instrumentos en el panel de Diseño</translation>
     </message>
     <message>
         <source>Toggle track mute by showing/hiding instruments in the Instruments panel</source>
@@ -14120,7 +14120,7 @@ Publicado bajo la &lt;a href=&quot;%1&quot;&gt;Licencia Pública General de GNU 
         <location filename="../../src/engraving/dom/edit.cpp" line="7405"/>
         <location filename="../../src/engraving/dom/edit.cpp" line="7553"/>
         <source>Remove stale partial tie</source>
-        <translation type="unfinished"/>
+        <translation>Eliminar ligadura de prolongación parcial obsoleta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="7463"/>
@@ -18287,7 +18287,7 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5582"/>
         <source>Half-open 2 (Weinberg)</source>
-        <translation type="unfinished"/>
+        <translation>Semi-abierta 2 (Weinberg)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5689"/>
@@ -19568,7 +19568,7 @@ Traste %1 en cuerdas %2</translation>
         <location filename="../../src/notation/view/widgets/pagesettings.cpp" line="170"/>
         <source>in</source>
         <comment>abbreviation of inch</comment>
-        <translation type="unfinished"/>
+        <translation>″</translation>
     </message>
 </context>
 <context>
@@ -20129,7 +20129,7 @@ anacrusa</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/ArpeggioExpandableBlank.qml" line="42"/>
         <source>Spread delay</source>
-        <translation>Retardo de propagación</translation>
+        <translation>Retardo entre notas:</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/staffs/staffsettingsmodel.cpp" line="32"/>
@@ -24557,7 +24557,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="182"/>
         <source>Note input preview note color</source>
-        <translation type="unfinished"/>
+        <translation>Color de notas en previsualización de introducción de notas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="261"/>
@@ -25198,17 +25198,17 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="421"/>
         <source>Hang into page margin</source>
-        <translation type="unfinished"/>
+        <translation>Sobresalir en el margen de la página</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="426"/>
         <source>Inset time signature</source>
-        <translation type="unfinished"/>
+        <translation>Desplazamiento de la indicación de compás</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="431"/>
         <source>Inset barline</source>
-        <translation type="unfinished"/>
+        <translation>Desplazamiento de barra de compás</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="452"/>
@@ -25334,7 +25334,7 @@ e intente de nuevo</translation>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="56"/>
         <source>Triggering the percussion panel</source>
-        <translation type="unfinished"/>
+        <translation>Activar el panel de percusión</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="68"/>

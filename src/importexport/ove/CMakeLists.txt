@@ -37,5 +37,9 @@ set(MODULE_LINK
     engraving
     )
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Core5Compat)
+endif()
+
 setup_module()
 

@@ -102,7 +102,7 @@ std::vector<ScoreRangeUtilities::RangeSection> ScoreRangeUtilities::splitRangeBy
         const System* currentSegmentSystem = segment->measure()->system();
 
         const Segment* nextSegment = segment->next1MMenabled();
-        while (!nextSegment->isActive()) {
+        while (nextSegment && !nextSegment->isActive()) {
             nextSegment = nextSegment->next1MMenabled();
         }
 

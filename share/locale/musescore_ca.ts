@@ -5546,7 +5546,7 @@ l&apos;alçària x del text):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="252"/>
         <source>Inch (in)</source>
-        <translation>Polzada (in)</translation>
+        <translation>Polzada (&quot;)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="259"/>
@@ -6243,7 +6243,7 @@ l&apos;alçària x del text):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="523"/>
         <source>Accidentals:</source>
-        <translation type="unfinished"/>
+        <translation>Alteracions:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="537"/>
@@ -11876,7 +11876,7 @@ Publicat sota &lt;a href=&quot;%1&quot;&gt;llicència pública general de GNU ve
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MixerSection.qml" line="41"/>
         <source>Toggle track mute by showing/hiding instruments in the Layout panel</source>
-        <translation type="unfinished"/>
+        <translation>Commuta l&apos;emmudiment de pista en mostrar/amagar instruments en el panell de disseny</translation>
     </message>
     <message>
         <source>Toggle track mute by showing/hiding instruments in the Instruments panel</source>
@@ -19565,7 +19565,7 @@ Trast %1 en cordes %2</translation>
         <location filename="../../src/notation/view/widgets/pagesettings.cpp" line="170"/>
         <source>in</source>
         <comment>abbreviation of inch</comment>
-        <translation type="unfinished"/>
+        <translation>&quot;</translation>
     </message>
 </context>
 <context>
@@ -22932,7 +22932,7 @@ compàs d&apos;anacrusi</translation>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="56"/>
         <source>&amp;</source>
-        <translation type="unfinished"/>
+        <translation>i</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/systemobjectslayertreeitem.cpp" line="65"/>
@@ -31158,7 +31158,7 @@ ha fallat.</translation>
         <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="164"/>
         <location filename="../../src/notation/view/abstractelementpopupmodel.cpp" line="176"/>
         <source>Edit %1</source>
-        <translation type="unfinished"/>
+        <translation>Edita %1</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/abstractinspectormodel.cpp" line="462"/>
@@ -31561,22 +31561,22 @@ ha fallat.</translation>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1096"/>
         <source>Drag element(s)</source>
-        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
+        <translation><numerusform>Arrossega element</numerusform><numerusform>Arrossega elements</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="1740"/>
         <source>Drop element: %1</source>
-        <translation type="unfinished"/>
+        <translation>Deixa anar element: %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="2109"/>
         <source>Apply palette element: %1</source>
-        <translation type="unfinished"/>
+        <translation>Aplica element de paleta: %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="3859"/>
         <source>Change vertical position</source>
-        <translation type="unfinished"/>
+        <translation>Canvia posició vertical</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5342"/>
@@ -31871,12 +31871,12 @@ ha fallat.</translation>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="439"/>
         <source>Add note to chord</source>
-        <translation type="unfinished"/>
+        <translation>Afegeix nota a l&apos;acord</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="441"/>
         <source>Insert note</source>
-        <translation type="unfinished"/>
+        <translation>Insereix una nota</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationnoteinput.cpp" line="463"/>
@@ -32093,7 +32093,7 @@ ha fallat.</translation>
     <message>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="190"/>
         <source>Remove hairpin</source>
-        <translation type="unfinished"/>
+        <translation>Elimina regulador</translation>
     </message>
 </context>
 <context>

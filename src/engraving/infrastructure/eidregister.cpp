@@ -24,11 +24,13 @@
 #include "eidregister.h"
 #include "log.h"
 
+#include "dom/mscore.h"
+
 using namespace mu::engraving;
 
 EID EIDRegister::newEIDForItem(const EngravingObject* item)
 {
-    EID eid = EID::newUnique();
+    EID eid = MScore::testMode ? EID::newUniqueTestMode(m_maxValTestMode) : EID::newUnique();
     registerItemEID(eid, const_cast<EngravingObject*>(item));
     return eid;
 }
@@ -44,6 +46,10 @@ void EIDRegister::registerItemEID(const EID& eid, const EngravingObject* item)
 
     inserted = m_itemToEid.emplace(const_cast<EngravingObject*>(item), eid).second;
     assert(inserted);
+
+    if (MScore::testMode) {
+        EID::updateMaxValTestMode(eid, m_maxValTestMode);
+    }
 
 #ifdef NDEBUG
     UNUSED(inserted);

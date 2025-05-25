@@ -789,7 +789,7 @@ class ChangeStaff : public UndoCommand
 
     bool visible = false;
     ClefTypeList clefType;
-    double userDist = 0.0;
+    Spatium userDist = Spatium(0.0);
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     bool showIfEmpty = false;
     bool cutaway = false;
@@ -802,8 +802,8 @@ class ChangeStaff : public UndoCommand
 public:
     ChangeStaff(Staff*);
 
-    ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, double userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
-                bool _hideSystemBarLine, AutoOnOff _mergeRests, bool _reflectTranspositionInLinkedTab);
+    ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, Spatium userDist, Staff::HideMode _hideMode, bool _showIfEmpty,
+                bool _cutaway, bool _hideSystemBarLine, AutoOnOff _mergeRests, bool _reflectTranspositionInLinkedTab);
 
     UNDO_TYPE(CommandType::ChangeStaff)
     UNDO_NAME("ChangeStaff")
@@ -1641,6 +1641,25 @@ public:
     UNDO_TYPE(CommandType::FretClear)
     UNDO_NAME("FretClear")
     UNDO_CHANGED_OBJECTS({ diagram })
+};
+
+class FretLinkHarmony : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, FretLinkHarmony)
+
+    FretDiagram* m_fretDiagram = nullptr;
+    Harmony* m_harmony = nullptr;
+    bool m_unlink = false;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    FretLinkHarmony(FretDiagram*, Harmony*, bool unlink = false);
+
+    UNDO_TYPE(CommandType::FretLinkHarmony)
+    UNDO_NAME("FretLinkHarmony")
+    UNDO_CHANGED_OBJECTS({ m_fretDiagram })
 };
 
 class MoveTremolo : public UndoCommand

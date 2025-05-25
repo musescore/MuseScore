@@ -1334,6 +1334,10 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         this->writeArtics(chord);
         this->writeVerses(chord);
     }
+    const int velocity = note->userVelocity();
+    if (velocity != 0) {
+        meiNote.SetVel(velocity);
+    }
     Convert::colorToMEI(note, meiNote);
     std::string xmlId = this->getXmlIdFor(note, 'n');
     meiNote.Write(m_currentNode, xmlId);
@@ -1710,7 +1714,7 @@ bool MeiExporter::writeF(const FiguredBassItem* figuredBassItem)
 }
 
 /**
- * Write a fb (FigureBass).
+ * Write a fb (figured bass).
  */
 
 bool MeiExporter::writeFb(const FiguredBass* figuredBass, const std::string& startid)

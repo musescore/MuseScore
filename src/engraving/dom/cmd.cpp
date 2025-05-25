@@ -1368,11 +1368,15 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             Fraction tick = cr->tick() + actualTicks(sd, tuplet, timeStretch);
 
             std::vector<TDuration> dList;
-            if (tuplet || staff(track / VOICES)->isLocalTimeSignature(tick)) {
+            if (tuplet) {
                 dList = toDurationList(rd, false);
                 std::reverse(dList.begin(), dList.end());
             } else {
-                dList = toRhythmicDurationList(rd, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, 0);
+                Staff* stf = staff(track2staff(track));
+                TimeSig* timeSig = stf->timeSig(tick);
+                TimeSigFrac refTimeSig = timeSig ? timeSig->sig() : sigmap()->timesig(tick).nominal();
+                Fraction rTickStart = (tick - measure->tick()) * stf->timeStretch(tick);
+                dList = toRhythmicDurationList(rd, true, rTickStart, refTimeSig, measure, 0);
             }
             if (dList.empty()) {
                 break;

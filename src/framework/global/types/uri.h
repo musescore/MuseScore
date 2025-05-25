@@ -85,6 +85,10 @@ public:
     const Params& params() const;
     Val param(const std::string& key, const Val& def = Val()) const;
     void addParam(const std::string& key, const Val& val);
+    UriQuery& add(const std::string& key, const Val& val);
+    UriQuery& add(const std::string& key, const std::string& val) { return add(key, Val(val)); }
+    UriQuery& add(const std::string& key, int val) { return add(key, Val(val)); }
+    UriQuery& add(const std::string& key, bool val) { return add(key, Val(val)); }
     UriQuery addingParam(const std::string& key, const Val& val) const;
     bool contains(const std::string& key) const;
 

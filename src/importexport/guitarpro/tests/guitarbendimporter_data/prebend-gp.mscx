@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,14 +18,15 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
-        <linkedTo>2</linkedTo>
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <Staff id="2">
-        <linkedTo>1</linkedTo>
+      <Staff>
+        <eid>D_D</eid>
+        <linkedTo>C_C</linkedTo>
         <StaffType group="tablature">
           <name>tab6StrSimple</name>
           <lines>6</lines>
@@ -76,51 +78,61 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>E_E</eid>
         <Text>
+          <eid>F_F</eid>
           <style>title</style>
           <text/>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <text/>
           </Text>
         <Text>
+          <eid>H_H</eid>
           <style>poet</style>
           <text/>
           </Text>
         </VBox>
       <Measure>
+        <eid>I_I</eid>
         <voice>
           <KeySig>
-            <linkedMain/>
+            <eid>J_J</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>L_L</eid>
             </Dynamic>
           <Tempo>
             <tempo>2</tempo>
+            <eid>M_M</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Chord>
-            <linkedMain/>
+            <eid>N_N</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <linkedMain/>
+              <eid>O_O</eid>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
+                <eid>P_P</eid>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
+                <eid>Q_Q</eid>
                 </Symbol>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -131,7 +143,7 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <linkedMain/>
+                  <eid>R_R</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -142,13 +154,13 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
+              <eid>T_T</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>1</fret>
+              <fret>3</fret>
               <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
@@ -160,29 +172,31 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
+            <eid>U_U</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <linkedMain/>
+              <eid>V_V</eid>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
+                <eid>W_W</eid>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
+                <eid>X_X</eid>
                 </Symbol>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>3</fret>
+              <fret>1</fret>
               <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <linkedMain/>
+                  <eid>Y_Y</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -193,18 +207,19 @@
               </Note>
             </Chord>
           <Chord>
-            <linkedMain/>
+            <eid>Z_Z</eid>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
+              <eid>a_a</eid>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalQuarterToneSharpArrowDown</subtype>
+                <eid>b_b</eid>
                 </Accidental>
               <pitch>64</pitch>
               <tpc>18</tpc>
-              <fret>1</fret>
-              <string>1</string>
+              <fret>0</fret>
+              <string>0</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -215,7 +230,7 @@
               </Note>
             </Chord>
           <Rest>
-            <linkedMain/>
+            <eid>c_c</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
@@ -225,21 +240,21 @@
       <Measure>
         <voice>
           <KeySig>
-            <linked>
-              </linked>
+            <eid>d_d</eid>
+            <linkedTo>J_J</linkedTo>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <Chord>
-            <linked>
-              </linked>
+            <eid>e_e</eid>
+            <linkedTo>N_N</linkedTo>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <linked>
-                </linked>
+              <eid>f_f</eid>
+              <linkedTo>O_O</linkedTo>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -249,8 +264,8 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <linked>
-                    </linked>
+                  <eid>g_g</eid>
+                  <linkedTo>R_R</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -261,12 +276,12 @@
               </Note>
             </Chord>
           <Chord>
-            <linked>
-              </linked>
+            <eid>h_h</eid>
+            <linkedTo>S_S</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <linked>
-                </linked>
+              <eid>i_i</eid>
+              <linkedTo>T_T</linkedTo>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>1</fret>
@@ -281,15 +296,15 @@
               </Note>
             </Chord>
           <Chord>
-            <linked>
-              </linked>
+            <eid>j_j</eid>
+            <linkedTo>U_U</linkedTo>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <linked>
-                </linked>
+              <eid>k_k</eid>
+              <linkedTo>V_V</linkedTo>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -299,8 +314,8 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <linked>
-                    </linked>
+                  <eid>l_l</eid>
+                  <linkedTo>Y_Y</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -311,15 +326,16 @@
               </Note>
             </Chord>
           <Chord>
-            <linked>
-              </linked>
+            <eid>m_m</eid>
+            <linkedTo>Z_Z</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <linked>
-                </linked>
+              <eid>n_n</eid>
+              <linkedTo>a_a</linkedTo>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalQuarterToneSharpArrowDown</subtype>
+                <eid>o_o</eid>
                 </Accidental>
               <pitch>64</pitch>
               <tpc>18</tpc>
@@ -335,8 +351,8 @@
               </Note>
             </Chord>
           <Rest>
-            <linked>
-              </linked>
+            <eid>p_p</eid>
+            <linkedTo>c_c</linkedTo>
             <durationType>half</durationType>
             </Rest>
           </voice>

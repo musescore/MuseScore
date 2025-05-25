@@ -14,8 +14,8 @@ private:
     std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(muse::XmlDomNode* trackNode, muse::XmlDomNode* versionNode) override;
 
     int readMidiChannel(muse::XmlDomNode* trackChildNode) const;
-    int readMidiProgramm(muse::XmlDomNode* trackChildNode, bool isRSE, const muse::String& soundPath) const;
-    GPTrack::Sound readSounds(muse::XmlDomNode* trackChildNode, bool isRSE) const;
+    int readMidiProgramm(muse::XmlDomNode* trackChildNode) const;
+    GPTrack::Sound readSounds(muse::XmlDomNode* trackChildNode) const;
     GPTrack::SoundAutomation readTrackAutomation(muse::XmlDomNode* automationNode) const;
 };
 } // namespace mu::iex::guitarpro

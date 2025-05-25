@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
@@ -28,7 +29,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -78,37 +80,47 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <TimeSig>
+            <eid>E_E</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>F_F</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>M_M</eid>
         <voice>
           <Rest>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             </Rest>
           <Chord>
+            <eid>O_O</eid>
             <durationType>quarter</durationType>
             <Lyrics>
               <ticks>1440</ticks>
               <ticks_f>3/4</ticks_f>
+              <eid>P_P</eid>
               <text>A</text>
               </Lyrics>
             <Note>
+              <eid>Q_Q</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>S_S</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -116,22 +128,28 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <Chord>
+            <eid>H_H</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>I_I</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>J_J</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>K_K</eid>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>L_L</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
