@@ -172,6 +172,7 @@ void EnigmaXmlImporter::importMeasures()
     m_score->sigmap()->clear();
     m_score->sigmap()->add(0, currTimeSig);
 
+    // create global time signatures. local timesigs are set up later
     std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
         Fraction tick{ 0, 1 };
@@ -193,8 +194,6 @@ void EnigmaXmlImporter::importMeasures()
         measure->setTimesig(scoreTimeSig);
         measure->setTicks(scoreTimeSig);
         m_score->measures()->append(measure);
-
-        /// @todo key signature
     }
 
     // import system layout
@@ -507,6 +506,7 @@ void EnigmaXmlImporter::importStaffItems()
     std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
         std::shared_ptr<TimeSignature> currMusxTimeSig;
+        std::shared_ptr<KeySignature> currMusxKeySig;
         ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId);
         /// @todo handle pickup measures and other measures where display and actual timesigs differ
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
@@ -529,8 +529,8 @@ void EnigmaXmlImporter::importStaffItems()
             }
 
             // timesig
-            std::shared_ptr<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
-            std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
+            const std::shared_ptr<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
+            const std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
             if (!currMusxTimeSig || !currMusxTimeSig->isSame(*musxTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
                 Fraction timeSig = FinaleTConv::simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
                 Segment* seg = measure->getSegment(SegmentType::TimeSig, currTick);
@@ -549,7 +549,32 @@ void EnigmaXmlImporter::importStaffItems()
             // clefs
             importClefs(musxScrollViewItem, musxMeasure, measure, staffIdx, musxCurrClef);
 
-            /// @todo key signatures (including independent key sigs)
+            // keysig
+            const std::shared_ptr<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxScrollViewItem->staffId);
+            if (!currMusxKeySig || !currMusxKeySig->isSame(*musxKeySig) || musxMeasure->showKey == others::Measure::ShowKeySigMode::Always) {
+                /// @todo custom keysigs
+                if (musxKeySig->calcEDODivisions() == music_theory::STANDARD_12EDO_STEPS && musxKeySig->isBuiltIn()) {
+                    Key key = FinaleTConv::keyFromAlteration(musxKeySig->getAlteration());
+                    Segment* seg = measure->getSegment(SegmentType::KeySig, currTick);
+                    KeySig* ks = Factory::createKeySig(seg);
+                    ks->setKey(key);
+                    ks->setTrack(staffIdx * VOICES);
+                    ks->setVisible(musxMeasure->showKey != others::Measure::ShowKeySigMode::Never);
+                    KeyMode km = KeyMode::UNKNOWN;
+                    if (musxKeySig->keyless) {
+                        km = KeyMode::NONE;
+                    } else if (musxKeySig->isMajor()) {
+                        km = KeyMode::MAJOR;
+                    } else if (musxKeySig->isMinor()) {
+                        km = KeyMode::MINOR;
+                    }
+                    ks->setMode(km);
+                    seg->add(ks);
+                    staff->setKey(currTick, ks->keySigEvent());
+                } else {
+                    logger()->logWarning(String(u"Microtonal / custom key signatures not supported."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                }
+            }
         }
     }
 }

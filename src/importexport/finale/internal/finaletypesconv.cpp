@@ -1020,4 +1020,9 @@ Fraction FinaleTConv::simpleMusxTimeSigToFraction(const std::pair<musx::util::Fr
     return Fraction(count.quotient(),  musx::util::Fraction::fromEdu(Edu(noteType)).denominator());
 }
 
+Key FinaleTConv::keyFromAlteration(int musxAlteration)
+{
+    return Key(musxAlteration);
+}
+
 }
