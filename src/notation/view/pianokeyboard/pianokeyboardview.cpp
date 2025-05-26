@@ -166,12 +166,68 @@ void PianoKeyboardView::calculateKeyRects()
 }
 
 bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key) {
-    for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
-        const piano_key_t& _key = m_clefKeySigs[i];
-        if (_key == key) {
-            return true;
+    // offset
+    // G#8va    120x1
+    // G#15va   120x2
+    // Gb8va    120x3
+    // F#8va    120x4
+    // Fb8va    120x5
+    if (keyIndex < 120) {
+        for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
+            const piano_key_t& _key = m_clefKeySigs[i];
+            if (_key == key) {
+                return true;
+            }
         }
-    }
+        return false;
+    } 
+
+    if (keyIndex / 120 == 1) {
+        keyIndex -= 120;
+        for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
+            if (m_clefKeySigs[i] + 12 == key) {
+                return true;
+            }
+        }
+        return false;
+    } 
+    if (keyIndex / 120 == 2) {
+        keyIndex -= 240;
+        for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
+            if (m_clefKeySigs[i] + 24 == key) {
+                return true;
+            }
+        }
+        return false;
+    } 
+    if (keyIndex / 120 == 3) {
+        keyIndex -= 360;
+        for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
+            if (m_clefKeySigs[i] - 12 == key) {
+                return true;
+            }
+        }
+        return false;
+    } 
+    // if (keyIndex / 120 == 4) {
+    //     keyIndex -= 480;
+    //     for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
+    //         if (m_clefKeySigs[i] + 12 == key) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // } 
+    // if (keyIndex / 120 == 5) {
+    //     keyIndex -= 600;
+    //     for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
+    //         if (m_clefKeySigs[i] - 12 == key) {
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+    
     return false;
 }
 

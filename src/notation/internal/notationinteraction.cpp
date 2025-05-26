@@ -1242,7 +1242,11 @@ muse::async::Notification NotationInteraction::arpeggioNotesChanged() {
 std::vector<mu::engraving::Note *> NotationInteraction::arpeggioNotes() const {
     return arpeggio_notes;
 }
-void NotationInteraction::arpeggioNotesUpdate() {
+bool NotationInteraction::arpeggioIsDown() const {
+    return arpeggio_is_down;
+}
+void NotationInteraction::arpeggioNotesUpdate(bool isDown) {
+    arpeggio_is_down = isDown;
     m_arpeggioNotesChanged.notify();
 }
 void NotationInteraction::arpeggioTick(int ticks) {

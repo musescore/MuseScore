@@ -164,7 +164,10 @@ public:
     virtual std::vector<mu::engraving::Note *> arpeggioNotes() const {
         return {};
     }
-    virtual void arpeggioNotesUpdate() {
+    virtual bool arpeggioIsDown() const {
+        return false;
+    }
+    virtual void arpeggioNotesUpdate(bool) {
         
     }
     virtual void arpeggioTick(int) {

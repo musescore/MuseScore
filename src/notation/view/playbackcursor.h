@@ -81,6 +81,8 @@ private:
     Note *curr_trill_note = nullptr;
 
     std::set<ClefType> clefTypes;
+    std::unordered_set<ClefType> curr_clefTypes;
+    std::map<int, ClefType> stash_clefType;
     std::set<mu::engraving::Key> keySigKeys;
 };
 }
