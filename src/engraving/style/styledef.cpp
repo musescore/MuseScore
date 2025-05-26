@@ -898,7 +898,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(rhGuitarFingeringOffset,                    PointF()),
 
     styleDef(hammerOnPullOffTappingFontFace,                          "Edwin"),
-    styleDef(hammerOnPullOffTappingFontSize,                          10.0),
+    styleDef(hammerOnPullOffTappingFontSize,                          8.0),
     styleDef(hammerOnPullOffTappingLineSpacing,                       1.0),
     styleDef(hammerOnPullOffTappingFontSpatiumDependent,              true),
     styleDef(hammerOnPullOffTappingFontStyle,                         int(FontStyle::Normal)),
