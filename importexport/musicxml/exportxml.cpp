@@ -2124,6 +2124,7 @@ void ExportMusicXml::timesig(const TimeSig* tsig, int staff)
       const int z = ts.numerator();
       const int n = ts.denominator();
       const QString ns = tsig->numeratorString();
+      const QString ds = tsig->denominatorString();
 
       _attr.doAttr(_xml, true);
       QString tagName = "time";
@@ -2131,7 +2132,7 @@ void ExportMusicXml::timesig(const TimeSig* tsig, int staff)
             tagName += " symbol=\"common\"";
       else if (st == TimeSigType::ALLA_BREVE)
             tagName += " symbol=\"cut\"";
-      else if (!ns.isEmpty() && tsig->denominatorString().isEmpty())
+      else if (!ns.isEmpty() && ds.isEmpty())
             tagName += " symbol=\"single-number\"";
       if (staff)
             tagName += QString(" number=\"%1\"").arg(staff);
@@ -2140,14 +2141,14 @@ void ExportMusicXml::timesig(const TimeSig* tsig, int staff)
       tagName += color2xml(tsig);
       _xml.stag(tagName);
 
-      static const QRegExp beats_re("^\\d+(\\+\\d+)+$"); // matches a compound numerator
-      if (beats_re.exactMatch(ns))
-            // if compound numerator, exported as is
+      if (!ns.isEmpty())
             _xml.tag("beats", ns);
       else
-            // else fall back and use the numerator as integer
             _xml.tag("beats", z);
-      _xml.tag("beat-type", n);
+      if (!ds.isEmpty())
+            _xml.tag("beat-type", ds);
+      else
+            _xml.tag("beat-type", n);
       _xml.etag();
       }
 
