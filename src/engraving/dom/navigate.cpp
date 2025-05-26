@@ -25,6 +25,7 @@
 #include "chord.h"
 #include "engravingitem.h"
 #include "lyrics.h"
+#include "hammeronpulloff.h"
 #include "measure.h"
 #include "measurerepeat.h"
 #include "marker.h"
@@ -750,6 +751,15 @@ EngravingItem* Score::nextElement()
                 return score()->firstElement();
             }
         }
+        case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+            return toHammerOnPullOffText(e)->endChord()->upNote();
+        case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
+        {
+            HammerOnPullOffSegment* hopoSeg = toHammerOnPullOffSegment(e);
+            if (!hopoSeg->hopoText().empty()) {
+                return hopoSeg->hopoText().front();
+            } // else fallthrough:
+        }
         case ElementType::VOLTA_SEGMENT:
         case ElementType::SLUR_SEGMENT:
         case ElementType::TEXTLINE_SEGMENT:
@@ -941,8 +951,20 @@ EngravingItem* Score::prevElement()
 
             return previousElement;
         }
+        case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+        {
+            HammerOnPullOffText* hopoText = toHammerOnPullOffText(e);
+            HammerOnPullOffSegment* hopoSegment = toHammerOnPullOffSegment(hopoText->parent());
+            DO_ASSERT(hopoSegment);
+            if (hopoSegment->hopoText().size() > 0 && hopoSegment->hopoText().front() == hopoText) {
+                return hopoSegment;
+            } else {
+                return hopoText->startChord()->downNote();
+            }
+        }
         case ElementType::VOLTA_SEGMENT:
         case ElementType::SLUR_SEGMENT:
+        case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
         case ElementType::TEXTLINE_SEGMENT:
         case ElementType::HAIRPIN_SEGMENT:
         case ElementType::OTTAVA_SEGMENT:

@@ -37,6 +37,7 @@
 #include "chordrest.h"
 #include "clef.h"
 #include "engravingitem.h"
+#include "hammeronpulloff.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
@@ -2102,6 +2103,17 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         if (s) {
             return s->spannerSegments().front();
         }
+
+        for (SpannerSegment* spannerSeg : system()->spannerSegments()) {
+            if (spannerSeg->staffIdx() == activeStaff && spannerSeg->isHammerOnPullOffSegment()) {
+                for (HammerOnPullOffText* hopoText : toHammerOnPullOffSegment(spannerSeg)->hopoText()) {
+                    if (hopoText->startChord() && hopoText->startChord()->segment() == this) {
+                        return hopoText;
+                    }
+                }
+            }
+        }
+
         Segment* nextSegment = seg->next1MMenabled();
         for (; nextSegment && nextSegment->isTimeTickType(); nextSegment = nextSegment->next1MMenabled()) {
             if (EngravingItem* annotation = nextSegment->firstAnnotation(activeStaff)) {
@@ -2288,7 +2300,19 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             } else {
                 return prev;
             }
+        } else {
+            System* system = seg->system();
+            for (SpannerSegment* spannerSeg : system->spannerSegments()) {
+                if (spannerSeg->staffIdx() == activeStaff && spannerSeg->isHammerOnPullOffSegment()) {
+                    for (HammerOnPullOffText* hopoText : toHammerOnPullOffSegment(spannerSeg)->hopoText()) {
+                        if (hopoText->endChord() && hopoText->endChord()->segment() == seg) {
+                            return hopoText;
+                        }
+                    }
+                }
+            }
         }
+
         Segment* prevSeg = seg->prev1MMenabled();
         for (; prevSeg && prevSeg->isTimeTickType(); prevSeg = prevSeg->prev1MMenabled()) {
             if (Spanner* spanner = prevSeg->lastSpanner(activeStaff)) {
