@@ -80,7 +80,7 @@ Item {
         FlatButton {
             id: bypassBtn
 
-            readonly property bool isHovering: bypassBtn.mouseArea.containsMouse
+            readonly property bool isHovering: bypassBtn.mouseArea.containsMouse && bypassBtn.enabled
 
             Layout.fillWidth: true
             Layout.preferredHeight: audioSignalAmountKnob.backgroundHeight
@@ -96,7 +96,7 @@ Item {
             }
 
             text: {
-                if (audioSignalAmountKnob.mouseArea.pressed) {
+                if (audioSignalAmountKnob.mouseArea.pressed && audioSignalAmountKnob.enabled) {
                     return audioSignalAmountKnob.value + "%"
                 }
 
