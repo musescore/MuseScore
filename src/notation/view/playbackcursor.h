@@ -62,7 +62,7 @@ public:
 
     void setHitMeasureNo(int m_no);
     void setHitMeasure(Measure* m);
-
+    
     Q_OBJECT
 signals:
     void lingeringCursorUpdate(double x, double y, double width, double height) const;
