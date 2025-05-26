@@ -65,9 +65,9 @@ public:
     RetVal<QColor> selectColor(const QColor& color = Qt::white, const QString& title = "") override;
     bool isSelectColorOpened() const override;
 
-    RetVal<Val> open(const UriQuery& uri) override;
     RetVal<Val> openSync(const UriQuery& uri) override;
     async::Promise<Val> openAsync(const UriQuery& uri) override;
+    async::Promise<Val> openAsync(const Uri& uri, const QVariantMap& params) override;
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
     async::Channel<Uri> opened() const override;
@@ -98,7 +98,6 @@ signals:
 
 private:
     struct OpenData {
-        bool sync = false;
         QString objectId;
     };
 
@@ -111,19 +110,20 @@ private:
     };
 
     async::Promise<Val>::Body openFunc(const UriQuery& q);
+    async::Promise<Val>::Body openFunc(const UriQuery& q, const QVariantMap& params);
 
     void raiseWindowInStack(QObject* newActiveWindow);
 
-    void fillExtData(QmlLaunchData* data, const UriQuery& q) const;
-    void fillData(QmlLaunchData* data, const UriQuery& q) const;
-    void fillData(QObject* object, const UriQuery& q) const;
+    void fillExtData(QmlLaunchData* data, const UriQuery& q, const QVariantMap& params) const;
+    void fillData(QmlLaunchData* data, const Uri& uri, const QVariantMap& params) const;
+    void fillData(QObject* object, const QVariantMap& params) const;
 
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
 
-    RetVal<OpenData> openExtensionDialog(const UriQuery& q);
-    RetVal<OpenData> openWidgetDialog(const UriQuery& q);
-    RetVal<OpenData> openQml(const UriQuery& q);
+    RetVal<OpenData> openExtensionDialog(const UriQuery& q, const QVariantMap& params);
+    RetVal<OpenData> openWidgetDialog(const Uri& uri, const QVariantMap& params);
+    RetVal<OpenData> openQml(const Uri& uri, const QVariantMap& params);
 
     void closeObject(const ObjectInfo& obj);
 

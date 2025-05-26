@@ -77,11 +77,7 @@ Item {
                     return
                 }
 
-                if (Boolean(data.value("sync")) && data.value("sync") === true) {
-                    dialogObj.object.exec()
-                } else {
-                    dialogObj.object.show()
-                }
+                dialogObj.object.show()
             }
         }
 

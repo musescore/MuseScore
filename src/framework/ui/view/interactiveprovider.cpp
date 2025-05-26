@@ -136,16 +136,6 @@ bool InteractiveProvider::isSelectColorOpened() const
     return m_isSelectColorOpened;
 }
 
-RetVal<Val> InteractiveProvider::open(const UriQuery& q)
-{
-    if (q.param("sync", Val(false)).toBool()) {
-        return openSync(q);
-    } else {
-        openAsync(q);
-        return RetVal<Val>::make_ok(Val());
-    }
-}
-
 RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
 {
     UriQuery q = q_;
@@ -185,12 +175,30 @@ Promise<Val> InteractiveProvider::openAsync(const UriQuery& q)
     return make_promise<Val>(openFunc(q));
 }
 
+async::Promise<Val> InteractiveProvider::openAsync(const Uri& uri, const QVariantMap& params)
+{
+    return make_promise<Val>(openFunc(UriQuery(uri), params));
+}
+
 Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q)
 {
-    auto func = [this, q](Promise<Val>::Resolve resolve, Promise<Val>::Reject reject) {
+    QVariantMap params;
+    const UriQuery::Params& p = q.params();
+    for (auto it = p.cbegin(); it != p.cend(); ++it) {
+        params[QString::fromStdString(it->first)] = it->second.toQVariant();
+    }
+
+    return openFunc(q, params);
+}
+
+Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q, const QVariantMap& params)
+{
+    auto func = [this, q, params](Promise<Val>::Resolve resolve, Promise<Val>::Reject reject) {
         m_openingObject = { q, resolve, reject, QVariant(), nullptr };
 
         RetVal<OpenData> openedRet;
+
+        notifyAboutCurrentUriWillBeChanged();
 
         //! NOTE Currently, extensions do not replace the default functionality
         //! But in the future, we may allow extensions to replace the current functionality
@@ -200,17 +208,17 @@ Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q)
         ContainerMeta openMeta = uriRegister()->meta(q.uri());
         switch (openMeta.type) {
         case ContainerType::QWidgetDialog:
-            openedRet = openWidgetDialog(q);
+            openedRet = openWidgetDialog(q.uri(), params);
             break;
         case ContainerType::PrimaryPage:
         case ContainerType::QmlDialog:
-            openedRet = openQml(q);
+            openedRet = openQml(q.uri(), params);
             break;
         case ContainerType::Undefined: {
             //! NOTE Not found default, try extension
             extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
             if (ext.isValid()) {
-                openedRet = openExtensionDialog(q);
+                openedRet = openExtensionDialog(q, params);
             } else {
                 openedRet.ret = make_ret(Ret::Code::UnknownError);
             }
@@ -330,7 +338,7 @@ void InteractiveProvider::closeObject(const ObjectInfo& obj)
     }
 }
 
-void InteractiveProvider::fillExtData(QmlLaunchData* data, const UriQuery& q) const
+void InteractiveProvider::fillExtData(QmlLaunchData* data, const UriQuery& q, const QVariantMap& params_) const
 {
     static Uri VIEWER_URI = Uri("muse://extensions/viewer");
 
@@ -338,46 +346,35 @@ void InteractiveProvider::fillExtData(QmlLaunchData* data, const UriQuery& q) co
     data->setValue("path", meta.qmlPath);
     data->setValue("type", meta.type);
 
-    QVariantMap params;
+    QVariantMap params = params_;
     params["uri"] = QString::fromStdString(q.toString());
 
     //! NOTE Extension dialogs open as non-modal by default
     //! The modal parameter must be present in the uri
     //! But here, just in case, `true` is indicated by default,
     //! since this value is set in the base class of the dialog by default
-    params["modal"] = q.param("modal", Val(true)).toBool();
+    if (!params.contains("modal")) {
+        params["modal"] = q.param("modal", Val(true)).toBool();
+    }
 
     data->setValue("uri", QString::fromStdString(VIEWER_URI.toString()));
     data->setValue("sync", params.value("sync", false));
     data->setValue("params", params);
 }
 
-void InteractiveProvider::fillData(QmlLaunchData* data, const UriQuery& q) const
+void InteractiveProvider::fillData(QmlLaunchData* data, const Uri& uri, const QVariantMap& params) const
 {
-    ContainerMeta meta = uriRegister()->meta(q.uri());
+    ContainerMeta meta = uriRegister()->meta(uri);
     data->setValue("path", meta.qmlPath);
     data->setValue("type", meta.type);
-    data->setValue("uri", QString::fromStdString(q.uri().toString()));
-
-    QVariantMap params;
-    const UriQuery::Params& p = q.params();
-    for (auto it = p.cbegin(); it != p.cend(); ++it) {
-        params[QString::fromStdString(it->first)] = it->second.toQVariant();
-    }
-
+    data->setValue("uri", QString::fromStdString(uri.toString()));
     data->setValue("params", params);
     data->setValue("sync", params.value("sync", false));
     data->setValue("modal", params.value("modal", ""));
 }
 
-void InteractiveProvider::fillData(QObject* object, const UriQuery& q) const
+void InteractiveProvider::fillData(QObject* object, const QVariantMap& params) const
 {
-    QVariantMap params;
-    const UriQuery::Params& p = q.params();
-    for (auto it = p.cbegin(); it != p.cend(); ++it) {
-        params[QString::fromStdString(it->first)] = it->second.toQVariant();
-    }
-
     const QMetaObject* metaObject = object->metaObject();
     for (int i = 0; i < metaObject->propertyCount(); i++) {
         QMetaProperty metaProperty = metaObject->property(i);
@@ -516,30 +513,25 @@ RetVal<Val> InteractiveProvider::toRetVal(const QVariant& jsrv) const
     return rv;
 }
 
-RetVal<InteractiveProvider::OpenData> InteractiveProvider::openExtensionDialog(const UriQuery& q)
+RetVal<InteractiveProvider::OpenData> InteractiveProvider::openExtensionDialog(const UriQuery& q, const QVariantMap& params)
 {
-    notifyAboutCurrentUriWillBeChanged();
-
     QmlLaunchData data;
-    fillExtData(&data, q);
+    fillExtData(&data, q, params);
 
     emit fireOpen(&data);
 
     RetVal<OpenData> result;
     result.ret = toRet(data.value("ret"));
-    result.val.sync = data.value("sync").toBool();
     result.val.objectId = data.value("objectId").toString();
 
     return result;
 }
 
-RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(const UriQuery& q)
+RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(const Uri& uri, const QVariantMap& params)
 {
-    notifyAboutCurrentUriWillBeChanged();
-
     RetVal<OpenData> result;
 
-    ContainerMeta meta = uriRegister()->meta(q.uri());
+    ContainerMeta meta = uriRegister()->meta(uri);
     int widgetMetaTypeId = meta.widgetMetaTypeId;
 
     static int count(0);
@@ -553,7 +545,7 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
         return result;
     }
 
-    fillData(dialog, q);
+    fillData(dialog, params);
 
     dialog->installEventFilter(new WidgetDialogEventFilter(dialog,
                                                            [this, dialog, objectId]() {
@@ -576,33 +568,24 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
         dialog->deleteLater();
     }));
 
-    bool sync = q.param("sync", Val(false)).toBool();
-    if (sync) {
-        dialog->exec();
-    } else {
-        dialog->show();
-        dialog->activateWindow(); // give keyboard focus to aid blind users
-    }
+    dialog->show();
+    dialog->activateWindow();     // give keyboard focus to aid blind users
 
     result.ret = make_ret(Ret::Code::Ok);
-    result.val.sync = sync;
     result.val.objectId = objectId;
 
     return result;
 }
 
-RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuery& q)
+RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const Uri& uri, const QVariantMap& params)
 {
-    notifyAboutCurrentUriWillBeChanged();
-
     QmlLaunchData data;
-    fillData(&data, q);
+    fillData(&data, uri, params);
 
     emit fireOpen(&data);
 
     RetVal<OpenData> result;
     result.ret = toRet(data.value("ret"));
-    result.val.sync = data.value("sync").toBool();
     result.val.objectId = data.value("objectId").toString();
 
     return result;
