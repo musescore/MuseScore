@@ -66,7 +66,7 @@ NameList: Adobe Glyph List
 DisplaySize: -96
 AntiAlias: 1
 FitToEm: 1
-WinInfo: 0 10 4
+WinInfo: 100 10 4
 BeginPrivate: 7
 BlueValues 21 [0 0 256 257 478 478]
 OtherBlues 11 [-141 -141]
@@ -98,7 +98,9 @@ StartChar: .notdef
 Encoding: 65536 -1 0
 GlifName: _notdef
 Width: 371
-Flags: MW
+Flags: W
+HStem: 0 34<68 271> 648 34<68 271>
+VStem: 34 34<34 648> 271 34<34 648>
 LayerCount: 2
 Fore
 SplineSet
@@ -121,7 +123,7 @@ Encoding: 32 32 1
 GlifName: space
 Width: 352
 GlyphClass: 2
-Flags: MW
+Flags: W
 LayerCount: 2
 Fore
 Validated: 1
@@ -132,7 +134,9 @@ Encoding: 43 43 2
 GlifName: plus
 Width: 256
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: 230 52<7.73523 102 154 248.265>
+VStem: 102 52<128.281 230 282 383.719>
 LayerCount: 2
 Fore
 SplineSet
@@ -170,7 +174,9 @@ Encoding: 44 44 3
 GlifName: comma
 Width: 117
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -161 279<39 53>
+VStem: 68 50<-61.5758 69>
 LayerCount: 2
 Fore
 SplineSet
@@ -198,7 +204,9 @@ Encoding: 45 45 4
 GlifName: hyphen
 Width: 169
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: 156 29<0.00366211 170.996>
+VStem: 0 171<156 185>
 LayerCount: 2
 Fore
 SplineSet
@@ -218,7 +226,9 @@ Encoding: 46 46 5
 GlifName: period
 Width: 117
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: 0 118<13.7812 104.219>
+VStem: 0 118<13.7812 104.219>
 LayerCount: 2
 Fore
 SplineSet
@@ -290,7 +300,9 @@ Encoding: 57506 57506 7
 GlifName: uniE_0A_2
 Width: 506
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -141 26<229.406 329.161> 115 26<178.911 276.918>
+VStem: 0 150<-51.4432 59.6467> 357 150<-58.7953 51.5723>
 LayerCount: 2
 Fore
 SplineSet
@@ -320,7 +332,9 @@ Encoding: 57507 57507 8
 GlifName: uniE_0A_3
 Width: 355
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -141 32<42.5437 122.043> 109 32<234.539 312.31>
+VStem: 0 33<-99.5717 -32.2754> 323 33<31.7589 99.4023>
 LayerCount: 2
 Fore
 SplineSet
@@ -353,7 +367,7 @@ Encoding: 57601 57601 9
 GlifName: uniE_101
 Width: 439
 GlyphClass: 2
-Flags: MW
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -378,7 +392,8 @@ Encoding: 57602 57602 10
 GlifName: uniE_102
 Width: 773
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -269 71<120 411> 198 71<360 652>
 LayerCount: 2
 Fore
 SplineSet
@@ -407,7 +422,8 @@ Encoding: 57603 57603 11
 GlifName: uniE_103
 Width: 601
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -269 71<120 240> 198 71<360 480>
 LayerCount: 2
 Fore
 SplineSet
@@ -436,7 +452,9 @@ Encoding: 57776 57776 12
 GlifName: uniE_1B_0
 Width: 347
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -138 32<41.3617 119.02> 106 31<229.658 305.123>
+VStem: 0 32<-96.4475 -30.9489> 315 32<30.8664 96.2756>
 LayerCount: 2
 Fore
 SplineSet
@@ -473,7 +491,8 @@ Encoding: 57777 57777 13
 GlifName: uniE_1B_1
 Width: 347
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -138 275<131.622 215.045>
 LayerCount: 2
 Fore
 SplineSet
@@ -497,7 +516,9 @@ Encoding: 57778 57778 14
 GlifName: uniE_1B_2
 Width: 355
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 44<45 311> 71 44<45 311>
+VStem: 0 45<-71 71> 311 44<-71 71>
 LayerCount: 2
 Fore
 SplineSet
@@ -528,7 +549,9 @@ Encoding: 57779 57779 15
 GlifName: uniE_1B_3
 Width: 336
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 230<7e-08 330.296>
+VStem: 0 337<-108.296 114.994>
 LayerCount: 2
 Fore
 SplineSet
@@ -554,7 +577,9 @@ Encoding: 57780 57780 16
 GlifName: uniE_1B_4
 Width: 355
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 44<45 252>
+VStem: 0 45<-71 53>
 LayerCount: 2
 Fore
 SplineSet
@@ -583,7 +608,9 @@ Encoding: 57781 57781 17
 GlifName: uniE_1B_5
 Width: 336
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 230<7e-08 62.375>
+VStem: 0 337<-108.296 -68.1875>
 LayerCount: 2
 Fore
 SplineSet
@@ -608,7 +635,9 @@ Encoding: 57782 57782 18
 GlifName: uniE_1B_6
 Width: 355
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: 71 44<103 311>
+VStem: 311 44<-53 71>
 LayerCount: 2
 Fore
 SplineSet
@@ -637,7 +666,9 @@ Encoding: 57783 57783 19
 GlifName: uniE_1B_7
 Width: 336
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 230<274.625 337>
+VStem: 0 337<68.1875 108.296>
 LayerCount: 2
 Fore
 SplineSet
@@ -662,7 +693,9 @@ Encoding: 57784 57784 20
 GlifName: uniE_1B_8
 Width: 336
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 230<163 174>
+VStem: 0 337<-11 11>
 LayerCount: 2
 Fore
 SplineSet
@@ -693,7 +726,9 @@ Encoding: 57785 57785 21
 GlifName: uniE_1B_9
 Width: 336
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 230<127.141 209.859>
+VStem: 0 337<-25.3438 25.3438>
 LayerCount: 2
 Fore
 SplineSet
@@ -719,7 +754,8 @@ Encoding: 57786 57786 22
 GlifName: uniE_1B_A_
 Width: 355
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 44<71 286>
 LayerCount: 2
 Fore
 SplineSet
@@ -748,7 +784,9 @@ Encoding: 57787 57787 23
 GlifName: uniE_1B_B_
 Width: 336
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 231<141.875 196.062>
+VStem: 0 337<-108.297 -58.7656>
 LayerCount: 2
 Fore
 SplineSet
@@ -773,7 +811,9 @@ Encoding: 57788 57788 24
 GlifName: uniE_1B_C_
 Width: 355
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 44<97.7805 258.986> 71 44<45 311>
+VStem: 0 45<-24.2188 71> 311 44<-23.1327 71>
 LayerCount: 2
 Fore
 SplineSet
@@ -806,7 +846,9 @@ Encoding: 57789 57789 25
 GlifName: uniE_1B_D_
 Width: 336
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 230<79.9927 257.524>
+VStem: 0 337<-38.8174 108.296>
 LayerCount: 2
 Fore
 SplineSet
@@ -831,7 +873,8 @@ Encoding: 57790 57790 26
 GlifName: uniE_1B_E_
 Width: 355
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: 71 44<89.086 267.309>
 LayerCount: 2
 Fore
 SplineSet
@@ -862,7 +905,9 @@ Encoding: 57791 57791 27
 GlifName: uniE_1B_F_
 Width: 336
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -115 230<134.328 202.34>
+VStem: 0 337<-3.15625 54.3555>
 LayerCount: 2
 Fore
 SplineSet
@@ -888,7 +933,9 @@ GlifName: uniE_1C_0
 Width: 246
 VWidth: 1000
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -112 48<78 169> 64 48<42 205>
+VStem: 0 246<94 110>
 LayerCount: 2
 Fore
 SplineSet
@@ -920,7 +967,9 @@ GlifName: uniE_1C_3
 Width: 246
 VWidth: 1000
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -113 225<9 173.91>
+VStem: 43 204<-58.2836 57.1691>
 LayerCount: 2
 Fore
 SplineSet
@@ -944,7 +993,9 @@ GlifName: uniE_1C_4
 Width: 246
 VWidth: 1000
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -112 224<217.312 247>
+VStem: 214 33<-57 57>
 LayerCount: 2
 Fore
 SplineSet
@@ -972,7 +1023,9 @@ GlifName: uniE_1C_5
 Width: 246
 VWidth: 1000
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -112 224<177.188 247>
+VStem: 0 247<-19.5 19.5>
 LayerCount: 2
 Fore
 SplineSet
@@ -996,7 +1049,9 @@ GlifName: uniE_1C_7
 Width: 246
 VWidth: 1000
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -112 225<73.0898 242.359>
+VStem: 0 247<-56.3817 57.3817>
 LayerCount: 2
 Fore
 SplineSet
@@ -1017,7 +1072,9 @@ GlifName: uniE_1C_8
 Width: 246
 VWidth: 1000
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -112 224<197.25 247>
+VStem: 193 32<-43.4993 43.4993>
 LayerCount: 2
 Fore
 SplineSet
@@ -1049,7 +1106,9 @@ GlifName: uniE_1C_9
 Width: 246
 VWidth: 1000
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -112 224<177.188 247>
+VStem: 0 247
 LayerCount: 2
 Fore
 SplineSet
@@ -1076,7 +1135,9 @@ GlifName: uniE_1C_A_
 Width: 246
 VWidth: 1000
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -113 226<186 193>
+VStem: 214 33<-59.3719 59.3719>
 LayerCount: 2
 Fore
 SplineSet
@@ -1105,7 +1166,8 @@ Encoding: 58528 58528 36
 GlifName: uniE_4A_0
 Width: 460
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: 0 21G<6.5 15> 238 20G<6.5 15>
 LayerCount: 2
 Fore
 SplineSet
@@ -1133,7 +1195,8 @@ Encoding: 58529 58529 37
 GlifName: uniE_4A_1
 Width: 460
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -258 21G<6.5 15> -20 20G<6.5 15>
 LayerCount: 2
 Fore
 Refer: 36 58528 N 1 0 0 1 0 -258 2
@@ -1145,7 +1208,9 @@ Encoding: 58530 58530 38
 GlifName: uniE_4A_2
 Width: 102
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: 0 102<15.4702 86.5298>
+VStem: 0 102<15.4702 86.5298>
 LayerCount: 2
 Fore
 SplineSet
@@ -1167,7 +1232,9 @@ Encoding: 58531 58531 39
 GlifName: uniE_4A_3
 Width: 102
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -102 102<15.4702 86.5298>
+VStem: 0 102<-86.5298 -15.4702>
 LayerCount: 2
 Fore
 Refer: 38 58530 N 1 0 0 1 0 -102 2
@@ -1179,7 +1246,9 @@ Encoding: 58532 58532 40
 GlifName: uniE_4A_4
 Width: 308
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: 0 40<0.0273438 300.781>
+VStem: 0 308<5.15747 34.8425>
 LayerCount: 2
 Fore
 SplineSet
@@ -1203,7 +1272,9 @@ Encoding: 58533 58533 41
 GlifName: uniE_4A_5
 Width: 308
 GlyphClass: 2
-Flags: MW
+Flags: W
+HStem: -40 40<0.0273438 300.781>
+VStem: 0 308<-34.8425 -5.15747>
 LayerCount: 2
 Fore
 Refer: 40 58532 N 1 0 0 1 0 -40 2
@@ -1215,7 +1286,7 @@ Encoding: 65537 -1 42
 GlifName: _null
 Width: 0
 GlyphClass: 2
-Flags: MW
+Flags: W
 LayerCount: 2
 Fore
 Validated: 1
@@ -1226,7 +1297,7 @@ Encoding: 65538 -1 43
 GlifName: nonmarkingreturn
 Width: 339
 GlyphClass: 2
-Flags: MW
+Flags: W
 LayerCount: 2
 Fore
 Validated: 1
@@ -1237,7 +1308,8 @@ Encoding: 59460 59460 44
 GlifName: fadeout
 Width: 362
 VWidth: 1000
-Flags: MW
+Flags: W
+HStem: 0 21G<9 21.5> 167 29.5<314.817 361.984>
 LayerCount: 2
 Fore
 SplineSet
@@ -1267,7 +1339,8 @@ Encoding: 59459 59459 45
 GlifName: fadein
 Width: 362
 VWidth: 1000
-Flags: MW
+Flags: W
+HStem: 0 21G<341 353> 168.5 29.5<0.0164795 46.3615>
 LayerCount: 2
 Fore
 SplineSet
@@ -1296,7 +1369,8 @@ Encoding: 59461 59461 46
 GlifName: volumeswell
 Width: 724
 VWidth: 1000
-Flags: MW
+Flags: W
+HStem: 0 21G<336.25 342.75 376 388.5> 167.5 30.5<-4.97803 45.4226 677.398 728.997>
 LayerCount: 2
 Fore
 SplineSet
@@ -1343,7 +1417,7 @@ Encoding: 60091 60091 47
 GlifName: wigglesawtooth
 Width: 748
 VWidth: 1000
-Flags: MW
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -1370,7 +1444,7 @@ Encoding: 60092 60092 48
 GlifName: wigglesawtoothwide
 Width: 1000
 VWidth: 1000
-Flags: MW
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -1398,7 +1472,7 @@ Encoding: 60132 60132 49
 GlifName: wigglevibratolargefaster
 Width: 376
 VWidth: 1000
-Flags: MW
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -1435,7 +1509,8 @@ Encoding: 60136 60136 50
 GlifName: wigglevibratolargeslowest
 Width: 763
 VWidth: 1000
-Flags: MW
+Flags: W
+HStem: 34 52<535.798 630.284> 426 52<145.642 228.054>
 LayerCount: 2
 Fore
 SplineSet
@@ -1477,7 +1552,8 @@ StartChar: uniE094
 Encoding: 57492 57492 51
 GlifName: uniE_094
 Width: 138
-Flags: MW
+Flags: W
+VStem: 0 96<-173.476 171.498>
 LayerCount: 2
 Fore
 SplineSet
@@ -1504,7 +1580,8 @@ StartChar: uniE095
 Encoding: 57493 57493 52
 GlifName: uniE_095
 Width: 128
-Flags: MW
+Flags: W
+VStem: 33 95<-170.747 172.235>
 LayerCount: 2
 Fore
 SplineSet
@@ -1532,7 +1609,9 @@ Encoding: 60334 60334 53
 GlifName: uniE_B_A_E_
 Width: 128
 VWidth: 0
-Flags: MW
+Flags: W
+HStem: 64 128<25.4922 102.508>
+VStem: 0 128<89.4922 166.508>
 LayerCount: 2
 Fore
 SplineSet
@@ -1554,7 +1633,9 @@ Encoding: 60335 60335 54
 GlifName: uniE_B_A_F_
 Width: 328
 VWidth: 0
-Flags: MW
+Flags: W
+HStem: 64 128<25.4922 102.508 225.492 302.508>
+VStem: 0 128<89.4922 166.508> 200 128<89.4922 166.508>
 LayerCount: 2
 Fore
 Refer: 53 60334 N 1 0 0 1 0 0 2
@@ -1567,7 +1648,10 @@ Encoding: 60336 60336 55
 GlifName: uniE_B_B_0
 Width: 428
 VWidth: 0
-Flags: MW
+Flags: W
+HStem: 64 128<25.4922 102.508 175.492 252.508 325.492 402.508>
+VStem: 0 128<89.4922 166.508> 150 128<89.4922 166.508> 300 128<89.4922 166.508>
+CounterMasks: 1 70
 LayerCount: 2
 Fore
 Refer: 53 60334 N 1 0 0 1 0 0 2
@@ -1581,7 +1665,9 @@ Encoding: 60333 60333 56
 GlifName: uniE_B_A_D_
 Width: 48
 VWidth: 0
-Flags: MW
+Flags: W
+HStem: 28 200<0 48>
+VStem: 0 48<28 228>
 LayerCount: 2
 Fore
 SplineSet
@@ -1598,7 +1684,10 @@ StartChar: uniE910
 Encoding: 59664 59664 57
 GlifName: uniE_910
 Width: 513
-Flags: MW
+Flags: W
+HStem: -269 25<187.737 324.115> -80 160<201.508 310.492> 243 25<187.904 324.096>
+VStem: 0 100<-129.293 122.642> 176 160<-54.4922 54.4922> 412 100<-126.534 122.642>
+CounterMasks: 1 1c
 LayerCount: 2
 Fore
 SplineSet
@@ -1639,7 +1728,9 @@ StartChar: uniE911
 Encoding: 59665 59665 58
 GlifName: uniE_911
 Width: 513
-Flags: MW
+Flags: W
+HStem: -269 25<187.737 324.115> 243 25<187.904 324.096>
+VStem: 0 100<-129.293 122.642> 412 100<-126.534 122.642>
 LayerCount: 2
 Fore
 SplineSet
@@ -1671,7 +1762,10 @@ StartChar: uniE912
 Encoding: 59666 59666 59
 GlifName: uniE_912
 Width: 513
-Flags: MW
+Flags: W
+HStem: -268 25<185.215 237 275 326.503> 242 26<184.5 237 275 327.5>
+VStem: 0 100<-126.615 123.685> 237 38<-438 -266.658 -243 242 266.666 438> 412 100<-126.615 123.685>
+CounterMasks: 1 38
 LayerCount: 2
 Fore
 SplineSet
@@ -1718,7 +1812,9 @@ StartChar: uniE913
 Encoding: 59667 59667 60
 GlifName: uniE_913
 Width: 513
-Flags: MW
+Flags: W
+HStem: -268 25<185.215 237 275 326.503> 242 26<184.5 237 275 327.5>
+VStem: 0 100<-123.685 123.685> 176 160<-54.4453 54.4453> 237 38<-438 -266.658 -243 -69.688 69.688 242 266.666 438> 412 100<-126.615 123.685>
 LayerCount: 2
 Fore
 SplineSet
@@ -1776,7 +1872,9 @@ StartChar: uniE914
 Encoding: 59668 59668 61
 GlifName: uniE_914
 Width: 435
-Flags: MW
+Flags: W
+HStem: -269 25<188.433 313.402> -80 160<201.508 310.492> 243 25<186.359 314.849>
+VStem: 0 100<-128 124.03> 176 160<-54.4922 54.4922> 418 25<-126.754 -79.0161 78.0112 120.713>
 LayerCount: 2
 Fore
 SplineSet
@@ -1820,7 +1918,9 @@ StartChar: uniE915
 Encoding: 59669 59669 62
 GlifName: uniE_915
 Width: 435
-Flags: MW
+Flags: W
+HStem: -269 25<195.555 314.266> 28 155<313.449 378.904> 243 25<196.292 315.239>
+VStem: 0 140<-125.084 124.351> 291 145<50.2617 158.248> 418 25<-127.161 -79.0117>
 LayerCount: 2
 Fore
 Refer: 222 57482 N 1 0 0 1 0 0 2
@@ -1831,7 +1931,9 @@ StartChar: uniE916
 Encoding: 59670 59670 63
 GlifName: uniE_916
 Width: 435
-Flags: MW
+Flags: W
+HStem: -269 25<121.57 238.695> 28 155<56.0957 121.588> 243 25<117.199 240.293>
+VStem: -8 25<-122.682 -79.0117> -1 145<50.174 158.248> 295 140<-128 123.136>
 LayerCount: 2
 Fore
 SplineSet
@@ -1869,7 +1971,9 @@ StartChar: uniE917
 Encoding: 59671 59671 64
 GlifName: uniE_917
 Width: 435
-Flags: MW
+Flags: W
+HStem: -268 25<186.689 237 275 317.451> 242 26<184.5 237 275 315.763>
+VStem: 0 100<-125.989 125.791> 176 160<-54.4453 54.4453> 237 38<-438 -266.41 -243 -69.688 69.688 242 266.669 438> 418 25<-126.754 -79.0117 78.0156 124.479>
 LayerCount: 2
 Fore
 SplineSet
@@ -1928,7 +2032,9 @@ StartChar: uniE918
 Encoding: 59672 59672 65
 GlifName: uniE_918
 Width: 435
-Flags: MW
+Flags: W
+HStem: -268 24<243 313.222> 28 155<313.449 378.904> 243 25<243 315.027>
+VStem: 0 140<-121.208 123.347> 205 38<-358 -268 -236 236 268 358> 291 145<50.2617 158.248> 418 25<-126.754 -79.0117>
 LayerCount: 2
 Fore
 Refer: 137 57483 N 1 0 0 1 0 0 2
@@ -1939,7 +2045,9 @@ StartChar: uniE919
 Encoding: 59673 59673 66
 GlifName: uniE_919
 Width: 435
-Flags: MW
+Flags: W
+HStem: -269 25<121.194 192> 28 155<56.0957 121.588> 243 25<119.549 192>
+VStem: -1 145<50.174 158.248> 192 38<-358 -268 -236 236 268 358> 295 140<-122.405 122.111>
 LayerCount: 2
 Fore
 SplineSet
@@ -1996,7 +2104,9 @@ StartChar: uniE91A
 Encoding: 59674 59674 67
 GlifName: uniE_91A_
 Width: 435
-Flags: MW
+Flags: W
+HStem: -269 25<121.029 247.434> -80 160<124.508 233.492> 243 25<120.469 248.27>
+VStem: -8 25<-124.307 -79.0117 78.0156 124.259> 99 160<-54.4922 54.4922> 335 100<-126.534 122.518>
 LayerCount: 2
 Fore
 SplineSet
@@ -2043,7 +2153,8 @@ Encoding: 57962 57962 68
 GlifName: uniE_26A_
 Width: 118
 UnlinkRmOvrlpSave: 1
-Flags: MW
+Flags: W
+VStem: 0 52<-126.346 128.276>
 LayerCount: 2
 Fore
 Refer: 102 57490 N 1 0 0 1 -26 0 2
@@ -2054,7 +2165,8 @@ Encoding: 57963 57963 69
 GlifName: uniE_26B_
 Width: 118
 UnlinkRmOvrlpSave: 1
-Flags: MW
+Flags: W
+VStem: 66 52<-126.346 126.017>
 LayerCount: 2
 Fore
 Refer: 100 57491 N 1 0 0 1 -36 0 2
@@ -2064,7 +2176,9 @@ StartChar: uniE057
 Encoding: 57431 57431 70
 GlifName: uniE_057
 Width: 641
-Flags: MW
+Flags: W
+HStem: -927 12<228.52 283.257> -683 12<243.59 296.47> -635 43<189.311 334.956> -533 198<146.469 234.981> -262 43<232.553 419.043> 151 112<288.657 333 401 473.963>
+VStem: 0 74<-22.4645 150.689> 65 207<-498.324 -376.707> 95 28.8<-856.043 -752.551> 167 23<-888.415 -825.432> 173 60<-33.1558 97.7737> 174.5 52<-742.907 -705.873> 198 48<667.697 896.987> 304.5 53<-889.86 -845.706> 324.5 22<-760.894 -700.32> 400.9 28.5<-855.224 -752.329> 428 72<790.773 970.954> 429 41<-484.082 -254> 574 71<-106.694 48.5196>
 LayerCount: 2
 Fore
 Refer: 206 57424 N 1 0 0 1 0 0 2
@@ -2076,7 +2190,9 @@ StartChar: uniE4E5
 Encoding: 58597 58597 71
 GlifName: uniE_4E_5
 Width: 242
-Flags: MW
+Flags: W
+HStem: -150 74<-2 143.453>
+VStem: -24 78<-253.75 -97.5> -6 128<-19 95.5> 121 128<179.75 287.5>
 LayerCount: 2
 Fore
 SplineSet
@@ -2123,7 +2239,9 @@ StartChar: uniE4C4
 Encoding: 58564 58564 72
 GlifName: uniE_4C_4
 Width: 512
-Flags: MW
+Flags: W
+HStem: 0 136<183.627 278.373>
+VStem: 0 37<0.217529 11> 163 136<20.627 115.373>
 LayerCount: 2
 Fore
 SplineSet
@@ -2160,7 +2278,8 @@ Encoding: 57953 57953 73
 GlifName: uniE_261
 Width: 168
 VWidth: 921
-Flags: MW
+Flags: W
+VStem: 0 32<-93 53 163 386.995> 136 32<-386.995 -163 -53 93>
 LayerCount: 2
 Fore
 SplineSet
@@ -2190,7 +2309,10 @@ StartChar: uniE048
 Encoding: 57416 57416 74
 GlifName: uniE_048
 Width: 540
-Flags: MW
+Flags: W
+HStem: -1 21G<276 284> 105 31<295 329.312> 345 30<5.00122 110 185 265 295 375 450 554.999> 584 31<230.688 265>
+VStem: 110 75<227.5 345 375 493.293> 265 30<-0.998779 107.027 136 345 375 584 612.973 720.999> 375 75<226.707 345 375 492.5>
+CounterMasks: 1 0e
 LayerCount: 2
 Fore
 SplineSet
@@ -2255,7 +2377,9 @@ StartChar: uniEB86
 Encoding: 60294 60294 75
 GlifName: uniE_B_86
 Width: 256
-Flags: MW
+Flags: W
+HStem: -20 40<-19.9951 105.959>
+VStem: -20 276
 LayerCount: 2
 Fore
 SplineSet
@@ -2285,7 +2409,9 @@ StartChar: uniE240
 Encoding: 57920 57920 76
 GlifName: uniE_240
 Width: 246
-Flags: MW
+Flags: W
+HStem: -20 20G<0 32>
+VStem: 0 32<-96.1207 0> 160 43<-762.781 -697.725> 203 43<-682.272 -456.896>
 LayerCount: 2
 Fore
 SplineSet
@@ -2314,7 +2440,9 @@ StartChar: uniE442
 Encoding: 58434 58434 77
 GlifName: uniE_442
 Width: 201
-Flags: MW
+Flags: W
+HStem: 129 32<78.4741 159.5>
+VStem: 0 38<163.673 274> 9 27<-146 97.1763 114 180.772> 133 101<-15.6233 121.823>
 LayerCount: 2
 Fore
 SplineSet
@@ -2363,7 +2491,8 @@ StartChar: uniE4F5
 Encoding: 58613 58613 78
 GlifName: uniE_4F_5
 Width: 384
-Flags: MW
+Flags: W
+HStem: -26 186<1e-07 384> -26 52<-159.764 0 384 543.719>
 LayerCount: 2
 Fore
 SplineSet
@@ -2392,7 +2521,8 @@ StartChar: uniE273
 Encoding: 57971 57971 79
 GlifName: uniE_273
 Width: 166
-Flags: MW
+Flags: W
+VStem: 0 32<-93 53 163 386.995> 134 32<-350 -163 -53 93>
 LayerCount: 2
 Fore
 SplineSet
@@ -2433,7 +2563,9 @@ StartChar: uniE0A4
 Encoding: 57508 57508 80
 GlifName: uniE_0A_4
 Width: 336
-Flags: MW
+Flags: W
+HStem: -141 282<130.668 208.038>
+VStem: 0 337<-24.7771 25.4766>
 LayerCount: 2
 Fore
 SplineSet
@@ -2454,7 +2586,9 @@ StartChar: uniE4C5
 Encoding: 58565 58565 81
 GlifName: uniE_4C_5
 Width: 512
-Flags: MW
+Flags: W
+HStem: -136 136<233.627 328.888>
+VStem: 213 136<-115.889 -20.658>
 LayerCount: 2
 Fore
 SplineSet
@@ -2489,7 +2623,9 @@ StartChar: uniEB84
 Encoding: 60292 60292 82
 GlifName: uniE_B_84
 Width: 128
-Flags: MW
+Flags: W
+HStem: -20 276
+VStem: -20 40<-19.9951 105.959>
 LayerCount: 2
 Fore
 SplineSet
@@ -2519,7 +2655,9 @@ StartChar: uniEAA0
 Encoding: 60064 60064 83
 GlifName: uniE_A_A_0
 Width: 214
-Flags: MW
+Flags: W
+HStem: 0 21G<140 150> 236 20G<68 78>
+VStem: -15 248
 LayerCount: 2
 Fore
 SplineSet
@@ -2544,7 +2682,8 @@ StartChar: uniE246
 Encoding: 57926 57926 84
 GlifName: uniE_246
 Width: 246
-Flags: MW
+Flags: W
+VStem: 0 32<-629 -513 -379.598 -283 -148.441 -52 85.3247 178 304.758 395> 160 43<-960.805 -897.037> 186 44<-135.672 -4.72192> 196 44<-902.349 -674.984 -588.218 -451.333 -370.497 -219.77>
 LayerCount: 2
 Fore
 SplineSet
@@ -2601,7 +2740,9 @@ StartChar: uniE568
 Encoding: 58728 58728 85
 GlifName: uniE_568
 Width: 559
-Flags: MW
+Flags: W
+HStem: 0 108<394.143 472.639> 0 80<61.1602 163.461> 162 108<87.3613 165.857> 190 80<396.681 498.84>
+VStem: 0 31<99.5948 174.221> 529 31<95.7789 170.405>
 LayerCount: 2
 Fore
 SplineSet
@@ -2650,7 +2791,8 @@ StartChar: uniE243
 Encoding: 57923 57923 86
 GlifName: uniE_243
 Width: 307
-Flags: MW
+Flags: W
+VStem: 0 32<-29 46.0801 176 274.182 406 483> 251 43<342.993 489.696> 264 43<576.268 734.978>
 LayerCount: 2
 Fore
 SplineSet
@@ -2690,7 +2832,9 @@ StartChar: uniE4E7
 Encoding: 58599 58599 87
 GlifName: uniE_4E_7
 Width: 307
-Flags: MW
+Flags: W
+HStem: -201 55<45.5 153.366> 55 55<125.75 232.066>
+VStem: -27 135<-143.3 -68.1748> 53 134<112.7 187.825> 68 56<-521.705 -488.687>
 LayerCount: 2
 Fore
 SplineSet
@@ -2731,7 +2875,8 @@ StartChar: uniE282
 Encoding: 57986 57986 88
 GlifName: uniE_282
 Width: 179
-Flags: MW
+Flags: W
+VStem: 0 179<-157.984 -97.2188 104.016 164.781> 66 40<-375.995 -193 -65 69 197 363.995>
 LayerCount: 2
 Fore
 SplineSet
@@ -2774,7 +2919,8 @@ StartChar: uniE272
 Encoding: 57970 57970 89
 GlifName: uniE_272
 Width: 166
-Flags: MW
+Flags: W
+VStem: 0 32<-93 53 163 376> 134 32<-386.995 -163 -53 93>
 LayerCount: 2
 Fore
 SplineSet
@@ -2815,7 +2961,9 @@ StartChar: uniE064
 Encoding: 57444 57444 90
 GlifName: uniE_064
 Width: 688
-Flags: MW
+Flags: W
+HStem: -769 12<201.52 256.257> -525 12<216.59 269.47> -180 104<585.47 658.53> -89 211<80.66 176.974> 76 104<585.47 658.53> 243 26<178.468 298.423>
+VStem: 0 217<-44.9336 80.4941> 140 23<-730.415 -667.432> 147.5 52<-584.907 -547.873> 277.5 53<-731.86 -687.706> 297.5 22<-602.894 -542.32> 413 125<-111.014 121.757> 570 104<-164.53 -91.4705 91.4705 164.53>
 LayerCount: 2
 Fore
 Refer: 327 -1 S 1 0 0 1 140 -641 2
@@ -2827,7 +2975,9 @@ StartChar: uniE651
 Encoding: 58961 58961 91
 GlifName: uniE_651
 Width: 427
-Flags: MW
+Flags: W
+HStem: 0 21G<107 133> 230 68<54.4574 106.16> 296 66<322.816 375.359> 494 18<244.751 310.539>
+VStem: -1 45<307.162 388.489> 128 18<324.008 364.998> 168 41<316.5 396.834> 258 53<172.794 223.316> 380 46<349.5 435.843>
 LayerCount: 2
 Fore
 SplineSet
@@ -2893,7 +3043,8 @@ StartChar: uniE274
 Encoding: 57972 57972 92
 GlifName: uniE_274
 Width: 261
-Flags: MW
+Flags: W
+VStem: 0 85<-222.508 -207 39.4922 55> 46 39<-391.995 -223 -94 39 168 341.995> 174 87<-60 -45.3652 202 217.666> 174 40<-346.995 -173 -45 89 218 426>
 LayerCount: 2
 Fore
 SplineSet
@@ -2961,7 +3112,9 @@ StartChar: uniE083
 Encoding: 57475 57475 93
 GlifName: uniE_083
 Width: 340
-Flags: MW
+Flags: W
+HStem: -256 24<106.926 191.85> 0 30<75.0308 206.138> 232 24<103.221 193.006>
+VStem: 0 93<-202.045 -127> 12 81<139 209.998> 222 119<-189.781 -35.8496> 222 105<50.8955 205.405>
 LayerCount: 2
 Fore
 SplineSet
@@ -3016,7 +3169,9 @@ StartChar: uniE0C0
 Encoding: 57536 57536 94
 GlifName: uniE_0C_0
 Width: 336
-Flags: MW
+Flags: W
+HStem: -115 230<7e-08 62.375>
+VStem: 0 337<-108.296 -68.1875>
 LayerCount: 2
 Fore
 SplineSet
@@ -3040,7 +3195,8 @@ StartChar: uniEAA4
 Encoding: 60068 60068 95
 GlifName: uniE_A_A_4
 Width: 256
-Flags: MW
+Flags: W
+HStem: 199 114<159.047 225> 292 114<31.25 96.2478>
 LayerCount: 2
 Fore
 SplineSet
@@ -3074,7 +3230,7 @@ StartChar: uniE564
 Encoding: 58724 58724 96
 GlifName: uniE_564
 Width: 212
-Flags: MW
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -3097,7 +3253,9 @@ StartChar: uniE4E9
 Encoding: 58601 58601 97
 GlifName: uniE_4E_9
 Width: 358
-Flags: MW
+Flags: W
+HStem: -457 55<5.5 126.473> -201 55<67.25 186.75> 55 55<125.5 231.705> 311 55<187.25 293.748>
+VStem: -69 135<-399.3 -324.175> -7 135<-144.231 -68.1748> 53 134<111.769 187.825> 115 135<367.769 443.825>
 LayerCount: 2
 Fore
 SplineSet
@@ -3162,7 +3320,9 @@ StartChar: uniE610
 Encoding: 58896 58896 98
 GlifName: uniE_610
 Width: 384
-Flags: MW
+Flags: W
+HStem: 0 21G<8 24 366.5 373.5> 205 136<32 354>
+VStem: 0 32<0.00366211 205> 354 32<4.64099 205>
 LayerCount: 2
 Fore
 SplineSet
@@ -3189,7 +3349,9 @@ StartChar: uniE624
 Encoding: 58916 58916 99
 GlifName: uniE_624
 Width: 203
-Flags: MW
+Flags: W
+HStem: 0 21G<96.5 107.5> 302 31<71.8986 133.21>
+VStem: 0 54<122.599 285.964> 80 44<7.73499 87.2129> 151 53<123.758 285.964>
 LayerCount: 2
 Fore
 SplineSet
@@ -3223,7 +3385,8 @@ StartChar: uniE093
 Encoding: 57491 57491 100
 GlifName: uniE_093
 Width: 180
-Flags: MW
+Flags: W
+VStem: 102 52<-126.346 126.017>
 LayerCount: 2
 Fore
 SplineSet
@@ -3250,7 +3413,9 @@ StartChar: uniE0D9
 Encoding: 57561 57561 101
 GlifName: uniE_0D_9
 Width: 372
-Flags: MW
+Flags: W
+HStem: -140 21G<33 51> -108 25<108.562 141.292> 83 31<226.053 286.36>
+VStem: 299 74<49.3618 117.493>
 LayerCount: 2
 Fore
 SplineSet
@@ -3294,7 +3459,8 @@ StartChar: uniE092
 Encoding: 57490 57490 102
 GlifName: uniE_092
 Width: 180
-Flags: MW
+Flags: W
+VStem: 26 52<-126.346 128.276>
 LayerCount: 2
 Fore
 SplineSet
@@ -3321,7 +3487,9 @@ StartChar: uniE522
 Encoding: 58658 58658 103
 GlifName: uniE_522
 Width: 437
-Flags: MW
+Flags: W
+HStem: -170 33<-43.9023 21.8481> 251 34<62.2183 127 263 332.843> 446 32<311.939 378.506>
+VStem: -102 58<-136.835 -97.1938> 379 58<405.357 445.809>
 LayerCount: 2
 Fore
 SplineSet
@@ -3384,7 +3552,9 @@ StartChar: uniE520
 Encoding: 58656 58656 104
 GlifName: uniE_520
 Width: 407
-Flags: MW
+Flags: W
+HStem: -141 15<-68.9121 18.3899 122.639 179.868> -4 38<192.611 261.769> 235 48<83.0952 147 243.925 311.656>
+VStem: 312 95<105.357 234.846>
 LayerCount: 2
 Fore
 SplineSet
@@ -3438,7 +3608,9 @@ StartChar: uniE062
 Encoding: 57442 57442 105
 GlifName: uniE_062
 Width: 688
-Flags: MW
+Flags: W
+HStem: -180 104<585.47 658.53> -89 211<80.66 176.974> 76 104<585.47 658.53> 243 26<178.468 298.423>
+VStem: 0 217<-44.9336 80.4941> 413 125<-111.014 121.757> 570 104<-164.53 -91.4705 91.4705 164.53>
 LayerCount: 2
 Fore
 SplineSet
@@ -3495,7 +3667,8 @@ StartChar: uniE4D1
 Encoding: 58577 58577 106
 GlifName: uniE_4D_1
 Width: 457
-Flags: MW
+Flags: W
+HStem: 0 21G<6 56.5 150 200>
 LayerCount: 2
 Fore
 SplineSet
@@ -3529,7 +3702,9 @@ StartChar: uniE047
 Encoding: 57415 57415 107
 GlifName: uniE_047
 Width: 512
-Flags: MW
+Flags: W
+HStem: 0 31<319.239 406.216> 302 62<58.2822 101.718> 404 62<410.282 453.718> 737 31<105.752 192.761>
+VStem: 0 80<576.725 693.887> 49 62<311.282 354.718> 177 115<575.595 673.207> 220 115<95.6602 192.405> 401 62<413.282 456.718> 432 80<74.1127 191.275>
 LayerCount: 2
 Fore
 SplineSet
@@ -3596,7 +3771,9 @@ StartChar: uniE4E1
 Encoding: 58593 58593 108
 GlifName: uniE_4E_1
 Width: 152
-Flags: MW
+Flags: W
+HStem: 236 20G<5 148.5>
+VStem: 0 154<-256 256>
 LayerCount: 2
 Fore
 SplineSet
@@ -3617,7 +3794,9 @@ StartChar: uniE086
 Encoding: 57478 57478 109
 GlifName: uniE_086
 Width: 348
-Flags: MW
+Flags: W
+HStem: -256 24<138.673 212.238> 6 24<138.066 212.602> 232 24<153.498 229.702>
+VStem: 0 120<-129.863 -2.4668 16 120.531> 237 111<-192.63 -32.0947> 242 94<125.789 209.569>
 LayerCount: 2
 Fore
 SplineSet
@@ -3663,7 +3842,9 @@ StartChar: uniE4E0
 Encoding: 58592 58592 110
 GlifName: uniE_4E_0
 Width: 460
-Flags: MW
+Flags: W
+HStem: 236 20G<5 148.5 312 456>
+VStem: 0 154<-256 256> 307 154<-256 256>
 LayerCount: 2
 Fore
 SplineSet
@@ -3693,7 +3874,9 @@ StartChar: uniE4C9
 Encoding: 58569 58569 111
 GlifName: uniE_4C_9
 Width: 784
-Flags: MW
+Flags: W
+HStem: -410 128<55 745> -230 76<183 617> -122 122<357.564 442.436>
+VStem: 16 39<-282 -6.21851> 144 39<-154 -0.00146484> 339 122<-103.436 -18.5642> 617 39<-154 -0.00146484> 745 39<-282 -6.21851>
 LayerCount: 2
 Fore
 SplineSet
@@ -3748,7 +3931,10 @@ StartChar: uniE4E8
 Encoding: 58600 58600 112
 GlifName: uniE_4E_8
 Width: 332
-Flags: MW
+Flags: W
+HStem: -201 55<18.5 138.926> 55 55<85.5 193.146> 311 55<157.5 263.017>
+VStem: -56 135<-143.506 -68.1747> 13 135<112.7 187.825> 84 134.5<368.494 443.825>
+CounterMasks: 1 e0
 LayerCount: 2
 Fore
 SplineSet
@@ -3800,7 +3986,9 @@ StartChar: uniE0D8
 Encoding: 57560 57560 113
 GlifName: uniE_0D_8
 Width: 506
-Flags: MW
+Flags: W
+HStem: -141 64<217.049 311.79> -55.5 110<20.7834 127.496 367.173 485.278> 77 64<195.39 288.832>
+VStem: 0 188<-38.1628 37.9933> 318 189<-37.9933 37.8812>
 LayerCount: 2
 Fore
 SplineSet
@@ -3848,7 +4036,8 @@ StartChar: uniE0BC
 Encoding: 57532 57532 114
 GlifName: uniE_0B_C_
 Width: 355
-Flags: MW
+Flags: W
+HStem: -115 44<71 286>
 LayerCount: 2
 Fore
 SplineSet
@@ -3876,7 +4065,9 @@ StartChar: uniE264
 Encoding: 57956 57956 115
 GlifName: uniE_264
 Width: 384
-Flags: MW
+Flags: W
+HStem: 126 31<73.4248 151.25 265.978 341>
+VStem: -4 47<145.088 470.985> 9 25<-150 95.78 109 170.681> 126 100<-22.9305 108.128 109 123.637> 188 47<145.088 470.985> 198 28<-150 -24 128 264.71> 318 99<-14.9953 116.411>
 LayerCount: 2
 Fore
 SplineSet
@@ -3931,7 +4122,9 @@ StartChar: uniE280
 Encoding: 57984 57984 116
 GlifName: uniE_280
 Width: 202
-Flags: MW
+Flags: W
+HStem: 129 32<41.75 123.407>
+VStem: -33 101<-15.7415 121.786> 153 53<133.176 481.908> 162 30<-146 101.52 114 148.824>
 LayerCount: 2
 Fore
 SplineSet
@@ -3966,7 +4159,9 @@ StartChar: uniEB7E
 Encoding: 60286 60286 117
 GlifName: uniE_B_7E_
 Width: 256
-Flags: MW
+Flags: W
+HStem: -10 20<-9.99756 55>
+VStem: -10 266
 LayerCount: 2
 Fore
 SplineSet
@@ -3999,7 +4194,9 @@ StartChar: uniE0B2
 Encoding: 57522 57522 118
 GlifName: uniE_0B_2
 Width: 400
-Flags: MW
+Flags: W
+HStem: -177 38<118.583 282.738> 139 38<118.684 282.085>
+VStem: 0 37<-63.3663 62.8214> 364 36<-63.6144 63.4041>
 LayerCount: 2
 Fore
 Refer: 181 57523 N 1 0 0 1 0 0 2
@@ -4010,7 +4207,9 @@ StartChar: uniEB82
 Encoding: 60290 60290 119
 GlifName: uniE_B_82
 Width: 256
-Flags: MW
+Flags: W
+HStem: -20 40<-104.315 19.9951>
+VStem: -256 276
 LayerCount: 2
 Fore
 SplineSet
@@ -4039,7 +4238,8 @@ StartChar: uniE664
 Encoding: 58980 58980 120
 GlifName: uniE_664
 Width: 256
-Flags: MW
+Flags: W
+HStem: 0 21G<118.5 137.5>
 LayerCount: 2
 Fore
 SplineSet
@@ -4068,7 +4268,9 @@ StartChar: uniE1E7
 Encoding: 57831 57831 121
 GlifName: uniE_1E_7
 Width: 116
-Flags: HMW
+Flags: W
+HStem: -186 116<17.533 98.467>
+VStem: 0 116<-168.467 -87.533>
 LayerCount: 2
 Fore
 Refer: 158 57412 N 1 0 0 1 0 -128 2
@@ -4078,7 +4280,9 @@ StartChar: uniE652
 Encoding: 58962 58962 122
 GlifName: uniE_652
 Width: 203
-Flags: MW
+Flags: W
+HStem: 1 21G<64.75 84.25> 260 34<48.3372 108.508>
+VStem: -1 34<142.588 234.514> 113 34<202.583 254.93>
 LayerCount: 2
 Fore
 SplineSet
@@ -4118,7 +4322,9 @@ StartChar: uniE653
 Encoding: 58963 58963 123
 GlifName: uniE_653
 Width: 340
-Flags: MW
+Flags: W
+HStem: 0 36<193.693 259.163> 430 19<-3.99414 35.3165>
+VStem: 114 54<63.9307 216.748> 273 70<63.1068 221.968>
 LayerCount: 2
 Fore
 SplineSet
@@ -4151,7 +4357,10 @@ StartChar: uniE8C8
 Encoding: 59592 59592 124
 GlifName: uniE_8C_8
 Width: 272
-Flags: MW
+Flags: W
+HStem: 0 24<-74.1328 74.1562> 256 24<-239 239> 512 24<-74.2153 74.1328>
+VStem: -272 33<179.008 256 280 358.641> 239 33<178.729 256 280 356.992>
+CounterMasks: 1 e0
 LayerCount: 2
 Fore
 SplineSet
@@ -4184,7 +4393,8 @@ StartChar: uniE248
 Encoding: 57928 57928 125
 GlifName: uniE_248
 Width: 244
-Flags: MW
+Flags: W
+VStem: 0 32<-630 -519 -381.945 -282 -146.339 -43 90.1743 194 329.312 432 561.729 650> 160 43<-961.805 -898.116> 186 44<114.688 244.977> 196 44<-903.559 -672.701 -590.155 -450.019 -364.162 -210.992 -126.162 27.0076>
 LayerCount: 2
 Fore
 SplineSet
@@ -4256,7 +4466,9 @@ StartChar: uniE59E
 Encoding: 58782 58782 126
 GlifName: uniE_59E_
 Width: 213
-Flags: MW
+Flags: W
+HStem: 0 21G<181.25 191.75> 236 20G<109.25 119.75>
+VStem: 0 301
 LayerCount: 2
 Fore
 SplineSet
@@ -4287,7 +4499,8 @@ StartChar: uniE247
 Encoding: 57927 57927 127
 GlifName: uniE_247
 Width: 307
-Flags: MW
+Flags: W
+VStem: 0 32<-384 -298.182 -174 -75.5485 51 149.189 282 370.654 512 640> 225 43<29.8264 155> 248 43<239.886 371.169> 256 43<438.313 549.421> 264 43<607.081 740.984>
 LayerCount: 2
 Fore
 SplineSet
@@ -4348,7 +4561,8 @@ StartChar: uniE565
 Encoding: 58725 58725 128
 GlifName: uniE_565
 Width: 275
-Flags: MW
+Flags: W
+HStem: 228 322
 LayerCount: 2
 Fore
 SplineSet
@@ -4371,7 +4585,9 @@ StartChar: uniE525
 Encoding: 58661 58661 129
 GlifName: uniE_525
 Width: 276
-Flags: MW
+Flags: W
+HStem: -15 72<91.6346 258.747> 0 21G<3.5 7.5> 10 58<41.083 193.072> 174 84<40.6783 165.475>
+VStem: 262 15<66.7654 117.038>
 LayerCount: 2
 Fore
 SplineSet
@@ -4412,7 +4628,9 @@ StartChar: uniE271
 Encoding: 57969 57969 130
 GlifName: uniE_271
 Width: 178
-Flags: MW
+Flags: W
+HStem: 129 32<53.6726 136>
+VStem: -28 53<116.724 481.908> -13 24<-471.952 -434.899 -266 -182.719 -146 84.2763> 110 101<-13.9341 121.706>
 LayerCount: 2
 Fore
 SplineSet
@@ -4458,7 +4676,9 @@ StartChar: uniE069
 Encoding: 57449 57449 131
 GlifName: uniE_069
 Width: 512
-Flags: MW
+Flags: W
+HStem: 236 20G<176 281.5 402.5 507>
+VStem: 171 116<-256 256> 397 115<-256 256>
 LayerCount: 2
 Fore
 SplineSet
@@ -4488,7 +4708,9 @@ StartChar: uniE4A6
 Encoding: 58534 58534 132
 GlifName: uniE_4A_6
 Width: 102
-Flags: MW
+Flags: W
+HStem: 0 269<37.8214 66.1786>
+VStem: 0 104<186.035 255.077> 39 26<0.00317383 51.9645>
 LayerCount: 2
 Fore
 SplineSet
@@ -4509,7 +4731,8 @@ StartChar: uniE4E3
 Encoding: 58595 58595 133
 GlifName: uniE_4E_3
 Width: 384
-Flags: MW
+Flags: W
+HStem: -160 160<0 384>
 LayerCount: 2
 Fore
 SplineSet
@@ -4530,7 +4753,9 @@ StartChar: uniE650
 Encoding: 58960 58960 134
 GlifName: uniE_650
 Width: 818
-Flags: MW
+Flags: W
+HStem: 0 36<668.766 734.348> 1 55<492.498 532.989> 230 68<54.4574 106.16> 260 34<458.013 516.672> 296 66<322.824 375.359> 430 19<471.094 514.391> 494 18<244.751 310.539>
+VStem: -1 45<307.162 388.489> 128 18<324.008 363.999> 168 41<316.5 396.834> 258 53<172.794 223.316> 380 46<349.5 435.843> 409 33<142.739 231.978> 521 36<200.139 255.402> 590 53<83.1453 216.499> 750 69<62.574 217.063>
 LayerCount: 2
 Fore
 SplineSet
@@ -4639,7 +4864,9 @@ StartChar: uniE082
 Encoding: 57474 57474 135
 GlifName: uniE_082
 Width: 375
-Flags: MW
+Flags: W
+HStem: -256 81<219 315.29> -188 73<67.6492 134.754> 232 24<130.548 203.94>
+VStem: 0 24<-255.976 -213.48> 12 105<111 204.25> 241 119<22.3945 180.563>
 LayerCount: 2
 Fore
 SplineSet
@@ -4688,7 +4915,9 @@ StartChar: uniE4A7
 Encoding: 58535 58535 136
 GlifName: uniE_4A_7
 Width: 102
-Flags: MW
+Flags: W
+HStem: -269 269<37.8214 66.1786>
+VStem: 0 104<-255.077 -186.035> 39 26<-51.9645 -0.00317383>
 LayerCount: 2
 Fore
 SplineSet
@@ -4709,7 +4938,9 @@ StartChar: uniE08B
 Encoding: 57483 57483 137
 GlifName: uniE_08B_
 Width: 435
-Flags: MW
+Flags: W
+HStem: -268 24<243 313.222> 28 155<313.449 378.904> 243 25<243 315.027>
+VStem: 0 140<-121.208 123.347> 205 38<-358 -268 -236 236 268 358> 291 145<50.2617 158.248> 418 25<-126.754 -79.0117>
 LayerCount: 2
 Fore
 SplineSet
@@ -4767,7 +4998,8 @@ StartChar: uniE56E
 Encoding: 58734 58734 138
 GlifName: uniE_56E_
 Width: 684
-Flags: MW
+Flags: W
+HStem: 0 21G<182 192 396 406 609 619> 236 20G<111 121 324 334 538 548>
 LayerCount: 2
 Fore
 SplineSet
@@ -4812,7 +5044,9 @@ StartChar: uniE4E2
 Encoding: 58594 58594 139
 GlifName: uniE_4E_2
 Width: 152
-Flags: MW
+Flags: W
+HStem: 0 21G<5 148.5> 236 20G<5 148.5>
+VStem: 0 154<0 256>
 LayerCount: 2
 Fore
 SplineSet
@@ -4833,7 +5067,9 @@ StartChar: uniE05C
 Encoding: 57436 57436 140
 GlifName: uniE_05C_
 Width: 697
-Flags: MW
+Flags: W
+HStem: -512 29<388.117 491.633> -239 164<319 379.5> -72 29<419.292 519.398> 43 29<419.57 519.398> 75 164<319 379.5> 483 29<385.759 491.633>
+VStem: 0 142<-512 512> 184 42<-512 -19 19 512> 269 106<-443.822 -350.5 350.5 453.25> 312 28<-238.996 -152.848 152.848 238.996> 568 128<-380.741 -163.774 163.774 380.741>
 LayerCount: 2
 Fore
 SplineSet
@@ -4915,7 +5151,8 @@ Encoding: 57954 57954 141
 GlifName: uniE_262
 Width: 254
 VWidth: 921
-Flags: MW
+Flags: W
+VStem: 0 77<-215.649 -204 40.3511 52> 47 30<-387.995 -216 -94 40 162 333.995> 172 30<-338.995 -166 -43 90 213 382.995>
 LayerCount: 2
 Fore
 SplineSet
@@ -4973,7 +5210,9 @@ StartChar: uniE440
 Encoding: 58432 58432 142
 GlifName: uniE_440
 Width: 201
-Flags: MW
+Flags: W
+HStem: 129 32<78.4741 159.5>
+VStem: 0 41<124.199 222 278 336> 9 27<-146 97.1763 114 139.356> 133 101<-15.6233 121.762>
 LayerCount: 2
 Fore
 SplineSet
@@ -5033,7 +5272,8 @@ StartChar: uniE003
 Encoding: 57347 57347 143
 GlifName: uniE_003
 Width: 466
-Flags: MW
+Flags: W
+HStem: 0 112<7.21973 163.359>
 LayerCount: 2
 Fore
 SplineSet
@@ -5062,7 +5302,8 @@ StartChar: uniE5B0
 Encoding: 58800 58800 144
 GlifName: uniE_5B_0
 Width: 469
-Flags: MW
+Flags: W
+HStem: 0 21G<182.25 192.75 395.25 405.75> 236 20G<110.25 120.75 323.25 333.75> 537 22<683.685 778.997>
 LayerCount: 2
 Fore
 SplineSet
@@ -5104,7 +5345,9 @@ StartChar: uniE4C8
 Encoding: 58568 58568 145
 GlifName: uniE_4C_8
 Width: 784
-Flags: MW
+Flags: W
+HStem: 0 122<357.564 442.436> 154 76<183 617> 282 128<55 745>
+VStem: 16 39<6.21851 282> 144 39<0.00146484 154> 339 122<18.5642 103.436> 617 39<0.00146484 154> 745 39<6.21851 282>
 LayerCount: 2
 Fore
 SplineSet
@@ -5159,7 +5402,9 @@ StartChar: uniE242
 Encoding: 57922 57922 146
 GlifName: uniE_242
 Width: 246
-Flags: MW
+Flags: W
+HStem: -20 20G<0 32>
+VStem: 0 32<-512 -435 -299.082 -218 -84.2931 0> 160 43<-890.781 -836.359> 203 43<-819.302 -613.752 -528.421 -410.354>
 LayerCount: 2
 Fore
 SplineSet
@@ -5198,7 +5443,8 @@ StartChar: uniE245
 Encoding: 57925 57925 147
 GlifName: uniE_245
 Width: 307
-Flags: MW
+Flags: W
+VStem: 0 32<-256 -177.188 -41 48.8865 189 278.218 420 512> 243 43<135.894 264.494> 256 43<349.456 495.052> 264 43<579.587 737.413>
 LayerCount: 2
 Fore
 SplineSet
@@ -5246,7 +5492,9 @@ StartChar: uniE5E7
 Encoding: 58855 58855 148
 GlifName: uniE_5E_7
 Width: 204
-Flags: MW
+Flags: W
+HStem: 0 31<67.0515 136.948> 225 31<67.0515 136.948>
+VStem: 0 44<47.625 208.375> 160 44<47.625 208.375>
 LayerCount: 2
 Fore
 SplineSet
@@ -5276,7 +5524,9 @@ StartChar: uniE4E6
 Encoding: 58598 58598 149
 GlifName: uniE_4E_6
 Width: 256
-Flags: MW
+Flags: W
+HStem: 55 55<70 178.004>
+VStem: -3 135.5<112.7 187.825> 74 56<-265.705 -236.049> 225 31<149.538 183.482>
 LayerCount: 2
 Fore
 SplineSet
@@ -5306,7 +5556,8 @@ StartChar: uniE612
 Encoding: 58898 58898 150
 GlifName: uniE_612
 Width: 332
-Flags: MW
+Flags: W
+HStem: 0 21G<158 176>
 LayerCount: 2
 Fore
 SplineSet
@@ -5331,7 +5582,9 @@ StartChar: uniE4C6
 Encoding: 58566 58566 151
 GlifName: uniE_4C_6
 Width: 638
-Flags: MW
+Flags: W
+HStem: 0 138<270.627 367.373> 282 102<37 601>
+VStem: 0 37<5.67249 282> 250 138<20.6272 117.373> 601 39<6.21851 282>
 LayerCount: 2
 Fore
 SplineSet
@@ -5369,7 +5622,9 @@ StartChar: uniE654
 Encoding: 58964 58964 152
 GlifName: uniE_654
 Width: 70
-Flags: MW
+Flags: W
+HStem: 0 72<2.92456 69.0754>
+VStem: 0 72<2.92456 69.0754>
 LayerCount: 2
 Fore
 SplineSet
@@ -5390,7 +5645,10 @@ StartChar: uniE631
 Encoding: 58929 58929 153
 GlifName: uniE_631
 Width: 271
-Flags: MW
+Flags: W
+HStem: 0 33<80.1156 191.884> 238 33<79.1016 120 152 192.879>
+VStem: 0 33<79.7155 191.622> 120 32<120.004 238 268.319 356.996> 239 33<79.7155 191.622>
+CounterMasks: 1 38
 LayerCount: 2
 Fore
 SplineSet
@@ -5428,7 +5686,9 @@ StartChar: uniE4AD
 Encoding: 58541 58541 154
 GlifName: uniE_4A_D_
 Width: 256
-Flags: MW
+Flags: W
+HStem: -282 282
+VStem: 231 25<-7 -0.0117188>
 LayerCount: 2
 Fore
 SplineSet
@@ -5454,7 +5714,9 @@ StartChar: uniE065
 Encoding: 57445 57445 155
 GlifName: uniE_065
 Width: 688
-Flags: MW
+Flags: W
+HStem: -180 104<585.47 658.53> -89 211<80.66 176.974> 76 104<585.47 658.53> 243 26<178.468 298.423> 323 12<201.52 256.257> 567 12<216.59 269.47>
+VStem: 0 217<-44.9336 80.4941> 140 23<361.585 424.568> 147.5 52<507.093 544.127> 277.5 53<360.14 404.294> 297.5 22<489.106 549.68> 413 125<-111.014 121.757> 570 104<-164.53 -91.4705 91.4705 164.53>
 LayerCount: 2
 Fore
 Refer: 327 -1 N 1 0 0 1 140 451 2
@@ -5466,7 +5728,9 @@ StartChar: uniE8C7
 Encoding: 59591 59591 156
 GlifName: uniE_8C_7
 Width: 529
-Flags: MW
+Flags: W
+HStem: 0 24<-107.81 107.81> 256 24<-419 419> 512 24<-496 496> 768 24<-419 419> 1024 24<-107.172 107.172>
+VStem: -528 32<400.262 512 536 643.107> 496 32<404.893 512 536 647.525>
 LayerCount: 2
 Fore
 SplineSet
@@ -5513,7 +5777,10 @@ StartChar: uniE4C0
 Encoding: 58560 58560 157
 GlifName: uniE_4C_0
 Width: 678
-Flags: MW
+Flags: W
+HStem: 0 138<291.627 388.373> 286 104<231.931 447.906>
+VStem: 0 39<0.0461426 85.3047> 271 138<20.6272 117.373> 641 39<4.18726 85.3047>
+CounterMasks: 1 38
 LayerCount: 2
 Fore
 SplineSet
@@ -5575,7 +5842,9 @@ StartChar: uniE5E5
 Encoding: 58853 58853 159
 GlifName: uniE_5E_5
 Width: 282
-Flags: MW
+Flags: W
+HStem: 0 21G<135.5 146.5> 115 52<0.236328 115 167 281.764>
+VStem: 115 52<0.236328 115 167 281.764>
 LayerCount: 2
 Fore
 SplineSet
@@ -5612,7 +5881,8 @@ StartChar: uniEAAE
 Encoding: 60078 60078 160
 GlifName: uniE_A_A_E_
 Width: 257
-Flags: MW
+Flags: W
+HStem: -61.5 325
 LayerCount: 2
 Fore
 SplineSet
@@ -5648,7 +5918,9 @@ StartChar: uniE614
 Encoding: 58900 58900 161
 GlifName: uniE_614
 Width: 272
-Flags: MW
+Flags: W
+HStem: 0 20<89.2129 182.787> 252 20<89.2129 182.787>
+VStem: 0 20<89.2129 182.787> 252 20<89.2129 182.787>
 LayerCount: 2
 Fore
 SplineSet
@@ -5679,7 +5951,8 @@ Encoding: 57589 57589 162
 GlifName: uniE_0F_5
 Width: 116
 UnlinkRmOvrlpSave: 1
-Flags: MW
+Flags: W
+VStem: 0 52<-126.346 128.276>
 LayerCount: 2
 Fore
 Refer: 102 57490 N 1 0 0 1 -26 0 2
@@ -5689,7 +5962,8 @@ StartChar: uniE658
 Encoding: 58968 58968 163
 GlifName: uniE_658
 Width: 214
-Flags: MW
+Flags: W
+VStem: 0 215
 LayerCount: 2
 Fore
 SplineSet
@@ -5710,7 +5984,9 @@ StartChar: uniE088
 Encoding: 57480 57480 164
 GlifName: uniE_088
 Width: 375
-Flags: MW
+Flags: W
+HStem: -256 24<123.039 232.515> 232 24<153.18 258.94>
+VStem: 0 46<-178.83 -52.8635> 15 104<112.186 186.253> 275 106<-181.72 -93.412> 315 44<76.2126 197.361>
 LayerCount: 2
 Fore
 SplineSet
@@ -5752,7 +6028,9 @@ StartChar: uniE089
 Encoding: 57481 57481 165
 GlifName: uniE_089
 Width: 348
-Flags: MW
+Flags: W
+HStem: -256 24<117.9 195.674> -30 24<135.661 210.077> 232 24<133.263 209.069>
+VStem: 0 112<32.0765 192.909> 12 94<-209.569 -125.789> 228 120<-120.172 -16 1.97607 129.863>
 LayerCount: 2
 Fore
 SplineSet
@@ -5798,7 +6076,8 @@ StartChar: uniE0A8
 Encoding: 57512 57512 166
 GlifName: uniE_0A_8
 Width: 388
-Flags: MW
+Flags: W
+HStem: -144 288
 LayerCount: 2
 Fore
 SplineSet
@@ -5860,7 +6139,9 @@ StartChar: uniE0BE
 Encoding: 57534 57534 167
 GlifName: uniE_0B_E_
 Width: 336
-Flags: MW
+Flags: W
+HStem: -115 231<141.875 196.062>
+VStem: 0 337<-108.297 -58.7656>
 LayerCount: 2
 Fore
 SplineSet
@@ -5884,7 +6165,9 @@ StartChar: uniE084
 Encoding: 57476 57476 168
 GlifName: uniE_084
 Width: 409
-Flags: MW
+Flags: W
+HStem: -256 24<114.003 162.436 358.742 406.996> -128 30<30 201 321 408.966> 236 20G<148 156.5 306.5 315.5>
+VStem: 201 120<-203.091 -128 -98 69.0312>
 LayerCount: 2
 Fore
 SplineSet
@@ -5937,7 +6220,9 @@ StartChar: uniE8CA
 Encoding: 59594 59594 169
 GlifName: uniE_8C_A_
 Width: 62
-Flags: MW
+Flags: W
+HStem: -63 126<-44.4353 44.4353>
+VStem: -63 126<-44.4353 44.4353>
 LayerCount: 2
 Fore
 SplineSet
@@ -5958,7 +6243,8 @@ StartChar: uniE275
 Encoding: 57973 57973 170
 GlifName: uniE_275
 Width: 261
-Flags: MW
+Flags: W
+VStem: 0 85<-222.508 -207 39.4922 55> 46 39<-447 -223 -94 39 168 341.995> 174 87<-60 -45.3652 202 217.666> 174 40<-346.995 -173 -45 89 218 392.995>
 LayerCount: 2
 Fore
 SplineSet
@@ -6027,7 +6313,8 @@ StartChar: uniE283
 Encoding: 57987 57987 171
 GlifName: uniE_283
 Width: 371
-Flags: MW
+Flags: W
+VStem: 46 39<-396.995 -226 -103 36 159 341.995> 162 39<-369.995 -196 -73 66 189 368.995> 278 38<-346.995 -167 -44 95 218 391.995>
 LayerCount: 2
 Fore
 SplineSet
@@ -6100,7 +6387,9 @@ StartChar: uniE080
 Encoding: 57472 57472 172
 GlifName: uniE_080
 Width: 375
-Flags: MW
+Flags: W
+HStem: -256 30<151.508 224.492> 226 30<151.508 224.492>
+VStem: 0 119<-123.795 123.795> 257 119<-123.795 123.795>
 LayerCount: 2
 Fore
 SplineSet
@@ -6132,7 +6421,9 @@ StartChar: uniE081
 Encoding: 57473 57473 173
 GlifName: uniE_081
 Width: 325
-Flags: MW
+Flags: W
+HStem: -256 24<33.0029 81.896 277.104 325.997> 237 20G<224.5 231.5>
+VStem: -2 29<-21.8671 -12> 120 119<-203.091 133.998>
 LayerCount: 2
 Fore
 SplineSet
@@ -6174,7 +6465,8 @@ StartChar: uniE249
 Encoding: 57929 57929 174
 GlifName: uniE_249
 Width: 307
-Flags: MW
+Flags: W
+VStem: 0 32<-615 -514.597 -401 -296.861 -175 -75.9177 51 147.805 281 370.959 511 665> 204 43<-177.943 -60 -7.9375 94.582> 225 44<25.5664 152.648> 248 43<236.513 370.17 507.779 549> 256 43<437.313 548.421> 264 43<606.101 734.297>
 LayerCount: 2
 Fore
 SplineSet
@@ -6249,7 +6541,9 @@ StartChar: uniE4B2
 Encoding: 58546 58546 175
 GlifName: uniE_4B_2
 Width: 308
-Flags: MW
+Flags: W
+HStem: 0 82<125.376 182.624> 192 36<5.67249 302.328>
+VStem: 113 82<12.3762 69.6238>
 LayerCount: 2
 Fore
 SplineSet
@@ -6279,7 +6573,9 @@ StartChar: uniE4F2
 Encoding: 58610 58610 176
 GlifName: uniE_4F_2
 Width: 256
-Flags: MW
+Flags: W
+HStem: 55 55<78.2498 186.5>
+VStem: 123.5 135.5<112.7 187.825> 126 56<-265.648 -236.049>
 LayerCount: 2
 Fore
 SplineSet
@@ -6310,7 +6606,8 @@ Encoding: 57590 57590 177
 GlifName: uniE_0F_6
 Width: 116
 UnlinkRmOvrlpSave: 1
-Flags: MW
+Flags: W
+VStem: 64 52<-126.346 126.017>
 LayerCount: 2
 Fore
 Refer: 100 57491 N 1 0 0 1 -38 0 2
@@ -6320,7 +6617,9 @@ StartChar: uniE051
 Encoding: 57425 57425 178
 GlifName: uniE_051
 Width: 641
-Flags: MW
+Flags: W
+HStem: -928 12<146.501 170.948 268.552 292.999 354.702 401.865> -778.5 15<350.852 403.831> -728 56<330.5 396.936> -681.5 10G<242.25 245.75> -635 43<189.311 334.956> -533 198<146.469 234.981> -262 43<232.553 419.043> 151 112<288.657 333 401 473.963>
+VStem: 0 74<-22.4645 150.689> 65 207<-498.324 -376.707> 129 14.5<-810.934 -806> 173 60<-33.1558 97.7737> 190 59.5<-901.546 -733.001> 198 48<667.697 896.987> 301 46.5<-901.374 -863.5> 316 14.5<-785.5 -728.22> 420.5 59<-884.981 -799.809> 428 72<790.773 970.954> 429 41<-484.082 -254> 574 71<-106.694 48.5196>
 LayerCount: 2
 Fore
 Refer: 206 57424 N 1 0 0 1 0 0 2
@@ -6332,7 +6631,9 @@ StartChar: uniE054
 Encoding: 57428 57428 179
 GlifName: uniE_054
 Width: 641
-Flags: MW
+Flags: W
+HStem: -635 43<189.311 334.956> -533 198<146.469 234.981> -262 43<232.553 419.043> 151 112<288.657 333 401 473.963> 1252 12<216.501 240.948 338.552 362.999 424.702 471.865> 1401.5 15<420.852 473.831> 1452 56<400.5 466.936> 1498.5 10G<312.25 315.75>
+VStem: 0 74<-22.4645 150.689> 65 207<-498.324 -376.707> 173 60<-33.1558 97.7737> 198 48<667.697 896.987> 199 14.5<1369.07 1374> 260 59.5<1278.45 1447> 371 46.5<1278.63 1316.5> 386 14.5<1394.5 1451.78> 428 72<790.773 970.954> 429 41<-484.082 -254> 490.5 59<1295.02 1380.19> 574 71<-106.694 48.5196>
 LayerCount: 2
 Fore
 Refer: 206 57424 N 1 0 0 1 0 0 2
@@ -6344,7 +6645,9 @@ StartChar: uniEB7C
 Encoding: 60284 60284 180
 GlifName: uniE_B_7C_
 Width: 256
-Flags: MW
+Flags: W
+HStem: 0 266
+VStem: 118 20<0.00244141 65>
 LayerCount: 2
 Fore
 SplineSet
@@ -6372,7 +6675,9 @@ StartChar: uniE0B3
 Encoding: 57523 57523 181
 GlifName: uniE_0B_3
 Width: 400
-Flags: MW
+Flags: W
+HStem: -177 38<118.583 282.738> 139 38<118.684 282.085>
+VStem: 0 37<-63.3663 62.8214> 364 36<-63.6144 63.4041>
 LayerCount: 2
 Fore
 SplineSet
@@ -6413,7 +6718,9 @@ StartChar: uniE270
 Encoding: 57968 57968 182
 GlifName: uniE_270
 Width: 178
-Flags: MW
+Flags: W
+HStem: 129 32<53.6726 136>
+VStem: -27 51<114 445> -15 31<-146 102.125 114 191.32> 110 101<-13.9644 121.638>
 LayerCount: 2
 Fore
 SplineSet
@@ -6457,7 +6764,9 @@ StartChar: uniE241
 Encoding: 57921 57921 183
 GlifName: uniE_241
 Width: 307
-Flags: MW
+Flags: W
+HStem: 0 21G<0 32>
+VStem: 0 32<0 84.6482> 264 43<444.399 642.31>
 LayerCount: 2
 Fore
 SplineSet
@@ -6486,7 +6795,9 @@ StartChar: uniE087
 Encoding: 57479 57479 184
 GlifName: uniE_087
 Width: 345
-Flags: MW
+Flags: W
+HStem: 0 21G<7.5 22.5> 105 94<170.5 275.875> 164 92<65.5667 140.075>
+VStem: 0 30<0.00366211 145.433 212.065 255.967>
 LayerCount: 2
 Fore
 SplineSet
@@ -6535,7 +6846,8 @@ StartChar: uniE460
 Encoding: 58464 58464 185
 GlifName: uniE_460
 Width: 565
-Flags: MW
+Flags: W
+VStem: -15 59<-475 -141 -79 80>
 LayerCount: 2
 Fore
 SplineSet
@@ -6563,7 +6875,8 @@ StartChar: uniE0BB
 Encoding: 57531 57531 186
 GlifName: uniE_0B_B_
 Width: 506
-Flags: MW
+Flags: W
+HStem: -115 44<86 421>
 LayerCount: 2
 Fore
 SplineSet
@@ -6591,7 +6904,8 @@ StartChar: uniEAA9
 Encoding: 60073 60073 187
 GlifName: uniE_A_A_9
 Width: 256
-Flags: MW
+Flags: W
+HStem: -1 114<159.047 225> 92 114<31.25 96.2478>
 LayerCount: 2
 Fore
 Refer: 95 60068 N 1 0 0 1 0 -200 2
@@ -6602,7 +6916,9 @@ StartChar: uniE8C9
 Encoding: 59593 59593 188
 GlifName: uniE_8C_9
 Width: 272
-Flags: MW
+Flags: W
+HStem: 0 34<-240 240> 256 34<-240 240> 512 34<-240 240> 768 34<-240 240>
+VStem: -272 32<34 256 290 512 546 768> 240 32<34 256 290 512 546 768>
 LayerCount: 2
 Fore
 SplineSet
@@ -6638,7 +6954,9 @@ StartChar: uniEAAD
 Encoding: 60077 60077 189
 GlifName: uniE_A_A_D_
 Width: 257
-Flags: MW
+Flags: W
+HStem: -62 328
+VStem: -89 314
 LayerCount: 2
 Fore
 SplineSet
@@ -6680,43 +6998,45 @@ StartChar: uniE085
 Encoding: 57477 57477 190
 GlifName: uniE_085
 Width: 345
-Flags: MW
+Flags: W
+HStem: -256 24<107.404 201.73> 43 30<99.7045 205.662> 144 112<59 191.872>
+VStem: 0 93<-202.749 -127> 30 29<29 143.559> 239 118<-169.961 0.382874>
 LayerCount: 2
 Fore
 SplineSet
 46 256 m 0,0,1
  54 256 54 256 63 253 c 1,2,3
- 63 253 63 253 110 248 c 2,4,5
- 157 243 157 243 193 243 c 128,-1,6
- 229 243 229 243 281.5 249.5 c 128,-1,7
- 334 256 334 256 336 256 c 0,8,9
- 349 256 349 256 349 247 c 0,10,11
- 349 243 349 243 346 240 c 0,12,13
- 252 146 252 146 77 144 c 0,14,15
- 71 144 71 144 65 139 c 128,-1,16
- 59 134 59 134 59 127 c 2,17,-1
- 59 29 l 1,18,19
- 103 73 103 73 167 73 c 0,20,21
- 258 73 258 73 307.5 32 c 128,-1,22
- 357 -9 357 -9 357 -85.5 c 128,-1,23
- 357 -162 357 -162 301 -210 c 0,24,25
- 244 -256 244 -256 171 -256 c 128,-1,26
- 98 -256 98 -256 49 -225.5 c 128,-1,27
- 0 -195 0 -195 0 -140 c 0,28,29
- 0 -114 0 -114 20 -92 c 0,30,31
- 41 -73 41 -73 68.5 -73 c 128,-1,32
- 96 -73 96 -73 114 -93 c 0,33,34
- 134 -112 134 -112 134 -140 c 0,35,36
- 134 -153 134 -153 114 -168 c 0,37,38
- 93 -182 93 -182 93 -195 c 0,39,40
- 93 -232 93 -232 166 -232 c 128,-1,41
- 239 -232 239 -232 239 -94.5 c 128,-1,42
- 239 43 239 43 167 43 c 0,43,44
- 102 43 102 43 76 17 c 0,45,46
- 67 6 67 6 57.5 -1.5 c 128,-1,47
- 48 -9 48 -9 45 -9 c 0,48,49
- 30 -9 30 -9 30 6 c 2,50,-1
- 30 240 l 2,51,52
+ 63 253 63 253 110 248 c 130,-1,4
+ 157 243 157 243 193 243 c 128,-1,5
+ 229 243 229 243 281.5 249.5 c 128,-1,6
+ 334 256 334 256 336 256 c 0,7,8
+ 349 256 349 256 349 247 c 0,9,10
+ 349 243 349 243 346 240 c 0,11,12
+ 252 146 252 146 77 144 c 0,13,14
+ 71 144 71 144 65 139 c 128,-1,15
+ 59 134 59 134 59 127 c 2,16,-1
+ 59 29 l 1,17,18
+ 103 73 103 73 167 73 c 0,19,20
+ 258 73 258 73 307.5 32 c 128,-1,21
+ 357 -9 357 -9 357 -85.5 c 128,-1,22
+ 357 -162 357 -162 301 -210 c 0,23,24
+ 244 -256 244 -256 171 -256 c 128,-1,25
+ 98 -256 98 -256 49 -225.5 c 128,-1,26
+ 0 -195 0 -195 0 -140 c 0,27,28
+ 0 -114 0 -114 20 -92 c 0,29,30
+ 41 -73 41 -73 68.5 -73 c 128,-1,31
+ 96 -73 96 -73 114 -93 c 0,32,33
+ 134 -112 134 -112 134 -140 c 0,34,35
+ 134 -153 134 -153 114 -168 c 0,36,37
+ 93 -182 93 -182 93 -195 c 0,38,39
+ 93 -232 93 -232 166 -232 c 128,-1,40
+ 239 -232 239 -232 239 -94.5 c 128,-1,41
+ 239 43 239 43 167 43 c 0,42,43
+ 102 43 102 43 76 17 c 0,44,45
+ 67 6 67 6 57.5 -1.5 c 128,-1,46
+ 48 -9 48 -9 45 -9 c 0,47,48
+ 30 -9 30 -9 30 6 c 2,49,-1
+ 30 240 l 2,50,51
  30 256 30 256 46 256 c 0,0,1
 EndSplineSet
 Validated: 1
@@ -6726,7 +7046,8 @@ StartChar: uniE0DB
 Encoding: 57563 57563 191
 GlifName: uniE_0D_B_
 Width: 377
-Flags: MW
+Flags: W
+HStem: -140 280
 LayerCount: 2
 Fore
 SplineSet
@@ -6758,7 +7079,8 @@ StartChar: uniE4E4
 Encoding: 58596 58596 192
 GlifName: uniE_4E_4
 Width: 384
-Flags: MW
+Flags: W
+HStem: 0 160<0 384>
 LayerCount: 2
 Fore
 SplineSet
@@ -6779,7 +7101,8 @@ StartChar: uniE006
 Encoding: 57350 57350 193
 GlifName: uniE_006
 Width: 466
-Flags: MW
+Flags: W
+HStem: -112 112<299.692 458.78>
 LayerCount: 2
 Fore
 SplineSet
@@ -6807,7 +7130,9 @@ StartChar: uniE662
 Encoding: 58978 58978 194
 GlifName: uniE_662
 Width: 256
-Flags: MW
+Flags: W
+HStem: 0 21G<14.5 23.5 232.5 241.5> 260 39<72.875 183.191>
+VStem: 0 39<5.67249 225.879> 217 39<5.67249 225.721>
 LayerCount: 2
 Fore
 SplineSet
@@ -6840,7 +7165,9 @@ StartChar: uniE661
 Encoding: 58977 58977 195
 GlifName: uniE_661
 Width: 256
-Flags: MW
+Flags: W
+HStem: 0 39<72.3959 183.613>
+VStem: 0 39<73.4375 293.328> 217 39<72.53 293.328>
 LayerCount: 2
 Fore
 SplineSet
@@ -6873,7 +7200,9 @@ StartChar: uniE521
 Encoding: 58657 58657 196
 GlifName: uniE_521
 Width: 442
-Flags: MW
+Flags: W
+HStem: 0 21G<17.5 82 152 216.5> 226 61<60.2375 116.498 183.698 228.498 305.5 352.499>
+VStem: 288 88<12.3195 92> 328 85<179.328 225.997>
 LayerCount: 2
 Fore
 SplineSet
@@ -6936,7 +7265,9 @@ StartChar: uniEB78
 Encoding: 60280 60280 197
 GlifName: uniE_B_78
 Width: 256
-Flags: MW
+Flags: W
+HStem: 0 266
+VStem: 118 20<201 265.998>
 LayerCount: 2
 Fore
 SplineSet
@@ -6964,7 +7295,10 @@ StartChar: uniE4C1
 Encoding: 58561 58561 198
 GlifName: uniE_4C_1
 Width: 678
-Flags: MW
+Flags: W
+HStem: -390 104<234.443 448.074> -138 138<291.627 388.373>
+VStem: 0 39<-85.3047 -4.18726> 271 138<-117.373 -20.6272> 641 39<-85.3047 -0.0461426>
+CounterMasks: 1 38
 LayerCount: 2
 Fore
 SplineSet
@@ -7004,7 +7338,9 @@ StartChar: uniE8C6
 Encoding: 59590 59590 199
 GlifName: uniE_8C_6
 Width: 400
-Flags: MW
+Flags: W
+HStem: 0 24<-93.6667 93.6447> 256 24<-341 341> 512 24<-341 341> 768 24<-92.9744 92.9744>
+VStem: -400 33<286.756 506.795> 367 33<286.364 506.865>
 LayerCount: 2
 Fore
 SplineSet
@@ -7044,7 +7380,8 @@ StartChar: uniE0A7
 Encoding: 57511 57511 200
 GlifName: uniE_0A_7
 Width: 439
-Flags: MW
+Flags: W
+HStem: -151 302
 LayerCount: 2
 Fore
 SplineSet
@@ -7106,7 +7443,9 @@ StartChar: uniE08D
 Encoding: 57485 57485 201
 GlifName: uniE_08D_
 Width: 256
-Flags: MW
+Flags: W
+HStem: -26 52<7.73523 102 154 248.265>
+VStem: 102 52<-127.719 -26 26 127.719>
 LayerCount: 2
 Fore
 Refer: 2 43 N 1 0 0 1 0 -256 2
@@ -7117,7 +7456,9 @@ StartChar: uniE4CE
 Encoding: 58574 58574 202
 GlifName: uniE_4C_E_
 Width: 118
-Flags: MW
+Flags: W
+HStem: 0 318<15 59>
+VStem: 54 64<123.594 252.617>
 LayerCount: 2
 Fore
 SplineSet
@@ -7142,7 +7483,9 @@ StartChar: uniE063
 Encoding: 57443 57443 203
 GlifName: uniE_063
 Width: 688
-Flags: MW
+Flags: W
+HStem: -769 12<96.5015 120.948 218.552 242.999 304.702 351.865> -619.5 15<300.852 353.831> -569 56<280.5 346.936> -522.5 10G<192.25 195.75> -180 104<585.47 658.53> -89 211<80.66 176.974> 76 104<585.47 658.53> 243 26<178.468 298.423>
+VStem: 0 217<-44.9336 80.4941> 79 14.5<-651.934 -647> 140 59.5<-742.546 -574.001> 251 46.5<-742.374 -704.5> 266 14.5<-626.5 -569.22> 370.5 59<-725.981 -640.809> 413 125<-111.014 121.757> 570 104<-164.53 -91.4705 91.4705 164.53>
 LayerCount: 2
 Fore
 Refer: 326 -1 N 1 0 0 1 79 -642 2
@@ -7154,7 +7497,9 @@ StartChar: uniE066
 Encoding: 57446 57446 204
 GlifName: uniE_066
 Width: 688
-Flags: MW
+Flags: W
+HStem: -180 104<585.47 658.53> -89 211<80.66 176.974> 76 104<585.47 658.53> 243 26<178.468 298.423> 323 12<96.5015 120.948 218.552 242.999 304.702 351.865> 472.5 15<300.852 353.831> 523 56<280.5 346.936> 569.5 10G<192.25 195.75>
+VStem: 0 217<-44.9336 80.4941> 79 14.5<440.066 445> 140 59.5<349.454 517.999> 251 46.5<349.626 387.5> 266 14.5<465.5 522.78> 370.5 59<366.019 451.191> 413 125<-111.014 121.757> 570 104<-164.53 -91.4705 91.4705 164.53>
 LayerCount: 2
 Fore
 Refer: 326 -1 N 1 0 0 1 79 450 2
@@ -7167,7 +7512,9 @@ Encoding: 58781 58781 205
 GlifName: uniE_59D_
 Width: 214
 VWidth: 1023
-Flags: MW
+Flags: W
+HStem: 0 259
+VStem: 3 260
 LayerCount: 2
 Fore
 SplineSet
@@ -7193,7 +7540,9 @@ StartChar: uniE050
 Encoding: 57424 57424 206
 GlifName: uniE_050
 Width: 641
-Flags: MW
+Flags: W
+HStem: -635 43<189.311 334.956> -533 198<146.469 234.981> -262 43<232.553 419.043> 151 112<288.657 333 401 473.963>
+VStem: 0 74<-22.4645 150.689> 65 207<-498.324 -376.707> 173 60<-33.1558 97.7737> 198 48<667.697 896.987> 428 72<790.773 970.954> 429 41<-484.082 -254> 574 71<-106.694 48.5196>
 LayerCount: 2
 Fore
 SplineSet
@@ -7285,7 +7634,9 @@ StartChar: uniE0B1
 Encoding: 57521 57521 207
 GlifName: uniE_0B_1
 Width: 400
-Flags: MW
+Flags: W
+HStem: -177 38<118.583 282.738> 139 38<118.684 282.085>
+VStem: 0 37<-63.3663 62.8214> 364 36<-63.6144 63.4041>
 LayerCount: 2
 Fore
 Refer: 181 57523 N 1 0 0 1 0 0 2
@@ -7296,7 +7647,9 @@ StartChar: uniE4EA
 Encoding: 58602 58602 208
 GlifName: uniE_4E_A_
 Width: 384
-Flags: MW
+Flags: W
+HStem: -457 55<12.75 134.608> -201 55<64.5 184.64> 55 55<116.75 234.465> 311 55<166 270.561> 567 55<217.5 322.357>
+VStem: -61 135<-400.231 -324.175> -10 135<-143.506 -68.1747> 42 134.5<112.494 187.825> 93 134<367.769 443.825> 145 136<623.769 699.825>
 LayerCount: 2
 Fore
 SplineSet
@@ -7371,7 +7724,9 @@ StartChar: uniE0B0
 Encoding: 57520 57520 209
 GlifName: uniE_0B_0
 Width: 400
-Flags: MW
+Flags: W
+HStem: -177 38<118.583 282.738> 139 38<118.684 282.085>
+VStem: 0 37<-63.3663 62.8214> 364 36<-63.6144 63.4041>
 LayerCount: 2
 Fore
 Refer: 181 57523 N 1 0 0 1 0 0 2
@@ -7382,7 +7737,9 @@ StartChar: uniE4C7
 Encoding: 58567 58567 210
 GlifName: uniE_4C_7
 Width: 638
-Flags: MW
+Flags: W
+HStem: -384 102<37 601> -138 138<270.627 367.373>
+VStem: 0 37<-282 -6.21851> 250 138<-117.373 -20.6272> 601 39<-282 -6.21851>
 LayerCount: 2
 Fore
 SplineSet
@@ -7420,7 +7777,9 @@ StartChar: uniE524
 Encoding: 58660 58660 211
 GlifName: uniE_524
 Width: 218
-Flags: MW
+Flags: W
+HStem: 0 15<48.7158 110.733> 270 13<127.319 164.6>
+VStem: 1 40<17.7915 78.5635> 43 58<181.019 246.99> 139 58<36.3235 106.912> 169 49<200.01 267.172>
 LayerCount: 2
 Fore
 SplineSet
@@ -7465,7 +7824,8 @@ StartChar: uniE444
 Encoding: 58436 58436 212
 GlifName: uniE_444
 Width: 179
-Flags: MW
+Flags: W
+VStem: 0 179<-157.984 -97.2188 104.016 164.781> 66 40<-375.995 -193 -65 69 197 363.995>
 LayerCount: 2
 Fore
 Refer: 88 57986 N 1 0 0 1 0 0 2
@@ -7476,7 +7836,9 @@ StartChar: uniE052
 Encoding: 57426 57426 213
 GlifName: uniE_052
 Width: 641
-Flags: MW
+Flags: W
+HStem: -928 12<227.52 282.257> -684 12<242.59 295.47> -635 43<189.311 334.956> -533 198<146.469 234.981> -262 43<232.553 419.043> 151 112<288.657 333 401 473.963>
+VStem: 0 74<-22.4645 150.689> 65 207<-498.324 -376.707> 166 23<-889.415 -826.432> 173 60<-33.1558 97.7737> 173.5 52<-743.907 -706.873> 198 48<667.697 896.987> 303.5 53<-890.86 -846.706> 323.5 22<-761.894 -701.32> 428 72<790.773 970.954> 429 41<-484.082 -254> 574 71<-106.694 48.5196>
 LayerCount: 2
 Fore
 Refer: 206 57424 N 1 0 0 1 0 0 2
@@ -7488,7 +7850,9 @@ StartChar: uniE053
 Encoding: 57427 57427 214
 GlifName: uniE_053
 Width: 641
-Flags: MW
+Flags: W
+HStem: -635 43<189.311 334.956> -533 198<146.469 234.981> -262 43<232.553 419.043> 151 112<288.657 333 401 473.963> 1252 12<327.52 382.257> 1496 12<342.59 395.47>
+VStem: 0 74<-22.4645 150.689> 65 207<-498.324 -376.707> 173 60<-33.1558 97.7737> 198 48<667.697 896.987> 266 23<1290.58 1353.57> 273.5 52<1436.09 1473.13> 403.5 53<1289.14 1333.29> 423.5 22<1418.11 1478.68> 428 72<790.773 970.954> 429 41<-484.082 -254> 574 71<-106.694 48.5196>
 LayerCount: 2
 Fore
 Refer: 206 57424 N 1 0 0 1 0 0 2
@@ -7500,7 +7864,8 @@ StartChar: uniE446
 Encoding: 58438 58438 215
 GlifName: uniE_446
 Width: 291
-Flags: MW
+Flags: W
+VStem: 117 40<-375.995 -193 -106 -51 57 110 197 363.995>
 LayerCount: 2
 Fore
 SplineSet
@@ -7555,7 +7920,8 @@ StartChar: uniE461
 Encoding: 58465 58465 216
 GlifName: uniE_461
 Width: 868
-Flags: MW
+Flags: W
+VStem: -15 164<-192 -175 -155 -131 131 192> 90 59<-364 -155 -69 69 155 338> 220 59<-338 -103 -17 17 103 364>
 LayerCount: 2
 Fore
 SplineSet
@@ -7616,7 +7982,10 @@ StartChar: uniE049
 Encoding: 57417 57417 217
 GlifName: uniE_049
 Width: 536
-Flags: MW
+Flags: W
+HStem: -1 21G<272 280> 104 31<195 261 291 357> 345 30<1.00122 105 195 261 291 357 447 550.999> 585 31<195 261 291 357>
+VStem: 105 90<135 345 375 585> 261 30<-0.998779 104 135 345 375 585 616 720.999> 357 90<135 345 375 585>
+CounterMasks: 1 0e
 LayerCount: 2
 Fore
 SplineSet
@@ -7685,7 +8054,10 @@ StartChar: uniE630
 Encoding: 58928 58928 218
 GlifName: uniE_630
 Width: 271
-Flags: MW
+Flags: W
+HStem: 0 33<80.1156 191.884> 238 33<79.1016 120 152 192.879>
+VStem: 0 33<79.7155 191.622> 120 32<120.004 238 268.319 356.996> 239 33<79.7155 191.622>
+CounterMasks: 1 38
 LayerCount: 2
 Fore
 SplineSet
@@ -7723,7 +8095,9 @@ StartChar: uniE260
 Encoding: 57952 57952 219
 GlifName: uniE_260
 Width: 192
-Flags: MW
+Flags: W
+HStem: 126 31<73.4248 151.25>
+VStem: -4 47<145.088 470.985> 9 25<-150 95.78 109 170.681> 126 99<-13.1051 118.294>
 LayerCount: 2
 Fore
 SplineSet
@@ -7756,7 +8130,8 @@ StartChar: uniE244
 Encoding: 57924 57924 220
 GlifName: uniE_244
 Width: 246
-Flags: MW
+Flags: W
+VStem: 0 32<-567 -462 -324.249 -239 -104.875 -16 112.979 201> 186 44<-317.617 -197.884> 203 43<-821.457 -625.413 -540.249 -419.543>
 LayerCount: 2
 Fore
 SplineSet
@@ -7808,7 +8183,8 @@ StartChar: uniE56D
 Encoding: 58733 58733 221
 GlifName: uniE_56D_
 Width: 469
-Flags: MW
+Flags: W
+VStem: 237 40<-44.9985 58 194 296.999>
 LayerCount: 2
 Fore
 SplineSet
@@ -7861,7 +8237,9 @@ StartChar: uniE08A
 Encoding: 57482 57482 222
 GlifName: uniE_08A_
 Width: 435
-Flags: MW
+Flags: W
+HStem: -269 25<195.555 314.266> 28 155<313.449 378.904> 243 25<196.292 315.239>
+VStem: 0 140<-125.084 124.351> 291 145<50.2617 158.248> 418 25<-127.161 -79.0117>
 LayerCount: 2
 Fore
 SplineSet
@@ -7903,7 +8281,9 @@ StartChar: uniE04A
 Encoding: 57418 57418 223
 GlifName: uniE_04A_
 Width: 312
-Flags: MW
+Flags: W
+HStem: -1002 51<-55.6578 166.574> 951 51<-166.409 55.6578>
+VStem: -314 41<-259.758 -153.893 53.0411 180.042 386.245 512.842> -307 71<753.237 872.655> -287 141<-827.498 -747.206> 146 141<747.206 845.344> 236 71<-872.655 -753.237> 273 41<-512.842 -386.245 -179.964 -53.0381 153.893 259.758>
 LayerCount: 2
 Fore
 SplineSet
@@ -8019,7 +8399,9 @@ StartChar: uniE0C9
 Encoding: 57545 57545 224
 GlifName: uniE_0C_9
 Width: 336
-Flags: MW
+Flags: W
+HStem: -115 230<274.625 337>
+VStem: 0 337<68.1875 108.296>
 LayerCount: 2
 Fore
 SplineSet
@@ -8043,7 +8425,9 @@ StartChar: uniE4D4
 Encoding: 58580 58580 225
 GlifName: uniE_4D_4
 Width: 322
-Flags: MW
+Flags: W
+HStem: 0 21G<15.25 25.75 167.75 179.25>
+VStem: 0 37<6.1875 51.0315> 154 36<0.0549316 48.3755>
 LayerCount: 2
 Fore
 SplineSet
@@ -8078,7 +8462,9 @@ StartChar: uniE06D
 Encoding: 57453 57453 226
 GlifName: uniE_06D_
 Width: 536
-Flags: MW
+Flags: W
+HStem: -826 87<196 379.23> -606 87<196 371.738> -403 87<196 373.793> -144 88<200 336> 746 89<60 215 321 476>
+VStem: 90 106<-739 -606 -519 -403> 215 106<325 746> 384 104<-507.182 -414.406> 398 106<-721.893 -621.959>
 LayerCount: 2
 Fore
 SplineSet
@@ -8132,7 +8518,8 @@ StartChar: uniE447
 Encoding: 58439 58439 227
 GlifName: uniE_447
 Width: 347
-Flags: MW
+Flags: W
+VStem: 49 77<-220.763 -206 83.4375 97> 87 39<-396.995 -221 -134 -77 30 83 169 341.995> 215 83<-100 -84.3496 204 218.65> 215 40<-346.995 -172 -84 -30 78 131 219 391.989>
 LayerCount: 2
 Fore
 SplineSet
@@ -8209,7 +8596,9 @@ StartChar: uniE655
 Encoding: 58965 58965 228
 GlifName: uniE_655
 Width: 398
-Flags: MW
+Flags: W
+HStem: 157 95<58.469 125.654 272.861 339.531> 253 120<139.027 169.516 228.484 258.973> 263 100<12.4384 83.5133 314.487 390.38> 302 22<89.9062 135.484 262.516 308.094> 374 95<58.469 125.139 272.346 339.531>
+VStem: 43 94<170.923 241.561 384.439 456.107> 139 120<253.027 283.516 342.484 372.973> 149 100<121.62 197.513 428.487 504.38> 188 22<203.906 249.484 376.516 422.094> 261 94<169.893 241.561 384.439 455.077>
 LayerCount: 2
 Fore
 SplineSet
@@ -8311,7 +8700,8 @@ StartChar: uniEAAA
 Encoding: 60074 60074 229
 GlifName: uniE_A_A_A_
 Width: 256
-Flags: MW
+Flags: W
+HStem: -1 114<31 96.9532> 92 114<159.752 224.75>
 LayerCount: 2
 Fore
 SplineSet
@@ -8345,7 +8735,9 @@ StartChar: uniE567
 Encoding: 58727 58727 230
 GlifName: uniE_567
 Width: 559
-Flags: MW
+Flags: W
+HStem: 0 108<87.3613 165.342> 0 80<396.606 498.862> 162 108<394.658 472.639> 190 80<61.1382 163.394>
+VStem: 0 31<95.2461 170.405> 529 31<99.5948 174.754>
 LayerCount: 2
 Fore
 SplineSet
@@ -8396,7 +8788,9 @@ StartChar: uniE4B3
 Encoding: 58547 58547 231
 GlifName: uniE_4B_3
 Width: 308
-Flags: MW
+Flags: W
+HStem: -228 36<5.67249 302.328> -82 82<125.376 182.624>
+VStem: 113 82<-69.6238 -12.3762>
 LayerCount: 2
 Fore
 SplineSet
@@ -8426,7 +8820,9 @@ StartChar: uniE281
 Encoding: 57985 57985 232
 GlifName: uniE_281
 Width: 433
-Flags: MW
+Flags: W
+HStem: 129 32<74.5 155.526 278.387 358.5>
+VStem: 0 101<-15.113 121.831> 193 48<114 481.967> 198 38<-146 103.896> 332 101<-15.6233 121.678>
 LayerCount: 2
 Fore
 SplineSet
@@ -8476,7 +8872,9 @@ StartChar: uniE523
 Encoding: 58659 58659 233
 GlifName: uniE_523
 Width: 284
-Flags: MW
+Flags: W
+HStem: 0 21G<13 76.5> 249 42<156.48 238.5> 258 32<30.3751 101.75>
+VStem: -9 16<209.062 230.183> 212 72<211.58 243.327>
 LayerCount: 2
 Fore
 SplineSet
@@ -8514,7 +8912,9 @@ StartChar: uniE0A9
 Encoding: 57513 57513 234
 GlifName: uniE_0A_9
 Width: 336
-Flags: MW
+Flags: W
+HStem: -141 282<31 40 297 306>
+VStem: 0 337<-116 -104 104 116>
 LayerCount: 2
 Fore
 SplineSet
@@ -8555,7 +8955,9 @@ StartChar: uniE0A1
 Encoding: 57505 57505 235
 GlifName: uniE_0A_1
 Width: 455
-Flags: MW
+Flags: W
+HStem: -131 80<50 405> 51 80<50 405>
+VStem: 0 50<-230.898 -131 -51 51 131 230.898> 405 50<-230.898 -131 -51 51 131 230.898>
 LayerCount: 2
 Fore
 SplineSet
@@ -8589,7 +8991,9 @@ StartChar: uniE566
 Encoding: 58726 58726 236
 GlifName: uniE_566
 Width: 681
-Flags: MW
+Flags: W
+HStem: -11 51<191.25 259.892> 176 26<31.1667 129.463> 285 25<47.4446 147.077> 312 28<495.86 568.529>
+VStem: 0 26<208.063 264.145> 146 81<40.3 181.43> 278 25<56.5251 150.706> 508 106<202.313 276.011>
 LayerCount: 2
 Fore
 SplineSet
@@ -8657,7 +9061,9 @@ StartChar: uniE0A0
 Encoding: 57504 57504 237
 GlifName: uniE_0A_0
 Width: 587
-Flags: MW
+Flags: W
+HStem: -141 26<268.384 367.987> 115 26<220.759 318.906>
+VStem: 0 50<-140.898 -40 40 140.898> 537 50<-140.898 -40 40 140.898>
 LayerCount: 2
 Fore
 SplineSet
@@ -8700,7 +9106,9 @@ StartChar: uniE0C8
 Encoding: 57544 57544 238
 GlifName: uniE_0C_8
 Width: 355
-Flags: MW
+Flags: W
+HStem: 71 44<103 311>
+VStem: 311 44<-53 71>
 LayerCount: 2
 Fore
 SplineSet
@@ -8728,7 +9136,9 @@ StartChar: uniEB7A
 Encoding: 60282 60282 239
 GlifName: uniE_B_7A_
 Width: 0
-Flags: MW
+Flags: W
+HStem: -10 20<-55 9.99756>
+VStem: -256 266
 LayerCount: 2
 Fore
 SplineSet
@@ -8761,7 +9171,8 @@ StartChar: uniE004
 Encoding: 57348 57348 240
 GlifName: uniE_004
 Width: 466
-Flags: MW
+Flags: W
+HStem: -112 112<7.21973 164.914>
 LayerCount: 2
 Fore
 SplineSet
@@ -8791,7 +9202,9 @@ Encoding: 57955 57955 241
 GlifName: uniE_263
 Width: 256
 VWidth: 1149
-Flags: MW
+Flags: W
+HStem: -138 109<0.0673828 2 4 54.4189 201.581 252 254 255.933> -24 48<106.902 148.962> 29 110<0.0673828 61.7825 194.217 255.933>
+VStem: -10 109<-126.963 -125 -123 -69.0392 69.656 124 126 127.933> 104 48<-21.197 20.9624> 157 110<-126.963 -39.2656 40.25 127.933>
 LayerCount: 2
 Fore
 SplineSet
@@ -8844,7 +9257,8 @@ StartChar: uniE005
 Encoding: 57349 57349 242
 GlifName: uniE_005
 Width: 466
-Flags: MW
+Flags: W
+HStem: 0 112<298.584 458.78>
 LayerCount: 2
 Fore
 SplineSet
@@ -8873,7 +9287,8 @@ StartChar: uniE56C
 Encoding: 58732 58732 243
 GlifName: uniE_56C_
 Width: 469
-Flags: MW
+Flags: W
+HStem: 0 21G<181.25 191.75 394.25 404.75> 236 20G<109.25 119.75 322.25 332.75>
 LayerCount: 2
 Fore
 SplineSet
@@ -8912,7 +9327,9 @@ StartChar: uniE4AC
 Encoding: 58540 58540 244
 GlifName: uniE_4A_C_
 Width: 256
-Flags: MW
+Flags: W
+HStem: 0 281
+VStem: 0 25<0.0117188 7>
 LayerCount: 2
 Fore
 SplineSet
@@ -8938,7 +9355,7 @@ StartChar: uniE665
 Encoding: 58981 58981 245
 GlifName: uniE_665
 Width: 256
-Flags: MW
+Flags: W
 LayerCount: 2
 Fore
 SplineSet
@@ -8966,7 +9383,8 @@ StartChar: uniE4F4
 Encoding: 58612 58612 246
 GlifName: uniE_4F_4
 Width: 384
-Flags: MW
+Flags: W
+HStem: -160 186<1e-07 384> -26 52<-159.764 0 384 543.719>
 LayerCount: 2
 Fore
 SplineSet
@@ -8995,7 +9413,9 @@ StartChar: uniEB80
 Encoding: 60288 60288 247
 GlifName: uniE_B_80
 Width: 128
-Flags: MW
+Flags: W
+HStem: -256 276
+VStem: -20 40<-104.315 19.9951>
 LayerCount: 2
 Fore
 SplineSet
@@ -9025,7 +9445,9 @@ StartChar: uniE055
 Encoding: 57429 57429 248
 GlifName: uniE_055
 Width: 1006
-Flags: MW
+Flags: W
+HStem: -635 43<189.855 337.642 554.855 702.759> -533 198<146.469 234.981 511.971 599.981> -262 43<234.017 419.043 600.32 784.028> 151 112<288.657 333 653.657 698 766 838.398>
+VStem: 2 72<-25.9787 150.38> 65 207<-498.324 -376.707> 173 60<-33.1558 97.7737> 198 48<667.697 896.987> 367 72<-25.2812 135.312> 428 72<790.773 970.954> 428 42<-359 -255.124> 538 107<-32.9844 97.8945> 563 48<667.697 896.987> 793 72<790.773 970.954> 793 42<-483.347 -255.827> 939 71<-105.144 49.4921>
 LayerCount: 2
 Fore
 SplineSet
@@ -9208,7 +9630,9 @@ Encoding: 57450 57450 249
 GlifName: uniE_06A_
 Width: 327
 VWidth: 0
-Flags: MW
+Flags: W
+HStem: -486 107<42 285> 379 107<42 285>
+VStem: 0 42<-379 379> 285 42<-379 379>
 LayerCount: 2
 Fore
 SplineSet
@@ -9247,7 +9671,8 @@ Encoding: 57441 57441 250
 GlifName: uniE_061
 Width: 1024
 VWidth: 0
-Flags: M
+HStem: -149 96<0 298> 52 97<0 298>
+VStem: 298 40<-562.995 -149 149 562.995>
 LayerCount: 2
 Fore
 SplineSet
@@ -9284,7 +9709,9 @@ Encoding: 57430 57430 251
 GlifName: uniE_056
 Width: 828
 VWidth: 0
-Flags: MW
+Flags: W
+HStem: -635 43<189.311 334.956> -533 198<146.469 234.981> -262 43<232.553 419.043> 151 112<288.657 333 401 473.963> 363 96<490 788> 564 97<490 788>
+VStem: 0 74<-22.4645 150.689> 65 207<-498.324 -376.707> 173 60<-33.1558 97.7737> 198 48<667.697 896.987> 428 72<790.773 970.954> 429 41<-484.082 -254> 574 71<-106.694 48.5196> 788 40<-50.9946 363 661 1074.99>
 LayerCount: 2
 Fore
 Refer: 206 57424 N 1 0 0 1 0 0 2
@@ -9297,7 +9724,9 @@ Encoding: 57451 57451 252
 GlifName: uniE_06B_
 Width: 263
 VWidth: 0
-Flags: MW
+Flags: W
+HStem: -154 51<51 256.817> 103 50<51 256.852>
+VStem: 1 50<-509 -154 -103 103 153 509>
 LayerCount: 2
 Fore
 SplineSet
@@ -9341,7 +9770,8 @@ Encoding: 57452 57452 253
 GlifName: uniE_06C_
 Width: 484
 VWidth: 0
-Flags: MW
+Flags: W
+VStem: 217 50<-208.78 -92 96 208.78>
 LayerCount: 2
 Fore
 SplineSet
@@ -9372,7 +9802,9 @@ StartChar: uniE441
 Encoding: 58433 58433 254
 GlifName: uniE_441
 Width: 192
-Flags: MW
+Flags: W
+HStem: 126 31<73.4248 151.25>
+VStem: -4 47<145.088 470.985> 9 25<-150 95.78 109 170.681> 126 99<-13.1051 118.294>
 LayerCount: 2
 Fore
 Refer: 219 57952 N 1 0 0 1 0 0 2
@@ -9383,7 +9815,8 @@ StartChar: uniE0BD
 Encoding: 57533 57533 255
 GlifName: uniE_0B_D_
 Width: 355
-Flags: MW
+Flags: W
+HStem: -115 44<71 286>
 LayerCount: 2
 Fore
 SplineSet
@@ -9411,7 +9844,9 @@ StartChar: uniE0BF
 Encoding: 57535 57535 256
 GlifName: uniE_0B_F_
 Width: 355
-Flags: MW
+Flags: W
+HStem: -115 44<44 252>
+VStem: 0 44<-71 53>
 LayerCount: 2
 Fore
 SplineSet
@@ -9439,7 +9874,9 @@ StartChar: uniE0CA
 Encoding: 57546 57546 257
 GlifName: uniE_0C_A_
 Width: 355
-Flags: MW
+Flags: W
+HStem: -115 44<97.7805 258.986> 71 44<45 311>
+VStem: 0 45<-24.2188 71> 311 44<-23.1327 71>
 LayerCount: 2
 Fore
 SplineSet
@@ -9471,7 +9908,9 @@ StartChar: uniE0CB
 Encoding: 57547 57547 258
 GlifName: uniE_0C_B_
 Width: 336
-Flags: MW
+Flags: W
+HStem: -115 230<79.9927 257.524>
+VStem: 0 337<-38.8174 108.296>
 LayerCount: 2
 Fore
 SplineSet
@@ -9495,7 +9934,8 @@ StartChar: uniE0DE
 Encoding: 57566 57566 259
 GlifName: uniE_0D_E_
 Width: 506
-Flags: MW
+Flags: W
+HStem: -115 230<247 260>
 LayerCount: 2
 Fore
 SplineSet
@@ -9525,7 +9965,9 @@ StartChar: uniE0B8
 Encoding: 57528 57528 260
 GlifName: uniE_0B_8
 Width: 506
-Flags: MW
+Flags: W
+HStem: -115 44<45 462> 71 44<45 462>
+VStem: 0 45<-71 71> 462 45<-71 71>
 LayerCount: 2
 Fore
 SplineSet
@@ -9555,7 +9997,8 @@ StartChar: uniE0CC
 Encoding: 57548 57548 261
 GlifName: uniE_0C_C_
 Width: 355
-Flags: MW
+Flags: W
+HStem: 71 44<89.086 267.309>
 LayerCount: 2
 Fore
 SplineSet
@@ -9585,7 +10028,9 @@ StartChar: uniE0CD
 Encoding: 57549 57549 262
 GlifName: uniE_0C_D_
 Width: 336
-Flags: MW
+Flags: W
+HStem: -115 230<134.328 202.34>
+VStem: 0 337<-3.15625 54.3555>
 LayerCount: 2
 Fore
 SplineSet
@@ -9609,7 +10054,8 @@ StartChar: uniED40
 Encoding: 60736 60736 263
 GlifName: uniE_D_40
 Width: 486
-Flags: MW
+Flags: W
+HStem: -1 38<-72.5859 -31.1675 31.1675 72.5859>
 LayerCount: 2
 Fore
 SplineSet
@@ -9651,7 +10097,8 @@ StartChar: uniED41
 Encoding: 60737 60737 264
 GlifName: uniE_D_41
 Width: 486
-Flags: MW
+Flags: W
+HStem: -256 38<-72.5859 -31.1675 31.1675 72.5859>
 LayerCount: 2
 Fore
 Refer: 263 60736 N 1 0 0 1 0 -255 2
@@ -9662,7 +10109,9 @@ StartChar: uniE590
 Encoding: 58768 58768 265
 GlifName: uniE_590
 Width: 0
-Flags: MW
+Flags: W
+HStem: -161 318<-56 -12>
+VStem: -115 64<-95.8929 33.4062>
 LayerCount: 2
 Fore
 SplineSet
@@ -9687,7 +10136,8 @@ StartChar: uniE591
 Encoding: 58769 58769 266
 GlifName: uniE_591
 Width: 62
-Flags: MW
+Flags: W
+VStem: -79 29<-168.985 -160>
 LayerCount: 2
 Fore
 SplineSet
@@ -9709,7 +10159,8 @@ StartChar: uniE592
 Encoding: 58770 58770 267
 GlifName: uniE_592
 Width: 62
-Flags: MW
+Flags: W
+VStem: 50 29<160 168.985>
 LayerCount: 2
 Fore
 SplineSet
@@ -9731,7 +10182,9 @@ StartChar: uniE5B8
 Encoding: 58808 58808 268
 GlifName: uniE_5B_8
 Width: 721
-Flags: MW
+Flags: W
+HStem: 0 21G<219 229 433 443 646 656> 236 20G<148 158 361 371 575 585>
+VStem: 0 41<-127.676 56.499> 488 41<-42.9985 60 196 298.999>
 LayerCount: 2
 Fore
 SplineSet
@@ -9796,7 +10249,9 @@ StartChar: uniE5BB
 Encoding: 58811 58811 269
 GlifName: uniE_5B_B_
 Width: 684
-Flags: MW
+Flags: W
+HStem: 0 21G<111.25 121.75 324.25 334.75 538.25 548.75> 236 20G<181.25 191.75 395.25 405.75 608.25 618.75>
+VStem: 726 41<133.071 312.939>
 LayerCount: 2
 Fore
 SplineSet
@@ -9849,7 +10304,8 @@ StartChar: uniE5BD
 Encoding: 58813 58813 270
 GlifName: uniE_5B_D_
 Width: 684
-Flags: MW
+Flags: W
+VStem: 451 41<-45.9985 57 193 295.999>
 LayerCount: 2
 Fore
 SplineSet
@@ -9910,7 +10366,9 @@ StartChar: uniE5B5
 Encoding: 58805 58805 271
 GlifName: uniE_5B_5
 Width: 721
-Flags: MW
+Flags: W
+HStem: 0 21G<219 229 433 443 646 656> 236 20G<148 158 361 371 575 585>
+VStem: 0 41<-127.676 56.499>
 LayerCount: 2
 Fore
 SplineSet
@@ -9961,7 +10419,9 @@ StartChar: uniE5B1
 Encoding: 58801 58801 272
 GlifName: uniE_5B_1
 Width: 684
-Flags: MW
+Flags: W
+HStem: 0 21G<111.25 121.75 324.25 334.75 538.25 548.75> 236 20G<181.25 191.75 395.25 405.75 608.25 618.75>
+VStem: 726 41<-127.768 56.3342>
 LayerCount: 2
 Fore
 SplineSet
@@ -10013,7 +10473,9 @@ StartChar: uniE5B2
 Encoding: 58802 58802 273
 GlifName: uniE_5B_2
 Width: 684
-Flags: MW
+Flags: W
+HStem: 0 21G<182 192 396 406 609 619> 236 20G<111 121 324 334 538 548>
+VStem: 0 41<160 624.986>
 LayerCount: 2
 Fore
 SplineSet
@@ -10063,7 +10525,9 @@ StartChar: uniE5C4
 Encoding: 58820 58820 274
 GlifName: uniE_5C_4
 Width: 721
-Flags: MW
+Flags: W
+HStem: 0 21G<219 229 433 443 646 656> 236 20G<148 158 361 371 575 585>
+VStem: 0 41<133.071 312.939> 19.5 58.5<301.857 359.43> 488 41<-42.9985 60 196 298.999>
 LayerCount: 2
 Fore
 SplineSet
@@ -10129,7 +10593,9 @@ StartChar: uniE5C6
 Encoding: 58822 58822 275
 GlifName: uniE_5C_6
 Width: 721
-Flags: MW
+Flags: W
+HStem: 0 21G<219 229 433 443 646 656> 236 20G<148 158 361 371 575 585>
+VStem: 0 41<133.071 312.939> 19.5 58.5<301.857 359.43>
 LayerCount: 2
 Fore
 SplineSet
@@ -10181,7 +10647,9 @@ StartChar: uniF474
 Encoding: 62580 62580 276
 GlifName: uniF_474
 Width: 688
-Flags: MW
+Flags: W
+HStem: -145.314 83.9592<470.65 529.631> -71.8497 170.34<63.1168 140.872> 61.3548 83.9592<470.65 529.631> 196.174 20.9898<142.077 238.917>
+VStem: -2 175.184<-36.2749 64.9829> 331.415 100.913<-89.6213 98.2948> 458.161 83.9592<-132.825 -73.8441 73.8441 132.825>
 LayerCount: 2
 Fore
 Refer: 105 57442 N 0.8073 0 0 0.8073 -2 0 2
@@ -10192,7 +10660,9 @@ StartChar: uniF473
 Encoding: 62579 62579 277
 GlifName: uniF_473
 Width: 557
-Flags: MW
+Flags: W
+HStem: -409.6 23.2<310.494 393.306> -191.2 131.2<255.2 303.6> -57.6 23.2<335.434 415.519> 34.4 23.2<335.656 415.519> 60 131.2<255.2 303.6> 386.4 23.2<308.607 393.306>
+VStem: 0 113.6<-409.6 409.6> 147.2 33.6<-409.6 -15.2 15.2 409.6> 215.2 84.8<-355.058 -280.4 280.4 362.6> 249.6 22.4<-191.197 -122.278 122.278 191.197> 454.4 102.4<-304.593 -131.019 131.019 304.593>
 LayerCount: 2
 Fore
 Refer: 140 57436 N 0.8 0 0 0.8 0 0 2
@@ -10203,7 +10673,9 @@ StartChar: uniF472
 Encoding: 62578 62578 278
 GlifName: uniF_472
 Width: 513
-Flags: MW
+Flags: W
+HStem: -512 43<147.588 273.461> -428 159<127.095 189.613> -212 43<178.529 330.559> 118 89<224.808 263 327 385.213>
+VStem: 2 61<-32.5216 134.863> 47 166<-405.31 -297.583> 135 55<-34.308 83.5068> 151 45<524.713 749.065> 332 61<647.23 815.781> 338 42<-392.855 -206 -155 -60.8801> 454 64<-88.3279 47.2171>
 LayerCount: 2
 Fore
 SplineSet
@@ -10293,7 +10765,9 @@ StartChar: uniF40B
 Encoding: 62475 62475 279
 GlifName: uniF_40B_
 Width: 717
-Flags: MW
+Flags: W
+HStem: -739 52<159.091 256.737> -726 61<377.019 481.199> -505 41<410.004 474.493> -463 210<233.5 375.5> -193 51<68.8466 184.768 507 586.654> -119 44<359.55 423.343> 263 52<254.554 348.582> 644 51<516.569 649.413> 687 50<291.988 410.173>
+VStem: 143 104<-423.812 -340.345> 159 103<572.222 659.618> 442 117<200.613 286.084> 499 104<-427.361 -335.192> 521 116<-627.188 -524.91>
 LayerCount: 2
 Fore
 SplineSet
@@ -10420,7 +10894,9 @@ StartChar: uniF40D
 Encoding: 62477 62477 280
 GlifName: uniF_40D_
 Width: 574
-Flags: MW
+Flags: W
+HStem: -591.2 41.6<124.273 202.39> -580.8 48.8<298.616 381.959> -404 32.8<325.004 376.595> -370.4 168<183.8 297.4> -154.4 40.8<52.0773 144.815 402.6 466.323> -95.2 35.2<284.64 335.675> 210.4 41.6<200.643 275.865> 515.2 40.8<410.255 516.53> 549.6 40<230.591 325.139>
+VStem: 111.4 83.2<-339.049 -272.276> 124.2 82.4<457.777 527.695> 350.6 93.6<160.491 228.868> 396.2 83.2<-341.889 -268.153> 413.8 92.8<-501.75 -419.928>
 LayerCount: 2
 Fore
 Refer: 279 62475 N 0.8 0 0 0.8 -3 0 2
@@ -10431,7 +10907,9 @@ StartChar: uniE265
 Encoding: 57957 57957 281
 GlifName: uniE_265
 Width: 574
-Flags: MW
+Flags: W
+HStem: -138 109<318.067 320 322 372.419 519.581 570 572 573.933> -24 48<424.902 466.962> 29 110<318.067 379.783 512.217 573.933>
+VStem: 0 77<-215.649 -204 40.3511 52> 47 30<-387.995 -216 -94 40 162 333.995> 172 30<-338.995 -166 -43 90 213 382.995> 308 109<-126.963 -125 -123 -69.0392 69.656 124 126 127.933> 422 48<-21.197 20.9624> 475 110<-126.963 -39.2656 40.25 127.933>
 LayerCount: 2
 Fore
 Refer: 141 57954 N 1 0 0 1 0 0 2
@@ -10443,7 +10921,9 @@ StartChar: uniE266
 Encoding: 57958 57958 282
 GlifName: uniE_266
 Width: 576
-Flags: MW
+Flags: W
+HStem: 126 31<73.4248 151.25 265.978 341.75 457.425 535.25>
+VStem: -4 47<145.088 470.985> 9 25<-150 95.78 109 170.681> 126 100<-22.9305 108.128 109 123.637> 188 47<145.088 470.985> 198 28<-150 -24 128 264.71> 318 100<-22.9305 108.128 109 123.637> 380 47<145.088 470.985> 390 28<-150 -24 126 263.544> 510 99<-13.1051 118.294>
 LayerCount: 2
 Fore
 SplineSet
@@ -10520,7 +11000,9 @@ StartChar: uniE267
 Encoding: 57959 57959 283
 GlifName: uniE_267
 Width: 423
-Flags: MW
+Flags: W
+HStem: 126 31<304.425 382.25>
+VStem: 0 32<-93 53 163 386.995> 136 32<-386.995 -163 -53 93> 227 47<145.088 470.985> 240 25<-150 95.78 109 170.681> 357 99<-13.1051 118.294>
 LayerCount: 2
 Fore
 Refer: 73 57953 N 1 0 0 1 0 0 2
@@ -10532,7 +11014,8 @@ StartChar: uniE268
 Encoding: 57960 57960 284
 GlifName: uniE_268
 Width: 485
-Flags: MW
+Flags: W
+VStem: 0 32<-93 53 163 386.995> 136 32<-386.995 -163 -53 93> 231 77<-215.649 -204 40.3511 52> 278 30<-387.995 -216 -94 40 162 333.995> 403 30<-338.995 -166 -43 90 213 382.995>
 LayerCount: 2
 Fore
 Refer: 73 57953 N 1 0 0 1 0 0 2
@@ -10544,7 +11027,8 @@ StartChar: uniE269
 Encoding: 57961 57961 285
 GlifName: uniE_269
 Width: 541
-Flags: MW
+Flags: W
+VStem: 0 77<-215.649 -204 40.3511 52> 47 30<-387.995 -216 -94 40 162 333.995> 172 30<-338.995 -166 -43 90 213 382.995> 287 77<-215.649 -204 40.3511 52> 334 30<-387.995 -216 -94 40 162 333.995> 459 30<-338.995 -166 -43 90 213 382.995>
 LayerCount: 2
 Fore
 Refer: 141 57954 N 1 0 0 1 0 0 2
@@ -10557,7 +11041,8 @@ Encoding: 58575 58575 286
 GlifName: uniE_4C_F_
 Width: 425
 VWidth: 1000
-Flags: MW
+Flags: W
+HStem: 0 96<126.401 161.676> 413 12<410.461 424.947>
 LayerCount: 2
 Fore
 SplineSet
@@ -10586,7 +11071,9 @@ Encoding: 57793 57793 287
 GlifName: uniE_1C_1
 Width: 246
 VWidth: 1000
-Flags: MW
+Flags: W
+HStem: -112 224<51.5156 195.484>
+VStem: 0 246<94 110>
 LayerCount: 2
 Fore
 SplineSet
@@ -10612,7 +11099,9 @@ Encoding: 57794 57794 288
 GlifName: uniE_1C_2
 Width: 246
 VWidth: 1000
-Flags: MW
+Flags: W
+HStem: -113 39<50 165.563> 74 38<50 165.563>
+VStem: 43 32<-58.125 58.125> 214 33<-41.8266 41.1987>
 LayerCount: 2
 Fore
 SplineSet
@@ -10642,7 +11131,9 @@ Encoding: 57798 57798 289
 GlifName: uniE_1C_6
 Width: 246
 VWidth: 1000
-Flags: MW
+Flags: W
+HStem: -112 55<73.0898 214> 57 56<73.0898 214>
+VStem: 0 33<-32.5918 32.8424> 214 33<-57 57>
 LayerCount: 2
 Fore
 SplineSet
@@ -10668,7 +11159,9 @@ Encoding: 57803 57803 290
 GlifName: uniE_1C_B_
 Width: 246
 VWidth: 1000
-Flags: MW
+Flags: W
+HStem: -113 226<145.062 213.766>
+VStem: 0 247<-20.7217 20.7217>
 LayerCount: 2
 Fore
 SplineSet
@@ -10692,7 +11185,9 @@ Encoding: 59595 59595 291
 GlifName: uniE_8C_B_
 Width: 0
 VWidth: 1000
-Flags: MW
+Flags: W
+HStem: 0 21G<15.25 23.75>
+VStem: 0 230
 LayerCount: 2
 Fore
 SplineSet
@@ -10720,7 +11215,9 @@ Encoding: 59596 59596 292
 GlifName: uniE_8C_C_
 Width: 37
 VWidth: 1000
-Flags: MW
+Flags: W
+HStem: 0 21G<244 252> 500 75<37 229>
+VStem: 229 38<0.00146484 500>
 LayerCount: 2
 Fore
 SplineSet
@@ -10748,7 +11245,8 @@ StartChar: uniE59F
 Encoding: 58783 58783 293
 GlifName: uniE_59F_
 Width: 0
-Flags: MW
+Flags: W
+VStem: -20 41<-42.9985 298.999>
 LayerCount: 2
 Fore
 SplineSet
@@ -10771,7 +11269,9 @@ StartChar: uniE59A
 Encoding: 58778 58778 294
 GlifName: uniE_59A_
 Width: 41
-Flags: MW
+Flags: W
+HStem: 236 20G<147 155>
+VStem: 0 41<-127.676 56.499>
 LayerCount: 2
 Fore
 SplineSet
@@ -10797,7 +11297,9 @@ StartChar: uniE5A7
 Encoding: 58791 58791 295
 GlifName: uniE_5A_7
 Width: 263
-Flags: MW
+Flags: W
+HStem: 236 20G<103.5 114.5>
+VStem: 222 41<-127.768 55.6165>
 LayerCount: 2
 Fore
 SplineSet
@@ -10829,7 +11331,8 @@ StartChar: uniE594
 Encoding: 58772 58772 296
 GlifName: uniE_594
 Width: 0
-Flags: MW
+Flags: W
+VStem: 0 41<72.0366 624.986>
 LayerCount: 2
 Fore
 SplineSet
@@ -10852,7 +11355,9 @@ StartChar: uniE5A1
 Encoding: 58785 58785 297
 GlifName: uniE_5A_1
 Width: 76
-Flags: MW
+Flags: W
+HStem: 72 297<12 43.1528>
+VStem: 35 41<145.168 312.696>
 LayerCount: 2
 Fore
 SplineSet
@@ -10877,7 +11382,9 @@ StartChar: uniE570
 Encoding: 58736 58736 298
 GlifName: uniE_570
 Width: 278
-Flags: MW
+Flags: W
+HStem: 0 21G<129.75 147.25> 236 20G<0 75.4118 232.588 278>
+VStem: 0 278
 LayerCount: 2
 Fore
 SplineSet
@@ -10898,7 +11405,9 @@ StartChar: uniE571
 Encoding: 58737 58737 299
 GlifName: uniE_571
 Width: 162
-Flags: MW
+Flags: W
+HStem: 1 21G<138.5 145.5>
+VStem: 1 36<128.551 347.811>
 LayerCount: 2
 Fore
 SplineSet
@@ -10932,7 +11441,9 @@ StartChar: uniE572
 Encoding: 58738 58738 300
 GlifName: uniE_572
 Width: 159
-Flags: MW
+Flags: W
+HStem: 1 21G<7.5 19>
+VStem: 122 36<126.351 346.972>
 LayerCount: 2
 Fore
 SplineSet
@@ -10961,7 +11472,8 @@ StartChar: uniE573
 Encoding: 58739 58739 301
 GlifName: uniE_573
 Width: 218
-Flags: MW
+Flags: W
+VStem: 1 30<233.508 381.524>
 LayerCount: 2
 Fore
 SplineSet
@@ -10991,7 +11503,8 @@ StartChar: uniE574
 Encoding: 58740 58740 302
 GlifName: uniE_574
 Width: 221
-Flags: MW
+Flags: W
+VStem: 188 32<233.005 382.936>
 LayerCount: 2
 Fore
 SplineSet
@@ -11020,7 +11533,9 @@ StartChar: uniE575
 Encoding: 58741 58741 303
 GlifName: uniE_575
 Width: 256
-Flags: MW
+Flags: W
+HStem: 0 38<37.1559 172.877>
+VStem: 0 256<49 141>
 LayerCount: 2
 Fore
 SplineSet
@@ -11044,7 +11559,9 @@ StartChar: uniE576
 Encoding: 58742 58742 304
 GlifName: uniE_576
 Width: 256
-Flags: MW
+Flags: W
+HStem: 0 38<83.123 218.844>
+VStem: -26 279.5
 LayerCount: 2
 Fore
 SplineSet
@@ -11069,7 +11586,8 @@ StartChar: uniE577
 Encoding: 58743 58743 305
 GlifName: uniE_577
 Width: 392
-Flags: MW
+Flags: W
+HStem: 0 21G<0 45 346.5 392> 99 26<128.858 263.347>
 LayerCount: 2
 Fore
 SplineSet
@@ -11094,7 +11612,8 @@ StartChar: uniE578
 Encoding: 58744 58744 306
 GlifName: uniE_578
 Width: 392
-Flags: MW
+Flags: W
+HStem: 0 26<128.858 263.347>
 LayerCount: 2
 Fore
 SplineSet
@@ -11119,7 +11638,9 @@ StartChar: uniE579
 Encoding: 58745 58745 307
 GlifName: uniE_579
 Width: 201
-Flags: MW
+Flags: W
+HStem: -1 301
+VStem: 1 197
 LayerCount: 2
 Fore
 SplineSet
@@ -11136,7 +11657,9 @@ StartChar: uniE57A
 Encoding: 58746 58746 308
 GlifName: uniE_57A_
 Width: 201
-Flags: MW
+Flags: W
+HStem: -1 302
+VStem: 0 198
 LayerCount: 2
 Fore
 SplineSet
@@ -11153,7 +11676,9 @@ StartChar: uniE57B
 Encoding: 58747 58747 309
 GlifName: uniE_57B_
 Width: 314
-Flags: MW
+Flags: W
+HStem: -1 21G<20.1613 66.6667>
+VStem: 1 313
 LayerCount: 2
 Fore
 SplineSet
@@ -11170,7 +11695,9 @@ StartChar: uniE57C
 Encoding: 58748 58748 310
 GlifName: uniE_57C_
 Width: 313
-Flags: MW
+Flags: W
+HStem: -1 21G<247.333 293.839>
+VStem: 0 313
 LayerCount: 2
 Fore
 SplineSet
@@ -11187,7 +11714,8 @@ StartChar: uniE57D
 Encoding: 58749 58749 311
 GlifName: uniE_57D_
 Width: 500
-Flags: MW
+Flags: W
+HStem: -1 21G<17.4516 62.6479 225.161 271.648>
 LayerCount: 2
 Fore
 SplineSet
@@ -11209,7 +11737,8 @@ StartChar: uniE57E
 Encoding: 58750 58750 312
 GlifName: uniE_57E_
 Width: 519
-Flags: MW
+Flags: W
+HStem: 1 21G<246.326 291.548 453.326 499.839>
 LayerCount: 2
 Fore
 SplineSet
@@ -11231,7 +11760,8 @@ StartChar: uniE57F
 Encoding: 58751 58751 313
 GlifName: uniE_57F_
 Width: 492
-Flags: MW
+Flags: W
+HStem: -10 276
 LayerCount: 2
 Fore
 SplineSet
@@ -11254,7 +11784,8 @@ StartChar: uniE580
 Encoding: 58752 58752 314
 GlifName: uniE_580
 Width: 492
-Flags: MW
+Flags: W
+HStem: -10 276
 LayerCount: 2
 Fore
 SplineSet
@@ -11277,7 +11808,9 @@ StartChar: uniE581
 Encoding: 58753 58753 315
 GlifName: uniE_581
 Width: 118
-Flags: MW
+Flags: W
+HStem: 0 318<15 59>
+VStem: 54 64<124.261 253.709>
 LayerCount: 2
 Fore
 SplineSet
@@ -11302,7 +11835,9 @@ StartChar: uniE582
 Encoding: 58754 58754 316
 GlifName: uniE_582
 Width: 262
-Flags: MW
+Flags: W
+HStem: 105 52<-9.71875 105 157 271.719>
+VStem: 105 52<-9.71875 105 157 271.719>
 LayerCount: 2
 Fore
 SplineSet
@@ -11339,7 +11874,9 @@ StartChar: uniE583
 Encoding: 58755 58755 317
 GlifName: uniE_583
 Width: 52
-Flags: MW
+Flags: W
+HStem: -10 276<0.28125 51.7188>
+VStem: 0 52<-9.71875 265.719>
 LayerCount: 2
 Fore
 SplineSet
@@ -11362,7 +11899,9 @@ StartChar: uniE584
 Encoding: 58756 58756 318
 GlifName: uniE_584
 Width: 219
-Flags: MW
+Flags: W
+HStem: -10 33<77.9459 148.736> 238 34<8 55 139 201>
+VStem: 15 51<33.9211 155.789> 206 12<106.544 135.997>
 LayerCount: 2
 Fore
 SplineSet
@@ -11399,7 +11938,8 @@ StartChar: uniE585
 Encoding: 58757 58757 319
 GlifName: uniE_585
 Width: 1088
-Flags: MW
+Flags: W
+VStem: 1056 34<1058.19 1092.55>
 LayerCount: 2
 Fore
 SplineSet
@@ -11498,7 +12038,8 @@ StartChar: uniE586
 Encoding: 58758 58758 320
 GlifName: uniE_586
 Width: 1088
-Flags: MW
+Flags: W
+VStem: 14 34<1059.19 1093.55>
 LayerCount: 2
 Fore
 SplineSet
@@ -11594,7 +12135,8 @@ StartChar: uniE587
 Encoding: 58759 58759 321
 GlifName: uniE_587
 Width: 880
-Flags: MW
+Flags: W
+HStem: 0 21G<182.25 192.75 395.5 406.5> 236 20G<110.25 120.75 323.25 333.75> 531 28<794.591 891.999>
 LayerCount: 2
 Fore
 SplineSet
@@ -11639,7 +12181,9 @@ StartChar: uniE588
 Encoding: 58760 58760 322
 GlifName: uniE_588
 Width: 548
-Flags: MW
+Flags: W
+HStem: 188 78<67.8025 183.77 364.23 480.198>
+VStem: 254 40<-2.26208 110.338 188.001 410.997>
 LayerCount: 2
 Fore
 SplineSet
@@ -11686,7 +12230,9 @@ StartChar: uniE589
 Encoding: 58761 58761 323
 GlifName: uniE_589
 Width: 421
-Flags: MW
+Flags: W
+HStem: 0 44<136.263 169.737 309.816 346.26> 72 44<44.3877 83.7273 222.263 256.471 394.557 437.102>
+VStem: 0 43<37.7032 71.5151> 438 43<37.7037 71.6157>
 LayerCount: 2
 Fore
 SplineSet
@@ -11736,7 +12282,9 @@ StartChar: uniE443
 Encoding: 58435 58435 324
 GlifName: uniE_443
 Width: 202
-Flags: MW
+Flags: W
+HStem: 129 32<41.75 123.407>
+VStem: -33 101<-15.7415 121.786> 153 53<133.176 481.908> 162 30<-146 101.52 114 148.824>
 LayerCount: 2
 Fore
 Refer: 116 57984 N 1 0 0 1 0 0 2
@@ -11748,7 +12296,8 @@ Encoding: 58437 58437 325
 GlifName: uniE_445
 Width: 254
 VWidth: 921
-Flags: MW
+Flags: W
+VStem: 0 77<-215.649 -204 40.3511 52> 47 30<-387.995 -216 -94 40 162 333.995> 172 30<-338.995 -166 -43 90 213 382.995>
 LayerCount: 2
 Fore
 Refer: 141 57954 N 1 0 0 1 0 0 2
@@ -11759,7 +12308,9 @@ StartChar: comb.15.halfsize
 Encoding: 65539 -1 326
 GlifName: comb.15.halfsize
 Width: 351
-Flags: MW
+Flags: W
+HStem: -127 12<17.5015 41.948 139.552 163.999 225.702 272.865> 22.5 15<221.852 274.831> 73 56<201.5 267.936> 119.5 10G<113.25 116.75>
+VStem: 0 14.5<-9.93353 -5> 61 59.5<-100.546 67.9991> 172 46.5<-100.374 -62.5> 187 14.5<15.5 72.7797> 291.5 59<-83.9806 1.19144>
 LayerCount: 2
 Fore
 Refer: 173 57473 N 0.5 0 0 0.5 1 1 2
@@ -11771,7 +12322,9 @@ StartChar: comb.8.halfsize
 Encoding: 65540 -1 327
 GlifName: comb.8.halfsize
 Width: 191
-Flags: MW
+Flags: W
+HStem: -128 12<61.5195 116.257> 116 12<76.5898 129.47>
+VStem: 0 23<-89.415 -26.4318> 7.5 52<56.0929 93.1267> 137.5 53<-90.8599 -46.706> 157.5 22<38.1063 98.6804>
 LayerCount: 2
 Fore
 Refer: 164 57480 N 0.5 0 0 0.5 0 0 2
@@ -11782,7 +12335,9 @@ StartChar: comb.paren_8.halfsize
 Encoding: 65541 -1 328
 GlifName: comb.paren_8.halfsize
 Width: 128
-Flags: MW
+Flags: W
+HStem: 0 12<133.52 188.257> 244 12<148.59 201.47>
+VStem: 0 28.8<70.9573 174.449> 72 23<38.585 101.568> 79.5 52<184.093 221.127> 209.5 53<37.1401 81.294> 229.5 22<166.106 226.68> 305.9 28.5<71.7758 174.671>
 LayerCount: 2
 Fore
 Refer: 327 -1 N 1 0 0 1 72 128 2
