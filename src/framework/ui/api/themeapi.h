@@ -82,7 +82,7 @@ class ThemeApi : public api::ApiObject, public async::Asyncable
 
     Q_PROPERTY(QFont musicalFont READ musicalFont NOTIFY themeChanged)
 
-    Q_PROPERTY(QFont defaultFont READ defaultFont CONSTANT)
+    Q_PROPERTY(QFont defaultFont READ defaultFont NOTIFY themeChanged)
 
     Q_PROPERTY(qreal defaultButtonSize READ defaultButtonSize NOTIFY themeChanged)
 
@@ -211,6 +211,10 @@ private:
     qreal m_itemOpacityDisabled = 0;
 
     ProxyStyle* m_style = nullptr;
+
+#ifdef Q_OS_WIN
+    QTimer* m_pollTimer = nullptr;
+#endif
 };
 
 class ProxyStyle : public QProxyStyle
