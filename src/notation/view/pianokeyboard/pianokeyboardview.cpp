@@ -208,24 +208,24 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
         }
         return false;
     } 
-    // if (keyIndex / 120 == 4) {
-    //     keyIndex -= 480;
-    //     for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
-    //         if (m_clefKeySigs[i] + 12 == key) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // } 
-    // if (keyIndex / 120 == 5) {
-    //     keyIndex -= 600;
-    //     for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
-    //         if (m_clefKeySigs[i] - 12 == key) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // }
+    if (keyIndex / 120 == 4) {
+        keyIndex -= 480;
+        for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
+            if (m_clefKeySigs[i] + 12 == key) {
+                return true;
+            }
+        }
+        return false;
+    } 
+    if (keyIndex / 120 == 5) {
+        keyIndex -= 600;
+        for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
+            if (m_clefKeySigs[i] - 12 == key) {
+                return true;
+            }
+        }
+        return false;
+    }
     return false;
 }
 
