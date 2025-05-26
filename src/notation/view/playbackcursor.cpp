@@ -161,13 +161,13 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
         curr_measure_trill_notes.clear();
         EngravingItemList measure_children = measure->childrenItems(true);
         for (size_t m_k = 0; m_k < measure_children.size(); m_k++) {
-            EngravingItem *measure_item = measure_children.at(m_k);
+            EngravingItem* measure_item = measure_children.at(m_k);
 
             if (measure_item && measure_item->isOrnament()) {
                 Ornament* orn = toOrnament(measure_item); // subtype 2214(trill)
                 Trill* _trill = toTrill(measure_item);
                 if (_trill) {
-                    Note *note = orn->noteAbove();
+                    Note* note = orn->noteAbove();
                     if (note) {
                         curr_measure_trill_notes.push_back(note);
                     }
@@ -201,13 +201,12 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 // int duration_ticks = duration.ticks().ticks();
                 int duration_ticks = chordRest->durationTypeTicks().ticks();
                 // LOGALEX() << "curr_ticks: " << tick.ticks() << ", note ticks: " << t1.ticks() << ", duration_ticks: " << duration_ticks;
-                
                 if (t1.ticks() + duration_ticks < tick.ticks()) {
                     engravingItem->setColor(muse::draw::Color::BLACK);
                     EngravingItemList itemList = engravingItem->childrenItems(true);
                     size_t items_len = itemList.size();
                     for (size_t j = 0; j < items_len; j++) {
-                        EngravingItem *item = itemList.at(j);
+                        EngravingItem* item = itemList.at(j);
                         if (item == nullptr) {
                             continue;
                         }
@@ -225,7 +224,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                     EngravingItemList itemList = engravingItem->childrenItems(true);
                     size_t items_len = itemList.size();
                     for (size_t j = 0; j < items_len; j++) {
-                        EngravingItem *item = itemList.at(j);
+                        EngravingItem* item = itemList.at(j);
                         if (item == nullptr) {
                             continue;
                         }
@@ -288,7 +287,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                     EngravingItemList pre_notesList = graceChords[grace_i]->childrenItems(false);
                                                     size_t pre_notes_len = pre_notesList.size();
                                                     for (size_t pre_j = 0; pre_j < pre_notes_len; pre_j++) {
-                                                        EngravingItem *pre_note_item = pre_notesList.at(pre_j);
+                                                        EngravingItem* pre_note_item = pre_notesList.at(pre_j);
                                                         if (pre_note_item->type() == mu::engraving::ElementType::NOTE) {
                                                             m_notation->interaction()->addPlaybackNote(toNote(pre_note_item));
                                                         }
@@ -314,7 +313,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                     EngravingItemList pre_notesList = graceChords[grace_i]->childrenItems(false);
                                                     size_t pre_notes_len = pre_notesList.size();
                                                     for (size_t pre_j = 0; pre_j < pre_notes_len; pre_j++) {
-                                                        EngravingItem *pre_note_item = pre_notesList.at(pre_j);
+                                                        EngravingItem* pre_note_item = pre_notesList.at(pre_j);
                                                         if (pre_note_item->type() == mu::engraving::ElementType::NOTE) {
                                                             m_notation->interaction()->addPlaybackNote(toNote(pre_note_item));
                                                         }
@@ -339,18 +338,19 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                             }
                             
                         } else if (item->type() == mu::engraving::ElementType::GLISSANDO) {
-                            EngravingItem *glissandoNote = item->parentItem();
+                            EngravingItem* glissandoNote = item->parentItem();
                             if (glissandoNote->type() != mu::engraving::ElementType::NOTE && glissandoNote->parentItem()->type() == mu::engraving::ElementType::NOTE) {
                                 glissandoNote = glissandoNote->parentItem();
                             }
                             if (glissandoNote->type() == mu::engraving::ElementType::NOTE) {
-                                if (tick.ticks() < m_notation->interaction()->glissandoNoteTicks() || tick.ticks() > m_notation->interaction()->glissandoNoteTicks() + m_notation->interaction()->glissandoNoteDurationticks()) {
+                                if (tick.ticks() < m_notation->interaction()->glissandoNoteTicks() 
+                                || tick.ticks() > m_notation->interaction()->glissandoNoteTicks() + m_notation->interaction()->glissandoNoteDurationticks()) {
                                     m_notation->interaction()->addGlissandoNote(toNote(glissandoNote), glissandoNote->tick().ticks(), duration_ticks);
 
                                     if (m_notation->interaction()->glissandoEndNotes().size() == 0) {
                                         EngravingItemList itemList__ = measure->childrenItems(true);
                                         for (size_t __j = 0; __j < itemList__.size(); __j++) {
-                                            EngravingItem *__item__ = itemList__.at(__j);
+                                            EngravingItem* __item__ = itemList__.at(__j);
                                             if (__item__ == nullptr) {
                                                 continue;
                                             }
@@ -368,13 +368,13 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                         } else if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
                             Arpeggio *__arpeggio = toArpeggio(item);
                             ArpeggioType __arpeggioType = __arpeggio->arpeggioType();
-                            EngravingItem *arpeggio = item->parentItem();
+                            EngravingItem* arpeggio = item->parentItem();
                             // check Fermata
                             bool isFermataTag = false;
-                            EngravingItem *arpeggioParent = arpeggio->parentItem();
+                            EngravingItem* arpeggioParent = arpeggio->parentItem();
                             EngravingItemList ___itemList = arpeggioParent->childrenItems(false);
                             for (size_t _k = 0; _k < ___itemList.size(); _k++) {
-                                EngravingItem *___item = ___itemList.at(_k);
+                                EngravingItem* ___item = ___itemList.at(_k);
                                 if (___item == nullptr) {
                                     continue;
                                 }
@@ -409,12 +409,12 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
 
                                         EngravingItemList _itemList = s->childrenItems(true);
                                         for (size_t k = 0; k < _itemList.size(); k++) {
-                                            EngravingItem *_item = _itemList.at(k);
+                                            EngravingItem* _item = _itemList.at(k);
                                             if (_item == nullptr) {
                                                 continue;
                                             }
                                             if (_item->type() == mu::engraving::ElementType::NOTE) {
-                                                EngravingItem *_itemParent = _item->parentItem();
+                                                EngravingItem* _itemParent = _item->parentItem();
                                                 if (_itemParent->type() == mu::engraving::ElementType::CHORD) {
                                                     if (_itemParent->tick().ticks() == t1.ticks()) {
                                                         mu::engraving::Chord *_itemParentChord = toChord(_itemParent);
@@ -540,7 +540,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 if (clefItem == nullptr) {
                     continue;
                 }
-                Clef *clef = toClef(clefItem);
+                Clef* clef = toClef(clefItem);
                 ClefType clefType = clef->clefType();
                 if (clefType == mu::engraving::ClefType::G || clefType == mu::engraving::ClefType::F 
                     || clefType == mu::engraving::ClefType::G8_VA || clefType == mu::engraving::ClefType::G15_MA 
@@ -584,7 +584,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
             if (!_keySigKeys.empty()) {
                 break;
             }
-
             mu::engraving::Segment* pre_segment = segment->prev(mu::engraving::SegmentType::KeySig);
             segment = pre_segment;
         }
@@ -612,11 +611,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                 mu::engraving::Key key = keySig->key();
                                 _keySigKeys.insert(key);
                             }
-    
                             if (!_keySigKeys.empty()) {
                                 break;
                             }
-                
                             mu::engraving::Segment* prev_segment = segment->prev(mu::engraving::SegmentType::KeySig);
                             segment = prev_segment;
                         }
@@ -866,13 +863,19 @@ QColor PlaybackCursor::color() const
 }
 
 // alex::
-int PlaybackCursor::hit_measure_no() { return m_hit_measure_no; }
-Measure *PlaybackCursor::hit_measure() {
+int PlaybackCursor::hit_measure_no() 
+{ 
+    return m_hit_measure_no; 
+}
+Measure* PlaybackCursor::hit_measure() 
+{
     return m_hit_measure;
 }
-void PlaybackCursor::setHitMeasureNo(int m_no) { 
+void PlaybackCursor::setHitMeasureNo(int m_no) 
+{ 
     m_hit_measure_no = m_no; 
 }
-void PlaybackCursor::setHitMeasure(Measure *m) {
+void PlaybackCursor::setHitMeasure(Measure* m) 
+{
     m_hit_measure = m;
 }
