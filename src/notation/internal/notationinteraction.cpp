@@ -1129,26 +1129,30 @@ muse::async::Notification NotationInteraction::selectionChanged() const
     return m_selectionChanged;
 }
 
-muse::async::Notification NotationInteraction::playbackNotesChanged() const {
+muse::async::Notification NotationInteraction::playbackNotesChanged() const 
+{
     return m_playbackNotesChanged;
 }
 
-std::vector<mu::engraving::Note *> NotationInteraction::playbackNotes() const {
+std::vector<mu::engraving::Note *> NotationInteraction::playbackNotes() const 
+{
     return m_playback_notes;
 }
 
-void NotationInteraction::addPlaybackNote(Note *note) {
+void NotationInteraction::addPlaybackNote(Note* note) {
     m_playback_notes.push_back(note);
 }
 
-void NotationInteraction::addGlissandoNote(mu::engraving::Note *note, int ticks, int duration_ticks) {
+void NotationInteraction::addGlissandoNote(mu::engraving::Note* note, int ticks, int duration_ticks) 
+{
     glissando_endnotes.clear();
     glissando_note = note;
     glissando_ticks = ticks;
     glissando_curr_ticks = ticks;
     glissando_duration_ticks = duration_ticks;
 }
-void NotationInteraction::addGlissandoEndNote(mu::engraving::Note *note) {
+void NotationInteraction::addGlissandoEndNote(mu::engraving::Note* note) 
+{
     for (Note* ptr : glissando_endnotes) {
         if (ptr == note) {
             return;
@@ -1162,31 +1166,39 @@ int NotationInteraction::glissandoNoteTicks() const {
 int NotationInteraction::glissandoNoteDurationticks() const {
     return glissando_duration_ticks;
 }
-int NotationInteraction::glissandoCurrticks() const {
+int NotationInteraction::glissandoCurrticks() const 
+{
     return glissando_curr_ticks;
 }
-void NotationInteraction::glissandoEndNotesUpdate() {
+void NotationInteraction::glissandoEndNotesUpdate() 
+{
     m_glissandoEndNotesChanged.notify();
 }
-muse::async::Notification NotationInteraction::glissandoEndNotesChanged() {
+muse::async::Notification NotationInteraction::glissandoEndNotesChanged() 
+{
     return m_glissandoEndNotesChanged;
 }
 
-mu::engraving::Note *NotationInteraction::glissandoNote() const {
+mu::engraving::Note *NotationInteraction::glissandoNote() const 
+{
     return glissando_note;
 }
-std::vector<mu::engraving::Note *> NotationInteraction::glissandoEndNotes() const {
+std::vector<mu::engraving::Note *> NotationInteraction::glissandoEndNotes() const 
+{
     return glissando_endnotes;
 }
-void NotationInteraction::glissandoTick(int ticks) {
+void NotationInteraction::glissandoTick(int ticks) 
+{
     glissando_curr_ticks = ticks;
     m_glissandoTickChanged.notify();
 }
-muse::async::Notification NotationInteraction::glissandoTickChanged() {
+muse::async::Notification NotationInteraction::glissandoTickChanged() 
+{
     return m_glissandoTickChanged;
 }
 
-bool NotationInteraction::arpeggioNoteTicksExist(muse::PointF point) const {
+bool NotationInteraction::arpeggioNoteTicksExist(muse::PointF point) const 
+{
     for (muse::PointF _point : arpeggio_points) {
         if (point.x() == _point.x() && point.y() == _point.y()) {
             return true;
@@ -1194,32 +1206,38 @@ bool NotationInteraction::arpeggioNoteTicksExist(muse::PointF point) const {
     }
     return false;
 }
-bool NotationInteraction::arpeggioPointEqual(muse::PointF point) {
+bool NotationInteraction::arpeggioPointEqual(muse::PointF point) 
+{
     for (muse::PointF _point : arpeggio_points) {
         return point.x() == _point.x();
     }
     return false;
 }
-void NotationInteraction::addArpeggioPoint(muse::PointF point) {
+void NotationInteraction::addArpeggioPoint(muse::PointF point) 
+{
     arpeggio_points.push_back(point);
 }
-void NotationInteraction::arpeggioPointClear() {
+void NotationInteraction::arpeggioPointClear() 
+{
     arpeggio_points.clear();
     arpeggio_notes.clear();
     arpeggio_curr_ticks = 0;
     arpeggio_ticks = 0;
     arpeggio_duration_ticks = 0;
 }
-void NotationInteraction::addArpeggioNote(mu::engraving::Note *note, int ticks, int duration_ticks) {
+void NotationInteraction::addArpeggioNote(mu::engraving::Note* note, int ticks, int duration_ticks) 
+{
     arpeggio_notes.push_back(note);
     arpeggio_ticks = ticks;
     arpeggio_curr_ticks = ticks;
     arpeggio_duration_ticks = duration_ticks;
 }
-void NotationInteraction::updateArpeggioDuration(int duration_ticks) {
+void NotationInteraction::updateArpeggioDuration(int duration_ticks) 
+{
     arpeggio_duration_ticks = duration_ticks;
 }
-void NotationInteraction::addArpeggioNote(mu::engraving::Note *note) {
+void NotationInteraction::addArpeggioNote(mu::engraving::Note* note) 
+{
     for (Note* ptr : arpeggio_notes) {
         if (ptr == note) {
             return;
@@ -1227,25 +1245,32 @@ void NotationInteraction::addArpeggioNote(mu::engraving::Note *note) {
     }
     arpeggio_notes.push_back(note);
 }
-int NotationInteraction::arpeggioNoteTicks() const {
+int NotationInteraction::arpeggioNoteTicks() const 
+{
     return arpeggio_ticks;
 }
-int NotationInteraction::arpeggioNoteDurationticks() const {
+int NotationInteraction::arpeggioNoteDurationticks() const 
+{
     return arpeggio_duration_ticks;
 }
-int NotationInteraction::arpeggioCurrticks() const {
+int NotationInteraction::arpeggioCurrticks() const 
+{
     return arpeggio_curr_ticks;
 }
-muse::async::Notification NotationInteraction::arpeggioNotesChanged() {
+muse::async::Notification NotationInteraction::arpeggioNotesChanged() 
+{
     return m_arpeggioNotesChanged;
 }
-std::vector<mu::engraving::Note *> NotationInteraction::arpeggioNotes() const {
+std::vector<mu::engraving::Note *> NotationInteraction::arpeggioNotes() const 
+{
     return arpeggio_notes;
 }
-bool NotationInteraction::arpeggioIsDown() const {
+bool NotationInteraction::arpeggioIsDown() const 
+{
     return arpeggio_is_down;
 }
-void NotationInteraction::arpeggioNotesUpdate(bool isDown) {
+void NotationInteraction::arpeggioNotesUpdate(bool isDown) 
+{
     arpeggio_is_down = isDown;
     m_arpeggioNotesChanged.notify();
 }
@@ -1264,35 +1289,44 @@ void NotationInteraction::arpeggioTick(int ticks) {
     }
     m_arpeggioTickChanged.notify();
 }
-muse::async::Notification NotationInteraction::arpeggioTickChanged() {
+muse::async::Notification NotationInteraction::arpeggioTickChanged() 
+{
     return m_arpeggioTickChanged;
 }
 
-void NotationInteraction::addTrillNote(mu::engraving::Note *note, int ticks, int duration_ticks) {
+void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int duration_ticks) 
+{
     trill_note = note;
     trill_ticks = ticks;
     trill_duration_ticks = duration_ticks;
 };
-int NotationInteraction::trillNoteTicks() const {
+int NotationInteraction::trillNoteTicks() const 
+{
     return trill_ticks;
 };
-int NotationInteraction::trillNoteDurationticks() const {
+int NotationInteraction::trillNoteDurationticks() const 
+{
     return trill_duration_ticks;
 };
-int NotationInteraction::trillCurrticks() const {
+int NotationInteraction::trillCurrticks() const 
+{
     return trill_curr_ticks;
 }
-void NotationInteraction::trillNoteUpdate() {
+void NotationInteraction::trillNoteUpdate() 
+{
     m_trillNoteChanged.notify();
 };
-mu::engraving::Note* NotationInteraction::trillNote() const {
+mu::engraving::Note* NotationInteraction::trillNote() const 
+{
     return trill_note;
 };
-bool NotationInteraction::trillTick(int ticks) {
+bool NotationInteraction::trillTick(int ticks) 
+{
     if (trill_duration_ticks == 0) {
         return false;
     }
-    if (ticks < trill_ticks || ticks > trill_ticks + trill_duration_ticks) {
+    if (ticks < trill_ticks || ticks > trill_ticks + trill_duration_ticks) 
+    {
         trill_curr_ticks = 0;
         trill_ticks = 0;
         trill_duration_ticks = 0;
@@ -1304,54 +1338,66 @@ bool NotationInteraction::trillTick(int ticks) {
     m_trillTickChanged.notify();
     return false;
 };
-muse::async::Notification NotationInteraction::trillNoteChanged() {
+muse::async::Notification NotationInteraction::trillNoteChanged() 
+{
     return m_trillNoteChanged;
 };
-muse::async::Notification NotationInteraction::trillTickChanged() {
+muse::async::Notification NotationInteraction::trillTickChanged() 
+{
     return m_trillTickChanged;
 };
 
 
-void NotationInteraction::notifyClefKeySigsKeysChanged() {
+void NotationInteraction::notifyClefKeySigsKeysChanged() 
+{
     m_clefKeySigsKeysChanged.notify();
 }
 
-muse::async::Notification NotationInteraction::clefKeySigsKeysChanged() const {
+muse::async::Notification NotationInteraction::clefKeySigsKeysChanged() const 
+{
     return m_clefKeySigsKeysChanged;
 }
 
-void NotationInteraction::clearClefKeySigsKeys() {
+void NotationInteraction::clearClefKeySigsKeys() 
+{
     m_clefKeySigsKeys.clear();
 }
 
-std::set<uint> NotationInteraction::clefKeySigsKeys() const {
+std::set<uint> NotationInteraction::clefKeySigsKeys() const 
+{
     return m_clefKeySigsKeys;
 }
 
-void NotationInteraction::addClefKeySigsKeys(uint clefKeySigsKey) {
+void NotationInteraction::addClefKeySigsKeys(uint clefKeySigsKey) 
+{
     m_clefKeySigsKeys.insert(clefKeySigsKey);
 }
 
-void NotationInteraction::notifyClefKeySigsKeysChange() {
+void NotationInteraction::notifyClefKeySigsKeysChange() 
+{
     if (m_clefKeySigsKeys.empty()) {
         return;
     }
     m_clefKeySigsKeysChanged.notify();
 }
 
-void NotationInteraction::playingChang(bool is_playing) {
+void NotationInteraction::playingChang(bool is_playing) 
+{
     m_isplaying = is_playing;
 }
 
-bool NotationInteraction::isPlaying() const {
+bool NotationInteraction::isPlaying() const 
+{
     return m_isplaying;
 }
 
-void NotationInteraction::clearPlaybackNotes() {
+void NotationInteraction::clearPlaybackNotes() 
+{
     m_playback_notes.clear();
 }
 
-void NotationInteraction::notifyPianoKeyboardNotesChanged() {
+void NotationInteraction::notifyPianoKeyboardNotesChanged() 
+{
     // m_playback_selection
     notifyAboutPianoKeyboardNotesChanged();
 }
