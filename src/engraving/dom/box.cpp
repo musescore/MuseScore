@@ -687,8 +687,13 @@ void FBox::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->isFretDiagram()) {
-        FretDiagram* fd = toFretDiagram(e);
-        fd->setFlag(ElementFlag::MOVABLE, false);
+        FretDiagram* fretDiagram = toFretDiagram(e);
+        fretDiagram->setFlag(ElementFlag::MOVABLE, false);
+        fretDiagram->setFlag(ElementFlag::ON_STAFF, false);
+
+        Harmony* harmony = fretDiagram->harmony();
+        harmony->setFlag(ElementFlag::MOVABLE, false);
+        harmony->setFlag(ElementFlag::ON_STAFF, false);
 
         if (!e->eid().isValid()) {
             e->assignNewEID();

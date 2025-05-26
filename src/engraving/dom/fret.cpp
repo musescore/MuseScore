@@ -1134,6 +1134,12 @@ void FretDiagram::setFingering(std::vector<int> v)
     m_fingering = std::move(v);
 }
 
+bool FretDiagram::isInFretBox() const
+{
+    EngravingObject* parent = explicitParent();
+    return parent ? parent->isFBox() : false;
+}
+
 void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath)
 {
     TRACEFUNC;

@@ -3867,6 +3867,21 @@ void Score::cmdDeleteSelection()
                 continue;
             }
 
+            // We can't delete elements inside fret box
+            if (e->isFretDiagram() || e->isHarmony()) {
+                if (e->isFretDiagram() && e->explicitParent()->isFBox()) {
+                    elSelectedAfterDeletion = toFBox(e->explicitParent());
+                    continue;
+                } else {
+                    EngravingObject* parent = toHarmony(e)->explicitParent();
+                    FretDiagram* fretDiagram = parent->isFretDiagram() ? toFretDiagram(parent) : nullptr;
+                    if (fretDiagram && fretDiagram->explicitParent()->isFBox()) {
+                        elSelectedAfterDeletion = toFBox(fretDiagram->explicitParent());
+                        continue;
+                    }
+                }
+            }
+
             if (e->isFretDiagram()) {
                 FretDiagram* fretDiagram = toFretDiagram(e);
                 Harmony* harmony = fretDiagram->harmony();
