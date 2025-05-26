@@ -182,6 +182,10 @@ if (OS_IS_WIN)
     list(APPEND MSCORE_APPEND_SRC ${WINDOWS_ICONS_RC})
 endif()
 
+if (OS_IS_WASM)
+    list(APPEND LINK_LIB webbridge)
+endif()
+
 ###########################################
 # Resources
 ###########################################
@@ -193,11 +197,7 @@ endif()
 ###########################################
 # Executable declaration
 ###########################################
-
-qt_add_executable(MuseScoreStudio
-    WIN32 MACOSX_BUNDLE
-    ${APP_RCC_SOURCES}
-    ${MSCORE_APPEND_SRC}
+set(APP_SRC
     main.cpp
     cmdoptions.h
     appfactory.cpp
@@ -209,6 +209,17 @@ qt_add_executable(MuseScoreStudio
     internal/consoleapp.h
     internal/guiapp.cpp
     internal/guiapp.h
+)
+
+if (CC_IS_EMCC)
+    set(APP_SRC ${APP_SRC} webapi.cpp)
+endif()
+
+qt_add_executable(MuseScoreStudio
+    WIN32 MACOSX_BUNDLE
+    ${APP_RCC_SOURCES}
+    ${MSCORE_APPEND_SRC}
+    ${APP_SRC}
 )
 
 ###########################################
@@ -270,7 +281,9 @@ target_include_directories(MuseScoreStudio PRIVATE
 target_link_libraries(MuseScoreStudio PRIVATE ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
 
 if (CC_IS_EMCC)
-    target_link_options(MuseScoreStudio PUBLIC ${EMCC_LINKER_FLAGS})
+    include(exported_functions.cmake)
+    target_link_options(MuseScoreStudio PRIVATE ${EMCC_LINKER_FLAGS})
+    target_link_options(MuseScoreStudio PRIVATE ${EXPORTED_FUNCTIONS})
 endif()
 
 
@@ -379,6 +392,15 @@ elseif(OS_IS_MAC)
 # Wasm
 ###########################################
 elseif(OS_IS_WASM)
+
+    add_custom_command(
+        TARGET MuseScoreStudio
+        POST_BUILD
+        COMMAND node ${PROJECT_SOURCE_DIR}/src/webbridge/install.js ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Install js api..."
+    )
+
 
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
