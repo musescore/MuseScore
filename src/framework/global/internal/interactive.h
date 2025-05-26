@@ -125,11 +125,11 @@ private:
 
     IInteractive::Result makeResult(const Val& val) const;
 
-    async::Promise<IInteractive::Result> openStandartAsync(const std::string& type, const std::string& contentTitle, const Text& text,
+    async::Promise<IInteractive::Result> openStandardAsync(const std::string& type, const std::string& contentTitle, const Text& text,
                                                            const ButtonDatas& buttons, int defBtn, const Options& options,
                                                            const std::string& dialogTitle);
 
-    IInteractive::Result openStandartSync(const std::string& type, const std::string& contentTitle, const Text& text,
+    IInteractive::Result openStandardSync(const std::string& type, const std::string& contentTitle, const Text& text,
                                           const ButtonDatas& buttons, int defBtn, const Options& options, const std::string& dialogTitle);
 };
 }

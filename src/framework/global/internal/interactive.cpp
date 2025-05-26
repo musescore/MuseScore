@@ -152,7 +152,7 @@ IInteractive::Result Interactive::makeResult(const Val& val) const
     return IInteractive::Result(btn, showAgain);
 }
 
-async::Promise<IInteractive::Result> Interactive::openStandartAsync(const std::string& type, const std::string& contentTitle,
+async::Promise<IInteractive::Result> Interactive::openStandardAsync(const std::string& type, const std::string& contentTitle,
                                                                     const Text& text,
                                                                     const ButtonDatas& buttons, int defBtn,
                                                                     const Options& options, const std::string& dialogTitle)
@@ -174,7 +174,7 @@ async::Promise<IInteractive::Result> Interactive::openStandartAsync(const std::s
     });
 }
 
-IInteractive::Result Interactive::openStandartSync(const std::string& type, const std::string& contentTitle,
+IInteractive::Result Interactive::openStandardSync(const std::string& type, const std::string& contentTitle,
                                                    const Text& text,
                                                    const ButtonDatas& buttons, int defBtn,
                                                    const Options& options, const std::string& dialogTitle)
@@ -193,65 +193,66 @@ IInteractive::Result Interactive::questionSync(const std::string& contentTitle, 
                                                const ButtonDatas& buttons, int defBtn,
                                                const Options& options, const std::string& dialogTitle)
 {
-    return openStandartSync("QUESTION", contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return openStandardSync("QUESTION", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 async::Promise<IInteractive::Result> Interactive::question(const std::string& contentTitle, const Text& text,
                                                            const ButtonDatas& buttons, int defBtn,
                                                            const Options& options, const std::string& dialogTitle)
 {
-    return openStandartAsync("QUESTION", contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return openStandardAsync("QUESTION", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result Interactive::infoSync(const std::string& contentTitle, const Text& text,
                                            const ButtonDatas& buttons, int defBtn,
                                            const Options& options, const std::string& dialogTitle)
 {
-    return openStandartSync("INFO", contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return openStandardSync("INFO", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 async::Promise<IInteractive::Result> Interactive::info(const std::string& contentTitle, const Text& text,
                                                        const ButtonDatas& buttons, int defBtn,
                                                        const Options& options, const std::string& dialogTitle)
 {
-    return openStandartAsync("INFO", contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return openStandardAsync("INFO", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result Interactive::warningSync(const std::string& contentTitle, const Text& text,
                                               const ButtonDatas& buttons, int defBtn,
                                               const Options& options, const std::string& dialogTitle)
 {
-    return openStandartSync("WARNING", contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return openStandardSync("WARNING", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 async::Promise<IInteractive::Result> Interactive::warning(const std::string& contentTitle, const Text& text,
                                                           const ButtonDatas& buttons, int defBtn,
                                                           const Options& options, const std::string& dialogTitle)
 {
-    return openStandartAsync("WARNING", contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return openStandardAsync("WARNING", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 IInteractive::Result Interactive::errorSync(const std::string& contentTitle, const Text& text,
                                             const ButtonDatas& buttons, int defBtn,
                                             const Options& options, const std::string& dialogTitle)
 {
-    return openStandartSync("ERROR", contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return openStandardSync("ERROR", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 async::Promise<IInteractive::Result> Interactive::error(const std::string& contentTitle, const Text& text,
                                                         const ButtonDatas& buttons, int defBtn,
                                                         const Options& options, const std::string& dialogTitle)
 {
-    return openStandartAsync("ERROR", contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return openStandardAsync("ERROR", contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
 void Interactive::showProgress(const std::string& title, Progress* progress)
 {
-    UriQuery q("muse://interactive/progress");
-    q.set("title", title)
-    .set("progress", Val((void*)progress));
+    Uri uri("muse://interactive/progress");
+    QVariantMap params;
+    params["title"] = QString::fromStdString(title);
+    params["progress"] = QVariant::fromValue(progress);
 
-    provider()->openAsync(q);
+    provider()->openAsync(uri, params);
 }
 
 static UriQuery makeSelectFileQuery(int mode, const QString& title, const io::path_t& dir, const std::vector<std::string>& filter,
