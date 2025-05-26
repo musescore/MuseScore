@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,27 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WASM_WASMMODULE_H
-#define MU_WASM_WASMMODULE_H
+#pragma once
 
 #include "modularity/imodulesetup.h"
-#include "modularity/ioc.h"
-#include "notation/inotationcreator.h"
-#include "actions/iactionsdispatcher.h"
-#include "context/iglobalcontext.h"
 
-namespace mu::wasmtest {
-class WasmTestModule : public muse::modularity::IModuleSetup
+namespace mu::webbridge {
+class WebBridgeModule : public muse::modularity::IModuleSetup
 {
-    // INJECT(wasmtest, notation::IProjectCreator, notationCreator)
-    // INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    // INJECT(wasmtest, context::IGlobalContext, context)
-
 public:
 
     std::string moduleName() const override;
     void onStartApp() override;
 };
 }
-
-#endif // MU_WASM_WASMMODULE_H

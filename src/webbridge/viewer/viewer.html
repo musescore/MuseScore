@@ -1,0 +1,138 @@
+<!--
+Copyright (C) 2024 The Qt Company Ltd.
+SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+-->
+
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!--Set visual viewport size for mobile devices to the device size,
+        witch results in a scale of 1 and a 1:1 mapping between CSS pixels
+        and Qt device independent pixels. -->
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=0"/>
+
+    <title>MuseScoreStudio</title>
+    <style>
+      html, body { padding: 0; margin: 0; overflow: hidden; height: 100% }
+      #spinner {
+        display: flex;
+        justify-content: center; /* горизонтальное выравнивание */
+        align-items: center;     /* вертикальное выравнивание */
+        height: 100vh;           /* на всю высоту viewport */
+      }
+      #panel { 
+        width: 100%; 
+        height: 40px; 
+        background-color: #f0f0f0; 
+        display: flex; 
+        align-items: center;
+        padding: 2px 5px;
+        box-sizing: border-box;
+      }
+      #panel button {
+        margin-right: 5px;
+        height: 16px;
+        font-size: 10px;
+        line-height: 10px;
+        padding: 0 4px;
+        cursor: pointer;
+      }
+      #screen { width: 100%; height: calc(100% - 40px); }
+    </style>
+  </head>
+  <body onload="init()">
+
+    <figure id="spinner">
+      <center style="margin-top:1.5em; line-height:150%">
+        <strong>MuseScoreStudio</strong>
+        <div id="qtstatus"></div>
+        <noscript>JavaScript is disabled. Please enable JavaScript to use this application.</noscript>
+      </center>
+    </figure>
+
+    <div id="panel">
+      <button onclick="onclickTest1()">Test 1</button>
+      <button>Test 2</button>
+      <button>Test 3</button>
+    </div>
+
+    <div id="screen"></div>
+
+    <script type="text/javascript">
+        async function init()
+        {
+            const spinner = document.querySelector('#spinner');
+            const screen = document.querySelector('#screen');
+            const status = document.querySelector('#qtstatus');
+
+            const showUi = (ui) => {
+                [spinner, screen].forEach(element => element.style.display = 'none');
+                if (screen === ui)
+                    screen.style.position = 'default';
+                ui.style.display = 'block';
+            }
+
+            try {
+                showUi(spinner);
+                status.innerHTML = 'Loading...';
+
+                const instance = await qtLoad({
+                    qt: {
+                        onLoaded: () => showUi(screen),
+                        onExit: exitData =>
+                        {
+                            status.innerHTML = 'Application exit';
+                            status.innerHTML +=
+                                exitData.code !== undefined ? ` with code ${exitData.code}` : '';
+                            status.innerHTML +=
+                                exitData.text !== undefined ? ` (${exitData.text})` : '';
+                            showUi(spinner);
+                        },
+                        entryFunction: window.MuseScoreStudio_entry,
+                        containerElements: [screen],
+                        
+                    }
+                });
+
+                window.muwasm = instance
+                if (window.onInited) {
+                  window.onInited()
+                }
+            } catch (e) {
+                console.error(e);
+                console.error(e.stack);
+            }
+        }
+    </script>
+    <script src="MuseScoreStudio.js"></script>
+    <script type="text/javascript" src="qtloader.js"></script>
+
+    <script type="text/javascript">
+      function onclickTest1() {
+        window.muapi.onclickTest1()
+      }
+    </script>  
+
+    <script type="module">
+        import createMuApi from "./muapi.js";
+
+        function onInit() {
+          console.log("on init mu api")
+          window.muapi = createMuApi({
+            muwasm: window.muwasm   
+          })
+        }
+
+        if (window.muwasm) {
+          onInit()
+        } else {
+          window.onInited = onInit
+        }
+
+    </script>    
+
+  </body>
+</html>
