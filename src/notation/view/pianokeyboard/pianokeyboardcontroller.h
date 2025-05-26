@@ -103,6 +103,7 @@ private:
     int m_arpeggio_ticks;
     int m_arpeggio_duration_ticks;
     int m_arpeggio_curr_ticks;
+    bool m_arpeggio_isdown = false;
 
     Note *receive_note = nullptr;
     piano_key_t m_trill_note_key;
