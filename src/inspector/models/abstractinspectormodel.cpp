@@ -50,6 +50,8 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::VIBRATO_SEGMENT, InspectorModelType::TYPE_VIBRATO },
     { mu::engraving::ElementType::SLUR, InspectorModelType::TYPE_SLUR },
     { mu::engraving::ElementType::SLUR_SEGMENT, InspectorModelType::TYPE_SLUR },
+    { mu::engraving::ElementType::HAMMER_ON_PULL_OFF, InspectorModelType::TYPE_HAMMER_ON_PULL_OFF },
+    { mu::engraving::ElementType::HAMMER_ON_PULL_OFF_SEGMENT, InspectorModelType::TYPE_HAMMER_ON_PULL_OFF },
     { mu::engraving::ElementType::TIE, InspectorModelType::TYPE_TIE },
     { mu::engraving::ElementType::TIE_SEGMENT, InspectorModelType::TYPE_TIE },
     { mu::engraving::ElementType::LAISSEZ_VIB, InspectorModelType::TYPE_LAISSEZ_VIB },

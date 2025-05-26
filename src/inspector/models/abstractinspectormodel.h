@@ -104,6 +104,7 @@ public:
         TYPE_VOLTA,
         TYPE_VIBRATO,
         TYPE_SLUR,
+        TYPE_HAMMER_ON_PULL_OFF,
         TYPE_TIE,
         TYPE_LAISSEZ_VIB,
         TYPE_PARTIAL_TIE,

@@ -58,6 +58,11 @@ SlurAndTieSettingsModel::SlurAndTieSettingsModel(QObject* parent, IElementReposi
         setElementType(mu::engraving::ElementType::PARTIAL_TIE);
         setTitle(muse::qtrc("inspector", "Tie (partial)"));
         setIcon(IconCode::NOTE_TIE);
+    } else if (elementType == ElementType::HammerOnPullOff) {
+        setModelType(InspectorModelType::TYPE_HAMMER_ON_PULL_OFF);
+        setElementType(mu::engraving::ElementType::HAMMER_ON_PULL_OFF);
+        setTitle(muse::qtrc("inspector", "Hammer-on/pull-off"));
+        setIcon(IconCode::NOTE_SLUR);
     }
 
     createProperties();

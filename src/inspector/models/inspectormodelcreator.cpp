@@ -156,6 +156,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new SlurAndTieSettingsModel(parent, repository, SlurAndTieSettingsModel::LaissezVib);
     case InspectorModelType::TYPE_PARTIAL_TIE:
         return new SlurAndTieSettingsModel(parent, repository, SlurAndTieSettingsModel::PartialTie);
+    case InspectorModelType::TYPE_HAMMER_ON_PULL_OFF:
+        return new SlurAndTieSettingsModel(parent, repository, SlurAndTieSettingsModel::HammerOnPullOff);
     case InspectorModelType::TYPE_STAFF_TYPE_CHANGES:
         return new StaffTypeSettingsModel(parent, repository);
     case InspectorModelType::TYPE_TEXT_FRAME:
