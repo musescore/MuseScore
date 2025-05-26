@@ -58,6 +58,8 @@ private:
     void setHasLinkedFretboardDiagram(bool has);
     void updateHasLinkedFretboardDiagram();
 
+    void updateIsDurationAvailable();
+
     PropertyItem* m_isLiteral = nullptr;
     PropertyItem* m_voicingType = nullptr;
     PropertyItem* m_durationType = nullptr;

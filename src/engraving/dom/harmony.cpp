@@ -120,6 +120,20 @@ bool Harmony::isRealizable() const
            || (m_harmonyType == HarmonyType::NASHVILLE);        // unable to fully check at for nashville at the moment
 }
 
+bool Harmony::isInFretBox() const
+{
+    EngravingObject* parent = explicitParent();
+    if (!parent) {
+        return false;
+    }
+
+    if (parent->isFretDiagram()) {
+        return toFretDiagram(parent)->isInFretBox();
+    }
+
+    return parent->isFBox();
+}
+
 //---------------------------------------------------------
 //   chordSymbolStyle
 //---------------------------------------------------------
