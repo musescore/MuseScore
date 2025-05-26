@@ -88,7 +88,7 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
 
     for (int i = 0; i < m_stack.size(); ++i) {
         bool found = m_stack[i].window == newActiveWindow;
-        if (m_stack[i].window->isWidgetType()) {
+        if (m_stack[i].window && m_stack[i].window->isWidgetType()) {
             found = newActiveWindow->objectName() == (m_stack[i].window->objectName() + "Window");
         }
 
