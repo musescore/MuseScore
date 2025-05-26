@@ -53,10 +53,10 @@ public:
 
     // alex::
     int hit_measure_no();
-    Measure *hit_measure();
+    Measure* hit_measure();
 
     void setHitMeasureNo(int m_no);
-    void setHitMeasure(Measure *m);
+    void setHitMeasure(Measure* m);
 
 // alex::
     Q_OBJECT
@@ -76,8 +76,8 @@ private:
 
     // alex::
     int m_hit_measure_no = -1;
-    Measure *m_hit_measure = nullptr;
-    std::vector<Note *> curr_measure_trill_notes;
+    Measure* m_hit_measure = nullptr;
+    std::vector<Note*> curr_measure_trill_notes;
     Note *curr_trill_note = nullptr;
 
     std::set<ClefType> clefTypes;
