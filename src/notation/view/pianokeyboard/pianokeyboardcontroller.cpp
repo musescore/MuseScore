@@ -82,14 +82,14 @@ KeyState PianoKeyboardController::glissandoKeyState(piano_key_t key) const {
             double ratio = left_dis / static_cast<double>(m_glissando_duration_ticks);
             if (m_glissando_note_key < m_glissando_endnote_min_key) {
                 double _key = m_glissando_note_key + (m_glissando_endnote_min_key - m_glissando_note_key) * ratio;
-                _key = static_cast<int>(_key);
-                if (key == (piano_key_t)_key) {
+                int __key = static_cast<int>(_key);
+                if (key == (piano_key_t)__key) {
                     return KeyState::Glissando;
                 }
             } else if (m_glissando_note_key > m_glissando_endnote_max_key) {
                 double _key = m_glissando_note_key - (m_glissando_note_key - m_glissando_endnote_max_key) * ratio;
-                _key = static_cast<int>(_key);
-                if (key == (piano_key_t)_key) {
+                int __key = static_cast<int>(_key);
+                if (key == (piano_key_t)__key) {
                     return KeyState::Glissando;
                 }
             }
@@ -100,6 +100,9 @@ KeyState PianoKeyboardController::glissandoKeyState(piano_key_t key) const {
 
 bool compare_by_note(piano_key_t a, piano_key_t b) {
     return a < b;
+}
+bool compare_by_note_reverse(piano_key_t a, piano_key_t b) {
+    return a > b;
 }
 
 KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const {
@@ -115,7 +118,11 @@ KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const {
         for (piano_key_t _key : m_arpeggio_notes_keys) {
             sorted_keys.push_back(_key);
         }
-        std::sort(sorted_keys.begin(), sorted_keys.end(), compare_by_note);
+        if (m_arpeggio_isdown) {
+            std::sort(sorted_keys.begin(), sorted_keys.end(), compare_by_note_reverse);
+        } else {
+            std::sort(sorted_keys.begin(), sorted_keys.end(), compare_by_note);
+        }
 
         int index = 0;
         for (piano_key_t _key : sorted_keys) {
@@ -311,6 +318,7 @@ void PianoKeyboardController::onNotationChanged()
             }
             m_arpeggio_ticks = notation->interaction()->arpeggioNoteTicks();
             m_arpeggio_duration_ticks = notation->interaction()->arpeggioNoteDurationticks();
+            m_arpeggio_isdown = notation->interaction()->arpeggioIsDown();
             std::vector<const Note*> notes;
             for (const mu::engraving::Note* note : notation->interaction()->arpeggioNotes()) {
                 notes.push_back(note);

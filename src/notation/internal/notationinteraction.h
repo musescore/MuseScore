@@ -123,7 +123,8 @@ public:
     int arpeggioCurrticks() const override;
     muse::async::Notification arpeggioNotesChanged() override;
     std::vector<mu::engraving::Note *> arpeggioNotes() const override;
-    void arpeggioNotesUpdate() override;
+    bool arpeggioIsDown() const override;
+    void arpeggioNotesUpdate(bool) override;
     void arpeggioTick(int) override;
     muse::async::Notification arpeggioTickChanged() override;
 
@@ -583,6 +584,7 @@ private:
     int arpeggio_ticks = 0;
     int arpeggio_duration_ticks = 0;
     std::vector<Note *> arpeggio_notes;
+    bool arpeggio_is_down = false;
     int arpeggio_curr_ticks = 0;
     muse::async::Notification m_arpeggioNotesChanged;
     muse::async::Notification m_arpeggioTickChanged;

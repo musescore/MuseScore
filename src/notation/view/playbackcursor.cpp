@@ -25,6 +25,7 @@
 #include "src/notation/notationtypes.h"
 #include "src/engraving/dom/ornament.h"
 #include "src/engraving/dom/trill.h"
+#include "src/engraving/dom/arpeggio.h"
 
 using namespace mu::notation;
 using namespace muse;
@@ -365,6 +366,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                 }
                             } 
                         } else if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
+                            Arpeggio *__arpeggio = toArpeggio(item);
+                            ArpeggioType __arpeggioType = __arpeggio->arpeggioType();
                             EngravingItem *arpeggio = item->parentItem();
                             // check Fermata
                             bool isFermataTag = false;
@@ -437,7 +440,12 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                 }
                                             }
                                         }
-                                        m_notation->interaction()->arpeggioNotesUpdate();
+                                        // if (__arpeggioType == ArpeggioType::DOWN || __arpeggioType == ArpeggioType::DOWN_STRAIGHT) {
+                                        //     m_notation->interaction()->arpeggioNotesUpdate(true);
+                                        // } else {
+                                        //     m_notation->interaction()->arpeggioNotesUpdate(false);
+                                        // }
+                                        m_notation->interaction()->arpeggioNotesUpdate(false);
                                     }
                                 }
                             }
@@ -523,6 +531,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
             }
         }
         
+        curr_clefTypes.clear();
         for (mu::engraving::Segment* segment = measure->first(mu::engraving::SegmentType::ClefType); segment;) {
             std::vector<EngravingItem*> clefItemList = segment->elist();
             size_t len = clefItemList.size();
@@ -533,13 +542,27 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 }
                 Clef *clef = toClef(clefItem);
                 ClefType clefType = clef->clefType();
-                if (clefType == ClefType::G || clefType == ClefType::F) {
+                if (clefType == mu::engraving::ClefType::G || clefType == mu::engraving::ClefType::F 
+                    || clefType == mu::engraving::ClefType::G8_VA || clefType == mu::engraving::ClefType::G15_MA 
+                    || clefType == mu::engraving::ClefType::G8_VB) {
                     clefTypes.insert(clefType);
+                    mu::engraving::Segment* lastChordRestSegment = measure->last(mu::engraving::SegmentType::ChordRest);
+                    if (lastChordRestSegment->canvasPos().x() > clef->canvasPos().x()) {
+                        curr_clefTypes.insert(clefType);
+                    } else {
+                        stash_clefType[measureNo] = clefType;
+                    } 
                 }
             }
 
             mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ClefType);
             segment = next_segment;
+        }
+        
+        if (measureNo > 0) {
+            if (stash_clefType.find(measureNo - 1) != stash_clefType.end()) {
+                curr_clefTypes.insert(stash_clefType[measureNo - 1]);
+            }
         }
 
         std::set<mu::engraving::Key> _keySigKeys;
@@ -585,12 +608,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                 if (keySigItem == nullptr) {
                                     continue;
                                 }
-    
-                                if (keySigItem->canvasPos().x() < x) {
-                                    mu::engraving::KeySig *keySig = toKeySig(keySigItem);
-                                    mu::engraving::Key key = keySig->key();
-                                    _keySigKeys.insert(key);
-                                }
+                                mu::engraving::KeySig *keySig = toKeySig(keySigItem);
+                                mu::engraving::Key key = keySig->key();
+                                _keySigKeys.insert(key);
                             }
     
                             if (!_keySigKeys.empty()) {
@@ -619,21 +639,138 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
             }
                         
         }
+        
+        if (curr_clefTypes.size() > 0) {
+            if (curr_clefTypes.find(mu::engraving::ClefType::G) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::G8_VA) != curr_clefTypes.cend()
+                && curr_clefTypes.find(mu::engraving::ClefType::G8_VB) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::G);
+            } 
+            if (curr_clefTypes.find(mu::engraving::ClefType::G) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::G8_VA) != curr_clefTypes.cend()
+                && curr_clefTypes.find(mu::engraving::ClefType::G15_MA) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::G8_VA);
+            } 
+            if (curr_clefTypes.find(mu::engraving::ClefType::F) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::G) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::F8_VB) != curr_clefTypes.cend()
+                && curr_clefTypes.find(mu::engraving::ClefType::G8_VB) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::F);
+                curr_clefTypes.erase(mu::engraving::ClefType::G);
+            } 
+            if (curr_clefTypes.find(mu::engraving::ClefType::F) != curr_clefTypes.cend()  
+                && curr_clefTypes.find(mu::engraving::ClefType::F8_VB) != curr_clefTypes.cend()
+                && curr_clefTypes.find(mu::engraving::ClefType::G8_VB) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::F);
+                curr_clefTypes.erase(mu::engraving::ClefType::G8_VB);
+            } 
+            if (curr_clefTypes.find(mu::engraving::ClefType::G8_VA) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::G15_MA) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::G15_MA);
+            }
+            if (curr_clefTypes.find(mu::engraving::ClefType::G8_VB) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::G) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::G);
+            }
+            if (curr_clefTypes.find(mu::engraving::ClefType::G8_VA) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::G) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::G);
+            }
+            if (curr_clefTypes.find(mu::engraving::ClefType::F) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::F_8VA) != curr_clefTypes.cend()
+                && curr_clefTypes.find(mu::engraving::ClefType::F8_VB) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::F);
+            }
+            if (curr_clefTypes.find(mu::engraving::ClefType::F_8VA) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::F) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::F);
+            }
+            if (curr_clefTypes.find(mu::engraving::ClefType::F8_VB) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::F) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::F);
+            }
+            if (curr_clefTypes.find(mu::engraving::ClefType::G) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::F_8VA) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::G);
+            }
+            if (curr_clefTypes.find(mu::engraving::ClefType::F) != curr_clefTypes.cend() 
+                && curr_clefTypes.find(mu::engraving::ClefType::G8_VB) != curr_clefTypes.cend()) {
+                curr_clefTypes.erase(mu::engraving::ClefType::F);
+            }
+            for (auto clefType : curr_clefTypes) {
+                for (auto key : keySigKeys) {
+                    if (clefType == mu::engraving::ClefType::G) {
+                        if ((int)key >= 0) {
+                            m_notation->interaction()->addClefKeySigsKeys((int)key);
+                        } else {
+                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 15);
+                        }
+                    }
+                    if (clefType == mu::engraving::ClefType::F) {
+                        if ((int)key >= 0) {
+                            m_notation->interaction()->addClefKeySigsKeys((int)key + 8);
+                        } else {
+                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 22);
+                        }
+                    }
 
-        for (auto clefType : clefTypes) {
-            for (auto key : keySigKeys) {
-                if (clefType == mu::engraving::ClefType::G) {
-                    if ((int)key >= 0) {
-                        m_notation->interaction()->addClefKeySigsKeys((int)key);
-                    } else {
-                        m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 15);
+                    if (clefType == mu::engraving::ClefType::G8_VA) { // G#8va
+                        if ((int)key >= 0) {
+                            m_notation->interaction()->addClefKeySigsKeys((int)key + 120);
+                        } else {
+                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 15 + 120);
+                        }
+                    }
+
+                    if (clefType == mu::engraving::ClefType::G15_MA) { // G#15va
+                        if ((int)key >= 0) {
+                            m_notation->interaction()->addClefKeySigsKeys((int)key + 120 * 2);
+                        } else {
+                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 15 + 120 * 2);
+                        }
+                    }
+
+                    if (clefType == mu::engraving::ClefType::G8_VB) { // Gb8va
+                        if ((int)key >= 0) {
+                            m_notation->interaction()->addClefKeySigsKeys((int)key + 120 * 3);
+                        } else {
+                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 15 + 120 * 3);
+                        }
+                    }
+
+                    if (clefType == mu::engraving::ClefType::F_8VA) { // F#8va
+                        if ((int)key >= 0) {
+                            m_notation->interaction()->addClefKeySigsKeys((int)key + 120 * 4);
+                        } else {
+                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 15 + 120 * 4);
+                        }
+                    }
+
+                    if (clefType == mu::engraving::ClefType::F8_VB) { // Fb8va
+                        if ((int)key >= 0) {
+                            m_notation->interaction()->addClefKeySigsKeys((int)key + 120 * 5);
+                        } else {
+                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 15 + 120 * 5);
+                        }
                     }
                 }
-                if (clefType == mu::engraving::ClefType::F) {
-                    if ((int)key >= 0) {
-                        m_notation->interaction()->addClefKeySigsKeys((int)key + 8);
-                    } else {
-                        m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 22);
+            }
+        } else {
+            for (auto clefType : clefTypes) {
+                for (auto key : keySigKeys) {
+                    if (clefType == mu::engraving::ClefType::G) {
+                        if ((int)key >= 0) {
+                            m_notation->interaction()->addClefKeySigsKeys((int)key);
+                        } else {
+                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 15);
+                        }
+                    }
+                    if (clefType == mu::engraving::ClefType::F) {
+                        if ((int)key >= 0) {
+                            m_notation->interaction()->addClefKeySigsKeys((int)key + 8);
+                        } else {
+                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 22);
+                        }
                     }
                 }
             }
