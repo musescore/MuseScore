@@ -3519,11 +3519,6 @@ void TRead::read(Slur* s, XmlReader& e, ReadContext& ctx)
 
 bool TRead::readProperties(Slur* s, XmlReader& e, ReadContext& ctx)
 {
-    const AsciiStringView tag(e.name());
-    if (tag == "stemArr") {
-        s->setSourceStemArrangement(e.readInt());
-        return true;
-    }
     return readProperties(static_cast<SlurTie*>(s), e, ctx);
 }
 

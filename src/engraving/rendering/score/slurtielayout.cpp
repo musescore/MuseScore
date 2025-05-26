@@ -88,14 +88,6 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             item->setTick2(item->tick());
         }
         computeUp(item, ctx);
-        if (item->sourceStemArrangement() != -1) {
-            if (item->sourceStemArrangement() != item->calcStemArrangement(item->startCR(), item->endCR())) {
-                // copy & paste from incompatible stem arrangement, so reset bezier points
-                for (int g = 0; g < (int)Grip::GRIPS; ++g) {
-                    slurSegment->ups((Grip)g) = UP();
-                }
-            }
-        }
         sst = item->tick2() < etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
     } else if (item->tick() < stick && item->tick2() >= etick) {
         sst = SpannerSegmentType::MIDDLE;
