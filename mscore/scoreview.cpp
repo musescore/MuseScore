@@ -427,7 +427,12 @@ void ScoreView::measurePopup(QContextMenuEvent* ev, Measure* obj)
       popup->addAction(getAction("cut"));
       popup->addAction(getAction("copy"));
       popup->addAction(getAction("paste"));
-      popup->addAction(getAction("paste-clone"));
+
+      // [Action: Paste Clone] option contingent upon an active selection
+      Selection& lastSelection = mscore->getLastScoreSelection();
+      if (!lastSelection.isNone())
+            popup->addAction(getAction("paste-clone"));
+
       popup->addAction(getAction("swap"));
       popup->addAction(getAction("delete"));
       popup->addAction(getAction("time-delete"));
@@ -2085,7 +2090,7 @@ bool ScoreView::clonePaste()
       auto copiedSel = mscore->getLastScoreSelection();
       if (!copiedSel.isRange() && !copiedSel.isSingle()) {
             QMessageBox::warning(0, "MuseScore",
-                   tr("A valid range or single selection required for measure position."));
+                   tr("An active range/single source selection is required for cloning."));
             return false;
             }
       if (!srcScore) {
