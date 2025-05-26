@@ -544,7 +544,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 ClefType clefType = clef->clefType();
                 if (clefType == mu::engraving::ClefType::G || clefType == mu::engraving::ClefType::F 
                     || clefType == mu::engraving::ClefType::G8_VA || clefType == mu::engraving::ClefType::G15_MA 
-                    || clefType == mu::engraving::ClefType::G8_VB) {
+                    || clefType == mu::engraving::ClefType::G8_VB
+                    || clefType == mu::engraving::ClefType::F_8VA || clefType == mu::engraving::ClefType::F8_VB) {
                     clefTypes.insert(clefType);
                     mu::engraving::Segment* lastChordRestSegment = measure->last(mu::engraving::SegmentType::ChordRest);
                     if (lastChordRestSegment->canvasPos().x() > clef->canvasPos().x()) {
@@ -737,17 +738,17 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
 
                     if (clefType == mu::engraving::ClefType::F_8VA) { // F#8va
                         if ((int)key >= 0) {
-                            m_notation->interaction()->addClefKeySigsKeys((int)key + 120 * 4);
+                            m_notation->interaction()->addClefKeySigsKeys((int)key + 8 + 120 * 4);
                         } else {
-                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 15 + 120 * 4);
+                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 22 + 120 * 4);
                         }
                     }
 
                     if (clefType == mu::engraving::ClefType::F8_VB) { // Fb8va
                         if ((int)key >= 0) {
-                            m_notation->interaction()->addClefKeySigsKeys((int)key + 120 * 5);
+                            m_notation->interaction()->addClefKeySigsKeys((int)key + 8 + 120 * 5);
                         } else {
-                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 15 + 120 * 5);
+                            m_notation->interaction()->addClefKeySigsKeys(-1 * (int)key + 22 + 120 * 5);
                         }
                     }
                 }
