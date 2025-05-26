@@ -106,8 +106,8 @@ public:
     int glissandoCurrticks() const override;
     void glissandoEndNotesUpdate() override;
     muse::async::Notification glissandoEndNotesChanged() override;
-    mu::engraving::Note *glissandoNote() const override;
-    std::vector<mu::engraving::Note *> glissandoEndNotes() const override;
+    mu::engraving::Note* glissandoNote() const override;
+    std::vector<mu::engraving::Note*> glissandoEndNotes() const override;
     void glissandoTick(int ticks) override;
     muse::async::Notification glissandoTickChanged() override;
 
@@ -115,20 +115,20 @@ public:
     bool arpeggioPointEqual(muse::PointF) override;
     void addArpeggioPoint(muse::PointF) override;
     void arpeggioPointClear() override;
-    void addArpeggioNote(mu::engraving::Note *, int, int) override;
+    void addArpeggioNote(mu::engraving::Note*, int, int) override;
     void updateArpeggioDuration(int) override;
     void addArpeggioNote(mu::engraving::Note *) override;
     int arpeggioNoteTicks() const override;
     int arpeggioNoteDurationticks() const override;
     int arpeggioCurrticks() const override;
     muse::async::Notification arpeggioNotesChanged() override;
-    std::vector<mu::engraving::Note *> arpeggioNotes() const override;
+    std::vector<mu::engraving::Note*> arpeggioNotes() const override;
     bool arpeggioIsDown() const override;
     void arpeggioNotesUpdate(bool) override;
     void arpeggioTick(int) override;
     muse::async::Notification arpeggioTickChanged() override;
 
-    void addTrillNote(mu::engraving::Note *, int, int) override;
+    void addTrillNote(mu::engraving::Note*, int, int) override;
     int trillNoteTicks() const override;
     int trillNoteDurationticks() const override;
     int trillCurrticks() const override;
@@ -572,7 +572,7 @@ private:
     muse::async::Notification m_playbackNotesChanged;
     std::vector<Note*> m_playback_notes;
     
-    Note *glissando_note = nullptr;
+    Note* glissando_note = nullptr;
     int glissando_ticks = 0;
     int glissando_duration_ticks = 0;
     std::vector<Note*> glissando_endnotes;
@@ -589,7 +589,7 @@ private:
     muse::async::Notification m_arpeggioNotesChanged;
     muse::async::Notification m_arpeggioTickChanged;
 
-    Note *trill_note = nullptr;
+    Note* trill_note = nullptr;
     int trill_ticks = 0;
     int trill_duration_ticks = 0;
     int trill_curr_ticks = 0;

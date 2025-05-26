@@ -90,19 +90,19 @@ public:
     {
         
     }
-    virtual std::vector<mu::engraving::Note *> playbackNotes() const 
+    virtual std::vector<mu::engraving::Note*> playbackNotes() const 
     {
         return {};
     }
-    virtual void addPlaybackNote(mu::engraving::Note *) 
+    virtual void addPlaybackNote(mu::engraving::Note*) 
     {
 
     }
-    virtual void addGlissandoNote(mu::engraving::Note *, int, int) 
+    virtual void addGlissandoNote(mu::engraving::Note*, int, int) 
     {
 
     }
-    virtual void addGlissandoEndNote(mu::engraving::Note *) 
+    virtual void addGlissandoEndNote(mu::engraving::Note*) 
     {
 
     }
@@ -126,11 +126,11 @@ public:
     {
         return muse::async::Notification();
     }
-    virtual mu::engraving::Note *glissandoNote() const 
+    virtual mu::engraving::Note* glissandoNote() const 
     {
         return nullptr;
     }
-    virtual std::vector<mu::engraving::Note *> glissandoEndNotes() const 
+    virtual std::vector<mu::engraving::Note*> glissandoEndNotes() const 
     {
         return {};
     }
@@ -159,7 +159,7 @@ public:
     {
 
     }
-    virtual void addArpeggioNote(mu::engraving::Note *, int, int) 
+    virtual void addArpeggioNote(mu::engraving::Note*, int, int) 
     {
 
     }
@@ -187,7 +187,7 @@ public:
     {
         return muse::async::Notification();
     }
-    virtual std::vector<mu::engraving::Note *> arpeggioNotes() const 
+    virtual std::vector<mu::engraving::Note*> arpeggioNotes() const 
     {
         return {};
     }
@@ -208,7 +208,7 @@ public:
         return muse::async::Notification();
     }
 
-    virtual void addTrillNote(mu::engraving::Note *, int, int) 
+    virtual void addTrillNote(mu::engraving::Note*, int, int) 
     {
         
     }
