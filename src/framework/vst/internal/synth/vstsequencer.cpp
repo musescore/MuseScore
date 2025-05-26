@@ -163,7 +163,7 @@ void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe:
 
     for (const auto& layer : layers) {
         for (const auto& dynamic : layer.second) {
-            auto level = expressionLevel(dynamic.second);
+            float level = expressionLevel(dynamic.second);
 
             if (hasCtrlVolumeMapping) {
                 destination[dynamic.first].emplace(ParamChangeEvent { volumeParamIt->second, level });

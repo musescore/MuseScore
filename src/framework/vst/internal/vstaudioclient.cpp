@@ -77,6 +77,10 @@ void VstAudioClient::loadSupportedParams()
         controller->getParameterInfo(i, info);
         m_pluginParamInfoMap.emplace(info.id, std::move(info));
     }
+
+    // Check whether the plugin can handle kCtrlVolume and set flag accordingly.
+    auto volMapping = paramsMapping({ Steinberg::Vst::kCtrlVolume });
+    m_pluginHandlesVolume = !volMapping.empty();
 }
 
 bool VstAudioClient::handleEvent(const VstEvent& event)
@@ -360,10 +364,6 @@ void VstAudioClient::setUpProcessData()
         component->activateBus(BusMediaType::kAudio, BusDirection::kOutput, 0, true);
         m_activeOutputBusses.emplace_back(0);
     }
-
-    // Check whether the plugin can handle kCtrlVolume and set flag accordingly.
-    auto volParamMapping = paramsMapping({ Steinberg::Vst::kCtrlVolume });
-    m_pluginHandlesVolume = !volParamMapping.empty();
 }
 
 void VstAudioClient::updateProcessSetup()
