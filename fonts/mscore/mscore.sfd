@@ -4,7 +4,7 @@ FullName: MScore for scores
 FamilyName: MScore
 Weight: Regular
 Copyright: MScore is Copyright (c)\n 2013-2014 Werner Schweer <ws@wschweer.de>\n 2014 John Pirie <jpirie23@gmail.com>\n 2018 Matt McClinch <mattmcclinch@gmail.com>\n 2013-2018 Nicolas Froment <lasconic@gmail.com>\n 2013-2019 Maurizio M. Gavioli <mmg@vistamaresoft.com>\n 2018-2020 mirabilos <m@mirbsd.org>\nand published under the GPLv3 or later with font exception (see\nbelow, but substitute this font for "fonts included in LilyPond").\n\nParts of the font are derived from Parnassus, which is Copyright (c)\n 2005-2013 Kristof Bastiaensen (www.resonata.be)\nand published under the GPL with font exception.\n\nParts of the font are derived from Emmentaler, which\nis part of GNU LilyPond and Copyright (c)\n 1997-2012 Han-Wen Nienhuys <hanwen@xs4all.nl>\n 1997-2012 Jan Nieuwenhuizen <janneke@gnu.org>\n 2000-2012 Juergen Reuter <reuter@ipd.uka.de>\n 2011-2012 Bertrand Bordage <bordage.bertrand@gmail.com>\n 1998-2012 Mats Bengtsson <matsb@s3.kth.se>\n 1998-2012 Christian Mondrup <scancm@biobase.dk>\n\nGNU LilyPond is free software: you can redistribute it and/or modify it\nunder the terms of the GNU General Public License as published by the\nFree Software Foundation, either version 3 of the License, or (at your\noption) any later version.\n\nThis program is distributed in the hope that it will be useful, but\nWITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General\nPublic License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with this program. If not, see <http://www.gnu.org/licenses/>.\n\nThe following exceptions apply:\n\nIf you create a document which uses fonts included in LilyPond, and\nembed this font or unaltered portions of this font into the document,\nthen this font does not by itself cause the resulting document to be\ncovered by the GNU General Public License. This exception does not\nhowever invalidate any other reasons why the document might be covered\nby the GNU General Public License. If you modify one or more of the\nfonts, you may extend this exception to your version of the fonts but\nyou are not obliged to do so. If you do not wish to do so, delete this\nexception statement from your version.
-Version: 2.002
+Version: 2.003
 DefaultBaseFilename: mscore
 ItalicAngle: 0
 UnderlinePosition: -51
@@ -12,7 +12,7 @@ UnderlineWidth: 51
 Ascent: 819
 Descent: 205
 InvalidEm: 0
-sfntRevision: 0x00020084
+sfntRevision: 0x000200c5
 LayerCount: 2
 Layer: 0 1 "Back" 1
 Layer: 1 1 "Fore" 0
@@ -22,7 +22,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1403170689
-ModificationTime: 1633461074
+ModificationTime: 1748269966
 PfmFamily: 17
 TTFWeight: 400
 TTFWidth: 5
@@ -66,7 +66,7 @@ NameList: Adobe Glyph List
 DisplaySize: -96
 AntiAlias: 1
 FitToEm: 1
-WinInfo: 0 11 14
+WinInfo: 0 10 4
 BeginPrivate: 7
 BlueValues 21 [0 0 256 257 478 478]
 OtherBlues 11 [-141 -141]
@@ -364,7 +364,7 @@ SplineSet
  320 269 320 269 327 269 c 2,7,-1
  429 269 l 2,8,9
  439 269 439 269 439 258 c 1,10,11
- 438 256 l 2,12,13
+ 439 258 439 258 438 256 c 2,12,13
  438 254 438 254 437 253 c 2,14,-1
  122 -264 l 2,15,16
  119 -269 119 -269 113 -269 c 2,17,-1
@@ -901,7 +901,7 @@ SplineSet
  70 -112 l 2,5,6
  57 -112 57 -112 54 -101 c 2,7,-1
  1 92 l 1,8,9
- 0 94 l 1,10,-1
+ 1 92 1 92 0 94 c 1,10,-1
  0 96 l 2,11,12
  0 112 0 112 16 112 c 2,13,-1
  231 112 l 2,14,15
@@ -4068,11 +4068,10 @@ StartChar: uniE1E7
 Encoding: 57831 57831 121
 GlifName: uniE_1E_7
 Width: 116
-Flags: MW
+Flags: HMW
 LayerCount: 2
 Fore
 Refer: 158 57412 N 1 0 0 1 0 -128 2
-Validated: 1
 EndChar
 
 StartChar: uniE652
@@ -5554,21 +5553,22 @@ StartChar: uniE044
 Encoding: 57412 57412 158
 GlifName: uniE_044
 Width: 116
-Flags: MW
+Flags: W
+HStem: -58 116<17.533 98.467>
+VStem: 0 116<-40.467 40.467>
 LayerCount: 2
 Fore
 SplineSet
-0 128 m 128,-1,1
- 0 152 0 152 17 169 c 128,-1,2
- 34 186 34 186 58 186 c 128,-1,3
- 82 186 82 186 99 169 c 128,-1,4
- 116 152 116 152 116 128 c 128,-1,5
- 116 104 116 104 99 87 c 128,-1,6
- 82 70 82 70 58 70 c 128,-1,7
- 34 70 34 70 17 87 c 128,-1,0
- 0 104 0 104 0 128 c 128,-1,1
+0 0 m 128,-1,1
+ 0 24 0 24 17 41 c 128,-1,2
+ 34 58 34 58 58 58 c 128,-1,3
+ 82 58 82 58 99 41 c 128,-1,4
+ 116 24 116 24 116 0 c 128,-1,5
+ 116 -24 116 -24 99 -41 c 128,-1,6
+ 82 -58 82 -58 58 -58 c 128,-1,7
+ 34 -58 34 -58 17 -41 c 128,-1,0
+ 0 -24 0 -24 0 0 c 128,-1,1
 EndSplineSet
-Validated: 1
 EndChar
 
 StartChar: uniE5E5
@@ -6686,7 +6686,7 @@ Fore
 SplineSet
 46 256 m 0,0,1
  54 256 54 256 63 253 c 1,2,3
- 110 248 l 2,4,5
+ 63 253 63 253 110 248 c 2,4,5
  157 243 157 243 193 243 c 128,-1,6
  229 243 229 243 281.5 249.5 c 128,-1,7
  334 256 334 256 336 256 c 0,8,9
@@ -6878,7 +6878,7 @@ LayerCount: 2
 Fore
 SplineSet
 -14 138 m 2,0,1
- -14 140 l 1,2,3
+ -14 138 -14 138 -14 140 c 1,2,3
  -11 147 -11 147 -4 169 c 128,-1,4
  3 191 3 191 37 239 c 128,-1,5
  71 287 71 287 116 287 c 0,6,7
@@ -8812,7 +8812,7 @@ SplineSet
  267 -123 267 -123 267 -125 c 0,22,23
  267 -139 267 -139 254 -139 c 1,24,-1
  252 -138 l 1,25,26
- 247 -138 l 1,27,-1
+ 252 -138 252 -138 247 -138 c 1,27,-1
  166 -127 l 2,28,29
  157 -126 157 -126 157 -103 c 0,30,31
  157 -24 157 -24 129 -24 c 128,-1,32
@@ -9625,7 +9625,7 @@ SplineSet
  -45 37 l 1,13,14
  -31 32 -31 32 -31 22 c 0,15,16
  -31 -1 -31 -1 -46 -1 c 2,17,18
- -50 -1 l 1,19,-1
+ -46 -1 -46 -1 -50 -1 c 1,19,-1
  -467 108 l 1,20,0
  -486 108 -486 108 -486 127 c 128,-1,1
 486 127 m 128,-1,22
@@ -10594,7 +10594,7 @@ SplineSet
  70 -112 l 2,1,2
  57 -112 57 -112 54 -101 c 2,3,-1
  1 92 l 1,4,5
- 0 94 l 1,6,-1
+ 1 92 1 92 0 94 c 1,6,-1
  0 96 l 2,7,8
  0 112 0 112 16 112 c 2,9,-1
  231 112 l 2,10,11
