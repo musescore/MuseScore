@@ -47,6 +47,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/tie.h"
+#include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 
@@ -421,45 +422,75 @@ bool EnigmaXmlImporter::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curT
     return true;
 }
 
-static std::vector<ReadableTuplet> createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo, int voice)
+static void processTremolos(std::vector<ReadableTuplet>& tremoloMap, track_idx_t curTrackIdx, Measure* measure)
 {
-    const size_t n = tupletInfo.size();
-    std::vector<ReadableTuplet> result;
-    result.reserve(n);
+    /// @todo account for invalid durations
+    for (ReadableTuplet tuplet : tremoloMap) {
+        Chord* c1 = measure->findChord(measure->tick() + tuplet.absBegin, curTrackIdx);
+        Chord* c2 = measure->findChord(measure->tick() + ((tuplet.absBegin + tuplet.absEnd) / 2), curTrackIdx);
+        IF_ASSERT_FAILED(c1 && c2 && c1->ticks() == c2->ticks()) {
+            continue;
+        }
 
+        // calculate tremolo type from number of beams
+        int tremoloBeamsNum = int(TremoloType::C8) - 1 + c1->durationType().hooks();
+        // rather than not import the tremolo, force it to be a valid type
+        tremoloBeamsNum = std::clamp(tremoloBeamsNum, int(TremoloType::C8), int(TremoloType::C64));
+
+        // ensure chords have correct duration (since they're no longer in a tremolo tuplet)
+        c1->setDurationType(c2->tick() - c1->tick()); ///@todo account for tuplets
+        c1->setTicks(c1->actualDurationType().fraction());
+        c2->setDurationType(c1->durationType());
+        c2->setTicks(c1->ticks());
+
+        TremoloTwoChord* tremolo = Factory::createTremoloTwoChord(c1);
+        tremolo->setTremoloType(TremoloType(tremoloBeamsNum));
+        tremolo->setTrack(curTrackIdx);
+        tremolo->setParent(c1);
+        tremolo->setChords(c1, c2);
+        c1->setTremoloTwoChord(tremolo);
+    }
+}
+
+static void createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo,
+                            std::vector<ReadableTuplet>& tupletMap, std::vector<ReadableTuplet>& tremoloMap, int voice)
+{
     const bool forVoice2 = bool(voice);
     for (const auto& tuplet : tupletInfo) {
-        if (forVoice2 != tuplet.voice2) {
+        if (forVoice2 != tuplet.voice2 || tuplet.tuplet->calcRatio() == 0) {
             continue;
         }
         ReadableTuplet rTuplet;
         rTuplet.absBegin   = FinaleTConv::musxFractionToFraction(tuplet.startDura).reduced();
         rTuplet.absEnd     = FinaleTConv::musxFractionToFraction(tuplet.endDura).reduced();
         rTuplet.musxTuplet = tuplet.tuplet;
-        result.emplace_back(rTuplet);
+        if (tuplet.calcIsTremolo()) {
+            tremoloMap.emplace_back(rTuplet);
+        } else {
+            tupletMap.emplace_back(rTuplet);
+        }
     }
 
-   for (size_t i = 0; i < n; ++i) {
-        for (size_t j = 0; j < n; ++j) {
+   for (size_t i = 0; i < tupletMap.size(); ++i) {
+        for (size_t j = 0; j < tupletMap.size(); ++j) {
             if(i == j) {
                 continue;
             }
 
-            if (result[i].absBegin >= result[j].absBegin && result[i].absEnd <= result[j].absEnd
-                && (result[i].absBegin > result[j].absBegin || result[i].absEnd < result[j].absEnd || result[i].layer == result[j].layer)) {
-                result[i].layer = std::max(result[i].layer, result[j].layer + 1);
+            if (tupletMap[i].absBegin >= tupletMap[j].absBegin && tupletMap[i].absEnd <= tupletMap[j].absEnd
+                && (tupletMap[i].absBegin > tupletMap[j].absBegin || tupletMap[i].absEnd < tupletMap[j].absEnd
+                    || tupletMap[i].layer == tupletMap[j].layer)) {
+                tupletMap[i].layer = std::max(tupletMap[i].layer, tupletMap[j].layer + 1);
             }
         }
     }
 
-    std::sort(result.begin(), result.end(), [](const ReadableTuplet& a, const ReadableTuplet& b) {
+    std::sort(tupletMap.begin(), tupletMap.end(), [](const ReadableTuplet& a, const ReadableTuplet& b) {
         if (a.layer == b.layer) {
             return a.absBegin < b.absBegin;
         }
         return a.layer < b.layer;
     });
-
-    return result;
 }
 
 static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std::vector<ReadableTuplet>& tupletMap, FinaleLoggerPtr& logger)
@@ -551,15 +582,16 @@ void EnigmaXmlImporter::importEntries()
                         }
                         track_idx_t curTrackIdx = curStaffIdx * VOICES + voiceOff;
 
-                        // generate tuplet map and create tuplets
-                        std::vector<ReadableTuplet> tupletMap = createTupletMap(entryFrame->tupletInfo, voice);
+                        // generate tuplet map, tremolo map and create tuplets
                         // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
                         /// @todo does this need to account for local timesigs
                         ReadableTuplet rTuplet;
                         rTuplet.absBegin = Fraction(0, 1);
                         rTuplet.absEnd = FinaleTConv::simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
-                        rTuplet.layer = -1,
-                        tupletMap.insert(tupletMap.begin(), rTuplet);
+                        rTuplet.layer = -1;
+                        std::vector<ReadableTuplet> tupletMap = { rTuplet };
+                        std::vector<ReadableTuplet> tremoloMap;
+                        createTupletMap(entryFrame->tupletInfo, tupletMap, tremoloMap, voice);
                         createTupletsFromMap(measure, curTrackIdx, tupletMap, logger());
 
                         // add chords and rests
@@ -567,6 +599,9 @@ void EnigmaXmlImporter::importEntries()
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
                             processEntryInfo(entryInfoPtr, curTrackIdx, measure, tupletMap, entryMap);
                         }
+
+                        // add tremolos
+                        processTremolos(tremoloMap, curTrackIdx, measure);
 
                         // create beams
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
