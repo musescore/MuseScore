@@ -953,16 +953,13 @@ void NotationInteraction::selectElementsWithSameTypeOnSegment(mu::engraving::Ele
 void NotationInteraction::selectAndStartEditIfNeeded(EngravingItem* element)
 {
     if (element->isSpanner() && !toSpanner(element)->segmentsEmpty()) {
-        SpannerSegment* frontSeg = toSpanner(element)->frontSegment();
-        select({ frontSeg }, SelectType::SINGLE);
-        if (frontSeg->needStartEditingAfterSelecting()) {
-            startEditElement(frontSeg, false);
-        }
-    } else {
-        select({ element }, SelectType::SINGLE);
-        if (element->needStartEditingAfterSelecting()) {
-            startEditElement(element, false);
-        }
+        element = toSpanner(element)->frontSegment();
+    }
+
+    select({ element }, SelectType::SINGLE);
+
+    if (element->needStartEditingAfterSelecting()) {
+        startEditElement(element, false);
     }
 }
 
