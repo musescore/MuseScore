@@ -85,14 +85,12 @@ void PianoKeyboardView::init()
         updateKeyStateColors();
         update();
     });
-
     // m_controller->glissandoEndNotesChanged().onNotify(this, [this]() {
         
     // });
     // m_controller->glissandoTickChanged().onNotify(this, [this]() {
         
     // });
-
     m_controller->keyStatesChanged().onNotify(this, [this]() {
         // LOGALEX() << "m_controller->keyStatesChanged().onNotify call back";
         updateKeyStateColors();
@@ -165,7 +163,8 @@ void PianoKeyboardView::calculateKeyRects()
     adjustKeysAreaPosition();
 }
 
-bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key) {
+bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key) 
+{
     // offset
     // G#8va    120x1
     // G#15va   120x2
@@ -227,7 +226,6 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key) {
     //     }
     //     return false;
     // }
-    
     return false;
 }
 
@@ -348,7 +346,8 @@ void PianoKeyboardView::updateKeyStateColors()
     m_blackKeyBottomPieceStateColors[KeyState::Played] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 1.0);
 }
 
-void PianoKeyboardView::updatePlaybackKeyStateColors() {
+void PianoKeyboardView::updatePlaybackKeyStateColors() 
+{
     if (!m_isInitialized) {
         return;
     }
@@ -493,7 +492,7 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
                 for (const uint& keyIndex : m_clefKeySigsKeys) {
                     if (containsKey(keyIndex, key)) {
                         fillColor = Qt::green;
-                        // m_check_rects.insert({key, rect});
+                        // m_check_rects.insert({ key, rect });
                     }
                 }
             }
@@ -502,24 +501,24 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
         if (!m_controller->playbackKeyStatesEmpty()) {
             if (m_controller->playbackKeyState(key) == KeyState::RightHand) {
                 fillColor = m_whiteKeyStateColors[m_controller->playbackKeyState(key)];
-                m_check_rects.insert({key, rect});
+                m_check_rects.insert({ key, rect });
             }
         }
 
         if (m_controller->isPlaying()) {
             if (m_controller->trillKeyState(key) != KeyState::None) {
                 fillColor = m_whiteKeyStateColors[m_controller->trillKeyState(key)];
-                m_check_rects.insert({key, rect});
+                m_check_rects.insert({ key, rect });
             }
 
             if (m_controller->arpeggioKeyState(key) != KeyState::None) {
                 fillColor = m_whiteKeyStateColors[m_controller->arpeggioKeyState(key)];
-                m_check_rects.insert({key, rect});
+                m_check_rects.insert({ key, rect });
             }
 
             if (m_controller->glissandoKeyState(key) != KeyState::None) {
                 fillColor = m_whiteKeyStateColors[m_controller->glissandoKeyState(key)];
-                m_check_rects.insert({key, rect});
+                m_check_rects.insert({ key, rect });
             }
         }
 
@@ -625,7 +624,7 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
                     if (containsKey(keyIndex, key)) {
                         topPieceGradient.setColorAt(1.0, Qt::green);
                         bottomPieceGradient.setColorAt(0.0, Qt::green);
-                        // m_check_rects.insert({key, rect});
+                        // m_check_rects.insert({ key, rect });
                     }
                 }
             }
@@ -635,7 +634,7 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             if (m_controller->playbackKeyState(key) == KeyState::RightHand) {
                 topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[m_controller->playbackKeyState(key)]);
                 bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[m_controller->playbackKeyState(key)]);
-                m_check_rects.insert({key, rect});
+                m_check_rects.insert({ key, rect });
             }
         }
 
@@ -643,19 +642,19 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             if (m_controller->trillKeyState(key) != KeyState::None) {
                 topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[m_controller->trillKeyState(key)]);
                 bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[m_controller->trillKeyState(key)]);
-                m_check_rects.insert({key, rect});
+                m_check_rects.insert({ key, rect });
             }
 
             if (m_controller->arpeggioKeyState(key) != KeyState::None) {
                 topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[m_controller->arpeggioKeyState(key)]);
                 bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[m_controller->arpeggioKeyState(key)]);
-                m_check_rects.insert({key, rect});
+                m_check_rects.insert({ key, rect });
             }
 
             if (m_controller->glissandoKeyState(key) != KeyState::None) {
                 topPieceGradient.setColorAt(1.0, m_blackKeyTopPieceStateColors[m_controller->glissandoKeyState(key)]);
                 bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomPieceStateColors[m_controller->glissandoKeyState(key)]);
-                m_check_rects.insert({key, rect});
+                m_check_rects.insert({ key, rect });
             }
         }
 
@@ -830,12 +829,14 @@ std::optional<piano_key_t> PianoKeyboardView::keyAt(const QPointF& position) con
     return std::nullopt;
 }
 
-void PianoKeyboardView::shiftCheckRects() {
+void PianoKeyboardView::shiftCheckRects() 
+{
     m_pre_check_rects.swap(m_check_rects);
     m_check_rects.clear();
 }
 
-bool PianoKeyboardView::preRectUnchanged() {
+bool PianoKeyboardView::preRectUnchanged() 
+{
     return m_check_rects == m_pre_check_rects;
 }
 
