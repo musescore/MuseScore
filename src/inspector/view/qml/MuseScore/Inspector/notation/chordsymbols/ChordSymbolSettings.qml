@@ -151,9 +151,9 @@ Column {
         requestIconFontSize: 16
 
         model: [
-            { iconCode: IconCode.ALIGN_LEFT, value: 0},
-            { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, value: 2},
-            { iconCode: IconCode.ALIGN_RIGHT, value: 1 }
+            { iconCode: IconCode.NOTE_ALIGN_LEFT, value: 0},
+            { iconCode: IconCode.NOTE_ALIGN_CENTER, value: 2},
+            { iconCode: IconCode.NOTE_ALIGN_RIGHT, value: 1 }
         ]
     }
 }

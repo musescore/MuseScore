@@ -434,8 +434,8 @@ StyledFlickable {
                                     width: 100
 
                                     model: [
-                                        { iconCode: IconCode.CHORD_ALIGN, iconSize: 20, value: false },
-                                        { iconCode: IconCode.CHORD_STAGGER, iconSize: 20, value: true }
+                                        { iconCode: IconCode.CHORD_BASS_ALIGN, iconSize: 16, value: false },
+                                        { iconCode: IconCode.CHORD_BASS_OFFSET, iconSize: 16, value: true }
                                     ]
 
                                     delegate: FlatRadioButton {
@@ -624,9 +624,9 @@ StyledFlickable {
                     hasReset: false
 
                     model: [
-                        { iconCode: IconCode.ALIGN_LEFT, iconSize: 16, value: 0},
-                        { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, iconSize: 16, value: 2},
-                        { iconCode: IconCode.ALIGN_RIGHT, iconSize: 16, value: 1 }
+                        { iconCode: IconCode.NOTE_ALIGN_LEFT, iconSize: 16, value: 0},
+                        { iconCode: IconCode.NOTE_ALIGN_CENTER, iconSize: 16, value: 2},
+                        { iconCode: IconCode.NOTE_ALIGN_RIGHT, iconSize: 16, value: 1 }
                     ]
                 }
 
