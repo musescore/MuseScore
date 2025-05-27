@@ -151,8 +151,8 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
     scoreTuplet->setAutoplace(musxTuplet->smartTuplet);
     // separate bracket/number offset not supported, just add it to the whole tuplet for now
     /// @todo needs to be negated?
-    scoreTuplet->setOffset(PointF((musxTuplet->tupOffX + musxTuplet->brackOffX) / EVPU_PER_SPACE,
-                                  (musxTuplet->tupOffY + musxTuplet->brackOffY) / EVPU_PER_SPACE));
+    scoreTuplet->setOffset(FinaleTConv::evpuToPointF(musxTuplet->tupOffX + musxTuplet->brackOffX,
+                                                     musxTuplet->tupOffY + musxTuplet->brackOffY));
     scoreTuplet->setVisible(!musxTuplet->hidden);
     if (musxTuplet->autoBracketStyle != options::TupletOptions::AutoBracketStyle::Always) {
         // Can't be determined until we write all the notes/beams
@@ -177,8 +177,8 @@ static void transferTupletProperties(std::shared_ptr<const details::TupletDef> m
 
     // bracket extensions
     /// @todo account for the fact that Finale always includes head widths in total bracket width, an option not yet in musescore. See PR and the related issues
-    scoreTuplet->setUserPoint1(PointF(-musxTuplet->leftHookExt / EVPU_PER_SPACE, 0.0));
-    scoreTuplet->setUserPoint2(PointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj) / EVPU_PER_SPACE);
+    scoreTuplet->setUserPoint1(FinaleTConv::evpuToPointF(-musxTuplet->leftHookExt, 0));
+    scoreTuplet->setUserPoint2(FinaleTConv::evpuToPointF(musxTuplet->rightHookExt, -musxTuplet->manualSlopeAdj));
     if (musxTuplet->alwaysFlat) {
         scoreTuplet->setUserPoint2(PointF(scoreTuplet->userP2().x(), scoreTuplet->userP1().y()));
     }

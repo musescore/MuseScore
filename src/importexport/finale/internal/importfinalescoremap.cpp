@@ -132,8 +132,7 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     // barline vertical offsets relative to staff
     auto calcBarlineOffsetHalfSpaces = [](Evpu offset) -> int {
         // Finale and MuseScore use opposite signs for up/down
-        double halfSpaces = (double(-offset) * 2.0) / EVPU_PER_SPACE;
-        return int(std::lround(halfSpaces));
+        return int(std::lround(FinaleTConv::doubleFromEvpu(-offset) * 2.0));
     };
     s->setBarLineFrom(calcBarlineOffsetHalfSpaces(musxStaff->topBarlineOffset));
     s->setBarLineTo(calcBarlineOffsetHalfSpaces(musxStaff->botBarlineOffset));
@@ -410,7 +409,7 @@ void EnigmaXmlImporter::importClefs(const std::shared_ptr<others::InstrumentUsed
                     /// @todo Test with stretched staff time. (midMeasureClef->xEduPos is in global edu values.)
                     if (Clef* clef = createClef(m_score, curStaffIdx, midMeasureClef->clefIndex, measure, midMeasureClef->xEduPos, afterBarline, visible)) {
                         // only set y offset because MuseScore automatically calculates the horizontal spacing offset
-                        clef->setOffset(0.0, clef->spatium() * (-double(midMeasureClef->yEvpuPos) / EVPU_PER_SPACE));
+                        clef->setOffset(0.0, -FinaleTConv::doubleFromEvpu(midMeasureClef->yEvpuPos) * clef->spatium());
                         /// @todo perhaps populate other fields from midMeasureClef, such as clef-specific mag, etc.?
                         musxCurrClef = midMeasureClef->clefIndex;
                     }
@@ -555,7 +554,7 @@ void EnigmaXmlImporter::importPageLayout()
                     distBox->setTick(distMeasure->tick());
                     distBox->setNext(distMeasure);
                     distBox->setPrev(distMeasure->prev());
-                    distBox->setBoxWidth(Spatium(dist / EVPU_PER_SPACE));
+                    distBox->setBoxWidth(Spatium(FinaleTConv::doubleFromEvpu(dist)));
                     distBox->setSizeIsSpatiumDependent(false);
                     distMeasure->setPrev(distBox);
                     // distBox->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
@@ -581,13 +580,13 @@ void EnigmaXmlImporter::importPageLayout()
             // for the very first system, create a non-frame indent instead
             if (isFirstSystemOnPage && currentPageIndex == 0) {
                 m_score->style().set(Sid::enableIndentationOnFirstSystem, true);
-                m_score->style().set(Sid::firstSystemIndentationValue, leftStaffSystem->left / EVPU_PER_SPACE);
+                m_score->style().set(Sid::firstSystemIndentationValue, FinaleTConv::doubleFromEvpu(leftStaffSystem->left));
             } else {
                 HBox* leftBox = Factory::createHBox(m_score->dummy()->system());
                 leftBox->setTick(startMeasure->tick());
                 leftBox->setNext(startMeasure);
                 leftBox->setPrev(startMeasure->prev());
-                leftBox->setBoxWidth(Spatium(leftStaffSystem->left / EVPU_PER_SPACE));
+                leftBox->setBoxWidth(Spatium(FinaleTConv::doubleFromEvpu(leftStaffSystem->left)));
                 leftBox->setSizeIsSpatiumDependent(false);
                 startMeasure->setPrev(leftBox);
                 // leftBox->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
@@ -603,7 +602,7 @@ void EnigmaXmlImporter::importPageLayout()
             rightBox->setTick(rightTick);
             rightBox->setNext(endMeasure->next());
             rightBox->setPrev(endMeasure);
-            rightBox->setBoxWidth(Spatium(double(-rightStaffSystem->right) / EVPU_PER_SPACE));
+            rightBox->setBoxWidth(Spatium(FinaleTConv::doubleFromEvpu(-rightStaffSystem->right)));
             rightBox->setSizeIsSpatiumDependent(false);
             endMeasure->setNext(rightBox);
             // rightBox->manageExclusionFromParts(/*exclude =*/ true); // excluded by default
@@ -634,7 +633,7 @@ void EnigmaXmlImporter::importPageLayout()
             Spacer* upSpacer = Factory::createSpacer(startMeasure);
             upSpacer->setSpacerType(SpacerType::UP);
             upSpacer->setTrack(0);
-            upSpacer->setGap(Spatium((double(-leftStaffSystem->top) + double(leftStaffSystem->distanceToPrev)) / EVPU_PER_SPACE));
+            upSpacer->setGap(Spatium(FinaleTConv::doubleFromEvpu(-leftStaffSystem->top + leftStaffSystem->distanceToPrev)));
             /// @todo account for title frames / perhaps header frames
             startMeasure->add(upSpacer);
         }
@@ -642,7 +641,7 @@ void EnigmaXmlImporter::importPageLayout()
             Spacer* upSpacer = Factory::createSpacer(startMeasure);
             upSpacer->setSpacerType(SpacerType::FIXED);
             upSpacer->setTrack(m_score->nstaves() * VOICES); // invisible staves are correctly accounted for on layout
-            upSpacer->setGap(Spatium((double(rightStaffSystem->bottom) + double(rightStaffSystem->distanceToPrev) + double(-staffSystems[i+1]->top)) / EVPU_PER_SPACE));
+            upSpacer->setGap(Spatium(FinaleTConv::doubleFromEvpu(rightStaffSystem->bottom + rightStaffSystem->distanceToPrev + -staffSystems[i+1]->top)));
             startMeasure->add(upSpacer);
         }
     }

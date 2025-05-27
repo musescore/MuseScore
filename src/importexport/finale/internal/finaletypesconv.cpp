@@ -1025,4 +1025,14 @@ Key FinaleTConv::keyFromAlteration(int musxAlteration)
     return Key(musxAlteration);
 }
 
+double FinaleTConv::doubleFromEvpu(Evpu evpu)
+{
+    return double(evpu) / EVPU_PER_SPACE;
+}
+
+PointF FinaleTConv::evpuToPointF(Evpu xEvpu, Evpu yEvpu)
+{
+    return PointF(doubleFromEvpu(xEvpu), doubleFromEvpu(yEvpu));
+}
+
 }
