@@ -122,8 +122,7 @@ private:
 struct RenderAction
 {
     enum class RenderActionType : char {
-        SET, MOVE, PUSH, POP,
-        NOTE, ACCIDENTAL, STOPHALIGN, SCALE
+        SET, MOVE, MOVEXHEIGHT, PUSH, POP, NOTE, ACCIDENTAL, STOPHALIGN, SCALE
     };
 
     virtual RenderActionType actionType() const = 0;
@@ -153,6 +152,12 @@ private:
     PointF m_vec = PointF(0.0, 0.0);
 };
 
+struct RenderActionMoveXHeight : RenderAction
+{
+    RenderActionMoveXHeight() {}
+    RenderActionType actionType() const override { return RenderActionType::MOVEXHEIGHT; }
+};
+
 struct RenderActionSet : RenderAction
 {
     RenderActionSet() {}
@@ -176,16 +181,29 @@ struct RenderActionPush : RenderAction
 struct RenderActionPop : RenderAction
 {
     RenderActionPop() {}
-    RenderActionPop(bool popx, bool popy)
-        : m_popx(popx), m_popy(popy) {}
 
     RenderActionType actionType() const override { return RenderActionType::POP; }
     void print() const override;
 
     double popX() const { return m_popx; }
     double popY() const { return m_popy; }
+protected:
+    RenderActionPop(bool popx, bool popy)
+        : m_popx(popx), m_popy(popy) {}
 private:
     bool m_popx = true, m_popy = true;
+};
+
+struct RenderActionPopX : RenderActionPop
+{
+    RenderActionPopX()
+        : RenderActionPop(true, false) {}
+};
+
+struct RenderActionPopY : RenderActionPop
+{
+    RenderActionPopY()
+        : RenderActionPop(false, true) {}
 };
 
 struct RenderActionNote : RenderAction

@@ -1182,6 +1182,9 @@ void Harmony::renderAction(const RenderAction* a, HarmonyRenderCtx& ctx)
     case RenderAction::RenderActionType::MOVE:
         renderActionMove(dynamic_cast<const RenderActionMove*>(a), ctx);
         break;
+    case RenderAction::RenderActionType::MOVEXHEIGHT:
+        renderActionMoveXHeight(ctx);
+        break;
     case RenderAction::RenderActionType::PUSH:
         renderActionPush(ctx);
         break;
@@ -1332,6 +1335,12 @@ void Harmony::renderActionMove(const RenderActionMove* a, HarmonyRenderCtx& ctx)
 {
     const FontMetrics fm = FontMetrics(font());
     ctx.pos = ctx.pos + a->vec() * fm.height();
+}
+
+void Harmony::renderActionMoveXHeight(HarmonyRenderCtx& ctx)
+{
+    const FontMetrics fm = FontMetrics(font());
+    ctx.movey(-fm.xHeight());
 }
 
 void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
