@@ -83,7 +83,7 @@ Column {
 
         currentIndex: tabBar.currentIndex
 
-        height: itemAt(currentIndex).height
+        height: itemAt(currentIndex).implicitHeight
 
         FretFrameChordsTab {
             height: implicitHeight
