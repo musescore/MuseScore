@@ -77,8 +77,10 @@ private:
     // alex::
     int m_hit_measure_no = -1;
     Measure* m_hit_measure = nullptr;
-    std::vector<Note*> curr_measure_trill_notes;
+    std::set<Note*> curr_measure_trill_notes;
     Note *curr_trill_note = nullptr;
+    std::map<Note*, int> tremolo_type_map;
+    std::map<Note*, bool> tremolo_half_map;
 
     std::set<ClefType> clefTypes;
     std::unordered_set<ClefType> curr_clefTypes;
