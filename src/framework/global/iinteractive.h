@@ -186,11 +186,12 @@ public:
 
     // warning
     virtual async::Promise<Result> warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                                           int defBtn = int(Button::NoButton), const Options& options = {},
+                                           int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
                                            const std::string& dialogTitle = "") = 0;
 
     async::Promise<Result> warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                   Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+                                   Button defBtn = Button::NoButton, const Options& options = { WithIcon },
+                                   const std::string& dialogTitle = "")
     {
         return warning(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
@@ -274,12 +275,13 @@ public:
     }
 
     virtual Result warningSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                               int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") = 0;
+                               int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                               const std::string& dialogTitle = "") = 0;
 
     Result warningSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                       const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+                       const Button& defBtn = Button::NoButton, const Options& options = { WithIcon }, const std::string& dialogTitle = "")
     {
-        return infoSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+        return warningSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     virtual Result errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
@@ -289,7 +291,7 @@ public:
     Result errorSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
                      const Button& defBtn = Button::NoButton, const Options& options = { WithIcon }, const std::string& dialogTitle = "")
     {
-        return infoSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+        return errorSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     virtual RetVal<Val> openSync(const UriQuery& uri) = 0;
