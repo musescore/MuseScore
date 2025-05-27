@@ -1792,7 +1792,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                             bool is_grace = _pre_note->isGrace();
                             if (!is_grace) {
                                 std::vector<Chord*>& _graceChords = _pre_note->chord()->graceNotes();
-
                                 size_t gracechords_size = _graceChords.size();
                                 if (gracechords_size > 0) {
                                     bool grace_before = true;
@@ -2130,7 +2129,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 }
             }
         }
-
         mu::engraving::Segment* ns = s->next(mu::engraving::SegmentType::ChordRest);
         while (ns && !ns->visible()) {
             ns = ns->next(mu::engraving::SegmentType::ChordRest);
