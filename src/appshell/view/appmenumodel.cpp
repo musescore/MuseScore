@@ -641,10 +641,21 @@ MenuItemList AppMenuModel::makeFramesItems()
         makeMenuItem("insert-hbox"),
         makeMenuItem("insert-vbox"),
         makeMenuItem("insert-textframe"),
+        makeMenuItem("insert-fretframe"),
         makeSeparator(),
+        makeMenu(TranslatableString("notation", "Insert at end of score"), makeFramesAppendItems())
+    };
+
+    return items;
+}
+
+MenuItemList AppMenuModel::makeFramesAppendItems()
+{
+    MenuItemList items {
         makeMenuItem("append-hbox"),
         makeMenuItem("append-vbox"),
-        makeMenuItem("append-textframe")
+        makeMenuItem("append-textframe"),
+        makeMenuItem("append-fretframe")
     };
 
     return items;
