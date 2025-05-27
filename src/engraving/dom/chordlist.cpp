@@ -408,7 +408,8 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderAction*>& al, 
             s += u":a";
             break;
         case RenderAction::RenderActionType::STOPHALIGN:
-        case mu::engraving::RenderAction::RenderActionType::SCALE:
+        case RenderAction::RenderActionType::SCALE:
+        case RenderAction::RenderActionType::MOVEXHEIGHT:
             // Internal, skip
             break;
         }
@@ -1467,9 +1468,9 @@ double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t 
     case ChordTokenClass::MODIFIER: {
         double yAdj = 0.0;
         if (m_stackModifiers && nmodifiers > 1) {
-            static constexpr double LINE_HEIGHT = 1.2;
+            static constexpr double LINE_HEIGHT = 1.1;
             const double modifierHeight = LINE_HEIGHT * m_mmag * m_stackedmmag;
-            double base = ((nmodifiers * modifierHeight) - 1) / 2;
+            double base = (nmodifiers * modifierHeight) / 2;
 
             yAdj += base - modifierIdx * modifierHeight;
         }
@@ -1532,7 +1533,7 @@ const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
                 found = true;
             }
         }
-
+        // build render list
         // check for adjustments
         double yAdjust = adjust ? cl->position(tok.names, ctc, modIdx, m_modifierList.size()) : 0.0;
 
@@ -1550,17 +1551,19 @@ const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
 
             // Stacked modifiers
             if (m_modifierList.size() > 1 && cl->stackModifiers()) {
-                // Set scale
-                m_renderList.emplace_back(new RenderActionScale(cl->stackedModifierMag()));
-
                 // Align vertically stacked modifier's x position by pushing it at the start of every modifier and popping at the end
                 if (m_modifierList.at(modIdx).startsWith(n)) {
                     m_renderList.emplace_back(new RenderActionPush());
                 }
+
+                // Set scale
+                m_renderList.emplace_back(new RenderActionScale(cl->stackedModifierMag()));
+                // Move to x-height
+                m_renderList.emplace_back(new RenderActionPush());
+                m_renderList.emplace_back(new RenderActionMoveXHeight());
             }
         }
 
-        // build render list
         if (!RealIsNull(yAdjust)) {
             m_renderList.emplace_back(new RenderActionMove(0.0, yAdjust));
         }
@@ -1577,13 +1580,15 @@ const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
 
         // Stacked modifiers
         if (tok.tokenClass == ChordTokenClass::MODIFIER && !n.empty() && cl->stackModifiers()) {
+            // Reset move to x-height
+            m_renderList.emplace_back(new RenderActionPopY());
             // Reset scale
             m_renderList.emplace_back(new RenderActionScale(1 / cl->stackedModifierMag()));
             if (m_modifierList.at(modIdx).endsWith(n) && modIdx != finalModIdx) {
                 modIdx++;
 
                 // Restore x position
-                m_renderList.emplace_back(new RenderActionPop(/* popx = */ true, /* popy = */ false));
+                m_renderList.emplace_back(new RenderActionPopX());
             }
         }
     }
@@ -2066,7 +2071,7 @@ void ChordList::checkChordList(const path_t& appDataPath, const MStyle& style)
 void RenderAction::print(RenderActionType type, const String& info) const
 {
     static const char* names[] = {
-        "SET", "MOVE", "PUSH", "POP",
+        "SET", "MOVE", "MOVEXHEIGHT", "PUSH", "POP",
         "NOTE", "ACCIDENTAL", "STOPHALIGN", "SCALE"
     };
     LOGD("%10s %s", names[int(type)], muPrintable(info));
