@@ -3288,6 +3288,10 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
                 }
             }
         }
+        if (startChord->stem() && endChord->stem() && startChord->up() == above && endChord->up() == above) {
+            // Mid-way between centered on the notes and centered on the stems
+            endX += (above ? 0.5 : -0.5) * endChord->upNote()->headWidth();
+        }
         double centerX = 0.5 * (startX + endX);
 
         double vertPadding = 0.5 * item->spatium();
