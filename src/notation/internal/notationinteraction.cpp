@@ -2155,6 +2155,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             if (element->isSlur() || cr1->staffIdx() == cr2->staffIdx()) {
                 addSingle = true;
             }
+        } else if (sel.element() && sel.element()->isSlurSegment() && element->isHammerOnPullOff()) {
+            addSingle = true;
         }
 
         auto isEntryDrumStaff = [score]() {
@@ -2682,6 +2684,9 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
     } else if (sel.isSingle()) {
         if (sel.element()->isNote() && !toNote(sel.element())->isTrillCueNote()) {
             doAddSlur(toNote(sel.element())->chord(), nullptr, slurTemplate);
+        } else if (sel.element()->isSlurSegment() && slurTemplate->isHammerOnPullOff()) {
+            Slur* slur = toSlurSegment(sel.element())->slur();
+            doAddSlur(slur->startElement(), slur->endElement(), slurTemplate);
         }
     } else {
         EngravingItem* firstItem = nullptr;
@@ -2763,6 +2768,14 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     Slur* slur = firstChordRest->slur(secondChordRest);
     if (!slur || slur->slurDirection() != DirectionV::AUTO) {
         slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
+    } else if (slur && slurTemplate->isHammerOnPullOff()) {
+        // Replace existing slur with HOPO
+        endEditElement();
+        score()->undoRemoveElement(slur);
+        slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
+        SlurSegment* segment = slur->frontSegment();
+        select({ segment }, SelectType::SINGLE);
+        startEditGrip(segment, Grip::END);
     }
 
     if (m_noteInput->isNoteInputMode()) {
