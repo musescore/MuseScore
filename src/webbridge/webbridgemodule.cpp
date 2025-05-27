@@ -21,6 +21,8 @@
  */
 #include "webbridgemodule.h"
 
+#include "internal/memfilesystem.h"
+
 #include "log.h"
 
 using namespace mu::webbridge;
@@ -30,7 +32,13 @@ std::string WebBridgeModule::moduleName() const
     return "webbridge";
 }
 
+void WebBridgeModule::registerExports()
+{
+    ioc()->unregister<muse::io::IFileSystem>(moduleName());
+    ioc()->registerExport<muse::io::IFileSystem>(moduleName(), new MemFileSystem());
+}
+
 void WebBridgeModule::onStartApp()
 {
-    int k = 16;
+    int k = 17;
 }

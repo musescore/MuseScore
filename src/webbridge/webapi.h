@@ -21,15 +21,20 @@
  */
 #pragma once
 
-#include "modularity/imodulesetup.h"
+#include "global/modularity/ioc.h"
+#include "global/iinteractive.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu::webbridge {
-class WebBridgeModule : public muse::modularity::IModuleSetup
+class WebApi
 {
-public:
+    inline static muse::GlobalInject<muse::IInteractive> interactive;
+    inline static muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void onStartApp() override;
+public:
+    WebApi() = default;
+
+    static void onclickTest1(int num);
+    static void load(const void* source, unsigned int len);
 };
 }

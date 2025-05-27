@@ -212,7 +212,7 @@ set(APP_SRC
 )
 
 if (CC_IS_EMCC)
-    set(APP_SRC ${APP_SRC} webapi.cpp)
+    set(APP_SRC ${APP_SRC} webapi_export.cpp)
 endif()
 
 qt_add_executable(MuseScoreStudio
