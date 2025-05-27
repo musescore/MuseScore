@@ -795,7 +795,7 @@ void FBox::init()
 {
     clearElements();
 
-    std::set<String /*pattern*/> usedDiagrams;
+    std::set<String> usedDiagrams;
 
     for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
          segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
@@ -809,8 +809,8 @@ void FBox::init()
                 continue;
             }
 
-            String pattern = FretDiagram::patternFromDiagram(fretDiagram);
-            if (muse::contains(usedDiagrams, pattern)) {
+            String harmonyName = fretDiagram->harmony()->harmonyName().toLower();
+            if (muse::contains(usedDiagrams, harmonyName)) {
                 delete fretDiagram;
                 fretDiagram = nullptr;
 
@@ -819,7 +819,7 @@ void FBox::init()
 
             add(fretDiagram);
 
-            usedDiagrams.insert(pattern);
+            usedDiagrams.insert(harmonyName);
         }
     }
 }
@@ -852,8 +852,6 @@ FretDiagram* FBox::makeFretDiagram(const EngravingItem* item)
             //! generate from diagram and add harmony
             fretDiagram->add(Factory::createHarmony(score()->dummy()->segment()));
         }
-    } else {
-        return nullptr;
     }
 
     return fretDiagram;
