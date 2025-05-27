@@ -1216,11 +1216,12 @@ muse::async::Notification NotationInteraction::arpeggioTickChanged()
     return m_arpeggioTickChanged;
 }
 
-void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int duration_ticks) 
+void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int duration_ticks, int tremolo_type) 
 {
     trill_note = note;
     trill_ticks = ticks;
     trill_duration_ticks = duration_ticks;
+    trill_tremolo_type = tremolo_type;
 }
 int NotationInteraction::trillNoteTicks() const 
 {
@@ -1229,6 +1230,10 @@ int NotationInteraction::trillNoteTicks() const
 int NotationInteraction::trillNoteDurationticks() const 
 {
     return trill_duration_ticks;
+}
+int NotationInteraction::trillNoteTremolotype() const 
+{
+    return trill_tremolo_type;
 }
 int NotationInteraction::trillCurrticks() const 
 {
@@ -1252,6 +1257,7 @@ bool NotationInteraction::trillTick(int ticks)
         trill_curr_ticks = 0;
         trill_ticks = 0;
         trill_duration_ticks = 0;
+        trill_tremolo_type = 0;
         trill_note = nullptr;
         m_trillTickChanged.notify();
         return true;

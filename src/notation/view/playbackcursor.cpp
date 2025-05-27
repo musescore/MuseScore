@@ -25,6 +25,7 @@
 #include "src/notation/notationtypes.h"
 #include "src/engraving/dom/ornament.h"
 #include "src/engraving/dom/trill.h"
+#include "src/engraving/dom/tremolobar.h"
 #include "src/engraving/dom/arpeggio.h"
 
 using namespace mu::notation;
@@ -159,17 +160,51 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
 
     if (measure != m_hit_measure) {
         curr_measure_trill_notes.clear();
+        tremolo_type_map.clear();
+        tremolo_half_map.clear();
         EngravingItemList measure_children = measure->childrenItems(true);
+        bool hasTremoloBar = false;
         for (size_t m_k = 0; m_k < measure_children.size(); m_k++) {
             EngravingItem* measure_item = measure_children.at(m_k);
-
             if (measure_item && measure_item->isOrnament()) {
                 Ornament* orn = toOrnament(measure_item); // subtype 2214(trill)
                 Trill* _trill = toTrill(measure_item);
                 if (_trill) {
                     Note* note = orn->noteAbove();
                     if (note) {
-                        curr_measure_trill_notes.push_back(note);
+                        curr_measure_trill_notes.insert(note);
+                    }
+                }
+            }
+
+            TremoloBar* _tremoloBar = toTremoloBar(measure_item);
+            if (_tremoloBar) {
+                hasTremoloBar = true;
+            }
+        }
+        if (hasTremoloBar) {
+            for (size_t m_k = 0; m_k < measure_children.size(); m_k++) {
+                EngravingItem* measure_item = measure_children.at(m_k);
+                if (measure_item->type() == mu::engraving::ElementType::NOTE) {
+                    Note* _tremoloNote = toNote(measure_item);
+                    TremoloType _tremoloType = _tremoloNote->chord()->tremoloType();
+                    tremolo_type_map[_tremoloNote] = (int)_tremoloType;
+
+                    TremoloTwoChord* _tremoloTwoChord = _tremoloNote->chord()->tremoloTwoChord();
+                    TremoloSingleChord* _tremoloSingleChord = _tremoloNote->chord()->tremoloSingleChord();
+                    if (_tremoloTwoChord) {
+                        Chord* chord1 = _tremoloTwoChord->chord1();
+                        Chord* chord2 = _tremoloTwoChord->chord2();
+
+                        Note* leftNote = chord1->notes()[chord1->notes().size() - 1];
+                        curr_measure_trill_notes.insert(leftNote);
+                        Note* rightNote = chord2->notes()[chord2->notes().size() - 1];
+                        curr_measure_trill_notes.insert(rightNote);
+                        tremolo_half_map[leftNote] = true;
+                        tremolo_half_map[rightNote] = true;
+                    }
+                    if (_tremoloSingleChord) {
+                        curr_measure_trill_notes.insert(_tremoloNote->chord()->notes()[_tremoloNote->chord()->notes().size() - 1]); 
                     }
                 }
             }
@@ -235,7 +270,27 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                 if (mnote == _pre_note) {
                                     if (curr_trill_note != _pre_note) {
                                         curr_trill_note = _pre_note;
-                                        m_notation->interaction()->addTrillNote(curr_trill_note, curr_trill_note->tick().ticks(), duration_ticks);
+                                        int logic_tremoloType = 0;
+                                        int _duration_ticks = duration_ticks;
+                                        if (tremolo_type_map.find(curr_trill_note) != tremolo_type_map.end()) {
+                                            if (tremolo_half_map[curr_trill_note]) {
+                                                _duration_ticks /= 2;
+                                            }
+                                            int _tremoloType = tremolo_type_map[curr_trill_note];
+                                            TremoloType tremoloType = (TremoloType)_tremoloType;
+                                            if (tremoloType == TremoloType::R8 || tremoloType == TremoloType::C8) {
+                                                logic_tremoloType = 20;
+                                            } else if (tremoloType == TremoloType::R16 || tremoloType == TremoloType::C16) {
+                                                logic_tremoloType = 40;
+                                            } else if (tremoloType == TremoloType::R32 || tremoloType == TremoloType::C32) {
+                                                logic_tremoloType = 80;
+                                            } else if (tremoloType == TremoloType::R64 || tremoloType == TremoloType::C64) {
+                                                logic_tremoloType = 160;
+                                            } else if (tremoloType == TremoloType::BUZZ_ROLL) {
+                                                logic_tremoloType = 50;
+                                            }
+                                        } 
+                                        m_notation->interaction()->addTrillNote(curr_trill_note, curr_trill_note->tick().ticks(), _duration_ticks, logic_tremoloType);
                                         m_notation->interaction()->trillNoteUpdate();
                                     }
                                     break;

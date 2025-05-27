@@ -107,6 +107,7 @@ private:
     piano_key_t m_trill_note_key;
     int m_trill_ticks;
     int m_trill_duration_ticks;
+    int m_trill_tremolo_type;
     int m_trill_curr_ticks;
 
     std::set<uint> m_clefKeySigsKeys;
