@@ -68,8 +68,12 @@ void ProjectActionsController::init()
 
     dispatcher()->reg(this, "file-close", [this]() {
         auto anyInstanceWithoutProject = multiInstancesProvider()->isHasAppInstanceWithoutProject();
-        closeOpenedProject(anyInstanceWithoutProject);
-        if (anyInstanceWithoutProject) {
+        bool ok = closeOpenedProject();
+        if (ok && anyInstanceWithoutProject) {
+            //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
+            async::Async::call(this, [this]() {
+                dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
+            });
             multiInstancesProvider()->activateWindowWithoutProject();
         }
     });
@@ -603,11 +607,10 @@ muse::async::Notification ProjectActionsController::projectBeingDownloadedChange
 
 Ret ProjectActionsController::openPageIfNeed(Uri pageUri)
 {
-    if (interactive()->isOpened(pageUri).val) {
-        return make_ret(Ret::Code::Ok);
+    if (!interactive()->isOpened(pageUri).val) {
+        interactive()->open(pageUri);
     }
-
-    return interactive()->openSync(pageUri).ret;
+    return make_ret(Ret::Code::Ok);
 }
 
 bool ProjectActionsController::isProjectOpened(const muse::io::path_t& scorePath) const
@@ -674,7 +677,7 @@ void ProjectActionsController::newProject()
     });
 }
 
-bool ProjectActionsController::closeOpenedProject(bool quitApp)
+bool ProjectActionsController::closeOpenedProject(bool goToHome)
 {
     if (m_isProjectClosing) {
         return false;
@@ -712,12 +715,7 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
         interactive()->closeAllDialogs();
         globalContext()->setCurrentProject(nullptr);
 
-        if (quitApp) {
-            //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
-            async::Async::call(this, [this]() {
-                dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
-            });
-        } else {
+        if (goToHome) {
             Ret ret = openPageIfNeed(HOME_PAGE_URI);
             if (!ret) {
                 LOGE() << ret.toString();
