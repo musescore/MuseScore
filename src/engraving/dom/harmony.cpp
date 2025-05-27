@@ -1145,6 +1145,11 @@ double TextSegment::width() const
     return FontMetrics::width(m_font, text);
 }
 
+double TextSegment::capHeight() const
+{
+    return FontMetrics::capHeight(m_font);
+}
+
 //---------------------------------------------------------
 //   boundingRect
 //---------------------------------------------------------
@@ -1498,21 +1503,21 @@ void Harmony::render()
 
         chordTextSegments.emplace(std::pair<double, std::vector<TextSegment*> > { ctx.x(), ctx.textList });
         m_textList.insert(m_textList.end(), ctx.textList.begin(), ctx.textList.end());
-        ctx.textList.clear();
 
+        TextSegment* root = ctx.textList.empty() ? nullptr : ctx.textList.front();
+        ctx.textList.clear();
         if (m_chords.size() == 1 || i == 1) {
             break;
         }
 
-        ctx.setx(0);
-        for (const TextSegment* ts : m_textList) {
-            double top = ts->pos().y() + ts->tightBoundingRect().top();
-            if (top < ctx.y()) {
-                ctx.sety(top);
-            }
-        }
+        assert(root);
 
-        double lineY = ctx.y() - style().styleS(Sid::polychordDividerSpacing).toMM(spatium());
+        ctx.setx(0);
+        double rootCapHeight = root->capHeight();
+        ctx.sety(root->y - rootCapHeight);
+
+        double lineY = ctx.y() - style().styleS(Sid::polychordDividerSpacing).toMM(spatium())
+                       - style().styleS(Sid::polychordDividerThickness).toMM(spatium()) / 2;
         LineF line = LineF(PointF(0.0, lineY), PointF(0.0, lineY));
         mutldata()->polychordDividerLines.mut_value().push_back(line);
 

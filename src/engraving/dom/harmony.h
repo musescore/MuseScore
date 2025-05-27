@@ -49,6 +49,7 @@ struct TextSegment {
     bool hAlign = true;
 
     double width() const;
+    double capHeight() const;
     RectF boundingRect() const;
     RectF tightBoundingRect() const;
     PointF pos() const { return PointF(x, y) + offset; }
