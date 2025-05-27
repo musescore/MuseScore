@@ -354,7 +354,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                             continue;
                         }
                         if (item->type() == mu::engraving::ElementType::NOTE) {
-                            Note *_pre_note = toNote(item);
+                            Note* _pre_note = toNote(item);
                             // check grace
                             bool is_grace = _pre_note->isGrace();
                             if (is_grace) {
@@ -440,14 +440,10 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                     }
                                 }
                             }
-                        
                             // check grace
                             bool is_grace = _pre_note->isGrace();
-                            if (is_grace) {
-                                
-                            } else {
+                            if (!is_grace) {
                                 std::vector<Chord*>& _graceChords = _pre_note->chord()->graceNotes();
-
                                 size_t gracechords_size = _graceChords.size();
                                 if (gracechords_size > 0) {
                                     bool grace_before = true;
@@ -522,15 +518,13 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                             _pre_note->setColor(muse::draw::Color::RED);
                                             m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType);
                                         }
-                                    }
-                                    
+                                    }  
                                 } else {
                                     Note* _noteItem = toNote(item);
                                     int _noteItem_ottavaType = ottava_map[_noteItem];
                                     m_notation->interaction()->addPlaybackNote(_noteItem, _noteItem_ottavaType);
                                 }
                             }
-                            
                         } else if (item->type() == mu::engraving::ElementType::GLISSANDO) {
                             EngravingItem* glissandoNote = item->parentItem();
                             if (glissandoNote->type() != mu::engraving::ElementType::NOTE && glissandoNote->parentItem()->type() == mu::engraving::ElementType::NOTE) {
@@ -561,12 +555,11 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                             } 
                                         }
                                     }
-                                    
                                     m_notation->interaction()->glissandoEndNotesUpdate();
                                 }
                             } 
                         } else if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
-                            Arpeggio *__arpeggio = toArpeggio(item);
+                            Arpeggio* __arpeggio = toArpeggio(item);
                             ArpeggioType __arpeggioType = __arpeggio->arpeggioType();
                             EngravingItem* arpeggio = item->parentItem();
                             // check Fermata
@@ -606,7 +599,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                         } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_QUARTER) {
                                             arpeggio_duration_ticks /= 2;
                                         }
-
                                         EngravingItemList _itemList = s->childrenItems(true);
                                         for (size_t k = 0; k < _itemList.size(); k++) {
                                             EngravingItem* _item = _itemList.at(k);
@@ -653,12 +645,10 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                 }
                             }
                         }
-                        
                     }
                 }
             }
         }
-
         mu::engraving::Segment* ns = s->next(mu::engraving::SegmentType::ChordRest);
         while (ns && !ns->visible()) {
             ns = ns->next(mu::engraving::SegmentType::ChordRest);
@@ -836,8 +826,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 } else {
                     keySigKeys.insert(mu::engraving::Key::C);
                 }
-            }
-                        
+            }    
         }
         
         if (curr_clefTypes.size() > 0) {
