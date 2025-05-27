@@ -3281,6 +3281,12 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
         y += above ? -vertPadding : vertPadding;
         y = above ? std::min(y, -vertPadding) : std::max(y, item->staff()->staffHeight(item->tick()) + vertPadding);
 
+        Note* startNote = above ? hopoText->startChord()->upNote() : hopoText->startChord()->downNote();
+        Note* endNote = above ? hopoText->endChord()->upNote() : hopoText->endChord()->downNote();
+        double yNoteLimit = above ? std::min(startNote->y(), endNote->y()) - 2 * vertPadding
+                            : std::max(startNote->y(), endNote->y()) + 2 * vertPadding;
+        y = above ? std::min(y, yNoteLimit) : std::max(y, yNoteLimit);
+
         hopoText->mutldata()->setPos(centerX, y);
 
         hopoTextShape.translateY(y);
