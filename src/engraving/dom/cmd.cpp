@@ -3295,18 +3295,17 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
     ChordRest* cr = toChordRest(el);
 
     // if measure rest is selected as input, then the correct initialDuration will be the
-    // duration of the measure's time signature, else is just the input state's duration
-    TDuration initialDuration;
-    if (cr->durationType() == DurationType::V_MEASURE) {
+    // duration of the measure's time signature, else is just the ChordRest's duration
+    TDuration initialDuration = cr->durationType();
+    if (initialDuration == DurationType::V_MEASURE) {
         initialDuration = TDuration(cr->measure()->timesig(), true);
 
         if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
             // Duration already shortened by truncation; shorten one step less
             --nSteps;
         }
-    } else {
-        initialDuration = m_is.duration();
     }
+
     TDuration d = (nSteps != 0) ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration;
     if (!d.isValid()) {
         return;
