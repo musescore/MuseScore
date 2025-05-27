@@ -4063,6 +4063,9 @@ static void writeGuitarBend(XmlWriter& xml, Notations& notations, Technical& tec
             XmlWriter::Attributes bendAttrs;
             int max_pitch = 0;
             for (const PitchValue& v : bend->points()) {
+                if (!v.pitch) {
+                    continue;
+                }
                 max_pitch = v.pitch < 0 ? std::min(max_pitch, v.pitch) : std::max(max_pitch, v.pitch);
             }
             addColorAttr(bend, bendAttrs);
