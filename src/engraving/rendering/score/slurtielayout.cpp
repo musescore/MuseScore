@@ -3008,10 +3008,6 @@ void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const P
     ldata->moveY(item->staffOffsetY());
 
     computeBezier(item);
-
-    if (item->isHammerOnPullOffSegment()) {
-        TLayout::layoutHammerOnPullOffSegment(toHammerOnPullOffSegment(item), ctx);
-    }
 }
 
 void SlurTieLayout::computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp)

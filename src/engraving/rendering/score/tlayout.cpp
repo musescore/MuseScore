@@ -3259,12 +3259,13 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
     // The layout of the slur has already been done. Here we layout the H/P letters.
     item->updateHopoText();
 
-    HammerOnPullOff* hopo = item->hammerOnPullOff();
-    Shape hopoSegmentShape = item->mutldata()->shape();
+    Skyline& sk = item->system()->staff(item->staffIdx())->skyline();
 
     for (HammerOnPullOffText* hopoText : item->hopoText()) {
+        bool above = hopoText->placeAbove();
+
         Align align;
-        align.vertical = hopo->up() ? AlignV::BASELINE : AlignV::TOP;
+        align.vertical = above ? AlignV::BASELINE : AlignV::TOP;
         align.horizontal = AlignH::HCENTER;
         hopoText->setAlign(align);
         layoutItem(hopoText, ctx);
@@ -3275,13 +3276,18 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
 
         double vertPadding = 0.5 * item->spatium();
         Shape hopoTextShape = hopoText->ldata()->shape().translated(PointF(centerX, 0.0));
-        double y = hopo->up() ? -hopoTextShape.minVerticalDistance(hopoSegmentShape) : hopoSegmentShape.minVerticalDistance(hopoTextShape);
-        y += hopo->up() ? -vertPadding : vertPadding;
-        y = hopo->up() ? std::min(y, -vertPadding) : std::max(y, item->staff()->staffHeight(item->tick()) + vertPadding);
+        SkylineLine& skyline = above ? sk.north() : sk.south();
+        double y = above ? -skyline.minDistanceToShapeAbove(hopoTextShape) : skyline.minDistanceToShapeBelow(hopoTextShape);
+        y += above ? -vertPadding : vertPadding;
+        y = above ? std::min(y, -vertPadding) : std::max(y, item->staff()->staffHeight(item->tick()) + vertPadding);
 
         hopoText->mutldata()->setPos(centerX, y);
+
+        hopoTextShape.translateY(y);
+        skyline.add(hopoTextShape);
     }
 
+    Shape hopoSegmentShape = item->mutldata()->shape();
     for (HammerOnPullOffText* hopoText : item->hopoText()) {
         hopoSegmentShape.add(hopoText->ldata()->shape().translated(hopoText->pos()));
     }

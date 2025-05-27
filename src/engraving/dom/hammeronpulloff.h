@@ -52,6 +52,8 @@ public:
 
     Color curColor() const override;
 
+    PropertyValue propertyDefault(Pid id) const override;
+
 private:
     Chord* m_startChord = nullptr;
     Chord* m_endChord = nullptr;

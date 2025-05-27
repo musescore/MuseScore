@@ -228,6 +228,7 @@ HammerOnPullOffText::HammerOnPullOffText(HammerOnPullOffSegment* parent)
     : TextBase(ElementType::HAMMER_ON_PULL_OFF_TEXT, parent, TextStyleType::HAMMER_ON_PULL_OFF,
                ElementFlag::MOVABLE | ElementFlag::GENERATED)
 {
+    resetProperty(Pid::PLACEMENT);
     initElementStyle(&hopoStyle);
 }
 
@@ -277,5 +278,15 @@ Color HammerOnPullOffText::curColor() const
     }
 
     return selected() || parentItem()->selected() ? engravingConf->criticalSelectedColor() : engravingConf->criticalColor();
+}
+
+PropertyValue HammerOnPullOffText::propertyDefault(Pid id) const
+{
+    switch (id) {
+    case Pid::PLACEMENT:
+        return PlacementV::ABOVE;
+    default:
+        return TextBase::propertyDefault(id);
+    }
 }
 } // namespace mu::engraving
