@@ -19,17 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
+#include "webapi.h"
 
-#include "modularity/imodulesetup.h"
+#include "global/io/file.h"
 
-namespace mu::webbridge {
-class WebBridgeModule : public muse::modularity::IModuleSetup
+#include "log.h"
+
+using namespace muse;
+using namespace mu::webbridge;
+
+void WebApi::onclickTest1(int num)
 {
-public:
+    LOGI() << "num: " << num;
+    interactive()->info("onclickTest1", "Hey!");
+}
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void onStartApp() override;
-};
+void WebApi::load(const void* source, unsigned int len)
+{
+    LOGI() << source << ", len: " << len;
+    ByteArray data = ByteArray::fromRawData(reinterpret_cast<const char*>(source), len);
+    io::path_t tempFilePath = "/mu/temp/current.mscz";
+    io::File::writeFile(tempFilePath, data);
+
+    dispatcher()->dispatch("file-open", actions::ActionData::make_arg1(QUrl::fromLocalFile(tempFilePath.toQString())));
+
+    io::File::remove(tempFilePath);
 }

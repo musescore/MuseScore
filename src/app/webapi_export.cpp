@@ -22,9 +22,11 @@
 
 #include "log.h"
 
+#include "webbridge/webapi.h"
+
+using namespace mu::webbridge;
+
 extern "C" {
-void onclickTest1(int num)
-{
-    LOGI() << "num: " << num;
-}
+void onclickTest1(int num) { WebApi::onclickTest1(num); }
+void load(const void* source, unsigned int len) { WebApi::load(source, len); }
 }

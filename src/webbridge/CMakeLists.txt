@@ -23,6 +23,11 @@ declare_module(webbridge)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/webbridgemodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/webbridgemodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/webapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/webapi.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/memfilesystem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/memfilesystem.h
     )
 
 setup_module()

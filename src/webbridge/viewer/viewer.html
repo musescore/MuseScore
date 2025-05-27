@@ -57,6 +57,7 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
       <button onclick="onclickTest1()">Test 1</button>
       <button>Test 2</button>
       <button>Test 3</button>
+      <input id="load_file" type="file" onchange="loadFile(this.files[0])">
     </div>
 
     <div id="screen"></div>
@@ -113,6 +114,15 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
     <script type="text/javascript">
       function onclickTest1() {
         window.muapi.onclickTest1()
+      }
+
+      async function loadFile(file) {
+            if (!file) {
+                return
+            }
+
+            const buffer = await file.arrayBuffer();
+            muapi.load(new Uint8Array(buffer)) 
       }
     </script>  
 
