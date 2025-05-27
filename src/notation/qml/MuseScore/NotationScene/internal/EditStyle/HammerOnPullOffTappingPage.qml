@@ -103,14 +103,14 @@ StyledFlickable {
                     spacing: 6
 
                     model: [
-                        {text: qsTrc("notation/editstyle/hammeronpulloff", "HP"), value: true },
-                        {text: qsTrc("notation/editstyle/hammeronpulloff", "hp"), value: false },
+                        {iconCode: IconCode.UPPER_CASE, value: true },
+                        {iconCode: IconCode.LOWER_CASE, value: false },
                     ]
 
                     delegate: FlatRadioButton {
                         width: 40
                         height: 30
-                        text: modelData.text
+                        iconCode: modelData.iconCode
                         checked: hopoPage.hopoUpperCase.value === modelData.value
                         onToggled: hopoPage.hopoUpperCase.value = modelData.value
                     }
