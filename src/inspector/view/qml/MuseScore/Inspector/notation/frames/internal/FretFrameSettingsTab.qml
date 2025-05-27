@@ -116,6 +116,7 @@ FocusableItem {
             propertyItem: root.model ? root.model.frameHeight : null
 
             icon: IconCode.VERTICAL
+            measureUnitsSymbol: qsTrc("global", "sp")
 
             navigationPanel: root.navigationPanel
             navigationRowStart: matchStaffSize.navigation.row + 1

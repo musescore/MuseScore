@@ -69,12 +69,12 @@ mu::engraving::FBox* FretFrameChordsSettingsModel::fretBox() const
 }
 
 void FretFrameChordsSettingsModel::onNotationChanged(const engraving::PropertyIdSet& changedPropertyIdSet,
-                                                     const engraving::StyleIdSet& changedStyleIdSet)
+                                                     const engraving::StyleIdSet&)
 {
     loadProperties(changedPropertyIdSet);
 }
 
-void FretFrameChordsSettingsModel::loadProperties(const engraving::PropertyIdSet& propertyIdSet)
+void FretFrameChordsSettingsModel::loadProperties(const engraving::PropertyIdSet&)
 {
 }
 
