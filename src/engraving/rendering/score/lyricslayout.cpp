@@ -357,9 +357,8 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
         dashCount = std::max(dashCount, 1);
     }
 
-    int maxDashCount = style.styleI(Sid::lyricsMaxDashCount);
-    if (maxDashCount > 0) {
-        dashCount = std::min(dashCount, maxDashCount);
+    if (style.styleB(Sid::lyricsLimitDashCount)) {
+        dashCount = std::min(dashCount, style.styleI(Sid::lyricsMaxDashCount));
     }
 
     if (curLength < dashMinLength && dashCount > 0) {

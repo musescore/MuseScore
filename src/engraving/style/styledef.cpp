@@ -100,7 +100,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(lyricsMelismaMinLength,                     Spatium(1.0)),
     styleDef(lyricsDashPosAtStartOfSystem,               int(LyricsDashSystemStart::STANDARD)),
     styleDef(lyricsAvoidBarlines,                        true),
-    styleDef(lyricsMaxDashCount,                         0),
+    styleDef(lyricsLimitDashCount,                       false),
+    styleDef(lyricsMaxDashCount,                         1),
     styleDef(lyricsCenterDashedSyllables,                false),
 
     styleDef(lyricsOddFontFace,                          "Edwin"),
