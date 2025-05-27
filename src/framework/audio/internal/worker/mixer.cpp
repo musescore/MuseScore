@@ -234,7 +234,6 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
         return 0;
     }
 
-
     processAuxChannels(outBuffer, samplesPerChannel);
     completeOutput(outBuffer, samplesPerChannel);
 
