@@ -208,7 +208,7 @@ public:
         return muse::async::Notification();
     }
 
-    virtual void addTrillNote(mu::engraving::Note*, int, int) 
+    virtual void addTrillNote(mu::engraving::Note*, int, int, int) 
     {
         
     }
@@ -217,6 +217,10 @@ public:
         return 0;
     }
     virtual int trillNoteDurationticks() const 
+    {
+        return 0;
+    }
+    virtual int trillNoteTremolotype() const
     {
         return 0;
     }
