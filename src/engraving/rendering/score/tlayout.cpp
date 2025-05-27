@@ -3259,7 +3259,9 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
     // The layout of the slur has already been done. Here we layout the H/P letters.
     item->updateHopoText();
 
-    Skyline& sk = item->system()->staff(item->staffIdx())->skyline();
+    System* system = item->system();
+    Fraction systemEndTick = system->endTick();
+    Skyline& sk = system->staff(item->staffIdx())->skyline();
 
     for (HammerOnPullOffText* hopoText : item->hopoText()) {
         bool above = hopoText->placeAbove();
@@ -3270,8 +3272,22 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
         hopoText->setAlign(align);
         layoutItem(hopoText, ctx);
 
-        double startX = hopoText->startChord()->systemPos().x() + hopoText->startChord()->upNote()->headWidth();
-        double endX = hopoText->endChord()->systemPos().x();
+        const Chord* startChord = hopoText->startChord();
+        const Chord* endChord = hopoText->endChord();
+        double startX = startChord->systemPos().x() + startChord->upNote()->headWidth();
+        double endX = startX;
+        if (endChord->tick() < systemEndTick) {
+            endX = endChord->systemPos().x();
+        } else {
+            // The last endChord of this segment is in next system. Use end barline instead.
+            Measure* lastMeas = system->lastMeasure();
+            for (Segment* seg = lastMeas->last(); seg; seg = seg->prev()) {
+                if (seg->isType(SegmentType::BarLineType)) {
+                    endX = seg->systemPos().x();
+                    break;
+                }
+            }
+        }
         double centerX = 0.5 * (startX + endX);
 
         double vertPadding = 0.5 * item->spatium();
@@ -3281,8 +3297,8 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
         y += above ? -vertPadding : vertPadding;
         y = above ? std::min(y, -vertPadding) : std::max(y, item->staff()->staffHeight(item->tick()) + vertPadding);
 
-        Note* startNote = above ? hopoText->startChord()->upNote() : hopoText->startChord()->downNote();
-        Note* endNote = above ? hopoText->endChord()->upNote() : hopoText->endChord()->downNote();
+        Note* startNote = above ? startChord->upNote() : startChord->downNote();
+        Note* endNote = above ? endChord->upNote() : endChord->downNote();
         double yNoteLimit = above ? std::min(startNote->y(), endNote->y()) - 2 * vertPadding
                             : std::max(startNote->y(), endNote->y()) + 2 * vertPadding;
         y = above ? std::min(y, yNoteLimit) : std::max(y, yNoteLimit);

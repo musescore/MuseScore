@@ -359,6 +359,17 @@ Segment* Segment::next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segTyp
     return next;
 }
 
+Segment* Segment::next1WithElemsOnTrack(track_idx_t trackIdx, SegmentType segType) const
+{
+    Segment* next = next1(segType);
+
+    while (next && !next->hasElements(trackIdx, trackIdx)) {
+        next = next->next1(segType);
+    }
+
+    return next;
+}
+
 Segment* Segment::next1MM(SegmentType types) const
 {
     for (Segment* s = next1MM(); s; s = s->next1MM()) {

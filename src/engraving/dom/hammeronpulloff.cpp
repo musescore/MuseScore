@@ -101,7 +101,11 @@ void HammerOnPullOffSegment::updateHopoText()
         EngravingItem* endEl = hammerOnPullOff()->endElement();
         endChord = endEl && endEl->isChord() ? toChord(endEl) : nullptr;
     } else {
+        // If the segment doesn't end in this system, the endChord is the first chord of next system
         ChordRest* lastCR = system()->lastChordRest(track());
+        if (lastCR) {
+            lastCR = toChordRest(lastCR->segment()->next1WithElemsOnTrack(track())->element(track()));
+        }
         endChord = lastCR && lastCR->isChord() ? toChord(lastCR) : nullptr;
     }
 
