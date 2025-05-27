@@ -3376,6 +3376,8 @@ void MuseScore::removeTab(int i)
             seq->stopWait();
             seq->setScoreView(0);
             }
+      if (score == mscore->getLastScoreSelection().score())
+            mscore->getLastScoreSelection().clear();
 
       int idx1      = tab1->currentIndex();
       bool firstTab = tab1->view(idx1) == cv;
