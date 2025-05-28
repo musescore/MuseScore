@@ -252,6 +252,19 @@ TEST_F(MidiRenderer_Tests, graceOnBeat)
     checkEventInterval(events, 720, 959, 57, defVol);
 }
 
+TEST_F(MidiRenderer_Tests, graceAfter)
+{
+    constexpr int defVol = 80; // mf
+
+    EventsHolder events = renderMidiEvents(u"grace_after.mscx");
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 4);
+
+    checkEventInterval(events, 0, 239, 60, defVol);
+    checkEventInterval(events, 240, 479, 62, defVol);
+}
+
 TEST_F(MidiRenderer_Tests, graceBeforeBeatGroup)
 {
     constexpr int defVol = 80; // mf
