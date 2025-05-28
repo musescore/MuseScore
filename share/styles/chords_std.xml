@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE museScore [
   <!-- superscript adjust -->
-  <!ENTITY super "0.5">
+  <!ENTITY super "0.36">
   ]>
 <!--
 =====================================================================
@@ -41,7 +41,7 @@
 -->
 
 <!-- allow style to control mag and position adjustments -->
-  <autoAdjust mag="0.8" adjust="-0.4">1</autoAdjust>
+  <autoAdjust mag="0.8" adjust="-0.29">1</autoAdjust>
 
   <font>
 
@@ -183,7 +183,7 @@
 
   <token>
     <name>69</name>
-    <render>:push m:0:-0.6 696 :pop m:0:0.2 699 m:0:-0.2</render>
+    <render>:push m:0:-0.43 696 :pop m:0:0.14 699 m:0:-0.14</render>
     </token>
 
   <token class="extension">
@@ -507,10 +507,10 @@
     <render>m:0:-&super; tX m:0:&super;</render>
     </token>
 
-  <renderRoot>:n :a m:0.05:0</renderRoot>
-  <renderFunction>:a m:0.05:0 :n</renderFunction>
-  <renderBass>m:-0.02:0 / m:0.02:0 :n :a</renderBass>
-  <renderBassOffset>m:-0.4:0.5 dslash m:-0.5:0.4 :n :a m:0:-0.9</renderBassOffset>
+  <renderRoot>:n :a m:0.036:0</renderRoot>
+  <renderFunction>:a m:0.036:0 :n</renderFunction>
+  <renderBass>m:-0.014:0 / m:0.014:0 :n :a</renderBass>
+  <renderBassOffset>m:-0.29:0.36 dslash m:-0.36:0.29 :n :a m:0:-0.65</renderBassOffset>
 
 <!--
       Part III: chord list
@@ -532,7 +532,7 @@
          render   this is a script which contains render commands
                   commands:
                         xxx         draw symbol name xxx
-                        m:x:y       add x:y to current position (1/5 spatium units)
+                        m:x:y       add x:y to current position (units are capheight of root)
                         :push
                         :pop
                         :n          root or base note
