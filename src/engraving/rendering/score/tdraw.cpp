@@ -643,8 +643,6 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
 
         //workaround to make several fonts work correctly with repeatDots
         if (item->score()->engravingFont()->name() == "Emmentaler"
-            || item->score()->engravingFont()->name() == "Gonville"
-            || item->score()->engravingFont()->name() == "MuseJazz"
             // above internal, builtin fonts, below external fonts
             || item->score()->engravingFont()->name() == "Ekmelos") { // not the other ones from the Ekmelos family though (EkmelosXXedo)
             double offset = 0.5 * item->style().spatium() * item->mag();
