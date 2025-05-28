@@ -462,21 +462,6 @@ void NotationConfigurationStub::setCanvasOrientation(muse::Orientation)
 {
 }
 
-bool NotationConfigurationStub::isLimitCanvasScrollArea() const
-{
-    return true;
-}
-
-void NotationConfigurationStub::setIsLimitCanvasScrollArea(bool)
-{
-}
-
-muse::async::Notification NotationConfigurationStub::isLimitCanvasScrollAreaChanged() const
-{
-    static muse::async::Notification n;
-    return n;
-}
-
 bool NotationConfigurationStub::colorNotesOutsideOfUsablePitchRange() const
 {
     return false;

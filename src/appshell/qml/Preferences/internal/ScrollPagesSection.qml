@@ -30,10 +30,8 @@ BaseSection {
     title: qsTrc("appshell/preferences", "Scroll pages")
 
     property int orientation: Qt.Horizontal
-    property alias limitScrollArea: limitScrollAreaBox.checked
 
     signal orientationChangeRequested(int orientation)
-    signal limitScrollAreaChangeRequested(bool limit)
 
     RadioButtonGroup {
         id: radioButtonList
@@ -70,21 +68,6 @@ BaseSection {
             onToggled: {
                 root.orientationChangeRequested(modelData["value"])
             }
-        }
-    }
-
-    CheckBox {
-        id: limitScrollAreaBox
-        width: parent.width
-
-        text: qsTrc("appshell/preferences", "Limit scroll area to page borders")
-
-        navigation.name: "LimitScrollAreaBox"
-        navigation.panel: root.navigation
-        navigation.row: radioButtonList.model.length
-
-        onClicked: {
-            root.limitScrollAreaChangeRequested(!checked)
         }
     }
 }

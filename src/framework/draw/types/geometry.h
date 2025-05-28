@@ -71,7 +71,7 @@ public:
     inline T x() const { return m_x; }
     inline T y() const { return m_y; }
 
-    //! NOTE I don't like this methods, but now it a lot of using
+    //! NOTE I don't like these methods, but now they are being used a lot
     inline number_t<T>& rx() { return m_x; }
     inline number_t<T>& ry() { return m_y; }
 
@@ -358,6 +358,9 @@ public:
 
     inline void pad(double p) { adjust(-p, -p, p, p); }
     inline RectX<T> padded(double p) const { return adjusted(-p, -p, p, p); }
+
+    inline void pad(double px, double py) { adjust(-px, -py, px, py); }
+    inline RectX<T> padded(double px, double py) const { return adjusted(-px, -py, px, py); }
 
     inline RectX<T>& scale(const SizeX<T>& mag)
     {

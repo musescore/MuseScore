@@ -183,23 +183,13 @@ void NotationViewInputController::initZoom()
 
 void NotationViewInputController::initCanvasPos()
 {
-    RectF notationContentRect = m_view->notationContentRect();
-    double totalScoreWidth = notationContentRect.width();
-    double totalScoreHeight = notationContentRect.height();
-
-    double curScaling = m_view->currentScaling();
-    double viewWidth = m_view->width() / curScaling;
-    double viewHeight = m_view->height() / curScaling;
-
-    const double canvasMargin = MScore::horizontalPageGapOdd;
-
-    bool centerHorizontally = totalScoreWidth < viewWidth - 2 * canvasMargin;
-    bool centerVertically = totalScoreHeight < viewHeight - 2 * canvasMargin;
-
-    double xMove = centerHorizontally ? 0.5 * (viewWidth - totalScoreWidth) : canvasMargin;
-    double yMove = centerVertically ? 0.5 * (viewHeight - totalScoreHeight) : canvasMargin;
-
-    m_view->moveCanvas(xMove, yMove);
+    RectF scrollArea = m_view->notationContentRect().padded(MScore::horizontalPageGapOdd);
+    RectF viewport = m_view->viewport();
+    double x = viewport.width() > scrollArea.width()
+               ? scrollArea.center().x() - viewport.width() / 2 : scrollArea.left();
+    double y = viewport.height() > scrollArea.height()
+               ? scrollArea.center().y() - viewport.height() / 2 : scrollArea.top();
+    m_view->moveCanvasToPosition(x, y, false);
 }
 
 void NotationViewInputController::updateZoomAfterSizeChange()
@@ -454,14 +444,15 @@ void NotationViewInputController::moveScreen(int direction)
     }
     auto scale = m_view->currentScaling();
     if (notation->viewMode() == ViewMode::LINE) {
-        m_view->moveCanvasHorizontal(m_view->width() * direction * scrollStep / scale);
+        m_view->moveCanvas(m_view->width() * direction * scrollStep / scale, 0);
     } else {
         auto offset = m_view->toLogical(QPoint());
         auto rect = m_view->notationContentRect();
         if (direction > 0 && offset.y() <= 0.0) {
             if (offset.x() >= -notationScreenPadding) {
-                m_view->moveCanvas(m_view->width() * direction * scrollStep / scale,
-                                   offset.y() - notationScreenPadding - (rect.height() - m_view->height() / scale));
+                m_view->moveCanvas(
+                    m_view->width() * direction * scrollStep / scale,
+                    offset.y() - notationScreenPadding - (rect.height() - m_view->height() / scale));
             }
         } else if (direction < 0 && offset.y() >= (rect.height() - m_view->height() / scale)) {
             auto dx = m_view->width() * direction * scrollStep / scale;
@@ -469,7 +460,7 @@ void NotationViewInputController::moveScreen(int direction)
                 m_view->moveCanvas(dx, offset.y() + notationScreenPadding);
             }
         } else {
-            m_view->moveCanvasVertical(m_view->height() * direction * scrollStep / scale);
+            m_view->moveCanvas(0, m_view->height() * direction * scrollStep / scale);
         }
     }
 }
@@ -488,11 +479,11 @@ void NotationViewInputController::movePage(int direction)
     if (configuration()->canvasOrientation().val == muse::Orientation::Vertical) {
         qreal offset = std::min((page->height() + notationScreenPadding) * direction, m_view->toLogical(
                                     QPoint()).y() + notationScreenPadding);
-        m_view->moveCanvasVertical(offset);
+        m_view->moveCanvas(0, offset);
     } else {
         qreal offset
             = std::min((page->width() + notationScreenPadding) * direction, m_view->toLogical(QPoint()).x() + notationScreenPadding);
-        m_view->moveCanvasHorizontal(offset);
+        m_view->moveCanvas(offset, 0);
     }
 }
 
@@ -587,7 +578,7 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
         qreal correction = 1.0 / m_view->currentScaling();
         if (keyState & Qt::ShiftModifier) {
             int abs = sqrt(dx * dx + dy * dy) * (dy > -dx ? 1 : -1);
-            m_view->moveCanvasHorizontal(abs * correction);
+            m_view->moveCanvas(abs * correction, 0);
         } else {
             m_view->moveCanvas(dx * correction, dy * correction);
         }

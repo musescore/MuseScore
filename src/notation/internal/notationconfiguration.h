@@ -179,10 +179,6 @@ public:
     muse::ValCh<muse::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(muse::Orientation orientation) override;
 
-    bool isLimitCanvasScrollArea() const override;
-    void setIsLimitCanvasScrollArea(bool limited) override;
-    muse::async::Notification isLimitCanvasScrollAreaChanged() const override;
-
     bool colorNotesOutsideOfUsablePitchRange() const override;
     void setColorNotesOutsideOfUsablePitchRange(bool value) override;
     muse::async::Channel<bool> colorNotesOutsideOfUsablePitchRangeChanged() const override;
@@ -294,7 +290,6 @@ private:
     muse::async::Channel<muse::io::path_t> m_userStylesPathChanged;
     muse::async::Channel<muse::io::path_t> m_userMusicFontsPathChanged;
     muse::async::Notification m_scoreOrderListPathsChanged;
-    muse::async::Notification m_isLimitCanvasScrollAreaChanged;
     muse::async::Channel<int> m_selectionProximityChanged;
     muse::async::Channel<bool> m_colorNotesOutsideOfUsablePitchRangeChanged;
     muse::async::Channel<bool> m_warnGuitarBendsChanged;
