@@ -196,9 +196,20 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                         Chord* chord1 = _tremoloTwoChord->chord1();
                         Chord* chord2 = _tremoloTwoChord->chord2();
 
-                        Note* leftNote = chord1->notes()[chord1->notes().size() - 1];
+                        Note* leftFirstNote = chord1->notes()[0];
+                        Note* leftLastNote = chord1->notes()[chord1->notes().size() - 1];
+                        Note* leftNote = leftFirstNote;
+                        if (leftFirstNote->canvasPos().y() < leftLastNote->canvasPos().y()) {
+                            leftNote = leftLastNote;
+                        }
                         curr_measure_trill_notes.insert(leftNote);
-                        Note* rightNote = chord2->notes()[chord2->notes().size() - 1];
+                        
+                        Note* rightFirstNote = chord2->notes()[0];
+                        Note* rightLastNote = chord2->notes()[chord2->notes().size() - 1];
+                        Note* rightNote = rightFirstNote;
+                        if (rightFirstNote->canvasPos().y() < rightLastNote->canvasPos().y()) {
+                            rightNote = rightLastNote;
+                        }
                         curr_measure_trill_notes.insert(rightNote);
                         tremolo_half_map[leftNote] = true;
                         tremolo_half_map[rightNote] = true;
@@ -226,6 +237,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
         if (isPlaying) {
             std::vector<EngravingItem*> engravingItemList = s->elist();
             size_t len = engravingItemList.size();
+            bool curr_trill_note_checked = false;
+            bool curr_trill_note1_checked = false;
             for (size_t i = 0; i < len; i++) {
                 EngravingItem* engravingItem = engravingItemList[i];
                 if (engravingItem == nullptr) {
@@ -268,32 +281,61 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                             Note *_pre_note = toNote(item);
                             for (Note* mnote : curr_measure_trill_notes) {
                                 if (mnote == _pre_note) {
-                                    if (curr_trill_note != _pre_note) {
-                                        curr_trill_note = _pre_note;
-                                        int logic_tremoloType = 0;
-                                        int _duration_ticks = duration_ticks;
-                                        if (tremolo_type_map.find(curr_trill_note) != tremolo_type_map.end()) {
-                                            if (tremolo_half_map[curr_trill_note]) {
-                                                _duration_ticks /= 2;
-                                            }
-                                            int _tremoloType = tremolo_type_map[curr_trill_note];
-                                            TremoloType tremoloType = (TremoloType)_tremoloType;
-                                            if (tremoloType == TremoloType::R8 || tremoloType == TremoloType::C8) {
-                                                logic_tremoloType = 20;
-                                            } else if (tremoloType == TremoloType::R16 || tremoloType == TremoloType::C16) {
-                                                logic_tremoloType = 40;
-                                            } else if (tremoloType == TremoloType::R32 || tremoloType == TremoloType::C32) {
-                                                logic_tremoloType = 80;
-                                            } else if (tremoloType == TremoloType::R64 || tremoloType == TremoloType::C64) {
-                                                logic_tremoloType = 160;
-                                            } else if (tremoloType == TremoloType::BUZZ_ROLL) {
-                                                logic_tremoloType = 50;
-                                            }
-                                        } 
-                                        m_notation->interaction()->addTrillNote(curr_trill_note, curr_trill_note->tick().ticks(), _duration_ticks, logic_tremoloType);
-                                        m_notation->interaction()->trillNoteUpdate();
+                                    if (!curr_trill_note_checked) {
+                                        if (curr_trill_note != _pre_note) {
+                                            curr_trill_note_checked = true;
+                                            curr_trill_note = _pre_note;
+                                            int logic_tremoloType = 0;
+                                            int _duration_ticks = duration_ticks;
+                                            if (tremolo_type_map.find(curr_trill_note) != tremolo_type_map.end()) {
+                                                if (tremolo_half_map[curr_trill_note]) {
+                                                    _duration_ticks /= 2;
+                                                }
+                                                int _tremoloType = tremolo_type_map[curr_trill_note];
+                                                TremoloType tremoloType = (TremoloType)_tremoloType;
+                                                if (tremoloType == TremoloType::R8 || tremoloType == TremoloType::C8) {
+                                                    logic_tremoloType = 20;
+                                                } else if (tremoloType == TremoloType::R16 || tremoloType == TremoloType::C16) {
+                                                    logic_tremoloType = 40;
+                                                } else if (tremoloType == TremoloType::R32 || tremoloType == TremoloType::C32) {
+                                                    logic_tremoloType = 80;
+                                                } else if (tremoloType == TremoloType::R64 || tremoloType == TremoloType::C64) {
+                                                    logic_tremoloType = 160;
+                                                } else if (tremoloType == TremoloType::BUZZ_ROLL) {
+                                                    logic_tremoloType = 50;
+                                                }
+                                            } 
+                                            m_notation->interaction()->addTrillNote(curr_trill_note, curr_trill_note->tick().ticks(), _duration_ticks, logic_tremoloType);
+                                            m_notation->interaction()->trillNoteUpdate();
+                                        }
+                                    } else if (curr_trill_note_checked && !curr_trill_note1_checked) {
+                                        if (curr_trill_note1 != _pre_note) {
+                                            curr_trill_note1_checked = true;
+                                            curr_trill_note1 = _pre_note;
+                                            int logic_tremoloType = 0;
+                                            int _duration_ticks = duration_ticks;
+                                            if (tremolo_type_map.find(curr_trill_note1) != tremolo_type_map.end()) {
+                                                if (tremolo_half_map[curr_trill_note1]) {
+                                                    _duration_ticks /= 2;
+                                                }
+                                                int _tremoloType = tremolo_type_map[curr_trill_note1];
+                                                TremoloType tremoloType = (TremoloType)_tremoloType;
+                                                if (tremoloType == TremoloType::R8 || tremoloType == TremoloType::C8) {
+                                                    logic_tremoloType = 20;
+                                                } else if (tremoloType == TremoloType::R16 || tremoloType == TremoloType::C16) {
+                                                    logic_tremoloType = 40;
+                                                } else if (tremoloType == TremoloType::R32 || tremoloType == TremoloType::C32) {
+                                                    logic_tremoloType = 80;
+                                                } else if (tremoloType == TremoloType::R64 || tremoloType == TremoloType::C64) {
+                                                    logic_tremoloType = 160;
+                                                } else if (tremoloType == TremoloType::BUZZ_ROLL) {
+                                                    logic_tremoloType = 50;
+                                                }
+                                            } 
+                                            m_notation->interaction()->addTrillNote1(curr_trill_note1, curr_trill_note1->tick().ticks(), _duration_ticks, logic_tremoloType);
+                                            m_notation->interaction()->trillNoteUpdate1();
+                                        }
                                     }
-                                    break;
                                 }
                             }
                         
@@ -859,6 +901,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
     m_notation->interaction()->arpeggioTick(tick.ticks());
     if (m_notation->interaction()->trillTick(tick.ticks())) {
         curr_trill_note = nullptr;
+    }
+    if (m_notation->interaction()->trillTick1(tick.ticks())) {
+        curr_trill_note1 = nullptr;
     }
 
     // if (measureNo < 2) {
