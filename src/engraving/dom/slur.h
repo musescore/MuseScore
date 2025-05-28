@@ -116,8 +116,6 @@ public:
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 
-    static int calcStemArrangement(EngravingItem* start, EngravingItem* end);
-
     double scalingFactor() const override;
 
     void undoSetIncoming(bool incoming);
@@ -127,7 +125,6 @@ public:
     bool isIncoming() const;
     bool isOutgoing() const;
 private:
-    M_PROPERTY2(int, sourceStemArrangement, setSourceStemArrangement, -1)
     M_PROPERTY2(ConnectedElement, connectedElement, setConnectedElement, ConnectedElement::NONE)
     M_PROPERTY2(PartialSpannerDirection, partialSpannerDirection, setPartialSpannerDirection, PartialSpannerDirection::NONE)
 

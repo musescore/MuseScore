@@ -4014,10 +4014,7 @@ void TRead::read(Slur* s, XmlReader& e, ReadContext& ctx)
 bool TRead::readProperties(Slur* s, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
-    if (tag == "stemArr") {
-        s->setSourceStemArrangement(e.readInt());
-        return true;
-    } else if (TRead::readProperty(s, tag, e, ctx, Pid::PARTIAL_SPANNER_DIRECTION)) {
+    if (TRead::readProperty(s, tag, e, ctx, Pid::PARTIAL_SPANNER_DIRECTION)) {
         return true;
     }
 
