@@ -138,6 +138,16 @@ bool InteractiveProvider::isSelectColorOpened() const
 
 RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
 {
+#ifdef Q_OS_WASM
+    NOT_SUPPORTED;
+    std::abort();
+    {
+        RetVal<Val> rv;
+        rv.ret = muse::make_ret(Ret::Code::NotSupported);
+        return rv;
+    }
+#endif
+
     UriQuery q = q_;
 
     //! NOTE Disable Dialog.exec()

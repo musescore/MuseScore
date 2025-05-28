@@ -23,14 +23,18 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+import Muse.Dock 1.0
 
 import MuseScore.AppShell 1.0
 
 import "../"
 import "../../"
+import "../../NotationPage"
 
 AppWindow {
     id: root
+
+    flags: Qt.FramelessWindowHint
 
     AppMenuBar {
         id: appMenuBar
@@ -40,15 +44,98 @@ AppWindow {
     }
 
     Component.onCompleted: {
-        window.init()
+        dockwin.init()
     }
 
-    WindowContent {
-        id: window
+    // WindowContent {
+    //     id: window
+
+    //     anchors.top: appMenuBar.bottom
+    //     anchors.left: parent.left
+    //     anchors.right: parent.right
+    //     anchors.bottom: parent.bottom
+    // }
+
+    DockWindow {
+        id: dockwin
 
         anchors.top: appMenuBar.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+
+        objectName: "WindowContent"
+
+        onPageLoaded: {
+            interactiveProvider.onPageOpened()
+        }
+
+        InteractiveProvider {
+            id: interactiveProvider
+            topParent: dockwin
+
+            onRequestedDockPage: function(uri, params) {
+                uri = "musescore://notation"
+                dockwin.loadPage(uri, params)
+            }
+        }
+
+        NavigationSection {
+            id: topToolbarKeyNavSec
+            name: "TopTool"
+            order: 1
+        }
+
+        // toolBars: [
+        //     DockToolBar {
+        //         id: mainToolBar
+
+        //         objectName: "mainToolBar"
+        //         title: qsTrc("appshell", "Main toolbar")
+
+        //         floatable: false
+        //         closable: false
+
+        //         navigationSection: topToolbarKeyNavSec
+
+        //         MainToolBar {
+        //             id: toolBar
+        //             navigation.section: mainToolBar.navigationSection
+        //             navigation.order: 1
+
+        //             currentUri: dockwin.currentPageUri
+
+        //             navigation.onActiveChanged: {
+        //                 if (navigation.active) {
+        //                     mainToolBar.forceActiveFocus()
+        //                 }
+        //             }
+
+        //             onSelected: function(uri) {
+        //                 api.launcher.open(uri)
+        //             }
+
+        //             Component.onCompleted: {
+        //                 toolBar.focusOnFirst()
+        //             }
+        //         }
+        //     }
+        // ]
+
+        pages: [
+            // HomePage {
+            //     window: root.window
+            // },
+
+            NotationPage {
+                topToolbarKeyNavSec: topToolbarKeyNavSec
+            }//,
+
+            //         PublishPage {
+            //             topToolbarKeyNavSec: topToolbarKeyNavSec
+            //         },
+
+            //         DevToolsPage {}
+        ]
     }
 }
