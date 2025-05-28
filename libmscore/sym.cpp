@@ -6622,7 +6622,7 @@ void ScoreFont::scanUserFonts(const QString& path, bool system)
       QDirIterator iterator(path, QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable);
 
       while (iterator.hasNext()) {
-            QString fontDir = iterator.next();
+            iterator.next();
             QString fontDirPath = iterator.filePath() + "/";
             QString fontDirName = iterator.fileName();
 
@@ -6660,7 +6660,7 @@ void ScoreFont::scanUserFonts(const QString& path, bool system)
 
       // Make sure the fonts are loaded, to avoid the situation that MuseScore
       // thinks a font exists but in practice it has disappeared.
-      for (const ScoreFont& f : userfonts) {
+      for (ScoreFont& f : userfonts) {
             ScoreFont font = f;
             if (!font.face)
                   font.load(system);
@@ -6780,7 +6780,7 @@ void ScoreFont::load(bool system)
                error.offset, qPrintable(error.errorString()));
 
       QJsonObject oo = metadataJson.value("glyphsWithAnchors").toObject();
-      for (const auto &i : oo.keys()) {
+      for (auto &i : oo.keys()) {
             QJsonObject ooo = oo.value(i).toObject();
             SymId symId = Sym::lnhash.value(i, SymId::noSym);
             if (symId == SymId::noSym) {
@@ -6790,7 +6790,7 @@ void ScoreFont::load(bool system)
                   continue;
                   }
             Sym* sym = &_symbols[int(symId)];
-            for (const auto &j : ooo.keys()) {
+            for (auto &j : ooo.keys()) {
                   if (j == "stemDownNW") {
                         qreal x = ooo.value(j).toArray().at(0).toDouble();
                         qreal y = ooo.value(j).toArray().at(1).toDouble();
@@ -6868,7 +6868,7 @@ void ScoreFont::load(bool system)
             { "tieMidpointThickness",          Sid::tieMidWidth },
             { "tupletBracketThickness",        Sid::tupletBracketWidth }
             };
-      for (const auto &i : oo.keys()) {
+      for (auto &i : oo.keys()) {
             for (auto mapping : engravingDefaultsMapping) {
                   if (i == mapping.first) {
                         qreal value = oo.value(i).toDouble();
@@ -7037,7 +7037,7 @@ void ScoreFont::load(bool system)
       QJsonObject oa = metadataJson.value("glyphsWithAlternates").toObject();
       bool ok;
       for (const StylisticAlternate& c : alternate) {
-            QJsonObject::const_iterator i = oa.find(c.key);
+            QJsonObject::const_iterator i = oa.constFind(c.key);
             if (i != oa.end()) {
                   QJsonArray oaa = i.value().toObject().value("alternates").toArray();
                   // locate the relevant altKey in alternate array
