@@ -193,6 +193,9 @@ void EnigmaXmlImporter::importMeasures()
         measure->setTimesig(scoreTimeSig);
         measure->setTicks(scoreTimeSig);
         m_score->measures()->append(measure);
+        if (!m_score->noStaves()) {
+            measure->createStaves(m_score->nstaves() - 1);
+        }
     }
 }
 
@@ -500,8 +503,8 @@ void EnigmaXmlImporter::importStaffItems()
 
 void EnigmaXmlImporter::importPageLayout()
 {
-    // No measures means no valid staff systems
-    if (m_score->measures()->empty()) {
+    // No measures or staves means no valid staff systems
+    if (m_score->measures()->empty() || m_score->noStaves()) {
         return;
     }
     std::vector<std::shared_ptr<others::Page>> pages = m_doc->getOthers()->getArray<others::Page>(m_currentMusxPartId);
@@ -619,11 +622,15 @@ void EnigmaXmlImporter::importPageLayout()
         for (const std::shared_ptr<others::Page>& page : pages) {
             const std::shared_ptr<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystem);
             Fraction pageStartTick = muse::value(m_meas2Tick, firstPageSystem->startMeas, Fraction(-1, 1));
-            if (pageStartTick == endTick + endMeasure->ticks()) {
+            // the last staff system in the score can't be compared to the startTick of the preceding page -
+            // account for that here too, but don't add a page break
+            if (pageStartTick == endTick + endMeasure->ticks() || i + 1 == staffSystems.size()) {
                 isLastSystemOnPage = true;
-                LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
-                lb->setLayoutBreakType(LayoutBreakType::PAGE);
-                sysEnd->add(lb);
+                if (i + 1 < staffSystems.size()) {
+                    LayoutBreak* lb = Factory::createLayoutBreak(sysEnd);
+                    lb->setLayoutBreakType(LayoutBreakType::PAGE);
+                    sysEnd->add(lb);
+                }
                 break;
             }
         }
@@ -638,11 +645,11 @@ void EnigmaXmlImporter::importPageLayout()
             startMeasure->add(upSpacer);
         }
         if (!isLastSystemOnPage) {
-            Spacer* upSpacer = Factory::createSpacer(startMeasure);
-            upSpacer->setSpacerType(SpacerType::FIXED);
-            upSpacer->setTrack(m_score->nstaves() * VOICES); // invisible staves are correctly accounted for on layout
-            upSpacer->setGap(Spatium(FinaleTConv::doubleFromEvpu(rightStaffSystem->bottom + rightStaffSystem->distanceToPrev + -staffSystems[i+1]->top)));
-            startMeasure->add(upSpacer);
+            Spacer* downSpacer = Factory::createSpacer(startMeasure);
+            downSpacer->setSpacerType(SpacerType::FIXED);
+            downSpacer->setTrack(m_score->nstaves() * VOICES); // invisible staves are correctly accounted for on layout
+            downSpacer->setGap(Spatium(FinaleTConv::doubleFromEvpu(rightStaffSystem->bottom + rightStaffSystem->distanceToPrev + (-staffSystems[i+1]->top))));
+            startMeasure->add(downSpacer);
         }
     }
 }
