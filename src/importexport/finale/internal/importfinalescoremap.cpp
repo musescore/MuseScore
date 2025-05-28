@@ -174,11 +174,8 @@ void EnigmaXmlImporter::importMeasures()
     // create global time signatures. local timesigs are set up later
     std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
-        Fraction tick{ 0, 1 };
         MeasureBase* lastMeasure = m_score->measures()->last();
-        if (lastMeasure) {
-            tick = lastMeasure->tick() + lastMeasure->ticks();
-        }
+        Fraction tick(lastMeasure ? lastMeasure->endTick() : Fraction(0, 1));
 
         Measure* measure = Factory::createMeasure(m_score->dummy()->system());
         measure->setTick(tick);
