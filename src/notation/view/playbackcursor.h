@@ -81,6 +81,7 @@ private:
     Note *curr_trill_note = nullptr;
     std::map<Note*, int> tremolo_type_map;
     std::map<Note*, bool> tremolo_half_map;
+    Note *curr_trill_note1 = nullptr;
 
     std::set<ClefType> clefTypes;
     std::unordered_set<ClefType> curr_clefTypes;

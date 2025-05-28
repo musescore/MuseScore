@@ -1304,29 +1304,60 @@ void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int
     trill_duration_ticks = duration_ticks;
     trill_tremolo_type = tremolo_type;
 }
+void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int ticks, int duration_ticks, int tremolo_type) 
+{
+    trill_note1 = note;
+    trill_ticks1 = ticks;
+    trill_duration_ticks1 = duration_ticks;
+    trill_tremolo_type1 = tremolo_type;
+}
 int NotationInteraction::trillNoteTicks() const 
 {
     return trill_ticks;
+}
+int NotationInteraction::trillNoteTicks1() const 
+{
+    return trill_ticks1;
 }
 int NotationInteraction::trillNoteDurationticks() const 
 {
     return trill_duration_ticks;
 }
+int NotationInteraction::trillNoteDurationticks1() const 
+{
+    return trill_duration_ticks1;
+}
 int NotationInteraction::trillNoteTremolotype() const 
 {
     return trill_tremolo_type;
+}
+int NotationInteraction::trillNoteTremolotype1() const 
+{
+    return trill_tremolo_type1;
 }
 int NotationInteraction::trillCurrticks() const 
 {
     return trill_curr_ticks;
 }
+int NotationInteraction::trillCurrticks1() const 
+{
+    return trill_curr_ticks1;
+}
 void NotationInteraction::trillNoteUpdate() 
 {
     m_trillNoteChanged.notify();
 }
+void NotationInteraction::trillNoteUpdate1() 
+{
+    m_trillNoteChanged1.notify();
+}
 mu::engraving::Note* NotationInteraction::trillNote() const 
 {
     return trill_note;
+}
+mu::engraving::Note* NotationInteraction::trillNote1() const 
+{
+    return trill_note1;
 }
 bool NotationInteraction::trillTick(int ticks) 
 {
@@ -1347,13 +1378,40 @@ bool NotationInteraction::trillTick(int ticks)
     m_trillTickChanged.notify();
     return false;
 }
+bool NotationInteraction::trillTick1(int ticks) 
+{
+    if (trill_duration_ticks1 == 0) {
+        return false;
+    }
+    if (ticks < trill_ticks1 || ticks > trill_ticks1 + trill_duration_ticks1) 
+    {
+        trill_curr_ticks1 = 0;
+        trill_ticks1 = 0;
+        trill_duration_ticks1 = 0;
+        trill_tremolo_type1 = 0;
+        trill_note1 = nullptr;
+        m_trillTickChanged1.notify();
+        return true;
+    } 
+    trill_curr_ticks1 = ticks;
+    m_trillTickChanged1.notify();
+    return false;
+}
 muse::async::Notification NotationInteraction::trillNoteChanged() 
 {
     return m_trillNoteChanged;
 }
+muse::async::Notification NotationInteraction::trillNoteChanged1() 
+{
+    return m_trillNoteChanged1;
+}
 muse::async::Notification NotationInteraction::trillTickChanged() 
 {
     return m_trillTickChanged;
+}
+muse::async::Notification NotationInteraction::trillTickChanged1() 
+{
+    return m_trillTickChanged1;
 }
 
 
