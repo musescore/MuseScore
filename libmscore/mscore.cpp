@@ -353,7 +353,7 @@ void MScore::init()
             ":/fonts/leland/LelandText.otf",
             ":/fonts/bravura/BravuraText.otf",
             ":/fonts/gootville/GootvilleText.otf",
-            ":/fonts/mscore/MScoreText.ttf",
+            ":/fonts/mscore/MScoreText.otf",
             ":/fonts/petaluma/PetalumaText.otf",
             ":/fonts/petaluma/PetalumaScript.otf",
             ":/fonts/finalemaestro/FinaleMaestroText.otf",

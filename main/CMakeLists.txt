@@ -488,7 +488,7 @@ endif (MINGW)
 if (APPLE)
      install (FILES
       ../fonts/gootville/GootvilleText.otf
-      ../fonts/mscore/MScoreText.ttf
+      ../fonts/mscore/MScoreText.otf
       ../fonts/musejazz/MuseJazzText.otf
       ../fonts/campania/Campania.otf
       ../fonts/edwin/Edwin-Roman.otf

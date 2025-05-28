@@ -2,7 +2,7 @@
     <qresource prefix="/">
         <file alias="fonts/leland/Leland.otf">../fonts/leland/Leland.otf</file>
         <file alias="fonts/bravura/Bravura.otf">../fonts/bravura/Bravura.otf</file>
-        <file alias="fonts/mscore/mscore.ttf">../fonts/mscore/mscore.ttf</file>
+        <file alias="fonts/mscore/mscore.ttf">../fonts/mscore/MScore.otf</file>
         <file alias="fonts/gootville/Gootville.otf">../fonts/gootville/Gootville.otf</file>
         <file alias="fonts/musejazz/MuseJazz.otf">../fonts/musejazz/MuseJazz.otf</file>
         <file alias="fonts/petaluma/Petaluma.otf">../fonts/petaluma/Petaluma.otf</file>

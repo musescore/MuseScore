@@ -39,7 +39,7 @@ static const int FALLBACK_FONT = 1;       // Bravura
 QVector<ScoreFont> ScoreFont::_builtinScoreFonts {
       ScoreFont("Leland",     "Leland",      ":/fonts/leland/",    "Leland.otf"   ),
       ScoreFont("Bravura",    "Bravura",     ":/fonts/bravura/",   "Bravura.otf"  ),
-      ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",    "mscore.ttf"   ),
+      ScoreFont("Emmentaler", "MScore",      ":/fonts/mscore/",    "MScore.otf"   ),
       ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf"),
       ScoreFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/",  "MuseJazz.otf" ),
       ScoreFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/",  "Petaluma.otf" ),
