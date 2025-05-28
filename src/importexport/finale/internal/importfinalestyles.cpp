@@ -175,6 +175,16 @@ static Sid styleIdx(const std::string& name)
     return MStyle::styleIdx(nameStr);
 }
 
+static void writeEvpuSpace(MStyle& style, Sid sid, Evpu evpu)
+{
+    style.set(sid, FinaleTConv::doubleFromEvpu(evpu));
+}
+
+static void writeEfixSpace(MStyle& style, Sid sid, Efix efix)
+{
+    style.set(sid, FinaleTConv::doubleFromEfix(efix));
+}
+
 static void writeFontPref(MStyle& style, const std::string& namePrefix, const FontInfo* fontInfo)
 {
     style.set(styleIdx(namePrefix + "FontFace"), String::fromStdString(fontInfo->getName()));
@@ -216,8 +226,8 @@ static void writeFramePrefs(MStyle& style, const std::string& namePrefix, const 
     } else {
         style.set(styleIdx(namePrefix + "FrameType"), int(FrameType::SQUARE));
     }
-    style.set(styleIdx(namePrefix + "FramePadding"), enclosure->xMargin / EVPU_PER_SPACE);
-    style.set(styleIdx(namePrefix + "FrameWidth"), enclosure->lineWidth / EFIX_PER_SPACE);
+    writeEvpuSpace(style, styleIdx(namePrefix + "FramePadding"), enclosure->xMargin);
+    writeEfixSpace(style, styleIdx(namePrefix + "FrameWidth"), enclosure->lineWidth);
     style.set(styleIdx(namePrefix + "FrameRound"),
               enclosure->roundCorners ? int(lround(enclosure->cornerRadius / EFIX_PER_EVPU)) : 0);
 }
@@ -263,7 +273,7 @@ static void writePagePrefs(MStyle& style, const FinalePreferences& prefs)
                double(pagePrefs->facingPages ? pagePrefs->rightPageMarginBottom : pagePrefs->leftPageMarginBottom) / EVPU_PER_INCH);
     style.set(Sid::pageTwosided, pagePrefs->facingPages);
     style.set(Sid::enableIndentationOnFirstSystem, pagePrefs->differentFirstSysMargin);
-    style.set(Sid::firstSystemIndentationValue, double(pagePrefs->firstSysMarginLeft) / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::firstSystemIndentationValue, pagePrefs->firstSysMarginLeft);
 
     // Calculate Spatium
     const double pagePercent = double(pagePrefs->pagePercent) / 100.0;
@@ -322,52 +332,52 @@ void writeLineMeasurePrefs(MStyle& style, const FinalePreferences& prefs)
 {
     using RepeatWingStyle = options::RepeatOptions::WingStyle;
 
-    style.set(Sid::barWidth, prefs.barlineOptions->barlineWidth / EFIX_PER_SPACE);
-    style.set(Sid::doubleBarWidth, prefs.barlineOptions->barlineWidth / EFIX_PER_SPACE);
-    style.set(Sid::endBarWidth, prefs.barlineOptions->thickBarlineWidth / EFIX_PER_SPACE);
+    writeEfixSpace(style, Sid::barWidth, prefs.barlineOptions->barlineWidth);
+    writeEfixSpace(style, Sid::doubleBarWidth, prefs.barlineOptions->barlineWidth);
+    writeEfixSpace(style, Sid::endBarWidth, prefs.barlineOptions->thickBarlineWidth);
 
     // these calculations are based on observed behavior
-    style.set(Sid::doubleBarDistance,
-               (prefs.barlineOptions->doubleBarlineSpace - prefs.barlineOptions->barlineWidth) / EFIX_PER_SPACE);
-    style.set(Sid::endBarDistance, prefs.barlineOptions->finalBarlineSpace / EFIX_PER_SPACE);
-    style.set(Sid::repeatBarlineDotSeparation, prefs.repeatOptions->forwardDotHPos / EVPU_PER_SPACE);
+    writeEfixSpace(style, Sid::doubleBarDistance,
+                   prefs.barlineOptions->doubleBarlineSpace - prefs.barlineOptions->barlineWidth);
+    writeEfixSpace(style, Sid::endBarDistance, prefs.barlineOptions->finalBarlineSpace);
+    writeEvpuSpace(style, Sid::repeatBarlineDotSeparation, prefs.repeatOptions->forwardDotHPos);
     style.set(Sid::repeatBarTips, prefs.repeatOptions->wingStyle != RepeatWingStyle::None);
 
     style.set(Sid::startBarlineSingle, prefs.barlineOptions->drawLeftBarlineSingleStaff);
     style.set(Sid::startBarlineMultiple, prefs.barlineOptions->drawLeftBarlineMultipleStaves);
 
     style.set(Sid::bracketWidth, 0.5); // Hard-coded in Finale
-    style.set(Sid::bracketDistance, -(prefs.braceOptions->defBracketPos) / EVPU_PER_SPACE);
-    style.set(Sid::akkoladeBarDistance, -prefs.braceOptions->defBracketPos / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::bracketDistance, -(prefs.braceOptions->defBracketPos));
+    writeEvpuSpace(style, Sid::akkoladeBarDistance, -prefs.braceOptions->defBracketPos);
 
-    style.set(Sid::clefLeftMargin, prefs.clefOptions->clefFrontSepar / EVPU_PER_SPACE);
-    style.set(Sid::keysigLeftMargin, prefs.keyOptions->keyFront / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::clefLeftMargin, prefs.clefOptions->clefFrontSepar);
+    writeEvpuSpace(style, Sid::keysigLeftMargin, prefs.keyOptions->keyFront);
 
     const double timeSigSpaceBefore = prefs.forPartId
                                           ? prefs.timeOptions->timeFrontParts
                                           : prefs.timeOptions->timeFront;
-    style.set(Sid::timesigLeftMargin, timeSigSpaceBefore / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::timesigLeftMargin, timeSigSpaceBefore);
 
-    style.set(Sid::clefKeyDistance,
-               (prefs.clefOptions->clefBackSepar + prefs.clefOptions->clefKeySepar + prefs.keyOptions->keyFront) / EVPU_PER_SPACE);
-    style.set(Sid::clefTimesigDistance,
-               (prefs.clefOptions->clefBackSepar + prefs.clefOptions->clefTimeSepar + timeSigSpaceBefore) / EVPU_PER_SPACE);
-    style.set(Sid::keyTimesigDistance,
-               (prefs.keyOptions->keyBack + prefs.keyOptions->keyTimeSepar + timeSigSpaceBefore) / EVPU_PER_SPACE);
-    style.set(Sid::keyBarlineDistance, prefs.repeatOptions->afterKeySpace / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::clefKeyDistance,
+               (prefs.clefOptions->clefBackSepar + prefs.clefOptions->clefKeySepar + prefs.keyOptions->keyFront));
+    writeEvpuSpace(style, Sid::clefTimesigDistance,
+               (prefs.clefOptions->clefBackSepar + prefs.clefOptions->clefTimeSepar + timeSigSpaceBefore));
+    writeEvpuSpace(style, Sid::keyTimesigDistance,
+               (prefs.keyOptions->keyBack + prefs.keyOptions->keyTimeSepar + timeSigSpaceBefore));
+    writeEvpuSpace(style, Sid::keyBarlineDistance, prefs.repeatOptions->afterKeySpace);
 
     // Skipped: systemHeaderDistance, systemHeaderTimeSigDistance: these do not translate well from Finale
 
-    style.set(Sid::clefBarlineDistance, -prefs.clefOptions->clefChangeOffset / EVPU_PER_SPACE);
-    style.set(Sid::timesigBarlineDistance, prefs.repeatOptions->afterClefSpace / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::clefBarlineDistance, -prefs.clefOptions->clefChangeOffset);
+    writeEvpuSpace(style, Sid::timesigBarlineDistance, prefs.repeatOptions->afterClefSpace);
 
-    style.set(Sid::measureRepeatNumberPos, -(prefs.alternateNotationOptions->twoMeasNumLift + 0.5) / EVPU_PER_SPACE);
-    style.set(Sid::staffLineWidth, prefs.lineCurveOptions->staffLineWidth / EFIX_PER_SPACE);
-    style.set(Sid::ledgerLineWidth, prefs.lineCurveOptions->legerLineWidth / EFIX_PER_SPACE);
-    style.set(Sid::ledgerLineLength,
-               (prefs.lineCurveOptions->legerFrontLength + prefs.lineCurveOptions->legerBackLength) / (2 * EVPU_PER_SPACE));
-    style.set(Sid::keysigAccidentalDistance, (prefs.keyOptions->acciAdd + 4) / EVPU_PER_SPACE);  // Observed fudge factor
-    style.set(Sid::keysigNaturalDistance, (prefs.keyOptions->acciAdd + 6) / EVPU_PER_SPACE);     // Observed fudge factor
+    writeEvpuSpace(style, Sid::measureRepeatNumberPos, -(prefs.alternateNotationOptions->twoMeasNumLift + 0.5));
+    writeEfixSpace(style, Sid::staffLineWidth, prefs.lineCurveOptions->staffLineWidth);
+    writeEfixSpace(style, Sid::ledgerLineWidth, prefs.lineCurveOptions->legerLineWidth);
+    writeEvpuSpace(style, Sid::ledgerLineLength,
+               (prefs.lineCurveOptions->legerFrontLength + prefs.lineCurveOptions->legerBackLength) / 2);
+    writeEvpuSpace(style, Sid::keysigAccidentalDistance, (prefs.keyOptions->acciAdd + 4));  // Observed fudge factor
+    writeEvpuSpace(style, Sid::keysigNaturalDistance, (prefs.keyOptions->acciAdd + 6));     // Observed fudge factor
 
     style.set(Sid::smallClefMag, prefs.clefOptions->clefChangePercent / 100.0);
     style.set(Sid::genClef, !prefs.clefOptions->showClefFirstSystemOnly);
@@ -385,40 +395,40 @@ void writeLineMeasurePrefs(MStyle& style, const FinalePreferences& prefs)
 void writeStemPrefs(MStyle& style, const FinalePreferences& prefs)
 {
     style.set(Sid::useStraightNoteFlags, prefs.flagOptions->straightFlags);
-    style.set(Sid::stemWidth, prefs.stemOptions->stemWidth / EFIX_PER_SPACE);
+    writeEfixSpace(style, Sid::stemWidth, prefs.stemOptions->stemWidth);
     style.set(Sid::shortenStem, true);
-    style.set(Sid::stemLength, prefs.stemOptions->stemLength / EVPU_PER_SPACE);
-    style.set(Sid::shortestStem, prefs.stemOptions->shortStemLength / EVPU_PER_SPACE);
-    style.set(Sid::stemSlashThickness, prefs.graceOptions->graceSlashWidth / EFIX_PER_SPACE);
+    writeEvpuSpace(style, Sid::stemLength, prefs.stemOptions->stemLength);
+    writeEvpuSpace(style, Sid::shortestStem, prefs.stemOptions->shortStemLength);
+    writeEfixSpace(style, Sid::stemSlashThickness, prefs.graceOptions->graceSlashWidth);
 }
 
 void writeMusicSpacingPrefs(MStyle& style, const FinalePreferences& prefs)
 {
-    style.set(Sid::minMeasureWidth, prefs.musicSpacing->minWidth / EVPU_PER_SPACE);
-    style.set(Sid::minNoteDistance, prefs.musicSpacing->minDistance / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::minMeasureWidth, prefs.musicSpacing->minWidth);
+    writeEvpuSpace(style, Sid::minNoteDistance, prefs.musicSpacing->minDistance);
     style.set(Sid::measureSpacing, prefs.musicSpacing->scalingFactor);
     /// @todo find a conversion for note distance to tie length.
-    style.set(Sid::minTieLength, prefs.musicSpacing->minDistTiedNotes / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::minTieLength, prefs.musicSpacing->minDistTiedNotes);
 }
 
 void writeNoteRelatedPrefs(MStyle& style, const FinalePreferences& prefs)
 {
-    style.set(Sid::accidentalDistance, prefs.accidentalOptions->acciAcciSpace / EVPU_PER_SPACE);
-    style.set(Sid::accidentalNoteDistance, prefs.accidentalOptions->acciNoteSpace / EVPU_PER_SPACE);
-    style.set(Sid::beamWidth, prefs.beamOptions->beamWidth / EFIX_PER_SPACE);
+    writeEvpuSpace(style, Sid::accidentalDistance, prefs.accidentalOptions->acciAcciSpace);
+    writeEvpuSpace(style, Sid::accidentalNoteDistance, prefs.accidentalOptions->acciNoteSpace);
+    writeEfixSpace(style, Sid::beamWidth, prefs.beamOptions->beamWidth);
     style.set(Sid::useWideBeams, prefs.beamOptions->beamSepar > (0.75 * EVPU_PER_SPACE));
 
     // Finale randomly adds twice the stem width to the length of a beam stub. (Observed behavior)
-    style.set(Sid::beamMinLen,
-              (prefs.beamOptions->beamStubLength + (2.0 * prefs.stemOptions->stemWidth / EFIX_PER_EVPU)) / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::beamMinLen,
+              (prefs.beamOptions->beamStubLength + (2.0 * prefs.stemOptions->stemWidth / EFIX_PER_EVPU)));
 
     style.set(Sid::beamNoSlope, prefs.beamOptions->beamingStyle == options::BeamOptions::FlattenStyle::AlwaysFlat);
     style.set(Sid::dotMag, museMagVal(prefs, options::FontOptions::FontType::AugDots));
-    style.set(Sid::dotNoteDistance, prefs.augDotOptions->dotNoteOffset / EVPU_PER_SPACE);
-    style.set(Sid::dotRestDistance, prefs.augDotOptions->dotNoteOffset / EVPU_PER_SPACE); // Same value as dotNoteDistance
+    writeEvpuSpace(style, Sid::dotNoteDistance, prefs.augDotOptions->dotNoteOffset);
+    writeEvpuSpace(style, Sid::dotRestDistance, prefs.augDotOptions->dotNoteOffset); // Same value as dotNoteDistance
     /// @todo Finale's value is calculated relative to the rightmost point of the previous dot, MuseScore the leftmost.(Observed behavior)
     /// We need to add on the symbol width of one dot for the correct value.
-    style.set(Sid::dotDotDistance, prefs.augDotOptions->dotOffset / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::dotDotDistance, prefs.augDotOptions->dotOffset);
     style.set(Sid::articulationMag, museMagVal(prefs, options::FontOptions::FontType::Articulation));
     style.set(Sid::graceNoteMag, prefs.graceOptions->gracePerc / 100.0);
     style.set(Sid::concertPitch, !prefs.partGlobals->showTransposed);
@@ -429,7 +439,7 @@ void writeNoteRelatedPrefs(MStyle& style, const FinalePreferences& prefs)
 void writeSmartShapePrefs(MStyle& style, const FinalePreferences& prefs)
 {
     // Hairpin-related settings
-    style.set(Sid::hairpinHeight, prefs.smartShapeOptions->shortHairpinOpeningWidth / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::hairpinHeight, prefs.smartShapeOptions->shortHairpinOpeningWidth);
     style.set(Sid::hairpinContHeight, 0.5); // Hardcoded to a half space
     writeCategoryTextFontPref(style, prefs, "hairpin", others::MarkingCategory::CategoryType::Dynamics);
     writeLinePrefs(style, "hairpin",
@@ -438,19 +448,19 @@ void writeSmartShapePrefs(MStyle& style, const FinalePreferences& prefs)
                    prefs.smartShapeOptions->smartDashOff);
 
     // Slur-related settings
-    style.set(Sid::slurEndWidth, prefs.smartShapeOptions->smartSlurTipWidth / EVPU_PER_SPACE);
-    style.set(Sid::slurDottedWidth, prefs.smartShapeOptions->smartLineWidth / EFIX_PER_SPACE);
+    writeEvpuSpace(style, Sid::slurEndWidth, prefs.smartShapeOptions->smartSlurTipWidth);
+    writeEfixSpace(style, Sid::slurDottedWidth, prefs.smartShapeOptions->smartLineWidth);
 
     // Tie-related settings
-    style.set(Sid::tieEndWidth, prefs.tieOptions->tieTipWidth / EVPU_PER_SPACE);
-    style.set(Sid::tieDottedWidth, prefs.smartShapeOptions->smartLineWidth / EFIX_PER_SPACE);
+    writeEvpuSpace(style, Sid::tieEndWidth, prefs.tieOptions->tieTipWidth);
+    writeEfixSpace(style, Sid::tieDottedWidth, prefs.smartShapeOptions->smartLineWidth);
     style.set(Sid::tiePlacementSingleNote, prefs.tieOptions->useOuterPlacement ? TiePlacement::OUTSIDE : TiePlacement::INSIDE);
 	// Note: Finale's 'outer placement' for notes within chords is much closer to inside placement. But outside placement is closer overall.
     style.set(Sid::tiePlacementChord, prefs.tieOptions->useOuterPlacement ? TiePlacement::OUTSIDE : TiePlacement::INSIDE);
 
     // Ottava settings
-    style.set(Sid::ottavaHookAbove, prefs.smartShapeOptions->hookLength / EVPU_PER_SPACE);
-    style.set(Sid::ottavaHookBelow, -prefs.smartShapeOptions->hookLength / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::ottavaHookAbove, prefs.smartShapeOptions->hookLength);
+    writeEvpuSpace(style, Sid::ottavaHookBelow, -prefs.smartShapeOptions->hookLength);
     writeLinePrefs(style, "ottava",
                    prefs.smartShapeOptions->smartLineWidth,
                    prefs.smartShapeOptions->smartDashOn,
@@ -533,18 +543,18 @@ void writeMeasureNumberPrefs(MStyle& style, const FinalePreferences& prefs)
 
     style.set(Sid::createMultiMeasureRests, prefs.forPartId != 0);
     style.set(Sid::minEmptyMeasures, prefs.mmRestOptions->numStart);
-    style.set(Sid::minMMRestWidth, prefs.mmRestOptions->measWidth / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::minMMRestWidth, prefs.mmRestOptions->measWidth);
     style.set(Sid::mmRestNumberPos, (prefs.mmRestOptions->numAdjY / EVPU_PER_SPACE) + 1);
     style.set(Sid::oldStyleMultiMeasureRests,
               prefs.mmRestOptions->useSymbols && prefs.mmRestOptions->useSymsThreshold > 1);
     style.set(Sid::mmRestOldStyleMaxMeasures,
               std::max(prefs.mmRestOptions->useSymsThreshold - 1, 0));
-    style.set(Sid::mmRestOldStyleSpacing, prefs.mmRestOptions->symSpacing / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::mmRestOldStyleSpacing, prefs.mmRestOptions->symSpacing);
 }
 
 void writeRepeatEndingPrefs(MStyle& style, const FinalePreferences& prefs)
 {
-    style.set(Sid::voltaLineWidth, prefs.repeatOptions->bracketLineWidth / EFIX_PER_SPACE);
+    writeEfixSpace(style, Sid::voltaLineWidth, prefs.repeatOptions->bracketLineWidth);
     style.set(Sid::voltaLineStyle, LineType::SOLID);
     writeDefaultFontPref(style, prefs, "volta", options::FontOptions::FontType::Ending);
     style.set(Sid::voltaAlign, Align(AlignH::LEFT, AlignV::BASELINE));
@@ -556,11 +566,11 @@ void writeTupletPrefs(MStyle& style, const FinalePreferences& prefs)
     const auto& tupletOptions = prefs.tupletOptions;
 
     style.set(Sid::tupletOutOfStaff, tupletOptions->avoidStaff);
-    style.set(Sid::tupletStemLeftDistance, tupletOptions->leftHookExt / EVPU_PER_SPACE);
-    style.set(Sid::tupletStemRightDistance, tupletOptions->rightHookExt / EVPU_PER_SPACE);
-    style.set(Sid::tupletNoteLeftDistance, tupletOptions->leftHookExt / EVPU_PER_SPACE);
-    style.set(Sid::tupletNoteRightDistance, tupletOptions->rightHookExt / EVPU_PER_SPACE);
-    style.set(Sid::tupletBracketWidth, tupletOptions->tupLineWidth / EFIX_PER_SPACE);
+    writeEvpuSpace(style, Sid::tupletStemLeftDistance, tupletOptions->leftHookExt);
+    writeEvpuSpace(style, Sid::tupletStemRightDistance, tupletOptions->rightHookExt);
+    writeEvpuSpace(style, Sid::tupletNoteLeftDistance, tupletOptions->leftHookExt);
+    writeEvpuSpace(style, Sid::tupletNoteRightDistance, tupletOptions->rightHookExt);
+    writeEfixSpace(style, Sid::tupletBracketWidth, tupletOptions->tupLineWidth);
 
     switch (tupletOptions->posStyle) {
     case TupletOptions::PositioningStyle::Above:
@@ -598,8 +608,8 @@ void writeTupletPrefs(MStyle& style, const FinalePreferences& prefs)
         style.set(Sid::tupletUseSymbols, false);
     }
 
-    style.set(Sid::tupletBracketHookHeight,
-              (std::max)(-tupletOptions->leftHookLen, -tupletOptions->rightHookLen) / EVPU_PER_SPACE);
+    writeEvpuSpace(style, Sid::tupletBracketHookHeight,
+                (std::max)(-tupletOptions->leftHookLen, -tupletOptions->rightHookLen));
 }
 
 void writeMarkingPrefs(MStyle& style, const FinalePreferences& prefs)
