@@ -66,9 +66,8 @@ for PNG_REF_FILE in $PNG_REF_LIST ; do
     GIF_DIFF_FILE=$OUTPUT_DIR/${FILE_NAME}.diff.gif
     
     if test -f $PNG_CUR_FILE; then
-        compare -metric AE -fuzz 0.0% $PNG_REF_FILE $PNG_CUR_FILE $PNG_DIFF_FILE 2>&1
-        code=$?
-        if ( ($code) > 0); then
+        code=$(compare -metric AE -fuzz 0.0% $PNG_REF_FILE $PNG_CUR_FILE $PNG_DIFF_FILE 2>&1)
+        if (( $code > 0)); then
             echo "Different: ref: $PNG_REF_FILE, current: $PNG_CUR_FILE, code: $code"
             export VTEST_DIFF_FOUND=true
             echo "VTEST_DIFF_FOUND=$VTEST_DIFF_FOUND" >> $GITHUB_ENV
