@@ -206,6 +206,61 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
     }
     return KeyState::None;
 }
+KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const 
+{
+    if (m_trill_duration_ticks1 == 0) {
+        return KeyState::None;
+    }
+
+    if (m_trill_curr_ticks1 >= m_trill_ticks1 && m_trill_curr_ticks1 <= m_trill_ticks1 + m_trill_duration_ticks1) {
+        int left_dis = m_trill_curr_ticks1 - m_trill_ticks1;
+        double ratio = left_dis / static_cast<double>(m_trill_duration_ticks1);
+
+        if (m_trill_tremolo_type1 > 0) {
+            if (receive_note1) {
+                DurationType noteDurationtype = receive_note1->chord()->durationType().type();
+                int frequency = m_trill_tremolo_type1 / 10;
+                if (noteDurationtype == mu::engraving::DurationType::V_WHOLE) {
+                    frequency *= 4;
+                } else if (noteDurationtype == mu::engraving::DurationType::V_HALF) {
+                    frequency *= 2;
+                } 
+                int _ratio_count = static_cast<int>(frequency * ratio);
+                int _int_note_key = static_cast<int>(m_trill_note_key1);
+                if (_ratio_count % 2 == 1) {
+                    _int_note_key += 1;
+                } 
+                if (key == (piano_key_t)_int_note_key) {
+                    return KeyState::Trill;
+                }
+            }
+        } else {
+            if (receive_note1 && receive_note1->chord()->durationType().type() <= mu::engraving::DurationType::V_QUARTER) {
+                int _ratio_count = static_cast<int>(48 * ratio);
+                int _int_note_key = static_cast<int>(m_trill_note_key1);
+                if (_ratio_count % 2 == 0) {
+                    _int_note_key -= 1;
+                } else {
+                    _int_note_key -= 2;
+                }
+                if (key == (piano_key_t)_int_note_key) {
+                    return KeyState::Trill;
+                }
+            } else {
+                int _int_note_key = static_cast<int>(m_trill_note_key1);
+                if (ratio < 0.333 || ratio > 0.666) {
+                    _int_note_key -= 2;
+                } else {
+                    _int_note_key -= 1;
+                }
+                if (key == (piano_key_t)_int_note_key) {
+                    return KeyState::Trill;
+                }
+            }
+        }
+    }
+    return KeyState::None;
+}
 
 bool PianoKeyboardController::playbackKeyStatesEmpty() const 
 {
@@ -387,6 +442,24 @@ void PianoKeyboardController::onNotationChanged()
                 m_trill_note_key = static_cast<piano_key_t>(10000);
             }
         });
+        notation->interaction()->trillNoteChanged1().onNotify(this, [this]() {
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+            m_trill_ticks1 = notation->interaction()->trillNoteTicks1();
+            m_trill_duration_ticks1 = notation->interaction()->trillNoteDurationticks1();
+            
+            Note *receivedNote = notation->interaction()->trillNote1();
+
+            receive_note1 = receivedNote;
+            if (receivedNote) {
+                const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
+                m_trill_note_key1 = static_cast<piano_key_t>(useWrittenPitch ? receivedNote->epitch() : receivedNote->ppitch());
+            } else {
+                m_trill_note_key1 = static_cast<piano_key_t>(10000);
+            }
+        });
 
         notation->interaction()->trillTickChanged().onNotify(this, [this]() {
             auto notation = currentNotation();
@@ -395,6 +468,14 @@ void PianoKeyboardController::onNotationChanged()
             }
             m_trill_curr_ticks = notation->interaction()->trillCurrticks();
             m_trill_tremolo_type = notation->interaction()->trillNoteTremolotype();
+        });
+        notation->interaction()->trillTickChanged1().onNotify(this, [this]() {
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+            m_trill_curr_ticks1 = notation->interaction()->trillCurrticks1();
+            m_trill_tremolo_type1 = notation->interaction()->trillNoteTremolotype1();
         });
 
         notation->interaction()->clefKeySigsKeysChanged().onNotify(this, [this]() {
