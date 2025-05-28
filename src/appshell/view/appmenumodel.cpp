@@ -67,13 +67,17 @@ void AppMenuModel::load()
 #endif
 
     MenuItemList items {
+#ifndef CONFIGURATION_IS_APPWEB
         makeFileMenu(),
+#endif
         makeEditMenu(),
         makeViewMenu(),
         makeAddMenu(),
         makeFormatMenu(),
         makeToolsMenu(),
+#ifndef CONFIGURATION_IS_APPWEB
         makePluginsMenu(),
+#endif
     };
 
     if (globalConfiguration()->devModeEnabled()) {

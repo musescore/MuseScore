@@ -21,11 +21,17 @@
  */
 #include "webbridgemodule.h"
 
+#ifdef Q_OS_WASM
 #include "internal/memfilesystem.h"
+#endif
 
 #include "log.h"
 
 using namespace mu::webbridge;
+
+//! NOTE It can work in two cases:
+//! 1. app-web configuration and wasm build for browser (main case)
+//! 2. app-web configuration and desktop build (develop case)
 
 std::string WebBridgeModule::moduleName() const
 {
@@ -34,8 +40,12 @@ std::string WebBridgeModule::moduleName() const
 
 void WebBridgeModule::registerExports()
 {
+#ifdef Q_OS_WASM
     ioc()->unregister<muse::io::IFileSystem>(moduleName());
     ioc()->registerExport<muse::io::IFileSystem>(moduleName(), new MemFileSystem());
+#endif
+
+
 }
 
 void WebBridgeModule::onStartApp()

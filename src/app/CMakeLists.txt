@@ -195,7 +195,7 @@ if (OS_IS_WIN)
     list(APPEND MSCORE_APPEND_SRC ${WINDOWS_ICONS_RC})
 endif()
 
-if (OS_IS_WASM)
+if (CONFIGURATION_IS_APPWEB)
     list(APPEND LINK_LIB webbridge)
 endif()
 

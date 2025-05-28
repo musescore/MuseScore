@@ -22,7 +22,7 @@
 #ifndef MU_APPSHELL_STARTUPSCENARIO_H
 #define MU_APPSHELL_STARTUPSCENARIO_H
 
-#include "istartupscenario.h"
+#include "../../istartupscenario.h"
 
 #include "async/asyncable.h"
 
@@ -31,7 +31,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "iappshellconfiguration.h"
-#include "isessionsmanager.h"
+#include "../../isessionsmanager.h"
 #include "project/iprojectautosaver.h"
 #include "audioplugins/iregisteraudiopluginsscenario.h"
 

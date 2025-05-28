@@ -324,7 +324,6 @@ include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseSetupConfiguration.cmake)
 ###########################################
 # Global definitions
 ###########################################
-
 if (QT_SUPPORT)
     add_compile_definitions(QT_SUPPORT)
     add_compile_definitions(SCRIPT_INTERFACE)

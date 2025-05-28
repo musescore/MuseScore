@@ -216,7 +216,7 @@
 #include "stubs/project/projectstubmodule.h"
 #endif
 
-#ifdef Q_OS_WASM
+#ifdef CONFIGURATION_IS_APPWEB
 #include "webbridge/webbridgemodule.h"
 #endif
 
@@ -356,7 +356,8 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
 
-#ifdef Q_OS_WASM
+#ifdef CONFIGURATION_IS_APPWEB
+    //! NOTE It should be the last one because it replaces some services.
     app->addModule(new mu::webbridge::WebBridgeModule());
 #endif
 

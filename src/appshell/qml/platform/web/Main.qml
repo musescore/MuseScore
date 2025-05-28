@@ -48,7 +48,7 @@ AppWindow {
     }
 
     // WindowContent {
-    //     id: window
+    //     id: dockwin
 
     //     anchors.top: appMenuBar.bottom
     //     anchors.left: parent.left
@@ -75,7 +75,6 @@ AppWindow {
             topParent: dockwin
 
             onRequestedDockPage: function(uri, params) {
-                uri = "musescore://notation"
                 dockwin.loadPage(uri, params)
             }
         }

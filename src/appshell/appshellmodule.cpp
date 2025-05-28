@@ -32,7 +32,6 @@
 #include "internal/applicationuiactions.h"
 #include "internal/applicationactioncontroller.h"
 #include "internal/appshellconfiguration.h"
-#include "internal/startupscenario.h"
 #include "internal/applicationactioncontroller.h"
 #include "internal/sessionsmanager.h"
 
@@ -69,6 +68,12 @@
 #include "view/internal/platform/macos/macosscrollinghook.h"
 #else
 #include "view/navigableappmenumodel.h"
+#endif
+
+#ifdef CONFIGURATION_IS_APPWEB
+#include "internal/platform/web/startupscenario.h"
+#else
+#include "internal/platform/desktop/startupscenario.h"
 #endif
 
 using namespace mu::appshell;
