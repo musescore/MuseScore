@@ -49,6 +49,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/capo.h"
+#include "engraving/dom/stringtunings.h"
 #include "engraving/types/symid.h"
 
 #include "../utils.h"
@@ -341,6 +342,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
 
     addFermatas();
     addContinuousSlideHammerOn();
+    addTuning();
 }
 
 void GPConverter::convertMasterBar(const GPMasterBar* mB, Context ctx)
@@ -2975,6 +2977,67 @@ void GPConverter::setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measur
 
     cr->setBeamMode(m_previousBeamMode);
     m_previousBeamMode = beamMode;
+}
+
+void GPConverter::addTuning()
+{
+
+    auto isStandardTuning = [](const StringData* sd) -> bool {
+        static std::array<int, 6> standardTuning{ 52, 57, 62, 67, 71, 76 };
+        const auto& sl = sd->stringList();
+
+        if (sl.size() != standardTuning.size()) {
+            return false;
+        }
+
+        for (size_t i = 0; i < standardTuning.size(); ++i) {
+            if (sl.at(i).pitch != standardTuning.at(i)) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    const Measure* m = _score->firstMeasure();
+
+    // NOTE: GP doesn't support multiple tunings on one part
+    // We're safe to just take the very first chord rest segment
+    // and check if it has any non-standard tuning
+    const Fraction& f{ 0, 1 };
+
+    for (auto p : _score->parts()) {
+        for (auto s : p->staves()) {
+            if (!s->isPrimaryStaff()) {
+                continue;
+            }
+
+            auto sd = p->stringData(f, s->idx());
+            std::vector<size_t> visibleStrings(sd->stringList().size());
+
+            for (size_t i = 0; i < visibleStrings.size(); ++i) {
+                visibleStrings[i] = i;
+            }
+
+            if (isStandardTuning(sd)) {
+                continue;
+            }
+
+            Segment* seg = m->findSegment(SegmentType::ChordRest, f);
+
+            IF_ASSERT_FAILED(seg) {
+                LOGE() << "First measure MUST has a chord rest segment after import";
+                return;
+            }
+
+            StringTunings* tun = Factory::createStringTunings(seg);
+            tun->setStringData(*sd);
+            tun->setVisibleStrings(visibleStrings);
+            tun->setTrack(staff2track(s->idx()));
+            tun->setParent(seg);
+            seg->add(tun);
+        }
+    }
 }
 
 void GPConverter::addCapos()

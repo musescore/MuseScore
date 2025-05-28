@@ -52,7 +52,7 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
                 // there is a bug in gp v 7.0.0
                 // All parts marked to use flat for tuning string,
                 // but in real world gp uses tuning presets
-                // sp we have to ignore <Flats/> and <TuningFlat> props
+                // so we have to ignore <Flats/> and <TuningFlat> props
                 readTrackProperties(&propertyNode, track.get(), version == "7");
                 staffNode = staffNode.nextSibling();
                 staffCount++;
