@@ -1770,7 +1770,10 @@ std::vector<OrnamentExcursion> excursions = {
       //  articulation type            set of  duration       body         repeatp      suffix
       //                               styles          prefix                    sustainp
       { SymId::ornamentTurn,                any, _32nd, {},    {1,0,-1,0},   false, true, {}}
+      ,{SymId::ornamentTurnUp,              any, _32nd, {},    {1,0,-1,0},   false, true, {}}
+      ,{SymId::ornamentHaydn,               any, _32nd, {},    {1,0,-1,0},   false, true, {}}
       ,{SymId::ornamentTurnInverted,        any, _32nd, {},    {-1,0,1,0},   false, true, {}}
+      ,{SymId::ornamentTurnUpS,             any, _32nd, {},    {-1,0,1,0},   false, true, {}}
       ,{SymId::ornamentTurnSlash,           any, _32nd, {},    {-1,0,1,0},   false, true, {}}
       ,{SymId::ornamentTrill,           baroque, _32nd, {1,0}, {1,0},        true,  true, {}}
       ,{SymId::ornamentTrill,          defstyle, _32nd, {0,1}, {0,1},        true,  true, {}}

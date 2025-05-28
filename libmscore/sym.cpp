@@ -5194,7 +5194,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       "Double oblique straight lines NW-SE",
       "Double oblique straight lines SW-NE",
       "Curve below",
-      "Haydn ornament",
+      QT_TRANSLATE_NOOP("symUserNames", "Haydn ornament"),
       "Ornament high left concave stroke",
       "Ornament high left convex stroke",
       "Ornament high right concave stroke",
@@ -5265,8 +5265,8 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       QT_TRANSLATE_NOOP("symUserNames", "Turn"),
       QT_TRANSLATE_NOOP("symUserNames", "Inverted turn"),
       QT_TRANSLATE_NOOP("symUserNames", "Turn with slash"),
-      "Turn up",
-      "Inverted turn up",
+      QT_TRANSLATE_NOOP("symUserNames", "Turn up"),
+      QT_TRANSLATE_NOOP("symUserNames", "Inverted turn up"),
       "Curve above",
       "Vertical line",
       "Ornament zig-zag line without right-hand end",
@@ -6183,6 +6183,8 @@ QVector<oldName> oldNames = {
       {"down bow",                              SymId::stringsDownBow },            // scripts.downbow
       {"reverse turn",                          SymId::ornamentTurnInverted },      // scripts.reverseturn
       {"turn",                                  SymId::ornamentTurn },              // scripts.turn
+      {"vertical turn",                         SymId::ornamentTurnUp },            // scripts.verticalturn
+      {"reverse vertical turn",                 SymId::ornamentTurnUpS },           // scripts.reverseverticalturn
       {"trill",                                 SymId::ornamentTrill },             // scripts.trill
       {"upedal heel",                           SymId::keyboardPedalHeel1 },        // scripts.upedalheel
       {"dpedalheel",                            SymId::keyboardPedalHeel2 },        // scripts.dpedalheel

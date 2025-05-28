@@ -644,6 +644,9 @@ bool Articulation::isLuteFingering() const
 bool Articulation::isOrnament() const
       {
       return _symId == SymId::ornamentTurn
+          || _symId == SymId::ornamentTurnUp
+          || _symId == SymId::ornamentTurnUpS
+          || _symId == SymId::ornamentHaydn
           || _symId == SymId::ornamentTurnInverted
           || _symId == SymId::ornamentTurnSlash
           || _symId == SymId::ornamentTrill
