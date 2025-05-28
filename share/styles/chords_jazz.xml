@@ -35,7 +35,6 @@
   <!ENTITY mod "4.5">
 <!-- this is additional superscripting to apply to modifier digits -->
   <!ENTITY modn "1">
-
   ]>
 
 <museScore version="1.24">
@@ -218,7 +217,7 @@
 
   <token>
     <name>0</name>
-    <render>m:0:-4 oslash m:0:4</render>
+    <render>m:0:-2.87 oslash m:0:2.87</render>
     </token>
 
   <token class="modifier">
@@ -243,17 +242,17 @@
 
   <token class="quality">
     <name>add</name>
-    <render>m:0:1.5 sadd m:0:-1.5</render>
+    <render>m:0:1.08 sadd m:0:-1.08</render>
     </token>
 
   <token class="modifier">
     <name>add</name>
-    <render>m:0:-0.5 sadd m:0:0.5</render>
+    <render>m:0:-0.36 sadd m:0:0.36</render>
     </token>
 
   <token class="modifier">
     <name>alt</name>
-    <render>m:-1:0 alt</render>
+    <render>m:-0.72:0 alt</render>
     </token>
 
   <token class="modifier">
@@ -268,22 +267,22 @@
 
   <token class="extension">
     <name>(</name>
-    <render>m:1:-&ext; m:0:-2 ( m:0:2 m:-0:&ext;</render>
+    <render>m:0.72:-&ext; m:0:-1.44 ( m:0:1.44 m:-0:&ext;</render>
     </token>
 
   <token class="extension">
     <name>)</name>
-    <render>m:0:-&ext; m:0:-2 ) m:0:2 m:0:&ext;</render>
+    <render>m:0:-&ext; m:0:-1.44 ) m:0:1.44 m:0:&ext;</render>
     </token>
 
   <token class="extension">
     <name>,</name>
-    <render>m:0:-&ext; m:0:-1 , m:0:1 m:0:&ext;</render>
+    <render>m:0:-&ext; m:0:-0.72 , m:0:0.72 m:0:&ext;</render>
     </token>
 
   <token class="extension">
     <name>/</name>
-    <render>m:0:-&ext; m:0:-1 / m:0:1 m:0:&ext;</render>
+    <render>m:0:-&ext; m:0:-0.72 / m:0:0.72 m:0:&ext;</render>
     </token>
 
   <token class="modifier">
@@ -308,7 +307,7 @@
 
   <token class="modifier">
     <name>b</name>
-    <render>m:0.5:0 sb</render>
+    <render>m:0.36:0 sb</render>
     </token>
 
   <token class="modifier">
@@ -408,8 +407,7 @@
 
   <token class="modifier">
     <name>4</name>
-    <!-- kludge: 4 used with sus mostly, so lower it accordingly -->
-    <render>m:0:0 s4 m:0:0</render>
+    <render>s4</render>
     </token>
 
   <token class="modifier">
@@ -459,7 +457,7 @@
 
   <renderRoot>:n :a </renderRoot>
   <renderFunction>:a :n</renderFunction>
-  <renderBase>/ m:0:1 :n :a m:0:-1</renderBase>
+  <renderBase>/ m:0:0.72 :n :a m:0:-0.72</renderBase>
 
 <!--
       Part III: chord list
@@ -481,7 +479,7 @@
          render   this is a script which contains render commands
                   commands:
                         xxx         draw symbol name xxx
-                        m:x:y       add x:y to current position (1/5 spatium units)
+                        m:x:y       add x:y to current position (units are capheight of root)
                         :push
                         :pop
                         :n          root or base note
@@ -489,20 +487,6 @@
                   if omitted, chord will be rendered directly from the first name listed above
                   so you can get all major seventh chords to render as "ma7" by creating a chord definition
                   with no id or render tag, and just the single name "ma7"
--->
-
-<!--
-
-  <chord>
-    <name>6/9</name>
-    <render>m:1:-2 s6 m:-2.5:0 s/ m:-2:7 s9 m:0:-5</render>
-    </chord>
-
-  <chord>
-    <name>6,9</name>
-    <render>s6 m:0:-&mod; s, m:0:&mod; s9</render>
-    </chord>
-
 -->
 
   </museScore>

@@ -1363,7 +1363,7 @@ void Harmony::renderActionSet(const RenderActionSet* a, HarmonyRenderCtx& ctx)
 void Harmony::renderActionMove(const RenderActionMove* a, HarmonyRenderCtx& ctx)
 {
     const FontMetrics fm = FontMetrics(font());
-    ctx.pos = ctx.pos + a->vec() * fm.height();
+    ctx.pos = ctx.pos + a->vec() * FontMetrics::capHeight(font());
 }
 
 void Harmony::renderActionMoveXHeight(HarmonyRenderCtx& ctx)
