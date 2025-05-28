@@ -255,6 +255,7 @@ void Interactive::showProgress(const std::string& title, Progress* progress)
     provider()->openAsync(uri, params);
 }
 
+#ifdef Q_OS_LINUX
 static UriQuery makeSelectFileQuery(int mode, const QString& title, const io::path_t& dir, const std::vector<std::string>& filter,
                                     bool confirmOverwrite)
 {
@@ -278,6 +279,8 @@ static UriQuery makeSelectFileQuery(int mode, const QString& title, const io::pa
 
     return q;
 }
+
+#endif
 
 io::path_t Interactive::selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter)
 {
@@ -319,7 +322,6 @@ io::path_t Interactive::selectSavingFile(const QString& title, const io::path_t&
     }
 
     return QUrl::fromUserInput(rv.val.toQString()).toLocalFile();
-
 #endif
 }
 
