@@ -345,6 +345,7 @@ mpe::ArticulationTypeSet SymbolsMetaParser::symbolToArticulations(SymId symId, O
         break;
     case SymId::ornamentTurn:
     case SymId::ornamentTurnUp:
+    case SymId::ornamentHaydn:
     case SymId::brassJazzTurn:
         types.emplace(mpe::ArticulationType::Turn);
         break;
