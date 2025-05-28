@@ -37,8 +37,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/istartupscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/startupscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/isessionsmanager.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/sessionsmanager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/sessionsmanager.h
@@ -107,6 +105,17 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/newinstanceloadingscreenview.h
     )
 
+if (CONFIGURATION_IS_APPWEB)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/web/startupscenario.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/web/startupscenario.h
+    )
+else()
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/desktop/startupscenario.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/desktop/startupscenario.h
+    )
+endif()
 
 set(MODULE_LINK
     muse::ui

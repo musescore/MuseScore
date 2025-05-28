@@ -76,9 +76,11 @@ if (MUE_BUILD_PROJECT_MODULE)
     add_subdirectory(project)
 endif()
 
+if (CONFIGURATION_IS_APPWEB)
+    add_subdirectory(webbridge)
+endif()
+
 # Stubs
 add_subdirectory(stubs)
 
-if (OS_IS_WASM)
-    add_subdirectory(webbridge)
-endif()
+
