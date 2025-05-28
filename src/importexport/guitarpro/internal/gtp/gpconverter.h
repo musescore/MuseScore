@@ -148,6 +148,7 @@ private:
     void fillTuplet();
     bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
     void setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measure, Fraction tick);
+    void addTuning();
 
     mu::engraving::Score* _score;
     std::unique_ptr<GPDomModel> _gpDom;
