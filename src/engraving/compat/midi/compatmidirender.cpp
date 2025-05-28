@@ -610,7 +610,18 @@ void CompatMidiRender::createGraceNotesPlayEvents(const Score* score, const Frac
 
         on += graceDuration;
     }
-    if (na) {
+
+    bool graceBendAfter = std::any_of(gna.begin(), gna.end(), [](const Chord* graceChord) {
+        for (Note* note : graceChord->notes()) {
+            if (note->bendBack()) {
+                return true;
+            }
+        }
+
+        return false;
+    });
+
+    if (!graceBendAfter && na) {
         if (chord->dots() == 1) {
             trailtime = floor(667 * weighta);
         } else if (chord->dots() == 2) {
