@@ -38,6 +38,7 @@ Capo::Capo(Segment* parent, TextStyleType textStyleType)
 
     m_params.active = true;
     m_params.fretPosition = 1;
+    m_params.capoTransposeState = std::make_shared<CapoTransposeStatePlaybackOnly>(1);
 }
 
 Capo* Capo::clone() const
@@ -60,6 +61,8 @@ PropertyValue Capo::getProperty(Pid id) const
         return ignoredStrings;
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         return m_shouldAutomaticallyGenerateText;
+    } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
+        return m_params.transposeMode;
     }
 
     return StaffTextBase::getProperty(id);
@@ -75,6 +78,8 @@ PropertyValue Capo::propertyDefault(Pid id) const
         return std::vector<int>();
     } else if (id == Pid::CAPO_GENERATE_TEXT) {
         return true;
+    } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
+        return (int)CapoParams::TransposeMode::PLAYBACK_ONLY;
     }
 
     return StaffTextBase::propertyDefault(id);
@@ -83,9 +88,29 @@ PropertyValue Capo::propertyDefault(Pid id) const
 bool Capo::setProperty(Pid id, const PropertyValue& val)
 {
     if (id == Pid::ACTIVE) {
-        m_params.active = val.toBool();
+        bool active = val.toBool();
+        if (active) {
+            switch (m_params.transposeMode) {
+                case CapoParams::TransposeMode::PLAYBACK_ONLY:
+                    m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
+                    break;
+                case CapoParams::TransposeMode::NOTATION_ONLY:
+                    m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
+                    break;
+                case CapoParams::TransposeMode::TAB_ONLY:
+                    m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            // Return to the default state
+            m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
+        }
+        m_params.active = active;
     } else if (id == Pid::CAPO_FRET_POSITION) {
         m_params.fretPosition = val.toInt();
+        m_params.capoTransposeState->setCapoFret(val.toInt());
     } else if (id == Pid::CAPO_IGNORED_STRINGS) {
         m_params.ignoredStrings.clear();
         std::vector<int> ignoredStrings = val.value<std::vector<int> >();
@@ -97,6 +122,21 @@ bool Capo::setProperty(Pid id, const PropertyValue& val)
 
         if (!m_shouldAutomaticallyGenerateText) {
             setXmlText(m_customText);
+        }
+    } else if (id == Pid::CAPO_TRANSPOSE_MODE) {
+        m_params.transposeMode = (CapoParams::TransposeMode)val.toInt();
+        switch (m_params.transposeMode) {
+            case CapoParams::TransposeMode::PLAYBACK_ONLY:
+                m_params.capoTransposeState = m_params.capoTransposeState->transitionToPlaybackOnly();
+                break;
+            case CapoParams::TransposeMode::NOTATION_ONLY:
+                m_params.capoTransposeState = m_params.capoTransposeState->transitionToStandardOnly();
+                break;
+            case CapoParams::TransposeMode::TAB_ONLY:
+                m_params.capoTransposeState = m_params.capoTransposeState->transitionToTabOnly();
+                break;
+            default:
+                break;
         }
     } else {
         return StaffTextBase::setProperty(id, val);
@@ -128,6 +168,7 @@ const CapoParams& Capo::params() const
 void Capo::setParams(const CapoParams& params)
 {
     m_params = params;
+    m_params.capoTransposeState->setCapoFret(params.fretPosition);
 }
 
 bool Capo::shouldAutomaticallyGenerateText() const
@@ -164,4 +205,97 @@ muse::String Capo::generateText(size_t stringCount) const
                   .arg(stringsToApply.join(u", "));
 
     return text;
+}
+
+/****************************
+CapoTransposeStatePlaybackOnly
+*****************************/
+void CapoTransposeStatePlaybackOnly::setCapoFret(int fret)
+{
+    m_capoFret = fret;
+    setStandardPitchOffset(0);
+    setTabPitchOffset(0);
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStatePlaybackOnly::transitionToPlaybackOnly()
+{
+    return shared_from_this();
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStatePlaybackOnly::transitionToStandardOnly()
+{
+    auto newMode = std::make_shared<CapoTransposeStateStandardOnly>(capoFret());
+    newMode->setStandardPitchOffset(capoFret());
+    newMode->setTabPitchOffset(0);
+    return newMode;
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStatePlaybackOnly::transitionToTabOnly()
+{
+    auto newMode = std::make_shared<CapoTransposeStateTabOnly>(capoFret());
+    newMode->setStandardPitchOffset(0);
+    newMode->setTabPitchOffset(-capoFret());
+    return newMode;
+}
+
+void CapoTransposeStateStandardOnly::setCapoFret(int fret)
+{
+    setStandardPitchOffset(fret - capoFret());
+    setTabPitchOffset(0);
+    m_capoFret = fret;
+}
+
+/****************************
+CapoTransposeStateStandardOnly
+*****************************/
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateStandardOnly::transitionToPlaybackOnly()
+{
+    auto newMode = std::make_shared<CapoTransposeStatePlaybackOnly>(capoFret());
+    newMode->setStandardPitchOffset(-capoFret());
+    newMode->setTabPitchOffset(0);
+    return newMode;
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateStandardOnly::transitionToStandardOnly()
+{
+    return shared_from_this();
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateStandardOnly::transitionToTabOnly()
+{
+    auto newMode = std::make_shared<CapoTransposeStateTabOnly>(capoFret());
+    newMode->setStandardPitchOffset(-capoFret());
+    newMode->setTabPitchOffset(-capoFret());
+    return newMode;
+}
+
+/****************************
+CapoTransposeStateTabOnly
+*****************************/
+void CapoTransposeStateTabOnly::setCapoFret(int fret)
+{
+    setTabPitchOffset(-fret);
+    setStandardPitchOffset(0);
+    m_capoFret = fret;
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateTabOnly::transitionToPlaybackOnly()
+{
+    auto newMode = std::make_shared<CapoTransposeStatePlaybackOnly>(capoFret());
+    newMode->setStandardPitchOffset(0);
+    newMode->setTabPitchOffset(0);
+    return newMode;
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateTabOnly::transitionToStandardOnly()
+{
+    auto newMode = std::make_shared<CapoTransposeStateStandardOnly>(capoFret());
+    newMode->setStandardPitchOffset(capoFret());
+    newMode->setTabPitchOffset(0);
+    return newMode;
+}
+
+std::shared_ptr<AbstractCapoTransposeState> CapoTransposeStateTabOnly::transitionToTabOnly()
+{
+    return shared_from_this();
 }

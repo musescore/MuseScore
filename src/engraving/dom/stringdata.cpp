@@ -33,6 +33,7 @@
 #include "part.h"
 #include "segment.h"
 #include "staff.h"
+#include "capo.h"
 
 using namespace mu;
 
@@ -149,8 +150,12 @@ void StringData::fretChords(Chord* chord) const
     std::map<int, Note*> sortedNotes;
     int count = 0;
     // store staff pitch offset at this tick, to speed up actual note pitch calculations
+    auto capo = chord->staff()->capo(chord->tick());
     int transp = chord->staff() ? chord->part()->instrument(chord->tick())->transpose().chromatic : 0;
     int pitchOffset = -transp + chord->staff()->pitchOffset(chord->segment()->tick());
+    if (capo.active) {
+        pitchOffset += capo.capoTransposeState->tabPitchOffset();
+    }
     // if chord parent is not a segment, the chord is special (usually a grace chord):
     // fret it by itself, ignoring the segment
     if (chord->explicitParent()->type() != ElementType::SEGMENT) {
