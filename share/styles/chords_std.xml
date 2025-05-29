@@ -44,18 +44,6 @@
   <autoAdjust mag="0.8" adjust="-0.29">1</autoAdjust>
 
   <font>
-
-    <sym code="0x0394" name="triangle"/>
-    <sym code="0x03bf" name="circle"/>
-    <sym code="0x00f8" name="oslash"/>
-
-    <sym code="0x266d" name="b"/>
-    <sym code="0x266e" name="natural"/>
-    <sym code="0x266f" name="#"/>
-
-    <sym code="0x1d12a" name="##"/>
-    <sym code="0x1d12b" name="bb"/>
-
 <!-- this allows "b" to render as a literal when encountered as a note name -->
     <sym value="b" class="note" name="b"/>
 
@@ -68,13 +56,24 @@
     <sym class="german_B" code="0x266d" name="b"/>
     </font>
 
-<font family="Bravura">
-<sym code="0xE87C" name="dslash"/>
-</font>
 
+<!-- Symbols we want to take from the musical text font -->
+<font family="ScoreText">
+    <sym code="0xE873" name="triangle"/>
+    <sym code="0xE870" name="circle"/>
+    <sym code="0xE871" name="oslash"/>
 
+    <sym code="0xED60" name="b"/>
+    <sym code="0xED61" name="natural"/>
+    <sym code="0xED62" name="#"/>
+    <sym code="0xED63" name="##"/>
+    <sym code="0xED64" name="bb"/>
+
+    <sym code="0xE87C" name="dslash"/>
+    </font>
+
+<!-- Extensions -->
   <font class="extension">
-<!--  <mag>0.9</mag> -->
     <sym value="0" name="e0"/>
     <sym value="1" name="e1"/>
     <sym value="2" name="e2"/>
@@ -89,14 +88,18 @@
     <sym value="11" name="e11"/>
     <sym value="12" name="e12"/>
     <sym value="13" name="e13"/>
-    <sym value="(" name="e("/>
-    <sym value=")" name="e)"/>
     <sym value="," name="e,"/>
     <sym value="/" name="e/"/>
     </font>
 
+<!-- Musical text font -->
+<font class="extension" family="ScoreText">
+    <sym code="0xE875" name="e("/>
+    <sym code="0xE876" name="e)"/>
+    </font>
+
+<!-- Modifiers -->
   <font class="modifier">
-<!--  <mag>0.8</mag> -->
     <sym value="0" name="s0"/>
     <sym value="1" name="s1"/>
     <sym value="2" name="s2"/>
@@ -111,8 +114,6 @@
     <sym value="11" name="s11"/>
     <sym value="12" name="s12"/>
     <sym value="13" name="s13"/>
-    <sym value="(" name="s("/>
-    <sym value=")" name="s)"/>
     <sym value="," name="s,"/>
     <sym value="/" name="s/"/>
     <sym value="M" name="sM"/>
@@ -120,14 +121,20 @@
     <sym value="Maj" name="sMaj"/>
     <sym value="ma" name="sma"/>
     <sym value="maj" name="smaj"/>
-    <sym code="0x266d" name="sb"/>
-    <sym code="0x266f" name="s#"/>
-    <sym code="0x0394" name="striangle"/>
 
     <sym code="add" name="sadd"/>
     <sym code="sus" name="ssus"/>
     <sym code="no" name="sno"/>
     <sym code="omit" name="somit"/>
+    </font>
+
+<!-- Musical text font -->
+<font class="modifier" family="ScoreText">
+    <sym code="0xED60" name="sb"/>
+    <sym code="0xED62" name="s#"/>
+    <sym code="0xE873" name="striangle"/>
+    <sym code="0xE875" name="s("/>
+    <sym code="0xE876" name="s)"/>
     </font>
 
   <font>
@@ -136,6 +143,7 @@
     <sym value="9" name="699"/>
     </font>
 
+<!-- Type/superscripts -->
 <font class="type">
     <mag>0.75</mag>
     <sym value="0" name="t0"/>
@@ -164,6 +172,32 @@
          render   this is a script that contains render commands
                   see Part III for details
 -->
+
+<!-- Musical text font symbols need extra padding either side -->
+  <token class="accidental">
+    <name>b</name>
+    <render>ms:0.1:0 b ms:0.1:0</render>
+    </token>
+
+  <token class="accidental">
+    <name>natural</name>
+    <render>ms:0.1:0 natural ms:0.1:0</render>
+    </token>
+
+  <token class="accidental">
+    <name>#</name>
+    <render>ms:0.1:0 # ms:0.1:0</render>
+    </token>
+
+    <token class="accidental">
+    <name>##</name>
+    <render>ms:0.1:0 ## ms:0.1:0</render>
+    </token>
+
+    <token class="accidental">
+    <name>bb</name>
+    <render>ms:0.1:0 bb ms:0.1:0</render>
+    </token>
 
   <token>
     <name>t</name>
@@ -403,18 +437,18 @@
 
   <token class="modifier">
     <name>b</name>
-    <render>sb</render>
+    <render>ms:0.1:0 sb ms:0.1:0</render>
     </token>
 
   <token class="modifier">
     <name>#</name>
-    <render>s#</render>
+    <render>ms:0.1:0 s# ms:0.1:0</render>
     </token>
 
   <token class="modifier">
     <name>t</name>
     <name>^</name>
-    <render>striangle</render>
+    <render>ms:0.1:0 striangle ms:0.1:0</render>
     </token>
 
   <token class="modifier">
@@ -510,7 +544,7 @@
   <renderRoot>:n :a m:0.036:0</renderRoot>
   <renderFunction>:a m:0.036:0 :n</renderFunction>
   <renderBass>m:-0.014:0 / m:0.014:0 :n :a</renderBass>
-  <renderBassOffset>m:-0.29:0.36 dslash m:-0.36:0.29 :n :a m:0:-0.65</renderBassOffset>
+  <renderBassOffset>m:-0.29:0.36 dslash ms:-0.5:0.9 :n :a ms:0:-0.65</renderBassOffset>
 
 <!--
       Part III: chord list

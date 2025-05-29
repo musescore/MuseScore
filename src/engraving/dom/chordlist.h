@@ -147,9 +147,23 @@ struct RenderActionMove : RenderAction
     double x() const { return m_vec.x(); }
     double y() const { return m_vec.y(); }
     PointF vec() const { return m_vec; }
+    bool scaled() const { return m_scaled; }
+
+protected:
+    RenderActionMove(double movex, double movey, bool scaled)
+        : m_vec(PointF(movex, movey)), m_scaled(scaled) {}
 
 private:
     PointF m_vec = PointF(0.0, 0.0);
+    bool m_scaled = false;
+};
+
+struct RenderActionMoveScaled : RenderActionMove
+{
+    RenderActionMoveScaled(double movex, double movey)
+        : RenderActionMove(movex, movey, true) {}
+
+    void print() const override;
 };
 
 struct RenderActionMoveXHeight : RenderAction
@@ -244,7 +258,7 @@ private:
 //---------------------------------------------------------
 
 enum class ChordTokenClass : char {
-    ALL, QUALITY, EXTENSION, MODIFIER, TYPE
+    ALL, QUALITY, EXTENSION, MODIFIER, TYPE, ACCIDENTAL
 };
 
 class ChordToken
@@ -255,6 +269,7 @@ public:
     std::list<RenderAction*> renderList;
     void read(XmlReader&, int mscVersion);
     void write(XmlWriter&) const;
+    bool isValid() const { return !names.empty(); }
 };
 
 //---------------------------------------------------------
@@ -367,6 +382,7 @@ struct ChordFont {
     String family;
     String fontClass;
     double mag = 1.0;
+    bool musicSymbolText = false;
 };
 
 //---------------------------------------------------------
@@ -393,7 +409,7 @@ public:
     bool excludeModsHAlign() const { return m_excludeModsHAlign; }
     double stackedModifierMag() const { return m_stackedmmag; }
     void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0, double stackedmmag = 0.0,
-                             bool stackModifiers = false, bool excludeModsHAlign = false);
+                             bool stackModifiers = false, bool excludeModsHAlign = false, String symbolFont = u"");
     double position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const;
 
     void checkChordList(const muse::io::path_t& appDataPath, const MStyle& style);
@@ -406,6 +422,7 @@ public:
 
     const ChordDescription* description(int id) const;
     ChordSymbol symbol(const String& s) const { return muse::value(m_symbols, s); }
+    ChordToken token(const String& s, ChordTokenClass) const;
 
     void setCustomChordList(bool t) { m_customChordList = t; }
     bool customChordList() const { return m_customChordList; }
@@ -424,6 +441,7 @@ private:
     double m_nmag = 1.0, m_nadjust = 0.0;   // adjust values are measured in percentage
     double m_emag = 1.0, m_eadjust = 0.0;   // (which is then applied to the height of the font)
     double m_mmag = 1.0, m_madjust = 0.0, m_stackedmmag = 0.0;
+    String m_symbolTextFont = u"";
 
     bool m_customChordList = false;         // if true, chordlist will be saved as part of score
 };
