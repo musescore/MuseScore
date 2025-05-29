@@ -364,6 +364,10 @@ static void readRenderList(String val, std::list<RenderAction*>& renderList, int
 
                 renderList.emplace_back(new RenderActionMoveScaled(movex, movey));
             }
+        } else if (s == u":mx") {
+            renderList.emplace_back(new RenderActionMoveXHeight(true));
+        } else if (s == u":mxs") {
+            renderList.emplace_back(new RenderActionMoveXHeightScaled(true));
         } else if (s == u":push") {
             renderList.emplace_back(new RenderActionPush());
         } else if (s == u":pop") {
@@ -405,6 +409,12 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderAction*>& al, 
             }
             break;
         }
+        case RenderAction::RenderActionType::MOVEXHEIGHT: {
+            const RenderActionMoveXHeight* movex = dynamic_cast<const RenderActionMoveXHeight*>(a);
+            String scaled = movex->scaled() ? u"s" : u"";
+            s += String(u":mx%1").arg(scaled);
+            break;
+        }
         case RenderAction::RenderActionType::PUSH:
             s += u":push";
             break;
@@ -419,7 +429,6 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderAction*>& al, 
             break;
         case RenderAction::RenderActionType::STOPHALIGN:
         case RenderAction::RenderActionType::SCALE:
-        case RenderAction::RenderActionType::MOVEXHEIGHT:
             // Internal, skip
             break;
         }
@@ -1575,7 +1584,7 @@ const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
                 m_renderList.emplace_back(new RenderActionScale(cl->stackedModifierMag()));
                 // Move to x-height
                 m_renderList.emplace_back(new RenderActionPush());
-                m_renderList.emplace_back(new RenderActionMoveXHeight());
+                m_renderList.emplace_back(new RenderActionMoveXHeight(true));
             }
         }
 
@@ -2137,6 +2146,12 @@ void RenderActionScale::print() const
 void RenderActionMoveScaled::print() const
 {
     String info = String(u"SCALED %1 %2").arg(x(), y());
+    RenderAction::print(actionType(), info);
+}
+
+void RenderActionMoveXHeight::print() const
+{
+    String info = String(u"up: %1").arg(m_up);
     RenderAction::print(actionType(), info);
 }
 }

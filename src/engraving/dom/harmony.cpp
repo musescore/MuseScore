@@ -54,6 +54,8 @@ using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
+static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
+
 //---------------------------------------------------------
 //   descr
 //    look up id in chord list
@@ -1242,7 +1244,7 @@ void Harmony::renderAction(const RenderAction* a, HarmonyRenderCtx& ctx)
         renderActionMove(dynamic_cast<const RenderActionMove*>(a), ctx);
         break;
     case RenderAction::RenderActionType::MOVEXHEIGHT:
-        renderActionMoveXHeight(ctx);
+        renderActionMoveXHeight(dynamic_cast<const RenderActionMoveXHeight*>(a), ctx);
         break;
     case RenderAction::RenderActionType::PUSH:
         renderActionPush(ctx);
@@ -1409,10 +1411,12 @@ void Harmony::renderActionMove(const RenderActionMove* a, HarmonyRenderCtx& ctx)
     ctx.pos = ctx.pos + a->vec() * FontMetrics::capHeight(font()) * scale;
 }
 
-void Harmony::renderActionMoveXHeight(HarmonyRenderCtx& ctx)
+void Harmony::renderActionMoveXHeight(const RenderActionMoveXHeight* a, HarmonyRenderCtx& ctx)
 {
+    const int direction = a->up() ? -1 : 1;
+    const double scale = a->scaled() ? ctx.scale : 1.0;
     const FontMetrics fm = FontMetrics(font());
-    ctx.movey(-fm.xHeight());
+    ctx.movey(direction * fm.xHeight() * scale);
 }
 
 void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)

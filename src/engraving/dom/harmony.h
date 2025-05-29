@@ -284,7 +284,7 @@ private:
     void renderAction(const RenderAction* a, HarmonyRenderCtx& ctx);
     void renderActionSet(const RenderActionSet* a, HarmonyRenderCtx& ctx);
     void renderActionMove(const RenderActionMove* a, HarmonyRenderCtx& ctx);
-    void renderActionMoveXHeight(HarmonyRenderCtx& ctx);
+    void renderActionMoveXHeight(const RenderActionMoveXHeight* a, HarmonyRenderCtx& ctx);
     void renderActionPush(HarmonyRenderCtx& ctx);
     void renderActionPop(const RenderActionPop* a, HarmonyRenderCtx& ctx);
     void renderActionNote(HarmonyRenderCtx& ctx);

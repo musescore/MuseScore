@@ -168,8 +168,27 @@ struct RenderActionMoveScaled : RenderActionMove
 
 struct RenderActionMoveXHeight : RenderAction
 {
-    RenderActionMoveXHeight() {}
+    RenderActionMoveXHeight(bool up)
+        : m_up(up) {}
     RenderActionType actionType() const override { return RenderActionType::MOVEXHEIGHT; }
+
+    bool up() const { return m_up; }
+    bool scaled() const { return m_scaled; }
+    void print() const override;
+
+protected:
+    RenderActionMoveXHeight(bool up, bool scaled)
+        : m_up(up), m_scaled(scaled) {}
+
+private:
+    bool m_up = true;
+    bool m_scaled = false;
+};
+
+struct RenderActionMoveXHeightScaled : RenderActionMoveXHeight
+{
+    RenderActionMoveXHeightScaled(bool up)
+        : RenderActionMoveXHeight(up, true) {}
 };
 
 struct RenderActionSet : RenderAction
