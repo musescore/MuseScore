@@ -2249,7 +2249,7 @@ const mu::engraving::Harmony* NotationActionController::editedChordSymbol() cons
 
 bool NotationActionController::elementHasPopup(const EngravingItem* e) const
 {
-    return AbstractElementPopupModel::supportsPopup(e);
+    return AbstractElementPopupModel::hasElementEditPopup(e);
 }
 
 bool NotationActionController::canUndo() const
