@@ -571,7 +571,7 @@ MenuItemList NoteInputBarModel::makeAddItems()
         makeMenu(TranslatableString("notation", "Frames"), makeFramesItems()),
         makeMenu(TranslatableString("notation", "Text"), makeTextItems()),
         makeMenu(TranslatableString("notation", "Lines"), makeLinesItems()),
-        makeMenu(TranslatableString("notation", "Chords & fretboard diagrams"), makeChordAndFretboardDiagramsItems()),
+        makeMenu(TranslatableString("notation", "Chords and fretboard diagrams"), makeChordAndFretboardDiagramsItems()),
     };
 
     return items;
