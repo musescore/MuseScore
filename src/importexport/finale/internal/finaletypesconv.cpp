@@ -1025,6 +1025,21 @@ Key FinaleTConv::keyFromAlteration(int musxAlteration)
     return Key(musxAlteration);
 }
 
+KeyMode FinaleTConv::keyModeFromDiatonicMode(music_theory::DiatonicMode diatonicMode)
+{
+    using DiatonicMode = music_theory::DiatonicMode;
+    static const std::unordered_map<music_theory::DiatonicMode, KeyMode> keyModeTypeTable = {
+        { DiatonicMode::Ionian,             KeyMode::MAJOR },
+        { DiatonicMode::Dorian,             KeyMode::DORIAN },
+        { DiatonicMode::Phrygian,           KeyMode::PHRYGIAN },
+        { DiatonicMode::Lydian,             KeyMode::LYDIAN },
+        { DiatonicMode::Mixolydian,         KeyMode::MIXOLYDIAN },
+        { DiatonicMode::Aeolian,            KeyMode::MINOR },
+        { DiatonicMode::Locrian,            KeyMode::LOCRIAN },
+    };
+    return muse::value(keyModeTypeTable, diatonicMode, KeyMode::UNKNOWN);
+}
+
 double FinaleTConv::doubleFromEvpu(Evpu evpu)
 {
     return double(evpu) / EVPU_PER_SPACE;

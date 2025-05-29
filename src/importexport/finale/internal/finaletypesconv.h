@@ -22,7 +22,6 @@
 #pragma once
 
 #include "musx/musx.h"
-#include "types/types.h"
 #include "engraving/types/types.h"
 #include "engraving/dom/key.h"
 #include "engraving/dom/noteval.h"
@@ -56,6 +55,7 @@ public:
     static engraving::Fraction eduToFraction(musx::dom::Edu edu);
     static engraving::Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger);
     static engraving::Key keyFromAlteration(int musxAlteration);
+    static engraving::KeyMode keyModeFromDiatonicMode(music_theory::DiatonicMode diatonicMode);
     static double doubleFromEvpu(musx::dom::Evpu evpu);
     static PointF evpuToPointF(musx::dom::Evpu xEvpu, musx::dom::Evpu yEvpu);
     static double doubleFromEfix(musx::dom::Efix efix);
