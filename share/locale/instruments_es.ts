@@ -5110,7 +5110,7 @@ Afinada en Do.</translation>
         <source>10-hole diatonic harmonica pitched in C.</source>
         <comment>harmonica description</comment>
         <extracomment>description for Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en do.</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en do.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1848"/>
@@ -5138,7 +5138,7 @@ Afinada en Do.</translation>
         <source>10-hole diatonic harmonica pitched in high G.</source>
         <comment>harmonica-d10high-g description</comment>
         <extracomment>description for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en sol.</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en sol.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1861"/>
@@ -5173,7 +5173,7 @@ Afinada en Do.</translation>
         <source>10-hole diatonic harmonica pitched in D.</source>
         <comment>harmonica-d10d description</comment>
         <extracomment>description for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en re.</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en re.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1883"/>
@@ -5194,7 +5194,7 @@ Afinada en Do.</translation>
         <source>10-hole diatonic harmonica pitched in C.</source>
         <comment>harmonica-d10c description</comment>
         <extracomment>description for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en do.</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en do.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1894"/>
@@ -5215,7 +5215,7 @@ Afinada en Do.</translation>
         <source>10-hole diatonic harmonica pitched in A.</source>
         <comment>harmonica-d10a description</comment>
         <extracomment>description for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en la.</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en la.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1905"/>
@@ -5236,7 +5236,7 @@ Afinada en Do.</translation>
         <source>10-hole diatonic harmonica pitched in G.</source>
         <comment>harmonica-d10g description</comment>
         <extracomment>description for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en sol.</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en sol.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1916"/>
@@ -5257,7 +5257,7 @@ Afinada en Do.</translation>
         <source>10-hole diatonic harmonica pitched in low D.</source>
         <comment>harmonica-d10low-d description</comment>
         <extracomment>description for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en re.</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en re.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1927"/>
@@ -5278,7 +5278,7 @@ Afinada en Do.</translation>
         <source>12-hole chromatic harmonica pitched in C.</source>
         <comment>harmonica-c12c description</comment>
         <extracomment>description for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 12 agujeros afinada en do.</translation>
+        <translation>Armónica diatónica de 12 agujeros afinada en do.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1938"/>
@@ -5299,7 +5299,7 @@ Afinada en Do.</translation>
         <source>12-hole chromatic harmonica pitched in G.</source>
         <comment>harmonica-c12g description</comment>
         <extracomment>description for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 12 agujeros afinada en sol.</translation>
+        <translation>Armónica cromática de 12 agujeros afinada en sol.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1949"/>
@@ -5320,7 +5320,7 @@ Afinada en Do.</translation>
         <source>12-hole chromatic tenor harmonica pitched in C.</source>
         <comment>harmonica-c12tenor-c description</comment>
         <extracomment>description for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 12 agujeros afinada en do.</translation>
+        <translation>Armónica diatónica de 12 agujeros afinada en do.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1960"/>
@@ -5341,7 +5341,7 @@ Afinada en Do.</translation>
         <source>14-hole chromatic harmonica pitched in C.</source>
         <comment>harmonica-c14c description</comment>
         <extracomment>description for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 14 agujeros afinada en do.</translation>
+        <translation>Armónica cromática de 14 agujeros afinada en do.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1971"/>
@@ -5362,7 +5362,7 @@ Afinada en Do.</translation>
         <source>16-hole chromatic harmonica pitched in C.</source>
         <comment>harmonica-c16c description</comment>
         <extracomment>description for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 16 agujeros afinada en do.</translation>
+        <translation>Armónica cromática de 16 agujeros afinada en do.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1982"/>
@@ -5383,7 +5383,7 @@ Afinada en Do.</translation>
         <source>Huang Chordet 20-hole double harmonica.</source>
         <comment>harmonica-chordet description</comment>
         <extracomment>description for 20-Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica doble Huang Chordet de 20 agujeros</translation>
+        <translation>Armónica doble Huang Chordet de 20 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1993"/>
@@ -5404,196 +5404,196 @@ Afinada en Do.</translation>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10high-g trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros</translation>
+        <translation>Armónica diatónica de 10 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1859"/>
         <source>10-Hole High G Diatonic Harmonica</source>
         <comment>harmonica-d10high-g longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: High G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en sol agudo</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en sol agudo</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1866"/>
         <source>10-hole diatonic harmonica pitched in F.</source>
         <comment>harmonica-d10f description</comment>
         <extracomment>description for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en fa.</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en fa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1868"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10f trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros</translation>
+        <translation>Armónica diatónica de 10 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1870"/>
         <source>10-Hole F Diatonic Harmonica</source>
         <comment>harmonica-d10f longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en fa</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en fa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1879"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10d trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros</translation>
+        <translation>Armónica diatónica de 10 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1881"/>
         <source>10-Hole D Diatonic Harmonica</source>
         <comment>harmonica-d10d longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en re</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en re</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1890"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10c trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros</translation>
+        <translation>Armónica diatónica de 10 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1892"/>
         <source>10-Hole C Diatonic Harmonica</source>
         <comment>harmonica-d10c longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en do</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en do</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1901"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10a trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros</translation>
+        <translation>Armónica diatónica de 10 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1903"/>
         <source>10-Hole A Diatonic Harmonica</source>
         <comment>harmonica-d10a longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: A; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en la</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en la</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1912"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10g trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros</translation>
+        <translation>Armónica diatónica de 10 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1914"/>
         <source>10-Hole G Diatonic Harmonica</source>
         <comment>harmonica-d10g longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en sol</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1923"/>
         <source>10-Hole Diatonic Harmonica</source>
         <comment>harmonica-d10low-d trackName</comment>
         <extracomment>trackName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros</translation>
+        <translation>Armónica diatónica de 10 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1925"/>
         <source>10-Hole Low D Diatonic Harmonica</source>
         <comment>harmonica-d10low-d longName</comment>
         <extracomment>longName for 10-Hole Diatonic Harmonica; tuning: Low D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica diatónica de 10 agujeros afinada en re grave</translation>
+        <translation>Armónica diatónica de 10 agujeros afinada en re grave</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1934"/>
         <source>12-Hole Chromatic Harmonica</source>
         <comment>harmonica-c12c trackName</comment>
         <extracomment>trackName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 12 agujeros</translation>
+        <translation>Armónica cromática de 12 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1936"/>
         <source>12-Hole C Chromatic Harmonica</source>
         <comment>harmonica-c12c longName</comment>
         <extracomment>longName for 12-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 12 agujeros afinada en do</translation>
+        <translation>Armónica cromática de 12 agujeros afinada en do</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1945"/>
         <source>12-Hole Chromatic Harmonica</source>
         <comment>harmonica-c12g trackName</comment>
         <extracomment>trackName for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 12 agujeros</translation>
+        <translation>Armónica cromática de 12 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1947"/>
         <source>12-Hole G Chromatic Harmonica</source>
         <comment>harmonica-c12g longName</comment>
         <extracomment>longName for 12-Hole Chromatic Harmonica; tuning: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 12 agujeros afinada en sol</translation>
+        <translation>Armónica cromática de 12 agujeros afinada en sol</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1956"/>
         <source>12-Hole Chromatic Harmonica</source>
         <comment>harmonica-c12tenor-c trackName</comment>
         <extracomment>trackName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 12 agujeros</translation>
+        <translation>Armónica cromática de 12 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1958"/>
         <source>12-Hole Tenor C Chromatic Harmonica</source>
         <comment>harmonica-c12tenor-c longName</comment>
         <extracomment>longName for 12-Hole Chromatic Harmonica; tuning: Tenor C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 12 agujeros afinada en do tenor</translation>
+        <translation>Armónica cromática de 12 agujeros afinada en do tenor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1967"/>
         <source>14-Hole Chromatic Harmonica</source>
         <comment>harmonica-c14c trackName</comment>
         <extracomment>trackName for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 14 agujeros</translation>
+        <translation>Armónica cromática de 14 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1969"/>
         <source>14-Hole C Chromatic Harmonica</source>
         <comment>harmonica-c14c longName</comment>
         <extracomment>longName for 14-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 14 agujeros afinada en do</translation>
+        <translation>Armónica cromática de 14 agujeros afinada en do</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1978"/>
         <source>16-Hole Chromatic Harmonica</source>
         <comment>harmonica-c16c trackName</comment>
         <extracomment>trackName for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 16 agujeros</translation>
+        <translation>Armónica cromática de 16 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1980"/>
         <source>16-Hole C Chromatic Harmonica</source>
         <comment>harmonica-c16c longName</comment>
         <extracomment>longName for 16-Hole Chromatic Harmonica; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica cromática de 16 agujeros afinada en do</translation>
+        <translation>Armónica cromática de 16 agujeros afinada en do</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1989"/>
         <source>20-Hole Chordet Harmonica</source>
         <comment>harmonica-chordet trackName</comment>
         <extracomment>trackName for 20-Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica Chordet de 20 agujeros</translation>
+        <translation>Armónica Chordet de 20 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1991"/>
         <source>20-Hole Chordet Harmonica</source>
         <comment>harmonica-chordet longName</comment>
         <extracomment>longName for 20-Hole Chordet Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica Chordet de 20 agujeros</translation>
+        <translation>Armónica Chordet de 20 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1996"/>
         <source>Hohner 31-hole bass harmonica.</source>
         <comment>bass-harmonica-hohner description</comment>
         <extracomment>description for Bass Hohner Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica baja Hohner de 31 agujeros</translation>
+        <translation>Armónica bajo Hohner de 31 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1998"/>
@@ -5621,7 +5621,7 @@ Afinada en Do.</translation>
         <source>Huang 30-hole bass harmonica.</source>
         <comment>bass-harmonica-huang description</comment>
         <extracomment>description for Bass Huang Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica baja Huang de 30 agujeros</translation>
+        <translation>Armónica bajo Huang de 30 agujeros</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2007"/>
@@ -5649,7 +5649,7 @@ Afinada en Do.</translation>
         <source>Bass harmonica (non-specific model).</source>
         <comment>bass-harmonica description</comment>
         <extracomment>description for Bass Harmonica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Harmónica baja (modelo no especificado).</translation>
+        <translation>Armónica bajo (modelo no especificado).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2016"/>

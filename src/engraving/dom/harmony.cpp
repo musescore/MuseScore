@@ -1057,29 +1057,13 @@ const ChordDescription* Harmony::generateDescription()
     return &cl->at(cd.id);
 }
 
-//---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void Harmony::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
+Color Harmony::curColor() const
 {
-    TextBase::drawEditMode(p, ed, currentViewScaling);
+    if (m_isMisspelled) {
+        return configuration()->criticalColor();
+    }
 
-    Color originalColor = color();
-    if (m_isMisspelled) {
-        setColor(configuration()->criticalColor());
-        setSelected(false);
-    }
-    PointF pos(canvasPos());
-    p->translate(pos);
-    setIsDrawEditMode(true);
-    renderer()->drawItem(this, p);
-    setIsDrawEditMode(false);
-    p->translate(-pos);
-    if (m_isMisspelled) {
-        setColor(originalColor);
-        setSelected(true);
-    }
+    return EngravingItem::curColor();
 }
 
 //---------------------------------------------------------

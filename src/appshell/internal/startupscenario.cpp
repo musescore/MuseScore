@@ -32,7 +32,7 @@ using namespace mu::appshell;
 using namespace muse;
 using namespace muse::actions;
 
-static const muse::Uri FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup");
+static const muse::UriQuery FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup?floating=true");
 static const muse::Uri HOME_URI("musescore://home");
 static const muse::Uri NOTATION_URI("musescore://notation");
 
@@ -174,8 +174,9 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         restoreLastSession();
         break;
     case StartupModeType::StartWithScore: {
-        project::ProjectFile file
-            = m_startupScoreFile.isValid() ? m_startupScoreFile : project::ProjectFile(configuration()->startupScorePath());
+        project::ProjectFile file = m_startupScoreFile.isValid()
+                                    ? m_startupScoreFile
+                                    : project::ProjectFile(configuration()->startupScorePath());
         openScore(file);
     } break;
     }
@@ -207,16 +208,18 @@ void StartupScenario::openScore(const project::ProjectFile& file)
 
 void StartupScenario::restoreLastSession()
 {
-    IInteractive::Result result = interactive()->question(muse::trc("appshell", "The previous session quit unexpectedly."),
-                                                          muse::trc("appshell", "Do you want to restore the session?"),
-                                                          { IInteractive::Button::No, IInteractive::Button::Yes });
+    auto promise = interactive()->question(muse::trc("appshell", "The previous session quit unexpectedly."),
+                                           muse::trc("appshell", "Do you want to restore the session?"),
+                                           { IInteractive::Button::No, IInteractive::Button::Yes });
 
-    if (result.button() == static_cast<int>(IInteractive::Button::Yes)) {
-        sessionsManager()->restore();
-    } else {
-        removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
-        sessionsManager()->reset();
-    }
+    promise.onResolve(this, [this](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Yes)) {
+            sessionsManager()->restore();
+        } else {
+            removeProjectsUnsavedChanges(configuration()->sessionProjectsPaths());
+            sessionsManager()->reset();
+        }
+    });
 }
 
 void StartupScenario::removeProjectsUnsavedChanges(const io::paths_t& projectsPaths)

@@ -118,7 +118,6 @@ public:
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
     void editDrag(EditData& editData) override;
     void endEditDrag(EditData&) override;
-    void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
     bool isTextualEditAllowed(EditData&) const override;
 

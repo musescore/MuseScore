@@ -416,6 +416,8 @@ void MusicXmlParserPass1::setExporterSoftware(String& exporter)
         } else {
             m_exporterSoftware = MusicXmlExporterSoftware::SIBELIUS;
         }
+    } else if (exporter.contains(u"dorico")) {
+        m_exporterSoftware = MusicXmlExporterSoftware::DORICO;
     } else if (exporter.contains(u"finale")) {
         m_exporterSoftware = MusicXmlExporterSoftware::FINALE;
     } else if (exporter.contains(u"noteflight")) {

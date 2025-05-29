@@ -198,7 +198,7 @@ Ret FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
     return ret;
 }
 
-Ret FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data) const
+Ret FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data)
 {
     Ret ret = muse::make_ok();
 

@@ -152,47 +152,48 @@
               <eid>K_K</eid>
               <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
               </Lyrics>
-            <StemDirection>down</StemDirection>
-            <Note>
+            <Lyrics>
+              <no>1</no>
               <eid>L_L</eid>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>M_M</eid>
-            <durationType>quarter</durationType>
-            <Lyrics>
-              <eid>N_N</eid>
-              <text>ce‿e in</text>
-              </Lyrics>
-            <StemDirection>down</StemDirection>
-            <Note>
-              <eid>O_O</eid>
-              <pitch>71</pitch>
-              <tpc>19</tpc>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>P_P</eid>
-            <durationType>quarter</durationType>
-            <Lyrics>
-              <eid>Q_Q</eid>
               <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
-              <eid>R_R</eid>
+              <eid>M_M</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <Chord>
-            <eid>S_S</eid>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Lyrics>
+              <eid>O_O</eid>
+              <text>ce‿e in</text>
+              </Lyrics>
+            <Lyrics>
+              <no>1</no>
+              <eid>P_P</eid>
+              <text>ce‿e in</text>
+              </Lyrics>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>Q_Q</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>R_R</eid>
+            <durationType>quarter</durationType>
+            <Lyrics>
+              <eid>S_S</eid>
+              <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
+              </Lyrics>
+            <Lyrics>
+              <no>1</no>
               <eid>T_T</eid>
-              <text>ce<sym>lyricsElision</sym>e‿in</text>
+              <text>ce<sym>lyricsElision</sym>e<sym>lyricsElision</sym>in</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
             <Note>
@@ -201,9 +202,28 @@
               <tpc>19</tpc>
               </Note>
             </Chord>
+          <Chord>
+            <eid>V_V</eid>
+            <durationType>quarter</durationType>
+            <Lyrics>
+              <eid>W_W</eid>
+              <text>ce<sym>lyricsElision</sym>e‿in</text>
+              </Lyrics>
+            <Lyrics>
+              <no>1</no>
+              <eid>X_X</eid>
+              <text>ce<sym>lyricsElision</sym>e‿in</text>
+              </Lyrics>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <eid>Y_Y</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
           <BarLine>
             <subtype>end</subtype>
-            <eid>V_V</eid>
+            <eid>Z_Z</eid>
             </BarLine>
           </voice>
         </Measure>

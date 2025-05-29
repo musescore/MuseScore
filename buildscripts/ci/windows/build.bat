@@ -43,9 +43,8 @@ ECHO "BUILD_WIN_PORTABLE: %BUILD_WIN_PORTABLE%"
 XCOPY "C:\musescore_dependencies" %CD% /E /I /Y
 ECHO "Finished copy dependencies"
 
-SET "QT_DIR=C:\Qt\6.2.11"
 SET "JACK_DIR=C:\Program Files (x86)\Jack"
-SET "PATH=%QT_DIR%\bin;%JACK_DIR%;%PATH%"
+SET "PATH=%JACK_DIR%;%PATH%"
 
 SET MUSESCORE_BUILD_CONFIGURATION="app"
 IF %BUILD_WIN_PORTABLE% == ON ( 

@@ -378,7 +378,7 @@ public:
     void setDotRelativeLine(int);
 
     void setHeadHasParentheses(bool hasParentheses, bool addToLinked = true, bool generated = false);
-    bool headHasParentheses() const { return m_hasHeadParentheses; }
+    bool headHasParentheses() const { return m_hasUserParentheses; }
 
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
@@ -539,7 +539,8 @@ private:
 
     Symbol* m_leftParenthesis = nullptr;
     Symbol* m_rightParenthesis = nullptr;
-    bool m_hasHeadParentheses = false;
+    bool m_hasUserParentheses = false;
+    bool m_hasGeneratedParens = false;
 
     bool m_isHammerOn = false;
     bool m_harmonic = false;

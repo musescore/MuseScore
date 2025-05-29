@@ -69,6 +69,8 @@ IF %DO_SIGN% == ON (
     )
 )
 
+SET SIGN="buildscripts\ci\windows\sign.bat"
+
 SET /p BUILD_VERSION=<%ARTIFACTS_DIR%\env\build_version.env
 SET /p BUILD_NUMBER=<%ARTIFACTS_DIR%\env\build_number.env
 SET /p BUILD_BRANCH=<%ARTIFACTS_DIR%\env\build_branch.env
@@ -86,15 +88,10 @@ ECHO "INSTALL_DIR: %INSTALL_DIR%"
 ECHO "PACKAGE_TYPE: %PACKAGE_TYPE%"
 ECHO "DO_SIGN: %DO_SIGN%"
 
-:: For MSI
-SET SIGN="buildscripts\ci\windows\sign.bat"
-SET UUIDGEN="C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\uuidgen.exe"
-SET WIX_DIR=%WIX%
-
-IF %PACKAGE_TYPE% == "portable" ( GOTO PACK_PORTABLE) ELSE (
-IF %PACKAGE_TYPE% == "7z" ( GOTO PACK_7z ) ELSE (
-IF %PACKAGE_TYPE% == "msi" (  GOTO PACK_MSI ) ELSE (
-IF %PACKAGE_TYPE% == "dir" (  GOTO PACK_DIR ) ELSE (    
+IF %PACKAGE_TYPE% == "portable" (GOTO PACK_PORTABLE) ELSE (
+IF %PACKAGE_TYPE% == "7z" (GOTO PACK_7z) ELSE (
+IF %PACKAGE_TYPE% == "msi" (GOTO PACK_MSI) ELSE (
+IF %PACKAGE_TYPE% == "dir" (GOTO PACK_DIR) ELSE (    
     ECHO "Unknown package type: %PACKAGE_TYPE%"
     GOTO END_ERROR
 ))))
@@ -134,6 +131,7 @@ GOTO END_SUCCESS
 ECHO "Start msi packing..."
 
 :: generate unique GUID
+SET UUIDGEN="C:\Program Files (x86)\Windows Kits\10\bin\10.0.20348.0\x64\uuidgen.exe"
 %UUIDGEN% > uuid.txt
 SET /p PACKAGE_UUID=<uuid.txt
 ECHO on
@@ -145,7 +143,7 @@ cmake -DCPACK_WIX_PRODUCT_GUID=%PACKAGE_UUID% ^
     -DCPACK_WIX_UPGRADE_GUID=%UPGRADE_UUID% ^
     ..
 
-SET PATH=%WIX_DIR%;%PATH% 
+SET PATH=%WIX%;%PATH% 
 cmake --build . --target package || SET WIX_ERROR=1
 cd ..
 

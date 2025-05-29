@@ -277,19 +277,6 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
 }
 
 //---------------------------------------------------------
-//   BarLineEditData
-//---------------------------------------------------------
-
-class BarLineEditData : public ElementEditData
-{
-    OBJECT_ALLOCATOR(engraving, BarLineEditData)
-public:
-    double yoff1;
-    double yoff2;
-    virtual EditDataType type() override { return EditDataType::BarLineEditData; }
-};
-
-//---------------------------------------------------------
 //   BarLineTable
 //---------------------------------------------------------
 
@@ -600,25 +587,6 @@ bool BarLine::isBottom() const
     } else {
         return nextVisibleSpannedStaff(this) == idx;
     }
-}
-
-//---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void BarLine::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
-{
-    EngravingItem::drawEditMode(p, ed, currentViewScaling);
-    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
-    BarLine::LayoutData* ldata = mutldata();
-    ldata->y1 += bed->yoff1;
-    ldata->y2 += bed->yoff2;
-    PointF pos(canvasPos());
-    p->translate(pos);
-    renderer()->drawItem(this, p);
-    p->translate(-pos);
-    ldata->y1 -= bed->yoff1;
-    ldata->y2 -= bed->yoff2;
 }
 
 //---------------------------------------------------------

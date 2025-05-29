@@ -154,7 +154,7 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
     query.addParam("notes", Val(info.notes));
     query.addParam("previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)));
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         LOGD() << rv.ret.toString();
         return;
@@ -179,7 +179,7 @@ void UpdateScenario::showServerErrorMsg()
 
 void UpdateScenario::downloadRelease()
 {
-    RetVal<Val> rv = interactive()->open("muse://update?mode=download");
+    RetVal<Val> rv = interactive()->openSync("muse://update?mode=download");
     if (!rv.ret) {
         processUpdateResult(rv.ret.code());
         return;
@@ -193,18 +193,19 @@ void UpdateScenario::closeAppAndStartInstallation(const muse::io::path_t& instal
     std::string info = muse::trc("update", "MuseScore Studio needs to close to complete the installation. "
                                            "If you have any unsaved changes, you will be prompted to save them before MuseScore Studio closes.");
     int closeBtn = int(IInteractive::Button::CustomButton) + 1;
-    IInteractive::Result result = interactive()->info("", info,
-                                                      { interactive()->buttonData(IInteractive::Button::Cancel),
-                                                        IInteractive::ButtonData(closeBtn, muse::trc("update", "Close"), true) },
-                                                      closeBtn);
+    auto promise = interactive()->info("", info,
+                                       { interactive()->buttonData(IInteractive::Button::Cancel),
+                                         IInteractive::ButtonData(closeBtn, muse::trc("update", "Close"), true) },
+                                       closeBtn);
+    promise.onResolve(this, [this, installerPath](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Cancel)) {
+            return;
+        }
 
-    if (result.standardButton() == IInteractive::Button::Cancel) {
-        return;
-    }
+        if (multiInstancesProvider()->instances().size() != 1) {
+            multiInstancesProvider()->quitAllAndRunInstallation(installerPath);
+        }
 
-    if (multiInstancesProvider()->instances().size() != 1) {
-        multiInstancesProvider()->quitAllAndRunInstallation(installerPath);
-    }
-
-    dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
+        dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
+    });
 }

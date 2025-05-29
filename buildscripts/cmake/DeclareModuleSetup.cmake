@@ -89,7 +89,7 @@ function(target_precompile_headers_clang_ccache target)
     target_precompile_headers(${target} ${ARGN})
 
     # https://discourse.cmake.org/t/ccache-clang-and-fno-pch-timestamp/7253
-    if (CC_IS_CLANG AND CCACHE_PROGRAM)
+    if (CC_IS_CLANG AND COMPILER_CACHE_PROGRAM)
         target_compile_options(${target} PRIVATE 
             "$<$<COMPILE_LANGUAGE:CXX>:SHELL:-Xclang -fno-pch-timestamp>"
         )
@@ -103,10 +103,17 @@ macro(setup_module)
         message(STATUS "Configuring ${MODULE} <${MODULE_ALIAS}>")
     endif()
 
-    if (CC_IS_EMSCRIPTEN)
-        add_library(${MODULE} OBJECT)
+    if (MODULE_USE_QT AND QT_SUPPORT)
+        if (${Qt6_VERSION} VERSION_GREATER_EQUAL "6.3.0")
+            # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+            qt_add_library(${MODULE} ${MODULE_SRC})
+        else()
+            # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+            add_library(${MODULE} ${MODULE_SRC})
+        endif()
     else()
-        add_library(${MODULE}) # STATIC/SHARED set global in the SetupBuildEnvironment.cmake
+        # STATIC/SHARED based on BUILD_SHARED_LIBS, which is set in SetupBuildEnvironment.cmake
+        add_library(${MODULE} ${MODULE_SRC})
     endif()
 
     if (MODULE_ALIAS)
@@ -114,17 +121,16 @@ macro(setup_module)
     endif()
 
     if (MODULE_USE_QT AND QT_SUPPORT)
-        if (MODULE_QRC AND NOT NO_QT_SUPPORT)
+        if (MODULE_QRC)
             qt_add_resources(RCC_SOURCES ${MODULE_QRC})
+            target_sources(${MODULE} PRIVATE ${RCC_SOURCES})
         endif()
 
-        if (MODULE_BIG_QRC AND NOT NO_QT_SUPPORT)
+        if (MODULE_BIG_QRC)
             qt_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
+            target_sources(${MODULE} PRIVATE ${RCC_BIG_SOURCES})
         endif()
     else()
-        set(RCC_SOURCES)
-        set(RCC_BIG_SOURCES)
-
         set_target_properties(${MODULE} PROPERTIES
             AUTOMOC OFF
             AUTOUIC OFF
@@ -161,12 +167,6 @@ macro(setup_module)
             set_target_properties(${MODULE} PROPERTIES UNITY_BUILD OFF)
         endif()
     endif()
-
-    target_sources(${MODULE} PRIVATE
-        ${RCC_SOURCES}
-        ${RCC_BIG_SOURCES}
-        ${MODULE_SRC}
-    )
 
     target_include_directories(${MODULE} PUBLIC
         ${MODULE_INCLUDE}

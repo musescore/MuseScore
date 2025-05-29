@@ -22,7 +22,7 @@ std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNod
         u"PlaybackState"                                 // ignored
     };
 
-    int trackIdx = trackNode->attribute("id").toInt();
+    int trackIdx = trackNode->toElement().attribute("id").value().toInt();
     auto track = std::make_unique<GPTrack>(trackIdx);
     XmlDomNode trackChildNode = trackNode->firstChild();
 
@@ -70,7 +70,7 @@ std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNod
 
 void GP6DomBuilder::setUpInstrument(XmlDomNode* trackChildNode, GPTrack* track)
 {
-    String ref = trackChildNode->attribute("ref");
+    String ref = trackChildNode->toElement().attribute("ref").value();
     track->setInstrument(ref);
     if (ref.endsWith(u"-gs") || ref.startsWith(u'2')) { // grand staff
         track->setStaffCount(2);
@@ -88,9 +88,9 @@ GPTrack::SoundAutomation GP6DomBuilder::readRsePickUp(XmlDomNode& bankChangesNod
 {
     GPTrack::SoundAutomation result;
 
-    result.bar = bankChangesNode.attribute("barIndex").toInt();
-    result.value = bankChangesNode.attribute("bankId");
-    result.position = bankChangesNode.attribute("tickOffset").toFloat();
+    result.bar = bankChangesNode.toElement().attribute("barIndex").value().toInt();
+    result.value = bankChangesNode.toElement().attribute("bankId").value();
+    result.position = bankChangesNode.toElement().attribute("tickOffset").value().toFloat();
 
     return result;
 }

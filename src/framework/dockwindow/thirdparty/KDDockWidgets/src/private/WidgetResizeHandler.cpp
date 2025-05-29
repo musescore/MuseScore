@@ -95,6 +95,11 @@ bool WidgetResizeHandler::eventFilter(QObject *o, QEvent *e)
         if (mTarget->isMaximized())
             break;
 
+        // Get the window under the cursor and check if it's our target window
+        QWindow *windowUnderCursor = qApp->topLevelAt(QCursor::pos());
+        if (!windowUnderCursor || (windowUnderCursor != widget->window()->windowHandle()))
+            return false;
+
         auto mouseEvent = static_cast<QMouseEvent *>(e);
         auto cursorPos = cursorPosition(Qt5Qt6Compat::eventGlobalPos(mouseEvent));
         updateCursor(cursorPos);

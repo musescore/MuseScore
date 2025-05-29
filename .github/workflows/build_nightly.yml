@@ -1,5 +1,5 @@
 name: "Build: Nightly"
-run-name: "${{ github.event.schedule == '0 3 * * *' && 'Build: Nightly - master branch' || 'Build: Nightly - current release branch' }}"
+run-name: "${{ format('Build: Nightly - {0}', github.ref_name) }}"
 
 on:
   schedule:
@@ -48,6 +48,7 @@ jobs:
                 platforms: 'linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable',
                 build_mode: 'nightly',
                 publish: 'on',
-                sentry_project: 'sandbox'
+                sentry_project: 'sandbox',
+                use_qt69: 'off'
               }
             })

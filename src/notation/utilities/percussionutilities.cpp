@@ -160,7 +160,7 @@ muse::RetVal<muse::Val> PercussionUtilities::openPercussionShortcutDialog(const 
     }
     query.addParam("applicationShortcuts", muse::Val::fromQVariant(applicationShortcuts));
 
-    return interactive()->open(query);
+    return interactive()->openSync(query);
 }
 
 QVariantMap PercussionUtilities::drumToQVariantMap(int pitch, const engraving::DrumInstrument& drum)

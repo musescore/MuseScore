@@ -641,10 +641,10 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
         y1l = st->doty1() * spatium;
         y2l = st->doty2() * spatium;
 
-        //workaround to make Emmentaler, Gonville and MuseJazz font work correctly with repeatDots
+        //workaround to make several fonts work correctly with repeatDots
         if (item->score()->engravingFont()->name() == "Emmentaler"
-            || item->score()->engravingFont()->name() == "Gonville"
-            || item->score()->engravingFont()->name() == "MuseJazz") {
+            // above internal, builtin fonts, below external fonts
+            || item->score()->engravingFont()->name() == "Ekmelos") { // not the other ones from the Ekmelos family though (EkmelosXXedo)
             double offset = 0.5 * item->style().spatium() * item->mag();
             y1l += offset;
             y2l += offset;
@@ -1183,7 +1183,7 @@ void TDraw::draw(const Fermata* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor());
-    item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
+    item->drawSymbol(item->symId(), painter);
 }
 
 void TDraw::draw(const FiguredBass* item, Painter* painter)
@@ -1890,11 +1890,6 @@ void TDraw::draw(const Harmony* item, Painter* painter)
     TRACE_DRAW_ITEM;
 
     const TextBase::LayoutData* ldata = item->ldata();
-
-    if (item->isDrawEditMode()) {
-        drawTextBase(item, painter);
-        return;
-    }
 
     if (item->textList().empty()) {
         drawTextBase(item, painter);

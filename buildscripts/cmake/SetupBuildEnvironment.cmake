@@ -92,24 +92,23 @@ if(CC_IS_MINGW)
 endif()
 
 # Wasm-specific
-if(CC_IS_EMSCRIPTEN)
-    set(EMCC_CMAKE_TOOLCHAIN "" CACHE FILEPATH "Path to EMCC CMake Emscripten.cmake")
-    set(EMCC_INCLUDE_PATH "." CACHE PATH "Path to EMCC include dir")
-    set(EMCC_COMPILE_FLAGS "--bind -o .html --preload-file ../../files")
+if(CC_IS_EMCC)
+
+    # set(EMCC_COMPILE_FLAGS "--bind -o .html --preload-file ../../files")
 
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/public_html)
-    set(CMAKE_EXECUTABLE_SUFFIX ".html")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EMCC_COMPILE_FLAGS}")
-    set(CMAKE_TOOLCHAIN_FILE ${EMCC_CMAKE_TOOLCHAIN})
-    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-    # for QtCreator
-    include_directories(AFTER
-        ${EMCC_INCLUDE_PATH}
-        ${EMCC_INCLUDE_PATH}/libcxx
-        ${EMCC_INCLUDE_PATH}/libc
-    )
-endif(CC_IS_EMSCRIPTEN)
+    set(EMCC_COMPILE_FLAGS "-s USE_ZLIB=1 -O2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EMCC_COMPILE_FLAGS}")
+
+    if (BUILD_IS_DEBUG)
+        set(EMCC_LINKER_FLAGS -O0)
+    else()
+        set(EMCC_LINKER_FLAGS -Os)
+    endif()
+
+
+endif(CC_IS_EMCC)
 
 # Warnings
 include(SetupCompileWarnings)

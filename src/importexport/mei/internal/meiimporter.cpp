@@ -2213,6 +2213,7 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
 
     lyrics->setXmlText(syllable);
     lyrics->setNo(no);
+    lyrics->initTextStyleType(lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
     lyrics->setTrack(chord->track());
     chord->add(lyrics);
 

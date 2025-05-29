@@ -1113,6 +1113,14 @@ void TLayout::layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, con
             UNREACHABLE;
         }
     }
+
+    if (!item->segment()) {
+        return;
+    }
+
+    if (Fermata* fermata = toFermata(item->segment()->findAnnotation(ElementType::FERMATA, item->track(), item->track() + VOICES))) {
+        layoutFermata(fermata, fermata->mutldata(), ctx.conf());
+    }
 }
 
 void TLayout::updateBarlineShape(const BarLine* item, BarLine::LayoutData* ldata, const LayoutContext& ctx)
@@ -2112,7 +2120,7 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata, con
     }
 
     double x = 0.0;
-    double y = 0.0;
+    double y = item->placeAbove() ? 0.0 : item->staff()->staffHeight(item->tick());
     const Segment* s = item->segment();
     const EngravingItem* e = s->element(item->track());
 
@@ -2123,14 +2131,11 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata, con
         if (e->isChord()) {
             const Chord* chord = toChord(e);
             x = chord->x() + chord->centerX();
-            y = chord->y();
         } else if (e->isRest()) {
             const Rest* rest = toRest(e);
             x = rest->x() + rest->centerX();
-            y = rest->y();
         } else {
             x = e->x() - e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5;
-            y = e->y();
         }
     }
 
@@ -2146,9 +2151,27 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata, con
             const_cast<Fermata*>(item)->setSymId(SymNames::symIdByName(name.left(name.size() - 5) + u"Below"));
         }
     }
+
+    ldata->setShape(Shape(item->symBbox(item->symId()), item));
+    x -= 0.5 * ldata->bbox().width();
+
+    if (item->isStyled(Pid::OFFSET)) {
+        y += item->offset().y();
+    }
+    Shape staffShape = item->segment()->staffShape(item->staffIdx());
+    staffShape.removeTypes({ ElementType::FERMATA });
+    if (item->placeAbove()) {
+        double minDist = ldata->shape().minVerticalDistance(staffShape) + item->minDistance().toMM(item->spatium());
+        y = std::min(y, -minDist);
+    } else {
+        double minDist = staffShape.minVerticalDistance(ldata->shape()) + item->minDistance().toMM(item->spatium());
+        y = std::max(y, minDist);
+    }
+    if (item->isStyled(Pid::OFFSET)) {
+        y -= item->offset().y();
+    }
+
     ldata->setPos(x, y);
-    RectF b(item->symBbox(item->symId()));
-    ldata->setBbox(b.translated(-0.5 * b.width(), 0.0));
 
     if (item->autoplace()) {
         const Segment* s2 = item->segment();
@@ -2624,7 +2647,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
                 continue;
             }
             if ((barre.startString == 0 && item->numPos() == 0)
-                || (barre.endString == -1 && item->numPos() == 1)) {
+                || ((barre.endString == -1 || barre.endString == item->strings() - 1) && item->numPos() == 1)) {
                 padding += 0.20 * ldata->dotDiameter * ctx.conf().styleD(Sid::barreLineWidth);
                 break;
             }
@@ -4327,7 +4350,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         if (item->ghost()) {
             const_cast<Note*>(item)->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
         } else {
-            const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false);
+            const_cast<Note*>(item)->setHeadHasParentheses(false, /*addToLinked=*/ false, /* generated= */ true);
         }
 
         double w = item->tabHeadWidth(tab);
@@ -4350,7 +4373,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             if (item->ghost()) {
                 const_cast<Note*>(item)->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
             } else {
-                const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false);
+                const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false, /* generated= */ true);
             }
         }
 

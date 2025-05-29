@@ -104,7 +104,6 @@ void Box::editDrag(EditData& ed)
         }
         mutldata()->setBbox(0.0, 0.0, system()->width(), absoluteFromSpatium(boxHeight()));
         system()->setHeight(height());
-        triggerLayout();
     } else {
         m_boxWidth += Spatium(ed.delta.x() / sp);
         if (ed.hRaster) {
@@ -112,15 +111,8 @@ void Box::editDrag(EditData& ed)
             int n = lrint(m_boxWidth.val() / hRaster);
             m_boxWidth = Spatium(hRaster * n);
         }
-        triggerLayout();
     }
-
-    renderer()->layoutItem(this);
-}
-
-void Box::endEdit(EditData&)
-{
-    renderer()->layoutItem(this);
+    triggerLayout();
 }
 
 //---------------------------------------------------------

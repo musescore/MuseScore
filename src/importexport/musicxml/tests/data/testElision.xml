@@ -124,6 +124,14 @@
           <elision/>
           <text>in</text>
           </lyric>
+        <lyric number="2" default-x="6.5" default-y="-44.42" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>ce</text>
+          <elision/>
+          <text>e</text>
+          <elision/>
+          <text>in</text>
+          </lyric>
         </note>
       <note default-x="302.17" default-y="-20">
         <pitch>
@@ -135,6 +143,14 @@
         <type>quarter</type>
         <stem>down</stem>
         <lyric number="1" default-x="6.5" default-y="-44.42" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>ce</text>
+          <elision>‿</elision>
+          <text>e</text>
+          <elision> </elision>
+          <text>in</text>
+          </lyric>
+        <lyric number="2" default-x="6.5" default-y="-44.42" relative-y="-30">
           <syllabic>single</syllabic>
           <text>ce</text>
           <elision>‿</elision>
@@ -160,6 +176,14 @@
           <elision smufl="lyricsElision"/>
           <text>in</text>
           </lyric>
+        <lyric number="2" default-x="6.5" default-y="-44.42" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>ce</text>
+          <elision smufl="lyricsElisionNarrow"/>
+          <text>e</text>
+          <elision smufl="lyricsElision"/>
+          <text>in</text>
+          </lyric>
         </note>
       <note default-x="746.08" default-y="-20">
         <pitch>
@@ -171,6 +195,14 @@
         <type>quarter</type>
         <stem>down</stem>
         <lyric number="1" default-x="6.5" default-y="-44.42" relative-y="-30">
+          <syllabic>single</syllabic>
+          <text>ce</text>
+          <elision smufl="lyricsElisionWide"/>
+          <text>e</text>
+          <elision>‿</elision>
+          <text>in</text>
+          </lyric>
+        <lyric number="2" default-x="6.5" default-y="-44.42" relative-y="-30">
           <syllabic>single</syllabic>
           <text>ce</text>
           <elision smufl="lyricsElisionWide"/>

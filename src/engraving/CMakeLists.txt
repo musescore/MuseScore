@@ -44,6 +44,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/dom/dom.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/score/rendering.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/single/single.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/editmode/editmode.cmake)
 
 if (MUE_BUILD_ENGRAVING_DEVTOOLS)
     include(${CMAKE_CURRENT_LIST_DIR}/devtools/devtools.cmake)
@@ -225,12 +226,14 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/rendering/iscorerenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/isinglerenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/ieditmoderenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/layoutoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.h
 
     ${RENDERING_SCORE_SRC}
     ${RENDERING_SINGLE_SRC}
+    ${RENDERING_EDITMODE_SRC}
 
     ${PLAYBACK_SRC}
     ${DEVTOOLS_SRC}

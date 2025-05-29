@@ -47,7 +47,7 @@ public:
 
     RetVal<ByteArray> readFile(const io::path_t& filePath) const override;
     Ret readFile(const io::path_t& filePath, ByteArray& data) const override;
-    Ret writeFile(const io::path_t& filePath, const ByteArray& data) const override;
+    Ret writeFile(const io::path_t& filePath, const ByteArray& data) override;
 
     void setAttribute(const io::path_t& path, Attribute attribute) const override;
     bool setPermissionsAllowedForAll(const io::path_t& path) const override;

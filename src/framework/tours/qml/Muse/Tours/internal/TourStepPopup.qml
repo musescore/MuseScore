@@ -35,6 +35,12 @@ StyledPopupView {
     property int index: 0
     property int total: 0
 
+    contentWidth: Math.min(content.implicitWidth, 300 - margins * 2)
+    contentHeight: content.implicitHeight
+
+    x: root.parent.width / 2 - (contentWidth + padding * 2 + margins * 2) / 2
+    y: root.parent.height
+
     padding: 8
     margins: 12
 
@@ -43,14 +49,6 @@ StyledPopupView {
 
     signal hideRequested()
     signal nextRequested()
-
-    function calculateSize() {
-        contentWidth = Math.min(content.implicitWidth, 300 - margins * 2)
-        contentHeight = content.implicitHeight
-
-        x = root.parent.width / 2 - (contentWidth + padding * 2 + margins * 2) / 2
-        y = root.parent.height
-    }
 
     ColumnLayout {
         id: content

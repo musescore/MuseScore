@@ -414,3 +414,40 @@ TEST_F(Engraving_TimesigTests, timesig_11)
 
     delete score;
 }
+
+TEST_F(Engraving_TimesigTests, endOfMeasureTimeSigChange)
+{
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"endOfMeasureChange.mscz");
+    EXPECT_TRUE(score);
+
+    // Check underlying measures in all scores are the lengths expected
+
+    std::array<Fraction, 5> expectedTimeSigs = { Fraction(4, 4), Fraction(4, 4), Fraction(3, 4), Fraction(4, 4), Fraction(4, 4) };
+
+    for (Score* partScore : score->scoreList()) {
+        for (Measure* m = partScore->firstMeasure(); m; m = m->nextMeasure()) {
+            EXPECT_TRUE(m->timesig() == expectedTimeSigs.at(m->measureIndex()));
+        }
+    }
+
+    // Check measures with MMRests turned on in the part are the lengths expected
+
+    Score* part = score->scoreList().back();
+    EXPECT_TRUE(part);
+    std::array<Fraction, 3> expectedTimeSigsMM = { Fraction(4, 4), Fraction(3, 4), Fraction(4, 4) };
+
+    size_t measureCount = 0;
+    for (MeasureBase* mb = part->firstMM(); mb; mb = mb->nextMM()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+
+        Measure* m = toMeasure(mb);
+        EXPECT_TRUE(m->timesig() == expectedTimeSigsMM.at(measureCount));
+        measureCount++;
+    }
+
+    MScore::useRead302InTestMode = useRead302;
+}
