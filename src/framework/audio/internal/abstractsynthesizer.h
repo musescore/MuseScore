@@ -49,10 +49,12 @@ public:
 
     void setup(const mpe::PlaybackData& playbackData) override;
 
+    void prepareToPlay() override;
+    bool readyToPlay() const override;
+
     void revokePlayingNotes() override;
 
 protected:
-
     virtual void setupSound(const mpe::PlaybackSetupData& setupData) = 0;
     virtual void setupEvents(const mpe::PlaybackData& playbackData) = 0;
     virtual void updateRenderingMode(const RenderMode mode);

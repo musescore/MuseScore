@@ -255,10 +255,6 @@ void MuseSamplerWrapper::setIsActive(bool active)
         return;
     }
 
-    if (active) {
-        m_samplerLib->setPosition(m_sampler, m_currentPosition);
-    }
-
     m_sequencer.setActive(active);
     m_samplerLib->setPlaying(m_sampler, active);
 }
@@ -424,6 +420,24 @@ void MuseSamplerWrapper::extractOutputSamples(samples_t samples, float* output)
             output[offset + audioChannelIndex] += sample;
         }
     }
+}
+
+void MuseSamplerWrapper::prepareToPlay()
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
+    m_samplerLib->setPosition(m_sampler, m_currentPosition);
+}
+
+bool MuseSamplerWrapper::readyToPlay() const
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return false;
+    }
+
+    return m_samplerLib->readyToPlay(m_sampler) == 1;
 }
 
 void MuseSamplerWrapper::revokePlayingNotes()

@@ -57,10 +57,12 @@ void SequencePlayer::play(const secs_t delay)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_clock->setCountDown(secsToMicrosecs(delay));
-    m_countDownIsSet = !delay.is_zero();
-    audioEngine()->setMode(RenderMode::RealTimeMode);
-    m_clock->start();
+    prepareAllTracksToPlay([this, delay]() {
+        m_clock->setCountDown(secsToMicrosecs(delay));
+        m_countDownIsSet = !delay.is_zero();
+        audioEngine()->setMode(RenderMode::RealTimeMode);
+        m_clock->start();
+    });
 }
 
 void SequencePlayer::seek(const secs_t newPosition)
@@ -78,6 +80,7 @@ void SequencePlayer::stop()
 
     audioEngine()->setMode(RenderMode::IdleMode);
     m_clock->stop();
+    clearNotYetReadyToPlayTracks();
 }
 
 void SequencePlayer::pause()
@@ -86,16 +89,19 @@ void SequencePlayer::pause()
 
     audioEngine()->setMode(RenderMode::IdleMode);
     m_clock->pause();
+    clearNotYetReadyToPlayTracks();
 }
 
 void SequencePlayer::resume(const secs_t delay)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_clock->setCountDown(secsToMicrosecs(delay));
-    m_countDownIsSet = !delay.is_zero();
-    audioEngine()->setMode(RenderMode::RealTimeMode);
-    m_clock->resume();
+    prepareAllTracksToPlay([this, delay]() {
+        m_clock->setCountDown(secsToMicrosecs(delay));
+        m_countDownIsSet = !delay.is_zero();
+        audioEngine()->setMode(RenderMode::RealTimeMode);
+        m_clock->resume();
+    });
 }
 
 msecs_t SequencePlayer::duration() const
@@ -182,4 +188,61 @@ void SequencePlayer::flushAllTracks()
             pair.second->inputHandler->flush();
         }
     }
+}
+
+void SequencePlayer::prepareAllTracksToPlay(OnAllTracksReadyToPlay onAllReadyToPlay)
+{
+    IF_ASSERT_FAILED(m_getTracks) {
+        return;
+    }
+
+    clearNotYetReadyToPlayTracks();
+
+    for (const auto& pair : m_getTracks->allTracks()) {
+        if (!pair.second->inputHandler) {
+            continue;
+        }
+
+        pair.second->inputHandler->prepareToPlay();
+
+        if (!pair.second->inputHandler->readyToPlay()) {
+            m_notYetReadyToPlayTracks.insert(pair.first);
+        }
+    }
+
+    if (m_notYetReadyToPlayTracks.empty()) {
+        onAllReadyToPlay();
+        return;
+    }
+
+    if (!m_checkAllTracksReadyToPlayTimer) {
+        m_checkAllTracksReadyToPlayTimer = std::make_unique<Timer>(std::chrono::microseconds(10000)); // every 10ms
+    }
+
+    m_checkAllTracksReadyToPlayTimer->onTimeout(this, [this, onAllReadyToPlay]() {
+        const std::set<TrackId> notYetReadyToPlayTracksCopy = m_notYetReadyToPlayTracks;
+
+        for (const TrackId trackId : notYetReadyToPlayTracksCopy) {
+            const TrackPtr track = m_getTracks->track(trackId);
+
+            if (!track || track->inputHandler->readyToPlay()) {
+                muse::remove(m_notYetReadyToPlayTracks, trackId);
+            }
+        }
+
+        if (m_notYetReadyToPlayTracks.empty()) {
+            onAllReadyToPlay();
+            m_checkAllTracksReadyToPlayTimer->stop();
+        }
+    });
+
+    m_checkAllTracksReadyToPlayTimer->start();
+}
+
+void SequencePlayer::clearNotYetReadyToPlayTracks()
+{
+    if (m_checkAllTracksReadyToPlayTimer) {
+        m_checkAllTracksReadyToPlayTimer->stop();
+    }
+    m_notYetReadyToPlayTracks.clear();
 }

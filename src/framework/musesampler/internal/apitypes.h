@@ -340,6 +340,9 @@ typedef ms_Result (* ms_reload_all_instruments)(); // Useful for sound developer
 typedef ms_Result (* ms_MuseSampler_start_audition_note_4)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_4 evt);
 typedef ms_Result (* ms_MuseSampler_add_track_syllable_event)(ms_MuseSampler ms, ms_Track track, ms_SyllableEvent evt);
 
+// Added in 0.101
+typedef int (* ms_MuseSampler_ready_to_play)(ms_MuseSampler ms); // 1 - true, 0 - false
+
 namespace muse::musesampler {
 using track_idx_t = size_t;
 using TrackList = std::vector<ms_Track>;

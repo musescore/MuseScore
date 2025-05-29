@@ -31,6 +31,7 @@
 #include "isequenceplayer.h"
 #include "igettracks.h"
 #include "iclock.h"
+#include "timer.h"
 
 namespace muse::audio {
 class SequencePlayer : public ISequencePlayer, public Injectable, public async::Asyncable
@@ -61,10 +62,17 @@ private:
     void seekAllTracks(const msecs_t newPositionMsecs);
     void flushAllTracks();
 
+    using OnAllTracksReadyToPlay = std::function<void ()>;
+    void prepareAllTracksToPlay(OnAllTracksReadyToPlay onAllReadyToPlay);
+    void clearNotYetReadyToPlayTracks();
+
     IGetTracks* m_getTracks = nullptr;
     IClockPtr m_clock = nullptr;
 
     bool m_countDownIsSet = false;
+
+    std::set<TrackId> m_notYetReadyToPlayTracks;
+    std::unique_ptr<Timer> m_checkAllTracksReadyToPlayTimer;
 };
 }
 
