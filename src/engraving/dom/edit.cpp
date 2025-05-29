@@ -6973,12 +6973,17 @@ FBox* Score::findFretBox() const
 
 void Score::undoRenameChordInFretBox(const Harmony* harmony, const String& oldName)
 {
-    FBox* fretBox = findFretBox();
+    Score* score = harmony->score();
+    if (!score) {
+        return;
+    }
+
+    FBox* fretBox = score->findFretBox();
     if (!fretBox) {
         return;
     }
 
-    undo(new RenameChordFBox(fretBox, harmony, oldName));
+    score->undo(new RenameChordFBox(fretBox, harmony, oldName));
     fretBox->triggerLayout();
 
     for (EngravingObject* linkedObject : fretBox->linkList()) {
@@ -6999,7 +7004,12 @@ void Score::undoAddChordToFretBox(const EngravingItem* harmonyOrFretDiagram)
         return;
     }
 
-    FBox* fretBox = findFretBox();
+    Score* score = harmonyOrFretDiagram->score();
+    if (!score) {
+        return;
+    }
+
+    FBox* fretBox = score->findFretBox();
     if (!fretBox) {
         return;
     }
@@ -7009,7 +7019,7 @@ void Score::undoAddChordToFretBox(const EngravingItem* harmonyOrFretDiagram)
         return;
     }
 
-    undo(new AddChordFBox(fretBox, chordName, harmonyOrFretDiagram->tick()));
+    score->undo(new AddChordFBox(fretBox, chordName, harmonyOrFretDiagram->tick()));
     fretBox->triggerLayout();
 
     for (EngravingObject* linkedObject : fretBox->linkList()) {
@@ -7030,7 +7040,12 @@ void Score::undoRemoveChordFromFretBox(const EngravingItem* harmonyOrFretDiagram
         return;
     }
 
-    FBox* fretBox = findFretBox();
+    Score* score = harmonyOrFretDiagram->score();
+    if (!score) {
+        return;
+    }
+
+    FBox* fretBox = score->findFretBox();
     if (!fretBox) {
         return;
     }
@@ -7040,19 +7055,19 @@ void Score::undoRemoveChordFromFretBox(const EngravingItem* harmonyOrFretDiagram
         return;
     }
 
-    undo(new RemoveChordFBox(fretBox, chordName, harmonyOrFretDiagram->tick()));
+    score->undo(new RemoveChordFBox(fretBox, chordName, harmonyOrFretDiagram->tick()));
     fretBox->triggerLayout();
 
-    for (EngravingObject* linkedObject : fretBox->linkList()) {
-        if (!linkedObject || !linkedObject->isFBox()) {
-            continue;
-        }
+    // for (EngravingObject* linkedObject : fretBox->linkList()) {
+    //     if (!linkedObject || !linkedObject->isFBox()) {
+    //         continue;
+    //     }
 
-        FBox* box = toFBox(linkedObject);
+    //     FBox* box = toFBox(linkedObject);
 
-        box->score()->undo(new RemoveChordFBox(box, chordName, harmonyOrFretDiagram->tick()));
-        box->triggerLayout();
-    }
+    //     box->score()->undo(new RemoveChordFBox(box, chordName, harmonyOrFretDiagram->tick()));
+    //     box->triggerLayout();
+    // }
 }
 
 //---------------------------------------------------------
