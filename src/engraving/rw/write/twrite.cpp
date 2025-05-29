@@ -1656,9 +1656,6 @@ void TWrite::write(const HammerOnPullOff* item, XmlWriter& xml, WriteContext& ct
     }
 
     xml.startElement(item);
-    if (ctx.clipboardmode()) {
-        xml.tag("stemArr", Slur::calcStemArrangement(item->startElement(), item->endElement()));
-    }
 
     writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
 

@@ -289,7 +289,6 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::SYSTEM,               "System",               muse::TranslatableString("engraving", "System") },
     { ElementType::CHORD,                "Chord",                muse::TranslatableString("engraving", "Chord") },
     { ElementType::SLUR,                 "Slur",                 muse::TranslatableString("engraving", "Slur") },
-    { ElementType::HAMMER_ON_PULL_OFF,   "HammerOnPullOff",      muse::TranslatableString("engraving",  "Hammer-on pull-off") },
     { ElementType::HBOX,                 "HBox",                 muse::TranslatableString("engraving", "Horizontal frame") },
     { ElementType::VBOX,                 "VBox",                 muse::TranslatableString("engraving", "Vertical frame") },
     { ElementType::TBOX,                 "TBox",                 muse::TranslatableString("engraving", "Text frame") },

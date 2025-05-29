@@ -887,8 +887,8 @@ EditStyle::EditStyle(QWidget* parent)
 
     // Define string here instead of in the .ui file to avoid MSVC compiler warning C4125, which would
     // be triggered by the decimal digit immediately following a non-ASCII character (curly quote).
-    oneMeasureRepeatShow1->setText(muse::qtrc("EditStyleBase", "Show â€˜1â€™ on 1-measure repeats"));
-    singleMMRestShowNumber->setText(muse::qtrc("EditStyleBase", "Show number â€˜1â€™"));
+    oneMeasureRepeatShow1->setText(muse::qtrc("EditStyleBase", "Show ‘1’ on 1-measure repeats"));
+    singleMMRestShowNumber->setText(muse::qtrc("EditStyleBase", "Show number ‘1’"));
 
     // ====================================================
     // BEAMS (QML)
@@ -1459,7 +1459,7 @@ void EditStyle::setHeaderFooterToolTip()
           + QString("</i></td></tr></table><p>")
           + muse::qtrc("notation/editstyle", "Available metadata tags and their current values")
           + QString("<br />")
-          + muse::qtrc("notation/editstyle", "(in File > Project propertiesâ€¦):")
+          + muse::qtrc("notation/editstyle", "(in File > Project properties…):")
           + QString("</p><table>");
 
     // show all tags for current score/part
@@ -1630,9 +1630,12 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
     case ElementType::LAISSEZ_VIB_SEGMENT:
     case ElementType::PARTIAL_TIE:
     case ElementType::PARTIAL_TIE_SEGMENT:
+        return "slurs-and-ties";
+
     case ElementType::HAMMER_ON_PULL_OFF:
     case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
-        return "slurs-and-ties";
+    case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+        return "hammer-ons-pull-offs-and-tapping";
 
     case ElementType::HAIRPIN:
     case ElementType::HAIRPIN_SEGMENT:

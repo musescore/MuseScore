@@ -3280,13 +3280,8 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
             endX = endChord->systemPos().x();
         } else {
             // The last endChord of this segment is in next system. Use end barline instead.
-            Measure* lastMeas = system->lastMeasure();
-            for (Segment* seg = lastMeas->last(); seg; seg = seg->prev()) {
-                if (seg->isType(SegmentType::BarLineType)) {
-                    endX = seg->systemPos().x();
-                    break;
-                }
-            }
+            Segment* endSeg = system->lastMeasure()->last(SegmentType::BarLineType);
+            endX = endSeg ? endSeg->systemPos().x() : endX;
         }
         if (startChord->stem() && endChord->stem() && startChord->up() == above && endChord->up() == above) {
             // Mid-way between centered on the notes and centered on the stems
