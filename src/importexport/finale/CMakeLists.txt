@@ -27,6 +27,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationfinalereader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/finaletypesconv.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/finaletypesconv.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musxxmldom.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinale.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinale.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinaleentries.cpp
