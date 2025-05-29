@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/NotationPage/NotationStatusBar.qml</file>
+        <file>qml/NotationPage/NotationPage.qml</file>
+        <file>qml/AppWindow.qml</file>
+        <file>qml/Main.qml</file>
+        <file>qml/AppButtonBackground.qml</file>
+        <file>qml/AppMenuBar.qml</file>
+    </qresource>
+</RCC>
