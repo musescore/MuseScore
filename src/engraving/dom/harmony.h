@@ -41,22 +41,36 @@ class ParsedChord;
 //---------------------------------------------------------
 
 struct TextSegment {
-    muse::draw::Font m_font;
-    String text;
-    double x, y = 0;     // Position of segments relative to each other.
-    PointF offset;       // Offset for placing within the TextBase.
-
-    bool hAlign = true;
-
     double width() const;
     double capHeight() const;
     RectF boundingRect() const;
     RectF tightBoundingRect() const;
-    PointF pos() const { return PointF(x, y) + offset; }
 
-    TextSegment(const String&, const muse::draw::Font&, double x, double y, bool align);
-    TextSegment(const String&, const muse::draw::Font&, double x, double y, PointF offset, bool align);
-    void setText(const String& t) { text = t; }
+    void setOffset(const PointF& p) { m_offset = p; }
+    PointF pos() const { return m_pos + m_offset; }
+    double x() const { return m_pos.x(); }
+    double y() const { return m_pos.y(); }
+    void movex(double v) { m_pos.rx() += v; }
+    void movey(double v) { m_pos.ry() += v; }
+
+    void setText(const String& t) { m_text = t; }
+    String text() const { return m_text; }
+
+    muse::draw::Font font() const { return m_font; }
+    void setFont(const muse::draw::Font& f);
+
+    bool align() const { return m_hAlign; }
+
+    TextSegment(const String& s, const muse::draw::Font& f, double _x, double _y, bool align)
+        : m_pos(_x, _y), m_hAlign(align) { setText(s); setFont(f); }
+
+private:
+    muse::draw::Font m_font;
+    String m_text;
+    PointF m_pos;     // Position of segments relative to each other.
+    PointF m_offset;       // Offset for placing within the TextBase.
+
+    bool m_hAlign = true;
 };
 
 //---------------------------------------------------------
