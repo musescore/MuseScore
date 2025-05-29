@@ -27,6 +27,8 @@
 #include "src/engraving/dom/trill.h"
 #include "src/engraving/dom/tremolobar.h"
 #include "src/engraving/dom/arpeggio.h"
+#include "src/engraving/dom/ottava.h"
+#include "src/engraving/dom/spanner.h"
 
 using namespace mu::notation;
 using namespace muse;
@@ -140,12 +142,107 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
 bool compare_by_chord_x(Chord* a, Chord* b) {
     return a->canvasPos().x() < b->canvasPos().x();
 }
+
+void PlaybackCursor::processOttava(mu::engraving::Score* score) {
+    if (m_isOttavaProcessed) {
+        return;
+    }
+    if (m_ottavaProcessFuture.valid()) {
+        m_ottavaProcessFuture.wait();
+    }
+    m_ottavaProcessFuture = std::async(std::launch::async, [this, score]() {
+        processOttavaAsync(score);
+        m_isOttavaProcessed = true;
+    });
+}
+
+void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
+    std::map<int, int> staff_stick_map;
+    std::map<int, int> staff_ottatype_map;
+    for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (mu::engraving::Segment* s = measure->first(mu::engraving::SegmentType::ChordRest); s;) {
+            std::vector<EngravingItem*> engravingItemList = s->elist();
+            for (size_t i = 0; i < engravingItemList.size(); i++) {
+                EngravingItem* engravingItem = engravingItemList[i];
+                if (engravingItem == nullptr) {
+                    continue;
+                }  
+                EngravingItemList itemList = engravingItem->childrenItems(false);
+                for (size_t j = 0; j < itemList.size(); j++) {
+                    EngravingItem* item_ = itemList.at(j);
+                    if (item_ == nullptr) {
+                        continue;
+                    }
+                    if (item_->type() == mu::engraving::ElementType::NOTE) {
+                        Note* note_ = toNote(item_);
+                        Staff* noteStaff = note_->staff();
+                        int noteStaffIndex = noteStaff->idx();
+                        bool isOttavaStartd = false;
+                        const std::set<Spanner*> starttingSpanners_ = note_->chord()->startingSpanners();
+                        for (const Spanner* _spanner : starttingSpanners_) {
+                            if (_spanner->isOttava()) {
+                                int startTicks = _spanner->tick().ticks();
+                                staff_stick_map[noteStaffIndex] = startTicks;
+                                int _ottavaType = (int)toOttava(_spanner)->ottavaType() + 100;
+                                staff_ottatype_map[noteStaffIndex] = _ottavaType;
+                                ottava_map[note_] = _ottavaType;
+                                isOttavaStartd = true;
+                                if (note_->chord()) {
+                                    std::vector<Note*> chordNotes = note_->chord()->notes();
+                                    for (Note* note_in_chord : chordNotes) {
+                                        ottava_map[note_in_chord] = _ottavaType;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+
+                        const std::set<Spanner*> endingSpanners_ = note_->chord()->endingSpanners();
+                        for (const Spanner* _spanner : endingSpanners_) {
+                            if (_spanner->isOttava()) {
+                                staff_stick_map[noteStaffIndex] = 0;
+                                isOttavaStartd = false;
+                                int _ottavaType = staff_ottatype_map[noteStaffIndex];
+                                staff_ottatype_map[noteStaffIndex] = 0;
+                                ottava_map[note_] = _ottavaType;
+                                if (note_->chord()) {
+                                    std::vector<Note*> chordNotes = note_->chord()->notes();
+                                    for (Note* note_in_chord : chordNotes) {
+                                        ottava_map[note_in_chord] = _ottavaType;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+
+                        if (!isOttavaStartd && staff_stick_map[noteStaffIndex] > 0) {
+                            int _ottavaType = staff_ottatype_map[noteStaffIndex];
+                            ottava_map[note_] = _ottavaType;
+                            if (note_->chord()) {
+                                std::vector<Note*> chordNotes = note_->chord()->notes();
+                                for (Note* note_in_chord : chordNotes) {
+                                    ottava_map[note_in_chord] = _ottavaType;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            mu::engraving::Segment* ns = s->next(mu::engraving::SegmentType::ChordRest);
+            while (ns && !ns->visible()) {
+                ns = ns->next(mu::engraving::SegmentType::ChordRest);
+            }
+            s = ns;
+        }
+    }
+}
 muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bool isPlaying) {
     if (!m_notation) {
         return RectF();
     }
 
     mu::engraving::Score* score = m_notation->elements()->msScore();
+    processOttava(score);
     Fraction tick = Fraction::fromTicks(_tick);
 
     Measure* measure = score->tick2measureMM(tick);
@@ -182,6 +279,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 hasTremoloBar = true;
             }
         }
+
         if (hasTremoloBar) {
             for (size_t m_k = 0; m_k < measure_children.size(); m_k++) {
                 EngravingItem* measure_item = measure_children.at(m_k);
@@ -243,7 +341,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 EngravingItem* engravingItem = engravingItemList[i];
                 if (engravingItem == nullptr) {
                     continue;
-                }  
+                } 
                 ChordRest *chordRest = toChordRest(engravingItem);
                 // mu::engraving::TDuration duration = chordRest->durationType();
                 // int duration_ticks = duration.ticks().ticks();
@@ -277,8 +375,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                             continue;
                         }
                         if (item->type() == mu::engraving::ElementType::NOTE) {
-                            // m_notation->interaction()->addPlaybackNote(toNote(item));
-                            Note *_pre_note = toNote(item);
+                            Note* _pre_note = toNote(item);
+                            int _pre_note_ottavaType = ottava_map[_pre_note];
+
                             for (Note* mnote : curr_measure_trill_notes) {
                                 if (mnote == _pre_note) {
                                     if (!curr_trill_note_checked) {
@@ -305,7 +404,10 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                     logic_tremoloType = 50;
                                                 }
                                             } 
-                                            m_notation->interaction()->addTrillNote(curr_trill_note, curr_trill_note->tick().ticks(), _duration_ticks, logic_tremoloType);
+
+                                            int _note_ottavaType = ottava_map[curr_trill_note];
+
+                                            m_notation->interaction()->addTrillNote(curr_trill_note, curr_trill_note->tick().ticks(), _duration_ticks, logic_tremoloType, _note_ottavaType);
                                             m_notation->interaction()->trillNoteUpdate();
                                         }
                                     } else if (curr_trill_note_checked && !curr_trill_note1_checked) {
@@ -332,7 +434,10 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                     logic_tremoloType = 50;
                                                 }
                                             } 
-                                            m_notation->interaction()->addTrillNote1(curr_trill_note1, curr_trill_note1->tick().ticks(), _duration_ticks, logic_tremoloType);
+
+                                            int _note_ottavaType = _note_ottavaType = ottava_map[curr_trill_note1];
+
+                                            m_notation->interaction()->addTrillNote1(curr_trill_note1, curr_trill_note1->tick().ticks(), _duration_ticks, logic_tremoloType, _note_ottavaType);
                                             m_notation->interaction()->trillNoteUpdate1();
                                         }
                                     }
@@ -381,13 +486,10 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                             for (size_t grace_i = 0; grace_i < gracechords_size; ++grace_i) {
                                                 if (ticks_dis >= single_grace_duration_ticks * grace_i && ticks_dis <= single_grace_duration_ticks * (grace_i + 1)) {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::RED);
-                                                    EngravingItemList pre_notesList = graceChords[grace_i]->childrenItems(false);
-                                                    size_t pre_notes_len = pre_notesList.size();
-                                                    for (size_t pre_j = 0; pre_j < pre_notes_len; pre_j++) {
-                                                        EngravingItem* pre_note_item = pre_notesList.at(pre_j);
-                                                        if (pre_note_item->type() == mu::engraving::ElementType::NOTE) {
-                                                            m_notation->interaction()->addPlaybackNote(toNote(pre_note_item));
-                                                        }
+                                                    std::vector<Note*> _notesList = graceChords[grace_i]->notes();
+                                                    for (Note* __note__ : _notesList) {
+                                                        int __note__ottavaType = ottava_map[__note__];
+                                                        m_notation->interaction()->addPlaybackNote(__note__, __note__ottavaType);
                                                     }
                                                 } else {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::BLACK);
@@ -399,7 +501,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                 _chord->setColor(muse::draw::Color::BLACK);
                                             }
                                             _pre_note->setColor(muse::draw::Color::RED);
-                                            m_notation->interaction()->addPlaybackNote(_pre_note);
+                                            m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType);
                                         }
                                     } else {
                                         int _pre_note_duration_ticks = _pre_note->chord()->durationTypeTicks().ticks();
@@ -407,13 +509,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                             for (size_t grace_i = 0; grace_i < gracechords_size; ++grace_i) {
                                                 if (ticks_dis >= _pre_note_duration_ticks - single_grace_duration_ticks * (gracechords_size - grace_i) && ticks_dis <= _pre_note_duration_ticks - single_grace_duration_ticks * (gracechords_size - grace_i - 1)) {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::RED);
-                                                    EngravingItemList pre_notesList = graceChords[grace_i]->childrenItems(false);
-                                                    size_t pre_notes_len = pre_notesList.size();
-                                                    for (size_t pre_j = 0; pre_j < pre_notes_len; pre_j++) {
-                                                        EngravingItem* pre_note_item = pre_notesList.at(pre_j);
-                                                        if (pre_note_item->type() == mu::engraving::ElementType::NOTE) {
-                                                            m_notation->interaction()->addPlaybackNote(toNote(pre_note_item));
-                                                        }
+                                                    for (Note* _note_item : graceChords[grace_i]->notes()) {
+                                                        int _note_item_ottavaType = ottava_map[_note_item];
+                                                        m_notation->interaction()->addPlaybackNote(_note_item, _note_item_ottavaType);
                                                     }
                                                 } else {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::BLACK);
@@ -425,12 +523,14 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                 _chord->setColor(muse::draw::Color::BLACK);
                                             }
                                             _pre_note->setColor(muse::draw::Color::RED);
-                                            m_notation->interaction()->addPlaybackNote(_pre_note);
+                                            m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType);
                                         }
                                     }
                                     
                                 } else {
-                                    m_notation->interaction()->addPlaybackNote(toNote(item));
+                                    Note* _noteItem = toNote(item);
+                                    int _noteItem_ottavaType = ottava_map[_noteItem];
+                                    m_notation->interaction()->addPlaybackNote(_noteItem, _noteItem_ottavaType);
                                 }
                             }
                             
@@ -442,7 +542,11 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                             if (glissandoNote->type() == mu::engraving::ElementType::NOTE) {
                                 if (tick.ticks() < m_notation->interaction()->glissandoNoteTicks() 
                                 || tick.ticks() > m_notation->interaction()->glissandoNoteTicks() + m_notation->interaction()->glissandoNoteDurationticks()) {
-                                    m_notation->interaction()->addGlissandoNote(toNote(glissandoNote), glissandoNote->tick().ticks(), duration_ticks);
+
+                                    Note* _note= toNote(glissandoNote);
+                                    int _note_ottavaType = ottava_map[_note];
+                                    
+                                    m_notation->interaction()->addGlissandoNote(_note, glissandoNote->tick().ticks(), duration_ticks, _note_ottavaType);
 
                                     if (m_notation->interaction()->glissandoEndNotes().size() == 0) {
                                         EngravingItemList itemList__ = measure->childrenItems(true);
@@ -453,7 +557,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                             }
                                             if (__item__->type() == mu::engraving::ElementType::NOTE) {
                                                 if (__item__->tick().ticks() >= glissandoNote->tick().ticks() + duration_ticks / 10) {
-                                                    m_notation->interaction()->addGlissandoEndNote(toNote(__item__));
+                                                    Note* _note = toNote(__item__);
+                                                    int _note_ottavaType = ottava_map[_note];
+                                                    m_notation->interaction()->addGlissandoEndNote(_note, _note_ottavaType);
                                                 }
                                             } 
                                         }
@@ -517,11 +623,14 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                         mu::engraving::Chord *_itemParentChord = toChord(_itemParent);
                                                         int _item_duration_ticks = _itemParentChord->durationTypeTicks().ticks();
                                                         if (tick.ticks() >= _itemParentChord->tick().ticks() && tick.ticks() <= _itemParentChord->tick().ticks() + _item_duration_ticks) {
+                                                            Note* _note = toNote(_item);
+                                                            int _note_ottavaType = ottava_map[_note];
+
                                                             if (!m_notation->interaction()->arpeggioNoteTicksExist(item->canvasPos())) {
                                                                 m_notation->interaction()->addArpeggioPoint(item->canvasPos());
-                                                                m_notation->interaction()->addArpeggioNote(toNote(_item), _itemParentChord->tick().ticks(), arpeggio_duration_ticks);
+                                                                m_notation->interaction()->addArpeggioNote(_note, _itemParentChord->tick().ticks(), arpeggio_duration_ticks, _note_ottavaType);
                                                             } else {
-                                                                m_notation->interaction()->addArpeggioNote(toNote(_item));
+                                                                m_notation->interaction()->addArpeggioNote(_note, _note_ottavaType);
                                                                 if (arpeggio_whole && m_notation->interaction()->arpeggioNotes().size() >= 8) {
                                                                     if (m_notation->interaction()->arpeggioNotes().size() == 8) {
                                                                         m_notation->interaction()->updateArpeggioDuration(1.2 * arpeggio_duration_ticks);
