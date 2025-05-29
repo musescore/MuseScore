@@ -487,6 +487,10 @@ enum class Sid {
     keySigCourtesyBarlineMode,
     timeSigCourtesyBarlineMode,
 
+    barlineBeforeSigChange,
+    doubleBarlineBeforeKeySig,
+    doubleBarlineBeforeTimeSig,
+
     swingRatio,
     swingUnit,
 
