@@ -447,6 +447,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CAPO_FRET_POSITION,      true,  "fretPosition",          P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "fret position") },
     { Pid::CAPO_IGNORED_STRINGS,    true,  "ignoredStrings",        P_TYPE::INT_VEC,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "ignored strings") },
     { Pid::CAPO_GENERATE_TEXT,      true,  "generateText",          P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "automatically generate text") },
+    { Pid::CAPO_TRANSPOSE_MODE,     true,  "transposeMode",         P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "transpose behaviour") },
 
     { Pid::TIE_PLACEMENT,           true,  "tiePlacement",          P_TYPE::TIE_PLACEMENT,      PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tie placement") },
     { Pid::MIN_LENGTH,              true,  "minLength",             P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "minimum length") },

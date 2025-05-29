@@ -167,7 +167,8 @@ public:
     void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { m_swingList.insert({ tick.ticks(), sp }); }
 
     const CapoParams& capo(const Fraction&) const;
-    void insertCapoParams(const Fraction& tick, const CapoParams& params);
+    void insertCapoParams(const Fraction& tick, const Capo* capo);
+    void applyCapoParams();
     void clearCapoParams();
 
     //==== staff type helper function
@@ -282,6 +283,7 @@ private:
     friend class Excerpt;
     void setVoiceVisible(voice_idx_t voice, bool visible);
     void updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tracks);
+    void applyCapoTranspose(int startTick, int endTick, const int pitchOffset);
 
     ID m_id = INVALID_ID;
     Part* m_part = nullptr;
@@ -310,7 +312,7 @@ private:
 
     std::map<int, int> m_channelList[VOICES];
     std::map<int, SwingParameters> m_swingList;
-    std::map<int, CapoParams> m_capoMap;
+    std::map<int, const Capo*> m_capoMap;
     bool m_playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> m_visibilityVoices { true, true, true, true };
 

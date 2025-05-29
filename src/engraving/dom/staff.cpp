@@ -45,6 +45,8 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "timesig.h"
+#include "utils.h"
+#include "capo.h"
 
 // #define DEBUG_CLEFS
 
@@ -1040,12 +1042,103 @@ const CapoParams& Staff::capo(const Fraction& tick) const
         return dummy;
     }
     --it;
-    return m_capoMap.at(*it);
+    return m_capoMap.at(*it)->params();
 }
 
-void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
+void Staff::applyCapoTranspose(int startTick, int endTick, const int pitchOffset)
 {
-    m_capoMap.insert_or_assign(tick.ticks(), params);
+    auto caposSelected = score()->selection().elements(ElementType::CAPO);
+    score()->deselectAll();
+    auto m = score()->firstMeasure();
+    while (m->tick().ticks() < startTick) {
+        m = m->nextMeasure();
+    }
+    if (-1 == endTick) {
+        while (m) {
+            score()->select(m, SelectType::RANGE, idx());
+            m = m->nextMeasure();
+        }
+    } else {
+        while (m && m->tick().ticks() <= endTick) {
+            score()->select(m, SelectType::RANGE, idx());
+            m = m->nextMeasure();
+        }
+    }
+    Segment* s1 = score()->selection().startSegment();
+    if (!s1) {
+        return;
+    }
+    if (s1->measure()->isMMRest()) {
+        s1 = score()->tick2segment(s1->tick(), true, s1->segmentType(), false);
+    }
+    if (s1->rtick().isZero()) {
+        s1 = s1->measure()->first();
+    }
+    Segment* s2 = score()->selection().endSegment();
+    std::list<track_idx_t> tracks;
+    track_idx_t sidx = idx() * VOICES;
+    for (voice_idx_t i = 0; i < VOICES; ++i) {
+        if (score()->selectionFilter().canSelectVoice(i)) {
+            tracks.push_back(sidx + i);
+        }
+    }
+    for (Segment* segment = s1; segment && segment != s2; segment = segment->next1()) {
+        if (!segment->enabled()) {
+            continue;
+        }
+        for (track_idx_t track : tracks) {
+            EngravingItem* e = segment->element(track);
+            if (!e) {
+                continue;
+            }
+
+            if (e->isChord()) {
+                Chord* chord = toChord(e);
+                const std::vector<Note*> nl = chord->notes();
+                for (size_t noteIdx = 0; noteIdx < nl.size(); ++noteIdx) {
+                    if (!score()->selectionFilter().canSelectNoteIdx(noteIdx, nl.size(),
+                                                                     score()->selection().rangeContainsMultiNoteChords())) {
+                        continue;
+                    }
+                    Note* note = nl.at(noteIdx);
+                    int notePitch = note->pitch();
+                    int newPitch = notePitch + pitchOffset;
+                    note->setPitch(newPitch, note->tpc1default(newPitch), note->tpc2default(newPitch));
+                }
+                for (Chord* g : chord->graceNotes()) {
+                    for (Note* n : g->notes()) {
+                        int notePitch = n->pitch();
+                        int newPitch = notePitch + pitchOffset;
+                        n->setPitch(newPitch, n->tpc1default(newPitch), n->tpc2default(newPitch));
+                    }
+                }
+            }
+        }
+    }
+    score()->deselectAll();
+    for (EngravingItem* i : caposSelected) {
+        score()->select(i, SelectType::SINGLE, idx());
+    }
+}
+
+void Staff::insertCapoParams(const Fraction& tick, const Capo* capo)
+{
+    m_capoMap.insert_or_assign(tick.ticks(), capo);
+}
+
+void Staff::applyCapoParams()
+{
+    for (auto it = m_capoMap.begin(); it != m_capoMap.end(); ++it) {
+        if (!staffType()->isTabStaff()) {
+            const Capo* capo = it->second;
+            int startTick = it->first;
+            int endTick = -1;
+            if (auto n = std::next(it); n != m_capoMap.end()) {
+                endTick = n->first;
+            }
+            applyCapoTranspose(startTick, endTick, capo->params().capoTransposeState->standardPitchOffset());
+        }
+    }
 }
 
 void Staff::clearCapoParams()
