@@ -3661,6 +3661,7 @@ void RenameChordFBox::redo(EditData*)
     Fraction currentHarmonyTick = m_harmony->tick();
     String currentHarmonyName = m_harmony->harmonyName();
 
+    std::set<String> usedDiagrams;
     for (Harmony* harmony: findAllHarmonies(m_fretBox->score())) {
         String harmonyName = harmony->harmonyName();
 
@@ -3674,7 +3675,10 @@ void RenameChordFBox::redo(EditData*)
             break;
         }
 
-        harmonyBeforeNextMatch = harmonyName;
+        if (!muse::contains(usedDiagrams, harmonyName.toLower())) {
+            harmonyBeforeNextMatch = harmonyName;
+            usedDiagrams.insert(harmonyName);
+        }
     }
 
     ElementList& existingDiagramsFromBox = m_fretBox->el();
@@ -3752,6 +3756,7 @@ void AddChordFBox::redo(EditData*)
     String harmonyBeforeCurrentHarmony;
     Harmony* currentHarmonyFromScore = nullptr;
 
+    std::set<String> usedDiagrams;
     for (Harmony* harmony: findAllHarmonies(m_fretBox->score())) {
         String harmonyName = harmony->harmonyName();
         if (areHarmoniesEqual(harmonyName, m_chordNewName)) {
@@ -3765,7 +3770,10 @@ void AddChordFBox::redo(EditData*)
             break;
         }
 
-        harmonyBeforeCurrentHarmony = harmonyName;
+        if (!muse::contains(usedDiagrams, harmonyName.toLower())) {
+            harmonyBeforeCurrentHarmony = harmonyName;
+            usedDiagrams.insert(harmonyName);
+        }
     }
 
     if (!found) {
@@ -3834,6 +3842,7 @@ void RemoveChordFBox::redo(EditData*)
     String harmonyBeforeCurrentHarmony;
     Harmony* nextMatchHarmonyToReplace = nullptr;
 
+    std::set<String> usedDiagrams;
     for (Harmony* harmony: findAllHarmonies(m_fretBox->score())) {
         String harmonyName = harmony->harmonyName();
         if (areHarmoniesEqual(harmonyName, m_chordName)) {
@@ -3851,7 +3860,10 @@ void RemoveChordFBox::redo(EditData*)
             break;
         }
 
-        harmonyBeforeCurrentHarmony = harmonyName;
+        if (!muse::contains(usedDiagrams, harmonyName.toLower())) {
+            harmonyBeforeCurrentHarmony = harmonyName;
+            usedDiagrams.insert(harmonyName);
+        }
     }
 
     ElementList& existingDiagramsFromBox = m_fretBox->el();
