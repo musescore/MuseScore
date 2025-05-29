@@ -355,6 +355,15 @@ static void readRenderList(String val, std::list<RenderAction*>& renderList, int
 
                 renderList.emplace_back(new RenderActionMove(movex, movey));
             }
+        } else if (s.startsWith(u"ms:")) {
+            StringList ssl = s.split(u':', muse::SkipEmptyParts);
+            if (ssl.size() == 3) {
+                // ms:x:y
+                double movex = ssl[1].toDouble();
+                double movey = ssl[2].toDouble();
+
+                renderList.emplace_back(new RenderActionMoveScaled(movex, movey));
+            }
         } else if (s == u":push") {
             renderList.emplace_back(new RenderActionPush());
         } else if (s == u":pop") {
@@ -391,7 +400,8 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderAction*>& al, 
             const RenderActionMove* move = dynamic_cast<const RenderActionMove*>(a);
 
             if (!RealIsNull(move->x()) || !RealIsNull(move->y())) {
-                s += String(u"m:%1:%2").arg(move->x()).arg(move->y());
+                String scaled = move->scaled() ? u"s" : u"";
+                s += String(u"m%1:%2:%3").arg(scaled).arg(move->x()).arg(move->y());
             }
             break;
         }
@@ -432,6 +442,8 @@ void ChordToken::read(XmlReader& e, int mscVersion)
         tokenClass = ChordTokenClass::MODIFIER;
     } else if (c == "type") {
         tokenClass = ChordTokenClass::TYPE;
+    } else if (c == "accidental") {
+        tokenClass = ChordTokenClass::ACCIDENTAL;
     } else {
         tokenClass = ChordTokenClass::ALL;
     }
@@ -464,6 +476,9 @@ void ChordToken::write(XmlWriter& xml) const
         break;
     case ChordTokenClass::TYPE:
         attrs.push_back({ "class", "type" });
+        break;
+    case ChordTokenClass::ACCIDENTAL:
+        attrs.push_back({ "accidental", "type" });
         break;
     default:
         break;
@@ -1747,7 +1762,7 @@ int ChordList::privateID = -1000;
 //---------------------------------------------------------
 
 void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust, double stackedmmag, bool stackModifiers,
-                                    bool excludeModsHAlign)
+                                    bool excludeModsHAlign, String symbolFont)
 {
     m_stackModifiers = stackModifiers;
     m_excludeModsHAlign = excludeModsHAlign;
@@ -1756,6 +1771,7 @@ void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, do
     m_mmag = mmag;
     m_stackedmmag = stackedmmag;
     m_madjust = madjust;
+    m_symbolTextFont = symbolFont;
 }
 
 //---------------------------------------------------------
@@ -1773,8 +1789,11 @@ void ChordList::read(XmlReader& e, int mscVersion)
             f.family = e.attribute("family", u"default");
             if (f.family == u"MuseJazz") {
                 f.family = u"MuseJazz Text";
+            } else if (f.family == u"ScoreText") {
+                f.family = m_symbolTextFont;
+                f.musicSymbolText = true;
             }
-            f.mag    = 1.0;
+            f.mag = 1.0;
             f.fontClass = e.attribute("class");
             while (e.readNextStartElement()) {
                 if (e.name() == "sym") {
@@ -2042,6 +2061,19 @@ const ChordDescription* ChordList::description(int id) const
     return &it->second;
 }
 
+ChordToken ChordList::token(const String& s, ChordTokenClass type) const
+{
+    for (const ChordToken& tok : chordTokenList) {
+        if (tok.tokenClass != type || !tok.names.contains(s)) {
+            continue;
+        }
+
+        return tok;
+    }
+
+    return ChordToken();
+}
+
 void ChordList::checkChordList(const path_t& appDataPath, const MStyle& style)
 {
     // make sure we have a chordlist
@@ -2053,7 +2085,8 @@ void ChordList::checkChordList(const path_t& appDataPath, const MStyle& style)
         double stackedmmag = style.styleD(Sid::chordStackedModiferMag);
         bool stackModifiers = style.styleB(Sid::verticallyStackModifiers);
         bool excludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
-        configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, stackModifiers, excludeModsHAlign);
+        String symbolFont = style.styleSt(Sid::musicalTextFont);
+        configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, stackModifiers, excludeModsHAlign, symbolFont);
 
         if (style.value(Sid::chordsXmlFile).toBool()) {
             read(appDataPath, u"chords.xml");
@@ -2098,6 +2131,12 @@ void RenderActionPop::print() const
 void RenderActionScale::print() const
 {
     String info = String(u"%1").arg(m_scale);
+    RenderAction::print(actionType(), info);
+}
+
+void RenderActionMoveScaled::print() const
+{
+    String info = String(u"SCALED %1 %2").arg(x(), y());
     RenderAction::print(actionType(), info);
 }
 }
