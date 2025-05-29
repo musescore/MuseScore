@@ -220,7 +220,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                         }
 
                         if (!isOttavaStartd && staff_stick_map[noteStaffIndex] > 0 && staff_etick_map[noteStaffIndex] > 0) {
-                            if (note_->tick().ticks() <= staff_etick_map[noteStaffIndex]) {
+                            if (note_->tick().ticks() >= staff_stick_map[noteStaffIndex] && note_->tick().ticks() <= staff_etick_map[noteStaffIndex]) {
                                 int _ottavaType = staff_ottatype_map[noteStaffIndex];
                                 ottava_map[note_] = _ottavaType;
                                 if (note_->chord()) {
@@ -307,7 +307,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                         }
 
                         if (!isOttavaStartd && staff_stick_map[noteStaffIndex] > 0 && staff_etick_map[noteStaffIndex] > 0) {
-                            if (note_->tick().ticks() >= staff_stick_map[noteStaffIndex]) {
+                            if (note_->tick().ticks() >= staff_stick_map[noteStaffIndex] && note_->tick().ticks() <= staff_etick_map[noteStaffIndex]) {
                                 int _ottavaType = staff_ottatype_map[noteStaffIndex];
                                 ottava_map[note_] = _ottavaType;
                                 if (note_->chord()) {

@@ -111,10 +111,13 @@ bool compare_by_note_reverse(piano_key_t a, piano_key_t b)
 
 KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const 
 {
+    if (m_arpeggio_notes_keys.empty()) {
+        return KeyState::None;
+    }
     if (m_arpeggio_duration_ticks == 0) {
         return KeyState::None;
     }
-    if (m_arpeggio_curr_ticks > m_arpeggio_ticks && m_arpeggio_curr_ticks < m_arpeggio_ticks + m_arpeggio_duration_ticks) {
+    if (m_arpeggio_curr_ticks >= m_arpeggio_ticks && m_arpeggio_curr_ticks <= m_arpeggio_ticks + m_arpeggio_duration_ticks) {
         int left_dis = m_arpeggio_curr_ticks - m_arpeggio_ticks;
         double ratio = left_dis / static_cast<double>(m_arpeggio_duration_ticks);
         size_t arpeggio_notes_count = m_arpeggio_notes_keys.size();
@@ -130,6 +133,7 @@ KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const
         }
 
         int index = 0;
+        double single_tsd = static_cast<double>(m_arpeggio_duration_ticks) / sorted_keys.size();
         for (piano_key_t _key : sorted_keys) {
             int _ratio_count = static_cast<int>(arpeggio_notes_count * ratio);
             if (_ratio_count == 0) {
@@ -146,6 +150,13 @@ KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const
                 }
             }
             ++index;
+            if (index == (int)sorted_keys.size()) {
+                if (static_cast<double>(m_arpeggio_curr_ticks) > static_cast<double>(m_arpeggio_ticks) + single_tsd * (index - 1)) {
+                    if (key == _key) {
+                        return KeyState::Arpeggio;
+                    }
+                }
+            }
         }
     }
     return KeyState::None;
