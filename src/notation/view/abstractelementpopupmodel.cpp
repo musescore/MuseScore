@@ -87,7 +87,7 @@ QRect AbstractElementPopupModel::itemRect() const
     return m_itemRect;
 }
 
-bool AbstractElementPopupModel::supportsPopup(const EngravingItem* element)
+bool AbstractElementPopupModel::hasElementEditPopup(const EngravingItem* element)
 {
     if (!element) {
         return false;
@@ -95,6 +95,11 @@ bool AbstractElementPopupModel::supportsPopup(const EngravingItem* element)
 
     const PopupModelType modelType = modelTypeFromElement(element->type());
     if (modelType == PopupModelType::TYPE_UNDEFINED) {
+        return false;
+    }
+
+    if (modelType == PopupModelType::TYPE_TEXT) {
+        // Text style popup is only opened when making a selection during text editing
         return false;
     }
 
@@ -106,6 +111,16 @@ bool AbstractElementPopupModel::supportsPopup(const EngravingItem* element)
     default:
         return true;
     }
+}
+
+bool AbstractElementPopupModel::hasTextStylePopup(const EngravingItem* element)
+{
+    if (!element) {
+        return false;
+    }
+
+    const PopupModelType modelType = modelTypeFromElement(element->type());
+    return modelType == PopupModelType::TYPE_TEXT;
 }
 
 PopupModelType AbstractElementPopupModel::modelTypeFromElement(const engraving::ElementType& elementType)

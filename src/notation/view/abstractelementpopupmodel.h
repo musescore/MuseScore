@@ -62,8 +62,9 @@ public:
     PopupModelType modelType() const;
     QRect itemRect() const;
 
-    static bool supportsPopup(const mu::engraving::EngravingItem* element);
-    static PopupModelType modelTypeFromElement(const mu::engraving::ElementType& elementType);
+    static bool hasElementEditPopup(const engraving::EngravingItem* element);
+    static bool hasTextStylePopup(const engraving::EngravingItem* element);
+    static PopupModelType modelTypeFromElement(const engraving::ElementType& elementType);
 
     virtual void init();
 
@@ -86,8 +87,8 @@ protected:
     notation::INotationPtr currentNotation() const;
     INotationInteractionPtr interaction() const;
 
-    void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value);
-    void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, engraving::PropertyFlags flags);
+    void changeItemProperty(engraving::Pid id, const PropertyValue& value);
+    void changeItemProperty(engraving::Pid id, const PropertyValue& value, engraving::PropertyFlags flags);
 
     EngravingItem* m_item = nullptr;
     QRect m_itemRect;
