@@ -112,6 +112,9 @@ void PianoKeyboardView::init()
     });
 
     update();
+
+    piano_key_t numKeys = std::min<piano_key_t>(m_lowestKey + m_numberOfKeys, MAX_NUM_KEYS);
+    m_controller->updatePianoKeyboardKeys(m_lowestKey, numKeys - m_lowestKey);
 }
 
 void PianoKeyboardView::calculateKeyRects()
@@ -261,6 +264,23 @@ void PianoKeyboardView::checkResponseKeyOccluded() {
         return;
     }
     if (m_check_rects.empty()) {
+        qreal screenWidth = QGuiApplication::primaryScreen()->geometry().width();
+        qreal screenHeight = QGuiApplication::primaryScreen()->geometry().height();
+
+        qreal _width = width();
+        qreal _height = height();
+        if (_width > screenWidth) {
+            _width = screenWidth;
+        }
+        if (_height > screenHeight) {
+            _height = screenHeight;
+        }
+        if (_width < m_keysAreaRect.width()) {
+            qreal keysAreaTop = (_height - m_keysAreaRect.height()) / 2;
+            m_scrollOffset = -1;
+            m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
+            updateScrollBar();
+        }
         return;
     }
 
@@ -719,6 +739,9 @@ void PianoKeyboardView::setNumberOfKeys(int number)
 
     calculateKeyRects();
     update();
+
+    piano_key_t numKeys = std::min<piano_key_t>(m_lowestKey + m_numberOfKeys, MAX_NUM_KEYS);
+    m_controller->updatePianoKeyboardKeys(m_lowestKey, numKeys - m_lowestKey);
 }
 
 void PianoKeyboardView::moveCanvas(qreal dx)

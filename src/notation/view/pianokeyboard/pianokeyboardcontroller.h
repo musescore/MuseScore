@@ -67,6 +67,8 @@ public:
     muse::async::Notification clefKeySigsKeysChanged() const;
     std::set<uint> clefKeySigsKeys() const;
     void clearClefKeySigsKeys();
+    
+    void updatePianoKeyboardKeys(piano_key_t _lowestKey, piano_key_t _numKeys);
 
 private:
     INotationPtr currentNotation() const;
@@ -104,13 +106,13 @@ private:
     int m_arpeggio_curr_ticks;
     bool m_arpeggio_isdown = false;
 
-    Note *receive_note = nullptr;
+    Note* receive_note = nullptr;
     piano_key_t m_trill_note_key;
     int m_trill_ticks;
     int m_trill_duration_ticks;
     int m_trill_tremolo_type;
     int m_trill_curr_ticks;
-    Note *receive_note1 = nullptr;
+    Note* receive_note1 = nullptr;
     piano_key_t m_trill_note_key1;
     int m_trill_ticks1;
     int m_trill_duration_ticks1;
@@ -125,6 +127,9 @@ private:
     muse::async::Notification m_keyStatesChanged;
 
     muse::async::Notification m_playbackKeyStatesChanged;
+
+    piano_key_t lowestKey;
+    piano_key_t numKeys;
 };
 }
 

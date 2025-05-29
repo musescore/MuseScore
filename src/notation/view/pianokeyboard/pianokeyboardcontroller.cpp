@@ -299,6 +299,11 @@ void PianoKeyboardController::clearClefKeySigsKeys()
     m_clefKeySigsKeys.clear();
 }
 
+void PianoKeyboardController::updatePianoKeyboardKeys(piano_key_t _lowestKey, piano_key_t _numKeys) {
+    lowestKey = _lowestKey;
+    numKeys = _numKeys;
+}
+
 bool PianoKeyboardController::isFromMidi() const
 {
     return m_isFromMidi;
@@ -438,6 +443,37 @@ void PianoKeyboardController::onNotationChanged()
             if (receivedNote) {
                 const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
                 m_trill_note_key = static_cast<piano_key_t>(useWrittenPitch ? receivedNote->epitch() : receivedNote->ppitch());
+
+                int _noteOttavaType = notation->interaction()->noteOttavaType(receivedNote);
+                
+                if (_noteOttavaType > 0) {
+                    int __key = static_cast<int>(m_trill_note_key);
+                    if (_noteOttavaType == 100) {
+                        __key += 12;
+                    }
+                    if (_noteOttavaType == 101) {
+                        __key -= 12;
+                    }
+                    if (_noteOttavaType == 102) {
+                        __key += 24;
+                    }
+                    if (_noteOttavaType == 103) {
+                        __key -= 24;
+                    }
+                    if (_noteOttavaType == 104) {
+                        __key += 36;
+                    }
+                    if (_noteOttavaType == 105) {
+                        __key -= 36;
+                    }
+                    if (__key < static_cast<int>(lowestKey)) {
+                        __key = static_cast<int>(lowestKey);
+                    }
+                    if (__key >= static_cast<int>(lowestKey + numKeys)) {
+                        __key = static_cast<int>(lowestKey + numKeys) - 1;
+                    }
+                    m_trill_note_key = (piano_key_t)__key;
+                }
             } else {
                 m_trill_note_key = static_cast<piano_key_t>(10000);
             }
@@ -456,6 +492,37 @@ void PianoKeyboardController::onNotationChanged()
             if (receivedNote) {
                 const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
                 m_trill_note_key1 = static_cast<piano_key_t>(useWrittenPitch ? receivedNote->epitch() : receivedNote->ppitch());
+                
+                int _noteOttavaType = notation->interaction()->noteOttavaType(receivedNote);
+
+                if (_noteOttavaType > 0) {
+                    int __key = static_cast<int>(m_trill_note_key1);
+                    if (_noteOttavaType == 100) {
+                        __key += 12;
+                    }
+                    if (_noteOttavaType == 101) {
+                        __key -= 12;
+                    }
+                    if (_noteOttavaType == 102) {
+                        __key += 24;
+                    }
+                    if (_noteOttavaType == 103) {
+                        __key -= 24;
+                    }
+                    if (_noteOttavaType == 104) {
+                        __key += 36;
+                    }
+                    if (_noteOttavaType == 105) {
+                        __key -= 36;
+                    }
+                    if (__key < static_cast<int>(lowestKey)) {
+                        __key = static_cast<int>(lowestKey);
+                    }
+                    if (__key >= static_cast<int>(lowestKey + numKeys)) {
+                        __key = static_cast<int>(lowestKey + numKeys) - 1;
+                    }
+                    m_trill_note_key1 = (piano_key_t)__key;
+                }
             } else {
                 m_trill_note_key1 = static_cast<piano_key_t>(10000);
             }
@@ -538,7 +605,39 @@ void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const No
     const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
 
     for (const mu::engraving::Note* note : receivedNotes) {
-        newKeys.insert(static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch()));
+        piano_key_t _key = static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch());
+        
+        int _noteOttavaType = currentNotation()->interaction()->noteOttavaType(note);
+        if (_noteOttavaType > 0) {
+            int __key = static_cast<int>(_key);
+            if (_noteOttavaType == 100) {
+                __key += 12;
+            }
+            if (_noteOttavaType == 101) {
+                __key -= 12;
+            }
+            if (_noteOttavaType == 102) {
+                __key += 24;
+            }
+            if (_noteOttavaType == 103) {
+                __key -= 24;
+            }
+            if (_noteOttavaType == 104) {
+                __key += 36;
+            }
+            if (_noteOttavaType == 105) {
+                __key -= 36;
+            }
+            if (__key < static_cast<int>(lowestKey)) {
+                __key = static_cast<int>(lowestKey);
+            }
+            if (__key >= static_cast<int>(lowestKey + numKeys)) {
+                __key = static_cast<int>(lowestKey + numKeys) - 1;
+            }
+            newKeys.insert((piano_key_t)__key);
+        } else {
+            newKeys.insert(_key);
+        }
     }
 }
 
@@ -567,8 +666,71 @@ void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const N
 
     const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
     m_glissando_note_key = static_cast<piano_key_t>(useWrittenPitch ? glissandoNote->epitch() : glissandoNote->ppitch());
+    
+    int _noteOttavaType = currentNotation()->interaction()->noteOttavaType(glissandoNote);
+    if (_noteOttavaType > 0) {
+        int __key = static_cast<int>(m_glissando_note_key);
+        if (_noteOttavaType == 100) {
+            __key += 12;
+        }
+        if (_noteOttavaType == 101) {
+            __key -= 12;
+        }
+        if (_noteOttavaType == 102) {
+            __key += 24;
+        }
+        if (_noteOttavaType == 103) {
+            __key -= 24;
+        }
+        if (_noteOttavaType == 104) {
+            __key += 36;
+        }
+        if (_noteOttavaType == 105) {
+            __key -= 36;
+        }
+        if (__key < static_cast<int>(lowestKey)) {
+            __key = static_cast<int>(lowestKey);
+        }
+        if (__key >= static_cast<int>(lowestKey + numKeys)) {
+            __key = static_cast<int>(lowestKey + numKeys) - 1;
+        }
+        m_glissando_note_key = (piano_key_t)__key;
+    } 
+
     for (const mu::engraving::Note* note : receivedNotes) {
-        newKeys.insert(static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch()));
+        piano_key_t _key = static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch());
+        
+        int noteOttavaType = currentNotation()->interaction()->noteOttavaType(note);
+        if (noteOttavaType > 0) {
+            int __key = static_cast<int>(_key);
+            if (noteOttavaType == 100) {
+                __key += 12;
+            }
+            if (noteOttavaType == 101) {
+                __key -= 12;
+            }
+            if (noteOttavaType == 102) {
+                __key += 24;
+            }
+            if (noteOttavaType == 103) {
+                __key -= 24;
+            }
+            if (noteOttavaType == 104) {
+                __key += 36;
+            }
+            if (noteOttavaType == 105) {
+                __key -= 36;
+            }
+            if (__key < static_cast<int>(lowestKey)) {
+                __key = static_cast<int>(lowestKey);
+            }
+            if (__key >= static_cast<int>(lowestKey + numKeys)) {
+                __key = static_cast<int>(lowestKey + numKeys) - 1;
+            }
+            newKeys.insert((piano_key_t)__key);
+        } else {
+            newKeys.insert(_key);
+        }
     }
 }
 
@@ -585,7 +747,39 @@ void PianoKeyboardController::updateArpeggioNotesKeys(const std::vector<const No
     const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
 
     for (const mu::engraving::Note* note : receivedNotes) {
-        newKeys.insert(static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch()));
+        piano_key_t _key = static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch());
+        
+        int _noteOttavaType = currentNotation()->interaction()->noteOttavaType(note);
+        if (_noteOttavaType > 0) {
+            int __key = static_cast<int>(_key);
+            if (_noteOttavaType == 100) {
+                __key += 12;
+            }
+            if (_noteOttavaType == 101) {
+                __key -= 12;
+            }
+            if (_noteOttavaType == 102) {
+                __key += 24;
+            }
+            if (_noteOttavaType == 103) {
+                __key -= 24;
+            }
+            if (_noteOttavaType == 104) {
+                __key += 36;
+            }
+            if (_noteOttavaType == 105) {
+                __key -= 36;
+            }
+            if (__key < static_cast<int>(lowestKey)) {
+                __key = static_cast<int>(lowestKey);
+            }
+            if (__key >= static_cast<int>(lowestKey + numKeys)) {
+                __key = static_cast<int>(lowestKey + numKeys) - 1;
+            }
+            newKeys.insert((piano_key_t)__key);
+        } else {
+            newKeys.insert(_key);
+        }
     }
 }
 
