@@ -61,7 +61,7 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * harmonyDuration READ harmonyDuration CONSTANT)
     Q_PROPERTY(StyleItem * capoPosition READ capoPosition CONSTANT)
 
-    Q_PROPERTY(bool isCustomXml READ isCustomXml CONSTANT NOTIFY changePreset)
+    Q_PROPERTY(bool isCustomXml READ isCustomXml NOTIFY changePreset)
 
     muse::Inject<mu::notation::INotationConfiguration> configuration = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
