@@ -209,7 +209,7 @@ static Tuplet* bottomTupletFromTick(std::vector<ReadableTuplet> tupletMap, Fract
 }
 
 bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrackIdx, Measure* measure,
-                                         std::vector<ReadableTuplet>& tupletMap, std::unordered_map<size_t, ChordRest*>& entryMap)
+                                         std::vector<ReadableTuplet>& tupletMap)
 {
     if (entryInfo->getEntry()->graceNote) {
         logger()->logWarning(String(u"Grace notes not yet supported"), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
@@ -366,18 +366,16 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         parentTuplet->add(cr);
     }
     logger()->logInfo(String(u"Adding entry of duration %2 at tick %1").arg(entryStartTick.toString(), cr->durationTypeTicks().toString()));
-    entryMap.emplace(entryInfo.getIndexInFrame(), cr);
     return true;
 }
 
-bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx,
-                                     std::unordered_map<size_t, ChordRest*>& entryMap)
+bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx, Measure* measure)
 {
     if (!entryInfoPtr.calcIsBeamStart()) {
         return true;
     }
     /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
-    ChordRest* cr = muse::value(entryMap, entryInfoPtr.getIndexInFrame(), nullptr);
+    ChordRest* cr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(entryInfoPtr->elapsedDuration), curTrackIdx);
     if (!cr) { // once grace notes are supported, use IF_ASSERT_FAILED(cr)
         logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
         return false;
@@ -394,7 +392,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     ChordRest* lastCr = nullptr;
     for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
         std::shared_ptr<const Entry> currentEntry = nextInBeam->getEntry();
-        lastCr = muse::value(entryMap, nextInBeam.getIndexInFrame(), nullptr);
+        lastCr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(nextInBeam->elapsedDuration), curTrackIdx);
         IF_ASSERT_FAILED(lastCr) {
             logger()->logWarning(String(u"Entry %1 was not mapped").arg(nextInBeam->getEntry()->getEntryNumber()), m_doc, nextInBeam.getStaff(), nextInBeam.getMeasure());
             continue;
@@ -595,9 +593,8 @@ void FinaleParser::importEntries()
                         createTupletsFromMap(measure, curTrackIdx, tupletMap, logger());
 
                         // add chords and rests
-                        std::unordered_map<size_t, ChordRest*> entryMap;
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, tupletMap, entryMap);
+                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, tupletMap);
                         }
 
                         // add tremolos
@@ -605,7 +602,7 @@ void FinaleParser::importEntries()
 
                         // create beams
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processBeams(entryInfoPtr, curTrackIdx, entryMap);
+                            processBeams(entryInfoPtr, curTrackIdx, measure);
                         }
                     }
                 }
