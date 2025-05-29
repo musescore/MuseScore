@@ -22,7 +22,7 @@
 #include <optional>
 
 #include "internal/importfinalelogger.h"
-#include "internal/importfinalescoremap.h"
+#include "internal/importfinaleparser.h"
 
 #include "log.h"
 

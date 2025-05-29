@@ -27,7 +27,7 @@
 #include "musx/musx.h"
 
 namespace mu::iex::finale {
-class EnigmaXmlImporter;
+class FinaleParser;
 
 class FinaleLogger
 {

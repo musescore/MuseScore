@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "internal/importfinalescoremap.h"
+#include "internal/importfinaleparser.h"
 #include "internal/importfinalelogger.h"
 #include "internal/finaletypesconv.h"
 #include "dom/sig.h"
@@ -59,7 +59,7 @@ using namespace musx::dom;
 
 namespace mu::iex::finale {
 
-void EnigmaXmlImporter::mapLayers()
+void FinaleParser::mapLayers()
 {
     // This function maps layers to voices based on the layer stem directions and the hardwired MuseScore directions.
     // MuseScore hardwire voices 0,2 up and voices 1,3 down.
@@ -106,7 +106,7 @@ void EnigmaXmlImporter::mapLayers()
     }
 }
 
-std::unordered_map<int, voice_idx_t> EnigmaXmlImporter::mapFinaleVoices(const std::map<LayerIndex, bool>& finaleVoiceMap,
+std::unordered_map<int, voice_idx_t> FinaleParser::mapFinaleVoices(const std::map<LayerIndex, bool>& finaleVoiceMap,
                                                                         musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const
 {
     using FinaleVoiceID = int;
@@ -188,7 +188,7 @@ static size_t indexOfParentTuplet(std::vector<ReadableTuplet> tupletMap, size_t 
 {
     for (size_t i = index; i > 0; --i) {
         if (tupletMap[i].layer + 1 == tupletMap[index].layer) {
-            if (tupletMap[i].absBegin <= tupletMap[index].absBegin && tupletMap[i].absEnd >= tupletMap[index].absEnd) {
+            if (tupletMap[i].startTick <= tupletMap[index].startTick && tupletMap[i].endTick >= tupletMap[index].endTick) {
                 return i;
             }
         }
@@ -201,14 +201,14 @@ static Tuplet* bottomTupletFromTick(std::vector<ReadableTuplet> tupletMap, Fract
     // return first tuplet the pos is contained within,
     // starting from the end (bottom layers) and working our way up
     for (size_t i = tupletMap.size() - 1; i > 0; --i) {
-        if (pos >= tupletMap[i].absBegin && pos < tupletMap[i].absEnd) {
+        if (pos >= tupletMap[i].startTick && pos < tupletMap[i].endTick) {
             return tupletMap[i].scoreTuplet;
         }
     }
     return nullptr;
 }
 
-bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrackIdx, Measure* measure,
+bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrackIdx, Measure* measure,
                                          std::vector<ReadableTuplet>& tupletMap, std::unordered_map<size_t, ChordRest*>& entryMap)
 {
     if (entryInfo->getEntry()->graceNote) {
@@ -370,7 +370,7 @@ bool EnigmaXmlImporter::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t cur
     return true;
 }
 
-bool EnigmaXmlImporter::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx,
+bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx,
                                      std::unordered_map<size_t, ChordRest*>& entryMap)
 {
     if (!entryInfoPtr.calcIsBeamStart()) {
@@ -426,8 +426,8 @@ static void processTremolos(std::vector<ReadableTuplet>& tremoloMap, track_idx_t
 {
     /// @todo account for invalid durations
     for (ReadableTuplet tuplet : tremoloMap) {
-        Chord* c1 = measure->findChord(measure->tick() + tuplet.absBegin, curTrackIdx);
-        Chord* c2 = measure->findChord(measure->tick() + ((tuplet.absBegin + tuplet.absEnd) / 2), curTrackIdx);
+        Chord* c1 = measure->findChord(measure->tick() + tuplet.startTick, curTrackIdx);
+        Chord* c2 = measure->findChord(measure->tick() + ((tuplet.startTick + tuplet.endTick) / 2), curTrackIdx);
         IF_ASSERT_FAILED(c1 && c2 && c1->ticks() == c2->ticks()) {
             continue;
         }
@@ -461,8 +461,8 @@ static void createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo,
             continue;
         }
         ReadableTuplet rTuplet;
-        rTuplet.absBegin   = FinaleTConv::musxFractionToFraction(tuplet.startDura).reduced();
-        rTuplet.absEnd     = FinaleTConv::musxFractionToFraction(tuplet.endDura).reduced();
+        rTuplet.startTick  = FinaleTConv::musxFractionToFraction(tuplet.startDura).reduced();
+        rTuplet.endTick    = FinaleTConv::musxFractionToFraction(tuplet.endDura).reduced();
         rTuplet.musxTuplet = tuplet.tuplet;
         if (tuplet.calcIsTremolo()) {
             tremoloMap.emplace_back(rTuplet);
@@ -477,8 +477,8 @@ static void createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo,
                 continue;
             }
 
-            if (tupletMap[i].absBegin >= tupletMap[j].absBegin && tupletMap[i].absEnd <= tupletMap[j].absEnd
-                && (tupletMap[i].absBegin > tupletMap[j].absBegin || tupletMap[i].absEnd < tupletMap[j].absEnd
+            if (tupletMap[i].startTick >= tupletMap[j].startTick && tupletMap[i].endTick <= tupletMap[j].endTick
+                && (tupletMap[i].startTick > tupletMap[j].startTick || tupletMap[i].endTick < tupletMap[j].endTick
                     || tupletMap[i].layer == tupletMap[j].layer)) {
                 tupletMap[i].layer = std::max(tupletMap[i].layer, tupletMap[j].layer + 1);
             }
@@ -487,7 +487,7 @@ static void createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo,
 
     std::sort(tupletMap.begin(), tupletMap.end(), [](const ReadableTuplet& a, const ReadableTuplet& b) {
         if (a.layer == b.layer) {
-            return a.absBegin < b.absBegin;
+            return a.startTick < b.startTick;
         }
         return a.layer < b.layer;
     });
@@ -507,7 +507,7 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
         }
         tupletMap[i].scoreTuplet = Factory::createTuplet(measure);
         tupletMap[i].scoreTuplet->setTrack(curTrackIdx);
-        tupletMap[i].scoreTuplet->setTick(measure->tick() + tupletMap[i].absBegin);
+        tupletMap[i].scoreTuplet->setTick(measure->tick() + tupletMap[i].startTick);
         tupletMap[i].scoreTuplet->setParent(measure);
         // musxTuplet::calcRatio is the reciprocal of what MuseScore needs
         /// @todo skip case where finale numerator is 0: often used for changing beams
@@ -517,12 +517,12 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
         Fraction f = baseLen.fraction() * tupletRatio.denominator();
         tupletMap[i].scoreTuplet->setTicks(f.reduced());
         logger->logInfo(String(u"Detected Tuplet: Starting at %1, duration: %2, ratio: %3").arg(
-                        tupletMap[i].absBegin.toString(), f.reduced().toString(), tupletRatio.toString()));
+                        tupletMap[i].startTick.toString(), f.reduced().toString(), tupletRatio.toString()));
         for (size_t ratioIndex = indexOfParentTuplet(tupletMap, i); tupletMap[ratioIndex].layer >= 0; ratioIndex = indexOfParentTuplet(tupletMap, ratioIndex)) {
             // finale value doesn't include parent tuplet ratio, but is global. Our setup should be correct though, so hack the assert
             f /= tupletMap[ratioIndex].scoreTuplet->ratio();
         }
-        IF_ASSERT_FAILED(f.reduced() == (tupletMap[i].absEnd - tupletMap[i].absBegin).reduced()) {
+        IF_ASSERT_FAILED(f.reduced() == (tupletMap[i].endTick - tupletMap[i].startTick).reduced()) {
             logger->logWarning(String(u"Tuplet duration is corrupted"));
             /// @todo account for tuplets with invalid durations, i.e. durations not attainable in MuseScore
         }
@@ -535,7 +535,7 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
     }
 }
 
-void EnigmaXmlImporter::importEntries()
+void FinaleParser::importEntries()
 {
     // Add entries (notes, rests, tuplets)
     std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
@@ -586,8 +586,8 @@ void EnigmaXmlImporter::importEntries()
                         // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
                         /// @todo does this need to account for local timesigs
                         ReadableTuplet rTuplet;
-                        rTuplet.absBegin = Fraction(0, 1);
-                        rTuplet.absEnd = FinaleTConv::simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
+                        rTuplet.startTick = Fraction(0, 1);
+                        rTuplet.endTick = FinaleTConv::simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
                         rTuplet.layer = -1;
                         std::vector<ReadableTuplet> tupletMap = { rTuplet };
                         std::vector<ReadableTuplet> tremoloMap;

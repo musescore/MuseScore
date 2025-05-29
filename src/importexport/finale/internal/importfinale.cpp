@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "internal/importenigmaxml.h"
-#include "internal/importfinalescoremap.h"
+#include "internal/importfinale.h"
+#include "internal/importfinaleparser.h"
 #include "internal/importfinalelogger.h"
 
 #include <zlib.h>
@@ -109,8 +109,8 @@ Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
 
         data.clear(); // free up data now that it isn't needed
 
-        EnigmaXmlImporter importer(score, doc, logger);
-        importer.import();
+        FinaleParser parser(score, doc, logger);
+        parser.parse();
 
         score->setUpTempoMap(); //??
         return Err::NoError;

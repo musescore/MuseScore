@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "notationfinalereader.h"
-#include "importenigmaxml.h"
+#include "importfinale.h"
 
 #include "engraving/dom/score.h"
 #include "engraving/engravingerrors.h"

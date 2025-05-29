@@ -42,20 +42,20 @@ class Staff;
 namespace mu::iex::finale {
 
 struct ReadableTuplet {
-    engraving::Fraction absBegin;
-    engraving::Fraction absEnd;
+    engraving::Fraction startTick;
+    engraving::Fraction endTick;
     std::shared_ptr<const musx::dom::details::TupletDef> musxTuplet = nullptr; // actual tuplet object. used for writing properties
     engraving::Tuplet* scoreTuplet = nullptr; // to be created tuplet object.
     int layer = 0; // for nested tuplets. 0 = outermost
 };
 
-class EnigmaXmlImporter
+class FinaleParser
 {
 public:
-    EnigmaXmlImporter(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, FinaleLoggerPtr& logger)
+    FinaleParser(engraving::Score* score, const std::shared_ptr<musx::dom::Document>& doc, FinaleLoggerPtr& logger)
         : m_score(score), m_doc(doc), m_logger(logger) {}
 
-    void import();
+    void parse();
 
     const engraving::Score* score() const { return m_score; }
     std::shared_ptr<musx::dom::Document> musxDocument() const { return m_doc; }

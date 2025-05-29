@@ -25,7 +25,7 @@
 #include "engraving/engravingerrors.h"
 #include "engraving/dom/masterscore.h"
 
-#include "importexport/finale/internal/importenigmaxml.h"
+#include "importexport/finale/internal/importfinale.h"
 
 #include "engraving/tests/utils/scorerw.h"
 #include "engraving/tests/utils/scorecomp.h"

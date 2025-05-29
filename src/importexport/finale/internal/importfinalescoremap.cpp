@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "internal/importfinalescoremap.h"
+#include "internal/importfinaleparser.h"
 #include "internal/importfinalelogger.h"
 #include "internal/finaletypesconv.h"
 
@@ -60,23 +60,6 @@ using namespace mu::iex::finale;
 
 namespace mu::iex::finale {
 
-void EnigmaXmlImporter::import()
-{
-    // styles (first, so that spatium and other defaults are correct)
-    importStyles(m_score->style(), m_currentMusxPartId);
-
-    // scoremap
-    importParts();
-    importBrackets();
-    importMeasures();
-    importPageLayout();
-    importStaffItems();
-
-    // entries
-    mapLayers();
-    importEntries();
-}
-
 static std::optional<ClefTypeList> clefTypeListFromMusxStaff(const std::shared_ptr<const others::Staff> musxStaff)
 {
     ClefType concertClef = FinaleTConv::toMuseScoreClefType(musxStaff->calcFirstClefIndex());
@@ -99,7 +82,7 @@ static std::string trimNewLineFromString(const std::string& src)
     return src;
 }
 
-Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const others::Staff> musxStaff, const InstrumentTemplate* it)
+Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others::Staff> musxStaff, const InstrumentTemplate* it)
 {
     Staff* s = Factory::createStaff(part);
 
@@ -164,7 +147,7 @@ Staff* EnigmaXmlImporter::createStaff(Part* part, const std::shared_ptr<const ot
     return s;
 }
 
-void EnigmaXmlImporter::importMeasures()
+void FinaleParser::importMeasures()
 {
     // add default time signature
     Fraction currTimeSig = Fraction(4, 4);
@@ -196,7 +179,7 @@ void EnigmaXmlImporter::importMeasures()
     }
 }
 
-void EnigmaXmlImporter::importParts()
+void FinaleParser::importParts()
 {
     std::vector<std::shared_ptr<others::InstrumentUsed>> scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
@@ -255,7 +238,7 @@ void EnigmaXmlImporter::importParts()
     }
 }
 
-void EnigmaXmlImporter::importBrackets()
+void FinaleParser::importBrackets()
 {
     struct StaffGroupLayer
     {
@@ -376,7 +359,7 @@ static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, 
     return clef;
 }
 
-void EnigmaXmlImporter::importClefs(const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem,
+void FinaleParser::importClefs(const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem,
                                     const std::shared_ptr<others::Measure>& musxMeasure, Measure* measure, staff_idx_t curStaffIdx,
                                     ClefIndex& musxCurrClef)
 {
@@ -419,7 +402,7 @@ void EnigmaXmlImporter::importClefs(const std::shared_ptr<others::InstrumentUsed
     }
 }
 
-void EnigmaXmlImporter::importStaffItems()
+void FinaleParser::importStaffItems()
 {
     std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
@@ -498,7 +481,7 @@ void EnigmaXmlImporter::importStaffItems()
     }
 }
 
-void EnigmaXmlImporter::importPageLayout()
+void FinaleParser::importPageLayout()
 {
     // No measures or staves means no valid staff systems
     if (m_score->measures()->empty() || m_score->noStaves()) {

@@ -23,7 +23,7 @@
 #include "dom/textbase.h"
 #include "dom/types.h"
 #include "internal/importfinalelogger.h"
-#include "internal/importfinalescoremap.h"
+#include "internal/importfinaleparser.h"
 #include "internal/finaletypesconv.h"
 #include "musx/musx.h"
 
@@ -49,7 +49,7 @@ static const std::set<std::string_view> museScoreSMuFLFonts{
 
 struct FinalePreferences
 {
-    FinalePreferences(const EnigmaXmlImporter& context) :
+    FinalePreferences(const FinaleParser& context) :
         document(context.musxDocument()), logger(context.logger()) {}
 
     DocumentPtr document;
@@ -86,7 +86,7 @@ struct FinalePreferences
 };
 
 template <typename T>
-static std::shared_ptr<T> getDocOptions(const EnigmaXmlImporter& context, const std::string& prefsName)
+static std::shared_ptr<T> getDocOptions(const FinaleParser& context, const std::string& prefsName)
 {
     auto result = context.musxDocument()->getOptions()->get<T>();
     if (!result) {
@@ -95,7 +95,7 @@ static std::shared_ptr<T> getDocOptions(const EnigmaXmlImporter& context, const 
     return result;
 }
 
-static FinalePreferences getCurrentPrefs(const EnigmaXmlImporter& context, Cmper forPartId)
+static FinalePreferences getCurrentPrefs(const FinaleParser& context, Cmper forPartId)
 {
     FinalePreferences retval(context);
     retval.forPartId = forPartId;
@@ -690,7 +690,7 @@ void writeMarkingPrefs(MStyle& style, const FinalePreferences& prefs)
     }
 }
 
-void EnigmaXmlImporter::importStyles(MStyle& style, Cmper partId)
+void FinaleParser::importStyles(MStyle& style, Cmper partId)
 {
     FinalePreferences prefs = getCurrentPrefs(*this, partId);
     writePagePrefs(style, prefs);
