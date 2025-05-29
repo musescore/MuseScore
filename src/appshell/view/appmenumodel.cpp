@@ -159,6 +159,18 @@ void AppMenuModel::onActionsStateChanges(const muse::actions::ActionCodeList& co
     }
 }
 
+MenuItemList AppMenuModel::makeChordAndFretboardDiagramsItems()
+{
+    MenuItemList items {
+        makeMenuItem("chord-text"),
+        makeMenuItem("add-fretboard-diagram"),
+        makeSeparator(),
+        makeMenuItem("insert-fretframe", TranslatableString("appshell/menu/add/chordandfret", "Fretboard diagram legend"))
+    };
+
+    return items;
+}
+
 MenuItem* AppMenuModel::makeMenuItem(const ActionCode& actionCode, MenuItemRole menuRole)
 {
     MenuItem* item = makeMenuItem(actionCode);
@@ -301,6 +313,7 @@ MenuItem* AppMenuModel::makeAddMenu()
         makeMenu(TranslatableString("appshell/menu/add", "&Frames"), makeFramesItems(), "menu-frames"),
         makeMenu(TranslatableString("appshell/menu/add", "&Text"), makeTextItems(), "menu-notes"),
         makeMenu(TranslatableString("appshell/menu/add", "&Lines"), makeLinesItems(), "menu-lines"),
+        makeMenu(TranslatableString("appshell/menu/add", "&Chords and fretboard diagrams"), makeChordAndFretboardDiagramsItems()),
     };
 
     return makeMenu(TranslatableString("appshell/menu/add", "&Add"), addItems, "menu-add");
