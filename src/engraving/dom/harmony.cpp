@@ -42,6 +42,7 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
+#include "textbase.h"
 #include "textedit.h"
 #include "utils.h"
 
@@ -329,7 +330,7 @@ Harmony::Harmony(const Harmony& h)
     }
 
     for (const TextSegment* s : h.m_textList) {
-        TextSegment* ns = new TextSegment(s->text, s->m_font, s->x, s->y, s->offset, s->hAlign);
+        TextSegment* ns = new TextSegment(*s);
         m_textList.push_back(ns);
     }
 }
@@ -1114,35 +1115,12 @@ void Harmony::renderRomanNumeral()
 }
 
 //---------------------------------------------------------
-//   TextSegment
-//---------------------------------------------------------
-
-TextSegment::TextSegment(const String& s, const Font& f, double _x, double _y, bool align)
-{
-    m_font = f;
-    x      = _x;
-    y      = _y;
-    hAlign = align;
-    setText(s);
-}
-
-TextSegment::TextSegment(const String& s, const muse::draw::Font& f, double _x, double _y, PointF _offset, bool align)
-{
-    m_font = f;
-    x      = _x;
-    y      = _y;
-    hAlign = align;
-    offset = _offset;
-    setText(s);
-}
-
-//---------------------------------------------------------
 //   width
 //---------------------------------------------------------
 
 double TextSegment::width() const
 {
-    return FontMetrics::width(m_font, text);
+    return FontMetrics::width(m_font, m_text);
 }
 
 double TextSegment::capHeight() const
@@ -1156,7 +1134,7 @@ double TextSegment::capHeight() const
 
 RectF TextSegment::boundingRect() const
 {
-    return FontMetrics::boundingRect(m_font, text);
+    return FontMetrics::boundingRect(m_font, m_text);
 }
 
 //---------------------------------------------------------
@@ -1165,7 +1143,43 @@ RectF TextSegment::boundingRect() const
 
 RectF TextSegment::tightBoundingRect() const
 {
-    return FontMetrics::tightBoundingRect(m_font, text);
+    return FontMetrics::tightBoundingRect(m_font, m_text);
+}
+
+void TextSegment::setFont(const muse::draw::Font& f)
+{
+    m_font = f;
+    if (f.type() != Font::Type::MusicSymbolText) {
+        return;
+    }
+
+    // Check all symbols in string are available in this font
+    FontMetrics fm(f);
+    bool fail = false;
+    for (size_t i = 0; i < m_text.size(); ++i) {
+        const Char& c = m_text.at(i);
+        if (c.isHighSurrogate()) {
+            if (i + 1 == m_text.size()) {
+                ASSERT_X("bad string");
+            }
+            const Char& c2 = m_text.at(i + 1);
+            ++i;
+            char32_t v = Char::surrogateToUcs4(c, c2);
+            if (!fm.inFontUcs4(v)) {
+                fail = true;
+                break;
+            }
+        } else {
+            if (!fm.inFont(c)) {
+                fail = true;
+                break;
+            }
+        }
+    }
+    // Fallback to default musical text font
+    if (fail) {
+        m_font.setFamily(String::fromUtf8(FALLBACK_SYMBOLTEXT_FONT), Font::Type::MusicSymbolText);
+    }
 }
 
 //---------------------------------------------------------
@@ -1538,7 +1552,7 @@ void Harmony::render()
 
         ctx.setx(0);
         double rootCapHeight = root->capHeight();
-        ctx.sety(root->y - rootCapHeight);
+        ctx.sety(root->y() - rootCapHeight);
 
         double lineY = ctx.y() - style().styleS(Sid::polychordDividerSpacing).toMM(spatium())
                        - style().styleS(Sid::polychordDividerThickness).toMM(spatium()) / 2;
@@ -1580,7 +1594,7 @@ void Harmony::render()
         }
 
         for (TextSegment* seg : segs) {
-            seg->x += diff;
+            seg->movex(diff);
         }
     }
 }

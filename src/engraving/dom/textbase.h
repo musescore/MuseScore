@@ -38,6 +38,9 @@ namespace mu::engraving {
 class TextBase;
 class TextBlock;
 
+static const char* FALLBACK_SYMBOL_FONT = "Bravura";
+static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
+
 //---------------------------------------------------------
 //   FrameType
 //---------------------------------------------------------

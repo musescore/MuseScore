@@ -68,6 +68,8 @@
     <sym code="0x1d12a" name="##"/>
     <sym code="0x1d12b" name="bb"/>
 
+    <sym code="0xE87C" name="dslash"/>
+
 <!-- add "code" attributes (as for "b" and "#" above) to get these to render as flat and sharp signs -->
     <sym class="accidental" name="es"/>
     <sym class="accidental" name="is"/>
