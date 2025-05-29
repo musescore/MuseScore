@@ -1104,13 +1104,13 @@ void Harmony::renderRomanNumeral()
     HarmonyInfo* info = m_chords.front();
 
     if (m_leftParen) {
-        render(u"( ", ctx);
+        render(SymId::csymParensLeftTall, ctx);
     }
 
     render(info->textName(), ctx);
 
     if (m_rightParen) {
-        render(u" )", ctx);
+        render(SymId::csymParensRightTall, ctx);
     }
 }
 
@@ -1193,6 +1193,22 @@ void Harmony::render(const String& s, HarmonyRenderCtx& ctx)
     }
 
     Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList.front() : font();
+    TextSegment* ts = new TextSegment(s, f, ctx.x(), ctx.y(), ctx.hAlign);
+    ctx.textList.push_back(ts);
+    ctx.movex(ts->width());
+}
+
+void Harmony::render(SymId sym, HarmonyRenderCtx& ctx)
+{
+    if (sym == SymId::noSym) {
+        return;
+    }
+
+    Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList.front() : font();
+    f.setFamily(style().styleSt(Sid::musicalTextFont), Font::Type::MusicSymbolText);
+
+    String s = score()->engravingFont()->toString(sym);
+
     TextSegment* ts = new TextSegment(s, f, ctx.x(), ctx.y(), ctx.hAlign);
     ctx.textList.push_back(ts);
     ctx.movex(ts->width());
@@ -1412,7 +1428,7 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
     NoteCaseType bassCase = bassRenderCase();
 
     if (m_leftParen) {
-        render(u"( ", ctx);
+        render(SymId::csymParensLeftTall, ctx);
     }
 
     NoteSpellingType spelling = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
@@ -1471,7 +1487,7 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
             }
         }
 
-        render(u"(", ctx);
+        render(SymId::csymParensLeftTall, ctx);
         render(chordList->renderListRoot, ctx, capoRootTpc, spelling, rootCase);
 
         // render extension
@@ -1485,11 +1501,11 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
                 = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
             render(bassNoteChordList, ctx, capoBassTpc, spelling, bassCase, m_bassScale);
         }
-        render(u")", ctx);
+        render(SymId::csymParensRightTall, ctx);
     }
 
     if (m_rightParen) {
-        render(u" )", ctx);
+        render(SymId::csymParensRightTall, ctx);
     }
 }
 

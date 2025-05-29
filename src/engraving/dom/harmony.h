@@ -277,6 +277,7 @@ private:
     void renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx);
     void renderRomanNumeral();
     void render(const String&, HarmonyRenderCtx& ctx);
+    void render(SymId, HarmonyRenderCtx& ctx);
     void render(const std::list<RenderAction*>& renderList, HarmonyRenderCtx& ctx, int tpc,
                 NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO,
                 double noteMag = 1.0);
