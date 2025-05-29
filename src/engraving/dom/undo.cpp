@@ -3661,23 +3661,36 @@ void RenameChordFBox::redo(EditData*)
     Fraction currentHarmonyTick = m_harmony->tick();
     String currentHarmonyName = m_harmony->harmonyName();
 
+    //! If there’s another chord symbol in the score before the one being edited,
+    //! then we don’t need to rename anything in the fretbox,
+    //! we just need to insert a new element at the correct position.
+    bool onlyAddNewDiagram = false;
+
     std::set<String> usedDiagrams;
     for (Harmony* harmony: findAllHarmonies(m_fretBox->score())) {
         String harmonyName = harmony->harmonyName();
 
+        bool isHarmonyWithSameName = areHarmoniesEqual(harmonyName, currentHarmonyName);
+
         //! If same chord symbol exists before, just remove old chord symbol
-        if (areHarmoniesEqual(harmonyName, currentHarmonyName) && harmony->tick() < currentHarmonyTick) {
+        if (isHarmonyWithSameName && harmony->tick() < currentHarmonyTick) {
             m_onlyRemove = true;
         }
 
-        if (areHarmoniesEqual(harmonyName, m_harmonyOldName)) {
+        //! If old chord symbol exists before, don't touch old chord symbol in fret box
+        bool isOldHarmony = areHarmoniesEqual(harmonyName, m_harmonyOldName);
+        if (isOldHarmony && harmony->tick() < currentHarmonyTick) {
+            onlyAddNewDiagram = true;
+        }
+
+        if (isHarmonyWithSameName && harmony->tick() == currentHarmonyTick) {
             nextMatchHarmonyToReplace = harmony;
             break;
         }
 
         if (!muse::contains(usedDiagrams, harmonyName.toLower())) {
             harmonyBeforeNextMatch = harmonyName;
-            usedDiagrams.insert(harmonyName);
+            usedDiagrams.insert(harmonyName.toLower());
         }
     }
 
@@ -3685,7 +3698,11 @@ void RenameChordFBox::redo(EditData*)
 
     for (size_t i = 0; i < existingDiagramsFromBox.size(); ++i) {
         FretDiagram* fd = toFretDiagram(existingDiagramsFromBox[i]);
-        if (!areHarmoniesEqual(fd->harmony()->harmonyName(), m_harmonyOldName)) {
+        if (onlyAddNewDiagram) {
+            if (!areHarmoniesEqual(fd->harmony()->harmonyName(), harmonyBeforeNextMatch)) {
+                continue;
+            }
+        } else if (!areHarmoniesEqual(fd->harmony()->harmonyName(), m_harmonyOldName)) {
             continue;
         }
 
@@ -3693,18 +3710,20 @@ void RenameChordFBox::redo(EditData*)
             m_diagramsForRestore.push_back(std::make_pair(i, fd));
 
             m_fretBox->remove(fd);
-        } else {
+        } else if (!onlyAddNewDiagram) {
             fd->setHarmony(currentHarmonyName);
             fd->updateDiagram(currentHarmonyName);
         }
 
+        int removeIndex = i + 1;
         if (nextMatchHarmonyToReplace) {
             //! Insert new fret diagram after the harmony preceding the next match
             m_diagramForRemove = insertFretDiagramToFretBox(m_fretBox, nextMatchHarmonyToReplace, harmonyBeforeNextMatch);
+            removeIndex = i + 2;
         }
 
         //! Remove all following diagrams with the new harmony name
-        m_diagramsForRestore = removeFretDiagramsFromFretBox(m_fretBox, i + 1, currentHarmonyName);
+        m_diagramsForRestore = removeFretDiagramsFromFretBox(m_fretBox, removeIndex, currentHarmonyName);
 
         break;
     }
@@ -3772,7 +3791,7 @@ void AddChordFBox::redo(EditData*)
 
         if (!muse::contains(usedDiagrams, harmonyName.toLower())) {
             harmonyBeforeCurrentHarmony = harmonyName;
-            usedDiagrams.insert(harmonyName);
+            usedDiagrams.insert(harmonyName.toLower());
         }
     }
 
@@ -3870,7 +3889,7 @@ void RemoveChordFBox::redo(EditData*)
 
         if (!muse::contains(usedDiagrams, harmonyName.toLower())) {
             harmonyBeforeCurrentHarmony = harmonyName;
-            usedDiagrams.insert(harmonyName);
+            usedDiagrams.insert(harmonyName.toLower());
         }
     }
 
