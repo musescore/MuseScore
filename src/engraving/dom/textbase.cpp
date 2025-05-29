@@ -66,6 +66,9 @@ static constexpr double subScriptSize     = 0.6;
 static constexpr double subScriptOffset   = 0.5; // of x-height
 static constexpr double superScriptOffset = -0.9; // of x-height
 
+static const char* FALLBACK_SYMBOL_FONT = "Bravura";
+static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
+
 //---------------------------------------------------------
 //   isSorted
 /// return true if (r1,c1) is at or before (r2,c2)
