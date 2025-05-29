@@ -1473,9 +1473,6 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
     ldata->setPos(PointF());
 
     const ElementList& elements = item->el();
-    if (elements.empty()) {
-        return;
-    }
 
     std::vector<FretDiagram*> fretDiagrams;
     for (EngravingItem* element : elements) {
@@ -1545,20 +1542,17 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
             totalTableHeight += rowGap;
         }
     }
+
+    if (muse::RealIsNull(totalTableHeight)) {
+        totalTableHeight = item->minHeight();
+    }
+
     const double totalTableWidth = cellWidth * columns + (columns - 1) * columnGap;
 
     ldata->totalTableHeight = totalTableHeight;
     ldata->totalTableWidth = totalTableWidth;
 
-    PropertyValue heightProperty = item->getProperty(Pid::BOX_HEIGHT);
-    PropertyValue heightDefaultProperty = item->propertyDefault(Pid::BOX_HEIGHT);
-
-    double boxHeight = totalTableHeight;
-    if (heightProperty.isValid() && heightProperty != heightDefaultProperty) {
-        boxHeight = item->absoluteFromSpatium(item->boxHeight());
-    }
-
-    ldata->setBbox(0.0, 0.0, parentSystem->ldata()->bbox().width(), boxHeight);
+    ldata->setBbox(0.0, 0.0, parentSystem->ldata()->bbox().width(), totalTableHeight);
 
     AlignH alignH = item->contentHorizontallAlignment();
     const double leftMargin = item->getProperty(Pid::LEFT_MARGIN).toDouble() * spatium;

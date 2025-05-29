@@ -3781,6 +3781,14 @@ void AddChordFBox::redo(EditData*)
     }
 
     ElementList& existingDiagramsFromBox = m_fretBox->el();
+    if (existingDiagramsFromBox.empty()) {
+        FretDiagram* fretDiagram = m_fretBox->makeFretDiagram(currentHarmonyFromScore);
+        addFretDiagramToFretBox(m_fretBox, fretDiagram, 0);
+        m_added = true;
+
+        return;
+    }
+
     for (size_t i = 0; i < existingDiagramsFromBox.size(); ++i) {
         FretDiagram* fd = toFretDiagram(existingDiagramsFromBox[i]);
 
