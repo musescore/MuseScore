@@ -478,6 +478,11 @@ void Box::manageExclusionFromParts(bool exclude)
             newFrame->setExcludeFromOtherParts(false);
             // newFrame->setSizeIsSpatiumDependent(!titleFrame);
 
+            // Clear auto generated diagrams inside fret box
+            if (newFrame->isFBox()) {
+                toFBox(newFrame)->clearElements();
+            }
+
             for (EngravingItem* item : el()) {
                 // Don't add instrument name from current part
                 if (item->isText() && toText(item)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {

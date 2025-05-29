@@ -879,6 +879,10 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
         }
         nmb->setTick(mb->tick());
         nmb->setTicks(mb->ticks());
+    } else if (mb->isFBox()) {
+        nmb = Factory::createFBox(score->dummy()->system());
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
     } else if (mb->isTBox()) {
         nmb = Factory::createTBox(score->dummy()->system());
         nmb->setTick(mb->tick());
