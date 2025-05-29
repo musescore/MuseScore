@@ -3421,10 +3421,10 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
             RectF bb;
             RectF hAlignBox;
             for (TextSegment* ts : item->textList()) {
-                RectF tsBbox = ts->tightBoundingRect().translated(ts->x, ts->y);
+                RectF tsBbox = ts->tightBoundingRect().translated(ts->x(), ts->y());
                 bb.unite(tsBbox);
 
-                if (ts->hAlign) {
+                if (ts->align()) {
                     hAlignBox.unite(tsBbox);
                 }
             }
@@ -3472,7 +3472,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
             }
 
             for (TextSegment* ts : item->textList()) {
-                ts->offset = PointF(xx, yy);
+                ts->setOffset(PointF(xx, yy));
             }
 
             ldata->setBbox(bb.translated(xx, yy));
