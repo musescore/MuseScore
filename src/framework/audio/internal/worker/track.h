@@ -44,6 +44,8 @@ public:
     virtual ~ITrackAudioInput() = default;
 
     virtual void seek(const msecs_t newPositionMsecs) = 0;
+    virtual void flush() = 0;
+
     virtual const AudioInputParams& inputParams() const = 0;
     virtual void applyInputParams(const AudioInputParams& requiredParams) = 0;
     virtual async::Channel<AudioInputParams> inputParamsChanged() const = 0;

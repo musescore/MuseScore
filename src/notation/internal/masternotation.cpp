@@ -227,7 +227,7 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                 measure->setTicks(mu::engraving::Fraction(scoreOptions.measureTimesigNumerator,
                                                           scoreOptions.measureTimesigDenominator));
             }
-            _score->measures()->add(measure);
+            _score->measures()->append(measure);
 
             for (mu::engraving::Staff* staff : _score->staves()) {
                 mu::engraving::staff_idx_t staffIdx = staff->idx();

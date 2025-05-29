@@ -1019,26 +1019,40 @@ ProjectMeta NotationProject::metaInfo() const
     TRACEFUNC;
 
     const engraving::MasterScore* score = m_masterNotation->masterScore();
+    const std::map<String, String>& allTags = score->metaTags();
+
+    const auto initProjectMetaString = [&allTags](QString& string, const String& tag) {
+        const auto search = allTags.find(tag);
+        if (search == allTags.end()) {
+            LOGW() << "Project meta tag not found: " << tag;
+            return;
+        }
+        string = search->second;
+    };
 
     ProjectMeta meta;
     meta.filePath = m_path;
 
-    const std::map<String, String>& allTags = score->metaTags();
+    initProjectMetaString(meta.title, WORK_TITLE_TAG);
+    initProjectMetaString(meta.subtitle, SUBTITLE_TAG);
+    initProjectMetaString(meta.composer, COMPOSER_TAG);
+    initProjectMetaString(meta.arranger, ARRANGER_TAG);
+    initProjectMetaString(meta.lyricist, LYRICIST_TAG);
+    initProjectMetaString(meta.translator, TRANSLATOR_TAG);
+    initProjectMetaString(meta.copyright, COPYRIGHT_TAG);
 
-    meta.title = allTags.at(WORK_TITLE_TAG);
-    meta.subtitle = allTags.at(SUBTITLE_TAG);
-    meta.composer = allTags.at(COMPOSER_TAG);
-    meta.arranger = allTags.at(ARRANGER_TAG);
-    meta.lyricist = allTags.at(LYRICIST_TAG);
-    meta.translator = allTags.at(TRANSLATOR_TAG);
-    meta.copyright = allTags.at(COPYRIGHT_TAG);
-    meta.creationDate = QDate::fromString(allTags.at(CREATION_DATE_TAG), Qt::ISODate);
+    if (allTags.find(CREATION_DATE_TAG) != allTags.end()) {
+        meta.creationDate = QDate::fromString(allTags.at(CREATION_DATE_TAG), Qt::ISODate);
+    } else {
+        LOGW() << "Project meta tag not found: " << CREATION_DATE_TAG;
+    }
 
     meta.partsCount = score->excerpts().size();
 
-    meta.source = allTags.at(SOURCE_TAG);
-    meta.audioComUrl = allTags.at(AUDIO_COM_URL_TAG);
-    meta.platform = allTags.at(PLATFORM_TAG);
+    initProjectMetaString(meta.source, SOURCE_TAG);
+    initProjectMetaString(meta.audioComUrl, AUDIO_COM_URL_TAG);
+    initProjectMetaString(meta.platform, PLATFORM_TAG);
+
     meta.musescoreVersion = score->mscoreVersion();
     meta.musescoreRevision = score->mscoreRevision();
     meta.mscVersion = score->mscVersion();

@@ -393,7 +393,6 @@ double SlurSegment::dottedWidth() const
 Slur::Slur(const Slur& s)
     : SlurTie(s)
 {
-    _sourceStemArrangement = s._sourceStemArrangement;
     _connectedElement = s._connectedElement;
     _partialSpannerDirection = s._partialSpannerDirection;
 }
@@ -406,16 +405,6 @@ Slur::Slur(EngravingItem* parent)
     : SlurTie(ElementType::SLUR, parent)
 {
     setAnchor(Anchor::CHORD);
-}
-
-//---------------------------------------------------------
-//   calcStemArrangement
-//---------------------------------------------------------
-
-int Slur::calcStemArrangement(EngravingItem* start, EngravingItem* end)
-{
-    return (start && start->isChord() && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
-           + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);
 }
 
 double Slur::scalingFactor() const

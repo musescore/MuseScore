@@ -451,27 +451,23 @@ void Selection::appendChordRest(ChordRest* cr)
         }
     }
 
-    Tuplet* tuplet = cr->tuplet();
-    if (tuplet) {
-        appendTupletHierarchy(tuplet);
-    }
-
-    if (cr->isChord()) {
-        Chord* chord = toChord(cr);
-        for (Chord* graceNote : chord->graceNotes()) {
-            if (canSelect(graceNote)) {
-                appendChord(graceNote);
-            }
+    if (cr->isRestFamily()) {
+        appendFiltered(cr);
+        Rest* r = toRest(cr);
+        for (int i = 0; i < r->dots(); ++i) {
+            appendFiltered(r->dot(i));
         }
-        appendChord(chord);
         return;
     }
 
-    appendFiltered(cr);
-    Rest* r = toRest(cr);
-    for (int i = 0; i < r->dots(); ++i) {
-        appendFiltered(r->dot(i));
+    Chord* chord = toChord(cr);
+    for (Chord* graceNote : chord->graceNotes()) {
+        if (canSelect(graceNote)) {
+            appendChord(graceNote);
+        }
     }
+
+    appendChord(chord);
 }
 
 void Selection::appendChord(Chord* chord)
@@ -520,7 +516,7 @@ void Selection::appendChord(Chord* chord)
         if (endElement && endElement->isNote()) {
             const Note* endNote = toNote(endElement);
             const Segment* endSeg = endNote->chord()->segment();
-            if (!endSeg || endSeg->tick() < tickEnd()) {
+            if (!endSeg || endSeg->tick() <= tickEnd()) {
                 for (SpannerSegment* spannerSeg : note->tieFor()->spannerSegments()) {
                     appendFiltered(spannerSeg);
                 }
@@ -533,7 +529,7 @@ void Selection::appendChord(Chord* chord)
             }
             const Note* endNote = toNote(sp->endElement());
             const Segment* endSeg = endNote->chord()->segment();
-            if (!endSeg || endSeg->tick() < tickEnd()) {
+            if (!endSeg || endSeg->tick() <= tickEnd()) {
                 if (sp->isGuitarBend()) {
                     appendGuitarBend(toGuitarBend(sp));
                     continue;
@@ -560,6 +556,23 @@ void Selection::appendTupletHierarchy(Tuplet* innermostTuplet)
 {
     if (muse::contains(m_el, static_cast<EngravingItem*>(innermostTuplet))) {
         return;
+    }
+
+    //! NOTE: It's not very efficient to use muse::contains here. It would be nicer to simply use
+    //! de->selected() instead, but the selected flag isn't set until Selection::update...
+    const std::vector<DurationElement*> elements = innermostTuplet->elements();
+    for (DurationElement* de : elements) {
+        if (!de->isChord()) {
+            if (!muse::contains(m_el, static_cast<EngravingItem*>(de))) {
+                return;
+            }
+            continue;
+        }
+        for (Note* note : toChord(de)->notes()) {
+            if (!muse::contains(m_el, static_cast<EngravingItem*>(note))) {
+                return;
+            }
+        }
     }
 
     appendFiltered(innermostTuplet);
@@ -653,6 +666,10 @@ void Selection::updateSelectedElements()
     track_idx_t startTrack = m_staffStart * VOICES;
     track_idx_t endTrack   = m_staffEnd * VOICES;
 
+    //! NOTE: We need to delay the appending of tuplets. We should only display tuplets as selected
+    //! if all of their contained elements are selected...
+    std::unordered_set<Tuplet*> innerTuplets;
+
     for (track_idx_t st = startTrack; st < endTrack; ++st) {
         if (!canSelectVoice(st)) {
             continue;
@@ -677,49 +694,57 @@ void Selection::updateSelectedElements()
             if (!e || e->generated() || e->isTimeSig() || e->isKeySig()) {
                 continue;
             }
-            if (e->isChordRest()) {
-                appendChordRest(toChordRest(e));
-            } else {
+
+            if (!e->isChordRest()) {
                 appendFiltered(e);
+                continue;
             }
+
+            ChordRest* cr = toChordRest(e);
+            if (Tuplet* tuplet = cr->tuplet()) {
+                innerTuplets.emplace(tuplet);
+            }
+
+            appendChordRest(cr);
         }
     }
-    Fraction stick = tickStart();
-    Fraction etick = tickEnd();
 
+    for (Tuplet* tuplet : innerTuplets) {
+        appendTupletHierarchy(tuplet);
+    }
+
+    const Fraction rangeStart = tickStart();
+    const Fraction rangeEnd = tickEnd();
+
+    //! NOTE: Ties are NOT handled in here - these are note anchored and handled in appendChord...
     for (auto i = m_score->spanner().begin(); i != m_score->spanner().end(); ++i) {
         Spanner* sp = (*i).second;
         // ignore spanners belonging to other tracks
         if (sp->track() < startTrack || sp->track() >= endTrack) {
             continue;
         }
-        if (!canSelectVoice(sp->track())) {
+
+        if (!canSelectVoice(sp->track()) || sp->isVolta()) {
             continue;
         }
-        // ignore voltas
-        if (sp->isVolta()) {
+
+        // ignore if start & end elements are not calculated yet, or if spanner is outside selection range
+        const bool isInRange = rangeStart < sp->tick2() && rangeEnd > sp->tick();
+        const bool startAndEndCalculated = sp->startElement() && sp->endElement();
+        if (!isInRange || !startAndEndCalculated) {
             continue;
         }
-        if (sp->isSlur() || sp->isHairpin() || sp->isOttava() || sp->isPedal() || sp->isTrill() || sp->isTextLine() || sp->isLetRing()
-            || sp->isPalmMute()) {
-            // ignore if start & end elements not calculated yet
-            if (!sp->startElement() || !sp->endElement()) {
-                continue;
+
+        const EngravingItem* startCR = sp->startCR();
+        const EngravingItem* endCR = sp->endCR();
+
+        const bool canSelectStart = sp->startElement()->isTimeTickAnchor() || sp->startElement()->isSegment() || canSelect(startCR);
+        const bool canSelectEnd = sp->endElement()->isTimeTickAnchor() || sp->endElement()->isSegment() || canSelect(endCR);
+
+        if (canSelectStart && canSelectEnd) {
+            for (auto seg : sp->spannerSegments()) {
+                appendFiltered(seg);
             }
-            if ((sp->tick() >= stick && sp->tick() < etick) || (sp->tick2() >= stick && sp->tick2() <= etick)) {
-                EngravingItem* startCR = sp->startCR();
-                EngravingItem* endCR = sp->endCR();
-                const bool canSelectStart
-                    = (sp->startElement()->isTimeTickAnchor() || sp->startElement()->isSegment() || canSelect(startCR));
-                const bool canSelectEnd = (sp->endElement()->isTimeTickAnchor() || sp->endElement()->isSegment() || canSelect(endCR));
-                if (canSelectStart && canSelectEnd) {
-                    for (auto seg : sp->spannerSegments()) {
-                        appendFiltered(seg);               // spanner with start or end in range selection
-                    }
-                }
-            }
-        } else if ((sp->tick() >= stick && sp->tick() < etick) && (sp->tick2() >= stick && sp->tick2() <= etick)) {
-            appendFiltered(sp);       // spanner with start and end in range selection
         }
     }
     update();

@@ -280,7 +280,7 @@ void Measure::fillGap(const Fraction& pos, const Fraction& len, track_idx_t trac
         rest->setTrack(track);
         rest->setGap(useGapRests);
         score()->undoAddCR(rest, this, curTick + tick());
-        curTick += d.fraction();
+        curTick += d.fraction() / stretch;
     }
 }
 

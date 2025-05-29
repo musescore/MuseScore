@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27</pageWidth>
@@ -33,7 +34,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">timesig1</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -74,70 +76,88 @@
       <VBox>
         <height>10</height>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Timesig change with tremolo</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>F_F</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>G_G</eid>
             </Clef>
           <TimeSig>
+            <eid>H_H</eid>
             <sigN>5</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>I_I</eid>
             <durationType>measure</durationType>
             <duration>5/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>J_J</eid>
         <voice>
           <Chord>
+            <eid>K_K</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
+              <eid>L_L</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             <TremoloTwoChord>
               <subtype>c32</subtype>
+              <eid>M_M</eid>
               <l1>-12</l1>
               <l2>-18</l2>
               </TremoloTwoChord>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             <duration>1/4</duration>
             <Note>
+              <eid>O_O</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>P_P</eid>
             <durationType>half</durationType>
             </Rest>
           <Rest>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>R_R</eid>
         <voice>
           <Rest>
+            <eid>S_S</eid>
             <durationType>measure</durationType>
             <duration>5/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>T_T</eid>
         <voice>
           <Rest>
+            <eid>U_U</eid>
             <durationType>measure</durationType>
             <duration>5/4</duration>
             </Rest>

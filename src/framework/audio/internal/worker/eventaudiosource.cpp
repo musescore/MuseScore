@@ -138,6 +138,17 @@ void EventAudioSource::seek(const msecs_t newPositionMsecs)
     m_synth->revokePlayingNotes();
 }
 
+void EventAudioSource::flush()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
+
+    m_synth->flushSound();
+}
+
 const AudioInputParams& EventAudioSource::inputParams() const
 {
     return m_params;

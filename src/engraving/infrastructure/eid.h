@@ -46,6 +46,10 @@ public:
     static EID newUnique();
     static EID invalid() { return EID(INVALID, INVALID); }
 
+    // FOR UNIT TESTING
+    static EID newUniqueTestMode(uint64_t& maxVal);
+    static void updateMaxValTestMode(const EID& curEID, uint64_t& maxVal);
+
 private:
     EID() = delete;
     EID(uint64_t f, uint64_t s)

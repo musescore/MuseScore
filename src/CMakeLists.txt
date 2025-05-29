@@ -68,7 +68,9 @@ if (MUE_BUILD_PLAYBACK_MODULE)
     add_subdirectory(playback)
 endif()
 
-add_subdirectory(print)
+if (MUE_BUILD_PRINT_MODULE)
+    add_subdirectory(print)
+endif()
 
 if (MUE_BUILD_PROJECT_MODULE)
     add_subdirectory(project)
@@ -78,5 +80,5 @@ endif()
 add_subdirectory(stubs)
 
 if (OS_IS_WASM)
-    add_subdirectory(wasmtest)
+    add_subdirectory(webbridge)
 endif()

@@ -51,9 +51,9 @@ class NotationStatusBarModel : public QObject, public QQmlParserStatus, public m
     Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QString accessibilityInfo READ accessibilityInfo NOTIFY accessibilityInfoChanged)
-    Q_PROPERTY(QVariant currentWorkspaceItem READ currentWorkspaceItem CONSTANT)
-    Q_PROPERTY(QVariant concertPitchItem READ concertPitchItem CONSTANT)
-    Q_PROPERTY(QVariant currentViewMode READ currentViewMode NOTIFY currentViewModeChanged)
+    Q_PROPERTY(muse::uicomponents::MenuItem * currentWorkspaceItem READ currentWorkspaceItem CONSTANT)
+    Q_PROPERTY(muse::uicomponents::MenuItem * concertPitchItem READ concertPitchItem CONSTANT)
+    Q_PROPERTY(muse::uicomponents::MenuItem * currentViewMode READ currentViewMode NOTIFY currentViewModeChanged)
     Q_PROPERTY(bool zoomEnabled READ zoomEnabled NOTIFY zoomEnabledChanged)
     Q_PROPERTY(QVariantList availableViewModeList READ availableViewModeList_property NOTIFY availableViewModeListChanged)
     Q_PROPERTY(QVariantList availableZoomList READ availableZoomList_property NOTIFY availableZoomListChanged)
@@ -70,9 +70,9 @@ public:
     explicit NotationStatusBarModel(QObject* parent = nullptr);
 
     QString accessibilityInfo() const;
-    QVariant currentWorkspaceItem();
-    QVariant concertPitchItem();
-    QVariant currentViewMode();
+    muse::uicomponents::MenuItem* currentWorkspaceItem();
+    muse::uicomponents::MenuItem* concertPitchItem();
+    muse::uicomponents::MenuItem* currentViewMode();
     bool zoomEnabled() const;
     int currentZoomPercentage() const;
 

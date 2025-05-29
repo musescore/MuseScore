@@ -83,7 +83,6 @@ void MuseSamplerModule::onInit(const IApplication::RunMode& mode)
 
     auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("musesampler", m_configuration->userLibraryPath());
-        pr->reg("musesampler fallback", m_configuration->fallbackLibraryPath());
+        pr->reg("musesampler", m_configuration->libraryPath());
     }
 }

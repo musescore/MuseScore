@@ -31,9 +31,19 @@
 using namespace muse;
 using namespace mu::braille;
 
+static void braille_init_qrc()
+{
+    Q_INIT_RESOURCE(braille);
+}
+
 std::string BrailleModule::moduleName() const
 {
     return "braille";
+}
+
+void BrailleModule::registerResources()
+{
+    braille_init_qrc();
 }
 
 void BrailleModule::registerExports()

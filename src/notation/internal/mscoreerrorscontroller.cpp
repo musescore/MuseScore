@@ -156,9 +156,11 @@ void MScoreErrorsController::checkAndShowMScoreError()
         break;
     }
 
-    IInteractive::Result result
-        = interactive()->info(title, message, {}, 0, IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
-    if (!result.showAgain()) {
-        configuration()->setNeedToShowMScoreError(MScore::errorToString(err), false);
-    }
+    interactive()->info(title, message, {}, 0,
+                        IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox)
+    .onResolve(this, [this, err](const IInteractive::Result& res) {
+        if (!res.showAgain()) {
+            configuration()->setNeedToShowMScoreError(MScore::errorToString(err), false);
+        }
+    });
 }

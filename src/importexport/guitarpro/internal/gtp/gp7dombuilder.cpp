@@ -6,71 +6,6 @@
 
 using namespace muse;
 
-namespace {
-std::map<String, int> RSE2MidiProgram = {
-    // Acoustic Guitars
-    { u"Stringed/Acoustic Guitars/Steel Guitar", 25 },
-    { u"Stringed/Acoustic Guitars/12 String Steel", 25 },
-    { u"Stringed/Acoustic Guitars/Nylon Guitar", 24 },
-    { u"Stringed/Acoustic Guitars/Resonator", 25 },
-    // Electric Guitars
-    { u"Stringed/Electric Guitars/Clean Guitar", 27 },
-    { u"Stringed/Electric Guitars/Jazz Guitar", 26 },
-    { u"Stringed/Electric Guitars/12 Strings Electric Guitar", 27 },
-    { u"Stringed/Electric Guitars/Overdrive Guitar", 29 },
-    { u"Stringed/Electric Guitars/Distortion Guitar", 30 },
-    { u"Stringed/Electric Guitars/Electric Sitar", 104 },
-    // Bass Guitars
-    { u"Stringed/Basses/Clean Bass", 33 },
-    { u"Stringed/Basses/Slap Bass", 37 },
-    { u"Stringed/Basses/Crunch Bass", 33 },
-    { u"Stringed/Basses/Acoustic Bass", 32 },
-    { u"Stringed/Basses/Fretless Bass", 35 },
-    { u"Stringed/Basses/Upright Bass", 32 },
-    { u"Stringed/Basses/Synth Bass", 39 },
-    // Other Stringed instruments
-    { u"Stringed/Other Stringed Instruments/Ukulele", 24 },
-    { u"Stringed/Other Stringed Instruments/Banjo", 105 },
-    { u"Stringed/Other Stringed Instruments/Mandolin", 25 },
-    { u"Stringed/Other Stringed Instruments/Pedal Steel", 26 },
-    // Keyboard
-    { u"Orchestra/Keyboard/Acoustic Piano", 1 },
-    { u"Orchestra/Keyboard/Electric Piano", 4 },
-    { u"Orchestra/Keyboard/Organ", 16 },
-    { u"Orchestra/Keyboard/Clavinet", 6 },
-    { u"Orchestra/Keyboard/Accordion", 21 },
-    // Synth
-    { u"Orchestra/Synth/Brass", 62 },
-    { u"Orchestra/Synth/Keyboard", 98 },
-    { u"Orchestra/Synth/Lead", 87 },
-    { u"Orchestra/Synth/Bass", 38 },
-    { u"Orchestra/Synth/Pad", 90 },
-    { u"Orchestra/Synth/Sequencer", 99 },
-    // Strings
-    { u"Orchestra/Strings/Violin", 40 },
-    { u"Orchestra/Strings/Viola", 41 },
-    { u"Orchestra/Strings/Cello", 42 },
-    { u"Orchestra/Strings/Contrabass", 43 },
-    { u"Orchestra/Strings/Harp", 46 },
-    // Winds
-    { u"Orchestra/Winds/Harmonica", 22 },
-    { u"Orchestra/Winds/Trumpet", 56 },
-    { u"Orchestra/Winds/Trombone", 57 },
-    { u"Orchestra/Winds/Tuba", 58 },
-    { u"Orchestra/Winds/Saxophone", 65 },
-    { u"Orchestra/Winds/Clarinet", 71 },
-    { u"Orchestra/Winds/Bassoon", 70 },
-    { u"Orchestra/Winds/Flute", 73 },
-    { u"Orchestra/Winds/Other Winds", 74 },
-    // Other Instruments
-    { u"Orchestra/Other/Celesta", 8 },
-    { u"Orchestra/Other/Vibraphone", 11 },
-    { u"Orchestra/Other/Xylophone", 13 },
-    { u"Orchestra/Other/Singer", 52 },
-    { u"Orchestra/Other/Timpani", 47 },
-};
-}
-
 namespace mu::iex::guitarpro {
 std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNode* trackNode, XmlDomNode* versionNode)
 {
@@ -82,11 +17,10 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
         u"Automations"
     };
 
-    int trackIdx = trackNode->attribute("id").toInt();
+    int trackIdx = trackNode->toElement().attribute("id").value().toInt();
     auto track = std::make_unique<GPTrack>(trackIdx);
     XmlDomNode trackChildNode = trackNode->firstChild();
     String version = versionNode->toElement().text();
-    bool isRSE = u"RSE" == trackNode->firstChildElement("AudioEngineState").text();
 
     while (!trackChildNode.isNull()) {
         String nodeName = trackChildNode.nodeName();
@@ -101,11 +35,10 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
         } else if (nodeName == u"ShortName") {
             track->setShortName(trackChildNode.toElement().text());
         } else if (nodeName == u"Sounds") {
-            String firstSoundPath = trackChildNode.firstChild().firstChildElement("Path").text();
-            int programm = readMidiProgramm(&trackChildNode, isRSE, firstSoundPath);
+            int programm = readMidiProgramm(&trackChildNode);
             auto soundNode = trackChildNode.firstChild();
             while (!soundNode.isNull()) {
-                GPTrack::Sound sound = readSounds(&soundNode, isRSE);
+                GPTrack::Sound sound = readSounds(&soundNode);
                 track->addSound(sound);
 
                 soundNode = soundNode.nextSibling();
@@ -167,40 +100,26 @@ int GP7DomBuilder::readMidiChannel(XmlDomNode* trackChildNode) const
     return channel;
 }
 
-int GP7DomBuilder::readMidiProgramm(XmlDomNode* trackChildNode, bool isRSE, const String& soundPath) const
+int GP7DomBuilder::readMidiProgramm(XmlDomNode* trackChildNode) const
 {
     int programm = trackChildNode->firstChild()
                    .firstChildElement("MIDI")
                    .firstChildElement("Program")
                    .text().toInt();
-    if (isRSE) {
-        if (auto it = RSE2MidiProgram.find(soundPath); it != RSE2MidiProgram.end()) {
-            programm = it->second;
-        }
-    }
 
     return programm;
 }
 
-GPTrack::Sound GP7DomBuilder::readSounds(XmlDomNode* soundNode, bool isRSE) const
+GPTrack::Sound GP7DomBuilder::readSounds(XmlDomNode* soundNode) const
 {
     GPTrack::Sound result;
-    result.path = soundNode->firstChildElement("Path").text();
-    if (isRSE) {
-        if (auto it = RSE2MidiProgram.find(result.path); it != RSE2MidiProgram.end()) {
-            result.programm = it->second;
-        } else {
-            result.programm = soundNode->firstChildElement("MIDI")
-                              .firstChildElement("Program")
-                              .text().toInt();
-        }
-    } else {
-        result.programm = soundNode->firstChildElement("MIDI")
-                          .firstChildElement("Program")
-                          .text().toInt();
-    }
+
+    result.programm = soundNode->firstChildElement("MIDI")
+                      .firstChildElement("Program")
+                      .text().toInt();
     result.name = soundNode->firstChildElement("Name").text();
     result.label = soundNode->firstChildElement("Label").text();
+    result.path = soundNode->firstChildElement("Path").text();
     result.role = soundNode->firstChildElement("Role").text();
 
     return result;

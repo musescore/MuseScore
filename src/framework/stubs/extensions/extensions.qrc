@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/Muse/Extensions/qmldir</file>
+        <file>qml/Muse/Extensions/ExtensionsToolBar.qml</file>
+        <file>qml/Muse/Extensions/ExtensionsListPanel.qml</file>
+    </qresource>
+</RCC>

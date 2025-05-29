@@ -79,6 +79,7 @@ void AbstractNotationPaintView::load()
 {
     TRACEFUNC;
 
+    m_loadCalled = true;
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
@@ -549,7 +550,7 @@ void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, 
         _pos = QPointF(width() / 2, height() / 2);
     }
 
-    emit showContextMenuRequested(static_cast<int>(elementType), pos);
+    emit showContextMenuRequested(static_cast<int>(elementType), _pos);
 }
 
 void AbstractNotationPaintView::hideContextMenu()
@@ -1231,8 +1232,11 @@ bool AbstractNotationPaintView::event(QEvent* event)
                                || eventType == QEvent::Type::ContextMenu) && hasFocus();
 
     if (isContextMenuEvent) {
-        showContextMenu(m_inputController->selectionType(),
-                        fromLogical(m_inputController->selectionElementPos()).toQPointF());
+        QContextMenuEvent* contextMenuEvent = dynamic_cast<QContextMenuEvent*>(event);
+        QPointF pos = contextMenuEvent && !contextMenuEvent->pos().isNull()
+                      ? mapFromGlobal(contextMenuEvent->globalPos())
+                      : fromLogical(m_inputController->selectionElementPos()).toQPointF();
+        showContextMenu(m_inputController->selectionType(), pos);
     } else if (eventType == QEvent::Type::ShortcutOverride) {
         bool shouldOverrideShortcut = shortcutOverride(keyEvent);
 
@@ -1293,10 +1297,13 @@ void AbstractNotationPaintView::dropEvent(QDropEvent* event)
 void AbstractNotationPaintView::setNotation(INotationPtr notation)
 {
     m_notation = notation;
-    m_continuousPanel->setNotation(m_notation);
-    m_playbackCursor->setNotation(m_notation);
-    m_loopInMarker->setNotation(m_notation);
-    m_loopOutMarker->setNotation(m_notation);
+
+    if (m_loadCalled) {
+        m_continuousPanel->setNotation(m_notation);
+        m_playbackCursor->setNotation(m_notation);
+        m_loopInMarker->setNotation(m_notation);
+        m_loopOutMarker->setNotation(m_notation);
+    }
 }
 
 void AbstractNotationPaintView::setReadonly(bool readonly)

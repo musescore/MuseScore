@@ -30,10 +30,11 @@ using namespace muse::vst;
 static const std::string module_name("vst");
 
 static const Settings::Key USER_VST_PATHS = Settings::Key(module_name, "application/paths/myVSTs");
-static const Settings::Key USED_VST_VIEW = Settings::Key(module_name, "dev/vst/view");
+static const Settings::Key USED_VST_VIEW = Settings::Key(module_name, "application/vst/view");
 
 void VstConfiguration::init()
 {
+    settings()->setDefaultValue(USED_VST_VIEW, Val("newview"));
     settings()->setDefaultValue(USER_VST_PATHS, Val(""));
     settings()->valueChanged(USER_VST_PATHS).onReceive(nullptr, [this](const Val&) {
         m_userVstDirsChanged.send(userVstDirectories());

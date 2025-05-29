@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.50197</pageWidth>
@@ -96,7 +97,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -161,24 +163,30 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         </VBox>
       <HBox>
         <width>5</width>
+        <eid>E_E</eid>
         </HBox>
       <Measure>
+        <eid>F_F</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>G_G</eid>
             </Clef>
           <TimeSig>
+            <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Spanner type="Ottava">
             <Ottava>
               <subtype>8va</subtype>
+              <eid>I_I</eid>
               </Ottava>
             <next>
               <location>
@@ -187,18 +195,22 @@
               </next>
             </Spanner>
           <Chord>
+            <eid>J_J</eid>
             <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>K_K</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>L_L</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>M_M</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -213,6 +225,7 @@
           <Spanner type="Ottava">
             <Ottava>
               <subtype>8vb</subtype>
+              <eid>N_N</eid>
               </Ottava>
             <next>
               <location>
@@ -221,11 +234,14 @@
               </next>
             </Spanner>
           <Chord>
+            <eid>O_O</eid>
             <durationType>half</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>P_P</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>Q_Q</eid>
                   </Tie>
                 <next>
                   <location>
@@ -241,11 +257,14 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>R_R</eid>
         <voice>
           <Chord>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>T_T</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -259,9 +278,11 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>V_V</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -274,10 +295,12 @@
               </prev>
             </Spanner>
           <Rest>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>X_X</eid>
             </BarLine>
           </voice>
         </Measure>

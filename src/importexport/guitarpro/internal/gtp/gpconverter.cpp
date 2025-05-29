@@ -1036,7 +1036,7 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
     MeasureBase* m = nullptr;
     if (!_score->measures()->first()) {
         m = Factory::createTitleVBox(_score->dummy()->system());
-        _score->addMeasure(m, 0);
+        _score->measures()->append(m);
     } else {
         m = _score->measures()->first();
         if (!m->isVBox()) {
@@ -1545,15 +1545,10 @@ void GPConverter::addInstrumentChanges()
             int midiProgramm = 0;
             String instrName;
 
-            auto it = track.second->sounds().find(soundAutomation.second.value.split(';').at(0));
+            auto it = track.second->sounds().find(soundAutomation.second.value);
             if (it == track.second->sounds().end()) {
                 midiProgramm = track.second->programm();
-                engraving::StringList list = soundAutomation.second.value.split(';');
-                if (list.size() != 1) {
-                    instrName = list[0].split('/')[2]; // Always looks like 'Main Group/Instrument Group/Instrument'
-                } else {
-                    instrName = soundAutomation.second.value;
-                }
+                instrName = soundAutomation.second.value;
             } else {
                 midiProgramm = it->second.programm;
                 instrName = it->second.label;
@@ -1713,7 +1708,7 @@ Measure* GPConverter::addMeasure(const GPMasterBar* mB)
     auto scoreTimeSig = Fraction(sig.numerator, sig.denominator);
     measure->setTimesig(scoreTimeSig);
     measure->setTicks(scoreTimeSig);
-    _score->measures()->add(measure);
+    _score->measures()->append(measure);
 
     return measure;
 }

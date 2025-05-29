@@ -22,6 +22,32 @@
 
 var Navigation = require("Navigation.js")
 
+function selectTab(tab)
+{
+    switch (tab) {
+    case "instruments":
+        Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
+        break;
+    case "templates":
+        Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Create from template")
+        break;
+    default:
+        api.autobot.error("instruments: unknown tab: " + tab)
+    }
+}
+
+function selectFamily(family)
+{
+    // Navigation.goToControl("NewScoreDialog", "FamilyView", family)
+    Navigation.triggerControl("NewScoreDialog", "FamilyView", family)
+}
+
+function selectInstrument(instrument)
+{
+    // Navigation.goToControl("NewScoreDialog", "InstrumentsView", instrument)
+    Navigation.triggerControl("NewScoreDialog", "InstrumentsView", instrument)
+}
+
 module.exports = {
     openNewScoreDialog: function()
     {
@@ -30,30 +56,42 @@ module.exports = {
         })
     },
 
+    selectTab: selectTab,
+
+    chooseTemplate: function(category, template)
+    {
+        Navigation.goToControl("NewScoreDialog", "Category", category)
+        Navigation.goToControl("NewScoreDialog", "Template", template)
+    },
+
     done: function()
     {
         Navigation.triggerControl("NewScoreDialog", "BottomPanel", "Done")
     },
 
+    selectFamily: selectFamily,
+    selectInstrument: selectInstrument,
+
     chooseInstrument: function(family, instrument)
     {
-        Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
-        // Navigation.goToControl("NewScoreDialog", "FamilyView", family)
-        // Navigation.goToControl("NewScoreDialog", "InstrumentsView", instrument) 
-        Navigation.triggerControl("NewScoreDialog", "FamilyView", family)
-        Navigation.triggerControl("NewScoreDialog", "InstrumentsView", instrument)
+        selectTab("instruments")
+        selectFamily(family)
+        selectInstrument(instrument)
         //Navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
     },
 
     chooseRandomInstruments: function(count, see_msec)
     {
         see_msec = see_msec || 50
+
+        selectTab("instruments")
+
         api.log.debug("chooseRandomInstruments count: " + count)
         for (var i = 0; i < count; i++) {
 
             api.log.debug("chooseRandomInstruments i: " + i)
             // Go to first family
-            api.navigation.goToControl("NewScoreDialog", "FamilyView", "Woodwinds")
+            selectFamily("Woodwinds")
 
             // Choose family
             var familyCount = api.autobot.randomInt(0, 20);
@@ -66,6 +104,8 @@ module.exports = {
             if (api.navigation.activeControl() === "genreBox") {
                 api.navigation.down()
             }
+
+            api.navigation.trigger()
 
             api.context.setStepVal("family_" + i, api.navigation.activeControl())
 
@@ -85,31 +125,13 @@ module.exports = {
                 api.navigation.down()
             }
 
+            api.navigation.trigger()
+
             api.context.setStepVal("instrument_" + i, api.navigation.activeControl())
 
             // Select
-            api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
+            // api.navigation.triggerControl("NewScoreDialog", "SelectPanel", "Select")
         }
-    },
-
-    selectTab: function(tab)
-    {
-        switch (tab) {
-        case "instruments":
-            Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Choose instruments")
-            break;
-        case "templates":
-            Navigation.triggerControl("NewScoreDialog", "ChooseTabPanel", "Create from template")
-            break;
-        default:
-            api.autobot.error("instruments: unknown tab: " + tab)
-        }
-    },
-
-    chooseTemplate: function(category, template)
-    {
-        Navigation.goToControl("NewScoreDialog", "Category", category)
-        Navigation.goToControl("NewScoreDialog", "Template", template)
     }
 }
 

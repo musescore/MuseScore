@@ -92,7 +92,7 @@ public:
     bool isUrlSupported(const QUrl& url) const override;
     bool isFileSupported(const muse::io::path_t& path) const override;
     muse::Ret openProject(const ProjectFile& file) override;
-    bool closeOpenedProject(bool quitApp = false) override;
+    bool closeOpenedProject(bool goToHome = true) override;
     bool saveProject(const muse::io::path_t& path = muse::io::path_t()) override;
     bool saveProjectLocally(
         const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;

@@ -199,6 +199,11 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                             lscore->undo(new Link(lbl, sbl));
                         } else if (lbl != sbl && generated && lbl->isLinked(sbl)) {
                             lscore->undo(new Unlink(lbl));
+                            while (EngravingItem* linkedOnCoveringMMRest = sbl->findLinkedInScore(lscore)) {
+                                // Edge case: an additional link of this barline exists on the covering mmRest of lbl's measure
+                                lscore->undo(new Unlink(linkedOnCoveringMMRest));
+                                lscore->doUndoRemoveElement(linkedOnCoveringMMRest);
+                            }
                         }
                     }
                 }
@@ -270,19 +275,6 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     break;
     }
 }
-
-//---------------------------------------------------------
-//   BarLineEditData
-//---------------------------------------------------------
-
-class BarLineEditData : public ElementEditData
-{
-    OBJECT_ALLOCATOR(engraving, BarLineEditData)
-public:
-    double yoff1;
-    double yoff2;
-    virtual EditDataType type() override { return EditDataType::BarLineEditData; }
-};
 
 //---------------------------------------------------------
 //   BarLineTable
@@ -595,25 +587,6 @@ bool BarLine::isBottom() const
     } else {
         return nextVisibleSpannedStaff(this) == idx;
     }
-}
-
-//---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void BarLine::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
-{
-    EngravingItem::drawEditMode(p, ed, currentViewScaling);
-    BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
-    BarLine::LayoutData* ldata = mutldata();
-    ldata->y1 += bed->yoff1;
-    ldata->y2 += bed->yoff2;
-    PointF pos(canvasPos());
-    p->translate(pos);
-    renderer()->drawItem(this, p);
-    p->translate(-pos);
-    ldata->y1 -= bed->yoff1;
-    ldata->y2 -= bed->yoff2;
 }
 
 //---------------------------------------------------------

@@ -125,7 +125,10 @@ void NotationModule::registerExports()
     m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController);
     m_midiInputOutputController = std::make_shared<MidiInputOutputController>();
     m_instrumentsRepository = std::make_shared<InstrumentsRepository>();
+
+#ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
     m_engravingFontsController = std::make_shared<EngravingFontsController>();
+#endif
 
     ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
@@ -246,7 +249,10 @@ void NotationModule::onInit(const IApplication::RunMode& mode)
     m_instrumentsRepository->init();
     m_actionController->init();
     m_notationUiActions->init();
+
+#ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
     m_engravingFontsController->init();
+#endif
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_midiInputOutputController->init();

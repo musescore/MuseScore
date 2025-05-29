@@ -1159,7 +1159,8 @@ bool BeamLayout::calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int 
 
     // if the chord ends a subdivision of the beat
     Fraction baseTick = tuplet ? tuplet->tick() : chord->measure()->tick();
-    Fraction tickNext = nextChordRest->tick() - baseTick;
+    Fraction stretch = chord->staff()->timeStretch(baseTick);
+    Fraction tickNext = (nextChordRest->tick() - baseTick) * stretch;
     if (tuplet) {
         // for tuplets with odd ratios, apply ratio
         // for tuplets with even ratios, use actual beat

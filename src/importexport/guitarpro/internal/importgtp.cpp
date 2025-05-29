@@ -935,7 +935,7 @@ void GuitarPro::createMeasures()
             }
         }
 
-        score->measures()->add(m);
+        score->measures()->append(m);
         tick += nts;
         ts = nts;
     }
@@ -1082,7 +1082,7 @@ bool GuitarPro1::read(IODevice* io)
             }
         }
 
-        score->measures()->add(m);
+        score->measures()->append(m);
         tick += nts;
         ts = nts;
     }
@@ -1475,7 +1475,7 @@ bool GuitarPro2::read(IODevice* io)
             }
         }
 
-        score->measures()->add(m);
+        score->measures()->append(m);
         tick += nts;
         ts = nts;
     }
@@ -2224,7 +2224,7 @@ bool GuitarPro3::read(IODevice* io)
             }
         }
 
-        score->measures()->add(m);
+        score->measures()->append(m);
         tick += nts;
         ts = nts;
     }
@@ -2746,7 +2746,7 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp, bool experimental)
     MeasureBase* m = nullptr;
     if (!score->measures()->first()) {
         m = Factory::createTitleVBox(score->dummy()->system());
-        score->addMeasure(m, 0);
+        score->measures()->append(m);
     } else {
         m = score->measures()->first();
         if (!m->isVBox()) {
@@ -2903,11 +2903,6 @@ static Err importScore(MasterScore* score, muse::io::IODevice* io, const muse::m
 {
     if (!io->open(IODevice::ReadOnly)) {
         return Err::FileOpenError;
-    }
-
-    score->loadStyle(u":/engraving/styles/gp-style.mss");
-    if (experimental) {
-        score->loadStyle(u":/engraving/styles/gp-style-experimental.mss");
     }
 
     score->checkChordList();

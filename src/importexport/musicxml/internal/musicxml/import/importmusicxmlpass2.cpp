@@ -907,6 +907,7 @@ static void addLyric(MusicXmlLogger* logger, const XmlStreamReader* const xmlrea
         delete l;
     } else {
         l->setNo(lyricNo);
+        l->initTextStyleType(l->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
         cr->add(l);
         extendedLyrics.setExtend(lyricNo, cr->track(), cr->tick(), l);
     }
@@ -2707,6 +2708,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
     DelayedArpMap delayedArps;
     HarmonyMap delayedHarmony;
     bool measureHasCoda = false;
+    String tempoString;  // helper for Dorico imports
 
     // collect candidates for courtesy accidentals to work out at measure end
     std::map<Note*, int> alterMap;
@@ -2716,8 +2718,12 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
             attributes(partId, measure, time + mTime);
         } else if (m_e.name() == "direction") {
             MusicXmlParserDirection dir(m_e, m_score, m_pass1, *this, m_logger);
-            dir.direction(partId, measure, time + mTime, m_spanners, delayedDirections, inferredFingerings, delayedHarmony, measureHasCoda,
-                          m_segnos);
+            if (!tempoString.empty() && m_pass1.exporterSoftware() == MusicXmlExporterSoftware::DORICO) {
+                dir.setBpm(tempoString.toDouble());
+                tempoString.clear();
+            }
+            dir.direction(partId, measure, time + mTime, m_spanners, delayedDirections,
+                          inferredFingerings, delayedHarmony, measureHasCoda, m_segnos);
         } else if (m_e.name() == "figured-bass") {
             FiguredBass* fb = figuredBass();
             if (fb) {
@@ -2726,6 +2732,28 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
         } else if (m_e.name() == "harmony") {
             harmony(partId, measure, time + mTime, delayedHarmony);
         } else if (m_e.name() == "note") {
+            if (!tempoString.empty()) {
+                // sound tempo="..."
+                // create an invisible default TempoText
+                // to prevent duplicates, only if none is present yet
+                Fraction tick = time + mTime;
+
+                if (canAddTempoText(m_score->tempomap(), tick.ticks())) {
+                    double tpo = tempoString.toDouble() / 60;
+                    TempoText* t = Factory::createTempoText(m_score->dummy()->segment());
+                    t->setXmlText(String(u"%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER)),
+                                                         tempoString));
+                    t->setVisible(false);
+                    t->setTempo(tpo);
+                    t->setFollowText(true);
+
+                    m_score->setTempo(tick, tpo);
+
+                    addElemOffset(t, m_pass1.trackForPart(partId), u"above", measure, tick);
+                }
+                tempoString.clear();
+            }
+
             // Correct delayed ottava tick
             if (m_delayedOttava && m_delayedOttava->tick2() < time + mTime) {
                 handleSpannerStop(m_delayedOttava, m_delayedOttava->track2(), time + mTime, m_spanners);
@@ -2786,28 +2814,7 @@ void MusicXmlParserPass2::measure(const String& partId, const Fraction time)
                 }
             }
         } else if (m_e.name() == "sound") {
-            String tempo = m_e.attribute("tempo");
-
-            if (!tempo.empty()) {
-                // sound tempo="..."
-                // create an invisible default TempoText
-                // to prevent duplicates, only if none is present yet
-                Fraction tick = time + mTime;
-
-                if (canAddTempoText(m_score->tempomap(), tick.ticks())) {
-                    double tpo = tempo.toDouble() / 60;
-                    TempoText* t = Factory::createTempoText(m_score->dummy()->segment());
-                    t->setXmlText(String(u"%1 = %2").arg(TempoText::duration2tempoTextString(TDuration(DurationType::V_QUARTER)),
-                                                         tempo));
-                    t->setVisible(false);
-                    t->setTempo(tpo);
-                    t->setFollowText(true);
-
-                    m_score->setTempo(tick, tpo);
-
-                    addElemOffset(t, m_pass1.trackForPart(partId), u"above", measure, tick);
-                }
-            }
+            tempoString = m_e.attribute("tempo");
             m_e.skipCurrentElement();
         } else if (m_e.name() == "barline") {
             barline(partId, measure, time + mTime);
@@ -3546,12 +3553,23 @@ void MusicXmlParserDirection::direction(const String& partId,
                 t->setColor(m_color);
             }
 
+            if (configuration()->importLayout()) {
+                if (m_justify == u"right") {
+                    t->setAlign(AlignH::RIGHT);
+                } else if (m_justify == u"center") {
+                    t->setAlign(AlignH::HCENTER);
+                } else {
+                    t->setAlign(AlignH::LEFT);
+                }
+            }
+
             t->setVisible(m_visible);
 
             if (m_swing.second != 0) {
                 toStaffTextBase(t)->setSwing(true);
                 toStaffTextBase(t)->setSwingParameters(m_swing.first,
-                                                       m_swing.first ? m_swing.second : toStaffTextBase(t)->style().styleI(Sid::swingRatio));
+                                                       m_swing.first ? m_swing.second
+                                                       : toStaffTextBase(t)->style().styleI(Sid::swingRatio));
                 m_swing.second = 0;
             }
 
@@ -3867,7 +3885,8 @@ Text* MusicXmlParserDirection::addTextToHeader(const TextStyleType textStyleType
     Text* t = Factory::createText(m_score->dummy(), textStyleType);
     t->setXmlText(m_wordsText.trimmed());
     MeasureBase* const firstMeasure = m_score->measures()->first();
-    VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXmlParserPass1::createAndAddVBoxForCreditWords(m_score);
+    VBox* vbox
+        = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXmlParserPass1::createAndAddVBoxForCreditWords(m_score, Fraction(0, 1));
     double spatium = m_score->style().styleD(Sid::spatium);
     vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height() / spatium / 2)); // add some height
     vbox->add(t);
@@ -3930,6 +3949,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         }
         String type = m_e.attribute("type");
         m_color = Color::fromString(m_e.asciiAttribute("color").ascii());
+        m_justify = m_e.attribute("justify");
         if (m_e.name() == "metronome") {
             m_metroText = metronome(m_tpoMetro);
         } else if (m_e.name() == "words") {
@@ -6507,11 +6527,8 @@ static void addFiguredBassElements(FiguredBassList& fbl, const Fraction noteStar
 //   addTremolo
 //---------------------------------------------------------
 
-static void addTremolo(ChordRest* cr,
-                       const int tremoloNr, const String& tremoloType, const String& tremoloSmufl,
-                       Chord*& tremStart,
-                       MusicXmlLogger* logger, const XmlStreamReader* const xmlreader,
-                       Fraction& timeMod)
+static void addTremolo(ChordRest* cr, const int tremoloNr, const String& tremoloType, const String& smufl, const Color& color,
+                       Chord*& tremStart, MusicXmlLogger* logger, const XmlStreamReader* const xmlreader, Fraction& timeMod)
 {
     if (!cr->isChord()) {
         return;
@@ -6535,6 +6552,9 @@ static void addTremolo(ChordRest* cr,
                 if (type != TremoloType::INVALID_TREMOLO) {
                     TremoloSingleChord* tremolo = Factory::createTremoloSingleChord(mu::engraving::toChord(cr));
                     tremolo->setTremoloType(type);
+                    if (color.isValid()) {
+                        tremolo->setColor(color);
+                    }
                     cr->add(tremolo);
                 }
             } else if (tremoloType == u"start") {
@@ -6563,6 +6583,9 @@ static void addTremolo(ChordRest* cr,
                     if (type != TremoloType::INVALID_TREMOLO) {
                         TremoloTwoChord* tremolo = Factory::createTremoloTwoChord(mu::engraving::toChord(cr));
                         tremolo->setTremoloType(type);
+                        if (color.isValid()) {
+                            tremolo->setColor(color);
+                        }
                         tremolo->setChords(tremStart, static_cast<Chord*>(cr));
                         // fixup chord duration and type
                         const Fraction tremDur = cr->ticks() * Fraction(1, 2);
@@ -6585,11 +6608,16 @@ static void addTremolo(ChordRest* cr,
         } else {
             logger->logError(String(u"unknown tremolo type %1").arg(tremoloNr), xmlreader);
         }
-    } else if (tremoloNr == 0 && (tremoloType == u"unmeasured" || tremoloType.empty() || tremoloSmufl == u"buzzRoll")) {
+    } else if (tremoloNr == 0 && (tremoloType == u"unmeasured" || tremoloType.empty() || smufl == u"buzzRoll")) {
         // Out of all the SMuFL unmeasured tremolos, we only support 'buzzRoll'
         TremoloSingleChord* tremolo = Factory::createTremoloSingleChord(mu::engraving::toChord(cr));
         tremolo->setTremoloType(TremoloType::BUZZ_ROLL);
+        if (color.isValid()) {
+            tremolo->setColor(color);
+        }
         cr->add(tremolo);
+    } else if (!smufl.empty() && smufl != u"buzzRoll") {
+        logger->logError(String(u"MusicXml::import: only buzzRoll glyph is supported for unmeasured tremolos"), xmlreader);
     }
 }
 
@@ -7164,7 +7192,8 @@ Note* MusicXmlParserPass2::note(const String& partId,
 
     // handle tremolo before handling tuplet (two note tremolos modify timeMod)
     if (cr && notations.hasTremolo()) {
-        addTremolo(cr, notations.tremoloNr(), notations.tremoloType(), notations.tremoloSmufl(), m_tremStart, m_logger, &m_e, timeMod);
+        addTremolo(cr, notations.tremoloNr(), notations.tremoloType(), notations.tremoloSmufl(), notations.tremoloColor(),
+                   m_tremStart, m_logger, &m_e, timeMod);
     }
 
     // handle tuplet state for the current chord or rest
@@ -8353,9 +8382,10 @@ void MusicXmlParserNotations::ornaments()
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "tremolo") {
             m_hasTremolo = true;
+            m_tremoloColor = Color::fromString(m_e.attribute("color"));
             m_tremoloType = m_e.attribute("type");
-            m_tremoloNr = m_e.readInt();
             m_tremoloSmufl = m_e.attribute("smufl");
+            m_tremoloNr = m_e.readInt();
         } else if (m_e.name() == "inverted-mordent"
                    || m_e.name() == "mordent") {
             mordentNormalOrInverted();
@@ -8389,7 +8419,14 @@ void MusicXmlParserNotations::technical()
 {
     while (m_e.readNextStartElement()) {
         SymId id { SymId::noSym };
-        if (convertArticulationToSymId(String::fromAscii(m_e.name().ascii()), id)) {
+        const String smufl = m_e.attribute("smufl");
+        if (!smufl.empty()) {
+            id = SymNames::symIdByName(smufl, SymId::noSym);
+            Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                                 m_e.attributes(), u"technical", id);
+            m_notations.push_back(notation);
+            m_e.skipCurrentElement();
+        } else if (convertArticulationToSymId(String::fromAscii(m_e.name().ascii()), id)) {
             Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
                                                                  m_e.attributes(), u"technical", id);
             m_notations.push_back(notation);
@@ -8425,17 +8462,7 @@ void MusicXmlParserNotations::technical()
 
 void MusicXmlParserNotations::otherTechnical()
 {
-    const String smufl = m_e.attribute("smufl");
-
-    if (!smufl.empty()) {
-        SymId id = SymNames::symIdByName(smufl, SymId::noSym);
-        Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
-                                                             m_e.attributes(), u"technical", id);
-        m_notations.push_back(notation);
-        m_e.skipCurrentElement();
-        return;
-    }
-
+    const Color color = Color::fromString(m_e.attribute("color"));
     const String text = m_e.readText();
 
     if (text == u"z") {
@@ -8443,6 +8470,7 @@ void MusicXmlParserNotations::otherTechnical()
         m_hasTremolo = true;
         m_tremoloNr = 0;
         m_tremoloType = u"unmeasured";
+        m_tremoloColor = color;
     }
 }
 

@@ -207,7 +207,7 @@ void ExtensionsListModel::editShortcut(const QString& extensionUri)
     params["shortcutCodeKey"] = actionCodeBase;
     preferencesUri.addParam("params", Val::fromQVariant(params));
 
-    RetVal<Val> retVal = interactive()->open(preferencesUri);
+    RetVal<Val> retVal = interactive()->openSync(preferencesUri);
 
     if (!retVal.ret) {
         LOGE() << retVal.ret.toString();

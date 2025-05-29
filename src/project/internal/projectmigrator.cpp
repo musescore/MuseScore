@@ -102,7 +102,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
     query.addParam("isRemapPercussion", Val(out.isRemapPercussion));
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         return rv.ret;
     }

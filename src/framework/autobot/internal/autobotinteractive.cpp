@@ -36,15 +36,15 @@ std::shared_ptr<IInteractive> AutobotInteractive::realInteractive() const
     return m_real;
 }
 
-IInteractive::Result AutobotInteractive::question(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                                  const Button& def, const Options& options,
-                                                  const std::string& dialogTitle) const
+IInteractive::Result AutobotInteractive::questionSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                                      int defBtn, const Options& options, const std::string& dialogTitle)
 {
-    return m_real->question(contentTitle, text, buttons, def, options, dialogTitle);
+    return m_real->questionSync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-IInteractive::Result AutobotInteractive::question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                                                  int defBtn, const Options& options, const std::string& dialogTitle) const
+async::Promise<IInteractive::Result> AutobotInteractive::question(const std::string& contentTitle, const Text& text,
+                                                                  const ButtonDatas& buttons, int defBtn,
+                                                                  const Options& options, const std::string& dialogTitle)
 {
     return m_real->question(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
@@ -54,59 +54,50 @@ IInteractive::ButtonData AutobotInteractive::buttonData(Button b) const
     return m_real->buttonData(b);
 }
 
-IInteractive::Result AutobotInteractive::info(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                              int defBtn, const Options& options, const std::string& dialogTitle) const
+IInteractive::Result AutobotInteractive::infoSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
+                                                  const Options& options, const std::string& dialogTitle)
+{
+    return m_real->infoSync(contentTitle, text, buttons, defBtn, options, dialogTitle);
+}
+
+async::Promise<IInteractive::Result> AutobotInteractive::info(const std::string& contentTitle, const Text& text,
+                                                              const ButtonDatas& buttons, int defBtn,
+                                                              const Options& options, const std::string& dialogTitle)
 {
     return m_real->info(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-IInteractive::Result AutobotInteractive::info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
-                                              const Options& options, const std::string& dialogTitle) const
+IInteractive::Result AutobotInteractive::warningSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                                     int defBtn,
+                                                     const Options& options, const std::string& dialogTitle)
 {
-    return m_real->info(contentTitle, text, buttons, defBtn, options, dialogTitle);
+    return m_real->warningSync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-IInteractive::Result AutobotInteractive::warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                                 const Button& def, const Options& options, const std::string& dialogTitle) const
-{
-    return m_real->warning(contentTitle, text, buttons, def, options, dialogTitle);
-}
-
-IInteractive::Result AutobotInteractive::warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                                                 int defBtn, const Options& options, const std::string& dialogTitle) const
+async::Promise<IInteractive::Result> AutobotInteractive::warning(const std::string& contentTitle, const Text& text,
+                                                                 const ButtonDatas& buttons, int defBtn,
+                                                                 const Options& options, const std::string& dialogTitle)
 {
     return m_real->warning(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-IInteractive::Result AutobotInteractive::warning(const std::string& contentTitle, const Text& text, const std::string& detailedText,
-                                                 const ButtonDatas& buttons, int defBtn,
-                                                 const Options& options, const std::string& dialogTitle) const
+IInteractive::Result AutobotInteractive::errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                                   int defBtn,
+                                                   const Options& options, const std::string& dialogTitle)
 {
-    return m_real->warning(contentTitle, text, detailedText, buttons, defBtn, options, dialogTitle);
+    return m_real->errorSync(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-IInteractive::Result AutobotInteractive::error(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                               const Button& def, const Options& options, const std::string& dialogTitle) const
-{
-    return m_real->error(contentTitle, text, buttons, def, options, dialogTitle);
-}
-
-IInteractive::Result AutobotInteractive::error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
-                                               int defBtn, const Options& options, const std::string& dialogTitle) const
+async::Promise<IInteractive::Result> AutobotInteractive::error(const std::string& contentTitle, const Text& text,
+                                                               const ButtonDatas& buttons, int defBtn,
+                                                               const Options& options, const std::string& dialogTitle)
 {
     return m_real->error(contentTitle, text, buttons, defBtn, options, dialogTitle);
 }
 
-IInteractive::Result AutobotInteractive::error(const std::string& contentTitle, const Text& text, const std::string& detailedText,
-                                               const ButtonDatas& buttons, int defBtn, const Options& options,
-                                               const std::string& dialogTitle) const
+void AutobotInteractive::showProgress(const std::string& title, Progress* progress)
 {
-    return m_real->error(contentTitle, text, detailedText, buttons, defBtn, options, dialogTitle);
-}
-
-Ret AutobotInteractive::showProgress(const std::string& title, Progress* progress) const
-{
-    return m_real->showProgress(title, progress);
+    m_real->showProgress(title, progress);
 }
 
 io::path_t AutobotInteractive::selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter)
@@ -124,7 +115,7 @@ io::path_t AutobotInteractive::selectSavingFile(const QString& title, const io::
     }
 
     LOGD() << title << " dir:" << dir << ", filter: " << filterList << ", confirmOverwrite: " << confirmOverwrite;
-    m_real->open("muse://autobot/selectfile?sync=true&filePath=" + dir.toStdString());
+    m_real->openSync("muse://autobot/selectfile?sync=true&filePath=" + dir.toStdString());
     m_selectedFilePath = dir;
     return m_selectedFilePath;
 }
@@ -150,32 +141,22 @@ bool AutobotInteractive::isSelectColorOpened() const
     return m_real->isSelectColorOpened();
 }
 
-RetVal<Val> AutobotInteractive::open(const std::string& uri) const
+RetVal<Val> AutobotInteractive::openSync(const UriQuery& uri)
+{
+    return m_real->openSync(uri);
+}
+
+async::Promise<Val> AutobotInteractive::open(const UriQuery& uri)
 {
     return m_real->open(uri);
 }
 
-RetVal<Val> AutobotInteractive::open(const Uri& uri) const
-{
-    return m_real->open(uri);
-}
-
-RetVal<Val> AutobotInteractive::open(const UriQuery& uri) const
-{
-    return m_real->open(uri);
-}
-
-RetVal<bool> AutobotInteractive::isOpened(const std::string& uri) const
+RetVal<bool> AutobotInteractive::isOpened(const UriQuery& uri) const
 {
     return m_real->isOpened(uri);
 }
 
 RetVal<bool> AutobotInteractive::isOpened(const Uri& uri) const
-{
-    return m_real->isOpened(uri);
-}
-
-RetVal<bool> AutobotInteractive::isOpened(const UriQuery& uri) const
 {
     return m_real->isOpened(uri);
 }
@@ -190,17 +171,12 @@ void AutobotInteractive::raise(const UriQuery& uri)
     m_real->raise(uri);
 }
 
-void AutobotInteractive::close(const std::string& uri)
+void AutobotInteractive::close(const UriQuery& uri)
 {
     m_real->close(uri);
 }
 
 void AutobotInteractive::close(const Uri& uri)
-{
-    m_real->close(uri);
-}
-
-void AutobotInteractive::close(const UriQuery& uri)
 {
     m_real->close(uri);
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <spatium>1.74978</spatium>
@@ -70,7 +71,8 @@
         </section>
       </Order>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -93,36 +95,47 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Untitled score</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>subtitle</style>
           <text>Subtitle</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>H_H</eid>
         <voice>
           <KeySig>
+            <eid>I_I</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>K_K</eid>
             <durationType>half</durationType>
             </Rest>
           <Chord>
+            <eid>L_L</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>M_M</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>N_N</eid>
                   </Tie>
                 <next>
                   <location>
@@ -136,17 +149,20 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>O_O</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>P_P</eid>
         <endRepeat>2</endRepeat>
         <voice>
           <Spanner type="Volta">
             <Volta>
               <endHookType>1</endHookType>
               <beginText>1.</beginText>
+              <eid>Q_Q</eid>
               <endings>1</endings>
               </Volta>
             <next>
@@ -156,11 +172,14 @@
               </next>
             </Spanner>
           <Rest>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>T_T</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -174,16 +193,20 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>U_U</eid>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <Note>
+              <eid>V_V</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>X_X</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -191,6 +214,7 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>Y_Y</eid>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -202,6 +226,7 @@
           <Spanner type="Volta">
             <Volta>
               <beginText>2.</beginText>
+              <eid>Z_Z</eid>
               <endings>2</endings>
               </Volta>
             <next>
@@ -211,16 +236,20 @@
               </next>
             </Spanner>
           <Chord>
+            <eid>a_a</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>b_b</eid>
               <PartialTie>
                 <partialSpannerDirection>incoming</partialSpannerDirection>
+                <eid>c_c</eid>
                 </PartialTie>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Rest>
+            <eid>d_d</eid>
             <durationType>half</durationType>
             </Rest>
           <Spanner type="Volta">

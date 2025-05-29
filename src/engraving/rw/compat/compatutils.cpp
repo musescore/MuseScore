@@ -415,7 +415,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
             newArtic->setPlayArticulation(combinedArtic->playArticulation());
             newArtic->setVisible(combinedArtic->visible());
             newArtic->setOrnamentStyle(combinedArtic->ornamentStyle());
-            LinkedObjects* links = new LinkedObjects(masterScore);
+            LinkedObjects* links = new LinkedObjects();
             links->push_back(newArtic);
             newArtic->setLinks(links);
             parentChord->add(newArtic);

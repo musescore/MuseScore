@@ -111,9 +111,9 @@ QString NotationStatusBarModel::accessibilityInfo() const
     return accessibility() ? QString::fromStdString(accessibility()->accessibilityInfo().val) : QString();
 }
 
-QVariant NotationStatusBarModel::concertPitchItem()
+MenuItem* NotationStatusBarModel::concertPitchItem()
 {
-    return QVariant::fromValue(m_concertPitchItem);
+    return m_concertPitchItem;
 }
 
 void NotationStatusBarModel::updateConcertPitchItem()
@@ -124,9 +124,9 @@ void NotationStatusBarModel::updateConcertPitchItem()
     m_concertPitchItem->setState(state);
 }
 
-QVariant NotationStatusBarModel::currentWorkspaceItem()
+MenuItem* NotationStatusBarModel::currentWorkspaceItem()
 {
-    return QVariant::fromValue(m_currentWorkspaceItem);
+    return m_currentWorkspaceItem;
 }
 
 void NotationStatusBarModel::updateCurrentWorkspaceItem()
@@ -150,7 +150,7 @@ MenuItem* NotationStatusBarModel::makeMenuItem(const ActionCode& actionCode)
     return item;
 }
 
-QVariant NotationStatusBarModel::currentViewMode()
+MenuItem* NotationStatusBarModel::currentViewMode()
 {
     ViewMode viewMode = notation() ? notation()->viewMode() : ViewMode::PAGE;
 
@@ -163,11 +163,11 @@ QVariant NotationStatusBarModel::currentViewMode()
                 modeItem->setTitle(muse::TranslatableString("notation", "Continuous view"));
             }
 
-            return QVariant::fromValue(modeItem);
+            return modeItem;
         }
     }
 
-    return QVariant();
+    return nullptr;
 }
 
 void NotationStatusBarModel::initAvailableViewModeList()
@@ -412,6 +412,8 @@ void NotationStatusBarModel::handleWorkspacesMenuItem(const QString& itemId)
 {
 #ifdef MUSE_MODULE_WORKSPACE
     m_workspacesMenuModel->handleMenuItem(itemId);
+#else
+    UNUSED(itemId);
 #endif
 }
 

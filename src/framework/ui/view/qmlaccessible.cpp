@@ -382,8 +382,10 @@ void AccessibleItem::classBegin()
 
 void AccessibleItem::componentComplete()
 {
-    accessibilityController()->reg(this);
-    m_registred = true;
+    if (accessibilityController()) {
+        accessibilityController()->reg(this);
+        m_registred = true;
+    }
 }
 
 AccessibleItem* AccessibleItem::accessibleParent_property() const

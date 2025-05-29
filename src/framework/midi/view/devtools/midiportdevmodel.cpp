@@ -159,7 +159,7 @@ void MidiPortDevModel::generateMIDI20()
         case Event::Opcode::NoteOff:
         case Event::Opcode::NoteOn:
             e.setNote(++note);
-            e.setVelocity(++velocity);
+            e.setVelocity7(++velocity);
             e.setPitchNote(note + 12, 0.5);
             break;
         case Event::Opcode::PolyPressure:

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <spatium>1.74978</spatium>
@@ -72,7 +73,8 @@
         </section>
       </Order>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>o_o</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -95,41 +97,51 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Untitled score</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>subtitle</style>
           <text>Subtitle</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>H_H</eid>
         <voice>
           <KeySig>
+            <eid>I_I</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>J_J</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>L_L</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>M_M</eid>
         <startRepeat/>
         <endRepeat>2</endRepeat>
         <voice>
           <Spanner type="PartialLyricsLine">
             <PartialLyricsLine>
               <isEndMelisma>1</isEndMelisma>
+              <eid>N_N</eid>
               </PartialLyricsLine>
             <next>
               <location>
@@ -138,10 +150,12 @@
               </next>
             </Spanner>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
                 <partialSpannerDirection>incoming</partialSpannerDirection>
+                <eid>R_R</eid>
                 </Slur>
               <next>
                 <location>
@@ -150,13 +164,16 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>S_S</eid>
               <PartialTie>
                 <partialSpannerDirection>incoming</partialSpannerDirection>
+                <eid>T_T</eid>
                 </PartialTie>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <Spanner type="NoteLine">
                 <NoteLine>
+                  <eid>U_U</eid>
                   <diagonal>1</diagonal>
                   </NoteLine>
                 <next>
@@ -175,9 +192,11 @@
               </prev>
             </Spanner>
           <Chord>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
+              <eid>W_W</eid>
               <text>oo</text>
               </Lyrics>
             <Spanner type="Slur">
@@ -188,10 +207,12 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>X_X</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <Spanner type="Glissando">
                 <Glissando>
+                  <eid>Y_Y</eid>
                   <diagonal>1</diagonal>
                   </Glissando>
                 <next>
@@ -214,20 +235,26 @@
             <velocity>33</velocity>
             <voiceAssignment>currentVoiceOnly</voiceAssignment>
             <direction>up</direction>
+            <eid>P_P</eid>
             </Dynamic>
           <Beam>
+            <eid>Z_Z</eid>
             <l1>44</l1>
             <l2>44</l2>
             </Beam>
           <Chord>
+            <eid>a_a</eid>
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>middle</syllabic>
+              <eid>b_b</eid>
               <text>oo</text>
               </Lyrics>
             <Note>
+              <eid>c_c</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>d_d</eid>
                   </Tie>
                 <next>
                   <location>
@@ -247,9 +274,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>e_e</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>f_f</eid>
               <LaissezVib>
+                <eid>g_g</eid>
                 </LaissezVib>
               <Spanner type="Tie">
                 <prev>
@@ -263,15 +293,19 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>h_h</eid>
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
               <ticks>1</ticks>
               <ticks_f>1/1920</ticks_f>
+              <eid>i_i</eid>
               <text>oo</text>
               </Lyrics>
             <Note>
+              <eid>j_j</eid>
               <PartialTie>
+                <eid>k_k</eid>
                 </PartialTie>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -280,8 +314,10 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>l_l</eid>
         <voice>
           <Rest>
+            <eid>n_n</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

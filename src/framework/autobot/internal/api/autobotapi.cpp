@@ -54,8 +54,8 @@ void AutobotApi::runTestCase(const QJSValue& testCase)
 bool AutobotApi::pause(bool immediately)
 {
     if (immediately) {
-        IInteractive::Result res = interactive()->question("Pause", "Continue?",
-                                                           { IInteractive::Button::Continue, IInteractive::Button::Abort });
+        IInteractive::Result res = interactive()->questionSync("Pause", "Continue?",
+                                                               { IInteractive::Button::Continue, IInteractive::Button::Abort });
 
         if (res.standardButton() == IInteractive::Button::Abort) {
             abort();
@@ -72,7 +72,7 @@ bool AutobotApi::pause(bool immediately)
 bool AutobotApi::confirm(const QString& msg)
 {
     int pauseBtn = int(IInteractive::Button::CustomButton) + 1;
-    IInteractive::Result res = interactive()->question("Confirm", msg.toStdString(), {
+    IInteractive::Result res = interactive()->questionSync("Confirm", msg.toStdString(), {
         interactive()->buttonData(IInteractive::Button::Continue),
         IInteractive::ButtonData(pauseBtn, "Pause"),
         interactive()->buttonData(IInteractive::Button::Abort)

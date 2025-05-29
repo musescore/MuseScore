@@ -44,6 +44,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/dom/dom.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/score/rendering.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/single/single.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/editmode/editmode.cmake)
 
 if (MUE_BUILD_ENGRAVING_DEVTOOLS)
     include(${CMAKE_CURRENT_LIST_DIR}/devtools/devtools.cmake)
@@ -158,6 +159,21 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/harmonytodiagramreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/read410/harmonytodiagramreader.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/read460.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/read460.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/staffread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/staffread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/measureread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/measureread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/readcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/readcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/tread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/tread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/connectorinforeader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/connectorinforeader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/harmonytodiagramreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read460/harmonytodiagramreader.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.cpp
@@ -210,12 +226,14 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/rendering/iscorerenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/isinglerenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/ieditmoderenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/layoutoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.h
 
     ${RENDERING_SCORE_SRC}
     ${RENDERING_SINGLE_SRC}
+    ${RENDERING_EDITMODE_SRC}
 
     ${PLAYBACK_SRC}
     ${DEVTOOLS_SRC}
@@ -295,6 +313,10 @@ endif()
 
 if (MUE_BUILD_ENGRAVING_DEVTOOLS)
     set(MODULE_DEF ${MODULE_DEF} -DMUE_BUILD_ENGRAVING_DEVTOOLS)
+endif()
+
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Quick)
 endif()
 
 set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})

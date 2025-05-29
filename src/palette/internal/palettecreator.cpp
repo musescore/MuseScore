@@ -558,7 +558,7 @@ PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
     for (SpacerType spacerType : spacers) {
         auto spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
         spacer->setSpacerType(spacerType);
-        spacer->setGap(Millimetre(3 * gpaletteScore->style().spatium()));
+        spacer->setGap(Spatium(3));
         PaletteCellPtr cell = sp->appendElement(spacer, spacer->subtypeUserName());
         cell->mag = .7;
     }
@@ -1702,6 +1702,8 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     };
 
     static const std::vector<FretDiagramInfo> fretboardDiagrams = {
+        { u"------", u"",  muse::TranslatableString("palette", "Blank") },
+
         { u"X32O1O", u"C",  muse::TranslatableString("palette", "C") },
         { u"X-554-", u"Cm", muse::TranslatableString("palette", "Cm") },
         { u"X3231O", u"C7", muse::TranslatableString("palette", "C7") },
@@ -1734,6 +1736,11 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     for (const FretDiagramInfo& fretboardDiagram : fretboardDiagrams) {
         auto fret = FretDiagram::createFromString(gpaletteScore, fretboardDiagram.diagram);
         fret->setHarmony(fretboardDiagram.harmony);
+
+        if (fretboardDiagram.harmony.empty()) {
+            fret->clear();
+        }
+
         sp->appendElement(fret, fretboardDiagram.userName);
     }
 

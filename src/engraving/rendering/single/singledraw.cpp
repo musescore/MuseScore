@@ -1780,11 +1780,6 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    if (item->isDrawEditMode()) {
-        drawTextBase(item, painter);
-        return;
-    }
-
     if (item->textList().empty()) {
         drawTextBase(item, painter);
         return;
@@ -2204,7 +2199,7 @@ void SingleDraw::draw(const Spacer* item, Painter* painter)
 
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
-    painter->drawPath(item->path());
+    painter->drawPath(item->ldata()->path);
 }
 
 void SingleDraw::draw(const StaffLines* item, Painter* painter)
