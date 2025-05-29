@@ -925,8 +925,8 @@ bool AbstractNotationPaintView::adjustCanvasPositionSmoothPan(const RectF& curso
     RectF viewRect = viewport();
     qreal newX = cursorRect.x() - (viewRect.width() / 2);
     qreal newY = viewRect.intersects(cursorRect)
-                 ? cursorRect.y() - (viewRect.height() / 2)
-                 : viewRect.y();
+                 ? viewRect.y()
+                 : cursorRect.y() - (viewRect.height() / 2);
     return moveCanvasToPosition(newX, newY);
 }
 
@@ -968,7 +968,7 @@ bool AbstractNotationPaintView::moveCanvasToPosition(
 
 bool AbstractNotationPaintView::moveCanvas(qreal dx, qreal dy, bool userTriggeredMove, bool overrideZoomType)
 {
-    PointF delta = this->viewport().topLeft() - PointF(dx, dy);
+    PointF delta = viewportTopLeft() - PointF(dx, dy);
     return moveCanvasToPosition(delta.x(), delta.y(), userTriggeredMove, overrideZoomType);
 }
 
