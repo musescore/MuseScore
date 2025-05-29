@@ -807,6 +807,7 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
         SymId::ornamentTrill,
         SymId::ornamentShortTrill,
         SymId::ornamentMordent,
+        SymId::ornamentHaydn,
         SymId::ornamentTremblement,
         SymId::ornamentPrallMordent,
         SymId::ornamentUpPrall,

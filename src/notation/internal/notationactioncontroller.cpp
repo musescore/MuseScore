@@ -451,6 +451,7 @@ void NotationActionController::init()
     registerAction("add-trill", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTrill);
     registerAction("add-short-trill", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShortTrill);
     registerAction("add-mordent", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentMordent);
+    registerAction("add-haydn", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentHaydn);
     registerAction("add-tremblement", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTremblement);
     registerAction("add-prall-mordent", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentPrallMordent);
     registerAction("add-shake", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShake3);

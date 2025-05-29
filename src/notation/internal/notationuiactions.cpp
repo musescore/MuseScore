@@ -1905,6 +1905,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Toggle mordent"),
              TranslatableString("action", "Add ornament: mordent")
              ),
+    UiAction("add-haydn",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Toggle Haydn ornament"),
+             TranslatableString("action", "Add ornament: Haydn ornament")
+             ),
     UiAction("add-tremblement",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
