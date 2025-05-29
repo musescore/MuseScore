@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/Main.wasm.qml</file>
         <file>qml/MainToolBar.qml</file>
         <file>qml/HomePage/HomeMenu.qml</file>
         <file>qml/DevTools/Interactive/SampleDialog.qml</file>
@@ -106,6 +105,5 @@
         <file>qml/DevTools/Extensions/ExtensionsListView.qml</file>
         <file>qml/platform/PlatformMenuBar.qml</file>
         <file>qml/Preferences/PercussionPreferencesPage.qml</file>
-        <file>qml/platform/web/Main.qml</file>
     </qresource>
 </RCC>

@@ -27,9 +27,7 @@ import Muse.Dock 1.0
 
 import MuseScore.AppShell 1.0
 
-import "../"
-import "../../"
-import "../../NotationPage"
+import "NotationPage"
 
 AppWindow {
     id: root
@@ -46,15 +44,6 @@ AppWindow {
     Component.onCompleted: {
         dockwin.init()
     }
-
-    // WindowContent {
-    //     id: dockwin
-
-    //     anchors.top: appMenuBar.bottom
-    //     anchors.left: parent.left
-    //     anchors.right: parent.right
-    //     anchors.bottom: parent.bottom
-    // }
 
     DockWindow {
         id: dockwin
@@ -85,56 +74,10 @@ AppWindow {
             order: 1
         }
 
-        // toolBars: [
-        //     DockToolBar {
-        //         id: mainToolBar
-
-        //         objectName: "mainToolBar"
-        //         title: qsTrc("appshell", "Main toolbar")
-
-        //         floatable: false
-        //         closable: false
-
-        //         navigationSection: topToolbarKeyNavSec
-
-        //         MainToolBar {
-        //             id: toolBar
-        //             navigation.section: mainToolBar.navigationSection
-        //             navigation.order: 1
-
-        //             currentUri: dockwin.currentPageUri
-
-        //             navigation.onActiveChanged: {
-        //                 if (navigation.active) {
-        //                     mainToolBar.forceActiveFocus()
-        //                 }
-        //             }
-
-        //             onSelected: function(uri) {
-        //                 api.launcher.open(uri)
-        //             }
-
-        //             Component.onCompleted: {
-        //                 toolBar.focusOnFirst()
-        //             }
-        //         }
-        //     }
-        // ]
-
         pages: [
-            // HomePage {
-            //     window: root.window
-            // },
-
             NotationPage {
                 topToolbarKeyNavSec: topToolbarKeyNavSec
-            }//,
-
-            //         PublishPage {
-            //             topToolbarKeyNavSec: topToolbarKeyNavSec
-            //         },
-
-            //         DevToolsPage {}
+            }
         ]
     }
 }

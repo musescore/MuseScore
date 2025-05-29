@@ -26,7 +26,13 @@ add_subdirectory(app)
 
 # Modules
 if (MUE_BUILD_APPSHELL_MODULE)
-    add_subdirectory(appshell)
+
+    if (MUE_CONFIGURATION_IS_APPWEB)
+        add_subdirectory(appshell_web)
+    else()
+        add_subdirectory(appshell)
+    endif()
+
 endif()
 
 if (MUE_BUILD_BRAILLE_MODULE)
@@ -76,7 +82,7 @@ if (MUE_BUILD_PROJECT_MODULE)
     add_subdirectory(project)
 endif()
 
-if (CONFIGURATION_IS_APPWEB)
+if (MUE_CONFIGURATION_IS_APPWEB)
     add_subdirectory(webbridge)
 endif()
 
