@@ -180,12 +180,12 @@ RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
 
 Promise<Val> InteractiveProvider::openAsync(const UriQuery& q)
 {
-    return make_promise<Val>(openFunc(q));
+    return make_promise<Val>(openFunc(q), PromiseType::AsyncByBody);
 }
 
 async::Promise<Val> InteractiveProvider::openAsync(const Uri& uri, const QVariantMap& params)
 {
-    return make_promise<Val>(openFunc(UriQuery(uri), params));
+    return make_promise<Val>(openFunc(UriQuery(uri), params), PromiseType::AsyncByBody);
 }
 
 Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q)
