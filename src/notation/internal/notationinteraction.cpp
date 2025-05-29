@@ -1140,20 +1140,34 @@ std::vector<mu::engraving::Note*> NotationInteraction::playbackNotes() const
     return m_playback_notes;
 }
 
-void NotationInteraction::addPlaybackNote(Note* note) 
+void NotationInteraction::addPlaybackNote(Note* note, int ottavaType) 
 {
+    if (ottavaType > 0) {
+        m_ottava_map[note] = ottavaType;
+    }
     m_playback_notes.push_back(note);
 }
 
-void NotationInteraction::addGlissandoNote(mu::engraving::Note* note, int ticks, int duration_ticks) 
+int NotationInteraction::noteOttavaType(const mu::engraving::Note* note) 
+{
+    if (m_ottava_map.find(note) != m_ottava_map.end()) {
+        return m_ottava_map[note];
+    }
+    return 0;
+}
+
+void NotationInteraction::addGlissandoNote(mu::engraving::Note* note, int ticks, int duration_ticks, int ottavaType) 
 {
     glissando_endnotes.clear();
     glissando_note = note;
     glissando_ticks = ticks;
     glissando_curr_ticks = ticks;
     glissando_duration_ticks = duration_ticks;
+    if (ottavaType > 0) {
+        m_ottava_map[note] = ottavaType;
+    }
 }
-void NotationInteraction::addGlissandoEndNote(mu::engraving::Note* note) 
+void NotationInteraction::addGlissandoEndNote(mu::engraving::Note* note, int ottavaType) 
 {
     for (Note* ptr : glissando_endnotes) {
         if (ptr == note) {
@@ -1161,6 +1175,9 @@ void NotationInteraction::addGlissandoEndNote(mu::engraving::Note* note)
         }
     }
     glissando_endnotes.push_back(note);
+    if (ottavaType > 0) {
+        m_ottava_map[note] = ottavaType;
+    }
 }
 int NotationInteraction::glissandoNoteTicks() const {
     return glissando_ticks;
@@ -1227,18 +1244,21 @@ void NotationInteraction::arpeggioPointClear()
     arpeggio_ticks = 0;
     arpeggio_duration_ticks = 0;
 }
-void NotationInteraction::addArpeggioNote(mu::engraving::Note* note, int ticks, int duration_ticks) 
+void NotationInteraction::addArpeggioNote(mu::engraving::Note* note, int ticks, int duration_ticks, int ottavaType) 
 {
     arpeggio_notes.push_back(note);
     arpeggio_ticks = ticks;
     arpeggio_curr_ticks = ticks;
     arpeggio_duration_ticks = duration_ticks;
+    if (ottavaType > 0) {
+        m_ottava_map[note] = ottavaType;
+    }
 }
 void NotationInteraction::updateArpeggioDuration(int duration_ticks) 
 {
     arpeggio_duration_ticks = duration_ticks;
 }
-void NotationInteraction::addArpeggioNote(mu::engraving::Note* note) 
+void NotationInteraction::addArpeggioNote(mu::engraving::Note* note, int ottavaType) 
 {
     for (Note* ptr : arpeggio_notes) {
         if (ptr == note) {
@@ -1246,6 +1266,9 @@ void NotationInteraction::addArpeggioNote(mu::engraving::Note* note)
         }
     }
     arpeggio_notes.push_back(note);
+    if (ottavaType > 0) {
+        m_ottava_map[note] = ottavaType;
+    }
 }
 int NotationInteraction::arpeggioNoteTicks() const 
 {
@@ -1297,19 +1320,25 @@ muse::async::Notification NotationInteraction::arpeggioTickChanged()
     return m_arpeggioTickChanged;
 }
 
-void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int duration_ticks, int tremolo_type) 
+void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int duration_ticks, int tremolo_type, int ottavaType) 
 {
     trill_note = note;
     trill_ticks = ticks;
     trill_duration_ticks = duration_ticks;
     trill_tremolo_type = tremolo_type;
+    if (ottavaType > 0) {
+        m_ottava_map[note] = ottavaType;
+    }
 }
-void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int ticks, int duration_ticks, int tremolo_type) 
+void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int ticks, int duration_ticks, int tremolo_type, int ottavaType) 
 {
     trill_note1 = note;
     trill_ticks1 = ticks;
     trill_duration_ticks1 = duration_ticks;
     trill_tremolo_type1 = tremolo_type;
+    if (ottavaType > 0) {
+        m_ottava_map[note] = ottavaType;
+    }
 }
 int NotationInteraction::trillNoteTicks() const 
 {

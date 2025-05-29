@@ -97,10 +97,11 @@ public:
     muse::async::Notification playbackNotesChanged() const override;
     std::vector<Note*> playbackNotes() const override;
     void clearPlaybackNotes() override;
-    void addPlaybackNote(Note* note) override;
+    void addPlaybackNote(Note*, int) override;
+    int noteOttavaType(const mu::engraving::Note* note) override;
 
-    void addGlissandoNote(mu::engraving::Note* note, int ticks, int duration_ticks) override;
-    void addGlissandoEndNote(mu::engraving::Note* note) override;
+    void addGlissandoNote(mu::engraving::Note* note, int ticks, int duration_ticks, int ottavaType) override;
+    void addGlissandoEndNote(mu::engraving::Note* note, int ottavaType) override;
     int glissandoNoteTicks() const override;
     int glissandoNoteDurationticks() const override;
     int glissandoCurrticks() const override;
@@ -115,9 +116,9 @@ public:
     bool arpeggioPointEqual(muse::PointF) override;
     void addArpeggioPoint(muse::PointF) override;
     void arpeggioPointClear() override;
-    void addArpeggioNote(mu::engraving::Note*, int, int) override;
+    void addArpeggioNote(mu::engraving::Note*, int, int, int) override;
     void updateArpeggioDuration(int) override;
-    void addArpeggioNote(mu::engraving::Note *) override;
+    void addArpeggioNote(mu::engraving::Note*, int) override;
     int arpeggioNoteTicks() const override;
     int arpeggioNoteDurationticks() const override;
     int arpeggioCurrticks() const override;
@@ -128,8 +129,8 @@ public:
     void arpeggioTick(int) override;
     muse::async::Notification arpeggioTickChanged() override;
 
-    void addTrillNote(mu::engraving::Note*, int, int, int) override;
-    void addTrillNote1(mu::engraving::Note*, int, int, int) override;
+    void addTrillNote(mu::engraving::Note*, int, int, int, int) override;
+    void addTrillNote1(mu::engraving::Note*, int, int, int, int) override;
     int trillNoteTicks() const override;
     int trillNoteTicks1() const override;
     int trillNoteDurationticks() const override;
@@ -582,6 +583,7 @@ private:
 
     muse::async::Notification m_playbackNotesChanged;
     std::vector<Note*> m_playback_notes;
+    std::map<const Note*, int> m_ottava_map;
     
     Note* glissando_note = nullptr;
     int glissando_ticks = 0;
