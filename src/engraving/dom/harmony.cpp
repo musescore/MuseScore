@@ -1313,12 +1313,23 @@ void Harmony::renderActionAcc(HarmonyRenderCtx& ctx)
     if (acc.empty()) {
         return;
     }
+
+    // Try to find token & execute renderlist
+    ChordToken tok = chordList->token(acc, ChordTokenClass::ACCIDENTAL);
+    if (tok.isValid()) {
+        for (const RenderAction* a : tok.renderList) {
+            renderAction(a, ctx);
+        }
+        return;
+    }
+
+    // No valid token, find symbol
+
     // German spelling - use special symbol for accidental in TPC_B_B
     // to allow it to be rendered as either Bb or B
     if (ctx.tpc == Tpc::TPC_B_B && ctx.noteSpelling == NoteSpellingType::GERMAN) {
         context = u"german_B";
     }
-
     String lookup = context + acc;
     ChordSymbol cs = chordList->symbol(lookup);
     if (!cs.isValid()) {
@@ -1327,6 +1338,7 @@ void Harmony::renderActionAcc(HarmonyRenderCtx& ctx)
     String text = cs.isValid() ? cs.value : c;
     muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
     font.setPointSizeF(font.pointSizeF() * ctx.scale);
+    font.setNoFontMerging(true);
 
     TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
     ctx.textList.push_back(ts);
@@ -1363,7 +1375,8 @@ void Harmony::renderActionSet(const RenderActionSet* a, HarmonyRenderCtx& ctx)
 void Harmony::renderActionMove(const RenderActionMove* a, HarmonyRenderCtx& ctx)
 {
     const FontMetrics fm = FontMetrics(font());
-    ctx.pos = ctx.pos + a->vec() * FontMetrics::capHeight(font());
+    const double scale = a->scaled() ? ctx.scale : 1.0;
+    ctx.pos = ctx.pos + a->vec() * FontMetrics::capHeight(font()) * scale;
 }
 
 void Harmony::renderActionMoveXHeight(HarmonyRenderCtx& ctx)
@@ -1491,7 +1504,9 @@ void Harmony::render()
         Font ff(font());
         double mag = m_userMag.value_or(cf.mag);
         ff.setPointSizeF(ff.pointSizeF() * mag);
-        if (!(cf.family.isEmpty() || cf.family == "default")) {
+        if (cf.musicSymbolText) {
+            ff.setFamily(cf.family, Font::Type::MusicSymbolText);
+        } else if (!(cf.family.isEmpty() || cf.family == "default")) {
             ff.setFamily(cf.family, Font::Type::Harmony);
         }
         m_fontList.push_back(ff);
