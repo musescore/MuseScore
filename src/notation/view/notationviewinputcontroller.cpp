@@ -147,9 +147,28 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideContextMenu();
         m_view->hideElementPopup();
 
-        if (AbstractElementPopupModel::supportsPopup(selectedItem)) {
+        if (AbstractElementPopupModel::hasElementEditPopup(selectedItem)) {
             m_view->showElementPopup(type, selectedItem->canvasBoundingRect());
         }
+    });
+
+    currNotation->interaction()->textEditingChanged().onNotify(this, [this]() {
+        const INotationPtr notation = currentNotation();
+        if (!notation) {
+            return;
+        }
+
+        if (notation->interaction()->isTextEditingStarted()) {
+            const TextBase* item = notation->interaction()->editedText();
+            if (AbstractElementPopupModel::hasTextStylePopup(item)
+                && item->cursor()->hasSelection()) {
+                m_view->showElementPopup(item->type(), item->canvasBoundingRect());
+                return;
+            }
+        }
+
+        m_view->hideContextMenu();
+        m_view->hideElementPopup();
     });
 }
 
@@ -1470,7 +1489,7 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
 
     ElementType type = item->type();
 
-    if (AbstractElementPopupModel::supportsPopup(item)) {
+    if (AbstractElementPopupModel::hasElementEditPopup(item)) {
         m_view->toggleElementPopup(type, item->canvasBoundingRect());
     }
 }
@@ -1478,7 +1497,7 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
 void NotationViewInputController::updateShadowNotePopupVisibility(bool forceHide)
 {
     const mu::engraving::ShadowNote* shadowNote = viewInteraction()->shadowNote();
-    if (forceHide || !shadowNote || !AbstractElementPopupModel::supportsPopup(shadowNote)) {
+    if (forceHide || !shadowNote || !AbstractElementPopupModel::hasElementEditPopup(shadowNote)) {
         m_view->hideElementPopup(ElementType::SHADOW_NOTE);
         return;
     }
