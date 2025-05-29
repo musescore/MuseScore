@@ -50,7 +50,7 @@ public:
 Dynamic* Engraving_TextBaseTests::addDynamic(MasterScore* score)
 {
     Dynamic* dynamic = new Dynamic(score->dummy()->segment());
-    dynamic->setXmlText("<sym>dynamicForte</sym>");
+    dynamic->setXmlText(u"<sym>dynamicForte</sym>");
     ChordRest* chordRest = score->firstSegment(SegmentType::ChordRest)->nextChordRest(0);
     EditData ed;
     ed.dropElement = dynamic;
