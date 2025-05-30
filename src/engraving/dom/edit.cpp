@@ -3626,7 +3626,7 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
     const auto foundDeselected = [&](const DurationElement* deselectedElement) {
         const std::vector<Rest*> rests = setRests(restStartTick, track, restDuration, /*useDots*/ !currentTuplet, currentTuplet);
         crsToSelect.insert(crsToSelect.end(), rests.begin(), rests.end());
-        restStartTick = deselectedElement->tick() + deselectedElement->ticks();
+        restStartTick = deselectedElement->tick() + deselectedElement->actualTicks();
         restDuration = Fraction();
     };
 
@@ -3685,8 +3685,8 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
                 restDuration += nextTuplet->ticks();
                 cmdDeleteTuplet(nextTuplet, /*replaceWithRest*/ false);
             } else {
-                deleteRangeAtTrack(crsToSelect, track, cr1->segment(), nextTuplet->tick() + nextTuplet->ticks(),
-                                   nextTuplet, filter, selectionContainsMultiNoteChords);
+                const Fraction recursionEnd = std::min(nextTuplet->tick() + nextTuplet->actualTicks(), endTick);
+                deleteRangeAtTrack(crsToSelect, track, cr1->segment(), recursionEnd, nextTuplet, filter, selectionContainsMultiNoteChords);
                 foundDeselected(nextTuplet);
             }
 
