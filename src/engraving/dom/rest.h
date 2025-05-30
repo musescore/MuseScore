@@ -116,6 +116,9 @@ public:
     double rightEdge() const override;
     double centerX() const;
 
+    bool alignWithOtherRests() const { return m_alignWithOtherRests; }
+    void setAlignWithOtherRests(bool v) { m_alignWithOtherRests = v; }
+
     void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue propertyDefault(Pid) const override;
     void resetProperty(Pid id) override;
@@ -139,12 +142,7 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(Rest)
 
-    int computeNaturalLine(int lines) const; // Natural rest vertical position
-    int computeVoiceOffset(int lines, LayoutData* ldata) const; // Vertical displacement in multi-voice cases
-    int computeWholeOrBreveRestOffset(int voiceOffset, int lines) const;
-
     SymId getSymbol(DurationType type, int line, int lines) const;
-    void updateSymbol(int line, int lines, LayoutData* ldata) const;
     double symWidthNoLedgerLines(LayoutData* ldata) const;
 
 protected:
@@ -174,6 +172,8 @@ private:
     DeadSlapped* m_deadSlapped = nullptr;
 
     RestVerticalClearance m_verticalClearance;
+
+    bool m_alignWithOtherRests = true;
 };
 } // namespace mu::engraving
 #endif

@@ -43,6 +43,7 @@ Column {
     spacing: 12
 
     readonly property QtObject beamModel: model ? model.modelByType(Inspector.TYPE_BEAM) : null
+    readonly property QtObject restModel: model ? model.modelByType(Inspector.TYPE_REST_REST) : null
 
     function focusOnFirst() {
         restBeamSettings.navigation.requestActive()
@@ -57,5 +58,16 @@ Column {
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1000
+    }
+
+    PropertyToggle {
+        id: alignWithOtherRests
+
+        navigation.name: "Align with other rests"
+        navigation.panel: root.navigationPanel
+        navigation.row: navigationRowStart
+
+        propertyItem: root.restModel ? root.restModel.alignWithOtherRests : null
+        text: qsTrc("inspector", "Align with other rests in the same voice")
     }
 }
