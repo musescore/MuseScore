@@ -28,6 +28,7 @@
 
 #include "types/string.h"
 
+#include "engraving/dom/note.h"
 #include "engraving/dom/noteval.h"
 
 #include "importfinalelogger.h"
@@ -81,10 +82,12 @@ DurationType FinaleTConv::noteTypeToDurationType(musx::dom::NoteType noteType)
 TDuration FinaleTConv::noteInfoToDuration(std::pair<musx::dom::NoteType, unsigned> noteInfo)
 {
     TDuration d = FinaleTConv::noteTypeToDurationType(noteInfo.first);
-    if (d.isValid()) {
-        d.setDots(static_cast<int>(noteInfo.second));
+    int ndots = static_cast<int>(noteInfo.second);
+    if (d.isValid() && ndots <= MAX_DOTS) {
+        d.setDots(ndots);
+        return d;
     }
-    return d;
+    return TDuration(DurationType::V_INVALID);
 }
 
 ClefType FinaleTConv::toMuseScoreClefType(ClefIndex clef)
