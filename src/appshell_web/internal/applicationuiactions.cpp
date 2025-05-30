@@ -233,8 +233,7 @@ bool ApplicationUiActions::actionChecked(const UiAction& act) const
         return brailleConfiguration()->braillePanelEnabled();
     }
 
-    const IDockWindow* window = dockWindowProvider()->window();
-    return window ? window->isDockOpenAndCurrentInFrame(dockName) : false;
+    return false;
 }
 
 muse::async::Channel<ActionCodeList> ApplicationUiActions::actionEnabledChanged() const
