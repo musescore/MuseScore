@@ -3967,6 +3967,8 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
                 m_enclosure = u"square";          // note different default
             }
             m_rehearsalText += xmlpass2::nextPartOfFormattedString(m_e);
+        } else if (m_e.name() == "harp-pedals") {
+            harpPedal();
         } else if (m_e.name() == "pedal") {
             pedal(type, n, starts, stops);
         } else if (m_e.name() == "octave-shift") {
@@ -4115,6 +4117,40 @@ void MusicXmlParserDirection::dynamics()
             m_e.skipCurrentElement();
         }
     }
+}
+
+//---------------------------------------------------------
+//   harpPedal
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/direction/direction-type/hair-pedal node.
+ */
+
+void MusicXmlParserDirection::harpPedal()
+{
+    const std::vector <String> pedalSteps = { u"D", u"C", u"B", u"E", u"F", u"G", u"A" };
+    const Color color = Color::fromString(m_e.attribute("color"));
+
+    HarpPedalDiagram* hpd = Factory::createHarpPedalDiagram(m_score->dummy()->segment());
+    while (m_e.readNextStartElement()) {
+        int stepIndex;
+        PedalPosition pedpos = PedalPosition::UNSET;
+        while (m_e.readNextStartElement()) {
+            if (m_e.name() == "pedal-step") {
+                stepIndex = std::distance(std::begin(pedalSteps), std::find(std::begin(pedalSteps), std::end(pedalSteps), m_e.readText()));
+            } else if (m_e.name() == "pedal-alter") {
+                pedpos = static_cast<PedalPosition>(m_e.readText().trimmed().toInt() + 1);
+            } else {
+                skipLogCurrElem();
+            }
+        }
+        hpd->setPedal(static_cast<HarpStringType>(stepIndex), pedpos);
+        if (color.isValid()) {
+            hpd->setColor(color);
+        }
+    }
+    m_elems.push_back(hpd);
 }
 
 void MusicXmlParserDirection::otherDirection()
