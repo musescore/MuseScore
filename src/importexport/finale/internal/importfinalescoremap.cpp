@@ -303,8 +303,8 @@ void FinaleParser::importBrackets()
             logger()->logWarning(String(u"Group info encountered without start or end slot information"));
             continue;
         }
-        auto musxStartStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.startSlot.value());
-        auto musxEndStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, groupInfo.info.endSlot.value());
+        auto musxStartStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, Cmper(groupInfo.info.startSlot.value()));
+        auto musxEndStaff = others::InstrumentUsed::getStaffAtIndex(scrollView, Cmper(groupInfo.info.endSlot.value()));
         IF_ASSERT_FAILED(musxStartStaff && musxEndStaff) {
             logger()->logWarning(String(u"Group info encountered missing start or end staff information"));
             continue;
