@@ -29,6 +29,8 @@
 
 #include "compat/dummyelement.h"
 
+#include "dom/factory.h"
+
 #include "dom/engravingitem.h"
 #include "dom/score.h"
 
@@ -80,6 +82,7 @@
 #include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/systemtext.h"
+#include "dom/tapping.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textline.h"
@@ -215,6 +218,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::SYSTEM_TEXT:  layout(toSystemText(item), ctx);
         break;
     case ElementType::SOUND_FLAG:   layout(item_cast<SoundFlag*>(item), ctx);
+        break;
+    case ElementType::TAPPING:      layout(toTapping(item), ctx);
         break;
     case ElementType::TEMPO_TEXT:   layout(toTempoText(item), ctx);
         break;
@@ -1027,13 +1032,13 @@ void SingleLayout::layout(HammerOnPullOffSegment* item, const Context& ctx)
 {
     const std::vector<HammerOnPullOffText*>& hopoTexts = item->hopoText();
     if (item->hopoText().empty()) {
-        HammerOnPullOffText* hopoText = new HammerOnPullOffText(item);
-        hopoText->setParent(item);
-        hopoText->setXmlText("H/P");
-        item->addHopoText(hopoText);
+        item->addHopoText(new HammerOnPullOffText(item));
     }
 
     HammerOnPullOffText* hopoText = hopoTexts.front();
+    hopoText->setParent(item);
+    hopoText->setXmlText("H/P");
+
     Align align;
     align.vertical = AlignV::BASELINE;
     align.horizontal = AlignH::HCENTER;
@@ -1550,6 +1555,26 @@ void SingleLayout::layout(Symbol* item, const Context&)
 void SingleLayout::layout(SystemText* item, const Context& ctx)
 {
     layoutTextBase(item, ctx, item->mutldata());
+}
+
+void SingleLayout::layout(Tapping* item, const Context& ctx)
+{
+    TappingText* text = item->text();
+
+    if (!text) {
+        text = new TappingText(item);
+    }
+
+    text->setParent(item);
+    item->setText(text);
+    text->setTrack(item->track());
+    DO_ASSERT(item->hand() != TappingHand::INVALID);
+    text->setXmlText(item->hand() == TappingHand::LEFT ? "l.h. tap" : "r.h. tap");
+    text->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
+
+    layoutTextBase(text, ctx, text->mutldata());
+
+    item->setbbox(text->ldata()->bbox());
 }
 
 void SingleLayout::layout(SoundFlag* item, const Context& ctx)

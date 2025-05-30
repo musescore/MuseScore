@@ -45,6 +45,10 @@ void ArticulationSettingsModel::createProperties()
 void ArticulationSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::ARTICULATION);
+    QList<mu::engraving::EngravingItem*> tappings = m_repository->findElementsByType(mu::engraving::ElementType::TAPPING);
+    for (mu::engraving::EngravingItem* tapping : tappings) {
+        m_elementList.push_back(tapping);
+    }
 }
 
 void ArticulationSettingsModel::loadProperties()

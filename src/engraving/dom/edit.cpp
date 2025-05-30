@@ -6349,6 +6349,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
     if (ostaff == 0 || (
             et != ElementType::ARTICULATION
             && et != ElementType::ORNAMENT
+            && et != ElementType::TAPPING
             && et != ElementType::CHORDLINE
             && et != ElementType::LYRICS
             && et != ElementType::SLUR

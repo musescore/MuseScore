@@ -136,6 +136,7 @@ class SystemDivider;
 class SystemText;
 
 class TabDurationSymbol;
+class Tapping;
 class TempoText;
 class Text;
 class TextBase;
@@ -258,6 +259,7 @@ private:
     static void draw(const SystemText* item, muse::draw::Painter* painter);
     static void draw(const SoundFlag* item, muse::draw::Painter* painter);
 
+    static void draw(const Tapping* item, muse::draw::Painter* painter);
     static void draw(const TempoText* item, muse::draw::Painter* painter);
     static void draw(const Text* item, muse::draw::Painter* painter);
     static void draw(const TextLineSegment* item, muse::draw::Painter* painter);

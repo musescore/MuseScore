@@ -140,6 +140,7 @@
 #include "dom/systemtext.h"
 #include "dom/soundflag.h"
 
+#include "dom/tapping.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textbase.h"
@@ -332,6 +333,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::SYSTEM_TEXT:  write(item_cast<const SystemText*>(item), xml, ctx);
         break;
     case ElementType::SOUND_FLAG:   write(item_cast<const SoundFlag*>(item), xml, ctx);
+        break;
+    case ElementType::TAPPING:      write(item_cast<const Tapping*>(item), xml, ctx);
         break;
     case ElementType::TEMPO_TEXT:   write(item_cast<const TempoText*>(item), xml, ctx);
         break;
@@ -614,7 +617,7 @@ void TWrite::writeProperties(const Articulation* item, XmlWriter& xml, WriteCont
     writeProperty(item, xml, Pid::DIRECTION);
     if (item->textType() != ArticulationTextType::NO_TEXT) {
         xml.tag("subtype", TConv::toXml(item->textType()));
-    } else {
+    } else if (!item->isTapping()) {
         xml.tag("subtype", SymNames::nameForSymId(item->symId()));
     }
 
@@ -857,7 +860,7 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperties(static_cast<const ChordRest*>(item), xml, ctx);
     for (const Articulation* a : item->articulations()) {
-        write(a, xml, ctx);
+        writeItem(a, xml, ctx);
     }
     switch (item->noteType()) {
     case NoteType::NORMAL:
@@ -3033,6 +3036,33 @@ void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
     }
 
     writeProperty(item, xml, Pid::APPLY_TO_ALL_STAVES);
+
+    xml.endElement();
+}
+
+void TWrite::write(const Tapping* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+
+    xml.tag("hand", TConv::toXml(item->hand()));
+
+    if (item->halfSlurAbove() && item->halfSlurAbove()->isUserModified()) {
+        write(item->halfSlurAbove(), xml, ctx);
+    }
+    if (item->halfSlurBelow() && item->halfSlurBelow()->isUserModified()) {
+        write(item->halfSlurBelow(), xml, ctx);
+    }
+
+    writeProperties(toArticulation(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const TappingHalfSlur* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+
+    xml.tag("isHalfSlurAbove", item->isHalfSlurAbove());
+    writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
 
     xml.endElement();
 }

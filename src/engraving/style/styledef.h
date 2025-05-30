@@ -940,6 +940,14 @@ enum class Sid {
     hopoUpperCase,
     hopoShowAll,
 
+    lhTappingSymbol,
+    lhTappingShowHalfSlursOnNormalStave,
+    lhTappingShowHalfSlursOnTab,
+    lhTappingSlurTopAndBottomNoteOnTab,
+
+    rhTappingSymbolNormalStave,
+    rhTappingSymbolTab,
+
     stringNumberFontFace,
     stringNumberFontSize,
     stringNumberLineSpacing,

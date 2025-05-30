@@ -152,6 +152,7 @@ class SoundFlag;
 class BSymbol;
 class FSymbol;
 
+class Tapping;
 class Text;
 class TextLine;
 class TextLineBase;
@@ -303,6 +304,8 @@ public:
     static void read(SoundFlag* sym, XmlReader& xml, ReadContext& ctx);
     static void read(FSymbol* sym, XmlReader& xml, ReadContext& ctx);
 
+    static void read(Tapping* t, XmlReader& xml, ReadContext& ctx);
+    static void read(TappingHalfSlur* t, XmlReader& xml, ReadContext& ctx);
     static void read(Text* t, XmlReader& xml, ReadContext& ctx);
     static void read(TextLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(TextLineBase* b, XmlReader& xml, ReadContext& ctx);

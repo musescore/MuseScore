@@ -495,8 +495,12 @@ public:
         CHORD_BASS_ALIGN = 0xF4A6,
         CHORD_BASS_OFFSET= 0xF4A7,
 
-        LOWER_CASE = 0xF49E,
-        UPPER_CASE = 0xF49F,
+        TAPPING_ENCIRCLED_T = 0xF49A,
+        TAPPING_DOT = 0xF49B,
+        TAPPING_PLUS = 0xF49C,
+        TAPPING_T = 0xF49D,
+        HP_LOWER_CASE = 0xF49E,
+        HP_UPPER_CASE = 0xF49F,
 
         NONE = 0xFFFF
     };

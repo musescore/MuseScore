@@ -115,6 +115,9 @@ enum class P_TYPE : unsigned char {
     LYRICS_DASH_SYSTEM_START_TYPE,
     PARTIAL_SPANNER_DIRECTION,
 
+    LH_TAPPING_SYMBOL,
+    RH_TAPPING_SYMBOL,
+
     VOICE_ASSIGNMENT,
     AUTO_ON_OFF,
 
@@ -319,6 +322,12 @@ public:
 
     PropertyValue(const PartialSpannerDirection& v)
         : m_type(P_TYPE::PARTIAL_SPANNER_DIRECTION), m_data(make_data<PartialSpannerDirection>(v)) {}
+
+    PropertyValue(const LHTappingSymbol& v)
+        : m_type(P_TYPE::LH_TAPPING_SYMBOL), m_data(make_data<LHTappingSymbol>(v)) {}
+
+    PropertyValue(const RHTappingSymbol& v)
+        : m_type(P_TYPE::RH_TAPPING_SYMBOL), m_data(make_data<RHTappingSymbol>(v)) {}
 
     PropertyValue(const VoiceAssignment& v)
         : m_type(P_TYPE::VOICE_ASSIGNMENT), m_data(make_data<VoiceAssignment>(v)) {}
