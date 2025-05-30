@@ -395,19 +395,72 @@ void FinaleParser::importClefs(const std::shared_ptr<others::InstrumentUsed>& mu
 bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<const musx::dom::others::StaffComposite>& currStaff)
 {
     bool result = false;
-    if (currStaff->masks->negClef) {
+    // only override the Show Clefs setting if it is actually overridden in the staff style. Otherwise,
+    // leave the MuseScore setting alone because it may be turned off to simulate a blank clef.
+    if (currStaff->masks->negClef && staffType->genClef() == currStaff->hideClefs) {
         staffType->setGenClef(!currStaff->hideClefs);
         result = true;
     }
-    if (currStaff->masks->negKey) {
+    if (staffType->genKeysig() == currStaff->hideKeySigs) {
         staffType->setGenKeysig(!currStaff->hideKeySigs);
         result = true;
     }
-    if (currStaff->masks->negTime) {
+    if (staffType->genTimesig() == currStaff->hideTimeSigs) {
         staffType->setGenTimesig(!currStaff->hideTimeSigs);
         result = true;
     }
-    /// @todo all the rest of them
+    StaffGroup staffGroup = FinaleTConv::staffGroupFromNotationStyle(currStaff->notationStyle);
+    if (staffType->group() != staffGroup) {
+        staffType->setGroup(staffGroup);
+        result = true;
+    }
+    int numLines = [&]() -> int {
+        if (currStaff->staffLines.has_value()) {
+            return currStaff->staffLines.value();
+        } else if (currStaff->customStaff.has_value()) {
+            return static_cast<int>(currStaff->customStaff.value().size());
+        }
+        return 5;
+    }();
+    bool staffInvisible = numLines <= 0;
+    if (staffInvisible) {
+        numLines = 5;
+    }
+    if (staffType->lines() != numLines) {
+        staffType->setLines(numLines);
+        result = true;
+    }
+    if (staffType->invisible() != staffInvisible) {
+        staffType->setInvisible(staffInvisible);
+        result = true;
+    }
+    int stepOffset = -currStaff->calcToplinePosition() / 2.0;
+    Spatium yoffset = Spatium(stepOffset);
+    if (staffType->yoffset() != yoffset) {
+        staffType->setYoffset(yoffset);
+        result = true;
+    }
+    if (staffType->stepOffset() != stepOffset) {
+        staffType->setStepOffset(stepOffset); // this is not working: don't know why
+        result = true;
+    }
+    if (staffType->showBarlines() == currStaff->hideBarlines) {
+        staffType->setShowBarlines(!currStaff->hideBarlines);
+        result = true;
+    }
+    if (staffType->showRests() == currStaff->hideRests) {
+        staffType->setShowRests(!currStaff->hideRests);
+        result = true;
+    }
+    if (staffType->stemless() != currStaff->hideStems) {
+        staffType->setStemless(currStaff->hideStems);
+        result = true;
+    }
+
+    /// @todo use userMag instead of smallClef. (But it requires a separate system-by-system search.)
+    /// @todo tablature options
+    /// @todo others?
+
     return result;
 }
 
@@ -457,17 +510,6 @@ void FinaleParser::importStaffItems()
                 return;
             }
             Fraction tick = measure->tick();
-            // # of staff lines (only load if changing)
-            if (currStaff->staffLines.has_value()) {
-                if (currStaff->staffLines.value() != staff->lines(tick)) {
-                    staff->setLines(tick, currStaff->staffLines.value());
-                }
-            } else if (currStaff->customStaff.has_value()) {
-                int customStaffSize = static_cast<int>(currStaff->customStaff.value().size());
-                if (customStaffSize != staff->lines(tick)) {
-                    staff->setLines(tick, customStaffSize);
-                }
-            }
             StaffType* staffType = staff->staffType(tick);
             IF_ASSERT_FAILED(staffType) {
                 logger()->logWarning(String(u"Unable to create MuseScore staff type"), m_doc, musxScrollViewItem->staffId, measNum);
@@ -478,7 +520,7 @@ void FinaleParser::importStaffItems()
                 newStaffType = std::make_unique<StaffType>(*staffType);
                 staffType = newStaffType.get();
             }
-            if (applyStaffSyles(staffType, currStaff) && tick > Fraction(0, 1)) {
+             if (applyStaffSyles(staffType, currStaff) && tick > Fraction(0, 1)) {
                 staff->setStaffType(tick, *staffType);
             }
         }
