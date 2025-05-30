@@ -27,6 +27,14 @@
 #cmakedefine MUSE_APP_INSTALL_PREFIX ${MUSE_APP_INSTALL_PREFIX}
 #cmakedefine MUSE_APP_INSTALL_NAME ${MUSE_APP_INSTALL_NAME}
 
+#cmakedefine WIN_PORTABLE 1
+
+/* ============================================== */
+/* Qt Subsystem                                   */
+/* ============================================== */
+#cmakedefine QT_QPROCESS_SUPPORTED 1
+#cmakedefine QT_CONCURRENT_SUPPORTED 1
+
 /* ============================================== */
 /* Modules                                        */
 /* ============================================== */

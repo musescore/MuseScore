@@ -21,15 +21,17 @@
  */
 #include "recentfilescontroller.h"
 
-#ifdef QT_CONCURRENT_SUPPORTED
-#include "global/concurrency/concurrent.h"
-#endif
-
 #include "global/async/async.h"
 #include "global/defer.h"
 #include "global/serialization/json.h"
 
 #include "multiinstances/resourcelockguard.h"
+
+#include "app_config.h"
+
+#ifdef QT_CONCURRENT_SUPPORTED
+#include "global/concurrency/concurrent.h"
+#endif
 
 using namespace mu::project;
 using namespace muse;

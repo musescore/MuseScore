@@ -4,6 +4,7 @@
 #include "internal/consoleapp.h"
 
 #include "muse_framework_config.h"
+#include "app_config.h"
 
 #ifdef MUSE_MODULE_ACCESSIBILITY
 #include "framework/accessibility/accessibilitymodule.h"
