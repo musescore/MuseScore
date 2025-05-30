@@ -50,7 +50,6 @@ set(MODULE_SRC
 set(MODULE_LINK
     muse::ui
     muse::uicomponents
-    muse::dockwindow
     )
 
 # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
