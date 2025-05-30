@@ -38,38 +38,44 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
         return muse::qtrc("layoutpanel", "System markings");
     }
 
+    // pointers are used here to avoid copying the groups
+    const auto visibleGroups = [&]() -> std::vector<const SystemObjectsGroup*> {
+        std::vector<const SystemObjectsGroup*> v;
+        v.reserve(groups.size());
+
+        for (const auto& group : groups) {
+            if (isSystemObjectsGroupVisible(group)) {
+                v.push_back(&group);
+            }
+        }
+
+        return v;
+    }();
+
+    if (visibleGroups.empty()) {
+        return muse::qtrc("layoutpanel", "System markings hidden");
+    }
+
+    QString title = translatedSystemObjectsGroupCapitalizedName(*visibleGroups.front());
+
+    if (visibleGroups.size() == 1) {
+        return title;
+    }
+
+    // has at least 2 visible groups. Build list of the form <First>[, <middle>...] & <last>
+
     //: %1 is the system markings list, %2 is the next system marking name to add to list
     const QString middleItem = muse::qtrc("layoutpanel", "%1, %2");
     //: %1 is the system markings list, %2 is the last system marking name to add to list
     const QString lastItem = muse::qtrc("layoutpanel", "%1 & %2");
 
-    QString title;
-
-    const size_t lastIdx = groups.size() - 1;
-    for (size_t i = 0; i <= lastIdx; ++i) {
-        const SystemObjectsGroup& group = groups.at(i);
-        if (!isSystemObjectsGroupVisible(group)) {
-            continue;
-        }
-
-        if (title.isEmpty()) {
-            title = translatedSystemObjectsGroupCapitalizedName(group);
-            continue;
-        }
-
-        const QString name = translatedSystemObjectsGroupName(group);
-        if (i == lastIdx) {
-            title = lastItem.arg(title, name);
-        } else {
-            title = middleItem.arg(title, name);
-        }
+    const size_t lastIdx = visibleGroups.size() - 1;
+    for (size_t i = 1; i < lastIdx; ++i) {
+        const QString name = translatedSystemObjectsGroupName(*visibleGroups.at(i));
+        title = middleItem.arg(title, name);
     }
 
-    if (title.isEmpty()) {
-        return muse::qtrc("layoutpanel", "System markings hidden");
-    }
-
-    return title;
+    return lastItem.arg(title, translatedSystemObjectsGroupName(*visibleGroups.back()));
 }
 
 static bool isLayerVisible(const SystemObjectGroups& groups)
