@@ -42,6 +42,8 @@
 #include "translation.h"
 #include "types/uri.h"
 
+#include "app_config.h"
+
 using namespace muse;
 using namespace mu::palette;
 using namespace mu::engraving;

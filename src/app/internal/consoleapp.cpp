@@ -23,13 +23,12 @@
 #include "consoleapp.h"
 
 #include <QApplication>
-#ifndef Q_OS_WASM
 #include <QThreadPool>
-#endif
 
 #include "modularity/ioc.h"
 
 #include "muse_framework_config.h"
+#include "app_config.h"
 
 #include "log.h"
 

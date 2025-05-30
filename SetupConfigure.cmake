@@ -44,7 +44,7 @@ string(TOUPPER ${MUSE_APP_BUILD_MODE} BUILD_MODE)
 ###########################################
 # Setup by mode
 ###########################################
-if(BUILD_MODE MATCHES "DEV")
+if(BUILD_MODE STREQUAL "DEV")
     set(MUSE_APP_UNSTABLE ON)
     set(MUSE_APP_RELEASE_CHANNEL "dev")
     set(MUSE_APP_NAME_VERSION "${MUSE_APP_NAME_VERSION} ${MUSE_APP_RELEASE_CHANNEL}")
@@ -53,7 +53,7 @@ if(BUILD_MODE MATCHES "DEV")
     set(MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE OFF)
 endif()
 
-if(BUILD_MODE MATCHES "TESTING")
+if(BUILD_MODE STREQUAL "TESTING")
     set(MUSE_APP_UNSTABLE OFF)
     set(MUSE_APP_RELEASE_CHANNEL "Testing")
     set(MUSE_APP_NAME_VERSION "${MUSE_APP_NAME_VERSION} ${MUSE_APP_RELEASE_CHANNEL}")
@@ -62,7 +62,7 @@ if(BUILD_MODE MATCHES "TESTING")
     set(MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE ON)
 endif()
 
-if(BUILD_MODE MATCHES "RELEASE")
+if(BUILD_MODE STREQUAL "RELEASE")
     set(MUSE_APP_UNSTABLE OFF)
     set(MUSE_APP_IS_PRERELEASE OFF)
     set(MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE OFF)
@@ -86,11 +86,13 @@ endif()
 # CONFIGURE: Desktop App
 ###########################################
 set(MUE_GENERAL_APP OFF)
-if(BUILD_CONFIGURATION MATCHES "APP")
+if(BUILD_CONFIGURATION STREQUAL "APP")
+    set(MUE_CONFIGURATION_IS_APP ON)
     set(MUE_GENERAL_APP ON)
 endif()
 
-if(BUILD_CONFIGURATION MATCHES "APP-PORTABLE")
+if(BUILD_CONFIGURATION STREQUAL "APP-PORTABLE")
+    set(MUE_CONFIGURATION_IS_APPPORTABLE ON)
     set(MUE_GENERAL_APP ON)
     set(WIN_PORTABLE ON)
 endif()
@@ -106,12 +108,14 @@ endif()
 ###########################################
 # CONFIGURE: Web App
 ###########################################
-if(BUILD_CONFIGURATION MATCHES "APP-WEB")
+if(BUILD_CONFIGURATION STREQUAL "APP-WEB")
+    set(MUE_CONFIGURATION_IS_APPWEB ON)
 
     set(QT_ADD_LINGUISTTOOLS OFF)
     set(QT_ADD_CONCURRENT OFF)
 
     set(QT_QPROCESS_SUPPORTED OFF)
+    set(QT_CONCURRENT_SUPPORTED OFF)
 
     set(MUE_GENERAL_APP ON)
     set(MUE_BUILD_APPSHELL_MODULE ON)
@@ -162,7 +166,9 @@ endif()
 ###########################################
 # CONFIGURE: VTest
 ###########################################
-if(BUILD_CONFIGURATION MATCHES "VTEST")
+if(BUILD_CONFIGURATION STREQUAL "VTEST")
+    set(MUE_CONFIGURATION_IS_VTEST ON)
+
     set(MUSE_ENABLE_UNIT_TESTS OFF)
     set(MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL ON)
     set(MUSE_COMPILE_ASAN ON)
@@ -210,7 +216,9 @@ endif()
 ###########################################
 # CONFIGURE: UTest
 ###########################################
-if(BUILD_CONFIGURATION MATCHES "UTEST")
+if(BUILD_CONFIGURATION STREQUAL "UTEST")
+    set(MUE_CONFIGURATION_IS_UTEST ON)
+
     set(MUSE_ENABLE_UNIT_TESTS ON)
     set(MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL ON)
     set(MUSE_MODULE_AUDIO ON)
@@ -243,11 +251,7 @@ endif()
 set(QT_SUPPORT ON)
 
 if (MUSE_MODULE_AUDIO_JACK)
-    if (OS_IS_LIN OR MINGW)
-        add_compile_definitions(JACK_AUDIO)
-    else()
-        set(MUSE_MODULE_AUDIO_JACK OFF)
-    endif()
+    set(MUSE_MODULE_AUDIO_JACK OFF)
 endif()
 
 if (NOT MUE_BUILD_IMPORTEXPORT_MODULE)
@@ -303,53 +307,11 @@ include(${MUSE_FRAMEWORK_SRC_PATH}/cmake/MuseSetupConfiguration.cmake)
 # Global definitions
 ###########################################
 
-
-# modules config
-
-if (MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE)
-    add_compile_definitions(MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE)
-endif()
-
-function(def_opt name val)
-    if (${val})
-        add_compile_definitions(${name})
-    endif()
-endfunction()
-
-# modules
-def_opt(MUE_BUILD_APPSHELL_MODULE ${MUE_BUILD_APPSHELL_MODULE})
-def_opt(MUE_BUILD_BRAILLE_MODULE ${MUE_BUILD_BRAILLE_MODULE})
-def_opt(MUE_BUILD_CONVERTER_MODULE ${MUE_BUILD_CONVERTER_MODULE})
-def_opt(MUE_BUILD_INSPECTOR_MODULE ${MUE_BUILD_INSPECTOR_MODULE})
-def_opt(MUE_BUILD_INSTRUMENTSSCENE_MODULE ${MUE_BUILD_INSTRUMENTSSCENE_MODULE})
-def_opt(MUE_BUILD_MUSESOUNDS_MODULE ${MUE_BUILD_MUSESOUNDS_MODULE})
-def_opt(MUE_BUILD_NOTATION_MODULE ${MUE_BUILD_NOTATION_MODULE})
-def_opt(MUE_BUILD_PALETTE_MODULE ${MUE_BUILD_PALETTE_MODULE})
-def_opt(MUE_BUILD_PLAYBACK_MODULE ${MUE_BUILD_PLAYBACK_MODULE})
-def_opt(MUE_BUILD_PRINT_MODULE ${MUE_BUILD_PRINT_MODULE})
-def_opt(MUE_BUILD_PROJECT_MODULE ${MUE_BUILD_PROJECT_MODULE})
-def_opt(MUE_BUILD_IMPORTEXPORT_MODULE ${MUE_BUILD_IMPORTEXPORT_MODULE})
-def_opt(MUE_BUILD_VIDEOEXPORT_MODULE ${MUE_BUILD_VIDEOEXPORT_MODULE})
-def_opt(MUE_BUILD_IMAGESEXPORT_MODULE ${MUE_BUILD_IMAGESEXPORT_MODULE})
-
 if (QT_SUPPORT)
     add_compile_definitions(QT_SUPPORT)
-    add_compile_definitions(KORS_LOGGER_QT_SUPPORT)
     add_compile_definitions(SCRIPT_INTERFACE)
-
-    if (QT_QPROCESS_SUPPORTED)
-        add_compile_definitions(QT_QPROCESS_SUPPORTED)
-    endif()
-
-    if (QT_ADD_CONCURRENT)
-        add_compile_definitions(QT_CONCURRENT_SUPPORTED)
-    endif()
 else()
     add_compile_definitions(NO_QT_SUPPORT)
-endif()
-
-if (WIN_PORTABLE)
-    add_compile_definitions(WIN_PORTABLE)
 endif()
 
 if (MUE_GENERAL_APP)
@@ -365,3 +327,5 @@ add_compile_definitions(KORS_PROFILER_ENABLED)
 if (MUE_ENABLE_LOAD_QML_FROM_SOURCE)
     add_compile_definitions(MUE_ENABLE_LOAD_QML_FROM_SOURCE)
 endif()
+
+configure_file(${CMAKE_CURRENT_LIST_DIR}/src/app/app_config.h.in app_config.h )

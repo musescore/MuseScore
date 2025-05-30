@@ -2,18 +2,17 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
-
 #include <QQuickWindow>
-
-#ifdef QT_CONCURRENT_SUPPORTED
-#include <QThreadPool>
-#endif
 
 #include "appshell/view/internal/splashscreen/splashscreen.h"
 #include "ui/iuiengine.h"
+#include "ui/graphicsapiprovider.h"
 
 #include "muse_framework_config.h"
-#include "ui/graphicsapiprovider.h"
+#include "app_config.h"
+#ifdef QT_CONCURRENT_SUPPORTED
+#include <QThreadPool>
+#endif
 
 #include "log.h"
 
