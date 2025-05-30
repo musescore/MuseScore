@@ -1562,17 +1562,34 @@ void Harmony::render()
         chordTextSegments.emplace(std::pair<double, std::vector<TextSegment*> > { ctx.x(), ctx.textList });
         m_textList.insert(m_textList.end(), ctx.textList.begin(), ctx.textList.end());
 
-        TextSegment* root = ctx.textList.empty() ? nullptr : ctx.textList.front();
+        // Measure divider spacing from lowest baseline and highest cap-height in segments
+        double rootBaseline = ctx.textList.empty() ? -DBL_MAX : ctx.textList.front()->y();
+        double bottomBaseline = -DBL_MAX;
+        for (const TextSegment* seg : ctx.textList) {
+            bottomBaseline = std::max(bottomBaseline, seg->y());
+        }
+
+        double diff = rootBaseline - bottomBaseline;
+        if (bottomBaseline > rootBaseline) {
+            for (TextSegment* seg : ctx.textList) {
+                seg->movey(diff);
+            }
+        }
+
+        double topCapHeight = DBL_MAX;
+        for (const TextSegment* seg : ctx.textList) {
+            topCapHeight = std::min(topCapHeight, seg->y() - seg->capHeight());
+        }
+
         ctx.textList.clear();
         if (m_chords.size() == 1 || i == 1) {
             break;
         }
 
-        assert(root);
+        assert(!muse::RealIsEqual(topCapHeight, DBL_MAX));
 
         ctx.setx(0);
-        double rootCapHeight = root->capHeight();
-        ctx.sety(root->y() - rootCapHeight);
+        ctx.sety(topCapHeight);
 
         double lineY = ctx.y() - style().styleS(Sid::polychordDividerSpacing).toMM(spatium())
                        - style().styleS(Sid::polychordDividerThickness).toMM(spatium()) / 2;
