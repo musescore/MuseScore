@@ -125,13 +125,14 @@ public:
     void determineRootBassSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase, NoteSpellingType& bassSpelling,
                                    NoteCaseType& bassCase);
 
-    bool isEditable() const override { return true; }
+    bool isEditable() const override { return !isInFretBox(); }
     void startEditTextual(EditData&) override;
     bool isTextualEditAllowed(EditData&) const override;
     bool editTextual(EditData&) override;
     void endEditTextual(EditData&) override;
 
     bool isRealizable() const;
+    bool isInFretBox() const;
 
     String hFunction() const { return m_function; }
     String hTextName() const { return m_textName; }

@@ -145,13 +145,23 @@ EngravingItem* FretDiagram::linkedClone()
     return e;
 }
 
+Segment* FretDiagram::segment() const
+{
+    EngravingObject* parent = explicitParent();
+    if (!parent || !parent->isSegment()) {
+        return nullptr;
+    }
+
+    return toSegment(explicitParent());
+}
+
 //---------------------------------------------------------
 //   fromString
 ///   Create diagram from string like "XO-123"
 ///   Always assume barre on the first visible fret
 //---------------------------------------------------------
 
-std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const String& s)
+std::shared_ptr<FretDiagram> FretDiagram::createFromPattern(Score* score, const String& s)
 {
     auto fd = Factory::makeFretDiagram(score->dummy()->segment());
 
@@ -776,7 +786,10 @@ void FretDiagram::linkHarmony(Harmony* harmony)
 
     setParent(harmony->explicitParent());
     harmony->setParent(this);
-    segment()->removeAnnotation(harmony);
+
+    if (Segment* segment = this->segment()) {
+        segment->removeAnnotation(harmony);
+    }
 
     m_harmony->setTrack(track());
 
@@ -1119,6 +1132,12 @@ String FretDiagram::screenReaderInfo() const
 void FretDiagram::setFingering(std::vector<int> v)
 {
     m_fingering = std::move(v);
+}
+
+bool FretDiagram::isInFretBox() const
+{
+    EngravingObject* parent = explicitParent();
+    return parent ? parent->isFBox() : false;
 }
 
 void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath)

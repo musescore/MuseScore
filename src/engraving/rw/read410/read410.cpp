@@ -292,7 +292,6 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->masterScore()->rebuildMidiMapping();
     score->masterScore()->updateChannel();
-    score->masterScore()->rebuildFretDiagramLegend();
 
     for (Staff* staff : score->staves()) {
         staff->updateOttava();

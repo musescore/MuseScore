@@ -2058,6 +2058,12 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         if (!m_annotations.empty()) {
             EngravingItem* next = firstAnnotation(activeStaff);
             if (next) {
+                if (next->isFretDiagram()) {
+                    if (Harmony* harmony = toFretDiagram(next)->harmony()) {
+                        return harmony;
+                    }
+                }
+
                 return next;
             }
         }
@@ -2104,6 +2110,11 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
                 if (next->isStaffText()) {
                     if (SoundFlag* soundFlag = toStaffText(next)->soundFlag()) {
                         return soundFlag;
+                    }
+                }
+                if (next->isFretDiagram()) {
+                    if (Harmony* harmony = toFretDiagram(next)->harmony()) {
+                        return harmony;
                     }
                 }
 

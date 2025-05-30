@@ -22,7 +22,10 @@
 
 #include "navigate.h"
 
+#include "box.h"
 #include "chord.h"
+#include "fret.h"
+#include "guitarbend.h"
 #include "engravingitem.h"
 #include "lyrics.h"
 #include "hammeronpulloff.h"
@@ -36,7 +39,6 @@
 #include "spanner.h"
 #include "staff.h"
 #include "soundflag.h"
-#include "guitarbend.h"
 
 using namespace mu;
 
@@ -839,9 +841,16 @@ EngravingItem* Score::nextElement()
 
             if ((selectedElement->type() == ElementType::VBOX
                  || selectedElement->type() == ElementType::HBOX
-                 || selectedElement->type() == ElementType::TBOX
-                 || selectedElement->type() == ElementType::FBOX) && !boxChildren.empty()) {
+                 || selectedElement->type() == ElementType::TBOX) && !boxChildren.empty()) {
                 return boxChildren.begin()->first;
+            }
+
+            if (selectedElement->type() == ElementType::FBOX) {
+                for (EngravingItem* child : toFBox(selectedElement)->el()) {
+                    if (child->isFretDiagram() && child->visible()) {
+                        return toFretDiagram(child)->harmony();
+                    }
+                }
             }
 
             for (auto child = boxChildren.begin(); child != boxChildren.end(); child++) {
@@ -882,6 +891,31 @@ EngravingItem* Score::nextElement()
                 return parent;
             }
             break;
+        case ElementType::HARMONY: {
+            if (EngravingItem* parent = toHarmony(e)->parentItem()) {
+                if (parent->isFretDiagram()) {
+                    return parent;
+                }
+            }
+            break;
+        }
+        case ElementType::FRET_DIAGRAM: {
+            FretDiagram* fretDiagram = toFretDiagram(e);
+            if (fretDiagram->isInFretBox()) {
+                const ElementList& diagrams = toFBox(fretDiagram->explicitParent())->el();
+
+                size_t index = muse::indexOf(diagrams, fretDiagram);
+                if (index != muse::nidx) {
+                    while (++index < diagrams.size()) {
+                        FretDiagram* fretDiagram = toFretDiagram(diagrams[index]);
+                        if (fretDiagram->visible()) {
+                            return fretDiagram->harmony();
+                        }
+                    }
+                }
+            }
+            break;
+        }
         default:
             break;
         }
@@ -1087,6 +1121,38 @@ EngravingItem* Score::prevElement()
             staffId = 0;
             e = toSystemLockIndicator(e)->systemLock()->endMB();
             continue;
+        }
+        case ElementType::HARMONY: {
+            Harmony* harmony = toHarmony(e);
+            if (harmony->isInFretBox()) {
+                FretDiagram* fretDiagram = toFretDiagram(harmony->explicitParent());
+                FBox* fretBox = toFBox(fretDiagram->explicitParent());
+                const ElementList& diagrams = fretBox->el();
+
+                size_t index = muse::indexOf(diagrams, fretDiagram);
+                if (index != muse::nidx) {
+                    while (--index > 0) {
+                        FretDiagram* fretDiagram = toFretDiagram(diagrams[index]);
+                        if (fretDiagram->visible()) {
+                            return fretDiagram;
+                        }
+                    }
+                }
+
+                return fretBox;
+            } else if (harmony->explicitParent()->isFretDiagram()) {
+                // jump over fret diagram
+                e = harmony->getParentSeg();
+                continue;
+            }
+            break;
+        }
+        case ElementType::FRET_DIAGRAM: {
+            FretDiagram* fretDiagram = toFretDiagram(e);
+            if (EngravingItem* harmony = fretDiagram->harmony()) {
+                return harmony;
+            }
+            break;
         }
         default:
             break;

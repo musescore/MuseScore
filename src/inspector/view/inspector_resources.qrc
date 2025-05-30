@@ -117,8 +117,12 @@
         <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangeStyleTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/FretFrameSettings.qml</file>
-        <file>qml/MuseScore/Inspector/notation/frames/internal/FretLegendGapsSection.qml</file>
-        <file>qml/MuseScore/Inspector/notation/frames/internal/FretLegendScalesSection.qml</file>
-        <file>qml/MuseScore/Inspector/notation/frames/internal/FretLegendAlignmentSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameGapsSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameScalesSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameAlignmentSection.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsView.qml</file>
+        <file>qml/MuseScore/Inspector/notation/frames/internal/FretFrameChordsControlPanel.qml</file>
     </qresource>
 </RCC>
