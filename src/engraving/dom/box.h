@@ -176,8 +176,9 @@ class FBox : public VBox
 
 public:
     FBox(System* parent);
-
     FBox* clone() const override { return new FBox(*this); }
+
+    void init();
 
     void add(EngravingItem*) override;
 
@@ -203,7 +204,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& val) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
-    void init();
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
     void undoReorderElements(const std::vector<EID>& newOrderElementsIds);
 

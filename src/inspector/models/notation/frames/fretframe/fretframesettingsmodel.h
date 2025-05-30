@@ -36,7 +36,6 @@ class FretFrameSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * chordsPerRow READ chordsPerRow CONSTANT)
     Q_PROPERTY(PropertyItem * horizontalAlignment READ horizontalAlignment CONSTANT)
 
-    Q_PROPERTY(PropertyItem * frameHeight READ frameHeight CONSTANT)
     Q_PROPERTY(PropertyItem * gapAbove READ gapAbove CONSTANT)
     Q_PROPERTY(PropertyItem * gapBelow READ gapBelow CONSTANT)
     Q_PROPERTY(PropertyItem * frameLeftMargin READ frameLeftMargin CONSTANT)
@@ -55,7 +54,6 @@ public:
     PropertyItem* chordsPerRow() const;
     PropertyItem* horizontalAlignment() const;
 
-    PropertyItem* frameHeight() const;
     PropertyItem* gapAbove() const;
     PropertyItem* gapBelow() const;
     PropertyItem* frameLeftMargin() const;
@@ -81,7 +79,6 @@ private:
     PropertyItem* m_chordsPerRow = nullptr;
     PropertyItem* m_horizontalAlignment = nullptr;
 
-    PropertyItem* m_frameHeight = nullptr;
     PropertyItem* m_gapAbove = nullptr;
     PropertyItem* m_gapBelow = nullptr;
     PropertyItem* m_frameLeftMargin = nullptr;

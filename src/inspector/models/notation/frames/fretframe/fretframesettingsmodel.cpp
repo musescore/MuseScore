@@ -56,7 +56,6 @@ void FretFrameSettingsModel::createProperties()
         emit requestReloadPropertyItems();
     });
 
-    m_frameHeight = buildPropertyItem(Pid::BOX_HEIGHT);
     m_gapAbove = buildPropertyItem(Pid::TOP_GAP);
     m_gapBelow = buildPropertyItem(Pid::BOTTOM_GAP);
     m_frameLeftMargin = buildPropertyItem(Pid::LEFT_MARGIN);
@@ -80,7 +79,6 @@ void FretFrameSettingsModel::loadProperties()
         Pid::FRET_FRAME_ROW_GAP,
         Pid::FRET_FRAME_CHORDS_PER_ROW,
         Pid::FRET_FRAME_H_ALIGN,
-        Pid::BOX_HEIGHT,
         Pid::TOP_GAP,
         Pid::BOTTOM_GAP,
         Pid::LEFT_MARGIN,
@@ -101,7 +99,6 @@ void FretFrameSettingsModel::resetProperties()
     m_rowGap->resetToDefault();
     m_chordsPerRow->resetToDefault();
     m_horizontalAlignment->resetToDefault();
-    m_frameHeight->resetToDefault();
     m_gapAbove->resetToDefault();
     m_gapBelow->resetToDefault();
     m_frameLeftMargin->resetToDefault();
@@ -144,10 +141,6 @@ void FretFrameSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& 
 
     if (muse::contains(propertyIdSet, Pid::FRET_FRAME_H_ALIGN)) {
         loadPropertyItem(m_horizontalAlignment);
-    }
-
-    if (muse::contains(propertyIdSet, Pid::BOX_HEIGHT)) {
-        loadPropertyItem(m_frameHeight, formatDoubleFunc);
     }
 
     if (muse::contains(propertyIdSet, Pid::TOP_GAP)) {
@@ -207,11 +200,6 @@ PropertyItem* FretFrameSettingsModel::chordsPerRow() const
 PropertyItem* FretFrameSettingsModel::horizontalAlignment() const
 {
     return m_horizontalAlignment;
-}
-
-PropertyItem* FretFrameSettingsModel::frameHeight() const
-{
-    return m_frameHeight;
 }
 
 PropertyItem* FretFrameSettingsModel::gapAbove() const

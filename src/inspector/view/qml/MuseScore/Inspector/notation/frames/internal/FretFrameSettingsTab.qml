@@ -106,22 +106,6 @@ FocusableItem {
             navigation.row: alignmentSection.navigationRowEnd + 1
         }
 
-        SpinBoxPropertyView {
-            id: heightSection
-            anchors.left: parent.left
-            anchors.right: parent.horizontalCenter
-            anchors.rightMargin: 2
-
-            titleText: qsTrc("inspector", "Height")
-            propertyItem: root.model ? root.model.frameHeight : null
-
-            icon: IconCode.VERTICAL
-            measureUnitsSymbol: qsTrc("global", "sp")
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: matchStaffSize.navigation.row + 1
-        }
-
         VerticalGapsSection {
             id: verticalGapsSection
             gapAbove: root.model ? root.model.gapAbove : null
