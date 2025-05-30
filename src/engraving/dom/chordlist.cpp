@@ -1544,6 +1544,7 @@ const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
 
     size_t modIdx = 0;
     const size_t finalModIdx = m_modifierList.size() - 1;
+    const bool stackModifiers = m_modifierList.size() > 1 && cl->stackModifiers();
 
     bool adjust = cl ? cl->autoAdjust() : false;
     for (const ChordToken& tok : m_tokenList) {
@@ -1591,7 +1592,7 @@ const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
             }
 
             // Stacked modifiers
-            if (m_modifierList.size() > 1 && cl->stackModifiers()) {
+            if (stackModifiers) {
                 // Align vertically stacked modifier's x position by pushing it at the start of every modifier and popping at the end
                 if (m_modifierList.at(modIdx).startsWith(n)) {
                     m_renderList.emplace_back(new RenderActionPush());
@@ -1620,7 +1621,7 @@ const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
         }
 
         // Stacked modifiers
-        if (tok.tokenClass == ChordTokenClass::MODIFIER && !n.empty() && cl->stackModifiers()) {
+        if (tok.tokenClass == ChordTokenClass::MODIFIER && !n.empty() && stackModifiers) {
             // Reset move to x-height
             m_renderList.emplace_back(new RenderActionPopY());
             // Reset scale

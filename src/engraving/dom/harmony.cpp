@@ -1553,7 +1553,7 @@ void Harmony::render()
     HarmonyRenderCtx ctx;
 
     // Map of text segments and their final width
-    std::map<double, std::vector<TextSegment*> > chordTextSegments;
+    std::multimap<double, std::vector<TextSegment*> > chordTextSegments;
 
     for (size_t i = m_chords.size(); i > 0; i--) {
         HarmonyInfo* harmony = m_chords.at(i - 1);
@@ -1585,9 +1585,7 @@ void Harmony::render()
 
     // Align polychords
 
-    AlignH align = AlignH(style().styleI(Sid::chordAlignmentToNotehead));
-
-    if (align == AlignH::LEFT) {
+    if (m_noteheadAlign == AlignH::LEFT) {
         return;
     }
 
@@ -1609,7 +1607,7 @@ void Harmony::render()
         }
 
         // For centre align adjust by .5* difference, for right align adjust by full difference
-        if (align == AlignH::HCENTER) {
+        if (m_noteheadAlign == AlignH::HCENTER) {
             diff *= 0.5;
         }
 
