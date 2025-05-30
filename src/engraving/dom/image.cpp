@@ -326,7 +326,7 @@ void Image::editDrag(EditData& ed)
     if (ed.curGrip == Grip::MIDDLE) {
         setOffset(offset() + ed.evtDelta);
         setOffsetChanged(true);
-        renderer()->layoutItem(this);
+        triggerLayout();
         return;
     }
 
@@ -353,7 +353,7 @@ void Image::editDrag(EditData& ed)
         }
     }
 
-    renderer()->layoutItem(this);
+    triggerLayout();
 }
 
 //---------------------------------------------------------

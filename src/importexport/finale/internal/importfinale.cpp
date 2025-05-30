@@ -27,7 +27,7 @@
 #include <exception>
 
 #include "musx/musx.h"
-#include "third_party/musx/TinyXmlImpl.h"
+#include "internal/musxxmldom.h"
 #include "third_party/score_encoder.h"
 
 #include "global/io/file.h"
@@ -105,7 +105,7 @@ Err importEnigmaXmlfromBuffer(Score* score, ByteArray&& data)
     logger->setLoggingLevel(FinaleLogger::Level::MUSX_TRACE); // for now
 
     try {
-        const std::shared_ptr<musx::dom::Document>& doc = musx::factory::DocumentFactory::create<musx::xml::tinyxml2::Document>(data.constChar(), data.size());
+        auto doc = musx::factory::DocumentFactory::create<xml::Document>(data.constChar(), data.size());
 
         data.clear(); // free up data now that it isn't needed
 

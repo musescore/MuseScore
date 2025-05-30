@@ -230,6 +230,12 @@ void UriQuery::addParam(const std::string& key, const Val& val)
     m_params[key] = val;
 }
 
+UriQuery& UriQuery::set(const std::string& key, const Val& val)
+{
+    m_params[key] = val;
+    return *this;
+}
+
 UriQuery UriQuery::addingParam(const std::string& key, const Val& val) const
 {
     UriQuery copy(*this);

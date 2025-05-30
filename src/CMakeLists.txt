@@ -80,5 +80,5 @@ endif()
 add_subdirectory(stubs)
 
 if (OS_IS_WASM)
-    add_subdirectory(wasmtest)
+    add_subdirectory(webbridge)
 endif()

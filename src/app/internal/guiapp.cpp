@@ -2,8 +2,12 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
-#include <QThreadPool>
+
 #include <QQuickWindow>
+
+#ifdef QT_CONCURRENT_SUPPORTED
+#include <QThreadPool>
+#endif
 
 #include "appshell/view/internal/splashscreen/splashscreen.h"
 #include "ui/iuiengine.h"
@@ -181,7 +185,7 @@ void GuiApp::perform()
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     const QString mainQmlFile = "/platform/linux/Main.qml";
 #elif defined(Q_OS_WASM)
-    const QString mainQmlFile = "/Main.wasm.qml";
+    const QString mainQmlFile = "/platform/web/Main.qml";
 #endif
 
 #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
@@ -230,7 +234,8 @@ void GuiApp::perform()
 
         // The main window must be shown at this point so KDDockWidgets can read its size correctly
         // and scale all sizes properly. https://github.com/musescore/MuseScore/issues/21148
-        obj->setProperty("visible", true);
+        QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
+        w->setVisible(true);
 
         startupScenario()->runAfterSplashScreen();
     }, Qt::QueuedConnection);
@@ -255,7 +260,7 @@ void GuiApp::finish()
     PROFILER_PRINT;
 
 // Wait Thread Poll
-#ifndef Q_OS_WASM
+#ifdef QT_CONCURRENT_SUPPORTED
     QThreadPool* globalThreadPool = QThreadPool::globalInstance();
     if (globalThreadPool) {
         LOGI() << "activeThreadCount: " << globalThreadPool->activeThreadCount();

@@ -97,6 +97,8 @@ DockToolBarView {
 
         Loader {
             id: contentLoader
+
+            active: root.visible
         }
     }
 

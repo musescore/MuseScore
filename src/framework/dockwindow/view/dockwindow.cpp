@@ -112,6 +112,12 @@ DockWindow::DockWindow(QQuickItem* parent)
 DockWindow::~DockWindow()
 {
     dockWindowProvider()->deinit();
+
+    // Without this, the connections would be deleted by the QObject destructor,
+    // because they are child objects of this. But since they use DockWindow-
+    // specific code (rather than QObject-specific), we need to delete them
+    // before the end of the DockWindow destructor.
+    qDeleteAll(m_pageConnections);
 }
 
 void DockWindow::componentComplete()
@@ -142,7 +148,7 @@ void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeom
     //! NOTE: it is important to reset the current minimum width for all top-level toolbars
     //! Otherwise, the window content can be displaced after LayoutWidget::onResize(QSize newSize)
     //! due to lack of free space
-    QList<DockToolBarView*> topToolBars = topLevelToolBars(m_currentPage);
+    const QList<DockToolBarView*> topToolBars = topLevelToolBars(m_currentPage);
     for (DockToolBarView* toolBar : topToolBars) {
         toolBar->setMinimumWidth(toolBar->contentWidth());
     }
@@ -731,6 +737,9 @@ void DockWindow::initDocks(DockPageView* page)
     adjustContentForAvailableSpace(page);
 
     for (DockToolBarView* toolbar : m_toolBars.list()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+        toolbar->setParentItem(this);
+#endif
         toolbar->init();
     }
 

@@ -28,13 +28,12 @@ if (CC_IS_MSVC)
 endif ()
 
 set(MODULE_SRC
-    ${TINYXML_MODULE_SRC}
-    ${CMAKE_CURRENT_LIST_DIR}/third_party/musx/TinyXmlImpl.h
     ${CMAKE_CURRENT_LIST_DIR}/third_party/score_encoder.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationfinalereader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationfinalereader.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/finaletypesconv.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/finaletypesconv.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/musxxmldom.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinale.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinale.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importfinaleentries.cpp

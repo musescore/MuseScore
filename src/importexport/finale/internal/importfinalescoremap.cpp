@@ -431,6 +431,7 @@ void FinaleParser::importStaffItems()
             }
 
             // timesig
+            /// @todo figure out how to deal with display vs actual time signature.
             const std::shared_ptr<TimeSignature> globalTimeSig = musxMeasure->createTimeSignature();
             const std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
             if (!currMusxTimeSig || !currMusxTimeSig->isSame(*musxTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
@@ -454,8 +455,8 @@ void FinaleParser::importStaffItems()
             // keysig
             const std::shared_ptr<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxScrollViewItem->staffId);
             if (!currMusxKeySig || !currMusxKeySig->isSame(*musxKeySig) || musxMeasure->showKey == others::Measure::ShowKeySigMode::Always) {
-                /// @todo custom keysigs
-                if (musxKeySig->calcEDODivisions() == music_theory::STANDARD_12EDO_STEPS && musxKeySig->isBuiltIn()) {
+                /// @todo non-linear/microtonal keysigs
+                if (musxKeySig->isLinear() && musxKeySig->calcEDODivisions() == music_theory::STANDARD_12EDO_STEPS) {
                     Key key = FinaleTConv::keyFromAlteration(musxKeySig->getAlteration());
                     Segment* seg = measure->getSegment(SegmentType::KeySig, currTick);
                     KeySig* ks = Factory::createKeySig(seg);
@@ -465,16 +466,14 @@ void FinaleParser::importStaffItems()
                     KeyMode km = KeyMode::UNKNOWN;
                     if (musxKeySig->keyless) {
                         km = KeyMode::NONE;
-                    } else if (musxKeySig->isMajor()) {
-                        km = KeyMode::MAJOR;
-                    } else if (musxKeySig->isMinor()) {
-                        km = KeyMode::MINOR;
+                    } else if (std::optional<music_theory::DiatonicMode> mode = musxKeySig->calcDiatonicMode()) {
+                        km = FinaleTConv::keyModeFromDiatonicMode(mode.value());
                     }
                     ks->setMode(km);
                     seg->add(ks);
                     staff->setKey(currTick, ks->keySigEvent());
                 } else {
-                    logger()->logWarning(String(u"Microtonal / custom key signatures not supported."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                    logger()->logWarning(String(u"Microtonal / non-linear key signatures not supported."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 }
             }
         }
@@ -627,7 +626,7 @@ void FinaleParser::importPageLayout()
         if (!isLastSystemOnPage) {
             Spacer* downSpacer = Factory::createSpacer(startMeasure);
             downSpacer->setSpacerType(SpacerType::FIXED);
-            downSpacer->setTrack(m_score->nstaves() * VOICES); // invisible staves are correctly accounted for on layout
+            downSpacer->setTrack((m_score->nstaves() - 1) * VOICES); // invisible staves are correctly accounted for on layout
             downSpacer->setGap(Spatium(FinaleTConv::doubleFromEvpu(rightStaffSystem->bottom + rightStaffSystem->distanceToPrev + (-staffSystems[i+1]->top))));
             startMeasure->add(downSpacer);
         }

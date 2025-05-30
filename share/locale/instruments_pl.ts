@@ -10702,28 +10702,28 @@
         <source>Tubular bells (British English), or chimes (American English).</source>
         <comment>tubular-bells description</comment>
         <extracomment>description for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tubular bells (brytyjski angielski) lub chimesy (amerykański angielski).</translation>
+        <translation>Dzwony rurowe. Tubular bells (brytyjski angielski) lub chimes (amerykański angielski).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3613"/>
         <source>Chimes</source>
         <comment>tubular-bells trackName</comment>
         <extracomment>trackName for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Campane</translation>
+        <translation>Campane tubolari</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3615"/>
         <source>Chimes</source>
         <comment>tubular-bells longName</comment>
         <extracomment>longName for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Campane</translation>
+        <translation>Campane tubolari</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3617"/>
         <source>Cme.</source>
         <comment>tubular-bells shortName</comment>
         <extracomment>shortName for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Camp.</translation>
+        <translation>Camp. t.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3620"/>

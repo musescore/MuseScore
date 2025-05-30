@@ -26,6 +26,7 @@
 #include <QJsonArray>
 #include <QJsonParseError>
 
+#include "defer.h"
 #include "global/io/file.h"
 #include "global/io/dir.h"
 
@@ -127,6 +128,13 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
 
     LOGI() << "in: " << in << ", out: " << out;
 
+    std::string suffix = io::suffix(out);
+
+    auto writer = writers()->writer(suffix);
+    if (!writer) {
+        return make_ret(Err::ConvertTypeUnknown);
+    }
+
     auto notationProject = notationCreator()->newProject(iocContext());
     IF_ASSERT_FAILED(notationProject) {
         return make_ret(Err::UnknownError);
@@ -153,17 +161,14 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
 
     globalContext()->setCurrentProject(notationProject);
 
+    DEFER {
+        globalContext()->setCurrentProject(nullptr);
+    };
+
     // Check if this is a part conversion job
     QString baseName = QString::fromStdString(io::completeBasename(out).toStdString());
     if (baseName.contains('*')) {
-        return convertScoreParts(in, out, stylePath, forceMode);
-    }
-
-    std::string suffix = io::suffix(out);
-
-    auto writer = writers()->writer(suffix);
-    if (!writer) {
-        return make_ret(Err::ConvertTypeUnknown);
+        return convertScoreParts(writer, notationProject->masterNotation(), out);
     }
 
     // use a extension for convert
@@ -192,8 +197,6 @@ Ret ConverterController::fileConvert(const muse::io::path_t& in, const muse::io:
         }
     }
 
-    globalContext()->setCurrentProject(nullptr);
-
     return ret;
 }
 
@@ -219,17 +222,24 @@ Ret ConverterController::convertScoreParts(const muse::io::path_t& in, const mus
         return make_ret(Err::InFileFailedLoad);
     }
 
+    ret = convertScoreParts(writer, notationProject->masterNotation(), out);
+
+    return ret;
+}
+
+Ret ConverterController::convertScoreParts(INotationWriterPtr writer, IMasterNotationPtr masterNotation, const muse::io::path_t& out)
+{
+    std::string suffix = io::suffix(out);
+
     if (suffix == PDF_SUFFIX) {
-        ret = convertScorePartsToPdf(writer, notationProject->masterNotation(), out);
+        return convertScorePartsToPdf(writer, masterNotation, out);
     } else if (suffix == PNG_SUFFIX) {
-        ret = convertScorePartsToPngs(writer, notationProject->masterNotation(), out);
+        return convertScorePartsToPngs(writer, masterNotation, out);
     } else if (suffix == MP3_SUFFIX) {
-        ret = convertScorePartsToMp3(writer, notationProject->masterNotation(), out);
-    } else {
-        ret = make_ret(Ret::Code::NotSupported);
+        return convertScorePartsToMp3(writer, masterNotation, out);
     }
 
-    return make_ret(Ret::Code::Ok);
+    return make_ret(Ret::Code::NotSupported);
 }
 
 RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const muse::io::path_t& batchJobFile) const
@@ -258,7 +268,7 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
         return io::Dir::fromNativeSeparators(path).toQString();
     };
 
-    for (const QJsonValueRef obj : arr) {
+    for (const auto obj : arr) {
         Job job;
         job.in = correctUserInputPath(obj[u"in"].toString());
 
@@ -278,7 +288,7 @@ RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(const m
             rv.val.push_back(std::move(job));
         } else if (outValue.isArray()) {
             const QJsonArray outArray = outValue.toArray();
-            for (const QJsonValueRef outItem : outArray) {
+            for (const auto outItem : outArray) {
                 Job partJob = job; // Copy the input path
                 if (outItem.isString()) {
                     partJob.out = correctUserInputPath(outItem.toString());

@@ -1066,7 +1066,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="274"/>
         <source>Cutaway</source>
-        <translation>提示曲谱</translation>
+        <translation>裁剪空节</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="220"/>
@@ -2582,7 +2582,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3178"/>
         <source>Show measure number range at multimeasure rests</source>
-        <translation>在长休止符处显示小节号的范围</translation>
+        <translation>在多节休止处显示休止小节数量</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3395"/>
@@ -2643,7 +2643,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
         <source>Dynamics &amp; hairpins</source>
-        <translation>力度与楔形力度符号</translation>
+        <translation>力度与楔形力度记号</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="592"/>
@@ -2997,7 +2997,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8251"/>
         <source>Default positions of dynamics and hairpins</source>
-        <translation>力度记号与渐强记号的默认位置</translation>
+        <translation>力度与楔形力度记号的默认位置</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8279"/>
@@ -3420,7 +3420,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5816"/>
         <source>Minimum number of empty measures:</source>
-        <translation>最小空小节数：</translation>
+        <translation>空小节最小数量：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5826"/>
@@ -3451,7 +3451,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6035"/>
         <source>Center between staves on multi-staff instruments</source>
-        <translation>在多谱乐器的谱表之间居中</translation>
+        <translation>在多谱乐器的谱表间居中</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6084"/>
@@ -3718,7 +3718,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="194"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10612"/>
         <source>System text lines</source>
-        <translation>谱行组文本线</translation>
+        <translation>谱行组有线文本</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="199"/>
@@ -3734,7 +3734,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="568"/>
         <source>Don’t hide empty staves in first system</source>
-        <translation>不隐藏首行谱行组的空谱表</translation>
+        <translation>不隐藏首排谱行组的空谱表</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2350"/>
@@ -3909,7 +3909,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7647"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7849"/>
         <source>Dotted line thickness:</source>
-        <translation>虚线粗细：</translation>
+        <translation>点状线粗细：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7689"/>
@@ -3965,7 +3965,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7679"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7881"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
-        <translation>重置“虚线粗细”值</translation>
+        <translation>重置“点状线粗细”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8010"/>
@@ -4107,14 +4107,14 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9265"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9708"/>
         <source>Dash-dotted</source>
-        <translation>点线组合</translation>
+        <translation>点画线</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9056"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9270"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9713"/>
         <source>Dash-dot-dotted</source>
-        <translation>双点一线</translation>
+        <translation>双点画线</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9064"/>
@@ -4694,7 +4694,7 @@ text x-height):</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="84"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2977"/>
         <source>Measure numbers</source>
-        <translation>小节数</translation>
+        <translation>小节号</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="124"/>
@@ -4845,7 +4845,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14084"/>
         <source>Palm mute (P.M.)</source>
-        <translation>闷音 (P.M.)</translation>
+        <translation>手掌闷音 (P.M.)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14246"/>
@@ -5345,7 +5345,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="290"/>
         <source>Break multimeasure rest</source>
-        <translation>断开小节休止符</translation>
+        <translation>断开多节休止符</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="303"/>
@@ -5822,7 +5822,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="54"/>
         <source>Swing:</source>
-        <translation>Swing摇摆节拍：</translation>
+        <translation>Swing：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="67"/>
@@ -6472,7 +6472,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="36"/>
         <source>&amp;Open…</source>
-        <translation>打开 (&amp;K)…</translation>
+        <translation>打开… (&amp;O)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="37"/>
@@ -6482,7 +6482,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="43"/>
         <source>&amp;New…</source>
-        <translation>新建 (&amp;J)…</translation>
+        <translation>新建 (&amp;N)…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="44"/>
@@ -6492,7 +6492,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="50"/>
         <source>&amp;Close</source>
-        <translation>关闭 (&amp;G)</translation>
+        <translation>关闭 (&amp;C)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="51"/>
@@ -6502,7 +6502,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="56"/>
         <source>&amp;Save</source>
-        <translation>保存 (&amp;B) …</translation>
+        <translation>保存… (&amp;S)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="57"/>
@@ -6512,7 +6512,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="63"/>
         <source>Save &amp;as…</source>
-        <translation>另存为 (&amp;L)...</translation>
+        <translation>另存为… (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="64"/>
@@ -6522,7 +6522,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="69"/>
         <source>Save a cop&amp;y…</source>
-        <translation>保存副本 (&amp;F)...</translation>
+        <translation>保存副本… (&amp;Y)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="70"/>
@@ -6532,7 +6532,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="75"/>
         <source>Save se&amp;lection…</source>
-        <translation>保存所选 (&amp;X)…</translation>
+        <translation>保存所选… (&amp;L)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="76"/>
@@ -6542,7 +6542,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="81"/>
         <source>Save to clo&amp;ud…</source>
-        <translation>保存到云端 (&amp;Y)…</translation>
+        <translation>保存到云端… (&amp;U)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="82"/>
@@ -6552,7 +6552,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="88"/>
         <source>Pu&amp;blish to MuseScore.com…</source>
-        <translation>发布到&amp;MuseScore.com…</translation>
+        <translation>发布到MuseScore.com… (&amp;B)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="89"/>
@@ -6578,7 +6578,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="109"/>
         <source>Import P&amp;DF…</source>
-        <translation>导入&amp;PDF…</translation>
+        <translation>导入PDF… (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="110"/>
@@ -6588,7 +6588,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="116"/>
         <source>Project propert&amp;ies…</source>
-        <translation>项目属性 (&amp;S)…</translation>
+        <translation>项目属性… (&amp;I)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="117"/>
@@ -6598,12 +6598,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="122"/>
         <source>&amp;Print…</source>
-        <translation>打印 (&amp;D)…</translation>
+        <translation>打印 (&amp;P)…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="129"/>
         <source>&amp;Clear recent files</source>
-        <translation>清除最近文件 (&amp;Q)</translation>
+        <translation>清除最近文件 (&amp;C)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
@@ -6804,7 +6804,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="307"/>
         <source>Cu&amp;t</source>
-        <translation>剪切 (&amp;X)</translation>
+        <translation>剪切 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="314"/>
@@ -6814,7 +6814,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="321"/>
         <source>Past&amp;e</source>
-        <translation>粘贴 (&amp;V)</translation>
+        <translation>粘贴 (&amp;E)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="328"/>
@@ -6824,7 +6824,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="334"/>
         <source>Paste &amp;double duration</source>
-        <translation>倍时值粘贴 (&amp;E)</translation>
+        <translation>倍时值粘贴 (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="346"/>
@@ -6845,7 +6845,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="364"/>
         <source>Select sectio&amp;n</source>
-        <translation>选择章节 (&amp;n)</translation>
+        <translation>选择章节 (&amp;N)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="370"/>
@@ -6914,7 +6914,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
         <source>Measures per s&amp;ystem…</source>
-        <translation>每行小节... (&amp;M)</translation>
+        <translation>每行小节… (&amp;Y)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="570"/>
@@ -7242,7 +7242,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="40"/>
         <source>&amp;Master palette</source>
-        <translation>符号总面板 (&amp;Z)</translation>
+        <translation>符号总面板 (&amp;M)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="41"/>
@@ -7429,7 +7429,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="245"/>
         <source>Snap to &amp;previous</source>
-        <translation>吸附到上一个 (&amp;S)</translation>
+        <translation>吸附到上一个 (&amp;P)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="246"/>
@@ -7439,7 +7439,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="252"/>
         <source>Snap to &amp;next</source>
-        <translation>吸附至下一个 (&amp;X)</translation>
+        <translation>吸附至下一个 (&amp;N)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="253"/>
@@ -7609,7 +7609,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="481"/>
         <source>Resequence rehearsal marks</source>
-        <translation>对排练记号进行排序</translation>
+        <translation>排练号重排序</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="493"/>
@@ -7624,7 +7624,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="512"/>
         <source>Display page view</source>
-        <translation>显示页面视图</translation>
+        <translation>显示多页视图</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="518"/>
@@ -7645,7 +7645,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="539"/>
         <source>&amp;Find / Go to</source>
-        <translation>查找/转到 (&amp;Z)</translation>
+        <translation>查找/转到 (&amp;F)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="540"/>
@@ -7952,7 +7952,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1226"/>
         <source>&amp;Dynamic</source>
-        <translation>力度记号 (&amp;L)</translation>
+        <translation>力度记号 (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1310"/>
@@ -8052,7 +8052,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1417"/>
         <source>&amp;Nonuplet</source>
-        <translation>九连音 (&amp;J)</translation>
+        <translation>九连音 (&amp;N)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1418"/>
@@ -8087,7 +8087,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1459"/>
         <source>Reset s&amp;hapes and positions</source>
-        <translation>重置形状和位置 (&amp;X)</translation>
+        <translation>重置形状和位置 (&amp;H)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1460"/>
@@ -8097,7 +8097,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1465"/>
         <source>Reset entire score to &amp;default layout</source>
-        <translation>将整个乐谱恢复为默认版面 (&amp;M)</translation>
+        <translation>将整个乐谱恢复为默认版面 (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1466"/>
@@ -8416,7 +8416,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2000"/>
         <source>Insert full measure rest</source>
-        <translation>全小节休止符</translation>
+        <translation>插入全小节休止</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2012"/>
@@ -8614,12 +8614,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2478"/>
         <source>Staff type change</source>
-        <translation>谱表类型变更</translation>
+        <translation>谱表类型更换</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2479"/>
         <source>Insert staff type change</source>
-        <translation>插入谱表类型变更指令</translation>
+        <translation>插入谱表类型更换指令</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2489"/>
@@ -9035,7 +9035,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="87"/>
         <source>As&amp;k for help</source>
-        <translation>寻求帮助 (&amp;B)</translation>
+        <translation>寻求帮助 (&amp;K)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="92"/>
@@ -9060,7 +9060,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="124"/>
         <source>&amp;Palettes</source>
-        <translation>符号面板 (&amp;M)</translation>
+        <translation>符号面板 (&amp;P)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="125"/>
@@ -9070,7 +9070,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="138"/>
         <source>Propert&amp;ies</source>
-        <translation>属性 (&amp;S)</translation>
+        <translation>属性 (&amp;I)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="139"/>
@@ -9090,7 +9090,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="152"/>
         <source>&amp;History</source>
-        <translation>历史  (&amp;L)</translation>
+        <translation>历史 (&amp;H)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="153"/>
@@ -9100,7 +9100,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="161"/>
         <source>&amp;Navigator</source>
-        <translation>导航视图 (&amp;D)</translation>
+        <translation>导航视图 (&amp;N)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="162"/>
@@ -9120,7 +9120,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="179"/>
         <source>Tim&amp;eline</source>
-        <translation>时间轴 (&amp;Z)</translation>
+        <translation>时间轴 (&amp;E)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="180"/>
@@ -9180,7 +9180,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="100"/>
         <source>Restore the &amp;default layout</source>
-        <translation>恢复默认输出 (&amp;M)</translation>
+        <translation>恢复默认版面 (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="101"/>
@@ -9205,7 +9205,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="194"/>
         <source>Piano &amp;keyboard</source>
-        <translation>钢琴键盘 (&amp;k)</translation>
+        <translation>钢琴键盘 (&amp;K)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="224"/>
@@ -9215,7 +9215,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/update/internal/updateuiactions.cpp" line="36"/>
         <source>Check for &amp;update</source>
-        <translation>检查更新 (&amp;X)</translation>
+        <translation>检查更新 (&amp;U)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="186"/>
@@ -9420,7 +9420,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2527"/>
         <source>Show f&amp;ormatting</source>
-        <translation>显示排版标记 (&amp;o)</translation>
+        <translation>显示排版标记 (&amp;O)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2528"/>
@@ -9430,12 +9430,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2534"/>
         <source>Show &amp;frames</source>
-        <translation>显示框体 (&amp;K)</translation>
+        <translation>显示框体 (&amp;F)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2541"/>
         <source>Show page &amp;margins</source>
-        <translation>显示页面边距 (&amp;B)</translation>
+        <translation>显示页面边距 (&amp;M)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="71"/>
@@ -9530,37 +9530,37 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="407"/>
         <source>&amp;Page settings…</source>
-        <translation>页面设置… (&amp;Y)</translation>
+        <translation>页面设置… (&amp;P)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="413"/>
         <source>&amp;Load style…</source>
-        <translation>加载样式… (&amp;Z)</translation>
+        <translation>加载样式… (&amp;L)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="419"/>
         <source>S&amp;ave style…</source>
-        <translation>保存样式… (&amp;C)</translation>
+        <translation>保存样式… (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="431"/>
         <source>&amp;Explode</source>
-        <translation>拆分谱表 (&amp;F)</translation>
+        <translation>拆分谱表 (&amp;E)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="437"/>
         <source>&amp;Implode</source>
-        <translation>合并谱表 (&amp;B)</translation>
+        <translation>合并谱表 (&amp;I)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="443"/>
         <source>Realize &amp;chord symbols</source>
-        <translation>具像化和弦符号 (&amp;J)</translation>
+        <translation>具像化和弦符号 (&amp;C)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="449"/>
         <source>Remove selected ran&amp;ge</source>
-        <translation>移除 (&amp;C) 所选区域</translation>
+        <translation>移除所选区域 (&amp;G)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="462"/>
@@ -9570,12 +9570,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="463"/>
         <source>Toggle rhythmic slash notation</source>
-        <translation>切换节奏斜线记号</translation>
+        <translation>切换节奏斜杠记号</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="468"/>
         <source>Respell &amp;pitches</source>
-        <translation>更改音高 (&amp;p)</translation>
+        <translation>更改音高 (&amp;P)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="474"/>
@@ -9585,17 +9585,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="480"/>
         <source>Resequence re&amp;hearsal marks</source>
-        <translation>排练记号重排序 (&amp;h)</translation>
+        <translation>排练记号重排序 (&amp;H)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="492"/>
         <source>Copy &amp;lyrics to clipboard</source>
-        <translation>将唱词拷贝到剪贴板 (&amp;l)</translation>
+        <translation>将唱词拷贝到剪贴板 (&amp;L)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="498"/>
         <source>Remove empty trailing meas&amp;ures</source>
-        <translation>移除末尾空小节 (&amp;u)</translation>
+        <translation>移除末尾空小节 (&amp;U)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="505"/>
@@ -9641,72 +9641,72 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="718"/>
         <source>Insert &amp;horizontal frame</source>
-        <translation>插入水平框 (&amp;s)</translation>
+        <translation>插入水平框 (&amp;H)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="725"/>
         <source>Insert &amp;vertical frame</source>
-        <translation>插入垂直框 (&amp;c)</translation>
+        <translation>插入垂直框 (&amp;W)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="732"/>
         <source>Insert &amp;text frame</source>
-        <translation>插入文本框 (&amp;w)</translation>
+        <translation>插入文本框 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="739"/>
         <source>Append h&amp;orizontal frame</source>
-        <translation>后加水平框体 (&amp;p)</translation>
+        <translation>后加水平框体 (&amp;P)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="745"/>
         <source>Append v&amp;ertical frame</source>
-        <translation>后加垂直框体 (&amp;z)</translation>
+        <translation>后加垂直框体 (&amp;Z)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="751"/>
         <source>Append te&amp;xt frame</source>
-        <translation>后加文本框 (&amp;b)</translation>
+        <translation>后加文本框 (&amp;X)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="896"/>
         <source>Se&amp;cond above</source>
-        <translation>上方 二度 (&amp;W)</translation>
+        <translation>上方 二度 (&amp;C)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="902"/>
         <source>Thir&amp;d above</source>
-        <translation>上方 三度 (&amp;E)</translation>
+        <translation>上方 三度 (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="908"/>
         <source>Fou&amp;rth above</source>
-        <translation>上方 四度 (&amp;R)</translation>
+        <translation>上方 四度 (&amp;H)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="914"/>
         <source>Fift&amp;h above</source>
-        <translation>上方 五度 (&amp;T)</translation>
+        <translation>上方 五度 (&amp;Y)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="920"/>
         <source>Si&amp;xth above</source>
-        <translation>上方 六度 (&amp;Y)</translation>
+        <translation>上方 六度 (&amp;X)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="926"/>
         <source>Seve&amp;nth above</source>
-        <translation>上方 七度 (&amp;U)</translation>
+        <translation>上方 七度 (&amp;N)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="932"/>
         <source>Octave &amp;above</source>
-        <translation>上方 八度 (&amp;I)</translation>
+        <translation>上方 八度 (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="938"/>
         <source>Ninth abov&amp;e</source>
-        <translation>上方 九度 (&amp;O)</translation>
+        <translation>上方 九度 (&amp;E)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="944"/>
@@ -9716,42 +9716,42 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="950"/>
         <source>&amp;Third below</source>
-        <translation>下方 三度 (&amp;D)</translation>
+        <translation>下方 三度 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="956"/>
         <source>F&amp;ourth below</source>
-        <translation>下方 四度 (&amp;F)</translation>
+        <translation>下方 四度 (&amp;O)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="962"/>
         <source>&amp;Fifth below</source>
-        <translation>下方 五度 (&amp;G)</translation>
+        <translation>下方 五度 (&amp;F)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="968"/>
         <source>S&amp;ixth below</source>
-        <translation>下方 六度 (&amp;H)</translation>
+        <translation>下方 六度 (&amp;I)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="974"/>
         <source>Se&amp;venth below</source>
-        <translation>下方 七度 (&amp;J)</translation>
+        <translation>下方 七度 (&amp;V)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="980"/>
         <source>Octave &amp;below</source>
-        <translation>下方 八度 (&amp;K)</translation>
+        <translation>下方 八度 (&amp;B)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="986"/>
         <source>Ninth belo&amp;w</source>
-        <translation>下方 九度 (&amp;L)</translation>
+        <translation>下方 九度 (&amp;W)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1214"/>
         <source>Ottava 8va &amp;alta</source>
-        <translation>高八度记号 (&amp;G)</translation>
+        <translation>高八度记号 (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1215"/>
@@ -9761,7 +9761,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1220"/>
         <source>Ottava 8va &amp;bassa</source>
-        <translation>低八度记号 (&amp;D)</translation>
+        <translation>低八度记号 (&amp;B)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1221"/>
@@ -9776,12 +9776,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1232"/>
         <source>&amp;Crescendo</source>
-        <translation>渐强 (&amp;Q)</translation>
+        <translation>渐强 (&amp;C)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1238"/>
         <source>&amp;Decrescendo</source>
-        <translation>渐弱 (&amp;R)</translation>
+        <translation>渐弱 (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1261"/>
@@ -9791,12 +9791,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1267"/>
         <source>&amp;Subtitle</source>
-        <translation>副标题 (&amp;F)</translation>
+        <translation>副标题 (&amp;S)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1273"/>
         <source>&amp;Composer</source>
-        <translation>作曲 (&amp;Q)</translation>
+        <translation>作曲 (&amp;C)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1279"/>
@@ -9811,17 +9811,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1297"/>
         <source>Syst&amp;em text</source>
-        <translation>总谱文本 (&amp;e)</translation>
+        <translation>总谱文本 (&amp;E)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1303"/>
         <source>St&amp;aff text</source>
-        <translation>谱表文本 (&amp;a)</translation>
+        <translation>谱表文本 (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1309"/>
         <source>E&amp;xpression text</source>
-        <translation>表情文本 (&amp;x)</translation>
+        <translation>表情文本 (&amp;X)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1315"/>
@@ -9841,12 +9841,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1333"/>
         <source>Stic&amp;king</source>
-        <translation>鼓法 (&amp;k)</translation>
+        <translation>鼓法 (&amp;K)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1345"/>
         <source>R&amp;oman numeral analysis</source>
-        <translation>和弦级数 (&amp;R)</translation>
+        <translation>罗马数字分析 (&amp;R)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1351"/>
@@ -9856,92 +9856,92 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1357"/>
         <source>L&amp;yrics</source>
-        <translation>唱词 (&amp;C)</translation>
+        <translation>唱词 (&amp;Y)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1363"/>
         <source>Figured &amp;bass</source>
-        <translation>数字低音 (&amp;b)</translation>
+        <translation>数字低音 (&amp;B)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1369"/>
         <source>Tempo &amp;marking</source>
-        <translation>速度记号 (&amp;S)</translation>
+        <translation>速度记号 (&amp;M)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1375"/>
         <source>&amp;Duplet</source>
-        <translation>二连音 (&amp;E)</translation>
+        <translation>二连音 (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1381"/>
         <source>&amp;Triplet</source>
-        <translation>三连音 (&amp;S)</translation>
+        <translation>三连音 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1387"/>
         <source>&amp;Quadruplet</source>
-        <translation>四连音 (&amp;I)</translation>
+        <translation>四连音 (&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1393"/>
         <source>Q&amp;uintuplet</source>
-        <translation>五连音 (&amp;W)</translation>
+        <translation>五连音 (&amp;U)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1399"/>
         <source>Se&amp;xtuplet</source>
-        <translation>六连音 (&amp;L)</translation>
+        <translation>六连音 (&amp;X)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1405"/>
         <source>Se&amp;ptuplet</source>
-        <translation>七连音 (&amp;Q)</translation>
+        <translation>七连音 (&amp;P)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1411"/>
         <source>&amp;Octuplet</source>
-        <translation>八连音 (&amp;B)</translation>
+        <translation>八连音 (&amp;O)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1423"/>
         <source>Othe&amp;r…</source>
-        <translation>其他… (&amp;T)</translation>
+        <translation>其他… (&amp;R)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1429"/>
         <source>&amp;Decrease layout stretch</source>
-        <translation>缩减小节宽度 (&amp;S)</translation>
+        <translation>缩减小节宽度 (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1435"/>
         <source>&amp;Increase layout stretch</source>
-        <translation>增加小节宽度 (&amp;Z)</translation>
+        <translation>增加小节宽度 (&amp;I)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1441"/>
         <source>&amp;Reset layout stretch</source>
-        <translation>重置小节拉伸 (&amp;C)</translation>
+        <translation>重置小节宽度 (&amp;R)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1447"/>
         <source>Reset &amp;text style overrides</source>
-        <translation>重置文本样式覆盖 (&amp;t)</translation>
+        <translation>重置文本样式覆盖 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1453"/>
         <source>Reset &amp;beams</source>
-        <translation>重置符杠 (&amp;b)</translation>
+        <translation>重置符杠 (&amp;B)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1570"/>
         <source>Jump to previous screen</source>
-        <translation>跳转到上一屏幕</translation>
+        <translation>跳转到上一屏</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1576"/>
         <source>Jump to next screen</source>
-        <translation>跳转到下一屏幕</translation>
+        <translation>跳转到下一屏</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1582"/>
@@ -10175,7 +10175,7 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2005"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2006"/>
         <source>Toggle multimeasure rests</source>
-        <translation>切换长休止符</translation>
+        <translation>切换多节休止</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2011"/>
@@ -10307,7 +10307,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2555"/>
         <source>Mark i&amp;rregular measures</source>
-        <translation>标记不规则小节 (&amp;i)</translation>
+        <translation>标记不规则小节 (&amp;I)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2612"/>
@@ -10359,7 +10359,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/autobot/internal/autobotactions.cpp" line="42"/>
         <source>Show &amp;scripts…</source>
-        <translation>显示脚本… (&amp;s)</translation>
+        <translation>显示脚本… (&amp;S)</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/internal/instrumentsuiactions.cpp" line="38"/>
@@ -10401,42 +10401,42 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="42"/>
         <source>Show p&amp;aths…</source>
-        <translation>显示路径… (&amp;L)</translation>
+        <translation>显示路径… (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="47"/>
         <source>Show pr&amp;ofiler…</source>
-        <translation>显示分析器... (&amp;F)</translation>
+        <translation>显示分析器… (&amp;O)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
         <source>Show g&amp;raphics info…</source>
-        <translation>显示显卡信息…</translation>
+        <translation>显示显卡信息… (&amp;R)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
         <source>Show &amp;navigation tree…</source>
-        <translation>显示导航树状图… (&amp;n)</translation>
+        <translation>显示导航树状图… (&amp;N)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="62"/>
         <source>Show &amp;accessibility tree…</source>
-        <translation>显示无障碍树状图...  (&amp;a)</translation>
+        <translation>显示无障碍树状图… (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
         <source>&amp;Dump accessibility tree to console</source>
-        <translation>将无障碍树状图转储到控制台  (&amp;D)</translation>
+        <translation>将无障碍树转储到控制台 (&amp;D)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>
         <source>Show engraving &amp;elements</source>
-        <translation>显示排版元素  (&amp;e)</translation>
+        <translation>显示排版元素 (&amp;E)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="77"/>
         <source>Show &amp;actions list</source>
-        <translation>显示操作列表 (&amp;X)</translation>
+        <translation>显示操作列表 (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="82"/>
@@ -10938,37 +10938,37 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="281"/>
         <source>&amp;Notes</source>
-        <translation>音符 (&amp;F)</translation>
+        <translation>音符 (&amp;N)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="282"/>
         <source>&amp;Intervals</source>
-        <translation>音程 (&amp;C)</translation>
+        <translation>音程 (&amp;I)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="283"/>
         <source>T&amp;uplets</source>
-        <translation>连音 (&amp;L)</translation>
+        <translation>连音 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="285"/>
         <source>&amp;Measures</source>
-        <translation>小节 (&amp;J)</translation>
+        <translation>小节 (&amp;M)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="286"/>
         <source>&amp;Frames</source>
-        <translation>框体 (&amp;K)</translation>
+        <translation>框体 (&amp;F)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="287"/>
         <source>&amp;Text</source>
-        <translation>文本 (&amp;W)</translation>
+        <translation>文本 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="288"/>
         <source>&amp;Lines</source>
-        <translation>线性记号 (&amp;X)</translation>
+        <translation>线性记号 (&amp;L)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="291"/>
@@ -11029,7 +11029,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="217"/>
         <source>&amp;Edit</source>
-        <translation>编辑 (&amp;B)</translation>
+        <translation>编辑 (&amp;E)</translation>
     </message>
 </context>
 <context>
@@ -11037,12 +11037,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="171"/>
         <source>Open &amp;recent</source>
-        <translation>打开最近文件 (&amp;Z)</translation>
+        <translation>打开最近文件 (&amp;R)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="192"/>
         <source>&amp;File</source>
-        <translation>文件 (&amp;W)</translation>
+        <translation>文件 (&amp;F)</translation>
     </message>
 </context>
 <context>
@@ -11050,12 +11050,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="307"/>
         <source>Str&amp;etch</source>
-        <translation>小节宽度 (&amp;K)</translation>
+        <translation>小节宽度 (&amp;E)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="318"/>
         <source>F&amp;ormat</source>
-        <translation>格式 (&amp;G)</translation>
+        <translation>格式 (&amp;O)</translation>
     </message>
 </context>
 <context>
@@ -11063,7 +11063,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="412"/>
         <source>&amp;Help</source>
-        <translation>帮助 (&amp;Z)</translation>
+        <translation>帮助 (&amp;H)</translation>
     </message>
 </context>
 <context>
@@ -11071,7 +11071,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="367"/>
         <source>&amp;Plugins</source>
-        <translation>插件 (&amp;C)</translation>
+        <translation>插件 (&amp;P)</translation>
     </message>
 </context>
 <context>
@@ -11079,17 +11079,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="343"/>
         <source>&amp;Voices</source>
-        <translation>声部 (&amp;B)</translation>
+        <translation>声部 (&amp;V)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="344"/>
         <source>&amp;Measures</source>
-        <translation>小节 (&amp;J)</translation>
+        <translation>小节 (&amp;M)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="362"/>
         <source>&amp;Tools</source>
-        <translation>工具 (&amp;J)</translation>
+        <translation>工具 (&amp;T)</translation>
     </message>
 </context>
 <context>
@@ -11097,22 +11097,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="267"/>
         <source>&amp;Toolbars</source>
-        <translation>工具栏 (&amp;L)</translation>
+        <translation>工具栏 (&amp;T)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="268"/>
         <source>W&amp;orkspaces</source>
-        <translation>工作区 (&amp;G)</translation>
+        <translation>工作区 (&amp;W)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="270"/>
         <source>&amp;Show</source>
-        <translation>显示 (&amp;X)</translation>
+        <translation>显示 (&amp;S)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="275"/>
         <source>&amp;View</source>
-        <translation>视图 (&amp;T)</translation>
+        <translation>视图 (&amp;V)</translation>
     </message>
 </context>
 <context>
@@ -12662,7 +12662,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="174"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1238"/>
         <source>Multimeasure rest range</source>
-        <translation>小节休止符范围</translation>
+        <translation>多节休止符范围</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="175"/>
@@ -12692,7 +12692,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="182"/>
         <source>System divider</source>
-        <translation>谱行分行号</translation>
+        <translation>谱行组分行号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="183"/>
@@ -12748,7 +12748,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="195"/>
         <source>Multimeasure rest</source>
-        <translation>小节休止符</translation>
+        <translation>多节休止符</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="196"/>
@@ -13037,7 +13037,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="257"/>
         <source>Spacer</source>
-        <translation>空位符</translation>
+        <translation>行距符</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="258"/>
@@ -13134,7 +13134,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="275"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1241"/>
         <source>Gradual tempo change</source>
-        <translation>渐渐改变速度</translation>
+        <translation>速度渐变记号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="276"/>
@@ -13490,7 +13490,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="325"/>
         <source>Measure numbers</source>
-        <translation>小节数</translation>
+        <translation>小节号</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1229"/>
@@ -15294,7 +15294,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="804"/>
         <source>C clef, H shape (19th century)</source>
-        <translation>C谱，H形（19世纪）</translation>
+        <translation>C 谱号，H 形（19世纪）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="805"/>
@@ -16640,17 +16640,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/spacer.cpp" line="237"/>
         <source>Staff spacer up</source>
-        <translation>上方空位符</translation>
+        <translation>上方行距符</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spacer.cpp" line="239"/>
         <source>Staff spacer down</source>
-        <translation>下方空位符</translation>
+        <translation>下方行距符</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/spacer.cpp" line="241"/>
         <source>Staff spacer fixed down</source>
-        <translation>下方固定空位符</translation>
+        <translation>下方固定行距符</translation>
     </message>
 </context>
 <context>
@@ -20261,7 +20261,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="58"/>
         <source>Number of measures to insert:</source>
-        <translation>插入小节个数：</translation>
+        <translation>插入小节数量：</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml" line="80"/>
@@ -21592,7 +21592,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml" line="51"/>
         <source>Don’t hide empty staves in first system</source>
-        <translation>不隐藏首行谱行组的空谱表</translation>
+        <translation>不隐藏首排谱行组的空谱表</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml" line="68"/>
@@ -22126,7 +22126,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/mmrests/mmrestsettingsmodel.cpp" line="34"/>
         <source>Multimeasure rest</source>
-        <translation>小节休止符</translation>
+        <translation>多节休止符</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notationsettingsproxymodel.cpp" line="38"/>
@@ -22182,7 +22182,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/spacers/spacersettingsmodel.cpp" line="35"/>
         <source>Spacer</source>
-        <translation>空位符</translation>
+        <translation>行距符</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/stafftype/stafftypesettingsmodel.cpp" line="34"/>
@@ -22549,7 +22549,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="63"/>
         <source>Alignment with adjacent dynamics</source>
-        <translation>与相邻动力度记号对齐</translation>
+        <translation>与相邻力度记号对齐</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml" line="68"/>
@@ -22844,7 +22844,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="159"/>
         <source>Hide all measures that do not contain notation (cutaway)</source>
-        <translation>隐藏所有不含音乐符号的小节（提示曲谱）</translation>
+        <translation>隐藏所有不含音乐符号的小节（裁剪空谱）</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="176"/>
@@ -23630,7 +23630,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="89"/>
         <source>E sharp</source>
-        <translation>E升</translation>
+        <translation>升E</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="90"/>
@@ -24104,22 +24104,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="612"/>
         <source>Insert &amp;after selection…</source>
-        <translation>在所选区域后 (&amp;H) 插入…</translation>
+        <translation>在所选区域后插入…  (&amp;A)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="613"/>
         <source>Insert &amp;before selection…</source>
-        <translation>在所选区域前 (&amp;Q) 插入…</translation>
+        <translation>在所选区域前插入…  (&amp;B)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="615"/>
         <source>Insert at &amp;start of score…</source>
-        <translation>在乐谱开头 (&amp;T) 插入…</translation>
+        <translation>在乐谱开头插入… (&amp;S)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="616"/>
         <source>Insert at &amp;end of score…</source>
-        <translation>在乐谱末尾 (&amp;W) 插入...</translation>
+        <translation>在乐谱末尾插入… (&amp;E)</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="49"/>
@@ -25910,7 +25910,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="591"/>
         <source>Fingering %1</source>
-        <translation>指法%1</translation>
+        <translation>第%1指</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="599"/>
@@ -31295,7 +31295,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="463"/>
         <source>Toggle multimeasure rests</source>
-        <translation>切换长休止符</translation>
+        <translation>切换多节休止</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="465"/>
@@ -31408,7 +31408,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4558"/>
         <source>Join measures</source>
-        <translation>合并小节</translation>
+        <translation>连接小节</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4710"/>
@@ -31700,7 +31700,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5912"/>
         <source>Toggle rhythmic slash notation</source>
-        <translation>切换节奏斜线记号</translation>
+        <translation>切换节奏斜杠记号</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5919"/>
@@ -31720,7 +31720,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5940"/>
         <source>Resequence rehearsal marks</source>
-        <translation>对排练记号进行排序</translation>
+        <translation>排练号重排序</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5947"/>

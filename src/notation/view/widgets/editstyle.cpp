@@ -380,6 +380,9 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::lyricsMelismaForce,      false, lyricsMelismaForce,   resetLyricsMelismaForce },
         { StyleId::lyricsDashPosAtStartOfSystem, false, lyricsDashStartSystemPlacement, resetLyricsDashStartSystemPlacement },
         { StyleId::lyricsAvoidBarlines, false, lyricsAvoidBarlines, resetLyricsAvoidBarlines },
+        { StyleId::lyricsLimitDashCount, false, limitDashCount, 0 },
+        { StyleId::lyricsMaxDashCount, false, lyricsMaxDashCount, resetLyricsMaxDashCount },
+        { StyleId::lyricsCenterDashedSyllables, false, lyricsCenterDashedSyllables, lyricsResetCenterDashedSyllables },
 
         { StyleId::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
         { StyleId::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
@@ -1074,7 +1077,11 @@ EditStyle::EditStyle(QWidget* parent)
         } else if (auto radioButton = qobject_cast<QRadioButton*>(sw.widget)) {
             connect(radioButton, &QRadioButton::toggled, setSignalMapper, mapFunction);
         } else if (auto checkBox = qobject_cast<QCheckBox*>(sw.widget)) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+            connect(checkBox, &QCheckBox::checkStateChanged, setSignalMapper, mapFunction);
+#else
             connect(checkBox, &QCheckBox::stateChanged, setSignalMapper, mapFunction);
+#endif
         } else if (auto button = qobject_cast<QAbstractButton*>(sw.widget)) {
             connect(button, &QAbstractButton::toggled, setSignalMapper, mapFunction);
         } else if (auto groupBox = qobject_cast<QGroupBox*>(sw.widget)) {
@@ -1265,6 +1272,11 @@ EditStyle::EditStyle(QWidget* parent)
     });
     connect(editLyricsTextStyleButton, &QPushButton::clicked, textStyles, [=](){
         textStyles->setCurrentRow(ALL_TEXT_STYLE_SUBPAGE_CODES.indexOf("lyrics-odd-lines"));
+    });
+
+    connect(resetLyricsMaxDashCount, &QCheckBox::clicked, this, [this] () {
+        resetStyleValue(int(StyleId::lyricsLimitDashCount));
+        resetStyleValue(int(StyleId::lyricsMaxDashCount));
     });
 
     adjustPagesStackSize(0);
@@ -2427,6 +2439,14 @@ void EditStyle::setValues()
     mmRestSingleUseHBar->setEnabled(!styleValue(StyleId::oldStyleMultiMeasureRests).toBool());
     mmRestRefDuration->setEnabled(styleValue(StyleId::mmRestConstantWidth).toBool());
 
+    lyricsMaxDashCount->setEnabled(styleValue(StyleId::lyricsLimitDashCount).toBool());
+    resetLyricsMaxDashCount->setEnabled(styleValue(StyleId::lyricsLimitDashCount) != defaultStyleValue(StyleId::lyricsLimitDashCount)
+                                        || styleValue(StyleId::lyricsMaxDashCount) != defaultStyleValue(StyleId::lyricsMaxDashCount));
+    lyricsDashMaxDistance->setEnabled(!styleValue(StyleId::lyricsLimitDashCount).toBool()
+                                      || styleValue(StyleId::lyricsMaxDashCount).toInt() > 1);
+    resetLyricsDashMaxDistance->setEnabled(lyricsDashMaxDistance->isEnabled() && styleValue(StyleId::lyricsDashMaxDistance)
+                                           != defaultStyleValue(StyleId::lyricsDashMaxDistance));
+
     updateParenthesisIndicatingTiesGroupState();
 }
 
@@ -2759,6 +2779,16 @@ void EditStyle::valueChanged(int i)
             setValues();
         }
         mmRestSingleUseHBar->setEnabled(!useOldStyle);
+    }
+
+    if (idx == StyleId::lyricsLimitDashCount || idx == StyleId::lyricsMaxDashCount) {
+        lyricsMaxDashCount->setEnabled(styleValue(StyleId::lyricsLimitDashCount).toBool());
+        resetLyricsMaxDashCount->setEnabled(styleValue(StyleId::lyricsLimitDashCount) != defaultStyleValue(StyleId::lyricsLimitDashCount)
+                                            || styleValue(StyleId::lyricsMaxDashCount) != defaultStyleValue(StyleId::lyricsMaxDashCount));
+        lyricsDashMaxDistance->setEnabled(!styleValue(StyleId::lyricsLimitDashCount).toBool()
+                                          || styleValue(StyleId::lyricsMaxDashCount).toInt() > 1);
+        resetLyricsDashMaxDistance->setEnabled(lyricsDashMaxDistance->isEnabled() && styleValue(StyleId::lyricsDashMaxDistance)
+                                               != defaultStyleValue(StyleId::lyricsDashMaxDistance));
     }
 }
 

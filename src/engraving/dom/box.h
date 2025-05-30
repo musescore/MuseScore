@@ -45,7 +45,6 @@ public:
     virtual bool edit(EditData&) override;
     virtual void startEditDrag(EditData&) override;
     virtual void editDrag(EditData&) override;
-    virtual void endEdit(EditData&) override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;

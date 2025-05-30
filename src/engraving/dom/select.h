@@ -170,7 +170,7 @@ private:
     muse::ByteArray staffMimeData() const;
     muse::ByteArray symbolListMimeData() const;
     SelectionFilter selectionFilter() const;
-    bool canSelect(EngravingItem* e) const { return selectionFilter().canSelect(e); }
+    bool canSelect(const EngravingItem* e) const { return selectionFilter().canSelect(e); }
     bool canSelectVoice(track_idx_t track) const { return selectionFilter().canSelectVoice(track); }
     void appendFiltered(EngravingItem* e);
     void appendChordRest(ChordRest* cr);

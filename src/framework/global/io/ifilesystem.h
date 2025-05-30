@@ -63,7 +63,7 @@ public:
 
     virtual RetVal<ByteArray> readFile(const io::path_t& filePath) const = 0;
     virtual Ret readFile(const io::path_t& filePath, ByteArray& data) const = 0;
-    virtual Ret writeFile(const io::path_t& filePath, const ByteArray& data) const = 0;
+    virtual Ret writeFile(const io::path_t& filePath, const ByteArray& data) = 0;
 
     //! NOTE File info
     virtual io::path_t canonicalFilePath(const io::path_t& filePath) const = 0;

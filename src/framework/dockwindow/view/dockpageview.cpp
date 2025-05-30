@@ -54,6 +54,9 @@ void DockPageView::init()
     TRACEFUNC;
 
     for (DockBase* dock : allDocks()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+        dock->setParentItem(this);
+#endif
         dock->init();
 
         connect(dock, &DockBase::floatingChanged, [this](){
@@ -292,6 +295,10 @@ void DockPageView::reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks
 {
     std::sort(sectionDocks.begin(), sectionDocks.end(), [](DockBase* dock1, DockBase* dock2) {
         if (!dock1->navigationSection() || !dock2->navigationSection()) {
+            return false;
+        }
+
+        if (dock1 == dock2) {
             return false;
         }
 

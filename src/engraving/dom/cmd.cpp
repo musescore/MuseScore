@@ -1368,11 +1368,15 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             Fraction tick = cr->tick() + actualTicks(sd, tuplet, timeStretch);
 
             std::vector<TDuration> dList;
-            if (tuplet || staff(track / VOICES)->isLocalTimeSignature(tick)) {
+            if (tuplet) {
                 dList = toDurationList(rd, false);
                 std::reverse(dList.begin(), dList.end());
             } else {
-                dList = toRhythmicDurationList(rd, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, 0);
+                Staff* stf = staff(track2staff(track));
+                TimeSig* timeSig = stf->timeSig(tick);
+                TimeSigFrac refTimeSig = timeSig ? timeSig->sig() : sigmap()->timesig(tick).nominal();
+                Fraction rTickStart = (tick - measure->tick()) * stf->timeStretch(tick);
+                dList = toRhythmicDurationList(rd, true, rTickStart, refTimeSig, measure, 0);
             }
             if (dList.empty()) {
                 break;
@@ -3291,18 +3295,17 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
     ChordRest* cr = toChordRest(el);
 
     // if measure rest is selected as input, then the correct initialDuration will be the
-    // duration of the measure's time signature, else is just the input state's duration
-    TDuration initialDuration;
-    if (cr->durationType() == DurationType::V_MEASURE) {
+    // duration of the measure's time signature, else is just the ChordRest's duration
+    TDuration initialDuration = cr->durationType();
+    if (initialDuration == DurationType::V_MEASURE) {
         initialDuration = TDuration(cr->measure()->timesig(), true);
 
         if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
             // Duration already shortened by truncation; shorten one step less
             --nSteps;
         }
-    } else {
-        initialDuration = m_is.duration();
     }
+
     TDuration d = (nSteps != 0) ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration;
     if (!d.isValid()) {
         return;

@@ -201,7 +201,7 @@
 #endif
 
 #ifdef Q_OS_WASM
-#include "wasmtest/wasmtestmodule.h"
+#include "webbridge/webbridgemodule.h"
 #endif
 
 using namespace muse;
@@ -326,7 +326,7 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::workspace::WorkspaceModule());
 
 #ifdef Q_OS_WASM
-    app->addModule(new mu::wasmtest::WasmTestModule());
+    app->addModule(new mu::webbridge::WebBridgeModule());
 #endif
 
     return app;
@@ -442,9 +442,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
 
-#ifdef Q_OS_WASM
-    app->addModule(new mu::wasmtest::WasmTestModule());
-#endif
+// #ifdef Q_OS_WASM
+//     app->addModule(new mu::wasmtest::WasmTestModule());
+// #endif
 
     return app;
 }

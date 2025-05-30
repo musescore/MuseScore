@@ -240,6 +240,9 @@ public:
     virtual muse::Ret canAddFiguredBass() const = 0;
     virtual void addFiguredBass() = 0;
 
+    virtual muse::Ret canAddFretboardDiagram() const = 0;
+    virtual void addFretboardDiagram() = 0;
+
     virtual void addStretch(qreal value) = 0;
 
     virtual Measure* selectedMeasure() const = 0;

@@ -46,9 +46,19 @@
 using namespace muse::autobot;
 using namespace muse::api;
 
+static void autobot_init_qrc()
+{
+    Q_INIT_RESOURCE(autobot);
+}
+
 std::string AutobotModule::moduleName() const
 {
     return "autobot";
+}
+
+void AutobotModule::registerResources()
+{
+    autobot_init_qrc();
 }
 
 void AutobotModule::registerExports()

@@ -100,6 +100,7 @@ enum class CommandType : signed char {
     FretMarker,
     FretBarre,
     FretClear,
+    FretLinkHarmony,
 
     // Harmony
     TransposeHarmony,

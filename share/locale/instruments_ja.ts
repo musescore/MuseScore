@@ -10702,7 +10702,7 @@
         <source>Tubular bells (British English), or chimes (American English).</source>
         <comment>tubular-bells description</comment>
         <extracomment>description for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>チューブラーベル (イギリス英語)、またはチャイム (アメリカ英語)。</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3613"/>

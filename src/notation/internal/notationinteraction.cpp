@@ -1786,9 +1786,14 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
         applyUserOffset = true;
         [[fallthrough]];
     case ElementType::DYNAMIC:
-    case ElementType::FRET_DIAGRAM:
     case ElementType::HARMONY:
         accepted = doDropTextBaseAndSymbols(pos, applyUserOffset);
+        break;
+    case ElementType::FRET_DIAGRAM:
+        accepted = doDropTextBaseAndSymbols(pos, applyUserOffset);
+        if (accepted) {
+            doFinishAddFretboardDiagram();
+        }
         break;
     case ElementType::HBOX:
     case ElementType::VBOX:
@@ -2579,6 +2584,10 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
             selectAndStartEditIfNeeded(el);
         }
 
+        if (score->selection().elements().size() == 1) {
+            doFinishAddFretboardDiagram();
+        }
+
         dropData->dropElement = nullptr;
 
         m_notifyAboutDropChanged = true;
@@ -3092,6 +3101,27 @@ void NotationInteraction::resetDropData()
     m_dropData = {};
 }
 
+void NotationInteraction::doFinishAddFretboardDiagram()
+{
+    EngravingItem* selectedElement = score()->selection().element();
+    if (!selectedElement || !selectedElement->isFretDiagram()) {
+        return;
+    }
+
+    FretDiagram* fretDiagram = toFretDiagram(selectedElement);
+    if (!fretDiagram->harmonyText().empty()) {
+        return;
+    }
+
+    //! first we need to apply changes
+    apply();
+
+    //! then add harmony
+    mu::engraving::TextBase* text = score()->addText(TextStyleType::HARMONY_A, fretDiagram);
+    doSelect({ text }, SelectType::SINGLE);
+    startEditElement(text, true);
+}
+
 void NotationInteraction::setAnchorLines(const std::vector<LineF>& anchorList)
 {
     m_anchorLines = anchorList;
@@ -3263,7 +3293,7 @@ void NotationInteraction::drawTextEditMode(muse::draw::Painter* painter)
         return;
     }
 
-    m_editData.element->drawEditMode(painter, m_editData, currentScaling(painter));
+    editModeRenderer()->drawItem(m_editData.element, painter, m_editData, currentScaling(painter));
 }
 
 void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
@@ -3332,7 +3362,7 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
     }
 
     editedElement->updateGrips(m_editData);
-    editedElement->drawEditMode(painter, m_editData, scaling);
+    editModeRenderer()->drawItem(editedElement, painter, m_editData, scaling);
 }
 
 void NotationInteraction::drawLasso(muse::draw::Painter* painter)
@@ -5625,6 +5655,18 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
         return item && item->isBox() ? muse::make_ok() : make_ret(Err::EmptySelection);
     }
 
+    static const std::set<TextStyleType> harmonyTypes {
+        TextStyleType::HARMONY_A,
+        TextStyleType::HARMONY_ROMAN,
+        TextStyleType::HARMONY_NASHVILLE,
+    };
+
+    if (muse::contains(harmonyTypes, type)) {
+        if (item && item->type() == ElementType::FRET_DIAGRAM) {
+            return muse::make_ok();
+        }
+    }
+
     static const std::set<TextStyleType> needSelectNoteOrRestTypes {
         TextStyleType::SYSTEM,
         TextStyleType::STAFF,
@@ -6109,8 +6151,26 @@ void NotationInteraction::resetHitElementContext()
 
 bool NotationInteraction::elementsSelected(const std::set<ElementType>& elementsTypes) const
 {
-    const EngravingItem* element = selection()->element();
-    return element && muse::contains(elementsTypes, element->type());
+    auto selection = this->selection();
+    if (!selection || selection->isNone()) {
+        return false;
+    }
+
+    std::vector<EngravingItem*> selectedElements;
+
+    if (EngravingItem* element = selection->element()) {
+        selectedElements = { element };
+    } else {
+        selectedElements = selection->elements();
+    }
+
+    for (const EngravingItem* element: selectedElements) {
+        if (element && muse::contains(elementsTypes, element->type())) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //! NOTE: Copied from ScoreView::lyricsTab
@@ -6128,6 +6188,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
     mu::engraving::PropertyFlags pFlags = lyrics->propertyFlags(mu::engraving::Pid::PLACEMENT);
     mu::engraving::FontStyle fStyle = lyrics->fontStyle();
     mu::engraving::PropertyFlags fFlags = lyrics->propertyFlags(mu::engraving::Pid::FONT_STYLE);
+    mu::engraving::TextStyleType styleType = lyrics->textStyleType();
 
     mu::engraving::Segment* nextSegment = segment;
     if (back) {
@@ -6198,11 +6259,8 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         nextLyrics->setTrack(track);
         cr = toChordRest(nextSegment->element(track));
         nextLyrics->setParent(cr);
-
         nextLyrics->setNo(verse);
-        const mu::engraving::TextStyleType styleType(nextLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
         nextLyrics->setTextStyleType(styleType);
-
         nextLyrics->setPlacement(placement);
         nextLyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
         nextLyrics->setSyllabic(mu::engraving::LyricsSyllabic::SINGLE);
@@ -6289,6 +6347,7 @@ void NotationInteraction::navigateToNextSyllable()
     PropertyFlags pFlags = lyrics->propertyFlags(Pid::PLACEMENT);
     FontStyle fStyle = lyrics->fontStyle();
     PropertyFlags fFlags = lyrics->propertyFlags(Pid::FONT_STYLE);
+    mu::engraving::TextStyleType styleType = lyrics->textStyleType();
 
     // search next chord
     Segment* nextSegment = segment;
@@ -6378,11 +6437,8 @@ void NotationInteraction::navigateToNextSyllable()
             Lyrics* toLyrics = Factory::createLyrics(initialCR);
             toLyrics->setTrack(track);
             toLyrics->setParent(initialCR);
-
             toLyrics->setNo(verse);
-            const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
             toLyrics->setTextStyleType(styleType);
-
             toLyrics->setPlacement(placement);
             toLyrics->setPropertyFlags(Pid::PLACEMENT, pFlags);
             toLyrics->setSyllabic(LyricsSyllabic::END);
@@ -6473,7 +6529,6 @@ void NotationInteraction::navigateToNextSyllable()
         toLyrics->setParent(toLyricsChord);
 
         toLyrics->setNo(verse);
-        const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
         toLyrics->setTextStyleType(styleType);
 
         toLyrics->setPlacement(placement);
@@ -6553,6 +6608,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     mu::engraving::PropertyFlags pFlags = lyrics->propertyFlags(mu::engraving::Pid::PLACEMENT);
     mu::engraving::FontStyle fStyle = lyrics->fontStyle();
     mu::engraving::PropertyFlags fFlags = lyrics->propertyFlags(mu::engraving::Pid::FONT_STYLE);
+    mu::engraving::TextStyleType styleType = lyrics->textStyleType();
 
     if (direction == MoveDirection::Up) {
         if (verse == 0) {
@@ -6573,11 +6629,8 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
         lyrics = Factory::createLyrics(cr);
         lyrics->setTrack(track);
         lyrics->setParent(cr);
-
         lyrics->setNo(verse);
-        const mu::engraving::TextStyleType styleType(lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
         lyrics->setTextStyleType(styleType);
-
         lyrics->setPlacement(placement);
         lyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
         lyrics->setFontStyle(fStyle);
@@ -7434,6 +7487,65 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
         select({ guitarBend });
     } else {
         rollback();
+    }
+}
+
+muse::Ret NotationInteraction::canAddFretboardDiagram() const
+{
+    bool canAdd = elementsSelected({ ElementType::HARMONY });
+    return canAdd ? muse::make_ok() : make_ret(Err::HarmonyIsNotSelected);
+}
+
+void NotationInteraction::addFretboardDiagram()
+{
+    Score* score = this->score();
+    if (!score) {
+        return;
+    }
+
+    auto selection = this->selection();
+    if (selection->isNone()) {
+        return;
+    }
+
+    std::vector<EngravingItem*> selectedElements;
+
+    if (EngravingItem* element = selection->element()) {
+        selectedElements = { element };
+    } else {
+        selectedElements = selection->elements();
+    }
+
+    std::vector<Harmony*> selectedHarmonies;
+    for (EngravingItem* element : selectedElements) {
+        Harmony* harmony = element && element->isHarmony() ? toHarmony(element) : nullptr;
+        if (harmony && !harmony->explicitParent()->isFretDiagram()) {
+            selectedHarmonies.emplace_back(harmony);
+        }
+    }
+
+    if (selectedHarmonies.empty()) {
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Add fretboard diagram"));
+
+    engraving::FretDiagram* lastAddedDiagram = nullptr;
+    for (Harmony* harmony : selectedHarmonies) {
+        engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(harmony->score()->dummy()->segment());
+        diagram->setTrack(harmony->track());
+        diagram->updateDiagram(harmony->plainText());
+
+        score->undo(new FretLinkHarmony(diagram, harmony));
+        score->undoAddElement(diagram);
+
+        lastAddedDiagram = diagram;
+    }
+
+    apply();
+
+    if (lastAddedDiagram) {
+        select({ lastAddedDiagram });
     }
 }
 
