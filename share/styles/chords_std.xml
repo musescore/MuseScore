@@ -207,17 +207,17 @@
 
   <token>
     <name>o</name>
-    <render>circle</render>
+    <render>sc:0.5 :push :mx circle :popy sc:2</render>
     </token>
 
   <token>
     <name>0</name>
-    <render>oslash</render>
+    <render>sc:0.5 :push :mx oslash :popy sc:2</render>
     </token>
 
   <token>
     <name>69</name>
-    <render>:push m:0:-0.43 696 :pop m:0:0.14 699 m:0:-0.14</render>
+    <render>:push m:0:-0.5 696 :pop m:0:0.4 699 m:0:-0.4</render>
     </token>
 
   <token class="extension">
@@ -566,7 +566,11 @@
          render   this is a script which contains render commands
                   commands:
                         xxx         draw symbol name xxx
-                        m:x:y       add x:y to current position (units are capheight of root)
+                        m:x:y       add x:y to current position (1 unit is the cap-height of the main font)
+                        ms:x:y      add x:y to current position (1 unit is the cap-height of the main font with scaling applied)
+                        :mx         move to the x-height of the main font
+                        :mxs        move to the x-height of the main font with scaling applied
+                        sc:x        apply x to the current scaling
                         :push
                         :pop
                         :n          root or base note
