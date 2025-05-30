@@ -345,8 +345,8 @@ static void readRenderList(String val, std::list<RenderAction*>& renderList, int
             StringList ssl = s.split(u':', muse::SkipEmptyParts);
             if (ssl.size() == 3) {
                 // m:x:y
-                double movex = ssl[1].toDouble();
-                double movey = ssl[2].toDouble();
+                double movex = ssl.at(1).toDouble();
+                double movey = ssl.at(2).toDouble();
 
                 if (mscVersion < 460) {
                     movex = compat::CompatUtils::convertChordExtModUnits(movex);
@@ -368,10 +368,20 @@ static void readRenderList(String val, std::list<RenderAction*>& renderList, int
             renderList.emplace_back(new RenderActionMoveXHeight(true));
         } else if (s == u":mxs") {
             renderList.emplace_back(new RenderActionMoveXHeightScaled(true));
+        } else if (s.startsWith(u"sc:")) {
+            StringList ssl = s.split(u':', muse::SkipEmptyParts);
+            if (ssl.size() == 2) {
+                double scale = ssl.at(1).toDouble();
+                renderList.emplace_back(new RenderActionScale(scale));
+            }
         } else if (s == u":push") {
             renderList.emplace_back(new RenderActionPush());
         } else if (s == u":pop") {
             renderList.emplace_back(new RenderActionPop());
+        } else if (s == u":popx") {
+            renderList.emplace_back(new RenderActionPopX());
+        } else if (s == u":popy") {
+            renderList.emplace_back(new RenderActionPopY());
         } else if (s == u":n") {
             renderList.emplace_back(new RenderActionNote());
         } else if (s == u":a") {
@@ -415,12 +425,20 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderAction*>& al, 
             s += String(u":mx%1").arg(scaled);
             break;
         }
+        case RenderAction::RenderActionType::SCALE: {
+            const RenderActionScale* scale = dynamic_cast<const RenderActionScale*>(a);
+            s+= String(u"sc:%1").arg(scale->scale());
+            break;
+        }
         case RenderAction::RenderActionType::PUSH:
             s += u":push";
             break;
-        case RenderAction::RenderActionType::POP:
-            s += u":pop";
+        case RenderAction::RenderActionType::POP: {
+            const RenderActionPop* pop = dynamic_cast<const RenderActionPop*>(a);
+            String coord = pop->popX() && pop->popY() ? u"" : (pop->popX() ? u"x" : u"y");
+            s += String(u":pop%1").arg(coord);
             break;
+        }
         case RenderAction::RenderActionType::NOTE:
             s += u":n";
             break;
@@ -428,7 +446,6 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderAction*>& al, 
             s += u":a";
             break;
         case RenderAction::RenderActionType::STOPHALIGN:
-        case RenderAction::RenderActionType::SCALE:
             // Internal, skip
             break;
         }

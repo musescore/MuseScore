@@ -239,7 +239,7 @@
 
   <token class="extension">
     <name>6/9</name>
-    <render>m:1:-2 s6 m:-2.5:0 s/ m:-2:7 s9 m:0:-5</render>
+    <render>m:1:-1.8 s6 m:-1.8:0 s/ m:-1.8:6.8 s9 m:0:-5</render>
     </token>
 
   <token class="quality">
