@@ -42,11 +42,6 @@ using namespace muse::actions;
 static const ActionCode TOGGLE_UNDO_HISTORY_PANEL_CODE = "toggle-undo-history-panel";
 static const QString VIEW_TOGGLE_UNDO_HISTORY_PANEL_ITEM_ID = "view/toggle-undo-history-panel";
 
-static QString makeId(const ActionCode& actionCode, int itemIndex)
-{
-    return QString::fromStdString(actionCode) + QString::number(itemIndex);
-}
-
 AppMenuModel::AppMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {

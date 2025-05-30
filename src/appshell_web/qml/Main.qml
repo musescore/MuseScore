@@ -23,16 +23,22 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import Muse.Dock 1.0
 
 import MuseScore.AppShell 1.0
-
-import "NotationPage"
 
 AppWindow {
     id: root
 
     flags: Qt.FramelessWindowHint
+
+    InteractiveProvider {
+        id: interactiveProvider
+        topParent: root
+
+        onRequestedDockPage: function(uri, params) {
+            Qt.callLater(interactiveProvider.onPageOpened)
+        }
+    }
 
     AppMenuBar {
         id: appMenuBar
@@ -41,43 +47,10 @@ AppWindow {
         anchors.right: parent.right
     }
 
-    Component.onCompleted: {
-        dockwin.init()
-    }
-
-    DockWindow {
-        id: dockwin
-
+    NotationFrame {
         anchors.top: appMenuBar.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-
-        objectName: "WindowContent"
-
-        onPageLoaded: {
-            interactiveProvider.onPageOpened()
-        }
-
-        InteractiveProvider {
-            id: interactiveProvider
-            topParent: dockwin
-
-            onRequestedDockPage: function(uri, params) {
-                dockwin.loadPage(uri, params)
-            }
-        }
-
-        NavigationSection {
-            id: topToolbarKeyNavSec
-            name: "TopTool"
-            order: 1
-        }
-
-        pages: [
-            NotationPage {
-                topToolbarKeyNavSec: topToolbarKeyNavSec
-            }
-        ]
     }
 }
