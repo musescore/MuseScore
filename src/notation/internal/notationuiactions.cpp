@@ -439,7 +439,7 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("add-fretboard-diagram",
              mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
+             mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Add &fretboard diagram"),
              TranslatableString("action", "Add fretboard diagram"),
              IconCode::Code::FRETBOARD_DIAGRAM

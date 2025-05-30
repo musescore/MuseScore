@@ -313,7 +313,8 @@ MenuItem* AppMenuModel::makeAddMenu()
         makeMenu(TranslatableString("appshell/menu/add", "&Frames"), makeFramesItems(), "menu-frames"),
         makeMenu(TranslatableString("appshell/menu/add", "&Text"), makeTextItems(), "menu-notes"),
         makeMenu(TranslatableString("appshell/menu/add", "&Lines"), makeLinesItems(), "menu-lines"),
-        makeMenu(TranslatableString("appshell/menu/add", "&Chords and fretboard diagrams"), makeChordAndFretboardDiagramsItems()),
+        makeMenu(TranslatableString("appshell/menu/add", "&Chords and fretboard diagrams"),
+                 makeChordAndFretboardDiagramsItems(), "menu-chord-and-frets"),
     };
 
     return makeMenu(TranslatableString("appshell/menu/add", "&Add"), addItems, "menu-add");

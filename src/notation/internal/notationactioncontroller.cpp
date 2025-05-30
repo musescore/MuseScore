@@ -293,10 +293,13 @@ void NotationActionController::init()
         addMeasures(actionData, AddBoxesTarget::AtEndOfScore);
     });
 
-    registerAction("insert-hbox", [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::BeforeSelection); });
-    registerAction("insert-vbox", [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::BeforeSelection); });
-    registerAction("insert-textframe", [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::BeforeSelection); });
-    registerAction("insert-fretframe", [this]() { addBoxes(BoxType::Fret, 1, AddBoxesTarget::BeforeSelection); });
+    registerAction("insert-hbox", [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::BeforeSelection); },
+                   &Interaction::canAddBoxes);
+    registerAction("insert-vbox", [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::BeforeSelection); }, &Interaction::canAddBoxes);
+    registerAction("insert-textframe", [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::BeforeSelection); },
+                   &Interaction::canAddBoxes);
+    registerAction("insert-fretframe", [this]() { addBoxes(BoxType::Fret, 1, AddBoxesTarget::BeforeSelection); },
+                   &Interaction::canAddBoxes);
     registerAction("append-hbox", [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::AtEndOfScore); });
     registerAction("append-vbox", [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::AtEndOfScore); });
     registerAction("append-textframe", [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::AtEndOfScore); });
@@ -314,7 +317,7 @@ void NotationActionController::init()
     registerAction("measure-properties", &Controller::openMeasurePropertiesDialog);
     registerAction("config-raster", &Controller::openEditGridSizeDialog);
     registerAction("realize-chord-symbols", &Controller::openRealizeChordSymbolsDialog);
-    registerAction("add-fretboard-diagram", &Controller::addFretboardDiagram);
+    registerAction("add-fretboard-diagram", &Controller::addFretboardDiagram, &Interaction::canAddFretboardDiagram);
 
     registerAction("load-style", &Controller::loadStyle);
     registerAction("save-style", &Controller::saveStyle);
@@ -2451,6 +2454,38 @@ void NotationActionController::registerAction(const ActionCode& code,
                                               bool (NotationActionController::* enabler)() const)
 {
     registerAction(code, [this, handler, direction, quickly]() { (this->*handler)(direction, quickly); }, enabler);
+}
+
+void NotationActionController::registerAction(const muse::actions::ActionCode& code,
+                                              void (NotationActionController::* handler)(), Ret (INotationInteraction::*enabler)() const)
+{
+    auto _enabler = [this, enabler]() {
+        INotationPtr notation = currentNotation();
+        if (notation) {
+            return ((*notation->interaction()).*enabler)().success();
+        }
+
+        return false;
+    };
+
+    m_isEnabledMap[code] = _enabler;
+    dispatcher()->reg(this, code, this, handler);
+}
+
+void NotationActionController::registerAction(const muse::actions::ActionCode& code, std::function<void()> handler,
+                                              Ret (INotationInteraction::*enabler)() const)
+{
+    auto _enabler = [this, enabler]() {
+        INotationPtr notation = currentNotation();
+        if (notation) {
+            return ((*notation->interaction()).*enabler)().success();
+        }
+
+        return false;
+    };
+
+    m_isEnabledMap[code] = _enabler;
+    dispatcher()->reg(this, code, handler);
 }
 
 void NotationActionController::registerAction(const ActionCode& code,
