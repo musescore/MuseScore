@@ -87,6 +87,7 @@ static const QStringList ALL_PAGE_CODES {
     "text-line",
     "system-text-line",
     "articulations-and-ornaments",
+    "hammer-ons-pull-offs-and-tapping",
     "fermatas",
     "staff-text",
     "tempo-text",
@@ -138,6 +139,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "fingering",
     "lh-guitar-fingering",
     "rh-guitar-fingering",
+    "hammer-ons-pull-offs-and-tapping",
     "string-number",
     "string-tunings",
     "fretboard-diagram-fingering",
@@ -940,6 +942,17 @@ EditStyle::EditStyle(QWidget* parent)
     fretboardsWidget->layout()->addWidget(fretboardsPage.widget);
 
     // ====================================================
+    // Hammer-on/pull-off and tapping STYLE PAGE (QML)
+    // ====================================================
+
+    auto hoposTappingPage = createQmlWidget(
+        hoposPageWidget,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml")));
+    hoposTappingPage.widget->setMinimumSize(224, 400);
+    connect(hoposTappingPage.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
+    hoposPageWidget->layout()->addWidget(hoposTappingPage.widget);
+
+    // ====================================================
     // GLISSANDO STYLE SECTION (QML)
     // ====================================================
 
@@ -1618,6 +1631,11 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
     case ElementType::PARTIAL_TIE:
     case ElementType::PARTIAL_TIE_SEGMENT:
         return "slurs-and-ties";
+
+    case ElementType::HAMMER_ON_PULL_OFF:
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
+    case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+        return "hammer-ons-pull-offs-and-tapping";
 
     case ElementType::HAIRPIN:
     case ElementType::HAIRPIN_SEGMENT:

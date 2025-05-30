@@ -1808,6 +1808,7 @@ static void updateStyles(Score* score,
         }
 
         bool needUseDefaultSize = tid == TextStyleType::HARMONY_ROMAN
+                                  || tid == TextStyleType::HAMMER_ON_PULL_OFF
                                   || isTitleFrameStyle(tid)
                                   || isHarpPedalStyle(tid);
 

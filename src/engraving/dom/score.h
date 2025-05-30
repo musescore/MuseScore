@@ -457,6 +457,7 @@ public:
                         EngravingItem* elementToRelink = nullptr);
     void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
     void undoRemoveElement(EngravingItem* element, bool removeLinked = true);
+    void undoRemoveHopoText(HammerOnPullOffText* hopoText);
     void undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElement, EngravingItem* endElement);
     void undoChangeElement(EngravingItem* oldElement, EngravingItem* newElement);
     void undoChangePitch(Note* note, int pitch, int tpc1, int tpc2);

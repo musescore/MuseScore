@@ -53,6 +53,7 @@
 #include "dom/gradualtempochange.h"
 #include "dom/guitarbend.h"
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harppedaldiagram.h"
 #include "dom/instrchange.h"
 #include "dom/jump.h"
@@ -156,6 +157,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::GRADUAL_TEMPO_CHANGE: layout(toGradualTempoChange(item), ctx);
         break;
     case ElementType::HAIRPIN:      layout(toHairpin(item), ctx);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF: layout(toHammerOnPullOff(item), ctx);
         break;
     case ElementType::HARP_DIAGRAM: layout(toHarpPedalDiagram(item), ctx);
         break;
@@ -992,6 +995,59 @@ void SingleLayout::layout(Hairpin* item, const Context& ctx)
 {
     item->setPos(0.0, 0.0);
     layoutLine(item, ctx);
+}
+
+void SingleLayout::layout(HammerOnPullOff* item, const Context& ctx)
+{
+    double spatium = item->spatium();
+    HammerOnPullOffSegment* s = nullptr;
+    if (item->spannerSegments().empty()) {
+        s = new HammerOnPullOffSegment(ctx.dummyParent()->system());
+        s->setTrack(item->track());
+        item->add(s);
+    } else {
+        s = toHammerOnPullOffSegment(item->frontSegment());
+    }
+
+    s->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+
+    s->setPos(PointF());
+    s->ups(Grip::START).p = PointF(0, 0);
+    s->ups(Grip::END).p   = PointF(spatium * 6, 0);
+    s->setExtraHeight(0.0);
+
+    SlurTieLayout::computeBezier(s);
+
+    layout(s, ctx);
+
+    item->setbbox(s->ldata()->bbox());
+}
+
+void SingleLayout::layout(HammerOnPullOffSegment* item, const Context& ctx)
+{
+    const std::vector<HammerOnPullOffText*>& hopoTexts = item->hopoText();
+    if (item->hopoText().empty()) {
+        HammerOnPullOffText* hopoText = new HammerOnPullOffText(item);
+        hopoText->setParent(item);
+        hopoText->setXmlText("H/P");
+        item->addHopoText(hopoText);
+    }
+
+    HammerOnPullOffText* hopoText = hopoTexts.front();
+    Align align;
+    align.vertical = AlignV::BASELINE;
+    align.horizontal = AlignH::HCENTER;
+    hopoText->setAlign(align);
+    layoutTextBase(hopoText, ctx, hopoText->mutldata());
+
+    RectF bbox = item->ldata()->bbox();
+    double x = 0.5 * (bbox.left() + bbox.right());
+    double y = bbox.top() - 0.5 * item->spatium();
+    hopoText->mutldata()->setPos(x, y);
+
+    Shape itemShape = item->mutldata()->shape();
+    itemShape.add(hopoText->shape().translated(hopoText->pos()));
+    item->mutldata()->setShape(itemShape);
 }
 
 void SingleLayout::layout(HairpinSegment* item, const Context& ctx)

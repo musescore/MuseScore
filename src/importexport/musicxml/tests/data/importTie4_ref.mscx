@@ -49,6 +49,7 @@
       <lhGuitarFingeringFontSize>22</lhGuitarFingeringFontSize>
       <rhGuitarFingeringFontFace>Palatino,serif</rhGuitarFingeringFontFace>
       <rhGuitarFingeringFontSize>22</rhGuitarFingeringFontSize>
+      <hammerOnPullOffTappingFontFace>Palatino,serif</hammerOnPullOffTappingFontFace>
       <stringNumberFontFace>Palatino,serif</stringNumberFontFace>
       <stringNumberFontSize>22</stringNumberFontSize>
       <stringTuningsFontSize>22</stringTuningsFontSize>

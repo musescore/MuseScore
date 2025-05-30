@@ -55,7 +55,7 @@ BaseSection {
         id: warnBendsBox
         width: parent.width
 
-        text: qsTrc("appshell/preferences", "Color guitar bends outside of playable range")
+        text: qsTrc("appshell/preferences", "Color guitar bends and hammer-ons/pull-offs outside of playable range")
 
         navigation.name: "WarnBendBox"
         navigation.panel: root.navigation

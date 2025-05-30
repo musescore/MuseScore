@@ -219,6 +219,7 @@ bool Rest::acceptDrop(EditData& data) const
     // prevent 'hanging' slurs, avoid crash on tie
     static const std::set<ElementType> ignoredTypes {
         ElementType::SLUR,
+        ElementType::HAMMER_ON_PULL_OFF,
         ElementType::TIE,
         ElementType::GLISSANDO
     };

@@ -60,6 +60,7 @@
 #include "dom/guitarbend.h"
 
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harppedaldiagram.h"
 #include "dom/harmonicmark.h"
 #include "dom/harmony.h"
@@ -208,6 +209,10 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
 
     case ElementType::HAIRPIN_SEGMENT: draw(item_cast<const HairpinSegment*>(item), painter);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT: draw(item_cast<const HammerOnPullOffSegment*>(item), painter);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF_TEXT: draw(item_cast<const HammerOnPullOffText*>(item), painter);
         break;
     case ElementType::HARP_DIAGRAM: draw(item_cast<const HarpPedalDiagram*>(item), painter);
         break;
@@ -1762,6 +1767,16 @@ void SingleDraw::draw(const HairpinSegment* item, Painter* painter)
         painter->setBrush(BrushStyle::NoBrush);
         painter->drawEllipse(item->circledTip(), item->circledTipRadius(), item->circledTipRadius());
     }
+}
+
+void SingleDraw::draw(const HammerOnPullOffSegment* item, muse::draw::Painter* painter)
+{
+    draw(toSlurSegment(item), painter);
+}
+
+void SingleDraw::draw(const HammerOnPullOffText* item, Painter* painter)
+{
+    drawTextBase(item, painter);
 }
 
 void SingleDraw::draw(const HarpPedalDiagram* item, Painter* painter)

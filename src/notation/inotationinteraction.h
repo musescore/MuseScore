@@ -192,6 +192,7 @@ public:
     virtual void addTiedNoteToChord() = 0;
     virtual void addLaissezVibToSelection() = 0;
     virtual void addSlurToSelection() = 0;
+    virtual void addHammerOnPullOffToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
     virtual void addHairpinOnGripDrag(engraving::EditData& ed, bool isLeftGrip) = 0;
     virtual void addHairpinsToSelection(HairpinType type) = 0;

@@ -1075,6 +1075,7 @@ muse::ByteArray Selection::symbolListMimeData() const
             e = toSpannerSegment(e)->spanner();
             [[fallthrough]];
         case ElementType::SLUR:
+        case ElementType::HAMMER_ON_PULL_OFF:
         case ElementType::HAIRPIN:
         case ElementType::OTTAVA:
         case ElementType::TRILL:

@@ -44,6 +44,7 @@
 #include "dom/laissezvib.h"
 #include "dom/parenthesis.h"
 #include "dom/partialtie.h"
+#include "dom/hammeronpulloff.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"
@@ -65,8 +66,8 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    SlurSegment* slurSegment = toSlurSegment(TLayout::getNextLayoutSystemSegment(item, system, [](System* parent) {
-        return new SlurSegment(parent);
+    SlurSegment* slurSegment = toSlurSegment(TLayout::getNextLayoutSystemSegment(item, system, [item](System* parent) {
+        return item->newSlurTieSegment(parent);
     }));
 
     SpannerSegmentType sst;

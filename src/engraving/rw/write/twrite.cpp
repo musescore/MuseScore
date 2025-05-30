@@ -75,6 +75,7 @@
 #include "dom/guitarbend.h"
 
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harmony.h"
 #include "dom/harmonicmark.h"
 #include "dom/harppedaldiagram.h"
@@ -231,6 +232,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::GUITAR_BEND:  write(item_cast<const GuitarBend*>(item), xml, ctx);
         break;
     case ElementType::HAIRPIN:      write(item_cast<const Hairpin*>(item), xml, ctx);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF: write(item_cast<const HammerOnPullOff*>(item), xml, ctx);
         break;
     case ElementType::HARMONY:      write(item_cast<const Harmony*>(item), xml, ctx);
         break;
@@ -1643,6 +1646,44 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const HammerOnPullOff* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (item->broken()) {
+        return;
+    }
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+
+    xml.startElement(item);
+
+    writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
+
+    writeProperties(static_cast<const Slur*>(item), xml, ctx);
+
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const HammerOnPullOffSegment* seg, XmlWriter& xml, WriteContext& ctx)
+{
+    for (size_t i = 0; i < seg->hopoText().size(); ++i) {
+        HammerOnPullOffText* hopoText = seg->hopoText()[i];
+        if (!hopoText->isUserModified()) {
+            continue;
+        }
+        write(hopoText, xml, ctx, i);
+    }
+}
+
+void TWrite::write(const HammerOnPullOffText* item, XmlWriter& xml, WriteContext& ctx, size_t idx)
+{
+    xml.startElement(item, { { "idx", idx } });
+
+    writeProperties(toTextBase(item), xml, ctx, /*writeText*/ false);
+
+    xml.endElement();
+}
+
 void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
 {
     if (!ctx.canWrite(item)) {
@@ -2593,14 +2634,7 @@ void TWrite::writeProperties(const SlurTie* item, XmlWriter& xml, WriteContext& 
 
 void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& ctx, int no)
 {
-    if (seg->visible() && seg->autoplace()
-        && (seg->color() == ctx.configuration()->defaultColor())
-        && seg->offset().isNull()
-        && seg->ups(Grip::START).off.isNull()
-        && seg->ups(Grip::BEZIER1).off.isNull()
-        && seg->ups(Grip::BEZIER2).off.isNull()
-        && seg->ups(Grip::END).off.isNull()
-        ) {
+    if (!seg->isUserModified()) {
         return;
     }
 
@@ -2619,6 +2653,11 @@ void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& 
     if (!seg->ups(Grip::END).off.isNull()) {
         xml.tagPoint("o4", seg->ups(Grip::END).off / _spatium);
     }
+
+    if (seg->isHammerOnPullOffSegment()) {
+        writeProperties(toHammerOnPullOffSegment(seg), xml, ctx);
+    }
+
     writeItemProperties(seg, xml, ctx);
     xml.endElement();
 }

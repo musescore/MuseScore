@@ -59,6 +59,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/figuredbass.h"
 #include "engraving/dom/guitarbend.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/image.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/gradualtempochange.h"
@@ -1541,6 +1542,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::REHEARSAL_MARK:
     case ElementType::CHORD:
     case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF:
     case ElementType::HARMONY:
     case ElementType::BAGPIPE_EMBELLISHMENT:
     case ElementType::AMBITUS:
@@ -1857,6 +1859,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     }
     break;
     case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF:
     {
         EngravingItem* el = dropTarget(edd.ed);
         mu::engraving::Slur* dropElement = toSlur(edd.ed.dropElement);
@@ -2152,6 +2155,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             if (element->isSlur() || cr1->staffIdx() == cr2->staffIdx()) {
                 addSingle = true;
             }
+        } else if (sel.element() && sel.element()->isSlurSegment() && element->isHammerOnPullOff()) {
+            addSingle = true;
         }
 
         auto isEntryDrumStaff = [score]() {
@@ -2679,6 +2684,9 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
     } else if (sel.isSingle()) {
         if (sel.element()->isNote() && !toNote(sel.element())->isTrillCueNote()) {
             doAddSlur(toNote(sel.element())->chord(), nullptr, slurTemplate);
+        } else if (sel.element()->isSlurSegment() && slurTemplate->isHammerOnPullOff()) {
+            Slur* slur = toSlurSegment(sel.element())->slur();
+            doAddSlur(slur->startElement(), slur->endElement(), slurTemplate);
         }
     } else {
         EngravingItem* firstItem = nullptr;
@@ -2760,6 +2768,14 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     Slur* slur = firstChordRest->slur(secondChordRest);
     if (!slur || slur->slurDirection() != DirectionV::AUTO) {
         slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
+    } else if (slur && slurTemplate->isHammerOnPullOff()) {
+        // Replace existing slur with HOPO
+        endEditElement();
+        score()->undoRemoveElement(slur);
+        slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
+        SlurSegment* segment = slur->frontSegment();
+        select({ segment }, SelectType::SINGLE);
+        startEditGrip(segment, Grip::END);
     }
 
     if (m_noteInput->isNoteInputMode()) {
@@ -5056,6 +5072,17 @@ void NotationInteraction::addSlurToSelection()
 
     // Calls `startEdit` internally
     doAddSlur();
+}
+
+void NotationInteraction::addHammerOnPullOffToSelection()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    HammerOnPullOff* hopo = Factory::createHammerOnPullOff(score()->dummy());
+    // Calls `startEdit` internally
+    doAddSlur(hopo);
 }
 
 void NotationInteraction::addOttavaToSelection(OttavaType type)
