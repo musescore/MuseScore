@@ -98,6 +98,9 @@
         <file>qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/AppearanceSettings.qml</file>
         <file>qml/MuseScore/Inspector/text/TextSettings.qml</file>
+        <file>qml/MuseScore/Inspector/text/textstylepopup/TextStylePopup.qml</file>
+        <file>qml/MuseScore/Inspector/text/textstylepopup/TextStyleSubPopup.qml</file>
+        <file>qml/MuseScore/Inspector/text/textstylepopup/FrameSubPopup.qml</file>
         <file>qml/MuseScore/Inspector/notation/lyrics/LyricsSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/rests/RestBeamSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/rests/RestSettings.qml</file>
