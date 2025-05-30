@@ -649,6 +649,7 @@ void Chord::add(EngravingItem* e)
         break;
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     {
         Articulation* a = toArticulation(e);
         if (a->layoutCloseToNote()) {
@@ -765,6 +766,7 @@ void Chord::remove(EngravingItem* e)
     break;
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     {
         Articulation* a = toArticulation(e);
         if (!muse::remove(m_articulations, a)) {
@@ -1360,6 +1362,7 @@ EngravingItem* Chord::drop(EditData& data)
     switch (e->type()) {
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     {
         Articulation* atr = toArticulation(e);
         Articulation* oa = hasArticulation(atr);

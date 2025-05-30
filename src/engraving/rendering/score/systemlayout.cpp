@@ -1132,6 +1132,17 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                     elements.chordRests.push_back(cr);
                     if (cr->isChord()) {
                         elements.chords.push_back(toChord(cr));
+                        for (Articulation* art : toChord(cr)->articulations()) {
+                            if (art->isTapping()) {
+                                Tapping* tapp = toTapping(art);
+                                if (tapp->halfSlurAbove()) {
+                                    elements.slurs.push_back(tapp->halfSlurAbove());
+                                }
+                                if (tapp->halfSlurBelow()) {
+                                    elements.slurs.push_back(tapp->halfSlurBelow());
+                                }
+                            }
+                        }
                     }
                 }
                 ++track;

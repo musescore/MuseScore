@@ -208,6 +208,9 @@ enum class ElementType : unsigned char {
     HAMMER_ON_PULL_OFF,
     HAMMER_ON_PULL_OFF_SEGMENT,
     HAMMER_ON_PULL_OFF_TEXT,
+    TAPPING,
+    TAPPING_HALF_SLUR,
+    TAPPING_HALF_SLUR_SEGMENT,
 
     ROOT_ITEM,
     DUMMY,
@@ -938,6 +941,24 @@ enum class SlurStyleType : signed char {
     Dotted,
     Dashed,
     WideDashed
+};
+
+enum class TappingHand {
+    INVALID = -1,
+    LEFT,
+    RIGHT,
+};
+
+enum class LHTappingSymbol : unsigned char {
+    NONE,
+    DOT,
+    CIRCLED_T,
+};
+
+enum class RHTappingSymbol : unsigned char {
+    NONE,
+    T,
+    PLUS,
 };
 
 struct InstrumentTrackId {

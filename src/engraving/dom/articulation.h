@@ -110,7 +110,7 @@ public:
     Articulation(const Articulation&) = default;
     Articulation& operator=(const Articulation&) = delete;
 
-    Articulation* clone() const override { return new Articulation(*this); }
+    virtual Articulation* clone() const override { return new Articulation(*this); }
 
     double mag() const override;
 

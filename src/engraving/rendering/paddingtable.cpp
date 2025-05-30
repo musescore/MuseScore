@@ -271,4 +271,9 @@ void PaddingTable::createTable(const MStyle& style)
     for (auto& elem : table) {
         elem[ElementType::FERMATA] = articulationAndFermataPadding;
     }
+
+    table[ElementType::TAPPING] = table[ElementType::ARTICULATION];
+    for (auto& elem : table) {
+        elem[ElementType::TAPPING] = elem[ElementType::ARTICULATION];
+    }
 }

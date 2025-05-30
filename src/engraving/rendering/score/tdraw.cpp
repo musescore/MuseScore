@@ -132,6 +132,7 @@
 #include "dom/systemlock.h"
 #include "dom/soundflag.h"
 
+#include "dom/tapping.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textbase.h"
@@ -371,6 +372,10 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
 
     case ElementType::TAB_DURATION_SYMBOL:  draw(item_cast<const TabDurationSymbol*>(item), painter);
+        break;
+    case ElementType::TAPPING:              draw(toTapping(item), painter);
+        break;
+    case ElementType::TAPPING_HALF_SLUR_SEGMENT: draw(toSlurSegment(item), painter);
         break;
     case ElementType::TEMPO_TEXT:           draw(item_cast<const TempoText*>(item), painter);
         break;
@@ -2627,6 +2632,9 @@ void TDraw::draw(const SlurSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
+    painter->save();
+    setMask(item, painter);
+
     Pen pen(item->curColor());
     double mag = item->staff() ? item->staff()->staffMag(item->slur()->tick()) : 1.0;
 
@@ -2663,6 +2671,8 @@ void TDraw::draw(const SlurSegment* item, Painter* painter)
     }
     painter->setPen(pen);
     painter->drawPath(item->ldata()->path());
+
+    painter->restore();
 }
 
 void TDraw::draw(const Spacer* item, Painter* painter)
@@ -3055,6 +3065,16 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter)
         }
     }
     painter->scale(imag, imag);
+}
+
+void TDraw::draw(const Tapping* item, muse::draw::Painter* painter)
+{
+    painter->setPen(item->curColor());
+    if (item->ldata()->symId != SymId::noSym) {
+        item->drawSymbol(item->ldata()->symId, painter, PointF(-0.5 * item->width(), 0.0));
+    } else {
+        drawTextBase(item->text(), painter);
+    }
 }
 
 void TDraw::draw(const TempoText* item, Painter* painter)

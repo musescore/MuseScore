@@ -28,7 +28,13 @@ HammerOnPullOffTappingPageModel::HammerOnPullOffTappingPageModel(QObject* parent
     : AbstractStyleDialogModel(parent, { StyleId::hopoShowOnStandardStaves,
                                          StyleId::hopoShowOnTabStaves,
                                          StyleId::hopoUpperCase,
-                                         StyleId::hopoShowAll })
+                                         StyleId::hopoShowAll,
+                                         StyleId::lhTappingSymbol,
+                                         StyleId::lhTappingShowHalfSlursOnNormalStave,
+                                         StyleId::lhTappingShowHalfSlursOnTab,
+                                         StyleId::lhTappingSlurTopAndBottomNoteOnTab,
+                                         StyleId::rhTappingSymbolNormalStave,
+                                         StyleId::rhTappingSymbolTab, })
 {
 }
 
@@ -50,4 +56,34 @@ StyleItem* HammerOnPullOffTappingPageModel::hopoUpperCase() const
 StyleItem* HammerOnPullOffTappingPageModel::hopoShowAll() const
 {
     return styleItem(StyleId::hopoShowAll);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::lhTappingSymbol() const
+{
+    return styleItem(StyleId::lhTappingSymbol);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::lhTappingShowHalfSlursOnNormalStave() const
+{
+    return styleItem(StyleId::lhTappingShowHalfSlursOnNormalStave);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::lhTappingShowHalfSlursOnTab() const
+{
+    return styleItem(StyleId::lhTappingShowHalfSlursOnTab);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::lhTappingSlurTopAndBottomNoteOnTab() const
+{
+    return styleItem(StyleId::lhTappingSlurTopAndBottomNoteOnTab);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::rhTappingSymbolNormalStave() const
+{
+    return styleItem(StyleId::rhTappingSymbolNormalStave);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::rhTappingSymbolTab() const
+{
+    return styleItem(StyleId::rhTappingSymbolTab);
 }

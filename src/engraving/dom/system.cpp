@@ -490,6 +490,7 @@ void System::add(EngravingItem* el)
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GUITAR_BEND_HOLD_SEGMENT:
     case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
+    case ElementType::TAPPING_HALF_SLUR_SEGMENT:
     {
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG

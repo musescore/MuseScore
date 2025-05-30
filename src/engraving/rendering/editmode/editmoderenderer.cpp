@@ -101,6 +101,7 @@ void EditModeRenderer::drawItem(EngravingItem* item, muse::draw::Painter* painte
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
     case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
+    case ElementType::TAPPING_HALF_SLUR_SEGMENT:
         drawSlurTieSegment(item_cast<SlurTieSegment*>(item), painter, ed, currentViewScaling);
         break;
     case ElementType::STAFF_TEXT:
