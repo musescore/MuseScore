@@ -60,6 +60,8 @@ void PropertyItem::resetToDefault()
 void PropertyItem::applyToStyle()
 {
     emit applyToStyleRequested(m_styleId, m_currentValue);
+
+    resetToDefault();
 }
 
 mu::engraving::Pid PropertyItem::propertyId() const
