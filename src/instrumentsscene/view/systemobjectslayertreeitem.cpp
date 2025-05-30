@@ -48,7 +48,7 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
         }
 
         if (title.isEmpty()) {
-            title = translatedSystemObjectsGroupName(group);
+            title = translatedSystemObjectsGroupCapitalizedName(group);
             continue;
         }
 
@@ -58,7 +58,7 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
             title += ", ";
         }
 
-        title += translatedSystemObjectsGroupName(group).toLower();
+        title += translatedSystemObjectsGroupName(group);
     }
 
     if (title.isEmpty()) {

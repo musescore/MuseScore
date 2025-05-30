@@ -37,7 +37,10 @@ public:
     static String toXml(const std::vector<string_idx_t>& v);
     static std::vector<string_idx_t> fromXml(const String& tag, const std::vector<string_idx_t>& def);
 
-    static const TranslatableString& userName(ElementType v, bool plural = false);
+    static const TranslatableString& userName(ElementType v);
+
+    // FIXME: bool plural is just wrong. Allow use of TranslatableString::translated(int) instead
+    static const TranslatableString& capitalizedUserName(ElementType v, bool plural = false);
 
     static AsciiStringView toXml(ElementType v);
     static ElementType fromXml(const AsciiStringView& tag, ElementType def, bool silent = false);
