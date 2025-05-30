@@ -1923,6 +1923,7 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         }
         return false;
     }
+    triggerLayout();
     return true;
 }
 
