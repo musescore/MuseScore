@@ -152,29 +152,42 @@ add_to_link_if_enabled(${MUE_BUILD_APPSHELL_MODULE} appshell)
 add_to_link_if_enabled(${MUE_BUILD_CONVERTER_MODULE} converter)
 add_to_link_if_enabled(${MUE_BUILD_PRINT_MODULE} print)
 
-if (MUE_BUILD_IMPORTEXPORT_MODULE)
-    list(APPEND LINK_LIB
-        iex_musicxml
-        iex_bb
-        iex_bww
-        iex_capella
-        iex_guitarpro
-        iex_midi
-        iex_musedata
-        iex_ove
-        iex_audioexport
-        iex_imagesexport
-        iex_mei
-    )
-
-    if (MUE_BUILD_VIDEOEXPORT_MODULE)
-        list(APPEND LINK_LIB iex_videoexport)
-    endif()
-else()
-    if (MUE_BUILD_IMAGESEXPORT_MODULE)
-        list(APPEND LINK_LIB iex_imagesexport)
-    endif()
-endif()
+if (MUE_BUILD_IMPEXP_BB_MODULE)
+    list(APPEND LINK_LIB iex_bb)
+endif ()
+if (MUE_BUILD_IMPEXP_BWW_MODULE)
+    list(APPEND LINK_LIB iex_bww)
+endif ()
+if (MUE_BUILD_IMPEXP_CAPELLA_MODULE)
+    list(APPEND LINK_LIB iex_capella)
+endif ()
+if (MUE_BUILD_IMPEXP_MIDI_MODULE)
+    list(APPEND LINK_LIB iex_midi)
+endif ()
+if (MUE_BUILD_IMPEXP_MUSEDATA_MODULE)
+    list(APPEND LINK_LIB iex_musedata)
+endif ()
+if (MUE_BUILD_IMPEXP_MUSICXML_MODULE)
+    list(APPEND LINK_LIB iex_musicxml)
+endif ()
+if (MUE_BUILD_IMPEXP_OVE_MODULE)
+    list(APPEND LINK_LIB iex_ove)
+endif ()
+if (MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE)
+    list(APPEND LINK_LIB iex_audioexport)
+endif ()
+if (MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE)
+    list(APPEND LINK_LIB iex_imagesexport)
+endif ()
+if (MUE_BUILD_IMPEXP_GUITARPRO_MODULE)
+    list(APPEND LINK_LIB iex_guitarpro)
+endif ()
+if (MUE_BUILD_IMPEXP_MEI_MODULE)
+    list(APPEND LINK_LIB iex_mei)
+endif ()
+if (MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE)
+    list(APPEND LINK_LIB iex_videoexport)
+endif ()
 
 set (MSCORE_APPEND_SRC)
 
