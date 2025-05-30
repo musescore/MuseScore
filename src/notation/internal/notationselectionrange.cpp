@@ -114,6 +114,12 @@ bool NotationSelectionRange::containsItem(const EngravingItem* item, engraving::
     return itemTrack >= selectionStartTrack && itemTrack < selectionEndTrack;
 }
 
+bool NotationSelectionRange::containsMultiNoteChords() const
+{
+    const mu::engraving::Selection& selection = score()->selection();
+    return selection.rangeContainsMultiNoteChords();
+}
+
 std::vector<const Part*> NotationSelectionRange::selectedParts() const
 {
     std::vector<const Part*> result;

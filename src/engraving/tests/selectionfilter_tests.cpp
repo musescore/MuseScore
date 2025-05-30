@@ -38,6 +38,7 @@ class Engraving_SelectionFilterTests : public ::testing::Test
 public:
     void testFilter(int idx, const SelectionFilterTypesVariant& type);
     void testFilterSpanner(int idx, const SelectionFilterTypesVariant& type);
+    void testNotesInChordsAction(void (*action)(Score*), const String& reference);
 };
 
 void Engraving_SelectionFilterTests::testFilter(int idx, const SelectionFilterTypesVariant& type)
@@ -208,4 +209,106 @@ TEST_F(Engraving_SelectionFilterTests, filterHairpin)
 TEST_F(Engraving_SelectionFilterTests, filterOrnament)
 {
     testFilter(23, ElementsSelectionFilterTypes::ORNAMENT);
+}
+
+/**
+ * @brief Engraving_VoiceSwitchingTests_notesInChordsDeleteRangeg
+ * @details Every five measures in this score, this test changes the "notes in chords" filter and performs
+ *          a range delete. The resultant score is checked against the expected reference.
+ */
+TEST_F(Engraving_SelectionFilterTests, notesInChordsDeleteRange)
+{
+    //! [GIVEN] A score with a mixture of chords, single notes, and tuplets...
+    MasterScore* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_notesinchords.mscx"));
+    ASSERT_TRUE(score);
+
+    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::ALL, false);
+
+    // Measures 1 to 5 - deselect bottom notes
+    //! [WHEN] Editing the selection filter and making a range selection over five measures...
+    MeasureBase* m1 = score->measure(0);
+    MeasureBase* m2 = score->measure(4);
+
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::ALL, true);
+    score->selectionFilter().setIncludeSingleNotes(true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::BOTTOM_NOTE, false);
+
+    score->deselectAll();
+    score->select(m1, SelectType::RANGE);
+    score->select(m2, SelectType::RANGE);
+
+    //! [WHEN] Performing a delete action...
+    score->cmdDeleteSelection();
+
+    // Measures 6 to 10 - deselect top notes and thirds
+    //! [WHEN] Editing the selection filter and making a range selection over five measures...
+    m1 = score->measure(5);
+    m2 = score->measure(9);
+
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::ALL, true);
+    score->selectionFilter().setIncludeSingleNotes(true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::TOP_NOTE, false);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::THIRD_NOTE, false);
+
+    score->deselectAll();
+    score->select(m1, SelectType::RANGE);
+    score->select(m2, SelectType::RANGE);
+
+    //! [WHEN] Performing a delete action...
+    score->cmdDeleteSelection();
+
+    // Measures 11 to 15 - deselect single notes
+    //! [WHEN] Editing the selection filter and making a range selection over five measures...
+    m1 = score->measure(10);
+    m2 = score->measure(14);
+
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::ALL, true);
+    score->selectionFilter().setIncludeSingleNotes(false);
+
+    score->deselectAll();
+    score->select(m1, SelectType::RANGE);
+    score->select(m2, SelectType::RANGE);
+
+    //! [WHEN] Performing a delete action...
+    score->cmdDeleteSelection();
+
+    // Measures 16 to 20 - select seconds and sixths
+    //! [WHEN] Editing the selection filter and making a range selection over five measures...
+    m1 = score->measure(15);
+    m2 = score->measure(19);
+
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::NONE, true);
+    score->selectionFilter().setIncludeSingleNotes(false);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::SECOND_NOTE, true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::SIXTH_NOTE, true);
+
+    score->deselectAll();
+    score->select(m1, SelectType::RANGE);
+    score->select(m2, SelectType::RANGE);
+
+    //! [WHEN] Performing a delete action...
+    score->cmdDeleteSelection();
+
+    // Measures 21 to 25 - select bottom notes, thirds, fourths, and top notes
+    //! [WHEN] Editing the selection filter and making a range selection over five measures...
+    m1 = score->measure(20);
+    m2 = score->measure(24);
+
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::NONE, true);
+    score->selectionFilter().setIncludeSingleNotes(false);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::BOTTOM_NOTE, true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::THIRD_NOTE, true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::FOURTH_NOTE, true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::TOP_NOTE, true);
+
+    score->deselectAll();
+    score->select(m1, SelectType::RANGE);
+    score->select(m2, SelectType::RANGE);
+
+    //! [WHEN] Performing a delete action...
+    score->cmdDeleteSelection();
+
+    //! [EXPECT] The result matches our expectations...
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"selectionfilter_notesinchords.mscx"),
+                                            SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_notesinchords_deleterange-ref.mscx")));
 }
