@@ -97,20 +97,7 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
         s->setBracketSpan(0, 0);
         s->setBarLineSpan(0);
     }
-    /// @todo This staffLines setting will move to wherever we parse staff styles
     /// @todo Need to intialize the staff type from presets?
-
-    // # of staff lines (only load if custom)
-    if (musxStaff->staffLines.has_value()) {
-        if (musxStaff->staffLines.value() != s->lines(eventTick)) {
-            s->setLines(eventTick, musxStaff->staffLines.value());
-        }
-    } else if (musxStaff->customStaff.has_value()) {
-        int customStaffSize = static_cast<int>(musxStaff->customStaff.value().size());
-        if (customStaffSize != s->lines(eventTick)) {
-            s->setLines(eventTick, customStaffSize);
-        }
-    }
 
     // barline vertical offsets relative to staff
     auto calcBarlineOffsetHalfSpaces = [](Evpu offset) -> int {
@@ -139,6 +126,9 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
     if (std::optional<ClefTypeList> defaultClefs = clefTypeListFromMusxStaff(musxStaff)) {
         s->setDefaultClefType(defaultClefs.value());
     } else {
+        // Finale has a "blank" clef type that is used for percussion staves. For now we emulate this
+        // at the beginning of the piece only.
+        /// @todo revisit how to handle blank clef types or changes to other clefs for things such as cues
         s->staffType(eventTick)->setGenClef(false);
     }
     m_score->appendStaff(s);
@@ -402,11 +392,97 @@ void FinaleParser::importClefs(const std::shared_ptr<others::InstrumentUsed>& mu
     }
 }
 
+bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<const musx::dom::others::StaffComposite>& currStaff)
+{
+    bool result = false;
+    if (currStaff->masks->negClef) {
+        staffType->setGenClef(!currStaff->hideClefs);
+        result = true;
+    }
+    if (currStaff->masks->negKey) {
+        staffType->setGenKeysig(!currStaff->hideKeySigs);
+        result = true;
+    }
+    if (currStaff->masks->negTime) {
+        staffType->setGenTimesig(!currStaff->hideTimeSigs);
+        result = true;
+    }
+    /// @todo all the rest of them
+    return result;
+}
+
 void FinaleParser::importStaffItems()
 {
     std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
+        // per staff style calculations
+        const std::shared_ptr<others::Staff>& rawStaff = m_doc->getOthers()->get<others::Staff>(m_currentMusxPartId, musxScrollViewItem->staffId);
+        IF_ASSERT_FAILED(rawStaff) {
+            logger()->logWarning(String(u"Unable to retrieve musx raw staff"), m_doc, musxScrollViewItem->staffId, 1);
+            return;
+        }
+        std::set<MeasCmper> styleChanges; // MuseScore style changes must occur on measure boundaries
+        styleChanges.emplace(1); // there is always a style change on the first measure.
+        if (rawStaff->hasStyles) {
+            std::vector<std::shared_ptr<others::StaffStyleAssign>> musxStyleChanges = m_doc->getOthers()->getArray<others::StaffStyleAssign>(m_currentMusxPartId, rawStaff->getCmper());
+            for (const auto& musxStyleChange : musxStyleChanges) {
+                styleChanges.emplace(musxStyleChange->startMeas);
+                if (std::optional<std::pair<MeasCmper, Edu>> nextLoc = musxStyleChange->nextLocation()) {  // staff style locations are global edus
+                    auto [nextMeas, nextEdu] = nextLoc.value();
+                    if (nextMeas == musxStyleChange->startMeas && nextMeas < MeasCmper(musxMeasures.size())) {
+                        styleChanges.emplace(nextMeas + 1);
+                    } else {
+                        styleChanges.emplace(nextMeas);
+                    }
+                }
+            }
+        }
+        for (MeasCmper measNum : styleChanges) {
+            Fraction currTick = muse::value(m_meas2Tick, measNum, Fraction(-1, 1));
+            Measure* measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
+            IF_ASSERT_FAILED(measure) {
+                logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, measNum);
+                return;
+            }
+            staff_idx_t staffIdx = muse::value(m_inst2Staff, musxScrollViewItem->staffId, muse::nidx);
+            Staff* staff = staffIdx != muse::nidx ? m_score->staff(staffIdx) : nullptr;
+            IF_ASSERT_FAILED(staff) {
+                logger()->logWarning(String(u"Unable to retrieve staff by idx"), m_doc, musxScrollViewItem->staffId, measNum);
+                return;
+            }
+            std::shared_ptr<const others::StaffComposite> currStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId, measNum, 0);
+            IF_ASSERT_FAILED(currStaff) {
+                logger()->logWarning(String(u"Unable to retrieve musx current staff"), m_doc, musxScrollViewItem->staffId, measNum);
+                return;
+            }
+            Fraction tick = measure->tick();
+            // # of staff lines (only load if changing)
+            if (currStaff->staffLines.has_value()) {
+                if (currStaff->staffLines.value() != staff->lines(tick)) {
+                    staff->setLines(tick, currStaff->staffLines.value());
+                }
+            } else if (currStaff->customStaff.has_value()) {
+                int customStaffSize = static_cast<int>(currStaff->customStaff.value().size());
+                if (customStaffSize != staff->lines(tick)) {
+                    staff->setLines(tick, customStaffSize);
+                }
+            }
+            StaffType* staffType = staff->staffType(tick);
+            IF_ASSERT_FAILED(staffType) {
+                logger()->logWarning(String(u"Unable to create MuseScore staff type"), m_doc, musxScrollViewItem->staffId, measNum);
+                return;
+            }
+            std::unique_ptr<StaffType> newStaffType;  // unique_ptr disposes of itself.
+            if (tick > Fraction(0, 1)) {
+                newStaffType = std::make_unique<StaffType>(*staffType);
+                staffType = newStaffType.get();
+            }
+            if (applyStaffSyles(staffType, currStaff) && tick > Fraction(0, 1)) {
+                staff->setStaffType(tick, *staffType);
+            }
+        }
+        // per measure calculations
         std::shared_ptr<TimeSignature> currMusxTimeSig;
         std::shared_ptr<KeySignature> currMusxKeySig;
         ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId);
@@ -466,6 +542,10 @@ void FinaleParser::importStaffItems()
                     KeyMode km = KeyMode::UNKNOWN;
                     if (musxKeySig->keyless) {
                         km = KeyMode::NONE;
+                    } else if (musxKeySig->isMajor()) {
+                        km = KeyMode::MAJOR;
+                    } else if (musxKeySig->isMinor()) {
+                        km = KeyMode::MINOR;
                     } else if (std::optional<music_theory::DiatonicMode> mode = musxKeySig->calcDiatonicMode()) {
                         km = FinaleTConv::keyModeFromDiatonicMode(mode.value());
                     }

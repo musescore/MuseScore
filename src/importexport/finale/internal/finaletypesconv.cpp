@@ -1032,12 +1032,12 @@ KeyMode FinaleTConv::keyModeFromDiatonicMode(music_theory::DiatonicMode diatonic
 {
     using DiatonicMode = music_theory::DiatonicMode;
     static const std::unordered_map<music_theory::DiatonicMode, KeyMode> keyModeTypeTable = {
-        { DiatonicMode::Ionian,             KeyMode::MAJOR },
+        { DiatonicMode::Ionian,             KeyMode::IONIAN },
         { DiatonicMode::Dorian,             KeyMode::DORIAN },
         { DiatonicMode::Phrygian,           KeyMode::PHRYGIAN },
         { DiatonicMode::Lydian,             KeyMode::LYDIAN },
         { DiatonicMode::Mixolydian,         KeyMode::MIXOLYDIAN },
-        { DiatonicMode::Aeolian,            KeyMode::MINOR },
+        { DiatonicMode::Aeolian,            KeyMode::AEOLIAN },
         { DiatonicMode::Locrian,            KeyMode::LOCRIAN },
     };
     return muse::value(keyModeTypeTable, diatonicMode, KeyMode::UNKNOWN);
