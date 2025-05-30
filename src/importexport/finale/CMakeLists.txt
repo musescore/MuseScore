@@ -21,6 +21,12 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(musx)
 
+if (CC_IS_MSVC)
+    include(FindZlibStatic)
+    set(Z_INCLUDE ${DEPENDENCIES_INC}/zlib)
+    list(APPEND MODULE_INCLUDE_PRIVATE ${Z_INCLUDE})
+endif ()
+
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/third_party/score_encoder.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationfinalereader.cpp
