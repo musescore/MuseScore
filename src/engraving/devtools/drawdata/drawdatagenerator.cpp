@@ -32,6 +32,7 @@
 #include "engraving/rw/mscloader.h"
 #include "engraving/dom/masterscore.h"
 
+// #include "app_config.h"
 // #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
 // #include "importexport/guitarpro/internal/guitarproreader.h"
 // #endif

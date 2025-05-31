@@ -186,6 +186,8 @@ public:
     static void layout(GuitarBend* item, const Context& ctx);
 
     static void layout(Hairpin* item, const Context& ctx);
+    static void layout(HammerOnPullOff* item, const Context& ctx);
+    static void layout(HammerOnPullOffSegment* item, const Context& ctx);
     static void layout(HarpPedalDiagram* item, const Context& ctx);
 
     static void layout(Image* item, const Context& ctx);

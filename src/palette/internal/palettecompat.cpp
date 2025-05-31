@@ -32,6 +32,7 @@
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/expression.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/fret.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/score.h"
@@ -113,6 +114,11 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
         addNewLineItems(palette);
         return;
     }
+
+    if (palette.type() == Palette::Type::FretboardDiagram) {
+        addNewFretboardDiagramItems(palette, paletteScore);
+        return;
+    }
 }
 
 void PaletteCompat::removeOldItemsIfNeeded(Palette& palette)
@@ -189,6 +195,27 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette)
     if (!containsNoteAnchoredLine) {
         int defaultPosition = std::min(20, linesPalette.cellsCount());
         linesPalette.insertActionIcon(defaultPosition, ActionIconType::NOTE_ANCHORED_LINE, "add-noteline", 2);
+    }
+}
+
+void PaletteCompat::addNewFretboardDiagramItems(Palette& fretboardDiagramPalette, engraving::Score* paletteScore)
+{
+    bool containsBlankItem = false;
+    for (const PaletteCellPtr& cell : fretboardDiagramPalette.cells()) {
+        const ElementPtr element = cell->element;
+        if (!element) {
+            continue;
+        }
+
+        if (element->isFretDiagram() && toFretDiagram(element.get())->harmonyText().empty()) {
+            containsBlankItem = true;
+        }
+    }
+
+    if (!containsBlankItem) {
+        auto fret = Factory::makeFretDiagram(paletteScore->dummy()->segment());
+        fret->clear();
+        fretboardDiagramPalette.insertElement(0, fret, muse::TranslatableString("palette", "Blank"));
     }
 }
 

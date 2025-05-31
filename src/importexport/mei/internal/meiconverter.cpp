@@ -1074,6 +1074,9 @@ void Convert::dirFromMEI(engraving::TextBase* textBase, const StringList& meiLin
     // @type
     // already process in Convert::elementTypeFor called for determining the factory to call in MeiImporter
 
+    // @color
+    Convert::colorFromMEI(textBase, meiDir);
+
     // text
     textBase->setXmlText(meiLines.join(u"\n"));
 }
@@ -1139,6 +1142,9 @@ libmei::Dir Convert::dirToMEI(const engraving::TextBase* textBase, StringList& m
         }
         meiDir.SetType(dirType);
     }
+
+    // @color
+    Convert::colorToMEI(textBase, meiDir);
 
     // text content - only split lines
     meiLines = String(textBase->plainText()).split(u"\n");
@@ -1449,9 +1455,10 @@ void Convert::fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm&
 {
     warning = false;
 
-    UNUSED(figuredBass);
-    UNUSED(meiHarm);
     UNUSED(meiFb);
+
+    // @color
+    Convert::colorFromMEI(figuredBass, meiHarm);
 }
 
 std::pair<libmei::Harm, libmei::Fb> Convert::fbToMEI(const engraving::FiguredBass* figuredBass)
@@ -1459,7 +1466,8 @@ std::pair<libmei::Harm, libmei::Fb> Convert::fbToMEI(const engraving::FiguredBas
     libmei::Harm meiHarm;
     libmei::Fb meiFb;
 
-    UNUSED(figuredBass);
+    // @color
+    Convert::colorToMEI(figuredBass, meiHarm);
 
     return { meiHarm, meiFb };
 }
@@ -3102,6 +3110,9 @@ void Convert::tempoFromMEI(engraving::TempoText* tempoText, const StringList& me
         tempoText->setFollowText(true);
     }
 
+    // @color
+    Convert::colorFromMEI(tempoText, meiTempo);
+
     // text
     tempoText->setXmlText(meiLines.join(u"\n"));
 }
@@ -3130,6 +3141,9 @@ libmei::Tempo Convert::tempoToMEI(const engraving::TempoText* tempoText, StringL
 
     // @staff
     Convert::staffIdentToMEI(tempoText, meiTempo);
+
+    // @color
+    Convert::colorToMEI(tempoText, meiTempo);
 
     return meiTempo;
 }

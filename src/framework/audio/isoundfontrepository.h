@@ -24,7 +24,6 @@
 
 #include "modularity/imoduleinterface.h"
 
-#include "global/types/ret.h"
 #include "global/async/notification.h"
 
 #include "soundfonttypes.h"
@@ -41,7 +40,7 @@ public:
     virtual const synth::SoundFontsMap& soundFonts() const = 0;
     virtual async::Notification soundFontsChanged() const = 0;
 
-    virtual Ret addSoundFont(const synth::SoundFontPath& path) = 0;
+    virtual void addSoundFont(const synth::SoundFontPath& path) = 0;
 };
 }
 

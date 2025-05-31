@@ -31,6 +31,11 @@ SOFTWARE.
 #include "async.h"
 
 namespace kors::async {
+enum class PromiseType {
+    AsyncByPromise,
+    AsyncByBody
+};
+
 template<typename ... T>
 class Promise;
 template<typename ... T>
@@ -39,9 +44,10 @@ class Promise
 public:
     struct Result;
 
-
     struct Resolve
     {
+        Resolve() = default;
+
         Resolve(Promise<T...> _p)
             : p(_p) {}
 
@@ -57,6 +63,8 @@ public:
 
     struct Reject
     {
+        Reject() = default;
+
         Reject(Promise<T...> _p)
             : p(_p) {}
 
@@ -85,27 +93,21 @@ public:
         friend struct Reject;
     };
 
+    using Body = std::function<Result (Resolve, Reject)>;
 
-    enum class AsynchronyType {
-        ProvidedByPromise,
-        ProvidedByBody
-    };
-
-    using Body = std::function<Result(Resolve, Reject)>;
-
-    Promise(Body body, AsynchronyType type)
+    Promise(Body body, PromiseType type)
     {
         Resolve res(*this);
         Reject rej(*this);
 
         switch (type) {
-        case AsynchronyType::ProvidedByPromise:
+        case PromiseType::AsyncByPromise:
             Async::call(nullptr, [res, rej](Body body) mutable {
                 body(res, rej);
             }, body);
             break;
 
-        case AsynchronyType::ProvidedByBody:
+        case PromiseType::AsyncByBody:
             body(res, rej);
             break;
         }
@@ -251,6 +253,12 @@ private:
 
     mutable std::shared_ptr<PromiseInvoker> m_ptr = nullptr;
 };
+
+template<typename ... T>
+inline Promise<T...> make_promise(typename Promise<T...>::Body f, PromiseType type = PromiseType::AsyncByPromise)
+{
+    return Promise<T...>(f, type);
+}
 }
 
 #endif // KORS_ASYNC_PROMISE_H

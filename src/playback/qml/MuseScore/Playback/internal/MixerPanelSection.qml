@@ -78,7 +78,7 @@ Loader {
             anchors.top: parent.top
             anchors.topMargin: root.spacingAbove
             width: contentItem.childrenRect.width
-            height: contentHeight
+            height: Math.max(1, contentHeight) // HACK: if the height is 0, the listview won't create any delegates
             contentHeight: contentItem.childrenRect.height
 
             interactive: false

@@ -122,6 +122,9 @@ class GradualTempoChange;
 
 class HairpinSegment;
 class Hairpin;
+class HammerOnPullOff;
+class HammerOnPullOffSegment;
+class HammerOnPullOffText;
 class HarmonicMarkSegment;
 
 class LedgerLine;
@@ -247,6 +250,9 @@ public:
 
     static void layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx);
     static void layoutHairpin(Hairpin* item, LayoutContext& ctx);
+    static void layoutHammerOnPullOff(HammerOnPullOff* item, LayoutContext& ctx);
+    static void layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutContext& ctx);
+    static void layoutHammerOnPullOffText(HammerOnPullOffText* item, LayoutContext& ctx);
     static void fillHairpinSegmentShape(const HairpinSegment* item, HairpinSegment::LayoutData* ldata);
     static void layoutHarpPedalDiagram(const HarpPedalDiagram* item, HarpPedalDiagram::LayoutData* ldata);
     static void layoutHarmonicMarkSegment(HarmonicMarkSegment* item, LayoutContext& ctx);

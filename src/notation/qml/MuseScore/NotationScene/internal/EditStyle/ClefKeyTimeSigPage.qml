@@ -301,6 +301,7 @@ StyledFlickable {
                                     measureUnitsSymbol: 'x'
                                     prefixIcon: IconCode.HORIZONTAL
                                     minValue: 1.0
+                                    step: 0.25
 
                                     currentValue: root.timeSigScale.value.width
                                     onValueEdited: function(newValue) {
@@ -318,6 +319,7 @@ StyledFlickable {
                                     measureUnitsSymbol: 'x'
                                     prefixIcon: IconCode.VERTICAL
                                     minValue: 1.0
+                                    step: 0.25
 
                                     currentValue: root.timeSigScale.value.height
                                     onValueEdited: function(newValue) {

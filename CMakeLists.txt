@@ -128,6 +128,7 @@ set(QT_ADD_LINGUISTTOOLS ON)
 set(QT_ADD_CONCURRENT ON)
 set(QT_ADD_WEBSOCKET OFF)
 set(QT_QPROCESS_SUPPORTED ON)
+set(QT_CONCURRENT_SUPPORTED ON)
 
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake")
     include(${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake)
@@ -186,11 +187,6 @@ add_subdirectory(src)
 
 if (OS_IS_LIN)
     include(packaging/Linux+BSD/SetupAppImagePackaging)
-
-target_sources(manpages
-  PRIVATE
-    share/autobotscripts/steps/Home.js
-)
 endif(OS_IS_LIN)
 
 if (OS_IS_WIN)

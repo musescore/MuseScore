@@ -437,6 +437,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "&Implode"),
              TranslatableString("action", "Implode")
              ),
+    UiAction("add-fretboard-diagram",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Add &fretboard diagram"),
+             TranslatableString("action", "Add fretboard diagram"),
+             IconCode::Code::FRETBOARD_DIAGRAM
+             ),
     UiAction("realize-chord-symbols",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -2518,6 +2525,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Slight bend"),
              IconCode::Code::GUITAR_SLIGHT_BEND
              ),
+    UiAction("hammer-on-pull-off",
+             mu::context::UiCtxProjectFocused,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Hammer-on/pull-off"),
+             TranslatableString("action", "Add hammer-on/pull-off")
+             )
 };
 
 const UiActionList NotationUiActions::m_scoreConfigActions = {

@@ -47,6 +47,7 @@
       <lhGuitarFingeringFontSize>10.25</lhGuitarFingeringFontSize>
       <rhGuitarFingeringFontFace>Times New Roman</rhGuitarFingeringFontFace>
       <rhGuitarFingeringFontSize>10.25</rhGuitarFingeringFontSize>
+      <hammerOnPullOffTappingFontFace>Times New Roman</hammerOnPullOffTappingFontFace>
       <stringNumberFontFace>Times New Roman</stringNumberFontFace>
       <stringNumberFontSize>10.25</stringNumberFontSize>
       <stringTuningsFontSize>10.25</stringTuningsFontSize>

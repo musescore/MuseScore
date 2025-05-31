@@ -309,7 +309,7 @@ RetVal<Val> AbstractCloudService::ensureAuthorization(bool publishingScore, cons
     query.addParam("text", Val(text));
     query.addParam("cloudCode", Val(cloudInfo().code));
     query.addParam("publishingScore", Val(publishingScore));
-    return interactive()->open(query);
+    return interactive()->openSync(query);
 }
 
 ValCh<bool> AbstractCloudService::userAuthorized() const

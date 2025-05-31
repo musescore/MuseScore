@@ -87,6 +87,10 @@ if(QT_ADD_WEBSOCKET)
     list(APPEND QT_LIBRARIES Qt::WebSockets)
 endif()
 
+if (OS_IS_WASM)
+    set(QT_WASM_EXTRA_EXPORTED_METHODS ccall)
+endif()
+
 find_package(Qt6 6.2 REQUIRED COMPONENTS ${qt_components})
 
 include(QtInstallPaths)
@@ -99,11 +103,6 @@ else()
     set(CMAKE_AUTOUIC ON)
     set(CMAKE_AUTOMOC ON)
     set(CMAKE_AUTORCC ON)
-endif()
-
-if (CC_IS_EMCC)
-    # see SetupBuildEnvironment.cmake
-    set_target_properties(Qt6::Platform PROPERTIES INTERFACE_LINK_OPTIONS "${EMCC_LINKER_FLAGS}")
 endif()
 
 if (QT_IS_STATIC)

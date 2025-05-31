@@ -199,6 +199,7 @@ public:
     void addLaissezVibToSelection() override;
     void addTiedNoteToChord() override;
     void addSlurToSelection() override;
+    void addHammerOnPullOffToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinOnGripDrag(engraving::EditData& ed, bool isLeftGrip) override;
     void addHairpinsToSelection(HairpinType type) override;
@@ -297,6 +298,9 @@ public:
 
     muse::Ret canAddGuitarBend() const override;
     void addGuitarBend(GuitarBendType bendType) override;
+
+    muse::Ret canAddFretboardDiagram() const override;
+    void addFretboardDiagram() override;
 
     void toggleBold() override;
     void toggleItalic() override;
@@ -416,6 +420,8 @@ private:
     bool prepareDropTimeAnchorElement(const muse::PointF& pos);
     bool dropCanvas(EngravingItem* e);
     void resetDropData();
+
+    void doFinishAddFretboardDiagram();
 
     bool selectInstrument(mu::engraving::InstrumentChange* instrumentChange);
     void cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const;

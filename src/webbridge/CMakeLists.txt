@@ -18,12 +18,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(wasmtest)
+declare_module(webbridge)
 
 set(MODULE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/wasmtestmodule.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/wasmtestmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/webbridgemodule.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/webbridgemodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/webapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/webapi.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/memfilesystem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/memfilesystem.h
     )
 
 setup_module()
-

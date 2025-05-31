@@ -115,11 +115,12 @@ private:
     void chordTie();
     void addLaissezVib();
     void addSlur();
+    void addHammerOnPullOff();
     void addFret(int num);
 
     void insertClef(mu::engraving::ClefType type);
 
-    muse::IInteractive::Result showErrorMessage(const std::string& message) const;
+    muse::async::Promise<muse::IInteractive::Result> showErrorMessage(const std::string& message);
 
     bool isElementsSelected(const std::vector<ElementType>& elementsTypes) const;
 
@@ -127,6 +128,7 @@ private:
     void addImage();
     void addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);
+    void addFretboardDiagram();
 
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();

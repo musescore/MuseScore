@@ -1117,7 +1117,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="367"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>켜기</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="372"/>
@@ -3792,13 +3792,13 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5993"/>
         <source>Use H-bar</source>
-        <translation type="unfinished"/>
+        <translation>H-bar 사용</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6003"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6006"/>
         <source>Number layout</source>
-        <translation type="unfinished"/>
+        <translation>숫자 레이아웃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6074"/>
@@ -4870,7 +4870,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14039"/>
         <source>Simple</source>
-        <translation type="unfinished"/>
+        <translation>쉬움</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14160"/>
@@ -5114,7 +5114,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="851"/>
         <source>Show number ‘1’</source>
-        <translation type="unfinished"/>
+        <translation>숫자&apos;1&apos; 보기</translation>
     </message>
 </context>
 <context>
@@ -12591,22 +12591,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1232"/>
         <source>Tab. 7-str. simple</source>
-        <translation type="unfinished"/>
+        <translation>7줄 타브 쉬움</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1233"/>
         <source>Tab. 8-str. simple</source>
-        <translation type="unfinished"/>
+        <translation>8줄 타브 쉬움</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1234"/>
         <source>Tab. 9-str. simple</source>
-        <translation type="unfinished"/>
+        <translation>9줄 타브 쉬움</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1235"/>
         <source>Tab. 10-str. simple</source>
-        <translation type="unfinished"/>
+        <translation>10줄 타브 쉬움</translation>
     </message>
     <message>
         <location filename="../../src/engraving/rw/read400/measurerw.cpp" line="94"/>
@@ -19465,7 +19465,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="127"/>
         <source>On</source>
         <extracomment>as opposed to Off</extracomment>
-        <translation type="unfinished"/>
+        <translation>켜기</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/Muse/UiComponents/StyledToolBarItem.qml" line="66"/>
@@ -22511,7 +22511,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="201"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="206"/>
         <source>On</source>
-        <translation type="unfinished"/>
+        <translation>켜기</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml" line="197"/>

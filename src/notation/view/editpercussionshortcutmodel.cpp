@@ -101,7 +101,7 @@ bool EditPercussionShortcutModel::trySave()
     const QString headerText = qtrc("shortcuts", "Reassign shortcut for <b>%1</b>").arg(originTitle);
     const IInteractive::Text text(getConflictWarningText().toStdString(), IInteractive::TextFormat::RichText);
 
-    const IInteractive::Button btn = interactive()->warning(headerText.toStdString(), text, {
+    const IInteractive::Button btn = interactive()->warningSync(headerText.toStdString(), text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         interactive()->buttonData(IInteractive::Button::Ok)
     }, (int)IInteractive::Button::Ok).standardButton();

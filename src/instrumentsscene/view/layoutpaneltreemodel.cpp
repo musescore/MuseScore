@@ -1000,7 +1000,7 @@ bool LayoutPanelTreeModel::warnAboutRemovingInstrumentsIfNecessary(int count)
         return true;
     }
 
-    return interactive()->warning(
+    return interactive()->warningSync(
         muse::trc("layoutpanel", "Are you sure you want to delete the selected instrument(s)?", nullptr, count),
         muse::trc("layoutpanel", "This will remove the instrument(s) from the full score and all part scores.", nullptr, count),
         { IInteractive::Button::No, IInteractive::Button::Yes }

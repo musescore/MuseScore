@@ -31,6 +31,8 @@
 #include "multiinstances/resourcelockguard.h"
 #endif
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace muse;

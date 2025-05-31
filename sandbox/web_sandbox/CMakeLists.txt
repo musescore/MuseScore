@@ -65,10 +65,10 @@ endif()
 
 #set_target_properties(Qt6::Platform PROPERTIES INTERFACE_LINK_OPTIONS "${EMCC_LINKER_FLAGS}")
 
-get_target_property(EMCC_LINKER_FLAGS Qt6::Platform INTERFACE_LINK_OPTIONS)
-#message(STATUS "${EMCC_LINKER_FLAGS}")
-set(EMCC_LINKER_FLAGS "SHELL:-s ASYNCIFY;${EMCC_LINKER_FLAGS}")
-set_target_properties(Qt6::Platform PROPERTIES INTERFACE_LINK_OPTIONS "${EMCC_LINKER_FLAGS}")
+# get_target_property(EMCC_LINKER_FLAGS Qt6::Platform INTERFACE_LINK_OPTIONS)
+# message(STATUS "${EMCC_LINKER_FLAGS}")
+# set(EMCC_LINKER_FLAGS "SHELL:-s ASYNCIFY;SHELL:-s ASYNCIFY_STACK_SIZE=1048576;${EMCC_LINKER_FLAGS}")
+# set_target_properties(Qt6::Platform PROPERTIES INTERFACE_LINK_OPTIONS "${EMCC_LINKER_FLAGS}")
 
 include_directories(appweb_sandbox PUBLIC
     ${qt_includes}
@@ -110,6 +110,8 @@ qt_add_qml_module(appweb_sandbox
     QML_FILES Main.qml
     SOURCES interactivetestmodel.h interactivetestmodel.cpp
 )
+
+target_link_options(appweb_sandbox PUBLIC -sASYNCIFY -Os)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

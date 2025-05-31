@@ -419,6 +419,17 @@ Segment* LineSegment::findNewAnchorSegment(const EditData& ed, const Segment* cu
             return curSeg->prev1WithElemsOnStaff(staffIdx());
         }
         if (ed.key == Key_Right) {
+            Segment* lastCRSegInScore = score()->lastSegment();
+            while (lastCRSegInScore && !lastCRSegInScore->isChordRestType()) {
+                lastCRSegInScore = lastCRSegInScore->prev1(SegmentType::ChordRest);
+            }
+            if (curSeg == lastCRSegInScore && curSeg == line()->endSegment()) {
+                // If we reach this point, it means that the line in question does not accept time anchors
+                // and that the line's end segment is the last CR segment in the score. Trying to use
+                // next1WithElemsOnStaff won't do anything from here, but the last segment in the score is
+                // still a valid new anchor segment for this line (see also LineSegment::edit)...
+                return score()->lastSegment();
+            }
             return curSeg->next1WithElemsOnStaff(staffIdx());
         }
     }
@@ -478,6 +489,15 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     Segment* seg = nullptr;   // don't prefer any segment while searching line position
     staff_idx_t staffIndex = oldStaffIndex;
     score()->dragPosition(pos, &staffIndex, &seg, spacingFactor, allowTimeAnchor());
+
+    // Lines that don't allow time anchors can anchor to the last segment in the score (see also LineSegment::findNewAnchorSegment)
+    if (seg && !allowTimeAnchor() && grip == Grip::END) {
+        Segment* last = score()->lastSegment();
+        const bool lastSegIsClosest = std::abs(last->canvasX() - pos.x()) < std::abs(seg->canvasX() - pos.x());
+        if (lastSegIsClosest) {
+            return last;
+        }
+    }
 
     return seg;
 }

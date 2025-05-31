@@ -4,6 +4,7 @@
 #include "internal/consoleapp.h"
 
 #include "muse_framework_config.h"
+#include "app_config.h"
 
 #ifdef MUSE_MODULE_ACCESSIBILITY
 #include "framework/accessibility/accessibilitymodule.h"
@@ -199,9 +200,9 @@
 #include "stubs/project/projectstubmodule.h"
 #endif
 
-// #ifdef Q_OS_WASM
-// #include "wasmtest/wasmtestmodule.h"
-// #endif
+#ifdef Q_OS_WASM
+#include "webbridge/webbridgemodule.h"
+#endif
 
 using namespace muse;
 using namespace mu::app;
@@ -323,9 +324,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
 
-// #ifdef Q_OS_WASM
-//     app->addModule(new mu::wasmtest::WasmTestModule());
-// #endif
+#ifdef Q_OS_WASM
+    app->addModule(new mu::webbridge::WebBridgeModule());
+#endif
 
     return app;
 }

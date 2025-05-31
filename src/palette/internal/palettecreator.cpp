@@ -51,6 +51,7 @@
 #include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/jump.h"
@@ -1603,8 +1604,8 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
         sp->appendElement(meaNum, QT_TRANSLATE_NOOP("palette", "Measure number"))->setElementTranslated(true);
 
         static const std::vector<PlayTechAnnotationInfo> playTechAnnotationsMaster = {
-            { QT_TRANSLATE_NOOP("palette", "détaché"),   PlayingTechniqueType::Detache },
-            { QT_TRANSLATE_NOOP("palette", "martelé"),   PlayingTechniqueType::Martele },
+            { QT_TRANSLATE_NOOP("palette", "dÃ©tachÃ©"),   PlayingTechniqueType::Detache },
+            { QT_TRANSLATE_NOOP("palette", "martelÃ©"),   PlayingTechniqueType::Martele },
             { QT_TRANSLATE_NOOP("palette", "col legno"), PlayingTechniqueType::ColLegno },
             { QT_TRANSLATE_NOOP("palette", "sul pont."), PlayingTechniqueType::SulPonticello },
             { QT_TRANSLATE_NOOP("palette", "sul tasto"), PlayingTechniqueType::SulTasto },
@@ -1702,6 +1703,8 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     };
 
     static const std::vector<FretDiagramInfo> fretboardDiagrams = {
+        { u"------", u"",  muse::TranslatableString("palette", "Blank") },
+
         { u"X32O1O", u"C",  muse::TranslatableString("palette", "C") },
         { u"X-554-", u"Cm", muse::TranslatableString("palette", "Cm") },
         { u"X3231O", u"C7", muse::TranslatableString("palette", "C7") },
@@ -1734,6 +1737,11 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     for (const FretDiagramInfo& fretboardDiagram : fretboardDiagrams) {
         auto fret = FretDiagram::createFromString(gpaletteScore, fretboardDiagram.diagram);
         fret->setHarmony(fretboardDiagram.harmony);
+
+        if (fretboardDiagram.harmony.empty()) {
+            fret->clear();
+        }
+
         sp->appendElement(fret, fretboardDiagram.userName);
     }
 
@@ -1755,7 +1763,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     capoLine->setLen(w);
     capoLine->setBeginText(u"VII");
     capoLine->setEndHookType(HookType::HOOK_90);
-    sp->appendElement(capoLine, QT_TRANSLATE_NOOP("palette", "Barré line"), 0.8);
+    sp->appendElement(capoLine, QT_TRANSLATE_NOOP("palette", "BarrÃ© line"), 0.8);
 
     auto pm = makeElement<PalmMute>(gpaletteScore);
     pm->setLen(w);
@@ -1818,6 +1826,9 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         f->setXmlText(QString(finger[i]));
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "String number %1"));
     }
+
+    auto hopo = Factory::makeHammerOnPullOff(gpaletteScore->dummy());
+    sp->appendElement(hopo, QT_TRANSLATE_NOOP("palette", "Hammer-on / pull-off"), 0.8);
 
     static const SymIdList luteSymbols {
         SymId::stringsThumbPosition,

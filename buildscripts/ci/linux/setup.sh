@@ -62,6 +62,7 @@ apt_packages=(
   desktop-file-utils # installs `desktop-file-validate` for appimagetool
   gawk
   git
+  lcov
   libasound2-dev
   libcups2-dev
   libfontconfig1-dev

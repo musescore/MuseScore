@@ -27,6 +27,7 @@
 
 #include "global/modularity/ioc.h"
 #include "global/iinteractive.h"
+#include "global/async/asyncable.h"
 
 namespace muse::extensions::apiv1 {
 class StandardButton
@@ -40,7 +41,7 @@ public:
     Q_ENUM(Button)
 };
 
-class MessageDialog : public QObject, public Injectable
+class MessageDialog : public QObject, public Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)

@@ -1966,6 +1966,7 @@ void Timeline::drawSelection()
             case ElementType::SLUR_SEGMENT:
             case ElementType::TIE:
             case ElementType::SLUR:
+            case ElementType::HAMMER_ON_PULL_OFF:
                 continue;
                 break;
             default: break;

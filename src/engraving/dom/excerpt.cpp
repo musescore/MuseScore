@@ -730,15 +730,31 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
     ns->styleChanged();
 }
 
-static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* m, track_idx_t track)
+static void updateSpatium(void* oldElement, EngravingItem* newElement)
 {
+    double oldSpatium = static_cast<EngravingItem*>(oldElement)->spatium();
+    double newSpatium = newElement->spatium();
+    if (!muse::RealIsEqual(oldSpatium, newSpatium)) {
+        newElement->spatiumChanged(oldSpatium, newSpatium);
+    }
+}
+
+static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& tupletMap, Measure* nm, track_idx_t track)
+{
+    const auto handleTuplet = [&](Tuplet* tuplet) {
+        tuplet->clear();
+        tuplet->setTrack(track);
+        tuplet->setParent(nm);
+        tuplet->styleChanged();
+        tuplet->scanElements(ot, updateSpatium);
+    };
+
     ot->setTrack(ocr->track());
+
     Tuplet* nt = tupletMap.findNew(ot);
-    if (nt == 0) {
+    if (!nt) {
         nt = toTuplet(ot->linkedClone());
-        nt->setTrack(track);
-        nt->setParent(m);
-        nt->setScore(ncr->score());
+        handleTuplet(nt);
         tupletMap.add(ot, nt);
 
         Tuplet* nt1 = nt;
@@ -746,9 +762,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
             Tuplet* nt2 = tupletMap.findNew(ot->tuplet());
             if (nt2 == 0) {
                 nt2 = toTuplet(ot->tuplet()->linkedClone());
-                nt2->setTrack(track);
-                nt2->setParent(m);
-                nt2->setScore(ncr->score());
+                handleTuplet(nt2);
                 tupletMap.add(ot->tuplet(), nt2);
             }
             nt2->add(nt1);
@@ -1493,15 +1507,6 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         score->undoAddElement(element, false /*addToLinkedStaves*/);
     };
 
-    auto updateSpatium = [](void* oldElement, EngravingItem* newElement)
-    {
-        double oldSpatium = static_cast<EngravingItem*>(oldElement)->spatium();
-        double newSpatium = newElement->spatium();
-        if (!muse::RealIsEqual(oldSpatium, newSpatium)) {
-            newElement->spatiumChanged(oldSpatium, newSpatium);
-        }
-    };
-
     for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
@@ -1587,21 +1592,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 if (oe->isChordRest()) {
                     ChordRest* ocr = toChordRest(oe);
                     ChordRest* ncr = toChordRest(ne);
-                    Tuplet* ot     = ocr->tuplet();
+                    Tuplet* ot = ocr->tuplet();
                     if (ot) {
-                        Tuplet* nt = tupletMap.findNew(ot);
-                        if (nt == 0) {
-                            // nt = new Tuplet(*ot);
-                            nt = toTuplet(ot->linkedClone());
-                            nt->clear();
-                            nt->setTrack(dstTrack);
-                            nt->setParent(nm);
-                            nt->styleChanged();
-                            nt->scanElements(ot, updateSpatium);
-                            tupletMap.add(ot, nt);
-                        }
-                        ncr->setTuplet(nt);
-                        nt->add(ncr);
+                        cloneTuplets(ocr, ncr, ot, tupletMap, nm, dstTrack);
                     }
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);

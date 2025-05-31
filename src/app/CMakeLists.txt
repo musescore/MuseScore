@@ -152,7 +152,6 @@ add_to_link_if_enabled(${MUE_BUILD_APPSHELL_MODULE} appshell)
 add_to_link_if_enabled(${MUE_BUILD_CONVERTER_MODULE} converter)
 add_to_link_if_enabled(${MUE_BUILD_PRINT_MODULE} print)
 
-
 if (MUE_BUILD_IMPORTEXPORT_MODULE)
     list(APPEND LINK_LIB
         iex_musicxml
@@ -183,6 +182,10 @@ if (OS_IS_WIN)
     list(APPEND MSCORE_APPEND_SRC ${WINDOWS_ICONS_RC})
 endif()
 
+if (OS_IS_WASM)
+    list(APPEND LINK_LIB webbridge)
+endif()
+
 ###########################################
 # Resources
 ###########################################
@@ -194,11 +197,7 @@ endif()
 ###########################################
 # Executable declaration
 ###########################################
-
-qt_add_executable(MuseScoreStudio
-    WIN32 MACOSX_BUNDLE
-    ${APP_RCC_SOURCES}
-    ${MSCORE_APPEND_SRC}
+set(APP_SRC
     main.cpp
     cmdoptions.h
     appfactory.cpp
@@ -210,6 +209,17 @@ qt_add_executable(MuseScoreStudio
     internal/consoleapp.h
     internal/guiapp.cpp
     internal/guiapp.h
+)
+
+if (CC_IS_EMCC)
+    set(APP_SRC ${APP_SRC} webapi_export.cpp)
+endif()
+
+qt_add_executable(MuseScoreStudio
+    WIN32 MACOSX_BUNDLE
+    ${APP_RCC_SOURCES}
+    ${MSCORE_APPEND_SRC}
+    ${APP_SRC}
 )
 
 ###########################################
@@ -269,6 +279,13 @@ target_include_directories(MuseScoreStudio PRIVATE
 ###########################################
 
 target_link_libraries(MuseScoreStudio PRIVATE ${LINK_LIB} ${COVERAGE_LINK_FLAGS})
+
+if (CC_IS_EMCC)
+    include(exported_functions.cmake)
+    target_link_options(MuseScoreStudio PRIVATE ${EMCC_LINKER_FLAGS})
+    target_link_options(MuseScoreStudio PRIVATE ${EXPORTED_FUNCTIONS})
+endif()
+
 
 ###########################################
 # INSTALL
@@ -376,9 +393,14 @@ elseif(OS_IS_MAC)
 ###########################################
 elseif(OS_IS_WASM)
 
-    configure_file("${CMAKE_CURRENT_BINARY_DIR}/MuseScoreStudio.html" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/MuseScoreStudio.html" COPYONLY)
-    configure_file("${CMAKE_CURRENT_BINARY_DIR}/qtloader.js" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtloader.js" COPYONLY)
-    configure_file("${CMAKE_CURRENT_BINARY_DIR}/qtlogo.svg" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qtlogo.svg" COPYONLY)
+    add_custom_command(
+        TARGET MuseScoreStudio
+        POST_BUILD
+        COMMAND node ${PROJECT_SOURCE_DIR}/src/webbridge/install.js ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Install js api..."
+    )
+
 
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")

@@ -26,6 +26,8 @@
 #include "global/io/dir.h"
 #include "global/internal/baseapplication.h"
 
+#include "app_config.h"
+
 #include "log.h"
 
 using namespace muse;

@@ -44,6 +44,7 @@
 #include "dom/laissezvib.h"
 #include "dom/parenthesis.h"
 #include "dom/partialtie.h"
+#include "dom/hammeronpulloff.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"
@@ -65,8 +66,8 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    SlurSegment* slurSegment = toSlurSegment(TLayout::getNextLayoutSystemSegment(item, system, [](System* parent) {
-        return new SlurSegment(parent);
+    SlurSegment* slurSegment = toSlurSegment(TLayout::getNextLayoutSystemSegment(item, system, [item](System* parent) {
+        return item->newSlurTieSegment(parent);
     }));
 
     SpannerSegmentType sst;
@@ -88,14 +89,6 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             item->setTick2(item->tick());
         }
         computeUp(item, ctx);
-        if (item->sourceStemArrangement() != -1) {
-            if (item->sourceStemArrangement() != item->calcStemArrangement(item->startCR(), item->endCR())) {
-                // copy & paste from incompatible stem arrangement, so reset bezier points
-                for (int g = 0; g < (int)Grip::GRIPS; ++g) {
-                    slurSegment->ups((Grip)g) = UP();
-                }
-            }
-        }
         sst = item->tick2() < etick ? SpannerSegmentType::SINGLE : SpannerSegmentType::BEGIN;
     } else if (item->tick() < stick && item->tick2() >= etick) {
         sst = SpannerSegmentType::MIDDLE;

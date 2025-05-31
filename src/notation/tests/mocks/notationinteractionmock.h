@@ -154,6 +154,7 @@ public:
     MOCK_METHOD(void, addLaissezVibToSelection, (), (override));
     MOCK_METHOD(void, addTiedNoteToChord, (), (override));
     MOCK_METHOD(void, addSlurToSelection, (), (override));
+    MOCK_METHOD(void, addHammerOnPullOffToSelection, (), (override));
     MOCK_METHOD(void, addOttavaToSelection, (OttavaType), (override));
     MOCK_METHOD(void, addHairpinOnGripDrag, (engraving::EditData&, bool), (override));
     MOCK_METHOD(void, addHairpinsToSelection, (HairpinType), (override));
@@ -237,6 +238,9 @@ public:
 
     MOCK_METHOD(muse::Ret, canAddGuitarBend, (), (const, override));
     MOCK_METHOD(void, addGuitarBend, (GuitarBendType), (override));
+
+    MOCK_METHOD(muse::Ret, canAddFretboardDiagram, (), (const, override));
+    MOCK_METHOD(void, addFretboardDiagram, (), (override));
 
     MOCK_METHOD(void, navigateToLyrics, (MoveDirection, bool), (override));
     MOCK_METHOD(void, navigateToLyricsVerse, (MoveDirection), (override));

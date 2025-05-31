@@ -48,6 +48,7 @@
       <lhGuitarFingeringFontSize>7.4</lhGuitarFingeringFontSize>
       <rhGuitarFingeringFontFace>Times</rhGuitarFingeringFontFace>
       <rhGuitarFingeringFontSize>7.4</rhGuitarFingeringFontSize>
+      <hammerOnPullOffTappingFontFace>Times</hammerOnPullOffTappingFontFace>
       <stringNumberFontFace>Times</stringNumberFontFace>
       <stringNumberFontSize>7.4</stringNumberFontSize>
       <stringTuningsFontSize>7.4</stringTuningsFontSize>

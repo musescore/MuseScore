@@ -103,11 +103,12 @@ bool FirstLaunchSetupModel::askAboutClosingEarly()
     };
 
     IInteractive::Result result
-        = interactive()->warning(muse::trc("appshell/gettingstarted", "Are you sure you want to cancel?"),
-                                 muse::trc("appshell/gettingstarted", "If you choose to cancel, then be sure to check out "
-                                                                      "our free MuseSounds playback library on MuseScore.org."),
-                                 buttons,
-                                 int(IInteractive::Button::Cancel));
+        = interactive()->warningSync(muse::trc("appshell/gettingstarted", "Are you sure you want to cancel?"),
+                                     muse::trc("appshell/gettingstarted",
+                                               "If you choose to cancel, then be sure to check out "
+                                               "our free MuseSounds playback library on MuseScore.org."),
+                                     buttons,
+                                     int(IInteractive::Button::Cancel));
 
     return result.standardButton() == IInteractive::Button::Cancel;
 }

@@ -1297,7 +1297,10 @@ void Note::add(EngravingItem* e)
         } else if (symbolId == SymId::noteheadParenthesisRight) {
             m_rightParenthesis = s;
         }
-        m_hasHeadParentheses = m_leftParenthesis && m_rightParenthesis;
+        m_hasUserParentheses = m_leftParenthesis && m_rightParenthesis && !m_leftParenthesis->generated()
+                               && !m_rightParenthesis->generated();
+        m_hasGeneratedParens = m_leftParenthesis && m_rightParenthesis && m_leftParenthesis->generated()
+                               && m_rightParenthesis->generated();
         m_el.push_back(e);
     } break;
     case ElementType::LAISSEZ_VIB: {
@@ -1373,7 +1376,10 @@ void Note::remove(EngravingItem* e)
         if (e == m_rightParenthesis) {
             m_rightParenthesis = nullptr;
         }
-        m_hasHeadParentheses = m_leftParenthesis && m_rightParenthesis;
+        m_hasUserParentheses = m_leftParenthesis && m_rightParenthesis && !m_leftParenthesis->generated()
+                               && !m_rightParenthesis->generated();
+        m_hasGeneratedParens = m_leftParenthesis && m_rightParenthesis && m_leftParenthesis->generated()
+                               && m_rightParenthesis->generated();
 
         if (!m_el.remove(e)) {
             LOGD("Note::remove(): cannot find %s", e->typeName());
@@ -1619,9 +1625,10 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
         }
     }
 
-    if (m_leftParenthesis && m_rightParenthesis) {
-        m_hasHeadParentheses = true;
-    }
+    m_hasUserParentheses = m_leftParenthesis && m_rightParenthesis && !m_leftParenthesis->generated()
+                           && !m_rightParenthesis->generated();
+    m_hasGeneratedParens = m_leftParenthesis && m_rightParenthesis && m_leftParenthesis->generated()
+                           && m_rightParenthesis->generated();
 }
 
 //---------------------------------------------------------
@@ -2093,11 +2100,15 @@ EngravingItem* Note::drop(EditData& data)
 
 void Note::setHeadHasParentheses(bool hasParentheses, bool addToLinked, bool generated)
 {
-    if (hasParentheses == m_hasHeadParentheses) {
+    if (generated && hasParentheses == m_hasGeneratedParens) {
         return;
     }
 
-    m_hasHeadParentheses = hasParentheses;
+    if (!generated && hasParentheses == m_hasUserParentheses) {
+        return;
+    }
+
+    m_hasUserParentheses = hasParentheses;
 
     if (hasParentheses) {
         if (!m_leftParenthesis) {
@@ -3039,7 +3050,7 @@ PropertyValue Note::getProperty(Pid propertyId) const
     case Pid::MIRROR_HEAD:
         return userMirror();
     case Pid::HEAD_HAS_PARENTHESES:
-        return m_hasHeadParentheses;
+        return m_hasUserParentheses;
     case Pid::DOT_POSITION:
         return PropertyValue::fromValue<DirectionV>(userDotPosition());
     case Pid::HEAD_SCHEME:

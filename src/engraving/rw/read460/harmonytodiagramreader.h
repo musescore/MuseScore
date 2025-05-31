@@ -28,6 +28,11 @@ namespace mu::engraving::read460 {
 class HarmonyToDiagramReader
 {
 public:
-    static std::unordered_map<String, String> read(XmlReader& reader);
+    struct FretDiagramInfo {
+        String xml;
+        String pattern;
+    };
+
+    static std::unordered_map<String, FretDiagramInfo> read(XmlReader& reader);
 };
 }

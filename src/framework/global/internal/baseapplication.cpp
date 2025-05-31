@@ -21,14 +21,14 @@
  */
 #include "baseapplication.h"
 
+#include "types/version.h"
+
+#include "muse_framework_config.h"
+
 #ifndef NO_QT_SUPPORT
 #include <QApplication>
 #include <QProcess>
 #endif
-
-#include "types/version.h"
-
-#include "muse_framework_config.h"
 
 #include "log.h"
 

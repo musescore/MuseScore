@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "wasmtestmodule.h"
+
 #include "log.h"
 
-using namespace mu::wasmtest;
+#include "webbridge/webapi.h"
 
-std::string WasmTestModule::moduleName() const
-{
-    return "wasmTest";
-}
+using namespace mu::webbridge;
 
-void WasmTestModule::onStartApp()
-{
-    // Ms::Score score;
-    // auto notation = notationCreator()->newMasterNotation();
-    // Ret ret = notation->load("/files/test3.mscz");
-
-    // if (!ret) {
-    //     LOGE() << ret.toString();
-    // }
-
-    // context()->addMasterNotation(notation);
-    // context()->setCurrentMasterNotation(notation);
+extern "C" {
+void onclickTest1(int num) { WebApi::onclickTest1(num); }
+void load(const void* source, unsigned int len) { WebApi::load(source, len); }
 }

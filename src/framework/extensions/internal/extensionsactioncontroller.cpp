@@ -72,15 +72,17 @@ void ExtensionsActionController::onExtensionTriggered(const actions::ActionQuery
         return;
     }
 
-    IInteractive::Result result = interactive()->warning(
+    auto promise = interactive()->warning(
         muse::qtrc("extensions", "The plugin “%1” is currently disabled. Do you want to enable it now?").arg(m.title).toStdString(),
         muse::trc("extensions", "Alternatively, you can enable it at any time from Home > Plugins."),
         { IInteractive::Button::No, IInteractive::Button::Yes });
 
-    if (result.standardButton() == IInteractive::Button::Yes) {
-        provider()->setExecPoint(q.uri(), EXEC_MANUALLY);
-        provider()->perform(q);
-    }
+    promise.onResolve(this, [this, q](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Yes)) {
+            provider()->setExecPoint(q.uri(), EXEC_MANUALLY);
+            provider()->perform(q);
+        }
+    });
 }
 
 void ExtensionsActionController::openUri(const UriQuery& uri, bool isSingle)
