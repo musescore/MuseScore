@@ -2,6 +2,7 @@
 
 #include "global/io/fileinfo.h"
 #include "global/serialization/zipreader.h"
+#include "global/translation.h"
 #include "global/uuid.h"
 
 #include "../extensionstypes.h"
@@ -36,10 +37,39 @@ Ret ExtensionInstaller::installExtension(const io::path_t srcPath)
         ExtensionsLoader loader;
         Manifest m = loader.parseManifest(data);
 
-        bool hasSame = provider()->manifest(m.uri).isValid();
-        if (hasSame) {
+        Manifest existingManifest = provider()->manifest(m.uri);
+        bool alreadyInstalled = existingManifest.isValid();
+        if (alreadyInstalled && existingManifest.version == m.version) {
             LOGI() << "already installed: " << m.uri;
+
+            interactive()->info(trc("extensions", "The extension is already installed."), std::string(),
+                                { interactive()->buttonData(IInteractive::Button::Ok) });
+
             return make_ok();
+        }
+
+        if (alreadyInstalled && !existingManifest.isRemovable) {
+            interactive()->error(trc("extensions", "This extension cannot be updated."), std::string(),
+                                 { interactive()->buttonData(IInteractive::Button::Ok) });
+
+            return make_ok();
+        }
+
+        if (alreadyInstalled) {
+            std::string text = qtrc("extensions", "Another version of the extension “%1” is already installed (version %2). "
+                                                  "Do you want to replace it with version %3?")
+                               .arg(existingManifest.title, existingManifest.version, m.version).toStdString();
+
+            IInteractive::Result result = interactive()->question(trc("extensions", "Update Extension"), text, {
+                interactive()->buttonData(IInteractive::Button::Cancel),
+                interactive()->buttonData(IInteractive::Button::Ok)
+            });
+
+            if (result.button() == int(IInteractive::Button::Ok)) {
+                this->uninstallExtension(existingManifest.uri);
+            } else {
+                return make_ok();
+            }
         }
     }
 
@@ -65,4 +95,25 @@ Ret ExtensionInstaller::installExtension(const io::path_t srcPath)
     }
 
     return ret;
+}
+
+Ret ExtensionInstaller::uninstallExtension(const Uri& uri)
+{
+    Manifest manifest = provider()->manifest(uri);
+    if (!manifest.isValid()) {
+        return make_ret(Ret::Code::UnknownError);
+    } else if (!manifest.isRemovable) {
+        return make_ret(Ret::Code::NotSupported);
+    }
+
+    io::path_t path = manifest.path;
+
+    Ret ret = fileSystem()->remove(io::dirpath(path));
+    if (!ret) {
+        LOGE() << "Failed to delete the folder: " << path;
+        return ret;
+    }
+
+    provider()->reloadExtensions();
+    return make_ok();
 }
