@@ -605,6 +605,7 @@ void FinaleParser::importStaffItems()
                     logger()->logWarning(String(u"Microtonal / non-linear key signatures not supported."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 }
             }
+            currMusxKeySig = musxKeySig;
         }
     }
 }
