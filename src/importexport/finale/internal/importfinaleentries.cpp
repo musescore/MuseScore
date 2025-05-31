@@ -217,7 +217,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     }
 
     Fraction entryStartTick = FinaleTConv::musxFractionToFraction(entryInfo->elapsedDuration).reduced();
-    Segment* segment = measure->getSegment(SegmentType::ChordRest, entryStartTick);
+    Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick() + entryStartTick);
 
     // Retrieve entry from entryInfo
     std::shared_ptr<const Entry> currentEntry = entryInfo->getEntry();

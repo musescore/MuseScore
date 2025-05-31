@@ -435,14 +435,14 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<c
         staffType->setInvisible(staffInvisible);
         result = true;
     }
-    int stepOffset = currStaff->calcToplinePosition() / 2.0;
-    Spatium yoffset = Spatium(-stepOffset);
+    int stepOffset = currStaff->calcToplinePosition();
+    Spatium yoffset = Spatium(-stepOffset /2.0);
     if (staffType->yoffset() != yoffset) {
         staffType->setYoffset(yoffset);
         result = true;
     }
     if (staffType->stepOffset() != stepOffset) {
-        staffType->setStepOffset(stepOffset); // this is not working: don't know why
+        staffType->setStepOffset(stepOffset);
         result = true;
     }
     if (staffType->showBarlines() == currStaff->hideBarlines) {
