@@ -694,6 +694,7 @@ public:
 
     void setStyle(const MStyle& s, const bool overlap = false);
     bool loadStyle(const String&, bool ign = false, const bool overlap = false);
+    bool loadStyle(const muse::ByteArray& data, bool ign = false, bool overlap = false);
     bool saveStyle(const String&);
 
     TranslatableString getTextStyleUserName(TextStyleType tid);
@@ -1080,6 +1081,7 @@ private:
     std::list<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
     void pasteChordRest(ChordRest* cr, const Fraction& tick);
 
+    bool doLoadStyle(muse::io::IODevice& dev, bool ign = false, bool overlap = false);
     void doSelect(EngravingItem* e, SelectType type, staff_idx_t staffIdx);
     void selectSingle(EngravingItem* e, staff_idx_t staffIdx);
     void selectAdd(EngravingItem* e);
