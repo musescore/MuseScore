@@ -19,24 +19,53 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
-import Muse.Ui
-import Muse.UiComponents
+import Muse.Ui 1.0
+import Muse.Shortcuts 1.0
+import MuseScore.AppShell 1.0
 
-Rectangle {
+import Muse.Tours 1.0
 
-    property bool floating: false
+ApplicationWindow {
+    id: root
 
-    property NavigationSection navigationPanelSection: navigationPanel.section
-    property int navigationPanelOrder: navigationPanel.order
+    default property alias windowContent: windowContentItem.data
 
-    color: ui.theme.backgroundPrimaryColor
+    objectName: "ApplicationWindow"
+
+    width: 1150
+    height: 800
+
+    minimumWidth: 1050
+    minimumHeight: 500
 
     visible: false
 
-    StyledTextLabel {
-        anchors.centerIn: parent
-        text: "Playback ToolBar Stub"
+    color: ui.theme.backgroundPrimaryColor
+
+    Component.onCompleted: {
+        ui.rootItem = root.contentItem
+    }
+
+
+    MainWindowBridge {
+        id: bridge
+
+        window: root
+    }
+
+    GraphicsTestObject {}
+
+    ToolTipProvider { }
+
+    Item {
+        id: windowContentItem
+        anchors.fill: parent
+    }
+
+    function showMinimizedWithSavePreviousState() {
+        bridge.showMinimizedWithSavePreviousState()
     }
 }

@@ -19,24 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick
+import QtQuick 2.15
 
-import Muse.Ui
-import Muse.UiComponents
+import Muse.Ui 1.0
+import Muse.UiComponents 1.0
 
-Rectangle {
+import MuseScore.AppShell 1.0
 
-    property bool floating: false
+AppWindow {
+    id: root
 
-    property NavigationSection navigationPanelSection: navigationPanel.section
-    property int navigationPanelOrder: navigationPanel.order
+    flags: Qt.FramelessWindowHint
 
-    color: ui.theme.backgroundPrimaryColor
+    InteractiveProvider {
+        id: interactiveProvider
+        topParent: root
 
-    visible: false
+        onRequestedDockPage: function(uri, params) {
+            Qt.callLater(interactiveProvider.onPageOpened)
+        }
+    }
 
-    StyledTextLabel {
-        anchors.centerIn: parent
-        text: "Playback ToolBar Stub"
+    AppMenuBar {
+        id: appMenuBar
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+    }
+
+    NotationFrame {
+        anchors.top: appMenuBar.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
     }
 }

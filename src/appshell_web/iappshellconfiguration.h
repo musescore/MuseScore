@@ -19,36 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+#ifndef MU_APPSHELL_IAPPSHELLCONFIGURATION_H
+#define MU_APPSHELL_IAPPSHELLCONFIGURATION_H
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+#include "modularity/imoduleinterface.h"
+#include "async/notification.h"
 
-import MuseScore.AppShell 1.0
+namespace mu::appshell {
+class IAppShellConfiguration : MODULE_EXPORT_INTERFACE
+{
+    INTERFACE_ID(IAppshellConfiguration)
 
-import "../"
-import "../../"
+public:
+    virtual ~IAppShellConfiguration() = default;
 
-AppWindow {
-    id: root
+    virtual std::string museScoreVersion() const = 0;
+    virtual std::string museScoreRevision() const = 0;
 
-    AppMenuBar {
-        id: appMenuBar
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-    }
-
-    Component.onCompleted: {
-        window.init()
-    }
-
-    WindowContent {
-        id: window
-
-        anchors.top: appMenuBar.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-    }
+    virtual bool isNotationNavigatorVisible() const = 0;
+    virtual void setIsNotationNavigatorVisible(bool visible) const = 0;
+    virtual muse::async::Notification isNotationNavigatorVisibleChanged() const = 0;
+};
 }
+
+#endif // MU_APPSHELL_IAPPSHELLCONFIGURATION_H

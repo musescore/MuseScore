@@ -19,24 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick
+#ifndef MU_APPSHELL_APPLICATIONCONTROLLER_H
+#define MU_APPSHELL_APPLICATIONCONTROLLER_H
 
-import Muse.Ui
-import Muse.UiComponents
+#include <QObject>
 
-Rectangle {
+#include "actions/actionable.h"
+#include "async/asyncable.h"
 
-    property bool floating: false
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
 
-    property NavigationSection navigationPanelSection: navigationPanel.section
-    property int navigationPanelOrder: navigationPanel.order
+namespace mu::appshell {
+class ApplicationActionController : public QObject, public muse::Injectable, public muse::actions::Actionable, public muse::async::Asyncable
+{
+    muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
-    color: ui.theme.backgroundPrimaryColor
+public:
+    ApplicationActionController(const muse::modularity::ContextPtr& iocCtx)
+        : muse::Injectable(iocCtx) {}
 
-    visible: false
+    void preInit();
+    void init();
 
-    StyledTextLabel {
-        anchors.centerIn: parent
-        text: "Playback ToolBar Stub"
-    }
+private:
+};
 }
+
+#endif // MU_APPSHELL_APPLICATIONCONTROLLER_H

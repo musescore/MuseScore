@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2025 MuseScore Limited
+ * Copyright (C) 2021 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,34 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "webbridgemodule.h"
-
-#ifdef Q_OS_WASM
-#include "internal/memfilesystem.h"
-#endif
+#include "applicationactioncontroller.h"
 
 #include "log.h"
 
-using namespace mu::webbridge;
+using namespace mu::appshell;
+using namespace muse;
+using namespace muse::actions;
 
-//! NOTE It can work in two cases:
-//! 1. app-web configuration and wasm build for browser (main case)
-//! 2. app-web configuration and desktop build (develop case)
-
-std::string WebBridgeModule::moduleName() const
+void ApplicationActionController::preInit()
 {
-    return "webbridge";
 }
 
-void WebBridgeModule::registerExports()
+void ApplicationActionController::init()
 {
-#ifdef Q_OS_WASM
-    ioc()->unregister<muse::io::IFileSystem>(moduleName());
-    ioc()->registerExport<muse::io::IFileSystem>(moduleName(), new MemFileSystem());
-#endif
-}
-
-void WebBridgeModule::onStartApp()
-{
-    int k = 17;
 }

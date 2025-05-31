@@ -17,6 +17,7 @@
 /* ============================================== */
 /* Modules                                        */
 /* ============================================== */
+#cmakedefine MUE_ENABLE_SPLASHSCREEN 1
 #cmakedefine MUE_BUILD_APPSHELL_MODULE 1
 #cmakedefine MUE_BUILD_BRAILLE_MODULE 1
 #cmakedefine MUE_BUILD_CONVERTER_MODULE 1

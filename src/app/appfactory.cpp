@@ -85,9 +85,12 @@
 #endif
 
 #ifdef MUSE_MODULE_UI
-#include "framework/dockwindow/dockmodule.h"
 #include "framework/ui/uimodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
+#endif
+
+#ifdef MUSE_MODULE_DOCKWINDOW
+#include "framework/dockwindow/dockmodule.h"
 #endif
 
 #ifdef MUSE_MODULE_UPDATE
@@ -200,7 +203,7 @@
 #include "stubs/project/projectstubmodule.h"
 #endif
 
-#ifdef Q_OS_WASM
+#ifdef MUE_CONFIGURATION_IS_APPWEB
 #include "webbridge/webbridgemodule.h"
 #endif
 
@@ -259,6 +262,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #ifdef MUSE_MODULE_UI
     app->addModule(new muse::ui::UiModule());
     app->addModule(new muse::uicomponents::UiComponentsModule());
+#endif
+
+#ifdef MUSE_MODULE_DOCKWINDOW
     app->addModule(new muse::dock::DockModule());
 #endif
     app->addModule(new muse::tours::ToursModule());
@@ -324,7 +330,8 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
 
-#ifdef Q_OS_WASM
+#ifdef MUE_CONFIGURATION_IS_APPWEB
+    //! NOTE It should be the last one because it replaces some services.
     app->addModule(new mu::webbridge::WebBridgeModule());
 #endif
 
@@ -376,6 +383,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
 #ifdef MUSE_MODULE_UI
     app->addModule(new muse::ui::UiModule());
     app->addModule(new muse::uicomponents::UiComponentsModule());
+#endif
+
+#ifdef MUSE_MODULE_DOCKWINDOW
     app->addModule(new muse::dock::DockModule());
 #endif
     app->addModule(new muse::tours::ToursModule());
