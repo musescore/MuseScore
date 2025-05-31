@@ -588,6 +588,31 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
         }
 
         bool createKey = tickStart.isZero();
+/*
+        // If we change to "Display transposed" we should regenerate Key Signatures for instrument change
+        if (flip) {
+            LOGI() << "tpacebes pasamos por aqui";
+            Part* part = staff(staffIdx)->part();
+            for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+                // If there are Intrument changes
+                if (s->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack() - 1)) {
+                    Fraction sTickStart = s->tick();
+                    KeySigEvent kse;
+
+                    // Check, if some key signature is already there, if no, mark new one "for instrument change"
+                    Segment* segKeySig = s->prev1(SegmentType::KeySig);
+                    KeySig* ksig = segKeySig ? toKeySig(segKeySig->element(staffIdx * VOICES)) : nullptr;
+                    bool forInstChange = !(ksig && ksig->tick() == sTickStart && !ksig->generated());
+                    kse.setForInstrumentChange(forInstChange);
+                    Key cKey = staff(staffIdx)->concertKey(sTickStart);
+                    LOGI() << "tpacebes cKey vale " << forInstChange;
+                    kse.setConcertKey(cKey);
+                    score()->undoChangeKeySig(staff(staffIdx), sTickStart, kse);
+                }
+            }
+        }
+        */
+
         for (Segment* s = firstSegment(SegmentType::KeySig); s; s = s->next1(SegmentType::KeySig)) {
             if (!s->enabled() || s->tick() < tickStart) {
                 continue;
@@ -596,6 +621,14 @@ void Score::transposeKeys(staff_idx_t staffStart, staff_idx_t staffEnd, const Fr
                 break;
             }
             KeySig* ks = toKeySig(s->element(staffIdx * VOICES));
+            /*
+            // To Display concert pitch we delete KeySignatures for instrument change
+            if (!flip) {
+                if (ks && !ks->generated() && ks->forInstrumentChange()) {
+                    ks->parentItem()->remove(ks);
+                }
+            }
+            */
             if (!ks || ks->generated()) {
                 continue;
             }
