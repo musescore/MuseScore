@@ -52,6 +52,9 @@ public:
     void flushSound() override;
     bool isValid() const override;
 
+    void prepareToPlay() override;
+    bool readyToPlay() const override;
+
     void revokePlayingNotes() override;
 
 private:

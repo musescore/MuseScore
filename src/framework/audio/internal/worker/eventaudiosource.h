@@ -59,6 +59,9 @@ public:
     void applyInputParams(const AudioInputParams& requiredParams) override;
     async::Channel<AudioInputParams> inputParamsChanged() const override;
 
+    void prepareToPlay() override;
+    bool readyToPlay() const override;
+
 private:
     struct SynthCtx
     {

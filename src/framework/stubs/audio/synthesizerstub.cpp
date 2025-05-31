@@ -89,6 +89,15 @@ void SynthesizerStub::setPlaybackPosition(const msecs_t)
 {
 }
 
+void SynthesizerStub::prepareToPlay()
+{
+}
+
+bool SynthesizerStub::readyToPlay() const
+{
+    return false;
+}
+
 void SynthesizerStub::revokePlayingNotes()
 {
 }

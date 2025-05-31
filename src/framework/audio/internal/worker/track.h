@@ -49,6 +49,9 @@ public:
     virtual const AudioInputParams& inputParams() const = 0;
     virtual void applyInputParams(const AudioInputParams& requiredParams) = 0;
     virtual async::Channel<AudioInputParams> inputParamsChanged() const = 0;
+
+    virtual void prepareToPlay() = 0;
+    virtual bool readyToPlay() const = 0;
 };
 
 class ITrackAudioOutput : public IAudioSource
