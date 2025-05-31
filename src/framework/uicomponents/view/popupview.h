@@ -286,6 +286,8 @@ protected:
 
     QQmlEngine* engine() const;
 
+    void setupAlwaysOnTop();
+
     IPopupWindow* m_window = nullptr;
 
     QQmlComponent* m_component = nullptr;
