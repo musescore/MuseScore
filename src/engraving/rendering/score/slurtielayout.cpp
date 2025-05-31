@@ -2775,21 +2775,6 @@ bool SlurTieLayout::shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx)
         if (slur->connectedElement() == Slur::ConnectedElement::GLISSANDO) {
             return false;
         }
-
-        /// not showing hammer-on slur if the up notes of chords are connected with tie
-        if (slur->connectedElement() == Slur::ConnectedElement::HAMMER_ON) {
-            EngravingItem* start = slur->startElement();
-            EngravingItem* end = slur->endElement();
-            if (start && end && start->isChord() && end->isChord()) {
-                Note* upStartNote = toChord(start)->upNote();
-                Note* upEndChord = toChord(end)->upNote();
-                Tie* startTie = upStartNote->tieFor();
-                Tie* endTie = upEndChord->tieBack();
-                if (startTie && startTie == endTie) {
-                    return true;
-                }
-            }
-        }
     }
 
     const StaffType* stType = item->staffType();
