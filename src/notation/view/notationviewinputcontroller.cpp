@@ -990,7 +990,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
             viewInteraction()->drag(m_mouseDownInfo.logicalBeginPoint, logicPos, mode);
 
             return;
-        } else if (hitElement == nullptr && (keyState & Qt::ShiftModifier)) {
+        } else if (hitElement == nullptr && (event->buttons() & Qt::LeftButton)) {
             if (!viewInteraction()->isDragStarted()) {
                 viewInteraction()->startDrag(std::vector<EngravingItem*>(), PointF(), [](const EngravingItem*) { return false; });
             }
