@@ -34,6 +34,7 @@
 #include "dom/text.h"
 #include "dom/undo.h"
 #include "utils/scorerw.h"
+#include "utils/scorecomp.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -509,5 +510,38 @@ TEST_F(Engraving_LinksTests, DISABLED_testMMRestLink)
         EngravingItem* linkedItem = toEngravingItem(linkedObj);
         EXPECT_FALSE(linkedItem->visible());
     }
+    delete score;
+}
+
+TEST_F(Engraving_LinksTests, testPickupLinkedStaff) {
+    // Read test score file in
+    MasterScore* score = ScoreRW::readScore(LINKS_DATA_DIR + u"testPickupLinkedStaff.mscx");
+    ASSERT_TRUE(score);
+
+    // Create an original staff and a clone of that staff
+    Staff* ostaff = score->staff(0);
+    Staff* staff = ostaff->clone();
+    // Set the cloned staff to same score
+    staff->setScore(score);
+    ASSERT_TRUE(staff->score() == score);
+
+    score->startCmd(TranslatableString::untranslatable("Engraving links tests"));
+    staff->setPart(ostaff->part());
+    score->undoInsertStaff(staff, 1, /* createRests = */ false);
+    Excerpt::cloneStaff(ostaff, staff);
+    score->endCmd();
+
+    // Check number of staves
+    EXPECT_EQ(score->staves().size(), 2);
+
+    String outputPath = u"testPickupLinkedStaffCloned.mscx";
+
+    String referencePath = LINKS_DATA_DIR + u"testPickupLinkedStaff-ref.mscx";
+
+    // Save Cloned staff file, and compare with reference file
+    bool saveAndCompare = ScoreComp::saveCompareScore(score, outputPath, referencePath);
+
+    EXPECT_TRUE(saveAndCompare);
+
     delete score;
 }
