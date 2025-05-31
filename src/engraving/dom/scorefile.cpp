@@ -22,6 +22,7 @@
 
 #include <cmath>
 
+#include "io/buffer.h"
 #include "io/file.h"
 #include "io/fileinfo.h"
 
@@ -122,6 +123,26 @@ bool Score::loadStyle(const String& fn, bool ign, const bool overlap)
             return true;
         } else {
             LOGE() << "The style file is not compatible with this version of MuseScore Studio.";
+            return false;
+        }
+    }
+
+    return false;
+}
+
+bool Score::loadStyle(muse::ByteArray&& data, bool ign, bool overlap)
+{
+    TRACEFUNC;
+
+    muse::io::Buffer buffer(std::move(data));
+
+    if (buffer.open(IODevice::ReadOnly)) {
+        MStyle st = style();
+        if (st.read(&buffer, ign)) {
+            undo(new ChangeStyle(this, st, overlap));
+            return true;
+        } else {
+            LOGE() << "The style data is not compatible with this version of MuseScore Studio.";
             return false;
         }
     }
