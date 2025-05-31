@@ -715,6 +715,7 @@ public:
 
     void setStyle(const MStyle& s, const bool overlap = false);
     bool loadStyle(const String&, bool ign = false, const bool overlap = false);
+    bool loadStyle(muse::ByteArray&& data, bool ign = false, bool overlap = false);
     bool saveStyle(const String&);
 
     TranslatableString getTextStyleUserName(TextStyleType tid);
