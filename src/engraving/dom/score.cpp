@@ -922,29 +922,16 @@ static std::vector<Note*> allNotesInScore(Score* score)
     return notes;
 }
 
-void Score::spellWithSharps()
+void Score::spellWithSharpsOrFlats(Prefer prefer)
 {
     std::vector<Note*> notes = (selection().isNone()) ? allNotesInScore(this) : selection().noteList();
     for (Note* n : notes) {
-        Key concertKey = n->staff()->concertKey(n->chord()->tick());
-        int tpc1 = pitch2tpc(n->pitch(), concertKey, Prefer::SHARPS);
-        int tpc2 = n->transposeTpc(tpc1);
-        n->undoChangeProperty(Pid::TPC1, tpc1);
-        n->undoChangeProperty(Pid::TPC2, tpc2);
-        for (Note* tied : n->tiedNotes()) {
-            tied->undoChangeProperty(Pid::TPC1, tpc1);
-            tied->undoChangeProperty(Pid::TPC2, tpc2);
-        }
-    }
-}
-
-void Score::spellWithFlats()
-{
-    std::vector<Note*> notes = (selection().isNone()) ? allNotesInScore(this) : selection().noteList();
-    for (Note* n : notes) {
-        Key concertKey = n->staff()->concertKey(n->chord()->tick());
-        int tpc1 = pitch2tpc(n->pitch(), concertKey, Prefer::FLATS);
-        int tpc2 = n->transposeTpc(tpc1);
+        Fraction tick = n->chord()->tick();
+        Key concertKey = n->staff()->concertKey(tick);
+        int tpc1 = pitch2tpc(n->pitch(), concertKey, prefer);
+        Interval v = n->staff()->transpose(tick);
+        v.flip();
+        int tpc2 = transposeTpc(tpc1, v, true);
         n->undoChangeProperty(Pid::TPC1, tpc1);
         n->undoChangeProperty(Pid::TPC2, tpc2);
         for (Note* tied : n->tiedNotes()) {

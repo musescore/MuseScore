@@ -153,6 +153,7 @@ enum class Key : signed char;
 enum class HairpinType : signed char;
 enum class SegmentType;
 enum class OttavaType : unsigned char;
+enum class Prefer : char;
 enum class Voicing : signed char;
 enum class HDuration : signed char;
 enum class AccidentalType : unsigned char;
@@ -693,8 +694,7 @@ public:
     void setIsOpen(bool open);
 
     void spell();
-    void spellWithSharps();
-    void spellWithFlats();
+    void spellWithSharpsOrFlats(Prefer prefer);
     void changeEnharmonicSpelling(bool both);
 
     Fraction nextSeg(const Fraction& tick, int track);
