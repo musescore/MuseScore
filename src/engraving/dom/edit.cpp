@@ -5615,6 +5615,9 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
 
         StaffType* staffType = staff->staffType(e->tick());
         StaffGroup staffGroup = staffType->group();
+        if (staffGroup != StaffGroup::TAB) {
+            staffGroup = staff->part()->instrument(e->tick())->useDrumset() ? StaffGroup::PERCUSSION : StaffGroup::STANDARD;
+        }
         if (ClefInfo::staffGroup(ct) != staffGroup && !forInstrumentChange) {
             continue;
         }
