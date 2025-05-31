@@ -86,8 +86,8 @@ private:
     std::unordered_map<int, engraving::track_idx_t> mapFinaleVoices(const std::map<musx::dom::LayerIndex, bool>& finaleVoiceMap,
                                                          musx::dom::InstCmper curStaff, musx::dom::MeasCmper curMeas) const;
     bool processEntryInfo(musx::dom::EntryInfoPtr entryInfo, engraving::track_idx_t curTrackIdx, engraving::Measure* measure,
-                          std::vector<ReadableTuplet>& tupletMap);
-    bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx, engraving::Measure* measure);
+                          std::vector<ReadableTuplet>& tupletMap, const Fraction& timeStretch);
+    bool processBeams(musx::dom::EntryInfoPtr entryInfoPtr, engraving::track_idx_t curTrackIdx, engraving::Measure* measure, const Fraction& timeStretch);
 
     // styles
     void importStyles(engraving::MStyle& style, musx::dom::Cmper partId);

@@ -209,14 +209,14 @@ static Tuplet* bottomTupletFromTick(std::vector<ReadableTuplet> tupletMap, Fract
 }
 
 bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrackIdx, Measure* measure,
-                                         std::vector<ReadableTuplet>& tupletMap)
+                                         std::vector<ReadableTuplet>& tupletMap, const Fraction& timeStretch)
 {
     if (entryInfo->getEntry()->graceNote) {
         logger()->logWarning(String(u"Grace notes not yet supported"), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
         return true;
     }
 
-    Fraction entryStartTick = FinaleTConv::musxFractionToFraction(entryInfo->elapsedDuration).reduced();
+    Fraction entryStartTick = FinaleTConv::musxFractionToFraction(entryInfo->elapsedDuration).reduced() / timeStretch;
     Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick() + entryStartTick);
 
     // Retrieve entry from entryInfo
@@ -369,13 +369,13 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     return true;
 }
 
-bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx, Measure* measure)
+bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackIdx, Measure* measure, const Fraction& timeStretch)
 {
     if (!entryInfoPtr.calcIsBeamStart()) {
         return true;
     }
     /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
-    ChordRest* cr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(entryInfoPtr->elapsedDuration), curTrackIdx);
+    ChordRest* cr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(entryInfoPtr->elapsedDuration) / timeStretch, curTrackIdx);
     if (!cr) { // once grace notes are supported, use IF_ASSERT_FAILED(cr)
         logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
         return false;
@@ -392,7 +392,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     ChordRest* lastCr = nullptr;
     for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
         std::shared_ptr<const Entry> currentEntry = nextInBeam->getEntry();
-        lastCr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(nextInBeam->elapsedDuration), curTrackIdx);
+        lastCr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(nextInBeam->elapsedDuration) / timeStretch, curTrackIdx);
         IF_ASSERT_FAILED(lastCr) {
             logger()->logWarning(String(u"Entry %1 was not mapped").arg(nextInBeam->getEntry()->getEntryNumber()), m_doc, nextInBeam.getStaff(), nextInBeam.getMeasure());
             continue;
@@ -565,6 +565,8 @@ void FinaleParser::importEntries()
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 break;
             }
+            Staff* staff = m_score->staff(curStaffIdx);
+            Fraction timeStretch = staff->timeStretch(measure->tick());
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
             if (gfHold) {
                 // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
@@ -602,7 +604,7 @@ void FinaleParser::importEntries()
 
                         // add chords and rests
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, tupletMap);
+                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, tupletMap, timeStretch);
                         }
 
                         // add tremolos
@@ -610,7 +612,7 @@ void FinaleParser::importEntries()
 
                         // create beams
                         for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processBeams(entryInfoPtr, curTrackIdx, measure);
+                            processBeams(entryInfoPtr, curTrackIdx, measure, timeStretch);
                         }
                     }
                 }
@@ -620,11 +622,10 @@ void FinaleParser::importEntries()
             measure->checkMeasure(curStaffIdx);
             // ...and make sure voice 1 exists.
             if (!measure->hasVoice(curStaffIdx * VOICES)) {
-                Staff* staff = m_score->staff(curStaffIdx);
                 Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
-                rest->setTicks(measure->timesig() / staff->timeStretch(measure->tick()));
+                rest->setTicks(measure->timesig() * timeStretch);
                 rest->setTrack(curStaffIdx * VOICES);
                 segment->add(rest);
             }
