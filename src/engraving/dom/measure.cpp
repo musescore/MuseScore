@@ -2413,7 +2413,7 @@ bool Measure::isCutawayClef(staff_idx_t staffIdx) const
             break;
         }
     }
-    while (s && s->isTimeTickType()) {
+    while (s && (s->isTimeTickType() || s->isBreathType())) {
         s = s->prev();
     }
     if (!s) {
