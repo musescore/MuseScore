@@ -165,10 +165,6 @@ public:
     MOCK_METHOD(muse::ValCh<muse::Orientation>, canvasOrientation, (), (const, override));
     MOCK_METHOD(void, setCanvasOrientation, (muse::Orientation), (override));
 
-    MOCK_METHOD(bool, isLimitCanvasScrollArea, (), (const, override));
-    MOCK_METHOD(void, setIsLimitCanvasScrollArea, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, isLimitCanvasScrollAreaChanged, (), (const, override));
-
     MOCK_METHOD(bool, colorNotesOutsideOfUsablePitchRange, (), (const, override));
     MOCK_METHOD(void, setColorNotesOutsideOfUsablePitchRange, (bool), (override));
     MOCK_METHOD((muse::async::Channel<bool>), colorNotesOutsideOfUsablePitchRangeChanged, (), (const, override));

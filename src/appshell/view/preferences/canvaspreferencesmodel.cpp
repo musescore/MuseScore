@@ -48,9 +48,6 @@ void CanvasPreferencesModel::setupConnections()
     notationConfiguration()->canvasOrientation().ch.onReceive(this, [this](muse::Orientation) {
         emit scrollPagesOrientationChanged();
     });
-    notationConfiguration()->isLimitCanvasScrollAreaChanged().onNotify(this, [this]() {
-        emit limitScrollAreaChanged();
-    });
     notationConfiguration()->selectionProximityChanged().onReceive(this, [this](int selectionProximity) {
         emit selectionProximityChanged(selectionProximity);
     });
@@ -87,11 +84,6 @@ int CanvasPreferencesModel::mouseZoomPrecision() const
 int CanvasPreferencesModel::scrollPagesOrientation() const
 {
     return static_cast<int>(notationConfiguration()->canvasOrientation().val);
-}
-
-bool CanvasPreferencesModel::limitScrollArea() const
-{
-    return notationConfiguration()->isLimitCanvasScrollArea();
 }
 
 int CanvasPreferencesModel::selectionProximity() const
@@ -137,16 +129,6 @@ void CanvasPreferencesModel::setScrollPagesOrientation(int orientation)
     }
 
     notationConfiguration()->setCanvasOrientation(static_cast<muse::Orientation>(orientation));
-}
-
-void CanvasPreferencesModel::setLimitScrollArea(bool limit)
-{
-    if (limitScrollArea() == limit) {
-        return;
-    }
-
-    notationConfiguration()->setIsLimitCanvasScrollArea(limit);
-    emit limitScrollAreaChanged();
 }
 
 void CanvasPreferencesModel::setSelectionProximity(int proximity)

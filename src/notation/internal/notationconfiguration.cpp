@@ -87,7 +87,6 @@ static const Settings::Key IS_COUNT_IN_ENABLED(module_name, "application/playbac
 static const Settings::Key TOOLBAR_KEY(module_name, "ui/toolbar/");
 
 static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/canvas/scroll/verticalOrientation");
-static const Settings::Key IS_LIMIT_CANVAS_SCROLL_AREA_KEY(module_name, "ui/canvas/scroll/limitScrollArea");
 
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
 static const Settings::Key WARN_GUITAR_BENDS(module_name, "score/note/warnGuitarBends");
@@ -284,11 +283,6 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(false));
     settings()->valueChanged(IS_CANVAS_ORIENTATION_VERTICAL_KEY).onReceive(nullptr, [this](const Val&) {
         m_canvasOrientationChanged.send(canvasOrientation().val);
-    });
-
-    settings()->setDefaultValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(false));
-    settings()->valueChanged(IS_LIMIT_CANVAS_SCROLL_AREA_KEY).onReceive(this, [this](const Val&) {
-        m_isLimitCanvasScrollAreaChanged.notify();
     });
 
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
@@ -946,21 +940,6 @@ void NotationConfiguration::setCanvasOrientation(muse::Orientation orientation)
     mu::engraving::MScore::setVerticalOrientation(isVertical);
 
     settings()->setSharedValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
-}
-
-bool NotationConfiguration::isLimitCanvasScrollArea() const
-{
-    return settings()->value(IS_LIMIT_CANVAS_SCROLL_AREA_KEY).toBool();
-}
-
-void NotationConfiguration::setIsLimitCanvasScrollArea(bool limited)
-{
-    settings()->setSharedValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(limited));
-}
-
-Notification NotationConfiguration::isLimitCanvasScrollAreaChanged() const
-{
-    return m_isLimitCanvasScrollAreaChanged;
 }
 
 bool NotationConfiguration::colorNotesOutsideOfUsablePitchRange() const

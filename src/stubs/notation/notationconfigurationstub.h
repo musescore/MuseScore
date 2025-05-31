@@ -161,10 +161,6 @@ public:
     ValCh<muse::Orientation> canvasOrientation() const override;
     void setCanvasOrientation(muse::Orientation orientation)  override;
 
-    bool isLimitCanvasScrollArea() const override;
-    void setIsLimitCanvasScrollArea(bool limited)  override;
-    muse::async::Notification isLimitCanvasScrollAreaChanged() const override;
-
     bool colorNotesOutsideOfUsablePitchRange() const override;
     void setColorNotesOutsideOfUsablePitchRange(bool value)  override;
     muse::async::Channel<bool> colorNotesOutsideOfUsablePitchRangeChanged() const override;

@@ -38,7 +38,6 @@ class CanvasPreferencesModel : public QObject, public muse::Injectable, public m
     Q_PROPERTY(int mouseZoomPrecision READ mouseZoomPrecision WRITE setMouseZoomPrecision NOTIFY mouseZoomPrecisionChanged)
 
     Q_PROPERTY(int scrollPagesOrientation READ scrollPagesOrientation WRITE setScrollPagesOrientation NOTIFY scrollPagesOrientationChanged)
-    Q_PROPERTY(bool limitScrollArea READ limitScrollArea WRITE setLimitScrollArea NOTIFY limitScrollAreaChanged)
 
     Q_PROPERTY(int selectionProximity READ selectionProximity WRITE setSelectionProximity NOTIFY selectionProximityChanged)
 
@@ -57,7 +56,6 @@ public:
     int mouseZoomPrecision() const;
 
     int scrollPagesOrientation() const;
-    bool limitScrollArea() const;
 
     int selectionProximity() const;
 
@@ -65,7 +63,6 @@ public slots:
     void setMouseZoomPrecision(int precision);
 
     void setScrollPagesOrientation(int orientation);
-    void setLimitScrollArea(bool limit);
 
     void setSelectionProximity(int proximity);
 
@@ -73,7 +70,6 @@ signals:
     void defaultZoomChanged();
     void mouseZoomPrecisionChanged();
     void scrollPagesOrientationChanged();
-    void limitScrollAreaChanged();
     void selectionProximityChanged(int selectionProximity);
 
 private:

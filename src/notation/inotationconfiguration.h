@@ -175,10 +175,6 @@ public:
     virtual muse::ValCh<muse::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(muse::Orientation orientation) = 0;
 
-    virtual bool isLimitCanvasScrollArea() const = 0;
-    virtual void setIsLimitCanvasScrollArea(bool limited) = 0;
-    virtual muse::async::Notification isLimitCanvasScrollAreaChanged() const = 0;
-
     virtual bool colorNotesOutsideOfUsablePitchRange() const = 0;
     virtual void setColorNotesOutsideOfUsablePitchRange(bool value) = 0;
     virtual muse::async::Channel<bool> colorNotesOutsideOfUsablePitchRangeChanged() const = 0;
