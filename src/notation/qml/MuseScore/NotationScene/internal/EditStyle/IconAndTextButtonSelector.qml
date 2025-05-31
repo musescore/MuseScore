@@ -33,13 +33,15 @@ StyleControlRowWithReset {
 
     property alias model: radioButtonGroup.model
 
+    property double buttonHeight: 70
+
     RadioButtonGroup {
         id: radioButtonGroup
 
         anchors.fill: parent
 
         delegate: FlatRadioButton {
-            height: 70
+            height: root.buttonHeight
 
             navigation.accessible.name: modelData.title ? modelData.title : (modelData.text ? modelData.text : "")
 
@@ -54,7 +56,7 @@ StyleControlRowWithReset {
                 StyledIconLabel {
                     anchors.horizontalCenter: parent.horizontalCenter
                     iconCode: modelData.iconCode ? modelData.iconCode : IconCode.NONE
-                    font.pixelSize: 28
+                    font.pixelSize: modelData.iconSize ? modelData.iconSize : 28
                 }
 
                 StyledTextLabel {

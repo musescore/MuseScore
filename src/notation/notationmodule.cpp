@@ -99,6 +99,7 @@
 #include "view/styledialog/notelinesectionmodel.h"
 #include "view/styledialog/clefkeytimesigpagemodel.h"
 #include "view/styledialog/hammeronpullofftappingpagemodel.h"
+#include "view/styledialog/chordsymbolspagemodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -232,6 +233,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NoteLineSectionModel>("MuseScore.NotationScene", 1, 0, "NoteLineSectionModel");
     qmlRegisterType<ClefKeyTimeSigPageModel>("MuseScore.NotationScene", 1, 0, "ClefKeyTimeSigPageModel");
     qmlRegisterType<HammerOnPullOffTappingPageModel>("MuseScore.NotationScene", 1, 0, "HammerOnPullOffTappingPageModel");
+    qmlRegisterType<ChordSymbolsPageModel>("MuseScore.NotationScene", 1, 0, "ChordSymbolsPageModel");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 

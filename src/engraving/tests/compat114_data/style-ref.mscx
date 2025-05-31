@@ -64,8 +64,6 @@
       <genKeysig>0</genKeysig>
       <genCourtesyTimesig>0</genCourtesyTimesig>
       <genCourtesyKeysig>0</genCourtesyKeysig>
-      <useStandardNoteNames>0</useStandardNoteNames>
-      <useGermanNoteNames>1</useGermanNoteNames>
       <concertPitch>1</concertPitch>
       <createMultiMeasureRests>1</createMultiMeasureRests>
       <minEmptyMeasures>3</minEmptyMeasures>

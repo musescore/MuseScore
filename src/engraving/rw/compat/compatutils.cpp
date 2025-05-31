@@ -26,6 +26,7 @@
 #include "dom/chord.h"
 #include "dom/dynamic.h"
 #include "dom/expression.h"
+#include "dom/harmony.h"
 #include "dom/laissezvib.h"
 #include "dom/masterscore.h"
 #include "dom/note.h"
@@ -510,6 +511,19 @@ ArticulationAnchor CompatUtils::translateToNewArticulationAnchor(int anchor)
     }
 }
 
+double CompatUtils::convertChordExtModUnits(double val)
+{
+    // Pre 4.6 this value was in 1/5 of a spatium
+    // After 4.6 this is in % of root cap height
+    // The best we can do for conversion of old files is to assume a default spatium of 1.75mm and a default font size of 10pt
+    // The height value is calculated from Edwin at 10pt using FontMetrics::capHeight
+    constexpr double DEFAULT_STAVE_SPACE_MM = 1.75;
+    constexpr double DEFAULT_SPATIUM = DEFAULT_STAVE_SPACE_MM * DPMM;
+    constexpr double DEFAULT_FONT_CAP_HEIGHT = 35.3795;
+
+    return ((val / 5) * DEFAULT_SPATIUM) / DEFAULT_FONT_CAP_HEIGHT;
+}
+
 void CompatUtils::resetRestVerticalOffset(MasterScore* masterScore)
 {
     for (Score* score : masterScore->scoreList()) {
@@ -865,4 +879,12 @@ void CompatUtils::convertLaissezVibArticToTie(MasterScore* masterScore)
 
         delete oldArtic;
     }
+}
+
+void CompatUtils::setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const muse::String& s)
+{
+    Key key = Key::INVALID;
+    const Staff* st = h->staff();
+    key = st ? st->key(h->tick()) : Key::INVALID;
+    info->setRootTpc(function2Tpc(s, key));
 }

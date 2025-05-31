@@ -488,6 +488,13 @@ public:
         FRET_FRAME = 0xF491,
         DURATION_CURSOR = 0xF492,
 
+        NOTE_ALIGN_LEFT = 0xF4A3,
+        NOTE_ALIGN_CENTER = 0xF4A4,
+        NOTE_ALIGN_RIGHT = 0xF4A5,
+
+        CHORD_BASS_ALIGN = 0xF4A6,
+        CHORD_BASS_OFFSET= 0xF4A7,
+
         LOWER_CASE = 0xF49E,
         UPPER_CASE = 0xF49F,
 

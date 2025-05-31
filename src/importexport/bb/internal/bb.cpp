@@ -510,15 +510,17 @@ Err importBB(MasterScore* score, const QString& name)
         }
         Segment* s = m->getSegment(SegmentType::ChordRest, tick);
         Harmony* h = Factory::createHarmony(s);
+        HarmonyInfo* info = new HarmonyInfo(score);
         h->setTrack(0);
-        h->setRootTpc(table[c.root - 1]);
+        info->setRootTpc(table[c.root - 1]);
         if (c.bass > 0) {
-            h->setBassTpc(table[c.bass - 1]);
+            info->setBassTpc(table[c.bass - 1]);
         } else {
-            h->setBassTpc(Tpc::TPC_INVALID);
+            info->setBassTpc(Tpc::TPC_INVALID);
         }
-        h->setId(c.extension);
-        h->getDescription();
+        info->setId(c.extension);
+        h->addChord(info);
+
         h->render();
         s->add(h);
     }
