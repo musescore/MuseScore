@@ -111,6 +111,7 @@ public:
     AsciiStringView asciiText() const;
     String readText();
     AsciiStringView readAsciiText();
+    bool readBool(bool* ok = nullptr);
     int readInt(bool* ok = nullptr, int base = 10);
     double readDouble(bool* ok = nullptr);
 
