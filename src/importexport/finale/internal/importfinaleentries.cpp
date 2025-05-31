@@ -621,7 +621,7 @@ void FinaleParser::importEntries()
             // ...and make sure voice 1 exists.
             if (!measure->hasVoice(curStaffIdx * VOICES)) {
                 Staff* staff = m_score->staff(curStaffIdx);
-                Segment* segment = measure->getSegment(SegmentType::ChordRest, Fraction(0, 1));
+                Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
                 rest->setTicks(measure->timesig() / staff->timeStretch(measure->tick()));

@@ -47,6 +47,7 @@
 #include "engraving/dom/sig.h"
 #include "engraving/dom/spacer.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stafftypechange.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/utils.h"
@@ -434,8 +435,8 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<c
         staffType->setInvisible(staffInvisible);
         result = true;
     }
-    int stepOffset = -currStaff->calcToplinePosition() / 2.0;
-    Spatium yoffset = Spatium(stepOffset);
+    int stepOffset = currStaff->calcToplinePosition() / 2.0;
+    Spatium yoffset = Spatium(-stepOffset);
     if (staffType->yoffset() != yoffset) {
         staffType->setYoffset(yoffset);
         result = true;
@@ -457,7 +458,7 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<c
         result = true;
     }
 
-    /// @todo use userMag instead of smallClef. (But it requires a separate system-by-system search.)
+    /// @todo use userMag instead of smallClef? (But it requires a separate system-by-system search.)
     /// @todo tablature options
     /// @todo others?
 
@@ -515,13 +516,19 @@ void FinaleParser::importStaffItems()
                 logger()->logWarning(String(u"Unable to create MuseScore staff type"), m_doc, musxScrollViewItem->staffId, measNum);
                 return;
             }
-            std::unique_ptr<StaffType> newStaffType;  // unique_ptr disposes of itself.
+            bool createdStaffType = false;
             if (tick > Fraction(0, 1)) {
-                newStaffType = std::make_unique<StaffType>(*staffType);
-                staffType = newStaffType.get();
+                staffType = new StaffType(*staffType);
+                createdStaffType = true;
             }
-             if (applyStaffSyles(staffType, currStaff) && tick > Fraction(0, 1)) {
-                staff->setStaffType(tick, *staffType);
+            if (applyStaffSyles(staffType, currStaff) && tick > Fraction(0, 1)) {
+                StaffTypeChange* staffChange = Factory::createStaffTypeChange(measure);
+                staffChange->setParent(measure);
+                staffChange->setTrack(staffIdx * VOICES);
+                staffChange->setStaffType(staffType, true);
+                measure->add(staffChange);
+            } else if (createdStaffType) {
+                delete staffType;
             }
         }
         // per measure calculations
