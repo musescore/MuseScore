@@ -73,9 +73,12 @@ signals:
 
 private:
     void calculateKeyRects();
+    bool containsKey(uint keyIndex, piano_key_t key);
     void adjustKeysAreaPosition();
+    void checkResponseKeyOccluded();
     void determineOctaveLabelsFont();
     void updateKeyStateColors();
+    void updatePlaybackKeyStateColors();
 
     void paintBackground(QPainter* painter);
 
@@ -93,6 +96,9 @@ private:
 
     std::optional<piano_key_t> keyAt(const QPointF& position) const;
 
+    void shiftCheckRects();
+    bool preRectUnchanged();
+
     static constexpr piano_key_t MIN_KEY = 0;
     static constexpr piano_key_t MAX_NUM_KEYS = 128;
 
@@ -107,11 +113,49 @@ private:
     std::map<piano_key_t, QRectF> m_blackKeyRects;
     std::map<piano_key_t, QRectF> m_whiteKeyRects;
 
+    std::set<uint> m_clefKeySigsKeys;
+    piano_key_t m_clefKeySigs[240] = {
+        72, 74, 76, 77, 79, 81, 83, 84, // 0 0: G-Clef # sharp  keys  key / 12 - 1 == 5 (C5-C6)
+        74, 76, 78, 79, 81, 83, 84, 86,
+        76, 78, 79, 81, 83, 85, 86, 88,
+        78, 80, 81, 83, 85, 86, 88, 90,
+        80, 81, 83, 85, 87, 88, 90, 92,
+        82, 83, 85, 87, 88, 90, 92, 94,
+        83, 85, 87, 89, 90, 92, 94, 95,
+        85, 87, 89, 90, 92, 94, 96, 97,
+        48, 50, 52, 53, 55, 57, 59, 60, // 8 64: F-Clef # sharp  keys  key / 12 - 1 == 3 (C3-C4)
+        50, 52, 54, 55, 57, 59, 60, 62,
+        52, 54, 55, 57, 59, 61, 62, 64,
+        54, 56, 57, 59, 61, 62, 64, 66,
+        56, 57, 59, 61, 63, 64, 66, 68,
+        58, 59, 61, 63, 64, 66, 68, 70,
+        59, 61, 63, 65, 66, 68, 70, 71,
+        61, 63, 65, 66, 68, 70, 72, 73,
+        74, 76, 77, 79, 81, 82, 84, 86, // 16 128: G-Clef b flat  keys  key / 12 - 1 == 5 (C5-C6)
+        75, 77, 79, 81, 82, 84, 86, 87,
+        77, 79, 80, 82, 84, 86, 87, 89,
+        79, 80, 82, 84, 85, 87, 89, 91,
+        80, 82, 84, 85, 87, 89, 90, 92,
+        82, 83, 85, 87, 89, 90, 92, 94,
+        83, 85, 87, 88, 90, 92, 94, 95,
+        50, 52, 53, 55, 57, 58, 60, 62, // 23 184: F-Clef b flat  keys  key / 12 - 1 == 3 (C3-C4)
+        51, 53, 55, 57, 58, 60, 62, 53,
+        53, 55, 56, 58, 60, 62, 63, 65,
+        55, 56, 58, 60, 61, 63, 65, 67,
+        56, 58, 60, 61, 63, 65, 66, 68,
+        58, 59, 61, 63, 65, 66, 68, 70,
+        59, 61, 63, 64, 66, 68, 70, 71
+    };
+
     QFont m_octaveLabelsFont;
 
     std::map<KeyState, QColor> m_whiteKeyStateColors;
     std::map<KeyState, QColor> m_blackKeyTopPieceStateColors;
     std::map<KeyState, QColor> m_blackKeyBottomPieceStateColors;
+
+    std::map<piano_key_t, QRectF> m_check_rects;
+    std::map<piano_key_t, QRectF> m_pre_check_rects;
+    bool playbackkey_state_base = false;
 
     qreal m_keyWidthScaling = 1.0;
     qreal m_scrollOffset = 0.0;

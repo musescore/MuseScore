@@ -82,6 +82,254 @@ public:
     virtual INotationSelectionPtr selection() const = 0;
     virtual void clearSelection() = 0;
     virtual muse::async::Notification selectionChanged() const = 0;
+    virtual muse::async::Notification playbackNotesChanged() const 
+    {
+        return muse::async::Notification();
+    }
+    virtual void notifyPianoKeyboardNotesChanged() 
+    {
+        
+    }
+    virtual std::vector<mu::engraving::Note*> playbackNotes() const 
+    {
+        return {};
+    }
+    virtual void addPlaybackNote(mu::engraving::Note*, int) 
+    {
+
+    }
+    virtual int noteOttavaType(const mu::engraving::Note*) 
+    {
+        return 0;
+    }
+    virtual void addGlissandoNote(mu::engraving::Note*, int, int, int) 
+    {
+
+    }
+    virtual void addGlissandoEndNote(mu::engraving::Note*, int) 
+    {
+
+    }
+    virtual int glissandoNoteTicks() const 
+    {
+        return 0;
+    }
+    virtual int glissandoNoteDurationticks() const 
+    {
+        return 0;
+    }
+    virtual int glissandoCurrticks() const 
+    {
+        return 0;
+    }
+    virtual void glissandoEndNotesUpdate() 
+    {
+
+    }
+    virtual muse::async::Notification glissandoEndNotesChanged() 
+    {
+        return muse::async::Notification();
+    }
+    virtual mu::engraving::Note* glissandoNote() const 
+    {
+        return nullptr;
+    }
+    virtual std::vector<mu::engraving::Note*> glissandoEndNotes() const 
+    {
+        return {};
+    }
+    virtual void glissandoTick(int) 
+    {
+        
+    }
+    virtual muse::async::Notification glissandoTickChanged() 
+    {
+        return muse::async::Notification();
+    }
+
+    virtual bool arpeggioNoteTicksExist(muse::PointF) const 
+    {
+        return false;
+    }
+    virtual bool arpeggioPointEqual(muse::PointF) 
+    {
+        return false;
+    }
+    virtual void addArpeggioPoint(muse::PointF) 
+    {
+
+    }
+    virtual void arpeggioPointClear() 
+    {
+
+    }
+    virtual void addArpeggioNote(mu::engraving::Note*, int, int, int) 
+    {
+
+    }
+    virtual void updateArpeggioDuration(int) 
+    {
+        
+    }
+    virtual void addArpeggioNote(mu::engraving::Note*, int) 
+    {
+
+    }
+    virtual int arpeggioNoteTicks() const 
+    {
+        return 0;
+    }
+    virtual int arpeggioNoteDurationticks() const 
+    {
+        return 0;
+    }
+    virtual int arpeggioCurrticks() const 
+    {
+        return 0;
+    }
+    virtual muse::async::Notification arpeggioNotesChanged() 
+    {
+        return muse::async::Notification();
+    }
+    virtual std::vector<mu::engraving::Note*> arpeggioNotes() const 
+    {
+        return {};
+    }
+    virtual bool arpeggioIsDown() const 
+    {
+        return false;
+    }
+    virtual void arpeggioNotesUpdate(bool) 
+    {
+        
+    }
+    virtual void arpeggioTick(int) 
+    {
+        
+    }
+    virtual muse::async::Notification arpeggioTickChanged() 
+    {
+        return muse::async::Notification();
+    }
+
+    virtual void addTrillNote(mu::engraving::Note*, int, int, int, int) 
+    {
+        
+    }
+    virtual void addTrillNote1(mu::engraving::Note*, int, int, int, int) 
+    {
+        
+    }
+    virtual int trillNoteTicks() const 
+    {
+        return 0;
+    }
+    virtual int trillNoteTicks1() const 
+    {
+        return 0;
+    }
+    virtual int trillNoteDurationticks() const 
+    {
+        return 0;
+    }
+    virtual int trillNoteDurationticks1() const 
+    {
+        return 0;
+    }
+    virtual int trillNoteTremolotype() const
+    {
+        return 0;
+    }
+    virtual int trillNoteTremolotype1() const
+    {
+        return 0;
+    }
+    virtual int trillCurrticks() const 
+    {
+        return 0;
+    }
+    virtual int trillCurrticks1() const 
+    {
+        return 0;
+    }
+    virtual void trillNoteUpdate() 
+    {
+        
+    }
+    virtual void trillNoteUpdate1() 
+    {
+        
+    }
+    virtual mu::engraving::Note *trillNote() const 
+    {
+        return nullptr;
+    }
+    virtual mu::engraving::Note *trillNote1() const 
+    {
+        return nullptr;
+    }
+    virtual bool trillTick(int) 
+    {
+        return false;
+    }
+    virtual bool trillTick1(int) 
+    {
+        return false;
+    }
+    virtual muse::async::Notification trillNoteChanged() 
+    {
+        return muse::async::Notification();
+    }
+    virtual muse::async::Notification trillNoteChanged1() 
+    {
+        return muse::async::Notification();
+    }
+    virtual muse::async::Notification trillTickChanged() 
+    {
+        return muse::async::Notification();
+    }
+    virtual muse::async::Notification trillTickChanged1() 
+    {
+        return muse::async::Notification();
+    }
+    
+    virtual void notifyClefKeySigsKeysChanged() 
+    {
+        
+    }
+    virtual muse::async::Notification clefKeySigsKeysChanged() const 
+    {
+        return muse::async::Notification();
+    }
+    virtual void clearClefKeySigsKeys() 
+    {
+        
+    }
+    virtual std::set<uint> clefKeySigsKeys() const 
+    {
+        return {};
+    }
+    virtual void addClefKeySigsKeys(uint) 
+    {
+
+    }
+    virtual void notifyClefKeySigsKeysChange() 
+    {
+
+    }
+    virtual void playingChang(bool) 
+    {
+
+    }
+    virtual bool isPlaying() const 
+    {
+        return false;
+    }
+    virtual void clearPlaybackNotes() 
+    {
+        
+    }
+    
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
 
     virtual EngravingItem* contextItem() const = 0;
