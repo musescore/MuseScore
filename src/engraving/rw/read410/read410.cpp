@@ -808,8 +808,9 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
     Fraction startTick   = dst->tick();        // the initial tick and track where to start pasting
     track_idx_t startTrack  = dst->track();
     track_idx_t maxTrack    = score->ntracks();
-
+   
     while (e.readNextStartElement()) {
+       
         if (done) {
             break;
         }
@@ -827,6 +828,7 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                 break;
             }
             const AsciiStringView tag(e.name());
+
 
             if (tag == "trackOffset") {
                 destTrack = startTrack + e.readInt();
@@ -876,7 +878,8 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                 b->setTrack(destTrack);
                 b->setParent(seg);
                 score->undoAddElement(b);
-            } else if (tag == "Breath") {
+            }
+            else if (tag == "Breath") {
                 Measure* meas = score->tick2measure(destTick);
                 Segment* seg = meas ? meas->undoGetSegment(SegmentType::Breath, destTick) : nullptr;
                 if (!seg) {
@@ -891,6 +894,21 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                 b->setTrack(destTrack);
                 b->setParent(seg);
                 score->undoAddElement(b);
+            }else if(tag == "Clef") {
+                
+                Measure* meas = score->tick2measure(destTick);
+                Segment* seg = meas ? meas->undoGetSegment(SegmentType::Clef, destTick) : nullptr;
+                if (!seg) {
+                    LOGD() << "No Clef segment at tick " << destTick.ticks();
+                    e.skipCurrentElement();
+                    continue;
+                }
+                Clef* c = Factory::createClef(score->dummy()->segment());
+                c->setTrack(destTrack);
+                TRead::read(c, e, ctx);
+                c->setTrack(destTrack);
+                c->setParent(seg);
+                score->undoAddElement(c);
             } else if (tag == "Dynamic"
                        || tag == "Expression"
                        || tag == "StaffText"

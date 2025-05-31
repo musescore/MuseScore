@@ -168,6 +168,11 @@ TEST_F(Engraving_CopyPasteSymbolListTests, DISABLED_copypasteFermataRest)
     copypaste(u"fermata-rest", ElementType::ARTICULATION);
 }
 
+TEST_F(Engraving_CopyPasteSymbolListTests, copypasteClef)
+{
+    copypaste(u"clef", ElementType::CLEF);
+}
+
 //---------------------------------------------------------
 //    select all elements of type in 2 first measures
 //    in the first staff and copy paste
