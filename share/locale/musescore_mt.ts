@@ -42,7 +42,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="14"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Miżuri kull sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
@@ -31584,7 +31584,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5490"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Miżuri kull sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5497"/>

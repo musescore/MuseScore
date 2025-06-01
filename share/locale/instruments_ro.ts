@@ -19699,7 +19699,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6260"/>
         <source>Big Band</source>
-        <translation type="unfinished"/>
+        <translation>Big Band</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6261"/>
@@ -19867,7 +19867,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="54"/>
         <source>Big Band</source>
-        <translation type="unfinished"/>
+        <translation>Big Band</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="55"/>

@@ -7937,7 +7937,7 @@ l&apos;alçària x del text):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1292"/>
         <source>Add frame text</source>
-        <translation>Afegeix marc de text</translation>
+        <translation>Afegeix text de marc</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1298"/>
@@ -28862,7 +28862,7 @@ ha fallat.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1539"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on MuseScore.org.</source>
-        <translation>Podeu continuar desant-la localment, però el fitxer pot esdevenir inutilitzable. Per preservar la vostra partitura, recupereu l&apos;última versió desada o corregiu els errors manualment. També podeu obtenir ajuda sobre aquest tema a MuseScore.org.</translation>
+        <translation>Podeu continuar desant-la localment, però el fitxer pot esdevenir inutilitzable. Per preservar la partitura, recupereu-ne l&apos;última versió desada o corregiu-ne els errors manualment. També podeu obtenir ajuda sobre aquest tema a MuseScore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1585"/>
@@ -31426,7 +31426,7 @@ ha fallat.</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4712"/>
         <source>Add text frame</source>
-        <translation>Afegeix marc de etxt</translation>
+        <translation>Afegeix marc de text</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4713"/>
