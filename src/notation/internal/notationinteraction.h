@@ -111,14 +111,9 @@ public:
     std::vector<mu::engraving::Note*> glissandoEndNotes() const override;
     void glissandoTick(int ticks) override;
     muse::async::Notification glissandoTickChanged() override;
-
-    bool arpeggioNoteTicksExist(muse::PointF) const override;
-    bool arpeggioPointEqual(muse::PointF) override;
-    void addArpeggioPoint(muse::PointF) override;
-    void arpeggioPointClear() override;
-    void addArpeggioNote(mu::engraving::Note*, int, int, int) override;
+    
+    void addArpeggioNotes(std::vector<mu::engraving::Note*>, int, int, int) override;
     void updateArpeggioDuration(int) override;
-    void addArpeggioNote(mu::engraving::Note*, int) override;
     int arpeggioNoteTicks() const override;
     int arpeggioNoteDurationticks() const override;
     int arpeggioCurrticks() const override;
@@ -149,12 +144,14 @@ public:
     muse::async::Notification trillNoteChanged1() override;
     muse::async::Notification trillTickChanged() override;
     muse::async::Notification trillTickChanged1() override;
+    bool islastMeasure() const override;
+    void lastMeasure(bool) override;
+    muse::async::Notification lastMeasureChanged() override;
 
     void notifyClefKeySigsKeysChanged() override;
     muse::async::Notification clefKeySigsKeysChanged() const override;
-    void clearClefKeySigsKeys() override;
     std::set<uint> clefKeySigsKeys() const override;
-    void addClefKeySigsKeys(uint) override;
+    void addClefKeySigsKeysSet(std::set<uint>) override;
     void notifyClefKeySigsKeysChange() override;
     void playingChang(bool is_playing) override;
     bool isPlaying() const override;
@@ -593,7 +590,6 @@ private:
     muse::async::Notification m_glissandoEndNotesChanged;
     muse::async::Notification m_glissandoTickChanged;
 
-    std::vector<muse::PointF> arpeggio_points;
     int arpeggio_ticks = 0;
     int arpeggio_duration_ticks = 0;
     std::vector<Note*> arpeggio_notes;
@@ -616,6 +612,8 @@ private:
     muse::async::Notification m_trillNoteChanged1;
     muse::async::Notification m_trillTickChanged;
     muse::async::Notification m_trillTickChanged1;
+    bool m_islastMeasure = false;
+    muse::async::Notification m_lastMeasureChanged;
 
     muse::async::Notification m_clefKeySigsKeysChanged;
     std::set<uint> m_clefKeySigsKeys;

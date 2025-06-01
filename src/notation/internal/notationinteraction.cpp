@@ -1216,59 +1216,22 @@ muse::async::Notification NotationInteraction::glissandoTickChanged()
     return m_glissandoTickChanged;
 }
 
-bool NotationInteraction::arpeggioNoteTicksExist(muse::PointF point) const 
+void NotationInteraction::addArpeggioNotes(std::vector<mu::engraving::Note*> notes, int ticks, int duration_ticks, int ottavaType) 
 {
-    for (muse::PointF _point : arpeggio_points) {
-        if (point.x() == _point.x() && point.y() == _point.y()) {
-            return true;
+    arpeggio_notes.clear();
+    for (const auto& note : notes) {
+        arpeggio_notes.push_back(note);  
+        if (ottavaType > 0) {
+            m_ottava_map[note] = ottavaType;
         }
     }
-    return false;
-}
-bool NotationInteraction::arpeggioPointEqual(muse::PointF point) 
-{
-    for (muse::PointF _point : arpeggio_points) {
-        return point.x() == _point.x();
-    }
-    return false;
-}
-void NotationInteraction::addArpeggioPoint(muse::PointF point) 
-{
-    arpeggio_points.push_back(point);
-}
-void NotationInteraction::arpeggioPointClear() 
-{
-    arpeggio_points.clear();
-    arpeggio_notes.clear();
-    arpeggio_curr_ticks = 0;
-    arpeggio_ticks = 0;
-    arpeggio_duration_ticks = 0;
-}
-void NotationInteraction::addArpeggioNote(mu::engraving::Note* note, int ticks, int duration_ticks, int ottavaType) 
-{
-    arpeggio_notes.push_back(note);
     arpeggio_ticks = ticks;
     arpeggio_curr_ticks = ticks;
     arpeggio_duration_ticks = duration_ticks;
-    if (ottavaType > 0) {
-        m_ottava_map[note] = ottavaType;
-    }
 }
 void NotationInteraction::updateArpeggioDuration(int duration_ticks) 
 {
     arpeggio_duration_ticks = duration_ticks;
-}
-void NotationInteraction::addArpeggioNote(mu::engraving::Note* note, int ottavaType) 
-{
-    for (Note* ptr : arpeggio_notes) {
-        if (ptr == note) {
-            return;
-        }
-    }
-    arpeggio_notes.push_back(note);
-    if (ottavaType > 0) {
-        m_ottava_map[note] = ottavaType;
-    }
 }
 int NotationInteraction::arpeggioNoteTicks() const 
 {
@@ -1308,7 +1271,6 @@ void NotationInteraction::arpeggioTick(int ticks)
         arpeggio_curr_ticks = 0;
         arpeggio_ticks = 0;
         arpeggio_duration_ticks = 0;
-        arpeggio_points.clear();
         arpeggio_notes.clear();
     } else {
         arpeggio_curr_ticks = ticks;
@@ -1443,6 +1405,20 @@ muse::async::Notification NotationInteraction::trillTickChanged1()
     return m_trillTickChanged1;
 }
 
+bool NotationInteraction::islastMeasure() const
+{
+    return m_islastMeasure;
+}
+void NotationInteraction::lastMeasure(bool islastMeasure) 
+{
+    m_islastMeasure = islastMeasure;
+    m_lastMeasureChanged.notify();
+}
+muse::async::Notification NotationInteraction::lastMeasureChanged()
+{
+    return m_lastMeasureChanged;
+}
+
 
 void NotationInteraction::notifyClefKeySigsKeysChanged() 
 {
@@ -1454,19 +1430,17 @@ muse::async::Notification NotationInteraction::clefKeySigsKeysChanged() const
     return m_clefKeySigsKeysChanged;
 }
 
-void NotationInteraction::clearClefKeySigsKeys() 
-{
-    m_clefKeySigsKeys.clear();
-}
-
 std::set<uint> NotationInteraction::clefKeySigsKeys() const 
 {
     return m_clefKeySigsKeys;
 }
 
-void NotationInteraction::addClefKeySigsKeys(uint clefKeySigsKey) 
+void NotationInteraction::addClefKeySigsKeysSet(std::set<uint> clefKeySigsKeys) 
 {
-    m_clefKeySigsKeys.insert(clefKeySigsKey);
+    m_clefKeySigsKeys.clear();
+    for (auto key : clefKeySigsKeys) {
+        m_clefKeySigsKeys.insert(key);
+    }
 }
 
 void NotationInteraction::notifyClefKeySigsKeysChange() 

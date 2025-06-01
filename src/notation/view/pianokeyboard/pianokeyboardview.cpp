@@ -108,7 +108,6 @@ void PianoKeyboardView::init()
         for (auto key : m_controller->clefKeySigsKeys()) {
             m_clefKeySigsKeys.insert(key);
         }
-        m_controller->clearClefKeySigsKeys();
     });
 
     update();
@@ -264,23 +263,25 @@ void PianoKeyboardView::checkResponseKeyOccluded() {
         return;
     }
     if (m_check_rects.empty()) {
-        qreal screenWidth = QGuiApplication::primaryScreen()->geometry().width();
-        qreal screenHeight = QGuiApplication::primaryScreen()->geometry().height();
+        if (m_controller->islastMeasure()) {
+            qreal screenWidth = QGuiApplication::primaryScreen()->geometry().width();
+            qreal screenHeight = QGuiApplication::primaryScreen()->geometry().height();
 
-        qreal _width = width();
-        qreal _height = height();
-        if (_width > screenWidth) {
-            _width = screenWidth;
-        }
-        if (_height > screenHeight) {
-            _height = screenHeight;
-        }
-        if (_width < m_keysAreaRect.width()) {
-            qreal keysAreaTop = (_height - m_keysAreaRect.height()) / 2;
-            m_scrollOffset = -1;
-            m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
-            updateScrollBar();
-        }
+            qreal _width = width();
+            qreal _height = height();
+            if (_width > screenWidth) {
+                _width = screenWidth;
+            }
+            if (_height > screenHeight) {
+                _height = screenHeight;
+            }
+            if (_width < m_keysAreaRect.width()) {
+                qreal keysAreaTop = (_height - m_keysAreaRect.height()) / 2;
+                m_scrollOffset = -1;
+                m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
+                updateScrollBar();
+            }
+        } 
         return;
     }
 
@@ -862,7 +863,7 @@ std::optional<piano_key_t> PianoKeyboardView::keyAt(const QPointF& position) con
 }
 
 void PianoKeyboardView::shiftCheckRects() 
-{
+{   
     m_pre_check_rects.swap(m_check_rects);
     m_check_rects.clear();
 }

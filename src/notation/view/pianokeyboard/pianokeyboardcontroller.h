@@ -57,6 +57,7 @@ public:
     bool isFromMidi() const;
 
     bool isPlaying() const;
+    bool islastMeasure() const;
 
     muse::async::Notification glissandoEndNotesChanged() const;
     muse::async::Notification glissandoTickChanged() const;
@@ -66,7 +67,6 @@ public:
 
     muse::async::Notification clefKeySigsKeysChanged() const;
     std::set<uint> clefKeySigsKeys() const;
-    void clearClefKeySigsKeys();
     
     void updatePianoKeyboardKeys(piano_key_t _lowestKey, piano_key_t _numKeys);
 
@@ -121,6 +121,8 @@ private:
 
     std::set<uint> m_clefKeySigsKeys;
     muse::async::Notification m_clefKeySigsKeysChanged;
+
+    bool m_islastMeasure;
 
     bool m_isFromMidi = false;
 

@@ -152,7 +152,7 @@ private:
     std::map<KeyState, QColor> m_whiteKeyStateColors;
     std::map<KeyState, QColor> m_blackKeyTopPieceStateColors;
     std::map<KeyState, QColor> m_blackKeyBottomPieceStateColors;
-
+    
     std::map<piano_key_t, QRectF> m_check_rects;
     std::map<piano_key_t, QRectF> m_pre_check_rects;
     bool playbackkey_state_base = false;
