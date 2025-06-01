@@ -87,8 +87,7 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
 {
     Staff* s = Factory::createStaff(part);
 
-    /// @todo staff settings can change at any tick
-    Fraction eventTick{0, 1};
+    StaffType* staffType = s->staffType(Fraction(0, 1));
 
     // initialise MuseScore's default values
     if (it) {
@@ -116,8 +115,9 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
     if (const auto& firstSystem = musxStaff->getDocument()->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, 1)) {
         if (firstSystem->hasStaffScaling) {
             if (auto staffSize = musxStaff->getDocument()->getDetails()->get<details::StaffSize>(m_currentMusxPartId, 1, musxStaff->getCmper())) {
-                if (staffSize->staffPercent < 100) {
-                    s->staffType(eventTick)->setSmall(true);
+                double userMag = FinaleTConv::doubleFromPercent(staffSize->staffPercent);
+                if (staffType->userMag() != userMag) {
+                    staffType->setUserMag(userMag);
                 }
             }
         }
@@ -130,7 +130,7 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
         // Finale has a "blank" clef type that is used for percussion staves. For now we emulate this
         // at the beginning of the piece only.
         /// @todo revisit how to handle blank clef types or changes to other clefs for things such as cues
-        s->staffType(eventTick)->setGenClef(false);
+        staffType->setGenClef(false);
     }
     m_score->appendStaff(s);
     m_staff2Inst.emplace(s->idx(), InstCmper(musxStaff->getCmper()));
