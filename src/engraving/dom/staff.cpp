@@ -964,7 +964,7 @@ SwingParameters Staff::swing(const Fraction& tick) const
     int swingUnit = 0;
     muse::ByteArray ba = style().styleSt(Sid::swingUnit).toAscii();
     DurationType unit = TConv::fromXml(ba.constChar(), DurationType::V_INVALID);
-    int swingRatio = style().styleI(Sid::swingRatio);
+    float swingRatio = style().styleI(Sid::swingRatio);
     if (unit == DurationType::V_EIGHTH) {
         swingUnit = Constants::DIVISION / 2;
     } else if (unit == DurationType::V_16TH) {

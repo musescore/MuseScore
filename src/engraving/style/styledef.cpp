@@ -476,7 +476,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(genCourtesyClef,                            true),
     styleDef(keySigCourtesyBarlineMode,                  PropertyValue(int(CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY))),
     styleDef(timeSigCourtesyBarlineMode,                 PropertyValue(int(CourtesyBarlineMode::ALWAYS_SINGLE))),
-    styleDef(swingRatio,                                 PropertyValue(60)),
+    styleDef(swingRatio,                                 PropertyValue(60.0)),
     styleDef(swingUnit,                                  PropertyValue(String())),
     styleDef(useStandardNoteNames,                       true),
     styleDef(useGermanNoteNames,                         false),
