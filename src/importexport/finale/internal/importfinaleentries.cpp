@@ -216,8 +216,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         return true;
     }
 
-    Fraction entryStartTick = FinaleTConv::musxFractionToFraction(entryInfo->elapsedDuration).reduced();
-    Segment* segment = measure->getSegment(SegmentType::ChordRest, entryStartTick);
+    Fraction entryStartTick = FinaleTConv::musxFractionToFraction(entryInfo.calcGlobalElapsedDuration()).reduced();
+    Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick() + entryStartTick);
 
     // Retrieve entry from entryInfo
     std::shared_ptr<const Entry> currentEntry = entryInfo->getEntry();
@@ -375,7 +375,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
         return true;
     }
     /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
-    ChordRest* cr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(entryInfoPtr->elapsedDuration), curTrackIdx);
+    ChordRest* cr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(entryInfoPtr.calcGlobalElapsedDuration()), curTrackIdx);
     if (!cr) { // once grace notes are supported, use IF_ASSERT_FAILED(cr)
         logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
         return false;
@@ -392,7 +392,7 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     ChordRest* lastCr = nullptr;
     for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
         std::shared_ptr<const Entry> currentEntry = nextInBeam->getEntry();
-        lastCr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(nextInBeam->elapsedDuration), curTrackIdx);
+        lastCr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(nextInBeam.calcGlobalElapsedDuration()), curTrackIdx);
         IF_ASSERT_FAILED(lastCr) {
             logger()->logWarning(String(u"Entry %1 was not mapped").arg(nextInBeam->getEntry()->getEntryNumber()), m_doc, nextInBeam.getStaff(), nextInBeam.getMeasure());
             continue;
@@ -621,10 +621,10 @@ void FinaleParser::importEntries()
             // ...and make sure voice 1 exists.
             if (!measure->hasVoice(curStaffIdx * VOICES)) {
                 Staff* staff = m_score->staff(curStaffIdx);
-                Segment* segment = measure->getSegment(SegmentType::ChordRest, Fraction(0, 1));
+                Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
-                rest->setTicks(measure->timesig() / staff->timeStretch(measure->tick()));
+                rest->setTicks(measure->timesig() * staff->timeStretch(measure->tick()));
                 rest->setTrack(curStaffIdx * VOICES);
                 segment->add(rest);
             }

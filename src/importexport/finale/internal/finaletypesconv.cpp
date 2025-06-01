@@ -1031,16 +1031,28 @@ Key FinaleTConv::keyFromAlteration(int musxAlteration)
 KeyMode FinaleTConv::keyModeFromDiatonicMode(music_theory::DiatonicMode diatonicMode)
 {
     using DiatonicMode = music_theory::DiatonicMode;
-    static const std::unordered_map<music_theory::DiatonicMode, KeyMode> keyModeTypeTable = {
-        { DiatonicMode::Ionian,             KeyMode::MAJOR },
+    static const std::unordered_map<DiatonicMode, KeyMode> keyModeTypeTable = {
+        { DiatonicMode::Ionian,             KeyMode::IONIAN },
         { DiatonicMode::Dorian,             KeyMode::DORIAN },
         { DiatonicMode::Phrygian,           KeyMode::PHRYGIAN },
         { DiatonicMode::Lydian,             KeyMode::LYDIAN },
         { DiatonicMode::Mixolydian,         KeyMode::MIXOLYDIAN },
-        { DiatonicMode::Aeolian,            KeyMode::MINOR },
+        { DiatonicMode::Aeolian,            KeyMode::AEOLIAN },
         { DiatonicMode::Locrian,            KeyMode::LOCRIAN },
     };
     return muse::value(keyModeTypeTable, diatonicMode, KeyMode::UNKNOWN);
+}
+
+StaffGroup FinaleTConv::staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle)
+{
+    using NotationStyle = musx::dom::others::Staff::NotationStyle;
+    static const std::unordered_map<NotationStyle, StaffGroup> staffGroupMapTable = {
+        { NotationStyle::Standard,          StaffGroup::STANDARD },
+        { NotationStyle::Percussion,        StaffGroup::PERCUSSION },
+        { NotationStyle::Tablature,         StaffGroup::TAB },
+    };
+    return muse::value(staffGroupMapTable, notationStyle, StaffGroup::STANDARD);
+
 }
 
 double FinaleTConv::doubleFromEvpu(Evpu evpu)

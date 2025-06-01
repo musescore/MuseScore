@@ -76,6 +76,8 @@ private:
                      const std::shared_ptr<musx::dom::others::Measure>& musxMeasure,
                      engraving::Measure* measure, engraving::staff_idx_t curStaffIdx,
                      musx::dom::ClefIndex& musxCurrClef);
+    bool applyStaffSyles(engraving::StaffType* staffType, const std::shared_ptr<const musx::dom::others::StaffComposite>& currStaff);
+
     // entries
     /// @todo create readContext struct with tick, segment, track, measure, etc
     void mapLayers();
