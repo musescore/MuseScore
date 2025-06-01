@@ -636,7 +636,14 @@ void FinaleParser::importPageLayout()
         bool isFirstSystemOnPage = false;
         for (size_t j = currentPageIndex; j < pages.size(); ++j) {
             const std::shared_ptr<others::Page>& page = pages[j];
+            if (page->isBlank()) {
+                /// @todo handle blank page??
+                continue;
+            }
             const std::shared_ptr<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystem);
+            IF_ASSERT_FAILED(firstPageSystem) {
+                break;
+            }
             Fraction pageStartTick = muse::value(m_meas2Tick, firstPageSystem->startMeas, Fraction(-1, 1));
             if (pageStartTick < startTick) {
                 continue;
@@ -732,6 +739,10 @@ void FinaleParser::importPageLayout()
         // add page break if needed
         bool isLastSystemOnPage = false;
         for (const std::shared_ptr<others::Page>& page : pages) {
+            if (page->isBlank()) {
+                /// @todo handle blank page???
+                continue;
+            }
             const std::shared_ptr<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystem);
             Fraction pageStartTick = muse::value(m_meas2Tick, firstPageSystem->startMeas, Fraction(-1, 1));
             // the last staff system in the score can't be compared to the startTick of the preceding page -
