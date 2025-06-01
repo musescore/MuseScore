@@ -69,7 +69,7 @@ private:
     QColor color() const;
     muse::RectF resolveCursorRectByTick(muse::midi::tick_t tick) const;
     muse::RectF resolveCursorRectByTick(muse::midi::tick_t tick, bool isPlaying = true);
-    void processOttava(mu::engraving::Score* score);
+    void processOttava(mu::engraving::Score* score, bool isPlaying = true);
     void processOttavaAsync(mu::engraving::Score* score);
 
     bool m_visible = false;
@@ -80,20 +80,30 @@ private:
     // alex::
     int m_hit_measure_no = -1;
     Measure* m_hit_measure = nullptr;
-    std::set<Note*> curr_measure_trill_notes;
-    Note *curr_trill_note = nullptr;
-    std::map<Note*, int> tremolo_type_map;
-    std::map<Note*, bool> tremolo_half_map;
-    Note *curr_trill_note1 = nullptr;
     std::map<const Note*, int> ottava_map;
+
+    std::map<EngravingItem*, Note*> score_trill_map;
+    std::map<EngravingItem*, int> score_trill_st_map;
+    std::map<EngravingItem*, int> score_trill_dt_map;
+    std::map<EngravingItem*, int> score_trill_tt_map;
+    std::map<EngravingItem*, int> score_trill_ot_map;
+    std::map<EngravingItem*, Note*> score_trill_map1;
+    std::map<EngravingItem*, int> score_trill_st_map1;
+    std::map<EngravingItem*, int> score_trill_dt_map1;
+    std::map<EngravingItem*, int> score_trill_tt_map1;
+    std::map<EngravingItem*, int> score_trill_ot_map1;
+
+    std::map<EngravingItem*, std::vector<Note*>> score_arpeggio_map;
+    std::map<EngravingItem*, int> score_arpeggio_st_map;
+    std::map<EngravingItem*, int> score_arpeggio_dt_map;
+    std::map<EngravingItem*, int> score_arpeggio_ot_map;
 
     std::future<void> m_ottavaProcessFuture;
     std::atomic<bool> m_isOttavaProcessed{ false };
 
-    std::set<ClefType> clefTypes;
-    std::unordered_set<ClefType> curr_clefTypes;
-    std::map<int, ClefType> stash_clefType;
-    std::set<mu::engraving::Key> keySigKeys;
+    std::map<int, std::set<uint>> clefKeySigsKeysMap;
+
+    int curr_seg_ticks = 0;
 };
 }
 
