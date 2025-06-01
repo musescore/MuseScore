@@ -343,7 +343,10 @@ static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, 
         clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
     }
 
-    Fraction clefTick = measure->tick() + FinaleTConv::eduToFraction(musxEduPos);
+    Staff* staff = score->staff(staffIdx);
+    Fraction timeStretch = staff->timeStretch(measure->tick());
+    // Clef positions in musx are staff-level, so back out any time stretch to get global position.
+    Fraction clefTick = measure->tick() + (FinaleTConv::eduToFraction(musxEduPos) / timeStretch);
     Segment* clefSeg = measure->getSegment(
         clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
     clefSeg->add(clef);
