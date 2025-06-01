@@ -313,7 +313,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
 
             // set up ties
             if (noteInfoPtr->tieStart) {
-                bool hasEnd = noteInfoPtr.calcTieTo()->tieEnd;
+                NoteInfoPtr tiedTo = noteInfoPtr.calcTieTo();
+                const bool hasEnd = tiedTo && tiedTo->tieEnd;
                 Tie* tie = hasEnd ? Factory::createTie(m_score->dummy()) : Factory::createLaissezVib(m_score->dummy()->note());
                 tie->setStartNote(note);
                 tie->setTick(note->tick());
