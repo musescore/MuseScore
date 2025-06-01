@@ -486,6 +486,16 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                     Note* note = orn->noteAbove();
                     if (note) {
                         _measure_trill_notes.insert(note);
+
+                        for (size_t m_k1 = 0; m_k1 < measure_children.size(); m_k1++) {
+                            EngravingItem* measure_item1 = measure_children.at(m_k1);
+                            if (measure_item1 && measure_item1->isTie()) {
+                                Tie* tie = toTie(measure_item1);
+                                if (tie->startNote() == note) {
+                                    score_trill_tie_map[note] = true;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1238,11 +1248,15 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                     engravingItem->setColor(muse::draw::Color::RED);
 
                     if (score_trill_map[engravingItem]) {
-                        m_notation->interaction()->addTrillNote(score_trill_map[engravingItem], score_trill_st_map[engravingItem], score_trill_dt_map[engravingItem], score_trill_tt_map[engravingItem], score_trill_ot_map[engravingItem]);
+                        m_notation->interaction()->addTrillNote(score_trill_map[engravingItem], score_trill_st_map[engravingItem], 
+                            score_trill_dt_map[engravingItem], score_trill_tt_map[engravingItem], score_trill_ot_map[engravingItem], 
+                            score_trill_tie_map[score_trill_map[engravingItem]]);
                         m_notation->interaction()->trillNoteUpdate();
                     }
                     if (score_trill_map1[engravingItem]) {
-                        m_notation->interaction()->addTrillNote1(score_trill_map1[engravingItem], score_trill_st_map1[engravingItem], score_trill_dt_map1[engravingItem], score_trill_tt_map1[engravingItem], score_trill_ot_map1[engravingItem]);
+                        m_notation->interaction()->addTrillNote1(score_trill_map1[engravingItem], score_trill_st_map1[engravingItem], 
+                            score_trill_dt_map1[engravingItem], score_trill_tt_map1[engravingItem], score_trill_ot_map1[engravingItem], 
+                            score_trill_tie_map1[score_trill_map1[engravingItem]]);
                         m_notation->interaction()->trillNoteUpdate1();
                     }
 

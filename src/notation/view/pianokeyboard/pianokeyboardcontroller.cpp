@@ -168,9 +168,14 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
         return KeyState::None;
     }
 
-    if (m_trill_curr_ticks >= m_trill_ticks && m_trill_curr_ticks <= m_trill_ticks + m_trill_duration_ticks) {
+    int _m_trill_duration_ticks = m_trill_duration_ticks;
+    if (m_trill_note_hastie) {
+        _m_trill_duration_ticks = m_trill_duration_ticks * 2;
+    }
+
+    if (m_trill_curr_ticks >= m_trill_ticks && m_trill_curr_ticks <= m_trill_ticks + _m_trill_duration_ticks) {
         int left_dis = m_trill_curr_ticks - m_trill_ticks;
-        double ratio = left_dis / static_cast<double>(m_trill_duration_ticks);
+        double ratio = left_dis / static_cast<double>(_m_trill_duration_ticks);
 
         if (m_trill_tremolo_type > 0) {
             if (receive_note) {
@@ -191,7 +196,11 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
                 }
             }
         } else {
-            if (receive_note && receive_note->chord()->durationType().type() <= mu::engraving::DurationType::V_QUARTER) {
+            mu::engraving::DurationType _type = receive_note->chord()->durationType().type();
+            if (m_trill_note_hastie) {
+                _type = static_cast<DurationType>(static_cast<int>(_type) - 1);
+            }
+            if (receive_note && _type <= mu::engraving::DurationType::V_QUARTER) {
                 int _ratio_count = static_cast<int>(48 * ratio);
                 int _int_note_key = static_cast<int>(m_trill_note_key);
                 if (_ratio_count % 2 == 0) {
@@ -222,10 +231,13 @@ KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const
     if (m_trill_duration_ticks1 == 0) {
         return KeyState::None;
     }
-
-    if (m_trill_curr_ticks1 >= m_trill_ticks1 && m_trill_curr_ticks1 <= m_trill_ticks1 + m_trill_duration_ticks1) {
+    int _m_trill_duration_ticks1 = m_trill_duration_ticks1;
+    if (m_trill_note1_hastie) {
+        _m_trill_duration_ticks1 = m_trill_duration_ticks1 * 2;
+    }
+    if (m_trill_curr_ticks1 >= m_trill_ticks1 && m_trill_curr_ticks1 <= m_trill_ticks1 + _m_trill_duration_ticks1) {
         int left_dis = m_trill_curr_ticks1 - m_trill_ticks1;
-        double ratio = left_dis / static_cast<double>(m_trill_duration_ticks1);
+        double ratio = left_dis / static_cast<double>(_m_trill_duration_ticks1);
 
         if (m_trill_tremolo_type1 > 0) {
             if (receive_note1) {
@@ -246,7 +258,11 @@ KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const
                 }
             }
         } else {
-            if (receive_note1 && receive_note1->chord()->durationType().type() <= mu::engraving::DurationType::V_QUARTER) {
+            mu::engraving::DurationType _type = receive_note1->chord()->durationType().type();
+            if (m_trill_note1_hastie) {
+                _type = static_cast<DurationType>(static_cast<int>(_type) - 1);
+            }
+            if (receive_note1 && _type <= mu::engraving::DurationType::V_QUARTER) {
                 int _ratio_count = static_cast<int>(48 * ratio);
                 int _int_note_key = static_cast<int>(m_trill_note_key1);
                 if (_ratio_count % 2 == 0) {
@@ -456,6 +472,7 @@ void PianoKeyboardController::onNotationChanged()
                 return;
             }
             m_trill_ticks = notation->interaction()->trillNoteTicks();
+            m_trill_note_hastie = notation->interaction()->trillNoteHasTie();
             m_trill_duration_ticks = notation->interaction()->trillNoteDurationticks();
             
             Note *receivedNote = notation->interaction()->trillNote();
@@ -505,6 +522,7 @@ void PianoKeyboardController::onNotationChanged()
                 return;
             }
             m_trill_ticks1 = notation->interaction()->trillNoteTicks1();
+            m_trill_note1_hastie = notation->interaction()->trillNote1HasTie();
             m_trill_duration_ticks1 = notation->interaction()->trillNoteDurationticks1();
             
             Note *receivedNote = notation->interaction()->trillNote1();
