@@ -176,9 +176,9 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
             if (receive_note) {
                 DurationType noteDurationtype = receive_note->chord()->durationType().type();
                 int frequency = m_trill_tremolo_type / 10;
-                if (noteDurationtype == mu::engraving::DurationType::V_WHOLE) {
+                if (noteDurationtype < mu::engraving::DurationType::V_WHOLE) {
                     frequency *= 4;
-                } else if (noteDurationtype == mu::engraving::DurationType::V_HALF) {
+                } else if (noteDurationtype <= mu::engraving::DurationType::V_WHOLE) {
                     frequency *= 2;
                 } 
                 int _ratio_count = static_cast<int>(frequency * ratio);
