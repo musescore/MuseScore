@@ -2811,7 +2811,7 @@ void TWrite::writeProperties(const StaffTextBase* item, XmlWriter& xml, WriteCon
         } else {
             swingUnit = DurationType::V_ZERO;
         }
-        int swingRatio = item->swingParameters().swingRatio;
+        float swingRatio = item->swingParameters().swingRatio;
         xml.tag("swing", { { "unit", TConv::toXml(swingUnit) }, { "ratio", swingRatio } });
     }
 
