@@ -87,11 +87,13 @@ private:
     std::map<EngravingItem*, int> score_trill_dt_map;
     std::map<EngravingItem*, int> score_trill_tt_map;
     std::map<EngravingItem*, int> score_trill_ot_map;
+    std::map<Note*, bool> score_trill_tie_map;
     std::map<EngravingItem*, Note*> score_trill_map1;
     std::map<EngravingItem*, int> score_trill_st_map1;
     std::map<EngravingItem*, int> score_trill_dt_map1;
     std::map<EngravingItem*, int> score_trill_tt_map1;
     std::map<EngravingItem*, int> score_trill_ot_map1;
+    std::map<Note*, bool> score_trill_tie_map1;
 
     std::map<EngravingItem*, std::vector<Note*>> score_arpeggio_map;
     std::map<EngravingItem*, int> score_arpeggio_st_map;
