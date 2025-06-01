@@ -305,11 +305,6 @@ std::set<uint> PianoKeyboardController::clefKeySigsKeys() const
     return m_clefKeySigsKeys;
 }
 
-void PianoKeyboardController::clearClefKeySigsKeys() 
-{
-    m_clefKeySigsKeys.clear();
-}
-
 void PianoKeyboardController::updatePianoKeyboardKeys(piano_key_t _lowestKey, piano_key_t _numKeys) {
     lowestKey = _lowestKey;
     numKeys = _numKeys;
@@ -324,6 +319,13 @@ bool PianoKeyboardController::isPlaying() const
 {
     if (auto notation = currentNotation()) {
         return notation->interaction()->isPlaying();
+    }
+    return false;
+}
+bool PianoKeyboardController::islastMeasure() const 
+{
+    if (auto notation = currentNotation()) {
+        return notation->interaction()->islastMeasure();
     }
     return false;
 }
@@ -388,6 +390,14 @@ void PianoKeyboardController::onNotationChanged()
             }
             m_isFromMidi = false;
             updatePlaybackNotesKeys(notes);
+        });
+
+        notation->interaction()->lastMeasureChanged().onNotify(this, [this]() {
+            auto notation = currentNotation();
+            if (!notation) {
+                return;
+            }
+            m_islastMeasure = notation->interaction()->islastMeasure();
         });
 
         notation->interaction()->glissandoEndNotesChanged().onNotify(this, [this]() {
@@ -561,10 +571,10 @@ void PianoKeyboardController::onNotationChanged()
             if (!notation) {
                 return;
             }
+            m_clefKeySigsKeys.clear();
             for (auto key : notation->interaction()->clefKeySigsKeys()) {
                 m_clefKeySigsKeys.insert(key);
             }
-            notation->interaction()->clearClefKeySigsKeys();
 
             m_clefKeySigsKeysChanged.notify();
         });
