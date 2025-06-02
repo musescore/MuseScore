@@ -39,7 +39,7 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
     }
 
     // pointers are used here to avoid copying the groups
-    const auto visibleGroups = [&]() -> std::vector<const SystemObjectsGroup*> {
+    const std::vector<const SystemObjectsGroup*> visibleGroups = [&] {
         std::vector<const SystemObjectsGroup*> v;
         v.reserve(groups.size());
 
