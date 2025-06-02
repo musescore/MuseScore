@@ -43,9 +43,9 @@ echo =======================
 echo Generate reference pngs: 
 ./vtest/vtest-generate-pngs.sh -o ./reference_pngs -m $REF_BIN
 ./vtest/vtest-generate-pngs.sh -o ./reference_pngs_small -m $REF_BIN -s ./vtest/scores_small -d 460 -S ./vtest/small.mss
-#./vtest/vtest-generate-pngs.sh -o ./reference_pngs_gp_small -m $REF_BIN -s ./vtest/gp_small -d 460 -S ./vtest/small.mss --gp-linked
+./vtest/vtest-generate-pngs.sh -o ./reference_pngs_gp_small -m $REF_BIN -s ./vtest/gp_small -d 460 -S ./vtest/small.mss --gp-linked
 
 echo Generate current pngs: 
 ./vtest/vtest-generate-pngs.sh -o ./current_pngs -m $CUR_BIN
 ./vtest/vtest-generate-pngs.sh -o ./current_pngs_small -m $CUR_BIN -s ./vtest/scores_small -d 460 -S ./vtest/small.mss
-#./vtest/vtest-generate-pngs.sh -o ./current_pngs_gp_small -m $CUR_BIN -s ./vtest/gp_small -d 460 -S ./vtest/small.mss --gp-linked
+./vtest/vtest-generate-pngs.sh -o ./current_pngs_gp_small -m $CUR_BIN -s ./vtest/gp_small -d 460 -S ./vtest/small.mss --gp-linked
