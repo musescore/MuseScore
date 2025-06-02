@@ -60,6 +60,10 @@ void NotationPageModel::init()
         onNotationChanged();
     });
 
+    extensionsProvider()->manifestListChanged().onNotify(this, [this]() {
+        updateExtensionsToolBarVisibility();
+    });
+
     brailleConfiguration()->braillePanelEnabledChanged().onNotify(this, [this]() {
         emit isBraillePanelVisibleChanged();
     });
@@ -68,6 +72,7 @@ void NotationPageModel::init()
 
     updateDrumsetPanelVisibility();
     updatePercussionPanelVisibility();
+    updateExtensionsToolBarVisibility();
 
     notationConfiguration()->useNewPercussionPanelChanged().onNotify(this, [this]() {
         updateDrumsetPanelVisibility();
@@ -97,6 +102,11 @@ QString NotationPageModel::undoRedoToolBarName() const
 QString NotationPageModel::noteInputBarName() const
 {
     return NOTE_INPUT_BAR_NAME;
+}
+
+QString NotationPageModel::extensionsToolBarName() const
+{
+    return EXTENSIONS_TOOLBAR_NAME;
 }
 
 QString NotationPageModel::palettesPanelName() const
@@ -312,4 +322,38 @@ void NotationPageModel::updatePercussionPanelVisibility()
     }
 
     setPercussionPanelOpen(true);
+}
+
+void NotationPageModel::updateExtensionsToolBarVisibility()
+{
+    const muse::dock::IDockWindow* window = dockWindowProvider()->window();
+    if (!window || window->isDockOpenAndCurrentInFrame(EXTENSIONS_TOOLBAR_NAME)) {
+        return;
+    }
+
+    auto setExtensionsToolBarOpen = [this, window](bool open) {
+        if (open == window->isDockOpenAndCurrentInFrame(EXTENSIONS_TOOLBAR_NAME)) {
+            return;
+        }
+
+        //! NOTE: ensure we don't dispatch it multiple times in succession
+        muse::async::Async::call(this, [=]() {
+            dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(EXTENSIONS_TOOLBAR_NAME, open));
+        });
+    };
+
+    bool noItems = true;
+
+    muse::extensions::ManifestList enabledExtensions = extensionsProvider()->manifestList(muse::extensions::Filter::Enabled);
+    for (const muse::extensions::Manifest& m : enabledExtensions) {
+        for (const muse::extensions::Action& a : m.actions) {
+            if (!a.showOnToolbar) {
+                continue;
+            }
+
+            noItems = false;
+        }
+    }
+
+    setExtensionsToolBarOpen(!noItems);
 }
