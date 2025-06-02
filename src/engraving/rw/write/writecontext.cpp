@@ -49,6 +49,15 @@ bool WriteContext::canWrite(const EngravingItem* e) const
     return _filter.canSelect(e);
 }
 
+bool WriteContext::canWriteNoteIdx(size_t noteIdx, size_t totalNotesInChord) const
+{
+    if (!_clipboardmode) {
+        return true;
+    }
+    const Selection& sel = m_score->selection();
+    return _filter.canSelectNoteIdx(noteIdx, totalNotesInChord, sel.rangeContainsMultiNoteChords());
+}
+
 bool WriteContext::canWriteVoice(track_idx_t track) const
 {
     if (!_clipboardmode) {
