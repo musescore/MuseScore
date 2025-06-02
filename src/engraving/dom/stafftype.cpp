@@ -895,9 +895,9 @@ TablatureFretFont::TablatureFretFont()
     }
 }
 
-bool TablatureFretFont::read(XmlReader& e)
+bool TablatureFretFont::read(XmlReader& e, int mscVersion)
 {
-    defPitch    = 9.0;
+    defSize    = 9.0;
     defYOffset  = 0.0;
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -908,8 +908,8 @@ bool TablatureFretFont::read(XmlReader& e)
             family = e.readText();
         } else if (tag == "displayName") {
             displayName = e.readText();
-        } else if (tag == "defaultPitch") {
-            defPitch = e.readDouble();
+        } else if (tag == "defaultSize" || (tag == "defaultPitch" && mscVersion < 460)) {
+            defSize = e.readDouble();
         } else if (tag == "defaultYOffset") {
             defYOffset = e.readDouble();
         } else if (tag == "mark") {
@@ -953,7 +953,7 @@ bool TablatureFretFont::read(XmlReader& e)
     return true;
 }
 
-bool TablatureDurationFont::read(XmlReader& e)
+bool TablatureDurationFont::read(XmlReader& e, int mscVersion)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -962,7 +962,7 @@ bool TablatureDurationFont::read(XmlReader& e)
             family = e.readText();
         } else if (tag == "displayName") {
             displayName = e.readText();
-        } else if (tag == "defaultPitch") {
+        } else if (tag == "defaultSize" || (tag == "defaultPitch" && mscVersion < 460)) {
             defPitch = e.readDouble();
         } else if (tag == "defaultYOffset") {
             defYOffset = e.readDouble();
@@ -1074,18 +1074,22 @@ bool StaffType::readTabConfigFile(const String& fileName)
     XmlReader e(&f);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
+            const String version = e.attribute("version");
+            const StringList sl = version.split(u'.');
+            const int mscVersion = sl.size() == 2 ? sl[0].toInt() * 100 + sl[1].toInt() : 0;
+
             while (e.readNextStartElement()) {
                 const AsciiStringView tag(e.name());
                 if (tag == "fretFont") {
                     TablatureFretFont ff;
-                    if (ff.read(e)) {
+                    if (ff.read(e, mscVersion)) {
                         m_fretFonts.push_back(ff);
                     } else {
                         continue;
                     }
                 } else if (tag == "durationFont") {
                     TablatureDurationFont df;
-                    if (df.read(e)) {
+                    if (df.read(e, mscVersion)) {
                         m_durationFonts.push_back(df);
                     } else {
                         continue;
@@ -1160,7 +1164,7 @@ bool StaffType::tabFontData(bool bDuration, size_t nIdx, String* pFamily, String
                 *pDisplayName     = f.displayName;
             }
             if (pSize) {
-                *pSize            = f.defPitch;
+                *pSize            = f.defSize;
             }
             if (pYOff) {
                 *pYOff            = f.defYOffset;

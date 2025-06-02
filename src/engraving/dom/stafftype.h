@@ -107,7 +107,7 @@ struct TablatureFretFont {
 
     String family;                                            // the family of the physical font to use
     String displayName;                                       // the name to display to the user
-    double defPitch = 9.0;                                    // the default size of the font
+    double defSize = 9.0;                                    // the default size of the font
     double defYOffset = 0.0;                                  // the default Y displacement
     Char xChar = u'X';                                        // the char to use for 'x'
     Char deadNoteChar = u'×';                                 // the char to use for dead notes
@@ -115,7 +115,7 @@ struct TablatureFretFont {
     std::array<String, NUM_OF_DIGITFRETS> displayDigit;       // the string to draw for digit frets
     Char displayLetter[NUM_OF_LETTERFRETS];                   // the char to use for letter frets
 
-    bool read(XmlReader&);
+    bool read(XmlReader&, int mscVersion);
 };
 
 enum class TabVal : char {
@@ -161,7 +161,7 @@ struct TablatureDurationFont {
     Char displayDot;                 // the char to use to draw a dot
     Char displayValue[int(TabVal::NUM_OF)];           // the char to use to draw a duration value
 
-    bool read(XmlReader&);
+    bool read(XmlReader&, int mscVersion);
 };
 
 // ready-made staff types

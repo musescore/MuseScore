@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<museScore version="1.0">
-
+<museScore version="4.60">
    <fretFont>
       <family>FreeSans</family>
       <displayName>MuseScore Tab Sans</displayName>
@@ -12,7 +11,7 @@
    <fretFont>
       <family>MScoreTabulature</family>
       <displayName>MuseScore Tab Renaiss</displayName>
-      <defaultPitch>10</defaultPitch>
+      <defaultSize>10</defaultSize>
       <defaultYOffset>0</defaultYOffset>
       <fret value="0"  letter="0">0</fret>
       <fret value="1"  letter="0">1</fret>
@@ -142,7 +141,7 @@
    <fretFont>
       <family>MScoreTabulature</family>
       <displayName>MuseScore Phalèse</displayName>
-      <defaultPitch>10</defaultPitch>
+      <defaultSize>10</defaultSize>
       <defaultYOffset>0</defaultYOffset>
       <fret value="0"  letter="0">0</fret>
       <fret value="1"  letter="0">1</fret>
@@ -272,7 +271,7 @@
    <fretFont>
       <family>MScoreTabulature</family>
       <displayName>MuseScore Bonneuil-de Visée</displayName>
-      <defaultPitch>10</defaultPitch>
+      <defaultSize>10</defaultSize>
       <defaultYOffset>0</defaultYOffset>
       <fret value="0"  letter="0">0</fret>
       <fret value="1"  letter="0">1</fret>
@@ -402,7 +401,7 @@
    <fretFont>
       <family>MScoreTabulature</family>
       <displayName>MuseScore Bonneuil-Gaultier</displayName>
-      <defaultPitch>10</defaultPitch>
+      <defaultSize>10</defaultSize>
       <defaultYOffset>0</defaultYOffset>
       <fret value="0"  letter="0">0</fret>
       <fret value="1"  letter="0">1</fret>
@@ -532,7 +531,7 @@
    <fretFont>
       <family>MScoreTabulature</family>
       <displayName>MuseScore Dowland</displayName>
-      <defaultPitch>10</defaultPitch>
+      <defaultSize>10</defaultSize>
       <defaultYOffset>0</defaultYOffset>
       <fret value="0"  letter="0">0</fret>
       <fret value="1"  letter="0">1</fret>
@@ -662,7 +661,7 @@
    <fretFont>
       <family>MScoreTabulature</family>
       <displayName>MuseScore Lute Didactic</displayName>
-      <defaultPitch>10</defaultPitch>
+      <defaultSize>10</defaultSize>
       <defaultYOffset>0</defaultYOffset>
       <fret value="0"  letter="0">0</fret>
       <fret value="1"  letter="0">1</fret>
@@ -793,7 +792,7 @@
    <durationFont>
       <family>MScoreTabulature</family>
       <displayName>MuseScore Tab Modern</displayName>
-      <defaultPitch>15</defaultPitch>
+      <defaultSize>15</defaultSize>
       <defaultYOffset>0</defaultYOffset>
       <beamWidth>0.5</beamWidth>
       <stemHeight>3</stemHeight>
@@ -815,7 +814,7 @@
    <durationFont>
       <family>MScoreTabulature</family>
       <displayName>MuseScore Tab Italian</displayName>
-      <defaultPitch>15</defaultPitch>
+      <defaultSize>15</defaultSize>
       <defaultYOffset>0</defaultYOffset>
       <beamWidth>0.15</beamWidth>
       <stemHeight>1.75</stemHeight>
@@ -837,7 +836,7 @@
    <durationFont>
       <family>MScoreTabulature</family>
       <displayName>MuseScore Tab French</displayName>
-      <defaultPitch>15</defaultPitch>
+      <defaultSize>15</defaultSize>
       <defaultYOffset>0</defaultYOffset>
       <beamWidth>0.30</beamWidth>
       <stemHeight>3.125</stemHeight>
@@ -859,7 +858,7 @@
    <durationFont>
       <family>MScoreTabulature</family>
       <displayName>MuseScore French Baroque (headless)</displayName>
-      <defaultPitch>15</defaultPitch>
+      <defaultSize>15</defaultSize>
       <defaultYOffset>0</defaultYOffset>
       <duration value="longa">Ȱ</duration>
       <duration value="brevis">ȱ</duration>
@@ -877,7 +876,7 @@
    <durationFont>
       <family>MScoreTabulature</family>
       <displayName>MuseScore French Baroque</displayName>
-      <defaultPitch>15</defaultPitch>
+      <defaultSize>15</defaultSize>
       <defaultYOffset>0</defaultYOffset>
       <duration value="longa">ɀ</duration>
       <duration value="brevis">Ɂ</duration>
