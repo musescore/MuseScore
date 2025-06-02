@@ -127,6 +127,7 @@ QVariant PropertyValue::toQVariant() const
         Align a = value<Align>();
         return QVariantList({ static_cast<int>(a.horizontal), static_cast<int>(a.vertical) });
     } break;
+    case P_TYPE::ALIGN_H:     return static_cast<int>(value<AlignH>());
     case P_TYPE::PLACEMENT_V: return static_cast<int>(value<PlacementV>());
     case P_TYPE::PLACEMENT_H: return static_cast<int>(value<PlacementH>());
     case P_TYPE::TEXT_PLACE:  return static_cast<int>(value<TextPlace>());
@@ -240,6 +241,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
         }
         return PropertyValue(Align(AlignH(l.at(0).toInt()), AlignV(l.at(1).toInt())));
     } break;
+    case P_TYPE::ALIGN_H:       return PropertyValue(AlignH(v.toInt()));
     case P_TYPE::PLACEMENT_V:   return PropertyValue(PlacementV(v.toInt()));
     case P_TYPE::PLACEMENT_H:   return PropertyValue(PlacementH(v.toInt()));
     case P_TYPE::TEXT_PLACE:    return PropertyValue(TextPlace(v.toInt()));

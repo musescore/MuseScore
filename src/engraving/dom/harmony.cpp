@@ -287,7 +287,7 @@ bool Harmony::isInFretBox() const
 const ElementStyle chordSymbolStyle {
     { Sid::harmonyPlacement, Pid::PLACEMENT },
     { Sid::minHarmonyDistance, Pid::MIN_DISTANCE },
-    { Sid::chordAlignmentToNotehead, Pid::HARMONY_NOTEHEAD_ALIGN },
+    { Sid::chordSymPosition, Pid::POSITION },
     { Sid::chordBassNoteScale, Pid::HARMONY_BASS_SCALE },
     { Sid::harmonyVoiceLiteral, Pid::HARMONY_VOICE_LITERAL },
     { Sid::harmonyVoicing, Pid::HARMONY_VOICING },
@@ -1602,7 +1602,7 @@ void Harmony::render()
 
     // Align polychords
 
-    if (m_noteheadAlign == AlignH::LEFT) {
+    if (align() == AlignH::LEFT) {
         return;
     }
 
@@ -1624,7 +1624,7 @@ void Harmony::render()
         }
 
         // For centre align adjust by .5* difference, for right align adjust by full difference
-        if (m_noteheadAlign == AlignH::HCENTER) {
+        if (align() == AlignH::HCENTER) {
             diff *= 0.5;
         }
 
@@ -1883,8 +1883,8 @@ PropertyValue Harmony::getProperty(Pid pid) const
         return PropertyValue(m_play);
     case Pid::HARMONY_TYPE:
         return PropertyValue(int(m_harmonyType));
-    case Pid::HARMONY_NOTEHEAD_ALIGN:
-        return PropertyValue(int(m_noteheadAlign));
+    case Pid::POSITION:
+        return PropertyValue(m_noteheadAlign);
     case Pid::HARMONY_BASS_SCALE:
         return m_bassScale;
     case Pid::HARMONY_VOICE_LITERAL:
@@ -1911,8 +1911,8 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
     case Pid::HARMONY_TYPE:
         setHarmonyType(HarmonyType(v.toInt()));
         break;
-    case Pid::HARMONY_NOTEHEAD_ALIGN:
-        setNoteheadAlign(AlignH(v.toInt()));
+    case Pid::POSITION:
+        setNoteheadAlign(v.value<AlignH>());
         render();
         break;
     case Pid::HARMONY_BASS_SCALE:
@@ -1966,8 +1966,8 @@ PropertyValue Harmony::propertyDefault(Pid id) const
             break;
         }
     }
-    case Pid::HARMONY_NOTEHEAD_ALIGN:
-        v = style().styleV(Sid::chordAlignmentToNotehead).toInt();
+    case Pid::POSITION:
+        v = style().styleV(Sid::chordSymPosition).value<AlignH>();
         break;
     case Pid::HARMONY_BASS_SCALE:
         v = style().styleV(Sid::chordBassNoteScale).toDouble();

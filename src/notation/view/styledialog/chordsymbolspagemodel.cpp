@@ -40,7 +40,7 @@ ChordSymbolsPageModel::ChordSymbolsPageModel(QObject* parent)
     StyleId::polychordDividerThickness,
     StyleId::polychordDividerSpacing,
     StyleId::verticallyAlignChordSymbols,
-    StyleId::chordAlignmentToNotehead,
+    StyleId::chordSymPosition,
     StyleId::chordAlignmentToFretboard,
     StyleId::chordAlignmentExcludeModifiers,
     StyleId::chordSymbolSpelling,
@@ -133,7 +133,7 @@ StyleItem* ChordSymbolsPageModel::polychordDividerThickness() const { return sty
 StyleItem* ChordSymbolsPageModel::polychordDividerSpacing() const { return styleItem(StyleId::polychordDividerSpacing); }
 
 StyleItem* ChordSymbolsPageModel::verticallyAlignChordSymbols() const { return styleItem(StyleId::verticallyAlignChordSymbols); }
-StyleItem* ChordSymbolsPageModel::chordAlignmentToNotehead() const { return styleItem(StyleId::chordAlignmentToNotehead); }
+StyleItem* ChordSymbolsPageModel::chordAlignmentToNotehead() const { return styleItem(StyleId::chordSymPosition); }
 StyleItem* ChordSymbolsPageModel::chordAlignmentToFretboard() const { return styleItem(StyleId::chordAlignmentToFretboard); }
 StyleItem* ChordSymbolsPageModel::chordAlignmentExcludeModifiers() const { return styleItem(StyleId::chordAlignmentExcludeModifiers); }
 

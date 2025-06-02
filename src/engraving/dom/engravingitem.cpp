@@ -1102,8 +1102,6 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
         return track();
     case Pid::VOICE:
         return voice();
-    case Pid::POSITION:
-        return rtick();
     case Pid::GENERATED:
         return generated();
     case Pid::COLOR:

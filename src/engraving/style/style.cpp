@@ -145,6 +145,9 @@ bool MStyle::readProperties(XmlReader& e)
                 Align align = TConv::fromXml(e.readText(), Align());
                 set(idx, align);
             } break;
+            case P_TYPE::ALIGN_H:
+                set(idx, AlignH(e.readInt()));
+                break;
             case P_TYPE::POINT: {
                 double x = e.doubleAttribute("x", 0.0);
                 double y = e.doubleAttribute("y", 0.0);
@@ -575,7 +578,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
 
     if (m_version < 460) {
         AlignH horizontalAlign = value(Sid::chordSymbolAAlign).value<Align>().horizontal;
-        set(Sid::chordAlignmentToNotehead, (int)horizontalAlign);
+        set(Sid::chordSymPosition, (int)horizontalAlign);
     }
 
     if (m_version < 450) {
@@ -635,6 +638,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
                 continue;
             }
             xml.tag(st.name(), TConv::toXml(a));
+        } else if (P_TYPE::ALIGN_H == type) {
+            xml.tag(st.name(), int(value(idx).value<AlignH>()));
         } else if (P_TYPE::LINE_TYPE == type) {
             xml.tagProperty(st.name(), value(idx));
         } else if (P_TYPE::TIE_PLACEMENT == type) {

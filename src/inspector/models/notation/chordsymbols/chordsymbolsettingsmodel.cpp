@@ -40,7 +40,7 @@ void ChordSymbolSettingsModel::createProperties()
     m_voicingType = buildPropertyItem(mu::engraving::Pid::HARMONY_VOICING);
     m_durationType = buildPropertyItem(mu::engraving::Pid::HARMONY_DURATION);
     m_verticalAlign = buildPropertyItem(mu::engraving::Pid::VERTICAL_ALIGN);
-    m_noteheadAlign = buildPropertyItem(mu::engraving::Pid::HARMONY_NOTEHEAD_ALIGN);
+    m_position = buildPropertyItem(mu::engraving::Pid::POSITION);
     m_bassScale = buildPropertyItem(mu::engraving::Pid::HARMONY_BASS_SCALE, [this](const engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
     }, [this](const engraving::Sid sid, const QVariant& newValue) {
@@ -64,7 +64,7 @@ void ChordSymbolSettingsModel::loadProperties()
     loadPropertyItem(m_durationType);
     updateIsDurationAvailable();
     loadPropertyItem(m_verticalAlign);
-    loadPropertyItem(m_noteheadAlign);
+    loadPropertyItem(m_position);
     loadPropertyItem(m_bassScale, [](const QVariant& elementPropertyValue) -> QVariant {
         return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
@@ -76,7 +76,7 @@ void ChordSymbolSettingsModel::resetProperties()
     m_voicingType->resetToDefault();
     m_durationType->resetToDefault();
     m_verticalAlign->resetToDefault();
-    m_noteheadAlign->resetToDefault();
+    m_position->resetToDefault();
     m_bassScale->resetToDefault();
 }
 
@@ -149,9 +149,9 @@ PropertyItem* ChordSymbolSettingsModel::verticalAlign() const
     return m_verticalAlign;
 }
 
-PropertyItem* ChordSymbolSettingsModel::noteheadAlign() const
+PropertyItem* ChordSymbolSettingsModel::position() const
 {
-    return m_noteheadAlign;
+    return m_position;
 }
 
 PropertyItem* ChordSymbolSettingsModel::bassScale() const

@@ -141,14 +141,15 @@ Column {
     }
 
     FlatRadioButtonGroupPropertyView {
-        id: alignToNoteheadButtonList
-        titleText: qsTrc("inspector", "Alignment to notehead")
-        propertyItem: root.model ? root.model.noteheadAlign : null
+        id: positionButtonList
+        titleText: qsTrc("inspector", "Position")
+        propertyItem: root.model ? root.model.position : null
 
         navigationPanel: root.navigationPanel
         navigationRowStart: bassNoteScale.navigationRowEnd + 1
 
         requestIconFontSize: 16
+        requestWidth: 98
 
         model: [
             { iconCode: IconCode.NOTE_ALIGN_LEFT, value: 0},
