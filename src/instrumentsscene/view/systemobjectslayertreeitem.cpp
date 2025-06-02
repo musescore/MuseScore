@@ -38,6 +38,11 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
         return muse::qtrc("layoutpanel", "System markings");
     }
 
+    //: %1 is the system markings list, %2 is the next system marking name to add to list
+    const QString middleItem = muse::qtrc("layoutpanel", "%1, %2");
+    //: %1 is the system markings list, %2 is the last system marking name to add to list
+    const QString lastItem = muse::qtrc("layoutpanel", "%1 & %2");
+
     QString title;
 
     const size_t lastIdx = groups.size() - 1;
@@ -52,17 +57,16 @@ static QString formatLayerTitle(const SystemObjectGroups& groups)
             continue;
         }
 
+        const QString name = translatedSystemObjectsGroupName(group);
         if (i == lastIdx) {
-            title += " " + muse::qtrc("layoutpanel", "&") + " ";
+            title = lastItem.arg(title, name);
         } else {
-            title += ", ";
+            title = middleItem.arg(title, name);
         }
-
-        title += translatedSystemObjectsGroupName(group);
     }
 
     if (title.isEmpty()) {
-        title = muse::qtrc("layoutpanel", "System markings hidden");
+        return muse::qtrc("layoutpanel", "System markings hidden");
     }
 
     return title;
