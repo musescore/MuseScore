@@ -69,15 +69,17 @@ static const double GRID_STEM_DEF_HEIGHT = 1.75;
 static const double GRID_STEM_DEF_WIDTH  = 0.125;
 
 struct TablatureFretFont {
-    String family;                             // the family of the physical font to use
-    String displayName;                        // the name to display to the user
-    double defPitch;                             // the default size of the font
-    double defYOffset;                           // the default Y displacement
-    Char xChar;                                // the char to use for 'x'
-    Char deadNoteChar;                            // the char to use for dead notes
-    String slashChar[NUM_OF_BASSSTRING_SLASHES];  // the char used to draw one or more '/' symbols
-    String displayDigit[NUM_OF_DIGITFRETS];    // the string to draw for digit frets
-    Char displayLetter[NUM_OF_LETTERFRETS];    // the char to use for letter frets
+    TablatureFretFont();
+
+    String family;                                            // the family of the physical font to use
+    String displayName;                                       // the name to display to the user
+    double defPitch = 9.0;                                    // the default size of the font
+    double defYOffset = 0.0;                                  // the default Y displacement
+    Char xChar = u'X';                                        // the char to use for 'x'
+    Char deadNoteChar = u'×';                                 // the char to use for dead notes
+    std::array<String, NUM_OF_BASSSTRING_SLASHES> slashChar;  // the char used to draw one or more '/' symbols
+    std::array<String, NUM_OF_DIGITFRETS> displayDigit;       // the string to draw for digit frets
+    Char displayLetter[NUM_OF_LETTERFRETS];                   // the char to use for letter frets
 
     bool read(XmlReader&);
 };
@@ -314,8 +316,8 @@ public:
     bool isHiddenElementOnTab(const MStyle& style, Sid commonTabStyle, Sid simpleTabStyle) const;
 
     // static functions for font config files
-    static std::vector<String> fontNames(bool bDuration);
-    static bool fontData(bool bDuration, size_t nIdx, String* pFamily, String* pDisplayName, double* pSize, double* pYOff);
+    static std::vector<String> tabFontNames(bool bDuration);
+    static bool tabFontData(bool bDuration, size_t nIdx, String* pFamily, String* pDisplayName, double* pSize, double* pYOff);
 
     static void initStaffTypes(const Color& defaultColor);
     static const std::vector<StaffType>& presets() { return m_presets; }
@@ -327,7 +329,7 @@ private:
     void  setDurationMetrics() const;
     void  setFretMetrics(const MStyle& style) const;
 
-    static bool readConfigFile(const String& fileName);
+    static bool readTabConfigFile(const String& fileName);
 
     StaffGroup m_group = StaffGroup::STANDARD;
 

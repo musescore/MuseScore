@@ -346,7 +346,7 @@ void StaffType::setDurationMetrics() const
     Font font(durationFont());
     font.setPointSizeF(m_durationFontSize);
     FontMetrics fm(font);
-    String txt(m_durationFonts[m_durationFontIdx].displayValue, int(TabVal::NUM_OF));
+    String txt(m_durationFonts[m_durationFontIdx].displayValue, size_t(TabVal::NUM_OF));
     RectF bb(fm.tightBoundingRect(txt));
     // raise symbols by a default margin and, if marks are above lines, by half the line distance
     // (converted from spatium units to raster units)
@@ -387,7 +387,7 @@ void StaffType::setFretMetrics(const MStyle& style) const
         // _fretYOffset = -(bb.y() + bb.height()/2.0);  // <- using bbox of all chars
     } else {
         // compute total height of used characters
-        String txt(m_fretFonts[m_fretFontIdx].displayLetter, NUM_OF_LETTERFRETS);
+        String txt(m_fretFontInfo.displayLetter, NUM_OF_LETTERFRETS);
         bb = fm.tightBoundingRect(txt);
         // for letters: centre on the 'a' ascender, by moving down half of the part above the base line in bx
         RectF bx(fm.tightBoundingRect(m_fretFonts[m_fretFontIdx].displayLetter[0]));
@@ -788,6 +788,24 @@ void TabDurationSymbol::layout2()
 //   STATIC FUNCTIONS FOR FONT CONFIGURATION MANAGEMENT
 //---------------------------------------------------------
 
+TablatureFretFont::TablatureFretFont()
+{
+    // Set up defaults
+    for (size_t i = 0; i < NUM_OF_DIGITFRETS; i++) {
+        displayDigit.at(i) = String::number(i);
+    }
+
+    for (size_t i = 0; i < NUM_OF_LETTERFRETS; i++) {
+        displayLetter[i] = Char(97 + i);
+    }
+
+    for (size_t i = 0; i < NUM_OF_BASSSTRING_SLASHES; i++) {
+        for (size_t j = 0; j < i; j++) {
+            slashChar.at(i).append(u"/");
+        }
+    }
+}
+
 bool TablatureFretFont::read(XmlReader& e)
 {
     defPitch    = 9.0;
@@ -824,7 +842,7 @@ bool TablatureFretFont::read(XmlReader& e)
                 if (num > NUM_OF_BASSSTRING_SLASHES) {
                     num = NUM_OF_BASSSTRING_SLASHES;
                 }
-                slashChar[num - 1] = txt;
+                slashChar.at(num - 1) = txt;
             }
         } else if (tag == "fret") {
             bool bLetter = e.intAttribute("letter");
@@ -835,7 +853,7 @@ bool TablatureFretFont::read(XmlReader& e)
                 }
             } else {
                 if (val >= 0 && val < NUM_OF_DIGITFRETS) {
-                    displayDigit[val] = txt;
+                    displayDigit.at(val) = txt;
                 }
             }
         } else {
@@ -901,31 +919,31 @@ bool TablatureDurationFont::read(XmlReader& e)
             String txt(e.readText());
             Char chr = txt.at(0);
             if (val == "longa") {
-                displayValue[int(TabVal::VAL_LONGA)] = chr;
+                displayValue[size_t(TabVal::VAL_LONGA)] = chr;
             } else if (val == "brevis") {
-                displayValue[int(TabVal::VAL_BREVIS)] = chr;
+                displayValue[size_t(TabVal::VAL_BREVIS)] = chr;
             } else if (val == "semibrevis") {
-                displayValue[int(TabVal::VAL_SEMIBREVIS)] = chr;
+                displayValue[size_t(TabVal::VAL_SEMIBREVIS)] = chr;
             } else if (val == "minima") {
-                displayValue[int(TabVal::VAL_MINIMA)] = chr;
+                displayValue[size_t(TabVal::VAL_MINIMA)] = chr;
             } else if (val == "semiminima") {
-                displayValue[int(TabVal::VAL_SEMIMINIMA)] = chr;
+                displayValue[size_t(TabVal::VAL_SEMIMINIMA)] = chr;
             } else if (val == "fusa") {
-                displayValue[int(TabVal::VAL_FUSA)] = chr;
+                displayValue[size_t(TabVal::VAL_FUSA)] = chr;
             } else if (val == "semifusa") {
-                displayValue[int(TabVal::VAL_SEMIFUSA)] = chr;
+                displayValue[size_t(TabVal::VAL_SEMIFUSA)] = chr;
             } else if (val == "32") {
-                displayValue[int(TabVal::VAL_32)] = chr;
+                displayValue[size_t(TabVal::VAL_32)] = chr;
             } else if (val == "64") {
-                displayValue[int(TabVal::VAL_64)] = chr;
+                displayValue[size_t(TabVal::VAL_64)] = chr;
             } else if (val == "128") {
-                displayValue[int(TabVal::VAL_128)] = chr;
+                displayValue[size_t(TabVal::VAL_128)] = chr;
             } else if (val == "256") {
-                displayValue[int(TabVal::VAL_256)] = chr;
+                displayValue[size_t(TabVal::VAL_256)] = chr;
             } else if (val == "512") {
-                displayValue[int(TabVal::VAL_512)] = chr;
+                displayValue[size_t(TabVal::VAL_512)] = chr;
             } else if (val == "1024") {
-                displayValue[int(TabVal::VAL_1024)] = chr;
+                displayValue[size_t(TabVal::VAL_1024)] = chr;
             } else if (val == "dot") {
                 displayDot = chr;
             } else {
@@ -946,7 +964,7 @@ bool TablatureDurationFont::read(XmlReader& e)
 //    resets everything and reads the built-in config file if fileName is null or empty
 //---------------------------------------------------------
 
-bool StaffType::readConfigFile(const String& fileName)
+bool StaffType::readTabConfigFile(const String& fileName)
 {
     muse::io::path_t path;
 
@@ -1000,7 +1018,7 @@ bool StaffType::readConfigFile(const String& fileName)
 //    the index of a name in the list can be used to retrieve the font data with fontData()
 //---------------------------------------------------------
 
-std::vector<String> StaffType::fontNames(bool bDuration)
+std::vector<String> StaffType::tabFontNames(bool bDuration)
 {
     std::vector<String> names;
     if (bDuration) {
@@ -1023,8 +1041,8 @@ std::vector<String> StaffType::fontNames(bool bDuration)
 // any of the pointer parameter can be null, if that datum is not needed
 //---------------------------------------------------------
 
-bool StaffType::fontData(bool bDuration, size_t nIdx, String* pFamily, String* pDisplayName,
-                         double* pSize, double* pYOff)
+bool StaffType::tabFontData(bool bDuration, size_t nIdx, String* pFamily, String* pDisplayName,
+                            double* pSize, double* pYOff)
 {
     if (bDuration) {
         if (nIdx < m_durationFonts.size()) {
@@ -1114,7 +1132,7 @@ std::vector<StaffType> StaffType::m_presets;
 /* *INDENT-OFF* */
 void StaffType::initStaffTypes(const Color& defaultColor)
 {
-    readConfigFile(String());            // get TAB font config, before initStaffTypes()
+    readTabConfigFile(String());            // get TAB font config, before initStaffTypes()
 
     // keep in sync with enum class StaffTypes
     m_presets = {
