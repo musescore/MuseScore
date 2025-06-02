@@ -117,8 +117,8 @@ enum class TablatureSymbolRepeat : char {
 struct TablatureDurationFont {
     String family;                   // the family of the physical font to use
     String displayName;              // the name to display to the user
-    double defPitch;                   // the default size of the font
-    double defYOffset;                 // the default Y displacement
+    double defSize;                  // the default size of the font
+    double defYOffset;               // the default Y displacement
     double gridBeamWidth  = GRID_BEAM_DEF_WIDTH;       // the width of the 'grid'-style beam (in sp)
     double gridStemHeight = GRID_STEM_DEF_HEIGHT;      // the height of the 'grid'-style stem (in sp)
     double gridStemWidth  = GRID_STEM_DEF_WIDTH;       // the width of the 'grid'-style stem (in sp)
@@ -259,10 +259,8 @@ public:
     double durationFontYOffset() const { setDurationMetrics(); return m_durationYOffset + m_durationFontUserY * SPATIUM20; }
     double durationGridYOffset() const { setDurationMetrics(); return m_durationGridYOffset; }
     double fretBoxH(const MStyle& style) const { setFretMetrics(style); return m_fretBoxH; }
-    double fretBoxH() const { UNREACHABLE; return 0.0; }
     double deadFretBoxH(const MStyle& style) const { setFretMetrics(style); return m_deadFretBoxH; }
     double fretBoxY(const MStyle& style) const { setFretMetrics(style); return m_fretBoxY + m_fretFontUserY * SPATIUM20; }
-    double fretBoxY() const { UNREACHABLE; return 0.0; }
     double deadFretBoxY(const MStyle& style) const { setFretMetrics(style); return m_deadFretBoxY + m_fretFontUserY * SPATIUM20; }
 
     // 2 methods to return the size of a box masking lines under a fret mark
@@ -270,7 +268,7 @@ public:
     double fretMaskY() const { return (m_onLines ? -0.5 : -1.0) * m_lineDistance.val() * SPATIUM20; }
 
     const muse::draw::Font& fretFont() const { return m_fretFont; }
-    const String fretFontName() const { return m_fretFonts[m_fretFontIdx].displayName; }
+    const String fretFontName() const { return m_fretFontInfo.displayName; }
     double fretFontSize() const { return m_fretFontSize; }
     double fretFontUserY() const { return m_fretFontUserY; }
     double fretFontYOffset(const MStyle& style) const { setFretMetrics(style); return m_fretYOffset + m_fretFontUserY * SPATIUM20; }
@@ -317,7 +315,7 @@ public:
 
     // static functions for font config files
     static std::vector<String> tabFontNames(bool bDuration);
-    static bool tabFontData(bool bDuration, size_t nIdx, String* pFamily, String* pDisplayName, double* pSize, double* pYOff);
+    static bool tabFontData(bool bDuration, size_t nIdx, double& pSize, double& pYOff);
 
     static void initStaffTypes(const Color& defaultColor);
     static const std::vector<StaffType>& presets() { return m_presets; }
@@ -398,7 +396,7 @@ private:
     // of a box bounding all fret characters (raster units) internally computed:
     // depends upon _onString, _useNumbers and the metrics of the fret font
     muse::draw::Font m_fretFont;                      // font used to draw fret marks; cached for efficiency
-    size_t m_fretFontIdx = 0;                 // the index of current fret font in fret font array
+    TablatureFretFont m_fretFontInfo;
     mutable double m_fretYOffset = 0.0;             // the vertical offset to draw fret marks with respect to the string lines;
     mutable double m_deadFretYOffset = 0.0;
     // (raster units); internally computed: depends upon _onString, _useNumbers
