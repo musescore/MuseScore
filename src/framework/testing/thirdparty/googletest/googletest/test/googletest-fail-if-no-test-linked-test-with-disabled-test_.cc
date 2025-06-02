@@ -1,4 +1,4 @@
-// Copyright 2008, Google Inc.
+// Copyright 2025, Google Inc.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,18 +27,12 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// Unit test for Google Test's --gtest_fail_if_no_test_linked flag.
+//
+// This program will be invoked from a Python test.
+// Don't run it directly.
+
 #include "gtest/gtest.h"
 
-class SetupFailTest : public ::testing::Test {
- protected:
-  static void SetUpTestSuite() { ASSERT_STREQ("", "SET_UP_FAIL"); }
-};
-
-TEST_F(SetupFailTest, NoopPassingTest) {}
-
-class TearDownFailTest : public ::testing::Test {
- protected:
-  static void TearDownTestSuite() { ASSERT_STREQ("", "TEAR_DOWN_FAIL"); }
-};
-
-TEST_F(TearDownFailTest, NoopPassingTest) {}
+// A dummy test that is disabled.
+TEST(SomeTest, DISABLED_Test1) {}
