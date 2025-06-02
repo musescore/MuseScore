@@ -733,6 +733,8 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
     std::map<int, std::unordered_set<ClefType>> score_clef_map;
     std::map<int, std::set<mu::engraving::Key>> score_keysig_map;
 
+    int staff_count = 0;
+
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
         for (mu::engraving::Segment* segment = measure->first(mu::engraving::SegmentType::ClefType); segment;) {
             std::vector<EngravingItem*> clefItemList = segment->elist();
@@ -751,6 +753,9 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
 
                     Staff* clefStaff = clef->staff();
                     int clefStaffIndex = clefStaff->idx();
+                    if (clefStaffIndex + 1 > staff_count) {
+                        staff_count = clefStaffIndex + 1;
+                    }
 
                     if (_clef_staff_map.find(clefStaffIndex) == _clef_staff_map.end()) {
                         _clef_staff_map[clefStaffIndex] = {};
@@ -906,8 +911,11 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
         }
     }
 
+    std::map<int, ClefType> stashed_staff_clef;
+    std::map<int, ClefType> seg_staff_clef;
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
         for (mu::engraving::Segment* segment = measure->first(mu::engraving::SegmentType::ChordRest); segment;) {
+            seg_staff_clef.clear();
             std::vector<EngravingItem*> itemList = segment->elist();
             std::unordered_set<ClefType> seg_clefTypes;
             int _ticks = segment->tick().ticks();
@@ -918,10 +926,17 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 }
                 int staffIndex = item->staff()->idx();
                 if (_score_staff_clef_map.find(staffIndex) != _score_staff_clef_map.end()) {
-                    _ticks = segment->tick().ticks();
                     if (_score_staff_clef_map[staffIndex].find(_ticks) != _score_staff_clef_map[staffIndex].end()) {
-                        seg_clefTypes.insert(_score_staff_clef_map[staffIndex][_ticks]);
+                        ClefType _clefType = _score_staff_clef_map[staffIndex][_ticks];
+                        seg_clefTypes.insert(_clefType);
+                        seg_staff_clef[staffIndex] = _clefType;
+                        stashed_staff_clef[staffIndex] = _clefType;
                     }
+                }
+            }
+            for (int i = 0; i < staff_count; i++) {
+                if (seg_staff_clef.find(i) == seg_staff_clef.end() && stashed_staff_clef.find(i) != stashed_staff_clef.end()) {
+                    seg_clefTypes.insert(stashed_staff_clef[i]);
                 }
             }
             
