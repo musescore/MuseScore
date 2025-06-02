@@ -1094,11 +1094,6 @@ void NotationInteraction::addGlissandoNote(mu::engraving::Note* note, int ticks,
 }
 void NotationInteraction::addGlissandoEndNote(mu::engraving::Note* note, int ottavaType) 
 {
-    for (Note* ptr : glissando_endnotes) {
-        if (ptr == note) {
-            return;
-        }
-    }
     glissando_endnotes.push_back(note);
     if (ottavaType > 0) {
         m_ottava_map[note] = ottavaType;

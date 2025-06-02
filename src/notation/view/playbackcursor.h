@@ -100,6 +100,12 @@ private:
     std::map<EngravingItem*, int> score_arpeggio_dt_map;
     std::map<EngravingItem*, int> score_arpeggio_ot_map;
 
+    std::map<EngravingItem*, Note*> score_glissando_startnote_map;
+    std::map<EngravingItem*, int> score_glissando_st_map;
+    std::map<EngravingItem*, int> score_glissando_dt_map;
+    std::map<EngravingItem*, int> score_glissando_ot_map;
+    std::map<EngravingItem*, std::vector<Note*>> score_glissando_endnotes_map;
+
     std::future<void> m_ottavaProcessFuture;
     std::atomic<bool> m_isOttavaProcessed{ false };
 
