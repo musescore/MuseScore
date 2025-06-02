@@ -99,12 +99,12 @@ jobs:
         echo "GITHUB_ARTIFACT_NAME=$GITHUB_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v4
+      uses: jdpurcell/install-qt-action@v5
       with:
         version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
         host: 'linux'
         target: 'desktop'
-        arch: 'linux_gcc_64'
+        arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
         modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
 
     - name: Setup environment
