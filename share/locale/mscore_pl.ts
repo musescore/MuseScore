@@ -13925,7 +13925,7 @@ Instrument: %5</translation>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7121"/>
         <source>Unable to open target file for writing</source>
-        <translation>Nie można otworzyć pliku docelowego do zapisania.</translation>
+        <translation>Nie można otworzyć pliku docelowego do zapisu.</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="7348"/>
