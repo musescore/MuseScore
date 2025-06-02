@@ -47,12 +47,11 @@ if(MUSE_COMPILE_USE_SHARED_LIBS_IN_DEBUG AND BUILD_IS_DEBUG)
     endif()
 endif()
 
-# Address Sanitizer
-if(MUSE_COMPILE_ASAN)
+# Sanitizers
+if(MUSE_COMPILE_SANITIZERS)
     if(CC_IS_CLANG OR CC_IS_GCC OR CC_IS_MINGW)
-        add_compile_options("-fsanitize=address")
-        add_compile_options("-fno-omit-frame-pointer")
-        add_link_options("-fsanitize=address")
+        add_compile_options("-fsanitize=address" "-fsanitize=undefined" "-fno-omit-frame-pointer" "-fno-optimize-sibling-calls")
+        add_link_options("-fsanitize=address" "-fsanitize=undefined")
     elseif(CC_IS_MSVC)
         add_compile_options("/fsanitize=address")
     endif()

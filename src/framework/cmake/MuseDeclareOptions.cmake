@@ -64,7 +64,7 @@ declare_muse_module_opt(WORKSPACE ON)
 
 # === Enviropment ===
 option(MUSE_COMPILE_BUILD_64 "Build 64 bit version" ON)
-option(MUSE_COMPILE_ASAN "Enable Address Sanitizer" OFF)
+option(MUSE_COMPILE_SANITIZERS "Enable Address Sanitizer and Undefined Behaviour Sanitizer if supported" OFF)
 option(MUSE_COMPILE_USE_PCH "Use precompiled headers." ON)
 option(MUSE_COMPILE_STRING_DEBUG_HACK "Enable string debug hack (only clang)" ON)
 
