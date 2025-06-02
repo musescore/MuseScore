@@ -200,7 +200,7 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (m_fretBoxY == st.m_fretBoxY);
     equal &= (m_deadFretBoxY == st.m_deadFretBoxY);
     equal &= (m_fretFont == st.m_fretFont);
-    equal &= (m_fretFontIdx == st.m_fretFontIdx);
+    equal &= (m_fretFontInfo.family == st.m_fretFontInfo.family);
     equal &= (m_fretYOffset == st.m_fretYOffset);
     equal &= (m_fretMetricsValid == st.m_fretMetricsValid);
     equal &= (m_refDPI == st.m_refDPI);
@@ -377,12 +377,12 @@ void StaffType::setFretMetrics(const MStyle& style) const
         // compute total height of used characters
         String txt;
         for (int idx = 0; idx < 10; idx++) {    // use only first 10 digits
-            txt.append(m_fretFonts[m_fretFontIdx].displayDigit[idx]);
+            txt.append(m_fretFontInfo.displayDigit[idx]);
         }
         bb = fm.tightBoundingRect(txt);
         // for numbers: centre on '0': move down by the whole part above (negative)
         // the base line ( -bb.y() ) then up by half the whole height ( -bb.height()/2 )
-        RectF bx(fm.tightBoundingRect(m_fretFonts[m_fretFontIdx].displayDigit[0]));
+        RectF bx(fm.tightBoundingRect(m_fretFontInfo.displayDigit[0]));
         m_fretYOffset = -(bx.y() + bx.height() / 2.0);
         // _fretYOffset = -(bb.y() + bb.height()/2.0);  // <- using bbox of all chars
     } else {
@@ -390,12 +390,12 @@ void StaffType::setFretMetrics(const MStyle& style) const
         String txt(m_fretFontInfo.displayLetter, NUM_OF_LETTERFRETS);
         bb = fm.tightBoundingRect(txt);
         // for letters: centre on the 'a' ascender, by moving down half of the part above the base line in bx
-        RectF bx(fm.tightBoundingRect(m_fretFonts[m_fretFontIdx].displayLetter[0]));
+        RectF bx(fm.tightBoundingRect(m_fretFontInfo.displayLetter[0]));
         m_fretYOffset = -bx.y() / 2.0;
     }
 
     // Calculate position for dead fret marks - these must be centred separately based on their glyph
-    RectF deadBb = fm.tightBoundingRect(m_fretFonts[m_fretFontIdx].xChar);
+    RectF deadBb = fm.tightBoundingRect(m_fretFontInfo.xChar);
     double lineThickness = style.styleS(Sid::staffLineWidth).val() * SPATIUM20 * 0.5;
     m_deadFretYOffset = -deadBb.y() / 2.0 + lineThickness;
 
@@ -440,22 +440,14 @@ void StaffType::setDurationFontName(const String& name)
 
 void StaffType::setFretFontName(const String& name)
 {
-    size_t idx;
     String locName = name;
     // convert old names for two built-in fonts which have changed of name
     if (name == "MuseScore Tab Late Renaiss") {
         locName = u"MuseScore Phalèse";
     }
-    for (idx = 0; idx < m_fretFonts.size(); idx++) {
-        if (m_fretFonts[idx].displayName == locName) {
-            break;
-        }
-    }
-    if (idx >= m_fretFonts.size()) {
-        idx = 0;              // if name not found, use first font
-    }
-    m_fretFont.setFamily(m_fretFonts[idx].family, Font::Type::Tablature);
-    m_fretFontIdx = idx;
+
+    m_fretFont.setFamily(locName, Font::Type::Tablature);
+    m_fretFontInfo.family = locName;
     m_fretMetricsValid = false;
 }
 
@@ -513,7 +505,7 @@ String StaffType::fretString(int fret, int string, bool deadNote) const
         return unknownFret;
     }
     if (deadNote) {
-        return String(m_fretFonts[m_fretFontIdx].xChar);
+        return String(m_fretFontInfo.xChar);
     } else {
         bool hasFret;
         String text  = tabBassStringPrefix(string, &hasFret);
@@ -523,8 +515,8 @@ String StaffType::fretString(int fret, int string, bool deadNote) const
         // otherwise, add to prefix the relevant digit/letter string
         return text
                + (m_useNumbers
-                  ? (fret >= NUM_OF_DIGITFRETS ? unknownFret : m_fretFonts[m_fretFontIdx].displayDigit[fret])
-                  : (fret >= NUM_OF_LETTERFRETS ? unknownFret : m_fretFonts[m_fretFontIdx].displayLetter[fret]));
+                  ? (fret >= NUM_OF_DIGITFRETS ? unknownFret : m_fretFontInfo.displayDigit[fret])
+                  : (fret >= NUM_OF_LETTERFRETS ? unknownFret : m_fretFontInfo.displayLetter[fret]));
     }
 }
 
@@ -561,7 +553,7 @@ String StaffType::tabBassStringPrefix(int strg, bool* hasFret) const
         // return a number with the string index
         if (bassStrgIdx > NUM_OF_BASSSTRINGS_WITH_NUMBER) {
             *hasFret    = false;
-            return m_fretFonts[m_fretFontIdx].displayDigit[strg + 1];
+            return m_fretFontInfo.displayDigit[strg + 1];
         }
         // if a frettable bass string, return an empty string
         return String();
@@ -571,13 +563,13 @@ String StaffType::tabBassStringPrefix(int strg, bool* hasFret) const
         // return a number with the bass string index itself
         if (bassStrgIdx > NUM_OF_BASSSTRINGS_WITH_LETTER) {
             *hasFret    = false;
-            return m_fretFonts[m_fretFontIdx].displayDigit[bassStrgIdx - 1];
+            return m_fretFontInfo.displayDigit[bassStrgIdx - 1];
         }
         // if a frettable bass string, return a character with the relevant num. of slashes;
         // note that the number of slashes is bassStrgIdx-1 (1st bass has no slash)
         // and slashChar[] is 0-based (slashChar[0] => 1 slash, ...), whence the -2
         String prefix    = bassStrgIdx > 1
-                           ? String(m_fretFonts[m_fretFontIdx].slashChar[bassStrgIdx - 2]) : String();
+                           ? String(m_fretFontInfo.slashChar[bassStrgIdx - 2]) : String();
         return prefix;
     }
 }
@@ -874,7 +866,7 @@ bool TablatureDurationFont::read(XmlReader& e, int mscVersion)
         } else if (tag == "displayName") {
             displayName = e.readText();
         } else if (tag == "defaultSize" || (tag == "defaultPitch" && mscVersion < 460)) {
-            defPitch = e.readDouble();
+            defSize = e.readDouble();
         } else if (tag == "defaultYOffset") {
             defYOffset = e.readDouble();
         } else if (tag == "beamWidth") {
@@ -1042,46 +1034,22 @@ std::vector<String> StaffType::tabFontNames(bool bDuration)
 //
 //    retrieves data about a Tablature font.
 //    returns: true if idx is valid | false if it is not
-// any of the pointer parameter can be null, if that datum is not needed
 //---------------------------------------------------------
 
-bool StaffType::tabFontData(bool bDuration, size_t nIdx, String* pFamily, String* pDisplayName,
-                            double* pSize, double* pYOff)
+bool StaffType::tabFontData(bool bDuration, size_t nIdx, double& pSize, double& pYOff)
 {
     if (bDuration) {
         if (nIdx < m_durationFonts.size()) {
             TablatureDurationFont f = m_durationFonts.at(nIdx);
-            if (pFamily) {
-                *pFamily          = f.family;
-            }
-            if (pDisplayName) {
-                *pDisplayName     = f.displayName;
-            }
-            if (pSize) {
-                *pSize            = f.defPitch;
-            }
-            if (pYOff) {
-                *pYOff            = f.defYOffset;
-            }
+            pSize = f.defSize;
+            pYOff = f.defYOffset;
             return true;
         }
     } else {
-        if (nIdx < m_fretFonts.size()) {
-            TablatureFretFont f = m_fretFonts.at(nIdx);
-            if (pFamily) {
-                *pFamily          = f.family;
-            }
-            if (pDisplayName) {
-                *pDisplayName     = f.displayName;
-            }
-            if (pSize) {
-                *pSize            = f.defSize;
-            }
-            if (pYOff) {
-                *pYOff            = f.defYOffset;
-            }
-            return true;
-        }
+        TablatureFretFont f = nIdx < m_fretFonts.size() ? m_fretFonts.at(nIdx) : TablatureFretFont();
+        pSize = f.defSize;
+        pYOff = f.defYOffset;
+        return true;
     }
     return false;
 }
