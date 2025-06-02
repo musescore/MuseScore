@@ -663,11 +663,21 @@ AlignV TConv::fromXml(const AsciiStringView& tag, AlignV def)
     return findTypeByXmlTag<AlignV>(ALIGN_V, tag, def);
 }
 
+String TConv::toXml(AlignH v)
+{
+    return String::fromAscii(findXmlTagByType<AlignH>(ALIGN_H, v).ascii());
+}
+
+String TConv::toXml(AlignV v)
+{
+    return String::fromAscii(findXmlTagByType<AlignV>(ALIGN_V, v).ascii());
+}
+
 String TConv::toXml(Align v)
 {
     StringList sl;
-    sl << String::fromAscii(findXmlTagByType<AlignH>(ALIGN_H, v.horizontal).ascii());
-    sl << String::fromAscii(findXmlTagByType<AlignV>(ALIGN_V, v.vertical).ascii());
+    sl << toXml(v.horizontal);
+    sl << toXml(v.vertical);
     return sl.join(u",");
 }
 

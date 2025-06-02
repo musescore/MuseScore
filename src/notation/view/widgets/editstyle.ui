@@ -8293,7 +8293,7 @@
                  <item>
                   <widget class="QLabel" name="label_62">
                    <property name="text">
-                    <string>Position:</string>
+                    <string>Placement:</string>
                    </property>
                   </widget>
                  </item>
@@ -8946,7 +8946,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_40">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>voltaPosAbove</cstring>
@@ -9752,7 +9752,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_124">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>pedalLinePlacement</cstring>
@@ -9984,7 +9984,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_125">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>trillLinePlacement</cstring>
@@ -10120,7 +10120,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_1251">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>vibratoLinePlacement</cstring>
@@ -10586,7 +10586,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_72">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePlacement</cstring>
@@ -10922,7 +10922,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_214">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePlacement</cstring>
@@ -11668,7 +11668,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_178">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>staffTextPlacement</cstring>
@@ -11933,7 +11933,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_128">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>tempoTextPlacement</cstring>
@@ -12475,7 +12475,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>Position:</string>
+                    <string>Placement:</string>
                    </property>
                    <property name="buddy">
                     <cstring>lyricsPlacement</cstring>
@@ -13234,7 +13234,7 @@ first note of the system</string>
            <item row="0" column="0">
             <widget class="QLabel" name="label_152">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>rehearsalMarkPlacement</cstring>
@@ -13624,8 +13624,8 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>624</width>
-             <height>478</height>
+             <width>660</width>
+             <height>744</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">

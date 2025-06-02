@@ -468,7 +468,7 @@ void TextSettingsModel::updateIsHorizontalAlignmentAvailable()
     bool available = false;
     for (EngravingItem* item : m_elementList) {
         bool isPureAlignedDynamic = item->isDynamic() && toDynamic(item)->centerOnNotehead();
-        if (!isPureAlignedDynamic && !item->isHarmony()) {
+        if (!isPureAlignedDynamic) {
             available = true;
             break;
         }

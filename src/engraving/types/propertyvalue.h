@@ -68,6 +68,7 @@ enum class P_TYPE : unsigned char {
 
     // Layout
     ALIGN,
+    ALIGN_H,
     PLACEMENT_V,
     PLACEMENT_H,
     TEXT_PLACE,
@@ -194,6 +195,8 @@ public:
     // Layout
     PropertyValue(Align v)
         : m_type(P_TYPE::ALIGN), m_data(make_data<Align>(v)) {}
+    PropertyValue(AlignH v)
+        : m_type(P_TYPE::ALIGN_H), m_data(make_data<AlignH>(v)) {}
 
     PropertyValue(PlacementV v)
         : m_type(P_TYPE::PLACEMENT_V), m_data(make_data<PlacementV>(v)) {}

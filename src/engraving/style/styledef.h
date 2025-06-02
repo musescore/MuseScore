@@ -513,7 +513,7 @@ enum class Sid {
     polychordDividerThickness,
     polychordDividerSpacing,
     verticallyAlignChordSymbols,
-    chordAlignmentToNotehead,
+    chordSymPosition,
     chordAlignmentToFretboard,
     chordAlignmentExcludeModifiers,
 

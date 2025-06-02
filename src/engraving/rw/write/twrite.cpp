@@ -507,9 +507,6 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         int t = static_cast<int>(item->track()) + ctx.trackDiff();
         xml.tag("track", t);
     }
-    if (ctx.writePosition()) {
-        xml.tagProperty(Pid::POSITION, item->rtick());
-    }
 
     for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z }) {
         if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {

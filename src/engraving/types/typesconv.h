@@ -42,6 +42,8 @@ public:
     static AsciiStringView toXml(ElementType v);
     static ElementType fromXml(const AsciiStringView& tag, ElementType def, bool silent = false);
 
+    static String toXml(AlignH v);
+    static String toXml(AlignV v);
     static String toXml(Align v);
     static Align fromXml(const String& str, Align def);
     static AlignH fromXml(const AsciiStringView& str, AlignH def);

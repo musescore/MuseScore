@@ -33,7 +33,7 @@ class ChordSymbolSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * voicingType READ voicingType CONSTANT)
     Q_PROPERTY(PropertyItem * durationType READ durationType CONSTANT)
     Q_PROPERTY(PropertyItem * verticalAlign READ verticalAlign CONSTANT)
-    Q_PROPERTY(PropertyItem * noteheadAlign READ noteheadAlign CONSTANT)
+    Q_PROPERTY(PropertyItem * position READ position CONSTANT)
     Q_PROPERTY(PropertyItem * bassScale READ bassScale CONSTANT)
 
     Q_PROPERTY(bool hasLinkedFretboardDiagram READ hasLinkedFretboardDiagram NOTIFY hasLinkedFretboardDiagramChanged FINAL)
@@ -50,7 +50,7 @@ public:
     PropertyItem* voicingType() const;
     PropertyItem* durationType() const;
     PropertyItem* verticalAlign() const;
-    PropertyItem* noteheadAlign() const;
+    PropertyItem* position() const;
     PropertyItem* bassScale() const;
 
     bool hasLinkedFretboardDiagram() const;
@@ -71,7 +71,7 @@ private:
     PropertyItem* m_durationType = nullptr;
     bool m_hasLinkedFretboardDiagram = false;
     PropertyItem* m_verticalAlign = nullptr;
-    PropertyItem* m_noteheadAlign = nullptr;
+    PropertyItem* m_position = nullptr;
     PropertyItem* m_bassScale = nullptr;
 };
 }

@@ -382,6 +382,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
 
     case P_TYPE::ALIGN:
         return PropertyValue(TConv::fromXml(e.readText(), Align()));
+    case P_TYPE::ALIGN_H:
+        return PropertyValue(TConv::fromXml(e.readText(), AlignH()).horizontal);
     case P_TYPE::PLACEMENT_V:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), PlacementV::ABOVE));
     case P_TYPE::PLACEMENT_H:
@@ -3202,7 +3204,7 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
                 }
             }
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::POS_ABOVE)) {
-        } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_NOTEHEAD_ALIGN)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::POSITION)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_TYPE)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::PLAY)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICE_LITERAL)) {
