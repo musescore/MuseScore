@@ -70,12 +70,12 @@ EditStaffType::EditStaffType(QWidget* parent)
     setupUi(this);
 
     // tab page configuration
-    std::vector<String> fontNames = mu::engraving::StaffType::fontNames(false);
+    std::vector<String> fontNames = mu::engraving::StaffType::tabFontNames(false);
     for (const String& fn : fontNames) {   // fill fret font name combo
         fretFontName->addItem(fn.toQString());
     }
     fretFontName->setCurrentIndex(0);
-    fontNames = mu::engraving::StaffType::fontNames(true);
+    fontNames = mu::engraving::StaffType::tabFontNames(true);
     for (const String& fn : fontNames) {  // fill duration font name combo
         durFontName->addItem(fn.toQString());
     }
@@ -366,7 +366,7 @@ void EditStaffType::nameEdited(const QString& /*s*/)
 void EditStaffType::durFontNameChanged(int idx)
 {
     qreal size, yOff;
-    if (mu::engraving::StaffType::fontData(true, idx, 0, 0, &size, &yOff)) {
+    if (mu::engraving::StaffType::tabFontData(true, idx, 0, 0, &size, &yOff)) {
         durFontSize->setValue(size);
         durY->setValue(yOff);
     }
@@ -376,7 +376,7 @@ void EditStaffType::durFontNameChanged(int idx)
 void EditStaffType::fretFontNameChanged(int idx)
 {
     qreal size, yOff;
-    if (mu::engraving::StaffType::fontData(false, idx, 0, 0, &size, &yOff)) {
+    if (mu::engraving::StaffType::tabFontData(false, idx, 0, 0, &size, &yOff)) {
         fretFontSize->setValue(size);
         fretY->setValue(yOff);
     }
