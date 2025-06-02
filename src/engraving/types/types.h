@@ -792,6 +792,7 @@ enum class TextStyleType : unsigned char {
     TUPLET,
     STICKING,
     FINGERING,
+    TAB_FRET_NUMBER,
     LH_GUITAR_FINGERING,
     RH_GUITAR_FINGERING,
     HAMMER_ON_PULL_OFF,
