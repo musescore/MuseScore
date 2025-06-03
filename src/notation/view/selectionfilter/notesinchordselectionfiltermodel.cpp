@@ -180,7 +180,6 @@ void NotesInChordSelectionFilterModel::updateTopNoteIdx()
     const INotationSelectionRangePtr range = selection ? selection->range() : nullptr;
     if (!filter || !range) {
         m_topNoteIdx = muse::nidx;
-
         return;
     }
 
