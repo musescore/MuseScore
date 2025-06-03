@@ -697,7 +697,7 @@ void FBox::init()
                 continue;
             }
 
-            FretDiagram* fretDiagram = makeFretDiagram(item);
+            FretDiagram* fretDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(item);
             if (!fretDiagram) {
                 continue;
             }
@@ -826,33 +826,6 @@ void FBox::undoReorderElements(const std::vector<EID>& newOrderElementsIds)
 {
     score()->undo(new ReorderFBox(this, newOrderElementsIds));
     triggerLayout();
-}
-
-FretDiagram* FBox::makeFretDiagram(const EngravingItem* item)
-{
-    FretDiagram* fretDiagram = nullptr;
-
-    if (item->isHarmony() && !item->parentItem()->isFretDiagram()) {
-        Harmony* harmony = toHarmony(item)->clone();
-        harmony->setParent(this);
-
-        fretDiagram = Factory::createFretDiagram(score()->dummy()->segment());
-
-        fretDiagram->setTrack(harmony->track());
-        fretDiagram->updateDiagram(harmony->plainText());
-
-        fretDiagram->linkHarmony(harmony);
-    } else if (item->isHarmony() && item->parentItem()->isFretDiagram()) {
-        fretDiagram = toFretDiagram(item->parentItem())->clone();
-    } else if (item->isFretDiagram()) {
-        fretDiagram = toFretDiagram(item)->clone();
-        if (!fretDiagram->harmony()) {
-            //! generate from diagram and add harmony
-            fretDiagram->add(Factory::createHarmony(score()->dummy()->segment()));
-        }
-    }
-
-    return fretDiagram;
 }
 
 //---------------------------------------------------------

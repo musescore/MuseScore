@@ -7009,7 +7009,7 @@ FBox* Score::findFretBox() const
 void Score::undoRenameChordInFretBox(const Harmony* harmony, const String& oldName)
 {
     Score* score = harmony->score();
-    if (!score) {
+    IF_ASSERT_FAILED(score) {
         return;
     }
 
@@ -7035,7 +7035,7 @@ void Score::undoRenameChordInFretBox(const Harmony* harmony, const String& oldNa
 
 void Score::undoAddChordToFretBox(const EngravingItem* harmonyOrFretDiagram)
 {
-    IF_ASSERT_FAILED(!harmonyOrFretDiagram || !harmonyOrFretDiagram->isHarmony() || !harmonyOrFretDiagram->isFretDiagram()) {
+    IF_ASSERT_FAILED(harmonyOrFretDiagram && (harmonyOrFretDiagram->isHarmony() || harmonyOrFretDiagram->isFretDiagram())) {
         return;
     }
 
@@ -7071,7 +7071,7 @@ void Score::undoAddChordToFretBox(const EngravingItem* harmonyOrFretDiagram)
 
 void Score::undoRemoveChordFromFretBox(const EngravingItem* harmonyOrFretDiagram)
 {
-    IF_ASSERT_FAILED(!harmonyOrFretDiagram || !harmonyOrFretDiagram->isHarmony() || !harmonyOrFretDiagram->isFretDiagram()) {
+    IF_ASSERT_FAILED(harmonyOrFretDiagram && (harmonyOrFretDiagram->isHarmony() || harmonyOrFretDiagram->isFretDiagram())) {
         return;
     }
 
@@ -7092,17 +7092,6 @@ void Score::undoRemoveChordFromFretBox(const EngravingItem* harmonyOrFretDiagram
 
     score->undo(new RemoveChordFBox(fretBox, chordName, harmonyOrFretDiagram->tick()));
     fretBox->triggerLayout();
-
-    // for (EngravingObject* linkedObject : fretBox->linkList()) {
-    //     if (!linkedObject || !linkedObject->isFBox()) {
-    //         continue;
-    //     }
-
-    //     FBox* box = toFBox(linkedObject);
-
-    //     box->score()->undo(new RemoveChordFBox(box, chordName, harmonyOrFretDiagram->tick()));
-    //     box->triggerLayout();
-    // }
 }
 
 //---------------------------------------------------------

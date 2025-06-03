@@ -3552,7 +3552,7 @@ static FretDiagram* insertFretDiagramToFretBox(FBox* fretBox, Harmony* harmonyFo
 {
     ElementList& existingDiagramsFromBox = fretBox->el();
 
-    FretDiagram* fretDiagram = fretBox->makeFretDiagram(harmonyForClone);
+    FretDiagram* fretDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(harmonyForClone);
     if (!fretDiagram) {
         return nullptr;
     }
@@ -3801,7 +3801,7 @@ void AddChordFBox::redo(EditData*)
 
     ElementList& existingDiagramsFromBox = m_fretBox->el();
     if (existingDiagramsFromBox.empty()) {
-        FretDiagram* fretDiagram = m_fretBox->makeFretDiagram(currentHarmonyFromScore);
+        FretDiagram* fretDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(currentHarmonyFromScore);
         addFretDiagramToFretBox(m_fretBox, fretDiagram, 0);
         m_added = true;
 
@@ -3818,7 +3818,7 @@ void AddChordFBox::redo(EditData*)
             }
         }
 
-        FretDiagram* fretDiagram = m_fretBox->makeFretDiagram(currentHarmonyFromScore);
+        FretDiagram* fretDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(currentHarmonyFromScore);
         if (!fretDiagram) {
             continue;
         }

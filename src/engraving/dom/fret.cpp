@@ -1134,6 +1134,36 @@ void FretDiagram::setFingering(std::vector<int> v)
     m_fingering = std::move(v);
 }
 
+FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harmonyOrFretDiagram)
+{
+    IF_ASSERT_FAILED(!harmonyOrFretDiagram || !harmonyOrFretDiagram->isHarmony() || !harmonyOrFretDiagram->isFretDiagram()) {
+        return nullptr;
+    }
+
+    FretDiagram* fretDiagram = nullptr;
+
+    if (harmonyOrFretDiagram->isHarmony() && !harmonyOrFretDiagram->parentItem()->isFretDiagram()) {
+        Harmony* harmony = toHarmony(harmonyOrFretDiagram)->clone();
+
+        fretDiagram = Factory::createFretDiagram(harmonyOrFretDiagram->score()->dummy()->segment());
+
+        fretDiagram->setTrack(harmony->track());
+        fretDiagram->updateDiagram(harmony->plainText());
+
+        fretDiagram->linkHarmony(harmony);
+    } else if (harmonyOrFretDiagram->isHarmony() && harmonyOrFretDiagram->parentItem()->isFretDiagram()) {
+        fretDiagram = toFretDiagram(harmonyOrFretDiagram->parentItem())->clone();
+    } else if (harmonyOrFretDiagram->isFretDiagram()) {
+        fretDiagram = toFretDiagram(harmonyOrFretDiagram)->clone();
+        if (!fretDiagram->harmony()) {
+            //! generate from diagram and add harmony
+            fretDiagram->add(Factory::createHarmony(harmonyOrFretDiagram->score()->dummy()->segment()));
+        }
+    }
+
+    return fretDiagram;
+}
+
 bool FretDiagram::isInFretBox() const
 {
     EngravingObject* parent = explicitParent();

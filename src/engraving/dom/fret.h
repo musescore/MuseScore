@@ -245,6 +245,8 @@ public:
     const std::vector<int>& fingering() const { return m_fingering; }
     void setFingering(std::vector<int> v);
 
+    static FretDiagram* makeFromHarmonyOrFretDiagram(const EngravingItem* harmonyOrFretDiagram);
+
     bool isInFretBox() const;
 
     friend class FretUndoData;

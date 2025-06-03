@@ -208,8 +208,6 @@ public:
 
     void undoReorderElements(const std::vector<EID>& newOrderElementsIds);
 
-    FretDiagram* makeFretDiagram(const EngravingItem* item);
-
     struct LayoutData : public VBox::LayoutData {
         double totalTableHeight = 0.0;
         double totalTableWidth = 0.0;
