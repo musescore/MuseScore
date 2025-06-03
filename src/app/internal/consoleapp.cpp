@@ -23,7 +23,9 @@
 #include "consoleapp.h"
 
 #include <QApplication>
+#ifndef Q_OS_WASM
 #include <QThreadPool>
+#endif
 
 #include "modularity/ioc.h"
 
