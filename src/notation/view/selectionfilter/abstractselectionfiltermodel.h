@@ -35,6 +35,8 @@ class AbstractSelectionFilterModel : public QAbstractListModel, public muse::Inj
     Q_OBJECT
 
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
+    Q_PROPERTY(bool isAllSelected READ isAllSelected NOTIFY maskStatesChanged)
+    Q_PROPERTY(bool isNoneSelected READ isNoneSelected NOTIFY maskStatesChanged)
 
     muse::Inject<context::IGlobalContext> globalContext = { this };
 
@@ -42,6 +44,8 @@ public:
     explicit AbstractSelectionFilterModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE virtual void selectAll();
+    Q_INVOKABLE virtual void clearAll();
 
     QVariant data(const QModelIndex& index, int role) const override;
     bool setData(const QModelIndex& index, const QVariant& data, int role) override;
@@ -52,6 +56,7 @@ public:
 
 signals:
     void enabledChanged();
+    void maskStatesChanged();
 
 protected:
     enum Roles {
@@ -62,6 +67,9 @@ protected:
     };
 
     virtual void loadTypes() = 0;
+
+    virtual bool isAllSelected() const;
+    virtual bool isNoneSelected() const;
 
     virtual SelectionFilterTypesVariant getAllMask() const = 0;
     virtual SelectionFilterTypesVariant getNoneMask() const = 0;
