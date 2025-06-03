@@ -145,13 +145,23 @@ EngravingItem* FretDiagram::linkedClone()
     return e;
 }
 
+Segment* FretDiagram::segment() const
+{
+    EngravingObject* parent = explicitParent();
+    if (!parent || !parent->isSegment()) {
+        return nullptr;
+    }
+
+    return toSegment(explicitParent());
+}
+
 //---------------------------------------------------------
 //   fromString
 ///   Create diagram from string like "XO-123"
 ///   Always assume barre on the first visible fret
 //---------------------------------------------------------
 
-std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const String& s)
+std::shared_ptr<FretDiagram> FretDiagram::createFromPattern(Score* score, const String& s)
 {
     auto fd = Factory::makeFretDiagram(score->dummy()->segment());
 
@@ -776,7 +786,10 @@ void FretDiagram::linkHarmony(Harmony* harmony)
 
     setParent(harmony->explicitParent());
     harmony->setParent(this);
-    segment()->removeAnnotation(harmony);
+
+    if (Segment* segment = this->segment()) {
+        segment->removeAnnotation(harmony);
+    }
 
     m_harmony->setTrack(track());
 
@@ -1119,6 +1132,42 @@ String FretDiagram::screenReaderInfo() const
 void FretDiagram::setFingering(std::vector<int> v)
 {
     m_fingering = std::move(v);
+}
+
+FretDiagram* FretDiagram::makeFromHarmonyOrFretDiagram(const EngravingItem* harmonyOrFretDiagram)
+{
+    IF_ASSERT_FAILED(!harmonyOrFretDiagram || !harmonyOrFretDiagram->isHarmony() || !harmonyOrFretDiagram->isFretDiagram()) {
+        return nullptr;
+    }
+
+    FretDiagram* fretDiagram = nullptr;
+
+    if (harmonyOrFretDiagram->isHarmony() && !harmonyOrFretDiagram->parentItem()->isFretDiagram()) {
+        Harmony* harmony = toHarmony(harmonyOrFretDiagram)->clone();
+
+        fretDiagram = Factory::createFretDiagram(harmonyOrFretDiagram->score()->dummy()->segment());
+
+        fretDiagram->setTrack(harmony->track());
+        fretDiagram->updateDiagram(harmony->plainText());
+
+        fretDiagram->linkHarmony(harmony);
+    } else if (harmonyOrFretDiagram->isHarmony() && harmonyOrFretDiagram->parentItem()->isFretDiagram()) {
+        fretDiagram = toFretDiagram(harmonyOrFretDiagram->parentItem())->clone();
+    } else if (harmonyOrFretDiagram->isFretDiagram()) {
+        fretDiagram = toFretDiagram(harmonyOrFretDiagram)->clone();
+        if (!fretDiagram->harmony()) {
+            //! generate from diagram and add harmony
+            fretDiagram->add(Factory::createHarmony(harmonyOrFretDiagram->score()->dummy()->segment()));
+        }
+    }
+
+    return fretDiagram;
+}
+
+bool FretDiagram::isInFretBox() const
+{
+    EngravingObject* parent = explicitParent();
+    return parent ? parent->isFBox() : false;
 }
 
 void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath)

@@ -200,7 +200,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newHarpPalette());
     defaultPalette->append(newGuitarPalette(true));
     defaultPalette->append(newFingeringPalette(true));
-    defaultPalette->append(newFretboardDiagramPalette());
+    defaultPalette->append(newFretboardDiagramPalette(true));
     defaultPalette->append(newAccordionPalette());
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
@@ -1688,7 +1688,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
     return sp;
 }
 
-PalettePtr PaletteCreator::newFretboardDiagramPalette()
+PalettePtr PaletteCreator::newFretboardDiagramPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::FretboardDiagram);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Fretboard diagrams"));
@@ -1735,7 +1735,7 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     };
 
     for (const FretDiagramInfo& fretboardDiagram : fretboardDiagrams) {
-        auto fret = FretDiagram::createFromString(gpaletteScore, fretboardDiagram.diagram);
+        auto fret = FretDiagram::createFromPattern(gpaletteScore, fretboardDiagram.diagram);
         fret->setHarmony(fretboardDiagram.harmony);
 
         if (fretboardDiagram.harmony.empty()) {
@@ -1743,6 +1743,10 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
         }
 
         sp->appendElement(fret, fretboardDiagram.userName);
+    }
+
+    if (!defaultPalette) {
+        sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
     }
 
     return sp;

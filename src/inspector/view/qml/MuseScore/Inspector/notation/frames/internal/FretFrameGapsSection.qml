@@ -54,6 +54,7 @@ Item {
         propertyItem: root.columnGap
 
         icon: IconCode.HORIZONTAL
+        measureUnitsSymbol: qsTrc("global", "sp")
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
@@ -69,6 +70,7 @@ Item {
         propertyItem: root.rowGap
 
         icon: IconCode.VERTICAL
+        measureUnitsSymbol: qsTrc("global", "sp")
 
         navigationPanel: root.navigationPanel
         navigationRowStart: columnGapView.navigationRowEnd + 1

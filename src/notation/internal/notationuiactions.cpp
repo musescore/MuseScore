@@ -439,7 +439,7 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("add-fretboard-diagram",
              mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
+             mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Add &fretboard diagram"),
              TranslatableString("action", "Add fretboard diagram"),
              IconCode::Code::FRETBOARD_DIAGRAM
@@ -750,20 +750,26 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("append-hbox",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Append h&orizontal frame"),
+             TranslatableString("action", "&Horizontal frame"),
              TranslatableString("action", "Append horizontal frame")
              ),
     UiAction("append-vbox",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Append v&ertical frame"),
+             TranslatableString("action", "&Vertical frame"),
              TranslatableString("action", "Append vertical frame")
              ),
     UiAction("append-textframe",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Append te&xt frame"),
+             TranslatableString("action", "&Text frame"),
              TranslatableString("action", "Append text frame")
+             ),
+    UiAction("append-fretframe",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "&Fretboard diagram legend"),
+             TranslatableString("action", "Append fretboard diagram legend")
              ),
     UiAction("acciaccatura",
              mu::context::UiCtxProjectOpened,
