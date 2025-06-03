@@ -212,6 +212,12 @@ Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q)
 Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q, const QVariantMap& params)
 {
     auto func = [this, q, params](Promise<Val>::Resolve resolve, Promise<Val>::Reject reject) {
+        IF_ASSERT_FAILED(!m_openingObject.objectId.isValid()) {
+            LOGE() << "The opening of the previous object has not been completed"
+                   << ", objectId: " << m_openingObject.objectId.toString()
+                   << ", query: " << m_openingObject.query.toString();
+        }
+
         m_openingObject = { q, resolve, reject, QVariant(), nullptr };
 
         RetVal<OpenData> openedRet;
