@@ -27,15 +27,49 @@
 namespace mu::engraving {
 class Chord;
 class Stem;
+class StaffType;
 }
 
 namespace mu::engraving::rendering::score {
 class StemLayout
 {
 public:
+    // all in spatium units
+    static constexpr double STAFFTYPE_TAB_DEFAULTSTEMLEN_UP = 3.0;
+    static constexpr double STAFFTYPE_TAB_DEFAULTSTEMDIST_UP = 1.0;
+    static constexpr double STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP = -STAFFTYPE_TAB_DEFAULTSTEMDIST_UP;
+    static constexpr double STAFFTYPE_TAB_DEFAULTSTEMLEN_DN = 3.0;
+    static constexpr double STAFFTYPE_TAB_DEFAULTSTEMDIST_DN = 1.0;
+    static constexpr double STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN = STAFFTYPE_TAB_DEFAULTSTEMDIST_DN;
+    static constexpr double STAFFTYPE_TAB_DEFAULTSTEMLEN_THRU = 3.5;
+    static constexpr double STAFFTYPE_TAB_DEFAULTSTEMPOSX = 0.75;
+    // TAB STEM NOTATION
+    // the ratio between the length of a full stem and the length of a short stem
+    // (used for half note stems, in some TAB styles)
+    static constexpr double STAFFTYPE_TAB_SHORTSTEMRATIO = 0.5;
+    // metrics of slashes through half note stems
+    static constexpr double STAFFTYPE_TAB_SLASH_WIDTH = 1.2; /* X width of half note slash */
+    static constexpr double STAFFTYPE_TAB_SLASH_SLANTY = 0.8; /* the Y coord of the slash slant */
+    static constexpr double STAFFTYPE_TAB_SLASH_THICK = 0.4; /* slash thickness */
+    static constexpr double STAFFTYPE_TAB_SLASH_DISPL = 0.8; /* the total displacement between one slash and the next:
+                                                      includes slash thickness and empty space between slashes*/
+    // the total height of a double slash
+    static constexpr double STAFFTYPE_TAB_SLASH_2TOTHEIGHT
+        = (STAFFTYPE_TAB_SLASH_THICK + STAFFTYPE_TAB_SLASH_DISPL + STAFFTYPE_TAB_SLASH_SLANTY);
+    // the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
+    static constexpr double STAFFTYPE_TAB_SLASH_2STARTY_UP = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP - STAFFTYPE_TAB_SLASH_2TOTHEIGHT) * 0.5);
+    // the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
+    static constexpr double STAFFTYPE_TAB_SLASH_2STARTY_DN = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_SLASH_2TOTHEIGHT) * 0.5);
+
     static double calcDefaultStemLength(Chord* item, const LayoutContext& ctx);
     static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing, bool useWideBeams,
                                bool isFullSize);
+
+    static double tabStemLength(const Chord* item, const StaffType* st);
+    static PointF tabStemPosBeam(const Chord* item, const StaffType* st);
+    static double tabStemPosX() { return STAFFTYPE_TAB_DEFAULTSTEMPOSX; }
+    static double tabRestStemPosY(const ChordRest* item, const StaffType* st);
+    static PointF tabStemPos(const Chord* item, const StaffType* st);
 
 private:
     static int stemLengthBeamAddition(const Chord* item, const LayoutContext& ctx);

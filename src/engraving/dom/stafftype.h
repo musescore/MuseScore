@@ -38,40 +38,6 @@ class Chord;
 class ChordRest;
 class Staff;
 
-// all in spatium units
-#define STAFFTYPE_TAB_DEFAULTSTEMLEN_UP   3.0
-#define STAFFTYPE_TAB_DEFAULTSTEMDIST_UP  1.0
-#define STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP  -STAFFTYPE_TAB_DEFAULTSTEMDIST_UP
-#define STAFFTYPE_TAB_DEFAULTSTEMLEN_DN   3.0
-#define STAFFTYPE_TAB_DEFAULTSTEMDIST_DN  1.0
-#define STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN  STAFFTYPE_TAB_DEFAULTSTEMDIST_DN
-#define STAFFTYPE_TAB_DEFAULTSTEMLEN_THRU 3.5
-#define STAFFTYPE_TAB_DEFAULTSTEMPOSX     0.75
-#define STAFFTYPE_TAB_DEFAULTDOTDIST_X    0.75
-
-// TAB STEM NOTATION
-// the ratio between the length of a full stem and the length of a short stem
-// (used for half note stems, in some TAB styles)
-#define STAFFTYPE_TAB_SHORTSTEMRATIO      0.5
-// metrics of slashes through half note stems
-#define STAFFTYPE_TAB_SLASH_WIDTH         1.2   /* X width of half note slash */
-#define STAFFTYPE_TAB_SLASH_SLANTY        0.8   /* the Y coord of the slash slant */
-#define STAFFTYPE_TAB_SLASH_THICK         0.4   /* slash thickness */
-#define STAFFTYPE_TAB_SLASH_DISPL         0.8   /* the total displacement between one slash and the next:
-                                                      includes slash thickness and empty space between slashes*/
-// the total height of a double slash
-#define STAFFTYPE_TAB_SLASH_2TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK + STAFFTYPE_TAB_SLASH_DISPL + STAFFTYPE_TAB_SLASH_SLANTY)
-// the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
-#define STAFFTYPE_TAB_SLASH_2STARTY_UP     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP - STAFFTYPE_TAB_SLASH_2TOTHEIGHT) * 0.5)
-// the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
-#define STAFFTYPE_TAB_SLASH_2STARTY_DN     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_SLASH_2TOTHEIGHT) * 0.5)
-// same for a 4-ple slash
-#define STAFFTYPE_TAB_SLASH_4TOTHEIGHT     (STAFFTYPE_TAB_SLASH_THICK + STAFFTYPE_TAB_SLASH_DISPL * 3 + STAFFTYPE_TAB_SLASH_SLANTY)
-// the initial Y coord for a double shash on an UP stem = topmost corner of topmost slash
-#define STAFFTYPE_TAB_SLASH_4STARTY_UP     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP - STAFFTYPE_TAB_SLASH_4TOTHEIGHT) * 0.5)
-// the initial Y coord for a double shash on an DN stem = topmost corner of topmost slash
-#define STAFFTYPE_TAB_SLASH_4STARTY_DN     ((STAFFTYPE_TAB_DEFAULTSTEMLEN_UP + STAFFTYPE_TAB_SLASH_4TOTHEIGHT) * 0.5)
-
 // HISTORIC TAB BASS STRING NOTATION
 // The following constants refer to the specifics of bass string notation in historic
 //    (Renaiss./Baroque French and Italian) tablatures.
@@ -339,13 +305,6 @@ public:
     void  setShowTabFingering(bool val) { m_showTabFingering = val; }
     void  setUseNumbers(bool val) { m_useNumbers = val; m_fretMetricsValid = false; }
     void  setShowBackTied(bool val) { m_showBackTied = val; }
-
-    // utility functions for tab specially managed elements
-    PointF chordStemPos(const Chord*) const;
-    double   chordRestStemPosY(const ChordRest*) const;
-    double   chordStemPosX(const Chord*) const { return STAFFTYPE_TAB_DEFAULTSTEMPOSX; }
-    PointF chordStemPosBeam(const Chord*) const;
-    double   chordStemLength(const Chord*) const;
 
     bool isTabStaff() const { return m_group == StaffGroup::TAB; }
     bool isDrumStaff() const { return m_group == StaffGroup::PERCUSSION; }

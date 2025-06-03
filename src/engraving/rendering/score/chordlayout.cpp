@@ -79,6 +79,8 @@ using namespace muse;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
+static constexpr double STAFFTYPE_TAB_DEFAULTDOTDIST_X = 0.75;
+
 void ChordLayout::layout(Chord* item, LayoutContext& ctx)
 {
     if (item->notes().empty()) {
@@ -351,7 +353,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     const Staff* st    = item->staff();
     const StaffType* tab = st->staffTypeForElement(item);
     double lineDist    = tab->lineDistance().val() * _spatium;
-    double stemX       = tab->chordStemPosX(item) * _spatium;
+    double stemX       = StemLayout::tabStemPosX() * _spatium;
     int ledgerLines = 0;
     double llY         = 0.0;
 
@@ -465,7 +467,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             stem->setGenerated(true);
             ctx.mutDom().addElement(stem);
         }
-        item->stem()->setPos(tab->chordStemPos(item) * _spatium);
+        item->stem()->setPos(StemLayout::tabStemPos(item, tab) * _spatium);
         if (item->hook()) {
             if (item->beam()) {
                 ctx.mutDom().undoRemoveElement(item->hook());

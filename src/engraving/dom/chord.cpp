@@ -64,6 +64,8 @@
 #include "tuplet.h"
 #include "undo.h"
 
+#include "rendering/score/stemlayout.h"
+
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #endif
@@ -450,7 +452,7 @@ double Chord::stemPosX() const
 {
     const StaffType* staffType = this->staffType();
     if (staffType && staffType->isTabStaff()) {
-        double xPos = staffType->chordStemPosX(this) * spatium();
+        double xPos = rendering::score::StemLayout::tabStemPosX() * spatium();
         if (isGraceBendEnd()) {
             GraceNotesGroup& graceBefore = graceNotesBefore();
             Chord* grace = graceBefore.empty() ? nullptr : graceBefore.front();
@@ -469,7 +471,7 @@ PointF Chord::stemPos() const
     const Staff* staff = this->staff();
     const StaffType* staffType = staff ? staff->staffTypeForElement(this) : nullptr;
     if (staffType && staffType->isTabStaff()) {
-        return pagePos() + staffType->chordStemPos(this) * spatium();
+        return pagePos() + rendering::score::StemLayout::tabStemPos(this, staffType) * spatium();
     }
 
     if (ldata()->up) {
@@ -489,7 +491,7 @@ PointF Chord::stemPosBeam() const
     const StaffType* st = stf ? stf->staffTypeForElement(this) : nullptr;
 
     if (st && st->isTabStaff()) {
-        return pagePos() + st->chordStemPosBeam(this) * spatium();
+        return pagePos() + rendering::score::StemLayout::tabStemPosBeam(this, st) * spatium();
     }
 
     if (ldata()->up) {
@@ -901,7 +903,7 @@ double Chord::centerX() const
     const Staff* st = staff();
     const StaffType* stt = st->staffTypeForElement(this);
     if (stt->isTabStaff()) {
-        return stt->chordStemPosX(this) * spatium();
+        return rendering::score::StemLayout::tabStemPosX() * spatium();
     }
 
     const Note* note = up() ? downNote() : upNote();
