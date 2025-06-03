@@ -2229,8 +2229,7 @@ void TDraw::draw(const Note* item, Painter* painter)
         painter->setPen(c);
         double startPosX = ldata->bbox().x();
 
-        const MStyle& style = item->style();
-        double yOffset = tab->fretFontYOffset(style);
+        double yOffset = tab->fretFontYOffset();
         painter->drawText(PointF(startPosX, yOffset * item->magS()), item->fretString());
     }
     // NOT tablature

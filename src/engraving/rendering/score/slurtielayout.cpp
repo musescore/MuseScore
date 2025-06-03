@@ -2783,7 +2783,7 @@ bool SlurTieLayout::shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx)
     }
 
     const StaffType* stType = item->staffType();
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {
         return true;
     }
 
