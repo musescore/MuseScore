@@ -2384,7 +2384,8 @@ void ExportMusicXml::clef(int staff, const ClefType ct, const QString& extraAttr
       QString sign = ClefInfo::sign(ct);
       int line   = ClefInfo::line(ct);
       _xml.tag("sign", sign);
-      _xml.tag("line", line);
+      if (sign != "percussion" && sign != "TAB")
+            _xml.tag("line", line);
       if (ClefInfo::octChng(ct))
             _xml.tag("clef-octave-change", ClefInfo::octChng(ct));
       _xml.etag();
