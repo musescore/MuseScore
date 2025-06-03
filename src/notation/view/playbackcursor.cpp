@@ -458,7 +458,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                     for (size_t _k = 0; _k < measure_children.size(); _k++) {
                         EngravingItem* _item = measure_children.at(_k);
                         if (_item->type() == mu::engraving::ElementType::NOTE) {
-                            if (ottava_map[toNote(_item)] == 0) {
+                            if (_item->staff()->idx() == startElem->staff()->idx() && ottava_map[toNote(_item)] == 0) {
                                 if (_item->tick().ticks() >= spannerStartTicks && _item->tick().ticks() <= spannerEndTicks) {
                                     ottava_map[toNote(_item)] = (int)toOttava(spanner)->ottavaType() + 100;
                                 }
@@ -468,7 +468,6 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 }
             }
         }
-        
     }
 
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
