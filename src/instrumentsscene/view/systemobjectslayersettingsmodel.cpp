@@ -47,7 +47,7 @@ QVariant SystemObjectsLayerSettingsModel::data(const QModelIndex& modelIndex, in
     const SystemObjectsGroup& group = m_systemObjectGroups.at(index);
 
     switch (role) {
-    case TitleRole: return translatedSystemObjectsGroupName(group).toQString();
+    case TitleRole: return translatedSystemObjectsGroupCapitalizedName(group).toQString();
     case VisibilityRole: return isSystemObjectsGroupVisible(group);
     }
 
