@@ -25,6 +25,8 @@
 #include "internal/memfilesystem.h"
 #endif
 
+#include "internal/webinteractive.h"
+
 #include "log.h"
 
 using namespace mu::webbridge;
@@ -44,9 +46,12 @@ void WebBridgeModule::registerExports()
     ioc()->unregister<muse::io::IFileSystem>(moduleName());
     ioc()->registerExport<muse::io::IFileSystem>(moduleName(), new MemFileSystem());
 #endif
+
+    auto originInteractive = ioc()->resolve<muse::IInteractive>(moduleName());
+    ioc()->unregister<muse::IInteractive>(moduleName());
+    ioc()->registerExport<muse::IInteractive>(moduleName(), new WebInteractive(originInteractive));
 }
 
 void WebBridgeModule::onStartApp()
 {
-    int k = 17;
 }

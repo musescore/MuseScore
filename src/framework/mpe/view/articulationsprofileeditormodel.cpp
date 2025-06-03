@@ -43,7 +43,7 @@ void ArticulationsProfileEditorModel::requestToOpenProfile()
 {
     //! Make these strings translatable when we expose this tool to users
     std::vector<std::string> filter = { /*qtrc*/ std::string("MPE articulations profile") + " " + PROFILE_EXTENSION };
-    io::path_t path = interactive()->selectOpeningFile(/*qtrc*/ QString("Open MPE articulations profile"), "", filter);
+    io::path_t path = interactive()->selectOpeningFileSync(/*trc*/ "Open MPE articulations profile", "", filter);
 
     if (path.empty()) {
         return;
@@ -57,7 +57,7 @@ void ArticulationsProfileEditorModel::requestToOpenProfile()
 bool ArticulationsProfileEditorModel::requestToCreateProfile()
 {
     std::vector<std::string> filter = { /*qtrc*/ std::string("MPE articulations profile") + " " + PROFILE_EXTENSION };
-    io::path_t path = interactive()->selectSavingFile(/*qtrc*/ QString("Save MPE articulations profile"), "", filter);
+    io::path_t path = interactive()->selectSavingFileSync(/*trc*/ "Save MPE articulations profile", "", filter);
 
     if (path.empty()) {
         return false;

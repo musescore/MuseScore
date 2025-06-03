@@ -184,16 +184,14 @@ void GuiApp::perform()
 
     QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
-#ifdef Q_OS_MACOS
+#ifdef MUE_CONFIGURATION_IS_APPWEB
+    const QString mainQmlFile = "/Main.qml";
+#elif defined(Q_OS_MACOS)
     const QString mainQmlFile = "/platform/mac/Main.qml";
 #elif defined(Q_OS_WIN)
     const QString mainQmlFile = "/platform/win/Main.qml";
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     const QString mainQmlFile = "/platform/linux/Main.qml";
-#endif
-
-#ifdef MUE_CONFIGURATION_IS_APPWEB
-    const QString mainQmlFile = "/Main.qml";
 #endif
 
 #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
