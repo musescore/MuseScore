@@ -824,7 +824,7 @@ void DockWindow::adjustContentForAvailableSpace(DockPageView* page)
     QList<DockBase*> topLevelToolBarsDocks;
 
     for (DockToolBarView* toolBar : topLevelToolBars(page)) {
-        if (!toolBar->dockWidget()->isFloating()) {
+        if (!toolBar->dockWidget()->isFloating() && toolBar->isVisible()) {
             topLevelToolBarsDocks << toolBar;
         }
     }

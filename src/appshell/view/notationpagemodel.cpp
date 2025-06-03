@@ -64,6 +64,10 @@ void NotationPageModel::init()
         updateExtensionsToolBarVisibility();
     });
 
+    extensionsProvider()->manifestChanged().onReceive(this, [this](const muse::extensions::Manifest&) {
+        updateExtensionsToolBarVisibility();
+    });
+
     brailleConfiguration()->braillePanelEnabledChanged().onNotify(this, [this]() {
         emit isBraillePanelVisibleChanged();
     });
@@ -327,15 +331,11 @@ void NotationPageModel::updatePercussionPanelVisibility()
 void NotationPageModel::updateExtensionsToolBarVisibility()
 {
     const muse::dock::IDockWindow* window = dockWindowProvider()->window();
-    if (!window || window->isDockOpenAndCurrentInFrame(EXTENSIONS_TOOLBAR_NAME)) {
+    if (!window) {
         return;
     }
 
-    auto setExtensionsToolBarOpen = [this, window](bool open) {
-        if (open == window->isDockOpenAndCurrentInFrame(EXTENSIONS_TOOLBAR_NAME)) {
-            return;
-        }
-
+    auto setExtensionsToolBarOpen = [this](bool open) {
         //! NOTE: ensure we don't dispatch it multiple times in succession
         muse::async::Async::call(this, [=]() {
             dispatcher()->dispatch("dock-set-open", ActionData::make_arg2<QString, bool>(EXTENSIONS_TOOLBAR_NAME, open));

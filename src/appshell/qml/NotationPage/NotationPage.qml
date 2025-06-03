@@ -176,9 +176,6 @@ DockPage {
                 { "dock": playbackToolBar, "dropLocation": Location.Right }
             ]
 
-            //! NOTE: hidden by default
-            visible: false
-
             navigationSection: root.topToolbarKeyNavSec
 
             ExtensionsToolBar {
