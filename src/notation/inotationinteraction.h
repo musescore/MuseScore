@@ -94,7 +94,11 @@ public:
     {
         return {};
     }
-    virtual void addPlaybackNote(mu::engraving::Note*, int) 
+    virtual std::map<const Note*, bool> playbackNotesHitTsMap() const
+    {
+        return {};
+    }
+    virtual void addPlaybackNote(mu::engraving::Note*, int, bool) 
     {
 
     }

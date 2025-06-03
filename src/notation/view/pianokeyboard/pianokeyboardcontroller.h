@@ -46,6 +46,7 @@ public:
     muse::async::Notification keyStatesChanged() const;
 
     KeyState playbackKeyState(piano_key_t key) const;
+    bool playbackKeyHitStartTick(piano_key_t key);
     bool playbackKeyStatesEmpty() const;
     muse::async::Notification playbackKeyStatesChanged() const;
 
@@ -75,7 +76,7 @@ private:
 
     void onNotationChanged();
     void updateNotesKeys(const std::vector<const Note*>& receivedNotes);
-    void updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes);
+    void updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes, std::map<const Note*, bool> hitTsMap);
 
     void updateGlissandoNotesKeys(const std::vector<const Note*>& receivedNotes, const mu::engraving::Note* glissandoNote);
     void updateArpeggioNotesKeys(const std::vector<const Note*>& receivedNotes);
@@ -88,6 +89,7 @@ private:
     std::unordered_set<piano_key_t> m_otherNotesInChord;
 
     std::unordered_set<piano_key_t> m_righthand_keys;
+    std::map<piano_key_t, bool> m_righthand_keys_hit_ts;
     std::unordered_set<piano_key_t> m_lefthand_keys;
 
     piano_key_t m_glissando_note_key;
