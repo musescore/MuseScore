@@ -58,6 +58,8 @@ protected:
     muse::Ret doWriteAndWait(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
 
 private:
+    void doWrite(const QString& path, const muse::audio::SoundTrackFormat& format, bool startProgress = true);
+
     UnitType unitTypeFromOptions(const Options& options) const;
 
     muse::Progress m_progress;
