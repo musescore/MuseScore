@@ -383,19 +383,21 @@ void PianoKeyboardView::updatePlaybackKeyStateColors()
     m_whiteKeyStateColors[KeyState::Selected] = mixedColors(Qt::white, accentColor, isKeysFromMidiInput ? 0.8 : 0.5);
     m_whiteKeyStateColors[KeyState::Played] = mixedColors(Qt::white, accentColor, 0.8);
     QColor whiteKeyPlayColor(255, 0, 0);
-    m_whiteKeyStateColors[KeyState::RightHand] = mixedColors(Qt::white, whiteKeyPlayColor, 1.0);
+    m_whiteKeyStateColors[KeyState::RightHand] = mixedColors(Qt::white, whiteKeyPlayColor, 0.8);
+
+    m_whiteKeyClefSigColor = mixedColors(Qt::white, Qt::green, 0.25);
 
     QColor whiteKeyRightHandHitColor(255, 100, 0);
     m_whiteKeyHitColors[KeyState::RightHand] = mixedColors(Qt::white, whiteKeyRightHandHitColor, 1.0);
 
     QColor whiteKeyTrillColor(255, 255, 0);
-    m_whiteKeyStateColors[KeyState::Trill] = mixedColors(Qt::white, whiteKeyTrillColor, 1.0);
+    m_whiteKeyStateColors[KeyState::Trill] = mixedColors(Qt::white, whiteKeyTrillColor, 0.8);
 
     QColor whiteKeyArpeggioColor(255, 255, 0);
-    m_whiteKeyStateColors[KeyState::Arpeggio] = mixedColors(Qt::white, whiteKeyArpeggioColor, 1.0);
+    m_whiteKeyStateColors[KeyState::Arpeggio] = mixedColors(Qt::white, whiteKeyArpeggioColor, 0.8);
 
     QColor whiteKeyGlissandoColor(255, 255, 0);
-    m_whiteKeyStateColors[KeyState::Glissando] = mixedColors(Qt::white, whiteKeyGlissandoColor, 1.0);
+    m_whiteKeyStateColors[KeyState::Glissando] = mixedColors(Qt::white, whiteKeyGlissandoColor, 0.8);
 
     QColor blackKeyTopPieceBaseColor(78, 78, 78);
     m_blackKeyTopPieceStateColors[KeyState::None] = blackKeyTopPieceBaseColor;
@@ -403,19 +405,21 @@ void PianoKeyboardView::updatePlaybackKeyStateColors()
     m_blackKeyTopPieceStateColors[KeyState::Selected] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 0.8);
     m_blackKeyTopPieceStateColors[KeyState::Played] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 1.0);
     QColor balckKeyPlayTopPieceColor(255, 0, 0);
-    m_blackKeyTopPieceStateColors[KeyState::RightHand] = mixedColors(blackKeyTopPieceBaseColor, balckKeyPlayTopPieceColor, 1.0);
+    m_blackKeyTopPieceStateColors[KeyState::RightHand] = mixedColors(blackKeyTopPieceBaseColor, balckKeyPlayTopPieceColor, 0.8);
+
+    m_blackKeyTopClefSigColor = mixedColors(blackKeyTopPieceBaseColor, Qt::green, 0.4);
 
     QColor blackKeyRightHandTopPieceHitColor(255, 100, 0);
     m_blackKeyTopPieceStateHitColors[KeyState::RightHand] = mixedColors(blackKeyTopPieceBaseColor, blackKeyRightHandTopPieceHitColor, 1.0);
 
     QColor blackKeyTrillTopPieceColor(255, 255, 0);
-    m_blackKeyTopPieceStateColors[KeyState::Trill] = mixedColors(blackKeyTopPieceBaseColor, blackKeyTrillTopPieceColor, 1.0);
+    m_blackKeyTopPieceStateColors[KeyState::Trill] = mixedColors(blackKeyTopPieceBaseColor, blackKeyTrillTopPieceColor, 0.8);
 
     QColor blackKeyArpeggioTopPieceColor(255, 255, 0);
-    m_blackKeyTopPieceStateColors[KeyState::Arpeggio] = mixedColors(blackKeyTopPieceBaseColor, blackKeyArpeggioTopPieceColor, 1.0);
+    m_blackKeyTopPieceStateColors[KeyState::Arpeggio] = mixedColors(blackKeyTopPieceBaseColor, blackKeyArpeggioTopPieceColor, 0.8);
 
     QColor blackKeyGlissandoTopPieceColor(255, 255, 0);
-    m_blackKeyTopPieceStateColors[KeyState::Glissando] = mixedColors(blackKeyTopPieceBaseColor, blackKeyGlissandoTopPieceColor, 1.0);
+    m_blackKeyTopPieceStateColors[KeyState::Glissando] = mixedColors(blackKeyTopPieceBaseColor, blackKeyGlissandoTopPieceColor, 0.8);
 
     QColor blackKeyBottomPieceBaseColor(56, 56, 58);
     m_blackKeyBottomPieceStateColors[KeyState::None] = blackKeyBottomPieceBaseColor;
@@ -423,19 +427,21 @@ void PianoKeyboardView::updatePlaybackKeyStateColors()
     m_blackKeyBottomPieceStateColors[KeyState::Selected] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 0.8);
     m_blackKeyBottomPieceStateColors[KeyState::Played] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 1.0);
     QColor balckKeyPlayBottomPieceColor(255, 0, 0);
-    m_blackKeyBottomPieceStateColors[KeyState::RightHand] = mixedColors(blackKeyBottomPieceBaseColor, balckKeyPlayBottomPieceColor, 1.0);
+    m_blackKeyBottomPieceStateColors[KeyState::RightHand] = mixedColors(blackKeyBottomPieceBaseColor, balckKeyPlayBottomPieceColor, 0.8);
+
+    m_blackKeyBottomClefSigColor = mixedColors(blackKeyBottomPieceBaseColor, Qt::green, 0.4);
 
     QColor blackKeyRightHandBottomPieceHitColor(255, 100, 0);
     m_blackKeyBottomPieceStateHitColors[KeyState::RightHand] = mixedColors(blackKeyBottomPieceBaseColor, blackKeyRightHandBottomPieceHitColor, 1.0);
 
     QColor blackKeyTrillBottomPieceColor(255, 255, 0);
-    m_blackKeyBottomPieceStateColors[KeyState::Trill] = mixedColors(blackKeyBottomPieceBaseColor, blackKeyTrillBottomPieceColor, 1.0);
+    m_blackKeyBottomPieceStateColors[KeyState::Trill] = mixedColors(blackKeyBottomPieceBaseColor, blackKeyTrillBottomPieceColor, 0.8);
 
     QColor blackKeyArpeggioBottomPieceColor(255, 255, 0);
-    m_blackKeyBottomPieceStateColors[KeyState::Arpeggio] = mixedColors(blackKeyBottomPieceBaseColor, blackKeyArpeggioBottomPieceColor, 1.0);
+    m_blackKeyBottomPieceStateColors[KeyState::Arpeggio] = mixedColors(blackKeyBottomPieceBaseColor, blackKeyArpeggioBottomPieceColor, 0.8);
 
     QColor blackKeyGlissandoBottomPieceColor(255, 255, 0);
-    m_blackKeyBottomPieceStateColors[KeyState::Glissando] = mixedColors(blackKeyBottomPieceBaseColor, blackKeyGlissandoBottomPieceColor, 1.0);
+    m_blackKeyBottomPieceStateColors[KeyState::Glissando] = mixedColors(blackKeyBottomPieceBaseColor, blackKeyGlissandoBottomPieceColor, 0.8);
 }
 
 void PianoKeyboardView::paint(QPainter* painter)
@@ -502,7 +508,7 @@ void PianoKeyboardView::paintWhiteKeys(QPainter* painter, const QRectF& viewport
             if (m_controller->isPlaying()) {
                 for (const uint& keyIndex : m_clefKeySigsKeys) {
                     if (containsKey(keyIndex, key)) {
-                        fillColor = Qt::green;
+                        fillColor = m_whiteKeyClefSigColor;
                         // m_check_rects.insert({ key, rect });
                     }
                 }
@@ -642,8 +648,8 @@ void PianoKeyboardView::paintBlackKeys(QPainter* painter, const QRectF& viewport
             if (m_controller->isPlaying()) {
                 for (const uint& keyIndex : m_clefKeySigsKeys) {
                     if (containsKey(keyIndex, key)) {
-                        topPieceGradient.setColorAt(1.0, Qt::green);
-                        bottomPieceGradient.setColorAt(0.0, Qt::green);
+                        topPieceGradient.setColorAt(1.0, m_blackKeyTopClefSigColor);
+                        bottomPieceGradient.setColorAt(0.0, m_blackKeyBottomClefSigColor);
                         // m_check_rects.insert({ key, rect });
                     }
                 }
