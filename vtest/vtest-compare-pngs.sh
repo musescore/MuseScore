@@ -66,7 +66,8 @@ for PNG_REF_FILE in $PNG_REF_LIST ; do
     GIF_DIFF_FILE=$OUTPUT_DIR/${FILE_NAME}.diff.gif
     
     if test -f $PNG_CUR_FILE; then
-        code=$(compare -metric AE -fuzz 0.0% $PNG_REF_FILE $PNG_CUR_FILE $PNG_DIFF_FILE 2>&1)
+        (compare -metric AE -fuzz 0.0% $PNG_REF_FILE $PNG_CUR_FILE $PNG_DIFF_FILE 2>&1)
+        code=$?
         if (( $code > 0 )); then
             echo "Different: ref: $PNG_REF_FILE, current: $PNG_CUR_FILE, code: $code"
             export VTEST_DIFF_FOUND=true
@@ -78,7 +79,7 @@ for PNG_REF_FILE in $PNG_REF_LIST ; do
 
             # generate comparison gif
             if [ $GEN_GIF -eq 1 ]; then
-                convert -delay 80 -loop 0 $PNG_CUR_FILE $PNG_REF_FILE $GIF_DIFF_FILE
+                magick convert -delay 80 -loop 0 $PNG_CUR_FILE $PNG_REF_FILE $GIF_DIFF_FILE
             fi    
         else
             echo "Equal: ref: $PNG_REF_FILE, current: $PNG_CUR_FILE"
