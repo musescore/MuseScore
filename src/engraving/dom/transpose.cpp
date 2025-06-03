@@ -466,15 +466,18 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 
             if (e->isChord()) {
                 Chord* chord = toChord(e);
-                std::vector<Note*> nl = chord->notes();
-                for (Note* n : nl) {
+                const std::vector<Note*> nl = chord->notes();
+                for (size_t noteIdx = 0; noteIdx < nl.size(); ++noteIdx) {
+                    if (!m_selectionFilter.canSelectNoteIdx(noteIdx, nl.size(), m_selection.rangeContainsMultiNoteChords())) {
+                        continue;
+                    }
+                    Note* note = nl.at(noteIdx);
                     if (mode == TransposeMode::DIATONICALLY) {
-                        n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
-                    } else {
-                        if (!transpose(n, interval, useDoubleSharpsFlats)) {
-                            result = false;
-                            continue;
-                        }
+                        note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
+                        continue;
+                    }
+                    if (!transpose(note, interval, useDoubleSharpsFlats)) {
+                        result = false;
                     }
                 }
                 for (Chord* g : chord->graceNotes()) {
