@@ -111,26 +111,10 @@ std::shared_ptr<Pixmap> Score::createThumbnail()
 //   loadStyle
 //---------------------------------------------------------
 
-bool Score::loadStyle(const String& fn, bool ign, const bool overlap)
+bool Score::loadStyle(muse::io::IODevice& dev, bool ign, bool overlap)
 {
     TRACEFUNC;
 
-    File f(fn);
-    return doLoadStyle(f, ign, overlap);
-}
-
-bool Score::loadStyle(const muse::ByteArray& data, bool ign, bool overlap)
-{
-    TRACEFUNC;
-
-    muse::ByteArray ba = muse::ByteArray::fromRawData(data.constData(), data.size());
-    Buffer buf(&ba);
-
-    return doLoadStyle(buf, ign, overlap);
-}
-
-bool Score::doLoadStyle(muse::io::IODevice& dev, bool ign, bool overlap)
-{
     if (!dev.open(IODevice::ReadOnly)) {
         LOGE() << "The style data is not available.";
         return false;
