@@ -1842,6 +1842,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
         case TextStyleType::RH_GUITAR_FINGERING:
             return "rh-guitar-fingering";
 
+        case TextStyleType::HAMMER_ON_PULL_OFF:
+            return "hammer-ons-pull-offs-and-tapping";
+
         case TextStyleType::STRING_NUMBER:
             return "string-number";
 
