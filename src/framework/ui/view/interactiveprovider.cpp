@@ -103,7 +103,7 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
     }
 }
 
-RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const QString& title)
+RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const std::string& title)
 {
     if (m_isSelectColorOpened) {
         LOGW() << "already opened";
@@ -115,8 +115,8 @@ RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const QStri
     QColor selectedColor;
     {
         QColorDialog dlg;
-        if (!title.isEmpty()) {
-            dlg.setWindowTitle(title);
+        if (!title.empty()) {
+            dlg.setWindowTitle(QString::fromStdString(title));
         }
 
         dlg.setCurrentColor(color);

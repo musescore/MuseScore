@@ -19,7 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
@@ -47,10 +49,43 @@ AppWindow {
         anchors.right: parent.right
     }
 
-    NotationFrame {
+    Item {
+        id: contentItem
         anchors.top: appMenuBar.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+
+        StyledTabBar {
+            id: bar
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 16
+
+            StyledTabButton {
+                text: "Notation"
+            }
+            StyledTabButton {
+                text: "Dev"
+            }
+        }
+
+        StackLayout {
+            anchors.top: bar.bottom
+            anchors.topMargin: 8
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            currentIndex: bar.currentIndex
+
+            NotationFrame {
+
+            }
+
+            DevFrame {
+
+            }
+
+        }
     }
 }

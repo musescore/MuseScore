@@ -212,16 +212,19 @@ public:
     virtual void showProgress(const std::string& title, Progress* progress) = 0;
 
     // files
-    virtual io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) = 0;
-    virtual io::path_t selectSavingFile(const QString& title, const io::path_t& path, const std::vector<std::string>& filter,
-                                        bool confirmOverwrite = true) = 0;
+    virtual async::Promise<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,
+                                                         const std::vector<std::string>& filter) = 0;
+    virtual io::path_t selectOpeningFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) = 0;
+    virtual io::path_t selectSavingFileSync(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
+                                            bool confirmOverwrite = true) = 0;
 
     // dirs
-    virtual io::path_t selectDirectory(const QString& title, const io::path_t& dir) = 0;
-    virtual io::paths_t selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories) = 0;
+    virtual io::path_t selectDirectory(const std::string& title, const io::path_t& dir) = 0;
+    virtual io::paths_t selectMultipleDirectories(const std::string& title, const io::path_t& dir,
+                                                  const io::paths_t& selectedDirectories) = 0;
 
     // color
-    virtual QColor selectColor(const QColor& color = Qt::white, const QString& title = "") = 0;
+    virtual QColor selectColor(const QColor& color = Qt::white, const std::string& title = "") = 0;
     virtual bool isSelectColorOpened() const = 0;
 
     // custom

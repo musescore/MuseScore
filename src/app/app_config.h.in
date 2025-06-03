@@ -17,7 +17,6 @@
 /* ============================================== */
 /* Modules                                        */
 /* ============================================== */
-#cmakedefine MUE_ENABLE_SPLASHSCREEN 1
 #cmakedefine MUE_BUILD_APPSHELL_MODULE 1
 #cmakedefine MUE_BUILD_BRAILLE_MODULE 1
 #cmakedefine MUE_BUILD_CONVERTER_MODULE 1
@@ -49,4 +48,6 @@
 /* ============================================== */
 /* Functions                                      */
 /* ============================================== */
+#cmakedefine MUE_ENABLE_SPLASHSCREEN 1
+#cmakedefine MUE_ENABLE_CONSOLEAPP 1
 #cmakedefine MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE 1

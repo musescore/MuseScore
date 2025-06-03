@@ -72,16 +72,18 @@ public:
     void showProgress(const std::string& title, Progress* progress) override;
 
     // files
-    io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
-    io::path_t selectSavingFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter,
-                                bool confirmOverwrite = true) override;
+    virtual async::Promise<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,
+                                                         const std::vector<std::string>& filter) override;
+    io::path_t selectOpeningFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
+    io::path_t selectSavingFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
+                                    bool confirmOverwrite = true) override;
 
     // dirs
-    io::path_t selectDirectory(const QString& title, const io::path_t& dir) override;
-    io::paths_t selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& initialDirectories) override;
+    io::path_t selectDirectory(const std::string& title, const io::path_t& dir) override;
+    io::paths_t selectMultipleDirectories(const std::string& title, const io::path_t& dir, const io::paths_t& initialDirectories) override;
 
     // color
-    QColor selectColor(const QColor& color = Qt::white, const QString& title = "") override;
+    QColor selectColor(const QColor& color = Qt::white, const std::string& title = "") override;
     bool isSelectColorOpened() const override;
 
     // custom

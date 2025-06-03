@@ -1494,7 +1494,7 @@ void NotationActionController::addImage()
             muse::trc("notation", "TIFF") + " (*.tif *.tiff)",
             muse::trc("notation", "All") + " (*)" };
 
-    muse::io::path_t path = interactive()->selectOpeningFile(muse::qtrc("notation", "Insert Image"), "", filter);
+    muse::io::path_t path = interactive()->selectOpeningFileSync(muse::trc("notation", "Insert Image"), "", filter);
     interaction->addImageToItem(path, item);
 }
 
@@ -1861,8 +1861,8 @@ muse::io::path_t NotationActionController::selectStyleFile(bool forLoad)
                              : muse::trc("notation", "MuseScore style file");
     std::vector<std::string> filter = { filterName + " (*.mss)" };
     return forLoad
-           ? interactive()->selectOpeningFile(muse::qtrc("notation", "Load style"), dir, filter)
-           : interactive()->selectSavingFile(muse::qtrc("notation", "Save style"), dir, filter);
+           ? interactive()->selectOpeningFileSync(muse::trc("notation", "Load style"), dir, filter)
+           : interactive()->selectSavingFileSync(muse::trc("notation", "Save style"), dir, filter);
 }
 
 void NotationActionController::loadStyle()

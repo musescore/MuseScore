@@ -597,7 +597,7 @@ void CustomizeKitDialog::load()
 {
     std::vector<std::string> filter = { muse::trc("palette", "MuseScore drumset file") + " (*.drm)" };
     muse::io::path_t dir = notationConfiguration()->userStylesPath();
-    muse::io::path_t fname = interactive()->selectOpeningFile(muse::qtrc("palette", "Load drumset"), dir, filter);
+    muse::io::path_t fname = interactive()->selectOpeningFileSync(muse::trc("palette", "Load drumset"), dir, filter);
 
     if (fname.empty()) {
         return;
@@ -646,7 +646,7 @@ void CustomizeKitDialog::save()
 {
     std::vector<std::string> filter = { muse::trc("palette", "MuseScore drumset file") + " (*.drm)" };
     muse::io::path_t dir = notationConfiguration()->userStylesPath();
-    muse::io::path_t fname = interactive()->selectSavingFile(muse::qtrc("palette", "Save drumset"), dir, filter);
+    muse::io::path_t fname = interactive()->selectSavingFileSync(muse::trc("palette", "Save drumset"), dir, filter);
 
     if (fname.empty()) {
         return;

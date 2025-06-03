@@ -216,13 +216,18 @@ set(APP_SRC
     appfactory.cpp
     appfactory.h
 
-    internal/commandlineparser.cpp
-    internal/commandlineparser.h
-    internal/consoleapp.cpp
-    internal/consoleapp.h
     internal/guiapp.cpp
     internal/guiapp.h
 )
+
+if (MUE_ENABLE_CONSOLEAPP)
+    set(APP_SRC ${APP_SRC}
+        internal/commandlineparser.cpp
+        internal/commandlineparser.h
+        internal/consoleapp.cpp
+        internal/consoleapp.h
+    )
+endif()
 
 if (CC_IS_EMCC)
     set(APP_SRC ${APP_SRC} webapi_export.cpp)
