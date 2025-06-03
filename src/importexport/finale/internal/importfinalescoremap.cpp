@@ -185,8 +185,11 @@ void FinaleParser::importParts()
             continue; // safety check
         }
 
-        auto multiStaffInst = staff->getMultiStaffInstGroup();
-        if (multiStaffInst && m_inst2Part.find(staff->getCmper()) != m_inst2Part.end()) {
+        std::shared_ptr<details::StaffGroup> multiStaffGroup;
+        if (staff->multiStaffInstVisualGroupId) {
+            multiStaffGroup = m_doc->getDetails()->get<details::StaffGroup>(SCORE_PARTID, 0, staff->multiStaffInstVisualGroupId);
+        }
+        if (multiStaffGroup && m_inst2Part.find(staff->getCmper()) != m_inst2Part.end()) {
             continue;
         }
 
@@ -212,14 +215,16 @@ void FinaleParser::importParts()
         std::string abrvName = compositeStaff->getAbbreviatedInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
         part->setShortName(QString::fromStdString(trimNewLineFromString(abrvName)));
 
-        if (multiStaffInst) {
-            m_part2Inst.emplace(partId, multiStaffInst->staffNums);
-            for (auto inst : multiStaffInst->staffNums) {
-                if (auto instStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, inst, 1, 0)) {
-                    createStaff(part, instStaff, it);
-                    m_inst2Part.emplace(inst, partId);
-                }
-            }
+        if (multiStaffGroup) {
+            auto groupInfo = details::StaffGroupInfo(multiStaffGroup, scrollView);
+            std::vector<InstCmper> stavesInInst;
+            groupInfo.iterateStaves(1, 0, [&](const std::shared_ptr<others::StaffComposite>& staff) {
+                createStaff(part, staff, it);
+                m_inst2Part.emplace(staff->getCmper(), partId);
+                stavesInInst.push_back(staff->getCmper());
+                return true;
+            });
+            m_part2Inst.emplace(partId, stavesInInst);
         } else {
             createStaff(part, compositeStaff, it);
             m_part2Inst.emplace(partId, std::vector<InstCmper>({ InstCmper(staff->getCmper()) }));
@@ -287,7 +292,7 @@ void FinaleParser::importBrackets()
     }
     auto scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
-    auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, scorePartInfo, scrollView);
+    auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, m_currentMusxPartId, scrollView);
     auto groupsByLayer = computeStaffGroupLayers(staffGroups);
     for (const auto& groupInfo : groupsByLayer) {
         IF_ASSERT_FAILED(groupInfo.info.startSlot && groupInfo.info.endSlot) {
