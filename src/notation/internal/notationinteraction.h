@@ -96,8 +96,9 @@ public:
     muse::async::Notification selectionChanged() const override;
     muse::async::Notification playbackNotesChanged() const override;
     std::vector<Note*> playbackNotes() const override;
+    std::map<const Note*, bool> playbackNotesHitTsMap() const override;
     void clearPlaybackNotes() override;
-    void addPlaybackNote(Note*, int) override;
+    void addPlaybackNote(Note*, int, bool) override;
     int noteOttavaType(const mu::engraving::Note* note) override;
 
     void addGlissandoNote(mu::engraving::Note* note, int ticks, int duration_ticks, int ottavaType) override;
@@ -582,6 +583,7 @@ private:
 
     muse::async::Notification m_playbackNotesChanged;
     std::vector<Note*> m_playback_notes;
+    std::map<const Note*, bool> m_playback_notes_hit_ts;
     std::map<const Note*, int> m_ottava_map;
     
     Note* glissando_note = nullptr;

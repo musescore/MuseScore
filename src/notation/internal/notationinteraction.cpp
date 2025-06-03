@@ -1139,13 +1139,20 @@ std::vector<mu::engraving::Note*> NotationInteraction::playbackNotes() const
 {
     return m_playback_notes;
 }
+std::map<const Note*, bool> NotationInteraction::playbackNotesHitTsMap() const 
+{
+    return m_playback_notes_hit_ts;
+}
 
-void NotationInteraction::addPlaybackNote(Note* note, int ottavaType) 
+void NotationInteraction::addPlaybackNote(Note* note, int ottavaType, bool hit_ts) 
 {
     if (ottavaType > 0) {
         m_ottava_map[note] = ottavaType;
     }
     m_playback_notes.push_back(note);
+    if (hit_ts) {
+        m_playback_notes_hit_ts[note] = true;
+    }
 }
 
 int NotationInteraction::noteOttavaType(const mu::engraving::Note* note) 
@@ -1477,6 +1484,8 @@ bool NotationInteraction::isPlaying() const
 void NotationInteraction::clearPlaybackNotes() 
 {
     m_playback_notes.clear();
+    m_playback_notes_hit_ts.clear();
+
 }
 
 void NotationInteraction::notifyPianoKeyboardNotesChanged() 
