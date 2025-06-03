@@ -740,43 +740,6 @@ TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
 }
 
 //---------------------------------------------------------
-//   layout2
-//
-//    Second step: after horizontal positions of elements involved are defined,
-//    compute width of 'grid beams'
-//---------------------------------------------------------
-
-void TabDurationSymbol::layout2()
-{
-    LayoutData* ldata = mutldata();
-    // if not within a TAB or not a MEDIALFINAL grid element, do nothing
-    if (!m_tab || ldata->beamGrid != TabBeamGrid::MEDIALFINAL) {
-        return;
-    }
-
-    // get 'grid' beam length from page positions of this' chord and previous chord
-    Chord* chord       = toChord(explicitParent());
-    ChordRestNavigateOptions options;
-    options.skipGrace = true;
-    ChordRest* prevChord   = prevChordRest(chord, options);
-    if (chord == nullptr || prevChord == nullptr) {
-        return;
-    }
-    double mags        = magS();
-    double beamLen     = prevChord->pagePos().x() - chord->pagePos().x();            // negative
-    // page pos. difference already includes any magnification in effect:
-    // scale it down, as it will be magnified again during drawing
-    ldata->beamLength = beamLen / mags;
-    // update bbox x and w, but keep current y and h
-    RectF bbox = ldata->bbox();
-    bbox.setLeft(beamLen);
-    // set bbox width to half a stem width (magnified) plus beam length (already magnified)
-    bbox.setWidth(m_tab->m_durationFonts[m_tab->m_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
-
-    ldata->setBbox(bbox);
-}
-
-//---------------------------------------------------------
 //   STATIC FUNCTIONS FOR FONT CONFIGURATION MANAGEMENT
 //---------------------------------------------------------
 

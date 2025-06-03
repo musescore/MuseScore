@@ -435,8 +435,6 @@ public:
 
     bool isEditable() const override { return false; }
 
-    void layout2();                 // second step of layout: after horiz. pos. are defined, compute width of 'grid beams'
-
     const StaffType* tab() const { return m_tab; }
     const String& text() const { return m_text; }
     void setDuration(DurationType type, int dots, const StaffType* tab)

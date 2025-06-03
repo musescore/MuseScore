@@ -170,7 +170,6 @@ public:
     void setSlurDirection(DirectionV d) { m_slurDirection = d; }
     void undoSetSlurDirection(DirectionV d);
 
-    virtual void layout2(const PointF, int, struct UP&) {}
     virtual bool contains(const PointF&) const { return false; }    // not selectable
 
     SlurStyleType styleType() const { return m_styleType; }
