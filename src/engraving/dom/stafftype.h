@@ -76,7 +76,6 @@ struct TablatureFretFont {
     double defSize = 9.0;                                     // the default size of the font
     double defYOffset = 0.0;                                  // the default Y displacement
     Char xChar = u'X';                                        // the char to use for 'x'
-    Char deadNoteChar = u'×';                                 // the char to use for dead notes
     std::array<String, NUM_OF_BASSSTRING_SLASHES> slashChar;  // the char used to draw one or more '/' symbols
     std::array<String, NUM_OF_DIGITFRETS> displayDigit;       // the string to draw for digit frets
     Char displayLetter[NUM_OF_LETTERFRETS];                   // the char to use for letter frets
