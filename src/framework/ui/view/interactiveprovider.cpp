@@ -29,6 +29,8 @@
 #include <QGuiApplication>
 #include <QWindow>
 
+#include "global/async/async.h"
+
 #include "diagnostics/diagnosticutils.h"
 
 #include "log.h"
@@ -659,9 +661,13 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
     }
 
     notifyAboutCurrentUriChanged();
-    m_opened.send(m_openingObject.query.uri());
 
-    m_openingObject = ObjectInfo(); // clear
+    Uri uri = m_openingObject.query.uri();
+    m_openingObject = ObjectInfo();     // clear
+
+    Async::call(this, [this, uri]() {
+        m_opened.send(uri);
+    });
 }
 
 void InteractiveProvider::onClose(const QString& objectId, const QVariant& jsrv)
