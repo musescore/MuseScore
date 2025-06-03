@@ -4973,12 +4973,31 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
                         }
                   tag += color2xml(hp);
                   tag += positioningAttributes(hp, isStart);
+                  switch (hp->lineStyle()) {
+                        case Qt::DashLine:
+                              tag += " line-type=\"dashed\"";
+                              break;
+                        case Qt::DotLine:
+                              tag += " line-type=\"dotted\"";
+                              break;
+                        case Qt::SolidLine:
+                        default:
+                              break;
+                        }
+                  if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT) && (hp->lineStyle() == Qt::DashLine)) {
+                        tag += QString(" dash-length=\"%1\"").arg(hp->dashLineLen() * 10, 2);
+                        tag += QString(" space-length=\"%1\"").arg(hp->dashGapLen() * 10, 2);
+                        }
+                  if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT) && hp->hairpinType() == HairpinType::CRESC_HAIRPIN)
+                        tag += QString(" spread=\"%1\"").arg(hp->hairpinHeight().val() * 10, 2);
                   }
             else {
                   tag += "\"stop\"";
                   if (hp->hairpinCircledTip() && hp->hairpinType() == HairpinType::DECRESC_HAIRPIN) {
                         tag += " niente=\"yes\"";
                         }
+                  if (preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT) && hp->hairpinType() == HairpinType::DECRESC_HAIRPIN)
+                        tag += QString(" spread=\"%1\"").arg(hp->hairpinHeight().val() * 10, 2);
                   }
             tag += QString(" number=\"%1\"").arg(n + 1);
             _xml.tagE(tag);

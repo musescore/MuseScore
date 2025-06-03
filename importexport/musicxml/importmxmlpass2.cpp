@@ -4935,6 +4935,16 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
             if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                   h->setLineColor(color);
 
+            QStringRef lineType = _e.attributes().value("line-type");
+            if (lineType == "dashed")
+                  h->setLineStyle(Qt::DashLine);
+            else if (lineType == "dotted")
+                  h->setLineStyle(Qt::DotLine);
+            const QStringRef spread = _e.attributes().value("spread");
+            if (!spread.isEmpty() && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)) {
+                  const Spatium val(spread.toDouble() / 10.0);
+                  h->setHairpinHeight(val);
+                  }
             starts.append(MusicXmlSpannerDesc(h, ElementType::HAIRPIN, number));
             }
       else if (type == "stop") {
