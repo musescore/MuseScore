@@ -153,6 +153,10 @@ private:
     std::map<KeyState, QColor> m_blackKeyTopPieceStateColors;
     std::map<KeyState, QColor> m_blackKeyBottomPieceStateColors;
 
+    QColor m_whiteKeyClefSigColor;
+    QColor m_blackKeyTopClefSigColor;
+    QColor m_blackKeyBottomClefSigColor;
+
     std::map<KeyState, QColor> m_whiteKeyHitColors;
 
     std::map<KeyState, QColor> m_blackKeyTopPieceStateHitColors;
