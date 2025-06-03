@@ -5351,8 +5351,6 @@ void MusicXmlParserDirection::wedge(const String& type, const int number,
             h->setLineStyle(LineType::DASHED);
         } else if (lineType == "dotted") {
             h->setLineStyle(LineType::DOTTED);
-        } else if (lineType == "solid" || lineType.empty()) {
-            h->setLineStyle(LineType::SOLID);
         }
         const String spread = m_e.attribute("spread");
         if (!spread.empty() && configuration()->importLayout()) {
