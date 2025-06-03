@@ -72,6 +72,29 @@ KeyState PianoKeyboardController::playbackKeyState(piano_key_t key) const
     return KeyState::None;
 }
 
+bool PianoKeyboardController::playbackKeyHitStartTick(piano_key_t key)  
+{
+    if (m_righthand_keys_hit_ts[key]) {
+        if (trillKeyState(key) != KeyState::None) {
+            return false;
+        }
+        if (trillKeyState1(key) != KeyState::None) {
+            return false;
+        }
+
+        if (arpeggioKeyState(key) != KeyState::None) {
+            return false;
+        }
+
+        if (glissandoKeyState(key) != KeyState::None) {
+            return false;
+        }
+        return true;
+    }
+
+    return false;
+}
+
 KeyState PianoKeyboardController::glissandoKeyState(piano_key_t key) const 
 {
     if (m_glissando_curr_ticks == m_glissando_ticks) {
@@ -401,11 +424,15 @@ void PianoKeyboardController::onNotationChanged()
             }
 
             std::vector<const Note*> notes;
+            std::map<const Note*, bool> notes_hit_ts;
             for (const mu::engraving::Note* note : notation->interaction()->playbackNotes()) {
                 notes.push_back(note);
             }
+            for (const auto& [note, hit] : notation->interaction()->playbackNotesHitTsMap()) {
+                notes_hit_ts[note] = hit;
+            }
             m_isFromMidi = false;
-            updatePlaybackNotesKeys(notes);
+            updatePlaybackNotesKeys(notes, notes_hit_ts);
         });
 
         notation->interaction()->lastMeasureChanged().onNotify(this, [this]() {
@@ -629,9 +656,10 @@ void PianoKeyboardController::updateNotesKeys(const std::vector<const Note*>& re
     }
 }
 
-void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes) 
+void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes, std::map<const Note*, bool> hitTsMap) 
 {
     std::unordered_set<piano_key_t> newKeys;
+    m_righthand_keys_hit_ts.clear();
 
     DEFER {
         if (newKeys != m_righthand_keys) {
@@ -674,8 +702,14 @@ void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const No
                 __key = static_cast<int>(lowestKey + numKeys) - 1;
             }
             newKeys.insert((piano_key_t)__key);
+            if (hitTsMap[note]) {
+                m_righthand_keys_hit_ts[(piano_key_t)__key] = true;
+            }
         } else {
             newKeys.insert(_key);
+            if (hitTsMap[note]) {
+                m_righthand_keys_hit_ts[_key] = true;
+            }
         }
     }
 }

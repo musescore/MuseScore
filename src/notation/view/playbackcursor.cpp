@@ -1412,6 +1412,25 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                         }
                         if (item->type() == mu::engraving::ElementType::NOTE) {
                             Note* _pre_note = toNote(item);
+                            bool note_hit_ts = false;
+                            int ticks_dis = tick.ticks() - _pre_note->tick().ticks();
+                            if (_pre_note->chord()) {
+                                int note_dt = _pre_note->chord()->durationTypeTicks().ticks();
+                                if (_pre_note->chord()->durationType().type() <= mu::engraving::DurationType::V_WHOLE) {
+                                    note_dt /= 4;
+                                }
+                                if (_pre_note->chord()->durationType().type() == mu::engraving::DurationType::V_HALF) {
+                                    note_dt /= 2;
+                                }
+                                if (_pre_note->chord()->durationType().type() >= mu::engraving::DurationType::V_EIGHTH 
+                                && _pre_note->chord()->durationType().type() <= mu::engraving::DurationType::V_1024TH) {
+                                    note_dt *= 4;
+                                }
+                                if (ticks_dis >= 0 && ticks_dis <= note_dt / 8) {
+                                    note_hit_ts = true;
+                                }
+                            }
+                            
                             int _pre_note_ottavaType = ottava_map[_pre_note];  
                             // check grace
                             bool is_grace = _pre_note->isGrace();
@@ -1446,7 +1465,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                         graceChords.push_back(_g);
                                     }
                                     std::sort(graceChords.begin(), graceChords.end(), compare_by_chord_x);
-                                    int ticks_dis = tick.ticks() - _pre_note->tick().ticks();
                                     int single_grace_duration_ticks = grace_duration_ticks / gracechords_size;
                                     if (grace_before) {
                                         if (ticks_dis < grace_duration_ticks) {
@@ -1456,7 +1474,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                     std::vector<Note*> _notesList = graceChords[grace_i]->notes();
                                                     for (Note* __note__ : _notesList) {
                                                         int __note__ottavaType = ottava_map[__note__];
-                                                        m_notation->interaction()->addPlaybackNote(__note__, __note__ottavaType);
+                                                        m_notation->interaction()->addPlaybackNote(__note__, __note__ottavaType, false);
                                                     }
                                                 } else {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::BLACK);
@@ -1468,7 +1486,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                 _chord->setColor(muse::draw::Color::BLACK);
                                             }
                                             _pre_note->setColor(muse::draw::Color::RED);
-                                            m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType);
+                                            m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType, note_hit_ts);
                                         }
                                     } else {
                                         int _pre_note_duration_ticks = _pre_note->chord()->durationTypeTicks().ticks();
@@ -1478,7 +1496,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                     graceChords[grace_i]->setColor(muse::draw::Color::RED);
                                                     for (Note* _note_item : graceChords[grace_i]->notes()) {
                                                         int _note_item_ottavaType = ottava_map[_note_item];
-                                                        m_notation->interaction()->addPlaybackNote(_note_item, _note_item_ottavaType);
+                                                        m_notation->interaction()->addPlaybackNote(_note_item, _note_item_ottavaType, false);
                                                     }
                                                 } else {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::BLACK);
@@ -1490,13 +1508,11 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                 _chord->setColor(muse::draw::Color::BLACK);
                                             }
                                             _pre_note->setColor(muse::draw::Color::RED);
-                                            m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType);
+                                            m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType, note_hit_ts);
                                         }
                                     }
                                 } else {
-                                    Note* _noteItem = toNote(item);
-                                    int _noteItem_ottavaType = ottava_map[_noteItem];
-                                    m_notation->interaction()->addPlaybackNote(_noteItem, _noteItem_ottavaType);
+                                    m_notation->interaction()->addPlaybackNote(_pre_note, ottava_map[_pre_note], note_hit_ts);
                                 }
                             }
                         }  

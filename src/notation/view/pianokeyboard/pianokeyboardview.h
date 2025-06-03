@@ -152,10 +152,13 @@ private:
     std::map<KeyState, QColor> m_whiteKeyStateColors;
     std::map<KeyState, QColor> m_blackKeyTopPieceStateColors;
     std::map<KeyState, QColor> m_blackKeyBottomPieceStateColors;
+
+    std::map<KeyState, QColor> m_whiteKeyHitColors;
+
+    std::map<KeyState, QColor> m_blackKeyTopPieceStateHitColors;
+    std::map<KeyState, QColor> m_blackKeyBottomPieceStateHitColors;
     
     std::map<piano_key_t, QRectF> m_check_rects;
-    std::map<piano_key_t, QRectF> m_pre_check_rects;
-    bool playbackkey_state_base = false;
 
     qreal m_keyWidthScaling = 1.0;
     qreal m_scrollOffset = 0.0;
