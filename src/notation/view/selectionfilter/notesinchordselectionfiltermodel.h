@@ -40,6 +40,12 @@ signals:
 private:
     bool enabled() const override;
 
+    void selectAll() override;
+    void clearAll() override;
+
+    bool isAllSelected() const override;
+    bool isNoneSelected() const override;
+
     void loadTypes() override;
 
     bool isFiltered(const SelectionFilterTypesVariant& variant) const override;
