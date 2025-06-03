@@ -36,18 +36,19 @@ StyledFlickable {
     property NavigationSection navigationSection: null
     property int navigationOrderStart: 0
 
-    enabled: selectionFilterModel.enabled
-
     contentWidth: root.width
     contentHeight: contentColumn.implicitHeight
 
     Component.onCompleted: {
         voicesModel.load()
+        notesInChordModel.load()
         elementsModel.load()
     }
 
     Column {
         id: contentColumn
+
+        readonly property real buttonHeight: 24
 
         anchors {
             fill: parent
@@ -81,12 +82,12 @@ StyledFlickable {
 
                     delegate: FlatButton {
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 24
+                        Layout.preferredHeight: contentColumn.buttonHeight
 
                         text: model.title
 
                         navigation.panel: voicesSection.navigation
-                        navigation.order: model.index
+                        navigation.column: model.index
 
                         accentButton: model.isSelected
                         onClicked: {
@@ -100,13 +101,93 @@ StyledFlickable {
         SeparatorLine {}
 
         SelectionFilterSection {
+            id: notesInChordSection
+
+            visible: notesInChordModel.enabled
+            sectionTitle: qsTrc("notation", "Chords")
+
+            navigation {
+                section: root.navigationSection
+                order: root.navigationOrderStart + 2
+                direction: NavigationPanel.Vertical
+            }
+
+            ColumnLayout {
+                id: notesInChordButtonsColumn
+
+                width: parent.width
+                spacing: 6
+
+                Repeater {
+                    model: NotesInChordSelectionFilterModel {
+                        id: notesInChordModel
+                    }
+
+                    delegate: FlatButton {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: contentColumn.buttonHeight
+
+                        visible: model.isAllowed
+                        text: model.title
+
+                        navigation.panel: notesInChordSection.navigation
+                        navigation.row: model.index
+
+                        accentButton: model.isSelected
+                        onClicked: {
+                            model.isSelected = !model.isSelected
+                        }
+                    }
+                }
+
+                Row {
+                    id: singleNotesToggleRow
+
+                    height: singleNotesToggle.height
+                    width: parent.width
+
+                    spacing: notesInChordSection.spacing
+
+                    ToggleButton {
+                        id: singleNotesToggle
+
+                        checked: notesInChordModel.includeSingleNotes
+
+                        navigation.name: "SingleNotesToggle"
+                        navigation.panel: notesInChordSection.navigation
+                        navigation.row: 100
+
+                        onToggled: {
+                            notesInChordModel.includeSingleNotes = !notesInChordModel.includeSingleNotes
+                        }
+                    }
+
+                    StyledTextLabel {
+                        id: singleNotesInfo
+
+                        height: parent.height
+
+                        horizontalAlignment: Text.AlignLeft
+                        verticalAlignment: Text.AlignVCenter
+
+                        wrapMode: Text.Wrap
+                        text: qsTrc("notation", "Include single notes")
+                    }
+                }
+
+            }
+        }
+
+        SeparatorLine { visible: notesInChordModel.enabled }
+
+        SelectionFilterSection {
             id: notationElementsSection
 
             sectionTitle: qsTrc("notation", "Notation elements")
 
             navigation {
                 section: root.navigationSection
-                order: root.navigationOrderStart + 2
+                order: root.navigationOrderStart + 3
                 direction: NavigationPanel.Vertical
             }
 
@@ -129,7 +210,7 @@ StyledFlickable {
                     text: model.title
 
                     navigation.panel: notationElementsSection.navigation
-                    navigation.order: model.index
+                    navigation.row: model.index
 
                     checked: model.isSelected
                     isIndeterminate: model.isIndeterminate
