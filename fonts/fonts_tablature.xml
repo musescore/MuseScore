@@ -131,7 +131,6 @@
       <fret value="15" letter="1">Q</fret>
       <fret value="16" letter="1">R</fret>
       <mark value="x">:</mark>
-      <mark value="ghost">@</mark>
       <mark value="slash" number="1">V</mark>
       <mark value="slash" number="2">W</mark>
       <mark value="slash" number="3">X</mark>
@@ -261,7 +260,6 @@
       <fret value="15" letter="1">q</fret>
       <fret value="16" letter="1">r</fret>
       <mark value="x">:</mark>
-      <mark value="ghost">`</mark>
       <mark value="slash" number="1">V</mark>
       <mark value="slash" number="2">W</mark>
       <mark value="slash" number="3">X</mark>
@@ -391,7 +389,6 @@
       <fret value="15" letter="1">ő</fret>
       <fret value="16" letter="1">Œ</fret>
       <mark value="x">:</mark>
-      <mark value="ghost">`</mark>
       <mark value="slash" number="1">V</mark>
       <mark value="slash" number="2">W</mark>
       <mark value="slash" number="3">X</mark>
@@ -521,7 +518,6 @@
       <fret value="15" letter="1">đ</fret>
       <fret value="16" letter="1">Ē</fret>
       <mark value="x">:</mark>
-      <mark value="ghost">Ā</mark>
       <mark value="slash" number="1">Ė</mark>
       <mark value="slash" number="2">ė</mark>
       <mark value="slash" number="3">Ę</mark>
@@ -651,7 +647,6 @@
       <fret value="15" letter="1">đ</fret>
       <fret value="16" letter="1">Ē</fret>
       <mark value="x">:</mark>
-      <mark value="ghost">Ā</mark>
       <mark value="slash" number="1">Ė</mark>
       <mark value="slash" number="2">ė</mark>
       <mark value="slash" number="3">Ę</mark>
@@ -781,7 +776,6 @@
       <fret value="15" letter="1">ı</fret>
       <fret value="16" letter="1">Ĳ</fret>
       <mark value="x">:</mark>
-      <mark value="ghost">Ā</mark>
       <mark value="slash" number="1">Ķ</mark>
       <mark value="slash" number="2">ķ</mark>
       <mark value="slash" number="3">ĸ</mark>

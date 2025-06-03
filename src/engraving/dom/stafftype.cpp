@@ -788,8 +788,6 @@ bool TablatureFretFont::read(XmlReader& e, int mscVersion)
             }
             if (sval == "x") {
                 xChar = txt.at(0);
-            } else if (sval == "ghost") {
-                deadNoteChar = txt.at(0);
             } else if (sval == "slash") {
                 // limit within legal range
                 if (num < 1) {
