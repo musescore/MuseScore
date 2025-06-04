@@ -935,11 +935,13 @@ void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlW
 
 void SlurHandler::doSlurStart(const Slur* s, Notations& notations, String tagName, XmlWriter& xml)
 {
+    // only slurs can hold line styles
+    const bool style = (tagName == u"slur"); 
     // check if on slur list (i.e. stop already seen)
     int i = findSlur(s);
     // compose tag
     tagName += u" type=\"start\"";
-    tagName += (tagName == u"slur") ? slurTieLineStyle(s) : color2xml(s);
+    tagName += style ? slurTieLineStyle(s) : color2xml(s);
     tagName += ExportMusicXml::positioningAttributes(s, true);
 
     if (i >= 0) {
