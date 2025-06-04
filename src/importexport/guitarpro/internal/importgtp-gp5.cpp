@@ -196,6 +196,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     uint8_t beatBits = readUInt8();
     bool dotted    = beatBits & BEAT_DOTTED;
     bool hasSlur = false;
+    bool hasHammerOnPullOff = false;
     bool hasLetRing = false;
     bool hasPalmMute = false;
     bool hasTrill = false;
@@ -345,7 +346,8 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 toChord(cr)->add(note);
 
                 ReadNoteResult readResult = readNote(6 - i, note);
-                hasSlur = readResult.slur;
+                hasSlur = readResult.slur || hasSlur;
+                hasHammerOnPullOff = readResult.hammerOnPullOff || hasHammerOnPullOff;
                 hasLetRing = readResult.letRing || hasLetRing;
                 hasPalmMute = readResult.palmMute || hasPalmMute;
                 hasTrill = readResult.trill || hasTrill;
@@ -423,6 +425,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         addLetRing(cr, hasLetRing);
         addPalmMute(cr, hasPalmMute);
         addTrill(cr, hasTrill);
+        addHammerOnPullOff(cr, hasHammerOnPullOff);
         addRasgueado(cr, m_currentBeatHasRasgueado);
         addVibratoLeftHand(cr, hasVibratoLeftHand);
         addVibratoWTremBar(cr, hasVibratoWTremBar);
@@ -898,10 +901,7 @@ bool GuitarPro5::read(IODevice* io)
         }
     }
 
-    slurs = new Slur*[staves];
-    for (size_t i = 0; i < staves; ++i) {
-        slurs[i] = 0;
-    }
+    slurs.resize(staves, nullptr);
 
     int tnumerator   = 4;
     int tdenominator = 4;
@@ -1111,7 +1111,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
         bendParent = note;
     }
     if (modMask1 & EFFECT_HAMMER) {
-        result.slur = true;
+        result.hammerOnPullOff = true;
     }
     if (modMask1 & EFFECT_LET_RING) {
         result.letRing = true;
