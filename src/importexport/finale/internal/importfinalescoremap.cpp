@@ -316,11 +316,10 @@ void FinaleParser::importBrackets()
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(groupInfo.layer));
         m_score->staff(startStaffIdx)->addBracket(bi);
+        m_score->staff(startStaffIdx)->setBarLineSpan(groupSpan - 1);
         if (groupInfo.info.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::ThroughStaves) {
             for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
-                Staff* s = m_score->staff(idx);
-                s->setBarLineTo(0);
-                s->setBarLineSpan(1);
+                m_score->staff(idx)->setBarLineTo(0);
             }
         }
     }
