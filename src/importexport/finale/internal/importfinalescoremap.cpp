@@ -133,7 +133,6 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
         staffType->setGenClef(false);
     }
     m_score->appendStaff(s);
-    m_staff2Inst.emplace(s->idx(), InstCmper(musxStaff->getCmper()));
     m_inst2Staff.emplace(InstCmper(musxStaff->getCmper()), s->idx());
     return s;
 }
@@ -217,17 +216,13 @@ void FinaleParser::importParts()
 
         if (multiStaffGroup) {
             auto groupInfo = details::StaffGroupInfo(multiStaffGroup, scrollView);
-            std::vector<InstCmper> stavesInInst;
             groupInfo.iterateStaves(1, 0, [&](const std::shared_ptr<others::StaffComposite>& staff) {
                 createStaff(part, staff, it);
                 m_inst2Part.emplace(staff->getCmper(), partId);
-                stavesInInst.push_back(staff->getCmper());
                 return true;
             });
-            m_part2Inst.emplace(partId, stavesInInst);
         } else {
             createStaff(part, compositeStaff, it);
-            m_part2Inst.emplace(partId, std::vector<InstCmper>({ InstCmper(staff->getCmper()) }));
             m_inst2Part.emplace(staff->getCmper(), partId);
         }
         m_score->appendPart(part);
