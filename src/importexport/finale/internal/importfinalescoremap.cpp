@@ -116,7 +116,7 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
         if (firstSystem->hasStaffScaling) {
             if (auto staffSize = musxStaff->getDocument()->getDetails()->get<details::StaffSize>(m_currentMusxPartId, 1, musxStaff->getCmper())) {
                 double userMag = FinaleTConv::doubleFromPercent(staffSize->staffPercent);
-                if (staffType->userMag() != userMag) {
+                if (!muse::RealIsEqual(staffType->userMag(), userMag)) {
                     staffType->setUserMag(userMag);
                 }
             }
