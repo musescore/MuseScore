@@ -338,7 +338,6 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                 }           
             }
             m_noteInfoPtr2Note.emplace(noteInfoPtr, note);
-            /// @todo clear map after each part (ties can be between staves (cross-staff) but not parts)
         }
         if (currentEntry->freezeStem || currentEntry->voice2 || entryInfo->v2Launch
             || m_layerForceStems.find(entryInfo.getLayerIndex()) != m_layerForceStems.end()) {
@@ -563,6 +562,15 @@ void FinaleParser::importEntries()
             logger()->logWarning(String(u"Add entries: Score has no first measure."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         }
+
+        Staff* curStaff = m_score->staff(curStaffIdx);
+        // reset tie tracking when appropriate
+        staff_idx_t lastStaffIdxInPart = curStaffIdx;
+        if (track2staff(curStaff->part()->endTrack()) > lastStaffIdxInPart) {
+            lastStaffIdxInPart = track2staff(curStaff->part()->endTrack());
+            m_noteInfoPtr2Note.clear();
+        }
+
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
             Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
             Measure* measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
@@ -625,11 +633,10 @@ void FinaleParser::importEntries()
             measure->checkMeasure(curStaffIdx);
             // ...and make sure voice 1 exists.
             if (!measure->hasVoice(curStaffIdx * VOICES)) {
-                Staff* staff = m_score->staff(curStaffIdx);
                 Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
-                rest->setTicks(measure->timesig() * staff->timeStretch(measure->tick()));
+                rest->setTicks(measure->timesig() * curStaff->timeStretch(measure->tick()));
                 rest->setTrack(curStaffIdx * VOICES);
                 segment->add(rest);
             }
