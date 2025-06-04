@@ -579,52 +579,53 @@ void FinaleParser::importEntries()
                 break;
             }
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
-            if (gfHold) {
-                // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
-                std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
-                std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxScrollViewItem->staffId, musxMeasure->getCmper());
-                for (const auto& finaleLayer : finaleLayers) {
-                    const LayerIndex layer = finaleLayer.first;
-                    /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
-                    std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
-                    if (!entryFrame) {
-                        logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+            if (!gfHold) {
+                continue;
+            }
+            // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
+            std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
+            std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxScrollViewItem->staffId, musxMeasure->getCmper());
+            for (const auto& finaleLayer : finaleLayers) {
+                const LayerIndex layer = finaleLayer.first;
+                /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
+                std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
+                if (!entryFrame) {
+                    logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                    continue;
+                }
+                const int maxV1V2 = finaleLayer.second ? 1 : 0;
+                for (int voice = 0; voice <= maxV1V2; voice++) {
+                    // calculate current track
+                    voice_idx_t voiceOff = muse::value(finaleVoiceMap, FinaleTConv::createFinaleVoiceId(layer, bool(voice)), muse::nidx);
+                    IF_ASSERT_FAILED(voiceOff != muse::nidx && voiceOff < VOICES) {
+                        logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                         continue;
                     }
-                    const int maxV1V2 = finaleLayer.second ? 1 : 0;
-                    for (int voice = 0; voice <= maxV1V2; voice++) {
-                        // calculate current track
-                        voice_idx_t voiceOff = muse::value(finaleVoiceMap, FinaleTConv::createFinaleVoiceId(layer, bool(voice)), muse::nidx);
-                        IF_ASSERT_FAILED(voiceOff != muse::nidx && voiceOff < VOICES) {
-                            logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
-                            continue;
-                        }
-                        track_idx_t curTrackIdx = curStaffIdx * VOICES + voiceOff;
+                    track_idx_t curTrackIdx = curStaffIdx * VOICES + voiceOff;
 
-                        // generate tuplet map, tremolo map and create tuplets
-                        // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
-                        /// @todo does this need to account for local timesigs
-                        ReadableTuplet rTuplet;
-                        rTuplet.startTick = Fraction(0, 1);
-                        rTuplet.endTick = FinaleTConv::simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
-                        rTuplet.layer = -1;
-                        std::vector<ReadableTuplet> tupletMap = { rTuplet };
-                        std::vector<ReadableTuplet> tremoloMap;
-                        createTupletMap(entryFrame->tupletInfo, tupletMap, tremoloMap, voice);
-                        createTupletsFromMap(measure, curTrackIdx, tupletMap, logger());
+                    // generate tuplet map, tremolo map and create tuplets
+                    // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
+                    /// @todo does this need to account for local timesigs
+                    ReadableTuplet rTuplet;
+                    rTuplet.startTick = Fraction(0, 1);
+                    rTuplet.endTick = FinaleTConv::simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
+                    rTuplet.layer = -1;
+                    std::vector<ReadableTuplet> tupletMap = { rTuplet };
+                    std::vector<ReadableTuplet> tremoloMap;
+                    createTupletMap(entryFrame->tupletInfo, tupletMap, tremoloMap, voice);
+                    createTupletsFromMap(measure, curTrackIdx, tupletMap, logger());
 
-                        // add chords and rests
-                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, tupletMap);
-                        }
+                    // add chords and rests
+                    for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
+                        processEntryInfo(entryInfoPtr, curTrackIdx, measure, tupletMap);
+                    }
 
-                        // add tremolos
-                        processTremolos(tremoloMap, curTrackIdx, measure);
+                    // add tremolos
+                    processTremolos(tremoloMap, curTrackIdx, measure);
 
-                        // create beams
-                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                            processBeams(entryInfoPtr, curTrackIdx, measure);
-                        }
+                    // create beams
+                    for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
+                        processBeams(entryInfoPtr, curTrackIdx, measure);
                     }
                 }
             }
