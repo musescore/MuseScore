@@ -183,6 +183,8 @@ public:
 
     bool operator==(const StaffType&) const;
 
+    const MStyle& style() const;
+
     StaffGroup group() const { return m_group; }
     void setGroup(StaffGroup g) { m_group = g; }
     StaffTypes type() const;
@@ -324,8 +326,6 @@ private:
     friend class TabDurationSymbol;
 
     Score* m_score = nullptr;
-
-    const MStyle& style() const;
 
     void  setDurationMetrics();
     void  setFretMetrics();
