@@ -525,7 +525,7 @@
                      <string>Reset fret font style</string>
                     </property>
                     <property name="text">
-                     <string>...</string>
+                     <string/>
                     </property>
                    </widget>
                   </item>
