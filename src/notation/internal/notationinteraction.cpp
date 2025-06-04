@@ -486,12 +486,11 @@ bool NotationInteraction::showShadowNote(ShadowNote& shadowNote, ShadowNoteParam
     shadowNote.setVoice(voice);
     shadowNote.setLineIndex(line);
 
-    Color color = configuration()->noteInputPreviewColor();
-
+    const Color color = configuration()->noteInputPreviewColor();
     if (color.isValid() && color != configuration()->selectionColor()) {
         shadowNote.setColor(color);
     } else {
-        shadowNote.setColor(configuration()->selectionColor(voice));
+        shadowNote.setColor(configuration()->highlightSelectionColor(voice));
     }
 
     mu::engraving::SymId symNotehead;
