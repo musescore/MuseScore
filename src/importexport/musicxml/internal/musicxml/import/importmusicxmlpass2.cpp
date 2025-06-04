@@ -8227,7 +8227,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
             score->addElement(newSlur);
         } else {
             // slur start for new slur: init
-            Slur* newSlur = Factory::createSlur(score->dummy());
+            Slur* newSlur = notation.name() == "slur" ? Factory::createSlur(score->dummy()) : Factory::createHammerOnPullOff(score->dummy());
             if (cr->isGrace()) {
                 newSlur->setAnchor(Spanner::Anchor::CHORD);
             }
@@ -9212,12 +9212,16 @@ void MusicXmlParserNotations::parse()
             fermata();
         } else if (m_e.name() == "glissando") {
             glissandoSlide();
+        } else if (m_e.name() == "hammer-on") {
+            slur();
         } else if (m_e.name() == "non-arpeggiate") {
             m_arpeggioColor = Color::fromString(m_e.attribute("color"));
             m_arpeggioType = u"non-arpeggiate";
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "ornaments") {
             ornaments();
+        } else if (m_e.name() == "pull-off") {
+            slur();
         } else if (m_e.name() == "slur") {
             slur();
         } else if (m_e.name() == "slide") {
@@ -9302,7 +9306,7 @@ void MusicXmlParserNotations::addToScore(ChordRest* const cr, Note* const note, 
     for (const Notation& notation : m_notations) {
         if (notation.symId() != SymId::noSym) {
             addNotation(notation, cr, note);
-        } else if (notation.name() == "slur") {
+        } else if (notation.name() == "slur" || notation.name() == "hammer-on" || notation.name() == "pull-off") {
             addSlur(notation, slurs, cr, tick, m_logger, &m_e);
         } else if (note && (notation.name() == "glissando" || notation.name() == "slide")) {
             addGlissandoSlide(notation, note, glissandi, spanners, m_logger, &m_e);
