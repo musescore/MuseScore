@@ -900,7 +900,7 @@ void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlW
         for (const auto& it : chordRest->score()->spanner()) {
             String tagName = u"slur";
             auto sp = it.second;
-            if (sp->generated() || ( sp->type() != ElementType::SLUR && sp->type() != ElementType::HAMMER_ON_PULL_OFF )
+            if (sp->generated() || (sp->type() != ElementType::SLUR && sp->type() != ElementType::HAMMER_ON_PULL_OFF)
                 || !ExportMusicXml::canWrite(sp)) {
                 continue;
             }
@@ -936,7 +936,7 @@ void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlW
 void SlurHandler::doSlurStart(const Slur* s, Notations& notations, String tagName, XmlWriter& xml)
 {
     // only slurs can hold line styles
-    const bool style = (tagName == u"slur"); 
+    const bool style = (tagName == u"slur");
     // check if on slur list (i.e. stop already seen)
     int i = findSlur(s);
     // compose tag
