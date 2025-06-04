@@ -388,8 +388,6 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     beam->setTrack(curTrackIdx);
     if (entryInfoPtr->getEntry()->isNote && cr->isChord()) {
         beam->setDirection(toChord(cr)->stemDirection());
-    } else {
-        beam->setDirection(DirectionV::AUTO);
     }
     beam->add(cr);
     cr->setBeamMode(BeamMode::BEGIN);
