@@ -76,6 +76,7 @@
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/guitarbend.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmonicmark.h"
 #include "engraving/dom/harmony.h"
@@ -288,8 +289,8 @@ public:
     void doSlurs(const ChordRest* chordRest, Notations& notations, XmlWriter& xml);
 
 private:
-    void doSlurStart(const Slur* s, Notations& notations, XmlWriter& xml);
-    void doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml);
+    void doSlurStart(const Slur* s, Notations& notations, String tagName, XmlWriter& xml);
+    void doSlurStop(const Slur* s, Notations& notations, String tagName, XmlWriter& xml);
     int findSlur(const Slur* s) const;
 
     const Slur* m_slur[MAX_NUMBER_LEVEL];
@@ -897,9 +898,15 @@ void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlW
     for (int i = 0; i < 2; ++i) {
         // search for slur(s) starting or stopping at this chord
         for (const auto& it : chordRest->score()->spanner()) {
+            String tagName = u"slur";
             auto sp = it.second;
-            if (sp->generated() || sp->type() != ElementType::SLUR || !ExportMusicXml::canWrite(sp)) {
+            if (sp->generated() || ( sp->type() != ElementType::SLUR && sp->type() != ElementType::HAMMER_ON_PULL_OFF )
+                || !ExportMusicXml::canWrite(sp)) {
                 continue;
+            }
+            if (sp->isHammerOnPullOff()) {
+                const HammerOnPullOffSegment* hopoSeg = static_cast<const HammerOnPullOffSegment*>(sp->spannerSegments().front());
+                tagName = hopoSeg->hopoText().front()->isHammerOn() ? u"hammer-on" : u"pull-off";
             }
             if (chordRest == sp->startElement() || chordRest == sp->endElement()) {
                 const Slur* s = static_cast<const Slur*>(sp);
@@ -908,12 +915,12 @@ void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlW
                     if (i == 0) {
                         // first time: do slur stops
                         if (firstChordRest != chordRest) {
-                            doSlurStop(s, notations, xml);
+                            doSlurStop(s, notations, tagName, xml);
                         }
                     } else {
                         // second time: do slur starts
                         if (firstChordRest == chordRest) {
-                            doSlurStart(s, notations, xml);
+                            doSlurStart(s, notations, tagName, xml);
                         }
                     }
                 }
@@ -926,14 +933,13 @@ void SlurHandler::doSlurs(const ChordRest* chordRest, Notations& notations, XmlW
 //   doSlurStart
 //---------------------------------------------------------
 
-void SlurHandler::doSlurStart(const Slur* s, Notations& notations, XmlWriter& xml)
+void SlurHandler::doSlurStart(const Slur* s, Notations& notations, String tagName, XmlWriter& xml)
 {
     // check if on slur list (i.e. stop already seen)
     int i = findSlur(s);
     // compose tag
-    String tagName = u"slur";
     tagName += u" type=\"start\"";
-    tagName += slurTieLineStyle(s);
+    tagName += (tagName == u"slur") ? slurTieLineStyle(s) : color2xml(s);
     tagName += ExportMusicXml::positioningAttributes(s, true);
 
     if (i >= 0) {
@@ -968,7 +974,7 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, XmlWriter& xm
 // - generate stop anyway and put it on the slur list
 // - doSlurStart() starts slur but doesn't store it
 
-void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml)
+void SlurHandler::doSlurStop(const Slur* s, Notations& notations, String tagName, XmlWriter& xml)
 {
     // check if on slur list
     int i = findSlur(s);
@@ -979,7 +985,7 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml
             m_slur[i] = s;
             m_started[i] = false;
             notations.tag(xml, s);
-            String tagName = String(u"slur type=\"stop\" number=\"%1\"").arg(i + 1);
+            tagName += String(u" type=\"stop\" number=\"%1\"").arg(i + 1);
             tagName += ExportMusicXml::positioningAttributes(s, false);
             xml.tagRaw(tagName);
         } else {
@@ -990,7 +996,7 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml
         m_slur[i] = 0;
         m_started[i] = false;
         notations.tag(xml, s);
-        String tagName = String(u"slur type=\"stop\" number=\"%1\"").arg(i + 1);
+        tagName += String(u" type=\"stop\" number=\"%1\"").arg(i + 1);
         tagName += ExportMusicXml::positioningAttributes(s, false);
         xml.tagRaw(tagName);
     }
@@ -4676,7 +4682,7 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
 static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* const el = 0)
 {
     attr.doAttr(xml, false);
-    String tagname = u"direction";
+    String tagName = u"direction";
     if (el) {
         /*
          LOGD("directionTag() spatium=%g elem=%p tp=%d (%s)\ndirectionTag()  x=%g y=%g xsp,ysp=%g,%g w=%g h=%g userOff.y=%g",
@@ -4768,14 +4774,14 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                 // compare the segment's canvas ypos with the staff's center height
                 // if (seg->pagePos().y() < sys->pagePos().y() + bb.y() + bb.height() / 2)
                 if (el->placement() == PlacementV::ABOVE) {
-                    tagname += u" placement=\"above\"";
+                    tagName += u" placement=\"above\"";
                 } else {
-                    tagname += u" placement=\"below\"";
+                    tagName += u" placement=\"below\"";
                 }
             } else if (el->isDynamic()) {
-                tagname += u" placement=\"";
-                tagname += el->placement() == PlacementV::ABOVE ? u"above" : u"below";
-                tagname += u"\"";
+                tagName += u" placement=\"";
+                tagName += el->placement() == PlacementV::ABOVE ? u"above" : u"below";
+                tagName += u"\"";
             } else {
                 /*
                 LOGD("directionTag()  staff ely=%g elh=%g bby=%g bbh=%g",
@@ -4784,18 +4790,18 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                  */
                 // if (el->y() + el->height() / 2 < /*bb.y() +*/ bb.height() / 2)
                 if (el->placement() == PlacementV::ABOVE) {
-                    tagname += u" placement=\"above\"";
+                    tagName += u" placement=\"above\"";
                 } else {
-                    tagname += u" placement=\"below\"";
+                    tagName += u" placement=\"below\"";
                 }
             }
         }           // if (pel && ...
 
         if (el->systemFlag() && !ExportMusicXml::configuration()->exportMu3Compat()) {
-            tagname += u" system=\"only-top\"";
+            tagName += u" system=\"only-top\"";
         }
     }
-    xml.startElementRaw(tagname);
+    xml.startElementRaw(tagName);
 }
 
 //---------------------------------------------------------
