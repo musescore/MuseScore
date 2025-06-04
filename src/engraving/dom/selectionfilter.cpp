@@ -162,6 +162,9 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     case ElementType::HAMMER_ON_PULL_OFF:
     case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
         return isFiltered(ElementsSelectionFilterTypes::SLUR);
+    case ElementType::TIE:
+    case ElementType::TIE_SEGMENT:
+        return isFiltered(ElementsSelectionFilterTypes::TIE);
     case ElementType::FIGURED_BASS:
         return isFiltered(ElementsSelectionFilterTypes::FIGURED_BASS);
     case ElementType::OTTAVA:

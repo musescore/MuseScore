@@ -3746,7 +3746,14 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
             if (opt && filter.canSelect(opt)) {
                 undoRemoveElement(lv);
             }
-
+            const EngravingItem* endElement = note->tieFor() ? note->tieFor()->endElement() : nullptr;
+            if (endElement && endElement->isNote()) {
+                const Note* endNote = toNote(endElement);
+                const Segment* endSeg = endNote->chord()->segment();
+                if (!endSeg || endSeg->tick() <= endTick) {
+                    undoRemoveElement(note->tieFor());
+                }
+            }
             if (!filter.canSelectNoteIdx(noteIdx, allNotes.size(), selectionContainsMultiNoteChords)) {
                 continue;
             }
