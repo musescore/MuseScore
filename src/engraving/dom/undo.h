@@ -1689,7 +1689,7 @@ class RenameChordFBox : public UndoCommand
     String m_harmonyOldName;
     bool m_onlyRemove = false;
 
-    std::vector<std::pair<int, FretDiagram*> > m_diagramsForRestore;
+    std::vector<std::pair<size_t, FretDiagram*> > m_diagramsForRestore;
     FretDiagram* m_diagramForRemove = nullptr;
 
     void undo(EditData*) override;
@@ -1712,7 +1712,7 @@ class AddChordFBox : public UndoCommand
     Fraction m_tick;
     String m_chordNewName;
 
-    std::vector<std::pair<int, FretDiagram*> > m_diagramsForRestore;
+    std::vector<std::pair<size_t, FretDiagram*> > m_diagramsForRestore;
 
     void undo(EditData*) override;
     void redo(EditData*) override;
@@ -1735,7 +1735,7 @@ class RemoveChordFBox : public UndoCommand
     String m_chordName;
 
     FretDiagram* m_removedFretDiagram = nullptr;
-    int m_removedFretDiagramIndex = 0;
+    size_t m_removedFretDiagramIndex = 0;
 
     FretDiagram* m_addedFretDiagram = nullptr;
 

@@ -3510,7 +3510,7 @@ static std::vector<Harmony*> findAllHarmonies(Score* score)
     return result;
 }
 
-static void addFretDiagramToFretBox(FBox* fretBox, FretDiagram* diagram, int index)
+static void addFretDiagramToFretBox(FBox* fretBox, FretDiagram* diagram, size_t index)
 {
     fretBox->add(diagram);
 
@@ -3526,9 +3526,10 @@ static bool areHarmoniesEqual(const String& name1, const String& name2)
     return name1.toLower() == name2.toLower();
 }
 
-static std::vector<std::pair<int, FretDiagram*> > removeFretDiagramsFromFretBox(FBox* fretBox, size_t fromIndex, const String& harmonyName)
+static std::vector<std::pair<size_t, FretDiagram*> > removeFretDiagramsFromFretBox(FBox* fretBox, size_t fromIndex,
+                                                                                   const String& harmonyName)
 {
-    std::vector<std::pair<int, FretDiagram*> > removedDiagrams;
+    std::vector<std::pair<size_t, FretDiagram*> > removedDiagrams;
 
     ElementList& existingDiagramsFromBox = fretBox->el();
 
@@ -3578,8 +3579,8 @@ void ReorderFBox::flip(EditData*)
 {
     ElementList& elements = m_fretBox->el();
 
-    const int n = elements.size();
-    if (n != static_cast<int>(m_orderElementsIds.size())) {
+    const size_t n = elements.size();
+    if (n != m_orderElementsIds.size()) {
         return;
     }
 
@@ -3637,7 +3638,7 @@ void RenameChordFBox::undo(EditData*)
     }
 
     for (auto& diagramInfo : m_diagramsForRestore) {
-        int diagramIndex = diagramInfo.first;
+        size_t diagramIndex = diagramInfo.first;
         FretDiagram* diagram = diagramInfo.second;
 
         //! NOTE: -1 because we removed the chord before it
@@ -3715,7 +3716,7 @@ void RenameChordFBox::redo(EditData*)
             fd->updateDiagram(currentHarmonyName);
         }
 
-        int removeIndex = i + 1;
+        size_t removeIndex = i + 1;
         if (nextMatchHarmonyToReplace) {
             //! Insert new fret diagram after the harmony preceding the next match
             m_diagramForRemove = insertFretDiagramToFretBox(m_fretBox, nextMatchHarmonyToReplace, harmonyBeforeNextMatch);
@@ -3755,7 +3756,7 @@ void AddChordFBox::undo(EditData*)
     }
 
     for (auto& diagramInfo : m_diagramsForRestore) {
-        int diagramIndex = diagramInfo.first;
+        size_t diagramIndex = diagramInfo.first;
         FretDiagram* diagram = diagramInfo.second;
 
         //! NOTE: -1 - because we removed the added chord
@@ -3823,7 +3824,7 @@ void AddChordFBox::redo(EditData*)
             continue;
         }
 
-        int addIndex = afterHarmony ? i + 1 : i;
+        size_t addIndex = afterHarmony ? i + 1 : i;
         addFretDiagramToFretBox(m_fretBox, fretDiagram, addIndex);
         m_added = true;
 
