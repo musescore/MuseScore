@@ -5395,7 +5395,7 @@
             <item>
              <widget class="QGroupBox" name="repeatBarlinesGroupBox">
               <property name="title">
-               <string>Repeat barlines</string>
+               <string>Left (start) repeat signs</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_46"/>
              </widget>
