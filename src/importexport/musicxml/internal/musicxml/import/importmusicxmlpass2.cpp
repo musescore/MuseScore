@@ -8227,7 +8227,9 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
             score->addElement(newSlur);
         } else {
             // slur start for new slur: init
-            Slur* newSlur = notation.name() == "slur" ? Factory::createSlur(score->dummy()) : Factory::createHammerOnPullOff(score->dummy());
+            Slur* newSlur = notation.name()
+                            == "slur" ? Factory::createSlur(score->dummy())
+                            : static_cast<Slur*>(Factory::createHammerOnPullOff(score->dummy()));
             if (cr->isGrace()) {
                 newSlur->setAnchor(Spanner::Anchor::CHORD);
             }
