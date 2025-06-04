@@ -93,8 +93,7 @@ public:
     /// temporary HACK for correct guitar pro import
     enum ConnectedElement : unsigned char {
         NONE,
-        GLISSANDO,
-        HAMMER_ON
+        GLISSANDO
     };
 
     ~Slur() {}
