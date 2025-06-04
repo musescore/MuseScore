@@ -382,7 +382,7 @@ void PianoKeyboardView::updatePlaybackKeyStateColors()
     m_whiteKeyStateColors[KeyState::OtherInSelectedChord] = mixedColors(Qt::white, accentColor, 0.25);
     m_whiteKeyStateColors[KeyState::Selected] = mixedColors(Qt::white, accentColor, isKeysFromMidiInput ? 0.8 : 0.5);
     m_whiteKeyStateColors[KeyState::Played] = mixedColors(Qt::white, accentColor, 0.8);
-    QColor whiteKeyPlayColor(255, 0, 0);
+    QColor whiteKeyPlayColor(240, 0, 0);
     m_whiteKeyStateColors[KeyState::RightHand] = mixedColors(Qt::white, whiteKeyPlayColor, 0.8);
 
     m_whiteKeyClefSigColor = mixedColors(Qt::white, Qt::green, 0.25);
@@ -404,7 +404,7 @@ void PianoKeyboardView::updatePlaybackKeyStateColors()
     m_blackKeyTopPieceStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 0.4);
     m_blackKeyTopPieceStateColors[KeyState::Selected] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 0.8);
     m_blackKeyTopPieceStateColors[KeyState::Played] = mixedColors(blackKeyTopPieceBaseColor, accentColor, 1.0);
-    QColor balckKeyPlayTopPieceColor(255, 0, 0);
+    QColor balckKeyPlayTopPieceColor(240, 0, 0);
     m_blackKeyTopPieceStateColors[KeyState::RightHand] = mixedColors(blackKeyTopPieceBaseColor, balckKeyPlayTopPieceColor, 0.8);
 
     m_blackKeyTopClefSigColor = mixedColors(blackKeyTopPieceBaseColor, Qt::green, 0.4);
@@ -426,7 +426,7 @@ void PianoKeyboardView::updatePlaybackKeyStateColors()
     m_blackKeyBottomPieceStateColors[KeyState::OtherInSelectedChord] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 0.4);
     m_blackKeyBottomPieceStateColors[KeyState::Selected] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 0.8);
     m_blackKeyBottomPieceStateColors[KeyState::Played] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 1.0);
-    QColor balckKeyPlayBottomPieceColor(255, 0, 0);
+    QColor balckKeyPlayBottomPieceColor(240, 0, 0);
     m_blackKeyBottomPieceStateColors[KeyState::RightHand] = mixedColors(blackKeyBottomPieceBaseColor, balckKeyPlayBottomPieceColor, 0.8);
 
     m_blackKeyBottomClefSigColor = mixedColors(blackKeyBottomPieceBaseColor, Qt::green, 0.4);
