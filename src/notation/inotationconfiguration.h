@@ -80,6 +80,7 @@ public:
     virtual bool thinNoteInputCursor() const = 0;
 
     virtual QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
+    virtual QColor highlightSelectionColor(engraving::voice_idx_t voiceIndex = 0) const = 0;
 
     virtual QColor dropRectColor() const = 0;
 
