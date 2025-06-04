@@ -161,11 +161,11 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     }
 
     // Special cases...
-    if (e->isTextBase()) { // only TEXT, INSTRCHANGE and STAFFTEXT are caught here, rest are system thus not in selection
+    if (e->isTextBase()) {
         return isFiltered(ElementsSelectionFilterTypes::OTHER_TEXT);
     }
 
-    if (e->isSLine()) { // NoteLine, Volta
+    if (e->isSLine() || e->isSLineSegment()) { // NoteLine, Volta
         return isFiltered(ElementsSelectionFilterTypes::OTHER_LINE);
     }
 
