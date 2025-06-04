@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>662</width>
-    <height>649</height>
+    <width>663</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -515,6 +515,19 @@
                      </widget>
                     </item>
                    </layout>
+                  </item>
+                  <item>
+                   <widget class="QToolButton" name="resetFretFontStyle">
+                    <property name="toolTip">
+                     <string>Reset fret font style</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset fret font style</string>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
@@ -1482,8 +1495,8 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="NumLettersButtGroup"/>
-  <buttongroup name="OnAboveLinesButtGroup"/>
   <buttongroup name="ContinuousBrokenLinesbuttGroup"/>
+  <buttongroup name="OnAboveLinesButtGroup"/>
+  <buttongroup name="NumLettersButtGroup"/>
  </buttongroups>
 </ui>
