@@ -481,7 +481,7 @@ static void createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo,
 
    for (size_t i = 0; i < tupletMap.size(); ++i) {
         for (size_t j = 0; j < tupletMap.size(); ++j) {
-            if(i == j) {
+            if (i == j) {
                 continue;
             }
 
@@ -494,20 +494,14 @@ static void createTupletMap(std::vector<EntryFrame::TupletInfo> tupletInfo,
     }
 
     std::sort(tupletMap.begin(), tupletMap.end(), [](const ReadableTuplet& a, const ReadableTuplet& b) {
-        if (a.layer == b.layer) {
-            return a.startTick < b.startTick;
-        }
-        return a.layer < b.layer;
+        return (a.layer == b.layer) ? (a.startTick < b.startTick) : (a.layer < b.layer);
     });
 }
 
 static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std::vector<ReadableTuplet>& tupletMap, FinaleLoggerPtr& logger)
 {
     // create Tuplets as needed, starting with the outermost
-    for (size_t i = 0; i < tupletMap.size(); ++i) {
-        if (tupletMap[i].layer < 0) {
-            continue;
-        }
+    for (size_t i = 1; i < tupletMap.size(); ++i) {
         TDuration baseLen = FinaleTConv::noteInfoToDuration(calcNoteInfoFromEdu(tupletMap[i].musxTuplet->referenceDuration));
         if (!baseLen.isValid()) {
             logger->logWarning(String(u"Given Tuplet duration not supported in MuseScore"));
@@ -603,10 +597,9 @@ void FinaleParser::importEntries()
 
                     // generate tuplet map, tremolo map and create tuplets
                     // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
-                    /// @todo does this need to account for local timesigs
                     ReadableTuplet rTuplet;
                     rTuplet.startTick = Fraction(0, 1);
-                    rTuplet.endTick = FinaleTConv::simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
+                    rTuplet.endTick = (measure->timesig() * curStaff->timeStretch(measure->tick())).reduced(); // account for local timesigs (needed?)
                     rTuplet.layer = -1;
                     std::vector<ReadableTuplet> tupletMap = { rTuplet };
                     std::vector<ReadableTuplet> tremoloMap;
