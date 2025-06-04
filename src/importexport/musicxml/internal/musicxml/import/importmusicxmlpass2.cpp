@@ -50,6 +50,7 @@
 #include "engraving/dom/fret.h"
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/gradualtempochange.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/instrchange.h"
