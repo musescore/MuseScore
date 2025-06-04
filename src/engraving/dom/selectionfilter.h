@@ -50,7 +50,7 @@ enum class NotesInChordSelectionFilterTypes : unsigned int {
     ALL                     = ~(~0u << NUM_NOTES_IN_CHORD_SELECTION_FILTER_TYPES)
 };
 
-static constexpr size_t NUM_ELEMENTS_SELECTION_FILTER_TYPES = 19;
+static constexpr size_t NUM_ELEMENTS_SELECTION_FILTER_TYPES = 20;
 enum class ElementsSelectionFilterTypes : unsigned int {
     NONE                    = 0,
     DYNAMIC                 = 1 << 0,
@@ -62,16 +62,17 @@ enum class ElementsSelectionFilterTypes : unsigned int {
     ARTICULATION            = 1 << 6,
     ORNAMENT                = 1 << 7,
     SLUR                    = 1 << 8,
-    FIGURED_BASS            = 1 << 9,
-    OTTAVA                  = 1 << 10,
-    PEDAL_LINE              = 1 << 11,
-    OTHER_LINE              = 1 << 12,
-    ARPEGGIO                = 1 << 13,
-    GLISSANDO               = 1 << 14,
-    FRET_DIAGRAM            = 1 << 15,
-    BREATH                  = 1 << 16,
-    TREMOLO                 = 1 << 17,
-    GRACE_NOTE              = 1 << 18,
+    TIE                     = 1 << 9,
+    FIGURED_BASS            = 1 << 10,
+    OTTAVA                  = 1 << 11,
+    PEDAL_LINE              = 1 << 12,
+    OTHER_LINE              = 1 << 13,
+    ARPEGGIO                = 1 << 14,
+    GLISSANDO               = 1 << 15,
+    FRET_DIAGRAM            = 1 << 16,
+    BREATH                  = 1 << 17,
+    TREMOLO                 = 1 << 18,
+    GRACE_NOTE              = 1 << 19,
     ALL                     = ~(~0u << NUM_ELEMENTS_SELECTION_FILTER_TYPES)
 };
 
