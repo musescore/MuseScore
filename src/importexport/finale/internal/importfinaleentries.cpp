@@ -313,14 +313,19 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
 
             // set up ties
             if (noteInfoPtr->tieStart) {
-                bool hasEnd = noteInfoPtr.calcTieTo()->tieEnd;
-                Tie* tie = hasEnd ? Factory::createTie(m_score->dummy()) : Factory::createLaissezVib(m_score->dummy()->note());
+                // Finale can sometimes be missing a tieEnd setting on a tied-to note,
+                // so the existence of a tiedTo candidate is sufficient when the `tieStart` bit is set.
+                // The test file v2v2Ties2.musx contains an example of a missing tieEnd bit with the tied E6 across the barline.
+                NoteInfoPtr tiedTo = noteInfoPtr.calcTieTo();
+                Tie* tie = tiedTo ? Factory::createTie(m_score->dummy()) : Factory::createLaissezVib(m_score->dummy()->note());
                 tie->setStartNote(note);
                 tie->setTick(note->tick());
                 tie->setTrack(note->track());
                 tie->setParent(note); //needed?
                 note->setTieFor(tie);
             }
+            /// @todo Since we may create a tie-start from a note without its corresponding `tieEnd` set (see above), I'm not sure the best way to handle this.
+            /// FWIW: This code seems, however, to be producing correct ties as-is, but it may not be correct in every case.
             if (noteInfoPtr->tieEnd) {
                 engraving::Note* prevTied = muse::value(m_noteInfoPtr2Note, noteInfoPtr.calcTieFrom(), nullptr);
                 Tie* tie = prevTied ? prevTied->tieFor() : nullptr;

@@ -60,6 +60,7 @@ public:
     static double doubleFromEvpu(musx::dom::Evpu evpu);
     static PointF evpuToPointF(musx::dom::Evpu xEvpu, musx::dom::Evpu yEvpu);
     static double doubleFromEfix(musx::dom::Efix efix);
+    static double doubleFromPercent(int percent);
 };
 
 }

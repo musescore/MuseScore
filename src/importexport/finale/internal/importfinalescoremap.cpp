@@ -87,8 +87,7 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
 {
     Staff* s = Factory::createStaff(part);
 
-    /// @todo staff settings can change at any tick
-    Fraction eventTick{0, 1};
+    StaffType* staffType = s->staffType(Fraction(0, 1));
 
     // initialise MuseScore's default values
     if (it) {
@@ -116,8 +115,9 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
     if (const auto& firstSystem = musxStaff->getDocument()->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, 1)) {
         if (firstSystem->hasStaffScaling) {
             if (auto staffSize = musxStaff->getDocument()->getDetails()->get<details::StaffSize>(m_currentMusxPartId, 1, musxStaff->getCmper())) {
-                if (staffSize->staffPercent < 100) {
-                    s->staffType(eventTick)->setSmall(true);
+                double userMag = FinaleTConv::doubleFromPercent(staffSize->staffPercent);
+                if (staffType->userMag() != userMag) {
+                    staffType->setUserMag(userMag);
                 }
             }
         }
@@ -130,7 +130,7 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
         // Finale has a "blank" clef type that is used for percussion staves. For now we emulate this
         // at the beginning of the piece only.
         /// @todo revisit how to handle blank clef types or changes to other clefs for things such as cues
-        s->staffType(eventTick)->setGenClef(false);
+        staffType->setGenClef(false);
     }
     m_score->appendStaff(s);
     m_staff2Inst.emplace(s->idx(), InstCmper(musxStaff->getCmper()));
@@ -185,8 +185,11 @@ void FinaleParser::importParts()
             continue; // safety check
         }
 
-        auto multiStaffInst = staff->getMultiStaffInstGroup();
-        if (multiStaffInst && m_inst2Part.find(staff->getCmper()) != m_inst2Part.end()) {
+        std::shared_ptr<details::StaffGroup> multiStaffGroup;
+        if (staff->multiStaffInstVisualGroupId) {
+            multiStaffGroup = m_doc->getDetails()->get<details::StaffGroup>(SCORE_PARTID, 0, staff->multiStaffInstVisualGroupId);
+        }
+        if (multiStaffGroup && m_inst2Part.find(staff->getCmper()) != m_inst2Part.end()) {
             continue;
         }
 
@@ -212,14 +215,16 @@ void FinaleParser::importParts()
         std::string abrvName = compositeStaff->getAbbreviatedInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
         part->setShortName(QString::fromStdString(trimNewLineFromString(abrvName)));
 
-        if (multiStaffInst) {
-            m_part2Inst.emplace(partId, multiStaffInst->staffNums);
-            for (auto inst : multiStaffInst->staffNums) {
-                if (auto instStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, inst, 1, 0)) {
-                    createStaff(part, instStaff, it);
-                    m_inst2Part.emplace(inst, partId);
-                }
-            }
+        if (multiStaffGroup) {
+            auto groupInfo = details::StaffGroupInfo(multiStaffGroup, scrollView);
+            std::vector<InstCmper> stavesInInst;
+            groupInfo.iterateStaves(1, 0, [&](const std::shared_ptr<others::StaffComposite>& staff) {
+                createStaff(part, staff, it);
+                m_inst2Part.emplace(staff->getCmper(), partId);
+                stavesInInst.push_back(staff->getCmper());
+                return true;
+            });
+            m_part2Inst.emplace(partId, stavesInInst);
         } else {
             createStaff(part, compositeStaff, it);
             m_part2Inst.emplace(partId, std::vector<InstCmper>({ InstCmper(staff->getCmper()) }));
@@ -287,7 +292,7 @@ void FinaleParser::importBrackets()
     }
     auto scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
-    auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, scorePartInfo, scrollView);
+    auto staffGroups = details::StaffGroupInfo::getGroupsAtMeasure(1, m_currentMusxPartId, scrollView);
     auto groupsByLayer = computeStaffGroupLayers(staffGroups);
     for (const auto& groupInfo : groupsByLayer) {
         IF_ASSERT_FAILED(groupInfo.info.startSlot && groupInfo.info.endSlot) {
@@ -343,7 +348,10 @@ static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, 
         clef->setClefToBarlinePosition(ClefToBarlinePosition::BEFORE);
     }
 
-    Fraction clefTick = measure->tick() + FinaleTConv::eduToFraction(musxEduPos);
+    Staff* staff = score->staff(staffIdx);
+    Fraction timeStretch = staff->timeStretch(measure->tick());
+    // Clef positions in musx are staff-level, so back out any time stretch to get global position.
+    Fraction clefTick = measure->tick() + (FinaleTConv::eduToFraction(musxEduPos) / timeStretch);
     Segment* clefSeg = measure->getSegment(
         clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
     clefSeg->add(clef);
@@ -633,7 +641,14 @@ void FinaleParser::importPageLayout()
         bool isFirstSystemOnPage = false;
         for (size_t j = currentPageIndex; j < pages.size(); ++j) {
             const std::shared_ptr<others::Page>& page = pages[j];
+            if (page->isBlank()) {
+                /// @todo handle blank page??
+                continue;
+            }
             const std::shared_ptr<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystem);
+            IF_ASSERT_FAILED(firstPageSystem) {
+                break;
+            }
             Fraction pageStartTick = muse::value(m_meas2Tick, firstPageSystem->startMeas, Fraction(-1, 1));
             if (pageStartTick < startTick) {
                 continue;
@@ -729,6 +744,10 @@ void FinaleParser::importPageLayout()
         // add page break if needed
         bool isLastSystemOnPage = false;
         for (const std::shared_ptr<others::Page>& page : pages) {
+            if (page->isBlank()) {
+                /// @todo handle blank page???
+                continue;
+            }
             const std::shared_ptr<others::StaffSystem>& firstPageSystem = m_doc->getOthers()->get<others::StaffSystem>(m_currentMusxPartId, page->firstSystem);
             Fraction pageStartTick = muse::value(m_meas2Tick, firstPageSystem->startMeas, Fraction(-1, 1));
             // the last staff system in the score can't be compared to the startTick of the preceding page -
