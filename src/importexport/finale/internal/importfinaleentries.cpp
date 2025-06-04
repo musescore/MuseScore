@@ -619,10 +619,9 @@ void FinaleParser::importEntries()
 
                     // generate tuplet map, tremolo map and create tuplets
                     // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
-                    /// @todo does this need to account for local timesigs
                     ReadableTuplet rTuplet;
                     rTuplet.startTick = Fraction(0, 1);
-                    rTuplet.endTick = FinaleTConv::simpleMusxTimeSigToFraction(musxMeasure->createTimeSignature()->calcSimplified(), logger());
+                    rTuplet.endTick = (measure->timesig() * curStaff->timeStretch(measure->tick())).reduced(); // account for local timesigs (needed?)
                     rTuplet.layer = -1;
                     std::vector<ReadableTuplet> tupletMap = { rTuplet };
                     std::vector<ReadableTuplet> tremoloMap;
