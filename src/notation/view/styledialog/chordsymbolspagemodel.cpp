@@ -111,7 +111,7 @@ void ChordSymbolsPageModel::selectChordDescriptionFile()
     muse::io::path_t dir = configuration()->userStylesPath();
     std::vector<std::string> filter = { muse::trc("notation", "MuseScore chord symbol style files") + " (*.xml)" };
 
-    muse::io::path_t path = interactive()->selectOpeningFile(muse::qtrc("notation", "Load style"), dir, filter);
+    muse::io::path_t path = interactive()->selectOpeningFileSync(muse::trc("notation", "Load style"), dir, filter);
     if (path.empty()) {
         return;
     }
