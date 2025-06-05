@@ -44,9 +44,11 @@ public:
 
     virtual muse::io::path_t defaultStyleFilePath() const = 0;
     virtual void setDefaultStyleFilePath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> defaultStyleFilePathChanged() const = 0;
 
     virtual muse::io::path_t partStyleFilePath() const = 0;
     virtual void setPartStyleFilePath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> partStyleFilePathChanged() const = 0;
 
     virtual SizeF defaultPageSize() const = 0;
 
@@ -54,7 +56,6 @@ public:
 
     virtual Color defaultColor() const = 0;
     virtual Color scoreInversionColor() const = 0;
-    virtual Color invisibleColor() const = 0;
     virtual Color lassoColor() const = 0;
     virtual Color warningColor() const = 0;
     virtual Color warningSelectedColor() const = 0;
@@ -77,12 +78,21 @@ public:
 
     virtual bool dynamicsApplyToAllVoices() const = 0;
     virtual void setDynamicsApplyToAllVoices(bool v) = 0;
+    virtual muse::async::Channel<bool> dynamicsApplyToAllVoicesChanged() const = 0;
 
     virtual Color formattingColor() const = 0;
     virtual muse::async::Channel<Color> formattingColorChanged() const = 0;
 
+    virtual Color invisibleColor() const = 0;
+    virtual muse::async::Channel<Color> invisibleColorChanged() const = 0;
+
     virtual Color unlinkedColor() const = 0;
     virtual muse::async::Channel<Color> unlinkedColorChanged() const = 0;
+
+    virtual Color frameColor() const = 0;
+    virtual muse::async::Channel<Color> frameColorChanged() const = 0;
+
+    virtual Color scoreGreyColor() const = 0;
 
     virtual Color highlightSelectionColor(voice_idx_t voiceIndex = 0) const = 0;
 
@@ -93,7 +103,9 @@ public:
         bool colorSegmentShapes = false;
         bool showSkylines = false;
         bool showSystemBoundingRects = false;
-        bool showCorruptedMeasures = true;
+        bool showElementMasks = false;
+        bool showLineAttachPoints = false;
+        bool markCorruptedMeasures = true;
 
         bool anyEnabled() const
         {
@@ -103,9 +115,9 @@ public:
                    || colorSegmentShapes
                    || showSkylines
                    || showSystemBoundingRects
-#ifndef NDEBUG
-                   || showCorruptedMeasures
-#endif
+                   || showElementMasks
+                   || showLineAttachPoints
+                   || markCorruptedMeasures
             ;
         }
     };
@@ -116,9 +128,13 @@ public:
 
     virtual bool isAccessibleEnabled() const = 0;
 
+    virtual bool doNotSaveEIDsForBackCompat() const = 0;
+    virtual void setDoNotSaveEIDsForBackCompat(bool doNotSave) = 0;
+
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
     virtual bool guitarProImportExperimental() const = 0;
-    virtual bool useStretchedBends() const = 0;
+    virtual bool experimentalGuitarBendImport() const = 0;
+    virtual void setExperimentalGuitarBendImport(bool enabled) = 0;
     virtual bool shouldAddParenthesisOnStandardStaff() const = 0;
     virtual bool negativeFretsAllowed() const = 0;
     virtual bool crossNoteHeadAlwaysBlack() const = 0;

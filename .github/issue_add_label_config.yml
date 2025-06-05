@@ -10,8 +10,6 @@ accessibility:
     - "Accessibility issue \\(e\\.g\\. for keyboard-only or screen reader users\\)"
 VST:
     - "VST bug"
-"Muse Sounds":
-    - "Muse Sounds bug"
 playback:
     - "General playback bug"
 cloud:
@@ -27,6 +25,3 @@ corruption:
     - "Yes, this used to work in a previous version of MuseScore 4.x"
 "regression nightly":
     - "Yes, this works in the latest released version and is broken in the nightly builds"
-
-"feature request":
-    - "Problem to be solved"

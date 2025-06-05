@@ -28,6 +28,7 @@
 #include "view/widgets/editstyle.h"
 
 #include "engraving/dom/gradualtempochange.h"
+#include "engraving/dom/fret.h"
 
 using namespace mu::notation;
 using namespace muse;
@@ -58,6 +59,8 @@ MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elemen
         return makeInstrumentNameItems();
     case ElementType::HARMONY:
         return makeHarmonyItems();
+    case ElementType::FRET_DIAGRAM:
+        return makeFretboardDiagramItems();
     case ElementType::INSTRUMENT_CHANGE:
         return makeChangeInstrumentItems();
     case ElementType::VBOX:
@@ -120,12 +123,17 @@ MenuItemList NotationContextMenuModel::makeMeasureItems()
     items << makeSeparator();
 
     if (isDrumsetStaff()) {
-        items << makeMenuItem("edit-drumset");
+        items << makeMenuItem("customize-kit");
     }
 
     items << makeMenuItem("staff-properties");
     items << makeSeparator();
     items << makeMenu(TranslatableString("notation", "Insert measures"), makeInsertMeasuresItems());
+    if (globalContext()->currentNotation()->viewMode() == mu::notation::ViewMode::PAGE) {
+        items << makeMenu(TranslatableString("notation", "Move measures"), makeMoveMeasureItems());
+    }
+    items << makeMenuItem("make-into-system", TranslatableString("notation", "Create system from selection"));
+    items << makeSeparator();
     items << makeMenuItem("measure-properties");
 
     return items;
@@ -171,7 +179,29 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
+
+    if (const EngravingItem* hitElement = hitElementContext().element) {
+        engraving::EngravingObject* parent = hitElement->isHarmony() ? hitElement->explicitParent() : nullptr;
+        bool hasLinkedFretboardDiagram = parent && parent->isFretDiagram();
+        if (!hasLinkedFretboardDiagram) {
+            items << makeMenuItem("add-fretboard-diagram");
+        }
+    }
+
     items << makeMenuItem("realize-chord-symbols");
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
+{
+    MenuItemList items = makeElementItems();
+    items << makeSeparator();
+
+    const engraving::FretDiagram* fretDiagram = engraving::toFretDiagram(hitElementContext().element);
+    if (!fretDiagram->harmony()) {
+        items << makeMenuItem("chord-text", TranslatableString("notation", "Add c&hord symbol"));
+    }
 
     return items;
 }
@@ -241,6 +271,16 @@ MenuItemList NotationContextMenuModel::makeInsertMeasuresItems()
         makeSeparator(),
         makeMenuItem("insert-measures-at-start-of-score", TranslatableString("notation", "At start of score…")),
         makeMenuItem("append-measures", TranslatableString("notation", "At end of score…"))
+    };
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeMoveMeasureItems()
+{
+    MenuItemList items {
+        makeMenuItem("move-measure-to-prev-system", TranslatableString("notation", "To previous system")),
+        makeMenuItem("move-measure-to-next-system", TranslatableString("notation", "To next system"))
     };
 
     return items;

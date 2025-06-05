@@ -51,7 +51,7 @@ void NoteInputBarCustomiseModel::load()
     ToolConfig toolConfig = uiConfiguration()->toolConfig(NOTE_INPUT_TOOLBAR_NAME, NotationUiActions::defaultNoteInputBarConfig());
 
     for (const ToolConfig::Item& item : toolConfig.items) {
-        UiAction action = actionsRegister()->action(item.action);
+        const UiAction& action = actionsRegister()->action(item.action);
         items << makeItem(action, item.show);
     }
 

@@ -14,7 +14,7 @@ defaults:
 
 jobs:
   update-release-clear:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
@@ -28,9 +28,9 @@ jobs:
 
           bash ./buildscripts/ci/release/make_empty_release_info_file.sh
 
-          bash ./buildscripts/ci/release/push_file_to_s3.sh \
+          bash ./buildscripts/ci/tools/s3_push_file.sh \
             --s3_key ${{ secrets.S3_KEY_UPDATE }} \
             --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
             --s3_url ${S3_URL} \
             --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
-            --file_name "release_info.json"
+            --file_name "build.artifacts/release_info.json"

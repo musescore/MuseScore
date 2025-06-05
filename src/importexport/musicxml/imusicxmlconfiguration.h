@@ -22,6 +22,7 @@
 #pragma once
 
 #include "modularity/imoduleinterface.h"
+#include "async/channel.h"
 #include "io/path.h"
 
 namespace mu::iex::musicxml {
@@ -34,9 +35,11 @@ public:
 
     virtual bool importBreaks() const = 0;
     virtual void setImportBreaks(bool value) = 0;
+    virtual muse::async::Channel<bool> importBreaksChanged() const = 0;
 
     virtual bool importLayout() const = 0;
     virtual void setImportLayout(bool value) = 0;
+    virtual muse::async::Channel<bool> importLayoutChanged() const = 0;
 
     virtual bool exportLayout() const = 0;
     virtual void setExportLayout(bool value) = 0;
@@ -56,13 +59,16 @@ public:
 
     virtual bool needUseDefaultFont() const = 0;
     virtual void setNeedUseDefaultFont(bool value) = 0;
+    virtual muse::async::Channel<bool> needUseDefaultFontChanged() const = 0;
     virtual void setNeedUseDefaultFontOverride(std::optional<bool> value) = 0;
 
     virtual bool needAskAboutApplyingNewStyle() const = 0;
     virtual void setNeedAskAboutApplyingNewStyle(bool value) = 0;
+    virtual muse::async::Channel<bool> needAskAboutApplyingNewStyleChanged() const = 0;
 
     virtual bool inferTextType() const = 0;
     virtual void setInferTextType(bool value) = 0;
+    virtual muse::async::Channel<bool> inferTextTypeChanged() const = 0;
     virtual void setInferTextTypeOverride(std::optional<bool> value) = 0;
 };
 }

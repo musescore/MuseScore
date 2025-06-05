@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <maskBarlinesForText>0</maskBarlinesForText>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <concertPitch>1</concertPitch>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
+      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -23,7 +32,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -75,19 +85,25 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <KeySig>
+            <eid>E_E</eid>
             <concertKey>-4</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>G_G</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>H_H</eid>
               <Accidental>
                 <subtype>accidentalDoubleFlat</subtype>
+                <eid>I_I</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>4</tpc>
@@ -95,11 +111,14 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>J_J</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>K_K</eid>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalDoubleFlat</subtype>
+                <eid>L_L</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>4</tpc>
@@ -109,12 +128,16 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>M_M</eid>
         <voice>
           <Chord>
+            <eid>N_N</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>O_O</eid>
               <Accidental>
                 <subtype>accidentalDoubleFlat</subtype>
+                <eid>P_P</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>4</tpc>
@@ -122,8 +145,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>R_R</eid>
               <pitch>62</pitch>
               <tpc>4</tpc>
               <tpc2>6</tpc2>
@@ -132,6 +157,7 @@
           <BarLine>
             <subtype>end</subtype>
             <span>1</span>
+            <eid>S_S</eid>
             </BarLine>
           </voice>
         </Measure>

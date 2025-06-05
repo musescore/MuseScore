@@ -151,7 +151,7 @@
           <item row="5" column="1">
            <widget class="QDoubleSpinBox" name="mag">
             <property name="suffix">
-             <string>%</string>
+             <string notr="true">%</string>
             </property>
             <property name="decimals">
              <number>1</number>
@@ -1031,10 +1031,10 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Go to previous staff</string>
+        <string>Apply and go to previous staff</string>
        </property>
        <property name="accessibleName">
-        <string>Go to previous staff</string>
+        <string>Apply and go to previous staff</string>
        </property>
        <property name="text">
         <string notr="true"/>
@@ -1050,10 +1050,10 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Go to next staff</string>
+        <string>Apply and go to next staff</string>
        </property>
        <property name="accessibleName">
-        <string>Go to next staff</string>
+        <string>Apply and go to next staff</string>
        </property>
        <property name="text">
         <string notr="true"/>

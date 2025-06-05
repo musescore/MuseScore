@@ -73,7 +73,7 @@ struct TextSegment {
 ///         <tr><td>A</td>     <td> 3</td><td>10</td><td>17</td><td>24</td><td>31</td></tr>
 ///         <tr><td>B</td>     <td> 5</td><td>12</td><td>19</td><td>26</td><td>33</td></tr></table>
 //
-//   @P baseTpc   int   bass note as "tonal pitch class"
+//   @P bassTpc   int   bass note as "tonal pitch class"
 //   @P id        int   harmony identifier
 //   @P rootTpc   int   root note as "tonal pitch class"
 //---------------------------------------------------------
@@ -98,8 +98,8 @@ public:
 
     bool play() const { return m_play; }
 
-    void setBaseCase(NoteCaseType c) { m_baseCase = c; }
-    NoteCaseType baseCase() const { return m_baseCase; }
+    void setBassCase(NoteCaseType c) { m_bassCase = c; }
+    NoteCaseType bassCase() const { return m_bassCase; }
     void setRootCase(NoteCaseType c) { m_rootCase = c; }
     NoteCaseType rootCase() const { return m_rootCase; }
 
@@ -122,34 +122,27 @@ public:
     RealizedHarmony& realizedHarmony();
     const RealizedHarmony& getRealizedHarmony() const;
 
-    void determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase, NoteSpellingType& baseSpelling,
-                                   NoteCaseType& baseCase);
+    void determineRootBassSpelling(NoteSpellingType& rootSpelling, NoteCaseType& rootCase, NoteSpellingType& bassSpelling,
+                                   NoteCaseType& bassCase);
 
-    void textChanged();
-
-    bool isEditable() const override { return true; }
-    void startEdit(EditData&) override;
-    bool isEditAllowed(EditData&) const override;
-    bool edit(EditData&) override;
-    void endEdit(EditData&) override;
+    bool isEditable() const override { return !isInFretBox(); }
+    void startEditTextual(EditData&) override;
+    bool isTextualEditAllowed(EditData&) const override;
+    bool editTextual(EditData&) override;
+    void endEditTextual(EditData&) override;
 
     bool isRealizable() const;
+    bool isInFretBox() const;
 
     String hFunction() const { return m_function; }
-    String hUserName() const { return m_userName; }
     String hTextName() const { return m_textName; }
-    int baseTpc() const { return m_baseTpc; }
-    void setBaseTpc(int val) { m_baseTpc = val; }
+    int bassTpc() const { return m_bassTpc; }
+    void setBassTpc(int val) { m_bassTpc = val; }
     int rootTpc() const { return m_rootTpc; }
     void setRootTpc(int val) { m_rootTpc = val; }
     void setTextName(const String& s) { m_textName = s; }
     void setFunction(const String& s) { m_function = s; }
-    String rootName();
-    String baseName();
     void addDegree(const HDegree& d);
-    size_t numberOfDegrees() const;
-    HDegree degree(int i) const;
-    void clearDegrees();
     const std::vector<HDegree>& degreeList() const;
     const ParsedChord* parsedForm() const;
     HarmonyType harmonyType() const { return m_harmonyType; }
@@ -161,7 +154,7 @@ public:
     String harmonyName() const;
     void render();
 
-    const ChordDescription* parseHarmony(const String& s, int* root, int* base, bool syntaxOnly = false);
+    const ChordDescription* parseHarmony(const String& s, int* root, int* bass, bool syntaxOnly = false);
 
     const String& extensionName() const;
 
@@ -171,12 +164,9 @@ public:
     String xmlParens() const;
     StringList xmlDegrees() const;
 
-    void resolveDegreeList();
-
     double baseLine() const override;
 
     const ChordDescription* fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&);
-    const ChordDescription* fromXml(const String& s, const std::list<HDegree>&);
     const ChordDescription* fromXml(const String& s);
     void spatiumChanged(double oldValue, double newValue) override;
     void localSpatiumChanged(double oldValue, double newValue) override;
@@ -194,9 +184,12 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    //! HACK Temporary hack
-    bool isDrawEditMode() const { return m_isDrawEditMode; }
-    void setIsDrawEditMode(bool val) { m_isDrawEditMode = val; }
+    double mag() const override;
+    void setUserMag(double m) { m_userMag = m; }
+
+    void undoMoveSegment(Segment* newSeg, Fraction tickDiff) override;
+
+    Color curColor() const override;
 
     struct LayoutData : public TextBase::LayoutData {
         ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };           // used for calculating the height is frame while editing.
@@ -205,9 +198,8 @@ public:
 
 private:
 
-    void determineRootBaseSpelling();
+    void determineRootBassSpelling();
 
-    void drawEditMode(muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
     void render(const String&, double&, double&);
     void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
                 NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
@@ -216,8 +208,8 @@ private:
     Harmony* findInSeg(Segment* seg) const;
 
     int m_rootTpc = Tpc::TPC_INVALID;               // root note for chord
-    int m_baseTpc = Tpc::TPC_INVALID;               // bass note or chord base; used for "slash" chords
-    // or notation of base note in chord
+    int m_bassTpc = Tpc::TPC_INVALID;               // bass note or chord bass; used for "slash" chords
+    // or notation of bass note in chord
     int m_id = -1;                    // >0 = id of matched chord from chord list, if applicable
     // -1 = invalid chord
     // <-10000 = private id of generated chord or matched chord with no id
@@ -239,13 +231,13 @@ private:
     bool m_play = true;                     // whether or not to play back the harmony
 
     NoteSpellingType m_rootSpelling = NoteSpellingType::STANDARD;
-    NoteSpellingType m_baseSpelling = NoteSpellingType::STANDARD;
+    NoteSpellingType m_bassSpelling = NoteSpellingType::STANDARD;
     NoteCaseType m_rootCase = NoteCaseType::AUTO;
-    NoteCaseType m_baseCase = NoteCaseType::AUTO;                // case as typed
+    NoteCaseType m_bassCase = NoteCaseType::AUTO;                // case as typed
     NoteCaseType m_rootRenderCase = NoteCaseType::AUTO;
-    NoteCaseType m_baseRenderCase = NoteCaseType::AUTO;           // case to render
+    NoteCaseType m_bassRenderCase = NoteCaseType::AUTO;           // case to render
 
-    bool m_isDrawEditMode = false;
+    std::optional<double> m_userMag;
 };
 } // namespace mu::engraving
 #endif

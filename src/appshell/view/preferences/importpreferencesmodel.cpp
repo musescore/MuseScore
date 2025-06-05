@@ -36,6 +36,41 @@ ImportPreferencesModel::ImportPreferencesModel(QObject* parent)
 
 void ImportPreferencesModel::load()
 {
+    notationConfiguration()->styleFileImportPathChanged().onReceive(this, [this](const std::string& val) {
+        emit styleFileImportPathChanged(QString::fromStdString(val));
+    });
+
+    oveConfiguration()->importOvertureCharsetChanged().onReceive(this, [this](const std::string& val) {
+        emit currentOvertureCharsetChanged(QString::fromStdString(val));
+    });
+
+    musicXmlConfiguration()->importLayoutChanged().onReceive(this, [this](bool val) {
+        emit importLayoutChanged(val);
+    });
+
+    musicXmlConfiguration()->importBreaksChanged().onReceive(this, [this](bool val) {
+        emit importBreaksChanged(val);
+    });
+
+    musicXmlConfiguration()->needUseDefaultFontChanged().onReceive(this, [this](bool val) {
+        emit needUseDefaultFontChanged(val);
+    });
+
+    musicXmlConfiguration()->inferTextTypeChanged().onReceive(this, [this](bool val) {
+        emit inferTextTypeChanged(val);
+    });
+
+    midiImportExportConfiguration()->midiShortestNoteChanged().onReceive(this, [this](int val) {
+        emit currentShortestNoteChanged(val);
+    });
+
+    meiConfiguration()->meiImportLayoutChanged().onReceive(this, [this](bool val) {
+        emit meiImportLayoutChanged(val);
+    });
+
+    musicXmlConfiguration()->needAskAboutApplyingNewStyleChanged().onReceive(this, [this](bool val) {
+        emit needAskAboutApplyingNewStyleChanged(val);
+    });
 }
 
 QVariantList ImportPreferencesModel::charsets() const

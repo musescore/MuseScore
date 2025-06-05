@@ -184,6 +184,7 @@ enum class SoundId
     Bongos,
     TomToms,
     Conga,
+    Cajon,
     Cuica,
     Drumset,
     Drum,
@@ -214,6 +215,7 @@ enum class SoundId
     Tubo,
     Vibraslap,
     Whip,
+    Cannon,
     Snap,
     Clap,
     Slap,
@@ -286,6 +288,9 @@ enum class SoundSubCategory
     Female,
     Pad,
     Plucked,
+
+    FourPiece,
+    FivePiece,
 
     Temple,
     Military,
@@ -555,6 +560,7 @@ inline const std::unordered_map<SoundId, String> ID_STRINGS
     { SoundId::Bongos, String(u"bongos") },
     { SoundId::TomToms, String(u"tom_toms") },
     { SoundId::Conga, String(u"conga") },
+    { SoundId::Cajon, String(u"cajon") },
     { SoundId::Cuica, String(u"cuica") },
     { SoundId::Drumset, String(u"drumset") },
     { SoundId::Drum, String(u"drum") },
@@ -585,6 +591,7 @@ inline const std::unordered_map<SoundId, String> ID_STRINGS
     { SoundId::Tubo, String(u"tubo") },
     { SoundId::Vibraslap, String(u"vibraslap") },
     { SoundId::Whip, String(u"whip") },
+    { SoundId::Cannon, String(u"cannon") },
     { SoundId::Snap, String(u"snap") },
     { SoundId::Clap, String(u"clap") },
     { SoundId::Slap, String(u"slap") },
@@ -704,6 +711,9 @@ inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
     { SoundSubCategory::Female, String(u"female") },
     { SoundSubCategory::Pad, String(u"pad") },
     { SoundSubCategory::Plucked, String(u"plucked") },
+
+    { SoundSubCategory::FourPiece, String(u"4_piece") },
+    { SoundSubCategory::FivePiece, String(u"5_piece") },
 
     { SoundSubCategory::Temple, String(u"temple") },
     { SoundSubCategory::Military, String(u"military") },

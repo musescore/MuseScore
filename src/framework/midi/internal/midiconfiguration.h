@@ -23,9 +23,10 @@
 #define MUSE_MIDI_MIDICONFIGURATION_H
 
 #include "../imidiconfiguration.h"
+#include "async/asyncable.h"
 
 namespace muse::midi {
-class MidiConfiguration : public IMidiConfiguration
+class MidiConfiguration : public IMidiConfiguration, public async::Asyncable
 {
 public:
     void init();
@@ -34,6 +35,7 @@ public:
 
     bool useRemoteControl() const override;
     void setUseRemoteControl(bool value) override;
+    async::Channel<bool> useRemoteControlChanged() const override;
 
     MidiDeviceID midiInputDeviceId() const override;
     void setMidiInputDeviceId(const MidiDeviceID& deviceId) override;
@@ -45,10 +47,13 @@ public:
 
     bool useMIDI20Output() const override;
     void setUseMIDI20Output(bool use) override;
+    async::Channel<bool> useMIDI20OutputChanged() const override;
 
 private:
     async::Notification m_midiInputDeviceIdChanged;
     async::Notification m_midiOutputDeviceIdChanged;
+    async::Channel<bool> m_useRemoteControlChanged;
+    async::Channel<bool> m_useMIDI20OutputChanged;
 };
 }
 

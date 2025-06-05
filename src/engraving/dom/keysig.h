@@ -42,6 +42,8 @@ class KeySig final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, KeySig)
     DECLARE_CLASSOF(ElementType::KEYSIG)
 
+    M_PROPERTY2(bool, isCourtesy, setIsCourtesy, false)
+
 public:
 
     KeySig* clone() const override { return new KeySig(*this); }

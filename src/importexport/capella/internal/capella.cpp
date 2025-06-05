@@ -62,8 +62,7 @@
 #include "engraving/dom/volta.h"
 
 #include "engraving/engravingerrors.h"
-
-#include "infrastructure/messagebox.h"
+#include "engraving/infrastructure/messagebox.h"
 
 #include "log.h"
 
@@ -809,6 +808,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     l->setSyllabic(LyricsSyllabic::BEGIN);
                 }
                 l->setNo(v.num);
+                l->initTextStyleType(l->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
                 chord->add(l);
             }
 
@@ -1370,7 +1370,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         if (m && !m->lineBreak()) {
             LayoutBreak* lb = Factory::createLayoutBreak(m);
             lb->setLayoutBreakType(LayoutBreakType::LINE);
-            lb->setTrack(muse::nidx);             // this are system elements
+            lb->setTrack(0);
             m->add(lb);
         }
         systemTick = mtick;
@@ -1465,14 +1465,8 @@ void TextObj::read()
 {
     BasicRectObj::read();
     unsigned size = cap->readUnsigned();
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    char txt[size + 1];
-#else
-    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-    //    heap allocation is slow, an optimization might be used.
     std::vector<char> vtxt(size + 1);
     char* txt = vtxt.data();
-#endif
     cap->read(txt, size);
     txt[size] = 0;
     text = QString(txt);
@@ -1557,14 +1551,8 @@ void MetafileObj::read()
 {
     BasicRectObj::read();
     unsigned size = cap->readUnsigned();
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    char enhMetaFileBits[size];
-#else
-    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-    //    heap allocation is slow, an optimization might be used.
     std::vector<char> vEnhMetaFileBits(size);
     char* enhMetaFileBits = vEnhMetaFileBits.data();
-#endif
     cap->read(enhMetaFileBits, size);
     // LOGD("MetaFileObj::read %d bytes", size);
 }

@@ -54,6 +54,7 @@ static Accidental* accidental(muse::XmlStreamReader& e, Score* score)
     const bool noParentheses = e.asciiAttribute("parentheses") == "no";
     const bool brackets = e.asciiAttribute("bracket") == "yes";
     const bool noBrackets = e.asciiAttribute("bracket") == "no";
+    const bool smallAccid = e.asciiAttribute("size") == "cue" || e.asciiAttribute("size") == "grace-cue";
     const Color accColor = Color(e.asciiAttribute("color").ascii());
     const String smufl = e.attribute("smufl");
 
@@ -75,6 +76,7 @@ static Accidental* accidental(muse::XmlStreamReader& e, Score* score)
         if (accColor.isValid()) {
             a->setColor(accColor);
         }
+        a->setSmall(smallAccid);
         return a;
     }
 

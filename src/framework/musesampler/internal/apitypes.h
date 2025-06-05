@@ -126,7 +126,7 @@ enum ms_NoteArticulation : uint64_t
     ms_NoteArticulation_PinchHarmonic = 1LL << 49,
     ms_NoteArticulation_BuzzTremolo = 1LL << 50,
 
-    ms_NoteArticulation_LetRing = 1LL << 59,
+    ms_NoteArticulation_LaissezVibrer = 1LL << 59,
 };
 
 enum ms_NoteHead : int16_t

@@ -68,6 +68,10 @@ void EventAudioSource::setIsActive(const bool active)
         return;
     }
 
+    if (m_synth->isActive() == active) {
+        return;
+    }
+
     m_synth->setIsActive(active);
     m_synth->flushSound();
 }
@@ -132,6 +136,17 @@ void EventAudioSource::seek(const msecs_t newPositionMsecs)
 
     m_synth->setPlaybackPosition(newPositionMsecs);
     m_synth->revokePlayingNotes();
+}
+
+void EventAudioSource::flush()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
+
+    m_synth->flushSound();
 }
 
 const AudioInputParams& EventAudioSource::inputParams() const

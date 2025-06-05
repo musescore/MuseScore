@@ -32,7 +32,7 @@ public:
     const synth::SoundFontsMap& soundFonts() const override;
     async::Notification soundFontsChanged() const override;
 
-    Ret addSoundFont(const synth::SoundFontPath& path) override;
+    void addSoundFont(const synth::SoundFontPath& path) override;
 };
 }
 

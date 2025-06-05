@@ -100,9 +100,19 @@ QWindow* NavigationControl::window() const
     return AbstractNavigation::window();
 }
 
+QQuickItem* muse::ui::NavigationControl::visualItem() const
+{
+    return AbstractNavigation::visualItem();
+}
+
 void NavigationControl::trigger()
 {
     emit triggered();
+}
+
+async::Notification NavigationControl::triggered() const
+{
+    return m_triggeed;
 }
 
 void NavigationControl::requestActive(bool enableHighlight)
@@ -117,6 +127,11 @@ void NavigationControl::requestActiveByInteraction(bool enableHighlight)
     if (m_panel) {
         m_panel->requestActive(this, enableHighlight, INavigation::ActivationType::ByMouse);
     }
+}
+
+void NavigationControl::notifyAboutControlWasTriggered()
+{
+    m_triggeed.notify();
 }
 
 void NavigationControl::setPanel(NavigationPanel* panel)

@@ -34,8 +34,6 @@ using namespace winrt;
 using namespace muse;
 using namespace muse::audio;
 
-static constexpr char DEFAULT_DEVICE_ID[] = "default";
-
 inline int refTimeToSamples(const REFERENCE_TIME& t, double sampleRate) noexcept
 {
     return sampleRate * ((double)t) * 0.0000001;
@@ -217,18 +215,22 @@ AudioDeviceList WasapiAudioDriver::availableOutputDevices() const
 
     result.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
 
-    // Get the string identifier of the audio renderer
-    hstring AudioSelector = MediaDevice::GetAudioRenderSelector();
-
-    winrt::Windows::Foundation::IAsyncOperation<DeviceInformationCollection> deviceRequest
-        = DeviceInformation::FindAllAsync(AudioSelector, {});
-
     DeviceInformationCollection devices = nullptr;
 
     try {
+        // Get the string identifier of the audio renderer
+        hstring AudioSelector = MediaDevice::GetAudioRenderSelector();
+
+        winrt::Windows::Foundation::IAsyncOperation<DeviceInformationCollection> deviceRequest
+            = DeviceInformation::FindAllAsync(AudioSelector, {});
+
         devices = deviceRequest.get();
     } catch (...) {
         LOGE() << to_string(hresult_error(to_hresult()).message());
+    }
+
+    if (!devices) {
+        return result;
     }
 
     for (const auto& deviceInfo : devices) {

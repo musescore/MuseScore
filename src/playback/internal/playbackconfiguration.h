@@ -40,12 +40,19 @@ public:
 
     bool playNotesWhenEditing() const override;
     void setPlayNotesWhenEditing(bool value) override;
+    muse::async::Notification playNotesWhenEditingChanged() const override;
 
     bool playChordWhenEditing() const override;
     void setPlayChordWhenEditing(bool value) override;
+    muse::async::Channel<bool> playChordWhenEditingChanged() const override;
 
     bool playHarmonyWhenEditing() const override;
     void setPlayHarmonyWhenEditing(bool value) override;
+    muse::async::Channel<bool> playHarmonyWhenEditingChanged() const override;
+
+    bool playNotesOnMidiInput() const override;
+    void setPlayNotesOnMidiInput(bool value) override;
+    muse::async::Channel<bool> playNotesOnMidiInputChanged() const override;
 
     PlaybackCursorType cursorType() const override;
 
@@ -69,7 +76,9 @@ public:
     muse::async::Channel<bool> muteHiddenInstrumentsChanged() const override;
 
     const SoundProfileName& basicSoundProfileName() const override;
-    const SoundProfileName& museSoundProfileName() const override;
+    const SoundProfileName& museSoundsProfileName() const override;
+    const SoundProfileName& compatMuseSoundsProfileName() const override;
+
     SoundProfileName defaultProfileForNewProjects() const override;
     void setDefaultProfileForNewProjects(const SoundProfileName& name) override;
 
@@ -87,6 +96,10 @@ public:
 private:
     const SoundProfileName& fallbackSoundProfileStr() const;
 
+    muse::async::Notification m_playNotesWhenEditingChanged;
+    muse::async::Channel<bool> m_playChordWhenEditingChanged;
+    muse::async::Channel<bool> m_playHarmonyWhenEditingChanged;
+    muse::async::Channel<bool> m_playNotesOnMidiInputChanged;
     muse::async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxSendVisibleChanged;
     muse::async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxChannelVisibleChanged;
     muse::async::Channel<MixerSectionType, bool> m_isMixerSectionVisibleChanged;

@@ -25,6 +25,7 @@
 #include "types/constants.h"
 #include "compat/pageformat.h"
 #include "rw/compat/readchordlisthook.h"
+#include "rw/compat/compatutils.h"
 #include "rw/xmlreader.h"
 #include "rw/xmlwriter.h"
 #include "types/typesconv.h"
@@ -189,8 +190,23 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::TIE_PLACEMENT:
                 set(idx, TConv::fromXml(e.readAsciiText(), TiePlacement::AUTO));
                 break;
+            case P_TYPE::TIE_DOTS_PLACEMENT:
+                set(idx, TConv::fromXml(e.readAsciiText(), TieDotsPlacement::AUTO));
+                break;
             case P_TYPE::GLISS_STYLE:
                 set(idx, GlissandoStyle(e.readText().toInt()));
+                break;
+            case P_TYPE::GLISS_TYPE:
+                set(idx, GlissandoType(e.readText().toInt()));
+                break;
+            case P_TYPE::TIMESIG_PLACEMENT:
+                set(idx, TConv::fromXml(e.readAsciiText(), TimeSigPlacement::NORMAL));
+                break;
+            case P_TYPE::TIMESIG_STYLE:
+                set(idx, TConv::fromXml(e.readAsciiText(), TimeSigStyle::NORMAL));
+                break;
+            case P_TYPE::TIMESIG_MARGIN:
+                set(idx, TConv::fromXml(e.readAsciiText(), TimeSigVSMargin::RIGHT_ALIGN_TO_BARLINE));
                 break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
@@ -514,9 +530,29 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
                    || tag == "defaultFontSpatiumDependent"
                    || tag == "usePre_3_6_defaults") {
             e.skipCurrentElement(); // obsolete
+        } else if (tag == "articulationAnchorDefault" && m_version < 410) {
+            set(Sid::articulationAnchorDefault, (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
+        } else if (tag == "articulationAnchorLuteFingering" && m_version < 410) {
+            set(Sid::articulationAnchorLuteFingering, (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
+        } else if (tag == "articulationAnchorOther" && m_version < 410) {
+            set(Sid::articulationAnchorOther, (int)compat::CompatUtils::translateToNewArticulationAnchor(e.readInt()));
+        } else if (tag == "lineEndToSystemEndDistance") { // renamed in 4.5
+            set(Sid::lineEndToBarlineDistance, Spatium(e.readDouble()));
         } else if (!readProperties(e)) {
             e.unknown();
         }
+    }
+
+    if (m_version < 450) {
+        // Didn't exist before 4.5. Default to false for compatibility.
+        set(Sid::scaleRythmicSpacingForSmallNotes, false);
+        set(Sid::maskBarlinesForText, false);
+        set(Sid::showCourtesiesRepeats, false);
+        set(Sid::showCourtesiesOtherJumps, false);
+        set(Sid::showCourtesiesAfterCancellingRepeats, false);
+        set(Sid::showCourtesiesAfterCancellingOtherJumps, false);
+        set(Sid::changesBeforeBarlineRepeats, false);
+        set(Sid::changesBeforeBarlineOtherJumps, false);
     }
 
     if (m_version < 420 && !MScore::testMode) {
@@ -568,6 +604,14 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tagProperty(st.name(), value(idx));
         } else if (P_TYPE::TIE_PLACEMENT == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<TiePlacement>()));
+        } else if (P_TYPE::TIE_DOTS_PLACEMENT == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TieDotsPlacement>()));
+        } else if (P_TYPE::TIMESIG_PLACEMENT == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigPlacement>()));
+        } else if (P_TYPE::TIMESIG_STYLE == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigStyle>()));
+        } else if (P_TYPE::TIMESIG_MARGIN == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigVSMargin>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

@@ -25,6 +25,8 @@ option(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT "Enable crashpad client" OFF) # e
 option(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (optional)" "")
 set(MUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL "" CACHE STRING "URL where to send crash reports")
 
+declare_muse_module_opt(DOCKWINDOW ON)
+
 declare_muse_module_opt(DRAW ON)
 option(MUSE_MODULE_DRAW_TRACE "Trace draw objects" OFF)
 option(MUSE_MODULE_DRAW_USE_QTFONTMETRICS "Use Qt font metrics (for some metrics)" ON)
@@ -40,12 +42,16 @@ declare_muse_module_opt(LEARN ON)
 declare_muse_module_opt(MIDI ON)
 declare_muse_module_opt(MPE ON)
 declare_muse_module_opt(MULTIINSTANCES ON)
+
 declare_muse_module_opt(MUSESAMPLER ON)
+option(MUSE_MODULE_MUSESAMPLER_LOAD_IN_DEBUG "Load MuseSampler module in debug builds" OFF)
 
 declare_muse_module_opt(NETWORK ON)
 option(MUSE_MODULE_NETWORK_WEBSOCKET "Enable websocket support" OFF)
 
 declare_muse_module_opt(SHORTCUTS ON)
+
+declare_muse_module_opt(TOURS ON)
 
 declare_muse_module_opt(UI ON)
 option(MUSE_MODULE_UI_DISABLE_MODALITY "Disable dialogs modality for testing purpose" OFF)
@@ -66,6 +72,7 @@ option(MUSE_COMPILE_STRING_DEBUG_HACK "Enable string debug hack (only clang)" ON
 
 # === Tests ===
 option(MUSE_ENABLE_UNIT_TESTS "Build framework unit tests" ON)
+option(MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE "Enable code coverage for unit tests" OFF)
 
 # === Tools ===
 option(MUSE_ENABLE_CUSTOM_ALLOCATOR "Enable custom allocator" OFF)

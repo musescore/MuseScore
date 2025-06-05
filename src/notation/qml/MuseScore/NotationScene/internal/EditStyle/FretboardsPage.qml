@@ -32,6 +32,8 @@ Rectangle {
     anchors.fill: parent
     color: ui.theme.backgroundPrimaryColor
 
+    readonly property real controlAreaWidth: 204
+
     signal goToTextStylePage(string s)
 
     StyledGroupBox {
@@ -45,135 +47,103 @@ Rectangle {
         }
 
         ColumnLayout {
+            spacing: 12
             width: parent.width
 
-            spacing: 12
-
-            BasicStyleSelectorWithSpinboxAndReset {
+            StyleSpinboxWithReset {
                 styleItem: fretboardsPage.fretY
                 label: qsTrc("notation", "Position above:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: root.controlAreaWidth
             }
 
-            BasicStyleSelectorWithSpinboxAndReset {
+            StyleSpinboxWithReset {
                 styleItem: fretboardsPage.fretMag
                 label: qsTrc("notation", "Scale:")
                 inPercentage: true
+                controlAreaWidth: root.controlAreaWidth
             }
 
-            RowLayout {
-                StyledTextLabel {
-                    Layout.fillWidth: true
-                    horizontalAlignment: Qt.AlignLeft
-                    text: qsTrc("notation", "Orientation:")
-                }
+            IconAndTextButtonSelector {
+                styleItem: fretboardsPage.fretOrientation
+                label: qsTrc("notation", "Orientation:")
+                controlAreaWidth: root.controlAreaWidth
 
-                RadioButtonGroup {
-                    Layout.preferredHeight: 70
-
-                    model: [
-                        { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Vertical"), value: 0 },
-                        { iconCode: IconCode.FRETBOARD_HORIZONTAL, text: qsTrc("notation", "Horizontal"), value: 1 }
-                    ]
-
-                    delegate: FlatRadioButton {
-                        width: 100
-                        height: 70
-                        Column {
-                            anchors.centerIn: parent
-                            height: childrenRect.height
-                            spacing: 8
-                            StyledIconLabel {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                iconCode: modelData.iconCode
-                                font.pixelSize: 28
-                            }
-                            StyledTextLabel {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                text: modelData.text
-                            }
-                        }
-                        checked: fretboardsPage.fretOrientation.value === modelData.value
-                        onToggled: fretboardsPage.fretOrientation.value = modelData.value
-                    }
-                }
+                model: [
+                    { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Vertical"), value: 0 },
+                    { iconCode: IconCode.FRETBOARD_HORIZONTAL, text: qsTrc("notation", "Horizontal"), value: 1 }
+                ]
             }
 
-            BasicStyleSelectorWithSpinboxAndReset {
+            StyleSpinboxWithReset {
                 styleItem: fretboardsPage.fretNutThickness
                 label: qsTrc("notation", "Nut line thickness:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: root.controlAreaWidth
             }
 
             StyledGroupBox {
                 Layout.fillWidth: true
 
                 title: qsTrc("notation", "Fret number")
+
                 ColumnLayout {
                     width: parent.width
+                    spacing: 12
+
                     RowLayout {
                         spacing: 12
+
                         StyledTextLabel {
                             horizontalAlignment: Text.AlignLeft
                             text: qsTrc("notation", "Position:")
                         }
-                        RowLayout {
-                            spacing: 8
-                            RoundedRadioButton {
-                                checked: fretboardsPage.fretNumPos.value === 0
-                                onToggled: fretboardsPage.fretNumPos.value = 0
-                            }
-                            StyledTextLabel {
-                                horizontalAlignment: Text.AlignLeft
-                                text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Left") : qsTrc("notation", "Bottom")
-                            }
+
+                        RoundedRadioButton {
+                            text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Left") : qsTrc("notation", "Bottom")
+                            checked: fretboardsPage.fretNumPos.value === 0
+                            onToggled: fretboardsPage.fretNumPos.value = 0
                         }
-                        RowLayout {
-                            spacing: 8
-                            RoundedRadioButton {
-                                checked: fretboardsPage.fretNumPos.value === 1
-                                onToggled: fretboardsPage.fretNumPos.value = 1
-                            }
-                            StyledTextLabel {
-                                horizontalAlignment: Text.AlignLeft
-                                text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Right") : qsTrc("notation", "Top")
-                            }
+
+                        RoundedRadioButton {
+                            text: fretboardsPage.fretOrientation.value === 0 ? qsTrc("notation", "Right") : qsTrc("notation", "Top")
+                            checked: fretboardsPage.fretNumPos.value === 1
+                            onToggled: fretboardsPage.fretNumPos.value = 1
                         }
                     }
 
                     StyledGroupBox {
                         title: qsTrc("notation", "Format:")
                         Layout.fillWidth: true
+
                         ColumnLayout {
-                            RowLayout {
-                                spacing: 8
-                                RoundedRadioButton {
-                                    checked: fretboardsPage.fretUseCustomSuffix.value === false
-                                    onToggled: fretboardsPage.fretUseCustomSuffix.value = false
-                                }
-                                StyledTextLabel {
-                                    horizontalAlignment: Text.AlignLeft
-                                    text: qsTrc("notation", "Number only")
-                                }
+                            width: parent.width
+                            spacing: 12
+
+                            RoundedRadioButton {
+                                text: qsTrc("notation", "Number only")
+                                checked: fretboardsPage.fretUseCustomSuffix.value === false
+                                onToggled: fretboardsPage.fretUseCustomSuffix.value = false
                             }
+
                             RowLayout {
                                 spacing: 8
+
                                 RoundedRadioButton {
+                                    text: qsTrc("notation", "Custom suffix:")
                                     checked: fretboardsPage.fretUseCustomSuffix.value === true
                                     onToggled: fretboardsPage.fretUseCustomSuffix.value = true
                                 }
-                                StyledTextLabel {
-                                    horizontalAlignment: Text.AlignLeft
-                                    text: qsTrc("notation", "Custom suffix:")
-                                }
+
                                 TextInputField {
-                                    enabled: fretboardsPage.fretUseCustomSuffix.value === true
                                     Layout.preferredWidth: 60
+                                    enabled: fretboardsPage.fretUseCustomSuffix.value === true
                                     currentText: fretboardsPage.fretCustomSuffix.value
-                                    onTextChanged: function(newTextValue) {
+                                    onTextEdited: function(newTextValue) {
                                         fretboardsPage.fretCustomSuffix.value = newTextValue
                                     }
                                 }
+
                                 StyledTextLabel {
                                     visible: fretboardsPage.fretUseCustomSuffix.value === true
                                     horizontalAlignment: Text.AlignLeft
@@ -193,10 +163,11 @@ Rectangle {
                 }
             }
 
-            BasicStyleSelectorWithSpinboxAndReset {
+            StyleSpinboxWithReset {
                 styleItem: fretboardsPage.fretDotSpatiumSize
                 label: qsTrc("notation", "Dot size:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: root.controlAreaWidth
             }
 
             StyledGroupBox {
@@ -205,54 +176,25 @@ Rectangle {
                 title: qsTrc("notation", "Barré")
 
                 ColumnLayout {
-                    spacing : 12
                     width: parent.width
-                    height: parent.height
-                    RowLayout {
-                        Layout.preferredHeight: 70
-                        width: parent.width
+                    spacing : 12
 
-                        StyledTextLabel {
-                            Layout.fillWidth: true
-                            horizontalAlignment: Text.AlignLeft
-                            text: qsTrc("notation", "Appearance:")
-                        }
+                    IconAndTextButtonSelector {
+                        styleItem: fretboardsPage.barreAppearanceSlur
+                        label: qsTrc("notation", "Appearance:")
+                        controlAreaWidth: root.controlAreaWidth
 
-                        RadioButtonGroup {
-                            Layout.preferredHeight: 70
-
-                            model: [
-                                { iconCode: IconCode.FRETBOARD_BARRE_LINE, text: qsTrc("notation", "Line"), value: false },
-                                { iconCode: IconCode.FRETBOARD_BARRE_SLUR, text: qsTrc("notation", "Slur"), value: true }
-                            ]
-
-                            delegate: FlatRadioButton {
-                                width: 100
-                                height: 70
-                                Column {
-                                    anchors.centerIn: parent
-                                    height: childrenRect.height
-                                    spacing: 8
-                                    StyledIconLabel {
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        iconCode: modelData.iconCode
-                                        font.pixelSize: 28
-                                    }
-                                    StyledTextLabel {
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        text: modelData.text
-                                    }
-                                }
-                                checked: fretboardsPage.barreAppearanceSlur.value === modelData.value
-                                onToggled: fretboardsPage.barreAppearanceSlur.value = modelData.value
-                            }
-                        }
+                        model: [
+                            { iconCode: IconCode.FRETBOARD_BARRE_LINE, text: qsTrc("notation", "Line"), value: false },
+                            { iconCode: IconCode.FRETBOARD_BARRE_SLUR, text: qsTrc("notation", "Slur"), value: true }
+                        ]
                     }
 
-                    BasicStyleSelectorWithSpinboxAndReset {
+                    StyleSpinboxWithReset {
                         styleItem: fretboardsPage.barreLineWidth
                         label: qsTrc("notation", "Line thickness:")
                         inPercentage: true
+                        controlAreaWidth: root.controlAreaWidth
                     }
                 }
             }
@@ -271,68 +213,43 @@ Rectangle {
                 }
             }
 
-            RowLayout {
-                width: parent.width
+            IconAndTextButtonSelector {
+                styleItem: fretboardsPage.fretStyleExtended
+                label: qsTrc("notation", "Fretboard style:")
+                controlAreaWidth: root.controlAreaWidth
 
-                StyledTextLabel {
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignLeft
-                    text: qsTrc("notation", "Fretboard style:")
-                }
-
-                RadioButtonGroup {
-                    Layout.preferredHeight: 70
-
-                    model: [
-                        { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Trimmed"), value: false },
-                        { iconCode: IconCode.FRETBOARD_EXTENDED, text: qsTrc("notation", "Extended"), value: true }
-                    ]
-
-                    delegate: FlatRadioButton {
-                        width: 100
-                        height: 70
-                        Column {
-                            anchors.centerIn: parent
-                            height: childrenRect.height
-                            spacing: 8
-                            StyledIconLabel {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                iconCode: modelData.iconCode
-                                font.pixelSize: 28
-                            }
-                            StyledTextLabel {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                text: modelData.text
-                            }
-                        }
-                        checked: fretboardsPage.fretStyleExtended.value === modelData.value
-                        onToggled: fretboardsPage.fretStyleExtended.value = modelData.value
-                    }
-                }
+                model: [
+                    { iconCode: IconCode.FRETBOARD_VERTICAL, text: qsTrc("notation", "Trimmed"), value: false },
+                    { iconCode: IconCode.FRETBOARD_EXTENDED, text: qsTrc("notation", "Extended"), value: true }
+                ]
             }
 
-            BasicStyleSelectorWithSpinboxAndReset {
+            StyleSpinboxWithReset {
                 styleItem: fretboardsPage.fretStringSpacing
                 label: qsTrc("notation", "String spacing:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: root.controlAreaWidth
             }
 
-            BasicStyleSelectorWithSpinboxAndReset {
+            StyleSpinboxWithReset {
                 styleItem: fretboardsPage.fretFretSpacing
                 label: qsTrc("notation", "Fret spacing:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: root.controlAreaWidth
             }
 
-            BasicStyleSelectorWithSpinboxAndReset {
+            StyleSpinboxWithReset {
                 styleItem: fretboardsPage.maxFretShiftAbove
                 label: qsTrc("notation", "Maximum shift above:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: root.controlAreaWidth
             }
 
-            BasicStyleSelectorWithSpinboxAndReset {
+            StyleSpinboxWithReset {
                 styleItem: fretboardsPage.maxFretShiftBelow
                 label: qsTrc("notation", "Maximum shift below:")
                 suffix: qsTrc("global", "sp")
+                controlAreaWidth: root.controlAreaWidth
             }
         }
     }

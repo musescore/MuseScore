@@ -106,9 +106,10 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
         { "tom-toms", { SoundId::TomToms, SoundCategory::Percussions } },
         { "congas", { SoundId::Conga, SoundCategory::Percussions } },
         { "cuica", { SoundId::Cuica, SoundCategory::Percussions } },
+        { "cajon", { SoundId::Cajon, SoundCategory::Percussions } },
         { "drumset", { SoundId::Drumset, SoundCategory::Percussions } },
-        { "drum-kit-4", { SoundId::Drumset, SoundCategory::Percussions } },
-        { "drum-kit-5", { SoundId::Drumset, SoundCategory::Percussions } },
+        { "drum-kit-4", { SoundId::Drumset, SoundCategory::Percussions, { SoundSubCategory::FourPiece } } },
+        { "drum-kit-5", { SoundId::Drumset, SoundCategory::Percussions, { SoundSubCategory::FivePiece } } },
         { "military-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Military } } },
         { "frame-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Frame } } },
         { "piccolo-snare-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Snare,
@@ -178,6 +179,7 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
         { "tubo", { SoundId::Tubo, SoundCategory::Percussions } },
         { "vibraslap", { SoundId::Vibraslap, SoundCategory::Percussions } },
         { "whip", { SoundId::Whip, SoundCategory::Percussions } },
+        { "cannon", { SoundId::Cannon, SoundCategory::Percussions } },
 
         { "marching-snare", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Marching,
                                                                            SoundSubCategory::Snare } } },
@@ -195,6 +197,8 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
         { "hand-clap", { SoundId::Clap, SoundCategory::Percussions, { SoundSubCategory::Hand } } },
         { "slap", { SoundId::Slap, SoundCategory::Percussions, { SoundSubCategory::Hand } } },
         { "stamp", { SoundId::Stamp, SoundCategory::Percussions, { SoundSubCategory::Foot } } },
+
+        { "taiko", { SoundId::Taiko, SoundCategory::Percussions } },
 
         { "percussion-synthesizer", { SoundId::Synthesizer, SoundCategory::Percussions, { SoundSubCategory::Electric,
                                                                                           SoundSubCategory::Percussive } } },

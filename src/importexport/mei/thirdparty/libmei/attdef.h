@@ -22,6 +22,7 @@
 namespace libmei {
 
 #define MEI_UNSET -0x7FFFFFFF
+#define MEI_UNSET_OCT -127
 
 /**
  * MEI virtual unit;
@@ -32,32 +33,8 @@ typedef double data_VU;
 // Durations
 //----------------------------------------------------------------------------
 
-/**
- * These duration values are used for internal calculation and differ from the
- * MEI data.DURATION types (see below)
- */
-#define DUR_NONE -32
-#define DUR_MX -1 // maxima
-#define DUR_LG 0 // longa
-#define DUR_BR 1 // brevis
-#define DUR_1 2 // whole note (semibrevis)
-#define DUR_2 3 // half note (minima)
-#define DUR_4 4 // ...
-#define DUR_8 5
-#define DUR_16 6
-#define DUR_32 7
-#define DUR_64 8
-#define DUR_128 9
-#define DUR_256 10
-#define DUR_512 11
-#define DUR_1024 12 // this is it for now
 // used for alignement
-#define DUR_MAX 1024
-// mensural duration
-#define DUR_MENSURAL_OFFSET (2 * DUR_MAX)
-#define DUR_MENSURAL_MASK (2 * DUR_MAX - 1)
-// used for mensural alignment
-#define DUR_MENSURAL_REF 1728
+#define DUR_MAX 2048
 
 //----------------------------------------------------------------------------
 // MEI data defines
@@ -97,15 +74,21 @@ enum data_BEATRPT_REND {
 typedef std::vector<std::pair<double, double>> data_BULGE;
 
 /**
+ * MEI data.DEGREES
+ */
+typedef double data_DEGREES;
+
+/**
  * MEI data.DURATION
  */
 enum data_DURATION {
-    DURATION_NONE = DUR_NONE,
-    DURATION_long = DUR_LG,
+    DURATION_NONE = -2,
+    DURATION_maxima, // -1
+    DURATION_long, // 0
     DURATION_breve,
     DURATION_1,
     DURATION_2,
-    DURATION_4,
+    DURATION_4, // 4
     DURATION_8,
     DURATION_16,
     DURATION_32,
@@ -113,11 +96,10 @@ enum data_DURATION {
     DURATION_128,
     DURATION_256,
     DURATION_512,
-    DURATION_1024,
+    DURATION_1024, // 12
     DURATION_2048,
-    DURATION_maxima = DUR_MX,
-    DURATION_longa = DUR_MENSURAL_OFFSET + DUR_LG,
-    DURATION_brevis,
+    DURATION_longa = 100,
+    DURATION_brevis, // 101
     DURATION_semibrevis,
     DURATION_minima,
     DURATION_semiminima,

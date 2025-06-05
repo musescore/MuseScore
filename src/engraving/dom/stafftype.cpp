@@ -267,6 +267,10 @@ bool StaffType::isSimpleTabStaff() const
     case StaffTypes::TAB_4SIMPLE:
     case StaffTypes::TAB_5SIMPLE:
     case StaffTypes::TAB_6SIMPLE:
+    case StaffTypes::TAB_7SIMPLE:
+    case StaffTypes::TAB_8SIMPLE:
+    case StaffTypes::TAB_9SIMPLE:
+    case StaffTypes::TAB_10SIMPLE:
     case StaffTypes::TAB_ITALIAN:
     case StaffTypes::TAB_FRENCH:
         return true;
@@ -493,95 +497,6 @@ void StaffType::setFretFontSize(double val)
     m_fretFontSize = val;
     m_fretFont.setPointSizeF(val);
     m_fretMetricsValid = false;
-}
-
-//---------------------------------------------------------
-//   chordRestStemPosY / chordStemPos / chordStemPosBeam / chordStemLength
-//
-//    computes the stem data for the given chord, according to TAB settings
-//    NOTE: unit: spatium, position: relative to chord (DIFFERENT from Chord own functions)
-//
-//   chordRestStemPosY
-//          returns the vertical position of stem start point
-//---------------------------------------------------------
-
-double StaffType::chordRestStemPosY(const ChordRest* chordRest) const
-{
-    if (stemThrough()) {            // does not make sense for "stems through staves" setting; just return top line vert. position
-        return 0.0;
-    }
-
-    // if stems beside staff, position are fixed, but take into account delta for half notes
-    double delta                                 // displacement for half note stems (if used)
-        =   // if half notes have not a short stem OR not a half note => 0
-          (minimStyle() != TablatureMinimStyle::SHORTER || chordRest->durationType().type() != DurationType::V_HALF)
-          ? 0.0
-          :       // if stem is up, displace of half stem length down (positive)
-                  // if stem is down, displace of half stem length up (negative)
-          (chordRest->up()
-           ? -STAFFTYPE_TAB_DEFAULTSTEMLEN_UP : STAFFTYPE_TAB_DEFAULTSTEMLEN_DN) * 0.5;
-    // if fret marks above lines and chordRest is up, move half a line distance up
-    if (!onLines() && chordRest->up()) {
-        delta -= m_lineDistance.val() * 0.5;
-    }
-    double y
-        = (chordRest->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (m_lines - 1) * m_lineDistance.val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
-          + delta;
-    return y;
-}
-
-//---------------------------------------------------------
-//   chordStemPos
-//    return position of note at other side of beam
-//---------------------------------------------------------
-
-PointF StaffType::chordStemPos(const Chord* chord) const
-{
-    double y;
-    if (stemThrough()) {
-        // if stems are through staff, stem goes from farthest note string
-        y = (chord->up() ? chord->downString() : chord->upString()) * m_lineDistance.val();
-    } else {
-        // if stems are beside staff, stem start point has a fixed vertical position,
-        // according to TAB parameters and stem up/down
-        y = chordRestStemPosY(chord);
-    }
-    return PointF(chordStemPosX(chord), y);
-}
-
-//---------------------------------------------------------
-//   chordStemPosBeam
-//          return position of note at beam side of stem
-//---------------------------------------------------------
-
-PointF StaffType::chordStemPosBeam(const Chord* chord) const
-{
-    double y = (stemsDown() ? chord->downString() : chord->upString()) * m_lineDistance.val();
-
-    return PointF(chordStemPosX(chord), y);
-}
-
-//---------------------------------------------------------
-//   chordStemLength
-//          return length of stem
-//---------------------------------------------------------
-
-double StaffType::chordStemLength(const Chord* chord) const
-{
-    double stemLen;
-    // if stems are through staff, length should be computed by relevant chord algorithm;
-    // here, just return default length (= 1 'octave' = 3.5 line spaces)
-    if (stemThrough()) {
-        return STAFFTYPE_TAB_DEFAULTSTEMLEN_THRU * m_lineDistance.val();
-    }
-    // if stems beside staff, length is fixed, but take into account shorter half note stems
-    else {
-        bool shrt = (minimStyle() == TablatureMinimStyle::SHORTER) && (chord->durationType().type() == DurationType::V_HALF);
-        stemLen = (stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
-                  * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0) * (chord->style().styleB(Sid::useWideBeams) ? 1.25 : 1.0);
-    }
-    // scale length by scale of parent chord, but relative to scale of context staff
-    return stemLen * chord->mag() / chord->staff()->staffMag(chord->tick());
 }
 
 //---------------------------------------------------------
@@ -849,7 +764,9 @@ void TabDurationSymbol::layout2()
 
     // get 'grid' beam length from page positions of this' chord and previous chord
     Chord* chord       = toChord(explicitParent());
-    ChordRest* prevChord   = prevChordRest(chord, true);
+    ChordRestNavigateOptions options;
+    options.skipGrace = true;
+    ChordRest* prevChord   = prevChordRest(chord, options);
     if (chord == nullptr || prevChord == nullptr) {
         return;
     }

@@ -383,50 +383,50 @@ AttHarpPedalLog::AttHarpPedalLog() : Att()
 
 void AttHarpPedalLog::ResetHarpPedalLog()
 {
-    m_c = harpPedalLog_C_NONE;
-    m_d = harpPedalLog_D_NONE;
-    m_e = harpPedalLog_E_NONE;
-    m_f = harpPedalLog_F_NONE;
-    m_g = harpPedalLog_G_NONE;
-    m_a = harpPedalLog_A_NONE;
-    m_b = harpPedalLog_B_NONE;
+    m_c = HARPPEDALPOSITION_NONE;
+    m_d = HARPPEDALPOSITION_NONE;
+    m_e = HARPPEDALPOSITION_NONE;
+    m_f = HARPPEDALPOSITION_NONE;
+    m_g = HARPPEDALPOSITION_NONE;
+    m_a = HARPPEDALPOSITION_NONE;
+    m_b = HARPPEDALPOSITION_NONE;
 }
 
 bool AttHarpPedalLog::ReadHarpPedalLog(pugi::xml_node element, bool removeAttr)
 {
     bool hasAttribute = false;
     if (element.attribute("c")) {
-        this->SetC(StrToHarpPedalLogC(element.attribute("c").value()));
+        this->SetC(StrToHarppedalposition(element.attribute("c").value()));
         if (removeAttr) element.remove_attribute("c");
         hasAttribute = true;
     }
     if (element.attribute("d")) {
-        this->SetD(StrToHarpPedalLogD(element.attribute("d").value()));
+        this->SetD(StrToHarppedalposition(element.attribute("d").value()));
         if (removeAttr) element.remove_attribute("d");
         hasAttribute = true;
     }
     if (element.attribute("e")) {
-        this->SetE(StrToHarpPedalLogE(element.attribute("e").value()));
+        this->SetE(StrToHarppedalposition(element.attribute("e").value()));
         if (removeAttr) element.remove_attribute("e");
         hasAttribute = true;
     }
     if (element.attribute("f")) {
-        this->SetF(StrToHarpPedalLogF(element.attribute("f").value()));
+        this->SetF(StrToHarppedalposition(element.attribute("f").value()));
         if (removeAttr) element.remove_attribute("f");
         hasAttribute = true;
     }
     if (element.attribute("g")) {
-        this->SetG(StrToHarpPedalLogG(element.attribute("g").value()));
+        this->SetG(StrToHarppedalposition(element.attribute("g").value()));
         if (removeAttr) element.remove_attribute("g");
         hasAttribute = true;
     }
     if (element.attribute("a")) {
-        this->SetA(StrToHarpPedalLogA(element.attribute("a").value()));
+        this->SetA(StrToHarppedalposition(element.attribute("a").value()));
         if (removeAttr) element.remove_attribute("a");
         hasAttribute = true;
     }
     if (element.attribute("b")) {
-        this->SetB(StrToHarpPedalLogB(element.attribute("b").value()));
+        this->SetB(StrToHarppedalposition(element.attribute("b").value()));
         if (removeAttr) element.remove_attribute("b");
         hasAttribute = true;
     }
@@ -437,31 +437,31 @@ bool AttHarpPedalLog::WriteHarpPedalLog(pugi::xml_node element)
 {
     bool wroteAttribute = false;
     if (this->HasC()) {
-        element.append_attribute("c") = HarpPedalLogCToStr(this->GetC()).c_str();
+        element.append_attribute("c") = HarppedalpositionToStr(this->GetC()).c_str();
         wroteAttribute = true;
     }
     if (this->HasD()) {
-        element.append_attribute("d") = HarpPedalLogDToStr(this->GetD()).c_str();
+        element.append_attribute("d") = HarppedalpositionToStr(this->GetD()).c_str();
         wroteAttribute = true;
     }
     if (this->HasE()) {
-        element.append_attribute("e") = HarpPedalLogEToStr(this->GetE()).c_str();
+        element.append_attribute("e") = HarppedalpositionToStr(this->GetE()).c_str();
         wroteAttribute = true;
     }
     if (this->HasF()) {
-        element.append_attribute("f") = HarpPedalLogFToStr(this->GetF()).c_str();
+        element.append_attribute("f") = HarppedalpositionToStr(this->GetF()).c_str();
         wroteAttribute = true;
     }
     if (this->HasG()) {
-        element.append_attribute("g") = HarpPedalLogGToStr(this->GetG()).c_str();
+        element.append_attribute("g") = HarppedalpositionToStr(this->GetG()).c_str();
         wroteAttribute = true;
     }
     if (this->HasA()) {
-        element.append_attribute("a") = HarpPedalLogAToStr(this->GetA()).c_str();
+        element.append_attribute("a") = HarppedalpositionToStr(this->GetA()).c_str();
         wroteAttribute = true;
     }
     if (this->HasB()) {
-        element.append_attribute("b") = HarpPedalLogBToStr(this->GetB()).c_str();
+        element.append_attribute("b") = HarppedalpositionToStr(this->GetB()).c_str();
         wroteAttribute = true;
     }
     return wroteAttribute;
@@ -469,37 +469,37 @@ bool AttHarpPedalLog::WriteHarpPedalLog(pugi::xml_node element)
 
 bool AttHarpPedalLog::HasC() const
 {
-    return (m_c != harpPedalLog_C_NONE);
+    return (m_c != HARPPEDALPOSITION_NONE);
 }
 
 bool AttHarpPedalLog::HasD() const
 {
-    return (m_d != harpPedalLog_D_NONE);
+    return (m_d != HARPPEDALPOSITION_NONE);
 }
 
 bool AttHarpPedalLog::HasE() const
 {
-    return (m_e != harpPedalLog_E_NONE);
+    return (m_e != HARPPEDALPOSITION_NONE);
 }
 
 bool AttHarpPedalLog::HasF() const
 {
-    return (m_f != harpPedalLog_F_NONE);
+    return (m_f != HARPPEDALPOSITION_NONE);
 }
 
 bool AttHarpPedalLog::HasG() const
 {
-    return (m_g != harpPedalLog_G_NONE);
+    return (m_g != HARPPEDALPOSITION_NONE);
 }
 
 bool AttHarpPedalLog::HasA() const
 {
-    return (m_a != harpPedalLog_A_NONE);
+    return (m_a != HARPPEDALPOSITION_NONE);
 }
 
 bool AttHarpPedalLog::HasB() const
 {
-    return (m_b != harpPedalLog_B_NONE);
+    return (m_b != HARPPEDALPOSITION_NONE);
 }
 
 //----------------------------------------------------------------------------

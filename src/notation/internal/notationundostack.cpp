@@ -79,7 +79,7 @@ void NotationUndoStack::redo(mu::engraving::EditData* editData)
     notifyAboutStateChanged();
 }
 
-void NotationUndoStack::undoRedoToIdx(size_t idx, mu::engraving::EditData* editData)
+void NotationUndoStack::undoRedoToIndex(size_t idx, mu::engraving::EditData* editData)
 {
     auto stack = undoStack();
 
@@ -87,14 +87,15 @@ void NotationUndoStack::undoRedoToIdx(size_t idx, mu::engraving::EditData* editD
         return;
     }
 
-    if (stack->currentIndex() > idx) {
-        while (stack->currentIndex() > idx && stack->canUndo()) {
-            score()->undoRedo(true, editData);
-        }
-    } else {
-        while (stack->currentIndex() <= idx && stack->canRedo()) {
-            score()->undoRedo(false, editData);
-        }
+    if (stack->currentIndex() == idx) {
+        return;
+    }
+
+    while (stack->currentIndex() > idx && stack->canUndo()) {
+        score()->undoRedo(true, editData);
+    }
+    while (stack->currentIndex() < idx && stack->canRedo()) {
+        score()->undoRedo(false, editData);
     }
 
     notifyAboutNotationChanged();
@@ -150,6 +151,15 @@ bool NotationUndoStack::isStackClean() const
     }
 
     return undoStack()->isClean();
+}
+
+void NotationUndoStack::mergeCommands(size_t startIdx)
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return;
+    }
+
+    undoStack()->mergeCommands(startIdx);
 }
 
 void NotationUndoStack::lock()
@@ -210,7 +220,7 @@ size_t NotationUndoStack::undoRedoActionCount() const
     return undoStack()->size();
 }
 
-size_t NotationUndoStack::undoRedoActionCurrentIdx() const
+size_t NotationUndoStack::currentStateIndex() const
 {
     IF_ASSERT_FAILED(undoStack()) {
         return muse::nidx;
@@ -219,13 +229,13 @@ size_t NotationUndoStack::undoRedoActionCurrentIdx() const
     return undoStack()->currentIndex();
 }
 
-const muse::TranslatableString NotationUndoStack::undoRedoActionNameAtIdx(size_t idx) const
+const muse::TranslatableString NotationUndoStack::lastActionNameAtIdx(size_t idx) const
 {
     IF_ASSERT_FAILED(undoStack()) {
         return {};
     }
 
-    if (auto action = undoStack()->atIndex(idx)) {
+    if (auto action = undoStack()->lastAtIndex(idx)) {
         return action->actionName();
     }
 

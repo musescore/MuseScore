@@ -17,17 +17,17 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //==============================================
 
-import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import MuseScore 3.0
-import Muse.UiComponents 1.0
+import Muse.UiComponents
 
 MuseScore {
 
     width: 344
-    height: 330
+    height: 360
 
     // configuration
     property bool useBracket: false
@@ -152,21 +152,25 @@ MuseScore {
                                 id: optFullRest
                                 text: "next full measure rest"
                                 checked: true
+                                onClicked: checked = !checked
                             }
                             CheckBox {
                                 id: optDoubleBar
                                 text: "next double bar line"
                                 checked: true
+                                onClicked: checked = !checked
                             }
                             CheckBox {
                                 id: optRehearsalMark
                                 text: "next rehearsal mark"
                                 checked: false
+                                onClicked: checked = !checked
                             }
                             CheckBox {
                                 id: optEndScore
                                 text: "end of the score"
                                 checked: true
+                                onClicked: checked = !checked
                             }
                         }
                     }
@@ -188,6 +192,7 @@ MuseScore {
                 id: optUseBracket
                 text: "Put accidentals in parenthesis"
                 checked: false
+                onClicked: checked = !checked
             }
 
             // preserve user settings

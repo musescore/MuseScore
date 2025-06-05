@@ -39,6 +39,7 @@ struct path_t {
     path_t() = default;
     path_t(const String& s);
     path_t(const std::string& s);
+    path_t(std::string&& s);
     path_t(const char* s);
 
     bool empty() const;

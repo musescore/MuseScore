@@ -152,26 +152,40 @@ FlatButton {
     Component {
         id: commonComp
 
-        StyledIconLabel {
+        Item {
             property string accessibleName: root.model.timeSignatureAccessibleName(AdditionalInfoModel.Common)
 
-            font.family: ui.theme.musicalFont.family
-            font.pixelSize: 30
-            horizontalAlignment: Text.AlignLeft
-            iconCode: MusicalSymbolCodes.TIMESIG_COMMON
+            implicitWidth: commonLabel.implicitWidth
+            implicitHeight: 30
+
+            StyledIconLabel {
+                id: commonLabel
+                anchors.verticalCenter: parent.verticalCenter
+                font.family: ui.theme.musicalFont.family
+                font.pixelSize: 30
+                horizontalAlignment: Text.AlignLeft
+                iconCode: MusicalSymbolCodes.TIMESIG_COMMON
+            }
         }
     }
 
     Component {
         id: cutComp
 
-        StyledIconLabel {
+        Item {
             property string accessibleName: root.model.timeSignatureAccessibleName(AdditionalInfoModel.Cut)
 
-            font.family: ui.theme.musicalFont.family
-            font.pixelSize: 30
-            horizontalAlignment: Text.AlignLeft
-            iconCode: MusicalSymbolCodes.TIMESIG_CUT
+            implicitWidth: cutLabel.implicitWidth
+            implicitHeight: 30
+
+            StyledIconLabel {
+                id: cutLabel
+                anchors.verticalCenter: parent.verticalCenter
+                font.family: ui.theme.musicalFont.family
+                font.pixelSize: 30
+                horizontalAlignment: Text.AlignLeft
+                iconCode: MusicalSymbolCodes.TIMESIG_CUT
+            }
         }
     }
 }

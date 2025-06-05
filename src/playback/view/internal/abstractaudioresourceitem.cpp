@@ -4,6 +4,7 @@
 #include <QTimer>
 
 #include "stringutils.h"
+#include "ui/view/iconcodes.h"
 
 using namespace muse;
 using namespace mu::playback;
@@ -19,9 +20,7 @@ AbstractAudioResourceItem::AbstractAudioResourceItem(QObject* parent)
 
 AbstractAudioResourceItem::~AbstractAudioResourceItem()
 {
-    if (m_editorUri.isValid()) {
-        emit nativeEditorViewCloseRequested();
-    }
+    requestToCloseNativeEditorView();
 }
 
 void AbstractAudioResourceItem::requestToLaunchNativeEditorView()
@@ -31,11 +30,9 @@ void AbstractAudioResourceItem::requestToLaunchNativeEditorView()
     }
 }
 
-void AbstractAudioResourceItem::updateNativeEditorView()
+void AbstractAudioResourceItem::requestToCloseNativeEditorView()
 {
-    if (hasNativeEditorSupport()) {
-        doRequestToLaunchNativeEditorView();
-    } else if (m_editorUri.isValid()) {
+    if (m_editorAction.isValid()) {
         emit nativeEditorViewCloseRequested();
     }
 }
@@ -82,6 +79,19 @@ QVariantMap AbstractAudioResourceItem::buildSeparator() const
     return result;
 }
 
+QVariantMap AbstractAudioResourceItem::buildExternalLinkMenuItem(const QString& menuId, const QString& title) const
+{
+    QVariantMap result;
+
+    result["id"] = menuId;
+    result["title"] = title;
+
+    const int openLinkIcon = static_cast<int>(ui::IconCode::Code::OPEN_LINK);
+    result["icon"] = openLinkIcon;
+
+    return result;
+}
+
 void AbstractAudioResourceItem::sortResourcesList(audio::AudioResourceMetaList& list)
 {
     std::sort(list.begin(), list.end(), [](const audio::AudioResourceMeta& m1, const audio::AudioResourceMeta& m2) {
@@ -94,12 +104,12 @@ bool AbstractAudioResourceItem::hasNativeEditorSupport() const
     return false;
 }
 
-const muse::UriQuery& AbstractAudioResourceItem::editorUri() const
+const actions::ActionQuery& AbstractAudioResourceItem::editorAction() const
 {
-    return m_editorUri;
+    return m_editorAction;
 }
 
-void AbstractAudioResourceItem::setEditorUri(const UriQuery& uri)
+void AbstractAudioResourceItem::setEditorAction(const actions::ActionQuery& action)
 {
-    m_editorUri = uri;
+    m_editorAction = action;
 }

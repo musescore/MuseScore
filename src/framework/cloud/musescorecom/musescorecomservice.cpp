@@ -51,7 +51,7 @@ static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL(MUSESCORECOM_API_RO
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
 
-static const QString MUSESCORE_TEXT_LOGO("https://musescore.org/themes/musescore_theme/logo.svg");
+static const QString MUSESCORE_TEXT_LOGO("https://musescore.com/static/public/musescore/img/logo/musescore-logo.svg");
 
 static const QString SCORE_ID_KEY("score_id");
 static const QString EDITOR_SOURCE_KEY("editor_source");
@@ -75,7 +75,7 @@ CloudInfo MuseScoreComService::cloudInfo() const
         MUSESCORECOM_CLOUD_TITLE,
         MUSESCORECOM_CLOUD_URL,
         MUSESCORE_TEXT_LOGO,
-        logoColorForTheme(uiConfig()->currentTheme())
+        logoColor()
     };
 }
 
@@ -115,10 +115,9 @@ AbstractCloudService::ServerConfig MuseScoreComService::serverConfig() const
 
 RequestHeaders MuseScoreComService::headers() const
 {
-    RequestHeaders headers;
+    RequestHeaders headers = defaultHeaders();
     headers.rawHeaders["Accept"] = "application/json";
     headers.rawHeaders["X-MS-CLIENT-ID"] = QByteArray::fromStdString(configuration()->clientId());
-    headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
 
     return headers;
 }
@@ -141,8 +140,13 @@ Ret MuseScoreComService::downloadAccountInfo()
         return ret;
     }
 
-    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-    QJsonObject user = document.object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        return muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+    }
+
+    QJsonObject user = doc.object();
 
     AccountInfo info;
     info.id = QString::number(user.value("id").toInt());
@@ -184,8 +188,14 @@ bool MuseScoreComService::doUpdateTokens()
         return false;
     }
 
-    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-    QJsonObject tokens = document.object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        LOGE() << "Error parsing JSON: " << err.errorString();
+        return false;
+    }
+
+    QJsonObject tokens = doc.object();
 
     setAccessToken(tokens.value(ACCESS_TOKEN_KEY).toString());
     setRefreshToken(tokens.value(REFRESH_TOKEN_KEY).toString());
@@ -223,8 +233,14 @@ RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
         return result;
     }
 
-    QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-    QJsonObject scoreInfo = document.object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data());
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        result.ret = muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+        return result;
+    }
+
+    QJsonObject scoreInfo = doc.object();
 
     result.val.id = scoreInfo.value("id").toInt();
     result.val.revisionId = scoreInfo.value("revision_id").toInt();
@@ -267,8 +283,13 @@ async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int scoresPer
 
         ScoresList result;
 
-        QJsonDocument document = QJsonDocument::fromJson(receivedData.data());
-        QJsonObject obj = document.object();
+        QJsonParseError err;
+        QJsonDocument doc = QJsonDocument::fromJson(receivedData.data());
+        if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+            return reject(static_cast<int>(Ret::Code::InternalError), err.errorString().toStdString());
+        }
+
+        QJsonObject obj = doc.object();
 
         QJsonObject metaObj = obj.value("_meta").toObject();
         result.meta.totalScoresCount = metaObj.value("totalCount").toInt();
@@ -309,19 +330,19 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
     ProgressPtr progress = std::make_shared<Progress>();
 
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progressChanged.send(current, total, message);
+    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progress(current, total, message);
     });
 
     async::Async::call(this, [this, manager, scoreId, &scoreData, hash, secret, progress]() {
-        progress->started.notify();
+        progress->start();
 
         ProgressResult result;
         result.ret = executeRequest([this, manager, scoreId, &scoreData, hash, secret]() {
             return doDownloadScore(manager, scoreId, scoreData, hash, secret);
         });
 
-        progress->finished.send(result);
+        progress->finish(result);
     });
 
     return progress;
@@ -363,8 +384,8 @@ ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString
     ProgressPtr progress = std::make_shared<Progress>();
 
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progressChanged.send(current, total, message);
+    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progress(current, total, message);
     });
 
     std::shared_ptr<ValMap> scoreUrlMap = std::make_shared<ValMap>();
@@ -377,13 +398,13 @@ ProgressPtr MuseScoreComService::uploadScore(QIODevice& scoreData, const QString
     };
 
     async::Async::call(this, [this, progress, uploadCallback, scoreUrlMap]() {
-        progress->started.notify();
+        progress->start();
 
         ProgressResult result;
         result.ret = executeRequest(uploadCallback);
         result.val = Val(*scoreUrlMap);
 
-        progress->finished.send(result);
+        progress->finish(result);
     });
 
     return progress;
@@ -394,8 +415,8 @@ ProgressPtr MuseScoreComService::uploadAudio(QIODevice& audioData, const QString
     ProgressPtr progress = std::make_shared<Progress>();
 
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    manager->progress().progressChanged.onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
-        progress->progressChanged.send(current, total, message);
+    manager->progress().progressChanged().onReceive(this, [progress](int64_t current, int64_t total, const std::string& message) {
+        progress->progress(current, total, message);
     });
 
     auto uploadCallback = [this, manager, &audioData, audioFormat, sourceUrl]() {
@@ -403,9 +424,9 @@ ProgressPtr MuseScoreComService::uploadAudio(QIODevice& audioData, const QString
     };
 
     async::Async::call(this, [this, progress, uploadCallback]() {
-        progress->started.notify();
+        progress->start();
         Ret ret = executeRequest(uploadCallback);
-        progress->finished.send(ret);
+        progress->finish(ret);
     });
 
     return progress;
@@ -503,7 +524,15 @@ RetVal<ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr uploadManag
         return result;
     }
 
-    QJsonObject scoreInfo = QJsonDocument::fromJson(receivedData.data()).object();
+    QJsonParseError err;
+    QJsonDocument doc = QJsonDocument::fromJson(receivedData.data(), &err);
+    if (err.error != QJsonParseError::NoError || !doc.isObject()) {
+        LOGE() << err.errorString();
+        result.ret = muse::make_ret(Ret::Code::InternalError, err.errorString().toStdString());
+        return result;
+    }
+
+    QJsonObject scoreInfo = doc.object();
     QUrl newSourceUrl = QUrl(scoreInfo.value("permalink").toString());
     QUrl editUrl = QUrl(scoreInfo.value("edit_url").toString());
     int newRevisionId = scoreInfo.value("revision_id").toInt();
@@ -558,14 +587,4 @@ Ret MuseScoreComService::doUploadAudio(network::INetworkManagerPtr uploadManager
     }
 
     return ret;
-}
-
-QString MuseScoreComService::logoColorForTheme(const ui::ThemeInfo& theme) const
-{
-    if (theme.codeKey == ui::LIGHT_THEME_CODE) {
-        return "#0065C3";
-    } else if (theme.codeKey == ui::DARK_THEME_CODE) {
-        return "#8EC9FF";
-    }
-    return AbstractCloudService::logoColorForTheme(theme);
 }

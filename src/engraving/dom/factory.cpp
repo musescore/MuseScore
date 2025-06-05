@@ -51,6 +51,7 @@
 #include "gradualtempochange.h"
 #include "guitarbend.h"
 #include "hairpin.h"
+#include "hammeronpulloff.h"
 #include "harmonicmark.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
@@ -59,6 +60,7 @@
 #include "instrumentname.h"
 #include "jump.h"
 #include "keysig.h"
+#include "laissezvib.h"
 #include "layoutbreak.h"
 #include "letring.h"
 #include "lyrics.h"
@@ -74,6 +76,8 @@
 #include "ottava.h"
 #include "page.h"
 #include "palmmute.h"
+#include "parenthesis.h"
+#include "partialtie.h"
 #include "pedal.h"
 #include "pickscrape.h"
 #include "playtechannotation.h"
@@ -96,6 +100,7 @@
 #include "stringtunings.h"
 #include "system.h"
 #include "systemdivider.h"
+#include "systemlock.h"
 #include "systemtext.h"
 #include "soundflag.h"
 #include "tempotext.h"
@@ -149,7 +154,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::HARMONIC_MARK:     return new HarmonicMark(parent);
     case ElementType::PICK_SCRAPE:       return new PickScrape(parent);
     case ElementType::PEDAL:             return new Pedal(parent);
-    case ElementType::HAIRPIN:           return new Hairpin(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::HAIRPIN:           return new Hairpin(parent);
     case ElementType::CLEF:              return new Clef(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::KEYSIG:            return new KeySig(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TIMESIG:           return new TimeSig(parent->isSegment() ? toSegment(parent) : dummy->segment());
@@ -216,6 +221,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FIGURED_BASS:      return new FiguredBass(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::STEM:              return new Stem(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::SLUR:              return new Slur(parent);
+    case ElementType::HAMMER_ON_PULL_OFF: return new HammerOnPullOff(parent);
     case ElementType::TIE:               return new Tie(parent);
     case ElementType::TUPLET:            return new Tuplet(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
     case ElementType::FINGERING:         return new Fingering(parent->isNote() ? toNote(parent) : dummy->note());
@@ -233,6 +239,10 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FRET_CIRCLE:       return new FretCircle(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::STRING_TUNINGS:      return new StringTunings(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TIME_TICK_ANCHOR:  return new TimeTickAnchor(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::LAISSEZ_VIB:       return new LaissezVib(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::PARTIAL_TIE:       return new PartialTie(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::PARTIAL_LYRICSLINE: return new PartialLyricsLine(parent);
+    case ElementType::PARENTHESIS:       return new Parenthesis(parent->isSegment() ? toSegment(parent) : dummy->segment());
 
     case ElementType::LYRICSLINE:
     case ElementType::TEXTLINE_BASE:
@@ -245,10 +255,11 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::GUITAR_BEND_TEXT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
+    case ElementType::LAISSEZ_VIB_SEGMENT:
+    case ElementType::PARTIAL_TIE_SEGMENT:
     case ElementType::STEM_SLASH:
     case ElementType::PAGE:
     case ElementType::BEAM:
-    case ElementType::BEAM_SEGMENT:
     case ElementType::HOOK:
     case ElementType::HAIRPIN_SEGMENT:
     case ElementType::OTTAVA_SEGMENT:
@@ -264,6 +275,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::VOLTA_SEGMENT:
     case ElementType::PEDAL_SEGMENT:
     case ElementType::LYRICSLINE_SEGMENT:
+    case ElementType::PARTIAL_LYRICSLINE_SEGMENT:
     case ElementType::LEDGER_LINE:
     case ElementType::STAFF_LINES:
     case ElementType::SELECTION:
@@ -271,22 +283,17 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::SHADOW_NOTE:
     case ElementType::SEGMENT:
     case ElementType::SYSTEM:
-    case ElementType::COMPOUND:
-    case ElementType::ELEMENT:
-    case ElementType::ELEMENT_LIST:
-    case ElementType::STAFF_LIST:
-    case ElementType::MEASURE_LIST:
     case ElementType::MAXTYPE:
     case ElementType::INVALID:
     case ElementType::PART:
     case ElementType::STAFF:
     case ElementType::SCORE:
     case ElementType::BRACKET_ITEM:
-    case ElementType::OSSIA:
     case ElementType::GRACE_NOTES_GROUP:
     case ElementType::ROOT_ITEM:
     case ElementType::FIGURED_BASS_ITEM:
     case ElementType::DUMMY:
+    case ElementType::SYSTEM_LOCK_INDICATOR:
         break;
     }
 
@@ -403,8 +410,8 @@ MAKE_ITEM_IMPL(Clef, Segment)
 CREATE_ITEM_IMPL(DeadSlapped, ElementType::DEAD_SLAPPED, Rest, isAccessibleEnabled)
 COPY_ITEM_IMPL(DeadSlapped)
 
-CREATE_ITEM_IMPL(Fermata, ElementType::FERMATA, EngravingItem, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Fermata, EngravingItem)
+CREATE_ITEM_IMPL(Fermata, ElementType::FERMATA, Segment, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Fermata, Segment)
 
 CREATE_ITEM_IMPL(FiguredBass, ElementType::FIGURED_BASS, Segment, isAccessibleEnabled)
 MAKE_ITEM_IMPL(FiguredBass, Segment)
@@ -420,6 +427,9 @@ MAKE_ITEM_IMPL(HarpPedalDiagram, Segment);
 CREATE_ITEM_IMPL(KeySig, ElementType::KEYSIG, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(KeySig)
 MAKE_ITEM_IMPL(KeySig, Segment)
+
+CREATE_ITEM_IMPL(LaissezVib, ElementType::LAISSEZ_VIB, Note, isAccessibleEnabled)
+COPY_ITEM_IMPL(LaissezVib);
 
 CREATE_ITEM_IMPL(LayoutBreak, ElementType::LAYOUT_BREAK, MeasureBase, isAccessibleEnabled)
 COPY_ITEM_IMPL(LayoutBreak)
@@ -463,7 +473,13 @@ Page* Factory::createPage(RootItem* parent, bool isAccessibleEnabled)
     return page;
 }
 
-Rest* Factory::createRest(Segment* parent, bool isAccessibleEnabled)
+CREATE_ITEM_IMPL(PartialTie, ElementType::PARTIAL_TIE, Note, isAccessibleEnabled)
+COPY_ITEM_IMPL(PartialTie)
+
+CREATE_ITEM_IMPL(PartialLyricsLine, ElementType::PARTIAL_LYRICSLINE, EngravingItem, isAccessibleEnabled)
+COPY_ITEM_IMPL(PartialLyricsLine)
+
+Rest* Factory::createRest(Segment * parent, bool isAccessibleEnabled)
 {
     Rest* r = new Rest(parent);
     r->setAccessibleEnabled(isAccessibleEnabled);
@@ -618,7 +634,13 @@ Text* Factory::createText(EngravingItem * parent, TextStyleType tid, bool isAcce
 COPY_ITEM_IMPL(Text)
 
 CREATE_ITEM_IMPL(Tie, ElementType::TIE, EngravingItem, isAccessibleEnabled)
-COPY_ITEM_IMPL(Tie)
+Tie* Factory::copyTie(const Tie& src)
+{
+    Tie* copy = src.isLaissezVib() ? new LaissezVib(*toLaissezVib(&src)) : new Tie(src);
+    copy->setAccessibleEnabled(src.accessibleEnabled());
+
+    return copy;
+}
 
 CREATE_ITEM_IMPL(TimeSig, ElementType::TIMESIG, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(TimeSig)
@@ -638,8 +660,11 @@ MAKE_ITEM_IMPL(TremoloBar, EngravingItem)
 CREATE_ITEM_IMPL(Tuplet, ElementType::TUPLET, Measure, isAccessibleEnabled)
 COPY_ITEM_IMPL(Tuplet)
 
-CREATE_ITEM_IMPL(Hairpin, ElementType::HAIRPIN, Segment, isAccessibleEnabled)
-MAKE_ITEM_IMPL(Hairpin, Segment)
+CREATE_ITEM_IMPL(Hairpin, ElementType::HAIRPIN, EngravingItem, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Hairpin, EngravingItem)
+
+CREATE_ITEM_IMPL(HammerOnPullOff, ElementType::HAMMER_ON_PULL_OFF, EngravingItem, isAccessibleEnabled)
+MAKE_ITEM_IMPL(HammerOnPullOff, EngravingItem)
 
 CREATE_ITEM_IMPL(Glissando, ElementType::GLISSANDO, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Glissando, EngravingItem)
@@ -751,3 +776,15 @@ PlayTechAnnotation* Factory::createPlayTechAnnotation(Segment * parent, PlayingT
 CREATE_ITEM_IMPL(Capo, ElementType::CAPO, Segment, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(TimeTickAnchor, ElementType::TIME_TICK_ANCHOR, Segment, isAccessibleEnabled)
+
+SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const SystemLock * lock, bool isAccessibleEnabled)
+{
+    SystemLockIndicator* sli = new SystemLockIndicator(parent, lock);
+    sli->setAccessibleEnabled(isAccessibleEnabled);
+    return sli;
+}
+
+COPY_ITEM_IMPL(SystemLockIndicator)
+
+CREATE_ITEM_IMPL(Parenthesis, ElementType::PARENTHESIS, Segment, isAccessibleEnabled);
+COPY_ITEM_IMPL(Parenthesis)

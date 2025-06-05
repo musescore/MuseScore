@@ -74,11 +74,12 @@ void InstrumentsActionsController::changeInstrument()
     key.partId = instrumentChange->part()->id();
     key.tick = instrumentChange->tick();
 
-    RetVal<Instrument> instrument = selectInstrumentsScenario()->selectInstrument(key);
-    if (!instrument.ret) {
-        LOGE() << instrument.ret.toString();
+    RetVal<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(key);
+    if (!templ.ret) {
+        LOGE() << templ.ret.toString();
         return;
     }
 
-    master->parts()->replaceInstrument(key, instrument.val);
+    Instrument instrument = Instrument::fromTemplate(&templ.val);
+    master->parts()->replaceInstrument(key, instrument);
 }

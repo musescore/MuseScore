@@ -52,6 +52,7 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
     m_startWithLongNames = false;
     m_startWithMeasureOne = false;
     m_firstSystemIndentation = false;
+    m_showCourtesy = false;
     m_layoutBreakType = LayoutBreakType(propertyDefault(Pid::LAYOUT_BREAK).toInt());
 
     initElementStyle(&sectionBreakStyle);
@@ -60,19 +61,18 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
     resetProperty(Pid::START_WITH_LONG_NAMES);
     resetProperty(Pid::START_WITH_MEASURE_ONE);
     resetProperty(Pid::FIRST_SYSTEM_INDENTATION);
-    m_lw = spatium() * 0.3;
+    resetProperty(Pid::SHOW_COURTESY);
 }
 
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     : EngravingItem(lb)
 {
     m_layoutBreakType        = lb.m_layoutBreakType;
-    m_lw                      = lb.m_lw;
     m_pause                  = lb.m_pause;
     m_startWithLongNames     = lb.m_startWithLongNames;
     m_startWithMeasureOne    = lb.m_startWithMeasureOne;
     m_firstSystemIndentation = lb.m_firstSystemIndentation;
-    init();
+    m_showCourtesy           = lb.m_showCourtesy;
 }
 
 void LayoutBreak::setParent(MeasureBase* parent)
@@ -80,75 +80,20 @@ void LayoutBreak::setParent(MeasureBase* parent)
     EngravingItem::setParent(parent);
 }
 
-//---------------------------------------------------------
-//   layout0
-//---------------------------------------------------------
-
-void LayoutBreak::init()
+char16_t LayoutBreak::iconCode() const
 {
-    double _spatium = spatium();
-    double w = _spatium * 2.5;
-    double h = w;
-
-    m_iconBorderRect = RectF(0.0, 0.0, w, h);
-    m_iconPath = PainterPath();
-
-    switch (layoutBreakType()) {
+    switch (m_layoutBreakType) {
     case LayoutBreakType::LINE:
-        m_iconPath.moveTo(w * .8, h * .3);
-        m_iconPath.lineTo(w * .8, h * .6);
-        m_iconPath.lineTo(w * .3, h * .6);
-
-        m_iconPath.moveTo(w * .4, h * .5);
-        m_iconPath.lineTo(w * .25, h * .6);
-        m_iconPath.lineTo(w * .4, h * .7);
-        m_iconPath.lineTo(w * .4, h * .5);
-        break;
-
+        return 0xF483;
     case LayoutBreakType::PAGE:
-        m_iconPath.moveTo(w * .25, h * .2);
-        m_iconPath.lineTo(w * .60, h * .2);
-        m_iconPath.lineTo(w * .75, h * .35);
-        m_iconPath.lineTo(w * .75, h * .8);
-        m_iconPath.lineTo(w * .25, h * .8);
-        m_iconPath.lineTo(w * .25, h * .2);
-
-        m_iconPath.moveTo(w * .55, h * .21); // 0.01 to avoid overlap
-        m_iconPath.lineTo(w * .55, h * .40);
-        m_iconPath.lineTo(w * .74, h * .40);
-        break;
-
+        return 0xF484;
     case LayoutBreakType::SECTION:
-        m_iconPath.moveTo(w * .25, h * .2);
-        m_iconPath.lineTo(w * .75, h * .2);
-        m_iconPath.lineTo(w * .75, h * .8);
-        m_iconPath.lineTo(w * .25, h * .8);
-
-        m_iconPath.moveTo(w * .55, h * .21); // 0.01 to avoid overlap
-        m_iconPath.lineTo(w * .55, h * .79);
-        break;
-
+        return 0xF485;
     case LayoutBreakType::NOBREAK:
-        m_iconPath.moveTo(w * .1,  h * .5);
-        m_iconPath.lineTo(w * .9,  h * .5);
-
-        m_iconPath.moveTo(w * .7, h * .3);
-        m_iconPath.lineTo(w * .5, h * .5);
-        m_iconPath.lineTo(w * .7, h * .7);
-        m_iconPath.lineTo(w * .7, h * .3);
-
-        m_iconPath.moveTo(w * .3,  h * .3);
-        m_iconPath.lineTo(w * .5,  h * .5);
-        m_iconPath.lineTo(w * .3,  h * .7);
-        m_iconPath.lineTo(w * .3,  h * .3);
-        break;
-
+        return 0xF486;
     default:
-        LOGD("unknown layout break symbol");
-        break;
+        return 0x000;
     }
-
-    setbbox(m_iconBorderRect.adjusted(-m_lw, -m_lw, m_lw, m_lw));
 }
 
 //---------------------------------------------------------
@@ -158,17 +103,6 @@ void LayoutBreak::init()
 void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
 {
     m_layoutBreakType = val;
-    init();
-}
-
-//---------------------------------------------------------
-//   spatiumChanged
-//---------------------------------------------------------
-
-void LayoutBreak::spatiumChanged(double, double)
-{
-    m_lw = spatium() * 0.3;
-    init();
 }
 
 //---------------------------------------------------------
@@ -209,6 +143,8 @@ PropertyValue LayoutBreak::getProperty(Pid propertyId) const
         return m_startWithMeasureOne;
     case Pid::FIRST_SYSTEM_INDENTATION:
         return m_firstSystemIndentation;
+    case Pid::SHOW_COURTESY:
+        return m_showCourtesy;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -236,6 +172,9 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::FIRST_SYSTEM_INDENTATION:
         setFirstSystemIndentation(v.toBool());
+        break;
+    case Pid::SHOW_COURTESY:
+        setShowCourtesy(v.toBool());
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
@@ -274,6 +213,8 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
         return true;
     case Pid::FIRST_SYSTEM_INDENTATION:
         return true;
+    case Pid::SHOW_COURTESY:
+        return false;
     default:
         return EngravingItem::propertyDefault(id);
     }
@@ -286,6 +227,15 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
 muse::TranslatableString LayoutBreak::subtypeUserName() const
 {
     return TConv::userName(layoutBreakType());
+}
+
+//---------------------------------------------------------
+//   accessibleInfo
+//---------------------------------------------------------
+
+String LayoutBreak::accessibleInfo() const
+{
+    return translatedSubtypeUserName();
 }
 
 void LayoutBreak::added()
@@ -304,5 +254,14 @@ void LayoutBreak::removed()
     }
 
     score()->setUpTempoMapLater();
+}
+
+Font LayoutBreak::font() const
+{
+    Font font(configuration()->iconsFontFamily(), Font::Type::Icon);
+    static constexpr double STANDARD_POINT_SIZE = 12.0;
+    double scaling = spatium() / SPATIUM20;
+    font.setPointSizeF(STANDARD_POINT_SIZE * scaling);
+    return font;
 }
 }

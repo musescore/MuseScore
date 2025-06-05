@@ -45,7 +45,6 @@ public:
     virtual bool edit(EditData&) override;
     virtual void startEditDrag(EditData&) override;
     virtual void editDrag(EditData&) override;
-    virtual void endEdit(EditData&) override;
 
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
@@ -176,12 +175,56 @@ class FBox : public VBox
     DECLARE_CLASSOF(ElementType::FBOX)
 
 public:
-    FBox(System* parent)
-        : VBox(ElementType::FBOX, parent) {}
-
+    FBox(System* parent);
     FBox* clone() const override { return new FBox(*this); }
 
+    void init();
+
     void add(EngravingItem*) override;
+
+    double textScale() const { return m_textScale; }
+    void setTextScale(double scale) { m_textScale = scale; }
+
+    double diagramScale() const { return m_diagramScale; }
+    void setDiagramScale(double scale) { m_diagramScale = scale; }
+
+    Spatium columnGap() const { return m_columnGap; }
+    void setColumnGap(Spatium gap) { m_columnGap = gap; }
+
+    Spatium rowGap() const { return m_rowGap; }
+    void setRowGap(Spatium gap) { m_rowGap = gap; }
+
+    int chordsPerRow() const { return m_chordsPerRow; }
+    void setChordsPerRow(int chords) { m_chordsPerRow = chords; }
+
+    AlignH contentHorizontallAlignment() const { return m_contentAlignmentH; }
+    void setContentHorizontallAlignment(AlignH alignment) { m_contentAlignmentH = alignment; }
+
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& val) override;
+    PropertyValue propertyDefault(Pid propertyId) const override;
+
+    std::vector<PointF> gripsPositions(const EditData&) const override;
+
+    void undoReorderElements(const std::vector<EID>& newOrderElementsIds);
+
+    struct LayoutData : public VBox::LayoutData {
+        double totalTableHeight = 0.0;
+        double totalTableWidth = 0.0;
+    };
+
+    DECLARE_LAYOUTDATA_METHODS(FBox)
+
+private:
+    void resolveContentRect();
+
+    double m_textScale = 0.0;
+    double m_diagramScale = 0.0;
+    Spatium m_columnGap;
+    Spatium m_rowGap;
+    int m_chordsPerRow = 0;
+
+    AlignH m_contentAlignmentH = AlignH::HCENTER;
 };
 
 //---------------------------------------------------------

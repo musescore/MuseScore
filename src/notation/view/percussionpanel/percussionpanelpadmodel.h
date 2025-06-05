@@ -24,53 +24,78 @@
 
 #include <QObject>
 
+#include "global/utils.h"
+
 #include "async/asyncable.h"
 #include "async/notification.h"
 
+#include "engraving/dom/engravingitem.h"
+
+namespace mu::notation {
 class PercussionPanelPadModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString instrumentName READ instrumentName NOTIFY instrumentNameChanged)
+    Q_PROPERTY(QString padName READ padName NOTIFY padNameChanged)
 
     Q_PROPERTY(QString keyboardShortcut READ keyboardShortcut NOTIFY keyboardShortcutChanged)
     Q_PROPERTY(QString midiNote READ midiNote NOTIFY midiNoteChanged)
 
-    Q_PROPERTY(bool isEmptySlot READ isEmptySlot NOTIFY isEmptySlotChanged)
+    Q_PROPERTY(QVariant notationPreviewItem READ notationPreviewItemVariant NOTIFY notationPreviewItemChanged)
+
+    Q_PROPERTY(QList<QVariantMap> contextMenuItems READ contextMenuItems CONSTANT)
 
 public:
     explicit PercussionPanelPadModel(QObject* parent = nullptr);
 
-    QString instrumentName() const { return m_instrumentName; }
-    void setInstrumentName(const QString& instrumentName);
+    QString padName() const { return m_padName; }
+    void setPadName(const QString& padName);
 
     QString keyboardShortcut() const { return m_keyboardShortcut; }
     void setKeyboardShortcut(const QString& keyboardShortcut);
 
-    QString midiNote() const { return m_midiNote; }
-    void setMidiNote(const QString& midiNote);
+    int pitch() const { return m_pitch; }
+    void setPitch(int pitch);
 
-    bool isEmptySlot() const { return m_isEmptySlot; }
-    void setIsEmptySlot(bool isEmptySlot);
+    QString midiNote() const { return QString::fromStdString(muse::pitchToString(m_pitch)); }
 
-    Q_INVOKABLE void triggerPad();
-    muse::async::Notification padTriggered() const { return m_triggeredNotification; }
+    void setNotationPreviewItem(mu::engraving::ElementPtr item);
+    mu::engraving::ElementPtr notationPreviewItem() const { return m_notationPreviewItem; }
+
+    const QVariant notationPreviewItemVariant() const;
+
+    QList<QVariantMap> contextMenuItems() const;
+    Q_INVOKABLE void handleMenuItem(const QString& itemId);
+
+    Q_INVOKABLE void triggerPad(const Qt::KeyboardModifiers& modifiers = Qt::KeyboardModifier::NoModifier);
+
+    enum class PadAction {
+        TRIGGER_STANDARD,
+        TRIGGER_ADD,
+        TRIGGER_INSERT,
+        DUPLICATE,
+        DELETE,
+        DEFINE_SHORTCUT,
+    };
+
+    muse::async::Channel<PadAction> padActionTriggered() const { return m_padActionTriggered; }
 
 signals:
-    void instrumentNameChanged();
+    void padNameChanged();
 
     void keyboardShortcutChanged();
     void midiNoteChanged();
 
-    void isEmptySlotChanged();
+    void notationPreviewItemChanged();
 
 private:
-    QString m_instrumentName;
+    QString m_padName;
 
     QString m_keyboardShortcut;
-    QString m_midiNote;
+    int m_pitch = -1;
 
-    bool m_isEmptySlot = true;
+    mu::engraving::ElementPtr m_notationPreviewItem;
 
-    muse::async::Notification m_triggeredNotification;
+    muse::async::Channel<PadAction> m_padActionTriggered;
 };
+}

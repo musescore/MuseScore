@@ -31,7 +31,10 @@ public:
 
     io::paths_t workspacePaths() const override;
 
+    io::paths_t builtinWorkspacesFilePaths() const override;
     io::path_t userWorkspacesPath() const override;
+
+    std::string defaultWorkspaceName() const override;
 
     std::string currentWorkspaceName() const override;
     void setCurrentWorkspaceName(const std::string& workspaceName) override;

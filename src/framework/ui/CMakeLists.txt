@@ -57,7 +57,10 @@ else()
     )
 endif()
 
+qt_wrap_ui(GENERATED_UI_HEADERS ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.ui)
+
 set(MODULE_SRC
+    ${GENERATED_UI_HEADERS}
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiengine.h
@@ -139,6 +142,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetstatestore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetstatestore.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetutils.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/qmldataformatter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/qmldataformatter.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/errordetailsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/errordetailsmodel.h
@@ -151,9 +156,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.h
     )
 
-set(MODULE_UI
-    ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.ui
-    )
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Quick Qt::Widgets)
+
+    if (OS_IS_LIN)
+        list(APPEND MODULE_LINK Qt::DBus)
+    endif()
+endif()
 
 if (OS_IS_MAC)
     find_library(AppKit NAMES AppKit)

@@ -60,7 +60,7 @@
         <type>whole</type>
         <notations>
           <ornaments>
-            <tremolo type="single">3</tremolo>
+            <tremolo type="single" color="#FE0133">3</tremolo>
             </ornaments>
           </notations>
         </note>

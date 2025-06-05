@@ -122,7 +122,7 @@ private:
 class TextCursor
 {
 public:
-    enum class MoveOperation {
+    enum class MoveOperation : unsigned char {
         Start,
         Up,
         StartOfLine,
@@ -135,7 +135,7 @@ public:
         Right
     };
 
-    enum class MoveMode {
+    enum class MoveMode : unsigned char {
         MoveAnchor,
         KeepAnchor
     };
@@ -305,11 +305,10 @@ public:
 
     Text& operator=(const Text&) = delete;
 
-    virtual void drawEditMode(muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
-    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
-
     Align align() const { return m_align; }
     void setAlign(Align a) { m_align = a; }
+
+    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
 
     static String plainToXmlText(const String& s) { return s.toXmlEscaped(); }
     void setPlainText(const String& t) { setXmlText(plainToXmlText(t)); }
@@ -337,17 +336,25 @@ public:
     void setFamily(const String& val);
     void setSize(const double& val);
 
+    bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }
+    void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
+
+    bool hasParentSegment() const { return explicitParent() && parent()->isSegment(); }
+    virtual bool needStartEditingAfterSelecting() const override { return hasParentSegment(); }
+    virtual bool allowTimeAnchor() const override { return hasParentSegment(); }
     virtual void startEdit(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;
+    virtual bool supportsNonTextualEdit() const;
     virtual bool edit(EditData&) override;
     virtual void editCut(EditData&) override;
     virtual void editCopy(EditData&) override;
     virtual void endEdit(EditData&) override;
+    virtual void editDrag(EditData&) override;
+    virtual void endDrag(EditData&) override;
     void movePosition(EditData&, TextCursor::MoveOperation);
 
-    virtual void startEditNonTextual(EditData&);
-    virtual bool editNonTextual(EditData&);
-    virtual void endEditNonTextual(EditData&);
+    virtual void undoMoveSegment(Segment* newSeg, Fraction tickDiff);
+    void checkMeasureBoundariesAndMoveIfNeed();
 
     bool deleteSelectedText(EditData&);
 
@@ -361,7 +368,6 @@ public:
     RectF pageRectangle() const;
 
     const Shape& highResShape() const { return ldata()->highResShape.value(); }
-    void computeHighResShape(const muse::draw::FontMetrics& fontMetrics);
 
     void dragTo(EditData&);
 
@@ -420,6 +426,9 @@ public:
 
     static const String UNDEFINED_FONT_FAMILY;
     static const double UNDEFINED_FONT_SIZE;
+
+    static bool isSorted(size_t r1, size_t c1, size_t r2, size_t c2);
+    static void sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2);
 
     bool bold() const { return fontStyle() & FontStyle::Bold; }
     bool italic() const { return fontStyle() & FontStyle::Italic; }
@@ -495,6 +504,20 @@ protected:
     TextBase(const ElementType& type, EngravingItem* parent, ElementFlags);
     TextBase(const TextBase&);
 
+    virtual void startEditTextual(EditData&);
+    virtual void startEditNonTextual(EditData&);
+    virtual bool editTextual(EditData&);
+    virtual bool editNonTextual(EditData&);
+    virtual void endEditNonTextual(EditData&);
+    virtual void endEditTextual(EditData&);
+    virtual bool isNonTextualEditAllowed(EditData&) const;
+    virtual bool isTextualEditAllowed(EditData&) const;
+    bool nudge(const EditData& ed);
+
+    virtual bool moveSegment(const EditData&);
+    void moveSnappedItems(Segment* newSeg, Fraction tickDiff) const;
+    void shiftInitOffset(EditData& ed, const PointF& offsetShift);
+
     void insertSym(EditData& ed, SymId id);
     void prepareFormat(const String& token, TextCursor& cursor);
     bool prepareFormat(const String& token, CharFormat& format);
@@ -504,8 +527,6 @@ protected:
     bool m_layoutToParentWidth = false;
 
 private:
-
-    void drawSelection(muse::draw::Painter*, const RectF&) const;
     void insert(TextCursor*, char32_t code, LayoutData* ldata) const;
     String genText(const LayoutData* ldata) const;
 
@@ -515,6 +536,8 @@ private:
 
     static String getHtmlStartTag(double, double&, const String&, String&, FontStyle, VerticalAlignment);
     static String getHtmlEndTag(FontStyle, VerticalAlignment);
+
+    static void swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2);
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
@@ -550,6 +573,7 @@ private:
     VoiceAssignment m_voiceAssignment = VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
     DirectionV m_direction = DirectionV::AUTO;
     AutoOnOff m_centerBetweenStaves = AutoOnOff::AUTO;
+    bool m_anchorToEndOfPrevious = false;
 };
 
 inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageHeight>11.6929</pageHeight>
@@ -51,7 +52,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test Inferred Fingerings</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -59,7 +61,8 @@
         <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -125,42 +128,53 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>E_E</eid>
         <Text>
+          <eid>F_F</eid>
           <style>title</style>
           <offset x="0" y="-0.07525"/>
           <text><font size="22"/>Test Inferred Fingerings</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>subtitle</style>
           <offset x="0" y="9.92425"/>
           <text><font size="16"/>MuseScore Testcase</text>
           </Text>
         <Text>
+          <eid>H_H</eid>
           <style>composer</style>
           <text>Henry Ives</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>I_I</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>J_J</eid>
             </Clef>
           <TimeSig>
+            <eid>K_K</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Beam>
+            <eid>L_L</eid>
             <StemDirection>up</StemDirection>
             <l1>-10</l1>
             <l2>-10</l2>
             </Beam>
           <Chord>
+            <eid>M_M</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>N_N</eid>
               <Fingering>
+                <eid>O_O</eid>
                 <text>–1</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -168,10 +182,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>P_P</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Q_Q</eid>
               <Fingering>
+                <eid>R_R</eid>
                 <text>1</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -179,10 +196,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>T_T</eid>
               <Fingering>
+                <eid>U_U</eid>
                 <text>2</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -190,9 +210,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>V_V</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>W_W</eid>
               <Fingering>
+                <eid>X_X</eid>
                 <text>3</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -200,15 +223,19 @@
               </Note>
             </Chord>
           <Beam>
+            <eid>Y_Y</eid>
             <StemDirection>up</StemDirection>
             <l1>-10</l1>
             <l2>-10</l2>
             </Beam>
           <Chord>
+            <eid>Z_Z</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>a_a</eid>
               <Fingering>
+                <eid>b_b</eid>
                 <text>4</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -216,10 +243,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>c_c</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>d_d</eid>
               <Fingering>
+                <eid>e_e</eid>
                 <text>5</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -227,10 +257,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>f_f</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>g_g</eid>
               <Fingering>
+                <eid>h_h</eid>
                 <text>4</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -238,9 +271,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>i_i</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>j_j</eid>
               <Fingering>
+                <eid>k_k</eid>
                 <text>3</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -253,11 +289,14 @@
             <fractions>3/8</fractions>
             </location>
           <Chord>
+            <eid>l_l</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>m_m</eid>
               <Fingering>
+                <eid>n_n</eid>
                 <placement>above</placement>
                 <text>1</text>
                 </Fingering>
@@ -266,22 +305,28 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>o_o</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>p_p</eid>
         <voice>
           <Beam>
+            <eid>q_q</eid>
             <StemDirection>down</StemDirection>
             <l1>34</l1>
             <l2>34</l2>
             </Beam>
           <Chord>
+            <eid>r_r</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>s_s</eid>
               <Fingering>
+                <eid>t_t</eid>
                 <text>2</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -289,10 +334,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>u_u</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>v_v</eid>
               <Fingering>
+                <eid>w_w</eid>
                 <text>1</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -300,10 +348,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>x_x</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>y_y</eid>
               <Fingering>
+                <eid>z_z</eid>
                 <text>0</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -311,9 +362,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>0_0</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>1_1</eid>
               <Fingering>
+                <eid>2_2</eid>
                 <text>1</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -321,15 +375,19 @@
               </Note>
             </Chord>
           <Beam>
+            <eid>3_3</eid>
             <StemDirection>down</StemDirection>
             <l1>42</l1>
             <l2>42</l2>
             </Beam>
           <Chord>
+            <eid>4_4</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>5_5</eid>
               <Fingering>
+                <eid>6_6</eid>
                 <text>2</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -337,10 +395,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>7_7</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>8_8</eid>
               <Fingering>
+                <eid>9_9</eid>
                 <text>3</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -348,17 +409,22 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>+_+</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>/_/</eid>
               <Fingering>
+                <eid>AB_AB</eid>
                 <text>2</text>
                 </Fingering>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>BB_BB</eid>
               <Fingering>
+                <eid>CB_CB</eid>
                 <text>4</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -366,9 +432,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>DB_DB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>EB_EB</eid>
               <Fingering>
+                <eid>FB_FB</eid>
                 <text>5</text>
                 </Fingering>
               <pitch>72</pitch>
@@ -377,6 +446,7 @@
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>GB_GB</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -388,21 +458,27 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>HB_HB</eid>
             </Clef>
           <TimeSig>
+            <eid>IB_IB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Beam>
+            <eid>JB_JB</eid>
             <StemDirection>up</StemDirection>
             <l1>-2</l1>
             <l2>-2</l2>
             </Beam>
           <Chord>
+            <eid>KB_KB</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>LB_LB</eid>
               <Fingering>
+                <eid>MB_MB</eid>
                 <text>4</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -410,10 +486,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>NB_NB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>OB_OB</eid>
               <Fingering>
+                <eid>PB_PB</eid>
                 <text>5</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -421,10 +500,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>QB_QB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>RB_RB</eid>
               <Fingering>
+                <eid>SB_SB</eid>
                 <text>0</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -432,9 +514,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>TB_TB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>UB_UB</eid>
               <Fingering>
+                <eid>VB_VB</eid>
                 <text>1</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -442,15 +527,19 @@
               </Note>
             </Chord>
           <Beam>
+            <eid>WB_WB</eid>
             <StemDirection>up</StemDirection>
             <l1>-2</l1>
             <l2>-2</l2>
             </Beam>
           <Chord>
+            <eid>XB_XB</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>YB_YB</eid>
               <Fingering>
+                <eid>ZB_ZB</eid>
                 <text>2</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -458,10 +547,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>aB_aB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>bB_bB</eid>
               <Fingering>
+                <eid>cB_cB</eid>
                 <text>3</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -469,10 +561,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>dB_dB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>eB_eB</eid>
               <Fingering>
+                <eid>fB_fB</eid>
                 <text>4-5</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -480,9 +575,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>gB_gB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>hB_hB</eid>
               <Fingering>
+                <eid>iB_iB</eid>
                 <text>5</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -494,15 +592,19 @@
       <Measure>
         <voice>
           <Beam>
+            <eid>jB_jB</eid>
             <StemDirection>up</StemDirection>
             <l1>-2</l1>
             <l2>-2</l2>
             </Beam>
           <Chord>
+            <eid>kB_kB</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>lB_lB</eid>
               <Fingering>
+                <eid>mB_mB</eid>
                 <text>0</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -510,10 +612,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>nB_nB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>oB_oB</eid>
               <Fingering>
+                <eid>pB_pB</eid>
                 <text>1</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -521,10 +626,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>qB_qB</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>rB_rB</eid>
               <Fingering>
+                <eid>sB_sB</eid>
                 <text>2</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -532,9 +640,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>tB_tB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>uB_uB</eid>
               <Fingering>
+                <eid>vB_vB</eid>
                 <text>3</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -542,15 +653,19 @@
               </Note>
             </Chord>
           <Beam>
+            <eid>wB_wB</eid>
             <StemDirection>up</StemDirection>
             <l1>-2</l1>
             <l2>-2</l2>
             </Beam>
           <Chord>
+            <eid>xB_xB</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>yB_yB</eid>
               <Fingering>
+                <eid>zB_zB</eid>
                 <text>4</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -558,10 +673,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>0B_0B</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>1B_1B</eid>
               <Fingering>
+                <eid>2B_2B</eid>
                 <text>5</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -569,10 +687,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>3B_3B</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>4B_4B</eid>
               <Fingering>
+                <eid>5B_5B</eid>
                 <text>0</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -580,9 +701,12 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>6B_6B</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>7B_7B</eid>
               <Fingering>
+                <eid>8B_8B</eid>
                 <text>1</text>
                 </Fingering>
               <pitch>48</pitch>
@@ -591,6 +715,7 @@
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>9B_9B</eid>
             </BarLine>
           </voice>
         </Measure>

@@ -33,19 +33,27 @@ import "internal"
 ColumnLayout {
     id: root
 
-    property alias contextMenuModel: contextMenuModel
-
     property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: mixerPanelModel.count > 0 ? mixerPanelModel.get(0).channelItem.panel : null // first panel
+    property int contentNavigationPanelOrderStart: 1
+
+    property alias contextMenuModel: contextMenuModel
+    property Component toolbarComponent: MixerPanelToolbar {
+        navigation.section: root.navigationSection
+        navigation.order: root.contentNavigationPanelOrderStart
+    }
 
     signal resizeRequested(var newWidth, var newHeight)
 
     spacing: 0
 
-    onImplicitHeightChanged: {
+    function resizePanelToContentHeight() {
         if (contentColumn.completed) {
-            resizeRequested(width, implicitHeight)
+            root.resizeRequested(width, implicitHeight)
         }
+    }
+
+    onImplicitHeightChanged: {
+        root.resizePanelToContentHeight()
     }
 
     QtObject {
@@ -68,10 +76,22 @@ ColumnLayout {
         }
     }
 
+    function scrollToFocusedItem(focusedIndex) {
+        let targetScrollPosition = (focusedIndex) * (prv.channelItemWidth + 1) // + 1 for separators
+        let maxContentX = flickable.contentWidth - flickable.width
+
+        if (targetScrollPosition + prv.channelItemWidth > flickable.contentX + flickable.width) {
+            flickable.contentX = Math.min(targetScrollPosition + prv.channelItemWidth - flickable.width, maxContentX)
+        } else if (targetScrollPosition < flickable.contentX) {
+            flickable.contentX = Math.max(targetScrollPosition - prv.channelItemWidth, 0)
+        }
+    }
+
     MixerPanelModel {
         id: mixerPanelModel
 
         navigationSection: root.navigationSection
+        navigationOrderStart: root.contentNavigationPanelOrderStart + 1 // +1 for toolbar
 
         Component.onCompleted: {
             mixerPanelModel.load()
@@ -82,8 +102,8 @@ ColumnLayout {
         }
 
         function setupConnections() {
-            for (var i = 0; i < mixerPanelModel.rowCount(); i++) {
-                var item = mixerPanelModel.get(i)
+            for (let i = 0; i < mixerPanelModel.rowCount(); i++) {
+                let item = mixerPanelModel.get(i)
                 item.channelItem.panel.navigationEvent.connect(function(event) {
                     if (event.type === NavigationEvent.AboutActive) {
                         if (Boolean(prv.currentNavigateControlIndex)) {
@@ -92,6 +112,7 @@ ColumnLayout {
                         }
 
                         prv.isPanelActivated = true
+                        scrollToFocusedItem(i)
                     }
                 })
             }

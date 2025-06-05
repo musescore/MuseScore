@@ -55,6 +55,8 @@ std::string toString(const T& t)
 
 bool lessThanCaseInsensitive(const std::string& lhs, const std::string& rhs);
 bool lessThanCaseInsensitive(const String& lhs, const String& rhs);
+
+size_t levenshteinDistance(const std::string& s1, const std::string& s2);
 }
 
 #endif // MUSE_GLOBAL_STRINGUTILS_H

@@ -83,6 +83,7 @@ void BeamSettingsModel::createProperties()
                                          [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
         loadPropertyItem(m_crossStaffMove);
+        loadBeamHeightProperties();
     });
 }
 

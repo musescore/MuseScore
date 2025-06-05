@@ -67,6 +67,7 @@ public:
     void settingsBeginTransaction() override;
     void settingsCommitTransaction() override;
     void settingsRollbackTransaction() override;
+    void settingsReset() override;
     void settingsSetValue(const std::string& key, const Val& value) override;
 
     // Resources (files)

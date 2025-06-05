@@ -60,6 +60,7 @@
 #include "dom/guitarbend.h"
 
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harppedaldiagram.h"
 #include "dom/harmonicmark.h"
 #include "dom/harmony.h"
@@ -83,6 +84,7 @@
 #include "dom/measurerepeat.h"
 
 #include "dom/note.h"
+#include "dom/noteline.h"
 
 #include "dom/ornament.h"
 #include "dom/ottava.h"
@@ -135,6 +137,8 @@
 #include "dom/whammybar.h"
 
 #include "dom/mscoreview.h"
+
+#include "rendering/score/stemlayout.h"
 
 #include "infrastructure/rtti.h"
 
@@ -208,6 +212,10 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter)
 
     case ElementType::HAIRPIN_SEGMENT: draw(item_cast<const HairpinSegment*>(item), painter);
         break;
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT: draw(item_cast<const HammerOnPullOffSegment*>(item), painter);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF_TEXT: draw(item_cast<const HammerOnPullOffText*>(item), painter);
+        break;
     case ElementType::HARP_DIAGRAM: draw(item_cast<const HarpPedalDiagram*>(item), painter);
         break;
     case ElementType::HARMONIC_MARK_SEGMENT: draw(item_cast<const HarmonicMarkSegment*>(item), painter);
@@ -249,6 +257,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::NOTE:                 draw(item_cast<const Note*>(item), painter);
         break;
     case ElementType::NOTEHEAD:             draw(item_cast<const NoteHead*>(item), painter);
+        break;
+    case ElementType::NOTELINE_SEGMENT:     draw(item_cast<const NoteLineSegment*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:             draw(item_cast<const Ornament*>(item), painter);
@@ -482,7 +492,7 @@ void SingleDraw::draw(const Note* item, Painter* painter)
         }
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
-        if (item->tieBack() && !tab->showBackTied()) {
+        if (item->tieBackNonPartial() && !tab->showBackTied()) {
             if (item->chord()->measure()->system() == item->tieBack()->startNote()->chord()->measure()->system() && item->el().empty()) {
                 // fret should be hidden, so return without drawing it
                 return;
@@ -562,6 +572,12 @@ void SingleDraw::draw(const Note* item, Painter* painter)
 void SingleDraw::draw(const NoteHead* item, Painter* painter)
 {
     draw(static_cast<const Symbol*>(item), painter);
+}
+
+void SingleDraw::draw(const NoteLineSegment*, Painter*)
+{
+    // TRACE_DRAW_ITEM;
+    // To be implemented
 }
 
 void SingleDraw::draw(const Ornament* item, Painter* painter)
@@ -1423,19 +1439,19 @@ void SingleDraw::draw(const Stem* item, Painter* painter)
     if (item->chord()->durationType().type() == DurationType::V_HALF
         && staffType->minimStyle() == TablatureMinimStyle::SLASHED) {
         // position slashes onto stem
-        double y = isUp ? -item->length() + STAFFTYPE_TAB_SLASH_2STARTY_UP * sp
-                   : item->length() - STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
+        double y = isUp ? -item->length() + score::StemLayout::STAFFTYPE_TAB_SLASH_2STARTY_UP * sp
+                   : item->length() - score::StemLayout::STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
         // if stems through, try to align slashes within or across lines
         if (staffType->stemThrough()) {
             double halfLineDist = staffType->lineDistance().val() * sp * 0.5;
-            double halfSlashHgt = STAFFTYPE_TAB_SLASH_2TOTHEIGHT * sp * 0.5;
+            double halfSlashHgt = score::StemLayout::STAFFTYPE_TAB_SLASH_2TOTHEIGHT * sp * 0.5;
             y = lrint((y + halfSlashHgt) / halfLineDist) * halfLineDist - halfSlashHgt;
         }
         // draw slashes
-        double hlfWdt= sp * STAFFTYPE_TAB_SLASH_WIDTH * 0.5;
-        double sln   = sp * STAFFTYPE_TAB_SLASH_SLANTY;
-        double thk   = sp * STAFFTYPE_TAB_SLASH_THICK;
-        double displ = sp * STAFFTYPE_TAB_SLASH_DISPL;
+        double hlfWdt= sp * score::StemLayout::STAFFTYPE_TAB_SLASH_WIDTH * 0.5;
+        double sln   = sp * score::StemLayout::STAFFTYPE_TAB_SLASH_SLANTY;
+        double thk   = sp * score::StemLayout::STAFFTYPE_TAB_SLASH_THICK;
+        double displ = sp * score::StemLayout::STAFFTYPE_TAB_SLASH_DISPL;
         PainterPath path;
         for (int i = 0; i < 2; ++i) {
             path.moveTo(hlfWdt, y);                   // top-right corner
@@ -1456,7 +1472,7 @@ void SingleDraw::draw(const Stem* item, Painter* painter)
     int nDots = item->chord()->dots();
     if (nDots > 0 && !staffType->stemThrough()) {
         double x     = item->chord()->dotPosX();
-        double y     = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
+        double y     = ((score::StemLayout::STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
         double step  = item->style().styleS(Sid::dotDotDistance).val() * sp;
         for (int dot = 0; dot < nDots; dot++, x += step) {
             item->drawSymbol(SymId::augmentationDot, painter, PointF(x, y));
@@ -1755,6 +1771,16 @@ void SingleDraw::draw(const HairpinSegment* item, Painter* painter)
     }
 }
 
+void SingleDraw::draw(const HammerOnPullOffSegment* item, muse::draw::Painter* painter)
+{
+    draw(toSlurSegment(item), painter);
+}
+
+void SingleDraw::draw(const HammerOnPullOffText* item, Painter* painter)
+{
+    drawTextBase(item, painter);
+}
+
 void SingleDraw::draw(const HarpPedalDiagram* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
@@ -1770,11 +1796,6 @@ void SingleDraw::draw(const HarmonicMarkSegment* item, Painter* painter)
 void SingleDraw::draw(const Harmony* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-
-    if (item->isDrawEditMode()) {
-        drawTextBase(item, painter);
-        return;
-    }
 
     if (item->textList().empty()) {
         drawTextBase(item, painter);
@@ -1927,7 +1948,7 @@ void SingleDraw::draw(const KeySig* item, Painter* painter)
 
     if (!item->explicitParent() && (item->isAtonal() || item->isCustom()) && ldata->keySymbols.empty()) {
         // empty custom or atonal key signature - draw something for palette
-        painter->setPen(item->configuration()->formattingColor());
+        painter->setPen(item->configuration()->scoreGreyColor());
         item->drawSymbol(SymId::timeSigX, painter, PointF(item->symWidth(SymId::timeSigX) * -0.5, 2.0 * item->spatium()));
     }
 }
@@ -1936,22 +1957,14 @@ void SingleDraw::draw(const LayoutBreak* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    Pen pen;
-    pen.setColor(item->configuration()->fontPrimaryColor());
-    pen.setWidthF(item->lineWidth() / 2);
-    pen.setJoinStyle(PenJoinStyle::MiterJoin);
-    pen.setCapStyle(PenCapStyle::SquareCap);
-    pen.setDashPattern({ 1, 3 });
-
+    Pen pen(item->configuration()->fontPrimaryColor());
     painter->setPen(pen);
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->drawRect(item->iconBorderRect());
 
-    pen.setWidthF(item->lineWidth());
-    pen.setStyle(PenStyle::SolidLine);
+    Font f(item->font());
+    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    painter->setFont(f);
 
-    painter->setPen(pen);
-    painter->drawPath(item->iconPath());
+    painter->drawSymbol(PointF(0.0, 0.0), item->iconCode());
 }
 
 void SingleDraw::draw(const LedgerLine* item, Painter* painter)
@@ -2064,7 +2077,7 @@ void SingleDraw::draw(const ShadowNote* item, Painter* painter)
     PointF ap(item->pagePos());
     painter->translate(ap);
     double lw = item->style().styleMM(Sid::stemWidth) * item->mag();
-    Pen pen(item->configuration()->highlightSelectionColor(item->voice()), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
+    Pen pen(item->color(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     bool up = item->computeUp();
@@ -2203,7 +2216,7 @@ void SingleDraw::draw(const Spacer* item, Painter* painter)
 
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
-    painter->drawPath(item->path());
+    painter->drawPath(item->ldata()->path);
 }
 
 void SingleDraw::draw(const StaffLines* item, Painter* painter)
@@ -2361,23 +2374,23 @@ void SingleDraw::draw(const TieSegment* item, Painter* painter)
         painter->setBrush(Brush(pen.color()));
         pen.setCapStyle(PenCapStyle::RoundCap);
         pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(item->style().styleMM(Sid::tieEndWidth) * mag);
+        pen.setWidthF(item->endWidth() * mag);
         break;
     case SlurStyleType::Dotted:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
         pen.setDashPattern(dotted);
-        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::Dashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
-        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::WideDashed:
         painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
-        pen.setWidthF(item->style().styleMM(Sid::tieDottedWidth) * mag);
+        pen.setWidthF(item->dottedWidth() * mag);
         break;
     case SlurStyleType::Undefined:
         break;

@@ -119,19 +119,13 @@
   <showFrames>1</showFrames>
   <page-layout>
     <pageFormat>A4</pageFormat>
-    <page-margins type="even">
+    <page-margins type="both">
       <left-margin>56.6929</left-margin>
       <right-margin>56.6929</right-margin>
       <top-margin>56.6929</top-margin>
       <bottom-margin>113.386</bottom-margin>
       </page-margins>
-    <page-margins type="odd">
-      <left-margin>56.6929</left-margin>
-      <right-margin>56.6929</right-margin>
-      <top-margin>56.6929</top-margin>
-      <bottom-margin>113.386</bottom-margin>
-      </page-margins>
-    <page-offset>0</page-offset>
+    <page-offset>3</page-offset>
     </page-layout>
   <siglist>
     <sig tick="0">

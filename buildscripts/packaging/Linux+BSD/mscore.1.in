@@ -53,6 +53,7 @@
 .Op Fl \-score\-transpose
 .Op Fl \-template\-mode
 .Op Fl \-test\-mode
+.Op Fl \-transpose
 .Op Fl \-version
 .Op Ar
 .\" should be .Ss semantically but that renders badly
@@ -267,6 +268,9 @@ Transpose the given score and export the data to
 a single JSON file, print it to stdout
 .It Fl \-template\-mode
 Save files in template mode (e.g. without page sizes)
+.It Fl \-transpose
+Transpose the given score (only if the \-o option is also set),
+then exports the given file in accordance with the \-o option
 .El
 .Pp
 MuseScore supports the automatic Qt command line options (see below).
@@ -280,7 +284,7 @@ document honouring the following specification:
 The top-level element must be a JSONArray, which may be empty.
 .It
 Each array element must be a JSONObject with the following keys:
-.Bl -tag -width plugin
+.Bl -tag -width transpose
 .It Li in
 Value is the name of the input file (score to convert), as JSONString.
 .It Li plugin
@@ -301,6 +305,9 @@ and
 .Li out
 .Em must
 be given.
+.It Li transpose
+Value is a JSONString with the transposing options.
+Optional.
 .El
 .It
 The conversion output target may be a filename (with extension,
@@ -437,6 +444,22 @@ Convert a score to PDF from the command line:
 .Pp
 .Dl Nm Fl o No "\(aqMy Score.pdf\(aq" "\(aqMy Score.mscz\(aq"
 .Pp
+Transpose, then convert a score to PDF from the command line:
+.Pp
+.Bd -literal -offset indent
+-o 'My Transposed Score.pdf' --transpose '{"mode": "by_interval", 
+"direction": "up", "transposeInterval": 12, 
+"transposeKeySignatures": true}' 'My Score.mscz'
+.Ed
+.Pp
+Transpose to another score from the command line:
+.Pp
+.Bd -literal -offset indent
+-o 'My Transposed Score.mscz' --transpose '{"mode": "diatonically", 
+"direction": "down", "transposeInterval": 3, 
+"useDoubleSharpsFlats": true}' 'My Score.mscz'
+.Ed
+.Pp
 Run a batch job converting multiple documents:
 .Pp
 .Dl Nm Fl j No job.json
@@ -460,6 +483,28 @@ similar to the following:
       "Reunion.musicxml",
       "Reunion.mid"
     ]
+  },
+  {
+    "in": "Reunion.mscz",
+    "out": "Reunion\-transposed.mscz",
+    "transpose": 
+	{
+	  "mode": "by_interval", 
+	  "direction": "up", 
+	  "transposeInterval": 12, 
+	  "transposeKeySignatures": true
+	}
+  },
+  {
+    "in": "Reunion.mscz",
+    "out": "Reunion\-transposed.pdf",
+    "transpose": 
+	{
+	  "mode": "diatonically", 
+	  "direction": "down", 
+	  "transposeInterval": 2, 
+	  "useDoubleSharpsFlats": true
+	}
   },
   {
     "in": "Piece with excerpts.mscz",
@@ -491,21 +536,12 @@ option.
 .Xr timidity 1 ,
 .Xr qtoptions 7
 .Bl -tag -width Ds
-.It Pa https://musescore.org/handbook
+.It Pa https://handbook.musescore.org
 Online Handbook, full user manual
 .It Pa https://musescore.org/forum
 Support Forum
-.It Pa https://musescore.org/handbook/command\-line\-options\-0
+.It Pa https://handbook.musescore.org/appendix/command-line-usage
 Further documentation of command line options
-.It Pa https://musescore.org/handbook/revert\-factory\-settings\-0
-Reverting to factory settings (troubleshooting)
-.It Pa https://musescore.org/project/issues
-Project Issue Tracker
-.Pp
-Please check first to if the bug you're encountering
-has already been reported.
-If you just need help with something, then please use the
-support forum (see above) instead.
 .It Pa http://doc.qt.io/qt\-5/qguiapplication.html#supported\-command\-line\-options
 Documentation of automatic Qt command line options
 .El
@@ -513,15 +549,13 @@ Documentation of automatic Qt command line options
 MuseScore attempts to implement the following standards:
 .Bl -bullet
 .It
-MusicXML 3.1 (score interchange format)
+MusicXML 4.0 (score interchange format)
 .It
 SF2 (SoundFont 2.01)
 .It
 SF3 (SoundFont with OGG Vorbis-compressed samples)
 .It
-SFZ (Sforzato soundfont)
-.It
-SMuFL (Standard Music Font Layout 1.30)
+SMuFL (Standard Music Font Layout 1.4)
 .El
 .Sh HISTORY
 MuseScore was split off the MusE sequencer in 2002 and has since

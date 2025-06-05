@@ -168,13 +168,6 @@ public:
         SPLIT_VIEW_VERTICAL = 0xEF80,
         KEY_SIGNATURE = 0xEF81,
         LINE_DASHED = 0xEF82,
-        LINE_WIDE_DASHED = 0xF434,
-
-        ZOOM_TOGGLE = 0xF437,
-        FIT_SELECTION = 0xF438,
-        FIT_PROJECT = 0xF439,
-        TRIM_AUDIO_OUTSIDE_SELECTION = 0xF43A,
-        SILENCE_AUDIO_SELECTION = 0xF43B,
 
         LINE_DOTTED = 0xEF83,
         LINE_NORMAL = 0xEF84,
@@ -386,10 +379,20 @@ public:
         INSERT_ONE_MEASURE = 0xF432,
         STAFF_TYPE_CHANGE = 0xF433,
 
+        LINE_WIDE_DASHED = 0xF434,
+
         CLOUD = 0xF435,
+
+        ZOOM_TOGGLE = 0xF437,
+        FIT_SELECTION = 0xF438,
+        FIT_PROJECT = 0xF439,
+        SILENCE_AUDIO_SELECTION = 0xF43A,
+        TRIM_AUDIO_OUTSIDE_SELECTION = 0xF43B,
 
         WAVEFORM = 0xF43C,
         CROSS_STAFF_BEAMING = 0xF43D,
+
+        MAGNET = 0xF43E,
 
         TEMPO_CHANGE = 0xF43F,
 
@@ -428,10 +431,14 @@ public:
         GUITAR_BEND_STYLE_1 = 0xF463,
         GUITAR_BEND_STYLE_FULL = 0xF464,
 
+        WORKSPACE = 0xF46B,
+
         TIE_OUTSIDE = 0xF45D,
         TIE_INSIDE = 0xF45E,
         TIE_CHORD_OUTSIDE = 0xF466,
         TIE_CHORD_INSIDE = 0xF467,
+
+        SINGLE_NOTE = 0xF46C,
 
         TRIANGLE_SYMBOL = 0xF46D,
 
@@ -448,6 +455,41 @@ public:
         PLAYHEAD_FILLED = 0xF47A,
 
         NOTE_ANCHORED_LINE = 0xF47B,
+
+        NOTE_LV = 0xF47C,
+
+        LV_OUTSIDE = 0xF47D,
+        LV_INSIDE = 0xF47E,
+        LV_CHORD_OUTSIDE = 0xF47F,
+        LV_CHORD_INSIDE = 0xF480,
+
+        PERCUSSION = 0xF479,
+
+        SYSTEM_LOCK_START = 0xF481,
+        SYSTEM_LOCK_END = 0xF482,
+
+        LINE_BREAK = 0xF483,
+        PAGE_BREAK = 0xF484,
+        SECTION_BREAK2 = 0xF485,
+        NO_BREAK = 0xF486,
+        SYSTEM_LOCK = 0xF487,
+
+        TIMESIG_STANDARD = 0XF488,
+        TIMESIG_NARROW = 0xF489,
+        TIMESIG_SANSSERIF = 0xF48A,
+
+        ALIGN_LEFT = 0xF48B,
+        ALIGN_HORIZONTAL_CENTER = 0xF48C,
+        ALIGN_RIGHT = 0xF48D,
+
+        ALIGN_TOP = 0xF48E,
+        ALIGN_VERTICAL_CENTER = 0xF48F,
+
+        FRET_FRAME = 0xF491,
+        DURATION_CURSOR = 0xF492,
+
+        LOWER_CASE = 0xF49E,
+        UPPER_CASE = 0xF49F,
 
         NONE = 0xFFFF
     };

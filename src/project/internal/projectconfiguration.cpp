@@ -114,7 +114,13 @@ void ProjectConfiguration::init()
     settings()->setDefaultValue(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG, Val(true));
     settings()->setDefaultValue(HAS_ASKED_AUDIO_GENERATION_SETTINGS, Val(false));
     settings()->setDefaultValue(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY, Val(static_cast<int>(GenerateAudioTimePeriodType::Never)));
+    settings()->valueChanged(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY).onReceive(nullptr, [this](const Val& val) {
+        m_generateAudioTimePeriodTypeChanged.send(val.toInt());
+    });
     settings()->setDefaultValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(10));
+    settings()->valueChanged(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY).onReceive(nullptr, [this](const Val& val) {
+        m_numberOfSavesToGenerateAudioChanged.send(val.toInt());
+    });
     settings()->setDefaultValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(true));
 
     settings()->setDefaultValue(DISABLE_VERSION_CHECKING, Val(false));
@@ -645,6 +651,11 @@ void ProjectConfiguration::setGenerateAudioTimePeriodType(GenerateAudioTimePerio
     settings()->setSharedValue(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY, Val(static_cast<int>(type)));
 }
 
+muse::async::Channel<int> ProjectConfiguration::generateAudioTimePeriodTypeChanged() const
+{
+    return m_generateAudioTimePeriodTypeChanged;
+}
+
 int ProjectConfiguration::numberOfSavesToGenerateAudio() const
 {
     return settings()->value(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY).toInt();
@@ -653,6 +664,11 @@ int ProjectConfiguration::numberOfSavesToGenerateAudio() const
 void ProjectConfiguration::setNumberOfSavesToGenerateAudio(int number)
 {
     settings()->setSharedValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(number));
+}
+
+muse::async::Channel<int> ProjectConfiguration::numberOfSavesToGenerateAudioChanged() const
+{
+    return m_numberOfSavesToGenerateAudioChanged;
 }
 
 muse::io::path_t ProjectConfiguration::temporaryMp3FilePathTemplate() const

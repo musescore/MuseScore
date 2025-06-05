@@ -16,10 +16,18 @@ on:
         description: 'Publish to FTP: on - publish'
         default: 'off'
         required: false
+      deploy_backend:
+        description: 'Deploy backend: on - deploy'
+        default: 'off'
+        required: false
       sentry_project:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         default: ''
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false   
   workflow_call:
     inputs:
       platforms:
@@ -37,11 +45,21 @@ on:
         default: 'off'
         type: string
         required: false
+      deploy_backend:
+        description: 'Deploy backend: on - deploy'
+        default: 'off'
+        type: string
+        required: false
       sentry_project:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         default: ''
         type: string
         required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        type: string
+        required: false  
 
 defaults:
   run:
@@ -57,26 +75,30 @@ jobs:
     with:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
+      deploy: ${{ inputs.deploy_backend }}
+      use_qt69: ${{ inputs.use_qt69 }}
 
-  linux_arm:
-    name: Linux ARM
-    uses: ./.github/workflows/build_linux_arm.yml
+  linux_arm32:
+    name: Linux ARM32
+    if: ${{ contains(inputs.platforms, 'linux_arm32') }}
+    uses: ./.github/workflows/build_linux_arm32.yml
+    secrets: inherit
+    with:
+      build_mode: ${{ inputs.build_mode }}
+      publish: ${{ inputs.publish }}
+      sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
+
+  linux:
+    name: Linux
+    uses: ./.github/workflows/build_linux.yml
     secrets: inherit
     with:
       platforms: ${{ inputs.platforms }}
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
-
-  linux_x64:
-    name: Linux x64
-    if: ${{ contains(inputs.platforms, 'linux_x64') }}
-    uses: ./.github/workflows/build_linux.yml
-    secrets: inherit
-    with:
-      build_mode: ${{ inputs.build_mode }}
-      publish: ${{ inputs.publish }}
-      sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
 
   macos:
     name: macOS
@@ -87,6 +109,7 @@ jobs:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
 
   windows:
     name: Windows
@@ -97,6 +120,7 @@ jobs:
       build_mode: ${{ inputs.build_mode }}
       publish: ${{ inputs.publish }}
       sentry_project: ${{ inputs.sentry_project }}
+      use_qt69: ${{ inputs.use_qt69 }}
 
   # Dummy build for testing purposes.
   dummy:
@@ -107,8 +131,7 @@ jobs:
         # Expose edge cases like different command versions, CRLF line endings, etc.
         # Use same OS versions as used in real build workflows.
         os:
-        - ubuntu-20.04 # linux_x64, backend
-        - ubuntu-22.04 # linux_arm32, linux_arm64
+        - ubuntu-22.04 # linux_x64, backend, linux_arm32, linux_arm64
         - macos-latest
         - windows-2022 # windows_x64, windows_portable
     runs-on: ${{ matrix.os }}

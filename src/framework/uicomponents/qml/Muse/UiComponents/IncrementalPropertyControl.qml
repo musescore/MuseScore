@@ -30,6 +30,7 @@ Item {
     property int iconMode: !iconImage.isEmpty ? IncrementalPropertyControl.Left : IncrementalPropertyControl.Hidden
     property int iconBackgroundSize: 20
     property alias icon: iconImage.iconCode
+    property alias prefixIcon: textInputField.hintIcon
 
     property alias isIndeterminate: textInputField.isIndeterminate
     property alias currentValue: textInputField.currentText
@@ -67,7 +68,7 @@ Item {
         if (Boolean(onIncrement)) {
             newValue = onIncrement()
         } else {
-            var value = root.isIndeterminate ? 0.0 : currentValue
+            var value = root.isIndeterminate ? 0.0 : Number(currentValue)
             if (value + step >= root.maxValue) {
                 newValue = wrap ? root.minValue + (value + step - root.maxValue) : root.maxValue
             } else {
@@ -90,7 +91,7 @@ Item {
         if (Boolean(onDecrement)) {
             newValue = onDecrement()
         } else {
-            var value = root.isIndeterminate ? 0.0 : currentValue
+            var value = root.isIndeterminate ? 0.0 : Number(currentValue)
             if (value - step < root.minValue) {
                 newValue = wrap ? root.maxValue + (value - step + root.minValue) : root.minValue
             } else {
@@ -229,7 +230,7 @@ Item {
             scrolled = 0
         }
 
-        onTextChanged: function(newTextValue) {
+        onTextEdited: function(newTextValue) {
             if (prv.isCustom) {
                 root.valueEdited(newTextValue)
                 return

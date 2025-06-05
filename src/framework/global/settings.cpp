@@ -31,6 +31,8 @@
 #include "multiinstances/resourcelockguard.h"
 #endif
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -90,11 +92,23 @@ void Settings::load()
     m_items = readItems();
 }
 
-void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges)
+void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges, bool notifyOtherInstances)
 {
     m_settings->clear();
 
     m_isTransactionStarted = false;
+
+    std::vector<Settings::Key> locallyAddedKeys;
+    for (auto it = m_localSettings.begin(); it != m_localSettings.end(); ++it) {
+        auto item = m_items.find(it->first);
+        if (item == m_items.end()) {
+            locallyAddedKeys.push_back(it->first);
+        } else {
+            // UI currently has the values from m_localSettings but we've turned off the transaction.
+            item->second.value = it->second.value;
+        }
+    }
+
     m_localSettings.clear();
 
     if (!keepDefaultSettings) {
@@ -107,11 +121,27 @@ void Settings::reset(bool keepDefaultSettings, bool notifyAboutChanges)
     }
 
     for (auto it = m_items.begin(); it != m_items.end(); ++it) {
+        if (it->second.value == it->second.defaultValue) {
+            continue;
+        }
+
         it->second.value = it->second.defaultValue;
 
         Channel<Val>& channel = findChannel(it->first);
         channel.send(it->second.value);
     }
+
+    for (auto it = locallyAddedKeys.cbegin(); it != locallyAddedKeys.cend(); ++it) {
+        Channel<Val>& channel = findChannel(*it);
+        channel.send(Val());
+    }
+
+    UNUSED(notifyOtherInstances);
+#ifdef MUSE_MODULE_MULTIINSTANCES
+    if (notifyOtherInstances && multiInstancesProvider()) {
+        multiInstancesProvider()->settingsReset();
+    }
+#endif
 }
 
 static Val compat_QVariantToVal(const QVariant& var)

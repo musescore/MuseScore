@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_UICONFIGURATIONMOCK_H
-#define MUSE_UI_UICONFIGURATIONMOCK_H
+#pragma once
 
 #include <gmock/gmock.h>
 
@@ -31,9 +30,9 @@ class UiConfigurationMock : public IUiConfiguration
 {
 public:
     MOCK_METHOD(ThemeList, themes, (), (const, override));
-
-    MOCK_METHOD(QStringList, possibleFontFamilies, (), (const, override));
     MOCK_METHOD(QStringList, possibleAccentColors, (), (const, override));
+    MOCK_METHOD(QStringList, possibleFontFamilies, (), (const, override));
+    MOCK_METHOD(void, setNonTextFonts, (const QStringList&), (override));
 
     MOCK_METHOD(bool, isDarkMode, (), (const, override));
     MOCK_METHOD(void, setIsDarkMode, (bool), (override));
@@ -60,6 +59,8 @@ public:
     MOCK_METHOD(std::string, iconsFontFamily, (), (const, override));
     MOCK_METHOD(int, iconsFontSize, (IconSizeType), (const, override));
     MOCK_METHOD(async::Notification, iconsFontChanged, (), (const, override));
+
+    MOCK_METHOD(io::path_t, appIconPath, (), (const, override));
 
     MOCK_METHOD(std::string, musicalFontFamily, (), (const, override));
     MOCK_METHOD(int, musicalFontSize, (), (const, override));
@@ -91,6 +92,10 @@ public:
     MOCK_METHOD(void, setIsVisible, (const QString&, bool), (override));
     MOCK_METHOD(async::Notification, isVisibleChanged, (const QString&), (const, override));
 
+    MOCK_METHOD(QString, uiItemState, (const QString&), (const, override));
+    MOCK_METHOD(void, setUiItemState, (const QString&, const QString&), (override));
+    MOCK_METHOD(async::Notification, uiItemStateChanged, (const QString&), (const, override));
+
     MOCK_METHOD(ToolConfig, toolConfig, (const QString&, const ToolConfig&), (const, override));
     MOCK_METHOD(void, setToolConfig, (const QString&, const ToolConfig&), (override));
     MOCK_METHOD(async::Notification, toolConfigChanged, (const QString&), (const, override));
@@ -100,5 +105,3 @@ public:
     MOCK_METHOD(int, tooltipDelay, (), (const, override));
 };
 }
-
-#endif // MUSE_UI_UICONFIGURATIONMOCK_H

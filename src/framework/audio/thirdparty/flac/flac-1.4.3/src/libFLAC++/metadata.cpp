@@ -35,11 +35,14 @@
 #include "config.h"
 #endif
 
+// MuseScore change: moved these two includes before the others
+// to avoid a "M_LN2 macro redefinition" warning in Visual Studio.
+#include <cstdlib> // for malloc(), free()
+#include <cstring> // for memcpy() etc.
+
 #include "share/alloc.h"
 #include "FLAC++/metadata.h"
 #include "FLAC/assert.h"
-#include <cstdlib> // for malloc(), free()
-#include <cstring> // for memcpy() etc.
 
 #ifdef _MSC_VER
 // warning C4800: 'int' : forcing to bool 'true' or 'false' (performance warning)

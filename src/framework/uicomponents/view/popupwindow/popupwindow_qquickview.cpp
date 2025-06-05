@@ -40,6 +40,8 @@ PopupWindow_QQuickView::~PopupWindow_QQuickView()
 
 void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool isFrameless)
 {
+    QQuickWindow::setDefaultAlphaBuffer(!isDialogMode);
+
     //! NOTE: do not set the window when constructing the view
     //! This causes different bugs on different OS (e.g., no transparency for popups on windows)
     m_view = new QQuickView(engine, nullptr);
@@ -61,6 +63,7 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     // dialog
     if (isDialogMode) {
         m_view->setFlags(Qt::Dialog);
+        m_view->setIcon(QIcon(uiConfiguration()->appIconPath().toString()));
 
         if (isFrameless) {
             m_view->setColor(QColor(Qt::transparent));
@@ -82,10 +85,10 @@ void PopupWindow_QQuickView::init(QQmlEngine* engine, bool isDialogMode, bool is
     // popup
     else {
         Qt::WindowFlags flags(
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
-            Qt::Tool
-#else
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
             Qt::Popup // Popups can't be Qt::Tool on Linux Wayland, or they can't be relatvely positioned.
+#else
+            Qt::Tool
 #endif
             | Qt::FramelessWindowHint            // Without border
             | Qt::NoDropShadowWindowHint         // Without system shadow
@@ -135,6 +138,9 @@ void PopupWindow_QQuickView::forceActiveFocus()
     if (!m_view) {
         return;
     }
+
+    m_view->setFlags(m_view->flags() & (~Qt::WindowDoesNotAcceptFocus));
+    m_view->requestActivate();
 
     QQuickItem* rootObject = m_view->rootObject();
     if (!rootObject) {
@@ -244,9 +250,19 @@ void PopupWindow_QQuickView::setPosition(const QPoint& position) const
     m_view->setPosition(position);
 }
 
+bool PopupWindow_QQuickView::hasActiveFocus() const
+{
+    return m_view && m_view->activeFocusItem() != nullptr;
+}
+
 void PopupWindow_QQuickView::setOnHidden(const std::function<void()>& callback)
 {
     m_onHidden = callback;
+}
+
+void PopupWindow_QQuickView::setTakeFocusOnClick(bool takeFocusOnClick)
+{
+    m_takeFocusOnClick = takeFocusOnClick;
 }
 
 bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
@@ -262,7 +278,7 @@ bool PopupWindow_QQuickView::eventFilter(QObject* watched, QEvent* event)
             m_view->rootObject()->forceActiveFocus();
         }
 
-        if (event->type() == QEvent::MouseButtonPress) {
+        if (m_takeFocusOnClick && event->type() == QEvent::MouseButtonPress) {
             forceActiveFocus();
         }
     }

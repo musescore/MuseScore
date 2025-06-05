@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H
-#define MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H
+#pragma once
 
 #include "async/notification.h"
 #include "async/channel.h"
@@ -30,7 +29,7 @@
 
 namespace mu::engraving {
 class EditData;
-enum class ElementType;
+enum class ElementType : unsigned char;
 }
 
 namespace mu::notation {
@@ -45,11 +44,13 @@ public:
     virtual bool canRedo() const = 0;
     virtual void redo(mu::engraving::EditData*) = 0;
 
-    virtual void undoRedoToIdx(size_t, mu::engraving::EditData*) = 0;
+    virtual void undoRedoToIndex(size_t, mu::engraving::EditData*) = 0;
 
     virtual void prepareChanges(const muse::TranslatableString&) = 0;
     virtual void rollbackChanges() = 0;
     virtual void commitChanges() = 0;
+
+    virtual void mergeCommands(const size_t startIdx) = 0;
 
     virtual bool isStackClean() const = 0;
 
@@ -60,8 +61,8 @@ public:
     virtual const muse::TranslatableString topMostUndoActionName() const = 0;
     virtual const muse::TranslatableString topMostRedoActionName() const = 0;
     virtual size_t undoRedoActionCount() const = 0;
-    virtual size_t undoRedoActionCurrentIdx() const = 0;
-    virtual const muse::TranslatableString undoRedoActionNameAtIdx(size_t) const = 0;
+    virtual size_t currentStateIndex() const = 0;
+    virtual const muse::TranslatableString lastActionNameAtIdx(size_t) const = 0;
 
     virtual muse::async::Notification stackChanged() const = 0;
     virtual muse::async::Channel<ChangesRange> changesChannel() const = 0;
@@ -70,5 +71,3 @@ public:
 
 using INotationUndoStackPtr = std::shared_ptr<INotationUndoStack>;
 }
-
-#endif // MU_SCENE_NOTATION_INOTATIONUNDOSTACK_H

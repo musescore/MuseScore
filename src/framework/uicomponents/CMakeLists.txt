@@ -119,7 +119,14 @@ if (MUSE_MODULE_UI_DISABLE_MODALITY)
     set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_UI_DISABLE_MODALITY)
 endif()
 
+if(QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Widgets Qt::Quick)
+endif()
+
 set(MODULE_USE_UNITY OFF)
+
 setup_module()
 
-
+if (MUSE_MODULE_UI_TESTS)
+    add_subdirectory(tests)
+endif()

@@ -495,8 +495,8 @@ void NotationBraille::setKeys(const QString& sequence)
         NoteName prevNoteName = NoteName::C;
         int prevNoteOctave = -1; // unknown octave
 
-        if (Segment* seg = interaction()->noteInput()->state().segment) {
-            const track_idx_t track = interaction()->noteInput()->state().currentTrack;
+        if (const Segment* seg = interaction()->noteInput()->state().segment()) {
+            const track_idx_t track = interaction()->noteInput()->state().track();
             Chord* prevChord = nullptr;
 
             for (Segment* s = seg->prev1(SegmentType::ChordRest); s; s = s->prev1(SegmentType::ChordRest)) {
@@ -548,7 +548,14 @@ void NotationBraille::setKeys(const QString& sequence)
             Duration duration = Duration(d);
             setInputNoteDuration(duration);
 
-            interaction()->noteInput()->addNote(brailleInput()->noteName(), NoteAddingMode::NextChord);
+            NoteInputParams params;
+            const int note = static_cast<int>(brailleInput()->noteName());
+            bool ok = score()->resolveNoteInputParams(note, /*addFlag*/ false, params);
+            if (!ok) {
+                return;
+            }
+
+            interaction()->noteInput()->addNote(params, NoteAddingMode::NextChord);
 
             if (brailleInput()->addedOctave() != -1) {
                 if (brailleInput()->addedOctave() < brailleInput()->octave()) {
@@ -566,8 +573,8 @@ void NotationBraille::setKeys(const QString& sequence)
             if (brailleInput()->longSlurStart()) {
                 if (brailleInput()->longSlurStartNote() == NULL) {
                     if (currentEngravingItem() != NULL && currentEngravingItem()->isNote()) {
-                        Note* note = toNote(currentEngravingItem());
-                        brailleInput()->setLongSlurStartNote(note);
+                        Note* currentNote = toNote(currentEngravingItem());
+                        brailleInput()->setLongSlurStartNote(currentNote);
                     }
                 }
             }
@@ -603,7 +610,15 @@ void NotationBraille::setKeys(const QString& sequence)
             if (brailleInput()->accidental() != mu::notation::AccidentalType::NONE) {
                 interaction()->noteInput()->setAccidental(brailleInput()->accidental());
             }
-            interaction()->noteInput()->addNote(brailleInput()->noteName(), NoteAddingMode::CurrentChord);
+
+            NoteInputParams params;
+            const int note = static_cast<int>(brailleInput()->noteName());
+            bool ok = score()->resolveNoteInputParams(note, /*addFlag*/ true, params);
+            if (!ok) {
+                return;
+            }
+
+            interaction()->noteInput()->addNote(params, NoteAddingMode::CurrentChord);
 
             if (brailleInput()->addedOctave() != -1) {
                 if (brailleInput()->addedOctave() < brailleInput()->octave()) {
@@ -859,14 +874,18 @@ void NotationBraille::toggleMode()
     case BrailleMode::Undefined:
     case BrailleMode::Navigation:
         setMode(BrailleMode::BrailleInput);
-        interaction()->noteInput()->startNoteInput();
-        stateTitle = muse::trc("notation", "Note input mode");
         break;
     case BrailleMode::BrailleInput:
         setMode(BrailleMode::Navigation);
-        interaction()->noteInput()->endNoteInput();
-        stateTitle = muse::trc("notation", "Normal mode");
         break;
+    }
+
+    dispatcher()->dispatch("note-input");
+
+    if (interaction()->noteInput()->isNoteInputMode()) {
+        stateTitle = muse::trc("notation", "Note input mode");
+    } else {
+        stateTitle = muse::trc("notation", "Normal mode");
     }
 
     auto notationAccessibility = notation()->accessibility();

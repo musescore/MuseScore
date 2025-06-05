@@ -35,10 +35,14 @@ class NoteInputCursor : public muse::Injectable
     muse::Inject<INotationConfiguration> configuration = { this };
 
 public:
+    NoteInputCursor(bool isThinLine = false);
+
     void paint(muse::draw::Painter* painter);
 
 private:
     INotationNoteInputPtr currentNoteInput() const;
+
+    bool m_isThinLine = false;
 };
 }
 

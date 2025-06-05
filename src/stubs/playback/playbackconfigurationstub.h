@@ -30,12 +30,19 @@ class PlaybackConfigurationStub : public IPlaybackConfiguration
 public:
     bool playNotesWhenEditing() const override;
     void setPlayNotesWhenEditing(bool value) override;
+    muse::async::Notification playNotesWhenEditingChanged() const override;
 
     bool playChordWhenEditing() const override;
     void setPlayChordWhenEditing(bool value) override;
+    muse::async::Channel<bool> playChordWhenEditingChanged() const override;
 
     bool playHarmonyWhenEditing() const override;
     void setPlayHarmonyWhenEditing(bool value) override;
+    muse::async::Channel<bool> playHarmonyWhenEditingChanged() const override;
+
+    bool playNotesOnMidiInput() const override;
+    void setPlayNotesOnMidiInput(bool value) override;
+    muse::async::Channel<bool> playNotesOnMidiInputChanged() const override;
 
     PlaybackCursorType cursorType() const override;
 
@@ -59,7 +66,8 @@ public:
     muse::async::Channel<bool> muteHiddenInstrumentsChanged() const override;
 
     const SoundProfileName& basicSoundProfileName() const override;
-    const SoundProfileName& museSoundProfileName() const override;
+    const SoundProfileName& museSoundsProfileName() const override;
+    const SoundProfileName& compatMuseSoundsProfileName() const override;
 
     SoundProfileName defaultProfileForNewProjects() const override;
     void setDefaultProfileForNewProjects(const SoundProfileName& name) override;

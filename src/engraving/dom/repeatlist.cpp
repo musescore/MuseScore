@@ -90,6 +90,24 @@ bool RepeatSegment::containsMeasure(Measure const* const m) const
     return false;
 }
 
+bool RepeatSegment::endsWithMeasure(Measure const* const m) const
+{
+    if (m_measureList.empty()) {
+        return false;
+    }
+
+    return m_measureList.back() == m;
+}
+
+bool RepeatSegment::startsWithMeasure(const Measure* const m) const
+{
+    if (m_measureList.empty()) {
+        return false;
+    }
+
+    return m_measureList.front() == m;
+}
+
 bool RepeatSegment::isEmpty() const
 {
     return m_measureList.empty();
@@ -149,7 +167,7 @@ int RepeatList::ticks() const
 //   update
 //---------------------------------------------------------
 
-void RepeatList::update(bool expand)
+void RepeatList::update(bool expand, bool updateTies)
 {
     if (!m_scoreChanged && expand == m_expanded) {
         return;
@@ -162,6 +180,10 @@ void RepeatList::update(bool expand)
     }
 
     m_scoreChanged = false;
+
+    if (updateTies) {
+        m_score->undoRemoveStaleTieJumpPoints();
+    }
 }
 
 //---------------------------------------------------------
@@ -276,10 +298,14 @@ int RepeatList::utime2utick(double secs) const
 ///
 std::vector<RepeatSegment*>::const_iterator RepeatList::findRepeatSegmentFromUTick(int utick) const
 {
-    return std::lower_bound(this->cbegin(), this->cend(), utick, [](RepeatSegment const* rs, int utick) {
-        // Skip RS where endtick is less than us
-        return utick > (rs->utick + rs->len());
-    });
+    for (auto it = cbegin(); it != cend(); ++it) {
+        const RepeatSegment* seg = *it;
+        if (utick >= seg->utick && utick < seg->utick + seg->len()) {
+            return it;
+        }
+    }
+
+    return cend();
 }
 
 //---------------------------------------------------------
@@ -316,7 +342,7 @@ void RepeatList::flatten()
 //          - d.s. al fine
 //          - d.s. al coda
 //---------------------------------------------------------
-enum class RepeatListElementType {
+enum class RepeatListElementType : unsigned char {
     SECTION_BREAK,
     VOLTA_START,
     VOLTA_END,
@@ -497,6 +523,10 @@ void RepeatList::collectRepeatListElements()
             }
             // Jumps and Markers
             for (EngravingItem* e : mb->el()) {
+                if (e->systemFlag() && !e->isTopSystemObject()) {
+                    continue;
+                }
+
                 if (e->isJump()) {
                     sectionRLElements.push_back(new RepeatListElement(RepeatListElementType::JUMP, e, toMeasure(mb)));
                     if (volta != nullptr) {

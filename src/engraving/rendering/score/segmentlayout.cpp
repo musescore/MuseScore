@@ -23,9 +23,11 @@
 
 #include "dom/part.h"
 #include "dom/drumset.h"
+#include "dom/parenthesis.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"
+#include "horizontalspacing.h"
 
 using namespace mu::engraving::rendering::score;
 

@@ -69,6 +69,11 @@ using voice_layer_idx_t = uint_fast8_t;
 using staff_layer_idx_t = uint_fast16_t;
 using layer_idx_t = size_t;
 
+struct TimestampAndDuration {
+    timestamp_t timestamp = 0;
+    duration_t duration = 0;
+};
+
 static constexpr voice_layer_idx_t MAX_VOICES = 4;
 
 constexpr inline layer_idx_t makeLayerIdx(const staff_layer_idx_t staffIdx, const voice_layer_idx_t voiceIdx)
@@ -131,7 +136,7 @@ struct ValuesCurve : public SharedMap<duration_percentage_t, T>
 };
 
 // Pitch
-enum class PitchClass {
+enum class PitchClass : signed char {
     Undefined = -1,
     C = 0,
     C_sharp = 1,
@@ -179,7 +184,7 @@ constexpr inline size_t pitchStepsCount(const pitch_level_t pitchRange)
 // Expression
 using ArticulationFamily = mpe::SoundCategory;
 
-enum class ArticulationType {
+enum class ArticulationType : signed char {
     Undefined = -1,
 
     // single note articulations
@@ -192,6 +197,7 @@ enum class ArticulationType {
     SoftAccent,
 
     LaissezVibrer,
+    LetRing,
 
     Subito,
 
@@ -286,12 +292,13 @@ enum class ArticulationType {
     Slap,
     Pop,
 
+    ContinuousGlissando,
+
     // multi-note articulations
     Trill,
     Crescendo,
     Decrescendo,
     DiscreteGlissando,
-    ContinuousGlissando,
     Legato,
     Pedal,
     Multibend,
@@ -313,7 +320,6 @@ inline bool isMultiNoteArticulation(const ArticulationType type)
         ArticulationType::Crescendo,
         ArticulationType::Decrescendo,
         ArticulationType::DiscreteGlissando,
-        ArticulationType::ContinuousGlissando,
         ArticulationType::Legato,
         ArticulationType::Pedal,
         ArticulationType::Multibend,

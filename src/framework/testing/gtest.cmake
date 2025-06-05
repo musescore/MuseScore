@@ -44,10 +44,21 @@ add_executable(${MODULE_TEST}
 target_include_directories(${MODULE_TEST} PRIVATE
     ${PROJECT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${PROJECT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/src/framework
-    ${PROJECT_SOURCE_DIR}/src/framework/global
+
     ${PROJECT_SOURCE_DIR}/src
+
+    ${MUSE_FRAMEWORK_PATH}
+    ${MUSE_FRAMEWORK_PATH}/framework
+    ${MUSE_FRAMEWORK_PATH}/framework/global
+    ${MUSE_FRAMEWORK_PATH}/framework/testing/thirdparty/googletest/googletest/include
+
+    # compat
+    ${MUSE_FRAMEWORK_PATH}/src
+    ${MUSE_FRAMEWORK_PATH}/src/framework
+    ${MUSE_FRAMEWORK_PATH}/src/framework/global
+    ${MUSE_FRAMEWORK_PATH}/src/framework/testing/thirdparty/googletest/googletest/include
+    # end compat
+
     ${MODULE_TEST_INCLUDE}
 )
 
@@ -55,6 +66,11 @@ target_compile_definitions(${MODULE_TEST} PRIVATE
     ${MODULE_TEST_DEF}
     ${MODULE_TEST}_DATA_ROOT="${MODULE_TEST_DATA_ROOT}"
 )
+if (MUSE_ENABLE_UNIT_TESTS_CODE_COVERAGE)
+    set(COVERAGE_FLAGS -fprofile-arcs -ftest-coverage --coverage)
+    target_compile_options(${MODULE_TEST} PRIVATE ${COVERAGE_FLAGS})
+    target_link_options(${MODULE_TEST} PRIVATE -lgcov --coverage)
+endif()
 
 find_package(Qt6Core REQUIRED)
 find_package(Qt6Gui REQUIRED)
@@ -65,6 +81,7 @@ target_link_libraries(${MODULE_TEST}
     gmock
     muse_global
     ${MODULE_TEST_LINK}
+    ${COVERAGE_FLAGS}
     )
 
 add_test(NAME ${MODULE_TEST} COMMAND ${MODULE_TEST})

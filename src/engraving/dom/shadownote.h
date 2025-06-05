@@ -73,6 +73,7 @@ public:
     SymId flagSym() const;
     AccidentalType accidentalType() const;
     const std::set<SymId>& articulationIds() const;
+
     double segmentSkylineBottomY() const;
     double segmentSkylineTopY() const;
 

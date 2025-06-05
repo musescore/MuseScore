@@ -136,12 +136,12 @@ ListItemBlank {
 
         result += rowLayout.anchors.leftMargin
         if (primaryIconLabel.visible) {
-            result += Math.ceil(primaryIconLabel.width)
+            result += Math.ceil(primaryIconLabel.Layout.preferredWidth)
             result += rowLayout.spacing
         }
 
         if (secondaryIconLabel.visible) {
-            result += Math.ceil(secondaryIconLabel.width)
+            result += Math.ceil(secondaryIconLabel.Layout.preferredWidth)
             result += rowLayout.spacing
         }
 
@@ -183,7 +183,7 @@ ListItemBlank {
         StyledIconLabel {
             id: primaryIconLabel
             Layout.alignment: Qt.AlignLeft
-            width: 16
+            Layout.preferredWidth: 16
             iconCode: {
                 if (root.iconAndCheckMarkMode !== StyledMenuItem.ShowBoth && itemPrv.hasIcon) {
                     return root.modelData?.icon ?? IconCode.NONE
@@ -201,7 +201,8 @@ ListItemBlank {
         StyledIconLabel {
             id: secondaryIconLabel
             Layout.alignment: Qt.AlignLeft
-            width: 16
+            Layout.preferredWidth: 16
+            color: root.modelData?.iconColor ?? ui.theme.fontPrimaryColor
             iconCode: root.modelData?.icon ?? IconCode.NONE
             visible: root.iconAndCheckMarkMode === StyledMenuItem.ShowBoth
         }

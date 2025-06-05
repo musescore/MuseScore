@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_APIV1_APITYPES_H
-#define MU_ENGRAVING_APIV1_APITYPES_H
+#pragma once
 
 #include <QObject>
 
@@ -214,6 +213,7 @@ Q_ENUM_NS(AccidentalType);
 enum class ElementType {
     ///.\{
     INVALID               = int(mu::engraving::ElementType::INVALID),
+
     BRACKET_ITEM          = int(mu::engraving::ElementType::BRACKET_ITEM),
     PART                  = int(mu::engraving::ElementType::PART),
     STAFF                 = int(mu::engraving::ElementType::STAFF),
@@ -225,6 +225,10 @@ enum class ElementType {
     INSTRUMENT_NAME       = int(mu::engraving::ElementType::INSTRUMENT_NAME),
     SLUR_SEGMENT          = int(mu::engraving::ElementType::SLUR_SEGMENT),
     TIE_SEGMENT           = int(mu::engraving::ElementType::TIE_SEGMENT),
+    LAISSEZ_VIB_SEGMENT   = int(mu::engraving::ElementType::LAISSEZ_VIB_SEGMENT),
+    LAISSEZ_VIB           = int(mu::engraving::ElementType::LAISSEZ_VIB),
+    PARTIAL_TIE_SEGMENT   = int(mu::engraving::ElementType::PARTIAL_TIE_SEGMENT),
+    PARTIAL_TIE           = int(mu::engraving::ElementType::PARTIAL_TIE),
     BAR_LINE              = int(mu::engraving::ElementType::BAR_LINE),
     STAFF_LINES           = int(mu::engraving::ElementType::STAFF_LINES),
     SYSTEM_DIVIDER        = int(mu::engraving::ElementType::SYSTEM_DIVIDER),
@@ -283,6 +287,7 @@ enum class ElementType {
     VOLTA_SEGMENT         = int(mu::engraving::ElementType::VOLTA_SEGMENT),
     PEDAL_SEGMENT         = int(mu::engraving::ElementType::PEDAL_SEGMENT),
     LYRICSLINE_SEGMENT    = int(mu::engraving::ElementType::LYRICSLINE_SEGMENT),
+    PARTIAL_LYRICSLINE_SEGMENT    = int(mu::engraving::ElementType::PARTIAL_LYRICSLINE_SEGMENT),
     GLISSANDO_SEGMENT     = int(mu::engraving::ElementType::GLISSANDO_SEGMENT),
     NOTELINE_SEGMENT      = int(mu::engraving::ElementType::NOTELINE_SEGMENT),
     LAYOUT_BREAK          = int(mu::engraving::ElementType::LAYOUT_BREAK),
@@ -290,7 +295,6 @@ enum class ElementType {
     STAFF_STATE           = int(mu::engraving::ElementType::STAFF_STATE),
     NOTEHEAD              = int(mu::engraving::ElementType::NOTEHEAD),
     NOTEDOT               = int(mu::engraving::ElementType::NOTEDOT),
-    TREMOLO               = int(mu::engraving::ElementType::INVALID), // deprecated
     TREMOLO_SINGLECHORD   = int(mu::engraving::ElementType::TREMOLO_SINGLECHORD),
     TREMOLO_TWOCHORD      = int(mu::engraving::ElementType::TREMOLO_TWOCHORD),
     IMAGE                 = int(mu::engraving::ElementType::IMAGE),
@@ -316,29 +320,32 @@ enum class ElementType {
     TEXTLINE_BASE         = int(mu::engraving::ElementType::TEXTLINE_BASE),
     NOTELINE              = int(mu::engraving::ElementType::NOTELINE),
     LYRICSLINE            = int(mu::engraving::ElementType::LYRICSLINE),
+    PARTIAL_LYRICSLINE    = int(mu::engraving::ElementType::PARTIAL_LYRICSLINE),
     GLISSANDO             = int(mu::engraving::ElementType::GLISSANDO),
     BRACKET               = int(mu::engraving::ElementType::BRACKET),
     SEGMENT               = int(mu::engraving::ElementType::SEGMENT),
     SYSTEM                = int(mu::engraving::ElementType::SYSTEM),
-    COMPOUND              = int(mu::engraving::ElementType::COMPOUND),
     CHORD                 = int(mu::engraving::ElementType::CHORD),
     SLUR                  = int(mu::engraving::ElementType::SLUR),
-    ELEMENT               = int(mu::engraving::ElementType::ELEMENT),
-    ELEMENT_LIST          = int(mu::engraving::ElementType::ELEMENT_LIST),
-    STAFF_LIST            = int(mu::engraving::ElementType::STAFF_LIST),
-    MEASURE_LIST          = int(mu::engraving::ElementType::MEASURE_LIST),
     HBOX                  = int(mu::engraving::ElementType::HBOX),
     VBOX                  = int(mu::engraving::ElementType::VBOX),
     TBOX                  = int(mu::engraving::ElementType::TBOX),
     FBOX                  = int(mu::engraving::ElementType::FBOX),
     ACTION_ICON           = int(mu::engraving::ElementType::ACTION_ICON),
-    OSSIA                 = int(mu::engraving::ElementType::OSSIA),
     BAGPIPE_EMBELLISHMENT = int(mu::engraving::ElementType::BAGPIPE_EMBELLISHMENT),
     STICKING              = int(mu::engraving::ElementType::STICKING),
     GRACE_NOTES_GROUP     = int(mu::engraving::ElementType::GRACE_NOTES_GROUP),
 
     ROOT_ITEM             = int(mu::engraving::ElementType::ROOT_ITEM),
     DUMMY                 = int(mu::engraving::ElementType::DUMMY),
+
+    TREMOLO               = int(mu::engraving::ElementType::INVALID), // deprecated
+    COMPOUND              = int(mu::engraving::ElementType::INVALID), // deprecated
+    ELEMENT               = int(mu::engraving::ElementType::INVALID), // deprecated
+    ELEMENT_LIST          = int(mu::engraving::ElementType::INVALID), // deprecated
+    STAFF_LIST            = int(mu::engraving::ElementType::INVALID), // deprecated
+    MEASURE_LIST          = int(mu::engraving::ElementType::INVALID), // deprecated
+    OSSIA                 = int(mu::engraving::ElementType::INVALID), // deprecated
 
     MAXTYPE               = int(mu::engraving::ElementType::MAXTYPE)
                             ///\}
@@ -3597,5 +3604,3 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Tid);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Syllabic);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Anchor);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SymId);
-
-#endif // MU_ENGRAVING_APIV1_APITYPES_H

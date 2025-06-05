@@ -121,7 +121,7 @@ void TrackList::combineTuplet(Tuplet* dst, Tuplet* src)
         Chord* chord = toChord(src->elements().front());
         bool akkumulateChord = true;
         for (Note* n : chord->notes()) {
-            if (!n->tieBack() || !n->tieBack()->generated()) {
+            if (!n->tieBackNonPartial() || !n->tieBack()->generated()) {
                 akkumulateChord = false;
                 break;
             }
@@ -196,7 +196,7 @@ void TrackList::append(EngravingItem* e)
                     Chord* chord = toChord(e);
                     bool akkumulateChord = true;
                     for (Note* n : chord->notes()) {
-                        if (!n->tieBack() || !n->tieBack()->generated()) {
+                        if (!n->tieBackNonPartial() || !n->tieBack()->generated()) {
                             akkumulateChord = false;
                             break;
                         }
@@ -297,6 +297,10 @@ void TrackList::read(const Segment* fs, const Segment* es)
         EngravingItem* e = s->element(m_track);
         if (!e || e->generated()) {
             for (EngravingItem* ee : s->annotations()) {
+                if (ee->systemFlag() && ee->track() != 0) {
+                    // Only process the top system object
+                    continue;
+                }
                 if (ee->track() == m_track) {
                     m_range->m_annotations.push_back({ s->tick(), ee->clone() });
                 }
@@ -354,7 +358,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
         }
         Chord* chord = toChord(e);
         for (Note* n1 : chord->notes()) {
-            Tie* tie = n1->tieFor();
+            Tie* tie = n1->tieForNonPartial();
             if (!tie) {
                 continue;
             }
@@ -644,7 +648,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
         }
         Chord* chord = toChord(e);
         for (Note* n : chord->notes()) {
-            Tie* tie = n->tieFor();
+            Tie* tie = n->tieForNonPartial();
             if (!tie) {
                 continue;
             }
@@ -691,6 +695,11 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
         Fraction etick = last->tick();
         for (auto i : first->score()->spanner()) {
             Spanner* s = i.second;
+            if (s->systemFlag() && s->track() != 0) {
+                // Only process the top system object
+                continue;
+            }
+
             if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                 Spanner* ns = toSpanner(s->clone());
                 ns->resetExplicitParent();
@@ -758,12 +767,27 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
                 s->setEndElement(dc->graceNotes()[idx]);
             }
         }
+        if (s->anchor() == Spanner::Anchor::MEASURE) {
+            Fraction startTick = s->tick();
+            Measure* startMeasure = score->tick2measureMM(startTick);
+            Fraction startMeasureTick = startMeasure->tick();
+            Fraction endTick = s->tick2();
+            Measure* endMeasure = score->tick2measureMM(endTick);
+            Fraction endMeasureTick = endMeasure->tick();
+            if (startMeasureTick != startTick) {
+                s->setTick(startMeasureTick);
+            }
+            if (endMeasureTick != endTick) {
+                s->setTick2(endMeasureTick != startMeasureTick ? endMeasureTick : endMeasure->endTick());
+            }
+        }
         score->undoAddElement(s);
     }
     for (const Annotation& a : m_annotations) {
         Measure* tm = score->tick2measure(a.tick);
         Segment* op = toSegment(a.e->explicitParent());
-        Segment* s = tm->undoGetSegment(op->segmentType(), a.tick);
+        Fraction destTick = a.e->isRehearsalMark() ? tm->tick() : a.tick; // Ensure reharsal mark can only go at measure start
+        Segment* s = tm->undoGetSegment(op->segmentType(), destTick);
         if (s) {
             a.e->setParent(s);
             score->undoAddElement(a.e);

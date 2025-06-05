@@ -24,6 +24,7 @@ var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var Palette = require("steps/Palette.js")
 var Score = require("steps/Score.js")
+var Home = require("steps/Home.js")
 
 var testCase = {
     name: "TC4: Using palettes",
@@ -31,13 +32,13 @@ var testCase = {
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
             api.dispatcher.dispatch("file-close")
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Home.goToHome()
         }},
         {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()
         }},
         {name: "Create score", func: function() {
-            NewScore.chooseInstrument("Woodwinds", "Flute")
+            NewScore.chooseInstrument("Keyboards", "Piano")
             NewScore.done()
         }},
         {name: "Confirm about all Palettes collapsed", func: function() {
@@ -45,9 +46,9 @@ var testCase = {
         }},
         {name: "Change Clefs", skip: false, func: function() {
             //! NOTE First, we need to select the current Clef
-            api.navigation.goToControl("NotationView", "ScoreView", "Score") // The first rest is selected by default.
-            api.shortcuts.activate("Alt+Left") // select Time sig
-            api.shortcuts.activate("Alt+Left") // select Clef
+            api.navigation.goToControl("NotationView", "ScoreView", "Score")
+            Score.firstElement()
+            api.shortcuts.activate("Alt+Right") // select Clef
             seeChanges()
 
             //! NOTE Return to Palettes and expand Clefs
@@ -140,12 +141,10 @@ var testCase = {
             api.dispatcher.dispatch("file-close")
         }},
         {name: "Home", func: function() {
-            api.navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Home.goToHome()
         }},
         {name: "Open last", func: function() {
-            api.navigation.goToControl("RecentScores", "RecentScores", "New score")
-            api.navigation.right()
-            api.navigation.trigger()
+            Home.openLastProject()
         }}
     ]
 };

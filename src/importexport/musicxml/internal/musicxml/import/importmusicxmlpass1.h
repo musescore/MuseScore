@@ -83,7 +83,8 @@ struct MusicXmlPartGroup {
     int start = 0;
     engraving::BracketType type = engraving::BracketType::NO_BRACKET;
     bool barlineSpan = false;
-    int column = 0;
+    muse::draw::Color color;
+    size_t column = 0;
 };
 typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
 typedef std::map<muse::String, engraving::Part*> PartMap;
@@ -199,7 +200,7 @@ public:
     bool hasBeamingInfo() const { return m_hasBeamingInfo; }
     bool isVocalStaff(const muse::String& partId) const { return m_parts.at(partId).isVocalStaff(); }
     bool isPercussionStaff(const muse::String& partId) const { return m_parts.at(partId).isPercussionStaff(); }
-    static engraving::VBox* createAndAddVBoxForCreditWords(engraving::Score* score);
+    static engraving::VBox* createAndAddVBoxForCreditWords(engraving::Score* score, engraving::Fraction tick);
     void createDefaultHeader(engraving::Score* const score);
     void createMeasuresAndVboxes(engraving::Score* const score, const std::vector<engraving::Fraction>& ml,
                                  const std::vector<engraving::Fraction>& ms, const std::set<int>& systemStartMeasureNrs,

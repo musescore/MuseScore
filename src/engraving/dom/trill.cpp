@@ -246,6 +246,82 @@ void Trill::computeStartElement()
     }
 }
 
+PointF Trill::trillLinePos(const SLine* line, Grip grip, System** system)
+{
+    if (!line) {
+        return PointF();
+    }
+
+    bool start = grip == Grip::START;
+    bool mmRest = line->style().styleB(Sid::createMultiMeasureRests);
+    double graceOffset = 0.0;
+    double clefOffset = 0.0;
+
+    Segment* segment = start ? line->startSegment() : line->endSegment();
+    if (!segment) {
+        return PointF();
+    }
+
+    if (start) {
+        *system = segment->measure()->system();
+        double x = segment->x() + segment->measure()->x();
+        return PointF(x, 0.0);
+    }
+
+    Segment* graceNoteSeg = segment->preAppendedItem(line->track2()) ? segment : nullptr;
+    Segment* clefSeg = segment->isClefType() ? segment : nullptr;
+    Fraction curTick = segment->tick();
+    while (true) {
+        Segment* prevSeg = mmRest ? segment->prev1MM() : segment->prev1();
+        if (prevSeg && prevSeg->tick() == curTick) {
+            graceNoteSeg = prevSeg->preAppendedItem(line->track2()) ? prevSeg : graceNoteSeg;
+            clefSeg = prevSeg->isClefType() ? prevSeg : clefSeg;
+            segment = prevSeg;
+        } else {
+            break;
+        }
+    }
+
+    // Stop line before clefs
+    if (clefSeg) {
+        EngravingItem* clefItem = clefSeg->element(line->track2());
+        if (clefItem && clefItem->isClef()) {
+            Clef* clef = toClef(clefItem);
+            SymId clefSym = ClefInfo::symId(clef->clefType());
+            Shape clefShape = line->symShapeWithCutouts(clefSym).translated(clef->pos());
+            clefOffset = segment->pageX() - clef->pageX() + clefShape.leftMostEdgeAtTop();
+        }
+    }
+
+    // Stop line before grace notes
+    if (graceNoteSeg) {
+        const EngravingItem* preAppendedItem = graceNoteSeg->preAppendedItem(line->track2());
+        if (preAppendedItem && preAppendedItem->isGraceNotesGroup()) {
+            // get x position of leftmost grace note
+            const Chord* leftMostGraceChord = nullptr;
+            const GraceNotesGroup* graceGroup = toGraceNotesGroup(preAppendedItem);
+            for (const Chord* graceChord : *graceGroup) {
+                leftMostGraceChord = leftMostGraceChord
+                                     && leftMostGraceChord->x() < graceChord->x() ? leftMostGraceChord : graceChord;
+            }
+            if (leftMostGraceChord) {
+                graceOffset = segment->pageX() - leftMostGraceChord->pageX();
+            }
+        }
+    }
+
+    double offset = std::max(graceOffset, clefOffset);
+
+    *system = segment->measure()->system();
+    double x = segment->x() + segment->measure()->x() - line->spatium() - offset;
+    return PointF(x, 0.0);
+}
+
+PointF Trill::linePos(Grip grip, System** system) const
+{
+    return trillLinePos(this, grip, system);
+}
+
 void Trill::setTrillType(TrillType tt)
 {
     m_trillType = tt;
@@ -355,16 +431,6 @@ muse::TranslatableString Trill::subtypeUserName() const
     return TConv::userName(trillType());
 }
 
-muse::TranslatableString TrillSegment::subtypeUserName() const
-{
-    return trill()->subtypeUserName();
-}
-
-int TrillSegment::subtype() const
-{
-    return trill()->subtype();
-}
-
 //---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
@@ -376,6 +442,6 @@ String Trill::accessibleInfo() const
 
 void Trill::doComputeEndElement()
 {
-    setEndElement(score()->findChordRestEndingBeforeTickInStaff(tick2(), track2staff(track2())));
+    setEndElement(score()->findChordRestEndingBeforeTickInStaffAndVoice(tick2(), track2staff(track2()), voice()));
 }
 }

@@ -35,6 +35,7 @@ class LayoutBreak;
 class Measure;
 class Score;
 class System;
+class SystemLock;
 
 //---------------------------------------------------------
 //   Repeat
@@ -79,6 +80,8 @@ public:
     ~MeasureBase();
 
     System* system() const { return toSystem(explicitParent()); }
+    System* prevNonVBoxSystem() const;
+    System* nextNonVBoxSystem() const;
     void setParent(System* s) { EngravingItem::setParent((EngravingObject*)(s)); }
 
     // Score Tree functions
@@ -170,19 +173,34 @@ public:
     bool noBreak() const { return flag(ElementFlag::NO_BREAK); }
     void setNoBreak(bool v) { setFlag(ElementFlag::NO_BREAK, v); }
 
-    bool hasCourtesyKeySig() const { return flag(ElementFlag::KEYSIG); }
-    void setHasCourtesyKeySig(int v) { setFlag(ElementFlag::KEYSIG, v); }
+    bool hasCourtesyKeySig() const { return flag(ElementFlag::COURTESY_KEYSIG); }
+    void setHasCourtesyKeySig(bool v) { setFlag(ElementFlag::COURTESY_KEYSIG, v); }
+
+    bool hasCourtesyTimeSig() const { return flag(ElementFlag::COURTESY_TIMESIG); }
+    void setHasCourtesyTimeSig(bool v) const { setFlag(ElementFlag::COURTESY_TIMESIG, v); }
+
+    bool hasCourtesyClef() const { return flag(ElementFlag::COURTESY_CLEF); }
+    void setHasCourtesyClef(bool v) const { setFlag(ElementFlag::COURTESY_CLEF, v); }
+
+    bool endOfMeasureChange() const { return flag(ElementFlag::END_OF_MEASURE_CHANGE); }
+    void setEndOfMeasureChange(bool val) const { setFlag(ElementFlag::END_OF_MEASURE_CHANGE, val); }
 
     virtual void computeMinWidth() { }
 
     int index() const;
     int measureIndex() const;
 
-    void setOldWidth(double n) { m_oldWidth = n; }
-    double oldWidth() const { return m_oldWidth; }
+    bool isBefore(const EngravingItem* other) const override;
+    bool isBefore(const MeasureBase* other) const;
+    bool isBeforeOrEqual(const MeasureBase* other) const { return other == this || isBefore(other); }
+    bool isAfter(const MeasureBase* other) const { return !isBeforeOrEqual(other); }
+    bool isAfterOrEqual(const MeasureBase* other) const { return !isBefore(other); }
+
+    const SystemLock* systemLock() const;
+    bool isStartOfSystemLock() const;
+    bool isEndOfSystemLock() const;
 
 protected:
-
     MeasureBase(const ElementType& type, System* system = 0);
     MeasureBase(const MeasureBase&);
 
@@ -197,7 +215,6 @@ private:
     Fraction m_tick = Fraction(0, 1);
     int m_no = 0;                         // Measure number, counting from zero
     int m_noOffset = 0;                   // Offset to measure number
-    double m_oldWidth = 0.0;              // Used to restore layout during recalculations in Score::collectSystem()
 };
 
 //---------------------------------------------------------
@@ -210,7 +227,7 @@ public:
     MeasureBaseList();
     MeasureBase* first() const { return m_first; }
     MeasureBase* last()  const { return m_last; }
-    void clear() { m_first = m_last = 0; m_size = 0; }
+    void clear();
     void add(MeasureBase*);
     void remove(MeasureBase*);
     void insert(MeasureBase*, MeasureBase*);
@@ -219,13 +236,25 @@ public:
     int size() const { return m_size; }
     bool empty() const { return m_size == 0; }
 
+    void append(MeasureBase*);
+
+    void updateTickIndex();
+
+    Measure* measureByTick(int tick) const;
+    std::vector<MeasureBase*> measureBasesAtTick(int tick) const;
+
 private:
-    void push_back(MeasureBase* e);
-    void push_front(MeasureBase* e);
+    void push_back(MeasureBase* m);
+    void push_front(MeasureBase* m);
 
     int m_size = 0;
     MeasureBase* m_first = nullptr;
     MeasureBase* m_last = nullptr;
+
+    // At a tick there can be any number of MeasureBases
+    // There can only be one Measure
+    // There can be any number of Boxes
+    std::multimap<int, MeasureBase*> m_tickIndex;
 };
 } // namespace mu::engraving
 #endif

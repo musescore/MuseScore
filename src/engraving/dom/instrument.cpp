@@ -154,7 +154,10 @@ StaffName::StaffName(const String& xmlText, int pos)
 
 String Instrument::recognizeMusicXmlId() const
 {
+    // Return a MusicXML "Sound ID", which is essentially an instrument ID.
+    // See https://github.com/w3c/musicxml/blob/gh-pages/schema/sounds.xml
     static const String defaultMusicXmlId(u"keyboard.piano");
+    static const String defaultMusicXmlPercussionId(u"drum.group"); // our General MIDI Percussion
 
     std::list<String> nameList;
 
@@ -181,12 +184,7 @@ String Instrument::recognizeMusicXmlId() const
         return tmplMidiProgram->musicXmlId;
     }
 
-    if (m_useDrumset) {
-        static const String drumsetId(u"drumset");
-        return drumsetId;
-    }
-
-    return defaultMusicXmlId;
+    return m_useDrumset ? defaultMusicXmlPercussionId : defaultMusicXmlId;
 }
 
 String Instrument::recognizeId() const
@@ -194,9 +192,16 @@ String Instrument::recognizeId() const
     // When reading a score created with pre-3.6, MuseScore's instrument ID
     // isn't saved in the score file, so we must try to guess the ID based on
     // the MusicXML ID, which is saved. However, MusicXML IDs are not unique,
-    // so we must also consider other data to find the best match.
+    // so we must also consider other data to find the best match, preferring
+    // more generic instruments when there's a tie.
 
-    if (m_musicXmlId.startsWith(u"mdl.")) {
+    // In these cases, the best and/or most generic match is already known,
+    // and we don't want to risk returning something else.
+    if (m_musicXmlId == u"drum.group") {
+        return u"percussion-synthesizer"; // General MIDI Percussion (most generic kit)
+    } else if (m_musicXmlId == u"drum.group.set") {
+        return u"drumset"; // Large Drum Kit (most generic drum kit)
+    } else if (m_musicXmlId.startsWith(u"mdl.")) {
         // Use fixed mapping for MDL1 instruments to ensure we get the
         // marching versions (e.g. "marching-snare" and not "snare-drum").
         // See https://github.com/musescore/mdl/blob/master/resources/instruments/mdl_1_3_0.xml
@@ -267,7 +272,13 @@ String Instrument::recognizeId() const
         }
     }
 
-    return fallback.isEmpty() ? String(u"piano") : fallback;
+    if (!fallback.isEmpty()) {
+        return fallback;
+    }
+
+    return m_useDrumset
+           ? u"percussion-synthesizer" // General MIDI Percussion (most generic kit)
+           : u"piano";
 }
 
 int Instrument::recognizeMidiProgram() const

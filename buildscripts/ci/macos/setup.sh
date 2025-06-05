@@ -22,14 +22,11 @@ echo "Setup macOS build environment"
 
 trap 'echo Setup failed; exit 1' ERR
 
-export MACOSX_DEPLOYMENT_TARGET=10.14
+export MACOSX_DEPLOYMENT_TARGET=10.15
 
 # Install build tools
 echo "Install build tools"
-
-rm '/usr/local/bin/2to3' # fixing install python 3.9 error (it is a dependency for ninja)
-brew install ninja pkg-config --quiet
-brew install cmake --formula --quiet
+brew install cmake ninja --formula --quiet
 
 # Download dependencies
 echo "Download dependencies"
@@ -38,23 +35,5 @@ wget -q --show-progress -O musescore_deps_macos.tar.gz https://raw.githubusercon
 mkdir -p $HOME/musescore_deps_macos
 tar xf musescore_deps_macos.tar.gz -C $HOME/musescore_deps_macos
 rm musescore_deps_macos.tar.gz
-
-# Qt
-export QT_SHORT_VERSION=6.2.4
-echo "Download Qt $QT_SHORT_VERSION"
-export QT_PATH=$HOME/Qt/$QT_SHORT_VERSION/
-export PATH=$PATH:$QT_PATH/macos/bin
-echo "PATH=$PATH" >> $GITHUB_ENV
-# r2 - added websocket support
-wget -nv -O qt.7z https://s3.amazonaws.com/utils.musescore.org/Qt624_mac_r2.7z
-mkdir -p $QT_PATH
-7z x -y qt.7z -o$QT_PATH
-rm qt.7z
-
-# VST SDK
-echo "Download VST SDK"
-wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_379.7z"
-7z x -y vst_sdk.7z -o"$HOME/vst"
-echo "VST3_SDK_PATH=$HOME/vst/VST3_SDK" >> $GITHUB_ENV
 
 echo "Setup script done"

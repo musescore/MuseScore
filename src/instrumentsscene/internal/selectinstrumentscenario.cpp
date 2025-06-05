@@ -36,7 +36,7 @@ RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstrument
     return selectInstruments(params);
 }
 
-RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
+RetVal<InstrumentTemplate> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
 {
     StringList params {
         u"canSelectMultipleInstruments=false",
@@ -49,14 +49,18 @@ RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const InstrumentK
     }
 
     const InstrumentTemplate& templ = selectedInstruments.val.instruments.first().instrumentTemplate;
-
-    return RetVal<Instrument>::make_ok(Instrument::fromTemplate(&templ));
+    return RetVal<InstrumentTemplate>::make_ok(templ);
 }
 
 RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const StringList& params) const
 {
-    String uri = String("musescore://instruments/select?%1").arg(params.join(u"&"));
-    RetVal<Val> retVal = interactive()->open(uri.toStdString());
+    static const std::string SELECT_INSTRUMENT_URI = "musescore://instruments/select";
+    if (interactive()->isOpened(Uri(SELECT_INSTRUMENT_URI)).val) {
+        return make_ret(Ret::Code::Cancel);
+    }
+
+    String uri = String::fromStdString(SELECT_INSTRUMENT_URI + "?%1").arg(params.join(u"&"));
+    RetVal<Val> retVal = interactive()->openSync(uri.toStdString());
     if (!retVal.ret) {
         return retVal.ret;
     }

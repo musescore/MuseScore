@@ -100,6 +100,7 @@ FocusScope {
         id: mouseArea
         anchors.fill: parent
 
+        enabled: root.enabled
         hoverEnabled: true
         onClicked: {
             navigation.requestActiveByInteraction()

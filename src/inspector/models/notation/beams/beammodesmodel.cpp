@@ -55,19 +55,19 @@ void BeamModesModel::loadProperties()
         mu::engraving::DurationType durationType = static_cast<mu::engraving::DurationType>(map["type"].toInt());
 
         switch (durationType) {
-        case mu::engraving::DurationType::V_INVALID:
-        case mu::engraving::DurationType::V_MEASURE:
-        case mu::engraving::DurationType::V_ZERO:
-        case mu::engraving::DurationType::V_LONG:
-        case mu::engraving::DurationType::V_BREVE:
-        case mu::engraving::DurationType::V_WHOLE:
-        case mu::engraving::DurationType::V_HALF:
-        case mu::engraving::DurationType::V_QUARTER:
-        case mu::engraving::DurationType::V_EIGHTH:
-            return false;
+            case mu::engraving::DurationType::V_INVALID:
+            case mu::engraving::DurationType::V_MEASURE:
+            case mu::engraving::DurationType::V_ZERO:
+            case mu::engraving::DurationType::V_LONG:
+            case mu::engraving::DurationType::V_BREVE:
+            case mu::engraving::DurationType::V_WHOLE:
+            case mu::engraving::DurationType::V_HALF:
+            case mu::engraving::DurationType::V_QUARTER:
+            case mu::engraving::DurationType::V_EIGHTH:
+                return false;
 
-        default:
-            return true;
+            default:
+                return true;
         }
     });
 }

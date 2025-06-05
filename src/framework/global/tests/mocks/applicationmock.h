@@ -43,9 +43,12 @@ public:
     MOCK_METHOD(RunMode, runMode, (), (const, override));
     MOCK_METHOD(bool, noGui, (), (const, override));
 
+#ifndef NO_QT_SUPPORT
     MOCK_METHOD(QWindow*, focusWindow, (), (const, override));
-
     MOCK_METHOD(bool, notify, (QObject*, QEvent*), (override));
+
+    MOCK_METHOD(Qt::KeyboardModifiers, keyboardModifiers, (), (const, override));
+#endif
 
     MOCK_METHOD(void, perform, (), (override));
     MOCK_METHOD(void, finish, (), (override));

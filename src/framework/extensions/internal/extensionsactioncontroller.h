@@ -49,7 +49,7 @@ public:
 private:
     void registerExtensions();
 
-    void onExtensionTriggered(const UriQuery& uri);
+    void onExtensionTriggered(const actions::ActionQuery& actionQuery);
     void openUri(const UriQuery& uri, bool isSingle = true);
 
     std::shared_ptr<ExtensionsUiActions> m_uiActions;

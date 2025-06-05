@@ -191,6 +191,21 @@ bool DockBase::separatorsVisible() const
     return m_properties.separatorsVisible;
 }
 
+bool DockBase::isCompact() const
+{
+    return m_isCompact;
+}
+
+int DockBase::compactPriorityOrder() const
+{
+    return m_compactPriorityOrder;
+}
+
+int DockBase::nonCompactWidth() const
+{
+    return m_nonCompactWidth;
+}
+
 bool DockBase::floatable() const
 {
     return m_properties.floatable;
@@ -346,6 +361,30 @@ void DockBase::setSeparatorsVisible(bool visible)
     emit separatorsVisibleChanged();
 }
 
+void DockBase::setIsCompact(bool compact)
+{
+    if (m_isCompact == compact) {
+        return;
+    }
+
+    if (compact) {
+        m_nonCompactWidth = width();
+    }
+
+    m_isCompact = compact;
+    emit isCompactChanged();
+}
+
+void DockBase::setCompactPriorityOrder(int order)
+{
+    if (m_compactPriorityOrder == order) {
+        return;
+    }
+
+    m_compactPriorityOrder = order;
+    emit compactPriorityOrderChanged();
+}
+
 void DockBase::setFloating(bool floating)
 {
     IF_ASSERT_FAILED(m_dockWidget) {
@@ -355,14 +394,24 @@ void DockBase::setFloating(bool floating)
     m_dockWidget->setFloating(floating);
 }
 
-void DockBase::setContentNavigationPanel(ui::NavigationPanel* panel)
+void DockBase::setNavigationSection(ui::NavigationSection* section)
 {
-    if (m_contentNavigationPanel == panel) {
+    if (m_navigationSection == section) {
         return;
     }
 
-    m_contentNavigationPanel = panel;
-    emit contentNavigationPanelChanged();
+    m_navigationSection = section;
+    emit navigationSectionChanged();
+}
+
+void DockBase::setContentNavigationPanelOrderStart(int order)
+{
+    if (m_contentNavigationPanelOrderStart == order) {
+        return;
+    }
+
+    m_contentNavigationPanelOrderStart = order;
+    emit contentNavigationPanelOrderStartChanged();
 }
 
 void DockBase::init()
@@ -400,8 +449,8 @@ void DockBase::open()
         return;
     }
 
-    m_dockWidget->show();
     setVisible(true);
+    m_dockWidget->show();
 
     applySizeConstraints();
 }
@@ -499,7 +548,7 @@ void DockBase::resize(int width, int height)
     }
 
     auto frame = static_cast<const KDDockWidgets::FrameQuick*>(m_dockWidget->frame());
-    if (!frame) {
+    if (!frame || m_dockWidget != frame->currentDockWidget()) {
         return;
     }
 
@@ -540,9 +589,14 @@ void DockBase::resize(int width, int height)
     applySizeConstraints();
 }
 
-muse::ui::NavigationPanel* DockBase::contentNavigationPanel() const
+muse::ui::NavigationSection* DockBase::navigationSection() const
 {
-    return m_contentNavigationPanel;
+    return m_navigationSection;
+}
+
+int DockBase::contentNavigationPanelOrderStart() const
+{
+    return m_contentNavigationPanelOrderStart;
 }
 
 void DockBase::componentComplete()
@@ -570,26 +624,28 @@ void DockBase::componentComplete()
     m_dockWidget->setTitle(m_title);
 
     writeProperties();
-    listenFloatingChanges();
+    setUpFrameConnections();
 
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::widthChanged, this, [this]() {
         if (m_dockWidget) {
             setWidth(m_dockWidget->width());
+            if (inited()) {
+                applySizeConstraints();
+            }
         }
     });
 
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::heightChanged, this, [this]() {
         if (m_dockWidget) {
             setHeight(m_dockWidget->height());
+            if (inited()) {
+                applySizeConstraints();
+            }
         }
     });
 
     connect(this, &DockBase::minimumSizeChanged, this, &DockBase::applySizeConstraints);
     connect(this, &DockBase::maximumSizeChanged, this, &DockBase::applySizeConstraints);
-
-    connect(this, &DockBase::visibleChanged, [this](){
-        emit reorderNavigationRequested();
-    });
 
     m_defaultVisibility = isVisible();
 }
@@ -667,18 +723,25 @@ void DockBase::applySizeConstraints()
     }
 }
 
-void DockBase::listenFloatingChanges()
+void DockBase::setUpFrameConnections()
 {
     IF_ASSERT_FAILED(m_dockWidget) {
         return;
     }
 
-    auto frameConn = std::make_shared<QMetaObject::Connection>();
+    auto floatingChangedConnection = std::make_shared<QMetaObject::Connection>();
+    auto widgetChangedConnection = std::make_shared<QMetaObject::Connection>();
 
-    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, this, [this, frameConn]() {
-        if (frameConn) {
-            disconnect(*frameConn);
+    connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::parentChanged, this,
+            [this, floatingChangedConnection, widgetChangedConnection]()
+    {
+        if (floatingChangedConnection) {
+            disconnect(*floatingChangedConnection);
             doSetFloating(false);
+        }
+
+        if (widgetChangedConnection) {
+            disconnect(*widgetChangedConnection);
         }
 
         if (!m_dockWidget || !m_dockWidget->parentItem()) {
@@ -701,8 +764,11 @@ void DockBase::listenFloatingChanges()
             }
         });
 
-        *frameConn = connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged,
-                             this, &DockBase::onIsInMainWindowChanged, Qt::UniqueConnection);
+        *floatingChangedConnection = connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged,
+                                             this, &DockBase::onIsInMainWindowChanged, Qt::UniqueConnection);
+
+        *widgetChangedConnection = connect(frame, &KDDockWidgets::Frame::currentDockWidgetChanged,
+                                           this, &DockBase::frameCurrentWidgetChanged, Qt::UniqueConnection);
     });
 
     connect(m_dockWidget->toggleAction(), &QAction::toggled, this, [this]() {

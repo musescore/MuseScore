@@ -57,4 +57,14 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
     }
+
+    PropertyCheckBox {
+        navigation.name: "Avoid barlines"
+        navigation.panel: root.navigationPanel
+        navigation.row: setVerse.navigationRowEnd + 1
+
+        text: qsTrc("inspector", "Avoid barlines")
+
+        propertyItem: root.model ? root.model.avoidBarlines : null
+    }
 }

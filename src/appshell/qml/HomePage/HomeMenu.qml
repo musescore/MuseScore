@@ -87,8 +87,7 @@ Item {
             model: [
                 { "name": "scores", "title": qsTrc("appshell", "Scores"), "icon": IconCode.MUSIC_NOTES },
                 { "name": "extensions", "title": qsTrc("appshell", "Plugins"), "icon":  IconCode.PLUGIN },
-                // TODO: need to implement
-                // { "name": "audio", "title": qsTrc("appshell", "Audio"), "icon":  IconCode.AUDIO },
+                { "name": "musesounds", "title": qsTrc("appshell", "MuseSounds"), "icon": IconCode.PLAY },
                 { "name": "learn", "title": qsTrc("appshell", "Learn"), "icon":  IconCode.MORTAR_BOARD }
             ]
 

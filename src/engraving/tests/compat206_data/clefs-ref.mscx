@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <defaultsVersion>206</defaultsVersion>
@@ -21,7 +22,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -74,20 +76,26 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>clefs</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>F_F</eid>
         <voice>
           <TimeSig>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>H_H</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>I_I</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -95,14 +103,18 @@
           <Clef>
             <concertClefType>G8va</concertClefType>
             <transposingClefType>G8va</transposingClefType>
+            <eid>J_J</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>K_K</eid>
         <voice>
           <Chord>
+            <eid>L_L</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>M_M</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -110,14 +122,18 @@
           <Clef>
             <concertClefType>G15ma</concertClefType>
             <transposingClefType>G15ma</transposingClefType>
+            <eid>N_N</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>O_O</eid>
         <voice>
           <Chord>
+            <eid>P_P</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>Q_Q</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -125,17 +141,22 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <eid>R_R</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>S_S</eid>
         <LayoutBreak>
+          <eid>T_T</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
+            <eid>U_U</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>V_V</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -143,14 +164,18 @@
           <Clef>
             <concertClefType>G8vbp</concertClefType>
             <transposingClefType>G8vbp</transposingClefType>
+            <eid>W_W</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>X_X</eid>
         <voice>
           <Chord>
+            <eid>Y_Y</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>Z_Z</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -158,14 +183,18 @@
           <Clef>
             <concertClefType>G1</concertClefType>
             <transposingClefType>G1</transposingClefType>
+            <eid>a_a</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>b_b</eid>
         <voice>
           <Chord>
+            <eid>c_c</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>d_d</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -173,14 +202,18 @@
           <Clef>
             <concertClefType>C1</concertClefType>
             <transposingClefType>C1</transposingClefType>
+            <eid>e_e</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>f_f</eid>
         <voice>
           <Chord>
+            <eid>g_g</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>h_h</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -188,17 +221,23 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>i_i</eid>
         <LayoutBreak>
+          <eid>j_j</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Clef>
             <concertClefType>C2</concertClefType>
             <transposingClefType>C2</transposingClefType>
+            <clefToBarlinePos>2</clefToBarlinePos>
+            <eid>k_k</eid>
             </Clef>
           <Chord>
+            <eid>l_l</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>m_m</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -206,14 +245,18 @@
           <Clef>
             <concertClefType>C3</concertClefType>
             <transposingClefType>C3</transposingClefType>
+            <eid>n_n</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>o_o</eid>
         <voice>
           <Chord>
+            <eid>p_p</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>q_q</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -221,14 +264,18 @@
           <Clef>
             <concertClefType>C4</concertClefType>
             <transposingClefType>C4</transposingClefType>
+            <eid>r_r</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>s_s</eid>
         <voice>
           <Chord>
+            <eid>t_t</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>u_u</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -236,14 +283,18 @@
           <Clef>
             <concertClefType>C5</concertClefType>
             <transposingClefType>C5</transposingClefType>
+            <eid>v_v</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>w_w</eid>
         <voice>
           <Chord>
+            <eid>x_x</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>y_y</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -251,17 +302,22 @@
           <Clef>
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
+            <eid>z_z</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>0_0</eid>
         <LayoutBreak>
+          <eid>1_1</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
+            <eid>2_2</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>3_3</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -269,14 +325,18 @@
           <Clef>
             <concertClefType>F8va</concertClefType>
             <transposingClefType>F8va</transposingClefType>
+            <eid>4_4</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>5_5</eid>
         <voice>
           <Chord>
+            <eid>6_6</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>7_7</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -284,14 +344,18 @@
           <Clef>
             <concertClefType>F15ma</concertClefType>
             <transposingClefType>F15ma</transposingClefType>
+            <eid>8_8</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>9_9</eid>
         <voice>
           <Chord>
+            <eid>+_+</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>/_/</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -299,14 +363,18 @@
           <Clef>
             <concertClefType>F8vb</concertClefType>
             <transposingClefType>F8vb</transposingClefType>
+            <eid>AB_AB</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>BB_BB</eid>
         <voice>
           <Chord>
+            <eid>CB_CB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>DB_DB</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -314,17 +382,22 @@
           <Clef>
             <concertClefType>F15mb</concertClefType>
             <transposingClefType>F15mb</transposingClefType>
+            <eid>EB_EB</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>FB_FB</eid>
         <LayoutBreak>
+          <eid>GB_GB</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
+            <eid>HB_HB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>IB_IB</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -332,14 +405,18 @@
           <Clef>
             <concertClefType>F3</concertClefType>
             <transposingClefType>F3</transposingClefType>
+            <eid>JB_JB</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>KB_KB</eid>
         <voice>
           <Chord>
+            <eid>LB_LB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>MB_MB</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -347,14 +424,18 @@
           <Clef>
             <concertClefType>F5</concertClefType>
             <transposingClefType>F5</transposingClefType>
+            <eid>NB_NB</eid>
             </Clef>
           </voice>
         </Measure>
       <Measure>
+        <eid>OB_OB</eid>
         <voice>
           <Chord>
+            <eid>PB_PB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>QB_QB</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -362,10 +443,13 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>RB_RB</eid>
         <voice>
           <Chord>
+            <eid>SB_SB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>TB_TB</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -373,19 +457,24 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>UB_UB</eid>
         <LayoutBreak>
+          <eid>VB_VB</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Chord>
+            <eid>WB_WB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>XB_XB</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>YB_YB</eid>
             </BarLine>
           </voice>
         </Measure>

@@ -40,9 +40,9 @@ void MuseSamplerActionController::checkLibraryIsDetected()
     std::string status;
 
     if (libVersion.empty()) {
-        status = muse::trc("musesampler", "Muse Sampler library is not found");
+        status = muse::trc("musesampler", "MuseSampler library is not found");
     } else {
-        status = muse::qtrc("musesampler", "Muse Sampler library is detected, version %1")
+        status = muse::qtrc("musesampler", "MuseSampler library is detected, version %1")
                  .arg(QString::fromStdString(libVersion)).toStdString();
     }
 
@@ -56,6 +56,6 @@ void MuseSamplerActionController::reloadMuseSampler()
     }
 
     if (!m_reloadMuseSampler()) {
-        interactive()->error("", std::string("Could not reload Muse Sampler library"));
+        interactive()->error("", std::string("Could not reload MuseSampler library"));
     }
 }

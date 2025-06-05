@@ -416,6 +416,8 @@ void MusicXmlParserPass1::setExporterSoftware(String& exporter)
         } else {
             m_exporterSoftware = MusicXmlExporterSoftware::SIBELIUS;
         }
+    } else if (exporter.contains(u"dorico")) {
+        m_exporterSoftware = MusicXmlExporterSoftware::DORICO;
     } else if (exporter.contains(u"finale")) {
         m_exporterSoftware = MusicXmlExporterSoftware::FINALE;
     } else if (exporter.contains(u"noteflight")) {
@@ -912,10 +914,11 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 //   createAndAddVBoxForCreditWords
 //---------------------------------------------------------
 
-VBox* MusicXmlParserPass1::createAndAddVBoxForCreditWords(Score* score)
+VBox* MusicXmlParserPass1::createAndAddVBoxForCreditWords(Score* score, Fraction tick)
 {
     VBox* vbox = Factory::createTitleVBox(score->dummy()->system());
-    score->measures()->add(vbox);
+    vbox->setTick(tick);
+    score->measures()->append(vbox);
     return vbox;
 }
 
@@ -996,9 +999,10 @@ static void inferFromTitle(String& title, String& inferredSubtitle, String& infe
 //---------------------------------------------------------
 
 static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const Size& pageSize,
-                            const bool top, const bool isSibeliusScore)
+                            Fraction tick, const bool isSibeliusScore)
 {
     VBox* vbox = nullptr;
+    const bool top = tick.isZero();
 
     std::vector<const CreditWords*> headerWords;
     std::vector<const CreditWords*> footerWords;
@@ -1035,7 +1039,8 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords, const 
             const Align align = alignForCreditWords(w, pageSize.width(), tid);
             double yoffs = tid == TextStyleType::COMPOSER ? 0.0 : (maxy - w->defaultY) * score->style().spatium() / 10;
             if (!vbox) {
-                vbox = MusicXmlParserPass1::createAndAddVBoxForCreditWords(score);
+                Fraction vBoxTick = top ? Fraction(0, 1) : tick;
+                vbox = MusicXmlParserPass1::createAndAddVBoxForCreditWords(score, vBoxTick);
             }
             addText2(vbox, score, w->words, tid, align, yoffs);
         } else if (w->type == u"rights" && score->metaTag(u"copyright").empty()) {
@@ -1101,7 +1106,7 @@ void MusicXmlParserPass1::createDefaultHeader(Score* score)
         strTranslator = metaTranslator;
     }
 
-    VBox* const vbox = MusicXmlParserPass1::createAndAddVBoxForCreditWords(score);
+    VBox* const vbox = MusicXmlParserPass1::createAndAddVBoxForCreditWords(score, Fraction(0, 1));
     vbox->setExcludeFromOtherParts(false);
     addText(vbox, score, strTitle.toXmlEscaped(),      TextStyleType::TITLE);
     addText(vbox, score, strSubTitle.toXmlEscaped(),   TextStyleType::SUBTITLE);
@@ -1139,7 +1144,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
             ++pageNr;
 
             if (pageNr == 1) {
-                vbox = addCreditWords(score, crWords, pageSize, true, sibOrDolet());
+                vbox = addCreditWords(score, crWords, pageSize, Fraction(0, 0), sibOrDolet());
                 if (i == 0 && vbox) {
                     vbox->setExcludeFromOtherParts(false);
                 }
@@ -1151,7 +1156,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
         measure->setTick(ms.at(i));
         measure->setTicks(ml.at(i));
         measure->setNo(int(i));
-        score->measures()->add(measure);
+        score->measures()->append(measure);
 
         // add break to previous measure or vbox
         MeasureBase* mb = vbox;
@@ -1166,7 +1171,7 @@ void MusicXmlParserPass1::createMeasuresAndVboxes(Score* score,
 
         // add a footer vbox if the next measure is on a new page or end of score has been reached
         if ((pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) && pageNr == 1) {
-            addCreditWords(score, crWords, pageSize, false, sibOrDolet());
+            addCreditWords(score, crWords, pageSize, measure->tick() + measure->ticks(), sibOrDolet());
         }
     }
 }
@@ -1286,6 +1291,9 @@ Err MusicXmlParserPass1::parse()
 
     if (!found) {
         m_logger->logError(u"this is not a MusicXML score-partwise file, node <score-partwise> not found", &m_e);
+        if (!m_e.errorString().isEmpty()) {
+            m_errors += errorStringWithLocation(m_e.lineNumber(), m_e.columnNumber(), m_e.errorString()) + '\n';
+        }
         return Err::FileBadFormat;
     }
 
@@ -1402,15 +1410,17 @@ void MusicXmlParserPass1::scorePartwise()
             Part* spannedPart = il.at(pg->start + j);
             stavesSpan += spannedPart->nstaves();
 
-            if (pg->barlineSpan) {
-                for (Staff* spannedStaff : spannedPart->staves()) {
-                    if ((j == pg->span - 1) && (spannedStaff == spannedPart->staves().back())) {
-                        // Very last staff of group,
-                        continue;
-                    } else {
-                        spannedStaff->setBarLineSpan(true);
-                    }
+            if (!pg->barlineSpan) {
+                continue;
+            }
+
+            for (Staff* spannedStaff : spannedPart->staves()) {
+                if ((j == pg->span - 1) && (spannedStaff == spannedPart->staves().back())) {
+                    // Very last staff of group,
+                    continue;
                 }
+
+                spannedStaff->setBarLineSpan(true);
             }
         }
         // add bracket and set the span
@@ -1419,10 +1429,20 @@ void MusicXmlParserPass1::scorePartwise()
         if (pg->type != BracketType::NO_BRACKET && !isRedundantBracket(staff, pg->type, stavesSpan)) {
             staff->setBracketType(pg->column, pg->type);
             staff->setBracketSpan(pg->column, stavesSpan);
+            if ((staff->brackets().size() > pg->column) && pg->color.isValid()) {
+                BracketItem* bracketItem = staff->brackets().at(pg->column);
+                bracketItem->setColor(pg->color);
+            }
             // add part to set (skip implicit bracket later)
             if (pg->span == 1) {
                 partSet.insert(il.at(pg->start));
             }
+        }
+
+        Score* score = staff->score();
+        if (!score->isSystemObjectStaff(staff) && exporterSoftware() == MusicXmlExporterSoftware::FINALE
+            && configuration()->inferTextType()) {
+            score->addSystemObjectStaff(staff);
         }
     }
 
@@ -1487,8 +1507,15 @@ void MusicXmlParserPass1::identification()
         } else if (m_e.name() == "source") {
             m_score->setMetaTag(u"source", m_e.readText());
         } else if (m_e.name() == "miscellaneous") {
-            // TODO
-            m_e.skipCurrentElement();        // skip but don't log
+            // store all miscellaneous information
+            while (m_e.readNextStartElement()) {
+                if (m_e.name() == "miscellaneous-field") {
+                    const String name = m_e.attribute("name");
+                    m_score->setMetaTag(name, m_e.readText());
+                } else {
+                    m_e.skipCurrentElement();
+                }
+            }
         } else {
             skipLogCurrElem();
         }
@@ -1781,6 +1808,7 @@ static void updateStyles(Score* score,
         }
 
         bool needUseDefaultSize = tid == TextStyleType::HARMONY_ROMAN
+                                  || tid == TextStyleType::HAMMER_ON_PULL_OFF
                                   || isTitleFrameStyle(tid)
                                   || isHarpPedalStyle(tid);
 
@@ -2207,7 +2235,7 @@ typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
  to generate the brackets.
  */
 
-static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, const String& s, bool barlineSpan)
+static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, const String& s, bool barlineSpan, Color color)
 {
     //LOGD("partGroupStart number=%d part=%d symbol=%s", n, p, muPrintable(s));
 
@@ -2239,7 +2267,10 @@ static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, const String
     pg->start = p;
     pg->barlineSpan = barlineSpan,
     pg->type = bracketType;
-    pg->column = n;
+    if (color.isValid()) {
+        pg->color = color;
+    }
+    pg->column = static_cast<size_t>(n);
     pgs[n] = pg;
 }
 
@@ -2289,6 +2320,7 @@ void MusicXmlParserPass1::partGroup(const int scoreParts,
     }
     String symbol;
     String type = m_e.attribute("type");
+    Color symbolColor;
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "group-name") {
@@ -2296,6 +2328,7 @@ void MusicXmlParserPass1::partGroup(const int scoreParts,
         } else if (m_e.name() == "group-abbreviation") {
             symbol = m_e.readText();
         } else if (m_e.name() == "group-symbol") {
+            symbolColor = Color::fromString(m_e.attribute("color"));
             symbol = m_e.readText();
         } else if (m_e.name() == "group-barline") {
             if (m_e.readText() == "no") {
@@ -2307,7 +2340,7 @@ void MusicXmlParserPass1::partGroup(const int scoreParts,
     }
 
     if (type == "start") {
-        partGroupStart(partGroups, number, scoreParts, symbol, barlineSpan);
+        partGroupStart(partGroups, number, scoreParts, symbol, barlineSpan, symbolColor);
     } else if (type == "stop") {
         partGroupStop(partGroups, number, scoreParts, partGroupList);
     } else {

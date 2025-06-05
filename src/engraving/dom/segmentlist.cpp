@@ -84,6 +84,12 @@ void SegmentList::check()
         case SegmentType::BarLine:
         case SegmentType::ChordRest:
         case SegmentType::Breath:
+        case SegmentType::ClefRepeatAnnounce:
+        case SegmentType::TimeSigRepeatAnnounce:
+        case SegmentType::KeySigRepeatAnnounce:
+        case SegmentType::ClefStartRepeatAnnounce:
+        case SegmentType::TimeSigStartRepeatAnnounce:
+        case SegmentType::KeySigStartRepeatAnnounce:
         case SegmentType::EndBarLine:
         case SegmentType::TimeSigAnnounce:
         case SegmentType::KeySigAnnounce:
@@ -262,6 +268,16 @@ Segment* SegmentList::last(ElementFlag flags) const
 {
     for (Segment* s = m_last; s; s = s->prev()) {
         if (s->flag(flags)) {
+            return s;
+        }
+    }
+    return nullptr;
+}
+
+Segment* SegmentList::last(SegmentType types) const
+{
+    for (Segment* s = m_last; s; s = s->prev()) {
+        if (s->segmentType() & types) {
             return s;
         }
     }

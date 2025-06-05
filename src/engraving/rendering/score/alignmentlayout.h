@@ -38,6 +38,7 @@ class AlignmentLayout
 public:
     static void alignItemsWithTheirSnappingChain(const std::vector<EngravingItem*>& elements, const System* system);
     static void alignStaffCenteredItems(const std::vector<EngravingItem*>& elements, const System* system);
+    static void alignItemsForSystem(const std::vector<EngravingItem*>& elements, const System* system);
     static void alignItemsGroup(const std::vector<EngravingItem*>& elements, const System* system);
 
 private:

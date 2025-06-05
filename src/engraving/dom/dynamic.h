@@ -25,6 +25,10 @@
 
 #include "textbase.h"
 
+namespace muse::draw {
+class Painter;
+}
+
 namespace mu::engraving {
 class Measure;
 class Segment;
@@ -68,19 +72,7 @@ public:
     int subtype() const override { return static_cast<int>(m_dynamicType); }
     TranslatableString subtypeUserName() const override;
 
-    double customTextOffset() const;
-
-    bool isEditable() const override { return true; }
-    bool isEditAllowed(EditData&) const override;
-    void startEdit(EditData&) override;
-    bool edit(EditData&) override;
-    bool editNonTextual(EditData&) override;
-    void editDrag(EditData&) override;
-    void endEdit(EditData&) override;
     void reset() override;
-    bool needStartEditingAfterSelecting() const override { return true; }
-
-    bool allowTimeAnchor() const override { return true; }
 
     void setVelocity(int v) { m_velocity = v; }
     int velocity() const;
@@ -105,15 +97,11 @@ public:
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
 
-    void manageBarlineCollisions();
-
     static String dynamicText(DynamicType t);
     bool hasCustomText() const { return dynamicText(m_dynamicType) != xmlText(); }
 
     Expression* snappedExpression() const;
     HairpinSegment* findSnapBeforeHairpinAcrossSystemBreak() const;
-
-    void undoMoveSegment(Segment* newSeg, Fraction tickDiff);
 
     bool playDynamic() const { return m_playDynamic; }
     void setPlayDynamic(bool v) { m_playDynamic = v; }
@@ -124,11 +112,32 @@ public:
     static int dynamicVelocity(DynamicType t);
     static const std::vector<Dyn>& dynamicList() { return DYN_LIST; }
 
-    bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }
-    void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
-    void checkMeasureBoundariesAndMoveIfNeed();
-
     bool hasVoiceAssignmentProperties() const override { return true; }
+
+    int gripsCount() const override;
+    std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
+    void editDrag(EditData& editData) override;
+    void endEditDrag(EditData&) override;
+
+    bool isTextualEditAllowed(EditData&) const override;
+
+    Hairpin* leftHairpin() const { return m_leftHairpin; }
+    Hairpin* rightHairpin() const { return m_rightHairpin; }
+
+    bool hasLeftGrip() const;
+    bool hasRightGrip() const;
+
+    void resetLeftDragOffset() { m_leftDragOffset = 0.0; }
+    void resetRightDragOffset() { m_rightDragOffset = 0.0; }
+
+    double leftDragOffset() const { return m_leftDragOffset; }
+    double rightDragOffset() const { return m_rightDragOffset; }
+
+    void findAdjacentHairpins();
+
+    Shape symShapeWithCutouts(SymId id) const override;
+
+    static Dyn dynInfo(DynamicType type);
 
 private:
 
@@ -136,10 +145,7 @@ private:
     M_PROPERTY(double, dynamicsSize, setDynamicsSize)
     M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
 
-    bool moveSegment(const EditData& ed);
-    void moveSnappedItems(Segment* newSeg, Fraction tickDiff) const;
-    bool nudge(const EditData& ed);
-
+    std::pair<DynamicType, String> parseDynamicText(const String&) const;
     DynamicType m_dynamicType = DynamicType::OTHER;
     bool m_playDynamic = true;
 
@@ -152,7 +158,11 @@ private:
 
     static const std::vector<Dyn> DYN_LIST;
 
-    bool m_anchorToEndOfPrevious = false;
+    double m_leftDragOffset = 0.0;
+    double m_rightDragOffset = 0.0;
+
+    Hairpin* m_leftHairpin = nullptr;
+    Hairpin* m_rightHairpin = nullptr;
 };
 } // namespace mu::engraving
 

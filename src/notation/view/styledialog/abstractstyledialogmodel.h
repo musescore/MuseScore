@@ -45,8 +45,8 @@ protected:
     explicit AbstractStyleDialogModel(QObject* parent, std::set<StyleId> ids);
     StyleItem* styleItem(StyleId id) const;
 
-private:
     INotationStylePtr currentNotationStyle() const;
+private:
 
     StyleItem* buildStyleItem(StyleId id) const;
 

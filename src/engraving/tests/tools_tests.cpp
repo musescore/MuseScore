@@ -40,36 +40,6 @@ public:
     void changeEnharmonic(bool);
 };
 
-TEST_F(Engraving_ToolsTests, undoAddLineBreaks)
-{
-    String readFile(TOOLS_DATA_DIR + "undoAddLineBreaks.mscx");
-    String writeFile1("undoAddLineBreaks01-test.mscx");
-    String reference1(TOOLS_DATA_DIR + "undoAddLineBreaks01-ref.mscx");
-    String writeFile2("undoAddLineBreaks02-test.mscx");
-    String reference2(TOOLS_DATA_DIR + "undoAddLineBreaks02-ref.mscx");
-
-    MasterScore* score = ScoreRW::readScore(readFile);
-    score->doLayout();
-
-    // select all
-    score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->cmdSelectAll();
-    score->endCmd();
-
-    // do
-    score->startCmd(TranslatableString::untranslatable("Engraving tools tests"));
-    score->addRemoveBreaks(4, false);
-    score->endCmd();
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
-
-    // undo
-    EditData ed;
-    score->undoStack()->undo(&ed);
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
-
-    delete score;
-}
-
 TEST_F(Engraving_ToolsTests, undoSlashFill)
 {
     String readFile(TOOLS_DATA_DIR + "undoSlashFill.mscx");

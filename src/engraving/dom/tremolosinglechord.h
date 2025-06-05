@@ -20,10 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TREMOLOSINGLECHORD_H
-#define MU_ENGRAVING_TREMOLOSINGLECHORD_H
-
-#include <memory>
+#pragma once
 
 #include "engravingitem.h"
 
@@ -85,12 +82,6 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
-    // only need grips for two-note trems
-    bool needStartEditingAfterSelecting() const override;
-    int gripsCount() const override;
-    Grip initialEditModeGrip() const override;
-    Grip defaultGrip() const override;
-    std::vector<PointF> gripsPositions(const EditData&) const override;
     bool isMovable() const override { return true; }
     bool isEditable() const override { return true; }
     void endEdit(EditData&) override;
@@ -113,7 +104,6 @@ private:
     muse::draw::PainterPath m_path;
     bool m_playTremolo = true;
 
-    int m_lines = 0;         // derived from _subtype
+    int m_lines = 0; // derived from _subtype
 };
 } // namespace mu::engraving
-#endif

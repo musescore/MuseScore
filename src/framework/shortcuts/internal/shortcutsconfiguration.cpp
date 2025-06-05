@@ -40,6 +40,9 @@ void ShortcutsConfiguration::init()
     m_config = ConfigReader::read(":/configs/shortcuts.cfg");
 
     settings()->setDefaultValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(true));
+    settings()->valueChanged(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE).onReceive(this, [this](const Val& val) {
+        m_advanceToNextNoteOnKeyReleaseChanged.send(val.toBool());
+    });
 }
 
 QString ShortcutsConfiguration::currentKeyboardLayout() const
@@ -82,4 +85,9 @@ bool ShortcutsConfiguration::advanceToNextNoteOnKeyRelease() const
 void ShortcutsConfiguration::setAdvanceToNextNoteOnKeyRelease(bool value)
 {
     settings()->setSharedValue(ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE, Val(value));
+}
+
+muse::async::Channel<bool> ShortcutsConfiguration::advanceToNextNoteOnKeyReleaseChanged() const
+{
+    return m_advanceToNextNoteOnKeyReleaseChanged;
 }

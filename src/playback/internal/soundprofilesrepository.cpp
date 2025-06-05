@@ -38,7 +38,7 @@ void SoundProfilesRepository::init()
 
     SoundProfile museProfile;
     museProfile.type = SoundProfileType::Muse;
-    museProfile.name = config()->museSoundProfileName();
+    museProfile.name = config()->museSoundsProfileName();
     m_profilesMap.emplace(museProfile.name, std::move(museProfile));
 }
 
@@ -47,7 +47,7 @@ void SoundProfilesRepository::refresh()
     playback()->tracks()->availableInputResources()
     .onResolve(this, [this](const AudioResourceMetaList& availableResources) {
         SoundProfile& basicProfile = m_profilesMap.at(config()->basicSoundProfileName());
-        SoundProfile& museProfile = m_profilesMap.at(config()->museSoundProfileName());
+        SoundProfile& museProfile = m_profilesMap.at(config()->museSoundsProfileName());
 
         for (const AudioResourceMeta& resource : availableResources) {
             auto setup = resource.attributes.find(u"playbackSetupData");

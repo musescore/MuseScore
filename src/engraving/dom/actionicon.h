@@ -26,7 +26,7 @@
 #include "engravingitem.h"
 
 namespace mu::engraving {
-enum class ActionIconType {
+enum class ActionIconType : signed char {
     UNDEFINED = -1,
 
     ACCIACCATURA,
@@ -64,6 +64,8 @@ enum class ActionIconType {
     SLIGHT_BEND,
 
     NOTE_ANCHORED_LINE,
+
+    SYSTEM_LOCK,
 };
 
 //! Dummy element, used for drag&drop

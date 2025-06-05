@@ -19,56 +19,124 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts
 
 import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
-Item {
+import "internal"
+
+StyledFlickable {
     id: root
-    enabled: selectionFilterModel.enabled
 
     property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: NavigationPanel {
-        name: "SelectionFilter"
-        section: root.navigationSection
-        direction: NavigationPanel.Vertical
-        enabled: root.enabled && root.visible
-        order: 2
-    }
+    property int navigationOrderStart: 0
+
+    enabled: selectionFilterModel.enabled
+
+    contentWidth: root.width
+    contentHeight: contentColumn.implicitHeight
 
     Component.onCompleted: {
-        selectionFilterModel.load()
+        voicesModel.load()
+        elementsModel.load()
     }
 
-    StyledListView {
-        anchors.fill: parent
+    Column {
+        id: contentColumn
 
-        topMargin: 12
-        leftMargin: topMargin
-        rightMargin: topMargin
-        bottomMargin: topMargin
-
-        spacing: 12
-
-        model: SelectionFilterModel {
-            id: selectionFilterModel
+        anchors {
+            fill: parent
+            leftMargin: 12
+            rightMargin: 12
         }
 
-        delegate: CheckBox {
-            width: ListView.view.width
+        spacing: 10
 
-            text: model.title
+        SelectionFilterSection {
+            id: voicesSection
 
-            navigation.panel: root.navigationPanel
-            navigation.order: model.index
+            sectionTitle: qsTrc("notation", "Voices")
 
-            checked: model.isSelected
-            isIndeterminate: model.isIndeterminate
-            onClicked: {
-                model.isSelected = !checked
+            navigation {
+                section: root.navigationSection
+                order: root.navigationOrderStart + 1
+                direction: NavigationPanel.Horizontal
+            }
+
+            RowLayout {
+                id: voiceButtonsRow
+
+                width: parent.width
+                spacing: voicesSection.spacing
+
+                Repeater {
+                    model: VoicesSelectionFilterModel {
+                        id: voicesModel
+                    }
+
+                    delegate: FlatButton {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 24
+
+                        text: model.title
+
+                        navigation.panel: voicesSection.navigation
+                        navigation.order: model.index
+
+                        accentButton: model.isSelected
+                        onClicked: {
+                            model.isSelected = !model.isSelected
+                        }
+                    }
+                }
+            }
+        }
+
+        SeparatorLine {}
+
+        SelectionFilterSection {
+            id: notationElementsSection
+
+            sectionTitle: qsTrc("notation", "Notation elements")
+
+            navigation {
+                section: root.navigationSection
+                order: root.navigationOrderStart + 2
+                direction: NavigationPanel.Vertical
+            }
+
+            StyledListView {
+                width: parent.width
+                height: contentHeight
+
+                spacing: notationElementsSection.spacing
+                clip: false
+
+                model: ElementsSelectionFilterModel {
+                    id: elementsModel
+                }
+
+                interactive: false
+
+                delegate: CheckBox {
+                    width: ListView.view.width
+
+                    text: model.title
+
+                    navigation.panel: notationElementsSection.navigation
+                    navigation.order: model.index
+
+                    checked: model.isSelected
+                    isIndeterminate: model.isIndeterminate
+                    onClicked: {
+                        model.isSelected = !checked
+                    }
+                }
             }
         }
     }

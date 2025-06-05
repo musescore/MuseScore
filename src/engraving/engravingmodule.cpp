@@ -41,13 +41,16 @@
 
 #include "engraving/style/defaultstyle.h"
 
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/drumset.h"
 #include "engraving/dom/figuredbass.h"
+#include "engraving/dom/fret.h"
 
 #include "rendering/score/scorerenderer.h"
 #include "rendering/single/singlerenderer.h"
+#include "rendering/editmode/editmoderenderer.h"
 
 #include "compat/scoreaccess.h"
 
@@ -115,6 +118,7 @@ void EngravingModule::registerExports()
     // internal
     ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::score::ScoreRenderer());
     ioc()->registerExport<rendering::ISingleRenderer>(moduleName(), new rendering::single::SingleRenderer());
+    ioc()->registerExport<rendering::IEditModeRenderer>(moduleName(), new rendering::editmode::EditModeRenderer());
 
 #ifdef MUE_BUILD_ENGRAVING_DEVTOOLS
     ioc()->registerExport<IEngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
@@ -181,7 +185,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         // MusicSymbol[Text]
         auto addMusicFont = [this, fdb](const std::string& name, const FontDataKey& fontDataKey, const muse::io::path_t& filePath){
             fdb->addFont(FontDataKey(fontDataKey), filePath);
-            m_engravingfonts->addFont(name, fontDataKey.family().id().toStdString(), filePath);
+            m_engravingfonts->addInternalFont(name, fontDataKey.family().id().toStdString(), filePath);
         };
 
         addMusicFont("Bravura", FontDataKey(u"Bravura"), ":/fonts/bravura/Bravura.otf");

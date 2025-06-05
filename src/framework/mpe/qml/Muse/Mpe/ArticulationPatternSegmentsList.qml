@@ -59,6 +59,7 @@ ListView {
                 id: thumbnailMouseArea
 
                 anchors.fill: parent
+                enabled: thumbnailPlot.enabled
                 hoverEnabled: true
 
                 onClicked: {

@@ -42,6 +42,10 @@ static const ElementStyle noteLineStyle {
     { Sid::noteLineAlign,                      Pid::CONTINUE_TEXT_ALIGN },
     { Sid::noteLineAlign,                      Pid::END_TEXT_ALIGN },
     { Sid::noteLineFontSpatiumDependent,       Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
+    { Sid::noteLineWidth,                      Pid::LINE_WIDTH },
+    { Sid::noteLineStyle,                      Pid::LINE_STYLE },
+    { Sid::noteLineDashLineLen,                Pid::DASH_LINE_LEN },
+    { Sid::noteLineDashGapLen,                 Pid::DASH_GAP_LEN },
 };
 
 Sid NoteLineSegment::getPropertyStyle(Pid pid) const
@@ -163,6 +167,8 @@ PropertyValue NoteLine::propertyDefault(Pid propertyId) const
 PropertyValue NoteLine::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
+    case Pid::PLAY:
+        return PropertyValue();
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;
     case Pid::NOTELINE_PLACEMENT:
@@ -175,6 +181,8 @@ PropertyValue NoteLine::getProperty(Pid propertyId) const
 bool NoteLine::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
+    case Pid::PLAY:
+        break;
     case Pid::NOTELINE_PLACEMENT:
         setLineEndPlacement(val.value<NoteLineEndPlacement>());
         break;

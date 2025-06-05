@@ -42,6 +42,7 @@ class Chord;
 class ChordRest;
 class Clef;
 class EngravingItem;
+class Fingering;
 class Lyrics;
 class Measure;
 class Note;
@@ -50,6 +51,7 @@ class Rest;
 class Score;
 class Staff;
 class TremoloSingleChord;
+class Trill;
 class Tuplet;
 class VBox;
 }
@@ -92,6 +94,7 @@ private:
     bool writeStaffGrpEnd(const engraving::Staff* staff, std::vector<int>& ends);
     bool writeStaffDef(const engraving::Staff* staff, const engraving::Measure* measure, const engraving::Part* part, bool isPart);
     bool writeLabel(pugi::xml_node node, const engraving::Part* part);
+    bool writeInstrDef(pugi::xml_node node, const engraving::Part* part);
     bool writeEnding(const engraving::Measure* measure);
     bool writeEndingEnd(const engraving::Measure* measure);
     bool writeMeasure(const engraving::Measure* measure, int& measureN, bool& isFirst, bool& wasLastIrregular);
@@ -130,9 +133,10 @@ private:
     bool writeFb(const engraving::FiguredBass* figuredBass, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const libmei::xsdPositiveInteger_List& staffNs, double tstamp);
+    bool writeFing(const engraving::Fingering* fing, const std::string& startid);
     bool writeHairpin(const engraving::Hairpin* hairpin, const std::string& startid);
     bool writeHarm(const engraving::Harmony* harmony, const std::string& startid);
-    bool writeLv(const engraving::Articulation* articulation, const std::string& startid);
+    bool writeHarpPedal(const engraving::HarpPedalDiagram* harpPedalDiagram, const std::string& startid);
     bool writeOctave(const engraving::Ottava* ottava, const std::string& startid);
     bool writeOrnament(const engraving::Ornament* ornament, const std::string& startid);
     bool writePedal(const engraving::Pedal* pedal, const std::string& startid);
@@ -142,6 +146,7 @@ private:
     bool writeSlur(const engraving::Slur* slur, const std::string& startid);
     bool writeTempo(const engraving::TempoText* tempoText, const std::string& startid);
     bool writeTie(const engraving::Tie* tie, const std::string& startid);
+    bool writeTrill(const engraving::Trill* trill, const std::string& startid);
 
     /**
      * Methods for writing specific MEI attribute classes within elements

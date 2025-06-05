@@ -494,36 +494,76 @@
 	<string>fonts/</string>
 	<key>CFBundleLocalizations</key>
 	<array>
+		<string>af</string>
 		<string>ar</string>
+		<string>ar_DZ</string>
+		<string>ar_EG</string>
+		<string>ar_SD</string>
+                <string>ast</string>
+                <string>be</string>
+		<string>bg</string>
+		<string>br</string>
+		<string>ca</string>
+		<string>ca@Valencia</string>
 		<string>cs</string>
+		<string>cy</string>
 		<string>da</string>
 		<string>de</string>
 		<string>el</string>
 		<string>en</string>
-		<string>es</string>
-		<string>fi</string>
+		<string>en_GB</string>
+		<string>en_US</string>
+                <string>eo</string>
+                <string>es</string>
+		<string>et</string>
+		<string>eu</string>
+                <string>fa</string>
+                <string>fi</string>
+		<string>fil</string>
+		<string>fo</string>
 		<string>fr</string>
 		<string>fr_CA</string>
+		<string>ga</string>
+		<string>gd</string>
+		<string>gl</string>
+		<string>he</string>
+		<string>hi_IN</string>
+		<string>hr</string>
 		<string>hu</string>
-		<string>is</string>
-		<string>it</string>
+		<string>hy</string>
+		<string>id</string>
+                <string>ig</string>
+                <string>it</string>
 		<string>ja</string>
+                <string>ka</string>
+                <string>kab</string>
 		<string>ko</string>
+                <string>lt</string>
+                <string>lv</string>
+		<string>ml</string>
+		<string>mn_MN</string>
+		<string>mt</string>
 		<string>nb</string>
 		<string>nl</string>
+		<string>nn</string>
 		<string>pl</string>
 		<string>pt</string>
 		<string>pt_BR</string>
-		<string>pt_PT</string>
 		<string>ro</string>
 		<string>ru</string>
+		<string>scn</string>
 		<string>sk</string>
 		<string>sl</string>
+		<string>sr</string>
+		<string>sr_RS</string>
 		<string>sv</string>
 		<string>th</string>
 		<string>tr</string>
 		<string>uk</string>
+                <string>uz@Latn</string>
+		<string>vi</string>
 		<string>zh_CN</string>
+		<string>zh_HK</string>
 		<string>zh_TW</string>
 	</array>
 </dict>

@@ -55,6 +55,8 @@ static const QString IPC_WHOIS("ipc_whois");
 static const QString IPC_METAINFO("ipc_metainfo");
 static const QString IPC_PING("ipc_ping");
 
+static constexpr uint32_t MAX_PACKAGE_SIZE = 4096;
+
 enum class Code {
     Undefined = -1,
     Success = 0,

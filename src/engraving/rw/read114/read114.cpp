@@ -1144,7 +1144,7 @@ static void readVolta114(XmlReader& e, ReadContext& ctx, Volta* volta)
                 volta->endings().push_back(i);
             }
         } else if (tag == "subtype") {
-            e.readInt();
+            volta->setVoltaType(e.readInt() == 1 ? Volta::Type::CLOSED : Volta::Type::OPEN);
         } else if (tag == "lineWidth") {
             volta->setLineWidth(Spatium(e.readDouble()));
             volta->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
@@ -1390,12 +1390,12 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
         const AsciiStringView tag(e.name());
         if (tag == "base") {
             if (ctx.mscVersion() >= 106) {
-                h->setBaseTpc(e.readInt());
+                h->setBassTpc(e.readInt());
             } else {
-                h->setBaseTpc(table[e.readInt() - 1]);
+                h->setBassTpc(table[e.readInt() - 1]);
             }
         } else if (tag == "baseCase") {
-            h->setBaseCase(static_cast<NoteCaseType>(e.readInt()));
+            h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
             h->setId(e.readInt());
         } else if (tag == "name") {
@@ -1492,7 +1492,6 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
 static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx)
 {
     Segment* segment = 0;
-    double _spatium = m->spatium();
 
     std::vector<Chord*> graceNotes;
 
@@ -1824,6 +1823,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 staff->clefList().insert(std::pair<int, ClefType>(ctx.tick().ticks(), ClefType::G));
             }
 
+            // Clef segments are sorted on layout now.  Previously, clef barline position could be out of sync with segment placement.
+            if (ctx.tick() != Fraction(0, 1) && ctx.tick() == m->tick()
+                && !(m->prevMeasure() && m->prevMeasure()->repeatEnd()) && !header) {
+                clef->setClefToBarlinePosition(ClefToBarlinePosition::AFTER);
+            }
+
             segment->add(clef);
         } else if (tag == "TimeSig") {
             // if time sig not at beginning of measure => courtesy time sig
@@ -1994,14 +1999,34 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                     j->setPlayUntil(e.readText());
                 } else if (t == "continueAt") {
                     j->setContinueAt(e.readText());
-                } else if (t == "playRepeats") {
-                    j->setPlayRepeats(e.readBool());
                 } else if (t == "subtype") {
-                    e.readInt();
+                    e.skipCurrentElement(); // obsolete, always "Repeat"
                 } else if (!TRead::readTextProperties(j, e, ctx)) {
                     e.unknown();
                 }
             }
+
+            // infer jump type
+            String jumpTo = j->jumpTo();
+            String playUntil = j->playUntil();
+            if (jumpTo == "start") {
+                if (playUntil == "end") {
+                    j->setJumpType(JumpType::DC);
+                } else if (playUntil == "fine") {
+                    j->setJumpType(JumpType::DC_AL_FINE);
+                } else {
+                    j->setJumpType(JumpType::DC_AL_CODA);
+                }
+            } else {
+                if (playUntil == "end") {
+                    j->setJumpType(JumpType::DS);
+                } else if (playUntil == "fine") {
+                    j->setJumpType(JumpType::DS_AL_FINE);
+                } else {
+                    j->setJumpType(JumpType::DS_AL_CODA);
+                }
+            }
+
             m->add(j);
         } else if (tag == "Marker") {
             Marker* a = Factory::createMarker(m);
@@ -2010,7 +2035,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             MarkerType mt = MarkerType::SEGNO;
             while (e.readNextStartElement()) {
                 const AsciiStringView t(e.name());
-                if (t == "subtype") {
+                if (t == "subtype" || t == "label") {
                     AsciiStringView s(e.readAsciiText());
                     a->setLabel(String::fromAscii(s.ascii()));
                     mt = TConv::fromXml(s, MarkerType::USER);
@@ -2025,6 +2050,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 // force the marker type for correct display
                 a->setXmlText(u"");
                 a->setMarkerType(a->markerType());
+                a->setTextStyleType(TextStyleType::REPEAT_LEFT);
             }
             m->add(a);
         } else if (tag == "Image") {
@@ -2074,7 +2100,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerDown(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
+            m->vspacerDown(staffIdx)->setGap(Spatium(e.readDouble()));
         } else if (tag == "vspacer" || tag == "vspacerUp") {
             if (!m->vspacerUp(staffIdx)) {
                 Spacer* spacer = Factory::createSpacer(m);
@@ -2082,7 +2108,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
             }
-            m->vspacerUp(staffIdx)->setGap(Millimetre(e.readDouble() * _spatium));
+            m->vspacerUp(staffIdx)->setGap(Spatium(e.readDouble()));
         } else if (tag == "visible") {
             m->setStaffVisible(staffIdx, e.readInt());
         } else if (tag == "slashStyle") {
@@ -2297,7 +2323,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                 measure->checkMeasure(staff);
 
                 if (!measure->isMMRest()) {
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                     ctx.setLastMeasure(measure);
                     ctx.setTick(measure->tick() + measure->ticks());
                 } else {
@@ -2315,7 +2341,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                     LOGD("Score::readStaff(): missing measure!");
                     measure = Factory::createMeasure(score->dummy()->system());
                     measure->setTick(ctx.tick());
-                    score->measures()->add(measure);
+                    score->measures()->append(measure);
                 }
                 ctx.setTick(measure->tick());
 
@@ -2337,7 +2363,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
             Box* mb = toBox(Factory::createItemByName(tag, score->dummy()));
             readBox(e, ctx, mb);
             mb->setTick(ctx.tick());
-            score->measures()->add(mb);
+            score->measures()->append(mb);
         } else if (tag == "tick") {
             ctx.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
         } else {
@@ -2597,7 +2623,7 @@ static void readPart(Part* part, XmlReader& e, ReadContext& ctx)
 //   readPageFormat
 //---------------------------------------------------------
 
-static void readPageFormat(PageFormat* pf, XmlReader& e)
+static void readPageFormat(PageFormat* pf, int& pageNumberOffset, XmlReader& e)
 {
     double _oddRightMargin  = 0.0;
     double _evenRightMargin = 0.0;
@@ -2647,7 +2673,7 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
             const PaperSize* s = getPaperSize114(e.readText());
             pf->setSize(SizeF(s->w, s->h));
         } else if (tag == "page-offset") {
-            e.readInt();
+            pageNumberOffset = e.readInt();
         } else {
             e.unknown();
         }
@@ -2722,16 +2748,20 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
 //    import old version <= 1.3 files
 //---------------------------------------------------------
 
-Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
+muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 {
     IF_ASSERT_FAILED(score->isMaster()) {
-        return Err::FileUnknownError;
+        return make_ret(Err::FileUnknownError);
     }
 
     ReadContext ctx(score);
-    if (out && out->overriddenSpatium.has_value()) {
-        ctx.setSpatium(out->overriddenSpatium.value());
-        ctx.setOverrideSpatium(true);
+    if (out) {
+        if (out->overriddenSpatium.has_value()) {
+            ctx.setSpatium(out->overriddenSpatium.value());
+            ctx.setOverrideSpatium(true);
+        }
+
+        ctx.setPropertiesToSkip(out->propertiesToSkip);
     }
 
     DEFER {
@@ -2825,7 +2855,11 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             e.skipCurrentElement();
         } else if (tag == "page-layout") {
             compat::PageFormat pf;
-            readPageFormat(&pf, e);
+            int pageNumberOffset = 0;
+            initPageFormat(&masterScore->style(), &pf);
+            readPageFormat(&pf, pageNumberOffset, e);
+            setPageFormat(&masterScore->style(), pf);
+            masterScore->setPageNumberOffset(pageNumberOffset);
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = Factory::createText(masterScore->dummy(), TextStyleType::DEFAULT, false);
             readText114(e, ctx, text, text);
@@ -2915,7 +2949,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 
     if (e.error() != muse::XmlStreamReader::NoError) {
         LOGD() << e.lineNumber() << " " << e.columnNumber() << ": " << e.errorString();
-        return Err::FileBadFormat;
+        return make_ret(Err::FileBadFormat, e.errorString());
     }
 
     for (Staff* s : masterScore->staves()) {
@@ -3172,7 +3206,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         score->removeElement(invalidSpanner);
     }
 
-    return Err::NoError;
+    return muse::make_ok();
 }
 
 bool Read114::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)

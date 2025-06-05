@@ -25,7 +25,7 @@
 #include <array>
 
 #include "../infrastructure/ifileinfoprovider.h"
-#include "../infrastructure/geteid.h"
+#include "../infrastructure/eidregister.h"
 
 #include "instrument.h"
 #include "score.h"
@@ -91,8 +91,8 @@ public:
 
     bool isMaster() const override { return true; }
 
-    GetEID* getEID() { return &m_getEID; }
-    const GetEID* getEID() const { return &m_getEID; }
+    EIDRegister* eidRegister() { return &m_eidRegister; }
+    const EIDRegister* eidRegister() const { return &m_eidRegister; }
 
     bool readOnly() const override { return m_readOnly; }
     void setReadOnly(bool ro) { m_readOnly = ro; }
@@ -112,8 +112,9 @@ public:
 
     void updateRepeatListTempo();
     void updateRepeatList();
+
     const RepeatList& repeatList() const override;
-    const RepeatList& repeatList(bool expandRepeats) const override;
+    const RepeatList& repeatList(bool expandRepeats, bool updateTies = true) const override;
 
     std::vector<Excerpt*>& excerpts() { return m_excerpts; }
     const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }
@@ -198,7 +199,10 @@ private:
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
     void removeDeletedMidiMapping();
+
     int updateMidiMapping();
+    void doUpdateMidiMapping(int& maxport, std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, Part* part,
+                             InstrChannel* channel, bool useDrumset);
 
     friend class EngravingProject;
     friend class compat::ScoreAccess;
@@ -211,7 +215,7 @@ private:
 
     void initParts(Excerpt*);
 
-    GetEID m_getEID;
+    EIDRegister m_eidRegister;
     UndoStack* m_undoStack = nullptr;
     TimeSigMap* m_sigmap = nullptr;
     TempoMap* m_tempomap = nullptr;

@@ -44,7 +44,7 @@ FocusScope {
 
     property alias defaultNavigationControl: fakeNavCtrl
 
-    property NavigationPanel navigationPanel: tabPanel.navigationPanel // first panel
+    readonly property alias navigationSection: navSec
 
     NavigationSection {
         id: navSec
@@ -122,7 +122,7 @@ FocusScope {
                             if (fakeNavCtrl.active) {
                                 notationView.forceFocusIn()
 
-                                if (navigationPanel.highlight) {
+                                if (notationView.navigationPanel.highlight) {
                                     notationView.selectOnNavigationActive()
                                 }
                             } else {
@@ -186,8 +186,11 @@ FocusScope {
                         notationViewNavigationSection: navSec
                         navigationOrderStart: notationView.navigationPanel.order + 1
 
-                        onOpened: paintView.onElementPopupIsOpenChanged(true)
-                        onClosed: paintView.onElementPopupIsOpenChanged(false)
+                        onOpened: function(popupType) {
+                            paintView.onElementPopupIsOpenChanged(popupType)
+                        }
+
+                        onClosed: paintView.onElementPopupIsOpenChanged()
                     }
                 }
 

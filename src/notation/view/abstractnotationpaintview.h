@@ -42,6 +42,7 @@
 
 #include "notationviewinputcontroller.h"
 #include "noteinputcursor.h"
+#include "notationruler.h"
 #include "playbackcursor.h"
 #include "loopmarker.h"
 #include "continuouspanel.h"
@@ -91,7 +92,7 @@ public:
     Q_INVOKABLE void forceFocusIn();
 
     Q_INVOKABLE void onContextMenuIsOpenChanged(bool open);
-    Q_INVOKABLE void onElementPopupIsOpenChanged(bool open);
+    Q_INVOKABLE void onElementPopupIsOpenChanged(const PopupModelType& popupType = PopupModelType::TYPE_UNDEFINED);
 
     Q_INVOKABLE void setPlaybackCursorItem(QQuickItem* cursor);
 
@@ -122,8 +123,10 @@ public:
     void hideContextMenu() override;
 
     void showElementPopup(const ElementType& elementType, const muse::RectF& elementRect) override;
-    void hideElementPopup() override;
+    void hideElementPopup(const ElementType& elementType = ElementType::INVALID) override;
     void toggleElementPopup(const ElementType& elementType, const muse::RectF& elementRect) override;
+
+    bool elementPopupIsOpen(const ElementType& elementType) const override;
 
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
@@ -167,6 +170,9 @@ signals:
 protected:
     INotationPtr notation() const;
     void setNotation(INotationPtr notation);
+
+    NotationViewInputController* inputController() const;
+
     void setReadonly(bool readonly);
     void setMatrix(const muse::draw::Transform& matrix);
 
@@ -182,6 +188,8 @@ protected:
 
     virtual void onLoadNotation(INotationPtr notation);
     virtual void onUnloadNotation(INotationPtr notation);
+
+    virtual void initZoomAndPosition();
 
     virtual void onMatrixChanged(const muse::draw::Transform& oldMatrix, const muse::draw::Transform& newMatrix, bool overrideZoomType);
 
@@ -258,9 +266,11 @@ private:
     INotationPtr m_notation;
     muse::draw::Transform m_matrix;
 
+    bool m_loadCalled = false;
     std::unique_ptr<NotationViewInputController> m_inputController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;
     std::unique_ptr<NoteInputCursor> m_noteInputCursor;
+    std::unique_ptr<NotationRuler> m_ruler;
     std::unique_ptr<LoopMarker> m_loopInMarker;
     std::unique_ptr<LoopMarker> m_loopOutMarker;
     std::unique_ptr<ContinuousPanel> m_continuousPanel;
@@ -276,7 +286,7 @@ private:
     bool m_autoScrollEnabled = true;
     QTimer m_enableAutoScrollTimer;
 
-    bool m_isPopupOpen = false;
+    PopupModelType m_currentElementPopupType = PopupModelType::TYPE_UNDEFINED;
     bool m_isContextMenuOpen = false;
 
     muse::RectF m_shadowNoteRect;

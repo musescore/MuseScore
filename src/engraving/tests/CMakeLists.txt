@@ -45,9 +45,11 @@ set(MODULE_TEST_SRC
     #${CMAKE_CURRENT_LIST_DIR}/concertpitch_tests.cpp doesn't compile and needs actualization
     ${CMAKE_CURRENT_LIST_DIR}/copypaste_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/copypastesymbollist_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/courtesy_changes_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/durationtype_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dynamic_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/earlymusic_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/eid_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/element_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/exchangevoices_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/expression_tests.cpp
@@ -65,22 +67,20 @@ set(MODULE_TEST_SRC
     #${CMAKE_CURRENT_LIST_DIR}/midimapping_tests.cpp doesn't compile and needs actualization
     ${CMAKE_CURRENT_LIST_DIR}/note_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/parts_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/partialtie_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pitchwheelrender_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackeventsrendering_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/playback/bendsrenderer_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/readwriteundoreset_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/remove_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/repeat_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rhythmicgrouping_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scantree_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selectionfilter_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/selectionrangedelete_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/selectionrange_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/spanners_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/split_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/splitstaff_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/staffmove_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/system_locks_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempomap_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textbase_tests.cpp
     #${CMAKE_CURRENT_LIST_DIR}/textedit_tests.cpp doesn't compile and needs actualization
@@ -91,6 +91,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/unrollrepeats_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/changevisibility_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreutils_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/voiceswitching_tests.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/mocks/engravingconfigurationmock.h
 )
@@ -98,6 +99,15 @@ set(MODULE_TEST_SRC
 if (MUE_BUILD_ENGRAVING_DEVTOOLS)
 set(MODULE_TEST_SRC ${MODULE_TEST_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/drawdata_tests.cpp
+)
+endif()
+
+if(MUE_BUILD_ENGRAVING_PLAYBACK)
+set(MODULE_TEST_SRC ${MODULE_TEST_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackeventsrendering_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/bendsrenderer_tests.cpp
 )
 endif()
 

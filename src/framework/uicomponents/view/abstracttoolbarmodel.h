@@ -28,10 +28,12 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuiactionsregister.h"
+#include "shortcuts/ishortcutsregister.h"
 #include "actions/iactionsdispatcher.h"
 
 namespace muse::uicomponents {
 class ToolBarItem;
+class MenuItem;
 using ToolBarItemList = QList<ToolBarItem*>;
 class ToolBarItemType
 {
@@ -56,6 +58,7 @@ class AbstractToolBarModel : public QAbstractListModel, public Injectable, publi
 public:
     Inject<ui::IUiActionsRegister> uiActionsRegister = { this };
     Inject<actions::IActionsDispatcher> dispatcher = { this };
+    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit AbstractToolBarModel(QObject* parent = nullptr);
@@ -111,6 +114,9 @@ protected:
 private:
     ToolBarItem& item(const ToolBarItemList& items, const QString& itemId);
     ToolBarItem& item(const ToolBarItemList& items, const actions::ActionCode& actionCode);
+
+    void updateShortcutsAll();
+    void updateShortcuts(MenuItem* menuItem);
 
     ToolBarItemList m_items;
 };

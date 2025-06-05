@@ -112,7 +112,11 @@ void PlaybackControllerStub::setTrackSoloMuteState(const engraving::InstrumentTr
 {
 }
 
-void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&)
+void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&, bool)
+{
+}
+
+void PlaybackControllerStub::playNotes(const notation::NoteValList&, const notation::staff_idx_t, const notation::Segment*)
 {
 }
 

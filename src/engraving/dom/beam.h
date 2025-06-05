@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_BEAM_H
-#define MU_ENGRAVING_BEAM_H
+#pragma once
 
 #include "beambase.h"
 #include "engravingitem.h"
@@ -34,8 +33,8 @@ class Factory;
 class Skyline;
 class System;
 class Beam;
-enum class ActionIconType;
-enum class SpannerSegmentType;
+enum class ActionIconType : signed char;
+enum class SpannerSegmentType : unsigned char;
 
 struct TremAnchor {
     ChordRest* chord1 = nullptr;
@@ -64,7 +63,6 @@ public:
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
-    void endEdit(EditData&) override;
     void editDrag(EditData&) override;
 
     Fraction tick() const override;
@@ -226,4 +224,3 @@ private:
     std::vector<TremAnchor> m_tremAnchors;
 };
 } // namespace mu::engraving
-#endif

@@ -63,7 +63,10 @@ void EditShortcutModel::load(const QVariant& originShortcut, const QVariantList&
     m_originSequence = originShortcutMap.value("sequence").toString();
     m_originShortcutTitle = originShortcutMap.value("title").toString();
 
+    m_cleared = false;
+
     emit originSequenceChanged();
+    emit clearedChanged();
 }
 
 void EditShortcutModel::clearNewSequence()
@@ -108,6 +111,14 @@ void EditShortcutModel::inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers)
     checkNewSequenceForConflicts();
 
     emit newSequenceChanged();
+}
+
+void EditShortcutModel::clear()
+{
+    clearNewSequence();
+    m_cleared = true;
+    emit originSequenceChanged();
+    emit clearedChanged();
 }
 
 bool EditShortcutModel::isShiftAllowed(Qt::Key key)
@@ -212,11 +223,11 @@ QString EditShortcutModel::conflictWarning() const
     return muse::qtrc("shortcuts", "This shortcut is already assigned to: <b>%1</b>").arg(title);
 }
 
-void EditShortcutModel::applyNewSequence()
+void EditShortcutModel::trySave()
 {
     QString newSequence = this->newSequence();
-
-    if (m_originSequence == newSequence) {
+    const bool alreadyEmpty = originSequenceInNativeFormat().isEmpty() && m_cleared;
+    if (alreadyEmpty || m_originSequence == newSequence) {
         return;
     }
 
@@ -234,17 +245,17 @@ void EditShortcutModel::applyNewSequence()
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
 
-    IInteractive::Button btn = interactive()->warning(muse::trc("shortcuts", "Reassign shortcut"), text, {
+    auto promise = interactive()->warning(muse::trc("shortcuts", "Reassign shortcut"), text, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         interactive()->buttonData(IInteractive::Button::Ok)
-    }, (int)IInteractive::Button::Ok).standardButton();
+    }, (int)IInteractive::Button::Ok);
 
-    if (btn != IInteractive::Button::Ok) {
-        return;
-    }
-
-    int conflictShortcutIndex = m_allShortcuts.indexOf(m_conflictShortcut);
-    emit applyNewSequenceRequested(m_originSequence, conflictShortcutIndex);
+    promise.onResolve(this, [this](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Ok)) {
+            int conflictShortcutIndex = m_allShortcuts.indexOf(m_conflictShortcut);
+            emit applyNewSequenceRequested(m_originSequence, conflictShortcutIndex);
+        }
+    });
 }
 
 QString EditShortcutModel::newSequence() const

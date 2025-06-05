@@ -32,6 +32,7 @@
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/expression.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/fret.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/score.h"
@@ -113,6 +114,11 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
         addNewLineItems(palette);
         return;
     }
+
+    if (palette.type() == Palette::Type::FretboardDiagram) {
+        addNewFretboardDiagramItems(palette, paletteScore);
+        return;
+    }
 }
 
 void PaletteCompat::removeOldItemsIfNeeded(Palette& palette)
@@ -192,6 +198,27 @@ void PaletteCompat::addNewLineItems(Palette& linesPalette)
     }
 }
 
+void PaletteCompat::addNewFretboardDiagramItems(Palette& fretboardDiagramPalette, engraving::Score* paletteScore)
+{
+    bool containsBlankItem = false;
+    for (const PaletteCellPtr& cell : fretboardDiagramPalette.cells()) {
+        const ElementPtr element = cell->element;
+        if (!element) {
+            continue;
+        }
+
+        if (element->isFretDiagram() && toFretDiagram(element.get())->harmonyText().empty()) {
+            containsBlankItem = true;
+        }
+    }
+
+    if (!containsBlankItem) {
+        auto fret = Factory::makeFretDiagram(paletteScore->dummy()->segment());
+        fret->clear();
+        fretboardDiagramPalette.insertElement(0, fret, muse::TranslatableString("palette", "Blank"));
+    }
+}
+
 void PaletteCompat::removeOldItems(Palette& palette)
 {
     std::vector<PaletteCellPtr> cellsToRemove;
@@ -203,6 +230,10 @@ void PaletteCompat::removeOldItems(Palette& palette)
         }
 
         if (element->isBend()) {
+            cellsToRemove.emplace_back(cell);
+        }
+
+        if (element->isArticulation() && toArticulation(element.get())->isLaissezVib()) {
             cellsToRemove.emplace_back(cell);
         }
     }

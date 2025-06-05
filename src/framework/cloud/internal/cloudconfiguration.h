@@ -26,11 +26,13 @@
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
+#include "network/inetworkconfiguration.h"
 
 namespace muse::cloud {
 class CloudConfiguration : public ICloudConfiguration, public Injectable
 {
     Inject<IGlobalConfiguration> globalConfiguration = { this };
+    Inject<network::INetworkConfiguration> networkConfiguration = { this };
 
 public:
     CloudConfiguration(const modularity::ContextPtr& iocCtx);
@@ -42,6 +44,8 @@ public:
     QByteArray uploadingLicense() const override;
 
     io::path_t tokensFilePath(const std::string& cloudName) const override;
+
+    network::RequestHeaders headers() const override;
 };
 }
 

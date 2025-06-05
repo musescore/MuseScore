@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H
-#define MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -50,7 +49,10 @@ public:
         TYPE_HARP_DIAGRAM,
         TYPE_CAPO,
         TYPE_STRING_TUNINGS,
-        TYPE_SOUND_FLAG
+        TYPE_SOUND_FLAG,
+        TYPE_DYNAMIC,
+        TYPE_PARTIAL_TIE,
+        TYPE_SHADOW_NOTE
     };
     Q_ENUM(PopupModelType)
 
@@ -59,7 +61,7 @@ public:
     PopupModelType modelType() const;
     QRect itemRect() const;
 
-    static bool supportsPopup(const mu::engraving::ElementType& elementType);
+    static bool supportsPopup(const mu::engraving::EngravingItem* element);
     static PopupModelType modelTypeFromElement(const mu::engraving::ElementType& elementType);
 
     virtual void init();
@@ -69,6 +71,8 @@ signals:
     void itemRectChanged(QRect rect);
 
 protected:
+    virtual void updateItemRect();
+
     muse::PointF fromLogical(muse::PointF point) const;
     muse::RectF fromLogical(muse::RectF rect) const;
 
@@ -79,23 +83,21 @@ protected:
     void endMultiCommands();
     void updateNotation();
     notation::INotationPtr currentNotation() const;
+    INotationInteractionPtr interaction() const;
 
     void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value);
     void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, engraving::PropertyFlags flags);
 
     EngravingItem* m_item = nullptr;
+    QRect m_itemRect;
 
 private:
-    INotationInteractionPtr interaction() const;
     INotationSelectionPtr selection() const;
 
     engraving::ElementType elementType() const;
     const engraving::ElementTypeSet& dependentElementTypes() const;
 
-    void updateItemRect();
-
     PopupModelType m_modelType = PopupModelType::TYPE_UNDEFINED;
-    QRect m_itemRect;
 };
 
 using PopupModelType = AbstractElementPopupModel::PopupModelType;
@@ -111,5 +113,3 @@ inline size_t qHash(mu::notation::PopupModelType key)
 #ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::notation::PopupModelType)
 #endif
-
-#endif // MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H

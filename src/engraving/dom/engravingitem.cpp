@@ -434,90 +434,57 @@ void EngravingItem::setStaffIdx(staff_idx_t val)
     m_track = staff2track(val, voiceIdx == muse::nidx ? 0 : voiceIdx);
 }
 
-staff_idx_t EngravingItem::staffIdxOrNextVisible() const
+staff_idx_t EngravingItem::effectiveStaffIdx() const
 {
-    // for system objects, sometimes the staff they're on is hidden so we have to find the next
-    // best staff for them
-    if (!staff()) {
+    if (!systemFlag()) {
+        return vStaffIdx();
+    }
+
+    const System* system = toSystem(findAncestor(ElementType::SYSTEM));
+    if (!system || system->vbox()) {
+        return vStaffIdx();
+    }
+
+    staff_idx_t originalStaffIdx = staffIdx();
+    if (originalStaffIdx == muse::nidx) {
         return muse::nidx;
     }
 
-    staff_idx_t si = staff()->idx();
-    if (!systemFlag()) {
-        return si;
-    }
-    Measure* m = nullptr;
-    if (parent() && parent()->isSegment()) {
-        Segment* s = parent() ? toSegment(parent()) : nullptr;
-        m = s ? s->measure() : nullptr;
-    } else if (parent() && parent()->isMeasure()) {
-        m = parent() ? toMeasure(parent()) : nullptr;
-    } else if (isSpanner()) {
-        m = score()->tick2measure(tick());
-    } else if (isSpannerSegment()) {
-        const SpannerSegment* spannerSeg = toSpannerSegment(this);
-        if (spannerSeg->isSingleBeginType()) {
-            m = score()->tick2measure(tick());
-        } else if (spannerSeg->isMiddleType() || spannerSeg->isEndType()) {
-            m = spannerSeg->system() ? spannerSeg->system()->firstMeasure() : nullptr;
+    const std::vector<Staff*>& systemObjectStaves = m_score->systemObjectStaves(); // CAUTION: may not be ordered
+    if (originalStaffIdx > 0) {
+        staff_idx_t prevSysObjStaffIdx = 0;
+        for (Staff* sysObjStaff : systemObjectStaves) {
+            staff_idx_t sysObjStaffIdx = sysObjStaff->idx();
+            if (sysObjStaffIdx > prevSysObjStaffIdx && sysObjStaffIdx < originalStaffIdx) {
+                prevSysObjStaffIdx = sysObjStaffIdx;
+            }
         }
-    }
-    if (!m || !m->system() || !m->system()->staff(si)) {
-        return si;
-    }
-    staff_idx_t firstVis = m->system()->firstVisibleStaff();
-    if (isTopSystemObject()) {
-        // original, put on the top of the score
-        return firstVis;
-    }
-    if (si <= firstVis) {
-        // we already know this staff will be replaced by the original
-        return muse::nidx;
-    }
-    bool foundStaff = false;
-    if (!m->system()->staff(si)->show()) {
-        const std::vector<Staff*> soStaves = score()->systemObjectStaves();
-        for (staff_idx_t i = 0; i < soStaves.size(); ++i) {
-            staff_idx_t idxOrig = soStaves[i]->idx();
-            if (idxOrig == si) {
-                // this is the staff we are supposed to be on
-                for (staff_idx_t idxNew = si + 1; idxNew < score()->staves().size(); ++idxNew) {
-                    if (i + 1 < soStaves.size() && idxNew >= score()->staffIdx(soStaves[i + 1]->part())) {
-                        // This is the flag to not show this element
-                        si = muse::nidx;
-                        break;
-                    } else if (m->system()->staff(idxNew)->show()) {
-                        // Move current element to this staff and finish
-                        foundStaff = true;
-                        si = idxNew;
-                        break;
-                    }
-                }
+
+        bool omitObject = true;
+        for (staff_idx_t stfIdx = prevSysObjStaffIdx; stfIdx < originalStaffIdx; ++stfIdx) {
+            if (m_score->staff(stfIdx)->show() && system->staff(stfIdx)->show()) {
+                omitObject = false;
                 break;
             }
         }
-    } else {
-        // the staff this object should be on is visible, so npnp
-        foundStaff = true;
+
+        if (omitObject) {
+            // If all staves between this and the previous system object are hidden
+            // we omit this object because it will be replaced by the upper one
+            return muse::nidx;
+        }
     }
-    return foundStaff ? si : muse::nidx;
+
+    if (m_score->staff(originalStaffIdx)->show() && system->staff(originalStaffIdx)->show()) {
+        return originalStaffIdx;
+    }
+
+    return system->nextVisibleStaff(originalStaffIdx);
 }
 
 bool EngravingItem::isTopSystemObject() const
 {
-    if (!systemFlag()) {
-        return false; // non system object
-    }
-    if ((isSpanner() || isSpannerSegment()) && track() != 0) {
-        return false;
-    }
-    if (!m_links) {
-        return true; // a system object, but not one with any linked clones
-    }
-    // this is part of a link ecosystem, see if we're the main one
-    EngravingObject* mainElement = m_links->mainElement();
-    return track() == 0
-           && (mainElement->score() != score() || !toEngravingItem(mainElement)->enabled());
+    return systemFlag() && track() == 0;
 }
 
 staff_idx_t EngravingItem::vStaffIdx() const
@@ -672,6 +639,25 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     return normalColor;
 }
 
+PointF EngravingItem::systemPos() const
+{
+    // Returns position in system coordinates. Only applicable to items
+    // that have a System ancestor.
+
+    IF_ASSERT_FAILED(findAncestor(ElementType::SYSTEM)) {
+        return PointF();
+    }
+
+    PointF result = pos();
+    EngravingItem* ancestor = parentItem();
+    while (ancestor && !ancestor->isSystem()) {
+        result += ancestor->pos();
+        ancestor = ancestor->parentItem();
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   pagePos
 //    return position in canvas coordinates
@@ -684,10 +670,7 @@ PointF EngravingItem::pagePos() const
         return p;
     }
 
-    staff_idx_t idx = muse::nidx;
-    if (systemFlag()) {
-        idx = staffIdxOrNextVisible();
-    }
+    staff_idx_t idx = effectiveStaffIdx();
 
     if (idx == muse::nidx) {
         idx = vStaffIdx();
@@ -703,6 +686,8 @@ PointF EngravingItem::pagePos() const
         } else if (explicitParent()->isSystem()) {
             system = toSystem(explicitParent());
         } else if (explicitParent()->isFretDiagram()) {
+            return p + parentItem()->pagePos();
+        } else if (explicitParent()->isFBox()) {
             return p + parentItem()->pagePos();
         } else {
             ASSERT_X(String(u"this %1 parent %2\n").arg(String::fromAscii(typeName()), String::fromAscii(explicitParent()->typeName())));
@@ -737,11 +722,7 @@ PointF EngravingItem::canvasPos() const
         return p;
     }
 
-    staff_idx_t idx = muse::nidx;
-
-    if (systemFlag()) {
-        idx = staffIdxOrNextVisible();
-    }
+    staff_idx_t idx = effectiveStaffIdx();
 
     if (idx == muse::nidx) {
         idx = vStaffIdx();
@@ -846,13 +827,6 @@ bool EngravingItem::hitShapeIntersects(const RectF& rr) const
     return hitShape().intersects(rr.translated(-pagePos()));
 }
 
-void EngravingItem::drawAt(muse::draw::Painter* p, const PointF& pt) const
-{
-    p->translate(pt);
-    renderer()->drawItem(this, p);
-    p->translate(-pt);
-}
-
 //---------------------------------------------------------
 //   remove
 ///   Remove \a el from the list. Return true on success.
@@ -901,20 +875,6 @@ Compound::Compound(const Compound& c)
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void Compound::draw(Painter* painter) const
-{
-    for (EngravingItem* e : m_elements) {
-        PointF pt(e->pos());
-        painter->translate(pt);
-        renderer()->drawItem(e, painter);
-        painter->translate(-pt);
-    }
-}
-
-//---------------------------------------------------------
 //   addElement
 //---------------------------------------------------------
 
@@ -927,16 +887,6 @@ void Compound::addElement(EngravingItem* e, double x, double y)
     e->setPos(x, y);
     e->setParent(this);
     m_elements.push_back(e);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Compound::layout()
-{
-    UNREACHABLE;
-    setbbox(RectF());
 }
 
 //---------------------------------------------------------
@@ -1289,6 +1239,30 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
     }
 }
 
+bool EngravingItem::isBefore(const EngravingItem* item) const
+{
+    if (!item) {
+        return false;
+    }
+    if (tick() != item->tick()) {
+        return tick() < item->tick();
+    }
+
+    const Measure* thisMeasure = findMeasure();
+    const Measure* otherMeasure = item->findMeasure();
+    if (thisMeasure != otherMeasure) {
+        return thisMeasure->isBefore(otherMeasure);
+    }
+
+    const EngravingItem* thisSeg = findAncestor(ElementType::SEGMENT);
+    const EngravingItem* otherSeg = item->findAncestor(ElementType::SEGMENT);
+    if (!thisSeg || !otherSeg || !thisSeg->isSegment() || !otherSeg->isSegment()) {
+        return false;
+    }
+
+    return toSegment(thisSeg)->goesBefore(toSegment(otherSeg));
+}
+
 bool EngravingItem::appliesToAllVoicesInInstrument() const
 {
     return hasVoiceAssignmentProperties()
@@ -1461,19 +1435,22 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
 
     const Score* sourceScore = score();
     const Score* destinationScore = destinationItem->score();
-    const bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
     const Staff* sourceStaff = staff();
     const Staff* destinationStaff = destinationItem->staff();
 
-    // Properties must be propagated to items cloned for MMRests
-    if (sourceScore == destinationScore && sourceStaff == destinationStaff) {
+    if (sourceScore == destinationScore) {
+        const bool diffStaff = sourceStaff != destinationStaff;
+        const bool visibleOrPosition = propertyId == Pid::VISIBLE || propertyGroup(propertyId) == PropertyGroup::POSITION;
+        const bool linkSameScore = propertyLinkSameScore(propertyId);
+        if ((diffStaff && visibleOrPosition) || !linkSameScore) {
+            // Allow visibility and position to stay independent
+            return PropertyPropagation::NONE;
+        }
+        // Maintain every other property synced
         return PropertyPropagation::PROPAGATE;
     }
 
-    if (propertyGroup(propertyId) != PropertyGroup::TEXT && sourceScore == destinationScore) {
-        return PropertyPropagation::NONE;
-    }
-
+    const bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
     if (isTextProperty) {
         if (sourceScore->isMaster() && destinationItem->isPropertyLinkedToMaster(propertyId)) {
             // From master score - check if destination part follows master
@@ -1490,6 +1467,11 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
         // Properties are only propagated when being edited from master. If this is being edited
         // from a part score, we mark it as unlinked so it becomes independent in the part.
         return PropertyPropagation::UNLINK;
+    }
+
+    if (systemFlag() && !isTopSystemObject()) {
+        // Let only the top system object propagate
+        return PropertyPropagation::NONE;
     }
 
     if (destinationItem->isPropertyLinkedToMaster(propertyId)) {
@@ -1604,10 +1586,6 @@ bool EngravingItem::isPrintable() const
     case ElementType::SPACER:
     case ElementType::SHADOW_NOTE:
     case ElementType::LASSO:
-    case ElementType::ELEMENT_LIST:
-    case ElementType::STAFF_LIST:
-    case ElementType::MEASURE_LIST:
-    case ElementType::SELECTION:
         return false;
     default:
         return true;
@@ -1619,8 +1597,9 @@ bool EngravingItem::isPlayable() const
     switch (type()) {
     case ElementType::NOTE:
     case ElementType::CHORD:
-    case ElementType::HARMONY:
         return true;
+    case ElementType::HARMONY:
+        return explicitParent() && explicitParent()->isSegment();
     default:
         return false;
     }
@@ -2104,25 +2083,6 @@ void EditData::addData(std::shared_ptr<ElementEditData> ed)
 }
 
 //---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void EngravingItem::drawEditMode(Painter* p, EditData& ed, double /*currentViewScaling*/)
-{
-    using namespace muse::draw;
-    Pen pen(configuration()->defaultColor(), 0.0);
-    p->setPen(pen);
-    for (int i = 0; i < ed.grips; ++i) {
-        if (Grip(i) == ed.curGrip) {
-            p->setBrush(configuration()->formattingColor());
-        } else {
-            p->setBrush(BrushStyle::NoBrush);
-        }
-        p->drawRect(ed.grip[i]);
-    }
-}
-
-//---------------------------------------------------------
 //   startDrag
 //---------------------------------------------------------
 
@@ -2255,7 +2215,7 @@ std::vector<LineF> EngravingItem::genericDragAnchorLines() const
     if (explicitParent()->isSegment() || explicitParent()->isMeasure()) {
         Measure* meas = explicitParent()->isSegment() ? toSegment(explicitParent())->measure() : toMeasure(explicitParent());
         System* system = meas->system();
-        const staff_idx_t stIdx = staffIdxOrNextVisible();
+        const staff_idx_t stIdx = effectiveStaffIdx();
         if (stIdx == muse::nidx) {
             return { LineF() };
         }
@@ -2646,7 +2606,8 @@ void EngravingItem::LayoutData::setBbox(const RectF& r)
 
 void EngravingItem::LayoutData::connectItemSnappedBefore(EngravingItem* itemBefore)
 {
-    IF_ASSERT_FAILED(itemBefore && itemBefore != m_item && itemBefore != m_itemSnappedAfter) {
+    IF_ASSERT_FAILED(itemBefore && itemBefore != m_item && itemBefore != m_itemSnappedAfter
+                     && itemBefore->ldata()->itemSnappedBefore() != m_item) {
         return;
     }
     m_itemSnappedBefore = itemBefore;
@@ -2664,7 +2625,8 @@ void EngravingItem::LayoutData::disconnectItemSnappedBefore()
 
 void EngravingItem::LayoutData::connectItemSnappedAfter(EngravingItem* itemAfter)
 {
-    IF_ASSERT_FAILED(itemAfter && itemAfter != m_item && itemAfter != m_itemSnappedBefore) {
+    IF_ASSERT_FAILED(itemAfter && itemAfter != m_item && itemAfter != m_itemSnappedBefore
+                     && itemAfter->ldata()->itemSnappedAfter() != m_item) {
         return;
     }
     m_itemSnappedAfter = itemAfter;
@@ -2726,6 +2688,8 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::WHAMMY_BAR_SEGMENT:
         case ElementType::SLUR_SEGMENT:
         case ElementType::TIE_SEGMENT:
+        case ElementType::LAISSEZ_VIB_SEGMENT:
+        case ElementType::PARTIAL_TIE_SEGMENT:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:
@@ -2800,7 +2764,7 @@ void EngravingItem::LayoutData::setWidthDebugHook(double w)
 void EngravingItem::LayoutData::dump(std::stringstream& ss) const
 {
     ss << "\n";
-    ss << m_item->typeName() << " id: " << m_item->eid().id() << "\n";
+    ss << m_item->typeName() << " id: " << m_item->eid().toStdString() << "\n";
 
     ss << "skip: " << (m_isSkipDraw ? "yes" : "no") << "\n";
     ss << "mag: " << m_mag << "\n";

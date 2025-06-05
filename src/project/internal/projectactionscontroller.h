@@ -43,8 +43,9 @@
 #include "io/ifilesystem.h"
 #include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
-#include "update/imusesoundscheckupdatescenario.h"
+#include "musesounds/imusesoundscheckupdatescenario.h"
 #include "extensions/iextensionsprovider.h"
+#include "tours/itoursservice.h"
 
 #include "async/asyncable.h"
 
@@ -75,8 +76,9 @@ class ProjectActionsController : public IProjectFilesController, public muse::mi
     muse::Inject<playback::IPlaybackController> playbackController = { this };
     muse::Inject<print::IPrintProvider> printProvider = { this };
     muse::Inject<muse::io::IFileSystem> fileSystem = { this };
-    muse::Inject<muse::update::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
+    muse::Inject<musesounds::IMuseSoundsCheckUpdateScenario> museSoundsCheckUpdateScenario = { this };
     muse::Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    muse::Inject<muse::tours::IToursService> toursService = { this };
 
 public:
 
@@ -90,9 +92,10 @@ public:
     bool isUrlSupported(const QUrl& url) const override;
     bool isFileSupported(const muse::io::path_t& path) const override;
     muse::Ret openProject(const ProjectFile& file) override;
-    bool closeOpenedProject(bool quitApp = false) override;
+    bool closeOpenedProject(bool goToHome = true) override;
     bool saveProject(const muse::io::path_t& path = muse::io::path_t()) override;
-    bool saveProjectLocally(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save) override;
+    bool saveProjectLocally(
+        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;
 
     // mi::IProjectProvider
     bool isProjectOpened(const muse::io::path_t& scorePath) const override;
@@ -196,7 +199,7 @@ private:
 
     void openProjectProperties();
 
-    muse::io::path_t selectScoreOpeningFile();
+    muse::async::Promise<muse::io::path_t> selectScoreOpeningFile() const;
     muse::io::path_t selectScoreSavingFile(const muse::io::path_t& defaultFilePath, const QString& saveTitle);
 
     muse::RetVal<INotationProjectPtr> loadProject(const muse::io::path_t& filePath);

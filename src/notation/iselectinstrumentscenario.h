@@ -35,7 +35,7 @@ public:
     virtual ~ISelectInstrumentsScenario() = default;
 
     virtual muse::RetVal<PartInstrumentListScoreOrder> selectInstruments() const = 0;
-    virtual muse::RetVal<Instrument> selectInstrument(const InstrumentKey& currentInstrumentKey = InstrumentKey()) const = 0;
+    virtual muse::RetVal<InstrumentTemplate> selectInstrument(const InstrumentKey& currentInstrumentKey = InstrumentKey()) const = 0;
 };
 }
 

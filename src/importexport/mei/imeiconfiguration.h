@@ -23,6 +23,7 @@
 #define MU_IMPORTEXPORT_IMEICONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
+#include "async/channel.h"
 
 namespace mu::iex::mei {
 class IMeiConfiguration : MODULE_EXPORT_INTERFACE
@@ -34,9 +35,13 @@ public:
 
     virtual bool meiImportLayout() const = 0;
     virtual void setMeiImportLayout(bool value) = 0;
+    virtual muse::async::Channel<bool> meiImportLayoutChanged() const = 0;
 
     virtual bool meiExportLayout() const = 0;
     virtual void setMeiExportLayout(bool value) = 0;
+
+    virtual bool meiUseMuseScoreIds() const = 0;
+    virtual void setMeiUseMuseScoreIds(bool value) = 0;
 };
 }
 

@@ -277,7 +277,7 @@ public:
     std::list<ChordFont> fonts;
     std::list<RenderAction> renderListRoot;
     std::list<RenderAction> renderListFunction;
-    std::list<RenderAction> renderListBase;
+    std::list<RenderAction> renderListBass;
     std::list<ChordToken> chordTokenList;
     static int privateID;
 

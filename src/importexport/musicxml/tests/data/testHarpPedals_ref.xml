@@ -55,7 +55,7 @@
         </attributes>
       <direction placement="below">
         <direction-type>
-          <harp-pedals placement="below" color="#0096FF">
+          <harp-pedals color="#0096FF">
             <pedal-tuning>
               <pedal-step>D</pedal-step>
               <pedal-alter>-1</pedal-alter>
@@ -209,38 +209,10 @@
         </note>
       </measure>
     <measure number="4">
-      <direction placement="above">
+      <direction placement="below">
         <direction-type>
-          <harp-pedals>
-            <pedal-tuning>
-              <pedal-step>D</pedal-step>
-              <pedal-alter>0</pedal-alter>
-              </pedal-tuning>
-            <pedal-tuning>
-              <pedal-step>C</pedal-step>
-              <pedal-alter>1</pedal-alter>
-              </pedal-tuning>
-            <pedal-tuning>
-              <pedal-step>B</pedal-step>
-              <pedal-alter>0</pedal-alter>
-              </pedal-tuning>
-            <pedal-tuning>
-              <pedal-step>E</pedal-step>
-              <pedal-alter>0</pedal-alter>
-              </pedal-tuning>
-            <pedal-tuning>
-              <pedal-step>F</pedal-step>
-              <pedal-alter>1</pedal-alter>
-              </pedal-tuning>
-            <pedal-tuning>
-              <pedal-step>G</pedal-step>
-              <pedal-alter>1</pedal-alter>
-              </pedal-tuning>
-            <pedal-tuning>
-              <pedal-step>A</pedal-step>
-              <pedal-alter>0</pedal-alter>
-              </pedal-tuning>
-            </harp-pedals>
+          <words>G 
+D </words>
           </direction-type>
         <staff>1</staff>
         </direction>

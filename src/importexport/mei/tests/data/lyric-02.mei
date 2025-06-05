@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
-<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.1/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.1+basic">
    <meiHead>
       <fileDesc>
          <titleStmt>
@@ -35,16 +35,19 @@
                         <staffDef n="1" lines="5" meter.count="4" meter.unit="2">
                            <label>Soprano</label>
                            <labelAbbr>S.</labelAbbr>
+                           <instrDef midi.instrnum="52" />
                            <clef shape="G" line="2" />
                         </staffDef>
                         <staffDef n="2" lines="5" meter.count="4" meter.unit="2">
                            <label>Alto</label>
                            <labelAbbr>A.</labelAbbr>
+                           <instrDef midi.instrnum="52" />
                            <clef shape="G" line="2" />
                         </staffDef>
                         <staffDef n="3" lines="5" meter.count="4" meter.unit="2">
                            <label>Bass</label>
                            <labelAbbr>B.</labelAbbr>
+                           <instrDef midi.instrnum="52" />
                            <clef shape="F" line="4" />
                         </staffDef>
                      </staffGrp>

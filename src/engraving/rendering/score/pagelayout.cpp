@@ -52,6 +52,7 @@
 #include "arpeggiolayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "masklayout.h"
 #include "measurelayout.h"
 #include "slurtielayout.h"
 #include "systemlayout.h"
@@ -81,7 +82,7 @@ void PageLayout::getNextPage(LayoutContext& ctx)
     } else {
         state.setPage(dom.pages()[state.pageIdx()]);
         std::vector<System*>& systems = state.page()->systems();
-        state.setPageOldMeasure(systems.empty() ? nullptr : systems.back()->measures().back());
+        state.setPageOldMeasure(systems.empty() || systems.back()->measures().empty() ? nullptr : systems.back()->measures().back());
         const system_idx_t i = muse::indexOf(systems, state.curSystem());
         if ((i < systems.size()) && i > 0 && systems[i - 1]->page() == state.page()) {
             // Current and previous systems are on the current page.
@@ -177,11 +178,11 @@ void PageLayout::collectPage(LayoutContext& ctx)
                         Spacer* sp = m->vspacerUp(0);
                         if (sp) {
                             if (sp->spacerType() == SpacerType::FIXED) {
-                                distance = sp->gap();
+                                distance = sp->absoluteGap();
                                 fixedDistance = true;
                                 break;
                             } else {
-                                distance = std::max(distance, sp->gap().val());
+                                distance = std::max(distance, sp->absoluteGap());
                             }
                         }
                     }
@@ -304,19 +305,9 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             continue;
                         }
                         ChordRest* cr = toChordRest(e2);
-                        if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
+                        if (BeamLayout::isStartOfCrossBeam(cr)) {                           // layout cross staff beams
                             TLayout::layoutBeam(cr->beam(), ctx);
                             BeamLayout::checkCrossPosAndStemConsistency(cr->beam(), ctx);
-                            for (EngravingItem* item : cr->beam()->elements()) {
-                                if (!item || !item->isRest()) {
-                                    continue;
-                                }
-                                Rest* rest = toRest(item);
-                                Beam* beam = rest->beam();
-                                if (beam && beam->fullCross() && rest->staffMove()) {
-                                    BeamLayout::verticalAdjustBeamedRests(rest, beam, ctx);
-                                }
-                            }
                         }
                         if (TupletLayout::notTopTuplet(cr)) {
                             // fix layout of tuplets
@@ -363,6 +354,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
             }
             MeasureLayout::layout2(m, ctx);
         }
+        SystemLayout::layoutSystemLockIndicators(s, ctx);
     }
 
     // If this is the last page we layout, we must also relayout the first barlines of the
@@ -393,6 +385,15 @@ void PageLayout::collectPage(LayoutContext& ctx)
     for (const System* system : page->systems()) {
         SystemLayout::centerElementsBetweenStaves(system);
     }
+
+    if (ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ACROSS_STAVES
+        && ctx.conf().styleB(Sid::timeSigCenterAcrossStaveGroup)) {
+        for (const System* system : page->systems()) {
+            SystemLayout::centerBigTimeSigsAcrossStaves(system);
+        }
+    }
+
+    MaskLayout::computeMasks(ctx, page);
 
     page->invalidateBspTree();
 }
@@ -719,7 +720,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
                     vbox = false;
                 }
 
-                prevYBottom  = system->y() + sysStaff->y() + sysStaff->bbox().height();
+                prevYBottom  = system->y() + sysStaff->bbox().bottom();
                 yBottom      = system->y() + sysStaff->y() + sysStaff->skyline().south().max();
                 spacerOffset = sysStaff->skyline().south().max() - sysStaff->bbox().height();
                 vgdl.push_back(vgd);
@@ -735,7 +736,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
     double spaceRemaining{ std::min(page->height() - combinedBottomMargin - yBottom, page->height() - marginToStaff - prevYBottom) };
 
     if (nextSpacer) {
-        spaceRemaining -= std::max(0.0, nextSpacer->gap() - spacerOffset - staffLowerBorder);
+        spaceRemaining -= std::max(0.0, nextSpacer->absoluteGap() - spacerOffset - staffLowerBorder);
     }
     if (spaceRemaining <= 0.0) {
         return;

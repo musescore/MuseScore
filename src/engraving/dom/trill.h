@@ -50,9 +50,6 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    int subtype() const override;
-    TranslatableString subtypeUserName() const override;
-
     void remove(EngravingItem*) override;
 
     const SymIdList& symbols() const { return m_symbols; }
@@ -94,6 +91,8 @@ public:
     void setTrack(track_idx_t n) override;
     void setScore(Score* s) override;
     void computeStartElement() override;
+    static PointF trillLinePos(const SLine* line, Grip grip, System** system);
+    PointF linePos(Grip grip, System** system) const override;
 
     void setTrillType(TrillType tt);
     TrillType trillType() const { return m_trillType; }

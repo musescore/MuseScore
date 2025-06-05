@@ -31,7 +31,7 @@
 namespace mu::engraving {
 class MidiNote;
 class Note;
-enum class Key;
+enum class Key : signed char;
 
 const int INVALID_PITCH      = -1;
 
@@ -97,6 +97,7 @@ extern int tpc2degree(int tpc, Key key);
 extern int tpcInterval(int startTpc, int interval, int alter);
 extern int step2pitchInterval(int step, int alter);
 extern int function2Tpc(const String& s, Key key);
+extern int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseType& noteCase, size_t& idx);
 
 //---------------------------------------------------------
 //   tpc2alter

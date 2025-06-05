@@ -1,8 +1,9 @@
-import QtQuick 2.1
-import QtQuick.Controls 2.15
+import QtQuick
+import QtQuick.Controls
 
 import MuseScore 3.0
-import Muse.UiComponents 1.0
+import Muse.Ui
+import Muse.UiComponents
 
 // Inspired by roblyric, by Robbie Matthews
 
@@ -57,8 +58,8 @@ MuseScore {
             anchors.topMargin: 10
         }
 
-        TextArea {
-            id:textLily
+        Rectangle {
+
             anchors.top: textLabel.bottom
             anchors.left: window.left
             anchors.right: buttonDump.left
@@ -67,15 +68,35 @@ MuseScore {
             anchors.bottomMargin: 10
             anchors.leftMargin: 10
             anchors.rightMargin: 5
-            width: parent.width
-            wrapMode: TextEdit.WrapAnywhere
-            textFormat: TextEdit.PlainText
-            text: ""
+
+            color: ui.theme.textFieldColor
+            border.color: ui.theme.strokeColor
+            border.width: Math.max(ui.theme.borderWidth, 1)
+            radius: 3
+
+            ScrollView {
+                id: view
+
+                anchors.fill: parent
+                //! Bad work for Mac
+                //ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+
+                TextArea {
+                    id:textLily
+                    width: parent.width
+                    height: Math.max(textLily.implicitHeight, view.height)
+                    anchors.margins: 8
+                    wrapMode: TextEdit.WrapAnywhere
+                    textFormat: TextEdit.PlainText
+                    selectByMouse: true
+                    text: ""
+                }
+            }
         }
 
-    /******************************************
-    **************** Buttons ******************
-    ******************************************/
+        /******************************************
+        **************** Buttons ******************
+        ******************************************/
 
         // PASTE
         FlatButton {
@@ -241,17 +262,17 @@ MuseScore {
         }
 
 
-    /******************************************
-    *********** Bottom bar controls ***********
-    ******************************************/
+        /******************************************
+        *********** Bottom bar controls ***********
+        ******************************************/
 
         Row {
             id: bottomBar
 
             spacing: 10
 
-            anchors.left: textLily.left
-            anchors.right: textLily.right
+            anchors.left: window.left
+            anchors.right: window.right
             anchors.bottom: window.bottom
             anchors.margins: 10
 
@@ -337,6 +358,8 @@ MuseScore {
 
                 checked: true
                 text: qsTr("Skip ties")
+
+                onClicked: checked = !checked
             }
 
             CheckBox {
@@ -346,6 +369,8 @@ MuseScore {
 
                 checked: true
                 text: qsTr("Extender")
+
+                onClicked: checked = !checked
             }
 
             FlatButton {

@@ -27,7 +27,6 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 // Google Mock - a framework for writing C++ mock classes.
 //
 // This file defines some utilities useful for implementing Google
@@ -42,8 +41,11 @@
 #include <cctype>
 #include <cstdint>
 #include <cstring>
+#include <iostream>
 #include <ostream>  // NOLINT
 #include <string>
+#include <utility>
+#include <vector>
 
 #include "gmock/gmock.h"
 #include "gmock/internal/gmock-port.h"
@@ -54,21 +56,22 @@ namespace internal {
 
 // Joins a vector of strings as if they are fields of a tuple; returns
 // the joined string.
-GTEST_API_ std::string JoinAsTuple(const Strings& fields) {
-  switch (fields.size()) {
-    case 0:
-      return "";
-    case 1:
-      return fields[0];
-    default:
-      std::string result = "(" + fields[0];
-      for (size_t i = 1; i < fields.size(); i++) {
-        result += ", ";
-        result += fields[i];
-      }
-      result += ")";
-      return result;
+GTEST_API_ std::string JoinAsKeyValueTuple(
+    const std::vector<const char*>& names, const Strings& values) {
+  GTEST_CHECK_(names.size() == values.size());
+  if (values.empty()) {
+    return "";
   }
+  const auto build_one = [&](const size_t i) {
+    return std::string(names[i]) + ": " + values[i];
+  };
+  std::string result = "(" + build_one(0);
+  for (size_t i = 1; i < values.size(); i++) {
+    result += ", ";
+    result += build_one(i);
+  }
+  result += ")";
+  return result;
 }
 
 // Converts an identifier name to a space-separated list of lower-case
@@ -82,12 +85,11 @@ GTEST_API_ std::string ConvertIdentifierNameToWords(const char* id_name) {
     // We don't care about the current locale as the input is
     // guaranteed to be a valid C++ identifier name.
     const bool starts_new_word = IsUpper(*p) ||
-        (!IsAlpha(prev_char) && IsLower(*p)) ||
-        (!IsDigit(prev_char) && IsDigit(*p));
+                                 (!IsAlpha(prev_char) && IsLower(*p)) ||
+                                 (!IsDigit(prev_char) && IsDigit(*p));
 
     if (IsAlNum(*p)) {
-      if (starts_new_word && result != "")
-        result += ' ';
+      if (starts_new_word && !result.empty()) result += ' ';
       result += ToLower(*p);
     }
   }
@@ -101,12 +103,9 @@ class GoogleTestFailureReporter : public FailureReporterInterface {
  public:
   void ReportFailure(FailureType type, const char* file, int line,
                      const std::string& message) override {
-    AssertHelper(type == kFatal ?
-                 TestPartResult::kFatalFailure :
-                 TestPartResult::kNonFatalFailure,
-                 file,
-                 line,
-                 message.c_str()) = Message();
+    AssertHelper(type == kFatal ? TestPartResult::kFatalFailure
+                                : TestPartResult::kNonFatalFailure,
+                 file, line, message.c_str()) = Message();
     if (type == kFatal) {
       posix::Abort();
     }
@@ -154,8 +153,7 @@ GTEST_API_ bool LogIsVisible(LogSeverity severity) {
 // conservative.
 GTEST_API_ void Log(LogSeverity severity, const std::string& message,
                     int stack_frames_to_skip) {
-  if (!LogIsVisible(severity))
-    return;
+  if (!LogIsVisible(severity)) return;
 
   // Ensures that logs from different threads don't interleave.
   MutexLock l(&g_log_mutex);
@@ -184,8 +182,8 @@ GTEST_API_ void Log(LogSeverity severity, const std::string& message,
       std::cout << "\n";
     }
     std::cout << "Stack trace:\n"
-         << ::testing::internal::GetCurrentOsStackTraceExceptTop(
-             ::testing::UnitTest::GetInstance(), actual_to_skip);
+              << ::testing::internal::GetCurrentOsStackTraceExceptTop(
+                     actual_to_skip);
   }
   std::cout << ::std::flush;
 }
@@ -202,20 +200,26 @@ GTEST_API_ void IllegalDoDefault(const char* file, int line) {
       "the variable in various places.");
 }
 
+constexpr char UndoWebSafeEncoding(char c) {
+  return c == '-' ? '+' : c == '_' ? '/' : c;
+}
+
 constexpr char UnBase64Impl(char c, const char* const base64, char carry) {
-  return *base64 == 0   ? static_cast<char>(65)
-         : *base64 == c ? carry
-                        : UnBase64Impl(c, base64 + 1, carry + 1);
+  return *base64 == 0 ? static_cast<char>(65)
+         : *base64 == c
+             ? carry
+             : UnBase64Impl(c, base64 + 1, static_cast<char>(carry + 1));
 }
 
 template <size_t... I>
-constexpr std::array<char, 256> UnBase64Impl(IndexSequence<I...>,
+constexpr std::array<char, 256> UnBase64Impl(std::index_sequence<I...>,
                                              const char* const base64) {
-  return {{UnBase64Impl(static_cast<char>(I), base64, 0)...}};
+  return {
+      {UnBase64Impl(UndoWebSafeEncoding(static_cast<char>(I)), base64, 0)...}};
 }
 
 constexpr std::array<char, 256> UnBase64(const char* const base64) {
-  return UnBase64Impl(MakeIndexSequence<256>{}, base64);
+  return UnBase64Impl(std::make_index_sequence<256>{}, base64);
 }
 
 static constexpr char kBase64[] =
@@ -238,7 +242,7 @@ bool Base64Unescape(const std::string& encoded, std::string* decoded) {
       return false;
     }
     if (bit_pos == 0) {
-      dst |= src_bin << 2;
+      dst |= static_cast<char>(src_bin << 2);
       bit_pos = 6;
     } else {
       dst |= static_cast<char>(src_bin >> (bit_pos - 2));

@@ -57,6 +57,10 @@ public:
     void renderMetronome(const Score* score, const int tick, const muse::mpe::timestamp_t actualTimestamp,
                          const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventsMap& result) const;
 
+    void renderCountIn(const Score* score, const int tick, const muse::mpe::timestamp_t actualTimestamp,
+                       const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventsMap& result,
+                       muse::mpe::duration_t& totalCountInDuration) const;
+
 private:
     void renderNoteEvents(const Chord* chord, const int tickPositionOffset, const muse::mpe::ArticulationsProfilePtr profile,
                           const PlaybackContextPtr playbackCtx, muse::mpe::PlaybackEventsMap& result) const;
@@ -67,8 +71,6 @@ private:
                               const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventList& result) const;
 
     void renderRestEvents(const Rest* rest, const int tickPositionOffset, muse::mpe::PlaybackEventsMap& result) const;
-
-    void renderArticulations(const Chord* chord, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result) const;
 };
 }
 

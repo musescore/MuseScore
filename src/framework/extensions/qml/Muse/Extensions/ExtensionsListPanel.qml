@@ -119,7 +119,7 @@ Item {
                 search: root.search
                 pluginIsEnabled: true
                 selectedCategory: root.selectedCategory
-                selectedPluginCodeKey: prv.selectedPlugin ? prv.selectedPlugin.codeKey : ""
+                selectedPluginUri: prv.selectedPlugin?.uri ?? ""
 
                 model: extensionsModel
 
@@ -148,7 +148,7 @@ Item {
                 search: root.search
                 pluginIsEnabled: false
                 selectedCategory: root.selectedCategory
-                selectedPluginCodeKey: prv.selectedPlugin ? prv.selectedPlugin.codeKey : ""
+                selectedPluginUri: prv.selectedPlugin?.uri ?? ""
 
                 model: extensionsModel
 
@@ -171,8 +171,8 @@ Item {
 
     function openInfoPanel(plugin, navigationControl) {
         prv.selectedPlugin = Object.assign({}, plugin)
-        panel.currentExecPointIndex = extensionsModel.currentExecPointIndex(prv.selectedPlugin.codeKey)
-        panel.execPointsModel = extensionsModel.execPointsModel(prv.selectedPlugin.codeKey)
+        panel.currentExecPointIndex = extensionsModel.currentExecPointIndex(prv.selectedPlugin.uri)
+        panel.execPointsModel = extensionsModel.execPointsModel(prv.selectedPlugin.uri)
         panel.open()
         prv.lastNavigatedExtension = navigationControl
     }
@@ -195,11 +195,11 @@ Item {
         ]
 
         onExecPointSelected: function(index) {
-            extensionsModel.selectExecPoint(selectedPlugin.codeKey, index)
+            extensionsModel.selectExecPoint(selectedPlugin.uri, index)
         }
 
         onEditShortcutRequested: {
-            Qt.callLater(extensionsModel.editShortcut, selectedPlugin.codeKey)
+            Qt.callLater(extensionsModel.editShortcut, selectedPlugin.uri)
             panel.close()
         }
 

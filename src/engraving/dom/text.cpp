@@ -39,13 +39,25 @@ static const ElementStyle defaultStyle {
     { Sid::defaultSystemFlag, Pid::SYSTEM_FLAG },
 };
 
+static bool styleIsSelectable(TextStyleType style)
+{
+    switch (style) {
+    case TextStyleType::HEADER:
+    case TextStyleType::FOOTER:
+    case TextStyleType::COPYRIGHT:
+    case TextStyleType::PAGE_NUMBER:
+        return false;
+    default: break;
+    }
+    return true;
+}
+
 //---------------------------------------------------------
 //   Text
 //---------------------------------------------------------
 
 Text::Text(EngravingItem* parent, TextStyleType tid)
-    : TextBase(ElementType::TEXT, parent, tid,
-               tid == TextStyleType::HEADER || tid == TextStyleType::FOOTER ? ElementFlag::NOT_SELECTABLE : ElementFlag::NOTHING)
+    : TextBase(ElementType::TEXT, parent, tid, styleIsSelectable(tid) ? ElementFlag::NOTHING : ElementFlag::NOT_SELECTABLE)
 {
     initElementStyle(&defaultStyle);
 }

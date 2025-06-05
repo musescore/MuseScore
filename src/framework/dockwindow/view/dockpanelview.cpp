@@ -165,6 +165,7 @@ DockPanelView::~DockPanelView()
     dockWidget->setProperty(DOCK_PANEL_PROPERTY, QVariant::fromValue(nullptr));
     dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(nullptr));
     dockWidget->setProperty(TITLEBAR_PROPERTY, QVariant::fromValue(nullptr));
+    dockWidget->setProperty(TOOLBAR_COMPONENT_PROPERTY, QVariant::fromValue(nullptr));
 }
 
 QString DockPanelView::groupName() const
@@ -196,27 +197,26 @@ void DockPanelView::componentComplete()
     dockWidget->setProperty(DOCK_PANEL_PROPERTY, QVariant::fromValue(this));
     dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
     dockWidget->setProperty(TITLEBAR_PROPERTY, QVariant::fromValue(m_titleBar));
+    dockWidget->setProperty(TOOLBAR_COMPONENT_PROPERTY, QVariant::fromValue(m_toolbarComponent));
 
     connect(m_menuModel, &AbstractMenuModel::itemsChanged, [dockWidget, this]() {
         if (dockWidget) {
             dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
         }
     });
-}
 
-QObject* DockPanelView::navigationSection() const
-{
-    return m_navigationSection;
-}
+    connect(this, &DockPanelView::toolbarComponentChanged, this, [this, dockWidget]() {
+        if (dockWidget) {
+            dockWidget->setProperty(TOOLBAR_COMPONENT_PROPERTY, QVariant::fromValue(m_toolbarComponent));
+        }
+    });
 
-void DockPanelView::setNavigationSection(QObject* newNavigation)
-{
-    if (m_navigationSection == newNavigation) {
-        return;
-    }
-
-    m_navigationSection = newNavigation;
-    emit navigationSectionChanged();
+    connect(this, &DockBase::frameCurrentWidgetChanged, this, [this, dockWidget](){
+        const KDDockWidgets::Frame* frame = dockWidget ? dockWidget->frame() : nullptr;
+        if (frame && frame->currentDockWidget() == dockWidget) {
+            emit panelShown();
+        }
+    });
 }
 
 AbstractMenuModel* DockPanelView::contextMenuModel() const
@@ -227,6 +227,11 @@ AbstractMenuModel* DockPanelView::contextMenuModel() const
 QQmlComponent* DockPanelView::titleBar() const
 {
     return m_titleBar;
+}
+
+QQmlComponent* DockPanelView::toolbarComponent() const
+{
+    return m_toolbarComponent;
 }
 
 void DockPanelView::setContextMenuModel(AbstractMenuModel* model)
@@ -250,6 +255,16 @@ void DockPanelView::setTitleBar(QQmlComponent* titleBar)
     emit titleBarChanged();
 }
 
+void DockPanelView::setToolbarComponent(QQmlComponent* component)
+{
+    if (m_toolbarComponent == component) {
+        return;
+    }
+
+    m_toolbarComponent = component;
+    emit toolbarComponentChanged();
+}
+
 bool DockPanelView::isTabAllowed(const DockPanelView* tab) const
 {
     IF_ASSERT_FAILED(tab) {
@@ -269,6 +284,10 @@ bool DockPanelView::isTabAllowed(const DockPanelView* tab) const
     }
 
     if (m_groupName.isEmpty() || tab->m_groupName.isEmpty()) {
+        return false;
+    }
+
+    if (tab->location() != location()) {
         return false;
     }
 
@@ -299,4 +318,28 @@ void DockPanelView::setCurrentTabIndex(int index)
     if (frame) {
         frame->setCurrentTabIndex(index);
     }
+}
+
+bool DockPanelView::isCurrentTabInFrame() const
+{
+    if (!dockWidget()) {
+        return false;
+    }
+
+    KDDockWidgets::Frame* frame = dockWidget()->frame();
+    return frame && frame->currentDockWidget() == dockWidget();
+}
+
+void DockPanelView::makeCurrentTabInFrame()
+{
+    IF_ASSERT_FAILED(dockWidget()) {
+        return;
+    }
+
+    KDDockWidgets::Frame* frame = dockWidget()->frame();
+    if (!frame) {
+        return;
+    }
+
+    frame->setCurrentDockWidget(dockWidget());
 }

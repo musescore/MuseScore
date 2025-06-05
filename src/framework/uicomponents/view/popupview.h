@@ -81,6 +81,8 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
     Q_PROPERTY(
         bool activateParentOnClose READ activateParentOnClose WRITE setActivateParentOnClose NOTIFY activateParentOnCloseChanged)
 
+    Q_PROPERTY(FocusPolicies focusPolicies READ focusPolicies WRITE setFocusPolicies NOTIFY focusPoliciesChanged)
+
     //! NOTE Used for dialogs, but be here so that dialogs and just popups have one api
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(QString objectId READ objectId WRITE setObjectId NOTIFY objectIdChanged)
@@ -93,7 +95,7 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
 public:
     Inject<ui::IMainWindow> mainWindow = { this };
     Inject<ui::IUiConfiguration> uiConfiguration = { this };
-    Inject<ui::INavigationController> navigationController= { this };
+    Inject<ui::INavigationController> navigationController = { this };
 
 public:
 
@@ -114,6 +116,15 @@ public:
     };
     Q_DECLARE_FLAGS(ClosePolicies, ClosePolicy)
     Q_FLAG(ClosePolicies)
+
+    enum class FocusPolicy {
+        TabFocus = 0x00000001,
+        ClickFocus = 0x00000002,
+        DefaultFocus = FocusPolicy::TabFocus | FocusPolicy::ClickFocus,
+        NoFocus = 0
+    };
+    Q_DECLARE_FLAGS(FocusPolicies, FocusPolicy)
+    Q_FLAG(FocusPolicies)
 
     enum class Placement {
         Default,
@@ -142,8 +153,6 @@ public:
     Q_INVOKABLE void close(bool force = false);
     Q_INVOKABLE void toggleOpened();
 
-    Q_INVOKABLE void setParentWindow(QWindow* window);
-
     Q_INVOKABLE QRectF anchorGeometry() const;
 
     OpenPolicies openPolicies() const;
@@ -151,6 +160,7 @@ public:
     Placement placement() const;
 
     bool activateParentOnClose() const;
+    FocusPolicies focusPolicies() const;
 
     ui::INavigationControl* navigationParentControl() const;
 
@@ -185,7 +195,7 @@ public slots:
     void setOpenPolicies(muse::uicomponents::PopupView::OpenPolicies openPolicies);
     void setClosePolicies(muse::uicomponents::PopupView::ClosePolicies closePolicies);
     void setPlacement(muse::uicomponents::PopupView::Placement newPlacement);
-    void setNavigationParentControl(ui::INavigationControl* parentNavigationControl);
+    void setNavigationParentControl(muse::ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
     void setModal(bool modal);
@@ -201,6 +211,7 @@ public slots:
     void setAnchorItem(QQuickItem* anchorItem);
 
     void setActivateParentOnClose(bool activateParentOnClose);
+    void setFocusPolicies(const muse::uicomponents::PopupView::FocusPolicies& policies);
 
 signals:
     void parentItemChanged();
@@ -213,7 +224,7 @@ signals:
     void openPoliciesChanged(muse::uicomponents::PopupView::OpenPolicies openPolicies);
     void closePoliciesChanged(muse::uicomponents::PopupView::ClosePolicies closePolicies);
     void placementChanged(muse::uicomponents::PopupView::Placement placement);
-    void navigationParentControlChanged(ui::INavigationControl* navigationParentControl);
+    void navigationParentControlChanged(muse::ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
     void modalChanged(bool modal);
@@ -234,6 +245,7 @@ signals:
     void anchorItemChanged(QQuickItem* anchorItem);
 
     void activateParentOnCloseChanged(bool activateParentOnClose);
+    void focusPoliciesChanged();
 
     void isContentReadyChanged();
 
@@ -259,6 +271,10 @@ protected:
     void repositionWindowIfNeed();
 
     void setErrCode(Ret::Code code);
+
+    QWindow* parentWindow() const;
+    void setParentWindow(QWindow* window);
+    void resolveParentWindow();
 
     virtual QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
@@ -291,6 +307,7 @@ protected:
     bool m_isContentReady = false;
 
     ClosePolicies m_closePolicies = { ClosePolicy::CloseOnPressOutsideParent };
+    FocusPolicies m_focusPolicies = { FocusPolicy::DefaultFocus };
 
     Placement m_placement = { Placement::Default };
 

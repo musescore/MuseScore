@@ -46,8 +46,8 @@ void ExtensionsActionController::registerExtensions()
 
     for (const Manifest& m : provider()->manifestList()) {
         for (const Action& a : m.actions) {
-            UriQuery q = makeUriQuery(m.uri, a.code);
-            dispatcher()->reg(this, q.toString(), [this, q]() {
+            actions::ActionQuery q = makeActionQuery(m.uri, a.code);
+            dispatcher()->reg(this, q, [this](const actions::ActionQuery& q) {
                 onExtensionTriggered(q);
             });
         }
@@ -58,8 +58,9 @@ void ExtensionsActionController::registerExtensions()
     uiActionsRegister()->reg(m_uiActions);
 }
 
-void ExtensionsActionController::onExtensionTriggered(const UriQuery& q)
+void ExtensionsActionController::onExtensionTriggered(const actions::ActionQuery& actionQuery)
 {
+    UriQuery q = uriQueryFromActionQuery(actionQuery);
     const Manifest& m = provider()->manifest(q.uri());
     if (!m.isValid()) {
         LOGE() << "Not found extension, uri: " << q.uri().toString();
@@ -71,15 +72,17 @@ void ExtensionsActionController::onExtensionTriggered(const UriQuery& q)
         return;
     }
 
-    IInteractive::Result result = interactive()->warning(
+    auto promise = interactive()->warning(
         muse::qtrc("extensions", "The plugin “%1” is currently disabled. Do you want to enable it now?").arg(m.title).toStdString(),
         muse::trc("extensions", "Alternatively, you can enable it at any time from Home > Plugins."),
         { IInteractive::Button::No, IInteractive::Button::Yes });
 
-    if (result.standardButton() == IInteractive::Button::Yes) {
-        provider()->setExecPoint(q.uri(), EXEC_MANUALLY);
-        provider()->perform(q);
-    }
+    promise.onResolve(this, [this, q](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Yes)) {
+            provider()->setExecPoint(q.uri(), EXEC_MANUALLY);
+            provider()->perform(q);
+        }
+    });
 }
 
 void ExtensionsActionController::openUri(const UriQuery& uri, bool isSingle)

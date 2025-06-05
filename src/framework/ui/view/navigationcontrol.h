@@ -59,11 +59,15 @@ public:
     void onEvent(EventPtr e) override;
 
     QWindow* window() const override;
+    QQuickItem* visualItem() const override;
 
     void trigger() override;
+    async::Notification triggered() const override;
 
     Q_INVOKABLE void requestActive(bool enableHighlight = false) override;
     Q_INVOKABLE void requestActiveByInteraction(bool enableHighlight = false);
+
+    Q_INVOKABLE void notifyAboutControlWasTriggered();
 
 public slots:
     void setPanel(NavigationPanel* panel);
@@ -77,6 +81,8 @@ private slots:
 
 private:
     NavigationPanel* m_panel = nullptr;
+
+    async::Notification m_triggeed;
 };
 }
 

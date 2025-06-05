@@ -39,7 +39,7 @@
 #include "iinteractive.h"
 
 namespace mu::engraving {
-enum class ActionIconType;
+enum class ActionIconType : signed char;
 class XmlWriter;
 class XmlReader;
 }
@@ -65,7 +65,7 @@ private:
     PaletteWidget* m_palette = nullptr;
 };
 
-class PaletteWidget : public QWidget
+class PaletteWidget : public QWidget, public muse::async::Asyncable
 {
     Q_OBJECT
 

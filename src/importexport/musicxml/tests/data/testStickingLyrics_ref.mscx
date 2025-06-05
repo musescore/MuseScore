@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.50197</pageWidth>
@@ -44,7 +45,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -61,8 +63,10 @@
           <head>normal</head>
           <line>8</line>
           <voice>1</voice>
-          <name>Acoustic Bass Drum</name>
+          <name>Bass Drum 2</name>
           <stem>2</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="36">
           <head>normal</head>
@@ -70,7 +74,9 @@
           <voice>1</voice>
           <name>Bass Drum 1</name>
           <stem>2</stem>
-          <shortcut>B</shortcut>
+          <shortcut>A</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="37">
           <head>slashed1</head>
@@ -78,6 +84,8 @@
           <voice>0</voice>
           <name>Side Stick</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="38">
           <head>normal</head>
@@ -85,14 +93,18 @@
           <voice>0</voice>
           <name>Acoustic Snare</name>
           <stem>1</stem>
-          <shortcut>A</shortcut>
+          <shortcut>B</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="40">
-          <head>normal</head>
+          <head>slash</head>
           <line>3</line>
           <voice>0</voice>
           <name>Electric Snare</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>0</panelColumn>
           </Drum>
         <Drum pitch="41">
           <head>normal</head>
@@ -100,6 +112,8 @@
           <voice>0</voice>
           <name>Low Floor Tom</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>7</panelColumn>
           </Drum>
         <Drum pitch="42">
           <head>cross</head>
@@ -107,14 +121,19 @@
           <voice>0</voice>
           <name>Closed Hi-Hat</name>
           <stem>1</stem>
-          <shortcut>G</shortcut>
+          <shortcut>C</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="43">
           <head>normal</head>
           <line>5</line>
           <voice>0</voice>
           <name>High Floor Tom</name>
-          <stem>2</stem>
+          <stem>1</stem>
+          <shortcut>H</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>7</panelColumn>
           </Drum>
         <Drum pitch="44">
           <head>cross</head>
@@ -122,7 +141,8 @@
           <voice>1</voice>
           <name>Pedal Hi-Hat</name>
           <stem>2</stem>
-          <shortcut>F</shortcut>
+          <panelRow>1</panelRow>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="45">
           <head>normal</head>
@@ -130,13 +150,18 @@
           <voice>0</voice>
           <name>Low Tom</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>6</panelColumn>
           </Drum>
         <Drum pitch="46">
-          <head>cross</head>
+          <head>xcircle</head>
           <line>-1</line>
           <voice>0</voice>
           <name>Open Hi-Hat</name>
           <stem>1</stem>
+          <shortcut>D</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="47">
           <head>normal</head>
@@ -144,6 +169,8 @@
           <voice>0</voice>
           <name>Low-Mid Tom</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="48">
           <head>normal</head>
@@ -151,6 +178,9 @@
           <voice>0</voice>
           <name>Hi-Mid Tom</name>
           <stem>1</stem>
+          <shortcut>G</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>6</panelColumn>
           </Drum>
         <Drum pitch="49">
           <head>cross</head>
@@ -158,7 +188,9 @@
           <voice>0</voice>
           <name>Crash Cymbal 1</name>
           <stem>1</stem>
-          <shortcut>C</shortcut>
+          <shortcut>E</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="50">
           <head>normal</head>
@@ -166,7 +198,8 @@
           <voice>0</voice>
           <name>High Tom</name>
           <stem>1</stem>
-          <shortcut>E</shortcut>
+          <panelRow>1</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="51">
           <head>cross</head>
@@ -174,14 +207,24 @@
           <voice>0</voice>
           <name>Ride Cymbal 1</name>
           <stem>1</stem>
-          <shortcut>D</shortcut>
+          <shortcut>F</shortcut>
+          <panelRow>0</panelRow>
+          <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="52">
-          <head>cross</head>
-          <line>-4</line>
+          <head>normal</head>
+          <noteheads>
+            <whole>noteheadHeavyXHat</whole>
+            <half>noteheadHeavyXHat</half>
+            <quarter>noteheadHeavyXHat</quarter>
+            <breve>noteheadHeavyXHat</breve>
+            </noteheads>
+          <line>-3</line>
           <voice>0</voice>
-          <name>Chinese Cymbal</name>
+          <name>China Cymbal</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="53">
           <head>diamond</head>
@@ -189,6 +232,8 @@
           <voice>0</voice>
           <name>Ride Bell</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>5</panelColumn>
           </Drum>
         <Drum pitch="54">
           <head>diamond</head>
@@ -196,13 +241,17 @@
           <voice>0</voice>
           <name>Tambourine</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>1</panelColumn>
           </Drum>
         <Drum pitch="55">
           <head>cross</head>
-          <line>-5</line>
+          <line>-4</line>
           <voice>0</voice>
           <name>Splash Cymbal</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>4</panelColumn>
           </Drum>
         <Drum pitch="56">
           <head>triangle-down</head>
@@ -210,6 +259,8 @@
           <voice>0</voice>
           <name>Cowbell</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>2</panelColumn>
           </Drum>
         <Drum pitch="57">
           <head>cross</head>
@@ -217,6 +268,8 @@
           <voice>0</voice>
           <name>Crash Cymbal 2</name>
           <stem>1</stem>
+          <panelRow>1</panelRow>
+          <panelColumn>3</panelColumn>
           </Drum>
         <Drum pitch="59">
           <head>cross</head>
@@ -224,6 +277,8 @@
           <voice>0</voice>
           <name>Ride Cymbal 2</name>
           <stem>1</stem>
+          <panelRow>2</panelRow>
+          <panelColumn>6</panelColumn>
           </Drum>
         <clef>PERC</clef>
         <singleNoteDynamics>0</singleNoteDynamics>
@@ -278,125 +333,159 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         </VBox>
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <Clef>
             <concertClefType>PERC</concertClefType>
             <transposingClefType>PERC</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>F_F</eid>
             </Clef>
           <TimeSig>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Sticking>
+            <eid>H_H</eid>
             <text>Rlr</text>
             </Sticking>
           <Beam>
+            <eid>I_I</eid>
             <StemDirection>down</StemDirection>
             <l1>34</l1>
             <l2>30</l2>
             </Beam>
           <Chord>
+            <eid>J_J</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
+              <eid>K_K</eid>
               </Articulation>
             <Note>
+              <eid>L_L</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>M_M</eid>
             <text>R</text>
             </Sticking>
           <Chord>
+            <eid>N_N</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>O_O</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>P_P</eid>
             <text>l</text>
             </Sticking>
           <Chord>
+            <eid>Q_Q</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
+              <eid>R_R</eid>
               </Articulation>
             <Note>
+              <eid>S_S</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>T_T</eid>
             <text>r</text>
             </Sticking>
           <Chord>
+            <eid>U_U</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>V_V</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>W_W</eid>
             <text>B</text>
             </Sticking>
           <Beam>
+            <eid>X_X</eid>
             <StemDirection>down</StemDirection>
             <l1>38</l1>
             <l2>42</l2>
             </Beam>
           <Chord>
+            <eid>Y_Y</eid>
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Z_Z</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>a_a</eid>
             <text>lr</text>
             </Sticking>
           <Chord>
+            <eid>b_b</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Articulation>
               <subtype>articAccentAbove</subtype>
+              <eid>c_c</eid>
               </Articulation>
             <Note>
+              <eid>d_d</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>e_e</eid>
             <text>B</text>
             </Sticking>
           <Chord>
+            <eid>f_f</eid>
             <BeamMode>mid</BeamMode>
             <durationType>eighth</durationType>
             <Note>
+              <eid>g_g</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Sticking>
+            <eid>h_h</eid>
             <text>l</text>
             </Sticking>
           <Chord>
+            <eid>i_i</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>j_j</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>k_k</eid>
             </BarLine>
           </voice>
         </Measure>

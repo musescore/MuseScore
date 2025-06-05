@@ -33,6 +33,8 @@ class ChordSymbolSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * voicingType READ voicingType CONSTANT)
     Q_PROPERTY(PropertyItem * durationType READ durationType CONSTANT)
 
+    Q_PROPERTY(bool hasLinkedFretboardDiagram READ hasLinkedFretboardDiagram NOTIFY hasLinkedFretboardDiagramChanged FINAL)
+
 public:
     explicit ChordSymbolSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -45,10 +47,24 @@ public:
     PropertyItem* voicingType() const;
     PropertyItem* durationType() const;
 
+    bool hasLinkedFretboardDiagram() const;
+
+    Q_INVOKABLE void addFretboardDiagram();
+
+signals:
+    void hasLinkedFretboardDiagramChanged();
+
 private:
+    void setHasLinkedFretboardDiagram(bool has);
+    void updateHasLinkedFretboardDiagram();
+
+    void updateIsDurationAvailable();
+
     PropertyItem* m_isLiteral = nullptr;
     PropertyItem* m_voicingType = nullptr;
     PropertyItem* m_durationType = nullptr;
+
+    bool m_hasLinkedFretboardDiagram = false;
 };
 }
 

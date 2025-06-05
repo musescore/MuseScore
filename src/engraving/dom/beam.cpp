@@ -340,6 +340,10 @@ public:
 
 void Beam::editDrag(EditData& ed)
 {
+    if (ed.curGrip == Grip::NO_GRIP) {
+        return;
+    }
+
     int idx = directionIdx();
     double dy = ed.delta.y();
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
@@ -479,15 +483,6 @@ void Beam::reset()
 void Beam::startEdit(EditData& ed)
 {
     initBeamEditData(ed);
-}
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void Beam::endEdit(EditData& ed)
-{
-    EngravingItem::endEdit(ed);
 }
 
 //---------------------------------------------------------

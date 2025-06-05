@@ -30,12 +30,13 @@
 #include "internal/instrumentsuiactions.h"
 #include "internal/instrumentsactionscontroller.h"
 
-#include "view/instrumentspaneltreemodel.h"
 #include "view/instrumentlistmodel.h"
 #include "view/instrumentsonscorelistmodel.h"
 #include "view/instrumentsettingsmodel.h"
 #include "view/staffsettingsmodel.h"
-#include "view/instrumentspanelcontextmenumodel.h"
+#include "view/systemobjectslayersettingsmodel.h"
+#include "view/layoutpaneltreemodel.h"
+#include "view/layoutpanelcontextmenumodel.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
@@ -87,12 +88,13 @@ void InstrumentsSceneModule::registerUiTypes()
     qmlRegisterType<InstrumentListModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentListModel");
     qmlRegisterType<InstrumentSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentSettingsModel");
     qmlRegisterType<StaffSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "StaffSettingsModel");
-    qmlRegisterType<InstrumentsPanelTreeModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentsPanelTreeModel");
-    qmlRegisterType<InstrumentsPanelContextMenuModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentsPanelContextMenuModel");
+    qmlRegisterType<SystemObjectsLayerSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "SystemObjectsLayerSettingsModel");
+    qmlRegisterType<LayoutPanelTreeModel>("MuseScore.InstrumentsScene", 1, 0, "LayoutPanelTreeModel");
+    qmlRegisterType<LayoutPanelContextMenuModel>("MuseScore.InstrumentsScene", 1, 0, "LayoutPanelContextMenuModel");
     qmlRegisterType<InstrumentsOnScoreListModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentsOnScoreListModel");
 
-    qmlRegisterUncreatableType<InstrumentsTreeItemType>("MuseScore.InstrumentsScene", 1, 0, "InstrumentsTreeItemType",
-                                                        "Cannot create a ContainerType");
+    qmlRegisterUncreatableType<LayoutPanelItemType>("MuseScore.InstrumentsScene", 1, 0, "LayoutPanelItemType",
+                                                    "Cannot create a ContainerType");
 
     auto uiengine = ioc()->resolve<IUiEngine>(moduleName());
     if (uiengine) {

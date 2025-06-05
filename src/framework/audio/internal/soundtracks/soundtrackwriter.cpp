@@ -76,7 +76,7 @@ SoundTrackWriter::SoundTrackWriter(const io::path_t& destination, const SoundTra
     }
 
     m_encoderPtr->init(destination, format, totalSamplesNumber);
-    m_encoderPtr->progress().progressChanged.onReceive(this, [this](int64_t current, int64_t total, std::string) {
+    m_encoderPtr->progress().progressChanged().onReceive(this, [this](int64_t current, int64_t total, std::string) {
         sendStepProgress(ENCODE_STEP, current, total);
     });
 }
@@ -179,5 +179,5 @@ void SoundTrackWriter::sendStepProgress(int step, int64_t current, int64_t total
     int stepRange = step == PREPARE_STEP ? 80 : 20;
     int stepProgressStart = step == PREPARE_STEP ? 0 : 80;
     int stepCurrentProgress = stepProgressStart + ((current * 100 / total) * stepRange) / 100;
-    m_progress.progressChanged.send(stepCurrentProgress, 100, "");
+    m_progress.progress(stepCurrentProgress, 100, "");
 }

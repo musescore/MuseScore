@@ -24,6 +24,7 @@
 
 #include "dom/note.h"
 #include "dom/spanner.h"
+#include "dom/laissezvib.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "internal/spannersmetaparser.h"
@@ -69,6 +70,8 @@ void NoteArticulationsParser::doParse(const EngravingItem* item, const Rendering
     parsePersistentMeta(ctx, result);
     parseGhostNote(note, ctx, result);
     parseNoteHead(note, ctx, result);
+    parseSymbols(note, ctx, result);
+    parseLaissezVibrer(note, ctx, result);
     parseSpanners(note, ctx, result);
 }
 
@@ -152,29 +155,86 @@ void NoteArticulationsParser::parseGhostNote(const Note* note, const RenderingCo
         return;
     }
 
-    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(mpe::ArticulationType::GhostNote);
-    if (pattern.empty()) {
-        return;
-    }
-
-    appendArticulationData(mpe::ArticulationMeta(mpe::ArticulationType::GhostNote,
-                                                 pattern,
-                                                 ctx.nominalTimestamp,
-                                                 ctx.nominalDuration), result);
+    appendArticulations({ mpe::ArticulationType::GhostNote }, ctx, result);
 }
 
 void NoteArticulationsParser::parseNoteHead(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    ArticulationTypeSet types;
     mpe::ArticulationType typeByNoteHeadGroup = articulationTypeByNoteheadGroup(note->headGroup());
 
     if (typeByNoteHeadGroup != mpe::ArticulationType::Undefined) {
-        types.insert(typeByNoteHeadGroup);
+        appendArticulations({ typeByNoteHeadGroup }, ctx, result);
     } else if (note->ldata()->cachedNoteheadSym.has_value()) {
         SymId symId = note->ldata()->cachedNoteheadSym.value(); // fastest way to get the notehead symbol
-        types = SymbolsMetaParser::symbolToArticulations(symId);
+        ArticulationTypeSet types = SymbolsMetaParser::symbolToArticulations(symId);
+        appendArticulations(types, ctx, result);
+    }
+}
+
+void NoteArticulationsParser::parseSymbols(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    for (const EngravingItem* item : note->el()) {
+        if (item && item->isSymbol()) {
+            ArticulationTypeSet types = SymbolsMetaParser::symbolToArticulations(toSymbol(item)->sym());
+            appendArticulations(types, ctx, result);
+        }
+    }
+}
+
+void NoteArticulationsParser::parseLaissezVibrer(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    const LaissezVib* laissezVib = note->laissezVib();
+    if (!laissezVib || !laissezVib->playSpanner()) {
+        return;
     }
 
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(mpe::ArticulationType::LaissezVibrer);
+    if (pattern.empty()) {
+        return;
+    }
+
+    const Measure* noteMeasure = note->findMeasure();
+    if (!noteMeasure) {
+        return;
+    }
+
+    const Measure* nextMeasure = noteMeasure->nextMeasure();
+    const Fraction endTick = nextMeasure ? nextMeasure->endTick() : noteMeasure->endTick();
+    const timestamp_t endTime = timestampFromTicks(ctx.score, endTick.ticks() + ctx.positionTickOffset);
+
+    appendArticulationData(mpe::ArticulationMeta(mpe::ArticulationType::LaissezVibrer,
+                                                 pattern,
+                                                 ctx.nominalTimestamp,
+                                                 endTime - ctx.nominalTimestamp), result);
+}
+
+void NoteArticulationsParser::parseSpanners(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    for (const Spanner* spanner : note->spannerFor()) {
+        int spannerFrom = spanner->tick().ticks();
+        int spannerTo = spannerFrom + std::abs(spanner->ticks().ticks());
+        int spannerDurationTicks = spannerTo - spannerFrom;
+
+        if (spannerDurationTicks == 0) {
+            spannerDurationTicks = ctx.nominalDurationTicks;
+        }
+
+        auto spannerTnD
+            = timestampAndDurationFromStartAndDurationTicks(ctx.score, spannerFrom, spannerDurationTicks, ctx.positionTickOffset);
+
+        RenderingContext spannerContext = ctx;
+        spannerContext.nominalTimestamp = spannerTnD.timestamp;
+        spannerContext.nominalDuration = spannerTnD.duration;
+        spannerContext.nominalPositionStartTick = spannerFrom;
+        spannerContext.nominalDurationTicks = spannerDurationTicks;
+
+        SpannersMetaParser::parse(spanner, spannerContext, result);
+    }
+}
+
+void NoteArticulationsParser::appendArticulations(const mpe::ArticulationTypeSet& types, const RenderingContext& ctx,
+                                                  mpe::ArticulationMap& result)
+{
     for (mpe::ArticulationType type : types) {
         if (type == mpe::ArticulationType::Undefined) {
             continue;
@@ -189,30 +249,5 @@ void NoteArticulationsParser::parseNoteHead(const Note* note, const RenderingCon
                                                      pattern,
                                                      ctx.nominalTimestamp,
                                                      ctx.nominalDuration), result);
-    }
-}
-
-void NoteArticulationsParser::parseSpanners(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
-{
-    const Score* score = note->score();
-
-    for (const Spanner* spanner : note->spannerFor()) {
-        int spannerFrom = spanner->tick().ticks();
-        int spannerTo = spannerFrom + std::abs(spanner->ticks().ticks());
-        int spannerDurationTicks = spannerTo - spannerFrom;
-
-        if (spannerDurationTicks == 0) {
-            continue;
-        }
-
-        auto spannerTnD = timestampAndDurationFromStartAndDurationTicks(score, spannerFrom, spannerDurationTicks, 0);
-
-        RenderingContext spannerContext = ctx;
-        spannerContext.nominalTimestamp = spannerTnD.timestamp;
-        spannerContext.nominalDuration = spannerTnD.duration;
-        spannerContext.nominalPositionStartTick = spannerFrom;
-        spannerContext.nominalDurationTicks = spannerDurationTicks;
-
-        SpannersMetaParser::parse(spanner, spannerContext, result);
     }
 }

@@ -42,7 +42,8 @@ static const Settings::Key HAS_COMPLETED_FIRST_LAUNCH_SETUP(module_name, "applic
 static const Settings::Key STARTUP_MODE_TYPE(module_name, "application/startup/modeStart");
 static const Settings::Key STARTUP_SCORE_PATH(module_name, "application/startup/startScore");
 
-static const std::string MUSESCORE_ONLINE_HANDBOOK_URL_PATH("/handbook/4");
+static const std::string MUSESCORE_ONLINE_HANDBOOK_URL("https://handbook.musescore.org");
+
 static const std::string MUSESCORE_ASK_FOR_HELP_URL_PATH("/redirect/post/question");
 static const std::string MUSESCORE_FORUM_URL_PATH("/forum");
 static const std::string MUSESCORE_CONTRIBUTE_URL_PATH("/contribute");
@@ -63,14 +64,25 @@ void AppShellConfiguration::init()
     settings()->setDefaultValue(HAS_COMPLETED_FIRST_LAUNCH_SETUP, Val(false));
 
     settings()->setDefaultValue(STARTUP_MODE_TYPE, Val(StartupModeType::StartEmpty));
+    settings()->valueChanged(STARTUP_MODE_TYPE).onReceive(this, [this](const Val&) {
+        m_startupModeTypeChanged.notify();
+    });
+
     settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(projectConfiguration()->myFirstProjectPath().toStdString()));
+    settings()->valueChanged(STARTUP_SCORE_PATH).onReceive(this, [this](const Val&) {
+        m_startupScorePathChanged.notify();
+    });
 
     fileSystem()->makePath(sessionDataPath());
 }
 
 bool AppShellConfiguration::hasCompletedFirstLaunchSetup() const
 {
+#ifdef Q_OS_WASM
+    return true;
+#else
     return settings()->value(HAS_COMPLETED_FIRST_LAUNCH_SETUP).toBool();
+#endif
 }
 
 void AppShellConfiguration::setHasCompletedFirstLaunchSetup(bool has)
@@ -88,6 +100,11 @@ void AppShellConfiguration::setStartupModeType(StartupModeType type)
     settings()->setSharedValue(STARTUP_MODE_TYPE, Val(type));
 }
 
+async::Notification AppShellConfiguration::startupModeTypeChanged() const
+{
+    return m_startupModeTypeChanged;
+}
+
 muse::io::path_t AppShellConfiguration::startupScorePath() const
 {
     return settings()->value(STARTUP_SCORE_PATH).toString();
@@ -96,6 +113,11 @@ muse::io::path_t AppShellConfiguration::startupScorePath() const
 void AppShellConfiguration::setStartupScorePath(const muse::io::path_t& scorePath)
 {
     settings()->setSharedValue(STARTUP_SCORE_PATH, Val(scorePath.toStdString()));
+}
+
+async::Notification AppShellConfiguration::startupScorePathChanged() const
+{
+    return m_startupScorePathChanged;
 }
 
 muse::io::path_t AppShellConfiguration::userDataPath() const
@@ -114,7 +136,7 @@ std::string AppShellConfiguration::handbookUrl() const
         QString::fromStdString(utm)
     };
 
-    return museScoreUrl() + MUSESCORE_ONLINE_HANDBOOK_URL_PATH + "?" + params.join("&").toStdString();
+    return MUSESCORE_ONLINE_HANDBOOK_URL + "?" + params.join("&").toStdString();
 }
 
 std::string AppShellConfiguration::askForHelpUrl() const
@@ -213,9 +235,9 @@ void AppShellConfiguration::rollbackSettings()
     settings()->rollbackTransaction();
 }
 
-void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges) const
+void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bool notifyAboutChanges, bool notifyOtherInstances) const
 {
-    settings()->reset(keepDefaultSettings, notifyAboutChanges);
+    settings()->reset(keepDefaultSettings, notifyAboutChanges, notifyOtherInstances);
 }
 
 muse::io::paths_t AppShellConfiguration::sessionProjectsPaths() const

@@ -23,20 +23,16 @@
 #ifndef MU_ENGRAVING_MSCOREVIEW_H
 #define MU_ENGRAVING_MSCOREVIEW_H
 
-#include <list>
-
-#include "draw/painter.h"
-
 #include "../types/types.h"
+
+namespace muse::draw {
+class Painter;
+}
 
 namespace mu::engraving {
 class EngravingItem;
 class Page;
 class Score;
-
-//---------------------------------------------------------
-//   MuseScoreView
-//---------------------------------------------------------
 
 class MuseScoreView
 {
@@ -57,13 +53,10 @@ public:
 
     virtual void changeEditElement(EngravingItem*) {}
     virtual void setDropRectangle(const RectF&) {}
-    virtual void startNoteEntryMode() {}
     virtual void drawBackground(muse::draw::Painter*, const RectF&) const = 0;
     virtual void setDropTarget(EngravingItem*) {}
 
     virtual void textTab(bool /*back*/) {}
-
-    virtual const muse::Rect geometry() const = 0;
 
     const std::vector<EngravingItem*> elementsAt(const PointF&) const;
     EngravingItem* elementNear(const PointF& pos) const;

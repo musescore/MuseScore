@@ -36,23 +36,20 @@ Item {
         id: model
     }
 
-    NavigationSection {
+    property NavigationSection navigationSection: NavigationSection {
         id: navSec
         name: "NotationStatusBar"
         enabled: root.enabled && root.visible
         order: 8
     }
 
-    property NavigationPanel navigationPanel: NavigationPanel {
+    NavigationPanel {
+        id: navPanel
         name: "NotationStatusBar"
         enabled: root.enabled && root.visible
         order: 0
         direction: NavigationPanel.Horizontal
         section: navSec
-    }
-
-    Component.onCompleted: {
-        model.load()
     }
 
     RowLayout {
@@ -109,14 +106,27 @@ Item {
             Layout.preferredHeight: 28
 
             text: model.currentWorkspaceItem.title
+            icon: IconCode.WORKSPACE
+            orientation: Qt.Horizontal
+
             transparent: true
             visible: statusBarRow.remainingSpace > width + concertPitchControl.width
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: 1
 
             onClicked: {
-                Qt.callLater(model.selectWorkspace)
+                menuLoader.toggleOpened(model.currentWorkspaceItem.subitems)
+            }
+
+            StyledMenuLoader {
+                id: menuLoader
+
+                menuAnchorItem: ui.rootItem
+
+                onHandleMenuItem: function(itemId) {
+                    Qt.callLater(model.handleWorkspacesMenuItem, itemId)
+                }
             }
         }
 
@@ -133,7 +143,7 @@ Item {
             enabled: model.concertPitchItem.enabled
             visible: statusBarRow.remainingSpace > width
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: 2
 
             onToggleConcertPitchRequested: {
@@ -151,7 +161,7 @@ Item {
             currentViewMode: model.currentViewMode
             availableViewModeList: model.availableViewModeList
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: 3
 
             onChangeCurrentViewModeRequested: function(newViewMode) {
@@ -170,7 +180,7 @@ Item {
             maxZoomPercentage: model.maxZoomPercentage()
             availableZoomList: model.availableZoomList
 
-            navigationPanel: root.navigationPanel
+            navigationPanel: navPanel
             navigationOrderMin: 4
 
             onChangeZoomPercentageRequested: function(newZoomPercentage) {
@@ -200,7 +210,7 @@ Item {
             visible: !concertPitchControl.visible ||
                      !workspaceControl.visible
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: zoomControl.navigationOrderMax + 1
 
             menuModel: {
@@ -223,7 +233,7 @@ Item {
                     model.handleAction(model.concertPitchItem.code)
                     break
                 case model.currentWorkspaceItem.id:
-                    model.handleAction(model.concertPitchItem.code)
+                    model.handleAction(model.currentWorkspaceItem.code)
                     break
                 }
             }

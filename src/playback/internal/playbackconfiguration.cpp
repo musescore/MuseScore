@@ -37,6 +37,7 @@ static const std::string moduleName("playback");
 
 static const Settings::Key PLAYBACK_CURSOR_TYPE_KEY(moduleName, "application/playback/cursorType");
 static const Settings::Key PLAY_NOTES_WHEN_EDITING(moduleName, "score/note/playOnClick");
+static const Settings::Key PLAY_NOTES_ON_MIDI_INPUT(moduleName, "score/note/playOnMidiInput");
 static const Settings::Key PLAY_CHORD_WHEN_EDITING(moduleName, "score/chord/playOnAddNote");
 static const Settings::Key PLAY_HARMONY_WHEN_EDITING(moduleName, "score/harmony/play/onedit");
 
@@ -60,7 +61,8 @@ static const Settings::Key MUTE_HIDDEN_INSTRUMENTS(moduleName, "playback/mixer/m
 
 static const Settings::Key DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS(moduleName, "playback/profiles/defaultProfileName");
 static const SoundProfileName BASIC_PROFILE_NAME(u"MuseScore Basic");
-static const SoundProfileName MUSE_PROFILE_NAME(u"Muse Sounds");
+static const SoundProfileName MUSESOUNDS_PROFILE_NAME(u"MuseSounds");
+static const SoundProfileName COMPAT_MUSESOUNDS_PROFILE_NAME(u"Muse Sounds");
 
 static Settings::Key mixerSectionVisibleKey(MixerSectionType sectionType)
 {
@@ -92,8 +94,21 @@ static Settings::Key auxChannelVisibleKey(aux_channel_idx_t index)
 void PlaybackConfiguration::init()
 {
     settings()->setDefaultValue(PLAY_NOTES_WHEN_EDITING, Val(true));
+    settings()->valueChanged(PLAY_NOTES_WHEN_EDITING).onReceive(this, [this](const Val&) {
+        m_playNotesWhenEditingChanged.notify();
+    });
     settings()->setDefaultValue(PLAY_CHORD_WHEN_EDITING, Val(true));
+    settings()->valueChanged(PLAY_CHORD_WHEN_EDITING).onReceive(this, [this](const Val& val) {
+        m_playChordWhenEditingChanged.send(val.toBool());
+    });
     settings()->setDefaultValue(PLAY_HARMONY_WHEN_EDITING, Val(true));
+    settings()->valueChanged(PLAY_HARMONY_WHEN_EDITING).onReceive(this, [this](const Val& val) {
+        m_playHarmonyWhenEditingChanged.send(val.toBool());
+    });
+    settings()->setDefaultValue(PLAY_NOTES_ON_MIDI_INPUT, Val(true));
+    settings()->valueChanged(PLAY_NOTES_ON_MIDI_INPUT).onReceive(this, [this](const Val& val) {
+        m_playNotesOnMidiInputChanged.send(val.toBool());
+    });
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
     settings()->setDefaultValue(SOUND_PRESETS_MULTI_SELECTION_KEY, Val(false));
     settings()->setDefaultValue(MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_SOUND_WARNING, Val(true));
@@ -141,6 +156,11 @@ void PlaybackConfiguration::setPlayNotesWhenEditing(bool value)
     settings()->setSharedValue(PLAY_NOTES_WHEN_EDITING, Val(value));
 }
 
+muse::async::Notification PlaybackConfiguration::playNotesWhenEditingChanged() const
+{
+    return m_playNotesWhenEditingChanged;
+}
+
 bool PlaybackConfiguration::playChordWhenEditing() const
 {
     return settings()->value(PLAY_CHORD_WHEN_EDITING).toBool();
@@ -151,6 +171,11 @@ void PlaybackConfiguration::setPlayChordWhenEditing(bool value)
     settings()->setSharedValue(PLAY_CHORD_WHEN_EDITING, Val(value));
 }
 
+async::Channel<bool> PlaybackConfiguration::playChordWhenEditingChanged() const
+{
+    return m_playChordWhenEditingChanged;
+}
+
 bool PlaybackConfiguration::playHarmonyWhenEditing() const
 {
     return settings()->value(PLAY_HARMONY_WHEN_EDITING).toBool();
@@ -159,6 +184,26 @@ bool PlaybackConfiguration::playHarmonyWhenEditing() const
 void PlaybackConfiguration::setPlayHarmonyWhenEditing(bool value)
 {
     settings()->setSharedValue(PLAY_HARMONY_WHEN_EDITING, Val(value));
+}
+
+async::Channel<bool> PlaybackConfiguration::playHarmonyWhenEditingChanged() const
+{
+    return m_playHarmonyWhenEditingChanged;
+}
+
+bool PlaybackConfiguration::playNotesOnMidiInput() const
+{
+    return settings()->value(PLAY_NOTES_ON_MIDI_INPUT).toBool();
+}
+
+void PlaybackConfiguration::setPlayNotesOnMidiInput(bool value)
+{
+    settings()->setSharedValue(PLAY_NOTES_ON_MIDI_INPUT, Val(value));
+}
+
+muse::async::Channel<bool> PlaybackConfiguration::playNotesOnMidiInputChanged() const
+{
+    return m_playNotesOnMidiInputChanged;
 }
 
 PlaybackCursorType PlaybackConfiguration::cursorType() const
@@ -250,9 +295,14 @@ const SoundProfileName& PlaybackConfiguration::basicSoundProfileName() const
     return BASIC_PROFILE_NAME;
 }
 
-const SoundProfileName& PlaybackConfiguration::museSoundProfileName() const
+const SoundProfileName& PlaybackConfiguration::museSoundsProfileName() const
 {
-    return MUSE_PROFILE_NAME;
+    return MUSESOUNDS_PROFILE_NAME;
+}
+
+const SoundProfileName& PlaybackConfiguration::compatMuseSoundsProfileName() const
+{
+    return COMPAT_MUSESOUNDS_PROFILE_NAME;
 }
 
 SoundProfileName PlaybackConfiguration::defaultProfileForNewProjects() const
@@ -303,7 +353,7 @@ bool PlaybackConfiguration::shouldMeasureInputLag() const
 const SoundProfileName& PlaybackConfiguration::fallbackSoundProfileStr() const
 {
     if (musesamplerInfo() && musesamplerInfo()->isInstalled()) {
-        return MUSE_PROFILE_NAME;
+        return MUSESOUNDS_PROFILE_NAME;
     }
 
     return BASIC_PROFILE_NAME;

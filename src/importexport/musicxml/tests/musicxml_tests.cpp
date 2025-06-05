@@ -133,7 +133,7 @@ void MusicXml_Tests::musicXmlIoTest(const char* file, bool exportLayout)
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual));
     setValue(PREF_IMPORT_MUSICXML_IMPORTBREAKS, Val(true));
     setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(exportLayout));
-    setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
+    setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(false));
     setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
@@ -436,6 +436,9 @@ TEST_F(MusicXml_Tests, beams2) {
 TEST_F(MusicXml_Tests, beams3) {
     musicXmlIoTestRef("testBeams3");
 }
+TEST_F(MusicXml_Tests, beams4) {
+    musicXmlIoTest("testBeams4");
+}
 TEST_F(MusicXml_Tests, breaksImplExpl) {
     musicXmlMscxExportTestRefBreaks("testBreaksImplExpl");
 }
@@ -562,6 +565,12 @@ TEST_F(MusicXml_Tests, dsalCodaMisplaced) {
 TEST_F(MusicXml_Tests, durationLargeErrorMscx) {
     musicXmlImportTestRef("testDurationLargeError");
 }
+TEST_F(MusicXml_Tests, duplicateFermataOnGraceNote) {
+    musicXmlImportTestRef("testDuplicateFermataOnGraceNote");
+}
+TEST_F(MusicXml_Tests, duplicateFermataOnGraceNoteAndMainNote) {
+    musicXmlImportTestRef("testDuplicateFermataOnGraceNoteAndMainNote");
+}
 TEST_F(MusicXml_Tests, duplicateInstrChange) {
     musicXmlImportTestRef("testDuplicateInstrChange");
 }
@@ -622,6 +631,9 @@ TEST_F(MusicXml_Tests, finaleInstr) {
 TEST_F(MusicXml_Tests, finaleInstr2) {
     musicXmlImportTestRef("testFinaleInstr2");
 }
+TEST_F(MusicXml_Tests, finaleSystemObjects) {
+    musicXmlImportTestRef("testFinaleSystemObjects");
+}
 TEST_F(MusicXml_Tests, formattedThings) {
     musicXmlIoTest("testFormattedThings");
 }
@@ -633,6 +645,9 @@ TEST_F(MusicXml_Tests, fractionPlus) {
 }
 TEST_F(MusicXml_Tests, fractionTicks) {
     musicXmlIoTestRef("testFractionTicks");
+}
+TEST_F(MusicXml_Tests, glissandoLines) {
+    musicXmlIoTest("testGlissandoLines");
 }
 TEST_F(MusicXml_Tests, glissFall) {
     musicXmlImportTestRef("testGlissFall");
@@ -661,11 +676,20 @@ TEST_F(MusicXml_Tests, DISABLED_graceAfter4) {
 TEST_F(MusicXml_Tests, graceFermata) {
     musicXmlIoTest("testGraceFermata");
 }
+TEST_F(MusicXml_Tests, guitarBends) {
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+    musicXmlMscxExportTestRef("testGuitarBends");
+    MScore::useRead302InTestMode = useRead302;
+}
 TEST_F(MusicXml_Tests, harpPedals) {
     musicXmlMscxExportTestRef("testHarpPedals");
 }
 TEST_F(MusicXml_Tests, hairpinDynamics) {
     musicXmlMscxExportTestRef("testHairpinDynamics");
+}
+TEST_F(MusicXml_Tests, handbells) {
+    musicXmlIoTest("testHandbells");
 }
 TEST_F(MusicXml_Tests, harmony1) {
     musicXmlIoTest("testHarmony1");
@@ -691,6 +715,12 @@ TEST_F(MusicXml_Tests, harmony7) {
 TEST_F(MusicXml_Tests, harmony8) {
     musicXmlIoTest("testHarmony8");
 }
+TEST_F(MusicXml_Tests, harmony9) {
+    musicXmlIoTest("testHarmony9");
+}                                                                      // chordnames without chordrest
+TEST_F(MusicXml_Tests, harmonMutes) {
+    musicXmlIoTest("testHarmonMutes");
+}
 TEST_F(MusicXml_Tests, hello) {
     musicXmlIoTest("testHello");
 }
@@ -699,6 +729,9 @@ TEST_F(MusicXml_Tests, helloReadCompr) {
 }
 TEST_F(MusicXml_Tests, helloReadWriteCompr) {
     musicXmlReadWriteTestCompr("testHello");
+}
+TEST_F(MusicXml_Tests, holes) {
+    musicXmlIoTest("testHoles");
 }
 TEST_F(MusicXml_Tests, implicitMeasure1) {
     musicXmlIoTest("testImplicitMeasure1");
@@ -779,14 +812,14 @@ TEST_F(MusicXml_Tests, invalidLayout) {
 TEST_F(MusicXml_Tests, invalidTimesig) {
     musicXmlIoTestRef("testInvalidTimesig");
 }
-TEST_F(MusicXml_Tests, invisibleDirection) {
-    musicXmlIoTest("testInvisibleDirection");
-}
 TEST_F(MusicXml_Tests, invisibleElements) {
     musicXmlIoTest("testInvisibleElements");
 }
 TEST_F(MusicXml_Tests, invisibleNote) {
     musicXmlMscxExportTestRef("testInvisibleNote");
+}
+TEST_F(MusicXml_Tests, invisibleTempo) {
+    musicXmlIoTest("testInvisibleTempo");
 }
 TEST_F(MusicXml_Tests, keysig1) {
     musicXmlIoTest("testKeysig1");
@@ -810,7 +843,10 @@ TEST_F(MusicXml_Tests, lines3) {
     musicXmlIoTest("testLines3");
 }
 TEST_F(MusicXml_Tests, lines4) {
-    musicXmlMscxExportTestRef("testLines4");
+    musicXmlIoTest("testLines4");
+}
+TEST_F(MusicXml_Tests, lineDetails) {
+    musicXmlIoTest("testLineDetails");
 }
 TEST_F(MusicXml_Tests, lyricBracket) {
     musicXmlImportTestRef("testLyricBracket");
@@ -868,6 +904,9 @@ TEST_F(MusicXml_Tests, measureStyleSlash) {
 }
 TEST_F(MusicXml_Tests, midiPortExport) {
     musicXmlMscxExportTestRef("testMidiPortExport");
+}
+TEST_F(MusicXml_Tests, ms3KitAndPerc) {
+    musicXmlImportTestRef("testMS3KitAndPerc");
 }
 TEST_F(MusicXml_Tests, multiInstrumentPart1) {
     musicXmlIoTest("testMultiInstrumentPart1");
@@ -929,6 +968,9 @@ TEST_F(MusicXml_Tests, DISABLED_noteAttributes4) {
 TEST_F(MusicXml_Tests, noteColor) {
     musicXmlIoTest("testNoteColor");
 }
+TEST_F(MusicXml_Tests, noteheadNames) {
+    musicXmlIoTest("testNoteheadNames");
+}
 TEST_F(MusicXml_Tests, noteheadParentheses) {
     musicXmlIoTest("testNoteheadParentheses");
 }
@@ -950,6 +992,12 @@ TEST_F(MusicXml_Tests, notesRests2) {
 TEST_F(MusicXml_Tests, numberedLyrics) {
     musicXmlIoTestRef("testNumberedLyrics");
 }
+TEST_F(MusicXml_Tests, numerals) {
+    musicXmlIoTest("testNumerals");
+}
+TEST_F(MusicXml_Tests, ornaments) {
+    musicXmlIoTest("testOrnaments");
+}
 TEST_F(MusicXml_Tests, overlappingSpanners) {
     musicXmlIoTest("testOverlappingSpanners");
 }
@@ -970,6 +1018,9 @@ TEST_F(MusicXml_Tests, pedalStyles) {
 }
 TEST_F(MusicXml_Tests, placementDefaults) {
     musicXmlImportTestRef("testPlacementDefaults");
+}
+TEST_F(MusicXml_Tests, playtech) {
+    musicXmlIoTest("testPlaytech");
 }
 TEST_F(MusicXml_Tests, printSpacingNo) {
     musicXmlIoTestRef("testPrintSpacingNo");
@@ -1047,7 +1098,7 @@ TEST_F(MusicXml_Tests, stringVoiceName) {
     musicXmlIoTestRef("testStringVoiceName");
 }
 TEST_F(MusicXml_Tests, swing) {
-    musicXmlMscxExportTestRef("testSwing");
+    musicXmlIoTest("testSwing");
 }
 TEST_F(MusicXml_Tests, systemBrackets1) {
     musicXmlIoTest("testSystemBrackets1");
@@ -1071,7 +1122,11 @@ TEST_F(MusicXml_Tests, DISABLED_EXCEPT_ON_LINUX(systemDistance)) {
     musicXmlMscxExportTestRef("testSystemDistance", true);
 }
 TEST_F(MusicXml_Tests, DISABLED_EXCEPT_ON_LINUX(systemDividers)) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    musicXmlIoTest("testSystemDividers-Qt68", true);
+#else
     musicXmlIoTest("testSystemDividers", true);
+#endif
 }
 TEST_F(MusicXml_Tests, systemObjectStaves) {
     musicXmlImportTestRef("testSystemObjectStaves");
@@ -1169,11 +1224,17 @@ TEST_F(MusicXml_Tests, importTie4) {
     // Dolet8 ties to different voices & staves
     musicXmlImportTestRef("importTie4");
 }
+TEST_F(MusicXml_Tests, importTie5) {
+    musicXmlIoTest("importTie5");
+}
 TEST_F(MusicXml_Tests, timesig1) {
     musicXmlIoTest("testTimesig1");
 }
 TEST_F(MusicXml_Tests, timesig3) {
     musicXmlIoTest("testTimesig3");
+}
+TEST_F(MusicXml_Tests, timesig4) {
+    musicXmlIoTest("testTimesig4");
 }
 TEST_F(MusicXml_Tests, timeTick) {
     musicXmlImportTestRef("testTimeTick");

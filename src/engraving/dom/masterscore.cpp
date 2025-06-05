@@ -36,6 +36,7 @@
 #include "barline.h"
 #include "excerpt.h"
 #include "factory.h"
+#include "box.h"
 #include "linkedobjects.h"
 #include "repeatlist.h"
 #include "rest.h"
@@ -202,14 +203,14 @@ const RepeatList& MasterScore::repeatList() const
     return *m_nonExpandedRepeatList;
 }
 
-const RepeatList& MasterScore::repeatList(bool expandRepeats) const
+const RepeatList& MasterScore::repeatList(bool expandRepeats, bool updateTies) const
 {
     if (expandRepeats) {
-        m_expandedRepeatList->update(true);
+        m_expandedRepeatList->update(true, updateTies);
         return *m_expandedRepeatList;
     }
 
-    m_nonExpandedRepeatList->update(false);
+    m_nonExpandedRepeatList->update(false, updateTies);
     return *m_nonExpandedRepeatList;
 }
 
@@ -620,14 +621,14 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                                 moveClef = initClef;
                             } else {
                                 ClefToBarlinePosition clefPos = toClef(e)->clefToBarlinePosition();
-                                if (clefPos == ClefToBarlinePosition::AFTER) {
-                                    // non header clef at the begining of the measure
-                                    moveClef = true;
-                                } else if (isBeginning) {
+                                if (isBeginning) {
                                     // special case:
                                     // there is a non-header clef at global tick 0, and we are inserting at the beginning of the score.
                                     // this clef will be moved with the measure it accompanies, but it will be moved before the barline.
                                     specialCase = true;
+                                    moveClef = true;
+                                } else if (clefPos == ClefToBarlinePosition::AFTER) {
+                                    // non header clef at the begining of the measure
                                     moveClef = true;
                                 }
                             }

@@ -247,28 +247,6 @@ static UInt32 nativeKeycode(UCKeyboardLayout* keyboard, Qt::Key keyCode, bool& f
     return 0;
 }
 
-static UInt32 nativeModifiers(Qt::KeyboardModifiers modifiers)
-{
-    UInt32 result = 0;
-    if (modifiers & Qt::ShiftModifier) {
-        result |= shiftKey;
-    }
-    if (modifiers & Qt::ControlModifier) {
-        result |= cmdKey;
-    }
-    if (modifiers & Qt::AltModifier) {
-        result |= optionKey;
-    }
-    if (modifiers & Qt::MetaModifier) {
-        result |= controlKey;
-    }
-    if (modifiers & Qt::KeypadModifier) {
-        result |= kEventKeyModifierNumLockMask;
-    }
-
-    return result;
-}
-
 static QString keyCodeToString(UCKeyboardLayout* keyboard, UInt32 keyNativeCode)
 {
     if (muse::contains(specialKeysMap, keyNativeCode)) {
@@ -307,33 +285,7 @@ static QString keyCodeToString(UCKeyboardLayout* keyboard, UInt32 keyNativeCode)
     return "";
 }
 
-static QString keyModifiersToString(UInt32 keyNativeModifiers)
-{
-    static const std::map<int, QString> qtModifiers = {
-        { shiftKey, "Shift" },
-        { rightShiftKey, "Shift" },
-        { controlKey, "Meta" },
-        { rightControlKey, "Meta" },
-        { cmdKey, "Ctrl" },
-        { optionKey, "Alt" },
-        { rightOptionKey, "Alt" },
-        { kEventKeyModifierNumLockMask, "Num" }
-    };
-
-    QString result;
-    for (const auto& [key, value] : qtModifiers) {
-        if (keyNativeModifiers & key) {
-            if (!result.isEmpty()) {
-                result += "+";
-            }
-            result += value;
-        }
-    }
-
-    return result;
-}
-
-static QString translateToCurrentKeyboardLayout(const QKeySequence& sequence)
+static QKeySequence translateToCurrentKeyboardLayout(const QKeySequence& sequence)
 {
     const QKeyCombination keyCombination = sequence[0];
 
@@ -352,13 +304,10 @@ static QString translateToCurrentKeyboardLayout(const QKeySequence& sequence)
         return {};
     }
 
-    Qt::KeyboardModifiers modifiers = keyCombination.keyboardModifiers();
-    UInt32 keyNativeModifiers = nativeModifiers(modifiers);
-
     QString keyStr = keyCodeToString(keyboard, keyNativeCode);
-    QString modifStr = keyModifiersToString(keyNativeModifiers);
+    Qt::Key translatedQKey = QKeySequence::fromString(keyStr, QKeySequence::PortableText)[0].key();
 
-    return (modifStr.isEmpty() ? "" : modifStr + "+") + keyStr;
+    return QKeyCombination(keyCombination.keyboardModifiers(), translatedQKey);
 }
 
 MacOSShortcutsInstanceModel::MacOSShortcutsInstanceModel(QObject* parent)
@@ -426,23 +375,33 @@ void MacOSShortcutsInstanceModel::doLoadShortcuts()
 
     for (const Shortcut& sc : shortcuts) {
         for (const std::string& seq : sc.sequences) {
-            QString untranslatedSequence = QString::fromStdString(seq);
+            QString untranslatedSequenceStr = QString::fromStdString(seq);
 
-            // Always record the untranslated sequence
-            recordMapping(untranslatedSequence, untranslatedSequence, true);
-            recordAutoRepeat(untranslatedSequence, sc.autoRepeat);
+            // Ensure standard order of modifiers by converting to/from QKeySequence
+            QKeySequence untranslatedSequence = QKeySequence::fromString(untranslatedSequenceStr, QKeySequence::PortableText);
 
             // Attempt to translate from combination of keys to character, e.g., `Shift+.` becomes `>`, in the case of a QWERTY layout
-            QString translatedSequence
-                = translateToCurrentKeyboardLayout(QKeySequence::fromString(untranslatedSequence, QKeySequence::PortableText));
-            if (translatedSequence.isEmpty()) {
-                LOGW() << "Failed to translate sequence " << untranslatedSequence;
-                continue;
+            QKeySequence translatedSequence
+                = translateToCurrentKeyboardLayout(untranslatedSequence);
+            if (translatedSequence.isEmpty() || !(untranslatedSequence[0].key() & 0xff) || untranslatedSequence[0].key() == Qt::Key_A) {
+                QString untranslatedSequenceStrNormalised = untranslatedSequence.toString(QKeySequence::PortableText);
+
+                // Record the untranslated sequence
+                // Map to non-normalised, because that's what ShortcutsInstanceModel::doActivate expects
+                recordMapping(untranslatedSequenceStrNormalised, untranslatedSequenceStr, true);
+                recordAutoRepeat(untranslatedSequenceStrNormalised, sc.autoRepeat);
             }
 
-            // If it was successful, record the translated sequence too, and map it to the untranslated sequence
-            recordMapping(translatedSequence, untranslatedSequence, false);
-            recordAutoRepeat(translatedSequence, sc.autoRepeat);
+            if (translatedSequence.isEmpty()) {
+                LOGW() << "Failed to translate sequence " << untranslatedSequenceStr;
+            } else {
+                QString translatedSequenceStrNormalised = translatedSequence.toString(QKeySequence::PortableText);
+
+                // If it was successful, record the translated sequence too, and map it to the untranslated sequence
+                // Again, map to non-normalised
+                recordMapping(translatedSequenceStrNormalised, untranslatedSequenceStr, false);
+                recordAutoRepeat(translatedSequenceStrNormalised, sc.autoRepeat);
+            }
         }
     }
 

@@ -26,10 +26,14 @@
 #include <vector>
 #include <memory>
 #include <QString>
+#include "global/types/uri.h"
 
 namespace muse::actions {
 using ActionCode = std::string;
 using ActionCodeList = std::vector<ActionCode>;
+
+using ActionUri = Uri;
+using ActionQuery = UriQuery;
 
 inline bool containsAction(const ActionCodeList& list, const ActionCode& actionCode)
 {

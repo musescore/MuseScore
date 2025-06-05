@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_OBJECT_H
-#define MU_ENGRAVING_OBJECT_H
+#pragma once
 
 #include "global/allocator.h"
 #include "types/string.h"
@@ -85,6 +84,9 @@ class GuitarBendText;
 class HBox;
 class Hairpin;
 class HairpinSegment;
+class HammerOnPullOff;
+class HammerOnPullOffSegment;
+class HammerOnPullOffText;
 class HarmonicMark;
 class HarmonicMarkSegment;
 class Harmony;
@@ -97,6 +99,8 @@ class Jump;
 class KeySig;
 class Lasso;
 class LayoutBreak;
+class LaissezVib;
+class LaissezVibSegment;
 class LedgerLine;
 class LetRing;
 class LetRingSegment;
@@ -124,7 +128,12 @@ class OttavaSegment;
 class Page;
 class PalmMute;
 class PalmMuteSegment;
+class Parenthesis;
 class Part;
+class PartialLyricsLine;
+class PartialLyricsLineSegment;
+class PartialTie;
+class PartialTieSegment;
 class Pedal;
 class PedalSegment;
 class PickScrape;
@@ -156,6 +165,7 @@ class StringTunings;
 class Symbol;
 class System;
 class SystemDivider;
+class SystemLockIndicator;
 class SystemText;
 class SoundFlag;
 class TBox;
@@ -183,6 +193,7 @@ class VoltaSegment;
 class WhammyBar;
 class WhammyBarSegment;
 class FretCircle;
+class ShadowNote;
 
 class LinkedObjects;
 
@@ -211,8 +222,9 @@ public:
     virtual TranslatableString typeUserName() const;
     virtual String translatedTypeUserName() const;
 
-    inline EID eid() const { return m_eid; }
-    inline void setEID(EID id) { m_eid = id; }
+    EID eid() const;
+    void setEID(EID id) const;
+    EID assignNewEID() const;
 
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);
@@ -284,7 +296,7 @@ protected:
     void addChild(EngravingObject* o);
     void removeChild(EngravingObject* o);
 
-    const ElementStyle* m_elementStyle {& EMPTY_STYLE };
+    const ElementStyle* m_elementStyle { &EMPTY_STYLE };
     PropertyFlags* m_propertyFlagsList = nullptr;
     LinkedObjects* m_links = nullptr;
     Score* m_score = nullptr;
@@ -296,7 +308,7 @@ private:
     void doSetScore(Score* sc);
 
     ElementType m_type = ElementType::INVALID;
-    mutable EID m_eid;
+
     EngravingObject* m_parent = nullptr;
     bool m_isParentExplicitlySet = false;
     EngravingObjectList m_children;
@@ -337,8 +349,6 @@ public:
     CONVERT(VBox,          VBOX)
     CONVERT(TBox,          TBOX)
     CONVERT(FBox,          FBOX)
-    CONVERT(Tie,           TIE)
-    CONVERT(Slur,          SLUR)
     CONVERT(Glissando,     GLISSANDO)
     CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
     CONVERT(GuitarBend,    GUITAR_BEND)
@@ -354,16 +364,18 @@ public:
     CONVERT(Jump,          JUMP)
     CONVERT(Ottava,        OTTAVA)
     CONVERT(LayoutBreak,   LAYOUT_BREAK)
+    CONVERT(SystemLockIndicator, SYSTEM_LOCK_INDICATOR)
     CONVERT(Segment,       SEGMENT)
     CONVERT(System,        SYSTEM)
     CONVERT(Lyrics,        LYRICS)
     CONVERT(Stem,          STEM)
     CONVERT(Beam,          BEAM)
-    CONVERT(BeamSegment,   BEAM_SEGMENT)
     CONVERT(Hook,          HOOK)
     CONVERT(StemSlash,     STEM_SLASH)
-    CONVERT(SlurSegment,   SLUR_SEGMENT)
-    CONVERT(TieSegment,    TIE_SEGMENT)
+    CONVERT(LaissezVibSegment,    LAISSEZ_VIB_SEGMENT)
+    CONVERT(LaissezVib,    LAISSEZ_VIB)
+    CONVERT(PartialTieSegment,    PARTIAL_TIE_SEGMENT)
+    CONVERT(PartialTie,    PARTIAL_TIE)
     CONVERT(Spacer,        SPACER)
     CONVERT(StaffLines,    STAFF_LINES)
     CONVERT(Ambitus,       AMBITUS)
@@ -414,8 +426,8 @@ public:
     CONVERT(FSymbol,       FSYMBOL)
     CONVERT(Fingering,     FINGERING)
     CONVERT(NoteHead,      NOTEHEAD)
-    CONVERT(LyricsLine,    LYRICSLINE)
-    CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
+    CONVERT(PartialLyricsLine,    PARTIAL_LYRICSLINE)
+    CONVERT(PartialLyricsLineSegment, PARTIAL_LYRICSLINE_SEGMENT)
     CONVERT(FiguredBass,   FIGURED_BASS)
     CONVERT(FiguredBassItem, FIGURED_BASS_ITEM)
     CONVERT(StaffState,    STAFF_STATE)
@@ -444,6 +456,11 @@ public:
     CONVERT(FretCircle, FRET_CIRCLE)
     CONVERT(StringTunings, STRING_TUNINGS)
     CONVERT(TimeTickAnchor, TIME_TICK_ANCHOR)
+    CONVERT(Parenthesis, PARENTHESIS)
+    CONVERT(ShadowNote, SHADOW_NOTE)
+    CONVERT(HammerOnPullOff, HAMMER_ON_PULL_OFF)
+    CONVERT(HammerOnPullOffSegment, HAMMER_ON_PULL_OFF_SEGMENT)
+    CONVERT(HammerOnPullOffText, HAMMER_ON_PULL_OFF_TEXT)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -473,6 +490,16 @@ public:
                || isNoteLineSegment();
     }
 
+    bool isSlur() const
+    {
+        return type() == ElementType::SLUR || type() == ElementType::HAMMER_ON_PULL_OFF;
+    }
+
+    bool isSlurSegment() const
+    {
+        return type() == ElementType::SLUR_SEGMENT || type() == ElementType::HAMMER_ON_PULL_OFF_SEGMENT;
+    }
+
     bool isLineSegment() const
     {
         return isGlissandoSegment()
@@ -483,6 +510,17 @@ public:
                || isGuitarBendSegment()
                || isGuitarBendHoldSegment()
         ;
+    }
+
+    bool isTieSegment() const
+    {
+        return type() == ElementType::TIE_SEGMENT || type() == ElementType::LAISSEZ_VIB_SEGMENT
+               || type() == ElementType::PARTIAL_TIE_SEGMENT;
+    }
+
+    bool isTie() const
+    {
+        return type() == ElementType::TIE || type() == ElementType::LAISSEZ_VIB || type() == ElementType::PARTIAL_TIE;
     }
 
     bool isSpannerSegment() const
@@ -509,6 +547,13 @@ public:
         ;
     }
 
+    bool isLyricsLine() const { return type() == ElementType::LYRICSLINE || type() == ElementType::PARTIAL_LYRICSLINE; }
+
+    bool isLyricsLineSegment() const
+    {
+        return type() == ElementType::LYRICSLINE_SEGMENT || type() == ElementType::PARTIAL_LYRICSLINE_SEGMENT;
+    }
+
     bool isSLine() const
     {
         return isTextLineBase() || isTrill() || isGlissando() || isVibrato() || isGuitarBend() || isGuitarBendHold();
@@ -533,6 +578,11 @@ public:
     bool isArticulationFamily() const
     {
         return isArticulation() || isOrnament();
+    }
+
+    bool isArticulationOrFermata() const
+    {
+        return isArticulationFamily() || isFermata();
     }
 };
 
@@ -588,13 +638,19 @@ static inline const Rest* toRest(const EngravingObject* e)
 
 static inline SlurTieSegment* toSlurTieSegment(EngravingObject* e)
 {
-    assert(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+    assert(
+        e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
+        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT || e->type() == ElementType::PARTIAL_TIE_SEGMENT
+        || e->type() == ElementType::HAMMER_ON_PULL_OFF_SEGMENT);
     return (SlurTieSegment*)e;
 }
 
 static inline const SlurTieSegment* toSlurTieSegment(const EngravingObject* e)
 {
-    assert(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
+    assert(
+        e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT
+        || e->type() == ElementType::LAISSEZ_VIB_SEGMENT || e->type() == ElementType::PARTIAL_TIE_SEGMENT
+        || e->type() == ElementType::HAMMER_ON_PULL_OFF_SEGMENT);
     return (const SlurTieSegment*)e;
 }
 
@@ -688,6 +744,18 @@ static inline const Articulation* toArticulation(const EngravingObject* e)
     return (const Articulation*)e;
 }
 
+static inline Tie* toTie(EngravingObject* e)
+{
+    assert(e == 0 || e->isTie() || e->isLaissezVib());
+    return (Tie*)e;
+}
+
+static inline const Tie* toTie(const EngravingObject* e)
+{
+    assert(e == 0 || e->isTie() || e->isLaissezVib());
+    return (const Tie*)e;
+}
+
 #define CONVERT(a)  \
     static inline a* to##a(EngravingObject * e) { assert(e == 0 || e->is##a()); return (a*)e; } \
     static inline const a* to##a(const EngravingObject * e) { assert(e == 0 || e->is##a()); return (const a*)e; }
@@ -710,7 +778,6 @@ CONVERT(VBox)
 CONVERT(TBox)
 CONVERT(FBox)
 CONVERT(Spanner)
-CONVERT(Tie)
 CONVERT(Slur)
 CONVERT(Glissando)
 CONVERT(GlissandoSegment)
@@ -730,17 +797,19 @@ CONVERT(PlayTechAnnotation)
 CONVERT(Capo)
 CONVERT(Ottava)
 CONVERT(LayoutBreak)
+CONVERT(SystemLockIndicator)
 CONVERT(Segment)
 CONVERT(System)
 CONVERT(Lyrics)
 CONVERT(Stem)
 CONVERT(Beam)
-CONVERT(BeamSegment)
 CONVERT(Hook)
 CONVERT(StemSlash)
 CONVERT(LineSegment)
 CONVERT(SlurSegment)
 CONVERT(TieSegment)
+CONVERT(LaissezVibSegment)
+CONVERT(PartialTieSegment)
 CONVERT(Spacer)
 CONVERT(StaffLines)
 CONVERT(Ambitus)
@@ -818,7 +887,14 @@ CONVERT(DeadSlapped)
 CONVERT(StringTunings)
 CONVERT(SoundFlag)
 CONVERT(TimeTickAnchor)
+CONVERT(LaissezVib)
+CONVERT(PartialTie)
+CONVERT(PartialLyricsLine)
+CONVERT(PartialLyricsLineSegment)
+CONVERT(Parenthesis)
+CONVERT(ShadowNote)
+CONVERT(HammerOnPullOff)
+CONVERT(HammerOnPullOffSegment)
+CONVERT(HammerOnPullOffText)
 #undef CONVERT
 }
-
-#endif

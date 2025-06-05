@@ -1,5 +1,4 @@
-
-declare_module(lame)
+declare_thirdparty_module(lame)
 
 include(GetPlatformInfo)
 include(GetCompilerInfo)
@@ -56,8 +55,9 @@ set (MODULE_SRC
     ${SOURCE_LIB}
     )
 
-set(MODULE_USE_PCH OFF)
 set(MODULE_USE_UNITY OFF)
+set(MODULE_USE_COVERAGE OFF)
+
 setup_module()
 
 #target_no_warning(${MODULE} -Wunused-const-variable=0)
@@ -71,11 +71,14 @@ target_no_warning(${MODULE} -Wno-shift-negative-value)
 target_no_warning(${MODULE} -Wno-implicit-fallthrough)
 target_no_warning(${MODULE} -Wno-empty-body)
 target_no_warning(${MODULE} -Wno-attributes)
-target_no_warning(${MODULE} -Wno-absolute-value) # we need this for C code in this module , but not for its C++ code
-#target_no_warning(${MODULE} -Wno-tautological-pointer-compare)
+target_no_warning(${MODULE} -Wc-no-absolute-value)
+target_no_warning(${MODULE} -Wc-no-tautological-pointer-compare)
+target_no_warning(${MODULE} -Wc-no-array-parameter)
+target_no_warning(${MODULE} -Wno-unused-but-set-variable)
 target_no_warning(${MODULE} -WMSVC-no-translation-unit-is-empty)
 target_no_warning(${MODULE} -WMSVC-no-nonstandard-extension-used)
 target_no_warning(${MODULE} -WMSVC-no-assignment-within-conditional-expression)
 target_no_warning(${MODULE} -WMSVC-no-hides-previous)
 target_no_warning(${MODULE} -WMSVC-no-undefined-assuming-extern)
 target_no_warning(${MODULE} -WMSVC-named-type-definition-in-parentheses)
+target_no_warning(${MODULE} -WMSVC-no-benign-redefinition)

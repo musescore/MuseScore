@@ -59,6 +59,8 @@ static const int TOOLTIP_DELAY = 500;
 
 void UiConfiguration::init()
 {
+    m_config = ConfigReader::read(":/configs/ui.cfg");
+
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(false));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val(defaultFontFamily()));
@@ -107,6 +109,8 @@ void UiConfiguration::init()
         m_windowGeometryChanged.notify();
     });
 
+    correctUserFontIfNeeded();
+
     initThemes();
 }
 
@@ -136,6 +140,17 @@ void UiConfiguration::initThemes()
 
     updateThemes();
     updateCurrentTheme();
+}
+
+void UiConfiguration::correctUserFontIfNeeded()
+{
+    QString userFontFamily = QString::fromStdString(fontFamily());
+    if (!QFontDatabase::hasFamily(userFontFamily)) {
+        std::string fallbackFontFamily = defaultFontFamily();
+        LOGI() << "The user font " << userFontFamily << " is missing, we will use the fallback font " << fallbackFontFamily;
+
+        setFontFamily(fallbackFontFamily);
+    }
 }
 
 void UiConfiguration::updateCurrentTheme()
@@ -314,17 +329,6 @@ ThemeList UiConfiguration::themes() const
     return m_themes;
 }
 
-QStringList UiConfiguration::possibleFontFamilies() const
-{
-    QStringList allFonts = QFontDatabase::families();
-    QStringList smuflFonts
-        = { "Bravura", "Campania", "Edwin", "Finale Broadway", "Finale Maestro", "Gootville", "Leland", "MScore", "MuseJazz", "Petaluma" };
-    for (const QString& font : smuflFonts) {
-        allFonts.removeAll(font);
-    }
-    return allFonts;
-}
-
 QStringList UiConfiguration::possibleAccentColors() const
 {
     static const QStringList lightAccentColors {
@@ -352,6 +356,20 @@ QStringList UiConfiguration::possibleAccentColors() const
     }
 
     return lightAccentColors;
+}
+
+QStringList UiConfiguration::possibleFontFamilies() const
+{
+    QStringList allFonts = QFontDatabase::families();
+    for (const QString& fontFamily : m_nonTextFonts) {
+        allFonts.removeAll(fontFamily);
+    }
+    return allFonts;
+}
+
+void UiConfiguration::setNonTextFonts(const QStringList& fontFamilies)
+{
+    m_nonTextFonts = fontFamilies;
 }
 
 void UiConfiguration::resetThemes()
@@ -513,6 +531,11 @@ muse::async::Notification UiConfiguration::iconsFontChanged() const
     return m_iconsFontChanged;
 }
 
+io::path_t UiConfiguration::appIconPath() const
+{
+    return m_config.value("appIconPath").toPath();
+}
+
 std::string UiConfiguration::musicalFontFamily() const
 {
     return settings()->value(UI_MUSICAL_FONT_FAMILY_KEY).toString();
@@ -660,6 +683,21 @@ void UiConfiguration::setIsVisible(const QString& key, bool val)
 async::Notification UiConfiguration::isVisibleChanged(const QString& key) const
 {
     return m_uiArrangement.valueChanged(key);
+}
+
+QString UiConfiguration::uiItemState(const QString& itemName) const
+{
+    return m_uiArrangement.value(itemName);
+}
+
+void UiConfiguration::setUiItemState(const QString& itemName, const QString& value)
+{
+    m_uiArrangement.setValue(itemName, value);
+}
+
+Notification UiConfiguration::uiItemStateChanged(const QString& itemName) const
+{
+    return m_uiArrangement.valueChanged(itemName);
 }
 
 ToolConfig UiConfiguration::toolConfig(const QString& toolName, const ToolConfig& defaultConfig) const

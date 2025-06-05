@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_SLURANDTIESETTINGSMODEL_H
-#define MU_INSPECTOR_SLURANDTIESETTINGSMODEL_H
+#pragma once
 
 #include "models/abstractinspectormodel.h"
 
@@ -32,12 +31,19 @@ class SlurAndTieSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * lineStyle READ lineStyle CONSTANT)
     Q_PROPERTY(PropertyItem * direction READ direction CONSTANT)
     Q_PROPERTY(PropertyItem * tiePlacement READ tiePlacement CONSTANT)
+    Q_PROPERTY(PropertyItem * minLength READ minLength CONSTANT)
     Q_PROPERTY(bool isTiePlacementAvailable READ isTiePlacementAvailable NOTIFY isTiePlacementAvailableChanged)
+    Q_PROPERTY(bool isMinLengthAvailable READ isMinLengthAvailable NOTIFY isMinLengthAvailableChanged)
+    Q_PROPERTY(bool isLineStyleAvailable READ isLineStyleAvailable NOTIFY isLineStyleAvailableChanged)
+    Q_PROPERTY(bool isLaissezVib READ isLaissezVib CONSTANT)
 
 public:
     enum ElementType {
         Slur,
-        Tie
+        Tie,
+        LaissezVib,
+        PartialTie,
+        HammerOnPullOff,
     };
 
     explicit SlurAndTieSettingsModel(QObject* parent, IElementRepositoryService* repository, ElementType elementType);
@@ -45,13 +51,20 @@ public:
     PropertyItem* lineStyle() const;
     PropertyItem* direction() const;
     PropertyItem* tiePlacement() const;
+    PropertyItem* minLength() const;
+
+    bool isLaissezVib() const;
 
     bool isTiePlacementAvailable() const;
+    bool isMinLengthAvailable() const;
+    bool isLineStyleAvailable() const;
 
     Q_INVOKABLE QVariantList possibleLineStyles() const;
 
 signals:
     void isTiePlacementAvailableChanged(bool available);
+    void isMinLengthAvailableChanged(bool available);
+    void isLineStyleAvailableChanged(bool available);
 
 private:
     void createProperties() override;
@@ -59,13 +72,18 @@ private:
     void resetProperties() override;
 
     void updateIsTiePlacementAvailable();
+    void updateIsMinLengthAvailable();
+    void updateisLineStyleAvailable();
 
     PropertyItem* m_lineStyle = nullptr;
     PropertyItem* m_direction = nullptr;
     PropertyItem* m_tiePlacement = nullptr;
+    PropertyItem* m_minLength = nullptr;
 
     bool m_isTiePlacementAvailable = false;
+    bool m_isMinLengthAvailable = false;
+    bool m_isLineStyleAvailable = false;
+
+    bool m_isLaissezVib = false;
 };
 }
-
-#endif // MU_INSPECTOR_SLURANDTIESETTINGSMODEL_H

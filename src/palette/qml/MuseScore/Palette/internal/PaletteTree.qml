@@ -320,7 +320,18 @@ StyledListView {
 
             onClosed: {
                 enablePaletteAnimations = false;
-                palettePopup.active = false;
+                // Deactivating the loader while dragging will cause a crash (#25848), so defer the deactivation...
+                if (!moreElementsPopup.isDragInProgress) {
+                    palettePopup.active = false;
+                }
+            }
+
+            onIsDragInProgressChanged: {
+                const deactivationWasDeferred = !moreElementsPopup.isOpened && palettePopup.active
+                if (!moreElementsPopup.isDragInProgress && deactivationWasDeferred) {
+                    // We're now safe to deactivate the loader...
+                    palettePopup.active = false
+                }
             }
 
             function scrollToPopupBottom() {

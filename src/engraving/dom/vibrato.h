@@ -46,9 +46,6 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    int subtype() const override;
-    TranslatableString subtypeUserName() const override;
-
     const SymIdList& symbols() const { return m_symbols; }
     void setSymbols(const SymIdList& s) { m_symbols = s; }
 
@@ -77,6 +74,7 @@ public:
     Vibrato* clone() const override { return new Vibrato(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
+    PointF linePos(Grip grip, System** system) const override;
 
     void undoSetVibratoType(VibratoType val);
     void setVibratoType(VibratoType tt) { m_vibratoType = tt; }

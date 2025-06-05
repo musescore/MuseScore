@@ -1,6 +1,6 @@
 name: Feature request
-description: Request an existing feature to be made better, or a new feature
-labels: ["Feature Request"]
+description: Request new functionality or enhancements to existing features in MuseScore Studio.
+type: Feature
 body:
   - type: textarea
     id: idea
@@ -20,7 +20,7 @@ body:
     id: other
     attributes:
       label: Prior art
-      description: Have you run into this problem with other apps? How did they solve it? You can paste screenshots. 
+      description: Have you run into this problem with other apps? How did they solve it? You can paste screenshots.
     validations:
       required: false
   - type: textarea

@@ -355,15 +355,6 @@ std::vector<PointF> TremoloTwoChord::gripsPositions(const EditData&) const
 }
 
 //---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void TremoloTwoChord::endEdit(EditData& ed)
-{
-    EngravingItem::endEdit(ed);
-}
-
-//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 

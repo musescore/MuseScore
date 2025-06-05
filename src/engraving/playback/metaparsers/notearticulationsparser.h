@@ -37,6 +37,8 @@ public:
     static void parsePersistentMeta(const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseGhostNote(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseNoteHead(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
+    static void parseSymbols(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
+    static void parseLaissezVibrer(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
     static void parseSpanners(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
 
 protected:
@@ -46,6 +48,8 @@ protected:
 
 private:
     static muse::mpe::ArticulationType articulationTypeByNoteheadGroup(const NoteHeadGroup noteheadGroup);
+    static void appendArticulations(const muse::mpe::ArticulationTypeSet& types, const RenderingContext& ctx,
+                                    muse::mpe::ArticulationMap& result);
 };
 }
 

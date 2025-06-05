@@ -15,6 +15,10 @@ on:
         description: 'Create tag & release: (if enabled, release type must be alpha,beta,rc,stable)'
         type: boolean
         default: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false   
 
 defaults:
   run:
@@ -60,6 +64,7 @@ jobs:
       platforms: ${{ inputs.platforms }}
       build_mode: ${{ inputs.release_type == 'stable' && 'stable' || 'testing' }}
       publish: ${{ inputs.create_tag && 'on' || 'off' }}
+      deploy_backend: 'on'
       sentry_project: ${{ (inputs.create_tag && inputs.release_type == 'stable') && 'mu4' || 'sandbox' }}
 
   update_learn_playlists:

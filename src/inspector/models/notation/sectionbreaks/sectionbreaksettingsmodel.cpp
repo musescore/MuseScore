@@ -41,6 +41,7 @@ void SectionBreakSettingsModel::createProperties()
     m_shouldResetBarNums = buildPropertyItem(mu::engraving::Pid::START_WITH_MEASURE_ONE);
     m_pauseDuration = buildPropertyItem(mu::engraving::Pid::PAUSE);
     m_firstSystemIndent = buildPropertyItem(mu::engraving::Pid::FIRST_SYSTEM_INDENTATION);
+    m_showCourtesySignatures = buildPropertyItem(mu::engraving::Pid::SHOW_COURTESY);
 }
 
 void SectionBreakSettingsModel::requestElements()
@@ -54,6 +55,7 @@ void SectionBreakSettingsModel::loadProperties()
     loadPropertyItem(m_shouldResetBarNums);
     loadPropertyItem(m_pauseDuration, formatDoubleFunc);
     loadPropertyItem(m_firstSystemIndent);
+    loadPropertyItem(m_showCourtesySignatures);
 }
 
 void SectionBreakSettingsModel::resetProperties()
@@ -62,6 +64,7 @@ void SectionBreakSettingsModel::resetProperties()
     m_shouldResetBarNums->resetToDefault();
     m_pauseDuration->resetToDefault();
     m_firstSystemIndent->resetToDefault();
+    m_showCourtesySignatures->resetToDefault();
 }
 
 PropertyItem* SectionBreakSettingsModel::shouldStartWithLongInstrNames() const
@@ -82,4 +85,9 @@ PropertyItem* SectionBreakSettingsModel::pauseDuration() const
 PropertyItem* SectionBreakSettingsModel::firstSystemIndent() const
 {
     return m_firstSystemIndent;
+}
+
+PropertyItem* SectionBreakSettingsModel::showCourtesySignatures() const
+{
+    return m_showCourtesySignatures;
 }

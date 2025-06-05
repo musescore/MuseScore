@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import QtQuick 2.2
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import MuseScore 3.0
 import FileIO 3.0
@@ -30,7 +30,7 @@ MuseScore {
     thumbnailName: "modal_tuning.png"
 
     width: 900
-    height: 722
+    height: 740
 
     property var offsetTextWidth: 40;
     property var offsetLabelAlignment: 0x02 | 0x80;
@@ -822,6 +822,13 @@ MuseScore {
     Item {
         anchors.fill: parent
 
+        ButtonGroup { id: temperamentTypeGroup }
+
+        component TuningItem: RadioButton {
+            padding: 2
+            ButtonGroup.group: temperamentTypeGroup
+        }
+
         GridLayout {
             columns: 2
             anchors.fill: parent
@@ -829,156 +836,130 @@ MuseScore {
             GroupBox {
                 title: "Temperament"
                 ColumnLayout {
-                    ButtonGroup { id: tempamentTypeGroup }
-                    RadioButton {
+                    TuningItem {
                         id: equal_button
                         text: "Equal"
                         checked: true
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(equal) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning01_button
                         text: "Meantone (1/4) 5 flats"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning01) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning02_button
                         text: "Meantone 1/4-comma"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning02) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning03_button
                         text: "Meantone (1/4) 5 sharps"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning03) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning04_button
                         text: "Meantone 1/5-comma"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning04) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning05_button
                         text: "Meantone 1/6-comma"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning05) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning06_button
                         text: "Werckmeister III"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning06) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning07_button
                         text: "Kirnberger III"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning07) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning08_button
                         text: "Vallotti"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning08) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning09_button
                         text: "Young I"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning09) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning10_button
                         text: "Kellner"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning10) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning11_button
                         text: "Fernando A. Martin 1/45-comma"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning11) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning12_button
                         text: "C Cm Db Dm Eb Ebm Em F Fm Ab Am Bb"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning12) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning13_button
                         text: "C Cm C#m D Dm E Em F F#m A Am Bb"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning13) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning14_button
                         text: "C Cm Db D Dm Em F Fm Ab Am Bb Bbm"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning14) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning15_button
                         text: "C Cm Db Eb Em F Fm G Gm Ab Am Bm"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning15) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning16_button
                         text: "C Cm D Dm Eb Em F#m G Gm Ab Bb Bm"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning16) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning17_button
                         text: "C D Ebm E Em F# F#m G G#m Bbm B Bm"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning17) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning18_button
                         text: "Simple Ratios"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning18) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning19_button
                         text: "Alternate Ratios"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning19) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning20_button
                         text: "Empty"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning20) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning21_button
                         text: "Empty"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning21) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning22_button
                         text: "Empty"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning22) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning23_button
                         text: "Empty"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning23) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: tuning24_button
                         text: "Empty"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(tuning24) }
 
                     }

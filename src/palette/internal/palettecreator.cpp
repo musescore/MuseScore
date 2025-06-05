@@ -51,6 +51,7 @@
 #include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/jump.h"
@@ -188,7 +189,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newKeyboardPalette());
     defaultPalette->append(newRepeatsPalette(true));
     defaultPalette->append(newBarLinePalette(true));
-    defaultPalette->append(newLayoutPalette());
+    defaultPalette->append(newLayoutPalette(true));
     defaultPalette->append(newBracketsPalette());
     defaultPalette->append(newOrnamentsPalette(true));
     defaultPalette->append(newBreathPalette(true));
@@ -199,7 +200,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newHarpPalette());
     defaultPalette->append(newGuitarPalette(true));
     defaultPalette->append(newFingeringPalette(true));
-    defaultPalette->append(newFretboardDiagramPalette());
+    defaultPalette->append(newFretboardDiagramPalette(true));
     defaultPalette->append(newAccordionPalette());
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
@@ -266,7 +267,7 @@ PalettePtr PaletteCreator::newDynamicsPalette(bool defaultPalette)
     const qreal w = gpaletteScore->style().spatium() * 8;
 
     for (HairpinType hairpinType : hairpins) {
-        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy());
         hairpin->setHairpinType(hairpinType);
         hairpin->setLen(w);
         qreal mag = (hairpinType == HairpinType::CRESC_LINE || hairpinType == HairpinType::DECRESC_LINE) ? 1 : 0.9;
@@ -523,7 +524,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
     return sp;
 }
 
-PalettePtr PaletteCreator::newLayoutPalette()
+PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Layout);
     //: The name of a palette
@@ -535,14 +536,20 @@ PalettePtr PaletteCreator::newLayoutPalette()
         LayoutBreakType::LINE,
         LayoutBreakType::PAGE,
         LayoutBreakType::SECTION,
-        LayoutBreakType::NOBREAK
     };
     for (LayoutBreakType layoutBreakType : layoutBreaks) {
         auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
         lb->setLayoutBreakType(layoutBreakType);
-        PaletteCellPtr cell = sp->appendElement(lb, TConv::userName(layoutBreakType));
-        cell->mag = 1.2;
+        sp->appendElement(lb, TConv::userName(layoutBreakType));
     }
+
+    if (!defaultPalette) {
+        auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
+        lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
+        sp->appendElement(lb, TConv::userName(LayoutBreakType::NOBREAK));
+    }
+
+    sp->appendActionIcon(ActionIconType::SYSTEM_LOCK, "toggle-system-lock");
 
     static const std::vector<SpacerType> spacers  {
         SpacerType::DOWN,
@@ -552,7 +559,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
     for (SpacerType spacerType : spacers) {
         auto spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
         spacer->setSpacerType(spacerType);
-        spacer->setGap(Millimetre(3 * gpaletteScore->style().spatium()));
+        spacer->setGap(Spatium(3));
         PaletteCellPtr cell = sp->appendElement(spacer, spacer->subtypeUserName());
         cell->mag = .7;
     }
@@ -560,9 +567,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
     sp->appendActionIcon(ActionIconType::VFRAME, "insert-vbox");
     sp->appendActionIcon(ActionIconType::HFRAME, "insert-hbox");
     sp->appendActionIcon(ActionIconType::TFRAME, "insert-textframe");
-    if (configuration()->enableExperimental()) {
-        sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
-    }
+    sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
     sp->appendActionIcon(ActionIconType::STAFF_TYPE_CHANGE, "insert-staff-type-change");
     sp->appendActionIcon(ActionIconType::MEASURE, "insert-measure");
 
@@ -726,7 +731,6 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
         SymId::articTenutoStaccatoAbove,
         SymId::articMarcatoAbove,
         SymId::articAccentStaccatoAbove,
-        SymId::articLaissezVibrerAbove,
         SymId::articMarcatoStaccatoAbove,
         SymId::articMarcatoTenutoAbove,
         SymId::articStaccatissimoStrokeAbove,
@@ -981,7 +985,7 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
     // Breaths
 
     for (auto i : defaultPalette ? defaultFermatas : masterFermatas) {
-        auto f = Factory::makeFermata(gpaletteScore->dummy());
+        auto f = Factory::makeFermata(gpaletteScore->dummy()->segment());
         f->setSymIdAndTimeStretch(i);
         sp->appendElement(f, f->subtypeUserName());
     }
@@ -1016,6 +1020,9 @@ PalettePtr PaletteCreator::newArpeggioPalette()
     for (int i = 0; i < 2; ++i) {
         auto a = makeElement<Glissando>(gpaletteScore);
         a->setGlissandoType(GlissandoType(i));
+        if (a->glissandoType() != a->style().styleV(Sid::glissandoType).value<GlissandoType>()) {
+            a->setPropertyFlags(Pid::GLISS_TYPE, PropertyFlags::UNSTYLED);
+        }
         sp->appendElement(a, a->glissandoTypeName());
     }
 
@@ -1061,17 +1068,17 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
     sp->setYOffset(1.0);
 
     static const std::vector<ClefType> clefsDefault  {
-        ClefType::G,     ClefType::G8_VA,  ClefType::G15_MA,  ClefType::G8_VB,    ClefType::C3,
-        ClefType::C4, ClefType::F,   ClefType::F_8VA,
+        ClefType::G, ClefType::G8_VA, ClefType::G15_MA, ClefType::G8_VB, ClefType::C3,
+        ClefType::C4, ClefType::F, ClefType::F_8VA,
         ClefType::F8_VB, ClefType::PERC, ClefType::TAB, ClefType::TAB4
     };
     static const std::vector<ClefType> clefsMaster  {
-        ClefType::G,     ClefType::G8_VA,  ClefType::G15_MA,  ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
-        ClefType::G8_VB_P,    ClefType::G_1,  ClefType::C1,  ClefType::C2,    ClefType::C3,
-        ClefType::C4,    ClefType::C4_8VB,    ClefType::C5,  ClefType::C_19C, ClefType::C1_F18C, ClefType::C3_F18C, ClefType::C4_F18C,
+        ClefType::G, ClefType::G8_VA, ClefType::G15_MA, ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
+        ClefType::G8_VB_C, ClefType::G8_VB_P, ClefType::G_1, ClefType::C1, ClefType::C2, ClefType::C3,
+        ClefType::C4, ClefType::C4_8VB, ClefType::C5, ClefType::C_19C, ClefType::C1_F18C, ClefType::C3_F18C, ClefType::C4_F18C,
         ClefType::C1_F20C, ClefType::C3_F20C, ClefType::C4_F20C,
-        ClefType::F,   ClefType::F_8VA, ClefType::F_15MA,
-        ClefType::F8_VB,    ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,
+        ClefType::F, ClefType::F_8VA, ClefType::F_15MA,
+        ClefType::F8_VB, ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,
         ClefType::PERC,
         ClefType::PERC2, ClefType::TAB, ClefType::TAB4, ClefType::TAB_SERIF, ClefType::TAB4_SERIF
     };
@@ -1088,6 +1095,7 @@ PalettePtr PaletteCreator::newGraceNotePalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::GraceNote);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Grace notes"));
+    sp->setMag(1.35);
     sp->setGridSize(45, 40);
     sp->setDrawGrid(true);
     sp->setVisible(false);
@@ -1146,13 +1154,13 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     };
 
     for (HairpinType hairpinType : hairpins) {
-        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+        auto hairpin = Factory::makeHairpin(gpaletteScore->dummy());
         hairpin->setHairpinType(hairpinType);
         hairpin->setLen(w);
         sp->appendElement(hairpin, hairpin->subtypeUserName());
     }
 
-    auto gabel = Factory::makeHairpin(gpaletteScore->dummy()->segment());
+    auto gabel = Factory::makeHairpin(gpaletteScore->dummy());
     gabel->setHairpinType(HairpinType::CRESC_HAIRPIN);
     gabel->setBeginText(u"<sym>dynamicMezzo</sym><sym>dynamicForte</sym>");
     gabel->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
@@ -1487,7 +1495,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     sp->appendElement(tempoPrimoTxt, tempoPrimoStr, 1.3);
 
     auto stxt = makeElement<SystemText>(gpaletteScore);
-    stxt->setTextStyleType(TextStyleType::TEMPO);
+    stxt->initTextStyleType(TextStyleType::TEMPO);
     stxt->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Swing")));
     stxt->setSwing(true);
     PaletteCellPtr cell = sp->appendElement(stxt, QT_TRANSLATE_NOOP("palette", "Swing"), 1.3);
@@ -1495,7 +1503,7 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
     cell->setElementTranslated(true);
 
     stxt = makeElement<SystemText>(gpaletteScore);
-    stxt->setTextStyleType(TextStyleType::TEMPO);
+    stxt->initTextStyleType(TextStyleType::TEMPO);
     /*: System text to switch from swing rhythm back to straight rhythm */
     stxt->setXmlText(QT_TRANSLATE_NOOP("palette", "Straight"));
     // need to be true to enable the "Off" option
@@ -1680,7 +1688,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
     return sp;
 }
 
-PalettePtr PaletteCreator::newFretboardDiagramPalette()
+PalettePtr PaletteCreator::newFretboardDiagramPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::FretboardDiagram);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Fretboard diagrams"));
@@ -1695,6 +1703,8 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     };
 
     static const std::vector<FretDiagramInfo> fretboardDiagrams = {
+        { u"------", u"",  muse::TranslatableString("palette", "Blank") },
+
         { u"X32O1O", u"C",  muse::TranslatableString("palette", "C") },
         { u"X-554-", u"Cm", muse::TranslatableString("palette", "Cm") },
         { u"X3231O", u"C7", muse::TranslatableString("palette", "C7") },
@@ -1725,9 +1735,18 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     };
 
     for (const FretDiagramInfo& fretboardDiagram : fretboardDiagrams) {
-        auto fret = FretDiagram::createFromString(gpaletteScore, fretboardDiagram.diagram);
+        auto fret = FretDiagram::createFromPattern(gpaletteScore, fretboardDiagram.diagram);
         fret->setHarmony(fretboardDiagram.harmony);
+
+        if (fretboardDiagram.harmony.empty()) {
+            fret->clear();
+        }
+
         sp->appendElement(fret, fretboardDiagram.userName);
+    }
+
+    if (!defaultPalette) {
+        sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
     }
 
     return sp;
@@ -1811,6 +1830,9 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         f->setXmlText(QString(finger[i]));
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "String number %1"));
     }
+
+    auto hopo = Factory::makeHammerOnPullOff(gpaletteScore->dummy());
+    sp->appendElement(hopo, QT_TRANSLATE_NOOP("palette", "Hammer-on / pull-off"), 0.8);
 
     static const SymIdList luteSymbols {
         SymId::stringsThumbPosition,

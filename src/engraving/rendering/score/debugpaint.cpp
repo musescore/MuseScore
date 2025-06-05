@@ -29,6 +29,7 @@
 #include "dom/system.h"
 #include "dom/measurebase.h"
 #include "dom/measure.h"
+#include "dom/note.h"
 #include "dom/segment.h"
 
 #include "tdraw.h"
@@ -94,6 +95,31 @@ void DebugPaint::paintElementDebug(Painter& painter, const EngravingItem* item)
             painter.setPen(PenStyle::NoPen);
             painter.setBrush(colorForPointer(item));
             painter.drawPath(path);
+        }
+
+        if (item->configuration()->debuggingOptions().showElementMasks) {
+            PainterPath path;
+            path.setFillRule(PainterPath::FillRule::WindingFill);
+            for (const ShapeElement& el : item->ldata()->mask().elements()) {
+                path.addRect(el);
+            }
+
+            painter.setPen(Color::BLACK);
+            Brush brush(Color::BLACK);
+            brush.setStyle(BrushStyle::BDiagPattern);
+            painter.setBrush(brush);
+            painter.drawPath(path);
+        }
+
+        if (item->isNote() && item->configuration()->debuggingOptions().showLineAttachPoints) {
+            painter.setPen(Color::RED);
+            Brush brush(Color::RED);
+            painter.setBrush(brush);
+            double radius = 0.1 * item->spatium();
+            for (const LineAttachPoint& lap : toNote(item)->lineAttachPoints()) {
+                PointF point = lap.pos();
+                painter.drawEllipse(RectF(point.x() - radius, point.y() - radius, 2 * radius, 2 * radius));
+            }
         }
 
         // Draw bbox
@@ -234,8 +260,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
         }
     }
 
-#ifndef NDEBUG
-    if (options.showCorruptedMeasures) {
+    if (options.markCorruptedMeasures && score->hasCorruptedMeasures()) {
         painter.setPen(Pen(Color::RED, 4.0));
         painter.setBrush(BrushStyle::NoBrush);
 
@@ -256,7 +281,6 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
             }
         }
     }
-#endif
 
     painter.restore();
 }

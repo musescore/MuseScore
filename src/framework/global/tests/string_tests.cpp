@@ -34,6 +34,10 @@
 
 using namespace muse;
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+using namespace Qt::Literals::StringLiterals;
+#endif
+
 class Global_Types_StringTests : public ::testing::Test
 {
 public:
@@ -88,7 +92,11 @@ TEST_F(Global_Types_StringTests, String_Construct)
 
     {
         //! GIVEN Some QString
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+        QString qstr = u"123abcПыф"_s;
+#else
         QString qstr = "123abcПыф";
+#endif
         //! DO
         String str = qstr;
         //! CHECK
@@ -106,7 +114,11 @@ TEST_F(Global_Types_StringTests, String_Convert)
 {
     {
         //! GIVEN Some QString
+#if QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+        QString qstr_origin = u"123abcПыф"_s;
+#else
         QString qstr_origin = "123abcПыф";
+#endif
         //! DO
         String str = String::fromQString(qstr_origin);
         //! CHECK
@@ -634,6 +646,15 @@ TEST_F(Global_Types_StringTests, String_Number)
         String str = String::number(v, 2);
         //! CHECK
         EXPECT_EQ(str, u"2.12");
+    }
+
+    {
+        //! GIVEN Some double
+        double v = -0.01;
+        //! DO
+        String str = String::number(v, 1);
+        //! CHECK
+        EXPECT_EQ(str, u"0");
     }
 }
 

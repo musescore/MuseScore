@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.50197</pageWidth>
@@ -39,6 +40,7 @@
       <fingeringFontFace>Times New Roman</fingeringFontFace>
       <lhGuitarFingeringFontFace>Times New Roman</lhGuitarFingeringFontFace>
       <rhGuitarFingeringFontFace>Times New Roman</rhGuitarFingeringFontFace>
+      <hammerOnPullOffTappingFontFace>Times New Roman</hammerOnPullOffTappingFontFace>
       <stringNumberFontFace>Times New Roman</stringNumberFontFace>
       <harpPedalDiagramFontFace>Times New Roman</harpPedalDiagramFontFace>
       <harpPedalTextDiagramFontFace>Times New Roman</harpPedalTextDiagramFontFace>
@@ -96,7 +98,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -161,168 +164,208 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         </VBox>
       <HBox>
         <width>5</width>
+        <eid>E_E</eid>
         </HBox>
       <Measure>
+        <eid>F_F</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>G_G</eid>
             </Clef>
           <TimeSig>
+            <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>0.666667</tempo>
             <followText>1</followText>
+            <eid>I_I</eid>
             <text>Lingering <sym>metNoteQuarterUp</sym> = c. 40</text>
             </Tempo>
           <Rest>
+            <eid>J_J</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>K_K</eid>
         <LayoutBreak>
+          <eid>L_L</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Tempo>
             <tempo>1.95</tempo>
             <followText>1</followText>
+            <eid>M_M</eid>
             <text><sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = c. 78</text>
             </Tempo>
           <Rest>
+            <eid>N_N</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>O_O</eid>
         <voice>
           <Tempo>
             <tempo>1.5</tempo>
             <followText>1</followText>
+            <eid>P_P</eid>
             <text>Andante (<sym>metNoteQuarterUp</sym> = c. 90)</text>
             </Tempo>
           <Rest>
+            <eid>Q_Q</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>R_R</eid>
         <LayoutBreak>
+          <eid>S_S</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Tempo>
             <tempo>1.333333</tempo>
             <followText>1</followText>
+            <eid>T_T</eid>
             <text>Leggero (<sym>metNoteQuarterUp</sym> = c. 80)</text>
             </Tempo>
           <Rest>
+            <eid>U_U</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>V_V</eid>
         <voice>
           <Tempo>
             <tempo>0.24375</tempo>
             <followText>1</followText>
+            <eid>W_W</eid>
             <text><sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = c. 78</text>
             </Tempo>
           <Rest>
+            <eid>X_X</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>Y_Y</eid>
         <voice>
           <Tempo>
             <tempo>0.325</tempo>
             <followText>1</followText>
+            <eid>Z_Z</eid>
             <text><sym>metNote16thUp</sym> = c. 78</text>
             </Tempo>
           <Rest>
+            <eid>a_a</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>b_b</eid>
         <voice>
           <Tempo>
             <tempo>0.975</tempo>
             <followText>1</followText>
+            <eid>c_c</eid>
             <text><sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = c. 78</text>
             </Tempo>
           <Rest>
+            <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>e_e</eid>
         <voice>
           <Tempo>
             <tempo>2.6</tempo>
             <followText>1</followText>
+            <eid>f_f</eid>
             <text><sym>metNoteHalfUp</sym> = c. 78</text>
             </Tempo>
           <Rest>
+            <eid>g_g</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>h_h</eid>
         <voice>
           <Tempo>
             <tempo>15.6</tempo>
             <followText>1</followText>
+            <eid>i_i</eid>
             <text><sym>metNoteDoubleWholeSquare</sym><sym>space</sym><sym>metAugmentationDot</sym> = c. 78</text>
             </Tempo>
           <Rest>
+            <eid>j_j</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>k_k</eid>
         <voice>
           <Tempo>
             <tempo>5.2</tempo>
             <followText>1</followText>
+            <eid>l_l</eid>
             <text><sym>metNoteWhole</sym> = c. 78</text>
             </Tempo>
           <Rest>
+            <eid>m_m</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>n_n</eid>
         <voice>
           <Tempo>
             <tempo>15.6</tempo>
             <followText>1</followText>
+            <eid>o_o</eid>
             <text><sym>metNoteDoubleWhole</sym><sym>space</sym><sym>metAugmentationDot</sym> = c. 78</text>
             </Tempo>
           <Rest>
+            <eid>p_p</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>q_q</eid>
             </BarLine>
           </voice>
         </Measure>

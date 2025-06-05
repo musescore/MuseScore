@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/MuseSounds/qmldir</file>
+        <file>qml/MuseScore/MuseSounds/MuseSoundsPage.qml</file>
+        <file>qml/MuseScore/MuseSounds/internal/SoundCatalogueListView.qml</file>
+        <file>qml/MuseScore/MuseSounds/internal/SoundLibraryItem.qml</file>
+        <file>qml/MuseScore/MuseSounds/MuseSoundsReleaseInfoDialog.qml</file>
+        <file>qml/MuseScore/MuseSounds/internal/MuseSoundsReleaseInfoBottomPanel.qml</file>
+        <file>qml/MuseScore/MuseSounds/resources/muse_sounds_promo.png</file>
+    </qresource>
+</RCC>

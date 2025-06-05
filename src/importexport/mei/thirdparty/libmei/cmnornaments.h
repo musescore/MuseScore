@@ -34,7 +34,7 @@ namespace libmei {
  * An ornament indicating rapid alternation of the main note with a secondary note,
  * usually a step below, but sometimes a step above.
  **/
-class Mordent : public Element, public AttLabelled, public AttTyped, public AttMordentLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartEndId, public AttStartId, public AttOrnamentAccid, public AttOrnamentAccidGes, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class Mordent : public Element, public AttLabelled, public AttTyped, public AttMordentLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartEndId, public AttStartId, public AttOrnamentAccid, public AttOrnamentAccidGes, public AttColor, public AttEnclosingChars, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Mordent();
         virtual ~Mordent();
@@ -49,7 +49,7 @@ public:
  * Rapid alternation of a note with another (usually at the interval of a second
  * above).
  **/
-class Trill : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttOrnamentAccid, public AttOrnamentAccidGes, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttColor, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttExtSymAuth, public AttExtSymNames, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
+class Trill : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttOrnamentAccid, public AttOrnamentAccidGes, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttColor, public AttEnclosingChars, public AttExtender, public AttLineRend, public AttLineRendBase, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
     public:
         Trill();
         virtual ~Trill();
@@ -64,7 +64,7 @@ public:
  * An ornament consisting of four notes — the upper neighbor of the written note,
  * the written note, the lower neighbor, and the written note.
  **/
-class Turn : public Element, public AttLabelled, public AttTyped, public AttTurnLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttOrnamentAccid, public AttOrnamentAccidGes, public AttStartId, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class Turn : public Element, public AttLabelled, public AttTyped, public AttTurnLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttOrnamentAccid, public AttOrnamentAccidGes, public AttStartId, public AttColor, public AttEnclosingChars, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Turn();
         virtual ~Turn();

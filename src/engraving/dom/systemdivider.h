@@ -41,7 +41,7 @@ public:
 
     SystemDivider* clone() const override { return new SystemDivider(*this); }
 
-    enum class Type {
+    enum class Type : unsigned char {
         LEFT, RIGHT
     };
 

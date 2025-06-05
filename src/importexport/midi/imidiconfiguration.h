@@ -25,6 +25,7 @@
 #include <optional>
 
 #include "modularity/imoduleinterface.h"
+#include "async/channel.h"
 #include "io/path.h"
 
 namespace mu::iex::midi {
@@ -38,6 +39,7 @@ public:
     // import
     virtual int midiShortestNote() const = 0; //ticks
     virtual void setMidiShortestNote(int ticks) = 0;
+    virtual muse::async::Channel<int> midiShortestNoteChanged() const = 0;
 
     virtual void setMidiImportOperationsFile(const std::optional<muse::io::path_t>& filePath) const = 0;
 

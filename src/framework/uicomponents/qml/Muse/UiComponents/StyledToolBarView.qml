@@ -31,11 +31,17 @@ Rectangle {
     property alias model: repeater.model
 
     property alias spacing: content.spacing
-    property int padding: 4
+
+    property int leftPadding: 0
+    property int rightPadding: 0
+    property int topPadding: 0
+    property int bottomPadding: 0
+
     property int rowHeight: 32
     property int separatorHeight: rowHeight
 
     property int maximumWidth: -1
+    property bool isMultiline: height > rowHeight
 
     property NavigationPanel navigationPanel: NavigationPanel {
         name: root.objectName !== "" ? root.objectName : "ToolBarView"
@@ -47,21 +53,24 @@ Rectangle {
 
     property var sourceComponentCallback
 
-    width: content.width + padding * 2
-    height: content.height + padding * 2
+    width: content.width + leftPadding + rightPadding
+    height: content.height + topPadding + bottomPadding
 
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
-        root.model.load()
+        if (root.model) {
+            root.model.load()
+        }
     }
 
     Flow {
         id: content
 
-        anchors.verticalCenter: parent.verticalCenter
         anchors.left: root.left
-        anchors.leftMargin: root.padding
+        anchors.leftMargin: root.leftPadding
+        anchors.top: root.top
+        anchors.topMargin: root.topPadding
 
         width: {
             var result = 0

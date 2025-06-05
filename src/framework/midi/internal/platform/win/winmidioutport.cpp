@@ -26,9 +26,8 @@
 #include <mmsystem.h>
 
 #include "midierrors.h"
-#include "stringutils.h"
-#include "translation.h"
-#include "defer.h"
+#include "global/translation.h"
+#include "global/defer.h"
 #include "log.h"
 
 struct muse::midi::WinMidiOutPort::Win {
@@ -193,7 +192,7 @@ Ret WinMidiOutPort::sendEvent(const Event& e)
 
     auto events = e.toMIDI10();
     for (auto& event : events) {
-        uint32_t msg = event.to_MIDI10Package();
+        uint32_t msg = event.toMidi10Package();
         MMRESULT ret = midiOutShortMsg(m_win->midiOut, (DWORD)msg);
         if (ret != MMSYSERR_NOERROR) {
             return make_ret(Err::MidiFailedConnect, "failed send event, error: " + errorString(ret));

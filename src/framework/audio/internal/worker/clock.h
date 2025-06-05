@@ -52,6 +52,9 @@ public:
     Ret setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
     void resetTimeLoop() override;
 
+    void setCountDown(const msecs_t duration) override;
+    async::Notification countDownEnded() const override;
+
     msecs_t currentTime() const override;
     async::Channel<secs_t> timeChanged() const override;
 
@@ -63,9 +66,11 @@ private:
     msecs_t m_timeDuration = 0;
     msecs_t m_timeLoopStart = 0;
     msecs_t m_timeLoopEnd = 0;
+    msecs_t m_countDown = 0;
 
     async::Channel<secs_t> m_timeChangedInSecs;
     async::Notification m_seekOccurred;
+    async::Notification m_countDownEnded;
 };
 }
 

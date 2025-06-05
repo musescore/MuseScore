@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H
-#define MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H
+#pragma once
 
 #include "types/fraction.h"
 
@@ -34,11 +33,10 @@ class Rest;
 class Shape;
 class StemSlash;
 class Segment;
-struct Spring;
 class Measure;
 class System;
-enum class ElementType;
-enum class KerningType;
+enum class ElementType : unsigned char;
+enum class KerningType : unsigned char;
 }
 
 namespace mu::engraving::rendering::score {
@@ -48,7 +46,7 @@ public:
 
     static double computeSpacingForFullSystem(System* system, double stretchReduction = 1.0, double squeezeFactor = 1.0,
                                               bool overrideMinMeasureWidth = false);
-    static double updateSpacingForLastAddedMeasure(System* system);
+    static double updateSpacingForLastAddedMeasure(System* system, bool startOfContinuousLayoutRegion = false);
     static void squeezeSystemToFit(System* system, double& curSysWidth, double targetSysWidth);
     static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
 
@@ -79,28 +77,34 @@ private:
     struct SegmentPosition {
         Segment* segment;
         double xPosInSystemCoords;
-        SegmentPosition(Segment* s, double x)
-            : segment(s), xPosInSystemCoords(x) {}
+        bool ignoreForSpacing;
+        SegmentPosition(Segment* s, double x, bool ignoreForSpacing = false)
+            : segment(s), xPosInSystemCoords(x), ignoreForSpacing(ignoreForSpacing) {}
     };
 
-    struct CrossBeamType
+    struct Spring
+    {
+        double springConst = 0.0;
+        double width = 0.0;
+        double preTension = 0.0;
+        Segment* segment = nullptr;
+        Spring(double sc, double w, double pt, Segment* s)
+            : springConst(sc), width(w), preTension(pt),  segment(s) {}
+    };
+
+    struct CrossBeamSpacing
     {
         bool upDown = false;
         bool downUp = false;
         bool canBeAdjusted = true;
         bool hasOpposingBeamlets = false;
-        void reset()
-        {
-            upDown = false;
-            downUp = false;
-            canBeAdjusted = true;
-            hasOpposingBeamlets = false;
-        }
+        bool preventCrossStaffKerning = false;
+        bool ensureMinStemDistance = false;
     };
 
     static void spaceMeasureGroup(const std::vector<Measure*>& measureGroup, HorizontalSpacingContext& ctx);
     static double getFirstSegmentXPos(Segment* segment, HorizontalSpacingContext& ctx);
-    static std::vector<SegmentPosition> spaceSegments(const std::vector<Segment*> segList, int startSegIdx, HorizontalSpacingContext& ctx);
+    static std::vector<SegmentPosition> spaceSegments(const std::vector<Segment*>& segList, int startSegIdx, HorizontalSpacingContext& ctx);
     static bool ignoreSegmentForSpacing(const Segment* segment);
     static bool ignoreAllSegmentsForSpacing(const std::vector<SegmentPosition>& segmentPositions);
     static void spaceAgainstPreviousSegments(Segment* segment, std::vector<SegmentPosition>& prevSegPositions,
@@ -108,11 +112,22 @@ private:
     static bool stopCheckingPreviousSegments(const SegmentPosition& prev, const SegmentPosition& curSegPos);
     static void checkLyricsAgainstLeftMargin(Segment* segment, double& x, HorizontalSpacingContext& ctx);
     static void checkLyricsAgainstRightMargin(std::vector<SegmentPosition>& segPositions);
+    static double spaceLyricsAgainstBarlines(Segment* firstSeg, Segment* secondSeg, const HorizontalSpacingContext& ctx);
+    static void checkLargeTimeSigAgainstRightMargin(std::vector<SegmentPosition>& segPositions);
     static void moveRightAlignedSegments(std::vector<SegmentPosition>& placedSegments, const HorizontalSpacingContext& ctx);
+    static void checkCollisionsWithCrossStaffStems(const Segment* thisSeg, const Segment* nextSeg, staff_idx_t staffIdx,
+                                                   double& curMinDist);
 
     static double chordRestSegmentNaturalWidth(Segment* segment, HorizontalSpacingContext& ctx);
+    static double computeSegmentDurationStretch(const Segment* curSeg, const Segment* prevSeg);
+    static double durationStretchForMMRests(const Segment* segment);
+    static double durationStretchForTicks(double slope, const Fraction& ticks);
+    static bool needsCueSizeSpacing(const Segment* segment);
+    static bool needsHeaderSpacingExceptions(const Segment* seg, const Segment* nextSeg);
+
     static void applyCrossBeamSpacingCorrection(Segment* thisSeg, Segment* nextSeg, double& width);
-    static CrossBeamType computeCrossBeamType(Segment* thisSeg, Segment* nextSeg);
+    static CrossBeamSpacing computeCrossBeamSpacing(Segment* thisSeg, Segment* nextSeg);
+    static double minStemDistOnNonAdjacentCross(const Segment* thisSeg, const Segment* nextSeg);
 
     static void enforceMinimumMeasureWidths(const std::vector<Measure*> measureGroup);
     static double computeMinMeasureWidth(Measure* m);
@@ -131,11 +146,15 @@ private:
     static bool isSameVoiceKerningLimited(const EngravingItem* item);
     static bool isNeverKernable(const EngravingItem* item);
     static bool isAlwaysKernable(const EngravingItem* item);
+    static bool ignoreItems(const EngravingItem* item1, const EngravingItem* item2);
 
     static KerningType doComputeKerningType(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeNoteKerningType(const Note* note, const EngravingItem* item2);
     static KerningType computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2);
     static KerningType computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2);
+    static KerningType computeArticulationAndFermataKerning(const EngravingItem* item1, const EngravingItem* item2);
+
+    static void computeHangingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap,
+                                        bool systemEnd);
 };
 } // namespace mu::engraving::layout
-#endif // MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H

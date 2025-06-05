@@ -1,4 +1,4 @@
-name: 'Translate: tx pull translations to S3'
+name: "Translate: tx pull translations to S3"
 
 on:
   schedule:
@@ -19,6 +19,10 @@ on:
         required: true
         type: boolean
         default: false
+      use_qt69:
+        description: "Use Qt 6.9"
+        default: "off"
+        required: false
 
 jobs:
   tx_pull:
@@ -68,15 +72,19 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4
 
-      - name: Setup environment for tx pull
-        run: |
-          bash ./buildscripts/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
+      - name: Install Qt for lrelease
+        if: env.DO_PUSH_TO_S3 == 'true'
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
+          host: "linux"
+          target: "desktop"
+          arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
+          archives: "qttools qtbase icu"
 
       - name: Setup environment for pushing to S3
         if: env.DO_PUSH_TO_S3 == 'true'
         run: |
-          # lrelease
-          bash ./buildscripts/ci/translation/qt_install.sh
           bash ./buildscripts/ci/tools/s3_install.sh --s3_key ${{ secrets.S3_KEY }} --s3_secret ${{ secrets.S3_SECRET }}
 
           bash ./buildscripts/ci/tools/make_build_number.sh
@@ -85,14 +93,17 @@ jobs:
           echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
 
       - name: Update .ts files (tx pull)
-        run: |
-          bash ./buildscripts/ci/translation/tx_pull.sh
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TRANSIFEX_API_TOKEN }}
+          args: "pull -f"
 
       - name: Create Pull Request
         if: env.DO_CREATE_PR == 'true'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           commit-message: "Update in-repo translations from Transifex"
           branch: "ci_tx_pull${{github.ref_name && format('_{0}', github.ref_name) || ''}}"
           add-paths: share/locale/*

@@ -38,26 +38,13 @@ ColumnLayout{
     RowLayout {
         spacing: 15
 
-        Rectangle {
-            id: display
-            width: image.width + 25
-            height: image.height + 20
+        StyledImage {
+            forceWidth: 100
+            forceHeight: 80
+            horizontalPadding: 12
+            verticalPadding: 10
 
-            color: "#ffffff"
-            border.color: ui.theme.strokeColor
-            radius: ui.theme.borderWidth
-
-            Image {
-                id: image
-
-                width: 100
-                height: 80
-                anchors.centerIn: parent
-                mipmap: true
-
-                fillMode: Image.PreserveAspectFit
-                source: toggleButton.checked ? imageON : imageOFF
-            }
+            source: toggleButton.checked ? imageON : imageOFF
         }
 
         RowLayout {

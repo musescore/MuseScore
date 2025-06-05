@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <limits>
 #include "instrtemplate.h"
 
 #include "io/file.h"
@@ -37,6 +38,7 @@
 #include "scoreorder.h"
 #include "stafftype.h"
 #include "stringdata.h"
+#include "stringutils.h"
 #include "utils.h"
 
 #include "log.h"
@@ -720,6 +722,9 @@ const InstrumentTemplate* searchTemplate(const String& name)
 const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const String& name, const int transposition, int bank,
                                                  int program)
 {
+    size_t minLevenshteinDistance = std::numeric_limits<size_t>::max();
+    const InstrumentTemplate* templateWithMinLevenshteinDistance = nullptr;
+
     if (mxmlId.empty() && name.empty() && bank == 0 && program == -1) {
         // No instrument information provided
         return nullptr;
@@ -790,11 +795,43 @@ const InstrumentTemplate* combinedTemplateSearch(const String& mxmlId, const Str
             if (matchStrength > bestMatchStrength) {
                 bestMatch = it;
                 bestMatchStrength = matchStrength;
+
                 if (bestMatchStrength - nameWeight == perfectMatchStrength && nameWeight > 0) {
                     return bestMatch; // stop looking for matches
+                } else {
+                    // We reset the distance
+                    minLevenshteinDistance = std::numeric_limits<int>::max();
+                    templateWithMinLevenshteinDistance = nullptr;
+                }
+            }
+
+            // We look for the shortest distance
+            if ((matchStrength == bestMatchStrength) && (matchStrength > 0)) {
+                // if the name has some meaning we calculate the distance
+                if ((!name.isEmpty()) && (name != u"MusicXML Part") && (name != u"Staff")) {
+                    // We keep the lowest distance with trackName ...
+                    size_t levenshteinDistance = muse::strings::levenshteinDistance(
+                        StaffName(name).toString().toStdString(), it->trackName.toStdString());
+
+                    // ... and longNames
+                    for (const muse::String& instLongName : it->longNames.toStringList()) {
+                        levenshteinDistance = std::min(levenshteinDistance,
+                                                       muse::strings::levenshteinDistance(
+                                                           StaffName(name).toString().toStdString(), instLongName.toStdString()));
+                    }
+                    // If we have a shortest distance we keep this element
+                    if (levenshteinDistance < minLevenshteinDistance) {
+                        minLevenshteinDistance = levenshteinDistance;
+                        templateWithMinLevenshteinDistance = it;
+                    }
                 }
             }
         }
+    }
+
+    // If we have improved the Levenshtein distance we change the best match
+    if (minLevenshteinDistance < std::numeric_limits<int>::max()) {
+        bestMatch = templateWithMinLevenshteinDistance;
     }
 
     return bestMatch;
@@ -816,19 +853,28 @@ const InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>
 {
     const InstrumentTemplate* bestMatch = nullptr; // default if no matches
     int bestMatchStrength = 0; // higher for better matches
-    for (const InstrumentGroup* g : instrumentGroups) {
-        for (const InstrumentTemplate* it : g->instrumentTemplates) {
-            for (const String& name : nameList) {
-                if (name.isEmpty() || it->useDrumset != useDrumset) {
+
+    for (String name : nameList) {
+        if (name.isEmpty()) {
+            continue;
+        }
+
+        if (!caseSensitive) {
+            name = name.toLower();
+        }
+        StaffName instrName(name);
+
+        for (const InstrumentGroup* g : instrumentGroups) {
+            for (const InstrumentTemplate* it : g->instrumentTemplates) {
+                if (it->useDrumset != useDrumset) {
                     continue;
                 }
+
                 String trackName = it->trackName;
                 StaffNameList longNames = it->longNames;
                 StaffNameList shortNames = it->shortNames;
-                String instrName = name;
 
                 if (!caseSensitive) {
-                    instrName = instrName.toLower();
                     trackName = trackName.toLower();
                     for (StaffName& n : longNames) {
                         n.setName(n.name().toLower());
@@ -839,9 +885,9 @@ const InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>
                 }
 
                 int matchStrength = 0
-                                    + (4 * (trackName == instrName ? 1 : 0)) // most weight to track name since there are fewer duplicates
-                                    + (2 * (muse::contains(longNames, StaffName(instrName)) ? 1 : 0))
-                                    + (1 * (muse::contains(shortNames, StaffName(instrName)) ? 1 : 0)); // least weight to short name
+                                    + (4 * (trackName == name ? 1 : 0)) // most weight to track name since there are fewer duplicates
+                                    + (2 * (muse::contains(longNames, instrName) ? 1 : 0))
+                                    + (1 * (muse::contains(shortNames, instrName) ? 1 : 0)); // least weight to short name
                 const int perfectMatchStrength = 7;
                 assert(matchStrength <= perfectMatchStrength);
                 if (matchStrength > bestMatchStrength) {
@@ -856,9 +902,15 @@ const InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>
     }
 
     if (!bestMatch) {
+        static const std::wregex drumsetRegex(L"drum ?(set|kit)", std::regex_constants::icase);
+
         for (const String& name : nameList) {
-            if (name.contains(u"drum", muse::CaseInsensitive)) {
-                return searchTemplate(u"drumset");
+            if (name.contains(drumsetRegex)) {
+                return searchTemplate(u"drumset"); // Large Drum Kit
+            }
+
+            if (name.contains(u"drum", muse::CaseInsensitive) || name.contains(u"percussion", muse::CaseInsensitive)) {
+                return searchTemplate(u"percussion-synthesizer"); // General MIDI percussion
             }
 
             if (name.contains(u"piano", muse::CaseInsensitive)) {

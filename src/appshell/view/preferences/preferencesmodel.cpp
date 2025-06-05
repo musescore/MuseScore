@@ -178,6 +178,9 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("midi-device-mapping", QT_TRANSLATE_NOOP("appshell/preferences", "MIDI mappings"), IconCode::Code::MIDI_INPUT,
                  "Preferences/MidiDeviceMappingPreferencesPage.qml"),
 
+        makeItem("percussion", QT_TRANSLATE_NOOP("appshell/preferences", "Percussion"), IconCode::Code::PERCUSSION,
+                 "Preferences/PercussionPreferencesPage.qml"),
+
         makeItem("import", QT_TRANSLATE_NOOP("appshell/preferences", "Import"), IconCode::Code::IMPORT,
                  "Preferences/ImportPreferencesPage.qml"),
 
@@ -204,12 +207,33 @@ void PreferencesModel::load(const QString& currentPageId)
     endResetModel();
 }
 
+bool PreferencesModel::askForConfirmationOfPreferencesReset()
+{
+    std::string title = muse::trc("appshell", "Are you sure you want to reset preferences?");
+    std::string question = muse::trc("appshell", "This action will reset all your app preferences and delete all custom shortcuts. "
+                                                 "It will not delete any of your scores.\n\n"
+                                                 "This action cannot be undone.");
+
+    muse::IInteractive::ButtonData cancelBtn = interactive()->buttonData(muse::IInteractive::Button::Cancel);
+    muse::IInteractive::ButtonData resetBtn = interactive()->buttonData(muse::IInteractive::Button::Reset);
+    cancelBtn.accent = true;
+
+    muse::IInteractive::Result result = interactive()->warningSync(title, question, { cancelBtn, resetBtn }, cancelBtn.btn,
+                                                                   { muse::IInteractive::Option::WithIcon },
+                                                                   muse::trc("appshell", "Reset preferences"));
+    return result.standardButton() == muse::IInteractive::Button::Reset;
+}
+
 void PreferencesModel::resetFactorySettings()
 {
     static constexpr bool KEEP_DEFAULT_SETTINGS = true;
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QApplication::processEvents();
     configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS);
+
+    // Unreset the "First Launch Completed" setting so the first-time launch wizard does not appear.
+    configuration()->setHasCompletedFirstLaunchSetup(true);
+
     configuration()->startEditSettings();
     QApplication::restoreOverrideCursor();
 }

@@ -61,9 +61,11 @@ public:
 
     StartupModeType startupModeType() const override;
     void setStartupModeType(StartupModeType type) override;
+    muse::async::Notification startupModeTypeChanged() const override;
 
     muse::io::path_t startupScorePath() const override;
     void setStartupScorePath(const muse::io::path_t& scorePath) override;
+    muse::async::Notification startupScorePathChanged() const override;
 
     muse::io::path_t userDataPath() const override;
 
@@ -92,7 +94,8 @@ public:
     void applySettings() override;
     void rollbackSettings() override;
 
-    void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true) const override;
+    void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true,
+                                 bool notifyOtherInstances = true) const override;
 
     muse::io::paths_t sessionProjectsPaths() const override;
     muse::Ret setSessionProjectsPaths(const muse::io::paths_t& paths) override;
@@ -111,6 +114,9 @@ private:
     muse::io::paths_t parseSessionProjectsPaths(const QByteArray& json) const;
 
     QString m_preferencesDialogCurrentPageId;
+
+    muse::async::Notification m_startupModeTypeChanged;
+    muse::async::Notification m_startupScorePathChanged;
 };
 }
 

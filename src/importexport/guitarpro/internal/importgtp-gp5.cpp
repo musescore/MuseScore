@@ -24,20 +24,19 @@
 
 #include "containers.h"
 
-#include "engraving/dom/factory.h"
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/barline.h"
-#include "engraving/dom/box.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordline.h"
 #include "engraving/dom/clef.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/excerpt.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/fingering.h"
+#include "engraving/dom/fretcircle.h"
 #include "engraving/dom/glissando.h"
-#include "engraving/dom/harmony.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/lyrics.h"
@@ -46,8 +45,8 @@
 #include "engraving/dom/measurebase.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/notedot.h"
-#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/segment.h"
@@ -56,18 +55,14 @@
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stringdata.h"
-#include "engraving/dom/stretchedbend.h"
-#include "types/symid.h"
-#include "engraving/dom/tempotext.h"
-#include "engraving/dom/text.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
-#include "engraving/dom/tremolobar.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
-#include "engraving/dom/fretcircle.h"
+#include "engraving/types/symid.h"
 
+#include "guitarprodrumset.h"
 #include "utils.h"
 
 #include "log.h"
@@ -853,6 +848,10 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 bool GuitarPro5::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
+    if (engravingConfiguration()->experimentalGuitarBendImport()) {
+        m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
+    }
+
     f = io;
 
     readInfo();
@@ -923,7 +922,7 @@ bool GuitarPro5::read(IODevice* io)
         }
         if (barBits & SCORE_REPEAT_END) {                    // number of repeats
             bar.repeatFlags = bar.repeatFlags | mu::engraving::Repeat::END;
-            bar.repeats = readUInt8() + 1;
+            bar.repeats = readUInt8();
         }
         if (barBits & SCORE_MARKER) {
             bar.marker = readDelphiString();           // new section?
@@ -937,6 +936,7 @@ bool GuitarPro5::read(IODevice* io)
                 bar.volta.voltaInfo.push_back(voltaNumber & 1);
                 voltaNumber >>= 1;
             }
+            bar.repeats = static_cast<int>(bar.volta.voltaInfo.size()) + 1;
         }
         if (barBits & SCORE_KEYSIG) {
             int currentKey = readUInt8();
@@ -1087,7 +1087,9 @@ bool GuitarPro5::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    StretchedBend::prepareBends(m_stretchedBends);
+    if (engravingConfiguration()->experimentalGuitarBendImport()) {
+        m_guitarBendImporter->applyBendsToChords();
+    }
 
     return true;
 }
@@ -1137,7 +1139,6 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
         int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr);
 
         auto gnote = score->setGraceNote(note->chord(), grace_pitch, note_type, grace_len);
-        score->deselect(gnote);
 
         // gp5 not supports more than one grace note,
         // so it's always should be shown as eight note
@@ -1528,8 +1529,12 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
             if (e && e->isChord()) {
                 Chord* chord2 = toChord(e);
                 for (Note* note2 : chord2->notes()) {
-                    if (note2->string() == string && chords.empty()) {
-                        Tie* tie = Factory::createTie(note2);
+                    if (note2->string() == string) {
+                        if (chords.empty()) {
+                            Tie* tie = Factory::createTie(note2);
+                            tie->setEndNote(note);
+                            note2->add(tie);
+                        }
 
                         //  fixing gp5 bug with not storying let ring for tied notes
                         if (m_letRingForChords.find(chord2) != m_letRingForChords.end()) {
@@ -1537,8 +1542,6 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                             muse::remove(m_letRingForChords, chord2);
                         }
 
-                        tie->setEndNote(note);
-                        note2->add(tie);
                         if (m_harmonicNotes.find(note) != m_harmonicNotes.end() && m_harmonicNotes.find(note2) != m_harmonicNotes.end()) {
                             Note* startHarmonicNote = m_harmonicNotes.at(note2);
                             Note* endHarmonicNote = m_harmonicNotes.at(note);

@@ -61,6 +61,8 @@ public:
     void setStartWithMeasureOne(bool v) { m_startWithMeasureOne = v; }
     bool firstSystemIndentation() const { return m_firstSystemIndentation; }
     void setFirstSystemIndentation(bool v) { m_firstSystemIndentation = v; }
+    bool showCourtesy() const { return m_showCourtesy; }
+    void setShowCourtesy(bool v) { m_showCourtesy = v; }
 
     bool isPageBreak() const { return m_layoutBreakType == LayoutBreakType::PAGE; }
     bool isLineBreak() const { return m_layoutBreakType == LayoutBreakType::LINE; }
@@ -71,12 +73,11 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-    void init();
+    String accessibleInfo() const override;
 
-    double lineWidth() const { return m_lw; }
-    const RectF& iconBorderRect() const { return m_iconBorderRect; }
-    const muse::draw::PainterPath& iconPath() const { return m_iconPath; }
+    char16_t iconCode() const;
 
+    muse::draw::Font font() const;
 protected:
     void added() override;
     void removed() override;
@@ -87,15 +88,11 @@ private:
     LayoutBreak(MeasureBase* parent = 0);
     LayoutBreak(const LayoutBreak&);
 
-    void spatiumChanged(double oldValue, double newValue) override;
-
-    double m_lw = 0.0;
-    RectF m_iconBorderRect;
-    muse::draw::PainterPath m_iconPath;
     double m_pause = 0.0;
     bool m_startWithLongNames = false;
     bool m_startWithMeasureOne = false;
     bool m_firstSystemIndentation = false;
+    bool m_showCourtesy = false;
     LayoutBreakType m_layoutBreakType = LayoutBreakType::NOBREAK;
 };
 } // namespace mu::engraving

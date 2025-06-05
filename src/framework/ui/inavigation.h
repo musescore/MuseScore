@@ -33,6 +33,7 @@
 #include "async/notification.h"
 
 class QWindow;
+class QQuickItem;
 
 namespace muse::ui {
 class INavigationSection;
@@ -103,6 +104,7 @@ public:
     virtual async::Channel<bool> activeChanged() const = 0;
 
     virtual QWindow* window() const = 0;
+    virtual QQuickItem* visualItem() const = 0;
 
     virtual void onEvent(EventPtr e) = 0;
 };
@@ -116,6 +118,8 @@ public:
     virtual INavigationPanel* panel() const = 0;
 
     virtual void trigger() = 0;
+    virtual async::Notification triggered() const = 0;
+
     virtual void requestActive(bool enableHighlight = false) = 0;
 };
 

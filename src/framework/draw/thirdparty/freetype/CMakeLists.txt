@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-declare_module(freetype)
+declare_thirdparty_module(freetype)
 
 set(FREETYPE_DIR ${CMAKE_CURRENT_LIST_DIR}/freetype-2.13.1)
 set(FREETYPE_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/freetype-2.13.1)
@@ -160,8 +160,9 @@ set(MODULE_DEF
     -DFT2_BUILD_LIBRARY
 )
 
-set(MODULE_USE_PCH OFF)
 set(MODULE_USE_UNITY OFF)
+set(MODULE_USE_COVERAGE OFF)
+
 setup_module()
 
 # Export variables

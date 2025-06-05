@@ -33,7 +33,7 @@ class ItemMultiSelectionModel;
 }
 
 namespace mu::notation {
-class PartListModel : public QAbstractListModel, public muse::Injectable
+class PartListModel : public QAbstractListModel, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 

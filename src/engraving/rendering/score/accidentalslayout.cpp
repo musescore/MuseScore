@@ -737,7 +737,9 @@ void AccidentalsLayout::applyOrderingOffsets(std::vector<Accidental*>& accidenta
 
     // Sort vector
     std::sort(accidentals.begin(), accidentals.end(), [](const Accidental* acc1, const Accidental* acc2) {
-        return acc1->stackingOrder() <= acc2->stackingOrder();
+        int stackingOrder1 = acc1->stackingOrder();
+        int stackingOrder2 = acc2->stackingOrder();
+        return stackingOrder1 == stackingOrder2 ? acc1->stackingOrderOffset() < acc2->stackingOrderOffset() : stackingOrder1 < stackingOrder2;
     });
 }
 
@@ -1031,7 +1033,8 @@ void AccidentalsLayout::collectVerticalSets(
         double x1 = xPosRelativeToSegment(acc1);
         for (size_t j = i + 1; j < ctx.allAccidentals.size(); ++j) {
             Accidental* acc2 = ctx.allAccidentals[j];
-            if (acc2->accidentalType() != acc1->accidentalType() || muse::contains(accidentalsAlreadyGrouped, acc2)) {
+            if (acc2->accidentalType() != acc1->accidentalType() || muse::contains(accidentalsAlreadyGrouped, acc2)
+                || !muse::RealIsEqual(acc1->mag(), acc2->mag())) {
                 continue;
             }
             int column2 = acc2->ldata()->column;
@@ -1057,10 +1060,12 @@ void AccidentalsLayout::alignVerticalSets(AccidentalGroups& vertSets, Accidental
         // Align the set
         double x = DBL_MAX;
         for (Accidental* acc : vertSet) {
-            x = std::min(x, xPosRelativeToSegment(acc));
+            double rightEdge = acc->ldata()->bbox().right() + xPosRelativeToSegment(acc);
+            x = std::min(x, rightEdge);
         }
         for (Accidental* acc : vertSet) {
-            setXposRelativeToSegment(acc, x);
+            double bboxRight = acc->ldata()->bbox().right();
+            setXposRelativeToSegment(acc, x - bboxRight);
         }
 
         // Re-check the outer ones for collisions

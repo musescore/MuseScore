@@ -204,6 +204,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::GLISS_STYLE: {
         element(name, TConv::toXml(data.value<GlissandoStyle>()));
     } break;
+    case P_TYPE::GLISS_TYPE: {
+        element(name, TConv::toXml(data.value<GlissandoType>()));
+    } break;
     case P_TYPE::ALIGN: {
         element(name, TConv::toXml(data.value<Align>()));
     }
@@ -299,6 +302,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     } break;
     case P_TYPE::INT_VEC: {
         element(name, TConv::toXml(data.value<std::vector<int> >()));
+    } break;
+    case P_TYPE::PARTIAL_SPANNER_DIRECTION: {
+        element(name, TConv::toXml(data.value<PartialSpannerDirection>()));
     } break;
     default: {
         UNREACHABLE; //! TODO

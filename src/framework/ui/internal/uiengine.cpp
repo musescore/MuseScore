@@ -80,6 +80,7 @@ UiEngine::UiEngine(const modularity::ContextPtr& iocCtx)
     m_interactiveProvider = std::make_shared<InteractiveProvider>(iocContext());
     m_api = new QmlApi(this, iocContext());
     m_tooltip = new QmlToolTip(this, iocContext());
+    m_dataFormatter = new QmlDataFormatter(this);
 
     //! NOTE At the moment, UiTheme is also QProxyStyle
     //! Inside the theme, QApplication::setStyle(this) is calling and the QStyleSheetStyle becomes as parent.
@@ -130,6 +131,11 @@ void UiEngine::quit()
     emit m_engine->quit();
     delete m_engine;
     m_engine = nullptr;
+}
+
+QmlDataFormatter* UiEngine::df() const
+{
+    return m_dataFormatter;
 }
 
 QQuickItem* UiEngine::rootItem() const

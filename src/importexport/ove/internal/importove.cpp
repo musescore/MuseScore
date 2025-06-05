@@ -328,7 +328,7 @@ void OveToMScore::createStructure()
         int tick = m_mtt->getTick(i, 0);
         measure->setTick(Fraction::fromTicks(tick));
         measure->setNo(i);
-        m_score->measures()->add(measure);
+        m_score->measures()->append(measure);
     }
 }
 
@@ -403,7 +403,7 @@ void OveToMScore::convertHeader()
 
     if (vbox) {
         vbox->setTick(Fraction(0, 1));
-        m_score->measures()->add(vbox);
+        m_score->measures()->append(vbox);
     }
 }
 
@@ -648,7 +648,9 @@ void OveToMScore::convertTrackHeader(ovebase::Track* track, Part* part)
             drumset->drum(i).line     = smDrumset->drum(i).line;
             drumset->drum(i).stemDirection = smDrumset->drum(i).stemDirection;
             drumset->drum(i).voice     = smDrumset->drum(i).voice;
-            drumset->drum(i).shortcut = 0;
+            drumset->drum(i).shortcut = smDrumset->drum(i).shortcut;
+            drumset->drum(i).panelRow = smDrumset->drum(i).panelRow;
+            drumset->drum(i).panelColumn = smDrumset->drum(i).panelColumn;
         }
         QList<ovebase::Track::DrumNode> nodes = track->getDrumKit();
         for (int i = 0; i < nodes.size(); ++i) {
@@ -1625,7 +1627,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 if (clefType == ovebase::ClefType::Percussion1 || clefType == ovebase::ClefType::Percussion2) {
                     Drumset* drumset = getDrumset(m_score, part);
                     if (drumset != 0) {
-                        if (!drumset->isValid(pitch) || pitch == -1) {
+                        if (!drumset->isValid(pitch)) {
                             LOGD("unmapped drum note 0x%02x %d", note->pitch(), note->pitch());
                         } else {
                             note->setHeadGroup(drumset->noteHead(pitch));
@@ -2105,7 +2107,7 @@ void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int tr
             && (harmonyPtr->getBass() != harmonyPtr->getRoot()
                 || (harmonyPtr->getBass() == harmonyPtr->getRoot()
                     && harmonyPtr->getAlterBass() != harmonyPtr->getAlterRoot()))) {
-            harmony->setBaseTpc(step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass())));
+            harmony->setBassTpc(step2tpc(harmonyPtr->getBass(), AccidentalVal(harmonyPtr->getAlterBass())));
         }
         const ChordDescription* d = harmony->fromXml(harmonyPtr->getHarmonyType());
         if (d != 0) {

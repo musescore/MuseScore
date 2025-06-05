@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
+#include "network/inetworkconfiguration.h"
 
 #include "global/types/config.h"
 
@@ -34,6 +35,7 @@ namespace muse::update {
 class UpdateConfiguration : public IUpdateConfiguration, public Injectable, public async::Asyncable
 {
     Inject<IGlobalConfiguration> globalConfiguration = { this };
+    Inject<network::INetworkConfiguration> networkConfiguration = { this };
 
 public:
     UpdateConfiguration(const modularity::ContextPtr& iocCtx)
@@ -48,16 +50,13 @@ public:
 
     bool needCheckForUpdate() const override;
     void setNeedCheckForUpdate(bool needCheck) override;
+    muse::async::Notification needCheckForUpdateChanged() const override;
 
     std::string skippedReleaseVersion() const override;
     void setSkippedReleaseVersion(const std::string& version) override;
 
-    std::string lastShownMuseSoundsReleaseVersion() const override;
-    void setLastShownMuseSoundsReleaseVersion(const std::string& version) override;
-
     std::string checkForAppUpdateUrl() const override;
     std::string previousAppReleasesNotesUrl() const override;
-    std::string checkForMuseSamplerUpdateUrl() const override;
 
     muse::network::RequestHeaders updateHeaders() const override;
 
@@ -68,6 +67,7 @@ public:
     muse::io::path_t updateRequestHistoryJsonPath() const override;
 
 private:
+    muse::async::Notification m_needCheckForUpdateChanged;
 
     Config m_config;
 };

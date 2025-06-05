@@ -23,6 +23,7 @@
 
 #include "modularity/ioc.h"
 #include "internal/networkmanagercreator.h"
+#include "internal/networkconfiguration.h"
 
 #include "global/api/iapiregister.h"
 
@@ -40,7 +41,10 @@ std::string NetworkModule::moduleName() const
 
 void NetworkModule::registerExports()
 {
+    m_configuration = std::make_shared<NetworkConfiguration>(iocContext());
+
     ioc()->registerExport<INetworkManagerCreator>(moduleName(), new NetworkManagerCreator());
+    ioc()->registerExport<INetworkConfiguration>(moduleName(), m_configuration);
 }
 
 void NetworkModule::registerApi()
@@ -54,4 +58,9 @@ void NetworkModule::registerApi()
         api->regApiCreator(moduleName(), "api.websocketserver", new ApiCreator<api::WebSocketServerApi>());
 #endif
     }
+}
+
+void NetworkModule::onInit(const IApplication::RunMode&)
+{
+    m_configuration->init();
 }

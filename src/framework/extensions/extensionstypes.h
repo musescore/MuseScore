@@ -150,22 +150,40 @@ struct Action {
 
     struct Config {
         ExecPointName execPoint = EXEC_DISABLED;
-        std::string shortcut;
     };
 
     bool isValid() const { return type != Type::Undefined && !code.empty(); }
 };
 
-inline UriQuery makeUriQuery(const Uri& uri, const std::string& actionCode)
+inline actions::ActionQuery makeActionQueryBase(const Uri& uri)
 {
     UriQuery q(uri);
+    q.setScheme("action");
+    return q;
+}
+
+inline actions::ActionQuery makeActionQuery(const Uri& uri, const std::string& actionCode)
+{
+    UriQuery q = makeActionQueryBase(uri);
     q.addParam("action", Val(actionCode));
     return q;
 }
 
+inline UriQuery uriQueryFromActionQuery(const actions::ActionQuery& a)
+{
+    UriQuery q(a);
+    q.setScheme("musescore");
+    return q;
+}
+
+inline actions::ActionCode makeActionCodeBase(const Uri& uri)
+{
+    return makeActionQueryBase(uri).toString();
+}
+
 inline actions::ActionCode makeActionCode(const Uri& uri, const std::string& extActionCode)
 {
-    return makeUriQuery(uri, extActionCode).toString();
+    return makeActionQuery(uri, extActionCode).toString();
 }
 
 /*
@@ -187,9 +205,6 @@ manifest.json
 struct Manifest {
     struct Config {
         std::map<std::string /*action*/, Action::Config> actions;
-
-        //! TODO remove
-        std::string shortcuts;
 
         const Action::Config& aconfig(const std::string& code) const
         {

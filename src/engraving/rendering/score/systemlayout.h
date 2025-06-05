@@ -63,8 +63,11 @@ public:
     static double minDistance(const System* top, const System* bottom, const LayoutContext& ctx);
 
     static void centerElementsBetweenStaves(const System* system);
+    static void centerBigTimeSigsAcrossStaves(const System* system);
 
     static void updateSkylineForElement(EngravingItem* element, const System* system, double yMove);
+
+    static void layoutSystemLockIndicators(System* system, LayoutContext& ctx);
 
 private:
     struct MeasureState
@@ -96,16 +99,69 @@ private:
         }
     };
 
+    struct ElementsToLayout
+    {
+        System* system;
+        std::vector<Measure*> measures;
+        std::vector<Segment*> segments;
+
+        std::vector<ChordRest*> chordRests;
+        std::vector<Chord*> chords;
+        std::vector<BarLine*> barlines;
+        std::vector<TimeSig*> timeSigAboveStaves;
+
+        std::vector<MeasureNumber*> measureNumbers;
+        std::vector<MMRestRange*> mmrRanges;
+        std::vector<EngravingItem*> markersAndJumps;
+
+        std::vector<Sticking*> stickings;
+        std::vector<EngravingItem*> fermatasAndTremoloBars;
+        std::vector<FiguredBass*> figuredBass;
+        std::vector<Dynamic*> dynamics;
+        std::vector<Expression*> expressions;
+        std::vector<HarpPedalDiagram*> harpDiagrams;
+        std::vector<FretDiagram*> fretDiagrams;
+        std::vector<StaffText*> staffText;
+        std::vector<InstrumentChange*> instrChanges;
+        std::vector<SystemText*> systemText;
+        std::vector<EngravingItem*> playTechCapoStringTunSystemTextTripletFeel;
+        std::vector<RehearsalMark*> rehMarks;
+        std::vector<TempoText*> tempoText;
+        std::vector<Image*> images;
+        std::vector<Parenthesis*> parenthesis;
+
+        std::vector<Spanner*> slurs;
+        std::vector<Spanner*> trills;
+        std::vector<Spanner*> hairpins;
+        std::vector<Spanner*> ottavas;
+        std::vector<Spanner*> pedal;
+        std::vector<Spanner*> voltas;
+        std::vector<Spanner*> tempoChangeLines;
+        std::vector<Spanner*> partialLyricsLines;
+        std::vector<Spanner*> allOtherSpanners;
+
+        ElementsToLayout(System* s)
+            : system(s) {}
+    };
+
+    static void collectElementsToLayout(Measure* measure, ElementsToLayout& elements, const LayoutContext& ctx);
+    static void collectSpannersToLayout(ElementsToLayout& elements, const LayoutContext& ctx);
+
     static System* getNextSystem(LayoutContext& lc);
-    static void processLines(System* system, LayoutContext& ctx, std::vector<Spanner*> lines, bool align);
+    static void createSkylines(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
+    static void processLines(System* system, LayoutContext& ctx, const std::vector<Spanner*>& lines, bool align = false);
     static void layoutTies(Chord* ch, System* system, const Fraction& stick, LayoutContext& ctx);
-    static void doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick, LayoutContext& ctx);
+    static void doLayoutTies(System* system, const std::vector<Segment*>& sl, const Fraction& stick, const Fraction& etick,
+                             LayoutContext& ctx);
     static void doLayoutNoteSpannersLinear(System* system, LayoutContext& ctx);
     static void layoutNoteAnchoredSpanners(System* system, Chord* chord);
-    static void layoutGuitarBends(const std::vector<Segment*>& sl, LayoutContext& ctx);
+    static void layoutGuitarBends(Chord* chord, LayoutContext& ctx);
     static void updateCrossBeams(System* system, LayoutContext& ctx);
     static bool measureHasCrossStuffOrModifiedBeams(const Measure* measure);
     static void restoreTiesAndBends(System* system, LayoutContext& ctx);
+    static void layoutTuplets(const std::vector<ChordRest*>& chordRests, LayoutContext& ctx);
+
+    static void layoutTiesAndBends(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
 
     static double instrumentNamesWidth(System* system, LayoutContext& ctx, bool isFirstSystem);
     static double totalBracketOffset(LayoutContext& ctx);
@@ -122,6 +178,18 @@ private:
     static void centerMMRestBetweenStaves(MMRest* mmRest, const System* system);
 
     static bool shouldBeJustified(System* system, double curSysWidth, double targetSystemWidth, LayoutContext& ctx);
+
+    static void updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx);
+
+    static void layoutSticking(const std::vector<Sticking*> stickings, System* system, LayoutContext& ctx);
+
+    static void layoutLyrics(const ElementsToLayout& elements, LayoutContext& ctx);
+
+    static void layoutVoltas(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
+
+    static void layoutDynamicExpressionAndHairpins(const ElementsToLayout& elementsToLayout, LayoutContext& ctx);
+
+    static void layoutParenthesisAndBigTimeSigs(const ElementsToLayout& elementsToLayout);
 };
 }
 

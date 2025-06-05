@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -47,26 +49,33 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <KeySig>
+            <eid>E_E</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
+            <eid>G_G</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <eid>H_H</eid>
             </Dynamic>
           <Chord>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <Slur>
+                <eid>J_J</eid>
                 </Slur>
               <next>
                 <location>
@@ -75,15 +84,15 @@
                 </next>
               </Spanner>
             <Note>
+              <eid>K_K</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>7</fret>
               <string>4</string>
               <Spanner type="Glissando">
                 <Glissando>
-                  <text>gliss.</text>
+                  <eid>L_L</eid>
                   <diagonal>1</diagonal>
-                  <anchor>3</anchor>
                   </Glissando>
                 <next>
                   <location>
@@ -94,11 +103,14 @@
               </Note>
             <ChordLine>
               <subtype>2</subtype>
+              <eid>M_M</eid>
               </ChordLine>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>O_O</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>9</fret>
@@ -106,9 +118,11 @@
               </Note>
             <ChordLine>
               <subtype>2</subtype>
+              <eid>P_P</eid>
               </ChordLine>
             </Chord>
           <Chord>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
               <prev>
@@ -118,6 +132,7 @@
                 </prev>
               </Spanner>
             <Note>
+              <eid>R_R</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>17</fret>
@@ -132,11 +147,14 @@
               </Note>
             <ChordLine>
               <subtype>2</subtype>
+              <eid>S_S</eid>
               </ChordLine>
             </Chord>
           <Chord>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>U_U</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <fret>10</fret>
@@ -144,13 +162,16 @@
               </Note>
             <ChordLine>
               <subtype>2</subtype>
+              <eid>V_V</eid>
               </ChordLine>
             </Chord>
           </voice>
         </Measure>
       <Measure>
+        <eid>W_W</eid>
         <voice>
           <Rest>
+            <eid>X_X</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

@@ -23,18 +23,26 @@
 #define MU_IMPORTEXPORT_MEICONFIGURATION_H
 
 #include "../imeiconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu::iex::mei {
-class MeiConfiguration : public IMeiConfiguration
+class MeiConfiguration : public IMeiConfiguration, public muse::async::Asyncable
 {
 public:
     void init();
 
     bool meiImportLayout() const override;
     void setMeiImportLayout(bool value) override;
+    muse::async::Channel<bool> meiImportLayoutChanged() const override;
 
     bool meiExportLayout() const override;
     void setMeiExportLayout(bool value) override;
+
+    bool meiUseMuseScoreIds() const override;
+    void setMeiUseMuseScoreIds(bool value) override;
+
+private:
+    muse::async::Channel<bool> m_meiImportLayoutChanged;
 };
 }
 

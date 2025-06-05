@@ -31,9 +31,11 @@ class NotationSelectionRangeMock : public INotationSelectionRange
 {
 public:
     MOCK_METHOD(engraving::staff_idx_t, startStaffIndex, (), (const, override));
+    MOCK_METHOD(engraving::Segment*, rangeStartSegment, (), (const, override));
     MOCK_METHOD(Fraction, startTick, (), (const, override));
 
     MOCK_METHOD(engraving::staff_idx_t, endStaffIndex, (), (const, override));
+    MOCK_METHOD(engraving::Segment*, rangeEndSegment, (), (const, override));
     MOCK_METHOD(Fraction, endTick, (), (const, override));
 
     MOCK_METHOD(MeasureRange, measureRange, (), (const, override));
@@ -42,7 +44,7 @@ public:
 
     MOCK_METHOD(std::vector<muse::RectF>, boundingArea, (), (const, override));
     MOCK_METHOD(bool, containsPoint, (const muse::PointF&), (const, override));
-    MOCK_METHOD(bool, containsItem, (const engraving::EngravingItem*), (const, override));
+    MOCK_METHOD(bool, containsItem, (const engraving::EngravingItem*, engraving::staff_idx_t), (const, override));
 };
 }
 

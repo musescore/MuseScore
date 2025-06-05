@@ -53,11 +53,11 @@ const UiActionList PaletteUiActions::m_actions = {
              TranslatableString("action", "Time signature properties…"),
              TranslatableString("action", "Time signature properties…")
              ),
-    UiAction("edit-drumset",
+    UiAction("customize-kit",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Edit drumset…"),
-             TranslatableString("action", "Edit drumset…")
+             TranslatableString("action", "Customize kit…"),
+             TranslatableString("action", "Customize kit…")
              ),
     UiAction("apply-current-palette-element",
              mu::context::UiCtxProjectOpened,

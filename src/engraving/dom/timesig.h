@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TIMESIG_H
-#define MU_ENGRAVING_TIMESIG_H
+#pragma once
 
 #include "engravingitem.h"
 
@@ -34,7 +33,7 @@ class Segment;
 //   TimeSigType
 //---------------------------------------------------------
 
-enum class TimeSigType : char {
+enum class TimeSigType : unsigned char {
     NORMAL,              // use sz/sn text
     FOUR_FOUR,           // common time (4/4)
     ALLA_BREVE,          // cut time (2/2)
@@ -51,6 +50,8 @@ class TimeSig final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TimeSig)
     DECLARE_CLASSOF(ElementType::TIMESIG)
+
+    M_PROPERTY2(bool, isCourtesy, setIsCourtesy, false)
 
 public:
 
@@ -99,9 +100,6 @@ public:
     bool largeParentheses() const { return m_largeParentheses; }
     void setLargeParentheses(bool v) { m_largeParentheses = v; }
 
-    const ScaleF& scale() const { return m_scale; }
-    void setScale(const ScaleF& s) { m_scale = s; }
-
     void setFrom(const TimeSig*);
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -121,6 +119,20 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
+
+    void initElementStyle(const ElementStyle*) override;
+    void styleChanged() override;
+    Sid getPropertyStyle(Pid id) const override;
+
+    bool showOnThisStaff() const;
+    bool isAboveStaves() const;
+    bool isAcrossStaves() const;
+    TimeSigPlacement timeSigPlacement() const;
+    TimeSigStyle timeSigStyle() const;
+    double numDist() const;
+    double yPos() const;
+    const ScaleF& scale() const { return m_scale; }
+    void setScale(const ScaleF& s) { m_scale = s; } // TODO: think about what to do with this
 
     struct LayoutData : public EngravingItem::LayoutData {
         SymIdList ns;
@@ -148,10 +160,9 @@ private:
     Fraction m_stretch;        // localSig / globalSig
     Groups m_groups;
 
-    ScaleF m_scale;
+    ScaleF m_scale = ScaleF(1.0, 1.0);
     TimeSigType m_timeSigType = TimeSigType::NORMAL;
     bool m_showCourtesySig = false;
     bool m_largeParentheses = false;
 };
 } // namespace mu::engraving
-#endif

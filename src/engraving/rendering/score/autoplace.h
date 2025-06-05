@@ -52,9 +52,6 @@ public:
     static void setOffsetChanged(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool v, bool absolute = true,
                                  const PointF& diff = PointF());
 
-    static void doAutoplace(const Articulation* item, Articulation::LayoutData* ldata);
-
-private:
     static bool itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline);
 };
 }

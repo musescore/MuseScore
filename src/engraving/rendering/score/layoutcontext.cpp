@@ -151,7 +151,7 @@ const std::vector<Part*>& DomAccessor::parts() const
     return score()->parts();
 }
 
-int DomAccessor::visiblePartCount() const
+size_t DomAccessor::visiblePartCount() const
 {
     IF_ASSERT_FAILED(score()) {
         return 0;
@@ -236,12 +236,28 @@ size_t DomAccessor::ntracks() const
     return score()->ntracks();
 }
 
+size_t DomAccessor::nmeasures() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return 0;
+    }
+    return score()->nmeasures();
+}
+
 const Measure* DomAccessor::tick2measure(const Fraction& tick) const
 {
     IF_ASSERT_FAILED(score()) {
         return nullptr;
     }
     return score()->tick2measure(tick);
+}
+
+const Measure* DomAccessor::tick2measureMM(const Fraction& tick) const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->tick2measureMM(tick);
 }
 
 const Measure* DomAccessor::firstMeasure() const
@@ -260,12 +276,52 @@ Measure* DomAccessor::firstMeasure()
     return score()->firstMeasure();
 }
 
+const Measure* DomAccessor::lastMeasure() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->lastMeasure();
+}
+
+const Measure* DomAccessor::lastMeasureMM() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->lastMeasureMM();
+}
+
+Measure* DomAccessor::lastMeasure()
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->lastMeasure();
+}
+
+Measure* DomAccessor::lastMeasureMM()
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->lastMeasureMM();
+}
+
 Measure* DomAccessor::tick2measure(const Fraction& tick)
 {
     IF_ASSERT_FAILED(score()) {
         return nullptr;
     }
     return score()->tick2measure(tick);
+}
+
+Measure* DomAccessor::tick2measureMM(const Fraction& tick)
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->tick2measureMM(tick);
 }
 
 const SpannerMap& DomAccessor::spannerMap() const
@@ -291,6 +347,14 @@ const ChordRest* DomAccessor::findCR(Fraction tick, track_idx_t track) const
         return nullptr;
     }
     return score()->findCR(tick, track);
+}
+
+const SystemLocks* DomAccessor::systemLocks() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->systemLocks();
 }
 
 ChordRest* DomAccessor::findCR(Fraction tick, track_idx_t track)
@@ -382,6 +446,14 @@ void DomAccessor::removeElement(EngravingItem* item)
         return;
     }
     score()->removeElement(item);
+}
+
+void DomAccessor::updateSystemLocksOnCreateMMRest(Measure* first, Measure* last)
+{
+    IF_ASSERT_FAILED(score()) {
+        return;
+    }
+    score()->updateSystemLocksOnCreateMMRests(first, last);
 }
 
 void DomAccessor::addUnmanagedSpanner(Spanner* s)

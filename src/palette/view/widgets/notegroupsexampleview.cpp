@@ -22,7 +22,6 @@
 
 #include "notegroupsexampleview.h"
 
-#include <cmath>
 #include <QMimeData>
 
 #include "engraving/rw/rwregister.h"
@@ -180,7 +179,7 @@ void NoteGroupsExampleView::mousePressEvent(QMouseEvent* event)
 
     PointF position = toLogical(event->position());
 
-    foreach (EngravingItem* e, elementsAt(position)) {
+    for (EngravingItem* e : elementsAt(position)) {
         if (e->type() == ElementType::NOTE) {
             emit noteClicked(toNote(e));
             break;

@@ -360,7 +360,11 @@ PointF Volta::linePos(Grip grip, System** system) const
         x += (isAtSystemStart ? 0.5 : -0.5) * absoluteFromSpatium(lineWidth());
     } else {
         if ((*system) && segment->tick() == (*system)->endTick()) {
-            x += segment->staffShape(staffIdxOrNextVisible()).right();
+            staff_idx_t si = backSegment()->effectiveStaffIdx();
+            if (si == muse::nidx) {
+                return PointF(x, 0.0);
+            }
+            x += segment->staffShape(si).right();
             x -= 0.5 * absoluteFromSpatium(lineWidth());
         } else if (segment->segmentType() & SegmentType::BarLineType) {
             BarLine* barLine = toBarLine(segment->elementAt(track()));

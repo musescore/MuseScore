@@ -39,6 +39,7 @@ Container {
                              contentHeight + topPadding + bottomPadding)
 
     padding: 0
+    spacing: 12
 
     property bool isAccessibilityDisabledWhenInit: false
     property NavigationPanel navigationPanel: NavigationPanel {
@@ -112,7 +113,7 @@ Container {
     }
 
     contentItem: RowLayout {
-        spacing: prv.spacing
+        spacing: root.spacing
         Repeater {
             model: root.contentModel
         }
@@ -147,8 +148,6 @@ Container {
 
     QtObject {
         id: prv
-
-        property int spacing: 12
 
         function layoutButtons() {
             var buttonsTypes = buttonBoxModel.load()
@@ -185,7 +184,7 @@ Container {
                 }
             }
 
-            if (buttonsWidths + buttonsTypes.length * prv.spacing > root.width) {
+            if (buttonsWidths + buttonsTypes.length * root.spacing > root.width) {
                 return
             }
 

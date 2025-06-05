@@ -81,6 +81,7 @@ void AbstractNavigation::setIndex(const INavigation::Index& index)
 
     bool _rowChanged = m_index.row != index.row;
     bool _columnChanged = m_index.column != index.column;
+    bool _orderChanged = m_index.order() != index.order();
 
     m_index = index;
 
@@ -94,6 +95,10 @@ void AbstractNavigation::setIndex(const INavigation::Index& index)
 
     if (_columnChanged) {
         emit columnChanged(m_index.column);
+    }
+
+    if (_orderChanged) {
+        emit orderChanged(m_index.order());
     }
 }
 
@@ -220,11 +225,17 @@ void AbstractNavigation::onEvent(INavigation::EventPtr e)
 
 QWindow* AbstractNavigation::window() const
 {
+    QQuickItem* visualItem = this->visualItem();
+    return visualItem ? visualItem->window() : nullptr;
+}
+
+QQuickItem* AbstractNavigation::visualItem() const
+{
     QObject* prn = parent();
     while (prn) {
         QQuickItem* vitem = qobject_cast<QQuickItem*>(prn);
         if (vitem) {
-            return vitem->window();
+            return vitem;
         }
 
         prn = prn->parent();

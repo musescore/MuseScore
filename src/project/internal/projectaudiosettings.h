@@ -48,6 +48,7 @@ public:
     const muse::audio::AudioInputParams& trackInputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackInputParams(const engraving::InstrumentTrackId& partId, const muse::audio::AudioInputParams& params) override;
     void clearTrackInputParams() override;
+    muse::async::Channel<engraving::InstrumentTrackId> trackInputParamsChanged() const override;
 
     bool trackHasExistingOutputParams(const engraving::InstrumentTrackId& partId) const override;
     const muse::audio::AudioOutputParams& trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
@@ -115,6 +116,7 @@ private:
     std::unordered_map<engraving::InstrumentTrackId, muse::audio::AudioOutputParams> m_trackOutputParamsMap;
 
     muse::async::Notification m_settingsChanged;
+    muse::async::Channel<engraving::InstrumentTrackId> m_trackInputParamsChanged;
 
     mu::playback::SoundProfileName m_activeSoundProfileName;
 };

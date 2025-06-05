@@ -32,7 +32,7 @@ Rectangle {
     default property alias content: contentColumn.data
     property alias spacing: contentColumn.spacing
 
-    Flickable {
+    StyledFlickable {
         id: flickable
         anchors.fill: parent
 

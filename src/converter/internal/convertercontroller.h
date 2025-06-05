@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CONVERTER_CONVERTERCONTROLLER_H
-#define MU_CONVERTER_CONVERTERCONTROLLER_H
+#pragma once
 
 #include <list>
 
@@ -51,7 +50,7 @@ public:
     muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
                           const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
                           const muse::String& soundProfile = muse::String(),
-                          const muse::UriQuery& extensionUri = muse::UriQuery()) override;
+                          const muse::UriQuery& extensionUri = muse::UriQuery(), const std::string& transposeOptionsJson = {}) override;
 
     muse::Ret batchConvert(const muse::io::path_t& batchJobFile,
                            const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
@@ -82,11 +81,20 @@ private:
     struct Job {
         muse::io::path_t in;
         muse::io::path_t out;
+        std::optional<notation::TransposeOptions> transposeOptions;
     };
 
     using BatchJob = std::list<Job>;
 
     muse::RetVal<BatchJob> parseBatchJob(const muse::io::path_t& batchJobFile) const;
+
+    muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
+                          const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
+                          const muse::String& soundProfile = muse::String(),
+                          const muse::UriQuery& extensionUri = muse::UriQuery(), const std::optional<notation::TransposeOptions>& transposeOptions = std::nullopt);
+
+    muse::Ret convertScoreParts(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
+                                const muse::io::path_t& out);
 
     muse::Ret convertByExtension(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out,
                                  const muse::UriQuery& extensionUri);
@@ -98,7 +106,7 @@ private:
                                      const muse::io::path_t& out) const;
     muse::Ret convertScorePartsToPngs(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
                                       const muse::io::path_t& out) const;
+    muse::Ret convertScorePartsToMp3(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
+                                     const muse::io::path_t& out) const;
 };
 }
-
-#endif // MU_CONVERTER_CONVERTERCONTROLLER_H

@@ -499,7 +499,7 @@ TEST_F(MidiRendererBend_Tests, gracebend)
     EventsHolder events = renderMidiEvents(u"gracebend.mscx", true, true);
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[0].size(), 43);
+    EXPECT_EQ(events[0].size(), 51);
 
     /// time factor: 0->1
     checkEventInterval(events, 360, 959, 52, defVol);
@@ -517,17 +517,21 @@ TEST_F(MidiRendererBend_Tests, gracebend)
     checkPitchBend(events, 470, 9339);
     checkPitchBend(events, 480, 9557);
 
-    /// time factor: 0.25->0.75
+    /// time factor: 0.25->0.75 (ignoring factor)
     checkPitchBend(events, 1310, pwReset);
     checkEventInterval(events, 1320, 1919, 52, defVol);
     checkPitchBend(events, 1320, 8192);
-    checkPitchBend(events, 1350, 8192);
-    checkPitchBend(events, 1360, 8229);
-    checkPitchBend(events, 1370, 8343);
+    checkPitchBend(events, 1330, 8201);
+    checkPitchBend(events, 1340, 8229);
+    checkPitchBend(events, 1350, 8277);
+    checkPitchBend(events, 1360, 8343);
+    checkPitchBend(events, 1370, 8429);
     checkPitchBend(events, 1380, 8533);
-    checkPitchBend(events, 1390, 8798);
-    checkPitchBend(events, 1400, 9140);
-    checkPitchBend(events, 1410, 9557);
+    checkPitchBend(events, 1390, 8656);
+    checkPitchBend(events, 1400, 8798);
+    checkPitchBend(events, 1410, 8960);
+    checkPitchBend(events, 1420, 9140);
+    checkPitchBend(events, 1430, 9339);
     checkPitchBend(events, 1440, 9557);
 
     /// note + gracebend
@@ -536,13 +540,17 @@ TEST_F(MidiRendererBend_Tests, gracebend)
     checkPitchBend(events, 2270, pwReset);
     checkEventInterval(events, 2280, 2879, 52, defVol);
     checkPitchBend(events, 2280, 8192);
-    checkPitchBend(events, 2310, 8192);
-    checkPitchBend(events, 2320, 8229);
-    checkPitchBend(events, 2330, 8343);
+    checkPitchBend(events, 2290, 8201);
+    checkPitchBend(events, 2300, 8229);
+    checkPitchBend(events, 2310, 8277);
+    checkPitchBend(events, 2320, 8343);
+    checkPitchBend(events, 2330, 8429);
     checkPitchBend(events, 2340, 8533);
-    checkPitchBend(events, 2350, 8798);
-    checkPitchBend(events, 2360, 9140);
-    checkPitchBend(events, 2370, 9557);
+    checkPitchBend(events, 2350, 8656);
+    checkPitchBend(events, 2360, 8798);
+    checkPitchBend(events, 2370, 8960);
+    checkPitchBend(events, 2380, 9140);
+    checkPitchBend(events, 2390, 9339);
     checkPitchBend(events, 2400, 9557);
 
     EXPECT_EQ(events[0].size(), 1);

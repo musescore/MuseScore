@@ -1,5 +1,4 @@
-
-declare_module(opusenc)
+declare_thirdparty_module(opusenc)
 
 include(GetPlatformInfo)
 include(GetCompilerInfo)
@@ -32,8 +31,9 @@ set(MODULE_SRC
 
 set(MODULE_LINK ${OPUS_LIBRARIES})
 
-set(MODULE_USE_PCH OFF)
 set(MODULE_USE_UNITY OFF)
+set(MODULE_USE_COVERAGE OFF)
+
 setup_module()
 
 target_no_warning(${MODULE} -Wno-unused-parameter)

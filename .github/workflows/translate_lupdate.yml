@@ -8,6 +8,10 @@ on:
         required: true
         type: boolean
         default: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false   
   schedule:
     - cron: "0 12 * * Sun"
 
@@ -28,18 +32,24 @@ jobs:
 
           echo "LUPDATE_ARGS=$LUPDATE_ARGS" | tee -a $GITHUB_ENV
 
-      - name: Setup environment
-        run: |
-          bash ./buildscripts/ci/translation/qt_install.sh
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
+          host: "linux"
+          target: "desktop"
+          arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
+          archives: "qttools qtbase icu"
 
       - name: Run lupdate
         run: |
-          bash ./buildscripts/ci/translation/run_lupdate.sh
+          bash ./tools/translations/run_lupdate.sh
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           commit-message: "Run `lupdate` with arguments `${{ env.LUPDATE_ARGS }}`"
           branch: "ci_lupdate${{github.ref_name && format('_{0}', github.ref_name) || ''}}"
           add-paths: share/locale/*

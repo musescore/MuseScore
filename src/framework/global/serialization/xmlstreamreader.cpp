@@ -157,7 +157,7 @@ static std::pair<XMLNode*, XmlStreamReader::TokenType> resolveNode(XMLNode* curr
         }
 
         XMLNode* sibling = currentNode->NextSibling();
-        if (!sibling || sibling->ToElement() || sibling->ToText()) {
+        if (!sibling || sibling->ToElement() || sibling->ToText() || sibling->ToComment()) {
             return { currentNode, XmlStreamReader::TokenType::EndElement };
         }
     }
@@ -382,6 +382,22 @@ std::vector<XmlStreamReader::Attribute> XmlStreamReader::attributes() const
     return attrs;
 }
 
+String XmlStreamReader::readBody() const
+{
+    if (m_xml->node) {
+        XMLPrinter printer;
+
+        const XMLElement* child = m_xml->node->FirstChildElement();
+        while (child) {
+            child->Accept(&printer);
+            child = child->NextSiblingElement();
+        }
+
+        return String::fromStdString(printer.CStr());
+    }
+    return String();
+}
+
 String XmlStreamReader::text() const
 {
     if (m_xml->node && (m_xml->node->ToText() || m_xml->node->ToComment())) {
@@ -458,7 +474,11 @@ double XmlStreamReader::readDouble(bool* ok)
 
 int64_t XmlStreamReader::lineNumber() const
 {
-    return m_xml->doc.ErrorLineNum();
+    int64_t lineNum = m_xml->doc.ErrorLineNum();
+    if (lineNum == 0 && m_xml->node) {
+        lineNum = m_xml->node->GetLineNum();
+    }
+    return lineNum;
 }
 
 int64_t XmlStreamReader::columnNumber() const

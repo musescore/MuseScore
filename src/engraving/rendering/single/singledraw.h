@@ -71,6 +71,8 @@ class GuitarBendSegment;
 
 class Hairpin;
 class HairpinSegment;
+class HammerOnPullOffSegment;
+class HammerOnPullOffText;
 class HarpPedalDiagram;
 class HarmonicMarkSegment;
 class Harmony;
@@ -99,6 +101,7 @@ class MeasureRepeat;
 
 class Note;
 class NoteHead;
+class NoteLineSegment;
 
 class Ornament;
 class Ottava;
@@ -199,6 +202,8 @@ private:
     static void draw(const GuitarBendSegment* item, muse::draw::Painter* painter);
 
     static void draw(const HairpinSegment* item, muse::draw::Painter* painter);
+    static void draw(const HammerOnPullOffSegment* item, muse::draw::Painter* painter);
+    static void draw(const HammerOnPullOffText* item, muse::draw::Painter* painter);
     static void draw(const HarpPedalDiagram* item, muse::draw::Painter* painter);
     static void draw(const HarmonicMarkSegment* item, muse::draw::Painter* painter);
     static void draw(const Harmony* item, muse::draw::Painter* painter);
@@ -223,6 +228,7 @@ private:
 
     static void draw(const Note* item, muse::draw::Painter* painter);
     static void draw(const NoteHead* item, muse::draw::Painter* painter);
+    static void draw(const NoteLineSegment* item, muse::draw::Painter* painter);
 
     static void draw(const Ornament* item, muse::draw::Painter* painter);
     static void draw(const OttavaSegment* item, muse::draw::Painter* painter);

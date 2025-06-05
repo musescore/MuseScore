@@ -37,6 +37,7 @@
 
 #include "tlayout.h"
 #include "chordlayout.h"
+#include "stemlayout.h"
 
 #include "log.h"
 
@@ -332,8 +333,9 @@ void BeamTremoloLayout::setSmallInnerBeamPos(const BeamBase::LayoutData* ldata, 
         if (!cr->isChord()) {
             continue;
         }
+        const Chord* c = toChord(cr);
         beamCount = std::max(beamCount, strokeCount(ldata, cr));
-        noteOutsideStaff |= (cr->downLine() < -2 && !ldata->up) || (cr->upLine() >= 11 && ldata->up);
+        noteOutsideStaff |= (c->downLine() < -2 && !ldata->up) || (c->upLine() >= 11 && ldata->up);
     }
 
     // AND stems have been extended to the second stave line when the notes are far enough outside of the stave
@@ -957,11 +959,11 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
             // we can't rely on comparing topFirst and bottomFirst ->tick() because beamed
             // graces have the same tick
             if (ldata->elements[0] == topFirst) {
-                yFirst = topFirst->stemPos().y();
-                yLast = bottomFirst->stemPos().y();
+                yFirst = StemLayout::stemPos(topFirst).y();
+                yLast = StemLayout::stemPos(bottomFirst).y();
             } else {
-                yFirst = bottomFirst->stemPos().y();
-                yLast = topFirst->stemPos().y();
+                yFirst = StemLayout::stemPos(bottomFirst).y();
+                yLast = StemLayout::stemPos(topFirst).y();
             }
             int desiredSlant = round((yFirst - yLast) / spatium);
             int slant = std::min(std::abs(desiredSlant), getMaxSlope(ldata));
@@ -1052,10 +1054,10 @@ int BeamTremoloLayout::getTargetStaffLine(const BeamBase::LayoutData* ldata, con
     bool useWideBeams = ctx.conf().styleB(Sid::useWideBeams);
     int startBeams = strokeCount(ldata, startChord);
     int endBeams = strokeCount(ldata, endChord);
-    int startTargetLine = Chord::minStaffOverlap(ldata->up, staffLines, startBeams, false,
-                                                 ldata->beamSpacing / 4.0, useWideBeams, isFullSize);
-    int endTargetLine = Chord::minStaffOverlap(ldata->up, staffLines, endBeams, false,
-                                               ldata->beamSpacing / 4.0, useWideBeams, !ldata->isGrace);
+    int startTargetLine = StemLayout::minStaffOverlap(ldata->up, staffLines, startBeams, false,
+                                                      ldata->beamSpacing / 4.0, useWideBeams, isFullSize);
+    int endTargetLine = StemLayout::minStaffOverlap(ldata->up, staffLines, endBeams, false,
+                                                    ldata->beamSpacing / 4.0, useWideBeams, !ldata->isGrace);
 
     int diff = 0;
     // Get diff between beam closest staff and actual staff, unless its full cross?
@@ -1278,14 +1280,14 @@ int BeamTremoloLayout::getBeamCount(const BeamBase::LayoutData* ldata, const std
 
 double BeamTremoloLayout::chordBeamAnchorX(const BeamBase::LayoutData* ldata, const ChordRest* cr, ChordBeamAnchorType anchorType)
 {
-    double pagePosX = ldata->trem ? ldata->trem->pagePos().x() : ldata->beam->pagePos().x();
-    double stemPosX = cr->stemPosX() + cr->pagePos().x() - pagePosX;
+    double pagePosX = ldata->trem ? ldata->trem->pagePos().x() : ldata->beam ? ldata->beam->pagePos().x() : 0.0;
+    double stemPosX = StemLayout::stemPosX(cr) + cr->pagePos().x() - pagePosX;
 
     if (!cr->isChord() || !toChord(cr)->stem()) {
         if (!ldata->up) {
             // rests always return the right side of the glyph as their stemPosX
             // so we need to adjust back to the left side if stems are down
-            stemPosX -= cr->stemPosX();
+            stemPosX -= StemLayout::stemPosX(cr);
         }
         return stemPosX;
     }
@@ -1341,8 +1343,8 @@ double BeamTremoloLayout::chordBeamAnchorY(const BeamBase::LayoutData* ldata, co
     double beamOffset = ldata->beamWidth / 2 * upValue;
 
     if (ldata->isBesideTabStaff) {
-        double stemLength = ldata->tab->chordStemLength(chord) * (ldata->up ? -1 : 1);
-        double y = ldata->tab->chordRestStemPosY(chord) + stemLength;
+        double stemLength = StemLayout::tabStemLength(chord, ldata->tab) * (ldata->up ? -1 : 1);
+        double y = StemLayout::tabRestStemPosY(chord, ldata->tab) + stemLength;
         y *= ldata->spatium;
         y -= beamOffset;
         return y + chord->pagePos().y();

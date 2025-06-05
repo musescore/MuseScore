@@ -132,16 +132,12 @@ Item {
             navigation.order: Boolean(itemModel) ? itemModel.order : 0
             isClickOnKeyNavTriggered: false
             navigation.onTriggered: {
-                if (menuLoader.isMenuOpened || hasMenu) {
+                if (btn.hasMenu) {
                     toggleMenuOpened()
                 } else {
                     handleMenuItem()
                 }
             }
-
-            mouseArea.acceptedButtons: hasMenu && itemModel.isMenuSecondary
-                                       ? Qt.LeftButton | Qt.RightButton
-                                       : Qt.LeftButton
 
             function toggleMenuOpened() {
                 menuLoader.toggleOpened(item.subitems)
@@ -151,38 +147,21 @@ Item {
                 Qt.callLater(noteInputModel.handleMenuItem, item.id)
             }
 
-            onClicked: function(mouse) {
-                if (menuLoader.isMenuOpened // If already menu open, close it
-                        || (hasMenu // Or if can open menu
-                            && (!itemModel.isMenuSecondary // And _should_ open menu
-                                || mouse.button === Qt.RightButton))) {
+            onClicked: {
+                if (btn.hasMenu) {
                     toggleMenuOpened()
-                    return
-                }
-
-                if (mouse.button === Qt.LeftButton) {
+                } else {
                     handleMenuItem()
                 }
             }
 
-            Connections {
-                target: btn.mouseArea
-
-                // Make sure we only connect to `pressAndHold` if necessary
-                // See https://github.com/musescore/MuseScore/issues/16012
-                enabled: btn.hasMenu && !menuLoader.isMenuOpened
-
-                function onPressAndHold() {
-                    if (menuLoader.isMenuOpened || !btn.hasMenu) {
-                        return
-                    }
-
-                    btn.toggleMenuOpened()
+            mouseArea.onPressAndHold: function(event) {
+                if (menuLoader.isMenuOpened || !btn.hasMenu) {
+                    event.accepted = false // do not suppress the click event
+                    return
                 }
-            }
 
-            FlatButtonMenuIndicatorTriangle {
-                visible: Boolean(itemModel) && itemModel.isMenuSecondary
+                btn.toggleMenuOpened()
             }
 
             StyledMenuLoader {

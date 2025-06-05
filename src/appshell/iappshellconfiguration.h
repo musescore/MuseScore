@@ -23,7 +23,7 @@
 #define MU_APPSHELL_IAPPSHELLCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
-#include "types/retval.h"
+#include "types/ret.h"
 
 #include "io/path.h"
 #include "appshelltypes.h"
@@ -42,9 +42,11 @@ public:
 
     virtual StartupModeType startupModeType() const = 0;
     virtual void setStartupModeType(StartupModeType type) = 0;
+    virtual muse::async::Notification startupModeTypeChanged() const = 0;
 
     virtual muse::io::path_t startupScorePath() const = 0;
     virtual void setStartupScorePath(const muse::io::path_t& scorePath) = 0;
+    virtual muse::async::Notification startupScorePathChanged() const = 0;
 
     virtual muse::io::path_t userDataPath() const = 0;
 
@@ -73,7 +75,8 @@ public:
     virtual void applySettings() = 0;
     virtual void rollbackSettings() = 0;
 
-    virtual void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true) const = 0;
+    virtual void revertToFactorySettings(bool keepDefaultSettings = false, bool notifyAboutChanges = true,
+                                         bool notifyOtherInstances = true) const = 0;
 
     virtual muse::io::paths_t sessionProjectsPaths() const = 0;
     virtual muse::Ret setSessionProjectsPaths(const muse::io::paths_t& paths) = 0;

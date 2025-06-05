@@ -41,9 +41,9 @@ InteractiveApi::InteractiveApi(IApiEngine* e)
  * @param {String} text Message
  */
 
-void InteractiveApi::info(const QString& title, const QString& text)
+void InteractiveApi::info(const QString& contentTitle, const QString& text)
 {
-    interactive()->info(title.toStdString(), text.toStdString());
+    interactive()->infoSync(contentTitle.toStdString(), text.toStdString());
 }
 
 /** APIDOC method

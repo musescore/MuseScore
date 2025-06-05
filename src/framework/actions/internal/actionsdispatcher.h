@@ -35,9 +35,11 @@ public:
 
     void dispatch(const ActionCode& actionCode) override;
     void dispatch(const ActionCode& actionCode, const ActionData& data) override;
+    void dispatch(const ActionQuery& actionQuery) override;
 
     void unReg(Actionable* client) override;
     void reg(Actionable* client, const ActionCode& actionCode, const ActionCallBackWithNameAndData& call) override;
+    void reg(Actionable* client, const ActionQuery& actionQuery, const ActionCallBackWithQuery& call) override;
     bool isReg(Actionable* client) const override;
     ActionCodeList actionList() const override;
 
@@ -45,6 +47,10 @@ private:
 
     using CallBacks = std::map<ActionCode, ActionCallBackWithNameAndData>;
     using Clients = std::map<Actionable*, CallBacks>;
+
+    void doDispatch(const Clients& clients, const ActionCode& actionCode, const ActionData& data);
+
+    void dump() const; // for debug
 
     std::map<ActionCode, Clients > m_clients;
 };

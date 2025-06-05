@@ -39,7 +39,7 @@ void RegisterAudioPluginsScenario::init()
 {
     TRACEFUNC;
 
-    m_progress.cancelRequested.onNotify(this, [this]() {
+    m_progress.canceled().onNotify(this, [this]() {
         m_aborted = true;
     });
 
@@ -55,7 +55,7 @@ Ret RegisterAudioPluginsScenario::registerNewPlugins()
 
     io::paths_t newPluginPaths;
 
-    for (IAudioPluginsScannerPtr scanner : scannerRegister()->scanners()) {
+    for (const IAudioPluginsScannerPtr& scanner : scannerRegister()->scanners()) {
         io::paths_t paths = scanner->scanPlugins();
 
         for (const io::path_t& path : paths) {
@@ -77,13 +77,10 @@ Ret RegisterAudioPluginsScenario::registerNewPlugins()
 
 void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t& pluginPaths)
 {
-    Ret ret = interactive()->showProgress(muse::trc("audio", "Scanning audio plugins"), &m_progress);
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
+    interactive()->showProgress(muse::trc("audio", "Scanning audio plugins"), &m_progress);
 
     m_aborted = false;
-    m_progress.started.notify();
+    m_progress.start();
 
     std::string appPath = globalConfiguration()->appBinPath().toStdString();
     int64_t pluginCount = static_cast<int64_t>(pluginPaths.size());
@@ -96,7 +93,7 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
         const io::path_t& pluginPath = pluginPaths[i];
         std::string pluginPathStr = pluginPath.toStdString();
 
-        m_progress.progressChanged.send(i, pluginCount, io::filename(pluginPath).toStdString());
+        m_progress.progress(i, pluginCount, io::filename(pluginPath).toStdString());
         qApp->processEvents();
 
         LOGD() << "--register-audio-plugin " << pluginPathStr;
@@ -110,7 +107,7 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
         }
     }
 
-    m_progress.finished.send(muse::make_ok());
+    m_progress.finish(muse::make_ok());
 }
 
 Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPath)
@@ -159,11 +156,7 @@ Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginP
     AudioPluginInfo info;
     info.meta.id = io::completeBasename(pluginPath).toStdString();
 
-    std::string ext = io::suffix(pluginPath);
-    if (ext.find("vst") != std::string::npos) {
-        info.meta.type = AudioResourceType::VstPlugin;
-    }
-
+    info.meta.type = metaType(pluginPath);
     info.path = pluginPath;
     info.enabled = false;
     info.errorCode = failCode;
@@ -174,11 +167,17 @@ Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginP
 
 IAudioPluginMetaReaderPtr RegisterAudioPluginsScenario::metaReader(const io::path_t& pluginPath) const
 {
-    for (IAudioPluginMetaReaderPtr reader : metaReaderRegister()->readers()) {
+    for (const IAudioPluginMetaReaderPtr& reader : metaReaderRegister()->readers()) {
         if (reader->canReadMeta(pluginPath)) {
             return reader;
         }
     }
 
     return nullptr;
+}
+
+audio::AudioResourceType RegisterAudioPluginsScenario::metaType(const io::path_t& pluginPath) const
+{
+    const IAudioPluginMetaReaderPtr reader = metaReader(pluginPath);
+    return reader ? reader->metaType() : audio::AudioResourceType::Undefined;
 }

@@ -31,6 +31,8 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/style/defaultstyle.h"
 
+#include "notation/utilities/engravingitempreviewpainter.h"
+
 #include "log.h"
 
 using namespace mu::palette;
@@ -70,26 +72,23 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
         return;
     }
 
-    painter.setPen(configuration()->elementsColor());
+    notation::EngravingItemPreviewPainter::PaintParams params;
+    params.painter = &painter;
 
-    if (element->isActionIcon()) {
-        paintActionIcon(painter, rect, element, dpi);
-        return; // never draw staff for icon elements
-    }
+    params.color = configuration()->elementsColor();
 
-    const bool drawStaff = m_cell->drawStaff;
-    const qreal spatium = configuration()->paletteSpatium() * m_extraMag * m_cell->mag;
+    params.mag = m_extraMag * m_cell->mag;
+    params.xoffset = m_cell->xoffset;
+    params.yoffset = m_cell->yoffset;
 
-    PointF origin = rect.center(); // draw element at center of cell by default
-    if (drawStaff) {
-        const qreal topLinePos = paintStaff(painter, rect, spatium); // draw dummy staff lines onto rect.
-        origin.setY(topLinePos); // vertical position relative to staff instead of cell center.
-    }
+    params.rect = rect;
+    params.dpi = dpi;
+    params.spatium = configuration()->paletteSpatium() * params.mag;
 
-    painter.translate(origin);
-    painter.translate(m_cell->xoffset * spatium, m_cell->yoffset * spatium); // additional offset for element onlym
+    //! NOTE: Slight hack - we can now specify exactly now many staff lines we want...
+    params.numStaffLines = m_cell->drawStaff ? 5 : 0;
 
-    paintScoreElement(painter, element, spatium, drawStaff, dpi);
+    notation::EngravingItemPreviewPainter::paintPreview(element, params);
 }
 
 void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect, bool selected, bool current) const
@@ -99,125 +98,4 @@ void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect,
         c.setAlpha(selected ? 100 : 60);
         painter.fillRect(rect, c);
     }
-}
-
-/// Paint an icon element so that it fills a QRect, preserving aspect ratio, and
-/// leaving a small margin around the edges.
-void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect, EngravingItem* element, double dpi) const
-{
-    IF_ASSERT_FAILED(element && element->isActionIcon()) {
-        return;
-    }
-
-    painter.save();
-
-    double DPIscaling = (mu::engraving::DPI / mu::engraving::DPI_F) / dpi;
-
-    ActionIcon* action = toActionIcon(element);
-    action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * m_cell->mag * m_extraMag * DPIscaling);
-
-    engravingRender()->layoutItem(action);
-
-    painter.translate(rect.center() - action->ldata()->bbox().center());
-    engravingRender()->drawItem(action, &painter);
-    painter.restore();
-}
-
-/// Paint a 5 line staff centered within a QRect and return the distance from the
-/// top of the QRect to the uppermost staff line.
-qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qreal spatium) const
-{
-    painter.save();
-
-    Color staffLinesColor(configuration()->elementsColor());
-    staffLinesColor.setAlpha(127);//reduce alpha of staff lines to half
-    Pen pen(staffLinesColor);
-    pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * spatium);
-    painter.setPen(pen);
-
-    constexpr int numStaffLines = 5;
-    const qreal staffHeight = spatium * (numStaffLines - 1);
-    const qreal topLineDist = rect.center().y() - (staffHeight / 2.0);
-
-    // lines bounded horizontally by edge of target (with small margin)
-    constexpr qreal margin = 3.0;
-    const qreal x1 = rect.left() + margin;
-    const qreal x2 = rect.right() - margin;
-
-    // draw staff lines with middle line centered vertically on target
-    qreal y = topLineDist;
-    for (int i = 0; i < numStaffLines; ++i) {
-        painter.drawLine(LineF(x1, y, x2, y));
-        y += spatium;
-    }
-
-    painter.restore();
-    return topLineDist;
-}
-
-/// Paint a non-icon element centered at the origin of the painter's coordinate
-/// system. If alignToStaff is true then the element is only centered horizontally;
-/// i.e. vertical alignment is unchanged from the default so that item will appear
-/// at the correct height on the staff.
-void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* item, qreal spatium, bool alignToStaff, qreal dpi) const
-{
-    IF_ASSERT_FAILED(item && !item->isActionIcon()) {
-        return;
-    }
-
-    painter.save();
-
-    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / dpi;
-
-    const qreal sizeRatio = spatium / gpaletteScore->style().spatium();
-    painter.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
-
-    // calculate bbox
-    engravingRender()->layoutItem(item);
-
-    PointF origin = item->ldata()->bbox().center();
-
-    if (alignToStaff) {
-        // y = 0 is position of the element's parent.
-        // If the parent is the staff (or a segment on the staff) then
-        // y = 0 corresponds to the position of the top staff line.
-        origin.setY(0.0);
-    }
-
-    painter.translate(-1.0 * origin); // shift coordinates so element is drawn at correct position
-
-    PaintContext ctx;
-    ctx.painter = &painter;
-
-    item->scanElements(&ctx, paintPaletteItem);
-    painter.restore();
-}
-
-void PaletteCellIconEngine::paintPaletteItem(void* context, EngravingItem* item)
-{
-    PaintContext* ctx = static_cast<PaintContext*>(context);
-    Painter* painter = ctx->painter;
-
-    painter->save();
-    painter->translate(item->pos()); // necessary for drawing child elements
-
-    Color colorBackup = item->getProperty(Pid::COLOR).value<Color>();
-    Color frameColorBackup = item->getProperty(Pid::FRAME_FG_COLOR).value<Color>();
-    bool colorsInversionEnabledBackup = item->colorsInversionEnabled();
-
-    item->setColorsInverionEnabled(ctx->colorsInversionEnabled);
-
-    if (!ctx->useElementColors) {
-        Color color = configuration()->elementsColor();
-        item->setProperty(Pid::COLOR, color);
-        item->setProperty(Pid::FRAME_FG_COLOR, color);
-    }
-
-    engravingRender()->drawItem(item, painter);
-
-    item->setColorsInverionEnabled(colorsInversionEnabledBackup);
-    item->setProperty(Pid::COLOR, colorBackup);
-    item->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
-
-    painter->restore();
 }

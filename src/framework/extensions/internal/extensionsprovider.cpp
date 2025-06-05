@@ -151,7 +151,7 @@ muse::Ret ExtensionsProvider::perform(const UriQuery& uri)
         if (!q.contains("modal")) {
             q.addParam("modal", Val(a.modal));
         }
-        return interactive()->open(q).ret;
+        return interactive()->openSync(q).ret;
     } break;
     case Type::Macros:
         return run(uri);
@@ -231,7 +231,7 @@ muse::Ret ExtensionsProvider::performPoint(const ExecPointName& name)
                 continue;
             }
 
-            Ret r = perform(makeUriQuery(m.uri, a.code));
+            Ret r = perform(makeActionQuery(m.uri, a.code));
             if (ret) {
                 ret = r;
             }

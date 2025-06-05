@@ -47,6 +47,7 @@ static const QString METHOD_ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES("ACTIVATE_WI
 static const QString METHOD_SETTINGS_BEGIN_TRANSACTION("SETTINGS_BEGIN_TRANSACTION");
 static const QString METHOD_SETTINGS_COMMIT_TRANSACTION("SETTINGS_COMMIT_TRANSACTION");
 static const QString METHOD_SETTINGS_ROLLBACK_TRANSACTION("SETTINGS_ROLLBACK_TRANSACTION");
+static const QString METHOD_SETTINGS_RESET("SETTINGS_RESET");
 static const QString METHOD_SETTINGS_SET_VALUE("SETTINGS_SET_VALUE");
 static const QString METHOD_QUIT("METHOD_QUIT");
 static const QString METHOD_QUIT_WITH_RESTART_LAST_INSTANCE("METHOD_QUIT_WITH_RESTART_LAST_INSTANCE");
@@ -148,6 +149,8 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         settings()->commitTransaction(false);
     } else if (msg.method == METHOD_SETTINGS_ROLLBACK_TRANSACTION) {
         settings()->rollbackTransaction(false);
+    } else if (msg.method == METHOD_SETTINGS_RESET) {
+        settings()->reset(true, true, false);
     } else if (msg.method == METHOD_SETTINGS_SET_VALUE) {
         CHECK_ARGS_COUNT(3);
         Settings::Key key("", msg.args.at(0).toStdString());
@@ -359,6 +362,15 @@ void MultiInstancesProvider::settingsRollbackTransaction()
     }
 
     m_ipcChannel->broadcast(METHOD_SETTINGS_ROLLBACK_TRANSACTION);
+}
+
+void MultiInstancesProvider::settingsReset()
+{
+    if (!isInited()) {
+        return;
+    }
+
+    m_ipcChannel->broadcast(METHOD_SETTINGS_RESET);
 }
 
 void MultiInstancesProvider::settingsSetValue(const std::string& key, const Val& value)

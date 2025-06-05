@@ -86,6 +86,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/importpreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/audiomidipreferencesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/audiomidipreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/percussionpreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/percussionpreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/braillepreferencesmodel.cpp
@@ -104,7 +106,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/newinstanceloadingscreenview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/newinstanceloadingscreenview.h
     )
-
 
 set(MODULE_LINK
     muse::ui
@@ -145,5 +146,9 @@ if (NOT OS_IS_MAC)
     # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
     set(MODULE_INCLUDE_PRIVATE ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
 endif(NOT OS_IS_MAC)
+
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Core5Compat Qt::Quick Qt::Svg Qt::Widgets)
+endif()
 
 setup_module()

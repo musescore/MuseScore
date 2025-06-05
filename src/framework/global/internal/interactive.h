@@ -43,75 +43,73 @@ public:
     Interactive(const muse::modularity::ContextPtr& ctx)
         : Injectable(ctx) {}
 
-    // question
-    Result question(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
-                    const Options& options = {}) const override;
-
-    Result question(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                    const Options& options = {}) const override;
-
     ButtonData buttonData(Button b) const override;
 
-    // info
-    Result info(const std::string& title, const std::string& text, const Buttons& buttons, int defBtn = int(Button::NoButton),
-                const Options& options = {}) const override;
+    // question
+    Result questionSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
+                        const Options& options = {}, const std::string& dialogTitle = "") override;
 
-    Result info(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                const Options& options = {}) const override;
+    async::Promise<Result> question(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons,
+                                    int defBtn = int(Button::NoButton), const Options& options = {},
+                                    const std::string& dialogTitle = "") override;
+
+    // info
+    Result infoSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
+                    const Options& options = {}, const std::string& dialogTitle = "") override;
+
+    async::Promise<Result> info(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                int defBtn = int(Button::NoButton), const Options& options = {},
+                                const std::string& dialogTitle = "") override;
 
     // warning
-    Result warning(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
-                   const Options& options = { WithIcon }) const override;
+    Result warningSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
+                       const Options& options = {}, const std::string& dialogTitle = "") override;
 
-    Result warning(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                   const Options& options = { WithIcon }) const override;
-
-    Result warning(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons,
-                   int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const override;
+    async::Promise<Result> warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                   int defBtn = int(Button::NoButton), const Options& options = {},
+                                   const std::string& dialogTitle = "") override;
 
     // error
-    Result error(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
-                 const Options& options = { WithIcon }) const override;
+    Result errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
+                     const Options& options = { WithIcon }, const std::string& dialogTitle = "") override;
 
-    Result error(const std::string& title, const Text& text, const ButtonDatas& buttons, int defBtn = int(Button::NoButton),
-                 const Options& options = { WithIcon }) const override;
-
-    Result error(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons,
-                 int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const override;
+    async::Promise<Result> error(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
+                                 int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                                 const std::string& dialogTitle = "") override;
 
     // progress
-    Ret showProgress(const std::string& title, Progress* progress) const override;
+    void showProgress(const std::string& title, Progress* progress) override;
 
     // files
-    io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
-    io::path_t selectSavingFile(const QString& title, const io::path_t& path, const std::vector<std::string>& filter,
-                                bool confirmOverwrite = true) override;
+    async::Promise<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,
+                                                 const std::vector<std::string>& filter) override;
+    io::path_t selectOpeningFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
+    io::path_t selectSavingFileSync(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
+                                    bool confirmOverwrite = true) override;
 
     // dirs
-    io::path_t selectDirectory(const QString& title, const io::path_t& dir) override;
-    io::paths_t selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories) override;
+    io::path_t selectDirectory(const std::string& title, const io::path_t& dir) override;
+    io::paths_t selectMultipleDirectories(const std::string& title, const io::path_t& dir, const io::paths_t& selectedDirectories) override;
 
     // color
-    QColor selectColor(const QColor& color = Qt::white, const QString& title = "") override;
+    QColor selectColor(const QColor& color = Qt::white, const std::string& title = "") override;
     bool isSelectColorOpened() const override;
 
     // custom
-    RetVal<Val> open(const std::string& uri) const override;
-    RetVal<Val> open(const Uri& uri) const override;
-    RetVal<Val> open(const UriQuery& uri) const override;
-    RetVal<bool> isOpened(const std::string& uri) const override;
-    RetVal<bool> isOpened(const Uri& uri) const override;
+    RetVal<Val> openSync(const UriQuery& uri) override;
+    async::Promise<Val> open(const UriQuery& uri) override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
+    RetVal<bool> isOpened(const Uri& uri) const override;
     async::Channel<Uri> opened() const override;
 
     void raise(const UriQuery& uri) override;
 
-    void close(const std::string& uri) override;
-    void close(const Uri& uri) override;
     void close(const UriQuery& uri) override;
+    void close(const Uri& uri) override;
     void closeAllDialogs() override;
 
     ValCh<Uri> currentUri() const override;
+    RetVal<bool> isCurrentUriDialog() const override;
     std::vector<Uri> stack() const override;
 
     Ret openUrl(const std::string& url) const override;
@@ -124,7 +122,17 @@ public:
     Ret revealInFileBrowser(const io::path_t& filePath) const override;
 
 private:
-    ButtonDatas buttonDataList(const Buttons& buttons) const;
+    UriQuery makeQuery(const std::string& type, const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
+                       const Options& options, const std::string& dialogTitle) const;
+
+    IInteractive::Result makeResult(const Val& val) const;
+
+    async::Promise<IInteractive::Result> openStandardAsync(const std::string& type, const std::string& contentTitle, const Text& text,
+                                                           const ButtonDatas& buttons, int defBtn, const Options& options,
+                                                           const std::string& dialogTitle);
+
+    IInteractive::Result openStandardSync(const std::string& type, const std::string& contentTitle, const Text& text,
+                                          const ButtonDatas& buttons, int defBtn, const Options& options, const std::string& dialogTitle);
 };
 }
 

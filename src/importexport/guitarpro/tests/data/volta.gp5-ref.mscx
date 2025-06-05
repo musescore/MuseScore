@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -48,33 +50,42 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <text>Etude</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>composer</style>
           <text>F. Tarrega</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <KeySig>
+            <eid>H_H</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>I_I</eid>
             <sigN>3</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <eid>J_J</eid>
             </Dynamic>
           <Tempo>
             <tempo>1.666667</tempo>
+            <eid>K_K</eid>
             <text><sym>metNoteQuarterUp</sym> = 100</text>
             </Tempo>
           <Tuplet>
+            <eid>L_L</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -84,12 +95,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>M_M</eid>
             <l1>-16</l1>
             <l2>-12</l2>
             </Beam>
           <Chord>
+            <eid>N_N</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>O_O</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -97,8 +111,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>P_P</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Q_Q</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -106,8 +122,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>R_R</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>S_S</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -116,6 +134,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>T_T</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -125,12 +144,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>U_U</eid>
             <l1>-24</l1>
             <l2>-20</l2>
             </Beam>
           <Chord>
+            <eid>V_V</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>W_W</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -138,8 +160,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>X_X</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Y_Y</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -147,8 +171,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>Z_Z</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>a_a</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -157,6 +183,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>b_b</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -166,12 +193,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>c_c</eid>
             <l1>-24</l1>
             <l2>-20</l2>
             </Beam>
           <Chord>
+            <eid>d_d</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>e_e</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -179,8 +209,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>f_f</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>g_g</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -188,8 +220,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>h_h</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>i_i</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -200,9 +234,11 @@
           </voice>
         <voice>
           <Chord>
+            <eid>j_j</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
+              <eid>k_k</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -212,8 +248,10 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>l_l</eid>
         <voice>
           <Tuplet>
+            <eid>m_m</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -223,12 +261,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>n_n</eid>
             <l1>-28</l1>
             <l2>-24</l2>
             </Beam>
           <Chord>
+            <eid>o_o</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>p_p</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -236,10 +277,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>q_q</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>r_r</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>s_s</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>23</tpc>
@@ -248,8 +292,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>t_t</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>u_u</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -258,6 +304,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>v_v</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -267,12 +314,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>w_w</eid>
             <l1>-24</l1>
             <l2>-20</l2>
             </Beam>
           <Chord>
+            <eid>x_x</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>y_y</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -280,8 +330,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>z_z</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>0_0</eid>
               <pitch>63</pitch>
               <tpc>23</tpc>
               <fret>4</fret>
@@ -289,8 +341,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>1_1</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>2_2</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -299,6 +353,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>3_3</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -308,14 +363,18 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>4_4</eid>
             <l1>-20</l1>
             <l2>-16</l2>
             </Beam>
           <Chord>
+            <eid>5_5</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>6_6</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>7_7</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -324,8 +383,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>8_8</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>9_9</eid>
               <pitch>63</pitch>
               <tpc>23</tpc>
               <fret>4</fret>
@@ -333,8 +394,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>+_+</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>/_/</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -345,9 +408,11 @@
           </voice>
         <voice>
           <Chord>
+            <eid>AB_AB</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
+              <eid>BB_BB</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -357,8 +422,10 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>CB_CB</eid>
         <voice>
           <Tuplet>
+            <eid>DB_DB</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -368,12 +435,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>EB_EB</eid>
             <l1>-32</l1>
             <l2>-28</l2>
             </Beam>
           <Chord>
+            <eid>FB_FB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>GB_GB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -381,8 +451,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>HB_HB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>IB_IB</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -390,8 +462,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>JB_JB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>KB_KB</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -400,6 +474,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>LB_LB</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -409,12 +484,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>MB_MB</eid>
             <l1>-32</l1>
             <l2>-28</l2>
             </Beam>
           <Chord>
+            <eid>NB_NB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>OB_OB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -422,8 +500,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>PB_PB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>QB_QB</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -431,8 +511,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>RB_RB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>SB_SB</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -441,6 +523,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>TB_TB</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -450,12 +533,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>UB_UB</eid>
             <l1>-32</l1>
             <l2>-28</l2>
             </Beam>
           <Chord>
+            <eid>VB_VB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>WB_WB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -463,8 +549,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>XB_XB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>YB_YB</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -472,8 +560,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>ZB_ZB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>aB_aB</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -484,9 +574,11 @@
           </voice>
         <voice>
           <Chord>
+            <eid>bB_bB</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
+              <eid>cB_cB</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -496,8 +588,10 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>dB_dB</eid>
         <voice>
           <Tuplet>
+            <eid>eB_eB</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -507,12 +601,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>fB_fB</eid>
             <l1>-16</l1>
             <l2>-12</l2>
             </Beam>
           <Chord>
+            <eid>gB_gB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>hB_hB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -520,8 +617,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>iB_iB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>jB_jB</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -529,8 +628,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>kB_kB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>lB_lB</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -539,6 +640,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>mB_mB</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -548,12 +650,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>nB_nB</eid>
             <l1>-24</l1>
             <l2>-20</l2>
             </Beam>
           <Chord>
+            <eid>oB_oB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>pB_pB</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -561,8 +666,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>qB_qB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>rB_rB</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -570,8 +677,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>sB_sB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>tB_tB</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -580,6 +689,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>uB_uB</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -589,12 +699,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>vB_vB</eid>
             <l1>-24</l1>
             <l2>-20</l2>
             </Beam>
           <Chord>
+            <eid>wB_wB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>xB_xB</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -602,8 +715,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>yB_yB</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>zB_zB</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -611,8 +726,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>0B_0B</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>1B_1B</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -623,9 +740,11 @@
           </voice>
         <voice>
           <Chord>
+            <eid>2B_2B</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
+              <eid>3B_3B</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -635,8 +754,10 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>4B_4B</eid>
         <voice>
           <Tuplet>
+            <eid>5B_5B</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -646,12 +767,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>6B_6B</eid>
             <l1>-24</l1>
             <l2>-18</l2>
             </Beam>
           <Chord>
+            <eid>7B_7B</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>8B_8B</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -659,8 +783,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>9B_9B</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>+B_+B</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -668,8 +794,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>/B_/B</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>AC_AC</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -678,6 +806,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>BC_BC</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -687,14 +816,18 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>CC_CC</eid>
             <l1>-20</l1>
             <l2>-14</l2>
             </Beam>
           <Chord>
+            <eid>DC_DC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>EC_EC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>FC_FC</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -703,8 +836,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>GC_GC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>HC_HC</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -712,8 +847,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>IC_IC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>JC_JC</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -722,6 +859,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>KC_KC</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -731,12 +869,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>LC_LC</eid>
             <l1>-20</l1>
             <l2>-14</l2>
             </Beam>
           <Chord>
+            <eid>MC_MC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>NC_NC</eid>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
@@ -744,8 +885,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>OC_OC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>PC_PC</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -753,8 +896,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>QC_QC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>RC_RC</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -765,9 +910,11 @@
           </voice>
         <voice>
           <Chord>
+            <eid>SC_SC</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
+              <eid>TC_TC</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -777,8 +924,10 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>UC_UC</eid>
         <voice>
           <Tuplet>
+            <eid>VC_VC</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -788,12 +937,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>WC_WC</eid>
             <l1>-28</l1>
             <l2>-22</l2>
             </Beam>
           <Chord>
+            <eid>XC_XC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>YC_YC</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -801,10 +953,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>ZC_ZC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>aC_aC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>bC_bC</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>23</tpc>
@@ -813,8 +968,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>cC_cC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>dC_dC</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -823,6 +980,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>eC_eC</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -832,12 +990,15 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>fC_fC</eid>
             <l1>-24</l1>
             <l2>-18</l2>
             </Beam>
           <Chord>
+            <eid>gC_gC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>hC_hC</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -845,8 +1006,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>iC_iC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>jC_jC</eid>
               <pitch>63</pitch>
               <tpc>23</tpc>
               <fret>4</fret>
@@ -854,8 +1017,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>kC_kC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>lC_lC</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -864,6 +1029,7 @@
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>mC_mC</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -873,14 +1039,18 @@
               </Number>
             </Tuplet>
           <Beam>
+            <eid>nC_nC</eid>
             <l1>-20</l1>
             <l2>-14</l2>
             </Beam>
           <Chord>
+            <eid>oC_oC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>pC_pC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>qC_qC</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -889,8 +1059,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>rC_rC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>sC_sC</eid>
               <pitch>63</pitch>
               <tpc>23</tpc>
               <fret>4</fret>
@@ -898,8 +1070,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>tC_tC</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>uC_uC</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -910,9 +1084,11 @@
           </voice>
         <voice>
           <Chord>
+            <eid>vC_vC</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
+              <eid>wC_wC</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -922,11 +1098,13 @@
           </voice>
         </Measure>
       <Measure>
-        <endRepeat>3</endRepeat>
+        <eid>xC_xC</eid>
+        <endRepeat>2</endRepeat>
         <voice>
           <Spanner type="Volta">
             <Volta>
               <beginText>1</beginText>
+              <eid>yC_yC</eid>
               <endings>1</endings>
               </Volta>
             <next>
@@ -936,8 +1114,10 @@
               </next>
             </Spanner>
           <Chord>
+            <eid>zC_zC</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>0C_0C</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -945,20 +1125,24 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>1C_1C</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>2C_2C</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>3C_3C</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
+              <eid>4C_4C</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -968,9 +1152,11 @@
           </voice>
         <voice>
           <Chord>
+            <eid>5C_5C</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
+              <eid>6C_6C</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
@@ -980,6 +1166,7 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>7C_7C</eid>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -991,6 +1178,7 @@
           <Spanner type="Volta">
             <Volta>
               <beginText>2,3,6,8</beginText>
+              <eid>8C_8C</eid>
               <endings>2,3,6,8</endings>
               </Volta>
             <next>
@@ -1000,6 +1188,7 @@
               </next>
             </Spanner>
           <Rest>
+            <eid>9C_9C</eid>
             <durationType>measure</durationType>
             <duration>3/4</duration>
             </Rest>
@@ -1013,27 +1202,32 @@
           </voice>
         <voice>
           <Chord>
+            <eid>+C_+C</eid>
             <dots>1</dots>
             <durationType>half</durationType>
             <Note>
+              <eid>/C_/C</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>0</fret>
               <string>5</string>
               </Note>
             <Note>
+              <eid>AD_AD</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
+              <eid>BD_BD</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
               <string>1</string>
               </Note>
             <Note>
+              <eid>CD_CD</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <fret>0</fret>

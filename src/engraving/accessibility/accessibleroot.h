@@ -26,7 +26,7 @@
 #include "../dom/rootitem.h"
 
 namespace mu::engraving {
-using AccessibleMapToScreenFunc = std::function<RectF(const RectF&)>;
+using AccessibleMapToScreenFunc = std::function<RectF (const RectF&)>;
 
 class AccessibleRoot : public AccessibleItem
 {

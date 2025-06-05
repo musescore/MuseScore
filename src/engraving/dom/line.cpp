@@ -419,6 +419,17 @@ Segment* LineSegment::findNewAnchorSegment(const EditData& ed, const Segment* cu
             return curSeg->prev1WithElemsOnStaff(staffIdx());
         }
         if (ed.key == Key_Right) {
+            Segment* lastCRSegInScore = score()->lastSegment();
+            while (lastCRSegInScore && !lastCRSegInScore->isChordRestType()) {
+                lastCRSegInScore = lastCRSegInScore->prev1(SegmentType::ChordRest);
+            }
+            if (curSeg == lastCRSegInScore && curSeg == line()->endSegment()) {
+                // If we reach this point, it means that the line in question does not accept time anchors
+                // and that the line's end segment is the last CR segment in the score. Trying to use
+                // next1WithElemsOnStaff won't do anything from here, but the last segment in the score is
+                // still a valid new anchor segment for this line (see also LineSegment::edit)...
+                return score()->lastSegment();
+            }
             return curSeg->next1WithElemsOnStaff(staffIdx());
         }
     }
@@ -478,6 +489,15 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
     Segment* seg = nullptr;   // don't prefer any segment while searching line position
     staff_idx_t staffIndex = oldStaffIndex;
     score()->dragPosition(pos, &staffIndex, &seg, spacingFactor, allowTimeAnchor());
+
+    // Lines that don't allow time anchors can anchor to the last segment in the score (see also LineSegment::findNewAnchorSegment)
+    if (seg && !allowTimeAnchor() && grip == Grip::END) {
+        Segment* last = score()->lastSegment();
+        const bool lastSegIsClosest = std::abs(last->canvasX() - pos.x()) < std::abs(seg->canvasX() - pos.x());
+        if (lastSegIsClosest) {
+            return last;
+        }
+    }
 
     return seg;
 }
@@ -586,9 +606,9 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
     const Segment* newTickSeg = left ? l->startSegment() : l->endSegment();
     const System* newSpannerSystem = newTickSeg->measure()->system();
 
-    if (newSeg->system() != oldLineSegSystem || oldSpannerSystem != newSpannerSystem) {
+    if ((oldLineSegSystem && newSeg->system() != oldLineSegSystem) || oldSpannerSystem != newSpannerSystem) {
         renderer()->layoutItem(l);
-        return left ? l->frontSegment() : l->backSegment();
+        return l->segmentsEmpty() ? nullptr : left ? l->frontSegment() : l->backSegment();
     } else if (anchorChanged) {
         rebaseOffsetsOnAnchorChanged(grip, oldPos, oldLineSegSystem);
     }
@@ -890,9 +910,9 @@ void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, 
     if (moveStart) {
         Fraction tickDiff = s1->tick() - thisLine->tick();
         if (EngravingItem* itemSnappedBefore = ldata()->itemSnappedBefore()) {
-            if (itemSnappedBefore->isDynamic()) {
-                // Let the dynamic manage the move
-                toDynamic(itemSnappedBefore)->undoMoveSegment(s1, tickDiff);
+            if (itemSnappedBefore->isTextBase()) {
+                // Let the TextBase manage the move
+                toTextBase(itemSnappedBefore)->undoMoveSegment(s1, tickDiff);
             } else if (itemSnappedBefore->isLineSegment()) {
                 toLineSegment(itemSnappedBefore)->line()->undoMoveEnd(tickDiff);
                 thisLine->undoMoveStart(tickDiff);
@@ -904,9 +924,9 @@ void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, 
     if (moveEnd) {
         Fraction tickDiff = s2->tick() - thisLine->tick2();
         if (EngravingItem* itemSnappedAfter = thisLine->backSegment()->ldata()->itemSnappedAfter()) {
-            if (itemSnappedAfter->isDynamic()) {
-                // Let the dynamic manage the move
-                toDynamic(itemSnappedAfter)->undoMoveSegment(s2, tickDiff);
+            if (itemSnappedAfter->isTextBase()) {
+                // Let the TextBase manage the move
+                toTextBase(itemSnappedAfter)->undoMoveSegment(s2, tickDiff);
             } else if (itemSnappedAfter->isLineSegment()) {
                 toLineSegment(itemSnappedAfter)->line()->undoMoveStart(tickDiff);
                 thisLine->undoMoveEnd(tickDiff);

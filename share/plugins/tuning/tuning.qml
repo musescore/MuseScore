@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import QtQuick 2.2
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
 import MuseScore 3.0
 import FileIO 3.0
@@ -739,6 +739,13 @@ MuseScore {
     Item {
         anchors.fill: parent
 
+        ButtonGroup { id: temperamentTypeGroup }
+
+        component TuningItem: RadioButton {
+            padding: 4
+            ButtonGroup.group: temperamentTypeGroup
+        }
+
         GridLayout {
             columns: 2
             anchors.fill: parent
@@ -746,108 +753,90 @@ MuseScore {
             GroupBox {
                 title: "Temperament"
                 ColumnLayout {
-                    ButtonGroup { id: tempamentTypeGroup }
-                    RadioButton {
+                    TuningItem {
                         id: equal_button
                         text: "Equal"
                         checked: true
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(equal) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: pythagorean_button
                         text: "Pythagorean"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(pythagorean) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: aaron_button
                         text: "Aaron"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(aaron) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: silberman_button
                         text: "Silberman"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(silberman) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: salinas_button
                         text: "Salinas"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(salinas) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: kirnberger_button
                         text: "Kirnberger"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(kirnberger) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: vallotti_button
                         text: "Vallotti"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(vallotti) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: werkmeister_button
                         text: "Werkmeister"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(werkmeister) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: marpurg_button
                         text: "Marpurg"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(marpurg) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: just_button
                         text: "Just"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(just) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: meanSemitone_button
                         text: "Mean Semitone"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(meanSemitone) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: grammateus_button
                         text: "Grammateus"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(grammateus) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: french_button
                         text: "French"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(french) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: french2_button
                         text: "Tempérament Ordinaire"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(french2) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: rameau_button
                         text: "Rameau"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(rameau) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: irrFr17e_button
                         text: "Irr Fr 17e"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(irrFr17e) }
                     }
-                    RadioButton {
+                    TuningItem {
                         id: bachLehman_button
                         text: "Bach/Lehman"
-                        ButtonGroup.group: tempamentTypeGroup
                         onClicked: { temperamentClicked(bachLehman) }
                     }
                 }

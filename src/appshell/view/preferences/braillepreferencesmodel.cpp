@@ -22,6 +22,8 @@
 
 #include "braillepreferencesmodel.h"
 
+#include <QVariant>
+
 #include "translation.h"
 
 using namespace mu::appshell;
@@ -30,6 +32,21 @@ using namespace mu::braille;
 BraillePreferencesModel::BraillePreferencesModel(QObject* parent)
     : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
+}
+
+void BraillePreferencesModel::load()
+{
+    brailleConfiguration()->braillePanelEnabledChanged().onNotify(this, [this]() {
+        emit braillePanelEnabledChanged(braillePanelEnabled());
+    });
+
+    brailleConfiguration()->intervalDirectionChanged().onNotify(this, [this]() {
+        emit intervalDirectionChanged(intervalDirection());
+    });
+
+    brailleConfiguration()->brailleTableChanged().onNotify(this, [this]() {
+        emit brailleTableChanged(brailleTable());
+    });
 }
 
 bool BraillePreferencesModel::braillePanelEnabled() const

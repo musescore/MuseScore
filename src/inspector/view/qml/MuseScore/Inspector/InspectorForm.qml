@@ -35,8 +35,7 @@ Rectangle {
     property alias notationView: popupController.notationView
 
     property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: sectionList.count > 0 ? sectionList.itemAtIndex(0)?.navigationPanel : null // first panel
-    property int navigationOrderStart: 0
+    property int navigationOrderStart: 1
 
     color: ui.theme.backgroundPrimaryColor
 
@@ -73,13 +72,11 @@ Rectangle {
         anchors.fill: parent
 
         topMargin: 12
-        leftMargin: 12
-        rightMargin: 12
         bottomMargin: 12
 
         spacing: 12
 
-        cacheBuffer: contentHeight
+        cacheBuffer: Math.max(0, contentHeight)
 
         function ensureContentVisible(invisibleContentHeight) {
             if (sectionList.contentY + invisibleContentHeight > 0) {
@@ -102,30 +99,27 @@ Rectangle {
         }
 
         delegate: Column {
-            width: ListView.view.width - ListView.view.leftMargin - ListView.view.rightMargin
-
+            width: ListView.view.width
             spacing: sectionList.spacing
 
             property var navigationPanel: _item.navigationPanel
 
             SeparatorLine {
-                anchors.margins: -12
-
                 visible: model.index !== 0
             }
 
             InspectorSectionDelegate {
                 id: _item
 
+                anchors.left: parent.left
+                anchors.leftMargin: 12
+                anchors.right: parent.right
+                anchors.rightMargin: 12
+
                 sectionModel: model.inspectorSectionModel
                 anchorItem: root
                 navigationPanel.section: root.navigationSection
                 navigationPanel.order: root.navigationOrderStart + model.index
-                navigationPanel.onOrderChanged: {
-                    if (model.index === 0) {
-                        root.navigationOrderStart = navigationPanel.order
-                    }
-                }
 
                 onEnsureContentVisibleRequested: function(invisibleContentHeight) {
                     sectionList.ensureContentVisible(invisibleContentHeight)

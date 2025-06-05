@@ -107,19 +107,19 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     playbackController()->setNotation(notation);
     playbackController()->setIsExportingAudio(true);
 
-    m_progress.finished.onReceive(this, [this](const auto&) {
+    m_progress.finished().onReceive(this, [this](const auto&) {
         playbackController()->setIsExportingAudio(false);
         playbackController()->setNotation(globalContext()->currentNotation());
     });
 
     playback()->sequenceIdList()
     .onResolve(this, [this, path, &format](const TrackSequenceIdList& sequenceIdList) {
-        m_progress.started.notify();
+        m_progress.start();
 
         for (const TrackSequenceId sequenceId : sequenceIdList) {
-            playback()->audioOutput()->saveSoundTrackProgress(sequenceId).progressChanged
+            playback()->audioOutput()->saveSoundTrackProgress(sequenceId).progressChanged()
             .onReceive(this, [this](int64_t current, int64_t total, std::string title) {
-                m_progress.progressChanged.send(current, total, title);
+                m_progress.progress(current, total, title);
             });
 
             playback()->audioOutput()->saveSoundTrack(sequenceId, muse::io::path_t(path), std::move(format))
@@ -127,12 +127,12 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
                 LOGD() << "Successfully saved sound track by path: " << path;
                 m_writeRet = muse::make_ok();
                 m_isCompleted = true;
-                m_progress.finished.send(muse::make_ok());
+                m_progress.finish(muse::make_ok());
             })
             .onReject(this, [this](int errorCode, const std::string& msg) {
                 m_writeRet = Ret(errorCode, msg);
                 m_isCompleted = true;
-                m_progress.finished.send(make_ret(errorCode, msg));
+                m_progress.finish(make_ret(errorCode, msg));
             });
         }
     })

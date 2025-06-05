@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_ABSTRACTINSPECTORMODEL_H
-#define MU_INSPECTOR_ABSTRACTINSPECTORMODEL_H
+#pragma once
 
 #include <functional>
 #include <set>
@@ -40,6 +39,7 @@
 #include "models/propertyitem.h"
 #include "models/pointfpropertyitem.h"
 #include "ui/view/iconcodes.h"
+#include "ui/iuiactionsregister.h"
 #include "types/commontypes.h"
 
 namespace mu::inspector {
@@ -56,6 +56,8 @@ class AbstractInspectorModel : public QObject, public muse::async::Asyncable
 public:
     INJECT(context::IGlobalContext, context)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::ui::IUiActionsRegister, uiActionsRegister)
+
 public:
     enum class InspectorSectionType {
         SECTION_UNDEFINED = -1,
@@ -102,13 +104,19 @@ public:
         TYPE_VOLTA,
         TYPE_VIBRATO,
         TYPE_SLUR,
+        TYPE_HAMMER_ON_PULL_OFF,
         TYPE_TIE,
+        TYPE_LAISSEZ_VIB,
+        TYPE_PARTIAL_TIE,
         TYPE_CRESCENDO,
         TYPE_DIMINUENDO,
         TYPE_STAFF_TYPE_CHANGES,
         TYPE_TEXT_FRAME,
         TYPE_VERTICAL_FRAME,
         TYPE_HORIZONTAL_FRAME,
+        TYPE_FRET_FRAME,
+        TYPE_FRET_FRAME_CHORDS,
+        TYPE_FRET_FRAME_SETTINGS,
         TYPE_ARTICULATION,
         TYPE_ORNAMENT,
         TYPE_AMBITUS,
@@ -188,7 +196,7 @@ protected:
     PointFPropertyItem* buildPointFPropertyItem(const mu::engraving::Pid& pid, std::function<void(const mu::engraving::Pid propertyId,
                                                                                                   const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 
-    using ConvertPropertyValueFunc = std::function<QVariant(const QVariant&)>;
+    using ConvertPropertyValueFunc = std::function<QVariant (const QVariant&)>;
     void loadPropertyItem(PropertyItem* propertyItem, ConvertPropertyValueFunc convertElementPropertyValueFunc = nullptr);
     void loadPropertyItem(PropertyItem* propertyItem, const QList<engraving::EngravingItem*>& elements,
                           ConvertPropertyValueFunc convertElementPropertyValueFunc = nullptr);
@@ -222,6 +230,8 @@ protected:
 
     QList<mu::engraving::EngravingItem*> m_elementList;
 
+    QString shortcutsForActionCode(std::string code) const;
+
 protected slots:
     void onPropertyValueChanged(const mu::engraving::Pid pid, const QVariant& newValue);
     void setPropertyValue(const QList<mu::engraving::EngravingItem*>& items, const mu::engraving::Pid pid, const QVariant& newValue);
@@ -249,5 +259,3 @@ using InspectorSectionType = AbstractInspectorModel::InspectorSectionType;
 using InspectorModelTypeSet = std::set<InspectorModelType>;
 using InspectorSectionTypeSet = std::set<InspectorSectionType>;
 }
-
-#endif // MU_INSPECTOR_ABSTRACTINSPECTORMODEL_H

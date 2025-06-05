@@ -41,6 +41,9 @@ static constexpr ui::UiContext UiCtxHomeOpened = "UiCtxHomeOpened";
 static constexpr ui::UiContext UiCtxProjectOpened = "UiCtxProjectOpened";
 static constexpr ui::UiContext UiCtxProjectFocused = "UiCtxProjectFocused";
 
+// dialogs
+static constexpr ui::UiContext UiCtxDialogOpened = "UiCtxDialogOpened";
+
 enum class Checkable {
     No = 0,
     Yes
@@ -54,6 +57,7 @@ struct UiAction
     MnemonicString title;
     TranslatableString description;
     IconCode::Code iconCode = IconCode::Code::NONE;
+    QString iconColor;
     Checkable checkable = Checkable::No;
     std::vector<std::string> shortcuts;
 
@@ -73,6 +77,10 @@ struct UiAction
              const TranslatableString& desc, IconCode::Code icon, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), checkable(ch) {}
 
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
+             const TranslatableString& desc, IconCode::Code icon, QString iconColor, Checkable ch = Checkable::No)
+        : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), iconColor(iconColor), checkable(ch) {}
+
     UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title, IconCode::Code icon,
              Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), iconCode(icon), checkable(ch) {}
@@ -90,8 +98,9 @@ struct UiAction
                && title == other.title
                && description == other.description
                && iconCode == other.iconCode
+               && iconColor == other.iconColor
                && checkable == other.checkable
-               && shortcuts == shortcuts;
+               && shortcuts == other.shortcuts;
     }
 };
 

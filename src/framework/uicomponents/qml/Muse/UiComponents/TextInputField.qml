@@ -197,16 +197,12 @@ FocusScope {
                     event.accepted = false
 
                     root.focus = false
-                    root.textEditingFinished(valueInput.text)
                 }
             }
 
             Keys.onPressed: function(event) {
                 var isAcceptKey = event.key === Qt.Key_Enter || event.key === Qt.Key_Return
                 var isEscapeKey = event.key === Qt.Key_Escape
-                if (isAcceptKey || isEscapeKey) {
-                    root.textEditingFinished(valueInput.text)
-                }
 
                 if (isAcceptKey) {
                     root.accepted()
@@ -227,7 +223,6 @@ FocusScope {
                     selectAll()
                 } else {
                     deselect()
-                    root.textEditingFinished(valueInput.text)
                 }
             }
 
@@ -245,6 +240,10 @@ FocusScope {
                 }
 
                 root.textEdited(text)
+            }
+
+            onEditingFinished: {
+                root.textEditingFinished(valueInput.text)
             }
         }
 
@@ -320,6 +319,7 @@ FocusScope {
         height: parent.height
         width: clearTextButtonItem.visible ? parent.width - clearTextButtonItem.width : parent.width
 
+        enabled: root.enabled
         propagateComposedEvents: true
         hoverEnabled: true
         cursorShape: root.readOnly ? Qt.ArrowCursor : Qt.IBeamCursor

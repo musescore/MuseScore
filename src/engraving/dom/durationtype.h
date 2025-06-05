@@ -28,7 +28,7 @@
 namespace mu::engraving {
 class Measure;
 class TimeSigFrac;
-enum class BeatType : char;
+enum class BeatType : unsigned char;
 
 //---------------------------------------------------------
 //   TDuration

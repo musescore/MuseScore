@@ -28,12 +28,16 @@
 
 #include "dom/guitarbend.h"
 #include "dom/tempo.h"
+#include "dom/part.h"
 
+#include "playback/renderingcontext.h"
 #include "playback/renderers/bendsrenderer.h"
 
 using namespace mu::engraving;
 using namespace muse;
 using namespace muse::mpe;
+
+static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in microseconds for 4/4 120BPM
 
 class Engraving_BendsRendererTests : public ::testing::Test
 {
@@ -50,6 +54,9 @@ protected:
         ASSERT_TRUE(m_score);
         ASSERT_EQ(m_score->parts().size(), 1);
         ASSERT_EQ(m_score->nstaves(), 2);
+
+        m_playbackCtx = std::make_shared<PlaybackContext>();
+        m_playbackCtx->update(m_score->parts().front()->id(), m_score);
 
         MScore::useRead302InTestMode = useRead302;
     }
@@ -88,37 +95,8 @@ protected:
         return pattern;
     }
 
-    RenderingContext buildCtx(const Chord* chord, ArticulationsProfilePtr profile,
-                              ArticulationType persistentArticulationType = ArticulationType::Standard)
-    {
-        int chordPosTick = chord->tick().ticks();
-        int chordDurationTicks = chord->actualTicks().ticks();
-
-        auto tnd = timestampAndDurationFromStartAndDurationTicks(m_score, chordPosTick, chordDurationTicks, 0);
-
-        BeatsPerSecond bps = m_score->tempomap()->tempo(chordPosTick);
-        TimeSigFrac timeSignatureFraction = m_score->sigmap()->timesig(chordPosTick).timesig();
-
-        PlaybackContextPtr dummyCtx = std::make_shared<PlaybackContext>();
-
-        RenderingContext ctx(tnd.timestamp,
-                             tnd.duration,
-                             5000,
-                             chordPosTick,
-                             0,
-                             chordDurationTicks,
-                             bps,
-                             timeSignatureFraction,
-                             persistentArticulationType,
-                             ArticulationMap(),
-                             profile,
-                             dummyCtx);
-
-        return ctx;
-    }
-
-private:
     Score* m_score = nullptr;
+    PlaybackContextPtr m_playbackCtx = nullptr;
 };
 
 /*!
@@ -130,7 +108,13 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
     // [GIVEN] First chord of the multibend
     const Chord* startChord = findChord(480);
     ASSERT_TRUE(startChord);
-    ASSERT_FALSE(startChord->notes().empty());
+    ASSERT_EQ(startChord->notes().size(), 1);
+
+    // [GIVEN] First note of the multibend
+    const Note* startNote = startChord->notes().front();
+
+    // [THEN] Check that the note is recognised as part of the multibend
+    EXPECT_TRUE(BendsRenderer::isMultibendPart(startNote));
 
     // [GIVEN] Context of the chord
     ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
@@ -138,27 +122,33 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::PreAppoggiatura, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Distortion, buildTestArticulationPattern());
-    RenderingContext startChordCtx = buildCtx(startChord, profile, ArticulationType::Distortion);
+    RenderingContext startChordCtx = buildRenderingCtx(startChord, 0, profile, m_playbackCtx);
 
-    // [THEN] BendsRenderer can render the multibend articulation
-    EXPECT_TRUE(BendsRenderer::isAbleToRender(ArticulationType::Multibend));
-
-    // [WHEN] Render the chord
+    // [WHEN] Render the note
     PlaybackEventList events;
-    BendsRenderer::render(startChord, ArticulationType::Multibend, startChordCtx, events);
+    BendsRenderer::render(startNote, startChordCtx, events);
 
     // [THEN] Render the multibend as a single NoteEvent
     ASSERT_EQ(events.size(), 1);
     ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(events.front()));
 
+    // [THEN] The note event has the correct timestamp and duration
     const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(events.front());
+    EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, QUARTER_NOTE_DURATION); // starts after a quarter rest
+    EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, QUARTER_NOTE_DURATION * 6); // F3 + G3 + F3 + A3 + A3 + G3
+    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 3));
 
-    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Multibend));
-    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Distortion)); // persistent articulation applied
-    EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, 500000); // starts after a quarter rest
-    EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, 3000000); // quarters: F3 + G3 + F3 + A3 + A3 + G3
-    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, 2050); // F3
+    // [THEN] The note event contains the multibend articulation with the correct timestamp and duration
+    auto multibendIt = noteEvent.expressionCtx().articulations.find(ArticulationType::Multibend);
+    ASSERT_TRUE(multibendIt != noteEvent.expressionCtx().articulations.end());
+    const mpe::ArticulationMeta& multibendMeta = multibendIt->second.meta;
+    EXPECT_EQ(multibendMeta.timestamp, noteEvent.arrangementCtx().actualTimestamp);
+    EXPECT_EQ(multibendMeta.overallDuration, noteEvent.arrangementCtx().actualDuration);
 
+    // [THEN] The note event contains the distortion articulation (persistent)
+    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Distortion));
+
+    // [THEN] The pitch curve is correct
     PitchCurve expectedPitchCurve;
     expectedPitchCurve.emplace(0, 0); // F3
     expectedPitchCurve.emplace(1600, 100); // F3 -> G3
@@ -169,19 +159,19 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
 
     EXPECT_EQ(noteEvent.pitchCtx().pitchCurve, expectedPitchCurve);
 
-    // [THEN] Check we don't render other chords of the multibend (only the first one)
+    // [THEN] Check we don't render other notes of the multibend (only the first one)
     const GuitarBend* bend = startChord->notes().front()->bendFor();
     ASSERT_TRUE(bend);
 
     while (bend) {
         const Note* note = bend->endNote();
         ASSERT_TRUE(note);
+        EXPECT_TRUE(BendsRenderer::isMultibendPart(note));
 
-        const Chord* chord = note->chord();
-        RenderingContext ctx = buildCtx(chord, profile);
+        RenderingContext ctx = buildRenderingCtx(note->chord(), 0, profile, m_playbackCtx);
 
         events.clear();
-        BendsRenderer::render(chord, ArticulationType::Multibend, ctx, events);
+        BendsRenderer::render(note, ctx, events);
         EXPECT_TRUE(events.empty());
 
         bend = note->bendFor();
@@ -192,24 +182,26 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
  * @details Render a chord with 2 bends and 1 note:
  * 1st bend: D3 -> E3
  * 2nd bend: G3 -> A3
- * note event: A3
+ * note event: C4
  */
 TEST_F(Engraving_BendsRendererTests, MultipleBendsOnOneChord)
 {
     // [GIVEN] Chord with multiple notes
-    const Chord* startChord = findChord(3840);
-    ASSERT_TRUE(startChord);
-    ASSERT_EQ(startChord->notes().size(), 3);
+    const Chord* chord = findChord(3840);
+    ASSERT_TRUE(chord);
+    ASSERT_EQ(chord->notes().size(), 3);
 
     // [GIVEN] Context of the chord
     ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
     profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    RenderingContext ctx = buildCtx(startChord, profile);
+    RenderingContext ctx = buildRenderingCtx(chord, 0, profile, m_playbackCtx);
 
     // [WHEN] Render the chord
     PlaybackEventList events;
-    BendsRenderer::render(startChord, ArticulationType::Multibend, ctx, events);
+    for (const Note* note : chord->notes()) {
+        BendsRenderer::render(note, ctx, events);
+    }
 
     // [THEN] 3 events: 2 bends + 1 note
     ASSERT_EQ(events.size(), 3);
@@ -222,16 +214,16 @@ TEST_F(Engraving_BendsRendererTests, MultipleBendsOnOneChord)
     expectedBendCurve.emplace(5000, 100);
 
     const mpe::NoteEvent& bendEvent1 = std::get<mpe::NoteEvent>(events.at(0));
-    EXPECT_EQ(bendEvent1.pitchCtx().nominalPitchLevel, 1900);
+    EXPECT_EQ(bendEvent1.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::D, 3));
     EXPECT_EQ(bendEvent1.pitchCtx().pitchCurve, expectedBendCurve);
 
     const mpe::NoteEvent& bendEvent2 = std::get<mpe::NoteEvent>(events.at(1));
     EXPECT_EQ(bendEvent2.pitchCtx().pitchCurve, expectedBendCurve);
-    EXPECT_EQ(bendEvent2.pitchCtx().nominalPitchLevel, 2150);
+    EXPECT_EQ(bendEvent2.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::G, 3));
 
     const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(events.at(2));
     EXPECT_NE(noteEvent.pitchCtx().pitchCurve, expectedBendCurve);
-    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, 2400);
+    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::C, 4));
 }
 
 /*!
@@ -245,50 +237,72 @@ TEST_F(Engraving_BendsRendererTests, PreBend)
     const Chord* chord = findChord(5760);
     ASSERT_TRUE(chord);
 
+    // [GIVEN] Pre-bend grace note (unplayable)
+    ASSERT_EQ(chord->graceNotesBefore().size(), 1);
+    const Chord* graceChord = chord->graceNotesBefore().front();
+    ASSERT_EQ(graceChord->notes().size(), 1);
+    const Note* unplayableGracePreBendNote = graceChord->notes().front();
+    ASSERT_TRUE(unplayableGracePreBendNote->isPreBendStart());
+
+    // [GIVEN] Playable principal note
+    ASSERT_EQ(chord->notes().size(), 1);
+    const Note* playblePrincipalNote = chord->notes().front();
+    ASSERT_TRUE(playblePrincipalNote->bendBack());
+    ASSERT_EQ(playblePrincipalNote->bendBack()->startNote(), unplayableGracePreBendNote);
+
     // [GIVEN] Context of the chord
     ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
     profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    RenderingContext ctx = buildCtx(chord, profile);
+    RenderingContext ctx = buildRenderingCtx(chord, 0, profile, m_playbackCtx);
 
-    // [WHEN] Render the chord
+    // [WHEN] Render the unplayable pre-bend grace note
     PlaybackEventList events;
-    BendsRenderer::render(chord, ArticulationType::Multibend, ctx, events);
+    BendsRenderer::render(unplayableGracePreBendNote, ctx, events);
 
-    // [THEN] Chord successfully rendered
+    // [THEN] No events
+    EXPECT_TRUE(events.empty());
+
+    // [WHEN] Render the first playable (principal) note
+    BendsRenderer::render(playblePrincipalNote, ctx, events);
+
+    // [THEN] Note successfully rendered
     ASSERT_EQ(events.size(), 1);
     ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(events.front()));
 
     PitchCurve expectedPitchCurve;
     expectedPitchCurve.emplace(0, 0); // A3
+    expectedPitchCurve.emplace(3300, 0); // tied A3
     expectedPitchCurve.emplace(6600, -100); // Release down to G3
 
     const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());
-    EXPECT_EQ(event.pitchCtx().nominalPitchLevel, 2250); // A3
-    EXPECT_EQ(event.arrangementCtx().actualDuration, 1500000); // quarters: A3 + A3 + G3
+    EXPECT_EQ(event.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 3)); // A3
+    EXPECT_EQ(event.arrangementCtx().actualDuration, QUARTER_NOTE_DURATION * 3); // A3 + A3 + G3
     EXPECT_EQ(event.pitchCtx().pitchCurve, expectedPitchCurve);
 }
 
 /*!
- * @details Render a note (A3) with a slight bend
+ * @details Render a quarter note (A3) with a slight bend
  */
 TEST_F(Engraving_BendsRendererTests, SlightBend)
 {
-    // [GIVEN] Chord with a slight bend
+    // [GIVEN] Quarter note with a slight bend
     const Chord* chord = findChord(7680);
     ASSERT_TRUE(chord);
+    ASSERT_EQ(chord->notes().size(), 1);
+    const Note* note = chord->notes().front();
 
     // [GIVEN] Context of the chord
     ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
     profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
-    RenderingContext ctx = buildCtx(chord, profile);
+    RenderingContext ctx = buildRenderingCtx(chord, 0, profile, m_playbackCtx);
 
-    // [WHEN] Render the chord
+    // [WHEN] Render the note
     PlaybackEventList events;
-    BendsRenderer::render(chord, ArticulationType::Multibend, ctx, events);
+    BendsRenderer::render(note, ctx, events);
 
-    // [THEN] Chord successfully rendered
+    // [THEN] Note successfully rendered
     ASSERT_EQ(events.size(), 1);
     ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(events.front()));
 
@@ -297,8 +311,16 @@ TEST_F(Engraving_BendsRendererTests, SlightBend)
     expectedPitchCurve.emplace(5000, 25); // 1/4
 
     const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());
-    EXPECT_EQ(event.pitchCtx().nominalPitchLevel, 2250); // A3
+    EXPECT_EQ(event.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 3));
     EXPECT_EQ(event.pitchCtx().pitchCurve, expectedPitchCurve);
+
+    EXPECT_EQ(event.expressionCtx().articulations.size(), 1);
+    auto artIt = event.expressionCtx().articulations.find(mpe::ArticulationType::Multibend);
+    EXPECT_TRUE(artIt != event.expressionCtx().articulations.end());
+
+    const ArticulationMeta& meta = artIt->second.meta;
+    EXPECT_EQ(meta.timestamp, timestampFromTicks(m_score, note->tick().ticks()));
+    EXPECT_EQ(meta.overallDuration, QUARTER_NOTE_DURATION);
 }
 
 /*!
@@ -313,18 +335,24 @@ TEST_F(Engraving_BendsRendererTests, Multibend_CustomTimeOffsets)
     const Chord* startChord = findChord(9600);
     ASSERT_TRUE(startChord);
 
+    // [GIVEN] First (grace) note of the multibend
+    ASSERT_EQ(startChord->graceNotesBefore().size(), 1);
+    const Chord* graceChord = startChord->graceNotesBefore().front();
+    ASSERT_EQ(graceChord->notes().size(), 1);
+    const Note* startGraceNote = graceChord->notes().front();
+
     // [GIVEN] Context of the chord
     ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
     profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::PreAppoggiatura, buildTestArticulationPattern());
-    RenderingContext ctx = buildCtx(startChord, profile);
+    RenderingContext ctx = buildRenderingCtx(startChord, 0, profile, m_playbackCtx);
 
-    // [WHEN] Render the chord
+    // [WHEN] Render the note
     PlaybackEventList events;
-    BendsRenderer::render(startChord, ArticulationType::Multibend, ctx, events);
+    BendsRenderer::render(startGraceNote, ctx, events);
 
-    // [THEN] Chord successfully rendered
+    // [THEN] Note successfully rendered
     ASSERT_EQ(events.size(), 1);
     ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(events.front()));
 
@@ -338,6 +366,63 @@ TEST_F(Engraving_BendsRendererTests, Multibend_CustomTimeOffsets)
     expectedPitchCurve.emplace(4950, 150); // end offset: 50%
 
     const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());
-    EXPECT_EQ(event.arrangementCtx().actualDuration, 1500000);
+    EXPECT_EQ(event.arrangementCtx().actualDuration, QUARTER_NOTE_DURATION * 3);
     EXPECT_EQ(event.pitchCtx().pitchCurve, expectedPitchCurve);
+}
+
+/*!
+ * @details Checks we can render a bend starting from a tied note
+ * See: https://github.com/musescore/MuseScore/issues/21345
+ */
+TEST_F(Engraving_BendsRendererTests, BendOnTiedNotes)
+{
+    // [GIVEN] First chord of the multibend
+    const Chord* chord = findChord(11520);
+    ASSERT_TRUE(chord);
+    ASSERT_EQ(chord->notes().size(), 1);
+
+    // [GIVEN] Context of the chord
+    ArticulationsProfilePtr profile = std::make_shared<ArticulationsProfile>();
+    profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+    profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
+    profile->setPattern(ArticulationType::PreAppoggiatura, buildTestArticulationPattern());
+    RenderingContext ctx = buildRenderingCtx(chord, 0, profile, m_playbackCtx);
+
+    // [GIVEN] Quarter A3 tied to another quarter A3
+    const Note* note = chord->notes().front();
+    ASSERT_TRUE(note->tieFor());
+    ASSERT_FALSE(note->tieBack());
+
+    // [THEN] Check that the note is recognised as part of the multibend
+    EXPECT_TRUE(BendsRenderer::isMultibendPart(note));
+
+    // [WHEN] Render the tied note
+    PlaybackEventList events;
+    BendsRenderer::render(note, ctx, events);
+
+    // [THEN] Note successfully rendered
+    ASSERT_EQ(events.size(), 1);
+    ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(events.front()));
+
+    PitchCurve expectedPitchCurve;
+    expectedPitchCurve.emplace(0, 0);
+    expectedPitchCurve.emplace(3300, 0); // tied A3
+    expectedPitchCurve.emplace(6600, 100); // B3
+
+    const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());
+    EXPECT_EQ(event.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::A, 3));
+    EXPECT_EQ(event.pitchCtx().pitchCurve, expectedPitchCurve);
+    EXPECT_EQ(event.arrangementCtx().actualDuration, QUARTER_NOTE_DURATION * 3); // 2 tied A3 + B3
+
+    // [THEN] The note event contains the multibend articulation with the correct timestamp and duration
+    auto multibendIt = event.expressionCtx().articulations.find(ArticulationType::Multibend);
+    ASSERT_TRUE(multibendIt != event.expressionCtx().articulations.end());
+
+    const mpe::ArticulationAppliedData& articulationData = multibendIt->second;
+    EXPECT_NE(articulationData.occupiedFrom, 0);
+    EXPECT_EQ(articulationData.occupiedTo, HUNDRED_PERCENT);
+
+    const mpe::ArticulationMeta& multibendMeta = articulationData.meta;
+    EXPECT_EQ(multibendMeta.timestamp, event.arrangementCtx().actualTimestamp);
+    EXPECT_EQ(multibendMeta.overallDuration, event.arrangementCtx().actualDuration);
 }

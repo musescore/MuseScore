@@ -32,33 +32,80 @@ Column {
 
     property int panelMode: -1
     property bool useNotationPreview: false
+    property alias notationPreviewNumStaffLines: notationPreview.numStaffLines
 
-    property bool dragActive: false
+    property alias footerHeight: footerArea.height
 
-    Rectangle {
+    property bool padSwapActive: false
+
+    function openContextMenu(pos) {
+        if (!root.padModel) {
+            return
+        }
+
+        if (!pos) {
+            pos = menuLoader.parent.mapFromItem(root, 0, root.height)
+        }
+
+        menuLoader.show(pos, root.padModel.contextMenuItems)
+    }
+
+    Item {
         id: mainContentArea
 
         width: parent.width
         height: parent.height - separator.height - footerArea.height
 
-        color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityNormal)
-
         MouseArea {
             id: mouseArea
-
             anchors.fill: parent
+
+            enabled: mainContentArea.enabled
             hoverEnabled: true
 
-            onPressed: {
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+            onPressed: function(event) {
+                ui.tooltip.hide(root)
+
                 if (!Boolean(root.padModel)) {
                     return
                 }
-                root.padModel.triggerPad()
+
+                if (event.button === Qt.RightButton) {
+                    let pos = menuLoader.parent.mapFromItem(mouseArea, event.x, event.y)
+                    root.openContextMenu(pos)
+                    return
+                }
+
+                root.padModel.triggerPad(event.modifiers)
+            }
+
+            onContainsMouseChanged: {
+                if (!Boolean(root.padModel)) {
+                    ui.tooltip.hide(root)
+                    return
+                }
+
+                if (mouseArea.containsMouse && root.useNotationPreview) {
+                    ui.tooltip.show(root, root.padModel.padName)
+                } else {
+                    ui.tooltip.hide(root)
+                }
             }
         }
 
+        Rectangle {
+            id: padNameBackground
+
+            visible: !root.useNotationPreview
+            anchors.fill: parent
+
+            color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityNormal)
+        }
+
         StyledTextLabel {
-            id: instrumentNameLabel
+            id: padNameLabel
 
             visible: !root.useNotationPreview
 
@@ -69,24 +116,45 @@ Column {
             maximumLineCount: 4
             font: ui.theme.bodyBoldFont
 
-            text: Boolean(root.padModel) ? root.padModel.instrumentName : ""
+            text: Boolean(root.padModel) ? root.padModel.padName : ""
+        }
+
+        PaintedEngravingItem {
+            id: notationPreview
+
+            visible: root.useNotationPreview
+
+            anchors.fill: parent
+
+            engravingItem: Boolean(root.padModel) ? root.padModel.notationPreviewItem : null
+            spatium: 6.25 // Value approximated visually (needs to accomodate "extreme ledger line" situations)
+
+            opacity: 0.9
         }
 
         states: [
             State {
                 name: "MOUSE_HOVERED"
-                when: mouseArea.containsMouse && !mouseArea.pressed && !root.dragActive
+                when: mouseArea.containsMouse && !mouseArea.pressed && !root.padSwapActive
                 PropertyChanges {
-                    target: mainContentArea
+                    target: padNameBackground
                     color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityHover)
+                }
+                PropertyChanges {
+                    target: notationPreview
+                    opacity: 0.7
                 }
             },
             State {
                 name: "MOUSE_HIT"
-                when: mouseArea.pressed || root.dragActive
+                when: mouseArea.pressed || root.padSwapActive
                 PropertyChanges {
-                    target: mainContentArea
+                    target: padNameBackground
                     color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityHit)
+                }
+                PropertyChanges {
+                    target: notationPreview
+                    opacity: 1.0
                 }
             }
         ]
@@ -98,16 +166,30 @@ Column {
         width: parent.width
         height: 1
 
-        color: ui.theme.accentColor
+        color: root.useNotationPreview ? ui.theme.strokeColor : ui.theme.accentColor
     }
 
     Rectangle {
         id: footerArea
 
         width: parent.width
-        height: 24
 
         color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityNormal)
+
+        MouseArea {
+            id: footerMouseArea
+
+            anchors.fill: parent
+            enabled: root.panelMode !== PanelMode.EDIT_LAYOUT
+            hoverEnabled: true
+
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+            onPressed: function(event) {
+                let pos = menuLoader.parent.mapFromItem(footerMouseArea, event.x, event.y)
+                root.openContextMenu(pos)
+            }
+        }
 
         StyledTextLabel {
             id: shortcutLabel
@@ -122,6 +204,17 @@ Column {
             text: Boolean(root.padModel) ? root.padModel.keyboardShortcut : ""
         }
 
+        StyledIconLabel {
+            id: midiNoteIcon
+
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: midiNoteLabel.left
+
+            color: ui.theme.fontPrimaryColor
+
+            iconCode: IconCode.SINGLE_NOTE
+        }
+
         StyledTextLabel {
             id: midiNoteLabel
 
@@ -134,5 +227,32 @@ Column {
 
             text: Boolean(root.padModel) ? root.padModel.midiNote : ""
         }
+    }
+
+    ContextMenuLoader {
+        id: menuLoader
+
+        onHandleMenuItem: function(itemId) {
+            root.padModel.handleMenuItem(itemId)
+        }
+
+        states: [
+            State {
+                name: "MOUSE_HOVERED"
+                when: footerMouseArea.containsMouse && !footerMouseArea.pressed
+                PropertyChanges {
+                    target: footerArea
+                    color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHover)
+                }
+            },
+            State {
+                name: "MOUSE_HIT"
+                when: footerMouseArea.pressed
+                PropertyChanges {
+                    target: footerArea
+                    color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHit)
+                }
+            }
+        ]
     }
 }

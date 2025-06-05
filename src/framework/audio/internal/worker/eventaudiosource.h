@@ -53,6 +53,7 @@ public:
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
 
     void seek(const msecs_t newPositionMsecs) override;
+    void flush() override;
 
     const AudioInputParams& inputParams() const override;
     void applyInputParams(const AudioInputParams& requiredParams) override;

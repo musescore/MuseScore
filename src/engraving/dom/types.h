@@ -20,10 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TYPES_OLD_H
-#define MU_ENGRAVING_TYPES_OLD_H
+#pragma once
 
-#include <unordered_set>
+#include <set>
 
 #include "global/containers.h"
 
@@ -35,7 +34,7 @@
 namespace mu::engraving {
 class EngravingItem;
 
-enum class CommandType {
+enum class CommandType : signed char {
     Unknown = -1,
 
     // Parts
@@ -48,6 +47,8 @@ enum class CommandType {
     // Staves
     InsertStaff,
     RemoveStaff,
+    AddSystemObjectStaff,
+    RemoveSystemObjectStaff,
     SortStaves,
     ChangeStaff,
     ChangeStaffType,
@@ -94,10 +95,18 @@ enum class CommandType {
     AddBracket,
 
     // Fret
+    FretDataChange,
     FretDot,
     FretMarker,
     FretBarre,
     FretClear,
+    FretLinkHarmony,
+
+    // FBox
+    ReorderFBox,
+    RenameChordFBox,
+    AddChordFBox,
+    RemoveChordFBox,
 
     // Harmony
     TransposeHarmony,
@@ -115,6 +124,9 @@ enum class CommandType {
     ChangeSpannerElements,
     InsertTimeUnmanagedSpanner,
     ChangeStartEndSpanner,
+
+    // Ties
+    ChangeTieEndPointActive,
 
     // Style
     ChangeStyle,
@@ -141,12 +153,17 @@ enum class CommandType {
     ChangeScoreOrder,
 };
 
+struct NoteInputParams {
+    int step = 0;
+    int drumPitch = -1;
+};
+
 //---------------------------------------------------------
 //   AccidentalType
 //---------------------------------------------------------
 // NOTE: keep this in sync with accList array in accidentals.cpp
 
-enum class AccidentalType {
+enum class AccidentalType : unsigned char {
     ///.\{
     NONE,
     FLAT,
@@ -329,7 +346,7 @@ enum class AccidentalType {
 //   NoteType
 //---------------------------------------------------------
 
-enum class NoteType {
+enum class NoteType : unsigned char {
     ///.\{
     NORMAL        = 0,
     ACCIACCATURA  = 0x1,
@@ -346,19 +363,19 @@ enum class NoteType {
 
 constexpr NoteType operator|(NoteType t1, NoteType t2)
 {
-    return static_cast<NoteType>(static_cast<int>(t1) | static_cast<int>(t2));
+    return static_cast<NoteType>(static_cast<unsigned char>(t1) | static_cast<unsigned char>(t2));
 }
 
 constexpr bool operator&(NoteType t1, NoteType t2)
 {
-    return static_cast<int>(t1) & static_cast<int>(t2);
+    return static_cast<unsigned char>(t1) & static_cast<unsigned char>(t2);
 }
 
 //---------------------------------------------------------
 //   HarmonyType
 //---------------------------------------------------------
 
-enum class HarmonyType {
+enum class HarmonyType : unsigned char {
     ///.\{
     STANDARD,
     ROMAN,
@@ -370,7 +387,7 @@ enum class HarmonyType {
 //   MMRestRangeBracketType
 //---------------------------------------------------------
 
-enum class MMRestRangeBracketType {
+enum class MMRestRangeBracketType : unsigned char {
     ///.\{
     BRACKETS, PARENTHESES, NONE
     ///\}
@@ -380,7 +397,7 @@ enum class MMRestRangeBracketType {
 //   OffsetType
 //---------------------------------------------------------
 
-enum class OffsetType : char {
+enum class OffsetType : unsigned char {
     ABS,         ///< offset in point units
     SPATIUM      ///< offset in staff space units
 };
@@ -393,27 +410,40 @@ enum class OffsetType : char {
 
 enum class SegmentType {
     ///.\{
-    Invalid            = 0x0,
-    BeginBarLine       = 0x1,
-    HeaderClef         = 0x2,
-    KeySig             = 0x4,
-    Ambitus            = 0x8,
-    TimeSig            = 0x10,
-    StartRepeatBarLine = 0x20,
-    Clef               = 0x40,
-    BarLine            = 0x80,
-    Breath             = 0x100,
+    Invalid               = 0x0,
+    BeginBarLine          = 0x1,
+    HeaderClef            = 0x2,
+    KeySig                = 0x4,
+    Ambitus               = 0x8,
+    TimeSig               = 0x10,
+    StartRepeatBarLine    = 0x20,
+    ClefStartRepeatAnnounce    = 0x40,
+    KeySigStartRepeatAnnounce  = 0x80,
+    TimeSigStartRepeatAnnounce = 0x100,
+    Clef                  = 0x200,
+    BarLine               = 0x400,
+    Breath                = 0x800,
     //--
-    TimeTick           = 0x200,
-    ChordRest          = 0x400,
+    TimeTick              = 0x1000,
+    ChordRest             = 0x2000,
     //--
-    EndBarLine         = 0x800,
-    KeySigAnnounce     = 0x1000,
-    TimeSigAnnounce    = 0x2000,
+    ClefRepeatAnnounce    = 0x4000,
+    KeySigRepeatAnnounce  = 0x8000,
+    TimeSigRepeatAnnounce = 0x10000,
     //--
-    All                = -1,   ///< Includes all barline types
+    EndBarLine            = 0x20000,
+    KeySigAnnounce        = 0x40000,
+    TimeSigAnnounce       = 0x80000,
+    //--
+    All                   = -1,   ///< Includes all barline types
     /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
-    BarLineType        = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine,
+    BarLineType           = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine,
+    CourtesyTimeSigType   = TimeSigAnnounce | TimeSigRepeatAnnounce | TimeSigStartRepeatAnnounce,
+    CourtesyKeySigType    = KeySigAnnounce | KeySigRepeatAnnounce | KeySigStartRepeatAnnounce,
+    CourtesyClefType      = ClefRepeatAnnounce | ClefStartRepeatAnnounce,
+    TimeSigType           = TimeSig | CourtesyTimeSigType,
+    KeySigType            = KeySig | CourtesyKeySigType,
+    ClefType              = Clef | HeaderClef | CourtesyClefType,
     ///\}
 };
 
@@ -462,7 +492,7 @@ constexpr bool operator&(FontStyle a1, FontStyle a2)
 /// in the score file.
 //---------------------------------------------------------
 
-enum class PlayEventType : char {
+enum class PlayEventType : unsigned char {
     ///.\{
     Auto,         ///< Play events for all notes are calculated by MuseScore.
     User,         ///< Some play events are modified by user. Those events are written into the mscx file.
@@ -473,10 +503,10 @@ enum class PlayEventType : char {
 //   Tuplets
 //---------------------------------------------------------
 
-enum class TupletNumberType : char {
+enum class TupletNumberType : unsigned char {
     SHOW_NUMBER, SHOW_RELATION, NO_TEXT
 };
-enum class TupletBracketType : char {
+enum class TupletBracketType : unsigned char {
     AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET
 };
 
@@ -484,7 +514,7 @@ enum class TupletBracketType : char {
 //   TripletFeels
 //---------------------------------------------------------
 
-enum class TripletFeelType : char {
+enum class TripletFeelType : unsigned char {
     NONE,
     TRIPLET_8TH,
     TRIPLET_16TH,
@@ -494,14 +524,14 @@ enum class TripletFeelType : char {
     SCOTTISH_16TH
 };
 
-enum class GuitarBendType {
+enum class GuitarBendType : unsigned char {
     BEND,
     PRE_BEND,
     GRACE_NOTE_BEND,
     SLIGHT_BEND,
 };
 
-enum class GuitarBendShowHoldLine {
+enum class GuitarBendShowHoldLine : unsigned char {
     AUTO,
     SHOW,
     HIDE,
@@ -513,7 +543,7 @@ struct ScoreChangesRange {
     staff_idx_t staffIdxFrom = muse::nidx;
     staff_idx_t staffIdxTo = muse::nidx;
 
-    std::set<const EngravingItem*> changedItems;
+    std::map<EngravingItem*, std::unordered_set<CommandType> > changedItems;
     ElementTypeSet changedTypes;
     PropertyIdSet changedPropertyIdSet;
     StyleIdSet changedStyleIdSet;
@@ -530,6 +560,23 @@ struct ScoreChangesRange {
     {
         return isValidBoundary() || !changedTypes.empty();
     }
+
+    void clear()
+    {
+        *this = ScoreChangesRange();
+    }
+
+    void combine(const ScoreChangesRange& r)
+    {
+        tickFrom = std::min(tickFrom, r.tickFrom);
+        tickTo = std::max(tickTo, r.tickTo);
+        staffIdxFrom = std::min(staffIdxFrom, r.staffIdxFrom);
+        staffIdxTo = std::max(staffIdxTo, r.staffIdxTo);
+        changedItems.insert(r.changedItems.begin(), r.changedItems.end());
+        changedTypes.insert(r.changedTypes.begin(), r.changedTypes.end());
+        changedPropertyIdSet.insert(r.changedPropertyIdSet.begin(), r.changedPropertyIdSet.end());
+        changedStyleIdSet.insert(r.changedStyleIdSet.begin(), r.changedStyleIdSet.end());
+    }
 };
 } // namespace mu::engraving
 
@@ -537,6 +584,4 @@ struct ScoreChangesRange {
 Q_DECLARE_METATYPE(mu::engraving::NoteType)
 Q_DECLARE_METATYPE(mu::engraving::PlayEventType)
 Q_DECLARE_METATYPE(mu::engraving::AccidentalType)
-#endif
-
 #endif

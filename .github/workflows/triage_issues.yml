@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 'Add label to issue'
-      uses: github/issue-labeler@v3.0
+      uses: github/issue-labeler@v3.4
       with:
         repo-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
         configuration-path: '.github/issue_add_label_config.yml'
@@ -37,12 +37,12 @@ jobs:
         github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
         labeled: cloud
 
-    - name: 'Muse Sounds'
+    - name: 'MuseSounds'
       uses: actions/add-to-project@main
       with:
         project-url: https://github.com/orgs/musescore/projects/21
         github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
-        labeled: 'Muse Sounds'
+        labeled: 'MuseSounds'
 
     - name: 'VST'
       uses: actions/add-to-project@main

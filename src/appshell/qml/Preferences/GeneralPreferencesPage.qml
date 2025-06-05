@@ -68,19 +68,10 @@ PreferencesPage {
         SeparatorLine { }
 
         ProgramStartSection {
-            startupModes: preferencesModel.startupModes
-            scorePathFilter: preferencesModel.scorePathFilter()
+            model: preferencesModel
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
-
-            onCurrentStartupModesChanged: function(index) {
-                preferencesModel.setCurrentStartupMode(index)
-            }
-
-            onStartupScorePathChanged: function(path) {
-                preferencesModel.setStartupScorePath(path)
-            }
         }
 
         /*

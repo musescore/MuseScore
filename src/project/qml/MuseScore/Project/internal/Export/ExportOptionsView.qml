@@ -161,6 +161,8 @@ Column {
         model: exportModel.availableUnitTypes
 
         delegate: RoundedRadioButton {
+            width: ListView.view.width
+
             text: modelData["text"]
 
             navigation.name: "ExportType_" + text

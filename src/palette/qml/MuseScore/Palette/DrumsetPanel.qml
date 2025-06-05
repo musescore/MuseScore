@@ -29,10 +29,12 @@ import MuseScore.Palette 1.0
 Item {
     id: root
 
-    property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: NavigationPanel {
+    property alias navigationSection: navPanel.section
+    property alias contentNavigationPanelOrderStart: navPanel.order
+
+    NavigationPanel {
+        id: navPanel
         name: "DrumsetSection"
-        section: root.navigationSection
         direction: NavigationPanel.Vertical
         enabled: root.enabled && root.visible
     }
@@ -53,18 +55,18 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 height: 20
-                width: editDrumsetButton.width
+                width: customizeKitButton.width
 
                 text: drumsetView.pitchName
             }
 
             FlatButton {
-                id: editDrumsetButton
+                id: customizeKitButton
 
-                text: qsTrc("palette", "Edit drumset")
+                text: qsTrc("palette", "Customize kit")
 
                 onClicked: {
-                    drumsetView.editDrumset()
+                    drumsetView.customizeKit()
                 }
             }
         }

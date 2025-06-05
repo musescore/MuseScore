@@ -32,6 +32,7 @@
 #include "../view/qmltranslation.h"
 #include "../view/interactiveprovider.h"
 #include "../view/qmlapi.h"
+#include "../view/qmldataformatter.h"
 
 #include "languages/ilanguagesservice.h"
 
@@ -43,6 +44,7 @@ class UiEngine : public QObject, public IUiEngine, public Injectable
 
     Q_PROPERTY(api::ThemeApi * theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QmlToolTip * tooltip READ tooltip CONSTANT)
+    Q_PROPERTY(QmlDataFormatter * df READ df CONSTANT)
 
     Q_PROPERTY(QQuickItem * rootItem READ rootItem WRITE setRootItem NOTIFY rootItemChanged)
 
@@ -62,6 +64,8 @@ public:
     QmlApi* api() const;
     api::ThemeApi* theme() const;
     QmlToolTip* tooltip() const;
+    QmlDataFormatter* df() const;
+
     InteractiveProvider* interactiveProvider_property() const;
     std::shared_ptr<InteractiveProvider> interactiveProvider() const;
 
@@ -101,9 +105,12 @@ private:
     QStringList m_sourceImportPaths;
     api::ThemeApi* m_theme = nullptr;
     QmlTranslation* m_translation = nullptr;
+
     std::shared_ptr<InteractiveProvider> m_interactiveProvider = nullptr;
+
     QmlApi* m_api = nullptr;
     QmlToolTip* m_tooltip = nullptr;
+    QmlDataFormatter* m_dataFormatter = nullptr;
     QQuickItem* m_rootItem = nullptr;
     mutable int m_isEffectsAllowed = -1;
 };

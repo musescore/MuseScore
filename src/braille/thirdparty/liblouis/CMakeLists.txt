@@ -1,4 +1,4 @@
-declare_module(liblouis)
+declare_thirdparty_module(liblouis)
 
 add_subdirectory(tables)
 
@@ -36,8 +36,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/liblouis/utils.c
 )
 
-set(MODULE_USE_PCH OFF)
 set(MODULE_USE_UNITY OFF)
+set(MODULE_USE_COVERAGE OFF)
 
 setup_module()
 

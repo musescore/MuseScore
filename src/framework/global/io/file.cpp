@@ -25,6 +25,8 @@
 
 #include "ioretcodes.h"
 
+#include "log.h"
+
 using namespace muse;
 using namespace muse::io;
 

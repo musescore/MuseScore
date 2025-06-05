@@ -30,6 +30,7 @@
 using namespace muse::diagnostics;
 using namespace muse;
 using namespace muse::accessibility;
+using namespace muse::actions;
 
 static const muse::UriQuery SYSTEM_PATHS_URI("muse://diagnostics/system/paths?sync=false&modal=false&floating=true");
 static const muse::UriQuery GRAPHICSINFO_URI("muse://diagnostics/system/graphicsinfo?sync=false&modal=false&floating=true");
@@ -50,6 +51,11 @@ void DiagnosticsActionsController::init()
     dispatcher()->reg(this, "diagnostic-show-engraving-elements", [this]() { openUri(ENGRAVING_ELEMENTS_URI, false); });
     dispatcher()->reg(this, "diagnostic-save-diagnostic-files", this, &DiagnosticsActionsController::saveDiagnosticFiles);
     dispatcher()->reg(this, "diagnostic-show-actions", [this]() { openUri(ACTIONS_LIST_URI); });
+
+    dispatcher()->reg(this, ActionQuery("action://diagnostic/actions/query"), this, &DiagnosticsActionsController::onActionQuery);
+    dispatcher()->reg(this, ActionQuery("action://diagnostic/actions/query_params1"), this, &DiagnosticsActionsController::onActionQuery);
+    dispatcher()->reg(this, ActionQuery("action://diagnostic/actions/query_params2?param1=val1"),
+                      this, &DiagnosticsActionsController::onActionQuery);
 }
 
 void DiagnosticsActionsController::openUri(const UriQuery& uri, bool isSingle)
@@ -67,4 +73,9 @@ void DiagnosticsActionsController::saveDiagnosticFiles()
     if (!ret) {
         LOGE() << ret.toString();
     }
+}
+
+void DiagnosticsActionsController::onActionQuery(const actions::ActionQuery& q)
+{
+    interactive()->info("Test query action", q.toString());
 }

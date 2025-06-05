@@ -86,6 +86,22 @@ static void clearRegistry()
 }
 }
 
+class DockWindow::UniqueConnectionHolder : public QObject
+{
+    Q_OBJECT
+public:
+    UniqueConnectionHolder(DockPageView* page, DockWindow* parent)
+        : QObject(parent), m_page(page) {}
+
+    void alignTopLevelToolBars()
+    {
+        static_cast<DockWindow*>(parent())->alignTopLevelToolBars(m_page);
+    }
+
+private:
+    DockPageView* m_page = nullptr;
+};
+
 DockWindow::DockWindow(QQuickItem* parent)
     : QQuickItem(parent), muse::Injectable(muse::iocCtxForQmlObject(this)),
     m_toolBars(this),
@@ -96,6 +112,12 @@ DockWindow::DockWindow(QQuickItem* parent)
 DockWindow::~DockWindow()
 {
     dockWindowProvider()->deinit();
+
+    // Without this, the connections would be deleted by the QObject destructor,
+    // because they are child objects of this. But since they use DockWindow-
+    // specific code (rather than QObject-specific), we need to delete them
+    // before the end of the DockWindow destructor.
+    qDeleteAll(m_pageConnections);
 }
 
 void DockWindow::componentComplete()
@@ -110,6 +132,10 @@ void DockWindow::componentComplete()
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
     connect(this, &QQuickItem::windowChanged, this, &DockWindow::windowPropertyChanged);
+
+    connect(this, &QQuickItem::widthChanged, this, [this]() {
+        adjustContentForAvailableSpace(m_currentPage);
+    });
 }
 
 void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
@@ -122,7 +148,7 @@ void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeom
     //! NOTE: it is important to reset the current minimum width for all top-level toolbars
     //! Otherwise, the window content can be displaced after LayoutWidget::onResize(QSize newSize)
     //! due to lack of free space
-    QList<DockToolBarView*> topToolBars = topLevelToolBars(m_currentPage);
+    const QList<DockToolBarView*> topToolBars = topLevelToolBars(m_currentPage);
     for (DockToolBarView* toolBar : topToolBars) {
         toolBar->setMinimumWidth(toolBar->contentWidth());
     }
@@ -171,14 +197,7 @@ void DockWindow::init()
 {
     clearRegistry();
 
-#ifdef Q_OS_MACOS
-    /*! TODO: restoring of the window geometry is temporarily disabled for macOS
-     * because it has a problem with saving a normal geometry of main window on KDDockWidgets
-     * see https://github.com/KDAB/KDDockWidgets/pull/273
-    */
-#else
     restoreGeometry();
-#endif
 
     dockWindowProvider()->init(this);
 
@@ -247,9 +266,9 @@ void DockWindow::loadPage(const QString& uri, const QVariantMap& params)
     }
 }
 
-bool DockWindow::isDockOpen(const QString& dockName) const
+bool DockWindow::isDockOpenAndCurrentInFrame(const QString& dockName) const
 {
-    return m_currentPage && m_currentPage->isDockOpen(dockName);
+    return m_currentPage && m_currentPage->isDockOpenAndCurrentInFrame(dockName);
 }
 
 void DockWindow::toggleDock(const QString& dockName)
@@ -298,6 +317,11 @@ QQuickItem& DockWindow::asItem() const
 void DockWindow::restoreDefaultLayout()
 {
     TRACEFUNC;
+
+    //! HACK: notify about upcoming change of current URI
+    //! so that all subscribers of this channel finish their work.
+    //! For example, our popups and tooltips will close.
+    interactiveProvider()->currentUriAboutToBeChanged().notify();
 
     if (m_currentPage) {
         for (DockBase* dock : m_currentPage->allDocks()) {
@@ -367,23 +391,14 @@ void DockWindow::loadPanels(const DockPageView* page)
 {
     TRACEFUNC;
 
-    auto addPanel = [this, page](DockPanelView* panel, Location location) {
-        for (DockPanelView* destinationPanel : page->panels()) {
-            if (panel->isVisible() && destinationPanel->isTabAllowed(panel)) {
-                registerDock(panel);
-
-                destinationPanel->addPanelAsTab(panel);
-                destinationPanel->setCurrentTabIndex(0);
-
-                return;
-            }
-        }
-
-        addDock(panel, location);
-    };
-
     for (DockPanelView* panel : page->panels()) {
-        addPanel(panel, panel->location());
+        if (DockPanelView* destinationPanel = findDestinationForPanel(page, panel)) {
+            addPanelAsTab(panel, destinationPanel);
+            continue;
+        }
+        const Location location = panel->location();
+        const bool isSideLocation = location == Location::Left || location == Location::Right;
+        addDock(panel, location, isSideLocation ? page->centralDock() : nullptr);
     }
 
     for (Location location : POSSIBLE_LOCATIONS) {
@@ -447,6 +462,16 @@ void DockWindow::alignTopLevelToolBars(const DockPageView* page)
     lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth() + deltaForLastCentralToolBar);
 }
 
+DockPanelView* DockWindow::findDestinationForPanel(const DockPageView* page, const DockPanelView* panel) const
+{
+    for (DockPanelView* destinationPanel : page->panels()) {
+        if (destinationPanel->isTabAllowed(panel)) {
+            return destinationPanel;
+        }
+    }
+    return nullptr;
+}
+
 void DockWindow::addDock(DockBase* dock, Location location, const DockBase* relativeTo)
 {
     TRACEFUNC;
@@ -463,6 +488,16 @@ void DockWindow::addDock(DockBase* dock, Location location, const DockBase* rela
     m_mainWindow->addDockWidget(dock->dockWidget(), locationToKLocation(location), relativeDock, options);
 }
 
+void DockWindow::addPanelAsTab(DockPanelView* panel, DockPanelView* destinationPanel)
+{
+    registerDock(panel);
+
+    if (panel->isVisible()) {
+        destinationPanel->addPanelAsTab(panel);
+        destinationPanel->setCurrentTabIndex(0);
+    }
+}
+
 void DockWindow::registerDock(DockBase* dock)
 {
     TRACEFUNC;
@@ -476,6 +511,39 @@ void DockWindow::registerDock(DockBase* dock)
 
     if (!registry->containsDockWidget(dockWidget->uniqueName())) {
         registry->registerDockWidget(dockWidget);
+    }
+}
+
+void DockWindow::handleUnknownDock(const DockPageView* page, DockBase* unknownDock)
+{
+    DockPanelView* unknownPanel = dynamic_cast<DockPanelView*>(unknownDock);
+    if (!unknownPanel) {
+        addDock(unknownDock, unknownDock->location(), page->centralDock());
+        return;
+    }
+
+    if (DockPanelView* destinationPanel = findDestinationForPanel(page, unknownPanel)) {
+        addPanelAsTab(unknownPanel, destinationPanel);
+        return;
+    }
+
+    DockingHolderView* holder = page->holder(DockType::Panel, unknownPanel->location());
+    IF_ASSERT_FAILED(holder) {
+        addDock(unknownDock, unknownDock->location(), page->centralDock());
+        return;
+    }
+
+    registerDock(unknownPanel);
+
+    holder->open(); // init the frame...
+
+    KDDockWidgets::Frame* frame = holder->dockWidget()->frame();
+    frame->addWidget(unknownPanel->dockWidget());
+
+    holder->close();
+
+    if (!unknownPanel->isVisible()) {
+        unknownPanel->close();
     }
 }
 
@@ -498,12 +566,16 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
     }
 
     loadPageContent(newPage);
-    restorePageState(newPage->objectName());
+    restorePageState(newPage);
     initDocks(newPage);
 
     newPage->setParams(params);
 
     m_currentPage = newPage;
+
+    connect(m_currentPage, &DockPageView::layoutRequested,
+            this, &DockWindow::forceLayout, Qt::UniqueConnection);
+
     m_currentPage->setVisible(true);
 
     return true;
@@ -547,16 +619,35 @@ void DockWindow::savePageState(const QString& pageName)
     m_reloadCurrentPageAllowed = true;
 }
 
-void DockWindow::restorePageState(const QString& pageName)
+void DockWindow::restorePageState(const DockPageView* page)
 {
     TRACEFUNC;
 
+    const QString& pageName = page->objectName();
+
     ValNt<QByteArray> pageStateValNt = uiConfiguration()->pageState(pageName);
+    const bool layoutIsEmpty = pageStateValNt.val.isEmpty();
+
+    QSet<DockBase*> unknownDocks;
+    if (!layoutIsEmpty) {
+        for (DockBase* dock : page->allDocks()) {
+            const KDDockWidgets::DockWidgetBase* dockWidget = dock->dockWidget();
+            if (!pageStateValNt.val.contains(dockWidget->uniqueName().toLocal8Bit())) {
+                unknownDocks.insert(dock);
+            }
+        }
+    }
 
     /// NOTE: Do not restore geometry
     bool ok = restoreLayout(pageStateValNt.val, true /*restoreRelativeToMainWindow*/);
     if (!ok) {
         LOGE() << "Could not restore the state of " << pageName << "!";
+    }
+
+    if (!layoutIsEmpty) {
+        for (DockBase* dock : unknownDocks) {
+            handleUnknownDock(page, dock);
+        }
     }
 
     if (!pageStateValNt.notification.isConnected()) {
@@ -601,6 +692,11 @@ bool DockWindow::checkLayoutIsCorrupted() const
     return false;
 }
 
+void DockWindow::forceLayout()
+{
+    m_mainWindow->layoutEqually();
+}
+
 QByteArray DockWindow::windowState() const
 {
     TRACEFUNC;
@@ -637,7 +733,13 @@ void DockWindow::initDocks(DockPageView* page)
 {
     TRACEFUNC;
 
+    //! before init we should correct toolbars sizes
+    adjustContentForAvailableSpace(page);
+
     for (DockToolBarView* toolbar : m_toolBars.list()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+        toolbar->setParentItem(this);
+#endif
         toolbar->init();
     }
 
@@ -648,19 +750,86 @@ void DockWindow::initDocks(DockPageView* page)
 
     alignTopLevelToolBars(page);
 
-    for (DockToolBarView* toolbar : topLevelToolBars(page)) {
-        connect(toolbar, &DockToolBarView::floatingChanged, this, [this, page]() {
-            alignTopLevelToolBars(page);
-        }, Qt::UniqueConnection);
-
-        connect(toolbar, &DockToolBarView::contentSizeChanged, this, [this, page]() {
-            alignTopLevelToolBars(page);
-        }, Qt::UniqueConnection);
-
-        connect(toolbar, &DockToolBarView::visibleChanged, this, [this, page]() {
-            alignTopLevelToolBars(page);
-        }, Qt::UniqueConnection);
+    if (!m_pageConnections.contains(page)) {
+        m_pageConnections[page] = new UniqueConnectionHolder(page, this);
     }
+
+    UniqueConnectionHolder* holder = m_pageConnections[page];
+
+    for (DockToolBarView* toolbar : topLevelToolBars(page)) {
+        connect(toolbar, &DockToolBarView::floatingChanged,
+                holder, &UniqueConnectionHolder::alignTopLevelToolBars, Qt::UniqueConnection);
+
+        connect(toolbar, &DockToolBarView::contentSizeChanged,
+                holder, &UniqueConnectionHolder::alignTopLevelToolBars, Qt::UniqueConnection);
+
+        connect(toolbar, &DockToolBarView::visibleChanged,
+                holder, &UniqueConnectionHolder::alignTopLevelToolBars, Qt::UniqueConnection);
+    }
+}
+
+void DockWindow::adjustContentForAvailableSpace(DockPageView* page)
+{
+    if (!page) {
+        return;
+    }
+
+    int spaceWidth = width();
+
+    auto adjustDocks = [&spaceWidth](QList<DockBase*> docks) {
+        int width = 0;
+        for (DockBase* dock : docks) {
+            width += dock->contentWidth();
+        }
+
+        docks.erase(std::remove_if(docks.begin(), docks.end(), [](const DockBase* dock){
+            return dock->compactPriorityOrder() == -1;
+        }), docks.end());
+
+        if (docks.empty()) {
+            return;
+        }
+
+        std::sort(docks.begin(), docks.end(), [](const DockBase* dock1, DockBase* dock2) {
+            return dock1->compactPriorityOrder() < dock2->compactPriorityOrder();
+        });
+
+        if (width >= spaceWidth) {
+            for (DockBase* dock : docks) {
+                if (!dock->isCompact()) {
+                    dock->setIsCompact(true);
+
+                    width -= dock->nonCompactWidth();
+                    width += dock->width();
+                }
+            }
+        } else {
+            for (int i = docks.size() - 1; i >= 0; i--) {
+                DockBase* dock = docks.at(i);
+                if (!dock->isCompact()) {
+                    continue;
+                }
+
+                int actualWidth = dock->contentWidth();
+                int nonCompactWidth = dock->nonCompactWidth();
+                if (width - actualWidth + nonCompactWidth < spaceWidth) {
+                    dock->setIsCompact(false);
+                }
+
+                break;
+            }
+        }
+    };
+
+    QList<DockBase*> topLevelToolBarsDocks;
+
+    for (DockToolBarView* toolBar : topLevelToolBars(page)) {
+        if (!toolBar->dockWidget()->isFloating()) {
+            topLevelToolBarsDocks << toolBar;
+        }
+    }
+
+    adjustDocks(topLevelToolBarsDocks);
 }
 
 void DockWindow::notifyAboutDocksOpenStatus()
@@ -702,3 +871,5 @@ QList<DockToolBarView*> DockWindow::topLevelToolBars(const DockPageView* page) c
 
     return toolBars;
 }
+
+#include "dockwindow.moc"

@@ -111,7 +111,6 @@ public:
     std::vector<PointF> gripsPositions(const EditData&) const override;
     bool isMovable() const override { return true; }
     bool isEditable() const override { return true; }
-    void endEdit(EditData&) override;
     void editDrag(EditData&) override;
 
     void clearBeamSegments() override;

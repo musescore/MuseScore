@@ -167,6 +167,10 @@ TEST_F(Mei_Tests, mei_fig_bass_01) {
     meiReadTest("fig-bass-01");
 }
 
+TEST_F(Mei_Tests, mei_fingering_01) {
+    meiReadTest("fingering-01");
+}
+
 TEST_F(Mei_Tests, mei_gracenote_01) {
     meiReadTest("gracenote-01");
 }
@@ -179,6 +183,10 @@ TEST_F(Mei_Tests, mei_hairpin_01) {
     meiReadTest("hairpin-01");
 }
 
+TEST_F(Mei_Tests, mei_harp_01) {
+    meiReadTest("harp-01");
+}
+
 TEST_F(Mei_Tests, mei_jump_01) {
     meiReadTest("jump-01");
 }
@@ -189,6 +197,10 @@ TEST_F(Mei_Tests, mei_jump_02) {
 
 TEST_F(Mei_Tests, mei_key_signature_01) {
     meiReadTest("key-signature-01");
+}
+
+TEST_F(Mei_Tests, mei_midi_01) {
+    meiReadTest("midi-01");
 }
 
 TEST_F(Mei_Tests, mei_label_01) {
@@ -271,6 +283,10 @@ TEST_F(Mei_Tests, mei_score_02) {
     meiReadTest("score-02");
 }
 
+TEST_F(Mei_Tests, mei_score_03) {
+    meiReadTest("score-03");
+}
+
 TEST_F(Mei_Tests, mei_slur_01) {
     meiReadTest("slur-01");
 }
@@ -301,6 +317,10 @@ TEST_F(Mei_Tests, mei_time_signature_02) {
 
 TEST_F(Mei_Tests, mei_transpose_01) {
     meiReadTest("transpose-01");
+}
+
+TEST_F(Mei_Tests, mei_trill_01) {
+    meiReadTest("trill-01");
 }
 
 TEST_F(Mei_Tests, mei_tuplet_01) {

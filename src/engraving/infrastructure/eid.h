@@ -22,6 +22,7 @@
 #ifndef MU_ENGRAVING_EID_H
 #define MU_ENGRAVING_EID_H
 
+#include <bitset>
 #include <cstdint>
 #include <string>
 #include <string_view>
@@ -34,33 +35,47 @@ namespace mu::engraving {
 class EID
 {
 public:
-    EID(ElementType type = ElementType::INVALID, uint32_t id = 0);
+    bool isValid() const { return m_first != INVALID || m_second != INVALID; }
 
-    bool isValid() const { return m_type != ElementType::INVALID && m_id != 0; }
-
-    ElementType type() const { return m_type; }
-    uint32_t id() const { return m_id; }
-
-    inline bool operator ==(const EID& other) const { return m_type == other.m_type && m_id == other.m_id; }
-    inline bool operator !=(const EID& other) const { return !this->operator ==(other); }
-
-    uint64_t toUint64() const;
-    static EID fromUint64(uint64_t v);
+    inline bool operator ==(const EID& other) const { return m_first == other.m_first && m_second == other.m_second; }
+    inline bool operator !=(const EID& other) const { return m_first != other.m_first || m_second != other.m_second; }
 
     std::string toStdString() const;
     static EID fromStdString(const std::string& v);
     static EID fromStdString(const std::string_view& v);
+    static EID newUnique();
+    static EID invalid() { return EID(INVALID, INVALID); }
+
+    // FOR UNIT TESTING
+    static EID newUniqueTestMode(uint64_t& maxVal);
+    static void updateMaxValTestMode(const EID& curEID, uint64_t& maxVal);
 
 private:
+    EID() = delete;
+    EID(uint64_t f, uint64_t s)
+        : m_first(f), m_second(s) {}
 
-    ElementType m_type = ElementType::INVALID;
-    uint32_t m_id = 0;
+    static constexpr uint64_t INVALID = uint64_t(-1);
+
+    uint64_t m_first = INVALID;
+    uint64_t m_second = INVALID;
+
+    friend struct std::hash<EID>;
 };
 }
 
+template<>
+struct std::hash<mu::engraving::EID>
+{
+    size_t operator()(const mu::engraving::EID& eid) const
+    {
+        return std::hash<uint64_t>()(eid.m_first) ^ (std::hash<uint64_t>()(eid.m_second) << 1);
+    }
+};
+
 inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const mu::engraving::EID& v)
 {
-    s << "[" << static_cast<int>(v.type()) << "] " << v.id();
+    s << v.toStdString();
     return s;
 }
 

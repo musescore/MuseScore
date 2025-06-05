@@ -20,26 +20,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_UTILS_H
-#define MU_ENGRAVING_UTILS_H
+#pragma once
 
 #include "../types/types.h"
+#include "types.h"
 
 #include "interval.h"
 
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {
+class Score;
 class Chord;
 class EngravingItem;
 class KeySig;
 class Note;
 class Rest;
+class Measure;
+class Score;
 class Segment;
 class System;
+class Staff;
 class Tuplet;
+class Volta;
+struct NoteVal;
 
-enum class Key;
+enum class Key : signed char;
 
 extern RectF handleRect(const PointF& pos);
 
@@ -67,7 +73,7 @@ extern Note* prevChordNote(Note* note);
 extern Segment* nextSeg1(Segment* s);
 extern Segment* prevSeg1(Segment* seg);
 
-extern Note* searchTieNote(Note* note);
+extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr, const bool disableOverRepeats = true);
 extern Note* searchTieNote114(Note* note);
 
 extern int absStep(int pitch);
@@ -79,9 +85,12 @@ extern int relStep(int pitch, int tpc, ClefType clef);
 extern int pitch2step(int pitch);
 extern int step2pitch(int step);
 int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalDiatonicSteps);
+extern int noteValToLine(const NoteVal& nval, const Staff* staff, const Fraction& tick);
+extern AccidentalVal noteValToAccidentalVal(const NoteVal& nval, const Staff* staff, const Fraction& tick);
+extern int compareNotesPos(const Note* n1, const Note* n2);
 
 extern Segment* skipTuplet(Tuplet* tuplet);
-extern SymIdList timeSigSymIdsFromString(const String&);
+extern SymIdList timeSigSymIdsFromString(const String&, TimeSigStyle timeSigStyle = TimeSigStyle::NORMAL);
 extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
 
 extern double yStaffDifference(const System* system1, const System* system2, staff_idx_t staffIdx1);
@@ -91,6 +100,7 @@ extern bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff
 
 extern void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords, std::vector<Rest*>& rests);
 extern void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords);
+extern std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::vector<Staff*>& staves = {});
 
 extern Interval ornamentIntervalToGeneralInterval(OrnamentInterval interval);
 
@@ -101,5 +111,10 @@ extern bool isFirstSystemKeySig(const KeySig* ks);
 extern String bendAmountToString(int fulls, int quarts);
 
 extern InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item);
+
+extern std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure);
+extern std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure);
+extern bool repeatHasPartialLyricLine(const Measure* endRepeatMeasure);
+extern bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment* secondSeg);
+extern bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment* secondSeg);
 } // namespace mu::engraving
-#endif

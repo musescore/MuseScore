@@ -125,6 +125,15 @@ private:
     BarreMap m_barres;
     MarkerMap m_markers;
     DotMap m_dots;
+
+    int m_strings = 0;
+    int m_frets = 0;
+    int m_fretOffset = 0;
+    int m_maxFrets = 0;
+    bool m_showNut = true;
+    bool m_showFingering = false;
+    Orientation m_orientation = Orientation::VERTICAL;
+    double m_userMag = 1.0;
 };
 
 //---------------------------------------------------------
@@ -155,9 +164,12 @@ public:
     EngravingItem* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
 
-    Segment* segment() const { return toSegment(explicitParent()); }
+    Segment* segment() const;
 
-    static std::shared_ptr<FretDiagram> createFromString(Score* score, const String& s);
+    static std::shared_ptr<FretDiagram> createFromPattern(Score* score, const String& s);
+    static String patternFromDiagram(const FretDiagram* diagram);
+
+    void updateDiagram(const String& harmonyName);
 
     std::vector<LineF> dragAnchorLines() const override;
     PointF pagePos() const override;
@@ -188,12 +200,14 @@ public:
     void setShowNut(bool val) { m_showNut = val; }
     double userMag() const { return m_userMag; }
     void setUserMag(double m) { m_userMag = m; }
-    int numPos() const { return m_numPos; }
+    int numPos() const;
 
     Orientation orientation() const { return m_orientation; }
 
     String harmonyText() const { return m_harmony ? m_harmony->plainText() : String(); }
     void setHarmony(String harmonyText);
+    void linkHarmony(Harmony* harmony);
+    void unlinkHarmony();
     Harmony* harmony() const { return m_harmony; }
 
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
@@ -221,6 +235,8 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
+    void setTrack(track_idx_t val) override;
+
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
 
@@ -228,6 +244,10 @@ public:
     void setShowFingering(bool v) { m_showFingering = v; }
     const std::vector<int>& fingering() const { return m_fingering; }
     void setFingering(std::vector<int> v);
+
+    static FretDiagram* makeFromHarmonyOrFretDiagram(const EngravingItem* harmonyOrFretDiagram);
+
+    bool isInFretBox() const;
 
     friend class FretUndoData;
 
@@ -262,17 +282,25 @@ private:
     FretDiagram(Segment* parent = nullptr);
     FretDiagram(const FretDiagram&);
 
+    void readHarmonyToDiagramFile(const muse::io::path_t& filePath);
+
+    void initDefaultValues();
+
     void removeDot(int s, int f = 0);
     void removeBarre(int f);
     void removeBarres(int string, int fret = 0);
     void removeMarker(int s);
     void removeDotsMarkers(int ss, int es, int fret);
 
-    int m_strings = 6;
-    int m_frets = 4;
+    static void applyDiagramPattern(FretDiagram* diagram, const String& pattern);
+
+    void applyAlignmentToHarmony();
+
+    int m_strings = 0;
+    int m_frets = 0;
     int m_fretOffset = 0;
-    int m_maxFrets = 24;
-    bool m_showNut = true;
+    int m_maxFrets = 0;
+    bool m_showNut = false;
     Orientation m_orientation = Orientation::VERTICAL;
 
     // Barres are stored in the format: K: fret, V: barre struct
@@ -287,7 +315,6 @@ private:
     Harmony* m_harmony = nullptr;
 
     double m_userMag = 1.0;                 // allowed 0.1 - 10.0
-    int m_numPos = 0;
 
     bool m_showFingering = false;
     std::vector<int> m_fingering = std::vector<int>(m_strings, 0);

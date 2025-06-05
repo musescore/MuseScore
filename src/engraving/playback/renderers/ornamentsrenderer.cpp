@@ -28,6 +28,9 @@
 #include "dom/utils.h"
 
 #include "playback/metaparsers/notearticulationsparser.h"
+#include "playback/utils/expressionutils.h"
+
+#include "noterenderer.h"
 
 using namespace mu::engraving;
 using namespace muse;
@@ -294,17 +297,11 @@ const ArticulationTypeSet& OrnamentsRenderer::supportedTypes()
 }
 
 void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationType preferredType,
-                                 const RenderingContext& context,
+                                 const RenderingContext& ctx,
                                  mpe::PlaybackEventList& result)
 {
     const Chord* chord = toChord(item);
-
     IF_ASSERT_FAILED(chord) {
-        return;
-    }
-
-    const Score* score = chord->score();
-    IF_ASSERT_FAILED(score) {
         return;
     }
 
@@ -314,8 +311,11 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
     }
 
     IntervalsInfo intervalsInfo;
-    if (const Ornament* ornament = chord->findOrnament(true)) {
+    bool isArticulation = false;
+
+    if (Ornament* ornament = chord->findOrnament(true)) {
         intervalsInfo = makeIntervalsInfo(ornament->intervalBelow(), ornament->intervalAbove());
+        isArticulation = muse::contains(chord->articulations(), static_cast<Articulation*>(ornament));
     } else {
         intervalsInfo = makeIntervalsInfo(DEFAULT_ORNAMENT_INTERVAL, DEFAULT_ORNAMENT_INTERVAL);
     }
@@ -323,19 +323,39 @@ void OrnamentsRenderer::doRender(const EngravingItem* item, const ArticulationTy
     const DisclosurePattern& nominalPattern = search->second;
 
     for (const Note* note : chord->notes()) {
-        if (!isNotePlayable(note, context.commonArticulations)) {
+        if (!NoteRenderer::shouldRender(note, ctx, ctx.commonArticulations)) {
             continue;
         }
 
-        NominalNoteCtx noteCtx(note, context);
-        NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.chordCtx.commonArticulations);
+        RenderingContext ornamentCtx(ctx);
+        if (isArticulation && note->tieFor()) {
+            applyTiedNotesDuration(note, preferredType, ornamentCtx);
+        }
 
-        convert(score, preferredType, nominalPattern.buildActualPattern(note, intervalsInfo, context.beatsPerSecond.val),
+        NominalNoteCtx noteCtx(note, ornamentCtx);
+        NoteArticulationsParser::buildNoteArticulationMap(note, noteCtx.chordCtx, noteCtx.articulations);
+
+        convert(preferredType, nominalPattern.buildActualPattern(note, intervalsInfo, ornamentCtx.beatsPerSecond.val),
                 std::move(noteCtx), result);
     }
 }
 
-void OrnamentsRenderer::convert(const Score* score, const ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
+void OrnamentsRenderer::applyTiedNotesDuration(const Note* note, const ArticulationType ornamentType, RenderingContext& ctx)
+{
+    const Note* lastTiedNote = note->lastTiedNote(false);
+    if (!lastTiedNote || lastTiedNote == note) {
+        return;
+    }
+
+    ctx.nominalPositionEndTick = lastTiedNote->chord()->endTick().ticks();
+    ctx.nominalDuration = timestampFromTicks(ctx.score, ctx.nominalPositionEndTick + ctx.positionTickOffset) - ctx.nominalTimestamp;
+    ctx.nominalDurationTicks = ctx.nominalPositionEndTick - ctx.nominalPositionStartTick;
+
+    mpe::ArticulationMeta& meta = ctx.commonArticulations.at(ornamentType).meta;
+    meta.overallDuration = ctx.nominalDuration;
+}
+
+void OrnamentsRenderer::convert(const ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
                                 mpe::PlaybackEventList& result)
 {
     if (noteCtx.chordCtx.nominalDurationTicks <= pattern.boundaries.lowTempoDurationTicks) {
@@ -345,7 +365,7 @@ void OrnamentsRenderer::convert(const Score* score, const ArticulationType type,
 
     // convert prefix
     if (!pattern.prefixPitchOffsets.empty()) {
-        createEvents(score, type, noteCtx, 1, pattern.prefixDurationTicks,
+        createEvents(type, noteCtx, 1, pattern.prefixDurationTicks,
                      noteCtx.chordCtx.nominalDurationTicks, pattern.prefixPitchOffsets, result);
     }
 
@@ -362,7 +382,7 @@ void OrnamentsRenderer::convert(const Score* score, const ArticulationType type,
         if (alterationsCount == 0) {
             result.emplace_back(buildNoteEvent(std::move(noteCtx)));
         } else {
-            createEvents(score, type, noteCtx, alterationsCount,
+            createEvents(type, noteCtx, alterationsCount,
                          noteCtx.chordCtx.nominalDurationTicks - pattern.prefixDurationTicks - pattern.suffixDurationTicks,
                          noteCtx.chordCtx.nominalDurationTicks,
                          pattern.alterationStepPitchOffsets, result);
@@ -371,7 +391,7 @@ void OrnamentsRenderer::convert(const Score* score, const ArticulationType type,
 
     // convert suffix
     if (!pattern.suffixPitchOffsets.empty()) {
-        createEvents(score, type, noteCtx, 1,
+        createEvents(type, noteCtx, 1,
                      pattern.suffixDurationTicks,
                      noteCtx.chordCtx.nominalDurationTicks,
                      pattern.suffixPitchOffsets, result);
@@ -386,7 +406,7 @@ int OrnamentsRenderer::alterationsNumberByTempo(const double beatsPerSeconds, co
     return static_cast<int>(std::max(subNotesCount / 2, 0.f));
 }
 
-void OrnamentsRenderer::createEvents(const Score* score, const ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
+void OrnamentsRenderer::createEvents(const ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
                                      const int availableDurationTicks, const int overallDurationTicks,
                                      const std::vector<mpe::pitch_level_t>& pitchOffsets, mpe::PlaybackEventList& result)
 {
@@ -403,11 +423,11 @@ void OrnamentsRenderer::createEvents(const Score* score, const ArticulationType 
             subNoteCtx.duration = durationStep;
             subNoteCtx.pitchLevel += pitchOffsets.at(alterationSubNoteIdx);
 
-            int utick = timestampToTick(score, subNoteCtx.timestamp);
+            int utick = timestampToTick(subNoteCtx.chordCtx.score, subNoteCtx.timestamp);
             subNoteCtx.dynamicLevel = noteCtx.chordCtx.playbackCtx->appliableDynamicLevel(trackIdx, utick);
 
             updateArticulationBoundaries(type, subNoteCtx.timestamp,
-                                         subNoteCtx.duration, subNoteCtx.chordCtx.commonArticulations);
+                                         subNoteCtx.duration, subNoteCtx.articulations);
 
             result.emplace_back(buildNoteEvent(std::move(subNoteCtx)));
 

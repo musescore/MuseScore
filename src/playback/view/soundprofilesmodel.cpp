@@ -44,7 +44,7 @@ void SoundProfilesModel::init()
 
     std::sort(m_profiles.begin(), m_profiles.end(), [this](const SoundProfile& left, const SoundProfile& right) {
         if (left.name == config()->basicSoundProfileName()
-            && right.name == config()->museSoundProfileName()) {
+            && right.name == config()->museSoundsProfileName()) {
             return true;
         }
 
@@ -162,10 +162,10 @@ bool SoundProfilesModel::askAboutChangingSounds()
         muse::IInteractive::ButtonData(changeBtn, muse::trc("playback", "Change sounds"), true /*accent*/)
     };
 
-    muse::IInteractive::Result result = interactive()->warning(muse::trc("playback", "Are you sure you want to change sounds?"),
-                                                               muse::trc("playback",
-                                                                         "Sound flags may be reset, but staff text will remain. This action can’t be undone."),
-                                                               buttons, changeBtn, options);
+    muse::IInteractive::Result result = interactive()->warningSync(muse::trc("playback", "Are you sure you want to change sounds?"),
+                                                                   muse::trc("playback",
+                                                                             "Sound flags may be reset, but staff text will remain. This action can’t be undone."),
+                                                                   buttons, changeBtn, options);
 
     if (result.button() == changeBtn) {
         if (!result.showAgain()) {

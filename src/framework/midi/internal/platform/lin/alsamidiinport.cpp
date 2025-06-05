@@ -26,9 +26,8 @@
 #include <alsa/seq_midi_event.h>
 
 #include "midierrors.h"
-#include "stringutils.h"
-#include "translation.h"
-#include "defer.h"
+#include "global/translation.h"
+#include "global/defer.h"
 #include "log.h"
 
 struct muse::midi::AlsaMidiInPort::Alsa {
@@ -336,7 +335,7 @@ void AlsaMidiInPort::doProcess()
             continue;
         }
 
-        e = Event::fromMIDI10Package(data);
+        e = Event::fromMidi10Package(data);
 
         e = e.toMIDI20();
         if (e) {

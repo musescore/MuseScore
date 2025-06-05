@@ -26,6 +26,7 @@
 #include "dom/chord.h"
 #include "dom/dynamic.h"
 #include "dom/expression.h"
+#include "dom/laissezvib.h"
 #include "dom/masterscore.h"
 #include "dom/note.h"
 #include "dom/score.h"
@@ -109,6 +110,7 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
 
     if (masterScore->mscVersion() < 450) {
         convertTextLineToNoteAnchoredLine(masterScore);
+        convertLaissezVibArticToTie(masterScore);
     }
 }
 
@@ -413,7 +415,7 @@ void CompatUtils::splitArticulations(MasterScore* masterScore)
             newArtic->setPlayArticulation(combinedArtic->playArticulation());
             newArtic->setVisible(combinedArtic->visible());
             newArtic->setOrnamentStyle(combinedArtic->ornamentStyle());
-            LinkedObjects* links = new LinkedObjects(masterScore);
+            LinkedObjects* links = new LinkedObjects();
             links->push_back(newArtic);
             newArtic->setLinks(links);
             parentChord->add(newArtic);
@@ -813,5 +815,54 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
         parent->add(newLine);
 
         delete oldLine;
+    }
+}
+
+void CompatUtils::convertLaissezVibArticToTie(MasterScore* masterScore)
+{
+    std::set<Articulation*> oldArtics; // NoteLines used to be TextLines
+
+    for (Measure* meas = masterScore->firstMeasure(); meas; meas = meas->nextMeasure()) {
+        for (Segment& seg : meas->segments()) {
+            if (!seg.isChordRestType()) {
+                continue;
+            }
+            for (EngravingItem* item : seg.elist()) {
+                if (!item || !item->isChord()) {
+                    continue;
+                }
+                Chord* chord = toChord(item);
+                for (Articulation* a : chord->articulations()) {
+                    if (!a->isLaissezVib()) {
+                        continue;
+                    }
+                    oldArtics.insert(a);
+
+                    LinkedObjects* links = a->links();
+                    if (!links || links->empty()) {
+                        continue;
+                    }
+
+                    for (EngravingObject* linked : *links) {
+                        if (linked != a && linked && linked->isLaissezVib()) {
+                            oldArtics.insert(toArticulation(linked));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (Articulation* oldArtic : oldArtics) {
+        Chord* parentChord = toChord(oldArtic->parentItem());
+        Note* parentNote = oldArtic->up() ? parentChord->upNote() : parentChord->downNote();
+
+        parentChord->remove(oldArtic);
+
+        LaissezVib* lv = Factory::createLaissezVib(parentNote);
+        lv->setParent(parentNote);
+        parentNote->add(lv);
+
+        delete oldArtic;
     }
 }

@@ -63,6 +63,9 @@ public:
     bool isMiddleType() const { return spannerSegmentType() == SpannerSegmentType::MIDDLE; }
     bool isEndType() const { return spannerSegmentType() == SpannerSegmentType::END; }
 
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
+
     void setSystem(System* s);
     System* system() const { return toSystem(explicitParent()); }
 
@@ -115,7 +118,7 @@ public:
     std::list<EngravingObject*> linkListForPropertyPropagation() const override;
     bool isPropertyLinkedToMaster(Pid id) const override;
 
-    bool isUserModified() const override;
+    virtual bool isUserModified() const override;
 
     bool allowTimeAnchor() const override;
 
@@ -152,7 +155,7 @@ class Spanner : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Spanner)
 public:
-    enum class Anchor {
+    enum class Anchor : unsigned char {
         SEGMENT, MEASURE, CHORD, NOTE
     };
 
@@ -173,9 +176,9 @@ public:
     void setTicks(const Fraction&);
 
     bool isVoiceSpecific() const;
-    track_idx_t track2() const { return m_track2; }
-    void setTrack2(track_idx_t v) { m_track2 = v; }
-    track_idx_t effectiveTrack2() const { return m_track2 == muse::nidx ? track() : m_track2; }
+    track_idx_t track2() const;
+    void setTrack2(track_idx_t v);
+    track_idx_t effectiveTrack2() const;
 
     bool broken() const { return m_broken; }
     void setBroken(bool v) { m_broken = v; }
@@ -229,7 +232,7 @@ public:
     Measure* findEndMeasure() const;
 
     void setStartElement(EngravingItem* e);
-    void setEndElement(EngravingItem* e);
+    virtual void setEndElement(EngravingItem* e);
 
     ChordRest* startCR();
     ChordRest* endCR();
@@ -279,6 +282,7 @@ protected:
     virtual void doComputeEndElement();
 
 private:
+    bool canBeCrossStaff() const;
 
     friend class SpannerSegment;
 

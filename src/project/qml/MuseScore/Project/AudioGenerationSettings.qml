@@ -55,6 +55,10 @@ RadioButtonGroup {
         id: settingsModel
     }
 
+    Component.onCompleted: {
+        settingsModel.load()
+    }
+
     model: [
         { text: qsTrc("project/save", "Never"), type: GenerateAudioTimePeriodType.Never },
         { text: qsTrc("project/save", "Always"), type: GenerateAudioTimePeriodType.Always },
@@ -121,10 +125,11 @@ RadioButtonGroup {
     Component {
         id: numberOfSavesComp
 
-        RowLayout {
+        Row {
             id: numberOfSavesItem
 
             width: parent.width
+            height: button.implicitHeight
             spacing: 6
 
             // "Every: %1 saves" needs to be one string for correct translatability. We then split the translated version.
@@ -152,7 +157,8 @@ RadioButtonGroup {
             RoundedRadioButton {
                 id: button
 
-                Layout.minimumWidth: 80
+                anchors.verticalCenter: parent.verticalCenter
+                width: Math.max(implicitWidth, 80)
 
                 text: numberOfSavesItem.textPart1.trim()
                 checked: settingsModel.timePeriodType === numberOfSavesItem.type
@@ -170,7 +176,8 @@ RadioButtonGroup {
             }
 
             IncrementalPropertyControl {
-                Layout.preferredWidth: numberOfSavesItem.textPart2InSpinbox ? 96 : 60
+                anchors.verticalCenter: parent.verticalCenter
+                width: numberOfSavesItem.textPart2InSpinbox ? 96 : 60
 
                 minValue: 2
                 maxValue: 30
@@ -190,7 +197,8 @@ RadioButtonGroup {
             }
 
             StyledTextLabel {
-                Layout.fillWidth: true
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width - x
 
                 text: numberOfSavesItem.textPart2InSpinbox ? "" : numberOfSavesItem.textPart2.trim()
                 horizontalAlignment: Text.AlignLeft

@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
+      <maskBarlinesForText>0</maskBarlinesForText>
+      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
+      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
+      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
+      <showCourtesiesRepeats>0</showCourtesiesRepeats>
+      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
+      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
+      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
       <spatium>1.76389</spatium>
       </Style>
     <showInvisible>1</showInvisible>
@@ -22,7 +31,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
@@ -59,7 +69,8 @@
         </Instrument>
       </Part>
     <Part id="2">
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>Standard</name>
           </StaffType>
@@ -103,44 +114,46 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <linkedMain/>
+        <eid>E_E</eid>
         </VBox>
       <Measure>
+        <eid>F_F</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <linkedMain/>
+            <eid>G_G</eid>
             </Clef>
           <TimeSig>
-            <linkedMain/>
+            <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
-            <linkedMain/>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
+              <eid>J_J</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Rest>
-            <linkedMain/>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <linkedMain/>
+            <eid>L_L</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>M_M</eid>
         <voice>
           <Rest>
-            <linkedMain/>
+            <eid>N_N</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -154,39 +167,39 @@
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
-            <linkedMain/>
+            <eid>O_O</eid>
             </Clef>
           <KeySig>
-            <linkedMain/>
+            <eid>P_P</eid>
             <concertKey>0</concertKey>
             <actualKey>3</actualKey>
             </KeySig>
           <TimeSig>
-            <linkedMain/>
+            <eid>Q_Q</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
             <root>17</root>
             <name>7</name>
-            <linkedMain/>
+            <eid>R_R</eid>
             </Harmony>
           <Chord>
-            <linkedMain/>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             <Note>
-              <linkedMain/>
+              <eid>T_T</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>17</tpc2>
               </Note>
             </Chord>
           <Rest>
-            <linkedMain/>
+            <eid>U_U</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <linkedMain/>
+            <eid>V_V</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
@@ -194,7 +207,7 @@
       <Measure>
         <voice>
           <Rest>
-            <linkedMain/>
+            <eid>W_W</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -202,6 +215,7 @@
         </Measure>
       </Staff>
     <Score>
+      <eid>X_X</eid>
       <name>Flute</name>
       <Division>480</Division>
       <Style>
@@ -214,8 +228,9 @@
       <showMargins>0</showMargins>
       <metaTag name="partName">Flute</metaTag>
       <Part id="1">
-        <Staff id="1">
-          <linkedTo>1</linkedTo>
+        <Staff>
+          <eid>Y_Y</eid>
+          <linkedTo>C_C</linkedTo>
           <StaffType group="pitched">
             <name>Standard</name>
             </StaffType>
@@ -254,56 +269,59 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <linked>
-            </linked>
+          <eid>Z_Z</eid>
+          <linkedTo>E_E</linkedTo>
           <Text>
+            <eid>a_a</eid>
             <style>instrument_excerpt</style>
             <text>Flute</text>
             </Text>
           </VBox>
         <Measure>
+          <eid>b_b</eid>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
               <isHeader>1</isHeader>
-              <linked>
-                </linked>
+              <eid>c_c</eid>
+              <linkedTo>G_G</linkedTo>
               </Clef>
             <TimeSig>
-              <linked>
-                </linked>
+              <eid>d_d</eid>
+              <linkedTo>H_H</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Chord>
-              <linked>
-                </linked>
+              <eid>e_e</eid>
+              <linkedTo>I_I</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <linked>
-                  </linked>
+                <eid>f_f</eid>
+                <linkedTo>J_J</linkedTo>
                 <pitch>72</pitch>
                 <tpc>14</tpc>
                 </Note>
               </Chord>
             <Rest>
-              <linked>
-                </linked>
+              <eid>g_g</eid>
+              <linkedTo>K_K</linkedTo>
               <durationType>quarter</durationType>
               </Rest>
             <Rest>
-              <linked>
-                </linked>
+              <eid>h_h</eid>
+              <linkedTo>L_L</linkedTo>
               <durationType>half</durationType>
               </Rest>
             </voice>
           </Measure>
         <Measure>
+          <eid>i_i</eid>
           <voice>
             <Rest>
-              <linked>
-                </linked>
+              <eid>j_j</eid>
+              <linkedTo>N_N</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -312,6 +330,7 @@
         </Staff>
       </Score>
     <Score>
+      <eid>k_k</eid>
       <name>Alto Saxophone</name>
       <Division>480</Division>
       <Style>
@@ -324,8 +343,9 @@
       <showMargins>0</showMargins>
       <metaTag name="partName">Alto Saxophone</metaTag>
       <Part id="2">
-        <Staff id="1">
-          <linkedTo>2</linkedTo>
+        <Staff>
+          <eid>l_l</eid>
+          <linkedTo>D_D</linkedTo>
           <StaffType group="pitched">
             <name>Standard</name>
             </StaffType>
@@ -369,72 +389,72 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <linked>
-            <location>
-              <staves>-1</staves>
-              </location>
-            </linked>
+          <eid>m_m</eid>
+          <linkedTo>E_E</linkedTo>
           <Text>
+            <eid>n_n</eid>
             <style>instrument_excerpt</style>
             <text>Alto Saxophone</text>
             </Text>
           </VBox>
         <Measure>
+          <eid>o_o</eid>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
               <isHeader>1</isHeader>
-              <linked>
-                </linked>
+              <eid>p_p</eid>
+              <linkedTo>O_O</linkedTo>
               </Clef>
             <KeySig>
-              <linked>
-                </linked>
+              <eid>q_q</eid>
+              <linkedTo>P_P</linkedTo>
               <concertKey>0</concertKey>
               <actualKey>3</actualKey>
               </KeySig>
             <TimeSig>
-              <linked>
-                </linked>
+              <eid>r_r</eid>
+              <linkedTo>Q_Q</linkedTo>
               <sigN>4</sigN>
               <sigD>4</sigD>
               </TimeSig>
             <Harmony>
               <root>17</root>
               <name>7</name>
-              <linked>
-                </linked>
+              <eid>s_s</eid>
+              <linkedTo>R_R</linkedTo>
               </Harmony>
             <Chord>
-              <linked>
-                </linked>
+              <eid>t_t</eid>
+              <linkedTo>S_S</linkedTo>
               <durationType>quarter</durationType>
               <Note>
-                <linked>
-                  </linked>
+                <eid>u_u</eid>
+                <linkedTo>T_T</linkedTo>
                 <pitch>60</pitch>
                 <tpc>14</tpc>
                 <tpc2>17</tpc2>
                 </Note>
               </Chord>
             <Rest>
-              <linked>
-                </linked>
+              <eid>v_v</eid>
+              <linkedTo>U_U</linkedTo>
               <durationType>quarter</durationType>
               </Rest>
             <Rest>
-              <linked>
-                </linked>
+              <eid>w_w</eid>
+              <linkedTo>V_V</linkedTo>
               <durationType>half</durationType>
               </Rest>
             </voice>
           </Measure>
         <Measure>
+          <eid>x_x</eid>
           <voice>
             <Rest>
-              <linked>
-                </linked>
+              <eid>y_y</eid>
+              <linkedTo>W_W</linkedTo>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>

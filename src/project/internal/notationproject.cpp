@@ -189,7 +189,8 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
 
     // Load style if present
     if (!stylePath.empty()) {
-        m_engravingProject->masterScore()->loadStyle(stylePath.toQString());
+        muse::io::File styleFile(stylePath);
+        m_engravingProject->masterScore()->loadStyle(styleFile);
     }
 
     mu::engraving::compat::EngravingCompat::doPreLayoutCompatIfNeeded(m_engravingProject->masterScore());
@@ -226,7 +227,7 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
     // Load view settings & solo-mute states (needs to be done after notations are created)
     m_masterNotation->notation()->viewState()->read(reader);
     m_masterNotation->notation()->soloMuteState()->read(reader);
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         if (!excerpt->hasFileName()) {
             continue;
         }
@@ -275,7 +276,8 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const muse::io::path
 
     // Load style if present
     if (!stylePath.empty()) {
-        score->loadStyle(stylePath.toQString());
+        muse::io::File styleFile(stylePath);
+        score->loadStyle(styleFile);
     }
 
     // Init ChordList
@@ -298,7 +300,7 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const muse::io::path
 
     // Setup view state
     m_masterNotation->notation()->viewState()->makeDefault();
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         excerpt->notation()->viewState()->makeDefault();
     }
 
@@ -348,7 +350,7 @@ Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 
     // Setup view state
     m_masterNotation->notation()->viewState()->makeDefault();
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         excerpt->notation()->viewState()->makeDefault();
     }
 
@@ -460,7 +462,7 @@ void NotationProject::setCloudAudioInfo(const CloudAudioInfo& audioInfo)
     m_masterNotation->masterScore()->setMetaTag(AUDIO_COM_URL_TAG, audioInfo.url.toString());
 }
 
-Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode)
+Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode, bool createBackup)
 {
     TRACEFUNC;
 
@@ -481,7 +483,10 @@ Ret NotationProject::save(const muse::io::path_t& path, SaveMode saveMode)
 
         std::string suffix = io::suffix(savePath);
 
-        Ret ret = saveScore(savePath, suffix);
+        // Whether a backup file will be created depends on both the caller's and user's will
+        bool shouldCreateBackup = createBackup && configuration()->createBackupBeforeSaving();
+
+        Ret ret = saveScore(savePath, suffix, shouldCreateBackup);
         if (ret) {
             if (saveMode != SaveMode::SaveCopy) {
                 markAsSaved(savePath);
@@ -625,7 +630,7 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
     // Step 3: create backup if need
     {
         if (generateBackup) {
-            makeCurrentFileAsBackup();
+            makeBackup(targetContainerPath);
         }
     }
 
@@ -691,21 +696,10 @@ Ret NotationProject::doSave(const muse::io::path_t& path, engraving::MscIoMode i
     return make_ret(Ret::Code::Ok);
 }
 
-Ret NotationProject::makeCurrentFileAsBackup()
+Ret NotationProject::makeBackup(muse::io::path_t filePath)
 {
     TRACEFUNC;
 
-    bool create = configuration()->createBackupBeforeSaving();
-    if (!create) {
-        return make_ret(Ret::Code::Ok);
-    }
-
-    if (isNewlyCreated()) {
-        LOGD() << "project just created";
-        return make_ret(Ret::Code::Ok);
-    }
-
-    muse::io::path_t filePath = m_path;
     if (io::suffix(filePath) != engraving::MSCZ) {
         LOGW() << "backup allowed only for MSCZ, currently: " << filePath;
         return make_ret(Ret::Code::Ok);
@@ -713,8 +707,8 @@ Ret NotationProject::makeCurrentFileAsBackup()
 
     Ret ret = fileSystem()->exists(filePath);
     if (!ret) {
-        LOGE() << "project file does not exist";
-        return ret;
+        LOGI() << "Backup won't be created, file does not exist: " << filePath;
+        return make_ret(Ret::Code::Ok);
     }
 
     muse::io::path_t backupPath = configuration()->projectBackupPath(filePath);
@@ -765,7 +759,7 @@ Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection, boo
 
     // Write view settings and excerpt solo-mute states
     m_masterNotation->notation()->viewState()->write(msczWriter);
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         muse::io::path_t path = u"Excerpts/" + excerpt->fileName() + u"/";
         excerpt->notation()->viewState()->write(msczWriter, path);
 
@@ -1026,37 +1020,51 @@ ProjectMeta NotationProject::metaInfo() const
 {
     TRACEFUNC;
 
-    mu::engraving::MasterScore* score = m_masterNotation->masterScore();
+    const engraving::MasterScore* score = m_masterNotation->masterScore();
+    const std::map<String, String>& allTags = score->metaTags();
+
+    const auto initProjectMetaString = [&allTags](QString& string, const String& tag) {
+        const auto search = allTags.find(tag);
+        if (search == allTags.end()) {
+            LOGW() << "Project meta tag not found: " << tag;
+            return;
+        }
+        string = search->second;
+    };
 
     ProjectMeta meta;
     meta.filePath = m_path;
 
-    auto allTags = score->metaTags();
+    initProjectMetaString(meta.title, WORK_TITLE_TAG);
+    initProjectMetaString(meta.subtitle, SUBTITLE_TAG);
+    initProjectMetaString(meta.composer, COMPOSER_TAG);
+    initProjectMetaString(meta.arranger, ARRANGER_TAG);
+    initProjectMetaString(meta.lyricist, LYRICIST_TAG);
+    initProjectMetaString(meta.translator, TRANSLATOR_TAG);
+    initProjectMetaString(meta.copyright, COPYRIGHT_TAG);
 
-    meta.title = allTags[WORK_TITLE_TAG];
-    meta.subtitle = allTags[SUBTITLE_TAG];
-    meta.composer = allTags[COMPOSER_TAG];
-    meta.arranger = allTags[ARRANGER_TAG];
-    meta.lyricist = allTags[LYRICIST_TAG];
-    meta.translator = allTags[TRANSLATOR_TAG];
-    meta.copyright = allTags[COPYRIGHT_TAG];
-    meta.creationDate = QDate::fromString(allTags[CREATION_DATE_TAG], Qt::ISODate);
+    if (allTags.find(CREATION_DATE_TAG) != allTags.end()) {
+        meta.creationDate = QDate::fromString(allTags.at(CREATION_DATE_TAG), Qt::ISODate);
+    } else {
+        LOGW() << "Project meta tag not found: " << CREATION_DATE_TAG;
+    }
 
     meta.partsCount = score->excerpts().size();
 
-    meta.source = allTags[SOURCE_TAG];
-    meta.audioComUrl = allTags[AUDIO_COM_URL_TAG];
-    meta.platform = allTags[PLATFORM_TAG];
+    initProjectMetaString(meta.source, SOURCE_TAG);
+    initProjectMetaString(meta.audioComUrl, AUDIO_COM_URL_TAG);
+    initProjectMetaString(meta.platform, PLATFORM_TAG);
+
     meta.musescoreVersion = score->mscoreVersion();
     meta.musescoreRevision = score->mscoreRevision();
     meta.mscVersion = score->mscVersion();
 
-    for (const String& tag : muse::keys(allTags)) {
+    for (const auto& [tag, value] : allTags) {
         if (isRepresentedInProjectMeta(tag)) {
             continue;
         }
 
-        meta.additionalTags[tag] = allTags[tag].toQString();
+        meta.additionalTags[tag] = value.toQString();
     }
 
     return meta;
@@ -1082,8 +1090,8 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
         { PLATFORM_TAG, meta.platform },
     };
 
-    for (const QString& tag : meta.additionalTags.keys()) {
-        tags[tag] = meta.additionalTags[tag].toString();
+    for (auto it = meta.additionalTags.cbegin(); it != meta.additionalTags.cend(); ++it) {
+        tags[it.key()] = it.value().toString();
     }
 
     MasterScore* score = m_masterNotation->masterScore();

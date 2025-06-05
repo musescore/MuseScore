@@ -52,6 +52,7 @@ public:
     virtual void settingsBeginTransaction() = 0;
     virtual void settingsCommitTransaction() = 0;
     virtual void settingsRollbackTransaction() = 0;
+    virtual void settingsReset() = 0;
     virtual void settingsSetValue(const std::string& key, const Val& value) = 0;
 
     // Resources (files)

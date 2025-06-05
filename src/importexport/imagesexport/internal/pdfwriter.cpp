@@ -65,9 +65,13 @@ Ret PdfWriter::write(INotationPtr notation, io::IODevice& destinationDevice, con
         return false;
     }
 
+    const bool TRANSPARENT_BACKGROUND = muse::value(options, OptionKey::TRANSPARENT_BACKGROUND,
+                                                    Val(configuration()->exportPdfWithTransparentBackground())).toBool();
+
     INotationPainting::Options opt;
     opt.deviceDpi = pdfWriter.logicalDpiX();
     opt.onNewPage = [&pdfWriter]() { pdfWriter.newPage(); };
+    opt.printPageBackground = !TRANSPARENT_BACKGROUND;
 
     notation->painting()->paintPdf(&painter, opt);
 
@@ -107,9 +111,13 @@ Ret PdfWriter::writeList(const INotationPtrList& notations, io::IODevice& destin
         return false;
     }
 
+    const bool TRANSPARENT_BACKGROUND = muse::value(options, OptionKey::TRANSPARENT_BACKGROUND,
+                                                    Val(configuration()->exportPdfWithTransparentBackground())).toBool();
+
     INotationPainting::Options opt;
     opt.deviceDpi = pdfWriter.logicalDpiX();
     opt.onNewPage = [&pdfWriter]() { pdfWriter.newPage(); };
+    opt.printPageBackground = !TRANSPARENT_BACKGROUND;
 
     for (const auto& notation : notations) {
         IF_ASSERT_FAILED(notation) {

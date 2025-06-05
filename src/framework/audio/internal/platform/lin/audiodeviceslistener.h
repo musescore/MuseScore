@@ -35,7 +35,7 @@ class AudioDevicesListener
 public:
     ~AudioDevicesListener();
 
-    using ActualDevicesCallback = std::function<AudioDeviceList()>;
+    using ActualDevicesCallback = std::function<AudioDeviceList ()>;
 
     void startWithCallback(const ActualDevicesCallback& callback);
 

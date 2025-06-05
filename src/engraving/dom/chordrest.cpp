@@ -40,6 +40,7 @@
 #include "instrchange.h"
 #include "keysig.h"
 #include "lyrics.h"
+#include "marker.h"
 #include "measure.h"
 #include "navigate.h"
 #include "note.h"
@@ -54,6 +55,7 @@
 #include "system.h"
 #include "tuplet.h"
 #include "utils.h"
+#include "volta.h"
 
 #include "log.h"
 
@@ -285,7 +287,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         if (!style().styleB(Sid::concertPitch) && !interval.isZero()) {
             interval.flip();
             int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
-            int baseTpc = transposeTpc(harmony->baseTpc(), interval, true);
+            int baseTpc = transposeTpc(harmony->bassTpc(), interval, true);
             score()->undoTransposeHarmony(harmony, rootTpc, baseTpc);
         }
         // render
@@ -642,7 +644,9 @@ void ChordRest::replaceBeam(Beam* newBeam)
 Slur* ChordRest::slur(const ChordRest* secondChordRest) const
 {
     if (secondChordRest == nullptr) {
-        secondChordRest = nextChordRest(const_cast<ChordRest*>(this));
+        ChordRestNavigateOptions options;
+        options.disableOverRepeats = true;
+        secondChordRest = nextChordRest(const_cast<ChordRest*>(this), options);
     }
     int currentTick = tick().ticks();
     Slur* result = nullptr;
@@ -809,24 +813,11 @@ Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
 {
     Fraction end = tick() + actualTicks();
     for (Segment* s = segment()->next1MM(types); s; s = s->next1MM(types)) {
-        // chordrest ends at afrac+actualFraction
-        // we return the segment at or after the end of the chordrest
-        // Segment::afrac() is based on ticks; use DurationElement::afrac() if possible
-        EngravingItem* e = s;
-        if (s->isChordRestType()) {
-            // Find the first non-NULL element in the segment
-            for (EngravingItem* ee : s->elist()) {
-                if (ee) {
-                    e = ee;
-                    break;
-                }
-            }
-        }
-        if (e->tick() >= end) {
+        if (s->tick() >= end) {
             return s;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -1207,17 +1198,29 @@ void ChordRest::removeMarkings(bool /* keepTremolo */)
 //   isBefore
 //---------------------------------------------------------
 
-bool ChordRest::isBefore(const ChordRest* o) const
+bool ChordRest::isBefore(const EngravingItem* o) const
 {
     if (!o || this == o) {
         return false;
     }
+
+    const ChordRest* otherCr = nullptr;
+    if (o->isChordRest()) {
+        otherCr = toChordRest(o);
+    } else if (o->isNote()) {
+        otherCr = toNote(o)->chord();
+    }
+
+    if (!otherCr) {
+        return EngravingItem::isBefore(o);
+    }
+
     int otick = o->tick().ticks();
     int t     = tick().ticks();
     if (t == otick) {   // At least one of the chord is a grace, order the grace notes
-        bool oGraceAfter = o->isGraceAfter();
+        bool oGraceAfter = otherCr->isGraceAfter();
         bool graceAfter  = isGraceAfter();
-        bool oGrace      = o->isGrace();
+        bool oGrace      = otherCr->isGrace();
         bool grace       = isGrace();
         // normal note are initialized at graceIndex 0 and graceIndex is 0 based
         size_t oGraceIndex  = oGrace ? toChord(o)->graceIndex() + 1 : 0;
@@ -1290,5 +1293,37 @@ void ChordRest::checkStaffMoveValidity()
         // Move valid, clear stored move
         m_storedStaffMove = 0;
     }
+}
+
+bool ChordRest::hasFollowingJumpItem() const
+{
+    const Segment* seg = segment();
+    const Measure* measure = seg ? seg->measure() : nullptr;
+    if (!measure) {
+        return false;
+    }
+
+    if (endTick() != measure->endTick()) {
+        return false;
+    }
+
+    std::vector<Measure*> followingRepeatMeasures = findFollowingRepeatMeasures(measure);
+
+    return !followingRepeatMeasures.empty();
+}
+
+bool ChordRest::hasPrecedingJumpItem() const
+{
+    TRACEFUNC;
+    const Segment* seg = segment();
+    const Measure* measure = seg->measure();
+
+    if (tick() != measure->tick()) {
+        return false;
+    }
+
+    std::vector<Measure*> precedingRepeatMeasures = findPreviousRepeatMeasures(measure);
+
+    return !precedingRepeatMeasures.empty();
 }
 }

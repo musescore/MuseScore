@@ -29,18 +29,19 @@ std::string WorkspaceStub::name() const
     return std::string();
 }
 
-std::string WorkspaceStub::title() const
-{
-    return std::string();
-}
-
-bool WorkspaceStub::isManaged(const DataKey&) const
+bool WorkspaceStub::isBuiltin() const
 {
     return false;
 }
 
-void WorkspaceStub::setIsManaged(const DataKey&, bool)
+bool WorkspaceStub::isEdited() const
 {
+    return false;
+}
+
+bool WorkspaceStub::isNeedSave() const
+{
+    return false;
 }
 
 RetVal<QByteArray> WorkspaceStub::rawData(const DataKey&) const
@@ -53,7 +54,15 @@ Ret WorkspaceStub::setRawData(const DataKey&, const QByteArray&)
     return make_ret(Ret::Code::NotImplemented);
 }
 
+void WorkspaceStub::reset()
+{
+}
+
 async::Notification WorkspaceStub::reloadNotification()
 {
     return async::Notification();
+}
+
+void muse::workspace::WorkspaceStub::assignNewName(const std::string&)
+{
 }

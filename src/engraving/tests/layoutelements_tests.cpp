@@ -86,6 +86,9 @@ static void isLayoutDone(void* data, EngravingItem* e)
         // Melisma line may be omitted if too short
         return;
     }
+    if (e->isLayoutBreak() || e->isSystemLockIndicator()) {
+        return;
+    }
 
     // If layout of element is done it (usually?) has a valid
     // bounding box (bbox).

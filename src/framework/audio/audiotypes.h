@@ -69,6 +69,8 @@ using PlaybackSetupData = mpe::PlaybackSetupData;
 
 static constexpr TrackId INVALID_TRACK_ID = -1;
 
+static constexpr char DEFAULT_DEVICE_ID[] = "default";
+
 #ifdef Q_OS_WIN
 static constexpr size_t MINIMUM_BUFFER_SIZE = 256;
 #else
@@ -126,6 +128,7 @@ enum class AudioResourceType {
     VstPlugin,
     MusePlugin,
     MuseSamplerSoundPack,
+    Lv2Plugin,
 };
 
 struct AudioResourceMeta {
@@ -213,6 +216,7 @@ struct AudioFxParams {
         switch (resourceMeta.type) {
         case AudioResourceType::VstPlugin: return AudioFxType::VstFx;
         case AudioResourceType::MusePlugin: return AudioFxType::MuseFx;
+        case AudioResourceType::Lv2Plugin:
         case AudioResourceType::FluidSoundfont:
         case AudioResourceType::MuseSamplerSoundPack:
         case AudioResourceType::Undefined: break;
@@ -301,6 +305,7 @@ inline AudioSourceType sourceTypeFromResourceType(AudioResourceType type)
     case AudioResourceType::FluidSoundfont: return AudioSourceType::Fluid;
     case AudioResourceType::VstPlugin: return AudioSourceType::Vsti;
     case AudioResourceType::MuseSamplerSoundPack: return AudioSourceType::MuseSampler;
+    case AudioResourceType::Lv2Plugin:
     case AudioResourceType::MusePlugin:
     case AudioResourceType::Undefined: break;
     }

@@ -38,7 +38,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -139,7 +139,6 @@ Dynamic::Dynamic(const Dynamic& d)
     _avoidBarLines = d._avoidBarLines;
     _dynamicsSize = d._dynamicsSize;
     _centerOnNotehead = d._centerOnNotehead;
-    m_anchorToEndOfPrevious = d.m_anchorToEndOfPrevious;
 }
 
 //---------------------------------------------------------
@@ -191,7 +190,7 @@ Fraction Dynamic::velocityChangeLength() const
         return Fraction::fromTicks(0);
     }
 
-    double ratio = score()->tempomap()->tempo(segment()->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
+    double ratio = score()->tempomap()->multipliedTempo(segment()->tick().ticks()).val / Constants::DEFAULT_TEMPO.val;
     double speedMult;
     switch (velChangeSpeed()) {
     case DynamicSpeed::SLOW:
@@ -237,205 +236,39 @@ bool Dynamic::isVelocityChangeAvailable() const
     }
 }
 
-double Dynamic::customTextOffset() const
-{
-    if (!_centerOnNotehead || m_dynamicType == DynamicType::OTHER) {
-        return 0.0;
-    }
-
-    String referenceString = String::fromUtf8(DYN_LIST[int(m_dynamicType)].text);
-    if (xmlText() == referenceString) {
-        return 0.0;
-    }
-
-    Dynamic referenceDynamic(*this);
-    referenceDynamic.setXmlText(referenceString);
-    renderer()->layoutItem(toTextBase(&referenceDynamic));
-
-    TextFragment referenceFragment;
-    if (!referenceDynamic.ldata()->blocks.empty()) {
-        TextBlock referenceBlock = referenceDynamic.ldata()->blocks.front();
-        if (!referenceBlock.fragments().empty()) {
-            referenceFragment = referenceDynamic.ldata()->blocks.front().fragments().front();
-        }
-    }
-
-    const LayoutData* ldata = this->ldata();
-    IF_ASSERT_FAILED(ldata) {
-        return 0.0;
-    }
-    for (const TextBlock& block : ldata->blocks) {
-        for (const TextFragment& fragment : block.fragments()) {
-            if (fragment.text == referenceFragment.text) {
-                return fragment.pos.x() - referenceFragment.pos.x();
-            }
-        }
-    }
-
-    return 0.0;
-}
-
-bool Dynamic::isEditAllowed(EditData& ed) const
-{
-    if (ed.editTextualProperties) {
-        return TextBase::isEditAllowed(ed);
-    }
-
-    static const std::set<KeyboardKey> ARROW_KEYS {
-        Key_Left,
-        Key_Right,
-        Key_Up,
-        Key_Down
-    };
-
-    return muse::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key));
-}
-
-//-------------------------------------------------------------------
-//   doAutoplace
-//
-//    Move Dynamic up or down to avoid collisions with other elements.
-//-------------------------------------------------------------------
-
-//void Dynamic::doAutoplace()
-//{
-//    Segment* s = segment();
-//    if (!(s && autoplace())) {
-//        return;
-//    }
-
-//    double minDistance = style().styleS(Sid::dynamicsMinDistance).val() * spatium();
-//    RectF r = bbox().translated(pos() + s->pos() + s->measure()->pos());
-//    double yOff = offset().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
-//    r.translate(0.0, -yOff);
-
-//    Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
-//    SkylineLine sk(!placeAbove());
-//    sk.add(r);
-
-//    if (placeAbove()) {
-//        double d = sk.minDistance(sl.north());
-//        if (d > -minDistance) {
-//            movePosY(-(d + minDistance));
-//        }
-//    } else {
-//        double d = sl.south().minDistance(sk);
-//        if (d > -minDistance) {
-//            movePosY(d + minDistance);
-//        }
-//    }
-//}
-
-//--------------------------------------------------------------------------
-//   manageBarlineCollisions
-//      If necessary, offset dynamic left/right to clear barline collisions
-//--------------------------------------------------------------------------
-
-void Dynamic::manageBarlineCollisions()
-{
-    if (!_avoidBarLines || score()->nstaves() <= 1 || anchorToEndOfPrevious() || !isStyled(Pid::OFFSET)) {
-        return;
-    }
-
-    Segment* thisSegment = segment();
-    if (!thisSegment) {
-        return;
-    }
-
-    System* system = measure()->system();
-    if (!system) {
-        return;
-    }
-
-    staff_idx_t barLineStaff = muse::nidx;
-    if (placeAbove()) {
-        // need to find the barline from the staff above
-        // taking into account there could be invisible staves
-        if (staffIdx() == 0) {
-            return;
-        }
-        for (int staffIndex = static_cast<int>(staffIdx()) - 1; staffIndex >= 0; --staffIndex) {
-            if (system->staff(staffIndex)->show()) {
-                barLineStaff = staffIndex;
-                break;
-            }
-        }
-    } else {
-        barLineStaff = staffIdx();
-    }
-
-    if (barLineStaff == muse::nidx) {
-        return;
-    }
-
-    if (score()->staff(barLineStaff)->barLineSpan() < 1) {
-        return; // Barline doesn't extend through staves
-    }
-
-    const double minBarLineDistance = 0.25 * spatium();
-
-    // Check barlines to the left
-    Segment* leftBarLineSegment = nullptr;
-    for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->prev1enabled()) {
-        if (segment->segmentType() & SegmentType::BarLineType) {
-            leftBarLineSegment = segment;
-            break;
-        }
-    }
-    if (leftBarLineSegment) {
-        EngravingItem* e = leftBarLineSegment->elementAt(barLineStaff * VOICES);
-        if (e) {
-            double leftMargin = ldata()->bbox().translated(pagePos() - offset()).left()
-                                - e->ldata()->bbox().translated(e->pagePos()).right()
-                                - minBarLineDistance;
-            if (leftMargin < 0) {
-                mutldata()->moveX(-leftMargin);
-                return;
-            }
-        }
-    }
-
-    // Check barlines to the right
-    Segment* rightBarLineSegment = nullptr;
-    for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->next1enabled()) {
-        if (segment->segmentType() & SegmentType::BarLineType) {
-            rightBarLineSegment = segment;
-            break;
-        }
-    }
-
-    if (rightBarLineSegment) {
-        EngravingItem* e = rightBarLineSegment->elementAt(barLineStaff * VOICES);
-        if (e) {
-            double rightMargin = e->ldata()->bbox().translated(e->pagePos()).left()
-                                 - ldata()->bbox().translated(pagePos() - offset()).right()
-                                 - minBarLineDistance;
-            if (rightMargin < 0) {
-                mutldata()->moveX(rightMargin);
-                return;
-            }
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   setDynamicType
 //---------------------------------------------------------
 
 void Dynamic::setDynamicType(const String& tag)
 {
+    const auto dynamicInfo = parseDynamicText(tag);
+
+    if (dynamicInfo.first == DynamicType::OTHER) {
+        LOGD("setDynamicType: other <%s>", muPrintable(tag));
+    }
+
+    setDynamicType(dynamicInfo.first);
+    setXmlText(dynamicInfo.second);
+}
+
+std::pair<DynamicType, String> Dynamic::parseDynamicText(const String& tag) const
+{
     std::string utf8Tag = tag.toStdString();
-    size_t n = DYN_LIST.size();
-    for (size_t i = 0; i < n; ++i) {
-        if (TConv::toXml(DynamicType(i)).ascii() == utf8Tag || DYN_LIST[i].text == utf8Tag) {
-            setDynamicType(DynamicType(i));
-            setXmlText(String::fromUtf8(DYN_LIST[i].text));
-            return;
+    const std::regex dynamicRegex(R"((?:<sym>.*?</sym>)+|(?:\b)[fmnprsz]+(?:\b(?=[^>]|$)))");
+    auto begin = std::sregex_iterator(utf8Tag.begin(), utf8Tag.end(), dynamicRegex);
+    for (auto it = begin; it != std::sregex_iterator(); ++it) {
+        const std::smatch match = *it;
+        const std::string matchStr = match.str();
+        size_t n = DYN_LIST.size();
+        for (size_t i = 0; i < n; ++i) {
+            if (TConv::toXml(DynamicType(i)).ascii() == matchStr || DYN_LIST[i].text == matchStr) {
+                utf8Tag.replace(match.position(0), match.length(0), DYN_LIST[i].text);
+                return { DynamicType(i), String::fromStdString(utf8Tag) };
+            }
         }
     }
-    LOGD("setDynamicType: other <%s>", muPrintable(tag));
-    setDynamicType(DynamicType::OTHER);
-    setXmlText(tag);
+    return { DynamicType::OTHER, tag };
 }
 
 String Dynamic::dynamicText(DynamicType t)
@@ -534,247 +367,37 @@ TranslatableString Dynamic::subtypeUserName() const
     }
 }
 
-void Dynamic::startEdit(EditData& ed)
-{
-    if (ed.editTextualProperties) {
-        TextBase::startEdit(ed);
-    } else {
-        startEditNonTextual(ed);
-    }
-}
-
-bool Dynamic::edit(EditData& ed)
-{
-    if (ed.editTextualProperties) {
-        return TextBase::edit(ed);
-    } else {
-        return editNonTextual(ed);
-    }
-}
-
-bool Dynamic::editNonTextual(EditData& ed)
-{
-    if (ed.key == Key_Shift) {
-        if (ed.isKeyRelease) {
-            score()->hideAnchors();
-        } else {
-            EditTimeTickAnchors::updateAnchors(this, track());
-        }
-        triggerLayout();
-        return true;
-    }
-
-    if (!isEditAllowed(ed)) {
-        return false;
-    }
-
-    bool leftRightKey = ed.key == Key_Left || ed.key == Key_Right;
-    bool altMod = ed.modifiers & AltModifier;
-    bool shiftMod = ed.modifiers & ShiftModifier;
-
-    bool changeAnchorType = shiftMod && altMod && leftRightKey;
-    if (changeAnchorType) {
-        undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious(), propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
-    }
-    bool doesntNeedMoveSeg = changeAnchorType && ((ed.key == Key_Left && anchorToEndOfPrevious())
-                                                  || (ed.key == Key_Right && !anchorToEndOfPrevious()));
-    if (doesntNeedMoveSeg) {
-        checkMeasureBoundariesAndMoveIfNeed();
-        return true;
-    }
-
-    bool moveSeg = shiftMod && (ed.key == Key_Left || ed.key == Key_Right);
-    if (moveSeg) {
-        bool moved = moveSegment(ed);
-        EditTimeTickAnchors::updateAnchors(this, track());
-        checkMeasureBoundariesAndMoveIfNeed();
-        return moved;
-    }
-
-    if (shiftMod) {
-        return false;
-    }
-
-    if (!nudge(ed)) {
-        return false;
-    }
-
-    triggerLayout();
-    return true;
-}
-
-void Dynamic::checkMeasureBoundariesAndMoveIfNeed()
-{
-    /* Dynamics are always assigned to a ChordRest segment if available at this tick,
-     * EXCEPT if we are at a measure boundary. In this case, if anchorToEndOfPrevious()
-     * we must assign to a TimeTick segment at the end of previous measure, otherwise to a
-     * ChordRest segment at the start of the next measure. */
-
-    Segment* curSeg = segment();
-    Fraction curTick = curSeg->tick();
-    Measure* curMeasure = curSeg->measure();
-    Measure* prevMeasure = curMeasure->prevMeasure();
-    bool needMoveToNext = curTick == curMeasure->endTick() && !anchorToEndOfPrevious();
-    bool needMoveToPrevious = curSeg->rtick().isZero() && anchorToEndOfPrevious() && prevMeasure;
-
-    if (!needMoveToPrevious && !needMoveToNext) {
-        return;
-    }
-
-    Segment* newSeg = nullptr;
-    if (needMoveToPrevious) {
-        newSeg = prevMeasure->findSegment(SegmentType::TimeTick, curSeg->tick());
-        if (!newSeg) {
-            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(prevMeasure, curTick - prevMeasure->tick(), staffIdx());
-            EditTimeTickAnchors::updateLayout(prevMeasure);
-            newSeg = anchor->segment();
-        }
-    } else {
-        newSeg = curSeg->next1(SegmentType::ChordRest);
-    }
-
-    if (newSeg && newSeg->tick() == curTick) {
-        score()->undoChangeParent(this, newSeg, staffIdx());
-        if (snappedExpression()) {
-            score()->undoChangeParent(snappedExpression(), newSeg, staffIdx());
-        }
-    }
-}
-
-bool Dynamic::moveSegment(const EditData& ed)
-{
-    bool forward = ed.key == Key_Right;
-    if (!(ed.modifiers & AltModifier)) {
-        if (anchorToEndOfPrevious()) {
-            undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
-            if (forward) {
-                return true;
-            }
-        }
-    }
-
-    Segment* curSeg = segment();
-    IF_ASSERT_FAILED(curSeg) {
-        return false;
-    }
-
-    Segment* newSeg = forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
-    if (!newSeg) {
-        return false;
-    }
-
-    undoMoveSegment(newSeg, newSeg->tick() - curSeg->tick());
-
-    return true;
-}
-
-void Dynamic::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
-{
-    score()->undoChangeParent(this, newSeg, staffIdx());
-    moveSnappedItems(newSeg, tickDiff);
-}
-
-void Dynamic::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
-{
-    if (EngravingItem* itemSnappedBefore = ldata()->itemSnappedBefore()) {
-        if (itemSnappedBefore->isHairpinSegment()) {
-            Hairpin* hairpinBefore = toHairpinSegment(itemSnappedBefore)->hairpin();
-            hairpinBefore->undoMoveEnd(tickDiff);
-        }
-    }
-
-    if (EngravingItem* itemSnappedAfter = ldata()->itemSnappedAfter()) {
-        Hairpin* hairpinAfter = itemSnappedAfter->isHairpinSegment() ? toHairpinSegment(itemSnappedAfter)->hairpin() : nullptr;
-        if (itemSnappedAfter->isExpression()) {
-            Expression* expressionAfter = toExpression(itemSnappedAfter);
-            Segment* curExpressionSegment = expressionAfter->segment();
-            if (curExpressionSegment != newSeg) {
-                score()->undoChangeParent(expressionAfter, newSeg, expressionAfter->staffIdx());
-            }
-            EngravingItem* possibleHairpinAfterExpr = expressionAfter->ldata()->itemSnappedAfter();
-            if (!hairpinAfter && possibleHairpinAfterExpr && possibleHairpinAfterExpr->isHairpinSegment()) {
-                hairpinAfter = toHairpinSegment(possibleHairpinAfterExpr)->hairpin();
-            }
-        }
-        if (hairpinAfter) {
-            hairpinAfter->undoMoveStart(tickDiff);
-        }
-    }
-}
-
-bool Dynamic::nudge(const EditData& ed)
-{
-    bool ctrlMod = ed.modifiers & ControlModifier;
-    double step = spatium() * (ctrlMod ? MScore::nudgeStep10 : MScore::nudgeStep);
-    PointF addOffset = PointF();
-    switch (ed.key) {
-    case Key_Up:
-        addOffset = PointF(0.0, -step);
-        break;
-    case Key_Down:
-        addOffset = PointF(0.0, step);
-        break;
-    case Key_Left:
-        addOffset = PointF(-step, 0.0);
-        break;
-    case Key_Right:
-        addOffset = PointF(step, 0.0);
-        break;
-    default:
-        return false;
-    }
-    undoChangeProperty(Pid::OFFSET, offset() + addOffset, PropertyFlags::UNSTYLED);
-    return true;
-}
-
 void Dynamic::editDrag(EditData& ed)
 {
-    ElementEditDataPtr eed = ed.getData(this);
-    if (!eed) {
+    const bool hasLeftGrip = this->hasLeftGrip();
+    const bool hasRightGrip = this->hasRightGrip();
+
+    // Right grip (when two grips/when single grip)
+    if ((int(ed.curGrip) == 1 && hasLeftGrip && hasRightGrip) || (int(ed.curGrip) == 0 && !hasLeftGrip && hasRightGrip)) {
+        m_rightDragOffset += ed.evtDelta.x();
+        if (m_rightDragOffset < 0) {
+            m_rightDragOffset = 0;
+        }
         return;
     }
 
-    EditTimeTickAnchors::updateAnchors(this, track());
-
-    KeyboardModifiers km = ed.modifiers;
-    if (km != (ShiftModifier | ControlModifier)) {
-        staff_idx_t si = staffIdx();
-        Segment* seg = nullptr; // don't prefer any segment while dragging, just snap to the closest
-        static constexpr double spacingFactor = 0.5;
-        score()->dragPosition(canvasPos(), &si, &seg, spacingFactor, allowTimeAnchor());
-        if ((seg && seg != segment()) || staffIdx() != si) {
-            const PointF oldOffset = offset();
-            PointF pos1(canvasPos());
-            score()->undoChangeParent(this, seg, staffIdx());
-            Expression* snappedExpr = snappedExpression();
-            if (snappedExpr) {
-                score()->undoChangeParent(snappedExpr, seg, staffIdx());
-            }
-            setOffset(PointF());
-
-            renderer()->layoutItem(this);
-
-            PointF pos2(canvasPos());
-            const PointF newOffset = pos1 - pos2;
-            setOffset(newOffset);
-            setOffsetChanged(true);
-            eed->initOffset += newOffset - oldOffset;
+    // Left grip (when two grips or single grip)
+    if (int(ed.curGrip) == 0 && hasLeftGrip) {
+        m_leftDragOffset += ed.evtDelta.x();
+        if (m_leftDragOffset > 0) {
+            m_leftDragOffset = 0;
         }
+        return;
     }
 
-    EngravingItem::editDrag(ed);
+    TextBase::editDrag(ed);
 }
 
-void Dynamic::endEdit(EditData& ed)
+void Dynamic::endEditDrag(EditData& ed)
 {
-    if (ed.editTextualProperties) {
-        TextBase::endEdit(ed);
-        if (!xmlText().contains(String::fromUtf8(DYN_LIST[int(m_dynamicType)].text))) {
-            m_dynamicType = DynamicType::OTHER;
-        }
-    } else {
-        endEditNonTextual(ed);
-    }
+    m_leftDragOffset = m_rightDragOffset = 0.0;
+
+    TextBase::endEditDrag(ed);
 }
 
 //---------------------------------------------------------
@@ -854,7 +477,11 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::DYNAMIC_TYPE:
-        m_dynamicType = v.value<DynamicType>();
+        if (v.type() == P_TYPE::DYNAMIC_TYPE) {
+            setDynamicType(v.value<DynamicType>());
+            break;
+        }
+        setDynamicType(v.value<String>());
         break;
     case Pid::VELOCITY:
         m_velocity = v.toInt();
@@ -957,4 +584,129 @@ String Dynamic::screenReaderInfo() const
     }
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
+}
+
+bool Dynamic::isTextualEditAllowed(EditData& ed) const
+{
+    if (ed.key == Key_Tab) {
+        return false;
+    }
+
+    return TextBase::isTextualEditAllowed(ed);
+}
+
+//---------------------------------------------------------
+//   hasLeftHairpin
+//---------------------------------------------------------
+
+bool Dynamic::hasLeftGrip() const
+{
+    if (segment()->tick().isZero()) {
+        return false; // Don't show the left grip for the leftmost dynamic with tick zero
+    }
+    return m_leftHairpin == nullptr;
+}
+
+//---------------------------------------------------------
+//   hasRightHairpin
+//---------------------------------------------------------
+
+bool Dynamic::hasRightGrip() const
+{
+    return m_rightHairpin == nullptr;
+}
+
+//---------------------------------------------------------
+//   findAdjacentHairpins
+//---------------------------------------------------------
+
+void Dynamic::findAdjacentHairpins()
+{
+    m_leftHairpin = nullptr;
+    m_rightHairpin = nullptr;
+
+    const Fraction tick = segment()->tick();
+    const int intTick = tick.ticks();
+
+    const auto& spanners = score()->spannerMap().findOverlapping(intTick - 1, intTick + 1);
+    for (auto i : spanners) {
+        Spanner* sp = i.value;
+        if (sp->track() == track() && sp->isHairpin()) {
+            Hairpin* hp = toHairpin(sp);
+            if (hp->tick() == tick) {
+                m_rightHairpin = hp;
+            } else if (hp->tick2() == tick) {
+                m_leftHairpin = hp;
+            }
+        }
+    }
+}
+
+Shape Dynamic::symShapeWithCutouts(SymId id) const
+{
+    Staff* stf = staff();
+    double staffMag = stf ? stf->staffMag(tick()) : 1.0;
+    Shape shape = score()->engravingFont()->shapeWithCutouts(id, magS() * staffMag * dynamicsSize());
+    for (ShapeElement& element : shape.elements()) {
+        element.setItem(this);
+    }
+
+    return shape;
+}
+
+Dyn Dynamic::dynInfo(DynamicType type)
+{
+    return DYN_LIST[static_cast<int>(type)];
+}
+
+//---------------------------------------------------------
+//   gripsCount
+//---------------------------------------------------------
+
+int Dynamic::gripsCount() const
+{
+    if (empty()) {
+        return 0;
+    }
+
+    const bool hasLeftGrip = this->hasLeftGrip();
+    const bool hasRightGrip = this->hasRightGrip();
+
+    if (hasLeftGrip && hasRightGrip) {
+        return 2;
+    } else if (hasLeftGrip || hasRightGrip) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+//---------------------------------------------------------
+//   gripsPositions
+//---------------------------------------------------------
+
+std::vector<PointF> Dynamic::gripsPositions(const EditData&) const
+{
+    const LayoutData* ldata = this->ldata();
+    const PointF pp(pagePos());
+    double md = score()->style().styleS(Sid::hairpinMinDistance).val() * spatium(); // Minimum distance between dynamic and grip
+
+    // Calculated by subtracting the y-value of the dynamic's pagePos from the y-value of hairpin's Grip::START position in HairpinSegment::gripsPositions
+    const double GRIP_VERTICAL_OFFSET = -11.408;
+
+    PointF leftOffset(-ldata->bbox().width() / 2 - md + m_leftDragOffset, GRIP_VERTICAL_OFFSET);
+    PointF rightOffset(ldata->bbox().width() / 2 + md + m_rightDragOffset, GRIP_VERTICAL_OFFSET);
+
+    const bool hasLeftGrip = this->hasLeftGrip();
+    const bool hasRightGrip = this->hasRightGrip();
+
+    if (hasLeftGrip && hasRightGrip) {
+        return { pp + leftOffset, pp + rightOffset };
+    } else if (hasLeftGrip) {
+        return { pp + leftOffset };
+    } else if (hasRightGrip) {
+        return { pp + rightOffset };
+    } else {
+        return {};
+    }
 }

@@ -27,11 +27,16 @@
 using namespace muse;
 using namespace muse::vst;
 
-static constexpr ControllIdx SUSTAIN_IDX = static_cast<ControllIdx>(Steinberg::Vst::kCtrlSustainOnOff);
-static constexpr ControllIdx PITCH_BEND_IDX = static_cast<ControllIdx>(Steinberg::Vst::kPitchBend);
+static constexpr ControlIdx SUSTAIN_IDX = static_cast<ControlIdx>(Steinberg::Vst::kCtrlSustainOnOff);
+static constexpr ControlIdx SOSTENUTO_IDX = static_cast<ControlIdx>(Steinberg::Vst::kCtrlSustenutoOnOff);
+static constexpr ControlIdx PITCH_BEND_IDX = static_cast<ControlIdx>(Steinberg::Vst::kPitchBend);
 
-static const mpe::ArticulationTypeSet PEDAL_CC_SUPPORTED_TYPES {
-    mpe::ArticulationType::Pedal,
+static const mpe::ArticulationTypeSet SUSTAIN_PEDAL_CC_SUPPORTED_TYPES {
+    mpe::ArticulationType::Pedal, mpe::ArticulationType::LetRing,
+};
+
+static const mpe::ArticulationTypeSet SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES = {
+    mpe::ArticulationType::LaissezVibrer,
 };
 
 static const mpe::ArticulationTypeSet BEND_SUPPORTED_TYPES {
@@ -54,12 +59,7 @@ void VstSequencer::init(ParamsMapping&& mapping, bool useDynamicEvents)
 
 void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList&)
 {
-    m_offStreamEvents.clear();
-
-    if (m_onOffStreamFlushed) {
-        m_onOffStreamFlushed();
-    }
-
+    flushOffstream();
     updatePlaybackEvents(m_offStreamEvents, events);
     updateOffSequenceIterator();
 }
@@ -99,8 +99,10 @@ muse::audio::gain_t VstSequencer::currentGain() const
 
 void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events)
 {
-    for (const auto& pair : events) {
-        for (const mpe::PlaybackEvent& event : pair.second) {
+    SostenutoTimeAndDurations sostenutoTimeAndDurations;
+
+    for (const auto& evPair : events) {
+        for (const mpe::PlaybackEvent& event : evPair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
                 continue;
             }
@@ -117,10 +119,30 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
             destination[timestampFrom].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
             destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
 
-            appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, SUSTAIN_IDX);
-            appendPitchBend(destination, noteEvent, BEND_SUPPORTED_TYPES);
+            for (const auto& articPair : noteEvent.expressionCtx().articulations) {
+                const mpe::ArticulationMeta& meta = articPair.second.meta;
+
+                if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
+                    appendPitchBend(destination, noteEvent, meta);
+                    continue;
+                }
+
+                if (muse::contains(SUSTAIN_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
+                    appendParamChange(destination, meta.timestamp, SUSTAIN_IDX, 1);
+                    appendParamChange(destination, meta.timestamp + meta.overallDuration, SUSTAIN_IDX, 0);
+                    continue;
+                }
+
+                if (muse::contains(SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
+                    const mpe::timestamp_t timestamp = timestampFrom + noteEvent.arrangementCtx().actualDuration * 0.1; // add offset for Sostenuto to take effect
+                    sostenutoTimeAndDurations.push_back(mpe::TimestampAndDuration { timestamp, meta.overallDuration });
+                    continue;
+                }
+            }
         }
     }
+
+    appendSostenutoEvents(destination, sostenutoTimeAndDurations);
 }
 
 void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& layers)
@@ -132,66 +154,32 @@ void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe:
     }
 }
 
-void VstSequencer::appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
-                                       const mpe::ArticulationTypeSet& appliableTypes, const ControllIdx controlIdx)
+void VstSequencer::appendParamChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
+                                     const ControlIdx controlIdx, const PluginParamValue value)
 {
     auto controlIt = m_mapping.find(controlIdx);
     if (controlIt == m_mapping.cend()) {
         return;
     }
 
-    mpe::ArticulationType currentType = mpe::ArticulationType::Undefined;
-
-    for (const mpe::ArticulationType type : appliableTypes) {
-        if (noteEvent.expressionCtx().articulations.contains(type)) {
-            currentType = type;
-            break;
-        }
-    }
-
-    if (currentType == mpe::ArticulationType::Undefined) {
-        return;
-    }
-
-    const mpe::ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(currentType);
-    const mpe::ArticulationMeta& articulationMeta = articulationData.meta;
-
-    const mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-    const mpe::timestamp_t timestampTo = articulationMeta.timestamp + articulationMeta.overallDuration;
-
-    destination[timestampFrom].emplace(ParamChangeEvent { controlIt->second, 1 /*on*/ });
-    destination[timestampTo].emplace(ParamChangeEvent { controlIt->second, 0 /*off*/ });
+    destination[timestamp].emplace(ParamChangeEvent { controlIt->second, value });
 }
 
 void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
-                                   const mpe::ArticulationTypeSet& appliableTypes)
+                                   const mpe::ArticulationMeta& artMeta)
 {
     auto pitchBendIt = m_mapping.find(PITCH_BEND_IDX);
     if (pitchBendIt == m_mapping.cend() || noteEvent.pitchCtx().pitchCurve.empty()) {
         return;
     }
 
-    mpe::ArticulationType currentType = mpe::ArticulationType::Undefined;
-
-    for (const mpe::ArticulationType type : appliableTypes) {
-        if (noteEvent.expressionCtx().articulations.contains(type)) {
-            currentType = type;
-            break;
-        }
-    }
-
-    if (currentType == mpe::ArticulationType::Undefined) {
-        return;
-    }
-
-    mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-    mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
-    mpe::timestamp_t timestampTo = timestampFrom + duration;
+    const mpe::timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+    const mpe::timestamp_t pitchBendTimestampTo = std::min(artMeta.timestamp + artMeta.overallDuration, noteTimestampTo);
 
     ParamChangeEvent event;
     event.paramId = pitchBendIt->second;
     event.value = 0.5f;
-    destination[timestampTo].insert(event);
+    destination[pitchBendTimestampTo].insert(event);
 
     auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
     auto nextIt = std::next(currIt);
@@ -205,8 +193,8 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
         float currBendValue = pitchBendLevel(currIt->second);
         float nextBendValue = pitchBendLevel(nextIt->second);
 
-        mpe::timestamp_t currTime = timestampFrom + duration * mpe::percentageToFactor(currIt->first);
-        mpe::timestamp_t nextTime = timestampFrom + duration * mpe::percentageToFactor(nextIt->first);
+        mpe::timestamp_t currTime = artMeta.timestamp + artMeta.overallDuration * mpe::percentageToFactor(currIt->first);
+        mpe::timestamp_t nextTime = artMeta.timestamp + artMeta.overallDuration * mpe::percentageToFactor(nextIt->first);
 
         Interpolation::Point p0 = makePoint(currTime, currBendValue);
         Interpolation::Point p1 = makePoint(nextTime, currBendValue);
@@ -221,11 +209,31 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
 
         for (const Interpolation::Point& point : points) {
             mpe::timestamp_t time = static_cast<mpe::timestamp_t>(std::round(point.x));
-            if (time < timestampTo) {
+            if (time < pitchBendTimestampTo) {
                 float bendValue = static_cast<float>(point.y);
                 event.value = bendValue;
                 destination[time].insert(event);
             }
+        }
+    }
+}
+
+void VstSequencer::appendSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations)
+{
+    for (size_t i = 0; i < sostenutoTimeAndDurations.size(); ++i) {
+        const mpe::TimestampAndDuration& currentTnD = sostenutoTimeAndDurations.at(i);
+        const mpe::timestamp_t timestampTo = currentTnD.timestamp + currentTnD.duration;
+
+        appendParamChange(destination, currentTnD.timestamp, SOSTENUTO_IDX, 1);
+
+        if (i == sostenutoTimeAndDurations.size() - 1) {
+            appendParamChange(destination, timestampTo, SOSTENUTO_IDX, 0);
+            continue;
+        }
+
+        const mpe::TimestampAndDuration& nextTnD = sostenutoTimeAndDurations.at(i + 1);
+        if (timestampTo <= nextTnD.timestamp) { // handle potential overlap
+            appendParamChange(destination, timestampTo, SOSTENUTO_IDX, 0);
         }
     }
 }

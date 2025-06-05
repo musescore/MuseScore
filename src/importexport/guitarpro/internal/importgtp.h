@@ -20,24 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMPORTGTP_H__
-#define __IMPORTGTP_H__
+#pragma once
 
-#include <vector>
 #include <map>
+#include <vector>
 
-#include "io/file.h"
-#include "engraving/dom/measurebase.h"
-
-#include "gtp/gp67dombuilder.h"
-#include "continiouselementsbuilder.h"
-#include "engraving/types/types.h"
-#include "engraving/engravingerrors.h"
-
+#include "io/iodevice.h"
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
+#include "types/bytearray.h"
+#include "types/string.h"
 
-#include "guitarprodrumset.h"
+#include "engraving/dom/measurebase.h"
+#include "engraving/engravingerrors.h"
+#include "engraving/iengravingconfiguration.h"
+#include "engraving/types/types.h"
+
+#include "continiouselementsbuilder.h"
+#include "gtp/igpdombuilder.h"
+#include "guitarbendimport/guitarbendimporter.h"
 
 namespace mu::engraving {
 class Chord;
@@ -57,7 +57,6 @@ class MasterScore;
 class Ottava;
 class Hairpin;
 class Bend;
-class StretchedBend;
 class Slur;
 } // namespace mu::engraving
 
@@ -267,7 +266,6 @@ protected:
     int slide = 0;
     int voltaSequence = 0;
     mu::engraving::Slur** slurs = nullptr;
-    std::vector<mu::engraving::StretchedBend*> m_stretchedBends;
 
     void skip(int64_t len);
     void read(void* p, int64_t len);
@@ -325,6 +323,7 @@ public:
     size_t measures = 0;
     std::vector<GpBar> bars;
     std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
+    std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
 
     enum class GuitarProError : char {
         GP_NO_ERROR, GP_UNKNOWN_FORMAT,
@@ -417,7 +416,7 @@ class GuitarPro5 : public GuitarPro
     int readBeatEffects(int track, mu::engraving::Segment* segment) override;
     ReadNoteResult readNote(int string, Note* note);
     bool readMixChange(Measure* measure) override;
-    void readMeasure(Measure* measure, int staffIdx, mu::engraving::Tuplet*[], bool mixChange);
+    void readMeasure(Measure * measure, int staffIdx, mu::engraving::Tuplet*[], bool mixChange);
     bool readTracks();
     void readMeasures(int startingTempo);
     Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, mu::engraving::Tuplet** tuplets, bool mixChange);
@@ -496,5 +495,4 @@ public:
     bool read(muse::io::IODevice*) override;
     GPProperties readProperties(muse::ByteArray* data);
 };
-} // namespace mu::iex::guitarpro
-#endif
+}

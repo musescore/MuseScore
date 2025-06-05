@@ -234,19 +234,8 @@ void DynamicExpressionDragGroup::startDrag(EditData& ed)
 
 RectF DynamicExpressionDragGroup::drag(EditData& ed)
 {
-    RectF r = static_cast<EngravingItem*>(m_dynamic)->drag(ed);
-
-    // Dynamic may snap to a different segment upon dragging,
-    // in which case move the expression with it
-    Segment* newSegment = m_dynamic->segment();
-    Segment* oldSegment = toSegment(m_expression->explicitParent());
-    staff_idx_t newStaff = m_dynamic->staffIdx();
-    staff_idx_t oldStaff = m_expression->staffIdx();
-
-    if (newSegment != oldSegment || newStaff != oldStaff) {
-        Score* score = newSegment->score();
-        score->undoChangeParent(m_expression, newSegment, newStaff);
-    }
+    RectF r = m_dynamic->drag(ed);
+    r.unite(m_expression->drag(ed));
 
     m_dynamic->triggerLayout();
     m_expression->triggerLayout();

@@ -71,6 +71,10 @@ void MultiInstancesStubProvider::settingsRollbackTransaction()
 {
 }
 
+void MultiInstancesStubProvider::settingsReset()
+{
+}
+
 void MultiInstancesStubProvider::settingsSetValue(const std::string&, const Val&)
 {
 }

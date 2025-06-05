@@ -70,6 +70,9 @@ endif()
 if (MUSE_MODULE_UI)
     add_subdirectory(ui)
     add_subdirectory(uicomponents)
+endif()
+
+if (MUSE_MODULE_DOCKWINDOW)
     add_subdirectory(dockwindow)
 endif()
 
@@ -79,6 +82,10 @@ endif()
 
 if (MUSE_MODULE_SHORTCUTS)
     add_subdirectory(shortcuts)
+endif()
+
+if (MUSE_MODULE_TOURS)
+    add_subdirectory(tours)
 endif()
 
 if (MUSE_MODULE_MULTIINSTANCES)

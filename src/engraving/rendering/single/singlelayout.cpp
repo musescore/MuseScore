@@ -53,6 +53,7 @@
 #include "dom/gradualtempochange.h"
 #include "dom/guitarbend.h"
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harppedaldiagram.h"
 #include "dom/instrchange.h"
 #include "dom/jump.h"
@@ -64,6 +65,7 @@
 #include "dom/measurenumber.h"
 #include "dom/measurerepeat.h"
 #include "dom/note.h"
+#include "dom/noteline.h"
 #include "dom/ornament.h"
 #include "dom/ottava.h"
 #include "dom/palmmute.h"
@@ -156,6 +158,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::HAIRPIN:      layout(toHairpin(item), ctx);
         break;
+    case ElementType::HAMMER_ON_PULL_OFF: layout(toHammerOnPullOff(item), ctx);
+        break;
     case ElementType::HARP_DIAGRAM: layout(toHarpPedalDiagram(item), ctx);
         break;
     case ElementType::IMAGE:        layout(toImage(item), ctx);
@@ -179,6 +183,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::MEASURE_REPEAT: layout(toMeasureRepeat(item), ctx);
         break;
     case ElementType::NOTEHEAD:     layout(toNoteHead(item), ctx);
+        break;
+    case ElementType::NOTELINE:     layout(toNoteLine(item), ctx);
         break;
     case ElementType::OTTAVA:       layout(toOttava(item), ctx);
         break;
@@ -783,7 +789,7 @@ void SingleLayout::layout(Chord* item, const Context& ctx)
     ChordLayout::computeUp(item, tctx);
     ChordLayout::layout(item, tctx);
     ChordLayout::layoutStem(item, tctx);
-    ChordLayout::layoutLedgerLines({ item });
+    ChordLayout::layoutLedgerLines({ item }, tctx);
 }
 
 void SingleLayout::layout(ChordLine* item, const Context& ctx)
@@ -977,7 +983,7 @@ void SingleLayout::layout(GradualTempoChangeSegment* item, const Context& ctx)
 void SingleLayout::layout(GuitarBend*, const Context&)
 {
     NOT_IMPLEMENTED;
-    //! NOTE: Bends can be removed from disallowed elements in NotationInteraction::dragCopyAllowed once this has been implemented
+    //! NOTE: Bends can be removed from disallowed elements in NotationInteraction::isOutgoingDragElementAllowed once this has been implemented
 }
 
 void SingleLayout::layout(GuitarBendSegment*, const Context&)
@@ -989,6 +995,59 @@ void SingleLayout::layout(Hairpin* item, const Context& ctx)
 {
     item->setPos(0.0, 0.0);
     layoutLine(item, ctx);
+}
+
+void SingleLayout::layout(HammerOnPullOff* item, const Context& ctx)
+{
+    double spatium = item->spatium();
+    HammerOnPullOffSegment* s = nullptr;
+    if (item->spannerSegments().empty()) {
+        s = new HammerOnPullOffSegment(ctx.dummyParent()->system());
+        s->setTrack(item->track());
+        item->add(s);
+    } else {
+        s = toHammerOnPullOffSegment(item->frontSegment());
+    }
+
+    s->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+
+    s->setPos(PointF());
+    s->ups(Grip::START).p = PointF(0, 0);
+    s->ups(Grip::END).p   = PointF(spatium * 6, 0);
+    s->setExtraHeight(0.0);
+
+    SlurTieLayout::computeBezier(s);
+
+    layout(s, ctx);
+
+    item->setbbox(s->ldata()->bbox());
+}
+
+void SingleLayout::layout(HammerOnPullOffSegment* item, const Context& ctx)
+{
+    const std::vector<HammerOnPullOffText*>& hopoTexts = item->hopoText();
+    if (item->hopoText().empty()) {
+        HammerOnPullOffText* hopoText = new HammerOnPullOffText(item);
+        hopoText->setParent(item);
+        hopoText->setXmlText("H/P");
+        item->addHopoText(hopoText);
+    }
+
+    HammerOnPullOffText* hopoText = hopoTexts.front();
+    Align align;
+    align.vertical = AlignV::BASELINE;
+    align.horizontal = AlignH::HCENTER;
+    hopoText->setAlign(align);
+    layoutTextBase(hopoText, ctx, hopoText->mutldata());
+
+    RectF bbox = item->ldata()->bbox();
+    double x = 0.5 * (bbox.left() + bbox.right());
+    double y = bbox.top() - 0.5 * item->spatium();
+    hopoText->mutldata()->setPos(x, y);
+
+    Shape itemShape = item->mutldata()->shape();
+    itemShape.add(hopoText->shape().translated(hopoText->pos()));
+    item->mutldata()->setShape(itemShape);
 }
 
 void SingleLayout::layout(HairpinSegment* item, const Context& ctx)
@@ -1259,7 +1318,9 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
 
 void SingleLayout::layout(LayoutBreak* item, const Context&)
 {
-    UNUSED(item);
+    FontMetrics metrics(item->font());
+    RectF bbox = metrics.boundingRect(item->iconCode());
+    item->mutldata()->setShape(Shape(bbox, item));
 }
 
 void SingleLayout::layout(LetRing* item, const Context& ctx)
@@ -1280,6 +1341,12 @@ void SingleLayout::layout(Lyrics* item, const Context& ctx)
 void SingleLayout::layout(NoteHead* item, const Context& ctx)
 {
     layout(static_cast<Symbol*>(item), ctx);
+}
+
+void SingleLayout::layout(NoteLine*, const Context&)
+{
+    NOT_IMPLEMENTED;
+    //! NOTE: NoteLines can be removed from disallowed elements in NotationInteraction::isOutgoingDragElementAllowed once this has been implemented
 }
 
 void SingleLayout::layout(Marker* item, const Context& ctx)

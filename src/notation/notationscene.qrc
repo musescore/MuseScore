@@ -26,6 +26,7 @@
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarActionDelegate.qml</file>
         <file>qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml</file>
         <file>qml/MuseScore/NotationScene/UndoRedoToolBar.qml</file>
+        <file>qml/MuseScore/NotationScene/UndoHistoryPanel.qml</file>
         <file>qml/MuseScore/NotationScene/Timeline.qml</file>
         <file>qml/MuseScore/NotationScene/SelectionFilterPanel.qml</file>
         <file>qml/MuseScore/NotationScene/EditGridSizeDialog.qml</file>
@@ -39,6 +40,7 @@
         <file>qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CapoPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/DynamicPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleToggleWithImage.qml</file>
@@ -52,11 +54,54 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveOffset-OFF.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/accidentalImages/octaveOffset-ON.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/EditStyle/BasicStyleSelectorWithSpinboxAndReset.qml</file>
-        <file>qml/MuseScore/NotationScene/UndoHistoryDialog.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleSpinboxWithReset.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml</file>
         <file>qml/MuseScore/NotationScene/PercussionPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PercussionPanelPad.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PercussionPanelPadContent.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/GlissandoSection.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/NoteLineSection.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/LineStyleSection.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/RadioButtonSelectorWithReset.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/StyleControlRowWithReset.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/TextFieldWithReset.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/IconAndTextButtonSelector.qml</file>
+        <file>qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PartialTiePopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/StyledImage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PartialTieMenuRowItem.qml</file>
+        <file>qml/MuseScore/NotationScene/EditPercussionShortcutDialog.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/ShadowNotePopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/PercussionNotePopupContent.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-above_staves.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-across_staves.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-hang.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-inset.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-courtesy-right_align.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/timeSigImages/timesig-on_all_staves.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_other-off.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_other-on-parens.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_other-on.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_repeat-off.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_repeat-on-parens.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/cancel_repeat-on.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-after_repeat-allow_changes.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-after_repeat-disallow_changes.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-after_repeat.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-before_repeat-allow_changes.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-before_repeat-disallow_changes.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/clefs-before_repeat.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other_jumps-off.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other_jumps-on-parens.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/other_jumps-on.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeats-off.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeats-on-parens.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/courtesyImages/repeats-on.png</file>
+        <file>qml/MuseScore/NotationScene/internal/SelectionFilterSection.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/hammerOnPullOffImages/hopoShowAll.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/hammerOnPullOffImages/hopoNotShowAll.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml</file>
     </qresource>
 </RCC>

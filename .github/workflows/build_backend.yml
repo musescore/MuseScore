@@ -14,6 +14,14 @@ on:
         description: 'Publish: on - publish'
         default: 'off'
         required: false
+      deploy:
+        description: 'Deploy: on - deploy'
+        default: 'off'
+        required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        required: false   
   workflow_call:
     inputs:
       build_mode:
@@ -26,10 +34,20 @@ on:
         default: 'off'
         type: string
         required: false
+      deploy:
+        description: 'Deploy: on - deploy'
+        default: 'off'
+        type: string
+        required: false
+      use_qt69:
+        description: 'Use Qt 6.9'
+        default: 'off'
+        type: string
+        required: false  
 
 jobs:
   backend:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     if: github.event_name != 'schedule' || github.repository == 'musescore/MuseScore'
     steps:
     - name: Cancel Previous Runs
@@ -48,9 +66,9 @@ jobs:
         BUILD_NUMBER=$(cat ./build.artifacts/env/build_number.env)
 
         DO_PUBLISH='false'
-        if [ "${{ inputs.publish }}" = "on" ]; then 
+        if [ "${{ inputs.publish }}" = "on" ]; then
           DO_PUBLISH='true';
-          if [ -z "${{ secrets.S3_KEY_CONVERTER }}" ]; then 
+          if [ -z "${{ secrets.S3_KEY_CONVERTER }}" ]; then
             echo "::warning::S3_KEY_CONVERTER is empty; publishing to S3 disabled"
             DO_PUBLISH='false'
           fi
@@ -60,15 +78,34 @@ jobs:
           fi
         fi
 
+        DO_DEPLOY='false'
+        if [ "${{ inputs.deploy }}" = "on" ]; then
+            DO_DEPLOY='true'
+        fi
+
         bash ./buildscripts/ci/tools/make_version_env.sh $BUILD_NUMBER
         VERSION=$(cat ./build.artifacts/env/build_version.env)
         GITHUB_ARTIFACT_NAME="MuseScore-${VERSION}"
+
+        VERSION_MAJOR_MINOR=$(echo "$VERSION" | cut -d '.' -f 1,2)
 
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" | tee -a $GITHUB_ENV
         echo "BUILD_NUMBER=$BUILD_NUMBER" | tee -a $GITHUB_ENV
         echo "DO_PUBLISH=$DO_PUBLISH" | tee -a $GITHUB_ENV
+        echo "DO_DEPLOY=$DO_DEPLOY" | tee -a $GITHUB_ENV
+        echo "VERSION=$VERSION" | tee -a $GITHUB_ENV
+        echo "VERSION_MAJOR_MINOR=$VERSION_MAJOR_MINOR" | tee -a $GITHUB_ENV
         echo "GITHUB_ARTIFACT_NAME=$GITHUB_ARTIFACT_NAME" | tee -a $GITHUB_ENV
+
+    - name: Install Qt
+      uses: jdpurcell/install-qt-action@v5
+      with:
+        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
+        host: 'linux'
+        target: 'desktop'
+        arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
+        modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
 
     - name: Setup environment
       run: |
@@ -82,12 +119,17 @@ jobs:
       run: |
         bash ./buildscripts/ci/backend/package.sh
 
-    - name: Publish to S3
+    - name: Send package to S3
       if: env.DO_PUBLISH == 'true'
       run: |
-        bash ./buildscripts/ci/backend/publish_to_s3.sh --s3_key ${{ secrets.S3_KEY_CONVERTER }} --s3_secret ${{ secrets.S3_SECRET_CONVERTER }}
+        bash ./buildscripts/ci/backend/publish_to_s3.sh \
+          --s3_key ${{ secrets.S3_KEY_CONVERTER }} \
+          --s3_secret ${{ secrets.S3_SECRET_CONVERTER }} \
+          --stage ${{ inputs.build_mode }} \
+          --mu_version ${{ env.VERSION }} \
+          --mu_version_major_minor ${{ env.VERSION_MAJOR_MINOR }}
 
-    - name: Build Docker
+    - name: Build Docker (used package from S3)
       if: env.DO_PUBLISH == 'true'
       run: |
         bash ./buildscripts/ci/backend/build_docker.sh
@@ -96,6 +138,12 @@ jobs:
       if: env.DO_PUBLISH == 'true'
       run: |
         bash ./buildscripts/ci/backend/publish_to_registry.sh --token ${{ secrets.PACKAGES_PAT }}
+
+    - name: Deploy to musescore.com
+      if: env.DO_DEPLOY == 'true'
+      run: |
+        pip install jenkinsapi
+        python3 ./buildscripts/ci/backend/deploy.py --mu_version ${{ env.VERSION_MAJOR_MINOR }} --api_token ${{ secrets.JENKINS_API_TOKEN }}
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}

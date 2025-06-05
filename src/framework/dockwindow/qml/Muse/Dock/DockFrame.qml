@@ -34,9 +34,13 @@ Rectangle {
     //! NOTE: please, don't rename those properties because they are used in c++
     property QtObject frameCpp
     readonly property QtObject titleBarCpp: Boolean(frameCpp) ? frameCpp.actualTitleBar : null
-    readonly property int nonContentsHeight: titleBar.visible ? titleBar.heightWhenVisible + tabsPanel.height : 0
+    readonly property int nonContentsHeight: titleBar.height + tabBar.height + stackLayout.anchors.topMargin
     property int titleBarNavigationPanelOrder: 1
     //! ---
+
+    readonly property bool hasTitleBar: frameModel.titleBarAllowed && !(frameModel.tabs.length > 1 || frameModel.isHorizontalPanel)
+    readonly property bool hasSingleTab: frameModel.titleBarAllowed && frameModel.tabs.length === 1 && frameModel.isHorizontalPanel
+    readonly property bool hasTabBar: frameModel.titleBarAllowed && (frameModel.tabs.length > 1 || frameModel.isHorizontalPanel)
 
     anchors.fill: parent
     color: ui.theme.backgroundPrimaryColor
@@ -53,10 +57,6 @@ Rectangle {
         }
     }
 
-    Component.onDestruction: {
-        tabs.model = 0
-    }
-
     DockFrameModel {
         id: frameModel
 
@@ -71,8 +71,8 @@ Rectangle {
         order: root.titleBarNavigationPanelOrder
 
         onNavigationEvent: function(event) {
-            if (event.type === NavigationEvent.AboutActive && tabsPanel.visible) {
-                event.setData("controlName", tabs.currentItem.navigation.name)
+            if (event.type === NavigationEvent.AboutActive && tabBar.visible) {
+                event.setData("controlName", tabBar.currentItemNavigationName)
             }
         }
     }
@@ -81,14 +81,16 @@ Rectangle {
         id: titleBar
 
         anchors.top: parent.top
+        width: parent.width
+        height: visible ? implicitHeight : 0
+
+        visible: root.hasTitleBar
 
         property alias titleBar: frameModel.titleBar
 
         titleBarCpp: root.titleBarCpp
 
         contextMenuModel: frameModel.currentDockContextMenuModel
-        visible: frameModel.titleBarVisible
-        isHorizontalPanel: frameModel.isHorizontalPanel
 
         navigationPanel: navPanel
         navigationOrder: 1
@@ -100,127 +102,61 @@ Rectangle {
         titleBarItem: frameModel.titleBar
     }
 
-    MouseArea {
-        id: dragMouseArea
+    DockTabBar {
+        id: tabBar
 
-        anchors.top: tabsPanel.top
-        width: tabs.contentWidth
-        height: tabsPanel.height - bottomSeparator.height
-
-        z: tabsPanel.z + 1
-
-        hoverEnabled: false
-        propagateComposedEvents: true
-        enabled: tabsPanel.visible
-        cursorShape: Qt.SizeAllCursor
-    }
-
-    Rectangle {
-        id: tabsPanel
-
-        anchors.top: titleBar.visible ? titleBar.bottom : parent.top
-
-        height: visible ? 35 : 0
+        anchors.top: parent.top
         width: parent.width
+        height: visible ? 35 : 0
 
-        visible: tabs.count > 1
-        clip: true
+        visible: root.hasTabBar
+        draggingTabsAllowed: root.hasTabBar && !root.hasSingleTab
 
-        color: ui.theme.backgroundSecondaryColor
+        tabBarCpp: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.tabBar : null
+        tabsModel: frameModel.tabs
+        currentIndex: Boolean(root.frameCpp) && root.frameCpp.currentIndex >= 0 ? root.frameCpp.currentIndex : 0
 
-        readonly property QtObject tabBarCpp: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.tabBar : null
-        property int currentIndex: Boolean(root.frameCpp) && root.frameCpp.currentIndex >= 0 ? root.frameCpp.currentIndex : 0
+        currentToolbarComponent: frameModel.currentDockToolbarComponent
 
-        onTabBarCppChanged: {
-            if (Boolean(tabBarCpp)) {
-                tabBarCpp.setDraggableMouseArea(dragMouseArea)
-                tabBarCpp.tabBarQmlItem = this
+        navigationPanel: navPanel
+
+        function setCurrentDockWidget(index: int) {
+            if (root.frameCpp) {
+                root.frameCpp.tabWidget.setCurrentDockWidget(index)
             }
         }
 
         onCurrentIndexChanged: {
-            if (Boolean(root) && Boolean(root.frameCpp)) {
-                root.frameCpp.tabWidget.setCurrentDockWidget(currentIndex)
-            }
+            setCurrentDockWidget(currentIndex)
         }
 
-        ListView {
-            id: tabs
-
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-
-            width: Math.min(contentWidth, availableWidth)
-
-            orientation: Qt.Horizontal
-            interactive: false
-            spacing: 0
-
-            currentIndex: tabsPanel.currentIndex
-            model: frameModel.tabs
-
-            readonly property real availableWidth: tabsPanel.width + 1  // + 1, because we don't need to see the rightmost separator
-            readonly property real implicitWidthOfActiveTab: currentItem ? currentItem.implicitWidth : 0
-            readonly property real implicitWidthOfAllTabsTogether: {
-                let result = 0
-                let items = tabs.contentItem.children
-
-                for (let i in items) {
-                    let item = items[i]
-                    if (item && item.implicitWidth) {
-                        result += item.implicitWidth
-                    }
-                }
-
-                return result
-            }
-
-            delegate: DockPanelTab {
-                text: modelData.title
-                isCurrent: tabsPanel && (tabsPanel.currentIndex === model.index)
-                contextMenuModel: modelData.contextMenuModel
-
-                width: isCurrent || (tabs.implicitWidthOfAllTabsTogether <= tabs.availableWidth)
-                       ? implicitWidth
-                       : (tabs.availableWidth - tabs.implicitWidthOfActiveTab)
-                         / (tabs.implicitWidthOfAllTabsTogether - tabs.implicitWidthOfActiveTab)
-                         * implicitWidth
-
-                navigation.name: text
-                navigation.panel: navPanel
-                navigation.order: model.index * 2 // NOTE '...' button will have +1 order
-
-                onNavigationTriggered: {
-                    tabsPanel.currentIndex = model.index
-                }
-
-                onClicked: {
-                    tabsPanel.currentIndex = model.index
-                }
-
-                onHandleContextMenuItemRequested: function(itemId) {
-                    frameModel.handleMenuItem(itemId)
-                }
-            }
+        onTabClicked: function(index) {
+            setCurrentDockWidget(index)
         }
 
-        Item {
-            anchors.left: tabs.right
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-
-            height: bottomSeparator.height
-
-            SeparatorLine { id: bottomSeparator }
+        onHandleContextMenuItemRequested: function(itemId) {
+            frameModel.handleMenuItem(itemId)
         }
+    }
+
+    DockTitleBarMouseArea {
+        id: titleBarMouseArea
+
+        anchors.fill: tabBar.visible ? tabBar
+                                     : titleBar.visible ? titleBar : null
+
+        enabled: root.hasTitleBar || root.hasSingleTab
+        propagateComposedEvents: true
+
+        titleBarCpp: root.titleBarCpp
     }
 
     StackLayout {
         id: stackLayout
 
-        anchors.top: tabsPanel.visible ? tabsPanel.bottom : (titleBar.visible ? titleBar.bottom : parent.top)
-        anchors.topMargin: tabsPanel.visible ? 12 : 0
+        anchors.top: tabBar.visible ? tabBar.bottom
+                                    : titleBar.visible ? titleBar.bottom : parent.top
+        anchors.topMargin: tabBar.visible ? 12 : 0
         anchors.bottom: parent.bottom
 
         width: parent.width

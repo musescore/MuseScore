@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.20">
-  <programVersion>4.2.0</programVersion>
+<museScore version="4.50">
+  <programVersion>4.5.0</programVersion>
   <programRevision></programRevision>
+  <LastEID>179</LastEID>
   <Score>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
@@ -10,6 +11,7 @@
     <showMargins>0</showMargins>
     <open>1</open>
     <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
     <metaTag name="composer">Composer / arranger</metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="creationDate">2023-10-10</metaTag>
@@ -91,35 +93,22 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <VBox>
-        <height>10</height>
-        <excludeFromParts>0</excludeFromParts>
-        <Text>
-          <style>title</style>
-          <text>Untitled score</text>
-          </Text>
-        <Text>
-          <style>subtitle</style>
-          <text>Subtitle</text>
-          </Text>
-        <Text>
-          <style>composer</style>
-          <text>Composer / arranger</text>
-          </Text>
-        </VBox>
       <Measure>
         <voice>
           <TimeSig>
+            <eid>38654705689</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Dynamic>
             <subtype>ppp</subtype>
             <velocity>16</velocity>
+            <eid>51539607588</eid>
             </Dynamic>
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <eid>55834574943</eid>
               </HairPin>
             <next>
               <location>
@@ -128,8 +117,20 @@
               </next>
             </Spanner>
           <Chord>
+            <eid>60129542260</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>73014444052</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>730144440351</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    </location>
+                  </next>
+                </Spanner>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -141,6 +142,7 @@
           <Dynamic>
             <subtype>fff</subtype>
             <velocity>126</velocity>
+            <eid>90194313252</eid>
             <offset x="-0.384535" y="2.73072"/>
             </Dynamic>
           <Spanner type="HairPin">
@@ -150,10 +152,48 @@
                 </location>
               </prev>
             </Spanner>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Chord>
+            <eid>682899800180</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>678604832788</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>734439407647</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/2</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>657129996404</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>670014898196</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/2</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       </Staff>

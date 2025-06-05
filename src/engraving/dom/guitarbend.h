@@ -30,7 +30,7 @@
 #include "types.h"
 
 namespace mu::engraving {
-enum class QuarterOffset {
+enum class QuarterOffset : unsigned char {
     QUARTER_FLAT,
     NONE,
     QUARTER_SHARP
@@ -251,6 +251,8 @@ class GuitarBendText final : public TextBase
 public:
     GuitarBendText(GuitarBendSegment* parent);
     GuitarBendText* clone() const override { return new GuitarBendText(*this); }
+
+    bool isEditable() const override { return false; }
 };
 } // namespace mu::engraving
 

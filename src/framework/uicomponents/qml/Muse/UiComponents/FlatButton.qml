@@ -40,6 +40,8 @@ FocusScope {
     property string toolTipTitle: ""
     property string toolTipDescription: ""
     property string toolTipShortcut: ""
+    //!NOTE: Needed to avoid showing a tooltip when tour is shown, see tours provider
+    property bool toolTipShowLocked: false
 
     property font iconFont: ui.theme.iconsFont
     property color iconColor: ui.theme.fontPrimaryColor
@@ -101,8 +103,9 @@ FocusScope {
     }
 
     signal clicked(var mouse)
-    // There are intentionally no "forwarded" signals here from the MouseArea, like `pressAndHold`
-    // See https://github.com/musescore/MuseScore/issues/16012#issuecomment-1399656043
+    // The `pressAndHold` signal is intentionally not "forwarded" here from the MouseArea for performance reasons.
+    // Most buttons don't use it and Qt has optimizations if no signal is attached. If a component needs it,
+    // it can hook to it directly (the mouse area is exposed via the `mouseArea` alias property).
 
     objectName: root.text
 
@@ -110,6 +113,10 @@ FocusScope {
     implicitHeight: Math.max(contentLoader.itemImplicitHeight, ui.theme.defaultButtonSize)
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
+
+    function doClicked(mouse) {
+        Qt.callLater(root.clicked, mouse)
+    }
 
     NavigationControl {
         id: navCtrl
@@ -124,7 +131,8 @@ FocusScope {
 
         onTriggered: {
             if (navCtrl.enabled && root.isClickOnKeyNavTriggered) {
-                root.clicked(null)
+                root.doClicked(null)
+                navCtrl.notifyAboutControlWasTriggered()
             }
         }
     }
@@ -296,12 +304,14 @@ FocusScope {
         id: mouseArea
         anchors.fill: parent
 
+        enabled: root.enabled
         hoverEnabled: true
 
         onClicked: function(mouse) {
             navigation.requestActiveByInteraction()
+            navigation.notifyAboutControlWasTriggered()
 
-            root.clicked(mouse)
+            root.doClicked(mouse)
         }
 
         onPressed: {
@@ -309,7 +319,7 @@ FocusScope {
         }
 
         onContainsMouseChanged: {
-            if (!Boolean(root.toolTipTitle)) {
+            if (!Boolean(root.toolTipTitle) || root.toolTipShowLocked) {
                 return
             }
 

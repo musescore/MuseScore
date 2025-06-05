@@ -47,6 +47,8 @@
 #include "dom/figuredbass.h"
 #include "dom/tremolotwochord.h"
 
+#include "engravingerrors.h"
+
 #include "staffrw.h"
 #include "tread.h"
 
@@ -55,11 +57,15 @@
 using namespace mu::engraving;
 using namespace mu::engraving::read400;
 
-Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
+muse::Ret Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
 {
     ReadContext ctx(score);
-    if (data && data->overriddenSpatium.has_value()) {
-        ctx.setSpatium(data->overriddenSpatium.value());
+    if (data) {
+        if (data->overriddenSpatium.has_value()) {
+            ctx.setSpatium(data->overriddenSpatium.value());
+        }
+
+        ctx.setPropertiesToSkip(data->propertiesToSkip);
     }
 
     if (!score->isMaster() && data) {
@@ -83,9 +89,9 @@ Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
         } else if (tag == "Score") {
             if (!readScore400(score, e, ctx)) {
                 if (e.error() == muse::XmlStreamReader::CustomError) {
-                    return Err::FileCriticallyCorrupted;
+                    return make_ret(Err::FileCriticallyCorrupted, e.errorString());
                 }
-                return Err::FileBadFormat;
+                return make_ret(Err::FileBadFormat, e.errorString());
             }
         } else if (tag == "museScore") {
             // pass
@@ -106,7 +112,7 @@ Err Read400::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
         data->settingsCompat = ctx.settingCompat();
     }
 
-    return Err::NoError;
+    return muse::make_ok();
 }
 
 bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
@@ -500,7 +506,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             if (cr->isChord()) {
                                 Chord* c = toChord(cr);
                                 for (Note* note: c->notes()) {
-                                    Tie* tie = note->tieFor();
+                                    Tie* tie = note->tieForNonPartial();
                                     if (tie) {
                                         note->setTieFor(0);
                                         delete tie;
@@ -559,7 +565,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
                         int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
-                        int baseTpc = transposeTpc(harmony->baseTpc(), interval, true);
+                        int baseTpc = transposeTpc(harmony->bassTpc(), interval, true);
                         score->undoTransposeHarmony(harmony, rootTpc, baseTpc);
                     }
 
@@ -828,7 +834,7 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                         if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                             interval.flip();
                             int rootTpc = transposeTpc(el->rootTpc(), interval, true);
-                            int baseTpc = transposeTpc(el->baseTpc(), interval, true);
+                            int baseTpc = transposeTpc(el->bassTpc(), interval, true);
                             score->undoTransposeHarmony(el, rootTpc, baseTpc);
                         }
                         el->setParent(harmSegm);

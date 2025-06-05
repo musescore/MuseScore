@@ -23,10 +23,7 @@
 #define MUSE_WORKSPACE_WORKSPACETYPES_H
 
 namespace muse::workspace {
-static const std::string DEFAULT_WORKSPACE_NAME("Default");
-
 using DataKey = const char*;
-inline constexpr DataKey WS_Undefined("");
 }
 
 #endif // MUSE_WORKSPACE_WORKSPACETYPES_H

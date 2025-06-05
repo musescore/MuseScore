@@ -115,6 +115,10 @@ enum class Sid {
     lyricsMelismaForce,
     lyricsMelismaMinLength,
     lyricsDashPosAtStartOfSystem,
+    lyricsAvoidBarlines,
+    lyricsLimitDashCount,
+    lyricsMaxDashCount,
+    lyricsCenterDashedSyllables,
 
     lyricsOddFontFace,
     lyricsOddFontSize,
@@ -163,6 +167,7 @@ enum class Sid {
     repeatBarTips,
     startBarlineSingle,
     startBarlineMultiple,
+    maskBarlinesForText,
 
     bracketWidth,
     bracketDistance,
@@ -181,7 +186,6 @@ enum class Sid {
     keysigLeftMargin,
     ambitusMargin,
     timesigLeftMargin,
-    timesigScale,
 
     midClefKeyRightMargin,
     clefKeyRightMargin,
@@ -191,10 +195,34 @@ enum class Sid {
     keyBarlineDistance,
     systemHeaderDistance,
     systemHeaderTimeSigDistance,
+    systemHeaderMinStartOfSystemDistance,
     systemTrailerRightMargin,
 
     clefBarlineDistance,
     timesigBarlineDistance,
+
+    timeSigPlacement,
+
+    timeSigCenterOnBarline,
+    timeSigVSMarginCentered,
+    timeSigVSMarginNonCentered,
+    timeSigCenterAcrossStaveGroup,
+
+    timeSigNormalStyle,
+    timeSigNormalScale,
+    timeSigNormalScaleLock,
+    timeSigNormalNumDist,
+    timeSigNormalY,
+    timeSigAboveStyle,
+    timeSigAboveScale,
+    timeSigAboveScaleLock,
+    timeSigAboveNumDist,
+    timeSigAboveY,
+    timeSigAcrossStyle,
+    timeSigAcrossScale,
+    timeSigAcrossScaleLock,
+    timeSigAcrossNumDist,
+    timeSigAcrossY,
 
     useStraightNoteFlags,
     stemWidth,
@@ -443,6 +471,7 @@ enum class Sid {
     measureNumberAllStaves,
 
     smallNoteMag,
+    scaleRythmicSpacingForSmallNotes,
     graceNoteMag,
     graceToMainNoteDist,
     graceToGraceNoteDist,
@@ -457,6 +486,10 @@ enum class Sid {
 
     keySigCourtesyBarlineMode,
     timeSigCourtesyBarlineMode,
+
+    barlineBeforeSigChange,
+    doubleBarlineBeforeKeySig,
+    doubleBarlineBeforeTimeSig,
 
     swingRatio,
     swingUnit,
@@ -526,16 +559,23 @@ enum class Sid {
     tieMidWidth,
     tieDottedWidth,
     minTieLength,
+    minHangingTieLength,
     minStraightGlissandoLength,
     minWigglyGlissandoLength,
     slurMinDistance,
     tieMinDistance,
-    headerToLineStartDistance, // determines start point of "dangling" lines (ties, gliss, lyrics...) at start of system
+    laissezVibMinDistance,
+    headerToLineStartDistance,   // determines start point of "dangling" lines (ties, gliss, lyrics...) when preceded by header clefs/timesigs/keysigs
+    lineEndToBarlineDistance,  // determines end point of "dangling" lines (ties, gliss, lyrics...) in relation to barlines
 
     tiePlacementSingleNote,
     tiePlacementChord,
+    tieDotsPlacement,
     tieMinShoulderHeight,
     tieMaxShoulderHeight,
+
+    minLaissezVibLength,
+    laissezVibUseSmuflSym,
 
     sectionPause,
     musicalSymbolFont,
@@ -715,6 +755,11 @@ enum class Sid {
     textLinePlacement,
     textLinePosAbove,
     textLinePosBelow,
+    textLineLineWidth,
+    textLineLineStyle,
+    textLineDashLineLen,
+    textLineDashGapLen,
+    textLineHookHeight,
     textLineFrameType,
     textLineFramePadding,
     textLineFrameWidth,
@@ -725,6 +770,11 @@ enum class Sid {
     systemTextLinePlacement,
     systemTextLinePosAbove,
     systemTextLinePosBelow,
+    systemTextLineLineWidth,
+    systemTextLineLineStyle,
+    systemTextLineDashLineLen,
+    systemTextLineDashGapLen,
+    systemTextLineHookHeight,
     systemTextLineFrameType,
     systemTextLineFramePadding,
     systemTextLineFrameWidth,
@@ -862,6 +912,26 @@ enum class Sid {
     rhGuitarFingeringFrameFgColor,
     rhGuitarFingeringFrameBgColor,
     rhGuitarFingeringOffset,
+
+    hammerOnPullOffTappingFontFace,
+    hammerOnPullOffTappingFontSize,
+    hammerOnPullOffTappingLineSpacing,
+    hammerOnPullOffTappingFontSpatiumDependent,
+    hammerOnPullOffTappingFontStyle,
+    hammerOnPullOffTappingColor,
+    hammerOnPullOffTappingAlign,
+    hammerOnPullOffTappingFrameType,
+    hammerOnPullOffTappingFramePadding,
+    hammerOnPullOffTappingFrameWidth,
+    hammerOnPullOffTappingFrameRound,
+    hammerOnPullOffTappingFrameFgColor,
+    hammerOnPullOffTappingFrameBgColor,
+    hammerOnPullOffTappingOffset,
+
+    hopoShowOnStandardStaves,
+    hopoShowOnTabStaves,
+    hopoUpperCase,
+    hopoShowAll,
 
     stringNumberFontFace,
     stringNumberFontSize,
@@ -1277,6 +1347,11 @@ enum class Sid {
     noteLineFrameFgColor,
     noteLineFrameBgColor,
 
+    noteLineWidth,
+    noteLineStyle,
+    noteLineDashLineLen,
+    noteLineDashGapLen,
+
     glissandoFontFace,
     glissandoFontSize,
     glissandoLineSpacing,
@@ -1295,6 +1370,12 @@ enum class Sid {
     glissandoText,
     glissandoStyle,
     glissandoStyleHarp,
+
+    glissandoType,
+    glissandoLineStyle,
+    glissandoDashLineLen,
+    glissandoDashGapLen,
+    glissandoShowText,
 
     bendFontFace,
     bendFontSize,
@@ -1745,6 +1826,26 @@ enum class Sid {
     autoplaceEnabled,
     defaultsVersion,
 
+    changesBeforeBarlineRepeats,
+    changesBeforeBarlineOtherJumps,
+
+    placeClefsBeforeRepeats,
+    changesBetweenEndStartRepeat,
+
+    showCourtesiesRepeats,
+    useParensRepeatCourtesies,
+
+    showCourtesiesOtherJumps,
+    useParensOtherJumpCourtesies,
+
+    showCourtesiesAfterCancellingRepeats,
+    useParensRepeatCourtesiesAfterCancelling,
+
+    showCourtesiesAfterCancellingOtherJumps,
+    useParensOtherJumpCourtesiesAfterCancelling,
+
+    smallParens,
+
     STYLES
     ///\}
 };
@@ -1756,7 +1857,7 @@ using StyleIdSet = std::unordered_set<Sid>;
 //   VerticalAlignRange
 //---------------------------------------------------------
 
-enum class VerticalAlignRange {
+enum class VerticalAlignRange : unsigned char {
     SEGMENT, MEASURE, SYSTEM
 };
 

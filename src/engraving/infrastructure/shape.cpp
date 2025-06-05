@@ -144,6 +144,24 @@ Shape Shape::adjusted(double xp1, double yp1, double xp2, double yp2) const
     return s;
 }
 
+Shape& Shape::pad(double p)
+{
+    for (ShapeElement& el : m_elements) {
+        el.pad(p);
+    }
+    return *this;
+}
+
+Shape Shape::padded(double p) const
+{
+    Shape s;
+    s.m_elements.reserve(m_elements.size());
+    for (const ShapeElement& el : m_elements) {
+        s.add(el.padded(p));
+    }
+    return s;
+}
+
 void Shape::invalidateBBox()
 {
     m_bbox = RectF();
@@ -350,6 +368,30 @@ double Shape::bottom() const
     return dist;
 }
 
+double Shape::topAtX(double x) const
+{
+    double localTop = DBL_MAX;
+    for (const ShapeElement& el : m_elements) {
+        if (el.left() < x && el.right() > x) {
+            localTop = std::min(localTop, el.top());
+        }
+    }
+
+    return localTop != DBL_MAX ? localTop : top();
+}
+
+double Shape::bottomAtX(double x) const
+{
+    double localBottom = -DBL_MAX;
+    for (const ShapeElement& el : m_elements) {
+        if (el.left() < x && el.right() > x) {
+            localBottom = std::max(localBottom, el.bottom());
+        }
+    }
+
+    return localBottom != DBL_MAX ? localBottom : bottom();
+}
+
 double Shape::rightMostEdgeAtHeight(double yAbove, double yBelow) const
 {
     double edge = -DBL_MAX;
@@ -367,6 +409,19 @@ double Shape::leftMostEdgeAtHeight(double yAbove, double yBelow) const
     double edge = DBL_MAX;
     for (const ShapeElement& sh : m_elements) {
         if (sh.bottom() > yAbove && sh.top() < yBelow) {
+            edge = std::min(edge, sh.left());
+        }
+    }
+
+    return edge;
+}
+
+double Shape::leftMostEdgeAtTop() const
+{
+    double edge = DBL_MAX;
+    const double shapeTop = top();
+    for (const ShapeElement& sh : m_elements) {
+        if (muse::RealIsEqual(sh.top(), shapeTop)) {
             edge = std::min(edge, sh.left());
         }
     }
@@ -477,6 +532,18 @@ void Shape::remove(const Shape& s)
     }
 
     invalidateBBox();
+}
+
+std::vector<RectF> Shape::toRects() const
+{
+    std::vector<RectF> rects;
+    rects.reserve(m_elements.size());
+
+    for (const RectF& shapeEl : m_elements) {
+        rects.push_back(shapeEl);
+    }
+
+    return rects;
 }
 
 void Shape::removeInvisibles()

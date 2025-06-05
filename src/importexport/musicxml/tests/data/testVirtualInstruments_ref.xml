@@ -49,7 +49,7 @@
       <part-name>Drumset</part-name>
       <part-abbreviation>Drs.</part-abbreviation>
       <score-instrument id="P3-I36">
-        <instrument-name>Acoustic Bass Drum</instrument-name>
+        <instrument-name>Bass Drum 2</instrument-name>
         </score-instrument>
       <score-instrument id="P3-I37">
         <instrument-name>Bass Drum 1</instrument-name>
@@ -97,7 +97,7 @@
         <instrument-name>Ride Cymbal 1</instrument-name>
         </score-instrument>
       <score-instrument id="P3-I53">
-        <instrument-name>Chinese Cymbal</instrument-name>
+        <instrument-name>China Cymbal</instrument-name>
         </score-instrument>
       <score-instrument id="P3-I54">
         <instrument-name>Ride Bell</instrument-name>

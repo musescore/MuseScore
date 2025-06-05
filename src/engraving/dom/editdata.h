@@ -192,7 +192,9 @@ enum KeyboardKey {
     Key_BraceRight = 0x7d,
     Key_AsciiTilde = 0x7e,
 
+    Key_nobreakspace = 0x0a0,
     Key_periodcentered = 0x0b7,
+    Key_ydiaeresis = 0x0ff,
 };
 
 enum MouseButton {
@@ -208,9 +210,10 @@ DECLARE_OPERATORS_FOR_FLAGS(MouseButtons)
 //   Grip
 //---------------------------------------------------------
 
-enum class Grip {
+enum class Grip : signed char {
     NO_GRIP = -1,
     START = 0, END = 1,                           // arpeggio etc.
+    LEFT = START, RIGHT = END,                    // aliases for dynamic
     MIDDLE = 2, APERTURE = 3,                     // Line
     /*START, END , */
     BEZIER1 = 2, SHOULDER = 3, BEZIER2 = 4, DRAG = 5,       // Slur
@@ -247,6 +250,7 @@ public:
     bool hRaster = false;
     bool vRaster = false;
     bool editTextualProperties = true;
+    bool isHairpinDragCreatedFromDynamic = false;
 
     int key = 0;
     bool isKeyRelease = false;
@@ -270,8 +274,8 @@ public:
     void addData(std::shared_ptr<ElementEditData>);
     bool control(bool textEditing = false) const;
     bool shift() const { return modifiers & ShiftModifier; }
-    bool isStartEndGrip() { return curGrip == Grip::START || curGrip == Grip::END; }
-    bool hasCurrentGrip() { return curGrip != Grip::NO_GRIP; }
+    bool isStartEndGrip() const { return curGrip == Grip::START || curGrip == Grip::END; }
+    bool hasCurrentGrip() const { return curGrip != Grip::NO_GRIP; }
 
 private:
     std::list<std::shared_ptr<ElementEditData> > m_data;

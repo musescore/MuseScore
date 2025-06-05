@@ -100,14 +100,14 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
 
     AudioOutputParams resultParams = requiredParams;
 
-    auto findFxProcessor = [this](const std::pair<AudioFxChainOrder, AudioFxParams>& params) -> IFxProcessorPtr {
+    auto findFxProcessor = [this](const std::pair<AudioFxChainOrder, AudioFxParams>& params) -> IFxProcessor* {
         for (IFxProcessorPtr& fx : m_fxProcessors) {
             if (fx->params().chainOrder != params.first) {
                 continue;
             }
 
             if (fx->params().resourceMeta == params.second.resourceMeta) {
-                return fx;
+                return fx.get();
             }
         }
 
@@ -115,7 +115,7 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
     };
 
     for (auto it = resultParams.fxChain.begin(); it != resultParams.fxChain.end();) {
-        if (IFxProcessorPtr fx = findFxProcessor(*it)) {
+        if (IFxProcessor* fx = findFxProcessor(*it)) {
             fx->setActive(it->second.active);
             ++it;
         } else {
@@ -167,7 +167,7 @@ void MixerChannel::setSampleRate(unsigned int sampleRate)
         m_audioSource->setSampleRate(sampleRate);
     }
 
-    for (IFxProcessorPtr fx : m_fxProcessors) {
+    for (IFxProcessorPtr& fx : m_fxProcessors) {
         fx->setSampleRate(sampleRate);
     }
 }
@@ -192,18 +192,20 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
     samples_t processedSamplesCount = samplesPerChannel;
 
-    if (m_audioSource && !m_params.muted) {
-        processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
+    if (m_audioSource) {
+        if (!m_params.muted || !m_isSilent) {
+            processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
+        }
     }
 
-    if (processedSamplesCount == 0 || m_params.muted) {
+    if (processedSamplesCount == 0 || (m_params.muted && m_isSilent)) {
         std::fill(buffer, buffer + samplesPerChannel * audioChannelsCount(), 0.f);
         notifyNoAudioSignal();
 
         return processedSamplesCount;
     }
 
-    for (IFxProcessorPtr fx : m_fxProcessors) {
+    for (IFxProcessorPtr& fx : m_fxProcessors) {
         if (!fx->active()) {
             continue;
         }
@@ -215,7 +217,7 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
     return processedSamplesCount;
 }
 
-void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) const
+void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount)
 {
     unsigned int channelsCount = audioChannelsCount();
     float volume = muse::db_to_linear(m_params.volume);
@@ -241,6 +243,7 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) cons
         m_audioSignalNotifier.updateSignalValues(audioChNum, rms);
     }
 
+    m_isSilent = RealIsNull(totalSquaredSum);
     m_audioSignalNotifier.notifyAboutChanges();
 
     if (!m_compressor->isActive()) {
@@ -249,6 +252,11 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) cons
 
     float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesCount * channelsCount);
     m_compressor->process(totalRms, buffer, channelsCount, samplesCount);
+}
+
+bool MixerChannel::isSilent() const
+{
+    return m_isSilent;
 }
 
 void MixerChannel::notifyNoAudioSignal()

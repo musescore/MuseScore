@@ -34,19 +34,15 @@ RadioDelegate {
 
     ButtonGroup.group: ListView.view && ListView.view instanceof RadioButtonGroup ? ListView.view.radioButtonGroup : null
 
-    implicitHeight: 20
-    implicitWidth: ListView.view
-                   ? (ListView.view.orientation === Qt.Vertical
-                      ? ListView.view.width
-                      : (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count)
-                   : 20
+    implicitWidth: leftPadding + implicitIndicatorWidth + spacing + implicitContentWidth + rightPadding
+    implicitHeight: topPadding + Math.max(implicitIndicatorHeight, implicitContentHeight) + bottomPadding
 
     spacing: 6
     padding: 0
 
     font: ui.theme.bodyFont
 
-    hoverEnabled: true
+    hoverEnabled: root.enabled
 
     onToggled: {
         navigation.requestActiveByInteraction()
@@ -74,6 +70,9 @@ RadioDelegate {
         anchors.fill: parent
         anchors.leftMargin: root.indicator.width + root.spacing + root.leftPadding
 
+        implicitWidth: contentLoader.implicitWidth
+        implicitHeight: contentLoader.implicitHeight
+
         Loader {
             id: contentLoader
 
@@ -90,6 +89,7 @@ RadioDelegate {
                     text: root.text
                     font: root.font
                     horizontalAlignment: Qt.AlignLeft
+                    wrapMode: Text.WordWrap
                 }
             }
         }
@@ -98,6 +98,7 @@ RadioDelegate {
     indicator: Item {
         x: root.leftPadding
         y: Boolean(parent) ? parent.height / 2 - height / 2 : 0
+
         implicitWidth: 20
         implicitHeight: implicitWidth
 

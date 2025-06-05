@@ -21,10 +21,13 @@
  */
 #include "abstractinspectormodel.h"
 #include "engraving/dom/dynamic.h"
+#include "engraving/dom/property.h"
+
+#include "shortcuts/shortcutstypes.h"
 
 #include "types/texttypes.h"
 
-#include "dom/tempotext.h"
+#include "engraving/dom/tempotext.h"
 
 #include "log.h"
 
@@ -47,8 +50,14 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::VIBRATO_SEGMENT, InspectorModelType::TYPE_VIBRATO },
     { mu::engraving::ElementType::SLUR, InspectorModelType::TYPE_SLUR },
     { mu::engraving::ElementType::SLUR_SEGMENT, InspectorModelType::TYPE_SLUR },
+    { mu::engraving::ElementType::HAMMER_ON_PULL_OFF, InspectorModelType::TYPE_HAMMER_ON_PULL_OFF },
+    { mu::engraving::ElementType::HAMMER_ON_PULL_OFF_SEGMENT, InspectorModelType::TYPE_HAMMER_ON_PULL_OFF },
     { mu::engraving::ElementType::TIE, InspectorModelType::TYPE_TIE },
     { mu::engraving::ElementType::TIE_SEGMENT, InspectorModelType::TYPE_TIE },
+    { mu::engraving::ElementType::LAISSEZ_VIB, InspectorModelType::TYPE_LAISSEZ_VIB },
+    { mu::engraving::ElementType::LAISSEZ_VIB_SEGMENT, InspectorModelType::TYPE_LAISSEZ_VIB },
+    { mu::engraving::ElementType::PARTIAL_TIE, InspectorModelType::TYPE_PARTIAL_TIE },
+    { mu::engraving::ElementType::PARTIAL_TIE_SEGMENT, InspectorModelType::TYPE_PARTIAL_TIE },
     { mu::engraving::ElementType::TEMPO_TEXT, InspectorModelType::TYPE_TEMPO },
     { mu::engraving::ElementType::FERMATA, InspectorModelType::TYPE_FERMATA },
     { mu::engraving::ElementType::LAYOUT_BREAK, InspectorModelType::TYPE_SECTIONBREAK },
@@ -76,6 +85,7 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::TBOX, InspectorModelType::TYPE_TEXT_FRAME },// text frame
     { mu::engraving::ElementType::VBOX, InspectorModelType::TYPE_VERTICAL_FRAME },// vertical frame
     { mu::engraving::ElementType::HBOX, InspectorModelType::TYPE_HORIZONTAL_FRAME },// horizontal frame
+    { mu::engraving::ElementType::FBOX, InspectorModelType::TYPE_FRET_FRAME },// fret diagram legend
     { mu::engraving::ElementType::ARTICULATION, InspectorModelType::TYPE_ARTICULATION },
     { mu::engraving::ElementType::ORNAMENT, InspectorModelType::TYPE_ORNAMENT },
     { mu::engraving::ElementType::TRILL, InspectorModelType::TYPE_ORNAMENT },
@@ -104,6 +114,8 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT, InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE },
     { mu::engraving::ElementType::INSTRUMENT_NAME, InspectorModelType::TYPE_INSTRUMENT_NAME },
     { mu::engraving::ElementType::LYRICS, InspectorModelType::TYPE_LYRICS },
+    { mu::engraving::ElementType::PARTIAL_LYRICSLINE, InspectorModelType::TYPE_LYRICS },
+    { mu::engraving::ElementType::PARTIAL_LYRICSLINE_SEGMENT, InspectorModelType::TYPE_LYRICS },
     { mu::engraving::ElementType::REST, InspectorModelType::TYPE_REST },
     { mu::engraving::ElementType::DYNAMIC, InspectorModelType::TYPE_DYNAMIC },
     { mu::engraving::ElementType::EXPRESSION, InspectorModelType::TYPE_EXPRESSION },
@@ -127,6 +139,12 @@ static const QMap<mu::engraving::TempoTextType, InspectorModelType> TEMPO_TEXT_E
     { mu::engraving::TempoTextType::A_TEMPO, InspectorModelType::TYPE_A_TEMPO },
     { mu::engraving::TempoTextType::TEMPO_PRIMO, InspectorModelType::TYPE_TEMPO_PRIMO },
 };
+
+QString AbstractInspectorModel::shortcutsForActionCode(std::string code) const
+{
+    const muse::ui::UiAction& action = uiActionsRegister()->action(code);
+    return muse::shortcuts::sequencesToNativeText(action.shortcuts);
+}
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,
                                                mu::engraving::ElementType elementType)
@@ -154,6 +172,10 @@ void AbstractInspectorModel::onCurrentNotationChanged()
     if (!notation) {
         return;
     }
+
+    notation->viewModeChanged().onNotify(this, [this]() {
+        onNotationChanged({}, {});
+    });
 
     notation->undoStack()->changesChannel().onReceive(this, [this](const ChangesRange& range) {
         if (range.changedPropertyIdSet.empty() && range.changedStyleIdSet.empty()) {
@@ -358,7 +380,7 @@ void AbstractInspectorModel::setPropertyValue(const QList<engraving::EngravingIt
         return;
     }
 
-    beginCommand(TranslatableString("undoableAction", "Edit element property"));
+    beginCommand(TranslatableString("undoableAction", "Edit %1").arg(propertyUserName(pid)));
 
     for (mu::engraving::EngravingItem* item : items) {
         IF_ASSERT_FAILED(item) {

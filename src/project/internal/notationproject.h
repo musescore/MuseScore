@@ -94,7 +94,8 @@ public:
     bool needAutoSave() const override;
     void setNeedAutoSave(bool val) override;
 
-    muse::Ret save(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save) override;
+    muse::Ret save(
+        const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save, bool createBackup = true) override;
     muse::Ret writeToDevice(QIODevice* device) override;
 
     ProjectMeta metaInfo() const override;
@@ -117,7 +118,7 @@ private:
     muse::Ret exportProject(const muse::io::path_t& path, const std::string& suffix);
     muse::Ret doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup = true, bool createThumbnail = true,
                      bool isAutosave = false);
-    muse::Ret makeCurrentFileAsBackup();
+    muse::Ret makeBackup(muse::io::path_t filePath);
     muse::Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection, bool createThumbnail = true);
     muse::Ret checkSavedFileForCorruption(engraving::MscIoMode ioMode, const muse::io::path_t& path, const muse::io::path_t& scoreFileName);
 

@@ -28,10 +28,12 @@ df -h .
 BUILD_TOOLS=$HOME/build_tools
 ARTIFACTS_DIR=build.artifacts
 BUILD_NUMBER=42
+ENABLE_CODE_COVERAGE="false"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
+        --enable_code_coverage) ENABLE_CODE_COVERAGE="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -41,15 +43,18 @@ cat $BUILD_TOOLS/environment.sh
 source $BUILD_TOOLS/environment.sh
 
 # TODO: https://github.com/musescore/MuseScore/issues/11689
-#echo "VST3_SDK_PATH: $VST3_SDK_PATH"
-#if [ -z "$VST3_SDK_PATH" ]; then
-#    echo "warning: not set VST3_SDK_PATH, build VST module disabled"
-#   BUILD_VST=OFF
-#else
-#    BUILD_VST=ON
-#fi
-
 BUILD_VST=OFF
+
+TESTS_ENABLE_CODE_COVERAGE=OFF
+TESTS_COMPILE_USE_UNITY=ON
+
+if [[ "$ENABLE_CODE_COVERAGE" == "true" ]]; then
+    TESTS_ENABLE_CODE_COVERAGE=ON
+    TESTS_COMPILE_USE_UNITY=OFF
+else
+    TESTS_ENABLE_CODE_COVERAGE=OFF
+    TESTS_COMPILE_USE_UNITY=ON
+fi
 
 echo "=== BUILD ==="
 
@@ -60,9 +65,10 @@ MUSE_APP_BUILD_MODE=dev \
 MUSESCORE_BUILD_NUMBER=$BUILD_NUMBER \
 MUSESCORE_REVISION=$MUSESCORE_REVISION \
 MUSESCORE_BUILD_VST_MODULE=$BUILD_VST \
-MUSESCORE_VST3_SDK_PATH=$VST3_SDK_PATH \
 MUSESCORE_DOWNLOAD_SOUNDFONT=OFF \
 MUSESCORE_BUILD_UNIT_TESTS=ON \
-bash ./ninja_build.sh -t installdebug          
+MUSESCORE_UNIT_TESTS_ENABLE_CODE_COVERAGE=$TESTS_ENABLE_CODE_COVERAGE \
+MUSESCORE_COMPILE_USE_UNITY=$TESTS_COMPILE_USE_UNITY \
+bash ./ninja_build.sh -t installdebug
 
 df -h .

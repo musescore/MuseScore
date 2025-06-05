@@ -41,6 +41,7 @@
 #include "engraving/dom/trill.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/lyrics.h"
 
 #include "log.h"
 
@@ -92,6 +93,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::BRACKET: return findBrackets();
     case mu::engraving::ElementType::REST: return findRests();
     case mu::engraving::ElementType::ORNAMENT: return findOrnaments();
+    case mu::engraving::ElementType::LYRICS: return findLyrics();
     case mu::engraving::ElementType::PEDAL:
     case mu::engraving::ElementType::GLISSANDO:
     case mu::engraving::ElementType::VIBRATO:
@@ -102,7 +104,10 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::TEXTLINE:
     case mu::engraving::ElementType::NOTELINE:
     case mu::engraving::ElementType::SLUR:
+    case mu::engraving::ElementType::HAMMER_ON_PULL_OFF:
     case mu::engraving::ElementType::TIE:
+    case mu::engraving::ElementType::LAISSEZ_VIB:
+    case mu::engraving::ElementType::PARTIAL_TIE:
     case mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE:
     case mu::engraving::ElementType::PALM_MUTE: return findLines(elementType);
     default:
@@ -319,7 +324,10 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findLines(mu::eng
         { mu::engraving::ElementType::TEXTLINE, mu::engraving::ElementType::TEXTLINE_SEGMENT },
         { mu::engraving::ElementType::NOTELINE, mu::engraving::ElementType::NOTELINE_SEGMENT },
         { mu::engraving::ElementType::SLUR, mu::engraving::ElementType::SLUR_SEGMENT },
+        { mu::engraving::ElementType::HAMMER_ON_PULL_OFF, mu::engraving::ElementType::HAMMER_ON_PULL_OFF_SEGMENT },
         { mu::engraving::ElementType::TIE, mu::engraving::ElementType::TIE_SEGMENT },
+        { mu::engraving::ElementType::LAISSEZ_VIB, mu::engraving::ElementType::LAISSEZ_VIB_SEGMENT },
+        { mu::engraving::ElementType::PARTIAL_TIE, mu::engraving::ElementType::PARTIAL_TIE_SEGMENT },
         { mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE, mu::engraving::ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT }
     };
 
@@ -439,6 +447,22 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findOrnaments() c
             resultList << (EngravingItem*)(toTrill(element)->ornament());
         } else if (element->isTrillSegment()) {
             resultList << (EngravingItem*)(toTrillSegment(element)->trill()->ornament());
+        }
+    }
+
+    return resultList;
+}
+
+QList<EngravingItem*> ElementRepositoryService::findLyrics() const
+{
+    QList<mu::engraving::EngravingItem*> resultList;
+    for (mu::engraving::EngravingItem* element : m_exposedElementList) {
+        if (element->isLyrics()) {
+            resultList << element;
+        } else if (element->isPartialLyricsLine()) {
+            resultList << element;
+        } else if (element->isPartialLyricsLineSegment()) {
+            resultList << toPartialLyricsLineSegment(element)->lyricsLine();
         }
     }
 

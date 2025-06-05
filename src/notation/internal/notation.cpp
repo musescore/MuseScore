@@ -30,7 +30,6 @@
 #include "notationviewstate.h"
 #include "notationsolomutestate.h"
 #include "notationinteraction.h"
-#include "notationplayback.h"
 #include "notationundostack.h"
 #include "notationstyle.h"
 #include "notationelements.h"
@@ -237,6 +236,11 @@ bool Notation::hasVisibleParts() const
     }
 
     return false;
+}
+
+bool Notation::isMaster() const
+{
+    return m_score->isMaster();
 }
 
 void Notation::notifyAboutNotationChanged()
