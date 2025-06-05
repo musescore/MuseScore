@@ -466,15 +466,18 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 
             if (e->isChord()) {
                 Chord* chord = toChord(e);
-                std::vector<Note*> nl = chord->notes();
-                for (Note* n : nl) {
+                const std::vector<Note*> nl = chord->notes();
+                for (size_t noteIdx = 0; noteIdx < nl.size(); ++noteIdx) {
+                    if (!m_selectionFilter.canSelectNoteIdx(noteIdx, nl.size(), m_selection.rangeContainsMultiNoteChords())) {
+                        continue;
+                    }
+                    Note* note = nl.at(noteIdx);
                     if (mode == TransposeMode::DIATONICALLY) {
-                        n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
-                    } else {
-                        if (!transpose(n, interval, useDoubleSharpsFlats)) {
-                            result = false;
-                            continue;
-                        }
+                        note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
+                        continue;
+                    }
+                    if (!transpose(note, interval, useDoubleSharpsFlats)) {
+                        result = false;
                     }
                 }
                 for (Chord* g : chord->graceNotes()) {
@@ -833,9 +836,15 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
                             n->undoChangeProperty(Pid::TPC2, tpc);
                         }
                     }
-                    for (Note* n : c->notes()) {
-                        int tpc = transposeTpc(n->tpc1(), v, true);
-                        n->undoChangeProperty(Pid::TPC2, tpc);
+                    const std::vector<Note*> notes = c->notes();
+                    for (size_t noteIdx = 0; noteIdx < notes.size(); ++noteIdx) {
+                        if (selection().isRange()
+                            && !m_selectionFilter.canSelectNoteIdx(noteIdx, notes.size(), m_selection.rangeContainsMultiNoteChords())) {
+                            continue;
+                        }
+                        Note* note = notes.at(noteIdx);
+                        int tpc = transposeTpc(note->tpc1(), v, true);
+                        note->undoChangeProperty(Pid::TPC2, tpc);
                     }
                 }
                 // find chord symbols

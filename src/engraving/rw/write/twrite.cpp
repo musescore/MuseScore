@@ -865,6 +865,24 @@ void TWrite::write(const Breath* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
 {
+    bool foundWritableNotes = false;
+    const size_t noteCount = item->notes().size();
+    for (size_t noteIdx = 0; noteIdx < noteCount; ++noteIdx) {
+        if (ctx.canWriteNoteIdx(noteIdx, noteCount)) {
+            foundWritableNotes = true;
+            break;
+        }
+    }
+    if (!foundWritableNotes) {
+        Rest* dummyRest = Factory::createRest(item->segment());
+        dummyRest->setDurationType(item->durationType());
+        dummyRest->setTicks(item->ticks());
+        dummyRest->setTrack(item->track());
+        write(dummyRest, xml, ctx);
+        dummyRest->deleteLater();
+        return;
+    }
+
     for (Chord* ch : item->graceNotes()) {
         write(ch, xml, ctx);
     }
@@ -920,9 +938,15 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
         write(item->stemSlash(), xml, ctx);
     }
     writeProperty(item, xml, Pid::STEM_DIRECTION);
-    for (Note* n : item->notes()) {
-        write(n, xml, ctx);
+
+    for (size_t noteIdx = 0; noteIdx < noteCount; ++noteIdx) {
+        if (!ctx.canWriteNoteIdx(noteIdx, noteCount)) {
+            continue;
+        }
+        const Note* note = item->notes().at(noteIdx);
+        write(note, xml, ctx);
     }
+
     if (item->arpeggio()) {
         write(item->arpeggio(), xml, ctx);
     }

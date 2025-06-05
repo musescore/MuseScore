@@ -45,6 +45,8 @@ public:
     MOCK_METHOD(std::vector<muse::RectF>, boundingArea, (), (const, override));
     MOCK_METHOD(bool, containsPoint, (const muse::PointF&), (const, override));
     MOCK_METHOD(bool, containsItem, (const engraving::EngravingItem*, engraving::staff_idx_t), (const, override));
+
+    MOCK_METHOD(bool, containsMultiNoteChords, (), (const, override));
 };
 }
 

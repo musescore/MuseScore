@@ -67,6 +67,8 @@ QString ElementsSelectionFilterModel::titleForType(const SelectionFilterTypesVar
         return muse::qtrc("notation", "Ornaments");
     case ElementsSelectionFilterTypes::SLUR:
         return muse::qtrc("notation", "Slurs");
+    case ElementsSelectionFilterTypes::TIE:
+        return muse::qtrc("notation", "Ties");
     case ElementsSelectionFilterTypes::FIGURED_BASS:
         return muse::qtrc("notation", "Figured bass");
     case ElementsSelectionFilterTypes::OTTAVA:
