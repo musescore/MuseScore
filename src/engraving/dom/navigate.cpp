@@ -907,9 +907,9 @@ EngravingItem* Score::nextElement()
                 size_t index = muse::indexOf(diagrams, fretDiagram);
                 if (index != muse::nidx) {
                     while (++index < diagrams.size()) {
-                        FretDiagram* fretDiagram = toFretDiagram(diagrams[index]);
-                        if (fretDiagram->visible()) {
-                            return fretDiagram->harmony();
+                        FretDiagram* fretDiagramI = toFretDiagram(diagrams[index]);
+                        if (fretDiagramI->visible()) {
+                            return fretDiagramI->harmony();
                         }
                     }
                 }
@@ -1132,9 +1132,9 @@ EngravingItem* Score::prevElement()
                 size_t index = muse::indexOf(diagrams, fretDiagram);
                 if (index != muse::nidx) {
                     while (--index > 0) {
-                        FretDiagram* fretDiagram = toFretDiagram(diagrams[index]);
-                        if (fretDiagram->visible()) {
-                            return fretDiagram;
+                        FretDiagram* fretDiagramI = toFretDiagram(diagrams[index]);
+                        if (fretDiagramI->visible()) {
+                            return fretDiagramI;
                         }
                     }
                 }
