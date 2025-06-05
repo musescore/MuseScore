@@ -86,7 +86,7 @@ struct MuseSamplerLibHandler
     ms_MuseSampler_add_pitch_bend addPitchBend = nullptr;
     ms_MuseSampler_add_vibrato addVibrato = nullptr;
 
-    ms_MuseSampler_add_track_syllable_event addSyllableEvent = nullptr;
+    std::function<bool(ms_MuseSampler ms, ms_Track track, const SyllableEvent& ev)> addSyllableEvent = nullptr;
 
     std::function<bool(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_4)> startAuditionNote = nullptr;
     ms_MuseSampler_stop_audition_note stopAuditionNote = nullptr;
@@ -122,6 +122,8 @@ private:
     ms_MuseSampler_start_audition_note_3 startAuditionNoteInternal3 = nullptr;
     ms_MuseSampler_start_audition_note_4 startAuditionNoteInternal4 = nullptr;
     ms_MuseSampler_start_liveplay_note_2 startLivePlayNoteInternal2 = nullptr;
+    ms_MuseSampler_add_track_syllable_event addSyllableEventInternal = nullptr;
+    ms_MuseSampler_add_track_syllable_event_2 addSyllableEventInternal2 = nullptr;
     ms_MuseSampler_init initSamplerInternal = nullptr;
     ms_MuseSampler_init_2 initSamplerInternal2 = nullptr;
 
@@ -270,11 +272,23 @@ public:
             return startLivePlayNoteInternal2(ms, track, evt) == ms_Result_OK;
         };
 
-        if (at_least_v_0_100) {
-            addSyllableEvent = (ms_MuseSampler_add_track_syllable_event)muse::getLibFunc(m_lib,
-                                                                                         "ms_MuseSampler_add_track_syllable_event");
+        if (at_least_v_0_101) {
+            addSyllableEventInternal2 = (ms_MuseSampler_add_track_syllable_event_2)muse::getLibFunc(m_lib,
+                                                                                                    "ms_MuseSampler_add_track_syllable_event_2");
+
+            addSyllableEvent = [this](ms_MuseSampler ms, ms_Track track, const SyllableEvent& ev) {
+                return addSyllableEventInternal2(ms, track, ev) == ms_Result_OK;
+            };
+        } else if (at_least_v_0_100) {
+            addSyllableEventInternal = (ms_MuseSampler_add_track_syllable_event)muse::getLibFunc(m_lib,
+                                                                                                 "ms_MuseSampler_add_track_syllable_event");
+
+            addSyllableEvent = [this](ms_MuseSampler ms, ms_Track track, const SyllableEvent& ev) {
+                ms_SyllableEvent ev1 { ev._text, ev._position_us };
+                return addSyllableEventInternal(ms, track, ev1) == ms_Result_OK;
+            };
         } else {
-            addSyllableEvent = [](ms_MuseSampler, ms_Track, ms_SyllableEvent) { return ms_Result_Error; };
+            addSyllableEvent = [](ms_MuseSampler, ms_Track, const SyllableEvent&) { return ms_Result_Error; };
         }
 
         getInstrumentVendorName = (ms_Instrument_get_vendor_name)muse::getLibFunc(m_lib, "ms_Instrument_get_vendor_name");
@@ -421,16 +435,16 @@ private:
     void printApiStatus() const
     {
         LOGI() << "MuseSampler API status:"
-               << "\n ms_get_version_major -" << reinterpret_cast<uint64_t>(getVersionMajor)
-               << "\n ms_get_version_minor -" << reinterpret_cast<uint64_t>(getVersionMinor)
-               << "\n ms_get_version_revision -" << reinterpret_cast<uint64_t>(getVersionRevision)
-               << "\n ms_get_version_build_number -" << reinterpret_cast<uint64_t>(getBuildNumber)
-               << "\n ms_get_version_string -" << reinterpret_cast<uint64_t>(getVersionString)
-               << "\n ms_contains_instrument -" << reinterpret_cast<uint64_t>(containsInstrument)
-               << "\n ms_get_matching_instrument_id -" << reinterpret_cast<uint64_t>(getMatchingInstrumentId)
+               << "\n ms_get_version_major - " << reinterpret_cast<uint64_t>(getVersionMajor)
+               << "\n ms_get_version_minor - " << reinterpret_cast<uint64_t>(getVersionMinor)
+               << "\n ms_get_version_revision - " << reinterpret_cast<uint64_t>(getVersionRevision)
+               << "\n ms_get_version_build_number - " << reinterpret_cast<uint64_t>(getBuildNumber)
+               << "\n ms_get_version_string - " << reinterpret_cast<uint64_t>(getVersionString)
+               << "\n ms_contains_instrument - " << reinterpret_cast<uint64_t>(containsInstrument)
+               << "\n ms_get_matching_instrument_id - " << reinterpret_cast<uint64_t>(getMatchingInstrumentId)
                << "\n ms_get_instrument_list -" << reinterpret_cast<uint64_t>(getInstrumentList)
-               << "\n ms_get_matching_instrument_list -" << reinterpret_cast<uint64_t>(getMatchingInstrumentList)
-               << "\n ms_get_drum_mapping -" << reinterpret_cast<uint64_t>(getDrumMapping)
+               << "\n ms_get_matching_instrument_list - " << reinterpret_cast<uint64_t>(getMatchingInstrumentList)
+               << "\n ms_get_drum_mapping - " << reinterpret_cast<uint64_t>(getDrumMapping)
                << "\n ms_InstrumentList_get_next - " << reinterpret_cast<uint64_t>(getNextInstrument)
                << "\n ms_Instrument_get_info_json - " << reinterpret_cast<uint64_t>(getInstrumentInfoJson)
                << "\n ms_Instrument_get_id - " << reinterpret_cast<uint64_t>(getInstrumentId)
@@ -477,7 +491,9 @@ private:
                << "\n ms_MuseSampler_ready_to_play - " << reinterpret_cast<uint64_t>(readyToPlay)
                << "\n ms_Instrument_is_online - " << reinterpret_cast<uint64_t>(isOnlineInstrument)
                << "\n ms_MuseSampler_get_render_info - " << reinterpret_cast<uint64_t>(getRenderInfo)
-               << "\n ms_RenderProgressInfo_get_next - " << reinterpret_cast<uint64_t>(getNextRenderProgressInfo);
+               << "\n ms_RenderProgressInfo_get_next - " << reinterpret_cast<uint64_t>(getNextRenderProgressInfo)
+               << "\n ms_MuseSampler_add_track_syllable_event - " << reinterpret_cast<uint64_t>(addSyllableEventInternal)
+               << "\n ms_MuseSampler_add_track_syllable_event_2 - " << reinterpret_cast<uint64_t>(addSyllableEventInternal2);
     }
 
     MuseSamplerLib m_lib = nullptr;
