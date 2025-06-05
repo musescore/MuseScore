@@ -169,6 +169,7 @@ public:
         std::unordered_map<staff_idx_t, VelocityMap> velocitiesByStaff;
         std::unordered_map<staff_idx_t, VelocityMap> velocityMultiplicationsByStaff;
         std::unordered_map<String, std::unordered_set<String> > articulationsWithoutValuesByInstrument;
+        std::unordered_set<const Chord*> chordsWithHammerOnPullOff;
 
         std::shared_ptr<ChannelLookup> channels = std::make_shared<ChannelLookup>();
         std::shared_ptr<PauseMap> pauseMap = std::make_shared<PauseMap>();
@@ -204,6 +205,7 @@ private:
     void collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events, double veloMultiplier, Staff* st,
                                        int tickOffset, PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
     void fillArticulationsInfo();
+    void fillHammerOnPullOffsInfo();
 
     Score* score = nullptr;
     Context m_context;

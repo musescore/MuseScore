@@ -1332,10 +1332,6 @@ void GPConverter::addContinuousSlideHammerOn()
             continue;
         }
 
-        if (SlideHammerOn::HammerOn == slide.second) {
-            endNote->setIsHammerOn(true);
-        }
-
         Fraction startTick = startNote->chord()->tick();
         Fraction endTick = endNote->chord()->tick();
         track_idx_t track = startNote->track();
