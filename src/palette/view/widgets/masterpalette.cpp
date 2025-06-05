@@ -135,21 +135,23 @@ MasterPalette::MasterPalette(QWidget* parent)
     stack->addWidget(new SymbolDialog(Smufl::SMUFL_ALL_SYMBOLS));
 
     // Add "All symbols" entry to be first in the list of categories
-    QTreeWidgetItem* child = new QTreeWidgetItem(QStringList(Smufl::SMUFL_ALL_SYMBOLS));
+    QTreeWidgetItem* child = new QTreeWidgetItem({ Smufl::SMUFL_ALL_SYMBOLS });
     child->setData(0, Qt::UserRole, m_idxAllSymbols);
     m_symbolItem->addChild(child);
 
-    std::vector<String> symbols = muse::keys(Smufl::smuflRanges());
-    for (size_t i = 0; i < symbols.size(); i++) {
-        QString symbol = symbols[i].toQString();
-        if (symbol == Smufl::SMUFL_ALL_SYMBOLS) {
+    const auto& ranges = Smufl::smuflRanges();
+    size_t idx = 0;
+    for (auto it = ranges.cbegin(); it != ranges.cend(); ++it) {
+        const String& rangeName = it->first;
+        if (rangeName == Smufl::SMUFL_ALL_SYMBOLS) {
             continue;
         }
 
-        QTreeWidgetItem* chld = new QTreeWidgetItem(QStringList(symbol));
-        chld->setData(0, Qt::UserRole, m_idxAllSymbols + static_cast<int>(i) + 1);
+        QTreeWidgetItem* chld = new QTreeWidgetItem({ rangeName });
+        chld->setData(0, Qt::UserRole, m_idxAllSymbols + static_cast<int>(idx) + 1);
 
         m_symbolItem->addChild(chld);
+        ++idx;
     }
 
     connect(treeWidget, &QTreeWidget::currentItemChanged, this, &MasterPalette::currentChanged);
@@ -183,8 +185,8 @@ void MasterPalette::currentChanged(QTreeWidgetItem* item, QTreeWidgetItem*)
 
     if (idx > m_idxAllSymbols) {
         if (!m_symbolWidgets.contains(idx)) {
-            std::vector<String> symbols = muse::keys(Smufl::smuflRanges());
-            SymbolDialog* dialog = new SymbolDialog(symbols[idx - m_idxAllSymbols - 1].toQString());
+            String rangeName = std::next(Smufl::smuflRanges().cbegin(), idx - m_idxAllSymbols - 1)->first;
+            SymbolDialog* dialog = new SymbolDialog(rangeName.toQString());
             m_symbolWidgets[idx] = dialog;
             stack->addWidget(dialog);
         }
