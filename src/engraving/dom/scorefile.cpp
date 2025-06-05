@@ -22,6 +22,7 @@
 
 #include <cmath>
 
+#include "io/buffer.h"
 #include "io/file.h"
 #include "io/fileinfo.h"
 
@@ -110,22 +111,22 @@ std::shared_ptr<Pixmap> Score::createThumbnail()
 //   loadStyle
 //---------------------------------------------------------
 
-bool Score::loadStyle(const String& fn, bool ign, const bool overlap)
+bool Score::loadStyle(muse::io::IODevice& dev, bool ign, bool overlap)
 {
     TRACEFUNC;
 
-    File f(fn);
-    if (f.open(IODevice::ReadOnly)) {
-        MStyle st = style();
-        if (st.read(&f, ign)) {
-            undo(new ChangeStyle(this, st, overlap));
-            return true;
-        } else {
-            LOGE() << "The style file is not compatible with this version of MuseScore Studio.";
-            return false;
-        }
+    if (!dev.open(IODevice::ReadOnly)) {
+        LOGE() << "The style data is not available.";
+        return false;
     }
 
+    MStyle st = style();
+    if (st.read(&dev, ign)) {
+        undo(new ChangeStyle(this, st, overlap));
+        return true;
+    }
+
+    LOGE() << "The style data is not compatible with this version of MuseScore Studio.";
     return false;
 }
 

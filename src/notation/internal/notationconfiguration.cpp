@@ -138,8 +138,7 @@ void NotationConfiguration::init()
         m_backgroundChanged.notify();
     });
 
-    uiConfiguration()->currentThemeChanged().onNotify(this, [this]()
-    {
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         m_backgroundChanged.notify();
     });
 
@@ -260,7 +259,12 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
     settings()->setDefaultValue(IS_PLAY_REPEATS_ENABLED, Val(true));
+
     settings()->setDefaultValue(IS_METRONOME_ENABLED, Val(false));
+    settings()->valueChanged(IS_METRONOME_ENABLED).onReceive(this, [this](const Val&) {
+        m_isMetronomeEnabledChanged.notify();
+    });
+
     settings()->setDefaultValue(IS_COUNT_IN_ENABLED, Val(false));
 
     settings()->setDefaultValue(PLAYBACK_SMOOTH_PANNING, Val(false));
@@ -594,6 +598,11 @@ QColor NotationConfiguration::selectionColor(engraving::voice_idx_t voiceIndex) 
     return engravingConfiguration()->selectionColor(voiceIndex).toQColor();
 }
 
+QColor NotationConfiguration::highlightSelectionColor(engraving::voice_idx_t voiceIndex) const
+{
+    return engravingConfiguration()->highlightSelectionColor(voiceIndex).toQColor();
+}
+
 QColor NotationConfiguration::dropRectColor() const
 {
     QColor color = selectionColor();
@@ -899,6 +908,11 @@ bool NotationConfiguration::isMetronomeEnabled() const
 void NotationConfiguration::setIsMetronomeEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_METRONOME_ENABLED, Val(enabled));
+}
+
+muse::async::Notification NotationConfiguration::isMetronomeEnabledChanged() const
+{
+    return m_isMetronomeEnabledChanged;
 }
 
 bool NotationConfiguration::isCountInEnabled() const

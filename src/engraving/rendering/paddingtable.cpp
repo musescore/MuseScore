@@ -50,12 +50,26 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::NOTE][ElementType::ACCIDENTAL]
         = std::max(static_cast<double>(style.styleMM(Sid::accidentalNoteDistance)), 0.35 * spatium);
     table[ElementType::NOTE][ElementType::REST] = style.styleMM(Sid::minNoteDistance);
-    table[ElementType::NOTE][ElementType::CLEF] = 1.0 * spatium;
+    table[ElementType::NOTE][ElementType::CLEF] = 0.8 * spatium;
     table[ElementType::NOTE][ElementType::ARPEGGIO] = 0.6 * spatium;
     table[ElementType::NOTE][ElementType::BAR_LINE] = style.styleMM(Sid::noteBarDistance);
     table[ElementType::NOTE][ElementType::KEYSIG] = 0.75 * spatium;
     table[ElementType::NOTE][ElementType::TIMESIG] = 0.75 * spatium;
     table[ElementType::NOTE][ElementType::PARENTHESIS] = style.styleMM(Sid::noteBarDistance);
+
+    // Obtain the Stem -> * and * -> Stem values from the note equivalents
+    table[ElementType::STEM] = table[ElementType::NOTE];
+    for (auto& elem: table) {
+        elem[ElementType::STEM] = elem[ElementType::NOTE];
+    }
+
+    table[ElementType::NOTE][ElementType::STEM] = style.styleMM(Sid::minNoteDistance);
+    table[ElementType::STEM][ElementType::NOTE] = style.styleMM(Sid::minNoteDistance);
+    table[ElementType::STEM][ElementType::STEM] = 0.85 * spatium;
+    table[ElementType::STEM][ElementType::ACCIDENTAL] = 0.35 * spatium;
+    table[ElementType::STEM][ElementType::LEDGER_LINE] = 0.35 * spatium;
+    table[ElementType::LEDGER_LINE][ElementType::STEM] = 0.35 * spatium;
+    table[ElementType::STEM][ElementType::PARENTHESIS] = 0.35 * spatium;
 
     table[ElementType::LEDGER_LINE][ElementType::NOTE] = table[ElementType::NOTE][ElementType::LEDGER_LINE];
     table[ElementType::LEDGER_LINE][ElementType::LEDGER_LINE] = ledgerPad;
@@ -113,8 +127,9 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::CLEF][ElementType::NOTE] = style.styleMM(Sid::clefKeyRightMargin);
     table[ElementType::CLEF][ElementType::LEDGER_LINE]
         = std::max(table[ElementType::CLEF][ElementType::NOTE] - ledgerLength / 2, ledgerPad);
-    table[ElementType::CLEF][ElementType::ACCIDENTAL] = 0.75 * spatium;
-    table[ElementType::CLEF][ElementType::REST] = 1.35 * spatium;
+    table[ElementType::CLEF][ElementType::ACCIDENTAL] = 0.6 * spatium;
+    table[ElementType::CLEF][ElementType::STEM] = 0.75 * spatium;
+    table[ElementType::CLEF][ElementType::REST] = table[ElementType::CLEF][ElementType::NOTE];
     table[ElementType::CLEF][ElementType::CLEF] = 0.75 * spatium;
     table[ElementType::CLEF][ElementType::ARPEGGIO] = 1.15 * spatium;
     table[ElementType::CLEF][ElementType::BAR_LINE] = style.styleMM(Sid::clefBarlineDistance);
@@ -157,19 +172,6 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::TIMESIG][ElementType::KEYSIG] = style.styleMM(Sid::keyTimesigDistance);
     table[ElementType::TIMESIG][ElementType::TIMESIG] = 1.0 * spatium;
     table[ElementType::TIMESIG][ElementType::PARENTHESIS] = 0.25 * spatium;
-
-    // Obtain the Stem -> * and * -> Stem values from the note equivalents
-    table[ElementType::STEM] = table[ElementType::NOTE];
-    for (auto& elem: table) {
-        elem[ElementType::STEM] = elem[ElementType::NOTE];
-    }
-
-    table[ElementType::STEM][ElementType::NOTE] = style.styleMM(Sid::minNoteDistance);
-    table[ElementType::STEM][ElementType::STEM] = 0.85 * spatium;
-    table[ElementType::STEM][ElementType::ACCIDENTAL] = 0.35 * spatium;
-    table[ElementType::STEM][ElementType::LEDGER_LINE] = 0.35 * spatium;
-    table[ElementType::LEDGER_LINE][ElementType::STEM] = 0.35 * spatium;
-    table[ElementType::STEM][ElementType::PARENTHESIS] = 0.35 * spatium;
 
     // Ambitus
     table[ElementType::AMBITUS].fill(style.styleMM(Sid::ambitusMargin));
@@ -258,5 +260,15 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::MEASURE_REPEAT] = table[ElementType::NOTE];
     for (auto& elem : table) {
         elem[ElementType::MEASURE_REPEAT] = elem[ElementType::NOTE];
+    }
+
+    const double articulationAndFermataPadding = 0.35 * spatium;
+    table[ElementType::ARTICULATION].fill(articulationAndFermataPadding);
+    for (auto& elem : table) {
+        elem[ElementType::ARTICULATION] = articulationAndFermataPadding;
+    }
+    table[ElementType::FERMATA].fill(articulationAndFermataPadding);
+    for (auto& elem : table) {
+        elem[ElementType::FERMATA] = articulationAndFermataPadding;
     }
 }

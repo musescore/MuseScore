@@ -83,6 +83,7 @@ protected:
 
     MenuItem& findItem(const QString& itemId);
     MenuItem& findItem(const muse::actions::ActionCode& actionCode);
+    MenuItemList findItems(const muse::actions::ActionCode& actionCode);
     MenuItem& findMenu(const QString& menuId);
 
     MenuItem* makeMenu(const TranslatableString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true);
@@ -96,7 +97,7 @@ protected:
 
 private:
     MenuItem& item(MenuItemList& items, const QString& itemId);
-    MenuItem& item(MenuItemList& items, const muse::actions::ActionCode& actionCode);
+    MenuItemList items(MenuItemList& items, const muse::actions::ActionCode& actionCode);
     MenuItem& menu(MenuItemList& items, const QString& menuId);
 
     void updateShortcutsAll();

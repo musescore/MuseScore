@@ -43,10 +43,16 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         rebase = rebaseOffset(item, ldata);
     }
 
-    const double minSkylineHorizontalClearance = item->style().styleMM(Sid::skylineMinHorizontalClearance) * item->mag();
+    // TODO: proper item-to-item table for horizontal clearance in skyline
+    const double minSkylineHorizontalClearance = item->isArticulationOrFermata() ? 0.0 : item->style().styleMM(
+        Sid::skylineMinHorizontalClearance) * item->mag();
 
     if (item->autoplace() && item->explicitParent()) {
-        const Segment* s = toSegment(item->explicitParent());
+        const Segment* s = toSegment(item->findAncestor(ElementType::SEGMENT));
+        IF_ASSERT_FAILED(s) {
+            return;
+        }
+
         const Measure* m = s->measure();
 
         LD_CONDITION(ldata->isSetPos());
@@ -68,7 +74,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         double minDistance = item->minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
-        Shape shape = item->ldata()->shape().translate(m->pos() + s->pos() + item->pos());
+        Shape shape = item->ldata()->shape().translate(item->systemPos());
         RectF r = shape.bbox();
 
         // Adjust bbox Y pos for staffType offset
@@ -381,67 +387,12 @@ void Autoplace::setOffsetChanged(const EngravingItem* item, EngravingItem::Layou
     ldata->autoplace.changedPos = item->pos() + diff;
 }
 
-//---------------------------------------------------------
-//   doAutoplace
-//    check for collisions
-//---------------------------------------------------------
-void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* ldata)
-{
-    // rebase vertical offset on drag
-    double rebase = 0.0;
-    if (ldata->offsetChanged() != OffsetChange::NONE) {
-        rebase = rebaseOffset(item, ldata);
-    }
-
-    if (item->autoplace() && item->explicitParent()) {
-        Segment* s = item->segment();
-        Measure* m = item->measure();
-        staff_idx_t si = item->vStaffIdx();
-
-        double sp = item->spatium();
-        double md = item->minDistance().val() * sp;
-
-        SysStaff* ss = m->system()->staff(si);
-
-        Shape thisShape = item->shape().translate(item->chordRest()->pos() + m->pos() + s->pos() + item->pos() + item->staffOffset());
-
-        for (const ShapeElement& shapeEl : thisShape.elements()) {
-            RectF r = shapeEl;
-
-            double d = 0.0;
-            bool above = item->up();
-            SkylineLine sk(!above);
-            if (above) {
-                sk.add(shapeEl);
-                d = sk.minDistance(ss->skyline().north());
-            } else {
-                sk.add(shapeEl);
-                d = ss->skyline().south().minDistance(sk);
-            }
-
-            if (d > -md) {
-                double yd = d + md;
-                if (above) {
-                    yd *= -1.0;
-                }
-                if (ldata->offsetChanged() != OffsetChange::NONE) {
-                    // user moved element within the skyline
-                    // we may need to adjust minDistance, yd, and/or offset
-                    //bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
-                    if (rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, true)) {
-                        r.translate(0.0, rebase);
-                    }
-                }
-                ldata->moveY(yd);
-                thisShape.translateY(yd);
-            }
-        }
-    }
-    setOffsetChanged(item, ldata, false);
-}
-
 bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace, const EngravingItem* itemInSkyline)
 {
+    if (itemToAutoplace == itemInSkyline) {
+        return true;
+    }
+
     if (itemInSkyline->isText() && itemInSkyline->explicitParent() && itemInSkyline->parent()->isSLineSegment()) {
         return itemsShouldIgnoreEachOther(itemToAutoplace, itemInSkyline->parentItem());
     }
@@ -488,6 +439,11 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
     if ((type1 == ElementType::FIGURED_BASS || type1 == ElementType::FIGURED_BASS_ITEM)
         && (type2 == ElementType::FIGURED_BASS || type2 == ElementType::FIGURED_BASS_ITEM)) {
         return true;
+    }
+
+    if (type1 == ElementType::FERMATA && itemInSkyline->isArticulationOrFermata()) {
+        // Fermata should ignore articulation on other segments
+        return itemToAutoplace->parent() != itemInSkyline->parent();
     }
 
     return itemToAutoplace->ldata()->itemSnappedBefore() == itemInSkyline || itemToAutoplace->ldata()->itemSnappedAfter() == itemInSkyline;

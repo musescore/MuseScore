@@ -37,6 +37,7 @@
 #include "chordrest.h"
 #include "clef.h"
 #include "engravingitem.h"
+#include "hammeronpulloff.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
 #include "instrchange.h"
@@ -352,6 +353,17 @@ Segment* Segment::next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segTyp
     track_idx_t startTrack = staffIdx * VOICES;
     track_idx_t endTrack = startTrack + VOICES - 1;
     while (next && !next->hasElements(startTrack, endTrack)) {
+        next = next->next1(segType);
+    }
+
+    return next;
+}
+
+Segment* Segment::next1WithElemsOnTrack(track_idx_t trackIdx, SegmentType segType) const
+{
+    Segment* next = next1(segType);
+
+    while (next && !next->hasElements(trackIdx, trackIdx)) {
         next = next->next1(segType);
     }
 
@@ -2046,6 +2058,12 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         if (!m_annotations.empty()) {
             EngravingItem* next = firstAnnotation(activeStaff);
             if (next) {
+                if (next->isFretDiagram()) {
+                    if (Harmony* harmony = toFretDiagram(next)->harmony()) {
+                        return harmony;
+                    }
+                }
+
                 return next;
             }
         }
@@ -2094,6 +2112,11 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
                         return soundFlag;
                     }
                 }
+                if (next->isFretDiagram()) {
+                    if (Harmony* harmony = toFretDiagram(next)->harmony()) {
+                        return harmony;
+                    }
+                }
 
                 return next;
             }
@@ -2102,6 +2125,17 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         if (s) {
             return s->spannerSegments().front();
         }
+
+        for (SpannerSegment* spannerSeg : system()->spannerSegments()) {
+            if (spannerSeg->staffIdx() == activeStaff && spannerSeg->isHammerOnPullOffSegment()) {
+                for (HammerOnPullOffText* hopoText : toHammerOnPullOffSegment(spannerSeg)->hopoText()) {
+                    if (hopoText->startChord() && hopoText->startChord()->segment() == this) {
+                        return hopoText;
+                    }
+                }
+            }
+        }
+
         Segment* nextSegment = seg->next1MMenabled();
         for (; nextSegment && nextSegment->isTimeTickType(); nextSegment = nextSegment->next1MMenabled()) {
             if (EngravingItem* annotation = nextSegment->firstAnnotation(activeStaff)) {
@@ -2288,7 +2322,19 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             } else {
                 return prev;
             }
+        } else {
+            System* system = seg->system();
+            for (SpannerSegment* spannerSeg : system->spannerSegments()) {
+                if (spannerSeg->staffIdx() == activeStaff && spannerSeg->isHammerOnPullOffSegment()) {
+                    for (HammerOnPullOffText* hopoText : toHammerOnPullOffSegment(spannerSeg)->hopoText()) {
+                        if (hopoText->endChord() && hopoText->endChord()->segment() == seg) {
+                            return hopoText;
+                        }
+                    }
+                }
+            }
         }
+
         Segment* prevSeg = seg->prev1MMenabled();
         for (; prevSeg && prevSeg->isTimeTickType(); prevSeg = prevSeg->prev1MMenabled()) {
             if (Spanner* spanner = prevSeg->lastSpanner(activeStaff)) {
@@ -2542,7 +2588,7 @@ void Segment::createShape(staff_idx_t staffIdx)
         track_idx_t effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
         if (effectiveTrack >= strack && effectiveTrack < etrack) {
             setVisible(true);
-            if (e->isRest() && toRest(e)->ticks() >= measure()->ticks() && measure()->hasVoices(e->staffIdx())) {
+            if (e->isRest() && toRest(e)->isFullMeasureRest() && measure()->hasVoices(e->staffIdx())) {
                 // A full measure rest in a measure with multiple voices must be ignored
                 continue;
             }
@@ -2554,10 +2600,15 @@ void Segment::createShape(staff_idx_t staffIdx)
             }
             // Non-standard trills display a cue note that we must add to shape here
             if (e->isChord()) {
-                Ornament* orn = toChord(e)->findOrnament();
-                Chord* cueNoteChord = orn ? orn->cueNoteChord() : nullptr;
-                if (cueNoteChord && cueNoteChord->upNote()->visible()) {
-                    s.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
+                for (Articulation* art : toChord(e)->articulations()) {
+                    if (art->isOrnament()) {
+                        Chord* cueNoteChord = toOrnament(art)->cueNoteChord();
+                        if (cueNoteChord && cueNoteChord->upNote()->visible()) {
+                            s.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
+                        }
+                    } else {
+                        s.add(art->shape().translated(art->pos() + e->pos()));
+                    }
                 }
             }
         }
@@ -2597,14 +2648,12 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isTripletFeel()
                    && !e->isInstrumentChange()
                    && !e->isArticulationFamily()
-                   && !e->isFermata()
                    && !e->isStaffText()
                    && !e->isHarpPedalDiagram()
                    && !e->isPlayTechAnnotation()
                    && !e->isCapo()
                    && !e->isStringTunings()) {
             // annotations added here are candidates for collision detection
-            // lyrics, ...
             s.add(e->shape().translate(e->pos() + e->staffOffset()));
         }
     }
@@ -2631,7 +2680,8 @@ void Segment::createShape(staff_idx_t staffIdx)
 double Segment::minRight() const
 {
     double distance = 0.0;
-    for (const Shape& sh : shapes()) {
+    for (Shape sh : shapes()) {
+        sh.remove_if([](ShapeElement& el) { return el.item() && el.item()->isArticulationOrFermata(); });
         distance = std::max(distance, sh.right());
     }
     return distance;
@@ -2640,7 +2690,8 @@ double Segment::minRight() const
 double Segment::minLeft() const
 {
     double distance = -DBL_MAX;
-    for (const Shape& sh : shapes()) {
+    for (Shape sh : shapes()) {
+        sh.remove_if([](ShapeElement& el) { return el.item() && el.item()->isArticulationOrFermata(); });
         double l = sh.left();
         if (l > distance) {
             distance = l;

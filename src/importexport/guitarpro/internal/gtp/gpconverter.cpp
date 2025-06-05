@@ -19,6 +19,7 @@
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/fretcircle.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/instrchange.h"
@@ -1036,7 +1037,7 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
     MeasureBase* m = nullptr;
     if (!_score->measures()->first()) {
         m = Factory::createTitleVBox(_score->dummy()->system());
-        _score->addMeasure(m, 0);
+        _score->measures()->append(m);
     } else {
         m = _score->measures()->first();
         if (!m->isVBox()) {
@@ -1321,6 +1322,7 @@ void GPConverter::addContinuousSlideHammerOn()
     };
 
     std::unordered_map<Note*, Slur*> legatoSlides;
+    std::unordered_map<Note*, HammerOnPullOff*> hammerOnPullOffs;
     std::unordered_set<Chord*> hammerOnInChord;
     for (const auto& slide : _slideHammerOnMap) {
         Note* startNote = slide.first;
@@ -1354,13 +1356,11 @@ void GPConverter::addContinuousSlideHammerOn()
             _score->addElement(gl);
         }
 
-        if (slide.second == SlideHammerOn::LegatoSlide || slide.second == SlideHammerOn::HammerOn) {
+        if (slide.second == SlideHammerOn::LegatoSlide) {
             if (legatoSlides.count(startNote) == 0) {
                 Slur* slur = mu::engraving::Factory::createSlur(_score->dummy());
                 if (slide.second == SlideHammerOn::LegatoSlide) {
                     slur->setConnectedElement(mu::engraving::Slur::ConnectedElement::GLISSANDO);
-                } else if (slide.second == SlideHammerOn::HammerOn) {
-                    slur->setConnectedElement(mu::engraving::Slur::ConnectedElement::HAMMER_ON);
                 }
 
                 slur->setStartElement(startNote->chord());
@@ -1377,25 +1377,28 @@ void GPConverter::addContinuousSlideHammerOn()
                 legatoSlides.erase(startNote);
                 legatoSlides[endNote] = slur;
             }
+        } else if (slide.second == SlideHammerOn::HammerOn) {
+            Chord* startChord = startNote->chord();
+            if (hammerOnInChord.find(startChord) != hammerOnInChord.end()) {
+                continue;
+            }
 
-            // TODO-gp: implement for editing too. Now works just for import.
-            if (slide.second == SlideHammerOn::HammerOn) {
-                Chord* startChord = startNote->chord();
-                if (hammerOnInChord.find(startChord) != hammerOnInChord.end()) {
-                    continue;
-                }
-
-                Measure* measure = startChord->measure();
-
-                auto midTick = (startTick + endTick) / 2;
-                Segment* segment = measure->getSegment(SegmentType::ChordRest, midTick);
-                StaffText* staffText = Factory::createStaffText(segment);
-                String hammerText = (startNote->pitch() > endNote->pitch()) ? u"P" : u"H";
-
-                staffText->setPlainText(hammerText);
-                staffText->setTrack(track);
-                segment->add(staffText);
+            if (hammerOnPullOffs.count(startNote) == 0) {
+                HammerOnPullOff* hammerOnPullOff = Factory::createHammerOnPullOff(_score->dummy());
+                hammerOnPullOff->setTrack(startNote->track());
+                hammerOnPullOff->setTick(startNote->tick());
+                hammerOnPullOff->setTick2(endNote->tick());
+                hammerOnPullOff->setStartElement(startChord);
+                hammerOnPullOff->setEndElement(endNote->chord());
+                _score->addElement(hammerOnPullOff);
+                hammerOnPullOffs[endNote] = hammerOnPullOff;
                 hammerOnInChord.insert(startChord);
+            } else {
+                HammerOnPullOff* hammerOnPullOff = hammerOnPullOffs[startNote];
+                hammerOnPullOff->setTick2(endTick);
+                hammerOnPullOff->setEndElement(endNote->chord());
+                hammerOnPullOffs.erase(startNote);
+                hammerOnPullOffs[endNote] = hammerOnPullOff;
             }
         }
     }
@@ -1545,15 +1548,10 @@ void GPConverter::addInstrumentChanges()
             int midiProgramm = 0;
             String instrName;
 
-            auto it = track.second->sounds().find(soundAutomation.second.value.split(';').at(0));
+            auto it = track.second->sounds().find(soundAutomation.second.value);
             if (it == track.second->sounds().end()) {
                 midiProgramm = track.second->programm();
-                engraving::StringList list = soundAutomation.second.value.split(';');
-                if (list.size() != 1) {
-                    instrName = list[0].split('/')[2]; // Always looks like 'Main Group/Instrument Group/Instrument'
-                } else {
-                    instrName = soundAutomation.second.value;
-                }
+                instrName = soundAutomation.second.value;
             } else {
                 midiProgramm = it->second.programm;
                 instrName = it->second.label;
@@ -1713,7 +1711,7 @@ Measure* GPConverter::addMeasure(const GPMasterBar* mB)
     auto scoreTimeSig = Fraction(sig.numerator, sig.denominator);
     measure->setTimesig(scoreTimeSig);
     measure->setTicks(scoreTimeSig);
-    _score->measures()->add(measure);
+    _score->measures()->append(measure);
 
     return measure;
 }

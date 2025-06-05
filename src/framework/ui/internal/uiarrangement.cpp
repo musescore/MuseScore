@@ -35,6 +35,10 @@ using namespace muse::workspace;
 
 void UiArrangement::load()
 {
+    if (!workspacesDataProvider()) {
+        return;
+    }
+
     workspacesDataProvider()->workspaceChanged().onNotify(this, [this]() {
         updateData(WS_UiSettings, m_settings, m_valuesNotifications);
         updateData(WS_UiStates, m_states, m_statesNotifications);

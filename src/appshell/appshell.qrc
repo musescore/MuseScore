@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>qml/Main.wasm.qml</file>
         <file>qml/MainToolBar.qml</file>
         <file>qml/HomePage/HomeMenu.qml</file>
         <file>qml/DevTools/Interactive/SampleDialog.qml</file>

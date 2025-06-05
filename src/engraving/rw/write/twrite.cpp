@@ -75,6 +75,7 @@
 #include "dom/guitarbend.h"
 
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harmony.h"
 #include "dom/harmonicmark.h"
 #include "dom/harppedaldiagram.h"
@@ -231,6 +232,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::GUITAR_BEND:  write(item_cast<const GuitarBend*>(item), xml, ctx);
         break;
     case ElementType::HAIRPIN:      write(item_cast<const Hairpin*>(item), xml, ctx);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF: write(item_cast<const HammerOnPullOff*>(item), xml, ctx);
         break;
     case ElementType::HARMONY:      write(item_cast<const Harmony*>(item), xml, ctx);
         break;
@@ -444,7 +447,7 @@ void TWrite::writeSystemLocks(const Score* score, XmlWriter& xml)
 
 void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (MScore::testMode || ctx.configuration()->doNotSaveEIDsForBackCompat() || item->score()->isPaletteScore() || ctx.clipboardmode()) {
+    if (ctx.configuration()->doNotSaveEIDsForBackCompat() || item->score()->isPaletteScore() || ctx.clipboardmode()) {
         return;
     }
 
@@ -453,6 +456,20 @@ void TWrite::writeItemEid(const EngravingObject* item, XmlWriter& xml, WriteCont
         eid = item->assignNewEID();
     }
     xml.tag("eid", eid.toStdString());
+}
+
+void TWrite::writeItemLink(const EngravingObject* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!item->links() || item->links()->size() <= 1 || ctx.clipboardmode()) {
+        return;
+    }
+
+    EngravingItem* mainElement = static_cast<EngravingItem*>(item->links()->mainElement());
+    if (mainElement != item) {
+        EID eidOfMainElement = mainElement->eid();
+        DO_ASSERT(eidOfMainElement.isValid());
+        xml.tag("linkedTo", mainElement->eid().toStdString());
+    }
 }
 
 void TWrite::writeSystemLock(const SystemLock* systemLock, XmlWriter& xml)
@@ -474,7 +491,7 @@ void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 
 void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
-    TWrite::writeItemEid(item, xml, ctx);
+    writeItemEid(item, xml, ctx);
 
     bool autoplaceEnabled = item->score()->style().styleB(Sid::autoplaceEnabled);
     if (!autoplaceEnabled) {
@@ -485,53 +502,8 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         writeProperty(item, xml, Pid::AUTOPLACE);
     }
 
-    // copy paste should not keep links
-    if (item->links() && (item->links()->size() > 1) && !ctx.clipboardmode()) {
-        if (MScore::debugMode) {
-            xml.tag("lid", item->links()->lid());
-        }
+    writeItemLink(item, xml, ctx);
 
-        EngravingItem* me = static_cast<EngravingItem*>(item->links()->mainElement());
-        DO_ASSERT(item->type() == me->type());
-        Staff* s = item->staff();
-        if (!s) {
-            s = item->score()->staff(ctx.curTrack() / VOICES);
-            if (!s) {
-                LOGW("EngravingItem::writeProperties: linked element's staff not found (%s)", item->typeName());
-            }
-        }
-        Location loc = Location::positionForElement(item);
-        if (me == item) {
-            xml.tag("linkedMain");
-            int index = ctx.assignLocalIndex(loc);
-            ctx.setLidLocalIndex(item->links()->lid(), index);
-        } else {
-            if (s && s->links()) {
-                Staff* linkedStaff = toStaff(s->links()->mainElement());
-                loc.setStaff(static_cast<int>(linkedStaff->idx()));
-            }
-            xml.startElement("linked");
-            if (!me->score()->isMaster()) {
-                if (me->score() == item->score()) {
-                    xml.tag("score", "same");
-                } else {
-                    LOGW(
-                        "EngravingItem::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)",
-                        item->typeName(), item->links()->lid());
-                }
-            }
-
-            Location mainLoc = Location::positionForElement(me);
-            const int guessedLocalIndex = ctx.assignLocalIndex(mainLoc);
-            if (loc != mainLoc) {
-                mainLoc.toRelative(loc);
-                write(&mainLoc, xml, ctx);
-            }
-            const int indexDiff = ctx.lidLocalIndex(item->links()->lid()) - guessedLocalIndex;
-            xml.tag("indexDiff", indexDiff, 0);
-            xml.endElement();       // </linked>
-        }
-    }
     if ((ctx.writeTrack() || item->track() != ctx.curTrack())
         && (item->track() != muse::nidx) && !item->isBeam() && !item->isTuplet()) {
         // Writing track number for beams and tuplets is redundant as it is calculated
@@ -1337,7 +1309,6 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         Pid::FRET_STRINGS,
         Pid::FRET_NUT,
         Pid::MAG,
-        Pid::FRET_NUM_POS,
         Pid::ORIENTATION,
         Pid::FRET_SHOW_FINGERINGS,
         Pid::FRET_FINGERING,
@@ -1672,6 +1643,44 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::HAIRPIN_CONT_HEIGHT);
 
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const HammerOnPullOff* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (item->broken()) {
+        return;
+    }
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+
+    xml.startElement(item);
+
+    writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
+
+    writeProperties(static_cast<const Slur*>(item), xml, ctx);
+
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const HammerOnPullOffSegment* seg, XmlWriter& xml, WriteContext& ctx)
+{
+    for (size_t i = 0; i < seg->hopoText().size(); ++i) {
+        HammerOnPullOffText* hopoText = seg->hopoText()[i];
+        if (!hopoText->isUserModified()) {
+            continue;
+        }
+        write(hopoText, xml, ctx, i);
+    }
+}
+
+void TWrite::write(const HammerOnPullOffText* item, XmlWriter& xml, WriteContext& ctx, size_t idx)
+{
+    xml.startElement(item, { { "idx", idx } });
+
+    writeProperties(toTextBase(item), xml, ctx, /*writeText*/ false);
+
     xml.endElement();
 }
 
@@ -2605,9 +2614,6 @@ void TWrite::write(const Slur* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
-    if (ctx.clipboardmode()) {
-        xml.tag("stemArr", Slur::calcStemArrangement(item->startElement(), item->endElement()));
-    }
 
     writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
 
@@ -2628,14 +2634,7 @@ void TWrite::writeProperties(const SlurTie* item, XmlWriter& xml, WriteContext& 
 
 void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& ctx, int no)
 {
-    if (seg->visible() && seg->autoplace()
-        && (seg->color() == ctx.configuration()->defaultColor())
-        && seg->offset().isNull()
-        && seg->ups(Grip::START).off.isNull()
-        && seg->ups(Grip::BEZIER1).off.isNull()
-        && seg->ups(Grip::BEZIER2).off.isNull()
-        && seg->ups(Grip::END).off.isNull()
-        ) {
+    if (!seg->isUserModified()) {
         return;
     }
 
@@ -2654,6 +2653,11 @@ void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& 
     if (!seg->ups(Grip::END).off.isNull()) {
         xml.tagPoint("o4", seg->ups(Grip::END).off / _spatium);
     }
+
+    if (seg->isHammerOnPullOffSegment()) {
+        writeProperties(toHammerOnPullOffSegment(seg), xml, ctx);
+    }
+
     writeItemProperties(seg, xml, ctx);
     xml.endElement();
 }
@@ -2663,23 +2667,16 @@ void TWrite::write(const Spacer* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     xml.tag("subtype", int(item->spacerType()));
     writeItemProperties(item, xml, ctx);
-    xml.tag("space", item->gap().val() / item->spatium());
+    xml.tag("space", item->gap().val());
     xml.endElement();
 }
 
 void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
 {
-    xml.startElement(item, { { "id", item->idx() + 1 } });
+    xml.startElement(item);
 
-    if (item->links()) {
-        Score* s = item->masterScore();
-        for (auto le : *item->links()) {
-            Staff* staff = toStaff(le);
-            if ((staff->score() == s) && (staff != item)) {
-                xml.tag("linkedTo", static_cast<int>(staff->idx() + 1));
-            }
-        }
-    }
+    writeItemEid(item, xml, ctx);
+    writeItemLink(item, xml, ctx);
 
     // for copy/paste we need to know the actual transposition
     if (ctx.clipboardmode()) {

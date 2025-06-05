@@ -146,7 +146,12 @@ set(MODULE_SRC
 set(MODULE_LINK
     muse::uicomponents
     notation
+    Qt::Quick
 )
+
+if (QT_ADD_CONCURRENT)
+    list(APPEND MODULE_LINK Qt::Concurrent)
+endif()
 
 setup_module()
 

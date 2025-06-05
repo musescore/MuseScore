@@ -17,7 +17,7 @@ if(NOT DEFINED CMAKE_SCRIPT_MODE_FILE)
     )
 endif()
 
-cmake_minimum_required(VERSION 3.16) # should match version in CMakeLists.txt
+cmake_minimum_required(VERSION 3.22) # should match version in CMakeLists.txt
 
 # CMake arguments up to '-P' (ignore these)
 set(i "1")

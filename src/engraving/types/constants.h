@@ -28,8 +28,8 @@
 namespace mu::engraving {
 struct Constants
 {
-    static constexpr int MSC_VERSION = 450;
-    static constexpr const char* MSC_VERSION_STR = "4.50";
+    static constexpr int MSC_VERSION = 460;
+    static constexpr const char* MSC_VERSION_STR = "4.60";
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -97,6 +97,10 @@ struct Constants
 //    4.50 (Version 4.5)
 //       - New property to set mergeMatchingRests at score level, with staff level changed to AutoOnOff from bool
 //       - New mmRest options and offset property
+//       - New EID implementation
+
+//    4.60 (Version 4.6)
+//       - New link system which uses EIDs
 
     constexpr static int DIVISION = 480;
     constexpr static BeatsPerSecond DEFAULT_TEMPO = 2.0; //default tempo is equal 120 bpm

@@ -252,6 +252,14 @@ const Measure* DomAccessor::tick2measure(const Fraction& tick) const
     return score()->tick2measure(tick);
 }
 
+const Measure* DomAccessor::tick2measureMM(const Fraction& tick) const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->tick2measureMM(tick);
+}
+
 const Measure* DomAccessor::firstMeasure() const
 {
     IF_ASSERT_FAILED(score()) {
@@ -276,6 +284,14 @@ const Measure* DomAccessor::lastMeasure() const
     return score()->lastMeasure();
 }
 
+const Measure* DomAccessor::lastMeasureMM() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->lastMeasureMM();
+}
+
 Measure* DomAccessor::lastMeasure()
 {
     IF_ASSERT_FAILED(score()) {
@@ -284,12 +300,28 @@ Measure* DomAccessor::lastMeasure()
     return score()->lastMeasure();
 }
 
+Measure* DomAccessor::lastMeasureMM()
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->lastMeasureMM();
+}
+
 Measure* DomAccessor::tick2measure(const Fraction& tick)
 {
     IF_ASSERT_FAILED(score()) {
         return nullptr;
     }
     return score()->tick2measure(tick);
+}
+
+Measure* DomAccessor::tick2measureMM(const Fraction& tick)
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->tick2measureMM(tick);
 }
 
 const SpannerMap& DomAccessor::spannerMap() const

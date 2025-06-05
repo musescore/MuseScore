@@ -126,26 +126,16 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
         }
     }
 
-    bool styleDidChange = false;
-    if (item->isEven() && (item->textStyleType() != TextStyleType::LYRICS_EVEN)) {
-        item->initTextStyleType(TextStyleType::LYRICS_EVEN, /* preserveDifferent */ true);
-        styleDidChange = true;
-    }
-    if (!item->isEven() && (item->textStyleType() != TextStyleType::LYRICS_ODD)) {
-        item->initTextStyleType(TextStyleType::LYRICS_ODD, /* preserveDifferent */ true);
-        styleDidChange = true;
-    }
-
-    if (styleDidChange) {
-        item->styleChanged();
-    }
-
     createOrRemoveLyricsLine(item, ctx);
 
     if (item->isMelisma() || hasNumber) {
         // use the melisma style alignment setting
         if (item->isStyled(Pid::ALIGN)) {
-            item->setAlign(ctx.conf().styleV(Sid::lyricsMelismaAlign).value<Align>());
+            if (ctx.conf().styleB(Sid::lyricsCenterDashedSyllables) && !(item->separator() && item->separator()->isEndMelisma())) {
+                item->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
+            } else {
+                item->setAlign(ctx.conf().styleV(Sid::lyricsMelismaAlign).value<Align>());
+            }
         }
     } else {
         // use the text style alignment setting
@@ -365,6 +355,10 @@ void LyricsLayout::layoutDashes(LyricsLineSegment* item)
 
     if (curLength > dashMinLength || forceDash) {
         dashCount = std::max(dashCount, 1);
+    }
+
+    if (style.styleB(Sid::lyricsLimitDashCount)) {
+        dashCount = std::min(dashCount, style.styleI(Sid::lyricsMaxDashCount));
     }
 
     if (curLength < dashMinLength && dashCount > 0) {

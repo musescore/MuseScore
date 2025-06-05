@@ -1,0 +1,53 @@
+/* ============================================== */
+/* App                                            */
+/* ============================================== */
+#cmakedefine MUE_CONFIGURATION_IS_APP 1
+#cmakedefine MUE_CONFIGURATION_IS_APPPORTABLE 1
+#cmakedefine WIN_PORTABLE 1
+#cmakedefine MUE_CONFIGURATION_IS_APPWEB 1
+#cmakedefine MUE_CONFIGURATION_IS_VTEST 1
+#cmakedefine MUE_CONFIGURATION_IS_UTEST 1
+
+/* ============================================== */
+/* Qt Subsystem                                   */
+/* ============================================== */
+#cmakedefine QT_QPROCESS_SUPPORTED 1
+#cmakedefine QT_CONCURRENT_SUPPORTED 1
+
+/* ============================================== */
+/* Modules                                        */
+/* ============================================== */
+#cmakedefine MUE_BUILD_APPSHELL_MODULE 1
+#cmakedefine MUE_BUILD_BRAILLE_MODULE 1
+#cmakedefine MUE_BUILD_CONVERTER_MODULE 1
+#cmakedefine MUE_BUILD_INSPECTOR_MODULE 1
+#cmakedefine MUE_BUILD_INSTRUMENTSSCENE_MODULE 1
+#cmakedefine MUE_BUILD_MUSESOUNDS_MODULE 1
+#cmakedefine MUE_BUILD_NOTATION_MODULE 1
+#cmakedefine MUE_BUILD_PALETTE_MODULE 1
+#cmakedefine MUE_BUILD_PLAYBACK_MODULE 1
+#cmakedefine MUE_BUILD_PRINT_MODULE 1
+#cmakedefine MUE_BUILD_PROJECT_MODULE 1
+
+/* ============================================== */
+/* Import Export Modules                          */
+/* ============================================== */
+#cmakedefine MUE_BUILD_IMPEXP_BB_MODULE ${MUE_BUILD_IMPEXP_BB_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_BWW_MODULE ${MUE_BUILD_IMPEXP_BWW_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_CAPELLA_MODULE ${MUE_BUILD_IMPEXP_CAPELLA_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_MIDI_MODULE ${MUE_BUILD_IMPEXP_MIDI_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_MUSEDATA_MODULE ${MUE_BUILD_IMPEXP_MUSEDATA_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_MUSICXML_MODULE ${MUE_BUILD_IMPEXP_MUSICXML_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_OVE_MODULE ${MUE_BUILD_IMPEXP_OVE_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE ${MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE ${MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_GUITARPRO_MODULE ${MUE_BUILD_IMPEXP_GUITARPRO_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_MEI_MODULE ${MUE_BUILD_IMPEXP_MEI_MODULE})
+#cmakedefine MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE ${MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE})
+
+/* ============================================== */
+/* Functions                                      */
+/* ============================================== */
+#cmakedefine MUE_ENABLE_SPLASHSCREEN 1
+#cmakedefine MUE_ENABLE_CONSOLEAPP 1
+#cmakedefine MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE 1

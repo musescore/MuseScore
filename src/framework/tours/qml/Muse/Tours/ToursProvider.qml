@@ -62,11 +62,6 @@ Item {
             }
         }
 
-        onLoaded: {
-            var tourStepPopup = tourStepLoader.item
-            tourStepPopup.calculateSize()
-        }
-
         function loadTourStepPopup() {
             tourStepLoader.active = true
         }
@@ -107,8 +102,6 @@ Item {
             tourStepPopup.videoExplanationUrl = videoExplanationUrl
             tourStepPopup.index = index
             tourStepPopup.total = total
-
-            tourStepPopup.calculateSize()
         }
     }
 

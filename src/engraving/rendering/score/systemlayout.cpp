@@ -113,6 +113,9 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     }
 
     System* system = getNextSystem(ctx);
+    for (SysStaff* staff : system->staves()) {
+        staff->skyline().clear();
+    }
 
     LAYOUT_CALL() << LAYOUT_ITEM_INFO(system);
 
@@ -134,7 +137,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     prevMeasureState.curHeader = ctx.state().curMeasure()->header();
     prevMeasureState.curTrailer = ctx.state().curMeasure()->trailer();
 
-    const SystemLock* systemLock = ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure());
+    const SystemLock* systemLock = ctx.conf().viewMode() == LayoutMode::PAGE || ctx.conf().viewMode() == LayoutMode::SYSTEM
+                                   ? ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure()) : nullptr;
 
     while (ctx.state().curMeasure()) {      // collect measure for system
         oldSystem = ctx.mutState().curMeasure()->system();
@@ -1198,8 +1202,13 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
 
 void SystemLayout::collectSpannersToLayout(ElementsToLayout& elements, const LayoutContext& ctx)
 {
-    Fraction stick = elements.measures.front()->tick();
-    Fraction etick = elements.measures.back()->endTick();
+    const System* system = elements.system;
+
+    // NOTE: in continuous view, this means we layout spanners for the entire score.
+    // TODO: find way to optimize this and only layout where necessary.
+    Fraction stick = system->measures().front()->tick();
+    Fraction etick = system->measures().back()->endTick();
+
     auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
     std::sort(spanners.begin(), spanners.end(), [](const auto& sp1, const auto& sp2) {
         return sp1.value->tick() < sp2.value->tick();
@@ -1210,8 +1219,6 @@ void SystemLayout::collectSpannersToLayout(ElementsToLayout& elements, const Lay
     for (auto item : spanners) {
         allSpanners.push_back(item.value);
     }
-
-    const System* system = elements.system;
 
     for (Spanner* spanner : allSpanners) {
         if (!spanner->systemFlag() && !system->staff(spanner->staffIdx())->show()) {
@@ -1232,6 +1239,7 @@ void SystemLayout::collectSpannersToLayout(ElementsToLayout& elements, const Lay
         } else {
             switch (spanner->type()) {
             case ElementType::SLUR:
+            case ElementType::HAMMER_ON_PULL_OFF:
                 if (!toSlur(spanner)->isCrossStaff()) {
                     elements.slurs.push_back(spanner);
                 }
@@ -1623,6 +1631,9 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, const std::v
                 continue;
             }
             system->staff(stfIdx)->skyline().add(ss->shape().translate(ss->pos()));
+            if (ss->isHammerOnPullOffSegment()) {
+                TLayout::layoutHammerOnPullOffSegment(toHammerOnPullOffSegment(ss), ctx);
+            }
         }
     }
 }
@@ -2242,7 +2253,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
         } else {
             dist += staffDistance;
         }
-        dist += staff2->userDist();
+        dist += staff2->absoluteFromSpatium(staff2->userDist());
         bool fixedSpace = false;
         for (const MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {
@@ -2252,16 +2263,16 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             Spacer* sp = m->vspacerDown(si1);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = staff->staffHeight() + sp->gap();
+                    dist = staff->staffHeight() + sp->absoluteGap();
                     fixedSpace = true;
                     break;
                 } else {
-                    dist = std::max(dist, staff->staffHeight() + sp->gap());
+                    dist = std::max(dist, staff->staffHeight() + sp->absoluteGap());
                 }
             }
             sp = m->vspacerUp(si2);
             if (sp) {
-                dist = std::max(dist, sp->gap() + staff->staffHeight());
+                dist = std::max(dist, sp->absoluteGap() + staff->staffHeight());
             }
         }
         if (!fixedSpace) {
@@ -2649,7 +2660,7 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     }
 
     const Staff* staff = dom.staff(firstStaff);
-    double userDist = staff ? staff->userDist() : 0.0;
+    double userDist = staff ? staff->absoluteFromSpatium(staff->userDist()) : 0.0;
     dist = std::max(dist, userDist);
     top->setFixedDownDistance(false);
 
@@ -2668,11 +2679,11 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
             const Spacer* sp = m->vspacerDown(lastStaff);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = sp->gap();
+                    dist = sp->absoluteGap();
                     top->setFixedDownDistance(true);
                     break;
                 } else {
-                    dist = std::max(dist, sp->gap().val());
+                    dist = std::max(dist, sp->absoluteGap());
                 }
             }
         }
@@ -2683,7 +2694,7 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
                 const Measure* m = toMeasure(mb2);
                 const Spacer* sp = m->vspacerUp(firstStaff);
                 if (sp) {
-                    dist = std::max(dist, sp->gap().val());
+                    dist = std::max(dist, sp->absoluteGap());
                 }
             }
         }

@@ -63,6 +63,7 @@
 #include "dom/guitarbend.h"
 
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harppedaldiagram.h"
 #include "dom/harmonicmark.h"
 #include "dom/harmony.h"
@@ -155,6 +156,8 @@
 
 #include "infrastructure/rtti.h"
 
+#include "stemlayout.h"
+
 // dev
 #include "dom/system.h"
 #include "dom/measure.h"
@@ -242,6 +245,10 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
 
     case ElementType::HAIRPIN_SEGMENT: draw(item_cast<const HairpinSegment*>(item), painter);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT: draw(item_cast<const HammerOnPullOffSegment*>(item), painter);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF_TEXT: draw(item_cast<const HammerOnPullOffText*>(item), painter);
         break;
     case ElementType::HARP_DIAGRAM: draw(item_cast<const HarpPedalDiagram*>(item), painter);
         break;
@@ -641,10 +648,10 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
         y1l = st->doty1() * spatium;
         y2l = st->doty2() * spatium;
 
-        //workaround to make Emmentaler, Gonville and MuseJazz font work correctly with repeatDots
+        //workaround to make several fonts work correctly with repeatDots
         if (item->score()->engravingFont()->name() == "Emmentaler"
-            || item->score()->engravingFont()->name() == "Gonville"
-            || item->score()->engravingFont()->name() == "MuseJazz") {
+            // above internal, builtin fonts, below external fonts
+            || item->score()->engravingFont()->name() == "Ekmelos") { // not the other ones from the Ekmelos family though (EkmelosXXedo)
             double offset = 0.5 * item->style().spatium() * item->mag();
             y1l += offset;
             y2l += offset;
@@ -1183,7 +1190,7 @@ void TDraw::draw(const Fermata* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor());
-    item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
+    item->drawSymbol(item->symId(), painter);
 }
 
 void TDraw::draw(const FiguredBass* item, Painter* painter)
@@ -1873,6 +1880,17 @@ void TDraw::draw(const HairpinSegment* item, Painter* painter)
     }
 }
 
+void TDraw::draw(const HammerOnPullOffSegment* item, muse::draw::Painter* painter)
+{
+    draw(toSlurSegment(item), painter);
+}
+
+void TDraw::draw(const HammerOnPullOffText* item, muse::draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
 void TDraw::draw(const HarpPedalDiagram* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
@@ -1890,11 +1908,6 @@ void TDraw::draw(const Harmony* item, Painter* painter)
     TRACE_DRAW_ITEM;
 
     const TextBase::LayoutData* ldata = item->ldata();
-
-    if (item->isDrawEditMode()) {
-        drawTextBase(item, painter);
-        return;
-    }
 
     if (item->textList().empty()) {
         drawTextBase(item, painter);
@@ -2614,7 +2627,7 @@ void TDraw::draw(const SlurSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    Pen pen(item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>()));
+    Pen pen(item->curColor());
     double mag = item->staff() ? item->staff()->staffMag(item->slur()->tick()) : 1.0;
 
     //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with tie.cpp)
@@ -2665,7 +2678,7 @@ void TDraw::draw(const Spacer* item, Painter* painter)
 
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
-    painter->drawPath(item->path());
+    painter->drawPath(item->ldata()->path);
 }
 
 void TDraw::draw(const StaffLines* item, Painter* painter)
@@ -2784,19 +2797,19 @@ void TDraw::draw(const Stem* item, Painter* painter)
     if (item->chord()->durationType().type() == DurationType::V_HALF
         && staffType->minimStyle() == TablatureMinimStyle::SLASHED) {
         // position slashes onto stem
-        double y = isUp ? -item->length() + STAFFTYPE_TAB_SLASH_2STARTY_UP * sp
-                   : item->length() - STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
+        double y = isUp ? -item->length() + StemLayout::STAFFTYPE_TAB_SLASH_2STARTY_UP * sp
+                   : item->length() - StemLayout::STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
         // if stems through, try to align slashes within or across lines
         if (staffType->stemThrough()) {
             double halfLineDist = staffType->lineDistance().val() * sp * 0.5;
-            double halfSlashHgt = STAFFTYPE_TAB_SLASH_2TOTHEIGHT * sp * 0.5;
+            double halfSlashHgt = StemLayout::STAFFTYPE_TAB_SLASH_2TOTHEIGHT * sp * 0.5;
             y = lrint((y + halfSlashHgt) / halfLineDist) * halfLineDist - halfSlashHgt;
         }
         // draw slashes
-        double hlfWdt= sp * STAFFTYPE_TAB_SLASH_WIDTH * 0.5;
-        double sln   = sp * STAFFTYPE_TAB_SLASH_SLANTY;
-        double thk   = sp * STAFFTYPE_TAB_SLASH_THICK;
-        double displ = sp * STAFFTYPE_TAB_SLASH_DISPL;
+        double hlfWdt= sp * StemLayout::STAFFTYPE_TAB_SLASH_WIDTH * 0.5;
+        double sln   = sp * StemLayout::STAFFTYPE_TAB_SLASH_SLANTY;
+        double thk   = sp * StemLayout::STAFFTYPE_TAB_SLASH_THICK;
+        double displ = sp * StemLayout::STAFFTYPE_TAB_SLASH_DISPL;
         PainterPath path;
         for (int i = 0; i < 2; ++i) {
             path.moveTo(hlfWdt, y);                   // top-right corner
@@ -2817,7 +2830,7 @@ void TDraw::draw(const Stem* item, Painter* painter)
     int nDots = item->chord()->dots();
     if (nDots > 0 && !staffType->stemThrough()) {
         double x     = item->chord()->dotPosX();
-        double y     = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
+        double y     = ((StemLayout::STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
         double step  = item->style().styleS(Sid::dotDotDistance).val() * sp;
         for (int dot = 0; dot < nDots; dot++, x += step) {
             item->drawSymbol(SymId::augmentationDot, painter, PointF(x, y));

@@ -207,6 +207,24 @@ const TextStyle rhGuitarFingeringTextStyle { {
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
+const TextStyle hammerOnPullOffTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::hammerOnPullOffTappingFontFace,                      Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::hammerOnPullOffTappingFontSize,                      Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::hammerOnPullOffTappingLineSpacing,                   Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::hammerOnPullOffTappingFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::hammerOnPullOffTappingFontStyle,                     Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::hammerOnPullOffTappingColor,                         Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::hammerOnPullOffTappingAlign,                         Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::hammerOnPullOffTappingOffset,                        Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::hammerOnPullOffTappingFrameType,                     Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::hammerOnPullOffTappingFramePadding,                  Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::hammerOnPullOffTappingFrameWidth,                    Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::hammerOnPullOffTappingFrameRound,                    Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::hammerOnPullOffTappingFrameFgColor,                  Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::hammerOnPullOffTappingFrameBgColor,                  Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+} };
+
 const TextStyle stringNumberTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::stringNumberFontFace,                   Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::stringNumberFontSize,                   Pid::FONT_SIZE },
@@ -1262,6 +1280,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::FINGERING: return &fingeringTextStyle;
     case TextStyleType::LH_GUITAR_FINGERING: return &lhGuitarFingeringTextStyle;
     case TextStyleType::RH_GUITAR_FINGERING: return &rhGuitarFingeringTextStyle;
+    case TextStyleType::HAMMER_ON_PULL_OFF: return &hammerOnPullOffTextStyle;
     case TextStyleType::STRING_NUMBER: return &stringNumberTextStyle;
     case TextStyleType::STRING_TUNINGS: return &stringTuningsStyle; // todo
     case TextStyleType::FRET_DIAGRAM_FINGERING: return &fretDiagramFingeringStyle;

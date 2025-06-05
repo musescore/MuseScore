@@ -41,19 +41,19 @@ void TimeSignatureSettingsModel::createProperties()
 {
     m_horizontalScale = buildPropertyItem(mu::engraving::Pid::SCALE,
                                           [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QSizeF(newValue.toDouble() / 100, m_verticalScale->value().toDouble() / 100));
+        onPropertyValueChanged(pid, QSizeF(newValue.toDouble(), m_verticalScale->value().toDouble()));
     },
                                           [this](const mu::engraving::Sid sid, const QVariant& newValue) {
-        updateStyleValue(sid, QSizeF(newValue.toDouble() / 100, m_verticalScale->value().toDouble() / 100));
+        updateStyleValue(sid, QSizeF(newValue.toDouble(), m_verticalScale->value().toDouble()));
         emit requestReloadPropertyItems();
     });
 
     m_verticalScale = buildPropertyItem(mu::engraving::Pid::SCALE,
                                         [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QSizeF(m_horizontalScale->value().toDouble() / 100, newValue.toDouble() / 100));
+        onPropertyValueChanged(pid, QSizeF(m_horizontalScale->value().toDouble(), newValue.toDouble()));
     },
                                         [this](const mu::engraving::Sid sid, const QVariant& newValue) {
-        updateStyleValue(sid, QSizeF(m_horizontalScale->value().toDouble() / 100, newValue.toDouble() / 100));
+        updateStyleValue(sid, QSizeF(m_horizontalScale->value().toDouble(), newValue.toDouble()));
         emit requestReloadPropertyItems();
     });
 
@@ -68,11 +68,11 @@ void TimeSignatureSettingsModel::requestElements()
 void TimeSignatureSettingsModel::loadProperties()
 {
     loadPropertyItem(m_horizontalScale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return muse::DataFormatter::roundDouble(elementPropertyValue.value<QSizeF>().width()) * 100;
+        return muse::DataFormatter::roundDouble(elementPropertyValue.value<QSizeF>().width());
     });
 
     loadPropertyItem(m_verticalScale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return muse::DataFormatter::roundDouble(elementPropertyValue.value<QSizeF>().height()) * 100;
+        return muse::DataFormatter::roundDouble(elementPropertyValue.value<QSizeF>().height());
     });
 
     loadPropertyItem(m_shouldShowCourtesy);

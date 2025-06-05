@@ -40,7 +40,6 @@
 #include "containers.h"
 
 #include "draw/painter.h"
-#include "draw/types/painterpath.h"
 #include "draw/types/pen.h"
 
 // TODO: Don't include from engraving/internal
@@ -60,6 +59,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/figuredbass.h"
 #include "engraving/dom/guitarbend.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/image.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/gradualtempochange.h"
@@ -68,7 +68,6 @@
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/lyrics.h"
-#include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/mscore.h"
@@ -98,6 +97,7 @@
 #include "notation.h"
 #include "notationnoteinput.h"
 #include "notationselection.h"
+#include "notationselectionfilter.h"
 #include "scorecallbacks.h"
 
 #include "utilities/scorerangeutilities.h"
@@ -486,12 +486,11 @@ bool NotationInteraction::showShadowNote(ShadowNote& shadowNote, ShadowNoteParam
     shadowNote.setVoice(voice);
     shadowNote.setLineIndex(line);
 
-    Color color = configuration()->noteInputPreviewColor();
-
+    const Color color = configuration()->noteInputPreviewColor();
     if (color.isValid() && color != configuration()->selectionColor()) {
         shadowNote.setColor(color);
     } else {
-        shadowNote.setColor(configuration()->selectionColor(voice));
+        shadowNote.setColor(configuration()->highlightSelectionColor(voice));
     }
 
     mu::engraving::SymId symNotehead;
@@ -752,6 +751,12 @@ bool NotationInteraction::elementIsLess(const EngravingItem* e1, const Engraving
         return false;
     }
     if (e1->isBox() && e2->isImage()) {
+        return true;
+    }
+    if ((e1->isHarmony() || e1->isFretDiagram()) && e2->isFBox()) {
+        return false;
+    }
+    if (e1->isFBox() && (e2->isHarmony() || e2->isFretDiagram())) {
         return true;
     }
     if (e1->z() == e2->z()) {
@@ -1469,7 +1474,7 @@ bool NotationInteraction::startDropImage(const QUrl& url)
 }
 
 //! NOTE Copied from ScoreView::dragMoveEvent
-bool NotationInteraction::isDropSingleAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers)
+bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifiers modifiers)
 {
     if (!m_dropData.elementDropData.has_value()) {
         return false;
@@ -1542,6 +1547,7 @@ bool NotationInteraction::isDropSingleAccepted(const PointF& pos, Qt::KeyboardMo
     case ElementType::REHEARSAL_MARK:
     case ElementType::CHORD:
     case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF:
     case ElementType::HARMONY:
     case ElementType::BAGPIPE_EMBELLISHMENT:
     case ElementType::AMBITUS:
@@ -1576,11 +1582,24 @@ bool NotationInteraction::isDropSingleAccepted(const PointF& pos, Qt::KeyboardMo
     return false;
 }
 
-static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLength, staff_idx_t numStaves, staff_idx_t* staffIdx,
-                              Segment** segment)
+static Segment* rangeEndSegment(Score* score, const Fraction& endTick)
+{
+    Segment* endSegment = score->tick2rightSegment(endTick,
+                                                   true,
+                                                   Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+
+    if (endSegment && !endSegment->enabled()) {
+        endSegment = endSegment->next1MMenabled();
+    }
+
+    return endSegment ? endSegment : score->lastSegmentMM();
+}
+
+static bool dropRangePosition(Score* score, const PointF& pos, Fraction tickLength, staff_idx_t numStaves, staff_idx_t* staffIdx,
+                              Segment** segment, const Segment** endSegment = nullptr, ShowAnchors* showAnchors = nullptr)
 {
     IF_ASSERT_FAILED(score && staffIdx && segment) {
-        return;
+        return false;
     }
 
     static constexpr double spacingFactor = 0.5;
@@ -1589,7 +1608,7 @@ static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLeng
     // First, get an approximate location
     score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
     if (*staffIdx == muse::nidx || !*segment) {
-        return;
+        return false;
     }
 
     // Determine the measures range
@@ -1598,7 +1617,7 @@ static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLeng
 
     Measure* startMeasure = (*segment)->measure();
     if (!startMeasure) {
-        return;
+        return false;
     }
 
     Measure* endMeasure = score->tick2measure(endTick);
@@ -1606,12 +1625,12 @@ static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLeng
         endMeasure = score->lastMeasure();
 
         if (!endMeasure) {
-            return;
+            return false;
         }
     }
 
     IF_ASSERT_FAILED(startMeasure == endMeasure || startMeasure->isBefore(endMeasure)) {
-        return;
+        return false;
     }
 
     const staff_idx_t endStaffIdx = std::min(*staffIdx + numStaves, score->nstaves());
@@ -1629,38 +1648,28 @@ static void dropRangePosition(Score* score, const PointF& pos, Fraction tickLeng
     // Get precise location using the newly created time tick anchors
     score->dragPosition(pos, staffIdx, segment, spacingFactor, useTimeAnchors);
     if (*staffIdx == muse::nidx || !*segment) {
-        return;
+        return false;
     }
 
     startTick = (*segment)->tick();
     endTick = startTick + tickLength;
 
-    score->setShowAnchors(ShowAnchors(0, *staffIdx, *staffIdx + numStaves, startTick, endTick,
-                                      startMeasure->tick(), endMeasure->endTick()));
-
-    // Invalidate BSP tree of affected pages
-    System* lastSeenSystem = nullptr;
-    Page* lastSeenPage = nullptr;
-    for (MeasureBase* mb = startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
-        System* s = mb->system();
-        if (!s || s == lastSeenSystem) {
-            continue;
+    if (endSegment) {
+        *endSegment = rangeEndSegment(score, endTick);
+        if (!*endSegment) {
+            return false;
         }
-
-        lastSeenSystem = s;
-
-        Page* p = s->page();
-        if (!p || p == lastSeenPage) {
-            continue;
-        }
-
-        lastSeenPage = p;
-
-        p->invalidateBspTree();
     }
+
+    if (showAnchors) {
+        *showAnchors = ShowAnchors(0, *staffIdx, *staffIdx + numStaves, startTick, endTick,
+                                   startMeasure->tick(), endMeasure->endTick());
+    }
+
+    return true;
 }
 
-bool NotationInteraction::isDropRangeAccepted(const PointF& pos)
+bool NotationInteraction::updateDropRange(const PointF& pos)
 {
     IF_ASSERT_FAILED(m_dropData.rangeDropData.has_value()) {
         return false;
@@ -1670,40 +1679,56 @@ bool NotationInteraction::isDropRangeAccepted(const PointF& pos)
 
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
+    const Segment* endSegment = nullptr;
+    ShowAnchors showAnchors;
 
-    dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
-    if (staffIdx == muse::nidx || !segment) {
-        return false;
+    const bool ok = dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment, &endSegment, &showAnchors);
+
+    if (showAnchors != score()->showAnchors()) {
+        score()->setShowAnchors(showAnchors);
+
+        // Invalidate BSP tree of affected pages
+        System* lastSeenSystem = nullptr;
+        Page* lastSeenPage = nullptr;
+        for (MeasureBase* mb = score()->tick2measureBase(showAnchors.startTickExtendedRegion);
+             mb && mb->tick() <= showAnchors.endTickExtendedRegion;
+             mb = mb->next()) {
+            System* s = mb->system();
+            if (!s || s == lastSeenSystem) {
+                continue;
+            }
+
+            lastSeenSystem = s;
+
+            Page* p = s->page();
+            if (!p || p == lastSeenPage) {
+                continue;
+            }
+
+            lastSeenPage = p;
+
+            p->invalidateBspTree();
+        }
     }
 
-    rdd.targetSegment = segment;
-    rdd.targetStaffIdx = staffIdx;
+    if (ok) {
+        rdd.targetSegment = segment;
+        rdd.targetStaffIdx = staffIdx;
 
-    const Segment* endSegment = score()->tick2rightSegment(segment->tick() + rdd.tickLength,
-                                                           true,
-                                                           Segment::CHORD_REST_OR_TIME_TICK_TYPE);
+        const staff_idx_t endStaffIdx = std::min(staffIdx + rdd.numStaves, score()->nstaves());
 
-    if (endSegment && !endSegment->enabled()) {
-        endSegment = endSegment->next1MMenabled();
+        rdd.dropRects = ScoreRangeUtilities::boundingArea(score(),
+                                                          segment, endSegment,
+                                                          staffIdx, endStaffIdx);
+    } else {
+        rdd.targetSegment = nullptr;
+        rdd.targetStaffIdx = muse::nidx;
+        rdd.dropRects.clear();
     }
-
-    if (!endSegment) {
-        endSegment = score()->lastSegmentMM();
-    }
-
-    if (!endSegment) {
-        return false;
-    }
-
-    const staff_idx_t endStaffIdx = std::min(staffIdx + rdd.numStaves, score()->nstaves());
-
-    rdd.dropRects = ScoreRangeUtilities::boundingArea(score(),
-                                                      segment, endSegment,
-                                                      staffIdx, endStaffIdx);
 
     notifyAboutDragChanged();
 
-    return true;
+    return ok;
 }
 
 //! NOTE Copied from ScoreView::dropEvent
@@ -1768,9 +1793,14 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
         applyUserOffset = true;
         [[fallthrough]];
     case ElementType::DYNAMIC:
-    case ElementType::FRET_DIAGRAM:
     case ElementType::HARMONY:
         accepted = doDropTextBaseAndSymbols(pos, applyUserOffset);
+        break;
+    case ElementType::FRET_DIAGRAM:
+        accepted = doDropTextBaseAndSymbols(pos, applyUserOffset);
+        if (accepted) {
+            doFinishAddFretboardDiagram();
+        }
         break;
     case ElementType::HBOX:
     case ElementType::VBOX:
@@ -1823,17 +1853,18 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
         break;
     case ElementType::STAFFTYPE_CHANGE: {
         EngravingItem* el = dropTarget(edd.ed);
-        if (el->isMeasure()) {
-            Measure* m = toMeasure(el);
+        Measure* m = el ? el->findMeasure() : nullptr;
+        if (m) {
             System* s = m->system();
             double y = pos.y() - s->canvasPos().y();
             staff_idx_t staffIndex = s->searchStaff(y);
             StaffTypeChange* stc = toStaffTypeChange(edd.ed.dropElement);
-            score()->cmdAddStaffTypeChange(toMeasure(el), staffIndex, stc);
+            score()->cmdAddStaffTypeChange(m, staffIndex, stc);
         }
     }
     break;
     case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF:
     {
         EngravingItem* el = dropTarget(edd.ed);
         mu::engraving::Slur* dropElement = toSlur(edd.ed.dropElement);
@@ -1973,8 +2004,8 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     staff_idx_t staffIdx = muse::nidx;
     Segment* segment = nullptr;
 
-    dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
-    if (staffIdx == muse::nidx || !segment) {
+    const bool ok = dropRangePosition(score(), pos, rdd.tickLength, rdd.numStaves, &staffIdx, &segment);
+    if (!ok) {
         return false;
     }
 
@@ -2001,15 +2032,7 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
             sourceStartSegment = sourceStartSegment->next1MMenabled();
         }
 
-        Segment* sourceEndSegment = score()->tick2rightSegment(rdd.sourceTick + rdd.tickLength,
-                                                               true,
-                                                               Segment::CHORD_REST_OR_TIME_TICK_TYPE);
-        if (sourceEndSegment && !sourceEndSegment->enabled()) {
-            sourceEndSegment = sourceEndSegment->next1MMenabled();
-        }
-        if (!sourceEndSegment) {
-            sourceEndSegment = score()->lastSegmentMM();
-        }
+        Segment* sourceEndSegment = rangeEndSegment(score(), rdd.sourceTick + rdd.tickLength);
 
         if (sourceStartSegment && sourceEndSegment) {
             score()->deleteRange(sourceStartSegment, sourceEndSegment,
@@ -2137,6 +2160,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             if (element->isSlur() || cr1->staffIdx() == cr2->staffIdx()) {
                 addSingle = true;
             }
+        } else if (sel.element() && sel.element()->isSlurSegment() && element->isHammerOnPullOff()) {
+            addSingle = true;
         }
 
         auto isEntryDrumStaff = [score]() {
@@ -2569,6 +2594,10 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
             selectAndStartEditIfNeeded(el);
         }
 
+        if (score->selection().elements().size() == 1) {
+            doFinishAddFretboardDiagram();
+        }
+
         dropData->dropElement = nullptr;
 
         m_notifyAboutDropChanged = true;
@@ -2660,6 +2689,9 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
     } else if (sel.isSingle()) {
         if (sel.element()->isNote() && !toNote(sel.element())->isTrillCueNote()) {
             doAddSlur(toNote(sel.element())->chord(), nullptr, slurTemplate);
+        } else if (sel.element()->isSlurSegment() && slurTemplate->isHammerOnPullOff()) {
+            Slur* slur = toSlurSegment(sel.element())->slur();
+            doAddSlur(slur->startElement(), slur->endElement(), slurTemplate);
         }
     } else {
         EngravingItem* firstItem = nullptr;
@@ -2741,6 +2773,14 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     Slur* slur = firstChordRest->slur(secondChordRest);
     if (!slur || slur->slurDirection() != DirectionV::AUTO) {
         slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
+    } else if (slur && slurTemplate->isHammerOnPullOff()) {
+        // Replace existing slur with HOPO
+        endEditElement();
+        score()->undoRemoveElement(slur);
+        slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
+        SlurSegment* segment = slur->frontSegment();
+        select({ segment }, SelectType::SINGLE);
+        startEditGrip(segment, Grip::END);
     }
 
     if (m_noteInput->isNoteInputMode()) {
@@ -2785,9 +2825,10 @@ void NotationInteraction::endDrop()
 {
     score()->hideAnchors();
     score()->setUpdateAll();
-    setDropTarget(nullptr);
+    setDropTarget(nullptr, /*notify=*/ false);
     resetDropData();
     score()->update();
+    notifyAboutDragChanged();
 }
 
 muse::async::Notification NotationInteraction::dropChanged() const
@@ -3081,6 +3122,27 @@ void NotationInteraction::resetDropData()
     m_dropData = {};
 }
 
+void NotationInteraction::doFinishAddFretboardDiagram()
+{
+    EngravingItem* selectedElement = score()->selection().element();
+    if (!selectedElement || !selectedElement->isFretDiagram()) {
+        return;
+    }
+
+    FretDiagram* fretDiagram = toFretDiagram(selectedElement);
+    if (!fretDiagram->harmonyText().empty()) {
+        return;
+    }
+
+    //! first we need to apply changes
+    apply();
+
+    //! then add harmony
+    mu::engraving::TextBase* text = score()->addText(TextStyleType::HARMONY_A, fretDiagram);
+    doSelect({ text }, SelectType::SINGLE);
+    startEditElement(text, true);
+}
+
 void NotationInteraction::setAnchorLines(const std::vector<LineF>& anchorList)
 {
     m_anchorLines = anchorList;
@@ -3252,7 +3314,7 @@ void NotationInteraction::drawTextEditMode(muse::draw::Painter* painter)
         return;
     }
 
-    m_editData.element->drawEditMode(painter, m_editData, currentScaling(painter));
+    editModeRenderer()->drawItem(m_editData.element, painter, m_editData, currentScaling(painter));
 }
 
 void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
@@ -3321,7 +3383,7 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
     }
 
     editedElement->updateGrips(m_editData);
-    editedElement->drawEditMode(painter, m_editData, scaling);
+    editModeRenderer()->drawItem(editedElement, painter, m_editData, scaling);
 }
 
 void NotationInteraction::drawLasso(muse::draw::Painter* painter)
@@ -4568,7 +4630,7 @@ Ret NotationInteraction::canAddBoxes() const
     }
 
     static const ElementTypeSet BOX_TYPES {
-        ElementType::VBOX, ElementType::HBOX, ElementType::TBOX
+        ElementType::VBOX, ElementType::HBOX, ElementType::TBOX, ElementType::FBOX
     };
 
     for (const EngravingItem* element: selection()->elements()) {
@@ -5015,6 +5077,17 @@ void NotationInteraction::addSlurToSelection()
 
     // Calls `startEdit` internally
     doAddSlur();
+}
+
+void NotationInteraction::addHammerOnPullOffToSelection()
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    HammerOnPullOff* hopo = Factory::createHammerOnPullOff(score()->dummy());
+    // Calls `startEdit` internally
+    doAddSlur(hopo);
 }
 
 void NotationInteraction::addOttavaToSelection(OttavaType type)
@@ -5614,6 +5687,18 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
         return item && item->isBox() ? muse::make_ok() : make_ret(Err::EmptySelection);
     }
 
+    static const std::set<TextStyleType> harmonyTypes {
+        TextStyleType::HARMONY_A,
+        TextStyleType::HARMONY_ROMAN,
+        TextStyleType::HARMONY_NASHVILLE,
+    };
+
+    if (muse::contains(harmonyTypes, type)) {
+        if (item && item->type() == ElementType::FRET_DIAGRAM) {
+            return muse::make_ok();
+        }
+    }
+
     static const std::set<TextStyleType> needSelectNoteOrRestTypes {
         TextStyleType::SYSTEM,
         TextStyleType::STAFF,
@@ -6098,8 +6183,26 @@ void NotationInteraction::resetHitElementContext()
 
 bool NotationInteraction::elementsSelected(const std::set<ElementType>& elementsTypes) const
 {
-    const EngravingItem* element = selection()->element();
-    return element && muse::contains(elementsTypes, element->type());
+    auto selection = this->selection();
+    if (!selection || selection->isNone()) {
+        return false;
+    }
+
+    std::vector<EngravingItem*> selectedElements;
+
+    if (EngravingItem* element = selection->element()) {
+        selectedElements = { element };
+    } else {
+        selectedElements = selection->elements();
+    }
+
+    for (const EngravingItem* element: selectedElements) {
+        if (element && muse::contains(elementsTypes, element->type())) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //! NOTE: Copied from ScoreView::lyricsTab
@@ -6117,6 +6220,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
     mu::engraving::PropertyFlags pFlags = lyrics->propertyFlags(mu::engraving::Pid::PLACEMENT);
     mu::engraving::FontStyle fStyle = lyrics->fontStyle();
     mu::engraving::PropertyFlags fFlags = lyrics->propertyFlags(mu::engraving::Pid::FONT_STYLE);
+    mu::engraving::TextStyleType styleType = lyrics->textStyleType();
 
     mu::engraving::Segment* nextSegment = segment;
     if (back) {
@@ -6187,11 +6291,8 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         nextLyrics->setTrack(track);
         cr = toChordRest(nextSegment->element(track));
         nextLyrics->setParent(cr);
-
         nextLyrics->setNo(verse);
-        const mu::engraving::TextStyleType styleType(nextLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
         nextLyrics->setTextStyleType(styleType);
-
         nextLyrics->setPlacement(placement);
         nextLyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
         nextLyrics->setSyllabic(mu::engraving::LyricsSyllabic::SINGLE);
@@ -6278,6 +6379,7 @@ void NotationInteraction::navigateToNextSyllable()
     PropertyFlags pFlags = lyrics->propertyFlags(Pid::PLACEMENT);
     FontStyle fStyle = lyrics->fontStyle();
     PropertyFlags fFlags = lyrics->propertyFlags(Pid::FONT_STYLE);
+    mu::engraving::TextStyleType styleType = lyrics->textStyleType();
 
     // search next chord
     Segment* nextSegment = segment;
@@ -6367,11 +6469,8 @@ void NotationInteraction::navigateToNextSyllable()
             Lyrics* toLyrics = Factory::createLyrics(initialCR);
             toLyrics->setTrack(track);
             toLyrics->setParent(initialCR);
-
             toLyrics->setNo(verse);
-            const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
             toLyrics->setTextStyleType(styleType);
-
             toLyrics->setPlacement(placement);
             toLyrics->setPropertyFlags(Pid::PLACEMENT, pFlags);
             toLyrics->setSyllabic(LyricsSyllabic::END);
@@ -6462,7 +6561,6 @@ void NotationInteraction::navigateToNextSyllable()
         toLyrics->setParent(toLyricsChord);
 
         toLyrics->setNo(verse);
-        const TextStyleType styleType(toLyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
         toLyrics->setTextStyleType(styleType);
 
         toLyrics->setPlacement(placement);
@@ -6542,6 +6640,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
     mu::engraving::PropertyFlags pFlags = lyrics->propertyFlags(mu::engraving::Pid::PLACEMENT);
     mu::engraving::FontStyle fStyle = lyrics->fontStyle();
     mu::engraving::PropertyFlags fFlags = lyrics->propertyFlags(mu::engraving::Pid::FONT_STYLE);
+    mu::engraving::TextStyleType styleType = lyrics->textStyleType();
 
     if (direction == MoveDirection::Up) {
         if (verse == 0) {
@@ -6562,11 +6661,8 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
         lyrics = Factory::createLyrics(cr);
         lyrics->setTrack(track);
         lyrics->setParent(cr);
-
         lyrics->setNo(verse);
-        const mu::engraving::TextStyleType styleType(lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD);
         lyrics->setTextStyleType(styleType);
-
         lyrics->setPlacement(placement);
         lyrics->setPropertyFlags(mu::engraving::Pid::PLACEMENT, pFlags);
         lyrics->setFontStyle(fStyle);
@@ -7423,6 +7519,83 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
         select({ guitarBend });
     } else {
         rollback();
+    }
+}
+
+muse::Ret NotationInteraction::canAddFretboardDiagram() const
+{
+    bool canAdd = elementsSelected({ ElementType::HARMONY, ElementType::NOTE, ElementType::REST });
+    return canAdd ? muse::make_ok() : make_ret(Err::NoteOrRestOrHarmonyIsNotSelected);
+}
+
+void NotationInteraction::addFretboardDiagram()
+{
+    Score* score = this->score();
+    if (!score) {
+        return;
+    }
+
+    auto selection = this->selection();
+    if (selection->isNone()) {
+        return;
+    }
+
+    std::vector<EngravingItem*> selectedElements;
+
+    if (EngravingItem* element = selection->element()) {
+        selectedElements = { element };
+    } else {
+        selectedElements = selection->elements();
+    }
+
+    std::vector<EngravingItem*> filteredElements;
+
+    for (EngravingItem* element : selectedElements) {
+        if (!element || (!element->isHarmony() && !element->isRest() && !element->isNote())) {
+            continue;
+        }
+
+        if (element->isHarmony()) {
+            if (!element->explicitParent()->isFretDiagram()) {
+                filteredElements.emplace_back(element);
+            }
+        } else {
+            filteredElements.emplace_back(element);
+        }
+    }
+
+    if (filteredElements.empty()) {
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Add fretboard diagram"));
+
+    engraving::FretDiagram* lastAddedDiagram = nullptr;
+
+    for (EngravingItem* element : filteredElements) {
+        engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(score->dummy()->segment());
+        diagram->setTrack(element->track());
+
+        if (element->isHarmony()) {
+            Harmony* harmony = toHarmony(element);
+
+            diagram->updateDiagram(harmony->plainText());
+            score->undo(new FretLinkHarmony(diagram, harmony));
+        } else {
+            // add blank diagram
+            diagram->setParent(element->isNote() ? toNote(element)->chord()->segment() : toRest(element)->segment());
+            diagram->clear();
+        }
+
+        score->undoAddElement(diagram);
+
+        lastAddedDiagram = diagram;
+    }
+
+    apply();
+
+    if (lastAddedDiagram) {
+        select({ lastAddedDiagram });
     }
 }
 

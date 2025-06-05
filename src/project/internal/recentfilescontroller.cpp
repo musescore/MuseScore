@@ -21,12 +21,17 @@
  */
 #include "recentfilescontroller.h"
 
-#include "global/concurrency/concurrent.h"
 #include "global/async/async.h"
 #include "global/defer.h"
 #include "global/serialization/json.h"
 
 #include "multiinstances/resourcelockguard.h"
+
+#include "app_config.h"
+
+#ifdef QT_CONCURRENT_SUPPORTED
+#include "global/concurrency/concurrent.h"
+#endif
 
 using namespace mu::project;
 using namespace muse;
@@ -252,7 +257,7 @@ Promise<QPixmap> RecentFilesController::thumbnail(const muse::io::path_t& filePa
         if (filePath.empty()) {
             return reject(int(Ret::Code::UnknownError), "Invalid file specified");
         }
-
+#ifdef QT_CONCURRENT_SUPPORTED
         Concurrent::run([this, filePath, resolve, reject]() {
             std::lock_guard lock(m_thumbnailCacheMutex);
 
@@ -275,13 +280,19 @@ Promise<QPixmap> RecentFilesController::thumbnail(const muse::io::path_t& filePa
                 (void)resolve(rv.val.thumbnail);
             }
         });
+#else
+        UNUSED(resolve);
+        UNUSED(this);
+        return reject(int(Ret::Code::NotSupported), "NotSupported");
+#endif
 
         return Promise<QPixmap>::Result::unchecked();
-    }, Promise<QPixmap>::AsynchronyType::ProvidedByBody);
+    }, PromiseType::AsyncByBody);
 }
 
 void RecentFilesController::cleanUpThumbnailCache(const RecentFilesList& files)
 {
+#ifdef QT_CONCURRENT_SUPPORTED
     Concurrent::run([this, files] {
         std::lock_guard lock(m_thumbnailCacheMutex);
 
@@ -300,4 +311,7 @@ void RecentFilesController::cleanUpThumbnailCache(const RecentFilesList& files)
             m_thumbnailCache = cleanedCache;
         }
     });
+#else
+    UNUSED(files);
+#endif
 }

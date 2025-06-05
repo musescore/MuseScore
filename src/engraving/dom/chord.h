@@ -123,8 +123,8 @@ public:
     void setIsUiItem(bool val) { m_isUiItem = val; }
 
     const std::vector<LedgerLine*>& ledgerLines() const { return m_ledgerLines; }
+    std::vector<LedgerLine*>& ledgerLines() { return m_ledgerLines; }
     void resizeLedgerLinesTo(size_t newSize);
-    void updateLedgerLines();
 
     double defaultStemLength() const { return m_defaultStemLength; }
     void setDefaultStemLength(double l) { m_defaultStemLength = l; }
@@ -191,9 +191,6 @@ public:
     int line() const { return ldata()->up ? upLine() : downLine(); }
     int upLine() const;
     int downLine() const;
-    PointF stemPos() const override;            ///< page coordinates
-    PointF stemPosBeam() const override;        ///< page coordinates
-    double stemPosX() const override;
     double rightEdge() const override;
 
     bool underBeam() const;
@@ -260,6 +257,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+    bool isUserModified() const override;
 
     void reset() override;
 
@@ -312,7 +310,6 @@ public:
 
     double upPos()   const override;
     double downPos() const override;
-    double centerX() const;
 
     struct StartEndSlurs {
         bool startUp = false;
@@ -329,6 +326,8 @@ public:
     };
 
     StartEndSlurs& startEndSlurs() { return m_startEndSlurs; }
+
+    bool allNotesTiedToNext() const;
 
 private:
 

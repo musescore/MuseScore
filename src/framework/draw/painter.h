@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_DRAW_PAINTER_H
-#define MUSE_DRAW_PAINTER_H
+#pragma once
 
 #include <stack>
 
@@ -103,19 +102,11 @@ public:
     void drawLines(const PointF* pointPairs, size_t lineCount);
     inline void drawLine(const LineF& line);
     inline void drawLine(const PointF& p1, const PointF& p2);
+    inline void drawLine(double x1, double y1, double x2, double y2);
     inline void drawLines(const std::vector<LineF>& lines);
 
-    //! NOTE Potentially dangerous method.
-    //! Most of them are cut with fractional values.
-    //! Fractions are also passed to this method, and, accordingly, the fractional part is discarded.
-    inline void drawLine(int x1, int y1, int x2, int y2);
-
     inline void drawRect(const RectF& rect);
-
-    //! NOTE Potentially dangerous method.
-    //! Most of them are cut with fractional values.
-    //! Fractions are also passed to this method, and, accordingly, the fractional part is discarded.
-    inline void drawRect(int x1, int y1, int w, int h);
+    inline void drawRect(double x1, double y1, double w, double h);
 
     void drawRects(const RectF* rects, size_t rectCount);
 
@@ -136,12 +127,9 @@ public:
     void drawArc(const RectF& rect, int a, int alen);
 
     void drawText(const PointF& point, const String& text);
-    void drawText(const RectF& rect, int flags, const String& text);
+    inline void drawText(double x, double y, const String& text);
 
-    //! NOTE Potentially dangerous method.
-    //! Most of them are cut with fractional values.
-    //! Fractions are also passed to this method, and, accordingly, the fractional part is discarded.
-    inline void drawText(int x, int y, const String& text);
+    void drawText(const RectF& rect, int flags, const String& text);
 
     //! NOTE workaround for https://musescore.org/en/node/284218
     //! and https://musescore.org/en/node/281601
@@ -221,7 +209,7 @@ inline void Painter::drawLine(const PointF& p1, const PointF& p2)
     drawLine(LineF(p1, p2));
 }
 
-inline void Painter::drawLine(int x1, int y1, int x2, int y2)
+inline void Painter::drawLine(double x1, double y1, double x2, double y2)
 {
     LineF l(PointF(x1, y1), PointF(x2, y2));
     drawLines(&l, 1);
@@ -237,7 +225,7 @@ inline void Painter::drawRect(const RectF& rect)
     drawRects(&rect, 1);
 }
 
-inline void Painter::drawRect(int x, int y, int w, int h)
+inline void Painter::drawRect(double x, double y, double w, double h)
 {
     RectF r(x, y, w, h);
     drawRects(&r, 1);
@@ -263,7 +251,7 @@ inline void Painter::drawConvexPolygon(const PolygonF& poly)
     drawConvexPolygon(poly.data(), poly.size());
 }
 
-inline void Painter::drawText(int x, int y, const String& text)
+inline void Painter::drawText(double x, double y, const String& text)
 {
     drawText(PointF(x, y), text);
 }
@@ -309,5 +297,3 @@ private:
     #define TRACE_DRAW_ITEM
     #define TRACE_ITEM_DRAW_C(painter, objName)
 #endif
-
-#endif // MUSE_DRAW_PAINTER_H

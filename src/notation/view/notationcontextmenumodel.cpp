@@ -28,6 +28,7 @@
 #include "view/widgets/editstyle.h"
 
 #include "engraving/dom/gradualtempochange.h"
+#include "engraving/dom/fret.h"
 
 using namespace mu::notation;
 using namespace muse;
@@ -58,6 +59,8 @@ MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elemen
         return makeInstrumentNameItems();
     case ElementType::HARMONY:
         return makeHarmonyItems();
+    case ElementType::FRET_DIAGRAM:
+        return makeFretboardDiagramItems();
     case ElementType::INSTRUMENT_CHANGE:
         return makeChangeInstrumentItems();
     case ElementType::VBOX:
@@ -176,7 +179,29 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
+
+    if (const EngravingItem* hitElement = hitElementContext().element) {
+        engraving::EngravingObject* parent = hitElement->isHarmony() ? hitElement->explicitParent() : nullptr;
+        bool hasLinkedFretboardDiagram = parent && parent->isFretDiagram();
+        if (!hasLinkedFretboardDiagram) {
+            items << makeMenuItem("add-fretboard-diagram");
+        }
+    }
+
     items << makeMenuItem("realize-chord-symbols");
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
+{
+    MenuItemList items = makeElementItems();
+    items << makeSeparator();
+
+    const engraving::FretDiagram* fretDiagram = engraving::toFretDiagram(hitElementContext().element);
+    if (!fretDiagram->harmony()) {
+        items << makeMenuItem("chord-text", TranslatableString("notation", "Add c&hord symbol"));
+    }
 
     return items;
 }

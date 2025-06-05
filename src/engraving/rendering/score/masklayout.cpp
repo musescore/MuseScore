@@ -217,7 +217,8 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
     }
 
     for (SpannerSegment* spannerSegment : system->spannerSegments()) {
-        if (!spannerSegment->isTextLineBaseSegment() || !system->staff(spannerSegment->staffIdx())->show()) {
+        if (!spannerSegment->isTextLineBaseSegment() || !system->staff(spannerSegment->staffIdx())->show()
+            || !spannerSegment->getProperty(Pid::VISIBLE).toBool()) {
             continue;
         }
         TextLineBaseSegment* textLineBaseSegment = static_cast<TextLineBaseSegment*>(spannerSegment);

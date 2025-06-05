@@ -24,6 +24,7 @@ var NewScore = require("steps/NewScore.js")
 var NoteInput = require("steps/NoteInput.js")
 var Navigation = require("steps/Navigation.js")
 var Score = require("steps/Score.js")
+var Home = require("steps/Home.js")
 
 var testCase = {
     name: "TC1.1: Create Simple Score",
@@ -31,8 +32,7 @@ var testCase = {
     steps: [
         {name: "Close score (if opened) and go to home to start", func: function() {
             api.dispatcher.dispatch("file-close")
-            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
-            //api.autobot.pause()
+            Home.goToHome()
         }},
         {name: "Open New Score Dialog", func: function() {
             NewScore.openNewScoreDialog()
@@ -86,13 +86,10 @@ var testCase = {
             api.dispatcher.dispatch("file-close")
         }},
         {name: "Home", func: function() {
-            // Go Home
-            Navigation.triggerControl("TopTool", "MainToolBar", "Home")
+            Home.goToHome()
         }},
         {name: "Open last", func: function() {
-            Navigation.goToControl("RecentScores", "RecentScoresGrid", "New score")
-            api.navigation.right()
-            api.navigation.trigger()
+            Home.openLastProject()
         }}
     ]
 };

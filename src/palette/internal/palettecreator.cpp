@@ -51,6 +51,7 @@
 #include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/jump.h"
@@ -199,7 +200,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newHarpPalette());
     defaultPalette->append(newGuitarPalette(true));
     defaultPalette->append(newFingeringPalette(true));
-    defaultPalette->append(newFretboardDiagramPalette());
+    defaultPalette->append(newFretboardDiagramPalette(true));
     defaultPalette->append(newAccordionPalette());
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
@@ -558,7 +559,7 @@ PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
     for (SpacerType spacerType : spacers) {
         auto spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
         spacer->setSpacerType(spacerType);
-        spacer->setGap(Millimetre(3 * gpaletteScore->style().spatium()));
+        spacer->setGap(Spatium(3));
         PaletteCellPtr cell = sp->appendElement(spacer, spacer->subtypeUserName());
         cell->mag = .7;
     }
@@ -1687,7 +1688,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
     return sp;
 }
 
-PalettePtr PaletteCreator::newFretboardDiagramPalette()
+PalettePtr PaletteCreator::newFretboardDiagramPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::FretboardDiagram);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Fretboard diagrams"));
@@ -1702,6 +1703,8 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     };
 
     static const std::vector<FretDiagramInfo> fretboardDiagrams = {
+        { u"------", u"",  muse::TranslatableString("palette", "Blank") },
+
         { u"X32O1O", u"C",  muse::TranslatableString("palette", "C") },
         { u"X-554-", u"Cm", muse::TranslatableString("palette", "Cm") },
         { u"X3231O", u"C7", muse::TranslatableString("palette", "C7") },
@@ -1732,9 +1735,18 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     };
 
     for (const FretDiagramInfo& fretboardDiagram : fretboardDiagrams) {
-        auto fret = FretDiagram::createFromString(gpaletteScore, fretboardDiagram.diagram);
+        auto fret = FretDiagram::createFromPattern(gpaletteScore, fretboardDiagram.diagram);
         fret->setHarmony(fretboardDiagram.harmony);
+
+        if (fretboardDiagram.harmony.empty()) {
+            fret->clear();
+        }
+
         sp->appendElement(fret, fretboardDiagram.userName);
+    }
+
+    if (!defaultPalette) {
+        sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
     }
 
     return sp;
@@ -1818,6 +1830,9 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         f->setXmlText(QString(finger[i]));
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "String number %1"));
     }
+
+    auto hopo = Factory::makeHammerOnPullOff(gpaletteScore->dummy());
+    sp->appendElement(hopo, QT_TRANSLATE_NOOP("palette", "Hammer-on / pull-off"), 0.8);
 
     static const SymIdList luteSymbols {
         SymId::stringsThumbPosition,

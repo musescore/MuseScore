@@ -32,6 +32,7 @@ class IAudioPluginMetaReader
 public:
     virtual ~IAudioPluginMetaReader() = default;
 
+    virtual audio::AudioResourceType metaType() const = 0;
     virtual bool canReadMeta(const io::path_t& pluginPath) const = 0;
     virtual RetVal<audio::AudioResourceMetaList> readMeta(const io::path_t& pluginPath) const = 0;
 };

@@ -93,7 +93,8 @@ Loader {
             case Inspector.TYPE_SLUR:
             case Inspector.TYPE_TIE:
             case Inspector.TYPE_LAISSEZ_VIB:
-            case Inspector.TYPE_PARTIAL_TIE: return slurAndTieComp
+            case Inspector.TYPE_PARTIAL_TIE:
+            case Inspector.TYPE_HAMMER_ON_PULL_OFF: return slurAndTieComp
             case Inspector.TYPE_TEMPO: return tempoComp
             case Inspector.TYPE_A_TEMPO: return aTempoComp
             case Inspector.TYPE_TEMPO_PRIMO: return tempoPrimoComp

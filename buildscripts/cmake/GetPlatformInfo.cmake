@@ -37,20 +37,22 @@ else()
 endif()
 
 # architecture detection
-# based on QT5 processor detection code
-# qtbase/blobs/master/src/corelib/global/qprocessordetection.h
+# based on Qt processor detection code
+# https://github.com/qt/qtbase/blob/dev/src/corelib/global/qprocessordetection.h
 
 # we only have binary blobs compatible with x86_64, aarch64, and armv7l
 
 set(archdetect_c_code "
-    #if defined(__arm__) || defined(__TARGET_ARCH_ARM) || defined(_M_ARM) || defined(__aarch64__) || defined(__ARM64__)
-        #if defined(__aarch64__) || defined(__ARM64__)
+    #if defined(__arm__) || defined(__TARGET_ARCH_ARM) || defined(_M_ARM) || defined(_M_ARM64) || defined(__aarch64__) || defined(__ARM64__)
+        #if defined(__aarch64__) || defined(__ARM64__) || defined(_M_ARM64)
             #error cmake_ARCH aarch64
         #elif defined(__ARM_ARCH_7A__)
             #error cmake_ARCH armv7l
         #endif
     #elif defined(__x86_64) || defined(__x86_64__) || defined(__amd64) || defined(_M_X64)
         #error cmake_ARCH x86_64
+    #elif defined(__EMSCRIPTEN__)
+        #error cmake_ARCH wasm
     #endif
     #error cmake_ARCH unknown
     ")
@@ -87,6 +89,8 @@ elseif(${ARCH} MATCHES "aarch64")
     set(ARCH_IS_AARCH64 1)
 elseif(${ARCH} MATCHES "x86_64")
     set(ARCH_IS_X86_64 1)
+elseif(${ARCH} MATCHES "wasm")
+    set(ARCH_IS_WASM 1)
 else()
     set(ARCH_IS_X86_64 1)
     message(WARNING "Architecture could not be detected. Using x86_64 as a fallback.")

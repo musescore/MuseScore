@@ -82,6 +82,10 @@ namespace mu::engraving::read410 {
 class Read410;
 }
 
+namespace mu::engraving::read460 {
+class Read460;
+}
+
 namespace mu::engraving::write {
 class Writer;
 }
@@ -232,6 +236,22 @@ struct ShowAnchors {
         endTickMainRegion = Fraction(-1, 1);
         startTickExtendedRegion = Fraction(-1, 1);
         endTickExtendedRegion = Fraction(-1, 1);
+    }
+
+    bool operator==(const ShowAnchors& other) const
+    {
+        return voiceIdx == other.voiceIdx
+               && staffIdx == other.staffIdx
+               && endStaffIdx == other.endStaffIdx
+               && startTickMainRegion == other.startTickMainRegion
+               && endTickMainRegion == other.endTickMainRegion
+               && startTickExtendedRegion == other.startTickExtendedRegion
+               && endTickExtendedRegion == other.endTickExtendedRegion;
+    }
+
+    bool operator!=(const ShowAnchors& other) const
+    {
+        return !(*this == other);
     }
 
     voice_idx_t voiceIdx = muse::nidx;
@@ -437,6 +457,7 @@ public:
                         EngravingItem* elementToRelink = nullptr);
     void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
     void undoRemoveElement(EngravingItem* element, bool removeLinked = true);
+    void undoRemoveHopoText(HammerOnPullOffText* hopoText);
     void undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElement, EngravingItem* endElement);
     void undoChangeElement(EngravingItem* oldElement, EngravingItem* newElement);
     void undoChangePitch(Note* note, int pitch, int tpc1, int tpc2);
@@ -693,7 +714,7 @@ public:
     void resetStyleValues(const StyleIdSet& styleIdSet);
 
     void setStyle(const MStyle& s, const bool overlap = false);
-    bool loadStyle(const String&, bool ign = false, const bool overlap = false);
+    bool loadStyle(muse::io::IODevice& dev, bool ign = false, bool overlap = false);
     bool saveStyle(const String&);
 
     TranslatableString getTextStyleUserName(TextStyleType tid);
@@ -907,10 +928,6 @@ public:
     PlayMode playMode() const { return m_playMode; }
     void setPlayMode(PlayMode v) { m_playMode = v; }
 
-    int linkId();
-    void linkId(int);
-    int getLinkId() const { return m_linkId; }
-
     std::list<Score*> scoreList();
 
     //@ appends to the score a number of measures
@@ -1037,6 +1054,10 @@ public:
     void removeSystemLocksContainingMMRests();
     void updateSystemLocksOnCreateMMRests(Measure* first, Measure* last);
 
+    void undoRenameChordInFretBox(const Harmony* harmony, const String& oldName);
+    void undoAddChordToFretBox(const EngravingItem* harmonyOrFretDiagram);
+    void undoRemoveChordFromFretBox(const EngravingItem* harmonyOrFretDiagram);
+
     friend class Chord;
 
 protected:
@@ -1060,6 +1081,7 @@ private:
     friend class read302::Read302;
     friend class read400::Read400;
     friend class read410::Read410;
+    friend class read460::Read460;
     friend class write::Writer;
 
     static std::set<Score*> validScores;
@@ -1109,6 +1131,9 @@ private:
     void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
                                     const SelectionFilter& filter);
 
+    void deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track_idx_t track, Segment* startSeg, const Fraction& endTick,
+                            Tuplet* currentTuplet);
+
     void update(bool resetCmdState, bool layoutAllParts = false);
 
     muse::ID newStaffId() const;
@@ -1125,7 +1150,8 @@ private:
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
     Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
 
-    int m_linkId = 0;
+    FBox* findFretBox() const;
+
     MasterScore* m_masterScore = nullptr;
     std::list<MuseScoreView*> m_viewer;
     Excerpt* m_excerpt = nullptr;

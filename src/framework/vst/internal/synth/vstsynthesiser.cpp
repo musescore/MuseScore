@@ -129,6 +129,8 @@ void VstSynthesiser::revokePlayingNotes()
 
 void VstSynthesiser::flushSound()
 {
+    m_sequencer.flushOffstream();
+
     if (m_vstAudioClient) {
         m_vstAudioClient->flush();
     }

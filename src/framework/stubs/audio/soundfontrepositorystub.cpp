@@ -41,7 +41,6 @@ async::Notification SoundFontRepositoryStub::soundFontsChanged() const
     return async::Notification();
 }
 
-Ret SoundFontRepositoryStub::addSoundFont(const synth::SoundFontPath&)
+void SoundFontRepositoryStub::addSoundFont(const synth::SoundFontPath&)
 {
-    return make_ret(Ret::Code::NotSupported);
 }

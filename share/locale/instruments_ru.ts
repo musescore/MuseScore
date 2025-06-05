@@ -16297,7 +16297,7 @@
         <source>B. Guit.</source>
         <comment>bass-guitar shortName</comment>
         <extracomment>shortName for Bass Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Б. гт.</translation>
+        <translation>Бас-гит.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5366"/>

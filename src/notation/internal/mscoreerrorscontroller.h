@@ -22,13 +22,14 @@
 #ifndef MU_NOTATION_MSCOREERRORSCONTROLLER_H
 #define MU_NOTATION_MSCOREERRORSCONTROLLER_H
 
-#include "modularity/ioc.h"
+#include "global/async/asyncable.h"
 
-#include "iinteractive.h"
+#include "modularity/ioc.h"
+#include "global/iinteractive.h"
 #include "inotationconfiguration.h"
 
 namespace mu::notation {
-class MScoreErrorsController : public muse::Injectable
+class MScoreErrorsController : public muse::Injectable, public muse::async::Asyncable
 {
     muse::Inject<INotationConfiguration> configuration = { this };
     muse::Inject<muse::IInteractive> interactive = { this };

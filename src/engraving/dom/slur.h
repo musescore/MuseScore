@@ -32,7 +32,7 @@ namespace mu::engraving {
 ///    a single segment of slur; also used for Tie
 //---------------------------------------------------------
 
-class SlurSegment final : public SlurTieSegment
+class SlurSegment : public SlurTieSegment
 {
     OBJECT_ALLOCATOR(engraving, SlurSegment)
     DECLARE_CLASSOF(ElementType::SLUR_SEGMENT)
@@ -42,7 +42,7 @@ class SlurSegment final : public SlurTieSegment
     M_PROPERTY2(PointF, endPointOff2, setEndPointOff2, PointF(0.0, 0.0))
 
 public:
-    SlurSegment(System* parent);
+    SlurSegment(System* parent, ElementType type = ElementType::SLUR_SEGMENT);
     SlurSegment(const SlurSegment& ss);
 
     SlurSegment* clone() const override { return new SlurSegment(*this); }
@@ -60,6 +60,8 @@ public:
     double midWidth() const override;
     double dottedWidth() const override;
 
+    Color curColor() const override;
+
 protected:
     void changeAnchor(EditData&, EngravingItem*) override;
 };
@@ -68,12 +70,14 @@ protected:
 //   @@ Slur
 //---------------------------------------------------------
 
-class Slur final : public SlurTie
+class Slur : public SlurTie
 {
     OBJECT_ALLOCATOR(engraving, Slur)
     DECLARE_CLASSOF(ElementType::SLUR)
 
 public:
+    Slur(EngravingItem* parent, ElementType type = ElementType::SLUR);
+    Slur(const Slur&);
 
     struct StemFloated
     {
@@ -89,8 +93,7 @@ public:
     /// temporary HACK for correct guitar pro import
     enum ConnectedElement : unsigned char {
         NONE,
-        GLISSANDO,
-        HAMMER_ON
+        GLISSANDO
     };
 
     ~Slur() {}
@@ -116,8 +119,6 @@ public:
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 
-    static int calcStemArrangement(EngravingItem* start, EngravingItem* end);
-
     double scalingFactor() const override;
 
     void undoSetIncoming(bool incoming);
@@ -126,8 +127,10 @@ public:
     void setOutgoing(bool outgoing);
     bool isIncoming() const;
     bool isOutgoing() const;
+
+    void undoChangeStartEndElements(ChordRest* scr, ChordRest* ecr);
+
 private:
-    M_PROPERTY2(int, sourceStemArrangement, setSourceStemArrangement, -1)
     M_PROPERTY2(ConnectedElement, connectedElement, setConnectedElement, ConnectedElement::NONE)
     M_PROPERTY2(PartialSpannerDirection, partialSpannerDirection, setPartialSpannerDirection, PartialSpannerDirection::NONE)
 
@@ -135,8 +138,6 @@ private:
     PartialSpannerDirection calcOutgoingDirection(bool outgoing);
 
     friend class Factory;
-    Slur(EngravingItem* parent);
-    Slur(const Slur&);
 
     StemFloated m_stemFloated; // end point position is attached to stem but floated towards the note
 };

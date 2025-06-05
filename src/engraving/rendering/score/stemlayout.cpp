@@ -24,6 +24,7 @@
 #include "dom/chord.h"
 #include "dom/hook.h"
 #include "dom/note.h"
+#include "dom/rest.h"
 #include "dom/staff.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
@@ -52,7 +53,7 @@ double StemLayout::calcDefaultStemLength(Chord* item, const LayoutContext& ctx)
 
     bool isBesideTabStaff = tab && !tab->stemless() && !tab->stemThrough();
     if (isBesideTabStaff) {
-        return tab->chordStemLength(item) * spatium;
+        return tabStemLength(item, tab) * spatium;
     }
 
     int defaultStemLength = style.styleD(Sid::stemLength) * 4;
@@ -175,6 +176,142 @@ int StemLayout::minStaffOverlap(bool up, int staffLines, int beamCount, bool has
         return staffOverlap;
     }
     return (staffLines - 1) * 4 - staffOverlap;
+}
+
+double StemLayout::stemPosX(const ChordRest* item)
+{
+    return item->isChord() ? stemPosX(toChord(item)) : stemPosX(toRest(item));
+}
+
+double StemLayout::stemPosX(const Chord* item)
+{
+    const StaffType* staffType = item->staffType();
+    if (!staffType || !staffType->isTabStaff()) {
+        return item->ldata()->up ? item->noteHeadWidth() : 0.0;
+    }
+
+    double xPos = rendering::score::StemLayout::tabStemPosX() * item->spatium();
+    if (item->isGraceBendEnd()) {
+        GraceNotesGroup& graceBefore = item->graceNotesBefore();
+        Chord* grace = graceBefore.empty() ? nullptr : graceBefore.front();
+        if (grace) {
+            xPos += grace->pos().x();
+        }
+    }
+    return xPos;
+}
+
+double StemLayout::stemPosX(const Rest* item)
+{
+    if (item->ldata()->up) {
+        return item->ldata()->bbox().right();
+    }
+
+    return item->ldata()->bbox().left();
+}
+
+PointF StemLayout::stemPos(const ChordRest* item)
+{
+    return item->isChord() ? stemPos(toChord(item)) : stemPos(toRest(item));
+}
+
+PointF StemLayout::stemPos(const Chord* item)
+{
+    const Staff* staff = item->staff();
+    const StaffType* staffType = staff ? staff->staffTypeForElement(item) : nullptr;
+    if (staffType && staffType->isTabStaff()) {
+        return item->pagePos() + rendering::score::StemLayout::tabStemPos(item, staffType) * item->spatium();
+    }
+
+    if (item->ldata()->up) {
+        const Note* downNote = item->downNote();
+        double nhw = item->notes().size() == 1 ? downNote->bboxRightPos() : item->noteHeadWidth();
+        return item->pagePos() + PointF(nhw, downNote->pos().y());
+    }
+
+    return item->pagePos() + PointF(0.0, item->upNote()->pos().y());
+}
+
+PointF StemLayout::stemPos(const Rest* item)
+{
+    return item->pagePos();
+}
+
+//---------------------------------------------------------
+//   tabRestStemPosY / chordStemPos / chordStemPosBeam / chordStemLength
+//
+//    computes the stem data for the given chord, according to TAB settings
+//    NOTE: unit: spatium, position: relative to chord (DIFFERENT from Chord own functions)
+//
+//   tabRestStemPosY
+//          returns the vertical position of stem start point
+//---------------------------------------------------------
+
+double StemLayout::tabRestStemPosY(const ChordRest* item, const StaffType* st)
+{
+    if (st->stemThrough()) {            // does not make sense for "stems through staves" setting; just return top line vert. position
+        return 0.0;
+    }
+
+    // if stems beside staff, position are fixed, but take into account delta for half notes
+    double delta                                 // displacement for half note stems (if used)
+        =   // if half notes have not a short stem OR not a half note => 0
+          (st->minimStyle() != TablatureMinimStyle::SHORTER || item->durationType().type() != DurationType::V_HALF)
+          ? 0.0
+          :           // if stem is up, displace of half stem length down (positive)
+          // if stem is down, displace of half stem length up (negative)
+          (item->up()
+           ? -STAFFTYPE_TAB_DEFAULTSTEMLEN_UP : STAFFTYPE_TAB_DEFAULTSTEMLEN_DN) * 0.5;
+    // if fret marks above lines and chordRest is up, move half a line distance up
+    if (!st->onLines() && item->up()) {
+        delta -= st->lineDistance().val() * 0.5;
+    }
+    double y
+        = (item->up() ? STAFFTYPE_TAB_DEFAULTSTEMPOSY_UP : (st->lines() - 1) * st->lineDistance().val() + STAFFTYPE_TAB_DEFAULTSTEMPOSY_DN)
+          + delta;
+    return y;
+}
+
+//---------------------------------------------------------
+//   tabStemLength
+//          return length of stem
+//---------------------------------------------------------
+
+double StemLayout::tabStemLength(const Chord* item, const StaffType* st)
+{
+    double stemLen;
+    // if stems are through staff, length should be computed by relevant chord algorithm;
+    // here, just return default length (= 1 'octave' = 3.5 line spaces)
+    if (st->stemThrough()) {
+        return STAFFTYPE_TAB_DEFAULTSTEMLEN_THRU * st->lineDistance().val();
+    }
+    // if stems beside staff, length is fixed, but take into account shorter half note stems
+    else {
+        bool shrt = (st->minimStyle() == TablatureMinimStyle::SHORTER) && (item->durationType().type() == DurationType::V_HALF);
+        stemLen = (st->stemsDown() ? STAFFTYPE_TAB_DEFAULTSTEMLEN_DN : STAFFTYPE_TAB_DEFAULTSTEMLEN_UP)
+                  * (shrt ? STAFFTYPE_TAB_SHORTSTEMRATIO : 1.0) * (item->style().styleB(Sid::useWideBeams) ? 1.25 : 1.0);
+    }
+    // scale length by scale of parent chord, but relative to scale of context staff
+    return stemLen * item->mag() / item->staff()->staffMag(item->tick());
+}
+
+//---------------------------------------------------------
+//   tabStemPos
+//    return position of note at other side of beam
+//---------------------------------------------------------
+
+PointF StemLayout::tabStemPos(const Chord* item, const StaffType* st)
+{
+    double y = 0.0;
+    if (st->stemThrough()) {
+        // if stems are through staff, stem goes from farthest note string
+        y = (item->up() ? item->downString() : item->upString()) * st->lineDistance().val();
+    } else {
+        // if stems are beside staff, stem start point has a fixed vertical position,
+        // according to TAB parameters and stem up/down
+        y = tabRestStemPosY(item, st);
+    }
+    return PointF(tabStemPosX(), y);
 }
 
 int StemLayout::stemLengthBeamAddition(const Chord* item, const LayoutContext& ctx)

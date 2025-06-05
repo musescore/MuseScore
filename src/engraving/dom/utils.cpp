@@ -77,20 +77,7 @@ Measure* Score::tick2measure(const Fraction& tick) const
         return firstMeasure();
     }
 
-    Measure* lm = 0;
-    for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-        if (tick < m->tick()) {
-            assert(lm);
-            return lm;
-        }
-        lm = m;
-    }
-    // check last measure
-    if (lm && (tick >= lm->tick()) && (tick <= lm->endTick())) {
-        return lm;
-    }
-    LOGD("tick2measure %d (max %d) not found", tick.ticks(), lm ? lm->tick().ticks() : -1);
-    return 0;
+    return m_measures.measureByTick(tick.ticks());
 }
 
 //---------------------------------------------------------
@@ -107,21 +94,17 @@ Measure* Score::tick2measureMM(const Fraction& t) const
         tick = Fraction(0, 1);
     }
 
-    Measure* lm = 0;
+    Measure* measure = m_measures.measureByTick(t.ticks());
+    if (!measure) {
+        LOGD("tick2measureMM %d not found", tick.ticks());
+        return nullptr;
+    }
 
-    for (Measure* m = firstMeasureMM(); m; m = m->nextMeasureMM()) {
-        if (tick < m->tick()) {
-            assert(lm);
-            return lm;
-        }
-        lm = m;
+    if (measure->hasMMRest()) {
+        return measure->mmRest();
     }
-    // check last measure
-    if (lm && (tick >= lm->tick()) && (tick <= lm->endTick())) {
-        return lm;
-    }
-    LOGD("tick2measureMM %d (max %d) not found", tick.ticks(), lm ? lm->tick().ticks() : -1);
-    return 0;
+
+    return measure;
 }
 
 //---------------------------------------------------------
@@ -130,15 +113,17 @@ Measure* Score::tick2measureMM(const Fraction& t) const
 
 MeasureBase* Score::tick2measureBase(const Fraction& tick) const
 {
-    for (MeasureBase* mb = first(); mb; mb = mb->next()) {
+    std::vector<MeasureBase*> mbList = m_measures.measureBasesAtTick(tick.ticks());
+    for (MeasureBase* mb : mbList) {
         Fraction st = mb->tick();
         Fraction l  = mb->ticks();
         if (tick >= st && tick < (st + l)) {
             return mb;
         }
     }
-//      LOGD("tick2measureBase %d not found", tick);
-    return 0;
+
+    LOGD("tick2measureBase %d not found", tick.ticks());
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -1582,8 +1567,7 @@ std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure)
     const MasterScore* master = measure->masterScore();
     const Score* score = measure->score();
 
-    const MeasureBase* masterMeasureBase = master->measure(measure->index());
-    const Measure* masterMeasure = masterMeasureBase && masterMeasureBase->isMeasure() ? toMeasure(masterMeasureBase) : nullptr;
+    const Measure* masterMeasure = master->tick2measure(measure->tick());
 
     const RepeatList& repeatList = master->repeatList(true, false);
 
@@ -1599,8 +1583,7 @@ std::vector<Measure*> findFollowingRepeatMeasures(const Measure* measure)
         // Get next segment
         const RepeatSegment* nextSeg = *nextSegIt;
         const Measure* firstMasterMeasure = nextSeg->firstMeasure();
-        MeasureBase* firstMeasureBase = firstMasterMeasure ? score->measure(firstMasterMeasure->index()) : nullptr;
-        Measure* firstMeasure = firstMeasureBase && firstMeasureBase->isMeasure() ? toMeasure(firstMeasureBase) : nullptr;
+        Measure* firstMeasure = firstMasterMeasure ? score->tick2measure(firstMasterMeasure->tick()) : nullptr;
         if (!firstMeasure) {
             continue;
         }
@@ -1616,8 +1599,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
     const MasterScore* master = measure->masterScore();
     const Score* score = measure->score();
 
-    const MeasureBase* masterMeasureBase = master->measure(measure->index());
-    const Measure* masterMeasure = masterMeasureBase && masterMeasureBase->isMeasure() ? toMeasure(masterMeasureBase) : nullptr;
+    const Measure* masterMeasure = master->tick2measure(measure->tick());
 
     const RepeatList& repeatList = master->repeatList(true, false);
 
@@ -1633,8 +1615,7 @@ std::vector<Measure*> findPreviousRepeatMeasures(const Measure* measure)
         // Get next segment
         const RepeatSegment* prevSeg = *prevSegIt;
         const Measure* lastMasterMeasure = prevSeg->lastMeasure();
-        MeasureBase* lastMeasureBase = lastMasterMeasure ? score->measure(lastMasterMeasure->index()) : nullptr;
-        Measure* lastMeasure = lastMeasureBase && lastMeasureBase->isMeasure() ? toMeasure(lastMeasureBase) : nullptr;
+        Measure* lastMeasure = lastMasterMeasure ? score->tick2measure(lastMasterMeasure->tick()) : nullptr;
         if (!lastMeasure) {
             continue;
         }
@@ -1677,12 +1658,8 @@ bool segmentsAreAdjacentInRepeatStructure(const Segment* firstSeg, const Segment
         return true;
     }
 
-    const MeasureBase* firstMasterMeasureBase = master->measure(firstMeasure->index());
-    const Measure* firstMasterMeasure = firstMasterMeasureBase
-                                        && firstMasterMeasureBase->isMeasure() ? toMeasure(firstMasterMeasureBase) : nullptr;
-    const MeasureBase* secondMasterMeasureBase = master->measure(secondMeasure->index());
-    const Measure* secondMasterMeasure = secondMasterMeasureBase
-                                         && secondMasterMeasureBase->isMeasure() ? toMeasure(secondMasterMeasureBase) : nullptr;
+    const Measure* firstMasterMeasure = master->tick2measure(firstMeasure->tick());
+    const Measure* secondMasterMeasure = master->tick2measure(secondMeasure->tick());
 
     Score* score = firstSeg->score();
 
@@ -1738,12 +1715,8 @@ bool segmentsAreInDifferentRepeatSegments(const Segment* firstSeg, const Segment
         return false;
     }
 
-    const MeasureBase* firstMasterMeasureBase = master->measure(firstMeasure->index());
-    const Measure* firstMasterMeasure = firstMasterMeasureBase
-                                        && firstMasterMeasureBase->isMeasure() ? toMeasure(firstMasterMeasureBase) : nullptr;
-    const MeasureBase* secondMasterMeasureBase = master->measure(secondMeasure->index());
-    const Measure* secondMasterMeasure = secondMasterMeasureBase
-                                         && secondMasterMeasureBase->isMeasure() ? toMeasure(secondMasterMeasureBase) : nullptr;
+    const Measure* firstMasterMeasure = master->tick2measure(firstMeasure->tick());
+    const Measure* secondMasterMeasure = master->tick2measure(secondMeasure->tick());
 
     Score* score = firstSeg->score();
 

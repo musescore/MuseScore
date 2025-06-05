@@ -28,6 +28,7 @@
 #include "async/asyncable.h"
 #include "iinteractive.h"
 #include "engraving/rendering/isinglerenderer.h"
+#include "engraving/rendering/ieditmoderenderer.h"
 
 #include "../inotationinteraction.h"
 #include "../inotationconfiguration.h"
@@ -55,6 +56,7 @@ class NotationInteraction : public INotationInteraction, public muse::Injectable
     muse::Inject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
+    muse::Inject<engraving::rendering::IEditModeRenderer> editModeRenderer = { this };
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
@@ -117,8 +119,8 @@ public:
     bool startDropSingle(const QByteArray& edata) override;
     bool startDropRange(const QByteArray& data) override;
     bool startDropImage(const QUrl& url) override;
-    bool isDropSingleAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
-    bool isDropRangeAccepted(const muse::PointF& pos) override;
+    bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool updateDropRange(const muse::PointF& pos) override;
     bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
@@ -197,6 +199,7 @@ public:
     void addLaissezVibToSelection() override;
     void addTiedNoteToChord() override;
     void addSlurToSelection() override;
+    void addHammerOnPullOffToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinOnGripDrag(engraving::EditData& ed, bool isLeftGrip) override;
     void addHairpinsToSelection(HairpinType type) override;
@@ -295,6 +298,9 @@ public:
 
     muse::Ret canAddGuitarBend() const override;
     void addGuitarBend(GuitarBendType bendType) override;
+
+    muse::Ret canAddFretboardDiagram() const override;
+    void addFretboardDiagram() override;
 
     void toggleBold() override;
     void toggleItalic() override;
@@ -414,6 +420,8 @@ private:
     bool prepareDropTimeAnchorElement(const muse::PointF& pos);
     bool dropCanvas(EngravingItem* e);
     void resetDropData();
+
+    void doFinishAddFretboardDiagram();
 
     bool selectInstrument(mu::engraving::InstrumentChange* instrumentChange);
     void cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const;

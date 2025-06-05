@@ -218,7 +218,9 @@ bool MidiRemote::needIgnoreEvent(const Event& event) const
         Event::Opcode::NoteOff
     };
 
-    bool release = releaseOps.contains(event.opcode());
+    bool release = releaseOps.contains(event.opcode())
+                   || (event.opcode() == Event::Opcode::ControlChange && event.data() == 0);
+
     if (release) {
         bool advanceToNextNoteOnKeyRelease = configuration()->advanceToNextNoteOnKeyRelease();
         if (!advanceToNextNoteOnKeyRelease) {

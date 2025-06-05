@@ -141,7 +141,7 @@ void WorkspaceManager::createAndAppendNewWorkspace()
     uri.addParam("sync", Val(true));
     uri.addParam("workspaceNames", Val(workspaceNames.join(',')));
 
-    RetVal<Val> obj = interactive()->open(uri);
+    RetVal<Val> obj = interactive()->openSync(uri);
     if (!obj.ret) {
         return;
     }
@@ -168,7 +168,7 @@ void WorkspaceManager::openConfigureWorkspacesDialog()
 {
     prepareCurrentWorkspaceForChange();
 
-    RetVal<Val> result = interactive()->open("muse://workspace/select?sync=true");
+    RetVal<Val> result = interactive()->openSync("muse://workspace/select?sync=true");
     if (!result.ret) {
         return;
     }

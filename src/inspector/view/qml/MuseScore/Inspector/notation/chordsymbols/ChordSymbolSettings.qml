@@ -78,6 +78,8 @@ Column {
     }
 
     DropdownPropertyView {
+        id: durationSection
+
         titleText: qsTrc("inspector", "Duration")
         propertyItem: root.model ? root.model.durationType : null
 
@@ -89,5 +91,25 @@ Column {
             { text: qsTrc("inspector", "Until the end of the measure"), value: ChordSymbolTypes.DURATION_STOP_AT_MEASURE_END },
             { text: qsTrc("inspector", "Until the end of the attached duration"), value: ChordSymbolTypes.DURATION_SEGMENT_DURATION }
         ]
+    }
+
+    FlatButton {
+        width: parent.width
+
+        navigation.name: "AddFretboardDiagram"
+        navigation.panel: root.navigationPanel
+        navigation.row: durationSection.navigationRowEnd + 1
+
+        text: qsTrc("inspector", "Add fretboard diagram")
+        icon: IconCode.FRETBOARD_DIAGRAM
+        orientation: Qt.Horizontal
+
+        visible: root.model ? !root.model.hasLinkedFretboardDiagram : false
+
+        onClicked: {
+            if (root.model) {
+                root.model.addFretboardDiagram()
+            }
+        }
     }
 }

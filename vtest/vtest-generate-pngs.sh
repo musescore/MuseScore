@@ -33,6 +33,9 @@ while [[ "$#" -gt 0 ]]; do
         -s|--scores) SCORES_DIR="$2"; shift ;;
         -o|--output-dir) OUTPUT_DIR="$2"; shift ;;
         -m|--mscore) MSCORE_BIN="$2"; shift ;;
+        -d|--dpi) DPI="$2"; shift ;;
+        -S|--style) STYLE_PATH="$2"; shift ;;
+        --gp-linked) GP_LINKED="--gp-linked"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -43,6 +46,7 @@ echo "SCORES_DIR: $SCORES_DIR"
 echo "OUTPUT_DIR: $OUTPUT_DIR"
 echo "MSCORE_BIN: $MSCORE_BIN"
 echo "DPI: $DPI"
+echo "STYLE_PATH: $STYLE_PATH"
 echo "::endgroup::"
 
 rm -rf $OUTPUT_DIR
@@ -63,7 +67,11 @@ cat $JSON_FILE
 echo "::endgroup::"
 
 echo "::group::Generating PNG files"
-$MSCORE_BIN -j $JSON_FILE -r $DPI 2>&1 | tee $LOG_FILE && SUCCESS="true"
+if [ -z "$STYLE_PATH" ]; then
+    $MSCORE_BIN -j $JSON_FILE -r $DPI $GP_LINKED 2>&1 | tee $LOG_FILE && SUCCESS="true"
+else
+    $MSCORE_BIN -S $STYLE_PATH -j $JSON_FILE -r $DPI $GP_LINKED 2>&1 | tee $LOG_FILE && SUCCESS="true"
+fi
 echo "::endgroup::"
 
 if [ -z "$SUCCESS" ]; then

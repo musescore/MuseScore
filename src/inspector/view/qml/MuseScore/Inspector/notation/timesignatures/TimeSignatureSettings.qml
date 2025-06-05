@@ -86,11 +86,11 @@ Column {
                 isIndeterminate: root.model ? root.model.horizontalScale.isUndefined : false
                 currentValue: root.model ? root.model.horizontalScale.value : 0
 
-                measureUnitsSymbol: "%"
-                step: 1
-                decimals: 0
-                maxValue: 1000
-                minValue: 1
+                measureUnitsSymbol: "x"
+                step: 0.25
+                decimals: 2
+                maxValue: 100
+                minValue: 1.0
 
                 navigation.name: "HorizontalScale"
                 navigation.panel: root.navigationPanel
@@ -113,11 +113,11 @@ Column {
                 isIndeterminate: root.model ? root.model.verticalScale.isUndefined : false
                 currentValue: root.model ? root.model.verticalScale.value : 0
 
-                measureUnitsSymbol: "%"
-                step: 1
-                decimals: 0
-                maxValue: 1000
-                minValue: 1
+                measureUnitsSymbol: "x"
+                step: 0.25
+                decimals: 2
+                maxValue: 100
+                minValue: 1.0
 
                 navigation.name: "VerticalScale"
                 navigation.panel: root.navigationPanel

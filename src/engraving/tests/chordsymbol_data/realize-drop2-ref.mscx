@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27</pageWidth>
@@ -35,7 +36,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -100,43 +102,55 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <TimeSig>
+            <eid>E_E</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
             <root>14</root>
             <name>m7(b5)</name>
+            <eid>F_F</eid>
             </Harmony>
           <Chord>
+            <eid>G_G</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>H_H</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>I_I</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>J_J</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <tpc2>8</tpc2>
               </Note>
             <Note>
+              <eid>K_K</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>L_L</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>M_M</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             <Note>
+              <eid>N_N</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>O_O</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -145,32 +159,41 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>P_P</eid>
         <voice>
           <Harmony>
             <root>14</root>
             <name>13</name>
+            <eid>Q_Q</eid>
             </Harmony>
           <Chord>
+            <eid>R_R</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>S_S</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>T_T</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>U_U</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>V_V</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>W_W</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>X_X</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -179,36 +202,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>Y_Y</eid>
         <voice>
           <Harmony>
             <root>14</root>
             <name>7(b9)</name>
+            <eid>Z_Z</eid>
             </Harmony>
           <Chord>
+            <eid>a_a</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>b_b</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>c_c</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>d_d</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>e_e</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <tpc2>9</tpc2>
               </Note>
             <Note>
+              <eid>f_f</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>g_g</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>h_h</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -217,25 +250,32 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>i_i</eid>
         <voice>
           <Harmony>
             <root>14</root>
+            <eid>j_j</eid>
             </Harmony>
           <Chord>
+            <eid>k_k</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>l_l</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>m_m</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>n_n</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>o_o</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -243,36 +283,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>p_p</eid>
         <voice>
           <Harmony>
             <root>14</root>
             <name>9(b13)</name>
+            <eid>q_q</eid>
             </Harmony>
           <Chord>
+            <eid>r_r</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>s_s</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>t_t</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>u_u</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               <tpc2>10</tpc2>
               </Note>
             <Note>
+              <eid>v_v</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>w_w</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>x_x</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>y_y</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -281,39 +331,50 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>z_z</eid>
         <voice>
           <Harmony>
             <root>14</root>
             <name>dim7</name>
+            <eid>0_0</eid>
             </Harmony>
           <Chord>
+            <eid>1_1</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>2_2</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>3_3</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>4_4</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <tpc2>8</tpc2>
               </Note>
             <Note>
+              <eid>5_5</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>6_6</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>7_7</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             <Note>
+              <eid>8_8</eid>
               <Accidental>
                 <subtype>accidentalDoubleFlat</subtype>
+                <eid>9_9</eid>
                 </Accidental>
               <pitch>69</pitch>
               <tpc>17</tpc>
@@ -323,36 +384,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>+_+</eid>
         <LayoutBreak>
+          <eid>/_/</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
             <root>14</root>
             <name>maj7(#11)</name>
+            <eid>AB_AB</eid>
             </Harmony>
           <Chord>
+            <eid>BB_BB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>CB_CB</eid>
               <pitch>36</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>DB_DB</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>EB_EB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>FB_FB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>GB_GB</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>HB_HB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -360,36 +431,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>IB_IB</eid>
         <voice>
           <Harmony>
             <root>21</root>
             <name>m7(b5)</name>
+            <eid>JB_JB</eid>
             </Harmony>
           <Chord>
+            <eid>KB_KB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>LB_LB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>MB_MB</eid>
                 </Accidental>
               <pitch>37</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>NB_NB</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>OB_OB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>PB_PB</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>QB_QB</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>RB_RB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -397,45 +478,57 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>SB_SB</eid>
         <voice>
           <Harmony>
             <root>21</root>
             <name>13</name>
+            <eid>TB_TB</eid>
             </Harmony>
           <Chord>
+            <eid>UB_UB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>VB_VB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>WB_WB</eid>
                 </Accidental>
               <pitch>37</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>XB_XB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>YB_YB</eid>
                 </Accidental>
               <pitch>58</pitch>
               <tpc>12</tpc>
               <tpc2>24</tpc2>
               </Note>
             <Note>
+              <eid>ZB_ZB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>aB_aB</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>bB_bB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>cB_cB</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>dB_dB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -443,40 +536,51 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>eB_eB</eid>
         <voice>
           <Harmony>
             <root>21</root>
             <name>7(b9)</name>
+            <eid>fB_fB</eid>
             </Harmony>
           <Chord>
+            <eid>gB_gB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>hB_hB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>iB_iB</eid>
                 </Accidental>
               <pitch>37</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>jB_jB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>kB_kB</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>lB_lB</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>mB_mB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>nB_nB</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>oB_oB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -484,37 +588,48 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>pB_pB</eid>
         <voice>
           <Harmony>
             <root>21</root>
+            <eid>qB_qB</eid>
             </Harmony>
           <Chord>
+            <eid>rB_rB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>sB_sB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>tB_tB</eid>
                 </Accidental>
               <pitch>37</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>uB_uB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>vB_vB</eid>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>wB_wB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>xB_xB</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>yB_yB</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>zB_zB</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -523,41 +638,52 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>0B_0B</eid>
         <voice>
           <Harmony>
             <root>21</root>
             <name>9(b13)</name>
+            <eid>1B_1B</eid>
             </Harmony>
           <Chord>
+            <eid>2B_2B</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>3B_3B</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>4B_4B</eid>
                 </Accidental>
               <pitch>37</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>5B_5B</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>6B_6B</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>7B_7B</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>8B_8B</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>9B_9B</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>+B_+B</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -565,38 +691,49 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>/B_/B</eid>
         <voice>
           <Harmony>
             <root>21</root>
             <name>dim7</name>
+            <eid>AC_AC</eid>
             </Harmony>
           <Chord>
+            <eid>BC_BC</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>CC_CC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>DC_DC</eid>
                 </Accidental>
               <pitch>37</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>EC_EC</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>FC_FC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>GC_GC</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>HC_HC</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>IC_IC</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>JC_JC</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -605,50 +742,64 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>KC_KC</eid>
         <LayoutBreak>
+          <eid>LC_LC</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
             <root>21</root>
             <name>maj7(#11)</name>
+            <eid>MC_MC</eid>
             </Harmony>
           <Chord>
+            <eid>NC_NC</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>OC_OC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>PC_PC</eid>
                 </Accidental>
               <pitch>37</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>QC_QC</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>RC_RC</eid>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <tpc2>27</tpc2>
               </Note>
             <Note>
+              <eid>SC_SC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>TC_TC</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>26</tpc2>
               </Note>
             <Note>
+              <eid>UC_UC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>VC_VC</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>WC_WC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>XC_XC</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -657,32 +808,41 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>YC_YC</eid>
         <voice>
           <Harmony>
             <root>16</root>
             <name>m7(b5)</name>
+            <eid>ZC_ZC</eid>
             </Harmony>
           <Chord>
+            <eid>aC_aC</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>bC_bC</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>cC_cC</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>dC_dC</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>eC_eC</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>fC_fC</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>gC_gC</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -692,33 +852,42 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>hC_hC</eid>
         <voice>
           <Harmony>
             <root>16</root>
             <name>13</name>
+            <eid>iC_iC</eid>
             </Harmony>
           <Chord>
+            <eid>jC_jC</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>kC_kC</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>lC_lC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>mC_mC</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>nC_nC</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>oC_oC</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>pC_pC</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -726,36 +895,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>qC_qC</eid>
         <voice>
           <Harmony>
             <root>16</root>
             <name>7(b9)</name>
+            <eid>rC_rC</eid>
             </Harmony>
           <Chord>
+            <eid>sC_sC</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>tC_tC</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>uC_uC</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>vC_vC</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>wC_wC</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>xC_xC</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>yC_yC</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             <Note>
+              <eid>zC_zC</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -763,28 +942,36 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>0C_0C</eid>
         <voice>
           <Harmony>
             <root>16</root>
+            <eid>1C_1C</eid>
             </Harmony>
           <Chord>
+            <eid>2C_2C</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>3C_3C</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>4C_4C</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>5C_5C</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>6C_6C</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>7C_7C</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -792,35 +979,45 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>8C_8C</eid>
         <voice>
           <Harmony>
             <root>16</root>
             <name>9(b13)</name>
+            <eid>9C_9C</eid>
             </Harmony>
           <Chord>
+            <eid>+C_+C</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>/C_/C</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>AD_AD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>BD_BD</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>CD_CD</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>DD_DD</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>ED_ED</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>FD_FD</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -829,36 +1026,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>GD_GD</eid>
         <voice>
           <Harmony>
             <root>16</root>
             <name>dim7</name>
+            <eid>HD_HD</eid>
             </Harmony>
           <Chord>
+            <eid>ID_ID</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>JD_JD</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>KD_KD</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>LD_LD</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               <tpc2>10</tpc2>
               </Note>
             <Note>
+              <eid>MD_MD</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>ND_ND</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>OD_OD</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>PD_PD</eid>
                 </Accidental>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -868,42 +1075,54 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>QD_QD</eid>
         <LayoutBreak>
+          <eid>RD_RD</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
             <root>16</root>
             <name>maj7(#11)</name>
+            <eid>SD_SD</eid>
             </Harmony>
           <Chord>
+            <eid>TD_TD</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>UD_UD</eid>
               <pitch>38</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>VD_VD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>WD_WD</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>XD_XD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>YD_YD</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>ZD_ZD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>aD_aD</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>bD_bD</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -911,44 +1130,56 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>cD_cD</eid>
         <voice>
           <Harmony>
             <root>23</root>
             <name>m7(b5)</name>
+            <eid>dD_dD</eid>
             </Harmony>
           <Chord>
+            <eid>eD_eD</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>fD_fD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>gD_gD</eid>
                 </Accidental>
               <pitch>39</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>hD_hD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>iD_iD</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>jD_jD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>kD_kD</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>lD_lD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>mD_mD</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>nD_nD</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -956,47 +1187,60 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>oD_oD</eid>
         <voice>
           <Harmony>
             <root>23</root>
             <name>13</name>
+            <eid>pD_pD</eid>
             </Harmony>
           <Chord>
+            <eid>qD_qD</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>rD_rD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>sD_sD</eid>
                 </Accidental>
               <pitch>39</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>tD_tD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>uD_uD</eid>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>vD_vD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>wD_wD</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>26</tpc2>
               </Note>
             <Note>
+              <eid>xD_xD</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>yD_yD</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>zD_zD</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>0D_0D</eid>
                 </Accidental>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -1006,43 +1250,55 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>1D_1D</eid>
         <voice>
           <Harmony>
             <root>23</root>
             <name>7(b9)</name>
+            <eid>2D_2D</eid>
             </Harmony>
           <Chord>
+            <eid>3D_3D</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>4D_4D</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>5D_5D</eid>
                 </Accidental>
               <pitch>39</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>6D_6D</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>7D_7D</eid>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <tpc2>27</tpc2>
               </Note>
             <Note>
+              <eid>8D_8D</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>9D_9D</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>+D_+D</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>/D_/D</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>AE_AE</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -1052,39 +1308,50 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>BE_BE</eid>
         <voice>
           <Harmony>
             <root>23</root>
+            <eid>CE_CE</eid>
             </Harmony>
           <Chord>
+            <eid>DE_DE</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>EE_EE</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>FE_FE</eid>
                 </Accidental>
               <pitch>39</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>GE_GE</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>HE_HE</eid>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <tpc2>27</tpc2>
               </Note>
             <Note>
+              <eid>IE_IE</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>JE_JE</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>KE_KE</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>LE_LE</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -1094,45 +1361,57 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>ME_ME</eid>
         <voice>
           <Harmony>
             <root>23</root>
             <name>9(b13)</name>
+            <eid>NE_NE</eid>
             </Harmony>
           <Chord>
+            <eid>OE_OE</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>PE_PE</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>QE_QE</eid>
                 </Accidental>
               <pitch>39</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>RE_RE</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>SE_SE</eid>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <tpc2>27</tpc2>
               </Note>
             <Note>
+              <eid>TE_TE</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>UE_UE</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>VE_VE</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>WE_WE</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>XE_XE</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -1140,41 +1419,52 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>YE_YE</eid>
         <voice>
           <Harmony>
             <root>23</root>
             <name>dim7</name>
+            <eid>ZE_ZE</eid>
             </Harmony>
           <Chord>
+            <eid>aE_aE</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>bE_bE</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>cE_cE</eid>
                 </Accidental>
               <pitch>39</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>dE_dE</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>eE_eE</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>fE_fE</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>gE_gE</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>hE_hE</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>iE_iE</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -1182,51 +1472,65 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>jE_jE</eid>
         <LayoutBreak>
+          <eid>kE_kE</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
             <root>23</root>
             <name>maj7(#11)</name>
+            <eid>lE_lE</eid>
             </Harmony>
           <Chord>
+            <eid>mE_mE</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>nE_nE</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>oE_oE</eid>
                 </Accidental>
               <pitch>39</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>pE_pE</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>qE_qE</eid>
                 </Accidental>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <tpc2>29</tpc2>
               </Note>
             <Note>
+              <eid>rE_rE</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>sE_sE</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>28</tpc2>
               </Note>
             <Note>
+              <eid>tE_tE</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>uE_uE</eid>
                 </Accidental>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <tpc2>27</tpc2>
               </Note>
             <Note>
+              <eid>vE_vE</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>wE_wE</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -1236,32 +1540,41 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>xE_xE</eid>
         <voice>
           <Harmony>
             <root>18</root>
             <name>m7(b5)</name>
+            <eid>yE_yE</eid>
             </Harmony>
           <Chord>
+            <eid>zE_zE</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>0E_0E</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>1E_1E</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>2E_2E</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>3E_3E</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>4E_4E</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>5E_5E</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -1270,38 +1583,49 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>6E_6E</eid>
         <voice>
           <Harmony>
             <root>18</root>
             <name>13</name>
+            <eid>7E_7E</eid>
             </Harmony>
           <Chord>
+            <eid>8E_8E</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>9E_9E</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>+E_+E</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>/E_/E</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>AF_AF</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>BF_BF</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>CF_CF</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>DF_DF</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>EF_EF</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -1310,33 +1634,42 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>FF_FF</eid>
         <voice>
           <Harmony>
             <root>18</root>
             <name>7(b9)</name>
+            <eid>GF_GF</eid>
             </Harmony>
           <Chord>
+            <eid>HF_HF</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>IF_IF</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>JF_JF</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>KF_KF</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>LF_LF</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>MF_MF</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>NF_NF</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -1344,28 +1677,36 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>OF_OF</eid>
         <voice>
           <Harmony>
             <root>18</root>
+            <eid>PF_PF</eid>
             </Harmony>
           <Chord>
+            <eid>QF_QF</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>RF_RF</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>SF_SF</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>TF_TF</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>UF_UF</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>VF_VF</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -1373,35 +1714,45 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>WF_WF</eid>
         <voice>
           <Harmony>
             <root>18</root>
             <name>9(b13)</name>
+            <eid>XF_XF</eid>
             </Harmony>
           <Chord>
+            <eid>YF_YF</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>ZF_ZF</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>aF_aF</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>bF_bF</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>cF_cF</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>dF_dF</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>eF_eF</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>fF_fF</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -1410,36 +1761,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>gF_gF</eid>
         <voice>
           <Harmony>
             <root>18</root>
             <name>dim7</name>
+            <eid>hF_hF</eid>
             </Harmony>
           <Chord>
+            <eid>iF_iF</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>jF_jF</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>kF_kF</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>lF_lF</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>mF_mF</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <tpc2>9</tpc2>
               </Note>
             <Note>
+              <eid>nF_nF</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>oF_oF</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>pF_pF</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -1448,44 +1809,56 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>qF_qF</eid>
         <LayoutBreak>
+          <eid>rF_rF</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
             <root>18</root>
             <name>maj7(#11)</name>
+            <eid>sF_sF</eid>
             </Harmony>
           <Chord>
+            <eid>tF_tF</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>uF_uF</eid>
               <pitch>40</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>vF_vF</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>wF_wF</eid>
                 </Accidental>
               <pitch>58</pitch>
               <tpc>12</tpc>
               <tpc2>24</tpc2>
               </Note>
             <Note>
+              <eid>xF_xF</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>yF_yF</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>zF_zF</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>0F_0F</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>1F_1F</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -1493,39 +1866,50 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>2F_2F</eid>
         <voice>
           <Harmony>
             <root>13</root>
             <name>m7(b5)</name>
+            <eid>3F_3F</eid>
             </Harmony>
           <Chord>
+            <eid>4F_4F</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>5F_5F</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>6F_6F</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>7F_7F</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               <tpc2>10</tpc2>
               </Note>
             <Note>
+              <eid>8F_8F</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>9F_9F</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             <Note>
+              <eid>+F_+F</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>/F_/F</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>AG_AG</eid>
                 </Accidental>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -1535,33 +1919,42 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>BG_BG</eid>
         <voice>
           <Harmony>
             <root>13</root>
             <name>13</name>
+            <eid>CG_CG</eid>
             </Harmony>
           <Chord>
+            <eid>DG_DG</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>EG_EG</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>FG_FG</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>GG_GG</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>HG_HG</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>IG_IG</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             <Note>
+              <eid>JG_JG</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -1569,37 +1962,47 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>KG_KG</eid>
         <voice>
           <Harmony>
             <root>13</root>
             <name>7(b9)</name>
+            <eid>LG_LG</eid>
             </Harmony>
           <Chord>
+            <eid>MG_MG</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>NG_NG</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>OG_OG</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>PG_PG</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <tpc2>8</tpc2>
               </Note>
             <Note>
+              <eid>QG_QG</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>RG_RG</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>SG_SG</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             <Note>
+              <eid>TG_TG</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -1607,25 +2010,32 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>UG_UG</eid>
         <voice>
           <Harmony>
             <root>13</root>
+            <eid>VG_VG</eid>
             </Harmony>
           <Chord>
+            <eid>WG_WG</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>XG_XG</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>YG_YG</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>ZG_ZG</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>aG_aG</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -1633,37 +2043,47 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>bG_bG</eid>
         <voice>
           <Harmony>
             <root>13</root>
             <name>9(b13)</name>
+            <eid>cG_cG</eid>
             </Harmony>
           <Chord>
+            <eid>dG_dG</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>eG_eG</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>fG_fG</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>gG_gG</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>hG_hG</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <tpc2>9</tpc2>
               </Note>
             <Note>
+              <eid>iG_iG</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>jG_jG</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             <Note>
+              <eid>kG_kG</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -1671,40 +2091,51 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>lG_lG</eid>
         <voice>
           <Harmony>
             <root>13</root>
             <name>dim7</name>
+            <eid>mG_mG</eid>
             </Harmony>
           <Chord>
+            <eid>nG_nG</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>oG_oG</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>pG_pG</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>qG_qG</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               <tpc2>10</tpc2>
               </Note>
             <Note>
+              <eid>rG_rG</eid>
               <Accidental>
                 <subtype>accidentalDoubleFlat</subtype>
+                <eid>sG_sG</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>4</tpc2>
               </Note>
             <Note>
+              <eid>tG_tG</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>uG_uG</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>vG_vG</eid>
                 </Accidental>
               <pitch>71</pitch>
               <tpc>19</tpc>
@@ -1714,33 +2145,42 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>wG_wG</eid>
         <LayoutBreak>
+          <eid>xG_xG</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
             <root>13</root>
             <name>maj7(#11)</name>
+            <eid>yG_yG</eid>
             </Harmony>
           <Chord>
+            <eid>zG_zG</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>0G_0G</eid>
               <pitch>41</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>1G_1G</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>2G_2G</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>3G_3G</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>4G_4G</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -1748,36 +2188,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>5G_5G</eid>
         <voice>
           <Harmony>
             <root>20</root>
             <name>m7(b5)</name>
+            <eid>6G_6G</eid>
             </Harmony>
           <Chord>
+            <eid>7G_7G</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>8G_8G</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>9G_9G</eid>
                 </Accidental>
               <pitch>42</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>+G_+G</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>/G_/G</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>AH_AH</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>BH_BH</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>CH_CH</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -1785,42 +2235,54 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>DH_DH</eid>
         <voice>
           <Harmony>
             <root>20</root>
             <name>13</name>
+            <eid>EH_EH</eid>
             </Harmony>
           <Chord>
+            <eid>FH_FH</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>GH_GH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>HH_HH</eid>
                 </Accidental>
               <pitch>42</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>IH_IH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>JH_JH</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>KH_KH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>LH_LH</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>MH_MH</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>NH_NH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>OH_OH</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -1830,38 +2292,49 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>PH_PH</eid>
         <voice>
           <Harmony>
             <root>20</root>
             <name>7(b9)</name>
+            <eid>QH_QH</eid>
             </Harmony>
           <Chord>
+            <eid>RH_RH</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>SH_SH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>TH_TH</eid>
                 </Accidental>
               <pitch>42</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>UH_UH</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>VH_VH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>WH_WH</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>XH_XH</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>YH_YH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>ZH_ZH</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -1871,36 +2344,47 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>aH_aH</eid>
         <voice>
           <Harmony>
             <root>20</root>
+            <eid>bH_bH</eid>
             </Harmony>
           <Chord>
+            <eid>cH_cH</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>dH_dH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>eH_eH</eid>
                 </Accidental>
               <pitch>42</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>fH_fH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>gH_gH</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>hH_hH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>iH_iH</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>jH_jH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>kH_kH</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -1910,38 +2394,49 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>lH_lH</eid>
         <voice>
           <Harmony>
             <root>20</root>
             <name>9(b13)</name>
+            <eid>mH_mH</eid>
             </Harmony>
           <Chord>
+            <eid>nH_nH</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>oH_oH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>pH_pH</eid>
                 </Accidental>
               <pitch>42</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>qH_qH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>rH_rH</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>sH_sH</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>tH_tH</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>uH_uH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>vH_vH</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -1951,39 +2446,50 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>wH_wH</eid>
         <voice>
           <Harmony>
             <root>20</root>
             <name>dim7</name>
+            <eid>xH_xH</eid>
             </Harmony>
           <Chord>
+            <eid>yH_yH</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>zH_zH</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>0H_0H</eid>
                 </Accidental>
               <pitch>42</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>1H_1H</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>2H_2H</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>3H_3H</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>4H_4H</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>5H_5H</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             <Note>
+              <eid>6H_6H</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -1991,49 +2497,63 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>7H_7H</eid>
         <LayoutBreak>
+          <eid>8H_8H</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
             <root>20</root>
             <name>maj7(#11)</name>
+            <eid>9H_9H</eid>
             </Harmony>
           <Chord>
+            <eid>+H_+H</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>/H_/H</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>AI_AI</eid>
                 </Accidental>
               <pitch>42</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>BI_BI</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>CI_CI</eid>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>DI_DI</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>EI_EI</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>26</tpc2>
               </Note>
             <Note>
+              <eid>FI_FI</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>GI_GI</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>HI_HI</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>II_II</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -2043,36 +2563,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>JI_JI</eid>
         <voice>
           <Harmony>
             <root>15</root>
             <name>m7(b5)</name>
+            <eid>KI_KI</eid>
             </Harmony>
           <Chord>
+            <eid>LI_LI</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>MI_MI</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>NI_NI</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>OI_OI</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>PI_PI</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <tpc2>9</tpc2>
               </Note>
             <Note>
+              <eid>QI_QI</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>RI_RI</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>SI_SI</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -2081,30 +2611,38 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>TI_TI</eid>
         <voice>
           <Harmony>
             <root>15</root>
             <name>13</name>
+            <eid>UI_UI</eid>
             </Harmony>
           <Chord>
+            <eid>VI_VI</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>WI_WI</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>XI_XI</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>YI_YI</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>ZI_ZI</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>aI_aI</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -2112,34 +2650,43 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>bI_bI</eid>
         <voice>
           <Harmony>
             <root>15</root>
             <name>7(b9)</name>
+            <eid>cI_cI</eid>
             </Harmony>
           <Chord>
+            <eid>dI_dI</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>eI_eI</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>fI_fI</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>gI_gI</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               <tpc2>10</tpc2>
               </Note>
             <Note>
+              <eid>hI_hI</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>iI_iI</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>jI_jI</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -2147,25 +2694,32 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>kI_kI</eid>
         <voice>
           <Harmony>
             <root>15</root>
+            <eid>lI_lI</eid>
             </Harmony>
           <Chord>
+            <eid>mI_mI</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>nI_nI</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>oI_oI</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>pI_pI</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>qI_qI</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -2173,33 +2727,42 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>rI_rI</eid>
         <voice>
           <Harmony>
             <root>15</root>
             <name>9(b13)</name>
+            <eid>sI_sI</eid>
             </Harmony>
           <Chord>
+            <eid>tI_tI</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>uI_uI</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>vI_vI</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>wI_wI</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>xI_xI</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             <Note>
+              <eid>yI_yI</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>zI_zI</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -2207,40 +2770,51 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>0I_0I</eid>
         <voice>
           <Harmony>
             <root>15</root>
             <name>dim7</name>
+            <eid>1I_1I</eid>
             </Harmony>
           <Chord>
+            <eid>2I_2I</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>3I_3I</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>4I_4I</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>5I_5I</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>6I_6I</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <tpc2>9</tpc2>
               </Note>
             <Note>
+              <eid>7I_7I</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>8I_8I</eid>
                 </Accidental>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <tpc2>6</tpc2>
               </Note>
             <Note>
+              <eid>9I_9I</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>+I_+I</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -2249,39 +2823,50 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>/I_/I</eid>
         <LayoutBreak>
+          <eid>AJ_AJ</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
             <root>15</root>
             <name>maj7(#11)</name>
+            <eid>BJ_BJ</eid>
             </Harmony>
           <Chord>
+            <eid>CJ_CJ</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>DJ_DJ</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>EJ_EJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>FJ_FJ</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>GJ_GJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>HJ_HJ</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>IJ_IJ</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>JJ_JJ</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -2289,39 +2874,50 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>KJ_KJ</eid>
         <voice>
           <Harmony>
             <root>22</root>
             <name>m7(b5)</name>
+            <eid>LJ_LJ</eid>
             </Harmony>
           <Chord>
+            <eid>MJ_MJ</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>NJ_NJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>OJ_OJ</eid>
                 </Accidental>
               <pitch>44</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>PJ_PJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>QJ_QJ</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>RJ_RJ</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>SJ_SJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>TJ_TJ</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>UJ_UJ</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -2329,46 +2925,59 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>VJ_VJ</eid>
         <voice>
           <Harmony>
             <root>22</root>
             <name>13</name>
+            <eid>WJ_WJ</eid>
             </Harmony>
           <Chord>
+            <eid>XJ_XJ</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>YJ_YJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>ZJ_ZJ</eid>
                 </Accidental>
               <pitch>44</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>aJ_aJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>bJ_bJ</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>cJ_cJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>dJ_dJ</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>26</tpc2>
               </Note>
             <Note>
+              <eid>eJ_eJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>fJ_fJ</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>gJ_gJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>hJ_hJ</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -2378,44 +2987,56 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>iJ_iJ</eid>
         <voice>
           <Harmony>
             <root>22</root>
             <name>7(b9)</name>
+            <eid>jJ_jJ</eid>
             </Harmony>
           <Chord>
+            <eid>kJ_kJ</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>lJ_lJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>mJ_mJ</eid>
                 </Accidental>
               <pitch>44</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>nJ_nJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>oJ_oJ</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>pJ_pJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>qJ_qJ</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>26</tpc2>
               </Note>
             <Note>
+              <eid>rJ_rJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>sJ_sJ</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>tJ_tJ</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -2423,38 +3044,49 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>uJ_uJ</eid>
         <voice>
           <Harmony>
             <root>22</root>
+            <eid>vJ_vJ</eid>
             </Harmony>
           <Chord>
+            <eid>wJ_wJ</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>xJ_xJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>yJ_yJ</eid>
                 </Accidental>
               <pitch>44</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>zJ_zJ</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>0J_0J</eid>
                 </Accidental>
               <pitch>51</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>1J_1J</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>2J_2J</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>26</tpc2>
               </Note>
             <Note>
+              <eid>3J_3J</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>4J_4J</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -2463,42 +3095,54 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>5J_5J</eid>
         <voice>
           <Harmony>
             <root>22</root>
             <name>9(b13)</name>
+            <eid>6J_6J</eid>
             </Harmony>
           <Chord>
+            <eid>7J_7J</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>8J_8J</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>9J_9J</eid>
                 </Accidental>
               <pitch>44</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>+J_+J</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>/J_/J</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>AK_AK</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>BK_BK</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>26</tpc2>
               </Note>
             <Note>
+              <eid>CK_CK</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>DK_DK</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>EK_EK</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -2508,36 +3152,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>FK_FK</eid>
         <voice>
           <Harmony>
             <root>22</root>
             <name>dim7</name>
+            <eid>GK_GK</eid>
             </Harmony>
           <Chord>
+            <eid>HK_HK</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>IK_IK</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>JK_JK</eid>
                 </Accidental>
               <pitch>44</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>KK_KK</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>LK_LK</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>MK_MK</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>NK_NK</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>OK_OK</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -2545,50 +3199,64 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>PK_PK</eid>
         <LayoutBreak>
+          <eid>QK_QK</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
             <root>22</root>
             <name>maj7(#11)</name>
+            <eid>RK_RK</eid>
             </Harmony>
           <Chord>
+            <eid>SK_SK</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>TK_TK</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>UK_UK</eid>
                 </Accidental>
               <pitch>44</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>VK_VK</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>WK_WK</eid>
                 </Accidental>
               <pitch>51</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>XK_XK</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>YK_YK</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>26</tpc2>
               </Note>
             <Note>
+              <eid>ZK_ZK</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>aK_aK</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>28</tpc2>
               </Note>
             <Note>
+              <eid>bK_bK</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>cK_cK</eid>
                 </Accidental>
               <pitch>67</pitch>
               <tpc>15</tpc>
@@ -2598,33 +3266,42 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>dK_dK</eid>
         <voice>
           <Harmony>
             <root>17</root>
             <name>m7(b5)</name>
+            <eid>eK_eK</eid>
             </Harmony>
           <Chord>
+            <eid>fK_fK</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>gK_gK</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>hK_hK</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>iK_iK</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>jK_jK</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>kK_kK</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             <Note>
+              <eid>lK_lK</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -2632,36 +3309,46 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>mK_mK</eid>
         <voice>
           <Harmony>
             <root>17</root>
             <name>13</name>
+            <eid>nK_nK</eid>
             </Harmony>
           <Chord>
+            <eid>oK_oK</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>pK_pK</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>qK_qK</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>rK_rK</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>sK_sK</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>tK_tK</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>uK_uK</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>vK_vK</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -2669,35 +3356,45 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>wK_wK</eid>
         <voice>
           <Harmony>
             <root>17</root>
             <name>7(b9)</name>
+            <eid>xK_xK</eid>
             </Harmony>
           <Chord>
+            <eid>yK_yK</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>zK_zK</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>0K_0K</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>1K_1K</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>2K_2K</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>3K_3K</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>4K_4K</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>5K_5K</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -2706,28 +3403,36 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>6K_6K</eid>
         <voice>
           <Harmony>
             <root>17</root>
+            <eid>7K_7K</eid>
             </Harmony>
           <Chord>
+            <eid>8K_8K</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>9K_9K</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>+K_+K</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>/K_/K</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>AL_AL</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>BL_BL</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -2735,33 +3440,42 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>CL_CL</eid>
         <voice>
           <Harmony>
             <root>17</root>
             <name>9(b13)</name>
+            <eid>DL_DL</eid>
             </Harmony>
           <Chord>
+            <eid>EL_EL</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>FL_FL</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>GL_GL</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>HL_HL</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>IL_IL</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>JL_JL</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>KL_KL</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -2769,37 +3483,47 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>LL_LL</eid>
         <voice>
           <Harmony>
             <root>17</root>
             <name>dim7</name>
+            <eid>ML_ML</eid>
             </Harmony>
           <Chord>
+            <eid>NL_NL</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>OL_OL</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>PL_PL</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>QL_QL</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               <tpc2>8</tpc2>
               </Note>
             <Note>
+              <eid>RL_RL</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>SL_SL</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>TL_TL</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               </Note>
             <Note>
+              <eid>UL_UL</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -2807,42 +3531,54 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>VL_VL</eid>
         <LayoutBreak>
+          <eid>WL_WL</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
             <root>17</root>
             <name>maj7(#11)</name>
+            <eid>XL_XL</eid>
             </Harmony>
           <Chord>
+            <eid>YL_YL</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>ZL_ZL</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>aL_aL</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>bL_bL</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>cL_cL</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>dL_dL</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>eL_eL</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>fL_fL</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>gL_gL</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -2851,42 +3587,54 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>hL_hL</eid>
         <voice>
           <Harmony>
             <root>24</root>
             <name>m7(b5)</name>
+            <eid>iL_iL</eid>
             </Harmony>
           <Chord>
+            <eid>jL_jL</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>kL_kL</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>lL_lL</eid>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <tpc2>24</tpc2>
               </Note>
             <Note>
+              <eid>mL_mL</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>nL_nL</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>oL_oL</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>pL_pL</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>qL_qL</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>rL_rL</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>sL_sL</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -2896,48 +3644,61 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>tL_tL</eid>
         <voice>
           <Harmony>
             <root>24</root>
             <name>13</name>
+            <eid>uL_uL</eid>
             </Harmony>
           <Chord>
+            <eid>vL_vL</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>wL_wL</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>xL_xL</eid>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <tpc2>24</tpc2>
               </Note>
             <Note>
+              <eid>yL_yL</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>zL_zL</eid>
                 </Accidental>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <tpc2>27</tpc2>
               </Note>
             <Note>
+              <eid>0L_0L</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>1L_1L</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>26</tpc2>
               </Note>
             <Note>
+              <eid>2L_2L</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>3L_3L</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>28</tpc2>
               </Note>
             <Note>
+              <eid>4L_4L</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>5L_5L</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -2946,45 +3707,57 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>6L_6L</eid>
         <voice>
           <Harmony>
             <root>24</root>
             <name>7(b9)</name>
+            <eid>7L_7L</eid>
             </Harmony>
           <Chord>
+            <eid>8L_8L</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>9L_9L</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>+L_+L</eid>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <tpc2>24</tpc2>
               </Note>
             <Note>
+              <eid>/L_/L</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>AM_AM</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>BM_BM</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>CM_CM</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>28</tpc2>
               </Note>
             <Note>
+              <eid>DM_DM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>EM_EM</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>FM_FM</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -2992,39 +3765,50 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>GM_GM</eid>
         <voice>
           <Harmony>
             <root>24</root>
+            <eid>HM_HM</eid>
             </Harmony>
           <Chord>
+            <eid>IM_IM</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>JM_JM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>KM_KM</eid>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <tpc2>24</tpc2>
               </Note>
             <Note>
+              <eid>LM_LM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>MM_MM</eid>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>NM_NM</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>OM_OM</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>28</tpc2>
               </Note>
             <Note>
+              <eid>PM_PM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>QM_QM</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -3034,47 +3818,60 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>RM_RM</eid>
         <voice>
           <Harmony>
             <root>24</root>
             <name>9(b13)</name>
+            <eid>SM_SM</eid>
             </Harmony>
           <Chord>
+            <eid>TM_TM</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>UM_UM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>VM_VM</eid>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <tpc2>24</tpc2>
               </Note>
             <Note>
+              <eid>WM_WM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>XM_XM</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>YM_YM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>ZM_ZM</eid>
                 </Accidental>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <tpc2>26</tpc2>
               </Note>
             <Note>
+              <eid>aM_aM</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>bM_bM</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>28</tpc2>
               </Note>
             <Note>
+              <eid>cM_cM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>dM_dM</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -3083,39 +3880,50 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>eM_eM</eid>
         <voice>
           <Harmony>
             <root>24</root>
             <name>dim7</name>
+            <eid>fM_fM</eid>
             </Harmony>
           <Chord>
+            <eid>gM_gM</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>hM_hM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>iM_iM</eid>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <tpc2>24</tpc2>
               </Note>
             <Note>
+              <eid>jM_jM</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>kM_kM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>lM_lM</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>mM_mM</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
             <Note>
+              <eid>nM_nM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>oM_oM</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -3125,51 +3933,65 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>pM_pM</eid>
         <LayoutBreak>
+          <eid>qM_qM</eid>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
           <Harmony>
             <root>24</root>
             <name>maj7(#11)</name>
+            <eid>rM_rM</eid>
             </Harmony>
           <Chord>
+            <eid>sM_sM</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>tM_tM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>uM_uM</eid>
                 </Accidental>
               <pitch>46</pitch>
               <tpc>12</tpc>
               <tpc2>24</tpc2>
               </Note>
             <Note>
+              <eid>vM_vM</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>wM_wM</eid>
                 </Accidental>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>xM_xM</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>yM_yM</eid>
                 </Accidental>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <tpc2>28</tpc2>
               </Note>
             <Note>
+              <eid>zM_zM</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>0M_0M</eid>
                 </Accidental>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <tpc2>30</tpc2>
               </Note>
             <Note>
+              <eid>1M_1M</eid>
               <Accidental>
                 <subtype>accidentalDoubleSharp</subtype>
+                <eid>2M_2M</eid>
                 </Accidental>
               <pitch>69</pitch>
               <tpc>17</tpc>
@@ -3179,30 +4001,38 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>3M_3M</eid>
         <voice>
           <Harmony>
             <root>19</root>
             <name>m7(b5)</name>
+            <eid>4M_4M</eid>
             </Harmony>
           <Chord>
+            <eid>5M_5M</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>6M_6M</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>7M_7M</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               </Note>
             <Note>
+              <eid>8M_8M</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>9M_9M</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>+M_+M</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -3210,40 +4040,51 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>/M_/M</eid>
         <voice>
           <Harmony>
             <root>19</root>
             <name>13</name>
+            <eid>AN_AN</eid>
             </Harmony>
           <Chord>
+            <eid>BN_BN</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>CN_CN</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>DN_DN</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>EN_EN</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               </Note>
             <Note>
+              <eid>FN_FN</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>GN_GN</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>HN_HN</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>IN_IN</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>JN_JN</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -3251,37 +4092,47 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>KN_KN</eid>
         <voice>
           <Harmony>
             <root>19</root>
             <name>7(b9)</name>
+            <eid>LN_LN</eid>
             </Harmony>
           <Chord>
+            <eid>MN_MN</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>NN_NN</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>ON_ON</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>PN_PN</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>QN_QN</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             <Note>
+              <eid>RN_RN</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>SN_SN</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>TN_TN</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -3289,32 +4140,41 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>UN_UN</eid>
         <voice>
           <Harmony>
             <root>19</root>
+            <eid>VN_VN</eid>
             </Harmony>
           <Chord>
+            <eid>WN_WN</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>XN_XN</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>YN_YN</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>ZN_ZN</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>aN_aN</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>bN_bN</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>cN_cN</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -3322,37 +4182,47 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>dN_dN</eid>
         <voice>
           <Harmony>
             <root>19</root>
             <name>9(b13)</name>
+            <eid>eN_eN</eid>
             </Harmony>
           <Chord>
+            <eid>fN_fN</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>gN_gN</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>hN_hN</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             <Note>
+              <eid>iN_iN</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>jN_jN</eid>
                 </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               </Note>
             <Note>
+              <eid>kN_kN</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>lN_lN</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>mN_mN</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -3360,34 +4230,43 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>nN_nN</eid>
         <voice>
           <Harmony>
             <root>19</root>
             <name>dim7</name>
+            <eid>oN_oN</eid>
             </Harmony>
           <Chord>
+            <eid>pN_pN</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>qN_qN</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>rN_rN</eid>
               <Accidental>
                 <subtype>accidentalFlat</subtype>
+                <eid>sN_sN</eid>
                 </Accidental>
               <pitch>56</pitch>
               <tpc>22</tpc>
               <tpc2>10</tpc2>
               </Note>
             <Note>
+              <eid>tN_tN</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               </Note>
             <Note>
+              <eid>uN_uN</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             <Note>
+              <eid>vN_vN</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -3395,43 +4274,55 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>wN_wN</eid>
         <voice>
           <Harmony>
             <root>19</root>
             <name>maj7(#11)</name>
+            <eid>xN_xN</eid>
             </Harmony>
           <Chord>
+            <eid>yN_yN</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>zN_zN</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               </Note>
             <Note>
+              <eid>0N_0N</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>1N_1N</eid>
                 </Accidental>
               <pitch>54</pitch>
               <tpc>20</tpc>
               </Note>
             <Note>
+              <eid>2N_2N</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>3N_3N</eid>
                 </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <tpc2>23</tpc2>
               </Note>
             <Note>
+              <eid>4N_4N</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>5N_5N</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <tpc2>25</tpc2>
               </Note>
             <Note>
+              <eid>6N_6N</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>7N_7N</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>

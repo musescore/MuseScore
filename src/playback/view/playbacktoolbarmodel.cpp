@@ -280,7 +280,7 @@ void PlaybackToolBarModel::rewind(secs_t secs)
 
 void PlaybackToolBarModel::rewindToBeat(const MeasureBeat& beat)
 {
-    secs_t secs = playbackController()->beatToSecs(beat.measureIndex, beat.beatIndex);
+    secs_t secs = playbackController()->beatToSecs(beat.measureIndex, static_cast<int>(beat.beat));
     rewind(secs);
 }
 
@@ -309,7 +309,7 @@ int PlaybackToolBarModel::maxMeasureNumber() const
 
 int PlaybackToolBarModel::beatNumber() const
 {
-    return measureBeat().beatIndex + 1;
+    return static_cast<int>(measureBeat().beat) + 1;
 }
 
 void PlaybackToolBarModel::setBeatNumber(int beatNumber)
@@ -317,11 +317,11 @@ void PlaybackToolBarModel::setBeatNumber(int beatNumber)
     int beatIndex = beatNumber - 1;
     MeasureBeat measureBeat = this->measureBeat();
 
-    if (beatIndex == measureBeat.beatIndex) {
+    if (beatIndex == static_cast<int>(measureBeat.beat)) {
         return;
     }
 
-    measureBeat.beatIndex = beatIndex;
+    measureBeat.beat = beatIndex;
     rewindToBeat(measureBeat);
 }
 

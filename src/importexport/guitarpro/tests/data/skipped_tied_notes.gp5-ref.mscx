@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,7 +18,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -48,33 +50,43 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <KeySig>
+            <eid>E_E</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <RehearsalMark>
+            <eid>G_G</eid>
             <text>Intro</text>
             </RehearsalMark>
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <eid>H_H</eid>
             </Dynamic>
           <Beam>
+            <eid>I_I</eid>
             <l1>-10</l1>
             <l2>-10</l2>
             </Beam>
           <Chord>
+            <eid>J_J</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>K_K</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>L_L</eid>
                 </Accidental>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>M_M</eid>
                   </Tie>
                 <next>
                   <location>
@@ -89,10 +101,13 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>O_O</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>P_P</eid>
                   </Tie>
                 <next>
                   <location>
@@ -113,11 +128,14 @@
               <string>5</string>
               </Note>
             <Note>
+              <eid>Q_Q</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
+                <eid>R_R</eid>
                 </Accidental>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>S_S</eid>
                   </Tie>
                 <next>
                   <location>
@@ -132,8 +150,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>T_T</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>U_U</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -147,8 +167,10 @@
               <string>5</string>
               </Note>
             <Note>
+              <eid>V_V</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>W_W</eid>
                   </Tie>
                 <next>
                   <location>
@@ -171,8 +193,10 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>X_X</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Y_Y</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -188,6 +212,7 @@
               </Note>
             </Chord>
           <Rest>
+            <eid>Z_Z</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

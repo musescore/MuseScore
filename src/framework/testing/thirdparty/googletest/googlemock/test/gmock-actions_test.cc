@@ -222,8 +222,8 @@ TEST(TypeTraits, IsInvocableRV) {
   // In C++17 and above, where it's guaranteed that functions can return
   // non-moveable objects, everything should work fine for non-moveable rsult
   // types too.
-#if defined(GTEST_INTERNAL_CPLUSPLUS_LANG) && \
-    GTEST_INTERNAL_CPLUSPLUS_LANG >= 201703L
+  // TODO(b/396121064) - Fix this test under MSVC
+#ifndef _MSC_VER
   {
     struct NonMoveable {
       NonMoveable() = default;
@@ -244,7 +244,7 @@ TEST(TypeTraits, IsInvocableRV) {
     static_assert(!internal::is_callable_r<int, Callable>::value);
     static_assert(!internal::is_callable_r<NonMoveable, Callable, int>::value);
   }
-#endif  // C++17 and above
+#endif  // _MSC_VER
 
   // Nothing should choke when we try to call other arguments besides directly
   // callable objects, but they should not show up as callable.
@@ -1642,6 +1642,22 @@ TEST(WithArgsTest, RefQualifiedInnerAction) {
 
   MockFunction<int(int, int)> mock;
   EXPECT_CALL(mock, Call).WillOnce(WithArg<1>(SomeAction{}));
+  EXPECT_EQ(19, mock.AsStdFunction()(0, 17));
+}
+
+// It should be fine to provide an lvalue WithArgsAction to WillOnce, even when
+// the inner action only wants to convert to OnceAction.
+TEST(WithArgsTest, ProvideAsLvalueToWillOnce) {
+  struct SomeAction {
+    operator OnceAction<int(int)>() const {  // NOLINT
+      return [](const int arg) { return arg + 2; };
+    }
+  };
+
+  const auto wa = WithArg<1>(SomeAction{});
+
+  MockFunction<int(int, int)> mock;
+  EXPECT_CALL(mock, Call).WillOnce(wa);
   EXPECT_EQ(19, mock.AsStdFunction()(0, 17));
 }
 

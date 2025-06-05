@@ -22,9 +22,13 @@
 
 #include "navigate.h"
 
+#include "box.h"
 #include "chord.h"
+#include "fret.h"
+#include "guitarbend.h"
 #include "engravingitem.h"
 #include "lyrics.h"
+#include "hammeronpulloff.h"
 #include "measure.h"
 #include "measurerepeat.h"
 #include "marker.h"
@@ -35,7 +39,6 @@
 #include "spanner.h"
 #include "staff.h"
 #include "soundflag.h"
-#include "guitarbend.h"
 
 using namespace mu;
 
@@ -750,6 +753,15 @@ EngravingItem* Score::nextElement()
                 return score()->firstElement();
             }
         }
+        case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+            return toHammerOnPullOffText(e)->endChord()->upNote();
+        case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
+        {
+            HammerOnPullOffSegment* hopoSeg = toHammerOnPullOffSegment(e);
+            if (!hopoSeg->hopoText().empty()) {
+                return hopoSeg->hopoText().front();
+            } // else fallthrough:
+        }
         case ElementType::VOLTA_SEGMENT:
         case ElementType::SLUR_SEGMENT:
         case ElementType::TEXTLINE_SEGMENT:
@@ -829,9 +841,16 @@ EngravingItem* Score::nextElement()
 
             if ((selectedElement->type() == ElementType::VBOX
                  || selectedElement->type() == ElementType::HBOX
-                 || selectedElement->type() == ElementType::TBOX
-                 || selectedElement->type() == ElementType::FBOX) && !boxChildren.empty()) {
+                 || selectedElement->type() == ElementType::TBOX) && !boxChildren.empty()) {
                 return boxChildren.begin()->first;
+            }
+
+            if (selectedElement->type() == ElementType::FBOX) {
+                for (EngravingItem* child : toFBox(selectedElement)->el()) {
+                    if (child->isFretDiagram() && child->visible()) {
+                        return toFretDiagram(child)->harmony();
+                    }
+                }
             }
 
             for (auto child = boxChildren.begin(); child != boxChildren.end(); child++) {
@@ -872,6 +891,31 @@ EngravingItem* Score::nextElement()
                 return parent;
             }
             break;
+        case ElementType::HARMONY: {
+            if (EngravingItem* parent = toHarmony(e)->parentItem()) {
+                if (parent->isFretDiagram()) {
+                    return parent;
+                }
+            }
+            break;
+        }
+        case ElementType::FRET_DIAGRAM: {
+            FretDiagram* fretDiagram = toFretDiagram(e);
+            if (fretDiagram->isInFretBox()) {
+                const ElementList& diagrams = toFBox(fretDiagram->explicitParent())->el();
+
+                size_t index = muse::indexOf(diagrams, fretDiagram);
+                if (index != muse::nidx) {
+                    while (++index < diagrams.size()) {
+                        FretDiagram* fretDiagramI = toFretDiagram(diagrams[index]);
+                        if (fretDiagramI->visible()) {
+                            return fretDiagramI->harmony();
+                        }
+                    }
+                }
+            }
+            break;
+        }
         default:
             break;
         }
@@ -941,8 +985,20 @@ EngravingItem* Score::prevElement()
 
             return previousElement;
         }
+        case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+        {
+            HammerOnPullOffText* hopoText = toHammerOnPullOffText(e);
+            HammerOnPullOffSegment* hopoSegment = toHammerOnPullOffSegment(hopoText->parent());
+            DO_ASSERT(hopoSegment);
+            if (hopoSegment->hopoText().size() > 0 && hopoSegment->hopoText().front() == hopoText) {
+                return hopoSegment;
+            } else {
+                return hopoText->startChord()->downNote();
+            }
+        }
         case ElementType::VOLTA_SEGMENT:
         case ElementType::SLUR_SEGMENT:
+        case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
         case ElementType::TEXTLINE_SEGMENT:
         case ElementType::HAIRPIN_SEGMENT:
         case ElementType::OTTAVA_SEGMENT:
@@ -1065,6 +1121,38 @@ EngravingItem* Score::prevElement()
             staffId = 0;
             e = toSystemLockIndicator(e)->systemLock()->endMB();
             continue;
+        }
+        case ElementType::HARMONY: {
+            Harmony* harmony = toHarmony(e);
+            if (harmony->isInFretBox()) {
+                FretDiagram* fretDiagram = toFretDiagram(harmony->explicitParent());
+                FBox* fretBox = toFBox(fretDiagram->explicitParent());
+                const ElementList& diagrams = fretBox->el();
+
+                size_t index = muse::indexOf(diagrams, fretDiagram);
+                if (index != muse::nidx) {
+                    while (--index > 0) {
+                        FretDiagram* fretDiagramI = toFretDiagram(diagrams[index]);
+                        if (fretDiagramI->visible()) {
+                            return fretDiagramI;
+                        }
+                    }
+                }
+
+                return fretBox;
+            } else if (harmony->explicitParent()->isFretDiagram()) {
+                // jump over fret diagram
+                e = harmony->getParentSeg();
+                continue;
+            }
+            break;
+        }
+        case ElementType::FRET_DIAGRAM: {
+            FretDiagram* fretDiagram = toFretDiagram(e);
+            if (EngravingItem* harmony = fretDiagram->harmony()) {
+                return harmony;
+            }
+            break;
         }
         default:
             break;

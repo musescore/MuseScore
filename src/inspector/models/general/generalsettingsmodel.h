@@ -80,6 +80,9 @@ private:
     AppearanceSettingsModel* m_appearanceSettingsModel = nullptr;
 
     QList<engraving::EngravingItem*> m_elementsForIsSmallProperty;
+    QList<engraving::EngravingItem*> m_elementsForIsVisibleProperty;
+    QList<engraving::EngravingItem*> m_elementsForIsAutoPlaceProperty;
+    QList<engraving::EngravingItem*> m_elementsForIsPlayableProperty;
 
     bool m_areGeneralPropertiesAvailable = true;
 };

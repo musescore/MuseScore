@@ -98,6 +98,8 @@
 #include "view/styledialog/glissandosectionmodel.h"
 #include "view/styledialog/notelinesectionmodel.h"
 #include "view/styledialog/clefkeytimesigpagemodel.h"
+#include "view/styledialog/hammeronpullofftappingpagemodel.h"
+#include "view/styledialog/repeatbarlinessectionmodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -125,7 +127,10 @@ void NotationModule::registerExports()
     m_notationUiActions = std::make_shared<NotationUiActions>(m_actionController);
     m_midiInputOutputController = std::make_shared<MidiInputOutputController>();
     m_instrumentsRepository = std::make_shared<InstrumentsRepository>();
+
+#ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
     m_engravingFontsController = std::make_shared<EngravingFontsController>();
+#endif
 
     ioc()->registerExport<INotationConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<INotationCreator>(moduleName(), new NotationCreator());
@@ -227,6 +232,8 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<GlissandoSectionModel>("MuseScore.NotationScene", 1, 0, "GlissandoSectionModel");
     qmlRegisterType<NoteLineSectionModel>("MuseScore.NotationScene", 1, 0, "NoteLineSectionModel");
     qmlRegisterType<ClefKeyTimeSigPageModel>("MuseScore.NotationScene", 1, 0, "ClefKeyTimeSigPageModel");
+    qmlRegisterType<HammerOnPullOffTappingPageModel>("MuseScore.NotationScene", 1, 0, "HammerOnPullOffTappingPageModel");
+    qmlRegisterType<RepeatBarlinesSectionModel>("MuseScore.NotationScene", 1, 0, "RepeatBarlinesSectionModel");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 
@@ -246,7 +253,10 @@ void NotationModule::onInit(const IApplication::RunMode& mode)
     m_instrumentsRepository->init();
     m_actionController->init();
     m_notationUiActions->init();
+
+#ifdef MUE_BUILD_ENGRAVING_FONTSCONTROLLER
     m_engravingFontsController->init();
+#endif
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_midiInputOutputController->init();

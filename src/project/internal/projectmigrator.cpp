@@ -31,6 +31,8 @@
 #include "engraving/dom/undo.h"
 #include "engraving/rw/compat/readstyle.h"
 
+#include "io/file.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -102,7 +104,7 @@ Ret ProjectMigrator::askAboutMigration(MigrationOptions& out, const QString& app
     query.addParam("isApplyEdwin", Val(out.isApplyEdwin));
     query.addParam("isRemapPercussion", Val(out.isRemapPercussion));
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         return rv.ret;
     }
@@ -194,24 +196,26 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
 
 bool ProjectMigrator::applyLelandStyle(mu::engraving::MasterScore* score)
 {
+    muse::io::File styleFile(LELAND_STYLE_PATH);
     for (mu::engraving::Excerpt* excerpt : score->excerpts()) {
-        if (!excerpt->excerptScore()->loadStyle(LELAND_STYLE_PATH, /*ign*/ false, /*overlap*/ true)) {
+        if (!excerpt->excerptScore()->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true)) {
             return false;
         }
     }
 
-    return score->loadStyle(LELAND_STYLE_PATH, /*ign*/ false, /*overlap*/ true);
+    return score->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true);
 }
 
 bool ProjectMigrator::applyEdwinStyle(mu::engraving::MasterScore* score)
 {
+    muse::io::File styleFile(EDWIN_STYLE_PATH);
     for (mu::engraving::Excerpt* excerpt : score->excerpts()) {
-        if (!excerpt->excerptScore()->loadStyle(EDWIN_STYLE_PATH, /*ign*/ false, /*overlap*/ true)) {
+        if (!excerpt->excerptScore()->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true)) {
             return false;
         }
     }
 
-    return score->loadStyle(EDWIN_STYLE_PATH, /*ign*/ false, /*overlap*/ true);
+    return score->loadStyle(styleFile, /*ign*/ false, /*overlap*/ true);
 }
 
 bool ProjectMigrator::resetAllElementsPositions(mu::engraving::MasterScore* score)

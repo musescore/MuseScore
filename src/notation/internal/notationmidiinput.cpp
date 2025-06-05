@@ -218,7 +218,7 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
 
     mu::engraving::MidiInputEvent inputEv;
     inputEv.pitch = e.note();
-    inputEv.velocity = e.velocity();
+    inputEv.velocity = e.velocity7();
 
     sc->activeMidiPitches().remove_if([&inputEv](const mu::engraving::MidiInputEvent& val) {
         return inputEv.pitch == val.pitch;
@@ -285,7 +285,7 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
 
 Note* NotationMidiInput::makePreviewNote(const muse::midi::Event& e)
 {
-    if (e.opcode() == muse::midi::Event::Opcode::NoteOff || e.velocity() == 0) {
+    if (e.opcode() == muse::midi::Event::Opcode::NoteOff || e.velocity7() == 0) {
         return nullptr;
     }
 

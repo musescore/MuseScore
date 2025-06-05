@@ -70,6 +70,9 @@ endif()
 if (MUSE_MODULE_UI)
     add_subdirectory(ui)
     add_subdirectory(uicomponents)
+endif()
+
+if (MUSE_MODULE_DOCKWINDOW)
     add_subdirectory(dockwindow)
 endif()
 

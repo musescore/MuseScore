@@ -1119,7 +1119,7 @@ bool MeiImporter::readPgHead(pugi::xml_node pgHeadNode)
     }
 
     if (vBox) {
-        m_score->measures()->add(vBox);
+        m_score->measures()->append(vBox);
     }
 
     return true;
@@ -1232,6 +1232,14 @@ bool MeiImporter::readStaffDefs(pugi::xml_node parentNode)
             //staff->setDefaultClefType(ClefTypeList(Convert::clefFromMEI(meiStaffDef)));
         }
         //m_clefs[meiStaffDef.GetN()] = staff->defaultClefType();
+
+        // try to import MEI from other applications
+        pugi::xml_node meterSigNode = staffDefXpathNode.node().select_node(".//meterSig").node();
+        if (meterSigNode) {
+            meiStaffDef.SetMeterCount(meiStaffDef.AttMeterSigDefaultLog::StrToMetercountPair(meterSigNode.attribute("count").value()));
+            meiStaffDef.SetMeterUnit(meterSigNode.attribute("unit").as_int());
+            meiStaffDef.SetMeterSym(meiStaffDef.AttMeterSigDefaultLog::StrToMetersign(meterSigNode.attribute("sym").value()));
+        }
 
         if (meiStaffDef.HasMeterSym() || meiStaffDef.HasMeterCount()) {
             m_timeSigs[staffIdx] = Convert::meterFromMEI(meiStaffDef, warning);
@@ -1444,7 +1452,7 @@ bool MeiImporter::readMeasure(pugi::xml_node measureNode)
         measure->setRepeatCount(measureSt.repeatCount);
     }
 
-    m_score->measures()->add(measure);
+    m_score->measures()->append(measure);
     m_ticks += measure->ticks();
 
     m_lastMeasure = measure;
@@ -1993,6 +2001,10 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     int tpc1 = mu::engraving::transposeTpc(pitchSt.tpc2, interval, true);
     note->setPitch(pitchSt.pitch, tpc1, pitchSt.tpc2);
 
+    if (meiNote.HasVel()) {
+        note->setUserVelocity(meiNote.GetVel());
+    }
+
     Accidental* accid = Factory::createAccidental(note);
     Convert::colorFromMEI(accid, meiAccid);
     this->readXmlId(accid, meiAccid.m_xmlId);
@@ -2209,6 +2221,7 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
 
     lyrics->setXmlText(syllable);
     lyrics->setNo(no);
+    lyrics->initTextStyleType(lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
     lyrics->setTrack(chord->track());
     chord->add(lyrics);
 
@@ -3196,7 +3209,7 @@ bool MeiImporter::buildTextFrame()
 
     if (vBox) {
         vBox->setTick(Fraction(0, 1));
-        m_score->measures()->add(vBox);
+        m_score->measures()->append(vBox);
     }
 
     return true;

@@ -28,6 +28,8 @@
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/undo.h"
 
+#include "io/file.h"
+
 #include "log.h"
 
 using namespace mu::notation;
@@ -114,7 +116,8 @@ Notification NotationStyle::styleChanged() const
 bool NotationStyle::loadStyle(const muse::io::path_t& path, bool allowAnyVersion)
 {
     m_undoStack->prepareChanges(muse::TranslatableString("undoableAction", "Load style"));
-    bool result = score()->loadStyle(path.toQString(), allowAnyVersion);
+    muse::io::File styleFile(path);
+    bool result = score()->loadStyle(styleFile, allowAnyVersion);
     m_undoStack->commitChanges();
 
     if (result) {

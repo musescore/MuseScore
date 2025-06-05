@@ -445,61 +445,6 @@ double Chord::noteHeadWidth() const
     return score()->noteHeadWidth() * mag();
 }
 
-//! Returns Chord coordinates
-double Chord::stemPosX() const
-{
-    const StaffType* staffType = this->staffType();
-    if (staffType && staffType->isTabStaff()) {
-        double xPos = staffType->chordStemPosX(this) * spatium();
-        if (isGraceBendEnd()) {
-            GraceNotesGroup& graceBefore = graceNotesBefore();
-            Chord* grace = graceBefore.empty() ? nullptr : graceBefore.front();
-            if (grace) {
-                xPos += grace->pos().x();
-            }
-        }
-        return xPos;
-    }
-    return ldata()->up ? noteHeadWidth() : 0.0;
-}
-
-//! Returns page coordinates
-PointF Chord::stemPos() const
-{
-    const Staff* staff = this->staff();
-    const StaffType* staffType = staff ? staff->staffTypeForElement(this) : nullptr;
-    if (staffType && staffType->isTabStaff()) {
-        return pagePos() + staffType->chordStemPos(this) * spatium();
-    }
-
-    if (ldata()->up) {
-        const Note* downNote = this->downNote();
-        double nhw = m_notes.size() == 1 ? downNote->bboxRightPos() : noteHeadWidth();
-        return pagePos() + PointF(nhw, downNote->pos().y());
-    }
-
-    return pagePos() + PointF(0.0, upNote()->pos().y());
-}
-
-//! Returns stem position of note on beam side
-//! Returns page coordinates
-PointF Chord::stemPosBeam() const
-{
-    const Staff* stf = this->staff();
-    const StaffType* st = stf ? stf->staffTypeForElement(this) : nullptr;
-
-    if (st && st->isTabStaff()) {
-        return pagePos() + st->chordStemPosBeam(this) * spatium();
-    }
-
-    if (ldata()->up) {
-        double nhw = noteHeadWidth();
-        return pagePos() + PointF(nhw, upNote()->pos().y());
-    }
-
-    return pagePos() + PointF(0, downNote()->pos().y());
-}
-
 //---------------------------------------------------------
 //   rightEdge
 //---------------------------------------------------------
@@ -853,165 +798,6 @@ double Chord::maxHeadWidth() const
 }
 
 //---------------------------------------------------------
-//   addLedgerLines
-//---------------------------------------------------------
-
-void Chord::updateLedgerLines()
-{
-    // initialize for palette
-    track_idx_t track = 0;                     // the track lines belong to
-    // the line pos corresponding to the bottom line of the staff
-    int lineBelow      = 8;                     // assuming 5-lined "staff"
-    double lineDistance = 1;
-    bool staffVisible  = true;
-    int stepOffset = 0;                         // for staff type changes with a step offset
-
-    if (segment()) {   //not palette
-        Fraction tick = segment()->tick();
-        staff_idx_t idx = staffIdx() + staffMove();
-        track         = staff2track(idx);
-        Staff* st     = score()->staff(idx);
-        lineBelow     = (st->lines(tick) - 1) * 2;
-        lineDistance  = st->lineDistance(tick);
-        staffVisible  = !staff()->isLinesInvisible(tick);
-        stepOffset = st->staffType(tick)->stepOffset();
-    }
-
-    // need ledger lines?
-    if (downLine() + stepOffset <= lineBelow + 1 && upLine() + stepOffset >= -1) {
-        muse::DeleteAll(m_ledgerLines);
-        m_ledgerLines.clear();
-        return;
-    }
-
-    // the extra length of a ledger line to be added on each side of the notehead
-    const double extraLen = style().styleMM(Sid::ledgerLineLength);
-
-    bool visible = false;
-
-    struct LedgerLineData {
-        int line;
-        double minX, maxX;
-        bool visible;
-        bool accidental;
-    };
-    std::vector<LedgerLineData> ledgerLineData;
-
-    // scan chord notes, collecting visibility and x and y extrema
-    // NOTE: notes are sorted from bottom to top (line no. decreasing)
-    // notes are scanned twice from outside (bottom or top) toward the staff
-    // each pass stops at the first note without ledger lines
-    int n = static_cast<int>(m_notes.size());
-
-    for (const bool topToBottom : { false, true }) {
-        const int from = topToBottom ? n - 1 : 0;
-        const int delta = topToBottom ? -1 : 1;
-        std::vector<LedgerLineData> vecLines;
-        double hw = 0.0;
-        double minX = std::numeric_limits<double>::max();
-        double maxX = std::numeric_limits<double>::min();
-        int minLine = 0;
-        int maxLine = lineBelow;
-
-        for (int i = from; i < n && i >= 0; i += delta) {
-            const Note* note = m_notes.at(i);
-            int l = note->line() + stepOffset;
-
-            // if 1st pass and note not below staff or 2nd pass and note not above staff
-            if ((!topToBottom && l <= lineBelow + 1)
-                || (topToBottom && l >= -1)) {
-                break; // stop this pass
-            }
-            // round line number to even number toward 0
-            if (l < 0) {
-                l = (l + 1) & ~1;
-            } else {
-                l = l & ~1;
-            }
-
-            if (note->visible()) { // if one note is visible,
-                visible = true;    // all lines between it and the staff are visible
-            }
-            hw = std::max(hw, note->headWidth());
-
-            // Experimental:
-            // shorten ledger line to avoid collisions with accidentals
-            // TODO: do something with the following `accid` flag
-            //
-            // bool accid = (note->accidental() && note->line() >= (l-1) && note->line() <= (l+1) );
-
-            // ledger lines need the leftmost point of the notehead with a respect of bbox
-            const double x = note->pos().x() + note->bboxXShift();
-            if (x - extraLen * note->mag() < minX) {
-                minX = x - extraLen * note->mag();
-                // increase width of all lines between this one and the staff
-                for (auto& d : vecLines) {
-                    if (!d.accidental && ((l < 0 && d.line >= l) || (l > 0 && d.line <= l))) {
-                        d.minX = minX;
-                    }
-                }
-            }
-            // same for left side
-            if (x + hw + extraLen * note->mag() > maxX) {
-                maxX = x + hw + extraLen * note->mag();
-                for (auto& d : vecLines) {
-                    if ((l < 0 && d.line >= l) || (l > 0 && d.line <= l)) {
-                        d.maxX = maxX;
-                    }
-                }
-            }
-
-            // check if note vert. pos. is outside current range
-            // and, if so, add data for new line(s)
-            if (l < minLine) {
-                for (int i1 = l; i1 < minLine; i1 += 2) {
-                    vecLines.emplace_back(LedgerLineData {
-                            /*line=*/ i1,
-                            /*minX=*/ minX,
-                            /*maxX=*/ maxX,
-                            /*visible=*/ visible,
-                            /*accidental=*/ false
-                        });
-                }
-                minLine = l;
-            }
-            if (l > maxLine) {
-                for (int i1 = maxLine + 2; i1 <= l; i1 += 2) {
-                    vecLines.emplace_back(LedgerLineData {
-                            /*line=*/ i1,
-                            /*minX=*/ minX,
-                            /*maxX=*/ maxX,
-                            /*visible=*/ visible,
-                            /*accidental=*/ false
-                        });
-                }
-                maxLine = l;
-            }
-        }
-        if (minLine < 0 || maxLine > lineBelow) {
-            ledgerLineData.insert(ledgerLineData.end(), vecLines.begin(), vecLines.end());
-        }
-    }
-
-    double _spatium = spatium();
-    double stepDistance = lineDistance * 0.5;
-    resizeLedgerLinesTo(ledgerLineData.size());
-    for (size_t i = 0; i < ledgerLineData.size(); ++i) {
-        LedgerLineData lld = ledgerLineData[i];
-        LedgerLine* h = m_ledgerLines[i];
-        h->setParent(this);
-        h->setTrack(track);
-        h->setVisible(lld.visible && staffVisible);
-        h->setLen(lld.maxX - lld.minX);
-        h->setPos(lld.minX, lld.line * _spatium * stepDistance);
-    }
-
-    for (LedgerLine* ll : m_ledgerLines) {
-        renderer()->layoutItem(ll);
-    }
-}
-
-//---------------------------------------------------------
 //   selectedNote
 //---------------------------------------------------------
 
@@ -1049,23 +835,31 @@ double Chord::downPos() const
     return downNote()->pos().y();
 }
 
-//---------------------------------------------------------
-//   centerX
-//    return x position for attributes
-//---------------------------------------------------------
-
-double Chord::centerX() const
+bool Chord::allNotesTiedToNext() const
 {
-    // TAB 'notes' are always centered on the stem
-    const Staff* st = staff();
-    const StaffType* stt = st->staffTypeForElement(this);
-    if (stt->isTabStaff()) {
-        return stt->chordStemPosX(this) * spatium();
+    Chord* tiedChord = nullptr;
+    for (Note* note : m_notes) {
+        if (!note->tieFor()) {
+            return false;
+        }
+
+        Note* endNote = note->tieFor()->endNote();
+        Chord* endChord = endNote ? endNote->chord() : nullptr;
+        if (!endChord) {
+            return false;
+        }
+
+        if (!tiedChord) {
+            tiedChord = endChord;
+            continue;
+        }
+
+        if (endChord != tiedChord) {
+            return false;
+        }
     }
 
-    const Note* note = up() ? downNote() : upNote();
-    double x = note->pos().x() + note->noteheadCenterX();
-    return x;
+    return true;
 }
 
 //---------------------------------------------------------
@@ -1190,8 +984,9 @@ void Chord::resizeLedgerLinesTo(size_t newSize)
 void Chord::setBeamExtension(double extension)
 {
     if (m_stem) {
-        m_stem->setBaseLength(std::max(m_stem->baseLength() + Millimetre(extension), Millimetre { 0.0 }));
-        m_defaultStemLength = std::max(m_defaultStemLength + extension, m_stem->baseLength().val());
+        double baseLength = m_stem->absoluteFromSpatium(m_stem->baseLength());
+        m_stem->setBaseLength(std::max(Spatium::fromMM(baseLength + extension, spatium()), Spatium(0.0)));
+        m_defaultStemLength = std::max(m_defaultStemLength + extension, m_stem->absoluteFromSpatium(m_stem->baseLength()));
     }
 }
 
@@ -1781,6 +1576,15 @@ PropertyValue Chord::propertyDefault(Pid propertyId) const
     default:
         return ChordRest::propertyDefault(propertyId);
     }
+}
+
+bool Chord::isUserModified() const
+{
+    if (showStemSlash() != propertyDefault(Pid::SHOW_STEM_SLASH).toBool()) {
+        return true;
+    }
+
+    return EngravingItem::isUserModified();
 }
 
 //---------------------------------------------------------

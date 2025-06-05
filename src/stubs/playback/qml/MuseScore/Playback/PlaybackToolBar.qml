@@ -33,6 +33,8 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    visible: false
+
     StyledTextLabel {
         anchors.centerIn: parent
         text: "Playback ToolBar Stub"

@@ -394,6 +394,7 @@ public:
     void dynamic(Dynamic const* const dyn, staff_idx_t staff);
     void systemText(StaffTextBase const* const text, staff_idx_t staff);
     void tempoText(TempoText const* const text, staff_idx_t staff);
+    void tempoSound(TempoText const* const text);
     void harmony(Harmony const* const, FretDiagram const* const fd, const Fraction& offset = Fraction(0, 1));
     Score* score() const { return m_score; }
     double getTenthsFromInches(double) const;
@@ -3283,7 +3284,6 @@ static String symIdToTechn(const SymId sid)
     case SymId::brassSmear:
         return u"smear";
     case SymId::brassMuteOpen:
-        // return u"open-string";
         return u"open";
     case SymId::brassMuteHalfClosed:
         return u"half-muted";
@@ -3324,6 +3324,16 @@ static String symIdToTechn(const SymId sid)
         return u"pluck lift";
     case SymId::handbellsSwing:
         return u"swing";
+    case SymId::guitarClosePedal:
+    case SymId::pictOpenRimShot:
+        return String(u"stopped smufl=\"%1\"").arg(String::fromAscii(SymNames::nameForSymId(sid).ascii()));
+    case SymId::guitarHalfOpenPedal:
+    case SymId::pictHalfOpen1:
+    case SymId::pictHalfOpen2:
+        return String(u"half-muted smufl=\"%1\"").arg(String::fromAscii(SymNames::nameForSymId(sid).ascii()));
+    case SymId::guitarOpenPedal:
+    case SymId::pictOpen:
+        return String(u"open smufl=\"%1\"").arg(String::fromAscii(SymNames::nameForSymId(sid).ascii()));
     default:
         return String(); // nothing
     }
@@ -5059,6 +5069,12 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
     if (staff) {
         m_xml.tag("staff", static_cast<int>(staff));
     }
+    tempoSound(text);
+    m_xml.endElement();
+}
+
+void ExportMusicXml::tempoSound(TempoText const* const text)
+{
     // Format tempo with maximum 2 decimal places, because in some MuseScore files tempo is stored
     // imprecisely and this could cause rounding errors (e.g. 92 BPM would be saved as 91.9998).
     BeatsPerMinute bpm = text->tempo().toBPM();
@@ -5067,7 +5083,6 @@ void ExportMusicXml::tempoText(TempoText const* const text, staff_idx_t staff)
     }
     double bpmRounded = round(bpm.val * 100) / 100;
     m_xml.tag("sound", { { "tempo", bpmRounded } });
-    m_xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -5245,6 +5260,19 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
     }
     attr += color2xml(rmk);
     attr += positioningAttributes(rmk);
+    if (configuration()->exportLayout()) {
+        switch (rmk->align().horizontal) {
+        case AlignH::LEFT:
+            // default in MusicXML
+            break;
+        case AlignH::HCENTER:
+            attr += u" justify=\"center\"";
+            break;
+        case AlignH::RIGHT:
+            attr += u" justify=\"right\"";
+            break;
+        }
+    }
     // set the default words format
     const MStyle& style = m_score->style();
     const String mtf = style.styleSt(Sid::musicalTextFont);
@@ -6452,6 +6480,10 @@ static void measureStyle(XmlWriter& xml, Attributes& attr, const Measure* const 
 static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff_idx_t sstaff)
 {
     if (!exp->canWrite(e)) {
+        // write only tempo
+        if (e->isTempoText()) {
+            exp->tempoSound(toTempoText(e));
+        }
         return false;
     }
 

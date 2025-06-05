@@ -134,6 +134,8 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
         return isFiltered(ElementsSelectionFilterTypes::CHORD_SYMBOL);
     case ElementType::SLUR:
     case ElementType::SLUR_SEGMENT:
+    case ElementType::HAMMER_ON_PULL_OFF:
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
         return isFiltered(ElementsSelectionFilterTypes::SLUR);
     case ElementType::FIGURED_BASS:
         return isFiltered(ElementsSelectionFilterTypes::FIGURED_BASS);
@@ -159,11 +161,11 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     }
 
     // Special cases...
-    if (e->isTextBase()) { // only TEXT, INSTRCHANGE and STAFFTEXT are caught here, rest are system thus not in selection
+    if (e->isTextBase()) {
         return isFiltered(ElementsSelectionFilterTypes::OTHER_TEXT);
     }
 
-    if (e->isSLine()) { // NoteLine, Volta
+    if (e->isSLine() || e->isSLineSegment()) { // NoteLine, Volta
         return isFiltered(ElementsSelectionFilterTypes::OTHER_LINE);
     }
 

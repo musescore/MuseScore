@@ -437,6 +437,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "&Implode"),
              TranslatableString("action", "Implode")
              ),
+    UiAction("add-fretboard-diagram",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Add &fretboard diagram"),
+             TranslatableString("action", "Add fretboard diagram"),
+             IconCode::Code::FRETBOARD_DIAGRAM
+             ),
     UiAction("realize-chord-symbols",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -743,20 +750,26 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("append-hbox",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Append h&orizontal frame"),
+             TranslatableString("action", "&Horizontal frame"),
              TranslatableString("action", "Append horizontal frame")
              ),
     UiAction("append-vbox",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Append v&ertical frame"),
+             TranslatableString("action", "&Vertical frame"),
              TranslatableString("action", "Append vertical frame")
              ),
     UiAction("append-textframe",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Append te&xt frame"),
+             TranslatableString("action", "&Text frame"),
              TranslatableString("action", "Append text frame")
+             ),
+    UiAction("append-fretframe",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "&Fretboard diagram legend"),
+             TranslatableString("action", "Append fretboard diagram legend")
              ),
     UiAction("acciaccatura",
              mu::context::UiCtxProjectOpened,
@@ -2518,6 +2531,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Slight bend"),
              IconCode::Code::GUITAR_SLIGHT_BEND
              ),
+    UiAction("hammer-on-pull-off",
+             mu::context::UiCtxProjectFocused,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Hammer-on/pull-off"),
+             TranslatableString("action", "Add hammer-on/pull-off")
+             )
 };
 
 const UiActionList NotationUiActions::m_scoreConfigActions = {

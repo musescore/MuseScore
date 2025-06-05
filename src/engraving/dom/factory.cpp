@@ -51,6 +51,7 @@
 #include "gradualtempochange.h"
 #include "guitarbend.h"
 #include "hairpin.h"
+#include "hammeronpulloff.h"
 #include "harmonicmark.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
@@ -220,6 +221,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FIGURED_BASS:      return new FiguredBass(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::STEM:              return new Stem(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::SLUR:              return new Slur(parent);
+    case ElementType::HAMMER_ON_PULL_OFF: return new HammerOnPullOff(parent);
     case ElementType::TIE:               return new Tie(parent);
     case ElementType::TUPLET:            return new Tuplet(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
     case ElementType::FINGERING:         return new Fingering(parent->isNote() ? toNote(parent) : dummy->note());
@@ -660,6 +662,9 @@ COPY_ITEM_IMPL(Tuplet)
 
 CREATE_ITEM_IMPL(Hairpin, ElementType::HAIRPIN, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Hairpin, EngravingItem)
+
+CREATE_ITEM_IMPL(HammerOnPullOff, ElementType::HAMMER_ON_PULL_OFF, EngravingItem, isAccessibleEnabled)
+MAKE_ITEM_IMPL(HammerOnPullOff, EngravingItem)
 
 CREATE_ITEM_IMPL(Glissando, ElementType::GLISSANDO, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Glissando, EngravingItem)

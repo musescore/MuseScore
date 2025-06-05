@@ -102,6 +102,8 @@ public:
 
     Q_INVOKABLE void setDefaultNavigationControl(muse::ui::NavigationControl* control);
 
+    Q_INVOKABLE void forceLayout();
+
     QVariant tours() const;
     void setTours(const QVariant& newTours);
 
@@ -118,6 +120,7 @@ signals:
     void statusBarChanged(DockStatusBarView* statusBar);
 
     void toursChanged();
+    void layoutRequested();
 
 private:
     void componentComplete() override;

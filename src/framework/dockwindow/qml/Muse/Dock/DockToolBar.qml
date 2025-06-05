@@ -97,6 +97,8 @@ DockToolBarView {
 
         Loader {
             id: contentLoader
+
+            active: root.visible
         }
     }
 
@@ -111,8 +113,8 @@ DockToolBarView {
                 contentWidth: prv.gripButtonWidth + contentLoader.implicitWidth
                 contentHeight: Math.max(prv.gripButtonHeight, contentLoader.implicitHeight + root.contentBottomPadding + root.contentTopPadding)
 
-                maximumWidth: root.floating ? root.contentWidth : prv.maximumLength
-                maximumHeight: root.floating ? root.contentHeight : root.thickness
+                maximumWidth: (root.inited && root.floating && !root.resizable) ? root.contentWidth : prv.maximumLength
+                maximumHeight: (root.inited && root.floating && !root.resizable) ? root.contentHeight : root.thickness
             }
 
             PropertyChanges {
