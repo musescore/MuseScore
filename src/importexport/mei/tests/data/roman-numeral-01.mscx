@@ -436,7 +436,9 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>I.bVI+6</name>
+            <harmonyInfo>
+              <name>I.bVI+6</name>
+              </harmonyInfo>
             <eid>UB_UB</eid>
             </Harmony>
           <Beam>
@@ -490,7 +492,9 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>v%43(-3)</name>
+            <harmonyInfo>
+              <name>v%43(-3)</name>
+              </harmonyInfo>
             <eid>fB_fB</eid>
             </Harmony>
           <Chord>
@@ -524,7 +528,9 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V7/V</name>
+            <harmonyInfo>
+              <name>V7/V</name>
+              </harmonyInfo>
             <eid>mB_mB</eid>
             </Harmony>
           <Beam>
@@ -573,7 +579,9 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>bI+6(+4)</name>
+            <harmonyInfo>
+              <name>bI+6(+4)</name>
+              </harmonyInfo>
             <eid>wB_wB</eid>
             </Harmony>
           <Chord>
@@ -993,7 +1001,9 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>E.I7{</name>
+            <harmonyInfo>
+              <name>E.I7{</name>
+              </harmonyInfo>
             <eid>FD_FD</eid>
             </Harmony>
           <Beam>
@@ -1017,7 +1027,9 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>bVII7(b9)</name>
+            <harmonyInfo>
+              <name>bVII7(b9)</name>
+              </harmonyInfo>
             <eid>KD_KD</eid>
             </Harmony>
           <Chord>
@@ -1046,7 +1058,9 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V7(-5)/bIII</name>
+            <harmonyInfo>
+              <name>V7(-5)/bIII</name>
+              </harmonyInfo>
             <eid>QD_QD</eid>
             </Harmony>
           <Beam>
@@ -1070,7 +1084,9 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>VI7(b5b4)</name>
+            <harmonyInfo>
+              <name>VI7(b5b4)</name>
+              </harmonyInfo>
             <eid>VD_VD</eid>
             </Harmony>
           <Chord>
@@ -1458,7 +1474,9 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>N7(+6)</name>
+            <harmonyInfo>
+              <name>N7(+6)</name>
+              </harmonyInfo>
             <eid>iE_iE</eid>
             </Harmony>
           <Beam>
@@ -1492,7 +1510,9 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>I7(+#6#4)</name>
+            <harmonyInfo>
+              <name>I7(+#6#4)</name>
+              </harmonyInfo>
             <eid>pE_pE</eid>
             </Harmony>
           <Chord>
@@ -1531,7 +1551,9 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V7(v##6)/III</name>
+            <harmonyInfo>
+              <name>V7(v##6)/III</name>
+              </harmonyInfo>
             <eid>xE_xE</eid>
             </Harmony>
           <Beam>
@@ -1565,7 +1587,9 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>bII7(+#6##3##1)/V/V/V</name>
+            <harmonyInfo>
+              <name>bII7(+#6##3##1)/V/V/V</name>
+              </harmonyInfo>
             <eid>4E_4E</eid>
             </Harmony>
           <Chord>
@@ -1608,7 +1632,9 @@
         <voice>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V7/V/V</name>
+            <harmonyInfo>
+              <name>V7/V/V</name>
+              </harmonyInfo>
             <eid>AF_AF</eid>
             </Harmony>
           <Beam>
@@ -1652,7 +1678,9 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>Fr(+#5)</name>
+            <harmonyInfo>
+              <name>Fr(+#5)</name>
+              </harmonyInfo>
             <eid>JF_JF</eid>
             </Harmony>
           <Chord>
@@ -1686,7 +1714,12 @@
             </Chord>
           <Harmony>
             <harmonyType>1</harmonyType>
-            <name>V7|HC}</name>
+            <harmonyInfo>
+              <name>V7</name>
+              </harmonyInfo>
+            <harmonyInfo>
+              <name>HC}</name>
+              </harmonyInfo>
             <eid>QF_QF</eid>
             </Harmony>
           <Chord>

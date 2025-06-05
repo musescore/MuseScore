@@ -6,7 +6,7 @@
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-      <chordAlignmentToNotehead>0</chordAlignmentToNotehead>
+      <chordSymPosition>left</chordSymPosition>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -186,6 +186,7 @@
               <root>17</root>
               </harmonyInfo>
             <eid>R_R</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>S_S</eid>
@@ -429,6 +430,7 @@
                 </harmonyInfo>
               <eid>s_s</eid>
               <linkedTo>R_R</linkedTo>
+              <verticalAlign>0</verticalAlign>
               </Harmony>
             <Chord>
               <eid>t_t</eid>

@@ -107,8 +107,10 @@
             <eid>H_H</eid>
             </Dynamic>
           <Harmony>
-            <root>18</root>
-            <name>m</name>
+            <harmonyInfo>
+              <name>m</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>I_I</eid>
             </Harmony>
           <Tempo>
@@ -187,8 +189,10 @@
             <eid>W_W</eid>
             </Dynamic>
           <Harmony>
-            <root>18</root>
-            <name>m</name>
+            <harmonyInfo>
+              <name>m</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>X_X</eid>
             </Harmony>
           <Chord>
@@ -210,8 +214,10 @@
       <Measure>
         <voice>
           <Harmony>
-            <root>17</root>
-            <name>m</name>
+            <harmonyInfo>
+              <name>m</name>
+              <root>17</root>
+              </harmonyInfo>
             <eid>b_b</eid>
             </Harmony>
           <Chord>
@@ -233,8 +239,10 @@
       <Measure>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>m</name>
+            <harmonyInfo>
+              <name>m</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>f_f</eid>
             </Harmony>
           <Chord>

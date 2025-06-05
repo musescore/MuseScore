@@ -11,7 +11,7 @@
       <maxSystemDistance>6</maxSystemDistance>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-      <chordAlignmentToNotehead>0</chordAlignmentToNotehead>
+      <chordSymPosition>left</chordSymPosition>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -116,6 +116,7 @@
               <root>14</root>
               </harmonyInfo>
             <eid>F_F</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>G_G</eid>
@@ -165,6 +166,7 @@
               <root>14</root>
               </harmonyInfo>
             <eid>P_P</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>Q_Q</eid>
@@ -205,6 +207,7 @@
               <root>14</root>
               </harmonyInfo>
             <eid>X_X</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>Y_Y</eid>
@@ -249,6 +252,7 @@
               <root>14</root>
               </harmonyInfo>
             <eid>g_g</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>h_h</eid>
@@ -285,6 +289,7 @@
               <root>14</root>
               </harmonyInfo>
             <eid>n_n</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>o_o</eid>
@@ -325,6 +330,7 @@
               <root>14</root>
               </harmonyInfo>
             <eid>v_v</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>w_w</eid>
@@ -379,6 +385,7 @@
               <root>14</root>
               </harmonyInfo>
             <eid>6_6</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>7_7</eid>
@@ -419,6 +426,7 @@
               <root>21</root>
               </harmonyInfo>
             <eid>CB_CB</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>DB_DB</eid>
@@ -459,6 +467,7 @@
               <root>21</root>
               </harmonyInfo>
             <eid>KB_KB</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>LB_LB</eid>
@@ -509,6 +518,7 @@
               <root>21</root>
               </harmonyInfo>
             <eid>UB_UB</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>VB_VB</eid>
@@ -553,6 +563,7 @@
               <root>21</root>
               </harmonyInfo>
             <eid>dB_dB</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>eB_eB</eid>
@@ -606,6 +617,7 @@
               <root>21</root>
               </harmonyInfo>
             <eid>oB_oB</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>pB_pB</eid>
@@ -656,6 +668,7 @@
               <root>21</root>
               </harmonyInfo>
             <eid>yB_yB</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>zB_zB</eid>
@@ -704,6 +717,7 @@
               <root>21</root>
               </harmonyInfo>
             <eid>8B_8B</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>9B_9B</eid>
@@ -759,6 +773,7 @@
               <root>16</root>
               </harmonyInfo>
             <eid>HC_HC</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>IC_IC</eid>
@@ -800,6 +815,7 @@
               <root>16</root>
               </harmonyInfo>
             <eid>PC_PC</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>QC_QC</eid>
@@ -840,6 +856,7 @@
               <root>16</root>
               </harmonyInfo>
             <eid>XC_XC</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>YC_YC</eid>
@@ -883,6 +900,7 @@
               <root>16</root>
               </harmonyInfo>
             <eid>gC_gC</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>hC_hC</eid>
@@ -923,6 +941,7 @@
               <root>16</root>
               </harmonyInfo>
             <eid>oC_oC</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>pC_pC</eid>
@@ -963,6 +982,7 @@
               <root>16</root>
               </harmonyInfo>
             <eid>wC_wC</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>xC_xC</eid>
@@ -1013,6 +1033,7 @@
               <root>16</root>
               </harmonyInfo>
             <eid>6C_6C</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>7C_7C</eid>
@@ -1061,6 +1082,7 @@
               <root>23</root>
               </harmonyInfo>
             <eid>ED_ED</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>FD_FD</eid>
@@ -1110,6 +1132,7 @@
               <root>23</root>
               </harmonyInfo>
             <eid>OD_OD</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>PD_PD</eid>
@@ -1165,6 +1188,7 @@
               <root>23</root>
               </harmonyInfo>
             <eid>ZD_ZD</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>aD_aD</eid>
@@ -1214,6 +1238,7 @@
               <root>23</root>
               </harmonyInfo>
             <eid>jD_jD</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>kD_kD</eid>
@@ -1270,6 +1295,7 @@
               <root>23</root>
               </harmonyInfo>
             <eid>uD_uD</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>vD_vD</eid>
@@ -1325,6 +1351,7 @@
               <root>23</root>
               </harmonyInfo>
             <eid>5D_5D</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>6D_6D</eid>
@@ -1374,6 +1401,7 @@
               <root>23</root>
               </harmonyInfo>
             <eid>DE_DE</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>EE_EE</eid>
@@ -1430,6 +1458,7 @@
               <root>18</root>
               </harmonyInfo>
             <eid>OE_OE</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>PE_PE</eid>
@@ -1470,6 +1499,7 @@
               <root>18</root>
               </harmonyInfo>
             <eid>WE_WE</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>XE_XE</eid>
@@ -1514,6 +1544,7 @@
               <root>18</root>
               </harmonyInfo>
             <eid>fE_fE</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>gE_gE</eid>
@@ -1553,6 +1584,7 @@
               <root>18</root>
               </harmonyInfo>
             <eid>nE_nE</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>oE_oE</eid>
@@ -1593,6 +1625,7 @@
               <root>18</root>
               </harmonyInfo>
             <eid>vE_vE</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>wE_wE</eid>
@@ -1637,6 +1670,7 @@
               <root>18</root>
               </harmonyInfo>
             <eid>4E_4E</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>5E_5E</eid>
@@ -1686,6 +1720,7 @@
               <root>18</root>
               </harmonyInfo>
             <eid>CF_CF</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>DF_DF</eid>
@@ -1736,6 +1771,7 @@
               <root>13</root>
               </harmonyInfo>
             <eid>MF_MF</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>NF_NF</eid>
@@ -1786,6 +1822,7 @@
               <root>13</root>
               </harmonyInfo>
             <eid>WF_WF</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>XF_XF</eid>
@@ -1826,6 +1863,7 @@
               <root>13</root>
               </harmonyInfo>
             <eid>eF_eF</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>fF_fF</eid>
@@ -1870,6 +1908,7 @@
               <root>13</root>
               </harmonyInfo>
             <eid>nF_nF</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>oF_oF</eid>
@@ -1906,6 +1945,7 @@
               <root>13</root>
               </harmonyInfo>
             <eid>uF_uF</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>vF_vF</eid>
@@ -1946,6 +1986,7 @@
               <root>13</root>
               </harmonyInfo>
             <eid>2F_2F</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>3F_3F</eid>
@@ -2001,6 +2042,7 @@
               <root>13</root>
               </harmonyInfo>
             <eid>BG_BG</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>CG_CG</eid>
@@ -2037,6 +2079,7 @@
               <root>20</root>
               </harmonyInfo>
             <eid>IG_IG</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>JG_JG</eid>
@@ -2077,6 +2120,7 @@
               <root>20</root>
               </harmonyInfo>
             <eid>QG_QG</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>RG_RG</eid>
@@ -2126,6 +2170,7 @@
               <root>20</root>
               </harmonyInfo>
             <eid>aG_aG</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>bG_bG</eid>
@@ -2170,6 +2215,7 @@
               <root>20</root>
               </harmonyInfo>
             <eid>jG_jG</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>kG_kG</eid>
@@ -2223,6 +2269,7 @@
               <root>20</root>
               </harmonyInfo>
             <eid>uG_uG</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>vG_vG</eid>
@@ -2272,6 +2319,7 @@
               <root>20</root>
               </harmonyInfo>
             <eid>4G_4G</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>5G_5G</eid>
@@ -2320,6 +2368,7 @@
               <root>20</root>
               </harmonyInfo>
             <eid>CH_CH</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>DH_DH</eid>
@@ -2375,6 +2424,7 @@
               <root>15</root>
               </harmonyInfo>
             <eid>NH_NH</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>OH_OH</eid>
@@ -2420,6 +2470,7 @@
               <root>15</root>
               </harmonyInfo>
             <eid>WH_WH</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>XH_XH</eid>
@@ -2456,6 +2507,7 @@
               <root>15</root>
               </harmonyInfo>
             <eid>dH_dH</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>eH_eH</eid>
@@ -2496,6 +2548,7 @@
               <root>15</root>
               </harmonyInfo>
             <eid>lH_lH</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>mH_mH</eid>
@@ -2532,6 +2585,7 @@
               <root>15</root>
               </harmonyInfo>
             <eid>sH_sH</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>tH_tH</eid>
@@ -2568,6 +2622,7 @@
               <root>15</root>
               </harmonyInfo>
             <eid>zH_zH</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>0H_0H</eid>
@@ -2622,6 +2677,7 @@
               <root>15</root>
               </harmonyInfo>
             <eid>+H_+H</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>/H_/H</eid>
@@ -2666,6 +2722,7 @@
               <root>22</root>
               </harmonyInfo>
             <eid>HI_HI</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>II_II</eid>
@@ -2710,6 +2767,7 @@
               <root>22</root>
               </harmonyInfo>
             <eid>QI_QI</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>RI_RI</eid>
@@ -2764,6 +2822,7 @@
               <root>22</root>
               </harmonyInfo>
             <eid>bI_bI</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>cI_cI</eid>
@@ -2812,6 +2871,7 @@
               <root>22</root>
               </harmonyInfo>
             <eid>lI_lI</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>mI_mI</eid>
@@ -2866,6 +2926,7 @@
               <root>22</root>
               </harmonyInfo>
             <eid>wI_wI</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>xI_xI</eid>
@@ -2920,6 +2981,7 @@
               <root>22</root>
               </harmonyInfo>
             <eid>7I_7I</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>8I_8I</eid>
@@ -2964,6 +3026,7 @@
               <root>22</root>
               </harmonyInfo>
             <eid>EJ_EJ</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>FJ_FJ</eid>
@@ -3019,6 +3082,7 @@
               <root>17</root>
               </harmonyInfo>
             <eid>PJ_PJ</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>QJ_QJ</eid>
@@ -3059,6 +3123,7 @@
               <root>17</root>
               </harmonyInfo>
             <eid>XJ_XJ</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>YJ_YJ</eid>
@@ -3099,6 +3164,7 @@
               <root>17</root>
               </harmonyInfo>
             <eid>fJ_fJ</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>gJ_gJ</eid>
@@ -3142,6 +3208,7 @@
               <root>17</root>
               </harmonyInfo>
             <eid>oJ_oJ</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>pJ_pJ</eid>
@@ -3182,6 +3249,7 @@
               <root>17</root>
               </harmonyInfo>
             <eid>wJ_wJ</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>xJ_xJ</eid>
@@ -3222,6 +3290,7 @@
               <root>17</root>
               </harmonyInfo>
             <eid>4J_4J</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>5J_5J</eid>
@@ -3271,6 +3340,7 @@
               <root>17</root>
               </harmonyInfo>
             <eid>CK_CK</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>DK_DK</eid>
@@ -3320,6 +3390,7 @@
               <root>24</root>
               </harmonyInfo>
             <eid>MK_MK</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>NK_NK</eid>
@@ -3369,6 +3440,7 @@
               <root>24</root>
               </harmonyInfo>
             <eid>WK_WK</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>XK_XK</eid>
@@ -3424,6 +3496,7 @@
               <root>24</root>
               </harmonyInfo>
             <eid>hK_hK</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>iK_iK</eid>
@@ -3473,6 +3546,7 @@
               <root>24</root>
               </harmonyInfo>
             <eid>rK_rK</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>sK_sK</eid>
@@ -3529,6 +3603,7 @@
               <root>24</root>
               </harmonyInfo>
             <eid>2K_2K</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>3K_3K</eid>
@@ -3584,6 +3659,7 @@
               <root>24</root>
               </harmonyInfo>
             <eid>BL_BL</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>CL_CL</eid>
@@ -3633,6 +3709,7 @@
               <root>24</root>
               </harmonyInfo>
             <eid>LL_LL</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>ML_ML</eid>
@@ -3689,6 +3766,7 @@
               <root>19</root>
               </harmonyInfo>
             <eid>WL_WL</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>XL_XL</eid>
@@ -3725,6 +3803,7 @@
               <root>19</root>
               </harmonyInfo>
             <eid>dL_dL</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>eL_eL</eid>
@@ -3770,6 +3849,7 @@
               <root>19</root>
               </harmonyInfo>
             <eid>mL_mL</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>nL_nL</eid>
@@ -3810,6 +3890,7 @@
               <root>19</root>
               </harmonyInfo>
             <eid>uL_uL</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>vL_vL</eid>
@@ -3855,6 +3936,7 @@
               <root>19</root>
               </harmonyInfo>
             <eid>3L_3L</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>4L_4L</eid>
@@ -3900,6 +3982,7 @@
               <root>19</root>
               </harmonyInfo>
             <eid>AM_AM</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>BM_BM</eid>
@@ -3941,6 +4024,7 @@
               <root>19</root>
               </harmonyInfo>
             <eid>IM_IM</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>JM_JM</eid>
