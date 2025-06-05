@@ -1098,7 +1098,20 @@ TEST_F(MusicXml_Tests, stringVoiceName) {
     musicXmlIoTestRef("testStringVoiceName");
 }
 TEST_F(MusicXml_Tests, swing) {
+    // Test integer swing as before (reference)
     musicXmlIoTest("testSwing");
+
+    // Test float swing, compare exported file to integer swing reference
+    String fileName = String::fromUtf8("testSwingFloat.xml");
+    MasterScore* score = readScore(XML_IO_DATA_DIR + fileName);
+    ASSERT_TRUE(score);
+    fixupScore(score);
+    score->doLayout();
+
+    // Export and compare to testSwing.xml (reference)
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, u"testSwingFloat.xml", u"testSwing.xml"));
+
+    delete score;
 }
 TEST_F(MusicXml_Tests, systemBrackets1) {
     musicXmlIoTest("testSystemBrackets1");
