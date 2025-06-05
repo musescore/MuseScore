@@ -565,6 +565,8 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
         return false;
     }
 
+    newPage->setVisible(true);
+
     loadPageContent(newPage);
     restorePageState(newPage);
     initDocks(newPage);
@@ -575,8 +577,6 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
 
     connect(m_currentPage, &DockPageView::layoutRequested,
             this, &DockWindow::forceLayout, Qt::UniqueConnection);
-
-    m_currentPage->setVisible(true);
 
     return true;
 }
