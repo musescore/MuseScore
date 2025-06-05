@@ -145,9 +145,10 @@ bool MStyle::readProperties(XmlReader& e)
                 Align align = TConv::fromXml(e.readText(), Align());
                 set(idx, align);
             } break;
-            case P_TYPE::ALIGN_H:
-                set(idx, AlignH(e.readInt()));
-                break;
+            case P_TYPE::ALIGN_H: {
+                AlignH align = TConv::fromXml(e.readAsciiText(), AlignH::HCENTER);
+                set(idx, align);
+            } break;
             case P_TYPE::POINT: {
                 double x = e.doubleAttribute("x", 0.0);
                 double y = e.doubleAttribute("y", 0.0);
@@ -639,7 +640,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             }
             xml.tag(st.name(), TConv::toXml(a));
         } else if (P_TYPE::ALIGN_H == type) {
-            xml.tag(st.name(), int(value(idx).value<AlignH>()));
+            xml.tag(st.name(), TConv::toXml(value(idx).value<AlignH>()));
         } else if (P_TYPE::LINE_TYPE == type) {
             xml.tagProperty(st.name(), value(idx));
         } else if (P_TYPE::TIE_PLACEMENT == type) {
