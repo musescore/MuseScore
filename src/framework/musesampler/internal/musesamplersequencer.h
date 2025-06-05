@@ -94,7 +94,7 @@ private:
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
     void addTextArticulation(const String& articulationCode, long long startUs, ms_Track track);
     void addPresets(const StringList& presets, long long startUs, ms_Track track);
-    void addSyllable(const String& syllable, long long positionUs, ms_Track track);
+    void addSyllable(const String& syllable, bool hyphenedToNext, long long positionUs, ms_Track track);
     void addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
     void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
 

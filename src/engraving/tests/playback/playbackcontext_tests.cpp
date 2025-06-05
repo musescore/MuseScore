@@ -648,23 +648,27 @@ TEST_F(Engraving_PlaybackContextTests, SoundFlags)
         EXPECT_TRUE(params.empty());
 
         params = ctx.playbackParams(trackIdx, 2000);
+        sulTasto.flags.setFlag(PlaybackParam::IsPersistent, true);
         EXPECT_EQ(params, PlaybackParamList { sulTasto });
 
         params = ctx.playbackParams(trackIdx, 4500);
-
         staff_idx_t staffIdx = track2staff(trackIdx);
 
         if (staffIdx == 1) {
+            pizz.flags.setFlag(PlaybackParam::IsPersistent, true);
             EXPECT_EQ(params, PlaybackParamList { pizz });
         } else {
+            bartok.flags.setFlag(PlaybackParam::IsPersistent, true);
             EXPECT_EQ(params, PlaybackParamList { bartok });
         }
 
         params = ctx.playbackParams(trackIdx, 7680);
 
         if (staffIdx == 1) {
+            espressivo.flags.setFlag(PlaybackParam::IsPersistent, false);
             EXPECT_EQ(params, PlaybackParamList { espressivo });
         } else {
+            bartok.flags.setFlag(PlaybackParam::IsPersistent, true);
             EXPECT_EQ(params, PlaybackParamList { bartok });
         }
     }

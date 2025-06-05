@@ -345,6 +345,15 @@ typedef ms_Result (* ms_MuseSampler_add_track_syllable_event)(ms_MuseSampler ms,
 typedef bool (* ms_MuseSampler_ready_to_play)(ms_MuseSampler ms);
 typedef bool (* ms_Instrument_is_online)(ms_InstrumentInfo);
 
+typedef struct ms_SyllableEvent2
+{
+    const char* _text;
+    long long _position_us;
+    bool _hyphened_to_next;
+} ms_SyllableEvent2;
+
+typedef ms_Result (* ms_MuseSampler_add_track_syllable_event_2)(ms_MuseSampler ms, ms_Track track, ms_SyllableEvent2 evt);
+
 typedef enum ms_RenderingState
 {
     ms_RenderingState_Rendering,
@@ -392,6 +401,7 @@ struct AuditionStopNoteEvent {
 };
 
 using NoteEvent = ms_NoteEvent_4;
+using SyllableEvent = ms_SyllableEvent2;
 }
 
 #endif // MUSE_MUSESAMPLER_APITYPES_H

@@ -177,7 +177,7 @@ PlaybackParamList PlaybackContext::playbackParams(const track_idx_t trackIdx, co
 
         bool persistent = !startAtNominalTick;
         for (size_t i = result.size() - params.size(); i < result.size(); ++i) {
-            result.at(i).isPersistent = persistent;
+            result.at(i).flags.setFlag(PlaybackParam::IsPersistent, persistent);
         }
     };
 
@@ -422,6 +422,23 @@ void PlaybackContext::updatePlaybackParamsForText(const TextBase* text, const in
     }
 
     PlaybackParam param(PlaybackParam::Syllable, text->plainText());
+    if (param.val.empty()) {
+        return;
+    }
+
+    if (text->isLyrics()) {
+        const Lyrics* lyrics = toLyrics(text);
+
+        switch (lyrics->syllabic()) {
+        case LyricsSyllabic::BEGIN:
+        case LyricsSyllabic::MIDDLE:
+            param.flags.setFlag(PlaybackParam::HyphenedToNext);
+            break;
+        case LyricsSyllabic::SINGLE:
+        case LyricsSyllabic::END:
+            break;
+        }
+    }
 
     staff_idx_t staffIdx = text->staffIdx();
 
