@@ -10,6 +10,7 @@
       <maskBarlinesForText>0</maskBarlinesForText>
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <chordSymPosition>left</chordSymPosition>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>

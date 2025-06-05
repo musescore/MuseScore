@@ -12,6 +12,7 @@
       <pedalPosBelow x="0" y="0"/>
       <trillPosAbove x="0" y="0"/>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <chordSymPosition>left</chordSymPosition>
       <minMMRestWidth>0</minMMRestWidth>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>

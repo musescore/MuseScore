@@ -6,6 +6,7 @@
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <chordSymPosition>left</chordSymPosition>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -427,8 +428,11 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>MB_MB</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>NB_NB</eid>
@@ -487,9 +491,12 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>15</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>15</root>
+              </harmonyInfo>
             <eid>UB_UB</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           </voice>
         </Measure>

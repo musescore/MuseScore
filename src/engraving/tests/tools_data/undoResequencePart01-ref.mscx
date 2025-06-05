@@ -8,6 +8,7 @@
       <lastSystemFillLimit>0.03</lastSystemFillLimit>
       <showMeasureNumber>0</showMeasureNumber>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <chordSymPosition>left</chordSymPosition>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -341,6 +342,7 @@
         <lastSystemFillLimit>0.03</lastSystemFillLimit>
         <showMeasureNumber>0</showMeasureNumber>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+        <chordSymPosition>left</chordSymPosition>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
         <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
