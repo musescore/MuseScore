@@ -191,9 +191,6 @@ public:
     int line() const { return ldata()->up ? upLine() : downLine(); }
     int upLine() const;
     int downLine() const;
-    PointF stemPos() const override;            ///< page coordinates
-    PointF stemPosBeam() const override;        ///< page coordinates
-    double stemPosX() const override;
     double rightEdge() const override;
 
     bool underBeam() const;
@@ -313,7 +310,6 @@ public:
 
     double upPos()   const override;
     double downPos() const override;
-    double centerX() const;
 
     struct StartEndSlurs {
         bool startUp = false;

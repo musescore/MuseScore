@@ -2156,7 +2156,7 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata, con
 
         if (e->isChord()) {
             const Chord* chord = toChord(e);
-            x = chord->x() + chord->centerX();
+            x = chord->x() + ChordLayout::centerX(chord);
         } else if (e->isRest()) {
             const Rest* rest = toRest(e);
             x = rest->x() + rest->centerX();

@@ -445,61 +445,6 @@ double Chord::noteHeadWidth() const
     return score()->noteHeadWidth() * mag();
 }
 
-//! Returns Chord coordinates
-double Chord::stemPosX() const
-{
-    const StaffType* staffType = this->staffType();
-    if (staffType && staffType->isTabStaff()) {
-        double xPos = staffType->chordStemPosX(this) * spatium();
-        if (isGraceBendEnd()) {
-            GraceNotesGroup& graceBefore = graceNotesBefore();
-            Chord* grace = graceBefore.empty() ? nullptr : graceBefore.front();
-            if (grace) {
-                xPos += grace->pos().x();
-            }
-        }
-        return xPos;
-    }
-    return ldata()->up ? noteHeadWidth() : 0.0;
-}
-
-//! Returns page coordinates
-PointF Chord::stemPos() const
-{
-    const Staff* staff = this->staff();
-    const StaffType* staffType = staff ? staff->staffTypeForElement(this) : nullptr;
-    if (staffType && staffType->isTabStaff()) {
-        return pagePos() + staffType->chordStemPos(this) * spatium();
-    }
-
-    if (ldata()->up) {
-        const Note* downNote = this->downNote();
-        double nhw = m_notes.size() == 1 ? downNote->bboxRightPos() : noteHeadWidth();
-        return pagePos() + PointF(nhw, downNote->pos().y());
-    }
-
-    return pagePos() + PointF(0.0, upNote()->pos().y());
-}
-
-//! Returns stem position of note on beam side
-//! Returns page coordinates
-PointF Chord::stemPosBeam() const
-{
-    const Staff* stf = this->staff();
-    const StaffType* st = stf ? stf->staffTypeForElement(this) : nullptr;
-
-    if (st && st->isTabStaff()) {
-        return pagePos() + st->chordStemPosBeam(this) * spatium();
-    }
-
-    if (ldata()->up) {
-        double nhw = noteHeadWidth();
-        return pagePos() + PointF(nhw, upNote()->pos().y());
-    }
-
-    return pagePos() + PointF(0, downNote()->pos().y());
-}
-
 //---------------------------------------------------------
 //   rightEdge
 //---------------------------------------------------------
@@ -888,25 +833,6 @@ double Chord::upPos() const
 double Chord::downPos() const
 {
     return downNote()->pos().y();
-}
-
-//---------------------------------------------------------
-//   centerX
-//    return x position for attributes
-//---------------------------------------------------------
-
-double Chord::centerX() const
-{
-    // TAB 'notes' are always centered on the stem
-    const Staff* st = staff();
-    const StaffType* stt = st->staffTypeForElement(this);
-    if (stt->isTabStaff()) {
-        return stt->chordStemPosX(this) * spatium();
-    }
-
-    const Note* note = up() ? downNote() : upNote();
-    double x = note->pos().x() + note->noteheadCenterX();
-    return x;
 }
 
 bool Chord::allNotesTiedToNext() const
