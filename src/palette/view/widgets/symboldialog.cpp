@@ -60,13 +60,13 @@ void SymbolDialog::createSymbols()
     // init the font if not done yet
     engravingFonts()->fontByName(f->name());
     m_symbolsWidget->clear();
-    for (auto name : Smufl::smuflRanges().at(range)) {
-        SymId id = SymNames::symIdByName(name);
+    for (SymId symId : Smufl::smuflRanges().at(range)) {
+        String symName = SymNames::translatedUserNameForSymId(symId);
         if (search->text().isEmpty()
-            || SymNames::translatedUserNameForSymId(id).toQString().contains(search->text(), Qt::CaseInsensitive)) {
+            || symName.toQString().contains(search->text(), Qt::CaseInsensitive)) {
             auto s = std::make_shared<Symbol>(gpaletteScore->dummy());
-            s->setSym(SymId(id), f);
-            m_symbolsWidget->appendElement(s, SymNames::translatedUserNameForSymId(SymId(id)));
+            s->setSym(symId, f);
+            m_symbolsWidget->appendElement(s, symName);
         }
     }
 }
