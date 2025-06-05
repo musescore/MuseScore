@@ -38,7 +38,6 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/score.h"
-#include "engraving/dom/stem.h"
 #include "engraving/dom/utils.h"
 
 #include "notation/utilities/percussionutilities.h"
@@ -51,8 +50,6 @@ using namespace mu::palette;
 using namespace muse::io;
 using namespace mu::notation;
 using namespace mu::engraving;
-
-static const QString CUSTOMIZE_KIT_DIALOG_NAME("CustomizeKitDialog");
 
 enum Column : char {
     PITCH, NOTE, SHORTCUT, NAME
@@ -124,14 +121,21 @@ struct SymbolIcon {
         QPixmap image(w, h);
         image.fill(Qt::transparent);
         muse::draw::Painter painter(&image, "generateicon");
+
         const muse::RectF& bbox = CustomizeKitDialog::engravingFonts()->fallbackFont()->bbox(id, 1);
         const qreal actualSymbolScale = std::min(w / bbox.width(), h / bbox.height());
         qreal mag = std::min(defaultScale, actualSymbolScale);
         const qreal& xStShift = (w - mag * bbox.width()) / 2 - mag * bbox.left();
         const qreal& yStShift = (h - mag * bbox.height()) / 2 - mag * bbox.top();
         const muse::PointF& stPtPos = muse::PointF(xStShift, yStShift);
+
+        painter.setPen(Color(CustomizeKitDialog::uiConfiguration()->currentTheme().values[muse::ui::FONT_PRIMARY_COLOR].toString()));
+        painter.setBrush(Color::transparent);
+
         CustomizeKitDialog::engravingFonts()->fallbackFont()->draw(id, &painter, mag, stPtPos);
+
         icon.addPixmap(image);
+
         return SymbolIcon(id, icon);
     }
 };
@@ -139,7 +143,7 @@ struct SymbolIcon {
 CustomizeKitDialog::CustomizeKitDialog(QWidget* parent)
     : QDialog(parent)
 {
-    setObjectName(CUSTOMIZE_KIT_DIALOG_NAME);
+    setObjectName(QStringLiteral("CustomizeKitDialog"));
 
     m_notation = globalContext()->currentNotation();
     if (!m_notation) {
