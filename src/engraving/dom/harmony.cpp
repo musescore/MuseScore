@@ -359,6 +359,24 @@ int Harmony::id() const
     return m_chords.front()->id();
 }
 
+//---------------------------------------------------------
+//   getParentSeg
+///   gets the parent segment of this harmony
+//---------------------------------------------------------
+
+Segment* Harmony::getParentSeg() const
+{
+    Segment* seg = nullptr;
+    if (explicitParent()->isFretDiagram()) {
+        // When this harmony is the child of a fret diagram, we need to go up twice
+        // to get to the parent seg.
+        seg = toFretDiagram(explicitParent())->segment();
+    } else {
+        seg = toSegment(explicitParent());
+    }
+    return seg;
+}
+
 void Harmony::afterRead()
 {
     // TODO: now that we can render arbitrary chords,
@@ -750,7 +768,7 @@ void Harmony::endEditTextual(EditData& ed)
     bool textChanged = ted != nullptr && ted->oldXmlText != harmonyName();
 
     if (textChanged) {
-        Segment* parentSegment = toSegment(findAncestor(ElementType::SEGMENT));
+        Segment* parentSegment = getParentSeg();
         if (parentSegment) {
             EngravingItem* fretDiagramItem = parentSegment->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
             if (fretDiagramItem) {
@@ -785,7 +803,7 @@ void Harmony::endEditTextual(EditData& ed)
             // we may now need to change the TPC's and the text, and re-render
             if (style().styleB(Sid::concertPitch) != h->style().styleB(Sid::concertPitch)) {
                 Staff* staffDest = h->staff();
-                Segment* segment = toSegment(findAncestor(ElementType::SEGMENT));
+                Segment* segment = getParentSeg();
                 Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
                 Interval interval = staffDest->transpose(tick);
                 if (!interval.isZero()) {
@@ -913,7 +931,7 @@ Harmony* Harmony::findInSeg(Segment* seg) const
 
 Harmony* Harmony::findNext() const
 {
-    const Segment* segment = toSegment(findAncestor(ElementType::SEGMENT));
+    const Segment* segment = getParentSeg();
     Segment* cur = segment ? segment->next1() : nullptr;
     while (cur) {
         Harmony* h = findInSeg(cur);
@@ -934,8 +952,8 @@ Harmony* Harmony::findNext() const
 
 Harmony* Harmony::findPrev() const
 {
-    const Segment* segment = toSegment(findAncestor(ElementType::SEGMENT));
-    Segment* cur = segment ? segment->next1() : nullptr;
+    const Segment* segment = getParentSeg();
+    Segment* cur = segment ? segment->prev1() : nullptr;
     while (cur) {
         Harmony* h = findInSeg(cur);
         if (h) {
@@ -957,7 +975,7 @@ Harmony* Harmony::findPrev() const
 //---------------------------------------------------------
 Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
 {
-    const Segment* seg = toSegment(findAncestor(ElementType::SEGMENT));
+    const Segment* seg = getParentSeg();
     if (!seg) {
         return Fraction(-1, 1);
     }

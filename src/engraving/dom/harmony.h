@@ -193,6 +193,7 @@ public:
     void setLeftParen(bool leftParen) { m_leftParen = leftParen; }
     void setRightParen(bool rightParen) { m_rightParen = rightParen; }
 
+    Segment* getParentSeg() const;
     Harmony* findNext() const;
     Harmony* findPrev() const;
     Fraction ticksTillNext(int utick, bool stopAtMeasureEnd = false) const;

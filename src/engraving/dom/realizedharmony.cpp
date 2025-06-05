@@ -255,7 +255,7 @@ Fraction RealizedHarmony::getActualDuration(int utick, HDuration durationType) c
         return m_harmony->ticksTillNext(utick, true);
         break;
     case HDuration::SEGMENT_DURATION: {
-        Segment* s = toSegment(m_harmony->findAncestor(ElementType::SEGMENT));
+        Segment* s = m_harmony->getParentSeg();
         if (s) {
             // TODO - use duration of chordrest on this segment / track
             // currently, this will result in too short of a duration

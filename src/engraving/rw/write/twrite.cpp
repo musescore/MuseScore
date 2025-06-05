@@ -1676,7 +1676,7 @@ static void writeHarmonyInfo(const HarmonyInfo* item, const Harmony* h, XmlWrite
         int rBassTpc = item->bassTpc();
         if (h->staff()) {
             // parent can be a fret diagram
-            const Segment* segment = toSegment(h->findAncestor(ElementType::SEGMENT));
+            const Segment* segment = h->getParentSeg();
             Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
             const Interval& interval = h->staff()->transpose(tick);
             if (ctx.clipboardmode() && !h->score()->style().styleB(Sid::concertPitch) && interval.chromatic) {

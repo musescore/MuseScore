@@ -1142,7 +1142,7 @@ EngravingItem* Score::prevElement()
                 return fretBox;
             } else if (harmony->explicitParent()->isFretDiagram()) {
                 // jump over fret diagram
-                e = harmony->findAncestor(ElementType::SEGMENT);
+                e = harmony->getParentSeg();
                 continue;
             }
             break;
