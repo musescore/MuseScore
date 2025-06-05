@@ -28,6 +28,7 @@ namespace mu::engraving {
 class Chord;
 class Stem;
 class StaffType;
+class Rest;
 }
 
 namespace mu::engraving::rendering::score {
@@ -65,8 +66,15 @@ public:
     static int minStaffOverlap(bool up, int staffLines, int beamCount, bool hasHook, double beamSpacing, bool useWideBeams,
                                bool isFullSize);
 
+    static double stemPosX(const ChordRest* item);
+    static double stemPosX(const Chord* item);
+    static double stemPosX(const Rest* item);
+
+    static PointF stemPos(const ChordRest* item);
+    static PointF stemPos(const Chord* item);
+    static PointF stemPos(const Rest* item);
+
     static double tabStemLength(const Chord* item, const StaffType* st);
-    static PointF tabStemPosBeam(const Chord* item, const StaffType* st);
     static double tabStemPosX() { return STAFFTYPE_TAB_DEFAULTSTEMPOSX; }
     static double tabRestStemPosY(const ChordRest* item, const StaffType* st);
     static PointF tabStemPos(const Chord* item, const StaffType* st);

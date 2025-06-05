@@ -24,6 +24,7 @@
 #include "dom/chord.h"
 #include "dom/hook.h"
 #include "dom/note.h"
+#include "dom/rest.h"
 #include "dom/staff.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
@@ -177,6 +178,65 @@ int StemLayout::minStaffOverlap(bool up, int staffLines, int beamCount, bool has
     return (staffLines - 1) * 4 - staffOverlap;
 }
 
+double StemLayout::stemPosX(const ChordRest* item)
+{
+    return item->isChord() ? stemPosX(toChord(item)) : stemPosX(toRest(item));
+}
+
+double StemLayout::stemPosX(const Chord* item)
+{
+    const StaffType* staffType = item->staffType();
+    if (!staffType || !staffType->isTabStaff()) {
+        return item->ldata()->up ? item->noteHeadWidth() : 0.0;
+    }
+
+    double xPos = rendering::score::StemLayout::tabStemPosX() * item->spatium();
+    if (item->isGraceBendEnd()) {
+        GraceNotesGroup& graceBefore = item->graceNotesBefore();
+        Chord* grace = graceBefore.empty() ? nullptr : graceBefore.front();
+        if (grace) {
+            xPos += grace->pos().x();
+        }
+    }
+    return xPos;
+}
+
+double StemLayout::stemPosX(const Rest* item)
+{
+    if (item->ldata()->up) {
+        return item->ldata()->bbox().right();
+    }
+
+    return item->ldata()->bbox().left();
+}
+
+PointF StemLayout::stemPos(const ChordRest* item)
+{
+    return item->isChord() ? stemPos(toChord(item)) : stemPos(toRest(item));
+}
+
+PointF StemLayout::stemPos(const Chord* item)
+{
+    const Staff* staff = item->staff();
+    const StaffType* staffType = staff ? staff->staffTypeForElement(item) : nullptr;
+    if (staffType && staffType->isTabStaff()) {
+        return item->pagePos() + rendering::score::StemLayout::tabStemPos(item, staffType) * item->spatium();
+    }
+
+    if (item->ldata()->up) {
+        const Note* downNote = item->downNote();
+        double nhw = item->notes().size() == 1 ? downNote->bboxRightPos() : item->noteHeadWidth();
+        return item->pagePos() + PointF(nhw, downNote->pos().y());
+    }
+
+    return item->pagePos() + PointF(0.0, item->upNote()->pos().y());
+}
+
+PointF StemLayout::stemPos(const Rest* item)
+{
+    return item->pagePos();
+}
+
 //---------------------------------------------------------
 //   tabRestStemPosY / chordStemPos / chordStemPosBeam / chordStemLength
 //
@@ -233,18 +293,6 @@ double StemLayout::tabStemLength(const Chord* item, const StaffType* st)
     }
     // scale length by scale of parent chord, but relative to scale of context staff
     return stemLen * item->mag() / item->staff()->staffMag(item->tick());
-}
-
-//---------------------------------------------------------
-//   tabStemPosBeam
-//          return position of note at beam side of stem
-//---------------------------------------------------------
-
-PointF StemLayout::tabStemPosBeam(const Chord* item, const StaffType* st)
-{
-    double y = (st->stemsDown() ? item->downString() : item->upString()) * st->lineDistance().val();
-
-    return PointF(tabStemPosX(), y);
 }
 
 //---------------------------------------------------------

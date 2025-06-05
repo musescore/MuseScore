@@ -959,11 +959,11 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
             // we can't rely on comparing topFirst and bottomFirst ->tick() because beamed
             // graces have the same tick
             if (ldata->elements[0] == topFirst) {
-                yFirst = topFirst->stemPos().y();
-                yLast = bottomFirst->stemPos().y();
+                yFirst = StemLayout::stemPos(topFirst).y();
+                yLast = StemLayout::stemPos(bottomFirst).y();
             } else {
-                yFirst = bottomFirst->stemPos().y();
-                yLast = topFirst->stemPos().y();
+                yFirst = StemLayout::stemPos(bottomFirst).y();
+                yLast = StemLayout::stemPos(topFirst).y();
             }
             int desiredSlant = round((yFirst - yLast) / spatium);
             int slant = std::min(std::abs(desiredSlant), getMaxSlope(ldata));
@@ -1281,13 +1281,13 @@ int BeamTremoloLayout::getBeamCount(const BeamBase::LayoutData* ldata, const std
 double BeamTremoloLayout::chordBeamAnchorX(const BeamBase::LayoutData* ldata, const ChordRest* cr, ChordBeamAnchorType anchorType)
 {
     double pagePosX = ldata->trem ? ldata->trem->pagePos().x() : ldata->beam ? ldata->beam->pagePos().x() : 0.0;
-    double stemPosX = cr->stemPosX() + cr->pagePos().x() - pagePosX;
+    double stemPosX = StemLayout::stemPosX(cr) + cr->pagePos().x() - pagePosX;
 
     if (!cr->isChord() || !toChord(cr)->stem()) {
         if (!ldata->up) {
             // rests always return the right side of the glyph as their stemPosX
             // so we need to adjust back to the left side if stems are down
-            stemPosX -= cr->stemPosX();
+            stemPosX -= StemLayout::stemPosX(cr);
         }
         return stemPosX;
     }
