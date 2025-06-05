@@ -1853,13 +1853,13 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
         break;
     case ElementType::STAFFTYPE_CHANGE: {
         EngravingItem* el = dropTarget(edd.ed);
-        if (el->isMeasure()) {
-            Measure* m = toMeasure(el);
+        Measure* m = el ? el->findMeasure() : nullptr;
+        if (m) {
             System* s = m->system();
             double y = pos.y() - s->canvasPos().y();
             staff_idx_t staffIndex = s->searchStaff(y);
             StaffTypeChange* stc = toStaffTypeChange(edd.ed.dropElement);
-            score()->cmdAddStaffTypeChange(toMeasure(el), staffIndex, stc);
+            score()->cmdAddStaffTypeChange(m, staffIndex, stc);
         }
     }
     break;
