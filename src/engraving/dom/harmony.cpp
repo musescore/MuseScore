@@ -1986,6 +1986,7 @@ PropertyValue Harmony::propertyDefault(Pid id) const
             break;
         }
     }
+    break;
     case Pid::POSITION:
         v = style().styleV(Sid::chordSymPosition).value<AlignH>();
         break;

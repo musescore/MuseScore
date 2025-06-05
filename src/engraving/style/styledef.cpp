@@ -500,7 +500,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(polychordDividerThickness,                  Spatium(0.11)),
     styleDef(polychordDividerSpacing,                    Spatium(0.4)),
     styleDef(verticallyAlignChordSymbols,                true),
-    styleDef(chordSymPosition,                   AlignH::HCENTER),
+    styleDef(chordSymPosition,                           AlignH::HCENTER),
     styleDef(chordAlignmentToFretboard,                  AlignH::HCENTER),
     styleDef(chordAlignmentExcludeModifiers,             false),
     styleDef(concertPitch,                               false),
