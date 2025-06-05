@@ -1439,6 +1439,8 @@ void Harmony::renderActionMoveXHeight(const RenderActionMoveXHeight* a, HarmonyR
 
 void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
 {
+    ctx.hAlign = true;
+
     int capo = style().styleI(Sid::capoPosition);
 
     ChordList* chordList = info->chordList();
