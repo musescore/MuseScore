@@ -985,6 +985,16 @@ EditStyle::EditStyle(QWidget* parent)
     clefTimeKeySigPage->layout()->addWidget(clefKeyTimeSigPage.widget);
 
     // ====================================================
+    // REPEAT BARLINES STYLE SECTION (QML)
+    // ====================================================
+
+    auto repeatBarlinesSection = createQmlWidget(
+        repeatBarlinesGroupBox,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml")));
+    repeatBarlinesSection.widget->setMinimumSize(224, 90);
+    repeatBarlinesGroupBox->layout()->addWidget(repeatBarlinesSection.widget);
+
+    // ====================================================
     // Figured Bass
     // ====================================================
 
