@@ -53,6 +53,7 @@ class DeadSlapped;
 class Dynamic;
 
 class Expression;
+class Footnote;
 
 class Fermata;
 class FiguredBassItem;
@@ -212,6 +213,7 @@ private:
     static void draw(const Dynamic* item, muse::draw::Painter* painter);
 
     static void draw(const Expression* item, muse::draw::Painter* painter);
+    static void draw(const Footnote* item, muse::draw::Painter* painter);
 
     static void draw(const Fermata* item, muse::draw::Painter* painter);
     static void draw(const FiguredBass* item, muse::draw::Painter* painter);

@@ -45,6 +45,7 @@
 #include "../../dom/dynamic.h"
 
 #include "../../dom/expression.h"
+#include "../../dom/footnote.h"
 
 #include "../../dom/fermata.h"
 #include "../../dom/figuredbass.h"
@@ -231,6 +232,7 @@ public:
     static void layoutDynamic(Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf);
 
     static void layoutExpression(const Expression* item, Expression::LayoutData* ldata);
+    static void layoutFootnote(const Footnote* item, Footnote::LayoutData* ldata);
 
     static void layoutFermata(const Fermata* item, Fermata::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutFiguredBass(const FiguredBass* item, FiguredBass::LayoutData* ldata, const LayoutContext& ctx);

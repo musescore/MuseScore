@@ -41,6 +41,7 @@
 #include "expression.h"
 #include "factory.h"
 #include "fingering.h"
+#include "footnote.h"
 #include "glissando.h"
 #include "guitarbend.h"
 #include "hairpin.h"
@@ -818,6 +819,15 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
             break;
         }
         textBox = Factory::createExpression(dummy()->segment());
+        chordRest->undoAddAnnotation(textBox);
+        break;
+    }
+    case TextStyleType::FOOTNOTE: {
+        ChordRest* chordRest = chordOrRest(destinationElement);
+        if (!chordRest) {
+            break;
+        }
+        textBox = Factory::createFootnote(dummy()->segment());
         chordRest->undoAddAnnotation(textBox);
         break;
     }
@@ -6366,6 +6376,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::BREATH
             && et != ElementType::DYNAMIC
             && et != ElementType::EXPRESSION
+            && et != ElementType::FOOTNOTE
             && et != ElementType::STAFF_TEXT
             && et != ElementType::SYSTEM_TEXT
             && et != ElementType::TRIPLET_FEEL
@@ -6413,6 +6424,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             ElementType::TREMOLOBAR,
             ElementType::DYNAMIC,
             ElementType::EXPRESSION,
+            ElementType::FOOTNOTE,
             ElementType::STAFF_TEXT,
             ElementType::PLAYTECH_ANNOTATION,
             ElementType::CAPO,
@@ -6462,6 +6474,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 case ElementType::FIGURED_BASS:
                 case ElementType::DYNAMIC:
                 case ElementType::EXPRESSION:
+                case ElementType::FOOTNOTE:
                 case ElementType::LYRICS:                       // not normally segment-attached
                 case ElementType::PARTIAL_LYRICSLINE:
                     continue;
@@ -6561,6 +6574,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                  || element->isTremoloBar()
                  || element->isDynamic()
                  || element->isExpression()
+                 || element->isFootnote()
                  || element->isStaffText()
                  || element->isPlayTechAnnotation()
                  || element->isCapo()

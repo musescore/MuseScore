@@ -217,6 +217,12 @@ InspectorSectionView {
                             typeRole: TextTypes.FONT_ALIGN_H_RIGHT,
                             title: qsTrc("inspector", "Align right"),
                             description: qsTrc("inspector", "Align right edge of text to reference point")
+                        },
+                        {
+                            iconRole: IconCode.TEXT_ALIGN_JUSTIFY, 
+                            typeRole: TextTypes.FONT_ALIGN_H_JUSTIFY,
+                            title: qsTrc("inspector", "Justify"),
+                            description: qsTrc("inspector", "Justify text to fill the available width")
                         }
                     ]
 

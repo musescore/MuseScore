@@ -153,6 +153,7 @@ double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
     switch (item->type()) {
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
+    case ElementType::FOOTNOTE:
     {
         curY += item->staffOffsetY();
         AlignV vertAlign = toTextBase(item)->align().vertical;

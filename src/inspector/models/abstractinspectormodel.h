@@ -131,6 +131,7 @@ public:
         TYPE_MEASURE_REPEAT,
         TYPE_DYNAMIC,
         TYPE_EXPRESSION,
+        TYPE_FOOTNOTE,
         TYPE_TUPLET,
         TYPE_TEXT_LINE,
         TYPE_GRADUAL_TEMPO_CHANGE,

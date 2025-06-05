@@ -119,6 +119,7 @@ private:
         std::vector<FiguredBass*> figuredBass;
         std::vector<Dynamic*> dynamics;
         std::vector<Expression*> expressions;
+        std::vector<Footnote*> footnotes;
         std::vector<HarpPedalDiagram*> harpDiagrams;
         std::vector<FretDiagram*> fretDiagrams;
         std::vector<StaffText*> staffText;

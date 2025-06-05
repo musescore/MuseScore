@@ -61,6 +61,7 @@
 #include "dom/fermata.h"
 #include "dom/figuredbass.h"
 #include "dom/fingering.h"
+#include "dom/footnote.h"
 #include "dom/fret.h"
 
 #include "dom/glissando.h"
@@ -240,6 +241,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::EXPRESSION:
         layoutExpression(item_cast<const Expression*>(item), static_cast<Expression::LayoutData*>(ldata));
+        break;
+    case ElementType::FOOTNOTE:
+        layoutFootnote(item_cast<const Footnote*>(item), static_cast<Footnote::LayoutData*>(ldata));
         break;
     case ElementType::FERMATA:
         layoutFermata(item_cast<const Fermata*>(item), static_cast<Fermata::LayoutData*>(ldata), ctx.conf());
@@ -2124,6 +2128,30 @@ void TLayout::layoutExpression(const Expression* item, Expression::LayoutData* l
     Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
+void TLayout::layoutFootnote(const Footnote* item, Footnote::LayoutData* ldata)
+{
+    LAYOUT_CALL_ITEM(item);
+    IF_ASSERT_FAILED(item->explicitParent()) {
+        return;
+    }
+   
+    TLayout::layoutBaseTextBase(item, ldata);
+
+    ldata->disconnectSnappedItems();
+   
+    if (!item->autoplace()) {
+        return;
+    }
+
+    const Segment* s = item->segment();
+    const Measure* m = s->measure();
+    LD_CONDITION(ldata->isSetPos());
+    LD_CONDITION(m->ldata()->isSetPos());
+    LD_CONDITION(s->ldata()->isSetPos());
+    
+    Autoplace::autoplaceSegmentElement(item, ldata);
+}
+
 void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     LAYOUT_CALL_ITEM(item);
@@ -3454,6 +3482,9 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
                 case AlignH::RIGHT:
                     xx = -hAlignBox.right();
                     break;
+                case AlignH::JUSTIFY:
+                    xx = -hAlignBox.left();
+                    break;
                 }
             } else {
                 switch (item->noteheadAlign()) {
@@ -3465,6 +3496,9 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
                     break;
                 case AlignH::RIGHT:
                     xx = -hAlignBox.right();
+                    break;
+                case AlignH::JUSTIFY:
+                    xx = -hAlignBox.left();
                     break;
                 }
             }
@@ -3503,6 +3537,9 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
             case AlignH::RIGHT:
                 newPosX = fd->mainWidth();
                 break;
+            case AlignH::JUSTIFY:
+                newPosX = 0.0;
+                break;
             }
         } else {
             switch (item->noteheadAlign()) {
@@ -3514,6 +3551,9 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
                 break;
             case AlignH::RIGHT:
                 newPosX = cw;
+                break;
+            case AlignH::JUSTIFY:
+                newPosX = 0.0;
                 break;
             }
         }

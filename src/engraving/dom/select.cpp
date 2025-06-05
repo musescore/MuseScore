@@ -43,6 +43,7 @@
 #include "expression.h"
 #include "figuredbass.h"
 #include "fingering.h"
+#include "footnote.h"
 #include "hairpin.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
@@ -1035,6 +1036,9 @@ muse::ByteArray Selection::symbolListMimeData() const
             break;
         case ElementType::EXPRESSION:
             seg = toExpression(e)->segment();
+            break;
+        case ElementType::FOOTNOTE:
+            seg = toFootnote(e)->segment();
             break;
         case ElementType::STICKING:
             seg = toSticking(e)->segment();

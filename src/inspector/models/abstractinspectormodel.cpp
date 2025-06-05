@@ -119,6 +119,7 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::REST, InspectorModelType::TYPE_REST },
     { mu::engraving::ElementType::DYNAMIC, InspectorModelType::TYPE_DYNAMIC },
     { mu::engraving::ElementType::EXPRESSION, InspectorModelType::TYPE_EXPRESSION },
+    { mu::engraving::ElementType::FOOTNOTE, InspectorModelType::TYPE_FOOTNOTE },
     { mu::engraving::ElementType::STRING_TUNINGS, InspectorModelType::TYPE_STRING_TUNINGS },
     { mu::engraving::ElementType::SYMBOL, InspectorModelType::TYPE_SYMBOL },
 };

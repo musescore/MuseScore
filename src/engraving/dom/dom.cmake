@@ -115,6 +115,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/figuredbass.h
     ${CMAKE_CURRENT_LIST_DIR}/fingering.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fingering.h
+    ${CMAKE_CURRENT_LIST_DIR}/footnote.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/footnote.h
     ${CMAKE_CURRENT_LIST_DIR}/fret.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fret.h
     ${CMAKE_CURRENT_LIST_DIR}/glissando.cpp

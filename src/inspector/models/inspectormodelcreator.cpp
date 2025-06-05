@@ -77,6 +77,7 @@
 #include "notation/rests/restsettingsproxymodel.h"
 #include "notation/dynamics/dynamicsettingsmodel.h"
 #include "notation/expressions/expressionsettingsmodel.h"
+#include "notation/footnotes/footnotesettingsmodel.h"
 #include "notation/stringtunings/stringtuningssettingsmodel.h"
 #include "notation/symbols/symbolsettingsmodel.h"
 
@@ -212,6 +213,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new DynamicsSettingsModel(parent, repository);
     case InspectorModelType::TYPE_EXPRESSION:
         return new ExpressionSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_FOOTNOTE:
+        return new FootnoteSettingsModel(parent, repository);
     case InspectorModelType::TYPE_STRING_TUNINGS:
         return new StringTuningsSettingsModel(parent, repository);
     case InspectorModelType::TYPE_SYMBOL:

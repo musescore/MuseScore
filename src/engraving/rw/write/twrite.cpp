@@ -65,6 +65,7 @@
 #include "dom/fermata.h"
 #include "dom/figuredbass.h"
 #include "dom/fingering.h"
+#include "dom/footnote.h"
 #include "dom/fret.h"
 
 #include "dom/glissando.h"
@@ -212,6 +213,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::DYNAMIC:      write(item_cast<const Dynamic*>(item), xml, ctx);
         break;
     case ElementType::EXPRESSION:   write(item_cast<const Expression*>(item), xml, ctx);
+        break;
+    case ElementType::FOOTNOTE:   write(item_cast<const Footnote*>(item), xml, ctx);
         break;
     case ElementType::FERMATA:      write(item_cast<const Fermata*>(item), xml, ctx);
         break;
@@ -1155,6 +1158,16 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
 }
 
 void TWrite::write(const Expression* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
+    xml.endElement();
+}
+
+void TWrite::write(const Footnote* item, XmlWriter& xml, WriteContext& ctx)
 {
     if (!ctx.canWrite(item)) {
         return;

@@ -832,6 +832,13 @@ void SystemLayout::layoutDynamicExpressionAndHairpins(const ElementsToLayout& el
         }
     }
 
+    for (Footnote* e : elementsToLayout.footnotes) {
+        TLayout::layoutItem(e, ctx);
+        if (e->addToSkyline()) {
+            dynamicsExprAndHairpinsToAlign.push_back(e);
+        }
+    }
+
     processLines(system, ctx, elementsToLayout.hairpins);
 
     for (SpannerSegment* spannerSegment : system->spannerSegments()) {
@@ -1172,6 +1179,9 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                 break;
             case ElementType::EXPRESSION:
                 elements.expressions.push_back(toExpression(item));
+                break;
+            case ElementType::FOOTNOTE:
+                elements.footnotes.push_back(toFootnote(item));
                 break;
             case ElementType::HARP_DIAGRAM:
                 elements.harpDiagrams.push_back(toHarpPedalDiagram(item));
@@ -1911,6 +1921,10 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
                 break;
             case AlignH::RIGHT:
                 t->mutldata()->setPosX(maxNamesWidth);
+                break;
+            case AlignH::JUSTIFY:
+                // Justify is not supported for instrument names
+                t->mutldata()->setPosX(0); // Same treatment as AlignH::LEFT
                 break;
             }
         }

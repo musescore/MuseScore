@@ -52,6 +52,7 @@ class Clef;
 class Dynamic;
 
 class Expression;
+class Footnote;
 
 class Fermata;
 class Fingering;
@@ -175,6 +176,7 @@ public:
     static void layout(Dynamic* item, const Context& ctx);
 
     static void layout(Expression* item, const Context& ctx);
+    static void layout(Footnote* item, const Context& ctx);
 
     static void layout(Fermata* item, const Context& ctx);
     static void layout(Fingering* item, const Context& ctx);

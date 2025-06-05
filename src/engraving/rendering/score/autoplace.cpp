@@ -418,6 +418,7 @@ bool Autoplace::itemsShouldIgnoreEachOther(const EngravingItem* itemToAutoplace,
         static const std::set<ElementType> TEXT_BASED_TYPES_WHICH_IGNORE_EACH_OTHER {
             ElementType::DYNAMIC,
             ElementType::EXPRESSION,
+            ElementType::FOOTNOTE,
             ElementType::STICKING
         };
         return !itemToAutoplace->isTextBase() || muse::contains(TEXT_BASED_TYPES_WHICH_IGNORE_EACH_OTHER, type1);

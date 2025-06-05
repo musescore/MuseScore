@@ -50,6 +50,9 @@ void EditModeRenderer::drawItem(EngravingItem* item, muse::draw::Painter* painte
     case ElementType::EXPRESSION:
         drawTextBase(item_cast<TextBase*>(item), painter, ed, currentViewScaling);
         break;
+    case ElementType::FOOTNOTE:
+        drawTextBase(item_cast<TextBase*>(item), painter, ed, currentViewScaling);
+        break;
     case ElementType::FIGURED_BASS:
         drawTextBase(item_cast<TextBase*>(item), painter, ed, currentViewScaling);
         break;

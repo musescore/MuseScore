@@ -59,6 +59,7 @@ class DeadSlapped;
 class DurationElement;
 class Dynamic;
 class Expression;
+class Footnote;
 class EngravingItem;
 class EngravingObject;
 class FBox;
@@ -387,6 +388,7 @@ public:
     CONVERT(NoteDot,       NOTEDOT)
     CONVERT(Dynamic,       DYNAMIC)
     CONVERT(Expression,    EXPRESSION)
+    CONVERT(Footnote,      FOOTNOTE)
     CONVERT(InstrumentName, INSTRUMENT_NAME)
     CONVERT(Accidental,    ACCIDENTAL)
     CONVERT(TextLine,      TEXTLINE)
@@ -823,6 +825,7 @@ CONVERT(Tuplet)
 CONVERT(NoteDot)
 CONVERT(Dynamic)
 CONVERT(Expression)
+CONVERT(Footnote)
 CONVERT(InstrumentName)
 CONVERT(Accidental)
 CONVERT(TextLine)

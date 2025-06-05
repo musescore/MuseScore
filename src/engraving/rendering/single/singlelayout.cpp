@@ -48,6 +48,7 @@
 #include "dom/expression.h"
 #include "dom/fermata.h"
 #include "dom/fingering.h"
+#include "dom/footnote.h"
 #include "dom/fret.h"
 #include "dom/glissando.h"
 #include "dom/gradualtempochange.h"
@@ -141,6 +142,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::DYNAMIC:      layout(toDynamic(item), ctx);
         break;
     case ElementType::EXPRESSION:   layout(toExpression(item), ctx);
+        break;
+    case ElementType::FOOTNOTE:     layout(toFootnote(item), ctx);
         break;
     case ElementType::FERMATA:      layout(toFermata(item), ctx);
         break;
@@ -880,6 +883,11 @@ void SingleLayout::layout(Clef* item, const Context& ctx)
 }
 
 void SingleLayout::layout(Expression* item, const Context& ctx)
+{
+    layoutTextBase(item, ctx, item->mutldata());
+}
+
+void SingleLayout::layout(Footnote* item, const Context& ctx)
 {
     layoutTextBase(item, ctx, item->mutldata());
 }

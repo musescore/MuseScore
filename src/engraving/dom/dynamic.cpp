@@ -27,6 +27,7 @@
 #include "anchors.h"
 #include "dynamichairpingroup.h"
 #include "expression.h"
+#include "footnote.h"
 #include "hairpin.h"
 #include "measure.h"
 #include "mscore.h"
@@ -332,6 +333,14 @@ EngravingItem* Dynamic::drop(EditData& ed)
         item->setTrack(track());
         item->setParent(segment());
         toExpression(item)->setVoiceAssignment(voiceAssignment());
+        score()->undoAddElement(item);
+        return item;
+    }
+
+    if (item->isFootnote()) {
+        item->setTrack(track());
+        item->setParent(segment());
+        toFootnote(item)->setVoiceAssignment(voiceAssignment());
         score()->undoAddElement(item);
         return item;
     }
