@@ -142,13 +142,21 @@ Rectangle {
     DockTitleBarMouseArea {
         id: titleBarMouseArea
 
-        anchors.fill: tabBar.visible ? tabBar
-                                     : titleBar.visible ? titleBar : null
+        readonly property var titleBarComp: tabBar.visible ? tabBar
+                                                           : titleBar.visible ? titleBar : null
+        anchors.fill: titleBarComp
 
         enabled: root.hasTitleBar || root.hasSingleTab
         propagateComposedEvents: true
 
         titleBarCpp: root.titleBarCpp
+
+        onDoubleClicked: function(mouse) {
+            if (titleBarComp) {
+                let pos = titleBarMouseArea.mapToItem(titleBarComp, mouse.x, mouse.y)
+                titleBarComp.doubleClicked(pos)
+            }
+        }
     }
 
     StackLayout {
