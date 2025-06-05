@@ -211,6 +211,7 @@ enum class ElementType : unsigned char {
     TAPPING,
     TAPPING_HALF_SLUR,
     TAPPING_HALF_SLUR_SEGMENT,
+    TAPPING_TEXT,
 
     ROOT_ITEM,
     DUMMY,

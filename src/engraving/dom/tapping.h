@@ -25,9 +25,11 @@
 
 #include "articulation.h"
 #include "slur.h"
+#include "textbase.h"
 
 namespace mu::engraving {
 class TappingHalfSlur;
+class TappingText;
 
 class Tapping : public Articulation
 {
@@ -46,8 +48,8 @@ public:
     TappingHand hand() const { return m_hand; }
     void setHand(TappingHand h) { m_hand = h; }
 
-    Text* text() const { return m_text; }
-    void setText(Text* text) { m_text = text; }
+    TappingText* text() const { return m_text; }
+    void setText(TappingText* text) { m_text = text; }
 
     void setSelected(bool f) override;
 
@@ -56,13 +58,21 @@ public:
     TappingHalfSlur* halfSlurBelow() const { return m_halfSlurBelow; }
     void setHalfSlurBelow(TappingHalfSlur* s) { m_halfSlurBelow = s; }
 
+    void styleChanged() override;
+
+    double mag() const override;
+
+    String accessibleInfo() const override;
+    TranslatableString typeUserName() const override;
+    TranslatableString subtypeUserName() const override;
+
 protected:
     friend class mu::engraving::Factory;
     Tapping(ChordRest* parent);
 
 private:
     TappingHand m_hand = TappingHand::INVALID;
-    Text* m_text = nullptr;
+    TappingText* m_text = nullptr;
     TappingHalfSlur* m_halfSlurAbove = nullptr;
     TappingHalfSlur* m_halfSlurBelow = nullptr;
 };
@@ -94,5 +104,16 @@ public:
 
 private:
     bool m_isHalfSlurAbove = true;
+};
+
+class TappingText final : public TextBase
+{
+    OBJECT_ALLOCATOR(engraving, TappingText)
+    DECLARE_CLASSOF(ElementType::TAPPING_TEXT)
+
+public:
+    TappingText(Tapping* parent = nullptr);
+    TappingText(const TappingText& t);
+    TappingText* clone() const override { return new TappingText(*this); }
 };
 } // namespace mu::engraving

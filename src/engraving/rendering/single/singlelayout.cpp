@@ -1559,10 +1559,10 @@ void SingleLayout::layout(SystemText* item, const Context& ctx)
 
 void SingleLayout::layout(Tapping* item, const Context& ctx)
 {
-    Text* text = item->text();
+    TappingText* text = item->text();
 
     if (!text) {
-        text = Factory::createText(item, TextStyleType::HAMMER_ON_PULL_OFF);
+        text = new TappingText(item);
     }
 
     text->setParent(item);

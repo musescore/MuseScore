@@ -624,7 +624,7 @@ void TWrite::writeProperties(const Articulation* item, XmlWriter& xml, WriteCont
     writeProperty(item, xml, Pid::DIRECTION);
     if (item->textType() != ArticulationTextType::NO_TEXT) {
         xml.tag("subtype", TConv::toXml(item->textType()));
-    } else {
+    } else if (!item->isTapping()) {
         xml.tag("subtype", SymNames::nameForSymId(item->symId()));
     }
 
@@ -3053,6 +3053,9 @@ void TWrite::write(const Tapping* item, XmlWriter& xml, WriteContext& ctx)
 
     if (item->halfSlurAbove() && item->halfSlurAbove()->isUserModified()) {
         write(item->halfSlurAbove(), xml, ctx);
+    }
+    if (item->halfSlurBelow() && item->halfSlurBelow()->isUserModified()) {
+        write(item->halfSlurBelow(), xml, ctx);
     }
 
     writeProperties(toArticulation(item), xml, ctx);

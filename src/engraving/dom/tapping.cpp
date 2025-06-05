@@ -22,6 +22,7 @@
 
 #include "tapping.h"
 #include "text.h"
+#include "types/typesconv.h"
 
 namespace mu::engraving {
 Tapping::Tapping(ChordRest* parent)
@@ -44,6 +45,34 @@ void Tapping::setSelected(bool f)
     EngravingItem::setSelected(f);
 }
 
+void Tapping::styleChanged()
+{
+    if (m_text) {
+        m_text->styleChanged();
+    }
+    Articulation::styleChanged();
+}
+
+double Tapping::mag() const
+{
+    return ldata()->mag() * Articulation::mag();
+}
+
+String Tapping::accessibleInfo() const
+{
+    return String(u"%1 %2").arg(translatedSubtypeUserName(), TConv::userName(ElementType::TAPPING).translated());
+}
+
+TranslatableString Tapping::typeUserName() const
+{
+    return EngravingItem::typeUserName();
+}
+
+TranslatableString Tapping::subtypeUserName() const
+{
+    return m_hand == TappingHand::LEFT ? TranslatableString("engraving", "Left-hand") : TranslatableString("engraving", "Right-hand");
+}
+
 TappingHalfSlur::TappingHalfSlur(EngravingItem* parent)
     : Slur(parent, ElementType::TAPPING_HALF_SLUR)
 {
@@ -61,6 +90,20 @@ TappingHalfSlurSegment::TappingHalfSlurSegment(System* parent)
 
 TappingHalfSlurSegment::TappingHalfSlurSegment(const TappingHalfSlurSegment& other)
     : SlurSegment(other)
+{
+}
+
+static ElementStyle tapTextStyle;
+
+TappingText::TappingText(Tapping* parent)
+    : TextBase(ElementType::TAPPING_TEXT, parent, TextStyleType::HAMMER_ON_PULL_OFF,
+               ElementFlag::MOVABLE | ElementFlag::GENERATED)
+{
+    initElementStyle(&tapTextStyle);
+}
+
+TappingText::TappingText(const TappingText& t)
+    : TextBase(t)
 {
 }
 }

@@ -945,8 +945,6 @@ void TLayout::layoutArticulation(const Articulation* item, Articulation::LayoutD
         bbox = fm.boundingRect(scaledFont, TConv::text(item->textType()));
     }
 
-    ldata->setBbox(bbox.translated(-0.5 * bbox.width(), 0.0));
-
     fillArticulationShape(item, ldata);
 }
 
@@ -968,10 +966,10 @@ void TLayout::fillArticulationShape(const Articulation* item, Articulation::Layo
         shape.add(base, item);
         shape.add(center, item);
         shape.add(tip, item);
-        PointF translate(-0.5 * width, sym == SymId::articAccentAbove ? -height : 0.0);
+        PointF translate(0.0, sym == SymId::articAccentAbove ? -height : 0.0);
         ldata->setShape(shape.translate(translate));
     } else {
-        ldata->setShape(Shape(ldata->bbox(), item));
+        ldata->setShape(Shape(item->symBbox(sym), item));
     }
 }
 
@@ -6204,17 +6202,19 @@ void TLayout::layoutTapping(Tapping* item, Tapping::LayoutData* ldata, LayoutCon
 
         if (lhSym == LHTappingSymbol::DOT) {
             ldata->symId = SymId::windClosedHole;
+            ldata->setMag(0.5);
         } else if (lhSym == LHTappingSymbol::CIRCLED_T) {
-            Text* text = item->text();
+            ldata->setMag(1.0);
+            TappingText* text = item->text();
             if (!text) {
-                text = Factory::createText(item, TextStyleType::HAMMER_ON_PULL_OFF);
+                text = new TappingText(item);
             }
             item->setText(text);
             text->setParent(item);
             text->setTrack(item->track());
             text->setXmlText("T");
             text->setFrameType(FrameType::CIRCLE);
-            text->setAlign(Align(AlignH::HCENTER, item->up() ? AlignV::BASELINE : AlignV::TOP));
+            text->setAlign(Align(AlignH::LEFT, item->up() ? AlignV::BASELINE : AlignV::TOP));
         }
     } else {
         RHTappingSymbol rhSym = tabStaff ? style.styleV(Sid::rhTappingSymbolTab).value<RHTappingSymbol>()
@@ -6230,24 +6230,25 @@ void TLayout::layoutTapping(Tapping* item, Tapping::LayoutData* ldata, LayoutCon
         if (rhSym == RHTappingSymbol::PLUS) {
             ldata->symId = SymId::pluckedLeftHandPizzicato;
         } else if (rhSym == RHTappingSymbol::T) {
-            Text* text = item->text();
+            TappingText* text = item->text();
             if (!text) {
-                text = Factory::createText(item, TextStyleType::HAMMER_ON_PULL_OFF);
+                text = new TappingText(item);
             }
             item->setText(text);
             text->setParent(item);
             text->setTrack(item->track());
             text->setXmlText("T");
-            text->setAlign(Align(AlignH::HCENTER, item->up() ? AlignV::BASELINE : AlignV::TOP));
+            text->setAlign(Align(AlignH::LEFT, item->up() ? AlignV::BASELINE : AlignV::TOP));
         }
     }
 
     if (ldata->symId != SymId::noSym) {
         ldata->setShape(Shape(item->symBbox(ldata->symId), item));
-    } else if (item->text()) {
-        layoutText(item->text(), item->text()->mutldata());
-        item->text()->setPos(PointF());
-        ldata->setShape(Shape(item->text()->ldata()->bbox(), item));
+    } else if (TappingText* text = item->text()) {
+        layoutBaseTextBase(text, ctx);
+        RectF textBbox = text->ldata()->bbox();
+        text->setPos(PointF(-textBbox.x(), 0.0));
+        ldata->setShape(Shape(textBbox.translated(text->pos()), item));
     }
 
     if (tabStaff) {
