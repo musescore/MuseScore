@@ -2773,7 +2773,7 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     Slur* slur = firstChordRest->slur(secondChordRest);
     if (!slur || slur->slurDirection() != DirectionV::AUTO) {
         slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
-    } else if (slur && slurTemplate->isHammerOnPullOff()) {
+    } else if (slurTemplate && slurTemplate->isHammerOnPullOff()) {
         // Replace existing slur with HOPO
         endEditElement();
         score()->undoRemoveElement(slur);
