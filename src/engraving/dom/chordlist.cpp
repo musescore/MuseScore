@@ -696,7 +696,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         addToken(String(s.at(i++)), ChordTokenClass::QUALITY);
     }
 
-    int prevIdx = i;
+    size_t prevIdx = i;
 
     // Get type - either "typen" or "III"
     // Eat up to first number

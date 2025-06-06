@@ -972,7 +972,7 @@ int function2Tpc(const String& s, Key key, size_t& idx)
         idx = 1;
     } else if (s.size() > 1) {
         constexpr int NUM_LEN = 1;
-        int accIdx = s.size() - NUM_LEN;
+        size_t accIdx = s.size() - NUM_LEN;
         String acc = s.left(accIdx);
         String num = s.right(NUM_LEN);
         if (num.size() > NUM_LEN || num.empty() || !num.at(0).isDigit()) {

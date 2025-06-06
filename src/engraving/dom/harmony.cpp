@@ -1808,8 +1808,8 @@ String Harmony::generateScreenReaderInfo() const
                 aux.replace(r.first, r.second);
             }
             // construct string one  character at a time
-            for (size_t i = 0; i < aux.size(); ++i) {
-                rez = String(u"%1 %2").arg(rez).arg(aux.at(i));
+            for (size_t j = 0; j < aux.size(); ++j) {
+                rez = String(u"%1 %2").arg(rez).arg(aux.at(j));
             }
         }
             return rez;
