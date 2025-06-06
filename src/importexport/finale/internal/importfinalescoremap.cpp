@@ -185,11 +185,8 @@ void FinaleParser::importParts()
             continue; // safety check
         }
 
-        std::shared_ptr<details::StaffGroup> multiStaffGroup;
-        if (staff->multiStaffInstVisualGroupId) {
-            multiStaffGroup = m_doc->getDetails()->get<details::StaffGroup>(SCORE_PARTID, 0, staff->multiStaffInstVisualGroupId);
-        }
-        if (multiStaffGroup && inst2Part.find(staff->getCmper()) != inst2Part.end()) {
+        auto multiStaffInst = staff->getMultiStaffInstGroup();
+        if (multiStaffInst && inst2Part.find(staff->getCmper()) != inst2Part.end()) {
             continue;
         }
 
@@ -215,13 +212,13 @@ void FinaleParser::importParts()
         std::string abrvName = compositeStaff->getAbbreviatedInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
         part->setShortName(QString::fromStdString(trimNewLineFromString(abrvName)));
 
-        if (multiStaffGroup) {
-            auto groupInfo = details::StaffGroupInfo(multiStaffGroup, scrollView);
-            groupInfo.iterateStaves(1, 0, [&](const std::shared_ptr<others::StaffComposite>& staff) {
-                createStaff(part, staff, it);
-                inst2Part.emplace(staff->getCmper(), partId);
-                return true;
-            });
+        if (multiStaffInst) {
+            for (auto inst : multiStaffInst->visualStaffNums) {
+                if (auto instStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, inst, 1, 0)) {
+                    createStaff(part, instStaff, it);
+                    inst2Part.emplace(inst, partId);
+                }
+            }
         } else {
             createStaff(part, compositeStaff, it);
             inst2Part.emplace(staff->getCmper(), partId);

@@ -97,7 +97,6 @@ private:
     FinaleLoggerPtr m_logger;
     const musx::dom::Cmper m_currentMusxPartId = musx::dom::SCORE_PARTID; // eventually this may be changed per excerpt/linked part
 
-    std::unordered_map<QString, std::vector<musx::dom::InstCmper>> m_part2Inst;
     std::unordered_map<engraving::staff_idx_t, musx::dom::InstCmper> m_staff2Inst;
     std::unordered_map<musx::dom::InstCmper, engraving::staff_idx_t> m_inst2Staff;
     std::unordered_map<musx::dom::MeasCmper, engraving::Fraction> m_meas2Tick;
