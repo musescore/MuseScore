@@ -89,4 +89,4 @@ endif()
 # Stubs
 add_subdirectory(stubs)
 
-
+add_subdirectory(macos-integration)
