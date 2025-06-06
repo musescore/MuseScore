@@ -380,12 +380,10 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     }
     /// @todo detect special cases for beams over barlines created by the Beam Over Barline plugin
     ChordRest* cr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(entryInfoPtr.calcGlobalElapsedDuration()), curTrackIdx);
-#ifndef NDEBUG
     if (!cr) { // once grace notes are supported, use IF_ASSERT_FAILED(cr)
         logger()->logWarning(String(u"Entry %1 was not mapped").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
         return false;
     }
-#endif
     Beam* beam = Factory::createBeam(m_score->dummy()->system());
     beam->setTrack(curTrackIdx);
     if (entryInfoPtr->getEntry()->isNote && cr->isChord()) {
@@ -397,12 +395,10 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     for (EntryInfoPtr nextInBeam = entryInfoPtr.getNextInBeamGroup(); nextInBeam; nextInBeam = nextInBeam.getNextInBeamGroup()) {
         std::shared_ptr<const Entry> currentEntry = nextInBeam->getEntry();
         lastCr = measure->findChordRest(measure->tick() + FinaleTConv::musxFractionToFraction(nextInBeam.calcGlobalElapsedDuration()), curTrackIdx);
-#ifndef NDEBUG
         IF_ASSERT_FAILED(lastCr) {
             logger()->logWarning(String(u"Entry %1 was not mapped").arg(nextInBeam->getEntry()->getEntryNumber()), m_doc, nextInBeam.getStaff(), nextInBeam.getMeasure());
             continue;
         }
-#endif
         /// @todo fully test secondary beam breaks: can a smaller beam than 32nd be broken?
         /// XM: No, not currently in MuseScore.
         unsigned secBeamStart = 0;
@@ -432,11 +428,9 @@ static void processTremolos(std::vector<ReadableTuplet>& tremoloMap, track_idx_t
     for (ReadableTuplet tuplet : tremoloMap) {
         Chord* c1 = measure->findChord(measure->tick() + tuplet.startTick, curTrackIdx);
         Chord* c2 = measure->findChord(measure->tick() + ((tuplet.startTick + tuplet.endTick) / 2), curTrackIdx);
-#ifndef NDEBUG
         IF_ASSERT_FAILED(c1 && c2 && c1->ticks() == c2->ticks()) {
             continue;
         }
-#endif
 
         // the current (too short) duration indicates the
         // tremolo type, we calculate it from number of beams
@@ -532,7 +526,6 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
         tupletMap[i].scoreTuplet->setTicks(f.reduced());
         logger->logInfo(String(u"Detected Tuplet: Starting at %1, duration: %2, ratio: %3").arg(
                         tupletMap[i].startTick.toString(), f.reduced().toString(), tupletRatio.toString()));
-#ifndef NDEBUG
         for (size_t ratioIndex = indexOfParentTuplet(tupletMap, i); tupletMap[ratioIndex].layer >= 0; ratioIndex = indexOfParentTuplet(tupletMap, ratioIndex)) {
             // finale value doesn't include parent tuplet ratio, but is global. Our setup should be correct though, so hack the assert
             f /= tupletMap[ratioIndex].scoreTuplet->ratio();
@@ -541,7 +534,6 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
             logger->logWarning(String(u"Tuplet duration is corrupted"));
             /// @todo account for tuplets with invalid durations, i.e. durations not attainable in MuseScore
         }
-#endif
         transferTupletProperties(tupletMap[i].musxTuplet, tupletMap[i].scoreTuplet, logger);
         // reparent tuplet if needed
         size_t parentIndex = indexOfParentTuplet(tupletMap, i);
@@ -558,7 +550,6 @@ void FinaleParser::importEntries()
     std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     for (const std::shared_ptr<others::InstrumentUsed>& musxScrollViewItem : musxScrollView) {
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxScrollViewItem->staffId), muse::nidx);
-#ifndef NDEBUG
         IF_ASSERT_FAILED (curStaffIdx != muse::nidx) {
             logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
@@ -569,7 +560,6 @@ void FinaleParser::importEntries()
             logger()->logWarning(String(u"Add entries: Score has no first measure."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         }
-#endif
 
         Staff* curStaff = m_score->staff(curStaffIdx);
         // reset tie tracking when appropriate
@@ -582,16 +572,14 @@ void FinaleParser::importEntries()
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
             Fraction currTick = muse::value(m_meas2Tick, musxMeasure->getCmper(), Fraction(-1, 1));
             Measure* measure = currTick >= Fraction(0, 1)  ? m_score->tick2measure(currTick) : nullptr;
-            details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
-#ifndef NDEBUG
             if (!measure) {
                 logger()->logWarning(String(u"Unable to retrieve measure by tick"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 break;
             }
+            details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
             if (!gfHold) {
                 continue;
             }
-#endif
             // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
             std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
             std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxScrollViewItem->staffId, musxMeasure->getCmper());
@@ -599,22 +587,18 @@ void FinaleParser::importEntries()
                 const LayerIndex layer = finaleLayer.first;
                 /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
                 std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
-#ifndef NDEBUG
                 if (!entryFrame) {
                     logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                     continue;
                 }
-#endif
                 const int maxV1V2 = finaleLayer.second ? 1 : 0;
                 for (int voice = 0; voice <= maxV1V2; voice++) {
                     // calculate current track
                     voice_idx_t voiceOff = muse::value(finaleVoiceMap, FinaleTConv::createFinaleVoiceId(layer, bool(voice)), muse::nidx);
-#ifndef NDEBUG
                     IF_ASSERT_FAILED(voiceOff != muse::nidx && voiceOff < VOICES) {
                         logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                         continue;
                     }
-#endif
                     track_idx_t curTrackIdx = curStaffIdx * VOICES + voiceOff;
 
                     // generate tuplet map, tremolo map and create tuplets
