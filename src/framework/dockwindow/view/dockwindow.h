@@ -91,6 +91,8 @@ public:
     void toggleDockFloating(const QString& dockName) override;
 
     DockPageView* currentPage() const override;
+    async::Notification currentPageChanged() const override;
+
     QQuickItem& asItem() const override;
 
     void restoreDefaultLayout() override;
@@ -139,6 +141,7 @@ private:
     void forceLayout();
 
     void initDocks(DockPageView* page);
+    void resetDocks(DockPageView* page);
 
     void adjustContentForAvailableSpace(DockPageView* page);
 
@@ -147,7 +150,10 @@ private:
     QList<DockToolBarView*> topLevelToolBars(const DockPageView* page) const;
 
     KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
+
     DockPageView* m_currentPage = nullptr;
+    async::Notification m_currentPageChanged;
+
     uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
     uicomponents::QmlListProperty<DockPageView> m_pages;
     async::Channel<QStringList> m_docksOpenStatusChanged;

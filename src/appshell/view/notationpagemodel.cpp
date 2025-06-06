@@ -86,6 +86,12 @@ void NotationPageModel::init()
     notationConfiguration()->percussionPanelAutoShowModeChanged().onNotify(this, [this]() {
         updatePercussionPanelVisibility();
     });
+
+    dockWindowProvider()->window()->currentPageChanged().onNotify(this, [this]() {
+        updateDrumsetPanelVisibility();
+        updatePercussionPanelVisibility();
+        updateExtensionsToolBarVisibility();
+    });
 }
 
 QString NotationPageModel::notationToolBarName() const
