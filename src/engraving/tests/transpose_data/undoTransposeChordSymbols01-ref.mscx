@@ -113,7 +113,6 @@
               <root>16</root>
               </harmonyInfo>
             <eid>i6JddkooT+K_VCqDglUeMRM</eid>
-            <position>left</position>
             <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
@@ -133,7 +132,6 @@
               <root>18</root>
               </harmonyInfo>
             <eid>SYmKSDioSgJ_3nRLTs3666</eid>
-            <position>left</position>
             <verticalAlign>0</verticalAlign>
             </Harmony>
           <location>
@@ -144,7 +142,6 @@
               <root>20</root>
               </harmonyInfo>
             <eid>mPZO1MniRBK_DR0+zmVAE6N</eid>
-            <position>left</position>
             <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
@@ -164,7 +161,6 @@
               <root>15</root>
               </harmonyInfo>
             <eid>saAjlrm1EO_FhNXvmfkddI</eid>
-            <position>left</position>
             <verticalAlign>0</verticalAlign>
             </Harmony>
           </voice>
@@ -177,7 +173,6 @@
               <root>16</root>
               </harmonyInfo>
             <eid>dvEMaLQcibK_SEWH/F36llB</eid>
-            <position>left</position>
             <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
@@ -197,7 +192,6 @@
               <root>18</root>
               </harmonyInfo>
             <eid>Ok0ECFxRvuI_2P4foxuqZq</eid>
-            <position>left</position>
             <verticalAlign>0</verticalAlign>
             </Harmony>
           <location>
@@ -208,7 +202,6 @@
               <root>12</root>
               </harmonyInfo>
             <eid>wLPL51aE/ZK_WYJ1s3hVxsG</eid>
-            <position>left</position>
             <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
@@ -228,7 +221,6 @@
               <root>22</root>
               </harmonyInfo>
             <eid>DUSTglH1glB_HnfKXBpuT4K</eid>
-            <position>left</position>
             <verticalAlign>0</verticalAlign>
             </Harmony>
           </voice>

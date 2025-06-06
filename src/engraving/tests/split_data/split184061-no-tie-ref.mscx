@@ -20,7 +20,6 @@
       <pedalPosBelow x="0" y="0"/>
       <trillPosAbove x="0" y="0"/>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-      <chordSymPosition>left</chordSymPosition>
       <minMMRestWidth>0</minMMRestWidth>
       <titleFontSize>10</titleFontSize>
       <titleFontSpatiumDependent>1</titleFontSpatiumDependent>

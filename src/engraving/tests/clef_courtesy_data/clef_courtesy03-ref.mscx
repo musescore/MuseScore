@@ -13,7 +13,6 @@
       <staffLineWidth>0.15</staffLineWidth>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <genCourtesyTimesig>0</genCourtesyTimesig>
-      <chordSymPosition>left</chordSymPosition>
       <sectionPause>2</sectionPause>
       <evenHeaderR>$:workTitle:</evenHeaderR>
       <oddHeaderL>$:workTitle:</oddHeaderL>

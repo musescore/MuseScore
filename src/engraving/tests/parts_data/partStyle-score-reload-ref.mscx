@@ -7,7 +7,6 @@
       <frameSystemDistance>21</frameSystemDistance>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-      <chordSymPosition>left</chordSymPosition>
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
       <titleFontFace>Arial</titleFontFace>
@@ -337,7 +336,6 @@
         <frameSystemDistance>21</frameSystemDistance>
         <maskBarlinesForText>0</maskBarlinesForText>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-        <chordSymPosition>left</chordSymPosition>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <defaultFramePadding>0</defaultFramePadding>
         <defaultFrameWidth>0</defaultFrameWidth>
@@ -554,7 +552,6 @@
         <frameSystemDistance>21</frameSystemDistance>
         <maskBarlinesForText>0</maskBarlinesForText>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-        <chordSymPosition>left</chordSymPosition>
         <createMultiMeasureRests>1</createMultiMeasureRests>
         <defaultFramePadding>0</defaultFramePadding>
         <defaultFrameWidth>0</defaultFrameWidth>

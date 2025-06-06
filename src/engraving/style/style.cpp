@@ -568,10 +568,24 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             if (e.readBool()) {
                 set(Sid::chordSymbolSpelling, NoteSpellingType::FRENCH);
             }
-        } else if (tag == "chordModifierAdjust") {
+        } else if (tag == "chordModifierAdjust" && m_version < 460) {
             set(Sid::chordModifierAdjust, compat::CompatUtils::convertChordExtModUnits(e.readDouble()));
-        } else if (tag == "chordExtensionAdjust") {
+        } else if (tag == "chordExtensionAdjust" && m_version < 460) {
             set(Sid::chordExtensionAdjust, compat::CompatUtils::convertChordExtModUnits(e.readDouble()));
+        } else if (tag == "chordDescriptionFile" && m_version < 460) {
+            AsciiStringView val = e.readAsciiText();
+            if (val == "chords_std.xml") {
+                set(Sid::chordDescriptionFile, String(u"chords_legacy.xml"));
+            } else {
+                set(Sid::chordDescriptionFile, String::fromAscii(val.ascii()));
+            }
+        } else if (tag == "chordStyle" && m_version < 460) {
+            AsciiStringView val = e.readAsciiText();
+            if (val == "std") {
+                set(Sid::chordStyle, ChordStylePreset::LEGACY);
+            } else {
+                set(Sid::chordStyle, TConv::fromXml(val, ChordStylePreset::STANDARD));
+            }
         } else if (!readProperties(e)) {
             e.unknown();
         }
