@@ -81,6 +81,7 @@ private:
     int m_hit_measure_no = -1;
     Measure* m_hit_measure = nullptr;
     std::map<const Note*, int> ottava_map;
+    std::map<EngravingItem*, EngravingItem*> chordrest_fermata_map;
 
     std::map<EngravingItem*, Note*> score_trill_map;
     std::map<EngravingItem*, int> score_trill_st_map;

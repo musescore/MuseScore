@@ -558,6 +558,15 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
         }
 
         for (mu::engraving::Segment* s = measure->first(mu::engraving::SegmentType::ChordRest); s;) {
+            EngravingItemList _list = s->childrenItems(true);
+            std::map<int, EngravingItem*> staff_fermata_map;
+            for (size_t i = 0; i < _list.size(); i++) {
+                EngravingItem* _item = _list.at(i);
+                if (_item->type() == mu::engraving::ElementType::FERMATA) {
+                    staff_fermata_map[_item->staff()->idx()] = _item;
+                }
+            }
+
             std::vector<EngravingItem*> engravingItemList = s->elist();
             bool _arpeggio_seg_checked = false;
             bool _glissando_seg_checked = false;
@@ -569,6 +578,10 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 if (engravingItem == nullptr) {
                     continue;
                 } 
+                int staff_idx = engravingItem->staff()->idx();
+                if (staff_fermata_map.find(staff_idx) != staff_fermata_map.end()) {
+                    chordrest_fermata_map[engravingItem] = staff_fermata_map[staff_idx];
+                }
                 ChordRest *chordRest = toChordRest(engravingItem);
                 int duration_ticks = chordRest->durationTypeTicks().ticks();
                 
@@ -581,7 +594,6 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                     }
                     if (item->type() == mu::engraving::ElementType::NOTE) {
                         Note* _pre_note = toNote(item);
-
                         for (Note* mnote : _measure_trill_notes) {
                             if (mnote == _pre_note) {
                                 if (!_trill_note_checked) {
@@ -659,6 +671,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                 }
                                 if (___item->type() == mu::engraving::ElementType::FERMATA) {
                                     isFermataTag = true;
+                                    chordrest_fermata_map[engravingItem] = ___item;
                                     break;
                                 }
                             }
@@ -1352,13 +1365,16 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 EngravingItem* engravingItem = engravingItemList[i];
                 if (engravingItem == nullptr) {
                     continue;
-                } 
+                }
                 ChordRest *chordRest = toChordRest(engravingItem);
                 // mu::engraving::TDuration duration = chordRest->durationType();
                 // int duration_ticks = duration.ticks().ticks();
                 int duration_ticks = chordRest->durationTypeTicks().ticks();
                 // LOGALEX() << "curr_ticks: " << tick.ticks() << ", note ticks: " << t1.ticks() << ", duration_ticks: " << duration_ticks;
                 if (t1.ticks() + duration_ticks < tick.ticks()) {
+                    if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
+                        chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
+                    }
                     engravingItem->setColor(muse::draw::Color::BLACK);
                     EngravingItemList itemList = engravingItem->childrenItems(true);
                     size_t items_len = itemList.size();
@@ -1407,6 +1423,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                         }
                     }
                 } else {
+                    if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
+                        chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::RED);
+                    }
                     engravingItem->setColor(muse::draw::Color::RED);
 
                     if (score_trill_map[engravingItem]) {
@@ -1807,6 +1826,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                     if (engravingItem == nullptr) {
                         continue;
                     }
+                    if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
+                        chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
+                    }
                     engravingItem->setColor(muse::draw::Color::BLACK);
 
                     EngravingItemList itemList = engravingItem->childrenItems(true);
@@ -1866,6 +1888,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                         EngravingItem* engravingItem = engravingItemListOfHitMeasure[i];
                         if (engravingItem == nullptr) {
                             continue;
+                        }
+                        if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
+                            chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
                         }
                         engravingItem->setColor(muse::draw::Color::BLACK);
 
