@@ -204,7 +204,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         // reuse existing mmrest
         if (mmrMeasure->ticks() != len) {
             Segment* bls = mmrMeasure->findSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
-            Segment* cs = mmrMeasure->findSegment(SegmentType::Clef | SegmentType::HeaderClef, mmrMeasure->ticks());
+            Segment* cs = mmrMeasure->findSegmentR(SegmentType::Clef, mmrMeasure->ticks());
             // adjust length
             mmrMeasure->setTicks(len);
             // move existing end barline and clef
