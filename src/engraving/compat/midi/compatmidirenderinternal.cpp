@@ -70,6 +70,8 @@
 namespace mu::engraving {
 static PitchWheelSpecs wheelSpec;
 static int LET_RING_MAX_TICKS = Constants::DIVISION * 16;
+// TODO this should be a (configurable?) constant somewhere
+static Fraction ARTICULATION_CHANGE_TIME_MAX = Fraction(1, 16);
 std::unordered_map<String,
                    CompatMidiRendererInternal::Context::BuiltInArticulation> CompatMidiRendererInternal::Context::
 s_builtInArticulationsValues = {
@@ -1627,136 +1629,124 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
         return;
     }
 
-    for (staff_idx_t staffIdx = 0; staffIdx < mainScore->nstaves(); staffIdx++) {
-        Staff* st = mainScore->staff(staffIdx);
-        if (!st->isPrimaryStaff()) {
-            continue;
-        }
-
-        for (Segment* s = mainScore->firstMeasure()->first(); s; s = s->next1()) {
-            Fraction tick = s->tick();
-            for (const EngravingItem* e : s->annotations()) {
-                if (e->staffIdx() != staffIdx || !e->isDynamic()) {
-                    continue;
-                }
-
-                const Dynamic* d = toDynamic(e);
-                int v = d->velocity();
-
-                // treat an invalid dynamic as no change, i.e. a dynamic set to 0
-                if (v < 1) {
-                    continue;
-                }
-
-                v = std::clamp(v, 1, 127);                 //  illegal values
-
-                // If a dynamic has 'velocity change' update its ending
-                int change = d->changeInVelocity();
-                ChangeDirection direction = ChangeDirection::INCREASING;
-                if (change < 0) {
-                    direction = ChangeDirection::DECREASING;
-                }
-
-                staff_idx_t dStaffIdx = d->staffIdx();
-                switch (d->voiceAssignment()) {
-                case VoiceAssignment::ALL_VOICE_IN_STAFF: {
-                    if (dStaffIdx != staffIdx) {
-                        break;
-                    }
-                    for (track_idx_t i = staffIdx * VOICES; i < (staffIdx + 1) * VOICES; ++i) {
-                        context.velocitiesByTrack[i].addDynamic(tick, v);
-                    }
-                    if (change != 0) {
-                        Fraction etick = tick + d->velocityChangeLength();
-                        ChangeMethod method = ChangeMethod::NORMAL;
-                        for (track_idx_t i = staffIdx * VOICES; i < (staffIdx + 1) * VOICES; ++i) {
-                            context.velocitiesByTrack[i].addHairpin(tick, etick, change, method, direction);
-                        }
-                    }
-                }
-                break;
-                case VoiceAssignment::ALL_VOICE_IN_INSTRUMENT: {
-                    staff_idx_t pStartStaff = st->part()->staves().front()->idx();
-                    staff_idx_t pEndStaff = st->part()->staves().back()->idx();
-                    if (dStaffIdx < pStartStaff || dStaffIdx > pEndStaff) {
-                        break;
-                    }
-                    for (staff_idx_t i = pStartStaff; i <= pEndStaff; ++i) {
-                        Staff* stp = mainScore->staff(i);
-                        if (!stp->isPrimaryStaff()) {
-                            continue;
-                        }
-                        for (track_idx_t i = stp->idx() * VOICES; i < (stp->idx() + 1) * VOICES; ++i) {
-                            context.velocitiesByTrack[i].addDynamic(tick, v);
-                        }
-                        if (change != 0) {
-                            Fraction etick = tick + d->velocityChangeLength();
-                            ChangeMethod method = ChangeMethod::NORMAL;
-                            for (track_idx_t i = stp->idx() * VOICES; i < (stp->idx() + 1) * VOICES; ++i) {
-                                context.velocitiesByTrack[i].addHairpin(tick, etick, change, method, direction);
-                            }
-                        }
-                    }
-                }
-                break;
-                case VoiceAssignment::CURRENT_VOICE_ONLY: {
-                    if (dStaffIdx != staffIdx) {
-                        break;
-                    }
-                    context.velocitiesByTrack[d->track()].addDynamic(tick, v);
-                    if (change != 0) {
-                        Fraction etick = tick + d->velocityChangeLength();
-                        ChangeMethod method = ChangeMethod::NORMAL;
-                        context.velocitiesByTrack[d->track()].addHairpin(tick, etick, change, method, direction);
-                    }
-                }
-                break;
-                }
-            }
-
-            if (s->isChordRestType()) {
-                for (size_t i = staffIdx * VOICES; i < (staffIdx + 1) * VOICES; ++i) {
-                    EngravingItem* el = s->element(track);
-                    if (!el || !el->isChord()) {
-                        continue;
-                    }
-
-                    Chord* chord = toChord(el);
-
-                    double veloMultiplier = chordVelocityMultiplier(chord, context);
-
-                    if (muse::RealIsEqual(veloMultiplier, 1.0)) {
-                        continue;
-                    }
-
-                    // TODO this should be a (configurable?) constant somewhere
-                    static Fraction ARTICULATION_CHANGE_TIME_MAX = Fraction(1, 16);
-                    Fraction ARTICULATION_CHANGE_TIME = std::min(s->ticks(), ARTICULATION_CHANGE_TIME_MAX);
-                    int start = veloMultiplier * engraving::CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
-                    int change = (veloMultiplier - 1) * engraving::CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
-                    context.velocityMultiplicationsByTrack[i].addDynamic(chord->tick(), start);
-                    context.velocityMultiplicationsByTrack[i].addHairpin(chord->tick(),
-                                                                         chord->tick() + ARTICULATION_CHANGE_TIME, change, ChangeMethod::NORMAL, ChangeDirection::DECREASING);
-                }
-            }
-        }
-
-        for (const auto& sp : mainScore->spannerMap().map()) {
-            Spanner* s = sp.second;
-            if (s->type() != ElementType::HAIRPIN || sp.second->staffIdx() != staffIdx) {
+    for (Segment* s = mainScore->firstMeasure()->first(); s; s = s->next1()) {
+        Fraction tick = s->tick();
+        for (const EngravingItem* e : s->annotations()) {
+            if (!e->isDynamic() || !e->staff()->isPrimaryStaff()) {
                 continue;
             }
 
-            fillHairpinVelocities(toHairpin(s), context.velocitiesByTrack);
+            const Dynamic* d = toDynamic(e);
+            int v = d->velocity();
+
+            // treat an invalid dynamic as no change, i.e. a dynamic set to 0
+            if (v < 1) {
+                continue;
+            }
+
+            // make sure value is legal
+            v = std::clamp(v, 1, 127);
+
+            // If a dynamic has 'velocity change' update its ending
+            int change = d->changeInVelocity();
+            ChangeDirection direction = ChangeDirection::INCREASING;
+            if (change < 0) {
+                direction = ChangeDirection::DECREASING;
+            }
+
+            switch (d->voiceAssignment()) {
+            case VoiceAssignment::ALL_VOICE_IN_STAFF: {
+                for (track_idx_t track = d->staffIdx() * VOICES; track < (d->staffIdx() + 1) * VOICES; ++track) {
+                    context.velocitiesByTrack[track].addDynamic(tick, v);
+                }
+                if (change != 0) {
+                    Fraction etick = tick + d->velocityChangeLength();
+                    ChangeMethod method = ChangeMethod::NORMAL;
+                    for (track_idx_t track = d->staffIdx() * VOICES; track < (d->staffIdx() + 1) * VOICES; ++track) {
+                        context.velocitiesByTrack[track].addHairpin(tick, etick, change, method, direction);
+                    }
+                }
+            }
+            break;
+            case VoiceAssignment::ALL_VOICE_IN_INSTRUMENT: {
+                Part* part = d->staff()->part();
+                staff_idx_t pStartStaff = part->staves().front()->idx();
+                staff_idx_t pEndStaff = part->staves().back()->idx();
+                if (d->staffIdx() < pStartStaff || d->staffIdx() > pEndStaff) {
+                    break;
+                }
+                for (staff_idx_t staffIdx = pStartStaff; staffIdx <= pEndStaff; ++staffIdx) {
+                    Staff* stp = mainScore->staff(staffIdx);
+                    if (!stp->isPrimaryStaff()) {
+                        continue;
+                    }
+                    for (track_idx_t track = stp->idx() * VOICES; track < (stp->idx() + 1) * VOICES; ++track) {
+                        context.velocitiesByTrack[track].addDynamic(tick, v);
+                    }
+                    if (change != 0) {
+                        Fraction etick = tick + d->velocityChangeLength();
+                        ChangeMethod method = ChangeMethod::NORMAL;
+                        for (track_idx_t track = stp->idx() * VOICES; track < (stp->idx() + 1) * VOICES; ++track) {
+                            context.velocitiesByTrack[track].addHairpin(tick, etick, change, method, direction);
+                        }
+                    }
+                }
+            }
+            break;
+            case VoiceAssignment::CURRENT_VOICE_ONLY: {
+                context.velocitiesByTrack[d->track()].addDynamic(tick, v);
+                if (change != 0) {
+                    Fraction etick = tick + d->velocityChangeLength();
+                    ChangeMethod method = ChangeMethod::NORMAL;
+                    context.velocitiesByTrack[d->track()].addHairpin(tick, etick, change, method, direction);
+                }
+            }
+            break;
+            }
+        }
+
+        if (s->isChordRestType()) {
+            for (track_idx_t track = 0; track < mainScore->ntracks(); ++track) {
+                EngravingItem* el = s->element(track);
+                if (!el || !el->isChord() || !el->staff()->isPrimaryStaff()) {
+                    continue;
+                }
+
+                Chord* chord = toChord(el);
+
+                double veloMultiplier = chordVelocityMultiplier(chord, context);
+
+                if (muse::RealIsEqual(veloMultiplier, 1.0)) {
+                    continue;
+                }
+
+                Fraction ARTICULATION_CHANGE_TIME = std::min(s->ticks(), ARTICULATION_CHANGE_TIME_MAX);
+                int start = veloMultiplier * CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
+                int change = (veloMultiplier - 1) * CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
+                context.velocityMultiplicationsByTrack[track].addDynamic(chord->tick(), start);
+                context.velocityMultiplicationsByTrack[track].addHairpin(chord->tick(),
+                                                                         chord->tick() + ARTICULATION_CHANGE_TIME, change, ChangeMethod::NORMAL,
+                                                                         ChangeDirection::DECREASING);
+            }
         }
     }
 
+    for (const auto& sp : mainScore->spannerMap().map()) {
+        Spanner* s = sp.second;
+        if (!s->isHairpin() || !s->staff()->isPrimaryStaff()) {
+            continue;
+        }
+
+        fillHairpinVelocities(toHairpin(s), context.velocitiesByTrack);
+    }
+
     for (Staff* st : mainScore->staves()) {
-        if (st->isPrimaryStaff()) {
-            for (track_idx_t track = st->idx() * VOICES; track < (st->idx() + 1) * VOICES; ++track) {
-                context.velocitiesByTrack[track].setup();
-                context.velocityMultiplicationsByTrack[track].setup();
-            }
+        if (!st->isPrimaryStaff()) {
+            continue;
+        }
+        for (track_idx_t track = st->idx() * VOICES; track < (st->idx() + 1) * VOICES; ++track) {
+            context.velocitiesByTrack[track].setup();
+            context.velocityMultiplicationsByTrack[track].setup();
         }
     }
 
@@ -1768,10 +1758,11 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
 
         Volta* volta = toVolta(spanner);
         Staff* st = volta->staff();
-        if (st->isPrimaryStaff()) {
-            for (track_idx_t track = st->idx() * VOICES; track < (st->idx() + 1) * VOICES; ++track) {
-                fillVoltaVelocities(volta, context.velocitiesByTrack[track]);
-            }
+        if (!st->isPrimaryStaff()) {
+            continue;
+        }
+        for (track_idx_t track = st->idx() * VOICES; track < (st->idx() + 1) * VOICES; ++track) {
+            fillVoltaVelocities(volta, context.velocitiesByTrack[track]);
         }
     }
 }
