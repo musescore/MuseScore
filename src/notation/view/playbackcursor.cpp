@@ -29,6 +29,11 @@
 #include "src/engraving/dom/arpeggio.h"
 #include "src/engraving/dom/ottava.h"
 #include "src/engraving/dom/spanner.h"
+#include "src/engraving/dom/rest.h"
+#include "src/engraving/dom/notedot.h"
+#include "src/engraving/dom/accidental.h"
+#include "src/engraving/dom/stem.h"
+#include "src/engraving/dom/hook.h"
 
 using namespace mu::notation;
 using namespace muse;
@@ -1361,12 +1366,39 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                         if (item == nullptr) {
                             continue;
                         }
+                        
                         if (item->type() == mu::engraving::ElementType::NOTE) {
                             Note *_pre_note = toNote(item);
                             // check grace
                             bool is_grace = _pre_note->isGrace();
                             if (is_grace) {
                                 _pre_note->setColor(muse::draw::Color::BLACK);
+                            }
+                            if (_pre_note->qmlDotsCount() > 0) {
+                                for (NoteDot* dot : _pre_note->dots()) {
+                                    dot->setColor(muse::draw::Color::BLACK);
+                                }
+                            }
+                            if (_pre_note->accidental()) {
+                                _pre_note->accidental()->setColor(muse::draw::Color::BLACK);
+                            }
+
+                            if (_pre_note->chord()) {
+                                if (_pre_note->chord()->articulations().size() > 0) {
+                                    std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
+                                    for (auto& a : mArticulations) {
+                                        a->setColor(muse::draw::Color::BLACK);
+                                    }
+                                }
+
+                                Stem* _stem = _pre_note->chord()->stem();
+                                if (_stem) {
+                                    _stem->setColor(muse::draw::Color::BLACK);
+                                }
+                                Hook* _hook = _pre_note->chord()->hook();
+                                if (_hook) {
+                                    _hook->setColor(muse::draw::Color::BLACK);
+                                }
                             }
                         }
                     }
@@ -1470,6 +1502,19 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                             for (size_t grace_i = 0; grace_i < gracechords_size; ++grace_i) {
                                                 if (ticks_dis >= single_grace_duration_ticks * grace_i && ticks_dis <= single_grace_duration_ticks * (grace_i + 1)) {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::RED);
+                                                    for (Note* choreNote : graceChords[grace_i]->notes()) {
+                                                        if (choreNote->accidental()) {
+                                                            choreNote->accidental()->setColor(muse::draw::Color::RED);
+                                                        }
+                                                    }
+                                                    Stem* _stem = graceChords[grace_i]->stem();
+                                                    if (_stem) {
+                                                        _stem->setColor(muse::draw::Color::RED);
+                                                    }
+                                                    Hook* _hook = graceChords[grace_i]->hook();
+                                                    if (_hook) {
+                                                        _hook->setColor(muse::draw::Color::RED);
+                                                    }
                                                     std::vector<Note*> _notesList = graceChords[grace_i]->notes();
                                                     for (Note* __note__ : _notesList) {
                                                         int __note__ottavaType = ottava_map[__note__];
@@ -1477,14 +1522,85 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                     }
                                                 } else {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::BLACK);
+                                                    for (Note* choreNote : graceChords[grace_i]->notes()) {
+                                                        if (choreNote->accidental()) {
+                                                            choreNote->accidental()->setColor(muse::draw::Color::BLACK);
+                                                        }
+                                                    }
+                                                    Stem* _stem = graceChords[grace_i]->stem();
+                                                    if (_stem) {
+                                                        _stem->setColor(muse::draw::Color::BLACK);
+                                                    }
+                                                    Hook* _hook = graceChords[grace_i]->hook();
+                                                    if (_hook) {
+                                                        _hook->setColor(muse::draw::Color::BLACK);
+                                                    }
                                                 }
                                             }
                                             _pre_note->setColor(muse::draw::Color::BLACK);
+                                            for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
+                                                _pre_note->dot(k)->setColor(muse::draw::Color::BLACK);
+                                            }
+                                            if (_pre_note->accidental()) {
+                                                _pre_note->accidental()->setColor(muse::draw::Color::BLACK);
+                                            }
+                                            if (_pre_note->chord()) {
+                                                if (_pre_note->chord()->articulations().size() > 0) {
+                                                    std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
+                                                    for (auto& a : mArticulations) {
+                                                        a->setColor(muse::draw::Color::BLACK);
+                                                    }
+                                                }
+                                                Stem* _stem = _pre_note->chord()->stem();
+                                                if (_stem) {
+                                                    _stem->setColor(muse::draw::Color::BLACK);
+                                                }
+                                                Hook* _hook = _pre_note->chord()->hook();
+                                                if (_hook) {
+                                                    _hook->setColor(muse::draw::Color::BLACK);
+                                                }
+                                            }
                                         } else {
                                             for (Chord *_chord : _graceChords) {
                                                 _chord->setColor(muse::draw::Color::BLACK);
+                                                for (Note* choreNote : _chord->notes()) {
+                                                    if (choreNote->accidental()) {
+                                                        choreNote->accidental()->setColor(muse::draw::Color::BLACK);
+                                                    }
+                                                }
+                                                Stem* _stem = _chord->stem();
+                                                if (_stem) {
+                                                    _stem->setColor(muse::draw::Color::BLACK);
+                                                }
+                                                Hook* _hook = _chord->hook();
+                                                if (_hook) {
+                                                    _hook->setColor(muse::draw::Color::BLACK);
+                                                }
                                             }
                                             _pre_note->setColor(muse::draw::Color::RED);
+                                            for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
+                                                _pre_note->dot(k)->setColor(muse::draw::Color::RED);
+                                            }
+                                            if (_pre_note->accidental()) {
+                                                _pre_note->accidental()->setColor(muse::draw::Color::RED);
+                                            }
+                                            if (_pre_note->chord()) {
+                                                if (_pre_note->chord()->articulations().size() > 0) {
+                                                    std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
+                                                    for (auto& a : mArticulations) {
+                                                        a->setColor(muse::draw::Color::RED);
+                                                    }
+                                                }
+
+                                                Stem* _stem = _pre_note->chord()->stem();
+                                                if (_stem) {
+                                                    _stem->setColor(muse::draw::Color::RED);
+                                                }
+                                                Hook* _hook = _pre_note->chord()->hook();
+                                                if (_hook) {
+                                                    _hook->setColor(muse::draw::Color::RED);
+                                                }
+                                            }
                                             m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType, note_hit_ts);
                                         }
                                     } else {
@@ -1493,28 +1609,136 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                             for (size_t grace_i = 0; grace_i < gracechords_size; ++grace_i) {
                                                 if (ticks_dis >= _pre_note_duration_ticks - single_grace_duration_ticks * (gracechords_size - grace_i) && ticks_dis <= _pre_note_duration_ticks - single_grace_duration_ticks * (gracechords_size - grace_i - 1)) {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::RED);
+                                                    for (Note* choreNote : graceChords[grace_i]->notes()) {
+                                                        if (choreNote->accidental()) {
+                                                            choreNote->accidental()->setColor(muse::draw::Color::RED);
+                                                        }
+                                                    }
+                                                    Stem* _stem = graceChords[grace_i]->stem();
+                                                    if (_stem) {
+                                                        _stem->setColor(muse::draw::Color::RED);
+                                                    }
+                                                    Hook* _hook = graceChords[grace_i]->hook();
+                                                    if (_hook) {
+                                                        _hook->setColor(muse::draw::Color::RED);
+                                                    }
                                                     for (Note* _note_item : graceChords[grace_i]->notes()) {
                                                         int _note_item_ottavaType = ottava_map[_note_item];
                                                         m_notation->interaction()->addPlaybackNote(_note_item, _note_item_ottavaType, false);
                                                     }
                                                 } else {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::BLACK);
+                                                    for (Note* choreNote : graceChords[grace_i]->notes()) {
+                                                        if (choreNote->accidental()) {
+                                                            choreNote->accidental()->setColor(muse::draw::Color::BLACK);
+                                                        }
+                                                    }
+                                                    Stem* _stem = graceChords[grace_i]->stem();
+                                                    if (_stem) {
+                                                        _stem->setColor(muse::draw::Color::BLACK);
+                                                    }
+                                                    Hook* _hook = graceChords[grace_i]->hook();
+                                                    if (_hook) {
+                                                        _hook->setColor(muse::draw::Color::BLACK);
+                                                    }
                                                 }
                                             }
                                             _pre_note->setColor(muse::draw::Color::BLACK);
+                                            for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
+                                                _pre_note->dot(k)->setColor(muse::draw::Color::BLACK);
+                                            }
+                                            if (_pre_note->accidental()) {
+                                                _pre_note->accidental()->setColor(muse::draw::Color::BLACK);
+                                            }
+                                            if (_pre_note->chord()) {
+                                                if (_pre_note->chord()->articulations().size() > 0) {
+                                                    std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
+                                                    for (auto& a : mArticulations) {
+                                                        a->setColor(muse::draw::Color::BLACK);
+                                                    }
+                                                    Stem* _stem = _pre_note->chord()->stem();
+                                                    if (_stem) {
+                                                        _stem->setColor(muse::draw::Color::BLACK);
+                                                    }
+                                                    Hook* _hook = _pre_note->chord()->hook();
+                                                    if (_hook) {
+                                                        _hook->setColor(muse::draw::Color::BLACK);
+                                                    }
+                                                }
+                                            }
                                         } else {
                                             for (Chord *_chord : _graceChords) {
                                                 _chord->setColor(muse::draw::Color::BLACK);
+                                                for (Note* choreNote : _chord->notes()) {
+                                                    if (choreNote->accidental()) {
+                                                        choreNote->accidental()->setColor(muse::draw::Color::BLACK);
+                                                    }
+                                                }
+                                                Stem* _stem = _chord->stem();
+                                                if (_stem) {
+                                                    _stem->setColor(muse::draw::Color::BLACK);
+                                                }
+                                                Hook* _hook = _chord->hook();
+                                                if (_hook) {
+                                                    _hook->setColor(muse::draw::Color::BLACK);
+                                                }
                                             }
                                             _pre_note->setColor(muse::draw::Color::RED);
+                                            for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
+                                                _pre_note->dot(k)->setColor(muse::draw::Color::RED);
+                                            }
+                                            if (_pre_note->accidental()) {
+                                                _pre_note->accidental()->setColor(muse::draw::Color::RED);
+                                            }
+                                            if (_pre_note->chord()) {
+                                                if (_pre_note->chord()->articulations().size() > 0) {
+                                                    std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
+                                                    for (auto& a : mArticulations) {
+                                                        a->setColor(muse::draw::Color::RED);
+                                                    }
+                                                }
+
+                                                Stem* _stem = _pre_note->chord()->stem();
+                                                if (_stem) {
+                                                    _stem->setColor(muse::draw::Color::RED);
+                                                }
+                                                Hook* _hook = _pre_note->chord()->hook();
+                                                if (_hook) {
+                                                    _hook->setColor(muse::draw::Color::RED);
+                                                }
+                                            }
                                             m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType, note_hit_ts);
                                         }
                                     }
                                 } else {
+                                    for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
+                                        _pre_note->dot(k)->setColor(muse::draw::Color::RED);
+                                    }
+                                    if (_pre_note->accidental()) {
+                                        _pre_note->accidental()->setColor(muse::draw::Color::RED);
+                                    }
+                                    
+                                    if (_pre_note->chord()) {
+                                        if (_pre_note->chord()->articulations().size() > 0) {
+                                            std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
+                                            for (auto& a : mArticulations) {
+                                                a->setColor(muse::draw::Color::RED);
+                                            }
+                                        }
+                                        Stem* _stem = _pre_note->chord()->stem();
+                                        if (_stem) {
+                                            _stem->setColor(muse::draw::Color::RED);
+                                        }
+
+                                        Hook* _hook = _pre_note->chord()->hook();
+                                        if (_hook) {
+                                            _hook->setColor(muse::draw::Color::RED);
+                                        }
+                                    }
                                     m_notation->interaction()->addPlaybackNote(_pre_note, ottava_map[_pre_note], note_hit_ts);
                                 }
                             }
-                        }  
+                        } 
                     }
 
                     if (s->tick().ticks() != curr_seg_ticks) {
@@ -1576,6 +1800,44 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                         continue;
                     }
                     engravingItem->setColor(muse::draw::Color::BLACK);
+
+                    EngravingItemList itemList = engravingItem->childrenItems(true);
+                    for (size_t j = 0; j < itemList.size(); j++) {
+                        EngravingItem* item = itemList.at(j);
+                        if (item == nullptr) {
+                            continue;
+                        }
+                        
+                        if (item->type() == mu::engraving::ElementType::NOTE) {
+                            Note *_pre_note = toNote(item);
+                            if (_pre_note->isGrace()) {
+                                _pre_note->setColor(muse::draw::Color::BLACK);
+                            } 
+                            for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
+                                _pre_note->dot(k)->setColor(muse::draw::Color::BLACK);
+                            }
+                            if (_pre_note->accidental()) {
+                                _pre_note->accidental()->setColor(muse::draw::Color::BLACK);
+                            }
+                            if (_pre_note->chord()) {
+                                if (_pre_note->chord()->articulations().size() > 0) {
+                                    std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
+                                    for (auto& a : mArticulations) {
+                                        a->setColor(muse::draw::Color::BLACK);
+                                    }
+                                }
+
+                                Stem* _stem = _pre_note->chord()->stem();
+                                if (_stem) {
+                                    _stem->setColor(muse::draw::Color::BLACK);
+                                }
+                                Hook* _hook = _pre_note->chord()->hook();
+                                if (_hook) {
+                                    _hook->setColor(muse::draw::Color::BLACK);
+                                }
+                            }
+                        }
+                    }
                 }
 
                 mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ChordRest);
@@ -1584,6 +1846,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 }
                 segment = next_segment;
             }
+
             if (hit_measure() != nullptr && prevMeasure != hit_measure()) {
                 for (mu::engraving::Segment* segment = hit_measure()->first(mu::engraving::SegmentType::ChordRest); segment;) {
                     std::vector<EngravingItem*> engravingItemListOfHitMeasure = segment->elist();
@@ -1594,6 +1857,44 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                             continue;
                         }
                         engravingItem->setColor(muse::draw::Color::BLACK);
+
+                        EngravingItemList itemList = engravingItem->childrenItems(true);
+                        for (size_t j = 0; j < itemList.size(); j++) {
+                            EngravingItem* item = itemList.at(j);
+                            if (item == nullptr) {
+                                continue;
+                            }
+                            
+                            if (item->type() == mu::engraving::ElementType::NOTE) {
+                                Note *_pre_note = toNote(item);
+                                if (_pre_note->isGrace()) {
+                                    _pre_note->setColor(muse::draw::Color::BLACK);
+                                }
+                                for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
+                                    _pre_note->dot(k)->setColor(muse::draw::Color::BLACK);
+                                }
+                                if (_pre_note->accidental()) {
+                                    _pre_note->accidental()->setColor(muse::draw::Color::BLACK);
+                                }
+                                if (_pre_note->chord()) {
+                                    if (_pre_note->chord()->articulations().size() > 0) {
+                                        std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
+                                        for (auto& a : mArticulations) {
+                                            a->setColor(muse::draw::Color::BLACK);
+                                        }
+                                    }
+
+                                    Stem* _stem = _pre_note->chord()->stem();
+                                    if (_stem) {
+                                        _stem->setColor(muse::draw::Color::BLACK);
+                                    }
+                                    Hook* _hook = _pre_note->chord()->hook();
+                                    if (_hook) {
+                                        _hook->setColor(muse::draw::Color::BLACK);
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ChordRest);
