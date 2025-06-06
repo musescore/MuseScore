@@ -41,7 +41,7 @@
 -->
 
 <!-- allow style to control mag and position adjustments -->
-  <autoAdjust mag="0.8" adjust="-0.29">1</autoAdjust>
+  <autoAdjust>1</autoAdjust>
 
   <font>
 <!-- this allows "b" to render as a literal when encountered as a note name -->

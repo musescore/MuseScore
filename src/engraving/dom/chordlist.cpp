@@ -1872,9 +1872,13 @@ void ChordList::read(XmlReader& e, int mscVersion)
             ++fontIdx;
         } else if (tag == "autoAdjust") {
             String nmag = e.attribute("mag");
-            m_nmag = nmag.toDouble();
+            if (!nmag.empty()) {
+                m_nmag = nmag.toDouble();
+            }
             String nadjust = e.attribute("adjust");
-            m_nadjust = nadjust.toDouble();
+            if (!nadjust.empty()) {
+                m_nadjust = nadjust.toDouble();
+            }
             m_autoAdjust = e.readBool();
         } else if (tag == "token") {
             ChordToken t;
