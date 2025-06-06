@@ -566,7 +566,7 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "velocity") {
             d->setVelocity(e.readInt());
         } else if (tag == "dynType") {
-            d->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+            d->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
         } else if (tag == "veloChange") {
             d->setChangeInVelocity(e.readInt());
         } else if (tag == "veloChangeSpeed") {
@@ -2721,7 +2721,7 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
         } else if (tag == "veloChange") {
             h->setVeloChange(e.readInt());
         } else if (tag == "dynType") {
-            h->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+            h->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
         } else if (tag == "useTextLine") {        // obsolete
             e.readInt();
             if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {

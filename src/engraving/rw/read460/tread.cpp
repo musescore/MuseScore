@@ -728,7 +728,7 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setVelocity(e.readInt());
         } else if (tag == "dynType") { // obsolete
             if (mscVersion < 440) {
-                d->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+                d->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
             } else {
                 e.skipCurrentElement();
             }
@@ -3109,7 +3109,7 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             h->setVeloChange(e.readInt());
         } else if (tag == "dynType") { // obsolete
             if (mscVersion < 440) {
-                h->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+                h->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
             } else {
                 e.skipCurrentElement();
             }
