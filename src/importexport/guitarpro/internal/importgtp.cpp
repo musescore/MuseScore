@@ -41,6 +41,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/glissando.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/instrtemplate.h"
@@ -103,11 +104,6 @@ GuitarPro::GuitarPro(MasterScore* s, int v, const modularity::ContextPtr& iocCtx
     version = v;
     voltaSequence = 1;
     tempo = -1;
-}
-
-GuitarPro::~GuitarPro()
-{
-    delete[] slurs;
 }
 
 //---------------------------------------------------------
@@ -319,6 +315,16 @@ void GuitarPro::addLetRing(ChordRest* cr, bool hasLetRing)
 void GuitarPro::addTrill(ChordRest* cr, bool hasTrill)
 {
     m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::TRILL, ContiniousElementsBuilder::ImportType::TRILL, hasTrill);
+}
+
+//---------------------------------------------------------
+//   addHammerOnPullOff
+//---------------------------------------------------------
+
+void GuitarPro::addHammerOnPullOff(ChordRest* cr, bool hasHammerOnPullOff)
+{
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::HAMMER_ON_PULL_OFF,
+                                                        ContiniousElementsBuilder::ImportType::HAMMER_ON_PULL_OFF, hasHammerOnPullOff);
 }
 
 //---------------------------------------------------------
@@ -1015,14 +1021,7 @@ bool GuitarPro1::read(IODevice* io)
         key = readInt();        // key
     }
     staves  = version > 102 ? 8 : 1;
-
-    slurs = new Slur*[staves];
-    for (size_t i = 0; i < staves; ++i) {
-        slurs[i] = nullptr;
-    }
-
-    //int tnumerator   = 4;
-    //int tdenominator = 4;
+    slurs.resize(staves, nullptr);
 
     //
     // create a part for every staff
@@ -1047,7 +1046,6 @@ bool GuitarPro1::read(IODevice* io)
             tuning[j] = readInt();
         }
         std::vector<int> tuning2(strings);
-        //int tuning2[strings];
         for (int k = 0; k < strings; ++k) {
             tuning2[strings - k - 1] = tuning[k];
         }
@@ -1101,7 +1099,6 @@ bool GuitarPro1::read(IODevice* io)
             segment->add(s);
         }
         std::vector<Tuplet*> tuplets(staves);
-        //Tuplet* tuplets[staves];
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
             tuplets[staffIdx] = 0;
         }
@@ -2115,10 +2112,7 @@ bool GuitarPro3::read(IODevice* io)
     staves = readInt();
     initDynamics(staves);
 
-    slurs = new Slur*[staves];
-    for (size_t i = 0; i < staves; ++i) {
-        slurs[i] = nullptr;
-    }
+    slurs.resize(staves, nullptr);
 
     int tnumerator   = 4;
     int tdenominator = 4;
