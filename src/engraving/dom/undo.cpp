@@ -1749,24 +1749,61 @@ void ChangeMeasureLen::flip(EditData*)
 //   TransposeHarmony
 //---------------------------------------------------------
 
-TransposeHarmony::TransposeHarmony(Harmony* h, int rtpc, int btpc)
+TransposeHarmony::TransposeHarmony(Harmony* h, Interval interval, bool doubleSharpsFlats)
 {
-    harmony = h;
-    rootTpc = rtpc;
-    baseTpc = btpc;
+    m_harmony = h;
+    m_interval = interval;
+    m_useDoubleSharpsFlats = doubleSharpsFlats;
 }
 
 void TransposeHarmony::flip(EditData*)
 {
-    harmony->realizedHarmony().setDirty(true);   //harmony should be re-realized after transposition
-    int baseTpc1 = harmony->bassTpc();
-    int rootTpc1 = harmony->rootTpc();
-    harmony->setBassTpc(baseTpc);
-    harmony->setRootTpc(rootTpc);
-    harmony->setXmlText(harmony->harmonyName());
-    harmony->render();
-    rootTpc = rootTpc1;
-    baseTpc = baseTpc1;
+    m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
+
+    for (HarmonyInfo* info : m_harmony->chords()) {
+        info->setRootTpc(transposeTpc(info->rootTpc(), m_interval, m_useDoubleSharpsFlats));
+        info->setBassTpc(transposeTpc(info->bassTpc(), m_interval, m_useDoubleSharpsFlats));
+    }
+
+    m_harmony->setXmlText(m_harmony->harmonyName());
+    m_harmony->render();
+    m_harmony->triggerLayout();
+    m_interval.flip();
+}
+
+//---------------------------------------------------------
+//   TransposeHarmonyDiatonic
+//---------------------------------------------------------
+
+void TransposeHarmonyDiatonic::flip(EditData*)
+{
+    m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
+
+    Fraction tick = Fraction(0, 1);
+    Segment* seg = toSegment(m_harmony->findAncestor(ElementType::SEGMENT));
+    if (seg) {
+        tick = seg->tick();
+    }
+    Key key = !m_harmony->staff() ? Key::C : m_harmony->staff()->key(tick);
+
+    for (HarmonyInfo* info : m_harmony->chords()) {
+        info->setRootTpc(transposeTpcDiatonicByKey(info->rootTpc(), m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats));
+        info->setBassTpc(transposeTpcDiatonicByKey(info->bassTpc(), m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats));
+    }
+
+    m_harmony->setXmlText(m_harmony->harmonyName());
+    m_harmony->render();
+    m_harmony->triggerLayout();
+
+    m_interval *= -1;
+}
+
+TransposeHarmonyDiatonic::TransposeHarmonyDiatonic(Harmony* h, int interval, bool useDoubleSharpsFlats, bool transposeKeys)
+{
+    m_harmony = h;
+    m_interval = interval;
+    m_useDoubleSharpsFlats = useDoubleSharpsFlats;
+    m_transposeKeys = transposeKeys;
 }
 
 //---------------------------------------------------------
@@ -2038,12 +2075,16 @@ static void changeChordStyle(Score* score)
     double eadjust = style.styleD(Sid::chordExtensionAdjust);
     double mmag = style.styleD(Sid::chordModifierMag);
     double madjust = style.styleD(Sid::chordModifierAdjust);
-    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
+    double stackedmmag = style.styleD(Sid::chordStackedModiferMag);
+    bool mstackModifiers = style.styleB(Sid::verticallyStackModifiers);
+    bool mexcludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
+    String msymbolFont = style.styleSt(Sid::musicalTextFont);
+    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, mstackModifiers, mexcludeModsHAlign, msymbolFont);
     if (score->style().styleB(Sid::chordsXmlFile)) {
         score->chordList()->read(score->configuration()->appDataPath(), u"chords.xml");
     }
     score->chordList()->read(score->configuration()->appDataPath(), style.styleSt(Sid::chordDescriptionFile));
-    score->chordList()->setCustomChordList(style.styleSt(Sid::chordStyle) == "custom");
+    score->chordList()->setCustomChordList(style.styleV(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::CUSTOM);
 }
 
 //---------------------------------------------------------
@@ -2093,7 +2134,10 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
     case Sid::chordExtensionAdjust:
     case Sid::chordModifierMag:
     case Sid::chordModifierAdjust:
-    case Sid::chordDescriptionFile: {
+    case Sid::chordDescriptionFile:
+    case Sid::verticallyStackModifiers:
+    case Sid::chordAlignmentExcludeModifiers:
+    case Sid::musicalTextFont: {
         changeChordStyle(score);
     }
     break;

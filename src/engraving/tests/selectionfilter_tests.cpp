@@ -122,7 +122,10 @@ TEST_F(Engraving_SelectionFilterTests, filterFingering)
 
 TEST_F(Engraving_SelectionFilterTests, filterChordSymbol)
 {
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
     testFilter(5, ElementsSelectionFilterTypes::CHORD_SYMBOL);
+    MScore::useRead302InTestMode = use302;
 }
 
 TEST_F(Engraving_SelectionFilterTests, filterSlur)

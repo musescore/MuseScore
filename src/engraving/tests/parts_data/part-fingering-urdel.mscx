@@ -6,6 +6,7 @@
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <chordSymPosition>left</chordSymPosition>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
@@ -827,6 +828,7 @@
       <Style>
         <maskBarlinesForText>0</maskBarlinesForText>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+        <chordSymPosition>left</chordSymPosition>
         <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
         <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
         <showCourtesiesRepeats>0</showCourtesiesRepeats>
@@ -1280,6 +1282,7 @@
       <Style>
         <maskBarlinesForText>0</maskBarlinesForText>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+        <chordSymPosition>left</chordSymPosition>
         <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
         <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
         <showCourtesiesRepeats>0</showCourtesiesRepeats>

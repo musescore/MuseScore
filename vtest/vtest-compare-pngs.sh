@@ -68,7 +68,7 @@ for PNG_REF_FILE in $PNG_REF_LIST ; do
     
     if test -f $PNG_CUR_FILE; then
         code=$(compare -metric AE -fuzz 0.0% $PNG_REF_FILE $PNG_CUR_FILE $PNG_DIFF_FILE 2>&1)
-        if (( $code > 0 )); then
+        if (( $code > 0)); then
             echo "Different: ref: $PNG_REF_FILE, current: $PNG_CUR_FILE, code: $code"
             export DIFF_FOUND=true
             DIFF_NAME_LIST+=" "$FILE_NAME

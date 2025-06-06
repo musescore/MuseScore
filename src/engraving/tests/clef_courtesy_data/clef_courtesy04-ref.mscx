@@ -15,6 +15,7 @@
       <measureNumberSystem>0</measureNumberSystem>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <genCourtesyTimesig>0</genCourtesyTimesig>
+      <chordSymPosition>left</chordSymPosition>
       <sectionPause>2</sectionPause>
       <evenHeaderR>$:workTitle:</evenHeaderR>
       <oddHeaderL>$:workTitle:</oddHeaderL>

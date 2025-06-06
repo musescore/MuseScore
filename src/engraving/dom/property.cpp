@@ -276,6 +276,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::HARMONY_VOICE_LITERAL,   true,  "harmonyVoiceLiteral",   P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony voice literal") },
     { Pid::HARMONY_VOICING,         true,  "harmonyVoicing",        P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony voicing") },
     { Pid::HARMONY_DURATION,        true,  "harmonyDuration",       P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony duration") },
+    { Pid::HARMONY_BASS_SCALE,      true,  "harmonyBassScale",      P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony bass scale") },
 
     { Pid::SYSTEM_BRACKET,          false, "type",                  P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "type") },
     { Pid::GAP,                     false, 0,                       P_TYPE::BOOL,               PropertyGroup::NONE,      DUMMY_QT_TR_NOOP("propertyName", "gap") },
@@ -385,7 +386,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::LOCATION_NOTE,           false, "note",                  P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "note index") },
 
     { Pid::VOICE,                   true,  "voice",                 P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "voice") },
-    { Pid::POSITION,                false, "position",              P_TYPE::FRACTION,           PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "position") },
+    { Pid::POSITION,                false, "position",              P_TYPE::ALIGN_H,            PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "position") },
 
     { Pid::CLEF_TYPE_CONCERT,       true,  "concertClefType",       P_TYPE::CLEF_TYPE,          PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "concert clef type") },
     { Pid::CLEF_TYPE_TRANSPOSING,   true,  "transposingClefType",   P_TYPE::CLEF_TYPE,          PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "transposing clef type") },
@@ -457,6 +458,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::APPLY_TO_ALL_STAVES,     false, "applyToAllStaves",      P_TYPE::BOOL,               PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "apply to all staves") },
     { Pid::IS_COURTESY,             false, "isCourtesy",            P_TYPE::BOOL,               PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "is courtesy") },
+    { Pid::VERTICAL_ALIGN,          false, "verticalAlign",         P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "vertical align") },
 
     { Pid::END,                     false, "++end++",               P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };

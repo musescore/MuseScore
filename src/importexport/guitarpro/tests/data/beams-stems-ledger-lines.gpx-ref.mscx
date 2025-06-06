@@ -72,9 +72,11 @@
             <eid>G_G</eid>
             </Dynamic>
           <Harmony>
-            <root>16</root>
-            <name>add11</name>
-            <base>20</base>
+            <harmonyInfo>
+              <name>add11</name>
+              <root>16</root>
+              <bass>20</bass>
+              </harmonyInfo>
             <eid>H_H</eid>
             </Harmony>
           <RehearsalMark>
@@ -493,9 +495,11 @@
             <eid>JB_JB</eid>
             </Dynamic>
           <Harmony>
-            <root>15</root>
-            <name>add9</name>
-            <base>18</base>
+            <harmonyInfo>
+              <name>add9</name>
+              <root>15</root>
+              <bass>18</bass>
+              </harmonyInfo>
             <eid>KB_KB</eid>
             </Harmony>
           <Beam>
