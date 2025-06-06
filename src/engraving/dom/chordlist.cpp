@@ -1509,7 +1509,7 @@ double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t 
     case ChordTokenClass::MODIFIER: {
         double yAdj = 0.0;
         if (m_stackModifiers && nmodifiers > 1) {
-            static constexpr double LINE_SPACING = 0.5;             // Space between modifiers in units of modiferHeight
+            static constexpr double LINE_SPACING = 0.4;             // Space between modifiers in units of modiferHeight
             const double modifierHeight = m_mmag * m_stackedmmag;   // Modifier height in units of root capheight
             const double stackHeight = (nmodifiers * modifierHeight) + ((nmodifiers - 1) * modifierHeight * LINE_SPACING); // Height of total modifier stack (bottom baseline to top capheight)
             const double base = stackHeight / 2;                            // Baseline of bottom modifier in the stack
