@@ -213,6 +213,7 @@
     <chordSymbolAFrameRound>0</chordSymbolAFrameRound>
     <chordSymbolAFrameFgColor r="0" g="0" b="0" a="255"/>
     <chordSymbolAFrameBgColor r="255" g="255" b="255" a="0"/>
+    <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
     <chordSymbolBFontFace>FreeSerif</chordSymbolBFontFace>
     <chordSymbolBFontSize>12</chordSymbolBFontSize>
     <chordSymbolBFontSpatiumDependent>1</chordSymbolBFontSpatiumDependent>
@@ -224,6 +225,7 @@
     <chordSymbolBFrameRound>0</chordSymbolBFrameRound>
     <chordSymbolBFrameFgColor r="0" g="0" b="0" a="255"/>
     <chordSymbolBFrameBgColor r="255" g="255" b="255" a="0"/>
+    <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
     <romanNumeralFontFace>Campania</romanNumeralFontFace>
     <romanNumeralFontSize>12</romanNumeralFontSize>
     <romanNumeralFontSpatiumDependent>1</romanNumeralFontSpatiumDependent>
@@ -290,9 +292,9 @@
     <lowerCaseMinorChords>0</lowerCaseMinorChords>
     <lowerCaseBassNotes>0</lowerCaseBassNotes>
     <allCapsNoteNames>0</allCapsNoteNames>
-    <chordStyle>std</chordStyle>
+    <chordStyle>legacy</chordStyle>
     <chordsXmlFile>0</chordsXmlFile>
-    <chordDescriptionFile>chords_std.xml</chordDescriptionFile>
+    <chordDescriptionFile>chords_legacy.xml</chordDescriptionFile>
     <chordExtensionMag>1</chordExtensionMag>
     <chordExtensionAdjust>0</chordExtensionAdjust>
     <chordModifierMag>1</chordModifierMag>
