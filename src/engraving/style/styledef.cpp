@@ -494,7 +494,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(chordModifierMag,                           PropertyValue(1.0)),
     styleDef(chordModifierAdjust,                        PropertyValue(0.0)),
     styleDef(verticallyStackModifiers,                   false),
-    styleDef(chordStackedModiferMag,                     PropertyValue(0.7)),
+    styleDef(chordStackedModiferMag,                     PropertyValue(0.75)),
     styleDef(chordBassNoteStagger,                       false),
     styleDef(chordBassNoteScale,                         1.0),
     styleDef(polychordDividerThickness,                  Spatium(0.11)),
