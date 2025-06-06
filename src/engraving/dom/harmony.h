@@ -67,7 +67,7 @@ struct TextSegment {
 private:
     muse::draw::Font m_font;
     String m_text;
-    PointF m_pos;     // Position of segments relative to each other.
+    PointF m_pos;          // Position of segments relative to Harmony position
     PointF m_offset;       // Offset for placing within the TextBase.
 
     bool m_hAlign = true;
@@ -79,8 +79,10 @@ private:
 
 struct HarmonyRenderCtx {
     PointF pos = PointF();
-    bool hAlign = true;
     std::vector<TextSegment*> textList;
+
+    // Reset every single chord
+    bool hAlign = true;
 
     // Reset every render() call
     std::stack<PointF> stack;
@@ -179,7 +181,7 @@ public:
 
     Harmony* clone() const override { return new Harmony(*this); }
 
-    int id() const;// DEPRECATED
+    int id() const; // WILL BE DEPRECATED AFTER RelaizedHarmony IS UPDATED
 
     bool play() const { return m_play; }
 
@@ -210,14 +212,14 @@ public:
     bool isRealizable() const;
     bool isInFretBox() const;
 
-    int bassTpc() const;                           // DEPRECATED
-    int rootTpc() const;                           // DEPRECATED
+    int bassTpc() const;                           // WILL BE DEPRECATED AFTER RelaizedHarmony IS UPDATED
+    int rootTpc() const;                           // WILL BE DEPRECATED AFTER RelaizedHarmony IS UPDATED
     void addDegree(const HDegree& d);
     const std::vector<HDegree>& degreeList() const;
     HarmonyType harmonyType() const { return m_harmonyType; }
     void setHarmonyType(HarmonyType val);
 
-    const ParsedChord* parsedForm() const;                                             // DEPRECATED
+    const ParsedChord* parsedForm() const;                                             // WILL BE DEPRECATED AFTER RelaizedHarmony IS UPDATED
 
     const std::vector<TextSegment*>& textList() const { return m_textList; }
 
@@ -275,6 +277,7 @@ private:
     NoteCaseType rootRenderCase(HarmonyInfo* info) const;
     NoteCaseType bassRenderCase() const;
 
+    // TODO - move harmony rendering into a layout class
     void renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx);
     void renderRomanNumeral();
     void render(const String&, HarmonyRenderCtx& ctx);
