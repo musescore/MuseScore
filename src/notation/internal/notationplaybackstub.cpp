@@ -144,7 +144,7 @@ Notification NotationPlaybackStub::loopBoundariesChanged() const
     return Notification();
 }
 
-const Tempo& NotationPlaybackStub::tempo(tick_t) const
+const Tempo& NotationPlaybackStub::multipliedTempo(tick_t) const
 {
     static const Tempo dummy;
     return dummy;
