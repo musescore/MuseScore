@@ -1242,6 +1242,10 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
         if (item->isTimeSig() && toTimeSig(item)->timeSigPlacement() != TimeSigPlacement::NORMAL) {
             return true;
         }
+        // Ignore fermatas
+        if (item->isFermata()) {
+            return true;
+        }
         return false;
     });
 
