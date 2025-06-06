@@ -21,6 +21,9 @@
  */
 #include "generalsettingsmodel.h"
 
+#include "dom/harmony.h"
+#include "dom/fret.h"
+
 #include "translation.h"
 
 using namespace mu::inspector;
@@ -60,8 +63,18 @@ void GeneralSettingsModel::requestElements()
     m_elementList = m_repository->takeAllElements();
 
     QSet<EngravingItem*> elementsForIsSmallProperty;
+    QSet<EngravingItem*> elementsForIsVisibleProperty;
+    QSet<EngravingItem*> elementsForIsAutoPlaceProperty;
+    QSet<EngravingItem*> elementsForIsPlayableProperty;
 
     for (EngravingItem* element : m_elementList) {
+        if (element->isHarmony() && toHarmony(element)->isInFretBox()) {
+            continue;
+        }
+        if (element->isFretDiagram() && toFretDiagram(element)->isInFretBox()) {
+            continue;
+        }
+
         // Trill cue note is small by definition, so isSmall property does not apply
         if (element->isNote() && toNote(element)->isTrillCueNote()) {
             continue;
@@ -74,9 +87,16 @@ void GeneralSettingsModel::requestElements()
         } else {
             elementsForIsSmallProperty.insert(element);
         }
+
+        elementsForIsVisibleProperty.insert(element);
+        elementsForIsAutoPlaceProperty.insert(element);
+        elementsForIsPlayableProperty.insert(element);
     }
 
     m_elementsForIsSmallProperty = elementsForIsSmallProperty.values();
+    m_elementsForIsVisibleProperty = elementsForIsVisibleProperty.values();
+    m_elementsForIsAutoPlaceProperty = elementsForIsAutoPlaceProperty.values();
+    m_elementsForIsPlayableProperty = elementsForIsPlayableProperty.values();
 }
 
 void GeneralSettingsModel::loadProperties()
@@ -108,11 +128,11 @@ void GeneralSettingsModel::onNotationChanged(const PropertyIdSet& changedPropert
 void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
 {
     if (muse::contains(propertyIdSet, Pid::VISIBLE)) {
-        loadPropertyItem(m_isVisible);
+        loadPropertyItem(m_isVisible, m_elementsForIsVisibleProperty);
     }
 
     if (muse::contains(propertyIdSet, Pid::AUTOPLACE)) {
-        loadPropertyItem(m_isAutoPlaceAllowed);
+        loadPropertyItem(m_isAutoPlaceAllowed, m_elementsForIsAutoPlaceProperty);
     }
 
     if (muse::contains(propertyIdSet, Pid::PLAY)) {
@@ -120,7 +140,7 @@ void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
         m_isPlayable->setIsVisible(isMaster);
 
         if (isMaster) {
-            loadPropertyItem(m_isPlayable);
+            loadPropertyItem(m_isPlayable, m_elementsForIsPlayableProperty);
         }
     }
 
@@ -198,7 +218,7 @@ void GeneralSettingsModel::updateAreGeneralPropertiesAvailable()
     };
 
     bool available = true;
-    for (EngravingItem* item : m_elementList) {
+    for (const EngravingItem* item : m_elementList) {
         if (item && muse::contains(TYPES_NO_PROPERTIES, item->type())) {
             available = false;
             break;

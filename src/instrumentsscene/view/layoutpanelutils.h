@@ -83,7 +83,17 @@ inline bool isSystemObjectsGroupVisible(const SystemObjectsGroup& group)
 
 inline muse::String translatedSystemObjectsGroupName(const SystemObjectsGroup& group)
 {
-    const bool plural = group.items.size() > 1;
-    return mu::engraving::TConv::userName(group.type, plural).translated();
+    const muse::TranslatableString& name = mu::engraving::TConv::userName(group.type);
+    const int n = static_cast<int>(group.items.size());
+
+    return name.translated(n);
+}
+
+inline muse::String translatedSystemObjectsGroupCapitalizedName(const SystemObjectsGroup& group)
+{
+    const muse::TranslatableString& name = mu::engraving::TConv::capitalizedUserName(group.type);
+    const int n = static_cast<int>(group.items.size());
+
+    return name.translated(n);
 }
 }

@@ -49,8 +49,8 @@ Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
         configuration()->setShouldWarnBeforeSavingDiagnosticFiles(result.showAgain());
     }
 
-    muse::io::path_t path = interactive()->selectSavingFile(
-        muse::qtrc("diagnostics", "Save diagnostic files"),
+    muse::io::path_t path = interactive()->selectSavingFileSync(
+        muse::trc("diagnostics", "Save diagnostic files"),
         configuration()->diagnosticFilesDefaultSavingPath(),
         { "(*.zip)" });
 

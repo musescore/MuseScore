@@ -176,15 +176,11 @@ class FBox : public VBox
 
 public:
     FBox(System* parent);
-
     FBox* clone() const override { return new FBox(*this); }
 
-    void add(EngravingItem*) override;
+    void init();
 
-    // Score Tree functions
-    EngravingObject* scanParent() const override;
-    EngravingObjectList scanChildren() const override;
-    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
+    void add(EngravingItem*) override;
 
     double textScale() const { return m_textScale; }
     void setTextScale(double scale) { m_textScale = scale; }
@@ -208,26 +204,19 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& val) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
-    const std::vector<FretDiagram*> fretDiagrams() const { return m_fretDiagrams; }
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
-    void init();
+    void undoReorderElements(const std::vector<EID>& newOrderElementsIds);
 
     struct LayoutData : public VBox::LayoutData {
-        double cellWidth = 0.0;
-        double cellHeight = 0.0;
-
         double totalTableHeight = 0.0;
         double totalTableWidth = 0.0;
-
-        double defaultMargins = 0.0;
     };
 
     DECLARE_LAYOUTDATA_METHODS(FBox)
 
 private:
     void resolveContentRect();
-
-    std::vector<FretDiagram*> m_fretDiagrams;
 
     double m_textScale = 0.0;
     double m_diagramScale = 0.0;

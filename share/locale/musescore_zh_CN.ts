@@ -271,7 +271,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="107"/>
         <source>Octave -1</source>
-        <translation>负1八度</translation>
+        <translation>-1八度</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="112"/>
@@ -2282,17 +2282,17 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1386"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
-        <translation>重置“垂直框体底边距”值</translation>
+        <translation>重置“垂直框底边距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1296"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
-        <translation>重置“垂直框体上边距”值</translation>
+        <translation>重置“垂直框顶边距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1373"/>
         <source>Vertical frame top margin:</source>
-        <translation>垂直框体上边距：</translation>
+        <translation>垂直框顶边距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1409"/>
@@ -2307,7 +2307,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1396"/>
         <source>Vertical frame bottom margin:</source>
-        <translation>垂直框体下边距：</translation>
+        <translation>垂直框底边距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1270"/>
@@ -2348,7 +2348,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1720"/>
         <source>Max. page fill distance:</source>
-        <translation>页面填充最大间距：</translation>
+        <translation>最大填页间距：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1733"/>
@@ -2401,7 +2401,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1939"/>
         <source>Reset &apos;Max. page fill distance&apos; value</source>
-        <translation>重置“最大页面填充间距”值</translation>
+        <translation>重置“最大填页间距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1980"/>
@@ -4365,7 +4365,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8370"/>
         <source>Reset &apos;Scale&apos; value</source>
-        <translation>重置“缩放大小”值</translation>
+        <translation>重置“缩放比”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12664"/>
@@ -4688,7 +4688,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8477"/>
         <source>Scale:</source>
-        <translation>缩放比例：</translation>
+        <translation>缩放比：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="84"/>
@@ -4927,12 +4927,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14950"/>
         <source>Musical symbols scale:</source>
-        <translation>音乐符号比例</translation>
+        <translation>音乐符号缩放</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14979"/>
         <source>Reset &apos;Musical symbols scale&apos; value</source>
-        <translation>重置“音乐符号比例”值</translation>
+        <translation>重置“音乐符号缩放”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="15048"/>
@@ -7712,7 +7712,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="726"/>
         <source>Insert vertical frame</source>
-        <translation>插入垂直框体</translation>
+        <translation>插入垂直框</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="733"/>
@@ -7727,7 +7727,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="746"/>
         <source>Append vertical frame</source>
-        <translation>后加垂直框体</translation>
+        <translation>后加垂直框</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="752"/>
@@ -13223,7 +13223,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="299"/>
         <source>Vertical frame</source>
-        <translation>垂直框体</translation>
+        <translation>垂直框</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="300"/>
@@ -20482,12 +20482,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="111"/>
         <source>Span from</source>
-        <translation>连谱线起点</translation>
+        <translation>延伸起点</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="130"/>
         <source>Span to</source>
-        <translation>连谱线终点</translation>
+        <translation>延伸终点</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="148"/>
@@ -20660,7 +20660,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
         <source>Show courtesy clef</source>
-        <translation>显示建议的谱号</translation>
+        <translation>显示提示谱号</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="63"/>
@@ -20745,7 +20745,7 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="50"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="133"/>
         <source>Scale</source>
-        <translation>缩放比例</translation>
+        <translation>缩放比</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="74"/>
@@ -25828,7 +25828,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="145"/>
         <source>Scale</source>
-        <translation>缩放比例</translation>
+        <translation>缩放比</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="162"/>
@@ -31418,7 +31418,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4711"/>
         <source>Add vertical frame</source>
-        <translation>添加垂直框体</translation>
+        <translation>添加垂直框</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="4712"/>

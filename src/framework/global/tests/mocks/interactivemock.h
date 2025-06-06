@@ -56,12 +56,15 @@ public:
 
     MOCK_METHOD(void, showProgress, (const std::string&, Progress*), (override));
 
-    MOCK_METHOD(io::path_t, selectOpeningFile, (const QString&, const io::path_t&, const std::vector<std::string>&), (override));
-    MOCK_METHOD(io::path_t, selectSavingFile, (const QString&, const io::path_t&, const std::vector<std::string>&, bool), (override));
-    MOCK_METHOD(io::path_t, selectDirectory, (const QString&, const io::path_t&), (override));
-    MOCK_METHOD(io::paths_t, selectMultipleDirectories, (const QString&, const io::path_t&, const io::paths_t&), (override));
+    MOCK_METHOD(async::Promise<io::path_t>, selectOpeningFile, (const std::string& title, const io::path_t& dir,
+                                                                const std::vector<std::string>& filter), (override));
+    MOCK_METHOD(io::path_t, selectOpeningFileSync, (const std::string&, const io::path_t&, const std::vector<std::string>&), (override));
+    MOCK_METHOD(io::path_t, selectSavingFileSync, (const std::string&, const io::path_t&, const std::vector<std::string>&, bool),
+                (override));
+    MOCK_METHOD(io::path_t, selectDirectory, (const std::string&, const io::path_t&), (override));
+    MOCK_METHOD(io::paths_t, selectMultipleDirectories, (const std::string&, const io::path_t&, const io::paths_t&), (override));
 
-    MOCK_METHOD(QColor, selectColor, (const QColor&, const QString&), (override));
+    MOCK_METHOD(QColor, selectColor, (const QColor&, const std::string&), (override));
     MOCK_METHOD(bool, isSelectColorOpened, (), (const, override));
 
     MOCK_METHOD(RetVal<Val>, openSync, (const UriQuery&), (override));

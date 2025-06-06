@@ -189,13 +189,18 @@ Ret ProjectActionsController::openProject(const ProjectFile& file)
     LOGI() << "Try open project: url = " << file.url.toString() << ", displayNameOverride = " << file.displayNameOverride;
 
     if (file.isNull()) {
-        muse::io::path_t askedPath = selectScoreOpeningFile();
+        auto promise = selectScoreOpeningFile();
+        promise.onResolve(this, [this](const io::path_t& askedPath) {
+            if (askedPath.empty()) {
+                return;
+            }
 
-        if (askedPath.empty()) {
-            return make_ret(Ret::Code::Cancel);
-        }
+            configuration()->setLastOpenedProjectsPath(io::dirpath(askedPath));
 
-        return openProject(askedPath);
+            openProject(askedPath);
+        });
+
+        return muse::make_ok();
     }
 
     if (file.url.isLocalFile()) {
@@ -1863,7 +1868,7 @@ void ProjectActionsController::printScore()
     printProvider()->printNotation(notation);
 }
 
-muse::io::path_t ProjectActionsController::selectScoreOpeningFile()
+async::Promise<io::path_t> ProjectActionsController::selectScoreOpeningFile() const
 {
     std::string allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx "
                          "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mei *.mscx *.mscs *.mscz~";
@@ -1894,13 +1899,7 @@ muse::io::path_t ProjectActionsController::selectScoreOpeningFile()
         defaultDir = configuration()->defaultUserProjectsPath();
     }
 
-    muse::io::path_t filePath = interactive()->selectOpeningFile(muse::qtrc("project", "Open"), defaultDir, filter);
-
-    if (!filePath.empty()) {
-        configuration()->setLastOpenedProjectsPath(io::dirpath(filePath));
-    }
-
-    return filePath;
+    return interactive()->selectOpeningFile(muse::trc("project", "Open"), defaultDir, filter);
 }
 
 bool ProjectActionsController::hasSelection() const

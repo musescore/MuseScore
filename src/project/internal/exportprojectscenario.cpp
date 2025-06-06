@@ -89,8 +89,8 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
     }
 
     RetVal<muse::io::path_t> exportPath;
-    exportPath.val = interactive()->selectSavingFile(muse::qtrc("project/export", "Export"), defaultPath,
-                                                     exportType.filter(), isCreatingOnlyOneFile);
+    exportPath.val = interactive()->selectSavingFileSync(muse::trc("project/export", "Export"), defaultPath,
+                                                         exportType.filter(), isCreatingOnlyOneFile);
     exportPath.ret = !exportPath.val.empty();
 
     return exportPath;

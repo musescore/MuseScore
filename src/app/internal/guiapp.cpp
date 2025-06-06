@@ -82,6 +82,7 @@ void GuiApp::perform()
         m->onPreInit(runMode);
     }
 
+#ifdef MUE_ENABLE_SPLASHSCREEN
     SplashScreen* splashScreen = nullptr;
     if (multiInstancesProvider()->isMainInstance()) {
         splashScreen = new SplashScreen(SplashScreen::Default);
@@ -103,6 +104,12 @@ void GuiApp::perform()
     if (splashScreen) {
         splashScreen->show();
     }
+#else
+    struct SplashScreen {
+        void close() {}
+    };
+    SplashScreen* splashScreen = nullptr;
+#endif
 
     // ====================================================
     // Setup modules: onInit
@@ -177,14 +184,14 @@ void GuiApp::perform()
 
     QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
-#if defined(Q_OS_WIN)
-    const QString mainQmlFile = "/platform/win/Main.qml";
+#ifdef MUE_CONFIGURATION_IS_APPWEB
+    const QString mainQmlFile = "/Main.qml";
 #elif defined(Q_OS_MACOS)
     const QString mainQmlFile = "/platform/mac/Main.qml";
+#elif defined(Q_OS_WIN)
+    const QString mainQmlFile = "/platform/win/Main.qml";
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     const QString mainQmlFile = "/platform/linux/Main.qml";
-#elif defined(Q_OS_WASM)
-    const QString mainQmlFile = "/platform/web/Main.qml";
 #endif
 
 #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE

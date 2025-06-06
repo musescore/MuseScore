@@ -25,11 +25,17 @@
 #include "models/abstractinspectormodel.h"
 
 namespace mu::inspector {
-class FretFrameLegendSettingsModel : public AbstractInspectorModel
+class FretFrameSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem * frameHeight READ frameHeight CONSTANT)
+    Q_PROPERTY(PropertyItem * textScale READ textScale CONSTANT)
+    Q_PROPERTY(PropertyItem * diagramScale READ diagramScale CONSTANT)
+    Q_PROPERTY(PropertyItem * columnGap READ columnGap CONSTANT)
+    Q_PROPERTY(PropertyItem * rowGap READ rowGap CONSTANT)
+    Q_PROPERTY(PropertyItem * chordsPerRow READ chordsPerRow CONSTANT)
+    Q_PROPERTY(PropertyItem * horizontalAlignment READ horizontalAlignment CONSTANT)
+
     Q_PROPERTY(PropertyItem * gapAbove READ gapAbove CONSTANT)
     Q_PROPERTY(PropertyItem * gapBelow READ gapBelow CONSTANT)
     Q_PROPERTY(PropertyItem * frameLeftMargin READ frameLeftMargin CONSTANT)
@@ -39,9 +45,15 @@ class FretFrameLegendSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * isSizeSpatiumDependent READ isSizeSpatiumDependent CONSTANT)
 
 public:
-    explicit FretFrameSettingsModel(QObject * parent, IElementRepositoryService * repository);
+    explicit FretFrameSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    PropertyItem* frameHeight() const;
+    PropertyItem* textScale() const;
+    PropertyItem* diagramScale() const;
+    PropertyItem* columnGap() const;
+    PropertyItem* rowGap() const;
+    PropertyItem* chordsPerRow() const;
+    PropertyItem* horizontalAlignment() const;
+
     PropertyItem* gapAbove() const;
     PropertyItem* gapBelow() const;
     PropertyItem* frameLeftMargin() const;
@@ -60,7 +72,13 @@ private:
 
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
-    PropertyItem* m_frameHeight = nullptr;
+    PropertyItem* m_textScale = nullptr;
+    PropertyItem* m_diagramScale = nullptr;
+    PropertyItem* m_columnGap = nullptr;
+    PropertyItem* m_rowGap = nullptr;
+    PropertyItem* m_chordsPerRow = nullptr;
+    PropertyItem* m_horizontalAlignment = nullptr;
+
     PropertyItem* m_gapAbove = nullptr;
     PropertyItem* m_gapBelow = nullptr;
     PropertyItem* m_frameLeftMargin = nullptr;

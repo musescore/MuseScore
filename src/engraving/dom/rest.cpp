@@ -649,46 +649,6 @@ double Rest::intrinsicMag() const
 }
 
 //---------------------------------------------------------
-//   stemPos
-//    point to connect stem
-//---------------------------------------------------------
-
-PointF Rest::stemPos() const
-{
-    return pagePos();
-}
-
-//---------------------------------------------------------
-//   stemPosBeam
-//    return stem position of note on beam side
-//    return canvas coordinates
-//---------------------------------------------------------
-
-PointF Rest::stemPosBeam() const
-{
-    PointF p(pagePos());
-    if (ldata()->up) {
-        p.ry() += ldata()->bbox().top() + spatium() * 1.5;
-    } else {
-        p.ry() += ldata()->bbox().bottom() - spatium() * 1.5;
-    }
-    return p;
-}
-
-//---------------------------------------------------------
-//   stemPosX
-//---------------------------------------------------------
-
-double Rest::stemPosX() const
-{
-    if (ldata()->up) {
-        return ldata()->bbox().right();
-    } else {
-        return ldata()->bbox().left();
-    }
-}
-
-//---------------------------------------------------------
 //   rightEdge
 //---------------------------------------------------------
 

@@ -84,6 +84,7 @@ public:
     bool thinNoteInputCursor() const override;
 
     QColor selectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
+    QColor highlightSelectionColor(engraving::voice_idx_t voiceIndex = 0) const override;
 
     QColor dropRectColor() const override;
 

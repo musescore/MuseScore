@@ -137,7 +137,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     prevMeasureState.curHeader = ctx.state().curMeasure()->header();
     prevMeasureState.curTrailer = ctx.state().curMeasure()->trailer();
 
-    const SystemLock* systemLock = ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure());
+    const SystemLock* systemLock = ctx.conf().viewMode() == LayoutMode::PAGE || ctx.conf().viewMode() == LayoutMode::SYSTEM
+                                   ? ctx.dom().systemLocks()->lockStartingAt(ctx.state().curMeasure()) : nullptr;
 
     while (ctx.state().curMeasure()) {      // collect measure for system
         oldSystem = ctx.mutState().curMeasure()->system();

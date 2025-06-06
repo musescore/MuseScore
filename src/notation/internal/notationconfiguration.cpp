@@ -598,6 +598,11 @@ QColor NotationConfiguration::selectionColor(engraving::voice_idx_t voiceIndex) 
     return engravingConfiguration()->selectionColor(voiceIndex).toQColor();
 }
 
+QColor NotationConfiguration::highlightSelectionColor(engraving::voice_idx_t voiceIndex) const
+{
+    return engravingConfiguration()->highlightSelectionColor(voiceIndex).toQColor();
+}
+
 QColor NotationConfiguration::dropRectColor() const
 {
     QColor color = selectionColor();

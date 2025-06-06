@@ -35,7 +35,9 @@ muse::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const muse::i
     muse::io::File file(path);
     mu::engraving::Err err = importGTP(score, &file, iocContext(), guitarProConfiguration()->linkedTabStaffCreated(),
                                        guitarProConfiguration()->experimental());
-    score->loadStyle(u":/engraving/styles/gp-style.mss");
+
+    muse::io::File styleFile(":/engraving/styles/gp-style.mss");
+    score->loadStyle(styleFile);
 
     return mu::engraving::make_ret(err, path);
 }

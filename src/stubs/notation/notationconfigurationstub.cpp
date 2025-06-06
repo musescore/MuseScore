@@ -155,6 +155,11 @@ QColor NotationConfigurationStub::selectionColor(engraving::voice_idx_t) const
     return QColor();
 }
 
+QColor NotationConfigurationStub::highlightSelectionColor(engraving::voice_idx_t) const
+{
+    return QColor();
+}
+
 QColor NotationConfigurationStub::dropRectColor() const
 {
     return QColor();

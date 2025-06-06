@@ -29,6 +29,7 @@ namespace muse::audioplugins {
 class AudioPluginMetaReaderMock : public IAudioPluginMetaReader
 {
 public:
+    MOCK_METHOD(audio::AudioResourceType, metaType, (), (const, override));
     MOCK_METHOD(bool, canReadMeta, (const io::path_t&), (const, override));
     MOCK_METHOD(RetVal<audio::AudioResourceMetaList>, readMeta, (const io::path_t&), (const, override));
 };

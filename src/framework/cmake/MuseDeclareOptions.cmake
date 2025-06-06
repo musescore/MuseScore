@@ -25,6 +25,8 @@ option(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT "Enable crashpad client" OFF) # e
 option(MUSE_MODULE_DIAGNOSTICS_CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (optional)" "")
 set(MUSE_MODULE_DIAGNOSTICS_CRASHREPORT_URL "" CACHE STRING "URL where to send crash reports")
 
+declare_muse_module_opt(DOCKWINDOW ON)
+
 declare_muse_module_opt(DRAW ON)
 option(MUSE_MODULE_DRAW_TRACE "Trace draw objects" OFF)
 option(MUSE_MODULE_DRAW_USE_QTFONTMETRICS "Use Qt font metrics (for some metrics)" ON)

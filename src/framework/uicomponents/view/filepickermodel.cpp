@@ -51,7 +51,7 @@ QString FilePickerModel::selectFile()
         filter.push_back(nameFilter.toStdString());
     }
 
-    io::path_t file = interactive()->selectOpeningFile(m_title, m_dir, filter);
+    io::path_t file = interactive()->selectOpeningFileSync(m_title.toStdString(), m_dir, filter);
 
     if (!file.empty()) {
         m_dir = io::dirpath(file).toQString();
@@ -62,7 +62,7 @@ QString FilePickerModel::selectFile()
 
 QString FilePickerModel::selectDirectory()
 {
-    io::path_t directory = interactive()->selectDirectory(m_title, m_dir);
+    io::path_t directory = interactive()->selectDirectory(m_title.toStdString(), m_dir);
 
     if (!directory.empty()) {
         m_dir = directory.toQString();
@@ -74,7 +74,7 @@ QString FilePickerModel::selectDirectory()
 QString FilePickerModel::selectMultipleDirectories(const QString& selectedDirectoriesStr)
 {
     io::paths_t selectedDirectories = io::pathsFromString(selectedDirectoriesStr.toStdString());
-    io::paths_t directories = interactive()->selectMultipleDirectories(m_title, m_dir, selectedDirectories);
+    io::paths_t directories = interactive()->selectMultipleDirectories(m_title.toStdString(), m_dir, selectedDirectories);
 
     QStringList result;
     for (const io::path_t& dir: directories) {

@@ -189,7 +189,8 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
 
     // Load style if present
     if (!stylePath.empty()) {
-        m_engravingProject->masterScore()->loadStyle(stylePath.toQString());
+        muse::io::File styleFile(stylePath);
+        m_engravingProject->masterScore()->loadStyle(styleFile);
     }
 
     mu::engraving::compat::EngravingCompat::doPreLayoutCompatIfNeeded(m_engravingProject->masterScore());
@@ -275,7 +276,8 @@ Ret NotationProject::doImport(const muse::io::path_t& path, const muse::io::path
 
     // Load style if present
     if (!stylePath.empty()) {
-        score->loadStyle(stylePath.toQString());
+        muse::io::File styleFile(stylePath);
+        score->loadStyle(styleFile);
     }
 
     // Init ChordList

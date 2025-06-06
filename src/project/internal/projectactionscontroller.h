@@ -199,7 +199,7 @@ private:
 
     void openProjectProperties();
 
-    muse::io::path_t selectScoreOpeningFile();
+    muse::async::Promise<muse::io::path_t> selectScoreOpeningFile() const;
     muse::io::path_t selectScoreSavingFile(const muse::io::path_t& defaultFilePath, const QString& saveTitle);
 
     muse::RetVal<INotationProjectPtr> loadProject(const muse::io::path_t& filePath);

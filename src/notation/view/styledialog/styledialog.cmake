@@ -26,4 +26,6 @@ set(STYLEDIALOG_SRC
     ${CMAKE_CURRENT_LIST_DIR}/clefkeytimesigpagemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/hammeronpullofftappingpagemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/hammeronpullofftappingpagemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/repeatbarlinessectionmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/repeatbarlinessectionmodel.h
     )

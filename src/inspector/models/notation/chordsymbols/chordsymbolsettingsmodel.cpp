@@ -45,13 +45,16 @@ void ChordSymbolSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HARMONY);
     updateHasLinkedFretboardDiagram();
+    updateIsDurationAvailable();
 }
 
 void ChordSymbolSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isLiteral);
     loadPropertyItem(m_voicingType);
+
     loadPropertyItem(m_durationType);
+    updateIsDurationAvailable();
 }
 
 void ChordSymbolSettingsModel::resetProperties()
@@ -109,4 +112,18 @@ void ChordSymbolSettingsModel::updateHasLinkedFretboardDiagram()
     }
 
     setHasLinkedFretboardDiagram(!hasHarmonyWhithoutFretboardDiagram);
+}
+
+void ChordSymbolSettingsModel::updateIsDurationAvailable()
+{
+    bool available = true;
+
+    for (engraving::EngravingItem* item : m_elementList) {
+        if (engraving::toHarmony(item)->isInFretBox()) {
+            available = false;
+            break;
+        }
+    }
+
+    m_durationType->setIsVisible(available);
 }

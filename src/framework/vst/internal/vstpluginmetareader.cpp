@@ -31,6 +31,11 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::vst;
 
+audio::AudioResourceType VstPluginMetaReader::metaType() const
+{
+    return audio::AudioResourceType::VstPlugin;
+}
+
 bool VstPluginMetaReader::canReadMeta(const io::path_t& pluginPath) const
 {
     return io::suffix(pluginPath) == VST3_PACKAGE_EXTENSION;

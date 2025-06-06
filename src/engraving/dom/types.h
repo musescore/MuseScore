@@ -102,6 +102,12 @@ enum class CommandType : signed char {
     FretClear,
     FretLinkHarmony,
 
+    // FBox
+    ReorderFBox,
+    RenameChordFBox,
+    AddChordFBox,
+    RemoveChordFBox,
+
     // Harmony
     TransposeHarmony,
 

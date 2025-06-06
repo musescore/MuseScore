@@ -156,6 +156,8 @@
 
 #include "infrastructure/rtti.h"
 
+#include "stemlayout.h"
+
 // dev
 #include "dom/system.h"
 #include "dom/measure.h"
@@ -2795,19 +2797,19 @@ void TDraw::draw(const Stem* item, Painter* painter)
     if (item->chord()->durationType().type() == DurationType::V_HALF
         && staffType->minimStyle() == TablatureMinimStyle::SLASHED) {
         // position slashes onto stem
-        double y = isUp ? -item->length() + STAFFTYPE_TAB_SLASH_2STARTY_UP * sp
-                   : item->length() - STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
+        double y = isUp ? -item->length() + StemLayout::STAFFTYPE_TAB_SLASH_2STARTY_UP * sp
+                   : item->length() - StemLayout::STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
         // if stems through, try to align slashes within or across lines
         if (staffType->stemThrough()) {
             double halfLineDist = staffType->lineDistance().val() * sp * 0.5;
-            double halfSlashHgt = STAFFTYPE_TAB_SLASH_2TOTHEIGHT * sp * 0.5;
+            double halfSlashHgt = StemLayout::STAFFTYPE_TAB_SLASH_2TOTHEIGHT * sp * 0.5;
             y = lrint((y + halfSlashHgt) / halfLineDist) * halfLineDist - halfSlashHgt;
         }
         // draw slashes
-        double hlfWdt= sp * STAFFTYPE_TAB_SLASH_WIDTH * 0.5;
-        double sln   = sp * STAFFTYPE_TAB_SLASH_SLANTY;
-        double thk   = sp * STAFFTYPE_TAB_SLASH_THICK;
-        double displ = sp * STAFFTYPE_TAB_SLASH_DISPL;
+        double hlfWdt= sp * StemLayout::STAFFTYPE_TAB_SLASH_WIDTH * 0.5;
+        double sln   = sp * StemLayout::STAFFTYPE_TAB_SLASH_SLANTY;
+        double thk   = sp * StemLayout::STAFFTYPE_TAB_SLASH_THICK;
+        double displ = sp * StemLayout::STAFFTYPE_TAB_SLASH_DISPL;
         PainterPath path;
         for (int i = 0; i < 2; ++i) {
             path.moveTo(hlfWdt, y);                   // top-right corner
@@ -2828,7 +2830,7 @@ void TDraw::draw(const Stem* item, Painter* painter)
     int nDots = item->chord()->dots();
     if (nDots > 0 && !staffType->stemThrough()) {
         double x     = item->chord()->dotPosX();
-        double y     = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
+        double y     = ((StemLayout::STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
         double step  = item->style().styleS(Sid::dotDotDistance).val() * sp;
         for (int dot = 0; dot < nDots; dot++, x += step) {
             item->drawSymbol(SymId::augmentationDot, painter, PointF(x, y));

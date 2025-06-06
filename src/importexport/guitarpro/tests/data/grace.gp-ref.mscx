@@ -251,18 +251,21 @@
               <string>0</string>
               </Note>
             </Chord>
-          <StaffText>
-            <eid>l_l</eid>
-            <text>H</text>
-            </StaffText>
           <Chord>
-            <eid>m_m</eid>
+            <eid>l_l</eid>
             <durationType>eighth</durationType>
             <duration>1/32</duration>
-            <Spanner type="Slur">
-              <Slur>
-                <eid>n_n</eid>
-                </Slur>
+            <Spanner type="HammerOnPullOff">
+              <HammerOnPullOff>
+                <eid>m_m</eid>
+                <HammerOnPullOffSegment no="0">
+                  <HammerOnPullOffText idx="0">
+                    <eid>n_n</eid>
+                    <style>hammer_on_pull_off</style>
+                    </HammerOnPullOffText>
+                  <eid>o_o</eid>
+                  </HammerOnPullOffSegment>
+                </HammerOnPullOff>
               <next>
                 <location>
                   </location>
@@ -270,10 +273,10 @@
               </Spanner>
             <appoggiatura/>
             <Note>
-              <eid>o_o</eid>
+              <eid>p_p</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>p_p</eid>
+                <eid>q_q</eid>
                 </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
@@ -282,9 +285,9 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>q_q</eid>
+            <eid>r_r</eid>
             <durationType>quarter</durationType>
-            <Spanner type="Slur">
+            <Spanner type="HammerOnPullOff">
               <prev>
                 <location>
                   <grace>0</grace>
@@ -292,7 +295,7 @@
                 </prev>
               </Spanner>
             <Note>
-              <eid>r_r</eid>
+              <eid>s_s</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -300,13 +303,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>s_s</eid>
+            <eid>t_t</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>t_t</eid>
+              <eid>u_u</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>u_u</eid>
+                <eid>v_v</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>24</tpc>
@@ -315,15 +318,10 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>v_v</eid>
+            <eid>w_w</eid>
             </BarLine>
           </voice>
         <voice>
-          <Rest>
-            <eid>w_w</eid>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>x_x</eid>
             <visible>0</visible>
@@ -339,21 +337,26 @@
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
+          <Rest>
+            <eid>0_0</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
           </voice>
         </Measure>
       <Measure>
-        <eid>0_0</eid>
+        <eid>1_1</eid>
         <voice>
           <Chord>
-            <eid>1_1</eid>
+            <eid>2_2</eid>
             <durationType>eighth</durationType>
             <duration>1/32</duration>
             <acciaccatura/>
             <Note>
-              <eid>2_2</eid>
+              <eid>3_3</eid>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
-                <eid>3_3</eid>
+                <eid>4_4</eid>
                 </Accidental>
               <pitch>68</pitch>
               <tpc>22</tpc>
@@ -362,20 +365,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>4_4</eid>
+            <eid>5_5</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>5_5</eid>
+              <eid>6_6</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
               <string>0</string>
               </Note>
             </Chord>
-          <Rest>
-            <eid>6_6</eid>
-            <durationType>quarter</durationType>
-            </Rest>
           <Rest>
             <eid>7_7</eid>
             <durationType>quarter</durationType>
@@ -384,13 +383,12 @@
             <eid>8_8</eid>
             <durationType>quarter</durationType>
             </Rest>
-          </voice>
-        <voice>
           <Rest>
             <eid>9_9</eid>
-            <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
+          </voice>
+        <voice>
           <Rest>
             <eid>+_+</eid>
             <visible>0</visible>
@@ -403,6 +401,11 @@
             </Rest>
           <Rest>
             <eid>AB_AB</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>BB_BB</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>

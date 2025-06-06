@@ -95,6 +95,7 @@ void AbstractCloudService::initOAuthIfNecessary()
     m_oauth2->setAuthorizationUrl(m_serverConfig.authorizationUrl);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
     m_oauth2->setTokenUrl(m_serverConfig.accessTokenUrl);
+    m_oauth2->setPkceMethod(QOAuth2AuthorizationCodeFlow::PkceMethod::None);
 #else
     m_oauth2->setAccessTokenUrl(m_serverConfig.accessTokenUrl);
 #endif

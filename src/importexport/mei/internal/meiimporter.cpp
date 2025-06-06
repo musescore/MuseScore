@@ -1233,6 +1233,14 @@ bool MeiImporter::readStaffDefs(pugi::xml_node parentNode)
         }
         //m_clefs[meiStaffDef.GetN()] = staff->defaultClefType();
 
+        // try to import MEI from other applications
+        pugi::xml_node meterSigNode = staffDefXpathNode.node().select_node(".//meterSig").node();
+        if (meterSigNode) {
+            meiStaffDef.SetMeterCount(meiStaffDef.AttMeterSigDefaultLog::StrToMetercountPair(meterSigNode.attribute("count").value()));
+            meiStaffDef.SetMeterUnit(meterSigNode.attribute("unit").as_int());
+            meiStaffDef.SetMeterSym(meiStaffDef.AttMeterSigDefaultLog::StrToMetersign(meterSigNode.attribute("sym").value()));
+        }
+
         if (meiStaffDef.HasMeterSym() || meiStaffDef.HasMeterCount()) {
             m_timeSigs[staffIdx] = Convert::meterFromMEI(meiStaffDef, warning);
             if (warning) {
