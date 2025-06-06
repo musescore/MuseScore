@@ -82,3 +82,13 @@ function getItemValue(model, index, roleName, def) {
 
     return item
 }
+
+function areEqual(a, b) {
+    if (a === b) {
+        return true
+    }
+    if (typeof a === 'object' && typeof b === 'object') {
+        return JSON.stringify(a) === JSON.stringify(b)
+    }
+    return false
+}
