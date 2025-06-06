@@ -173,6 +173,7 @@ void FinaleParser::importParts()
 {
     std::vector<std::shared_ptr<others::InstrumentUsed>> scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
+    std::unordered_map<InstCmper, QString> inst2Part;
     int partNumber = 0;
     for (const std::shared_ptr<others::InstrumentUsed>& item : scrollView) {
         std::shared_ptr<others::Staff> staff = item->getStaff();
@@ -188,7 +189,7 @@ void FinaleParser::importParts()
         if (staff->multiStaffInstVisualGroupId) {
             multiStaffGroup = m_doc->getDetails()->get<details::StaffGroup>(SCORE_PARTID, 0, staff->multiStaffInstVisualGroupId);
         }
-        if (multiStaffGroup && m_inst2Part.find(staff->getCmper()) != m_inst2Part.end()) {
+        if (multiStaffGroup && inst2Part.find(staff->getCmper()) != inst2Part.end()) {
             continue;
         }
 
@@ -218,12 +219,12 @@ void FinaleParser::importParts()
             auto groupInfo = details::StaffGroupInfo(multiStaffGroup, scrollView);
             groupInfo.iterateStaves(1, 0, [&](const std::shared_ptr<others::StaffComposite>& staff) {
                 createStaff(part, staff, it);
-                m_inst2Part.emplace(staff->getCmper(), partId);
+                inst2Part.emplace(staff->getCmper(), partId);
                 return true;
             });
         } else {
             createStaff(part, compositeStaff, it);
-            m_inst2Part.emplace(staff->getCmper(), partId);
+            inst2Part.emplace(staff->getCmper(), partId);
         }
         m_score->appendPart(part);
     }
