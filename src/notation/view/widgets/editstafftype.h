@@ -64,7 +64,6 @@ private slots:
     void tabMinimShortToggled(bool checked);
     void tabStemsToggled(bool checked);
     void updatePreview();
-    void resetFretFontStylePressed();
 
     void savePresets();
     void loadPresets();
