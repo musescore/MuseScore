@@ -412,8 +412,6 @@ public:
 
     void setStretchedBend(StretchedBend* s) { m_stretchedBend = s; }
     StretchedBend* stretchedBend() const { return m_stretchedBend; }
-    bool isHammerOn() const { return m_isHammerOn; }
-    void setIsHammerOn(bool hammerOn) { m_isHammerOn = hammerOn; }
 
     void setHarmonic(bool val) { m_harmonic = val; }
     bool harmonic() const { return m_harmonic; }
@@ -542,7 +540,6 @@ private:
     bool m_hasUserParentheses = false;
     bool m_hasGeneratedParens = false;
 
-    bool m_isHammerOn = false;
     bool m_harmonic = false;
 
     ElementList m_el;          // fingering, other text, symbols or images
