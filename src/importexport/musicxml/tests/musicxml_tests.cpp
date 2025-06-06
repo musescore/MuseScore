@@ -1099,6 +1099,16 @@ TEST_F(MusicXml_Tests, stringVoiceName) {
 }
 TEST_F(MusicXml_Tests, swing) {
     musicXmlIoTest("testSwing");
+
+    String fileName = String::fromUtf8("testSwingFloat.xml");
+    MasterScore* score = readScore(XML_IO_DATA_DIR + fileName);
+    ASSERT_TRUE(score);
+    fixupScore(score);
+    score->doLayout();
+
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, u"testSwingFloat.xml", u"testSwing.xml"));
+
+    delete score;
 }
 TEST_F(MusicXml_Tests, systemBrackets1) {
     musicXmlIoTest("testSystemBrackets1");

@@ -479,7 +479,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(barlineBeforeSigChange,                     false),
     styleDef(doubleBarlineBeforeKeySig,                  false),
     styleDef(doubleBarlineBeforeTimeSig,                 false),
-    styleDef(swingRatio,                                 PropertyValue(60)),
+    styleDef(swingRatio,                                 PropertyValue(60.0)),
     styleDef(swingUnit,                                  PropertyValue(String())),
     styleDef(useStandardNoteNames,                       true),
     styleDef(useGermanNoteNames,                         false),

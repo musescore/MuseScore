@@ -5177,8 +5177,8 @@ void ExportMusicXml::systemText(StaffTextBase const* const text, staff_idx_t sta
         if (!text->swingParameters().swingUnit) {
             m_xml.tag("straight");
         } else {
-            const int swingPercentage = text->swingParameters().swingRatio;
-            const int swingDivisor = std::gcd(text->swingParameters().swingRatio, 100);
+            const int swingPercentage = static_cast<int>(text->swingParameters().swingRatio);
+            const int swingDivisor = std::gcd(static_cast<int>(text->swingParameters().swingRatio), 100);
             m_xml.tag("first",  100 / swingDivisor);
             m_xml.tag("second", swingPercentage / swingDivisor);
             if (text->swingParameters().swingUnit == Constants::DIVISION / 2) {

@@ -117,7 +117,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="swingBox">
+            <widget class="QDoubleSpinBox" name="swingBox">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -125,10 +125,16 @@
               <string notr="true">%</string>
              </property>
              <property name="minimum">
-              <number>25</number>
+               <double>0.0</double>
              </property>
-             <property name="value">
-              <number>60</number>
+             <property name="maximum">
+              <double>100.0</double>
+             </property>
+             <property name="singleStep">
+              <double>0.1</double>
+             </property>
+             <property name="decimals">
+              <number>2</number>
              </property>
             </widget>
            </item>

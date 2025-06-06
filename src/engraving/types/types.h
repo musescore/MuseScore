@@ -1142,7 +1142,7 @@ static inline Key operator-=(Key& a, const Key& b) { return a = Key(static_cast<
 
 struct SwingParameters {
     int swingUnit = 0;
-    int swingRatio = 0;
+    float swingRatio = 0;
 
     bool isOn() const { return swingUnit != 0; }
 };
