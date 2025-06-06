@@ -117,6 +117,7 @@ private:
 
 //---------------------------------------------------------
 //   RenderAction
+//    Render commands to be passed to and executed by Harmony
 //---------------------------------------------------------
 
 struct RenderAction
@@ -274,6 +275,7 @@ private:
 
 //---------------------------------------------------------
 //   ChordToken
+//    Reads/represents the <token> tag in chord XML files
 //---------------------------------------------------------
 
 enum class ChordTokenClass : char {
@@ -293,6 +295,8 @@ public:
 
 //---------------------------------------------------------
 //   ParsedChord
+//    Extracts quality, extension & modifiers from a string eg. "m7#11"
+//    Generates a list of render instructions to lay this chord out
 //---------------------------------------------------------
 
 class ParsedChord
@@ -349,6 +353,7 @@ private:
 
 //---------------------------------------------------------
 //   ChordDescription
+//    Describes chord quality, extensions and modifiers. eg. m7#11
 //---------------------------------------------------------
 
 struct ChordDescription {
@@ -382,6 +387,7 @@ private:
 
 //---------------------------------------------------------
 //   ChordSymbol
+//    Represents the <sym> tag in chord XML files
 //---------------------------------------------------------
 
 struct ChordSymbol {
@@ -395,6 +401,7 @@ struct ChordSymbol {
 
 //---------------------------------------------------------
 //   ChordFont
+//    Represents the <font> tag in chord XML files
 //---------------------------------------------------------
 
 struct ChordFont {
@@ -406,6 +413,7 @@ struct ChordFont {
 
 //---------------------------------------------------------
 //   ChordList
+//    Reads chord XML files and stores the list of known chords
 //---------------------------------------------------------
 
 class ChordList : public std::map<int, ChordDescription>
