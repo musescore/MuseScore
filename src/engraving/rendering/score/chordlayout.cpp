@@ -1154,7 +1154,9 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             } else {
                 Autoplace::autoplaceSegmentElement(a, a->mutldata(), a->up(), true);
             }
-            a->segment()->staffShape(a->vStaffIdx()).add(a->shape().translated(a->pos() + item->pos() + item->staffOffset()));
+            if (a->addToSkyline()) {
+                a->segment()->staffShape(a->vStaffIdx()).add(a->shape().translated(a->pos() + item->pos() + item->staffOffset()));
+            }
         }
     }
 }
