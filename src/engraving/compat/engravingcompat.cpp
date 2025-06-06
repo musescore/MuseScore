@@ -271,8 +271,6 @@ bool EngravingCompat::migrateChordSymbolAlignment(MasterScore* score)
         needsRelayout |= rendering::score::HarmonyLayout::alignHarmonies(sl, false, maxFretShiftAbove, maxFretShiftBelow);
     }
 
-    LOGI() << "Needs relayout: " << needsRelayout;
-
     return needsRelayout;
 }
 } // namespace mu::engraving::compat

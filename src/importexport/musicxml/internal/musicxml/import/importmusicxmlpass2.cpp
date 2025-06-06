@@ -7800,9 +7800,9 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
         } else if (m_e.name() == "staff") {
             size_t nstaves = m_pass1.getPart(partId)->nstaves();
             String strStaff = m_e.readText();
-            int staff = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
-            if (staff >= 0 && staff < int(nstaves)) {
-                track += staff * VOICES;
+            int staffIdx = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
+            if (staffIdx >= 0 && staffIdx < int(nstaves)) {
+                track += staffIdx * VOICES;
             } else {
                 m_logger->logError(String(u"invalid staff %1").arg(strStaff), &m_e);
             }
