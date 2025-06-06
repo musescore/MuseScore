@@ -305,7 +305,7 @@ async::Promise<io::path_t> Interactive::selectOpeningFile(const std::string& tit
             (void)resolve(file);
         });
 
-        dlg->show();
+        dlg->open();
 
         return async::Promise<io::path_t>::Result::unchecked();
     }, async::PromiseType::AsyncByBody);
