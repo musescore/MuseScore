@@ -602,7 +602,7 @@ ChordRest* Score::prevTrack(ChordRest* cr, bool skipMeasureRepeatRests)
 ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRest)
 {
     if (!element) {
-        return 0;
+        return nullptr;
     }
 
     Measure* measure = nullptr;
@@ -612,12 +612,8 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
         measure = element->measure()->nextMeasure();
     }
 
-    if (!measure) {
-        return 0;
-    }
-
     Fraction endTick = element->measure()->last()->nextChordRest(element->track(), true)->tick();
-    bool last   = false;
+    bool last = false;
 
     if (selection().isRange()) {
         if (element->tick() != endTick && selection().tickEnd() <= endTick) {
@@ -647,7 +643,7 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -657,10 +653,10 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
 ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
 {
     if (!element) {
-        return 0;
+        return nullptr;
     }
 
-    Measure* measure =  0;
+    Measure* measure = nullptr;
     if (mmRest) {
         measure = element->measure()->prevMeasureMM();
     } else {
@@ -693,7 +689,7 @@ ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
