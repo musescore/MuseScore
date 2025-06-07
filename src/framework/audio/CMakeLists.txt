@@ -219,6 +219,7 @@ include(SetupGobject)
 
 # fluidsynth dependency
 include(SetupSndFile)
+include(SetupInstPatch)
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)
 

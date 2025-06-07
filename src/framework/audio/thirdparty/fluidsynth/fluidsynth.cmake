@@ -60,8 +60,6 @@ set(FLUIDSYNTH_SRC
 
     ${FLUIDSYNTH_DIR}/src/sfloader/fluid_defsfont.c
     ${FLUIDSYNTH_DIR}/src/sfloader/fluid_defsfont.h
-    # ${FLUIDSYNTH_DIR}/src/sfloader/fluid_instpatch.c
-    # ${FLUIDSYNTH_DIR}/src/sfloader/fluid_instpatch.h
     ${FLUIDSYNTH_DIR}/src/sfloader/fluid_samplecache.c
     ${FLUIDSYNTH_DIR}/src/sfloader/fluid_samplecache.h
     ${FLUIDSYNTH_DIR}/src/sfloader/fluid_sffile.c
@@ -107,6 +105,13 @@ set(FLUIDSYNTH_SRC
     ${FLUIDSYNTH_DIR}/src/drivers/fluid_mdriver.h
     ${FLUIDSYNTH_DIR}/src/drivers/fluid_mdriver.c
     )
+
+if (LIBINSTPATCH_SUPPORT)
+    list(APPEND FLUIDSYNTH_SRC ${FLUIDSYNTH_DIR}/src/bindings/fluid_cmd.c)
+    list(APPEND FLUIDSYNTH_SRC ${FLUIDSYNTH_DIR}/src/bindings/fluid_cmd.h)
+    list(APPEND FLUIDSYNTH_SRC ${FLUIDSYNTH_DIR}/src/sfloader/fluid_instpatch.c)
+    list(APPEND FLUIDSYNTH_SRC ${FLUIDSYNTH_DIR}/src/sfloader/fluid_instpatch.h)
+endif (LIBINSTPATCH_SUPPORT)
 
 if (NOT MSVC)
    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)

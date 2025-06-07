@@ -72,6 +72,7 @@ apt_packages=(
   libgl1-mesa-dev
   libglib2.0-dev
   libgpgme-dev # install for appimagetool
+  libinstpatch-dev
   libjack-dev
   libnss3-dev
   libportmidi-dev
