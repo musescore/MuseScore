@@ -14,10 +14,11 @@ set(FLUIDSYNTH_INC
     ${FLUIDSYNTH_DIR}/src/utils
     )
 
-set(FLUIDSYNTH_DEF
-    -DNO_GLIB
-    -DNO_THREADS
-    )
+# DLS requires libinstpatch requires glib
+if (NOT DEFINED LIBINSTPATCH_SUPPORT)
+    list(APPEND FLUIDSYNTH_DEF -DNO_THREADS)
+    list(APPEND FLUIDSYNTH_DEF -DNO_GLIB)
+endif (NOT DEFINED LIBINSTPATCH_SUPPORT)
 
 set(FLUIDSYNTH_SRC
     # ${FLUIDSYNTH_DIR}/src/fluidsynth.c
