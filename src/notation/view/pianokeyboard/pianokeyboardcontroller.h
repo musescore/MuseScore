@@ -45,13 +45,41 @@ public:
     KeyState keyState(piano_key_t key) const;
     muse::async::Notification keyStatesChanged() const;
 
+    KeyState playbackKeyState(piano_key_t key) const;
+    bool playbackKeyHitStartTick(piano_key_t key);
+    bool playbackKeyStatesEmpty() const;
+    muse::async::Notification playbackKeyStatesChanged() const;
+
+    KeyState glissandoKeyState(piano_key_t key) const;
+    KeyState arpeggioKeyState(piano_key_t key) const;
+    KeyState trillKeyState(piano_key_t key) const;
+    KeyState trillKeyState1(piano_key_t key) const;
+
     bool isFromMidi() const;
+
+    bool isPlaying() const;
+    bool islastMeasure() const;
+
+    muse::async::Notification glissandoEndNotesChanged() const;
+    muse::async::Notification glissandoTickChanged() const;
+
+    muse::async::Notification arpeggioNotesChanged() const;
+    muse::async::Notification arpeggioTickChanged() const;
+
+    muse::async::Notification clefKeySigsKeysChanged() const;
+    std::set<uint> clefKeySigsKeys() const;
+    
+    void updatePianoKeyboardKeys(piano_key_t _lowestKey, piano_key_t _numKeys);
 
 private:
     INotationPtr currentNotation() const;
 
     void onNotationChanged();
     void updateNotesKeys(const std::vector<const Note*>& receivedNotes);
+    void updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes, std::map<const Note*, bool> hitTsMap);
+
+    void updateGlissandoNotesKeys(const std::vector<const Note*>& receivedNotes, const mu::engraving::Note* glissandoNote);
+    void updateArpeggioNotesKeys(const std::vector<const Note*>& receivedNotes);
 
     void sendNoteOn(piano_key_t key);
     void sendNoteOff(piano_key_t key);
@@ -60,9 +88,54 @@ private:
     std::unordered_set<piano_key_t> m_keys;
     std::unordered_set<piano_key_t> m_otherNotesInChord;
 
+    std::unordered_set<piano_key_t> m_righthand_keys;
+    std::map<piano_key_t, bool> m_righthand_keys_hit_ts;
+    std::unordered_set<piano_key_t> m_lefthand_keys;
+
+    piano_key_t m_glissando_note_key;
+    std::unordered_set<piano_key_t> m_glissando_endnotes_keys;
+    piano_key_t m_glissando_endnote_min_key;
+    piano_key_t m_glissando_endnote_max_key;
+    int m_glissando_ticks;
+    int m_glissando_duration_ticks;
+    int m_glissando_curr_ticks;
+    muse::async::Notification m_glissandoEndNotesChanged;
+    muse::async::Notification m_glissandoTickChanged;
+
+    std::unordered_set<piano_key_t> m_arpeggio_notes_keys;
+    int m_arpeggio_ticks;
+    int m_arpeggio_duration_ticks;
+    int m_arpeggio_curr_ticks;
+    bool m_arpeggio_isdown = false;
+
+    Note* receive_note = nullptr;
+    piano_key_t m_trill_note_key;
+    int m_trill_ticks;
+    int m_trill_duration_ticks;
+    int m_trill_tremolo_type;
+    int m_trill_curr_ticks;
+    Note* receive_note1 = nullptr;
+    piano_key_t m_trill_note_key1;
+    int m_trill_ticks1;
+    bool m_trill_note_hastie;
+    bool m_trill_note1_hastie;
+    int m_trill_duration_ticks1;
+    int m_trill_tremolo_type1;
+    int m_trill_curr_ticks1;
+
+    std::set<uint> m_clefKeySigsKeys;
+    muse::async::Notification m_clefKeySigsKeysChanged;
+
+    bool m_islastMeasure;
+
     bool m_isFromMidi = false;
 
     muse::async::Notification m_keyStatesChanged;
+
+    muse::async::Notification m_playbackKeyStatesChanged;
+
+    piano_key_t lowestKey;
+    piano_key_t numKeys;
 };
 }
 
