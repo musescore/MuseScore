@@ -23,10 +23,7 @@
 #pragma once
 
 #include "global/allocator.h"
-#include "types/string.h"
 
-#include "draw/types/geometry.h"
-#include "modularity/ioc.h"
 #include "../devtools/iengravingelementsprovider.h"
 
 #include "../style/styledef.h"
@@ -34,7 +31,7 @@
 #include "../types/propertyvalue.h"
 #include "../types/types.h"
 
-#include "../infrastructure/rtti.h"
+#include "../infrastructure/rtti.h" // IWYU pragma: export
 #include "../infrastructure/eid.h"
 
 namespace mu::engraving {
