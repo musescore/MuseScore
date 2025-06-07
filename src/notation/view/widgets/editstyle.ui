@@ -8365,37 +8365,13 @@
                <string>Dynamics</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_672">
-               <item row="5" column="0">
-                <widget class="QLabel" name="label_220">
-                 <property name="text">
-                  <string>Autoplace min. distance:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
+               <item row="4" column="1">
                 <widget class="mu::notation::OffsetSelect" name="dynamicsPosAbove" native="true"/>
                </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_223">
-                 <property name="text">
-                  <string>Offset below:</string>
-                 </property>
-                </widget>
+               <item row="5" column="1">
+                <widget class="mu::notation::OffsetSelect" name="dynamicsPosBelow" native="true"/>
                </item>
-               <item row="4" column="2">
-                <widget class="QToolButton" name="resetDynamicsPosBelow">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Offset below' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
+               <item row="3" column="2">
                 <widget class="QToolButton" name="resetDynamicsSize">
                  <property name="toolTip">
                   <string>Reset to default</string>
@@ -8408,40 +8384,156 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="2">
-                <widget class="QToolButton" name="resetAvoidBarLines">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Avoid barlines' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
                <item row="5" column="2">
-                <widget class="QToolButton" name="resetDynamicsMinDistance">
+                <widget class="QToolButton" name="resetDynamicsPosBelow">
                  <property name="toolTip">
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Autoplace min. distance' value</string>
+                  <string>Reset 'Offset below' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
                  </property>
                 </widget>
                </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_221">
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_220">
                  <property name="text">
-                  <string>Offset above:</string>
+                  <string>Autoplace min. distance:</string>
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
+               <item row="4" column="2">
+                <widget class="QToolButton" name="resetDynamicsPosAbove">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Offset above' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0" colspan="4">
+                <widget class="QGroupBox" name="dynamicsOverrideFont">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::StrongFocus</enum>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Override score font</string>
+                 </property>
+                 <property name="title">
+                  <string>Override score font</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_73">
+                  <property name="spacing">
+                   <number>7</number>
+                  </property>
+                  <property name="leftMargin">
+                   <number>8</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>8</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>7</number>
+                  </property>
+                  <item>
+                   <layout class="QHBoxLayout" name="chooseFont">
+                    <property name="spacing">
+                     <number>5</number>
+                    </property>
+                    <item>
+                     <widget class="QRadioButton" name="dynamicsFontChoose">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>Choose font:</string>
+                      </property>
+                      <property name="checked">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="dynamicsFont">
+                      <property name="enabled">
+                       <bool>true</bool>
+                      </property>
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>225</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16777215</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="accessibleDescription">
+                       <string/>
+                      </property>
+                      <property name="autoFillBackground">
+                       <bool>false</bool>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="horizontalSpacer_73">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="dynamicsUseExpressionTextStyle">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>24</height>
+                     </size>
+                    </property>
+                    <property name="autoFillBackground">
+                     <bool>false</bool>
+                    </property>
+                    <property name="text">
+                     <string>Use expression text style</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item row="3" column="1">
                 <widget class="QDoubleSpinBox" name="dynamicsSize">
                  <property name="keyboardTracking">
                   <bool>false</bool>
@@ -8457,7 +8549,70 @@
                  </property>
                 </widget>
                </item>
-               <item row="5" column="1">
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_223">
+                 <property name="text">
+                  <string>Offset below:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_225">
+                 <property name="text">
+                  <string>Scale:</string>
+                 </property>
+                 <property name="margin">
+                  <number>0</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="3">
+                <spacer name="horizontalSpacer_30">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="6" column="2">
+                <widget class="QToolButton" name="resetDynamicsMinDistance">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Autoplace min. distance' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QCheckBox" name="avoidBarLines">
+                 <property name="text">
+                  <string>Avoid barlines</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QToolButton" name="resetAvoidBarLines">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Avoid barlines' setting</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="1">
                 <widget class="QDoubleSpinBox" name="dynamicsMinDistance">
                  <property name="keyboardTracking">
                   <bool>false</bool>
@@ -8482,83 +8637,12 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QCheckBox" name="avoidBarLines">
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_221">
                  <property name="text">
-                  <string>Avoid barlines</string>
+                  <string>Offset above:</string>
                  </property>
                 </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QToolButton" name="resetDynamicsPosAbove">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Offset above' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="mu::notation::OffsetSelect" name="dynamicsPosBelow" native="true"/>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_225">
-                 <property name="text">
-                  <string>Scale:</string>
-                 </property>
-                 <property name="margin">
-                  <number>0</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0" colspan="4">
-                <widget class="QGroupBox" name="dynamicsOverrideFont">
-                 <property name="accessibleName">
-                  <string>Override score font</string>
-                 </property>
-                 <property name="title">
-                  <string>Override score font</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_14">
-                  <item>
-                   <widget class="QLabel" name="label_224">
-                    <property name="text">
-                     <string>Font:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="dynamicsFont">
-                    <property name="minimumSize">
-                     <size>
-                      <width>0</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item row="5" column="3">
-                <spacer name="horizontalSpacer_30">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
                </item>
               </layout>
              </widget>
@@ -8569,6 +8653,23 @@
                <string>Hairpins</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_7">
+               <item row="0" column="1">
+                <widget class="mu::notation::OffsetSelect" name="hairpinPosAbove" native="true">
+                 <property name="focusPolicy">
+                  <enum>Qt::StrongFocus</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_117">
+                 <property name="text">
+                  <string>Autoplace, distance to dynamics:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>autoplaceHairpinDynamicsDistance</cstring>
+                 </property>
+                </widget>
+               </item>
                <item row="5" column="2">
                 <widget class="QToolButton" name="resetAutoplaceHairpinDynamicsDistance">
                  <property name="sizePolicy">
@@ -8588,84 +8689,6 @@
                  </property>
                 </widget>
                </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_95">
-                 <property name="text">
-                  <string>Offset above:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>hairpinPosAbove</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QDoubleSpinBox" name="hairpinHeight">
-                 <property name="keyboardTracking">
-                  <bool>false</bool>
-                 </property>
-                 <property name="suffix">
-                  <string extracomment="spatium unit">sp</string>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.100000000000000</double>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="mu::notation::OffsetSelect" name="hairpinPosAbove" native="true">
-                 <property name="focusPolicy">
-                  <enum>Qt::StrongFocus</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QLabel" name="label_117">
-                 <property name="text">
-                  <string>Autoplace, distance to dynamics:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>autoplaceHairpinDynamicsDistance</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QToolButton" name="resetHairpinPosAbove">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Offset above' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="2">
-                <widget class="QToolButton" name="resetHairpinContinueHeight">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Continue height' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
                <item row="3" column="0">
                 <widget class="QLabel" name="label_9">
                  <property name="text">
@@ -8676,13 +8699,13 @@
                  </property>
                 </widget>
                </item>
-               <item row="6" column="0">
-                <widget class="QLabel" name="label_8">
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_10">
                  <property name="text">
-                  <string>Line thickness:</string>
+                  <string>Continue height:</string>
                  </property>
                  <property name="buddy">
-                  <cstring>hairpinLineWidth</cstring>
+                  <cstring>hairpinContinueHeight</cstring>
                  </property>
                 </widget>
                </item>
@@ -8718,10 +8741,126 @@
                  </property>
                 </widget>
                </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_129">
+                 <property name="text">
+                  <string>Offset below:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>hairpinPosBelow</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QDoubleSpinBox" name="hairpinContinueHeight">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string extracomment="spatium unit">sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QToolButton" name="resetHairpinPosAbove">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Offset above' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <spacer name="horizontalSpacer_671">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="3" column="2">
+                <widget class="QToolButton" name="resetHairpinHeight">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Height' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>Line thickness:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>hairpinLineWidth</cstring>
+                 </property>
+                </widget>
+               </item>
                <item row="1" column="1">
                 <widget class="mu::notation::OffsetSelect" name="hairpinPosBelow" native="true">
                  <property name="focusPolicy">
                   <enum>Qt::StrongFocus</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <widget class="QToolButton" name="resetHairpinContinueHeight">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Continue height' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QDoubleSpinBox" name="hairpinHeight">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string extracomment="spatium unit">sp</string>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -8738,13 +8877,13 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_129">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_95">
                  <property name="text">
                   <string>Offset below:</string>
                  </property>
                  <property name="buddy">
-                  <cstring>hairpinPosBelow</cstring>
+                  <cstring>hairpinPosAbove</cstring>
                  </property>
                 </widget>
                </item>
@@ -8766,61 +8905,6 @@
                   <string notr="true"/>
                  </property>
                 </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QDoubleSpinBox" name="hairpinContinueHeight">
-                 <property name="keyboardTracking">
-                  <bool>false</bool>
-                 </property>
-                 <property name="suffix">
-                  <string extracomment="spatium unit">sp</string>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.100000000000000</double>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_10">
-                 <property name="text">
-                  <string>Continue height:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>hairpinContinueHeight</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QToolButton" name="resetHairpinHeight">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Height' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3">
-                <spacer name="horizontalSpacer_671">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
                </item>
               </layout>
              </widget>

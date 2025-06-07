@@ -749,10 +749,11 @@ TextFragment::TextFragment(const String& s)
     text = s;
 }
 
-TextFragment::TextFragment(TextCursor* cursor, const String& s)
+TextFragment::TextFragment(TextCursor* cursor, const String& s, mu::engraving::TextFragmentType t)
     : TextFragment(s)
 {
     format = *cursor->format();
+    type = t;
 }
 
 TextFragment::TextFragment(const TextFragment& f)
@@ -760,6 +761,7 @@ TextFragment::TextFragment(const TextFragment& f)
     text = f.text;
     format = f.format;
     pos = f.pos;
+    type = f.type;
 }
 
 TextFragment& TextFragment::operator =(const TextFragment& f)
@@ -767,6 +769,7 @@ TextFragment& TextFragment::operator =(const TextFragment& f)
     text = f.text;
     format = f.format;
     pos = f.pos;
+    type = f.type;
     return *this;
 }
 
@@ -780,6 +783,7 @@ TextFragment TextFragment::split(int column)
     int col = 0;
     TextFragment f;
     f.format = format;
+    f.type = type;
 
     for (size_t i = 0; i < text.size(); ++i) {
         const Char& c = text.at(i);
@@ -883,7 +887,8 @@ Font TextFragment::font(const TextBase* t) const
 
     String family;
     Font::Type fontType = Font::Type::Unknown;
-    if (format.fontFamily() == "ScoreText") {
+    bool dynamicsUseExpressionTextStyle = t->isDynamic() && toDynamic(t)->useExpressionTextStyle();
+    if (format.fontFamily() == "ScoreText" && !dynamicsUseExpressionTextStyle) {
         if (t->isDynamic()
             || t->isStringTunings()
             || t->textStyleType() == TextStyleType::OTTAVA
@@ -898,7 +903,7 @@ Font TextFragment::font(const TextBase* t) const
                 m = MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
                 if (t->isDynamic()) {
                     m *= t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
-                    if (t->style().styleB(Sid::dynamicsOverrideFont)) {
+                    if (t->style().styleB(Sid::dynamicsOverrideFont) && !t->style().styleB(Sid::dynamicsUseExpressionTextStyle)) {
                         std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
                         family = String::fromStdString(fontName2);
                     }
@@ -960,7 +965,7 @@ Font TextFragment::font(const TextBase* t) const
             }
         }
     } else {
-        family = format.fontFamily();
+        family = dynamicsUseExpressionTextStyle ? t->style().styleSt(Sid::expressionFontFace) : format.fontFamily();
         fontType = Font::Type::Unknown;
         font.setBold(format.bold());
         font.setItalic(format.italic());
@@ -1286,22 +1291,22 @@ void TextBlock::insert(TextCursor* cursor, const String& s)
     removeEmptyFragment();   // since we are going to write text, we don't need an empty fragment to hold format info. if such exists, delete it
     auto i = fragment(static_cast<int>(cursor->column()), &rcol, &ridx);
     if (i != m_fragments.end()) {
-        if (!(i->format == *cursor->format())) {
+        if (!(i->format == *cursor->format() && i->type == cursor->type())) {
             if (rcol == 0) {
-                m_fragments.insert(i, TextFragment(cursor, s));
+                m_fragments.insert(i, TextFragment(cursor, s, cursor->type()));
             } else {
                 TextFragment f2 = i->split(rcol);
-                i = m_fragments.insert(std::next(i), TextFragment(cursor, s));
+                i = m_fragments.insert(std::next(i), TextFragment(cursor, s, cursor->type()));
                 m_fragments.insert(std::next(i), f2);
             }
         } else {
             i->text.insert(ridx, s);
         }
     } else {
-        if (!m_fragments.empty() && m_fragments.back().format == *cursor->format()) {
+        if (!m_fragments.empty() && m_fragments.back().format == *cursor->format() && m_fragments.back().type == cursor->type()) {
             m_fragments.back().text.append(s);
         } else {
-            m_fragments.push_back(TextFragment(cursor, s));
+            m_fragments.push_back(TextFragment(cursor, s, cursor->type()));
         }
     }
 }
@@ -1707,6 +1712,9 @@ TextBase::TextBase(const TextBase& st)
 {
     m_cursor                      = new TextCursor(this);
     m_cursor->setFormat(*(st.cursor()->format()));
+    if (st.cursor()->editing()) {
+        m_cursor->startEdit();
+    }
     m_text                        = st.m_text;
     m_textInvalid                  = st.m_textInvalid;
     m_layoutToParentWidth         = st.m_layoutToParentWidth;
@@ -1876,14 +1884,27 @@ void TextBase::createBlocks(LayoutData* ldata) const
                     symState = false;
                     SymId id = SymNames::symIdByName(sym);
                     if (id != SymId::noSym) {
-                        CharFormat fmt = *cursor.format(); // save format
-
-                        //char32_t code = score()->scoreFont()->symCode(id);
-                        char32_t code = id
-                                        == SymId::space ? static_cast<char32_t>(' ') : score()->engravingFonts()->fallbackFont()->symCode(id);
-                        cursor.format()->setFontFamily(u"ScoreText");
-                        insert(&cursor, code, ldata);
-                        cursor.setFormat(fmt); // restore format
+                        if (isDynamic() && toDynamic(this)->useExpressionTextStyle()) {
+                            DynamicType dynamicType = TConv::dynamicType(id);
+                            if (dynamicType != DynamicType::OTHER) {
+                                TextFragmentType type = cursor.type();
+                                cursor.setType(TextFragmentType::PLAIN_DYNAMIC);
+                                std::string dynamic = TConv::toXml(dynamicType).ascii();
+                                for (char32_t ch : dynamic) {
+                                    insert(&cursor, ch, ldata);
+                                }
+                                cursor.setType(type);
+                            }
+                        } else {
+                            CharFormat fmt = *cursor.format(); // save format
+                            //char32_t code = score()->scoreFont()->symCode(id);
+                            char32_t code = id
+                                            == SymId::space ? static_cast<char32_t>(' ') : score()->engravingFonts()->fallbackFont()->
+                                            symCode(id);
+                            cursor.format()->setFontFamily(u"ScoreText");
+                            insert(&cursor, code, ldata);
+                            cursor.setFormat(fmt); // restore format
+                        }
                     } else {
                         LOGD("unknown symbol <%s>", muPrintable(sym));
                     }
@@ -2250,6 +2271,8 @@ String TextBase::genText(const LayoutData* ldata) const
                 for (size_t i = 0; i < f.text.size(); ++i) {
                     text += toSymbolXml(f.text.at(i));
                 }
+            } else if (f.type == TextFragmentType::PLAIN_DYNAMIC) {
+                text += Dynamic::xmlToText(f.text);
             } else {
                 text += XmlWriter::xmlString(f.text);
             }

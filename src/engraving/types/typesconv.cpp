@@ -1261,7 +1261,7 @@ DynamicType TConv::dynamicType(SymId v)
         return i.symId == v;
     });
 
-    IF_ASSERT_FAILED(it != DYNAMIC_TYPES.cend()) {
+    if (it == DYNAMIC_TYPES.cend()) {
         return DynamicType::OTHER;
     }
     return it->type;
@@ -1379,7 +1379,7 @@ AsciiStringView TConv::toXml(DynamicType v)
         return i.type == v;
     });
 
-    IF_ASSERT_FAILED(it != DYNAMIC_TYPES.cend()) {
+    if (it == DYNAMIC_TYPES.cend()) {
         static AsciiStringView dummy;
         return dummy;
     }

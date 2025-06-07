@@ -729,6 +729,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     styleDef(dynamicsOverrideFont,                       false),
     styleDef(dynamicsFont,                               PropertyValue(String(u"Leland"))),
+    styleDef(dynamicsUseExpressionTextStyle,             false),
     styleDef(dynamicsSize,                               1.0), // percentage of the standard size
     styleDef(dynamicsPlacement,                          PlacementV::BELOW),
     styleDef(dynamicsPosAbove,                           PointF(.0, -1.0)),

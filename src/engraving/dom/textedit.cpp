@@ -225,10 +225,10 @@ void TextBase::endEditTextual(EditData& ed)
         return;
     }
 
+    resetFormatting();
     if (textWasEdited) {
         setXmlText(ted->oldXmlText); // reset text to value before editing
         undo->reopen();
-        resetFormatting();
 
         // change property to set text to actual value again - this also changes text of linked elements
         undoChangeProperty(Pid::TEXT, actualXmlText);
