@@ -56,7 +56,6 @@
 #include "dom/segment.h"
 #include "dom/staff.h"
 #include "dom/stafftextbase.h"
-#include "dom/stretchedbend.h"
 #include "dom/swing.h"
 #include "dom/tie.h"
 #include "dom/trill.h"
@@ -205,10 +204,6 @@ static Fraction getPlayTicksForBend(const Note* note)
             if (e && (e->type() == ElementType::BEND)) {
                 return nextNote->chord()->tick() - stick;
             }
-        }
-
-        if (nextNote->stretchedBend()) {
-            return nextNote->chord()->tick() - stick;
         }
 
         tie = nextNote->tieFor();

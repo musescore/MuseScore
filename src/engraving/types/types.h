@@ -130,7 +130,6 @@ enum class ElementType : unsigned char {
     FRET_DIAGRAM,
     HARP_DIAGRAM,
     BEND,
-    STRETCHED_BEND,
     TREMOLOBAR,
     VOLTA,
     HAIRPIN_SEGMENT,

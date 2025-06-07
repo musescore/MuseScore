@@ -48,7 +48,6 @@ class Note;
 class NoteEventList;
 class Stem;
 class StemSlash;
-class StretchedBend;
 class TremoloTwoChord;
 class TremoloSingleChord;
 
