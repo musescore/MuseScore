@@ -31,20 +31,28 @@ class AbstractScoresModel : public QAbstractListModel
 
     Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged)
     Q_PROPERTY(QList<int> nonScoreItemIndices READ nonScoreItemIndices NOTIFY rowCountChanged)
+    Q_PROPERTY(QString currentSortKey READ currentSortKey NOTIFY sortKeyChanged)
+    Q_PROPERTY(Qt::SortOrder sortOrder READ sortOrder NOTIFY sortOrderChanged)
 
 public:
     explicit AbstractScoresModel(QObject* parent = nullptr);
 
     Q_INVOKABLE virtual void load() = 0;
+    Q_INVOKABLE void sortBy(const QString& key);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
     virtual QList<int> nonScoreItemIndices() const;
+    
+    QString currentSortKey() const;
+    Qt::SortOrder sortOrder() const;
 
 signals:
     void rowCountChanged();
+    void sortKeyChanged();
+    void sortOrderChanged();
 
 protected:
     enum Roles {
@@ -55,6 +63,9 @@ protected:
 
     static const QString NAME_KEY;
     static const QString PATH_KEY;
+    static const QString COMPOSER_KEY;
+    static const QString ARRANGER_KEY;
+    static const QString CREATION_DATE_KEY;
     static const QString SUFFIX_KEY;
     static const QString FILE_SIZE_KEY;
     static const QString THUMBNAIL_URL_KEY;
@@ -66,7 +77,13 @@ protected:
     static const QString CLOUD_VISIBILITY_KEY;
     static const QString CLOUD_VIEW_COUNT_KEY;
 
+    void sortScoreItems(std::vector<QVariantMap>& items);
+    bool compareItems(const QVariantMap& a, const QVariantMap& b, const QString& key, Qt::SortOrder order);
+    bool isValueEmpty(const QVariant& value);
+    
     std::vector<QVariantMap> m_items;
+    QString m_sortKey;
+    Qt::SortOrder m_sortOrder;
 };
 }
 
