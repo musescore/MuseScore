@@ -122,6 +122,7 @@ public:
     async::Notification toolConfigChanged(const QString& toolName) const override;
 
     int flickableMaxVelocity() const override;
+    int flickableDeceleration() const override;
 
     int tooltipDelay() const override;
 
