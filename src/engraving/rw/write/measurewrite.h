@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_MEASUREWRITE_H
-#define MU_ENGRAVING_MEASUREWRITE_H
+#pragma once
 
 #include "../xmlwriter.h"
 #include "writecontext.h"
@@ -38,5 +37,3 @@ public:
                              bool forceTimeSig);
 };
 }
-
-#endif // MU_ENGRAVING_MEASUREWRITE_H

@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_READ460_MEASURERW_H
-#define MU_ENGRAVING_READ460_MEASURERW_H
+#pragma once
 
 #include "../xmlreader.h"
 #include "readcontext.h"
@@ -40,5 +39,3 @@ private:
     static void readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int staffIdx, bool irregular);
 };
 }
-
-#endif // MU_ENGRAVING_READ460_MEASURERW_H

@@ -21,10 +21,7 @@
  */
 #include "staffread.h"
 
-#include "rw/write/twrite.h"
-
 #include "dom/factory.h"
-#include "dom/box.h"
 #include "dom/measure.h"
 #include "dom/score.h"
 
@@ -87,10 +84,9 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 MeasureBase* mb = toMeasureBase(Factory::createItemByName(tag, ctx.dummy()));
                 mb->setTick(ctx.tick());
                 score->measures()->append(mb);
+
                 // This default value needs initialising after being added to the score, as it depends on whether this is the title frame
-                if (mb->score()->mscVersion() >= 440) {
-                    mb->setSizeIsSpatiumDependent(mb->propertyDefault(Pid::SIZE_SPATIUM_DEPENDENT).toBool());
-                }
+                mb->setSizeIsSpatiumDependent(mb->propertyDefault(Pid::SIZE_SPATIUM_DEPENDENT).toBool());
 
                 TRead::readItem(mb, e, ctx);
             } else if (tag == "tick") {

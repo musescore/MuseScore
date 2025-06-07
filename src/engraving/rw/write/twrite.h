@@ -26,9 +26,6 @@
 
 #include "../../dom/property.h"
 
-#include "global/modularity/ioc.h"
-#include "../../iengravingconfiguration.h"
-
 namespace mu::engraving {
 class EngravingItem;
 class ElementList;
