@@ -61,10 +61,14 @@ private:
     void seekAllTracks(const msecs_t newPositionMsecs);
     void flushAllTracks();
 
+    using AllTracksReadyCallback = std::function<void ()>;
+    void prepareAllTracksToPlay(AllTracksReadyCallback allTracksReadyCallback);
+
     IGetTracks* m_getTracks = nullptr;
     IClockPtr m_clock = nullptr;
 
     bool m_countDownIsSet = false;
+    std::set<TrackId> m_notYetReadyToPlayTrackIdSet;
 };
 }
 

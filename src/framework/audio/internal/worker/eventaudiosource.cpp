@@ -197,6 +197,39 @@ async::Channel<AudioInputParams> EventAudioSource::inputParamsChanged() const
     return m_paramsChanges;
 }
 
+void EventAudioSource::prepareToPlay()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
+
+    m_synth->prepareToPlay();
+}
+
+bool EventAudioSource::readyToPlay() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return false;
+    }
+
+    return m_synth->readyToPlay();
+}
+
+async::Notification EventAudioSource::readyToPlayChanged() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_synth) {
+        return {};
+    }
+
+    return m_synth->readyToPlayChanged();
+}
+
 EventAudioSource::SynthCtx EventAudioSource::currentSynthCtx() const
 {
     if (!m_synth) {
