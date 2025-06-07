@@ -1998,9 +1998,7 @@ void Score::upDown(bool up, UpDownMode mode)
                 Note* firstTiedNote = oNote->firstTiedNote();
                 int newLine = firstTiedNote->line() + (up ? -1 : 1);
                 Staff* vStaff = score()->staff(firstTiedNote->chord()->vStaffIdx());
-                Key vKey = vStaff->key(tick);
-                Key cKey = vStaff->concertKey(tick);
-                Interval interval = vStaff->part()->instrument(tick)->transpose();
+                Interval v = vStaff->transpose(tick);
 
                 bool error = false;
                 AccidentalVal accOffs = firstTiedNote->chord()->measure()->findAccidental(
@@ -2014,14 +2012,20 @@ void Score::upDown(bool up, UpDownMode mode)
 
                 if (testPitch <= 127 && testPitch > 0) {
                     newPitch = testPitch;
-                    if (!firstTiedNote->concertPitch()) {
-                        newPitch += interval.chromatic;
+                    int ntpc = step2tpc(nStep % 7, accOffs);
+                    if (v.isZero()) {
+                        newTpc1 = newTpc2 = ntpc;
                     } else {
-                        interval.flip();
-                        vKey = transposeKey(cKey, interval, vStaff->part()->preferSharpFlat());
+                        if (firstTiedNote->concertPitch()) {
+                            v.flip();
+                            newTpc1 = ntpc;
+                            newTpc2 = transposeTpc(ntpc, v, true);
+                        } else {
+                            newPitch += v.chromatic;
+                            newTpc2 = ntpc;
+                            newTpc1 = transposeTpc(ntpc, v, true);
+                        }
                     }
-                    newTpc1 = pitch2tpc(newPitch, cKey, Prefer::NEAREST);
-                    newTpc2 = pitch2tpc(newPitch - firstTiedNote->transposition(), vKey, Prefer::NEAREST);
                 }
             }
             break;
