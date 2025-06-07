@@ -22,11 +22,15 @@
 #include "abstractscoresmodel.h"
 
 #include "uicomponents/view/modelutils.h"
+#include <algorithm>
 
 using namespace mu::project;
 
 const QString AbstractScoresModel::NAME_KEY("name");
 const QString AbstractScoresModel::PATH_KEY("path");
+const QString AbstractScoresModel::COMPOSER_KEY("composer");
+const QString AbstractScoresModel::ARRANGER_KEY("arranger");
+const QString AbstractScoresModel::CREATION_DATE_KEY("creationDate");
 const QString AbstractScoresModel::SUFFIX_KEY("suffix");
 const QString AbstractScoresModel::FILE_SIZE_KEY("fileSize");
 const QString AbstractScoresModel::THUMBNAIL_URL_KEY("thumbnailUrl");
@@ -40,6 +44,8 @@ const QString AbstractScoresModel::CLOUD_VIEW_COUNT_KEY("cloudViewCount");
 
 AbstractScoresModel::AbstractScoresModel(QObject* parent)
     : QAbstractListModel(parent)
+    , m_sortKey("")
+    , m_sortOrder(Qt::AscendingOrder)
 {
     muse::uicomponents::ModelUtils::connectRowCountChangedSignal(this, &AbstractScoresModel::rowCountChanged);
 }
@@ -80,4 +86,88 @@ QHash<int, QByteArray> AbstractScoresModel::roleNames() const
 QList<int> AbstractScoresModel::nonScoreItemIndices() const
 {
     return {};
+}
+
+void AbstractScoresModel::sortBy(const QString& key)
+{    
+    if (m_sortKey == key) {
+        m_sortOrder = (m_sortOrder == Qt::AscendingOrder) ? Qt::DescendingOrder : Qt::AscendingOrder;
+    } else {
+        m_sortKey = key;
+        m_sortOrder = Qt::AscendingOrder;
+    }
+    
+    emit sortKeyChanged();
+    emit sortOrderChanged();
+    
+    load();
+}
+
+void AbstractScoresModel::sortScoreItems(std::vector<QVariantMap>& items)
+{
+    if (m_sortKey.isEmpty()) {
+        return;
+    }
+
+    std::sort(items.begin(), items.end(), [this](const QVariantMap& a, const QVariantMap& b) {
+        return compareItems(a, b, m_sortKey, m_sortOrder);
+    });
+}
+
+bool AbstractScoresModel::compareItems(const QVariantMap& a, const QVariantMap& b, const QString& key, Qt::SortOrder order)
+{
+    QVariant valueA, valueB;
+    
+    if (key == "timeSinceModified") {
+        valueA = a.value("rawModifiedTime");
+        valueB = b.value("rawModifiedTime");
+    } else if (key == "fileSize") {
+        valueA = a.value("rawFileSize");
+        valueB = b.value("rawFileSize");
+    } else {
+        valueA = a.value(key, "");
+        valueB = b.value(key, "");
+    }
+    
+    bool aIsEmpty = isValueEmpty(valueA);
+    bool bIsEmpty = isValueEmpty(valueB);
+    
+    if (aIsEmpty && bIsEmpty) return false;
+    if (aIsEmpty) return false;
+    if (bIsEmpty) return true;
+    
+    bool result = false;
+    if (valueA.typeId() == QMetaType::QString) {
+        result = QString::localeAwareCompare(valueA.toString(), valueB.toString()) < 0;
+    } else if (valueA.canConvert<qint64>() && valueB.canConvert<qint64>()) {
+        result = valueA.toLongLong() < valueB.toLongLong();
+    } else {
+        result = QString::localeAwareCompare(valueA.toString(), valueB.toString()) < 0;
+    }
+    
+    return (order == Qt::AscendingOrder) ? result : !result;
+}
+
+bool AbstractScoresModel::isValueEmpty(const QVariant& value)
+{
+    if (value.isNull() || !value.isValid()) {
+        return true;
+    }
+    
+    if (value.typeId() == QMetaType::QString) {
+        QString str = value.toString().trimmed();
+        return str.isEmpty() || str == "-";
+    }
+    
+    return false;
+}
+
+QString AbstractScoresModel::currentSortKey() const
+{
+    return m_sortKey;
+}
+
+Qt::SortOrder AbstractScoresModel::sortOrder() const
+{
+    return m_sortOrder;
 }

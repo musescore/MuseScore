@@ -57,11 +57,56 @@ Item {
         property Component delegate
     }
 
+    // Component for sortable headers
+    component SortableHeader : Rectangle {
+        property string headerText
+        property string sortKey
+        property bool sortable: true
+        
+        height: 44
+        color: "transparent"
+        
+        Row {
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 4
+            
+            StyledTextLabel {
+                text: headerText
+                font: Qt.font(Object.assign({}, ui.theme.bodyBoldFont, { capitalization: Font.AllUppercase }))
+                horizontalAlignment: Text.AlignLeft
+                anchors.verticalCenter: parent.verticalCenter
+
+                color: headerMouseArea.containsMouse ? "grey" : "white"
+            }
+            
+            StyledIconLabel {
+                visible: sortable && root.model && root.model.currentSortKey === sortKey
+                iconCode: (root.model && root.model.sortOrder === Qt.AscendingOrder) ? IconCode.ARROW_UP : IconCode.ARROW_DOWN
+                font.pixelSize: 12
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+        
+        MouseArea {
+            id: headerMouseArea
+            anchors.fill: parent
+            hoverEnabled: sortable
+            cursorShape: sortable ? Qt.PointingHandCursor : Qt.ArrowCursor
+            
+            onClicked: {
+                if (sortable && root.model && root.model.sortBy) {
+                    root.model.sortBy(sortKey)
+                }
+            }
+        }
+    }
+
     SortFilterProxyModel {
         id: searchFilterModel
         sourceModel: root.model
 
-        alwaysExcludeIndices: root.model.nonScoreItemIndices
+        alwaysExcludeIndices: root.model ? root.model.nonScoreItemIndices : []
 
         filters: [
             FilterValue {
@@ -136,7 +181,7 @@ Item {
                 anchors.fill: parent
                 spacing: 0
 
-                // Column headers
+                // Column headers with sorting functionality
                 RowLayout {
                     Layout.preferredHeight: 44
                     Layout.leftMargin: view.itemInset
@@ -144,35 +189,31 @@ Item {
 
                     spacing: view.columnSpacing
 
-                    StyledTextLabel {
+                    SortableHeader {
                         Layout.fillWidth: true
-
-                        text: qsTrc("project", "Name")
-
-                        // It is not possible to set the `font` and `font.capitalization` properties at the same time.
-                        // The following alternatives do not work:
-                        // - font: { let f = ui.theme.bodyBoldFont; f.capitalization = Font.AllUppercase; return f }
-                        //
-                        // - font: ui.theme.bodyBoldFont
-                        //   Component.onCompleted: { font.capitalization = Font.AllUppercase }
-                        //   (breaks updating the font when changed in Preferences > Appearance
-                        //
-                        // - Qt.font(Object.assign(ui.theme.bodyBoldFont, { capitalization: Font.AllUppercase }))
-                        //   (complains that ui.theme.bodyBoldFont is const and cannot be modified)
-                        font: Qt.font(Object.assign({}, ui.theme.bodyBoldFont, { capitalization: Font.AllUppercase }))
-                        horizontalAlignment: Text.AlignLeft
+                        headerText: qsTrc("project", "Name")
+                        sortKey: "name"
                     }
 
                     Repeater {
                         model: root.columns
 
-                        delegate: StyledTextLabel {
+                        delegate: SortableHeader {
                             Layout.preferredWidth: modelData.width(parent.width)
-
-                            text: modelData.header
-
-                            font: Qt.font(Object.assign({}, ui.theme.bodyBoldFont, { capitalization: Font.AllUppercase }))
-                            horizontalAlignment: Text.AlignLeft
+                            
+                            headerText: modelData.header
+                            sortKey: {
+                                // Map header text to sort keys
+                                if (modelData.header === qsTrc("project", "Composer")) return "composer"
+                                if (modelData.header === qsTrc("project", "Modified")) return "timeSinceModified"
+                                if (modelData.header === qsTrc("project", "Created")) return "creationDate"
+                                if (modelData.header === qsTrc("project", "File Path")) return "path"
+                                if (modelData.header === qsTrc("global", "Size", "file size")) return "fileSize"
+                                if (modelData.header === qsTrc("project", "Views", "number of views")) return "cloudViewCount"
+                                if (modelData.header === qsTrc("project/cloud", "Visibility")) return "cloudVisibility"
+                                return ""
+                            }
+                            sortable: sortKey !== ""
                         }
                     }
                 }
