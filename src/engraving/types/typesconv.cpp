@@ -229,7 +229,6 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::FRET_DIAGRAM,         "FretDiagram",          muse::TranslatableString("engraving", "Fretboard diagram") },
     { ElementType::HARP_DIAGRAM,         "HarpPedalDiagram",     muse::TranslatableString("engraving", "Harp pedal diagram") },
     { ElementType::BEND,                 "Bend",                 muse::TranslatableString("engraving", "Bend") },
-    { ElementType::STRETCHED_BEND,       "Bend",                 muse::TranslatableString("engraving", "Bend") },
     { ElementType::TREMOLOBAR,           "TremoloBar",           muse::TranslatableString("engraving", "Tremolo bar") },
     { ElementType::VOLTA,                "Volta",                muse::TranslatableString("engraving", "Volta") },
     { ElementType::HAIRPIN_SEGMENT,      "HairpinSegment",       muse::TranslatableString("engraving", "Hairpin segment") },

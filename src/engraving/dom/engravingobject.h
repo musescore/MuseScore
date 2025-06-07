@@ -157,7 +157,6 @@ class StaffTypeChange;
 class Stem;
 class StemSlash;
 class Sticking;
-class StretchedBend;
 class StringTunings;
 class Symbol;
 class System;
@@ -385,7 +384,6 @@ public:
     CONVERT(Hairpin,       HAIRPIN)
     CONVERT(HairpinSegment, HAIRPIN_SEGMENT)
     CONVERT(Bend,          BEND)
-    CONVERT(StretchedBend, STRETCHED_BEND)
     CONVERT(TremoloBar,    TREMOLOBAR)
     CONVERT(MeasureRepeat, MEASURE_REPEAT)
     CONVERT(Tuplet,        TUPLET)
@@ -702,13 +700,13 @@ static inline const StaffTextBase* toStaffTextBase(const EngravingObject* e)
 
 static inline Bend* toBend(EngravingObject* e)
 {
-    assert(e == 0 || e->isBend() || e->isStretchedBend());
+    assert(e == 0 || e->isBend());
     return (Bend*)e;
 }
 
 static inline const Bend* toBend(const EngravingObject* e)
 {
-    assert(e == 0 || e->isBend() || e->isStretchedBend());
+    assert(e == 0 || e->isBend());
     return (const Bend*)e;
 }
 
@@ -802,7 +800,6 @@ CONVERT(MeasureNumber)
 CONVERT(MMRestRange)
 CONVERT(Hairpin)
 CONVERT(HairpinSegment)
-CONVERT(StretchedBend)
 CONVERT(TremoloBar)
 CONVERT(MeasureRepeat)
 CONVERT(MMRest)

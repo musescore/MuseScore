@@ -152,7 +152,6 @@ class Slur;
 class Spacer;
 class SpannerSegment;
 class StaffLines;
-class StretchedBend;
 class StringTunings;
 
 class BSymbol;
@@ -320,8 +319,6 @@ public:
     static void layoutStem(const Stem* item, Stem::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutSticking(const Sticking* item, Sticking::LayoutData* ldata);
-    static void layoutStretchedBend(StretchedBend* item, LayoutContext& ctx);
-    static void layoutStretched(StretchedBend* item, LayoutContext& ctx);
     static void layoutStringTunings(StringTunings* item, LayoutContext& ctx);
     static void layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldata);
 

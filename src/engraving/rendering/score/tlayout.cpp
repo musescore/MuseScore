@@ -27,7 +27,6 @@
 #include "global/types/number.h"
 #include "draw/fontmetrics.h"
 
-#include "iengravingconfiguration.h"
 #include "infrastructure/rtti.h"
 #include "infrastructure/ld_access.h"
 
@@ -128,8 +127,6 @@
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
 #include "dom/stringtunings.h"
-#include "dom/stretchedbend.h"
-#include "dom/bsymbol.h"
 #include "dom/symbol.h"
 #include "dom/system.h"
 #include "dom/systemdivider.h"
@@ -154,7 +151,6 @@
 #include "dom/whammybar.h"
 
 #include "accidentalslayout.h"
-#include "arpeggiolayout.h"
 #include "autoplace.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
@@ -204,8 +200,6 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::BEND:
         layoutBend(item_cast<const Bend*>(item), static_cast<Bend::LayoutData*>(ldata));
-        break;
-    case ElementType::STRETCHED_BEND:   layoutStretchedBend(item_cast<StretchedBend*>(item), ctx);
         break;
     case ElementType::HBOX:
         layoutHBox(item_cast<const HBox*>(item), static_cast<HBox::LayoutData*>(ldata), ctx);
@@ -5668,26 +5662,6 @@ void TLayout::layoutSticking(const Sticking* item, Sticking::LayoutData* ldata)
     }
 
     Autoplace::autoplaceSegmentElement(item, ldata);
-}
-
-void TLayout::layoutStretchedBend(StretchedBend* item, LayoutContext& ctx)
-{
-    LAYOUT_CALL_ITEM(item);
-    item->fillArrows(ctx.conf().styleMM(Sid::bendArrowWidth));
-    item->fillSegments();
-    item->fillStretchedSegments(false);
-
-    item->setbbox(item->calculateBoundingRect());
-    item->setPos(0.0, 0.0);
-}
-
-void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
-{
-    LAYOUT_CALL_ITEM(item);
-    UNUSED(ctx);
-    item->fillStretchedSegments(true);
-    item->setbbox(item->calculateBoundingRect());
-    item->setPos(0.0, 0.0);
 }
 
 void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)

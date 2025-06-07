@@ -27,7 +27,6 @@
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../style/textstyle.h"
-#include "../../infrastructure/ifileinfoprovider.h"
 #include "../../infrastructure/rtti.h"
 
 #include "dom/score.h"
@@ -50,7 +49,6 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/bend.h"
-#include "dom/stretchedbend.h"
 #include "dom/box.h"
 #include "dom/bracket.h"
 #include "dom/breath.h"
@@ -189,8 +187,6 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::BEAM:         write(item_cast<const Beam*>(item), xml, ctx);
         break;
     case ElementType::BEND:         write(item_cast<const Bend*>(item), xml, ctx);
-        break;
-    case ElementType::STRETCHED_BEND: write(item_cast<const StretchedBend*>(item), xml, ctx);
         break;
     case ElementType::HBOX:         write(item_cast<const HBox*>(item), xml, ctx);
         break;
@@ -766,14 +762,6 @@ void TWrite::write(const Bend* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::PLAY);
     writeItemProperties(item, xml, ctx);
     xml.endElement();
-}
-
-void TWrite::write(const StretchedBend* item, XmlWriter& xml, WriteContext& ctx)
-{
-    UNUSED(item);
-    UNUSED(xml);
-    UNUSED(ctx);
-    // not implemented
 }
 
 void TWrite::write(const Box* item, XmlWriter& xml, WriteContext& ctx)
