@@ -2606,7 +2606,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                         if (cueNoteChord && cueNoteChord->upNote()->visible()) {
                             s.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
                         }
-                    } else {
+                    } else if (art->addToSkyline()) {
                         s.add(art->shape().translated(art->pos() + e->pos()));
                     }
                 }

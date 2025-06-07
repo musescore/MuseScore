@@ -40,6 +40,8 @@ enum class Grip : signed char;
 class Note;
 class PartialTie;
 class PartialTieSegment;
+class TappingHalfSlur;
+class TappingHalfSlurSegment;
 }
 
 namespace muse::draw {
@@ -68,6 +70,7 @@ public:
 private:
 
     static void slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx);
+    static void adjustForTappingHalfSlurs(TappingHalfSlur* item, SlurTiePos* sp, Note* endNote);
     static void avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTiePos* sp);
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);
     static void adjustEndPoints(SlurSegment* slurSeg);
@@ -86,6 +89,7 @@ private:
     static bool stemSideStartForBeam(Slur* slur) { return stemSideForBeam(slur, true); }
     static bool stemSideEndForBeam(Slur* slur) { return stemSideForBeam(slur, false); }
     static bool isOverBeams(Slur* slur);
+    static double computeShoulderHeight(SlurSegment* slurSeg, double slurLengthInSp, PointF shoulderOffset);
 
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
     static PointF computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd);
@@ -122,5 +126,7 @@ private:
     static PartialTieSegment* layoutPartialTie(PartialTie* item);
 
     static void setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos);
+
+    static void layoutMaskForTappingHalfSlur(TappingHalfSlurSegment* item);
 };
 }

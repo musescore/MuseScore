@@ -208,6 +208,12 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::TIMESIG_MARGIN:
                 set(idx, TConv::fromXml(e.readAsciiText(), TimeSigVSMargin::RIGHT_ALIGN_TO_BARLINE));
                 break;
+            case P_TYPE::LH_TAPPING_SYMBOL:
+                set(idx, TConv::fromXml(e.readAsciiText(), LHTappingSymbol::NONE));
+                break;
+            case P_TYPE::RH_TAPPING_SYMBOL:
+                set(idx, TConv::fromXml(e.readAsciiText(), RHTappingSymbol::NONE));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
@@ -612,6 +618,10 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigStyle>()));
         } else if (P_TYPE::TIMESIG_MARGIN == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<TimeSigVSMargin>()));
+        } else if (P_TYPE::LH_TAPPING_SYMBOL == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<LHTappingSymbol>()));
+        } else if (P_TYPE::RH_TAPPING_SYMBOL == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<RHTappingSymbol>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

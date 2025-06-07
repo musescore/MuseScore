@@ -488,8 +488,12 @@ public:
         FRET_FRAME = 0xF491,
         DURATION_CURSOR = 0xF492,
 
-        LOWER_CASE = 0xF49E,
-        UPPER_CASE = 0xF49F,
+        TAPPING_ENCIRCLED_T = 0xF49A,
+        TAPPING_DOT = 0xF49B,
+        TAPPING_PLUS = 0xF49C,
+        TAPPING_T = 0xF49D,
+        HP_LOWER_CASE = 0xF49E,
+        HP_UPPER_CASE = 0xF49F,
 
         NONE = 0xFFFF
     };

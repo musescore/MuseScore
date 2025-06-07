@@ -114,6 +114,7 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     case ElementType::HAIRPIN_SEGMENT:
         return isFiltered(ElementsSelectionFilterTypes::HAIRPIN);
     case ElementType::ARTICULATION:
+    case ElementType::TAPPING:
     case ElementType::VIBRATO:
     case ElementType::VIBRATO_SEGMENT:
     case ElementType::FERMATA:

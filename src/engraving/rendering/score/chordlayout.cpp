@@ -985,6 +985,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                 }
             }
         }
+        x -= 0.5 * a->ldata()->bbox().width();
         a->setPos(x, y);
         if (a->visible()) {
             prevVisibleArticulation = a;
@@ -1141,6 +1142,8 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             }
         }
 
+        a->mutldata()->moveX(-0.5 * a->width());
+
         if (!a->isOnCrossBeamSide()) {
             if (a->layoutCloseToNote()) {
                 Measure* meas = a->measure();
@@ -1151,7 +1154,9 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             } else {
                 Autoplace::autoplaceSegmentElement(a, a->mutldata(), a->up(), true);
             }
-            a->segment()->staffShape(a->vStaffIdx()).add(a->shape().translated(a->pos() + item->pos() + item->staffOffset()));
+            if (a->addToSkyline()) {
+                a->segment()->staffShape(a->vStaffIdx()).add(a->shape().translated(a->pos() + item->pos() + item->staffOffset()));
+            }
         }
     }
 }
