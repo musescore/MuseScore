@@ -35,8 +35,8 @@
 #include "style/style.h"
 #include "style/textstyle.h"
 
-#include "types/symnames.h"
 #include "types/typesconv.h"
+#include "types/symnames.h"
 
 #include "dom/accidental.h"
 #include "dom/ambitus.h"
@@ -492,6 +492,19 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+}
+
+VoiceAssignment Read206::readDynamicRange(int i)
+{
+    switch (i) {
+    case 0:
+        return VoiceAssignment::ALL_VOICE_IN_STAFF;
+    case 1:
+    case 2:
+        break;
+    }
+
+    return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
 }
 
 NoteHeadGroup Read206::convertHeadGroup(int i)
@@ -1421,7 +1434,7 @@ static void readDynamic(Dynamic* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "velocity") {
             d->setVelocity(tctx.reader().readInt());
         } else if (tag == "dynType") {
-            d->setDynRange(TConv::fromXml(tctx.reader().readAsciiText(), DynamicRange::STAFF));
+            d->setVoiceAssignment(Read206::readDynamicRange(tctx.reader().readInt()));
         } else if (tag == "size") {
             e.skipCurrentElement();
         } else if (!readTextProperties206(tctx.reader(), ctx, d)) {
@@ -2165,7 +2178,7 @@ void Read206::readHairpin206(XmlReader& e, ReadContext& ctx, Hairpin* h)
         } else if (tag == "veloChange") {
             h->setVeloChange(e.readInt());
         } else if (tag == "dynType") {
-            h->setDynRange(DynamicRange(e.readInt()));
+            h->setVoiceAssignment(readDynamicRange(e.readInt()));
         } else if (tag == "useTextLine") {        // < 206
             e.readInt();
             if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {
