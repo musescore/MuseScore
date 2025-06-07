@@ -76,10 +76,11 @@ ManifestList ExtPluginsLoader::loadManifestList(const io::path_t& defPath, const
         retList.push_back(m);
     }
 
-    for (const Manifest& m : externalManifests) {
+    for (Manifest& m : externalManifests) {
         if (!m.isValid()) {
             continue;
         }
+        m.isRemovable = true;
         retList.push_back(m);
     }
 
@@ -95,6 +96,7 @@ ManifestList ExtPluginsLoader::manifestList(const io::path_t& rootPath) const
         if (!manifest.isValid()) {
             continue;
         }
+        manifest.path = path;
         resolvePaths(manifest, io::FileInfo(path).dirPath());
         manifests.push_back(manifest);
     }

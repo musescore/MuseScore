@@ -23,6 +23,7 @@
 
 #include "global/containers.h"
 #include "global/async/async.h"
+#include "global/io/path.h"
 
 #include "extensionsloader.h"
 #include "legacy/extpluginsloader.h"

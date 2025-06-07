@@ -29,6 +29,7 @@
 #include "../iextensionsprovider.h"
 #include "../iextensionsexecpointsregister.h"
 #include "global/iinteractive.h"
+#include "io/ifilesystem.h"
 
 namespace muse::extensions {
 class ExtensionsProvider : public IExtensionsProvider, public Injectable, public async::Asyncable
@@ -36,6 +37,7 @@ class ExtensionsProvider : public IExtensionsProvider, public Injectable, public
     Inject<IExtensionsConfiguration> configuration = { this };
     Inject<IExtensionsExecPointsRegister> execPointsRegister = { this };
     Inject<IInteractive> interactive = { this };
+    Inject<io::IFileSystem> fileSystem  = { this };
 
 public:
     ExtensionsProvider(const modularity::ContextPtr& iocCtx)
