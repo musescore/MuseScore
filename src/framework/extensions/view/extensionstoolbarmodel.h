@@ -21,36 +21,19 @@
  */
 #pragma once
 
-#include <QAbstractListModel>
-
 #include "modularity/ioc.h"
 #include "../iextensionsprovider.h"
-#include "ui/iuiactionsregister.h"
+
 #include "uicomponents/view/abstracttoolbarmodel.h"
-#include "actions/iactionsdispatcher.h"
 
 namespace muse::extensions {
 class ExtensionsToolBarModel : public uicomponents::AbstractToolBarModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY isEmptyChanged FINAL)
-
     Inject<IExtensionsProvider> extensionsProvider = { this };
-    Inject<ui::IUiActionsRegister> actionsRegister = { this };
-    Inject<actions::IActionsDispatcher> dispatcher = { this };
 
 public:
-
     Q_INVOKABLE void load() override;
-
-    bool isEmpty() const;
-
-signals:
-    void isEmptyChanged();
-
-private:
-
-    bool m_isEmpty = true;
 };
 }

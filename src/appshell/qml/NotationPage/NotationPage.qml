@@ -161,7 +161,7 @@ DockPage {
         DockToolBar {
             id: extDockToolBar
 
-            objectName: "extensionsToolBar"
+            objectName: root.pageModel.extensionsToolBarName()
             title: qsTrc("appshell", "Extensions toolbar")
 
             separatorsVisible: false
@@ -183,34 +183,6 @@ DockPage {
 
                 navigationPanel.section: extDockToolBar.navigationSection
                 navigationPanel.order: 4
-
-                function updateVisible() {
-                    if (!extDockToolBar.inited) {
-                        return;
-                    }
-
-                    if (!root.visible) {
-                        return;
-                    }
-
-                    if (extToolBar.isEmpty) {
-                        extDockToolBar.close()
-                    } else {
-                        extDockToolBar.open()
-                    }
-                }
-
-                onIsEmptyChanged: extToolBar.updateVisible()
-
-                Connections {
-                    target: extDockToolBar
-                    function onInitedChanged() { extToolBar.updateVisible() }
-                }
-
-                Connections {
-                    target: root
-                    function onVisibleChanged() { extToolBar.updateVisible() }
-                }
             }
         },
 

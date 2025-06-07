@@ -25,6 +25,7 @@
 
 #include "modularity/ioc.h"
 
+#include "ui/iuiactionsregister.h"
 #include "ui/iinteractiveuriregister.h"
 
 #include "internal/extensionsprovider.h"
@@ -32,6 +33,7 @@
 #include "internal/extensionsactioncontroller.h"
 #include "internal/extensioninstaller.h"
 #include "internal/extensionsexecpointsregister.h"
+#include "internal/extensionsuiactions.h"
 
 #include "view/extensionbuilder.h"
 #include "view/extensionsuiengine.h"
@@ -97,6 +99,11 @@ void ExtensionsModule::resolveImports()
     if (ir) {
         ir->registerQmlUri(Uri("muse://extensions/viewer"), "Muse/Extensions/ExtensionViewerDialog.qml");
         ir->registerQmlUri(Uri("muse://extensions/apidump"), "Muse/Extensions/ExtensionsApiDumpDialog.qml");
+    }
+
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<ExtensionsUiActions>(iocContext()));
     }
 
     m_execPointsRegister->reg(moduleName(), { EXEC_DISABLED, TranslatableString("extensions", "Disabled") });

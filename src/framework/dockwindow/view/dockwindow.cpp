@@ -309,6 +309,11 @@ DockPageView* DockWindow::currentPage() const
     return m_currentPage;
 }
 
+Notification DockWindow::currentPageChanged() const
+{
+    return m_currentPageChanged;
+}
+
 QQuickItem& DockWindow::asItem() const
 {
     return *m_mainWindow;
@@ -324,9 +329,7 @@ void DockWindow::restoreDefaultLayout()
     interactiveProvider()->currentUriAboutToBeChanged().notify();
 
     if (m_currentPage) {
-        for (DockBase* dock : m_currentPage->allDocks()) {
-            dock->resetToDefault();
-        }
+        resetDocks(m_currentPage);
     }
 
     m_reloadCurrentPageAllowed = false;
@@ -565,6 +568,7 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
         return false;
     }
 
+    resetDocks(newPage);
     loadPageContent(newPage);
     restorePageState(newPage);
     initDocks(newPage);
@@ -577,6 +581,8 @@ bool DockWindow::doLoadPage(const QString& uri, const QVariantMap& params)
             this, &DockWindow::forceLayout, Qt::UniqueConnection);
 
     m_currentPage->setVisible(true);
+
+    m_currentPageChanged.notify();
 
     return true;
 }
@@ -768,6 +774,13 @@ void DockWindow::initDocks(DockPageView* page)
     }
 }
 
+void DockWindow::resetDocks(DockPageView* page)
+{
+    for (DockBase* dock : page->allDocks()) {
+        dock->resetToDefault();
+    }
+}
+
 void DockWindow::adjustContentForAvailableSpace(DockPageView* page)
 {
     if (!page) {
@@ -824,7 +837,7 @@ void DockWindow::adjustContentForAvailableSpace(DockPageView* page)
     QList<DockBase*> topLevelToolBarsDocks;
 
     for (DockToolBarView* toolBar : topLevelToolBars(page)) {
-        if (!toolBar->dockWidget()->isFloating()) {
+        if (!toolBar->dockWidget()->isFloating() && toolBar->isVisible()) {
             topLevelToolBarsDocks << toolBar;
         }
     }
