@@ -121,7 +121,7 @@ void RecentScoresModel::updateRecentScores()
     setRecentScores(items);
 }
 
-void RecentScoresModel::readFromScore(const muse::io::path_t& path, QVariantMap &obj)
+void RecentScoresModel::readFromScore(const muse::io::path_t& path, QVariantMap& obj)
 {
     MscReader::Params params;
     params.filePath = path;

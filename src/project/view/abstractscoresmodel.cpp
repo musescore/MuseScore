@@ -138,7 +138,7 @@ bool AbstractScoresModel::compareItems(const QVariantMap& a, const QVariantMap& 
     if (aIsEmpty) {
         return false;
     }
-    if(bIsEmpty) {
+    if (bIsEmpty) {
         return true;
     }
 

@@ -171,7 +171,7 @@ void CloudScoresModel::loadItemsIfNecessary()
 }
 
 void CloudScoresModel::sortBy(const QString& key)
-{    
+{
     if (m_sortKey == key) {
         m_sortOrder = (m_sortOrder == Qt::AscendingOrder) ? Qt::DescendingOrder : Qt::AscendingOrder;
     } else {
@@ -188,7 +188,6 @@ void CloudScoresModel::sortBy(const QString& key)
         sortScoreItems(m_items);
         endResetModel();
     }
-
 }
 
 bool CloudScoresModel::needsLoading()
