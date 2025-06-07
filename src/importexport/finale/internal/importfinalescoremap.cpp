@@ -185,7 +185,7 @@ void FinaleParser::importParts()
             continue; // safety check
         }
 
-        auto multiStaffInst = staff->getMultiStaffInstGroup();
+        auto multiStaffInst = staff->getMultiStaffInstVisualGroup();
         if (multiStaffInst && inst2Part.find(staff->getCmper()) != inst2Part.end()) {
             continue;
         }
