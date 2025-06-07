@@ -261,7 +261,7 @@ bool LineSegment::edit(EditData& ed)
         } else {
             s2 = MoveElementAnchors::findNewAnchorSegmentForLine(this, ed, s2);
         }
-        if (s1 == 0 || s2 == 0 || s1->tick() >= s2->tick()) {
+        if (!s1 || !s2 || s1->tick() >= s2->tick()) {
             return true;
         }
 
@@ -357,6 +357,18 @@ bool LineSegment::edit(EditData& ed)
                 if (m2->nextMeasure()) {
                     m2 = m2->nextMeasure();
                 }
+            }
+        } else if (ed.key == Key_Home) {
+            if (moveStart) {
+                m1 = m1->system()->firstMeasure();
+            } else if (moveEnd) {
+                m2 = m2->system()->firstMeasure();
+            }
+        } else if (ed.key == Key_End) {
+            if (moveStart) {
+                m1 = m1->system()->lastMeasure();
+            } else if (moveEnd) {
+                m2 = m2->system()->lastMeasure();
             }
         }
         if (m1->tick() > m2->tick()) {
