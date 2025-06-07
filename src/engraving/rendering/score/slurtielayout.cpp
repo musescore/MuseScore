@@ -1191,7 +1191,7 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
 
         // Its own startCR or items belonging to it, lyrics, fingering, ledger lines, articulation on endCR
         if (item == startCR || parent == startCR || item->isTextBase() || item->isLedgerLine()
-            || (item->isArticulationFamily() && parent == endCR) || item->isBend() || item->isStretchedBend()) {
+            || (item->isArticulationFamily() && parent == endCR) || item->isBend()) {
             return true;
         }
         // Ornament accidentals on start or end chord

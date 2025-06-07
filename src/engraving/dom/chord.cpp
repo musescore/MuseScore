@@ -54,7 +54,6 @@
 #include "stafftype.h"
 #include "stem.h"
 #include "stemslash.h"
-#include "stretchedbend.h"
 #include "stringdata.h"
 #include "system.h"
 #include "tie.h"
@@ -353,19 +352,6 @@ Chord::Chord(const Chord& c, bool link)
             if (link) {
                 score()->undo(new Link(ncl, cl));
             }
-        } else if (e->isStretchedBend()) {
-            StretchedBend* sb = toStretchedBend(e);
-            StretchedBend* nsb = Factory::copyStretchedBend(*sb);
-            add(nsb);
-            if (Note* originalNote = sb->note()) {
-                for (Note* note : notes()) {
-                    if (note->pitch() == originalNote->pitch() && note->string() == originalNote->string()) {
-                        nsb->setNote(note);
-                        note->setStretchedBend(nsb);
-                        break;
-                    }
-                }
-            }
         }
     }
 }
@@ -626,7 +612,6 @@ void Chord::add(EngravingItem* e)
     case ElementType::HOOK:
         m_hook = toHook(e);
         break;
-    case ElementType::STRETCHED_BEND:
     case ElementType::CHORDLINE:
     case ElementType::FRET_CIRCLE:
         addEl(e);
@@ -699,9 +684,6 @@ void Chord::remove(EngravingItem* e)
             for (Spanner* s : note->spannerFor()) {
                 note->removeSpannerFor(s);
             }
-            if (StretchedBend* stretchedBend = note->stretchedBend()) {
-                removeEl(stretchedBend);
-            }
         } else {
             LOGD("Chord::remove() note %p not found!", e);
         }
@@ -740,17 +722,6 @@ void Chord::remove(EngravingItem* e)
         }
         m_stemSlash = 0;
         break;
-    case ElementType::STRETCHED_BEND:
-    {
-        StretchedBend* stretchedBend = toStretchedBend(e);
-        auto it = std::find_if(m_notes.begin(), m_notes.end(), [stretchedBend](Note* note) {
-                return note->stretchedBend() == stretchedBend;
-            });
-        if (it != m_notes.end()) {
-            (*it)->setStretchedBend(nullptr);
-        }
-    }
-    // fallthrough
     case ElementType::CHORDLINE:
     case ElementType::FRET_CIRCLE:
         removeEl(e);

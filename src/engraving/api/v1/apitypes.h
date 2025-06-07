@@ -270,7 +270,6 @@ enum class ElementType {
     HARMONY               = int(mu::engraving::ElementType::HARMONY),
     FRET_DIAGRAM          = int(mu::engraving::ElementType::FRET_DIAGRAM),
     BEND                  = int(mu::engraving::ElementType::BEND),
-    STRETCHED_BEND        = int(mu::engraving::ElementType::STRETCHED_BEND),
     TREMOLOBAR            = int(mu::engraving::ElementType::TREMOLOBAR),
     VOLTA                 = int(mu::engraving::ElementType::VOLTA),
     HAIRPIN_SEGMENT       = int(mu::engraving::ElementType::HAIRPIN_SEGMENT),
