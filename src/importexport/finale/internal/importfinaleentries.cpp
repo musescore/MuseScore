@@ -540,6 +540,10 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
 void FinaleParser::importEntries()
 {
     // Add entries (notes, rests, tuplets)
+    if (m_score->measures().empty()) {
+        logger()->logWarning(String(u"Add entries: No measures in score"), m_doc, musxScrollViewItem->staffId, 1);
+        return;
+    }
     std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
     std::vector<std::shared_ptr<others::InstrumentUsed>> musxScrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
     staff_idx_t lastStaffIdxInPart = 0;
@@ -547,12 +551,6 @@ void FinaleParser::importEntries()
         staff_idx_t curStaffIdx = muse::value(m_inst2Staff, InstCmper(musxScrollViewItem->staffId), muse::nidx);
         IF_ASSERT_FAILED (curStaffIdx != muse::nidx) {
             logger()->logWarning(String(u"Add entries: Musx inst value not found."), m_doc, musxScrollViewItem->staffId, 1);
-            continue;
-        } else {
-            logger()->logInfo(String(u"Add entries: Successfully read staff_idx_t %1").arg(int(curStaffIdx)), m_doc, musxScrollViewItem->staffId, 1);
-        }
-        if (!m_score->firstMeasure()) {
-            logger()->logWarning(String(u"Add entries: Score has no first measure."), m_doc, musxScrollViewItem->staffId, 1);
             continue;
         }
 
