@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_CONNECTORINFOWRITER_H
-#define MU_ENGRAVING_CONNECTORINFOWRITER_H
+#pragma once
 
 #include "../../dom/connector.h"
 
@@ -82,5 +81,3 @@ public:
     static void fillSpannerPosition(Location& l, const MeasureBase* endpoint, const Fraction& tick, bool clipboardmode);
 };
 }
-
-#endif // MU_ENGRAVING_CONNECTORINFOWRITER_H

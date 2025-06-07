@@ -20,12 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_READ460_READCONTEXT_H
-#define MU_ENGRAVING_READ460_READCONTEXT_H
+#pragma once
 
-#include <map>
-
-#include "global/modularity/ioc.h"
 #include "iengravingfontsprovider.h"
 
 #include "../types/types.h"
@@ -35,7 +31,6 @@
 #include "dom/location.h"
 #include "dom/sig.h"
 
-#include "../linksindexer.h"
 #include "../inoutdata.h"
 
 #include "connectorinforeader.h"
@@ -208,8 +203,8 @@ private:
     Fraction _tickOffset       { Fraction(0, 1) };
     int _intTick = 0;
 
-    track_idx_t _track = 0;
     int _trackOffset = 0;
+    track_idx_t _track = 0;
 
     Measure* _curMeasure = nullptr;
     Measure* _lastMeasure = nullptr;
@@ -236,5 +231,3 @@ private:
     Fraction m_timeSigForNextMeasure = Fraction(0, 1);
 };
 }
-
-#endif // MU_ENGRAVING_READ460_READCONTEXT_H

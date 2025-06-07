@@ -68,9 +68,9 @@
 
 namespace mu::engraving {
 static PitchWheelSpecs wheelSpec;
-static int LET_RING_MAX_TICKS = Constants::DIVISION * 16;
+static constexpr int LET_RING_MAX_TICKS = Constants::DIVISION * 16;
 // TODO this should be a (configurable?) constant somewhere
-static Fraction ARTICULATION_CHANGE_TIME_MAX = Fraction(1, 16);
+static constexpr Fraction ARTICULATION_CHANGE_TIME_MAX = Fraction(1, 16);
 std::unordered_map<String,
                    CompatMidiRendererInternal::Context::BuiltInArticulation> CompatMidiRendererInternal::Context::
 s_builtInArticulationsValues = {

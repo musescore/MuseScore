@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_WRITECONTEXT_H
-#define MU_ENGRAVING_WRITECONTEXT_H
+#pragma once
 
 #include <map>
 
@@ -114,5 +112,3 @@ private:
     std::map<int, int> m_lidLocalIndices;
 };
 }
-
-#endif // MU_ENGRAVING_WRITECONTEXT_H
