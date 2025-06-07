@@ -45,7 +45,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     virtual QList<int> nonScoreItemIndices() const;
-    
+
     QString currentSortKey() const;
     Qt::SortOrder sortOrder() const;
 
@@ -80,7 +80,7 @@ protected:
     void sortScoreItems(std::vector<QVariantMap>& items);
     bool compareItems(const QVariantMap& a, const QVariantMap& b, const QString& key, Qt::SortOrder order);
     bool isValueEmpty(const QVariant& value);
-    
+
     std::vector<QVariantMap> m_items;
     QString m_sortKey;
     Qt::SortOrder m_sortOrder;

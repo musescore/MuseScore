@@ -98,9 +98,9 @@ void RecentScoresModel::updateRecentScores()
         obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(io::FileInfo(file.path).lastModified().date()).toQString();
         obj[IS_CREATE_NEW_KEY] = false;
         obj[IS_NO_RESULTS_FOUND_KEY] = false;
-        
+
         obj["rawModifiedTime"] = io::FileInfo(file.path).lastModified().date().toString().toQString();
-        obj["rawFileSize"] = fileSize.val;
+        obj["rawFileSize"] = static_cast<qulonglong>(fileSize.val);
 
         scoreItems.push_back(obj);
     }
@@ -121,7 +121,6 @@ void RecentScoresModel::updateRecentScores()
     setRecentScores(items);
 }
 
-
 void RecentScoresModel::readFromScore(const muse::io::path_t& path, QVariantMap &obj)
 {
     MscReader::Params params;
@@ -139,20 +138,20 @@ void RecentScoresModel::readFromScore(const muse::io::path_t& path, QVariantMap 
     }
 
     XmlStreamReader xml(scoreData);
-    
+
     while (!xml.atEnd()) {
-        xml.readNext();        
+        xml.readNext();
         if (xml.isStartElement() && xml.name() == "Score") {
             while (!xml.atEnd()) {
-                xml.readNext();                
+                xml.readNext();
                 if (xml.isEndElement() && xml.name() == "Score") {
                     break;
                 }
-                
+
                 if (xml.isStartElement() && xml.name() == "metaTag") {
                     QString metaTagNameAttribute = xml.attribute("name").toQString();
                     QString metaTagValue = xml.readText().toQString();
-                    
+
                     if (metaTagNameAttribute == "composer") {
                         obj[COMPOSER_KEY] = metaTagValue;
                     } else if (metaTagNameAttribute == "arranger") {

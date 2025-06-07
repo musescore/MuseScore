@@ -145,7 +145,7 @@ void CloudScoresModel::loadItemsIfNecessary()
                     obj[CLOUD_VIEW_COUNT_KEY] = item.viewCount;
 
                     obj["rawModifiedTime"] = item.lastModified.date().toString();
-                    obj["rawFileSize"] = item.fileSize;
+                    obj["rawFileSize"] = static_cast<qulonglong>(item.fileSize);
 
                     m_items.push_back(obj);
                 }
@@ -178,17 +178,17 @@ void CloudScoresModel::sortBy(const QString& key)
         m_sortKey = key;
         m_sortOrder = Qt::AscendingOrder;
     }
-    
+
     emit sortKeyChanged();
     emit sortOrderChanged();
-    
+
     // Sort the existing items
     if (!m_items.empty()) {
         beginResetModel();
         sortScoreItems(m_items);
         endResetModel();
     }
-    
+
 }
 
 bool CloudScoresModel::needsLoading()

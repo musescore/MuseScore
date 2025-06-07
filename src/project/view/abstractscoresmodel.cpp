@@ -89,17 +89,17 @@ QList<int> AbstractScoresModel::nonScoreItemIndices() const
 }
 
 void AbstractScoresModel::sortBy(const QString& key)
-{    
+{
     if (m_sortKey == key) {
         m_sortOrder = (m_sortOrder == Qt::AscendingOrder) ? Qt::DescendingOrder : Qt::AscendingOrder;
     } else {
         m_sortKey = key;
         m_sortOrder = Qt::AscendingOrder;
     }
-    
+
     emit sortKeyChanged();
     emit sortOrderChanged();
-    
+
     load();
 }
 
@@ -117,7 +117,7 @@ void AbstractScoresModel::sortScoreItems(std::vector<QVariantMap>& items)
 bool AbstractScoresModel::compareItems(const QVariantMap& a, const QVariantMap& b, const QString& key, Qt::SortOrder order)
 {
     QVariant valueA, valueB;
-    
+
     if (key == "timeSinceModified") {
         valueA = a.value("rawModifiedTime");
         valueB = b.value("rawModifiedTime");
@@ -128,14 +128,20 @@ bool AbstractScoresModel::compareItems(const QVariantMap& a, const QVariantMap& 
         valueA = a.value(key, "");
         valueB = b.value(key, "");
     }
-    
+
     bool aIsEmpty = isValueEmpty(valueA);
     bool bIsEmpty = isValueEmpty(valueB);
-    
-    if (aIsEmpty && bIsEmpty) return false;
-    if (aIsEmpty) return false;
-    if (bIsEmpty) return true;
-    
+
+    if (aIsEmpty && bIsEmpty) {
+        return false;
+    }
+    if (aIsEmpty) {
+        return false;
+    }
+    if(bIsEmpty) {
+        return true;
+    }
+
     bool result = false;
     if (valueA.typeId() == QMetaType::QString) {
         result = QString::localeAwareCompare(valueA.toString(), valueB.toString()) < 0;
@@ -144,7 +150,7 @@ bool AbstractScoresModel::compareItems(const QVariantMap& a, const QVariantMap& 
     } else {
         result = QString::localeAwareCompare(valueA.toString(), valueB.toString()) < 0;
     }
-    
+
     return (order == Qt::AscendingOrder) ? result : !result;
 }
 
@@ -153,12 +159,12 @@ bool AbstractScoresModel::isValueEmpty(const QVariant& value)
     if (value.isNull() || !value.isValid()) {
         return true;
     }
-    
+
     if (value.typeId() == QMetaType::QString) {
         QString str = value.toString().trimmed();
         return str.isEmpty() || str == "-";
     }
-    
+
     return false;
 }
 
