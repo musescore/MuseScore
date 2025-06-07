@@ -30,6 +30,11 @@ void ExtensionInstaller::installExtension(const io::path_t& srcPath)
     const ByteArray data = zip.fileData("manifest.json");
     if (data.empty()) {
         LOGE() << "not found manifest.json in: " << srcPath;
+
+        interactive()->error(trc("extensions", "Failed to install extension"),
+                             trc("extensions", "The extension does not contain a valid manifest file."),
+                             { interactive()->buttonData(IInteractive::Button::Ok) });
+
         return;
     }
 
@@ -87,6 +92,15 @@ void ExtensionInstaller::doInstallExtension(const io::path_t& srcPath)
     Ret ret = zip.unpack(srcPath, dstPath);
     if (!ret) {
         LOGE() << "failed unpack from: " << srcPath << ", to: " << dstPath << ", err: " << ret.toString();
+
+        interactive()->error(trc("extensions", "Failed to install extension"),
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+                             qtrc("extensions", "Error code: %1").arg(ret.toString()).toStdString(),
+#else
+                             qtrc("extensions", "Error code: %1").arg(QString::fromStdString(ret.toString())).toStdString(),
+#endif
+                             { interactive()->buttonData(IInteractive::Button::Ok) });
+
         return;
     }
 
