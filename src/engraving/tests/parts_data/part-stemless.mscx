@@ -218,7 +218,6 @@
         </Measure>
       <Measure>
         <eid>Q_Q</eid>
-        <slashStyle>1</slashStyle>
         <stemless>1</stemless>
         <voice>
           <Chord>
@@ -408,7 +407,6 @@
           </voice>
         </Measure>
       <Measure>
-        <slashStyle>1</slashStyle>
         <stemless>1</stemless>
         <voice>
           <Chord>

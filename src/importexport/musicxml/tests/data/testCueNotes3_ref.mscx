@@ -188,7 +188,6 @@
             <eid>R_R</eid>
             <durationType>quarter</durationType>
             <Lyrics>
-              <ticks>480</ticks>
               <ticks_f>1/4</ticks_f>
               <eid>S_S</eid>
               <text>stripes</text>

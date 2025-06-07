@@ -624,24 +624,6 @@ enum class DynamicType : unsigned char {
     LAST
 };
 
-//! OBSOLETE. Use VoiceAssignment
-enum class DynamicRange : unsigned char {
-    STAFF, PART, SYSTEM
-};
-
-inline VoiceAssignment dynamicRangeToVoiceAssignment(DynamicRange range)
-{
-    switch (range) {
-    case DynamicRange::STAFF:
-        return VoiceAssignment::ALL_VOICE_IN_STAFF;
-    case DynamicRange::PART:
-    case DynamicRange::SYSTEM:
-        break;
-    }
-
-    return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
-}
-
 // P_TYPE::DYNAMIC_SPEED
 enum class DynamicSpeed : unsigned char {
     SLOW, NORMAL, FAST

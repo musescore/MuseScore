@@ -96,7 +96,6 @@ private:
 
 //---------------------------------------------------------
 //   @@ Hairpin
-//   @P dynRange     enum (Dynamic.STAFF, Dynamic.PART, Dynamic.SYSTEM)
 //   @P hairpinType  enum (Hairpin.CRESCENDO, Hairpin.DECRESCENDO)
 //   @P veloChange   int
 //---------------------------------------------------------
@@ -127,9 +126,6 @@ public:
 
     int veloChange() const { return m_veloChange; }
     void setVeloChange(int v) { m_veloChange = v; }
-
-    DynamicRange dynRange() const { return m_dynRange; }
-    void setDynRange(DynamicRange t);
 
     Spatium hairpinHeight() const { return m_hairpinHeight; }
     void setHairpinHeight(Spatium val) { m_hairpinHeight = val; }
@@ -191,7 +187,6 @@ private:
     HairpinType m_hairpinType = HairpinType::INVALID;
     int m_veloChange = 0;
     bool m_hairpinCircledTip = false;
-    DynamicRange m_dynRange = DynamicRange::PART;
     bool m_singleNoteDynamics = false;
     ChangeMethod m_veloChangeMethod = ChangeMethod::NORMAL;
 

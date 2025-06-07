@@ -91,7 +91,6 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
         xml.tag("visible", mstaff->visible());
     }
     if (mstaff->stemless()) {
-        xml.tag("slashStyle", mstaff->stemless());     // for backwards compatibility
         xml.tag("stemless", mstaff->stemless());
     }
     if (mstaff->measureRepeatCount()) {

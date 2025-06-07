@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_STAFFWRITE_H
-#define MU_ENGRAVING_STAFFWRITE_H
+#pragma once
 
 #include "../xmlwriter.h"
 #include "writecontext.h"
@@ -39,5 +38,3 @@ public:
                            staff_idx_t staffStart, staff_idx_t staffIdx, bool selectionOnly);
 };
 }
-
-#endif // MU_ENGRAVING_STAFFWRITE_H
