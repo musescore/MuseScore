@@ -2017,7 +2017,55 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 if (engravingItem == nullptr) {
                     continue;
                 }
+                if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
+                    chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
+                }
                 engravingItem->setColor(muse::draw::Color::BLACK);
+
+                EngravingItemList itemList = engravingItem->childrenItems(true);
+                for (size_t j = 0; j < itemList.size(); j++) {
+                    EngravingItem* item = itemList.at(j);
+                    if (item == nullptr) {
+                        continue;
+                    }
+                    
+                    if (item->type() == mu::engraving::ElementType::NOTE) {
+                        Note *_pre_note = toNote(item);
+                        if (_pre_note->isGrace()) {
+                            _pre_note->setColor(muse::draw::Color::BLACK);
+                        }
+                        for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
+                            _pre_note->dot(k)->setColor(muse::draw::Color::BLACK);
+                        }
+                        if (_pre_note->accidental()) {
+                            _pre_note->accidental()->setColor(muse::draw::Color::BLACK);
+                        }
+                        if (_pre_note->chord()) {
+                            if (_pre_note->chord()->articulations().size() > 0) {
+                                std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
+                                for (auto& a : mArticulations) {
+                                    a->setColor(muse::draw::Color::BLACK);
+                                }
+                            }
+
+                            Stem* _stem = _pre_note->chord()->stem();
+                            if (_stem) {
+                                _stem->setColor(muse::draw::Color::BLACK);
+                            }
+                            Hook* _hook = _pre_note->chord()->hook();
+                            if (_hook) {
+                                _hook->setColor(muse::draw::Color::BLACK);
+                            }
+                            Beam* _beam = _pre_note->chord()->beam();
+                            if (_beam) {
+                                _beam->setColor(muse::draw::Color::BLACK);
+                            }
+                        }
+                    }
+                    if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
+                        item->setColor(muse::draw::Color::BLACK);
+                    }
+                }
             }
 
             mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ChordRest);

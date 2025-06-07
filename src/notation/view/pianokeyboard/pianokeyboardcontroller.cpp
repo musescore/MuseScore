@@ -159,22 +159,14 @@ KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const
         double single_tsd = static_cast<double>(m_arpeggio_duration_ticks) / sorted_keys.size();
         for (piano_key_t _key : sorted_keys) {
             int _ratio_count = static_cast<int>(arpeggio_notes_count * ratio);
-            if (_ratio_count == 0) {
-                if (_ratio_count == index) {
-                    if (key == _key) {
-                        return KeyState::Arpeggio;
-                    }
-                }
-            } else {
-                if (_ratio_count - 1 == index) {
-                    if (key == _key) {
-                        return KeyState::Arpeggio;
-                    }
+            if (_ratio_count == index) {
+                if (key == _key) {
+                    return KeyState::Arpeggio;
                 }
             }
             ++index;
             if (index == (int)sorted_keys.size()) {
-                if (static_cast<double>(m_arpeggio_curr_ticks) > static_cast<double>(m_arpeggio_ticks) + single_tsd * (index - 1)) {
+                if (static_cast<double>(m_arpeggio_curr_ticks) >= static_cast<double>(m_arpeggio_ticks) + single_tsd * (index - 1)) {
                     if (key == _key) {
                         return KeyState::Arpeggio;
                     }
