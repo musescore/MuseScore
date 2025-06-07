@@ -99,6 +99,7 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
+#include "pitchspelling.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -884,8 +885,14 @@ void Score::spell()
             for (track_idx_t track = strack; track < etrack; ++track) {
                 EngravingItem* e = s->element(track);
                 if (e && e->type() == ElementType::CHORD) {
-                    std::copy_if(toChord(e)->notes().begin(), toChord(e)->notes().end(),
+                    Chord* c = toChord(e);
+                    std::copy_if(c->notes().begin(), c->notes().end(),
                                  std::back_inserter(notes), [this](EngravingItem* ce) { return selection().isNone() || ce->selected(); });
+                    for (Chord* g : c->graceNotes()) {
+                        std::copy_if(g->notes().begin(), g->notes().end(),
+                                     std::back_inserter(notes),
+                                     [this](EngravingItem* ce) { return selection().isNone() || ce->selected(); });
+                    }
                 }
             }
         }
@@ -893,23 +900,44 @@ void Score::spell()
     }
 }
 
-void Score::spell(staff_idx_t startStaff, staff_idx_t endStaff, Segment* startSegment, Segment* endSegment)
+static std::vector<Note*> allNotesInScore(Score* score)
 {
-    for (staff_idx_t i = startStaff; i < endStaff; ++i) {
-        std::vector<Note*> notes;
-        for (Segment* s = startSegment; s && s != endSegment; s = s->next()) {
+    std::vector<Note*> notes;
+    for (staff_idx_t i = 0; i < score->nstaves(); ++i) {
+        for (Segment* s = score->firstSegment(SegmentType::All); s; s = s->next1()) {
             track_idx_t strack = i * VOICES;
             track_idx_t etrack = strack + VOICES;
             for (track_idx_t track = strack; track < etrack; ++track) {
                 EngravingItem* e = s->element(track);
                 if (e && e->type() == ElementType::CHORD) {
-                    notes.insert(notes.end(),
-                                 toChord(e)->notes().begin(),
-                                 toChord(e)->notes().end());
+                    Chord* c = toChord(e);
+                    notes.insert(notes.end(), c->notes().begin(), c->notes().end());
+                    for (Chord* g : c->graceNotes()) {
+                        notes.insert(notes.end(), g->notes().begin(), g->notes().end());
+                    }
                 }
             }
         }
-        spellNotelist(notes);
+    }
+    return notes;
+}
+
+void Score::spellWithSharpsOrFlats(Prefer prefer)
+{
+    std::vector<Note*> notes = (selection().isNone()) ? allNotesInScore(this) : selection().noteList();
+    for (Note* n : notes) {
+        Fraction tick = n->chord()->tick();
+        Key concertKey = n->staff()->concertKey(tick);
+        int tpc1 = pitch2tpc(n->pitch(), concertKey, prefer);
+        Interval v = n->staff()->transpose(tick);
+        v.flip();
+        int tpc2 = transposeTpc(tpc1, v, true);
+        n->undoChangeProperty(Pid::TPC1, tpc1);
+        n->undoChangeProperty(Pid::TPC2, tpc2);
+        for (Note* tied : n->tiedNotes()) {
+            tied->undoChangeProperty(Pid::TPC1, tpc1);
+            tied->undoChangeProperty(Pid::TPC2, tpc2);
+        }
     }
 }
 
@@ -970,98 +998,6 @@ void Score::changeEnharmonicSpelling(bool both)
             }
         }
     }
-}
-
-//---------------------------------------------------------
-//   prevNote
-//---------------------------------------------------------
-
-Note* prevNote(Note* n)
-{
-    Chord* chord = n->chord();
-    Segment* seg = chord->segment();
-    const std::vector<Note*> nl = chord->notes();
-    auto i = std::find(nl.begin(), nl.end(), n);
-    if (i != nl.begin()) {
-        return *(i - 1);
-    }
-    staff_idx_t staff      = n->staffIdx();
-    track_idx_t startTrack = staff * VOICES + n->voice() - 1;
-    track_idx_t endTrack   = 0;
-    while (seg) {
-        if (seg->segmentType() == SegmentType::ChordRest) {
-            for (track_idx_t track = startTrack; track >= endTrack; --track) {
-                EngravingItem* e = seg->element(track);
-                if (e && e->type() == ElementType::CHORD) {
-                    return toChord(e)->upNote();
-                }
-            }
-        }
-        seg = seg->prev1();
-        startTrack = staff * VOICES + VOICES - 1;
-    }
-    return n;
-}
-
-//---------------------------------------------------------
-//   nextNote
-//---------------------------------------------------------
-
-static Note* nextNote(Note* n)
-{
-    Chord* chord = n->chord();
-    const std::vector<Note*> nl = chord->notes();
-    auto i = std::find(nl.begin(), nl.end(), n);
-    if (i != nl.end()) {
-        ++i;
-        if (i != nl.end()) {
-            return *i;
-        }
-    }
-    Segment* seg   = chord->segment();
-    staff_idx_t staff      = n->staffIdx();
-    track_idx_t startTrack = staff * VOICES + n->voice() + 1;
-    track_idx_t endTrack   = staff * VOICES + VOICES;
-    while (seg) {
-        if (seg->segmentType() == SegmentType::ChordRest) {
-            for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                EngravingItem* e = seg->element(track);
-                if (e && e->type() == ElementType::CHORD) {
-                    return ((Chord*)e)->downNote();
-                }
-            }
-        }
-        seg = seg->next1();
-        startTrack = staff * VOICES;
-    }
-    return n;
-}
-
-//---------------------------------------------------------
-//   spell
-//---------------------------------------------------------
-
-void Score::spell(Note* note)
-{
-    std::vector<Note*> notes;
-
-    notes.push_back(note);
-    Note* nn = nextNote(note);
-    notes.push_back(nn);
-    nn = nextNote(nn);
-    notes.push_back(nn);
-    nn = nextNote(nn);
-    notes.push_back(nn);
-
-    nn = prevNote(note);
-    notes.insert(notes.begin(), nn);
-    nn = prevNote(nn);
-    notes.insert(notes.begin(), nn);
-    nn = prevNote(nn);
-    notes.insert(notes.begin(), nn);
-
-    int opt = computeWindow(notes, 0, 7);
-    note->setTpc(tpc(3, note->pitch(), opt));
 }
 
 //---------------------------------------------------------
