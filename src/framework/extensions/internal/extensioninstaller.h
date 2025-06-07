@@ -2,6 +2,7 @@
 
 #include "../iextensioninstaller.h"
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 #include "../iextensionsconfiguration.h"
 #include "../iextensionsprovider.h"
@@ -9,7 +10,7 @@
 #include "io/ifilesystem.h"
 
 namespace muse::extensions {
-class ExtensionInstaller : public IExtensionInstaller
+class ExtensionInstaller : public IExtensionInstaller, public async::Asyncable
 {
     muse::GlobalInject<IExtensionsConfiguration> configuration;
     muse::GlobalInject<IExtensionsProvider> provider;
@@ -19,8 +20,11 @@ class ExtensionInstaller : public IExtensionInstaller
 public:
     ExtensionInstaller() = default;
 
-    Ret isFileSupported(const io::path_t path) const override;
-    Ret installExtension(const io::path_t path) override;
-    Ret uninstallExtension(const Uri& uri) override;
+    Ret isFileSupported(const io::path_t& path) const override;
+    void installExtension(const io::path_t& path) override;
+    void uninstallExtension(const Uri& uri) override;
+
+private:
+    void doInstallExtension(const io::path_t& srcPath);
 };
 }
