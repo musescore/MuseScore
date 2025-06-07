@@ -36,6 +36,8 @@
 #include <QOperatingSystemVersion>
 #endif
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -660,6 +662,15 @@ muse::async::Notification UiConfiguration::windowGeometryChanged() const
 bool UiConfiguration::isGlobalMenuAvailable() const
 {
     return platformTheme()->isGlobalMenuAvailable();
+}
+
+bool UiConfiguration::isSystemDragSupported() const
+{
+#ifdef MUSE_MODULE_UI_SYSTEMDRAG_SUPPORTED
+    return true;
+#else
+    return false;
+#endif
 }
 
 void UiConfiguration::applyPlatformStyle(QWindow* window)

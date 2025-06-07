@@ -106,6 +106,7 @@ public:
     async::Notification windowGeometryChanged() const override;
 
     bool isGlobalMenuAvailable() const override;
+    bool isSystemDragSupported() const override;
 
     void applyPlatformStyle(QWindow* window) override;
 

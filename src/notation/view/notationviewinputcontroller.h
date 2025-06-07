@@ -39,6 +39,8 @@
 #include "playback/iplaybackcontroller.h"
 
 #include "global/iglobalconfiguration.h"
+#include "ui/idragcontroller.h"
+#include "ui/iuiconfiguration.h"
 
 class QQuickItem;
 
@@ -93,6 +95,8 @@ public:
     muse::Inject<playback::IPlaybackController> playbackController = { this };
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<muse::IGlobalConfiguration> globalConfiguration = { this };
+    muse::Inject<muse::ui::IDragController> dragController = { this };
+    muse::Inject<muse::ui::IUiConfiguration> uiConfiguration = { this };
 
 public:
     NotationViewInputController(IControlledView* view, const muse::modularity::ContextPtr& iocCtx);
@@ -216,6 +220,15 @@ private:
         QPointF physicalBeginPoint;
         muse::PointF logicalBeginPoint;
     } m_mouseDownInfo;
+
+    struct DragMoveEvent {
+        QPointF position;
+        Qt::KeyboardModifiers modifiers;
+        Qt::DropAction dropAction = Qt::DropAction::CopyAction;
+        QObject* source = nullptr;
+    };
+    bool dropEvent(const DragMoveEvent& event, const QMimeData* mimeData = nullptr);
+    DragMoveEvent m_lastDragMoveEvent;
 
     const mu::engraving::EngravingItem* m_prevHitElement = nullptr;
     const mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;

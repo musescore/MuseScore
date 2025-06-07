@@ -104,4 +104,5 @@ Item {
         isBraillePanelVisible: false
         isMainView: true
     }
+
 }
