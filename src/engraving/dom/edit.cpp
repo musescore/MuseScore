@@ -3608,9 +3608,9 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t tra
 void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track_idx_t track, Segment* startSeg,
                                const Fraction& endTick, Tuplet* currentTuplet)
 {
-    while (startSeg && !startSeg->cr(track)) {
+    while (startSeg && !(startSeg->isChordRestType() && startSeg->cr(track))) {
         // Range should always start at a ChordRest segment - find the next one for this track...
-        startSeg = startSeg->next1();
+        startSeg = startSeg->next1(SegmentType::ChordRest);
     }
 
     if (!startSeg) {
