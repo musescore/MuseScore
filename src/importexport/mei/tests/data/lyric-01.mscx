@@ -136,7 +136,6 @@
             <eid>X_X</eid>
             <durationType>eighth</durationType>
             <Lyrics>
-              <ticks>960</ticks>
               <ticks_f>4/8</ticks_f>
               <eid>Y_Y</eid>
               <text>due</text>
@@ -206,7 +205,6 @@
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Lyrics>
-              <ticks>2400</ticks>
               <ticks_f>20/16</ticks_f>
               <eid>n_n</eid>
               <text>ter</text>

@@ -118,7 +118,6 @@
             <eid>J_J</eid>
             <durationType>half</durationType>
             <Lyrics>
-              <ticks>960</ticks>
               <ticks_f>2/4</ticks_f>
               <eid>K_K</eid>
               <text>Ooh</text>
@@ -179,7 +178,6 @@
             <durationType>eighth</durationType>
             <Lyrics>
               <no>1</no>
-              <ticks>960</ticks>
               <ticks_f>4/8</ticks_f>
               <eid>T_T</eid>
               <text>Ahh</text>
@@ -247,7 +245,6 @@
             <eid>g_g</eid>
             <durationType>half</durationType>
             <Lyrics>
-              <ticks>960</ticks>
               <ticks_f>2/4</ticks_f>
               <eid>h_h</eid>
               <placement>above</placement>
@@ -312,7 +309,6 @@
             <BeamMode>begin</BeamMode>
             <durationType>eighth</durationType>
             <Lyrics>
-              <ticks>960</ticks>
               <ticks_f>4/8</ticks_f>
               <eid>r_r</eid>
               <text>Ahh</text>
