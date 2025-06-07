@@ -4834,14 +4834,14 @@ void NotationInteraction::copySelection()
 
 Ret NotationInteraction::repeatSelection()
 {
-    const mu::engraving::Selection& selection = score()->selection();
+    const Selection& selection = score()->selection();
     if (score()->noteEntryMode() && selection.isSingle()) {
         EngravingItem* el = selection.element();
         if (el && el->type() == ElementType::NOTE && !score()->inputState().endOfScore()) {
             startEdit(TranslatableString("undoableAction", "Repeat selection"));
             Chord* c = toNote(el)->chord();
             for (Note* note : c->notes()) {
-                mu::engraving::NoteVal nval = note->noteVal();
+                NoteVal nval = note->noteVal();
                 score()->addPitch(nval, note != c->notes()[0]);
             }
             apply();
@@ -4862,22 +4862,25 @@ Ret NotationInteraction::repeatSelection()
         return ret;
     }
 
-    mu::engraving::XmlReader xml(selection.mimeData());
-    track_idx_t dStaff = selection.staffStart();
+    XmlReader xml(selection.mimeData());
+    staff_idx_t dStaff = selection.staffStart();
     mu::engraving::Segment* endSegment = selection.endSegment();
 
-    if (endSegment && endSegment->segmentType() != mu::engraving::SegmentType::ChordRest) {
-        endSegment = endSegment->next1(mu::engraving::SegmentType::ChordRest);
+    if (endSegment && endSegment->segmentType() != SegmentType::ChordRest) {
+        endSegment = endSegment->next1(SegmentType::ChordRest);
     }
-    if (endSegment && endSegment->element(dStaff * mu::engraving::VOICES)) {
-        EngravingItem* e = endSegment->element(dStaff * mu::engraving::VOICES);
-        if (e) {
-            startEdit(TranslatableString("undoableAction", "Repeat selection"));
-            ChordRest* cr = toChordRest(e);
-            score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
-            apply();
+    if (endSegment) {
+        for (track_idx_t track = dStaff * VOICES; track < (dStaff + 1) * VOICES; ++track) {
+            EngravingItem* e = endSegment->element(track);
+            if (e) {
+                startEdit(TranslatableString("undoableAction", "Repeat selection"));
+                ChordRest* cr = toChordRest(e);
+                score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
+                apply();
 
-            showItem(cr);
+                showItem(cr);
+                break;
+            }
         }
     }
 
