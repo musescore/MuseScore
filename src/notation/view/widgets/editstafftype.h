@@ -43,7 +43,6 @@ class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::In
 
     muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
-    mu::engraving::Staff* staff;
     mu::engraving::StaffType staffType;
 
     virtual void hideEvent(QHideEvent*);
@@ -65,6 +64,7 @@ private slots:
     void tabMinimShortToggled(bool checked);
     void tabStemsToggled(bool checked);
     void updatePreview();
+    void resetFretFontStylePressed();
 
     void savePresets();
     void loadPresets();

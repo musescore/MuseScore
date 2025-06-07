@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <QFontDatabase>
 
 #include "editstafftype.h"
 #include "engraving/dom/part.h"
@@ -32,6 +33,7 @@
 #include "engraving/compat/mscxcompat.h"
 
 #include "ui/view/widgetstatestore.h"
+#include "ui/view/widgetutils.h"
 
 #include "notationerrors.h"
 
@@ -70,12 +72,13 @@ EditStaffType::EditStaffType(QWidget* parent)
     setupUi(this);
 
     // tab page configuration
-    std::vector<String> fontNames = mu::engraving::StaffType::fontNames(false);
+    std::vector<String> fontNames = mu::engraving::StaffType::tabFontNames(false);
     for (const String& fn : fontNames) {   // fill fret font name combo
         fretFontName->addItem(fn.toQString());
     }
+    fretFontName->addItems(QFontDatabase::families());
     fretFontName->setCurrentIndex(0);
-    fontNames = mu::engraving::StaffType::fontNames(true);
+    fontNames = mu::engraving::StaffType::tabFontNames(true);
     for (const String& fn : fontNames) {  // fill duration font name combo
         durFontName->addItem(fn.toQString());
     }
@@ -149,6 +152,9 @@ EditStaffType::EditStaffType(QWidget* parent)
 
     connect(templateReset,  &QPushButton::clicked, this, &EditStaffType::resetToTemplateClicked);
     connect(addToTemplates, &QPushButton::clicked, this, &EditStaffType::addToTemplatesClicked);
+
+    WidgetUtils::setWidgetIcon(resetFretFontStyle, IconCode::Code::UNDO);
+    connect(resetFretFontStyle, &QToolButton::clicked, this, &EditStaffType::resetFretFontStylePressed);
 
     //connect(groupCombo, &QComboBox::currentIndexChanged, this, &EditStaffType::staffGroupChanged);
 
@@ -276,6 +282,14 @@ void EditStaffType::setValues()
         fretFontName->setCurrentIndex(idx);
         fretFontSize->setValue(staffType.fretFontSize());
         fretY->setValue(staffType.fretFontUserY());
+        const MStyle& style = staffType.style();
+        if (fretFontName->currentText() != style.styleSt(Sid::tabFretNumberFontFace)
+            || fretFontSize->value() != style.styleD(Sid::tabFretNumberFontSize)
+            || fretY->value() != style.value(Sid::tabFretNumberOffset).value<PointF>().y()) {
+            resetFretFontStyle->setEnabled(true);
+        } else {
+            resetFretFontStyle->setEnabled(false);
+        }
 
         numbersRadio->setChecked(staffType.useNumbers());
         lettersRadio->setChecked(!staffType.useNumbers());
@@ -291,6 +305,7 @@ void EditStaffType::setValues()
         durFontName->setCurrentIndex(idx);
         durFontSize->setValue(staffType.durationFontSize());
         durY->setValue(staffType.durationFontUserY());
+
         // convert combined values of genDurations and slashStyle/stemless into noteValuesx radio buttons
         // Above/Below, Beside/Through and minim are only used if stems-and-beams
         // but set them from stt values anyway, to ensure preset matching
@@ -366,7 +381,7 @@ void EditStaffType::nameEdited(const QString& /*s*/)
 void EditStaffType::durFontNameChanged(int idx)
 {
     qreal size, yOff;
-    if (mu::engraving::StaffType::fontData(true, idx, 0, 0, &size, &yOff)) {
+    if (mu::engraving::StaffType::tabFontData(true, idx, size, yOff)) {
         durFontSize->setValue(size);
         durY->setValue(yOff);
     }
@@ -376,7 +391,7 @@ void EditStaffType::durFontNameChanged(int idx)
 void EditStaffType::fretFontNameChanged(int idx)
 {
     qreal size, yOff;
-    if (mu::engraving::StaffType::fontData(false, idx, 0, 0, &size, &yOff)) {
+    if (mu::engraving::StaffType::tabFontData(false, idx, size, yOff)) {
         fretFontSize->setValue(size);
         fretY->setValue(yOff);
     }
@@ -449,6 +464,14 @@ void EditStaffType::setFromDlg()
         staffType.setFretFontName(fretFontName->currentText());
         staffType.setFretFontSize(fretFontSize->value());
         staffType.setFretFontUserY(fretY->value());
+        const MStyle& style = staffType.style();
+        if (fretFontName->currentText() != style.styleSt(Sid::tabFretNumberFontFace)
+            || fretFontSize->value() != style.styleD(Sid::tabFretNumberFontSize)
+            || fretY->value() != style.value(Sid::tabFretNumberOffset).value<PointF>().y()) {
+            resetFretFontStyle->setEnabled(true);
+        } else {
+            resetFretFontStyle->setEnabled(false);
+        }
         staffType.setLinesThrough(linesThroughRadio->isChecked());
         staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE
                                 : (minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER : mu::engraving::
@@ -623,6 +646,23 @@ void EditStaffType::updatePreview()
         preview->updateAll();
         preview->update();
     }
+}
+
+void EditStaffType::resetFretFontStylePressed()
+{
+    staffType.setFretFontName(staffType.style().styleSt(Sid::tabFretNumberFontFace));
+    staffType.setFretFontSize(staffType.style().styleD(Sid::tabFretNumberFontSize));
+    staffType.setFretFontUserY(staffType.style().value(Sid::tabFretNumberOffset).value<PointF>().y());
+
+    int idx = fretFontName->findText(staffType.fretFontName(), Qt::MatchFixedString);
+    if (idx == -1) {
+        idx = 0;                      // if name not found, use first name
+    }
+    fretFontName->setCurrentIndex(idx);
+    fretFontSize->setValue(staffType.fretFontSize());
+    fretY->setValue(staffType.fretFontUserY());
+
+    setFromDlg();
 }
 
 //---------------------------------------------------------

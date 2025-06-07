@@ -236,7 +236,7 @@ bool Articulation::isHiddenOnTabStaff() const
         return false;
     }
 
-    return stType->isHiddenElementOnTab(style(), m_showOnTabStyles.first, m_showOnTabStyles.second);
+    return stType->isHiddenElementOnTab(m_showOnTabStyles.first, m_showOnTabStyles.second);
 }
 
 //---------------------------------------------------------
