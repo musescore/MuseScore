@@ -3643,7 +3643,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7042"/>
         <source>Bracket hook height:</source>
         <comment>Tuplet bracket</comment>
-        <translation>括号折钩高度</translation>
+        <translation>连音括号高度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7061"/>
@@ -4285,7 +4285,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12264"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
-        <translation>重置“最大延伸线距离”值</translation>
+        <translation>重置“延伸线最大间距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12408"/>
@@ -4295,17 +4295,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12319"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
-        <translation>重置“最短延伸线长度”值</translation>
+        <translation>重置“延伸线最小长度”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12306"/>
         <source>Max. dash length:</source>
-        <translation>最大延伸线长度：</translation>
+        <translation>延伸线最大长度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12229"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
-        <translation>重置“最大延伸线长度”值</translation>
+        <translation>重置“延伸线最大长度”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12164"/>
@@ -4315,7 +4315,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12274"/>
         <source>Min. dash length:</source>
-        <translation>最小延伸线长度：</translation>
+        <translation>延伸线最小长度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11899"/>
@@ -24715,7 +24715,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="224"/>
         <source>&lt;b&gt;Always open&lt;/b&gt;&lt;br&gt;On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.</source>
-        <translation>&lt;b&gt;常开&lt;/b&gt;&lt;br&gt;在指法谱谱表上，除了标有“0”的弦外，不能在标有“常开”的弦上输入品位。适用于弦乐器上不在品格上的弦，如大颈琴。</translation>
+        <translation>&lt;b&gt;总是打开&lt;/b&gt;&lt;br&gt;在指法谱线谱上，除了标有‘0’的弦位置外，不能在其他标记为“总是打开”的弦上录入品位。适用于带有不在品格上的弦的乐器，例如短双颈琉特琴。</translation>
     </message>
 </context>
 <context>

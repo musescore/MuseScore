@@ -3370,7 +3370,7 @@ en la primera nota del sistema</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5393"/>
         <source>Flag style</source>
-        <translation>Estil de la cua</translation>
+        <translation>Estil del ganxo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5423"/>
