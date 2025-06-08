@@ -9446,13 +9446,13 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1471"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1472"/>
         <source>Zoom in</source>
-        <translation>Zoom avant</translation>
+        <translation>Élargissement</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1478"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1479"/>
         <source>Zoom out</source>
-        <translation>Zoom arrière</translation>
+        <translation>Rétrécissement</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1485"/>
@@ -12884,7 +12884,7 @@ Publié sous licence &lt;a href=&quot;%1&quot;&gt;GNU General Public License. ve
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
         <source>Playing technique annotation</source>
-        <translation>Jouer l&apos;annotation de technique de jeu</translation>
+        <translation>Annotation de technique de jeu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
@@ -23326,12 +23326,12 @@ Remarque : Maitriser MuseScore est disponible principalement en anglais (Certain
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="78"/>
         <source>Zoom in</source>
-        <translation>Zoom avant</translation>
+        <translation>Élargissement</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="58"/>
         <source>Zoom out</source>
-        <translation>Zoom arrière</translation>
+        <translation>Rétrécissement</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="126"/>
@@ -29737,12 +29737,12 @@ a échoué.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="148"/>
         <source>Zoom in</source>
-        <translation>Zoom avant</translation>
+        <translation>Élargissement</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="161"/>
         <source>Zoom out</source>
-        <translation>Zoom arrière</translation>
+        <translation>Rétrécissement</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="49"/>
