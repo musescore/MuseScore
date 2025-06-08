@@ -1267,16 +1267,16 @@ void NotationInteraction::arpeggioNotesUpdate(bool isDown)
 void NotationInteraction::arpeggioTick(int ticks) 
 {
     if (arpeggio_duration_ticks == 0) {
+        arpeggio_curr_ticks = ticks;
+        m_arpeggioTickChanged.notify();
         return;
     }
     if (ticks < arpeggio_ticks || ticks > arpeggio_ticks + arpeggio_duration_ticks) {
-        arpeggio_curr_ticks = 0;
         arpeggio_ticks = 0;
         arpeggio_duration_ticks = 0;
         arpeggio_notes.clear();
-    } else {
-        arpeggio_curr_ticks = ticks;
     }
+    arpeggio_curr_ticks = ticks;
     m_arpeggioTickChanged.notify();
 }
 muse::async::Notification NotationInteraction::arpeggioTickChanged() 
@@ -1365,6 +1365,8 @@ mu::engraving::Note* NotationInteraction::trillNote1() const
 bool NotationInteraction::trillTick(int ticks) 
 {
     if (trill_duration_ticks == 0) {
+        trill_curr_ticks = ticks;
+        m_trillTickChanged.notify();
         return false;
     }
     int _trill_duration_ticks = trill_duration_ticks;
@@ -1373,7 +1375,7 @@ bool NotationInteraction::trillTick(int ticks)
     }
     if (ticks < trill_ticks || ticks > trill_ticks + _trill_duration_ticks) 
     {
-        trill_curr_ticks = 0;
+        trill_curr_ticks = ticks;
         trill_ticks = 0;
         trill_duration_ticks = 0;
         trill_tremolo_type = 0;
@@ -1388,6 +1390,8 @@ bool NotationInteraction::trillTick(int ticks)
 bool NotationInteraction::trillTick1(int ticks) 
 {
     if (trill_duration_ticks1 == 0) {
+        trill_curr_ticks1 = ticks;
+        m_trillTickChanged1.notify();
         return false;
     }
     int _trill_duration_ticks = trill_duration_ticks1;
@@ -1396,7 +1400,7 @@ bool NotationInteraction::trillTick1(int ticks)
     }
     if (ticks < trill_ticks1 || ticks > trill_ticks1 + _trill_duration_ticks) 
     {
-        trill_curr_ticks1 = 0;
+        trill_curr_ticks1 = ticks;
         trill_ticks1 = 0;
         trill_duration_ticks1 = 0;
         trill_tremolo_type1 = 0;
