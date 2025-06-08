@@ -129,14 +129,13 @@ Rectangle {
         color: "transparent"
         radius: 4
         border.width: 1
-        border.color: mouseArea.containsMouse ? root.theme.accentColor : root.theme.strokeColor
+        border.color: mouseArea.containsMouse && root.enabled ? root.theme.accentColor : root.theme.strokeColor
     }
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
 
-        enabled: root.enabled
         hoverEnabled: true
 
         onClicked: root.clicked()
