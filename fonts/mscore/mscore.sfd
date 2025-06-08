@@ -22,7 +22,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1403170689
-ModificationTime: 1748269966
+ModificationTime: 1749400993
 PfmFamily: 17
 TTFWeight: 400
 TTFWidth: 5
@@ -60,13 +60,12 @@ MarkAttachClasses: 1
 DEI: 91125
 LangName: 1033
 Encoding: UnicodeBmp
-Compacted: 1
 UnicodeInterp: none
 NameList: Adobe Glyph List
 DisplaySize: -96
 AntiAlias: 1
 FitToEm: 1
-WinInfo: 100 10 4
+WinInfo: 57820 10 4
 BeginPrivate: 7
 BlueValues 21 [0 0 256 257 478 478]
 OtherBlues 11 [-141 -141]
@@ -4268,12 +4267,12 @@ StartChar: uniE1E7
 Encoding: 57831 57831 121
 GlifName: uniE_1E_7
 Width: 116
-Flags: W
-HStem: -186 116<17.533 98.467>
-VStem: 0 116<-168.467 -87.533>
+Flags: WO
+HStem: -58 116<17.533 98.467>
+VStem: 0 116<-40.467 40.467>
 LayerCount: 2
 Fore
-Refer: 158 57412 N 1 0 0 1 0 -128 2
+Refer: 158 57412 S 1 0 0 1 0 0 2
 EndChar
 
 StartChar: uniE652
