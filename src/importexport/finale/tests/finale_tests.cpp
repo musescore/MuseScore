@@ -160,3 +160,15 @@ TEST_F(Finale_Tests, onePartOneMeasureWithNestedTuplets) {
 TEST_F(Finale_Tests, oneMeasureWithTies) {
     finaleImportTestRef("oneMeasureWithTies");
 }
+
+TEST_F(Finale_Tests, multistaffInst) {
+    finaleImportTestRef("multistaffInst");
+}
+
+TEST_F(Finale_Tests, v1v2Ties) {
+    finaleImportTestRef("v1v2Ties");
+}
+
+TEST_F(Finale_Tests, v1v2Ties2) {
+    finaleImportTestRef("v1v2Ties2");
+}

@@ -133,7 +133,6 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
         staffType->setGenClef(false);
     }
     m_score->appendStaff(s);
-    m_staff2Inst.emplace(s->idx(), InstCmper(musxStaff->getCmper()));
     m_inst2Staff.emplace(InstCmper(musxStaff->getCmper()), s->idx());
     return s;
 }
@@ -174,6 +173,7 @@ void FinaleParser::importParts()
 {
     std::vector<std::shared_ptr<others::InstrumentUsed>> scrollView = m_doc->getOthers()->getArray<others::InstrumentUsed>(m_currentMusxPartId, BASE_SYSTEM_ID);
 
+    std::unordered_map<InstCmper, QString> inst2Part;
     int partNumber = 0;
     for (const std::shared_ptr<others::InstrumentUsed>& item : scrollView) {
         std::shared_ptr<others::Staff> staff = item->getStaff();
@@ -185,11 +185,8 @@ void FinaleParser::importParts()
             continue; // safety check
         }
 
-        std::shared_ptr<details::StaffGroup> multiStaffGroup;
-        if (staff->multiStaffInstVisualGroupId) {
-            multiStaffGroup = m_doc->getDetails()->get<details::StaffGroup>(SCORE_PARTID, 0, staff->multiStaffInstVisualGroupId);
-        }
-        if (multiStaffGroup && m_inst2Part.find(staff->getCmper()) != m_inst2Part.end()) {
+        auto multiStaffInst = staff->getMultiStaffInstVisualGroup();
+        if (multiStaffInst && inst2Part.find(staff->getCmper()) != inst2Part.end()) {
             continue;
         }
 
@@ -215,20 +212,16 @@ void FinaleParser::importParts()
         std::string abrvName = compositeStaff->getAbbreviatedInstrumentName(musx::util::EnigmaString::AccidentalStyle::Unicode);
         part->setShortName(QString::fromStdString(trimNewLineFromString(abrvName)));
 
-        if (multiStaffGroup) {
-            auto groupInfo = details::StaffGroupInfo(multiStaffGroup, scrollView);
-            std::vector<InstCmper> stavesInInst;
-            groupInfo.iterateStaves(1, 0, [&](const std::shared_ptr<others::StaffComposite>& staff) {
-                createStaff(part, staff, it);
-                m_inst2Part.emplace(staff->getCmper(), partId);
-                stavesInInst.push_back(staff->getCmper());
-                return true;
-            });
-            m_part2Inst.emplace(partId, stavesInInst);
+        if (multiStaffInst) {
+            for (auto inst : multiStaffInst->visualStaffNums) {
+                if (auto instStaff = others::StaffComposite::createCurrent(m_doc, m_currentMusxPartId, inst, 1, 0)) {
+                    createStaff(part, instStaff, it);
+                    inst2Part.emplace(inst, partId);
+                }
+            }
         } else {
             createStaff(part, compositeStaff, it);
-            m_part2Inst.emplace(partId, std::vector<InstCmper>({ InstCmper(staff->getCmper()) }));
-            m_inst2Part.emplace(staff->getCmper(), partId);
+            inst2Part.emplace(staff->getCmper(), partId);
         }
         m_score->appendPart(part);
     }

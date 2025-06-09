@@ -349,9 +349,18 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     } else {
         Rest* rest = Factory::createRest(segment, d);
 
-        for (size_t i = 0; i < currentEntry->notes.size(); ++i) {
-            // NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, i);
-            /// @todo calculate y-offset here (remember is also staff-dependent)
+        if (!currentEntry->floatRest && !currentEntry->notes.empty()) {
+            NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, 0);
+            if (noteInfoPtr->getNoteId() == musx::dom::Note::RESTID) {
+                /// @todo test other staff line configurations that 5 lines. (Finale reference line is not always the top line, e.g. 1-line staves.)
+                /// @todo correctly calculate default rest position in multi-voice situation.
+                auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNoteProperties();
+                int linePosition = 2 * rest->computeNaturalLine(targetStaff->lines(rest->tick()));
+                rest->ryoffset() = double(-staffPosition - linePosition) * targetStaff->spatium(rest->tick()) / 2.0;
+                rest->setAutoplace(false);
+            } else {
+                logger()->logWarning(String(u"Rest found with unexpected note ID"), m_doc, noteInfoPtr.getEntryInfo().getStaff(), noteInfoPtr.getEntryInfo().getMeasure());
+            }
         }
         cr = toChordRest(rest);
     }
@@ -591,6 +600,7 @@ void FinaleParser::importEntries()
                         logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                         continue;
                     }
+
                     track_idx_t curTrackIdx = curStaffIdx * VOICES + voiceOff;
 
                     // generate tuplet map, tremolo map and create tuplets
