@@ -82,16 +82,20 @@ private:
     Measure* m_hit_measure = nullptr;
     std::map<const Note*, int> ottava_map;
     std::map<EngravingItem*, EngravingItem*> chordrest_fermata_map;
+    std::map<int, std::set<EngravingItem*>> measure_spanner_map;
+    std::map<EngravingItem*, std::map<int, int>> spanner_ticks_map;
 
     std::map<EngravingItem*, Note*> score_trill_map;
     std::map<EngravingItem*, int> score_trill_st_map;
     std::map<EngravingItem*, int> score_trill_dt_map;
+    std::map<EngravingItem*, int> score_trill_tdt_map;
     std::map<EngravingItem*, int> score_trill_tt_map;
     std::map<EngravingItem*, int> score_trill_ot_map;
     std::map<Note*, bool> score_trill_tie_map;
     std::map<EngravingItem*, Note*> score_trill_map1;
     std::map<EngravingItem*, int> score_trill_st_map1;
     std::map<EngravingItem*, int> score_trill_dt_map1;
+    std::map<EngravingItem*, int> score_trill_tdt_map1;
     std::map<EngravingItem*, int> score_trill_tt_map1;
     std::map<EngravingItem*, int> score_trill_ot_map1;
     std::map<Note*, bool> score_trill_tie_map1;

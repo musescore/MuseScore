@@ -36,6 +36,8 @@
 #include "src/engraving/dom/stem.h"
 #include "src/engraving/dom/hook.h"
 #include "src/engraving/dom/beam.h"
+#include "src/engraving/dom/dynamic.h"
+#include "src/engraving/dom/hairpin.h"
 
 using namespace mu::notation;
 using namespace muse;
@@ -433,9 +435,14 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
 
     SpannerMap& smap = score->spannerMap();
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        if (measure_spanner_map.find(measure->no()) == measure_spanner_map.end()) {
+            measure_spanner_map[measure->no()] = {};
+        }
         EngravingItemList measure_children = measure->childrenItems(true);
+        
         int min_ticks = 0;
         int max_ticks = 0;
+        
         for (size_t m_k = 0; m_k < measure_children.size(); m_k++) {
             EngravingItem* measure_item = measure_children.at(m_k);
             if (min_ticks == 0) {
@@ -450,18 +457,83 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
             if (measure_item->tick().ticks() > max_ticks) {
                 max_ticks = measure_item->tick().ticks();
             }
+
+            if (measure_item->type() == mu::engraving::ElementType::NOTE) {
+                Note* note_item = toNote(measure_item);
+                Tie* _tieBack = note_item->tieBack();
+                Tie* _tieFor = note_item->tieFor();
+                if (_tieBack) {
+                    if (_tieBack->startNote() && _tieBack->endNote()) {
+                        measure_spanner_map[measure->no()].insert((EngravingItem*)_tieBack);
+                        if (spanner_ticks_map.find((EngravingItem*)_tieBack) == spanner_ticks_map.end()) {
+                            spanner_ticks_map[(EngravingItem*)_tieBack] = {};
+                        }
+
+                        Note* _startNote = _tieBack->startNote();
+                        Note* _endNote = _tieBack->endNote();
+                        
+                        spanner_ticks_map[(EngravingItem*)_tieBack][0] = _startNote->tick().ticks();
+                        spanner_ticks_map[(EngravingItem*)_tieBack][1] = _endNote->tick().ticks();
+                    }
+                }
+                if (_tieFor) {
+                    if (_tieFor->startNote() && _tieFor->endNote()) {
+                        measure_spanner_map[measure->no()].insert((EngravingItem*)_tieFor);
+                        if (spanner_ticks_map.find((EngravingItem*)_tieFor) == spanner_ticks_map.end()) {
+                            spanner_ticks_map[(EngravingItem*)_tieFor] = {};
+                        }
+
+                        Note* _startNote = _tieFor->startNote();
+                        Note* _endNote = _tieFor->endNote();
+
+                        spanner_ticks_map[(EngravingItem*)_tieFor][0] = _startNote->tick().ticks();
+                        spanner_ticks_map[(EngravingItem*)_tieFor][1] = _endNote->tick().ticks();
+                    }
+                }
+
+                Chord* note_chord = note_item->chord();
+                if (note_chord) {
+                    const std::set<Spanner*> sSpanners = note_chord->startingSpanners();
+                    const std::set<Spanner*> eSpanners = note_chord->endingSpanners();
+
+                    for (Spanner* spanner : sSpanners) {
+                        int spannerStartTicks = spanner->tick().ticks();
+                        int spannerEndTicks = spanner->tick2().ticks();
+                        if (spanner->isSlur() || spanner->isTrill() || spanner->isGlissando() || spanner->isHairpin()) {
+                            measure_spanner_map[measure->no()].insert((EngravingItem*)spanner);
+                            if (spanner_ticks_map.find((EngravingItem*)spanner) == spanner_ticks_map.end()) {
+                                spanner_ticks_map[(EngravingItem*)spanner] = {};
+                            }
+                            spanner_ticks_map[(EngravingItem*)spanner][0] = spannerStartTicks;
+                            spanner_ticks_map[(EngravingItem*)spanner][1] = spannerEndTicks;
+                        }
+                    }
+
+                    for (Spanner* spanner : eSpanners) {
+                        int spannerStartTicks = spanner->tick().ticks();
+                        int spannerEndTicks = spanner->tick2().ticks();
+                        if (spanner->isSlur() || spanner->isTrill() || spanner->isGlissando() || spanner->isHairpin()) {
+                            measure_spanner_map[measure->no()].insert((EngravingItem*)spanner);
+                            if (spanner_ticks_map.find((EngravingItem*)spanner) == spanner_ticks_map.end()) {
+                                spanner_ticks_map[(EngravingItem*)spanner] = {};
+                            }
+                            spanner_ticks_map[(EngravingItem*)spanner][0] = spannerStartTicks;
+                            spanner_ticks_map[(EngravingItem*)spanner][1] = spannerEndTicks;
+                        }
+                    }
+                }
+            }
         }
 
         auto spanners = smap.findOverlapping(min_ticks, max_ticks);
         for (auto interval : spanners) {
             Spanner* spanner = interval.value;
+            int spannerStartTicks = spanner->tick().ticks();
+            int spannerEndTicks = spanner->tick2().ticks();
+            EngravingItem* startElem = spanner->startElement();
+            EngravingItem* endElem = spanner->endElement();
             if (spanner->isOttava()) {
-                int spannerStartTicks = spanner->tick().ticks();
-                int spannerEndTicks = spanner->tick2().ticks();
-                EngravingItem* startElem = spanner->startElement();
-                EngravingItem* endElem = spanner->endElement();
                 if (startElem->staff()->idx() == endElem->staff()->idx()) {
-                    EngravingItemList _children = measure->childrenItems(true);
                     for (size_t _k = 0; _k < measure_children.size(); _k++) {
                         EngravingItem* _item = measure_children.at(_k);
                         if (_item->type() == mu::engraving::ElementType::NOTE) {
@@ -474,11 +546,52 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                     }
                 }
             }
+
+            if (spanner->isSlur() || spanner->isTrill() || spanner->isGlissando() || spanner->isHairpin()) {
+                measure_spanner_map[measure->no()].insert((EngravingItem*)spanner);
+                if (spanner_ticks_map.find((EngravingItem*)spanner) == spanner_ticks_map.end()) {
+                    spanner_ticks_map[(EngravingItem*)spanner] = {};
+                }
+                spanner_ticks_map[(EngravingItem*)spanner][0] = spannerStartTicks;
+                spanner_ticks_map[(EngravingItem*)spanner][1] = spannerEndTicks;
+            }
+        }
+        spanners = smap.findContained(min_ticks, max_ticks);
+        for (auto interval : spanners) {
+            Spanner* spanner = interval.value;
+            int spannerStartTicks = spanner->tick().ticks();
+            int spannerEndTicks = spanner->tick2().ticks();
+            EngravingItem* startElem = spanner->startElement();
+            EngravingItem* endElem = spanner->endElement();
+            if (spanner->isOttava()) {
+                if (startElem->staff()->idx() == endElem->staff()->idx()) {
+                    for (size_t _k = 0; _k < measure_children.size(); _k++) {
+                        EngravingItem* _item = measure_children.at(_k);
+                        if (_item->type() == mu::engraving::ElementType::NOTE) {
+                            if (_item->staff()->idx() == startElem->staff()->idx() && ottava_map[toNote(_item)] == 0) {
+                                if (_item->tick().ticks() >= spannerStartTicks && _item->tick().ticks() <= spannerEndTicks) {
+                                    ottava_map[toNote(_item)] = (int)toOttava(spanner)->ottavaType() + 100;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (spanner->isSlur() || spanner->isTrill() || spanner->isGlissando() || spanner->isHairpin()) {
+                measure_spanner_map[measure->no()].insert((EngravingItem*)spanner);
+                if (spanner_ticks_map.find((EngravingItem*)spanner) == spanner_ticks_map.end()) {
+                    spanner_ticks_map[(EngravingItem*)spanner] = {};
+                }
+                spanner_ticks_map[(EngravingItem*)spanner][0] = spannerStartTicks;
+                spanner_ticks_map[(EngravingItem*)spanner][1] = spannerEndTicks;
+            }
         }
     }
 
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
         std::set<Note*> _measure_trill_notes;
+        std::map<Note*, EngravingItem*> _measure_trill_notes_trill_map;
         std::map<Note*, int> _measure_tremolo_type_map;
         std::map<Note*, bool> _measure_tremolo_half_map;
         EngravingItemList measure_children = measure->childrenItems(true);
@@ -490,6 +603,11 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 Trill* _trill = toTrill(measure_item);
                 if (_trill) {
                     Note* note = orn->noteAbove();
+                    
+                    if (spanner_ticks_map.find((EngravingItem*)_trill) != spanner_ticks_map.end()) {
+                        _measure_trill_notes_trill_map[note] = (EngravingItem*)_trill;
+                    }
+                    
                     if (note) {
                         _measure_trill_notes.insert(note);
 
@@ -625,6 +743,13 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     score_trill_dt_map[engravingItem] = _duration_ticks;
                                     score_trill_tt_map[engravingItem] = logic_tremoloType;
                                     score_trill_ot_map[engravingItem] = ottava_map[mnote];
+
+                                    score_trill_tdt_map[engravingItem] = 0;
+                                    if (_measure_trill_notes_trill_map.find(mnote) != _measure_trill_notes_trill_map.end()) {
+                                        EngravingItem* __trill = _measure_trill_notes_trill_map[mnote];
+                                        score_trill_tdt_map[engravingItem] = spanner_ticks_map[__trill][1] - spanner_ticks_map[__trill][0];
+                                    }
+                                    
                                 } else if (_trill_note_checked && !_trill_note1_checked) {
                                     _trill_note1_checked = true;
                                     int logic_tremoloType = 0;
@@ -653,6 +778,12 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     score_trill_dt_map1[engravingItem] = _duration_ticks;
                                     score_trill_tt_map1[engravingItem] = logic_tremoloType;
                                     score_trill_ot_map1[engravingItem] = ottava_map[mnote];
+
+                                    score_trill_tdt_map1[engravingItem] = 0;
+                                    if (_measure_trill_notes_trill_map.find(mnote) != _measure_trill_notes_trill_map.end()) {
+                                        EngravingItem* __trill = _measure_trill_notes_trill_map[mnote];
+                                        score_trill_tdt_map1[engravingItem] = spanner_ticks_map[__trill][1] - spanner_ticks_map[__trill][0];
+                                    }
                                 }
                             }
                         }
@@ -1345,6 +1476,36 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
         return RectF();
     }
 
+    if (isPlaying) {
+        for (EngravingItem* _item : measure_spanner_map[measure->no()]) {
+            if (spanner_ticks_map.find(_item) != spanner_ticks_map.end()) {
+                if (tick.ticks() >= spanner_ticks_map[_item][0] && tick.ticks() < spanner_ticks_map[_item][1]) {
+                    _item->setColor(muse::draw::Color::RED);
+                } else {
+                    _item->setColor(muse::draw::Color::BLACK);
+                }
+            }
+            int max_rollback_measures = 4;
+            Measure* prevMeasure = measure->prevMeasure();
+            max_rollback_measures -= 1;
+            while (max_rollback_measures > 0 && prevMeasure && measure_spanner_map[prevMeasure->no()].size() > 0) {
+                for (EngravingItem* _item : measure_spanner_map[prevMeasure->no()]) {
+                    if (spanner_ticks_map.find(_item) != spanner_ticks_map.end()) {
+                        if (tick.ticks() >= spanner_ticks_map[_item][0] && tick.ticks() < spanner_ticks_map[_item][1]) {
+                            if (isPlaying) {
+                                _item->setColor(muse::draw::Color::RED);
+                            }
+                        } else {
+                            _item->setColor(muse::draw::Color::BLACK);
+                        }
+                    }
+                }
+                prevMeasure = prevMeasure->prevMeasure();
+                max_rollback_measures -= 1;
+            }
+        }
+    }
+
     qreal x = 0.0;
     mu::engraving::Segment* s = nullptr;
     mu::engraving::Segment* s1 = nullptr;
@@ -1434,13 +1595,13 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
 
                     if (score_trill_map[engravingItem]) {
                         m_notation->interaction()->addTrillNote(score_trill_map[engravingItem], score_trill_st_map[engravingItem], 
-                            score_trill_dt_map[engravingItem], score_trill_tt_map[engravingItem], score_trill_ot_map[engravingItem], 
+                            score_trill_dt_map[engravingItem], score_trill_tdt_map[engravingItem], score_trill_tt_map[engravingItem], score_trill_ot_map[engravingItem], 
                             score_trill_tie_map[score_trill_map[engravingItem]]);
                         m_notation->interaction()->trillNoteUpdate();
                     }
                     if (score_trill_map1[engravingItem]) {
                         m_notation->interaction()->addTrillNote1(score_trill_map1[engravingItem], score_trill_st_map1[engravingItem], 
-                            score_trill_dt_map1[engravingItem], score_trill_tt_map1[engravingItem], score_trill_ot_map1[engravingItem], 
+                            score_trill_dt_map1[engravingItem], score_trill_tdt_map1[engravingItem], score_trill_tt_map1[engravingItem], score_trill_ot_map1[engravingItem], 
                             score_trill_tie_map1[score_trill_map1[engravingItem]]);
                         m_notation->interaction()->trillNoteUpdate1();
                     }
@@ -1999,6 +2160,25 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                     }
                     segment = next_segment;
                 }
+
+                int max_rollback_measures = 4;
+                Measure* prevMeasure1 = hit_measure();
+                max_rollback_measures -= 1;
+                while (max_rollback_measures > 0 && prevMeasure1 && measure_spanner_map[prevMeasure1->no()].size() > 0) {
+                    for (EngravingItem* _item : measure_spanner_map[prevMeasure1->no()]) {
+                        if (spanner_ticks_map.find(_item) != spanner_ticks_map.end()) {
+                            if (tick.ticks() >= spanner_ticks_map[_item][0] && tick.ticks() < spanner_ticks_map[_item][1]) {
+                                if (isPlaying) {
+                                    _item->setColor(muse::draw::Color::RED);
+                                }
+                            } else {
+                                _item->setColor(muse::draw::Color::BLACK);
+                            }
+                        }
+                    }
+                    prevMeasure1 = prevMeasure1->prevMeasure();
+                    max_rollback_measures -= 1;
+                }
             }
         }
 
@@ -2073,6 +2253,19 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 next_segment = next_segment->next(mu::engraving::SegmentType::ChordRest);
             }
             segment = next_segment;
+        }
+
+        int max_rollback_measures = 8;
+        Measure* prevMeasure1 = score->lastMeasure();
+        max_rollback_measures -= 1;
+        while (max_rollback_measures > 0 && prevMeasure1 && measure_spanner_map[prevMeasure1->no()].size() > 0) {
+            for (EngravingItem* _item : measure_spanner_map[prevMeasure1->no()]) {
+                if (spanner_ticks_map.find(_item) != spanner_ticks_map.end()) {
+                    _item->setColor(muse::draw::Color::BLACK);
+                }
+            }
+            prevMeasure1 = prevMeasure1->prevMeasure();
+            max_rollback_measures -= 1;
         }
     }
     

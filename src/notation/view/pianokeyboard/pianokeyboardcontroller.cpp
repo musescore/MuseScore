@@ -186,6 +186,9 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
     int _m_trill_duration_ticks = m_trill_duration_ticks;
     if (m_trill_note_hastie) {
         _m_trill_duration_ticks = m_trill_duration_ticks * 2;
+        if (m_trill_trill_duration_ticks > m_trill_duration_ticks && m_trill_trill_duration_ticks < m_trill_duration_ticks * 2) {
+            _m_trill_duration_ticks = m_trill_trill_duration_ticks;
+        }
     }
 
     if (m_trill_curr_ticks >= m_trill_ticks && m_trill_curr_ticks <= m_trill_ticks + _m_trill_duration_ticks) {
@@ -249,6 +252,9 @@ KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const
     int _m_trill_duration_ticks1 = m_trill_duration_ticks1;
     if (m_trill_note1_hastie) {
         _m_trill_duration_ticks1 = m_trill_duration_ticks1 * 2;
+        if (m_trill_trill_duration_ticks1 > m_trill_duration_ticks1 && m_trill_trill_duration_ticks1 < m_trill_duration_ticks1 * 2) {
+            _m_trill_duration_ticks1 = m_trill_trill_duration_ticks1;
+        }
     }
     if (m_trill_curr_ticks1 >= m_trill_ticks1 && m_trill_curr_ticks1 <= m_trill_ticks1 + _m_trill_duration_ticks1) {
         int left_dis = m_trill_curr_ticks1 - m_trill_ticks1;
@@ -493,6 +499,7 @@ void PianoKeyboardController::onNotationChanged()
             m_trill_ticks = notation->interaction()->trillNoteTicks();
             m_trill_note_hastie = notation->interaction()->trillNoteHasTie();
             m_trill_duration_ticks = notation->interaction()->trillNoteDurationticks();
+            m_trill_trill_duration_ticks = notation->interaction()->trillTrillNoteDurationticks();
             
             Note *receivedNote = notation->interaction()->trillNote();
 
@@ -543,6 +550,7 @@ void PianoKeyboardController::onNotationChanged()
             m_trill_ticks1 = notation->interaction()->trillNoteTicks1();
             m_trill_note1_hastie = notation->interaction()->trillNote1HasTie();
             m_trill_duration_ticks1 = notation->interaction()->trillNoteDurationticks1();
+            m_trill_trill_duration_ticks1 = notation->interaction()->trillTrillNoteDurationticks1();
             
             Note *receivedNote = notation->interaction()->trillNote1();
 
