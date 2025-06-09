@@ -3104,6 +3104,14 @@ void Score::deleteItem(EngravingItem* el)
     }
     break;
 
+    case ElementType::TAPPING_HALF_SLUR_SEGMENT:
+    {
+        TappingHalfSlur* halfSlur = toTappingHalfSlur(toTappingHalfSlurSegment(el)->spanner());
+        Tapping* tapping = toTapping(halfSlur->parent());
+        undoRemoveElement(tapping);
+        break;
+    }
+
     case ElementType::HAMMER_ON_PULL_OFF_TEXT:
         undoRemoveHopoText(toHammerOnPullOffText(el));
         break;
