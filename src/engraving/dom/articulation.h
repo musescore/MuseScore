@@ -116,7 +116,7 @@ public:
 
     SymId symId() const { return m_symId; }
     void setSymId(SymId id);
-    int subtype() const override;
+    virtual int subtype() const override;
     void setTextType(ArticulationTextType textType);
     ArticulationTextType textType() const { return m_textType; }
     TranslatableString typeUserName() const override;

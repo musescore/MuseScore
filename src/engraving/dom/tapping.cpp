@@ -58,6 +58,11 @@ double Tapping::mag() const
     return ldata()->mag() * Articulation::mag();
 }
 
+int Tapping::subtype() const
+{
+    return static_cast<int>(m_hand);
+}
+
 String Tapping::accessibleInfo() const
 {
     return String(u"%1 %2").arg(translatedSubtypeUserName(), TConv::userName(ElementType::TAPPING).translated());

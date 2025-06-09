@@ -1607,6 +1607,20 @@ Articulation* Chord::hasArticulation(const Articulation* aa)
     return 0;
 }
 
+Tapping* Chord::tapping() const
+{
+    std::vector<Tapping*> tappings;
+    tappings.reserve(1);
+    for (Articulation* a : m_articulations) {
+        if (a->isTapping()) {
+            tappings.push_back(toTapping(a));
+        }
+    }
+    DO_ASSERT(tappings.size() <= 1);
+
+    return tappings.size() > 0 ? tappings.front() : nullptr;
+}
+
 void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, ArticulationsUpdateMode updateMode)
 {
     Articulation* staccato = nullptr;

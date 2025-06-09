@@ -62,6 +62,8 @@ public:
 
     double mag() const override;
 
+    int subtype() const override;
+
     String accessibleInfo() const override;
     TranslatableString typeUserName() const override;
     TranslatableString subtypeUserName() const override;
