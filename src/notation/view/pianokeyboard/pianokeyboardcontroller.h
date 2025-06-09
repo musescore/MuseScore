@@ -112,6 +112,7 @@ private:
     piano_key_t m_trill_note_key;
     int m_trill_ticks;
     int m_trill_duration_ticks;
+    int m_trill_trill_duration_ticks;
     int m_trill_tremolo_type;
     int m_trill_curr_ticks;
     Note* receive_note1 = nullptr;
@@ -120,6 +121,7 @@ private:
     bool m_trill_note_hastie;
     bool m_trill_note1_hastie;
     int m_trill_duration_ticks1;
+    int m_trill_trill_duration_ticks1;
     int m_trill_tremolo_type1;
     int m_trill_curr_ticks1;
 
