@@ -121,6 +121,7 @@ PreferencesPage {
         MidiSection {
             shortestNotes: importPreferencesModel.shortestNotes()
             currentShortestNote: importPreferencesModel.currentShortestNote
+            channel9isDrum: importPreferencesModel.currentChannel9isDrum
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 4
@@ -128,6 +129,10 @@ PreferencesPage {
             onCurrentShortestNoteChangeRequested: function(note) {
                 importPreferencesModel.currentShortestNote = note
             }
+
+            onCurrentChannel9isDrumChangeRequested: function(isDrum) {
+                importPreferencesModel.currentChannel9isDrum = isDrum
+	    }
 
             onFocusChanged: {
                 if (activeFocus) {

@@ -64,6 +64,10 @@ void ImportPreferencesModel::load()
         emit currentShortestNoteChanged(val);
     });
 
+    midiImportExportConfiguration()->midiChannel9isDrumChanged().onReceive(this, [this](bool isDrum) {
+        emit currentChannel9isDrumChanged(isDrum);
+    });
+
     meiConfiguration()->meiImportLayoutChanged().onReceive(this, [this](bool val) {
         emit meiImportLayoutChanged(val);
     });
@@ -155,6 +159,11 @@ int ImportPreferencesModel::currentShortestNote() const
     return midiImportExportConfiguration()->midiShortestNote();
 }
 
+bool ImportPreferencesModel::currentChannel9isDrum() const
+{
+    return midiImportExportConfiguration()->midiChannel9isDrum();
+}
+
 bool ImportPreferencesModel::needAskAboutApplyingNewStyle() const
 {
     return musicXmlConfiguration()->needAskAboutApplyingNewStyle();
@@ -233,6 +242,16 @@ void ImportPreferencesModel::setCurrentShortestNote(int note)
 
     midiImportExportConfiguration()->setMidiShortestNote(note);
     emit currentShortestNoteChanged(note);
+}
+
+void ImportPreferencesModel::setCurrentChannel9isDrum(bool isDrum)
+{
+    if (isDrum == currentChannel9isDrum()) {
+        return;
+    }
+
+    midiImportExportConfiguration()->setMidiChannel9isDrum(isDrum);
+    emit currentChannel9isDrumChanged(isDrum);
 }
 
 void ImportPreferencesModel::setNeedAskAboutApplyingNewStyle(bool value)
