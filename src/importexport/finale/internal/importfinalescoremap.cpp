@@ -393,6 +393,13 @@ void FinaleParser::importClefs(const std::shared_ptr<others::InstrumentUsed>& mu
     }
 }
 
+template<typename T>
+static bool changed(const T& a, const T& b, bool& result)
+{
+	result = result || a != b;
+	return a != b;
+}
+
 bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<const musx::dom::others::StaffComposite>& currStaff)
 {
     bool result = false;
@@ -402,18 +409,15 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<c
         staffType->setGenClef(!currStaff->hideClefs);
         result = true;
     }
-    if (staffType->genKeysig() == currStaff->hideKeySigs) {
+    if (changed(staffType->genKeysig(), !currStaff->hideKeySigs, result)) {
         staffType->setGenKeysig(!currStaff->hideKeySigs);
-        result = true;
     }
-    if (staffType->genTimesig() == currStaff->hideTimeSigs) {
+    if (changed(staffType->genTimesig(), !currStaff->hideTimeSigs, result)) {
         staffType->setGenTimesig(!currStaff->hideTimeSigs);
-        result = true;
     }
     StaffGroup staffGroup = FinaleTConv::staffGroupFromNotationStyle(currStaff->notationStyle);
-    if (staffType->group() != staffGroup) {
+    if (changed(staffType->group(), staffGroup, result)) {
         staffType->setGroup(staffGroup);
-        result = true;
     }
     int numLines = [&]() -> int {
         if (currStaff->staffLines.has_value()) {
@@ -427,35 +431,28 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<c
     if (staffInvisible) {
         numLines = 5;
     }
-    if (staffType->lines() != numLines) {
+    if (changed(staffType->lines(), numLines, result)) {
         staffType->setLines(numLines);
-        result = true;
     }
-    if (staffType->invisible() != staffInvisible) {
+    if (changed(staffType->invisible(), staffInvisible, result)) {
         staffType->setInvisible(staffInvisible);
-        result = true;
     }
     int stepOffset = currStaff->calcToplinePosition();
     Spatium yoffset = Spatium(-stepOffset /2.0);
-    if (staffType->yoffset() != yoffset) {
+    if (changed(staffType->yoffset(), yoffset, result)) {
         staffType->setYoffset(yoffset);
-        result = true;
     }
-    if (staffType->stepOffset() != stepOffset) {
+    if (changed(staffType->stepOffset(), stepOffset, result)) {
         staffType->setStepOffset(stepOffset);
-        result = true;
     }
-    if (staffType->showBarlines() == currStaff->hideBarlines) {
+    if (changed(staffType->showBarlines(), !currStaff->hideBarlines, result)) {
         staffType->setShowBarlines(!currStaff->hideBarlines);
-        result = true;
     }
-    if (staffType->showRests() == currStaff->hideRests) {
+    if (changed(staffType->showRests(), !currStaff->hideRests, result)) {
         staffType->setShowRests(!currStaff->hideRests);
-        result = true;
     }
-    if (staffType->stemless() != currStaff->hideStems) {
+    if (changed(staffType->stemless(), currStaff->hideStems, result)) {
         staffType->setStemless(currStaff->hideStems);
-        result = true;
     }
 
     /// @todo use userMag instead of smallClef? (But it requires a separate system-by-system search.)
