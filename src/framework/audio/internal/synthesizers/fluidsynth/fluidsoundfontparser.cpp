@@ -39,14 +39,12 @@ RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& 
 
     DEFER {
         if (sfont) {
-            fluid_defsfont_sfont_delete(sfont);
+            sfont->free(sfont);
         }
         if (loader) {
-            delete_fluid_sfloader(loader);
+            loader->free(loader);
         }
-        if (settings) {
-            delete_fluid_settings(settings);
-        }
+        delete_fluid_settings(settings);
     };
 
     settings = new_fluid_settings();
@@ -69,13 +67,13 @@ RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& 
     SoundFontMeta meta;
     meta.path = path;
 
-    fluid_defsfont_sfont_iteration_start(sfont);
+    sfont->iteration_start(sfont);
 
     fluid_preset_t* fluid_preset;
-    while ((fluid_preset = fluid_defsfont_sfont_iteration_next(sfont))) {
-        int bank = fluid_defpreset_preset_get_banknum(fluid_preset);
-        int program = fluid_defpreset_preset_get_num(fluid_preset);
-        const char* name = fluid_defpreset_preset_get_name(fluid_preset);
+    while ((fluid_preset = sfont->iteration_next(sfont))) {
+        int bank = fluid_preset->get_banknum(fluid_preset);
+        int program = fluid_preset->get_num(fluid_preset);
+        const char* name = fluid_preset->get_name(fluid_preset);
 
         SoundFontPreset preset;
         preset.program = midi::Program(bank, program);
