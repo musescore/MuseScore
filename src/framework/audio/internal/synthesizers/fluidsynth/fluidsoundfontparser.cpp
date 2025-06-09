@@ -23,6 +23,7 @@
 #include "fluidsoundfontparser.h"
 
 #include <fluidsynth.h>
+#include <fluid_instpatch.h>
 #include <sfloader/fluid_sfont.h>
 #include <sfloader/fluid_defsfont.h>
 
@@ -36,6 +37,7 @@ RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& 
     fluid_settings_t* settings = nullptr;
     fluid_sfloader_t* loader = nullptr;
     fluid_sfont_t* sfont = nullptr;
+    fluid_synth_t* synth = nullptr;
 
     DEFER {
         if (sfont) {
@@ -44,6 +46,7 @@ RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& 
         if (loader) {
             loader->free(loader);
         }
+        delete_fluid_synth(synth);
         delete_fluid_settings(settings);
     };
 
@@ -54,7 +57,33 @@ RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& 
 
     fluid_settings_setint(settings, "synth.dynamic-sample-loading", 1);
 
-    loader = new_fluid_defsfloader(settings);
+#if defined(LIBINSTPATCH_SUPPORT)
+    // Try DLS first
+
+    // call new_fluid_synth() to invoke not exported
+    // fluid_instpatch_init() / fluid_instpatch_supports_multi_init()
+    synth = new_fluid_synth(settings);
+    if (!synth) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    loader = new_fluid_instpatch_loader(settings);
+    if (loader) {
+        sfont = fluid_sfloader_load(loader, path.c_str());
+        if (sfont) {
+            goto skip_sfloader;
+        } else {
+            loader->free(loader);
+            loader = nullptr;
+        }
+    }
+#endif
+
+    if (!sfont) {
+        // Then try SoundFont
+        loader = new_fluid_defsfloader(settings);
+    }
+
     if (!loader) {
         return make_ret(Ret::Code::UnknownError);
     }
@@ -64,6 +93,7 @@ RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& 
         return make_ret(Ret::Code::UnknownError);
     }
 
+skip_sfloader:
     SoundFontMeta meta;
     meta.path = path;
 
