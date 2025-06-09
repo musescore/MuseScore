@@ -3353,8 +3353,8 @@ void Score::cmdAddParentheses(EngravingItem* el)
         acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
     } else if (el->type() == ElementType::HARMONY) {
         Harmony* h = toHarmony(el);
-        h->setLeftParen(true);
-        h->setRightParen(true);
+        h->setLeftParen(!h->leftParen());
+        h->setRightParen(!h->rightParen());
         h->render();
     } else if (el->type() == ElementType::TIMESIG) {
         TimeSig* ts = toTimeSig(el);

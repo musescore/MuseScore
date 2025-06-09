@@ -175,6 +175,10 @@ String Harmony::harmonyName() const
 {
     String name;
 
+    if (m_leftParen) {
+        name = u"(";
+    }
+
     for (size_t i = 0; i < m_chords.size(); i++) {
         const HarmonyInfo* info = m_chords.at(i);
         HChord hc = info->descr() ? info->descr()->chord : HChord();
@@ -182,10 +186,6 @@ String Harmony::harmonyName() const
 
         if (i != 0) {
             name += u"|";
-        }
-
-        if (m_leftParen) {
-            s = u"(";
         }
 
         if (m_harmonyType == HarmonyType::STANDARD && tpcIsValid(info->rootTpc())) {
@@ -231,12 +231,13 @@ String Harmony::harmonyName() const
 
         s += r + e + b;
 
-        if (m_rightParen) {
-            s += u")";
-        }
-
         name += s;
     }
+
+    if (m_rightParen) {
+        name += u")";
+    }
+
     return name;
 }
 
@@ -447,7 +448,7 @@ const std::vector<const ChordDescription*> Harmony::parseHarmony(const String& s
         return descriptions;
     }
 
-    StringList chords = ss.split('|');
+    StringList chords = s.split('|');
 
     for (const String& subChord : chords) {
         if (subChord.empty()) {
@@ -467,7 +468,7 @@ const ChordDescription* Harmony::parseSingleHarmony(const String& ss, HarmonyInf
     String s = ss.simplified();
 
     if (m_harmonyType == HarmonyType::ROMAN) {
-        info->setTextName(ss);
+        info->setTextName(s);
         info->setRootTpc(Tpc::TPC_INVALID);
         info->setBassTpc(Tpc::TPC_INVALID);
         return nullptr;
