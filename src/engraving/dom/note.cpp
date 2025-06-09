@@ -2824,7 +2824,7 @@ void Note::verticalDrag(EditData& ed)
     int lineOffset      = lrint(ed.moveDelta.y() / step);
 
     if (tab) {
-        const StringData* strData = staff()->part()->stringData(_tick, stf->idx());
+        const StringData* strData = part()->stringData(_tick, stf->idx());
         const int pitchOffset = stf->pitchOffset(_tick);
         int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
         int nFret   = strData->fret(m_pitch + pitchOffset, nString, staff());
@@ -2840,10 +2840,7 @@ void Note::verticalDrag(EditData& ed)
             }
         }
     } else {
-        Key key = staff()->key(_tick);
-        Key cKey = staff()->concertKey(_tick);
         staff_idx_t idx = chord()->vStaffIdx();
-        Interval interval = staff()->part()->instrument(_tick)->transpose();
         bool error = false;
         AccidentalVal accOffs = firstTiedNote()->chord()->measure()->findAccidental(
             firstTiedNote()->chord()->segment(), idx, ned->line + lineOffset, error);
@@ -2856,15 +2853,15 @@ void Note::verticalDrag(EditData& ed)
         int newPitch = step2pitch(nStep) + octave * 12 + int(accOffs);
         newPitch = std::clamp(newPitch, 0, 127);
 
-        if (!concertPitch()) {
-            newPitch += interval.chromatic;
+        int newTpc1 = step2tpc(nStep % 7, accOffs);
+        int newTpc2 = newTpc1;
+        if (concertPitch()) {
+            newTpc2 = transposeTpc(newTpc1);
         } else {
-            interval.flip();
-            key = transposeKey(cKey, interval, staff()->part()->preferSharpFlat());
+            newPitch += staff()->transpose(_tick).chromatic;
+            newTpc1 = transposeTpc(newTpc2);
         }
 
-        int newTpc1 = pitch2tpc(newPitch, cKey, Prefer::NEAREST);
-        int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
         for (Note* nn : tiedNotes()) {
             nn->setAccidentalType(AccidentalType::NONE);
             nn->setPitch(newPitch, newTpc1, newTpc2);
