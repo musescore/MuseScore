@@ -38,6 +38,7 @@ class Engraving_SelectionFilterTests : public ::testing::Test
 public:
     void testFilter(int idx, const SelectionFilterTypesVariant& type);
     void testFilterSpanner(int idx, const SelectionFilterTypesVariant& type);
+    void testNotesInChordsAction(void (*action)(Score*, MeasureBase*), const String& reference);
 };
 
 void Engraving_SelectionFilterTests::testFilter(int idx, const SelectionFilterTypesVariant& type)
@@ -208,4 +209,143 @@ TEST_F(Engraving_SelectionFilterTests, filterHairpin)
 TEST_F(Engraving_SelectionFilterTests, filterOrnament)
 {
     testFilter(23, ElementsSelectionFilterTypes::ORNAMENT);
+}
+
+/**
+ * @brief Engraving_SelectionFilterTests::testNotesInChordsAction
+ * @details This method modifies the selection filter, makes a range selection over five measures, then performs a given action. These steps are
+ *          repeated every five measures (until measure 25), and the result is compared with the given reference. The "action" method can take
+ *          an auxiliary Measure - for copy/pastes this is used as the paste destination...
+ */
+void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Score*, MeasureBase* auxMeasure), const String& reference)
+{
+    //! [GIVEN] A score with a mixture of chords, single notes, and tuplets...
+    MasterScore* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_notesinchords.mscx"));
+    EXPECT_TRUE(score);
+
+    const auto prepareSelectionRange = [score](MeasureBase* rangeStart, MeasureBase* rangeEnd){
+        score->deselectAll();
+        score->select(rangeStart, SelectType::SINGLE);
+        score->select(rangeEnd, SelectType::RANGE);
+    };
+
+    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::ALL, false);
+
+    // Measures 1 to 5 - deselect bottom notes
+    //! [WHEN] Editing the selection filter and making a range selection over the first five measures...
+    MeasureBase* rangeStart = score->measure(0);
+    MeasureBase* rangeEnd = score->measure(4);
+    MeasureBase* auxMeasure = score->measure(25);
+    EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
+
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::ALL, true);
+    score->selectionFilter().setIncludeSingleNotes(true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::BOTTOM_NOTE, false);
+    prepareSelectionRange(rangeStart, rangeEnd);
+
+    //! [WHEN] Performing the given action over the selected measures...
+    action(score, auxMeasure);
+
+    // Measures 6 to 10 - deselect top notes and thirds
+    //! [WHEN] Editing the selection filter and making a range selection over the next five measures...
+    rangeStart = score->measure(5);
+    rangeEnd = score->measure(9);
+    auxMeasure = score->measure(30);
+    EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
+
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::ALL, true);
+    score->selectionFilter().setIncludeSingleNotes(true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::TOP_NOTE, false);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::THIRD_NOTE, false);
+    prepareSelectionRange(rangeStart, rangeEnd);
+
+    //! [WHEN] Performing the given action over the selected measures...
+    action(score, auxMeasure);
+
+    // Measures 11 to 15 - deselect single notes
+    //! [WHEN] Editing the selection filter and making a range selection over the next five measures...
+    rangeStart = score->measure(10);
+    rangeEnd = score->measure(14);
+    auxMeasure = score->measure(35);
+    EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
+
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::ALL, true);
+    score->selectionFilter().setIncludeSingleNotes(false);
+    prepareSelectionRange(rangeStart, rangeEnd);
+
+    //! [WHEN] Performing the given action over the selected measures...
+    action(score, auxMeasure);
+
+    // Measures 16 to 20 - select seconds and sixths
+    //! [WHEN] Editing the selection filter and making a range selection over the next five measures...
+    rangeStart = score->measure(15);
+    rangeEnd = score->measure(19);
+    auxMeasure = score->measure(40);
+    EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
+
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::NONE, true);
+    score->selectionFilter().setIncludeSingleNotes(false);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::SECOND_NOTE, true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::SIXTH_NOTE, true);
+    prepareSelectionRange(rangeStart, rangeEnd);
+
+    //! [WHEN] Performing the given action over the selected measures...
+    action(score, auxMeasure);
+
+    // Measures 21 to 25 - select bottom notes, thirds, fourths, and top notes
+    //! [WHEN] Editing the selection filter and making a range selection over the next five measures...
+    rangeStart = score->measure(20);
+    rangeEnd = score->measure(24);
+    auxMeasure = score->measure(45);
+    EXPECT_TRUE(rangeStart && rangeEnd && auxMeasure);
+
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::NONE, true);
+    score->selectionFilter().setIncludeSingleNotes(false);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::BOTTOM_NOTE, true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::THIRD_NOTE, true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::FOURTH_NOTE, true);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::TOP_NOTE, true);
+    prepareSelectionRange(rangeStart, rangeEnd);
+
+    //! [WHEN] Performing the given action over the selected measures...
+    action(score, auxMeasure);
+
+    //! [EXPECT] The result matches the given reference...
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"selectionfilter_notesinchords.mscx"), reference));
+}
+
+/**
+ * @brief Engraving_VoiceSwitchingTests_notesInChordsDeleteRange
+ * @details See Engraving_SelectionFilterTests::testNotesInChordsAction
+ */
+TEST_F(Engraving_SelectionFilterTests, notesInChordsDeleteRange)
+{
+    const auto deleteAction = [](Score* score, MeasureBase*){
+        score->startCmd(TranslatableString::untranslatable("Selection filter - delete range test"));
+        score->cmdDeleteSelection();
+        score->endCmd();
+    };
+
+    testNotesInChordsAction(deleteAction, SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_notesinchords_deleterange-ref.mscx"));
+}
+
+/**
+ * @brief Engraving_VoiceSwitchingTests_notesInChordsCopyPaste
+ * @details See Engraving_SelectionFilterTests::testNotesInChordsAction
+ */
+TEST_F(Engraving_SelectionFilterTests, notesInChordsCopyPaste)
+{
+    const auto copyPasteAction = [](Score* score, MeasureBase* auxMeasure) {
+        muse::ByteArray mimeData = score->selection().mimeData();
+        EXPECT_TRUE(!mimeData.empty());
+
+        score->deselectAll();
+        score->select(auxMeasure, SelectType::SINGLE);
+
+        score->startCmd(TranslatableString::untranslatable("Selection filter - copy/paste test"));
+        score->cmdPasteStaffList(mimeData);
+        score->endCmd();
+    };
+
+    testNotesInChordsAction(copyPasteAction, SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_notesinchords_copypaste-ref.mscx"));
 }
