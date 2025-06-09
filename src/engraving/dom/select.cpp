@@ -190,8 +190,8 @@ ChordRest* Selection::currentCR() const
 
 ChordRest* Selection::activeCR() const
 {
-    if ((m_state != SelState::RANGE) || !m_activeSegment) {
-        return 0;
+    if (m_state != SelState::RANGE || !m_activeSegment) {
+        return nullptr;
     }
     if (m_activeSegment == m_startSegment) {
         return firstChordRest(m_activeTrack);
@@ -200,25 +200,91 @@ ChordRest* Selection::activeCR() const
     }
 }
 
-Segment* Selection::firstChordRestSegment() const
+ChordRest* Selection::firstChordRestInRange(track_idx_t track) const
 {
-    if (!isRange()) {
-        return 0;
+    IF_ASSERT_FAILED(isRange()) {
+        return nullptr;
     }
 
-    for (Segment* s = m_startSegment; s && (s != m_endSegment); s = s->next1MM()) {
-        if (!s->enabled()) {
+    Segment* firstCRSegment = nullptr;
+
+    for (Segment* currSeg = m_startSegment; currSeg && (currSeg != m_endSegment); currSeg = currSeg->next1MM()) {
+        if (!currSeg->enabled() || !currSeg->isChordRestType()) {
             continue;
         }
-        if (s->isChordRestType()) {
-            return s;
+        if (track == muse::nidx) {
+            // no track specified, use the first CR segment we find...
+            firstCRSegment = currSeg;
+            break;
+        }
+        EngravingItem* e = currSeg->element(track);
+        if (e && e->isChordRest()) {
+            return toChordRest(e);
         }
     }
-    return 0;
+
+    if (!firstCRSegment) {
+        return nullptr;
+    }
+
+    for (track_idx_t track = staff2track(staffStart()); track < staff2track(staffEnd()); ++track) {
+        EngravingItem* e = firstCRSegment->element(track);
+        if (e && e->isChordRest()) {
+            return toChordRest(e);
+        }
+    }
+    return nullptr;
+}
+
+ChordRest* Selection::lastChordRestInRange(track_idx_t track) const
+{
+    IF_ASSERT_FAILED(isRange()) {
+        return nullptr;
+    }
+
+    Segment* lastCRSegment = nullptr;
+
+    Segment* lastSegInScore = m_score->lastMeasureMM() ? m_score->lastMeasureMM()->last() : nullptr;
+    Segment* currSeg = m_endSegment ? m_endSegment->prev1MM() : lastSegInScore;
+    while (currSeg) {
+        if (!currSeg->enabled() || !currSeg->isChordRestType()) {
+            currSeg = currSeg->prev1MM();
+            continue;
+        }
+        if (track == muse::nidx) {
+            // no track specified, use the first CR segment we find...
+            lastCRSegment = currSeg;
+            break;
+        }
+        EngravingItem* e = currSeg->element(track);
+        if (e && e->isChordRest()) {
+            return toChordRest(e);
+        }
+        currSeg = currSeg->prev1MM();
+        if (currSeg == m_startSegment->prev1MM()) {
+            break;
+        }
+    }
+
+    if (!lastCRSegment) {
+        return nullptr;
+    }
+
+    for (track_idx_t track = staff2track(staffStart()); track < staff2track(staffEnd()); ++track) {
+        EngravingItem* e = lastCRSegment->element(track);
+        if (e && e->isChordRest()) {
+            return toChordRest(e);
+        }
+    }
+
+    return nullptr;
 }
 
 ChordRest* Selection::firstChordRest(track_idx_t track) const
 {
+    if (isRange()) {
+        return firstChordRestInRange(track);
+    }
     if (m_el.size() == 1) {
         EngravingItem* el = m_el[0];
         if (el->isNote()) {
@@ -226,9 +292,9 @@ ChordRest* Selection::firstChordRest(track_idx_t track) const
         } else if (el->isChordRest()) {
             return toChordRest(el);
         }
-        return 0;
+        return nullptr;
     }
-    ChordRest* cr = 0;
+    ChordRest* cr = nullptr;
     for (EngravingItem* el : m_el) {
         if (el->isNote()) {
             el = el->parentItem();
@@ -251,6 +317,9 @@ ChordRest* Selection::firstChordRest(track_idx_t track) const
 
 ChordRest* Selection::lastChordRest(track_idx_t track) const
 {
+    if (isRange()) {
+        return lastChordRestInRange(track);
+    }
     if (m_el.size() == 1) {
         EngravingItem* el = m_el[0];
         if (el) {
@@ -263,7 +332,7 @@ ChordRest* Selection::lastChordRest(track_idx_t track) const
         return nullptr;
     }
     ChordRest* cr = nullptr;
-    for (auto el : m_el) {
+    for (EngravingItem* el : m_el) {
         if (el->isNote()) {
             el = toNote(el)->chord();
         }
@@ -884,9 +953,10 @@ void Selection::update()
     if (cr->isChord()) {
         // Use the top selected note in the chord...
         const std::vector<Note*> notes = toChord(cr)->notes();
-        for (size_t noteIdx = notes.size() - 1; noteIdx >= 0; --noteIdx) {
+        const size_t noteCount = notes.size();
+        for (size_t noteIdx = noteCount - 1; noteIdx >= 0 && noteIdx < noteCount; --noteIdx) {
             Note* note = notes.at(noteIdx);
-            if (note->selected()) {
+            if (selectionFilter().canSelectNoteIdx(noteIdx, notes.size(), rangeContainsMultiNoteChords())) {
                 toSelectAgain = note;
                 break;
             }
@@ -895,8 +965,8 @@ void Selection::update()
         toSelectAgain = cr;
     }
 
-    // Was selected earlier (toSelectAgain is somewhere in m_el)
-    IF_ASSERT_FAILED(toSelectAgain && toSelectAgain->selected()) {
+    if (!toSelectAgain || !toSelectAgain->selected()) {
+        // Means we have a range with no selected elements...
         updateState();
         return;
     }
@@ -929,23 +999,36 @@ void Selection::dump()
 
 void Selection::updateState()
 {
-    size_t n = m_el.size();
-    EngravingItem* e = element();
-    if (n == 0) {
+    const size_t totalStaves = m_score->nstaves();
+
+    //! NOTE: m_startSegment being non-null and m_endSegment being null is a valid case. It means we've selected the
+    //! last segment of the final measure...
+    const bool rangeSegsInvalid = !m_startSegment || (m_endSegment && m_endSegment->tick() <= m_startSegment->tick());
+    const bool rangeStavesInvalid = m_staffStart == muse::nidx || m_staffStart >= totalStaves
+                                    || m_staffEnd == muse::nidx || m_staffEnd > totalStaves
+                                    || m_staffStart >= m_staffEnd;
+    const bool rangeIsValid = isRange() && !rangeSegsInvalid && !rangeStavesInvalid;
+
+    //! NOTE: Range can be valid even if no elements are selectable in that range...
+    if (m_el.size() == 0 && !rangeIsValid) {
         setState(SelState::NONE);
     } else if (m_state == SelState::NONE) {
         setState(SelState::LIST);
     }
-    if (e) {
-        if (e->isSpannerSegment()) {
-            m_currentTick = toSpannerSegment(e)->spanner()->tick();
-        } else {
-            m_currentTick = e->tick();
-        }
-        // ignore system elements (e.g., frames)
-        if (e->track() != muse::nidx) {
-            m_currentTrack = e->track();
-        }
+
+    const EngravingItem* e = element();
+    if (!e) {
+        return;
+    }
+
+    if (e->isSpannerSegment()) {
+        m_currentTick = toSpannerSegment(e)->spanner()->tick();
+    } else {
+        m_currentTick = e->tick();
+    }
+    // ignore system elements (e.g., frames)
+    if (e->track() != muse::nidx) {
+        m_currentTrack = e->track();
     }
 }
 
@@ -1439,8 +1522,10 @@ bool Selection::canCopy() const
         }
 
         // check if selection starts or ends partway through measure repeat group
-        if (firstChordRest()->measure()->isMeasureRepeatGroupWithPrevM(staffIdx)
-            || lastChordRest()->measure()->isMeasureRepeatGroupWithNextM(staffIdx)) {
+        const ChordRest* firstCR = firstChordRest();
+        const ChordRest* lastCR = lastChordRest();
+        if ((firstCR && firstCR->measure()->isMeasureRepeatGroupWithPrevM(staffIdx))
+            || (lastCR && lastCR->measure()->isMeasureRepeatGroupWithNextM(staffIdx))) {
             return false;
         }
     }

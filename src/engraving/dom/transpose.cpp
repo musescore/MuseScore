@@ -833,9 +833,15 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
                             n->undoChangeProperty(Pid::TPC2, tpc);
                         }
                     }
-                    for (Note* n : c->notes()) {
-                        int tpc = transposeTpc(n->tpc1(), v, true);
-                        n->undoChangeProperty(Pid::TPC2, tpc);
+                    const std::vector<Note*> notes = c->notes();
+                    for (size_t noteIdx = 0; noteIdx < notes.size(); ++noteIdx) {
+                        if (selection().isRange()
+                            && !m_selectionFilter.canSelectNoteIdx(noteIdx, notes.size(), m_selection.rangeContainsMultiNoteChords())) {
+                            continue;
+                        }
+                        Note* note = notes.at(noteIdx);
+                        int tpc = transposeTpc(note->tpc1(), v, true);
+                        note->undoChangeProperty(Pid::TPC2, tpc);
                     }
                 }
                 // find chord symbols
