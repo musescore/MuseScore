@@ -3473,7 +3473,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
             if (item->align() == AlignV::VCENTER) {
                 yy = -bb.y() / 2.0;
             } else if (item->align() == AlignV::BASELINE) {
-                yy = 0.0;
+                yy = item->baseLine();
             } else if (item->align() == AlignV::BOTTOM) {
                 yy = -bb.height() - bb.y();
             }

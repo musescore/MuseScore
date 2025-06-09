@@ -265,6 +265,7 @@ public:
     struct LayoutData : public TextBase::LayoutData {
         ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };           // used for calculating the height is frame while editing.
         ld_field<std::vector<LineF> > polychordDividerLines = { "[Harmony] polychordDividerLine", std::vector<LineF>() };
+        ld_field<double> baseline = { "[Harmony] baseline", 0.0 };
     };
     DECLARE_LAYOUTDATA_METHODS(Harmony)
 

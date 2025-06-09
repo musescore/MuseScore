@@ -861,7 +861,11 @@ void Harmony::setHarmony(const String& s)
 
 double Harmony::baseLine() const
 {
-    return (m_textList.empty()) ? TextBase::baseLine() : 0.0;
+    if (m_textList.empty() || !ldata()->baseline.has_value()) {
+        return TextBase::baseLine();
+    }
+
+    return ldata()->baseline.value();
 }
 
 //---------------------------------------------------------
@@ -1595,6 +1599,10 @@ void Harmony::render()
                 seg->movey(diff);
             }
         }
+        if (i == m_chords.size()) {
+            // Set baseline for bottom chord
+            mutldata()->baseline = -diff;
+        }
 
         double topCapHeight = DBL_MAX;
         for (const TextSegment* seg : ctx.textList) {
@@ -1613,6 +1621,7 @@ void Harmony::render()
 
         double lineY = ctx.y() - style().styleS(Sid::polychordDividerSpacing).toMM(spatium())
                        - style().styleS(Sid::polychordDividerThickness).toMM(spatium()) / 2;
+        lineY += ldata()->baseline;
         LineF line = LineF(PointF(0.0, lineY), PointF(0.0, lineY));
         mutldata()->polychordDividerLines.mut_value().push_back(line);
 
