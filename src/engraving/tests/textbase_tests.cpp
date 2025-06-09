@@ -72,6 +72,8 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextBefore)
     EditData ed;
     dynamic->startEdit(ed);
     score->startCmd(TranslatableString::untranslatable("Edit dynamic text (test)"));
+    dynamic->cursor()->clearSelection();
+    dynamic->cursor()->moveCursorToStart();
     score->undo(new InsertText(dynamic->cursor(), String(u"poco ")), &ed);
     score->endCmd();
     dynamic->endEdit(ed);
@@ -86,6 +88,7 @@ TEST_F(Engraving_TextBaseTests, dynamicAddTextAfter)
     ed.s = String(u" ma non troppo");
     dynamic->startEdit(ed);
     score->startCmd(TranslatableString::untranslatable("Edit dynamic text (test)"));
+    dynamic->cursor()->clearSelection();
     dynamic->cursor()->moveCursorToEnd();
     dynamic->edit(ed);
     score->endCmd();
