@@ -5,7 +5,7 @@
 # MuseScore Studio
 # Music Composition & Notation
 #
-# Copyright (C) 2021 MuseScore Limited
+# Copyright (C) 2025 MuseScore Limited
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 3 as
@@ -18,26 +18,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-echo "Build Linux MuseScore AppImage"
 
-#set -x
 trap 'echo Build failed; exit 1' ERR
-
-df -h .
 
 BUILD_TOOLS=$HOME/build_tools
 ARTIFACTS_DIR=build.artifacts
-CRASH_REPORT_URL=""
+BUILD_DIR=build.release
 BUILD_NUMBER=""
 BUILD_MODE=""
-SUFFIX="" # appended to `mscore` command name to avoid conflicts (e.g. `mscoredev`)
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
-        --crash_log_url) CRASH_REPORT_URL="$2"; shift ;;
         --build_mode) BUILD_MODE="$2"; shift ;;
-        --arch) PACKARCH="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -56,43 +49,30 @@ case "${BUILD_MODE}" in
 esac
 
 echo "MUSE_APP_BUILD_MODE: $MUSE_APP_BUILD_MODE"
-echo "BUILD_NUMBER: $BUILD_NUMBER"
-echo "CRASH_REPORT_URL: $CRASH_REPORT_URL"
 echo "BUILD_MODE: $BUILD_MODE"
+echo "BUILD_NUMBER: $BUILD_NUMBER"
 
 echo "=== ENVIRONMENT === "
 
 cat $BUILD_TOOLS/environment.sh
 source $BUILD_TOOLS/environment.sh
 
-# disable update module due to current broken functionality
-if [ "$PACKARCH" == "aarch64" ] || [ "$PACKARCH" == "armv7l" ]; then
-  MUSESCORE_BUILD_UPDATE_MODULE="OFF"
-fi
+export CMAKE_TOOLCHAIN_FILE=${QT_ROOT_DIR}/lib/cmake/Qt6/qt.toolchain.cmake
 
-# TODO: https://github.com/musescore/MuseScore/issues/11689
-BUILD_VST=OFF
-
+# =========== Build =======================
 echo "=== BUILD ==="
 
 MUSESCORE_REVISION=$(git rev-parse --short=7 HEAD)
 
 # Build portable AppImage
 MUSE_APP_BUILD_MODE=$MUSE_APP_BUILD_MODE \
-MUSE_APP_INSTALL_SUFFIX=$SUFFIX \
+MUSESCORE_BUILD_CONFIGURATION="app-web" \
 MUSESCORE_BUILD_NUMBER=$BUILD_NUMBER \
 MUSESCORE_REVISION=$MUSESCORE_REVISION \
-MUSESCORE_CRASHREPORT_URL=$CRASH_REPORT_URL \
-MUSESCORE_BUILD_VST_MODULE=$BUILD_VST \
-MUSESCORE_BUILD_CRASHPAD_CLIENT=${MUSESCORE_BUILD_CRASHPAD_CLIENT:-"ON"} \
-MUSESCORE_BUILD_UPDATE_MODULE=${MUSESCORE_BUILD_UPDATE_MODULE:-"ON"} \
-MUSESCORE_BUILD_WEBSOCKET="ON" \
-bash ./ninja_build.sh -t appimage
-
+bash ./ninja_build.sh -t release
 
 bash ./buildscripts/ci/tools/make_release_channel_env.sh -c $MUSE_APP_BUILD_MODE
 bash ./buildscripts/ci/tools/make_version_env.sh $BUILD_NUMBER
 bash ./buildscripts/ci/tools/make_revision_env.sh $MUSESCORE_REVISION
 bash ./buildscripts/ci/tools/make_branch_env.sh
 
-df -h .
