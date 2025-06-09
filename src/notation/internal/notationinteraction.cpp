@@ -1284,23 +1284,25 @@ muse::async::Notification NotationInteraction::arpeggioTickChanged()
     return m_arpeggioTickChanged;
 }
 
-void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int duration_ticks, int tremolo_type, int ottavaType, bool hasTie) 
+void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int duration_ticks, int _trill_duration_ticks, int tremolo_type, int ottavaType, bool hasTie) 
 {
     trill_note = note;
     till_note_hastie = hasTie;
     trill_ticks = ticks;
     trill_duration_ticks = duration_ticks;
+    trill_trill_duration_ticks = _trill_duration_ticks;
     trill_tremolo_type = tremolo_type;
     if (ottavaType > 0) {
         m_ottava_map[note] = ottavaType;
     }
 }
-void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int ticks, int duration_ticks, int tremolo_type, int ottavaType, bool hasTie) 
+void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int ticks, int duration_ticks, int _trill_duration_ticks, int tremolo_type, int ottavaType, bool hasTie) 
 {
     trill_note1 = note;
     till_note1_hastie = hasTie;
     trill_ticks1 = ticks;
     trill_duration_ticks1 = duration_ticks;
+    trill_trill_duration_ticks1 = _trill_duration_ticks;
     trill_tremolo_type1 = tremolo_type;
     if (ottavaType > 0) {
         m_ottava_map[note] = ottavaType;
@@ -1329,6 +1331,14 @@ int NotationInteraction::trillNoteDurationticks() const
 int NotationInteraction::trillNoteDurationticks1() const 
 {
     return trill_duration_ticks1;
+}
+int NotationInteraction::trillTrillNoteDurationticks() const 
+{
+    return trill_trill_duration_ticks;
+}
+int NotationInteraction::trillTrillNoteDurationticks1() const 
+{
+    return trill_trill_duration_ticks1;
 }
 int NotationInteraction::trillNoteTremolotype() const 
 {
@@ -1372,12 +1382,18 @@ bool NotationInteraction::trillTick(int ticks)
     int _trill_duration_ticks = trill_duration_ticks;
     if (till_note_hastie) {
         _trill_duration_ticks = trill_duration_ticks * 2;
+        if (trill_trill_duration_ticks > 0) {
+            if (trill_trill_duration_ticks > trill_duration_ticks && trill_trill_duration_ticks < trill_duration_ticks * 2) {
+                _trill_duration_ticks = trill_trill_duration_ticks;
+            }
+        }
     }
     if (ticks < trill_ticks || ticks > trill_ticks + _trill_duration_ticks) 
     {
         trill_curr_ticks = ticks;
         trill_ticks = 0;
         trill_duration_ticks = 0;
+        trill_trill_duration_ticks = 0;
         trill_tremolo_type = 0;
         trill_note = nullptr;
         m_trillTickChanged.notify();
@@ -1397,12 +1413,18 @@ bool NotationInteraction::trillTick1(int ticks)
     int _trill_duration_ticks = trill_duration_ticks1;
     if (till_note_hastie) {
         _trill_duration_ticks = trill_duration_ticks1 * 2;
+        if (trill_trill_duration_ticks1 > 0) {
+            if (trill_trill_duration_ticks1 > trill_duration_ticks && trill_trill_duration_ticks1 < trill_duration_ticks * 2) {
+                _trill_duration_ticks = trill_trill_duration_ticks1;
+            }
+        }
     }
     if (ticks < trill_ticks1 || ticks > trill_ticks1 + _trill_duration_ticks) 
     {
         trill_curr_ticks1 = ticks;
         trill_ticks1 = 0;
         trill_duration_ticks1 = 0;
+        trill_trill_duration_ticks1 = 0;
         trill_tremolo_type1 = 0;
         trill_note1 = nullptr;
         m_trillTickChanged1.notify();
