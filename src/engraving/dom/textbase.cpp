@@ -145,9 +145,7 @@ void TextCursor::clearSelection()
 
 void TextCursor::startEdit()
 {
-    setRow(0);
-    setColumn(0);
-    clearSelection();
+    m_text->selectAll(this);
     m_editing = true;
 }
 
