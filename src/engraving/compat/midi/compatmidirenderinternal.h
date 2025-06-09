@@ -166,8 +166,8 @@ public:
 
         int sndController = CTRL_BREATH;
 
-        std::unordered_map<staff_idx_t, VelocityMap> velocitiesByStaff;
-        std::unordered_map<staff_idx_t, VelocityMap> velocityMultiplicationsByStaff;
+        std::unordered_map<track_idx_t, VelocityMap> velocitiesByTrack;
+        std::unordered_map<track_idx_t, VelocityMap> velocityMultiplicationsByTrack;
         std::unordered_map<String, std::unordered_set<String> > articulationsWithoutValuesByInstrument;
         std::unordered_set<const Chord*> chordsWithHammerOnPullOff;
 

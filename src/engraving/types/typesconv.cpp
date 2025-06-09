@@ -1395,13 +1395,6 @@ DynamicType TConv::fromXml(const AsciiStringView& tag, DynamicType def)
     return it->type;
 }
 
-DynamicRange TConv::fromXml(const AsciiStringView& tag, DynamicRange def)
-{
-    bool ok = false;
-    int v = tag.toInt(&ok);
-    return ok ? DynamicRange(v) : def;
-}
-
 static const std::vector<Item<DynamicSpeed> > DYNAMIC_SPEEDS = {
     { DynamicSpeed::NORMAL, "normal" },
     { DynamicSpeed::SLOW,   "slow" },

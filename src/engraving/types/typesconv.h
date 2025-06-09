@@ -84,7 +84,6 @@ public:
     static String translatedUserName(DynamicType v);
     static AsciiStringView toXml(DynamicType v);
     static DynamicType fromXml(const AsciiStringView& tag, DynamicType def);
-    static DynamicRange fromXml(const AsciiStringView& tag, DynamicRange def);
     static String translatedUserName(DynamicSpeed v);
     static AsciiStringView toXml(DynamicSpeed v);
     static DynamicSpeed fromXml(const AsciiStringView& tag, DynamicSpeed def);
