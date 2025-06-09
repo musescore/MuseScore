@@ -189,6 +189,8 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
         if (m_trill_trill_duration_ticks > m_trill_duration_ticks && m_trill_trill_duration_ticks < m_trill_duration_ticks * 2) {
             _m_trill_duration_ticks = m_trill_trill_duration_ticks;
         }
+    } else {
+        _m_trill_duration_ticks = m_trill_trill_duration_ticks;
     }
 
     if (m_trill_curr_ticks >= m_trill_ticks && m_trill_curr_ticks <= m_trill_ticks + _m_trill_duration_ticks) {
@@ -255,6 +257,8 @@ KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const
         if (m_trill_trill_duration_ticks1 > m_trill_duration_ticks1 && m_trill_trill_duration_ticks1 < m_trill_duration_ticks1 * 2) {
             _m_trill_duration_ticks1 = m_trill_trill_duration_ticks1;
         }
+    } else {
+        _m_trill_duration_ticks1 = m_trill_trill_duration_ticks1;
     }
     if (m_trill_curr_ticks1 >= m_trill_ticks1 && m_trill_curr_ticks1 <= m_trill_ticks1 + _m_trill_duration_ticks1) {
         int left_dis = m_trill_curr_ticks1 - m_trill_ticks1;
