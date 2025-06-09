@@ -4171,7 +4171,7 @@ static void writeType(XmlWriter& xml, const Note* const note)
         xml.tag("type", s);
     }
 
-    if ((int)note->dots().size() != dots) {
+    if (note->dots().empty()) {
         for (int ni = dots; ni > 0; --ni) {
             xml.tag("dot");
         }
