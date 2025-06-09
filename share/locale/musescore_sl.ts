@@ -7579,7 +7579,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="432"/>
         <source>Explode</source>
-        <translation>Razširi</translation>
+        <translation>Razbij</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="438"/>
@@ -9545,7 +9545,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="431"/>
         <source>&amp;Explode</source>
-        <translation>&amp;Raztegni</translation>
+        <translation>&amp;Razbij</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="437"/>
@@ -31670,7 +31670,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5804"/>
         <source>Explode</source>
-        <translation>Razširi</translation>
+        <translation>Razbij</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5815"/>

@@ -130,7 +130,6 @@ class StaffTypeChange;
 class Stem;
 class StemSlash;
 class Sticking;
-class StretchedBend;
 class StringTunings;
 class Symbol;
 class SystemDivider;
@@ -253,7 +252,6 @@ private:
     static void draw(const StemSlash* item, muse::draw::Painter* painter);
     static void draw(const Sticking* item, muse::draw::Painter* painter);
     static void draw(const StringTunings* item, muse::draw::Painter* painter);
-    static void draw(const StretchedBend* item, muse::draw::Painter* painter);
     static void draw(const Symbol* item, muse::draw::Painter* painter);
     static void draw(const FSymbol* item, muse::draw::Painter* painter);
     static void draw(const SystemDivider* item, muse::draw::Painter* painter);

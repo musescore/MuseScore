@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -21,33 +21,26 @@
  */
 #pragma once
 
-#include <sstream>
-#include <string>
-#include <thread>
+#include "../idragcontroller.h"
 
-namespace muse::runtime {
-inline constexpr bool isDebug()
+#include "global/modularity/ioc.h"
+#include "../iuiconfiguration.h"
+
+namespace muse::ui {
+class DragController : public IDragController
 {
-#ifndef NDEBUG
-    return true;
-#else
-    return false;
-#endif
-}
+    GlobalInject<IUiConfiguration> configuration;
 
-inline std::thread::id mainThreadId()
-{
-    static std::thread::id mainId = std::this_thread::get_id();
-    return mainId;
-}
+public:
+    DragController() = default;
 
-inline std::string toString(const std::thread::id& id)
-{
-    std::ostringstream ss;
-    ss << id;
-    return ss.str();
-}
+    void setCurrentData(const DragDataPtr& data) override;
 
-void setThreadName(const std::string& name);
-const std::string& threadName();
+    const DragDataPtr& dragData() const override;
+    const QMimeData* mimeData(const QDropEvent* event = nullptr) const override;
+
+private:
+
+    DragDataPtr m_dragData;
+};
 }

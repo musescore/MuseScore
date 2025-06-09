@@ -2456,12 +2456,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2144"/>
         <source>Small note size:</source>
-        <translation>Pienen nuotin koko:</translation>
+        <translation>Pikkunuotin koko:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2087"/>
         <source>Reset &apos;Small note size&apos; value</source>
-        <translation>Palauta &apos;Pienen nuotin koko&apos; -arvo</translation>
+        <translation>Palauta &apos;Pikkunuotin koko&apos; -arvo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2252"/>
@@ -3032,7 +3032,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10450"/>
         <source>Use cue sized numbers for grace note bends</source>
-        <translation>Käytä vihjekokoisia numeroita korusävelten taivutuksiin</translation>
+        <translation>Käytä pienoiskokoisia numeroita korusävelten taivutuksiin</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11660"/>
@@ -3132,12 +3132,12 @@ viivaston ensimmäisessä nuotissa</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
         <source>Cue sizes</source>
-        <translation>Vihjekoot</translation>
+        <translation>Pienoiskoot</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2064"/>
         <source>Reduce rhythmic spacing for small notes</source>
-        <translation>Pienennä pienten nuottien rytmistä välistystä</translation>
+        <translation>Tiivistä pikkunuottien välistystä</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3436"/>
@@ -4510,7 +4510,7 @@ x-korkeudesta):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11036"/>
         <source>Trill cue note</source>
-        <translation>Trillin vihjenuotti</translation>
+        <translation>Trillin pikkunuotti</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11042"/>
@@ -20098,7 +20098,7 @@ kohotahti</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="76"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="48"/>
         <source>Cue size</source>
-        <translation>Vihjekoko</translation>
+        <translation>Pikkunuotti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="89"/>
@@ -22376,7 +22376,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="198"/>
         <source>Cue note visibility</source>
-        <translation>Vihjenuotin näkyvyys</translation>
+        <translation>Pikkunuotin näkyvyys</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="219"/>

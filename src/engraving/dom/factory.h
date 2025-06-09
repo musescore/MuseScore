@@ -70,9 +70,6 @@ public:
     static Bend* createBend(Note* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Bend> makeBend(Note* parent);
 
-    static StretchedBend* createStretchedBend(Chord* parent, bool isAccessibleEnabled = true);
-    static StretchedBend* copyStretchedBend(const StretchedBend& src);
-
     static Bracket* createBracket(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Bracket> makeBracket(EngravingItem* parent);
     static BracketItem* createBracketItem(EngravingItem* parent);

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,35 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#pragma once
+#include "dragcontroller.h"
 
-#include <sstream>
-#include <string>
-#include <thread>
+#include <QDropEvent>
 
-namespace muse::runtime {
-inline constexpr bool isDebug()
+using namespace muse::ui;
+
+void DragController::setCurrentData(const DragDataPtr& data)
 {
-#ifndef NDEBUG
-    return true;
-#else
-    return false;
-#endif
+    m_dragData = data;
 }
 
-inline std::thread::id mainThreadId()
+const DragDataPtr& DragController::dragData() const
 {
-    static std::thread::id mainId = std::this_thread::get_id();
-    return mainId;
+    return m_dragData;
 }
 
-inline std::string toString(const std::thread::id& id)
+const QMimeData* DragController::mimeData(const QDropEvent* event) const
 {
-    std::ostringstream ss;
-    ss << id;
-    return ss.str();
-}
+    const QMimeData* md = nullptr;
+    if (configuration()->isSystemDragSupported() && event) {
+        md = event->mimeData();
+    }
 
-void setThreadName(const std::string& name);
-const std::string& threadName();
+    if (md) {
+        return md;
+    }
+
+    if (m_dragData) {
+        return &m_dragData->mimeData;
+    }
+
+    return nullptr;
 }

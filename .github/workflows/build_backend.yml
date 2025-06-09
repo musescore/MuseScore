@@ -21,7 +21,7 @@ on:
       use_qt69:
         description: 'Use Qt 6.9'
         default: 'off'
-        required: false   
+        required: false
   workflow_call:
     inputs:
       build_mode:
@@ -43,7 +43,7 @@ on:
         description: 'Use Qt 6.9'
         default: 'off'
         type: string
-        required: false  
+        required: false
 
 jobs:
   backend:
@@ -99,7 +99,7 @@ jobs:
         echo "GITHUB_ARTIFACT_NAME=$GITHUB_ARTIFACT_NAME" | tee -a $GITHUB_ENV
 
     - name: Install Qt
-      uses: jdpurcell/install-qt-action@v5
+      uses: jurplel/install-qt-action@v4
       with:
         version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
         host: 'linux'
