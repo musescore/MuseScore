@@ -303,6 +303,8 @@ void StringTuningsSettingsModel::updateStrings()
 {
     const QVariantList presets = this->presets();
     QString currentPreset = this->currentPreset();
+    const auto& tick = m_item->tick();
+    const auto transpose  = m_item->part()->instrument(tick)->transpose().chromatic;
 
     m_strings.clear();
 
@@ -318,7 +320,7 @@ void StringTuningsSettingsModel::updateStrings()
                 item->blockSignals(true);
                 item->setShow(true);
                 item->setNumber(QString::number(i + 1));
-                item->setValue(valueList[valueIndex].toInt());
+                item->setValue(valueList[valueIndex].toInt() - transpose);
                 item->setUseFlat(useFlats);
                 item->blockSignals(false);
 
