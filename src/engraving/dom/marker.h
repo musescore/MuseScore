@@ -86,6 +86,8 @@ public:
     double symbolSize() const { return m_symbolSize; }
     void setSymbolSize(double v) { m_symbolSize = v; }
 
+    std::vector<LineF> dragAnchorLines() const override;
+
     static constexpr std::array<MarkerType, 4> RIGHT_MARKERS {
         MarkerType::TOCODA,
         MarkerType::TOCODASYM,

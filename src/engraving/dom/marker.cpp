@@ -22,6 +22,8 @@
 
 #include "marker.h"
 
+#include "dom/staff.h"
+#include "dom/system.h"
 #include "types/typesconv.h"
 
 #include "measure.h"
@@ -274,6 +276,24 @@ EngravingItem* Marker::prevSegmentElement()
 String Marker::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), markerTypeUserName());
+}
+
+std::vector<LineF> Marker::dragAnchorLines() const
+{
+    Measure* measure = parentItem() ? toMeasure(parentItem()) : nullptr;
+
+    std::vector<LineF> lines(TextBase::dragAnchorLines());
+
+    if (!measure || !isRightMarker()) {
+        return lines;
+    }
+
+    for (LineF& l : lines) {
+        l.setP1(l.p1() + PointF(measure->width(), 0.0));
+        l.setP2(l.p2() + PointF(ldata()->bbox().width(), 0.0));
+    }
+
+    return lines;
 }
 
 //---------------------------------------------------------
