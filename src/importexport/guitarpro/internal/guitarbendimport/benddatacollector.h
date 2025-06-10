@@ -51,10 +51,22 @@ public:
         int pitchDiff() const { return endPitch - startPitch; }
     };
 
+    enum class BendType {
+        NORMAL_BEND,
+        PREBEND,
+        TIED_TO_PREVIOUS_NOTE,
+        SLIGHT_BEND
+    };
+
     struct ImportedBendInfo {
         const mu::engraving::Note* note = nullptr;
-        int pitchChangesAmount = 0;
         std::vector<BendSegment> segments;
+        BendType type = BendType::NORMAL_BEND;
+        int timeOffsetFromStart = 0;
+        int pitchOffsetFromStart = 0;
+
+        bool isSlightBend() const;
+        bool startsWithPrebend() const;
     };
 
 private:
