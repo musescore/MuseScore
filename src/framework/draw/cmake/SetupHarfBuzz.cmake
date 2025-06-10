@@ -55,6 +55,8 @@ cmake_language(CALL harfbuzz_Populate ${remote_url} ${local_path} "source" "" ""
 set(HB_HAVE_FREETYPE ON)
 
 add_subdirectory(${local_path}/harfbuzz harfbuzz)
+set(HARFBUZZ_LIBRARIES harfbuzz)
+set(HARFBUZZ_INCLUDE_DIRS ${local_path}/harfbuzz/harfbuzz/src)
 
 target_no_warning(harfbuzz -Wno-conversion)
 target_no_warning(harfbuzz -Wno-unused-parameter)
@@ -62,7 +64,3 @@ target_no_warning(harfbuzz -Wno-unused-variable)
 target_no_warning(harfbuzz -WMSVC-no-hides-previous)
 target_no_warning(harfbuzz -WMSVC-no-unreachable)
 
-#add_subdirectory(thirdparty/msdfgen)
-
-set(HARFBUZZ_LIBRARIES harfbuzz)
-set(HARFBUZZ_INCLUDE_DIRS ${local_path}/harfbuzz/harfbuzz/src)

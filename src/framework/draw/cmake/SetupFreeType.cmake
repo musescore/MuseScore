@@ -29,6 +29,13 @@ if (MUE_COMPILE_USE_SYSTEM_FREETYPE)
 endif()
 
 if (NOT FREETYPE_FOUND)
-    # sets FREETYPE_LIBRARIES and FREETYPE_INCLUDE_DIRS
-    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../thirdparty/freetype freetype)
+    include(GetPlatformInfo)
+    if (OS_IS_WASM)
+        # Using Qt bundled Freetype
+        set(FREETYPE_DIR ${CMAKE_CURRENT_LIST_DIR}/../thirdparty/freetype/freetype-2.13.1)
+        set(FREETYPE_INCLUDE_DIRS ${FREETYPE_DIR}/include)
+    else()
+        # sets FREETYPE_LIBRARIES and FREETYPE_INCLUDE_DIRS
+        add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../thirdparty/freetype freetype)
+    endif()
 endif()

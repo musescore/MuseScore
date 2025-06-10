@@ -104,7 +104,7 @@ if(CC_IS_EMCC)
     if (BUILD_IS_DEBUG)
         set(EMCC_LINKER_FLAGS -O0)
     else()
-        set(EMCC_LINKER_FLAGS -Os)
+        set(EMCC_LINKER_FLAGS -Os -flto)
     endif()
 
 
