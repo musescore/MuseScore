@@ -7068,6 +7068,11 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
 
     xml.startElement("encoding");
 
+    String encoder = score->metaTag(u"encoder");
+    if (!encoder.empty()) {
+        xml.tag("encoder", encoder);
+    }
+
     if (MScore::debugMode) {
         xml.tag("software", String(u"MuseScore 0.7.0"));
         xml.tag("encoding-date", String(u"2007-09-10"));

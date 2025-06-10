@@ -1489,7 +1489,9 @@ void MusicXmlParserPass1::identification()
         } else if (m_e.name() == "encoding") {
             // TODO
             while (m_e.readNextStartElement()) {
-                if (m_e.name() == "software") {
+                if (m_e.name() == "encoder") {
+                    m_score->setMetaTag(u"encoder", m_e.readText());
+                } else if (m_e.name() == "software") {
                     String exporterString = m_e.readText().toLower();
                     setExporterSoftware(exporterString);
                 } else if (m_e.name() == "supports" && m_e.asciiAttribute("element") == "beam" && m_e.asciiAttribute("type") == "yes") {
