@@ -363,8 +363,9 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                     logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc, noteInfoPtr.getEntryInfo().getStaff(), noteInfoPtr.getEntryInfo().getMeasure());
                 }
                 auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNoteProperties();
-                int linePosition = 2 * rest->computeNaturalLine(targetStaff->lines(rest->tick())) - currMusxStaff->calcToplinePosition();
-                rest->ryoffset() = double(-staffPosition - linePosition) * targetStaff->spatium(rest->tick()) / 2.0; // RGP: based on testing, lineSpacing is not the correct value here.
+                const int linePosition = 2 * rest->computeNaturalLine(targetStaff->lines(rest->tick())) - currMusxStaff->calcToplinePosition();
+                const double lineSpacing = targetStaff->staffType(rest->tick())->lineDistance().val();
+                rest->ryoffset() = double(-staffPosition - linePosition) * targetStaff->spatium(rest->tick()) * lineSpacing / 2.0;
             } else {
                 logger()->logWarning(String(u"Rest found with unexpected note ID %1").arg(noteInfoPtr->getNoteId()), m_doc, noteInfoPtr.getEntryInfo().getStaff(), noteInfoPtr.getEntryInfo().getMeasure());
             }
