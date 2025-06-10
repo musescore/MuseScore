@@ -460,6 +460,13 @@
                   <item>
                    <widget class="QComboBox" name="textStyleComboBox"/>
                   </item>
+                  <item>
+                   <widget class="QPushButton" name="editTextStyleButton">
+                    <property name="text">
+                     <string>Edit text style</string>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
                 </item>
                 <item>
@@ -1507,8 +1514,8 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="ContinuousBrokenLinesbuttGroup"/>
   <buttongroup name="OnAboveLinesButtGroup"/>
   <buttongroup name="NumLettersButtGroup"/>
+  <buttongroup name="ContinuousBrokenLinesbuttGroup"/>
  </buttongroups>
 </ui>

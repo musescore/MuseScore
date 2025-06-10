@@ -32,6 +32,8 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
 
+#include "actions/iactionsdispatcher.h"
+
 #include "ui/view/widgetstatestore.h"
 
 #include "notationerrors.h"
@@ -160,6 +162,11 @@ EditStaffType::EditStaffType(QWidget* parent)
     connect(templateReset,  &QPushButton::clicked, this, &EditStaffType::resetToTemplateClicked);
     connect(addToTemplates, &QPushButton::clicked, this, &EditStaffType::addToTemplatesClicked);
 
+    connect(editTextStyleButton, &QPushButton::clicked, this, [=]() {
+        muse::actions::ActionData args = muse::actions::ActionData::make_arg2<QString, QString>("text-styles", "tab-fret-number");
+        dispatcher()->dispatch("edit-style", args);
+    });
+
     addToTemplates->setVisible(false);
 
     WidgetStateStore::restoreGeometry(this);
@@ -199,6 +206,7 @@ void EditStaffType::setInstrument(const Instrument& instrument)
 void EditStaffType::enablePresets()
 {
     textStyleComboBox->setVisible(false);
+    editTextStyleButton->setVisible(false);
 
     fretFontName->setVisible(true);
     fretFontSize->setVisible(true);
@@ -216,6 +224,7 @@ void EditStaffType::enableTextStyles()
     fretY->setVisible(false);
 
     textStyleComboBox->setVisible(true);
+    editTextStyleButton->setVisible(true);
     textStyleComboBox->setCurrentIndex((int)staffType.fretTextStyle() - 1);
 }
 
