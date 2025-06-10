@@ -31,6 +31,8 @@ class MarkerSettingsModel : public AbstractInspectorModel
 
     Q_PROPERTY(PropertyItem * type READ type CONSTANT)
     Q_PROPERTY(PropertyItem * label READ label CONSTANT)
+    Q_PROPERTY(PropertyItem * symbolSize READ symbolSize CONSTANT)
+
 public:
     explicit MarkerSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -41,10 +43,12 @@ public:
 
     PropertyItem* type() const;
     PropertyItem* label() const;
+    PropertyItem* symbolSize() const;
 
 private:
     PropertyItem* m_type = nullptr;
     PropertyItem* m_label = nullptr;
+    PropertyItem* m_symbolSize = nullptr;
 };
 }
 

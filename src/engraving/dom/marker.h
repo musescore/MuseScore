@@ -83,6 +83,9 @@ public:
 
     void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
 
+    double symbolSize() const { return m_symbolSize; }
+    void setSymbolSize(double v) { m_symbolSize = v; }
+
     static constexpr std::array<MarkerType, 4> RIGHT_MARKERS {
         MarkerType::TOCODA,
         MarkerType::TOCODASYM,
@@ -93,5 +96,7 @@ public:
 private:
     MarkerType m_markerType = MarkerType::SEGNO;
     String m_label;                 ///< referenced from Jump() element
+
+    double m_symbolSize = 18.0;
 };
 } // namespace mu::engraving

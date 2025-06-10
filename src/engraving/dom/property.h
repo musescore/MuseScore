@@ -207,6 +207,7 @@ enum class Pid {
     CONTINUE_AT,
     LABEL,
     MARKER_TYPE,
+    MARKER_SYMBOL_SIZE,
     ARP_USER_LEN1,
     ARP_USER_LEN2,
     REPEAT_END,

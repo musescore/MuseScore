@@ -183,6 +183,8 @@ PropertyValue Marker::getProperty(Pid propertyId) const
         return label();
     case Pid::MARKER_TYPE:
         return int(markerType());
+    case Pid::MARKER_SYMBOL_SIZE:
+        return symbolSize();
     default:
         break;
     }
@@ -201,6 +203,9 @@ bool Marker::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::MARKER_TYPE:
         setMarkerType(MarkerType(v.toInt()));
+        break;
+    case Pid::MARKER_SYMBOL_SIZE:
+        setSymbolSize(v.toDouble());
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
@@ -225,6 +230,8 @@ PropertyValue Marker::propertyDefault(Pid propertyId) const
         return int(MarkerType::FINE);
     case Pid::PLACEMENT:
         return PlacementV::ABOVE;
+    case Pid::MARKER_SYMBOL_SIZE:
+        return 18.0;
     default:
         break;
     }

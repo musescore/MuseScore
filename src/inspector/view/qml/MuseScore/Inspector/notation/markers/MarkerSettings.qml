@@ -77,4 +77,23 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart
     }
+
+    SpinBoxPropertyView {
+        id: symbolSize
+
+        anchors.left: parent.left
+
+        navigationName: "Symbol size"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: labelSection.navigationRowEnd + 1
+
+        titleText: qsTrc("inspector", "Symbol size")
+        measureUnitsSymbol: "pt"
+        propertyItem: root.model ? root.model.symbolSize : null
+
+        decimals: 0
+        step: 1
+        minValue: 0
+        maxValue: 1000
+    }
 }

@@ -38,6 +38,7 @@ void MarkerSettingsModel::createProperties()
 {
     m_type = buildPropertyItem(mu::engraving::Pid::MARKER_TYPE);
     m_label = buildPropertyItem(mu::engraving::Pid::LABEL);
+    m_symbolSize = buildPropertyItem(mu::engraving::Pid::MARKER_SYMBOL_SIZE);
 }
 
 void MarkerSettingsModel::requestElements()
@@ -49,12 +50,14 @@ void MarkerSettingsModel::loadProperties()
 {
     loadPropertyItem(m_type);
     loadPropertyItem(m_label);
+    loadPropertyItem(m_symbolSize);
 }
 
 void MarkerSettingsModel::resetProperties()
 {
     m_type->resetToDefault();
     m_label->resetToDefault();
+    m_symbolSize->resetToDefault();
 }
 
 PropertyItem* MarkerSettingsModel::type() const
@@ -65,4 +68,9 @@ PropertyItem* MarkerSettingsModel::type() const
 PropertyItem* MarkerSettingsModel::label() const
 {
     return m_label;
+}
+
+PropertyItem* MarkerSettingsModel::symbolSize() const
+{
+    return m_symbolSize;
 }
