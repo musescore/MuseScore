@@ -2035,6 +2035,13 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
         EngravingItem* next = nullptr;
         if (e->explicitParent() == this) {
             next = nextAnnotation(e);
+
+            if (next && next->isFretDiagram()) {
+                FretDiagram* fretDiagram = toFretDiagram(next);
+                if (fretDiagram->harmony()) {
+                    next = fretDiagram->harmony();
+                }
+            }
         }
         if (next) {
             return next;
@@ -2050,6 +2057,18 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
             if (nextEl) {
                 return nextEl;
             }
+
+            if (EngravingItem* annotation = nextSegment->firstAnnotation(activeStaff)) {
+                if (annotation && annotation->isFretDiagram()) {
+                    FretDiagram* fretDiagram = toFretDiagram(annotation);
+                    if (fretDiagram->harmony()) {
+                        annotation = fretDiagram->harmony();
+                    }
+                }
+
+                return annotation;
+            }
+
             nextSegment = nextSegment->next1MMenabled();
         }
         break;
@@ -2074,6 +2093,10 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
 
         Segment* nextSegment = this->next1MMenabled();
         while (nextSegment) {
+            if (EngravingItem* annotation = nextSegment->firstAnnotation(activeStaff)) {
+                return annotation;
+            }
+
             EngravingItem* nextEl = nextSegment->firstElementOfSegment(activeStaff);
             if (nextEl) {
                 return nextEl;
@@ -2233,6 +2256,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         if (e->explicitParent() == this) {
             prev = prevAnnotation(e);
         }
+
         if (prev) {
             return prev;
         }
@@ -2250,7 +2274,19 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
         Segment* s = this;
         EngravingItem* el = s->element(track);
         while (track > 0 && (!el || el->staffIdx() != activeStaff)) {
+            if (s != this) {
+                if (EngravingItem* annotation = s->lastAnnotation(activeStaff)) {
+                    if (annotation->isFretDiagram()) {
+                        Harmony* harmony = toFretDiagram(annotation)->harmony();
+                        return harmony ? harmony : annotation;
+                    } else {
+                        return annotation;
+                    }
+                }
+            }
+
             el = s->element(--track);
+
             if (track == 0) {
                 track = score()->nstaves() * VOICES - 1;
                 s = s->prev1MMenabled();
@@ -2369,10 +2405,21 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
             }
         }
 
-        prev = prevSeg->lastElementOfSegment(activeStaff);
+        if (EngravingItem* annotation = prevSeg->lastAnnotation(activeStaff)) {
+            return annotation;
+        }
+        if (!prev) {
+            prev = prevSeg->lastElementOfSegment(activeStaff);
+        }
+
         while (!prev && prevSeg) {
             prevSeg = prevSeg->prev1MMenabled();
-            prev = prevSeg->lastElementOfSegment(activeStaff);
+
+            if (EngravingItem* annotation = prevSeg->lastAnnotation(activeStaff)) {
+                prev = annotation;
+            } else {
+                prev = prevSeg->lastElementOfSegment(activeStaff);
+            }
         }
         if (!prevSeg) {
             return score()->firstElement();
