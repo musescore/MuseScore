@@ -718,7 +718,7 @@ public:
     bool loadStyle(muse::io::IODevice& dev, bool ign = false, bool overlap = false);
     bool saveStyle(const String&);
 
-    TranslatableString getTextStyleUserName(TextStyleType tid);
+    TranslatableString getTextStyleUserName(TextStyleType tid) const;
 
     // These position are in ticks and not uticks
     Fraction loopInTick() const { return loopBoundaryTick(LoopBoundaryType::LoopIn); }

@@ -2087,25 +2087,6 @@ static void changeChordStyle(Score* score)
     score->chordList()->setCustomChordList(style.styleV(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::CUSTOM);
 }
 
-static void changeStaffTypeStyle(Score* score, Sid idx, const PropertyValue& oldValue, const PropertyValue& newValue)
-{
-    for (Staff* staff : score->staves()) {
-        for (int tick = 0; tick != -1; tick = staff->staffTypeRange(Fraction::fromTicks(tick + 1)).second) {
-            StaffType* st = staff->staffType(Fraction::fromTicks(tick));
-            if (!st) {
-                continue;
-            }
-            if (idx == Sid::tabFretNumberFontFace && st->fretFontName() == oldValue.value<String>()) {
-                st->setFretFontName(newValue.value<String>());
-            } else if (idx == Sid::tabFretNumberFontSize && st->fretFontSize() == oldValue.toDouble()) {
-                st->setFretFontSize(newValue.toDouble());
-            } else if (idx == Sid::tabFretNumberOffset && st->fretFontUserY() == oldValue.value<PointF>().y()) {
-                st->setFretFontUserY(newValue.value<PointF>().y());
-            }
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   ChangeStyle
 //----------------------------------------------------------
@@ -2158,12 +2139,6 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
     case Sid::chordAlignmentExcludeModifiers:
     case Sid::musicalTextFont: {
         changeChordStyle(score);
-    }
-    break;
-    case Sid::tabFretNumberFontFace:
-    case Sid::tabFretNumberFontSize:
-    case Sid::tabFretNumberOffset: {
-        changeStaffTypeStyle(score, idx, oldValue, newValue);
     }
     break;
     case Sid::spatium:

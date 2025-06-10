@@ -29,6 +29,7 @@
 #include "engraving/iengravingconfiguration.h"
 
 #include "engraving/dom/stafftype.h"
+#include "engraving/style/textstyle.h"
 
 #include "notation/notationtypes.h"
 
@@ -60,6 +61,8 @@ private slots:
     void nameEdited(const QString&);
     void durFontNameChanged(int idx);
     void fretFontNameChanged(int idx);
+    void textStylesToggled(bool checked);
+    void presetsToggled(bool checked);
     void tabStemThroughToggled(bool checked);
     void tabMinimShortToggled(bool checked);
     void tabStemsToggled(bool checked);
@@ -69,7 +72,6 @@ private slots:
     void loadPresets();
     void resetToTemplateClicked();
     void addToTemplatesClicked();
-//      void staffGroupChanged(int);
 
 public:
     EditStaffType(QWidget* parent = nullptr);
@@ -81,6 +83,12 @@ public:
 
 private:
     muse::Ret loadScore(mu::engraving::MasterScore* score, const muse::io::path_t& path);
+
+    void enablePresets();
+    void enableTextStyles();
+
+    std::vector<QString> textStyleNames() const;
+    engraving::TextStyleType getTextStyle(const QString& name) const;
 };
 }
 #endif

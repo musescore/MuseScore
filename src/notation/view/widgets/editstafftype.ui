@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>662</width>
-    <height>649</height>
+    <width>663</width>
+    <height>730</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -437,6 +437,31 @@
                 <string>Fret marks</string>
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_7">
+                  <item>
+                   <widget class="QRadioButton" name="textStyleRadioButton">
+                    <property name="text">
+                     <string>Text style</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="presetRadioButton">
+                    <property name="text">
+                     <string>TAB font preset</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_8">
+                  <item>
+                   <widget class="QComboBox" name="textStyleComboBox"/>
+                  </item>
+                 </layout>
+                </item>
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_6">
                   <item>
@@ -1482,8 +1507,8 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="NumLettersButtGroup"/>
-  <buttongroup name="OnAboveLinesButtGroup"/>
   <buttongroup name="ContinuousBrokenLinesbuttGroup"/>
+  <buttongroup name="OnAboveLinesButtGroup"/>
+  <buttongroup name="NumLettersButtGroup"/>
  </buttongroups>
 </ui>

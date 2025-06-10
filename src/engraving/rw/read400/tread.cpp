@@ -3614,6 +3614,8 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
         t->setGenKeysig(false);
     }
 
+    t->setFretUseTextStyle(false);
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
