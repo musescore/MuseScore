@@ -2689,7 +2689,7 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
     } else if (sel.isSingle()) {
         if (sel.element()->isNote() && !toNote(sel.element())->isTrillCueNote()) {
             doAddSlur(toNote(sel.element())->chord(), nullptr, slurTemplate);
-        } else if (sel.element()->isSlurSegment() && slurTemplate->isHammerOnPullOff()) {
+        } else if (sel.element()->isSlurSegment() && slurTemplate && slurTemplate->isHammerOnPullOff()) {
             Slur* slur = toSlurSegment(sel.element())->slur();
             doAddSlur(slur->startElement(), slur->endElement(), slurTemplate);
         }
@@ -2773,7 +2773,7 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     Slur* slur = firstChordRest->slur(secondChordRest);
     if (!slur || slur->slurDirection() != DirectionV::AUTO) {
         slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
-    } else if (slur && slurTemplate->isHammerOnPullOff()) {
+    } else if (slurTemplate && slurTemplate->isHammerOnPullOff()) {
         // Replace existing slur with HOPO
         endEditElement();
         score()->undoRemoveElement(slur);
