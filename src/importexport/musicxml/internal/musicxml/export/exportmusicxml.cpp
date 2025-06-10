@@ -4802,7 +4802,7 @@ static void directionETag(XmlWriter& xml, staff_idx_t staff, int offs = 0)
 //   partGroupStart
 //---------------------------------------------------------
 
-static void partGroupStart(XmlWriter& xml, int number, const BracketItem* const bracket, const bool barlineSpan)
+static void partGroupStart(XmlWriter& xml, int number, const BracketItem* const bracket, const bool barlineSpan, const bool groupTime)
 {
     xml.startElement("part-group", { { "type", "start" }, { "number", number } });
     String br;
@@ -4832,6 +4832,9 @@ static void partGroupStart(XmlWriter& xml, int number, const BracketItem* const 
     }
     if (barlineSpan) {
         xml.tag("group-barline", "yes");
+    }
+    if (groupTime) {
+        xml.tag("group-time");
     }
     xml.endElement();
 }
@@ -7608,6 +7611,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
     xml.startElement("part-list");
     size_t staffCount = 0;                               // count sum of # staves in parts
     const auto& parts = score->parts();
+    const bool groupTime = score->style().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>() == TimeSigPlacement::ACROSS_STAVES;
     int partGroupEnd[MAX_PART_GROUPS];                // staff where part group ends (bracketSpan is in staves, not parts)
     for (int i = 0; i < MAX_PART_GROUPS; i++) {
         partGroupEnd[i] = -1;
@@ -7634,7 +7638,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
                                     int number = findPartGroupNumber(partGroupEnd);
                                     if (number < MAX_PART_GROUPS) {
                                         const BracketItem* bi = st->brackets().at(j);
-                                        partGroupStart(xml, number + 1, bi, st->barLineSpan());
+                                        partGroupStart(xml, number + 1, bi, st->barLineSpan(), groupTime);
                                         partGroupEnd[number] = static_cast<int>(staffCount + st->bracketSpan(j));
                                     }
                                 }
@@ -7652,7 +7656,7 @@ static void partList(XmlWriter& xml, Score* score, MusicXmlInstrumentMap& instrM
             int number = findPartGroupNumber(partGroupEnd);
             if (number < MAX_PART_GROUPS) {
                 const BracketItem* bi = Factory::createBracketItem(score->dummy());
-                partGroupStart(xml, number + 1, bi, false);
+                partGroupStart(xml, number + 1, bi, false, groupTime);
                 delete bi;
                 partGroupEnd[number] = static_cast<int>(idx + part->nstaves());
             }
