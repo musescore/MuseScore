@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<!DOCTYPE museScore [
+  <!-- superscript adjust -->
+  <!ENTITY super "0.36">
+  ]>
 <!--
 =====================================================================
     SPDX-License-Identifier: GPL-3.0-only
@@ -28,7 +31,7 @@
 =====================================================================
 -->
 
-<museScore version="1.24">
+<museScore version="4.60">
 
 <!--
       Part I: font list
@@ -38,21 +41,9 @@
 -->
 
 <!-- allow style to control mag and position adjustments -->
-  <autoAdjust mag="0.8" adjust="-4.0">1</autoAdjust>
+  <autoAdjust>1</autoAdjust>
 
   <font>
-
-    <sym code="0x0394" name="triangle"/>
-    <sym code="0x03bf" name="circle"/>
-    <sym code="0x00f8" name="oslash"/>
-
-    <sym code="0x266d" name="b"/>
-    <sym code="0x266e" name="natural"/>
-    <sym code="0x266f" name="#"/>
-
-    <sym code="0x1d12a" name="##"/>
-    <sym code="0x1d12b" name="bb"/>
-
 <!-- this allows "b" to render as a literal when encountered as a note name -->
     <sym value="b" class="note" name="b"/>
 
@@ -63,11 +54,26 @@
     <sym class="accidental" name="s"/>
 <!-- change value of "code" attribute to "0x200b" (zero width space) to force Bb to render as B in German -->
     <sym class="german_B" code="0x266d" name="b"/>
-
     </font>
 
+
+<!-- Symbols we want to take from the musical text font -->
+<font family="ScoreText">
+    <sym code="0xE873" name="triangle"/>
+    <sym code="0xE870" name="circle"/>
+    <sym code="0xE871" name="oslash"/>
+
+    <sym code="0xED60" name="b"/>
+    <sym code="0xED61" name="natural"/>
+    <sym code="0xED62" name="#"/>
+    <sym code="0xED63" name="##"/>
+    <sym code="0xED64" name="bb"/>
+
+    <sym code="0xE87C" name="dslash"/>
+    </font>
+
+<!-- Extensions -->
   <font class="extension">
-<!--  <mag>0.9</mag> -->
     <sym value="0" name="e0"/>
     <sym value="1" name="e1"/>
     <sym value="2" name="e2"/>
@@ -82,14 +88,18 @@
     <sym value="11" name="e11"/>
     <sym value="12" name="e12"/>
     <sym value="13" name="e13"/>
-    <sym value="(" name="e("/>
-    <sym value=")" name="e)"/>
     <sym value="," name="e,"/>
     <sym value="/" name="e/"/>
     </font>
 
+<!-- Musical text font -->
+<font class="extension" family="ScoreText">
+    <sym code="0xE875" name="e("/>
+    <sym code="0xE876" name="e)"/>
+    </font>
+
+<!-- Modifiers -->
   <font class="modifier">
-<!--  <mag>0.8</mag> -->
     <sym value="0" name="s0"/>
     <sym value="1" name="s1"/>
     <sym value="2" name="s2"/>
@@ -104,8 +114,6 @@
     <sym value="11" name="s11"/>
     <sym value="12" name="s12"/>
     <sym value="13" name="s13"/>
-    <sym value="(" name="s("/>
-    <sym value=")" name="s)"/>
     <sym value="," name="s,"/>
     <sym value="/" name="s/"/>
     <sym value="M" name="sM"/>
@@ -113,9 +121,20 @@
     <sym value="Maj" name="sMaj"/>
     <sym value="ma" name="sma"/>
     <sym value="maj" name="smaj"/>
-    <sym code="0x266d" name="sb"/>
-    <sym code="0x266f" name="s#"/>
-    <sym code="0x0394" name="striangle"/>
+
+    <sym code="add" name="sadd"/>
+    <sym code="sus" name="ssus"/>
+    <sym code="no" name="sno"/>
+    <sym code="omit" name="somit"/>
+    </font>
+
+<!-- Musical text font -->
+<font class="modifier" family="ScoreText">
+    <sym code="0xED60" name="sb"/>
+    <sym code="0xED62" name="s#"/>
+    <sym code="0xE873" name="striangle"/>
+    <sym code="0xE875" name="s("/>
+    <sym code="0xE876" name="s)"/>
     </font>
 
   <font>
@@ -123,6 +142,26 @@
     <sym value="6" name="696"/>
     <sym value="9" name="699"/>
     </font>
+
+<!-- Type/superscripts -->
+<font class="type">
+    <mag>0.75</mag>
+    <sym value="0" name="t0"/>
+    <sym value="1" name="t1"/>
+    <sym value="2" name="t2"/>
+    <sym value="3" name="t3"/>
+    <sym value="4" name="t4"/>
+    <sym value="5" name="t5"/>
+    <sym value="6" name="t6"/>
+    <sym value="7" name="t7"/>
+    <sym value="8" name="t8"/>
+    <sym value="9" name="t9"/>
+
+    <sym value="I" name="tI"/>
+    <sym value="V" name="tV"/>
+    <sym value="X" name="tX"/>
+    <sym code="type" name="ttype"/>
+</font>
 
 <!--
       Part II: token list
@@ -134,6 +173,32 @@
                   see Part III for details
 -->
 
+<!-- Musical text font symbols need extra padding either side -->
+  <token class="accidental">
+    <name>b</name>
+    <render>ms:0.1:0 b ms:0.1:0</render>
+    </token>
+
+  <token class="accidental">
+    <name>natural</name>
+    <render>ms:0.1:0 natural ms:0.1:0</render>
+    </token>
+
+  <token class="accidental">
+    <name>#</name>
+    <render>ms:0.1:0 # ms:0.1:0</render>
+    </token>
+
+    <token class="accidental">
+    <name>##</name>
+    <render>ms:0.1:0 ## ms:0.1:0</render>
+    </token>
+
+    <token class="accidental">
+    <name>bb</name>
+    <render>ms:0.1:0 bb ms:0.1:0</render>
+    </token>
+
   <token>
     <name>t</name>
     <name>^</name>
@@ -142,17 +207,17 @@
 
   <token>
     <name>o</name>
-    <render>circle</render>
+    <render>sc:0.5 :push :mx circle :popy sc:2</render>
     </token>
 
   <token>
     <name>0</name>
-    <render>oslash</render>
+    <render>sc:0.5 :push :mx oslash :popy sc:2</render>
     </token>
 
   <token>
     <name>69</name>
-    <render>:push m:0:-6 696 :pop m:0:2 699 m:0:-2</render>
+    <render>:push m:0:-0.5 696 :pop m:0:0.4 699 m:0:-0.4</render>
     </token>
 
   <token class="extension">
@@ -372,43 +437,114 @@
 
   <token class="modifier">
     <name>b</name>
-    <render>sb</render>
+    <render>ms:0.1:0 sb ms:0.1:0</render>
     </token>
 
   <token class="modifier">
     <name>#</name>
-    <render>s#</render>
+    <render>ms:0.1:0 s# ms:0.1:0</render>
     </token>
 
   <token class="modifier">
     <name>t</name>
     <name>^</name>
-    <render>striangle</render>
+    <render>ms:0.1:0 striangle ms:0.1:0</render>
     </token>
 
   <token class="modifier">
     <name>add</name>
-    <render>add</render>
+    <render>sadd</render>
     </token>
 
   <token class="modifier">
     <name>sus</name>
-    <render>sus</render>
+    <render>ssus</render>
     </token>
 
   <token class="modifier">
     <name>no</name>
-    <render>no</render>
+    <render>sno</render>
     </token>
 
   <token class="modifier">
     <name>omit</name>
-    <render>omit</render>
+    <render>somit</render>
     </token>
 
-  <renderRoot>:n :a m:0.5:0</renderRoot>
-  <renderFunction>:a m:0.5:0 :n</renderFunction>
-  <renderBase>m:-0.2:1 / m:0.2:1 :n :a m:0:-2</renderBase>
+  <token class="type">
+    <name>type</name>
+    <render>m:0:-&super; ttype m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>0</name>
+    <render>m:0:-&super; t0 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>1</name>
+    <render>m:0:-&super; t1 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>2</name>
+    <render>m:0:-&super; t2 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>3</name>
+    <render>m:0:-&super; t3 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>4</name>
+    <render>m:0:-&super; t4 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>5</name>
+    <render>m:0:-&super; t5 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>6</name>
+    <render>m:0:-&super; t6 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>7</name>
+    <render>m:0:-&super; t7 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>8</name>
+    <render>m:0:-&super; t8 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>9</name>
+    <render>m:0:-&super; t9 m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>I</name>
+    <render>m:0:-&super; tI m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>V</name>
+    <render>m:0:-&super; tV m:0:&super;</render>
+    </token>
+
+  <token class="type">
+    <name>X</name>
+    <render>m:0:-&super; tX m:0:&super;</render>
+    </token>
+
+  <renderRoot>:n :a m:0.036:0</renderRoot>
+  <renderFunction>:a m:0.036:0 :n</renderFunction>
+  <renderBass>m:-0.014:0 / m:0.014:0 :n :a</renderBass>
+  <renderBassOffset>ms:-0.4:0.5 dslash :mxs ms:-0.4:1.5 :n :a</renderBassOffset>
 
 <!--
       Part III: chord list
@@ -430,7 +566,11 @@
          render   this is a script which contains render commands
                   commands:
                         xxx         draw symbol name xxx
-                        m:x:y       add x:y to current position (1/5 spatium units)
+                        m:x:y       add x:y to current position (1 unit is the cap-height of the main font)
+                        ms:x:y      add x:y to current position (1 unit is the cap-height of the main font with scaling applied)
+                        :mx         move to the x-height of the main font
+                        :mxs        move to the x-height of the main font with scaling applied
+                        sc:x        apply x to the current scaling
                         :push
                         :pop
                         :n          root or base note
@@ -438,18 +578,6 @@
                   if omitted, chord will be rendered directly from the first name listed above
                   so you can get all major seventh chords to render as "ma7" by creating a chord definition
                   with no id or render tag, and just the single name "ma7"
--->
-
-<!--
-    <chord>
-      <name>6/9</name>
-      <render>m:0:-4 e6 e/ e9 m:0:4</render>
-      </chord>
-
-    <chord>
-      <name>6,9</name>
-      <render>m:0:-4 e6 e, e9 m:0:4</render>
-      </chord>
 -->
 
   </museScore>

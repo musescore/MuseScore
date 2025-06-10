@@ -28,7 +28,7 @@ import Muse.Ui 1.0
 
 FlatRadioButtonGroupPropertyView {
     id: root
-    titleText: qsTrc("inspector", "Position")
+    titleText: qsTrc("inspector", "Placement")
 
     model: [
         { text: qsTrc("inspector", "Above"), value: CommonTypes.PLACEMENT_TYPE_ABOVE },

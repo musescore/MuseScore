@@ -1748,13 +1748,13 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
     Color color = item->textColor();
     painter->setPen(color);
     for (const TextSegment* ts : item->textList()) {
-        Font f(ts->m_font);
+        Font f(ts->font());
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
-        TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text);
+        TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text());
 #else
         painter->setFont(f);
-        painter->drawText(ts->pos(), ts->text);
+        painter->drawText(ts->pos(), ts->text());
 #endif
     }
 }

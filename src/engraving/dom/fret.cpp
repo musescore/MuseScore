@@ -178,18 +178,8 @@ void FretDiagram::updateDiagram(const String& harmonyName)
 
     String _harmonyName = harmonyName;
 
-    if (!style().styleB(Sid::useStandardNoteNames)) {
-        NoteSpellingType spellingType = NoteSpellingType::STANDARD;
-        if (style().styleB(Sid::useGermanNoteNames)) {
-            spellingType = NoteSpellingType::GERMAN;
-        } else if (style().styleB(Sid::useFullGermanNoteNames)) {
-            spellingType = NoteSpellingType::GERMAN_PURE;
-        } else if (style().styleB(Sid::useSolfeggioNoteNames)) {
-            spellingType = NoteSpellingType::SOLFEGGIO;
-        } else if (style().styleB(Sid::useFrenchNoteNames)) {
-            spellingType = NoteSpellingType::FRENCH;
-        }
-
+    NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
+    if (spellingType != NoteSpellingType::STANDARD) {
         NoteCaseType noteCase;
         size_t idx;
         int tpc = convertNote(harmonyName, spellingType, noteCase, idx);

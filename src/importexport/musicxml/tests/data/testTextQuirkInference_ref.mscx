@@ -161,7 +161,9 @@
             <text>N.C.</text>
             </StaffText>
           <Harmony>
-            <name>N.C.</name>
+            <harmonyInfo>
+              <name>N.C.</name>
+              </harmonyInfo>
             <eid>M_M</eid>
             </Harmony>
           <Beam>
@@ -291,7 +293,9 @@
             <text>N.C.</text>
             </StaffText>
           <Harmony>
-            <name>N.C.</name>
+            <harmonyInfo>
+              <name>N.C.</name>
+              </harmonyInfo>
             <eid>n_n</eid>
             </Harmony>
           <Beam>
@@ -395,7 +399,9 @@
           </Marker>
         <voice>
           <Harmony>
-            <name>N.C.</name>
+            <harmonyInfo>
+              <name>N.C.</name>
+              </harmonyInfo>
             <eid>8_8</eid>
             </Harmony>
           <Beam>

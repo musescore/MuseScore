@@ -243,7 +243,7 @@
     <chordSymbolAFontSpatiumDependent>1</chordSymbolAFontSpatiumDependent>
     <chordSymbolAFontStyle>0</chordSymbolAFontStyle>
     <chordSymbolAColor r="0" g="0" b="0" a="255"/>
-    <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
+    <chordSymbolAAlign>center,baseline</chordSymbolAAlign>
     <chordSymbolAFrameType>0</chordSymbolAFrameType>
     <chordSymbolAFramePadding>0.2</chordSymbolAFramePadding>
     <chordSymbolAFrameWidth>0.1</chordSymbolAFrameWidth>
@@ -256,7 +256,7 @@
     <chordSymbolBFontSpatiumDependent>1</chordSymbolBFontSpatiumDependent>
     <chordSymbolBFontStyle>2</chordSymbolBFontStyle>
     <chordSymbolBColor r="0" g="0" b="0" a="255"/>
-    <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
+    <chordSymbolBAlign>center,baseline</chordSymbolBAlign>
     <chordSymbolBFrameType>0</chordSymbolBFrameType>
     <chordSymbolBFramePadding>0.2</chordSymbolBFramePadding>
     <chordSymbolBFrameWidth>0.1</chordSymbolBFrameWidth>

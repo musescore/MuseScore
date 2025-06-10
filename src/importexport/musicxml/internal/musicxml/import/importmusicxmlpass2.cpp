@@ -4704,10 +4704,12 @@ void MusicXmlParserDirection::handleNmiCmi(Measure* measure, const Fraction& tic
         return;
     }
     Harmony* ha = new Harmony(m_score->dummy()->segment());
-    ha->setRootTpc(Tpc::TPC_INVALID);
-    ha->setId(-1);
-    ha->setTextName(u"N.C.");
+    HarmonyInfo* info = new HarmonyInfo(m_score);
+    info->setRootTpc(Tpc::TPC_INVALID);
+    info->setId(-1);
+    info->setTextName(u"N.C.");
     ha->setTrack(m_track);
+    ha->addChord(info);
     MusicXmlDelayedDirectionElement* delayedDirection = new MusicXmlDelayedDirectionElement(totalY(), ha, m_track, u"above", measure, tick);
     delayedDirections.push_back(delayedDirection);
     m_wordsText.replace(u"NmiCmi", u"N.C.");
@@ -4732,6 +4734,8 @@ void MusicXmlParserDirection::handleChordSym(const Fraction& tick, HarmonyMap& h
     ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
     ha->resetProperty(Pid::OFFSET);
     ha->setVisible(m_visible);
+    const HarmonyInfo* info = ha->chords().empty() ? nullptr : ha->chords().front();
+    const ChordDescription* desc = info ? info->descr() : nullptr;
     HarmonyDesc newHarmonyDesc(m_track, ha, nullptr);
 
     const int ticks = tick.ticks();
@@ -4744,7 +4748,7 @@ void MusicXmlParserDirection::handleChordSym(const Fraction& tick, HarmonyMap& h
 
         // Don't insert if there is a matching chord symbol
         // This symbol doesn't have a fret diagram, so no need to check that here
-        if (track2staff(foundHarmonyDesc.m_track) == track2staff(m_track) && foundHarmonyDesc.m_harmony->descr() == ha->descr()) {
+        if (track2staff(foundHarmonyDesc.m_track) == track2staff(m_track) && foundHarmonyDesc.descr() == desc) {
             insert = false;
         }
     }
@@ -7637,6 +7641,9 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     UNUSED(measure);
     track_idx_t track = m_pass1.trackForPart(partId);
 
+    Staff* staff = m_score->staff(track2staff(track));
+    Key key = staff ? staff->key(sTime) : Key::INVALID;
+
     const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
     const String placement = m_e.attribute("placement");
     const bool printObject = m_e.asciiAttribute("print-object") != "no";
@@ -7646,6 +7653,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
 
     FretDiagram* fd = nullptr;
     Harmony* ha = Factory::createHarmony(m_score->dummy()->segment());
+    HarmonyInfo* info = new HarmonyInfo(m_score);
     Fraction offset;
     if (!placement.empty()) {
         ha->setPlacement(placement == "below" ? PlacementV::BELOW : PlacementV::ABOVE);
@@ -7675,27 +7683,27 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
                 }
             }
             if (invalidRoot) {
-                ha->setRootTpc(Tpc::TPC_INVALID);
+                info->setRootTpc(Tpc::TPC_INVALID);
             } else {
-                ha->setRootTpc(step2tpc(step, AccidentalVal(alter)));
+                info->setRootTpc(step2tpc(step, AccidentalVal(alter)));
             }
         } else if (m_e.name() == "function") {
             // deprecated in MusicXML 4.0
             // attributes: print-style
-            ha->setRootTpc(Tpc::TPC_INVALID);
-            ha->setBassTpc(Tpc::TPC_INVALID);
+            info->setRootTpc(Tpc::TPC_INVALID);
+            info->setBassTpc(Tpc::TPC_INVALID);
             functionText = m_e.readText();
             ha->setHarmonyType(HarmonyType::ROMAN);
         } else if (m_e.name() == "numeral") {
-            ha->setRootTpc(Tpc::TPC_INVALID);
-            ha->setBassTpc(Tpc::TPC_INVALID);
+            info->setRootTpc(Tpc::TPC_INVALID);
+            info->setBassTpc(Tpc::TPC_INVALID);
             while (m_e.readNextStartElement()) {
                 if (m_e.name() == "numeral-root") {
                     functionText = m_e.attribute("text");
                     const String numeralRoot = m_e.readText();
                     if (functionText.isEmpty() || functionText.at(0).isDigit()) {
                         ha->setHarmonyType(HarmonyType::NASHVILLE);
-                        ha->setFunction(numeralRoot);
+                        setHarmonyRootTpcFromFunction(info, ha, numeralRoot, key);
                     } else {
                         ha->setHarmonyType(HarmonyType::ROMAN);
                     }
@@ -7703,10 +7711,10 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
                     const int alter = m_e.readText().toInt();
                     switch (alter) {
                     case -1:
-                        ha->setFunction(u"b" + ha->hFunction());
+                        setHarmonyRootTpcFromFunction(info, ha, u"b" + harmonyXmlFunction(info, ha, key), key);
                         break;
                     case 1:
-                        ha->setFunction(u"#" + ha->hFunction());
+                        setHarmonyRootTpcFromFunction(info, ha, u"#" + harmonyXmlFunction(info, ha, key), key);
                         break;
                     default:
                         break;
@@ -7724,7 +7732,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
             parens = m_e.attribute("parentheses-degrees");
             kind = m_e.readText();
             if (kind == "none") {
-                ha->setRootTpc(Tpc::TPC_INVALID);
+                info->setRootTpc(Tpc::TPC_INVALID);
             }
         } else if (m_e.name() == "inversion") {
             const int inversion = m_e.readText().toInt();
@@ -7752,7 +7760,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
                     skipLogCurrElem();
                 }
             }
-            ha->setBassTpc(step2tpc(step, AccidentalVal(alter)));
+            info->setBassTpc(step2tpc(step, AccidentalVal(alter)));
         } else if (m_e.name() == "degree") {
             int degreeValue = 0;
             int degreeAlter = 0;
@@ -7792,9 +7800,9 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
         } else if (m_e.name() == "staff") {
             size_t nstaves = m_pass1.getPart(partId)->nstaves();
             String strStaff = m_e.readText();
-            int staff = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
-            if (staff >= 0 && staff < int(nstaves)) {
-                track += staff * VOICES;
+            int staffIdx = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
+            if (staffIdx >= 0 && staffIdx < int(nstaves)) {
+                track += staffIdx * VOICES;
             } else {
                 m_logger->logError(String(u"invalid staff %1").arg(strStaff), &m_e);
             }
@@ -7804,17 +7812,18 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
     }
 
     const ChordDescription* d = nullptr;
-    if (ha->rootTpc() != Tpc::TPC_INVALID || ha->harmonyType() == HarmonyType::NASHVILLE) {
-        d = ha->fromXml(kind, kindText, symbols, parens, degreeList);
+    if (info->rootTpc() != Tpc::TPC_INVALID || ha->harmonyType() == HarmonyType::NASHVILLE) {
+        d = harmonyFromXml(info, m_score, kind, kindText, symbols, parens, degreeList);
     }
     if (d) {
-        ha->setId(d->id);
-        ha->setTextName(d->names.front());
+        info->setId(d->id);
+        info->setTextName(d->names.front());
     } else {
-        ha->setId(-1);
+        info->setId(-1);
         String textName = functionText + kindText + inversionText;
-        ha->setTextName(textName);
+        info->setTextName(textName);
     }
+    ha->addChord(info);
     ha->render();
 
     ha->setVisible(printObject);
@@ -7837,7 +7846,7 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
             }
             HarmonyDesc& foundHarmonyDesc = itr->second;
             if (track2staff(foundHarmonyDesc.m_track) == track2staff(track) && foundHarmonyDesc.m_harmony
-                && foundHarmonyDesc.m_harmony->descr() == ha->descr()) {
+                && foundHarmonyDesc.descr() == info->descr()) {
                 if (foundHarmonyDesc.m_harmony && foundHarmonyDesc.fretDiagramVisible() == newHarmonyDesc.fretDiagramVisible()) {
                     // Matching harmony with matching visibility of fret diagram.  No need to add
                     insert = false;
@@ -9377,5 +9386,10 @@ MusicXmlParserDirection::MusicXmlParserDirection(XmlStreamReader& e,
 bool HarmonyDesc::fretDiagramVisible() const
 {
     return m_fretDiagram ? m_fretDiagram->visible() : false;
+}
+
+const ChordDescription* HarmonyDesc::descr() const
+{
+    return m_harmony && !m_harmony->chords().empty() ? m_harmony->chords().front()->descr() : nullptr;
 }
 }

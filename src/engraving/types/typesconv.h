@@ -42,6 +42,8 @@ public:
     static AsciiStringView toXml(ElementType v);
     static ElementType fromXml(const AsciiStringView& tag, ElementType def, bool silent = false);
 
+    static String toXml(AlignH v);
+    static String toXml(AlignV v);
     static String toXml(Align v);
     static Align fromXml(const String& str, Align def);
     static AlignH fromXml(const AsciiStringView& str, AlignH def);
@@ -255,5 +257,11 @@ public:
 
     static AsciiStringView toXml(TimeSigVSMargin timeSigVSMargin);
     static TimeSigVSMargin fromXml(const AsciiStringView& str, TimeSigVSMargin def);
+
+    static AsciiStringView toXml(NoteSpellingType noteSpellingType);
+    static NoteSpellingType fromXml(const AsciiStringView& str, NoteSpellingType def);
+
+    static AsciiStringView toXml(ChordStylePreset chordStylePreset);
+    static ChordStylePreset fromXml(const AsciiStringView& str, ChordStylePreset def);
 };
 }

@@ -3234,6 +3234,26 @@ static void readStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, ReadChor
                 style->set(Sid::harmonyPlacement, PlacementV::ABOVE);
                 style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
             }
+        } else if (tag == "useStandardNoteNames") {     // These settings were collapsed into one enum in 4.6
+            if (e.readBool()) {
+                style->set(Sid::chordSymbolSpelling, NoteSpellingType::STANDARD);
+            }
+        } else if (tag == "useGermanNoteNames") {
+            if (e.readBool()) {
+                style->set(Sid::chordSymbolSpelling, NoteSpellingType::GERMAN);
+            }
+        } else if (tag == "useFullGermanNoteNames") {
+            if (e.readBool()) {
+                style->set(Sid::chordSymbolSpelling, NoteSpellingType::GERMAN_PURE);
+            }
+        } else if (tag == "useSolfeggioNoteNames") {
+            if (e.readBool()) {
+                style->set(Sid::chordSymbolSpelling, NoteSpellingType::SOLFEGGIO);
+            }
+        } else if (tag == "useFrenchNoteNames") {
+            if (e.readBool()) {
+                style->set(Sid::chordSymbolSpelling, NoteSpellingType::FRENCH);
+            }
         } else {
             if (!ReadStyleHook::readStyleProperties(style, e)) {
                 e.skipCurrentElement();

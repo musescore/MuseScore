@@ -382,6 +382,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
 
     case P_TYPE::ALIGN:
         return PropertyValue(TConv::fromXml(e.readText(), Align()));
+    case P_TYPE::ALIGN_H:
+        return PropertyValue(TConv::fromXml(e.readText(), AlignH()).horizontal);
     case P_TYPE::PLACEMENT_V:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), PlacementV::ABOVE));
     case P_TYPE::PLACEMENT_H:
@@ -3135,24 +3137,42 @@ void TRead::read(HammerOnPullOff* h, XmlReader& xml, ReadContext& ctx)
     }
 }
 
+static void readHarmonyInfo(HarmonyInfo* info, XmlReader& e)
+{
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "bass") {
+            info->setBassTpc(e.readInt());
+        } else if (tag == "extension") {
+            info->setId(e.readInt());
+        } else if (tag == "name") {
+            info->setTextName(e.readText());
+        } else if (tag == "root") {
+            info->setRootTpc(e.readInt());
+        } else {
+            e.unknown();
+        }
+    }
+}
+
 void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        if (tag == "base") {
-            h->setBassTpc(e.readInt());
-        } else if (tag == "baseCase") {
+        if (tag == "leftParen") {
+            h->setLeftParen(true);
+            e.readNext();
+        } else if (tag == "rightParen") {
+            h->setRightParen(true);
+            e.readNext();
+        } else if (tag == "bassCase") {
             h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
-        } else if (tag == "extension") {
-            h->setId(e.readInt());
-        } else if (tag == "name") {
-            h->setTextName(e.readText());
-        } else if (tag == "root") {
-            h->setRootTpc(e.readInt());
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
-        } else if (tag == "function") {
-            h->setFunction(e.readText());
+        } else if (tag == "harmonyInfo") {
+            HarmonyInfo* info = new HarmonyInfo(ctx.score());
+            readHarmonyInfo(info, e);
+            h->addChord(info);
         } else if (tag == "degree") {
             int degreeValue = 0;
             int degreeAlter = 0;
@@ -3183,13 +3203,8 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
                     h->addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
                 }
             }
-        } else if (tag == "leftParen") {
-            h->setLeftParen(true);
-            e.readNext();
-        } else if (tag == "rightParen") {
-            h->setRightParen(true);
-            e.readNext();
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::POS_ABOVE)) {
+        } else if (TRead::readProperty(h, tag, e, ctx, Pid::POSITION)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_TYPE)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::PLAY)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICE_LITERAL)) {

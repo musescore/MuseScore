@@ -3397,10 +3397,6 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;
 
-    if (ldata->isValid()) {
-        return;
-    }
-
     if (!item->explicitParent()) {
         ldata->setPos(0.0, 0.0);
         const_cast<Harmony*>(item)->setOffset(0.0, 0.0);
@@ -3436,28 +3432,48 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
             }
         } else {
             RectF bb;
+            RectF hAlignBox;
             for (TextSegment* ts : item->textList()) {
-                bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
+                RectF tsBbox = ts->tightBoundingRect().translated(ts->x(), ts->y());
+                bb.unite(tsBbox);
+
+                if (ts->align()) {
+                    hAlignBox.unite(tsBbox);
+                }
             }
 
             double xx = 0.0;
-            switch (item->align().horizontal) {
-            case AlignH::LEFT:
-                xx = -bb.left();
-                break;
-            case AlignH::HCENTER:
-                xx = -(bb.center().x());
-                break;
-            case AlignH::RIGHT:
-                xx = -bb.right();
-                break;
+            if (fd) {
+                switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
+                case AlignH::LEFT:
+                    xx = -hAlignBox.left();
+                    break;
+                case AlignH::HCENTER:
+                    xx = -(hAlignBox.center().x());
+                    break;
+                case AlignH::RIGHT:
+                    xx = -hAlignBox.right();
+                    break;
+                }
+            } else {
+                switch (item->noteheadAlign()) {
+                case AlignH::LEFT:
+                    xx = -hAlignBox.left();
+                    break;
+                case AlignH::HCENTER:
+                    xx = -(hAlignBox.center().x());
+                    break;
+                case AlignH::RIGHT:
+                    xx = -hAlignBox.right();
+                    break;
+                }
             }
 
             double yy = -bb.y();      // Align::TOP
             if (item->align() == AlignV::VCENTER) {
                 yy = -bb.y() / 2.0;
             } else if (item->align() == AlignV::BASELINE) {
-                yy = 0.0;
+                yy = item->baseLine();
             } else if (item->align() == AlignV::BOTTOM) {
                 yy = -bb.height() - bb.y();
             }
@@ -3469,7 +3485,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
             }
 
             for (TextSegment* ts : item->textList()) {
-                ts->offset = PointF(xx, yy);
+                ts->setOffset(PointF(xx, yy));
             }
 
             ldata->setBbox(bb.translated(xx, yy));
@@ -3477,7 +3493,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
         }
 
         if (fd) {
-            switch (item->align().horizontal) {
+            switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
             case AlignH::LEFT:
                 newPosX = 0.0;
                 break;
@@ -3489,7 +3505,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
                 break;
             }
         } else {
-            switch (item->align().horizontal) {
+            switch (item->noteheadAlign()) {
             case AlignH::LEFT:
                 newPosX = 0.0;
                 break;
@@ -3506,6 +3522,13 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
     };
 
     auto positionPoint = calculateBoundingRect(item, ldata, ctx);
+
+    if (item->isPolychord()) {
+        for (LineF& line : ldata->polychordDividerLines.mut_value()) {
+            line.setP1(PointF(ldata->bbox().left(), line.y1()));
+            line.setP2(PointF(ldata->bbox().right(), line.y2()));
+        }
+    }
 
     if (item->hasFrame()) {
         item->layoutFrame(ldata);
