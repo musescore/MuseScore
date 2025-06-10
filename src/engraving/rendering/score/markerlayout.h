@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore Limited
+ * Copyright (C) 2023 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,19 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Controls 2.15
 
-import MuseScore.Inspector 1.0
-import Muse.UiComponents 1.0
-import Muse.Ui 1.0
+#pragma once
 
-FlatRadioButtonGroupPropertyView {
-    id: root
-    titleText: qsTrc("inspector", "Position")
+#include "../dom/marker.h"
+#include "rendering/score/layoutcontext.h"
 
-    model: [
-        { text: qsTrc("inspector", "Above"), value: CommonTypes.PLACEMENT_TYPE_ABOVE },
-        { text: qsTrc("inspector", "Below"), value: CommonTypes.PLACEMENT_TYPE_BELOW }
-    ]
-}
+namespace mu::engraving::rendering::score {
+class LayoutConfiguration;
+
+class MarkerLayout
+{
+public:
+    static void layoutMarker(const Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx);
+
+private:
+    static void doLayoutMarker(const Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx);
+    static double computeCustomTextOffset(const Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx);
+};
+} // namespace mu::engraving::rendering::score

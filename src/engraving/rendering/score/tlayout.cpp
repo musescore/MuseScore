@@ -169,6 +169,7 @@
 #include "measurelayout.h"
 #include "tappinglayout.h"
 #include "harmonylayout.h"
+#include "markerlayout.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -330,7 +331,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::PARTIAL_LYRICSLINE_SEGMENT: layoutLyricsLineSegment(item_cast<LyricsLineSegment*>(item), ctx);
         break;
     case ElementType::MARKER:
-        layoutMarker(item_cast<const Marker*>(item), static_cast<Marker::LayoutData*>(ldata));
+        layoutMarker(item_cast<const Marker*>(item), static_cast<Marker::LayoutData*>(ldata), ctx);
         break;
     case ElementType::MEASURE_NUMBER:
         layoutMeasureNumber(item_cast<const MeasureNumber*>(item), static_cast<MeasureNumber::LayoutData*>(ldata), ctx);
@@ -3958,27 +3959,11 @@ void TLayout::layoutLyricsLineSegment(LyricsLineSegment* item, LayoutContext& ct
     LyricsLayout::layout(item, ctx);
 }
 
-void TLayout::layoutMarker(const Marker* item, Marker::LayoutData* ldata)
+void TLayout::layoutMarker(const Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
-    LD_CONDITION(item->parentItem()->ldata()->isSetBbox());
 
-    TLayout::layoutBaseTextBase(item, ldata);
-
-    // although normally laid out to parent (measure) width,
-    // force to center over barline if left-aligned
-    if (item->layoutToParentWidth() && item->align() == AlignH::LEFT) {
-        ldata->moveX(-ldata->bbox().width() * 0.5);
-    }
-
-    if (item->autoplace()) {
-        const Measure* m = toMeasure(item->explicitParent());
-        LD_CONDITION(ldata->isSetPos());
-        LD_CONDITION(ldata->isSetBbox());
-        LD_CONDITION(m->ldata()->isSetPos());
-    }
-
-    Autoplace::autoplaceMeasureElement(item, ldata);
+    MarkerLayout::layoutMarker(item, ldata, ctx);
 }
 
 void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext& ctx)
@@ -6089,13 +6074,44 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
     Shape shape;
     double y = 0.0;
 
+    double maxBlockWidth = -DBL_MAX;
     // adjust the bounding box for the text item
     for (size_t i = 0; i < ldata->blocks.size(); ++i) {
         TextBlock& t = ldata->blocks[i];
         t.layout(item);
         y += t.lineSpacing();
         t.setY(y);
-        shape.add(t.shape().translated(PointF(0.0, y)));
+        if (!item->positionSeparateFromAlignment()) {
+            shape.add(t.shape().translated(PointF(0.0, y)));
+        }
+        maxBlockWidth = std::max(maxBlockWidth, t.boundingRect().width());
+    }
+
+    // ALIGN TEXT
+    // TODO - implement for all text items
+    if (item->positionSeparateFromAlignment()) {
+        for (size_t i = 0; i < ldata->blocks.size(); ++i) {
+            TextBlock& t = ldata->blocks[i];
+            double diff = maxBlockWidth - t.boundingRect().width();
+            if (muse::RealIsNull(diff)) {
+                shape.add(t.shape().translated(PointF(0.0, t.y())));
+                continue;
+            }
+            double rx = 0.0;
+            AlignH alignH = item->align().horizontal;
+            bool dynamicAlwaysCentered = item->isDynamic() && item->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
+            if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
+                rx = diff * 0.5;
+            } else if (alignH == AlignH::RIGHT) {
+                rx = diff;
+            }
+
+            for (TextFragment& f : t.fragments()) {
+                f.pos.rx() += rx;
+            }
+            t.shape().translate(PointF(rx, 0.0));
+            shape.add(t.shape().translated(PointF(0.0, t.y())));
+        }
     }
 
     RectF bb = shape.bbox();

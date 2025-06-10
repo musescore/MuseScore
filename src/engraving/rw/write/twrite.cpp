@@ -2267,6 +2267,8 @@ void TWrite::write(const Marker* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.tag("label", item->label());
+    writeProperty(item, xml, Pid::MARKER_CENTER_ON_SYMBOL);
+    writeProperty(item, xml, Pid::MARKER_SYMBOL_SIZE);
     xml.endElement();
 }
 

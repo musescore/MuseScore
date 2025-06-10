@@ -91,7 +91,7 @@ void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldat
                     break;
                 }
             } else {
-                switch (item->noteheadAlign()) {
+                switch (item->position()) {
                 case AlignH::LEFT:
                     xx = -hAlignBox.left();
                     break;
@@ -140,7 +140,7 @@ void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldat
                 break;
             }
         } else {
-            switch (item->noteheadAlign()) {
+            switch (item->position()) {
             case AlignH::LEFT:
                 newPosX = 0.0;
                 break;

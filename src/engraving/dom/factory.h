@@ -264,6 +264,8 @@ public:
 
     static Marker* createMarker(EngravingItem* parent, TextStyleType tid, bool isAccessibleEnabled = true);
 
+    static std::shared_ptr<Marker> makeMarker(EngravingItem* parent);
+
     static GradualTempoChange* createGradualTempoChange(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static PalmMute* createPalmMute(EngravingItem* parent, bool isAccessibleEnabled = true);

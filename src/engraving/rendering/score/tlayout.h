@@ -279,7 +279,7 @@ public:
     static void layoutLyricsLine(LyricsLine* item, LayoutContext& ctx);
     static void layoutLyricsLineSegment(LyricsLineSegment* item, LayoutContext& ctx);
 
-    static void layoutMarker(const Marker* item, Marker::LayoutData* ldata);
+    static void layoutMarker(const Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx);
     static void layoutMeasureBase(MeasureBase* item, LayoutContext& ctx); // factory
     static void layoutBaseMeasureBase(const MeasureBase* item, MeasureBase::LayoutData* ldata, const LayoutContext& ctx); // base class
     static void layoutMeasureNumber(const MeasureNumber* item, MeasureNumber::LayoutData* ldata, const LayoutContext& ctx);

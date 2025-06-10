@@ -253,9 +253,6 @@ public:
     double mag() const override;
     void setUserMag(double m) { m_userMag = m; }
 
-    AlignH noteheadAlign() const { return m_noteheadAlign; }
-    void setNoteheadAlign(AlignH v) { m_noteheadAlign = v; }
-
     double bassScale() const { return m_bassScale; }
     void setBassScale(double v) { m_bassScale = v; }
 
@@ -319,7 +316,6 @@ private:
     NoteCaseType m_bassCase = NoteCaseType::AUTO;        // case as typed
 
     std::optional<double> m_userMag;
-    AlignH m_noteheadAlign = AlignH::HCENTER;
     double m_bassScale = 1.0;
 };
 } // namespace mu::engraving

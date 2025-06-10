@@ -705,6 +705,8 @@ Marker* Factory::createMarker(EngravingItem * parent, TextStyleType tid, bool is
     return m;
 }
 
+MAKE_ITEM_IMPL(Marker, EngravingItem)
+
 CREATE_ITEM_IMPL(GradualTempoChange, ElementType::GRADUAL_TEMPO_CHANGE, EngravingItem, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(PalmMute, ElementType::PALM_MUTE, EngravingItem, isAccessibleEnabled)
