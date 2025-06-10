@@ -273,6 +273,13 @@ private:
     double m_scale = 1.0;
 };
 
+using RenderActionPtr = std::shared_ptr<RenderAction>;
+using RenderActionMovePtr = std::shared_ptr<RenderActionMove>;
+using RenderActionMoveXHeightPtr = std::shared_ptr<RenderActionMoveXHeight>;
+using RenderActionPopPtr = std::shared_ptr<RenderActionPop>;
+using RenderActionScalePtr = std::shared_ptr<RenderActionScale>;
+using RenderActionSetPtr = std::shared_ptr<RenderActionSet>;
+
 //---------------------------------------------------------
 //   ChordToken
 //    Reads/represents the <token> tag in chord XML files
@@ -287,7 +294,7 @@ class ChordToken
 public:
     ChordTokenClass tokenClass;
     StringList names;
-    std::list<RenderAction*> renderList;
+    std::list<RenderActionPtr > renderList;
     void read(XmlReader&, int mscVersion);
     void write(XmlWriter&) const;
     bool isValid() const { return !names.empty(); }
@@ -306,7 +313,7 @@ public:
 
     bool parse(const String&, const ChordList*, bool syntaxOnly = false, bool preferMinor = false);
     String fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&, const ChordList*);
-    const std::list<RenderAction*>& renderList(const ChordList*);
+    const std::list<RenderActionPtr >& renderList(const ChordList*);
     bool parseable() const { return m_parseable; }
     bool understandable() const { return m_understandable; }
     const String& name() const { return m_name; }
@@ -339,7 +346,7 @@ private:
     String m_modifiers;
     StringList m_modifierList;
     std::list<ChordToken> m_tokenList;
-    std::list<RenderAction*> m_renderList;
+    std::list<RenderActionPtr > m_renderList;
     String m_xmlKind;
     String m_xmlText;
     String m_xmlSymbols;
@@ -368,7 +375,7 @@ struct ChordDescription {
     String xmlParens;        // MusicXML: kind parentheses-degrees=
     StringList xmlDegrees;   // MusicXML: list of degrees (if any)
     HChord chord;             // C based chord
-    std::list<RenderAction*> renderList;
+    std::list<RenderActionPtr > renderList;
     bool generated = false;
     bool renderListGenerated = false;
     bool exportOk = false;
@@ -422,10 +429,10 @@ class ChordList : public std::map<int, ChordDescription>
 
 public:
     std::list<ChordFont> fonts;
-    std::list<RenderAction*> renderListRoot;
-    std::list<RenderAction*> renderListFunction;
-    std::list<RenderAction*> renderListBass;
-    std::list<RenderAction*> renderListBassOffset;
+    std::list<RenderActionPtr > renderListRoot;
+    std::list<RenderActionPtr > renderListFunction;
+    std::list<RenderActionPtr > renderListBass;
+    std::list<RenderActionPtr > renderListBassOffset;
     std::list<ChordToken> chordTokenList;
     static int privateID;
 

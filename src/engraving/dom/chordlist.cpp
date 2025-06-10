@@ -336,7 +336,7 @@ void HChord::add(const std::vector<HDegree>& degreeList)
 //   readRenderList
 //---------------------------------------------------------
 
-static void readRenderList(String val, std::list<RenderAction*>& renderList, int mscVersion)
+static void readRenderList(String val, std::list<RenderActionPtr>& renderList, int mscVersion)
 {
     renderList.clear();
     StringList sl = val.split(u' ', muse::SkipEmptyParts);
@@ -396,22 +396,22 @@ static void readRenderList(String val, std::list<RenderAction*>& renderList, int
 //   writeRenderList
 //---------------------------------------------------------
 
-static void writeRenderList(XmlWriter& xml, const std::list<RenderAction*>& al, const AsciiStringView& name)
+static void writeRenderList(XmlWriter& xml, const std::list<RenderActionPtr>& al, const AsciiStringView& name)
 {
     String s;
 
-    for (const RenderAction* a : al) {
+    for (const RenderActionPtr& a : al) {
         if (!s.isEmpty()) {
             s += u" ";
         }
         switch (a->actionType()) {
         case RenderAction::RenderActionType::SET: {
-            const RenderActionSet* set = dynamic_cast<const RenderActionSet*>(a);
+            const RenderActionSetPtr set = std::static_pointer_cast<RenderActionSet>(a);
             s += set->text();
             break;
         }
         case RenderAction::RenderActionType::MOVE: {
-            const RenderActionMove* move = dynamic_cast<const RenderActionMove*>(a);
+            const RenderActionMovePtr move = std::static_pointer_cast<RenderActionMove>(a);
 
             if (!RealIsNull(move->x()) || !RealIsNull(move->y())) {
                 String scaled = move->scaled() ? u"s" : u"";
@@ -420,13 +420,13 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderAction*>& al, 
             break;
         }
         case RenderAction::RenderActionType::MOVEXHEIGHT: {
-            const RenderActionMoveXHeight* movex = dynamic_cast<const RenderActionMoveXHeight*>(a);
+            const RenderActionMoveXHeightPtr movex = std::static_pointer_cast<RenderActionMoveXHeight>(a);
             String scaled = movex->scaled() ? u"s" : u"";
             s += String(u":mx%1").arg(scaled);
             break;
         }
         case RenderAction::RenderActionType::SCALE: {
-            const RenderActionScale* scale = dynamic_cast<const RenderActionScale*>(a);
+            const RenderActionScalePtr scale = std::static_pointer_cast<RenderActionScale>(a);
             s+= String(u"sc:%1").arg(scale->scale());
             break;
         }
@@ -434,7 +434,7 @@ static void writeRenderList(XmlWriter& xml, const std::list<RenderAction*>& al, 
             s += u":push";
             break;
         case RenderAction::RenderActionType::POP: {
-            const RenderActionPop* pop = dynamic_cast<const RenderActionPop*>(a);
+            const RenderActionPopPtr pop = std::static_pointer_cast<RenderActionPop>(a);
             String coord = pop->popX() && pop->popY() ? u"" : (pop->popX() ? u"x" : u"y");
             s += String(u":pop%1").arg(coord);
             break;
@@ -1534,7 +1534,7 @@ double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t 
 //   renderList
 //---------------------------------------------------------
 
-const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
+const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl)
 {
     // generate anew on each call,
     // in case chord list has changed since last time
@@ -1549,7 +1549,7 @@ const std::list<RenderAction*>& ParsedChord::renderList(const ChordList* cl)
     bool adjust = cl ? cl->autoAdjust() : false;
     for (const ChordToken& tok : m_tokenList) {
         String n = tok.names.front();
-        std::list<RenderAction*> rl;
+        std::list<RenderActionPtr > rl;
         std::list<ChordToken> definedTokens;
         bool found = false;
         // potential definitions for token

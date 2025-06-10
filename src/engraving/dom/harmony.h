@@ -283,19 +283,19 @@ private:
     void renderRomanNumeral();
     void render(const String&, HarmonyRenderCtx& ctx);
     void render(SymId, HarmonyRenderCtx& ctx);
-    void render(const std::list<RenderAction*>& renderList, HarmonyRenderCtx& ctx, int tpc,
+    void render(const std::list<RenderActionPtr>& renderList, HarmonyRenderCtx& ctx, int tpc,
                 NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO,
                 double noteMag = 1.0);
-    void renderAction(const RenderAction* a, HarmonyRenderCtx& ctx);
-    void renderActionSet(const RenderActionSet* a, HarmonyRenderCtx& ctx);
-    void renderActionMove(const RenderActionMove* a, HarmonyRenderCtx& ctx);
-    void renderActionMoveXHeight(const RenderActionMoveXHeight* a, HarmonyRenderCtx& ctx);
+    void renderAction(const RenderActionPtr& a, HarmonyRenderCtx& ctx);
+    void renderActionSet(const RenderActionSetPtr& a, HarmonyRenderCtx& ctx);
+    void renderActionMove(const RenderActionMovePtr& a, HarmonyRenderCtx& ctx);
+    void renderActionMoveXHeight(const RenderActionMoveXHeightPtr& a, HarmonyRenderCtx& ctx);
     void renderActionPush(HarmonyRenderCtx& ctx);
-    void renderActionPop(const RenderActionPop* a, HarmonyRenderCtx& ctx);
+    void renderActionPop(const RenderActionPopPtr& a, HarmonyRenderCtx& ctx);
     void renderActionNote(HarmonyRenderCtx& ctx);
     void renderActionAcc(HarmonyRenderCtx& ctx);
     void renderActionAlign(HarmonyRenderCtx& ctx);
-    void renderActionScale(const RenderActionScale* a, HarmonyRenderCtx& ctx);
+    void renderActionScale(const RenderActionScalePtr& a, HarmonyRenderCtx& ctx);
 
     Sid getPropertyStyle(Pid) const override;
 

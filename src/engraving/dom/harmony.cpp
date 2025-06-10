@@ -1243,7 +1243,8 @@ void Harmony::render(SymId sym, HarmonyRenderCtx& ctx)
 //   render
 //---------------------------------------------------------
 
-void Harmony::render(const std::list<RenderAction*>& renderList, HarmonyRenderCtx& ctx, int tpc, NoteSpellingType noteSpelling,
+void Harmony::render(const std::list<RenderActionPtr>& renderList, HarmonyRenderCtx& ctx, int tpc,
+                     NoteSpellingType noteSpelling,
                      NoteCaseType noteCase, double noteMag)
 {
     ctx.stack = {};
@@ -1252,28 +1253,28 @@ void Harmony::render(const std::list<RenderAction*>& renderList, HarmonyRenderCt
     ctx.noteCase = noteCase;
     ctx.scale = noteMag;
 
-    for (const RenderAction* a : renderList) {
+    for (const RenderActionPtr& a : renderList) {
         renderAction(a, ctx);
     }
 }
 
-void Harmony::renderAction(const RenderAction* a, HarmonyRenderCtx& ctx)
+void Harmony::renderAction(const RenderActionPtr& a, HarmonyRenderCtx& ctx)
 {
     switch (a->actionType()) {
     case RenderAction::RenderActionType::SET:
-        renderActionSet(dynamic_cast<const RenderActionSet*>(a), ctx);
+        renderActionSet(std::static_pointer_cast<RenderActionSet>(a), ctx);
         break;
     case RenderAction::RenderActionType::MOVE:
-        renderActionMove(dynamic_cast<const RenderActionMove*>(a), ctx);
+        renderActionMove(std::static_pointer_cast<RenderActionMove>(a), ctx);
         break;
     case RenderAction::RenderActionType::MOVEXHEIGHT:
-        renderActionMoveXHeight(dynamic_cast<const RenderActionMoveXHeight*>(a), ctx);
+        renderActionMoveXHeight(std::static_pointer_cast<RenderActionMoveXHeight>(a), ctx);
         break;
     case RenderAction::RenderActionType::PUSH:
         renderActionPush(ctx);
         break;
     case RenderAction::RenderActionType::POP:
-        renderActionPop(dynamic_cast<const RenderActionPop*>(a), ctx);
+        renderActionPop(std::static_pointer_cast<RenderActionPop>(a), ctx);
         break;
     case RenderAction::RenderActionType::NOTE:
         renderActionNote(ctx);
@@ -1285,7 +1286,7 @@ void Harmony::renderAction(const RenderAction* a, HarmonyRenderCtx& ctx)
         renderActionAlign(ctx);
         break;
     case RenderAction::RenderActionType::SCALE:
-        renderActionScale(dynamic_cast<const RenderActionScale*>(a), ctx);
+        renderActionScale(std::static_pointer_cast<RenderActionScale>(a), ctx);
         break;
     default:
         LOGD("unknown render action %d", static_cast<int>(a->actionType()));
@@ -1297,7 +1298,7 @@ void Harmony::renderActionPush(HarmonyRenderCtx& ctx)
     ctx.stack.push(ctx.pos);
 }
 
-void Harmony::renderActionPop(const RenderActionPop* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionPop(const RenderActionPopPtr& a, HarmonyRenderCtx& ctx)
 {
     if (ctx.stack.empty()) {
         LOGD("RenderAction::RenderActionType::POP: stack empty");
@@ -1372,7 +1373,7 @@ void Harmony::renderActionAcc(HarmonyRenderCtx& ctx)
     // Try to find token & execute renderlist
     ChordToken tok = chordList->token(acc, ChordTokenClass::ACCIDENTAL);
     if (tok.isValid()) {
-        for (const RenderAction* a : tok.renderList) {
+        for (const RenderActionPtr& a : tok.renderList) {
             renderAction(a, ctx);
         }
         return;
@@ -1405,12 +1406,12 @@ void Harmony::renderActionAlign(HarmonyRenderCtx& ctx)
     ctx.hAlign = false;
 }
 
-void Harmony::renderActionScale(const RenderActionScale* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionScale(const RenderActionScalePtr& a, HarmonyRenderCtx& ctx)
 {
     ctx.scale *= a->scale();
 }
 
-void Harmony::renderActionSet(const RenderActionSet* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionSet(const RenderActionSetPtr& a, HarmonyRenderCtx& ctx)
 {
     const ChordList* chordList = score()->chordList();
     const ChordSymbol cs = chordList->symbol(a->text());
@@ -1427,14 +1428,14 @@ void Harmony::renderActionSet(const RenderActionSet* a, HarmonyRenderCtx& ctx)
     ctx.movex(ts->width());
 }
 
-void Harmony::renderActionMove(const RenderActionMove* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionMove(const RenderActionMovePtr& a, HarmonyRenderCtx& ctx)
 {
     const FontMetrics fm = FontMetrics(font());
     const double scale = a->scaled() ? ctx.scale : 1.0;
     ctx.pos = ctx.pos + a->vec() * FontMetrics::capHeight(font()) * scale;
 }
 
-void Harmony::renderActionMoveXHeight(const RenderActionMoveXHeight* a, HarmonyRenderCtx& ctx)
+void Harmony::renderActionMoveXHeight(const RenderActionMoveXHeightPtr& a, HarmonyRenderCtx& ctx)
 {
     const int direction = a->up() ? -1 : 1;
     const double scale = a->scaled() ? ctx.scale : 1.0;
@@ -1486,7 +1487,7 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
 
     // render bass
     if (tpcIsValid(info->bassTpc())) {
-        std::list<RenderAction*>& bassNoteChordList
+        std::list<RenderActionPtr >& bassNoteChordList
             = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
         render(bassNoteChordList, ctx, info->bassTpc(), spelling, bassCase, m_bassScale);
     }
@@ -1526,7 +1527,7 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
         }
 
         if (tpcIsValid(capoBassTpc)) {
-            std::list<RenderAction*>& bassNoteChordList
+            std::list<RenderActionPtr >& bassNoteChordList
                 = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
             render(bassNoteChordList, ctx, capoBassTpc, spelling, bassCase, m_bassScale);
         }
