@@ -845,7 +845,11 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                         arpeggio_duration_ticks /= 2;
                                     }
                                 } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_QUARTER) {
-                                    arpeggio_duration_ticks /= 2;
+                                    if (isFermataTag) {
+                                        arpeggio_duration_ticks /= 10;
+                                    } else {
+                                        arpeggio_duration_ticks /= 2;
+                                    }
                                 }
                                 _arpeggio_duration_check = true;
                             }
@@ -885,7 +889,11 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                                         arpeggio_duration_ticks /= 2;
                                                     }
                                                 } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_QUARTER) {
-                                                    arpeggio_duration_ticks /= 2;
+                                                    if (isFermataTag) {
+                                                        arpeggio_duration_ticks /= 10;
+                                                    } else {
+                                                        arpeggio_duration_ticks /= 2;
+                                                    }
                                                 }
                                                 for (Note* note_ : _note->chord()->notes()) {
                                                     if (std::find(score_arpeggio_map[engravingItem].begin(), score_arpeggio_map[engravingItem].end(), note_) == score_arpeggio_map[engravingItem].end()) {
