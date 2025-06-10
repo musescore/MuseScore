@@ -75,11 +75,11 @@ private:
     void processCursorSpannerRenderStatus(Measure* measure, Fraction tick, bool recover, bool isPlaying);
     void processCursorSpannerRenderStatusAsync(Measure* measure, Fraction tick, bool recover, bool isPlaying);
 
-    void processCursorNoteRenderStatus(Measure* measure);
-    void processCursorNoteRenderStatusAsync(Measure* measure);
+    void processCursorNoteRenderStatus(Measure* measure, int curr_ticks);
+    void processCursorNoteRenderStatusAsync(Measure* measure, int curr_ticks);
 
-    void processCursorNoteRenderRecover(EngravingItem* engravingItem);
-    void processCursorNoteRenderRecoverAsync(EngravingItem* engravingItem);
+    void processCursorNoteRenderRecover(EngravingItem* engravingItem, int curr_ticks);
+    void processCursorNoteRenderRecoverAsync(EngravingItem* engravingItem, int curr_ticks);
 
     bool m_visible = false;
     muse::RectF m_rect;
