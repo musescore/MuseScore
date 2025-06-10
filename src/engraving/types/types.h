@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
 #include <functional>
@@ -35,12 +34,14 @@
 #include "draw/types/geometry.h"
 #include "draw/types/painterpath.h"
 
+// IWYU pragma: begin_exports
 #include "bps.h"
 #include "dimension.h"
 #include "fraction.h"
 #include "groupnode.h"
 #include "pitchvalue.h"
 #include "symid.h"
+// IWYU pragma: end_exports
 
 namespace mu::engraving {
 using staff_idx_t = size_t;

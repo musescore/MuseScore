@@ -21,6 +21,8 @@
  */
 #pragma once
 
+#include "global/types/flags.h"
+
 #include "types/fraction.h"
 
 namespace mu::engraving {
