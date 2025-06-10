@@ -1005,7 +1005,7 @@ Fraction FinaleTConv::musxFractionToFraction(musx::util::Fraction fraction)
 
 Fraction FinaleTConv::eduToFraction(Edu edu)
 {
-	return musxFractionToFraction(musx::util::Fraction::fromEdu(edu));
+    return musxFractionToFraction(musx::util::Fraction::fromEdu(edu));
 }
 
 Fraction FinaleTConv::simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger)
