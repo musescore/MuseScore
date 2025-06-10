@@ -24,9 +24,8 @@
 #include <variant>
 
 #include "modularity/imoduleinterface.h"
-#include "draw/types/geometry.h"
 
-#include "../types/fraction.h"
+#include "../types/types.h"
 
 namespace muse::draw {
 class Painter;
