@@ -922,6 +922,10 @@ Font TextFragment::font(const TextBase* t) const
             fontType = Font::Type::MusicSymbolText;
             // to keep desired size ratio (based on 20pt symbol size to 12pt text size)
             m *= 5.0 / 3.0;
+        } else if (t->isMarker()) {
+            family = t->style().styleSt(Sid::musicalTextFont);
+            fontType = Font::Type::MusicSymbolText;
+            m = t->getProperty(Pid::MARKER_SYMBOL_SIZE).toDouble();
         } else {
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;
