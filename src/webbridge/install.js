@@ -22,4 +22,5 @@ function copyFile(src, dst) {
 copyFile(HERE+"/viewer/viewer.html", OUTPUT_DIR+"/MuseScoreStudio.html"); // replace origin MuseScoreStudio.html
 copyFile(HERE+"/viewer/index.html", OUTPUT_DIR+"/index.html");
 copyFile(HERE+"/viewer/run_server.sh", OUTPUT_DIR+"/run_server.sh");
+copyFile(HERE+"/viewer/README.md", OUTPUT_DIR+"/README.md");
 copyFile(HERE+"/distr/muapi.js", OUTPUT_DIR+"/muapi.js");
