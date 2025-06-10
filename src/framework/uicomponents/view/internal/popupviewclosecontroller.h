@@ -56,9 +56,6 @@ public:
     QWindow* popupWindow() const;
     void setWindow(QWindow* window);
 
-    bool popupHasFocus() const;
-    void setPopupHasFocus(bool hasFocus);
-
     void setIsCloseOnPressOutsideParent(bool close);
 
     async::Notification closeNotification() const;
@@ -69,20 +66,21 @@ private slots:
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void doFocusOut();
+    void doFocusOut(const QPointF& mousePos);
     virtual void doUpdateEventFilters();
 
-    bool isMouseWithinBoundaries(const QPoint& mousePos) const;
+    bool isMouseWithinBoundaries(const QPointF& mousePos) const;
 
     void notifyAboutClose();
 
 private:
+    QWindow* parentWindow() const;
+
     bool m_active = false;
 
     QQuickItem* m_parentItem = nullptr;
     QWindow* m_popupWindow = nullptr;
 
-    bool m_popupHasFocus = true;
     bool m_isCloseOnPressOutsideParent = false;
 
     async::Notification m_closeNotification;

@@ -11920,16 +11920,14 @@
         <source>Suspended Cymbal</source>
         <comment>crash-cymbal trackName</comment>
         <extracomment>trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Подвешенная 
-тарелка</translation>
+        <translation>Подвешенная тарелка</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4032"/>
         <source>Suspended Cymbal</source>
         <comment>crash-cymbal longName</comment>
         <extracomment>longName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Подвешенная 
-тарелка</translation>
+        <translation>Подвешенная тарелка</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4034"/>

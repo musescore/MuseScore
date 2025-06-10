@@ -79,7 +79,6 @@
 #include "../../dom/barline.h"
 #include "../../dom/chord.h"
 #include "../../dom/bend.h"
-#include "../../dom/stretchedbend.h"
 #include "../../dom/box.h"
 #include "../../dom/layoutbreak.h"
 #include "../../dom/stafftypechange.h"
@@ -146,7 +145,7 @@ using namespace mu::engraving;
 using namespace mu::engraving::read400;
 
 using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
-                                 BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
+                                 BagpipeEmbellishment, BarLine, Beam, Bend,  HBox, VBox, FBox, TBox, Bracket, Breath,
                                  Chord, ChordLine, Clef,
                                  Dynamic, Expression,
                                  Fermata, FiguredBass, Fingering, FretDiagram,
@@ -566,7 +565,7 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
         } else if (tag == "velocity") {
             d->setVelocity(e.readInt());
         } else if (tag == "dynType") {
-            d->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+            d->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
         } else if (tag == "veloChange") {
             d->setChangeInVelocity(e.readInt());
         } else if (tag == "veloChangeSpeed") {
@@ -1948,14 +1947,6 @@ void TRead::read(Bend* b, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(StretchedBend* b, XmlReader& xml, ReadContext& ctx)
-{
-    UNUSED(b);
-    UNUSED(xml);
-    UNUSED(ctx);
-    // not implemented
-}
-
 void TRead::read(Box* b, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
@@ -2721,7 +2712,7 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
         } else if (tag == "veloChange") {
             h->setVeloChange(e.readInt());
         } else if (tag == "dynType") {
-            h->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+            h->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
         } else if (tag == "useTextLine") {        // obsolete
             e.readInt();
             if (h->hairpinType() == HairpinType::CRESC_HAIRPIN) {

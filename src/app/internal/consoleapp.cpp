@@ -23,7 +23,9 @@
 #include "consoleapp.h"
 
 #include <QApplication>
+#ifndef Q_OS_WASM
 #include <QThreadPool>
+#endif
 
 #include "modularity/ioc.h"
 
@@ -231,7 +233,7 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
         }
     }
 
-#ifdef MUE_BUILD_IMAGESEXPORT_MODULE
+#ifdef MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE
     imagesExportConfiguration()->setTrimMarginPixelSize(options.exportImage.trimMarginPixelSize);
     imagesExportConfiguration()->setExportPngDpiResolutionOverride(options.exportImage.pngDpiResolution);
 #endif
@@ -243,15 +245,20 @@ void ConsoleApp::applyCommandLineOptions(const CmdOptions& options, IApplication
     videoExportConfiguration()->setTrailingSec(options.exportVideo.trailingSec);
 #endif
 
-#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
-    audioExportConfiguration()->setExportMp3BitrateOverride(options.exportAudio.mp3Bitrate);
+#ifdef MUE_BUILD_IMPEXP_MIDI_MODULE
     midiImportExportConfiguration()->setMidiImportOperationsFile(options.importMidi.operationsFile);
-    guitarProConfiguration()->setLinkedTabStaffCreated(options.guitarPro.linkedTabStaffCreated);
-    guitarProConfiguration()->setExperimental(options.guitarPro.experimental);
+#endif
+#ifdef MUE_BUILD_IMPEXP_MUSICXML_MODULE
     musicXmlConfiguration()->setNeedUseDefaultFontOverride(options.importMusicXml.useDefaultFont);
     musicXmlConfiguration()->setInferTextTypeOverride(options.importMusicXml.inferTextType);
 #endif
-
+#ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
+    audioExportConfiguration()->setExportMp3BitrateOverride(options.exportAudio.mp3Bitrate);
+#endif
+#ifdef MUE_BUILD_IMPEXP_GUITARPRO_MODULE
+    guitarProConfiguration()->setLinkedTabStaffCreated(options.guitarPro.linkedTabStaffCreated);
+    guitarProConfiguration()->setExperimental(options.guitarPro.experimental);
+#endif
     if (options.app.revertToFactorySettings) {
         appshellConfiguration()->revertToFactorySettings(options.app.revertToFactorySettings.value());
     }

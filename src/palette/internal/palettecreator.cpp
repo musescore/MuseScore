@@ -200,7 +200,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newHarpPalette());
     defaultPalette->append(newGuitarPalette(true));
     defaultPalette->append(newFingeringPalette(true));
-    defaultPalette->append(newFretboardDiagramPalette());
+    defaultPalette->append(newFretboardDiagramPalette(true));
     defaultPalette->append(newAccordionPalette());
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
@@ -803,9 +803,12 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
         SymId::ornamentTurn,
         SymId::ornamentTurnInverted,
         SymId::ornamentTurnSlash,
+        SymId::ornamentTurnUp,
+        SymId::ornamentTurnUpS,
         SymId::ornamentTrill,
         SymId::ornamentShortTrill,
         SymId::ornamentMordent,
+        SymId::ornamentHaydn,
         SymId::ornamentTremblement,
         SymId::ornamentPrallMordent,
         SymId::ornamentUpPrall,
@@ -1604,8 +1607,8 @@ PalettePtr PaletteCreator::newTextPalette(bool defaultPalette)
         sp->appendElement(meaNum, QT_TRANSLATE_NOOP("palette", "Measure number"))->setElementTranslated(true);
 
         static const std::vector<PlayTechAnnotationInfo> playTechAnnotationsMaster = {
-            { QT_TRANSLATE_NOOP("palette", "dÃ©tachÃ©"),   PlayingTechniqueType::Detache },
-            { QT_TRANSLATE_NOOP("palette", "martelÃ©"),   PlayingTechniqueType::Martele },
+            { QT_TRANSLATE_NOOP("palette", "détaché"),   PlayingTechniqueType::Detache },
+            { QT_TRANSLATE_NOOP("palette", "martelé"),   PlayingTechniqueType::Martele },
             { QT_TRANSLATE_NOOP("palette", "col legno"), PlayingTechniqueType::ColLegno },
             { QT_TRANSLATE_NOOP("palette", "sul pont."), PlayingTechniqueType::SulPonticello },
             { QT_TRANSLATE_NOOP("palette", "sul tasto"), PlayingTechniqueType::SulTasto },
@@ -1688,7 +1691,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
     return sp;
 }
 
-PalettePtr PaletteCreator::newFretboardDiagramPalette()
+PalettePtr PaletteCreator::newFretboardDiagramPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::FretboardDiagram);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Fretboard diagrams"));
@@ -1735,7 +1738,7 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     };
 
     for (const FretDiagramInfo& fretboardDiagram : fretboardDiagrams) {
-        auto fret = FretDiagram::createFromString(gpaletteScore, fretboardDiagram.diagram);
+        auto fret = FretDiagram::createFromPattern(gpaletteScore, fretboardDiagram.diagram);
         fret->setHarmony(fretboardDiagram.harmony);
 
         if (fretboardDiagram.harmony.empty()) {
@@ -1743,6 +1746,10 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
         }
 
         sp->appendElement(fret, fretboardDiagram.userName);
+    }
+
+    if (!defaultPalette) {
+        sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
     }
 
     return sp;
@@ -1763,7 +1770,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     capoLine->setLen(w);
     capoLine->setBeginText(u"VII");
     capoLine->setEndHookType(HookType::HOOK_90);
-    sp->appendElement(capoLine, QT_TRANSLATE_NOOP("palette", "BarrÃ© line"), 0.8);
+    sp->appendElement(capoLine, QT_TRANSLATE_NOOP("palette", "Barré line"), 0.8);
 
     auto pm = makeElement<PalmMute>(gpaletteScore);
     pm->setLen(w);

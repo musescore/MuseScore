@@ -62,7 +62,7 @@ class InteractiveProvider : public QObject, public IInteractiveProvider, public 
 public:
     explicit InteractiveProvider(const modularity::ContextPtr& iocCtx);
 
-    RetVal<QColor> selectColor(const QColor& color = Qt::white, const QString& title = "") override;
+    RetVal<QColor> selectColor(const QColor& color = Qt::white, const std::string& title = "") override;
     bool isSelectColorOpened() const override;
 
     RetVal<Val> openSync(const UriQuery& uri) override;

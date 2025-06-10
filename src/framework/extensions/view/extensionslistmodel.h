@@ -29,6 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
+#include "extensions/iextensioninstaller.h"
 #include "extensions/iextensionsconfiguration.h"
 #include "extensions/iextensionsprovider.h"
 #include "shortcuts/ishortcutsregister.h"
@@ -40,6 +41,7 @@ class ExtensionsListModel : public QAbstractListModel, public Injectable, public
 
     Inject<IInteractive> interactive = { this };
     Inject<IExtensionsProvider> provider = { this };
+    Inject<IExtensionInstaller> installer = { this };
     Inject<IExtensionsConfiguration> configuration = { this };
     Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
@@ -58,6 +60,7 @@ public:
 
     Q_INVOKABLE void editShortcut(const QString& uri);
     Q_INVOKABLE void reloadPlugins();
+    Q_INVOKABLE void removeExtension(const QString& uri);
 
     Q_INVOKABLE QVariantList categories() const;
 
@@ -73,7 +76,8 @@ private:
         rEnabled,
         rCategory,
         rVersion,
-        rShortcuts
+        rShortcuts,
+        rIsRemovable
     };
 
     struct ExecPoints {

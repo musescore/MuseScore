@@ -102,8 +102,10 @@ private:
     muse::uicomponents::MenuItemList makeTupletsItems();
     muse::uicomponents::MenuItemList makeMeasuresItems();
     muse::uicomponents::MenuItemList makeFramesItems();
+    muse::uicomponents::MenuItemList makeFramesAppendItems();
     muse::uicomponents::MenuItemList makeTextItems();
     muse::uicomponents::MenuItemList makeLinesItems();
+    muse::uicomponents::MenuItemList makeChordAndFretboardDiagramsItems();
     muse::uicomponents::MenuItemList makeToolbarsItems();
     muse::uicomponents::MenuItemList makeWorkspacesItems();
     muse::uicomponents::MenuItemList makeShowItems();

@@ -293,13 +293,17 @@ void NotationActionController::init()
         addMeasures(actionData, AddBoxesTarget::AtEndOfScore);
     });
 
-    registerAction("insert-hbox", [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::BeforeSelection); });
-    registerAction("insert-vbox", [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::BeforeSelection); });
-    registerAction("insert-textframe", [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::BeforeSelection); });
-    registerAction("insert-fretframe", [this]() { addBoxes(BoxType::Fret, 1, AddBoxesTarget::BeforeSelection); });
+    registerAction("insert-hbox", [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::BeforeSelection); },
+                   &Interaction::canAddBoxes);
+    registerAction("insert-vbox", [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::BeforeSelection); }, &Interaction::canAddBoxes);
+    registerAction("insert-textframe", [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::BeforeSelection); },
+                   &Interaction::canAddBoxes);
+    registerAction("insert-fretframe", [this]() { addBoxes(BoxType::Fret, 1, AddBoxesTarget::BeforeSelection); },
+                   &Interaction::canAddBoxes);
     registerAction("append-hbox", [this]() { addBoxes(BoxType::Horizontal, 1, AddBoxesTarget::AtEndOfScore); });
     registerAction("append-vbox", [this]() { addBoxes(BoxType::Vertical, 1, AddBoxesTarget::AtEndOfScore); });
     registerAction("append-textframe", [this]() { addBoxes(BoxType::Text, 1, AddBoxesTarget::AtEndOfScore); });
+    registerAction("append-fretframe", [this]() { addBoxes(BoxType::Fret, 1, AddBoxesTarget::AtEndOfScore); });
 
     registerAction("edit-style", &Controller::openEditStyleDialog);
     registerAction("page-settings", &Controller::openPageSettingsDialog);
@@ -313,7 +317,7 @@ void NotationActionController::init()
     registerAction("measure-properties", &Controller::openMeasurePropertiesDialog);
     registerAction("config-raster", &Controller::openEditGridSizeDialog);
     registerAction("realize-chord-symbols", &Controller::openRealizeChordSymbolsDialog);
-    registerAction("add-fretboard-diagram", &Controller::addFretboardDiagram);
+    registerAction("add-fretboard-diagram", &Controller::addFretboardDiagram, &Interaction::canAddFretboardDiagram);
 
     registerAction("load-style", &Controller::loadStyle);
     registerAction("save-style", &Controller::saveStyle);
@@ -447,9 +451,12 @@ void NotationActionController::init()
     registerAction("add-turn", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurn);
     registerAction("add-turn-inverted", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnInverted);
     registerAction("add-turn-slash", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnSlash);
+    registerAction("add-turn-up", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnUp);
+    registerAction("add-turn-inverted-up", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTurnUpS);
     registerAction("add-trill", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTrill);
     registerAction("add-short-trill", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShortTrill);
     registerAction("add-mordent", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentMordent);
+    registerAction("add-haydn", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentHaydn);
     registerAction("add-tremblement", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentTremblement);
     registerAction("add-prall-mordent", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentPrallMordent);
     registerAction("add-shake", &Interaction::toggleOrnament, mu::engraving::SymId::ornamentShake3);
@@ -1490,7 +1497,7 @@ void NotationActionController::addImage()
             muse::trc("notation", "TIFF") + " (*.tif *.tiff)",
             muse::trc("notation", "All") + " (*)" };
 
-    muse::io::path_t path = interactive()->selectOpeningFile(muse::qtrc("notation", "Insert Image"), "", filter);
+    muse::io::path_t path = interactive()->selectOpeningFileSync(muse::trc("notation", "Insert Image"), "", filter);
     interaction->addImageToItem(path, item);
 }
 
@@ -1857,8 +1864,8 @@ muse::io::path_t NotationActionController::selectStyleFile(bool forLoad)
                              : muse::trc("notation", "MuseScore style file");
     std::vector<std::string> filter = { filterName + " (*.mss)" };
     return forLoad
-           ? interactive()->selectOpeningFile(muse::qtrc("notation", "Load style"), dir, filter)
-           : interactive()->selectSavingFile(muse::qtrc("notation", "Save style"), dir, filter);
+           ? interactive()->selectOpeningFileSync(muse::trc("notation", "Load style"), dir, filter)
+           : interactive()->selectSavingFileSync(muse::trc("notation", "Save style"), dir, filter);
 }
 
 void NotationActionController::loadStyle()
@@ -2450,6 +2457,38 @@ void NotationActionController::registerAction(const ActionCode& code,
                                               bool (NotationActionController::* enabler)() const)
 {
     registerAction(code, [this, handler, direction, quickly]() { (this->*handler)(direction, quickly); }, enabler);
+}
+
+void NotationActionController::registerAction(const muse::actions::ActionCode& code,
+                                              void (NotationActionController::* handler)(), Ret (INotationInteraction::*enabler)() const)
+{
+    auto _enabler = [this, enabler]() {
+        INotationPtr notation = currentNotation();
+        if (notation) {
+            return ((*notation->interaction()).*enabler)().success();
+        }
+
+        return false;
+    };
+
+    m_isEnabledMap[code] = _enabler;
+    dispatcher()->reg(this, code, this, handler);
+}
+
+void NotationActionController::registerAction(const muse::actions::ActionCode& code, std::function<void()> handler,
+                                              Ret (INotationInteraction::*enabler)() const)
+{
+    auto _enabler = [this, enabler]() {
+        INotationPtr notation = currentNotation();
+        if (notation) {
+            return ((*notation->interaction()).*enabler)().success();
+        }
+
+        return false;
+    };
+
+    m_isEnabledMap[code] = _enabler;
+    dispatcher()->reg(this, code, handler);
 }
 
 void NotationActionController::registerAction(const ActionCode& code,

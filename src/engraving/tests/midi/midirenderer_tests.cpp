@@ -975,3 +975,21 @@ TEST_F(MidiRenderer_Tests, hairpinTwoInstruments)
     checkEventInterval(events, 960, 1439, 55, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
     checkEventInterval(events, 1440, 1919, 55, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
 }
+
+TEST_F(MidiRenderer_Tests, hammerOnPullOff)
+{
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"hammer_on_pull_off.mscx", false, true));
+
+    EXPECT_EQ(events.size(), 2);
+
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 4);
+    EXPECT_EQ(events[DEFAULT_CHANNEL + 1].size(), 8);
+
+    checkEventInterval(events, 0, 479, 52, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL);
+    checkEventInterval(events, 480, 959, 53, 80, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+
+    checkEventInterval(events, 960, 1199, 52, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL);
+    checkEventInterval(events, 1200, 1439, 53, 80, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 1440, 1679, 55, 80, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 1680, 1919, 53, 80, MidiInstrumentEffect::HAMMER_PULL, DEFAULT_CHANNEL + 1);
+}

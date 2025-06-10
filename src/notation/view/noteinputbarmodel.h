@@ -91,8 +91,10 @@ private:
     muse::uicomponents::MenuItemList makeIntervalsItems();
     muse::uicomponents::MenuItemList makeMeasuresItems();
     muse::uicomponents::MenuItemList makeFramesItems();
+    muse::uicomponents::MenuItemList makeFramesAppendItems();
     muse::uicomponents::MenuItemList makeTextItems();
     muse::uicomponents::MenuItemList makeLinesItems();
+    muse::uicomponents::MenuItemList makeChordAndFretboardDiagramsItems();
 
     INotationNoteInputPtr noteInput() const;
     INotationInteractionPtr interaction() const;

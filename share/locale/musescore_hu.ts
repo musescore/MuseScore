@@ -58,7 +58,7 @@
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="69"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="72"/>
         <source>Add system locks to each system</source>
-        <translation type="unfinished"/>
+        <translation>Sorcsoport-zárolások hozzáadása az egyes sorcsoportokhoz</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="79"/>
@@ -3132,7 +3132,7 @@ sorcsoport első szótagja előtt</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
         <source>Cue sizes</source>
-        <translation type="unfinished"/>
+        <translation>Kiskotta mérete</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2064"/>
@@ -3355,17 +3355,17 @@ sorcsoport első szótagja előtt</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3085"/>
         <source>Horizontal position:</source>
-        <translation type="unfinished"/>
+        <translation>Vízszintes helyzet:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5292"/>
         <source>Mask barlines</source>
-        <translation type="unfinished"/>
+        <translation>Ütemvonalak maszkolása</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5295"/>
         <source>Mask barlines when intersecting text</source>
-        <translation type="unfinished"/>
+        <translation>Ütemvonalak maszkolása, ha szöveg metszi őket</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5393"/>
@@ -3441,7 +3441,7 @@ sorcsoport első szótagja előtt</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5947"/>
         <source>measure(s)</source>
-        <translation type="unfinished"/>
+        <translation>ütemek</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6025"/>
@@ -4483,7 +4483,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8116"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>Laissez vibrer</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8130"/>
@@ -6627,7 +6627,7 @@ x-magasságának %-a)</translation>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="234"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="77"/>
         <source>Undo ‘%1’</source>
-        <translation type="unfinished"/>
+        <translation>„%1” visszavonása</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="239"/>
@@ -6641,7 +6641,7 @@ x-magasságának %-a)</translation>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="240"/>
         <location filename="../../src/notation/view/internal/undoredotoolbarmodel.cpp" line="85"/>
         <source>Redo ‘%1’</source>
-        <translation type="unfinished"/>
+        <translation>„%1” mégis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2053"/>
@@ -6914,12 +6914,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="569"/>
         <source>Measures per s&amp;ystem…</source>
-        <translation type="unfinished"/>
+        <translation>Ütemek száma s&amp;orcsoportonként…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="570"/>
         <source>Measures per system…</source>
-        <translation type="unfinished"/>
+        <translation>Ütemek száma sorcsoportonként…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="681"/>
@@ -7269,7 +7269,7 @@ x-magasságának %-a)</translation>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="59"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="60"/>
         <source>Customize kit…</source>
-        <translation type="unfinished"/>
+        <translation>Készlet testreszabása…</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="65"/>
@@ -7674,19 +7674,19 @@ x-magasságának %-a)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="637"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="638"/>
         <source>Add/remove system lock</source>
-        <translation type="unfinished"/>
+        <translation>Sorcsoport-zárolás hozzáadása/eltávolítása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="643"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="644"/>
         <source>Move measure to previous system</source>
-        <translation type="unfinished"/>
+        <translation>Ütem áthelyezése az előző sorcsoportba</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="650"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="651"/>
         <source>Move measure to next system</source>
-        <translation type="unfinished"/>
+        <translation>Ütem áthelyezése a következő sorcsoportba</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="663"/>
@@ -7893,12 +7893,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1244"/>
         <source>&amp;Note-anchored line</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Hangjegyhez rögzített vonal</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1245"/>
         <source>Add note-anchored line</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyhez rögzített vonal hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1256"/>
@@ -7953,7 +7953,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1226"/>
         <source>&amp;Dynamic</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Dinamikus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1310"/>
@@ -7983,7 +7983,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1339"/>
         <source>C&amp;hord symbol</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Akkordjelzés</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1340"/>
@@ -8332,7 +8332,7 @@ x-magasságának %-a)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1771"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1772"/>
         <source>Add lyrics verse</source>
-        <translation type="unfinished"/>
+        <translation>Versszak hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1778"/>
@@ -8600,12 +8600,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2380"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>Laissez vibrer</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2381"/>
         <source>Add laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>Laissez vibrer hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2387"/>
@@ -8669,7 +8669,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2566"/>
         <source>Show/hide element bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>Elemeket határoló téglalapok megjelenítése/elrejtése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2572"/>
@@ -8684,7 +8684,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2579"/>
         <source>Show/hide segment shapes</source>
-        <translation type="unfinished"/>
+        <translation>Szakaszalakzatok megjelenítése/elrejtése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2585"/>
@@ -8699,7 +8699,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2592"/>
         <source>Show/hide skylines</source>
-        <translation type="unfinished"/>
+        <translation>Légvonalak megjelenítése/elrejtése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2598"/>
@@ -8709,17 +8709,17 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2599"/>
         <source>Show/hide system bounding rectangles</source>
-        <translation type="unfinished"/>
+        <translation>Sorcsoport-határoló téglalapok megjelenítése/elrejtése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2605"/>
         <source>Show element masks</source>
-        <translation type="unfinished"/>
+        <translation>Elemmaszkok megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2606"/>
         <source>Show/hide element masks</source>
-        <translation type="unfinished"/>
+        <translation>Elemmaszkok megjelenítése/elrejtése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1999"/>
@@ -8841,22 +8841,22 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2067"/>
         <source>Input by note name</source>
-        <translation type="unfinished"/>
+        <translation>Bevitel hangjegynév alapján</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2068"/>
         <source>Toggle note input mode: input by note name</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegybeviteli mód váltása: bevitel hangjegynév alapján</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2074"/>
         <source>Input by duration</source>
-        <translation type="unfinished"/>
+        <translation>Bevitel hossz alapján</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2075"/>
         <source>Toggle note input mode: input by duration</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegybeviteli mód váltása: bevitel hossz alapján</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2395"/>
@@ -9091,12 +9091,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="152"/>
         <source>&amp;History</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Előzmények</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="153"/>
         <source>Show/hide undo history</source>
-        <translation type="unfinished"/>
+        <translation>Visszavonási előzmények megjelenítése/elrejtése</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="161"/>
@@ -9146,7 +9146,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="202"/>
         <source>Show/hide percussion panel</source>
-        <translation type="unfinished"/>
+        <translation>Ütősök paneljének megjelenítése/elrejtése</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="216"/>
@@ -9201,7 +9201,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="132"/>
         <source>Show/hide layout panel</source>
-        <translation type="unfinished"/>
+        <translation>Elrendezési panel megjelenítése/elrejtése</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="194"/>
@@ -9258,22 +9258,22 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="96"/>
         <source>Written pitch</source>
-        <translation type="unfinished"/>
+        <translation>Írt hangmagasság</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="97"/>
         <source>Input written pitch</source>
-        <translation type="unfinished"/>
+        <translation>Írt hangmagasság bevitele</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="104"/>
         <source>Sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>Hangzó magasság</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="105"/>
         <source>Input sounding pitch</source>
-        <translation type="unfinished"/>
+        <translation>Hangzó magasság bevitele</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="123"/>
@@ -9284,12 +9284,12 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="131"/>
         <source>Hear playback when editing</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszás szerkesztés során</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="132"/>
         <source>Toggle hear playback when editing</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszás szerkesztés során be/ki</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="139"/>
@@ -9299,7 +9299,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="175"/>
         <source>Reload playback cache</source>
-        <translation type="unfinished"/>
+        <translation>Lejátszási gyorsítótár újratöltése</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="86"/>
@@ -9627,7 +9627,7 @@ x-magasságának %-a)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="657"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="658"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>Sorcsoport létrehozása a kijelölésből</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="669"/>
@@ -9772,7 +9772,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1227"/>
         <source>Add dynamic</source>
-        <translation type="unfinished"/>
+        <translation>Dinamika hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1232"/>
@@ -9958,13 +9958,13 @@ x-magasságának %-a)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1616"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1617"/>
         <source>Lock/unlock all systems</source>
-        <translation type="unfinished"/>
+        <translation>Összes sorcsoport zárolása be/ki</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1622"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1623"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation type="unfinished"/>
+        <translation>Kijelölt sorcsoportok zárolása be/ki</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1650"/>
@@ -10314,7 +10314,7 @@ x-magasságának %-a)</translation>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2612"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2613"/>
         <source>Mark corrupted measures</source>
-        <translation type="unfinished"/>
+        <translation>Hibás ütemek megjelölése</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2619"/>
@@ -10437,7 +10437,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="77"/>
         <source>Show &amp;actions list</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Műveletek megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="82"/>
@@ -13422,7 +13422,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>Laissez vibrer</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="179"/>
@@ -20326,7 +20326,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="164"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation type="unfinished"/>
+        <translation>Kijelölt sorcsoportok zárolása be/ki</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="165"/>
@@ -20337,7 +20337,7 @@ felismerése</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="187"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="189"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>Sorcsoport létrehozása a kijelölésből</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="190"/>
@@ -22069,7 +22069,7 @@ felismerése</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="53"/>
         <source>Laissez vibrer</source>
-        <translation type="unfinished"/>
+        <translation>Laissez vibrer</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="59"/>
@@ -23487,7 +23487,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="132"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>Sorcsoport létrehozása a kijelölésből</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/notationcontextmenumodel.cpp" line="208"/>
@@ -31467,22 +31467,22 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5459"/>
         <source>Lock/unlock selected system(s)</source>
-        <translation type="unfinished"/>
+        <translation>Kijelölt sorcsoportok zárolása be/ki</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5466"/>
         <source>Lock/unlock all systems</source>
-        <translation type="unfinished"/>
+        <translation>Összes sorcsoport zárolása be/ki</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5473"/>
         <source>Create system from selection</source>
-        <translation type="unfinished"/>
+        <translation>Sorcsoport létrehozása a kijelölésből</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5596"/>
         <source>Add note-anchored line</source>
-        <translation type="unfinished"/>
+        <translation>Hangjegyhez rögzített vonal hozzáadása</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5872"/>
@@ -31576,7 +31576,7 @@ palettafájl írása sikertelen:</translation>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5385"/>
         <location filename="../../src/notation/view/internal/dynamicpopupmodel.cpp" line="159"/>
         <source>Add dynamic</source>
-        <translation type="unfinished"/>
+        <translation>Dinamika hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5438"/>
@@ -31586,12 +31586,12 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5445"/>
         <source>Move measure to previous system</source>
-        <translation type="unfinished"/>
+        <translation>Ütem áthelyezése az előző sorcsoportba</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5452"/>
         <source>Move measure to next system</source>
-        <translation type="unfinished"/>
+        <translation>Ütem áthelyezése a következő sorcsoportba</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5480"/>
@@ -31791,7 +31791,7 @@ palettafájl írása sikertelen:</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7349"/>
         <source>Add lyrics verse</source>
-        <translation type="unfinished"/>
+        <translation>Versszak hozzáadása</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7397"/>

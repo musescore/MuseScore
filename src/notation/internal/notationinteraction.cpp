@@ -486,12 +486,11 @@ bool NotationInteraction::showShadowNote(ShadowNote& shadowNote, ShadowNoteParam
     shadowNote.setVoice(voice);
     shadowNote.setLineIndex(line);
 
-    Color color = configuration()->noteInputPreviewColor();
-
+    const Color color = configuration()->noteInputPreviewColor();
     if (color.isValid() && color != configuration()->selectionColor()) {
         shadowNote.setColor(color);
     } else {
-        shadowNote.setColor(configuration()->selectionColor(voice));
+        shadowNote.setColor(configuration()->highlightSelectionColor(voice));
     }
 
     mu::engraving::SymId symNotehead;
@@ -752,6 +751,12 @@ bool NotationInteraction::elementIsLess(const EngravingItem* e1, const Engraving
         return false;
     }
     if (e1->isBox() && e2->isImage()) {
+        return true;
+    }
+    if ((e1->isHarmony() || e1->isFretDiagram()) && e2->isFBox()) {
+        return false;
+    }
+    if (e1->isFBox() && (e2->isHarmony() || e2->isFretDiagram())) {
         return true;
     }
     if (e1->z() == e2->z()) {
@@ -1848,13 +1853,13 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
         break;
     case ElementType::STAFFTYPE_CHANGE: {
         EngravingItem* el = dropTarget(edd.ed);
-        if (el->isMeasure()) {
-            Measure* m = toMeasure(el);
+        Measure* m = el ? el->findMeasure() : nullptr;
+        if (m) {
             System* s = m->system();
             double y = pos.y() - s->canvasPos().y();
             staff_idx_t staffIndex = s->searchStaff(y);
             StaffTypeChange* stc = toStaffTypeChange(edd.ed.dropElement);
-            score()->cmdAddStaffTypeChange(toMeasure(el), staffIndex, stc);
+            score()->cmdAddStaffTypeChange(m, staffIndex, stc);
         }
     }
     break;
@@ -2684,7 +2689,7 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
     } else if (sel.isSingle()) {
         if (sel.element()->isNote() && !toNote(sel.element())->isTrillCueNote()) {
             doAddSlur(toNote(sel.element())->chord(), nullptr, slurTemplate);
-        } else if (sel.element()->isSlurSegment() && slurTemplate->isHammerOnPullOff()) {
+        } else if (sel.element()->isSlurSegment() && slurTemplate && slurTemplate->isHammerOnPullOff()) {
             Slur* slur = toSlurSegment(sel.element())->slur();
             doAddSlur(slur->startElement(), slur->endElement(), slurTemplate);
         }
@@ -2768,7 +2773,7 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     Slur* slur = firstChordRest->slur(secondChordRest);
     if (!slur || slur->slurDirection() != DirectionV::AUTO) {
         slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
-    } else if (slur && slurTemplate->isHammerOnPullOff()) {
+    } else if (slurTemplate && slurTemplate->isHammerOnPullOff()) {
         // Replace existing slur with HOPO
         endEditElement();
         score()->undoRemoveElement(slur);
@@ -4625,7 +4630,7 @@ Ret NotationInteraction::canAddBoxes() const
     }
 
     static const ElementTypeSet BOX_TYPES {
-        ElementType::VBOX, ElementType::HBOX, ElementType::TBOX
+        ElementType::VBOX, ElementType::HBOX, ElementType::TBOX, ElementType::FBOX
     };
 
     for (const EngravingItem* element: selection()->elements()) {
@@ -4829,14 +4834,14 @@ void NotationInteraction::copySelection()
 
 Ret NotationInteraction::repeatSelection()
 {
-    const mu::engraving::Selection& selection = score()->selection();
+    const Selection& selection = score()->selection();
     if (score()->noteEntryMode() && selection.isSingle()) {
         EngravingItem* el = selection.element();
         if (el && el->type() == ElementType::NOTE && !score()->inputState().endOfScore()) {
             startEdit(TranslatableString("undoableAction", "Repeat selection"));
             Chord* c = toNote(el)->chord();
             for (Note* note : c->notes()) {
-                mu::engraving::NoteVal nval = note->noteVal();
+                NoteVal nval = note->noteVal();
                 score()->addPitch(nval, note != c->notes()[0]);
             }
             apply();
@@ -4857,22 +4862,25 @@ Ret NotationInteraction::repeatSelection()
         return ret;
     }
 
-    mu::engraving::XmlReader xml(selection.mimeData());
-    track_idx_t dStaff = selection.staffStart();
+    XmlReader xml(selection.mimeData());
+    staff_idx_t dStaff = selection.staffStart();
     mu::engraving::Segment* endSegment = selection.endSegment();
 
-    if (endSegment && endSegment->segmentType() != mu::engraving::SegmentType::ChordRest) {
-        endSegment = endSegment->next1(mu::engraving::SegmentType::ChordRest);
+    if (endSegment && endSegment->segmentType() != SegmentType::ChordRest) {
+        endSegment = endSegment->next1(SegmentType::ChordRest);
     }
-    if (endSegment && endSegment->element(dStaff * mu::engraving::VOICES)) {
-        EngravingItem* e = endSegment->element(dStaff * mu::engraving::VOICES);
-        if (e) {
-            startEdit(TranslatableString("undoableAction", "Repeat selection"));
-            ChordRest* cr = toChordRest(e);
-            score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
-            apply();
+    if (endSegment) {
+        for (track_idx_t track = dStaff * VOICES; track < (dStaff + 1) * VOICES; ++track) {
+            EngravingItem* e = endSegment->element(track);
+            if (e) {
+                startEdit(TranslatableString("undoableAction", "Repeat selection"));
+                ChordRest* cr = toChordRest(e);
+                score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
+                apply();
 
-            showItem(cr);
+                showItem(cr);
+                break;
+            }
         }
     }
 
@@ -7519,8 +7527,8 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
 
 muse::Ret NotationInteraction::canAddFretboardDiagram() const
 {
-    bool canAdd = elementsSelected({ ElementType::HARMONY });
-    return canAdd ? muse::make_ok() : make_ret(Err::HarmonyIsNotSelected);
+    bool canAdd = elementsSelected({ ElementType::HARMONY, ElementType::NOTE, ElementType::REST });
+    return canAdd ? muse::make_ok() : make_ret(Err::NoteOrRestOrHarmonyIsNotSelected);
 }
 
 void NotationInteraction::addFretboardDiagram()
@@ -7543,27 +7551,45 @@ void NotationInteraction::addFretboardDiagram()
         selectedElements = selection->elements();
     }
 
-    std::vector<Harmony*> selectedHarmonies;
+    std::vector<EngravingItem*> filteredElements;
+
     for (EngravingItem* element : selectedElements) {
-        Harmony* harmony = element && element->isHarmony() ? toHarmony(element) : nullptr;
-        if (harmony && !harmony->explicitParent()->isFretDiagram()) {
-            selectedHarmonies.emplace_back(harmony);
+        if (!element || (!element->isHarmony() && !element->isRest() && !element->isNote())) {
+            continue;
+        }
+
+        if (element->isHarmony()) {
+            if (!element->explicitParent()->isFretDiagram()) {
+                filteredElements.emplace_back(element);
+            }
+        } else {
+            filteredElements.emplace_back(element);
         }
     }
 
-    if (selectedHarmonies.empty()) {
+    if (filteredElements.empty()) {
         return;
     }
 
     startEdit(TranslatableString("undoableAction", "Add fretboard diagram"));
 
     engraving::FretDiagram* lastAddedDiagram = nullptr;
-    for (Harmony* harmony : selectedHarmonies) {
-        engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(harmony->score()->dummy()->segment());
-        diagram->setTrack(harmony->track());
-        diagram->updateDiagram(harmony->plainText());
 
-        score->undo(new FretLinkHarmony(diagram, harmony));
+    for (EngravingItem* element : filteredElements) {
+        engraving::FretDiagram* diagram = engraving::Factory::createFretDiagram(score->dummy()->segment());
+        diagram->setTrack(element->track());
+
+        if (element->isHarmony()) {
+            Harmony* harmony = toHarmony(element);
+
+            diagram->updateDiagram(harmony->plainText());
+            score->undo(new FretLinkHarmony(diagram, harmony));
+        } else {
+            // add blank diagram
+            diagram->setParent(element->isNote() ? toNote(element)->chord()->segment() : toRest(element)->segment());
+            diagram->clear();
+        }
+
         score->undoAddElement(diagram);
 
         lastAddedDiagram = diagram;

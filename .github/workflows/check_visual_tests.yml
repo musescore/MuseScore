@@ -181,6 +181,12 @@ jobs:
       run: |
         echo "VTEST_DIFF_FOUND=false" >> $GITHUB_ENV
         ./vtest/vtest-compare-pngs.sh --ci 1
+    - name: Compare PNGs small
+      run: |
+        ./vtest/vtest-compare-pngs.sh --ci 1 -c ./current_pngs_small -r ./reference_pngs_small -o ./comparison/small
+    - name: Compare PNGs gp
+      run: |
+        ./vtest/vtest-compare-pngs.sh --ci 1 -c ./current_pngs_gp_small -r ./reference_pngs_gp_small -o ./comparison/gp
     - name: Upload comparison
       if: env.VTEST_DIFF_FOUND == 'true'
       uses: actions/upload-artifact@v4

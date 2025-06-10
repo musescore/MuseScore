@@ -73,7 +73,7 @@ void AppMenuModel::load()
         makeAddMenu(),
         makeFormatMenu(),
         makeToolsMenu(),
-        makePluginsMenu(),
+        makePluginsMenu()
     };
 
     if (globalConfiguration()->devModeEnabled()) {
@@ -157,6 +157,18 @@ void AppMenuModel::onActionsStateChanges(const muse::actions::ActionCodeList& co
             item.setState(uiActionsRegister()->actionState(TOGGLE_UNDO_HISTORY_PANEL_CODE));
         }
     }
+}
+
+MenuItemList AppMenuModel::makeChordAndFretboardDiagramsItems()
+{
+    MenuItemList items {
+        makeMenuItem("chord-text"),
+        makeMenuItem("add-fretboard-diagram"),
+        makeSeparator(),
+        makeMenuItem("insert-fretframe", TranslatableString("appshell/menu/add/chordandfret", "Fretboard diagram legend"))
+    };
+
+    return items;
 }
 
 MenuItem* AppMenuModel::makeMenuItem(const ActionCode& actionCode, MenuItemRole menuRole)
@@ -301,6 +313,8 @@ MenuItem* AppMenuModel::makeAddMenu()
         makeMenu(TranslatableString("appshell/menu/add", "&Frames"), makeFramesItems(), "menu-frames"),
         makeMenu(TranslatableString("appshell/menu/add", "&Text"), makeTextItems(), "menu-notes"),
         makeMenu(TranslatableString("appshell/menu/add", "&Lines"), makeLinesItems(), "menu-lines"),
+        makeMenu(TranslatableString("appshell/menu/add", "&Chords and fretboard diagrams"),
+                 makeChordAndFretboardDiagramsItems(), "menu-chord-and-frets"),
     };
 
     return makeMenu(TranslatableString("appshell/menu/add", "&Add"), addItems, "menu-add");
@@ -641,10 +655,21 @@ MenuItemList AppMenuModel::makeFramesItems()
         makeMenuItem("insert-hbox"),
         makeMenuItem("insert-vbox"),
         makeMenuItem("insert-textframe"),
+        makeMenuItem("insert-fretframe"),
         makeSeparator(),
+        makeMenu(TranslatableString("notation", "Insert at end of score"), makeFramesAppendItems())
+    };
+
+    return items;
+}
+
+MenuItemList AppMenuModel::makeFramesAppendItems()
+{
+    MenuItemList items {
         makeMenuItem("append-hbox"),
         makeMenuItem("append-vbox"),
-        makeMenuItem("append-textframe")
+        makeMenuItem("append-textframe"),
+        makeMenuItem("append-fretframe")
     };
 
     return items;

@@ -693,7 +693,7 @@ const char* EngravingObject::typeName() const
 
 TranslatableString EngravingObject::typeUserName() const
 {
-    return TConv::userName(type());
+    return TConv::capitalizedUserName(type());
 }
 
 String EngravingObject::translatedTypeUserName() const

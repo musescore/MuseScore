@@ -3,6 +3,8 @@
 #include "internal/guiapp.h"
 #include "internal/consoleapp.h"
 
+#include "global/runtime.h"
+
 #include "muse_framework_config.h"
 #include "app_config.h"
 
@@ -85,9 +87,12 @@
 #endif
 
 #ifdef MUSE_MODULE_UI
-#include "framework/dockwindow/dockmodule.h"
 #include "framework/ui/uimodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
+#endif
+
+#ifdef MUSE_MODULE_DOCKWINDOW
+#include "framework/dockwindow/dockmodule.h"
 #endif
 
 #ifdef MUSE_MODULE_UPDATE
@@ -137,25 +142,41 @@
 #include "diagnostics/diagnosticsmodule.h"
 #include "engraving/engravingmodule.h"
 
-#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
-#include "importexport/musicxml/musicxmlmodule.h"
+#ifdef MUE_BUILD_IMPEXP_BB_MODULE
 #include "importexport/bb/bbmodule.h"
+#endif
+#ifdef MUE_BUILD_IMPEXP_BWW_MODULE
 #include "importexport/bww/bwwmodule.h"
+#endif
+#ifdef MUE_BUILD_IMPEXP_CAPELLA_MODULE
 #include "importexport/capella/capellamodule.h"
-#include "importexport/guitarpro/guitarpromodule.h"
+#endif
+#ifdef MUE_BUILD_IMPEXP_MIDI_MODULE
 #include "importexport/midi/midimodule.h"
+#endif
+#ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
 #include "importexport/musedata/musedatamodule.h"
+#endif
+#ifdef MUE_BUILD_IMPEXP_MUSICXML_MODULE
+#include "importexport/musicxml/musicxmlmodule.h"
+#endif
+#ifdef MUE_BUILD_IMPEXP_OVE_MODULE
 #include "importexport/ove/ovemodule.h"
+#endif
+#ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
 #include "importexport/audioexport/audioexportmodule.h"
+#endif
+#ifdef MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE
 #include "importexport/imagesexport/imagesexportmodule.h"
+#endif
+#ifdef MUE_BUILD_IMPEXP_GUITARPRO_MODULE
+#include "importexport/guitarpro/guitarpromodule.h"
+#endif
+#ifdef MUE_BUILD_IMPEXP_MEI_MODULE
 #include "importexport/mei/meimodule.h"
-#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
+#endif
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
 #include "importexport/videoexport/videoexportmodule.h"
-#endif
-#else
-#ifdef MUE_BUILD_IMAGESEXPORT_MODULE
-#include "importexport/imagesexport/imagesexportmodule.h"
-#endif
 #endif
 
 #include "inspector/inspectormodule.h"
@@ -200,7 +221,7 @@
 #include "stubs/project/projectstubmodule.h"
 #endif
 
-#ifdef Q_OS_WASM
+#ifdef MUE_CONFIGURATION_IS_APPWEB
 #include "webbridge/webbridgemodule.h"
 #endif
 
@@ -259,6 +280,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 #ifdef MUSE_MODULE_UI
     app->addModule(new muse::ui::UiModule());
     app->addModule(new muse::uicomponents::UiComponentsModule());
+#endif
+
+#ifdef MUSE_MODULE_DOCKWINDOW
     app->addModule(new muse::dock::DockModule());
 #endif
     app->addModule(new muse::tours::ToursModule());
@@ -285,25 +309,41 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 
     app->addModule(new mu::engraving::EngravingModule());
 
-#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
+#ifdef MUE_BUILD_IMPEXP_BB_MODULE
     app->addModule(new mu::iex::bb::BBModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_BWW_MODULE
     app->addModule(new mu::iex::bww::BwwModule());
-    app->addModule(new mu::iex::musicxml::MusicXmlModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_CAPELLA_MODULE
     app->addModule(new mu::iex::capella::CapellaModule());
-    app->addModule(new mu::iex::guitarpro::GuitarProModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_MIDI_MODULE
     app->addModule(new mu::iex::midi::MidiModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
     app->addModule(new mu::iex::musedata::MuseDataModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_MUSICXML_MODULE
+    app->addModule(new mu::iex::musicxml::MusicXmlModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_OVE_MODULE
     app->addModule(new mu::iex::ove::OveModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
     app->addModule(new mu::iex::audioexport::AudioExportModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE
     app->addModule(new mu::iex::imagesexport::ImagesExportModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_GUITARPRO_MODULE
+    app->addModule(new mu::iex::guitarpro::GuitarProModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_MEI_MODULE
     app->addModule(new mu::iex::mei::MeiModule());
-#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
+#endif
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     app->addModule(new mu::iex::videoexport::VideoExportModule());
-#endif
-#else
-#ifdef MUE_BUILD_IMAGESEXPORT_MODULE
-    app->addModule(new mu::iex::imagesexport::ImagesExportModule());
-#endif
 #endif
 
     app->addModule(new mu::inspector::InspectorModule());
@@ -324,7 +364,8 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
 
-#ifdef Q_OS_WASM
+#ifdef MUE_CONFIGURATION_IS_APPWEB
+    //! NOTE It should be the last one because it replaces some services.
     app->addModule(new mu::webbridge::WebBridgeModule());
 #endif
 
@@ -333,6 +374,8 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 
 std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& options) const
 {
+#ifdef MUE_ENABLE_CONSOLEAPP
+
     modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
     ++m_lastID;
     // ctx->id = m_lastID;
@@ -376,6 +419,9 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
 #ifdef MUSE_MODULE_UI
     app->addModule(new muse::ui::UiModule());
     app->addModule(new muse::uicomponents::UiComponentsModule());
+#endif
+
+#ifdef MUSE_MODULE_DOCKWINDOW
     app->addModule(new muse::dock::DockModule());
 #endif
     app->addModule(new muse::tours::ToursModule());
@@ -402,25 +448,41 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
 
     app->addModule(new mu::engraving::EngravingModule());
 
-#ifdef MUE_BUILD_IMPORTEXPORT_MODULE
+#ifdef MUE_BUILD_IMPEXP_BB_MODULE
     app->addModule(new mu::iex::bb::BBModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_BWW_MODULE
     app->addModule(new mu::iex::bww::BwwModule());
-    app->addModule(new mu::iex::musicxml::MusicXmlModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_CAPELLA_MODULE
     app->addModule(new mu::iex::capella::CapellaModule());
-    app->addModule(new mu::iex::guitarpro::GuitarProModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_MIDI_MODULE
     app->addModule(new mu::iex::midi::MidiModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_MUSEDATA_MODULE
     app->addModule(new mu::iex::musedata::MuseDataModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_MUSICXML_MODULE
+    app->addModule(new mu::iex::musicxml::MusicXmlModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_OVE_MODULE
     app->addModule(new mu::iex::ove::OveModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_AUDIOEXPORT_MODULE
     app->addModule(new mu::iex::audioexport::AudioExportModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_IMAGESEXPORT_MODULE
     app->addModule(new mu::iex::imagesexport::ImagesExportModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_GUITARPRO_MODULE
+    app->addModule(new mu::iex::guitarpro::GuitarProModule());
+#endif
+#ifdef MUE_BUILD_IMPEXP_MEI_MODULE
     app->addModule(new mu::iex::mei::MeiModule());
-#ifdef MUE_BUILD_VIDEOEXPORT_MODULE
+#endif
+#ifdef MUE_BUILD_IMPEXP_VIDEOEXPORT_MODULE
     app->addModule(new mu::iex::videoexport::VideoExportModule());
-#endif
-#else
-#ifdef MUE_BUILD_IMAGESEXPORT_MODULE
-    app->addModule(new mu::iex::imagesexport::ImagesExportModule());
-#endif
 #endif
 
     app->addModule(new mu::inspector::InspectorModule());
@@ -440,9 +502,12 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
 
-// #ifdef Q_OS_WASM
-//     app->addModule(new mu::wasmtest::WasmTestModule());
-// #endif
-
     return app;
+
+#else // MUE_ENABLE_CONSOLEAPP
+
+    UNUSED(options);
+    return nullptr;
+
+#endif
 }

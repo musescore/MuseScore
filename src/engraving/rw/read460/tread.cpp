@@ -83,7 +83,6 @@
 #include "../../dom/barline.h"
 #include "../../dom/chord.h"
 #include "../../dom/bend.h"
-#include "../../dom/stretchedbend.h"
 #include "../../dom/box.h"
 #include "../../dom/laissezvib.h"
 #include "../../dom/layoutbreak.h"
@@ -174,8 +173,6 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::BEAM: read(item_cast<Beam*>(item), xml, ctx);
         break;
     case ElementType::BEND: read(item_cast<Bend*>(item), xml, ctx);
-        break;
-    case ElementType::STRETCHED_BEND: read(item_cast<StretchedBend*>(item), xml, ctx);
         break;
     case ElementType::HBOX: read(item_cast<HBox*>(item), xml, ctx);
         break;
@@ -728,7 +725,7 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setVelocity(e.readInt());
         } else if (tag == "dynType") { // obsolete
             if (mscVersion < 440) {
-                d->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+                d->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
             } else {
                 e.skipCurrentElement();
             }
@@ -2184,14 +2181,6 @@ void TRead::read(Bend* b, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(StretchedBend* b, XmlReader& xml, ReadContext& ctx)
-{
-    UNUSED(b);
-    UNUSED(xml);
-    UNUSED(ctx);
-    // not implemented
-}
-
 void TRead::read(Box* b, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
@@ -3109,7 +3098,7 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             h->setVeloChange(e.readInt());
         } else if (tag == "dynType") { // obsolete
             if (mscVersion < 440) {
-                h->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+                h->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
             } else {
                 e.skipCurrentElement();
             }

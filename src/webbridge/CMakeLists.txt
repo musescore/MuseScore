@@ -28,6 +28,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/memfilesystem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/memfilesystem.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/webinteractive.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/webinteractive.h
     )
 
 setup_module()

@@ -30,15 +30,13 @@
 #include "containers.h"
 
 #include "engravingitem.h"
-
-#include "mscore.h"
 #include "noteevent.h"
+#include "noteval.h"
 #include "pitchspelling.h"
 #include "symbol.h"
 #include "tie.h"
 #include "tiejumppointlist.h"
 #include "types.h"
-#include "noteval.h"
 
 namespace mu::engraving {
 class Factory;
@@ -51,7 +49,6 @@ class Accidental;
 class NoteDot;
 class Spanner;
 class StaffType;
-class StretchedBend;
 class NoteEditData;
 enum class AccidentalType : unsigned char;
 
@@ -410,11 +407,6 @@ public:
     SlideType slideToType() const { return m_slideToType; }
     SlideType slideFromType() const { return m_slideFromType; }
 
-    void setStretchedBend(StretchedBend* s) { m_stretchedBend = s; }
-    StretchedBend* stretchedBend() const { return m_stretchedBend; }
-    bool isHammerOn() const { return m_isHammerOn; }
-    void setIsHammerOn(bool hammerOn) { m_isHammerOn = hammerOn; }
-
     void setHarmonic(bool val) { m_harmonic = val; }
     bool harmonic() const { return m_harmonic; }
 
@@ -502,7 +494,7 @@ private:
     bool m_play = true;           // note is not played if false
     mutable bool m_mark = false;  // for use in sequencer
     bool m_fixed = false;         // for slash notation
-    StretchedBend* m_stretchedBend = nullptr;
+
     SlideType m_slideToType = SlideType::Undefined;
     SlideType m_slideFromType = SlideType::Undefined;
 
@@ -542,7 +534,6 @@ private:
     bool m_hasUserParentheses = false;
     bool m_hasGeneratedParens = false;
 
-    bool m_isHammerOn = false;
     bool m_harmonic = false;
 
     ElementList m_el;          // fingering, other text, symbols or images

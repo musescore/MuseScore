@@ -70,6 +70,7 @@ public:
     MOCK_METHOD(bool, thinNoteInputCursor, (), (const, override));
 
     MOCK_METHOD(QColor, selectionColor, (engraving::voice_idx_t), (const, override));
+    MOCK_METHOD(QColor, highlightSelectionColor, (engraving::voice_idx_t), (const, override));
 
     MOCK_METHOD(QColor, dropRectColor, (), (const, override));
 

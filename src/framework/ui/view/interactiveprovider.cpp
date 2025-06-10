@@ -29,6 +29,8 @@
 #include <QGuiApplication>
 #include <QWindow>
 
+#include "global/async/async.h"
+
 #include "diagnostics/diagnosticutils.h"
 
 #include "log.h"
@@ -101,7 +103,7 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
     }
 }
 
-RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const QString& title)
+RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const std::string& title)
 {
     if (m_isSelectColorOpened) {
         LOGW() << "already opened";
@@ -113,8 +115,8 @@ RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const QStri
     QColor selectedColor;
     {
         QColorDialog dlg;
-        if (!title.isEmpty()) {
-            dlg.setWindowTitle(title);
+        if (!title.empty()) {
+            dlg.setWindowTitle(QString::fromStdString(title));
         }
 
         dlg.setCurrentColor(color);
@@ -138,6 +140,16 @@ bool InteractiveProvider::isSelectColorOpened() const
 
 RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
 {
+#ifdef Q_OS_WASM
+    NOT_SUPPORTED;
+    std::abort();
+    {
+        RetVal<Val> rv;
+        rv.ret = muse::make_ret(Ret::Code::NotSupported);
+        return rv;
+    }
+#endif
+
     UriQuery q = q_;
 
     //! NOTE Disable Dialog.exec()
@@ -202,6 +214,12 @@ Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q)
 Promise<Val>::Body InteractiveProvider::openFunc(const UriQuery& q, const QVariantMap& params)
 {
     auto func = [this, q, params](Promise<Val>::Resolve resolve, Promise<Val>::Reject reject) {
+        IF_ASSERT_FAILED(!m_openingObject.objectId.isValid()) {
+            LOGE() << "The opening of the previous object has not been completed"
+                   << ", objectId: " << m_openingObject.objectId.toString()
+                   << ", query: " << m_openingObject.query.toString();
+        }
+
         m_openingObject = { q, resolve, reject, QVariant(), nullptr };
 
         RetVal<OpenData> openedRet;
@@ -643,9 +661,13 @@ void InteractiveProvider::onOpen(const QVariant& type, const QVariant& objectId,
     }
 
     notifyAboutCurrentUriChanged();
-    m_opened.send(m_openingObject.query.uri());
 
-    m_openingObject = ObjectInfo(); // clear
+    Uri uri = m_openingObject.query.uri();
+    m_openingObject = ObjectInfo();     // clear
+
+    Async::call(this, [this, uri]() {
+        m_opened.send(uri);
+    });
 }
 
 void InteractiveProvider::onClose(const QString& objectId, const QVariant& jsrv)

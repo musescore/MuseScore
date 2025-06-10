@@ -12051,7 +12051,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="39"/>
         <source>This will create a .zip file with information about your MuseScore Studio setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation>Spowoduje to utworzenie pliku .zip z informacjami o Twojej konfiguracji MuseScore Studio, aby pomóc twórcom zdiagnozować wszystkie problemy. Możesz sprawdzić zawartość tego pliku przed wysłaniem go komukolwiek.</translation>
+        <translation>Spowoduje to utworzenie pliku .zip z informacjami o Twoich ustawieniach MuseScore Studio, aby pomóc twórcom zdiagnozować wszystkie problemy. Możesz sprawdzić zawartość tego pliku przed wysłaniem go komukolwiek.</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/savediagnosticfilesscenario.cpp" line="53"/>

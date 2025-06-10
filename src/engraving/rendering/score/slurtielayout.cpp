@@ -48,6 +48,7 @@
 
 #include "tlayout.h"
 #include "chordlayout.h"
+#include "stemlayout.h"
 #include "tremololayout.h"
 #include "../engraving/types/symnames.h"
 
@@ -438,7 +439,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     case SlurAnchor::STEM:                //sc can't be null
     {
         // place slur starting point at stem end point
-        pt = sc->stemPos() - sc->pagePos() + sc->stem()->ldata()->line.p2();
+        pt = StemLayout::stemPos(sc) - sc->pagePos() + sc->stem()->ldata()->line.p2();
         if (useTablature) {                           // in tabs, stems are centred on note:
             pt.rx() = hw1 * 0.5 + (note1 ? note1->bboxXShift() : 0.0);                      // skip half notehead to touch stem, anatoly-os: incorrect. half notehead width is not always the stem position
         }
@@ -462,7 +463,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                 // longer be used. for the time being fakeCutout describes a point on the line y=mx+b, out from the top of the stem
                 // where y = yadj, m = fakeCutoutSlope, and x = y/m + fakeCutout
                 fakeCutout = std::min(0.0, std::abs(yadj) - (hook->width() / fakeCutoutSlope));
-                pt.rx() = sc->stemPosX() - fakeCutout;
+                pt.rx() = StemLayout::stemPosX(sc) - fakeCutout;
             }
         } else {
             Hook* hook = sc->hook();
@@ -486,7 +487,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     switch (sa2) {
     case SlurAnchor::STEM:                //ec can't be null
     {
-        pt = ec->stemPos() - ec->pagePos() + ec->stem()->ldata()->line.p2();
+        pt = StemLayout::stemPos(ec) - ec->pagePos() + ec->stem()->ldata()->line.p2();
         if (useTablature) {
             pt.rx() = hw2 * 0.5;
         }
@@ -547,11 +548,11 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                 double offset2 = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
                 double sh = stem1->length() + (beamWidthSp / 2) + offset2;
                 if (item->up()) {
-                    po.ry() = sc->stemPos().y() - sc->pagePos().y() - sh;
+                    po.ry() = StemLayout::stemPos(sc).y() - sc->pagePos().y() - sh;
                 } else {
-                    po.ry() = sc->stemPos().y() - sc->pagePos().y() + sh;
+                    po.ry() = StemLayout::stemPos(sc).y() - sc->pagePos().y() + sh;
                 }
-                po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->intrinsicMag()) + (stem1->lineWidthMag() / 2 * __up);
+                po.rx() = StemLayout::stemPosX(sc) + (beamAnchorInset * _spatium * sc->intrinsicMag()) + (stem1->lineWidthMag() / 2 * __up);
 
                 // account for articulations
                 fixArticulations(item, po, sc, __up, true);
@@ -567,14 +568,15 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                 double sh = stemHeight + offset2;
 
                 if (item->up()) {
-                    po.ry() = sc->stemPos().y() - sc->pagePos().y() - sh;
+                    po.ry() = StemLayout::stemPos(sc).y() - sc->pagePos().y() - sh;
                 } else {
-                    po.ry() = sc->stemPos().y() - sc->pagePos().y() + sh;
+                    po.ry() = StemLayout::stemPos(sc).y() - sc->pagePos().y() + sh;
                 }
                 if (!stem1) {
                     po.rx() = note->noteheadCenterX();
                 } else {
-                    po.rx() = sc->stemPosX() + (beamAnchorInset * _spatium * sc->intrinsicMag()) + (stem1->lineWidthMag() / 2. * __up);
+                    po.rx() = StemLayout::stemPosX(sc) + (beamAnchorInset * _spatium * sc->intrinsicMag())
+                              + (stem1->lineWidthMag() / 2. * __up);
                 }
                 fixArticulations(item, po, sc, __up, true);
 
@@ -701,15 +703,16 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                     double sh = stemHeight + offset3;
 
                     if (item->up()) {
-                        po.ry() = ec->stemPos().y() - ec->pagePos().y() - sh;
+                        po.ry() = StemLayout::stemPos(ec).y() - ec->pagePos().y() - sh;
                     } else {
-                        po.ry() = ec->stemPos().y() - ec->pagePos().y() + sh;
+                        po.ry() = StemLayout::stemPos(ec).y() - ec->pagePos().y() + sh;
                     }
                     if (!stem2) {
                         // tremolo whole notes
                         po.setX(note->noteheadCenterX());
                     } else {
-                        po.setX(ec->stemPosX() + (stem2->lineWidthMag() / 2 * __up) - (beamAnchorInset * _spatium * ec->intrinsicMag()));
+                        po.setX(StemLayout::stemPosX(ec) + (stem2->lineWidthMag() / 2 * __up)
+                                - (beamAnchorInset * _spatium * ec->intrinsicMag()));
                     }
 
                     // account for articulations
@@ -1188,7 +1191,7 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
 
         // Its own startCR or items belonging to it, lyrics, fingering, ledger lines, articulation on endCR
         if (item == startCR || parent == startCR || item->isTextBase() || item->isLedgerLine()
-            || (item->isArticulationFamily() && parent == endCR) || item->isBend() || item->isStretchedBend()) {
+            || (item->isArticulationFamily() && parent == endCR) || item->isBend()) {
             return true;
         }
         // Ornament accidentals on start or end chord
@@ -2774,21 +2777,6 @@ bool SlurTieLayout::shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx)
         Slur* slur = item->slur();
         if (slur->connectedElement() == Slur::ConnectedElement::GLISSANDO) {
             return false;
-        }
-
-        /// not showing hammer-on slur if the up notes of chords are connected with tie
-        if (slur->connectedElement() == Slur::ConnectedElement::HAMMER_ON) {
-            EngravingItem* start = slur->startElement();
-            EngravingItem* end = slur->endElement();
-            if (start && end && start->isChord() && end->isChord()) {
-                Note* upStartNote = toChord(start)->upNote();
-                Note* upEndChord = toChord(end)->upNote();
-                Tie* startTie = upStartNote->tieFor();
-                Tie* endTie = upEndChord->tieBack();
-                if (startTie && startTie == endTie) {
-                    return true;
-                }
-            }
         }
     }
 
