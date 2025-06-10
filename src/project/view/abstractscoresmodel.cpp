@@ -90,12 +90,29 @@ QList<int> AbstractScoresModel::nonScoreItemIndices() const
 
 void AbstractScoresModel::sortBy(const QString& key)
 {
-    if (m_sortKey == key) {
-        m_sortOrder = (m_sortOrder == Qt::AscendingOrder) ? Qt::DescendingOrder : Qt::AscendingOrder;
+    if (m_sortKey == key && m_isSorted) {
+        if (m_sortOrder == Qt::AscendingOrder) {
+            m_sortOrder = Qt::DescendingOrder;
+        } else {
+            clearSort();
+            return;
+        }
     } else {
         m_sortKey = key;
         m_sortOrder = Qt::AscendingOrder;
+        m_isSorted = true;
     }
+
+    emit sortKeyChanged();
+    emit sortOrderChanged();
+
+    load();
+}
+
+void AbstractScoresModel::clearSort()
+{
+    m_isSorted = false;
+    m_sortKey.clear();
 
     emit sortKeyChanged();
     emit sortOrderChanged();
@@ -105,7 +122,7 @@ void AbstractScoresModel::sortBy(const QString& key)
 
 void AbstractScoresModel::sortScoreItems(std::vector<QVariantMap>& items)
 {
-    if (m_sortKey.isEmpty()) {
+    if (m_sortKey.isEmpty() || !m_isSorted) {
         return;
     }
 
@@ -117,8 +134,10 @@ void AbstractScoresModel::sortScoreItems(std::vector<QVariantMap>& items)
 bool AbstractScoresModel::compareItems(const QVariantMap& a, const QVariantMap& b, const QString& key, Qt::SortOrder order)
 {
     QVariant valueA, valueB;
+    bool timeSinceOrder = false;
 
     if (key == "timeSinceModified") {
+        timeSinceOrder = true;
         valueA = a.value("rawModifiedTime");
         valueB = b.value("rawModifiedTime");
     } else if (key == "fileSize") {
@@ -143,14 +162,13 @@ bool AbstractScoresModel::compareItems(const QVariantMap& a, const QVariantMap& 
     }
 
     bool result = false;
-    if (valueA.typeId() == QMetaType::QString) {
+    if (valueA.typeId() == QMetaType::QString && timeSinceOrder) {
+        result = QString::localeAwareCompare(valueA.toString(), valueB.toString()) > 0;
+    } else if (valueA.typeId() == QMetaType::QString) {
         result = QString::localeAwareCompare(valueA.toString(), valueB.toString()) < 0;
     } else if (valueA.canConvert<qint64>() && valueB.canConvert<qint64>()) {
         result = valueA.toLongLong() < valueB.toLongLong();
-    } else {
-        result = QString::localeAwareCompare(valueA.toString(), valueB.toString()) < 0;
     }
-
     return (order == Qt::AscendingOrder) ? result : !result;
 }
 
@@ -170,7 +188,7 @@ bool AbstractScoresModel::isValueEmpty(const QVariant& value)
 
 QString AbstractScoresModel::currentSortKey() const
 {
-    return m_sortKey;
+    return m_isSorted ? m_sortKey : QString();
 }
 
 Qt::SortOrder AbstractScoresModel::sortOrder() const

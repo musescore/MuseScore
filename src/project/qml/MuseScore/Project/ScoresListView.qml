@@ -77,14 +77,17 @@ Item {
                 horizontalAlignment: Text.AlignLeft
                 anchors.verticalCenter: parent.verticalCenter
 
-                color: headerMouseArea.containsMouse ? "grey" : "white"
+                opacity: headerMouseArea.containsMouse ? 0.5 : 1.0
             }
             
             StyledIconLabel {
                 visible: sortable && root.model && root.model.currentSortKey === sortKey
-                iconCode: (root.model && root.model.sortOrder === Qt.AscendingOrder) ? IconCode.ARROW_UP : IconCode.ARROW_DOWN
+                iconCode: (root.model && root.model.sortOrder === Qt.AscendingOrder) ?  IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_UP
+
                 font.pixelSize: 12
                 anchors.verticalCenter: parent.verticalCenter
+
+                opacity: headerMouseArea.containsMouse ? 0.5 : 1.0
             }
         }
         

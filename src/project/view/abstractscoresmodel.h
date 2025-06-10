@@ -77,6 +77,7 @@ protected:
     static const QString CLOUD_VISIBILITY_KEY;
     static const QString CLOUD_VIEW_COUNT_KEY;
 
+    void clearSort();
     void sortScoreItems(std::vector<QVariantMap>& items);
     bool compareItems(const QVariantMap& a, const QVariantMap& b, const QString& key, Qt::SortOrder order);
     bool isValueEmpty(const QVariant& value);
@@ -84,6 +85,7 @@ protected:
     std::vector<QVariantMap> m_items;
     QString m_sortKey;
     Qt::SortOrder m_sortOrder;
+    bool m_isSorted = false;
 };
 }
 
