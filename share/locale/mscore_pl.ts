@@ -16480,7 +16480,7 @@ aby utworzyć pięciolinie.</translation>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="2093"/>
         <source>An active range/single source selection is required for cloning.</source>
-        <translation type="unfinished"></translation>
+        <translation>Do klonowania wymagany jest aktywny zakres/zaznaczenie pojedynczego źródła.</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="2925"/>
@@ -34229,7 +34229,7 @@ Ta partytura ma już partie. Zmiana lokalnych oznaczeń metrycznych, gdy obecne 
     <message>
         <location filename="../../libmscore/sym.cpp" line="5197"/>
         <source>Haydn ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>Ozdobnik Haydna</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5215"/>
@@ -34299,12 +34299,12 @@ Ta partytura ma już partie. Zmiana lokalnych oznaczeń metrycznych, gdy obecne 
     <message>
         <location filename="../../libmscore/sym.cpp" line="5268"/>
         <source>Turn up</source>
-        <translation type="unfinished"></translation>
+        <translation>Obiegnik w górę</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5269"/>
         <source>Inverted turn up</source>
-        <translation type="unfinished"></translation>
+        <translation>Odwrócony obiegnik w górę</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5458"/>
