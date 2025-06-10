@@ -72,6 +72,15 @@ private:
     void processOttava(mu::engraving::Score* score, bool isPlaying = true);
     void processOttavaAsync(mu::engraving::Score* score);
 
+    void processCursorSpannerRenderStatus(Measure* measure, Fraction tick, bool recover, bool isPlaying);
+    void processCursorSpannerRenderStatusAsync(Measure* measure, Fraction tick, bool recover, bool isPlaying);
+
+    void processCursorNoteRenderStatus(Measure* measure);
+    void processCursorNoteRenderStatusAsync(Measure* measure);
+
+    void processCursorNoteRenderRecover(EngravingItem* engravingItem);
+    void processCursorNoteRenderRecoverAsync(EngravingItem* engravingItem);
+
     bool m_visible = false;
     muse::RectF m_rect;
 
@@ -113,6 +122,11 @@ private:
 
     std::future<void> m_ottavaProcessFuture;
     std::atomic<bool> m_isOttavaProcessed{ false };
+
+    std::future<void> m_cursorSpannerRenderStatusProcessFuture;
+    std::future<void> m_cursorNoteRenderStatusProcessFuture;
+
+    std::future<void> m_cursorNoteRenderRecoverFuture;
 
     std::map<int, std::set<uint>> clefKeySigsKeysMap;
 

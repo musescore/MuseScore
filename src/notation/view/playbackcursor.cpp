@@ -1457,6 +1457,202 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
     }
 
 }
+
+void PlaybackCursor::processCursorSpannerRenderStatus(Measure* measure, Fraction tick, bool recover, bool isPlaying) {
+    if (m_cursorSpannerRenderStatusProcessFuture.valid()) {
+        m_cursorSpannerRenderStatusProcessFuture.wait();
+    }
+    m_cursorSpannerRenderStatusProcessFuture = std::async(std::launch::async, [this, measure, tick, recover, isPlaying]() {
+        processCursorSpannerRenderStatusAsync(measure, tick, recover, isPlaying);
+    });
+}
+
+void PlaybackCursor::processCursorSpannerRenderStatusAsync(Measure* measure, Fraction tick, bool recover, bool isPlaying) {
+    for (EngravingItem* _item : measure_spanner_map[measure->no()]) {
+        int max_rollback_measures = 4;
+        if (recover) {
+            max_rollback_measures = 8;
+        } 
+        if (spanner_ticks_map.find(_item) != spanner_ticks_map.end()) {
+            if (recover) {
+                _item->setColor(muse::draw::Color::BLACK);
+            } else {
+                if (tick.ticks() >= spanner_ticks_map[_item][0] && tick.ticks() < spanner_ticks_map[_item][1]) {
+                    if (isPlaying) {
+                        _item->setColor(muse::draw::Color::RED);
+                    }
+                } else {
+                    _item->setColor(muse::draw::Color::BLACK);
+                }
+            }
+        }
+        Measure* prevMeasure = measure->prevMeasure();
+        max_rollback_measures -= 1;
+        while (max_rollback_measures > 0 && prevMeasure) {
+            for (EngravingItem* _item : measure_spanner_map[prevMeasure->no()]) {
+                if (spanner_ticks_map.find(_item) != spanner_ticks_map.end()) {
+                    if (recover) {
+                        _item->setColor(muse::draw::Color::BLACK);
+                    } else {
+                        if (tick.ticks() >= spanner_ticks_map[_item][0] && tick.ticks() < spanner_ticks_map[_item][1]) {
+                            if (isPlaying) {
+                                _item->setColor(muse::draw::Color::RED);
+                            }
+                        } else {
+                            _item->setColor(muse::draw::Color::BLACK);
+                        }
+                    }
+                }
+            }
+            prevMeasure = prevMeasure->prevMeasure();
+            max_rollback_measures -= 1;
+        }
+    }
+}
+
+void PlaybackCursor::processCursorNoteRenderStatus(Measure* measure) {
+    if (m_cursorNoteRenderStatusProcessFuture.valid()) {
+        m_cursorNoteRenderStatusProcessFuture.wait();
+    }
+    m_cursorNoteRenderStatusProcessFuture = std::async(std::launch::async, [this, measure]() {
+        processCursorNoteRenderStatusAsync(measure);
+    });
+}
+
+void PlaybackCursor::processCursorNoteRenderStatusAsync(Measure* measure) {
+    for (mu::engraving::Segment* segment = measure->first(mu::engraving::SegmentType::ChordRest); segment;) {
+        std::vector<EngravingItem*> engravingItemListOfPrevMeasure = segment->elist();
+        size_t prev_len = engravingItemListOfPrevMeasure.size();
+        for (size_t i = 0; i < prev_len; i++) {
+            EngravingItem* engravingItem = engravingItemListOfPrevMeasure[i];
+            if (engravingItem == nullptr) {
+                continue;
+            }
+            if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
+                chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
+            }
+            engravingItem->setColor(muse::draw::Color::BLACK);
+
+            EngravingItemList itemList = engravingItem->childrenItems(true);
+            for (size_t j = 0; j < itemList.size(); j++) {
+                EngravingItem* item = itemList.at(j);
+                if (item == nullptr) {
+                    continue;
+                }
+                
+                if (item->type() == mu::engraving::ElementType::NOTE) {
+                    Note *_pre_note = toNote(item);
+                    if (_pre_note->isGrace()) {
+                        _pre_note->setColor(muse::draw::Color::BLACK);
+                    } 
+                    for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
+                        _pre_note->dot(k)->setColor(muse::draw::Color::BLACK);
+                    }
+                    if (_pre_note->accidental()) {
+                        _pre_note->accidental()->setColor(muse::draw::Color::BLACK);
+                    }
+                    if (_pre_note->chord()) {
+                        if (_pre_note->chord()->articulations().size() > 0) {
+                            std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
+                            for (auto& a : mArticulations) {
+                                a->setColor(muse::draw::Color::BLACK);
+                            }
+                        }
+
+                        Stem* _stem = _pre_note->chord()->stem();
+                        if (_stem) {
+                            _stem->setColor(muse::draw::Color::BLACK);
+                        }
+                        Hook* _hook = _pre_note->chord()->hook();
+                        if (_hook) {
+                            _hook->setColor(muse::draw::Color::BLACK);
+                        }
+                        Beam* _beam = _pre_note->chord()->beam();
+                        if (_beam) {
+                            _beam->setColor(muse::draw::Color::BLACK);
+                        }
+                    }
+                }
+                if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
+                    item->setColor(muse::draw::Color::BLACK);
+                }
+            }
+        }
+
+        mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ChordRest);
+        while (next_segment && !next_segment->visible()) {
+            next_segment = next_segment->next(mu::engraving::SegmentType::ChordRest);
+        }
+        segment = next_segment;
+    }
+}
+
+void PlaybackCursor::processCursorNoteRenderRecover(EngravingItem* engravingItem) {
+    if (m_cursorNoteRenderRecoverFuture.valid()) {
+        m_cursorNoteRenderRecoverFuture.wait();
+    }
+    m_cursorNoteRenderRecoverFuture = std::async(std::launch::async, [this, engravingItem]() {
+        processCursorNoteRenderRecoverAsync(engravingItem);
+    });
+}
+
+void PlaybackCursor::processCursorNoteRenderRecoverAsync(EngravingItem* engravingItem) {
+    if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
+        chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
+    }
+    engravingItem->setColor(muse::draw::Color::BLACK);
+    EngravingItemList itemList = engravingItem->childrenItems(true);
+    size_t items_len = itemList.size();
+    for (size_t j = 0; j < items_len; j++) {
+        EngravingItem* item = itemList.at(j);
+        if (item == nullptr) {
+            continue;
+        }
+        
+        if (item->type() == mu::engraving::ElementType::NOTE) {
+            Note *_pre_note = toNote(item);
+            // check grace
+            bool is_grace = _pre_note->isGrace();
+            if (is_grace) {
+                _pre_note->setColor(muse::draw::Color::BLACK);
+            }
+            if (_pre_note->qmlDotsCount() > 0) {
+                for (NoteDot* dot : _pre_note->dots()) {
+                    dot->setColor(muse::draw::Color::BLACK);
+                }
+            }
+            if (_pre_note->accidental()) {
+                _pre_note->accidental()->setColor(muse::draw::Color::BLACK);
+            }
+
+            if (_pre_note->chord()) {
+                if (_pre_note->chord()->articulations().size() > 0) {
+                    std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
+                    for (auto& a : mArticulations) {
+                        a->setColor(muse::draw::Color::BLACK);
+                    }
+                }
+
+                Stem* _stem = _pre_note->chord()->stem();
+                if (_stem) {
+                    _stem->setColor(muse::draw::Color::BLACK);
+                }
+                Hook* _hook = _pre_note->chord()->hook();
+                if (_hook) {
+                    _hook->setColor(muse::draw::Color::BLACK);
+                }
+                Beam* _beam = _pre_note->chord()->beam();
+                if (_beam) {
+                    _beam->setColor(muse::draw::Color::BLACK);
+                }
+            }
+        }
+        if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
+            item->setColor(muse::draw::Color::BLACK);
+        }
+    }
+}
+
 muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bool isPlaying) {
     if (!m_notation) {
         return RectF();
@@ -1476,35 +1672,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
         return RectF();
     }
 
-    if (isPlaying) {
-        for (EngravingItem* _item : measure_spanner_map[measure->no()]) {
-            if (spanner_ticks_map.find(_item) != spanner_ticks_map.end()) {
-                if (tick.ticks() >= spanner_ticks_map[_item][0] && tick.ticks() < spanner_ticks_map[_item][1]) {
-                    _item->setColor(muse::draw::Color::RED);
-                } else {
-                    _item->setColor(muse::draw::Color::BLACK);
-                }
-            }
-            int max_rollback_measures = 4;
-            Measure* prevMeasure = measure->prevMeasure();
-            max_rollback_measures -= 1;
-            while (max_rollback_measures > 0 && prevMeasure && measure_spanner_map[prevMeasure->no()].size() > 0) {
-                for (EngravingItem* _item : measure_spanner_map[prevMeasure->no()]) {
-                    if (spanner_ticks_map.find(_item) != spanner_ticks_map.end()) {
-                        if (tick.ticks() >= spanner_ticks_map[_item][0] && tick.ticks() < spanner_ticks_map[_item][1]) {
-                            if (isPlaying) {
-                                _item->setColor(muse::draw::Color::RED);
-                            }
-                        } else {
-                            _item->setColor(muse::draw::Color::BLACK);
-                        }
-                    }
-                }
-                prevMeasure = prevMeasure->prevMeasure();
-                max_rollback_measures -= 1;
-            }
-        }
-    }
+    processCursorSpannerRenderStatus(measure, tick, false, isPlaying);
 
     qreal x = 0.0;
     mu::engraving::Segment* s = nullptr;
@@ -1533,61 +1701,17 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 int duration_ticks = chordRest->durationTypeTicks().ticks();
                 // LOGALEX() << "curr_ticks: " << tick.ticks() << ", note ticks: " << t1.ticks() << ", duration_ticks: " << duration_ticks;
                 if (t1.ticks() + duration_ticks < tick.ticks()) {
-                    if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
-                        chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
-                    }
-                    engravingItem->setColor(muse::draw::Color::BLACK);
-                    EngravingItemList itemList = engravingItem->childrenItems(true);
-                    size_t items_len = itemList.size();
-                    for (size_t j = 0; j < items_len; j++) {
-                        EngravingItem* item = itemList.at(j);
-                        if (item == nullptr) {
-                            continue;
-                        }
-                        
-                        if (item->type() == mu::engraving::ElementType::NOTE) {
-                            Note *_pre_note = toNote(item);
-                            // check grace
-                            bool is_grace = _pre_note->isGrace();
-                            if (is_grace) {
-                                _pre_note->setColor(muse::draw::Color::BLACK);
-                            }
-                            if (_pre_note->qmlDotsCount() > 0) {
-                                for (NoteDot* dot : _pre_note->dots()) {
-                                    dot->setColor(muse::draw::Color::BLACK);
-                                }
-                            }
-                            if (_pre_note->accidental()) {
-                                _pre_note->accidental()->setColor(muse::draw::Color::BLACK);
-                            }
-
-                            if (_pre_note->chord()) {
-                                if (_pre_note->chord()->articulations().size() > 0) {
-                                    std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
-                                    for (auto& a : mArticulations) {
-                                        a->setColor(muse::draw::Color::BLACK);
-                                    }
-                                }
-
-                                Stem* _stem = _pre_note->chord()->stem();
-                                if (_stem) {
-                                    _stem->setColor(muse::draw::Color::BLACK);
-                                }
-                                Hook* _hook = _pre_note->chord()->hook();
-                                if (_hook) {
-                                    _hook->setColor(muse::draw::Color::BLACK);
-                                }
-                                Beam* _beam = _pre_note->chord()->beam();
-                                if (_beam) {
-                                    _beam->setColor(muse::draw::Color::BLACK);
-                                }
-                            }
-                        }
-                        if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
-                            item->setColor(muse::draw::Color::BLACK);
-                        }
-                    }
+                    processCursorNoteRenderRecover(engravingItem);
                 } else {
+                    if (s->tick().ticks() != curr_seg_ticks) {
+                        curr_seg_ticks = s->tick().ticks();
+                        if (clefKeySigsKeysMap.find(curr_seg_ticks) != clefKeySigsKeysMap.end()) {
+                            if (clefKeySigsKeysMap[curr_seg_ticks].size() > 0) {
+                                m_notation->interaction()->addClefKeySigsKeysSet(clefKeySigsKeysMap[curr_seg_ticks]);
+                                m_notation->interaction()->notifyClefKeySigsKeysChange();    
+                            }
+                        }
+                    }
                     if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
                         chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::RED);
                     }
@@ -1978,15 +2102,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                         }
                     }
 
-                    if (s->tick().ticks() != curr_seg_ticks) {
-                        curr_seg_ticks = s->tick().ticks();
-                        if (clefKeySigsKeysMap.find(curr_seg_ticks) != clefKeySigsKeysMap.end()) {
-                            if (clefKeySigsKeysMap[curr_seg_ticks].size() > 0) {
-                                m_notation->interaction()->addClefKeySigsKeysSet(clefKeySigsKeysMap[curr_seg_ticks]);
-                                m_notation->interaction()->notifyClefKeySigsKeysChange();    
-                            }
-                        }
-                    }
                 }
             }
         }
@@ -2028,160 +2143,12 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
     if (hit_measure_no() != measureNo || hit_measure() != measure) {
         Measure* prevMeasure = measure->prevMeasure();
         if (prevMeasure) {
-            for (mu::engraving::Segment* segment = prevMeasure->first(mu::engraving::SegmentType::ChordRest); segment;) {
-                std::vector<EngravingItem*> engravingItemListOfPrevMeasure = segment->elist();
-                size_t prev_len = engravingItemListOfPrevMeasure.size();
-                for (size_t i = 0; i < prev_len; i++) {
-                    EngravingItem* engravingItem = engravingItemListOfPrevMeasure[i];
-                    if (engravingItem == nullptr) {
-                        continue;
-                    }
-                    if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
-                        chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
-                    }
-                    engravingItem->setColor(muse::draw::Color::BLACK);
-
-                    EngravingItemList itemList = engravingItem->childrenItems(true);
-                    for (size_t j = 0; j < itemList.size(); j++) {
-                        EngravingItem* item = itemList.at(j);
-                        if (item == nullptr) {
-                            continue;
-                        }
-                        
-                        if (item->type() == mu::engraving::ElementType::NOTE) {
-                            Note *_pre_note = toNote(item);
-                            if (_pre_note->isGrace()) {
-                                _pre_note->setColor(muse::draw::Color::BLACK);
-                            } 
-                            for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
-                                _pre_note->dot(k)->setColor(muse::draw::Color::BLACK);
-                            }
-                            if (_pre_note->accidental()) {
-                                _pre_note->accidental()->setColor(muse::draw::Color::BLACK);
-                            }
-                            if (_pre_note->chord()) {
-                                if (_pre_note->chord()->articulations().size() > 0) {
-                                    std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
-                                    for (auto& a : mArticulations) {
-                                        a->setColor(muse::draw::Color::BLACK);
-                                    }
-                                }
-
-                                Stem* _stem = _pre_note->chord()->stem();
-                                if (_stem) {
-                                    _stem->setColor(muse::draw::Color::BLACK);
-                                }
-                                Hook* _hook = _pre_note->chord()->hook();
-                                if (_hook) {
-                                    _hook->setColor(muse::draw::Color::BLACK);
-                                }
-                                Beam* _beam = _pre_note->chord()->beam();
-                                if (_beam) {
-                                    _beam->setColor(muse::draw::Color::BLACK);
-                                }
-                            }
-                        }
-                        if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
-                            item->setColor(muse::draw::Color::BLACK);
-                        }
-                    }
-                }
-
-                mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ChordRest);
-                while (next_segment && !next_segment->visible()) {
-                    next_segment = next_segment->next(mu::engraving::SegmentType::ChordRest);
-                }
-                segment = next_segment;
-            }
-
+            processCursorNoteRenderStatus(prevMeasure);
             if (hit_measure() != nullptr && prevMeasure != hit_measure()) {
-                for (mu::engraving::Segment* segment = hit_measure()->first(mu::engraving::SegmentType::ChordRest); segment;) {
-                    std::vector<EngravingItem*> engravingItemListOfHitMeasure = segment->elist();
-                    size_t hit_len = engravingItemListOfHitMeasure.size();
-                    for (size_t i = 0; i < hit_len; i++) {
-                        EngravingItem* engravingItem = engravingItemListOfHitMeasure[i];
-                        if (engravingItem == nullptr) {
-                            continue;
-                        }
-                        if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
-                            chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
-                        }
-                        engravingItem->setColor(muse::draw::Color::BLACK);
-
-                        EngravingItemList itemList = engravingItem->childrenItems(true);
-                        for (size_t j = 0; j < itemList.size(); j++) {
-                            EngravingItem* item = itemList.at(j);
-                            if (item == nullptr) {
-                                continue;
-                            }
-                            
-                            if (item->type() == mu::engraving::ElementType::NOTE) {
-                                Note *_pre_note = toNote(item);
-                                if (_pre_note->isGrace()) {
-                                    _pre_note->setColor(muse::draw::Color::BLACK);
-                                }
-                                for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
-                                    _pre_note->dot(k)->setColor(muse::draw::Color::BLACK);
-                                }
-                                if (_pre_note->accidental()) {
-                                    _pre_note->accidental()->setColor(muse::draw::Color::BLACK);
-                                }
-                                if (_pre_note->chord()) {
-                                    if (_pre_note->chord()->articulations().size() > 0) {
-                                        std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
-                                        for (auto& a : mArticulations) {
-                                            a->setColor(muse::draw::Color::BLACK);
-                                        }
-                                    }
-
-                                    Stem* _stem = _pre_note->chord()->stem();
-                                    if (_stem) {
-                                        _stem->setColor(muse::draw::Color::BLACK);
-                                    }
-                                    Hook* _hook = _pre_note->chord()->hook();
-                                    if (_hook) {
-                                        _hook->setColor(muse::draw::Color::BLACK);
-                                    }
-                                    Beam* _beam = _pre_note->chord()->beam();
-                                    if (_beam) {
-                                        _beam->setColor(muse::draw::Color::BLACK);
-                                    }
-                                }
-                            }
-                            if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
-                                item->setColor(muse::draw::Color::BLACK);
-                            }
-                        }
-                    }
-
-                    mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ChordRest);
-                    while (next_segment && !next_segment->visible()) {
-                        next_segment = next_segment->next(mu::engraving::SegmentType::ChordRest);
-                    }
-                    segment = next_segment;
-                }
-
-                int max_rollback_measures = 4;
-                Measure* prevMeasure1 = hit_measure();
-                max_rollback_measures -= 1;
-                while (max_rollback_measures > 0 && prevMeasure1 && measure_spanner_map[prevMeasure1->no()].size() > 0) {
-                    for (EngravingItem* _item : measure_spanner_map[prevMeasure1->no()]) {
-                        if (spanner_ticks_map.find(_item) != spanner_ticks_map.end()) {
-                            if (tick.ticks() >= spanner_ticks_map[_item][0] && tick.ticks() < spanner_ticks_map[_item][1]) {
-                                if (isPlaying) {
-                                    _item->setColor(muse::draw::Color::RED);
-                                }
-                            } else {
-                                _item->setColor(muse::draw::Color::BLACK);
-                            }
-                        }
-                    }
-                    prevMeasure1 = prevMeasure1->prevMeasure();
-                    max_rollback_measures -= 1;
-                }
+                processCursorNoteRenderStatus(hit_measure());
+                processCursorSpannerRenderStatus(hit_measure(), tick, false, isPlaying);
             }
         }
-
         setHitMeasureNo(measureNo);
         setHitMeasure(measure);
     }
@@ -2255,18 +2222,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
             segment = next_segment;
         }
 
-        int max_rollback_measures = 8;
-        Measure* prevMeasure1 = score->lastMeasure();
-        max_rollback_measures -= 1;
-        while (max_rollback_measures > 0 && prevMeasure1 && measure_spanner_map[prevMeasure1->no()].size() > 0) {
-            for (EngravingItem* _item : measure_spanner_map[prevMeasure1->no()]) {
-                if (spanner_ticks_map.find(_item) != spanner_ticks_map.end()) {
-                    _item->setColor(muse::draw::Color::BLACK);
-                }
-            }
-            prevMeasure1 = prevMeasure1->prevMeasure();
-            max_rollback_measures -= 1;
-        }
+        processCursorSpannerRenderStatus(hit_measure(), tick, true, isPlaying);
     }
     
     m_notation->interaction()->arpeggioTick(tick.ticks());
