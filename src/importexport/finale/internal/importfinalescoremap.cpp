@@ -437,6 +437,10 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<c
     if (changed(staffType->invisible(), staffInvisible, result)) {
         staffType->setInvisible(staffInvisible);
     }
+    Spatium lineDistance = Spatium(double(currStaff->lineSpace) / EVPU_PER_SPACE);
+    if (changed(staffType->lineDistance(), lineDistance, result)) {
+        staffType->setLineDistance(lineDistance);
+    }
     int stepOffset = currStaff->calcToplinePosition();
     Spatium yoffset = Spatium(-stepOffset /2.0);
     if (changed(staffType->yoffset(), yoffset, result)) {
