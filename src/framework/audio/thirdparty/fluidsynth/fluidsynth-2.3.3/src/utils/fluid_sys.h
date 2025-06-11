@@ -529,14 +529,6 @@ static FLUID_INLINE int fluid_atomic_int_exchange_and_add(volatile fluid_atomic_
 }
 #define fluid_atomic_int_add(_pi, _add) fluid_atomic_int_exchange_and_add(_pi, _add)
 
-static FLUID_INLINE int fluid_atomic_uint_exchange_and_add(volatile fluid_atomic_uint_t *_pi, int _add)
-{
-    fluid_atomic_uint_t tmp = *_pi;
-    *_pi += _add;
-    return tmp;
-}
-#define fluid_atomic_uint_add(_pi, _add) fluid_atomic_uint_exchange_and_add(_pi, _add)
-
 #define fluid_atomic_pointer_get(_pp) (*(_pp))
 #define fluid_atomic_pointer_set(_pp, val) ((void)(*(_pp) = val))
 static FLUID_INLINE int fluid_atomic_pointer_compare_and_exchange(volatile void **_pp, void *_old, void *_new)
@@ -576,6 +568,14 @@ typedef void **fluid_private_t;
 #define fluid_private_init(_priv)                  ((void)((_priv = (fluid_private_t) malloc(sizeof(void*))), 0))
 
 #endif //NO_THREADS
+
+static FLUID_INLINE int fluid_atomic_uint_exchange_and_add(volatile fluid_atomic_uint_t *_pi, int _add)
+{
+    fluid_atomic_uint_t tmp = *_pi;
+    *_pi += _add;
+    return tmp;
+}
+#define fluid_atomic_uint_add(_pi, _add) fluid_atomic_uint_exchange_and_add(_pi, _add)
 
 /* Dynamic Module Loading, currently only used by LADSPA subsystem */
 #ifdef LADSPA

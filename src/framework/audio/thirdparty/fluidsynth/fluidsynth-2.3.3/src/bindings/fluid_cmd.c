@@ -26,6 +26,12 @@
 #include "fluid_sfont.h"
 #include "fluid_chan.h"
 
+#ifndef NO_THREADS
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+#endif // NO_THREADS
+
 /* FIXME: LADSPA used to need a lot of parameters on a single line. This is not
  * necessary anymore, so the limits below could probably be reduced */
 #define MAX_TOKENS 100
