@@ -137,7 +137,7 @@ StyledFlickable {
         StyledGroupBox {
             Layout.fillWidth: true
             Layout.minimumWidth: 500
-            title: qsTrc("notation/editstyle/hammeronpulloff", "Consecutive hammer-on/pull-offs")
+            title: qsTrc("notation/editstyle/hammeronpulloff", "Consecutive hammer-ons/pull-offs")
 
             ColumnLayout {
                 width: parent.width
