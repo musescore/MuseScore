@@ -86,6 +86,9 @@ public:
     double symbolSize() const { return m_symbolSize; }
     void setSymbolSize(double v) { m_symbolSize = v; }
 
+    bool centerOnSymbol() const { return m_centerOnSymbol; }
+    void setCenterOnSymbol(bool val) { m_centerOnSymbol = val; }
+
     std::vector<LineF> dragAnchorLines() const override;
 
     static constexpr std::array<MarkerType, 4> RIGHT_MARKERS {
@@ -95,10 +98,13 @@ public:
         MarkerType::DA_DBLCODA,
     };
 
+    String symbolString() const;
+
 private:
     MarkerType m_markerType = MarkerType::SEGNO;
     String m_label;                 ///< referenced from Jump() element
 
     double m_symbolSize = 18.0;
+    bool m_centerOnSymbol = true;
 };
 } // namespace mu::engraving

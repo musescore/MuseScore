@@ -40,6 +40,7 @@ void MarkerSettingsModel::createProperties()
     m_label = buildPropertyItem(mu::engraving::Pid::LABEL);
     m_symbolSize = buildPropertyItem(mu::engraving::Pid::MARKER_SYMBOL_SIZE);
     m_position = buildPropertyItem(mu::engraving::Pid::POSITION);
+    m_centerOnSymbol = buildPropertyItem(mu::engraving::Pid::MARKER_CENTER_ON_SYMBOL);
 }
 
 void MarkerSettingsModel::requestElements()
@@ -53,6 +54,7 @@ void MarkerSettingsModel::loadProperties()
     loadPropertyItem(m_label);
     loadPropertyItem(m_symbolSize);
     loadPropertyItem(m_position);
+    loadPropertyItem(m_centerOnSymbol);
 }
 
 void MarkerSettingsModel::resetProperties()
@@ -61,6 +63,7 @@ void MarkerSettingsModel::resetProperties()
     m_label->resetToDefault();
     m_symbolSize->resetToDefault();
     m_position->resetToDefault();
+    m_centerOnSymbol->resetToDefault();
 }
 
 PropertyItem* MarkerSettingsModel::type() const
@@ -81,4 +84,9 @@ PropertyItem* MarkerSettingsModel::symbolSize() const
 PropertyItem* MarkerSettingsModel::position() const
 {
     return m_position;
+}
+
+PropertyItem* MarkerSettingsModel::centerOnSymbol() const
+{
+    return m_centerOnSymbol;
 }

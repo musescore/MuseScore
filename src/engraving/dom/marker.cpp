@@ -190,6 +190,8 @@ PropertyValue Marker::getProperty(Pid propertyId) const
         return int(markerType());
     case Pid::MARKER_SYMBOL_SIZE:
         return symbolSize();
+    case Pid::MARKER_CENTER_ON_SYMBOL:
+        return centerOnSymbol();
     default:
         break;
     }
@@ -211,6 +213,9 @@ bool Marker::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::MARKER_SYMBOL_SIZE:
         setSymbolSize(v.toDouble());
+        break;
+    case Pid::MARKER_CENTER_ON_SYMBOL:
+        setCenterOnSymbol(v.toBool());
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
@@ -240,6 +245,8 @@ PropertyValue Marker::propertyDefault(Pid propertyId) const
     case Pid::POSITION:
         // TODO - move to text style
         return isRightMarker() ? AlignH::RIGHT : AlignH::LEFT;
+    case Pid::MARKER_CENTER_ON_SYMBOL:
+        return true;
     default:
         break;
     }
@@ -299,6 +306,29 @@ std::vector<LineF> Marker::dragAnchorLines() const
     }
 
     return lines;
+}
+
+String Marker::symbolString() const
+{
+    // Returns the coda/segno symbol if present
+    const static std::array<muse::String, 7> REPEAT_SYMBOL_NAMES {
+        u"<sym>coda</sym>",
+        u"<sym>codaSquare</sym>",
+        u"<sym>codaJapanes</sym>",
+        u"<sym>segno</sym>",
+        u"<sym>segnoSerpent1</sym>",
+        u"<sym>segnoSerpent2</sym>",
+        u"<sym>segnoJapanese</sym>",
+    };
+
+    String symName;
+    for (const String& sym : REPEAT_SYMBOL_NAMES) {
+        if (xmlText().contains(sym)) {
+            symName = sym;
+        }
+    }
+
+    return symName;
 }
 
 //---------------------------------------------------------

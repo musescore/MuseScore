@@ -255,6 +255,7 @@ public:
     std::list<TextFragment>& fragments() { return m_fragments; }
     std::list<TextFragment> fragmentsWithoutEmpty();
     const Shape& shape() const { return m_shape; }
+    Shape& shape() { return m_shape; }
     const RectF& boundingRect() const { return m_shape.bbox(); }
     RectF boundingRect(int col1, int col2, const TextBase*) const;
     size_t columns() const;
