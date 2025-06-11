@@ -177,5 +177,13 @@ TEST_F(GuitarBendImporter_Tests, gpDottedDurations) {
 TEST_F(GuitarBendImporter_Tests, gpSimpleBend) {
     gpReadTest(u"simple_bend", u"gp");
 }
+
+TEST_F(GuitarBendImporter_Tests, gpBendRelease) {
+    gpReadTest(u"bend_release", u"gp");
+}
+
+TEST_F(GuitarBendImporter_Tests, gpPrebendBend) {
+    gpReadTest(u"prebend_bend", u"gp");
+}
 #endif
 }
