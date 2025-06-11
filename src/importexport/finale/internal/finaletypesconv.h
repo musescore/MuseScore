@@ -56,6 +56,7 @@ public:
     static engraving::Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger);
     static engraving::Key keyFromAlteration(int musxAlteration);
     static engraving::KeyMode keyModeFromDiatonicMode(music_theory::DiatonicMode diatonicMode);
+    static engraving::SymId acciSymbolFromAcciAmount(int acciAmount);
     static engraving::StaffGroup staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle);
     static double doubleFromEvpu(musx::dom::Evpu evpu);
     static PointF evpuToPointF(musx::dom::Evpu xEvpu, musx::dom::Evpu yEvpu);

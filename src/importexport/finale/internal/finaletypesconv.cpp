@@ -1043,6 +1043,20 @@ KeyMode FinaleTConv::keyModeFromDiatonicMode(music_theory::DiatonicMode diatonic
     return muse::value(keyModeTypeTable, diatonicMode, KeyMode::UNKNOWN);
 }
 
+SymId FinaleTConv::acciSymbolFromAcciAmount(int acciAmount)
+{
+    /// @todo add support for microtonal symbols (will require access to musx KeySignature instance)
+    /// This code assumes each chromatic halfstep is 1 EDO division, but we cannot make that assumption
+    /// with microtonal symbols.
+    static const std::unordered_map<int, SymId> acciSymbolTable = {
+        { -2,   SymId::accidentalDoubleFlat },
+        { -1,   SymId::accidentalFlat },
+        { 1,    SymId::accidentalSharp },
+        { 2,    SymId::accidentalDoubleSharp },
+    };
+    return muse::value(acciSymbolTable, acciAmount, SymId::noSym);
+}
+
 StaffGroup FinaleTConv::staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle)
 {
     using NotationStyle = musx::dom::others::Staff::NotationStyle;
