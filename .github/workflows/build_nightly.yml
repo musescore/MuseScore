@@ -49,6 +49,6 @@ jobs:
                 build_mode: 'nightly',
                 publish: 'on',
                 sentry_project: 'sandbox',
-                use_qt69: 'off'
+                use_qt69: 'on'
               }
             })

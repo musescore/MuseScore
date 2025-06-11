@@ -22,7 +22,7 @@ on:
         required: false
       use_qt69:
         description: 'Use Qt 6.9'
-        default: 'off'
+        default: 'on'
         required: false  
   workflow_call:
     inputs:
@@ -48,12 +48,25 @@ on:
         required: false
       use_qt69:
         description: 'Use Qt 6.9'
-        default: 'off'
+        default: 'on'
         type: string
-        required: false    
+        required: false
+ 
+env:
+  USE_QT69: ${{ inputs.use_qt69 != '' && inputs.use_qt69 || 'on' }}        
 
 jobs:
+  setup:
+    runs-on: ubuntu-22.04
+    outputs:
+      use_qt69: ${{ steps.set_use_qt69.outputs.use_qt69 }}
+    steps:
+      - id: set_use_qt69
+        run: |
+          echo "use_qt69=${{ env.USE_QT69 }}" >> $GITHUB_OUTPUT
+
   build:
+    needs: setup
     if: github.event_name != 'workflow_dispatch' || contains(inputs.platforms, 'linux_x64') || contains(inputs.platforms, 'linux_arm64')
     runs-on: ${{ matrix.runs-on }}
     strategy:
@@ -72,11 +85,12 @@ jobs:
             arch: x86_64
             runs-on: ubuntu-22.04
             qt-host: linux
-            qt-arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }} 
+            qt-version: ${{ needs.setup.outputs.use_qt69 == 'on' && '6.9.1' || '6.2.4' }}
+            qt-arch: ${{ needs.setup.outputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }} 
             dump-symbols-arch: x86-64
           - platform: linux_arm64
             arch: aarch64
-            runs-on: ${{ inputs.use_qt69 == 'on' && 'ubuntu-24.04-arm' || 'ubuntu-22.04-arm' }}  
+            runs-on: ${{ needs.setup.outputs.use_qt69 == 'on' && 'ubuntu-24.04-arm' || 'ubuntu-22.04-arm' }}  
             qt-host: linux_arm64
             qt-arch: linux_gcc_arm64
             dump-symbols-arch: aarch64
@@ -181,15 +195,15 @@ jobs:
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4 
-      if: ${{ !(matrix.qt-host == 'linux_arm64' && inputs.use_qt69 != 'on') }}
+      if: ${{ !(matrix.qt-host == 'linux_arm64' && env.USE_QT69 != 'on') }}
       with:
-        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
+        version: ${{ env.USE_QT69 == 'on' && '6.9.1' || '6.2.4' }}
         host: ${{ matrix.qt-host }}
         target: 'desktop'
         arch: ${{ matrix.qt-arch }}
         modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Install Qt 6.2.4 arm64
-      if: ${{ matrix.qt-host == 'linux_arm64' && inputs.use_qt69 != 'on' }}  
+      if: ${{ matrix.qt-host == 'linux_arm64' && env.USE_QT69 != 'on' }}  
       run: |
         bash ./buildscripts/ci/linux/arm64/install_qt.sh     
     - name: Setup environment

@@ -22,7 +22,7 @@ on:
         required: false
       use_qt69:
         description: 'Use Qt 6.9'
-        default: 'off'
+        default: 'on'
         required: false   
   workflow_call:
     inputs:
@@ -48,9 +48,12 @@ on:
         required: false
       use_qt69:
         description: 'Use Qt 6.9'
-        default: 'off'
+        default: 'on'
         type: string
         required: false    
+
+env:
+  USE_QT69: ${{ inputs.use_qt69 != '' && inputs.use_qt69 || 'on' }}               
 
 jobs:
   windows_x64:
@@ -158,15 +161,15 @@ jobs:
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
-      if: ${{ inputs.use_qt69 == 'on' }}
+      if: ${{ env.USE_QT69 == 'on' }}
       with:
-        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }} 
+        version: '6.9.1'
         host: 'windows'
         target: 'desktop'
-        arch: ${{ inputs.use_qt69 == 'on' && 'win64_msvc2022_64' || 'win64_msvc2019_64' }} 
+        arch: 'win64_msvc2022_64'
         modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Install Qt 6.2.11
-      if: ${{ inputs.use_qt69 != 'on' }}
+      if: ${{ env.USE_QT69 != 'on' }}
       run: |
         buildscripts\ci\windows\install_qt_6_2_11.bat
     - name: Setup environment
@@ -309,7 +312,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: '6.9.*'
+        version: '6.9.1'
         host: 'windows'
         target: 'desktop'
         arch: 'win64_msvc2022_64'
