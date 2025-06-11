@@ -219,10 +219,10 @@ bool MStyle::readProperties(XmlReader& e)
                 set(idx, TConv::fromXml(e.readAsciiText(), ChordStylePreset::STANDARD));
                 break;
             case P_TYPE::LH_TAPPING_SYMBOL:
-                set(idx, TConv::fromXml(e.readAsciiText(), LHTappingSymbol::NONE));
+                set(idx, TConv::fromXml(e.readAsciiText(), LHTappingSymbol::DOT));
                 break;
             case P_TYPE::RH_TAPPING_SYMBOL:
-                set(idx, TConv::fromXml(e.readAsciiText(), RHTappingSymbol::NONE));
+                set(idx, TConv::fromXml(e.readAsciiText(), RHTappingSymbol::T));
                 break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));

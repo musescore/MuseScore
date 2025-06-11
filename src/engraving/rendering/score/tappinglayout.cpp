@@ -66,14 +66,23 @@ void TappingLayout::layoutLeftHandTapping(Tapping* item, Tapping::LayoutData* ld
 {
     updateHalfSlurs(item, style, tabStaff, ctx);
 
-    LHTappingSymbol lhSym = style.styleV(Sid::lhTappingSymbol).value<LHTappingSymbol>();
+    LHTappingSymbol lhSym = tabStaff ? style.styleV(Sid::lhTappingSymbolTab).value<LHTappingSymbol>()
+                            : style.styleV(Sid::lhTappingSymbolNormalStave).value<LHTappingSymbol>();
+    LHTappingShowItems showItems
+        = tabStaff ? style.styleV(Sid::lhTappingShowItemsNormalStave).value<LHTappingShowItems>()
+          : style.styleV(Sid::lhTappingShowItemsNormalStave).value<LHTappingShowItems>();
+    bool dontShowSymbols = showItems == LHTappingShowItems::HALF_SLUR;
 
-    if (lhSym != LHTappingSymbol::DOT) {
+    if (lhSym != LHTappingSymbol::DOT || dontShowSymbols) {
         ldata->symId = SymId::noSym;
     }
-    if (lhSym != LHTappingSymbol::CIRCLED_T) {
+    if (lhSym != LHTappingSymbol::CIRCLED_T || dontShowSymbols) {
         delete item->text();
         item->setText(nullptr);
+    }
+
+    if (dontShowSymbols) {
+        return;
     }
 
     if (lhSym == LHTappingSymbol::DOT) {
@@ -101,8 +110,10 @@ void TappingLayout::updateHalfSlurs(Tapping* item, const MStyle& style, bool tab
         return;
     }
 
-    if ((tabStaff && style.styleB(Sid::lhTappingShowHalfSlursOnTab))
-        || (!tabStaff && style.styleB(Sid::lhTappingShowHalfSlursOnNormalStave))) {
+    bool showHalfSlurAbove
+        = (tabStaff && style.styleV(Sid::lhTappingShowItemsTab).value<LHTappingShowItems>() != LHTappingShowItems::SYMBOL)
+          || (!tabStaff && style.styleV(Sid::lhTappingShowItemsNormalStave).value<LHTappingShowItems>() != LHTappingShowItems::SYMBOL);
+    if (showHalfSlurAbove) {
         TappingHalfSlur* halfSlurAbove = item->halfSlurAbove();
         if (!halfSlurAbove) {
             halfSlurAbove = new TappingHalfSlur(item);
@@ -127,9 +138,10 @@ void TappingLayout::updateHalfSlurs(Tapping* item, const MStyle& style, bool tab
         item->setHalfSlurAbove(nullptr);
     }
 
-    if (tabStaff && style.styleB(Sid::lhTappingShowHalfSlursOnTab)
-        && style.styleB(Sid::lhTappingSlurTopAndBottomNoteOnTab)
-        && toChord(item->parent())->notes().size() > 1) {
+    bool showHalfSlurBelow
+        = tabStaff && style.styleV(Sid::lhTappingShowItemsTab).value<LHTappingShowItems>() != LHTappingShowItems::SYMBOL
+          && style.styleB(Sid::lhTappingSlurTopAndBottomNoteOnTab) && toChord(item->parent())->notes().size() > 1;
+    if (showHalfSlurBelow) {
         TappingHalfSlur* halfSlurBelow = item->halfSlurBelow();
         if (!halfSlurBelow) {
             halfSlurBelow = new TappingHalfSlur(item);

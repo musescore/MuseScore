@@ -940,15 +940,19 @@ enum class TappingHand {
 };
 
 enum class LHTappingSymbol : unsigned char {
-    NONE,
     DOT,
     CIRCLED_T,
 };
 
 enum class RHTappingSymbol : unsigned char {
-    NONE,
     T,
     PLUS,
+};
+
+enum class LHTappingShowItems : unsigned char {
+    HALF_SLUR,
+    SYMBOL,
+    BOTH,
 };
 
 struct InstrumentTrackId {

@@ -893,7 +893,6 @@ TappingHand TConv::fromXml(const AsciiStringView& str, TappingHand def)
 
 std::vector<Item<LHTappingSymbol> > LH_TAPPING_SYMBOL
 {
-    { LHTappingSymbol::NONE, "none" },
     { LHTappingSymbol::DOT, "dot" },
     { LHTappingSymbol::CIRCLED_T, "circledT" },
 };
@@ -910,7 +909,6 @@ LHTappingSymbol TConv::fromXml(const AsciiStringView& str, LHTappingSymbol def)
 
 std::vector<Item<RHTappingSymbol> > RH_TAPPING_SYMBOL
 {
-    { RHTappingSymbol::NONE, "none" },
     { RHTappingSymbol::T, "T" },
     { RHTappingSymbol::PLUS, "plus" },
 };
