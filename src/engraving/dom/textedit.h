@@ -71,14 +71,19 @@ class TextEditUndoCommand : public UndoCommand
     OBJECT_ALLOCATOR(engraving, TextEditUndoCommand)
 
 public:
+    UNDO_TYPE(CommandType::TextEdit)
+    UNDO_NAME("TextEdit")
+
     TextEditUndoCommand(const TextCursor& tc)
         : m_cursor(tc) {}
+
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
     {
         return f == UndoCommand::Filter::TextEdit && m_cursor.text() == target;
     }
 
     TextCursor& cursor() { return m_cursor; }
+    const TextCursor& cursor() const { return m_cursor; }
 
 protected:
     TextCursor m_cursor;
