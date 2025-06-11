@@ -265,6 +265,8 @@ struct ScoreChangesRange {
     staff_idx_t staffIdxFrom = muse::nidx;
     staff_idx_t staffIdxTo = muse::nidx;
 
+    bool isTextEditing = false;
+
     std::map<EngravingItem*, std::unordered_set<CommandType> > changedItems;
     ElementTypeSet changedTypes;
     PropertyIdSet changedPropertyIdSet;
@@ -286,18 +288,6 @@ struct ScoreChangesRange {
     void clear()
     {
         *this = ScoreChangesRange();
-    }
-
-    void combine(const ScoreChangesRange& r)
-    {
-        tickFrom = std::min(tickFrom, r.tickFrom);
-        tickTo = std::max(tickTo, r.tickTo);
-        staffIdxFrom = std::min(staffIdxFrom, r.staffIdxFrom);
-        staffIdxTo = std::max(staffIdxTo, r.staffIdxTo);
-        changedItems.insert(r.changedItems.begin(), r.changedItems.end());
-        changedTypes.insert(r.changedTypes.begin(), r.changedTypes.end());
-        changedPropertyIdSet.insert(r.changedPropertyIdSet.begin(), r.changedPropertyIdSet.end());
-        changedStyleIdSet.insert(r.changedStyleIdSet.begin(), r.changedStyleIdSet.end());
     }
 };
 

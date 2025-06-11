@@ -206,6 +206,9 @@ enum class CommandType : signed char {
     // Meta info
     ChangeMetaInfo,
 
+    // Text
+    TextEdit,
+
     // Other
     InsertTime,
     ChangeScoreOrder,
@@ -293,6 +296,7 @@ public:
         std::map<EngravingItem*, std::unordered_set<CommandType> > changedItems;
         StyleIdSet changedStyleIdSet;
         PropertyIdSet changedPropertyIdSet;
+        bool isTextEditing = false;
     };
 
     ChangesInfo changesInfo(bool undo = false) const;
