@@ -115,6 +115,7 @@ bool Score::loadStyle(muse::io::IODevice& dev, bool ign, bool overlap)
 {
     TRACEFUNC;
 
+    bool success = false;
     if (!dev.open(IODevice::ReadOnly)) {
         LOGE() << "The style data is not available.";
         return false;
@@ -123,11 +124,13 @@ bool Score::loadStyle(muse::io::IODevice& dev, bool ign, bool overlap)
     MStyle st = style();
     if (st.read(&dev, ign)) {
         undo(new ChangeStyle(this, st, overlap));
-        return true;
+        success = true;
+    } else {
+        LOGE() << "The style data is not compatible with this version of MuseScore Studio.";
     }
 
-    LOGE() << "The style data is not compatible with this version of MuseScore Studio.";
-    return false;
+    dev.close();
+    return success;
 }
 
 //---------------------------------------------------------
