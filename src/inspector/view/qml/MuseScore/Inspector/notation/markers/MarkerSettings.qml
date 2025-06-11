@@ -96,4 +96,22 @@ Column {
         minValue: 0
         maxValue: 1000
     }
+
+    FlatRadioButtonGroupPropertyView {
+        id: positionButtonList
+        titleText: qsTrc("inspector", "Position")
+        propertyItem: root.model ? root.model.position : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: symbolSize.navigationRowEnd + 1
+
+        requestIconFontSize: 16
+        requestWidth: 98
+
+        model: [
+            { iconCode: IconCode.ALIGN_LEFT, value: 0},
+            { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, value: 2},
+            { iconCode: IconCode.ALIGN_RIGHT, value: 1 }
+        ]
+    }
 }

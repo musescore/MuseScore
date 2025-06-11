@@ -4086,11 +4086,23 @@ void TLayout::layoutMarker(const Marker* item, Marker::LayoutData* ldata)
 
     TLayout::layoutBaseTextBase(item, ldata);
 
-    // although normally laid out to parent (measure) width,
-    // force to center over barline if left-aligned
-    if (item->layoutToParentWidth() && item->align() == AlignH::LEFT) {
-        ldata->moveX(-ldata->bbox().width() * 0.5);
+    // POSITION
+    Measure* measure = item->parentItem() ? toMeasure(item->parentItem()) : nullptr;
+    double xAdj = item->isRightMarker() ? measure->width() : 0.0;
+
+    AlignH hPos = item->getProperty(Pid::POSITION).value<AlignH>();
+    switch (hPos) {
+    case AlignH::HCENTER:
+        xAdj -= ldata->bbox().width() / 2;
+        break;
+    case AlignH::RIGHT:
+        xAdj -= ldata->bbox().width();
+        break;
+    case AlignH::LEFT:
+        break;
     }
+
+    ldata->moveX(xAdj);
 
     if (item->autoplace()) {
         const Measure* m = toMeasure(item->explicitParent());
@@ -6202,13 +6214,44 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
     Shape shape;
     double y = 0.0;
 
+    double maxBlockWidth = -DBL_MAX;
     // adjust the bounding box for the text item
     for (size_t i = 0; i < ldata->blocks.size(); ++i) {
         TextBlock& t = ldata->blocks[i];
         t.layout(item);
         y += t.lineSpacing();
         t.setY(y);
-        shape.add(t.shape().translated(PointF(0.0, y)));
+        if (!item->positionSeparateFromAlignment()) {
+            shape.add(t.shape().translated(PointF(0.0, y)));
+        }
+        maxBlockWidth = std::max(maxBlockWidth, t.boundingRect().width());
+    }
+
+    // ALIGN TEXT
+    // TODO - implement for all text items
+    if (item->positionSeparateFromAlignment()) {
+        for (size_t i = 0; i < ldata->blocks.size(); ++i) {
+            TextBlock& t = ldata->blocks[i];
+            double diff = maxBlockWidth - t.boundingRect().width();
+            if (muse::RealIsNull(diff)) {
+                shape.add(t.shape().translated(PointF(0.0, y)));
+                continue;
+            }
+            double rx = 0.0;
+            AlignH alignH = item->align().horizontal;
+            bool dynamicAlwaysCentered = item->isDynamic() && item->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
+            if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
+                rx = diff * 0.5;
+            } else if (alignH == AlignH::RIGHT) {
+                rx = diff;
+            }
+
+            for (TextFragment& f : t.fragments()) {
+                f.pos.rx() += rx;
+            }
+
+            shape.add(t.shape().translated(PointF(rx, t.y())));
+        }
     }
 
     RectF bb = shape.bbox();
