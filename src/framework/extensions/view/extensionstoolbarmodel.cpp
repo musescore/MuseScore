@@ -26,8 +26,6 @@
 #include "log.h"
 
 using namespace muse::extensions;
-using namespace muse::actions;
-using namespace muse::ui;
 using namespace muse::uicomponents;
 
 void ExtensionsToolBarModel::load()
@@ -55,11 +53,4 @@ void ExtensionsToolBarModel::load()
     setItems(items);
 
     AbstractToolBarModel::load();
-
-    emit isEmptyChanged();
-}
-
-bool ExtensionsToolBarModel::isEmpty() const
-{
-    return rowCount() == 0;
 }

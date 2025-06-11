@@ -3,6 +3,8 @@
 #include "internal/guiapp.h"
 #include "internal/consoleapp.h"
 
+#include "global/runtime.h"
+
 #include "muse_framework_config.h"
 #include "app_config.h"
 
@@ -372,6 +374,8 @@ std::shared_ptr<muse::IApplication> AppFactory::newGuiApp(const CmdOptions& opti
 
 std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& options) const
 {
+#ifdef MUE_ENABLE_CONSOLEAPP
+
     modularity::ContextPtr ctx = std::make_shared<modularity::Context>();
     ++m_lastID;
     // ctx->id = m_lastID;
@@ -498,9 +502,12 @@ std::shared_ptr<muse::IApplication> AppFactory::newConsoleApp(const CmdOptions& 
     app->addModule(new muse::update::UpdateModule());
     app->addModule(new muse::workspace::WorkspaceModule());
 
-// #ifdef Q_OS_WASM
-//     app->addModule(new mu::wasmtest::WasmTestModule());
-// #endif
-
     return app;
+
+#else // MUE_ENABLE_CONSOLEAPP
+
+    UNUSED(options);
+    return nullptr;
+
+#endif
 }

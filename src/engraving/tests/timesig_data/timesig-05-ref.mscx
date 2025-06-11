@@ -529,8 +529,11 @@
         <eid>YB_YB</eid>
         <voice>
           <Harmony>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>ZB_ZB</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>aB_aB</eid>
@@ -556,9 +559,12 @@
             <fractions>-1/4</fractions>
             </location>
           <Harmony>
-            <root>15</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>15</root>
+              </harmonyInfo>
             <eid>dB_dB</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           </voice>
         </Measure>

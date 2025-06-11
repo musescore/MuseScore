@@ -465,7 +465,8 @@ public:
     void spellNotelist(std::vector<Note*>& notes);
     void undoChangeTpc(Note* note, int tpc);
     void undoChangeChordRestLen(ChordRest* cr, const TDuration&);
-    void undoTransposeHarmony(Harmony*, int, int);
+    void undoTransposeHarmony(Harmony*, Interval interval, bool doubleSharpFlat = true);
+    void undoTransposeHarmonyDiatonic(Harmony*, int interval, bool doubleSharpFlat, bool transposeKeys);
     void undoExchangeVoice(Measure* measure, voice_idx_t val1, voice_idx_t val2, staff_idx_t staff1, staff_idx_t staff2);
     void undoRemovePart(Part* part, size_t partIdx = muse::nidx);
     void undoInsertPart(Part* part, size_t targetPartIndex);
@@ -714,8 +715,7 @@ public:
     void resetStyleValues(const StyleIdSet& styleIdSet);
 
     void setStyle(const MStyle& s, const bool overlap = false);
-    bool loadStyle(const String&, bool ign = false, const bool overlap = false);
-    bool loadStyle(const muse::ByteArray& data, bool ign = false, bool overlap = false);
+    bool loadStyle(muse::io::IODevice& dev, bool ign = false, bool overlap = false);
     bool saveStyle(const String&);
 
     TranslatableString getTextStyleUserName(TextStyleType tid);
@@ -1055,6 +1055,10 @@ public:
     void removeSystemLocksContainingMMRests();
     void updateSystemLocksOnCreateMMRests(Measure* first, Measure* last);
 
+    void undoRenameChordInFretBox(const Harmony* harmony, const String& oldName);
+    void undoAddChordToFretBox(const EngravingItem* harmonyOrFretDiagram);
+    void undoRemoveChordFromFretBox(const EngravingItem* harmonyOrFretDiagram);
+
     friend class Chord;
 
 protected:
@@ -1100,7 +1104,6 @@ private:
     std::list<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
     void pasteChordRest(ChordRest* cr, const Fraction& tick);
 
-    bool doLoadStyle(muse::io::IODevice& dev, bool ign = false, bool overlap = false);
     void doSelect(EngravingItem* e, SelectType type, staff_idx_t staffIdx);
     void selectSingle(EngravingItem* e, staff_idx_t staffIdx);
     void selectAdd(EngravingItem* e);
@@ -1147,6 +1150,8 @@ private:
     Note* addPitchToChord(NoteVal&, Chord* chord, InputState* externalInputState = nullptr);
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
     Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
+
+    FBox* findFretBox() const;
 
     MasterScore* m_masterScore = nullptr;
     std::list<MuseScoreView*> m_viewer;

@@ -54,6 +54,7 @@ Item {
         propertyItem: root.gapAbove
 
         icon: IconCode.GAP_ABOVE
+        measureUnitsSymbol: qsTrc("global", "sp")
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
@@ -69,6 +70,7 @@ Item {
         propertyItem: root.gapBelow
 
         icon: IconCode.GAP_BELOW
+        measureUnitsSymbol: qsTrc("global", "sp")
 
         navigationPanel: root.navigationPanel
         navigationRowStart: gapAbove.navigationRowEnd + 1

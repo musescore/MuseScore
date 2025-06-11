@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
@@ -42,113 +43,66 @@ Column {
     spacing: 12
 
     function focusOnFirst() {
-        legendScalesSection.focusOnFirst()
+        tabBar.focusOnCurrentTab()
     }
 
-    FretLegendScalesSection {
-        id: legendScalesSection
-        textScale: root.model ? root.model.textScale : null
-        diagramScale: root.model ? root.model.diagramScale : null
+    readonly property QtObject frameChordsModel: model ? model.modelByType(Inspector.TYPE_FRET_FRAME_CHORDS) : null
+    readonly property QtObject frameSettingsModel: model ? model.modelByType(Inspector.TYPE_FRET_FRAME_SETTINGS) : null
 
-        navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowStart + 1
-    }
+    InspectorTabBar {
+        id: tabBar
 
-    FretLegendGapsSection {
-        id: legendGapsSection
-        columnGap: root.model ? root.model.columnGap : null
-        rowGap: root.model ? root.model.rowGap : null
+        property bool isChordsTabActive: currentIndex === 0
 
-        navigationPanel: root.navigationPanel
-        navigationRowStart: legendScalesSection.navigationRowEnd + 1
-    }
+        InspectorTabButton {
+            text: qsTrc("inspector", "Chords")
 
-    Item {
-        height: childrenRect.height
-        width: parent.width
-
-        SpinBoxPropertyView {
-            id: chordsPerRowSection
-            anchors.left: parent.left
-            anchors.right: parent.horizontalCenter
-            anchors.rightMargin: 2
-
-            titleText: qsTrc("inspector", "Chords per row")
-            propertyItem: root.model ? root.model.chordsPerRow : null
-            step: 1
-            decimals: 0
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: legendGapsSection.navigationRowEnd + 1
+            navigation.name: "ChordsTab"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart
         }
 
-        FretLegendAlignmentSection {
-            id: legendAlignmentSection
-            anchors.left: parent.horizontalCenter
-            anchors.leftMargin: 2
-            anchors.right: parent.right
+        InspectorTabButton {
+            text: qsTrc("inspector", "Frame")
 
-            propertyItem: root.model ? root.model.horizontalAlignment : null
-
-            navigationPanel: root.navigationPanel
-            navigationRowStart: chordsPerRowSection.navigationRowEnd + 1
+            navigation.name: "FrameTab"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart + 1
         }
     }
 
+    StackLayout {
+        id: stackLayout
 
-    SeparatorLine { anchors.margins: -12 }
+        readonly property int sideMargin: -12
 
-    PropertyCheckBox {
-        id: matchStaffSize
-
-        text: qsTrc("inspector", "Scale with staff size")
-        propertyItem: root.model ? root.model.isSizeSpatiumDependent : null
-
-        navigation.name: "Scale with staff size"
-        navigation.panel: root.navigationPanel
-        navigation.row: legendAlignmentSection.navigationRowEnd + 1
-    }
-
-    SpinBoxPropertyView {
-        id: heightSection
         anchors.left: parent.left
-        anchors.right: parent.horizontalCenter
-        anchors.rightMargin: 2
+        anchors.leftMargin: tabBar.isChordsTabActive ? sideMargin : 0
+        anchors.right: parent.right
+        anchors.rightMargin: tabBar.isChordsTabActive ? sideMargin : 0
 
-        titleText: qsTrc("inspector", "Height")
-        propertyItem: root.model ? root.model.frameHeight : null
+        currentIndex: tabBar.currentIndex
 
-        icon: IconCode.VERTICAL
+        height: itemAt(currentIndex).implicitHeight
 
-        navigationPanel: root.navigationPanel
-        navigationRowStart: matchStaffSize.navigation.row + 1
-    }
+        FretFrameChordsTab {
+            height: implicitHeight
 
-    VerticalGapsSection {
-        id: verticalGapsSection
-        gapAbove: root.model ? root.model.gapAbove : null
-        gapBelow: root.model ? root.model.gapBelow : null
+            model: root.frameChordsModel
 
-        navigationPanel: root.navigationPanel
-        navigationRowStart: heightSection.navigationRowEnd + 1
-    }
+            sideMargin: -stackLayout.sideMargin
 
-    SeparatorLine { anchors.margins: -12 }
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1000
+        }
 
-    HorizontalMarginsSection {
-        id: horizontalMarginsSection
-        frameLeftMargin: root.model ? root.model.frameLeftMargin : null
-        frameRightMargin: root.model ? root.model.frameRightMargin : null
+        FretFrameSettingsTab {
+            height: implicitHeight
 
-        navigationPanel: root.navigationPanel
-        navigationRowStart: verticalGapsSection.navigationRowEnd + 1
-    }
+            model: root.frameSettingsModel
 
-    VerticalMarginsSection {
-        frameTopMargin: root.model ? root.model.frameTopMargin : null
-        frameBottomMargin: root.model ? root.model.frameBottomMargin : null
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: horizontalMarginsSection.navigationRowEnd + 1
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 2000
+        }
     }
 }

@@ -102,5 +102,8 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/HammerOnPullOffTappingPage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/hammerOnPullOffImages/hopoShowAll.png</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/hammerOnPullOffImages/hopoNotShowAll.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/ComboBoxDropdown.qml</file>
     </qresource>
 </RCC>

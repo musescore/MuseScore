@@ -33,6 +33,7 @@
 #include "../compat/midi/midipatch.h"
 
 #include "bend.h"
+#include "box.h"
 #include "bracket.h"
 #include "chord.h"
 #include "drumset.h"
@@ -580,18 +581,38 @@ class TransposeHarmony : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, TransposeHarmony)
 
-    Harmony* harmony = nullptr;
-    int rootTpc = 0;
-    int baseTpc = 0;
+    Harmony* m_harmony = nullptr;
+
+    Interval m_interval = Interval(0, 0);
+    bool m_useDoubleSharpsFlats = false;
 
     void flip(EditData*) override;
 
 public:
-    TransposeHarmony(Harmony*, int rootTpc, int baseTpc);
+    TransposeHarmony(Harmony*, Interval interval, bool useDoubleSharpsFlats);
 
     UNDO_TYPE(CommandType::TransposeHarmony)
     UNDO_NAME("TransposeHarmony")
-    UNDO_CHANGED_OBJECTS({ harmony })
+    UNDO_CHANGED_OBJECTS({ m_harmony })
+};
+
+class TransposeHarmonyDiatonic : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, TransposeHarmonyDiatonic)
+
+    Harmony* m_harmony = nullptr;
+    int m_interval = 0;
+    bool m_useDoubleSharpsFlats = false;
+    bool m_transposeKeys = false;
+
+    void flip(EditData*) override;
+
+public:
+    TransposeHarmonyDiatonic(Harmony*, int interval, bool useDoubleSharpsFlats, bool transposeKeys);
+
+    UNDO_TYPE(CommandType::TransposeHarmony)
+    UNDO_NAME("TransposeHarmonyDiatonic")
+    UNDO_CHANGED_OBJECTS({ m_harmony })
 };
 
 class ExchangeVoice : public UndoCommand
@@ -1660,6 +1681,93 @@ public:
     UNDO_TYPE(CommandType::FretLinkHarmony)
     UNDO_NAME("FretLinkHarmony")
     UNDO_CHANGED_OBJECTS({ m_fretDiagram })
+};
+
+class ReorderFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, ReorderFBox)
+
+    FBox* m_fretBox = nullptr;
+    std::vector<EID> m_orderElementsIds;
+
+    void flip(EditData*) override;
+
+public:
+    ReorderFBox(FBox* fbox, const std::vector<EID>& newOrderElementsIds);
+
+    UNDO_TYPE(CommandType::ReorderFBox)
+    UNDO_NAME("ReorderFBox")
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
+};
+
+class RenameChordFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RenameChordFBox)
+
+    FBox* m_fretBox = nullptr;
+    const Harmony* m_harmony = nullptr;
+    String m_harmonyOldName;
+    bool m_onlyRemove = false;
+
+    std::vector<std::pair<size_t, FretDiagram*> > m_diagramsForRestore;
+    FretDiagram* m_diagramForRemove = nullptr;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    RenameChordFBox(FBox* box, const Harmony* harmony, const String& oldName);
+
+    UNDO_TYPE(CommandType::RenameChordFBox)
+    UNDO_NAME("RenameChordFBox")
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
+};
+
+class AddChordFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, AddChordFBox)
+
+    FBox* m_fretBox = nullptr;
+    bool m_added = false;
+    Fraction m_tick;
+    String m_chordNewName;
+
+    std::vector<std::pair<size_t, FretDiagram*> > m_diagramsForRestore;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    AddChordFBox(FBox* box, const String& chordNewName, const Fraction& tick);
+
+    UNDO_TYPE(CommandType::AddChordFBox)
+    UNDO_NAME("AddChordFBox")
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
+};
+
+class RemoveChordFBox : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, RemoveChordFBox)
+
+    FBox* m_fretBox = nullptr;
+    bool m_removed = false;
+    Fraction m_tick;
+    String m_chordName;
+
+    FretDiagram* m_removedFretDiagram = nullptr;
+    size_t m_removedFretDiagramIndex = 0;
+
+    FretDiagram* m_addedFretDiagram = nullptr;
+
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+
+public:
+    RemoveChordFBox(FBox* box, const String& chordName, const Fraction& tick);
+
+    UNDO_TYPE(CommandType::RemoveChordFBox)
+    UNDO_NAME("RemoveChordFBox")
+    UNDO_CHANGED_OBJECTS({ m_fretBox })
 };
 
 class MoveTremolo : public UndoCommand

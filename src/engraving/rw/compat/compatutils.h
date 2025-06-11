@@ -28,12 +28,13 @@
 #include "dom/articulation.h"
 
 namespace mu::engraving {
-enum class SymId;
-class Score;
-class MasterScore;
-class Excerpt;
 class Dynamic;
+class Excerpt;
+class HarmonyInfo;
+class MasterScore;
+class Score;
 enum class DynamicType : unsigned char;
+enum class SymId;
 }
 
 namespace mu::engraving::compat {
@@ -43,6 +44,8 @@ public:
     static void assignInitialPartToExcerpts(const std::vector<Excerpt*>& excerpts);
     static void doCompatibilityConversions(MasterScore* masterScore);
     static ArticulationAnchor translateToNewArticulationAnchor(int anchor);
+    static double convertChordExtModUnits(double val);
+    static void setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const muse::String& s);
     static const std::set<SymId> ORNAMENT_IDS;
 
 private:

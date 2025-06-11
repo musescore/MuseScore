@@ -216,13 +216,18 @@ set(APP_SRC
     appfactory.cpp
     appfactory.h
 
-    internal/commandlineparser.cpp
-    internal/commandlineparser.h
-    internal/consoleapp.cpp
-    internal/consoleapp.h
     internal/guiapp.cpp
     internal/guiapp.h
 )
+
+if (MUE_ENABLE_CONSOLEAPP)
+    set(APP_SRC ${APP_SRC}
+        internal/commandlineparser.cpp
+        internal/commandlineparser.h
+        internal/consoleapp.cpp
+        internal/consoleapp.h
+    )
+endif()
 
 if (CC_IS_EMCC)
     set(APP_SRC ${APP_SRC} webapi_export.cpp)
@@ -392,7 +397,7 @@ elseif(OS_IS_MAC)
             ${PROJECT_SOURCE_DIR}/fonts/leland/LelandText.otf
             ${PROJECT_SOURCE_DIR}/fonts/mscore-BC.ttf
             ${PROJECT_SOURCE_DIR}/fonts/mscoreTab.ttf
-            ${PROJECT_SOURCE_DIR}/fonts/mscore/MScoreText.ttf
+            ${PROJECT_SOURCE_DIR}/fonts/mscore/MScoreText.otf
             ${PROJECT_SOURCE_DIR}/fonts/musejazz/MuseJazzText.otf
             ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaScript.otf
             ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaText.otf

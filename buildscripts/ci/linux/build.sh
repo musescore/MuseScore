@@ -28,6 +28,7 @@ df -h .
 BUILD_TOOLS=$HOME/build_tools
 ARTIFACTS_DIR=build.artifacts
 CRASH_REPORT_URL=""
+BUILD_NUMBER=""
 BUILD_MODE=""
 SUFFIX="" # appended to `mscore` command name to avoid conflicts (e.g. `mscoredev`)
 

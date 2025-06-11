@@ -94,8 +94,10 @@
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>14</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>G_G</eid>
             </Harmony>
           <Chord>
@@ -212,8 +214,10 @@
               <sigD>4</sigD>
               </TimeSig>
             <Harmony>
-              <root>14</root>
-              <name>7</name>
+              <harmonyInfo>
+                <name>7</name>
+                <root>14</root>
+                </harmonyInfo>
               <eid>Q_Q</eid>
               <linkedTo>G_G</linkedTo>
               </Harmony>

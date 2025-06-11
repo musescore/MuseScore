@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #pragma once
 
 #include <functional>
@@ -35,12 +34,14 @@
 #include "draw/types/geometry.h"
 #include "draw/types/painterpath.h"
 
+// IWYU pragma: begin_exports
 #include "bps.h"
 #include "dimension.h"
 #include "fraction.h"
 #include "groupnode.h"
 #include "pitchvalue.h"
 #include "symid.h"
+// IWYU pragma: end_exports
 
 namespace mu::engraving {
 using staff_idx_t = size_t;
@@ -130,7 +131,6 @@ enum class ElementType : unsigned char {
     FRET_DIAGRAM,
     HARP_DIAGRAM,
     BEND,
-    STRETCHED_BEND,
     TREMOLOBAR,
     VOLTA,
     HAIRPIN_SEGMENT,
@@ -625,24 +625,6 @@ enum class DynamicType : unsigned char {
     LAST
 };
 
-//! OBSOLETE. Use VoiceAssignment
-enum class DynamicRange : unsigned char {
-    STAFF, PART, SYSTEM
-};
-
-inline VoiceAssignment dynamicRangeToVoiceAssignment(DynamicRange range)
-{
-    switch (range) {
-    case DynamicRange::STAFF:
-        return VoiceAssignment::ALL_VOICE_IN_STAFF;
-    case DynamicRange::PART:
-    case DynamicRange::SYSTEM:
-        break;
-    }
-
-    return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
-}
-
 // P_TYPE::DYNAMIC_SPEED
 enum class DynamicSpeed : unsigned char {
     SLOW, NORMAL, FAST
@@ -746,6 +728,13 @@ enum class PartialSpannerDirection : signed char {
     INCOMING,
     OUTGOING,
     BOTH
+};
+
+enum ChordStylePreset : unsigned char {
+    STANDARD,
+    JAZZ,
+    LEGACY,
+    CUSTOM
 };
 
 //-------------------------------------------------------------------
@@ -1102,6 +1091,10 @@ enum class TimeSigVSMargin : unsigned char {
     HANG_INTO_MARGIN,
     RIGHT_ALIGN_TO_BARLINE,
     CREATE_SPACE,
+};
+
+enum class NoteSpellingType : unsigned char {
+    STANDARD = 0, GERMAN, GERMAN_PURE, SOLFEGGIO, FRENCH
 };
 
 //---------------------------------------------------------

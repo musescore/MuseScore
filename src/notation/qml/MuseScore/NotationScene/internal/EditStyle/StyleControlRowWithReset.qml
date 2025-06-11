@@ -41,6 +41,8 @@ RowLayout {
     default property alias data: control.data
 
     property bool hasReset: true
+    property var resetEnabled: null
+    property var resetOnClicked: null
 
     spacing: 8
 
@@ -65,7 +67,7 @@ RowLayout {
         id: resetButton
         visible: hasReset
         icon: IconCode.UNDO
-        enabled: !styleItem.isDefault
-        onClicked: styleItem.value = styleItem.defaultValue
+        enabled: resetEnabled ? resetEnabled : !styleItem.isDefault
+        onClicked: resetOnClicked ? resetOnClicked : styleItem.value = styleItem.defaultValue
     }
 }

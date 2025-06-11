@@ -20,6 +20,7 @@
 
 install(FILES
       MuseJazz.mss
+      chords_legacy.xml
       chords_std.xml
       chords_jazz.xml
       chords.xml

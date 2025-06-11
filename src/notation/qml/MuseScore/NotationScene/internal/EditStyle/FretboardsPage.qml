@@ -237,20 +237,6 @@ Rectangle {
                 suffix: qsTrc("global", "sp")
                 controlAreaWidth: root.controlAreaWidth
             }
-
-            StyleSpinboxWithReset {
-                styleItem: fretboardsPage.maxFretShiftAbove
-                label: qsTrc("notation", "Maximum shift above:")
-                suffix: qsTrc("global", "sp")
-                controlAreaWidth: root.controlAreaWidth
-            }
-
-            StyleSpinboxWithReset {
-                styleItem: fretboardsPage.maxFretShiftBelow
-                label: qsTrc("notation", "Maximum shift below:")
-                suffix: qsTrc("global", "sp")
-                controlAreaWidth: root.controlAreaWidth
-            }
         }
     }
 }

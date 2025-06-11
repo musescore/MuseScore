@@ -49,12 +49,12 @@ char32_t Smufl::smuflCode(SymId id)
 
 bool Smufl::init()
 {
-    bool ok = initGlyphNamesJson();
+    bool ok = loadGlyphNamesJson();
 
     return ok;
 }
 
-bool Smufl::initGlyphNamesJson()
+bool Smufl::loadGlyphNamesJson()
 {
     File file(":/fonts/smufl/glyphnames.json");
     if (!file.open(IODevice::ReadOnly)) {
@@ -106,41 +106,51 @@ bool Smufl::initGlyphNamesJson()
     return true;
 }
 
-//---------------------------------------------------------
-//   smuflRanges
-//    read smufl ranges.json file
-//---------------------------------------------------------
-
-const std::map<String, StringList>& Smufl::smuflRanges()
+const std::map<String, std::vector<SymId> >& Smufl::smuflRanges()
 {
-    static std::map<String, StringList> ranges;
-    StringList allSymbols;
+    static std::map<String, std::vector<SymId> > ranges = readSmuflRangesJson();
+    return ranges;
+}
 
-    if (ranges.empty()) {
-        File fi(":/fonts/smufl/ranges.json");
-        if (!fi.open(IODevice::ReadOnly)) {
-            LOGE() << "failed open: " << fi.filePath();
-        }
-        std::string error;
-        JsonObject o = JsonDocument::fromJson(fi.readAll(), &error).rootObject();
-        if (!error.empty()) {
-            LOGE() << "failed parse, err: " << error << ", file: " << fi.filePath();
-        }
+std::map<String, std::vector<SymId> > Smufl::readSmuflRangesJson()
+{
+    std::map<String, std::vector<SymId> > ranges;
+    std::vector<SymId> allSymbols;
 
-        for (auto s : o.keys()) {
-            JsonObject range = o.value(s).toObject();
-            String desc      = range.value("description").toString();
-            JsonArray glyphs = range.value("glyphs").toArray();
-            if (glyphs.size() > 0) {
-                StringList glyphNames;
-                for (size_t i = 0; i < glyphs.size(); ++i) {
-                    glyphNames.append(glyphs.at(i).toString());
-                }
-                ranges.insert({ desc, glyphNames });
-                allSymbols << glyphNames;
+    File fi(":/fonts/smufl/ranges.json");
+    if (!fi.open(IODevice::ReadOnly)) {
+        LOGE() << "failed open: " << fi.filePath();
+        return ranges;
+    }
+
+    std::string error;
+    JsonObject o = JsonDocument::fromJson(fi.readAll(), &error).rootObject();
+    if (!error.empty()) {
+        LOGE() << "failed parse, err: " << error << ", file: " << fi.filePath();
+        return ranges;
+    }
+
+    for (const std::string& s : o.keys()) {
+        const JsonObject range = o.value(s).toObject();
+        const String desc      = range.value("description").toString();
+        const JsonArray glyphs = range.value("glyphs").toArray();
+
+        if (glyphs.empty()) {
+            continue;
+        }
+        std::vector<SymId> rangeSymbols;
+        for (size_t i = 0; i < glyphs.size(); ++i) {
+            String symName = glyphs.at(i).toString();
+            SymId symId = SymNames::symIdByName(symName);
+            if (symId != SymId::noSym) {
+                rangeSymbols.push_back(symId);
+                allSymbols.push_back(symId);
             }
         }
-        ranges.insert({ String::fromAscii(SMUFL_ALL_SYMBOLS), allSymbols });     // TODO: make translatable as well as ranges.json
+        ranges.insert({ desc, rangeSymbols });
     }
+
+    ranges.insert({ String::fromAscii(SMUFL_ALL_SYMBOLS), allSymbols }); // TODO: make translatable as well as ranges.json
+
     return ranges;
 }

@@ -32,6 +32,7 @@
 #include "global/iapplication.h"
 
 #include "muse_framework_config.h"
+#include "app_config.h"
 
 #include "log.h"
 
@@ -180,6 +181,7 @@ int main(int argc, char** argv)
     // ====================================================
     // Parse command line options
     // ====================================================
+#ifdef MUE_ENABLE_CONSOLEAPP
     CommandLineParser commandLineParser;
     commandLineParser.init();
     commandLineParser.parse(argcFinal, argvFinal);
@@ -194,9 +196,16 @@ int main(int argc, char** argv)
     }
 
     commandLineParser.processBuiltinArgs(*qapp);
+    CmdOptions opt = commandLineParser.options();
+
+#else
+    QCoreApplication* qapp = new QApplication(argcFinal, argvFinal);
+    CmdOptions opt;
+    opt.runMode = IApplication::RunMode::GuiApp;
+#endif
 
     AppFactory f;
-    std::shared_ptr<muse::IApplication> app = f.newApp(commandLineParser.options());
+    std::shared_ptr<muse::IApplication> app = f.newApp(opt);
 
     app->perform();
 

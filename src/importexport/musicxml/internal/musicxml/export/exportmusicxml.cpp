@@ -8822,18 +8822,11 @@ static void writeMusicXml(const FretDiagram* item, XmlWriter& xml)
 
 void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd, const Fraction& offset)
 {
-    // this code was probably in place to allow chord symbols shifted *right* to export with offset
-    // since this was at once time the only way to get a chord to appear over beat 3 in an empty 4/4 measure
-    // but the value was calculated incorrectly (should be divided by spatium) and would be better off using offset anyhow
-    // since we now support placement of chord symbols over "empty" beats directly,
-    // and we don't generally export position info for other elements
-    // it's just as well to not bother doing so here
-    //double rx = h->offset().x()*10;
-    //String relative;
-    //if (rx > 0) {
-    //      relative = String(" relative-x=\"%1\"").arg(String::number(rx, 2));
-    //      }
-    int rootTpc = h->rootTpc();
+    // No supprt for polychords at the moment. Export the first chord from the list.
+    HarmonyInfo* info = h->chords().empty() ? nullptr : h->chords().front();
+    int rootTpc = info ? info->rootTpc() : Tpc::TPC_INVALID;
+    int bassTpc = info ? info->bassTpc() : Tpc::TPC_INVALID;
+
     XmlWriter::Attributes harmonyAttrs;
     if (!h->isStyled(Pid::PLACEMENT)) {
         harmonyAttrs.emplace_back(std::make_pair("placement", (h->placement() == PlacementV::BELOW) ? "below" : "above"));
@@ -8844,7 +8837,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
     }
     addColorAttr(h, harmonyAttrs);
     m_xml.startElement("harmony", harmonyAttrs);
-    if (rootTpc != Tpc::TPC_INVALID) {
+    if (h->harmonyType() == HarmonyType::STANDARD && tpcIsValid(rootTpc)) {
         m_xml.startElement("root");
         m_xml.tag("root-step", tpc2stepName(rootTpc));
         int alter = int(tpc2alter(rootTpc));
@@ -8853,36 +8846,37 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         }
         m_xml.endElement();
 
-        if (!h->xmlKind().isEmpty()) {
+        const String xmlKind = harmonyXmlKind(info);
+
+        if (!xmlKind.isEmpty()) {
             String s = u"kind";
-            String kindText = h->musicXmlText();
-            if (!h->musicXmlText().empty()) {
+            String kindText = harmonyXmlText(info);
+            if (!harmonyXmlText(info).empty()) {
                 s += u" text=\"" + kindText + u"\"";
             }
-            if (h->xmlSymbols() == u"yes") {
+            if (harmonyXmlSymbols(info) == u"yes") {
                 s += u" use-symbols=\"yes\"";
             }
-            if (h->xmlParens() == u"yes") {
+            if (harmonyXmlParens(info) == u"yes") {
                 s += u" parentheses-degrees=\"yes\"";
             }
-            m_xml.tagRaw(s, h->xmlKind());
+            m_xml.tagRaw(s, xmlKind);
 
-            int baseTpc = h->bassTpc();
-            if (baseTpc != Tpc::TPC_INVALID) {
+            if (bassTpc != Tpc::TPC_INVALID) {
                 m_xml.startElement("bass");
-                m_xml.tag("bass-step", tpc2stepName(baseTpc));
-                alter = int(tpc2alter(baseTpc));
+                m_xml.tag("bass-step", tpc2stepName(bassTpc));
+                alter = int(tpc2alter(bassTpc));
                 if (alter) {
                     m_xml.tag("bass-alter", alter);
                 }
                 m_xml.endElement();
             }
 
-            StringList l = h->xmlDegrees();
+            StringList l = harmonyXmlDegrees(info);
             if (!l.empty()) {
                 for (const String& tag : l) {
                     String degreeText;
-                    if (h->xmlKind().startsWith(u"suspended")
+                    if (xmlKind.startsWith(u"suspended")
                         && tag.startsWith(u"add") && tag.at(3).isDigit()
                         && !kindText.isEmpty() && kindText.at(0).isDigit()) {
                         // hack to correct text for suspended chords whose kind text has degree information baked in
@@ -8920,17 +8914,16 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 }
             }
         } else {
-            if (h->extensionName().empty()) {
+            if (info->textName().empty()) {
                 m_xml.tag("kind", "none");
             } else {
-                m_xml.tag("kind", { { "text", h->extensionName() } }, "");
+                m_xml.tag("kind", { { "text", info->textName() } }, "");
             }
 
-            int baseTpc = h->bassTpc();
-            if (baseTpc != Tpc::TPC_INVALID) {
+            if (bassTpc != Tpc::TPC_INVALID) {
                 m_xml.startElement("bass");
-                m_xml.tag("bass-step", tpc2stepName(baseTpc));
-                alter = int(tpc2alter(baseTpc));
+                m_xml.tag("bass-step", tpc2stepName(bassTpc));
+                alter = int(tpc2alter(bassTpc));
                 if (alter) {
                     m_xml.tag("bass-alter", alter);
                 }
@@ -8951,11 +8944,12 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         // export an unrecognized Chord
         // which may contain arbitrary text
         //
-        const String textName = h->hTextName();
+        const String xmlKind = harmonyXmlKind(info);
+        const String textName = info->textName();
         switch (h->harmonyType()) {
         case HarmonyType::NASHVILLE: {
             String alter;
-            String functionText = h->hFunction();
+            String functionText = harmonyXmlFunction(info, h);
             if (functionText.empty()) {
                 // we just dump the text as deprecated function
                 m_xml.tag("function", textName);
@@ -8973,19 +8967,19 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                 m_xml.tag("numeral-alter", "1");
             }
             m_xml.endElement();
-            if (!h->xmlKind().isEmpty()) {
+            if (!xmlKind.isEmpty()) {
                 String s = u"kind";
-                String kindText = h->musicXmlText();
-                if (!h->musicXmlText().empty()) {
+                String kindText = harmonyXmlText(info);
+                if (!harmonyXmlText(info).empty()) {
                     s += u" text=\"" + kindText + u"\"";
                 }
-                if (h->xmlSymbols() == "yes") {
+                if (harmonyXmlSymbols(info) == "yes") {
                     s += u" use-symbols=\"yes\"";
                 }
-                if (h->xmlParens() == "yes") {
+                if (harmonyXmlParens(info) == "yes") {
                     s += u" parentheses-degrees=\"yes\"";
                 }
-                m_xml.tagRaw(s, h->xmlKind());
+                m_xml.tagRaw(s, xmlKind);
             } else {
                 // default is major
                 m_xml.tag("kind", "major");

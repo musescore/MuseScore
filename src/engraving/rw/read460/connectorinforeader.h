@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_READ460_CONNECTORINFOREADER_H
-#define MU_ENGRAVING_READ460_CONNECTORINFOREADER_H
+#pragma once
 
 #include "../xmlreader.h"
 #include "../../dom/connector.h"
@@ -75,5 +74,3 @@ private:
     EngravingObject* m_connectorReceiver = nullptr;
 };
 }
-
-#endif // MU_ENGRAVING_READ460_CONNECTORINFOREADER_H

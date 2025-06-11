@@ -30,6 +30,7 @@
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
 #include "engraving/rendering/isinglerenderer.h"
+#include "ui/iuiconfiguration.h"
 
 #include "engraving/dom/drumset.h"
 
@@ -48,6 +49,7 @@ public:
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
     INJECT_STATIC(engraving::IEngravingFontsProvider, engravingFonts)
+    INJECT_STATIC(muse::ui::IUiConfiguration, uiConfiguration)
 
 public:
     CustomizeKitDialog(QWidget* parent = nullptr);

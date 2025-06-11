@@ -101,8 +101,10 @@
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>14</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>H_H</eid>
             </Harmony>
           <Chord>

@@ -480,7 +480,7 @@ void DockWindow::addDock(DockBase* dock, Location location, const DockBase* rela
 
     KDDockWidgets::DockWidgetBase* relativeDock = relativeTo ? relativeTo->dockWidget() : nullptr;
 
-    auto visibilityOption = dock->isVisible() ? KDDockWidgets::InitialVisibilityOption::StartVisible
+    auto visibilityOption = dock->defaultVisibility() ? KDDockWidgets::InitialVisibilityOption::StartVisible
                             : KDDockWidgets::InitialVisibilityOption::StartHidden;
 
     KDDockWidgets::InitialOption options(visibilityOption, dock->preferredSize());
@@ -824,7 +824,7 @@ void DockWindow::adjustContentForAvailableSpace(DockPageView* page)
     QList<DockBase*> topLevelToolBarsDocks;
 
     for (DockToolBarView* toolBar : topLevelToolBars(page)) {
-        if (!toolBar->dockWidget()->isFloating()) {
+        if (!toolBar->dockWidget()->isFloating() && toolBar->isVisible()) {
             topLevelToolBarsDocks << toolBar;
         }
     }

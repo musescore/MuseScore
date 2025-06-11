@@ -180,9 +180,12 @@
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>17</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>17</root>
+              </harmonyInfo>
             <eid>R_R</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>S_S</eid>
@@ -420,10 +423,13 @@
               <sigD>4</sigD>
               </TimeSig>
             <Harmony>
-              <root>17</root>
-              <name>7</name>
+              <harmonyInfo>
+                <name>7</name>
+                <root>17</root>
+                </harmonyInfo>
               <eid>s_s</eid>
               <linkedTo>R_R</linkedTo>
+              <verticalAlign>0</verticalAlign>
               </Harmony>
             <Chord>
               <eid>t_t</eid>

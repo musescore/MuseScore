@@ -27,7 +27,6 @@
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../style/textstyle.h"
-#include "../../infrastructure/ifileinfoprovider.h"
 #include "../../infrastructure/rtti.h"
 
 #include "dom/score.h"
@@ -50,7 +49,6 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/bend.h"
-#include "dom/stretchedbend.h"
 #include "dom/box.h"
 #include "dom/bracket.h"
 #include "dom/breath.h"
@@ -190,8 +188,6 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::BEAM:         write(item_cast<const Beam*>(item), xml, ctx);
         break;
     case ElementType::BEND:         write(item_cast<const Bend*>(item), xml, ctx);
-        break;
-    case ElementType::STRETCHED_BEND: write(item_cast<const StretchedBend*>(item), xml, ctx);
         break;
     case ElementType::HBOX:         write(item_cast<const HBox*>(item), xml, ctx);
         break;
@@ -511,9 +507,6 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         int t = static_cast<int>(item->track()) + ctx.trackDiff();
         xml.tag("track", t);
     }
-    if (ctx.writePosition()) {
-        xml.tagProperty(Pid::POSITION, item->rtick());
-    }
 
     for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z }) {
         if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {
@@ -738,14 +731,6 @@ void TWrite::write(const Bend* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::PLAY);
     writeItemProperties(item, xml, ctx);
     xml.endElement();
-}
-
-void TWrite::write(const StretchedBend* item, XmlWriter& xml, WriteContext& ctx)
-{
-    UNUSED(item);
-    UNUSED(xml);
-    UNUSED(ctx);
-    // not implemented
 }
 
 void TWrite::write(const Box* item, XmlWriter& xml, WriteContext& ctx)
@@ -1680,6 +1665,47 @@ void TWrite::write(const HammerOnPullOffText* item, XmlWriter& xml, WriteContext
     xml.startElement(item, { { "idx", idx } });
 
     writeProperties(toTextBase(item), xml, ctx, /*writeText*/ false);
+    xml.endElement();
+}
+
+static void writeHarmonyInfo(const HarmonyInfo* item, const Harmony* h, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement("harmonyInfo");
+    if (item->rootTpc() != Tpc::TPC_INVALID || item->bassTpc() != Tpc::TPC_INVALID) {
+        int rRootTpc = item->rootTpc();
+        int rBassTpc = item->bassTpc();
+        if (h->staff()) {
+            // parent can be a fret diagram
+            const Segment* segment = h->getParentSeg();
+            Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
+            const Interval& interval = h->staff()->transpose(tick);
+            if (ctx.clipboardmode() && !h->score()->style().styleB(Sid::concertPitch) && interval.chromatic) {
+                rRootTpc = transposeTpc(item->rootTpc(), interval, true);
+                rBassTpc = transposeTpc(item->bassTpc(), interval, true);
+            }
+        }
+
+        if (item->id() > 0) {
+            xml.tag("extension", item->id());
+        }
+        // parser uses leading "=" as a hidden specifier for minor
+        // this may or may not currently be incorporated into _textName
+        String writeName = item->textName();
+        if (item->parsedChord() && item->parsedChord()->name().startsWith(u'=') && !writeName.startsWith(u'=')) {
+            writeName = u"=" + writeName;
+        }
+        if (!writeName.isEmpty()) {
+            xml.tag("name", writeName);
+        }
+        if (rRootTpc != Tpc::TPC_INVALID) {
+            xml.tag("root", rRootTpc);
+        }
+        if (rBassTpc != Tpc::TPC_INVALID) {
+            xml.tag("bass", rBassTpc);
+        }
+    } else {
+        xml.tag("name", item->textName());
+    }
 
     xml.endElement();
 }
@@ -1695,72 +1721,43 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
     if (item->leftParen()) {
         xml.tag("leftParen");
     }
-    if (item->rootTpc() != Tpc::TPC_INVALID || item->bassTpc() != Tpc::TPC_INVALID) {
-        int rRootTpc = item->rootTpc();
-        int rBaseTpc = item->bassTpc();
-        if (item->staff()) {
-            // parent can be a fret diagram
-            Segment* segment = item->getParentSeg();
-            Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
-            const Interval& interval = item->staff()->transpose(tick);
-            if (ctx.clipboardmode() && !item->score()->style().styleB(Sid::concertPitch) && interval.chromatic) {
-                rRootTpc = transposeTpc(item->rootTpc(), interval, true);
-                rBaseTpc = transposeTpc(item->bassTpc(), interval, true);
-            }
-        }
-        if (rRootTpc != Tpc::TPC_INVALID) {
-            xml.tag("root", rRootTpc);
-            if (item->rootCase() != NoteCaseType::CAPITAL) {
-                xml.tag("rootCase", static_cast<int>(item->rootCase()));
-            }
-        }
-        if (item->id() > 0) {
-            xml.tag("extension", item->id());
-        }
-        // parser uses leading "=" as a hidden specifier for minor
-        // this may or may not currently be incorporated into _textName
-        String writeName = item->hTextName();
-        if (item->parsedForm() && item->parsedForm()->name().startsWith(u'=') && !writeName.startsWith(u'=')) {
-            writeName = u"=" + writeName;
-        }
-        if (!writeName.isEmpty()) {
-            xml.tag("name", writeName);
-        }
 
-        if (rBaseTpc != Tpc::TPC_INVALID) {
-            xml.tag("base", rBaseTpc);
-            if (item->bassCase() != NoteCaseType::CAPITAL) {
-                xml.tag("baseCase", static_cast<int>(item->bassCase()));
-            }
-        }
-        for (const HDegree& hd : item->degreeList()) {
-            HDegreeType tp = hd.type();
-            if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
-                xml.startElement("degree");
-                xml.tag("degree-value", hd.value());
-                xml.tag("degree-alter", hd.alter());
-                switch (tp) {
-                case HDegreeType::ADD:
-                    xml.tag("degree-type", "add");
-                    break;
-                case HDegreeType::ALTER:
-                    xml.tag("degree-type", "alter");
-                    break;
-                case HDegreeType::SUBTRACT:
-                    xml.tag("degree-type", "subtract");
-                    break;
-                default:
-                    break;
-                }
-                xml.endElement();
-            }
-        }
-    } else {
-        xml.tag("name", item->hTextName());
+    // check tpcs valid?
+    if (item->rootCase() != NoteCaseType::CAPITAL) {
+        xml.tag("rootCase", static_cast<int>(item->rootCase()));
     }
-    if (!item->hFunction().isEmpty()) {
-        xml.tag("function", item->hFunction());
+
+    if (item->bassCase() != NoteCaseType::CAPITAL) {
+        xml.tag("bassCase", static_cast<int>(item->bassCase()));
     }
+
+    for (const HarmonyInfo* info : item->chords()) {
+        writeHarmonyInfo(info, item, xml, ctx);
+    }
+
+    for (const HDegree& hd : item->degreeList()) { // Do we really still need this?
+        HDegreeType tp = hd.type();
+        if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
+            xml.startElement("degree");
+            xml.tag("degree-value", hd.value());
+            xml.tag("degree-alter", hd.alter());
+            switch (tp) {
+            case HDegreeType::ADD:
+                xml.tag("degree-type", "add");
+                break;
+            case HDegreeType::ALTER:
+                xml.tag("degree-type", "alter");
+                break;
+            case HDegreeType::SUBTRACT:
+                xml.tag("degree-type", "subtract");
+                break;
+            default:
+                break;
+            }
+            xml.endElement();
+        }
+    }
+
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, false);
     //Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION
     //written by the above function call because they are part of element style
@@ -2227,7 +2224,6 @@ void TWrite::write(const Lyrics* item, XmlWriter& xml, WriteContext& ctx)
     if (item->syllabic() != LyricsSyllabic::SINGLE) {
         xml.tag("syllabic", TConv::toXml(item->syllabic()));
     }
-    xml.tag("ticks", item->ticks().ticks(), 0);   // pre-3.1 compatibility: write integer ticks under <ticks> tag
     writeProperty(item, xml, Pid::LYRIC_TICKS);
 
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
@@ -2846,7 +2842,6 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("clef", item->genClef());
     }
     if (item->stemless()) {
-        xml.tag("slashStyle", item->stemless());     // for backwards compatibility
         xml.tag("stemless", item->stemless());
     }
     if (!item->showBarlines()) {

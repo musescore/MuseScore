@@ -164,9 +164,10 @@ public:
     EngravingItem* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
 
-    Segment* segment() const { return toSegment(explicitParent()); }
+    Segment* segment() const;
 
-    static std::shared_ptr<FretDiagram> createFromString(Score* score, const String& s);
+    static std::shared_ptr<FretDiagram> createFromPattern(Score* score, const String& s);
+    static String patternFromDiagram(const FretDiagram* diagram);
 
     void updateDiagram(const String& harmonyName);
 
@@ -244,6 +245,10 @@ public:
     const std::vector<int>& fingering() const { return m_fingering; }
     void setFingering(std::vector<int> v);
 
+    static FretDiagram* makeFromHarmonyOrFretDiagram(const EngravingItem* harmonyOrFretDiagram);
+
+    bool isInFretBox() const;
+
     friend class FretUndoData;
 
     struct FingeringItem {
@@ -288,7 +293,6 @@ private:
     void removeDotsMarkers(int ss, int es, int fret);
 
     static void applyDiagramPattern(FretDiagram* diagram, const String& pattern);
-    static String patternFromDiagram(const FretDiagram* diagram);
 
     void applyAlignmentToHarmony();
 

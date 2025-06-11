@@ -159,9 +159,6 @@ bool Read460::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
             score->m_showSoundFlags = e.readInt();
         } else if (tag == "markIrregularMeasures") {
             score->m_markIrregularMeasures = e.readInt();
-        } else if (tag == "Style") {
-            // Since version 400, the style is stored in a separate file
-            e.skipCurrentElement();
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag(u"copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
@@ -216,9 +213,6 @@ bool Read460::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
             Spanner* s = toSpanner(Factory::createItemByName(tag, score->dummy()));
             TRead::readItem(s, e, ctx);
             score->addSpanner(s);
-        } else if (tag == "Excerpt") {
-            // Since version 400, the Excerpts are stored in a separate file
-            e.skipCurrentElement();
         } else if (e.name() == "initialPartId") {
             if (score->excerpt()) {
                 score->excerpt()->setInitialPartId(ID(e.readInt()));
@@ -231,9 +225,6 @@ bool Read460::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
             if (strack != -1 && dtrack != -1) {
                 ctx.tracks().insert({ strack, dtrack });
             }
-            e.skipCurrentElement();
-        } else if (tag == "Score") {
-            // Since version 400, the Excerpts is stored in a separate file
             e.skipCurrentElement();
         } else if (tag == "name") {
             String n = e.readText();
@@ -283,7 +274,6 @@ bool Read460::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->masterScore()->rebuildMidiMapping();
     score->masterScore()->updateChannel();
-    score->masterScore()->rebuildFretDiagramLegend();
 
     for (Staff* staff : score->staves()) {
         staff->updateOttava();
@@ -589,9 +579,7 @@ bool Read460::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Interval interval = staffDest->transpose(tick);
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
-                        int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
-                        int bassTpc = transposeTpc(harmony->bassTpc(), interval, true);
-                        score->undoTransposeHarmony(harmony, rootTpc, bassTpc);
+                        score->undoTransposeHarmony(harmony, interval);
                     }
 
                     // remove pre-existing chords on this track
@@ -955,9 +943,7 @@ void Read460::pasteSymbols(XmlReader& e, ChordRest* dst)
                     Interval interval = staffDest->transpose(destTick);
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
-                        int rootTpc = transposeTpc(el->rootTpc(), interval, true);
-                        int bassTpc = transposeTpc(el->bassTpc(), interval, true);
-                        score->undoTransposeHarmony(el, rootTpc, bassTpc);
+                        score->undoTransposeHarmony(el, interval);
                     }
                     el->setParent(seg);
                     score->undoAddElement(el);

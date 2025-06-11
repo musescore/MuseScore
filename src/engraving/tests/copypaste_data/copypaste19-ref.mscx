@@ -110,8 +110,11 @@
         <eid>K_K</eid>
         <voice>
           <Harmony>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>L_L</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>M_M</eid>
@@ -123,8 +126,11 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>13</root>
+            <harmonyInfo>
+              <root>13</root>
+              </harmonyInfo>
             <eid>O_O</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>P_P</eid>
@@ -136,8 +142,11 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>16</root>
+            <harmonyInfo>
+              <root>16</root>
+              </harmonyInfo>
             <eid>R_R</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>S_S</eid>
@@ -149,9 +158,12 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>17</root>
-            <name>m</name>
+            <harmonyInfo>
+              <name>m</name>
+              <root>17</root>
+              </harmonyInfo>
             <eid>U_U</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>V_V</eid>
@@ -186,7 +198,9 @@
         <eid>b_b</eid>
         <voice>
           <Harmony>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>c_c</eid>
             </Harmony>
           <Chord>
@@ -199,7 +213,9 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>13</root>
+            <harmonyInfo>
+              <root>13</root>
+              </harmonyInfo>
             <eid>f_f</eid>
             </Harmony>
           <Chord>
@@ -212,7 +228,9 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>16</root>
+            <harmonyInfo>
+              <root>16</root>
+              </harmonyInfo>
             <eid>i_i</eid>
             </Harmony>
           <Chord>
@@ -225,8 +243,10 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>17</root>
-            <name>m</name>
+            <harmonyInfo>
+              <name>m</name>
+              <root>17</root>
+              </harmonyInfo>
             <eid>l_l</eid>
             </Harmony>
           <Chord>

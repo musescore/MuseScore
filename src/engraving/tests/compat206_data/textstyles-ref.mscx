@@ -403,8 +403,11 @@
         <eid>m_m</eid>
         <voice>
           <Harmony>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>n_n</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Rest>
             <eid>o_o</eid>

@@ -49,6 +49,7 @@ static const DockName NOTATION_TOOLBAR_NAME("notationToolBar");
 static const DockName UNDO_REDO_TOOLBAR_NAME("undoRedoToolBar");
 static const DockName NOTE_INPUT_BAR_NAME("noteInputBar");
 static const DockName PLAYBACK_TOOLBAR_NAME("playbackToolBar");
+static const DockName EXTENSIONS_TOOLBAR_NAME("extensionsToolBar");
 
 // Other:
 static const DockName NOTATION_STATUSBAR_NAME("notationStatusBar");

@@ -23,6 +23,7 @@
 #include "engravingcompat.h"
 
 #include "dom/marker.h"
+#include "dom/system.h"
 #include "engraving/dom/beam.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/instrument.h"
@@ -31,6 +32,7 @@
 #include "engraving/dom/pedal.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
+#include "engraving/rendering/score/harmonylayout.h"
 
 using namespace mu::engraving;
 
@@ -179,16 +181,15 @@ void EngravingCompat::resetMarkerLeftFontSize(MasterScore* masterScore)
 
 void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 {
-    if (score->mscVersion() >= 440) {
-        return;
-    }
-
     bool needRelayout = false;
 
     if (relayoutUserModifiedCrossStaffBeams(score)) {
         needRelayout = true;
     }
-    // As we progress, likely that more things will be done here
+
+    if (migrateChordSymbolAlignment(score)) {
+        needRelayout = true;
+    }
 
     if (needRelayout) {
         score->update();
@@ -197,6 +198,9 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
 bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
 {
+    if (score->mscVersion() >= 440) {
+        return false;
+    }
     bool found = false;
 
     auto findBeam = [&found](ChordRest* cr) {
@@ -230,5 +234,43 @@ bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
     }
 
     return found;
+}
+
+bool EngravingCompat::migrateChordSymbolAlignment(MasterScore* score)
+{
+    if (score->mscVersion() >= 460) {
+        return false;
+    }
+    // Use maxChordShiftAbove/Below with the old algorithm to decide which chord symbols to
+    // Exclude from vertical alignment
+    bool needsRelayout = false;
+    const double maxShiftAbove = score->style().styleMM(Sid::maxChordShiftAbove);
+    const double maxShiftBelow = score->style().styleMM(Sid::maxChordShiftBelow);
+    const double maxFretShiftAbove = score->style().styleMM(Sid::maxFretShiftAbove);
+    const double maxFretShiftBelow = score->style().styleMM(Sid::maxFretShiftBelow);
+    for (System* sys : score->systems()) {
+        // Get segment list for system
+        std::vector<Segment*> sl;
+        Measure* firstMeas = sys->firstMeasure();
+        if (!firstMeas) {
+            continue;
+        }
+        for (Segment* s = firstMeas->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+            if (s->system() != sys) {
+                break;
+            }
+            if (s->annotations().empty()) {
+                continue;
+            }
+            sl.push_back(s);
+        }
+
+        // Harmony
+        needsRelayout |= rendering::score::HarmonyLayout::alignHarmonies(sl, true, maxShiftAbove, maxShiftBelow);
+        // Fret diagrams
+        needsRelayout |= rendering::score::HarmonyLayout::alignHarmonies(sl, false, maxFretShiftAbove, maxFretShiftBelow);
+    }
+
+    return needsRelayout;
 }
 } // namespace mu::engraving::compat

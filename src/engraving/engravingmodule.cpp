@@ -192,8 +192,8 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         fdb->addFont(FontDataKey(u"Bravura Text"), ":/fonts/bravura/BravuraText.otf");
         addMusicFont("Leland", FontDataKey(u"Leland"), ":/fonts/leland/Leland.otf");
         fdb->addFont(FontDataKey(u"Leland Text"), ":/fonts/leland/LelandText.otf");
-        addMusicFont("Emmentaler", FontDataKey(u"MScore"), ":/fonts/mscore/mscore.ttf");
-        fdb->addFont(FontDataKey(u"MScore Text"), ":/fonts/mscore/MScoreText.ttf");
+        addMusicFont("Emmentaler", FontDataKey(u"MScore"), ":/fonts/mscore/MScore.otf");
+        fdb->addFont(FontDataKey(u"MScore Text"), ":/fonts/mscore/MScoreText.otf");
         addMusicFont("Gonville", FontDataKey(u"Gootville"), ":/fonts/gootville/Gootville.otf");
         fdb->addFont(FontDataKey(u"Gootville Text"), ":/fonts/gootville/GootvilleText.otf");
         addMusicFont("MuseJazz", FontDataKey(u"MuseJazz"), ":/fonts/musejazz/MuseJazz.otf");

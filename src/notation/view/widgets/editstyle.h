@@ -127,8 +127,8 @@ private:
     void setStyleValue(StyleId id, const PropertyValue& value);
 
 private slots:
-    void selectChordDescriptionFile();
-    void setChordStyle(bool);
+    // void selectChordDescriptionFile();
+    // void setChordStyle(bool);
     void enableStyleWidget(const StyleId idx, bool enable);
     void enableVerticalSpreadClicked(bool);
     void disableVerticalSpreadClicked(bool);

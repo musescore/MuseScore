@@ -18,7 +18,7 @@ on:
         required: false
       use_qt69:
         description: 'Use Qt 6.9'
-        default: 'off'
+        default: 'on'
         required: false    
   workflow_call:
     inputs:
@@ -39,12 +39,13 @@ on:
         required: false
       use_qt69:
         description: 'Use Qt 6.9'
-        default: 'off'
+        default: 'on'
         type: string
         required: false   
 
 env:
   DEVELOPER_DIR: /Applications/Xcode_16.3.app/Contents/Developer
+  USE_QT69: ${{ inputs.use_qt69 != '' && inputs.use_qt69 || 'on' }}  
 
 jobs:
   macos_universal:
@@ -163,7 +164,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
+        version: ${{ env.USE_QT69 == 'on' && '6.9.1' || '6.2.4' }}
         host: 'mac'
         target: 'desktop'
         arch: 'clang_64'

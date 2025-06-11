@@ -108,8 +108,11 @@
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>17</root>
+            <harmonyInfo>
+              <root>17</root>
+              </harmonyInfo>
             <eid>F_F</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>G_G</eid>
@@ -138,8 +141,11 @@
         <eid>L_L</eid>
         <voice>
           <Harmony>
-            <root>12</root>
+            <harmonyInfo>
+              <root>12</root>
+              </harmonyInfo>
             <eid>M_M</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>N_N</eid>
@@ -172,8 +178,11 @@
         <eid>T_T</eid>
         <voice>
           <Harmony>
-            <root>21</root>
+            <harmonyInfo>
+              <root>21</root>
+              </harmonyInfo>
             <eid>U_U</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>V_V</eid>
@@ -206,8 +215,11 @@
         <eid>b_b</eid>
         <voice>
           <Harmony>
-            <root>30</root>
+            <harmonyInfo>
+              <root>30</root>
+              </harmonyInfo>
             <eid>c_c</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>d_d</eid>
@@ -241,8 +253,11 @@
         <eid>j_j</eid>
         <voice>
           <Harmony>
-            <root>4</root>
+            <harmonyInfo>
+              <root>4</root>
+              </harmonyInfo>
             <eid>k_k</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>l_l</eid>
@@ -276,8 +291,11 @@
         <eid>r_r</eid>
         <voice>
           <Harmony>
-            <root>13</root>
+            <harmonyInfo>
+              <root>13</root>
+              </harmonyInfo>
             <eid>s_s</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>t_t</eid>
@@ -306,8 +324,11 @@
         <eid>y_y</eid>
         <voice>
           <Harmony>
-            <root>15</root>
+            <harmonyInfo>
+              <root>15</root>
+              </harmonyInfo>
             <eid>z_z</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>0_0</eid>

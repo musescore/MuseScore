@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_WRITECONTEXT_H
-#define MU_ENGRAVING_WRITECONTEXT_H
+#pragma once
 
 #include <map>
 
@@ -63,13 +61,11 @@ public:
     bool excerptmode() const { return _excerptmode; }
     bool isMsczMode() const { return _msczMode; }
     bool writeTrack() const { return _writeTrack; }
-    bool writePosition() const { return _writePosition; }
 
     void setClipboardmode(bool v) { _clipboardmode = v; }
     void setExcerptmode(bool v) { _excerptmode = v; }
     void setIsMsczMode(bool v) { _msczMode = v; }
     void setWriteTrack(bool v) { _writeTrack= v; }
-    void setWritePosition(bool v) { _writePosition = v; }
 
     void setFilter(SelectionFilter f) { _filter = f; }
     bool canWrite(const EngravingItem*) const;
@@ -85,7 +81,6 @@ public:
                && _excerptmode == c._excerptmode
                && _msczMode == c._msczMode
                && _writeTrack == c._writeTrack
-               && _writePosition == c._writePosition
                && _filter == c._filter
                && m_linksIndexer == c.m_linksIndexer
                && m_lidLocalIndices == c.m_lidLocalIndices;
@@ -106,7 +101,6 @@ private:
     bool _excerptmode    { false };     // true when writing a part
     bool _msczMode       { true };      // false if writing into *.msc file
     bool _writeTrack     { false };
-    bool _writePosition  { false };
 
     SelectionFilter _filter;
 
@@ -114,5 +108,3 @@ private:
     std::map<int, int> m_lidLocalIndices;
 };
 }
-
-#endif // MU_ENGRAVING_WRITECONTEXT_H

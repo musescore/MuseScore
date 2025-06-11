@@ -61,29 +61,32 @@ function applyToNotesInSelection(func) {
 }
 
 function colorNote(note) {
-    if (note.color == black)
-        note.color = colors[note.pitch % 12];
-    else
-        note.color = black;
+    // Get the base color for the note based on its pitch (modulo 12 for octave wrapping)
+    let base_color = colors[note.pitch % 12];
 
+    // Check if the note has an accidental (e.g., sharp or flat)
     if (note.accidental) {
-        if (note.accidental.color == black)
-            note.accidental.color = colors[note.pitch % 12];
-        else
-            note.accidental.color = black;
+        // If the accidental already has the same color as the base color, change to black
+        if (note.accidental.color == base_color) {
+            base_color = black;
+        }
+        // Set the accidental's color to the base color
+        note.accidental.color = base_color;
+
+    // If there is no accidental, but the note's color is equal to the base color, change it to black
+    } else if (note.color == base_color) {
+        base_color = black;
     }
 
+    // Assign the final color to the note itself
+    note.color = base_color;
+
+    // If the note has dots (augmentation dots), set each dot's color to match the note's color
     if (note.dots) {
         for (var i = 0; i < note.dots.length; i++) {
             if (note.dots[i]) {
-                if (note.dots[i].color == black)
-                    note.dots[i].color = colors[note.pitch % 12];
-                else
-                    note.dots[i].color = black;
+                note.dots[i].color = note.color;
             }
         }
     }
 }
-
-
-

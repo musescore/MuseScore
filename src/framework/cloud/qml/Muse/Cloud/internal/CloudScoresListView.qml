@@ -38,20 +38,38 @@ ScoresListView {
         prv.updateDesiredRowCount()
     }
 
+    Connections {
+        target: root.model
+        onStateChanged: {
+            if (root.model.state === CloudScoresModel.Fine) {
+                // After the model has loaded more, check if even more is needed
+                prv.updateDesiredRowCount();
+            }
+        }
+    }
+
     QtObject {
         id: prv
 
         readonly property int remainingScoresBelowViewport:
-            root.model.rowCount - Math.ceil((view.contentY + view.height) / view.rowHeight)
+            root.view.count - Math.ceil((root.view.contentY + root.view.height) / root.view.rowHeight)
 
-        onRemainingScoresBelowViewportChanged: {
-            updateDesiredRowCount()
+        readonly property bool isSatisfied: remainingScoresBelowViewport >= 20
+
+        onIsSatisfiedChanged: {
+            if (!isSatisfied) {
+                updateDesiredRowCount();
+            }
         }
 
         property bool updateDesiredRowCountScheduled: false
 
         function updateDesiredRowCount() {
             if (updateDesiredRowCountScheduled) {
+                return
+            }
+
+            if (isSatisfied || !root.model.hasMore) {
                 return
             }
 

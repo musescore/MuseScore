@@ -387,7 +387,7 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(endTextOffset,           END_TEXT_OFFSET)
     API_PROPERTY(posAbove,                POS_ABOVE)
     API_PROPERTY_T(int, voice,            VOICE)
-    API_PROPERTY_READ_ONLY(position,      POSITION)                      // TODO: needed?
+    API_PROPERTY(position,                POSITION)
     /**
      * For chord symbols, chord symbol type, one of
      * PluginAPI::PluginAPI::HarmonyType values.

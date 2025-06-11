@@ -460,8 +460,6 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         continue;
                     }
                     Harmony* h  = toHarmony(e);
-                    int rootTpc = mu::engraving::transposeTpc(h->rootTpc(), interval, true);
-                    int baseTpc = mu::engraving::transposeTpc(h->bassTpc(), interval, true);
                     // mmrests are on by default in part
                     // if this harmony is attached to an mmrest,
                     // be sure to transpose harmony in underlying measure as well
@@ -471,7 +469,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                         if (hh->staff() != h->staff()) {
                             continue;
                         }
-                        score->undoTransposeHarmony(hh, rootTpc, baseTpc);
+                        score->undoTransposeHarmony(hh, interval);
                     }
                 }
             }
@@ -877,6 +875,10 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
         } else {
             nmb = Factory::createVBox(score->dummy()->system());
         }
+        nmb->setTick(mb->tick());
+        nmb->setTicks(mb->ticks());
+    } else if (mb->isFBox()) {
+        nmb = Factory::createFBox(score->dummy()->system());
         nmb->setTick(mb->tick());
         nmb->setTicks(mb->ticks());
     } else if (mb->isTBox()) {
