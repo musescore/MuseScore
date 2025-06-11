@@ -191,6 +191,11 @@ bool DockBase::separatorsVisible() const
     return m_properties.separatorsVisible;
 }
 
+bool DockBase::defaultVisibility() const
+{
+    return m_defaultVisibility;
+}
+
 bool DockBase::isCompact() const
 {
     return m_isCompact;
