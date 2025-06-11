@@ -307,6 +307,8 @@ public:
 
     Align align() const { return m_align; }
     void setAlign(Align a) { m_align = a; }
+    AlignH position() const { return m_position; }
+    void setPosition(AlignH val) { m_position = val; }
 
     static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
 
@@ -489,6 +491,7 @@ public:
     //! NOTE It can only be set for some types of text, see who has the setter.
     //! At the moment it's: Text, Jump, Marker
     bool layoutToParentWidth() const { return m_layoutToParentWidth; }
+    virtual bool positionSeparateFromAlignment() const { return false; }
 
     void setVoiceAssignment(VoiceAssignment v) { m_voiceAssignment = v; }
     VoiceAssignment voiceAssignment() const { return m_voiceAssignment; }
@@ -548,6 +551,8 @@ private:
     void notifyAboutTextRemoved(int startPosition, int endPosition, const String& text);
 
     Align m_align;
+
+    AlignH m_position = AlignH::LEFT;
 
     FrameType m_frameType = FrameType::NO_FRAME;
     double m_textLineSpacing = 1.0;

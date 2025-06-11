@@ -81,7 +81,7 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 
-    void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
+    bool positionSeparateFromAlignment() const override { return true; }
 
     double symbolSize() const { return m_symbolSize; }
     void setSymbolSize(double v) { m_symbolSize = v; }
