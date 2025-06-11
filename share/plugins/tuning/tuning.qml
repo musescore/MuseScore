@@ -475,12 +475,12 @@ MuseScore {
 
     property var defaultTemperaments: [defaultWesternTemperaments, defaultMiddleEasternTemperaments]
     
-    property var temperaments: JSON.parse(JSON.stringify(defaultTemperaments))
+    property var temperaments: [[], []] 
         
-    property var userTemperaments: [[],[]]
+    property var userTemperaments: [[], []]
 
     property var currentDefaultTemperament: defaultWesternTemperaments[currentTemperamentIndex]
-    property var currentTemperament: temperaments[0][0]
+    property var currentTemperament: temperaments[0][0] 
 
     property var currentTemperamentIndex: 0
     property var currentRoot: 0
@@ -488,12 +488,21 @@ MuseScore {
     property var currentTweak: 0.0
 
     property var currentListView: tabBar.currentIndex == 0 ? westernListView : middleEasternListView
-    property var currentTab: tabBar.currentIndex
+    property var currentTab: tabBar.currentIndex    
 
     onRun: {
-        temperaments = JSON.parse(fileIO.read())               
-        userTemperaments = JSON.parse(fileIOUserTemp.read())                     
-    }    
+        var fileData = fileIO.exists() ? JSON.parse(fileIO.read()) : [JSON.parse(JSON.stringify(defaultTemperaments)), 0, 0] // [temperaments, lastOpenTab, lastOpenTemperamentIndex] 
+        // reload last session temperament         
+        temperaments = fileData[0]          
+        tabBar.currentIndex = fileData[1]
+        currentTemperamentIndex = fileData[2]
+                
+        userTemperaments = fileIOUserTemp.exists() ? JSON.parse(fileIOUserTemp.read()) : [[],[]]        
+
+        currentListView.positionViewAtIndex(currentTemperamentIndex, currentListView.Center)
+        currentListView.itemAtIndex(currentTemperamentIndex).checked = true                
+        currentListView.itemAtIndex(currentTemperamentIndex).clicked()        
+    }
 
     function applyTemperament() {
         var selection = new scoreSelection()
@@ -789,8 +798,7 @@ MuseScore {
                     ButtonGroup.group: tempGroup
                     orientation: Qt.Horizontal
                     leftPadding: 5                    
-                    title: modelData.name
-                    checked: index==0
+                    title: modelData.name                    
                     onClicked: {
                         currentTemperamentIndex = index
                         currentTemperament = temperaments[0][index]
@@ -802,16 +810,7 @@ MuseScore {
                         }
                         temperamentClicked(currentTemperament)
                     }                    
-                }                
-                // not sure why Component.onCompleted did not work, even with Qt.callLater
-                Timer {
-                    interval: 10 // Time in milliseconds
-                    running: true
-                    repeat: false
-                    onTriggered: {
-                        westernListView.itemAtIndex(0).clicked()
-                    }
-                }
+                }        
             }
 
             StyledListView {
@@ -1042,7 +1041,7 @@ MuseScore {
             entry.offsets.push( parseFloat(finalOffsets.itemAt(i).children[1].currentText) )
         }
         
-        temperaments[currentTab].push(entry)  
+        temperaments[currentTab].push(entry) //adds new entry and updates buttons 
         currentListView.model = temperaments[currentTab]
         userTemperaments[currentTab].push(JSON.parse(JSON.stringify(entry)))
         currentListView.positionViewAtEnd()
@@ -1063,7 +1062,7 @@ MuseScore {
 
     function saveCustomTemperaments() {
         fileIO.write(
-            JSON.stringify(temperaments)
+            JSON.stringify([temperaments, currentTab, currentTemperamentIndex])
         ) 
     }    
 
