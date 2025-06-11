@@ -3803,6 +3803,11 @@ static void writeType(XmlWriter& xml, const Note* const note)
             xml.tag("type size=\"grace-cue\"", s);
       else
             xml.tag("type", s);
+
+      if (note->dots().empty()) {
+            for (int ni = dots; ni > 0; --ni)
+                  xml.tagE("dot");
+            }
       }
 
 //---------------------------------------------------------
