@@ -107,6 +107,7 @@ void TappingLayout::updateHalfSlurs(Tapping* item, const MStyle& style, bool tab
         if (!halfSlurAbove) {
             halfSlurAbove = new TappingHalfSlur(item);
             item->setHalfSlurAbove(halfSlurAbove);
+            halfSlurAbove->setSelected(item->selected());
         }
 
         halfSlurAbove->setParent(item);

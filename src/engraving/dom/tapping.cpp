@@ -41,6 +41,9 @@ void Tapping::setSelected(bool f)
     if (m_text) {
         m_text->setSelected(f);
     }
+    if (m_halfSlurAbove) {
+        m_halfSlurAbove->setSelected(f);
+    }
 
     EngravingItem::setSelected(f);
 }
