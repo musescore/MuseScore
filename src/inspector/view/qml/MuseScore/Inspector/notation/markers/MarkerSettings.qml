@@ -97,13 +97,24 @@ Column {
         maxValue: 1000
     }
 
+    CheckBoxPropertyView {
+        id: alignSymbolCheckbox
+        titleText: qsTrc("inspector", "Align symbol with barline")
+        propertyItem: root.model ? root.model.centerOnSymbol : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: symbolSize.navigationRowEnd + 1
+    }
+
     FlatRadioButtonGroupPropertyView {
         id: positionButtonList
         titleText: qsTrc("inspector", "Position")
         propertyItem: root.model ? root.model.position : null
 
+        enabled: root.model ? !root.model.centerOnSymbol.value : false
+
         navigationPanel: root.navigationPanel
-        navigationRowStart: symbolSize.navigationRowEnd + 1
+        navigationRowStart: alignSymbolCheckbox.navigationRowEnd + 1
 
         requestIconFontSize: 16
         requestWidth: 98

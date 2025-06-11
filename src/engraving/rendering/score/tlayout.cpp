@@ -164,6 +164,7 @@
 #include "tupletlayout.h"
 #include "horizontalspacing.h"
 #include "measurelayout.h"
+#include "markerlayout.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -4082,36 +4083,8 @@ void TLayout::layoutLyricsLineSegment(LyricsLineSegment* item, LayoutContext& ct
 void TLayout::layoutMarker(const Marker* item, Marker::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
-    LD_CONDITION(item->parentItem()->ldata()->isSetBbox());
 
-    TLayout::layoutBaseTextBase(item, ldata);
-
-    // POSITION
-    Measure* measure = item->parentItem() ? toMeasure(item->parentItem()) : nullptr;
-    double xAdj = item->isRightMarker() ? measure->width() : 0.0;
-
-    AlignH hPos = item->getProperty(Pid::POSITION).value<AlignH>();
-    switch (hPos) {
-    case AlignH::HCENTER:
-        xAdj -= ldata->bbox().width() / 2;
-        break;
-    case AlignH::RIGHT:
-        xAdj -= ldata->bbox().width();
-        break;
-    case AlignH::LEFT:
-        break;
-    }
-
-    ldata->moveX(xAdj);
-
-    if (item->autoplace()) {
-        const Measure* m = toMeasure(item->explicitParent());
-        LD_CONDITION(ldata->isSetPos());
-        LD_CONDITION(ldata->isSetBbox());
-        LD_CONDITION(m->ldata()->isSetPos());
-    }
-
-    Autoplace::autoplaceMeasureElement(item, ldata);
+    MarkerLayout::layoutMarker(item, ldata);
 }
 
 void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext& ctx)
@@ -6234,7 +6207,7 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
             TextBlock& t = ldata->blocks[i];
             double diff = maxBlockWidth - t.boundingRect().width();
             if (muse::RealIsNull(diff)) {
-                shape.add(t.shape().translated(PointF(0.0, y)));
+                shape.add(t.shape().translated(PointF(0.0, t.y())));
                 continue;
             }
             double rx = 0.0;
@@ -6249,8 +6222,8 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
             for (TextFragment& f : t.fragments()) {
                 f.pos.rx() += rx;
             }
-
-            shape.add(t.shape().translated(PointF(rx, t.y())));
+            t.shape().translate(PointF(rx, 0.0));
+            shape.add(t.shape().translated(PointF(0.0, t.y())));
         }
     }
 
