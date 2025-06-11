@@ -134,6 +134,7 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
     }
     m_score->appendStaff(s);
     m_inst2Staff.emplace(InstCmper(musxStaff->getCmper()), s->idx());
+    m_staff2Inst.emplace(s->idx(), InstCmper(musxStaff->getCmper()));
     return s;
 }
 
