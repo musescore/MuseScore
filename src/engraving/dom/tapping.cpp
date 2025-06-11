@@ -111,4 +111,13 @@ TappingText::TappingText(const TappingText& t)
     : TextBase(t)
 {
 }
+
+Color TappingText::curColor() const
+{
+    if (parentItem()) {
+        return parentItem()->curColor();
+    }
+
+    return EngravingItem::curColor();
+}
 }
