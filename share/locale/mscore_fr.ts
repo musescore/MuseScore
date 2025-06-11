@@ -16482,7 +16482,7 @@ créer des portées</translation>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="2093"/>
         <source>An active range/single source selection is required for cloning.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une plage active / source unique sélectionnée est nécessaire pour le clonage.</translation>
     </message>
     <message>
         <location filename="../../mscore/scoreview.cpp" line="2925"/>
@@ -24960,12 +24960,12 @@ a échoué</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="346"/>
         <source>Respell Pitches</source>
-        <translation>Recalculer les altérations</translation>
+        <translation>Optimiser l&apos;écriture des notes enharmoniques</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="347"/>
         <source>Respell pitches</source>
-        <translation>Recalculer les altérations</translation>
+        <translation>Optimiser l&apos;écriture des notes enharmoniques</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="356"/>
@@ -26650,32 +26650,32 @@ a échoué</translation>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2967"/>
         <source>Change Enharmonic Spelling (Both Modes)</source>
-        <translation>Changer l&apos;enharmonie (Tonalité réelle et transposée)</translation>
+        <translation>Échanger les notes enharmoniques (Tonalité réelle et transposée)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2968"/>
         <source>Change enharmonic spelling (both modes)</source>
-        <translation>Changer l&apos;enharmonie (Tonalité réelle et transposée)</translation>
+        <translation>Échanger les notes enharmoniques (Tonalité réelle et transposée)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2969"/>
         <source>Change enharmonic note (alters the spelling in concert pitch and transposed mode)</source>
-        <translation>Changer l&apos;enharmonie de la note (Tonalité réelle et transposée)</translation>
+        <translation>Échanger les notes enharmoniques (Tonalité réelle et transposée)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2975"/>
         <source>Change Enharmonic Spelling (Current Mode)</source>
-        <translation>Changer l&apos;enharmonie (Tonalité active)</translation>
+        <translation>Échanger les notes enharmoniques (Tonalité active)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2976"/>
         <source>Change enharmonic spelling (current mode)</source>
-        <translation>Changer l&apos;enharmonie (Tonalité active)</translation>
+        <translation>Échanger les notes enharmoniques (Tonalité active)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2977"/>
         <source>Change enharmonic note (alters the spelling in the current mode only)</source>
-        <translation>Changer l&apos;enharmonie de la note (Tonalité active)</translation>
+        <translation>Échanger les notes enharmoniques (Tonalité active seulement)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2991"/>
@@ -34225,7 +34225,7 @@ Cette partition contient des parties. La modification des indications de mesure 
     <message>
         <location filename="../../libmscore/sym.cpp" line="5197"/>
         <source>Haydn ornament</source>
-        <translation type="unfinished"></translation>
+        <translation>Ornement Haydn</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5215"/>
@@ -34295,12 +34295,12 @@ Cette partition contient des parties. La modification des indications de mesure 
     <message>
         <location filename="../../libmscore/sym.cpp" line="5268"/>
         <source>Turn up</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppetto vertical</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5269"/>
         <source>Inverted turn up</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppetto inversé vertical</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5458"/>
