@@ -2224,7 +2224,6 @@ void TWrite::write(const Lyrics* item, XmlWriter& xml, WriteContext& ctx)
     if (item->syllabic() != LyricsSyllabic::SINGLE) {
         xml.tag("syllabic", TConv::toXml(item->syllabic()));
     }
-    xml.tag("ticks", item->ticks().ticks(), 0);   // pre-3.1 compatibility: write integer ticks under <ticks> tag
     writeProperty(item, xml, Pid::LYRIC_TICKS);
 
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
@@ -2843,7 +2842,6 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("clef", item->genClef());
     }
     if (item->stemless()) {
-        xml.tag("slashStyle", item->stemless());     // for backwards compatibility
         xml.tag("stemless", item->stemless());
     }
     if (!item->showBarlines()) {

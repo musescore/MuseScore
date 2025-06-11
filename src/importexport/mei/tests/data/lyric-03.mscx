@@ -132,7 +132,6 @@
             <Lyrics>
               <no>1</no>
               <syllabic>end</syllabic>
-              <ticks>1920</ticks>
               <ticks_f>8/8</ticks_f>
               <eid>T_T</eid>
               <text>que</text>
@@ -229,7 +228,6 @@
               <text>ve</text>
               </Lyrics>
             <Lyrics>
-              <ticks>1920</ticks>
               <ticks_f>8/8</ticks_f>
               <eid>n_n</eid>
               <text>màs,</text>
@@ -400,7 +398,6 @@
             <eid>HB_HB</eid>
             <durationType>quarter</durationType>
             <Lyrics>
-              <ticks>1920</ticks>
               <ticks_f>8/8</ticks_f>
               <eid>IB_IB</eid>
               <text>màs</text>
@@ -498,7 +495,6 @@
             <Lyrics>
               <no>1</no>
               <syllabic>end</syllabic>
-              <ticks>1920</ticks>
               <ticks_f>2/2</ticks_f>
               <eid>bB_bB</eid>
               <text>que</text>
@@ -583,7 +579,6 @@
             <eid>qB_qB</eid>
             <durationType>quarter</durationType>
             <Lyrics>
-              <ticks>1920</ticks>
               <ticks_f>8/8</ticks_f>
               <eid>rB_rB</eid>
               <text>màs,</text>
