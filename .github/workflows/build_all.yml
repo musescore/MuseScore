@@ -122,17 +122,6 @@ jobs:
       sentry_project: ${{ inputs.sentry_project }}
       use_qt69: ${{ inputs.use_qt69 }}
 
-  wasm:
-    name: Wasm
-    uses: ./.github/workflows/build_wasm.yml
-    secrets: inherit
-    with:
-      platforms: ${{ inputs.platforms }}
-      build_mode: ${{ inputs.build_mode }}
-      publish: ${{ inputs.publish }}
-      sentry_project: ${{ inputs.sentry_project }}
-      use_qt69: ${{ inputs.use_qt69 }}
-
   # Dummy build for testing purposes.
   dummy:
     if: ${{ contains(inputs.platforms, 'dummy') }}
