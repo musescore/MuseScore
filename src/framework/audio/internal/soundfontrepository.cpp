@@ -49,7 +49,7 @@ void SoundFontRepository::loadSoundFonts()
     SoundFontsMap oldSoundFonts;
     m_soundFonts.swap(oldSoundFonts);
 
-    static const std::vector<std::string> filters = { "*.sf2",  "*.sf3" };
+    static const std::vector<std::string> filters = { "*.sf2",  "*.sf3", "*.dls" };
     io::paths_t dirs = configuration()->soundFontDirectories();
 
     for (const io::path_t& dir : dirs) {
