@@ -1267,7 +1267,9 @@ void MusicXMLParserPass1::identification()
             else if (_e.name() == "encoding") {
                   // TODO
                   while (_e.readNextStartElement()) {
-                        if (_e.name() == "software") {
+                        if (_e.name() == "encoder")
+                              _score->setMetaTag("encoder", _e.readElementText());
+                        else if (_e.name() == "software") {
                               QString exporterString = _e.readElementText().toLower();
                               setExporterSoftware(exporterString);
                               }

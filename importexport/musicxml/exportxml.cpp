@@ -6389,6 +6389,10 @@ static void identification(XmlWriter& xml, Score const* const score)
 
       xml.stag("encoding");
 
+      QString encoder = score->metaTag("encoder");
+      if (!encoder.isEmpty())
+            xml.tag("encoder", encoder);
+
       if (MScore::debugMode) {
             xml.tag("software", QString("MuseScore 0.7.0"));
             xml.tag("encoding-date", QString("2007-09-10"));
