@@ -1283,7 +1283,7 @@ bool MeiImporter::readStaffGrps(pugi::xml_node parentNode, int& staffSpan, int c
             Staff* staff = m_score->staff(idx);
             libmei::StaffGrp meiStaffGrp;
             meiStaffGrp.Read(child.node());
-            Convert::BracketStruct bracketSt = Convert::bracketFromMEI(meiStaffGrp);
+            Convert::BracketStruct bracketSt = Convert::staffGrpFromMEI(meiStaffGrp);
             staff->setBracketType(column, bracketSt.bracketType);
 
             int childStaffSpan = 0;
