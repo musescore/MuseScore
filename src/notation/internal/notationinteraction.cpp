@@ -893,7 +893,7 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
     TRACEFUNC;
 
     if (needEndTextEditing(elements)) {
-        endEditText();
+        endEditText(/*startNonTextualEdit*/ false);
     } else if (needEndElementEditing(elements)) {
         endEditElement();
     }
@@ -4188,21 +4188,19 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     return true;
 }
 
-void NotationInteraction::endEditText()
+void NotationInteraction::endEditText(bool startNonTextualEdit)
 {
     if (!isTextEditingStarted()) {
         return;
     }
 
-    EngravingItem* editedElement = m_editData.element;
+    TextBase* editedElement = toTextBase(m_editData.element);
     doEndEditElement();
+    notifyAboutTextEditingEnded(editedElement);
 
-    if (editedElement) {
-        notifyAboutTextEditingEnded(toTextBase(editedElement));
-        // When textual edit is finished, non-textual edit can still happen, so we need to start the non-textual edit mode here
-        if (editedElement->isTextBase() && toTextBase(editedElement)->supportsNonTextualEdit()) {
-            startEditElement(editedElement, false);
-        }
+    // When textual edit is finished, non-textual edit can still happen, so we need to start the non-textual edit mode here
+    if (startNonTextualEdit && editedElement->supportsNonTextualEdit()) {
+        startEditElement(editedElement, false);
     }
 
     notifyAboutTextEditingChanged();
@@ -6263,7 +6261,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         return;
     }
 
-    endEditText();
+    endEditText(/*startNonTextualEdit*/ false);
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // if we are skipping several chords with spaces
@@ -6413,7 +6411,7 @@ void NotationInteraction::navigateToNextSyllable()
         return;
     }
 
-    endEditText();
+    endEditText(/*startNonTextualEdit*/ false);
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // we are extending with several dashes
@@ -6657,7 +6655,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
         }
     }
 
-    endEditText();
+    endEditText(/*startNonTextualEdit*/ false);
 
     lyrics = cr->lyrics(verse, placement);
     if (!lyrics) {
@@ -7239,7 +7237,7 @@ void NotationInteraction::addMelisma()
     FontStyle fStyle = lyrics->fontStyle();
     PropertyFlags fFlags = lyrics->propertyFlags(Pid::FONT_STYLE);
     Fraction endTick = segment->tick(); // a previous melisma cannot extend beyond this point
-    endEditText();
+    endEditText(/*startNonTextualEdit*/ false);
 
     // search next chord
     Segment* nextSegment = segment;
@@ -7444,7 +7442,7 @@ void NotationInteraction::addLyricsVerse()
     mu::engraving::FontStyle fStyle = oldLyrics->fontStyle();
     mu::engraving::PropertyFlags fFlags = oldLyrics->propertyFlags(mu::engraving::Pid::FONT_STYLE);
 
-    endEditText();
+    endEditText(/*startNonTextualEdit*/ false);
 
     score()->startCmd(TranslatableString("undoableAction", "Add lyrics verse"));
     int newVerse = oldLyrics->no() + 1;
