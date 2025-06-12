@@ -39,7 +39,6 @@ static void fillChordDurationsFromBendDiagram(BendDataContext& bendDataCtx, Frac
                                               const BendDataCollector::ImportedBendInfo& importedInfo);
 static void fillBendDataForNote(BendDataContext& bendDataCtx, const BendDataCollector::ImportedBendInfo& importedInfo,
                                 int noteIndexInChord);
-static bool isSlightBend(const BendDataCollector::ImportedBendInfo& importedInfo);
 static BendDataCollector::ImportedBendInfo fillBendInfo(const Note* note, const PitchValues& pitchValues);
 
 bool BendDataCollector::ImportedBendInfo::isSlightBend() const
