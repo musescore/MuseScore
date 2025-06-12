@@ -42,7 +42,7 @@ static muse::testing::SuiteEnvironment importexport_se(
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::noGui = true;
 
-    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
+    mu::engraving::loadInstrumentTemplates(":/engraving/instruments/instruments.xml");
 
     LOGW() << "WARNING: actually all MIDI import/export tests are disabled!";
 }
