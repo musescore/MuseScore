@@ -134,6 +134,7 @@ Staff* FinaleParser::createStaff(Part* part, const std::shared_ptr<const others:
     }
     m_score->appendStaff(s);
     m_inst2Staff.emplace(InstCmper(musxStaff->getCmper()), s->idx());
+    m_staff2Inst.emplace(s->idx(), InstCmper(musxStaff->getCmper()));
     return s;
 }
 
@@ -309,9 +310,10 @@ void FinaleParser::importBrackets()
         bi->setBracketSpan(groupSpan);
         bi->setColumn(size_t(groupInfo.layer));
         m_score->staff(startStaffIdx)->addBracket(bi);
-        m_score->staff(startStaffIdx)->setBarLineSpan(groupSpan - 1);
         if (groupInfo.info.group->drawBarlines == details::StaffGroup::DrawBarlineStyle::ThroughStaves) {
             for (staff_idx_t idx = startStaffIdx; idx < startStaffIdx + groupSpan - 1; idx++) {
+                // RGP: Unlike bi->setBracketSpan, staff->setBarLineSpan is 1 staff at-a-time. Although the parameter is int, it is interpreted as bool.
+                m_score->staff(idx)->setBarLineSpan(1);
                 m_score->staff(idx)->setBarLineTo(0);
             }
         }
@@ -437,6 +439,10 @@ bool FinaleParser::applyStaffSyles(StaffType* staffType, const std::shared_ptr<c
     if (changed(staffType->invisible(), staffInvisible, result)) {
         staffType->setInvisible(staffInvisible);
     }
+    Spatium lineDistance = Spatium(double(currStaff->lineSpace) / EVPU_PER_SPACE);
+    if (changed(staffType->lineDistance(), lineDistance, result)) {
+        staffType->setLineDistance(lineDistance);
+    }
     int stepOffset = currStaff->calcToplinePosition();
     Spatium yoffset = Spatium(-stepOffset /2.0);
     if (changed(staffType->yoffset(), yoffset, result)) {
@@ -531,6 +537,7 @@ void FinaleParser::importStaffItems()
         // per measure calculations
         std::shared_ptr<TimeSignature> currMusxTimeSig;
         std::shared_ptr<KeySignature> currMusxKeySig;
+        std::optional<KeySigEvent> currKeySigEvent;
         ClefIndex musxCurrClef = others::Staff::calcFirstClefIndex(m_doc, m_currentMusxPartId, musxScrollViewItem->staffId);
         /// @todo handle pickup measures and other measures where display and actual timesigs differ
         for (const std::shared_ptr<others::Measure>& musxMeasure : musxMeasures) {
@@ -575,32 +582,86 @@ void FinaleParser::importStaffItems()
             importClefs(musxScrollViewItem, musxMeasure, measure, staffIdx, musxCurrClef);
 
             // keysig
-            const std::shared_ptr<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxScrollViewItem->staffId);
+            const std::shared_ptr<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxScrollViewItem->staffId, /*forWrittenPitch*/ true);
             if (!currMusxKeySig || !currMusxKeySig->isSame(*musxKeySig) || musxMeasure->showKey == others::Measure::ShowKeySigMode::Always) {
-                /// @todo non-linear/microtonal keysigs
-                if (musxKeySig->isLinear() && musxKeySig->calcEDODivisions() == music_theory::STANDARD_12EDO_STEPS) {
-                    Key key = FinaleTConv::keyFromAlteration(musxKeySig->getAlteration());
+                /// @todo microtonal keysigs
+                std::optional<KeySigEvent> keySigEvent;
+                if (musxKeySig->calcEDODivisions() == music_theory::STANDARD_12EDO_STEPS) {
+                    const bool usesChromaticTransposition = currStaff->transposition && currStaff->transposition->chromatic
+                                                            && (currStaff->transposition->chromatic->alteration || currStaff->transposition->chromatic->diatonic);
+                    if (usesChromaticTransposition && musxKeySig->getAlteration() != 0) {
+                        logger()->logWarning(String(u"Finale's chromatic transposition with a key signature is not supported. Using Keyless instead.").arg(musxKeySig->getKeyMode()),
+                                             m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                    }
+                    const bool keyless = usesChromaticTransposition || musxKeySig->keyless || musxKeySig->hideKeySigShowAccis || currStaff->hideKeySigsShowAccis;
+                    keySigEvent = KeySigEvent();
+                    // Note that isLinear and isNonLinear can in theory both return false, although if it happens it is evidence of musx file corruption.
+                    KeySigEvent& ksEvent = keySigEvent.value();
+                    if (musxKeySig->isLinear() || keyless) {
+                        Key concertKey = keyless ? Key::C : FinaleTConv::keyFromAlteration(musxKeySig->getConcertAlteration());
+                        Key key = keyless ? Key::C : FinaleTConv::keyFromAlteration(musxKeySig->getAlteration());
+                        ksEvent.setConcertKey(concertKey);
+                        ksEvent.setKey(key);
+                        KeyMode km = KeyMode::UNKNOWN;
+                        if (keyless) {
+                            km = KeyMode::NONE;
+                        } else if (musxKeySig->isMajor()) {
+                            km = KeyMode::MAJOR;
+                        } else if (musxKeySig->isMinor()) {
+                            km = KeyMode::MINOR;
+                        } else if (std::optional<music_theory::DiatonicMode> mode = musxKeySig->calcDiatonicMode()) {
+                            km = FinaleTConv::keyModeFromDiatonicMode(mode.value());
+                        }
+                        ksEvent.setMode(km);
+                    } else if (musxKeySig->isNonLinear()) {
+                        std::shared_ptr<others::AcciOrderSharps> musxAccis = m_doc->getOthers()->get<others::AcciOrderSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
+                        std::shared_ptr<others::AcciAmountSharps> musxAmounts = m_doc->getOthers()->get<others::AcciAmountSharps>(m_currentMusxPartId, musxKeySig->getKeyMode());
+                        IF_ASSERT_FAILED(musxAccis->values.size() >= musxAmounts->values.size()) {
+                            logger()->logWarning(String(u"Nonlinear key %1 has insufficient AcciOrderSharps.").arg(musxKeySig->getKeyMode()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                            return;
+                        }
+                        ksEvent.setConcertKey(Key::C);
+                        ksEvent.setKey(Key::C);
+                        ksEvent.setCustom(true);
+                        for (size_t x = 0; x < musxAccis->values.size(); x++) {
+                            int amount = musxAmounts->values[x];
+                            if (amount == 0) {
+                                break;
+                            }
+                            SymId accidental = FinaleTConv::acciSymbolFromAcciAmount(amount);
+                            if (accidental != SymId::noSym) {
+                                CustDef cd;
+                                cd.sym = accidental;
+                                cd.degree = musxAccis->values[x];
+                                /// @todo calculate any octave offset. Finale specifies the exact octave for every clef
+                                /// while MuseScore specifies an offset from the default octave for the currently active clef.
+                                /// Since this is a poor mapping, we are taking the MuseScore default for now.
+                                ksEvent.customKeyDefs().push_back(cd);
+                            } else {
+                                logger()->logWarning(String(u"Skipping unknown accidental amount %1 in nonlinear key %2.").arg(amount, musxKeySig->getKeyMode()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                            }
+                        }
+                        if (ksEvent.customKeyDefs().empty()) {
+                            ksEvent.setCustom(false);
+                            ksEvent.setMode(KeyMode::NONE);
+                            logger()->logWarning(String(u"Converting non-linear Finale key %1 that has no accidentals to Keyless.").arg(musxKeySig->getKeyMode()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                        }
+                    } else {
+                        logger()->logWarning(String(u"Skipping Finale key %1 that is neither linear nor non-linear.").arg(musxKeySig->getKeyMode()), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                    }
+                } else {
+                    logger()->logWarning(String(u"Microtonal key signatures not supported."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                }
+                if (keySigEvent && keySigEvent != currKeySigEvent) {
                     Segment* seg = measure->getSegment(SegmentType::KeySig, currTick);
                     KeySig* ks = Factory::createKeySig(seg);
-                    ks->setKey(key);
+                    ks->setKeySigEvent(keySigEvent.value());
                     ks->setTrack(staffIdx * VOICES);
                     ks->setVisible(musxMeasure->showKey != others::Measure::ShowKeySigMode::Never);
-                    KeyMode km = KeyMode::UNKNOWN;
-                    if (musxKeySig->keyless) {
-                        km = KeyMode::NONE;
-                    } else if (musxKeySig->isMajor()) {
-                        km = KeyMode::MAJOR;
-                    } else if (musxKeySig->isMinor()) {
-                        km = KeyMode::MINOR;
-                    } else if (std::optional<music_theory::DiatonicMode> mode = musxKeySig->calcDiatonicMode()) {
-                        km = FinaleTConv::keyModeFromDiatonicMode(mode.value());
-                    }
-                    ks->setMode(km);
                     seg->add(ks);
                     staff->setKey(currTick, ks->keySigEvent());
-                } else {
-                    logger()->logWarning(String(u"Microtonal / non-linear key signatures not supported."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 }
+                currKeySigEvent = keySigEvent;
             }
             currMusxKeySig = musxKeySig;
         }

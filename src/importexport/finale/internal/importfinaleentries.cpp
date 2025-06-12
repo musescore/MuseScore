@@ -209,7 +209,7 @@ static Tuplet* bottomTupletFromTick(std::vector<ReadableTuplet> tupletMap, Fract
 }
 
 bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrackIdx, Measure* measure,
-                                         std::vector<ReadableTuplet>& tupletMap)
+                                         std::vector<ReadableTuplet>& tupletMap, std::unordered_map<Rest*, NoteInfoPtr>& fixedRests)
 {
     if (entryInfo->getEntry()->graceNote) {
         logger()->logWarning(String(u"Grace notes not yet supported"), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
@@ -242,9 +242,10 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     for (size_t i = 0; i < currentEntry->notes.size(); ++i) {
         NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, i);
         if (noteInfoPtr->crossStaff) {
-            staff_idx_t crossStaffIdx = muse::value(m_inst2Staff, noteInfoPtr.calcStaff(), muse::nidx);
+            InstCmper nextMusxStaff = noteInfoPtr.calcStaff();
+            staff_idx_t crossStaffIdx = muse::value(m_inst2Staff, nextMusxStaff, muse::nidx);
             IF_ASSERT_FAILED(crossStaffIdx != muse::nidx) {
-                logger()->logWarning(String(u"Collect cross staffing: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(noteInfoPtr.calcStaff()))));
+                logger()->logWarning(String(u"Collect cross staffing: Musx inst value not found for staff cmper %1").arg(String::fromStdString(std::to_string(nextMusxStaff))));
                 continue;
             }
             int newStaffMove = int(crossStaffIdx) - int(staffIdx);
@@ -348,19 +349,10 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         cr = toChordRest(chord);
     } else {
         Rest* rest = Factory::createRest(segment, d);
-
+        // Fixed-positioning for rests is calculated in a 2nd pass after all voices in all layers have been created.
+        // This allows MuseScore code to calculate correctly the voice offset for the rest.
         if (!currentEntry->floatRest && !currentEntry->notes.empty()) {
-            NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, 0);
-            if (noteInfoPtr->getNoteId() == musx::dom::Note::RESTID) {
-                /// @todo test other staff line configurations that 5 lines. (Finale reference line is not always the top line, e.g. 1-line staves.)
-                /// @todo correctly calculate default rest position in multi-voice situation.
-                auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNoteProperties();
-                int linePosition = 2 * rest->computeNaturalLine(targetStaff->lines(rest->tick()));
-                rest->ryoffset() = double(-staffPosition - linePosition) * targetStaff->staffType(rest->tick())->lineDistance().val() / 2.0;
-                rest->setAutoplace(false);
-            } else {
-                logger()->logWarning(String(u"Rest found with unexpected note ID"), m_doc, noteInfoPtr.getEntryInfo().getStaff(), noteInfoPtr.getEntryInfo().getMeasure());
-            }
+            fixedRests.emplace(rest, NoteInfoPtr(entryInfo, 0));
         }
         cr = toChordRest(rest);
     }
@@ -431,13 +423,56 @@ bool FinaleParser::processBeams(EntryInfoPtr entryInfoPtr, track_idx_t curTrackI
     return true;
 }
 
+bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom::NoteInfoPtr>& fixedRests)
+{
+    for (const auto& next : fixedRests) {
+        Rest* rest = next.first;
+        NoteInfoPtr noteInfoPtr = next.second;
+        EntryInfoPtr entryInfoPtr = noteInfoPtr.getEntryInfo();
+        InstCmper targetMusxStaffId = muse::value(m_staff2Inst, rest->staffIdx(), 0);
+        IF_ASSERT_FAILED (targetMusxStaffId) {
+            logger()->logWarning(String(u"Entry %1 (a rest) was not mapped to a known musx staff.").arg(entryInfoPtr->getEntry()->getEntryNumber()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
+            return false;
+        }
+        Staff* targetStaff = rest->staff();
+        if (noteInfoPtr->getNoteId() == musx::dom::Note::RESTID) {
+            /// @todo correctly calculate default rest position in multi-voice situation. rest->setAutoPlace is problematic because it also affects spacing
+            /// (and does not cover all vertical placement situations either).
+            std::shared_ptr<const others::StaffComposite> currMusxStaff = noteInfoPtr.getEntryInfo().createCurrentStaff(targetMusxStaffId);
+            IF_ASSERT_FAILED(currMusxStaff) {
+                logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
+            }
+            auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNoteProperties();
+            StaffType* staffType = targetStaff->staffType(rest->tick());
+            // following code copied from TLayout::layoutRest:
+            Rest::LayoutData layoutData;
+            const int naturalLine = rest->computeNaturalLine(staffType->lines()); // Measured in 1sp steps
+            const int voiceOffset = rest->computeVoiceOffset(staffType->lines(), &layoutData); // Measured in 1sp steps
+            const int wholeRestOffset = rest->computeWholeOrBreveRestOffset(voiceOffset, staffType->lines());
+            const int finalLine = naturalLine + voiceOffset + wholeRestOffset;
+            // convert finalLine to staff position offset for Finale rest. This value is measured in 0.5sp steps.
+            const int staffPositionOffset = 2 * finalLine - currMusxStaff->calcToplinePosition();
+            const double lineSpacing = staffType->lineDistance().val();
+            rest->ryoffset() = double(-staffPosition - staffPositionOffset) * targetStaff->spatium(rest->tick()) * lineSpacing / 2.0;
+            /// @todo Account for additional default positioning around collision avoidance (when the rest is on the "wrong" side for the voice.)
+            /// Unfortunately, we can't set `autoplace` to false because that also suppresses horizontal spacing.
+            /// The test file `beamsAndRest.musx` includes an example of this issue in the first 32nd rest in the top staff.
+            /// It should be at the same vertical position as the second 32nd rest in the same staff.
+        } else {
+            logger()->logWarning(String(u"Rest found with unexpected note ID %1").arg(noteInfoPtr->getNoteId()), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
+            return false;
+        }
+    }
+    return true;
+}
+
 static void processTremolos(std::vector<ReadableTuplet>& tremoloMap, track_idx_t curTrackIdx, Measure* measure)
 {
     /// @todo account for invalid durations
-    Fraction timeStretch = measure->score()->staff(track2staff(curTrackIdx))->timeStretch(m->tick());
+    Fraction timeStretch = measure->score()->staff(track2staff(curTrackIdx))->timeStretch(measure->tick());
     for (ReadableTuplet tuplet : tremoloMap) {
         Chord* c1 = measure->findChord(measure->tick() + tuplet.startTick, curTrackIdx); // timestretch?
-        Chord* c2 = measure->findChord(measure->tick() + (tuplet.startTick + tuplet.endTick) / 2, curTrackIdx);
+        Chord* c2 = measure->findChord(measure->tick() + ((tuplet.startTick + tuplet.endTick) / 2), curTrackIdx);
         IF_ASSERT_FAILED(c1 && c2 && c1->ticks() == c2->ticks()) {
             continue;
         }
@@ -550,8 +585,8 @@ static void createTupletsFromMap(Measure* measure, track_idx_t curTrackIdx, std:
 void FinaleParser::importEntries()
 {
     // Add entries (notes, rests, tuplets)
-    if (m_score->measures().empty()) {
-        logger()->logWarning(String(u"Add entries: No measures in score"), m_doc, musxScrollViewItem->staffId, 1);
+    if (m_score->measures()->empty()) {
+        logger()->logWarning(String(u"Add entries: No measures in score"));
         return;
     }
     std::vector<std::shared_ptr<others::Measure>> musxMeasures = m_doc->getOthers()->getArray<others::Measure>(m_currentMusxPartId);
@@ -579,55 +614,59 @@ void FinaleParser::importEntries()
                 break;
             }
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
-            if (!gfHold) {
-                continue;
-            }
-            // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
-            std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
-            std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxScrollViewItem->staffId, musxMeasure->getCmper());
-            for (const auto& finaleLayer : finaleLayers) {
-                const LayerIndex layer = finaleLayer.first;
-                /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
-                std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
-                if (!entryFrame) {
-                    logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
-                    continue;
-                }
-                const int maxV1V2 = finaleLayer.second ? 1 : 0;
-                for (int voice = 0; voice <= maxV1V2; voice++) {
-                    // calculate current track
-                    voice_idx_t voiceOff = muse::value(finaleVoiceMap, FinaleTConv::createFinaleVoiceId(layer, bool(voice)), muse::nidx);
-                    IF_ASSERT_FAILED(voiceOff != muse::nidx && voiceOff < VOICES) {
-                        logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+            // Note from RGP: You cannot short-circuit out of this code with a `if (!gfHold) continue` statement.
+            // The code after the if statement must still be executed.
+            if (gfHold) {
+                // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
+                std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
+                std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                std::unordered_map<Rest*, musx::dom::NoteInfoPtr> fixedRests;
+                for (const auto& finaleLayer : finaleLayers) {
+                    const LayerIndex layer = finaleLayer.first;
+                    /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
+                    std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
+                    if (!entryFrame) {
+                        logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                         continue;
                     }
+                    const int maxV1V2 = finaleLayer.second ? 1 : 0;
+                    for (int voice = 0; voice <= maxV1V2; voice++) {
+                        // calculate current track
+                        voice_idx_t voiceOff = muse::value(finaleVoiceMap, FinaleTConv::createFinaleVoiceId(layer, bool(voice)), muse::nidx);
+                        IF_ASSERT_FAILED(voiceOff != muse::nidx && voiceOff < VOICES) {
+                            logger()->logWarning(String(u"Encountered incorrectly mapped voice ID for layer %1").arg(int(layer) + 1), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                            continue;
+                        }
 
-                    track_idx_t curTrackIdx = curStaffIdx * VOICES + voiceOff;
+                        track_idx_t curTrackIdx = curStaffIdx * VOICES + voiceOff;
 
-                    // generate tuplet map, tremolo map and create tuplets
-                    // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
-                    ReadableTuplet rTuplet;
-                    rTuplet.startTick = Fraction(0, 1);
-                    rTuplet.endTick = (measure->timesig() * curStaff->timeStretch(measure->tick())).reduced(); // account for local timesigs (needed?)
-                    rTuplet.layer = -1;
-                    std::vector<ReadableTuplet> tupletMap = { rTuplet };
-                    std::vector<ReadableTuplet> tremoloMap;
-                    createTupletMap(entryFrame->tupletInfo, tupletMap, tremoloMap, voice);
-                    createTupletsFromMap(measure, curTrackIdx, tupletMap, logger());
+                        // generate tuplet map, tremolo map and create tuplets
+                        // trick: insert invalid 'tuplet' spanning the whole measure. useful for fallback
+                        ReadableTuplet rTuplet;
+                        rTuplet.startTick = Fraction(0, 1);
+                        rTuplet.endTick = (measure->timesig() * curStaff->timeStretch(measure->tick())).reduced(); // account for local timesigs (needed?)
+                        rTuplet.layer = -1;
+                        std::vector<ReadableTuplet> tupletMap = { rTuplet };
+                        std::vector<ReadableTuplet> tremoloMap;
+                        createTupletMap(entryFrame->tupletInfo, tupletMap, tremoloMap, voice);
+                        createTupletsFromMap(measure, curTrackIdx, tupletMap, logger());
 
-                    // add chords and rests
-                    for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                        processEntryInfo(entryInfoPtr, curTrackIdx, measure, tupletMap);
-                    }
+                        // add chords and rests
+                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
+                            processEntryInfo(entryInfoPtr, curTrackIdx, measure, tupletMap, fixedRests);
+                        }
 
-                    // add tremolos
-                    processTremolos(tremoloMap, curTrackIdx, measure);
+                        // add tremolos
+                        processTremolos(tremoloMap, curTrackIdx, measure);
 
-                    // create beams
-                    for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
-                        processBeams(entryInfoPtr, curTrackIdx, measure);
+                        // create beams and position non-floating rests
+                        for (EntryInfoPtr entryInfoPtr = entryFrame->getFirstInVoice(voice + 1); entryInfoPtr; entryInfoPtr = entryInfoPtr.getNextInVoice(voice + 1)) {
+                            processBeams(entryInfoPtr, curTrackIdx, measure);
+                        }
                     }
                 }
+                // position fixed rests after all layers have been imported
+                positionFixedRests(fixedRests);
             }
             // Avoid corruptions: fill in any gaps in existing voices...
             logger()->logInfo(String(u"Fixing corruptions for measure at staff %1, tick %2").arg(String::number(curStaffIdx), currTick.toString()));
