@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
+        <file alias="notation/instruments/instruments.xml">../../share/instruments/instruments.xml</file>
+        <file alias="notation/instruments/orders.xml">../../share/instruments/orders.xml</file>
+        <file alias="notation/instruments/string_tunings_presets.json">../../share/instruments/string_tunings_presets.json</file>
         <file>qml/MuseScore/NotationScene/NotationView.qml</file>
         <file>qml/MuseScore/NotationScene/qmldir</file>
         <file>qml/MuseScore/NotationScene/ZoomControl.qml</file>

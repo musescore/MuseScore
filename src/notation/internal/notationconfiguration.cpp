@@ -313,8 +313,7 @@ void NotationConfiguration::init()
         m_styleFileImportPathChanged.send(val.toString());
     });
 
-    settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY,
-                                Val(globalConfiguration()->appDataPath().toStdString() + "instruments/orders.xml"));
+    settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY, Val(":/notation/instruments/orders.xml"));
     settings()->valueChanged(FIRST_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
         m_scoreOrderListPathsChanged.notify();
     });
@@ -1043,7 +1042,7 @@ void NotationConfiguration::setTestModeEnabled(std::optional<bool> enabled)
 
 muse::io::path_t NotationConfiguration::instrumentListPath() const
 {
-    return globalConfiguration()->appDataPath() + "instruments/instruments.xml";
+    return ":/notation/instruments/instruments.xml";
 }
 
 io::paths_t NotationConfiguration::scoreOrderListPaths() const
@@ -1090,7 +1089,7 @@ void NotationConfiguration::setUserScoreOrderListPaths(const io::paths_t& paths)
 
 muse::io::path_t NotationConfiguration::stringTuningsPresetsPath() const
 {
-    return globalConfiguration()->appDataPath() + "instruments/string_tunings_presets.json";
+    return ":/notation/instruments/string_tunings_presets.json";
 }
 
 bool NotationConfiguration::isSnappedToGrid(muse::Orientation gridOrientation) const
