@@ -66,6 +66,8 @@ public:
     static double noteOpticalCenterForTie(const Note* note, bool up);
     static void createSlurSegments(Slur* item, LayoutContext& ctx);
 
+    static void adjustOverlappingSlurs(const std::list<SpannerSegment*>& spannerSegments);
+
     static void layoutLaissezVibChord(Chord* chord, LayoutContext& ctx);
 private:
 
