@@ -68,10 +68,8 @@ void TappingLayout::layoutLeftHandTapping(Tapping* item, Tapping::LayoutData* ld
 
     LHTappingSymbol lhSym = tabStaff ? style.styleV(Sid::lhTappingSymbolTab).value<LHTappingSymbol>()
                             : style.styleV(Sid::lhTappingSymbolNormalStave).value<LHTappingSymbol>();
-    LHTappingShowItems showItems
-        = tabStaff ? style.styleV(Sid::lhTappingShowItemsNormalStave).value<LHTappingShowItems>()
-          : style.styleV(Sid::lhTappingShowItemsNormalStave).value<LHTappingShowItems>();
-    bool dontShowSymbols = showItems == LHTappingShowItems::HALF_SLUR;
+
+    bool dontShowSymbols = item->lhShowItems() == LHTappingShowItems::HALF_SLUR;
 
     if (lhSym != LHTappingSymbol::DOT || dontShowSymbols) {
         ldata->symId = SymId::noSym;
@@ -110,9 +108,7 @@ void TappingLayout::updateHalfSlurs(Tapping* item, const MStyle& style, bool tab
         return;
     }
 
-    bool showHalfSlurAbove
-        = (tabStaff && style.styleV(Sid::lhTappingShowItemsTab).value<LHTappingShowItems>() != LHTappingShowItems::SYMBOL)
-          || (!tabStaff && style.styleV(Sid::lhTappingShowItemsNormalStave).value<LHTappingShowItems>() != LHTappingShowItems::SYMBOL);
+    bool showHalfSlurAbove = item->lhShowItems() != LHTappingShowItems::SYMBOL;
     if (showHalfSlurAbove) {
         TappingHalfSlur* halfSlurAbove = item->halfSlurAbove();
         if (!halfSlurAbove) {
@@ -138,9 +134,8 @@ void TappingLayout::updateHalfSlurs(Tapping* item, const MStyle& style, bool tab
         item->setHalfSlurAbove(nullptr);
     }
 
-    bool showHalfSlurBelow
-        = tabStaff && style.styleV(Sid::lhTappingShowItemsTab).value<LHTappingShowItems>() != LHTappingShowItems::SYMBOL
-          && style.styleB(Sid::lhTappingSlurTopAndBottomNoteOnTab) && toChord(item->parent())->notes().size() > 1;
+    bool showHalfSlurBelow = tabStaff && showHalfSlurAbove && style.styleB(Sid::lhTappingSlurTopAndBottomNoteOnTab)
+                             && toChord(item->parent())->notes().size() > 1;
     if (showHalfSlurBelow) {
         TappingHalfSlur* halfSlurBelow = item->halfSlurBelow();
         if (!halfSlurBelow) {

@@ -58,6 +58,8 @@ public:
     TappingHalfSlur* halfSlurBelow() const { return m_halfSlurBelow; }
     void setHalfSlurBelow(TappingHalfSlur* s) { m_halfSlurBelow = s; }
 
+    LHTappingShowItems lhShowItems() const;
+
     void styleChanged() override;
 
     double mag() const override;

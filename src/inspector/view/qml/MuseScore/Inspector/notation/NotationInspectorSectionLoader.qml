@@ -124,6 +124,7 @@ Loader {
             case Inspector.TYPE_HORIZONTAL_FRAME: return horizontalFrameComp
             case Inspector.TYPE_FRET_FRAME: return fretFrameComp
             case Inspector.TYPE_ARTICULATION: return articulationComp
+            case Inspector.TYPE_TAPPING: return articulationComp
             case Inspector.TYPE_ORNAMENT: return ornamentComp
             case Inspector.TYPE_AMBITUS: return ambitusComp
             case Inspector.TYPE_IMAGE: return imageComp

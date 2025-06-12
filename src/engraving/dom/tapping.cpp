@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "stafftype.h"
+#include "style/style.h"
 #include "tapping.h"
 #include "text.h"
 #include "types/typesconv.h"
@@ -46,6 +48,16 @@ void Tapping::setSelected(bool f)
     }
 
     EngravingItem::setSelected(f);
+}
+
+LHTappingShowItems Tapping::lhShowItems() const
+{
+    DO_ASSERT(m_hand == TappingHand::LEFT);
+
+    const MStyle& s = style();
+    bool tabStaff = staffType()->isTabStaff();
+
+    return s.styleV(tabStaff ? Sid::lhTappingShowItemsTab : Sid::lhTappingShowItemsNormalStave).value<LHTappingShowItems>();
 }
 
 void Tapping::styleChanged()
