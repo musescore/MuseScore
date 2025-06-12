@@ -3011,14 +3011,8 @@ void GPConverter::addTuning()
                 continue;
             }
 
-            std::vector<size_t> visibleStrings(sd.stringList().size());
-            for (size_t i = 0; i < visibleStrings.size(); ++i) {
-                visibleStrings[i] = i;
-            }
-
             StringTunings* tun = Factory::createStringTunings(seg);
             tun->setStringData(sd);
-            tun->setVisibleStrings(visibleStrings);
             tun->setTrack(staff2track(s->idx()));
             tun->setParent(seg);
             seg->add(tun);
