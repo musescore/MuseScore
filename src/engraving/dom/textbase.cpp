@@ -2908,9 +2908,6 @@ PropertyValue TextBase::propertyDefault(Pid id) const
         return AutoOnOff::AUTO;
     case Pid::VOICE_ASSIGNMENT:
         return VoiceAssignment::ALL_VOICE_IN_INSTRUMENT;
-    case Pid::POSITION:
-        // TODO - move to text style
-        return AlignH::HCENTER;
     default:
         for (const auto& p : *textStyle(TextStyleType::DEFAULT)) {
             if (p.pid == id) {

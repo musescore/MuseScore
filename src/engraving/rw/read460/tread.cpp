@@ -2889,7 +2889,6 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
                 }
             }
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::POS_ABOVE)) {
-        } else if (TRead::readProperty(h, tag, e, ctx, Pid::POSITION)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_TYPE)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::PLAY)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICE_LITERAL)) {
@@ -4239,6 +4238,7 @@ static constexpr std::array<Pid, 18> TextBasePropertyId { {
     Pid::FRAME_FG_COLOR,
     Pid::FRAME_BG_COLOR,
     Pid::ALIGN,
+    Pid::POSITION,
 } };
 
 bool TRead::readTextProperties(TextBase* t, XmlReader& xml, ReadContext& ctx)

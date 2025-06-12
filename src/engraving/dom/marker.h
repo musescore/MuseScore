@@ -91,7 +91,8 @@ public:
 
     std::vector<LineF> dragAnchorLines() const override;
 
-    static constexpr std::array<MarkerType, 4> RIGHT_MARKERS {
+    static constexpr std::array<MarkerType, 5> RIGHT_MARKERS {
+        MarkerType::FINE,
         MarkerType::TOCODA,
         MarkerType::TOCODASYM,
         MarkerType::DA_CODA,
