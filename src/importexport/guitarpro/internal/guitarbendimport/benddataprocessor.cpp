@@ -34,8 +34,18 @@
 using namespace mu::engraving;
 
 namespace mu::iex::guitarpro {
-static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving::Chord* chord);
+static void createSlightBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
+static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
+static Note* getLocatedNote(mu::engraving::Score* score, Fraction tickFr, track_idx_t track, size_t noteInChordIdx);
+static Chord* getLocatedChord(mu::engraving::Score* score, Fraction tickFr, track_idx_t track);
+
+#ifdef SPLIT_CHORD_DURATIONS
+static void createSplitDurationBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
+static void createSplitDurationBendsForChord(const BendDataContext& bendDataCtx, mu::engraving::Chord* chord);
 static void removeReduntantChords(const BendDataContext& bendDataCtx, const mu::engraving::Score* score);
+#else
+static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
+#endif
 
 BendDataProcessor::BendDataProcessor(mu::engraving::Score* score)
     : m_score(score)
@@ -43,6 +53,194 @@ BendDataProcessor::BendDataProcessor(mu::engraving::Score* score)
 }
 
 void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
+{
+    createPreBends(bendDataCtx, m_score);
+    createSlightBends(bendDataCtx, m_score);
+
+#ifdef SPLIT_CHORD_DURATIONS
+    createSplitDurationBends(bendDataCtx, m_score);
+    removeReduntantChords(bendDataCtx, m_score);
+#else
+    createGraceAfterBends(bendDataCtx, m_score);
+#endif
+}
+
+static void createSlightBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score)
+{
+    for (const auto& [track, trackInfo] : bendDataCtx.slightBendData) {
+        for (const auto& [tick, tickInfo] : trackInfo) {
+            Chord* chord = getLocatedChord(score, tick, track);
+            for (size_t noteIndex = 0; noteIndex < chord->notes().size(); noteIndex++) {
+                if (!muse::contains(tickInfo, noteIndex)) {
+                    continue;
+                }
+
+                Note* note = chord->notes()[noteIndex];
+                const auto& noteBendData = tickInfo.at(noteIndex);
+                GuitarBend* bend = chord->score()->addGuitarBend(GuitarBendType::SLIGHT_BEND, note);
+                IF_ASSERT_FAILED(bend) {
+                    LOGE() << "bend wasn't created for track " << chord->track() << ", tick " << chord->tick().ticks();
+                    return;
+                }
+
+                bend->setStartTimeFactor(noteBendData.startFactor);
+                bend->setEndTimeFactor(noteBendData.endFactor);
+            }
+        }
+    }
+}
+
+static void createPreBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score)
+{
+    for (const auto& [track, trackInfo] : bendDataCtx.prebendData) {
+        for (const auto& [tick, tickInfo] : trackInfo) {
+            Chord* chord = getLocatedChord(score, tick, track);
+            for (size_t noteIndex = 0; noteIndex < chord->notes().size(); noteIndex++) {
+                if (!muse::contains(tickInfo, noteIndex)) {
+                    continue;
+                }
+
+                Note* note = chord->notes()[noteIndex];
+                const auto& noteBendData = tickInfo.at(noteIndex);
+                GuitarBend* bend = chord->score()->addGuitarBend(GuitarBendType::PRE_BEND, note);
+                IF_ASSERT_FAILED(bend) {
+                    LOGE() << "bend wasn't created for track " << chord->track() << ", tick " << chord->tick().ticks();
+                    return;
+                }
+
+                bend->setStartTimeFactor(noteBendData.startFactor);
+                bend->setEndTimeFactor(noteBendData.endFactor);
+
+#ifdef SPLIT_CHORD_DURATIONS
+                auto tieBackInfoForTrackIt = bendDataCtx.chordTicksForTieBack.find(chord->track());
+                if (tieBackInfoForTrackIt != bendDataCtx.chordTicksForTieBack.end()
+                    && (tieBackInfoForTrackIt->second.find(chord->tick()) != tieBackInfoForTrackIt->second.end())) {
+                    const Chord* prevChord = chord->prev();
+                    IF_ASSERT_FAILED(prevChord) {
+                        LOGE() << "bend import error : couldn't add tie, previous chord was null for track " << chord->track() <<
+                            ", tick " <<
+                            chord->tick().ticks();
+                        continue;
+                    }
+
+                    // TODO: adapt to creating ties for each note if needed (now only checking up note)
+                    Note* endNote = chord->upNote();
+                    Note* prevStartNote = prevChord->upNote();
+
+                    Tie* tie = Factory::createTie(chord->score()->dummy());
+                    prevStartNote->add(tie);
+                    tie->setEndNote(endNote);
+                    endNote->setTieBack(tie);
+
+                    continue;
+                }
+#endif
+
+                const int pitch = noteBendData.quarterTones / 2;
+                note->setPitch(note->pitch() + pitch);
+                note->setTpcFromPitch();
+                QuarterOffset quarterOff = noteBendData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+                bend->setEndNotePitch(note->pitch(), quarterOff);
+                Note* startNote = bend->startNote();
+                if (!startNote) {
+                    return;
+                }
+
+                startNote->setPitch(note->pitch() - pitch);
+                startNote->setTpcFromPitch();
+
+                int newPitch = note->pitch();
+                Note* tiedNote = nullptr;
+
+                Tie* tieFor = startNote->tieFor();
+                if (tieFor) {
+                    tiedNote = tieFor->endNote();
+                    startNote->remove(tieFor);
+                }
+
+                while (tiedNote) {
+                    tiedNote->setPitch(newPitch);
+                    tiedNote->setTpcFromPitch();
+                    Tie* tie = tiedNote->tieFor();
+                    if (!tie) {
+                        break;
+                    }
+
+                    tiedNote = tie->endNote();
+                }
+            }
+        }
+    }
+}
+
+static Chord* getLocatedChord(mu::engraving::Score* score, Fraction tickFr, track_idx_t track)
+{
+    const Measure* measure = score->tick2measure(tickFr);
+    if (!measure) {
+        LOGE() << "bend import error: no valid measure for track " << track << ", tick " << tickFr.ticks();
+        return nullptr;
+    }
+
+    Chord* chord = measure->findChord(tickFr, track);
+    if (!chord) {
+        LOGE() << "bend import error: no valid chord for track " << track << ", tick " << tickFr.ticks();
+        return nullptr;
+    }
+
+    return chord;
+}
+
+static Note* getLocatedNote(mu::engraving::Score* score, Fraction tickFr, track_idx_t track, size_t noteInChordIdx)
+{
+    Chord* chord = getLocatedChord(score, tickFr, track);
+    if (chord && noteInChordIdx >= chord->notes().size()) {
+        LOGE() << "bend import error: note index invalid for track " << track << ", tick " << tickFr.ticks();
+        return nullptr;
+    }
+
+    return chord->notes()[noteInChordIdx];
+}
+
+#ifndef SPLIT_CHORD_DURATIONS
+
+static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score)
+{
+    for (const auto& [track, trackInfo] : bendDataCtx.graceAfterBendData) {
+        for (const auto& [tick, tickInfo] : trackInfo) {
+            for (const auto& [noteInChordIdx, graceVector] : tickInfo) {
+                Note* note = getLocatedNote(score, tick, track, noteInChordIdx);
+                if (!note) {
+                    continue;
+                }
+
+                Note* startNote = note;
+                for (const auto& graceInfo : graceVector) {
+                    Chord* graceChord = Factory::createChord(score->dummy()->segment());
+                    graceChord->setTrack(track);
+                    graceChord->setNoteType(NoteType::GRACE8_AFTER);
+
+                    Note* graceNote = Factory::createNote(graceChord);
+                    graceNote->setPitch(startNote->pitch() + graceInfo.quarterTones / 2);
+                    graceNote->setTpcFromPitch();
+                    graceChord->add(graceNote);
+                    note->chord()->add(graceChord);
+
+                    GuitarBend* bend = score->addGuitarBend(GuitarBendType::BEND, startNote, graceNote);
+
+                    QuarterOffset quarterOff = graceInfo.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+                    bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + graceInfo.quarterTones / 2, quarterOff);
+                    bend->setStartTimeFactor(graceInfo.startFactor);
+                    bend->setEndTimeFactor(graceInfo.endFactor);
+
+                    startNote = graceNote;
+                }
+            }
+        }
+    }
+}
+
+#else
+static void createSplitDurationBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score)
 {
     for (const auto& [track, trackInfo] : bendDataCtx.bendChordDurations) {
         for (const auto& [mainTick, chordsDurations] : trackInfo) {
@@ -52,7 +250,7 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
             }
 
             Fraction mainTickFr = Fraction::fromTicks(mainTick);
-            const Measure* mainChordMeasure = m_score->tick2measure(mainTickFr);
+            const Measure* mainChordMeasure = score->tick2measure(mainTickFr);
 
             if (!mainChordMeasure) {
                 LOGE() << "bend import error : no valid measure for track " << track << ", tick " << mainTick;
@@ -70,11 +268,11 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
             mainChord->setDurationType(TDuration(newMainChordDuration));
             Fraction currentTick = mainChord->tick() + mainChord->ticks();
             Fraction currentActualTick = mainChord->tick() + mainChord->actualTicks();
-            createGuitarBends(bendDataCtx, mainChord);
+            createSplitDurationBendsForChord(bendDataCtx, mainChord);
 
             Tuplet* tuplet = mainChord->tuplet();
             for (size_t i = 1; i < chordsDurations.size(); i++) {
-                Measure* currentMeasure = m_score->tick2measure(currentTick);
+                Measure* currentMeasure = score->tick2measure(currentTick);
                 if (!currentMeasure) {
                     LOGE() << "bend import error : no valid measure for track " << track << ", tick " << currentTick.ticks();
                     return;
@@ -96,7 +294,7 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
                     currentChord->setDurationType(currentChordDuration);
                 } else {
                     curSegment = currentMeasure->getSegment(SegmentType::ChordRest, currentActualTick);
-                    currentChord = Factory::createChord(m_score->dummy()->segment());
+                    currentChord = Factory::createChord(score->dummy()->segment());
                     currentChord->setTrack(track);
                     currentChord->setTicks(currentChordDuration);
                     currentChord->setDurationType(currentChordDuration);
@@ -115,80 +313,27 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
                     }
                 }
 
-                createGuitarBends(bendDataCtx, currentChord);
+                createSplitDurationBendsForChord(bendDataCtx, currentChord);
                 currentTick += currentChordDuration;
                 currentActualTick += actualDuration;
             }
         }
     }
-
-    removeReduntantChords(bendDataCtx, m_score);
-
-    for (const auto& [track, trackInfo] : bendDataCtx.graceAfterBendData) {
-        for (const auto& [tick, tickInfo] : trackInfo) {
-            Fraction tickFr = Fraction::fromTicks(tick);
-            for (const auto& [noteInChordIdx, graceVector] : tickInfo) {
-                const Measure* measure = m_score->tick2measure(tickFr);
-                if (!measure) {
-                    LOGE() << "bend import error (grace after): no valid measure for track " << track << ", tick " << tick;
-                    continue;
-                }
-
-                Chord* chord = measure->findChord(tickFr, track);
-                if (!chord) {
-                    LOGE() << "bend import error (grace after): no valid chord for track " << track << ", tick " << tick;
-                    continue;
-                }
-
-                if (noteInChordIdx >= chord->notes().size()) {
-                    LOGE() << "bend import error (grace after): note index invalid for track " << track << ", tick " << tick;
-                    continue;
-                }
-
-                Note* note = chord->notes()[noteInChordIdx];
-
-                // TODO: fix for chords with several notes with bends
-                Note* startNote = note;
-                for (const auto& graceInfo : graceVector) {
-                    Chord* graceChord = Factory::createChord(m_score->dummy()->segment());
-                    graceChord->setTrack(chord->track());
-                    graceChord->setNoteType(NoteType::GRACE8_AFTER);
-
-                    Note* graceNote = Factory::createNote(graceChord);
-                    graceNote->setPitch(startNote->pitch() + graceInfo.quarterTones / 2);
-                    graceNote->setTpcFromPitch();
-                    graceChord->add(graceNote);
-                    chord->add(graceChord);
-
-                    GuitarBend* bend = m_score->addGuitarBend(GuitarBendType::BEND, startNote, graceNote);
-
-                    QuarterOffset quarterOff = graceInfo.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
-                    bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + graceInfo.quarterTones / 2, quarterOff);
-                    bend->setStartTimeFactor(graceInfo.startFactor);
-                    bend->setEndTimeFactor(graceInfo.endFactor);
-
-                    startNote = graceNote;
-                }
-            }
-        }
-    }
 }
 
-static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving::Chord* chord)
+static void createSplitDurationBendsForChord(const BendDataContext& bendDataCtx, mu::engraving::Chord* chord)
 {
     Score* score = chord->score();
     int chordTicks = chord->tick().ticks();
 
-    if (bendDataCtx.bendDataByEndTick.find(chord->track()) == bendDataCtx.bendDataByEndTick.end()) {
+    if (!muse::contains(bendDataCtx.bendDataByEndTick, chord->track())) {
         return;
     }
 
     const auto& currentTrackData = bendDataCtx.bendDataByEndTick.at(chord->track());
-    if (currentTrackData.find(chordTicks) == currentTrackData.end()) {
+    if (!muse::contains(currentTrackData, chordTicks)) {
         return;
     }
-
-    auto tieBackInfoForTrackIt = bendDataCtx.chordTicksForTieBack.find(chord->track());
 
     const BendDataContext::BendChordData& bendChordData = currentTrackData.at(chordTicks);
     const Measure* startMeasure = score->tick2measure(bendChordData.startTick);
@@ -234,65 +379,22 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
         const auto& bendNoteData = bendChordData.noteDataByIdx.at(static_cast<int>(noteIndex));
         const int pitch = bendNoteData.quarterTones / 2;
 
-        if (bendNoteData.type == GuitarBendType::PRE_BEND) {
-            if (tieBackInfoForTrackIt != bendDataCtx.chordTicksForTieBack.end()
-                && (tieBackInfoForTrackIt->second.find(bendChordData.startTick) != tieBackInfoForTrackIt->second.end())) {
-                const Chord* prevChord = chord->prev();
-                IF_ASSERT_FAILED(prevChord) {
-                    LOGE() << "bend import error : couldn't add tie, previous chord was null for track " << chord->track() << ", tick " <<
-                        chord->tick().ticks();
-                    continue;
-                }
-
-                // TODO: adapt to creating ties for each note if needed (now only checking up note)
-                Note* endNote = chord->upNote();
-                Note* prevStartNote = prevChord->upNote();
-
-                Tie* tie = Factory::createTie(chord->score()->dummy());
-                prevStartNote->add(tie);
-                tie->setEndNote(endNote);
-                endNote->setTieBack(tie);
-
-                continue;
-            }
-
-            note->setPitch(note->pitch() + pitch);
-            note->setTpcFromPitch();
-            GuitarBend* bend = score->addGuitarBend(bendNoteData.type, note);
-            QuarterOffset quarterOff = bendNoteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
-            bend->setEndNotePitch(note->pitch(), quarterOff);
-            Note* bendStartNote = bend->startNote();
-            if (bendStartNote) {
-                bendStartNote->setPitch(note->pitch() - pitch);
-                bendStartNote->setTpcFromPitch();
-            }
-        } else if (bendNoteData.type == GuitarBendType::SLIGHT_BEND) {
-            GuitarBend* bend = score->addGuitarBend(bendNoteData.type, note);
-            IF_ASSERT_FAILED(bend) {
-                LOGE() << "bend wasn't created for track " << chord->track() << ", tick " << startChord->tick().ticks();
-                return;
-            }
-
-            bend->setStartTimeFactor(bendNoteData.startFactor);
-            bend->setEndTimeFactor(bendNoteData.endFactor);
-        } else {
-            IF_ASSERT_FAILED(startChord != chord) {
-                LOGE() << "bend import error : start and end chords are the same for track " << chord->track() << ", tick " <<
-                    bendChordData.startTick.ticks();
-                return;
-            }
-
-            GuitarBend* bend = score->addGuitarBend(bendNoteData.type, startNote, note);
-            IF_ASSERT_FAILED(bend) {
-                LOGE() << "bend wasn't created for track " << chord->track() << ", tick " << startChord->tick().ticks();
-                return;
-            }
-
-            QuarterOffset quarterOff = bendNoteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
-            bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + pitch, quarterOff);
-            bend->setStartTimeFactor(bendNoteData.startFactor);
-            bend->setEndTimeFactor(bendNoteData.endFactor);
+        IF_ASSERT_FAILED(startChord != chord) {
+            LOGE() << "bend import error : start and end chords are the same for track " << chord->track() << ", tick " <<
+                bendChordData.startTick.ticks();
+            return;
         }
+
+        GuitarBend* bend = score->addGuitarBend(GuitarBendType::BEND, startNote, note);
+        IF_ASSERT_FAILED(bend) {
+            LOGE() << "bend wasn't created for track " << chord->track() << ", tick " << startChord->tick().ticks();
+            return;
+        }
+
+        QuarterOffset quarterOff = bendNoteData.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+        bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + pitch, quarterOff);
+        bend->setStartTimeFactor(bendNoteData.startFactor);
+        bend->setEndTimeFactor(bendNoteData.endFactor);
 
         int newPitch = note->pitch();
         Note* tiedNote = nullptr;
@@ -300,9 +402,7 @@ static void createGuitarBends(const BendDataContext& bendDataCtx, mu::engraving:
         Tie* tieFor = startNote->tieFor();
         if (tieFor) {
             tiedNote = tieFor->endNote();
-            if (bendNoteData.type != GuitarBendType::PRE_BEND) {
-                startNote->remove(tieFor);
-            }
+            startNote->remove(tieFor);
         }
 
         while (tiedNote) {
@@ -342,4 +442,6 @@ static void removeReduntantChords(const BendDataContext& bendDataCtx, const mu::
         }
     }
 }
+
+#endif
 } // namespace mu::iex::guitarpro
