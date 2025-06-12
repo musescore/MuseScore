@@ -90,6 +90,8 @@ public:
     TappingHalfSlurSegment(System* parent);
     TappingHalfSlurSegment(const TappingHalfSlurSegment& other);
     TappingHalfSlurSegment* clone() const override { return new TappingHalfSlurSegment(*this); }
+
+    TappingHalfSlur* tappingHalfSlur() const { return toTappingHalfSlur(spanner()); }
 };
 
 class TappingHalfSlur : public Slur
@@ -105,6 +107,8 @@ public:
     TappingHalfSlur(const TappingHalfSlur&);
     TappingHalfSlur* clone() const override { return new TappingHalfSlur(*this); }
     TappingHalfSlurSegment* newSlurTieSegment(System* parent) override { return new TappingHalfSlurSegment(parent); }
+
+    Tapping* tapping() const { return toTapping(parent()); }
 
 private:
     bool m_isHalfSlurAbove = true;

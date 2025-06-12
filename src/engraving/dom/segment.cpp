@@ -1912,7 +1912,16 @@ EngravingItem* Segment::lastElementOfSegment(staff_idx_t activeStaff) const
 
                 const std::vector<Articulation*>& articulations = chord->articulations();
                 if (!articulations.empty()) {
-                    return articulations.back();
+                    Articulation* lastArtic = articulations.back();
+                    if (lastArtic->isTapping()) {
+                        Tapping* tap = toTapping(lastArtic);
+                        if (tap->halfSlurBelow()) {
+                            return tap->halfSlurBelow()->frontSegment();
+                        } else if (tap->halfSlurAbove()) {
+                            return tap->halfSlurAbove()->frontSegment();
+                        }
+                    }
+                    return lastArtic;
                 }
                 return chord->upNote();
             }
