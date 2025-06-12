@@ -230,12 +230,18 @@ class Instrument : public QObject
     Q_OBJECT
 
     /**
-     * The string identifier
-     * ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
+     * The MuseScore string identifier
      * for this instrument.
      * \see \ref apiv1::Part::instrumentId "Part.instrumentId"
      */
     Q_PROPERTY(QString instrumentId READ instrumentId)
+    /**
+     * The string identifier
+     * ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
+     * for this instrument.
+     * \see \ref apiv1::Part::musicXmlId "Part.musicXmlId"
+     */
+    Q_PROPERTY(QString musicXmlId READ musicXmlId)
     // mu::engraving::Instrument supports multiple short/long names (for aeolus instruments?)
     // but in practice only one is actually used. If this gets changed this API could
     // be expanded.
@@ -268,6 +274,7 @@ public:
     mu::engraving::Part* part() { return _part; }
 
     QString instrumentId() const { return instrument()->id(); }
+    QString musicXmlId() const { return instrument()->musicXmlId(); }
     QString longName() const;
     QString shortName() const;
 
