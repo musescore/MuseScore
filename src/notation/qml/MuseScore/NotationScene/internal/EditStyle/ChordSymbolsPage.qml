@@ -406,7 +406,7 @@ StyledFlickable {
 
                 StyledGroupBox {
                     Layout.fillWidth: true
-                    title: qsTrc("notation/editstyle/chordsymbols", "Altered bass notes (eg. A7/G)")
+                    title: qsTrc("notation/editstyle/chordsymbols", "Altered bass notes (e.g. A7/G)")
 
                     ColumnLayout {
                         spacing: 12
