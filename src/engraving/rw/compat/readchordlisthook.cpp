@@ -87,5 +87,5 @@ void ReadChordListHook::validate()
     }
 
     // make sure we have a chordlist
-    chordList->checkChordList(m_score->configuration()->appDataPath(), style);
+    chordList->checkChordList(style);
 }

@@ -260,7 +260,7 @@ BeatType Score::tick2beatType(const Fraction& tick) const
 
 void Score::checkChordList()
 {
-    m_chordList.checkChordList(configuration()->appDataPath(), style());
+    m_chordList.checkChordList(style());
 }
 
 //---------------------------------------------------------

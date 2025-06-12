@@ -446,8 +446,8 @@ public:
                              bool stackModifiers = false, bool excludeModsHAlign = false, String symbolFont = u"");
     double position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const;
 
-    void checkChordList(const muse::io::path_t& appDataPath, const MStyle& style);
-    bool read(const muse::io::path_t& appDataPath, const String& name);
+    void checkChordList(const MStyle& style);
+    bool read(const String& name);
     bool read(muse::io::IODevice* device);
     bool write(const String&) const;
     bool write(muse::io::IODevice* device) const;
