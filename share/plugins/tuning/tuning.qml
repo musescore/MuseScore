@@ -742,6 +742,7 @@ MuseScore {
                     id: addDialog                                                                  
                     contentWidth:  addButton.width //c1.childrenRect.width
                     contentHeight: c1.childrenRect.height 
+                    onOpened: customTempName.focus = true
                     Column {
                         width: parent.width 
                         id: c1                            
@@ -750,7 +751,14 @@ MuseScore {
                             id: customTempName                            
                             hint: "Temperament name"  
                             focus: true 
-                            onTextEditingFinished: function (newText) { currentText = newText }                                  
+                            onTextEdited: function (newText) { currentText = newText } 
+                            onAccepted: {                                
+                                addTemperament()
+                                addDialog.close()
+                                saveCustomTemperaments()                                
+                                saveUserTemperaments()
+                                customTempName.currentText = ""
+                            }                                  
                         }
                         FlatButton {
                             width: parent.width 
