@@ -750,12 +750,6 @@ bool GuitarPro4::read(IODevice* io)
         bool isStandardTuning = utils::isStandardTuning(patch, tuning2);
 
         if (!isStandardTuning) {
-            std::vector<size_t> visibleStrings(stringData.stringList().size());
-
-            for (size_t vsId = 0; vsId < visibleStrings.size(); ++vsId) {
-                visibleStrings[vsId] = vsId;
-            }
-
             const Measure* m = score->firstMeasure();
             Segment* seg = m->findSegment(SegmentType::ChordRest, { 0, 1 });
 
@@ -766,7 +760,6 @@ bool GuitarPro4::read(IODevice* io)
 
             StringTunings* tun = Factory::createStringTunings(seg);
             tun->setStringData(stringData);
-            tun->setVisibleStrings(visibleStrings);
             tun->setTrack(staff2track(score->staff(i)->idx()));
             tun->setParent(seg);
             seg->add(tun);
