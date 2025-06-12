@@ -1140,9 +1140,8 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
                     staffBotY = a->y() + a->height() + minDist + yOffset;
                 }
             }
+            a->mutldata()->moveX(-0.5 * a->width());
         }
-
-        a->mutldata()->moveX(-0.5 * a->width());
 
         if (!a->isOnCrossBeamSide()) {
             if (a->layoutCloseToNote()) {
