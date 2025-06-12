@@ -2890,7 +2890,7 @@ Convert::BracketStruct Convert::staffGrpFromMEI(const libmei::StaffGrp& meiStaff
 {
     Convert::BracketStruct bracketSt;
 
-    bracketSt.bracketType = bracketFromMEI(meiStaffGrp.GetSymbol());
+    bracketSt.bracketType = symbolFromMEI(meiStaffGrp.GetSymbol());
 
     if (meiStaffGrp.HasBarThru() && meiStaffGrp.GetBarThru() == libmei::BOOLEAN_true) {
         bracketSt.barLineSpan = 1;
