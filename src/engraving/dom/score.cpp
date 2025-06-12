@@ -872,38 +872,24 @@ void Score::spell()
     }
 }
 
-static std::vector<Note*> allNotesInScore(Score* score)
-{
-    std::vector<Note*> notes;
-    for (staff_idx_t i = 0; i < score->nstaves(); ++i) {
-        for (Segment* s = score->firstSegment(SegmentType::All); s; s = s->next1()) {
-            track_idx_t strack = i * VOICES;
-            track_idx_t etrack = strack + VOICES;
-            for (track_idx_t track = strack; track < etrack; ++track) {
-                EngravingItem* e = s->element(track);
-                if (e && e->type() == ElementType::CHORD) {
-                    Chord* c = toChord(e);
-                    notes.insert(notes.end(), c->notes().begin(), c->notes().end());
-                    for (Chord* g : c->graceNotes()) {
-                        notes.insert(notes.end(), g->notes().begin(), g->notes().end());
-                    }
-                }
-            }
-        }
-    }
-    return notes;
-}
-
 void Score::spellWithSharpsOrFlats(Prefer prefer)
 {
-    std::vector<Note*> notes = (selection().isNone()) ? allNotesInScore(this) : selection().noteList();
+    std::vector<Note*> notes = selection().noteList();
     for (Note* n : notes) {
-        Fraction tick = n->chord()->tick();
-        Key concertKey = n->staff()->concertKey(tick);
-        int tpc1 = pitch2tpc(n->pitch(), concertKey, prefer);
-        Interval v = n->staff()->transpose(tick);
-        v.flip();
-        int tpc2 = transposeTpc(tpc1, v, true);
+        Interval v = n->part()->instrument(n->chord()->tick())->transpose();
+        int tpc1, tpc2;
+        if (n->staff()->concertPitch() || v.isZero()) {
+            // Note: using Key::C always and ignoring actual key signature. Otherwise, "respell with flats" would still use sharps
+            // sometimes if they're in the key, and vice versa, which seems contrary to the intent of the command.
+            tpc1 = pitch2tpc(n->pitch(), Key::C, prefer);
+            v.flip();
+            tpc2 = transposeTpc(tpc1, v, true);
+        } else {
+            // Spell the transposed pitch first, then convert to concert pitch
+            int writtenPitch = n->pitch() - v.chromatic;
+            tpc2 = pitch2tpc(writtenPitch, Key::C, prefer);
+            tpc1 = transposeTpc(tpc2, v, true);
+        }
         n->undoChangeProperty(Pid::TPC1, tpc1);
         n->undoChangeProperty(Pid::TPC2, tpc2);
         for (Note* tied : n->tiedNotes()) {
