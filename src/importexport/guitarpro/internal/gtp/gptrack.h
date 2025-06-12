@@ -19,10 +19,10 @@ public:
         float tremolo{ 0 };
     };
 
-    struct StaffProperty {
+    struct StaffProperties {
         int fretCount{ 24 };
         int capoFret{ 0 };
-        std::vector<int> tunning;
+        std::vector<int> tuning;
         bool useFlats{ false };
         bool ignoreFlats{ false };
     };
@@ -84,8 +84,8 @@ public:
     void setIsGuitar(bool arg) { _isGuitar = arg; }
     bool isGuitar() const { return _isGuitar; }
 
-    void addStaffProperty(const StaffProperty& st) { _staffProperty.push_back(st); }
-    const std::vector<StaffProperty>& staffProperty() const { return _staffProperty; }
+    void setStaffProperties(const StaffProperties& st) { _staffProperties = st; }
+    const StaffProperties& staffProperties() const { return _staffProperties; }
 
     void addSound(Sound sound);
 
@@ -103,13 +103,8 @@ public:
     std::vector<InstrumentString> strings() const
     {
         std::vector<InstrumentString> ss;
-        if (_staffProperty.empty()) {
-            return ss;
-        }
-
-        const StaffProperty& sp = _staffProperty.at(0);
-        for (size_t i = 0; i < sp.tunning.size(); ++i) {
-            ss.push_back({ static_cast<int>(i + 1), sp.tunning.at(i) });
+        for (size_t i = 0; i < _staffProperties.tuning.size(); ++i) {
+            ss.push_back({ static_cast<int>(i + 1), _staffProperties.tuning.at(i) });
         }
 
         return ss;
@@ -146,7 +141,7 @@ protected:
     bool _isGuitar{ false };
     int _idx{ -1 };
     size_t _staffCount{ 1 };
-    std::vector<StaffProperty> _staffProperty;
+    StaffProperties _staffProperties;
     std::unordered_map<muse::String, Sound> _sounds;
     std::map<SoundAutomationPos, SoundAutomation> _automations;
     int _transpose{ 0 };
