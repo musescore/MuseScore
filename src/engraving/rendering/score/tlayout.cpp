@@ -3312,7 +3312,11 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
 
         double vertPadding = 0.5 * item->spatium();
         Shape hopoTextShape = hopoText->ldata()->shape().translated(PointF(centerX, 0.0));
-        SkylineLine& skyline = above ? sk.north() : sk.south();
+        SkylineLine& skl = above ? sk.north() : sk.south();
+        SkylineLine skyline = skl.getFilteredCopy([](const ShapeElement& el) {
+            return el.item() && el.item()->isArticulationFamily();
+        });
+
         double y = above ? -skyline.minDistanceToShapeAbove(hopoTextShape) : skyline.minDistanceToShapeBelow(hopoTextShape);
         y += above ? -vertPadding : vertPadding;
         y = above ? std::min(y, -vertPadding) : std::max(y, item->staff()->staffHeight(item->tick()) + vertPadding);
