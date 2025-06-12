@@ -49,7 +49,7 @@ static muse::testing::SuiteEnvironment engraving_se(
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::noGui = true;
 
-    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
+    mu::engraving::loadInstrumentTemplates(":/engraving/instruments/instruments.xml");
 
     using ECMock = ::testing::NiceMock<mu::engraving::EngravingConfigurationMock>;
 

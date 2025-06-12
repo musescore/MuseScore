@@ -44,6 +44,6 @@ static muse::testing::SuiteEnvironment importexport_se(
     mu::engraving::MScore::testWriteStyleToScore = false;
     mu::engraving::MScore::noGui = true;
 
-    mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
+    mu::engraving::loadInstrumentTemplates(":/engraving/instruments/instruments.xml");
 }
     );
