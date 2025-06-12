@@ -29,6 +29,8 @@ class Note;
 
 namespace mu::iex::guitarpro::utils {
 int harmonicOvertone(mu::engraving::Note* note, float harmonicValue, int harmonicType);
+std::vector<int> standardTuningFor(int midiProgram, int stringsCount);
+bool isStandardTuning(int midiProgram, const std::vector<int>& tuning);
 } // mu::iex::guitarpro
 
 #endif // MU_IMPORTEXPORT_UTILS_H
