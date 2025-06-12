@@ -592,8 +592,15 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
     }
 
     if (m_version < 460) {
-        AlignH horizontalAlign = value(Sid::chordSymbolAAlign).value<Align>().horizontal;
-        set(Sid::chordSymPosition, (int)horizontalAlign);
+        // Make sure new position styles are initially the same as align values
+        for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
+            Sid positionSid = compat::CompatUtils::positionStyleFromAlign(st.styleIdx());
+            if (positionSid == Sid::NOSTYLE) {
+                continue;
+            }
+            AlignH val = value(st.styleIdx()).value<Align>().horizontal;
+            set(positionSid, val);
+        }
     }
 
     if (m_version < 450) {

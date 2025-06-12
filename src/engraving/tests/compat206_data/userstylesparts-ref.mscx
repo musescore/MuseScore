@@ -19,6 +19,7 @@
       <user1Align>center,top</user1Align>
       <user1FramePadding>0</user1FramePadding>
       <user1FrameWidth>0</user1FrameWidth>
+      <user1Position>center</user1Position>
       <user2Name>Style2</user2Name>
       <user2FontFace>MuseJazz Text</user2FontFace>
       <user2FontSize>12</user2FontSize>
@@ -26,6 +27,7 @@
       <user2Align>right,top</user2Align>
       <user2FramePadding>0</user2FramePadding>
       <user2FrameWidth>0</user2FrameWidth>
+      <user2Position>right</user2Position>
       <user3Name>Style3</user3Name>
       <user3FontFace>FreeSans</user3FontFace>
       <user3FontSize>12</user3FontSize>
@@ -39,6 +41,7 @@
       <user4Align>center,center</user4Align>
       <user4FramePadding>0</user4FramePadding>
       <user4FrameWidth>0</user4FrameWidth>
+      <user4Position>center</user4Position>
       <user5Name>Style5</user5Name>
       <user5FontSize>15</user5FontSize>
       <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
@@ -52,6 +55,7 @@
       <user6Align>center,bottom</user6Align>
       <user6FramePadding>0</user6FramePadding>
       <user6FrameWidth>0</user6FrameWidth>
+      <user6Position>center</user6Position>
       <user7Name>Style7</user7Name>
       <user7FontSize>12</user7FontSize>
       <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
@@ -59,6 +63,8 @@
       <user7Align>right,bottom</user7Align>
       <user7FramePadding>0</user7FramePadding>
       <user7FrameWidth>0</user7FrameWidth>
+      <user7Position>right</user7Position>
+      <user1Position>center</user1Position>
       <defaultsVersion>206</defaultsVersion>
       <spatium>1.76389</spatium>
       </Style>
@@ -407,6 +413,7 @@
         <user1Align>center,top</user1Align>
         <user1FramePadding>0</user1FramePadding>
         <user1FrameWidth>0</user1FrameWidth>
+        <user1Position>center</user1Position>
         <user2Name>Style2</user2Name>
         <user2FontFace>MuseJazz Text</user2FontFace>
         <user2FontSize>12</user2FontSize>
@@ -414,6 +421,7 @@
         <user2Align>right,top</user2Align>
         <user2FramePadding>0</user2FramePadding>
         <user2FrameWidth>0</user2FrameWidth>
+        <user2Position>right</user2Position>
         <user3Name>Style3</user3Name>
         <user3FontFace>FreeSans</user3FontFace>
         <user3FontSize>12</user3FontSize>
@@ -427,6 +435,7 @@
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
+        <user4Position>center</user4Position>
         <user5Name>Style5</user5Name>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
@@ -440,6 +449,7 @@
         <user6Align>center,bottom</user6Align>
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
+        <user6Position>center</user6Position>
         <user7Name>Style7</user7Name>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
@@ -447,6 +457,8 @@
         <user7Align>right,bottom</user7Align>
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
+        <user7Position>right</user7Position>
+        <user1Position>center</user1Position>
         <defaultsVersion>206</defaultsVersion>
         <spatium>1.76389</spatium>
         </Style>
@@ -639,6 +651,7 @@
         <user1Align>center,top</user1Align>
         <user1FramePadding>0</user1FramePadding>
         <user1FrameWidth>0</user1FrameWidth>
+        <user1Position>center</user1Position>
         <user2Name>Style2</user2Name>
         <user2FontFace>MuseJazz Text</user2FontFace>
         <user2FontSize>12</user2FontSize>
@@ -646,6 +659,7 @@
         <user2Align>right,top</user2Align>
         <user2FramePadding>0</user2FramePadding>
         <user2FrameWidth>0</user2FrameWidth>
+        <user2Position>right</user2Position>
         <user3Name>Style3</user3Name>
         <user3FontFace>FreeSans</user3FontFace>
         <user3FontSize>12</user3FontSize>
@@ -659,6 +673,7 @@
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
+        <user4Position>center</user4Position>
         <user5Name>Style5</user5Name>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
@@ -672,6 +687,7 @@
         <user6Align>center,bottom</user6Align>
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
+        <user6Position>center</user6Position>
         <user7Name>Style7</user7Name>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
@@ -679,6 +695,8 @@
         <user7Align>right,bottom</user7Align>
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
+        <user7Position>right</user7Position>
+        <user1Position>center</user1Position>
         <defaultsVersion>206</defaultsVersion>
         <spatium>1.76389</spatium>
         </Style>
@@ -870,6 +888,7 @@
         <user1Align>center,top</user1Align>
         <user1FramePadding>0</user1FramePadding>
         <user1FrameWidth>0</user1FrameWidth>
+        <user1Position>center</user1Position>
         <user2Name>Style2</user2Name>
         <user2FontFace>MuseJazz Text</user2FontFace>
         <user2FontSize>12</user2FontSize>
@@ -877,6 +896,7 @@
         <user2Align>right,top</user2Align>
         <user2FramePadding>0</user2FramePadding>
         <user2FrameWidth>0</user2FrameWidth>
+        <user2Position>right</user2Position>
         <user3Name>Style3</user3Name>
         <user3FontFace>FreeSans</user3FontFace>
         <user3FontSize>12</user3FontSize>
@@ -890,6 +910,7 @@
         <user4Align>center,center</user4Align>
         <user4FramePadding>0</user4FramePadding>
         <user4FrameWidth>0</user4FrameWidth>
+        <user4Position>center</user4Position>
         <user5Name>Style5</user5Name>
         <user5FontSize>15</user5FontSize>
         <user5FontSpatiumDependent>0</user5FontSpatiumDependent>
@@ -903,6 +924,7 @@
         <user6Align>center,bottom</user6Align>
         <user6FramePadding>0</user6FramePadding>
         <user6FrameWidth>0</user6FrameWidth>
+        <user6Position>center</user6Position>
         <user7Name>Style7</user7Name>
         <user7FontSize>12</user7FontSize>
         <user7FontSpatiumDependent>0</user7FontSpatiumDependent>
@@ -910,6 +932,8 @@
         <user7Align>right,bottom</user7Align>
         <user7FramePadding>0</user7FramePadding>
         <user7FrameWidth>0</user7FrameWidth>
+        <user7Position>right</user7Position>
+        <user1Position>center</user1Position>
         <defaultsVersion>206</defaultsVersion>
         <spatium>1.76389</spatium>
         </Style>

@@ -51,7 +51,6 @@ static const ElementStyle markerStyle {
 Marker::Marker(EngravingItem* parent)
     : Marker(parent, TextStyleType::REPEAT_LEFT)
 {
-    setPosition(isRightMarker() ? AlignH::RIGHT : AlignH::LEFT);
 }
 
 Marker::Marker(EngravingItem* parent, TextStyleType tid)
@@ -59,8 +58,6 @@ Marker::Marker(EngravingItem* parent, TextStyleType tid)
 {
     initElementStyle(&markerStyle);
     m_markerType = MarkerType::FINE;
-    // TODO - move to text style
-    setPosition(isRightMarker() ? AlignH::RIGHT : AlignH::LEFT); // TODO - move to text style
 }
 
 //---------------------------------------------------------
@@ -134,7 +131,6 @@ void Marker::setMarkerType(MarkerType t)
         LOGD("unknown marker type %d", int(t));
         break;
     }
-    setPosition(isRightMarker() ? AlignH::RIGHT : AlignH::LEFT); // TODO - move to text style
     if (empty() && txt) {
         setXmlText(String::fromAscii(txt));
     }
@@ -242,9 +238,6 @@ PropertyValue Marker::propertyDefault(Pid propertyId) const
         return PlacementV::ABOVE;
     case Pid::MARKER_SYMBOL_SIZE:
         return 18.0;
-    case Pid::POSITION:
-        // TODO - move to text style
-        return isRightMarker() ? AlignH::RIGHT : AlignH::LEFT;
     case Pid::MARKER_CENTER_ON_SYMBOL:
         return true;
     default:

@@ -3457,7 +3457,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
                     break;
                 }
             } else {
-                switch (item->noteheadAlign()) {
+                switch (item->position()) {
                 case AlignH::LEFT:
                     xx = -hAlignBox.left();
                     break;
@@ -3506,7 +3506,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
                 break;
             }
         } else {
-            switch (item->noteheadAlign()) {
+            switch (item->position()) {
             case AlignH::LEFT:
                 newPosX = 0.0;
                 break;
