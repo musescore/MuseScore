@@ -582,19 +582,25 @@ void FinaleParser::importStaffItems()
             importClefs(musxScrollViewItem, musxMeasure, measure, staffIdx, musxCurrClef);
 
             // keysig
-            const std::shared_ptr<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxScrollViewItem->staffId);
+            const std::shared_ptr<KeySignature> musxKeySig = musxMeasure->createKeySignature(musxScrollViewItem->staffId, /*forWrittenPitch*/ true);
             if (!currMusxKeySig || !currMusxKeySig->isSame(*musxKeySig) || musxMeasure->showKey == others::Measure::ShowKeySigMode::Always) {
                 /// @todo microtonal keysigs
                 std::optional<KeySigEvent> keySigEvent;
                 if (musxKeySig->calcEDODivisions() == music_theory::STANDARD_12EDO_STEPS) {
-                    // Note that isLinear and isNonLinear can in theory both return false, although if it happens it is evidence of musx file corruption.
-                    const bool keyless = musxKeySig->keyless || musxKeySig->hideKeySigShowAccis || currStaff->hideKeySigsShowAccis;
+                    const bool usesChromaticTransposition = currStaff->transposition && currStaff->transposition->chromatic
+                                                            && (currStaff->transposition->chromatic->alteration || currStaff->transposition->chromatic->diatonic);
+                    if (usesChromaticTransposition && musxKeySig->getAlteration() != 0) {
+                        logger()->logWarning(String(u"Finale's chromatic transposition with a key signature is not supported. Using Keyless instead.").arg(musxKeySig->getKeyMode()),
+                                             m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                    }
+                    const bool keyless = usesChromaticTransposition || musxKeySig->keyless || musxKeySig->hideKeySigShowAccis || currStaff->hideKeySigsShowAccis;
                     keySigEvent = KeySigEvent();
+                    // Note that isLinear and isNonLinear can in theory both return false, although if it happens it is evidence of musx file corruption.
                     KeySigEvent& ksEvent = keySigEvent.value();
                     if (musxKeySig->isLinear() || keyless) {
+                        Key concertKey = keyless ? Key::C : FinaleTConv::keyFromAlteration(musxKeySig->getConcertAlteration());
                         Key key = keyless ? Key::C : FinaleTConv::keyFromAlteration(musxKeySig->getAlteration());
-                        ksEvent.setConcertKey(key);
-                        /// @todo figure out transposed key. (Finale has "Chromatic Transposition" which makes it more complicated.)
+                        ksEvent.setConcertKey(concertKey);
                         ksEvent.setKey(key);
                         KeyMode km = KeyMode::UNKNOWN;
                         if (keyless) {
