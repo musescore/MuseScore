@@ -537,7 +537,7 @@ bool GuitarPro5::readMixChange(Measure* measure)
 //   readTracks
 //---------------------------------------------------------
 
-bool GuitarPro5::readTracks()
+bool GuitarPro5::readTracks(std::unordered_map<uint64_t, mu::engraving::StringData>& stringDatas)
 {
     for (size_t i = 0; i < staves; ++i) {
         int tuning[GP_MAX_STRING_NUMBER];
@@ -591,6 +591,7 @@ bool GuitarPro5::readTracks()
         instr->setSingleNoteDynamics(false);
         part->setPartName(name);
         part->setPlainLongName(name);
+        stringDatas.insert_or_assign(part->id().toUint64(), stringData);
 
         //
         // determine clef
@@ -966,10 +967,64 @@ bool GuitarPro5::read(IODevice* io)
     }
 
     createMeasures();
-    if (!readTracks()) {
+    std::unordered_map<uint64_t, mu::engraving::StringData> stringDatas;
+    if (!readTracks(stringDatas)) {
         return false;
     }
     readMeasures(tempo);
+    const Measure* m = score->firstMeasure();
+
+    // NOTE: GP doesn't support multiple tunings on one part
+    // We're safe to just take the very first chord rest segment
+    // and check if it has any non-standard tuning
+    const Fraction& f{ 0, 1 };
+
+    for (auto p : score->parts()) {
+        for (auto s : p->staves()) {
+            if (!s->isPrimaryStaff()) {
+                continue;
+            }
+
+            Segment* seg = m->findSegment(SegmentType::ChordRest, f);
+
+            IF_ASSERT_FAILED(seg) {
+                LOGE() << "First measure MUST has a chord rest segment after import";
+                return false;
+            }
+
+            if (stringDatas.find(p->id().toUint64()) == stringDatas.end()) {
+                continue;
+            }
+            StringData sd = stringDatas.at(p->id().toUint64());
+
+            std::vector<int> tuningPitches(sd.strings());
+            for (size_t i = 0; i < tuningPitches.size(); ++i) {
+                tuningPitches[i] = sd.stringList().at(i).pitch + p->instrument()->transpose().chromatic;
+            }
+
+            if (utils::isStandardTuning(p->instrument()->recognizeMidiProgram(), tuningPitches)) {
+                continue;
+            }
+
+            std::vector<size_t> visibleStrings(sd.stringList().size());
+
+            for (size_t i = 0; i < visibleStrings.size(); ++i) {
+                visibleStrings[i] = i;
+            }
+
+
+            StringTunings* tun = Factory::createStringTunings(seg);
+            tun->setStringData(sd);
+            tun->setVisibleStrings(visibleStrings);
+            tun->setTrack(staff2track(s->idx()));
+            tun->setParent(seg);
+            seg->add(tun);
+
+            auto tuning = utils::standardTuningFor(p->instrument()->recognizeMidiProgram(), (int)sd.strings());
+            sd = StringData(sd.frets(), (int)tuning.size(), tuning.data());
+            p->instrument()->setStringData(sd);
+        }
+    }
     for (auto n : slideList) {
         auto segment = n->chord()->segment();
         auto measure = segment->measure();

@@ -57,9 +57,6 @@
 
 #include "log.h"
 
-namespace {
-std::vector<int> standardTuning = { 40, 45, 50, 55, 59, 64 };
-} // namespace
 using namespace mu::engraving;
 
 namespace mu::iex::guitarpro {
@@ -1100,6 +1097,10 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     int pan_val = static_cast<int>(std::lround(tR->rse().pan * 127));
     part->instrument()->channel(0)->setPan(std::clamp(pan_val, 0, 127));
 
+    Instrument* instr = part->instrument();
+    instr->setSingleNoteDynamics(false);
+    instr->setTranspose(tR->transpose());
+
     if (midiChannel == PERC_CHANNEL) {
         String drumInstrName = tR->instrument();
         if (!drumInstrName.empty()) {
@@ -1131,19 +1132,15 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
             part->instrument()->setDrumset(drumset::gpDrumset);
         }
         staff->setStaffType(Fraction(0, 1), *StaffType::preset(type));
-    }
+    } else {
+        auto staffProperties = tR->staffProperties();
 
-    Instrument* instr = part->instrument();
-
-    if (!tR->staffProperty().empty()) {
-        auto staffProperty = tR->staffProperty();
-
-        int capoFret = staffProperty[0].capoFret;
+        int capoFret = staffProperties.capoFret;
 
         part->setCapoFret(capoFret);
         m_capoParams.insert_or_assign(part->id().toUint64(), capoFret);
-        auto tuning = staffProperty[0].tunning;
-        bool usePresetTable = staffProperty[0].ignoreFlats;
+        auto tuning = staffProperties.tuning;
+        bool usePresetTable = staffProperties.ignoreFlats;
 
         std::array<uint64_t, 3> flatPresets{ 0x3f3a36312c27, 0x3c37332e2924, 0x3f3a36312c25 };
 
@@ -1152,38 +1149,29 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
             k |= (uint64_t)tuning[i] << 8 * i;
         }
         bool useFlats
-            = usePresetTable ? std::find(flatPresets.begin(), flatPresets.end(), k) != flatPresets.end() : staffProperty[0].useFlats;
-        auto fretCount = staffProperty[0].fretCount;
+                = usePresetTable ? std::find(flatPresets.begin(), flatPresets.end(), k) != flatPresets.end() : staffProperties.useFlats;
+        auto fretCount = staffProperties.fretCount;
 
         if (tuning.empty()) {
-            tuning = standardTuning;
+            tuning = utils::standardTuningFor(25, 6); // 6 string guitar
         }
 
         int transpose = tR->transpose();
         for (auto& t : tuning) {
             t -= transpose;
         }
-        if (!instr->useDrumset()) {
-            for (auto& t : standardTuning) {
-                t -= transpose;
-            }
-        }
 
         StringData stringData = StringData(fretCount, static_cast<int>(tuning.size()), tuning.data(), useFlats);
         m_stringDatas.insert_or_assign(part->id().toUint64(), stringData);
+        // We're using Tuning String for non-standard string data
+        // Instrument string data should be set to the standard
+        tuning = utils::standardTuningFor(programm, (int)tuning.size());
+        for (auto& t : tuning) {
+            t -= tR->transpose();
+        }
+        stringData = StringData(fretCount, static_cast<int>(tuning.size()), tuning.data());
+        instr->setStringData(stringData);
     }
-    // We're using Tuning String for non-standard string data
-    // Instrument string data should be set to the standard
-    StringData stringData = StringData(24, static_cast<int>(standardTuning.size()), standardTuning.data());
-    instr->setStringData(stringData);
-
-    instr->setSingleNoteDynamics(false);
-
-    // this code sets score lyrics from the first processed track.
-//    if (_score->OffLyrics.isEmpty())
-//        _score->OffLyrics = tR->lyrics();
-
-    instr->setTranspose(tR->transpose());
 }
 
 void GPConverter::collectTempoMap(const GPMasterTracks* mTr)
@@ -2989,22 +2977,6 @@ void GPConverter::setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measur
 
 void GPConverter::addTuning()
 {
-    auto isStandardTuning = [](const StringData& sd, int transpose) -> bool {
-        const auto& sl = sd.stringList();
-
-        if (sl.size() != standardTuning.size()) {
-            return false;
-        }
-
-        for (size_t i = 0; i < standardTuning.size(); ++i) {
-            if (sl.at(i).pitch != standardTuning.at(i) - transpose) {
-                return false;
-            }
-        }
-
-        return true;
-    };
-
     const Measure* m = _score->firstMeasure();
 
     // NOTE: GP doesn't support multiple tunings on one part
@@ -3025,21 +2997,24 @@ void GPConverter::addTuning()
                 return;
             }
 
-            IF_ASSERT_FAILED(m_stringDatas.find(p->id().toUint64()) != m_stringDatas.end()) {
-                LOGE() << "No string data after GP import";
-                return;
-            }
-            const StringData sd = m_stringDatas.at(p->id().toUint64());
-            std::vector<size_t> visibleStrings(sd.stringList().size());
-
-            for (size_t i = 0; i < visibleStrings.size(); ++i) {
-                visibleStrings[i] = i;
-            }
-
-            if (isStandardTuning(sd, p->instrument()->transpose().chromatic)) {
+            if (m_stringDatas.find(p->id().toUint64()) == m_stringDatas.end()) {
                 continue;
             }
 
+            const StringData sd = m_stringDatas.at(p->id().toUint64());
+            std::vector<int> tuning(sd.strings());
+            for (size_t i = 0; i < tuning.size(); ++i) {
+                tuning[i] = sd.stringList().at(i).pitch + p->instrument()->transpose().chromatic;
+            }
+
+            if (utils::isStandardTuning(p->instrument()->recognizeMidiProgram(), tuning)) {
+                continue;
+            }
+
+            std::vector<size_t> visibleStrings(sd.stringList().size());
+            for (size_t i = 0; i < visibleStrings.size(); ++i) {
+                visibleStrings[i] = i;
+            }
 
             StringTunings* tun = Factory::createStringTunings(seg);
             tun->setStringData(sd);

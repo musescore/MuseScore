@@ -21,6 +21,7 @@
  */
 
 #include "importgtp.h"
+#include "utils.h"
 
 #include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
@@ -49,6 +50,7 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/stringtunings.h"
 #include "engraving/types/symid.h"
 
 #include "guitarprodrumset.h"
@@ -743,11 +745,41 @@ bool GuitarPro4::read(IODevice* io)
         part->setPartName(name);
         part->setPlainLongName(name);
 
+        int patch = channelDefaults[midiChannel].patch;
+
+        bool isStandardTuning = utils::isStandardTuning(patch, tuning2);
+
+        if (!isStandardTuning) {
+            std::vector<size_t> visibleStrings(stringData.stringList().size());
+
+            for (size_t vsId = 0; vsId < visibleStrings.size(); ++vsId) {
+                visibleStrings[vsId] = vsId;
+            }
+
+            const Measure* m = score->firstMeasure();
+            Segment* seg = m->findSegment(SegmentType::ChordRest, { 0, 1 });
+
+            IF_ASSERT_FAILED(seg) {
+                LOGE() << "First measure MUST has a chord rest segment after import";
+                return false;
+            }
+
+            StringTunings* tun = Factory::createStringTunings(seg);
+            tun->setStringData(stringData);
+            tun->setVisibleStrings(visibleStrings);
+            tun->setTrack(staff2track(score->staff(i)->idx()));
+            tun->setParent(seg);
+            seg->add(tun);
+
+            tuning2 = utils::standardTuningFor(patch, (int)tuning2.size());
+            stringData = StringData(frets, static_cast<int>(tuning2.size()), tuning2.data());
+            instr->setStringData(stringData);
+        }
+
         //
         // determine clef
         //
         Staff* staff = score->staff(i);
-        int patch = channelDefaults[midiChannel].patch;
         ClefType clefId = ClefType::G;
         if (midiChannel == GP_DEFAULT_PERCUSSION_CHANNEL) {
             clefId = ClefType::PERC;

@@ -31,5 +31,7 @@ class Score;
 
 namespace mu::iex::guitarpro::utils {
 int harmonicOvertone(mu::engraving::Note* note, float harmonicValue, int harmonicType);
+std::vector<int> standardTuningFor(int midiProgram, int stringsCount);
+bool isStandardTuning(int midiProgram, const std::vector<int>& tuning);
 mu::engraving::Chord* getLocatedChord(mu::engraving::Score* score, mu::engraving::Fraction tickFr, mu::engraving::track_idx_t track);
 } // mu::iex::guitarpro
