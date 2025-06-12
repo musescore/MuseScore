@@ -404,7 +404,7 @@ Err importBB(MasterScore* score, const QString& name)
         return engraving::Err::FileOpenError;
     }
     score->style().set(Sid::chordsXmlFile, true);
-    score->chordList()->read(score->configuration()->appDataPath(), u"chords.xml");
+    score->chordList()->read(u"chords.xml");
     *(score->sigmap()) = bb.siglist();
 
     QList<BBTrack*>* tracks = bb.tracks();

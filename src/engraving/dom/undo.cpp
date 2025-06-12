@@ -2081,9 +2081,9 @@ static void changeChordStyle(Score* score)
     String msymbolFont = style.styleSt(Sid::musicalTextFont);
     score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, mstackModifiers, mexcludeModsHAlign, msymbolFont);
     if (score->style().styleB(Sid::chordsXmlFile)) {
-        score->chordList()->read(score->configuration()->appDataPath(), u"chords.xml");
+        score->chordList()->read(u"chords.xml");
     }
-    score->chordList()->read(score->configuration()->appDataPath(), style.styleSt(Sid::chordDescriptionFile));
+    score->chordList()->read(style.styleSt(Sid::chordDescriptionFile));
     score->chordList()->setCustomChordList(style.styleV(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::CUSTOM);
 }
 

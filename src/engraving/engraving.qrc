@@ -14,5 +14,15 @@
         <file>qml/MuseScore/Engraving/EngravingElementsPanel.qml</file>
         <file>qml/MuseScore/Engraving/qmldir</file>
         <file>data/harmony_to_diagram.xml</file>
+        <file alias="engraving/styles/stdchords.xml">data/chords/stdchords.xml</file>
+        <file alias="engraving/styles/jazzchords.xml">data/chords/jazzchords.xml</file>
+        <file alias="engraving/styles/chords_std.xml">data/chords/chords_std.xml</file>
+        <file alias="engraving/styles/chords_legacy.xml">data/chords/chords_legacy.xml</file>
+        <file alias="engraving/styles/chords_jazz.xml">data/chords/chords_jazz.xml</file>
+        <file alias="engraving/styles/chords.xml">data/chords/chords.xml</file>
+        <file alias="engraving/styles/cchords_sym.xml">data/chords/cchords_sym.xml</file>
+        <file alias="engraving/styles/cchords_rb.xml">data/chords/cchords_rb.xml</file>
+        <file alias="engraving/styles/cchords_nrb.xml">data/chords/cchords_nrb.xml</file>
+        <file alias="engraving/styles/cchords_muse.xml">data/chords/cchords_muse.xml</file>
     </qresource>
 </RCC>
