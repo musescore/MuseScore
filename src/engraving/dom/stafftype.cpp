@@ -209,6 +209,7 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (m_fretFontInfo.family == st.m_fretFontInfo.family);
     equal &= (m_fretYOffset == st.m_fretYOffset);
     equal &= (m_fretPresetIdx == st.m_fretPresetIdx);
+    equal &= (m_fretColor == st.m_fretColor);
 
     return equal;
 }
@@ -354,6 +355,7 @@ void StaffType::setFretTextStyle(const TextStyleType& val)
 {
     m_fretTextStyle = val;
     m_fretFontInfo = TablatureFretFont();
+    m_fretFont = Font();
 
     const TextStyle* ts = textStyle(m_fretTextStyle);
 
@@ -372,14 +374,28 @@ void StaffType::setFretTextStyle(const TextStyleType& val)
             PointF offset = style().styleV(property.sid).value<PointF>();
             setFretFontUserY(offset.y());
         } break;
+        case TextStylePropertyType::Color: {
+            setFretColor(style().styleV(property.sid).value<Color>());
+        } break;
+        case TextStylePropertyType::FontStyle: {
+            FontStyle fStyle = style().styleV(property.sid).value<FontStyle>();
+            m_fretFont.setBold(fStyle & FontStyle::Bold);
+            m_fretFont.setItalic(fStyle & FontStyle::Italic);
+            m_fretFont.setUnderline(fStyle & FontStyle::Underline);
+            m_fretFont.setStrike(fStyle & FontStyle::Strike);
+        } break;
         default:
             continue;
         }
     }
+
+    setFretMetrics();
 }
 
 void StaffType::setFretPresetIdx(size_t idx)
 {
+    // Clear all previous formatting
+    m_fretFont = Font();
     if (idx >= m_fretFonts.size()) {
         m_fretPresetIdx = 0;
         m_fretFontInfo = m_fretFonts[0];
@@ -391,6 +407,7 @@ void StaffType::setFretPresetIdx(size_t idx)
     setFretFontName(m_fretFontInfo.family);
     setFretFontSize(m_fretFontInfo.defSize);
     setFretFontUserY(m_fretFontInfo.defYOffset);
+    setFretColor(Color::BLACK);
 }
 
 void StaffType::setFretPreset(const String& name)
