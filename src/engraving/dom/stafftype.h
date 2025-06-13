@@ -274,6 +274,7 @@ public:
     double fretFontSize() const { return m_fretFontSize; }
     double fretFontUserY() const { return m_fretFontUserY; }
     double fretFontYOffset() const { return m_fretYOffset + m_fretFontUserY * SPATIUM20; }
+    Color fretColor() const { return m_fretColor; }
     bool  genDurations() const { return m_genDurations; }
     bool  linesThrough() const { return m_linesThrough; }
     TablatureMinimStyle minimStyle() const { return m_minimStyle; }
@@ -314,6 +315,7 @@ public:
     void  setFretTextStyle(const TextStyleType& val);
     void  setFretPresetIdx(size_t idx);
     void  setFretPreset(const String& str);
+    void  setFretColor(const Color& color) { m_fretColor = color; }
 
     bool isTabStaff() const { return m_group == StaffGroup::TAB; }
     bool isDrumStaff() const { return m_group == StaffGroup::PERCUSSION; }
@@ -416,6 +418,7 @@ private:
     double m_deadFretYOffset = 0.0;
     // (raster units); internally computed: depends upon _onString, _useNumbers
     // and the metrics of the fret font
+    Color m_fretColor = Color::BLACK;
 
     // the array of configured fonts
     static std::vector<TablatureFretFont> m_fretFonts;

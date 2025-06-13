@@ -2215,7 +2215,7 @@ void TDraw::draw(const Note* item, Painter* painter)
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
 
-        if (item->fretConflict() && !item->score()->printing() && item->score()->showUnprintable()) {                    //on fret conflict, draw on red background
+        if (negativeFret || (item->fretConflict() && !item->score()->printing() && item->score()->showUnprintable())) {                    //on fret conflict, draw on red background
             painter->save();
             painter->setPen(config->criticalColor());
             painter->setBrush(config->criticalColor());
@@ -2226,7 +2226,7 @@ void TDraw::draw(const Note* item, Painter* painter)
         Font f(tab->fretFont());
         f.setPointSizeF(f.pointSizeF() * item->magS() * MScore::pixelRatio);
         painter->setFont(f);
-        painter->setPen(c);
+        painter->setPen(tab->fretColor());
         double startPosX = ldata->bbox().x();
 
         double yOffset = tab->fretFontYOffset();
