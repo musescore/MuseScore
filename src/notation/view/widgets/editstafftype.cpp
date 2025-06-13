@@ -163,8 +163,10 @@ EditStaffType::EditStaffType(QWidget* parent)
     connect(addToTemplates, &QPushButton::clicked, this, &EditStaffType::addToTemplatesClicked);
 
     connect(editTextStyleButton, &QPushButton::clicked, this, [=]() {
-        muse::actions::ActionData args = muse::actions::ActionData::make_arg2<QString, QString>("text-styles", "tab-fret-number");
-        dispatcher()->dispatch("edit-style", args);
+        UriQuery uri("musescore://notation/style");
+        uri.addParam("currentPageCode", Val("text-styles"));
+        uri.addParam("currentSubPageCode", Val("tab-fret-number"));
+        interactive()->open(uri);
     });
 
     addToTemplates->setVisible(false);

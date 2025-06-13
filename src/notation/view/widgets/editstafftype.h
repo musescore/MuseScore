@@ -20,19 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_EDITSTAFFTYPE_H
-#define MU_NOTATION_EDITSTAFFTYPE_H
+#pragma once
 
 #include "ui_editstafftype.h"
 
 #include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
 #include "engraving/iengravingconfiguration.h"
 
 #include "engraving/dom/stafftype.h"
 #include "engraving/style/textstyle.h"
 
 #include "notation/notationtypes.h"
+#include "view/widgets/editstyle.h"
 
 namespace mu::notation {
 //---------------------------------------------------------
@@ -44,7 +43,7 @@ class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::In
     Q_OBJECT
 
     muse::Inject<engraving::IEngravingConfiguration> engravingConfiguration = { this };
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::IInteractive, interactive)
 
     mu::engraving::StaffType staffType;
 
@@ -93,4 +92,3 @@ private:
     engraving::TextStyleType getTextStyle(const QString& name) const;
 };
 }
-#endif

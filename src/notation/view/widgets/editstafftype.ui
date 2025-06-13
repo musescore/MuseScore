@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>663</width>
-    <height>730</height>
+    <height>736</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -449,7 +449,7 @@
                   <item>
                    <widget class="QRadioButton" name="presetRadioButton">
                     <property name="text">
-                     <string>TAB font preset</string>
+                     <string>Tab font preset</string>
                     </property>
                    </widget>
                   </item>
@@ -1514,8 +1514,8 @@
   </connection>
  </connections>
  <buttongroups>
+  <buttongroup name="ContinuousBrokenLinesbuttGroup"/>
   <buttongroup name="OnAboveLinesButtGroup"/>
   <buttongroup name="NumLettersButtGroup"/>
-  <buttongroup name="ContinuousBrokenLinesbuttGroup"/>
  </buttongroups>
 </ui>
