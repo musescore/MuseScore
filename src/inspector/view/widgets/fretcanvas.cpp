@@ -92,9 +92,24 @@ void FretCanvas::draw(QPainter* painter)
         painter->drawLine(QLineF(0.0, y, x2, y));
     }
 
+    // Don't draw dots if they covered by barres
+    std::set<std::pair<int, int> > dotsCoveredByBarres;
+    for (const auto& i : m_diagram->barres()) {
+        int fret = i.first;
+        int startString = i.second.startString;
+        int endString = (i.second.endString == -1) ? m_diagram->strings() - 1 : i.second.endString;
+        for (int s = startString; s <= endString; ++s) {
+            dotsCoveredByBarres.insert({ fret, s });
+        }
+    }
+
     // Draw dots and markers
     for (int i = 0; i < _strings; ++i) {
         for (auto const& dt : m_diagram->dot(i)) {
+            if (muse::contains(dotsCoveredByBarres, { dt.fret, i })) {
+                continue;
+            }
+
             if (dt.exists()) {
                 painter->setPen(symPen);
                 int fret = dt.fret;

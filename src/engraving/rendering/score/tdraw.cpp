@@ -1336,9 +1336,24 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     double symPenWidth = ldata->stringLineWidth * 1.2;
     symPen.setWidthF(symPenWidth);
 
+    // Don't draw dots if they covered by barres
+    std::set<std::pair<int, int> > dotsCoveredByBarres;
+    for (const auto& i : item->barres()) {
+        int fret = i.first;
+        int startString = i.second.startString;
+        int endString = (i.second.endString == -1) ? item->strings() - 1 : i.second.endString;
+        for (int s = startString; s <= endString; ++s) {
+            dotsCoveredByBarres.insert({ fret, s });
+        }
+    }
+
     for (auto const& i : item->dots()) {
         for (auto const& d : i.second) {
             if (!d.exists()) {
+                continue;
+            }
+
+            if (muse::contains(dotsCoveredByBarres, { d.fret, i.first })) {
                 continue;
             }
 
