@@ -345,9 +345,8 @@ static Clef* createClef(Score* score, staff_idx_t staffIdx, ClefIndex musxClef, 
     Staff* staff = score->staff(staffIdx);
     Fraction timeStretch = staff->timeStretch(measure->tick());
     // Clef positions in musx are staff-level, so back out any time stretch to get global position.
-    Fraction clefTick = measure->tick() + (FinaleTConv::eduToFraction(musxEduPos) / timeStretch);
-    Segment* clefSeg = measure->getSegment(
-        clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
+    Fraction clefTick = FinaleTConv::eduToFraction(musxEduPos) / timeStretch;
+    Segment* clefSeg = measure->getSegmentR(clef->isHeader() ? SegmentType::HeaderClef : SegmentType::Clef, clefTick);
     clefSeg->add(clef);
     return clef;
 }
@@ -565,7 +564,7 @@ void FinaleParser::importStaffItems()
             const std::shared_ptr<TimeSignature> musxTimeSig = musxMeasure->createTimeSignature(musxScrollViewItem->staffId);
             if (!currMusxTimeSig || !currMusxTimeSig->isSame(*musxTimeSig) || musxMeasure->showTime == others::Measure::ShowTimeSigMode::Always) {
                 Fraction timeSig = FinaleTConv::simpleMusxTimeSigToFraction(musxTimeSig->calcSimplified(), logger());
-                Segment* seg = measure->getSegment(SegmentType::TimeSig, currTick);
+                Segment* seg = measure->getSegmentR(SegmentType::TimeSig, Fraction(0, 1));
                 TimeSig* ts = Factory::createTimeSig(seg);
                 ts->setSig(timeSig);
                 ts->setTrack(staffIdx * VOICES);
@@ -653,7 +652,7 @@ void FinaleParser::importStaffItems()
                     logger()->logWarning(String(u"Microtonal key signatures not supported."), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                 }
                 if (keySigEvent && keySigEvent != currKeySigEvent) {
-                    Segment* seg = measure->getSegment(SegmentType::KeySig, currTick);
+                    Segment* seg = measure->getSegmentR(SegmentType::KeySig, Fraction(0, 1));
                     KeySig* ks = Factory::createKeySig(seg);
                     ks->setKeySigEvent(keySigEvent.value());
                     ks->setTrack(staffIdx * VOICES);

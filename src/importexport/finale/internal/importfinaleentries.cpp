@@ -217,7 +217,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
     }
 
     Fraction entryStartTick = FinaleTConv::musxFractionToFraction(entryInfo.calcGlobalElapsedDuration()).reduced();
-    Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick() + entryStartTick);
+    Segment* segment = measure->getSegmentR(SegmentType::ChordRest, entryStartTick);
 
     // Retrieve entry from entryInfo
     std::shared_ptr<const Entry> currentEntry = entryInfo->getEntry();
@@ -673,7 +673,7 @@ void FinaleParser::importEntries()
             measure->checkMeasure(curStaffIdx);
             // ...and make sure voice 1 exists.
             if (!measure->hasVoice(curStaffIdx * VOICES)) {
-                Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
+                Segment* segment = measure->getSegmentR(SegmentType::ChordRest, Fraction(0, 1));
                 Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
                 rest->setScore(m_score);
                 rest->setTicks(measure->timesig() * curStaff->timeStretch(measure->tick()));
