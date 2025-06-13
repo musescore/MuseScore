@@ -94,6 +94,9 @@ private:
     std::map<int, std::set<EngravingItem*>> measure_spanner_map;
     std::map<EngravingItem*, std::map<int, int>> spanner_ticks_map;
 
+    int stand_arpeggio_quarter_duration_ticks = 0;
+    int stand_arpeggio_eighth_duration_ticks = 0;
+
     std::map<EngravingItem*, Note*> score_trill_map;
     std::map<EngravingItem*, int> score_trill_st_map;
     std::map<EngravingItem*, int> score_trill_dt_map;
