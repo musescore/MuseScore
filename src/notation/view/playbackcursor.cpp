@@ -794,6 +794,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                             EngravingItem* arpeggio = item->parentItem();
                             // check Fermata
                             bool isFermataTag = false;
+                            bool isFermataAtLastSegment = false;
                             EngravingItem* arpeggioParent = arpeggio->parentItem();
                             EngravingItemList ___itemList = arpeggioParent->childrenItems(false);
                             for (size_t _k = 0; _k < ___itemList.size(); _k++) {
@@ -803,6 +804,9 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                 }
                                 if (___item->type() == mu::engraving::ElementType::FERMATA) {
                                     isFermataTag = true;
+                                    if (___item->tick().ticks() >= measure->last(mu::engraving::SegmentType::ChordRest)->tick().ticks()) {
+                                        isFermataAtLastSegment = true;
+                                    }
                                     chordrest_fermata_map[engravingItem] = ___item;
                                 }
                             }
@@ -845,25 +849,16 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                         arpeggio_duration_ticks /= 2;
                                     }
                                 } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_QUARTER) {
-                                    if (stand_arpeggio_quarter_duration_ticks == 0) {
-                                        stand_arpeggio_quarter_duration_ticks = arpeggio_duration_ticks;
-                                    } else if (arpeggio_duration_ticks < stand_arpeggio_quarter_duration_ticks) {
-                                        stand_arpeggio_quarter_duration_ticks = arpeggio_duration_ticks;
-                                    }
                                     if (isFermataTag) {
                                         arpeggio_duration_ticks /= 10;
                                     } else {
                                         arpeggio_duration_ticks /= 4;
                                     }
                                 } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_EIGHTH) {
-                                    if (stand_arpeggio_eighth_duration_ticks == 0) {
-                                        stand_arpeggio_eighth_duration_ticks = arpeggio_duration_ticks;
-                                    } else if (arpeggio_duration_ticks < stand_arpeggio_eighth_duration_ticks) {
-                                        stand_arpeggio_eighth_duration_ticks = arpeggio_duration_ticks;
-                                    }
                                     arpeggio_duration_ticks /= 2;
-                                    if (isFermataTag) {
-                                       arpeggio_duration_ticks /= 8;
+                                    
+                                    if (isFermataTag && isFermataAtLastSegment) {
+                                       arpeggio_duration_ticks /= 10;
                                     }
                                 }
                                 _arpeggio_duration_check = true;
@@ -904,25 +899,15 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                                         arpeggio_duration_ticks /= 2;
                                                     }
                                                 } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_QUARTER) {
-                                                    if (stand_arpeggio_quarter_duration_ticks == 0) {
-                                                        stand_arpeggio_quarter_duration_ticks = arpeggio_duration_ticks;
-                                                    } else if (arpeggio_duration_ticks < stand_arpeggio_quarter_duration_ticks) {
-                                                        stand_arpeggio_quarter_duration_ticks = arpeggio_duration_ticks;
-                                                    }
                                                     if (isFermataTag) {
                                                         arpeggio_duration_ticks /= 10;
                                                     } else {
                                                         arpeggio_duration_ticks /= 4;
                                                     }
                                                 } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_EIGHTH) {
-                                                    if (stand_arpeggio_eighth_duration_ticks == 0) {
-                                                        stand_arpeggio_eighth_duration_ticks = arpeggio_duration_ticks;
-                                                    } else if (arpeggio_duration_ticks < stand_arpeggio_eighth_duration_ticks) {
-                                                        stand_arpeggio_eighth_duration_ticks = arpeggio_duration_ticks;
-                                                    }
                                                     arpeggio_duration_ticks /= 2;
-                                                    if (isFermataTag) {
-                                                        arpeggio_duration_ticks /= 8;
+                                                    if (isFermataTag && isFermataAtLastSegment) {
+                                                        arpeggio_duration_ticks /= 10;
                                                     }
                                                 }
                                                 for (Note* note_ : _note->chord()->notes()) {
