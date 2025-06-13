@@ -79,7 +79,7 @@ void PartialTiePopupModel::init()
     load();
 }
 
-void PartialTiePopupModel::toggleItemChecked(QString& id)
+void PartialTiePopupModel::toggleItemChecked(const QString& id)
 {
     Tie* tieItem = tie();
     if (!tieItem || !tieItem->tieJumpPoints()) {
