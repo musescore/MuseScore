@@ -47,6 +47,7 @@ using namespace mu::playback;
 
 static const ActionCode PLAY_CODE("play");
 static const ActionCode STOP_CODE("stop");
+static const ActionCode PAUSE_AND_SELECT_CODE("pause-and-select");
 static const ActionCode REWIND_CODE("rewind");
 static const ActionCode LOOP_CODE("loop");
 static const ActionCode LOOP_IN_CODE("loop-in");
@@ -92,7 +93,8 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
-    dispatcher()->reg(this, STOP_CODE, this, &PlaybackController::pause);
+    dispatcher()->reg(this, STOP_CODE, [this]() { PlaybackController::pause(/*select*/ false); });
+    dispatcher()->reg(this, PAUSE_AND_SELECT_CODE, [this]() { PlaybackController::pause(/*select*/ true); });
     dispatcher()->reg(this, REWIND_CODE, this, &PlaybackController::rewind);
     dispatcher()->reg(this, LOOP_CODE, this, &PlaybackController::toggleLoopPlayback);
     dispatcher()->reg(this, LOOP_IN_CODE, [this]() { addLoopBoundary(LoopBoundaryType::LoopIn); });
@@ -665,13 +667,21 @@ void PlaybackController::rewind(const ActionData& args)
     seek(newPosition);
 }
 
-void PlaybackController::pause()
+void PlaybackController::pause(bool select)
 {
     IF_ASSERT_FAILED(currentPlayer()) {
         return;
     }
 
+    if (isPaused()) {
+        return;
+    }
+
     currentPlayer()->pause();
+
+    if (select) {
+        selectAtRawTick(m_currentTick);
+    }
 }
 
 void PlaybackController::stop()
@@ -699,6 +709,21 @@ void PlaybackController::resume()
     }
 
     currentPlayer()->resume(delay);
+}
+
+void PlaybackController::selectAtRawTick(const tick_t& rawTick)
+{
+    if (!m_notation) {
+        return;
+    }
+
+    const RetVal<tick_t> playPositionTick = notationPlayback()->playPositionTickByRawTick(rawTick);
+    if (!playPositionTick.ret) {
+        return;
+    }
+
+    const Fraction playPositionFrac = Fraction::fromTicks(playPositionTick.val);
+    interaction()->findAndSelectChordRest(playPositionFrac);
 }
 
 secs_t PlaybackController::playbackStartSecs() const
@@ -750,7 +775,7 @@ InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() 
 
     InstrumentTrackIdSet result;
 
-    for (const Part* part: selectedParts) {
+    for (const Part* part : selectedParts) {
         if (const Instrument* startInstrument = part->instrument(startTick)) {
             result.insert({ part->id(), startInstrument->id() });
         }
