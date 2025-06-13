@@ -1302,7 +1302,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(rehearsalMarkMinDistance,                   Spatium(0.5)),
 
     styleDef(repeatLeftFontFace,                         "Edwin"),
-    styleDef(repeatLeftFontSize,                         18.0),
+    styleDef(repeatLeftFontSize,                         10.0),
     styleDef(repeatLeftLineSpacing,                      1.0),
     styleDef(repeatLeftFontSpatiumDependent,             true),
     styleDef(repeatLeftFontStyle,                        int(FontStyle::Normal)),
@@ -1318,7 +1318,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(repeatLeftPosition,                         AlignH::LEFT),
 
     styleDef(repeatRightFontFace,                        "Edwin"),
-    styleDef(repeatRightFontSize,                        11.0),
+    styleDef(repeatRightFontSize,                        10.0),
     styleDef(repeatRightLineSpacing,                     1.0),
     styleDef(repeatRightFontSpatiumDependent,            true),
     styleDef(repeatRightFontStyle,                       int(FontStyle::Normal)),
