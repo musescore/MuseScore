@@ -27,6 +27,8 @@
 
 #include "internal/webinteractive.h"
 
+#include "webapi.h"
+
 #include "log.h"
 
 using namespace mu::webbridge;
@@ -52,6 +54,12 @@ void WebBridgeModule::registerExports()
     ioc()->registerExport<muse::IInteractive>(moduleName(), new WebInteractive(originInteractive));
 }
 
-void WebBridgeModule::onStartApp()
+void WebBridgeModule::onInit(const muse::IApplication::RunMode&)
 {
+    WebApi::instance()->init();
+}
+
+void WebBridgeModule::onDeinit()
+{
+    WebApi::instance()->deinit();
 }

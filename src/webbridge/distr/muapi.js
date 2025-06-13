@@ -10,13 +10,20 @@ const MuApi = {
         this.Module.HEAPU8.set(data, ptr);
         this.Module._load(ptr, data.length);
         this.Module._free(ptr);
-    }
-
+    },
 }
 
 let createMuApi = (function(config, onInited) {
 
     MuApi.Module = config.muwasm
+
+    MuApi.Module.onProjectSaved = function(data) {
+        console.log("[js muapi internal] onProjectSaved len: ", data.length)
+        if (config.onProjectSaved) {
+            config.onProjectSaved(data)
+        }
+    }
+
     return MuApi
 })
 

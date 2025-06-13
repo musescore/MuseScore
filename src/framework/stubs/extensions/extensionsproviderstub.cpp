@@ -88,7 +88,7 @@ std::vector<ExecPoint> ExtensionsProviderStub::execPoints(const Uri&) const
 
 Ret ExtensionsProviderStub::performPoint(const ExecPointName&)
 {
-    return muse::make_ret(Ret::Code::NotSupported);
+    return muse::make_ret(Ret::Code::Ok);
 }
 
 void ExtensionsProviderStub::performPointAsync(const ExecPointName&)

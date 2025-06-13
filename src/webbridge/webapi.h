@@ -21,20 +21,36 @@
  */
 #pragma once
 
+#include "global/async/asyncable.h"
+
 #include "global/modularity/ioc.h"
 #include "global/iinteractive.h"
 #include "actions/iactionsdispatcher.h"
+#include "context/iglobalcontext.h"
 
 namespace mu::webbridge {
-class WebApi
+class WebApi : public muse::async::Asyncable
 {
     inline static muse::GlobalInject<muse::IInteractive> interactive;
     inline static muse::GlobalInject<muse::actions::IActionsDispatcher> dispatcher;
+    inline static muse::GlobalInject<mu::context::IGlobalContext> globalContext;
 
 public:
     WebApi() = default;
 
-    static void onclickTest1(int num);
-    static void load(const void* source, unsigned int len);
+    static WebApi* instance();
+
+    void init();
+    void deinit();
+
+    void onclickTest1(int num);
+
+    void load(const void* source, unsigned int len);
+
+private:
+
+    void onProjectSaved(const muse::io::path_t& path, mu::project::SaveMode mode);
+
+    project::INotationProjectPtr m_currentProject;
 };
 }
