@@ -288,14 +288,21 @@ EngravingItem* Rest::drop(EditData& data)
 
 SymId Rest::getSymbol(DurationType type, int line, int lines) const
 {
+    auto getBreveSymbol = [&]() {
+        if (style().styleB(Sid::showLedgerLinesOnBreveRests)) {
+            return (line <= 0 || line >= lines) ? SymId::restDoubleWholeLegerLine : SymId::restDoubleWhole;
+        }
+        return SymId::restDoubleWhole;
+    };
+
     switch (type) {
     case DurationType::V_LONG:
         return SymId::restLonga;
     case DurationType::V_BREVE:
-        return SymId::restDoubleWhole;
+        return getBreveSymbol();
     case DurationType::V_MEASURE:
         if (ticks() >= Fraction(2, 1)) {
-            return SymId::restDoubleWhole;
+            return getBreveSymbol();
         }
     // fall through
     case DurationType::V_WHOLE:
@@ -567,6 +574,27 @@ bool Rest::isBreveRest() const
     TDuration durType = durationType();
     return durType == DurationType::V_BREVE
            || (durType == DurationType::V_MEASURE && measure() && measure()->ticks() >= Fraction(2, 1));
+}
+
+bool Rest::hasLedgerLineOutsideStaff() const
+{
+    const bool breveRestsHaveLedgerLines = style().styleB(Sid::showLedgerLinesOnBreveRests);
+
+    switch (durationType().type()) {
+    case DurationType::V_BREVE:
+        return breveRestsHaveLedgerLines;
+    case DurationType::V_WHOLE:
+        return true;
+    case DurationType::V_HALF:
+        return true;
+    case DurationType::V_MEASURE:
+        if (breveRestsHaveLedgerLines) {
+            return true;
+        }
+        return measure()->ticks() < Fraction(2, 1);
+    default:
+        return false;
+    }
 }
 
 int Rest::computeNaturalLine(int lines) const
