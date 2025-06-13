@@ -34,6 +34,15 @@ class HammerOnPullOffTappingPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * hopoUpperCase READ hopoUpperCase CONSTANT)
     Q_PROPERTY(StyleItem * hopoShowAll READ hopoShowAll CONSTANT)
 
+    Q_PROPERTY(StyleItem * lhTappingSymbolNormalStave READ lhTappingSymbolNormalStave CONSTANT)
+    Q_PROPERTY(StyleItem * lhTappingSymbolTab READ lhTappingSymbolTab CONSTANT)
+    Q_PROPERTY(StyleItem * lhTappingShowItemsNormalStave READ lhTappingShowItemsNormalStave CONSTANT)
+    Q_PROPERTY(StyleItem * lhTappingShowItemsTab READ lhTappingShowItemsTab CONSTANT)
+    Q_PROPERTY(StyleItem * lhTappingSlurTopAndBottomNoteOnTab READ lhTappingSlurTopAndBottomNoteOnTab CONSTANT)
+
+    Q_PROPERTY(StyleItem * rhTappingSymbolNormalStave READ rhTappingSymbolNormalStave CONSTANT)
+    Q_PROPERTY(StyleItem * rhTappingSymbolTab READ rhTappingSymbolTab CONSTANT)
+
 public:
     explicit HammerOnPullOffTappingPageModel(QObject* parent = nullptr);
 
@@ -41,5 +50,14 @@ public:
     StyleItem* showOnTabStaves() const;
     StyleItem* hopoUpperCase() const;
     StyleItem* hopoShowAll() const;
+
+    StyleItem* lhTappingSymbolNormalStave() const;
+    StyleItem* lhTappingSymbolTab() const;
+    StyleItem* lhTappingShowItemsNormalStave() const;
+    StyleItem* lhTappingShowItemsTab() const;
+    StyleItem* lhTappingSlurTopAndBottomNoteOnTab() const;
+
+    StyleItem* rhTappingSymbolNormalStave() const;
+    StyleItem* rhTappingSymbolTab() const;
 };
 }

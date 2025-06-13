@@ -176,6 +176,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new FretFrameSettingsModel(parent, repository);
     case InspectorModelType::TYPE_ARTICULATION:
         return new ArticulationSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_TAPPING:
+        return new ArticulationSettingsModel(parent, repository, InspectorModelType::TYPE_TAPPING);
     case InspectorModelType::TYPE_ORNAMENT:
         return new OrnamentSettingsModel(parent, repository);
     case InspectorModelType::TYPE_AMBITUS:

@@ -634,6 +634,7 @@ void Chord::add(EngravingItem* e)
         break;
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     {
         Articulation* a = toArticulation(e);
         if (a->layoutCloseToNote()) {
@@ -736,6 +737,7 @@ void Chord::remove(EngravingItem* e)
     break;
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     {
         Articulation* a = toArticulation(e);
         if (!muse::remove(m_articulations, a)) {
@@ -1331,6 +1333,7 @@ EngravingItem* Chord::drop(EditData& data)
     switch (e->type()) {
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     {
         Articulation* atr = toArticulation(e);
         Articulation* oa = hasArticulation(atr);
@@ -1602,6 +1605,20 @@ Articulation* Chord::hasArticulation(const Articulation* aa)
         }
     }
     return 0;
+}
+
+Tapping* Chord::tapping() const
+{
+    std::vector<Tapping*> tappings;
+    tappings.reserve(1);
+    for (Articulation* a : m_articulations) {
+        if (a->isTapping()) {
+            tappings.push_back(toTapping(a));
+        }
+    }
+    DO_ASSERT(tappings.size() <= 1);
+
+    return tappings.size() > 0 ? tappings.front() : nullptr;
 }
 
 void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, ArticulationsUpdateMode updateMode)

@@ -1834,6 +1834,14 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "String number %1"));
     }
 
+    auto lhTapping = Factory::makeTapping(gpaletteScore->dummy()->chord());
+    lhTapping->setHand(TappingHand::LEFT);
+    sp->appendElement(lhTapping, QT_TRANSLATE_NOOP("palette", "Left-hand tapping"), 1.0);
+
+    auto rhTapping = Factory::makeTapping(gpaletteScore->dummy()->chord());
+    rhTapping->setHand(TappingHand::RIGHT);
+    sp->appendElement(rhTapping, QT_TRANSLATE_NOOP("palette", "Right-hand tapping"), 1.0);
+
     auto hopo = Factory::makeHammerOnPullOff(gpaletteScore->dummy());
     sp->appendElement(hopo, QT_TRANSLATE_NOOP("palette", "Hammer-on / pull-off"), 0.8);
 

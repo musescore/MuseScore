@@ -3104,6 +3104,14 @@ void Score::deleteItem(EngravingItem* el)
     }
     break;
 
+    case ElementType::TAPPING_HALF_SLUR_SEGMENT:
+    {
+        TappingHalfSlur* halfSlur = toTappingHalfSlur(toTappingHalfSlurSegment(el)->spanner());
+        Tapping* tapping = toTapping(halfSlur->parent());
+        undoRemoveElement(tapping);
+        break;
+    }
+
     case ElementType::HAMMER_ON_PULL_OFF_TEXT:
         undoRemoveHopoText(toHammerOnPullOffText(el));
         break;
@@ -6349,6 +6357,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
     if (ostaff == 0 || (
             et != ElementType::ARTICULATION
             && et != ElementType::ORNAMENT
+            && et != ElementType::TAPPING
             && et != ElementType::CHORDLINE
             && et != ElementType::LYRICS
             && et != ElementType::SLUR

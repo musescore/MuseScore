@@ -925,6 +925,15 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(hopoUpperCase,                                           true),
     styleDef(hopoShowAll,                                             true),
 
+    styleDef(lhTappingSymbolNormalStave,                 LHTappingSymbol::DOT),
+    styleDef(lhTappingSymbolTab,                         LHTappingSymbol::DOT),
+    styleDef(lhTappingShowItemsNormalStave,              int(LHTappingShowItems::HALF_SLUR)),
+    styleDef(lhTappingShowItemsTab,                      int(LHTappingShowItems::HALF_SLUR)),
+    styleDef(lhTappingSlurTopAndBottomNoteOnTab,         true),
+
+    styleDef(rhTappingSymbolNormalStave,                 RHTappingSymbol::PLUS),
+    styleDef(rhTappingSymbolTab,                         RHTappingSymbol::T),
+
     styleDef(stringNumberFontFace,                       "Edwin"),
     styleDef(stringNumberFontSize,                       8.0),
     styleDef(stringNumberLineSpacing,                    1.0),

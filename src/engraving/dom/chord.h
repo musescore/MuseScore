@@ -247,6 +247,7 @@ public:
     const std::vector<Articulation*>& articulations() const { return m_articulations; }
     std::set<SymId> articulationSymbolIds() const;
     Articulation* hasArticulation(const Articulation*);
+    Tapping* tapping() const;
     bool hasSingleArticulation() const { return m_articulations.size() == 1; }
 
     void updateArticulations(const std::set<SymId>& newArticulationIds,

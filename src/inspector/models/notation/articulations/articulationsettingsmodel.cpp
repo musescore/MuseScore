@@ -22,17 +22,19 @@
 #include "articulationsettingsmodel.h"
 
 #include "engraving/dom/articulation.h"
+#include "engraving/dom/tapping.h"
 
 #include "log.h"
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
-ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository)
+ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository, InspectorModelType type)
     : AbstractInspectorModel(parent, repository)
 {
-    setModelType(InspectorModelType::TYPE_ARTICULATION);
-    setTitle(muse::qtrc("inspector", "Articulation"));
+    setModelType(type);
+    setTitle(type == InspectorModelType::TYPE_ARTICULATION ? muse::qtrc("inspector", "Articulation") : muse::qtrc("inspector", "Tapping"));
     setIcon(muse::ui::IconCode::Code::ARTICULATION);
     createProperties();
 }
@@ -45,11 +47,25 @@ void ArticulationSettingsModel::createProperties()
 void ArticulationSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::ARTICULATION);
+
+    QList<mu::engraving::EngravingItem*> tappings = m_repository->findElementsByType(mu::engraving::ElementType::TAPPING);
+    for (mu::engraving::EngravingItem* tapping : tappings) {
+        m_elementList.push_back(tapping);
+    }
+
+    QList<mu::engraving::EngravingItem*> halfSlurSegs
+        = m_repository->findElementsByType(mu::engraving::ElementType::TAPPING_HALF_SLUR_SEGMENT);
+    for (mu::engraving::EngravingItem* halfSlurSeg : halfSlurSegs) {
+        TappingHalfSlur* halfSlur = toTappingHalfSlur(toTappingHalfSlurSegment(halfSlurSeg)->spanner());
+        Tapping* tapping = toTapping(halfSlur->parentItem());
+        m_elementList.push_back(tapping);
+    }
 }
 
 void ArticulationSettingsModel::loadProperties()
 {
     loadPropertyItem(m_placement);
+    updateIsPlacementAvailable();
 }
 
 void ArticulationSettingsModel::resetProperties()
@@ -57,7 +73,35 @@ void ArticulationSettingsModel::resetProperties()
     m_placement->resetToDefault();
 }
 
+void ArticulationSettingsModel::updateIsPlacementAvailable()
+{
+    bool available = false;
+    for (EngravingItem* item : m_elementList) {
+        if (!item->isTapping()) {
+            available = true;
+            break;
+        }
+
+        Tapping* tapping = toTapping(item);
+        bool hasSymbol = tapping->hand() == TappingHand::RIGHT || tapping->lhShowItems() != LHTappingShowItems::HALF_SLUR;
+        if (hasSymbol) {
+            available = true;
+            break;
+        }
+    }
+
+    if (available != m_isPlacementAvailable) {
+        m_isPlacementAvailable = available;
+        emit isPlacementAvailableChanged(m_isPlacementAvailable);
+    }
+}
+
 PropertyItem* ArticulationSettingsModel::placement() const
 {
     return m_placement;
+}
+
+bool ArticulationSettingsModel::isPlacementAvailable() const
+{
+    return m_isPlacementAvailable;
 }

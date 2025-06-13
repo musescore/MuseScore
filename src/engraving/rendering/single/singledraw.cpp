@@ -116,6 +116,7 @@
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
 
+#include "dom/tapping.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textbase.h"
@@ -312,6 +313,8 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::SOUND_FLAG:           draw(item_cast<const SoundFlag*>(item), painter);
         break;
 
+    case ElementType::TAPPING:              draw(item_cast<const Tapping*>(item), painter);
+        break;
     case ElementType::TEMPO_TEXT:           draw(item_cast<const TempoText*>(item), painter);
         break;
     case ElementType::TEXT:                 draw(item_cast<const Text*>(item), painter);
@@ -2251,6 +2254,11 @@ void SingleDraw::draw(const SoundFlag* item, Painter* painter)
     Font f(item->iconFont());
     painter->setFont(f);
     painter->drawText(item->ldata()->bbox(), muse::draw::AlignCenter, Char(item->iconCode()));
+}
+
+void SingleDraw::draw(const Tapping* item, muse::draw::Painter* painter)
+{
+    drawTextBase(item->text(), painter);
 }
 
 void SingleDraw::draw(const TempoText* item, Painter* painter)

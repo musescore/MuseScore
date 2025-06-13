@@ -332,6 +332,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/systemdivider.h
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/systemtext.h
+    ${CMAKE_CURRENT_LIST_DIR}/tapping.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tapping.h
     ${CMAKE_CURRENT_LIST_DIR}/tempo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempo.h
     ${CMAKE_CURRENT_LIST_DIR}/tempotext.cpp

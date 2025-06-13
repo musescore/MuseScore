@@ -165,6 +165,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
         break;
     case ElementType::ARTICULATION: read(item_cast<Articulation*>(item), xml, ctx);
         break;
+    case ElementType::TAPPING: read(item_cast<Tapping*>(item), xml, ctx);
+        break;
     case ElementType::BAGPIPE_EMBELLISHMENT: read(item_cast<BagpipeEmbellishment*>(item), xml, ctx);
         break;
     case ElementType::BAR_LINE: read(item_cast<BarLine*>(item), xml, ctx);
@@ -1910,6 +1912,38 @@ bool TRead::readProperties(Articulation* a, XmlReader& xml, ReadContext& ctx)
     return true;
 }
 
+void TRead::read(Tapping* t, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        AsciiStringView tag = xml.name();
+        if (tag == "hand") {
+            t->setHand(TConv::fromXml(xml.readAsciiText(), TappingHand::INVALID));
+        } else if (tag == TConv::toXml(ElementType::TAPPING_HALF_SLUR)) {
+            TappingHalfSlur* tappingHalfSlur = new TappingHalfSlur(t);
+            read(tappingHalfSlur, xml, ctx);
+            tappingHalfSlur->setParent(t);
+            if (tappingHalfSlur->isHalfSlurAbove()) {
+                t->setHalfSlurAbove(tappingHalfSlur);
+            } else {
+                t->setHalfSlurBelow(tappingHalfSlur);
+            }
+        } else if (!readProperties(toArticulation(t), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
+void TRead::read(TappingHalfSlur* t, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        if (xml.name() == "isHalfSlurAbove") {
+            t->setIsHalfSlurAbove(xml.readBool());
+        } else if (!readProperties(toSlur(t), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
 void TRead::read(Audio* a, XmlReader& e, ReadContext&)
 {
     while (e.readNextStartElement()) {
@@ -2482,6 +2516,14 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
         ornament->setTrack(ch->track());
         TRead::read(ornament, e, ctx);
         ch->add(ornament);
+    } else if (tag == "Tapping") {
+        Tapping* tapping = Factory::createTapping(ch);
+        tapping->setTrack(ch->track());
+        TRead::read(tapping, e, ctx);
+        ch->add(tapping);
+    } else if (tag == "leadingSpace" || tag == "trailingSpace") {
+        LOGD("ChordRest: %s obsolete", tag.ascii());
+        e.skipCurrentElement();
     } else if (tag == "small") {
         ch->setSmall(e.readInt());
     } else if (tag == "duration") {
@@ -3610,7 +3652,7 @@ bool TRead::readProperties(SlurTie* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "lineType") {
         s->setStyleType(static_cast<SlurStyleType>(e.readInt()));
     } else if (tag == "SlurSegment" || tag == "TieSegment" || tag == "LaissezVibSegment" || tag == "PartialTieSegment"
-               || tag == "HammerOnPullOffSegment") {
+               || tag == "HammerOnPullOffSegment" || tag == "TappingHalfSlurSegment") {
         const int idx = e.intAttribute("no", 0);
         const int n = int(s->spannerSegments().size());
         for (int i = n; i < idx; ++i) {

@@ -134,6 +134,7 @@
 #include "dom/systemtext.h"
 #include "dom/soundflag.h"
 
+#include "dom/tapping.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textline.h"
@@ -151,6 +152,8 @@
 
 #include "dom/whammybar.h"
 
+#include "dom/factory.h"
+
 #include "accidentalslayout.h"
 #include "autoplace.h"
 #include "beamlayout.h"
@@ -164,6 +167,7 @@
 #include "tupletlayout.h"
 #include "horizontalspacing.h"
 #include "measurelayout.h"
+#include "tappinglayout.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -425,6 +429,12 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::SYSTEM_TEXT:
         layoutSystemText(item_cast<const SystemText*>(item), static_cast<SystemText::LayoutData*>(ldata));
+        break;
+    case ElementType::TAPPING:
+        layoutTapping(toTapping(item), static_cast<Tapping::LayoutData*>(ldata), ctx);
+        break;
+    case ElementType::TAPPING_HALF_SLUR:
+        layoutTappingHalfSlur(toTappingHalfSlur(item));
         break;
     case ElementType::TEMPO_TEXT:
         layoutTempoText(item_cast<const TempoText*>(item), static_cast<TempoText::LayoutData*>(ldata));
@@ -930,8 +940,6 @@ void TLayout::layoutArticulation(const Articulation* item, Articulation::LayoutD
         bbox = fm.boundingRect(scaledFont, TConv::text(item->textType()));
     }
 
-    ldata->setBbox(bbox.translated(-0.5 * bbox.width(), 0.0));
-
     fillArticulationShape(item, ldata);
 }
 
@@ -953,10 +961,10 @@ void TLayout::fillArticulationShape(const Articulation* item, Articulation::Layo
         shape.add(base, item);
         shape.add(center, item);
         shape.add(tip, item);
-        PointF translate(-0.5 * width, sym == SymId::articAccentAbove ? -height : 0.0);
+        PointF translate(0.0, sym == SymId::articAccentAbove ? -height : 0.0);
         ldata->setShape(shape.translate(translate));
     } else {
-        ldata->setShape(Shape(ldata->bbox(), item));
+        ldata->setShape(Shape(item->symBbox(sym), item));
     }
 }
 
@@ -3304,7 +3312,11 @@ void TLayout::layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutC
 
         double vertPadding = 0.5 * item->spatium();
         Shape hopoTextShape = hopoText->ldata()->shape().translated(PointF(centerX, 0.0));
-        SkylineLine& skyline = above ? sk.north() : sk.south();
+        SkylineLine& skl = above ? sk.north() : sk.south();
+        SkylineLine skyline = skl.getFilteredCopy([](const ShapeElement& el) {
+            return el.item() && el.item()->isArticulationFamily();
+        });
+
         double y = above ? -skyline.minDistanceToShapeAbove(hopoTextShape) : skyline.minDistanceToShapeBelow(hopoTextShape);
         y += above ? -vertPadding : vertPadding;
         y = above ? std::min(y, -vertPadding) : std::max(y, item->staff()->staffHeight(item->tick()) + vertPadding);
@@ -6122,6 +6134,16 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
     ldata->setPos(xpos * mag, ypos * mag);
 }
 
+void TLayout::layoutTapping(Tapping* item, Tapping::LayoutData* ldata, LayoutContext& ctx)
+{
+    TappingLayout::layoutTapping(item, ldata, ctx);
+}
+
+void TLayout::layoutTappingHalfSlur(TappingHalfSlur* item)
+{
+    UNUSED(item)
+}
+
 void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
@@ -7120,7 +7142,7 @@ void TLayout::layoutWhammyBarSegment(WhammyBarSegment* item, LayoutContext& ctx)
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
-using LayoutSystemTypes = rtti::TypeList<LyricsLine, Slur, HammerOnPullOff, Volta>;
+using LayoutSystemTypes = rtti::TypeList<LyricsLine, Slur, HammerOnPullOff, TappingHalfSlur, Volta>;
 
 class LayoutSystemVisitor : public rtti::Visitor<LayoutSystemVisitor>
 {
@@ -7157,7 +7179,7 @@ SpannerSegment* TLayout::getNextLayoutSystemSegment(Spanner* spanner, System* sy
 {
     SpannerSegment* seg = nullptr;
     for (SpannerSegment* ss : spanner->spannerSegments()) {
-        if (!ss->system()) {
+        if (!ss->system() || ss->isTappingHalfSlurSegment()) {
             seg = ss;
             break;
         }

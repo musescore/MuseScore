@@ -263,5 +263,14 @@ public:
 
     static AsciiStringView toXml(ChordStylePreset chordStylePreset);
     static ChordStylePreset fromXml(const AsciiStringView& str, ChordStylePreset def);
+
+    static AsciiStringView toXml(TappingHand tappingHand);
+    static TappingHand fromXml(const AsciiStringView& str, TappingHand def);
+
+    static AsciiStringView toXml(LHTappingSymbol lh);
+    static LHTappingSymbol fromXml(const AsciiStringView& str, LHTappingSymbol def);
+
+    static AsciiStringView toXml(RHTappingSymbol rh);
+    static RHTappingSymbol fromXml(const AsciiStringView& str, RHTappingSymbol def);
 };
 }
