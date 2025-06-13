@@ -49,7 +49,7 @@ using PlaybackParamMap = std::map<timestamp_t, PlaybackParamList>;
 using PlaybackParamLayers = std::map<layer_idx_t, PlaybackParamMap>;
 
 using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamLayers>;
-using OffStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamList>;
+using OffStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamList, bool /*flushOffstream*/>;
 
 struct ArrangementContext
 {
@@ -60,6 +60,16 @@ struct ArrangementContext
     voice_layer_idx_t voiceLayerIndex = 0;
     staff_layer_idx_t staffLayerIndex = 0;
     double bps = 0.0;
+
+    bool hasStart() const
+    {
+        return actualDuration > 0;
+    }
+
+    bool hasEnd() const
+    {
+        return actualDuration != mpe::INFINITE_DURATION;
+    }
 
     bool operator==(const ArrangementContext& other) const
     {
@@ -199,7 +209,7 @@ private:
     {
         m_arrangementCtx.actualDuration = m_arrangementCtx.nominalDuration;
 
-        if (articulationsApplied.empty()) {
+        if (articulationsApplied.empty() || m_arrangementCtx.nominalDuration == INFINITE_DURATION) {
             return;
         }
 

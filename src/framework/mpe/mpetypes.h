@@ -69,6 +69,8 @@ using voice_layer_idx_t = uint_fast8_t;
 using staff_layer_idx_t = uint_fast16_t;
 using layer_idx_t = size_t;
 
+static constexpr duration_t INFINITE_DURATION = std::numeric_limits<duration_t>::max();
+
 struct TimestampAndDuration {
     timestamp_t timestamp = 0;
     duration_t duration = 0;

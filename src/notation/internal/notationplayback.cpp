@@ -146,9 +146,10 @@ const muse::mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engravi
     return m_playbackModel.resolveTrackPlaybackData(trackId);
 }
 
-void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingItem*>& items)
+void NotationPlayback::triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration,
+                                             bool flushSound)
 {
-    m_playbackModel.triggerEventsForItems(items);
+    m_playbackModel.triggerEventsForItems(items, duration, flushSound);
 }
 
 void NotationPlayback::triggerMetronome(muse::midi::tick_t tick)

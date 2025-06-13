@@ -60,7 +60,6 @@ void VstSequencer::init(ParamsMapping&& mapping, bool useDynamicEvents)
 void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
                                          const mpe::PlaybackParamList&)
 {
-    flushOffstream();
     updatePlaybackEvents(m_offStreamEvents, events);
 
     if (m_useDynamicEvents) {
@@ -113,16 +112,20 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
             }
 
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
-
-            mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-            mpe::timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
+            const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
 
             int32_t noteId = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
             float velocityFraction = noteVelocityFraction(noteEvent);
             float tuning = noteTuning(noteEvent, noteId);
 
-            destination[timestampFrom].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
-            destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
+            if (arrangementCtx.hasStart()) {
+                destination[arrangementCtx.actualTimestamp].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
+            }
+
+            if (arrangementCtx.hasEnd()) {
+                const mpe::timestamp_t timestampTo = arrangementCtx.actualTimestamp + noteEvent.arrangementCtx().actualDuration;
+                destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
+            }
 
             for (const auto& articPair : noteEvent.expressionCtx().articulations) {
                 const mpe::ArticulationMeta& meta = articPair.second.meta;
@@ -139,7 +142,7 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
                 }
 
                 if (muse::contains(SOSTENUTO_PEDAL_CC_SUPPORTED_TYPES, meta.type)) {
-                    const mpe::timestamp_t timestamp = timestampFrom + noteEvent.arrangementCtx().actualDuration * 0.1; // add offset for Sostenuto to take effect
+                    const mpe::timestamp_t timestamp = arrangementCtx.actualTimestamp + noteEvent.arrangementCtx().actualDuration * 0.1; // add offset for Sostenuto to take effect
                     sostenutoTimeAndDurations.push_back(mpe::TimestampAndDuration { timestamp, meta.overallDuration });
                     continue;
                 }

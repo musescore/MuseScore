@@ -249,7 +249,7 @@ const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, co
     return resolveTrackPlaybackData(idKey(partId, instrumentId));
 }
 
-void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items)
+void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound)
 {
     std::vector<const EngravingItem*> playableItems = filterPlayableItems(items);
     if (playableItems.empty()) {
@@ -281,7 +281,6 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     constexpr timestamp_t timestamp = 0;
     dynamic_level_t dynamicLevel = dynamicLevelFromType(muse::mpe::DynamicType::Natural);
-    duration_t duration = MScore::defaultPlayDuration * 1000;
     int minTick = std::numeric_limits<int>::max();
 
     for (const EngravingItem* item : playableItems) {
@@ -303,7 +302,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     }
 
     PlaybackParamList params = ctx->playbackParams(playableItems.front()->track(), minTick);
-    trackPlaybackData.offStream.send(std::move(events), std::move(dynamics), std::move(params));
+    trackPlaybackData.offStream.send(std::move(result), std::move(params), std::move(dynamics), flushSound);
 }
 
 void PlaybackModel::triggerMetronome(int tick)
@@ -317,7 +316,7 @@ void PlaybackModel::triggerMetronome(int tick)
 
     PlaybackEventsMap result;
     m_renderer.renderMetronome(m_score, tick, 0, profile, result);
-    trackPlaybackData->second.offStream.send(std::move(result), {}, {});
+    trackPlaybackData->second.offStream.send(std::move(result), {}, {}, true /*flushOffstream*/);
 }
 
 void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& totalCountInDuration)
@@ -331,7 +330,7 @@ void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& totalCountIn
 
     PlaybackEventsMap result;
     m_renderer.renderCountIn(m_score, tick, 0, profile, result, totalCountInDuration);
-    trackPlaybackData->second.offStream.send(std::move(result), {}, {});
+    trackPlaybackData->second.offStream.send(std::move(result), {}, {}, true /*flushOffstream*/);
 }
 
 InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const

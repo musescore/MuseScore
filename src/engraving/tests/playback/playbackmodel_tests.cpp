@@ -1131,7 +1131,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents,
                                                                          const DynamicLevelLayers& triggeredDynamics,
-                                                                         const PlaybackParamList&) {
+                                                                         const PlaybackParamList&, bool flushOffstream) {
         ASSERT_EQ(triggeredEvents.size(), 1);
         const PlaybackEventList& eventList = triggeredEvents.at(firstNoteTimestamp);
 
@@ -1147,10 +1147,12 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
         const mpe::DynamicLevelMap& dynamicsMap = triggeredDynamics.at(0);
         ASSERT_EQ(dynamicsMap.size(), 1);
         EXPECT_EQ(dynamicsMap.begin()->second, dynamicLevelFromType(mpe::DynamicType::ppp));
+
+        EXPECT_TRUE(flushOffstream);
     });
 
     // [WHEN] User has clicked on the first note
-    model.triggerEventsForItems({ firstNote });
+    model.triggerEventsForItems({ firstNote }, QUARTER_NOTE_DURATION, true /*flushSounds*/);
 }
 
 /**
@@ -1201,7 +1203,8 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents,
                                                       const DynamicLevelLayers& triggeredDynamics,
-                                                      const PlaybackParamList&) {
+                                                      const PlaybackParamList&,
+                                                      bool flushOffstream) {
         ASSERT_EQ(triggeredEvents.size(), 1);
         const PlaybackEventList& actualEvents = triggeredEvents.at(0);
         ASSERT_EQ(actualEvents.size(), expectedEvents.size());
@@ -1213,7 +1216,9 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
             EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == 0);
             EXPECT_FALSE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());
             EXPECT_TRUE(actualNoteEvent.pitchCtx() == expectedNoteEvent.pitchCtx());
+
             EXPECT_TRUE(triggeredDynamics.empty());
+            EXPECT_TRUE(flushOffstream);
         }
     });
 
@@ -1221,7 +1226,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     model.setUseScoreDynamicsForOffstreamPlayback(false);
 
     // [WHEN] User has clicked on the first note
-    model.triggerEventsForItems({ thirdChord });
+    model.triggerEventsForItems({ thirdChord }, QUARTER_NOTE_DURATION, true /*flushSounds*/);
 }
 
 /**

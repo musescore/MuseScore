@@ -71,7 +71,12 @@ public:
 
         m_playbackData.offStream.onReceive(this, [this](const mpe::PlaybackEventsMap& events,
                                                         const mpe::DynamicLevelLayers& dynamics,
-                                                        const mpe::PlaybackParamList& params) {
+                                                        const mpe::PlaybackParamList& params,
+                                                        bool flush) {
+            if (flush) {
+                flushOffstream();
+            }
+
             updateOffStreamEvents(events, dynamics, params);
         });
 
