@@ -99,6 +99,7 @@ private:
     };
 
     std::vector<HopoTextRegion> computeHopoTextRegions(Chord* startChord, Chord* endChord);
+    void resolveStartEndNotes(Note** startNote, Note** endNote, Chord* startChord, Chord* endChord, bool isTabStaff);
 
     std::vector<HammerOnPullOffText*> m_hopoText;
 };

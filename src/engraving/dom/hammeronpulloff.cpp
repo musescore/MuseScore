@@ -169,8 +169,10 @@ std::vector<HammerOnPullOffSegment::HopoTextRegion> HammerOnPullOffSegment::comp
             break;
         }
 
-        Note* curNote = curChord->upNote();
-        Note* nextNote = nextChord->upNote();
+        Note* curNote = nullptr;
+        Note* nextNote = nullptr;
+        resolveStartEndNotes(&curNote, &nextNote, curChord, nextChord, isTabStaff);
+
         bool isValid = isTabStaff ? nextNote->string() == curNote->string() : nextNote->pitch() != curNote->pitch();
         bool isHammerOn = isTabStaff ? nextNote->fret() > curNote->fret() : nextNote->pitch() > curNote->pitch();
 
@@ -193,6 +195,43 @@ std::vector<HammerOnPullOffSegment::HopoTextRegion> HammerOnPullOffSegment::comp
     }
 
     return result;
+}
+
+void HammerOnPullOffSegment::resolveStartEndNotes(Note** startNote, Note** endNote, Chord* startChord, Chord* endChord, bool isTabStaff)
+{
+    // In future we need the ability to draw slurs between individual notes. For now, slurs are
+    // attached to chords so we just try to guess which notes to consider for this HOPO
+
+    const std::vector<Note*>& startNotes = startChord->notes();
+    const std::vector<Note*>& endNotes = endChord->notes();
+    int startNotesSize = static_cast<int>(startNotes.size());
+    int endNotesSize = static_cast<int>(endNotes.size());
+    int largerNoteCount = startNotesSize > endNotesSize ? startNotesSize : endNotesSize;
+
+    for (int i = largerNoteCount - 1; i >= 0; --i) {
+        int startNoteIdx = std::min(i, startNotesSize - 1);
+        int endNoteIdx = std::min(i, endNotesSize - 1);
+        Note* sNote = startNotes[startNoteIdx];
+        Note* eNote = endNotes[endNoteIdx];
+        if (sNote->tieFor() && sNote->tieFor() == eNote->tieBack()) {
+            continue;
+        }
+
+        bool usablePair = sNote->pitch() != eNote->pitch();
+        if (isTabStaff) {
+            usablePair &= sNote->string() == eNote->string();
+        }
+
+        if (usablePair) {
+            *startNote = sNote;
+            *endNote = eNote;
+            return;
+        }
+    }
+
+    // Couldn't find a usable pair
+    *startNote = startChord->upNote();
+    *endNote = endChord->upNote();
 }
 
 bool HammerOnPullOffSegment::isUserModified() const
