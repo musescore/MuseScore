@@ -1090,6 +1090,9 @@ muse::ByteArray Selection::symbolListMimeData() const
         case ElementType::PEDAL:
             seg = toSpanner(e)->startSegment();
             break;
+        case ElementType::CLEF:
+            seg = toClef(e)->segment();
+            break;
         default:
             // Elements of other types are ignored. To allow copying them,
             // add support for them here and in `Score::pasteSymbols`.
