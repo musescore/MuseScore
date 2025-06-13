@@ -41,7 +41,9 @@ void PercussionUtilities::readDrumset(const muse::ByteArray& drumMapping, Drumse
         if (reader.name() == "museScore") {
             while (reader.readNextStartElement()) {
                 if (reader.name() == "Drum") {
-                    drumset.load(reader);
+                    drumset.loadDrum(reader);
+                } else if (reader.name() == "percussionPanelColumns") {
+                    drumset.setPercussionPanelColumns(reader.readInt());
                 } else {
                     reader.unknown();
                 }

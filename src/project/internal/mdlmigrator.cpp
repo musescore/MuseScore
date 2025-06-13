@@ -110,7 +110,9 @@ bool MdlMigrator::loadDrumset(Drumset* drumset, path_t path)
             }
             while (xml.readNextStartElement()) {
                 if (xml.name() == "Drum") {
-                    drumset->load(xml);
+                    drumset->loadDrum(xml);
+                } else if (xml.name() == "percussionPanelColumns") {
+                    drumset->setPercussionPanelColumns(xml.readInt());
                 } else {
                     xml.unknown();
                 }

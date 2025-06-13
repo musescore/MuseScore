@@ -233,6 +233,7 @@ Item {
 
                 width: cellWidth * numColumns
                 Layout.fillHeight: true
+                Layout.preferredWidth: width
 
                 interactive: false
 
