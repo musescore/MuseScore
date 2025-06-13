@@ -180,7 +180,7 @@ bool AbstractScoresModel::isValueEmpty(const QVariant& value)
 
     if (value.typeId() == QMetaType::QString) {
         QString str = value.toString().trimmed();
-        return str.isEmpty() || str == "-";
+        return str.isEmpty() || str == "-" || str == "Composer / arranger";
     }
 
     return false;
