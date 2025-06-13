@@ -65,6 +65,8 @@ private:
     Note* addNoteToScore(const muse::midi::Event& e);
     Note* makePreviewNote(const muse::midi::Event& e);
 
+    void releasePreviewNotes(const std::vector<int>& pitches);
+
     void enableMetronome();
     void disableMetronome();
 
@@ -96,6 +98,8 @@ private:
 
     bool m_shouldDisableMetronome = false;
     bool m_holdingNotes = false;
+
+    std::map<int, const Note*> m_playingPreviewNotes;
 };
 }
 

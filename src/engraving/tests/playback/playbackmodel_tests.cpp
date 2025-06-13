@@ -1130,7 +1130,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents,
-                                                                         const PlaybackParamList&) {
+                                                                         const PlaybackParamList&, bool flushOffstream) {
         EXPECT_EQ(triggeredEvents.size(), 1);
 
         const PlaybackEventList& eventList = triggeredEvents.at(firstNoteTimestamp);
@@ -1142,10 +1142,11 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
         EXPECT_TRUE(noteEvent.arrangementCtx().actualTimestamp == expectedEvent.arrangementCtx().actualTimestamp);
         EXPECT_FALSE(noteEvent.expressionCtx() == expectedEvent.expressionCtx());
         EXPECT_TRUE(noteEvent.pitchCtx() == expectedEvent.pitchCtx());
+        EXPECT_TRUE(flushOffstream);
     });
 
     // [WHEN] User has clicked on the first note
-    model.triggerEventsForItems({ firstNote });
+    model.triggerEventsForItems({ firstNote }, QUARTER_NOTE_DURATION, true /*flushSounds*/);
 }
 
 /**
@@ -1194,7 +1195,8 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     const PlaybackEventList& expectedEvents = result.originEvents.at(thirdChordTimestamp);
 
     // [THEN] Triggered events map will match our expectations
-    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents, const PlaybackParamList&) {
+    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents, const PlaybackParamList&,
+                                                      bool flushOffstream) {
         EXPECT_EQ(triggeredEvents.size(), 1);
 
         const PlaybackEventList& actualEvents = triggeredEvents.at(0);
@@ -1207,11 +1209,12 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
             EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == 0);
             EXPECT_FALSE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());
             EXPECT_TRUE(actualNoteEvent.pitchCtx() == expectedNoteEvent.pitchCtx());
+            EXPECT_TRUE(flushOffstream);
         }
     });
 
     // [WHEN] User has clicked on the first note
-    model.triggerEventsForItems({ thirdChord });
+    model.triggerEventsForItems({ thirdChord }, QUARTER_NOTE_DURATION, true /*flushSounds*/);
 }
 
 /**

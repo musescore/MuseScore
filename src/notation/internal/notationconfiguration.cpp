@@ -390,7 +390,6 @@ void NotationConfiguration::init()
 
     mu::engraving::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
     mu::engraving::MScore::warnGuitarBends = warnGuitarBends();
-    mu::engraving::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
 
     mu::engraving::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
     mu::engraving::MScore::setVRaster(DEFAULT_GRID_SIZE_SPATIUM);
@@ -1030,7 +1029,6 @@ int NotationConfiguration::notePlayDurationMilliseconds() const
 
 void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
 {
-    mu::engraving::MScore::defaultPlayDuration = durationMs;
     settings()->setSharedValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
 }
 

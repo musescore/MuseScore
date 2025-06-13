@@ -63,7 +63,7 @@ const muse::mpe::PlaybackData& NotationPlaybackStub::trackPlaybackData(const eng
     return dummy;
 }
 
-void NotationPlaybackStub::triggerEventsForItems(const std::vector<const EngravingItem*>&)
+void NotationPlaybackStub::triggerEventsForItems(const std::vector<const EngravingItem*>&, muse::mpe::duration_t, bool)
 {
 }
 

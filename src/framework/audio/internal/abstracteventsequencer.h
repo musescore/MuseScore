@@ -69,7 +69,13 @@ public:
             }
         });
 
-        m_playbackData.offStream.onReceive(this, [this](const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) {
+        m_playbackData.offStream.onReceive(this, [this](const mpe::PlaybackEventsMap& events,
+                                                        const mpe::PlaybackParamList& params,
+                                                        bool flush) {
+            if (flush) {
+                flushOffstream();
+            }
+
             updateOffStreamEvents(events, params);
         });
 
