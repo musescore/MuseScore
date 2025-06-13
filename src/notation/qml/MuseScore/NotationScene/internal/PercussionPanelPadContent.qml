@@ -38,6 +38,8 @@ Column {
 
     property bool padSwapActive: false
 
+    property real cornerRadius: 0
+
     function openContextMenu(pos) {
         if (!root.padModel) {
             return
@@ -95,11 +97,14 @@ Column {
             }
         }
 
-        Rectangle {
+        RoundedRectangle {
             id: padNameBackground
 
             visible: !root.useNotationPreview
+
             anchors.fill: parent
+            topLeftRadius: root.cornerRadius
+            topRightRadius: root.cornerRadius
 
             color: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.buttonOpacityNormal)
         }
@@ -169,10 +174,12 @@ Column {
         color: root.useNotationPreview ? ui.theme.strokeColor : ui.theme.accentColor
     }
 
-    Rectangle {
+    RoundedRectangle {
         id: footerArea
 
         width: parent.width
+        bottomLeftRadius: root.cornerRadius
+        bottomRightRadius: root.cornerRadius
 
         color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityNormal)
 
