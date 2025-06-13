@@ -13,6 +13,7 @@
 #include "gpdrumsetresolver.h"
 #include "gpmasterbar.h"
 #include "gpmastertracks.h"
+#include "dom/stringdata.h"
 
 namespace mu::iex::guitarpro {
 class GPScore;
@@ -148,6 +149,7 @@ private:
     void fillTuplet();
     bool tupletParamsChanged(const GPBeat* beat, const ChordRest* cr);
     void setBeamMode(const GPBeat* beat, ChordRest* cr, Measure* measure, Fraction tick);
+    void addTuning();
 
     mu::engraving::Score* _score;
     std::unique_ptr<GPDomModel> _gpDom;
@@ -205,5 +207,6 @@ private:
     std::unique_ptr<GPDrumSetResolver> _drumResolver;
     std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
     std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
+    std::unordered_map<uint64_t, mu::engraving::StringData> m_stringDatas;
 };
 }
