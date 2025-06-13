@@ -12157,7 +12157,7 @@
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Min. distance' value</string>
+                    <string>Reset 'Min. gap between syllables/words' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -12180,7 +12180,7 @@
                  <item row="3" column="4">
                   <widget class="QLabel" name="label_minDistance">
                    <property name="text">
-                    <string>Min. space between lyrics:</string>
+                    <string>Min. gap between syllables/words:</string>
                    </property>
                    <property name="buddy">
                     <cstring>lyricsMinDistance</cstring>
