@@ -313,6 +313,7 @@ public:
     void  setFretUseTextStyle(bool val) { m_fretUseTextStyle = val; }
     void  setFretTextStyle(const TextStyleType& val);
     void  setFretPresetIdx(size_t idx);
+    void  setFretPreset(const String& str);
 
     bool isTabStaff() const { return m_group == StaffGroup::TAB; }
     bool isDrumStaff() const { return m_group == StaffGroup::PERCUSSION; }

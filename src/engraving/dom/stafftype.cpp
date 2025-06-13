@@ -117,7 +117,7 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
     if (fretFontUseTextStyle) {
         setFretTextStyle(TextStyleType::TAB_FRET_NUMBER);
     } else {
-        setFretFontName(fretFontName);
+        setFretPreset(fretFontName);
         setFretFontSize(fretFontSize);
         setFretFontUserY(fretFontUserY);
     }
@@ -391,6 +391,23 @@ void StaffType::setFretPresetIdx(size_t idx)
     setFretFontName(m_fretFontInfo.family);
     setFretFontSize(m_fretFontInfo.defSize);
     setFretFontUserY(m_fretFontInfo.defYOffset);
+}
+
+void StaffType::setFretPreset(const String& name)
+{
+    String locName = name;
+    // convert old names for two built-in fonts which have changed of name
+    if (name == "MuseScore Tab Late Renaiss") {
+        locName = u"MuseScore Phalèse";
+    }
+    size_t idx = 0;
+    for (idx = 0; idx < m_fretFonts.size(); idx++) {
+        if (m_fretFonts[idx].displayName == locName) {
+            break;
+        }
+    }
+
+    setFretPresetIdx(idx);
 }
 
 //---------------------------------------------------------
