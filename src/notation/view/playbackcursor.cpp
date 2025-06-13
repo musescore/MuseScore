@@ -863,7 +863,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     }
                                     arpeggio_duration_ticks /= 2;
                                     if (isFermataTag) {
-                                       arpeggio_duration_ticks /= 10;
+                                       arpeggio_duration_ticks /= 8;
                                     }
                                 }
                                 _arpeggio_duration_check = true;
@@ -922,7 +922,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                                     }
                                                     arpeggio_duration_ticks /= 2;
                                                     if (isFermataTag) {
-                                                        arpeggio_duration_ticks /= 10;
+                                                        arpeggio_duration_ticks /= 8;
                                                     }
                                                 }
                                                 for (Note* note_ : _note->chord()->notes()) {
