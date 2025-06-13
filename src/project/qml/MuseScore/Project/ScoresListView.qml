@@ -84,7 +84,7 @@ Item {
                 visible: sortable && root.model && root.model.currentSortKey === sortKey
                 iconCode: (root.model && root.model.sortOrder === Qt.AscendingOrder) ?  IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_UP
 
-                font.pixelSize: 12
+                font.pixelSize: 16
                 anchors.verticalCenter: parent.verticalCenter
 
                 opacity: headerMouseArea.containsMouse ? 0.5 : 1.0
