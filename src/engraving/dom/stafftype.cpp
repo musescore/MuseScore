@@ -67,7 +67,7 @@ StaffType::StaffType()
     // set reasonable defaults for type-specific members */
     m_symRepeat = TablatureSymbolRepeat::NEVER;
     setDurationFontName(m_durationFonts[0].displayName);
-    setFretFontName(m_fretFonts[0].displayName);
+    setFretPresetIdx(0);
 }
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
@@ -404,10 +404,11 @@ void StaffType::setFretPresetIdx(size_t idx)
         m_fretFontInfo = m_fretFonts[idx];
     }
 
-    setFretFontName(m_fretFontInfo.family);
+    m_fretFont.setFamily(m_fretFontInfo.family, Font::Type::Tablature);
     setFretFontSize(m_fretFontInfo.defSize);
     setFretFontUserY(m_fretFontInfo.defYOffset);
     setFretColor(Color::BLACK);
+    setFretMetrics();
 }
 
 void StaffType::setFretPreset(const String& name)
@@ -501,7 +502,7 @@ void StaffType::setFretMetrics()
 }
 
 //---------------------------------------------------------
-//   setDurationFontName / setFretFontName
+//   setDurationFontName
 //---------------------------------------------------------
 
 void StaffType::setDurationFontName(const String& name)
@@ -518,18 +519,6 @@ void StaffType::setDurationFontName(const String& name)
     m_durationFont.setFamily(m_durationFonts[idx].family, Font::Type::Tablature);
     m_durationFontIdx = idx;
     setDurationMetrics();
-}
-
-void StaffType::setFretFontName(const String& name)
-{
-    String locName = name;
-    // // convert old names for two built-in fonts which have changed of name
-    // if (name == "MuseScore Tab Late Renaiss") {
-    //     locName = u"MuseScore Phalèse";
-    // }
-
-    m_fretFont.setFamily(m_fretFontInfo.family, Font::Type::Tablature);
-    setFretMetrics();
 }
 
 //---------------------------------------------------------

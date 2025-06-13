@@ -295,7 +295,6 @@ public:
     void  setDurationFontName(const String&);
     void  setDurationFontSize(double);
     void  setDurationFontUserY(double val) { m_durationFontUserY = val; }
-    void  setFretFontName(const String&);
     void  setFretFontSize(double);
     void  setFretFontUserY(double val) { m_fretFontUserY = val; }
     void  setGenDurations(bool val) { m_genDurations = val; }

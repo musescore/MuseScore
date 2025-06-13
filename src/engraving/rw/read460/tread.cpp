@@ -3693,8 +3693,9 @@ void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
+void TRead::read(StaffType* t, XmlReader& e, ReadContext& ctx)
 {
+    t->setScore(ctx.score());
     t->setGroup(TConv::fromXml(e.asciiAttribute("group"), StaffGroup::STANDARD));
 
     if (t->group() == StaffGroup::TAB) {
