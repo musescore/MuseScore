@@ -382,10 +382,10 @@ public:
     void cmdAddGrace(NoteType, int);
     void cmdResetNoteAndRestGroupings();
     void cmdResetAllPositions(bool undoable = true);
-    void cmdDoubleDuration() { cmdIncDecDuration(-1, false); }
-    void cmdHalfDuration() { cmdIncDecDuration(1, false); }
-    void cmdIncDurationDotted() { cmdIncDecDuration(-1, true); }
-    void cmdDecDurationDotted() { cmdIncDecDuration(1, true); }
+    void cmdDoubleDuration() { cmdIncDecDuration(1, false); }
+    void cmdHalfDuration() { cmdIncDecDuration(-1, false); }
+    void cmdIncDurationDotted() { cmdIncDecDuration(1, true); }
+    void cmdDecDurationDotted() { cmdIncDecDuration(-1, true); }
     void cmdIncDecDuration(int nSteps, bool stepDotted = false);
     void cmdToggleLayoutBreak(LayoutBreakType);
     void cmdMoveMeasureToPrevSystem();
