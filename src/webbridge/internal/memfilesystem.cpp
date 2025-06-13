@@ -224,6 +224,5 @@ muse::DateTime MemFileSystem::lastModified(const muse::io::path_t& /*path*/) con
 
 muse::Ret MemFileSystem::isWritable(const muse::io::path_t& /*path*/) const
 {
-    NOT_IMPLEMENTED;
-    return muse::Ret();
+    return muse::make_ok();
 }

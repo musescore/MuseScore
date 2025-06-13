@@ -54,6 +54,7 @@ void AppMenuModel::load()
     AbstractMenuModel::load();
 
     MenuItemList items {
+        makeFileMenu(),
         makeEditMenu(),
         makeViewMenu(),
         makeAddMenu(),
@@ -108,6 +109,15 @@ MenuItem* AppMenuModel::makeMenuItem(const ActionCode& actionCode, MenuItemRole 
     MenuItem* item = makeMenuItem(actionCode);
     item->setRole(menuRole);
     return item;
+}
+
+muse::uicomponents::MenuItem* AppMenuModel::makeFileMenu()
+{
+    MenuItemList fileItems {
+        makeMenuItem("file-save")
+    };
+
+    return makeMenu(TranslatableString("appshell/menu/file", "&File"), fileItems, "menu-file");
 }
 
 MenuItem* AppMenuModel::makeEditMenu()

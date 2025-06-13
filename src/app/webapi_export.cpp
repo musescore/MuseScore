@@ -27,6 +27,6 @@
 using namespace mu::webbridge;
 
 extern "C" {
-void onclickTest1(int num) { WebApi::onclickTest1(num); }
-void load(const void* source, unsigned int len) { WebApi::load(source, len); }
+void onclickTest1(int num) { WebApi::instance()->onclickTest1(num); }
+void load(const void* source, unsigned int len) { WebApi::instance()->load(source, len); }
 }
