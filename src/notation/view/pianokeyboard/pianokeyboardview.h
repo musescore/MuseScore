@@ -97,7 +97,6 @@ private:
     std::optional<piano_key_t> keyAt(const QPointF& position) const;
 
     void shiftCheckRects();
-    bool preRectUnchanged();
 
     static constexpr piano_key_t MIN_KEY = 0;
     static constexpr piano_key_t MAX_NUM_KEYS = 128;
