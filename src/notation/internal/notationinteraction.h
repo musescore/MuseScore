@@ -94,6 +94,73 @@ public:
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
     muse::async::Notification selectionChanged() const override;
+    muse::async::Notification playbackNotesChanged() const override;
+    std::vector<Note*> playbackNotes() const override;
+    std::map<const Note*, bool> playbackNotesHitTsMap() const override;
+    void clearPlaybackNotes() override;
+    void addPlaybackNote(Note*, int, bool) override;
+    int noteOttavaType(const mu::engraving::Note* note) override;
+
+    void addGlissandoNote(mu::engraving::Note* note, int ticks, int duration_ticks, int ottavaType) override;
+    void addGlissandoEndNote(mu::engraving::Note* note, int ottavaType) override;
+    int glissandoNoteTicks() const override;
+    int glissandoNoteDurationticks() const override;
+    int glissandoCurrticks() const override;
+    void glissandoEndNotesUpdate() override;
+    muse::async::Notification glissandoEndNotesChanged() override;
+    mu::engraving::Note* glissandoNote() const override;
+    std::vector<mu::engraving::Note*> glissandoEndNotes() const override;
+    void glissandoTick(int ticks) override;
+    muse::async::Notification glissandoTickChanged() override;
+    
+    void addArpeggioNotes(std::vector<mu::engraving::Note*>, int, int, int) override;
+    void updateArpeggioDuration(int) override;
+    int arpeggioNoteTicks() const override;
+    int arpeggioNoteDurationticks() const override;
+    int arpeggioCurrticks() const override;
+    muse::async::Notification arpeggioNotesChanged() override;
+    std::vector<mu::engraving::Note*> arpeggioNotes() const override;
+    bool arpeggioIsDown() const override;
+    void arpeggioNotesUpdate(bool) override;
+    void arpeggioTick(int) override;
+    muse::async::Notification arpeggioTickChanged() override;
+
+    void addTrillNote(mu::engraving::Note*, int, int, int, int, int, bool) override;
+    void addTrillNote1(mu::engraving::Note*, int, int, int, int, int, bool) override;
+    int trillNoteTicks() const override;
+    int trillNoteTicks1() const override;
+    bool trillNoteHasTie() const override;
+    bool trillNote1HasTie() const override;
+    int trillNoteDurationticks() const override;
+    int trillNoteDurationticks1() const override;
+    int trillTrillNoteDurationticks() const override;
+    int trillTrillNoteDurationticks1() const override;
+    int trillNoteTremolotype() const override;
+    int trillNoteTremolotype1() const override;
+    int trillCurrticks() const override;
+    int trillCurrticks1() const override;
+    void trillNoteUpdate() override;
+    void trillNoteUpdate1() override;
+    mu::engraving::Note *trillNote() const override;
+    mu::engraving::Note *trillNote1() const override;
+    bool trillTick(int) override;
+    bool trillTick1(int) override;
+    muse::async::Notification trillNoteChanged() override;
+    muse::async::Notification trillNoteChanged1() override;
+    muse::async::Notification trillTickChanged() override;
+    muse::async::Notification trillTickChanged1() override;
+    bool islastMeasure() const override;
+    void lastMeasure(bool) override;
+    muse::async::Notification lastMeasureChanged() override;
+
+    void notifyClefKeySigsKeysChanged() override;
+    muse::async::Notification clefKeySigsKeysChanged() const override;
+    std::set<uint> clefKeySigsKeys() const override;
+    void addClefKeySigsKeysSet(std::set<uint>) override;
+    void notifyClefKeySigsKeysChange() override;
+    void playingChang(bool is_playing) override;
+    bool isPlaying() const override;
+    void notifyPianoKeyboardNotesChanged() override;
     void selectTopOrBottomOfChord(MoveDirection d) override;
     void moveSegmentSelection(MoveDirection d) override;
 
@@ -362,6 +429,7 @@ private:
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
     void notifyAboutSelectionChangedIfNeed();
+    void notifyAboutPianoKeyboardNotesChanged();
     void notifyAboutNotationChanged();
     void notifyAboutTextEditingStarted();
     void notifyAboutTextEditingChanged();
@@ -502,7 +570,54 @@ private:
     muse::async::Notification m_shadowNoteChanged;
 
     std::shared_ptr<NotationSelection> m_selection = nullptr;
+    std::shared_ptr<NotationSelection> m_playback_selection = nullptr;
     muse::async::Notification m_selectionChanged;
+
+    muse::async::Notification m_playbackNotesChanged;
+    std::vector<Note*> m_playback_notes;
+    std::map<const Note*, bool> m_playback_notes_hit_ts;
+    std::map<const Note*, int> m_ottava_map;
+    
+    Note* glissando_note = nullptr;
+    int glissando_ticks = 0;
+    int glissando_duration_ticks = 0;
+    std::vector<Note*> glissando_endnotes;
+    int glissando_curr_ticks = 0;
+    muse::async::Notification m_glissandoEndNotesChanged;
+    muse::async::Notification m_glissandoTickChanged;
+
+    int arpeggio_ticks = 0;
+    int arpeggio_duration_ticks = 0;
+    std::vector<Note*> arpeggio_notes;
+    bool arpeggio_is_down = false;
+    int arpeggio_curr_ticks = 0;
+    muse::async::Notification m_arpeggioNotesChanged;
+    muse::async::Notification m_arpeggioTickChanged;
+
+    Note* trill_note = nullptr;
+    bool till_note_hastie = false;
+    int trill_ticks = 0;
+    int trill_duration_ticks = 0;
+    int trill_trill_duration_ticks = 0;
+    int trill_tremolo_type = 0;
+    int trill_curr_ticks = 0;
+    Note* trill_note1 = nullptr;
+    bool till_note1_hastie = false;
+    int trill_ticks1 = 0;
+    int trill_duration_ticks1 = 0;
+    int trill_trill_duration_ticks1 = 0;
+    int trill_tremolo_type1 = 0;
+    int trill_curr_ticks1 = 0;
+    muse::async::Notification m_trillNoteChanged;
+    muse::async::Notification m_trillNoteChanged1;
+    muse::async::Notification m_trillTickChanged;
+    muse::async::Notification m_trillTickChanged1;
+    bool m_islastMeasure = false;
+    muse::async::Notification m_lastMeasureChanged;
+
+    muse::async::Notification m_clefKeySigsKeysChanged;
+    std::set<uint> m_clefKeySigsKeys;
+    bool m_isplaying = false;
 
     std::shared_ptr<NotationSelectionFilter> m_selectionFilter = nullptr;
 
