@@ -519,8 +519,8 @@ protected:
     void shiftInitOffset(EditData& ed, const PointF& offsetShift);
 
     void insertSym(EditData& ed, SymId id);
-    void prepareFormat(const String& token, TextCursor& cursor);
-    bool prepareFormat(const String& token, CharFormat& format);
+    void prepareFormat(const String& token, TextCursor& cursor, String& prevFontFace, double& prevFontSize);
+    bool prepareFormat(const String& token, CharFormat& format, String& prevFontFace, double& prevFontSize) const;
 
     virtual void commitText();
 
