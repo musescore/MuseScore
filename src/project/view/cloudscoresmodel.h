@@ -64,6 +64,8 @@ public:
     int desiredRowCount() const;
     void setDesiredRowCount(int count);
 
+    Q_INVOKABLE void sortBy(const QString& key);
+
 signals:
     void stateChanged();
     void hasMoreChanged();
