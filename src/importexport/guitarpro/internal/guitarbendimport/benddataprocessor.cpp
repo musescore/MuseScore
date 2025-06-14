@@ -45,6 +45,7 @@ static void createSplitDurationBendsForChord(const BendDataContext& bendDataCtx,
 static void removeReduntantChords(const BendDataContext& bendDataCtx, const mu::engraving::Score* score);
 #else
 static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
+static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score);
 #endif
 
 BendDataProcessor::BendDataProcessor(mu::engraving::Score* score)
@@ -62,6 +63,7 @@ void BendDataProcessor::processBends(const BendDataContext& bendDataCtx)
     removeReduntantChords(bendDataCtx, m_score);
 #else
     createGraceAfterBends(bendDataCtx, m_score);
+    createTiedNotesBends(bendDataCtx, m_score);
 #endif
 }
 
@@ -233,6 +235,59 @@ static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engrav
                     bend->setEndTimeFactor(graceInfo.endFactor);
 
                     startNote = graceNote;
+                }
+            }
+        }
+    }
+}
+
+static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engraving::Score* score)
+{
+    for (const auto& [track, trackInfo] : bendDataCtx.tiedNotesBendsData) {
+        for (const auto& [tick, tickInfo] : trackInfo) {
+            Chord* chord = getLocatedChord(score, tick, track);
+            if (!chord) {
+                continue;
+            }
+
+            Chord* nextChord = chord->nextTiedChord();
+            if (!nextChord) {
+                continue;
+            }
+
+            for (size_t noteIndex = 0; noteIndex < chord->notes().size(); noteIndex++) {
+                if (!muse::contains(tickInfo, noteIndex)) {
+                    continue;
+                }
+
+                const auto& noteInfo = tickInfo.at(noteIndex);
+                Note* startNote = chord->notes()[noteIndex];
+                Note* endNote = nextChord->notes()[noteIndex];
+
+                GuitarBend* bend = score->addGuitarBend(GuitarBendType::BEND, startNote, endNote);
+                QuarterOffset quarterOff = noteInfo.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+                bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + noteInfo.quarterTones / 2, quarterOff);
+                bend->setStartTimeFactor(noteInfo.startFactor);
+                bend->setEndTimeFactor(noteInfo.endFactor);
+                endNote->setHeadHasParentheses(true);
+
+                Tie* tie = startNote->tieFor();
+                if (tie) {
+                    startNote->remove(tie);
+                }
+
+                tie = endNote->tieFor();
+                while (tie) {
+                    Note* nextNote = tie->endNote();
+                    IF_ASSERT_FAILED(nextNote) {
+                        LOGE() << "bend import error: not found tied note for track " << track << ", tick " << tick.ticks();
+                        break;
+                    }
+
+                    nextNote->setPitch(endNote->pitch());
+                    nextNote->setTpcFromPitch();
+                    nextNote->setHeadHasParentheses(true);
+                    tie = nextNote->tieFor();
                 }
             }
         }

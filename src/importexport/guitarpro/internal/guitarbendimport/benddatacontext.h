@@ -44,18 +44,19 @@ struct BendDataContext {
     using bend_data_map_t       = std::map<size_t /* idx in chord */, BendNoteData>;
     using grace_bend_data_map_t = std::map<size_t /* idx in chord */, std::vector<BendNoteData> >; // each note can have multiple grace notes connected
 
+#ifdef SPLIT_CHORD_DURATIONS
     struct BendChordData {
         mu::engraving::Fraction startTick;
         bend_data_map_t noteDataByIdx;
     };
 
-#ifdef SPLIT_CHORD_DURATIONS
     std::unordered_map<mu::engraving::track_idx_t, std::map<int, BendChordData> > bendDataByEndTick;
     std::unordered_map<mu::engraving::track_idx_t, std::map<int, std::vector<mu::engraving::Fraction> > > bendChordDurations;
     std::unordered_map<mu::engraving::track_idx_t, std::set<mu::engraving::Fraction> > reduntantChordTicks;
     std::unordered_map<mu::engraving::track_idx_t, std::set<mu::engraving::Fraction> > chordTicksForTieBack;
 #else
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, grace_bend_data_map_t > > graceAfterBendData;
+    std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, bend_data_map_t > > tiedNotesBendsData;
 #endif
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, bend_data_map_t > > prebendData;
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, bend_data_map_t > > slightBendData;
