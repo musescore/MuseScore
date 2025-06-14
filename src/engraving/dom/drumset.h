@@ -113,6 +113,9 @@ public:
     int panelRow(int pitch) const { return m_drums[pitch].panelRow; }
     int panelColumn(int pitch) const { return m_drums[pitch].panelColumn; }
 
+    size_t percussionPanelColumns() const { return m_percussionPanelColumns; }
+    void setPercussionPanelColumns(size_t columns) { m_percussionPanelColumns = columns; }
+
     int pitchForShortcut(const String& shortcut) const;
 
     // defaultPitchForLine tries to find the pitch of a normal notehead at "line". If a normal notehead can't be found it will
@@ -120,8 +123,8 @@ public:
     int defaultPitchForLine(int line) const;
 
     void save(XmlWriter&) const;
-    void load(XmlReader&);
-    bool readProperties(XmlReader&, int);
+    void loadDrum(XmlReader&);
+    bool readDrumProperties(XmlReader&, int);
     void clear();
     int nextPitch(int) const;
     int prevPitch(int) const;
@@ -140,7 +143,7 @@ public:
             }
             return false;
         }
-        return true;
+        return m_percussionPanelColumns == other.m_percussionPanelColumns;
     }
 
     bool operator!=(const Drumset& other) const
@@ -150,6 +153,7 @@ public:
 
 private:
     DrumInstrument m_drums[DRUM_INSTRUMENTS];
+    size_t m_percussionPanelColumns = 8;
 };
 
 extern Drumset* smDrumset;

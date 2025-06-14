@@ -509,13 +509,19 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "drumset") {
             useDrumset = e.readInt();
         } else if (tag == "Drum") {
-            // if we see one of this tags, a custom drumset will
-            // be created
-            if (drumset == 0) {
+            // if we see one of these tags, a custom drumset will be created
+            if (!drumset) {
                 drumset = new Drumset(*smDrumset);
                 drumset->clear();
             }
-            drumset->load(e);
+            drumset->loadDrum(e);
+        } else if (tag == "percussionPanelColumns") {
+            // if we see one of these tags, a custom drumset will be created
+            if (!drumset) {
+                drumset = new Drumset(*smDrumset);
+                drumset->clear();
+            }
+            drumset->setPercussionPanelColumns(e.readInt());
         } else if (tag == "MidiAction") {
             NamedEventList a;
             read400::TRead::read(&a, e);
