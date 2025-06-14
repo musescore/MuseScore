@@ -473,6 +473,11 @@ void TextCursor::setFormat(FormatId id, FormatValue val)
 
 bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode mode, int count)
 {
+    auto isWordBoundaryCharacter = [this](bool lettersOrDigits) -> bool {
+        Char c = currentCharacter();
+        return c.isSpace() || lettersOrDigits != (c.isLetter() || c.isDigit());
+    };
+
     for (int i = 0; i < count; i++) {
         switch (op) {
         case TextCursor::MoveOperation::Left:
@@ -563,26 +568,29 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
 
             break;
 
-        case TextCursor::MoveOperation::WordLeft:
+        case TextCursor::MoveOperation::WordLeft: {
             if (m_column > 0) {
                 --m_column;
                 while (m_column > 0 && currentCharacter().isSpace()) {
                     --m_column;
                 }
-                while (m_column > 0 && !currentCharacter().isSpace()) {
+                bool isWordOrDigit = currentCharacter().isLetter() || currentCharacter().isDigit();
+                while (m_column > 0 && !isWordBoundaryCharacter(isWordOrDigit)) {
                     --m_column;
                 }
-                if (currentCharacter().isSpace()) {
+                if (isWordBoundaryCharacter(isWordOrDigit)) {
                     ++m_column;
                 }
             }
-            break;
+        }
+        break;
 
         case TextCursor::MoveOperation::NextWord: {
             size_t cols =  columns();
             if (m_column < cols) {
                 ++m_column;
-                while (m_column < cols && !currentCharacter().isSpace()) {
+                bool isWordOrDigit = currentCharacter().isLetter() || currentCharacter().isDigit();
+                while (m_column < cols && !isWordBoundaryCharacter(isWordOrDigit)) {
                     ++m_column;
                 }
                 while (m_column < cols && currentCharacter().isSpace()) {
@@ -622,7 +630,9 @@ void TextCursor::selectWord()
     //handle double-clicking inside a word
     size_t startPosition = m_column;
 
-    while (m_column > 0 && currentCharacter().isSpace() == selectSpaces) {
+    bool parseLetters = (currentCharacter().isLetter() || currentCharacter().isDigit());
+    while (m_column > 0 && currentCharacter().isSpace() == selectSpaces
+           && parseLetters == (currentCharacter().isLetter() || currentCharacter().isDigit())) {
         --m_column;
     }
 
@@ -633,7 +643,8 @@ void TextCursor::selectWord()
     m_selectColumn = m_column;
 
     m_column = startPosition;
-    while (m_column < curLine().columns() && currentCharacter().isSpace() == selectSpaces) {
+    while (m_column < curLine().columns() && currentCharacter().isSpace() == selectSpaces
+           && parseLetters == (currentCharacter().isLetter() || currentCharacter().isDigit())) {
         ++m_column;
     }
 
