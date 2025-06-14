@@ -170,9 +170,6 @@ public:
     static engraving::BeamMode breaksecFromMEI(int breaksec, bool& warning);
     static int breaksecToMEI(engraving::BeamMode beamMode);
 
-    static BracketStruct bracketFromMEI(const libmei::StaffGrp& meiStaffGrp);
-    static libmei::StaffGrp bracketToMEI(const engraving::BracketType, int barLineSpan);
-
     static void breathFromMEI(engraving::Breath* breath, const libmei::Breath& meiBreath, bool& warning);
     static libmei::Breath breathToMEI(const engraving::Breath* breath);
 
@@ -297,6 +294,9 @@ public:
     static StaffStruct staffFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
     static libmei::StaffDef staffToMEI(const engraving::Staff* staff);
 
+    static BracketStruct staffGrpFromMEI(const libmei::StaffGrp& meiStaffGrp);
+    static libmei::StaffGrp staffGrpToMEI(const engraving::BracketType, int barLineSpan);
+
     static void staffIdentToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
 
     static std::pair<engraving::DirectionV, bool> stemFromMEI(const libmei::AttStems& meiStemsAtt, bool& warning);
@@ -307,6 +307,9 @@ public:
 
     static void sylFromMEI(engraving::Lyrics* lyrics, const libmei::Syl& meiSyl, ElisionType elision, bool& warning);
     static libmei::Syl sylToMEI(const engraving::Lyrics* lyrics, ElisionType elision);
+
+    static engraving::BracketType symbolFromMEI(const libmei::staffGroupingSym_SYMBOL meiGrpSym);
+    static libmei::staffGroupingSym_SYMBOL symbolToMEI(const engraving::BracketType bracket);
 
     static void tempoFromMEI(engraving::TempoText* tempo, const muse::StringList& meiLines, const libmei::Tempo& meiTempo, bool& warning);
     static libmei::Tempo tempoToMEI(const engraving::TempoText* tempoText, muse::StringList& meiLines);
