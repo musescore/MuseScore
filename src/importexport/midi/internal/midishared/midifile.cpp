@@ -22,6 +22,9 @@
 
 #include "midifile.h"
 
+#include "modularity/ioc.h"
+#include "importexport/midi/imidiconfiguration.h"
+
 #include "containers.h"
 
 #include "log.h"
@@ -676,8 +679,11 @@ bool MidiFile::readEvent(MidiEvent* event)
 
 void MidiTrack::setOutChannel(int n)
 {
+    auto conf = muse::modularity::globalIoc()->resolve<mu::iex::midi::IMidiImportExportConfiguration>("iex_midi");
+
     _outChannel = n;
-    if (_outChannel == 9) {
+
+    if (conf->midiChannel9isDrum() && _outChannel == 9) {
         _drumTrack = true;
     }
 }
