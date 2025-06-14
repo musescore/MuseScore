@@ -64,13 +64,40 @@ public:
         BendType type = BendType::NORMAL_BEND;
         int timeOffsetFromStart = 0;
         int pitchOffsetFromStart = 0;
+        bool connectsToNextNote = false;
 
         bool isSlightBend() const;
         bool startsWithPrebend() const;
     };
 
+#ifndef SPLIT_CHORD_DURATIONS
+    struct ChordImportedBendData {
+        mu::engraving::Chord* chord = nullptr;
+        std::map<mu::engraving::Note*, ImportedBendInfo> dataByNote;
+    };
+
+    struct TiedChordsBendDataChunk {
+        std::vector<ChordImportedBendData> chordsData;
+        bool shouldConnectToNext = false;
+    };
+#endif
+
 private:
     std::unordered_map<mu::engraving::track_idx_t,
-                       std::map<int, std::unordered_map<const mu::engraving::Note*, ImportedBendInfo> > > m_bendInfoForNote;
+                       std::map<mu::engraving::Fraction,
+                                std::unordered_map<const mu::engraving::Note*, ImportedBendInfo> > > m_bendInfoForNote;
+
+#ifndef SPLIT_CHORD_DURATIONS
+    std::unordered_map<mu::engraving::track_idx_t,
+                       std::map<mu::engraving::Fraction, BendDataCollector::TiedChordsBendDataChunk> > m_regroupedDataByTiedChords;
+
+    // converts m_bendInfoForNote to m_regroupedData, leaves m_bendInfoForNote empty
+    // m_bendInfoForNote is needed to store separate bend data for each note, while m_regroupedData stores in format, comfortoble for import
+    void regroupBendDataByTiedChords();
+    void fillBendDataContext(BendDataContext& bendDataCtx);
+#else
+    void fillBendsDurations(BendDataContext& bendDataCtx);
+    void fillBendData(BendDataContext& bendDataCtx);
+#endif
 };
 } // mu::iex::guitarpro

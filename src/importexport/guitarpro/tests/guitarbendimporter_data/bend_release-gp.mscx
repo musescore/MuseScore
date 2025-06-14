@@ -403,7 +403,7 @@
                 <GuitarBend>
                   <guitarBendType>2</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.96875</bendEndTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
                   <eid>u_u</eid>
                   <anchor>3</anchor>
                   </GuitarBend>

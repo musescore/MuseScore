@@ -219,7 +219,7 @@
                 <GuitarBend>
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.983333</bendEndTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
                   <eid>a_a</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
@@ -241,7 +241,7 @@
                 <GuitarBend>
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0.766667</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.983333</bendEndTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
                   <eid>c_c</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
