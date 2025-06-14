@@ -143,7 +143,16 @@ class Element : public Ms::PluginAPI::ScoreElement {
        */
       Q_PROPERTY(QRectF bbox READ bbox)
 
-      API_PROPERTY( subtype,                 SUBTYPE                   )
+      /**
+       * Subtype of this element.
+       * \since MuseScore 3.7
+       */
+      Q_PROPERTY(int subtype READ subtype)
+      /**
+       * Unlike the name might suggest, this property no longer returns the subtype and is scarcely used.
+       * Named 'subtype' prior to MuseScore 3.7
+       */
+      API_PROPERTY( subType,                 SUBTYPE                   )
       API_PROPERTY_READ_ONLY_T( bool, selected, SELECTED               )
       API_PROPERTY_READ_ONLY_T( bool, generated, GENERATED             )
       /**
@@ -399,6 +408,8 @@ class Element : public Ms::PluginAPI::ScoreElement {
       Staff* staff() { return wrap<Staff>(element()->staff()); }
 
       QRectF bbox() const;
+
+      int subtype() const { return element()->subtype(); }
 
    public:
       /// \cond MS_INTERNAL
