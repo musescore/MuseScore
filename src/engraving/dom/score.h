@@ -555,7 +555,7 @@ public:
     void reconnectSlurs(MeasureBase* mbStart, MeasureBase* mbLast);
     void cmdDeleteSelection();
     std::vector<ChordRest*> deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
-                                        const SelectionFilter& filter);
+                                        const SelectionFilter& filter, bool selectionContainsMultiNoteChords);
     void cmdFullMeasureRest();
 
     muse::Ret putNote(const PointF&, bool replace, bool insert);
@@ -739,6 +739,12 @@ public:
     void styleChanged() override;
 
     std::vector<EngravingItem*> cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
+
+    // TODO: Not ideal that these are public but it's very convenient for testing purposes (a copy/paste refactor is coming soon)...
+    std::vector<EngravingItem*> cmdPasteSymbol(muse::ByteArray& data, MuseScoreView* view, Fraction scale = Fraction(1, 1));
+    void cmdPasteStaffList(muse::ByteArray& data, Fraction scale = Fraction(1, 1));
+    void cmdPasteSymbolList(muse::ByteArray& data);
+
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void pasteSymbols(XmlReader& e, ChordRest* dst);
 
@@ -1133,7 +1139,7 @@ private:
                                     const SelectionFilter& filter);
 
     void deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track_idx_t track, Segment* startSeg, const Fraction& endTick,
-                            Tuplet* currentTuplet);
+                            Tuplet* currentTuplet, const SelectionFilter& filter, bool selectionContainsMultiNoteChords);
 
     void update(bool resetCmdState, bool layoutAllParts = false);
 

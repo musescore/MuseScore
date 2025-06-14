@@ -51,6 +51,7 @@
 #include "view/notationnavigator.h"
 
 #include "view/selectionfilter/voicesselectionfiltermodel.h"
+#include "view/selectionfilter/notesinchordselectionfiltermodel.h"
 #include "view/selectionfilter/elementsselectionfiltermodel.h"
 
 #include "view/editgridsizedialogmodel.h"
@@ -200,6 +201,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
     qmlRegisterType<ElementsSelectionFilterModel>("MuseScore.NotationScene", 1, 0, "ElementsSelectionFilterModel");
     qmlRegisterType<VoicesSelectionFilterModel>("MuseScore.NotationScene", 1, 0, "VoicesSelectionFilterModel");
+    qmlRegisterType<NotesInChordSelectionFilterModel>("MuseScore.NotationScene", 1, 0, "NotesInChordSelectionFilterModel");
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
     qmlRegisterType<EditPercussionShortcutModel>("MuseScore.NotationScene", 1, 0, "EditPercussionShortcutModel");
     qmlRegisterType<PianoKeyboardView>("MuseScore.NotationScene", 1, 0, "PianoKeyboardView");
