@@ -49,10 +49,13 @@ public:
 
     void setup(const mpe::PlaybackData& playbackData) override;
 
+    void prepareToPlay() override;
+    bool readyToPlay() const override;
+    async::Notification readyToPlayChanged() const override;
+
     void revokePlayingNotes() override;
 
 protected:
-
     virtual void setupSound(const mpe::PlaybackSetupData& setupData) = 0;
     virtual void setupEvents(const mpe::PlaybackData& playbackData) = 0;
     virtual void updateRenderingMode(const RenderMode mode);
@@ -66,6 +69,8 @@ protected:
 
     audio::AudioInputParams m_params;
     async::Channel<audio::AudioInputParams> m_paramsChanges;
+
+    async::Notification m_readyToPlayChanged;
 
     samples_t m_sampleRate = 0;
 };

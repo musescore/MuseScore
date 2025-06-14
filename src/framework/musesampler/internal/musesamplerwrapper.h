@@ -33,6 +33,8 @@
 
 #include "imusesamplertracks.h"
 
+#include "timer.h"
+
 namespace muse::musesampler {
 class MuseSamplerWrapper : public muse::audio::synth::AbstractSynthesizer, public IMuseSamplerTracks,
     public std::enable_shared_from_this<MuseSamplerWrapper>
@@ -51,6 +53,9 @@ public:
     muse::audio::AudioSourceType type() const override;
     void flushSound() override;
     bool isValid() const override;
+
+    void prepareToPlay() override;
+    bool readyToPlay() const override;
 
     void revokePlayingNotes() override;
 
@@ -100,6 +105,8 @@ private:
     bool m_allNotesOffRequested = false;
 
     MuseSamplerSequencer m_sequencer;
+
+    std::unique_ptr<Timer> m_checkReadyToPlayTimer;
 };
 
 using MuseSamplerWrapperPtr = std::shared_ptr<MuseSamplerWrapper>;

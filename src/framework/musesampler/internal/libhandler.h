@@ -100,6 +100,8 @@ struct MuseSamplerLibHandler
     ms_MuseSampler_stop_offline_mode stopOfflineMode = nullptr;
     ms_MuseSampler_process_offline processOffline = nullptr;
 
+    ms_MuseSampler_ready_to_play readyToPlay = nullptr;
+
     ms_MuseSampler_set_position setPosition = nullptr;
     ms_MuseSampler_set_playing setPlaying = nullptr;
     ms_MuseSampler_process process = nullptr;
@@ -167,6 +169,7 @@ public:
         int versionMinor = getVersionMinor();
 
         bool at_least_v_0_100 = (versionMajor == 0 && versionMinor >= 100) || versionMajor > 0;
+        bool at_least_v_0_101 = (versionMajor == 0 && versionMinor >= 101) || versionMajor > 0;
         m_supportsReinit = at_least_v_0_100;
 
         containsInstrument = (ms_contains_instrument)muse::getLibFunc(m_lib, "ms_contains_instrument");
@@ -298,6 +301,12 @@ public:
             reloadAllInstruments = (ms_reload_all_instruments)muse::getLibFunc(m_lib, "ms_reload_all_instruments");
         } else {
             reloadAllInstruments = []() { return ms_Result_Error; };
+        }
+
+        if (at_least_v_0_101) {
+            readyToPlay = (ms_MuseSampler_ready_to_play)muse::getLibFunc(m_lib, "ms_MuseSampler_ready_to_play");
+        } else {
+            readyToPlay = [](ms_MuseSampler) { return true; };
         }
     }
 
@@ -454,7 +463,8 @@ private:
                << "\n ms_MuseSampler_set_position - " << reinterpret_cast<uint64_t>(setPosition)
                << "\n ms_MuseSampler_set_playing - " << reinterpret_cast<uint64_t>(setPlaying)
                << "\n ms_MuseSampler_process - " << reinterpret_cast<uint64_t>(process)
-               << "\n ms_MuseSampler_all_notes_off - " << reinterpret_cast<uint64_t>(allNotesOff);
+               << "\n ms_MuseSampler_all_notes_off - " << reinterpret_cast<uint64_t>(allNotesOff)
+               << "\n ms_MuseSampler_ready_to_play - " << reinterpret_cast<uint64_t>(readyToPlay);
     }
 
     MuseSamplerLib m_lib = nullptr;
