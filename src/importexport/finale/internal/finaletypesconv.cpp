@@ -981,7 +981,7 @@ CourtesyBarlineMode FinaleTConv::boolToCourtesyBarlineMode(bool useDoubleBarline
     return muse::value(courtesyBarlineModeTable, useDoubleBarlines, CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY);
 }
 
-NoteVal FinaleTConv::notePropertiesToNoteVal(std::tuple<musx::dom::Note::NoteName, int, int, int> noteProperties, Key key)
+NoteVal FinaleTConv::notePropertiesToNoteVal(const std::tuple<musx::dom::Note::NoteName, int, int, int>& noteProperties, Key key)
 {
     NoteVal nval;
     int absStep = 35 /*middle C*/ + int(std::get<0>(noteProperties))
@@ -997,7 +997,7 @@ NoteVal FinaleTConv::notePropertiesToNoteVal(std::tuple<musx::dom::Note::NoteNam
     return nval;
 }
 
-Fraction FinaleTConv::musxFractionToFraction(musx::util::Fraction fraction)
+Fraction FinaleTConv::musxFractionToFraction(const musx::util::Fraction& fraction)
 {
     // unlike with time signatures, remainder does not need to be accounted for
     return Fraction(fraction.numerator(), fraction.denominator());
