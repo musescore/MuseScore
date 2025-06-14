@@ -4170,6 +4170,12 @@ static void writeType(XmlWriter& xml, const Note* const note)
     } else {
         xml.tag("type", s);
     }
+
+    if (note->dots().empty()) {
+        for (int ni = dots; ni > 0; --ni) {
+            xml.tag("dot");
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -4376,7 +4382,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         m_xml.tag("voice", static_cast<int>(voice));
 
         writeType(m_xml, note);
-        for (NoteDot* dot : note->dots()) {
+        for (const NoteDot* dot : note->dots()) {
             String dotTag = u"dot";
             if (note->userDotPosition() != engraving::DirectionV::AUTO) {
                 if (note->dotPosition() == engraving::DirectionV::UP) {
