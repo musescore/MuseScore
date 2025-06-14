@@ -40,6 +40,7 @@
 #include "../../dom/drumset.h"
 #include "../../dom/dynamic.h"
 #include "../../dom/expression.h"
+#include "../../dom/footnote.h"
 #include "../../dom/harmony.h"
 #include "../../dom/harmonicmark.h"
 #include "../../dom/chordlist.h"
@@ -196,6 +197,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::DYNAMIC: read(item_cast<Dynamic*>(item), xml, ctx);
         break;
     case ElementType::EXPRESSION: read(item_cast<Expression*>(item), xml, ctx);
+        break;
+    case ElementType::FOOTNOTE: read(item_cast<Footnote*>(item), xml, ctx);
         break;
     case ElementType::FERMATA: read(item_cast<Fermata*>(item), xml, ctx);
         break;
@@ -730,6 +733,18 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
 }
 
 void TRead::read(Expression* expr, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag = xml.name();
+        if (tag == "snapToDynamics") {
+            readProperty(expr, xml, ctx, Pid::SNAP_TO_DYNAMICS);
+        } else if (!readProperties(static_cast<TextBase*>(expr), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
+void TRead::read(Footnote* expr, XmlReader& xml, ReadContext& ctx)
 {
     while (xml.readNextStartElement()) {
         const AsciiStringView tag = xml.name();

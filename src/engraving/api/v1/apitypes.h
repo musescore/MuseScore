@@ -365,8 +365,9 @@ enum class Align : char {
     BOTTOM   = 4,
     VCENTER  = 8,
     BASELINE = 16,
+    JUSTIFY  = 32,
     CENTER = Align::HCENTER | Align::VCENTER,
-    HMASK  = Align::LEFT | Align::RIGHT | Align::HCENTER,
+    HMASK  = Align::LEFT | Align::RIGHT | Align::HCENTER | Align::JUSTIFY,
     VMASK  = Align::TOP | Align::BOTTOM | Align::VCENTER | Align::BASELINE
 };
 Q_ENUM_NS(Align);
@@ -566,7 +567,8 @@ enum class Tid {
     HEADER = int(mu::engraving::TextStyleType::HEADER),
     FOOTER = int(mu::engraving::TextStyleType::FOOTER),
     COPYRIGHT = int(mu::engraving::TextStyleType::COPYRIGHT),
-    PAGE_NUMBER = int(mu::engraving::TextStyleType::PAGE_NUMBER)
+    PAGE_NUMBER = int(mu::engraving::TextStyleType::PAGE_NUMBER),
+    FOOTNOTE = int(mu::engraving::TextStyleType::FOOTNOTE)
 };
 Q_ENUM_NS(Tid);
 

@@ -182,6 +182,8 @@ public:
 
     static Expression* createExpression(Segment* parent, bool isAccessibleEnabled = true);
 
+    static Footnote* createFootnote(Segment* parent, bool isAccessibleEnabled = true);
+
     static RehearsalMark* createRehearsalMark(Segment* parent, bool isAccessibleEnabled = true);
 
     static Stem* createStem(Chord* parent, bool isAccessibleEnabled = true);
