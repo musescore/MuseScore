@@ -5,8 +5,8 @@
     <work-title>Ornaments import test</work-title>
     </work>
   <identification>
-    <creator type="composer">Klaus Rettinghaus</creator>
     <encoding>
+      <encoder>Klaus Rettinghaus</encoder>
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
       <supports element="accidental" type="yes"/>
