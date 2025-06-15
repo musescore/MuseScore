@@ -74,12 +74,12 @@ static void fillBendDataForNote(BendDataContext& bendDataCtx, const ImportedBend
         return;
     }
 
-    if (importedInfo.isSlightBend()) {
+    if (importedInfo.type == BendType::SLIGHT_BEND) {
         fillSlightBendData(bendDataCtx, importedInfo, noteIndexInChord);
         return;
     }
 
-    if (importedInfo.startsWithPrebend()) {
+    if (importedInfo.type == BendType::PREBEND) {
         fillPrebendData(bendDataCtx, importedInfo, noteIndexInChord);
     }
 
@@ -181,7 +181,17 @@ void BendDataCollector::regroupBendDataByTiedChords()
 
                 muse::contains(trackInfo, currentNote->tick());
                 if (muse::contains(trackInfo, currentNote->tick()) && muse::contains(trackInfo.at(currentNote->tick()), currentNote)) {
-                    break;
+                    auto& noteInfo = trackInfo.at(currentNote->tick()).at(currentNote);
+                    if (noteInfo.type == BendType::PREBEND) {
+                        noteInfo.type = BendType::HOLD;
+                        // rewriting first note's info about should it connect to next or not
+                        size_t noteIndex = muse::indexOf(currentNote->chord()->notes(), currentNote);
+                        auto& firstChordData = chunk.chordsData[0];
+                        firstChordData.dataByNote[firstChordData.chord->notes()[noteIndex]].connectsToNextNote = true;
+                        continue;
+                    } else {
+                        break;
+                    }
                 }
 
                 ChordImportedBendData chordBendData;
