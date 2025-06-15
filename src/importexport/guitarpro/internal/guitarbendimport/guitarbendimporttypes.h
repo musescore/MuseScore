@@ -74,7 +74,7 @@ struct ImportedBendInfo {
 
 struct ChordImportedBendData {
     mu::engraving::Chord* chord = nullptr;
-    std::map<mu::engraving::Note*, ImportedBendInfo> dataByNote;
+    std::map<const mu::engraving::Note*, ImportedBendInfo> dataByNote;
 };
 
 struct TiedChordsBendDataChunk {
