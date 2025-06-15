@@ -32,11 +32,14 @@
 namespace muse::dock {
 class DockTitleBar : public KDDockWidgets::TitleBarQuick
 {
+    Q_OBJECT
+
 public:
     explicit DockTitleBar(KDDockWidgets::Frame* parent);
     explicit DockTitleBar(KDDockWidgets::FloatingWindow* parent);
 
     QPoint mapToWindow(QPoint pos) const override;
+    Q_INVOKABLE bool doubleClicked(const QPoint& /*pos*/);
 };
 }
 

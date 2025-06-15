@@ -56,6 +56,7 @@ public:
     int alignment() const;
 
     Q_INVOKABLE void setDraggableMouseArea(QQuickItem* mouseArea);
+    Q_INVOKABLE void onGripDoubleClicked();
 
     void init() override;
     void resetToDefault() override;
