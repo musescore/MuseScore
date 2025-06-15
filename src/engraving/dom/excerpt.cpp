@@ -811,6 +811,23 @@ static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* sc
     }
 }
 
+static void addBackSpanners(const Note* oldNote, Note* newNote, Score* score)
+{
+    // add back spanners (going back from end to start spanner element
+    // makes sure the 'other' spanner anchor element is already set up)
+    // 'on' is the old spanner end note and 'nn' is the new spanner end note
+    for (Spanner* oldSp : oldNote->spannerBack()) {
+        Note* newStart = Spanner::startElementFromSpanner(oldSp, newNote);
+        if (newStart != nullptr) {
+            Spanner* newSp = toSpanner(oldSp->linkedClone());
+            newSp->setNoteSpan(newStart, newNote);
+            score->addElement(newSp);
+        } else {
+            LOGD("cloneStaff: cannot find spanner start note");
+        }
+    }
+}
+
 static void addGraceNoteTies(GraceNotesGroup& originalGraceNotes, Chord* newChord, TieMap& tieMap, Score* score)
 {
     for (Chord* oldGrace : originalGraceNotes) {
@@ -825,6 +842,25 @@ static void addGraceNoteTies(GraceNotesGroup& originalGraceNotes, Chord* newChor
             Note* newNote = newGrace->notes().at(i);
 
             addTies(originalNote, newNote, tieMap, score);
+        }
+    }
+}
+
+static void addGraceNoteBackSpanners(GraceNotesGroup& originalGraceNotes, Chord* newChord, Score* score)
+{
+    for (size_t graceIndex = 0; graceIndex < originalGraceNotes.size(); graceIndex++) {
+        Chord* oldGrace = originalGraceNotes[graceIndex];
+        Chord* newGrace = newChord->graceNoteAt(graceIndex);
+        if (!newGrace) {
+            continue;
+        }
+
+        size_t notes = oldGrace->notes().size();
+        for (size_t i = 0; i < notes; ++i) {
+            Note* originalNote = oldGrace->notes().at(i);
+            Note* newNote = newGrace->notes().at(i);
+
+            addBackSpanners(originalNote, newNote, score);
         }
     }
 }
@@ -1381,21 +1417,10 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                             Note* on = och->notes().at(i);
                             Note* nn = nch->notes().at(i);
                             addTies(on, nn, tieMap, score);
-                            // add back spanners (going back from end to start spanner element
-                            // makes sure the 'other' spanner anchor element is already set up)
-                            // 'on' is the old spanner end note and 'nn' is the new spanner end note
-                            for (Spanner* oldSp : on->spannerBack()) {
-                                Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
-                                if (newStart != nullptr) {
-                                    Spanner* newSp = toSpanner(oldSp->linkedClone());
-                                    newSp->setNoteSpan(newStart, nn);
-                                    score->addElement(newSp);
-                                } else {
-                                    LOGD("cloneStaff: cannot find spanner start note");
-                                }
-                            }
+                            addBackSpanners(on, nn, score);
                         }
                         addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
+                        addGraceNoteBackSpanners(och->graceNotesAfter(), nch, score);
                         addTremoloTwoChord(och, nch, prevTremolo);
 
                         // Check grace note staff move validity
