@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -19,8 +20,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
-      <Staff id="1">
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -83,31 +85,38 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <TimeSig>
+            <eid>E_E</eid>
             <sigN>9</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Chord>
+            <eid>F_F</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>G_G</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Rest>
+            <eid>H_H</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
+            <eid>I_I</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
+            <eid>J_J</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>K_K</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             </Rest>
