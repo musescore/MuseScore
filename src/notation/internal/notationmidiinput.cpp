@@ -265,7 +265,7 @@ Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
     }
 
     // holding shift while inputting midi will add the new pitch to the prior existing chord
-    if (QGuiApplication::keyboardModifiers() & Qt::ShiftModifier) {
+    if (QGuiApplication::queryKeyboardModifiers() & Qt::ShiftModifier) {
         mu::engraving::EngravingItem* cr = is.lastSegment()->element(is.track());
         if (cr && cr->isChord()) {
             inputEv.chord = true;

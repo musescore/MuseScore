@@ -58,13 +58,21 @@ class Part : public ScoreElement
     Q_PROPERTY(int startTrack READ startTrack)
     Q_PROPERTY(int endTrack READ endTrack)
     /**
+     * The MuseScore string identifier
+     * for the first instrument in this part.
+     * \see \ref mu::plugins::api::Instrument::instrumentId "Instrument.instrumentId"
+     * \since MuseScore 4.6
+     */
+    Q_PROPERTY(QString instrumentId READ instrumentId)
+    /**
      * The string identifier
      * ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
      * for the first instrument in this part.
-     * \see \ref mu::plugins::api::Instrument::instrumentId "Instrument.instrumentId"
+     * Was called using \ref instrumentId prior to 4.6
+     * \see \ref mu::plugins::api::Instrument::musicXmlId "Instrument.musicXmlId"
      * \since MuseScore 3.2
      */
-    Q_PROPERTY(QString instrumentId READ instrumentId)
+    Q_PROPERTY(QString musicXmlId READ musicXmlId)
     /// The number of Chord Symbols. \since MuseScore 3.2.1
     Q_PROPERTY(int harmonyCount READ harmonyCount)
     /// Whether it is a percussion staff. \since MuseScore 3.2.1
@@ -114,7 +122,8 @@ public:
 
     int startTrack() const { return static_cast<int>(part()->startTrack()); }
     int endTrack()   const { return static_cast<int>(part()->endTrack()); }
-    QString instrumentId() const { return part()->instrument()->musicXmlId(); }
+    QString instrumentId() const { return part()->instrument()->id(); }
+    QString musicXmlId() const { return part()->instrument()->musicXmlId(); }
     int harmonyCount() const { return part()->harmonyCount(); }
     bool hasPitchedStaff() const { return part()->hasPitchedStaff(); }
     bool hasTabStaff() const { return part()->hasTabStaff(); }

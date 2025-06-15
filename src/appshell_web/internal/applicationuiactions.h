@@ -23,15 +23,18 @@
 #define MU_APPSHELL_APPLICATIONUIACTIONS_H
 
 #include "ui/iuiactionsmodule.h"
-#include "applicationactioncontroller.h"
+
+#include "global/async/asyncable.h"
+
 #include "modularity/ioc.h"
-#include "async/asyncable.h"
 #include "ui/imainwindow.h"
 #include "braille/ibrailleconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "dockwindow/idockwindowprovider.h"
+#include "../iappshellconfiguration.h"
 
 #include "../appshelltypes.h"
+#include "applicationactioncontroller.h"
 
 namespace mu::appshell {
 class ApplicationUiActions : public muse::ui::IUiActionsModule, public muse::Injectable, public muse::async::Asyncable

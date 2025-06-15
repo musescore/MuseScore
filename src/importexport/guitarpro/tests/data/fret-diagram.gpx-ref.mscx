@@ -466,9 +466,11 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>17</root>
-            <name>sus4</name>
-            <base>18</base>
+            <harmonyInfo>
+              <name>sus4</name>
+              <root>17</root>
+              <bass>18</bass>
+              </harmonyInfo>
             <eid>FB_FB</eid>
             </Harmony>
           <Beam>

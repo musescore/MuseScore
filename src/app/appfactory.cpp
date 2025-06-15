@@ -3,6 +3,8 @@
 #include "internal/guiapp.h"
 #include "internal/consoleapp.h"
 
+#include "global/runtime.h"
+
 #include "muse_framework_config.h"
 #include "app_config.h"
 

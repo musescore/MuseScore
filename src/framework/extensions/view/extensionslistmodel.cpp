@@ -44,6 +44,7 @@ ExtensionsListModel::ExtensionsListModel(QObject* parent)
         { rCategory, "category" },
         { rVersion, "version" },
         { rShortcuts, "shortcuts" },
+        { rIsRemovable, "isRemovable" }
     };
 }
 
@@ -119,6 +120,9 @@ QVariant ExtensionsListModel::data(const QModelIndex& index, int role) const
 
         //: No keyboard shortcut is assigned to this plugin.
         return muse::qtrc("extensions", "Not defined");
+    }
+    case rIsRemovable: {
+        return plugin.isRemovable;
     }
     }
 
@@ -217,6 +221,11 @@ void ExtensionsListModel::editShortcut(const QString& extensionUri)
 void ExtensionsListModel::reloadPlugins()
 {
     provider()->reloadExtensions();
+}
+
+void ExtensionsListModel::removeExtension(const QString& uri)
+{
+    installer()->uninstallExtension(Uri(uri.toStdString()));
 }
 
 QVariantList ExtensionsListModel::categories() const

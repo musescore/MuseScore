@@ -34,6 +34,8 @@ Item {
     property AbstractScoresModel model
     property string searchText
 
+    property bool isNoResultsMessageAllowed: true
+
     property color backgroundColor: ui.theme.backgroundSecondaryColor
     property real sideMargin: 46
 
@@ -187,8 +189,7 @@ Item {
         id: noResultsMessage
         anchors.fill: parent
 
-        // This will become visible if a "No results found" item is not provided by the model.
-        visible: Boolean(root.searchText) && itemTypeFilterModel.rowCount === 0
+        visible: Boolean(root.searchText) && view.count === 0 && root.isNoResultsMessageAllowed
 
         Message {
             anchors.top: parent.top

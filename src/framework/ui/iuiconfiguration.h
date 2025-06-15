@@ -101,6 +101,7 @@ public:
     virtual async::Notification windowGeometryChanged() const = 0;
 
     virtual bool isGlobalMenuAvailable() const = 0;
+    virtual bool isSystemDragSupported() const = 0;
 
     virtual void applyPlatformStyle(QWindow* window) = 0;
 

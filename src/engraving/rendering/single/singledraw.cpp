@@ -111,7 +111,6 @@
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
-#include "dom/stretchedbend.h"
 #include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
@@ -303,8 +302,6 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::STICKING:             draw(item_cast<const Sticking*>(item), painter);
         break;
     case ElementType::STRING_TUNINGS:       draw(item_cast<const StringTunings*>(item), painter);
-        break;
-    case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
     case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
         break;
@@ -1501,84 +1498,6 @@ void SingleDraw::draw(const StringTunings* item, Painter* painter)
     drawTextBase(item, painter);
 }
 
-void SingleDraw::draw(const StretchedBend* item, Painter* painter)
-{
-    TRACE_DRAW_ITEM;
-
-    double sp = item->spatium();
-    const Color& color = item->curColor();
-    const int textFlags = item->textFlags();
-
-    Pen pen(color, item->absoluteFromSpatium(item->lineWidth()), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
-    painter->setPen(pen);
-    painter->setBrush(Brush(color));
-    Font f = item->font(sp * MScore::pixelRatio);
-    painter->setFont(f);
-
-    bool isTextDrawn = false;
-
-    for (const StretchedBend::BendSegment& bendSegment : item->bendSegmentsStretched()) {
-        if (!bendSegment.visible) {
-            continue;
-        }
-
-        const PointF& src = bendSegment.src;
-        const PointF& dest = bendSegment.dest;
-        const String& text = item->toneToLabel(bendSegment.tone);
-
-        switch (bendSegment.type) {
-        case StretchedBend::BendSegmentType::LINE_UP:
-        {
-            painter->drawLine(LineF(src, dest));
-            painter->setBrush(color);
-            painter->drawPolygon(item->arrows().up.translated(dest));
-            /// TODO: remove substraction after fixing bRect
-            PointF pos = dest - PointF(0, sp * 0.5);
-            painter->drawText(RectF(pos.x(), pos.y(), .0, .0), textFlags, text);
-            break;
-        }
-
-        case StretchedBend::BendSegmentType::CURVE_UP:
-        case StretchedBend::BendSegmentType::CURVE_DOWN:
-        {
-            bool bendUp = (bendSegment.type == StretchedBend::BendSegmentType::CURVE_UP);
-            double endY = dest.y() + item->arrows().width * (bendUp ? 1 : -1);
-
-            PainterPath path = item->bendCurveFromPoints(src, PointF(dest.x(), endY));
-            const auto& arrowPath = (bendUp ? item->arrows().up : item->arrows().down);
-
-            painter->setBrush(BrushStyle::NoBrush);
-            painter->drawPath(path);
-            painter->setBrush(color);
-            painter->drawPolygon(arrowPath.translated(dest));
-
-            if (bendUp && !isTextDrawn) {
-                /// TODO: remove subtraction after fixing bRect
-                PointF pos = dest - PointF(0, sp * 0.5);
-                painter->drawText(RectF(pos.x(), pos.y(), .0, .0), textFlags, text);
-                isTextDrawn = true;
-            }
-
-            break;
-        }
-
-        case StretchedBend::BendSegmentType::LINE_STROKED:
-        {
-            PainterPath path;
-            path.moveTo(src + PointF(item->arrows().width, 0));
-            path.lineTo(dest);
-            Pen p(painter->pen());
-            p.setStyle(PenStyle::DashLine);
-            painter->strokePath(path, p);
-            break;
-        }
-
-        default:
-            break;
-        }
-    }
-}
-
 void SingleDraw::drawTextBase(const TextBase* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
@@ -1829,13 +1748,13 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
     Color color = item->textColor();
     painter->setPen(color);
     for (const TextSegment* ts : item->textList()) {
-        Font f(ts->m_font);
+        Font f(ts->font());
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
-        TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text);
+        TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text());
 #else
         painter->setFont(f);
-        painter->drawText(ts->pos(), ts->text);
+        painter->drawText(ts->pos(), ts->text());
 #endif
     }
 }

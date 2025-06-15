@@ -48,6 +48,8 @@ ScoresView {
             model: recentScoresModel
             searchText: root.searchText
 
+            isNoResultsMessageAllowed: false // provided by the model instead
+
             backgroundColor: root.backgroundColor
             sideMargin: root.sideMargin
 

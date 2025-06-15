@@ -32,7 +32,6 @@
           <name>tab6StrSimple</name>
           <lines>6</lines>
           <lineDistance>1.5</lineDistance>
-          <slashStyle>1</slashStyle>
           <stemless>1</stemless>
           <timesig>0</timesig>
           <durations>0</durations>
@@ -124,7 +123,7 @@
                 <GuitarBend>
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.266667</bendEndTimeFactor>
+                  <bendEndTimeFactor>0.25</bendEndTimeFactor>
                   <eid>O_O</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
@@ -154,7 +153,7 @@
                 <GuitarBend>
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.266667</bendEndTimeFactor>
+                  <bendEndTimeFactor>0.25</bendEndTimeFactor>
                   <eid>R_R</eid>
                   <anchor>3</anchor>
                   </GuitarBend>

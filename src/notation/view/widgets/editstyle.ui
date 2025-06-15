@@ -8293,7 +8293,7 @@
                  <item>
                   <widget class="QLabel" name="label_62">
                    <property name="text">
-                    <string>Position:</string>
+                    <string>Placement:</string>
                    </property>
                   </widget>
                  </item>
@@ -8946,7 +8946,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_40">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>voltaPosAbove</cstring>
@@ -9752,7 +9752,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_124">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>pedalLinePlacement</cstring>
@@ -9984,7 +9984,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_125">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>trillLinePlacement</cstring>
@@ -10120,7 +10120,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_1251">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>vibratoLinePlacement</cstring>
@@ -10586,7 +10586,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_72">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePlacement</cstring>
@@ -10922,7 +10922,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_214">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePlacement</cstring>
@@ -11668,7 +11668,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_178">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>staffTextPlacement</cstring>
@@ -11933,7 +11933,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_128">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>tempoTextPlacement</cstring>
@@ -12475,7 +12475,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>Position:</string>
+                    <string>Placement:</string>
                    </property>
                    <property name="buddy">
                     <cstring>lyricsPlacement</cstring>
@@ -13234,7 +13234,7 @@ first note of the system</string>
            <item row="0" column="0">
             <widget class="QLabel" name="label_152">
              <property name="text">
-              <string>Position:</string>
+              <string>Placement:</string>
              </property>
              <property name="buddy">
               <cstring>rehearsalMarkPlacement</cstring>
@@ -13558,617 +13558,8 @@ first note of the system</string>
       <widget class="QWidget" name="PageChordSymbols">
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
-         <widget class="QGroupBox" name="groupBox_chordSymbols">
-          <property name="title">
-           <string>Chord symbols</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_13">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item row="0" column="0" colspan="4">
-            <widget class="QScrollArea" name="scrollArea_chordSymbols">
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
-             </property>
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="scrollArea_chordSymbols_contents">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>632</width>
-                <height>710</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_55" rowstretch="0,0,0,0,1">
-               <item row="2" column="1">
-                <widget class="QLabel" name="label_60">
-                 <property name="text">
-                  <string extracomment="Capodastro">Capo fret position:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>capoPosition</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QSpinBox" name="capoPosition">
-                 <property name="keyboardTracking">
-                  <bool>false</bool>
-                 </property>
-                 <property name="maximum">
-                  <number>11</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1" colspan="2">
-                <widget class="QGroupBox" name="harmonyPlay">
-                 <property name="title">
-                  <string>Playback</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>false</bool>
-                 </property>
-                 <layout class="QGridLayout" name="gridLayout_47">
-                  <item row="0" column="0">
-                   <widget class="mu::notation::VoicingSelect" name="voicingSelectWidget" native="true"/>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item row="0" column="0" colspan="3">
-                <widget class="QGroupBox" name="harmonyAppearance">
-                 <property name="title">
-                  <string>Appearance</string>
-                 </property>
-                 <layout class="QGridLayout" name="gridLayout_45">
-                  <item row="1" column="4">
-                   <widget class="QDoubleSpinBox" name="modifierMag">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.100000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="4">
-                   <widget class="QDoubleSpinBox" name="modifierAdjust">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="minimum">
-                     <double>-99.989999999999995</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QDoubleSpinBox" name="extensionMag">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.100000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QDoubleSpinBox" name="extensionAdjust">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="minimum">
-                     <double>-99.989999999999995</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="2">
-                   <widget class="QToolButton" name="resetExtensionAdjust">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Extension vertical offset' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="labelExtensionAdjust">
-                    <property name="text">
-                     <string>Extension vertical offset:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>extensionAdjust</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="labelExtensionMag">
-                    <property name="text">
-                     <string>Extension scaling:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>extensionMag</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="2">
-                   <widget class="QToolButton" name="resetExtensionMag">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Extension scaling' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="3">
-                   <widget class="QLabel" name="labelModifierMag">
-                    <property name="text">
-                     <string>Modifier scaling:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>modifierMag</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="3">
-                   <widget class="QLabel" name="labelModifierAdjust">
-                    <property name="text">
-                     <string>Modifier vertical offset:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>modifierAdjust</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="5">
-                   <widget class="QToolButton" name="resetModifierMag">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Modifier scaling' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="5">
-                   <widget class="QToolButton" name="resetModifierAdjust">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Modifier vertical offset' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="0" colspan="6">
-                   <widget class="QGroupBox" name="automaticCapitalization">
-                    <property name="accessibleName">
-                     <string>Automatic capitalization</string>
-                    </property>
-                    <property name="title">
-                     <string>Automatic capitalization</string>
-                    </property>
-                    <property name="checkable">
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_12">
-                     <item>
-                      <widget class="QCheckBox" name="lowerCaseMinorChords">
-                       <property name="text">
-                        <string>Lower case minor chords</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QCheckBox" name="lowerCaseBassNotes">
-                       <property name="text">
-                        <string>Lower case bass notes</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QCheckBox" name="allCapsNoteNames">
-                       <property name="text">
-                        <string>All caps note names</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_17">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>0</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="3" column="0" colspan="6">
-                   <widget class="QGroupBox" name="harmonySpelling">
-                    <property name="accessibleName">
-                     <string>Spelling</string>
-                    </property>
-                    <property name="title">
-                     <string>Spelling</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_6">
-                     <item>
-                      <widget class="QRadioButton" name="useStandardNoteNames">
-                       <property name="toolTip">
-                        <string notr="true">A, B♭, B, C, C♯, …</string>
-                       </property>
-                       <property name="text">
-                        <string comment="chord symbol spelling">Standard</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="useGermanNoteNames">
-                       <property name="toolTip">
-                        <string notr="true">A, B♭, H, C, C♯, …</string>
-                       </property>
-                       <property name="text">
-                        <string>German</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="useFullGermanNoteNames">
-                       <property name="toolTip">
-                        <string notr="true">A, B, H, C, Cis, …</string>
-                       </property>
-                       <property name="text">
-                        <string>Full German</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="useSolfeggioNoteNames">
-                       <property name="toolTip">
-                        <string notr="true">Do, Do♯, Re♭, Re, …</string>
-                       </property>
-                       <property name="text">
-                        <string>Solfeggio</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="useFrenchNoteNames">
-                       <property name="toolTip">
-                        <string notr="true">Do, Do♯, Ré♭, Ré, …</string>
-                       </property>
-                       <property name="text">
-                        <string>French</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_12">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>0</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="0" column="0" colspan="6">
-                   <widget class="QGroupBox" name="harmonyStyle">
-                    <property name="accessibleName">
-                     <string>Style</string>
-                    </property>
-                    <property name="title">
-                     <string>Style</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_7">
-                     <item>
-                      <widget class="QRadioButton" name="chordsStandard">
-                       <property name="text">
-                        <string comment="chord symbol style">Standard</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="chordsJazz">
-                       <property name="text">
-                        <string>Jazz</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="chordsCustom">
-                       <property name="text">
-                        <string>Custom</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QWidget" name="chordDescriptionGroup" native="true">
-                       <layout class="QGridLayout" name="chordDescriptionLayout">
-                        <property name="leftMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="topMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="rightMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="bottomMargin">
-                         <number>0</number>
-                        </property>
-                        <item row="0" column="3">
-                         <widget class="QCheckBox" name="chordsXmlFile">
-                          <property name="text">
-                           <string>Load XML</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="0" column="2">
-                         <widget class="QToolButton" name="chordDescriptionFileButton">
-                          <property name="text">
-                           <string notr="true"/>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="0" column="1">
-                         <widget class="QLineEdit" name="chordDescriptionFile"/>
-                        </item>
-                       </layout>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item row="1" column="0" rowspan="3">
-                <widget class="QGroupBox" name="harmonyPositioning">
-                 <property name="title">
-                  <string>Positioning</string>
-                 </property>
-                 <layout class="QGridLayout" name="gridLayout_15">
-                  <item row="4" column="0">
-                   <widget class="QLabel" name="label_1461">
-                    <property name="text">
-                     <string>Maximum shift below:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>maxChordShiftBelow</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="2">
-                   <widget class="QToolButton" name="resetMaxChordShiftAbove">
-                    <property name="text">
-                     <string notr="true">…</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_79">
-                    <property name="text">
-                     <string>Distance to fretboard diagram:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>harmonyFretDist</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_1231">
-                    <property name="text">
-                     <string>Maximum shift above:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>maxChordShiftAbove</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QDoubleSpinBox" name="maxHarmonyBarDistance">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="minimum">
-                     <double>-50.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>50.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>3.000000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_1001">
-                    <property name="text">
-                     <string>Minimum chord spacing:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>minHarmonyDistance</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_1002">
-                    <property name="text">
-                     <string>Maximum barline distance:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>maxHarmonyBarDistance</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="2">
-                   <widget class="QToolButton" name="resetMaxChordShiftBelow">
-                    <property name="text">
-                     <string notr="true">…</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QDoubleSpinBox" name="harmonyFretDist">
-                    <property name="enabled">
-                     <bool>true</bool>
-                    </property>
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string extracomment="spatium unit">sp</string>
-                    </property>
-                    <property name="minimum">
-                     <double>-10000.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>10000.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QDoubleSpinBox" name="minHarmonyDistance">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="minimum">
-                     <double>-50.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>10.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.100000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="1">
-                   <widget class="QDoubleSpinBox" name="maxChordShiftBelow">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1">
-                   <widget class="QDoubleSpinBox" name="maxChordShiftAbove">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>0.000000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item row="4" column="0" colspan="3">
-                <spacer name="verticalSpacer_61">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="3" column="1" colspan="2">
-                <spacer name="verticalSpacer_3411">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
-          </layout>
+         <widget class="QWidget" name="chordSymbolsPage" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_59"/>
          </widget>
         </item>
        </layout>
@@ -14233,8 +13624,8 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>624</width>
-             <height>478</height>
+             <width>660</width>
+             <height>744</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -16095,38 +15486,6 @@ first note of the system</string>
   <tabstop>radioFBBottom</tabstop>
   <tabstop>radioFBModern</tabstop>
   <tabstop>radioFBHistoric</tabstop>
-  <tabstop>scrollArea_chordSymbols</tabstop>
-  <tabstop>chordsStandard</tabstop>
-  <tabstop>chordsJazz</tabstop>
-  <tabstop>chordsCustom</tabstop>
-  <tabstop>chordDescriptionFile</tabstop>
-  <tabstop>chordDescriptionFileButton</tabstop>
-  <tabstop>chordsXmlFile</tabstop>
-  <tabstop>extensionMag</tabstop>
-  <tabstop>resetExtensionMag</tabstop>
-  <tabstop>extensionAdjust</tabstop>
-  <tabstop>resetExtensionAdjust</tabstop>
-  <tabstop>modifierMag</tabstop>
-  <tabstop>resetModifierMag</tabstop>
-  <tabstop>modifierAdjust</tabstop>
-  <tabstop>resetModifierAdjust</tabstop>
-  <tabstop>useStandardNoteNames</tabstop>
-  <tabstop>useGermanNoteNames</tabstop>
-  <tabstop>useFullGermanNoteNames</tabstop>
-  <tabstop>useSolfeggioNoteNames</tabstop>
-  <tabstop>useFrenchNoteNames</tabstop>
-  <tabstop>automaticCapitalization</tabstop>
-  <tabstop>lowerCaseMinorChords</tabstop>
-  <tabstop>lowerCaseBassNotes</tabstop>
-  <tabstop>allCapsNoteNames</tabstop>
-  <tabstop>harmonyFretDist</tabstop>
-  <tabstop>minHarmonyDistance</tabstop>
-  <tabstop>maxHarmonyBarDistance</tabstop>
-  <tabstop>maxChordShiftAbove</tabstop>
-  <tabstop>resetMaxChordShiftAbove</tabstop>
-  <tabstop>maxChordShiftBelow</tabstop>
-  <tabstop>resetMaxChordShiftBelow</tabstop>
-  <tabstop>capoPosition</tabstop>
   <tabstop>scrollArea_2</tabstop>
   <tabstop>scrollArea</tabstop>
   <tabstop>slurShowTabCommon</tabstop>

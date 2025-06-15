@@ -376,9 +376,6 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::BEND, "Bend",
           TranslatableString("engraving", "bend(s)", nullptr, 1),
           TranslatableString("engraving", "Bend(s)", nullptr, 1) },
-    Item{ ElementType::STRETCHED_BEND, "Bend",
-          TranslatableString("engraving", "bend(s)", nullptr, 1),
-          TranslatableString("engraving", "Bend(s)", nullptr, 1) },
     Item{ ElementType::TREMOLOBAR, "TremoloBar",
           TranslatableString("engraving", "tremolo bar(s)", nullptr, 1),
           TranslatableString("engraving", "Tremolo bar(s)", nullptr, 1) },
@@ -666,11 +663,21 @@ AlignV TConv::fromXml(const AsciiStringView& tag, AlignV def)
     return findTypeByXmlTag<AlignV>(ALIGN_V, tag, def);
 }
 
+String TConv::toXml(AlignH v)
+{
+    return String::fromAscii(findXmlTagByType<AlignH>(ALIGN_H, v).ascii());
+}
+
+String TConv::toXml(AlignV v)
+{
+    return String::fromAscii(findXmlTagByType<AlignV>(ALIGN_V, v).ascii());
+}
+
 String TConv::toXml(Align v)
 {
     StringList sl;
-    sl << String::fromAscii(findXmlTagByType<AlignH>(ALIGN_H, v.horizontal).ascii());
-    sl << String::fromAscii(findXmlTagByType<AlignV>(ALIGN_V, v.vertical).ascii());
+    sl << toXml(v.horizontal);
+    sl << toXml(v.vertical);
     return sl.join(u",");
 }
 
@@ -816,6 +823,41 @@ AsciiStringView TConv::toXml(TimeSigVSMargin timeSigVSMargin)
 TimeSigVSMargin TConv::fromXml(const AsciiStringView& str, TimeSigVSMargin def)
 {
     return findTypeByXmlTag<TimeSigVSMargin>(TIMESIG_MARGIN, str, def);
+}
+
+static const std::vector<Item<NoteSpellingType> > NOTE_SPELLING_TYPE = {
+    { NoteSpellingType::STANDARD, "standard" },
+    { NoteSpellingType::GERMAN, "german" },
+    { NoteSpellingType::GERMAN_PURE, "germanPure" },
+    { NoteSpellingType::SOLFEGGIO, "solfeggio" },
+    { NoteSpellingType::FRENCH, "french" },
+};
+
+AsciiStringView TConv::toXml(NoteSpellingType noteSpellingType)
+{
+    return findXmlTagByType<NoteSpellingType>(NOTE_SPELLING_TYPE, noteSpellingType);
+}
+
+NoteSpellingType TConv::fromXml(const AsciiStringView& str, NoteSpellingType def)
+{
+    return findTypeByXmlTag<NoteSpellingType>(NOTE_SPELLING_TYPE, str, def);
+}
+
+static const std::vector<Item<ChordStylePreset> > CHORD_STYLE_PRESET = {
+    { ChordStylePreset::STANDARD, "std" },
+    { ChordStylePreset::JAZZ, "jazz" },
+    { ChordStylePreset::LEGACY, "legacy" },
+    { ChordStylePreset::CUSTOM, "custom" },
+};
+
+AsciiStringView TConv::toXml(ChordStylePreset chordStylePreset)
+{
+    return findXmlTagByType<ChordStylePreset>(CHORD_STYLE_PRESET, chordStylePreset);
+}
+
+ChordStylePreset TConv::fromXml(const AsciiStringView& str, ChordStylePreset def)
+{
+    return findTypeByXmlTag<ChordStylePreset>(CHORD_STYLE_PRESET, str, def);
 }
 
 static const std::vector<Item<VoiceAssignment> > VOICE_ASSIGNMENT = {
@@ -1396,13 +1438,6 @@ DynamicType TConv::fromXml(const AsciiStringView& tag, DynamicType def)
         return def;
     }
     return it->type;
-}
-
-DynamicRange TConv::fromXml(const AsciiStringView& tag, DynamicRange def)
-{
-    bool ok = false;
-    int v = tag.toInt(&ok);
-    return ok ? DynamicRange(v) : def;
 }
 
 static const std::vector<Item<DynamicSpeed> > DYNAMIC_SPEEDS = {

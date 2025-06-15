@@ -3167,7 +3167,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4871"/>
         <source>Clef/key signature to first note:</source>
-        <translation>谱/调号-首音符：</translation>
+        <translation>谱号/调号—首音符：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4884"/>
@@ -3643,7 +3643,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7042"/>
         <source>Bracket hook height:</source>
         <comment>Tuplet bracket</comment>
-        <translation>括号折钩高度</translation>
+        <translation>连音括号高度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7061"/>
@@ -4285,7 +4285,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12264"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
-        <translation>重置“最大延伸线距离”值</translation>
+        <translation>重置“延伸线最大间距”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12408"/>
@@ -4295,17 +4295,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12319"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
-        <translation>重置“最短延伸线长度”值</translation>
+        <translation>重置“延伸线最小长度”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12306"/>
         <source>Max. dash length:</source>
-        <translation>最大延伸线长度：</translation>
+        <translation>延伸线最大长度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12229"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
-        <translation>重置“最大延伸线长度”值</translation>
+        <translation>重置“延伸线最大长度”值</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12164"/>
@@ -4315,7 +4315,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12274"/>
         <source>Min. dash length:</source>
-        <translation>最小延伸线长度：</translation>
+        <translation>延伸线最小长度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11899"/>
@@ -4840,7 +4840,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14101"/>
         <source>Turns</source>
-        <translation>回旋音</translation>
+        <translation>回音</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14084"/>
@@ -10004,12 +10004,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1849"/>
         <source>Toggle turn</source>
-        <translation>切换回旋音</translation>
+        <translation>切换回音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1850"/>
         <source>Add ornament: turn</source>
-        <translation>添加装饰音：回旋音</translation>
+        <translation>添加装饰音：回音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1855"/>
@@ -10024,12 +10024,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1861"/>
         <source>Toggle turn with slash</source>
-        <translation>切换逆回音（穿线）</translation>
+        <translation>切换带杠回音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1862"/>
         <source>Add ornament: turn with slash</source>
-        <translation>添加装饰音：逆回音（穿线）</translation>
+        <translation>添加装饰音：带杠回音</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1868"/>
@@ -15908,57 +15908,57 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1642"/>
         <source>accel.</source>
-        <translation>accel.</translation>
+        <translation>accel.（渐快）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1643"/>
         <source>allarg.</source>
-        <translation>allarg.</translation>
+        <translation>allarg.（逐渐宽广并渐强）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1644"/>
         <source>calando</source>
-        <translation>calando</translation>
+        <translation>calando（渐弱）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1645"/>
         <source>lentando</source>
-        <translation>lentando</translation>
+        <translation>lentando（渐慢）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1646"/>
         <source>morendo</source>
-        <translation>morendo</translation>
+        <translation>morendo（渐弱至消逝）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1647"/>
         <source>precipitando</source>
-        <translation>precipitando</translation>
+        <translation>precipitando（急促）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1648"/>
         <source>rall.</source>
-        <translation>rall.</translation>
+        <translation>rall.（渐慢）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1649"/>
         <source>rit.</source>
-        <translation>rit.</translation>
+        <translation>rit.（徐缓）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1650"/>
         <source>smorz.</source>
-        <translation>smorz.</translation>
+        <translation>smorz.（渐弱至无声）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1651"/>
         <source>sost.</source>
-        <translation>sost.</translation>
+        <translation>sost.（持续地、稳定地）</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1652"/>
         <source>string.</source>
-        <translation>string.</translation>
+        <translation>string.（收紧/渐快）</translation>
     </message>
 </context>
 <context>
@@ -18276,7 +18276,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5391"/>
         <source>Turn with slash</source>
-        <translation>逆回音</translation>
+        <translation>带杠回音</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5582"/>
@@ -24715,7 +24715,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="224"/>
         <source>&lt;b&gt;Always open&lt;/b&gt;&lt;br&gt;On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.</source>
-        <translation>&lt;b&gt;常开&lt;/b&gt;&lt;br&gt;在指法谱谱表上，除了标有“0”的弦外，不能在标有“常开”的弦上输入品位。适用于弦乐器上不在品格上的弦，如大颈琴。</translation>
+        <translation>&lt;b&gt;总是打开&lt;/b&gt;&lt;br&gt;在指法谱线谱上，除了标有‘0’的弦位置外，不能在其他标记为“总是打开”的弦上录入品位。适用于带有不在品格上的弦的乐器，例如短双颈琉特琴。</translation>
     </message>
 </context>
 <context>
@@ -25236,7 +25236,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="562"/>
         <source>Changes that apply to both the repeat/jump and the subsequent bar</source>
-        <translation>同时应用于反复/跳跃号内与后续小节的更改</translation>
+        <translation>同时应用于反复号/跳跃号内与后续小节的更替</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="569"/>

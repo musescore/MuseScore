@@ -3608,9 +3608,9 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t tra
 void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track_idx_t track, Segment* startSeg,
                                const Fraction& endTick, Tuplet* currentTuplet)
 {
-    while (startSeg && !startSeg->cr(track)) {
+    while (startSeg && !(startSeg->isChordRestType() && startSeg->cr(track))) {
         // Range should always start at a ChordRest segment - find the next one for this track...
-        startSeg = startSeg->next1();
+        startSeg = startSeg->next1(SegmentType::ChordRest);
     }
 
     if (!startSeg) {
@@ -5792,9 +5792,14 @@ void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
 //   undoTransposeHarmony
 //---------------------------------------------------------
 
-void Score::undoTransposeHarmony(Harmony* h, int rootTpc, int baseTpc)
+void Score::undoTransposeHarmony(Harmony* h, Interval interval, bool doubleSharpFlat)
 {
-    undo(new TransposeHarmony(h, rootTpc, baseTpc));
+    undo(new TransposeHarmony(h, interval, doubleSharpFlat));
+}
+
+void Score::undoTransposeHarmonyDiatonic(Harmony* h, int interval, bool doubleSharpFlat, bool transposeKeys)
+{
+    undo(new TransposeHarmonyDiatonic(h, interval, doubleSharpFlat, transposeKeys));
 }
 
 //---------------------------------------------------------
@@ -6616,9 +6621,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                         if (!score->style().styleB(Sid::concertPitch)) {
                             interval.flip();
                         }
-                        int rootTpc = transposeTpc(h->rootTpc(), interval, true);
-                        int baseTpc = transposeTpc(h->bassTpc(), interval, true);
-                        score->undoTransposeHarmony(h, rootTpc, baseTpc);
+                        score->undoTransposeHarmony(h, interval);
                     }
                 }
             }

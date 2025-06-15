@@ -85,6 +85,7 @@ public:
     MOCK_METHOD(async::Notification, windowGeometryChanged, (), (const, override));
 
     MOCK_METHOD(bool, isGlobalMenuAvailable, (), (const, override));
+    MOCK_METHOD(bool, isSystemDragSupported, (), (const, override));
 
     MOCK_METHOD(void, applyPlatformStyle, (QWindow*), (override));
 

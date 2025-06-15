@@ -32,6 +32,7 @@ InspectorPropertyView {
     property alias model: radioButtonGroupItem.model
 
     property int requestHeight: 30
+    property int requestWidth: 0
     property int requestIconFontSize: 0
 
     navigationRowEnd: navigationRowStart /* Menu button */ + radioButtonGroupItem.count /* FlatRadioButtons */
@@ -44,7 +45,7 @@ InspectorPropertyView {
         id: radioButtonGroupItem
 
         height: root.requestHeight
-        width: parent.width
+        width: requestWidth ? requestWidth : parent.width
 
         currentValue: root.propertyItem && !root.propertyItem.isUndefined ? root.propertyItem.value : undefined
 

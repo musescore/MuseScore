@@ -4,15 +4,7 @@
     <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <maskBarlinesForText>0</maskBarlinesForText>
-      <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
-      <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
-      <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
-      <showCourtesiesRepeats>0</showCourtesiesRepeats>
-      <showCourtesiesOtherJumps>0</showCourtesiesOtherJumps>
-      <showCourtesiesAfterCancellingRepeats>0</showCourtesiesAfterCancellingRepeats>
-      <showCourtesiesAfterCancellingOtherJumps>0</showCourtesiesAfterCancellingOtherJumps>
-      <spatium>1.76389</spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -255,8 +247,10 @@
         <eid>e_e</eid>
         <voice>
           <Harmony>
-            <root>15</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>15</root>
+              </harmonyInfo>
             <eid>f_f</eid>
             <offset x="0" y="-3.22581"/>
             </Harmony>
@@ -1328,8 +1322,10 @@
           <eid>MD_MD</eid>
           <voice>
             <Harmony>
-              <root>15</root>
-              <name>7</name>
+              <harmonyInfo>
+                <name>7</name>
+                <root>15</root>
+                </harmonyInfo>
               <eid>ND_ND</eid>
               <linkedTo>f_f</linkedTo>
               </Harmony>

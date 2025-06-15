@@ -31,6 +31,7 @@
 
 class QQmlEngine;
 class QQmlApplicationEngine;
+class QQuickItem;
 
 namespace muse::ui {
 class IUiEngine : MODULE_EXPORT_INTERFACE

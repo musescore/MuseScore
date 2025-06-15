@@ -159,7 +159,16 @@ class EngravingItem : public apiv1::ScoreElement
      */
     Q_PROPERTY(QRectF bbox READ bbox)
 
-    API_PROPERTY(subtype,                 SUBTYPE)
+    /**
+     * Subtype of this element.
+     * \since MuseScore 4.6
+     */
+    Q_PROPERTY(int subtype READ subtype)
+    /**
+     * Unlike the name might suggest, this property no longer returns the subtype and is scarcely used.
+     * Named 'subtype' prior to MuseScore 4.6
+     */
+    API_PROPERTY(subType,                 SUBTYPE)
     API_PROPERTY_READ_ONLY_T(bool, selected, SELECTED)
     API_PROPERTY_READ_ONLY_T(bool, generated, GENERATED)
     /**
@@ -387,7 +396,7 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(endTextOffset,           END_TEXT_OFFSET)
     API_PROPERTY(posAbove,                POS_ABOVE)
     API_PROPERTY_T(int, voice,            VOICE)
-    API_PROPERTY_READ_ONLY(position,      POSITION)                      // TODO: needed?
+    API_PROPERTY(position,                POSITION)
     /**
      * For chord symbols, chord symbol type, one of
      * PluginAPI::PluginAPI::HarmonyType values.
@@ -409,6 +418,8 @@ class EngravingItem : public apiv1::ScoreElement
     Staff* staff() { return wrap<Staff>(element()->staff()); }
 
     QRectF bbox() const;
+
+    int subtype() const { return element()->subtype(); }
 
 public:
     /// \cond MS_INTERNAL

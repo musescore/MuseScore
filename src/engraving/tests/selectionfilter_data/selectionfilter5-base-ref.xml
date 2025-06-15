@@ -5,7 +5,10 @@
       <voice id="0">0</voice>
       </voiceOffset>
     <Harmony>
-      <root>14</root>
+      <harmonyInfo>
+        <root>14</root>
+        </harmonyInfo>
+      <verticalAlign>0</verticalAlign>
       </Harmony>
     <Chord>
       <durationType>quarter</durationType>
@@ -15,7 +18,10 @@
         </Note>
       </Chord>
     <Harmony>
-      <root>13</root>
+      <harmonyInfo>
+        <root>13</root>
+        </harmonyInfo>
+      <verticalAlign>0</verticalAlign>
       </Harmony>
     <Chord>
       <durationType>quarter</durationType>
@@ -25,7 +31,10 @@
         </Note>
       </Chord>
     <Harmony>
-      <root>16</root>
+      <harmonyInfo>
+        <root>16</root>
+        </harmonyInfo>
+      <verticalAlign>0</verticalAlign>
       </Harmony>
     <Chord>
       <durationType>quarter</durationType>
@@ -35,8 +44,11 @@
         </Note>
       </Chord>
     <Harmony>
-      <root>17</root>
-      <name>m</name>
+      <harmonyInfo>
+        <name>m</name>
+        <root>17</root>
+        </harmonyInfo>
+      <verticalAlign>0</verticalAlign>
       </Harmony>
     <Chord>
       <durationType>quarter</durationType>

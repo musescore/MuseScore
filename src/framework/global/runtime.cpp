@@ -22,8 +22,6 @@
 
 #include "runtime.h"
 
-#include "log.h"
-
 #if defined(Q_OS_LINUX) || defined(Q_OS_MACOS)
 #include <pthread.h>
 #endif

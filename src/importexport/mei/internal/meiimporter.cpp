@@ -1240,17 +1240,23 @@ bool MeiImporter::readStaffDefs(pugi::xml_node parentNode)
             meiStaffDef.SetMeterUnit(meterSigNode.attribute("unit").as_int());
             meiStaffDef.SetMeterSym(meiStaffDef.AttMeterSigDefaultLog::StrToMetersign(meterSigNode.attribute("sym").value()));
         }
-
         if (meiStaffDef.HasMeterSym() || meiStaffDef.HasMeterCount()) {
             m_timeSigs[staffIdx] = Convert::meterFromMEI(meiStaffDef, warning);
             if (warning) {
                 this->addLog("meter signature", staffDefXpathNode.node());
             }
         }
+
         if (meiStaffDef.HasKeysig()) {
             m_keySigs[staffIdx] = Convert::keyFromMEI(meiStaffDef.GetKeysig(), warning);
             if (warning) {
                 this->addLog("key signature", staffDefXpathNode.node());
+            }
+        } else if (pugi::xml_node keySigNode = staffDefXpathNode.node().select_node(".//keySig").node()) {
+            m_keySigs[staffIdx] = Convert::keyFromMEI(
+                meiStaffDef.AttKeySigDefaultLog::StrToKeysignature(keySigNode.attribute("sig").value()), warning);
+            if (warning) {
+                this->addLog("key signature", keySigNode);
             }
         }
     }
@@ -2356,7 +2362,7 @@ bool MeiImporter::readBreath(pugi::xml_node breathNode, Measure* measure)
 }
 
 /**
- * Read a caesura (
+ * Read a caesura
  */
 
 bool MeiImporter::readCaesura(pugi::xml_node caesuraNode, Measure* measure)

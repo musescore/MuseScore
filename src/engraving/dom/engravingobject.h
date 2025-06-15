@@ -23,10 +23,7 @@
 #pragma once
 
 #include "global/allocator.h"
-#include "types/string.h"
 
-#include "draw/types/geometry.h"
-#include "modularity/ioc.h"
 #include "../devtools/iengravingelementsprovider.h"
 
 #include "../style/styledef.h"
@@ -34,7 +31,7 @@
 #include "../types/propertyvalue.h"
 #include "../types/types.h"
 
-#include "../infrastructure/rtti.h"
+#include "../infrastructure/rtti.h" // IWYU pragma: export
 #include "../infrastructure/eid.h"
 
 namespace mu::engraving {
@@ -160,7 +157,6 @@ class StaffTypeChange;
 class Stem;
 class StemSlash;
 class Sticking;
-class StretchedBend;
 class StringTunings;
 class Symbol;
 class System;
@@ -385,7 +381,6 @@ public:
     CONVERT(Hairpin,       HAIRPIN)
     CONVERT(HairpinSegment, HAIRPIN_SEGMENT)
     CONVERT(Bend,          BEND)
-    CONVERT(StretchedBend, STRETCHED_BEND)
     CONVERT(TremoloBar,    TREMOLOBAR)
     CONVERT(MeasureRepeat, MEASURE_REPEAT)
     CONVERT(Tuplet,        TUPLET)
@@ -722,13 +717,13 @@ static inline const StaffTextBase* toStaffTextBase(const EngravingObject* e)
 
 static inline Bend* toBend(EngravingObject* e)
 {
-    assert(e == 0 || e->isBend() || e->isStretchedBend());
+    assert(e == 0 || e->isBend());
     return (Bend*)e;
 }
 
 static inline const Bend* toBend(const EngravingObject* e)
 {
-    assert(e == 0 || e->isBend() || e->isStretchedBend());
+    assert(e == 0 || e->isBend());
     return (const Bend*)e;
 }
 
@@ -821,7 +816,6 @@ CONVERT(MeasureNumber)
 CONVERT(MMRestRange)
 CONVERT(Hairpin)
 CONVERT(HairpinSegment)
-CONVERT(StretchedBend)
 CONVERT(TremoloBar)
 CONVERT(MeasureRepeat)
 CONVERT(MMRest)

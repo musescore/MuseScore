@@ -2456,12 +2456,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2144"/>
         <source>Small note size:</source>
-        <translation>Pienen nuotin koko:</translation>
+        <translation>Pikkunuotin koko:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2087"/>
         <source>Reset &apos;Small note size&apos; value</source>
-        <translation>Palauta &apos;Pienen nuotin koko&apos; -arvo</translation>
+        <translation>Palauta &apos;Pikkunuotin koko&apos; -arvo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2252"/>
@@ -3032,7 +3032,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10450"/>
         <source>Use cue sized numbers for grace note bends</source>
-        <translation>Käytä vihjekokoisia numeroita korusävelten taivutuksiin</translation>
+        <translation>Käytä pienoiskokoisia numeroita korusävelten taivutuksiin</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11660"/>
@@ -3132,12 +3132,12 @@ viivaston ensimmäisessä nuotissa</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
         <source>Cue sizes</source>
-        <translation>Vihjekoot</translation>
+        <translation>Pienoiskoot</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2064"/>
         <source>Reduce rhythmic spacing for small notes</source>
-        <translation>Pienennä pienten nuottien rytmistä välistystä</translation>
+        <translation>Tiivistä pikkunuottien välistystä</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3436"/>
@@ -4510,7 +4510,7 @@ x-korkeudesta):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11036"/>
         <source>Trill cue note</source>
-        <translation>Trillin vihjenuotti</translation>
+        <translation>Trillin pikkunuotti</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11042"/>
@@ -7599,7 +7599,7 @@ x-korkeudesta):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
         <source>Respell pitches</source>
-        <translation>Muuta sävelkorkeuksien kirjoitusasua</translation>
+        <translation>Enharmoninen korjaus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="475"/>
@@ -11275,7 +11275,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/KeyboardLayoutsSection.qml" line="31"/>
         <source>Keyboard layout</source>
-        <translation>Näppäimistön ulkoasu</translation>
+        <translation>Koskettimiston ulkoasu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="31"/>
@@ -11594,7 +11594,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="107"/>
         <source>SoundFonts</source>
-        <translation>Äänifontit</translation>
+        <translation>SoundFonts</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="113"/>
@@ -20098,7 +20098,7 @@ kohotahti</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="76"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="48"/>
         <source>Cue size</source>
-        <translation>Vihjekoko</translation>
+        <translation>Pikkunuotti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="89"/>
@@ -22376,7 +22376,7 @@ kohotahti</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="198"/>
         <source>Cue note visibility</source>
-        <translation>Vihjenuotin näkyvyys</translation>
+        <translation>Pikkunuotin näkyvyys</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="219"/>
@@ -28440,7 +28440,7 @@ kirjoitus epäonnistui.</translation>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="46"/>
         <source>SoundFonts</source>
-        <translation>Äänifontit</translation>
+        <translation>SoundFonts</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="95"/>
@@ -31713,7 +31713,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5926"/>
         <source>Respell pitches</source>
-        <translation>Muuta sävelkorkeuksien kirjoitusasua</translation>
+        <translation>Enharmoninen korjaus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5933"/>

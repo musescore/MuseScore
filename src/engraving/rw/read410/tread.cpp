@@ -83,7 +83,6 @@
 #include "../../dom/barline.h"
 #include "../../dom/chord.h"
 #include "../../dom/bend.h"
-#include "../../dom/stretchedbend.h"
 #include "../../dom/box.h"
 #include "../../dom/laissezvib.h"
 #include "../../dom/layoutbreak.h"
@@ -173,8 +172,6 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::BEAM: read(item_cast<Beam*>(item), xml, ctx);
         break;
     case ElementType::BEND: read(item_cast<Bend*>(item), xml, ctx);
-        break;
-    case ElementType::STRETCHED_BEND: read(item_cast<StretchedBend*>(item), xml, ctx);
         break;
     case ElementType::HBOX: read(item_cast<HBox*>(item), xml, ctx);
         break;
@@ -767,7 +764,7 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setVelocity(e.readInt());
         } else if (tag == "dynType") { // obsolete
             if (mscVersion < 440) {
-                d->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+                d->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
             } else {
                 e.skipCurrentElement();
             }
@@ -2223,14 +2220,6 @@ void TRead::read(Bend* b, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(StretchedBend* b, XmlReader& xml, ReadContext& ctx)
-{
-    UNUSED(b);
-    UNUSED(xml);
-    UNUSED(ctx);
-    // not implemented
-}
-
 void TRead::read(Box* b, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
@@ -3148,7 +3137,7 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             h->setVeloChange(e.readInt());
         } else if (tag == "dynType") { // obsolete
             if (mscVersion < 440) {
-                h->setDynRange(TConv::fromXml(e.readAsciiText(), DynamicRange::PART));
+                h->setVoiceAssignment(read206::Read206::readDynamicRange(e.readInt()));
             } else {
                 e.skipCurrentElement();
             }
@@ -3178,22 +3167,23 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
 {
+    HarmonyInfo* info = new HarmonyInfo(ctx.score());
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "base") {
-            h->setBassTpc(e.readInt());
+            info->setBassTpc(e.readInt());
         } else if (tag == "baseCase") {
             h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
-            h->setId(e.readInt());
+            info->setId(e.readInt());
         } else if (tag == "name") {
-            h->setTextName(e.readText());
+            info->setTextName(e.readText());
         } else if (tag == "root") {
-            h->setRootTpc(e.readInt());
+            info->setRootTpc(e.readInt());
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "function") {
-            h->setFunction(e.readText());
+            compat::CompatUtils::setHarmonyRootTpcFromFunction(info, h, e.readText());
         } else if (tag == "degree") {
             int degreeValue = 0;
             int degreeAlter = 0;
@@ -3240,6 +3230,17 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
             e.unknown();
         }
     }
+
+    h->setNoteheadAlign(h->align().horizontal);
+    if ((int)h->noteheadAlign() != h->propertyDefault(Pid::POSITION).toInt()) {
+        h->setPropertyFlags(Pid::POSITION, PropertyFlags::UNSTYLED);
+    }
+
+    // Migrate vertical alignment later
+    h->setVerticalAlign(false);
+    h->setPropertyFlags(Pid::VERTICAL_ALIGN, PropertyFlags::UNSTYLED);
+
+    h->addChord(info);
 
     h->afterRead();
 }

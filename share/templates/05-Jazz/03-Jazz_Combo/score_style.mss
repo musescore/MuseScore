@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Style>
     <pageWidth>8.26772</pageWidth>
     <pageHeight>11.6929</pageHeight>
@@ -243,7 +243,7 @@
     <chordSymbolAFontSpatiumDependent>1</chordSymbolAFontSpatiumDependent>
     <chordSymbolAFontStyle>0</chordSymbolAFontStyle>
     <chordSymbolAColor r="0" g="0" b="0" a="255"/>
-    <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
+    <chordSymbolAAlign>center,baseline</chordSymbolAAlign>
     <chordSymbolAFrameType>0</chordSymbolAFrameType>
     <chordSymbolAFramePadding>0.2</chordSymbolAFramePadding>
     <chordSymbolAFrameWidth>0.1</chordSymbolAFrameWidth>
@@ -256,7 +256,7 @@
     <chordSymbolBFontSpatiumDependent>1</chordSymbolBFontSpatiumDependent>
     <chordSymbolBFontStyle>2</chordSymbolBFontStyle>
     <chordSymbolBColor r="0" g="0" b="0" a="255"/>
-    <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
+    <chordSymbolBAlign>center,baseline</chordSymbolBAlign>
     <chordSymbolBFrameType>0</chordSymbolBFrameType>
     <chordSymbolBFramePadding>0.2</chordSymbolBFramePadding>
     <chordSymbolBFrameWidth>0.1</chordSymbolBFrameWidth>

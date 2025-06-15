@@ -6,7 +6,7 @@
         <source>Wind section notated on a grand staff.</source>
         <comment>winds description</comment>
         <extracomment>description for Winds; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Puhkpillisektsioon kahel noodireal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="208"/>
@@ -34,7 +34,7 @@
         <source>Piccolo in E♭, sounding a minor third above the standard piccolo.</source>
         <comment>eb-piccolo description</comment>
         <extracomment>description for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pikkoloflööt in Eb, kõlab väikse tertsi võrra kõrgemalt tavalisest pikkolost.</translation>
+        <translation>Pikkoloflööt in Eb, kõlab tavalisest pikkolost väikse tertsi võrra kõrgemalt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="217"/>
@@ -55,7 +55,7 @@
         <source>Picc.</source>
         <comment>eb-piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Picc.</translation>
+        <translation>Pik.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="223"/>
@@ -69,7 +69,7 @@
         <source>Piccolo in D♭, sounding a semitone above the standard piccolo.</source>
         <comment>db-piccolo description</comment>
         <extracomment>description for Piccolo; transposition: D♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pikkoloflööt in Db, kõlab poole tooni võrra kõrgemalt tavalisest pikkolost.</translation>
+        <translation>Pikkoloflööt in Db, kõlab tavalisest pikkolost poole tooni võrra kõrgemalt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="228"/>
@@ -90,7 +90,7 @@
         <source>Picc.</source>
         <comment>db-piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: D♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Picc.</translation>
+        <translation>Pik.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="234"/>
@@ -125,7 +125,7 @@
         <source>Picc.</source>
         <comment>piccolo shortName</comment>
         <extracomment>shortName for Piccolo; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Picc.</translation>
+        <translation>Pik.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="245"/>
@@ -139,7 +139,7 @@
         <source>Flute in G, sounding a fifth higher than the standard flute.</source>
         <comment>treble-flute description</comment>
         <extracomment>description for Treble Flute; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Flööt in G, kõlab kvint kõrgemal tavalisest flöödist.</translation>
+        <translation>Flööt in G, kõlab tavalisest flöödist kvindi võrra kõrgemalt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="250"/>
@@ -1924,7 +1924,7 @@
         <source>Oboe in E♭, sounding a minor third above the standard oboe. Historically called the oboe musette.</source>
         <comment>piccolo-oboe description</comment>
         <extracomment>description for Piccolo Oboe; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oboe in Eb, kõlab tavalisest oboest väikse tertsi võrra kõrgemalt. Ajaloolise nimetusega oboe musette.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="827"/>
@@ -2008,7 +2008,7 @@
         <source>Oboe in A, sounding a minor third below the standard oboe.</source>
         <comment>oboe-d'amore description</comment>
         <extracomment>description for Oboe d’amore; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oboe in A, kõlab tavalisest oboest väikse tertsi võrra madalamalt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="854"/>
@@ -2036,7 +2036,7 @@
         <source>Oboe in F, sounding a perfect fifth below the standard oboe.</source>
         <comment>oboe-da-caccia description</comment>
         <extracomment>description for Oboe da caccia; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oboe in F, kõlab tavalisest oboest kvindi võrra madalamalt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="863"/>
@@ -2064,7 +2064,7 @@
         <source>Oboe in F, sounding a perfect fifth below the standard oboe.</source>
         <comment>english-horn description</comment>
         <extracomment>description for English Horn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Oboe in F, kõlab tavalisest oboest kvindi võrra madalamalt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="872"/>
@@ -19010,7 +19010,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="89"/>
         <source>Flutes</source>
-        <translation type="unfinished"/>
+        <translation>Flöödid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="90"/>
@@ -19030,7 +19030,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="93"/>
         <source>Whistles</source>
-        <translation type="unfinished"/>
+        <translation>Viled</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="94"/>
@@ -19065,7 +19065,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="100"/>
         <source>Oboes</source>
-        <translation type="unfinished"/>
+        <translation>Oboed</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="101"/>
@@ -19135,12 +19135,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="114"/>
         <source>Saxophones</source>
-        <translation type="unfinished"/>
+        <translation>Saksofonid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="115"/>
         <source>Bassoons</source>
-        <translation type="unfinished"/>
+        <translation>Fagotid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="116"/>
@@ -19165,17 +19165,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="120"/>
         <source>Bagpipes</source>
-        <translation type="unfinished"/>
+        <translation>Torupillid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="121"/>
         <source>Accordions</source>
-        <translation type="unfinished"/>
+        <translation>Akordionid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="122"/>
         <source>Harmonicas</source>
-        <translation type="unfinished"/>
+        <translation>Suupillid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="123"/>
@@ -19195,17 +19195,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="126"/>
         <source>Horns</source>
-        <translation type="unfinished"/>
+        <translation>Metsasarved</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="127"/>
         <source>Wagner Tubas</source>
-        <translation type="unfinished"/>
+        <translation>Wagneri tuubad</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="128"/>
         <source>Cornets</source>
-        <translation type="unfinished"/>
+        <translation>Kornetid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="129"/>
@@ -19230,12 +19230,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="133"/>
         <source>Trumpets</source>
-        <translation type="unfinished"/>
+        <translation>Trompetid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="134"/>
         <source>Baroque Trumpets</source>
-        <translation type="unfinished"/>
+        <translation>Barokktrompetid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="135"/>
@@ -19245,7 +19245,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="136"/>
         <source>Flugelhorns</source>
-        <translation type="unfinished"/>
+        <translation>Flüügelhornid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="137"/>
@@ -19255,7 +19255,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="138"/>
         <source>Cornetts</source>
-        <translation type="unfinished"/>
+        <translation>Kornetid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="139"/>
@@ -19265,7 +19265,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="140"/>
         <source>Trombones</source>
-        <translation type="unfinished"/>
+        <translation>Tromboonid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="141"/>
@@ -19280,12 +19280,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="143"/>
         <source>Euphoniums</source>
-        <translation type="unfinished"/>
+        <translation>Eufooniumid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="144"/>
         <source>Tubas</source>
-        <translation type="unfinished"/>
+        <translation>Tuubad</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="145"/>
@@ -19435,7 +19435,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="174"/>
         <source>Organs</source>
-        <translation type="unfinished"/>
+        <translation>Orelid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="175"/>
@@ -19445,17 +19445,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="176"/>
         <source>Harps</source>
-        <translation type="unfinished"/>
+        <translation>Harfid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="177"/>
         <source>Guitars</source>
-        <translation type="unfinished"/>
+        <translation>Kitarrid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="178"/>
         <source>Bass Guitars</source>
-        <translation type="unfinished"/>
+        <translation>Basskitarrid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="179"/>
@@ -19465,12 +19465,12 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="180"/>
         <source>Ukuleles</source>
-        <translation type="unfinished"/>
+        <translation>Ukuleled</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="181"/>
         <source>Mandolins</source>
-        <translation type="unfinished"/>
+        <translation>Mandoliinid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="182"/>
@@ -19485,7 +19485,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="184"/>
         <source>Balalaikas</source>
-        <translation type="unfinished"/>
+        <translation>Balalaikas</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="185"/>
@@ -19535,7 +19535,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="194"/>
         <source>Orchestral Strings</source>
-        <translation type="unfinished"/>
+        <translation>Orkestraalsed keelpillid</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="195"/>
@@ -19689,7 +19689,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6258"/>
         <source>Choir</source>
-        <translation type="unfinished"/>
+        <translation>Koor</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6259"/>
@@ -19724,17 +19724,17 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6265"/>
         <source>Woodwind Ensemble</source>
-        <translation type="unfinished"/>
+        <translation>Puupuhkpilliansambel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6266"/>
         <source>Brass Ensemble</source>
-        <translation type="unfinished"/>
+        <translation>Vaskpuhkpilliansambel</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="6267"/>
         <source>String Ensemble</source>
-        <translation type="unfinished"/>
+        <translation>Keelpilliansambel</translation>
     </message>
 </context>
 <context>

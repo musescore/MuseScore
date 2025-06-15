@@ -3441,7 +3441,7 @@ de la première note du système</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5947"/>
         <source>measure(s)</source>
-        <translation> mesure(s)</translation>
+        <translation>mesure(s)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6025"/>
@@ -6845,7 +6845,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="364"/>
         <source>Select sectio&amp;n</source>
-        <translation>Sélectionner une sectio&amp;n </translation>
+        <translation>Sélectionner une sectio&amp;n</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="370"/>
@@ -9446,13 +9446,13 @@ text x-height):</source>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1471"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1472"/>
         <source>Zoom in</source>
-        <translation>Zoom avant</translation>
+        <translation>Augmenter le zoom</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1478"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1479"/>
         <source>Zoom out</source>
-        <translation>Zoom arrière</translation>
+        <translation>Diminuer le zoom</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1485"/>
@@ -12884,7 +12884,7 @@ Publié sous licence &lt;a href=&quot;%1&quot;&gt;GNU General Public License. ve
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="221"/>
         <source>Playing technique annotation</source>
-        <translation>Jouer l&apos;annotation de technique de jeu</translation>
+        <translation>Annotation de technique de jeu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="222"/>
@@ -19525,7 +19525,7 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/PercussionPanelPadSwapDialog.qml" line="203"/>
         <source>This setting can be changed at any time in Preferences</source>
-        <translation>Ce paramètre peut être modifié à n&apos;importe quel moment dans Préférences.</translation>
+        <translation>Ce paramètre peut être modifié à n&apos;importe quel moment dans Préférences</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
@@ -20332,7 +20332,7 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="165"/>
         <source>Keep measures on the selected system(s) together and prevent them from reflowing to the next system</source>
-        <translation>Garder les mesures ensemble sur les systèmes sélectionnés ensemble et éviter qu&apos;elles ne se déplacent sur le système suivant.</translation>
+        <translation>Garder les mesures ensemble sur les systèmes sélectionnés ensemble et éviter qu&apos;elles ne se déplacent sur le système suivant</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="187"/>
@@ -23326,12 +23326,12 @@ Remarque : Maitriser MuseScore est disponible principalement en anglais (Certain
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="78"/>
         <source>Zoom in</source>
-        <translation>Zoom avant</translation>
+        <translation>Augmenter le zoom</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="58"/>
         <source>Zoom out</source>
-        <translation>Zoom arrière</translation>
+        <translation>Diminuer le zoom</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="126"/>
@@ -24022,7 +24022,7 @@ Remarque : Maitriser MuseScore est disponible principalement en anglais (Certain
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="218"/>
         <source>Fretboard style:</source>
-        <translation>Style de diagramme d&apos;accord</translation>
+        <translation>Style de diagramme d&apos;accord :</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/FretboardsPage.qml" line="222"/>
@@ -25339,7 +25339,7 @@ les portées :</translation>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="107"/>
         <source>Close the panel automatically</source>
-        <translation>Fermer le panneau automatiquement :</translation>
+        <translation>Fermer le panneau automatiquement</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PercussionPreferencesPage.qml" line="174"/>
@@ -29737,12 +29737,12 @@ a échoué.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="148"/>
         <source>Zoom in</source>
-        <translation>Zoom avant</translation>
+        <translation>Augmenter le zoom</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/CreateFromTemplatePage.qml" line="161"/>
         <source>Zoom out</source>
-        <translation>Zoom arrière</translation>
+        <translation>Diminuer le zoom</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="49"/>

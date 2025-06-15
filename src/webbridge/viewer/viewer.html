@@ -155,7 +155,12 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
         function onInit() {
           console.log("on init mu api")
           window.muapi = createMuApi({
-            muwasm: window.muwasm   
+            muwasm: window.muwasm,
+
+            // callbacks
+            onProjectSaved: function(data) {
+              console.log("[html] onProjectSaved len: ", data.length)
+            }   
           })
         }
 

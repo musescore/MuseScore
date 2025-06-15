@@ -128,8 +128,11 @@
             <durationType>half</durationType>
             </Rest>
           <Harmony>
-            <root>17</root>
+            <harmonyInfo>
+              <root>17</root>
+              </harmonyInfo>
             <eid>I_I</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>J_J</eid>
@@ -460,8 +463,11 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>19</root>
+            <harmonyInfo>
+              <root>19</root>
+              </harmonyInfo>
             <eid>s_s</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>t_t</eid>
@@ -898,8 +904,11 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>bB_bB</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>cB_cB</eid>
@@ -1328,8 +1337,11 @@
               </Note>
             </Chord>
           <Harmony>
-            <root>16</root>
+            <harmonyInfo>
+              <root>16</root>
+              </harmonyInfo>
             <eid>JC_JC</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>KC_KC</eid>

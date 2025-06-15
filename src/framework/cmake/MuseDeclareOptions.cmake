@@ -55,6 +55,7 @@ declare_muse_module_opt(TOURS ON)
 
 declare_muse_module_opt(UI ON)
 option(MUSE_MODULE_UI_DISABLE_MODALITY "Disable dialogs modality for testing purpose" OFF)
+option(MUSE_MODULE_UI_SYSTEMDRAG_SUPPORTED "System drag supported" ON)
 
 declare_muse_module_opt(UPDATE ON)
 

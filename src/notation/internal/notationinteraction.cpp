@@ -893,7 +893,7 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
     TRACEFUNC;
 
     if (needEndTextEditing(elements)) {
-        endEditText();
+        endEditText(/*startNonTextualEdit*/ false);
     } else if (needEndElementEditing(elements)) {
         endEditElement();
     }
@@ -2689,7 +2689,7 @@ void NotationInteraction::doAddSlur(const Slur* slurTemplate)
     } else if (sel.isSingle()) {
         if (sel.element()->isNote() && !toNote(sel.element())->isTrillCueNote()) {
             doAddSlur(toNote(sel.element())->chord(), nullptr, slurTemplate);
-        } else if (sel.element()->isSlurSegment() && slurTemplate->isHammerOnPullOff()) {
+        } else if (sel.element()->isSlurSegment() && slurTemplate && slurTemplate->isHammerOnPullOff()) {
             Slur* slur = toSlurSegment(sel.element())->slur();
             doAddSlur(slur->startElement(), slur->endElement(), slurTemplate);
         }
@@ -2773,7 +2773,7 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
     Slur* slur = firstChordRest->slur(secondChordRest);
     if (!slur || slur->slurDirection() != DirectionV::AUTO) {
         slur = score()->addSlur(firstChordRest, secondChordRest, slurTemplate);
-    } else if (slur && slurTemplate->isHammerOnPullOff()) {
+    } else if (slurTemplate && slurTemplate->isHammerOnPullOff()) {
         // Replace existing slur with HOPO
         endEditElement();
         score()->undoRemoveElement(slur);
@@ -4188,21 +4188,19 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     return true;
 }
 
-void NotationInteraction::endEditText()
+void NotationInteraction::endEditText(bool startNonTextualEdit)
 {
     if (!isTextEditingStarted()) {
         return;
     }
 
-    EngravingItem* editedElement = m_editData.element;
+    TextBase* editedElement = toTextBase(m_editData.element);
     doEndEditElement();
+    notifyAboutTextEditingEnded(editedElement);
 
-    if (editedElement) {
-        notifyAboutTextEditingEnded(toTextBase(editedElement));
-        // When textual edit is finished, non-textual edit can still happen, so we need to start the non-textual edit mode here
-        if (editedElement->isTextBase() && toTextBase(editedElement)->supportsNonTextualEdit()) {
-            startEditElement(editedElement, false);
-        }
+    // When textual edit is finished, non-textual edit can still happen, so we need to start the non-textual edit mode here
+    if (startNonTextualEdit && editedElement->supportsNonTextualEdit()) {
+        startEditElement(editedElement, false);
     }
 
     notifyAboutTextEditingChanged();
@@ -4834,14 +4832,14 @@ void NotationInteraction::copySelection()
 
 Ret NotationInteraction::repeatSelection()
 {
-    const mu::engraving::Selection& selection = score()->selection();
+    const Selection& selection = score()->selection();
     if (score()->noteEntryMode() && selection.isSingle()) {
         EngravingItem* el = selection.element();
         if (el && el->type() == ElementType::NOTE && !score()->inputState().endOfScore()) {
             startEdit(TranslatableString("undoableAction", "Repeat selection"));
             Chord* c = toNote(el)->chord();
             for (Note* note : c->notes()) {
-                mu::engraving::NoteVal nval = note->noteVal();
+                NoteVal nval = note->noteVal();
                 score()->addPitch(nval, note != c->notes()[0]);
             }
             apply();
@@ -4862,22 +4860,25 @@ Ret NotationInteraction::repeatSelection()
         return ret;
     }
 
-    mu::engraving::XmlReader xml(selection.mimeData());
-    track_idx_t dStaff = selection.staffStart();
+    XmlReader xml(selection.mimeData());
+    staff_idx_t dStaff = selection.staffStart();
     mu::engraving::Segment* endSegment = selection.endSegment();
 
-    if (endSegment && endSegment->segmentType() != mu::engraving::SegmentType::ChordRest) {
-        endSegment = endSegment->next1(mu::engraving::SegmentType::ChordRest);
+    if (endSegment && endSegment->segmentType() != SegmentType::ChordRest) {
+        endSegment = endSegment->next1(SegmentType::ChordRest);
     }
-    if (endSegment && endSegment->element(dStaff * mu::engraving::VOICES)) {
-        EngravingItem* e = endSegment->element(dStaff * mu::engraving::VOICES);
-        if (e) {
-            startEdit(TranslatableString("undoableAction", "Repeat selection"));
-            ChordRest* cr = toChordRest(e);
-            score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
-            apply();
+    if (endSegment) {
+        for (track_idx_t track = dStaff * VOICES; track < (dStaff + 1) * VOICES; ++track) {
+            EngravingItem* e = endSegment->element(track);
+            if (e) {
+                startEdit(TranslatableString("undoableAction", "Repeat selection"));
+                ChordRest* cr = toChordRest(e);
+                score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
+                apply();
 
-            showItem(cr);
+                showItem(cr);
+                break;
+            }
         }
     }
 
@@ -6260,7 +6261,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         return;
     }
 
-    endEditText();
+    endEditText(/*startNonTextualEdit*/ false);
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // if we are skipping several chords with spaces
@@ -6410,7 +6411,7 @@ void NotationInteraction::navigateToNextSyllable()
         return;
     }
 
-    endEditText();
+    endEditText(/*startNonTextualEdit*/ false);
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // we are extending with several dashes
@@ -6654,7 +6655,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
         }
     }
 
-    endEditText();
+    endEditText(/*startNonTextualEdit*/ false);
 
     lyrics = cr->lyrics(verse, placement);
     if (!lyrics) {
@@ -7236,7 +7237,7 @@ void NotationInteraction::addMelisma()
     FontStyle fStyle = lyrics->fontStyle();
     PropertyFlags fFlags = lyrics->propertyFlags(Pid::FONT_STYLE);
     Fraction endTick = segment->tick(); // a previous melisma cannot extend beyond this point
-    endEditText();
+    endEditText(/*startNonTextualEdit*/ false);
 
     // search next chord
     Segment* nextSegment = segment;
@@ -7441,7 +7442,7 @@ void NotationInteraction::addLyricsVerse()
     mu::engraving::FontStyle fStyle = oldLyrics->fontStyle();
     mu::engraving::PropertyFlags fFlags = oldLyrics->propertyFlags(mu::engraving::Pid::FONT_STYLE);
 
-    endEditText();
+    endEditText(/*startNonTextualEdit*/ false);
 
     score()->startCmd(TranslatableString("undoableAction", "Add lyrics verse"));
     int newVerse = oldLyrics->no() + 1;

@@ -161,6 +161,11 @@ bool UiEngine::isEffectsAllowed() const
     return m_isEffectsAllowed;
 }
 
+bool UiEngine::isSystemDragSupported() const
+{
+    return configuration()->isSystemDragSupported();
+}
+
 void UiEngine::addSourceImportPath(const QString& path)
 {
 #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE

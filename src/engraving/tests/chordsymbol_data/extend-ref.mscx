@@ -94,9 +94,12 @@
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>14</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>G_G</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>H_H</eid>
@@ -111,9 +114,12 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>16</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>J_J</eid>
+            <verticalAlign>0</verticalAlign>
             </Harmony>
           </voice>
         </Measure>
