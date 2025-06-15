@@ -52,7 +52,7 @@ public:
     Segment* segment() const;
     String channelName(voice_idx_t voice) const { return m_channelNames[voice]; }
     void setChannelName(voice_idx_t v, const String& s) { m_channelNames[v] = s; }
-    void setSwingParameters(int unit, int ratio)
+    void setSwingParameters(int unit, float ratio)
     {
         m_swingParameters.swingUnit = unit;
         m_swingParameters.swingRatio = ratio;
