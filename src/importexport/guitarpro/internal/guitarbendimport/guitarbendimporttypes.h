@@ -56,7 +56,7 @@ struct BendSegment {
 enum class BendType {
     NORMAL_BEND,
     PREBEND,
-    TIED_TO_PREVIOUS_NOTE,
+    HOLD,
     SLIGHT_BEND
 };
 
@@ -67,13 +67,10 @@ struct ImportedBendInfo {
     int timeOffsetFromStart = 0;
     int pitchOffsetFromStart = 0;
     bool connectsToNextNote = false;
-
-    bool isSlightBend() const { return type == BendType::SLIGHT_BEND; }
-    bool startsWithPrebend() const { return type == BendType::PREBEND; }
 };
 
 struct ChordImportedBendData {
-    mu::engraving::Chord* chord = nullptr;
+    const mu::engraving::Chord* chord = nullptr;
     std::map<const mu::engraving::Note*, ImportedBendInfo> dataByNote;
 };
 

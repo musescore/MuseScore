@@ -55,11 +55,11 @@ ImportedBendInfo BendInfoConverter::fillBendInfo(const Note* note, const PitchVa
         return prev.pitch < cur.pitch ? pvd::INCREASED_PITCH_DIFF_TIME : pvd::DECREASED_PITCH_DIFF_TIME;
     };
 
-    auto addPrebendOrHold = [&importedInfo](const PitchValue& start, bool noteTiedBack) {
+    auto addPrebendOrHold = [&importedInfo](const PitchValue& start) {
         importedInfo.timeOffsetFromStart = start.time;
         importedInfo.pitchOffsetFromStart = start.pitch;
         if (start.pitch > 0) {
-            importedInfo.type = (noteTiedBack ? BendType::TIED_TO_PREVIOUS_NOTE : BendType::PREBEND);
+            importedInfo.type = BendType::PREBEND;
         }
     };
 
@@ -85,7 +85,7 @@ ImportedBendInfo BendInfoConverter::fillBendInfo(const Note* note, const PitchVa
         case pvd::SAME_PITCH_DIFF_TIME:
         {
             if (importedInfo.segments.empty()) {
-                addPrebendOrHold(pitchValues[i], note->tieBack());
+                addPrebendOrHold(pitchValues[i]);
             } else {
                 BendSegment& lastSegment = importedInfo.segments.back();
                 lastSegment.middleTime = lastSegment.endTime;
@@ -98,7 +98,7 @@ ImportedBendInfo BendInfoConverter::fillBendInfo(const Note* note, const PitchVa
         case pvd::INCREASED_PITCH_SAME_TIME:
         {
             if (importedInfo.segments.empty()) {
-                addPrebendOrHold(pitchValues[i], note->tieBack());
+                addPrebendOrHold(pitchValues[i]);
             }
 
             break;
@@ -108,7 +108,7 @@ ImportedBendInfo BendInfoConverter::fillBendInfo(const Note* note, const PitchVa
         case pvd::DECREASED_PITCH_DIFF_TIME:
         {
             if (importedInfo.segments.empty()) {
-                addPrebendOrHold(pitchValues[i], note->tieBack());
+                addPrebendOrHold(pitchValues[i]);
             }
 
             BendSegment newSegment;
