@@ -11155,7 +11155,7 @@ Publicado bajo la &lt;a href=&quot;%1&quot;&gt;Licencia Pública General de GNU 
         <location filename="../../src/appshell/qml/Preferences/internal/AccentColorsSection.qml" line="63"/>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="47"/>
         <source>Accent color:</source>
-        <translation>Color del acento:</translation>
+        <translation>Color de resalte:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="44"/>

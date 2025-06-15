@@ -762,7 +762,7 @@
         <source>Whistle pitched in D (notated at concert pitch).</source>
         <comment>d-tin-whistle description</comment>
         <extracomment>description for Tin Whistle; tuning: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dommerfløyte stemt i D (notert i kammertone)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="453"/>
@@ -797,7 +797,7 @@
         <source>Whistle pitched in C.</source>
         <comment>c-tin-whistle description</comment>
         <extracomment>description for Tin Whistle; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dommerfløyte stemt i C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="464"/>
@@ -832,7 +832,7 @@
         <source>Whistle pitched in B♭ (notated at concert pitch).</source>
         <comment>bflat-tin-whistle description</comment>
         <extracomment>description for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Dommerfløyte stemt i B♭ (notert i kammertone).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="475"/>

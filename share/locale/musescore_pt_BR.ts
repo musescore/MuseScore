@@ -47,7 +47,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
         <source>Lock layout with X measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Travar o layout com X compassos por sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="34"/>
@@ -58,13 +58,13 @@
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="69"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="72"/>
         <source>Add system locks to each system</source>
-        <translation type="unfinished"/>
+        <translation>Adicionar travas de sistema para cada sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="79"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="82"/>
         <source>Remove current system locks</source>
-        <translation type="unfinished"/>
+        <translation>Remover travas de sistema atual</translation>
     </message>
 </context>
 <context>
@@ -1112,7 +1112,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="354"/>
         <source>Merge matching rests:</source>
-        <translation type="unfinished"/>
+        <translation>Mesclar pausas correspondentes:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="367"/>
@@ -1278,13 +1278,13 @@
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1034"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1037"/>
         <source>Apply and go to previous staff</source>
-        <translation type="unfinished"/>
+        <translation>Aplicar e ir para pauta anterior</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1053"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1056"/>
         <source>Apply and go to next staff</source>
-        <translation type="unfinished"/>
+        <translation>Aplicar e ir para pauta seguinte</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="458"/>
@@ -2421,7 +2421,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="362"/>
         <source>MuseScore Studio will change the style to suit the font better</source>
-        <translation type="unfinished"/>
+        <translation>O MuseScore Studio mudará o estilo para se adequar melhor à fonte</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1044"/>
@@ -2643,7 +2643,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
         <source>Dynamics &amp; hairpins</source>
-        <translation type="unfinished"/>
+        <translation>Dinâmicas &amp; sinais de dinâmica</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="592"/>
@@ -2653,23 +2653,23 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="598"/>
         <source>Hide if there is only 1 instrument</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar se houver apenas 1 instrumento</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="607"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="627"/>
         <source>Long name</source>
-        <translation type="unfinished"/>
+        <translation>Nome longo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="617"/>
         <source>Reset &apos;Instrument labels on subsequent systems&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Redefinir o valor de &apos;Etiquetas de instrumentos em sistemas subsequentes&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="637"/>
         <source>Reset &apos;Instrument labels on first system of sections&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Redefinir o valor de &apos;Etiquetas de instrumentos na primeira seção de sistemas&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="647"/>
@@ -9093,7 +9093,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="153"/>
         <source>Show/hide undo history</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar/ocultar histórico de desfazer</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="161"/>
@@ -24640,7 +24640,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="375"/>
         <source>History</source>
-        <translation type="unfinished"/>
+        <translation>Histórico</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="619"/>
