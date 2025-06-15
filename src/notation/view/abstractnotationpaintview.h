@@ -195,6 +195,8 @@ protected:
 
 protected slots:
     virtual void onViewSizeChanged();
+    void handleLingeringCursorUpdate(double x, double y, double width, double height);
+    void handleLingeringCursorUpdate1();
 
 private:
     INotationNoteInputPtr notationNoteInput() const;
