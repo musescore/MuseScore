@@ -42,15 +42,24 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/utils.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/guitarbendimporttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/guitarbendimporter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/guitarbendimporter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddatacontext.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddatacollector.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddatacollector.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/bendchorddurationsplitter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/bendchorddurationsplitter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/bendinfoconverter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/bendinfoconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddataprocessor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/benddataprocessor.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/benddatacontextsplitchord.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/benddatacollectorsplitchord.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/benddatacollectorsplitchord.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/benddataprocessorsplitchord.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/benddataprocessorsplitchord.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/bendchorddurationsplitter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/guitarbendimport/splitchord/bendchorddurationsplitter.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.h

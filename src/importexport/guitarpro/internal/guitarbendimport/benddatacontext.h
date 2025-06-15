@@ -29,36 +29,16 @@
 // otherwise - "grace note after" is placed where the "small note head" was in guitar pro, and normal note is placed where normal note was in guitar pro
 // #define SPLIT_CHORD_DURATIONS 1
 
-namespace mu::engraving {
-class Chord;
-}
+#include "guitarbendimporttypes.h"
+#include "splitchord/benddatacontextsplitchord.h"
 
 namespace mu::iex::guitarpro {
 struct BendDataContext {
-    struct BendNoteData {
-        double startFactor = 0.0;
-        double endFactor = 1.0;
-        int quarterTones = 0;
-    };
-
-    using bend_data_map_t       = std::map<size_t /* idx in chord */, BendNoteData>;
-    using grace_bend_data_map_t = std::map<size_t /* idx in chord */, std::vector<BendNoteData> >; // each note can have multiple grace notes connected
-
-#ifdef SPLIT_CHORD_DURATIONS
-    struct BendChordData {
-        mu::engraving::Fraction startTick;
-        bend_data_map_t noteDataByIdx;
-    };
-
-    std::unordered_map<mu::engraving::track_idx_t, std::map<int, BendChordData> > bendDataByEndTick;
-    std::unordered_map<mu::engraving::track_idx_t, std::map<int, std::vector<mu::engraving::Fraction> > > bendChordDurations;
-    std::unordered_map<mu::engraving::track_idx_t, std::set<mu::engraving::Fraction> > reduntantChordTicks;
-    std::unordered_map<mu::engraving::track_idx_t, std::set<mu::engraving::Fraction> > chordTicksForTieBack;
-#else
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, grace_bend_data_map_t > > graceAfterBendData;
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, bend_data_map_t > > tiedNotesBendsData;
-#endif
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, bend_data_map_t > > prebendData;
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, bend_data_map_t > > slightBendData;
+
+    std::unique_ptr<BendDataContextSplitChord> splitChordCtx;
 };
 } // mu::iex::guitarpro
