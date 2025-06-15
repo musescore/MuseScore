@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -19,8 +20,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
-      <Staff id="1">
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -83,71 +85,87 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <TimeSig>
+            <eid>E_E</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>F_F</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
+              <eid>G_G</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Rest>
+            <eid>H_H</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Chord>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>J_J</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Rest>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>L_L</eid>
         <voice>
           <Chord>
+            <eid>M_M</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <Note>
+              <eid>N_N</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Rest>
+            <eid>O_O</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
+            <eid>P_P</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>Q_Q</eid>
         <voice>
           <Rest>
+            <eid>R_R</eid>
             <durationType>half</durationType>
             </Rest>
           <Rest>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>U_U</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>V_V</eid>
                   </Tie>
                 <next>
                   <location>
@@ -159,16 +177,18 @@
               <pitch>71</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           </voice>
         </Measure>
       <Measure>
+        <eid>W_W</eid>
         <voice>
           <Chord>
+            <eid>X_X</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Y_Y</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -180,16 +200,18 @@
               <pitch>71</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Rest>
+            <eid>Z_Z</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
+            <eid>a_a</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>b_b</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

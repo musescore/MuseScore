@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -19,8 +20,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
-      <Staff id="1">
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -83,64 +85,83 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <TimeSig>
+            <eid>E_E</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>F_F</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
+            <eid>G_G</eid>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
+            <eid>H_H</eid>
             <durationType>32nd</durationType>
             </Rest>
           <Rest>
+            <eid>I_I</eid>
             <durationType>64th</durationType>
             </Rest>
           <Rest>
+            <eid>J_J</eid>
             <durationType>128th</durationType>
             </Rest>
+          <Beam>
+            <eid>K_K</eid>
+            <l1>-26</l1>
+            <l2>-20</l2>
+            </Beam>
           <Chord>
+            <eid>L_L</eid>
             <durationType>128th</durationType>
             <Note>
+              <eid>M_M</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>64th</durationType>
             <Note>
+              <eid>O_O</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>P_P</eid>
             <dots>1</dots>
             <durationType>32nd</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              <eid>Q_Q</eid>
               </Articulation>
             <Note>
+              <eid>R_R</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Rest>
+            <eid>S_S</eid>
             <durationType>16th</durationType>
             </Rest>
           <Rest>
+            <eid>T_T</eid>
             <durationType>eighth</durationType>
             </Rest>
           <Rest>
+            <eid>U_U</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

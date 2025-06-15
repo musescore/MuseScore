@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -19,15 +20,17 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
-      <Staff id="1">
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -91,72 +94,91 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tuplet>
+            <eid>G_G</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>5</actualNotes>
             <baseNote>16th</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>5</text>
+              </Number>
             </Tuplet>
           <Chord>
+            <eid>H_H</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>I_I</eid>
               <pitch>76</pitch>
               <tpc>18</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Rest>
+            <eid>J_J</eid>
             <durationType>16th</durationType>
             </Rest>
+          <Beam>
+            <eid>K_K</eid>
+            <l1>38</l1>
+            <l2>40</l2>
+            </Beam>
           <Chord>
+            <eid>L_L</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>M_M</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>N_N</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>O_O</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <endTuplet/>
           <Chord>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>Q_Q</eid>
               <pitch>64</pitch>
               <tpc>18</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>S_S</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>U_U</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           </voice>
@@ -166,70 +188,88 @@
       <Measure>
         <voice>
           <TimeSig>
+            <eid>V_V</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Tuplet>
+            <eid>W_W</eid>
             <normalNotes>4</normalNotes>
             <actualNotes>5</actualNotes>
             <baseNote>16th</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>5</text>
+              </Number>
             </Tuplet>
+          <Beam>
+            <eid>X_X</eid>
+            <l1>-12</l1>
+            <l2>-12</l2>
+            </Beam>
           <Chord>
+            <eid>Y_Y</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>Z_Z</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>a_a</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>b_b</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>c_c</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>d_d</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>e_e</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>f_f</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>g_g</eid>
             <durationType>16th</durationType>
             <Note>
+              <eid>h_h</eid>
               <pitch>47</pitch>
               <tpc>19</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             <Note>
+              <eid>i_i</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <endTuplet/>
           <Rest>
+            <eid>j_j</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
+            <eid>k_k</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
