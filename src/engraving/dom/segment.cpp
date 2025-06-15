@@ -725,6 +725,7 @@ void Segment::add(EngravingItem* el)
     case ElementType::TEMPO_TEXT:
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
+    case ElementType::FOOTNOTE:
     case ElementType::HARMONY:
     case ElementType::SYMBOL:
     case ElementType::FRET_DIAGRAM:
@@ -917,6 +918,7 @@ void Segment::remove(EngravingItem* el)
 
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
+    case ElementType::FOOTNOTE:
     case ElementType::FIGURED_BASS:
     case ElementType::FRET_DIAGRAM:
     case ElementType::HARMONY:
@@ -2009,6 +2011,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::DYNAMIC:
     case ElementType::HARMONY:
     case ElementType::EXPRESSION:
+    case ElementType::FOOTNOTE:
     case ElementType::SYMBOL:
     case ElementType::FERMATA:
     case ElementType::FRET_DIAGRAM:
@@ -2199,6 +2202,7 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     switch (e->type()) {
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
+    case ElementType::FOOTNOTE:
     case ElementType::HARMONY:
     case ElementType::SYMBOL:
     case ElementType::FERMATA:
@@ -2641,6 +2645,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isTempoText()
                    && !e->isDynamic()
                    && !e->isExpression()
+                   && !e->isFootnote()
                    && !e->isFiguredBass()
                    && !e->isSymbol()
                    && !e->isFSymbol()

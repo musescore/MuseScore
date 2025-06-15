@@ -424,6 +424,24 @@ const TextStyle expressionTextStyle { {
     { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
 } };
 
+const TextStyle footnoteTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::footnoteFontFace,                       Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::footnoteFontSize,                       Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::footnoteLineSpacing,                    Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::footnoteFontSpatiumDependent,           Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::footnoteFontStyle,                      Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::footnoteColor,                          Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::footnoteAlign,                          Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::footnoteOffset,                         Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::footnoteFrameType,                      Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::footnoteFramePadding,                   Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::footnoteFrameWidth,                     Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::footnoteFrameRound,                     Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::footnoteFrameFgColor,                   Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::footnoteFrameBgColor,                   Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+} };
+
 const TextStyle tempoTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::tempoFontFace,                          Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::tempoFontSize,                          Pid::FONT_SIZE },
@@ -1266,6 +1284,7 @@ const TextStyle* textStyle(TextStyleType idx)
 
     case TextStyleType::STAFF: return &staffTextStyle;
     case TextStyleType::EXPRESSION: return &expressionTextStyle;
+    case TextStyleType::FOOTNOTE: return &footnoteTextStyle;
     case TextStyleType::DYNAMICS: return &dynamicsTextStyle;
     case TextStyleType::HAIRPIN: return &hairpinTextStyle;
     case TextStyleType::LYRICS_ODD: return &lyricsOddTextStyle;

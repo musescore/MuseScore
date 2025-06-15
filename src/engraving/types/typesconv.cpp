@@ -307,6 +307,9 @@ static const std::array ELEMENT_TYPES {
     Item{ ElementType::EXPRESSION, "Expression",
           TranslatableString("engraving", "expression(s)", nullptr, 1),
           TranslatableString("engraving", "Expression(s)", nullptr, 1) },
+    Item{ ElementType::FOOTNOTE, "Footnote",
+          TranslatableString("engraving", "footnote(s)", nullptr, 1),
+          TranslatableString("engraving", "Footnote(s)", nullptr, 1) },
     Item{ ElementType::BEAM, "Beam",
           TranslatableString("engraving", "beam(s)", nullptr, 1),
           TranslatableString("engraving", "Beam(s)", nullptr, 1) },
@@ -1579,6 +1582,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
 
     { TextStyleType::STAFF,             "staff",                muse::TranslatableString("engraving", "Staff") },
     { TextStyleType::EXPRESSION,        "expression",           muse::TranslatableString("engraving", "Expression") },
+    { TextStyleType::FOOTNOTE,          "footnote",             muse::TranslatableString("engraving", "Footnote") },
     { TextStyleType::DYNAMICS,          "dynamics",             muse::TranslatableString("engraving", "Dynamics") },
     { TextStyleType::HAIRPIN,           "hairpin",              muse::TranslatableString("engraving", "Hairpin") },
     { TextStyleType::LYRICS_ODD,        "lyrics_odd",           muse::TranslatableString("engraving", "Lyrics odd lines") },

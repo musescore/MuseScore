@@ -45,6 +45,7 @@
 #include "fermata.h"
 #include "figuredbass.h"
 #include "fingering.h"
+#include "footnote.h"
 #include "fret.h"
 #include "fretcircle.h"
 #include "glissando.h"
@@ -170,6 +171,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::ACCIDENTAL:        return new Accidental(parent);
     case ElementType::DYNAMIC:           return new Dynamic(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::EXPRESSION:        return new Expression(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::FOOTNOTE:          return new Footnote(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TEXT:              return new Text(parent);
     case ElementType::MEASURE_NUMBER:    return new MeasureNumber(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
     case ElementType::MMREST_RANGE:      return new MMRestRange(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
@@ -557,6 +559,13 @@ Expression* Factory::createExpression(Segment * parent, bool isAccessibleEnabled
     Expression* expression = new Expression(parent);
     expression->setAccessibleEnabled(isAccessibleEnabled);
     return expression;
+}
+
+Footnote* Factory::createFootnote(Segment * parent, bool isAccessibleEnabled)
+{
+    Footnote* footnote = new Footnote(parent);
+    footnote->setAccessibleEnabled(isAccessibleEnabled);
+    return footnote;
 }
 
 CREATE_ITEM_IMPL(RehearsalMark, ElementType::REHEARSAL_MARK, Segment, isAccessibleEnabled)

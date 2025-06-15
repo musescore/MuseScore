@@ -45,6 +45,7 @@ public:
         FONT_ALIGN_H_LEFT = 0,
         FONT_ALIGN_H_RIGHT = 1,
         FONT_ALIGN_H_CENTER = 2,
+        FONT_ALIGN_H_JUSTIFY = 3,
     };
 
     enum class FontVerticalAlignment {
@@ -74,6 +75,7 @@ public:
         TEXT_TYPE_INSTRUMENT_CHANGE,
         TEXT_TYPE_HEADER,
         TEXT_TYPE_FOOTER,
+        TEXT_TYPE_FOOTNOTE,
         TEXT_TYPE_COPYRIGHT,
         TEXT_TYPE_PAGE_NUMBER,
         TEXT_TYPE_MEASURE_NUMBER,
@@ -148,6 +150,7 @@ static const QList<mu::engraving::ElementType> TEXT_ELEMENT_TYPES = {
     mu::engraving::ElementType::TRIPLET_FEEL,
     mu::engraving::ElementType::DYNAMIC,
     mu::engraving::ElementType::EXPRESSION,
+    mu::engraving::ElementType::FOOTNOTE,
     mu::engraving::ElementType::FIGURED_BASS,
     mu::engraving::ElementType::FINGERING,
     mu::engraving::ElementType::HARMONY,
