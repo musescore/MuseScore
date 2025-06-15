@@ -1382,7 +1382,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="997"/>
         <source>Don’t reflect transposition in linked tablature staves</source>
-        <translation>Nie odzwierciedlaj transpozycji w połączonych pięcioliniach tabulatur</translation>
+        <translation>Nie odzwierciedlaj transpozycji w połączonych tabulaturach</translation>
     </message>
 </context>
 <context>
@@ -3077,7 +3077,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12370"/>
         <source>Omit dash when space is limited</source>
-        <translation>Pomiń łącznik, gdy spacja jest ograniczona</translation>
+        <translation>Pomiń łącznik, gdy odległość jest ograniczona</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12390"/>
@@ -3117,7 +3117,7 @@ na pierwszą nutę systemu</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13903"/>
         <source>Select the elements you would like displayed in common and simple tablature staves</source>
-        <translation>Zaznacz elementy, które chcesz wyświetlać w podstawowych i prostych pięcioliniach tabulatury</translation>
+        <translation>Zaznacz elementy, które chcesz wyświetlać w podstawowych i prostych tabulaturach</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4122"/>
@@ -4152,12 +4152,12 @@ na pierwszą nutę systemu</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10244"/>
         <source>Line thickness on standard staves:</source>
-        <translation>Grubość linii na standardowych pięcioliniach:</translation>
+        <translation>Grubość linii w standardowych pięcioliniach:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10267"/>
         <source>Reset &apos;Line thickness on standard staves&apos; value</source>
-        <translation>Resetuj wartość &quot;Grubość linii na standardowych pięcioliniach&quot;</translation>
+        <translation>Resetuj wartość &quot;Grubość linii w standardowych pięcioliniach&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10302"/>
@@ -4177,12 +4177,12 @@ na pierwszą nutę systemu</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10377"/>
         <source>Line thickness on tablature staves:</source>
-        <translation>Grubość linii na pięcioliniach tabulatury:</translation>
+        <translation>Grubość linii w tabulaturach:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10415"/>
         <source>Reset &apos;Line thickness on tablature staves&apos; value</source>
-        <translation>Resetuj wartość &quot;Grubość linii na pięcioliniach tabulatury&quot;</translation>
+        <translation>Resetuj wartość &quot;Grubość linii w tabulaturach&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10760"/>
@@ -4421,7 +4421,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12380"/>
         <source>Reset &apos;Omit dash when space is limited&apos; value</source>
-        <translation>Resetuj wartość &quot;Pomiń łącznik, gdy spacja jest ograniczona&quot;</translation>
+        <translation>Resetuj wartość &quot;Pomiń łącznik, gdy odległość jest ograniczona&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12424"/>
@@ -4456,12 +4456,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12574"/>
         <source>Omit extension line when space is limited</source>
-        <translation>Pomiń linię przedłużającą, gdy spacja jest ograniczona</translation>
+        <translation>Pomiń linię przedłużającą, gdy odległość jest ograniczona</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12584"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
-        <translation>Resetuj wartość &quot;Pomiń linię przedłużającą, gdy spacja jest ograniczona&quot;</translation>
+        <translation>Resetuj wartość &quot;Pomiń linię przedłużającą, gdy odległość jest ograniczona&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3062"/>
@@ -11366,7 +11366,7 @@ Opublikowano na licencji &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="108"/>
         <source>Play chord when editing</source>
-        <translation>Odtwarzaj akordy podczas edytowania</translation>
+        <translation>Odtwarzaj akord podczas edytowania</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NotePreviewSection.qml" line="125"/>
@@ -24716,7 +24716,7 @@ Ponadto Mastering MuseScore oferuje wsparcie społeczności muzyków, z przestrz
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="224"/>
         <source>&lt;b&gt;Always open&lt;/b&gt;&lt;br&gt;On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.</source>
-        <translation>&lt;b&gt;Zawsze otwarta&lt;/b&gt;&lt;br&gt;Na pięcioliniach tabulatury pozycji progów innych niż „0” nie można wprowadzać na strunach oznaczonych jako „zawsze otwarta”. Przydatne dla instrumentów, których struny nie znajdują się na podstrunnicy, np. teorba.</translation>
+        <translation>&lt;b&gt;Zawsze otwarta&lt;/b&gt;&lt;br&gt;W tabulaturach pozycje progów innych niż „0” nie można wprowadzać na strunach oznaczonych jako „zawsze otwarta”. Przydatne dla instrumentów, których struny nie znajdują się na podstrunnicy, np. teorba.</translation>
     </message>
 </context>
 <context>

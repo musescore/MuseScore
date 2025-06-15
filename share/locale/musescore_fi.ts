@@ -7599,7 +7599,7 @@ x-korkeudesta):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
         <source>Respell pitches</source>
-        <translation>Muuta sävelkorkeuksien kirjoitusasua</translation>
+        <translation>Enharmoninen korjaus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="475"/>
@@ -11275,7 +11275,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/KeyboardLayoutsSection.qml" line="31"/>
         <source>Keyboard layout</source>
-        <translation>Näppäimistön ulkoasu</translation>
+        <translation>Koskettimiston ulkoasu</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="31"/>
@@ -11594,7 +11594,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="107"/>
         <source>SoundFonts</source>
-        <translation>Äänifontit</translation>
+        <translation>SoundFonts</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/folderspreferencesmodel.cpp" line="113"/>
@@ -28440,7 +28440,7 @@ kirjoitus epäonnistui.</translation>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="46"/>
         <source>SoundFonts</source>
-        <translation>Äänifontit</translation>
+        <translation>SoundFonts</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="95"/>
@@ -31713,7 +31713,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5926"/>
         <source>Respell pitches</source>
-        <translation>Muuta sävelkorkeuksien kirjoitusasua</translation>
+        <translation>Enharmoninen korjaus</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5933"/>

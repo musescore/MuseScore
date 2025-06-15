@@ -10472,27 +10472,27 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="45"/>
         <source>Show API dump</source>
-        <translation type="unfinished"/>
+        <translation>API kiíratás megjelenítése</translation>
     </message>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="38"/>
         <source>Use old view</source>
-        <translation type="unfinished"/>
+        <translation>Régi nézet használata</translation>
     </message>
     <message>
         <location filename="../../src/framework/vst/internal/vstuiactions.cpp" line="44"/>
         <source>Use new view</source>
-        <translation type="unfinished"/>
+        <translation>Új nézet használata</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="37"/>
         <source>Check MuseSampler</source>
-        <translation type="unfinished"/>
+        <translation>MuseSampler ellenőrzése</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="42"/>
         <source>Reload MuseSampler</source>
-        <translation type="unfinished"/>
+        <translation>MuseSampler újratöltése</translation>
     </message>
 </context>
 <context>
@@ -10518,7 +10518,7 @@ x-magasságának %-a)</translation>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="90"/>
         <location filename="../../src/musesounds/qml/MuseScore/MuseSounds/MuseSoundsPage.qml" line="86"/>
         <source>MuseSounds</source>
-        <translation type="unfinished"/>
+        <translation>MuseSounds</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="91"/>
@@ -10556,7 +10556,7 @@ x-magasságának %-a)</translation>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="164"/>
         <source>Extensions toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Bővítmények eszköztára</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="220"/>
@@ -10748,14 +10748,16 @@ A művelet nem törli egyik kottáját sem.</translation>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="212"/>
         <source>Are you sure you want to reset preferences?</source>
-        <translation type="unfinished"/>
+        <translation>Biztos, hogy alaphelyzetbe állítja a beállításokat?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="213"/>
         <source>This action will reset all your app preferences and delete all custom shortcuts. It will not delete any of your scores.
 
 This action cannot be undone.</source>
-        <translation type="unfinished"/>
+        <translation>Ez a művelet az alkalmazás összes beállítását alaphelyzetbe állítja, és törli az összes egyéni gyorsbillentyűt. A kottákat nem törli.
+
+A művelet nem vonható vissza.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="223"/>
@@ -10800,7 +10802,8 @@ This action cannot be undone.</source>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="140"/>
         <source>Copyright © 1999-2025 MuseScore Limited.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
-        <translation type="unfinished"/>
+        <translation>Copyright © 1999-2025 MuseScore Limited.
+&lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt; licenc alatt közzétéve.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="32"/>
@@ -24638,7 +24641,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsToolBar.qml" line="35"/>
         <source>Extensions toolbar</source>
-        <translation type="unfinished"/>
+        <translation>Bővítmények eszköztára</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="375"/>
