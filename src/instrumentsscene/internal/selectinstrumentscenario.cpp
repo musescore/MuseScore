@@ -29,8 +29,8 @@ using namespace mu::notation;
 
 RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments() const
 {
-    StringList params {
-        u"canSelectMultipleInstruments=true"
+    ValMap params {
+        { "canSelectMultipleInstruments", Val(true) }
     };
 
     return selectInstruments(params);
@@ -38,9 +38,9 @@ RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstrument
 
 RetVal<InstrumentTemplate> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
 {
-    StringList params {
-        u"canSelectMultipleInstruments=false",
-        u"currentInstrumentId=" + currentInstrumentKey.instrumentId
+    ValMap params {
+        { "canSelectMultipleInstruments", Val(false) },
+        { "currentInstrumentId", Val(currentInstrumentKey.instrumentId.toStdString()) }
     };
 
     RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params);
@@ -52,15 +52,17 @@ RetVal<InstrumentTemplate> SelectInstrumentsScenario::selectInstrument(const Ins
     return RetVal<InstrumentTemplate>::make_ok(templ);
 }
 
-RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const StringList& params) const
+RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const ValMap& params) const
 {
-    static const std::string SELECT_INSTRUMENT_URI = "musescore://instruments/select";
+    static const Uri SELECT_INSTRUMENT_URI = Uri("musescore://instruments/select");
     if (interactive()->isOpened(Uri(SELECT_INSTRUMENT_URI)).val) {
         return make_ret(Ret::Code::Cancel);
     }
 
-    String uri = String::fromStdString(SELECT_INSTRUMENT_URI + "?%1").arg(params.join(u"&"));
-    RetVal<Val> retVal = interactive()->openSync(uri.toStdString());
+    UriQuery q(SELECT_INSTRUMENT_URI);
+    q.set(params);
+
+    RetVal<Val> retVal = interactive()->openSync(q);
     if (!retVal.ret) {
         return retVal.ret;
     }

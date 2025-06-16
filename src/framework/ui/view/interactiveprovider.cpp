@@ -33,6 +33,8 @@
 
 #include "diagnostics/diagnosticutils.h"
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -140,7 +142,7 @@ bool InteractiveProvider::isSelectColorOpened() const
 
 RetVal<Val> InteractiveProvider::openSync(const UriQuery& q_)
 {
-#ifdef Q_OS_WASM
+#ifndef MUSE_MODULE_UI_SYNCINTERACTIVE_SUPPORTED
     NOT_SUPPORTED;
     std::abort();
     {
