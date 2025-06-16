@@ -168,5 +168,16 @@ FocusableItem {
             navigationPanel: root.navigationPanel
             navigationRowStart: orientationSection.navigationRowEnd + 1
         }
+
+        PropertyCheckBox {
+            id: verticalAlignCheckBox
+
+            text: qsTrc("inspector", "Vertically align with fretboard diagrams on the same system")
+            propertyItem: root.model ? root.model.verticalAlign : null
+
+            navigation.name: "Vertically align with fretboard diagrams on the same system"
+            navigation.panel: root.navigationPanel
+            navigation.row: placementSection.navigationRowEnd + 1
+        }
     }
 }

@@ -120,6 +120,8 @@ void FretDiagram::initDefaultValues()
 
     m_showFingering = false;
     m_fingering = std::vector<int>(m_strings, 0);
+
+    setVerticalAlign(true);
 }
 
 FretDiagram::~FretDiagram()
@@ -911,6 +913,8 @@ PropertyValue FretDiagram::getProperty(Pid propertyId) const
         return m_showFingering;
     case Pid::FRET_FINGERING:
         return m_fingering;
+    case Pid::VERTICAL_ALIGN:
+        return true;
     default:
         return EngravingItem::getProperty(propertyId);
     }

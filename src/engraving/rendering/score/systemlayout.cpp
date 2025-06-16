@@ -1036,6 +1036,16 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     if (hasFretDiagram) {
         for (FretDiagram* fretDiag : elementsToLayout.fretDiagrams) {
             Autoplace::autoplaceSegmentElement(fretDiag, fretDiag->mutldata());
+        }
+
+        if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
+            std::vector<EngravingItem*> fretItems(elementsToLayout.fretDiagrams.begin(), elementsToLayout.fretDiagrams.end());
+            AlignmentLayout::alignItemsForSystem(fretItems, system);
+        }
+
+        layoutHarmonies(elementsToLayout.harmonies, system, ctx);
+
+        for (FretDiagram* fretDiag : elementsToLayout.fretDiagrams) {
             if (Harmony* harmony = fretDiag->harmony()) {
                 SkylineLine& skl = system->staff(fretDiag->staffIdx())->skyline().north();
                 Segment* s = fretDiag->segment();
@@ -1043,8 +1053,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 skl.add(harmShape);
             }
         }
-
-        layoutHarmonies(elementsToLayout.harmonies, system, ctx);
     }
 
     layoutVoltas(elementsToLayout, ctx);
@@ -1178,6 +1186,9 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
                 break;
             case ElementType::FRET_DIAGRAM:
                 elements.fretDiagrams.push_back(toFretDiagram(item));
+                if (Harmony* h = toFretDiagram(item)->harmony()) {
+                    elements.harmonies.push_back(h);
+                }
                 break;
             case ElementType::STAFF_TEXT:
                 elements.staffText.push_back(toStaffText(item));

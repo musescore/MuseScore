@@ -2657,6 +2657,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     ldata->stringExtendTop = item->fretOffset() && extendedStyle ? -spatium * .2 : 0.0;
     ldata->stringExtendBottom = extendedStyle ? 0.5 * ldata->fretDist : 0.0;
     ldata->dotDiameter = ctx.conf().styleMM(Sid::fretDotSpatiumSize) * item->userMag();
+    ldata->gridHeight = 0.0;
 
     double shapeMarginAboveDiagram = ldata->fretDist * 1.5;
     double w = ldata->stringDist * (item->strings() - 1) + ldata->markerSize;
@@ -2706,6 +2707,8 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     // When changing how bbox is calculated, don't forget to update the centerX and rightX methods too.
     Shape shape;
     shape.add(RectF(x, y, w, h), item);
+
+    ldata->gridHeight = h;
 
     ldata->fingeringItems.clear();
     if (item->showFingering()) {
