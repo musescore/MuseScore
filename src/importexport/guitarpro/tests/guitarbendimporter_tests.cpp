@@ -196,6 +196,9 @@ TEST_F(GuitarBendImporter_Tests, gpBendsTied1) {
 TEST_F(GuitarBendImporter_Tests, gpBendsTied2) {
     gpReadTest(u"bends_tied_2", u"gp");
 }
+TEST_F(GuitarBendImporter_Tests, gpBendsTied3) {
+    gpReadTest(u"bends_tied_3", u"gp");
+}
 TEST_F(GuitarBendImporter_Tests, gpBendHold) {
     gpReadTest(u"bend_hold", u"gp");
 }
