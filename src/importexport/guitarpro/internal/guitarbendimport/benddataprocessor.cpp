@@ -174,32 +174,44 @@ static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engrav
 {
     for (const auto& [track, trackInfo] : bendDataCtx.graceAfterBendData) {
         for (const auto& [tick, tickInfo] : trackInfo) {
-            for (const auto& [noteInChordIdx, graceVector] : tickInfo) {
-                Note* note = getLocatedNote(score, tick, track, noteInChordIdx);
-                if (!note) {
+            for (const auto& [noteInChordIdx, graceData] : tickInfo) {
+                Note* mainNote = getLocatedNote(score, tick, track, noteInChordIdx);
+                if (!mainNote) {
                     continue;
                 }
 
-                Note* startNote = note;
+                const auto& graceVector = graceData.data;
+                bool shouldMoveTie = graceData.shouldMoveTie;
+
+                Note* currentNote = mainNote;
                 for (const auto& graceInfo : graceVector) {
                     Chord* graceChord = Factory::createChord(score->dummy()->segment());
                     graceChord->setTrack(track);
                     graceChord->setNoteType(NoteType::GRACE8_AFTER);
 
                     Note* graceNote = Factory::createNote(graceChord);
-                    graceNote->setPitch(startNote->pitch() + graceInfo.quarterTones / 2);
+                    graceNote->setPitch(currentNote->pitch() + graceInfo.quarterTones / 2);
                     graceNote->setTpcFromPitch();
                     graceChord->add(graceNote);
-                    note->chord()->add(graceChord);
+                    mainNote->chord()->add(graceChord);
 
-                    GuitarBend* bend = score->addGuitarBend(GuitarBendType::BEND, startNote, graceNote);
+                    GuitarBend* bend = score->addGuitarBend(GuitarBendType::BEND, currentNote, graceNote);
 
                     QuarterOffset quarterOff = graceInfo.quarterTones % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
                     bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + graceInfo.quarterTones / 2, quarterOff);
                     bend->setStartTimeFactor(graceInfo.startFactor);
                     bend->setEndTimeFactor(graceInfo.endFactor);
 
-                    startNote = graceNote;
+                    currentNote = graceNote;
+                }
+
+                if (shouldMoveTie) {
+                    Tie* tieFor = mainNote->tieFor();
+                    if (tieFor && tieFor->endNote()) {
+                        Note* tiedNote = tieFor->endNote();
+                        mainNote->remove(tieFor);
+                        score->addGuitarBend(GuitarBendType::BEND, currentNote, tiedNote);
+                    }
                 }
             }
         }

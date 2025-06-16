@@ -38,7 +38,6 @@ struct BendDataContext {
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, bend_data_map_t > > tiedNotesBendsData;
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, bend_data_map_t > > prebendData;
     std::unordered_map<mu::engraving::track_idx_t, std::map<mu::engraving::Fraction, bend_data_map_t > > slightBendData;
-
     std::unique_ptr<BendDataContextSplitChord> splitChordCtx;
 };
 } // mu::iex::guitarpro

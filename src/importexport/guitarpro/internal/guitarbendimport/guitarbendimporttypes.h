@@ -35,8 +35,13 @@ struct BendNoteData {
     int quarterTones = 0;
 };
 
+struct GraceNotesImportInfo {
+    std::vector<BendNoteData> data;
+    bool shouldMoveTie = false; // tie between originally tied notes should be removed and instead the bend after last grace note should be placed
+};
+
 using bend_data_map_t       = std::map<size_t /* idx in chord */, BendNoteData>;
-using grace_bend_data_map_t = std::map<size_t /* idx in chord */, std::vector<BendNoteData> >; // each note can have multiple grace notes connected
+using grace_bend_data_map_t = std::map<size_t /* idx in chord */, GraceNotesImportInfo >; // each note can have multiple grace notes connected
 
 struct BendChordData {
     mu::engraving::Fraction startTick;
@@ -60,13 +65,20 @@ enum class BendType {
     SLIGHT_BEND
 };
 
+enum class ConnectionToNextNoteType {
+    NONE, // note doesn't connect to next tied note -> using "grace note after"
+    MAIN_NOTE_CONNECTS, // new note isn't added, only adding bend between 2 originally tied notes
+    LAST_GRACE_CONNECTS // grace notes are created and last of them connects to next tied note with bend
+};
+
 struct ImportedBendInfo {
     const mu::engraving::Note* note = nullptr;
     std::vector<BendSegment> segments;
     BendType type = BendType::NORMAL_BEND;
     int timeOffsetFromStart = 0;
     int pitchOffsetFromStart = 0;
-    bool connectsToNextNote = false;
+
+    ConnectionToNextNoteType connectionType = ConnectionToNextNoteType::NONE;
 };
 
 struct ChordImportedBendData {
@@ -74,8 +86,5 @@ struct ChordImportedBendData {
     std::map<const mu::engraving::Note*, ImportedBendInfo> dataByNote;
 };
 
-struct TiedChordsBendDataChunk {
-    std::vector<ChordImportedBendData> chordsData;
-    bool shouldConnectToNext = false;
-};
+using tied_chords_bend_data_chunk_t = std::vector<ChordImportedBendData>;
 } // mu::iex::guitarpro
