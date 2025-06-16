@@ -237,6 +237,8 @@ void PopupView::doOpen()
 
     beforeOpen();
 
+    resolveParentWindow();
+
     updateGeometry();
 
     if (!isDialog()) {
@@ -271,7 +273,6 @@ void PopupView::doOpen()
         m_window->setResizable(m_resizable);
     }
 
-    resolveParentWindow();
     resolveNavigationParentControl();
 
     QScreen* screen = resolveScreen();
