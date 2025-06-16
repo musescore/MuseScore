@@ -164,7 +164,7 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
 
         // avoid division by zero for zero-length beams (can exist as a pre-layout state used
         // for horizontal spacing computations)
-        if (endX != startX) {
+        if (!muse::RealIsEqual(endX, startX)) {
             const double proportionAlongX = (anchor.x() - startX) / (endX - startX);
             while (true) {
                 const int slope = std::abs(dictator - pointer);
