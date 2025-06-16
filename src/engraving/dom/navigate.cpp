@@ -1145,8 +1145,11 @@ EngravingItem* Score::prevElement()
         }
         case ElementType::FRET_DIAGRAM: {
             FretDiagram* fretDiagram = toFretDiagram(e);
-            if (EngravingItem* harmony = fretDiagram->harmony()) {
-                return harmony;
+            if (fretDiagram->isInFretBox()) {
+                EngravingItem* harmony = fretDiagram->harmony();
+                if (harmony) {
+                    return harmony;
+                }
             }
             break;
         }
