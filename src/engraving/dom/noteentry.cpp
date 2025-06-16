@@ -363,7 +363,16 @@ Note* Score::addPitchToChord(NoteVal& nval, Chord* chord, InputState* externalIn
         note = addNote(chord, nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
     }
 
-    if (is.lastSegment() == is.segment()) {
+    if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
+        // move cursor to next note
+        ChordRest* next = nextChordRest(note->chord());
+        while (next && !next->isChord()) {
+            next = nextChordRest(next);
+        }
+        if (next) {
+            is.moveInputPos(next->segment());
+        }
+    } else if (is.lastSegment() == is.segment()) {
         NoteEntryMethod entryMethod = is.noteEntryMethod();
         if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL) {
             is.moveToNextInputPos();
