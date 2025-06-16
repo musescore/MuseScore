@@ -23,6 +23,7 @@
 #define MU_INSTRUMENTSSCENE_INSTRUMENTSACTIONSCONTROLLER_H
 
 #include "actions/actionable.h"
+#include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
@@ -30,7 +31,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsActionsController : public muse::actions::Actionable
+class InstrumentsActionsController : public muse::actions::Actionable, public muse::async::Asyncable
 {
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)

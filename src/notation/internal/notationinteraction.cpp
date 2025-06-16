@@ -34,6 +34,7 @@
 #include <QDrag>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
+#include <QEventLoop>
 
 #include "defer.h"
 #include "ptrutils.h"
@@ -101,6 +102,8 @@
 #include "scorecallbacks.h"
 
 #include "utilities/scorerangeutilities.h"
+
+#include "app_config.h"
 
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -2069,20 +2072,36 @@ bool NotationInteraction::selectInstrument(mu::engraving::InstrumentChange* inst
         return false;
     }
 
-    RetVal<InstrumentTemplate> templ = selectInstrumentScenario()->selectInstrument();
-    if (!templ.ret) {
-        return false;
-    }
+#ifdef MUE_CONFIGURATION_IS_APPWEB
+    interactive()->info("", muse::trc("notation", "Sorry, instrument change on the web is not supported at this time."));
+    return false;
+#else
 
-    Instrument newInstrument = Instrument::fromTemplate(&templ.val);
-    instrumentChange->setInit(true);
-    instrumentChange->setupInstrument(&newInstrument);
+    //! HACK To remake the asynchronous mode, a lot of refactoring is needed,
+    //! so for now this is a hack
+    bool result = false;
+    QEventLoop loop;
+    async::Promise<InstrumentTemplate> templ = selectInstrumentScenario()->selectInstrument();
+    templ.onResolve(this, [this, instrumentChange, &loop, &result](const InstrumentTemplate& val) {
+        Instrument newInstrument = Instrument::fromTemplate(&val);
+        instrumentChange->setInit(true);
+        instrumentChange->setupInstrument(&newInstrument);
 
-    if (newInstrument.useDrumset()) {
-        cleanupDrumsetChanges(instrumentChange);
-    }
+        if (newInstrument.useDrumset()) {
+            cleanupDrumsetChanges(instrumentChange);
+        }
 
-    return true;
+        result = true;
+        loop.quit();
+    }).onReject(this, [&loop, &result](int, const std::string&) {
+        result = false;
+        loop.quit();
+    });
+
+    loop.exec();
+
+    return result;
+#endif
 }
 
 void NotationInteraction::cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const

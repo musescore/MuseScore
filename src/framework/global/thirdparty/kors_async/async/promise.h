@@ -93,6 +93,8 @@ public:
         friend struct Reject;
     };
 
+    static Result dummy_result() { return Result::unchecked(); }
+
     using Body = std::function<Result (Resolve, Reject)>;
 
     Promise(Body body, PromiseType type)

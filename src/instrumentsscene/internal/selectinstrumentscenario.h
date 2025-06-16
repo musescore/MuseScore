@@ -23,23 +23,27 @@
 #define MU_INSTRUMENTSSCENE_SELECTINSTRUMENTSSCENARIO_H
 
 #include "notation/iselectinstrumentscenario.h"
+
+#include "global/modularity/ioc.h"
+#include "global/iinteractive.h"
 #include "notation/iinstrumentsrepository.h"
-#include "modularity/ioc.h"
-#include "iinteractive.h"
+
+#include "global/async/asyncable.h"
+#include "global/async/promise.h"
 
 namespace mu::instrumentsscene {
-class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario
+class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario, public muse::async::Asyncable
 {
-    INJECT(muse::IInteractive, interactive)
-    INJECT(notation::IInstrumentsRepository, instrumentsRepository)
+    muse::Inject<muse::IInteractive> interactive;
+    muse::Inject<notation::IInstrumentsRepository> instrumentsRepository;
 
 public:
-    muse::RetVal<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
-    muse::RetVal<notation::InstrumentTemplate> selectInstrument(
+    muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
+    muse::async::Promise<notation::InstrumentTemplate> selectInstrument(
         const notation::InstrumentKey& currentInstrumentId = notation::InstrumentKey()) const override;
 
 private:
-    muse::RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const muse::ValMap& params) const;
+    muse::async::Promise<notation::PartInstrumentListScoreOrder> selectInstruments(const muse::ValMap& params) const;
 };
 }
 
