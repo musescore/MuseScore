@@ -197,8 +197,6 @@ private:
     void setupSequenceTracks();
     void setupSequencePlayer();
 
-    void initMuteStates();
-
     void updateSoloMuteStates();
     void updateAuxMuteStates();
 
