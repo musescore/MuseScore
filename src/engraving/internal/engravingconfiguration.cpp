@@ -53,6 +53,7 @@ static const Settings::Key INVISIBLE_COLOR("engraving", "engraving/colors/invisi
 static const Settings::Key UNLINKED_COLOR("engraving", "engraving/colors/unlinkedColor");
 
 static const Settings::Key DYNAMICS_APPLY_TO_ALL_VOICES("engraving", "score/dynamicsApplyToAllVoices");
+static const Settings::Key FRETBOARD_DIAGRAMS_AUTO_UPDATE("engraving", "score/fretboardDiagramsAutoUpdate");
 
 static const Settings::Key DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT("engraving", "engraving/compat/doNotSaveEIDsForBackCompat");
 
@@ -121,6 +122,11 @@ void EngravingConfiguration::init()
     settings()->setDefaultValue(DYNAMICS_APPLY_TO_ALL_VOICES, Val(true));
     settings()->valueChanged(DYNAMICS_APPLY_TO_ALL_VOICES).onReceive(this, [this](const Val& val) {
         m_dynamicsApplyToAllVoicesChanged.send(val.toBool());
+    });
+
+    settings()->setDefaultValue(FRETBOARD_DIAGRAMS_AUTO_UPDATE, Val(true));
+    settings()->valueChanged(FRETBOARD_DIAGRAMS_AUTO_UPDATE).onReceive(this, [this](const Val& val) {
+        m_fretboardDiagramsAutoUpdateChanged.send(val.toBool());
     });
 
     settings()->setDefaultValue(FRAME_COLOR, Val(Color("#A0A0A4").toQColor()));
@@ -352,6 +358,21 @@ void EngravingConfiguration::setDynamicsApplyToAllVoices(bool v)
 muse::async::Channel<bool> EngravingConfiguration::dynamicsApplyToAllVoicesChanged() const
 {
     return m_dynamicsApplyToAllVoicesChanged;
+}
+
+bool EngravingConfiguration::autoUpdateFretboardDiagrams() const
+{
+    return settings()->value(FRETBOARD_DIAGRAMS_AUTO_UPDATE).toBool();
+}
+
+void EngravingConfiguration::setAutoUpdateFretboardDiagrams(bool v)
+{
+    settings()->setSharedValue(FRETBOARD_DIAGRAMS_AUTO_UPDATE, Val(v));
+}
+
+muse::async::Channel<bool> EngravingConfiguration::autoUpdateFretboardDiagramsChanged() const
+{
+    return m_fretboardDiagramsAutoUpdateChanged;
 }
 
 muse::async::Notification EngravingConfiguration::scoreInversionChanged() const
