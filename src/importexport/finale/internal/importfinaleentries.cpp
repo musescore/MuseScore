@@ -215,6 +215,10 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         logger()->logWarning(String(u"Grace notes not yet supported"), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
         return true;
     }
+    if (entryInfo.calcIsCue()) {
+        logger()->logWarning(String(u"Cue notes not yet supported"), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
+        return true;
+    }
 
     Fraction entryStartTick = FinaleTConv::musxFractionToFraction(entryInfo.calcGlobalElapsedDuration()).reduced();
     Segment* segment = measure->getSegmentR(SegmentType::ChordRest, entryStartTick);
@@ -271,7 +275,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         idx = staffIdx;
     }
 
-    if (currentEntry->isNote) {
+    if (!entryInfo.calcDisplaysAsRest()) {
         Chord* chord = Factory::createChord(segment);
 
         for (size_t i = 0; i < currentEntry->notes.size(); ++i) {
@@ -348,6 +352,9 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         }
         cr = toChordRest(chord);
     } else {
+        if (entryInfo.calcIsFullMeasureRest()) {
+            d = TDuration(DurationType::V_MEASURE);
+        }
         Rest* rest = Factory::createRest(segment, d);
         // Fixed-positioning for rests is calculated in a 2nd pass after all voices in all layers have been created.
         // This allows MuseScore code to calculate correctly the voice offset for the rest.
