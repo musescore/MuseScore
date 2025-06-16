@@ -85,6 +85,7 @@ public:
     const Params& params() const;
     Val param(const std::string& key, const Val& def = Val()) const;
     void addParam(const std::string& key, const Val& val);
+    UriQuery& set(const ValMap& vals);
     UriQuery& set(const std::string& key, const Val& val);
     UriQuery& set(const std::string& key, const ValList& vals) { return set(key, Val(vals)); }
     UriQuery& set(const std::string& key, const std::string& val) { return set(key, Val(val)); }

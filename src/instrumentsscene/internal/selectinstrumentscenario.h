@@ -39,7 +39,7 @@ public:
         const notation::InstrumentKey& currentInstrumentId = notation::InstrumentKey()) const override;
 
 private:
-    muse::RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const muse::StringList& params) const;
+    muse::RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const muse::ValMap& params) const;
 };
 }
 
