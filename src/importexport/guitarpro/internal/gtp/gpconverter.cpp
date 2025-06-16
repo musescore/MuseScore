@@ -2088,9 +2088,18 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         //       instead.
         pitch = note->part()->instrument()->channel(0)->program();
     } else {
-        pitch
-            = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
-                                                                 nullptr) + note->part()->instrument()->transpose().chromatic;
+        if (m_stringDatas.empty()) {
+            pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
+                                                                         nullptr) + note->part()->instrument()->transpose().chromatic;
+        } else {
+            if (const auto sd = m_stringDatas.find(note->part()->id().toUint64()); sd != m_stringDatas.end()) {
+                pitch = sd->second.getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
+                                                                           nullptr) + note->part()->instrument()->transpose().chromatic;
+            } else {
+                pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
+                                                                           nullptr) + note->part()->instrument()->transpose().chromatic;
+            }
+        }
     }
 
     pitch = std::clamp(pitch, 0, 127);
@@ -2122,28 +2131,10 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
 
 void GPConverter::setTpc(Note* note, int accidental)
 {
-    std::map<int, int> toneToTpc = {
-        { 0,  14 },
-        { 1,  21 },
-        { 2,  16 },
-        { 3,  11 },
-        { 4,  18 },
-        { 5,  13 },
-        { 6,  20 },
-        { 7,  15 },
-        { 8,  22 },
-        { 9,  17 },
-        { 10, 24 },
-        { 11, 19 },
-    };
-
-    if (note->staff()->capo({ 0, 1 }).fretPosition != 0 || accidental == GPNote::invalidAccidental) {
+    if (0 == accidental || accidental == GPNote::invalidAccidental ) {
         note->setTpcFromPitch();
     } else {
-        int tone = (note->pitch() - accidental + 12) % 12;
-        int tpc = toneToTpc[tone] + accidental * 7;
-        note->setTpc1(tpc);
-        note->setTpc2(tpc);
+        note->setTpcFromPitch(accidental < 0 ? Prefer::FLATS : Prefer::SHARPS);
     }
 }
 
