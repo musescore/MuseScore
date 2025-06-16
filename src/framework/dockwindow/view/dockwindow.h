@@ -117,8 +117,6 @@ private:
     void loadTopLevelToolBars(const DockPageView* page);
     void alignTopLevelToolBars(const DockPageView* page);
 
-    DockPanelView* findDestinationForPanel(const DockPageView* page, const DockPanelView* panel) const;
-
     void addDock(DockBase* dock, Location location = Location::Left, const DockBase* relativeTo = nullptr);
     void addPanelAsTab(DockPanelView* panel, DockPanelView* destinationPanel);
     void registerDock(DockBase* dock);
