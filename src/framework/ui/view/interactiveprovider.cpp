@@ -30,8 +30,9 @@
 #include <QWindow>
 
 #include "global/async/async.h"
-
 #include "diagnostics/diagnosticutils.h"
+
+#include "internal/widgetdialogadapter.h"
 
 #include "muse_framework_config.h"
 
@@ -40,33 +41,6 @@
 using namespace muse;
 using namespace muse::ui;
 using namespace muse::async;
-
-class WidgetDialogEventFilter : public QObject
-{
-public:
-    WidgetDialogEventFilter(QObject* parent, const std::function<void()>& onShownCallBack,
-                            const std::function<void()>& onHideCallBack = std::function<void()>())
-        : QObject(parent), m_onShownCallBack(onShownCallBack), m_onHideCallBack(onHideCallBack)
-    {
-    }
-
-private:
-    bool eventFilter(QObject* watched, QEvent* event) override
-    {
-        if (event->type() == QEvent::Show && m_onShownCallBack) {
-            m_onShownCallBack();
-        }
-
-        if (event->type() == QEvent::Hide && m_onHideCallBack) {
-            m_onHideCallBack();
-        }
-
-        return QObject::eventFilter(watched, event);
-    }
-
-    std::function<void()> m_onShownCallBack;
-    std::function<void()> m_onHideCallBack;
-};
 
 InteractiveProvider::InteractiveProvider(const modularity::ContextPtr& iocCtx)
     : QObject(), Injectable(iocCtx)
@@ -575,27 +549,25 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
     fillData(dialog, params);
 
-    dialog->installEventFilter(new WidgetDialogEventFilter(dialog,
-                                                           [this, dialog, objectId]() {
-        if (dialog) {
-            onOpen(ContainerType::QWidgetDialog, objectId, dialog->window());
-        }
-    },
-                                                           [this, dialog, objectId]() {
-        if (!dialog) {
-            return;
-        }
-
-        QVariantMap status;
-
+    //! NOTE Will be deleted with the dialog
+    WidgetDialogAdapter* adapter = new WidgetDialogAdapter(dialog, mainWindow()->qWindow());
+    adapter->onShow([this, objectId]() {
+        onOpen(ContainerType::QWidgetDialog, objectId);
+    })
+    .onHide([this, objectId, dialog]() {
         QDialog::DialogCode dialogCode = static_cast<QDialog::DialogCode>(dialog->result());
         Ret::Code errorCode = dialogCode == QDialog::Accepted ? Ret::Code::Ok : Ret::Code::Cancel;
-        status["errcode"] = static_cast<int>(errorCode);
 
-        onClose(objectId, status);
+        QVariantMap ret;
+        ret["errcode"] = static_cast<int>(errorCode);
+
+        onClose(objectId, ret);
+
         dialog->deleteLater();
-    }));
+    });
 
+    bool modal = params.value("modal", "true") == "true";
+    dialog->setWindowModality(modal ? Qt::ApplicationModal : Qt::NonModal);
     dialog->show();
     dialog->activateWindow();     // give keyboard focus to aid blind users
 
