@@ -22,4 +22,8 @@ function copyFile(src, dst) {
 copyFile(HERE+"/viewer/viewer.html", OUTPUT_DIR+"/MuseScoreStudio.html"); // replace origin MuseScoreStudio.html
 copyFile(HERE+"/viewer/index.html", OUTPUT_DIR+"/index.html");
 copyFile(HERE+"/viewer/run_server.sh", OUTPUT_DIR+"/run_server.sh");
-copyFile(HERE+"/distr/muapi.js", OUTPUT_DIR+"/muapi.js");
+
+fs.mkdirSync(OUTPUT_DIR+"/distr", { recursive: true });
+copyFile(HERE+"/distr/muapi.js", OUTPUT_DIR+"/distr/muapi.js");
+copyFile(HERE+"/distr/muimpl.js", OUTPUT_DIR+"/distr/muimpl.js");
+copyFile(HERE+"/distr/qtloader.js", OUTPUT_DIR+"/distr/qtloader.js");

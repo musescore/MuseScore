@@ -1,3 +1,5 @@
+import MuImpl from "./muimpl.js"
+
 const MuApi = {
 
     onclickTest1: function() {
@@ -13,9 +15,9 @@ const MuApi = {
     },
 }
 
-let createMuApi = (function(config, onInited) {
+async function createMuApi(config) {
 
-    MuApi.Module = config.muwasm
+    MuApi.Module = await MuImpl.loadModule(config)
 
     MuApi.Module.onProjectSaved = function(data) {
         console.log("[js muapi internal] onProjectSaved len: ", data.length)
@@ -25,6 +27,7 @@ let createMuApi = (function(config, onInited) {
     }
 
     return MuApi
-})
+}
 
 export default createMuApi;
+
