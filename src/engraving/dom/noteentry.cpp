@@ -234,17 +234,24 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
                     undoRemoveElement(n->tieBack());
                 }
             }
-            // for single note chords only, preserve ties by changing pitch of all forward notes
+            // for the first note of the chord only, preserve ties by changing pitch of all forward notes
             // the tie forward itself will be added later
             // multi-note chords get reduced to single note chords anyhow since we remove the old notes below
-            // so there will be no way to preserve those ties
-            if (notes.size() == 1 && notes.front()->tieFor()) {
+            if (notes.front()->tieFor()) {
                 Note* tn = notes.front()->tieFor()->endNote();
                 while (tn) {
                     Chord* tc = tn->chord();
                     if (tc->notes().size() != 1) {
-                        undoRemoveElement(tn->tieBack());
-                        break;
+                        std::vector<Note*> notesToRemove;
+                        for (Note* n : tc->notes()) {
+                            if (n != tn) {
+                                notesToRemove.push_back(n);
+                            }
+                        }
+                        for (Note* n : notesToRemove) {
+                            undoRemoveElement(n);
+                        }
+                        assert(tc->notes().size() == 1 && tc->notes().front() == tn);
                     }
                     if (!firstTiedNote) {
                         firstTiedNote = tn;
@@ -694,17 +701,24 @@ Ret Score::repitchNote(const Position& p, bool replace)
                 undoRemoveElement(e);
             }
         }
-        // for single note chords only, preserve ties by changing pitch of all forward notes
+        // for the first note of the chord only, preserve ties by changing pitch of all forward notes
         // the tie forward itself will be added later
         // multi-note chords get reduced to single note chords anyhow since we remove the old notes below
-        // so there will be no way to preserve those ties
-        if (notes.size() == 1 && notes.front()->tieFor()) {
+        if (notes.front()->tieFor()) {
             Note* tn = notes.front()->tieFor()->endNote();
             while (tn) {
                 Chord* tc = tn->chord();
                 if (tc->notes().size() != 1) {
-                    undoRemoveElement(tn->tieBack());
-                    break;
+                    std::vector<Note*> notesToRemove;
+                    for (Note* n : tc->notes()) {
+                        if (n != tn) {
+                            notesToRemove.push_back(n);
+                        }
+                    }
+                    for (Note* n : notesToRemove) {
+                        undoRemoveElement(n);
+                    }
+                    assert(tc->notes().size() == 1 && tc->notes().front() == tn);
                 }
                 if (!firstTiedNote) {
                     firstTiedNote = tn;
