@@ -113,7 +113,6 @@
               <root>14</root>
               </harmonyInfo>
             <eid>i6JddkooT+K_VCqDglUeMRM</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>HzvSPszx2NI_lxchTRPN6iO</eid>
@@ -132,7 +131,6 @@
               <root>16</root>
               </harmonyInfo>
             <eid>SYmKSDioSgJ_3nRLTs3666</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
@@ -142,7 +140,6 @@
               <root>18</root>
               </harmonyInfo>
             <eid>mPZO1MniRBK_DR0+zmVAE6N</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>lNT7H0p9/lF_SLiwqKlD1UD</eid>
@@ -161,7 +158,6 @@
               <root>13</root>
               </harmonyInfo>
             <eid>saAjlrm1EO_FhNXvmfkddI</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           </voice>
         </Measure>
@@ -173,7 +169,6 @@
               <root>14</root>
               </harmonyInfo>
             <eid>dvEMaLQcibK_SEWH/F36llB</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>/Sa4VlGGHaH_eEnHBeShepD</eid>
@@ -192,7 +187,6 @@
               <root>16</root>
               </harmonyInfo>
             <eid>Ok0ECFxRvuI_2P4foxuqZq</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
@@ -202,7 +196,6 @@
               <root>10</root>
               </harmonyInfo>
             <eid>wLPL51aE/ZK_WYJ1s3hVxsG</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>weLPdp/TOPE_HveOwApPWWC</eid>
@@ -221,7 +214,6 @@
               <root>20</root>
               </harmonyInfo>
             <eid>DUSTglH1glB_HnfKXBpuT4K</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           </voice>
         </Measure>

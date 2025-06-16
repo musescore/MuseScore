@@ -1458,10 +1458,6 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
         h->setPropertyFlags(Pid::POSITION, PropertyFlags::UNSTYLED);
     }
 
-    // Migrate vertical alignment later
-    h->setVerticalAlign(false);
-    h->setPropertyFlags(Pid::VERTICAL_ALIGN, PropertyFlags::UNSTYLED);
-
     h->afterRead();
 }
 

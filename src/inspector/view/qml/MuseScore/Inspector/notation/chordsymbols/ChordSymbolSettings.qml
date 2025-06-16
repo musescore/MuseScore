@@ -115,10 +115,10 @@ Column {
     PropertyCheckBox {
         id: verticalAlignCheckBox
 
-        text: qsTrc("inspector", "Vertically align with symbols on the same system")
+        text: qsTrc("inspector", "Exclude from vertical alignment")
         propertyItem: root.model ? root.model.verticalAlign : null
 
-        navigation.name: "Vertically align with symbols on the same system"
+        navigation.name: "Exclude from vertical alignment"
         navigation.panel: root.navigationPanel
         navigation.row: durationSection.navigationRowEnd + 1
     }

@@ -120,8 +120,6 @@ void FretDiagram::initDefaultValues()
 
     m_showFingering = false;
     m_fingering = std::vector<int>(m_strings, 0);
-
-    setVerticalAlign(true);
 }
 
 FretDiagram::~FretDiagram()
@@ -913,8 +911,6 @@ PropertyValue FretDiagram::getProperty(Pid propertyId) const
         return m_showFingering;
     case Pid::FRET_FINGERING:
         return m_fingering;
-    case Pid::VERTICAL_ALIGN:
-        return true;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -951,6 +947,19 @@ bool FretDiagram::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::FRET_FINGERING:
         setFingering(v.value<std::vector<int> >());
         break;
+    case Pid::EXCLUDE_VERTICAL_ALIGN:
+    {
+        bool val = v.toBool();
+        setExcludeVerticalAlign(val);
+        Harmony* h = harmony();
+        if (h && h->excludeVerticalAlign() != val) {
+            h->setExcludeVerticalAlign(val);
+            PropertyFlags flag = h->propertyFlags(Pid::EXCLUDE_VERTICAL_ALIGN)
+                                 == PropertyFlags::STYLED ? PropertyFlags::UNSTYLED : PropertyFlags::STYLED;
+            h->setPropertyFlags(Pid::EXCLUDE_VERTICAL_ALIGN, flag);
+        }
+        break;
+    }
     default:
         return EngravingItem::setProperty(propertyId, v);
     }

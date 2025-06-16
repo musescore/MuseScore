@@ -39,7 +39,7 @@ void ChordSymbolSettingsModel::createProperties()
     m_isLiteral = buildPropertyItem(mu::engraving::Pid::HARMONY_VOICE_LITERAL);
     m_voicingType = buildPropertyItem(mu::engraving::Pid::HARMONY_VOICING);
     m_durationType = buildPropertyItem(mu::engraving::Pid::HARMONY_DURATION);
-    m_verticalAlign = buildPropertyItem(mu::engraving::Pid::VERTICAL_ALIGN);
+    m_verticalAlign = buildPropertyItem(mu::engraving::Pid::EXCLUDE_VERTICAL_ALIGN);
     m_position = buildPropertyItem(mu::engraving::Pid::POSITION);
     m_bassScale = buildPropertyItem(mu::engraving::Pid::HARMONY_BASS_SCALE, [this](const engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);

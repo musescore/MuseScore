@@ -40,6 +40,5 @@ private:
     static void resetMarkerLeftFontSize(MasterScore* masterScore);
 
     static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
-    static bool migrateChordSymbolAlignment(MasterScore* score);
 };
 } // namespace mu::engraving::compat

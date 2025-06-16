@@ -1300,6 +1300,7 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         Pid::ORIENTATION,
         Pid::FRET_SHOW_FINGERINGS,
         Pid::FRET_FINGERING,
+        Pid::EXCLUDE_VERTICAL_ALIGN
     } };
 
     // Write properties first and only once

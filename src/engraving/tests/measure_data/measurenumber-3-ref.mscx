@@ -7,6 +7,7 @@
       <maskBarlinesForText>0</maskBarlinesForText>
       <showMeasureNumberOne>1</showMeasureNumberOne>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <measureNumberVPlacement>1</measureNumberVPlacement>
       <measureNumberHPlacement>1</measureNumberHPlacement>
       <pageNumberFontSize>9</pageNumberFontSize>

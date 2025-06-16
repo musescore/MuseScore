@@ -128,7 +128,7 @@ void AlignmentLayout::alignItemsForSystem(const std::vector<EngravingItem*>& ele
     std::map<staff_idx_t, StaffItemGroups> staffItems;
 
     for (EngravingItem* item : elements) {
-        if (item->addToSkyline() && item->verticalAlign()) {
+        if (item->addToSkyline() && !item->excludeVerticalAlign()) {
             item->placeAbove() ? staffItems[item->staffIdx()].itemsAbove.push_back(item)
             : staffItems[item->staffIdx()].itemsBelow.push_back(item);
         }

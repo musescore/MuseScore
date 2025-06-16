@@ -883,14 +883,14 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
     }
 }
 
-void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, LayoutContext& ctx)
+void SystemLayout::layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, bool verticalAlign, LayoutContext& ctx)
 {
     for (Harmony* harmony : harmonies) {
         TLayout::layoutHarmony(harmony, harmony->mutldata(), ctx);
         Autoplace::autoplaceSegmentElement(harmony, harmony->mutldata());
     }
 
-    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols)) {
+    if (ctx.conf().styleB(Sid::verticallyAlignChordSymbols) && verticalAlign) {
         std::vector<EngravingItem*> harmonyItems(harmonies.begin(), harmonies.end());
         AlignmentLayout::alignItemsForSystem(harmonyItems, system);
     }
@@ -1018,7 +1018,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     bool hasFretDiagram = elementsToLayout.fretDiagrams.size() > 0;
     if (!hasFretDiagram) {
-        layoutHarmonies(elementsToLayout.harmonies, system, ctx);
+        layoutHarmonies(elementsToLayout.harmonies, system, true, ctx);
     }
 
     for (StaffText* st : elementsToLayout.staffText) {
@@ -1043,7 +1043,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             AlignmentLayout::alignItemsForSystem(fretItems, system);
         }
 
-        layoutHarmonies(elementsToLayout.harmonies, system, ctx);
+        layoutHarmonies(elementsToLayout.harmonies, system, false, ctx);
 
         for (FretDiagram* fretDiag : elementsToLayout.fretDiagrams) {
             if (Harmony* harmony = fretDiag->harmony()) {

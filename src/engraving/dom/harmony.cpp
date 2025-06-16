@@ -293,7 +293,6 @@ const ElementStyle chordSymbolStyle {
     { Sid::harmonyVoiceLiteral, Pid::HARMONY_VOICE_LITERAL },
     { Sid::harmonyVoicing, Pid::HARMONY_VOICING },
     { Sid::harmonyDuration, Pid::HARMONY_DURATION },
-    { Sid::verticallyAlignChordSymbols, Pid::VERTICAL_ALIGN }
 };
 
 //---------------------------------------------------------
@@ -376,6 +375,15 @@ Segment* Harmony::getParentSeg() const
         seg = toSegment(explicitParent());
     }
     return seg;
+}
+
+FretDiagram* Harmony::getParentFretDiagram() const
+{
+    if (explicitParent() && explicitParent()->isFretDiagram()) {
+        return toFretDiagram(explicitParent());
+    }
+
+    return nullptr;
 }
 
 void Harmony::afterRead()
@@ -1959,6 +1967,18 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
     case Pid::HARMONY_DURATION:
         m_realizedHarmony.setDuration(HDuration(v.toInt()));
         break;
+    case Pid::EXCLUDE_VERTICAL_ALIGN: {
+        bool val = v.toBool();
+        setExcludeVerticalAlign(val);
+        FretDiagram* fd = getParentFretDiagram();
+        if (fd && fd->excludeVerticalAlign() != val) {
+            fd->setExcludeVerticalAlign(val);
+            PropertyFlags flag = fd->propertyFlags(Pid::EXCLUDE_VERTICAL_ALIGN)
+                                 == PropertyFlags::STYLED ? PropertyFlags::UNSTYLED : PropertyFlags::STYLED;
+            fd->setPropertyFlags(Pid::EXCLUDE_VERTICAL_ALIGN, flag);
+        }
+        break;
+    }
     default:
         if (TextBase::setProperty(pid, v)) {
             if (pid == Pid::TEXT) {
@@ -2007,8 +2027,6 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     case Pid::PLAY:
         v = true;
         break;
-    case Pid::VERTICAL_ALIGN:
-        return true;
     case Pid::OFFSET:
         if (explicitParent() && explicitParent()->isFretDiagram()) {
             v = PropertyValue::fromValue(PointF(0.0, 0.0));

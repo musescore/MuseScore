@@ -93,7 +93,7 @@ void FretDiagramSettingsModel::createProperties()
         emit fingeringsChanged(fingerings());
     });
 
-    m_verticalAlign = buildPropertyItem(mu::engraving::Pid::VERTICAL_ALIGN);
+    m_verticalAlign = buildPropertyItem(mu::engraving::Pid::EXCLUDE_VERTICAL_ALIGN);
 }
 
 void FretDiagramSettingsModel::requestElements()
