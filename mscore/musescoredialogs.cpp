@@ -159,14 +159,11 @@ AboutBoxDialog::AboutBoxDialog()
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
       auto compilerDateISO = []() -> std::string {
-            // Store __DATE__ in ISO 8601 format ( e.g. 2025-04-20 )
-            int month, day, year;
-            char buffer[10];
-            static const char monthNames[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
-            sscanf(__DATE__, "%s %d %d", buffer, &day, &year);
-            month = ((strstr(monthNames, buffer) - monthNames) / 3) + 1;
-            sprintf(buffer, "%d-%02d-%02d", year, month, day);
-            return std::string(buffer);
+            // Attempt to convert __DATE__ into ISO 8601 format (YYYY-MM-DD)
+            QDate date = QDate::fromString(__DATE__, "MMM dd yyyy");
+            if (!date.isValid())
+                  date = QDate::fromString(__DATE__, "MMM d yyyy");
+            return date.isValid() ? date.toString(Qt::ISODate).toStdString() : std::string(__DATE__);
             };
 
       std::string dateTime;
