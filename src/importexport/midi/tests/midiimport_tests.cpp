@@ -222,8 +222,7 @@ TEST_F(MidiImportTests, human4_4) {
     dontSimplify("human_4-4");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_humanTempo) {
+TEST_F(MidiImportTests, humanTempo) {
     importThenCompareWithRef("human_tempo");
 }
 
@@ -313,7 +312,6 @@ TEST_F(MidiImportTests, meterTwoBeatsOver) {
     dontSimplify("meter_two_beats_over");
 }
 
-// TODO: update ref
 TEST_F(MidiImportTests, meterDotTie) {
     dontSimplify("meter_dot_tie");
 }
@@ -461,8 +459,7 @@ TEST_F(MidiImportTests, tupletOffTimeOtherBar2) {
     dontSimplify("tuplet_off_time_other_bar2");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_tuplet16th8th) {
+TEST_F(MidiImportTests, tuplet16th8th) {
     dontSimplify("tuplet_16th_8th");
 }
 
@@ -482,8 +479,7 @@ TEST_F(MidiImportTests, pickupMeasureLong) {
     noTempoText("pickup_long");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_pickupMeasureTurnOff) {
+TEST_F(MidiImportTests, pickupMeasureTurnOff) {
     noTempoText("pickup_turn_off");
 }
 
@@ -493,8 +489,7 @@ TEST_F(MidiImportTests, LHRH_Nontuplet) {
     staffSplit("split_nontuplet");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_LHRH_Acid) {
+TEST_F(MidiImportTests, LHRH_Acid) {
     staffSplit("split_acid");
 }
 
@@ -544,8 +539,7 @@ TEST_F(MidiImportTests, swingShuffle) {
     importThenCompareWithRef(midiFile.toStdString().c_str());
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_swingClef) {
+TEST_F(MidiImportTests, swingClef) {
     QString midiFile("swing_clef");
     auto& opers = midiImportOperations;
     opers.addNewMidiFile(midiFilePath(midiFile));
@@ -615,13 +609,11 @@ TEST_F(MidiImportTests, clefTied) {
     dontSimplify("clef_tied");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_clefMelody) {
+TEST_F(MidiImportTests, clefMelody) {
     dontSimplify("clef_melody");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_clefPrev) {
+TEST_F(MidiImportTests, clefPrev) {
     dontSimplify("clef_prev");
 }
 
@@ -643,13 +635,11 @@ TEST_F(MidiImportTests, simplify8thDottedNoStaccato) {
     simplification("simplify_8th_dotted_no_staccato");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_simplify4thDottedTied) {
+TEST_F(MidiImportTests, simplify4thDottedTied) {
     simplification("simplify_4th_dotted_tied");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_simplifyTripletStaccato) {
+TEST_F(MidiImportTests, simplifyTripletStaccato) {
     simplification("simplify_triplet_staccato");
 }
 
@@ -663,8 +653,7 @@ TEST_F(MidiImportTests, simplifyStaccato9_8) {
 
 // voice separation
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_voiceSeparationAcid) {
+TEST_F(MidiImportTests, voiceSeparationAcid) {
     voiceSeparation("voice_acid");
 }
 
@@ -712,13 +701,11 @@ TEST_F(MidiImportTests, DISABLED_instrumentClef) {
 
 // lyrics
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_lyricsTime0) {
+TEST_F(MidiImportTests, lyricsTime0) {
     noTempoText("lyrics_time_0");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_lyricsVoice1) {
+TEST_F(MidiImportTests, lyricsVoice1) {
     noTempoText("lyrics_voice_1");
 }
 

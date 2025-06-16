@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -19,8 +20,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
-      <Staff id="1">
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -83,116 +85,171 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <TimeSig>
+            <eid>E_E</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Beam>
+            <eid>F_F</eid>
+            <l1>8</l1>
+            <l2>8</l2>
+            </Beam>
           <Chord>
+            <eid>G_G</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>H_H</eid>
+              <Accidental>
+                <subtype>accidentalFlat</subtype>
+                <eid>I_I</eid>
+                </Accidental>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <velocity>66</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>J_J</eid>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              <eid>K_K</eid>
               </Articulation>
             <Note>
+              <eid>L_L</eid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <velocity>73</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Rest>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Tuplet>
+            <eid>N_N</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>3</text>
+              </Number>
             </Tuplet>
+          <Beam>
+            <eid>O_O</eid>
+            <l1>10</l1>
+            <l2>8</l2>
+            </Beam>
           <Chord>
+            <eid>P_P</eid>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              <eid>Q_Q</eid>
               </Articulation>
             <Note>
+              <eid>R_R</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <velocity>73</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>S_S</eid>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              <eid>T_T</eid>
               </Articulation>
             <Note>
+              <eid>U_U</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <velocity>83</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>V_V</eid>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              <eid>W_W</eid>
               </Articulation>
             <Note>
+              <eid>X_X</eid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <velocity>103</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <endTuplet/>
           <Tuplet>
+            <eid>Y_Y</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>3</text>
+              </Number>
             </Tuplet>
+          <Beam>
+            <eid>Z_Z</eid>
+            <l1>0</l1>
+            <l2>2</l2>
+            </Beam>
           <Chord>
+            <eid>a_a</eid>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              <eid>b_b</eid>
               </Articulation>
             <Note>
+              <eid>c_c</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>d_d</eid>
+                </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <velocity>124</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>e_e</eid>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              <eid>f_f</eid>
               </Articulation>
             <Note>
+              <eid>g_g</eid>
+              <Accidental>
+                <subtype>accidentalNatural</subtype>
+                <eid>h_h</eid>
+                </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <velocity>72</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>i_i</eid>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articStaccatoAbove</subtype>
+              <subtype>articStaccatoBelow</subtype>
+              <eid>j_j</eid>
               </Articulation>
             <Note>
+              <eid>k_k</eid>
               <pitch>63</pitch>
               <tpc>11</tpc>
               <velocity>103</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <endTuplet/>
