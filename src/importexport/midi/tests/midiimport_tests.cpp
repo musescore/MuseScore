@@ -218,14 +218,11 @@ TEST_F(MidiImportTests, quantDotted4th) {
 
 // human-performed (unaligned) files
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: vector iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_human4_4) {
+TEST_F(MidiImportTests, human4_4) {
     dontSimplify("human_4-4");
 }
 
 // TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: vector iterators incompatible)
 TEST_F(MidiImportTests, DISABLED_humanTempo) {
     importThenCompareWithRef("human_tempo");
 }

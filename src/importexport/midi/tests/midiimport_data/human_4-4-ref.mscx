@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -19,8 +20,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
-      <Staff id="1">
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -84,48 +86,55 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <KeySig>
-            <accidental>1</accidental>
+            <eid>E_E</eid>
+            <concertKey>1</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Chord>
+            <eid>G_G</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>H_H</eid>
               <pitch>42</pitch>
               <tpc>20</tpc>
               <velocity>70</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>I_I</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>J_J</eid>
               <pitch>45</pitch>
               <tpc>17</tpc>
               <velocity>70</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>K_K</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>L_L</eid>
               <pitch>43</pitch>
               <tpc>15</tpc>
               <velocity>70</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>M_M</eid>
             <durationType>quarter</durationType>
             <Note>
+              <eid>N_N</eid>
               <pitch>42</pitch>
               <tpc>20</tpc>
               <velocity>70</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           </voice>
