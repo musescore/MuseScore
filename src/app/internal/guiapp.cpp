@@ -161,6 +161,7 @@ void GuiApp::perform()
         }
 
         LOGI() << "Using graphics api: " << GraphicsApiProvider::graphicsApiName();
+        LOGI() << "Gui platform: " << QGuiApplication::platformName();
 
         if (GraphicsApiProvider::graphicsApi() == GraphicsApi::Software) {
             gApiProvider->destroy();

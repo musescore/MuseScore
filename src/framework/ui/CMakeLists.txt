@@ -154,6 +154,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/errordetailsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/progressdialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/progressdialogmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/widgetdialogadapter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/widgetdialogadapter.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h
