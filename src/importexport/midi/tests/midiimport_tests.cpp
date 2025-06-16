@@ -366,9 +366,7 @@ TEST_F(MidiImportTests, tuplet5_5TupletsRests) {
     dontSimplify("tuplet_5_5_tuplets_rests");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tuplet3_4) {
+TEST_F(MidiImportTests, tuplet3_4) {
     dontSimplify("tuplet_3-4");
 }
 
@@ -380,9 +378,7 @@ TEST_F(MidiImportTests, tupletMars) {
     dontSimplify("tuplet_mars");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tupletNonuplet3_4) {
+TEST_F(MidiImportTests, tupletNonuplet3_4) {
     // requires 1/64 quantization
     QString midiFile("tuplet_nonuplet_3-4");
     auto& opers = midiImportOperations;
@@ -412,15 +408,11 @@ TEST_F(MidiImportTests, tupletQuadruplet) {
     dontSimplify("tuplet_quadruplet");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tupletSeptuplet) {
+TEST_F(MidiImportTests, tupletSeptuplet) {
     dontSimplify("tuplet_septuplet");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tupletTripletsMixed) {
+TEST_F(MidiImportTests, tupletTripletsMixed) {
     dontSimplify("tuplet_triplets_mixed");
 }
 
@@ -432,9 +424,7 @@ TEST_F(MidiImportTests, tupletTripletFirstTied) {
     dontSimplify("tuplet_triplet_first_tied");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tupletTripletFirstTied2) {
+TEST_F(MidiImportTests, tupletTripletFirstTied2) {
     dontSimplify("tuplet_triplet_first_tied2");
 }
 
@@ -470,14 +460,11 @@ TEST_F(MidiImportTests, tupletOffTimeOtherBar) {
     dontSimplify("tuplet_off_time_other_bar");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tupletOffTimeOtherBar2) {
+TEST_F(MidiImportTests, tupletOffTimeOtherBar2) {
     dontSimplify("tuplet_off_time_other_bar2");
 }
 
 // TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
 TEST_F(MidiImportTests, DISABLED_tuplet16th8th) {
     dontSimplify("tuplet_16th_8th");
 }
@@ -596,7 +583,6 @@ TEST_F(MidiImportTests, DISABLED_percNoGrandStaff) {
 }
 
 // TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
 TEST_F(MidiImportTests, DISABLED_percTriplet) {
     noTempoText("perc_triplet");
 }
@@ -617,7 +603,6 @@ TEST_F(MidiImportTests, DISABLED_percTupletSimplify) {
 }
 
 // TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
 TEST_F(MidiImportTests, DISABLED_percTupletSimplify2) {
     noTempoText("perc_tuplet_simplify2");
 }
@@ -639,7 +624,6 @@ TEST_F(MidiImportTests, DISABLED_clefMelody) {
 }
 
 // TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
 TEST_F(MidiImportTests, DISABLED_clefPrev) {
     dontSimplify("clef_prev");
 }
@@ -668,7 +652,6 @@ TEST_F(MidiImportTests, DISABLED_simplify4thDottedTied) {
 }
 
 // TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
 TEST_F(MidiImportTests, DISABLED_simplifyTripletStaccato) {
     simplification("simplify_triplet_staccato");
 }
@@ -692,9 +675,7 @@ TEST_F(MidiImportTests, voiceSeparationIntersect) {
     voiceSeparation("voice_intersect");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_voiceSeparationTuplet) {
+TEST_F(MidiImportTests, voiceSeparationTuplet) {
     voiceSeparation("voice_tuplet", true);
 }
 
