@@ -60,6 +60,8 @@ ApplicationWindow {
 
     ToolTipProvider { }
 
+    Shortcuts { }
+
     Item {
         id: windowContentItem
         anchors.fill: parent
