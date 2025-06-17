@@ -74,12 +74,13 @@ signals:
 
 private:
     void setState(State state);
-
+    void restoreOriginalOrder();
     void loadItemsIfNecessary();
     bool needsLoading();
 
     State m_state = State::Fine;
     bool m_isWaitingForPromise = false;
+    bool m_needsResortAfterLoad = false;
 
     size_t m_totalItems = muse::nidx;
 
