@@ -932,6 +932,19 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             }
             tok2.append(s.at(i));
         }
+        // check suffix - 'st', 'nd', 'rd', 'th'
+        String suffix;
+        static const int SUFFIX_LEN = 2;
+        for (int j = 0; j < SUFFIX_LEN && i + j < len; j++) {
+            suffix.append(s.at(i + j));
+        }
+
+        if (suffix.contains(std::wregex(L"st|nd|rd|th"))) {
+            i += SUFFIX_LEN;
+        } else {
+            suffix.clear();
+        }
+
         tok2L = tok2.toLower();
         // re-attach "add"
         if (addPending) {
@@ -1004,7 +1017,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         } else if (m_raise.contains(tok1L)) {
             tok1L = u"#";
         }
-        String m = tok1L + tok2L;
+        String m = tok1L + tok2L + suffix;
         if (!m.empty()) {
             m_modifierList << m;
         }
@@ -1013,6 +1026,9 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         }
         if (!tok2.empty()) {
             addToken(tok2, ChordTokenClass::MODIFIER);
+        }
+        if (!suffix.empty()) {
+            addToken(suffix, ChordTokenClass::MODIFIER);
         }
         if (!syntaxOnly) {
             int d;

@@ -125,7 +125,11 @@
     <sym code="add" name="sadd"/>
     <sym code="sus" name="ssus"/>
     <sym code="no" name="sno"/>
-    <sym code="omit" name="somit"/>
+
+    <sym code="st" name="sst"/>
+    <sym code="nd" name="snd"/>
+    <sym code="rd" name="srd"/>
+    <sym code="th" name="sth"/>
     </font>
 
 <!-- Musical text font -->
@@ -469,6 +473,26 @@
   <token class="modifier">
     <name>omit</name>
     <render>somit</render>
+    </token>
+
+<token class="modifier">
+    <name>st</name>
+    <render>sst</render>
+    </token>
+
+<token class="modifier">
+    <name>nd</name>
+    <render>snd</render>
+    </token>
+
+<token class="modifier">
+    <name>rd</name>
+    <render>srd</render>
+    </token>
+
+<token class="modifier">
+    <name>th</name>
+    <render>sth</render>
     </token>
 
   <token class="type">

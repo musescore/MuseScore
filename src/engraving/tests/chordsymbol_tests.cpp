@@ -22,6 +22,7 @@
 
 #include <gtest/gtest.h>
 
+#include "compat/scoreaccess.h"
 #include "dom/chordrest.h"
 #include "dom/durationtype.h"
 #include "dom/excerpt.h"
@@ -422,4 +423,19 @@ TEST_F(Engraving_ChordSymbolTests, testNashvilleNumbers) {
     }
 
     MScore::useRead302InTestMode = use302;
+}
+
+TEST_F(Engraving_ChordSymbolTests, testParserSuffix)
+{
+    MasterScore* score = compat::ScoreAccess::createMasterScore(nullptr);
+    StringList symbols = { u"Cno3rd", u"Domit1st", u"Cadd9th", u"Ebsus2nd" };
+
+    // Expect these symbols to parse successfully
+    ParsedChord* pc = new ParsedChord();
+    for (const String& chord : symbols) {
+        EXPECT_TRUE(pc->parse(chord, score->chordList()));
+    }
+
+    delete pc;
+    delete score;
 }
