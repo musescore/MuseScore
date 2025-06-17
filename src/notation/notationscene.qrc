@@ -105,5 +105,10 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/RepeatBarlinesSection.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/ChordSymbolsPage.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/ComboBoxDropdown.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/voltasImages/voltaAfterKeySig.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/voltasImages/voltaBeforeKeySig.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/voltasImages/voltaLeftOfBarline.png</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/voltasImages/voltaRightOfBarline.png</file>
     </qresource>
 </RCC>

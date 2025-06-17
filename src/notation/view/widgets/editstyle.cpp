@@ -327,9 +327,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::figuredBassYOffset,      false, doubleSpinFBVertPos,     0 },
         { StyleId::figuredBassLineHeight,   true,  spinFBLineHeight,        0 },
         { StyleId::keySigNaturals,          false, ksng,                    0 },
-        { StyleId::voltaLineStyle,          false, voltaLineStyle,          resetVoltaLineStyle },
-        { StyleId::voltaDashLineLen,        false, voltaLineStyleDashSize,  resetVoltaLineStyleDashSize },
-        { StyleId::voltaDashGapLen,         false, voltaLineStyleGapSize,   resetVoltaLineStyleGapSize },
         { StyleId::ottavaLineStyle,         false, ottavaLineStyle,         resetOttavaLineStyle },
         { StyleId::ottavaDashLineLen,       false, ottavaLineStyleDashSize, resetOttavaLineStyleDashSize },
         { StyleId::ottavaDashGapLen,        false, ottavaLineStyleGapSize,  resetOttavaLineStyleGapSize },
@@ -520,9 +517,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::articulationStemHAlign,  false, articulationStemSide,    0 },
         { StyleId::articulationKeepTogether, false, articulationKeepTogether, 0 },
         { StyleId::trillAlwaysShowCueNote, false, trillAlwaysShowCueNote, 0 },
-        { StyleId::voltaPosAbove,           false, voltaPosAbove,           resetVoltaPosAbove },
-        { StyleId::voltaHook,               false, voltaHook,               resetVoltaHook },
-        { StyleId::voltaLineWidth,          false, voltaLineWidth,          resetVoltaLineWidth },
 
         { StyleId::ottavaPosAbove,          false, ottavaPosAbove,          resetOttavaPosAbove },
         { StyleId::ottavaPosBelow,          false, ottavaPosBelow,          resetOttavaPosBelow },
@@ -725,15 +719,6 @@ EditStyle::EditStyle(QWidget* parent)
     // ====================================================
 
     m_lineStyleSelects = {
-        new LineStyleSelect(this, voltaLineStyle, {
-            label_volta_lineStyle_dashSize,
-            voltaLineStyleDashSize,
-            resetVoltaLineStyleDashSize,
-            label_volta_lineStyle_gapSize,
-            voltaLineStyleGapSize,
-            resetVoltaLineStyleGapSize
-        }),
-
         new LineStyleSelect(this, ottavaLineStyle, {
             label_ottava_lineStyle_dashSize,
             ottavaLineStyleDashSize,
@@ -1005,6 +990,16 @@ EditStyle::EditStyle(QWidget* parent)
     chordSymbolsPageWidget.widget->setMinimumSize(224, 400);
     connect(chordSymbolsPageWidget.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
     chordSymbolsPage->layout()->addWidget(chordSymbolsPageWidget.widget);
+
+    // ====================================================
+    // Voltas STYLE PAGE (QML)
+    // ====================================================
+
+    auto voltasPage = createQmlWidget(
+        voltasPageWidget,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml")));
+    voltasPage.widget->setMinimumSize(224, 400);
+    voltasPageWidget->layout()->addWidget(voltasPage.widget);
 
     // ====================================================
     // Figured Bass

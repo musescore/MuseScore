@@ -33,11 +33,12 @@ StyleControlRowWithReset {
     property string suffix: ''
     property bool inPercentage: false
     property double step: 0.01
+    property double spinBoxWidth: 80
 
     IncrementalPropertyControl {
         id: spinBox
 
-        width: 80
+        width: root.spinBoxWidth
 
         currentValue: inPercentage ? Math.round(styleItem.value * 100) : styleItem.value
         minValue: 0

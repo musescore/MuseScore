@@ -629,6 +629,9 @@ enum class Sid {
     voltaFrameFgColor,
     voltaFrameBgColor,
 
+    voltaAlignStartBeforeKeySig,
+    voltaAlignEndLeftOfBarline,
+
     ottava8VAPlacement,
     ottava8VBPlacement,
     ottava15MAPlacement,
