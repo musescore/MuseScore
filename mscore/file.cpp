@@ -467,6 +467,7 @@ MasterScore* MuseScore::readScore(const QString& name)
                         score->setMovements(new Movements());
                         score->setStyle(MScore::baseStyle());
                         rv = Ms::readScore(score, name, true);
+                        score->setCreated(true); // force save as for imported files
                         }
                   else
                         rv = Score::FileError::FILE_NO_ERROR;
