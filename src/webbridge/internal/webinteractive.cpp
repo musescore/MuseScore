@@ -42,7 +42,7 @@ static FileOpenData g_fileOpenData;
 #ifdef Q_OS_WASM
 static void openFileDialog(const emscripten::val& callback)
 {
-    emscripten::val::global("openFileDialog")(callback);
+    emscripten::val::module_property("openFileDialog")(callback);
 }
 
 static bool isUint8Array(const emscripten::val& v)
