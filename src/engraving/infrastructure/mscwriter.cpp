@@ -183,6 +183,11 @@ void MscWriter::writeThumbnailFile(const ByteArray& data)
     addFileData(u"Thumbnails/thumbnail.png", data);
 }
 
+void MscWriter::writePdfFile(const ByteArray& data)
+{
+    addFileData(u"preview.pdf", data);
+}
+
 void MscWriter::addImageFile(const String& fileName, const ByteArray& data)
 {
     addFileData(u"Pictures/" + fileName, data);
