@@ -117,6 +117,12 @@ struct SoundProfile {
 };
 
 using SoundProfilesMap = std::map<SoundProfileName, SoundProfile>;
+
+enum OnlineSoundsShowProgressBarMode {
+    Always = 0,
+    DuringPlayback,
+    Never,
+};
 }
 
 #endif // MU_PLAYBACK_PLAYBACKTYPES_H

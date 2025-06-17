@@ -50,6 +50,12 @@ class AudioMidiPreferencesModel : public QObject, public muse::Injectable, publi
 
     Q_PROPERTY(bool muteHiddenInstruments READ muteHiddenInstruments WRITE setMuteHiddenInstruments NOTIFY muteHiddenInstrumentsChanged)
 
+    Q_PROPERTY(
+        bool autoProcessOnlineSoundsInBackground READ autoProcessOnlineSoundsInBackground WRITE setAutoProcessOnlineSoundsInBackground NOTIFY autoProcessOnlineSoundsInBackgroundChanged)
+
+    Q_PROPERTY(
+        int onlineSoundsShowProgressBarMode READ onlineSoundsShowProgressBarMode WRITE setOnlineSoundsShowProgressBarMode NOTIFY onlineSoundsShowProgressBarModeChanged)
+
     muse::Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
     muse::Inject<muse::midi::IMidiConfiguration> midiConfiguration = { this };
     muse::Inject<muse::midi::IMidiOutPort> midiOutPort = { this };
@@ -73,6 +79,8 @@ public:
 
     Q_INVOKABLE void restartAudioAndMidiDevices();
 
+    Q_INVOKABLE bool onlineSoundsSectionVisible() const;
+
     QVariantList midiInputDevices() const;
     QVariantList midiOutputDevices() const;
 
@@ -81,12 +89,18 @@ public:
 
     bool muteHiddenInstruments() const;
 
+    bool autoProcessOnlineSoundsInBackground() const;
+    int onlineSoundsShowProgressBarMode() const;
+
 public slots:
     void setCurrentAudioApiIndex(int index);
 
     void setUseMIDI20Output(bool use);
 
     void setMuteHiddenInstruments(bool mute);
+
+    void setAutoProcessOnlineSoundsInBackground(bool value);
+    void setOnlineSoundsShowProgressBarMode(int mode);
 
 signals:
     void currentAudioApiIndexChanged(int index);
@@ -99,6 +113,9 @@ signals:
     void useMIDI20OutputChanged();
 
     void muteHiddenInstrumentsChanged(bool mute);
+
+    void autoProcessOnlineSoundsInBackgroundChanged();
+    void onlineSoundsShowProgressBarModeChanged();
 
 private:
     muse::midi::MidiDeviceID midiInputDeviceId(int index) const;
