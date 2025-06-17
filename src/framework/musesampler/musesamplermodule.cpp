@@ -77,9 +77,7 @@ void MuseSamplerModule::onInit(const IApplication::RunMode& mode)
 
     m_configuration->init();
     m_resolver->init();
-    m_actionController->init([this]() {
-        return m_resolver->reloadMuseSampler();
-    });
+    m_actionController->init(m_resolver);
 
     auto pr = ioc()->resolve<muse::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {

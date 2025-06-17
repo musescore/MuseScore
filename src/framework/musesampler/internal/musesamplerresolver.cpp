@@ -96,7 +96,7 @@ void MuseSamplerResolver::init()
     LOGI() << "MuseSampler successfully inited: " << configuration()->libraryPath();
 }
 
-bool MuseSamplerResolver::reloadMuseSampler()
+bool MuseSamplerResolver::reloadAllInstruments()
 {
     if (!m_libHandler) {
         return false;
@@ -105,11 +105,16 @@ bool MuseSamplerResolver::reloadMuseSampler()
     return m_libHandler->reloadAllInstruments() == ms_Result_OK;
 }
 
+void MuseSamplerResolver::processOnlineSounds()
+{
+    m_processOnlineSoundsRequested.notify();
+}
+
 ISynthesizerPtr MuseSamplerResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params) const
 {
     InstrumentInfo instrument = findInstrument(m_libHandler, params.resourceMeta);
     if (instrument.isValid()) {
-        return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params, iocContext());
+        return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params, m_processOnlineSoundsRequested, iocContext());
     }
 
     return nullptr;

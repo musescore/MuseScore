@@ -28,28 +28,26 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "iinteractive.h"
-#include "imusesamplerinfo.h"
+#include "musesamplerresolver.h"
 
 namespace muse::musesampler {
 class MuseSamplerActionController : public Injectable, public actions::Actionable, public async::Asyncable
 {
     Inject<actions::IActionsDispatcher> dispatcher = { this };
     Inject<IInteractive> interactive = { this };
-    Inject<IMuseSamplerInfo> museSamplerInfo = { this };
 
 public:
     MuseSamplerActionController(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    using ReloadMuseSamplerFunc = std::function<bool ()>;
-
-    void init(const ReloadMuseSamplerFunc& reloadMuseSampler);
+    void init(std::weak_ptr<MuseSamplerResolver> resolver);
 
 private:
     void checkLibraryIsDetected();
     void reloadMuseSampler();
+    void processOnlineSounds();
 
-    ReloadMuseSamplerFunc m_reloadMuseSampler;
+    std::weak_ptr<MuseSamplerResolver> m_museSamplerResolver;
 };
 }
 

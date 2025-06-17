@@ -374,6 +374,9 @@ typedef void* ms_RenderingRangeList;
 
 typedef ms_RenderingRangeList (* ms_MuseSampler_get_render_info)(ms_MuseSampler ms, int* num_ranges);
 typedef ms_RenderRangeInfo (* ms_RenderProgressInfo_get_next)(ms_RenderingRangeList range_list);
+
+typedef void (* ms_MuseSampler_set_auto_render_interval)(ms_MuseSampler ms, double interval_seconds);
+typedef void (* ms_MuseSampler_trigger_render)(ms_MuseSampler ms);
 // ------------------------------------------------------------
 
 namespace muse::musesampler {

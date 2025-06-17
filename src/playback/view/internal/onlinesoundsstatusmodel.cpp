@@ -25,7 +25,7 @@
 using namespace mu::playback;
 
 OnlineSoundsStatusModel::OnlineSoundsStatusModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -46,11 +46,28 @@ void OnlineSoundsStatusModel::load()
     progress.finished().onReceive(this, [this](const muse::ProgressResult& result) {
         setStatus(result.ret.success() ? Status::Success : Status::Error);
     });
+
+    setCanProcessOnlineSounds(!audioConfiguration()->autoProcessOnlineSoundsInBackground());
+    audioConfiguration()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool value) {
+        setCanProcessOnlineSounds(!value);
+    });
+}
+
+void OnlineSoundsStatusModel::processOnlineSounds()
+{
+    if (m_canProcessOnlineSounds) {
+        dispatcher()->dispatch("process-online-sounds");
+    }
 }
 
 bool OnlineSoundsStatusModel::hasOnlineSounds() const
 {
     return m_hasOnlineSounds;
+}
+
+bool OnlineSoundsStatusModel::canProcessOnlineSounds() const
+{
+    return m_canProcessOnlineSounds;
 }
 
 int OnlineSoundsStatusModel::status() const
@@ -66,6 +83,16 @@ void OnlineSoundsStatusModel::setHasOnlineSounds(bool value)
 
     m_hasOnlineSounds = value;
     emit hasOnlineSoundsChanged();
+}
+
+void OnlineSoundsStatusModel::setCanProcessOnlineSounds(bool canRun)
+{
+    if (m_canProcessOnlineSounds == canRun) {
+        return;
+    }
+
+    m_canProcessOnlineSounds = canRun;
+    emit canProcessOnlineSoundsChanged();
 }
 
 void OnlineSoundsStatusModel::setStatus(Status status)
