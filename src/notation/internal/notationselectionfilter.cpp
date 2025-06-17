@@ -49,6 +49,23 @@ void NotationSelectionFilter::setSelectionTypeFiltered(const SelectionFilterType
     }
 }
 
+bool NotationSelectionFilter::includeSingleNotes() const
+{
+    return score()->selectionFilter().includeSingleNotes();
+}
+
+void NotationSelectionFilter::setIncludeSingleNotes(bool include)
+{
+    engraving::Selection& selection = score()->selection();
+
+    score()->selectionFilter().setIncludeSingleNotes(include);
+
+    if (selection.isRange()) {
+        selection.updateSelectedElements();
+        m_selectionChangedCallback();
+    }
+}
+
 mu::engraving::Score* NotationSelectionFilter::score() const
 {
     return m_getScore->score();

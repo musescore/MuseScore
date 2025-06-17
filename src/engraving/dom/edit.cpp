@@ -27,6 +27,7 @@
 
 #include "accidental.h"
 #include "anchors.h"
+#include "arpeggio.h"
 #include "articulation.h"
 #include "barline.h"
 #include "beam.h"
@@ -3605,8 +3606,8 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, track_idx_t tra
     }
 }
 
-void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track_idx_t track, Segment* startSeg,
-                               const Fraction& endTick, Tuplet* currentTuplet)
+void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track_idx_t track, Segment* startSeg, const Fraction& endTick,
+                               Tuplet* currentTuplet, const SelectionFilter& filter, bool selectionContainsMultiNoteChords)
 {
     while (startSeg && !(startSeg->isChordRestType() && startSeg->cr(track))) {
         // Range should always start at a ChordRest segment - find the next one for this track...
@@ -3658,8 +3659,8 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
 
         // currentTuplet refers to the tuplet that we're currently performing a delete range "inside". It is possible that currentTuplet contains nested
         // tuplets, in which case we should find the "top-most nested tuplet" (nextTuplet) and:
-        //      1. If it is selected, delete it completely using cmdDeleteTuplet (deletes all elements contained in that tuplet)
-        //      2. If it is not selected, call this method recursively "inside" that tuplet (nextTuplet becomes currentTuplet for the recursive call)
+        //      1. If it is selectable, delete it completely using cmdDeleteTuplet (deletes all elements contained in that tuplet)
+        //      2. If it is not selectable, call this method recursively "inside" that tuplet (nextTuplet becomes currentTuplet for the recursive call)
 
         Tuplet* nextTuplet = nullptr;
         if (cr1->tuplet() && cr1->tuplet() != currentTuplet) {
@@ -3680,11 +3681,12 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
             }
             s = toChordRest(lastInTuplet)->segment();
 
-            if (nextTuplet->selected()) {
+            if (filter.canSelectTuplet(nextTuplet, cr1->tick(), endTick, selectionContainsMultiNoteChords)) {
                 restDuration += nextTuplet->ticks();
                 cmdDeleteTuplet(nextTuplet, /*replaceWithRest*/ false);
             } else {
-                deleteRangeAtTrack(crsToSelect, track, cr1->segment(), nextTuplet->tick() + nextTuplet->ticks(), nextTuplet);
+                deleteRangeAtTrack(crsToSelect, track, cr1->segment(), nextTuplet->tick() + nextTuplet->ticks(),
+                                   nextTuplet, filter, selectionContainsMultiNoteChords);
                 foundDeselected(nextTuplet);
             }
 
@@ -3705,15 +3707,50 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
             continue;
         }
 
-        // TODO: The following logic is redundant for now, but once our "NotesInChords" selection filter is implemented it'll
-        // be possible to have individually de-selected notes/chords within a selection range. Additionally we won't be using
-        // note->selected() (or tuplet->selected() as above) - instead we'll use SelectionFilter for this purpose...
-        const std::vector<Note*> allNotes = toChord(cr1)->notes();
-        std::unordered_set<Note*> notesToRemove;
-        for (Note* note : allNotes) {
-            if (note->selected()) {
-                notesToRemove.emplace(note);
+        Chord* chord = toChord(cr1);
+
+        // TODO: Not loving the duplication with Selection::appendChord here...
+        Arpeggio* arp = chord->arpeggio();
+        if (arp && filter.canSelect(arp)) {
+            undoRemoveElement(arp);
+        }
+        TremoloTwoChord* tremTwo = chord->tremoloTwoChord();
+        if (tremTwo && filter.canSelect(tremTwo)) {
+            undoRemoveElement(tremTwo);
+        }
+        TremoloSingleChord* tremSing = chord->tremoloSingleChord();
+        if (tremSing && filter.canSelect(tremSing)) {
+            undoRemoveElement(tremSing);
+        }
+        for (Articulation* art : chord->articulations()) {
+            if (filter.canSelect(art)) {
+                undoRemoveElement(art);
             }
+        }
+
+        const std::vector<Note*> allNotes = chord->notes();
+        std::unordered_set<Note*> notesToRemove;
+        for (size_t noteIdx = 0; noteIdx < allNotes.size(); ++noteIdx) {
+            Note* note = allNotes.at(noteIdx);
+
+            // TODO: More duplication here...
+            LaissezVib* lv = note->laissezVib();
+            if (lv && filter.canSelect(lv)) {
+                undoRemoveElement(lv);
+            }
+            PartialTie* ipt = note->incomingPartialTie();
+            if (ipt && filter.canSelect(ipt)) {
+                undoRemoveElement(lv);
+            }
+            PartialTie* opt = note->outgoingPartialTie();
+            if (opt && filter.canSelect(opt)) {
+                undoRemoveElement(lv);
+            }
+
+            if (!filter.canSelectNoteIdx(noteIdx, allNotes.size(), selectionContainsMultiNoteChords)) {
+                continue;
+            }
+            notesToRemove.emplace(note);
         }
 
         if (notesToRemove.size() == allNotes.size()) {
@@ -3740,7 +3777,8 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
 ///   deletion operation.
 //---------------------------------------------------------
 
-std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, track_idx_t track2, const SelectionFilter& filter)
+std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, track_idx_t track2, const SelectionFilter& filter,
+                                           bool selectionContainsMultiNoteChords)
 {
     std::vector<ChordRest*> crsForSelection;
     IF_ASSERT_FAILED(s1) {
@@ -3765,7 +3803,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
         if (!filter.canSelectVoice(track)) {
             continue;
         }
-        deleteRangeAtTrack(crsForSelection, track, s1, endTick, /*currentTuplet*/ nullptr);
+        deleteRangeAtTrack(crsForSelection, track, s1, endTick, /*currentTuplet*/ nullptr, filter, selectionContainsMultiNoteChords);
     }
 
     return crsForSelection;
@@ -3783,7 +3821,7 @@ void Score::cmdDeleteSelection()
     if (selection().isRange()) {
         crsSelectedAfterDeletion = deleteRange(selection().startSegment(), selection().endSegment(),
                                                staff2track(selection().staffStart()), staff2track(selection().staffEnd()),
-                                               selectionFilter());
+                                               selectionFilter(), selection().rangeContainsMultiNoteChords());
     } else {
         // deleteItem modifies selection().elements() list,
         // so we need a local copy:

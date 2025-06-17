@@ -48,14 +48,15 @@ public:
     int rowCount(const QModelIndex& parent = {}) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    bool enabled() const;
+    virtual bool enabled() const;
 
 signals:
     void enabledChanged();
 
 protected:
     enum Roles {
-        TitleRole = Qt::UserRole + 1,
+        IsAllowedRole = Qt::UserRole + 1,
+        TitleRole,
         IsSelectedRole,
         IsIndeterminateRole
     };
@@ -65,18 +66,23 @@ protected:
     virtual SelectionFilterTypesVariant getAllMask() const = 0;
     virtual SelectionFilterTypesVariant getNoneMask() const = 0;
 
-    bool isFiltered(const SelectionFilterTypesVariant& variant) const;
-    void setFiltered(const SelectionFilterTypesVariant& variant, bool filtered);
+    INotationInteractionPtr currentNotationInteraction() const;
+    INotationSelectionFilterPtr currentNotationSelectionFilter() const;
 
+    virtual bool isFiltered(const SelectionFilterTypesVariant& variant) const;
+    virtual void setFiltered(const SelectionFilterTypesVariant& variant, bool filtered);
+
+    virtual bool isAllowed(const SelectionFilterTypesVariant&) const { return true; }
     virtual QString titleForType(const SelectionFilterTypesVariant& variant) const = 0;
     bool isIndeterminate(const SelectionFilterTypesVariant& variant) const;
 
+    virtual void onSelectionChanged();
+    virtual void onNotationChanged();
     void notifyAboutDataChanged(const QModelIndex& index, const SelectionFilterTypesVariant& variant);
 
     QList<SelectionFilterTypesVariant> m_types;
 
 private:
     INotationPtr currentNotation() const;
-    INotationSelectionFilterPtr currentNotationSelectionFilter() const;
 };
 }

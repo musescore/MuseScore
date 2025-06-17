@@ -36,6 +36,20 @@ enum class VoicesSelectionFilterTypes : unsigned int {
     ALL                     = ~(~0u << NUM_VOICES_SELECTION_FILTER_TYPES)
 };
 
+static constexpr size_t NUM_NOTES_IN_CHORD_SELECTION_FILTER_TYPES = 8;
+enum class NotesInChordSelectionFilterTypes : unsigned int {
+    NONE                    = 0,
+    TOP_NOTE                = 1 << 0,
+    SEVENTH_NOTE            = 1 << 1,
+    SIXTH_NOTE              = 1 << 2,
+    FIFTH_NOTE              = 1 << 3,
+    FOURTH_NOTE             = 1 << 4,
+    THIRD_NOTE              = 1 << 5,
+    SECOND_NOTE             = 1 << 6,
+    BOTTOM_NOTE             = 1 << 7,
+    ALL                     = ~(~0u << NUM_NOTES_IN_CHORD_SELECTION_FILTER_TYPES)
+};
+
 static constexpr size_t NUM_ELEMENTS_SELECTION_FILTER_TYPES = 19;
 enum class ElementsSelectionFilterTypes : unsigned int {
     NONE                    = 0,
@@ -61,7 +75,9 @@ enum class ElementsSelectionFilterTypes : unsigned int {
     ALL                     = ~(~0u << NUM_ELEMENTS_SELECTION_FILTER_TYPES)
 };
 
-using SelectionFilterTypesVariant = std::variant<VoicesSelectionFilterTypes, ElementsSelectionFilterTypes>;
+using SelectionFilterTypesVariant = std::variant<VoicesSelectionFilterTypes,
+                                                 NotesInChordSelectionFilterTypes,
+                                                 ElementsSelectionFilterTypes>;
 
 class SelectionFilter
 {
@@ -71,6 +87,7 @@ public:
     inline bool operator==(const SelectionFilter& f) const
     {
         return m_filteredVoicesTypes == f.m_filteredVoicesTypes
+               && m_filteredNotesInChordTypes == f.m_filteredNotesInChordTypes
                && m_filteredElementsTypes == f.m_filteredElementsTypes;
     }
 
@@ -80,10 +97,21 @@ public:
     void setFiltered(const SelectionFilterTypesVariant& variant, bool filtered);
 
     bool canSelect(const EngravingItem* element) const;
+    bool canSelectNoteIdx(size_t noteIdx, size_t totalNotesInChord, bool selectionContainsMultiNoteChords) const;
+    bool canSelectTuplet(const Tuplet* tuplet, const Fraction& selectionRangeStart, const Fraction& selectionRangeEnd,
+                         bool selectionContainsMultiNoteChords) const;
     bool canSelectVoice(track_idx_t track) const;
+
+    //! IMPORTANT NOTE: This flag should only ever be used for selections that contain multi-note Chords. It should always be
+    //! ignored in selections that exclusively consist of single notes...
+    bool includeSingleNotes() const { return m_includeSingleNotes; }
+    void setIncludeSingleNotes(bool include) { m_includeSingleNotes = include; }
 
 private:
     unsigned int m_filteredVoicesTypes = static_cast<unsigned int>(VoicesSelectionFilterTypes::ALL);
+    unsigned int m_filteredNotesInChordTypes = static_cast<unsigned int>(NotesInChordSelectionFilterTypes::ALL);
     unsigned int m_filteredElementsTypes = static_cast<unsigned int>(ElementsSelectionFilterTypes::ALL);
+
+    bool m_includeSingleNotes = true;
 };
 }

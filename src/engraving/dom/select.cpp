@@ -433,7 +433,7 @@ void Selection::appendFiltered(EngravingItem* e)
         LOGE() << "selection locked, reason: " << lockReason();
         return;
     }
-    if (selectionFilter().canSelect(e)) {
+    if (canSelectVoice(e->voice()) && canSelect(e)) {
         m_el.push_back(e);
     }
 }
@@ -442,6 +442,10 @@ void Selection::appendChordRest(ChordRest* cr)
 {
     IF_ASSERT_FAILED(!isLocked()) {
         LOGE() << "selection locked, reason: " << lockReason();
+        return;
+    }
+
+    if (!canSelectVoice(cr->voice())) {
         return;
     }
 
@@ -476,53 +480,43 @@ void Selection::appendChord(Chord* chord)
         LOGE() << "selection locked, reason: " << lockReason();
         return;
     }
-    if (chord->beam() && !muse::contains(m_el, static_cast<EngravingItem*>(chord->beam()))) {
-        m_el.push_back(chord->beam());
+
+    if (!canSelectVoice(chord->voice())) {
+        return;
     }
-    if (chord->stem()) {
-        m_el.push_back(chord->stem());
-    }
-    if (chord->hook()) {
-        m_el.push_back(chord->hook());
-    }
-    if (chord->arpeggio()) {
-        appendFiltered(chord->arpeggio());
-    }
-    if (chord->stemSlash()) {
-        m_el.push_back(chord->stemSlash());
-    }
-    if (chord->tremoloTwoChord()) {
-        appendFiltered(chord->tremoloTwoChord());
-    }
-    if (chord->tremoloSingleChord()) {
-        appendFiltered(chord->tremoloSingleChord());
-    }
-    for (Articulation* art : chord->articulations()) {
-        appendFiltered(art);
-    }
-    for (Note* note : chord->notes()) {
+
+    appendChordFilteredExtras(chord);
+
+    const size_t totalNotesInChord = chord->notes().size();
+    const bool isSingleNote = totalNotesInChord == 1;
+
+    size_t totalAppendedNotes = 0;
+    for (size_t noteIdx = 0; noteIdx < totalNotesInChord; ++noteIdx) {
+        Note* note = chord->notes().at(noteIdx);
+
+        appendNoteFilteredExtras(note);
+
+        //! Hack Explainer: Due to the fact that this method is called while we're still in the process of "building" our
+        //! selection, we can't know for certain whether the selection as a whole will contain multi-note Chords (and thus
+        //! whether the "includeSingleNotes" flag should apply - see includeSingleNotes in select.h). For this reason, this
+        //! method ALWAYS appends single note chords. If single note chords should be ommitted from a selection, we simply
+        //! don't call this method (see usage of appendChordRest in Selection::updateSelectedElements).
+        if (/*hack*/ !isSingleNote && !canSelectNoteIdx(noteIdx, totalNotesInChord, /*hack*/ true)) {
+            continue;
+        }
+
         m_el.push_back(note);
+        ++totalAppendedNotes;
+
         if (note->accidental()) {
             m_el.push_back(note->accidental());
         }
         for (EngravingItem* el : note->el()) {
-            appendFiltered(el);
+            m_el.push_back(el);
         }
         for (NoteDot* dot : note->dots()) {
             m_el.push_back(dot);
         }
-
-        const EngravingItem* endElement = note->tieFor() ? note->tieFor()->endElement() : nullptr;
-        if (endElement && endElement->isNote()) {
-            const Note* endNote = toNote(endElement);
-            const Segment* endSeg = endNote->chord()->segment();
-            if (!endSeg || endSeg->tick() <= tickEnd()) {
-                for (SpannerSegment* spannerSeg : note->tieFor()->spannerSegments()) {
-                    appendFiltered(spannerSeg);
-                }
-            }
-        }
-
         for (Spanner* sp : note->spannerFor()) {
             if (!sp->endElement()->isNote()) {
                 continue;
@@ -537,45 +531,81 @@ void Selection::appendChord(Chord* chord)
                 m_el.push_back(sp);
             }
         }
+    }
 
-        if (note->laissezVib() && !note->laissezVib()->segmentsEmpty()) {
-            appendFiltered(note->laissezVib()->frontSegment());
-        }
+    //! NOTE: Beams, stems, etc should only be added if all notes in chord are selected...
+    if (totalAppendedNotes < totalNotesInChord) {
+        return;
+    }
+    if (chord->beam() && !muse::contains(m_el, static_cast<EngravingItem*>(chord->beam()))) {
+        m_el.push_back(chord->beam());
+    }
+    if (chord->stem()) {
+        m_el.push_back(chord->stem());
+    }
+    if (chord->hook()) {
+        m_el.push_back(chord->hook());
+    }
+    if (chord->stemSlash()) {
+        m_el.push_back(chord->stemSlash());
+    }
+}
 
-        if (note->incomingPartialTie() && !note->incomingPartialTie()->segmentsEmpty()) {
-            appendFiltered(note->incomingPartialTie()->frontSegment());
-        }
+void Selection::appendChordFilteredExtras(Chord* chord)
+{
+    if (Arpeggio* arp = chord->arpeggio()) {
+        appendFiltered(arp);
+    }
+    if (TremoloTwoChord* tremTwo = chord->tremoloTwoChord()) {
+        appendFiltered(tremTwo);
+    }
+    if (TremoloSingleChord* tremSing = chord->tremoloSingleChord()) {
+        appendFiltered(tremSing);
+    }
+    for (Articulation* art : chord->articulations()) {
+        appendFiltered(art);
+    }
+}
 
-        if (note->outgoingPartialTie() && !note->outgoingPartialTie()->segmentsEmpty()) {
-            appendFiltered(note->outgoingPartialTie()->frontSegment());
+void Selection::appendNoteFilteredExtras(Note* note)
+{
+    LaissezVib* lv = note->laissezVib();
+    if (lv && !lv->segmentsEmpty()) {
+        appendFiltered(lv->frontSegment());
+    }
+    PartialTie* ipt = note->incomingPartialTie();
+    if (ipt && !ipt->segmentsEmpty()) {
+        appendFiltered(ipt->frontSegment());
+    }
+    PartialTie* opt = note->outgoingPartialTie();
+    if (opt && !opt->segmentsEmpty()) {
+        appendFiltered(opt->frontSegment());
+    }
+    const EngravingItem* endElement = note->tieFor() ? note->tieFor()->endElement() : nullptr;
+    if (endElement && endElement->isNote()) {
+        const Note* endNote = toNote(endElement);
+        const Segment* endSeg = endNote->chord()->segment();
+        if (!endSeg || endSeg->tick() <= tickEnd()) {
+            for (SpannerSegment* spannerSeg : note->tieFor()->spannerSegments()) {
+                appendFiltered(spannerSeg);
+            }
         }
     }
 }
 
 void Selection::appendTupletHierarchy(Tuplet* innermostTuplet)
 {
-    if (muse::contains(m_el, static_cast<EngravingItem*>(innermostTuplet))) {
+    if (!canSelectVoice(innermostTuplet->voice()) || muse::contains(m_el, static_cast<EngravingItem*>(innermostTuplet))) {
         return;
     }
 
-    //! NOTE: It's not very efficient to use muse::contains here. It would be nicer to simply use
-    //! de->selected() instead, but the selected flag isn't set until Selection::update...
-    const std::vector<DurationElement*> elements = innermostTuplet->elements();
-    for (DurationElement* de : elements) {
-        if (!de->isChord()) {
-            if (!muse::contains(m_el, static_cast<EngravingItem*>(de))) {
-                return;
-            }
-            continue;
-        }
-        for (Note* note : toChord(de)->notes()) {
-            if (!muse::contains(m_el, static_cast<EngravingItem*>(note))) {
-                return;
-            }
-        }
+    //! NOTE: Not hugely efficient since canSelectTuplet will recursively check all contained tuplets...
+    if (!selectionFilter().canSelectTuplet(innermostTuplet, tickStart(), tickEnd(),
+                                           rangeContainsMultiNoteChords())) {
+        return;
     }
 
-    appendFiltered(innermostTuplet);
+    m_el.push_back(innermostTuplet);
 
     // Recursively append upwards/outwards
     Tuplet* outerTuplet = innermostTuplet->tuplet();
@@ -586,7 +616,7 @@ void Selection::appendTupletHierarchy(Tuplet* innermostTuplet)
 
 void Selection::appendGuitarBend(GuitarBend* guitarBend)
 {
-    if (!guitarBend) {
+    if (!guitarBend || !canSelectVoice(guitarBend->voice())) {
         return;
     }
 
@@ -612,6 +642,7 @@ void Selection::updateSelectedElements()
         return;
     }
     if (m_state != SelState::RANGE) {
+        m_rangeContainsMultiNoteChords = false;
         update();
         return;
     }
@@ -666,16 +697,18 @@ void Selection::updateSelectedElements()
     track_idx_t startTrack = m_staffStart * VOICES;
     track_idx_t endTrack   = m_staffEnd * VOICES;
 
-    //! NOTE: We need to delay the appending of tuplets. We should only display tuplets as selected
+    //! NOTE: See appendChord/appendChordRest - we should include single notes if the selection consists solely of
+    //! single notes, even if the "include single notes" filter flag is false...
+    std::vector<Chord*> singleNoteChords;
+    size_t totalChordsFound = 0;
+
+    //! NOTE: We also need to delay the appending of tuplets. We should only display tuplets as selected
     //! if all of their contained elements are selected...
     std::unordered_set<Tuplet*> innerTuplets;
 
     for (track_idx_t st = startTrack; st < endTrack; ++st) {
-        if (!canSelectVoice(st)) {
-            continue;
-        }
         for (Segment* s = m_startSegment; s && (s != m_endSegment); s = s->next1MM()) {
-            if (!s->enabled() || s->isEndBarLineType()) {      // do not select end bar line
+            if (!s->enabled() || s->isEndBarLineType()) { // do not select end bar line
                 continue;
             }
             for (EngravingItem* e : s->annotations()) {
@@ -705,8 +738,31 @@ void Selection::updateSelectedElements()
                 innerTuplets.emplace(tuplet);
             }
 
-            appendChordRest(cr);
+            if (!cr->isChord()) {
+                appendChordRest(cr);
+                continue;
+            }
+
+            Chord* chord = toChord(cr);
+            const std::vector<Note*> notes = chord->notes();
+            if (notes.size() == 1) {
+                singleNoteChords.emplace_back(chord);
+            } else {
+                appendChordRest(chord);
+            }
+            ++totalChordsFound;
         }
+    }
+
+    m_rangeContainsMultiNoteChords = totalChordsFound > singleNoteChords.size();
+
+    for (Chord* singleNoteChord : singleNoteChords) {
+        if (!m_rangeContainsMultiNoteChords || selectionFilter().includeSingleNotes()) {
+            appendChordRest(singleNoteChord);
+        }
+        // Include the extra notation elements even if the note itself isn't included...
+        appendChordFilteredExtras(singleNoteChord);
+        appendNoteFilteredExtras(singleNoteChord->notes().front());
     }
 
     for (Tuplet* tuplet : innerTuplets) {
@@ -749,6 +805,14 @@ void Selection::updateSelectedElements()
     }
     update();
     m_score->setSelectionChanged(true);
+}
+
+bool Selection::rangeContainsMultiNoteChords() const
+{
+    IF_ASSERT_FAILED(m_state == SelState::RANGE) {
+        return false;
+    }
+    return m_rangeContainsMultiNoteChords;
 }
 
 void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t staffStart, staff_idx_t staffEnd)
@@ -806,15 +870,39 @@ void Selection::update()
     for (EngravingItem* e : m_el) {
         e->setSelected(true); // also tells accessibility that e has focus
     }
-    // Only one element can have focus at a time, so currently the final
-    // element in _el has focus. That's ok for a LIST selection because it
-    // corresponds to the last element the user clicked on.
-    if (ChordRest* cr = activeCR()) {
-        // User is performing a RANGE selection. Let's focus a note/rest in the activeCR.
-        EngravingItem* e = cr->isChord() ? toChord(cr)->upNote() : toEngravingItem(cr);
-        assert(e->selected()); // was selected in loop above (e is somewhere in _el)
-        e->setSelected(true); // HACK: select it again so accessibility thinks it has focus
+
+    ChordRest* cr = activeCR();
+    if (!cr) {
+        updateState();
+        return;
     }
+
+    // Only one element can have focus at a time, and currently the final element in m_el has
+    // focus. That's ok for a LIST selection (because it corresponds to the last element the
+    // user clicked on) but for range selections, we should focus something in activeCR...
+    EngravingItem* toSelectAgain = nullptr;
+    if (cr->isChord()) {
+        // Use the top selected note in the chord...
+        const std::vector<Note*> notes = toChord(cr)->notes();
+        for (size_t noteIdx = notes.size() - 1; noteIdx >= 0; --noteIdx) {
+            Note* note = notes.at(noteIdx);
+            if (note->selected()) {
+                toSelectAgain = note;
+                break;
+            }
+        }
+    } else {
+        toSelectAgain = cr;
+    }
+
+    // Was selected earlier (toSelectAgain is somewhere in m_el)
+    IF_ASSERT_FAILED(toSelectAgain && toSelectAgain->selected()) {
+        updateState();
+        return;
+    }
+
+    toSelectAgain->setSelected(true); // HACK: select it again so accessibility thinks it has focus
+
     updateState();
 }
 
@@ -1503,4 +1591,9 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_
 SelectionFilter Selection::selectionFilter() const
 {
     return m_score->selectionFilter();
+}
+
+bool Selection::canSelectNoteIdx(size_t noteIdx, size_t totalNotesInChord, bool selectionContainsMultiNoteChords) const
+{
+    return selectionFilter().canSelectNoteIdx(noteIdx, totalNotesInChord, selectionContainsMultiNoteChords);
 }

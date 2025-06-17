@@ -2038,7 +2038,7 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
             score()->deleteRange(sourceStartSegment, sourceEndSegment,
                                  engraving::staff2track(rdd.sourceStaffIdx),
                                  engraving::staff2track(rdd.sourceStaffIdx + rdd.numStaves),
-                                 score()->selectionFilter());
+                                 score()->selectionFilter(), score()->selection().rangeContainsMultiNoteChords());
         }
     }
 
@@ -2586,28 +2586,39 @@ void NotationInteraction::applyPaletteElementToRange(EngravingItem* element, boo
     mu::engraving::Segment* startSegment = sel.startSegment();
     mu::engraving::Segment* endSegment = sel.endSegment();           //keep it, it could change during the loop
 
+    const bool rangeContainsMultiNoteChords = sel.rangeContainsMultiNoteChords();
+
+    const auto applyDropPaletteElementToChord = [this, score, element, modifiers, rangeContainsMultiNoteChords](Chord* chord) {
+        const size_t totalNotesInChord = chord->notes().size();
+        for (size_t noteIdx = 0; noteIdx < totalNotesInChord; ++noteIdx) {
+            Note* note = chord->notes().at(noteIdx);
+            if (!note || !score->selectionFilter().canSelectNoteIdx(noteIdx, totalNotesInChord, rangeContainsMultiNoteChords)) {
+                continue;
+            }
+            applyDropPaletteElement(score, note, element, modifiers);
+            if (!element->isAccidental() && !element->isNoteHead() && !element->isGlissando() && !element->isChordLine()) {
+                // Only need to apply to one note...
+                break;
+            }
+        }
+    };
+
     for (mu::engraving::Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
         for (track_idx_t track = track1; track < track2; ++track) {
             mu::engraving::EngravingItem* e = s->element(track);
-            if (e == 0 || !score->selectionFilter().canSelect(e)
-                || !score->selectionFilter().canSelectVoice(track)) {
+            if (!e || !score->selectionFilter().canSelect(e) || !score->selectionFilter().canSelectVoice(track)) {
                 continue;
             }
-            if (e->isChord()) {
-                mu::engraving::Chord* chord = toChord(e);
-                for (mu::engraving::Note* n : chord->notes()) {
-                    applyDropPaletteElement(score, n, element, modifiers);
-                    if (!(element->isAccidental() || element->isNoteHead()
-                          || element->isGlissando() || element->isChordLine())) {     // only these need to apply to every note
-                        break;
-                    }
-                }
-            } else {
+            if (!e->isChord()) {
                 // do not apply articulation to barline in a range selection
                 if (!e->isBarLine() || !element->isArticulationFamily()) {
                     applyDropPaletteElement(score, e, element, modifiers);
                 }
+                continue;
             }
+
+            Chord* chord = toChord(e);
+            applyDropPaletteElementToChord(chord);
         }
         if (!element->placeMultiple()) {
             break;

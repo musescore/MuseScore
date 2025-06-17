@@ -40,12 +40,10 @@ void AbstractSelectionFilterModel::load()
     loadTypes();
     endResetModel();
 
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        emit enabledChanged();
+    onNotationChanged();
 
-        if (currentNotation()) {
-            emit dataChanged(index(0), index(rowCount() - 1), { IsSelectedRole, IsIndeterminateRole });
-        }
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
     });
 }
 
@@ -59,6 +57,9 @@ QVariant AbstractSelectionFilterModel::data(const QModelIndex& index, int role) 
     const SelectionFilterTypesVariant type = m_types.at(row);
 
     switch (role) {
+    case IsAllowedRole:
+        return isAllowed(type);
+
     case TitleRole:
         return titleForType(type);
 
@@ -103,6 +104,7 @@ int AbstractSelectionFilterModel::rowCount(const QModelIndex&) const
 QHash<int, QByteArray> AbstractSelectionFilterModel::roleNames() const
 {
     return {
+        { IsAllowedRole, "isAllowed" },
         { TitleRole, "title" },
         { IsSelectedRole, "isSelected" },
         { IsIndeterminateRole, "isIndeterminate" }
@@ -119,10 +121,14 @@ INotationPtr AbstractSelectionFilterModel::currentNotation() const
     return globalContext()->currentNotation();
 }
 
+INotationInteractionPtr AbstractSelectionFilterModel::currentNotationInteraction() const
+{
+    return currentNotation() ? currentNotation()->interaction() : nullptr;
+}
+
 INotationSelectionFilterPtr AbstractSelectionFilterModel::currentNotationSelectionFilter() const
 {
-    const INotationInteractionPtr interaction = currentNotation() ? currentNotation()->interaction() : nullptr;
-    return interaction ? interaction->selectionFilter() : nullptr;
+    return currentNotationInteraction() ? currentNotationInteraction()->selectionFilter() : nullptr;
 }
 
 bool AbstractSelectionFilterModel::isFiltered(const SelectionFilterTypesVariant& variant) const
@@ -143,6 +149,28 @@ bool AbstractSelectionFilterModel::isIndeterminate(const SelectionFilterTypesVar
         return !isFiltered(getAllMask()) && !isFiltered(getNoneMask());
     }
     return false;
+}
+
+void AbstractSelectionFilterModel::onSelectionChanged()
+{
+    if (!currentNotation()) {
+        return;
+    }
+    emit dataChanged(index(0), index(rowCount() - 1), { IsSelectedRole, IsIndeterminateRole });
+    emit enabledChanged();
+}
+
+void AbstractSelectionFilterModel::onNotationChanged()
+{
+    onSelectionChanged();
+
+    const INotationInteractionPtr interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+    interaction->selectionChanged().onNotify(this, [this]() {
+        onSelectionChanged();
+    });
 }
 
 void AbstractSelectionFilterModel::notifyAboutDataChanged(const QModelIndex& index, const SelectionFilterTypesVariant& variant)
