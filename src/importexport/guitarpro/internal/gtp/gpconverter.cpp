@@ -2998,7 +2998,7 @@ void GPConverter::addTuning()
                 tuning[i] = sd.stringList().at(i).pitch + p->instrument()->transpose().chromatic;
             }
 
-            if (utils::isStandardTuning(p->instrument()->recognizeMidiProgram(), tuning)) {
+            if (utils::isStandardTuning(p->instrument()->channel(0)->program(), tuning)) {
                 continue;
             }
 

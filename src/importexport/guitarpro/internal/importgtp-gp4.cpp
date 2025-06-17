@@ -1150,7 +1150,7 @@ bool GuitarPro4::read(IODevice* io)
 
     for (auto p : score->parts()) {
         for (auto s : p->staves()) {
-            if (!s->isPrimaryStaff()) {
+            if (!s->isPrimaryStaff() || p->instrument()->useDrumset()) {
                 continue;
             }
 
@@ -1167,7 +1167,7 @@ bool GuitarPro4::read(IODevice* io)
                 tuning[i] = sd.stringList().at(i).pitch + p->instrument()->transpose().chromatic;
             }
 
-            if (utils::isStandardTuning(p->instrument()->recognizeMidiProgram(), tuning)) {
+            if (utils::isStandardTuning(p->instrument()->channel(0)->program(), tuning)) {
                 continue;
             }
 
@@ -1177,7 +1177,7 @@ bool GuitarPro4::read(IODevice* io)
             tun->setParent(seg);
             seg->add(tun);
             // Instrument string data should be set to the standard
-            tuning = utils::standardTuningFor(p->instrument()->recognizeMidiProgram(), (int)sd.strings());
+            tuning = utils::standardTuningFor(p->instrument()->channel(0)->program(), (int)sd.strings());
             StringData instrumentSD(sd.frets(), (int)tuning.size(), tuning.data());
             p->instrument()->setStringData(instrumentSD);
         }
