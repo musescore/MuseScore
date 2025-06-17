@@ -163,14 +163,16 @@ void BendDataCollector::regroupBendDataByTiedChords()
             tied_chords_bend_data_chunk_t chunk;
             const Note* currentNote = tickInfo.begin()->first;
 
-            ChordImportedBendData chordBendData;
-            chordBendData.chord = currentNote->chord();
+            {
+                ChordImportedBendData chordBendData;
+                chordBendData.chord = currentNote->chord();
 
-            for (Note* note : currentNote->chord()->notes()) {
-                chordBendData.dataByNote[note] = std::move(tickInfo[note]);
+                for (Note* note : currentNote->chord()->notes()) {
+                    chordBendData.dataByNote[note] = std::move(tickInfo[note]);
+                }
+
+                chunk.push_back(std::move(chordBendData));
             }
-
-            chunk.push_back(std::move(chordBendData));
 
             const Tie* tieFor = currentNote->tieFor();
             while (tieFor) {
