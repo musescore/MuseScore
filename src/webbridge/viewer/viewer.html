@@ -55,12 +55,12 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
     <div id="screen"></div>
 
-<!--    <div id="panel">
+    <!-- <div id="panel">
       <button onclick="onclickTest1()">Test 1</button>
       <button>Test 2</button>
       <button>Test 3</button>
-      <input id="load_file" type="file" onchange="loadFile(this.files[0])">
-    </div>-->
+      <input id="load_file" type="file" onchange="window.muapi.loadScoreFile(this.files[0])">
+    </div> -->
 
     <script type="module">
       import createMuApi from "./distr/muapi.js";
@@ -81,22 +81,19 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
         showUi(spinner);
         status.innerHTML = 'Loading...';
 
-        window.muapi = createMuApi({
+        window.muapi = await createMuApi({
 
           // properties
           screen: screen,
 
           // runtime
           onLoaded: () => showUi(screen),
-          onExit: exitData =>
-                {
-                    status.innerHTML = 'Application exit';
-                    status.innerHTML +=
-                        exitData.code !== undefined ? ` with code ${exitData.code}` : '';
-                    status.innerHTML +=
-                        exitData.text !== undefined ? ` (${exitData.text})` : '';
-                    showUi(spinner);
-                },
+          onExit: function(exitData) {
+            status.innerHTML = 'Application exit';
+            status.innerHTML += exitData.code !== undefined ? ` with code ${exitData.code}` : '';
+            status.innerHTML += exitData.text !== undefined ? ` (${exitData.text})` : '';
+            showUi(spinner);
+          },
 
           // api callbacks
           onProjectSaved: function(data) {
@@ -108,17 +105,6 @@ SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
         console.error(e.stack);
     }
     </script>
-    <script src="MuseScoreStudio.js"></script>
-    <script type="text/javascript">
-      async function loadFile(file) {
-            if (!file) {
-                return
-            }
-
-            const buffer = await file.arrayBuffer();
-            muapi.load(new Uint8Array(buffer)) 
-      }
-    </script>  
-
+    <script src="MuseScoreStudio.js"></script> 
   </body>
 </html>
