@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
-      <Spatium>1.74978</Spatium>
+      <spatium>1.74978</spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -19,8 +20,9 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Part>
-      <Staff id="1">
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -83,76 +85,103 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <TimeSig>
+            <eid>E_E</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <StaffText>
+            <eid>F_F</eid>
             <text>Swing</text>
             </StaffText>
           <Rest>
+            <eid>G_G</eid>
             <durationType>eighth</durationType>
             </Rest>
+          <Beam>
+            <eid>H_H</eid>
+            <l1>0</l1>
+            <l2>2</l2>
+            </Beam>
           <Chord>
+            <eid>I_I</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>J_J</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>K_K</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>L_L</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>M_M</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>N_N</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
+          <Beam>
+            <eid>O_O</eid>
+            <l1>0</l1>
+            <l2>10</l2>
+            </Beam>
           <Chord>
+            <eid>P_P</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>Q_Q</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>R_R</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>S_S</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>T_T</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>U_U</eid>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           <Chord>
+            <eid>V_V</eid>
             <durationType>eighth</durationType>
             <Note>
+              <eid>W_W</eid>
+              <Accidental>
+                <subtype>accidentalFlat</subtype>
+                <eid>X_X</eid>
+                </Accidental>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>Y_Y</eid>
                   </Tie>
                 <next>
                   <location>
@@ -164,16 +193,18 @@
               <pitch>58</pitch>
               <tpc>12</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           </voice>
         </Measure>
       <Measure>
+        <eid>Z_Z</eid>
         <voice>
           <Chord>
+            <eid>a_a</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>b_b</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -185,14 +216,15 @@
               <pitch>58</pitch>
               <tpc>12</tpc>
               <velocity>80</velocity>
-              <veloType>user</veloType>
               </Note>
             </Chord>
           </voice>
         </Measure>
       <Measure>
+        <eid>c_c</eid>
         <voice>
           <Rest>
+            <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

@@ -72,17 +72,15 @@ void AgentList::removeDuplicates()
                         }
                   }
             }
-      int removed = 0;
-      for (iterator itr = begin(); itr != end(); ) {
-            if ((*itr)->phaseScore < 0.0) {
-                  ++removed;
-                  delete *itr;
-                  list.erase(itr);
-                  }
-            else {
-                  ++itr;
-                  }
-            }
+
+      auto last = std::remove_if(begin(), end(), [](const Agent* agent){
+                  if (agent->phaseScore < 0.0) {
+                        delete agent;
+                        return true;
+                        }
+                  return false;
+            });
+      list.erase(last, list.end());
       }
 
 

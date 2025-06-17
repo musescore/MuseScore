@@ -218,15 +218,11 @@ TEST_F(MidiImportTests, quantDotted4th) {
 
 // human-performed (unaligned) files
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: vector iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_human4_4) {
+TEST_F(MidiImportTests, human4_4) {
     dontSimplify("human_4-4");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: vector iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_humanTempo) {
+TEST_F(MidiImportTests, humanTempo) {
     importThenCompareWithRef("human_tempo");
 }
 
@@ -316,7 +312,6 @@ TEST_F(MidiImportTests, meterTwoBeatsOver) {
     dontSimplify("meter_two_beats_over");
 }
 
-// TODO: update ref
 TEST_F(MidiImportTests, meterDotTie) {
     dontSimplify("meter_dot_tie");
 }
@@ -366,9 +361,7 @@ TEST_F(MidiImportTests, tuplet5_5TupletsRests) {
     dontSimplify("tuplet_5_5_tuplets_rests");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tuplet3_4) {
+TEST_F(MidiImportTests, tuplet3_4) {
     dontSimplify("tuplet_3-4");
 }
 
@@ -380,9 +373,7 @@ TEST_F(MidiImportTests, tupletMars) {
     dontSimplify("tuplet_mars");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tupletNonuplet3_4) {
+TEST_F(MidiImportTests, tupletNonuplet3_4) {
     // requires 1/64 quantization
     QString midiFile("tuplet_nonuplet_3-4");
     auto& opers = midiImportOperations;
@@ -412,15 +403,11 @@ TEST_F(MidiImportTests, tupletQuadruplet) {
     dontSimplify("tuplet_quadruplet");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tupletSeptuplet) {
+TEST_F(MidiImportTests, tupletSeptuplet) {
     dontSimplify("tuplet_septuplet");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tupletTripletsMixed) {
+TEST_F(MidiImportTests, tupletTripletsMixed) {
     dontSimplify("tuplet_triplets_mixed");
 }
 
@@ -432,9 +419,7 @@ TEST_F(MidiImportTests, tupletTripletFirstTied) {
     dontSimplify("tuplet_triplet_first_tied");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tupletTripletFirstTied2) {
+TEST_F(MidiImportTests, tupletTripletFirstTied2) {
     dontSimplify("tuplet_triplet_first_tied2");
 }
 
@@ -470,15 +455,11 @@ TEST_F(MidiImportTests, tupletOffTimeOtherBar) {
     dontSimplify("tuplet_off_time_other_bar");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tupletOffTimeOtherBar2) {
+TEST_F(MidiImportTests, tupletOffTimeOtherBar2) {
     dontSimplify("tuplet_off_time_other_bar2");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_tuplet16th8th) {
+TEST_F(MidiImportTests, tuplet16th8th) {
     dontSimplify("tuplet_16th_8th");
 }
 
@@ -498,8 +479,7 @@ TEST_F(MidiImportTests, pickupMeasureLong) {
     noTempoText("pickup_long");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_pickupMeasureTurnOff) {
+TEST_F(MidiImportTests, pickupMeasureTurnOff) {
     noTempoText("pickup_turn_off");
 }
 
@@ -509,8 +489,7 @@ TEST_F(MidiImportTests, LHRH_Nontuplet) {
     staffSplit("split_nontuplet");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_LHRH_Acid) {
+TEST_F(MidiImportTests, LHRH_Acid) {
     staffSplit("split_acid");
 }
 
@@ -560,8 +539,7 @@ TEST_F(MidiImportTests, swingShuffle) {
     importThenCompareWithRef(midiFile.toStdString().c_str());
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_swingClef) {
+TEST_F(MidiImportTests, swingClef) {
     QString midiFile("swing_clef");
     auto& opers = midiImportOperations;
     opers.addNewMidiFile(midiFilePath(midiFile));
@@ -596,7 +574,6 @@ TEST_F(MidiImportTests, DISABLED_percNoGrandStaff) {
 }
 
 // TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
 TEST_F(MidiImportTests, DISABLED_percTriplet) {
     noTempoText("perc_triplet");
 }
@@ -617,7 +594,6 @@ TEST_F(MidiImportTests, DISABLED_percTupletSimplify) {
 }
 
 // TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
 TEST_F(MidiImportTests, DISABLED_percTupletSimplify2) {
     noTempoText("perc_tuplet_simplify2");
 }
@@ -633,14 +609,11 @@ TEST_F(MidiImportTests, clefTied) {
     dontSimplify("clef_tied");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_clefMelody) {
+TEST_F(MidiImportTests, clefMelody) {
     dontSimplify("clef_melody");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_clefPrev) {
+TEST_F(MidiImportTests, clefPrev) {
     dontSimplify("clef_prev");
 }
 
@@ -662,14 +635,11 @@ TEST_F(MidiImportTests, simplify8thDottedNoStaccato) {
     simplification("simplify_8th_dotted_no_staccato");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_simplify4thDottedTied) {
+TEST_F(MidiImportTests, simplify4thDottedTied) {
     simplification("simplify_4th_dotted_tied");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_simplifyTripletStaccato) {
+TEST_F(MidiImportTests, simplifyTripletStaccato) {
     simplification("simplify_triplet_staccato");
 }
 
@@ -683,8 +653,7 @@ TEST_F(MidiImportTests, simplifyStaccato9_8) {
 
 // voice separation
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_voiceSeparationAcid) {
+TEST_F(MidiImportTests, voiceSeparationAcid) {
     voiceSeparation("voice_acid");
 }
 
@@ -692,9 +661,7 @@ TEST_F(MidiImportTests, voiceSeparationIntersect) {
     voiceSeparation("voice_intersect");
 }
 
-// TODO: update ref
-// FIXME: MSVC debug build crashes (Assertion failed: map/set iterators incompatible)
-TEST_F(MidiImportTests, DISABLED_voiceSeparationTuplet) {
+TEST_F(MidiImportTests, voiceSeparationTuplet) {
     voiceSeparation("voice_tuplet", true);
 }
 
@@ -734,13 +701,11 @@ TEST_F(MidiImportTests, DISABLED_instrumentClef) {
 
 // lyrics
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_lyricsTime0) {
+TEST_F(MidiImportTests, lyricsTime0) {
     noTempoText("lyrics_time_0");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_lyricsVoice1) {
+TEST_F(MidiImportTests, lyricsVoice1) {
     noTempoText("lyrics_voice_1");
 }
 
