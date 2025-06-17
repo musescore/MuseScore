@@ -36,7 +36,7 @@ NotesInChordSelectionFilterModel::NotesInChordSelectionFilterModel(QObject* pare
 bool NotesInChordSelectionFilterModel::enabled() const
 {
     const INotationSelectionPtr selection = currentNotationInteraction() ? currentNotationInteraction()->selection() : nullptr;
-    if (!selection || selection->isNone() || !selection->isRange()) {
+    if (!selection || !selection->isRange()) {
         return false;
     }
     const INotationSelectionRangePtr range = selection->range();
@@ -48,6 +48,30 @@ void NotesInChordSelectionFilterModel::loadTypes()
     for (size_t i = 0; i < NUM_NOTES_IN_CHORD_SELECTION_FILTER_TYPES; i++) {
         m_types << static_cast<NotesInChordSelectionFilterTypes>(1 << i);
     }
+}
+
+void NotesInChordSelectionFilterModel::selectAll()
+{
+    setIncludeSingleNotes(true);
+    AbstractSelectionFilterModel::selectAll();
+    return;
+}
+
+void NotesInChordSelectionFilterModel::clearAll()
+{
+    setIncludeSingleNotes(false);
+    AbstractSelectionFilterModel::clearAll();
+    return;
+}
+
+bool NotesInChordSelectionFilterModel::isAllSelected() const
+{
+    return includeSingleNotes() && AbstractSelectionFilterModel::isAllSelected();
+}
+
+bool NotesInChordSelectionFilterModel::isNoneSelected() const
+{
+    return !includeSingleNotes() && AbstractSelectionFilterModel::isNoneSelected();
 }
 
 bool NotesInChordSelectionFilterModel::isFiltered(const SelectionFilterTypesVariant& variant) const
@@ -95,6 +119,7 @@ void NotesInChordSelectionFilterModel::setIncludeSingleNotes(bool include)
     }
     filter->setIncludeSingleNotes(include);
     emit includeSingleNotesChanged();
+    emit maskStatesChanged();
 }
 
 bool NotesInChordSelectionFilterModel::multipleIndicesSelected() const

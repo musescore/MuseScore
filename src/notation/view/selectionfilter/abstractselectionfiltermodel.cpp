@@ -45,6 +45,20 @@ void AbstractSelectionFilterModel::load()
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
     });
+
+    emit maskStatesChanged();
+}
+
+void AbstractSelectionFilterModel::selectAll()
+{
+    setFiltered(getAllMask(), true);
+    notifyAboutDataChanged(this->index(0), getAllMask());
+}
+
+void AbstractSelectionFilterModel::clearAll()
+{
+    setFiltered(getAllMask(), false);
+    notifyAboutDataChanged(this->index(0), getAllMask());
 }
 
 QVariant AbstractSelectionFilterModel::data(const QModelIndex& index, int role) const
@@ -116,6 +130,16 @@ bool AbstractSelectionFilterModel::enabled() const
     return currentNotation() != nullptr;
 }
 
+bool AbstractSelectionFilterModel::isAllSelected() const
+{
+    return isFiltered(getAllMask());
+}
+
+bool AbstractSelectionFilterModel::isNoneSelected() const
+{
+    return isFiltered(getNoneMask());
+}
+
 INotationPtr AbstractSelectionFilterModel::currentNotation() const
 {
     return globalContext()->currentNotation();
@@ -177,9 +201,11 @@ void AbstractSelectionFilterModel::notifyAboutDataChanged(const QModelIndex& ind
 {
     if (variant == getAllMask()) {
         emit dataChanged(this->index(0), this->index(rowCount() - 1), { IsSelectedRole, IsIndeterminateRole });
+        emit maskStatesChanged();
         return;
     }
 
     emit dataChanged(this->index(0), this->index(0), { IsSelectedRole, IsIndeterminateRole });
     emit dataChanged(index, index, { IsSelectedRole });
+    emit maskStatesChanged();
 }
