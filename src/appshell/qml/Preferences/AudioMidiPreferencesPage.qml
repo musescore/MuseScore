@@ -93,6 +93,24 @@ PreferencesPage {
             }
         }
 
+        SeparatorLine {}
+
+        OnlineSoundsSection {
+            autoProcessOnlineSoundsInBackground: audioMidiModel.autoProcessOnlineSoundsInBackground
+            progressBarMode: audioMidiModel.onlineSoundsShowProgressBarMode
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 4
+
+            onAutoProcessOnlineSoundsInBackgroundChangeRequested: function(value) {
+                audioMidiModel.autoProcessOnlineSoundsInBackground = value
+            }
+
+            onProgressBarModeChangeRequired: function(mode) {
+                audioMidiModel.onlineSoundsShowProgressBarMode = mode
+            }
+        }
+
         /*
          * TODO: https://github.com/musescore/MuseScore/issues/9807
         SeparatorLine {}
