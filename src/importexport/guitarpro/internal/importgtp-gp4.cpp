@@ -747,28 +747,6 @@ bool GuitarPro4::read(IODevice* io)
 
         int patch = channelDefaults[midiChannel].patch;
 
-        bool isStandardTuning = utils::isStandardTuning(patch, tuning2);
-
-        if (!isStandardTuning) {
-            const Measure* m = score->firstMeasure();
-            Segment* seg = m->findSegment(SegmentType::ChordRest, { 0, 1 });
-
-            IF_ASSERT_FAILED(seg) {
-                LOGE() << "First measure MUST has a chord rest segment after import";
-                return false;
-            }
-
-            StringTunings* tun = Factory::createStringTunings(seg);
-            tun->setStringData(stringData);
-            tun->setTrack(staff2track(score->staff(i)->idx()));
-            tun->setParent(seg);
-            seg->add(tun);
-
-            tuning2 = utils::standardTuningFor(patch, (int)tuning2.size());
-            stringData = StringData(frets, static_cast<int>(tuning2.size()), tuning2.data());
-            instr->setStringData(stringData);
-        }
-
         //
         // determine clef
         //
@@ -1158,6 +1136,50 @@ bool GuitarPro4::read(IODevice* io)
 
         if (bar == 1 && !mixChange) {
             setTempo(temp, score->firstMeasure());
+        }
+    }
+    ////////////////////////
+    // Add String Tunings //
+    ////////////////////////
+    const Measure* m = score->firstMeasure();
+
+    // NOTE: GP doesn't support multiple tunings on one part
+    // We're safe to just take the very first chord rest segment
+    // and check if it has any non-standard tuning
+    const Fraction& f{ 0, 1 };
+
+    for (auto p : score->parts()) {
+        for (auto s : p->staves()) {
+            if (!s->isPrimaryStaff()) {
+                continue;
+            }
+
+            Segment* seg = m->findSegment(SegmentType::ChordRest, f);
+
+            IF_ASSERT_FAILED(seg) {
+                LOGE() << "First measure MUST has a chord rest segment after import";
+                break;
+            }
+
+            const StringData sd = *p->instrument()->stringData();
+            std::vector<int> tuning(sd.strings());
+            for (size_t i = 0; i < tuning.size(); ++i) {
+                tuning[i] = sd.stringList().at(i).pitch + p->instrument()->transpose().chromatic;
+            }
+
+            if (utils::isStandardTuning(p->instrument()->recognizeMidiProgram(), tuning)) {
+                continue;
+            }
+
+            StringTunings* tun = Factory::createStringTunings(seg);
+            tun->setStringData(sd);
+            tun->setTrack(staff2track(s->idx()));
+            tun->setParent(seg);
+            seg->add(tun);
+            // Instrument string data should be set to the standard
+            tuning = utils::standardTuningFor(p->instrument()->recognizeMidiProgram(), (int)sd.strings());
+            StringData instrumentSD(sd.frets(), (int)tuning.size(), tuning.data());
+            p->instrument()->setStringData(instrumentSD);
         }
     }
 
