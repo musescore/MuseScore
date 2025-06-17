@@ -98,6 +98,11 @@ int main(int argc, char** argv)
     if (qEnvironmentVariable("QT_QPA_PLATFORM") != "offscreen") {
         qputenv("QT_QPA_PLATFORMTHEME", "gtk3");
     }
+
+    //! NOTE Forced X11, with Wayland there are a number of problems now
+    if (qEnvironmentVariable("QT_QPA_PLATFORM") == "") {
+        qputenv("QT_QPA_PLATFORM", "xcb");
+    }
 #endif
 
 #ifdef Q_OS_WIN
