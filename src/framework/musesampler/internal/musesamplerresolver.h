@@ -30,6 +30,8 @@
 #include "imusesamplerconfiguration.h"
 #include "imusesamplerinfo.h"
 
+#include "async/notification.h"
+
 namespace muse::musesampler {
 class MuseSamplerResolver : public muse::audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo, public Injectable
 {
@@ -41,7 +43,9 @@ public:
         : Injectable(iocCtx) {}
 
     void init();
-    bool reloadMuseSampler();
+
+    bool reloadAllInstruments();
+    void processOnlineSounds();
 
     muse::audio::synth::ISynthesizerPtr resolveSynth(const muse::audio::TrackId trackId,
                                                      const muse::audio::AudioInputParams& params) const override;
@@ -65,6 +69,7 @@ private:
     String buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const;
 
     MuseSamplerLibHandlerPtr m_libHandler = nullptr;
+    async::Notification m_processOnlineSoundsRequested;
 };
 }
 

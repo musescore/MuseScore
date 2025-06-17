@@ -26,16 +26,24 @@
 
 #include "modularity/ioc.h"
 #include "playback/iplaybackcontroller.h"
+#include "audio/iaudioconfiguration.h"
+#include "actions/iactionsdispatcher.h"
 
 namespace mu::playback {
-class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable
+class OnlineSoundsStatusModel : public QObject, public muse::async::Asyncable, public muse::Injectable
 {
     Q_OBJECT
 
-    INJECT(IPlaybackController, playbackController)
+    Inject<IPlaybackController> playbackController = { this };
+    Inject<muse::audio::IAudioConfiguration> audioConfiguration = { this };
+    Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
     Q_PROPERTY(bool hasOnlineSounds READ hasOnlineSounds NOTIFY hasOnlineSoundsChanged)
+    Q_PROPERTY(bool canProcessOnlineSounds READ canProcessOnlineSounds NOTIFY canProcessOnlineSoundsChanged)
+
     Q_PROPERTY(int status READ status NOTIFY statusChanged)
+    Q_PROPERTY(QString errorTitle READ errorTitle NOTIFY statusChanged)
+    Q_PROPERTY(QString errorDescription READ errorDescription NOTIFY statusChanged)
 
 public:
     enum class Status {
@@ -49,19 +57,27 @@ public:
     explicit OnlineSoundsStatusModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE void processOnlineSounds();
 
     bool hasOnlineSounds() const;
+    bool canProcessOnlineSounds() const;
+
     int status() const;
+    QString errorTitle() const;
+    QString errorDescription() const;
 
 signals:
     void hasOnlineSoundsChanged();
+    void canProcessOnlineSoundsChanged();
     void statusChanged();
 
 private:
     void setHasOnlineSounds(bool value);
+    void setCanProcessOnlineSounds(bool canRun);
     void setStatus(Status status);
 
     bool m_hasOnlineSounds = false;
+    bool m_canProcessOnlineSounds = false;
     Status m_status = Status::Success;
 };
 }

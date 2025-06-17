@@ -33,6 +33,7 @@
 #include "notation/inotationplayback.h"
 #include "audio/iplayer.h"
 #include "audio/iplayback.h"
+#include "audio/iaudioconfiguration.h"
 #include "audio/audiotypes.h"
 #include "iinteractive.h"
 #include "drumsetloader.h"
@@ -49,6 +50,7 @@ class PlaybackController : public IPlaybackController, public muse::actions::Act
     INJECT_STATIC(IPlaybackConfiguration, configuration)
     INJECT_STATIC(notation::INotationConfiguration, notationConfiguration)
     INJECT_STATIC(muse::audio::IPlayback, playback)
+    INJECT_STATIC(muse::audio::IAudioConfiguration, audioConfiguration)
     INJECT_STATIC(ISoundProfilesRepository, profilesRepo)
     INJECT_STATIC(muse::IInteractive, interactive)
 
