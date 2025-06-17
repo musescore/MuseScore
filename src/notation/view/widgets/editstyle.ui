@@ -14193,7 +14193,7 @@ first note of the system</string>
                  <property name="title">
                   <string>Tied fret marks</string>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_591">
+                 <layout class="QVBoxLayout" name="verticalLayout_5911">
                   <item>
                    <widget class="QRadioButton" name="tabShowTiesAndFret">
                     <property name="text">
