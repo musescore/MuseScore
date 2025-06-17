@@ -656,6 +656,8 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             if (nn) {
                 tie->setEndNote(nn);
                 nn->setTieBack(tie);
+            } else {
+                score->doUndoRemoveElement(tie);
             }
         }
         if (s == segment) {
