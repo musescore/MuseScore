@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -26,8 +26,7 @@
 #include <engraving/types/types.h>
 #include <engraving/dom/types.h>
 
-#include "benddatacontext.h"
-#include "splitchord/benddatacollectorsplitchord.h"
+#include "benddatacontextsplitchord.h"
 
 namespace mu::engraving {
 class Note;
@@ -35,29 +34,19 @@ class Chord;
 }
 
 namespace mu::iex::guitarpro {
-class BendDataCollector
+class BendDataCollectorSplitChord
 {
 public:
 
     void storeBendData(const mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues);
-    BendDataContext collectBendDataContext();
+    BendDataContextSplitChord collectBendDataContext();
 
 private:
     std::unordered_map<mu::engraving::track_idx_t,
                        std::map<mu::engraving::Fraction,
                                 std::unordered_map<const mu::engraving::Note*, ImportedBendInfo> > > m_bendInfoForNote;
 
-    std::unordered_map<mu::engraving::track_idx_t,
-                       std::map<mu::engraving::Fraction, tied_chords_bend_data_chunk_t> > m_regroupedDataByTiedChords;
-
-    std::unique_ptr<BendDataCollectorSplitChord> m_bendDataCollectorSplitChord;
-
-    // converts m_bendInfoForNote to m_regroupedData, leaves m_bendInfoForNote empty
-    // m_bendInfoForNote is needed to store separate bend data for each note, while m_regroupedData stores in format, comfortoble for import
-    void regroupBendDataByTiedChords();
-    void fillBendDataContext(BendDataContext& bendDataCtx);
-
-    // if first chord in chunk has more segments than tied notes, move segments forward to other notes
-    void moveSegmentsToTiedNotes(tied_chords_bend_data_chunk_t& dataChunk, ImportedBendInfo& dataForFirstNote, size_t noteIdx);
+    void fillBendsDurations(BendDataContextSplitChord& bendDataCtx);
+    void fillBendData(BendDataContextSplitChord& bendDataCtx);
 };
 } // mu::iex::guitarpro

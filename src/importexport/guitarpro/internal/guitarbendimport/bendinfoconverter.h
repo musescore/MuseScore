@@ -5,7 +5,7 @@
  * MuseScore Studio
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore Limited
+ * Copyright (C) 2025 MuseScore Limited
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,23 +22,18 @@
 
 #pragma once
 
-#include "benddatacontext.h"
-#include "splitchord/benddataprocessorsplitchord.h"
+#include <engraving/types/pitchvalue.h>
+#include "guitarbendimporttypes.h"
 
 namespace mu::engraving {
 class Note;
-class Score;
+class Chord;
 }
 
 namespace mu::iex::guitarpro {
-class BendDataProcessor
+class BendInfoConverter
 {
 public:
-    BendDataProcessor(mu::engraving::Score* score);
-    void processBends(const BendDataContext& bendDataCtx);
-
-private:
-    mu::engraving::Score* m_score = nullptr;
-    std::unique_ptr<BendDataProcessorSplitChord> m_bendDataProcessorSplitChord;
+    static ImportedBendInfo fillBendInfo(const mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues);
 };
 } // mu::iex::guitarpro
