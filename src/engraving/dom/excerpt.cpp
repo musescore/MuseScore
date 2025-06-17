@@ -811,7 +811,24 @@ static void addTies(Note* originalNote, Note* newNote, TieMap& tieMap, Score* sc
     }
 }
 
-static void addGraceNoteTies(GraceNotesGroup& originalGraceNotes, Chord* newChord, TieMap& tieMap, Score* score)
+static void addBackSpanners(Note* on, Note* nn, Score* score)
+{
+    // add back spanners (going back from end to start spanner element
+    // makes sure the 'other' spanner anchor element is already set up)
+    // 'on' is the old spanner end note and 'nn' is the new spanner end note
+    for (Spanner* oldSp : on->spannerBack()) {
+        Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
+        if (newStart != nullptr) {
+            Spanner* newSp = toSpanner(oldSp->linkedClone());
+            newSp->setNoteSpan(newStart, nn);
+            score->addElement(newSp);
+        } else {
+            LOGD("cloneStaff2: cannot find spanner start note");
+        }
+    }
+}
+
+static void addGraceNoteTiesAndBackSpanners(GraceNotesGroup& originalGraceNotes, Chord* newChord, TieMap& tieMap, Score* score)
 {
     for (Chord* oldGrace : originalGraceNotes) {
         Chord* newGrace = newChord->graceNoteAt(oldGrace->graceIndex());
@@ -825,6 +842,7 @@ static void addGraceNoteTies(GraceNotesGroup& originalGraceNotes, Chord* newChor
             Note* newNote = newGrace->notes().at(i);
 
             addTies(originalNote, newNote, tieMap, score);
+            addBackSpanners(originalNote, newNote, score);
         }
     }
 }
@@ -1045,7 +1063,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                             if (oe->isChord()) {
                                 Chord* och = toChord(ocr);
                                 Chord* nch = toChord(ncr);
-                                addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
+                                addGraceNoteTiesAndBackSpanners(och->graceNotesBefore(), nch, tieMap, score);
                                 size_t n = och->notes().size();
                                 for (size_t i = 0; i < n; ++i) {
                                     Note* on = och->notes().at(i);
@@ -1084,7 +1102,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                         }
                                     }
                                 }
-                                addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
+                                addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
                                 addTremoloTwoChord(och, nch, prevTremolo);
                             }
                         }
@@ -1375,7 +1393,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
                         Chord* nch = toChord(ncr);
-                        addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
+                        addGraceNoteTiesAndBackSpanners(och->graceNotesBefore(), nch, tieMap, score);
                         size_t n = och->notes().size();
                         for (size_t i = 0; i < n; ++i) {
                             Note* on = och->notes().at(i);
@@ -1395,7 +1413,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                                 }
                             }
                         }
-                        addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
+                        addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
                         addTremoloTwoChord(och, nch, prevTremolo);
 
                         // Check grace note staff move validity
@@ -1601,25 +1619,13 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     if (oe->isChord()) {
                         Chord* och = toChord(ocr);
                         Chord* nch = toChord(ncr);
-                        addGraceNoteTies(och->graceNotesBefore(), nch, tieMap, score);
+                        addGraceNoteTiesAndBackSpanners(och->graceNotesBefore(), nch, tieMap, score);
                         size_t n = och->notes().size();
                         for (size_t i = 0; i < n; ++i) {
                             Note* on = och->notes().at(i);
                             Note* nn = nch->notes().at(i);
                             addTies(on, nn, tieMap, score);
-                            // add back spanners (going back from end to start spanner element
-                            // makes sure the 'other' spanner anchor element is already set up)
-                            // 'on' is the old spanner end note and 'nn' is the new spanner end note
-                            for (Spanner* oldSp : on->spannerBack()) {
-                                Note* newStart = Spanner::startElementFromSpanner(oldSp, nn);
-                                if (newStart != nullptr) {
-                                    Spanner* newSp = toSpanner(oldSp->linkedClone());
-                                    newSp->setNoteSpan(newStart, nn);
-                                    score->addElement(newSp);
-                                } else {
-                                    LOGD("cloneStaff2: cannot find spanner start note");
-                                }
-                            }
+                            addBackSpanners(on, nn, score);
                             GuitarBend* bendBack = on->bendBack();
                             Note* newStartNote = bendBack ? toNote(bendBack->startNote()->findLinkedInStaff(dstStaff)) : nullptr;
                             if (bendBack && newStartNote) {
@@ -1646,7 +1652,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                                 nn->addSpannerFor(newBend);
                             }
                         }
-                        addGraceNoteTies(och->graceNotesAfter(), nch, tieMap, score);
+                        addGraceNoteTiesAndBackSpanners(och->graceNotesAfter(), nch, tieMap, score);
                         addTremoloTwoChord(och, nch, prevTremolo);
                     }
                 }
