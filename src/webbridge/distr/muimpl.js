@@ -38,7 +38,23 @@ const MuImpl = {
         setupInternalCallbacks(instance)
 
         return instance;
-    }
+    },
+
+    loadScoreFile: async function(file) {
+        if (!file) {
+            return
+        }
+
+        const buffer = await file.arrayBuffer();
+        this.loadScoreData(new Uint8Array(buffer)) 
+    },
+
+    loadScoreData: function(data) {
+        const ptr = this.Module._malloc(data.length);
+        this.Module.HEAPU8.set(data, ptr);
+        this.Module._load(ptr, data.length);
+        this.Module._free(ptr);
+    },
 }
 
 export default MuImpl;
