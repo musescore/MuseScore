@@ -70,6 +70,8 @@ public:
     void deinit();
 
     void setRenderingProgress(audio::InputProcessingProgress* progress);
+    void setAutoRenderInterval(double secs);
+    void triggerRender();
 
 private:
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;

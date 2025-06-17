@@ -26,17 +26,23 @@
 
 using namespace muse::musesampler;
 
-void MuseSamplerActionController::init(const ReloadMuseSamplerFunc& reloadMuseSampler)
+void MuseSamplerActionController::init(std::weak_ptr<MuseSamplerResolver> resolver)
 {
-    m_reloadMuseSampler = reloadMuseSampler;
+    m_museSamplerResolver = resolver;
 
     dispatcher()->reg(this, "musesampler-check", this, &MuseSamplerActionController::checkLibraryIsDetected);
     dispatcher()->reg(this, "musesampler-reload", this, &MuseSamplerActionController::reloadMuseSampler);
+    dispatcher()->reg(this, "process-online-sounds", this, &MuseSamplerActionController::processOnlineSounds);
 }
 
 void MuseSamplerActionController::checkLibraryIsDetected()
 {
-    std::string libVersion = museSamplerInfo()->version();
+    std::shared_ptr<MuseSamplerResolver> resolver = m_museSamplerResolver.lock();
+    if (!resolver) {
+        return;
+    }
+
+    std::string libVersion = resolver->version();
     std::string status;
 
     if (libVersion.empty()) {
@@ -51,11 +57,22 @@ void MuseSamplerActionController::checkLibraryIsDetected()
 
 void MuseSamplerActionController::reloadMuseSampler()
 {
-    IF_ASSERT_FAILED(m_reloadMuseSampler) {
+    std::shared_ptr<MuseSamplerResolver> resolver = m_museSamplerResolver.lock();
+    if (!resolver) {
         return;
     }
 
-    if (!m_reloadMuseSampler()) {
+    if (resolver->reloadAllInstruments()) {
         interactive()->error("", std::string("Could not reload MuseSampler library"));
     }
+}
+
+void MuseSamplerActionController::processOnlineSounds()
+{
+    std::shared_ptr<MuseSamplerResolver> resolver = m_museSamplerResolver.lock();
+    if (!resolver) {
+        return;
+    }
+
+    resolver->processOnlineSounds();
 }

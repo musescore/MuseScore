@@ -1838,8 +1838,16 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
 
 void PlaybackController::setIsExportingAudio(bool exporting)
 {
+    if (m_isExportingAudio == exporting) {
+        return;
+    }
+
     m_isExportingAudio = exporting;
     updateSoloMuteStates();
+
+    if (!m_onlineSounds.empty() && !audioConfiguration()->autoProcessOnlineSoundsInBackground()) {
+        dispatcher()->dispatch("process-online-sounds");
+    }
 }
 
 bool PlaybackController::canReceiveAction(const ActionCode&) const

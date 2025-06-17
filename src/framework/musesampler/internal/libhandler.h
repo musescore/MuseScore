@@ -112,6 +112,8 @@ struct MuseSamplerLibHandler
     ms_Instrument_is_online isOnlineInstrument = nullptr;
     ms_MuseSampler_get_render_info getRenderInfo = nullptr;
     ms_RenderProgressInfo_get_next getNextRenderProgressInfo = nullptr;
+    ms_MuseSampler_set_auto_render_interval setAutoRenderInterval = nullptr;
+    ms_MuseSampler_trigger_render triggerRender = nullptr;
 
 private:
     ms_init initLib = nullptr;
@@ -326,11 +328,16 @@ public:
             isOnlineInstrument = (ms_Instrument_is_online)muse::getLibFunc(m_lib, "ms_Instrument_is_online");
             getRenderInfo = (ms_MuseSampler_get_render_info)muse::getLibFunc(m_lib, "ms_MuseSampler_get_render_info");
             getNextRenderProgressInfo = (ms_RenderProgressInfo_get_next)muse::getLibFunc(m_lib, "ms_RenderProgressInfo_get_next");
+            setAutoRenderInterval = (ms_MuseSampler_set_auto_render_interval)muse::getLibFunc(m_lib,
+                                                                                              "ms_MuseSampler_set_auto_render_interval");
+            triggerRender = (ms_MuseSampler_trigger_render)muse::getLibFunc(m_lib, "ms_MuseSampler_trigger_render");
         } else {
             readyToPlay = [](ms_MuseSampler) { return true; };
             isOnlineInstrument = [](ms_InstrumentInfo) { return false; };
             getRenderInfo = [](ms_MuseSampler, int*) { return ms_RenderingRangeList(); };
             getNextRenderProgressInfo = [](ms_RenderingRangeList) { return ms_RenderRangeInfo { 0, 0, ms_RenderingState_ErrorRendering }; };
+            setAutoRenderInterval = [](ms_MuseSampler, double) {};
+            triggerRender = [](ms_MuseSampler) {};
         }
     }
 
