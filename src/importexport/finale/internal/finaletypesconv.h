@@ -50,8 +50,8 @@ public:
     static engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle);
     static engraving::Align justifyToAlignment(musx::dom::others::NamePositioning::AlignJustify alignJustify);
     static engraving::CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines);
-    static engraving::NoteVal notePropertiesToNoteVal(std::tuple<musx::dom::Note::NoteName, int, int, int> noteProperties, engraving::Key key = engraving::Key::C);
-    static engraving::Fraction musxFractionToFraction(musx::util::Fraction fraction);
+    static engraving::NoteVal notePropertiesToNoteVal(const std::tuple<musx::dom::Note::NoteName, int, int, int>& noteProperties, engraving::Key key = engraving::Key::C);
+    static engraving::Fraction musxFractionToFraction(const musx::util::Fraction& fraction);
     static engraving::Fraction eduToFraction(musx::dom::Edu edu);
     static engraving::Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger);
     static engraving::Key keyFromAlteration(int musxAlteration);
@@ -59,7 +59,7 @@ public:
     static engraving::SymId acciSymbolFromAcciAmount(int acciAmount);
     static engraving::StaffGroup staffGroupFromNotationStyle(musx::dom::others::Staff::NotationStyle notationStyle);
     static double doubleFromEvpu(musx::dom::Evpu evpu);
-    static PointF evpuToPointF(musx::dom::Evpu xEvpu, musx::dom::Evpu yEvpu);
+    static engraving::PointF evpuToPointF(musx::dom::Evpu xEvpu, musx::dom::Evpu yEvpu);
     static double doubleFromEfix(musx::dom::Efix efix);
     static double doubleFromPercent(int percent);
 };
