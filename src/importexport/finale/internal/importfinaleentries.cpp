@@ -368,8 +368,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
                 logger()->logWarning(String(u"Inconsistent cue note sizes found. Using the last encountered."), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
             }
             m_score->style().set(Sid::smallNoteMag, crMag);
-            m_smallNoteMagFound = true;
         }
+        m_smallNoteMagFound = true;
         cr->setSmall(true);
     }
 
@@ -383,7 +383,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         }
         cr->setTicks(cr->actualDurationType().fraction());
     } else {
-        cr->setTicks(measure->ticks());
+        cr->setTicks(measure->timesig() * targetStaff->timeStretch(measure->tick()));
     }
     segment->add(cr);
     Tuplet* parentTuplet = bottomTupletFromTick(tupletMap, entryStartTick);
