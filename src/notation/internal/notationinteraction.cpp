@@ -876,12 +876,16 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
     TRACEFUNC;
 
     const mu::engraving::Selection& selection = score()->selection();
-    std::vector<EngravingItem*> oldSelectedElements = selection.elements();
-    mu::engraving::SelState oldSelectionState = selection.state();
+    const std::vector<EngravingItem*> oldSelectedElements = selection.elements();
+    const mu::engraving::SelState oldSelectionState = selection.state();
+
+    const Fraction oldStartTick = selection.tickStart();
+    const Fraction oldEndTick = selection.tickEnd();
 
     doSelect(elements, type, staffIndex);
 
-    if (oldSelectedElements != selection.elements() || oldSelectionState != selection.state()) {
+    const bool rangeChanged = selection.isRange() && (oldStartTick != selection.tickStart() || oldEndTick != selection.tickEnd());
+    if (rangeChanged || oldSelectionState != selection.state() || oldSelectedElements != selection.elements()) {
         notifyAboutSelectionChangedIfNeed();
     } else {
         score()->setSelectionChanged(false);

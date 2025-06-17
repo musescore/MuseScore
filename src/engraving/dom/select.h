@@ -126,7 +126,6 @@ public:
     void clear();
     EngravingItem* element() const;
     ChordRest* cr() const;
-    Segment* firstChordRestSegment() const;
     ChordRest* firstChordRest(track_idx_t track = muse::nidx) const;
     ChordRest* lastChordRest(track_idx_t track = muse::nidx) const;
     Measure* findMeasure() const;
@@ -180,6 +179,9 @@ private:
     void appendNoteFilteredExtras(Note* note);
     void appendTupletHierarchy(Tuplet* innermostTuplet);
     void appendGuitarBend(GuitarBend* guitarBend);
+
+    ChordRest* firstChordRestInRange(track_idx_t track = muse::nidx) const;
+    ChordRest* lastChordRestInRange(track_idx_t track = muse::nidx) const;
 
     Score* m_score = nullptr;
     SelState m_state = SelState::NONE;
