@@ -288,30 +288,18 @@ RetVal<INotationProjectPtr> ProjectActionsController::loadProject(const muse::io
 {
     TRACEFUNC;
 
-    auto project = projectCreator()->newProject(iocContext());
+    const auto project = projectCreator()->newProject(iocContext());
     IF_ASSERT_FAILED(project) {
         return make_ret(Ret::Code::InternalError);
     }
 
-    bool hasUnsavedChanges = projectAutoSaver()->projectHasUnsavedChanges(filePath);
+    const bool hasUnsavedChanges = projectAutoSaver()->projectHasUnsavedChanges(filePath);
 
-    muse::io::path_t loadPath = hasUnsavedChanges ? projectAutoSaver()->projectAutoSavePath(filePath) : filePath;
-    std::string format = io::suffix(filePath);
+    const muse::io::path_t loadPath = hasUnsavedChanges ? projectAutoSaver()->projectAutoSavePath(filePath) : filePath;
+    const std::string format = io::suffix(filePath);
 
-    Ret ret = project->load(loadPath, "" /*stylePath*/, false /*forceMode*/, format);
-
-    if (!ret) {
-        if (ret.code() == static_cast<int>(Ret::Code::Cancel)) {
-            return ret;
-        }
-
-        if (checkCanIgnoreError(ret, loadPath)) {
-            ret = project->load(loadPath, "" /*stylePath*/, true /*forceMode*/, format);
-        }
-
-        if (!ret) {
-            return ret;
-        }
+    if (Ret result = loadWithFallback(project, loadPath, format); !result) {
+        return result;
     }
 
     if (hasUnsavedChanges) {
@@ -321,12 +309,28 @@ RetVal<INotationProjectPtr> ProjectActionsController::loadProject(const muse::io
         project->markAsUnsaved();
     }
 
-    bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath);
-    if (isNewlyCreated) {
+    if (bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath)) {
         project->markAsNewlyCreated();
     }
 
     return RetVal<INotationProjectPtr>::make_ok(project);
+}
+
+Ret ProjectActionsController::loadWithFallback(const std::shared_ptr<INotationProject>& project,
+                                               const muse::io::path_t& loadPath,
+                                               const std::string& format)
+{
+    Ret result = project->load(loadPath, /*stylePath*/ "", /*forceMode*/ false, format);
+
+    if (result || result.code() == static_cast<int>(Ret::Code::Cancel)) {
+        return result;
+    }
+
+    if (const bool forceLoad = shouldRetryLoadAfterError(result, loadPath)) {
+        result = project->load(loadPath, "", /*forceMode*/ forceLoad, format);
+    }
+
+    return result;
 }
 
 Ret ProjectActionsController::doOpenProject(const muse::io::path_t& filePath)
@@ -1718,7 +1722,7 @@ void ProjectActionsController::moveProject(INotationProjectPtr project, const mu
     recentFilesController()->moveRecentFile(oldPath, makeRecentFile(project));
 }
 
-bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const muse::io::path_t& filepath)
+bool ProjectActionsController::shouldRetryLoadAfterError(const Ret& ret, const muse::io::path_t& filepath)
 {
     if (ret) {
         return true;
@@ -1737,10 +1741,10 @@ bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const muse::i
         warnProjectCriticallyCorrupted(io::filename(filepath).toString(), ret.text());
         return false;
     default:
+        warnProjectCannotBeOpened(ret, filepath);
         break;
     }
 
-    warnProjectCannotBeOpened(ret, filepath);
     return false;
 }
 
