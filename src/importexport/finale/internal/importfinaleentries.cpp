@@ -349,8 +349,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         cr = toChordRest(chord);
     } else {
         if (entryInfo.calcIsFullMeasureRest()) {
-            /// @todo Convert to full-measure rest. (Adding the line below causes an assert in the engraving code.)
-            //d = TDuration(DurationType::V_MEASURE);
+            d = TDuration(DurationType::V_MEASURE);
         }
         Rest* rest = Factory::createRest(segment, d);
         // Fixed-positioning for rests is calculated in a 2nd pass after all voices in all layers have been created.
@@ -361,14 +360,31 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         cr = toChordRest(rest);
     }
 
+    int entrySize = entryInfo.calcEntrySize();
+    if (entrySize <= musx::dom::MAX_CUE_PERCENTAGE) {
+        double crMag = FinaleTConv::doubleFromPercent(entrySize);
+        if (crMag != m_score->style().styleD(Sid::smallNoteMag)) {
+            if (m_smallNoteMagFound) {
+                logger()->logWarning(String(u"Inconsistent cue note sizes found. Using the last encountered."), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
+            }
+            m_score->style().set(Sid::smallNoteMag, crMag);
+            m_smallNoteMagFound = true;
+        }
+        cr->setSmall(true);
+    }
+
     cr->setDurationType(d);
     cr->setStaffMove(crossStaffMove);
     cr->setParent(segment);
     cr->setTrack(curTrackIdx);
-    if (cr->durationTypeTicks() < Fraction(1, 4)) {
-        cr->setBeamMode(BeamMode::NONE); // this is changed in the next pass to match the beaming.
+    if (cr->durationType().type() != DurationType::V_MEASURE) {
+        if (cr->durationTypeTicks() < Fraction(1, 4)) {
+            cr->setBeamMode(BeamMode::NONE); // this is changed in the next pass to match the beaming.
+        }
+        cr->setTicks(cr->actualDurationType().fraction());
+    } else {
+        cr->setTicks(measure->ticks());
     }
-    cr->setTicks(cr->actualDurationType().fraction());
     segment->add(cr);
     Tuplet* parentTuplet = bottomTupletFromTick(tupletMap, entryStartTick);
     if (parentTuplet) {
@@ -452,11 +468,14 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
             Rest::LayoutData layoutData;
             const int naturalLine = rest->computeNaturalLine(staffType->lines()); // Measured in 1sp steps
             const int voiceOffset = rest->computeVoiceOffset(staffType->lines(), &layoutData); // Measured in 1sp steps
-            const int wholeRestOffset = rest->computeWholeOrBreveRestOffset(voiceOffset, staffType->lines());
-            const int finalLine = naturalLine + voiceOffset + wholeRestOffset;
+            // omit call to computeWholeOrBreveRestOffset because it requires layout rectangles to have been created
+            int finalLine = naturalLine + voiceOffset;
             // convert finalLine to staff position offset for Finale rest. This value is measured in 0.5sp steps.
             const int staffPositionOffset = 2 * finalLine - currMusxStaff->calcToplinePosition();
             const double lineSpacing = staffType->lineDistance().val();
+            if (rest->isWholeRest()) {
+                staffPosition += 2; // account for a whole rest's staff line discrepancy between Finale and MuseScore
+            }
             rest->ryoffset() = double(-staffPosition - staffPositionOffset) * targetStaff->spatium(rest->tick()) * lineSpacing / 2.0;
             /// @todo Account for additional default positioning around collision avoidance (when the rest is on the "wrong" side for the voice.)
             /// Unfortunately, we can't set `autoplace` to false because that also suppresses horizontal spacing.

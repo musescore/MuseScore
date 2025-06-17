@@ -97,6 +97,7 @@ private:
     const std::shared_ptr<musx::dom::Document> m_doc;
     FinaleLoggerPtr m_logger;
     const musx::dom::Cmper m_currentMusxPartId = musx::dom::SCORE_PARTID; // eventually this may be changed per excerpt/linked part
+    bool m_smallNoteMagFound = false;
 
     std::unordered_map<engraving::staff_idx_t, musx::dom::InstCmper> m_staff2Inst;
     std::unordered_map<musx::dom::InstCmper, engraving::staff_idx_t> m_inst2Staff;

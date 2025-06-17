@@ -280,11 +280,12 @@ static void writePagePrefs(MStyle& style, const FinalePreferences& prefs)
     const double staffPercent = (double(pagePrefs->rawStaffHeight) / (EVPU_PER_SPACE * 4 * 16)) * (double(pagePrefs->sysPercent) / 100.0);
     style.set(Sid::spatium, ((EVPU_PER_SPACE * staffPercent * pagePercent) / EVPU_PER_MM) * DPMM);
 
-    // Calculate small staff size from first system, if any is there
+    // Calculate small staff size and small note size from first system, if any is there
     if (const auto& firstSystem = prefs.document->getOthers()->get<others::StaffSystem>(prefs.forPartId, 1)) {
         auto minMax = firstSystem->calcMinMaxStaffSizes();
         if (minMax.first < 1.0) {
             style.set(Sid::smallStaffMag, minMax.first);
+            style.set(Sid::smallNoteMag, minMax.first);
         }
     }
 
