@@ -98,12 +98,11 @@ Item {
             visible: !hiddenControlsMenuButton.visible
         }
 
-        OnlineSoundsStatusIndicator {
-            id: onlineSoundsIndicator
+        OnlineSoundsStatusView {
+            id: onlineSoundsStatusView
 
             Layout.alignment: Qt.AlignVCenter
             Layout.preferredHeight: 28
-            Layout.rightMargin: 8
         }
 
         SeparatorLine { orientation: Qt.Vertical; visible: workspaceControl.visible }

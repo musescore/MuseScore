@@ -135,6 +135,25 @@ void MuseSamplerSequencer::setRenderingProgress(audio::InputProcessingProgress* 
     m_renderingProgress = progress;
 }
 
+void MuseSamplerSequencer::setAutoRenderInterval(double secs)
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
+    m_samplerLib->setAutoRenderInterval(m_sampler, secs);
+}
+
+void MuseSamplerSequencer::triggerRender()
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
+    m_samplerLib->triggerRender(m_sampler);
+    pollRenderingProgress();
+}
+
 void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events, const PlaybackParamList& params)
 {
     flushOffstream();

@@ -22,10 +22,12 @@
 
 #include "onlinesoundsstatusmodel.h"
 
+#include "translation.h"
+
 using namespace mu::playback;
 
 OnlineSoundsStatusModel::OnlineSoundsStatusModel(QObject* parent)
-    : QObject(parent)
+    : QObject(parent), muse::Injectable(muse::iocCtxForQmlObject(this))
 {
 }
 
@@ -46,6 +48,18 @@ void OnlineSoundsStatusModel::load()
     progress.finished().onReceive(this, [this](const muse::ProgressResult& result) {
         setStatus(result.ret.success() ? Status::Success : Status::Error);
     });
+
+    setCanProcessOnlineSounds(!audioConfiguration()->autoProcessOnlineSoundsInBackground());
+    audioConfiguration()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool value) {
+        setCanProcessOnlineSounds(!value);
+    });
+}
+
+void OnlineSoundsStatusModel::processOnlineSounds()
+{
+    if (m_canProcessOnlineSounds) {
+        dispatcher()->dispatch("process-online-sounds");
+    }
 }
 
 bool OnlineSoundsStatusModel::hasOnlineSounds() const
@@ -53,9 +67,32 @@ bool OnlineSoundsStatusModel::hasOnlineSounds() const
     return m_hasOnlineSounds;
 }
 
+bool OnlineSoundsStatusModel::canProcessOnlineSounds() const
+{
+    return m_canProcessOnlineSounds;
+}
+
 int OnlineSoundsStatusModel::status() const
 {
     return static_cast<int>(m_status);
+}
+
+QString OnlineSoundsStatusModel::errorTitle() const
+{
+    if (m_status != Status::Error) {
+        return QString();
+    }
+
+    return muse::qtrc("playback", "Some online sounds aren’t ready yet");
+}
+
+QString OnlineSoundsStatusModel::errorDescription() const
+{
+    if (m_status != Status::Error) {
+        return QString();
+    }
+
+    return muse::qtrc("global", "Please check your internet connection or try again later.");
 }
 
 void OnlineSoundsStatusModel::setHasOnlineSounds(bool value)
@@ -66,6 +103,20 @@ void OnlineSoundsStatusModel::setHasOnlineSounds(bool value)
 
     m_hasOnlineSounds = value;
     emit hasOnlineSoundsChanged();
+
+    if (!m_hasOnlineSounds) {
+        setStatus(Status::Success);
+    }
+}
+
+void OnlineSoundsStatusModel::setCanProcessOnlineSounds(bool canRun)
+{
+    if (m_canProcessOnlineSounds == canRun) {
+        return;
+    }
+
+    m_canProcessOnlineSounds = canRun;
+    emit canProcessOnlineSoundsChanged();
 }
 
 void OnlineSoundsStatusModel::setStatus(Status status)
