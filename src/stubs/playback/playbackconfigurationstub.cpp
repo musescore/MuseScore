@@ -213,6 +213,20 @@ void PlaybackConfigurationStub::setNeedToShowOnlineSoundsConnectionWarning(bool)
 {
 }
 
+OnlineSoundsShowProgressBarMode PlaybackConfigurationStub::onlineSoundsShowProgressBarMode() const
+{
+    return OnlineSoundsShowProgressBarMode::Never;
+}
+
+void PlaybackConfigurationStub::setOnlineSoundsShowProgressBarMode(OnlineSoundsShowProgressBarMode)
+{
+}
+
+muse::async::Notification PlaybackConfigurationStub::onlineSoundsShowProgressBarModeChanged() const
+{
+    return {};
+}
+
 bool PlaybackConfigurationStub::shouldMeasureInputLag() const
 {
     return false;

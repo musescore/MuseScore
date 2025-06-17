@@ -84,6 +84,10 @@ public:
     bool needToShowOnlineSoundsConnectionWarning() const override;
     void setNeedToShowOnlineSoundsConnectionWarning(bool show) override;
 
+    OnlineSoundsShowProgressBarMode onlineSoundsShowProgressBarMode() const override;
+    void setOnlineSoundsShowProgressBarMode(OnlineSoundsShowProgressBarMode mode) override;
+    muse::async::Notification onlineSoundsShowProgressBarModeChanged() const override;
+
     bool shouldMeasureInputLag() const override;
 };
 }

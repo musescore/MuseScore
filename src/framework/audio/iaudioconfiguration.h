@@ -73,6 +73,10 @@ public:
     virtual void setUserSoundFontDirectories(const io::paths_t& paths) = 0;
     virtual async::Channel<io::paths_t> soundFontDirectoriesChanged() const = 0;
 
+    virtual bool autoProcessOnlineSoundsInBackground() const = 0;
+    virtual void setAutoProcessOnlineSoundsInBackground(bool value) = 0;
+    virtual async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const = 0;
+
     virtual bool shouldMeasureInputLag() const = 0;
 };
 }

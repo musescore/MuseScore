@@ -58,6 +58,7 @@ static const Settings::Key MIXER_RESET_SOUND_FLAGS_WHEN_CHANGE_PLAYBACK_PROFILE_
                                                                                         "playback/mixer/needToShowAboutResetSoundFlagsWhwnChangePlaybackProfileWarning");
 
 static const Settings::Key ONLINE_SOUNDS_CONNECTION_WARNING(moduleName, "playback/onlineSounds/showConnectionWarning");
+static const Settings::Key ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE(moduleName, "playback/onlineSounds/showProgressBarMode");
 
 static const Settings::Key MUTE_HIDDEN_INSTRUMENTS(moduleName, "playback/mixer/muteHiddenInstruments");
 
@@ -148,6 +149,11 @@ void PlaybackConfiguration::init()
     }
 
     settings()->setDefaultValue(ONLINE_SOUNDS_CONNECTION_WARNING, Val(true));
+
+    settings()->setDefaultValue(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE, Val(static_cast<int>(OnlineSoundsShowProgressBarMode::Always)));
+    settings()->valueChanged(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE).onReceive(nullptr, [this](const Val&) {
+        m_onlineSoundsShowProgressBarModeChanged.notify();
+    });
 }
 
 bool PlaybackConfiguration::playNotesWhenEditing() const
@@ -357,6 +363,21 @@ bool PlaybackConfiguration::needToShowOnlineSoundsConnectionWarning() const
 void PlaybackConfiguration::setNeedToShowOnlineSoundsConnectionWarning(bool show)
 {
     settings()->setSharedValue(ONLINE_SOUNDS_CONNECTION_WARNING, Val(show));
+}
+
+OnlineSoundsShowProgressBarMode PlaybackConfiguration::onlineSoundsShowProgressBarMode() const
+{
+    return static_cast<OnlineSoundsShowProgressBarMode>(settings()->value(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE).toInt());
+}
+
+void PlaybackConfiguration::setOnlineSoundsShowProgressBarMode(OnlineSoundsShowProgressBarMode mode)
+{
+    settings()->setSharedValue(ONLINE_SOUNDS_SHOW_PROGRESS_BAR_MODE, Val(static_cast<int>(mode)));
+}
+
+muse::async::Notification PlaybackConfiguration::onlineSoundsShowProgressBarModeChanged() const
+{
+    return m_onlineSoundsShowProgressBarModeChanged;
 }
 
 bool PlaybackConfiguration::shouldMeasureInputLag() const

@@ -53,6 +53,8 @@ Item {
 
     property alias navigation: mainItem.navigation
 
+    property alias isOpened: dropdownLoader.isOpened
+
     signal activated(int index, var value)
 
     height: 30

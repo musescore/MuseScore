@@ -76,6 +76,10 @@ public:
     void setUserSoundFontDirectories(const io::paths_t& paths) override;
     async::Channel<io::paths_t> soundFontDirectoriesChanged() const override;
 
+    bool autoProcessOnlineSoundsInBackground() const override;
+    void setAutoProcessOnlineSoundsInBackground(bool process) override;
+    async::Channel<bool> autoProcessOnlineSoundsInBackgroundChanged() const override;
+
     bool shouldMeasureInputLag() const override;
 
 private:
@@ -83,6 +87,7 @@ private:
 
     async::Channel<io::paths_t> m_soundFontDirsChanged;
     async::Channel<samples_t> m_samplesToPreallocateChanged;
+    async::Channel<bool> m_autoProcessOnlineSoundsInBackgroundChanged;
 
     async::Notification m_audioOutputDeviceIdChanged;
     async::Notification m_driverBufferSizeChanged;
