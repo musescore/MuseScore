@@ -215,10 +215,6 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         logger()->logWarning(String(u"Grace notes not yet supported"), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
         return true;
     }
-    if (entryInfo.calcIsCue()) {
-        logger()->logWarning(String(u"Cue notes not yet supported"), m_doc, entryInfo.getStaff(), entryInfo.getMeasure());
-        return true;
-    }
 
     Fraction entryStartTick = FinaleTConv::musxFractionToFraction(entryInfo.calcGlobalElapsedDuration()).reduced();
     Segment* segment = measure->getSegmentR(SegmentType::ChordRest, entryStartTick);
@@ -353,7 +349,8 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
         cr = toChordRest(chord);
     } else {
         if (entryInfo.calcIsFullMeasureRest()) {
-            d = TDuration(DurationType::V_MEASURE);
+            /// @todo Convert to full-measure rest. (Adding the line below causes an assert in the engraving code.)
+            //d = TDuration(DurationType::V_MEASURE);
         }
         Rest* rest = Factory::createRest(segment, d);
         // Fixed-positioning for rests is calculated in a 2nd pass after all voices in all layers have been created.
@@ -621,9 +618,14 @@ void FinaleParser::importEntries()
                 break;
             }
             details::GFrameHoldContext gfHold(musxMeasure->getDocument(), m_currentMusxPartId, musxScrollViewItem->staffId, musxMeasure->getCmper());
-            // Note from RGP: You cannot short-circuit out of this code with a `if (!gfHold) continue` statement.
+            bool processContext = bool(gfHold);
+            if (processContext && gfHold.calcIsCuesOnly()) {
+                logger()->logWarning(String(u"Cue notes not yet supported"), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
+                processContext = false;
+            }
+            // Note from RGP: You cannot short-circuit out of this code with a `if (!processContext) continue` statement.
             // The code after the if statement must still be executed.
-            if (gfHold) {
+            if (processContext) {
                 // gfHold.calcVoices() guarantees that every layer/voice returned contains entries
                 std::map<LayerIndex, bool> finaleLayers = gfHold.calcVoices();
                 std::unordered_map<int, track_idx_t> finaleVoiceMap = mapFinaleVoices(finaleLayers, musxScrollViewItem->staffId, musxMeasure->getCmper());
