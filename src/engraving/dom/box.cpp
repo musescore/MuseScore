@@ -817,6 +817,21 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
     }
 }
 
+int FBox::gripsCount() const
+{
+    return 0;
+}
+
+Grip FBox::initialEditModeGrip() const
+{
+    return Grip::NO_GRIP;
+}
+
+Grip FBox::defaultGrip() const
+{
+    return Grip::NO_GRIP;
+}
+
 std::vector<PointF> FBox::gripsPositions(const EditData&) const
 {
     return {};

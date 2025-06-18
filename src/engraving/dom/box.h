@@ -204,6 +204,9 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& val) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
+    int gripsCount() const override;
+    Grip initialEditModeGrip() const override;
+    Grip defaultGrip() const override;
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
     void undoReorderElements(const std::vector<EID>& newOrderElementsIds);
