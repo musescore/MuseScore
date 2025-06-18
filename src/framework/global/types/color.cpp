@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace muse::draw {
+namespace muse {
 static constexpr int fromHex(char c);
 static int hex2int(const char* s, int n);
 static bool getHexRgb(const char* name, size_t len, Rgba* rgba);
@@ -268,7 +268,7 @@ static bool getHexRgb(const char* name, size_t len, Rgba* rgba)
         return false;
     }
 
-    *rgba = muse::draw::rgba(r, g, b, a);
+    *rgba = muse::rgba(r, g, b, a);
     return true;
 }
 

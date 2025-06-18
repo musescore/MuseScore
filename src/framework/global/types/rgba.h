@@ -20,12 +20,11 @@
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   */
 
-#ifndef MUSE_DRAW_RGBA_H
-#define MUSE_DRAW_RGBA_H
+#pragma once
 
 #include <cstdint>
 
-namespace muse::draw {
+namespace muse {
 using Rgba = uint32_t;
 
 // masks RGB values
@@ -81,4 +80,3 @@ inline constexpr bool isRgbaValid(int r, int g, int b, int a)
 }
 }
 
-#endif // MUSE_DRAW_RGBA_H
