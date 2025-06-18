@@ -174,5 +174,3 @@ inline QColor blendQColors(const QColor& c1, const QColor& c2, float alpha)
 
 #endif
 }
-
-

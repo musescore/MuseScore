@@ -79,34 +79,49 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
     }
 }
 
-RetVal<QColor> InteractiveProvider::selectColor(const QColor& color, const std::string& title)
+async::Promise<Color> InteractiveProvider::selectColor(const Color& color, const std::string& title)
 {
     if (m_isSelectColorOpened) {
         LOGW() << "already opened";
-        return RetVal<QColor>(make_ret(Ret::Code::UnknownError));
+        return async::make_promise<Color>([](auto, auto reject) {
+            Ret ret = muse::make_ret(Ret::Code::UnknownError);
+            return reject(ret.code(), ret.text());
+        });
     }
 
     m_isSelectColorOpened = true;
 
-    QColor selectedColor;
-    {
-        QColorDialog dlg;
+    return async::make_promise<Color>([this, color, title](auto resolve, auto reject) {
+        //! FIX https://github.com/musescore/MuseScore/issues/23208
+        shortcutsRegister()->setActive(false);
+
+        QColorDialog* dlg = new QColorDialog();
         if (!title.empty()) {
-            dlg.setWindowTitle(QString::fromStdString(title));
+            dlg->setWindowTitle(QString::fromStdString(title));
         }
 
-        dlg.setCurrentColor(color);
-        dlg.exec();
-        selectedColor = dlg.selectedColor();
-    }
+        dlg->setCurrentColor(color.toQColor());
 
-    m_isSelectColorOpened = false;
+        QObject::connect(dlg, &QFileDialog::finished, [this, dlg, resolve, reject](int result) {
+            dlg->deleteLater();
 
-    if (!selectedColor.isValid()) {
-        selectedColor = color;
-    }
+            m_isSelectColorOpened = false;
+            shortcutsRegister()->setActive(true);
 
-    return RetVal<QColor>::make_ok(selectedColor);
+            if (result != QDialog::Accepted) {
+                Ret ret = muse::make_ret(Ret::Code::Cancel);
+                (void)reject(ret.code(), ret.text());
+                return;
+            }
+
+            QColor selectedColor = dlg->selectedColor();
+            (void)resolve(Color::fromQColor(selectedColor));
+        });
+
+        dlg->open();
+
+        return async::Promise<Color>::dummy_result();
+    }, async::PromiseType::AsyncByBody);
 }
 
 bool InteractiveProvider::isSelectColorOpened() const

@@ -83,7 +83,7 @@ public:
     io::paths_t selectMultipleDirectories(const std::string& title, const io::path_t& dir, const io::paths_t& initialDirectories) override;
 
     // color
-    QColor selectColor(const QColor& color = Qt::white, const std::string& title = "") override;
+    async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") override;
     bool isSelectColorOpened() const override;
 
     // custom

@@ -34,6 +34,7 @@
 #include "../iinteractiveuriregister.h"
 #include "../imainwindow.h"
 #include "extensions/iextensionsprovider.h"
+#include "shortcuts/ishortcutsregister.h"
 #include "types/retval.h"
 
 namespace muse::ui {
@@ -58,11 +59,12 @@ class InteractiveProvider : public QObject, public IInteractiveProvider, public 
     Inject<IInteractiveUriRegister> uriRegister = { this };
     Inject<IMainWindow> mainWindow = { this };
     Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit InteractiveProvider(const modularity::ContextPtr& iocCtx);
 
-    RetVal<QColor> selectColor(const QColor& color = Qt::white, const std::string& title = "") override;
+    async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") override;
     bool isSelectColorOpened() const override;
 
     RetVal<Val> openSync(const UriQuery& uri) override;

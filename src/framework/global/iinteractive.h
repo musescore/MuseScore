@@ -28,6 +28,7 @@
 #include "types/retval.h"
 #include "types/uri.h"
 #include "types/flags.h"
+#include "types/color.h"
 #include "async/promise.h"
 #include "progress.h"
 
@@ -224,7 +225,7 @@ public:
                                                   const io::paths_t& selectedDirectories) = 0;
 
     // color
-    virtual QColor selectColor(const QColor& color = Qt::white, const std::string& title = "") = 0;
+    virtual async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") = 0;
     virtual bool isSelectColorOpened() const = 0;
 
     // custom

@@ -297,7 +297,8 @@ async::Promise<io::path_t> Interactive::selectOpeningFile(const std::string& tit
             QStringList files = dlg->selectedFiles();
 
             if (result != QDialog::Accepted || files.isEmpty()) {
-                (void)reject((int)Ret::Code::Cancel, "cancel");
+                Ret ret = muse::make_ret(Ret::Code::Cancel);
+                (void)reject(ret.code(), ret.text());
                 return;
             }
 
@@ -409,12 +410,9 @@ io::paths_t Interactive::selectMultipleDirectories(const std::string& title, con
     return io::pathsFromString(result.val.toString());
 }
 
-QColor Interactive::selectColor(const QColor& color, const std::string& title)
+async::Promise<Color> Interactive::selectColor(const Color& color, const std::string& title)
 {
-    shortcutsRegister()->setActive(false);
-    QColor selectColor = provider()->selectColor(color, title).val;
-    shortcutsRegister()->setActive(true);
-    return selectColor;
+    return provider()->selectColor(color, title);
 }
 
 bool Interactive::isSelectColorOpened() const
