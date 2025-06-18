@@ -77,6 +77,10 @@ void VstAudioClient::loadSupportedParams()
         controller->getParameterInfo(i, info);
         m_pluginParamInfoMap.emplace(info.id, std::move(info));
     }
+
+    // Check whether the plugin can handle kCtrlVolume and set flag accordingly.
+    auto volMapping = paramsMapping({ Steinberg::Vst::kCtrlVolume });
+    m_pluginHandlesVolume = !volMapping.empty();
 }
 
 bool VstAudioClient::handleEvent(const VstEvent& event)
@@ -110,7 +114,8 @@ bool VstAudioClient::handleParamChange(const ParamChangeEvent& param)
 
 void VstAudioClient::setVolumeGain(const muse::audio::gain_t newVolumeGain)
 {
-    m_volumeGain = newVolumeGain;
+    // Only set volume when plugin is not handling volume events.
+    m_volumeGain = m_pluginHandlesVolume ? 1.f : newVolumeGain;
 }
 
 muse::audio::samples_t VstAudioClient::process(float* output, muse::audio::samples_t samplesPerChannel,
