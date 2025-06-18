@@ -56,6 +56,7 @@ public:
     MOCK_METHOD(void, clearSelection, (), (override));
     MOCK_METHOD(muse::async::Notification, selectionChanged, (), (const, override));
     MOCK_METHOD(void, selectTopOrBottomOfChord, (MoveDirection), (override));
+    MOCK_METHOD(void, findAndSelectChordRest, (const Fraction&), (override));
 
     MOCK_METHOD(INotationSelectionFilterPtr, selectionFilter, (), (const, override));
 

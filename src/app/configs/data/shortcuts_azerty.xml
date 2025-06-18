@@ -795,6 +795,11 @@
     <autorepeat>0</autorepeat>
     </SC>
   <SC>
+    <key>pause-and-select</key>
+    <seq>Ctrl+Space</seq>
+    <autorepeat>0</autorepeat>
+    </SC>
+  <SC>
     <key>play-prev-chord</key>
     <seq>Left</seq>
     </SC>
