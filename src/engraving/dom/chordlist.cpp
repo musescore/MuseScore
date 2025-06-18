@@ -1593,7 +1593,7 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl)
         }
         // build render list
         // check for adjustments
-        double yAdjust = adjust ? cl->position(tok.names, ctc, modIdx, m_modifierList.size()) : 0.0;
+        double yAdjust = adjust ? cl->position(tok.names, ctc, finalModIdx - modIdx, m_modifierList.size()) : 0.0;
 
         // Modifier behaviour
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
