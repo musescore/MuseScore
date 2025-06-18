@@ -24,12 +24,14 @@ import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
+import Muse.GraphicalEffects 1.0
 
 StyledPopupView {
     id: root
 
     property alias title: titleLabel.text
     property alias description: descriptionLabel.text
+    property string previewImageOrGifUrl: ""
     property string videoExplanationUrl: ""
 
     property int index: 0
@@ -94,6 +96,38 @@ StyledPopupView {
             visible: Boolean(root.description)
         }
 
+        Rectangle {
+            id: previewRect
+
+            Layout.fillWidth: true
+            Layout.preferredHeight: 120
+            Layout.topMargin: 8
+            Layout.leftMargin: -4 // same hack as for ButtonBox
+
+            border.width: 1
+            border.color: ui.theme.strokeColor
+
+            radius: 3
+
+            visible: root.previewImageOrGifUrl !== ""
+
+            AnimatedImage {
+                anchors.fill: parent
+                anchors.margins: 1
+
+                source: root.previewImageOrGifUrl
+
+                layer.enabled: ui.isEffectsAllowed
+                layer.effect: EffectOpacityMask {
+                    maskSource: Rectangle {
+                        width: previewRect.width
+                        height: previewRect.height
+                        radius: previewRect.radius
+                    }
+                }
+            }
+        }
+
         ButtonBox {
             id: box
 
@@ -124,7 +158,7 @@ StyledPopupView {
             }
 
             FlatButton {
-                Layout.preferredWidth: watchVideoBtn.visible ? (content.width - box.spacing) / 2 : 54
+                Layout.preferredWidth: watchVideoBtn.visible ? (content.width - box.spacing) / 2 : content.width
                 Layout.alignment: Qt.AlignRight
 
                 property bool isLastStep: root.index == root.total

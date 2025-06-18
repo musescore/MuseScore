@@ -100,6 +100,7 @@ void ToursService::initTours()
             }
 
             TourStep step;
+            step.previewImageOrGifUrl = itemObj.value("previewImageOrGifUrl").toString();
             step.videoExplanationUrl = itemObj.value("video_explanation_url").toString();
             step.controlUri = Uri(itemObj.value("control_uri").toString());
 
