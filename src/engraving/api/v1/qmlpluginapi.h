@@ -50,6 +50,7 @@ class MsProcess;
 class Score;
 
 #define DECLARE_API_ENUM(qmlName, cppName, enumName) \
+    /** Accessed using qmlName.VALUE*/ \
     Q_PROPERTY(mu::engraving::apiv1::Enum * qmlName READ get_##cppName CONSTANT) \
     static Enum* cppName; \
     static Enum* get_##cppName() { \
@@ -61,6 +62,7 @@ class Score;
     }
 
 #define DECLARE_API_ENUM2(qmlName, cppName, enumName1, enumName2) \
+    /** Accessed using qmlName.VALUE*/ \
     Q_PROPERTY(mu::engraving::apiv1::Enum * qmlName READ get_##cppName CONSTANT) \
     static Enum* cppName; \
     static Enum* get_##cppName() { \
