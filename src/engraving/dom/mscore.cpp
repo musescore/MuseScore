@@ -78,7 +78,7 @@ MsError MScore::_error { MsError::MS_NO_ERROR };
 void MScore::registerUiTypes()
 {
 #ifdef SCRIPT_INTERFACE
-    qRegisterMetaType<Spanner::Anchor>("Anchor");
+    qRegisterMetaType<SpannerAnchor>("Anchor");
     qRegisterMetaType<SegmentType>("SegmentType");
     qRegisterMetaType<FiguredBassItem::Modifier>("Modifier");
     qRegisterMetaType<FiguredBassItem::Parenthesis>("Parenthesis");

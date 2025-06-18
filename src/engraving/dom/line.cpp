@@ -253,7 +253,7 @@ bool LineSegment::edit(EditData& ed)
     }
 
     switch (l->anchor()) {
-    case Spanner::Anchor::SEGMENT:
+    case SpannerAnchor::SEGMENT:
     {
         Segment* s1 = spanner()->startSegment();
         Segment* s2 = spanner()->endSegment();
@@ -282,7 +282,7 @@ bool LineSegment::edit(EditData& ed)
         EditTimeTickAnchors::updateAnchors(this, moveStart ? track : track2);
     }
     break;
-    case Spanner::Anchor::NOTE:
+    case SpannerAnchor::NOTE:
     {
         Note* note1       = toNote(l->startElement());
         Note* note2       = toNote(l->endElement());
@@ -343,8 +343,8 @@ bool LineSegment::edit(EditData& ed)
         }
     }
     break;
-    case Spanner::Anchor::MEASURE:
-    case Spanner::Anchor::CHORD:
+    case SpannerAnchor::MEASURE:
+    case SpannerAnchor::CHORD:
     {
         Measure* m1 = l->startMeasure();
         Measure* m2 = l->endMeasure();
@@ -635,7 +635,7 @@ void LineSegment::rebaseOffsetsOnAnchorChanged(Grip grip, const PointF& oldPos, 
 
 void LineSegment::rebaseAnchors(EditData& ed, Grip grip)
 {
-    if (line()->anchor() != Spanner::Anchor::SEGMENT) {
+    if (line()->anchor() != SpannerAnchor::SEGMENT) {
         return;
     }
 
@@ -789,7 +789,7 @@ void LineSegment::editDrag(EditData& ed)
     default:
         break;
     }
-    if (line()->anchor() == Spanner::Anchor::NOTE && ed.isStartEndGrip()) {
+    if (line()->anchor() == SpannerAnchor::NOTE && ed.isStartEndGrip()) {
         //
         // if we touch a different note, change anchor
         //
@@ -966,7 +966,7 @@ PointF SLine::linePos(Grip grip, System** system) const
     bool mmRest = style().styleB(Sid::createMultiMeasureRests);
 
     switch (anchor()) {
-    case Spanner::Anchor::NOTE:
+    case SpannerAnchor::NOTE:
     {
         EngravingItem* item = start ? startElement() : endElement();
         Note* note = item && item->isNote() ? toNote(item) : nullptr;
@@ -979,14 +979,14 @@ PointF SLine::linePos(Grip grip, System** system) const
         }
         return note->pagePos() - (*system)->pagePos();
     }
-    case Spanner::Anchor::CHORD:
-    case Spanner::Anchor::SEGMENT:
+    case SpannerAnchor::CHORD:
+    case SpannerAnchor::SEGMENT:
     {
         Segment* segment = start ? startSegment() : endSegment();
         if (!segment) {
             return PointF();
         }
-        if (anchor() == Spanner::Anchor::CHORD && !segment->isChordRestType()) {
+        if (anchor() == SpannerAnchor::CHORD && !segment->isChordRestType()) {
             return PointF();
         }
         if (!start) {
@@ -1004,7 +1004,7 @@ PointF SLine::linePos(Grip grip, System** system) const
         double x = segment->x() + segment->measure()->x() - (start ? 0.0 : spatium());
         return PointF(x, 0.0);
     }
-    case Spanner::Anchor::MEASURE:
+    case SpannerAnchor::MEASURE:
     {
         Measure* measure = score()->tick2measureMM(start ? tick() : tick2());
         if (!measure) {

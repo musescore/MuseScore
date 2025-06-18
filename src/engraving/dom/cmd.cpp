@@ -565,7 +565,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
     spanner->setTrack(track);
     spanner->setTrack2(track);
 
-    if (spanner->anchor() == Spanner::Anchor::SEGMENT) {
+    if (spanner->anchor() == SpannerAnchor::SEGMENT) {
         spanner->setTick(segment->tick());
         Fraction lastTick = lastMeasure()->tick() + lastMeasure()->ticks();
         Fraction tick2 = std::min(segment->measure()->tick() + segment->measure()->ticks(), lastTick);
@@ -595,7 +595,7 @@ void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* start
         ss->setTrack(track);
     }
 
-    bool isMeasureAnchor = spanner->anchor() == Spanner::Anchor::MEASURE;
+    bool isMeasureAnchor = spanner->anchor() == SpannerAnchor::MEASURE;
     Fraction tick1 = isMeasureAnchor ? startSegment->measure()->tick() : startSegment->tick();
     spanner->setTick(tick1);
 
@@ -948,7 +948,7 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
     }
 
     GuitarBend* bend = new GuitarBend(score()->dummy()->note());
-    bend->setAnchor(Spanner::Anchor::NOTE);
+    bend->setAnchor(SpannerAnchor::NOTE);
     bend->setTick(chord->tick());
     bend->setTrack(chord->track());
 

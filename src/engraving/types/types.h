@@ -1063,6 +1063,10 @@ enum class SpannerSegmentType : unsigned char {
     SINGLE, BEGIN, MIDDLE, END
 };
 
+enum class SpannerAnchor : unsigned char {
+    SEGMENT, MEASURE, CHORD, NOTE
+};
+
 enum class TiePlacement : unsigned char {
     AUTO,
     INSIDE,

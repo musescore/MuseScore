@@ -3985,7 +3985,7 @@ bool TRead::readProperties(SLine* l, XmlReader& e, ReadContext& ctx)
     } else if (tag == "diagonal") {
         l->setDiagonal(e.readInt());
     } else if (tag == "anchor") {
-        l->setAnchor(SLine::Anchor(e.readInt()));
+        l->setAnchor(SpannerAnchor(e.readInt()));
     } else if (tag == "lineWidth") {
         l->setLineWidth(Spatium(e.readDouble()));
     } else if (TRead::readProperty(l, tag, e, ctx, Pid::LINE_STYLE)) {

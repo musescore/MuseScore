@@ -767,7 +767,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
                 s->setEndElement(dc->graceNotes()[idx]);
             }
         }
-        if (s->anchor() == Spanner::Anchor::MEASURE) {
+        if (s->anchor() == SpannerAnchor::MEASURE) {
             Fraction startTick = s->tick();
             Measure* startMeasure = score->tick2measureMM(startTick);
             Fraction startMeasureTick = startMeasure->tick();

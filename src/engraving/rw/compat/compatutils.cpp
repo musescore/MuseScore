@@ -744,7 +744,7 @@ void CompatUtils::mapHeaderFooterStyles(MasterScore* score)
 
 NoteLine* CompatUtils::createNoteLineFromTextLine(TextLine* textLine)
 {
-    assert(textLine->anchor() == Spanner::Anchor::NOTE);
+    assert(textLine->anchor() == SpannerAnchor::NOTE);
     Note* startNote = toNote(textLine->startElement());
     Note* endNote = toNote(textLine->endElement());
 
@@ -798,7 +798,7 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
                 Chord* chord = toChord(el);
                 for (Note* note : chord->notes()) {
                     for (Spanner* spanner : note->spannerFor()) {
-                        if (!spanner->isTextLine() || spanner->anchor() != Spanner::Anchor::NOTE) {
+                        if (!spanner->isTextLine() || spanner->anchor() != SpannerAnchor::NOTE) {
                             continue;
                         }
 
@@ -811,7 +811,7 @@ void CompatUtils::convertTextLineToNoteAnchoredLine(MasterScore* masterScore)
 
                         for (EngravingObject* linked : *links) {
                             if (linked != spanner && linked && linked->isTextLine()
-                                && toTextLine(linked)->anchor() == Spanner::Anchor::NOTE) {
+                                && toTextLine(linked)->anchor() == SpannerAnchor::NOTE) {
                                 oldLines.insert(toTextLine(linked));
                             }
                         }

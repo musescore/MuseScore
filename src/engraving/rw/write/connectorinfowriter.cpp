@@ -106,7 +106,7 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, WriteContext* ctx, const EngravingI
 {
     const bool clipboardmode = ctx->clipboardmode();
     if ((!sp->startElement() || !sp->endElement())
-        && (sp->anchor() == Spanner::Anchor::CHORD || sp->anchor() == Spanner::Anchor::NOTE)) {
+        && (sp->anchor() == SpannerAnchor::CHORD || sp->anchor() == SpannerAnchor::NOTE)) {
         LOGW("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
         return;
     }

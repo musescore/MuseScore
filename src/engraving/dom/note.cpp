@@ -2025,7 +2025,7 @@ EngravingItem* Note::drop(EditData& data)
         Note* finalNote = endEl && endEl->isNote() ? toNote(endEl) : SLine::guessFinalNote(this);
         if (finalNote) {
             // init glissando data
-            gliss->setAnchor(Spanner::Anchor::NOTE);
+            gliss->setAnchor(SpannerAnchor::NOTE);
             gliss->setStartElement(this);
             gliss->setEndElement(finalNote);
             gliss->setTick(ch->tick());
@@ -2083,7 +2083,7 @@ EngravingItem* Note::drop(EditData& data)
 
     default:
         Spanner* spanner;
-        if (e->isSpanner() && (spanner = toSpanner(e))->anchor() == Spanner::Anchor::NOTE) {
+        if (e->isSpanner() && (spanner = toSpanner(e))->anchor() == SpannerAnchor::NOTE) {
             spanner->setParent(this);
             spanner->setStartElement(this);
             spanner->setTick(tick());

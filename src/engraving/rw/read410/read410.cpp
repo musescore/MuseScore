@@ -720,7 +720,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     continue;
                 }
                 // CHORD and NOTE spanners are normally handled already
-                if (sp->anchor() == Spanner::Anchor::CHORD || sp->anchor() == Spanner::Anchor::NOTE) {
+                if (sp->anchor() == SpannerAnchor::CHORD || sp->anchor() == SpannerAnchor::NOTE) {
                     continue;
                 }
                 // skip if present originally

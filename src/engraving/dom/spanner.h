@@ -155,9 +155,6 @@ class Spanner : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Spanner)
 public:
-    enum class Anchor : unsigned char {
-        SEGMENT, MEASURE, CHORD, NOTE
-    };
 
     // Score Tree functions
     virtual EngravingObject* scanParent() const override;
@@ -186,8 +183,8 @@ public:
     bool playSpanner() const { return m_playSpanner; }
     void setPlaySpanner(bool p) { m_playSpanner = p; }
 
-    Anchor anchor() const { return m_anchor; }
-    void setAnchor(Anchor a) { m_anchor = a; }
+    SpannerAnchor anchor() const { return m_anchor; }
+    void setAnchor(SpannerAnchor a) { m_anchor = a; }
 
     const std::vector<SpannerSegment*>& spannerSegments() const { return m_segments; }
     void setSpannerSegments(const std::vector<SpannerSegment*>& s) { m_segments = s; }
@@ -291,7 +288,7 @@ private:
 
     bool m_playSpanner = true;
 
-    Anchor m_anchor = Anchor::SEGMENT;
+    SpannerAnchor m_anchor =SpannerAnchor::SEGMENT;
     Fraction m_tick = Fraction(-1, 1);
     Fraction m_ticks = Fraction(0, 1);
     track_idx_t m_track2 = muse::nidx;

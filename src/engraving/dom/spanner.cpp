@@ -703,7 +703,7 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
         setEndElement(0);                 // invalidate
         break;
     case Pid::ANCHOR:
-        setAnchor(Anchor(v.toInt()));
+        setAnchor(SpannerAnchor(v.toInt()));
         break;
     case Pid::POSITION_LINKED_TO_MASTER:
         setPositionLinkedToMaster(v.toBool());
@@ -740,7 +740,7 @@ PropertyValue Spanner::propertyDefault(Pid propertyId) const
     case Pid::PLAY:
         return true;
     case Pid::ANCHOR:
-        return int(Anchor::SEGMENT);
+        return int(SpannerAnchor::SEGMENT);
     default:
         break;
     }
@@ -770,7 +770,7 @@ void Spanner::computeStartElement()
 void Spanner::doComputeStartElement()
 {
     switch (m_anchor) {
-    case Anchor::SEGMENT: {
+    case SpannerAnchor::SEGMENT: {
         Segment* startSeg = startSegment();
         if (!startSeg) {
             return;
@@ -788,14 +788,14 @@ void Spanner::doComputeStartElement()
     }
     break;
 
-    case Anchor::MEASURE:
+    case SpannerAnchor::MEASURE:
         m_startElement = score()->tick2measure(tick());
         break;
 
-    case Anchor::CHORD:
+    case SpannerAnchor::CHORD:
         m_startElement = startCR();
         break;
-    case Anchor::NOTE:
+    case SpannerAnchor::NOTE:
         break;
     }
 }
@@ -828,7 +828,7 @@ void Spanner::computeEndElement()
 void Spanner::doComputeEndElement()
 {
     switch (m_anchor) {
-    case Anchor::SEGMENT: {
+    case SpannerAnchor::SEGMENT: {
         Segment* endSeg = endSegment();
         if (!endSeg) {
             return;
@@ -847,13 +847,13 @@ void Spanner::doComputeEndElement()
     }
     break;
 
-    case Anchor::MEASURE:
+    case SpannerAnchor::MEASURE:
         m_endElement = score()->tick2measure(tick2() - Fraction(1, 1920));
         break;
 
-    case Anchor::NOTE:
+    case SpannerAnchor::NOTE:
         break;
-    case Anchor::CHORD:
+    case SpannerAnchor::CHORD:
         m_endElement = endCR();
         break;
     }
@@ -880,14 +880,14 @@ bool Spanner::canBeCrossStaff() const
 //    element of a new Spanner, so that it is 'parallel' to the old one.
 //    Can be used while cloning a linked Spanner, to update the cloned spanner start and end elements
 //    (Spanner(const Spanner&) copies start and end elements from the original to the copy).
-//    NOTES:      Only spanners with Anchor::NOTE are currently supported.
+//    NOTES:      Only spanners with SpannerAnchor::NOTE are currently supported.
 //                Going back from end to start ensures the 'other' anchor of this is already set up
 //                      (for instance, while cloning staves)
 //---------------------------------------------------------
 
 Note* Spanner::startElementFromSpanner(Spanner* sp, EngravingItem* newEnd)
 {
-    if (sp->anchor() != Anchor::NOTE) {
+    if (sp->anchor() != SpannerAnchor::NOTE) {
         return nullptr;
     }
 
@@ -918,12 +918,12 @@ Note* Spanner::startElementFromSpanner(Spanner* sp, EngravingItem* newEnd)
 //    element of a new Spanner, so that it is 'parallel' to the old one.
 //    Can be used while cloning a linked Spanner, to update the cloned spanner start and end elements
 //    (Spanner(const Spanner&) copies start and end elements from the original to the copy).
-//    NOTES:      Only spanners with Anchor::NOTE are currently supported.
+//    NOTES:      Only spanners with SpannerAnchor::NOTE are currently supported.
 //---------------------------------------------------------
 
 Note* Spanner::endElementFromSpanner(Spanner* sp, EngravingItem* newStart)
 {
-    if (sp->anchor() != Anchor::NOTE) {
+    if (sp->anchor() != SpannerAnchor::NOTE) {
         return nullptr;
     }
 
@@ -955,7 +955,7 @@ Note* Spanner::endElementFromSpanner(Spanner* sp, EngravingItem* newStart)
 
 void Spanner::setNoteSpan(Note* startNote, Note* endNote)
 {
-    if (m_anchor != Anchor::NOTE) {
+    if (m_anchor != SpannerAnchor::NOTE) {
         return;
     }
 
@@ -982,7 +982,7 @@ void Spanner::setNoteSpan(Note* startNote, Note* endNote)
 
 Chord* Spanner::startChord()
 {
-    assert(m_anchor == Anchor::CHORD);
+    assert(m_anchor == SpannerAnchor::CHORD);
     if (!m_startElement) {
         m_startElement = findStartChord();
     }
@@ -1000,7 +1000,7 @@ Chord* Spanner::startChord()
 
 Chord* Spanner::endChord()
 {
-    assert(m_anchor == Anchor::CHORD);
+    assert(m_anchor == SpannerAnchor::CHORD);
     if (!m_endElement && type() == ElementType::SLUR) {
         m_endElement = findEndChord();
     }
@@ -1018,7 +1018,7 @@ Chord* Spanner::endChord()
 
 ChordRest* Spanner::startCR()
 {
-    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
+    assert(m_anchor == SpannerAnchor::SEGMENT || m_anchor == SpannerAnchor::CHORD);
     if (!m_startElement || m_startElement->score() != score()) {
         // TODO: This is a bit weird and prevents this method from being const...
         m_startElement = findStartCR();
@@ -1032,7 +1032,7 @@ ChordRest* Spanner::startCR()
 
 ChordRest* Spanner::endCR()
 {
-    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
+    assert(m_anchor == SpannerAnchor::SEGMENT || m_anchor == SpannerAnchor::CHORD);
     if ((!m_endElement || m_endElement->score() != score())) {
         // TODO: This is a bit weird and prevents this method from being const...
         m_endElement = findEndCR();
@@ -1046,7 +1046,7 @@ ChordRest* Spanner::endCR()
 
 Chord* Spanner::findStartChord() const
 {
-    assert(m_anchor == Anchor::CHORD);
+    assert(m_anchor == SpannerAnchor::CHORD);
     ChordRest* cr = score()->findCR(tick(), track());
     return cr && cr->isChord() ? toChord(cr) : nullptr;
 }
@@ -1057,7 +1057,7 @@ Chord* Spanner::findStartChord() const
 
 Chord* Spanner::findEndChord() const
 {
-    assert(m_anchor == Anchor::CHORD);
+    assert(m_anchor == SpannerAnchor::CHORD);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     ChordRest* endCR = s ? toChordRest(s->element(track2())) : nullptr;
     if (endCR && !endCR->isChord()) {
@@ -1072,7 +1072,7 @@ Chord* Spanner::findEndChord() const
 
 ChordRest* Spanner::findStartCR() const
 {
-    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
+    assert(m_anchor == SpannerAnchor::SEGMENT || m_anchor == SpannerAnchor::CHORD);
     return score()->findCR(tick(), track());
 }
 
@@ -1082,7 +1082,7 @@ ChordRest* Spanner::findStartCR() const
 
 ChordRest* Spanner::findEndCR() const
 {
-    assert(m_anchor == Anchor::SEGMENT || m_anchor == Anchor::CHORD);
+    assert(m_anchor == SpannerAnchor::SEGMENT || m_anchor == SpannerAnchor::CHORD);
     Segment* s = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
     const track_idx_t tr2 = effectiveTrack2();
     ChordRest* endCR = s ? toChordRest(s->element(tr2)) : nullptr;
@@ -1186,7 +1186,7 @@ Measure* Spanner::startMeasure() const
 
 Measure* Spanner::endMeasure() const
 {
-    assert(anchor() == Spanner::Anchor::MEASURE);
+    assert(anchor() == SpannerAnchor::MEASURE);
     return toMeasure(m_endElement);
 }
 
@@ -1266,7 +1266,7 @@ void Spanner::setColor(const Color& col)
 void Spanner::setStartElement(EngravingItem* e)
 {
 #ifndef NDEBUG
-    if (m_anchor == Anchor::NOTE) {
+    if (m_anchor == SpannerAnchor::NOTE) {
         assert(!e || e->type() == ElementType::NOTE);
     }
 #endif
@@ -1280,7 +1280,7 @@ void Spanner::setStartElement(EngravingItem* e)
 void Spanner::setEndElement(EngravingItem* e)
 {
 #ifndef NDEBUG
-    if (m_anchor == Anchor::NOTE) {
+    if (m_anchor == SpannerAnchor::NOTE) {
         assert(!e || e->type() == ElementType::NOTE);
     }
 #endif

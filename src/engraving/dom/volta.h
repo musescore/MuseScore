@@ -65,7 +65,7 @@ public:
         OPEN, CLOSED
     };
 
-    static constexpr Anchor VOLTA_ANCHOR = Anchor::MEASURE;
+    static constexpr SpannerAnchor VOLTA_ANCHOR = SpannerAnchor::MEASURE;
 
     Volta(EngravingItem* parent);
 

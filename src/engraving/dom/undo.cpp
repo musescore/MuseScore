@@ -2917,7 +2917,7 @@ void ChangeSpannerElements::flip(EditData*)
     EngravingItem* oldStartElement   = spanner->startElement();
     EngravingItem* oldEndElement     = spanner->endElement();
     bool isPartialSpanner = spanner->isPartialTie() || spanner->isLaissezVib();
-    if (spanner->anchor() == Spanner::Anchor::NOTE) {
+    if (spanner->anchor() == SpannerAnchor::NOTE) {
         // be sure new spanner elements are of the right type
         if (!isPartialSpanner && (!startElement || !startElement->isNote() || !endElement || !endElement->isNote())) {
             return;

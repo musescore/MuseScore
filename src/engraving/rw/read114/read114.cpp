@@ -1735,7 +1735,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             Spanner* sp = toSpanner(Factory::createItemByName(tag, m));
             sp->setTrack(ctx.track());
             sp->setTick(ctx.tick());
-            // ?? sp->setAnchor(Spanner::Anchor::SEGMENT);
+            // ?? sp->setAnchor(SpannerAnchor::SEGMENT);
             if (tag == "Volta") {
                 readVolta114(e, ctx, toVolta(sp));
             } else {
@@ -2995,7 +2995,7 @@ muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         if (!s->isSlur()) {
             if (s->isVolta()) {
                 Volta* volta = toVolta(s);
-                volta->setAnchor(Spanner::Anchor::MEASURE);
+                volta->setAnchor(SpannerAnchor::MEASURE);
             }
         }
 

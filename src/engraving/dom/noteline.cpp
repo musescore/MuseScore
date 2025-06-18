@@ -158,7 +158,7 @@ PropertyValue NoteLine::propertyDefault(Pid propertyId) const
     case Pid::SYSTEM_FLAG:
         return false;
     case Pid::ANCHOR:
-        return int(Spanner::Anchor::NOTE);
+        return int(SpannerAnchor::NOTE);
     default:
         return TextLineBase::propertyDefault(propertyId);
     }

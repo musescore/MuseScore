@@ -3715,7 +3715,7 @@ void ChordLayout::fillShape(const MMRest* item, MMRest::LayoutData* ldata, const
 
 void ChordLayout::addLineAttachPoints(Spanner* spanner)
 {
-    assert(spanner->anchor() == Spanner::Anchor::NOTE);
+    assert(spanner->anchor() == SpannerAnchor::NOTE);
 
     const SpannerSegment* frontSeg = toSpannerSegment(spanner->frontSegment());
     const SpannerSegment* backSeg = toSpannerSegment(spanner->backSegment());

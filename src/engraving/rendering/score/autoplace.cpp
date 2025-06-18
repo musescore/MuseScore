@@ -204,7 +204,7 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
         const_cast<SpannerSegment*>(item)->setOffset(item->spanner()->propertyDefault(Pid::OFFSET).value<PointF>());
     }
 
-    if (item->spanner()->anchor() == Spanner::Anchor::NOTE) {
+    if (item->spanner()->anchor() == SpannerAnchor::NOTE) {
         return;
     }
 
