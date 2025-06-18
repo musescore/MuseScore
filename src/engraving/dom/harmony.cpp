@@ -827,6 +827,11 @@ void Harmony::endEditTextual(EditData& ed)
     }
 }
 
+bool Harmony::isPlayable() const
+{
+    return !isInFretBox();
+}
+
 //---------------------------------------------------------
 //   setHarmony
 //---------------------------------------------------------

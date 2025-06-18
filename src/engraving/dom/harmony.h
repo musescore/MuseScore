@@ -209,6 +209,8 @@ public:
     bool editTextual(EditData&) override;
     void endEditTextual(EditData&) override;
 
+    bool isPlayable() const override;
+
     bool isRealizable() const;
     bool isInFretBox() const;
 
