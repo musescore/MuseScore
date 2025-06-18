@@ -291,7 +291,7 @@ void NotationInteraction::onViewModeChanged()
     // VBoxes are not included in horizontal layouts - deselect them (and their contents) when switching to horizontal mode...
     const std::vector<EngravingItem*> sel = selection()->elements();
     for (EngravingItem* item : sel) {
-        if (!item->findAncestor(ElementType::VBOX)) {
+        if (!item->findAncestor(ElementType::VBOX) || !item->findAncestor(ElementType::FBOX)) {
             continue;
         }
         score()->deselect(item);
