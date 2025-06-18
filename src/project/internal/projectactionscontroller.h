@@ -132,6 +132,9 @@ private:
 
     muse::Ret canSaveProject() const;
     bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
+    void saveProjectAt(const muse::actions::ActionData& args);
+    bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
+    bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
 
     struct AudioFile {
         QString format;
@@ -148,10 +151,6 @@ private:
     void publish();
     void shareAudio(const AudioFile& existingAudio);
     void shareAudio() { shareAudio(AudioFile()); }
-
-    bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
-    bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
-
     void alsoShareAudioCom(const AudioFile& audio);
 
     muse::Ret askAudioGenerationSettings() const;

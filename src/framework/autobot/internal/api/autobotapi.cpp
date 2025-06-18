@@ -32,6 +32,7 @@
 
 #include "log.h"
 
+using namespace muse::actions;
 using namespace muse::autobot::api;
 using namespace muse::autobot;
 
@@ -112,15 +113,23 @@ bool AutobotApi::openProject(const QString& name)
     io::paths_t dirs = autobotConfiguration()->testingFilesDirPaths();
 
     io::path_t filePath;
+    bool found = false;
     for (const io::path_t& dir : dirs) {
         filePath = dir + "/" + name;
         if (io::FileInfo::exists(filePath)) {
+            found = true;
             break;
         }
     }
 
-    Ret ret = projectFilesController()->openProject(filePath);
-    return ret;
+    if (!found) {
+        LOGE() << "not found file: " << name;
+        return false;
+    }
+
+    dispatcher()->dispatch("file-open", ActionData::make_arg1<QUrl>(QUrl::fromLocalFile(filePath.toQString())));
+
+    return true;
 }
 
 void AutobotApi::saveProject(const QString& name)
@@ -132,7 +141,8 @@ void AutobotApi::saveProject(const QString& name)
     }
 
     io::path_t filePath = dir + "/" + QDateTime::currentDateTime().toString("yyMMddhhmmss") + "_" + name;
-    projectFilesController()->saveProject(filePath);
+
+    dispatcher()->dispatch("file-save-at", ActionData::make_arg1<io::path_t>(filePath));
 }
 
 void AutobotApi::sleep(int msec)

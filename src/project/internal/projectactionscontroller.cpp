@@ -83,6 +83,7 @@ void ProjectActionsController::init()
     dispatcher()->reg(this, "file-save-a-copy", [this]() { saveProject(SaveMode::SaveCopy); });
     dispatcher()->reg(this, "file-save-selection", [this]() { saveProject(SaveMode::SaveSelection, SaveLocationType::Local); });
     dispatcher()->reg(this, "file-save-to-cloud", [this]() { saveProject(SaveMode::SaveAs, SaveLocationType::Cloud); });
+    dispatcher()->reg(this, "file-save-at", [this](const ActionData& args) { saveProjectAt(args); });
 
     dispatcher()->reg(this, "file-publish", this, &ProjectActionsController::publish);
     dispatcher()->reg(this, "file-share-audio", this, &ProjectActionsController::shareAudio);
@@ -904,6 +905,14 @@ void ProjectActionsController::shareAudio(const AudioFile& existingAudio)
     });
 
     isSharingFinished = false;
+}
+
+void ProjectActionsController::saveProjectAt(const muse::actions::ActionData& args)
+{
+    io::path_t path = !args.empty() ? args.arg<io::path_t>(0) : io::path_t();
+    if (!path.empty()) {
+        saveProjectAt(SaveLocation(path));
+    }
 }
 
 bool ProjectActionsController::saveProjectAt(const SaveLocation& location, SaveMode saveMode, bool force)
