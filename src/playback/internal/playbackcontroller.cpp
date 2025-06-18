@@ -1285,6 +1285,10 @@ void PlaybackController::addToOnlineSounds(const TrackId trackId)
     m_onlineSounds.insert(trackId);
     listenOnlineSoundsProcessingProgress(trackId);
     m_onlineSoundsChanged.notify();
+
+    if (m_onlineSounds.size() == 1) {
+        tours()->onEvent(u"online_sounds_added");
+    }
 }
 
 void PlaybackController::removeFromOnlineSounds(const TrackId trackId)
