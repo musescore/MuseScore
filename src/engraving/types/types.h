@@ -378,6 +378,10 @@ struct DurationTypeWithDots
 
 // --- Types ---
 
+enum class SpacerType : char {
+    UP, DOWN, FIXED
+};
+
 // P_TYPE::LAYOUTBREAK_TYPE
 enum class LayoutBreakType : unsigned char {
     PAGE, LINE, SECTION, NOBREAK
