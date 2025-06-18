@@ -121,7 +121,7 @@ private:
     muse::Ret openMuseScoreUrl(const QUrl& url);
     muse::Ret openScoreFromMuseScoreCom(const QUrl& url);
 
-    bool checkCanIgnoreError(const muse::Ret& ret, const muse::io::path_t& filepath);
+    bool shouldRetryLoadAfterError(const muse::Ret& ret, const muse::io::path_t& filepath);
     bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);
     void warnFileTooNew(const muse::io::path_t& filepath);
     bool askIfUserAgreesToOpenCorruptedProject(const muse::String& projectName, const std::string& errorText);
@@ -202,6 +202,8 @@ private:
     muse::io::path_t selectScoreSavingFile(const muse::io::path_t& defaultFilePath, const QString& saveTitle);
 
     muse::RetVal<INotationProjectPtr> loadProject(const muse::io::path_t& filePath);
+    muse::Ret loadWithFallback(const std::shared_ptr<INotationProject>& project, const muse::io::path_t& loadPath,
+                               const std::string& format);
     muse::Ret doOpenProject(const muse::io::path_t& filePath);
     muse::Ret doOpenCloudProject(const muse::io::path_t& filePath, const CloudProjectInfo& info, bool isOwner = true);
     muse::Ret doOpenCloudProjectOffline(const muse::io::path_t& filePath, const QString& displayNameOverride);
