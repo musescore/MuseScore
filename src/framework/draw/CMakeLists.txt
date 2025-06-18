@@ -25,9 +25,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/drawmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drawmodule.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/types/color.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/color.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/rgba.h
     ${CMAKE_CURRENT_LIST_DIR}/types/geometry.h
     ${CMAKE_CURRENT_LIST_DIR}/types/transform.h
     ${CMAKE_CURRENT_LIST_DIR}/types/transform.cpp

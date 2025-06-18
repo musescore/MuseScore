@@ -29,10 +29,6 @@
 #include "async/notification.h"
 #include "engraving/types/types.h"
 
-namespace muse::draw {
-class Color;
-}
-
 namespace mu::engraving {
 class IEngravingConfiguration : MODULE_EXPORT_INTERFACE
 {
