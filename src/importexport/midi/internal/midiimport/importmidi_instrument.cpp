@@ -716,12 +716,13 @@ QString msInstrName(int trackIndex)
     if (!instr) {
         return "";
     }
-    if (!instr->trackName.isEmpty()) {
-        return instr->trackName;
-    }
     if (!instr->longNames.empty()) {
         return instr->longNames.front().name();
     }
+    if (!instr->trackName.isEmpty()) {
+        return instr->trackName;
+    }
+
     return "";
 }
 } // namespace MidiInstr

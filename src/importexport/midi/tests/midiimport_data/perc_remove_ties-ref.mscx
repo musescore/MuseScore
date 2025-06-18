@@ -29,9 +29,9 @@
           </StaffType>
         <defaultClef>PERC</defaultClef>
         </Staff>
-      <trackName>Drum Kit (large), Drum Set</trackName>
+      <trackName>Drum Kit, Drum Set</trackName>
       <Instrument id="drumset">
-        <longName>Drum Kit (large), Drum Set</longName>
+        <longName>Drum Kit, Drum Set</longName>
         <shortName>D. Kit</shortName>
         <trackName>Drum Kit (large)</trackName>
         <instrumentId>drum.group.set</instrumentId>

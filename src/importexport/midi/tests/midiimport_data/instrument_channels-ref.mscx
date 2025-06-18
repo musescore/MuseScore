@@ -27,9 +27,9 @@
           <name>stdNormal</name>
           </StaffType>
         </Staff>
-      <trackName>Violins (section)</trackName>
+      <trackName>Violins</trackName>
       <Instrument id="violins">
-        <longName>Violins (section)</longName>
+        <longName>Violins</longName>
         <shortName>Vlns.</shortName>
         <trackName>Violins (section)</trackName>
         <minPitchP>55</minPitchP>
