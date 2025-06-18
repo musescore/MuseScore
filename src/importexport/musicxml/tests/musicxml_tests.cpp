@@ -192,15 +192,15 @@ void MusicXml_Tests::musicXmlIoTestRefBreaks(const char* file)
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::No));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_no_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_no.xml", XML_IO_DATA_DIR + fileName + u"_no_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_manual.xml", XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::All));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_all_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_all.xml", XML_IO_DATA_DIR + fileName + u"_all_ref.xml"));
     delete score;
 }
 
@@ -251,15 +251,15 @@ void MusicXml_Tests::musicXmlMscxExportTestRefBreaks(const char* file)
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::No));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_no_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_no.xml", XML_IO_DATA_DIR + fileName + u"_no_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_manual.xml", XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::All));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_all_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_all.xml", XML_IO_DATA_DIR + fileName + u"_all_ref.xml"));
     delete score;
 }
 
@@ -279,11 +279,11 @@ void MusicXml_Tests::musicXmlMscxExportTestRefInvisibleElements(const char* file
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_invisible_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_invisible.xml", XML_IO_DATA_DIR + fileName + u"_invisible_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(false));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_noinvisible_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_noinvisible.xml", XML_IO_DATA_DIR + fileName + u"_noinvisible_ref.xml"));
 
     delete score;
 }
@@ -445,10 +445,10 @@ TEST_F(MusicXml_Tests, breaksImplExpl) {
 TEST_F(MusicXml_Tests, breaksMMRest) {
     musicXmlMscxExportTestRefBreaks("testBreaksMMRest");
 }
-TEST_F(MusicXml_Tests, DISABLED_breaksManual) { // fail after sync with 3.x
+TEST_F(MusicXml_Tests, breaksManual) {
     musicXmlIoTestRefBreaks("testBreaksManual");
 }
-TEST_F(MusicXml_Tests, DISABLED_breaksPage) { // fail after sync with 3.x
+TEST_F(MusicXml_Tests, breaksPage) {
     musicXmlMscxExportTestRefBreaks("testBreaksPage");
 }
 TEST_F(MusicXml_Tests, breaksSystem) {
@@ -785,7 +785,7 @@ TEST_F(MusicXml_Tests, inferredDynamicsExpression) {
 TEST_F(MusicXml_Tests, inferredRights) {
     musicXmlImportTestRef("testInferredRights");
 }
-TEST_F(MusicXml_Tests, DISABLED_inferredTechnique) {
+TEST_F(MusicXml_Tests, inferredTechnique) {
     musicXmlImportTestRef("testInferredTechnique");
 }
 TEST_F(MusicXml_Tests, inferredTempoText) {

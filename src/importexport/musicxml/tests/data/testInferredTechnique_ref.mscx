@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.26997</pageWidth>
@@ -52,7 +53,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -122,35 +124,44 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>12.5</height>
+        <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <offset x="0" y="-0.0367999"/>
           <text><font size="22"/>Untitled score</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>composer</style>
           <text>Composer / arranger</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <PlayTechAnnotation>
             <playTechType>pizzicato</playTechType>
+            <eid>J_J</eid>
             <text><i>pizz.</i></text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>K_K</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>L_L</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -158,13 +169,17 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>M_M</eid>
         <voice>
           <PlayTechAnnotation>
+            <eid>N_N</eid>
             <text>normal</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>O_O</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>P_P</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -172,14 +187,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>Q_Q</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>pizzicato</playTechType>
+            <eid>R_R</eid>
             <text>pizzicato</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>S_S</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>T_T</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -187,13 +206,17 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>U_U</eid>
         <voice>
           <PlayTechAnnotation>
+            <eid>V_V</eid>
             <text>ord.</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>W_W</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>X_X</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -201,13 +224,17 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>Y_Y</eid>
         <voice>
           <PlayTechAnnotation>
+            <eid>Z_Z</eid>
             <text>arco</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>a_a</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>b_b</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -215,14 +242,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>c_c</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>mute</playTechType>
+            <eid>d_d</eid>
             <text>mute</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>e_e</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>f_f</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -230,14 +261,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>g_g</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>open</playTechType>
+            <eid>h_h</eid>
             <text>without mute</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>i_i</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>j_j</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -245,14 +280,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>k_k</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>open</playTechType>
+            <eid>l_l</eid>
             <text>no mute</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>m_m</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>n_n</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -260,13 +299,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>o_o</eid>
         <voice>
           <PlayTechAnnotation>
+            <playTechType>mute</playTechType>
+            <eid>p_p</eid>
             <text>con sord</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>q_q</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>r_r</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -274,13 +318,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>s_s</eid>
         <voice>
           <PlayTechAnnotation>
+            <playTechType>mute</playTechType>
+            <eid>t_t</eid>
             <text>senza sord</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>u_u</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>v_v</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -288,14 +337,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>w_w</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>open</playTechType>
+            <eid>x_x</eid>
             <text>open</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>y_y</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>z_z</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -303,14 +356,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>0_0</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>tremolo</playTechType>
+            <eid>1_1</eid>
             <text>trem</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>2_2</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>3_3</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -318,14 +375,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>4_4</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>detache</playTechType>
+            <eid>5_5</eid>
             <text>detache</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>6_6</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>7_7</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -333,14 +394,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>8_8</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>martele</playTechType>
+            <eid>9_9</eid>
             <text>martele</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>+_+</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>/_/</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -348,14 +413,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>AB_AB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>col_legno</playTechType>
+            <eid>BB_BB</eid>
             <text>col legno</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>CB_CB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>DB_DB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -363,14 +432,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>EB_EB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>col_legno</playTechType>
+            <eid>FB_FB</eid>
             <text>col legno battuto</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>GB_GB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>HB_HB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -378,14 +451,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>IB_IB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>sul_ponticello</playTechType>
+            <eid>JB_JB</eid>
             <text>sul pont</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>KB_KB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>LB_LB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -393,14 +470,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>MB_MB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>sul_tasto</playTechType>
+            <eid>NB_NB</eid>
             <text>sul tast</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>OB_OB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>PB_PB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -408,14 +489,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>QB_QB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>sul_ponticello</playTechType>
+            <eid>RB_RB</eid>
             <text>sul ponticello</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>SB_SB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>TB_TB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -423,14 +508,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>UB_UB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>vibrato</playTechType>
+            <eid>VB_VB</eid>
             <text>vibrato</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>WB_WB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>XB_XB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -438,14 +527,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>YB_YB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>legato</playTechType>
+            <eid>ZB_ZB</eid>
             <text>legato</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>aB_aB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>bB_bB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -453,14 +546,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>cB_cB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>distortion</playTechType>
+            <eid>dB_dB</eid>
             <text>distortion</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>eB_eB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>fB_fB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -468,14 +565,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>gB_gB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>overdrive</playTechType>
+            <eid>hB_hB</eid>
             <text>overdriven</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>iB_iB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>jB_jB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -483,14 +584,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>kB_kB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>overdrive</playTechType>
+            <eid>lB_lB</eid>
             <text>overdrive</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>mB_mB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>nB_nB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -498,14 +603,18 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>oB_oB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>harmonics</playTechType>
+            <eid>pB_pB</eid>
             <text>harmonics</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>qB_qB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>rB_rB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -513,20 +622,25 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>sB_sB</eid>
         <voice>
           <PlayTechAnnotation>
             <playTechType>jazz_tone</playTechType>
+            <eid>tB_tB</eid>
             <text>jazz</text>
             </PlayTechAnnotation>
           <Chord>
+            <eid>uB_uB</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>vB_vB</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>wB_wB</eid>
             </BarLine>
           </voice>
         </Measure>
