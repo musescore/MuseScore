@@ -3628,16 +3628,16 @@ void ReorderFBox::flip(EditData*)
         return;
     }
 
-    std::map<std::string, int> eidToIndex;
-    for (int i = 0; i < n; ++i) {
+    std::map<std::string, size_t> eidToIndex;
+    for (size_t i = 0; i < n; ++i) {
         eidToIndex[elements[i]->eid().toStdString()] = i;
     }
 
-    for (int i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i) {
         const EID& desiredEid = m_orderElementsIds[i];
 
-        int correctIndex = muse::value(eidToIndex, desiredEid.toStdString(), -1);
-        if (correctIndex == -1) {
+        size_t correctIndex = muse::value(eidToIndex, desiredEid.toStdString(), muse::nidx);
+        if (correctIndex == muse::nidx) {
             continue;
         }
 
