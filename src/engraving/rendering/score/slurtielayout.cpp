@@ -2083,7 +2083,9 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
         ElementType::HOOK,
         ElementType::STEM_SLASH,
         ElementType::LEDGER_LINE,
-        ElementType::LYRICS
+        ElementType::LYRICS,
+        ElementType::HARMONY,
+        ElementType::FRET_DIAGRAM
     };
     shape.remove_if([&](ShapeElement& s) {
         bool remove =  !s.item() || s.item() == note || muse::contains(IGNORED_TYPES, s.item()->type())
