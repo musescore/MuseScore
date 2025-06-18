@@ -1193,7 +1193,7 @@ private:
 
     void applyAccidentalToInputNotes(AccidentalType accidentalType);
 
-    Note* addPitchToChord(NoteVal&, Chord* chord, InputState* externalInputState = nullptr);
+    Note* addPitchToChord(NoteVal&, Chord* chord, InputState* externalInputState = nullptr, bool forceAccidental = false);
     Note* addTiedMidiPitch(int pitch, bool addFlag, Chord* prevChord, bool allowTransposition);
     Note* addNoteToTiedChord(Chord*, const NoteVal& noteVal, bool forceAccidental = false, const std::set<SymId>& articulationIds = {});
 
