@@ -144,6 +144,12 @@ void PlaybackController::init()
         notifyActionCheckedChanged(TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE);
     });
 
+    audioConfiguration()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool value) {
+        if (!value) {
+            tours()->onEvent(u"online_sounds_auto_process_disabled");
+        }
+    });
+
     m_measureInputLag = configuration()->shouldMeasureInputLag();
 }
 
@@ -1285,6 +1291,10 @@ void PlaybackController::addToOnlineSounds(const TrackId trackId)
     m_onlineSounds.insert(trackId);
     listenOnlineSoundsProcessingProgress(trackId);
     m_onlineSoundsChanged.notify();
+
+    if (m_onlineSounds.size() == 1) {
+        tours()->onEvent(u"online_sounds_added");
+    }
 }
 
 void PlaybackController::removeFromOnlineSounds(const TrackId trackId)

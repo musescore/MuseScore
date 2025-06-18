@@ -29,6 +29,9 @@ import MuseScore.Playback 1.0
 Loader {
     id: root
 
+    property var navigationPanel
+    property int navigationOrder: 0
+
     active: statusModel.hasOnlineSounds
 
     OnlineSoundsStatusModel {
@@ -41,12 +44,18 @@ Loader {
 
     onLoaded: {
         item.model = statusModel
+        item.navigation.panel = root.navigationPanel
+        item.navigation.order = root.navigationOrder
     }
 
     sourceComponent: FlatButton {
         id: view
 
         property var model
+        property var navPanel
+        property int navOrder: 0
+
+        navigation.name: "OnlineSoundsStatusView"
 
         readonly property bool mouseAreaEnabled: view.model.canProcessOnlineSounds
                                                  || view.model.status === OnlineSoundsStatusModel.Error
