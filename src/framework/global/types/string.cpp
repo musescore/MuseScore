@@ -550,8 +550,13 @@ String String::fromUtf8(const char* str)
     if (!str) {
         return String();
     }
+    return fromUtf8(std::string_view(str));
+}
+
+String String::fromUtf8(const std::string_view str)
+{
     String s;
-    UtfCodec::utf8to16(std::string_view(str), s.mutStr());
+    UtfCodec::utf8to16(str, s.mutStr());
     return s;
 }
 
