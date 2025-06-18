@@ -208,6 +208,8 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (m_fretFont == st.m_fretFont);
     equal &= (m_fretFontInfo.family == st.m_fretFontInfo.family);
     equal &= (m_fretYOffset == st.m_fretYOffset);
+    equal &= (m_fretUseTextStyle == st.m_fretUseTextStyle);
+    equal &= (m_fretTextStyle == st.m_fretTextStyle);
     equal &= (m_fretPresetIdx == st.m_fretPresetIdx);
     equal &= (m_fretColor == st.m_fretColor);
 

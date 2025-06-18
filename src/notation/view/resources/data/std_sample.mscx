@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.01">
-  <programVersion>3.0.0</programVersion>
-  <programRevision>3543170</programRevision>
+<museScore version="4.60">
+  <programVersion>4.6.0</programVersion>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -31,8 +30,8 @@
       <pedalLineWidth>0.16</pedalLineWidth>
       <slurEndWidth>0.1</slurEndWidth>
       <slurMidWidth>0.22</slurMidWidth>
-      <musicalSymbolFont>Bravura</musicalSymbolFont>
-      <musicalTextFont>Bravura Text</musicalTextFont>
+      <musicalSymbolFont>Leland</musicalSymbolFont>
+      <musicalTextFont>Leland Text</musicalTextFont>
       <voltaLineWidth>0.16</voltaLineWidth>
       <ottavaLineWidth>0.16</ottavaLineWidth>
       <tupletBracketWidth>0.16</tupletBracketWidth>
