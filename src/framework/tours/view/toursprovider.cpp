@@ -91,7 +91,7 @@ void ToursProvider::doShow()
         return;
     }
 
-    connect(parentControlItem, &QObject::destroyed, this, [this](){
+    connect(parentControlItem, &QObject::destroyed, this, [this]() {
         emit closeCurrentTourStep();
         showNext();
     });
@@ -104,7 +104,8 @@ void ToursProvider::doShow()
     //! NOTE: Avoid showing tooltip for control when tour for that control is shown
     setBlockShowingTooltipForItem(parentControlItem, true);
 
-    emit openTourStep(parentControlItem, step.title, step.description, step.videoExplanationUrl, index, m_totalSteps);
+    emit openTourStep(parentControlItem, step.title, step.description, step.previewImageOrGifUrl, step.videoExplanationUrl, index,
+                      m_totalSteps);
 }
 
 const ui::INavigationControl* ToursProvider::findControl(const Uri& controlUri)

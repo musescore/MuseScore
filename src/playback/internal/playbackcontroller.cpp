@@ -35,6 +35,7 @@
 
 #include "containers.h"
 #include "defer.h"
+#include "async/async.h"
 #include "log.h"
 
 using namespace muse;
@@ -145,6 +146,8 @@ void PlaybackController::init()
     configuration()->playNotesWhenEditingChanged().onNotify(this, [this]() {
         notifyActionCheckedChanged(TOGGLE_HEAR_PLAYBACK_WHEN_EDITING_CODE);
     });
+
+    listenAutoProcessOnlineSoundsInBackgroundChanged();
 
     m_measureInputLag = configuration()->shouldMeasureInputLag();
 }
@@ -450,6 +453,7 @@ void PlaybackController::onAudioResourceChanged(const TrackId trackId, const Ins
 
     if (audio::isOnlineAudioResource(newMeta)) {
         addToOnlineSounds(trackId);
+        tours()->onEvent(u"online_sounds_added");
     } else if (audio::isOnlineAudioResource(oldMeta)) {
         removeFromOnlineSounds(trackId);
     }
@@ -1362,6 +1366,36 @@ void PlaybackController::listenOnlineSoundsProcessingProgress(const TrackId trac
 
             if (m_onlineSoundsBeingProcessed.empty()) {
                 m_onlineSoundsProcessingProgress.finish(Ret(m_onlineSoundsProcessingErrorCode));
+            }
+        });
+    });
+}
+
+void PlaybackController::listenAutoProcessOnlineSoundsInBackgroundChanged()
+{
+    audioConfiguration()->autoProcessOnlineSoundsInBackgroundChanged().onReceive(this, [this](bool value) {
+        if (value) {
+            return;
+        }
+
+        const Uri preferencesUri("muse://preferences");
+        const String toursEventCode(u"online_sounds_auto_process_disabled");
+
+        if (!interactive()->isOpened(preferencesUri).val) {
+            tours()->onEvent(toursEventCode);
+            return;
+        }
+
+        async::Channel<Uri> currentUriChanged = interactive()->currentUri().ch;
+        currentUriChanged.onReceive(this, [=](const Uri&) {
+            if (!audioConfiguration()->autoProcessOnlineSoundsInBackground()
+                && !interactive()->isOpened(preferencesUri).val) {
+                async::Async::call(this, [=]() {
+                    tours()->onEvent(toursEventCode);
+                });
+
+                async::Channel<Uri> mut = currentUriChanged;
+                mut.resetOnReceive(this);
             }
         });
     });

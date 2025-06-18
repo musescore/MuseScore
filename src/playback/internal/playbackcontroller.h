@@ -36,6 +36,8 @@
 #include "audio/iaudioconfiguration.h"
 #include "audio/audiotypes.h"
 #include "iinteractive.h"
+#include "tours/itoursservice.h"
+
 #include "drumsetloader.h"
 
 #include "../iplaybackcontroller.h"
@@ -53,6 +55,7 @@ class PlaybackController : public IPlaybackController, public muse::actions::Act
     INJECT_STATIC(muse::audio::IAudioConfiguration, audioConfiguration)
     INJECT_STATIC(ISoundProfilesRepository, profilesRepo)
     INJECT_STATIC(muse::IInteractive, interactive)
+    INJECT_STATIC(muse::tours::IToursService, tours)
 
 public:
     void init();
@@ -225,6 +228,7 @@ private:
     void addToOnlineSounds(const muse::audio::TrackId trackId);
     void removeFromOnlineSounds(const muse::audio::TrackId trackId);
     void listenOnlineSoundsProcessingProgress(const muse::audio::TrackId trackId);
+    void listenAutoProcessOnlineSoundsInBackgroundChanged();
     bool shouldShowOnlineSoundsConnectionWarning() const;
     void showOnlineSoundsConnectionWarning();
 

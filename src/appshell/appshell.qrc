@@ -97,6 +97,7 @@
         <file>qml/platform/AppMenuBar.qml</file>
         <file>qml/platform/AppButtonBackground.qml</file>
         <file>resources/LoadingScreen.svg</file>
+        <file>resources/OnlineSoundsPreview.gif</file>
         <file>qml/Preferences/BraillePreferencesPage.qml</file>
         <file>qml/Preferences/internal/BrailleSection.qml</file>
         <file>qml/Preferences/internal/BrailleAdvancedSection.qml</file>
