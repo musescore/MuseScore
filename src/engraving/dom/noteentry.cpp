@@ -267,7 +267,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
     return note;
 }
 
-Note* Score::addPitchToChord(NoteVal& nval, Chord* chord, InputState* externalInputState)
+Note* Score::addPitchToChord(NoteVal& nval, Chord* chord, InputState* externalInputState, bool forceAccidental)
 {
     IF_ASSERT_FAILED(chord) {
         return nullptr;
@@ -285,12 +285,12 @@ Note* Score::addPitchToChord(NoteVal& nval, Chord* chord, InputState* externalIn
 
     Note* note = nullptr;
     if (isTied(chord)) {
-        note = addNoteToTiedChord(chord, nval, /* forceAccidental */ false);
+        note = addNoteToTiedChord(chord, nval, forceAccidental);
         if (!note) {
-            note = addNote(chord, nval, /* forceAccidental */ false, /* articulationIds */ {}, externalInputState);
+            note = addNote(chord, nval, forceAccidental, /* articulationIds */ {}, externalInputState);
         }
     } else {
-        note = addNote(chord, nval, /* forceAccidental */ false, is.articulationIds(), externalInputState);
+        note = addNote(chord, nval, forceAccidental, is.articulationIds(), externalInputState);
     }
 
     if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
@@ -619,6 +619,11 @@ Ret Score::repitchNote(const Position& p, bool replace)
     if (m_is.accidentalType() != AccidentalType::NONE) {
         NoteVal nval2 = noteValForPosition(p, AccidentalType::NONE, error);
         forceAccidental = (nval.pitch == nval2.pitch);
+    }
+
+    // Note: not sure this is ever called with replace == false, since add (not replace) case is handled already in cmdAddPitch
+    if (!replace) {
+        return addPitchToChord(nval, chord, /* externalInputState */ nullptr, forceAccidental);
     }
 
     auto [note, lastTiedNote] = repitchReplaceNote(chord, nval, forceAccidental);
