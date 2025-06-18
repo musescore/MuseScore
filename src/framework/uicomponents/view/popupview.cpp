@@ -184,6 +184,7 @@ void PopupView::initCloseController()
     m_closeController->setParentItem(parentItem());
     m_closeController->setWindow(window());
     m_closeController->setIsCloseOnPressOutsideParent(m_closePolicies & ClosePolicy::CloseOnPressOutsideParent);
+    m_closeController->setCanClosed(!m_closePolicies.testFlag(ClosePolicy::NoAutoClose));
 
     m_closeController->closeNotification().onNotify(this, [this]() {
         close(true);
@@ -311,6 +312,7 @@ void PopupView::close(bool force)
     }
 
     if (m_closeController) {
+        m_closeController->setCanClosed(true);
         m_closeController->setActive(false);
     }
 

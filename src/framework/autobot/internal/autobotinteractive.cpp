@@ -138,7 +138,7 @@ io::paths_t AutobotInteractive::selectMultipleDirectories(const std::string& tit
     return m_real->selectMultipleDirectories(title, dir, initialDirectories);
 }
 
-QColor AutobotInteractive::selectColor(const QColor& color, const std::string& title)
+async::Promise<Color> AutobotInteractive::selectColor(const Color& color, const std::string& title)
 {
     return m_real->selectColor(color, title);
 }

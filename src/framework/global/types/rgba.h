@@ -79,4 +79,3 @@ inline constexpr bool isRgbaValid(int r, int g, int b, int a)
            && isValidComp(a);
 }
 }
-

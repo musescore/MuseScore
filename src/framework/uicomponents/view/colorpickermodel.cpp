@@ -22,6 +22,8 @@
 
 #include "colorpickermodel.h"
 
+#include "log.h"
+
 using namespace muse::uicomponents;
 
 ColorPickerModel::ColorPickerModel(QObject* parent)
@@ -29,7 +31,13 @@ ColorPickerModel::ColorPickerModel(QObject* parent)
 {
 }
 
-QColor ColorPickerModel::selectColor(const QColor& currentColor)
+void ColorPickerModel::selectColor(const QColor& currentColor)
 {
-    return interactive()->selectColor(currentColor);
+    auto promise = interactive()->selectColor(Color::fromQColor(currentColor));
+    promise.onResolve(this, [this](const Color& c) {
+        emit colorSelected(c.toQColor());
+    }).onReject(this, [this](int code, const std::string& msg) {
+        LOGD() << "select color rejected, err code: " << code << ", msg: " << msg;
+        emit selectRejected();
+    });
 }

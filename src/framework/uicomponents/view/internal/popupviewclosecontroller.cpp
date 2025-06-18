@@ -87,9 +87,14 @@ void PopupViewCloseController::setWindow(QWindow* window)
     m_popupWindow = window;
 }
 
-void PopupViewCloseController::setIsCloseOnPressOutsideParent(bool close)
+void PopupViewCloseController::setIsCloseOnPressOutsideParent(bool arg)
 {
-    m_isCloseOnPressOutsideParent = close;
+    m_isCloseOnPressOutsideParent = arg;
+}
+
+void PopupViewCloseController::setCanClosed(bool arg)
+{
+    m_canClosed = arg;
 }
 
 muse::async::Notification PopupViewCloseController::closeNotification() const
@@ -105,6 +110,10 @@ bool PopupViewCloseController::eventFilter(QObject* watched, QEvent* event)
         doFocusOut(static_cast<QMouseEvent*>(event)->globalPosition());
     } else if (QEvent::FocusOut == event->type() && watched == popupWindow()) {
         doFocusOut(QCursor::pos());
+    } else if (QEvent::Close == event->type() && watched == popupWindow()) {
+        if (!m_canClosed) {
+            event->ignore();
+        }
     }
 
     return QObject::eventFilter(watched, event);

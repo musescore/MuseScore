@@ -26,6 +26,7 @@
 
 #include "global/types/uri.h"
 #include "global/types/retval.h"
+#include "global/types/color.h"
 #include "global/async/promise.h"
 
 class QWindow;
@@ -39,7 +40,7 @@ public:
     virtual ~IInteractiveProvider() = default;
 
     // color
-    virtual RetVal<QColor> selectColor(const QColor& color = Qt::white, const std::string& title = "") = 0;
+    virtual async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") = 0;
     virtual bool isSelectColorOpened() const = 0;
 
     virtual RetVal<Val> openSync(const UriQuery& uri) = 0;

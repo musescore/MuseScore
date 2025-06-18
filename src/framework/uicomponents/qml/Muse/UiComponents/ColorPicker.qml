@@ -50,14 +50,17 @@ Rectangle {
 
     ColorPickerModel {
         id: colorPickerModel
+
+        onColorSelected: function(color) {
+            root.newColorSelected(color)
+        }
     }
 
     QtObject {
         id: prv
 
         function selectColor() {
-            var selectedColor = colorPickerModel.selectColor(root.color)
-            root.newColorSelected(selectedColor)
+            colorPickerModel.selectColor(root.color)
         }
     }
 
