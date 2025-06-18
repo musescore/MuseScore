@@ -263,8 +263,7 @@ TEST_F(MidiImportTests, metertimeSig12_8) {
     dontSimplify("meter_12-8");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_metertimeSig15_8) {
+TEST_F(MidiImportTests, metertimeSig15_8) {
     dontSimplify("meter_15-8");
 }
 
@@ -558,48 +557,39 @@ TEST_F(MidiImportTests, swingClef) {
 
 // percussion
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_percDrums) {
+TEST_F(MidiImportTests, percDrums) {
     noTempoText("perc_drums");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_percRemoveTies) {
+TEST_F(MidiImportTests, percRemoveTies) {
     noTempoText("perc_remove_ties");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_percNoGrandStaff) {
+TEST_F(MidiImportTests, percNoGrandStaff) {
     noTempoText("perc_no_grand_staff");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_percTriplet) {
+TEST_F(MidiImportTests, percTriplet) {
     noTempoText("perc_triplet");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_percRespectBeat) {
+TEST_F(MidiImportTests, percRespectBeat) {
     noTempoText("perc_respect_beat");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_percTupletVoice) {
+TEST_F(MidiImportTests, percTupletVoice) {
     noTempoText("perc_tuplet_voice");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_percTupletSimplify) {
+TEST_F(MidiImportTests, percTupletSimplify) {
     noTempoText("perc_tuplet_simplify");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_percTupletSimplify2) {
+TEST_F(MidiImportTests, percTupletSimplify2) {
     noTempoText("perc_tuplet_simplify2");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_percShortNotes) {
+TEST_F(MidiImportTests, percShortNotes) {
     noTempoText("perc_short_notes");
 }
 
@@ -685,8 +675,7 @@ TEST_F(MidiImportTests, instrumentGrand2) {
     importThenCompareWithRef("instrument_grand2");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_instrumentChannels) {
+TEST_F(MidiImportTests, instrumentChannels) {
     importThenCompareWithRef("instrument_channels");
 }
 
@@ -694,8 +683,7 @@ TEST_F(MidiImportTests, instrument3StaffOrgan) {
     importThenCompareWithRef("instrument_3staff_organ");
 }
 
-// TODO: update ref
-TEST_F(MidiImportTests, DISABLED_instrumentClef) {
+TEST_F(MidiImportTests, instrumentClef) {
     noTempoText("instrument_clef");
 }
 
