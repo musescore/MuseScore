@@ -278,7 +278,7 @@ bool FinaleParser::processEntryInfo(EntryInfoPtr entryInfo, track_idx_t curTrack
             NoteInfoPtr noteInfoPtr = NoteInfoPtr(entryInfo, i);
 
             // calculate pitch & accidentals
-            NoteVal nval = FinaleTConv::notePropertiesToNoteVal(noteInfoPtr.calcNoteProperties(), baseStaff->concertKey(segment->tick()));
+            NoteVal nval = FinaleTConv::notePropertiesToNoteVal(noteInfoPtr.calcNotePropertiesConcert(), baseStaff->concertKey(segment->tick()));
             AccidentalVal accVal = tpc2alter(nval.tpc1);
             ///@todo transposition
             nval.tpc2 = nval.tpc1;
@@ -462,7 +462,7 @@ bool FinaleParser::positionFixedRests(const std::unordered_map<Rest*, musx::dom:
             IF_ASSERT_FAILED(currMusxStaff) {
                 logger()->logWarning(String(u"Target staff %1 not found.").arg(targetMusxStaffId), m_doc, entryInfoPtr.getStaff(), entryInfoPtr.getMeasure());
             }
-            auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNoteProperties();
+            auto [pitchClass, octave, alteration, staffPosition] = noteInfoPtr.calcNotePropertiesInView();
             StaffType* staffType = targetStaff->staffType(rest->tick());
             // following code copied from TLayout::layoutRest:
             Rest::LayoutData layoutData;
@@ -652,7 +652,7 @@ void FinaleParser::importEntries()
                 for (const auto& finaleLayer : finaleLayers) {
                     const LayerIndex layer = finaleLayer.first;
                     /// @todo reparse with forWrittenPitch true, to obtain correct transposed keysigs/clefs/enharmonics
-                    std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer, /*forWrittenPitch*/ false);
+                    std::shared_ptr<const EntryFrame> entryFrame = gfHold.createEntryFrame(layer);
                     if (!entryFrame) {
                         logger()->logWarning(String(u"Layer %1 not found.").arg(int(layer)), m_doc, musxScrollViewItem->staffId, musxMeasure->getCmper());
                         continue;

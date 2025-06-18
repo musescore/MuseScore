@@ -50,7 +50,7 @@ public:
     static engraving::TupletNumberType toMuseScoreTupletNumberType(musx::dom::options::TupletOptions::NumberStyle numberStyle);
     static engraving::Align justifyToAlignment(musx::dom::others::NamePositioning::AlignJustify alignJustify);
     static engraving::CourtesyBarlineMode boolToCourtesyBarlineMode(bool useDoubleBarlines);
-    static engraving::NoteVal notePropertiesToNoteVal(const std::tuple<musx::dom::Note::NoteName, int, int, int>& noteProperties, engraving::Key key = engraving::Key::C);
+    static engraving::NoteVal notePropertiesToNoteVal(const musx::dom::Note::NoteProperties& noteProperties, engraving::Key key = engraving::Key::C);
     static engraving::Fraction musxFractionToFraction(const musx::util::Fraction& fraction);
     static engraving::Fraction eduToFraction(musx::dom::Edu edu);
     static engraving::Fraction simpleMusxTimeSigToFraction(const std::pair<musx::util::Fraction, musx::dom::NoteType>& simpleMusxTimeSig, FinaleLoggerPtr& logger);
