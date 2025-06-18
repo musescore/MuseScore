@@ -405,7 +405,7 @@ public:
     double magS() const;
 
     bool isPrintable() const;
-    bool isPlayable() const;
+    virtual bool isPlayable() const;
     virtual double absoluteFromSpatium(const Spatium& sp) const { return sp.val() * spatium(); }
 
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }
