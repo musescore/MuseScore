@@ -170,6 +170,7 @@
         </note>
       </measure>
     <measure number="12">
+      <print new-system="yes"/>
       <note>
         <pitch>
           <step>A</step>
@@ -374,6 +375,7 @@
         </note>
       </measure>
     <measure number="30">
+      <print new-system="yes"/>
       <note>
         <pitch>
           <step>D</step>
@@ -506,6 +508,7 @@
         </note>
       </measure>
     <measure number="42">
+      <print new-system="yes"/>
       <note>
         <pitch>
           <step>C</step>
@@ -622,6 +625,7 @@
         </note>
       </measure>
     <measure number="54">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -706,6 +710,7 @@
         </note>
       </measure>
     <measure number="66">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -790,6 +795,7 @@
         </note>
       </measure>
     <measure number="78">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -874,6 +880,7 @@
         </note>
       </measure>
     <measure number="90">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -958,6 +965,7 @@
         </note>
       </measure>
     <measure number="102">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1042,6 +1050,7 @@
         </note>
       </measure>
     <measure number="114">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1126,6 +1135,7 @@
         </note>
       </measure>
     <measure number="126">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1210,6 +1220,7 @@
         </note>
       </measure>
     <measure number="138">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1294,6 +1305,7 @@
         </note>
       </measure>
     <measure number="150">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1378,6 +1390,7 @@
         </note>
       </measure>
     <measure number="162">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1462,6 +1475,7 @@
         </note>
       </measure>
     <measure number="174">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1546,6 +1560,7 @@
         </note>
       </measure>
     <measure number="186">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1630,6 +1645,7 @@
         </note>
       </measure>
     <measure number="198">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -1714,6 +1730,7 @@
         </note>
       </measure>
     <measure number="210">
+      <print new-system="yes"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>

@@ -11,13 +11,13 @@
 //=============================================================================
 
 #include <QtTest/QtTest>
-#include "mtest/testutils.h"
 #include "libmscore/score.h"
-#include "mscore/preferences.h"
 // start includes required for fixupScore()
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"
 // end includes required for fixupScore()
+#include "mscore/preferences.h"
+#include "mtest/testutils.h"
 
 namespace Ms {
 extern bool saveMxl(Score*, const QString&);
@@ -161,7 +161,7 @@ private slots:
       void harmony6() { mxmlMscxExportTestRef("testHarmony6"); }
       void harmony7() { mxmlMscxExportTestRef("testHarmony7"); }
       void harmony8() { mxmlIoTest("testHarmony8"); }
-      void harmony9() { mxmlIoTest("testHarmony9"); }
+      void harmony9() { mxmlIoTest("testHarmony9"); } // chordnames without chordrest
       void harmonMutes() { mxmlIoTest("testHarmonMutes"); }
       void hello() { mxmlIoTest("testHello"); }
       void helloReadCompr() { mxmlReadTestCompr("testHello"); }
@@ -247,9 +247,9 @@ private slots:
       void nonStandardKeySig3() { mxmlIoTest("testNonStandardKeySig3"); }
       void nonUniqueThings() { mxmlIoTestRef("testNonUniqueThings"); }
       void noteAttributes1() { mxmlIoTest("testNoteAttributes1"); }
-      void noteAttributes2() { mxmlIoTestRef("testNoteAttributes2"); }
+      void noteAttributes2Import() { mxmlImportTestRef("testNoteAttributes2"); }
+      void noteAttributes2io() { mxmlIoTestRef("testNoteAttributes2"); }
       void noteAttributes3() { mxmlIoTest("testNoteAttributes3"); }
-      void noteAttributes4() { mxmlImportTestRef("testNoteAttributes2"); }
       void noteColor() { mxmlIoTest("testNoteColor"); }
       void noteheadParentheses() { mxmlIoTest("testNoteheadParentheses"); }
       void noteheads() { mxmlIoTest("testNoteheads"); }
@@ -462,14 +462,14 @@ void TestMxmlIO::mxmlIoTestRefBreaks(const char* file)
       fixupScore(score);
       score->doLayout();
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::NO);
-      QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
-      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + file + "_no_ref.xml"));
+      QVERIFY(saveMusicXml(score, QString(file) + "_no.xml"));
+      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + "_no.xml", DIR + file + "_no_ref.xml"));
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
-      QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
-      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + file + "_manual_ref.xml"));
+      QVERIFY(saveMusicXml(score, QString(file) + "_manual.xml"));
+      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + "_manual.xml", DIR + file + "_manual_ref.xml"));
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::ALL);
-      QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
-      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + file + "_all_ref.xml"));
+      QVERIFY(saveMusicXml(score, QString(file) + "_all.xml"));
+      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + "_all.xml", DIR + file + "_all_ref.xml"));
       delete score;
       }
 
@@ -513,14 +513,14 @@ void TestMxmlIO::mxmlMscxExportTestRefBreaks(const char* file)
       fixupScore(score);
       score->doLayout();
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::NO);
-      QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
-      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + file + "_no_ref.xml"));
+      QVERIFY(saveMusicXml(score, QString(file) + "_no.xml"));
+      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + "_no.xml", DIR + file + "_no_ref.xml"));
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
-      QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
-      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + file + "_manual_ref.xml"));
+      QVERIFY(saveMusicXml(score, QString(file) + "_manual.xml"));
+      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + "_manual.xml", DIR + file + "_manual_ref.xml"));
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::ALL);
-      QVERIFY(saveMusicXml(score, QString(file) + ".xml"));
-      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + ".xml", DIR + file + "_all_ref.xml"));
+      QVERIFY(saveMusicXml(score, QString(file) + "_all.xml"));
+      QVERIFY(saveCompareMusicXmlScore(score, QString(file) + "_all.xml", DIR + file + "_all_ref.xml"));
       delete score;
       }
 

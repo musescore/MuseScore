@@ -192,7 +192,6 @@
         </note>
       </measure>
     <measure number="14">
-      <print new-system="yes"/>
       <note>
         <pitch>
           <step>B</step>
@@ -239,7 +238,6 @@
         </note>
       </measure>
     <measure number="18">
-      <print new-page="yes"/>
       <note>
         <pitch>
           <step>C</step>
