@@ -1632,7 +1632,7 @@ void Harmony::render()
 
         double lineY = ctx.y() - style().styleS(Sid::polychordDividerSpacing).toMM(spatium())
                        - style().styleS(Sid::polychordDividerThickness).toMM(spatium()) / 2;
-        lineY += ldata()->baseline;
+        // lineY += ldata()->baseline;
         LineF line = LineF(PointF(0.0, lineY), PointF(0.0, lineY));
         mutldata()->polychordDividerLines.mut_value().push_back(line);
 

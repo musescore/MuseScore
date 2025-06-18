@@ -1862,8 +1862,8 @@ void TDraw::draw(const Harmony* item, Painter* painter)
         pen.setWidthF(item->style().styleS(Sid::polychordDividerThickness).toMM(item->spatium()));
         pen.setColor(color);
         painter->setPen(pen);
-        for (LineF line : ldata->polychordDividerLines.value()) {
-            painter->drawLine(line);
+        for (const LineF& line : ldata->polychordDividerLines.value()) {
+            painter->drawLine(line.translated(PointF(0.0, ldata->polychordDividerOffset)));
         }
     }
 }
