@@ -909,6 +909,20 @@ enum class AccidentalVal : signed char {
     MAX     = SHARP3
 };
 
+// Positions of naturals in key sig. changes
+enum class KeySigNatural : char {
+    NONE   = 0,      // no naturals, except for change to CMaj/Amin
+    BEFORE = 1,      // naturals before accidentals
+    AFTER  = 2       // naturals after accidentals (but always before if going sharps <=> flats)
+};
+
+// For barlines before key sig. and time sig. changes
+enum class CourtesyBarlineMode : char {
+    ALWAYS_SINGLE = 0,
+    ALWAYS_DOUBLE = 1,
+    DOUBLE_BEFORE_COURTESY = 2,
+};
+
 enum class FermataType : signed char {
     Undefined = -1,
     VeryShort,
