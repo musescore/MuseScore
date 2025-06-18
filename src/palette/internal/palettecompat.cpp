@@ -134,6 +134,7 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     bool containsCapo = false;
     bool containsStringTunings = false;
     bool containsGuitarBends = false;
+    bool containsFFrame = false;
 
     for (const PaletteCellPtr& cell : guitarPalette.cells()) {
         const ElementPtr element = cell->element;
@@ -149,6 +150,9 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
             const ActionIcon* icon = toActionIcon(element.get());
             if (muse::contains(BENDS_ACTION_TYPES, icon->actionType())) {
                 containsGuitarBends = true;
+            }
+            if (icon->actionType() == ActionIconType::FFRAME) {
+                containsFFrame = true;
             }
         }
     }
@@ -175,6 +179,10 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, "pre-bend", 1.25);
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.25);
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.25);
+    }
+
+    if (!containsFFrame) {
+        guitarPalette.appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
     }
 }
 
