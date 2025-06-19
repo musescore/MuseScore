@@ -1191,38 +1191,38 @@ Segment* skipTuplet(Tuplet* tuplet)
 SymIdList timeSigSymIdsFromString(const String& string, TimeSigStyle timeSigStyle)
 {
     static const std::map<Char, SymId> dict = {
-        { 43,    SymId::timeSigPlusSmall },             // '+'
-        { 48,    SymId::timeSig0 },                     // '0'
-        { 49,    SymId::timeSig1 },                     // '1'
-        { 50,    SymId::timeSig2 },                     // '2'
-        { 51,    SymId::timeSig3 },                     // '3'
-        { 52,    SymId::timeSig4 },                     // '4'
-        { 53,    SymId::timeSig5 },                     // '5'
-        { 54,    SymId::timeSig6 },                     // '6'
-        { 55,    SymId::timeSig7 },                     // '7'
-        { 56,    SymId::timeSig8 },                     // '8'
-        { 57,    SymId::timeSig9 },                     // '9'
-        { 67,    SymId::timeSigCommon },                // 'C'
-        { 40,    SymId::timeSigParensLeftSmall },       // '('
-        { 41,    SymId::timeSigParensRightSmall },      // ')'
-        { 162,   SymId::timeSigCutCommon },             // '¢'
-        { 189,   SymId::timeSigFractionHalf },          // '½'
-        { 188,   SymId::timeSigFractionQuarter },       // '¼'
-        { 42,    SymId::timeSigMultiply },              // '*'
-        { 88,    SymId::timeSigMultiply },              // 'X'
-        { 120,   SymId::timeSigMultiply },              // 'x'
-        { 215,   SymId::timeSigMultiply },              // '×'
-        { 59664, SymId::mensuralProlation1 },
-        { 79,    SymId::mensuralProlation2 },           // 'O'
-        { 59665, SymId::mensuralProlation2 },
-        { 216,   SymId::mensuralProlation3 },           // 'Ø'
-        { 59666, SymId::mensuralProlation3 },
-        { 59667, SymId::mensuralProlation4 },
-        { 59668, SymId::mensuralProlation5 },
-        { 59670, SymId::mensuralProlation7 },
-        { 59671, SymId::mensuralProlation8 },
-        { 59673, SymId::mensuralProlation10 },
-        { 59674, SymId::mensuralProlation11 },
+        { '+',    SymId::timeSigPlusSmall },
+        { '0',    SymId::timeSig0 },
+        { '1',    SymId::timeSig1 },
+        { '2',    SymId::timeSig2 },
+        { '3',    SymId::timeSig3 },
+        { '4',    SymId::timeSig4 },
+        { '5',    SymId::timeSig5 },
+        { '6',    SymId::timeSig6 },
+        { '7',    SymId::timeSig7 },
+        { '8',    SymId::timeSig8 },
+        { '9',    SymId::timeSig9 },
+        { 'C',    SymId::timeSigCommon },
+        { '(',    SymId::timeSigParensLeftSmall },
+        { ')',    SymId::timeSigParensRightSmall },
+        { u'¢',   SymId::timeSigCutCommon },
+        { u'½',   SymId::timeSigFractionHalf },
+        { u'¼',   SymId::timeSigFractionQuarter },
+        { '*',    SymId::timeSigMultiply },
+        { 'X',    SymId::timeSigMultiply },
+        { 'x',    SymId::timeSigMultiply },
+        { u'×',   SymId::timeSigMultiply },
+        { 59664,  SymId::mensuralProlation1 },
+        { 79,     SymId::mensuralProlation2 },           // 'O'
+        { 59665,  SymId::mensuralProlation2 },
+        { 216,    SymId::mensuralProlation3 },           // 'Ø'
+        { 59666,  SymId::mensuralProlation3 },
+        { 59667,  SymId::mensuralProlation4 },
+        { 59668,  SymId::mensuralProlation5 },
+        { 59670,  SymId::mensuralProlation7 },
+        { 59671,  SymId::mensuralProlation8 },
+        { 59673,  SymId::mensuralProlation10 },
+        { 59674,  SymId::mensuralProlation11 },
     };
 
     static const std::map<Char, SymId> dictLarge = {
