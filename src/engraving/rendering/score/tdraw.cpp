@@ -219,7 +219,7 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
 
     case ElementType::EXPRESSION:   draw(item_cast<const Expression*>(item), painter);
         break;
-    
+
     case ElementType::FOOTNOTE:   draw(item_cast<const Footnote*>(item), painter);
         break;
 

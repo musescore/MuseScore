@@ -25,7 +25,6 @@
 #include "textbase.h"
 
 namespace mu::engraving {
-
 class Footnote final : public TextBase
 {
     DECLARE_CLASSOF(ElementType::FOOTNOTE)
@@ -52,6 +51,5 @@ public:
 
     void reset() override;
 };
-
 } // namespace mu::engraving
 #endif // MU_ENGRAVING_FOOTNOTE_H

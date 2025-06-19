@@ -1129,7 +1129,7 @@ void TextBlock::layout(const TextBase* t)
         struct SubFragment {
             String text;
             CharFormat format;
-            double width; 
+            double width;
         };
         std::vector<SubFragment> subfrags;
         for (const TextFragment& f : m_fragments) {
@@ -1140,41 +1140,41 @@ void TextBlock::layout(const TextBase* t)
                 current += c;
                 if (c.isSpace()) {
                     double w = fm.width(current);
-                    subfrags.push_back({current, f.format, w});
+                    subfrags.push_back({ current, f.format, w });
                     current.clear();
                 }
             }
             if (!current.isEmpty()) {
                 double w = fm.width(current);
-                subfrags.push_back({current, f.format, w});
+                subfrags.push_back({ current, f.format, w });
             }
         }
-        
+
         int numSpaces = 0;
         double textWidth = 0;
         for (const auto& sf : subfrags) {
-            numSpaces ++;
+            numSpaces++;
             textWidth += sf.width; // accumulate text width
         }
-        numSpaces --;
+        numSpaces--;
         double spaceToFill = layoutWidth - textWidth;
         if (numSpaces > 0 && spaceToFill > 0) {
             m_fragments.clear();
             double extraSpacing = spaceToFill / numSpaces;
-            double x = 0.0;
+            x = 0.0;
             for (const auto& sf : subfrags) {
                 TextFragment frag;
                 frag.text = sf.text;
                 frag.format = sf.format;
                 frag.pos.rx() = x;
                 m_fragments.push_back(frag);
-                x += sf.width + extraSpacing; 
+                x += sf.width + extraSpacing;
             }
         }
     }
 
     rx += lm;
-    
+
     if (alignH != AlignH::JUSTIFY) {
         for (TextFragment& f : m_fragments) {
             f.pos.rx() += rx;
@@ -3004,7 +3004,7 @@ Sid TextBase::offsetSid() const
     case TextStyleType::EXPRESSION:
         return above ? Sid::expressionPosAbove : Sid::expressionPosBelow;
     case TextStyleType::FOOTNOTE:
-        return above ? Sid::expressionPosAbove : Sid::expressionPosBelow;
+        return above ? Sid::footnotePosAbove : Sid::footnotePosBelow;
     case TextStyleType::LYRICS_ODD:
     case TextStyleType::LYRICS_EVEN:
         return above ? Sid::lyricsPosAbove : Sid::lyricsPosBelow;

@@ -2134,11 +2134,11 @@ void TLayout::layoutFootnote(const Footnote* item, Footnote::LayoutData* ldata)
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
-   
+
     TLayout::layoutBaseTextBase(item, ldata);
 
     ldata->disconnectSnappedItems();
-   
+
     if (!item->autoplace()) {
         return;
     }
@@ -2148,7 +2148,7 @@ void TLayout::layoutFootnote(const Footnote* item, Footnote::LayoutData* ldata)
     LD_CONDITION(ldata->isSetPos());
     LD_CONDITION(m->ldata()->isSetPos());
     LD_CONDITION(s->ldata()->isSetPos());
-    
+
     Autoplace::autoplaceSegmentElement(item, ldata);
 }
 

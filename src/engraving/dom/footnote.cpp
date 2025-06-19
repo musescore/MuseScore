@@ -78,5 +78,4 @@ void Footnote::reset()
 {
     TextBase::reset();
 }
-
 } // namespace mu::engraving

@@ -561,7 +561,7 @@ Expression* Factory::createExpression(Segment * parent, bool isAccessibleEnabled
     return expression;
 }
 
-Footnote* Factory::createFootnote(Segment * parent, bool isAccessibleEnabled)
+Footnote* Factory::createFootnote(Segment* parent, bool isAccessibleEnabled)
 {
     Footnote* footnote = new Footnote(parent);
     footnote->setAccessibleEnabled(isAccessibleEnabled);
