@@ -1085,6 +1085,20 @@ void TextBlock::layout(const TextBase* t)
                 x += w;
             }
 
+            const bool adjustCodaSymbol = fragmentFont.type() == Font::Type::MusicSymbolText && t->isMarker() && fi != m_fragments.begin();
+
+            if (adjustCodaSymbol) {
+                // Align the x-height of the coda symbol to half the x-height of the previous text
+                TextFragment& prevFragment = *(std::prev(fi));
+                FontMetrics prevFm(prevFragment.font(t));
+
+                double middle = (fm.tightBoundingRect(f.text).height() / 2) - fm.tightBoundingRect(f.text).bottom();
+                double prevXHeight = prevFm.capHeight() / 2;
+                double diff = prevXHeight - middle;
+
+                f.pos.ry() -= diff;
+            }
+
             RectF textBRect = fm.tightBoundingRect(f.text).translated(f.pos);
             bool useDynamicSymShape = fragmentFont.type() == Font::Type::MusicSymbol && t->isDynamic();
             if (useDynamicSymShape) {
@@ -1099,8 +1113,7 @@ void TextBlock::layout(const TextBase* t)
                 m_shape.add(textBRect, t);
             }
 
-            Font font = f.font(t);
-            if (font.type() == Font::Type::MusicSymbol || font.type() == Font::Type::MusicSymbolText) {
+            if (fragmentFont.type() == Font::Type::MusicSymbol || fragmentFont.type() == Font::Type::MusicSymbolText) {
                 // SEMI-HACK: Music fonts can have huge linespacing because of tall symbols, so instead of using the
                 // font linespacing value we just use the height of the individual fragment with some added margin
 
