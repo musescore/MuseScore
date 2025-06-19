@@ -1720,6 +1720,7 @@ bool Note::acceptDrop(EditData& data) const
 
     return type == ElementType::ARTICULATION
            || type == ElementType::ORNAMENT
+           || type == ElementType::TAPPING
            || type == ElementType::FERMATA
            || type == ElementType::CHORDLINE
            || type == ElementType::TEXT

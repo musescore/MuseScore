@@ -28,7 +28,14 @@ HammerOnPullOffTappingPageModel::HammerOnPullOffTappingPageModel(QObject* parent
     : AbstractStyleDialogModel(parent, { StyleId::hopoShowOnStandardStaves,
                                          StyleId::hopoShowOnTabStaves,
                                          StyleId::hopoUpperCase,
-                                         StyleId::hopoShowAll })
+                                         StyleId::hopoShowAll,
+                                         StyleId::lhTappingSymbolNormalStave,
+                                         StyleId::lhTappingSymbolTab,
+                                         StyleId::lhTappingShowItemsNormalStave,
+                                         StyleId::lhTappingShowItemsTab,
+                                         StyleId::lhTappingSlurTopAndBottomNoteOnTab,
+                                         StyleId::rhTappingSymbolNormalStave,
+                                         StyleId::rhTappingSymbolTab, })
 {
 }
 
@@ -50,4 +57,39 @@ StyleItem* HammerOnPullOffTappingPageModel::hopoUpperCase() const
 StyleItem* HammerOnPullOffTappingPageModel::hopoShowAll() const
 {
     return styleItem(StyleId::hopoShowAll);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::lhTappingSymbolNormalStave() const
+{
+    return styleItem(StyleId::lhTappingSymbolNormalStave);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::lhTappingSymbolTab() const
+{
+    return styleItem(StyleId::lhTappingSymbolTab);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::lhTappingShowItemsNormalStave() const
+{
+    return styleItem(StyleId::lhTappingShowItemsNormalStave);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::lhTappingShowItemsTab() const
+{
+    return styleItem(StyleId::lhTappingShowItemsTab);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::lhTappingSlurTopAndBottomNoteOnTab() const
+{
+    return styleItem(StyleId::lhTappingSlurTopAndBottomNoteOnTab);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::rhTappingSymbolNormalStave() const
+{
+    return styleItem(StyleId::rhTappingSymbolNormalStave);
+}
+
+StyleItem* HammerOnPullOffTappingPageModel::rhTappingSymbolTab() const
+{
+    return styleItem(StyleId::rhTappingSymbolTab);
 }

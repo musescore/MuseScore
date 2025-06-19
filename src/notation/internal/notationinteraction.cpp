@@ -1528,6 +1528,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::BREATH:
     case ElementType::GLISSANDO:
     case ElementType::ARTICULATION:
+    case ElementType::TAPPING:
     case ElementType::FERMATA:
     case ElementType::CHORDLINE:
     case ElementType::BEND:
@@ -1817,6 +1818,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     case ElementType::MEASURE_NUMBER:
     case ElementType::BRACKET:
     case ElementType::ARTICULATION:
+    case ElementType::TAPPING:
     case ElementType::FERMATA:
     case ElementType::CHORDLINE:
     case ElementType::BEND:

@@ -110,13 +110,13 @@ public:
     Articulation(const Articulation&) = default;
     Articulation& operator=(const Articulation&) = delete;
 
-    Articulation* clone() const override { return new Articulation(*this); }
+    virtual Articulation* clone() const override { return new Articulation(*this); }
 
-    double mag() const override;
+    virtual double mag() const override;
 
     SymId symId() const { return m_symId; }
     void setSymId(SymId id);
-    int subtype() const override;
+    virtual int subtype() const override;
     void setTextType(ArticulationTextType textType);
     ArticulationTextType textType() const { return m_textType; }
     TranslatableString typeUserName() const override;
@@ -158,7 +158,7 @@ public:
     String channelName() const { return m_channelName; }
     void setChannelName(const String& s) { m_channelName = s; }
 
-    String accessibleInfo() const override;
+    virtual String accessibleInfo() const override;
 
     bool isDouble() const { return m_categories & ArticulationCategory::DOUBLE; }
     bool isTenuto() const { return m_categories & ArticulationCategory::TENUTO; }
