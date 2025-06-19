@@ -83,8 +83,6 @@ MuseScore {
         var cursor = curScore.newCursor()
         for (var i in sendObjs) {
             var el = sendObjs[i]
-            console.log("Received " + el.type + ": Tick " + el.startTick
-                + ", voice " + (el.track % 4 + 1) + ", staff " + Math.ceil((el.track + 1) / 4))
             if (el.track != curTrack) {
                 curTrack = el.track
                 cursor.track = curTrack
@@ -125,24 +123,12 @@ MuseScore {
     function getDuration(element) {
         return {numerator: getChordRest(element).duration.numerator, denominator: getChordRest(element).duration.denominator}
     }
-    //returns the notes in a note/chord/rest
-    function getNotesArray(element) {
-        switch (element.type) {
-            case Element.REST: return [] //null
-            default: return getChordRest(element).notes
-        }
-    }
     //creates readable information from the notes in a note/chord/rest
     function getNotes(element) {
         var notes = []
-        var chordNotes = getNotesArray(element)
-        for (var i in chordNotes) {
-            notes[i] = {
-                pitch: chordNotes[i].pitch,
-                tpc: chordNotes[i].tpc,
-                tpc1: chordNotes[i].tpc1,
-                tpc2: chordNotes[i].tpc2
-            }
+        if (element.type == Element.REST) return notes
+        for (var i in getChordRest(element).notes) {
+            notes[i] = getChordRest(element).notes[i].clone()
         }
         return notes
     }
@@ -165,58 +151,16 @@ MuseScore {
     function getAnnotations(element) {
         var annotations = getSegment(element).annotations
         var annoList = []
+        var removeList = []
         for (var i in annotations) {
             var el = annotations[i]
-            var obj = {}
-            switch (el.type) {
-                case Element.TEMPO_TEXT: {
-                    console.log("logging tempo marking", 1)
-                    obj = {
-                        text: el.text,
-                        tempo: el.tempo,
-                        tempoFollowText: el.tempoFollowText
-                    }
-                    break
-                }
-                case Element.STAFF_TEXT:
-                case Element.SYSTEM_TEXT: {
-                    console.log("logging staff/system text", 1)
-                    obj = {
-                        text: el.text,
-                        fontStyle: el.fontStyle
-                    }
-                    break
-                }
-                case Element.DYNAMIC: {
-                    console.log("logging dynamic", 1)
-                    obj = {
-                        text: el.text,
-                        velocity: el.velocity,
-                        veloChange: el.veloChange
-                    }
-                    break
-                }
-                case Element.FERMATA: {
-                    console.log("logging fermata", 1)
-                    obj = {
-                        symbol: el.symbol,
-                        timeStretch: el.timeStretch
-                    }
-                    break
-                }
-                default: {
-                    console.log("Unknown annotation element", 2)
-                    logMessage("Unknown annotation element")
-                    break
-                }
+            if (el.track == getChordRest(element).track) {
+                annoList.push(el.clone())
+                removeList.push(el)
             }
-            obj.type = el.type
-            obj.visible = el.visible
-            obj.placement = el.placement
-            annoList.push(obj)
         }
-        for (var i in annotations) {
-            removeElement(annotations[i])
+        for (var i in removeList) {
+            removeElement(removeList[i])
         }
         return annoList
     }
@@ -224,24 +168,14 @@ MuseScore {
     function getArticulations(element) {
         var artiList = []
         if (element.type == Element.REST) return artiList
-        var storedSelection = false
-        if (!curScore.selection.isRange) {
-            storeSelection()
-            storedSelection = true
-            cmd("select-all")
+        var removeList = []
+        for (var i in getChordRest(element).articulations) {
+            artiList.push(getChordRest(element).articulations[i].clone())
+            removeList.push(getChordRest(element).articulations[i])
         }
-        for (var i in curScore.selection.elements) {
-            if (curScore.selection.elements[i].type == Element.ARTICULATION && getTick(curScore.selection.elements[i].parent) == getTick(element)
-                && curScore.selection.elements[i].track == element.track) {
-                artiList.push({
-                    placement: curScore.selection.elements[i].placement,
-                    play: curScore.selection.elements[i].play,
-                    symbol: curScore.selection.elements[i].symbol,
-                    visible: curScore.selection.elements[i].visible
-                })
-            }
+        for (var i in removeList) {
+            removeElement(removeList[i])
         }
-        if (storedSelection) retrieveSelection()
         return artiList
     }
     //retrieves a chordrests grace notes
@@ -369,13 +303,12 @@ MuseScore {
             c.element.visible = element.visible
         } else {
             c.rewindToTick(t)
-            for (var i in element.notes) {c.addNote(element.notes[i].pitch, i != 0)}
+            c.addNote(60)
             c.rewindToTick(t)
-            for (var i in c.element.notes) {
-                c.element.notes[i].tpc  = element.notes[i].tpc
-                c.element.notes[i].tpc1 = element.notes[i].tpc1
-                c.element.notes[i].tpc2 = element.notes[i].tpc2
-            }
+            var toRemove = c.element.notes[0]
+            for (var i in element.notes) {c.element.add(element.notes[i])}
+            removeElement(toRemove)
+            c.rewindToTick(t)
             addArticulations(c, element.articulations)
             addGraceNotes(c.element.notes[0], element.graceNotes)
             for (var i in element.ties) {
@@ -411,62 +344,20 @@ MuseScore {
     //adds annotations (dynamics, tempo text, etc) to the score
     function addAnnotations(cursor, annotations) {
         for (var i in getSegment(cursor.element).annotations) {
-            removeElement(getSegment(cursor.element).annotations[i])
+            var el = getSegment(cursor.element).annotations[i]
+            if (el.track == cursor.track) {
+                removeElement(el)
+            }
         }
-        if (annotations.length < 1) return
         for (var i in annotations) {
             var el = annotations[i]
-            var obj = newElement(el.type)
-            obj.visible = el.visible
-            obj.placement = el.placement
-            switch (el.type) {
-                case Element.TEMPO_TEXT: {
-                    console.log("adding tempo marking", 1)
-                    obj.text = el.text
-                    break
-                }
-                case Element.STAFF_TEXT:
-                case Element.SYSTEM_TEXT: {
-                    console.log("adding staff/system text", 1)
-                    obj.text = el.text
-                    obj.fontStyle = el.fontStyle
-                    break
-                }
-                case Element.DYNAMIC: {
-                    console.log("adding dynamic", 1)
-                    obj.text = el.text
-                    obj.velocity = el.velocity
-                    obj.dynamicRange = el.dynamicRange
-                    obj.veloChange = el.veloChange
-                    break
-                }
-                case Element.FERMATA: {
-                    console.log("adding fermata", 1)
-                    obj.symbol = el.symbol
-                    obj.timeStretch = el.timeStretch
-                    break
-                }
-            }
-            cursor.add(obj)
-            if (el.type == Element.TEMPO_TEXT) {
-                obj.tempo = el.tempo
-                obj.tempoFollowText = el.tempoFollowText
-                //crash if applying before adding
-            }
-            delete obj
+            cursor.add(el)
         }
     }
     //adds articulations from sendObj
     function addArticulations(cursor, artiList) {
-        //if (artiList.length < 1) return
         for (var i in artiList) {
-            var obj = newElement(Element.ARTICULATION)
-            obj.placement = artiList[i].placement
-            obj.play = artiList[i].play
-            obj.symbol = artiList[i].symbol
-            obj.visible = artiList[i].visible
-            cursor.add(obj)
-            delete obj
+            cursor.add(artiList[i])
         }
     }
     //adds grace notes from sendObj
@@ -482,20 +373,12 @@ MuseScore {
                 cmd(graceList[i].type)
             }
             for (var i in graceList) {
-                curScore.selection.select(graceNotes[i].notes[0], false)
-                applyGraceNoteDuration(graceNotes[i].notes[0], graceList[i].duration)
-                
+                var toRemove = graceNotes[i].notes[0];
+                applyGraceNoteDuration(toRemove, graceList[i].duration)
                 for (var j in graceList[i].notes) {
-                    curScore.selection.select(graceNotes[i].notes[j], false)
-                    if (j != 0) {
-                        cmd("chord-e")
-                        cmd("note-input") //cancel chord-e effect
-                    }
-                    graceNotes[i].notes[j].pitch = graceList[i].notes[j].pitch
-                    graceNotes[i].notes[j].tpc = graceList[i].notes[j].tpc
-                    graceNotes[i].notes[j].tpc1 = graceList[i].notes[j].tpc1
-                    graceNotes[i].notes[j].tpc2 = graceList[i].notes[j].tpc2
+                    graceNotes[i].add(graceList[i].notes[j])
                 }
+                removeElement(toRemove)
             }
             retrieveSelection()
         }
@@ -564,7 +447,7 @@ MuseScore {
             c.rewindToTick(tieList[i].startTick)
             c.track = tieList[i].track
             if (tieList[i].startTick != c.measure.firstSegment.tick) c.rewindToTick(tieList[i].startTick)
-            if (!c.element || c.element.type == Element.REST) return console.log("Unable to add tie, notes missing", 2)
+            if (!c.element || c.element.type == Element.REST) return console.log("Unable to add tie, notes missing")
             var n = c.element.notes[tieList[i].note]
             while (n.tieForward) {
                 n = n.tieForward.endNote
@@ -630,7 +513,7 @@ MuseScore {
         } else {
             curScore.startCmd("Retrograde selection")
         }
-        retrogradeSelection();
+        retrogradeSelection()
         curScore.endCmd()
         quit()
     }
