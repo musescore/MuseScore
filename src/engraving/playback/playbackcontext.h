@@ -38,6 +38,7 @@ class SoundFlag;
 class Score;
 class MeasureRepeat;
 class TextBase;
+class ChordRest;
 
 class PlaybackContext
 {
@@ -104,6 +105,8 @@ private:
     ParamsByTrack m_soundFlagParamsByTrack;
     ParamsByTrack m_textParamsByTrack;
     PlayTechniquesMap m_playTechniquesMap;
+
+    std::unordered_map<const ChordRest*, int> m_currentVerseNumByChordRest;
 };
 
 using PlaybackContextPtr = std::shared_ptr<PlaybackContext>;
