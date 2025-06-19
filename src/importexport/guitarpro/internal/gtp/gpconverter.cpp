@@ -1149,7 +1149,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
             k |= (uint64_t)tuning[i] << 8 * i;
         }
         bool useFlats
-                = usePresetTable ? std::find(flatPresets.begin(), flatPresets.end(), k) != flatPresets.end() : staffProperties.useFlats;
+            = usePresetTable ? std::find(flatPresets.begin(), flatPresets.end(), k) != flatPresets.end() : staffProperties.useFlats;
         auto fretCount = staffProperties.fretCount;
 
         if (tuning.empty()) {
@@ -2090,11 +2090,11 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
     } else {
         if (m_stringDatas.empty()) {
             pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
-                                                                         nullptr) + note->part()->instrument()->transpose().chromatic;
+                                                                       nullptr) + note->part()->instrument()->transpose().chromatic;
         } else {
             if (const auto sd = m_stringDatas.find(note->part()->id().toUint64()); sd != m_stringDatas.end()) {
                 pitch = sd->second.getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
-                                                                           nullptr) + note->part()->instrument()->transpose().chromatic;
+                                            nullptr) + note->part()->instrument()->transpose().chromatic;
             } else {
                 pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
                                                                            nullptr) + note->part()->instrument()->transpose().chromatic;
@@ -2131,7 +2131,7 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
 
 void GPConverter::setTpc(Note* note, int accidental)
 {
-    if (0 == accidental || accidental == GPNote::invalidAccidental ) {
+    if (0 == accidental || accidental == GPNote::invalidAccidental) {
         note->setTpcFromPitch();
     } else {
         note->setTpcFromPitch(accidental < 0 ? Prefer::FLATS : Prefer::SHARPS);

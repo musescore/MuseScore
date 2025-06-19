@@ -981,7 +981,7 @@ bool GuitarPro5::read(IODevice* io)
 
     for (auto p : score->parts()) {
         for (auto s : p->staves()) {
-            if (!s->isPrimaryStaff()) {
+            if (!s->isPrimaryStaff() || p->instrument()->useDrumset()) {
                 continue;
             }
 
@@ -1002,7 +1002,7 @@ bool GuitarPro5::read(IODevice* io)
                 tuningPitches[i] = sd.stringList().at(i).pitch + p->instrument()->transpose().chromatic;
             }
 
-            if (utils::isStandardTuning(p->instrument()->recognizeMidiProgram(), tuningPitches)) {
+            if (utils::isStandardTuning(p->instrument()->channel(0)->program(), tuningPitches)) {
                 continue;
             }
 
@@ -1012,7 +1012,7 @@ bool GuitarPro5::read(IODevice* io)
             tun->setParent(seg);
             seg->add(tun);
 
-            auto tuning = utils::standardTuningFor(p->instrument()->recognizeMidiProgram(), (int)sd.strings());
+            auto tuning = utils::standardTuningFor(p->instrument()->channel(0)->program(), (int)sd.strings());
             sd = StringData(sd.frets(), (int)tuning.size(), tuning.data());
             p->instrument()->setStringData(sd);
         }
