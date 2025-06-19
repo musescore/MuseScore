@@ -31,6 +31,7 @@
 #include "types/string.h"
 
 #include "engraving/dom/measurebase.h"
+#include "engraving/dom/stringdata.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/iengravingconfiguration.h"
 #include "engraving/types/types.h"
