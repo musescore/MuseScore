@@ -199,6 +199,8 @@ public:
 
     std::map<int, HarpPedalDiagram*> harpDiagrams;
 
+    const std::map<int, StringTunings*>& stringTunings() const { return m_stringTunings; }
+
 private:
     friend class read206::Read206;
 
