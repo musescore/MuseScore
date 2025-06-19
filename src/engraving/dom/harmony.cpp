@@ -1973,9 +1973,6 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         FretDiagram* fd = getParentFretDiagram();
         if (fd && fd->excludeVerticalAlign() != val) {
             fd->setExcludeVerticalAlign(val);
-            PropertyFlags flag = fd->propertyFlags(Pid::EXCLUDE_VERTICAL_ALIGN)
-                                 == PropertyFlags::STYLED ? PropertyFlags::UNSTYLED : PropertyFlags::STYLED;
-            fd->setPropertyFlags(Pid::EXCLUDE_VERTICAL_ALIGN, flag);
         }
         break;
     }

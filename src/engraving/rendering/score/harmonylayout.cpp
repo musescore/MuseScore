@@ -29,8 +29,8 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-void mu::engraving::rendering::score::HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata,
-                                                                   const LayoutContext& ctx)
+void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata,
+                                  const LayoutContext& ctx)
 {
     if (!item->explicitParent()) {
         ldata->setPos(0.0, 0.0);
