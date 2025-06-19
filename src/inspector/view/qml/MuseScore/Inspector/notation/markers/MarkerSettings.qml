@@ -107,8 +107,8 @@ Column {
     }
 
     FlatRadioButtonGroupPropertyView {
-        id: positionButtonList
-        titleText: qsTrc("inspector", "Position")
+        id: alignmentButtonList
+        titleText: qsTrc("inspector", "Alignment to barline")
         propertyItem: root.model ? root.model.position : null
 
         enabled: root.model ? !root.model.centerOnSymbol.value : false
