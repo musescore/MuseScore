@@ -243,8 +243,14 @@ void Interactive::showProgress(const std::string& title, Progress* progress)
 }
 
 #ifdef Q_OS_LINUX
-static UriQuery makeSelectFileQuery(int mode, const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter,
-                                    bool confirmOverwrite)
+// see QQuickPlatformFileDialog::FileMode
+enum class FileDialogMode {
+    OpenFile = 0,
+    SaveFile = 2
+};
+
+static UriQuery makeSelectFileQuery(FileDialogMode mode, const std::string& title, const io::path_t& current,
+                                    const std::vector<std::string>& filter, bool confirmOverwrite)
 {
     UriQuery q("muse://interactive/selectfile");
     q.set("title", title);
@@ -255,13 +261,16 @@ static UriQuery makeSelectFileQuery(int mode, const std::string& title, const io
     }
 
     q.set("nameFilters", filterList);
-    q.set("selectExisting", true);
-    // see QQuickPlatformFileDialog::FileMode::OpenFile
-    q.set("fileMode", mode);
-    q.set("folder", QUrl::fromLocalFile(dir.toQString()).toLocalFile().toStdString());
+    q.set("fileMode", static_cast<int>(mode));
+    if (mode == FileDialogMode::OpenFile) {
+        q.set("selectExisting", true);
+        q.set("folder", QUrl::fromLocalFile(current.toQString()).toString().toStdString());
+    } else if (mode == FileDialogMode::SaveFile) {
+        q.set("currentFile", QUrl::fromLocalFile(current.toQString()).toString().toStdString());
 
-    if (!confirmOverwrite) {
-        q.set("options", QFileDialog::DontConfirmOverwrite);
+        if (!confirmOverwrite) {
+            q.set("options", QFileDialog::DontConfirmOverwrite);
+        }
     }
 
     return q;
@@ -313,9 +322,7 @@ async::Promise<io::path_t> Interactive::selectOpeningFile(const std::string& tit
 
 #else
 
-    // see QQuickPlatformFileDialog::FileMode::OpenFile
-    int mode = 0;
-    UriQuery q = makeSelectFileQuery(mode, title, dir, filter, false);
+    UriQuery q = makeSelectFileQuery(FileDialogMode::OpenFile, title, dir, filter, false);
 
     async::Promise<Val> promise = provider()->openAsync(q);
 
@@ -338,9 +345,7 @@ io::path_t Interactive::selectOpeningFileSync(const std::string& title, const io
     return result;
 #else
 
-    // see QQuickPlatformFileDialog::FileMode::OpenFile
-    int mode = 0;
-    UriQuery q = makeSelectFileQuery(mode, title, dir, filter, false);
+    UriQuery q = makeSelectFileQuery(FileDialogMode::OpenFile, title, dir, filter, false);
 
     RetVal<Val> rv = provider()->openSync(q);
     if (!rv.ret) {
@@ -362,9 +367,7 @@ io::path_t Interactive::selectSavingFileSync(const std::string& title, const io:
     return result;
 #else
 
-    // see QQuickPlatformFileDialog::FileMode::SaveFile
-    int mode = 2;
-    UriQuery q = makeSelectFileQuery(mode, title, dir, filter, confirmOverwrite);
+    UriQuery q = makeSelectFileQuery(FileDialogMode::SaveFile, title, dir, filter, confirmOverwrite);
 
     RetVal<Val> rv = provider()->openSync(q);
     if (!rv.ret) {
