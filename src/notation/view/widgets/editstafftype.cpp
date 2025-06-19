@@ -210,6 +210,9 @@ void EditStaffType::enablePresets()
     textStyleComboBox->setVisible(false);
     editTextStyleButton->setVisible(false);
 
+    fretFontLabel->setVisible(true);
+    fretFontSizeLabel->setVisible(true);
+    fretYLabel->setVisible(true);
     fretFontName->setVisible(true);
     fretFontSize->setVisible(true);
     fretY->setVisible(true);
@@ -221,6 +224,9 @@ void EditStaffType::enablePresets()
 
 void EditStaffType::enableTextStyles()
 {
+    fretFontLabel->setVisible(false);
+    fretFontSizeLabel->setVisible(false);
+    fretYLabel->setVisible(false);
     fretFontName->setVisible(false);
     fretFontSize->setVisible(false);
     fretY->setVisible(false);

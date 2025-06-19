@@ -438,7 +438,7 @@
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <layout class="QVBoxLayout" name="verticalLayout_8">
                   <item>
                    <widget class="QRadioButton" name="textStyleRadioButton">
                     <property name="text">
@@ -1446,6 +1446,10 @@
   <tabstop>stemlessPercussion</tabstop>
   <tabstop>upsideDown</tabstop>
   <tabstop>tabWidget</tabstop>
+  <tabstop>textStyleRadioButton</tabstop>
+  <tabstop>presetRadioButton</tabstop>
+  <tabstop>textStyleComboBox</tabstop>
+  <tabstop>editTextStyleButton</tabstop>
   <tabstop>fretFontName</tabstop>
   <tabstop>fretFontSize</tabstop>
   <tabstop>fretY</tabstop>
@@ -1456,10 +1460,6 @@
   <tabstop>linesThroughRadio</tabstop>
   <tabstop>linesBrokenRadio</tabstop>
   <tabstop>showTabFingering</tabstop>
-  <tabstop>durFontName</tabstop>
-  <tabstop>durFontSize</tabstop>
-  <tabstop>durY</tabstop>
-  <tabstop>noteValuesNone</tabstop>
   <tabstop>noteValuesSymb</tabstop>
   <tabstop>noteValuesStems</tabstop>
   <tabstop>valuesRepeatNever</tabstop>
@@ -1477,6 +1477,10 @@
   <tabstop>templateCombo</tabstop>
   <tabstop>templateReset</tabstop>
   <tabstop>addToTemplates</tabstop>
+  <tabstop>durY</tabstop>
+  <tabstop>noteValuesNone</tabstop>
+  <tabstop>durFontName</tabstop>
+  <tabstop>durFontSize</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -1487,8 +1491,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>844</x>
-     <y>554</y>
+     <x>649</x>
+     <y>723</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -1503,8 +1507,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>844</x>
-     <y>554</y>
+     <x>649</x>
+     <y>723</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -1514,8 +1518,8 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="ContinuousBrokenLinesbuttGroup"/>
   <buttongroup name="OnAboveLinesButtGroup"/>
+  <buttongroup name="ContinuousBrokenLinesbuttGroup"/>
   <buttongroup name="NumLettersButtGroup"/>
  </buttongroups>
 </ui>
