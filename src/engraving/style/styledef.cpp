@@ -560,6 +560,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(laissezVibMinDistance,                      Spatium(0.5)),
     styleDef(headerToLineStartDistance,                  Spatium(1.0)),
     styleDef(lineEndToBarlineDistance,                   Spatium(0.25)),
+    styleDef(floatHangingSlurs,                           false),
 
     styleDef(tiePlacementSingleNote,                     TiePlacement::OUTSIDE),
     styleDef(tiePlacementChord,                          TiePlacement::OUTSIDE),
