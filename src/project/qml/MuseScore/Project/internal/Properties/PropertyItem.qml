@@ -168,4 +168,6 @@ RowLayout {
 
         onClicked: root.deletePropertyRequested()
     }
+
+    focus: index === 0
 }

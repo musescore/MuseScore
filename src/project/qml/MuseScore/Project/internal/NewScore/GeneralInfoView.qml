@@ -71,6 +71,10 @@ Column {
 
             navigationPanel: root.navigationPanel
             navigationColumn: 0
+
+            // Use tab to navigate to the next itembox
+            focus: true
+            KeyNavigation.tab: subtitleInfo
         }
         GeneralInfoItem {
             id: composerInfo
@@ -85,6 +89,9 @@ Column {
 
             navigationPanel: root.navigationPanel
             navigationColumn: 1
+
+            focus: true
+            KeyNavigation.tab: subtitleInfo
         }
     }
 
@@ -111,6 +118,8 @@ Column {
 
             navigationPanel: root.navigationPanel
             navigationColumn: 2
+
+            KeyNavigation.tab: lyricistInfo
         }
 
         GeneralInfoItem {
@@ -124,6 +133,8 @@ Column {
 
             navigationPanel: root.navigationPanel
             navigationColumn: 3
+
+            KeyNavigation.tab: copyrightInfo
         }
     }
 
@@ -140,5 +151,7 @@ Column {
 
         navigationPanel: root.navigationPanel
         navigationColumn: 4
+
+        KeyNavigation.tab: doneButton
     }
 }

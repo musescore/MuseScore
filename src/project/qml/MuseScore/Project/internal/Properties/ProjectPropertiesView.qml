@@ -88,4 +88,13 @@ StyledListView {
             root.propertiesModel.deleteProperty(model.index)
         }
     }
+
+    // Inclusion of the "Ok" button in tab sequence
+    FlatButton {
+        id: closeButton
+        text: qsTr("Ok")
+        Layout.alignment: Qt.AlignRight
+        navigationPanel: root.navigationPanel
+        navigationColumn: root.navigationColumnStart + propertiesModel.count
+    }
 }
