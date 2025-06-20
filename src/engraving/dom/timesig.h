@@ -109,9 +109,6 @@ public:
     const Groups& groups() const { return m_groups; }
     void setGroups(const Groups& e) { m_groups = e; }
 
-    Fraction globalSig() const { return (m_sig * m_stretch).reduced(); }
-    void setGlobalSig(const Fraction& f) { m_stretch = (m_sig / f).reduced(); }
-
     bool isLocal() const { return m_stretch != Fraction(1, 1); }
 
     PointF staffOffset() const override;
