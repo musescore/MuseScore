@@ -496,13 +496,26 @@
             </KeySig>
           <Chord>
             <eid>8_8</eid>
+            <linkedTo>N_N</linkedTo>
+            <grace8after/>
+            <Note>
+              <eid>9_9</eid>
+              <linkedTo>O_O</linkedTo>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <fret>1</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>+_+</eid>
             <linkedTo>P_P</linkedTo>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>9_9</eid>
+              <eid>/_/</eid>
               <linkedTo>Q_Q</linkedTo>
               <pitch>62</pitch>
               <tpc>16</tpc>
@@ -513,7 +526,7 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>+_+</eid>
+                  <eid>AB_AB</eid>
                   <linkedTo>T_T</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
@@ -522,19 +535,6 @@
                     </location>
                   </next>
                 </Spanner>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>/_/</eid>
-            <linkedTo>N_N</linkedTo>
-            <grace8after/>
-            <Note>
-              <eid>AB_AB</eid>
-              <linkedTo>O_O</linkedTo>
-              <pitch>65</pitch>
-              <tpc>13</tpc>
-              <fret>1</fret>
-              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -551,7 +551,7 @@
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
-                    <grace>0</grace>
+                    <grace>1</grace>
                     </location>
                   </prev>
                 </Spanner>
@@ -559,13 +559,31 @@
             </Chord>
           <Chord>
             <eid>DB_DB</eid>
+            <linkedTo>X_X</linkedTo>
+            <grace8after/>
+            <Note>
+              <eid>EB_EB</eid>
+              <linkedTo>Y_Y</linkedTo>
+              <Accidental>
+                <role>1</role>
+                <subtype>accidentalSharp</subtype>
+                <eid>FB_FB</eid>
+                </Accidental>
+              <pitch>66</pitch>
+              <tpc>20</tpc>
+              <fret>2</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>GB_GB</eid>
             <linkedTo>a_a</linkedTo>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>EB_EB</eid>
+              <eid>HB_HB</eid>
               <linkedTo>b_b</linkedTo>
               <pitch>62</pitch>
               <tpc>16</tpc>
@@ -576,7 +594,7 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>FB_FB</eid>
+                  <eid>IB_IB</eid>
                   <linkedTo>e_e</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
@@ -585,24 +603,6 @@
                     </location>
                   </next>
                 </Spanner>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>GB_GB</eid>
-            <linkedTo>X_X</linkedTo>
-            <grace8after/>
-            <Note>
-              <eid>HB_HB</eid>
-              <linkedTo>Y_Y</linkedTo>
-              <Accidental>
-                <role>1</role>
-                <subtype>accidentalSharp</subtype>
-                <eid>IB_IB</eid>
-                </Accidental>
-              <pitch>66</pitch>
-              <tpc>20</tpc>
-              <fret>2</fret>
-              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -624,7 +624,7 @@
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
-                    <grace>0</grace>
+                    <grace>1</grace>
                     </location>
                   </prev>
                 </Spanner>
@@ -632,13 +632,31 @@
             </Chord>
           <Chord>
             <eid>MB_MB</eid>
+            <linkedTo>j_j</linkedTo>
+            <grace8after/>
+            <Note>
+              <eid>NB_NB</eid>
+              <linkedTo>k_k</linkedTo>
+              <Accidental>
+                <role>1</role>
+                <subtype>accidentalFlat</subtype>
+                <eid>OB_OB</eid>
+                </Accidental>
+              <pitch>63</pitch>
+              <tpc>11</tpc>
+              <fret>4</fret>
+              <string>1</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>PB_PB</eid>
             <linkedTo>m_m</linkedTo>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>NB_NB</eid>
+              <eid>QB_QB</eid>
               <linkedTo>n_n</linkedTo>
               <pitch>62</pitch>
               <tpc>16</tpc>
@@ -649,7 +667,7 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>OB_OB</eid>
+                  <eid>RB_RB</eid>
                   <linkedTo>q_q</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
@@ -658,24 +676,6 @@
                     </location>
                   </next>
                 </Spanner>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>PB_PB</eid>
-            <linkedTo>j_j</linkedTo>
-            <grace8after/>
-            <Note>
-              <eid>QB_QB</eid>
-              <linkedTo>k_k</linkedTo>
-              <Accidental>
-                <role>1</role>
-                <subtype>accidentalFlat</subtype>
-                <eid>RB_RB</eid>
-                </Accidental>
-              <pitch>63</pitch>
-              <tpc>11</tpc>
-              <fret>4</fret>
-              <string>1</string>
               </Note>
             </Chord>
           <Chord>
@@ -692,7 +692,7 @@
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
-                    <grace>0</grace>
+                    <grace>1</grace>
                     </location>
                   </prev>
                 </Spanner>
@@ -700,13 +700,31 @@
             </Chord>
           <Chord>
             <eid>UB_UB</eid>
+            <linkedTo>v_v</linkedTo>
+            <grace8after/>
+            <Note>
+              <eid>VB_VB</eid>
+              <linkedTo>w_w</linkedTo>
+              <Accidental>
+                <role>1</role>
+                <subtype>accidentalQuarterToneSharpArrowDown</subtype>
+                <eid>WB_WB</eid>
+                </Accidental>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <fret>0</fret>
+              <string>0</string>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>XB_XB</eid>
             <linkedTo>y_y</linkedTo>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>VB_VB</eid>
+              <eid>YB_YB</eid>
               <linkedTo>z_z</linkedTo>
               <pitch>62</pitch>
               <tpc>16</tpc>
@@ -717,7 +735,7 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>WB_WB</eid>
+                  <eid>ZB_ZB</eid>
                   <linkedTo>2_2</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
@@ -726,24 +744,6 @@
                     </location>
                   </next>
                 </Spanner>
-              </Note>
-            </Chord>
-          <Chord>
-            <eid>XB_XB</eid>
-            <linkedTo>v_v</linkedTo>
-            <grace8after/>
-            <Note>
-              <eid>YB_YB</eid>
-              <linkedTo>w_w</linkedTo>
-              <Accidental>
-                <role>1</role>
-                <subtype>accidentalQuarterToneSharpArrowDown</subtype>
-                <eid>ZB_ZB</eid>
-                </Accidental>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
-              <fret>0</fret>
-              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -765,7 +765,7 @@
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
-                    <grace>0</grace>
+                    <grace>1</grace>
                     </location>
                   </prev>
                 </Spanner>
