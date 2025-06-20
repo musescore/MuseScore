@@ -51,6 +51,7 @@
         <trackName>Tam-tam</trackName>
         <instrumentId>metal.tamtam</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="52">
           <head>cross</head>
           <line>0</line>
