@@ -255,10 +255,6 @@ void MuseSamplerWrapper::setIsActive(bool active)
         return;
     }
 
-    if (active) {
-        m_samplerLib->setPosition(m_sampler, m_currentPosition);
-    }
-
     m_sequencer.setActive(active);
     m_samplerLib->setPlaying(m_sampler, active);
 }
@@ -424,6 +420,44 @@ void MuseSamplerWrapper::extractOutputSamples(samples_t samples, float* output)
             output[offset + audioChannelIndex] += sample;
         }
     }
+}
+
+void MuseSamplerWrapper::prepareToPlay()
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
+    m_sequencer.updateMainStream();
+    m_samplerLib->setPosition(m_sampler, m_currentPosition);
+
+    if (readyToPlay()) {
+        return;
+    }
+
+    if (!m_checkReadyToPlayTimer) {
+        m_checkReadyToPlayTimer = std::make_unique<Timer>(std::chrono::microseconds(10000)); // every 10ms
+    }
+
+    m_checkReadyToPlayTimer->stop();
+
+    m_checkReadyToPlayTimer->onTimeout(this, [this]() {
+        if (readyToPlay()) {
+            m_readyToPlayChanged.notify();
+            m_checkReadyToPlayTimer->stop();
+        }
+    });
+
+    m_checkReadyToPlayTimer->start();
+}
+
+bool MuseSamplerWrapper::readyToPlay() const
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return false;
+    }
+
+    return m_samplerLib->readyToPlay(m_sampler);
 }
 
 void MuseSamplerWrapper::revokePlayingNotes()

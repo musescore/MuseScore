@@ -68,6 +68,25 @@ void AbstractSynthesizer::revokePlayingNotes()
     ONLY_AUDIO_WORKER_THREAD;
 }
 
+void AbstractSynthesizer::prepareToPlay()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+}
+
+bool AbstractSynthesizer::readyToPlay() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return true;
+}
+
+async::Notification AbstractSynthesizer::readyToPlayChanged() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_readyToPlayChanged;
+}
+
 void AbstractSynthesizer::updateRenderingMode(const RenderMode /*mode*/)
 {
     ONLY_AUDIO_WORKER_THREAD;

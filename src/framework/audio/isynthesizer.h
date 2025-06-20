@@ -26,6 +26,8 @@
 
 #include "iaudiosource.h"
 
+#include "global/async/notification.h"
+
 namespace muse::audio::synth {
 class ISynthesizer : public IAudioSource
 {
@@ -44,6 +46,10 @@ public:
 
     virtual msecs_t playbackPosition() const = 0;
     virtual void setPlaybackPosition(const msecs_t newPosition) = 0;
+
+    virtual void prepareToPlay() = 0;
+    virtual bool readyToPlay() const = 0;
+    virtual async::Notification readyToPlayChanged() const = 0;
 
     virtual void revokePlayingNotes() = 0;
     virtual void flushSound() = 0;
