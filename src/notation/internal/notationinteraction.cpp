@@ -5164,6 +5164,34 @@ Ret NotationInteraction::repeatSelection()
         return muse::make_ok();
     }
 
+    if (!score()->noteEntryMode() && selection.isList()) {
+        startEdit(TranslatableString("undoableAction", "Repeat selection"));
+        InputState& is = score()->inputState();
+        std::vector<Note*> nList;
+
+        for (EngravingItem* el : selection.elements()) {
+            if (el && el->isNote()) {//&& toChordRest(el)->segment() != score()->lastSegment()) {
+                Chord* c = toNote(el)->chord();
+
+                is.moveInputPos(el);
+                is.setTrack(c->track());
+                is.setSegment(c->segment());
+                is.moveToNextInputPos();
+
+                for (Note* note : c->notes()) {
+                    NoteVal nval = note->noteVal();
+                    Note* nn = score()->addPitch(nval, note != c->notes()[0]);
+                    nList.push_back(nn);
+                }
+            }
+        }
+        for (Note* n : nList) {
+            score()->select(n, SelectType::ADD);
+        }
+        apply();
+        return muse::make_ok();
+    }
+
     if (!selection.isRange()) {
         ChordRest* cr = score()->getSelectedChordRest();
         if (!cr) {
