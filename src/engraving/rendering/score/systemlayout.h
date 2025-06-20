@@ -192,7 +192,7 @@ private:
 
     static void layoutParenthesisAndBigTimeSigs(const ElementsToLayout& elementsToLayout);
 
-    static void layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, LayoutContext& ctx);
+    static void layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, bool verticalAlign, LayoutContext& ctx);
 };
 }
 

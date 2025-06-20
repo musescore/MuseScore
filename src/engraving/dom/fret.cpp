@@ -947,6 +947,16 @@ bool FretDiagram::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::FRET_FINGERING:
         setFingering(v.value<std::vector<int> >());
         break;
+    case Pid::EXCLUDE_VERTICAL_ALIGN:
+    {
+        bool val = v.toBool();
+        setExcludeVerticalAlign(val);
+        Harmony* h = harmony();
+        if (h && h->excludeVerticalAlign() != val) {
+            h->setExcludeVerticalAlign(val);
+        }
+        break;
+    }
     default:
         return EngravingItem::setProperty(propertyId, v);
     }

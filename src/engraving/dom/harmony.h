@@ -196,6 +196,7 @@ public:
     void setRightParen(bool rightParen) { m_rightParen = rightParen; }
 
     Segment* getParentSeg() const;
+    FretDiagram* getParentFretDiagram() const;
     Harmony* findNext() const;
     Harmony* findPrev() const;
     Fraction ticksTillNext(int utick, bool stopAtMeasureEnd = false) const;

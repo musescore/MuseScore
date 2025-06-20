@@ -6,6 +6,7 @@
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <createMultiMeasureRests>1</createMultiMeasureRests>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>

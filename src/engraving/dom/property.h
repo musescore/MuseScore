@@ -468,7 +468,7 @@ enum class Pid {
 
     IS_COURTESY,
 
-    VERTICAL_ALIGN,
+    EXCLUDE_VERTICAL_ALIGN,
 
     END
 };

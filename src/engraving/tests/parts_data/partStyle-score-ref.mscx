@@ -8,6 +8,7 @@
       <maskBarlinesForText>0</maskBarlinesForText>
       <clefLeftMargin>4</clefLeftMargin>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
       <titleFontFace>Arial</titleFontFace>

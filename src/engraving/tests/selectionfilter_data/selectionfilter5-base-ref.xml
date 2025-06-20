@@ -8,7 +8,6 @@
       <harmonyInfo>
         <root>14</root>
         </harmonyInfo>
-      <verticalAlign>0</verticalAlign>
       </Harmony>
     <Chord>
       <durationType>quarter</durationType>
@@ -21,7 +20,6 @@
       <harmonyInfo>
         <root>13</root>
         </harmonyInfo>
-      <verticalAlign>0</verticalAlign>
       </Harmony>
     <Chord>
       <durationType>quarter</durationType>
@@ -34,7 +32,6 @@
       <harmonyInfo>
         <root>16</root>
         </harmonyInfo>
-      <verticalAlign>0</verticalAlign>
       </Harmony>
     <Chord>
       <durationType>quarter</durationType>
@@ -48,7 +45,6 @@
         <name>m</name>
         <root>17</root>
         </harmonyInfo>
-      <verticalAlign>0</verticalAlign>
       </Harmony>
     <Chord>
       <durationType>quarter</durationType>

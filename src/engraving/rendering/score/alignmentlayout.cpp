@@ -28,6 +28,7 @@
 #include "dom/hairpin.h"
 #include "dom/system.h"
 #include "dom/text.h"
+#include "dom/fret.h"
 
 namespace mu::engraving::rendering::score {
 void AlignmentLayout::alignItemsGroup(const std::vector<EngravingItem*>& elements, const System* system)
@@ -127,7 +128,7 @@ void AlignmentLayout::alignItemsForSystem(const std::vector<EngravingItem*>& ele
     std::map<staff_idx_t, StaffItemGroups> staffItems;
 
     for (EngravingItem* item : elements) {
-        if (item->addToSkyline() && item->verticalAlign()) {
+        if (item->addToSkyline() && !item->excludeVerticalAlign()) {
             item->placeAbove() ? staffItems[item->staffIdx()].itemsAbove.push_back(item)
             : staffItems[item->staffIdx()].itemsBelow.push_back(item);
         }
@@ -190,6 +191,17 @@ double AlignmentLayout::yOpticalCenter(const EngravingItem* item)
                 curY -= 0.5 * item->spatium();
             }
         }
+        break;
+    }
+    case ElementType::FRET_DIAGRAM:
+        curY += toFretDiagram(item)->ldata()->gridHeight;
+        break;
+    case ElementType::HARMONY: {
+        EngravingItem* parentItem = toHarmony(item)->parentItem();
+        if (parentItem && parentItem->isFretDiagram()) {
+            curY += parentItem->pos().y();
+        }
+        break;
     }
     default:
         break;

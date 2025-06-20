@@ -34,6 +34,7 @@ InspectorPropertyView {
     property int requestHeight: 30
     property int requestWidth: 0
     property int requestIconFontSize: 0
+    property bool transparent: false
 
     navigationRowEnd: navigationRowStart /* Menu button */ + radioButtonGroupItem.count /* FlatRadioButtons */
 
@@ -46,6 +47,8 @@ InspectorPropertyView {
 
         height: root.requestHeight
         width: requestWidth ? requestWidth : parent.width
+
+        transparent: root.transparent
 
         currentValue: root.propertyItem && !root.propertyItem.isUndefined ? root.propertyItem.value : undefined
 

@@ -168,6 +168,7 @@
 #include "horizontalspacing.h"
 #include "measurelayout.h"
 #include "tappinglayout.h"
+#include "harmonylayout.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -2657,6 +2658,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     ldata->stringExtendTop = item->fretOffset() && extendedStyle ? -spatium * .2 : 0.0;
     ldata->stringExtendBottom = extendedStyle ? 0.5 * ldata->fretDist : 0.0;
     ldata->dotDiameter = ctx.conf().styleMM(Sid::fretDotSpatiumSize) * item->userMag();
+    ldata->gridHeight = 0.0;
 
     double shapeMarginAboveDiagram = ldata->fretDist * 1.5;
     double w = ldata->stringDist * (item->strings() - 1) + ldata->markerSize;
@@ -2706,6 +2708,8 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     // When changing how bbox is calculated, don't forget to update the centerX and rightX methods too.
     Shape shape;
     shape.add(RectF(x, y, w, h), item);
+
+    ldata->gridHeight = h;
 
     ldata->fingeringItems.clear();
     if (item->showFingering()) {
@@ -3409,144 +3413,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;
 
-    if (!item->explicitParent()) {
-        ldata->setPos(0.0, 0.0);
-        const_cast<Harmony*>(item)->setOffset(0.0, 0.0);
-    }
-
-    if (ldata->layoutInvalid) {
-        item->createBlocks(ldata);
-    }
-
-    if (ldata->blocks.empty()) {
-        ldata->blocks.push_back(TextBlock());
-    }
-
-    auto calculateBoundingRect = [](const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx) -> PointF
-    {
-        const double ypos = (item->placeBelow() && item->staff()) ? item->staff()->staffHeight(item->tick()) : 0.0;
-        const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
-                                ? toFretDiagram(item->explicitParent())
-                                : nullptr;
-
-        const double cw = item->symWidth(SymId::noteheadBlack);
-
-        double newPosX = 0.0;
-        double newPosY = 0.0;
-
-        if (item->textList().empty()) {
-            layoutBaseTextBase1(item, ldata);
-
-            if (fd) {
-                newPosY = ldata->pos().y();
-            } else {
-                newPosY = ypos - ((item->align() == AlignV::BOTTOM) ? -ldata->bbox().height() : 0.0);
-            }
-        } else {
-            RectF bb;
-            RectF hAlignBox;
-            for (TextSegment* ts : item->textList()) {
-                RectF tsBbox = ts->tightBoundingRect().translated(ts->x(), ts->y());
-                bb.unite(tsBbox);
-
-                if (ts->align()) {
-                    hAlignBox.unite(tsBbox);
-                }
-            }
-
-            double xx = 0.0;
-            if (fd) {
-                switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
-                case AlignH::LEFT:
-                    xx = -hAlignBox.left();
-                    break;
-                case AlignH::HCENTER:
-                    xx = -(hAlignBox.center().x());
-                    break;
-                case AlignH::RIGHT:
-                    xx = -hAlignBox.right();
-                    break;
-                }
-            } else {
-                switch (item->noteheadAlign()) {
-                case AlignH::LEFT:
-                    xx = -hAlignBox.left();
-                    break;
-                case AlignH::HCENTER:
-                    xx = -(hAlignBox.center().x());
-                    break;
-                case AlignH::RIGHT:
-                    xx = -hAlignBox.right();
-                    break;
-                }
-            }
-
-            double yy = -bb.y();      // Align::TOP
-            if (item->align() == AlignV::VCENTER) {
-                yy = -bb.y() / 2.0;
-            } else if (item->align() == AlignV::BASELINE) {
-                yy = item->baseLine();
-            } else if (item->align() == AlignV::BOTTOM) {
-                yy = -bb.height() - bb.y();
-            }
-
-            if (fd) {
-                newPosY = ypos - yy - ctx.conf().styleMM(Sid::harmonyFretDist);
-            } else {
-                newPosY = ypos;
-            }
-
-            for (TextSegment* ts : item->textList()) {
-                ts->setOffset(PointF(xx, yy));
-            }
-
-            ldata->setBbox(bb.translated(xx, yy));
-            ldata->harmonyHeight = ldata->bbox().height();
-        }
-
-        if (fd) {
-            switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
-            case AlignH::LEFT:
-                newPosX = 0.0;
-                break;
-            case AlignH::HCENTER:
-                newPosX = 0.5 * fd->mainWidth();
-                break;
-            case AlignH::RIGHT:
-                newPosX = fd->mainWidth();
-                break;
-            }
-        } else {
-            switch (item->noteheadAlign()) {
-            case AlignH::LEFT:
-                newPosX = 0.0;
-                break;
-            case AlignH::HCENTER:
-                newPosX = cw * 0.5;
-                break;
-            case AlignH::RIGHT:
-                newPosX = cw;
-                break;
-            }
-        }
-
-        return PointF(newPosX, newPosY);
-    };
-
-    auto positionPoint = calculateBoundingRect(item, ldata, ctx);
-
-    if (item->isPolychord()) {
-        for (LineF& line : ldata->polychordDividerLines.mut_value()) {
-            line.setP1(PointF(ldata->bbox().left(), line.y1()));
-            line.setP2(PointF(ldata->bbox().right(), line.y2()));
-        }
-    }
-
-    if (item->hasFrame()) {
-        item->layoutFrame(ldata);
-    }
-
-    ldata->setPos(positionPoint);
+    HarmonyLayout::layoutHarmony(item, ldata, ctx);
 }
 
 void TLayout::layoutHook(const Hook* item, Hook::LayoutData* ldata)

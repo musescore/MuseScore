@@ -232,7 +232,6 @@
               <root>21</root>
               </harmonyInfo>
             <eid>W_W</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>X_X</eid>
@@ -353,7 +352,6 @@
                 <root>21</root>
                 </harmonyInfo>
               <eid>g_g</eid>
-              <verticalAlign>0</verticalAlign>
               </Harmony>
             <Chord>
               <eid>h_h</eid>

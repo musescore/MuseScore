@@ -9,6 +9,7 @@
       <pagePrintableWidth>7.4826</pagePrintableWidth>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -118,7 +119,6 @@
               <root>17</root>
               </harmonyInfo>
             <eid>G_G</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>H_H</eid>
@@ -153,7 +153,6 @@
               <root>17</root>
               </harmonyInfo>
             <eid>N_N</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>O_O</eid>
@@ -189,7 +188,6 @@
               <root>17</root>
               </harmonyInfo>
             <eid>U_U</eid>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>V_V</eid>
@@ -428,7 +426,6 @@
               </harmonyInfo>
             <eid>x_x</eid>
             <harmonyDuration>1</harmonyDuration>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>y_y</eid>
@@ -464,7 +461,6 @@
               </harmonyInfo>
             <eid>4_4</eid>
             <harmonyDuration>1</harmonyDuration>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>5_5</eid>
@@ -501,7 +497,6 @@
               </harmonyInfo>
             <eid>/_/</eid>
             <harmonyDuration>1</harmonyDuration>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>AB_AB</eid>
@@ -566,7 +561,6 @@
               </harmonyInfo>
             <eid>MB_MB</eid>
             <harmonyDuration>2</harmonyDuration>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>NB_NB</eid>
@@ -615,7 +609,6 @@
               </harmonyInfo>
             <eid>WB_WB</eid>
             <harmonyDuration>2</harmonyDuration>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>XB_XB</eid>
@@ -661,7 +654,6 @@
               </harmonyInfo>
             <eid>fB_fB</eid>
             <harmonyDuration>2</harmonyDuration>
-            <verticalAlign>0</verticalAlign>
             </Harmony>
           <Chord>
             <eid>gB_gB</eid>

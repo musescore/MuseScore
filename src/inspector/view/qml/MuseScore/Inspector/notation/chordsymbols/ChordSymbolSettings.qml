@@ -113,48 +113,64 @@ Column {
     }
 
     PropertyCheckBox {
-        id: hideNoteheadCheckBox
+        id: verticalAlignCheckBox
 
-        text: qsTrc("inspector", "Vertically align with symbols on the same system")
+        text: qsTrc("inspector", "Exclude from vertical alignment")
         propertyItem: root.model ? root.model.verticalAlign : null
 
-        navigation.name: "Vertically align with symbols on the same system"
+        navigation.name: "Exclude from vertical alignment"
         navigation.panel: root.navigationPanel
         navigation.row: durationSection.navigationRowEnd + 1
     }
 
-    SpinBoxPropertyView {
-        id: bassNoteScale
+    Item {
+        height: childrenRect.height
+        width: parent.width
 
-        titleText: qsTrc("inspector", "Bass note scale")
-        propertyItem: root.model ? root.model.bassScale : null
+        SpinBoxPropertyView {
+            id: bassNoteScale
 
-        step: 1
-        decimals: 0
-        maxValue: 300
-        minValue: 0
-        measureUnitsSymbol: "%"
+            anchors.left: parent.left
+            anchors.right: parent.horizontalCenter
+            anchors.rightMargin: 4
 
-        navigationName: "Bass note scale"
-        navigationPanel: root.navigationPanel
-        navigationRowStart: hideNoteheadCheckBox.navigationRowEnd + 1
-    }
+            titleText: qsTrc("inspector", "Bass note scale")
+            propertyItem: root.model ? root.model.bassScale : null
 
-    FlatRadioButtonGroupPropertyView {
-        id: positionButtonList
-        titleText: qsTrc("inspector", "Position")
-        propertyItem: root.model ? root.model.position : null
+            step: 1
+            decimals: 0
+            maxValue: 300
+            minValue: 0
+            measureUnitsSymbol: "%"
 
-        navigationPanel: root.navigationPanel
-        navigationRowStart: bassNoteScale.navigationRowEnd + 1
+            navigationName: "Bass note scale"
+            navigationPanel: root.navigationPanel
+            navigationRowStart: verticalAlignCheckBox.navigationRowEnd + 1
+        }
 
-        requestIconFontSize: 16
-        requestWidth: 98
+        FlatRadioButtonGroupPropertyView {
+            id: positionButtonList
 
-        model: [
-            { iconCode: IconCode.NOTE_ALIGN_LEFT, value: 0},
-            { iconCode: IconCode.NOTE_ALIGN_CENTER, value: 2},
-            { iconCode: IconCode.NOTE_ALIGN_RIGHT, value: 1 }
-        ]
+            anchors.left: parent.horizontalCenter
+            anchors.leftMargin: 4
+            anchors.right: parent.right
+
+            transparent: true
+
+            titleText: qsTrc("inspector", "Position")
+            propertyItem: root.model ? root.model.position : null
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: bassNoteScale.navigationRowEnd + 1
+
+            requestIconFontSize: 16
+            requestWidth: 98
+
+            model: [
+                { iconCode: IconCode.NOTE_ALIGN_LEFT, value: 0},
+                { iconCode: IconCode.NOTE_ALIGN_CENTER, value: 2},
+                { iconCode: IconCode.NOTE_ALIGN_RIGHT, value: 1 }
+            ]
+        }
     }
 }

@@ -21,20 +21,18 @@
  */
 #pragma once
 
-#include <vector>
-
 #include "layoutcontext.h"
+#include "dom/harmony.h"
 
 namespace mu::engraving {
 class Segment;
 class System;
-class Harmony;
 }
 
 namespace mu::engraving::rendering::score {
 class HarmonyLayout
 {
 public:
-    static bool alignHarmonies(const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove, const double maxShiftBelow);
+    static void layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
 };
 }

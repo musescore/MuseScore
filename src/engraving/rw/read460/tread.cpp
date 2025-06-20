@@ -830,6 +830,7 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
             d->add(h);
         } else if (readProperty(d, tag, e, ctx, Pid::FRET_SHOW_FINGERINGS)) {
         } else if (readProperty(d, tag, e, ctx, Pid::FRET_FINGERING)) {
+        } else if (TRead::readProperty(d, tag, e, ctx, Pid::EXCLUDE_VERTICAL_ALIGN)) {
         } else if (!readItemProperties(d, e, ctx)) {
             e.unknown();
         }

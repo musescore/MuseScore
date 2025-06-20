@@ -168,5 +168,16 @@ FocusableItem {
             navigationPanel: root.navigationPanel
             navigationRowStart: orientationSection.navigationRowEnd + 1
         }
+
+        PropertyCheckBox {
+            id: verticalAlignCheckBox
+
+            text: qsTrc("inspector", "Exclude from vertical alignment")
+            propertyItem: root.model ? root.model.verticalAlign : null
+
+            navigation.name: "Exclude from vertical alignment"
+            navigation.panel: root.navigationPanel
+            navigation.row: placementSection.navigationRowEnd + 1
+        }
     }
 }

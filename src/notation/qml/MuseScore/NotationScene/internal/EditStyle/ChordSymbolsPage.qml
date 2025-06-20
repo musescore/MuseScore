@@ -601,7 +601,7 @@ StyledFlickable {
                         implicitHeight: children.length === 1 ? children[0].implicitHeight : 0
 
                         CheckBox {
-                            text: qsTrc("notation/editstyle/chordsymbols", "Vertically align chord symbols on the same system")
+                            text: qsTrc("notation/editstyle/chordsymbols", "Vertically align chord symbols and fretboard diagrams on the same system")
                             checked: chordSymbolsModel.verticallyAlignChordSymbols.value === true
                             onClicked: chordSymbolsModel.verticallyAlignChordSymbols.value = !chordSymbolsModel.verticallyAlignChordSymbols.value
                         }

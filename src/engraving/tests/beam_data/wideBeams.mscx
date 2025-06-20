@@ -7,6 +7,7 @@
       <maskBarlinesForText>0</maskBarlinesForText>
       <useWideBeams>1</useWideBeams>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>

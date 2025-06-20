@@ -14,6 +14,7 @@
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <genCourtesyTimesig>0</genCourtesyTimesig>
       <genCourtesyClef>0</genCourtesyClef>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <sectionPause>2</sectionPause>
       <evenHeaderR>$:workTitle:</evenHeaderR>
       <oddHeaderL>$:workTitle:</oddHeaderL>
