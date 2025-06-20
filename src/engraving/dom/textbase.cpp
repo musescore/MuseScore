@@ -1005,6 +1005,7 @@ void TextBlock::layout(const TextBase* t)
 
     double layoutWidth = 0;
     EngravingItem* e = t->parentItem();
+    // TODO - remove when position is implemented for all text items
     if (e && t->layoutToParentWidth()) {
         layoutWidth = e->width();
         switch (e->type()) {
@@ -1085,18 +1086,24 @@ void TextBlock::layout(const TextBase* t)
                 x += w;
             }
 
-            const bool adjustCodaSymbol = fragmentFont.type() == Font::Type::MusicSymbolText && t->isMarker() && fi != m_fragments.begin();
-
+            const bool adjustCodaSymbol = fragmentFont.type() == Font::Type::MusicSymbolText && t->isMarker();
+            double yOffset = 0.0;
             if (adjustCodaSymbol) {
-                // Align the x-height of the coda symbol to half the x-height of the previous text
-                TextFragment& prevFragment = *(std::prev(fi));
-                FontMetrics prevFm(prevFragment.font(t));
+                // Align the x-height of the coda symbol to half the x-height of the surrounding text
+                Font refFont;
+                if (m_fragments.size() == 1) {
+                    refFont = t->font();
+                } else {
+                    TextFragment& refFragment = fi != m_fragments.begin() ? *(std::prev(fi)) : *(std::next(fi));
+                    refFont = refFragment.font(t);
+                }
+                FontMetrics refFm(refFont);
 
-                double middle = (fm.tightBoundingRect(f.text).height() / 2) - fm.tightBoundingRect(f.text).bottom();
-                double prevXHeight = prevFm.capHeight() / 2;
-                double diff = prevXHeight - middle;
+                const double middle = (fm.tightBoundingRect(f.text).height() / 2) - fm.tightBoundingRect(f.text).bottom();
+                const double refXHeight = refFm.capHeight() / 2;
+                yOffset = refXHeight - middle;
 
-                f.pos.ry() -= diff;
+                f.pos.ry() -= yOffset;
             }
 
             RectF textBRect = fm.tightBoundingRect(f.text).translated(f.pos);
@@ -1112,12 +1119,12 @@ void TextBlock::layout(const TextBase* t)
             } else {
                 m_shape.add(textBRect, t);
             }
-
             if (fragmentFont.type() == Font::Type::MusicSymbol || fragmentFont.type() == Font::Type::MusicSymbolText) {
                 // SEMI-HACK: Music fonts can have huge linespacing because of tall symbols, so instead of using the
                 // font linespacing value we just use the height of the individual fragment with some added margin
 
-                m_lineSpacing = std::max(m_lineSpacing, 1.25 * m_shape.bbox().height());
+                m_lineSpacing = std::max(m_lineSpacing, 1.25 * (m_shape.bbox().height() - m_shape.bbox().bottom()) + yOffset);
+                // m_lineSpacing = std::max(m_lineSpacing, 1.25 * m_shape.bbox().height());
             } else {
                 m_lineSpacing = std::max(m_lineSpacing, fm.lineSpacing());
             }
