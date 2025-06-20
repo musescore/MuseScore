@@ -205,6 +205,11 @@ static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engrav
                     currentNote = graceNote;
                 }
 
+                int gi = 0;
+                for (Chord* c : mainNote->chord()->graceNotes()) {
+                    c->setGraceIndex(gi++);
+                }
+
                 if (shouldMoveTie) {
                     Tie* tieFor = mainNote->tieFor();
                     if (tieFor && tieFor->endNote()) {
