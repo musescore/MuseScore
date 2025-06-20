@@ -1283,7 +1283,13 @@ bool MeiImporter::readStaffGrps(pugi::xml_node parentNode, int& staffSpan, int c
             Staff* staff = m_score->staff(idx);
             libmei::StaffGrp meiStaffGrp;
             meiStaffGrp.Read(child.node());
-            Convert::BracketStruct bracketSt = Convert::bracketFromMEI(meiStaffGrp);
+            Convert::BracketStruct bracketSt = Convert::staffGrpFromMEI(meiStaffGrp);
+            if (!meiStaffGrp.HasSymbol()) {
+                bracketSt.bracketType = Convert::symbolFromMEI(
+                    meiStaffGrp.AttStaffGroupingSym::StrToStaffGroupingSymSymbol(
+                        child.node().child("grpSym").attribute("symbol").value()));
+            }
+
             staff->setBracketType(column, bracketSt.bracketType);
 
             int childStaffSpan = 0;
