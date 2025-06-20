@@ -27,8 +27,11 @@
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/factory.h"
+#include "engraving/dom/interval.h"
+#include "engraving/types/types.h"
 
 // api
+#include "apitypes.h"
 #include "engravingapiv1.h"
 #include "score.h"
 #include "instrument.h"
@@ -541,3 +544,41 @@ qreal PluginAPI::mscoreDPI() const
 {
     return engraving::DPI;
 }
+
+OrnamentIntervalWrapper* PluginAPI::defaultOrnamentInterval() const
+{
+    return wrap(mu::engraving::DEFAULT_ORNAMENT_INTERVAL);
+}
+
+//---------------------------------------------------------
+//   PluginAPI::ornamentInterval
+///  Creates a new ornament interval with the given step and type
+//---------------------------------------------------------
+
+OrnamentIntervalWrapper* PluginAPI::ornamentInterval(apiv1::IntervalStep step, apiv1::IntervalType type) const
+{
+    return wrap(mu::engraving::OrnamentInterval(step, type));
+}
+
+//---------------------------------------------------------
+//   PluginAPI::interval
+///  Creates a new interval with the given chromatic and diatonic steps
+//---------------------------------------------------------
+
+IntervalWrapper* PluginAPI::interval(int diatonic, int chromatic) const
+{
+    return wrap(mu::engraving::Interval(diatonic, chromatic));
+}
+
+//---------------------------------------------------------
+//   PluginAPI::intervalFromOrnamentInterval
+///  Creates a new interval from a given ornament interval
+//---------------------------------------------------------
+
+IntervalWrapper* PluginAPI::intervalFromOrnamentInterval(OrnamentIntervalWrapper* o) const
+{
+    return wrap(mu::engraving::Interval::fromOrnamentInterval(o->ornamentInterval()));
+}
+
+
+
