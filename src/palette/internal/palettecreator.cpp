@@ -1877,6 +1877,8 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         sp->appendElement(pta, TConv::userName(playTechAnnotation.playTechType), 0.8)->setElementTranslated(true);
     }
 
+    sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
+
     return sp;
 }
 
