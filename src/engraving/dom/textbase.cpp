@@ -1815,6 +1815,32 @@ void TextBase::createBlocks(LayoutData* ldata) const
     cursor.setRow(0);
     cursor.setColumn(0);
 
+    auto insertNewBlock = [](LayoutData* ldata, TextCursor& cursor) {
+        if (ldata->rows() <= cursor.row()) {
+            ldata->blocks.push_back(TextBlock());
+        }
+
+        if (cursor.row() < ldata->rows()) {
+            if (ldata->blocks.at(cursor.row()).fragments().size() == 0) {
+                ldata->blocks[cursor.row()].insertEmptyFragmentIfNeeded(&cursor);           // used to preserve the Font size of the line (font info is held in TextFragments, see PR #5881)
+            }
+
+            ldata->blocks[cursor.row()].setEol(true);
+        }
+
+        cursor.setRow(cursor.row() + 1);
+        cursor.setColumn(0);
+        if (ldata->rows() <= cursor.row()) {
+            ldata->blocks.push_back(TextBlock());
+        }
+
+        if (cursor.row() < ldata->rows()) {
+            if (ldata->blocks.at(cursor.row()).fragments().size() == 0) {
+                ldata->blocks[cursor.row()].insertEmptyFragmentIfNeeded(&cursor); // an empty fragment may be needed on either side of the newline
+            }
+        }
+    };
+
     int state = 0;
     String token;
     String sym;
@@ -1829,29 +1855,7 @@ void TextBase::createBlocks(LayoutData* ldata) const
                 state = 2;
                 token.clear();
             } else if (c == '\n') {
-                if (ldata->rows() <= cursor.row()) {
-                    ldata->blocks.push_back(TextBlock());
-                }
-
-                if (cursor.row() < ldata->rows()) {
-                    if (ldata->blocks.at(cursor.row()).fragments().size() == 0) {
-                        ldata->blocks[cursor.row()].insertEmptyFragmentIfNeeded(&cursor);           // used to preserve the Font size of the line (font info is held in TextFragments, see PR #5881)
-                    }
-
-                    ldata->blocks[cursor.row()].setEol(true);
-                }
-
-                cursor.setRow(cursor.row() + 1);
-                cursor.setColumn(0);
-                if (ldata->rows() <= cursor.row()) {
-                    ldata->blocks.push_back(TextBlock());
-                }
-
-                if (cursor.row() < ldata->rows()) {
-                    if (ldata->blocks.at(cursor.row()).fragments().size() == 0) {
-                        ldata->blocks[cursor.row()].insertEmptyFragmentIfNeeded(&cursor); // an empty fragment may be needed on either side of the newline
-                    }
-                }
+                insertNewBlock(ldata, cursor);
             } else {
                 if (symState) {
                     sym += c;
@@ -1887,6 +1891,8 @@ void TextBase::createBlocks(LayoutData* ldata) const
                     } else {
                         LOGD("unknown symbol <%s>", muPrintable(sym));
                     }
+                } else if (token == "br") {
+                    insertNewBlock(ldata, cursor);
                 }
             } else {
                 token += c;
@@ -2256,7 +2262,7 @@ String TextBase::genText(const LayoutData* ldata) const
             fmt = format;
         }
         if (block.eol()) {
-            text += Char::LineFeed;
+            text += String(u"<br></br>");
         }
     }
     while (!xmlNesting.empty()) {
@@ -3725,7 +3731,7 @@ String TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) c
             fmt = format;
         }
         if (block.eol()) {
-            _txt += Char::LineFeed;
+            _txt += String(u"<br></br>");
         }
     }
     while (!xmlNesting.empty()) {
