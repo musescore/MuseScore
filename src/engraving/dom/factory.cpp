@@ -102,6 +102,7 @@
 #include "systemlock.h"
 #include "systemtext.h"
 #include "soundflag.h"
+#include "tapping.h"
 #include "tempotext.h"
 #include "text.h"
 #include "textline.h"
@@ -164,6 +165,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::GLISSANDO:         return new Glissando(parent);
     case ElementType::BRACKET:           return new Bracket(parent);
     case ElementType::ARTICULATION:      return new Articulation(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
+    case ElementType::TAPPING:           return new Tapping(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
     case ElementType::ORNAMENT:          return new Ornament(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
     case ElementType::FERMATA:           return new Fermata(parent);
     case ElementType::CHORDLINE:         return new ChordLine(parent->isChord() ? toChord(parent) : dummy->chord());
@@ -292,6 +294,11 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FIGURED_BASS_ITEM:
     case ElementType::DUMMY:
     case ElementType::SYSTEM_LOCK_INDICATOR:
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
+    case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+    case ElementType::TAPPING_HALF_SLUR:
+    case ElementType::TAPPING_HALF_SLUR_SEGMENT:
+    case ElementType::TAPPING_TEXT:
         break;
     }
 
@@ -341,6 +348,9 @@ MAKE_ITEM_IMPL(Arpeggio, Chord)
 
 CREATE_ITEM_IMPL(Articulation, ElementType::ARTICULATION, ChordRest, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Articulation, ChordRest)
+
+CREATE_ITEM_IMPL(Tapping, ElementType::TAPPING, ChordRest, isAccessibleEnabled)
+MAKE_ITEM_IMPL(Tapping, ChordRest)
 
 CREATE_ITEM_IMPL(Ornament, ElementType::ORNAMENT, ChordRest, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Ornament, ChordRest)

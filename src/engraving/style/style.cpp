@@ -218,6 +218,12 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::CHORD_PRESET_TYPE:
                 set(idx, TConv::fromXml(e.readAsciiText(), ChordStylePreset::STANDARD));
                 break;
+            case P_TYPE::LH_TAPPING_SYMBOL:
+                set(idx, TConv::fromXml(e.readAsciiText(), LHTappingSymbol::DOT));
+                break;
+            case P_TYPE::RH_TAPPING_SYMBOL:
+                set(idx, TConv::fromXml(e.readAsciiText(), RHTappingSymbol::T));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
@@ -671,6 +677,10 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(value(idx).value<ChordStylePreset>()));
         } else if (P_TYPE::NOTE_SPELLING_TYPE == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<NoteSpellingType>()));
+        } else if (P_TYPE::LH_TAPPING_SYMBOL == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<LHTappingSymbol>()));
+        } else if (P_TYPE::RH_TAPPING_SYMBOL == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<RHTappingSymbol>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

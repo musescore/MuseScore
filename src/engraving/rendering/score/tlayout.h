@@ -95,6 +95,7 @@
 #include "../../dom/systemtext.h"
 #include "../../dom/soundflag.h"
 
+#include "../../dom/tapping.h"
 #include "../../dom/textbase.h"
 #include "../../dom/tempotext.h"
 #include "../../dom/text.h"
@@ -165,6 +166,7 @@ class SystemDivider;
 class SystemText;
 
 class TabDurationSymbol;
+class Tapping;
 class TempoText;
 class Text;
 class TextLine;
@@ -335,6 +337,8 @@ public:
     static void layoutSystemText(const SystemText* item, SystemText::LayoutData* ldata);
 
     static void layoutTabDurationSymbol(const TabDurationSymbol* item, TabDurationSymbol::LayoutData* ldata);
+    static void layoutTapping(Tapping* item, Tapping::LayoutData* ldata, LayoutContext& ctx);
+    static void layoutTappingHalfSlur(TappingHalfSlur* item);
     static void layoutTempoText(const TempoText* item, TempoText::LayoutData* ldata);
 
     static void layoutTextBase(TextBase* item, LayoutContext& ctx);                 // factory

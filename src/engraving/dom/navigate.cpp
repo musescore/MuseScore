@@ -39,6 +39,7 @@
 #include "spanner.h"
 #include "staff.h"
 #include "soundflag.h"
+#include "tapping.h"
 
 using namespace mu;
 
@@ -749,6 +750,15 @@ EngravingItem* Score::nextElement()
                 return score()->firstElement();
             }
         }
+        case ElementType::TAPPING:
+        {
+            TappingHalfSlur* halfSlurAbove = toTapping(e)->halfSlurAbove();
+            EngravingItem* selEl = getSelectedElement();
+            if (halfSlurAbove && !(selEl && selEl->isTappingHalfSlurSegment())) {
+                return halfSlurAbove->frontSegment();
+            }
+            break;
+        }
         case ElementType::HAMMER_ON_PULL_OFF_TEXT:
             return toHammerOnPullOffText(e)->endChord()->upNote();
         case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
@@ -756,6 +766,14 @@ EngravingItem* Score::nextElement()
             HammerOnPullOffSegment* hopoSeg = toHammerOnPullOffSegment(e);
             if (!hopoSeg->hopoText().empty()) {
                 return hopoSeg->hopoText().front();
+            } // else fallthrough:
+        }
+        case ElementType::TAPPING_HALF_SLUR_SEGMENT:
+        {
+            TappingHalfSlur* halfSlur = toTappingHalfSlurSegment(e)->tappingHalfSlur();
+            Tapping* tapping = halfSlur->tapping();
+            if (halfSlur->isHalfSlurAbove() && tapping->halfSlurBelow()) {
+                return tapping->halfSlurBelow()->frontSegment();
             } // else fallthrough:
         }
         case ElementType::VOLTA_SEGMENT:
@@ -990,6 +1008,19 @@ EngravingItem* Score::prevElement()
                 return hopoSegment;
             } else {
                 return hopoText->startChord()->downNote();
+            }
+        }
+        case ElementType::TAPPING_HALF_SLUR_SEGMENT:
+        {
+            TappingHalfSlur* halfSlur = toTappingHalfSlurSegment(e)->tappingHalfSlur();
+            Tapping* tapping = halfSlur->tapping();
+            if (!halfSlur->isHalfSlurAbove()) {
+                IF_ASSERT_FAILED(tapping->halfSlurAbove()) {
+                    return tapping;
+                }
+                return tapping->halfSlurAbove()->frontSegment();
+            } else {
+                return tapping;
             }
         }
         case ElementType::VOLTA_SEGMENT:

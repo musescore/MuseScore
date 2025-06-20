@@ -1012,6 +1012,7 @@ muse::ByteArray Selection::symbolListMimeData() const
         switch (e->type()) {
         case ElementType::ARTICULATION:
         case ElementType::ORNAMENT:
+        case ElementType::TAPPING:
         case ElementType::ARPEGGIO:
         case ElementType::TREMOLO_SINGLECHORD: {
             // ignore articulations not attached to chords/rest or segment

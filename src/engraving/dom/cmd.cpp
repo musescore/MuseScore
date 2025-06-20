@@ -2409,6 +2409,13 @@ bool Score::toggleArticulation(EngravingItem* el, Articulation* a)
         return false;
     }
 
+    Tapping* tap = c->tapping();
+    if (tap) {
+        // If we got here it means that the user is entering a tap
+        // of different hand, so replace the old one
+        undoRemoveElement(tap);
+    }
+
     if (!a->isDouble()) {
         a->setParent(c);
         a->setTrack(c->track());

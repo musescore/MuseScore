@@ -302,6 +302,8 @@ public:
 
 private:
 
+    void addArticulationsToShape(const Chord* chord, Shape& shape);
+
     friend class Factory;
     Segment(Measure* m = 0);
     Segment(Measure*, SegmentType, const Fraction&);

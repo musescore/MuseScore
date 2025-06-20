@@ -1912,7 +1912,16 @@ EngravingItem* Segment::lastElementOfSegment(staff_idx_t activeStaff) const
 
                 const std::vector<Articulation*>& articulations = chord->articulations();
                 if (!articulations.empty()) {
-                    return articulations.back();
+                    Articulation* lastArtic = articulations.back();
+                    if (lastArtic->isTapping()) {
+                        Tapping* tap = toTapping(lastArtic);
+                        if (tap->halfSlurBelow()) {
+                            return tap->halfSlurBelow()->frontSegment();
+                        } else if (tap->halfSlurAbove()) {
+                            return tap->halfSlurAbove()->frontSegment();
+                        }
+                    }
+                    return lastArtic;
                 }
                 return chord->upNote();
             }
@@ -2600,16 +2609,7 @@ void Segment::createShape(staff_idx_t staffIdx)
             }
             // Non-standard trills display a cue note that we must add to shape here
             if (e->isChord()) {
-                for (Articulation* art : toChord(e)->articulations()) {
-                    if (art->isOrnament()) {
-                        Chord* cueNoteChord = toOrnament(art)->cueNoteChord();
-                        if (cueNoteChord && cueNoteChord->upNote()->visible()) {
-                            s.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
-                        }
-                    } else {
-                        s.add(art->shape().translated(art->pos() + e->pos()));
-                    }
-                }
+                addArticulationsToShape(toChord(e), s);
             }
         }
     }
@@ -2668,6 +2668,42 @@ void Segment::createShape(staff_idx_t staffIdx)
         } else {
             Shape& shape = m_shapes[item->vStaffIdx()];
             shape.add(item->shape().translate(item->pos() + item->staffOffset()));
+        }
+    }
+}
+
+void Segment::addArticulationsToShape(const Chord* chord, Shape& shape)
+{
+    auto addTappingHalfSlurToShape = [&] (TappingHalfSlur* slur) {
+        IF_ASSERT_FAILED(!slur->segmentsEmpty()) {
+            return;
+        }
+        TappingHalfSlurSegment* slurSeg = toTappingHalfSlurSegment(slur->frontSegment());
+        Shape slurSegShape = slurSeg->shape();
+        // Semi-hack: we don't know the exact position at this stage, but we know that it
+        // must end approx on the center of the notehead
+        Note* note = slur->up() ? chord->upNote() : chord->downNote();
+        double approxPosX = chord->x() + note->x() + 0.5 * note->headWidth() - slurSegShape.right();
+        slurSegShape.translateX(approxPosX);
+        shape.add(slurSegShape);
+    };
+
+    for (Articulation* art : chord->articulations()) {
+        if (art->isOrnament()) {
+            Chord* cueNoteChord = toOrnament(art)->cueNoteChord();
+            if (cueNoteChord && cueNoteChord->upNote()->visible()) {
+                shape.add(cueNoteChord->shape().translate(cueNoteChord->pos() + cueNoteChord->staffOffset()));
+            }
+        } else if (art->addToSkyline()) {
+            shape.add(art->shape().translated(art->pos() + chord->pos()));
+            if (art->isTapping()) {
+                if (TappingHalfSlur* halfSlur = toTapping(art)->halfSlurAbove()) {
+                    addTappingHalfSlurToShape(halfSlur);
+                }
+                if (TappingHalfSlur* halfSlur = toTapping(art)->halfSlurBelow()) {
+                    addTappingHalfSlurToShape(halfSlur);
+                }
+            }
         }
     }
 }

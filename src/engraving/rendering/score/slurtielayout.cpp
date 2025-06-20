@@ -306,6 +306,10 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         p1.ry() = p2.y() + (0.25 * item->spatium() * (item->up() ? -1 : 1));
     }
 
+    if (item->isTappingHalfSlur()) {
+        p1 = p2 - PointF(2.5 * item->spatium(), 0.0);
+    }
+
     layoutSegment(slurSegment, ctx, p1, p2);
 
     return slurSegment;
@@ -788,6 +792,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         SlurTieLayout::avoidPreBendsOnTab(sc, ec, sp);
     }
 
+    if (item->isTappingHalfSlur()) {
+        adjustForTappingHalfSlurs(toTappingHalfSlur(item), sp, note2);
+    }
+
     /// adding extra space above slurs for notes in circles
     if (item->configuration()->enableExperimentalFretCircle() && item->staff()->staffType()->isCommonTabStaff()) {
         auto adjustSlur = [](Chord* ch, PointF& coord, bool up) {
@@ -804,6 +812,20 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
 
         adjustSlur(sc, sp->p1, item->up());
         adjustSlur(ec, sp->p2, item->up());
+    }
+}
+
+void SlurTieLayout::adjustForTappingHalfSlurs(TappingHalfSlur* item, SlurTiePos* sp, Note* endNote)
+{
+    if (item->staffType()->isTabStaff()) {
+        return;
+    }
+
+    int staffLines = endNote->staff()->lines(endNote->tick());
+    bool noteIsInsideStaff = endNote->line() > 1 && endNote->line() < 2 * (staffLines - 1) - 1;
+    bool noteIsOnSpace = endNote->line() % 2 != 0;
+    if (noteIsInsideStaff && noteIsOnSpace) {
+        sp->p2.ry() += (item->up() ? 0.2 : -0.2) * item->spatium();
     }
 }
 
@@ -828,7 +850,7 @@ void SlurTieLayout::fixArticulations(Slur* item, PointF& pt, Chord* c, double up
         }
         // Correct x-position inwards
         Note* note = c->up() ? c->downNote() : c->upNote();
-        pt.rx() = a->x() - note->x();
+        pt.rx() = a->x() + 0.5 * a->width() - note->x();
         if (start) {
             pt.rx() += slurTipInwardAdjust;
         } else if (end) {
@@ -1191,7 +1213,7 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
 
         // Its own startCR or items belonging to it, lyrics, fingering, ledger lines, articulation on endCR
         if (item == startCR || parent == startCR || item->isTextBase() || item->isLedgerLine()
-            || (item->isArticulationFamily() && parent == endCR) || item->isBend()) {
+            || (item->isArticulationFamily() && parent == endCR) || item->isBend() || item->isTappingHalfSlurSegment()) {
             return true;
         }
         // Ornament accidentals on start or end chord
@@ -1220,6 +1242,10 @@ Shape SlurTieLayout::getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRe
         if (item->isTimeSig() && toTimeSig(item)->timeSigPlacement() != TimeSigPlacement::NORMAL) {
             return true;
         }
+        // Ignore fermatas
+        if (item->isFermata()) {
+            return true;
+        }
         return false;
     });
 
@@ -1244,6 +1270,8 @@ void SlurTieLayout::addMinClearanceToShapes(Shape& segShapes, double spatium, bo
             clearance = noteClearance;
             break;
         case ElementType::ARTICULATION:
+        case ElementType::ORNAMENT:
+        case ElementType::TAPPING:
             clearance = articulationClearance;
             break;
         default:
@@ -1728,6 +1756,68 @@ void SlurTieLayout::createSlurSegments(Slur* item, LayoutContext& ctx)
             lineSegm->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
         } else if (i == endSysIdx) {
             lineSegm->setSpannerSegmentType(SpannerSegmentType::END);
+        }
+    }
+}
+
+void SlurTieLayout::adjustOverlappingSlurs(const std::list<SpannerSegment*>& spannerSegments)
+{
+    std::vector<SlurSegment*> segments;
+    for (SpannerSegment* seg : spannerSegments) {
+        if (seg->isSlurSegment()) {
+            segments.push_back(toSlurSegment(seg));
+        }
+    }
+    if (segments.size() <= 1) {
+        return;
+    }
+
+    //how far vertically an endpoint should adjust to avoid other slur endpoints:
+    const double spatium = segments.front()->spatium();
+    const double slurCollisionVertOffset = 0.65 * spatium;
+    const double slurCollisionHorizOffset = 0.2 * spatium;
+    const double fuzzyHorizCompare = 0.25 * spatium;
+    auto compare = [fuzzyHorizCompare](double x1, double x2) { return std::abs(x1 - x2) < fuzzyHorizCompare; };
+    for (SlurSegment* slur1 : segments) {
+        for (SlurSegment* slur2 : segments) {
+            if (slur1->slur()->endChord() == slur2->slur()->startChord()
+                && compare(slur1->ups(Grip::END).p.y(), slur2->ups(Grip::START).p.y())) {
+                slur1->ups(Grip::END).p.rx() -= slurCollisionHorizOffset;
+                slur2->ups(Grip::START).p.rx() += slurCollisionHorizOffset;
+                SlurTieLayout::computeBezier(slur1);
+                SlurTieLayout::computeBezier(slur2);
+                continue;
+            }
+
+            SlurTieSegment* slurTie2 = toSlurTieSegment(slur2);
+
+            // slurs don't collide with themselves or slurs on other staves
+            if (slur1->vStaffIdx() != slurTie2->vStaffIdx()) {
+                continue;
+            }
+            // slurs which don't overlap don't need to be checked
+            if (slur1->ups(Grip::END).p.x() < slurTie2->ups(Grip::START).p.x()
+                || slurTie2->ups(Grip::END).p.x() < slur1->ups(Grip::START).p.x()
+                || slur1->slur()->up() != slurTie2->slurTie()->up()) {
+                continue;
+            }
+            // START POINT
+            if (compare(slur1->ups(Grip::START).p.x(), slurTie2->ups(Grip::START).p.x())) {
+                if (slur1->ups(Grip::END).p.x() > slurTie2->ups(Grip::END).p.x() || slurTie2->isTieSegment()) {
+                    // slur1 is the "outside" slur
+                    slur1->ups(Grip::START).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
+                    SlurTieLayout::computeBezier(slur1);
+                }
+            }
+            // END POINT
+            if (compare(slur1->ups(Grip::END).p.x(), slurTie2->ups(Grip::END).p.x())) {
+                // slurs have the same endpoint
+                if (slur1->ups(Grip::START).p.x() < slurTie2->ups(Grip::START).p.x() || slurTie2->isTieSegment()) {
+                    // slur1 is the "outside" slur
+                    slur1->ups(Grip::END).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
+                    SlurTieLayout::computeBezier(slur1);
+                }
+            }
         }
     }
 }
@@ -2582,18 +2672,6 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     // Keep track of the original value before it gets changed
     PointF oldp1 = pp1;
     PointF oldp2 = pp2;
-    // Check slur integrity
-    if (pp2 == pp1) {
-        Measure* m1 = slurSeg->slur()->startCR()->segment()->measure();
-        Measure* m2 = slurSeg->slur()->endCR()->segment()->measure();
-        LOGD("zero slur at tick %d(%d) track %zu in measure %d-%d  tick %d ticks %d",
-             m1->tick().ticks(), slurSeg->tick().ticks(), slurSeg->track(), m1->no(), m2->no(),
-             slurSeg->slur()->tick().ticks(), slurSeg->slur()->ticks().ticks());
-        slurSeg->slur()->setBroken(true);
-        return;
-    } else {
-        slurSeg->slur()->setBroken(false);
-    }
 
     // Set up coordinate transforms
     // CAUTION: transform operations are applies in reverse order to how
@@ -2613,7 +2691,6 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     // Compute default shoulder height and width
     double _spatium  = slurSeg->spatium();
     double shoulderW; // expressed as fraction of slur-length
-    double shoulderH;
     double d = p2.x() / _spatium;
 
     if (d < 0) {
@@ -2632,16 +2709,8 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     } else {
         shoulderW = 0.7;
     }
-    shoulderH = sqrt(d / 4) * _spatium;
 
-    static constexpr double shoulderReduction = 0.75;
-    if (isOverBeams(slurSeg->slur())) {
-        shoulderH *= shoulderReduction;
-    }
-    shoulderH -= shoulderOffset.y();
-    if (!slurSeg->slur()->up()) {
-        shoulderH = -shoulderH;
-    }
+    double shoulderH = computeShoulderHeight(slurSeg, d, shoulderOffset);
 
     double c    = p2.x();
     double c1   = (c - c * shoulderW) * .5 + shoulderOffset.x();
@@ -2659,7 +2728,7 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
 
     // ADAPT SLUR SHAPE AND ENDPOINT POSITION
     // to clear collisions with underlying items
-    if (slurSeg->autoplace()) {
+    if (slurSeg->autoplace() && !slurSeg->isTappingHalfSlurSegment()) {
         avoidCollisions(slurSeg, pp1, p2, p3, p4, toSystemCoordinates, slurAngle);
     }
 
@@ -2714,6 +2783,30 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     slurSeg->mutldata()->path.set_value(path);
 
     fillShape(slurSeg, p2.x() / slurSeg->spatium());
+}
+
+double SlurTieLayout::computeShoulderHeight(SlurSegment* slurSeg, double slurLengthInSp, PointF shoulderOffset)
+{
+    double spatium = slurSeg->spatium();
+
+    if (slurSeg->isTappingHalfSlurSegment()) {
+        double shoulderH = (slurSeg->staffType()->isTabStaff() ? 1.0 : 0.6) * spatium;
+        return slurSeg->slur()->up() ? shoulderH : -shoulderH;
+    }
+
+    double shoulderH = sqrt(slurLengthInSp / 4) * spatium;
+
+    static constexpr double shoulderReduction = 0.75;
+    if (isOverBeams(slurSeg->slur())) {
+        shoulderH *= shoulderReduction;
+    }
+
+    shoulderH -= shoulderOffset.y();
+    if (!slurSeg->slur()->up()) {
+        shoulderH = -shoulderH;
+    }
+
+    return shoulderH;
 }
 
 double SlurTieLayout::defaultStemLengthStart(TremoloTwoChord* tremolo)

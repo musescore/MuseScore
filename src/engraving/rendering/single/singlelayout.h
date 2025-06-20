@@ -228,6 +228,7 @@ public:
     static void layout(Symbol* item, const Context& ctx);
     static void layout(SystemText* item, const Context& ctx);
 
+    static void layout(Tapping* item, const Context& ctx);
     static void layout(TempoText* item, const Context& ctx);
     static void layout(TextLine* item, const Context& ctx);
     static void layout(TimeSig* item, const Context& ctx);

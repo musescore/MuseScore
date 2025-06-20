@@ -175,6 +175,8 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::TIMESIG_MARGIN: return static_cast<int>(value<TimeSigVSMargin>());
     case P_TYPE::NOTE_SPELLING_TYPE: return static_cast<int>(value<NoteSpellingType>());
     case P_TYPE::CHORD_PRESET_TYPE: return static_cast<int>(value<ChordStylePreset>());
+    case P_TYPE::LH_TAPPING_SYMBOL: return static_cast<int>(value<LHTappingSymbol>());
+    case P_TYPE::RH_TAPPING_SYMBOL: return static_cast<int>(value<RHTappingSymbol>());
 
     case P_TYPE::VOICE_ASSIGNMENT: return static_cast<int>(value<VoiceAssignment>());
     case P_TYPE::AUTO_ON_OFF:       return static_cast<int>(value<AutoOnOff>());

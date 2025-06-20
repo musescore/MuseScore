@@ -119,6 +119,7 @@ public:
         TYPE_FRET_FRAME_SETTINGS,
         TYPE_ARTICULATION,
         TYPE_ORNAMENT,
+        TYPE_TAPPING,
         TYPE_AMBITUS,
         TYPE_IMAGE,
         TYPE_CHORD_SYMBOL,
