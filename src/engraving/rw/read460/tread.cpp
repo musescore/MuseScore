@@ -3736,8 +3736,9 @@ void TRead::read(Spacer* s, XmlReader& e, ReadContext& ctx)
     }
 }
 
-void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
+void TRead::read(StaffType* t, XmlReader& e, ReadContext& ctx)
 {
+    t->setScore(ctx.score());
     t->setGroup(TConv::fromXml(e.asciiAttribute("group"), StaffGroup::STANDARD));
 
     if (t->group() == StaffGroup::TAB) {
@@ -3789,12 +3790,16 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
             t->setDurationFontSize(e.readDouble());
         } else if (tag == "durationFontY") {
             t->setDurationFontUserY(e.readDouble());
-        } else if (tag == "fretFontName") {
-            t->setFretFontName(e.readText());
+        } else if (tag == "fretPresetIdx") {
+            t->setFretPresetIdx(e.readInt());
         } else if (tag == "fretFontSize") {
             t->setFretFontSize(e.readDouble());
         } else if (tag == "fretFontY") {
             t->setFretFontUserY(e.readDouble());
+        } else if (tag == "fretUseTextStyle") {
+            t->setFretUseTextStyle(e.readBool());
+        } else if (tag == "fretTextStyle") {
+            t->setFretTextStyle(TextStyleType(e.readInt()));
         } else if (tag == "symbolRepeat") {
             t->setSymbolRepeat((TablatureSymbolRepeat)e.readInt());
         } else if (tag == "linesThrough") {

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>662</width>
-    <height>649</height>
+    <width>663</width>
+    <height>736</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -437,6 +437,38 @@
                 <string>Fret marks</string>
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_8">
+                  <item>
+                   <widget class="QRadioButton" name="textStyleRadioButton">
+                    <property name="text">
+                     <string>Text style</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QRadioButton" name="presetRadioButton">
+                    <property name="text">
+                     <string>Tab font preset</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_8">
+                  <item>
+                   <widget class="QComboBox" name="textStyleComboBox"/>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="editTextStyleButton">
+                    <property name="text">
+                     <string>Edit text style</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_6">
                   <item>
@@ -1414,6 +1446,10 @@
   <tabstop>stemlessPercussion</tabstop>
   <tabstop>upsideDown</tabstop>
   <tabstop>tabWidget</tabstop>
+  <tabstop>textStyleRadioButton</tabstop>
+  <tabstop>presetRadioButton</tabstop>
+  <tabstop>textStyleComboBox</tabstop>
+  <tabstop>editTextStyleButton</tabstop>
   <tabstop>fretFontName</tabstop>
   <tabstop>fretFontSize</tabstop>
   <tabstop>fretY</tabstop>
@@ -1424,10 +1460,6 @@
   <tabstop>linesThroughRadio</tabstop>
   <tabstop>linesBrokenRadio</tabstop>
   <tabstop>showTabFingering</tabstop>
-  <tabstop>durFontName</tabstop>
-  <tabstop>durFontSize</tabstop>
-  <tabstop>durY</tabstop>
-  <tabstop>noteValuesNone</tabstop>
   <tabstop>noteValuesSymb</tabstop>
   <tabstop>noteValuesStems</tabstop>
   <tabstop>valuesRepeatNever</tabstop>
@@ -1445,6 +1477,10 @@
   <tabstop>templateCombo</tabstop>
   <tabstop>templateReset</tabstop>
   <tabstop>addToTemplates</tabstop>
+  <tabstop>durY</tabstop>
+  <tabstop>noteValuesNone</tabstop>
+  <tabstop>durFontName</tabstop>
+  <tabstop>durFontSize</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -1455,8 +1491,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>844</x>
-     <y>554</y>
+     <x>649</x>
+     <y>723</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -1471,8 +1507,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>844</x>
-     <y>554</y>
+     <x>649</x>
+     <y>723</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -1482,8 +1518,8 @@
   </connection>
  </connections>
  <buttongroups>
-  <buttongroup name="NumLettersButtGroup"/>
   <buttongroup name="OnAboveLinesButtGroup"/>
   <buttongroup name="ContinuousBrokenLinesbuttGroup"/>
+  <buttongroup name="NumLettersButtGroup"/>
  </buttongroups>
 </ui>

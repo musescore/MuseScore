@@ -69,17 +69,18 @@ static const double GRID_STEM_DEF_HEIGHT = 1.75;
 static const double GRID_STEM_DEF_WIDTH  = 0.125;
 
 struct TablatureFretFont {
-    String family;                             // the family of the physical font to use
-    String displayName;                        // the name to display to the user
-    double defPitch;                             // the default size of the font
-    double defYOffset;                           // the default Y displacement
-    Char xChar;                                // the char to use for 'x'
-    Char deadNoteChar;                            // the char to use for dead notes
-    String slashChar[NUM_OF_BASSSTRING_SLASHES];  // the char used to draw one or more '/' symbols
-    String displayDigit[NUM_OF_DIGITFRETS];    // the string to draw for digit frets
-    Char displayLetter[NUM_OF_LETTERFRETS];    // the char to use for letter frets
+    TablatureFretFont();
 
-    bool read(XmlReader&);
+    String family;                                            // the family of the physical font to use
+    String displayName;                                       // the name to display to the user
+    double defSize = 9.0;                                     // the default size of the font
+    double defYOffset = 0.0;                                  // the default Y displacement
+    Char xChar = u'X';                                        // the char to use for 'x'
+    std::array<String, NUM_OF_BASSSTRING_SLASHES> slashChar;  // the char used to draw one or more '/' symbols
+    std::array<String, NUM_OF_DIGITFRETS> displayDigit;       // the string to draw for digit frets
+    Char displayLetter[NUM_OF_LETTERFRETS];                   // the char to use for letter frets
+
+    bool read(XmlReader&, int mscVersion);
 };
 
 enum class TabVal : char {
@@ -115,8 +116,8 @@ enum class TablatureSymbolRepeat : char {
 struct TablatureDurationFont {
     String family;                   // the family of the physical font to use
     String displayName;              // the name to display to the user
-    double defPitch;                   // the default size of the font
-    double defYOffset;                 // the default Y displacement
+    double defSize;                  // the default size of the font
+    double defYOffset;               // the default Y displacement
     double gridBeamWidth  = GRID_BEAM_DEF_WIDTH;       // the width of the 'grid'-style beam (in sp)
     double gridStemHeight = GRID_STEM_DEF_HEIGHT;      // the height of the 'grid'-style stem (in sp)
     double gridStemWidth  = GRID_STEM_DEF_WIDTH;       // the width of the 'grid'-style stem (in sp)
@@ -125,7 +126,7 @@ struct TablatureDurationFont {
     Char displayDot;                 // the char to use to draw a dot
     Char displayValue[int(TabVal::NUM_OF)];           // the char to use to draw a duration value
 
-    bool read(XmlReader&);
+    bool read(XmlReader&, int mscVersion);
 };
 
 // ready-made staff types
@@ -174,13 +175,16 @@ public:
 
     StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist, bool genClef, bool showBarLines,
               bool stemless, bool genTimesig, bool invisible, const Color& color, const String& durFontName, double durFontSize,
-              double durFontUserY, double genDur, const String& fretFontName, double fretFontSize, double fretFontUserY,
-              TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
-              bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
+              double durFontUserY, double genDur, bool fretFontUseTextStyle, const String& fretFontName, double fretFontSize,
+              double fretFontUserY, TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines,
+              bool showRests, bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
 
     virtual ~StaffType() = default;
 
     bool operator==(const StaffType&) const;
+
+    const MStyle& style() const;
+    const Score* score() const { return m_score; }
 
     StaffGroup group() const { return m_group; }
     void setGroup(StaffGroup g) { m_group = g; }
@@ -213,7 +217,7 @@ public:
     void setColor(const Color& val) { m_color = val; }
     Spatium yoffset() const { return m_yoffset; }
     void setYoffset(Spatium val) { m_yoffset = val; }
-    double spatium(const MStyle& style) const;
+    double spatium() const;
 
     void setStemless(bool val) { m_stemless = val; }
     bool stemless() const { return m_stemless; }
@@ -254,25 +258,23 @@ public:
     const String& durationFontName() const { return m_durationFonts[m_durationFontIdx].displayName; }
     double durationFontSize() const { return m_durationFontSize; }
     double durationFontUserY() const { return m_durationFontUserY; }
-    double durationFontYOffset() const { setDurationMetrics(); return m_durationYOffset + m_durationFontUserY * SPATIUM20; }
-    double durationGridYOffset() const { setDurationMetrics(); return m_durationGridYOffset; }
-    double fretBoxH(const MStyle& style) const { setFretMetrics(style); return m_fretBoxH; }
-    double fretBoxH() const { UNREACHABLE; return 0.0; }
-    double deadFretBoxH(const MStyle& style) const { setFretMetrics(style); return m_deadFretBoxH; }
-    double fretBoxY(const MStyle& style) const { setFretMetrics(style); return m_fretBoxY + m_fretFontUserY * SPATIUM20; }
-    double fretBoxY() const { UNREACHABLE; return 0.0; }
-    double deadFretBoxY(const MStyle& style) const { setFretMetrics(style); return m_deadFretBoxY + m_fretFontUserY * SPATIUM20; }
+    double durationFontYOffset() const { return m_durationYOffset + m_durationFontUserY * SPATIUM20; }
+    double durationGridYOffset() const { return m_durationGridYOffset; }
+    double fretBoxH() const { return m_fretBoxH; }
+    double deadFretBoxH() const { return m_deadFretBoxH; }
+    double fretBoxY() const { return m_fretBoxY + m_fretFontUserY * SPATIUM20; }
+    double deadFretBoxY() const { return m_deadFretBoxY + m_fretFontUserY * SPATIUM20; }
 
     // 2 methods to return the size of a box masking lines under a fret mark
     double fretMaskH() const { return m_lineDistance.val() * SPATIUM20; }
     double fretMaskY() const { return (m_onLines ? -0.5 : -1.0) * m_lineDistance.val() * SPATIUM20; }
 
     const muse::draw::Font& fretFont() const { return m_fretFont; }
-    const String fretFontName() const { return m_fretFonts[m_fretFontIdx].displayName; }
+    const String fretFontName() const { return m_fretFontInfo.displayName; }
     double fretFontSize() const { return m_fretFontSize; }
     double fretFontUserY() const { return m_fretFontUserY; }
-    double fretFontYOffset(const MStyle& style) const { setFretMetrics(style); return m_fretYOffset + m_fretFontUserY * SPATIUM20; }
-    double fretFontYOffset() const { UNREACHABLE; return 0.0; }
+    double fretFontYOffset() const { return m_fretYOffset + m_fretFontUserY * SPATIUM20; }
+    Color fretColor() const { return m_fretColor; }
     bool  genDurations() const { return m_genDurations; }
     bool  linesThrough() const { return m_linesThrough; }
     TablatureMinimStyle minimStyle() const { return m_minimStyle; }
@@ -285,12 +287,14 @@ public:
     bool  showTabFingering() const { return m_showTabFingering; }
     bool  useNumbers() const { return m_useNumbers; }
     bool  showBackTied() const { return m_showBackTied; }
+    bool  fretUseTextStyle() const { return m_fretUseTextStyle; }
+    TextStyleType fretTextStyle() const { return m_fretTextStyle; }
+    size_t fretPresetIdx() const { return m_fretPresetIdx; }
 
     // properties setters (setting some props invalidates metrics)
     void  setDurationFontName(const String&);
     void  setDurationFontSize(double);
     void  setDurationFontUserY(double val) { m_durationFontUserY = val; }
-    void  setFretFontName(const String&);
     void  setFretFontSize(double);
     void  setFretFontUserY(double val) { m_fretFontUserY = val; }
     void  setGenDurations(bool val) { m_genDurations = val; }
@@ -303,19 +307,27 @@ public:
     void  setStemsThrough(bool val) { m_stemsThrough = val; }
     void  setUpsideDown(bool val) { m_upsideDown = val; }
     void  setShowTabFingering(bool val) { m_showTabFingering = val; }
-    void  setUseNumbers(bool val) { m_useNumbers = val; m_fretMetricsValid = false; }
+    void  setUseNumbers(bool val);
     void  setShowBackTied(bool val) { m_showBackTied = val; }
+    void  setScore(Score* score) { m_score = score; }
+    void  setFretUseTextStyle(bool val) { m_fretUseTextStyle = val; }
+    void  setFretTextStyle(const TextStyleType& val);
+    void  setFretPresetIdx(size_t idx);
+    void  setFretPreset(const String& str);
+    void  setFretColor(const Color& color) { m_fretColor = color; }
 
     bool isTabStaff() const { return m_group == StaffGroup::TAB; }
     bool isDrumStaff() const { return m_group == StaffGroup::PERCUSSION; }
 
     bool isSimpleTabStaff() const;
     bool isCommonTabStaff() const;
-    bool isHiddenElementOnTab(const MStyle& style, Sid commonTabStyle, Sid simpleTabStyle) const;
+    bool isHiddenElementOnTab(Sid commonTabStyle, Sid simpleTabStyle) const;
+
+    void styleChanged();
 
     // static functions for font config files
-    static std::vector<String> fontNames(bool bDuration);
-    static bool fontData(bool bDuration, size_t nIdx, String* pFamily, String* pDisplayName, double* pSize, double* pYOff);
+    static std::vector<String> tabFontNames(bool bDuration);
+    static bool tabFontData(bool bDuration, size_t nIdx, double& pSize, double& pYOff);
 
     static void initStaffTypes(const Color& defaultColor);
     static const std::vector<StaffType>& presets() { return m_presets; }
@@ -324,10 +336,12 @@ private:
 
     friend class TabDurationSymbol;
 
-    void  setDurationMetrics() const;
-    void  setFretMetrics(const MStyle& style) const;
+    Score* m_score = nullptr;
 
-    static bool readConfigFile(const String& fileName);
+    void  setDurationMetrics();
+    void  setFretMetrics();
+
+    static bool readTabConfigFile(const String& fileName);
 
     StaffGroup m_group = StaffGroup::STANDARD;
 
@@ -378,31 +392,32 @@ private:
     // TAB: internally managed variables
     // Note: values in RASTER UNITS are independent from score scaling and
     //    must be multiplied by magS() to be used in contexts using sp units
-    mutable double m_durationBoxH = 0.0;
-    double mutable m_durationBoxY = 0.0;            // the height and the y rect.coord. (relative to staff top line)
-    // of a box bounding all duration symbols (raster units) internally computed:
-    // depends upon _onString and the metrics of the duration font
-    muse::draw::Font m_durationFont;                  // font used to draw dur. symbols; cached for efficiency
-    size_t m_durationFontIdx = 0;             // the index of current dur. font in dur. font array
-    mutable double m_durationYOffset = 0.0;         // the vertical offset to draw duration symbols with respect to the
+    double m_durationBoxH = 0.0;
+    double m_durationBoxY = 0.0;            // the height and the y rect.coord. (relative to staff top line)
+                                            // of a box bounding all duration symbols (raster units) internally computed:
+                                            // depends upon _onString and the metrics of the duration font
+    muse::draw::Font m_durationFont;        // font used to draw dur. symbols; cached for efficiency
+    size_t m_durationFontIdx = 0;           // the index of current dur. font in dur. font array
+    double m_durationYOffset = 0.0;         // the vertical offset to draw duration symbols with respect to the
     // string lines (raster units); internally computed: depends upon _onString and duration font
-    mutable double m_durationGridYOffset = 0.0;     // the vertical offset to draw the bottom of duration grid with respect to the
+    double m_durationGridYOffset = 0.0;     // the vertical offset to draw the bottom of duration grid with respect to the
     // string lines (raster units); internally computed: depends upon _onstring and duration font
-    mutable bool m_durationMetricsValid = false;     // whether duration font metrics are valid or not
-    mutable double m_fretBoxH = 0.0;
-    mutable double m_fretBoxY = 0.0;                // the height and the y rect.coord. (relative to staff line)
-    mutable double m_deadFretBoxH = 0.0;
-    mutable double m_deadFretBoxY = 0.0;
+    double m_fretBoxH = 0.0;
+    double m_fretBoxY = 0.0;                // the height and the y rect.coord. (relative to staff line)
+    double m_deadFretBoxH = 0.0;
+    double m_deadFretBoxY = 0.0;
     // of a box bounding all fret characters (raster units) internally computed:
     // depends upon _onString, _useNumbers and the metrics of the fret font
+    bool m_fretUseTextStyle = false;
+    TextStyleType m_fretTextStyle = TextStyleType::TAB_FRET_NUMBER;
     muse::draw::Font m_fretFont;                      // font used to draw fret marks; cached for efficiency
-    size_t m_fretFontIdx = 0;                 // the index of current fret font in fret font array
-    mutable double m_fretYOffset = 0.0;             // the vertical offset to draw fret marks with respect to the string lines;
-    mutable double m_deadFretYOffset = 0.0;
+    TablatureFretFont m_fretFontInfo;
+    size_t m_fretPresetIdx = 0;           // the index of current fret font in fret font array
+    double m_fretYOffset = 0.0;             // the vertical offset to draw fret marks with respect to the string lines;
+    double m_deadFretYOffset = 0.0;
     // (raster units); internally computed: depends upon _onString, _useNumbers
     // and the metrics of the fret font
-    mutable bool m_fretMetricsValid = false;       // whether fret font metrics are valid or not
-    mutable double m_refDPI = 0.0;                  // reference value used to last computed metrics and to see if they are still valid
+    Color m_fretColor = Color::BLACK;
 
     // the array of configured fonts
     static std::vector<TablatureFretFont> m_fretFonts;
@@ -434,8 +449,6 @@ public:
     TabDurationSymbol* clone() const override { return new TabDurationSymbol(*this); }
 
     bool isEditable() const override { return false; }
-
-    void layout2();                 // second step of layout: after horiz. pos. are defined, compute width of 'grid beams'
 
     const StaffType* tab() const { return m_tab; }
     const String& text() const { return m_text; }

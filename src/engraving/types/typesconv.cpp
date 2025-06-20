@@ -1654,6 +1654,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::TUPLET,            "tuplet",               muse::TranslatableString("engraving", "Tuplet") },
     { TextStyleType::STICKING,          "sticking",             muse::TranslatableString("engraving", "Sticking") },
     { TextStyleType::FINGERING,         "fingering",            muse::TranslatableString("engraving", "Fingering") },
+    { TextStyleType::TAB_FRET_NUMBER,   "tab_fret_number",      muse::TranslatableString("engraving", "Tablature fret number") },
     { TextStyleType::LH_GUITAR_FINGERING, "guitar_fingering_lh", muse::TranslatableString("engraving", "LH guitar fingering") },
     { TextStyleType::RH_GUITAR_FINGERING, "guitar_fingering_rh", muse::TranslatableString("engraving", "RH guitar fingering") },
     { TextStyleType::HAMMER_ON_PULL_OFF, "hammer_on_pull_off",

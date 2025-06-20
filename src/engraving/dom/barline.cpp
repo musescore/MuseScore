@@ -491,7 +491,7 @@ void BarLine::calcY()
         }
     }
 
-    double spatium1 = staffType1->spatium(style());
+    double spatium1 = staffType1->spatium();
     double lineDistance = staffType1->lineDistance().val() * spatium1;
     double offset = staffType1->yoffset().val() * spatium1;
     double lineWidth = style().styleS(Sid::staffLineWidth).val() * spatium1 * .5;
@@ -504,7 +504,7 @@ void BarLine::calcY()
         // as it may be scalled diferently
         const Staff* staff2 = score()->staff(staffIdx2);
         const StaffType* staffType2 = staff2 ? staff2->staffType(tick) : staffType1;
-        double spatium2 = staffType2->spatium(style());
+        double spatium2 = staffType2->spatium();
         double lineDistance2 = staffType2->lineDistance().val() * spatium2;
         double startStaffY = system->staff(staffIdx1)->y();
 
@@ -534,7 +534,7 @@ void BarLine::calcY()
                     to = BARLINE_SPAN_1LINESTAFF_TO;
                 }
             }
-            double spatium1Next = staffType1Next->spatium(style());
+            double spatium1Next = staffType1Next->spatium();
             double lineDistanceNext = staffType1Next->lineDistance().val() * spatium1Next;
             double offsetNext = staffType1Next->yoffset().val() * spatium1Next;
             double lineWidthNext = style().styleS(Sid::staffLineWidth).val() * spatium1Next * .5;

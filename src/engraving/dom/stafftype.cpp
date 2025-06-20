@@ -29,10 +29,13 @@
 #include "rw/xmlreader.h"
 #include "types/typesconv.h"
 #include "style/style.h"
+#include "style/defaultstyle.h"
+#include "engraving/style/textstyle.h"
 
 #include "chord.h"
 #include "mscore.h"
 #include "navigate.h"
+#include "score.h"
 #include "staff.h"
 
 #include "log.h"
@@ -64,7 +67,7 @@ StaffType::StaffType()
     // set reasonable defaults for type-specific members */
     m_symRepeat = TablatureSymbolRepeat::NEVER;
     setDurationFontName(m_durationFonts[0].displayName);
-    setFretFontName(m_fretFonts[0].displayName);
+    setFretPresetIdx(0);
 }
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
@@ -86,9 +89,8 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
 }
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
-                     bool genClef,
-                     bool showBarLines, bool stemless, bool genTimesig, bool invisible, const Color& color,
-                     const String& durFontName, double durFontSize, double durFontUserY, double genDur,
+                     bool genClef, bool showBarLines, bool stemless, bool genTimesig, bool invisible, const Color& color,
+                     const String& durFontName, double durFontSize, double durFontUserY, double genDur, bool fretFontUseTextStyle,
                      const String& fretFontName, double fretFontSize, double fretFontUserY,
                      TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines,
                      bool showRests, bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers,
@@ -111,9 +113,14 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
     setDurationFontSize(durFontSize);
     setDurationFontUserY(durFontUserY);
     setGenDurations(genDur);
-    setFretFontName(fretFontName);
-    setFretFontSize(fretFontSize);
-    setFretFontUserY(fretFontUserY);
+    setFretUseTextStyle(fretFontUseTextStyle);
+    if (fretFontUseTextStyle) {
+        setFretTextStyle(TextStyleType::TAB_FRET_NUMBER);
+    } else {
+        setFretPreset(fretFontName);
+        setFretFontSize(fretFontSize);
+        setFretFontUserY(fretFontUserY);
+    }
     setSymbolRepeat(symRepeat);
     setLinesThrough(linesThrough);
     setMinimStyle(minimStyle);
@@ -194,16 +201,17 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (m_durationFontIdx == st.m_durationFontIdx);
     equal &= (m_durationYOffset == st.m_durationYOffset);
     equal &= (m_durationGridYOffset == st.m_durationGridYOffset);
-    equal &= (m_durationMetricsValid == st.m_durationMetricsValid);
     equal &= (m_fretBoxH == st.m_fretBoxH);
     equal &= (m_deadFretBoxH == st.m_deadFretBoxH);
     equal &= (m_fretBoxY == st.m_fretBoxY);
     equal &= (m_deadFretBoxY == st.m_deadFretBoxY);
     equal &= (m_fretFont == st.m_fretFont);
-    equal &= (m_fretFontIdx == st.m_fretFontIdx);
+    equal &= (m_fretFontInfo.family == st.m_fretFontInfo.family);
     equal &= (m_fretYOffset == st.m_fretYOffset);
-    equal &= (m_fretMetricsValid == st.m_fretMetricsValid);
-    equal &= (m_refDPI == st.m_refDPI);
+    equal &= (m_fretUseTextStyle == st.m_fretUseTextStyle);
+    equal &= (m_fretTextStyle == st.m_fretTextStyle);
+    equal &= (m_fretPresetIdx == st.m_fretPresetIdx);
+    equal &= (m_fretColor == st.m_fretColor);
 
     return equal;
 }
@@ -295,9 +303,17 @@ bool StaffType::isCommonTabStaff() const
 //   isHiddenElementOnTab
 //---------------------------------------------------------
 
-bool StaffType::isHiddenElementOnTab(const MStyle& style, Sid commonTabStyle, Sid simpleTabStyle) const
+bool StaffType::isHiddenElementOnTab(Sid commonTabStyle, Sid simpleTabStyle) const
 {
-    return (isCommonTabStaff() && !style.styleB(commonTabStyle)) || (isSimpleTabStaff() && !style.styleB(simpleTabStyle));
+    return (isCommonTabStaff() && !style().styleB(commonTabStyle)) || (isSimpleTabStaff() && !style().styleB(simpleTabStyle));
+}
+
+void StaffType::styleChanged()
+{
+    if (!m_fretUseTextStyle) {
+        return;
+    }
+    setFretTextStyle(m_fretTextStyle);
 }
 
 //---------------------------------------------------------
@@ -327,7 +343,91 @@ double StaffType::doty2() const
 void StaffType::setOnLines(bool val)
 {
     m_onLines = val;
-    m_durationMetricsValid = m_fretMetricsValid = false;
+    setDurationMetrics();
+    setFretMetrics();
+}
+
+void StaffType::setUseNumbers(bool val)
+{
+    m_useNumbers = val;
+    setFretMetrics();
+}
+
+void StaffType::setFretTextStyle(const TextStyleType& val)
+{
+    m_fretTextStyle = val;
+    m_fretFontInfo = TablatureFretFont();
+    m_fretFont = Font();
+
+    const TextStyle* ts = textStyle(m_fretTextStyle);
+
+    for (const TextStyleProperty property : *ts) {
+        switch (property.type) {
+        case TextStylePropertyType::FontFace: {
+            String fontName = style().styleSt(property.sid);
+            m_fretFontInfo.family = fontName;
+            m_fretFont.setFamily(fontName, Font::Type::Tablature);
+        } break;
+        case TextStylePropertyType::FontSize: {
+            double fontSize = style().styleD(property.sid);
+            setFretFontSize(fontSize);
+        } break;
+        case TextStylePropertyType::Offset: {
+            PointF offset = style().styleV(property.sid).value<PointF>();
+            setFretFontUserY(offset.y());
+        } break;
+        case TextStylePropertyType::Color: {
+            setFretColor(style().styleV(property.sid).value<Color>());
+        } break;
+        case TextStylePropertyType::FontStyle: {
+            FontStyle fStyle = style().styleV(property.sid).value<FontStyle>();
+            m_fretFont.setBold(fStyle & FontStyle::Bold);
+            m_fretFont.setItalic(fStyle & FontStyle::Italic);
+            m_fretFont.setUnderline(fStyle & FontStyle::Underline);
+            m_fretFont.setStrike(fStyle & FontStyle::Strike);
+        } break;
+        default:
+            continue;
+        }
+    }
+
+    setFretMetrics();
+}
+
+void StaffType::setFretPresetIdx(size_t idx)
+{
+    // Clear all previous formatting
+    m_fretFont = Font();
+    if (idx >= m_fretFonts.size()) {
+        m_fretPresetIdx = 0;
+        m_fretFontInfo = m_fretFonts[0];
+    } else {
+        m_fretPresetIdx = idx;
+        m_fretFontInfo = m_fretFonts[idx];
+    }
+
+    m_fretFont.setFamily(m_fretFontInfo.family, Font::Type::Tablature);
+    setFretFontSize(m_fretFontInfo.defSize);
+    setFretFontUserY(m_fretFontInfo.defYOffset);
+    setFretColor(Color::BLACK);
+    setFretMetrics();
+}
+
+void StaffType::setFretPreset(const String& name)
+{
+    String locName = name;
+    // convert old names for two built-in fonts which have changed of name
+    if (name == "MuseScore Tab Late Renaiss") {
+        locName = u"MuseScore Phalèse";
+    }
+    size_t idx = 0;
+    for (idx = 0; idx < m_fretFonts.size(); idx++) {
+        if (m_fretFonts[idx].displayName == locName) {
+            break;
+        }
+    }
+
+    setFretPresetIdx(idx);
 }
 
 //---------------------------------------------------------
@@ -335,18 +435,14 @@ void StaffType::setOnLines(bool val)
 //    checks whether the internally computed metrics are is still valid and re-computes them, if not
 //---------------------------------------------------------
 
-void StaffType::setDurationMetrics() const
+void StaffType::setDurationMetrics()
 {
-    if (m_durationMetricsValid && m_refDPI == DPI) {           // metrics are still valid
-        return;
-    }
-
 // FontMetrics returns results unreliably rounded to integral pixels;
 // use a scaled up font and then scale computed values down
     Font font(durationFont());
     font.setPointSizeF(m_durationFontSize);
     FontMetrics fm(font);
-    String txt(m_durationFonts[m_durationFontIdx].displayValue, int(TabVal::NUM_OF));
+    String txt(m_durationFonts[m_durationFontIdx].displayValue, size_t(TabVal::NUM_OF));
     RectF bb(fm.tightBoundingRect(txt));
     // raise symbols by a default margin and, if marks are above lines, by half the line distance
     // (converted from spatium units to raster units)
@@ -359,17 +455,10 @@ void StaffType::setDurationMetrics() const
     m_durationYOffset        -= (bb.height() + bb.y()) / 100.0;
     m_durationBoxH           = bb.height() / 100.0;
     m_durationBoxY           = m_durationGridYOffset - bb.height() / 100.0;
-    // keep track of the conditions under which metrics have been computed
-    m_refDPI = DPI;
-    m_durationMetricsValid = true;
 }
 
-void StaffType::setFretMetrics(const MStyle& style) const
+void StaffType::setFretMetrics()
 {
-    if (m_fretMetricsValid && m_refDPI == DPI) {
-        return;
-    }
-
     FontMetrics fm(fretFont());
     RectF bb;
     // compute vertical displacement
@@ -377,26 +466,26 @@ void StaffType::setFretMetrics(const MStyle& style) const
         // compute total height of used characters
         String txt;
         for (int idx = 0; idx < 10; idx++) {    // use only first 10 digits
-            txt.append(m_fretFonts[m_fretFontIdx].displayDigit[idx]);
+            txt.append(m_fretFontInfo.displayDigit[idx]);
         }
         bb = fm.tightBoundingRect(txt);
         // for numbers: centre on '0': move down by the whole part above (negative)
         // the base line ( -bb.y() ) then up by half the whole height ( -bb.height()/2 )
-        RectF bx(fm.tightBoundingRect(m_fretFonts[m_fretFontIdx].displayDigit[0]));
+        RectF bx(fm.tightBoundingRect(m_fretFontInfo.displayDigit[0]));
         m_fretYOffset = -(bx.y() + bx.height() / 2.0);
         // _fretYOffset = -(bb.y() + bb.height()/2.0);  // <- using bbox of all chars
     } else {
         // compute total height of used characters
-        String txt(m_fretFonts[m_fretFontIdx].displayLetter, NUM_OF_LETTERFRETS);
+        String txt(m_fretFontInfo.displayLetter, NUM_OF_LETTERFRETS);
         bb = fm.tightBoundingRect(txt);
         // for letters: centre on the 'a' ascender, by moving down half of the part above the base line in bx
-        RectF bx(fm.tightBoundingRect(m_fretFonts[m_fretFontIdx].displayLetter[0]));
+        RectF bx(fm.tightBoundingRect(m_fretFontInfo.displayLetter[0]));
         m_fretYOffset = -bx.y() / 2.0;
     }
 
     // Calculate position for dead fret marks - these must be centred separately based on their glyph
-    RectF deadBb = fm.tightBoundingRect(m_fretFonts[m_fretFontIdx].xChar);
-    double lineThickness = style.styleS(Sid::staffLineWidth).val() * SPATIUM20 * 0.5;
+    RectF deadBb = fm.tightBoundingRect(m_fretFontInfo.xChar);
+    double lineThickness = style().styleS(Sid::staffLineWidth).val() * SPATIUM20 * 0.5;
     m_deadFretYOffset = -deadBb.y() / 2.0 + lineThickness;
 
     // if on string, we are done; if between strings, raise by half line distance
@@ -412,14 +501,10 @@ void StaffType::setFretMetrics(const MStyle& style) const
 
     m_deadFretBoxH = deadBb.height();
     m_deadFretBoxY = deadBb.y() + m_deadFretYOffset;
-
-    // keep track of the conditions under which metrics have been computed
-    m_refDPI = DPI;
-    m_fretMetricsValid = true;
 }
 
 //---------------------------------------------------------
-//   setDurationFontName / setFretFontName
+//   setDurationFontName
 //---------------------------------------------------------
 
 void StaffType::setDurationFontName(const String& name)
@@ -435,28 +520,7 @@ void StaffType::setDurationFontName(const String& name)
     }
     m_durationFont.setFamily(m_durationFonts[idx].family, Font::Type::Tablature);
     m_durationFontIdx = idx;
-    m_durationMetricsValid = false;
-}
-
-void StaffType::setFretFontName(const String& name)
-{
-    size_t idx;
-    String locName = name;
-    // convert old names for two built-in fonts which have changed of name
-    if (name == "MuseScore Tab Late Renaiss") {
-        locName = u"MuseScore Phalèse";
-    }
-    for (idx = 0; idx < m_fretFonts.size(); idx++) {
-        if (m_fretFonts[idx].displayName == locName) {
-            break;
-        }
-    }
-    if (idx >= m_fretFonts.size()) {
-        idx = 0;              // if name not found, use first font
-    }
-    m_fretFont.setFamily(m_fretFonts[idx].family, Font::Type::Tablature);
-    m_fretFontIdx = idx;
-    m_fretMetricsValid = false;
+    setDurationMetrics();
 }
 
 //---------------------------------------------------------
@@ -468,7 +532,6 @@ double StaffType::durationBoxH() const
     if (!m_genDurations && !m_stemless) {
         return 0.0;
     }
-    setDurationMetrics();
     return m_durationBoxH;
 }
 
@@ -477,7 +540,6 @@ double StaffType::durationBoxY() const
     if (!m_genDurations && !m_stemless) {
         return 0.0;
     }
-    setDurationMetrics();
     return m_durationBoxY + m_durationFontUserY * SPATIUM20;
 }
 
@@ -489,14 +551,14 @@ void StaffType::setDurationFontSize(double val)
 {
     m_durationFontSize = val;
     m_durationFont.setPointSizeF(val);
-    m_durationMetricsValid = false;
+    setDurationMetrics();
 }
 
 void StaffType::setFretFontSize(double val)
 {
     m_fretFontSize = val;
     m_fretFont.setPointSizeF(val);
-    m_fretMetricsValid = false;
+    setFretMetrics();
 }
 
 //---------------------------------------------------------
@@ -513,7 +575,7 @@ String StaffType::fretString(int fret, int string, bool deadNote) const
         return unknownFret;
     }
     if (deadNote) {
-        return String(m_fretFonts[m_fretFontIdx].xChar);
+        return String(m_fretFontInfo.xChar);
     } else {
         bool hasFret;
         String text  = tabBassStringPrefix(string, &hasFret);
@@ -523,15 +585,15 @@ String StaffType::fretString(int fret, int string, bool deadNote) const
         // otherwise, add to prefix the relevant digit/letter string
         return text
                + (m_useNumbers
-                  ? (fret >= NUM_OF_DIGITFRETS ? unknownFret : m_fretFonts[m_fretFontIdx].displayDigit[fret])
-                  : (fret >= NUM_OF_LETTERFRETS ? unknownFret : m_fretFonts[m_fretFontIdx].displayLetter[fret]));
+                  ? (fret >= NUM_OF_DIGITFRETS ? unknownFret : m_fretFontInfo.displayDigit[fret])
+                  : (fret >= NUM_OF_LETTERFRETS ? unknownFret : m_fretFontInfo.displayLetter[fret]));
     }
 }
 
 String StaffType::durationString(DurationType type, int dots) const
 {
-    String s = m_durationFonts[m_durationFontIdx].displayValue[int(type)];
-    for (int count=0; count < dots; count++) {
+    String s = m_durationFonts[m_durationFontIdx].displayValue[size_t(type)];
+    for (int count = 0; count < dots; count++) {
         s.append(m_durationFonts[m_durationFontIdx].displayDot);
     }
     return s;
@@ -561,7 +623,7 @@ String StaffType::tabBassStringPrefix(int strg, bool* hasFret) const
         // return a number with the string index
         if (bassStrgIdx > NUM_OF_BASSSTRINGS_WITH_NUMBER) {
             *hasFret    = false;
-            return m_fretFonts[m_fretFontIdx].displayDigit[strg + 1];
+            return m_fretFontInfo.displayDigit[strg + 1];
         }
         // if a frettable bass string, return an empty string
         return String();
@@ -571,13 +633,13 @@ String StaffType::tabBassStringPrefix(int strg, bool* hasFret) const
         // return a number with the bass string index itself
         if (bassStrgIdx > NUM_OF_BASSSTRINGS_WITH_LETTER) {
             *hasFret    = false;
-            return m_fretFonts[m_fretFontIdx].displayDigit[bassStrgIdx - 1];
+            return m_fretFontInfo.displayDigit[bassStrgIdx - 1];
         }
         // if a frettable bass string, return a character with the relevant num. of slashes;
         // note that the number of slashes is bassStrgIdx-1 (1st bass has no slash)
         // and slashChar[] is 0-based (slashChar[0] => 1 slash, ...), whence the -2
         String prefix    = bassStrgIdx > 1
-                           ? String(m_fretFonts[m_fretFontIdx].slashChar[bassStrgIdx - 2]) : String();
+                           ? String(m_fretFontInfo.slashChar[bassStrgIdx - 2]) : String();
         return prefix;
     }
 }
@@ -748,49 +810,30 @@ TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
 }
 
 //---------------------------------------------------------
-//   layout2
-//
-//    Second step: after horizontal positions of elements involved are defined,
-//    compute width of 'grid beams'
-//---------------------------------------------------------
-
-void TabDurationSymbol::layout2()
-{
-    LayoutData* ldata = mutldata();
-    // if not within a TAB or not a MEDIALFINAL grid element, do nothing
-    if (!m_tab || ldata->beamGrid != TabBeamGrid::MEDIALFINAL) {
-        return;
-    }
-
-    // get 'grid' beam length from page positions of this' chord and previous chord
-    Chord* chord       = toChord(explicitParent());
-    ChordRestNavigateOptions options;
-    options.skipGrace = true;
-    ChordRest* prevChord   = prevChordRest(chord, options);
-    if (chord == nullptr || prevChord == nullptr) {
-        return;
-    }
-    double mags        = magS();
-    double beamLen     = prevChord->pagePos().x() - chord->pagePos().x();            // negative
-    // page pos. difference already includes any magnification in effect:
-    // scale it down, as it will be magnified again during drawing
-    ldata->beamLength = beamLen / mags;
-    // update bbox x and w, but keep current y and h
-    RectF bbox = ldata->bbox();
-    bbox.setLeft(beamLen);
-    // set bbox width to half a stem width (magnified) plus beam length (already magnified)
-    bbox.setWidth(m_tab->m_durationFonts[m_tab->m_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
-
-    ldata->setBbox(bbox);
-}
-
-//---------------------------------------------------------
 //   STATIC FUNCTIONS FOR FONT CONFIGURATION MANAGEMENT
 //---------------------------------------------------------
 
-bool TablatureFretFont::read(XmlReader& e)
+TablatureFretFont::TablatureFretFont()
 {
-    defPitch    = 9.0;
+    // Set up defaults
+    for (size_t i = 0; i < NUM_OF_DIGITFRETS; i++) {
+        displayDigit.at(i) = String::number(i);
+    }
+
+    for (size_t i = 0; i < NUM_OF_LETTERFRETS; i++) {
+        displayLetter[i] = Char(97 + i);
+    }
+
+    for (size_t i = 0; i < NUM_OF_BASSSTRING_SLASHES; i++) {
+        for (size_t j = 0; j < i; j++) {
+            slashChar.at(i).append(u"/");
+        }
+    }
+}
+
+bool TablatureFretFont::read(XmlReader& e, int mscVersion)
+{
+    defSize    = 9.0;
     defYOffset  = 0.0;
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -801,8 +844,8 @@ bool TablatureFretFont::read(XmlReader& e)
             family = e.readText();
         } else if (tag == "displayName") {
             displayName = e.readText();
-        } else if (tag == "defaultPitch") {
-            defPitch = e.readDouble();
+        } else if (tag == "defaultSize" || (tag == "defaultPitch" && mscVersion < 460)) {
+            defSize = e.readDouble();
         } else if (tag == "defaultYOffset") {
             defYOffset = e.readDouble();
         } else if (tag == "mark") {
@@ -814,8 +857,6 @@ bool TablatureFretFont::read(XmlReader& e)
             }
             if (sval == "x") {
                 xChar = txt.at(0);
-            } else if (sval == "ghost") {
-                deadNoteChar = txt.at(0);
             } else if (sval == "slash") {
                 // limit within legal range
                 if (num < 1) {
@@ -824,7 +865,7 @@ bool TablatureFretFont::read(XmlReader& e)
                 if (num > NUM_OF_BASSSTRING_SLASHES) {
                     num = NUM_OF_BASSSTRING_SLASHES;
                 }
-                slashChar[num - 1] = txt;
+                slashChar.at(num - 1) = txt;
             }
         } else if (tag == "fret") {
             bool bLetter = e.intAttribute("letter");
@@ -835,7 +876,7 @@ bool TablatureFretFont::read(XmlReader& e)
                 }
             } else {
                 if (val >= 0 && val < NUM_OF_DIGITFRETS) {
-                    displayDigit[val] = txt;
+                    displayDigit.at(val) = txt;
                 }
             }
         } else {
@@ -846,7 +887,7 @@ bool TablatureFretFont::read(XmlReader& e)
     return true;
 }
 
-bool TablatureDurationFont::read(XmlReader& e)
+bool TablatureDurationFont::read(XmlReader& e, int mscVersion)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -855,8 +896,8 @@ bool TablatureDurationFont::read(XmlReader& e)
             family = e.readText();
         } else if (tag == "displayName") {
             displayName = e.readText();
-        } else if (tag == "defaultPitch") {
-            defPitch = e.readDouble();
+        } else if (tag == "defaultSize" || (tag == "defaultPitch" && mscVersion < 460)) {
+            defSize = e.readDouble();
         } else if (tag == "defaultYOffset") {
             defYOffset = e.readDouble();
         } else if (tag == "beamWidth") {
@@ -901,31 +942,31 @@ bool TablatureDurationFont::read(XmlReader& e)
             String txt(e.readText());
             Char chr = txt.at(0);
             if (val == "longa") {
-                displayValue[int(TabVal::VAL_LONGA)] = chr;
+                displayValue[size_t(TabVal::VAL_LONGA)] = chr;
             } else if (val == "brevis") {
-                displayValue[int(TabVal::VAL_BREVIS)] = chr;
+                displayValue[size_t(TabVal::VAL_BREVIS)] = chr;
             } else if (val == "semibrevis") {
-                displayValue[int(TabVal::VAL_SEMIBREVIS)] = chr;
+                displayValue[size_t(TabVal::VAL_SEMIBREVIS)] = chr;
             } else if (val == "minima") {
-                displayValue[int(TabVal::VAL_MINIMA)] = chr;
+                displayValue[size_t(TabVal::VAL_MINIMA)] = chr;
             } else if (val == "semiminima") {
-                displayValue[int(TabVal::VAL_SEMIMINIMA)] = chr;
+                displayValue[size_t(TabVal::VAL_SEMIMINIMA)] = chr;
             } else if (val == "fusa") {
-                displayValue[int(TabVal::VAL_FUSA)] = chr;
+                displayValue[size_t(TabVal::VAL_FUSA)] = chr;
             } else if (val == "semifusa") {
-                displayValue[int(TabVal::VAL_SEMIFUSA)] = chr;
+                displayValue[size_t(TabVal::VAL_SEMIFUSA)] = chr;
             } else if (val == "32") {
-                displayValue[int(TabVal::VAL_32)] = chr;
+                displayValue[size_t(TabVal::VAL_32)] = chr;
             } else if (val == "64") {
-                displayValue[int(TabVal::VAL_64)] = chr;
+                displayValue[size_t(TabVal::VAL_64)] = chr;
             } else if (val == "128") {
-                displayValue[int(TabVal::VAL_128)] = chr;
+                displayValue[size_t(TabVal::VAL_128)] = chr;
             } else if (val == "256") {
-                displayValue[int(TabVal::VAL_256)] = chr;
+                displayValue[size_t(TabVal::VAL_256)] = chr;
             } else if (val == "512") {
-                displayValue[int(TabVal::VAL_512)] = chr;
+                displayValue[size_t(TabVal::VAL_512)] = chr;
             } else if (val == "1024") {
-                displayValue[int(TabVal::VAL_1024)] = chr;
+                displayValue[size_t(TabVal::VAL_1024)] = chr;
             } else if (val == "dot") {
                 displayDot = chr;
             } else {
@@ -946,7 +987,7 @@ bool TablatureDurationFont::read(XmlReader& e)
 //    resets everything and reads the built-in config file if fileName is null or empty
 //---------------------------------------------------------
 
-bool StaffType::readConfigFile(const String& fileName)
+bool StaffType::readTabConfigFile(const String& fileName)
 {
     muse::io::path_t path;
 
@@ -967,18 +1008,22 @@ bool StaffType::readConfigFile(const String& fileName)
     XmlReader e(&f);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
+            const String version = e.attribute("version");
+            const StringList sl = version.split(u'.');
+            const int mscVersion = sl.size() == 2 ? sl[0].toInt() * 100 + sl[1].toInt() : 0;
+
             while (e.readNextStartElement()) {
                 const AsciiStringView tag(e.name());
                 if (tag == "fretFont") {
                     TablatureFretFont ff;
-                    if (ff.read(e)) {
+                    if (ff.read(e, mscVersion)) {
                         m_fretFonts.push_back(ff);
                     } else {
                         continue;
                     }
                 } else if (tag == "durationFont") {
                     TablatureDurationFont df;
-                    if (df.read(e)) {
+                    if (df.read(e, mscVersion)) {
                         m_durationFonts.push_back(df);
                     } else {
                         continue;
@@ -1000,7 +1045,7 @@ bool StaffType::readConfigFile(const String& fileName)
 //    the index of a name in the list can be used to retrieve the font data with fontData()
 //---------------------------------------------------------
 
-std::vector<String> StaffType::fontNames(bool bDuration)
+std::vector<String> StaffType::tabFontNames(bool bDuration)
 {
     std::vector<String> names;
     if (bDuration) {
@@ -1020,48 +1065,42 @@ std::vector<String> StaffType::fontNames(bool bDuration)
 //
 //    retrieves data about a Tablature font.
 //    returns: true if idx is valid | false if it is not
-// any of the pointer parameter can be null, if that datum is not needed
 //---------------------------------------------------------
 
-bool StaffType::fontData(bool bDuration, size_t nIdx, String* pFamily, String* pDisplayName,
-                         double* pSize, double* pYOff)
+bool StaffType::tabFontData(bool bDuration, size_t nIdx, double& pSize, double& pYOff)
 {
     if (bDuration) {
         if (nIdx < m_durationFonts.size()) {
             TablatureDurationFont f = m_durationFonts.at(nIdx);
-            if (pFamily) {
-                *pFamily          = f.family;
-            }
-            if (pDisplayName) {
-                *pDisplayName     = f.displayName;
-            }
-            if (pSize) {
-                *pSize            = f.defPitch;
-            }
-            if (pYOff) {
-                *pYOff            = f.defYOffset;
-            }
+            pSize = f.defSize;
+            pYOff = f.defYOffset;
             return true;
         }
     } else {
-        if (nIdx < m_fretFonts.size()) {
-            TablatureFretFont f = m_fretFonts.at(nIdx);
-            if (pFamily) {
-                *pFamily          = f.family;
-            }
-            if (pDisplayName) {
-                *pDisplayName     = f.displayName;
-            }
-            if (pSize) {
-                *pSize            = f.defPitch;
-            }
-            if (pYOff) {
-                *pYOff            = f.defYOffset;
-            }
-            return true;
-        }
+        TablatureFretFont f = nIdx < m_fretFonts.size() ? m_fretFonts.at(nIdx) : TablatureFretFont();
+        pSize = f.defSize;
+        pYOff = f.defYOffset;
+        return true;
     }
     return false;
+}
+
+const MStyle& StaffType::style() const
+{
+    if (!m_score) {
+        return DefaultStyle::defaultStyle();
+    }
+
+    return m_score->style();
+}
+
+//---------------------------------------------------------
+//   spatium
+//---------------------------------------------------------
+
+double StaffType::spatium() const
+{
+    return style().spatium() * (isSmall() ? style().styleD(Sid::smallStaffMag) : 1.0) * userMag();
 }
 
 //=========================================================
@@ -1114,7 +1153,7 @@ std::vector<StaffType> StaffType::m_presets;
 /* *INDENT-OFF* */
 void StaffType::initStaffTypes(const Color& defaultColor)
 {
-    readConfigFile(String());            // get TAB font config, before initStaffTypes()
+    readTabConfigFile(String());            // get TAB font config, before initStaffTypes()
 
     // keep in sync with enum class StaffTypes
     m_presets = {
@@ -1125,38 +1164,30 @@ void StaffType::initStaffTypes(const Color& defaultColor)
         StaffType(StaffGroup::PERCUSSION, u"perc3Line", muse::mtrc("engraving", "Perc. 3 lines"),   3, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
         StaffType(StaffGroup::PERCUSSION, u"perc5Line", muse::mtrc("engraving", "Perc. 5 lines"),   5, 0,     1,   true,  true, false, true, false, true, false,  defaultColor),
 
-//                 group            xml-name,     human-readable-name                  lin stpOff dist clef   bars stemless time   invis     color   duration font     size off genDur     fret font          size off  duration symbol repeat      thru       minim style              onLin  rests  stmDn  stmThr upsDn  sTFing nums  bkTied
-        StaffType(StaffGroup::TAB, u"tab6StrSimple", muse::mtrc("engraving", "Tab. 6-str. simple"), 6, 0,     1.5, true,  true, true,  false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",    9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, false, true, false),
-        StaffType(StaffGroup::TAB, u"tab6StrCommon", muse::mtrc("engraving", "Tab. 6-str. common"), 6, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tab6StrFull",   muse::mtrc("engraving", "Tab. 6-str. full"),   6, 0,     1.5, true,  true, false, true, false,  defaultColor,  u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,  true,  true,  true,  true,  false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tab4StrSimple", muse::mtrc("engraving", "Tab. 4-str. simple"), 4, 0,     1.5, true,  true, true,  false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",    9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, false, true, false),
-        StaffType(StaffGroup::TAB, u"tab4StrCommon", muse::mtrc("engraving", "Tab. 4-str. common"), 4, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tab4StrFull",   muse::mtrc("engraving", "Tab. 4-str. full"),   4, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,  true,  true,  true,  true,  false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tab5StrSimple", muse::mtrc("engraving", "Tab. 5-str. simple"), 5, 0,     1.5, true,  true, true,  false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",    9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,   true,  false, true,  false, false, false, true, false),
-        StaffType(StaffGroup::TAB, u"tab5StrCommon", muse::mtrc("engraving", "Tab. 5-str. common"), 5, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tab5StrFull",   muse::mtrc("engraving", "Tab. 5-str. full"),   5, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED,  true,  true,  true,  true,  false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tabUkulele",    muse::mtrc("engraving", "Tab. ukulele"),       4, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tabBalajka",    muse::mtrc("engraving", "Tab. balalaika"),     3, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tabDulcimer",   muse::mtrc("engraving", "Tab. dulcimer"),      3, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true,  true,  false, true,  true, true, true),
-        StaffType(StaffGroup::TAB, u"tab6StrItalian",muse::mtrc("engraving", "Tab. 6-str. Italian"),6, 0,     1.5, false, true, true,  true, false,  defaultColor,  u"MuseScore Tab Italian",15, 0, true,  u"MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   true,  true,  false, false, true,  false, true, false),
-        StaffType(StaffGroup::TAB, u"tab6StrFrench", muse::mtrc("engraving", "Tab. 6-str. French"), 6, 0,     1.5, false, true, true,  true, false,  defaultColor,  u"MuseScore Tab French", 15, 0, true,  u"MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,   false, false, false, false, false, false, false, false),
-        StaffType(StaffGroup::TAB, u"tab7StrCommon", muse::mtrc("engraving", "Tab. 7-str. common"), 7, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tab8StrCommon", muse::mtrc("engraving", "Tab. 8-str. common"), 8, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tab9StrCommon", muse::mtrc("engraving", "Tab. 9-str. common"), 9, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tab10StrCommon", muse::mtrc("engraving", "Tab. 10-str. common"), 10, 0,     1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER,true,  true, true,  false, false, true, true, true),
-        StaffType(StaffGroup::TAB, u"tab7StrSimple", muse::mtrc("engraving", "Tab. 7-str. simple"), 7, 0,     1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,true,  false, true,  false, false, false, true, false),
-        StaffType(StaffGroup::TAB, u"tab8StrSimple", muse::mtrc("engraving", "Tab. 8-str. simple"), 8, 0,     1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,true,  false, true,  false, false, false, true, false),
-        StaffType(StaffGroup::TAB, u"tab9StrSimple", muse::mtrc("engraving", "Tab. 9-str. simple"), 9, 0,     1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,true,  false, true,  false, false, false, true, false),
-        StaffType(StaffGroup::TAB, u"tab10StrSimple", muse::mtrc("engraving", "Tab. 10-str. simple"), 10, 0,     1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, u"MuseScore Tab Sans",   9, 0, TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,true,  false, true,  false, false, false, true, false),
+//                 group            xml-name,         human-readable-name                         lin stpOff dist clef   bars stemless time  invis     color       duration font         size off genDur textStyle fret font          size off  duration symbol repeat       thru    minim style                  onLin  rests  stmDn  stmThr upsDn  sTFing nums  bkTied
+        StaffType(StaffGroup::TAB, u"tab6StrSimple",  muse::mtrc("engraving", "Tab. 6-str. simple"),  6,  0, 1.5, true,  true, true,  false, false, defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, u"tab6StrCommon",  muse::mtrc("engraving", "Tab. 6-str. common"),  6,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tab6StrFull",    muse::mtrc("engraving", "Tab. 6-str. full"),    6,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED, true,  true,  true,  true,  false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tab4StrSimple",  muse::mtrc("engraving", "Tab. 4-str. simple"),  4,  0, 1.5, true,  true, true,  false, false, defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, u"tab4StrCommon",  muse::mtrc("engraving", "Tab. 4-str. common"),  4,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tab4StrFull",    muse::mtrc("engraving", "Tab. 4-str. full"),    4,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED, true,  true,  true,  true,  false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tab5StrSimple",  muse::mtrc("engraving", "Tab. 5-str. simple"),  5,  0, 1.5, true,  true, true,  false, false, defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, u"tab5StrCommon",  muse::mtrc("engraving", "Tab. 5-str. common"),  5,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tab5StrFull",    muse::mtrc("engraving", "Tab. 5-str. full"),    5,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SLASHED, true,  true,  true,  true,  false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tabUkulele",     muse::mtrc("engraving", "Tab. ukulele"),        4,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tabBalajka",     muse::mtrc("engraving", "Tab. balalaika"),      3,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tabDulcimer",    muse::mtrc("engraving", "Tab. dulcimer"),       3,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, true,  true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tab6StrItalian", muse::mtrc("engraving", "Tab. 6-str. Italian"), 6,  0, 1.5, false, true, true,  true, false,  defaultColor, u"MuseScore Tab Italian",15, 0, true,  false, u"MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,    true,  true,  false, false, true,  false, true,  false),
+        StaffType(StaffGroup::TAB, u"tab6StrFrench",  muse::mtrc("engraving", "Tab. 6-str. French"),  6,  0, 1.5, false, true, true,  true, false,  defaultColor, u"MuseScore Tab French", 15, 0, true,  false, u"MuseScore Tab Renaiss",10, 0, TablatureSymbolRepeat::NEVER, true,  TablatureMinimStyle::NONE,    false, false, false, false, false, false, false, false),
+        StaffType(StaffGroup::TAB, u"tab7StrCommon",  muse::mtrc("engraving", "Tab. 7-str. common"),  7,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tab8StrCommon",  muse::mtrc("engraving", "Tab. 8-str. common"),  8,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tab9StrCommon",  muse::mtrc("engraving", "Tab. 9-str. common"),  9,  0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tab10StrCommon", muse::mtrc("engraving", "Tab. 10-str. common"), 10, 0, 1.5, true,  true, false, true, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::SHORTER, true,  true,  true,  false, false, true,  true,  true),
+        StaffType(StaffGroup::TAB, u"tab7StrSimple",  muse::mtrc("engraving", "Tab. 7-str. simple"),  7,  0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, u"tab8StrSimple",  muse::mtrc("engraving", "Tab. 8-str. simple"),  8,  0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, u"tab9StrSimple",  muse::mtrc("engraving", "Tab. 9-str. simple"),  9,  0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
+        StaffType(StaffGroup::TAB, u"tab10StrSimple", muse::mtrc("engraving", "Tab. 10-str. simple"), 10, 0, 1.5, true,  true, true, false, false,  defaultColor, u"MuseScore Tab Modern", 15, 0, false, true,  u"MuseScore Tab Sans",                     9, 0,  TablatureSymbolRepeat::NEVER, false, TablatureMinimStyle::NONE,    true,  false, true,  false, false, false, true,  false),
     };
 }
 /* *INDENT-ON* */
-//---------------------------------------------------------
-//   spatium
-//---------------------------------------------------------
-
-double StaffType::spatium(const MStyle& style) const
-{
-    return style.spatium() * (isSmall() ? style.styleD(Sid::smallStaffMag) : 1.0) * userMag();
-}
 } // namespace mu::engraving

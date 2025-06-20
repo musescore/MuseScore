@@ -2137,7 +2137,7 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata, con
 {
     LAYOUT_CALL_ITEM(item);
     const StaffType* stType = item->staffType();
-    if (stType && stType->isHiddenElementOnTab(conf.style(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
         ldata->setIsSkipDraw(true);
         return;
     }
@@ -3049,7 +3049,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
 
     const StaffType* stType = item->staffType();
 
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::hairpinShowTabCommon, Sid::hairpinShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(Sid::hairpinShowTabCommon, Sid::hairpinShowTabSimple)) {
         ldata->setIsSkipDraw(true);
         return;
     }
@@ -3394,7 +3394,7 @@ void TLayout::layoutHarmonicMarkSegment(HarmonicMarkSegment* item, LayoutContext
     const StaffType* stType = item->staffType();
     if (stType
         && (!stType->isTabStaff()
-            || stType->isHiddenElementOnTab(ctx.conf().style(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple))) {
+            || stType->isHiddenElementOnTab(Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple))) {
         ldata->setIsSkipDraw(true);
         return;
     }
@@ -3920,7 +3920,7 @@ void TLayout::layoutLetRingSegment(LetRingSegment* item, LayoutContext& ctx)
 
     const StaffType* stType = item->staffType();
 
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
         ldata->setIsSkipDraw(true);
         return;
     }
@@ -4349,11 +4349,8 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 
         double w = item->tabHeadWidth(tab);
         double mags = item->magS();
-
-        const MStyle& style = item->style();
-
-        double y = item->deadNote() ? tab->deadFretBoxY(style) : tab->fretBoxY(style);
-        double height = item->deadNote() ? tab->deadFretBoxH(style) : tab->fretBoxH(style);
+        double y = item->deadNote() ? tab->deadFretBoxY() : tab->fretBoxY();
+        double height = item->deadNote() ? tab->deadFretBoxH() : tab->fretBoxH();
 
         noteBBox = RectF(0, y * mags, w, height * mags);
     } else {
@@ -4581,7 +4578,7 @@ void TLayout::layoutPalmMuteSegment(PalmMuteSegment* item, LayoutContext& ctx)
 
     const StaffType* stType = item->staffType();
 
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
         ldata->setIsSkipDraw(true);
         return;
     }
@@ -4745,7 +4742,7 @@ void TLayout::layoutRasgueadoSegment(RasgueadoSegment* item, LayoutContext& ctx)
     RasgueadoSegment::LayoutData* ldata = item->mutldata();
     const StaffType* stType = item->staffType();
 
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::rasgueadoShowTabCommon, Sid::rasgueadoShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(Sid::rasgueadoShowTabCommon, Sid::rasgueadoShowTabSimple)) {
         ldata->setIsSkipDraw(true);
         return;
     }

@@ -137,6 +137,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "tuplet",
     "sticking",
     "fingering",
+    "tab-fret-number",
     "lh-guitar-fingering",
     "rh-guitar-fingering",
     "hammer-ons-pull-offs-and-tapping",
@@ -1848,6 +1849,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::FINGERING:
             return "fingering";
+
+        case TextStyleType::TAB_FRET_NUMBER:
+            return "tab-fret-number";
 
         case TextStyleType::LH_GUITAR_FINGERING:
             return "lh-guitar-fingering";

@@ -2875,11 +2875,16 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("durationFontName", item->durationFontName());     // write font names anyway for backward compatibility
         xml.tag("durationFontSize", item->durationFontSize());
         xml.tag("durationFontY",    item->durationFontUserY());
-        xml.tag("fretFontName",     item->fretFontName());
-        xml.tag("fretFontSize",     item->fretFontSize());
-        xml.tag("fretFontY",        item->fretFontUserY());
         if (item->symRepeat() != TablatureSymbolRepeat::NEVER) {
             xml.tag("symbolRepeat", int(item->symRepeat()));
+        }
+        xml.tag("fretUseTextStyle", item->fretUseTextStyle());
+        if (item->fretUseTextStyle()) {
+            xml.tag("fretTextStyle", int(item->fretTextStyle()));
+        } else {
+            xml.tag("fretPresetIdx", item->fretPresetIdx());
+            xml.tag("fretFontSize",  item->fretFontSize());
+            xml.tag("fretFontY",     item->fretFontUserY());
         }
         xml.tag("linesThrough",     item->linesThrough());
         xml.tag("minimStyle",       int(item->minimStyle()));

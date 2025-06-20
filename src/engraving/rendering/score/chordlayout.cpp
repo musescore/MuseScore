@@ -3359,8 +3359,8 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         double w = item->tabHeadWidth(staffType);
         double xOff = 0.5 * (w - widthWithoutParens);
         ldata->moveX(-xOff);
-        ldata->setBbox(0, staffType->fretBoxY(ctx.conf().style()) * item->magS(), w,
-                       staffType->fretBoxH(ctx.conf().style()) * item->magS());
+        ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w,
+                       staffType->fretBoxH() * item->magS());
     } else if (isTabStaff && (!item->ghost() || item->shouldHideFret()) && item->headHasParentheses()) {
         item->setHeadHasParentheses(false, /*addToLinked=*/ false, /* generated= */ true);
     }

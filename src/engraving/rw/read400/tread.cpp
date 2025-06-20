@@ -3610,6 +3610,8 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
         t->setGenKeysig(false);
     }
 
+    t->setFretUseTextStyle(false);
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "name") {
@@ -3656,7 +3658,7 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext&)
         } else if (tag == "durationFontY") {
             t->setDurationFontUserY(e.readDouble());
         } else if (tag == "fretFontName") {
-            t->setFretFontName(e.readText());
+            t->setFretPreset(e.readText());
         } else if (tag == "fretFontSize") {
             t->setFretFontSize(e.readDouble());
         } else if (tag == "fretFontY") {
