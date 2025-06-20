@@ -615,6 +615,9 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(voltaFrameFgColor,                          PropertyValue::fromValue(Color::BLACK)),
     styleDef(voltaFrameBgColor,                          PropertyValue::fromValue(Color::transparent)),
 
+    styleDef(voltaAlignStartBeforeKeySig,                false),
+    styleDef(voltaAlignEndLeftOfBarline,                 false),
+
     styleDef(ottava8VAPlacement,                         PlacementV::ABOVE),
     styleDef(ottava8VBPlacement,                         PlacementV::BELOW),
     styleDef(ottava15MAPlacement,                        PlacementV::ABOVE),

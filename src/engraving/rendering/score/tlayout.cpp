@@ -7129,7 +7129,8 @@ SpannerSegment* TLayout::layoutSystemSLine(SLine* line, System* system, LayoutCo
     }
     break;
     case SpannerSegmentType::MIDDLE: {
-        double x1 = system->firstNoteRestSegmentX(true);
+        double x1 = line->isVolta() ? voltaMidEndSegmentStartX(toVolta(line), system, ctx)
+                    : system->firstNoteRestSegmentX(true);
         double x2 = system->endingXForOpenEndedLines();
         System* s;
         PointF p1 = line->linePos(Grip::START, &s);
@@ -7140,7 +7141,8 @@ SpannerSegment* TLayout::layoutSystemSLine(SLine* line, System* system, LayoutCo
     case SpannerSegmentType::END: {
         System* s;
         PointF p2 = line->linePos(Grip::END,   &s);
-        double x1 = system->firstNoteRestSegmentX(true);
+        double x1 = line->isVolta() ? voltaMidEndSegmentStartX(toVolta(line), system, ctx)
+                    : system->firstNoteRestSegmentX(true);
         double len = p2.x() - x1;
         lineSegm->setPos(PointF(p2.x() - len, p2.y()));
         lineSegm->setPos2(PointF(len, 0.0));
@@ -7151,6 +7153,35 @@ SpannerSegment* TLayout::layoutSystemSLine(SLine* line, System* system, LayoutCo
     layoutLineSegment(lineSegm, ctx);
 
     return lineSegm;
+}
+
+double TLayout::voltaMidEndSegmentStartX(Volta* volta, System* system, LayoutContext& ctx)
+{
+    Measure* firstMeasure = system->firstMeasure();
+    if (!firstMeasure) {
+        return 0.0;
+    }
+
+    Segment* refSeg = firstMeasure->repeatStart()
+                      ? firstMeasure->first(SegmentType::StartRepeatBarLine)
+                      : ctx.conf().styleB(Sid::voltaAlignStartBeforeKeySig)
+                      ? firstMeasure->first(SegmentType::KeySig)
+                      : nullptr;
+
+    if (!refSeg) {
+        return system->firstNoteRestSegmentX(true);
+    }
+
+    if (refSeg->isStartRepeatBarLineType()) {
+        return refSeg->x() + firstMeasure->x();
+    }
+
+    KeySig* keySig = toKeySig(refSeg->element(volta->track()));
+    if (!keySig->ldata()->keySymbols.empty()) {
+        KeySym keySym = keySig->ldata()->keySymbols.front();
+        double xCutout = ctx.engravingFont()->smuflAnchor(keySym.sym, SmuflAnchorId::cutOutNW, 1.0).x();
+        return keySig->x() + keySym.xPos + xCutout + refSeg->x() + firstMeasure->x();
+    }
 }
 
 SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutContext& ctx)
