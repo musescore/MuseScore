@@ -294,6 +294,11 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FIGURED_BASS_ITEM:
     case ElementType::DUMMY:
     case ElementType::SYSTEM_LOCK_INDICATOR:
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
+    case ElementType::HAMMER_ON_PULL_OFF_TEXT:
+    case ElementType::TAPPING_HALF_SLUR:
+    case ElementType::TAPPING_HALF_SLUR_SEGMENT:
+    case ElementType::TAPPING_TEXT:
         break;
     }
 
