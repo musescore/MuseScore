@@ -618,7 +618,7 @@ StyledFlickable {
 
                 IconAndTextButtonSelector {
                     styleItem: chordSymbolsModel.chordAlignmentToNotehead
-                    label: qsTrc("notation", "Position:")
+                    label: qsTrc("notation", "Alignment to notehead:")
                     controlAreaWidth: 98
                     buttonHeight: 30
                     hasReset: false

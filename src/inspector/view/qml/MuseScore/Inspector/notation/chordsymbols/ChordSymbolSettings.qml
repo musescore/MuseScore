@@ -141,8 +141,8 @@ Column {
     }
 
     FlatRadioButtonGroupPropertyView {
-        id: positionButtonList
-        titleText: qsTrc("inspector", "Position")
+        id: alignmentButtonList
+        titleText: qsTrc("inspector", "Alignment to notehead")
         propertyItem: root.model ? root.model.position : null
 
         navigationPanel: root.navigationPanel

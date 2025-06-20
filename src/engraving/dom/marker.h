@@ -81,17 +81,31 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 
-    void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
+    bool positionSeparateFromAlignment() const override { return true; }
 
-    static constexpr std::array<MarkerType, 4> RIGHT_MARKERS {
+    double symbolSize() const { return m_symbolSize; }
+    void setSymbolSize(double v) { m_symbolSize = v; }
+
+    bool centerOnSymbol() const { return m_centerOnSymbol; }
+    void setCenterOnSymbol(bool val) { m_centerOnSymbol = val; }
+
+    std::vector<LineF> dragAnchorLines() const override;
+
+    static constexpr std::array<MarkerType, 5> RIGHT_MARKERS {
+        MarkerType::FINE,
         MarkerType::TOCODA,
         MarkerType::TOCODASYM,
         MarkerType::DA_CODA,
         MarkerType::DA_DBLCODA,
     };
 
+    String symbolString() const;
+
 private:
     MarkerType m_markerType = MarkerType::SEGNO;
     String m_label;                 ///< referenced from Jump() element
+
+    double m_symbolSize = 18.0;
+    bool m_centerOnSymbol = true;
 };
 } // namespace mu::engraving
