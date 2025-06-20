@@ -874,6 +874,68 @@ void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
     showItem(target);
 }
 
+void NotationInteraction::findAndSelectChordRest(const Fraction& tick)
+{
+    IF_ASSERT_FAILED(selection() && score()) {
+        return;
+    }
+
+    Segment* startSeg = score()->tick2leftSegment(tick, /*useMMrest*/ false, SegmentType::ChordRest);
+    IF_ASSERT_FAILED(startSeg && startSeg->isChordRestType()) {
+        return;
+    }
+
+    staff_idx_t lastSelectedStaffIdx = 0;
+    voice_idx_t lastSelectedVoiceIdx = 0;
+    if (selection()->isRange()) {
+        lastSelectedStaffIdx = selection()->range()->startStaffIndex();
+    } else if (!selection()->elements().empty()) {
+        const EngravingItem* lastSelectedItem = selection()->elements().back();
+        if (lastSelectedItem) {
+            lastSelectedStaffIdx = lastSelectedItem->staffIdx();
+            lastSelectedVoiceIdx = lastSelectedItem->voice();
+        }
+    }
+
+    // startSeg could be a CR segment in any staff. The idea of this method is to select the CR in the last selected
+    // staff (or the top staff if none was selected). The following outer loop iterates backwards through previous CR
+    // segments until a valid CR is found in the desired staff...
+    EngravingItem* toSelect = nullptr;
+    for (Segment* currSeg = startSeg; currSeg && !toSelect; currSeg = currSeg->prev(SegmentType::ChordRest)) {
+        toSelect = currSeg->element(staff2track(lastSelectedStaffIdx, lastSelectedVoiceIdx));
+        if (toSelect && toSelect->isChordRest()) {
+            break;
+        }
+        toSelect = nullptr;
+        // Inner loop: Couldn't find a valid CR in the last selected voice - try other voices in the same staff...
+        for (voice_idx_t currVoice = 0; currVoice < VOICES; ++currVoice) {
+            if (currVoice == lastSelectedVoiceIdx) {
+                // Already tried this...
+                continue;
+            }
+            toSelect = currSeg->element(staff2track(lastSelectedStaffIdx, currVoice));
+            if (toSelect && toSelect->isChordRest()) {
+                break;
+            }
+            toSelect = nullptr;
+        }
+    }
+
+    IF_ASSERT_FAILED(toSelect) {
+        return;
+    }
+
+    std::vector<EngravingItem*> itemsToSelect;
+    if (toSelect->isChord()) {
+        const std::vector<Note*>& notes = toChord(toSelect)->notes();
+        itemsToSelect.insert(itemsToSelect.end(), notes.begin(), notes.end());
+    } else {
+        itemsToSelect = { toSelect };
+    }
+
+    select(itemsToSelect, SelectType::REPLACE);
+}
+
 void NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
 {
     TRACEFUNC;
