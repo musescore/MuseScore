@@ -65,7 +65,14 @@ function addCourtesyAccidentals() {
     for (var i in curScore.selection.elements) {
         if (curScore.selection.elements[i].type == Element.NOTE && !curScore.selection.elements[i].staff.part.hasDrumStaff) {
             notes.push(curScore.selection.elements[i])
-        }
+        } else if (curScore.selection.elements[i].type == Element.ORNAMENT) {
+			let ornament = curScore.selection.elements[i];
+			// not yet used in MuseScore
+			if (ornament.startOnUpperNote != true) {
+				continue;
+			}
+			
+		}
     }
 
     // Exception: Only 1 note is selected
