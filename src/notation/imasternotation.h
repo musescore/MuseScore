@@ -62,6 +62,7 @@ public:
     virtual muse::async::Notification hasPartsChanged() const = 0;
 
     virtual INotationPlaybackPtr playback() const = 0;
+    virtual void initNotationSoloMuteState(const INotationPtr notation) = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;

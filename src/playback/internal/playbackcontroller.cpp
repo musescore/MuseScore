@@ -1231,7 +1231,13 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
 
     playback()->tracks()->removeTrack(m_currentSequenceId, search->second);
     audioSettings()->removeTrackParams(instrumentTrackId);
-    m_notation->soloMuteState()->removeTrackSoloMuteState(instrumentTrackId);
+
+    m_masterNotation->notation()->soloMuteState()->removeTrackSoloMuteState(instrumentTrackId);
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
+        if (const INotationPtr& notation = excerpt->notation()) {
+            notation->soloMuteState()->removeTrackSoloMuteState(instrumentTrackId);
+        }
+    }
 
     m_trackRemoved.send(search->second);
     m_instrumentTrackIdMap.erase(instrumentTrackId);
@@ -1241,7 +1247,7 @@ void PlaybackController::onTrackNewlyAdded(const InstrumentTrackId& instrumentTr
 {
     for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         if (const INotationPtr& notation = excerpt->notation()) {
-            if (notation == m_notation) {
+            if (notation == m_notation || notation->soloMuteState()->trackSoloMuteStateExists(instrumentTrackId)) {
                 continue;
             }
             const INotationSoloMuteState::SoloMuteState soloMuteState = { /*mute*/ true, /*solo*/ false };
@@ -1422,32 +1428,6 @@ void PlaybackController::setupSequencePlayer()
         currentPlayer()->setDuration(secsToMilisecs(totalPlaybackTime));
         m_totalPlayTimeChanged.notify();
     });
-}
-
-void PlaybackController::initMuteStates()
-{
-    if (!m_notation) {
-        return;
-    }
-
-    INotationPartsPtr notationParts = m_notation->parts();
-
-    for (const InstrumentTrackId& instrumentTrackId : notationPlayback()->existingTrackIdSet()) {
-        if (!muse::contains(m_instrumentTrackIdMap, instrumentTrackId)) {
-            continue;
-        }
-
-        if (instrumentTrackId == notationPlayback()->metronomeTrackId()) {
-            continue;
-        }
-
-        // If the part doesn't exist for this notation, mute it
-        if (!notationParts->part(instrumentTrackId.partId)) {
-            INotationSoloMuteState::SoloMuteState soloMuteState;
-            soloMuteState.mute = true;
-            m_notation->soloMuteState()->setTrackSoloMuteState(instrumentTrackId, soloMuteState);
-        }
-    }
 }
 
 void PlaybackController::updateSoloMuteStates()
@@ -1668,7 +1648,7 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
     }
     m_isPlayAllowedChanged.notify();
 
-    // All invisible tracks should be muted in newly opened notations (initMuteStates)
+    // All invisible tracks should be muted in newly opened notations (initNotationSoloMuteState)
     // Once the mute state has been edited, this "custom state" will be recalled from then onwards
     bool emptyMuteStates = true;
     InstrumentTrackIdSet existingTrackIdSet = notationPlayback()->existingTrackIdSet();
@@ -1680,7 +1660,7 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
     }
 
     if (emptyMuteStates) {
-        initMuteStates();
+        m_masterNotation->initNotationSoloMuteState(notation);
     }
 
     updateSoloMuteStates();
