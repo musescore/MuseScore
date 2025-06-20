@@ -738,6 +738,7 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::LYRICS
            || type() == ElementType::DYNAMIC
            || type() == ElementType::EXPRESSION
+           || type() == ElementType::FOOTNOTE
            || type() == ElementType::FINGERING
            || type() == ElementType::HARMONY
            || type() == ElementType::MARKER
