@@ -35,6 +35,8 @@ class AbstractSelectionFilterModel : public QAbstractListModel, public muse::Inj
     Q_OBJECT
 
     Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
+    Q_PROPERTY(bool isAllSelected READ isAllSelected NOTIFY maskStatesChanged)
+    Q_PROPERTY(bool isNoneSelected READ isNoneSelected NOTIFY maskStatesChanged)
 
     muse::Inject<context::IGlobalContext> globalContext = { this };
 
@@ -42,41 +44,53 @@ public:
     explicit AbstractSelectionFilterModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE virtual void selectAll();
+    Q_INVOKABLE virtual void clearAll();
 
     QVariant data(const QModelIndex& index, int role) const override;
     bool setData(const QModelIndex& index, const QVariant& data, int role) override;
     int rowCount(const QModelIndex& parent = {}) const override;
     QHash<int, QByteArray> roleNames() const override;
 
-    bool enabled() const;
+    virtual bool enabled() const;
 
 signals:
     void enabledChanged();
+    void maskStatesChanged();
 
 protected:
     enum Roles {
-        TitleRole = Qt::UserRole + 1,
+        IsAllowedRole = Qt::UserRole + 1,
+        TitleRole,
         IsSelectedRole,
         IsIndeterminateRole
     };
 
     virtual void loadTypes() = 0;
 
+    virtual bool isAllSelected() const;
+    virtual bool isNoneSelected() const;
+
     virtual SelectionFilterTypesVariant getAllMask() const = 0;
     virtual SelectionFilterTypesVariant getNoneMask() const = 0;
 
-    bool isFiltered(const SelectionFilterTypesVariant& variant) const;
-    void setFiltered(const SelectionFilterTypesVariant& variant, bool filtered);
+    INotationInteractionPtr currentNotationInteraction() const;
+    INotationSelectionFilterPtr currentNotationSelectionFilter() const;
 
+    virtual bool isFiltered(const SelectionFilterTypesVariant& variant) const;
+    virtual void setFiltered(const SelectionFilterTypesVariant& variant, bool filtered);
+
+    virtual bool isAllowed(const SelectionFilterTypesVariant&) const { return true; }
     virtual QString titleForType(const SelectionFilterTypesVariant& variant) const = 0;
     bool isIndeterminate(const SelectionFilterTypesVariant& variant) const;
 
+    virtual void onSelectionChanged();
+    virtual void onNotationChanged();
     void notifyAboutDataChanged(const QModelIndex& index, const SelectionFilterTypesVariant& variant);
 
     QList<SelectionFilterTypesVariant> m_types;
 
 private:
     INotationPtr currentNotation() const;
-    INotationSelectionFilterPtr currentNotationSelectionFilter() const;
 };
 }

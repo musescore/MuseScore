@@ -36,6 +36,9 @@ public:
     bool isSelectionTypeFiltered(const SelectionFilterTypesVariant& variant) const override;
     void setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered) override;
 
+    bool includeSingleNotes() const override;
+    void setIncludeSingleNotes(bool include) override;
+
 private:
     mu::engraving::Score* score() const;
 

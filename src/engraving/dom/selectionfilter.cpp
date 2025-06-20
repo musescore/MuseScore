@@ -21,6 +21,7 @@
  */
 
 #include "selectionfilter.h"
+#include "tuplet.h"
 
 using namespace mu::engraving;
 
@@ -61,6 +62,15 @@ bool SelectionFilter::isFiltered(const SelectionFilterTypesVariant& variant) con
         return isFiltered_Impl(m_filteredVoicesTypes, params);
     }
     case 1: {
+        const NotesInChordSelectionFilterTypes type = std::get<NotesInChordSelectionFilterTypes>(variant);
+        const FilterParams params {
+            /*otherFilter*/ static_cast<unsigned int>(type),
+            /*noneMask*/ static_cast<unsigned int>(NotesInChordSelectionFilterTypes::NONE),
+            /*allMask*/ static_cast<unsigned int>(NotesInChordSelectionFilterTypes::ALL)
+        };
+        return isFiltered_Impl(m_filteredNotesInChordTypes, params);
+    }
+    case 2: {
         const ElementsSelectionFilterTypes type = std::get<ElementsSelectionFilterTypes>(variant);
         const FilterParams params {
             /*otherFilter*/ static_cast<unsigned int>(type),
@@ -69,7 +79,7 @@ bool SelectionFilter::isFiltered(const SelectionFilterTypesVariant& variant) con
         };
         return isFiltered_Impl(m_filteredElementsTypes, params);
     }
-    default: UNREACHABLE;
+    default: break;
     }
 
     UNREACHABLE;
@@ -90,6 +100,16 @@ void SelectionFilter::setFiltered(const SelectionFilterTypesVariant& variant, bo
         return;
     }
     case 1: {
+        const NotesInChordSelectionFilterTypes type = std::get<NotesInChordSelectionFilterTypes>(variant);
+        FilterParams params {
+            /*otherFilter*/ static_cast<unsigned int>(type),
+            /*noneMask*/ static_cast<unsigned int>(NotesInChordSelectionFilterTypes::NONE),
+            /*allMask*/ static_cast<unsigned int>(NotesInChordSelectionFilterTypes::ALL)
+        };
+        setFiltered_Impl(m_filteredNotesInChordTypes, params, filtered);
+        return;
+    }
+    case 2: {
         const ElementsSelectionFilterTypes type = std::get<ElementsSelectionFilterTypes>(variant);
         FilterParams params {
             /*otherFilter*/ static_cast<unsigned int>(type),
@@ -107,6 +127,11 @@ void SelectionFilter::setFiltered(const SelectionFilterTypesVariant& variant, bo
 
 bool SelectionFilter::canSelect(const EngravingItem* e) const
 {
+    IF_ASSERT_FAILED(!e->isNote() && !e->isTuplet()) {
+        LOGE() << "Using canSelect on a Note or Tuplet - use canSelectNoteIdx or canSelectTuplet instead";
+        return true;
+    }
+
     switch (e->type()) {
     case ElementType::DYNAMIC:
         return isFiltered(ElementsSelectionFilterTypes::DYNAMIC);
@@ -138,6 +163,9 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     case ElementType::HAMMER_ON_PULL_OFF:
     case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
         return isFiltered(ElementsSelectionFilterTypes::SLUR);
+    case ElementType::TIE:
+    case ElementType::TIE_SEGMENT:
+        return isFiltered(ElementsSelectionFilterTypes::TIE);
     case ElementType::FIGURED_BASS:
         return isFiltered(ElementsSelectionFilterTypes::FIGURED_BASS);
     case ElementType::OTTAVA:
@@ -174,6 +202,84 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
         return isFiltered(ElementsSelectionFilterTypes::GRACE_NOTE);
     }
 
+    return true;
+}
+
+bool SelectionFilter::canSelectNoteIdx(size_t noteIdx, size_t totalNotesInChord, bool selectionContainsMultiNoteChords) const
+{
+    if (totalNotesInChord == 1) {
+        //! NOTE: Always include single notes when the selection consists solely of single notes...
+        return m_includeSingleNotes || !selectionContainsMultiNoteChords;
+    }
+
+    NotesInChordSelectionFilterTypes type = NotesInChordSelectionFilterTypes::NONE;
+    switch (noteIdx) {
+    case 0: type = NotesInChordSelectionFilterTypes::BOTTOM_NOTE;
+        break;
+    case 1: type = NotesInChordSelectionFilterTypes::SECOND_NOTE;
+        break;
+    case 2: type = NotesInChordSelectionFilterTypes::THIRD_NOTE;
+        break;
+    case 3: type = NotesInChordSelectionFilterTypes::FOURTH_NOTE;
+        break;
+    case 4: type = NotesInChordSelectionFilterTypes::FIFTH_NOTE;
+        break;
+    case 5: type = NotesInChordSelectionFilterTypes::SIXTH_NOTE;
+        break;
+    case 6: type = NotesInChordSelectionFilterTypes::SEVENTH_NOTE;
+        break;
+    default: break;
+    }
+
+    //! NOTE: Everything above "normal" we handle as top notes...
+    const bool idxIsNormal = noteIdx < NUM_NOTES_IN_CHORD_SELECTION_FILTER_TYPES - 1;
+    if (noteIdx == totalNotesInChord - 1 || !idxIsNormal) {
+        return isFiltered(NotesInChordSelectionFilterTypes::TOP_NOTE) || (idxIsNormal && isFiltered(type));
+    }
+
+    IF_ASSERT_FAILED(type != NotesInChordSelectionFilterTypes::NONE) {
+        return true;
+    }
+
+    return isFiltered(type);
+}
+
+bool SelectionFilter::canSelectTuplet(const Tuplet* tuplet, const Fraction& selectionRangeStart, const Fraction& selectionRangeEnd,
+                                      bool selectionContainsMultiNoteChords) const
+{
+    // Tuplets are selectable if all of their contained elements are selectable...
+    for (const DurationElement* element : tuplet->elements()) {
+        if (element->tick() < selectionRangeStart || element->tick() >= selectionRangeEnd) {
+            return false;
+        }
+        switch (element->type()) {
+        case ElementType::CHORD: {
+            const std::vector<Note*> notes = toChord(element)->notes();
+            for (size_t noteIdx = 0; noteIdx < notes.size(); ++noteIdx) {
+                if (!canSelectNoteIdx(noteIdx, notes.size(), selectionContainsMultiNoteChords)) {
+                    return false;
+                }
+            }
+            break;
+        }
+        case ElementType::REST:
+            if (!canSelect(element)) {
+                return false;
+            }
+            break;
+        case ElementType::TUPLET: {
+            // Recursive call...
+            if (!canSelectTuplet(toTuplet(element), selectionRangeStart, selectionRangeEnd, selectionContainsMultiNoteChords)) {
+                return false;
+            }
+            break;
+        }
+        default: {
+            UNREACHABLE;
+            break;
+        }
+        }
+    }
     return true;
 }
 

@@ -189,6 +189,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/abstractselectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/voicesselectionfiltermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/voicesselectionfiltermodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/notesinchordselectionfiltermodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/notesinchordselectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/elementsselectionfiltermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/elementsselectionfiltermodel.h
 

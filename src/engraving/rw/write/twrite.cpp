@@ -853,6 +853,28 @@ void TWrite::write(const Breath* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
 {
+    // HACK: foundNotes is a workaround introduced with the "notes in chords" selection filter. A substantial overhaul of our
+    // copy/paste logic would be required to make this fully compatible with de-selected chords - for now we'll simply replace
+    // these chords with a rest of the same duration...
+    bool foundNotes = false;
+    const size_t noteCount = item->notes().size();
+    for (size_t noteIdx = 0; noteIdx < noteCount; ++noteIdx) {
+        if (ctx.canWriteNoteIdx(noteIdx, noteCount)) {
+            foundNotes = true;
+            break;
+        }
+    }
+    if (!foundNotes) {
+        Rest* dummyRest = Factory::createRest(item->segment());
+        dummyRest->setDurationType(item->durationType());
+        dummyRest->setTuplet(item->tuplet());
+        dummyRest->setTicks(item->ticks());
+        dummyRest->setTrack(item->track());
+        write(dummyRest, xml, ctx);
+        dummyRest->deleteLater();
+        return;
+    }
+
     for (Chord* ch : item->graceNotes()) {
         write(ch, xml, ctx);
     }
@@ -908,9 +930,15 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
         write(item->stemSlash(), xml, ctx);
     }
     writeProperty(item, xml, Pid::STEM_DIRECTION);
-    for (Note* n : item->notes()) {
-        write(n, xml, ctx);
+
+    for (size_t noteIdx = 0; noteIdx < noteCount; ++noteIdx) {
+        if (!ctx.canWriteNoteIdx(noteIdx, noteCount)) {
+            continue;
+        }
+        const Note* note = item->notes().at(noteIdx);
+        write(note, xml, ctx);
     }
+
     if (item->arpeggio()) {
         write(item->arpeggio(), xml, ctx);
     }

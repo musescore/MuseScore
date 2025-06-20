@@ -69,6 +69,7 @@ public:
 
     void setFilter(SelectionFilter f) { _filter = f; }
     bool canWrite(const EngravingItem*) const;
+    bool canWriteNoteIdx(size_t noteIdx, size_t totalNotesInChord) const;
     bool canWriteVoice(track_idx_t track) const;
 
     inline bool operator==(const WriteContext& c) const
