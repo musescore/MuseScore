@@ -33,9 +33,9 @@ class Hairpin;
 enum class HairpinType : signed char {
     INVALID = -1,
     CRESC_HAIRPIN,
-    DECRESC_HAIRPIN,
+    DIM_HAIRPIN,
     CRESC_LINE,
-    DECRESC_LINE
+    DIM_LINE
 };
 
 //---------------------------------------------------------
@@ -96,7 +96,7 @@ private:
 
 //---------------------------------------------------------
 //   @@ Hairpin
-//   @P hairpinType  enum (Hairpin.CRESCENDO, Hairpin.DECRESCENDO)
+//   @P hairpinType  enum (Hairpin.CRESCENDO, Hairpin.DIMINUENDO)
 //   @P veloChange   int
 //---------------------------------------------------------
 
@@ -146,7 +146,7 @@ public:
 
     bool isDecrescendo() const
     {
-        return m_hairpinType == HairpinType::DECRESC_HAIRPIN || m_hairpinType == HairpinType::DECRESC_LINE;
+        return m_hairpinType == HairpinType::DIM_HAIRPIN || m_hairpinType == HairpinType::DIM_LINE;
     }
 
     PropertyValue getProperty(Pid id) const override;
@@ -156,7 +156,7 @@ public:
     String accessibleInfo() const override;
     bool isLineType() const
     {
-        return m_hairpinType == HairpinType::CRESC_LINE || m_hairpinType == HairpinType::DECRESC_LINE;
+        return m_hairpinType == HairpinType::CRESC_LINE || m_hairpinType == HairpinType::DIM_LINE;
     }
 
     PointF linePos(Grip grip, System** system) const override;
