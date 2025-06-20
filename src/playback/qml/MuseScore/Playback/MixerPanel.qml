@@ -47,7 +47,7 @@ ColumnLayout {
     spacing: 0
 
     function resizePanelToContentHeight() {
-        if (contentColumn.completed) {
+        if (contentColumn.completed && implicitHeight > 0) {
             root.resizeRequested(width, implicitHeight)
         }
     }
