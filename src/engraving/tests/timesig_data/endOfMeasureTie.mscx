@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <programVersion>4.6.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>f0fsNXB8dmN_ZFR16/BVYOL</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2025-06-17</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="oboe">
+        <family id="oboes">Oboes</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      </Order>
+    <Part id="1">
+      <Staff>
+        <eid>uPbgiwleqFG_G9r3vXko/oH</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Oboe</trackName>
+      <Instrument id="oboe">
+        <longName>Oboe</longName>
+        <shortName>Ob.</shortName>
+        <trackName>Oboe</trackName>
+        <minPitchP>58</minPitchP>
+        <maxPitchP>96</maxPitchP>
+        <minPitchA>58</minPitchA>
+        <maxPitchA>87</maxPitchA>
+        <instrumentId>wind.reed.oboe</instrumentId>
+        <Channel>
+          <program value="68"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>ZxxzBpl9HXD_hqxR3/glq0F</eid>
+        <voice>
+          <KeySig>
+            <eid>82E1Dv3ttZD_uKzCJ7xsBbB</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>04NNvKgupiP_FImPRZIO5zD</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>dDP5XukCvBE_iZ0lWxEoFfJ</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>Ghwtr3lF5uN_VHlGMAkA8ND</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>7Xm+UrjA8HI_NrF1seYnihI</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>CqCeBOvIskJ_r12TO1I1HyL</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>Dtldpo0wDRH_x3YqI8kPblK</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>UhAOJ1LnJYF_V2zVH0KP5GL</eid>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>ivFSFFNw/pM_+WPh4SHvS7F</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>dvtF7V2Q28E_wT7bUM8qpOL</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>XkMy3S274MI_3ZCK0C5thhK</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    <fractions>-3/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>H1BaLfj6NBF_XKlPs0MwEWD</eid>
+        <voice>
+          <TimeSig>
+            <eid>D5e8q6iwnWN_8rVyblPbr6K</eid>
+            <sigN>3</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Chord>
+            <eid>MRsXTHIURZH_Uqo0VKLeF2</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>TW8MuJu2ioG_fVM8ZU69UqP</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    <fractions>3/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>Z9ieNWhuMRK_iJoyT8yWFQL</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>kbiWDL++dlK_vwfzAJV+1PO</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

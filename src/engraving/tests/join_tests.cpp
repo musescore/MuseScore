@@ -145,3 +145,53 @@ TEST_F(Engraving_JoinTests, join10)
 {
     join("join10.mscx", "join10-ref.mscx", 1);
 }
+
+TEST_F(Engraving_JoinTests, joinTieAtStart) {
+    // Test splitting a measure when there is a tie ending on the first chord on the split range
+    bool use302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+
+    MasterScore* score = ScoreRW::readScore(JOIN_DATA_DIR + u"joinTieAtStart.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    EXPECT_TRUE(m1);
+
+    Segment* s1 = m1->last(SegmentType::ChordRest);
+    ChordRest* cr1 = toChordRest(s1->element(0));
+    EXPECT_TRUE(cr1 && cr1->isChord());
+    Chord* c1 = toChord(cr1);
+    Note* n1 = c1->upNote();
+    EXPECT_TRUE(n1);
+
+    auto checkTie = [&]() -> Tie* {
+        Tie* t = n1->tieFor();
+        EXPECT_TRUE(t);
+
+        Note* n2 = t->endNote();
+        EXPECT_TRUE(n2);
+        EXPECT_EQ(n2->tick(), Fraction(1, 1));
+        EXPECT_EQ(n2->chord()->measure(), m1->nextMeasure());
+
+        return t;
+    };
+
+    Tie* tie1 = checkTie();
+
+    score->startCmd(TranslatableString::untranslatable("Engraving join tests"));
+    Measure* m2 = m1->nextMeasure();
+    Measure* m3 = m2->nextMeasure();
+    score->cmdJoinMeasure(m2, m3);
+    score->endCmd();
+
+    Tie* tie2 = checkTie();
+    EXPECT_NE(tie2, tie1);
+
+    score->undoRedo(true, nullptr);
+
+    Tie* tie3 = checkTie();
+    EXPECT_EQ(tie3, tie1);
+
+    delete score;
+    MScore::useRead302InTestMode = use302;
+}
