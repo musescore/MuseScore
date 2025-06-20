@@ -271,7 +271,7 @@ void TextBase::insertSym(EditData& ed, SymId id)
     deleteSelectedText(ed);
     String s = score()->engravingFont()->toString(id);
     cursor->format()->setFontFamily(u"ScoreText");
-    score()->undo(new InsertText(m_cursor, s), &ed);
+    score()->undo(new InsertText(cursor, s), &ed);
 }
 
 //---------------------------------------------------------
@@ -958,6 +958,7 @@ void TextBase::paste(EditData& ed, const String& txt)
                     sym.clear();
                 } else if (token == "/sym") {
                     symState = false;
+                    static_cast<TextEditData*>(ed.getData(this).get())->cursor()->setFormat(format);
                     insertSym(ed, SymNames::symIdByName(sym));
                 } else {
                     prepareFormat(token, format);
