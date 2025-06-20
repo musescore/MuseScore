@@ -3409,26 +3409,39 @@ void Score::cmdExtendToNextNote()
         Fraction crts = cr->ticks();
         crList.push_back(cr);
 
-        while ((nextChordRest(cr) && nextChordRest(cr)->isRest())
-        || (nextChordRest(cr) && nextChordRest(cr)->tick() > (cr->tick() + cr->ticks()))) {
-
+        while ((nextChordRest(cr) && nextChordRest(cr)->isRest()) || (nextChordRest(cr) && nextChordRest(cr)->tick() > (cr->tick() + cr->ticks()))) {
             ChordRest* ncr = nextChordRest(cr);
             Rest* r = toRest(ncr);
 
             if (cr->tuplet() || r->tuplet()) {
-                Chord* nc = addChord(r->tick(), r->ticks(), toChord(cr), true, r->tuplet());
-                cr = toChordRest(nc);
+                m_is.setSegment(ncr->segment());
+                m_is.setLastSegment(m_is.segment());
+                m_is.setDuration(r->durationType());
+
+                Note* nn = nullptr;
+                for (uint i = 0; i < toChord(cr)->notes().size(); i++) {
+                    Note* note = toChord(cr)->notes()[i];
+                    NoteVal nval(note->noteVal());
+                    nn = addPitch(nval, i != 0);
+
+                    Tie* tie =  Factory::createTie(note);
+                    tie->setStartNote(note);
+                    tie->setTrack(note->track());
+                    tie->setTick(note->chord()->segment()->tick());
+                    tie->setEndNote(nn);
+                    tie->setTicks(nn->chord()->segment()->tick() - note->chord()->segment()->tick());
+                    undoAddElement(tie);
+                }
+                cr = toChordRest(nn->chord());
                 crList.push_back(cr);
             } else {
                 changeCRlen(cr, cr->ticks() + r->ticks());
                 if (cr->ticks() == crts) {
                     cr = nextChordRest(cr);
-                    crts = cr->ticks();
                     crList.push_back(cr);
-                } else {
-                    crts = cr->ticks();
                 }
             }
+            crts = cr->ticks();
             endTick = cr->tick() + cr->ticks() >= endTick ? cr->tick() + cr->ticks() : endTick;
         }
         while ((!nextChordRest(cr) && cr->voice() > 0 && cr->measure() != score()->lastMeasure())) {
