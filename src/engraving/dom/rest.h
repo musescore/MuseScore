@@ -107,6 +107,7 @@ public:
 
     bool isWholeRest() const;
     bool isBreveRest() const;
+    bool hasLedgerLineOutsideStaff() const;
 
     DeadSlapped* deadSlapped() const { return m_deadSlapped; }
 
