@@ -30,16 +30,11 @@ MuseScore {
     thumbnailName: "assets/accidentals.png"
     requiresScore: true
 
-    enum AccBracketType { //todo: add enum from api and use it
-		NONE: 0,
-		ROUND: 1,
-		SQUARE: 2,
-	}
     enum AccDurationMode {
-		NOT_BEFORE: 0,
-		INSTANTANEOUS: 1,
-		DURING: 2,
-	}
+        NOT_BEFORE = 0,
+        INSTANTANEOUS = 1,
+        DURING = 2
+    }
 
     //  TODO:
     //  Add option to restate accidentals coming from chromatic runs
@@ -56,28 +51,28 @@ MuseScore {
     // Notes in same measure at different octave
     property var setting1: {
         "addAccidentals": true,    //  If to cancel, bracket type
-        "bracketType": 0,
+        "bracketType": AccidentalBracket.NONE,
         "parseGraceNotes": true,   //  Include grace notes in calculations and adding
         "parseOrnaments": true,
-        "durationMode": 0
+        "durationMode": AccDurationMode.NOT_BEFORE
     }
 
     // Notes in same measure in different staves (of same instrument)
     property var setting2: {
         "addAccidentals": true,
-        "bracketType": 0,
+        "bracketType": AccidentalBracket.NONE,
         "parseGraceNotes": true,
         "parseOrnaments": true,
-        "durationMode": 0
+        "durationMode": AccDurationMode.NOT_BEFORE
     }
 
     // Notes in same measure, different octave, different staves
     property var setting3: {
         "addAccidentals": true,
-        "bracketType": 0,
+        "bracketType": AccidentalBracket.NONE,
         "parseGraceNotes": false,
         "parseOrnaments": false,
-        "durationMode": 0
+        "durationMode": AccDurationMode.NOT_BEFORE
     }
 
     // Notes in different measures
@@ -85,16 +80,16 @@ MuseScore {
         //  same octave
         "a": {
             "addAccidentals": true,
-            "bracketType": 0,
+            "bracketType": AccidentalBracket.NONE,
             "parseGraceNotes": true,
-			"parseOrnaments": true,
+            "parseOrnaments": true,
         },
         //  different octaves
         "b": {
             "addAccidentals": true,
-            "bracketType": 0,
+            "bracketType": AccidentalBracket.NONE,
             "parseGraceNotes": false,
-			"parseOrnaments": false,
+            "parseOrnaments": false,
         }
     }
 
@@ -102,15 +97,15 @@ MuseScore {
     property var setting5: {
         "a": {
             "addAccidentals": true,
-            "bracketType": 0,
+            "bracketType": AccidentalBracket.NONE,
             "parseGraceNotes": false,
-			"parseOrnaments": false,
+            "parseOrnaments": false,
         },
         "b": {
             "addAccidentals": false,
-            "bracketType": 0,
+            "bracketType": AccidentalBracket.NONE,
             "parseGraceNotes": false,
-	        "parseOrnaments": false,
+            "parseOrnaments": false,
         }
     }
 
@@ -118,29 +113,29 @@ MuseScore {
     property var setting6: {
         "a": {
             "addAccidentals": true,
-            "bracketType": 0
+            "bracketType": AccidentalBracket.NONE
         },
         // add to notes in different staves
         "b": {
             "addAccidentals": true,
-            "bracketType": 0
+            "bracketType": AccidentalBracket.NONE
         }
     }
 
     // Notes over a key change (new bar)
     property var setting7: {
         "addAccidentals": true,
-        "bracketType": 0,
+        "bracketType": AccidentalBracket.NONE,
         "cancelOctaves": false,  //  Cancel in different octaves
         "parseGraceNotes": true,
-		"parseOrnaments": true,
+        "parseOrnaments": true,
         "cancelMode": true       //  Excessive cancelling mode (see setting9)
     }
 
     // Notes over a key change (mid bar)
     property var setting8: {
         "addAccidentals": true,
-        "bracketType": 0,
+        "bracketType": AccidentalBracket.NONE,
         "cancelOctaves": false,
         "parseGraceNotes": true,
         "parseOrnaments": true,
@@ -161,12 +156,12 @@ MuseScore {
     property var setting10: {
         "a": {
             "addAccidentals": true,
-            "bracketType": 0
+            "bracketType": AccidentalBracket.NONE
         },
         // add to notes in different staves
         "b": {
             "addAccidentals": true,
-            "bracketType": 0
+            "bracketType": AccidentalBracket.NONE
         }
     }
 

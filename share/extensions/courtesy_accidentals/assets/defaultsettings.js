@@ -25,21 +25,21 @@ function read () {
     },
     setting1: {
       addAccidentals: true,
-      bracketType: 0,
+      bracketType: AccidentalBracket.NONE,
       parseGraceNotes: true,
       parseOrnaments: true,
       durationMode: 0
     },
     setting2: {
       addAccidentals: true,
-      bracketType: 0,
+      bracketType: AccidentalBracket.NONE,
       parseGraceNotes: true,
       parseOrnaments: true,
       durationMode: 0
     },
     setting3: {
       addAccidentals: true,
-      bracketType: 0,
+      bracketType: AccidentalBracket.NONE,
       parseGraceNotes: false,
       parseOrnaments: false,
       durationMode: 0
@@ -47,27 +47,27 @@ function read () {
     setting4: {
       a: {
         addAccidentals: true,
-        bracketType: 0,
+        bracketType: AccidentalBracket.NONE,
         parseGraceNotes: false,
         parseOrnaments: false
       },
       b: {
         addAccidentals: false,
-        bracketType: 0,
+        bracketType: AccidentalBracket.NONE,
         parseGraceNotes: false,
         parseOrnaments: false
       }
     },
-	setting5: {
+    setting5: {
       a: {
         addAccidentals: true,
-        bracketType: 0,
+        bracketType: AccidentalBracket.NONE,
         parseGraceNotes: false,
         parseOrnaments: false
       },
       b: {
         addAccidentals: false,
-        bracketType: 0,
+        bracketType: AccidentalBracket.NONE,
         parseGraceNotes: false,
         parseOrnaments: false
       }
@@ -75,16 +75,16 @@ function read () {
     setting6: {
       a: {
         addAccidentals: true,
-        bracketType: 0
+        bracketType: AccidentalBracket.NONE
       },
       b: {
         addAccidentals: false,
-        bracketType: 0
+        bracketType: AccidentalBracket.NONE
       }
     },
     setting7: {
       addAccidentals: true,
-      bracketType: 0,
+      bracketType: AccidentalBracket.NONE,
       cancelOctaves: false,
       parseGraceNotes: true,
       parseOrnaments: true,
@@ -92,7 +92,7 @@ function read () {
     },
     setting8: {
       addAccidentals: true,
-      bracketType: 0,
+      bracketType: AccidentalBracket.NONE,
       cancelOctaves: true,
       parseGraceNotes: true,
       parseOrnaments: true,
@@ -105,11 +105,11 @@ function read () {
     setting10: {
       a: {
         addAccidentals: true,
-        bracketType: 0
+        bracketType: AccidentalBracket.NONE
       },
       b: {
         addAccidentals: false,
-        bracketType: 0
+        bracketType: AccidentalBracket.NONE
       }
     }
   }
