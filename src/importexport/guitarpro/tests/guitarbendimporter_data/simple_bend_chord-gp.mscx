@@ -276,28 +276,33 @@
             </KeySig>
           <Chord>
             <eid>g_g</eid>
-            <linkedTo>U_U</linkedTo>
+            <linkedTo>N_N</linkedTo>
             <grace8after/>
             <Note>
               <eid>h_h</eid>
-              <linkedTo>V_V</linkedTo>
-              <pitch>62</pitch>
-              <tpc>16</tpc>
-              <fret>3</fret>
-              <string>1</string>
+              <linkedTo>O_O</linkedTo>
+              <Accidental>
+                <role>1</role>
+                <subtype>accidentalSharp</subtype>
+                <eid>i_i</eid>
+                </Accidental>
+              <pitch>68</pitch>
+              <tpc>22</tpc>
+              <fret>13</fret>
+              <string>2</string>
               </Note>
             </Chord>
           <Chord>
-            <eid>i_i</eid>
+            <eid>j_j</eid>
             <linkedTo>Q_Q</linkedTo>
             <grace8after/>
             <Note>
-              <eid>j_j</eid>
+              <eid>k_k</eid>
               <linkedTo>R_R</linkedTo>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalFlat</subtype>
-                <eid>k_k</eid>
+                <eid>l_l</eid>
                 </Accidental>
               <pitch>70</pitch>
               <tpc>12</tpc>
@@ -306,21 +311,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>l_l</eid>
-            <linkedTo>N_N</linkedTo>
+            <eid>m_m</eid>
+            <linkedTo>U_U</linkedTo>
             <grace8after/>
             <Note>
-              <eid>m_m</eid>
-              <linkedTo>O_O</linkedTo>
-              <Accidental>
-                <role>1</role>
-                <subtype>accidentalSharp</subtype>
-                <eid>n_n</eid>
-                </Accidental>
-              <pitch>68</pitch>
-              <tpc>22</tpc>
-              <fret>13</fret>
-              <string>2</string>
+              <eid>n_n</eid>
+              <linkedTo>V_V</linkedTo>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <fret>3</fret>
+              <string>1</string>
               </Note>
             </Chord>
           <Chord>
