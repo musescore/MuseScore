@@ -249,28 +249,44 @@
             <Note>
               <eid>d_d</eid>
               <linkedTo>R_R</linkedTo>
+              <visible>1</visible>
+              <Symbol>
+                <name>noteheadParenthesisLeft</name>
+                <eid>e_e</eid>
+                </Symbol>
+              <Symbol>
+                <name>noteheadParenthesisRight</name>
+                <eid>f_f</eid>
+                </Symbol>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
+              <ghost>1</ghost>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    </location>
+                  </prev>
+                </Spanner>
               </Note>
             </Chord>
           <Chord>
-            <eid>e_e</eid>
+            <eid>g_g</eid>
             <linkedTo>S_S</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>f_f</eid>
+              <eid>h_h</eid>
               <linkedTo>T_T</linkedTo>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
-                <eid>g_g</eid>
+                <eid>i_i</eid>
                 <linkedTo>U_U</linkedTo>
                 <visible>0</visible>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
-                <eid>h_h</eid>
+                <eid>j_j</eid>
                 <linkedTo>V_V</linkedTo>
                 <visible>0</visible>
                 </Symbol>
@@ -278,6 +294,21 @@
               <tpc>16</tpc>
               <fret>1</fret>
               <string>1</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>0</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>k_k</eid>
+                  <linkedTo>W_W</linkedTo>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <grace>0</grace>
+                    </location>
+                  </next>
+                </Spanner>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -288,7 +319,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>i_i</eid>
+            <eid>l_l</eid>
             <linkedTo>X_X</linkedTo>
             <durationType>half</durationType>
             </Rest>

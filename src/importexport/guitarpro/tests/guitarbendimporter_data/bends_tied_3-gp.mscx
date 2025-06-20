@@ -264,7 +264,7 @@
               <linkedTo>O_O</linkedTo>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
+              <fret>1</fret>
               <string>1</string>
               <Spanner type="GuitarBend">
                 <GuitarBend>
@@ -281,6 +281,12 @@
                     </location>
                   </next>
                 </Spanner>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    </location>
+                  </prev>
+                </Spanner>
               </Note>
             </Chord>
           <Chord>
@@ -294,43 +300,78 @@
               <tpc>14</tpc>
               <fret>1</fret>
               <string>1</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>0</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>i_i</eid>
+                  <linkedTo>S_S</linkedTo>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <grace>0</grace>
+                    </location>
+                  </next>
+                </Spanner>
               </Note>
             </Chord>
           <Chord>
-            <eid>i_i</eid>
+            <eid>j_j</eid>
             <linkedTo>T_T</linkedTo>
             <grace8after/>
             <Note>
-              <eid>j_j</eid>
+              <eid>k_k</eid>
               <linkedTo>U_U</linkedTo>
               <pitch>62</pitch>
               <tpc>16</tpc>
-              <fret>3</fret>
+              <fret>1</fret>
               <string>1</string>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    </location>
+                  </prev>
+                </Spanner>
               </Note>
             </Chord>
           <Chord>
-            <eid>k_k</eid>
+            <eid>l_l</eid>
             <linkedTo>V_V</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>l_l</eid>
+              <eid>m_m</eid>
               <linkedTo>W_W</linkedTo>
+              <visible>1</visible>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
-                <eid>m_m</eid>
-                <visible>0</visible>
+                <eid>n_n</eid>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
-                <eid>n_n</eid>
-                <visible>0</visible>
+                <eid>o_o</eid>
                 </Symbol>
               <pitch>60</pitch>
               <tpc>14</tpc>
-              <fret>3</fret>
+              <fret>1</fret>
               <string>1</string>
               <ghost>1</ghost>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>0</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>p_p</eid>
+                  <linkedTo>X_X</linkedTo>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <grace>0</grace>
+                    </location>
+                  </next>
+                </Spanner>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -342,12 +383,12 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>o_o</eid>
+            <eid>q_q</eid>
             <linkedTo>Y_Y</linkedTo>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
-            <eid>p_p</eid>
+            <eid>r_r</eid>
             <linkedTo>Z_Z</linkedTo>
             </BarLine>
           </voice>
@@ -355,7 +396,7 @@
       <Measure>
         <voice>
           <Rest>
-            <eid>q_q</eid>
+            <eid>s_s</eid>
             <linkedTo>b_b</linkedTo>
             <durationType>measure</durationType>
             <duration>4/4</duration>
