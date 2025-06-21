@@ -994,7 +994,7 @@ void GP67DomBuilder::readNoteProperties(XmlDomNode* propertiesNode, GPNote* note
             note->setHammerOn(GPNote::HammerOn::Start);
         } else if (propertyName == u"Tapped") {
             if (propertyNode.firstChild().nodeName() == "Enable") {
-                note->setTapping(true);
+                note->setRightHandTapping(true);
             }
         } else if (propertyName == u"LeftHandTapped") {
             if (propertyNode.firstChild().nodeName() == "Enable") {

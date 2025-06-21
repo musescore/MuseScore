@@ -387,9 +387,12 @@ void GuitarPro::addHarmonicMarks(ChordRest* cr, bool hasHarmonicArtificial, bool
 //   addTap
 //---------------------------------------------------------
 
-void GuitarPro::addTap(Note* note)
+void GuitarPro::addTap(Chord* chord)
 {
-    addTextArticulation(note, ArticulationTextType::TAP);
+    Tapping* tapping = Factory::createTapping(chord);
+    tapping->setTrack(chord->track());
+    tapping->setHand(TappingHand::RIGHT);
+    chord->add(tapping);
 }
 
 //---------------------------------------------------------
@@ -953,9 +956,9 @@ void GuitarPro::createMeasures()
 
 void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect, bool& hasVibratoLeftHand, bool& hasVibratoWTremBar)
 {
-    /* tap/slap/pop implemented as text until SMuFL has
+    /* slap/pop implemented as text until SMuFL has
      * specifications and we can add them to fonts. Note that
-     * tap/slap/pop are just added to the top note in the chord,
+     * slap/pop are just added to the top note in the chord,
      * technically these can be applied to individual notes on the
      * UI, but Guitar Pro has no way to express that on the
      * score. To get the same result, we should just add the marking
@@ -963,7 +966,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect, bool& hasVibratoL
      */
     if (beatEffect == 1) {
         if (version > 300) {
-            addTap(chord->upNote());
+            addTap(chord);
         } else {
             hasVibratoLeftHand = true;
         }

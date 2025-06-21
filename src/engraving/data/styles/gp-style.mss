@@ -32,5 +32,10 @@
     <tabShowTiedFret>1</tabShowTiedFret>
     <tabParenthesizeTiedFret>1</tabParenthesizeTiedFret>
     <parenthesizeTiedFretIfArticulation>1</parenthesizeTiedFretIfArticulation>
+    <lhTappingSymbolNormalStave>circledT</lhTappingSymbolNormalStave>
+    <lhTappingShowItemsNormalStave>1</lhTappingShowItemsNormalStave>
+    <lhTappingShowItemsTab>0</lhTappingShowItemsTab>
+    <rhTappingSymbolNormalStave>T</rhTappingSymbolNormalStave>
+    <rhTappingSymbolTab>T</rhTappingSymbolTab>
   </Style>
 </museScore>

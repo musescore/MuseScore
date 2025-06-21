@@ -140,6 +140,7 @@ protected:
     using Fraction = mu::engraving::Fraction;
     using Measure = mu::engraving::Measure;
     using ChordRest = mu::engraving::ChordRest;
+    using Chord = mu::engraving::Chord;
     using Note = mu::engraving::Note;
 
     enum class TabImportOption {
@@ -307,7 +308,7 @@ protected:
     void addVibratoLeftHand(ChordRest* cr, bool hasVibratoLeftHand);
     void addVibratoWTremBar(ChordRest* cr, bool hasVibratoWTremBar);
     void addHarmonicMarks(ChordRest* cr, bool hasHarmonicArtificial, bool hasHarmonicPinch, bool hasHarmonicTap, bool hasHarmonicSemi);
-    void addTap(Note*);
+    void addTap(Chord*);
     void addSlap(Note*);
     void addPop(Note*);
     bool createTuningString(int strings, int tuning[]); // returns useFlats
