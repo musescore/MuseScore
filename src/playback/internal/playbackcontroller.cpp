@@ -651,7 +651,7 @@ void PlaybackController::play()
             delay = playbackDelay(countInDuration);
         }
     }
-
+    
     currentPlayer()->play(delay);
 }
 

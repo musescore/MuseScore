@@ -22,16 +22,19 @@
 #ifndef MU_NOTATION_PLAYBACKCURSOR_H
 #define MU_NOTATION_PLAYBACKCURSOR_H
 
+#include <QObject>
+
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "draw/types/geometry.h"
 
 #include "notation/inotation.h"
+#include <future>
 
 class QColor;
 
 namespace mu::notation {
-class PlaybackCursor : public muse::Injectable
+class PlaybackCursor : public QObject, public muse::Injectable
 {
     muse::Inject<INotationConfiguration> configuration = { this };
 
@@ -42,21 +45,89 @@ public:
     void paint(muse::draw::Painter* painter);
 
     void setNotation(INotationPtr notation);
-    void move(muse::midi::tick_t tick);
+    void move(muse::midi::tick_t tick, bool isPlaying = true);
 
     bool visible() const;
     void setVisible(bool arg);
 
     const muse::RectF& rect() const;
 
+    int hit_measure_no();
+    Measure* hit_measure();
+
+    void setHitMeasureNo(int m_no);
+    void setHitMeasure(Measure* m);
+    
+    Q_OBJECT
+signals:
+    void lingeringCursorUpdate(double x, double y, double width, double height) const;
+    void lingeringCursorUpdate1() const;
+
 private:
     QColor color() const;
     muse::RectF resolveCursorRectByTick(muse::midi::tick_t tick) const;
+    muse::RectF resolveCursorRectByTick(muse::midi::tick_t tick, bool isPlaying = true);
+    void processOttava(mu::engraving::Score* score, bool isPlaying = true);
+    void processOttavaAsync(mu::engraving::Score* score);
+
+    void processCursorSpannerRenderStatus(Measure* measure, Fraction tick, bool recover, bool isPlaying);
+    void processCursorSpannerRenderStatusAsync(Measure* measure, Fraction tick, bool recover, bool isPlaying);
+
+    void processCursorNoteRenderStatus(Measure* measure, int curr_ticks);
+    void processCursorNoteRenderStatusAsync(Measure* measure, int curr_ticks);
+
+    void processCursorNoteRenderRecover(EngravingItem* engravingItem, int curr_ticks);
+    void processCursorNoteRenderRecoverAsync(EngravingItem* engravingItem, int curr_ticks);
 
     bool m_visible = false;
     muse::RectF m_rect;
 
     INotationPtr m_notation;
+
+    int m_hit_measure_no = -1;
+    Measure* m_hit_measure = nullptr;
+    std::map<const Note*, int> ottava_map;
+    std::map<EngravingItem*, EngravingItem*> chordrest_fermata_map;
+    std::map<int, std::set<EngravingItem*>> measure_spanner_map;
+    std::map<EngravingItem*, std::map<int, int>> spanner_ticks_map;
+
+    std::map<EngravingItem*, Note*> score_trill_map;
+    std::map<EngravingItem*, int> score_trill_st_map;
+    std::map<EngravingItem*, int> score_trill_dt_map;
+    std::map<EngravingItem*, int> score_trill_tdt_map;
+    std::map<EngravingItem*, int> score_trill_tt_map;
+    std::map<EngravingItem*, int> score_trill_ot_map;
+    std::map<Note*, bool> score_trill_tie_map;
+    std::map<EngravingItem*, Note*> score_trill_map1;
+    std::map<EngravingItem*, int> score_trill_st_map1;
+    std::map<EngravingItem*, int> score_trill_dt_map1;
+    std::map<EngravingItem*, int> score_trill_tdt_map1;
+    std::map<EngravingItem*, int> score_trill_tt_map1;
+    std::map<EngravingItem*, int> score_trill_ot_map1;
+    std::map<Note*, bool> score_trill_tie_map1;
+
+    std::map<EngravingItem*, std::vector<Note*>> score_arpeggio_map;
+    std::map<EngravingItem*, int> score_arpeggio_st_map;
+    std::map<EngravingItem*, int> score_arpeggio_dt_map;
+    std::map<EngravingItem*, int> score_arpeggio_ot_map;
+
+    std::map<EngravingItem*, Note*> score_glissando_startnote_map;
+    std::map<EngravingItem*, int> score_glissando_st_map;
+    std::map<EngravingItem*, int> score_glissando_dt_map;
+    std::map<EngravingItem*, int> score_glissando_ot_map;
+    std::map<EngravingItem*, std::vector<Note*>> score_glissando_endnotes_map;
+
+    std::future<void> m_ottavaProcessFuture;
+    std::atomic<bool> m_isOttavaProcessed{ false };
+
+    std::future<void> m_cursorSpannerRenderStatusProcessFuture;
+    std::future<void> m_cursorNoteRenderStatusProcessFuture;
+
+    std::future<void> m_cursorNoteRenderRecoverFuture;
+
+    std::map<int, std::set<uint>> clefKeySigsKeysMap;
+
+    int curr_seg_ticks = 0;
 };
 }
 
