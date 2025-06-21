@@ -50,6 +50,9 @@ void AppearanceSettingsModel::createProperties()
     m_offset = buildPointFPropertyItem(Pid::OFFSET, [this](const mu::engraving::Pid, const QVariant& newValue) {
         setPropertyValue(m_elementsForOffsetProperty, Pid::OFFSET, newValue);
         loadProperties();
+    }, [this](const mu::engraving::Pid) {
+        resetPropertyValue(m_elementsForOffsetProperty, Pid::OFFSET);
+        loadProperties();
     });
 }
 
