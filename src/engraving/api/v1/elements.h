@@ -461,6 +461,13 @@ class Note : public EngravingItem
     /// to see meaningful data in the PlayEvent lists.
     /// \since MuseScore 3.3
     Q_PROPERTY(QQmlListProperty<apiv1::PlayEvent> playEvents READ playEvents)
+    /// List of spanners attached to and starting on this note
+    /// e.g. glissandos, guitar bends
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> spannerForward READ spannerFor)
+    /// List of spanners attached to and ending on this note
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> spannerBack READ spannerBack)
 //       Q_PROPERTY(int                            fret              READ fret               WRITE undoSetFret)
 //       Q_PROPERTY(bool                           ghost             READ ghost              WRITE undoSetGhost)
 //       Q_PROPERTY(mu::engraving::NoteHead::Group            headGroup         READ headGroup          WRITE undoSetHeadGroup)
@@ -531,10 +538,7 @@ public:
     int tpc() const { return note()->tpc(); }
     void setTpc(int val);
 
-    apiv1::Tie* tieBack()    const
-    {
-        return note()->tieBack() != nullptr ? tieWrap(note()->tieBack()) : nullptr;
-    }
+    apiv1::Tie* tieBack() const { return note()->tieBack() != nullptr ? tieWrap(note()->tieBack()) : nullptr; }
 
     apiv1::Tie* tieForward() const { return note()->tieFor() != nullptr ? tieWrap(note()->tieFor()) : nullptr; }
 
@@ -544,6 +548,16 @@ public:
     QQmlListProperty<EngravingItem> dots() { return wrapContainerProperty<EngravingItem>(this, note()->dots()); }
     QQmlListProperty<EngravingItem> elements() { return wrapContainerProperty<EngravingItem>(this, note()->el()); }
     QQmlListProperty<PlayEvent> playEvents() { return wrapPlayEventsContainerProperty(this, note()->playEvents()); }
+
+    QQmlListProperty<EngravingItem> spannerFor()
+    {
+        return wrapContainerProperty<EngravingItem>(this, note()->spannerFor());
+    }
+
+    QQmlListProperty<EngravingItem> spannerBack()
+    {
+        return wrapContainerProperty<EngravingItem>(this, note()->spannerBack());
+    }
 
     EngravingItem* accidental() { return wrap<EngravingItem>(note()->accidental()); }
 
