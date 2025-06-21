@@ -221,6 +221,8 @@ public:
 
     MOCK_METHOD(void, changeEnharmonicSpelling, (bool), (override));
     MOCK_METHOD(void, spellPitches, (), (override));
+    MOCK_METHOD(void, spellPitchesWithSharps, (), (override));
+    MOCK_METHOD(void, spellPitchesWithFlats, (), (override));
     MOCK_METHOD(void, regroupNotesAndRests, (), (override));
     MOCK_METHOD(void, resequenceRehearsalMarks, (), (override));
 

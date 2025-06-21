@@ -265,6 +265,8 @@ public:
     void replaceSelectedNotesWithSlashes() override;
     void changeEnharmonicSpelling(bool) override;
     void spellPitches() override;
+    void spellPitchesWithSharps() override;
+    void spellPitchesWithFlats() override;
     void regroupNotesAndRests() override;
     void resequenceRehearsalMarks() override;
 
