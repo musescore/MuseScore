@@ -1692,14 +1692,35 @@ NoteVal Score::noteVal(int pitch, staff_idx_t staffIdx, bool allowTransposition)
         return nval;
     }
 
+    bool concertPitch = style().styleB(Sid::concertPitch);
+    Interval v = st->part()->instrument(inputState().tick())->transpose();
+
+    // If an accidental is set in the input state, use it as a hint for the pitch spelling
+    if (AccidentalType at = m_is.accidentalType(); at == AccidentalType::FLAT || at == AccidentalType::SHARP) {
+        Prefer prefer = at == AccidentalType::SHARP ? Prefer::SHARPS : Prefer::FLATS;
+        if (concertPitch || v.isZero()) {
+            // Note: using Key::C always and ignoring actual key signature. Otherwise, flat mode would still use sharps
+            // sometimes if they're in the key, and vice versa, which seems contrary to the intent of the hint.
+            nval.tpc1 = pitch2tpc(nval.pitch, Key::C, prefer);
+            Interval vFlipped = v;
+            vFlipped.flip();
+            nval.tpc2 = transposeTpc(nval.tpc1, vFlipped, true);
+        } else {
+            // Spell the transposed pitch first, then convert to concert pitch
+            int writtenPitch = nval.pitch;
+            if (!allowTransposition) {
+                writtenPitch -= v.chromatic;
+            }
+            nval.tpc2 = pitch2tpc(writtenPitch, Key::C, prefer);
+            nval.tpc1 = transposeTpc(nval.tpc2, v, true);
+        }
+    }
+
     // if transposing, interpret MIDI pitch as representing desired written pitch
     // set pitch based on corresponding sounding pitch
-    if (!style().styleB(Sid::concertPitch) && allowTransposition) {
-        nval.pitch += st->part()->instrument(inputState().tick())->transpose().chromatic;
+    if (!concertPitch && allowTransposition) {
+        nval.pitch += v.chromatic;
     }
-    // let addPitch calculate tpc values from pitch
-    //Key key   = st->key(inputState().tick());
-    //nval.tpc1 = pitch2tpc(nval.pitch, key, Prefer::NEAREST);
 
     return nval;
 }
