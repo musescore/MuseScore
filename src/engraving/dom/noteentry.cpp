@@ -290,7 +290,7 @@ Note* Score::addPitchToChord(NoteVal& nval, Chord* chord, InputState* externalIn
             note = addNote(chord, nval, forceAccidental, /* articulationIds */ {}, externalInputState);
         }
     } else {
-        note = addNote(chord, nval, forceAccidental, is.articulationIds(), externalInputState);
+        note = addNote(chord, nval, forceAccidental, /* articulationIds */ {}, externalInputState);
     }
 
     if (is.usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
