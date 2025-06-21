@@ -85,6 +85,10 @@ public:
 
     void setNotation(notation::INotationPtr notation) override;
     void setIsExportingAudio(bool exporting) override;
+
+    const std::set<muse::audio::TrackId>& onlineSounds() const override;
+    muse::async::Notification onlineSoundsChanged() const override;
+    muse::Progress onlineSoundsProcessingProgress() const override;
 };
 }
 

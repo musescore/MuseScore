@@ -60,6 +60,24 @@ static const Harmony* findChordSymbol(const EngravingItem* item)
     return nullptr;
 }
 
+static bool shouldSkipChanges(const ScoreChangesRange& changes)
+{
+    if (!changes.isValid() || changes.isTextEditing) {
+        return true;
+    }
+
+    if (changes.changedItems.size() != 1) {
+        return false;
+    }
+
+    const EngravingItem* item = changes.changedItems.begin()->first;
+    if (item->isTextBase()) {
+        return toTextBase(item)->empty();
+    }
+
+    return false;
+}
+
 void PlaybackModel::load(Score* score)
 {
     TRACEFUNC;
@@ -74,7 +92,7 @@ void PlaybackModel::load(Score* score)
     changesChannel.resetOnReceive(this);
 
     changesChannel.onReceive(this, [this](const ScoreChangesRange& range) {
-        if (!range.isValid()) {
+        if (shouldSkipChanges(range)) {
             return;
         }
 

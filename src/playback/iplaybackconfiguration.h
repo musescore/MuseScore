@@ -88,6 +88,13 @@ public:
     virtual bool needToShowResetSoundFlagsWhenChangePlaybackProfileWarning() const = 0;
     virtual void setNeedToShowResetSoundFlagsWhenChangePlaybackProfileWarning(bool show) = 0;
 
+    virtual bool needToShowOnlineSoundsConnectionWarning() const = 0;
+    virtual void setNeedToShowOnlineSoundsConnectionWarning(bool show) = 0;
+
+    virtual OnlineSoundsShowProgressBarMode onlineSoundsShowProgressBarMode() const = 0;
+    virtual void setOnlineSoundsShowProgressBarMode(OnlineSoundsShowProgressBarMode mode) = 0;
+    virtual muse::async::Notification onlineSoundsShowProgressBarModeChanged() const = 0;
+
     virtual bool shouldMeasureInputLag() const = 0;
 };
 }

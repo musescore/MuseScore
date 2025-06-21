@@ -4,3 +4,5 @@ PlaybackLoadingInfo 1.0 PlaybackLoadingInfo.qml
 MixerPanel 1.0 MixerPanel.qml
 SoundProfilesDialog 1.0 SoundProfilesDialog.qml
 SoundFlagPopup 1.0 SoundFlagPopup.qml
+OnlineSoundsStatusView 1.0 OnlineSoundsStatusView.qml
+NotationRegionsBeingProcessedView 1.0 NotationRegionsBeingProcessedView.qml
