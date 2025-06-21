@@ -68,10 +68,10 @@
           <Chord>
             <eid>H_H</eid>
             <durationType>quarter</durationType>
-            <Articulation>
-              <subtype>Tap</subtype>
+            <Tapping>
+              <hand>right</hand>
               <eid>I_I</eid>
-              </Articulation>
+              </Tapping>
             <Note>
               <eid>J_J</eid>
               <pitch>60</pitch>

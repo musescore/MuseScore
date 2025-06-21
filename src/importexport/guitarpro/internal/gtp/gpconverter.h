@@ -92,9 +92,10 @@ private:
     Note* addHarmonic(const GPNote* gpnote, Note* note);
     void addFingering(const GPNote* gpnote, Note* note);
     void addAccent(const GPNote* gpnote, Note* note);
-    void addLeftHandTapping(const GPNote* gpnote, Note* note);
     void addStringNumber(const GPNote* gpnote, Note* note);
-    void addTapping(const GPNote* gpnote, Note* note);
+    void addTapping(const GPNote* gpnote, Note* note, engraving::TappingHand hand);
+    void addLeftHandTapping(const GPNote* gpnote, Note* note);
+    void addRightHandTapping(const GPNote* gpnote, Note* note);
     void addSlide(const GPNote* gpnote, Note* note);
     void addSingleSlide(const GPNote* gpnote, Note* note);
     void addPickScrape(const GPNote* gpnote, Note* note);
@@ -111,6 +112,7 @@ private:
     void addLegato(const GPBeat* beat, ChordRest* cr);
     void addOttava(const GPBeat* gpb, ChordRest* cr);
     void addDynamic(const GPBeat* beat, ChordRest* cr);
+    void addTapping(const GPBeat* beat, ChordRest* cr);
     void addSlapped(const GPBeat* beat, ChordRest* cr);
     void addPopped(const GPBeat* beat, ChordRest* cr);
     void addBrush(const GPBeat* beat, ChordRest* cr);
