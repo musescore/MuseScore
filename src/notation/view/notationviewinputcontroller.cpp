@@ -1000,8 +1000,28 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         }
     }
 
-    // move canvas
     if (!isNoteEnterMode || isMiddleButton) {
+        // wrap mouse over the edge of the canvas
+        QPoint pos = event->pos();
+
+        int right = m_view->width();
+        int bottom = m_view->height();
+
+        int padding = 2; // This is the minimum magic number to get the cursor to wrap over the right edge when muse score is fullscreen on X11
+        if (pos.x()<padding) pos.setX(right-padding);
+        else if (pos.x()+padding>right) pos.setX(padding);
+        if (pos.y()<padding) pos.setY(bottom-padding);
+        else if (pos.y()+padding>bottom) pos.setY(padding);
+
+        QPoint delta = pos - event->pos();
+        if (delta.x() != 0 || delta.y() != 0) {
+            QCursor cursor = QCursor();
+            cursor.setPos(cursor.pos() + delta);
+            m_mouseDownInfo.physicalBeginPoint = pos;
+            m_mouseDownInfo.logicalBeginPoint = m_view->toLogical(pos);
+        }
+
+        // move canvas
         PointF logicalDragDelta = logicPos - m_mouseDownInfo.logicalBeginPoint;
         m_view->moveCanvas(logicalDragDelta.x(), logicalDragDelta.y());
 
