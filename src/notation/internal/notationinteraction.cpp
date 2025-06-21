@@ -6804,8 +6804,12 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
 //! NOTE: Copied from ScoreView::harmonyBeatsTab
 void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool nearNoteOrRest)
 {
-    mu::engraving::Harmony* harmony = editedHarmony();
-    mu::engraving::Segment* segment = harmony ? toSegment(harmony->parent()) : nullptr;
+    Harmony* harmony = editedHarmony();
+    if (!harmony) {
+        return;
+    }
+
+    Segment* segment = harmonySegment(harmony);
     if (!segment) {
         LOGD("no segment");
         return;
@@ -6895,8 +6899,12 @@ void NotationInteraction::navigateToNearHarmony(MoveDirection direction, bool ne
 //! NOTE: Copied from ScoreView::harmonyTab
 void NotationInteraction::navigateToHarmonyInNearMeasure(MoveDirection direction)
 {
-    mu::engraving::Harmony* harmony = editedHarmony();
-    mu::engraving::Segment* segment = harmony ? toSegment(harmony->parent()) : nullptr;
+    Harmony* harmony = editedHarmony();
+    if (!harmony) {
+        return;
+    }
+
+    Segment* segment = harmonySegment(harmony);
     if (!segment) {
         LOGD("harmonyTicksTab: no segment");
         return;
@@ -6941,8 +6949,12 @@ void NotationInteraction::navigateToHarmonyInNearMeasure(MoveDirection direction
 //! NOTE: Copied from ScoreView::harmonyBeatsTab
 void NotationInteraction::navigateToHarmony(const Fraction& ticks)
 {
-    mu::engraving::Harmony* harmony = editedHarmony();
-    mu::engraving::Segment* segment = harmony ? toSegment(harmony->parent()) : nullptr;
+    Harmony* harmony = editedHarmony();
+    if (!harmony) {
+        return;
+    }
+
+    Segment* segment = harmonySegment(harmony);
     if (!segment) {
         LOGD("no segment");
         return;
@@ -7715,14 +7727,15 @@ void NotationInteraction::addFretboardDiagram()
     }
 }
 
-mu::engraving::Harmony* NotationInteraction::editedHarmony() const
+Harmony* NotationInteraction::editedHarmony() const
 {
     Harmony* harmony = static_cast<Harmony*>(m_editData.element);
     if (!harmony) {
         return nullptr;
     }
 
-    if (!harmony->parent() || !harmony->parent()->isSegment()) {
+    if (!harmony->parent() || (!harmony->parent()->isSegment()
+                               && !harmony->parent()->isFretDiagram())) {
         LOGD("no segment parent");
         return nullptr;
     }
@@ -7730,12 +7743,40 @@ mu::engraving::Harmony* NotationInteraction::editedHarmony() const
     return harmony;
 }
 
+Segment* NotationInteraction::harmonySegment(const Harmony* harmony) const
+{
+    if (!harmony || !harmony->parent()) {
+        return nullptr;
+    }
+
+    EngravingObject* parent = harmony->parent();
+    Segment* segment = parent->isSegment() ? toSegment(parent) : nullptr;
+    if (!segment && parent->isFretDiagram()) {
+        segment = toFretDiagram(parent)->segment();
+    }
+
+    return segment;
+}
+
 mu::engraving::Harmony* NotationInteraction::findHarmonyInSegment(const mu::engraving::Segment* segment, track_idx_t track,
                                                                   mu::engraving::TextStyleType textStyleType) const
 {
     for (mu::engraving::EngravingItem* e : segment->annotations()) {
-        if (e->isHarmony() && e->track() == track && toHarmony(e)->textStyleType() == textStyleType) {
-            return toHarmony(e);
+        if (!e->isHarmony() && !e->isFretDiagram()) {
+            continue;
+        }
+
+        Harmony* harmony = e->isHarmony() ? toHarmony(e) : nullptr;
+        if (e->isFretDiagram()) {
+            harmony = toFretDiagram(e)->harmony();
+        }
+
+        if (!harmony) {
+            continue;
+        }
+
+        if (harmony->track() == track && harmony->textStyleType() == textStyleType) {
+            return harmony;
         }
     }
 

@@ -3925,7 +3925,7 @@ void Score::cmdDeleteSelection()
                 if (e->isFretDiagram() && e->explicitParent()->isFBox()) {
                     elSelectedAfterDeletion = toFBox(e->explicitParent());
                     continue;
-                } else {
+                } else if (e->isHarmony()) {
                     EngravingObject* parent = toHarmony(e)->explicitParent();
                     FretDiagram* fretDiagram = parent->isFretDiagram() ? toFretDiagram(parent) : nullptr;
                     if (fretDiagram && fretDiagram->explicitParent()->isFBox()) {
