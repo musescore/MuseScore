@@ -96,6 +96,10 @@ void NoteInputPreferencesModel::load()
     notationConfiguration()->warnGuitarBendsChanged().onReceive(this, [this](bool value) {
         emit warnGuitarBendsChanged(value);
     });
+
+    engravingConfiguration()->autoUpdateFretboardDiagramsChanged().onReceive(this, [this](bool value) {
+        emit autoUpdateFretboardDiagramsChanged(value);
+    });
 }
 
 QVariantList NoteInputPreferencesModel::noteInputMethods() const
@@ -344,4 +348,18 @@ void NoteInputPreferencesModel::setWarnGuitarBends(bool value)
     }
 
     notationConfiguration()->setWarnGuitarBends(value);
+}
+
+bool NoteInputPreferencesModel::autoUpdateFretboardDiagrams() const
+{
+    return engravingConfiguration()->autoUpdateFretboardDiagrams();
+}
+
+void NoteInputPreferencesModel::setAutoUpdateFretboardDiagrams(bool value)
+{
+    if (value == autoUpdateFretboardDiagrams()) {
+        return;
+    }
+
+    engravingConfiguration()->setAutoUpdateFretboardDiagrams(value);
 }

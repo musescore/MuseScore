@@ -776,7 +776,7 @@ void Harmony::endEditTextual(EditData& ed)
     TextEditData* ted = dynamic_cast<TextEditData*>(ed.getData(this).get());
     bool textChanged = ted != nullptr && ted->oldXmlText != harmonyName();
 
-    if (textChanged) {
+    if (textChanged && configuration()->autoUpdateFretboardDiagrams()) {
         Segment* parentSegment = getParentSeg();
         if (parentSegment) {
             EngravingItem* fretDiagramItem = parentSegment->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
