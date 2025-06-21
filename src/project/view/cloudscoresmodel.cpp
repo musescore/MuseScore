@@ -144,6 +144,10 @@ void CloudScoresModel::loadItemsIfNecessary()
                     obj[CLOUD_VISIBILITY_KEY] = static_cast<int>(item.visibility);
                     obj[CLOUD_VIEW_COUNT_KEY] = item.viewCount;
 
+                    obj["rawModifiedTime"] = item.lastModified.date().toString();
+                    obj["rawFileSize"] = static_cast<qulonglong>(item.fileSize);
+                    obj["originalIndex"] = static_cast<int>(m_items.size());
+
                     m_items.push_back(obj);
                 }
 
@@ -164,10 +168,50 @@ void CloudScoresModel::loadItemsIfNecessary()
         });
     } else {
         setState(State::Fine);
+
+        if (m_needsResortAfterLoad && !m_items.empty()) {
+            m_needsResortAfterLoad = false;
+            beginResetModel();
+            restoreOriginalOrder();
+            endResetModel();
+        }
+    }
+}
+
+void CloudScoresModel::sortBy(const QString& key)
+{
+    if (m_sortKey == key && m_isSorted) {
+        if (m_sortOrder == Qt::AscendingOrder) {
+            m_sortOrder = Qt::DescendingOrder;
+        } else {
+            m_needsResortAfterLoad = true;
+            clearSort();
+            return;
+        }
+    } else {
+        m_sortKey = key;
+        m_sortOrder = Qt::AscendingOrder;
+        m_isSorted = true;
+    }
+
+    emit sortKeyChanged();
+    emit sortOrderChanged();
+
+    if (!m_items.empty()) {
+        beginResetModel();
+        sortScoreItems(m_items);
+        endResetModel();
     }
 }
 
 bool CloudScoresModel::needsLoading()
 {
     return hasMore() && static_cast<int>(m_items.size()) < m_desiredRowCount;
+}
+
+void CloudScoresModel::restoreOriginalOrder()
+{
+    std::sort(m_items.begin(), m_items.end(), [](const QVariantMap& a, const QVariantMap& b) {
+        return a.value("originalIndex", 0).toInt() < b.value("originalIndex", 0).toInt();
+    });
 }
