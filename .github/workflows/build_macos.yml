@@ -77,8 +77,7 @@ jobs:
           if [ -z "${{ secrets.APPLE_USERNAME }}" ]; then
             echo "::warning::APPLE_USERNAME is empty; notarization disabled"
             DO_NOTARIZE='false'
-          fi
-          if [ -z "${{ secrets.APPLE_PASSWORD }}" ]; then
+          elif [ -z "${{ secrets.APPLE_PASSWORD }}" ]; then
             echo "::warning::APPLE_PASSWORD is empty, notarization disabled"
             DO_NOTARIZE='false'
           fi
