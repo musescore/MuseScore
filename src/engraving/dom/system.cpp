@@ -703,7 +703,7 @@ void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
         }
         bool v = true;
         Spanner* spanner = ss->spanner();
-        if (spanner->anchor() == Spanner::Anchor::SEGMENT || spanner->anchor() == Spanner::Anchor::CHORD) {
+        if (spanner->anchor() == SpannerAnchor::SEGMENT || spanner->anchor() == SpannerAnchor::CHORD) {
             EngravingItem* se = spanner->startElement();
             EngravingItem* ee = spanner->endElement();
             bool v1 = true;

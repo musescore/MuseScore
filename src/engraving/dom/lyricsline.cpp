@@ -46,7 +46,7 @@ LyricsLine::LyricsLine(EngravingItem* parent)
     setGenerated(true);             // no need to save it, as it can be re-generated
     setDiagonal(false);
     setLineWidth(style().styleS(Sid::lyricsDashLineThickness));
-    setAnchor(Spanner::Anchor::SEGMENT);
+    setAnchor(SpannerAnchor::SEGMENT);
     m_nextLyrics = 0;
 }
 
@@ -56,7 +56,7 @@ LyricsLine::LyricsLine(const ElementType& type, EngravingItem* parent, ElementFl
     setGenerated(true);             // no need to save it, as it can be re-generated
     setDiagonal(false);
     setLineWidth(style().styleS(Sid::lyricsDashLineThickness));
-    setAnchor(Spanner::Anchor::SEGMENT);
+    setAnchor(SpannerAnchor::SEGMENT);
     m_nextLyrics = 0;
 }
 

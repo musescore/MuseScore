@@ -2521,7 +2521,7 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
 
             hp->setTick(Fraction::fromTicks(absTick));
             hp->setTick2(Fraction::fromTicks(absTick2));
-            hp->setAnchor(Spanner::Anchor::SEGMENT);
+            hp->setAnchor(SpannerAnchor::SEGMENT);
             m_score->addSpanner(hp);
         }
     }

@@ -458,7 +458,7 @@ void GuitarBend::updateHoldLine()
         m_holdLine = new GuitarBendHold(this);
     }
 
-    m_holdLine->setAnchor(Spanner::Anchor::NOTE);
+    m_holdLine->setAnchor(SpannerAnchor::NOTE);
     m_holdLine->setStartElement(startOfHold);
     m_holdLine->setEndElement(endOfHold);
     m_holdLine->setTick(startOfHold->tick());

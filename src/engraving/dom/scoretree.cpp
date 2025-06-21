@@ -233,7 +233,7 @@ EngravingObjectList Measure::scanChildren() const
     int start_tick = tick().ticks();
     for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
         Spanner* s = i->second;
-        if (s->anchor() == Spanner::Anchor::MEASURE) {
+        if (s->anchor() == SpannerAnchor::MEASURE) {
             children.push_back(s);
         }
     }
@@ -280,7 +280,7 @@ EngravingObjectList Segment::scanChildren() const
         int start_tick = tick().ticks();
         for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
             Spanner* s = i->second;
-            if (s->anchor() == Spanner::Anchor::SEGMENT) {
+            if (s->anchor() == SpannerAnchor::SEGMENT) {
                 children.push_back(s);
             }
         }
@@ -340,7 +340,7 @@ EngravingObjectList ChordRest::scanChildren() const
     int start_tick = tick().ticks();
     for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
         Spanner* s = i->second;
-        if (s->anchor() == Spanner::Anchor::CHORD && s->scanParent() == this) {
+        if (s->anchor() == SpannerAnchor::CHORD && s->scanParent() == this) {
             children.push_back(s);
         }
     }
@@ -548,13 +548,13 @@ EngravingObjectList FretDiagram::scanChildren() const
 EngravingObject* Spanner::scanParent() const
 {
     switch (anchor()) {
-    case Anchor::SEGMENT:
+    case SpannerAnchor::SEGMENT:
         return startSegment();
-    case Anchor::MEASURE:
+    case SpannerAnchor::MEASURE:
         return startMeasure();
-    case Anchor::CHORD:
+    case SpannerAnchor::CHORD:
         return findStartCR();
-    case Anchor::NOTE:
+    case SpannerAnchor::NOTE:
         return startElement();
     default:
         return nullptr;

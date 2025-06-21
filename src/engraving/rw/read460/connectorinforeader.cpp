@@ -387,7 +387,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 tie->setStartNote(n);
                 n->setTieFor(tie);
             } else {
-                sp->setAnchor(Spanner::Anchor::NOTE);
+                sp->setAnchor(SpannerAnchor::NOTE);
                 sp->setStartElement(item);
                 item->addSpannerFor(sp);
                 sp->setParent(item);
@@ -455,7 +455,7 @@ void ConnectorInfoReader::readAddConnector(Score* item, ConnectorInfoReader* inf
         Spanner* sp = toSpanner(info->connector());
         const Location& l = info->location();
         if (info->isStart()) {
-            sp->setAnchor(Spanner::Anchor::SEGMENT);
+            sp->setAnchor(SpannerAnchor::SEGMENT);
             sp->setTrack(l.track());
             sp->setTrack2(l.track());
             sp->setTick(l.frac());

@@ -194,7 +194,7 @@ LineSegment* TextLine::createLineSegment(System* parent)
     TextLineSegment* seg = new TextLineSegment(this, parent, systemFlag());
     seg->setTrack(track());
     // note-anchored line segments are relative to system not to staff
-    if (anchor() == Spanner::Anchor::NOTE) {
+    if (anchor() == SpannerAnchor::NOTE) {
         seg->setFlag(ElementFlag::ON_STAFF, false);
     }
     seg->initStyle();
@@ -227,7 +227,7 @@ Sid TextLine::getTextLinePos(bool above) const
 Sid TextLineSegment::getPropertyStyle(Pid pid) const
 {
     if (pid == Pid::OFFSET) {
-        if (spanner()->anchor() == Spanner::Anchor::NOTE) {
+        if (spanner()->anchor() == SpannerAnchor::NOTE) {
             return Sid::NOSTYLE;
         } else {
             return getTextLinePos(spanner()->placeAbove());
@@ -239,7 +239,7 @@ Sid TextLineSegment::getPropertyStyle(Pid pid) const
 Sid TextLine::getPropertyStyle(Pid pid) const
 {
     if (pid == Pid::OFFSET) {
-        if (anchor() == Spanner::Anchor::NOTE) {
+        if (anchor() == SpannerAnchor::NOTE) {
             return Sid::NOSTYLE;
         } else {
             return getTextLinePos(placeAbove());
@@ -282,7 +282,7 @@ PropertyValue TextLine::propertyDefault(Pid propertyId) const
 //---------------------------------------------------------
 bool TextLine::allowTimeAnchor() const
 {
-    return !(anchor() == Spanner::Anchor::NOTE);
+    return !(anchor() == SpannerAnchor::NOTE);
 }
 
 //---------------------------------------------------------

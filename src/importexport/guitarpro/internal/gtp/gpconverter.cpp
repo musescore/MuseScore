@@ -1339,7 +1339,7 @@ void GPConverter::addContinuousSlideHammerOn()
         /// Layout info
         if (slide.second == SlideHammerOn::LegatoSlide || slide.second == SlideHammerOn::Slide) {
             Glissando* gl = mu::engraving::Factory::createGlissando(_score->dummy());
-            gl->setAnchor(Spanner::Anchor::NOTE);
+            gl->setAnchor(SpannerAnchor::NOTE);
             gl->setStartElement(startNote);
             gl->setTrack(track);
             gl->setTick(startTick);

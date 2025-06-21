@@ -459,7 +459,7 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     case Pid::DIAGONAL:
         return true;
     case Pid::ANCHOR:
-        return int(Spanner::Anchor::NOTE);
+        return int(SpannerAnchor::NOTE);
     default:
         break;
     }

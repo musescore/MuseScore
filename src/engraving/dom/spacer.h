@@ -28,14 +28,7 @@
 
 namespace mu::engraving {
 class Factory;
-
-//---------------------------------------------------------
-//   SpacerType
-//---------------------------------------------------------
-
-enum class SpacerType : char {
-    UP, DOWN, FIXED
-};
+enum class SpacerType : char;
 
 //-------------------------------------------------------------------
 //   @@ Spacer
