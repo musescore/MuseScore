@@ -53,7 +53,7 @@ StyledFlickable {
                     spacing: 8
 
                     StyledTextLabel {
-                        text: qsTrc("notation/editstyle/voltas", "Positition Y:")
+                        text: qsTrc("notation/editstyle/voltas", "Position Y:")
                         horizontalAlignment: Text.AlignLeft
                         Layout.preferredWidth: 160
                     }
