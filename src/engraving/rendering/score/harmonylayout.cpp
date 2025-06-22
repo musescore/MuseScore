@@ -89,6 +89,9 @@ void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldat
                 case AlignH::RIGHT:
                     xx = -hAlignBox.right();
                     break;
+                case AlignH::JUSTIFY:
+                    xx = -hAlignBox.left();
+                    break;
                 }
             } else {
                 switch (item->noteheadAlign()) {
@@ -100,6 +103,9 @@ void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldat
                     break;
                 case AlignH::RIGHT:
                     xx = -hAlignBox.right();
+                    break;
+                case AlignH::JUSTIFY:
+                    xx = -hAlignBox.left();
                     break;
                 }
             }
@@ -138,6 +144,9 @@ void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldat
             case AlignH::RIGHT:
                 newPosX = fd->mainWidth();
                 break;
+            case AlignH::JUSTIFY:
+                newPosX = 0.0;
+                break;
             }
         } else {
             switch (item->noteheadAlign()) {
@@ -149,6 +158,9 @@ void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldat
                 break;
             case AlignH::RIGHT:
                 newPosX = cw;
+                break;
+            case AlignH::JUSTIFY:
+                newPosX = 0.0;
                 break;
             }
         }
