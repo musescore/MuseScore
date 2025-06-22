@@ -1026,10 +1026,16 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
         QPoint delta = newPos - event->pos();
         if (delta.x() != 0 || delta.y() != 0) {
-            QCursor cursor = QCursor();
-            cursor.setPos(cursor.pos() + delta);
-            m_mouseDownInfo.physicalBeginPoint = newPos;
-            m_mouseDownInfo.logicalBeginPoint = m_view->toLogical(newPos);
+            QPoint newCursorPos = cursor.pos() + delta;
+            cursor.setPos(newCursorPos);
+            QPoint cursorDelta = cursor.pos() - newCursorPos;
+
+            // do not update the mouse down info if the mouse did not move because setting the mouse position is not possible on some targets (including wayland)
+            // allow some margin for error because sometimes the user moves the mouse between the call to `setPos` and the call to `cursor.pos`
+            if (-15 < cursorDelta.x() && cursorDelta.x() < 15 && -15 < cursorDelta.y() && cursorDelta.y() < 15) {
+                m_mouseDownInfo.physicalBeginPoint = newPos;
+                m_mouseDownInfo.logicalBeginPoint = m_view->toLogical(newPos);
+            }
         }
     }
 }
