@@ -31625,7 +31625,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5552"/>
         <source>Add interval</source>
-        <translation>Lägg till interval</translation>
+        <translation>Lägg till intervall</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5559"/>
