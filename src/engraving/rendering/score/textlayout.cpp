@@ -223,6 +223,11 @@ void TextLayout::textHorizontalLayout(const TextBase* item, Shape& shape, double
             xAdj += diff * 0.5;
         } else if (alignH == AlignH::RIGHT) {
             xAdj += diff;
+        } else if (alignH == AlignH::JUSTIFY) {
+            // Don't justify final line
+            if (i != ldata->blocks.size() - 1) {
+                justifyLine(item, &textBlock, maxBlockWidth);
+            }
         }
 
         for (TextFragment& fragment : textBlock.fragments()) {
@@ -230,6 +235,55 @@ void TextLayout::textHorizontalLayout(const TextBase* item, Shape& shape, double
         }
         textBlock.shape().translate(PointF(xAdj, 0.0));
         shape.add(textBlock.shape().translated(PointF(0.0, textBlock.y())));
+    }
+}
+
+void TextLayout::justifyLine(const TextBase* item, TextBlock* textBlock, double maxBlockWidth)
+{
+    struct SubFragment {
+        String text;
+        CharFormat format;
+        double width;
+    };
+    std::vector<SubFragment> subfrags;
+    for (const TextFragment& f : textBlock->fragments()) {
+        String current;
+        FontMetrics fm(f.font(item));
+        for (size_t i = 0; i < f.text.size(); ++i) {
+            Char c = f.text.at(i);
+            current += c;
+            if (c.isSpace()) {
+                double w = fm.width(current);
+                subfrags.push_back({ current, f.format, w });
+                current.clear();
+            }
+        }
+        if (!current.isEmpty()) {
+            double w = fm.width(current);
+            subfrags.push_back({ current, f.format, w });
+        }
+    }
+
+    int numSpaces = 0;
+    double textWidth = 0;
+    for (const SubFragment& sf : subfrags) {
+        numSpaces++;
+        textWidth += sf.width; // accumulate text width
+    }
+    numSpaces--;
+    double spaceToFill = maxBlockWidth - textWidth;
+    if (numSpaces > 0 && spaceToFill > 0) {
+        textBlock->fragments().clear();
+        double extraSpacing = spaceToFill / numSpaces;
+        double x = 0.0;
+        for (const SubFragment& sf : subfrags) {
+            TextFragment frag;
+            frag.text = sf.text;
+            frag.format = sf.format;
+            frag.pos.rx() = x;
+            textBlock->fragments().push_back(frag);
+            x += sf.width + extraSpacing;
+        }
     }
 }
 

@@ -2129,6 +2129,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
             TLayout::layoutInstrumentName(t, t->mutldata());
 
             switch (t->align().horizontal) {
+            case AlignH::JUSTIFY:   // Justify is not supported for instrument names
             case AlignH::LEFT:
                 t->mutldata()->setPosX(0);
                 break;

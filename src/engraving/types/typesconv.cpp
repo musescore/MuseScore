@@ -659,6 +659,7 @@ static const std::vector<Item<AlignH> > ALIGN_H = {
     { AlignH::LEFT,     "left" },
     { AlignH::RIGHT,    "right" },
     { AlignH::HCENTER,  "center" },
+    { AlignH::JUSTIFY,  "justify" },
 };
 
 static const std::vector<Item<AlignV> > ALIGN_V = {

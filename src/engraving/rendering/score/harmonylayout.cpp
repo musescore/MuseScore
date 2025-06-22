@@ -112,6 +112,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
         if (alignToFretDiagram) {
             switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
             case AlignH::LEFT:
+            case AlignH::JUSTIFY:
                 xx = -hAlignBox.left();
                 break;
             case AlignH::HCENTER:
@@ -124,6 +125,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
         } else {
             switch (item->position()) {
             case AlignH::LEFT:
+            case AlignH::JUSTIFY:
                 xx = -hAlignBox.left();
                 break;
             case AlignH::HCENTER:
@@ -164,6 +166,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
     if (alignToFretDiagram) {
         switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
         case AlignH::LEFT:
+        case AlignH::JUSTIFY:
             newPosX = 0.0;
             break;
         case AlignH::HCENTER:
@@ -176,6 +179,7 @@ PointF HarmonyLayout::calculateBoundingRect(const Harmony* item, Harmony::Layout
     } else {
         switch (item->position()) {
         case AlignH::LEFT:
+        case AlignH::JUSTIFY:
             newPosX = 0.0;
             break;
         case AlignH::HCENTER:
