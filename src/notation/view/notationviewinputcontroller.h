@@ -22,7 +22,6 @@
 #ifndef MU_NOTATION_NOTATIONVIEWINPUTCONTROLLER_H
 #define MU_NOTATION_NOTATIONVIEWINPUTCONTROLLER_H
 
-#include <QApplication>
 #include <QtEvents>
 
 #include "modularity/ioc.h"
@@ -236,8 +235,6 @@ private:
 
     bool m_shouldStartEditOnLeftClickRelease = false;
     bool m_shouldTogglePopupOnLeftClickRelease = false;
-
-    QCursor cursor;
 };
 }
 
