@@ -23753,7 +23753,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="243"/>
         <source>Name already exists</source>
-        <translation>Il nome esiste già</translation>
+        <translation>Nome già esistente</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="284"/>

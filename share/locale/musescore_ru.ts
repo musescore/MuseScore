@@ -18219,7 +18219,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5339"/>
         <source>Mordent</source>
-        <translation>Мордент</translation>
+        <translation>Нижний мордент</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5345"/>

@@ -28972,7 +28972,7 @@ fehlgeschlagen.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1879"/>
         <source>Open</source>
-        <translation>Offen</translation>
+        <translation>Öffnen</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectconfiguration.cpp" line="129"/>

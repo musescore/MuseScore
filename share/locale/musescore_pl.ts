@@ -24716,7 +24716,7 @@ Ponadto Mastering MuseScore oferuje wsparcie społeczności muzyków, z przestrz
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="224"/>
         <source>&lt;b&gt;Always open&lt;/b&gt;&lt;br&gt;On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.</source>
-        <translation>&lt;b&gt;Zawsze otwarta&lt;/b&gt;&lt;br&gt;W tabulaturach pozycje progów innych niż „0” nie można wprowadzać na strunach oznaczonych jako „zawsze otwarta”. Przydatne dla instrumentów, których struny nie znajdują się na podstrunnicy, np. teorba.</translation>
+        <translation>&lt;b&gt;Zawsze otwarta&lt;/b&gt;&lt;br&gt;W tabulaturach pozycje progów inne niż „0” nie mogą być wprowadzane na strunach oznaczonych jako „zawsze otwarta”. Przydatne w przypadku instrumentów, których struny nie znajdują się na podstrunnicy, np. teorba.</translation>
     </message>
 </context>
 <context>
