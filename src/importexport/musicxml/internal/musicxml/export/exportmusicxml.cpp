@@ -5266,6 +5266,9 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
         case AlignH::RIGHT:
             attr += u" justify=\"right\"";
             break;
+        case AlignH::JUSTIFY:
+            attr += u" justify=\"justify\"";
+            break;
         }
     }
     // set the default words format
