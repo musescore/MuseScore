@@ -1922,10 +1922,6 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
             case AlignH::RIGHT:
                 t->mutldata()->setPosX(maxNamesWidth);
                 break;
-            case AlignH::JUSTIFY:
-                // Justify is not supported for instrument names
-                t->mutldata()->setPosX(0); // Same treatment as AlignH::LEFT
-                break;
             }
         }
     }

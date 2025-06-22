@@ -45,7 +45,6 @@ public:
         FONT_ALIGN_H_LEFT = 0,
         FONT_ALIGN_H_RIGHT = 1,
         FONT_ALIGN_H_CENTER = 2,
-        FONT_ALIGN_H_JUSTIFY = 3,
     };
 
     enum class FontVerticalAlignment {

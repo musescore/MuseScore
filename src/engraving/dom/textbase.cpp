@@ -1028,10 +1028,6 @@ void TextBlock::layout(const TextBase* t)
         default:
             break;
         }
-    } else {
-        // fallback: default width in case of no parent item
-        FontMetrics fm(t->font());
-        layoutWidth = fm.width(t->plainText());
     }
 
     if (m_fragments.empty()) {
@@ -1125,69 +1121,14 @@ void TextBlock::layout(const TextBase* t)
         rx = -bbox.left();
     } else if (alignH == AlignH::RIGHT) {
         rx = layoutWidth - bbox.right();
-    } else if (alignH == AlignH::JUSTIFY) {
-        struct SubFragment {
-            String text;
-            CharFormat format;
-            double width;
-        };
-        std::vector<SubFragment> subfrags;
-        for (const TextFragment& f : m_fragments) {
-            String current;
-            FontMetrics fm(f.font(t));
-            for (size_t i = 0; i < f.text.size(); ++i) {
-                Char c = f.text.at(i);
-                current += c;
-                if (c.isSpace()) {
-                    double w = fm.width(current);
-                    subfrags.push_back({ current, f.format, w });
-                    current.clear();
-                }
-            }
-            if (!current.isEmpty()) {
-                double w = fm.width(current);
-                subfrags.push_back({ current, f.format, w });
-            }
-        }
-
-        int numSpaces = 0;
-        double textWidth = 0;
-        for (const auto& sf : subfrags) {
-            numSpaces++;
-            textWidth += sf.width; // accumulate text width
-        }
-        numSpaces--;
-        double spaceToFill = layoutWidth - textWidth;
-        if (numSpaces > 0 && spaceToFill > 0) {
-            m_fragments.clear();
-            double extraSpacing = spaceToFill / numSpaces;
-            x = 0.0;
-            for (const auto& sf : subfrags) {
-                TextFragment frag;
-                frag.text = sf.text;
-                frag.format = sf.format;
-                frag.pos.rx() = x;
-                m_fragments.push_back(frag);
-                x += sf.width + extraSpacing;
-            }
-        }
     }
 
     rx += lm;
 
-    if (alignH != AlignH::JUSTIFY) {
-        for (TextFragment& f : m_fragments) {
-            f.pos.rx() += rx;
-        }
-        m_shape.translate(PointF(rx, 0.0));
-    } else {
-        m_shape.clear();
-        for (const TextFragment& f : m_fragments) {
-            FontMetrics fm(f.font(t));
-            RectF textBRect = fm.tightBoundingRect(f.text).translated(f.pos);
-            m_shape.add(textBRect, t);
-        }
+    for (TextFragment& f : m_fragments) {
+        f.pos.rx() += rx;
     }
+    m_shape.translate(PointF(rx, 0.0));
 }
 
 //---------------------------------------------------------

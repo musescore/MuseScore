@@ -268,8 +268,7 @@ enum class AlignV : unsigned char {
 enum class AlignH : unsigned char {
     LEFT,
     RIGHT,
-    HCENTER,
-    JUSTIFY
+    HCENTER
 };
 
 struct Align {

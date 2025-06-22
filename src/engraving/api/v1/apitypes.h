@@ -365,9 +365,8 @@ enum class Align : char {
     BOTTOM   = 4,
     VCENTER  = 8,
     BASELINE = 16,
-    JUSTIFY  = 32,
     CENTER = Align::HCENTER | Align::VCENTER,
-    HMASK  = Align::LEFT | Align::RIGHT | Align::HCENTER | Align::JUSTIFY,
+    HMASK  = Align::LEFT | Align::RIGHT | Align::HCENTER,
     VMASK  = Align::TOP | Align::BOTTOM | Align::VCENTER | Align::BASELINE
 };
 Q_ENUM_NS(Align);
