@@ -893,28 +893,28 @@
         },
         "fermataAbove": {
             "bBoxNE": [
-                2.72,
-                1.56
+                2.636,
+                1.444
             ],
             "bBoxSW": [
-                0.0,
-                0.0
+                -0.004,
+                -0.068
             ]
         },
         "fermataBelow": {
             "bBoxNE": [
-                2.72,
-                0.0
+                2.636,
+                0.068
             ],
             "bBoxSW": [
-                0.0,
-                -1.56
+                -0.004,
+                -1.444
             ]
         },
         "fermataLongAbove": {
             "bBoxNE": [
-                2.56,
-                1.536
+                2.5,
+                1.5
             ],
             "bBoxSW": [
                 0.0,
@@ -923,18 +923,38 @@
         },
         "fermataLongBelow": {
             "bBoxNE": [
-                2.56,
+                2.5,
                 0.0
             ],
             "bBoxSW": [
                 0.0,
-                -1.536
+                -1.5
+            ]
+        },
+        "fermataLongHenzeAbove": {
+            "bBoxNE": [
+                2.64,
+                1.444
+            ],
+            "bBoxSW": [
+                0.0,
+                -0.068
+            ]
+        },
+        "fermataLongHenzeBelow": {
+            "bBoxNE": [
+                2.64,
+                0.068
+            ],
+            "bBoxSW": [
+                0.0,
+                -1.444
             ]
         },
         "fermataShortAbove": {
             "bBoxNE": [
-                2.044,
-                2.252
+                2.0,
+                2.2
             ],
             "bBoxSW": [
                 0.0,
@@ -943,32 +963,72 @@
         },
         "fermataShortBelow": {
             "bBoxNE": [
-                2.0463,
+                2.0,
                 0.0
             ],
             "bBoxSW": [
                 0.0,
-                -2.252
+                -2.2
+            ]
+        },
+        "fermataShortHenzeAbove": {
+            "bBoxNE": [
+                1.58,
+                1.444
+            ],
+            "bBoxSW": [
+                0.0,
+                -0.068
+            ]
+        },
+        "fermataShortHenzeBelow": {
+            "bBoxNE": [
+                1.58,
+                0.068
+            ],
+            "bBoxSW": [
+                0.0,
+                -1.444
             ]
         },
         "fermataVeryLongAbove": {
             "bBoxNE": [
-                3.136,
-                1.64
+                3.0,
+                1.6
             ],
             "bBoxSW": [
-                0.064,
+                0.0,
                 0.0
             ]
         },
         "fermataVeryLongBelow": {
             "bBoxNE": [
-                3.136,
+                3.0,
                 0.0
             ],
             "bBoxSW": [
-                0.064,
-                -1.64
+                0.0,
+                -1.6
+            ]
+        },
+        "fermataVeryShortAbove": {
+            "bBoxNE": [
+                2.504,
+                2.42
+            ],
+            "bBoxSW": [
+                0.0,
+                0.0
+            ]
+        },
+        "fermataVeryShortBelow": {
+            "bBoxNE": [
+                2.504,
+                0.0
+            ],
+            "bBoxSW": [
+                0.0,
+                -2.42
             ]
         },
         "flag128thDown": {
@@ -2161,6 +2221,16 @@
                 0.0
             ]
         },
+        "ornamentHaydn": {
+            "bBoxNE": [
+                2.016,
+                0.9
+            ],
+            "bBoxSW": [
+                0.0,
+                -0.3
+            ]
+        },
         "ornamentHighLeftConcaveStroke": {
             "bBoxNE": [
                 0.316,
@@ -2233,12 +2303,12 @@
         },
         "ornamentMordent": {
             "bBoxNE": [
-                2.056,
-                1.188
+                2.008,
+                1.168
             ],
             "bBoxSW": [
                 0.0,
-                -0.18
+                -0.168
             ]
         },
         "ornamentObliqueLineAfterNote": {
@@ -2463,8 +2533,8 @@
         },
         "ornamentShortTrill": {
             "bBoxNE": [
-                2.056,
-                1.024
+                2.008,
+                1.0
             ],
             "bBoxSW": [
                 0.0,
@@ -2503,8 +2573,8 @@
         },
         "ornamentTremblement": {
             "bBoxNE": [
-                2.92,
-                1.024
+                2.84,
+                1.0
             ],
             "bBoxSW": [
                 0.0,
@@ -2523,18 +2593,18 @@
         },
         "ornamentTrill": {
             "bBoxNE": [
-                2.456,
-                2.212
+                1.108,
+                2.16
             ],
             "bBoxSW": [
-                0.0,
-                -0.044
+                -1.288,
+                -0.04
             ]
         },
         "ornamentTurn": {
             "bBoxNE": [
-                2.24,
-                1.08
+                2.184,
+                1.056
             ],
             "bBoxSW": [
                 0.0,
@@ -2543,8 +2613,38 @@
         },
         "ornamentTurnInverted": {
             "bBoxNE": [
-                2.24,
-                1.08
+                2.184,
+                1.056
+            ],
+            "bBoxSW": [
+                0.0,
+                0.0
+            ]
+        },
+        "ornamentTurnSlash": {
+            "bBoxNE": [
+                2.184,
+                1.232
+            ],
+            "bBoxSW": [
+                0.0,
+                -0.176
+            ]
+        },
+        "ornamentTurnUp": {
+            "bBoxNE": [
+                1.056,
+                2.184
+            ],
+            "bBoxSW": [
+                0.0,
+                0.0
+            ]
+        },
+        "ornamentTurnUpS": {
+            "bBoxNE": [
+                1.056,
+                2.184
             ],
             "bBoxSW": [
                 0.0,
