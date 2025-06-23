@@ -28,9 +28,12 @@
 #include "containers.h"
 
 #include "accidental.h"
+#include "arpeggio.h"
 #include "chord.h"
 #include "chordrest.h"
 #include "clef.h"
+#include "laissezvib.h"
+#include "lyrics.h"
 #include "marker.h"
 #include "masterscore.h"
 #include "repeatlist.h"
@@ -39,6 +42,7 @@
 #include "note.h"
 #include "page.h"
 #include "part.h"
+#include "partialtie.h"
 #include "pitchspelling.h"
 #include "rest.h"
 #include "score.h"
@@ -47,6 +51,8 @@
 #include "staff.h"
 #include "system.h"
 #include "spanner.h"
+#include "tremolosinglechord.h"
+#include "tremolotwochord.h"
 #include "tuplet.h"
 #include "drumset.h"
 
@@ -1471,6 +1477,98 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
     }
 
     return result;
+}
+
+std::unordered_set<EngravingItem*> collectElementsAnchoredToChordRest(const ChordRest* cr)
+{
+    std::unordered_set<EngravingItem*> elems;
+    for (EngravingItem* lyric : cr->lyrics()) {
+        elems.emplace(lyric);
+    }
+    if (!cr->isChord()) {
+        return elems;
+    }
+    const Chord* chord = toChord(cr);
+    if (Arpeggio* arp = chord->arpeggio()) {
+        elems.emplace(arp);
+    }
+    if (TremoloTwoChord* tremTwo = chord->tremoloTwoChord()) {
+        elems.emplace(tremTwo);
+    }
+    if (TremoloSingleChord* tremSing = chord->tremoloSingleChord()) {
+        elems.emplace(tremSing);
+    }
+    for (Articulation* art : chord->articulations()) {
+        elems.emplace(art);
+    }
+    for (Chord* grace : chord->graceNotes()) {
+        elems.emplace(grace);
+    }
+    return elems;
+}
+
+std::unordered_set<EngravingItem*> collectElementsAnchoredToNote(const Note* note, bool includeForwardTiesSpanners,
+                                                                 bool includeBackwardTiesSpanners)
+{
+    std::unordered_set<EngravingItem*> elems;
+    LaissezVib* lv = note->laissezVib();
+    if (lv && !lv->segmentsEmpty()) {
+        elems.emplace(lv);
+    }
+    PartialTie* ipt = note->incomingPartialTie();
+    if (ipt && !ipt->segmentsEmpty()) {
+        elems.emplace(ipt);
+    }
+    PartialTie* opt = note->outgoingPartialTie();
+    if (opt && !opt->segmentsEmpty()) {
+        elems.emplace(opt);
+    }
+    if (includeForwardTiesSpanners) {
+        Tie* tieFor = note->tieFor();
+        if (tieFor && !tieFor->segmentsEmpty()) {
+            elems.emplace(tieFor);
+        }
+        for (Spanner* sp : note->spannerFor()) {
+            if (sp->segmentsEmpty()) {
+                continue;
+            }
+            elems.emplace(sp);
+        }
+    }
+    if (includeBackwardTiesSpanners) {
+        Tie* tieBack = note->tieBack();
+        if (tieBack && !tieBack->segmentsEmpty()) {
+            elems.emplace(tieBack);
+        }
+        for (Spanner* sp : note->spannerBack()) {
+            if (sp->segmentsEmpty()) {
+                continue;
+            }
+            elems.emplace(sp);
+        }
+    }
+    return elems;
+}
+
+bool noteAnchoredSpannerIsInRange(const Spanner* spanner, const Fraction& rangeStart, const Fraction& rangeEnd)
+{
+    IF_ASSERT_FAILED(rangeStart < rangeEnd) {
+        return false;
+    }
+    const EngravingItem* startElement = spanner->startElement();
+    const EngravingItem* endElement = spanner->endElement();
+    IF_ASSERT_FAILED(startElement && startElement->isNote() && endElement && endElement->isNote()) {
+        LOGD() << "Cannot calculate isInRange - might be a partial tie or laissez vibrer";
+        return false;
+    }
+    const Note* startNote = toNote(startElement);
+    const Segment* startSeg = startNote->chord()->segment();
+    if (startSeg->tick() < rangeStart) {
+        return false;
+    }
+    const Note* endNote = toNote(endElement);
+    const Segment* endSeg = endNote->chord()->segment();
+    return !endSeg || endSeg->tick() <= rangeEnd;
 }
 
 String formatUniqueExcerptName(const String& baseName, const StringList& allExcerptLowerNames)
