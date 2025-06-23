@@ -1523,6 +1523,12 @@ std::unordered_set<EngravingItem*> collectElementsAnchoredToNote(const Note* not
     if (opt && !opt->segmentsEmpty()) {
         elems.emplace(opt);
     }
+    // The following is a bit of a hack - addressing properly would require a fingering rework...
+    for (EngravingItem* elem : note->el()) {
+        if (elem->isFingering()) {
+            elems.emplace(elem);
+        }
+    }
     if (includeForwardTiesSpanners) {
         Tie* tieFor = note->tieFor();
         if (tieFor && !tieFor->segmentsEmpty()) {
