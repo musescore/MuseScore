@@ -55,6 +55,7 @@
 #include "system.h"
 #include "systemdivider.h"
 #include "text.h"
+
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "trill.h"
@@ -468,6 +469,14 @@ EngravingObjectList Note::scanChildren() const
 
     for (Spanner* spanner : spannerFor()) {
         children.push_back(spanner);
+    }
+
+    if (m_leftParenthesis) {
+        children.push_back(m_leftParenthesis);
+    }
+
+    if (m_rightParenthesis) {
+        children.push_back(m_rightParenthesis);
     }
 
     return children;

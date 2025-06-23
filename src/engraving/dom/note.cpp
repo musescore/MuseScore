@@ -29,6 +29,7 @@
 
 #include <cassert>
 
+#include "dom/parenthesis.h"
 #include "translation.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -1274,23 +1275,17 @@ void Note::add(EngravingItem* e)
         m_el.push_back(e);
         break;
     case ElementType::SYMBOL: {
-        Symbol* s = toSymbol(e);
-        SymId symbolId = toSymbol(e)->sym();
-        if ((symbolId == SymId::noteheadParenthesisLeft && m_leftParenthesis)
-            || (symbolId == SymId::noteheadParenthesisRight && m_rightParenthesis)) {
-            break;
-        }
-
-        if (symbolId == SymId::noteheadParenthesisLeft) {
-            m_leftParenthesis = s;
-        } else if (symbolId == SymId::noteheadParenthesisRight) {
-            m_rightParenthesis = s;
+        m_el.push_back(e);
+    } break;
+    case ElementType::PARENTHESIS: {
+        Parenthesis* p = toParenthesis(e);
+        if (p->direction() == DirectionH::LEFT) {
+            m_leftParenthesis = p;
+        } else if (p->direction() == DirectionH::RIGHT) {
+            m_rightParenthesis = p;
         }
         m_hasUserParentheses = m_leftParenthesis && m_rightParenthesis && !m_leftParenthesis->generated()
                                && !m_rightParenthesis->generated();
-        m_hasGeneratedParens = m_leftParenthesis && m_rightParenthesis && m_leftParenthesis->generated()
-                               && m_rightParenthesis->generated();
-        m_el.push_back(e);
     } break;
     case ElementType::LAISSEZ_VIB: {
         LaissezVib* lv = toLaissezVib(e);
@@ -1359,6 +1354,12 @@ void Note::remove(EngravingItem* e)
         }
         break;
     case ElementType::SYMBOL:
+        if (!m_el.remove(e)) {
+            LOGD("Note::remove(): cannot find %s", e->typeName());
+        }
+        break;
+
+    case ElementType::PARENTHESIS:
         if (e == m_leftParenthesis) {
             m_leftParenthesis = nullptr;
         }
@@ -1367,12 +1368,6 @@ void Note::remove(EngravingItem* e)
         }
         m_hasUserParentheses = m_leftParenthesis && m_rightParenthesis && !m_leftParenthesis->generated()
                                && !m_rightParenthesis->generated();
-        m_hasGeneratedParens = m_leftParenthesis && m_rightParenthesis && m_leftParenthesis->generated()
-                               && m_rightParenthesis->generated();
-
-        if (!m_el.remove(e)) {
-            LOGD("Note::remove(): cannot find %s", e->typeName());
-        }
         break;
 
     case ElementType::PARTIAL_TIE: {
@@ -1599,25 +1594,8 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
         }
     }
 
-    for (EngravingItem* item : m_el) {
-        if (!item->isSymbol()) {
-            continue;
-        }
-
-        Symbol* symbol = toSymbol(item);
-        SymId symbolId = symbol->sym();
-
-        if (symbolId == SymId::noteheadParenthesisLeft) {
-            m_leftParenthesis = symbol;
-        } else if (symbolId == SymId::noteheadParenthesisRight) {
-            m_rightParenthesis = symbol;
-        }
-    }
-
     m_hasUserParentheses = m_leftParenthesis && m_rightParenthesis && !m_leftParenthesis->generated()
                            && !m_rightParenthesis->generated();
-    m_hasGeneratedParens = m_leftParenthesis && m_rightParenthesis && m_leftParenthesis->generated()
-                           && m_rightParenthesis->generated();
 }
 
 //---------------------------------------------------------
@@ -2090,7 +2068,10 @@ EngravingItem* Note::drop(EditData& data)
 
 void Note::setHeadHasParentheses(bool hasParentheses, bool addToLinked, bool generated)
 {
-    if (generated && hasParentheses == m_hasGeneratedParens) {
+    const bool hasGeneratedParams = m_leftParenthesis && m_rightParenthesis && m_leftParenthesis->generated()
+                                    && m_rightParenthesis->generated();
+
+    if (generated && hasParentheses == hasGeneratedParams) {
         return;
     }
 
@@ -2102,19 +2083,23 @@ void Note::setHeadHasParentheses(bool hasParentheses, bool addToLinked, bool gen
 
     if (hasParentheses) {
         if (!m_leftParenthesis) {
-            Symbol* leftParen = new Symbol(this);
-            leftParen->setSym(SymId::noteheadParenthesisLeft);
-            leftParen->setParent(this);
-            leftParen->setGenerated(generated);
-            score()->undoAddElement(leftParen, addToLinked);
+            Parenthesis* paren = Factory::createParenthesis(this);
+            paren->setParent(this);
+            paren->setTrack(track());
+            paren->setDirection(DirectionH::LEFT);
+            paren->setGenerated(generated);
+
+            score()->undoAddElement(paren, addToLinked);
         }
 
         if (!m_rightParenthesis) {
-            Symbol* rightParen = new Symbol(this);
-            rightParen->setSym(SymId::noteheadParenthesisRight);
-            rightParen->setParent(this);
-            rightParen->setGenerated(generated);
-            score()->undoAddElement(rightParen, addToLinked);
+            Parenthesis* paren = Factory::createParenthesis(this);
+            paren->setParent(this);
+            paren->setTrack(track());
+            paren->setDirection(DirectionH::RIGHT);
+            paren->setGenerated(generated);
+
+            score()->undoAddElement(paren, addToLinked);
         }
     } else {
         score()->undoRemoveElement(m_leftParenthesis, addToLinked);
@@ -2348,6 +2333,14 @@ void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
     }
     for (NoteDot* dot : m_dots) {
         func(data, dot);
+    }
+
+    if (m_leftParenthesis) {
+        func(data, m_leftParenthesis);
+    }
+
+    if (m_rightParenthesis) {
+        func(data, m_rightParenthesis);
     }
 
     // see above - tie segments are still collected from System!

@@ -50,6 +50,7 @@
 
 #include "dom/ornament.h"
 #include "dom/page.h"
+#include "dom/parenthesis.h"
 #include "dom/part.h"
 #include "dom/rest.h"
 #include "dom/score.h"
@@ -3426,29 +3427,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     for (EngravingItem* e : item->el()) {
         if (e->isSymbol()) {
             e->mutldata()->setMag(item->mag());
-            Shape noteShape = item->shape();
-            noteShape.remove_if([e](ShapeElement& s) { return s.item() == e || s.item()->isBend(); });
-            LedgerLine* ledger = (item->line() < -1 || item->line() > item->staff()->lines(item->tick())) && !chord->ledgerLines().empty()
-                                 ? chord->ledgerLines().front() : nullptr;
-            if (ledger) {
-                noteShape.add(ledger->shape().translate(ledger->pos() - item->pos()));
-            }
-            double right = noteShape.right();
-            double left = noteShape.left();
-            Symbol* sym = toSymbol(e);
             TLayout::layoutItem(e, ctx);
-            double parenthesisPadding = ctx.conf().styleMM(Sid::bracketedAccidentalPadding) * item->mag();
-            if (sym->sym() == SymId::noteheadParenthesisRight) {
-                if (isTabStaff) {
-                    const Staff* st = item->staff();
-                    const StaffType* tab = st->staffTypeForElement(item);
-                    right = item->tabHeadWidth(tab);
-                }
-
-                e->mutldata()->setPosX(right + parenthesisPadding);
-            } else if (sym->sym() == SymId::noteheadParenthesisLeft) {
-                e->mutldata()->setPosX(-left - e->width() - parenthesisPadding);
-            }
         } else if (e->isFingering()) {
             // don't set mag; fingerings should not scale with note
             Fingering* f = toFingering(e);
@@ -3465,6 +3444,39 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             TLayout::layoutItem(e, ctx);
         }
     }
+
+    auto layoutParen = [&](Parenthesis* paren) {
+        if (!paren) {
+            return;
+        }
+        paren->mutldata()->setMag(item->mag());
+        Shape noteShape = item->shape();
+        noteShape.remove_if([paren](ShapeElement& s) { return s.item() == paren || s.item()->isBend(); });
+        LedgerLine* ledger = (item->line() < -1 || item->line() > item->staff()->lines(item->tick())) && !chord->ledgerLines().empty()
+                             ? chord->ledgerLines().front() : nullptr;
+        if (ledger) {
+            noteShape.add(ledger->shape().translate(ledger->pos() - item->pos()));
+        }
+        double right = noteShape.right();
+        double left = noteShape.left();
+        TLayout::layoutParenthesis(paren);
+        double parenthesisPadding = ctx.conf().styleMM(Sid::bracketedAccidentalPadding) * item->mag();
+
+        if (paren->direction() == DirectionH::LEFT) {
+            paren->mutldata()->setPosX(-left - paren->width() - parenthesisPadding);
+        } else if (paren->direction() == DirectionH::RIGHT) {
+            if (isTabStaff) {
+                const Staff* st = item->staff();
+                const StaffType* tab = st->staffTypeForElement(item);
+                right = item->tabHeadWidth(tab);
+            }
+
+            paren->mutldata()->setPosX(right + parenthesisPadding);
+        }
+    };
+
+    layoutParen(item->leftParen());
+    layoutParen(item->rightParen());
 }
 
 void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)

@@ -788,5 +788,5 @@ SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const S
 
 COPY_ITEM_IMPL(SystemLockIndicator)
 
-CREATE_ITEM_IMPL(Parenthesis, ElementType::PARENTHESIS, Segment, isAccessibleEnabled);
+CREATE_ITEM_IMPL(Parenthesis, ElementType::PARENTHESIS, EngravingItem, isAccessibleEnabled);
 COPY_ITEM_IMPL(Parenthesis)

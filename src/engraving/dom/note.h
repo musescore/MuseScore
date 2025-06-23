@@ -432,6 +432,11 @@ public:
 
     void setVisible(bool v) override;
 
+    Parenthesis* leftParen() const { return m_leftParenthesis; }
+    Parenthesis* rightParen() const { return m_rightParenthesis; }
+    void setLeftParen(Parenthesis* paren) { m_leftParenthesis = paren; }
+    void setRightParen(Parenthesis* paren) { m_rightParenthesis = paren; }
+
     TieJumpPointList* tieJumpPoints() { return &m_jumpPoints; }
     const TieJumpPointList* tieJumpPoints() const { return &m_jumpPoints; }
 
@@ -524,10 +529,9 @@ private:
     Tie* m_tieFor = nullptr;
     Tie* m_tieBack = nullptr;
 
-    Symbol* m_leftParenthesis = nullptr;
-    Symbol* m_rightParenthesis = nullptr;
+    Parenthesis* m_leftParenthesis = nullptr;
+    Parenthesis* m_rightParenthesis = nullptr;
     bool m_hasUserParentheses = false;
-    bool m_hasGeneratedParens = false;
 
     bool m_harmonic = false;
 

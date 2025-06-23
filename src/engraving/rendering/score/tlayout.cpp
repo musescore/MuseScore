@@ -371,7 +371,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::PALM_MUTE_SEGMENT: layoutPalmMuteSegment(item_cast<PalmMuteSegment*>(item), ctx);
         break;
-    case ElementType::PARENTHESIS:      layoutParenthesis(item_cast<Parenthesis*>(item), ctx);
+    case ElementType::PARENTHESIS:      layoutParenthesis(item_cast<Parenthesis*>(item));
         break;
     case ElementType::PEDAL:            layoutPedal(item_cast<Pedal*>(item), ctx);
         break;
@@ -4408,6 +4408,15 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
         }
     }
 
+    const Parenthesis* leftParen = item->leftParen();
+    if (leftParen && leftParen->addToSkyline()) {
+        shape.add(leftParen->ldata()->shape().translated(leftParen->pos()));
+    }
+    const Parenthesis* rightParen = item->rightParen();
+    if (rightParen && rightParen->addToSkyline()) {
+        shape.add(rightParen->ldata()->shape().translated(rightParen->pos()));
+    }
+
     // This method is also called from SingleLayout, where `part` may be nullptr
     Part* part = item->part();
     if (part && part->instrument()->hasStrings() && !item->staffType()->isTabStaff()) {
@@ -4571,18 +4580,14 @@ void TLayout::layoutPalmMuteSegment(PalmMuteSegment* item, LayoutContext& ctx)
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
-void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
+void TLayout::layoutParenthesis(Parenthesis* item)
 {
-    UNUSED(ctx);
-
     Parenthesis::LayoutData* ldata = item->mutldata();
     ldata->setPos(PointF());
     ldata->reset();
     ldata->path.reset();
 
     const Staff* staff = item->staff();
-    const Segment* seg = item->segment();
-    const bool isClefSeg = seg->isType(SegmentType::ClefType);
     const Fraction tick = item->tick();
     const Fraction tickPrev = tick - Fraction::eps();
     const double spatium = item->spatium();
@@ -4594,10 +4599,23 @@ void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
 
     double startY = ldata->startY;
     double height = ldata->height;
+    double xPos = 0.0;
 
+    const Segment* seg = item->segment();
+    const bool isClefSeg = seg ? seg->isType(SegmentType::ClefType) : false;
     if (isClefSeg && seg->rtick() == seg->measure()->ticks()) {
         double offset = st->yoffset().val() - (stPrev ? stPrev->yoffset().val() : 0);
         startY += offset * spatium;
+    }
+
+    if (muse::RealIsNull(height)) {
+        EngravingItem* parent = item->parentItem();
+        RectF bbox = parent->ldata()->bbox();
+
+        startY = bbox.top() - 0.25 * spatium;
+        height = bbox.height() + 0.5 * spatium;
+        const double PADDING = spatium * 0.2;
+        xPos = item->direction() == DirectionH::RIGHT ? bbox.right() + PADDING : -PADDING;
     }
 
     const double heightInSpatium = height / spatium;
@@ -4606,8 +4624,8 @@ void TLayout::layoutParenthesis(Parenthesis* item, LayoutContext& ctx)
     ldata->thickness.set_value(thickness);
     const double shoulderX = 0.2 * height * mag;
 
-    PointF start = PointF(0.0, startY);
-    const PointF end = PointF(0.0, start.y() + height);
+    PointF start = PointF(xPos, startY);
+    const PointF end = PointF(xPos, start.y() + height);
     const PointF endNormalised = end - start;
 
     const int direction = leftBracket ? -1 : 1;

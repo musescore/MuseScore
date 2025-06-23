@@ -32,17 +32,20 @@ class Parenthesis : public EngravingItem
 public:
     static constexpr double PARENTHESIS_END_WIDTH = 0.1;
 
-    Parenthesis(Segment* parent);
+    Parenthesis(EngravingItem* parent);
     Parenthesis(const Parenthesis& p);
 
     Parenthesis* clone() const override { return new Parenthesis(*this); }
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return explicitParent() && explicitParent()->isSegment() ? toSegment(explicitParent()) : nullptr; }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
     String accessibleInfo() const override;
+
+    PointF pagePos() const override;
+    PointF canvasPos() const override;
 
     struct LayoutData : public EngravingItem::LayoutData
     {
