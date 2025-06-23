@@ -603,6 +603,10 @@ void Selection::appendChordRest(ChordRest* cr)
             m_el.push_back(note->accidental());
         }
         for (EngravingItem* el : note->el()) {
+            if (el->isFingering()) {
+                // Slight hack (already handled, see collectElementsAnchoredToNote)...
+                continue;
+            }
             m_el.push_back(el);
         }
         for (NoteDot* dot : note->dots()) {
