@@ -318,7 +318,7 @@ StyledFlickable {
                     spacing: 8
 
                     StyledTextLabel {
-                        text: qsTrc("notation/editstyle/hammeronpulloff", "Symbol (standard stave)")
+                        text: qsTrc("notation/editstyle/hammeronpulloff", "Symbol (standard staff)")
                     }
 
                     RadioButtonGroup {
@@ -345,7 +345,7 @@ StyledFlickable {
                     spacing: 8
 
                     StyledTextLabel {
-                        text: qsTrc("notation/editstyle/hammeronpulloff", "Symbol (tablature stave)")
+                        text: qsTrc("notation/editstyle/hammeronpulloff", "Symbol (tablature staff)")
                     }
 
                     RadioButtonGroup {
