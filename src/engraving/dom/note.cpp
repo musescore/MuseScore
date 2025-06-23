@@ -54,6 +54,7 @@
 #include "navigate.h"
 #include "notedot.h"
 #include "noteline.h"
+#include "parenthesis.h"
 #include "part.h"
 #include "partialtie.h"
 #include "pitchspelling.h"
@@ -553,8 +554,6 @@ Note::~Note()
     }
 
     muse::DeleteAll(m_dots);
-    m_leftParenthesis = nullptr;
-    m_rightParenthesis = nullptr;
 }
 
 std::vector<Note*> Note::compoundNotes() const
@@ -1274,22 +1273,6 @@ void Note::add(EngravingItem* e)
         m_el.push_back(e);
         break;
     case ElementType::SYMBOL: {
-        Symbol* s = toSymbol(e);
-        SymId symbolId = toSymbol(e)->sym();
-        if ((symbolId == SymId::noteheadParenthesisLeft && m_leftParenthesis)
-            || (symbolId == SymId::noteheadParenthesisRight && m_rightParenthesis)) {
-            break;
-        }
-
-        if (symbolId == SymId::noteheadParenthesisLeft) {
-            m_leftParenthesis = s;
-        } else if (symbolId == SymId::noteheadParenthesisRight) {
-            m_rightParenthesis = s;
-        }
-        m_hasUserParentheses = m_leftParenthesis && m_rightParenthesis && !m_leftParenthesis->generated()
-                               && !m_rightParenthesis->generated();
-        m_hasGeneratedParens = m_leftParenthesis && m_rightParenthesis && m_leftParenthesis->generated()
-                               && m_rightParenthesis->generated();
         m_el.push_back(e);
     } break;
     case ElementType::LAISSEZ_VIB: {
@@ -1331,7 +1314,7 @@ void Note::add(EngravingItem* e)
         addSpanner(toSpanner(e));
         break;
     default:
-        LOGD("Note::add() not impl. %s", e->typeName());
+        EngravingItem::add(e);
         break;
     }
     triggerLayout();
@@ -1359,22 +1342,10 @@ void Note::remove(EngravingItem* e)
         }
         break;
     case ElementType::SYMBOL:
-        if (e == m_leftParenthesis) {
-            m_leftParenthesis = nullptr;
-        }
-        if (e == m_rightParenthesis) {
-            m_rightParenthesis = nullptr;
-        }
-        m_hasUserParentheses = m_leftParenthesis && m_rightParenthesis && !m_leftParenthesis->generated()
-                               && !m_rightParenthesis->generated();
-        m_hasGeneratedParens = m_leftParenthesis && m_rightParenthesis && m_leftParenthesis->generated()
-                               && m_rightParenthesis->generated();
-
         if (!m_el.remove(e)) {
             LOGD("Note::remove(): cannot find %s", e->typeName());
         }
         break;
-
     case ElementType::PARTIAL_TIE: {
         PartialTie* pt = toPartialTie(e);
         assert((pt->isOutgoing() ? pt->startNote() : pt->endNote()) == this);
@@ -1410,7 +1381,7 @@ void Note::remove(EngravingItem* e)
         break;
 
     default:
-        LOGD("Note::remove() not impl. %s", e->typeName());
+        EngravingItem::remove(e);
         break;
     }
     triggerLayout();
@@ -1524,12 +1495,6 @@ bool Note::shouldForceShowFret() const
 void Note::setVisible(bool v)
 {
     EngravingItem::setVisible(v);
-    if (m_leftParenthesis) {
-        m_leftParenthesis->setVisible(v);
-    }
-    if (m_rightParenthesis) {
-        m_rightParenthesis->setVisible(v);
-    }
 }
 
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
@@ -1603,26 +1568,6 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
     if (st && st->isTabStaff() && st->fretUseTextStyle() && color() == configuration()->defaultColor()) {
         setColor(propertyDefault(Pid::COLOR).value<Color>());
     }
-
-    for (EngravingItem* item : m_el) {
-        if (!item->isSymbol()) {
-            continue;
-        }
-
-        Symbol* symbol = toSymbol(item);
-        SymId symbolId = symbol->sym();
-
-        if (symbolId == SymId::noteheadParenthesisLeft) {
-            m_leftParenthesis = symbol;
-        } else if (symbolId == SymId::noteheadParenthesisRight) {
-            m_rightParenthesis = symbol;
-        }
-    }
-
-    m_hasUserParentheses = m_leftParenthesis && m_rightParenthesis && !m_leftParenthesis->generated()
-                           && !m_rightParenthesis->generated();
-    m_hasGeneratedParens = m_leftParenthesis && m_rightParenthesis && m_leftParenthesis->generated()
-                           && m_rightParenthesis->generated();
 }
 
 //---------------------------------------------------------
@@ -2093,42 +2038,6 @@ EngravingItem* Note::drop(EditData& data)
     return 0;
 }
 
-void Note::setHeadHasParentheses(bool hasParentheses, bool addToLinked, bool generated)
-{
-    if (generated && hasParentheses == m_hasGeneratedParens) {
-        return;
-    }
-
-    if (!generated && hasParentheses == m_hasUserParentheses) {
-        return;
-    }
-
-    m_hasUserParentheses = hasParentheses;
-
-    if (hasParentheses) {
-        if (!m_leftParenthesis) {
-            Symbol* leftParen = new Symbol(this);
-            leftParen->setSym(SymId::noteheadParenthesisLeft);
-            leftParen->setParent(this);
-            leftParen->setGenerated(generated);
-            score()->undoAddElement(leftParen, addToLinked);
-        }
-
-        if (!m_rightParenthesis) {
-            Symbol* rightParen = new Symbol(this);
-            rightParen->setSym(SymId::noteheadParenthesisRight);
-            rightParen->setParent(this);
-            rightParen->setGenerated(generated);
-            score()->undoAddElement(rightParen, addToLinked);
-        }
-    } else {
-        score()->undoRemoveElement(m_leftParenthesis, addToLinked);
-        score()->undoRemoveElement(m_rightParenthesis, addToLinked);
-        assert(m_leftParenthesis == nullptr);
-        assert(m_rightParenthesis == nullptr);
-    }
-}
-
 //---------------------------------------------------------
 //   setDotY
 //    dotMove is number of staff spaces/lines to move from the note's
@@ -2338,9 +2247,7 @@ String Note::noteTypeUserName() const
 void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     func(data, this);
-    // tie segments are collected from System
-    //      if (_tieFor && !staff()->isTabStaff(chord->tick()))  // no ties in tablature
-    //            _tieFor->scanElements(data, func, all);
+
     for (EngravingItem* e : m_el) {
         e->scanElements(data, func, all);
     }
@@ -2355,11 +2262,12 @@ void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
         func(data, dot);
     }
 
-    // see above - tie segments are still collected from System!
-    // if (_tieFor && !_tieFor->spannerSegments().empty())
-    //      _tieFor->spannerSegments().front()->scanElements(data, func, all);
-    // if (_tieBack && _tieBack->spannerSegments().size() > 1)
-    //      _tieBack->spannerSegments().back()->scanElements(data, func, all);
+    if (leftParen()) {
+        func(data, leftParen());
+    }
+    if (rightParen()) {
+        func(data, rightParen());
+    }
 }
 
 //---------------------------------------------------------
@@ -3044,8 +2952,6 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return isSmall();
     case Pid::MIRROR_HEAD:
         return userMirror();
-    case Pid::HEAD_HAS_PARENTHESES:
-        return m_hasUserParentheses;
     case Pid::DOT_POSITION:
         return PropertyValue::fromValue<DirectionV>(userDotPosition());
     case Pid::HEAD_SCHEME:
@@ -3113,18 +3019,6 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::MIRROR_HEAD:
         setUserMirror(v.value<DirectionH>());
-        break;
-    case Pid::HEAD_HAS_PARENTHESES:
-        setHeadHasParentheses(v.toBool());
-        if (links()) {
-            for (EngravingObject* scoreElement : *links()) {
-                Note* note = toNote(scoreElement);
-                Staff* linkedStaff = note ? note->staff() : nullptr;
-                if (linkedStaff && linkedStaff->isTabStaff(tick())) {
-                    note->setGhost(v.toBool());
-                }
-            }
-        }
         break;
     case Pid::DOT_POSITION:
         setUserDotPosition(v.value<DirectionV>());
@@ -3224,8 +3118,6 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
         return false;
     case Pid::MIRROR_HEAD:
         return DirectionH::AUTO;
-    case Pid::HEAD_HAS_PARENTHESES:
-        return false;
     case Pid::DOT_POSITION:
         return DirectionV::AUTO;
     case Pid::HEAD_SCHEME:

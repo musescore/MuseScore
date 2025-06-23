@@ -171,10 +171,7 @@ public:
     void setRootCase(NoteCaseType c) { m_rootCase = c; }
     NoteCaseType rootCase() const { return m_rootCase; }
 
-    bool leftParen() const { return m_leftParen; }
-    bool rightParen() const { return m_rightParen; }
-    void setLeftParen(bool leftParen) { m_leftParen = leftParen; }
-    void setRightParen(bool rightParen) { m_rightParen = rightParen; }
+    void setParenthesesMode(const ParenthesesMode& v, bool addToLinked = true, bool generated = false) override;
 
     Segment* getParentSeg() const;
     FretDiagram* getParentFretDiagram() const;
@@ -272,8 +269,6 @@ private:
 
     std::vector<HDegree> m_degreeList;
 
-    bool m_leftParen = false;
-    bool m_rightParen = false;                           // include opening and/or closing parenthesis
     bool m_play = true;                                  // whether or not to play back the harmony
     bool m_doNotStackModifiers = false;
 

@@ -111,7 +111,7 @@ Ret EngravingProject::doSetupMasterScore(bool forceMode)
 {
     TRACEFUNC;
 
-    m_masterScore->createPaddingTable();
+    m_masterScore->createPaddingTables();
     m_masterScore->connectTies();
     m_masterScore->undoRemoveStaleTieJumpPoints(false);
 

@@ -37,6 +37,7 @@
 #include "measure.h"
 #include "mscore.h"
 #include "part.h"
+#include "parenthesis.h"
 #include "pitchspelling.h"
 #include "repeatlist.h"
 #include "score.h"
@@ -175,7 +176,7 @@ String Harmony::harmonyName() const
 {
     String name;
 
-    if (m_leftParen) {
+    if (leftParen()) {
         name = u"(";
     }
 
@@ -234,7 +235,7 @@ String Harmony::harmonyName() const
         name += s;
     }
 
-    if (m_rightParen) {
+    if (rightParen()) {
         name += u")";
     }
 
@@ -304,8 +305,6 @@ Harmony::Harmony(Segment* parent)
     m_rootCase   = NoteCaseType::CAPITAL;
     m_bassCase   = NoteCaseType::CAPITAL;
     m_harmonyType = HarmonyType::STANDARD;
-    m_leftParen  = false;
-    m_rightParen = false;
     m_play = true;
     m_realizedHarmony = RealizedHarmony(this);
     initElementStyle(&chordSymbolStyle);
@@ -316,8 +315,6 @@ Harmony::Harmony(const Harmony& h)
 {
     m_rootCase   = h.m_rootCase;
     m_bassCase   = h.m_bassCase;
-    m_leftParen  = h.m_leftParen;
-    m_rightParen = h.m_rightParen;
     m_bassScale = h.m_bassScale;
     m_degreeList = h.m_degreeList;
     m_harmonyType = h.m_harmonyType;
@@ -350,6 +347,12 @@ int Harmony::id() const
         return -1;
     }
     return m_chords.front()->id();
+}
+
+void Harmony::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool generated)
+{
+    EngravingItem::setParenthesesMode(v, addToLinked, generated);
+    render();
 }
 
 //---------------------------------------------------------
@@ -430,13 +433,15 @@ const std::vector<const ChordDescription*> Harmony::parseHarmony(const String& s
 {
     // pre-process for parentheses
     String s = ss.simplified();
-    if ((m_leftParen = s.startsWith('('))) {
+    if (s.startsWith('(')) {
+        setParenthesesMode(ParenthesesMode::LEFT, true, true);
         s.remove(0, 1);
     }
-    if ((m_rightParen = (s.endsWith(')') && s.count('(') < s.count(')')))) {
+    if (s.endsWith(')') && s.count('(') < s.count(')')) {
+        setParenthesesMode(ParenthesesMode::RIGHT, true, true);
         s.remove(s.size() - 1, 1);
     }
-    if (m_leftParen || m_rightParen) {
+    if (parenthesesMode() == ParenthesesMode::BOTH) {
         s = s.simplified();         // in case of spaces inside parentheses
     }
 

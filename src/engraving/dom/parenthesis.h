@@ -32,11 +32,11 @@ class Parenthesis : public EngravingItem
 public:
     static constexpr double PARENTHESIS_END_WIDTH = 0.1;
 
-    Parenthesis(Segment* parent);
+    Parenthesis(EngravingItem* parent);
     Parenthesis(const Parenthesis& p);
 
     Parenthesis* clone() const override { return new Parenthesis(*this); }
-    Segment* segment() const { return (Segment*)explicitParent(); }
+    Segment* segment() const { return explicitParent() && explicitParent()->isSegment() ? toSegment(explicitParent()) : nullptr; }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
@@ -44,12 +44,17 @@ public:
 
     String accessibleInfo() const override;
 
+    PointF pagePos() const override;
+    PointF canvasPos() const override;
+
     struct LayoutData : public EngravingItem::LayoutData
     {
-        ld_field<muse::draw::PainterPath> path = "path";
-        ld_field<double> startY = "startY";
-        ld_field<double> height = "height";
-        ld_field<double> thickness = "thickness";
+        ld_field<muse::draw::PainterPath> path = "[Parenthesis] path";
+        ld_field<double> startY = { "[Parenthesis] startY", 0.0 };
+        ld_field<double> height = { "[Parenthesis] height", 0.0 };
+        ld_field<double> midPointThickness = { "[Parenthesis] midPointThickness", 0.0 };
+        ld_field<double> endPointThickness = { "[Parenthesis] endPointThickness", PARENTHESIS_END_WIDTH };
+        ld_field<SymId> symId = { "[Parenthesis] symId", SymId::noSym };
     };
     DECLARE_LAYOUTDATA_METHODS(Parenthesis);
 };

@@ -6343,6 +6343,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || (et == ElementType::CHORD && toChord(element)->isGrace())
         || et == ElementType::LAISSEZ_VIB
         || et == ElementType::PARTIAL_TIE
+        || et == ElementType::PARENTHESIS
         ) {
         const EngravingItem* parent = element->parentItem();
         const LinkedObjects* links = parent ? parent->links() : nullptr;

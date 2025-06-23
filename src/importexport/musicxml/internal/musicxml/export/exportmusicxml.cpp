@@ -6711,7 +6711,7 @@ static void writeMusicXml(const FiguredBass* item, XmlWriter& xml, bool isOrigin
                           int divisions)
 {
     XmlWriter::Attributes attrs;
-    if (item->hasParentheses()) {
+    if (item->parenthesesMode()) {
         attrs = { { "parentheses", "yes" } };
     }
     if (item->placeAbove()) {

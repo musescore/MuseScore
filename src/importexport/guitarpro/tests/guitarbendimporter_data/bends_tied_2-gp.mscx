@@ -163,14 +163,14 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>T_T</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>U_U</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>V_V</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -250,14 +250,14 @@
               <eid>d_d</eid>
               <linkedTo>R_R</linkedTo>
               <visible>1</visible>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>e_e</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>f_f</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -278,18 +278,6 @@
             <Note>
               <eid>h_h</eid>
               <linkedTo>T_T</linkedTo>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <eid>i_i</eid>
-                <linkedTo>U_U</linkedTo>
-                <visible>0</visible>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <eid>j_j</eid>
-                <linkedTo>V_V</linkedTo>
-                <visible>0</visible>
-                </Symbol>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>1</fret>
@@ -299,7 +287,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>k_k</eid>
+                  <eid>i_i</eid>
                   <linkedTo>W_W</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
@@ -319,7 +307,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>l_l</eid>
+            <eid>j_j</eid>
             <linkedTo>X_X</linkedTo>
             <durationType>half</durationType>
             </Rest>

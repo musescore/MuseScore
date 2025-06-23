@@ -28,6 +28,7 @@
 #include "dom/measure.h"
 #include "dom/measurenumber.h"
 #include "dom/note.h"
+#include "dom/parenthesis.h"
 #include "dom/segment.h"
 #include "dom/staff.h"
 #include "dom/stafflines.h"
@@ -258,7 +259,17 @@ void MaskLayout::maskTABStringLinesForFrets(StaffLines* staffLines, const Layout
     auto maskFret = [&mask, linesThrough, padding, staffLinesPos] (Chord* chord) {
         for (Note* note : chord->notes()) {
             if (note->visible() && !note->shouldHideFret() && (!linesThrough || note->fretConflict())) {
-                RectF noteShape = note->ldata()->bbox().translated(note->pagePos());
+                Shape noteShape = note->ldata()->bbox();
+                const Parenthesis* leftParen = note->leftParen();
+                if (leftParen && leftParen->addToSkyline()) {
+                    noteShape.add(leftParen->ldata()->bbox().translated(leftParen->pos()));
+                }
+                const Parenthesis* rightParen = note->rightParen();
+                if (rightParen && rightParen->addToSkyline()) {
+                    noteShape.add(rightParen->ldata()->bbox().translated(rightParen->pos()));
+                }
+                noteShape.translate(note->pagePos());
+
                 noteShape.pad(padding);
                 mask.add(noteShape.translated(-staffLinesPos));
             }

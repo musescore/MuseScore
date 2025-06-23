@@ -63,6 +63,7 @@
 #include "tremololayout.h"
 #include "segmentlayout.h"
 #include "modifydom.h"
+#include "parenthesislayout.h"
 
 #include "log.h"
 
@@ -2066,138 +2067,22 @@ void MeasureLayout::setCourtesyClef(Measure* m, const Fraction& refClefTick, con
     }
 }
 
-void MeasureLayout::placeParentheses(Segment* segment, track_idx_t trackIdx, LayoutContext& ctx)
-{
-    const EngravingItem* segItem = segment->elementAt(trackIdx);
-    const std::vector<EngravingItem*> parens = segment->findAnnotations(ElementType::PARENTHESIS, trackIdx, trackIdx);
-    bool itemAddToSkyline = segItem->addToSkyline();
-    assert(parens.size() <= 2);
-    if (parens.empty() || !segItem) {
-        return;
-    }
-
-    Shape dummySegShape = segment->staffShape(track2staff(trackIdx));
-    dummySegShape.remove_if([](ShapeElement& shapeEl) {
-        return shapeEl.item() && shapeEl.item()->isParenthesis();
-    });
-
-    if (parens.size() == 1) {
-        // 1 parenthesis
-        Parenthesis* paren = toParenthesis(parens.front());
-        const bool leftBracket = paren->direction() == DirectionH::LEFT;
-        TLayout::layoutParenthesis(paren, ctx);
-        if (!leftBracket && itemAddToSkyline) {
-            // Space against existing segment shape
-            const double minDist = HorizontalSpacing::minHorizontalDistance(dummySegShape, paren->shape().translated(
-                                                                                paren->pos()), paren->spatium());
-            paren->mutldata()->moveX(minDist);
-        } else if (itemAddToSkyline) {
-            // Space following segment shape against this
-            const double minDist = HorizontalSpacing::minHorizontalDistance(paren->shape().translated(
-                                                                                paren->pos()), dummySegShape, paren->spatium());
-            paren->mutldata()->moveX(-minDist);
-        }
-        segment->createShape(track2staff(trackIdx));
-        return;
-    }
-
-    // 2 parentheses
-    Parenthesis* leftParen = nullptr;
-    Parenthesis* rightParen = nullptr;
-    for (EngravingItem* paren : parens) {
-        if (toParenthesis(paren)->direction() == DirectionH::LEFT) {
-            leftParen = toParenthesis(paren);
-            continue;
-        }
-
-        rightParen = toParenthesis(paren);
-    }
-
-    assert(leftParen && rightParen);
-
-    TLayout::layoutParenthesis(toParenthesis(leftParen), ctx);
-    TLayout::layoutParenthesis(toParenthesis(rightParen), ctx);
-
-    if (!itemAddToSkyline) {
-        return;
-    }
-
-    const double itemLeftX = segItem->pos().x();
-    const double itemRightX = itemLeftX + segItem->width();
-
-    const double leftParenPadding = HorizontalSpacing::minHorizontalDistance(leftParen->shape().translated(leftParen->pos()),
-                                                                             dummySegShape, leftParen->spatium());
-    leftParen->mutldata()->moveX(-leftParenPadding);
-    dummySegShape.add(leftParen->shape().translate(leftParen->pos() + leftParen->staffOffset()));
-
-    const double rightParenPadding = HorizontalSpacing::minHorizontalDistance(dummySegShape, rightParen->shape().translated(
-                                                                                  rightParen->pos()), rightParen->spatium());
-    rightParen->mutldata()->moveX(rightParenPadding);
-
-    // If the right parenthesis has been padded against the left parenthesis, this means the parenthesis -> parenthesis padding distance
-    // is larger than the width of the item the parentheses surrounds. In this case, the result is visually unbalanced.  Move both parens
-    // to the left (relative to the segment) in order to centre the item: (b  ) -> ( b )
-    const double itemWidth = segItem->width();
-    const double parenPadding = segment->score()->paddingTable().at(ElementType::PARENTHESIS).at(ElementType::PARENTHESIS);
-
-    if (itemWidth >= parenPadding) {
-        segment->createShape(track2staff(trackIdx));
-        return;
-    }
-
-    // Move parentheses to place item in the middle
-    const double leftParenX = leftParen->pos().x() + leftParen->ldata()->bbox().x() + leftParen->ldata()->thickness;
-    const double rightParenX = rightParen->pos().x() + rightParen->ldata()->bbox().x() + rightParen->width()
-                               - rightParen->ldata()->thickness;
-
-    const double leftParenToItem = itemLeftX - leftParenX;
-    const double itemToRightParen = rightParenX - itemRightX;
-    const double parenToItemDist = (leftParenToItem + itemToRightParen) / 2;
-
-    leftParen->mutldata()->moveX(-(parenToItemDist - leftParenToItem));
-    rightParen->mutldata()->moveX(-(itemToRightParen - parenToItemDist));
-
-    segment->createShape(track2staff(trackIdx));
-}
-
-Parenthesis* MeasureLayout::findOrCreateParenthesis(Segment* segment, const DirectionH direction, const track_idx_t track)
-{
-    if (!segment || !segment->element(track)) {
-        return nullptr;
-    }
-
-    std::vector<EngravingItem*> parens = segment->findAnnotations(ElementType::PARENTHESIS, track, track);
-
-    for (EngravingItem* el : parens) {
-        if (!el->isParenthesis() || toParenthesis(el)->direction() != direction) {
-            continue;
-        }
-        return toParenthesis(el);
-    }
-
-    Parenthesis* paren = Factory::createParenthesis(segment);
-    paren->setTrack(track);
-    paren->setDirection(direction);
-    segment->add(paren);
-
-    return paren;
-}
-
 static void calcParenTopBottom(Parenthesis* item, double& top, double& bottom, LayoutContext& ctx)
 {
-    Segment* seg = item->segment();
-    EngravingItem* el = seg->element(item->track());
+    EngravingItem* parent = item->parentItem();
     const double spatium = item->spatium();
-    if (!el) {
+    if (!parent) {
         return;
     }
 
-    if (!el->ldata()->isValid()) {
-        TLayout::layoutItem(el, ctx);
+    if (!parent->ldata()->isValid()) {
+        TLayout::layoutItem(parent, ctx);
     }
 
-    top = std::min(top, el->shape().top() + el->pos().y() + spatium / 4);
-    bottom = std::max(bottom, el->shape().bottom() + el->pos().y() - spatium / 4);
+    RectF bbox = parent->ldata()->bbox();
+
+    top = std::min(top, bbox.top() + parent->pos().y() + spatium / 4);
+    bottom = std::max(bottom, bbox.bottom() + parent->pos().y() - spatium / 4);
 }
 
 void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continuation, LayoutContext& ctx)
@@ -2208,13 +2093,13 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
 
     const Fraction sigTick = continuation ? Fraction(0, 1) : m->ticks();
 
-    auto segShouldHaveParenthesis = [&](const Segment* seg, const track_idx_t track) -> bool {
+    auto elShouldHaveParenthesis = [&](const Segment* seg, const track_idx_t track) -> bool {
         const EngravingItem* el = seg ? seg->element(track) : nullptr;
         return seg && seg->enabled() && el && el->visible();
     };
 
     auto timeSigShouldHaveOwnParentheses = [&](const Segment* seg, const track_idx_t track) -> bool {
-        if (!segShouldHaveParenthesis(seg, track)) {
+        if (!elShouldHaveParenthesis(seg, track)) {
             return false;
         }
 
@@ -2229,8 +2114,18 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
     auto createParenthesesForSegments = [&](Segment* leftSeg, Segment* rightSeg, track_idx_t track) -> void {
         double top = DBL_MAX;
         double bottom = -DBL_MAX;
-        Parenthesis* leftParen = findOrCreateParenthesis(leftSeg, DirectionH::LEFT, track);
-        Parenthesis* rightParen = findOrCreateParenthesis(rightSeg, DirectionH::RIGHT, track);
+        EngravingItem* leftItem = leftSeg ? leftSeg->element(track) : nullptr;
+        EngravingItem* rightItem = rightSeg ? rightSeg->element(track) : nullptr;
+        Parenthesis* leftParen = nullptr;
+        if (leftItem) {
+            leftItem->setParenthesesMode(leftItem->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT, true, true);
+            leftParen = leftItem->leftParen();
+        }
+        Parenthesis* rightParen = nullptr;
+        if (rightItem) {
+            rightItem->setParenthesesMode(rightItem->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT, true, true);
+            rightParen = rightItem->rightParen();
+        }
         bool needsBigTimeSigAdjust = leftSeg && rightSeg && leftSeg == rightSeg && leftSeg->isType(SegmentType::TimeSigType)
                                      && ctx.conf().styleV(Sid::timeSigPlacement).value<TimeSigPlacement>()
                                      != TimeSigPlacement::NORMAL;
@@ -2248,8 +2143,14 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
 
             rightParen->mutldata()->startY.set_value(top);
             rightParen->mutldata()->height.set_value(height);
+            rightParen->mutldata()->midPointThickness.set_value(height / 60 * rightParen->ldata()->mag());  // 0.1sp for a height of 6sp
             leftParen->mutldata()->startY.set_value(top);
             leftParen->mutldata()->height.set_value(height);
+            leftParen->mutldata()->midPointThickness.set_value(height / 60 * leftParen->ldata()->mag());  // 0.1sp for a height of 6sp
+
+            double mag = std::max(leftParen->ldata()->mag(), rightParen->ldata()->mag());
+            leftParen->mutldata()->setMag(mag);
+            rightParen->mutldata()->setMag(mag);
         } else if (leftParen || rightParen) {
             const Staff* staff = leftParen ? leftParen->staff() : rightParen->staff();
             const double spatium = leftParen ? leftParen->spatium() : rightParen->spatium();
@@ -2257,19 +2158,21 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
             if (leftParen) {
                 leftParen->mutldata()->startY.set_value(-spatium);
                 leftParen->mutldata()->height.set_value(staff->staffHeight(tick) + 2 * spatium * leftParen->mag());
+                leftParen->mutldata()->midPointThickness.set_value(leftParen->ldata()->height / 60 * leftParen->ldata()->mag());  // 0.1sp for a height of 6sp
             }
             if (rightParen) {
                 rightParen->mutldata()->startY.set_value(-spatium);
                 rightParen->mutldata()->height.set_value(staff->staffHeight(tick) + 2 * spatium * rightParen->mag());
+                rightParen->mutldata()->midPointThickness.set_value(rightParen->ldata()->height / 60 * rightParen->ldata()->mag());  // 0.1sp for a height of 6sp
             }
         }
 
         if (leftParen) {
-            placeParentheses(leftSeg, track, ctx);
+            ParenthesisLayout::layoutParentheses(leftItem, ctx);
         }
 
-        if (rightParen && rightSeg != leftSeg) {
-            placeParentheses(rightSeg, track, ctx);
+        if (rightParen && rightItem != leftItem) {
+            ParenthesisLayout::layoutParentheses(rightItem, ctx);
         }
     };
 
@@ -2281,46 +2184,48 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
 
         Segment* leftMostSeg = clefSeg;
 
-        if (!segShouldHaveParenthesis(leftMostSeg, track)) {
+        if (!elShouldHaveParenthesis(leftMostSeg, track)) {
             leftMostSeg = ksSeg;
         }
 
-        if (!separateTsParens && !segShouldHaveParenthesis(leftMostSeg, track)) {
+        if (!separateTsParens && !elShouldHaveParenthesis(leftMostSeg, track)) {
             leftMostSeg = tsSeg;
         }
 
-        if (!segShouldHaveParenthesis(leftMostSeg, track)) {
+        if (!elShouldHaveParenthesis(leftMostSeg, track)) {
             leftMostSeg = nullptr;
         }
 
         // Remove stale parentheses
         for (Segment* seg : { clefSeg, ksSeg, tsSeg }) {
-            if (seg == leftMostSeg || !seg || (seg == tsSeg && separateTsParens)) {
+            if (seg == leftMostSeg || !seg || (seg == tsSeg && separateTsParens) || !seg->element(track)) {
                 continue;
             }
-            removeRepeatCourtesyParenthesesSegment(seg, track, DirectionH::LEFT);
+            EngravingItem* item = seg->element(track);
+            removeRepeatCourtesyParenthesis(item, DirectionH::LEFT);
         }
 
         Segment* rightMostSeg = separateTsParens ? nullptr : tsSeg;
 
-        if (!segShouldHaveParenthesis(rightMostSeg, track)) {
+        if (!elShouldHaveParenthesis(rightMostSeg, track)) {
             rightMostSeg = ksSeg;
         }
 
-        if (!segShouldHaveParenthesis(rightMostSeg, track)) {
+        if (!elShouldHaveParenthesis(rightMostSeg, track)) {
             rightMostSeg = clefSeg;
         }
 
-        if (!segShouldHaveParenthesis(rightMostSeg, track)) {
+        if (!elShouldHaveParenthesis(rightMostSeg, track)) {
             rightMostSeg = nullptr;
         }
 
         // Remove stale parentheses
         for (Segment* seg : { clefSeg, ksSeg, tsSeg }) {
-            if (seg == rightMostSeg || !seg || (seg == tsSeg && separateTsParens)) {
+            if (seg == rightMostSeg || !seg || (seg == tsSeg && separateTsParens) || !seg->element(track)) {
                 continue;
             }
-            removeRepeatCourtesyParenthesesSegment(seg, track, DirectionH::RIGHT);
+            EngravingItem* item = seg->element(track);
+            removeRepeatCourtesyParenthesis(item, DirectionH::RIGHT);
         }
 
         createParenthesesForSegments(leftMostSeg, rightMostSeg, track);
@@ -2348,28 +2253,36 @@ void MeasureLayout::removeRepeatCourtesyParenthesesMeasure(Measure* m, const boo
             continue;
         }
         for (track_idx_t track = 0; track <= ctx.dom().nstaves() * VOICES; track += VOICES) {
-            removeRepeatCourtesyParenthesesSegment(seg, track);
+            EngravingItem* item = seg->element(track);
+            if (!item) {
+                continue;
+            }
+            removeRepeatCourtesyParenthesis(item);
         }
     }
 }
 
-void MeasureLayout::removeRepeatCourtesyParenthesesSegment(Segment* seg, const track_idx_t track, const DirectionH direction)
+void MeasureLayout::removeRepeatCourtesyParenthesis(EngravingItem* item, const DirectionH direction)
 {
-    if (!seg) {
+    if (!item) {
+        return;
+    }
+    if (direction == DirectionH::AUTO) {
+        if (Parenthesis* leftParen = item->leftParen()) {
+            item->remove(leftParen);
+        }
+        if (Parenthesis* rightParen = item->rightParen()) {
+            item->remove(rightParen);
+        }
         return;
     }
 
-    std::vector<EngravingItem*> parens = seg->findAnnotations(ElementType::PARENTHESIS, track, track);
-    for (EngravingItem* paren : parens) {
-        if (!paren->isParenthesis()) {
-            continue;
-        }
-        if (direction != DirectionH::AUTO && toParenthesis(paren)->direction() != direction) {
-            continue;
-        }
-
-        seg->remove(paren);
+    Parenthesis* paren = item->paren(direction);
+    if (!paren) {
+        return;
     }
+
+    item->remove(paren);
 }
 
 void MeasureLayout::setRepeatCourtesiesAndParens(Measure* m, LayoutContext& ctx)

@@ -170,7 +170,8 @@ Score::Score(const modularity::ContextPtr& iocCtx)
     //! NOTE Looks like a bug, `minimumPaddingUnit` is set using the default style's spatium value
     //! and does not change if the style or the spatium of this score is changed
     m_paddingTable.setMinimumPaddingUnit(0.1 * style().spatium());
-    createPaddingTable();
+    m_externParenPaddingTable.setMinimumPaddingUnit(0.1 * style().spatium());
+    createPaddingTables();
 
     m_shadowNote = new ShadowNote(this);
     m_shadowNote->setVisible(false);
@@ -218,7 +219,7 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
     checkChordList();
     m_synthesizerState = parent->m_synthesizerState;
     m_mscVersion = parent->m_mscVersion;
-    createPaddingTable();
+    createPaddingTables();
 }
 
 Score::Score(MasterScore* parent, const MStyle& s)
@@ -226,7 +227,7 @@ Score::Score(MasterScore* parent, const MStyle& s)
 {
     Score::validScores.insert(this);
     m_style  = s;
-    createPaddingTable();
+    createPaddingTables();
 }
 
 //---------------------------------------------------------
@@ -1420,7 +1421,7 @@ void Score::spatiumChanged(double oldValue, double newValue)
         staff->spatiumChanged(oldValue, newValue);
     }
     m_layoutOptions.noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, newValue / SPATIUM20);
-    createPaddingTable();
+    createPaddingTables();
 }
 
 //---------------------------------------------------------
@@ -1461,7 +1462,7 @@ void Score::styleChanged()
             st->styleChanged();
         }
     }
-    createPaddingTable();
+    createPaddingTables();
     setLayoutAll();
 }
 
@@ -1764,7 +1765,7 @@ void Score::removeElement(EngravingItem* element)
     {
         Note* startNote = toGuitarBend(element)->startNote();
         if (startNote) {
-            startNote->setHeadHasParentheses(false);
+            startNote->setParenthesesMode(ParenthesesMode::NONE);
             startNote->chord()->setNoStem(false);
             startNote->chord()->setBeamMode(BeamMode::AUTO);
         }
@@ -6045,9 +6046,10 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     }
 }
 
-void Score::createPaddingTable()
+void Score::createPaddingTables()
 {
     m_paddingTable.createTable(style());
+    m_externParenPaddingTable.createTable(style());
 }
 
 //--------------------------------------------------------
@@ -6082,7 +6084,7 @@ void Score::autoUpdateSpatium()
     targetSpatium = (resultingStaffHeight / 4) * DPI / INCH;
 
     style().setSpatium(targetSpatium);
-    createPaddingTable();
+    createPaddingTables();
 }
 
 void Score::addSystemLock(const SystemLock* lock)

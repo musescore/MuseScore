@@ -524,6 +524,14 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
     writeProperty(item, xml, Pid::POSITION_LINKED_TO_MASTER);
     writeProperty(item, xml, Pid::APPEARANCE_LINKED_TO_MASTER);
     writeProperty(item, xml, Pid::EXCLUDE_FROM_OTHER_PARTS);
+
+    writeProperty(item, xml, Pid::HAS_PARENTHESES);
+    if (item->leftParen()) {
+        writeItem(item->leftParen(), xml, ctx);
+    }
+    if (item->rightParen()) {
+        writeItem(item->rightParen(), xml, ctx);
+    }
 }
 
 void TWrite::write(const Accidental* item, XmlWriter& xml, WriteContext& ctx)
@@ -1750,9 +1758,6 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperty(item, xml, Pid::HARMONY_TYPE);
     writeProperty(item, xml, Pid::PLAY);
-    if (item->leftParen()) {
-        xml.tag("leftParen");
-    }
 
     // check tpcs valid?
     if (item->rootCase() != NoteCaseType::CAPITAL) {
@@ -1794,9 +1799,6 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, false);
     //Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION
     //written by the above function call because they are part of element style
-    if (item->rightParen()) {
-        xml.tag("rightParen");
-    }
     xml.endElement();
 }
 

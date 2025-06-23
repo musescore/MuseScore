@@ -678,11 +678,15 @@ void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
                 if (!timeSig) {
                     continue;
                 }
-                std::vector<EngravingItem*> parens = seg.findAnnotations(ElementType::PARENTHESIS, timeSig->track(), timeSig->track());
+                Parenthesis* leftParen = timeSig->leftParen();
+                Parenthesis* rightParen = timeSig->rightParen();
                 if (!muse::contains(timeSigToKeep, timeSig)) {
                     timeSig->mutldata()->reset(); // Eliminates the shape
-                    for (EngravingItem* paren : parens) {
-                        paren->mutldata()->reset();
+                    if (leftParen) {
+                        leftParen->mutldata()->reset();
+                    }
+                    if (rightParen) {
+                        rightParen->mutldata()->reset();
                     }
                     continue;
                 }
@@ -691,38 +695,28 @@ void SystemLayout::updateBigTimeSigIfNeeded(System* system, LayoutContext& ctx)
                     // Center timeSig on its segment
                     RectF bbox = timeSig->ldata()->bbox();
                     double newXPos = -0.5 * (bbox.right() + bbox.left());
-                    double xPosDiff = timeSig->pos().x() - newXPos;
                     timeSig->mutldata()->setPosX(newXPos);
-
-                    for (EngravingItem* el : parens) {
-                        el->mutldata()->moveX(-xPosDiff);
-                    }
                 } else if (!seg.isTimeSigRepeatAnnounceType()) {
                     // Left-align to parenthesis if present
                     double xLeftParens = DBL_MAX;
-                    for (EngravingItem* paren : parens) {
-                        if (toParenthesis(paren)->direction() == DirectionH::LEFT) {
-                            xLeftParens = paren->x() + paren->ldata()->bbox().left();
-                        }
+                    if (leftParen) {
+                        xLeftParens = leftParen->x() + leftParen->ldata()->bbox().left();
                     }
                     if (xLeftParens != DBL_MAX) {
                         timeSig->mutldata()->moveX(-xLeftParens);
-                        for (EngravingItem* paren : parens) {
-                            paren->mutldata()->moveX(-xLeftParens);
-                        }
                     }
                 } else {
                     // TimeSigRepeatAnnounce: right-align to segment
                     double xRight = -DBL_MAX;
                     xRight = std::max(xRight, timeSig->shape().right() + timeSig->x());
-                    for (EngravingItem* paren : parens) {
-                        xRight = std::max(xRight, paren->ldata()->bbox().right() + paren->x());
+                    if (leftParen) {
+                        xRight = std::max(xRight, leftParen->ldata()->bbox().right() + leftParen->x());
+                    }
+                    if (rightParen) {
+                        xRight = std::max(xRight, rightParen->ldata()->bbox().right() + rightParen->x());
                     }
                     if (xRight != -DBL_MAX) {
                         timeSig->mutldata()->moveX(-xRight);
-                        for (EngravingItem* paren : parens) {
-                            paren->mutldata()->moveX(-xRight);
-                        }
                     }
                 }
             }
@@ -870,16 +864,7 @@ void SystemLayout::layoutParenthesisAndBigTimeSigs(const ElementsToLayout& eleme
     }
 
     for (TimeSig* timeSig : elementsToLayout.timeSigAboveStaves) {
-        const double yBefore = timeSig->pos().y();
         Autoplace::autoplaceSegmentElement(timeSig, timeSig->mutldata());
-        const double yAfter = timeSig->pos().y();
-        const double yPosDiff = yAfter - yBefore;
-        Segment* s = timeSig->segment();
-        std::vector<EngravingItem*> parens = s->findAnnotations(ElementType::PARENTHESIS,
-                                                                timeSig->track(), timeSig->track());
-        for (EngravingItem* el : parens) {
-            el->mutldata()->moveY(yPosDiff);
-        }
     }
 }
 
@@ -2770,15 +2755,7 @@ void SystemLayout::centerBigTimeSigsAcrossStaves(const System* system)
                 double yTop = system->staff(thisStaffIdx)->y() + system->score()->staff(thisStaffIdx)->staffHeight(segment.tick());
                 double yBottom = system->staff(nextStaffIdx)->y() + system->score()->staff(nextStaffIdx)->staffHeight(segment.tick());
                 double newYPos = 0.5 * (yBottom - yTop);
-                double yPosDiff = newYPos - timeSig->pos().y();
                 timeSig->mutldata()->setPosY(newYPos);
-
-                for (EngravingItem* el : segment.findAnnotations(ElementType::PARENTHESIS, timeSig->track(), timeSig->track())) {
-                    if (!el || !el->isParenthesis()) {
-                        continue;
-                    }
-                    el->mutldata()->moveY(yPosDiff);
-                }
             }
         }
     }

@@ -217,6 +217,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::CHORD_PRESET_TYPE:
                 set(idx, TConv::fromXml(e.readAsciiText(), ChordStylePreset::STANDARD));
                 break;
+            case P_TYPE::PARENTHESES_MODE:
+                set(idx, TConv::fromXml(e.readAsciiText(), ParenthesesMode::NONE));
+                break;
             case P_TYPE::LH_TAPPING_SYMBOL:
                 set(idx, TConv::fromXml(e.readAsciiText(), LHTappingSymbol::DOT));
                 break;
@@ -727,6 +730,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(value(idx).value<RHTappingSymbol>()));
         } else if (P_TYPE::TEXT_STYLE == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<TextStyleType>()));
+        } else if (P_TYPE::PARENTHESES_MODE == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<ParenthesesMode>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

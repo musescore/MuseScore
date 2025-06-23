@@ -22,6 +22,7 @@
 #include <cfloat>
 
 #include "horizontalspacing.h"
+#include "parenthesislayout.h"
 
 #include "dom/barline.h"
 #include "dom/beam.h"
@@ -1402,6 +1403,9 @@ double HorizontalSpacing::minLeft(const Segment* seg, const Shape& ls)
 
 double HorizontalSpacing::computePadding(const EngravingItem* item1, const EngravingItem* item2)
 {
+    if (item1->isParenthesis() != item2->isParenthesis()) {
+        return ParenthesisLayout::computeParenthesisPadding(item1, item2);
+    }
     const PaddingTable& paddingTable = item1->score()->paddingTable();
     ElementType type1 = item1->type();
     ElementType type2 = item2->type();
