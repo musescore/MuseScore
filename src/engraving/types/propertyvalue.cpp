@@ -177,6 +177,7 @@ QVariant PropertyValue::toQVariant() const
     case P_TYPE::CHORD_PRESET_TYPE: return static_cast<int>(value<ChordStylePreset>());
     case P_TYPE::LH_TAPPING_SYMBOL: return static_cast<int>(value<LHTappingSymbol>());
     case P_TYPE::RH_TAPPING_SYMBOL: return static_cast<int>(value<RHTappingSymbol>());
+    case P_TYPE::PARENTHESES_MODE: return static_cast<int>(value<ParenthesesMode>());
 
     case P_TYPE::VOICE_ASSIGNMENT: return static_cast<int>(value<VoiceAssignment>());
     case P_TYPE::AUTO_ON_OFF:       return static_cast<int>(value<AutoOnOff>());
@@ -293,6 +294,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::TIMESIG_MARGIN:   return PropertyValue(TimeSigVSMargin(v.toInt()));
     case P_TYPE::NOTE_SPELLING_TYPE:   return PropertyValue(NoteSpellingType(v.toInt()));
     case P_TYPE::CHORD_PRESET_TYPE:   return PropertyValue(ChordStylePreset(v.toInt()));
+    case P_TYPE::PARENTHESES_MODE:   return PropertyValue(ParenthesesMode(v.toInt()));
 
     // Other
     case P_TYPE::GROUPS: {

@@ -330,6 +330,14 @@
             <noStem>1</noStem>
             <Note>
               <eid>g_g</eid>
+              <parentheses>both</parentheses>
+              <Parenthesis>
+                <eid>SB_SB</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>TB_TB</eid>
+                </Parenthesis>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
                 <eid>h_h</eid>
@@ -597,6 +605,14 @@
             <noStem>1</noStem>
             <Note>
               <eid>EB_EB</eid>
+              <parentheses>both</parentheses>
+              <Parenthesis>
+                <eid>UB_UB</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>VB_VB</eid>
+                </Parenthesis>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
                 <eid>FB_FB</eid>

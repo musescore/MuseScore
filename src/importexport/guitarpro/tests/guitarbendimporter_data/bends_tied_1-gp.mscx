@@ -146,14 +146,14 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>R_R</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>S_S</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>T_T</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -209,14 +209,14 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>b_b</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>c_c</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>d_d</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>3</fret>
@@ -249,14 +249,14 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>g_g</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>h_h</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>i_i</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -312,14 +312,14 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>q_q</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>r_r</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>s_s</eid>
-                </Symbol>
+                </Parenthesis>
               <Spanner type="Tie">
                 <Tie>
                   <eid>t_t</eid>
@@ -348,14 +348,14 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>v_v</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>w_w</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>x_x</eid>
-                </Symbol>
+                </Parenthesis>
               <Spanner type="Tie">
                 <Tie>
                   <eid>y_y</eid>
@@ -384,14 +384,14 @@
             <durationType>quarter</durationType>
             <Note>
               <eid>0_0</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>1_1</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>2_2</eid>
-                </Symbol>
+                </Parenthesis>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -452,18 +452,6 @@
             <Note>
               <eid>8_8</eid>
               <linkedTo>R_R</linkedTo>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <eid>9_9</eid>
-                <linkedTo>S_S</linkedTo>
-                <visible>0</visible>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <eid>+_+</eid>
-                <linkedTo>T_T</linkedTo>
-                <visible>0</visible>
-                </Symbol>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>1</fret>
@@ -478,12 +466,12 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>/_/</eid>
+            <eid>9_9</eid>
             <linkedTo>U_U</linkedTo>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
-            <eid>AB_AB</eid>
+            <eid>+_+</eid>
             <linkedTo>V_V</linkedTo>
             </BarLine>
           </voice>
@@ -491,11 +479,11 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>BB_BB</eid>
+            <eid>/_/</eid>
             <linkedTo>X_X</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>CB_CB</eid>
+              <eid>AB_AB</eid>
               <linkedTo>Y_Y</linkedTo>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -506,7 +494,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>DB_DB</eid>
+                  <eid>BB_BB</eid>
                   <linkedTo>Z_Z</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
@@ -519,24 +507,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>EB_EB</eid>
+            <eid>CB_CB</eid>
             <linkedTo>a_a</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>FB_FB</eid>
+              <eid>DB_DB</eid>
               <linkedTo>b_b</linkedTo>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <eid>GB_GB</eid>
-                <linkedTo>c_c</linkedTo>
-                <visible>0</visible>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <eid>HB_HB</eid>
-                <linkedTo>d_d</linkedTo>
-                <visible>0</visible>
-                </Symbol>
               <pitch>62</pitch>
               <tpc>16</tpc>
               <fret>1</fret>
@@ -546,7 +522,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>IB_IB</eid>
+                  <eid>EB_EB</eid>
                   <linkedTo>e_e</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
@@ -566,23 +542,21 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>JB_JB</eid>
+            <eid>FB_FB</eid>
             <linkedTo>f_f</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>KB_KB</eid>
+              <eid>GB_GB</eid>
               <linkedTo>g_g</linkedTo>
               <visible>1</visible>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <eid>LB_LB</eid>
-                <linkedTo>h_h</linkedTo>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <eid>MB_MB</eid>
-                <linkedTo>i_i</linkedTo>
-                </Symbol>
+              <parentheses>both</parentheses>
+              <Parenthesis>
+                <eid>HB_HB</eid>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>IB_IB</eid>
+                </Parenthesis>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -598,12 +572,12 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>NB_NB</eid>
+            <eid>JB_JB</eid>
             <linkedTo>j_j</linkedTo>
             <durationType>quarter</durationType>
             </Rest>
           <BarLine>
-            <eid>OB_OB</eid>
+            <eid>KB_KB</eid>
             <linkedTo>k_k</linkedTo>
             </BarLine>
           </voice>
@@ -611,11 +585,11 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>PB_PB</eid>
+            <eid>LB_LB</eid>
             <linkedTo>m_m</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>QB_QB</eid>
+              <eid>MB_MB</eid>
               <linkedTo>n_n</linkedTo>
               <pitch>60</pitch>
               <tpc>14</tpc>
@@ -626,11 +600,11 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>RB_RB</eid>
+                  <eid>NB_NB</eid>
                   <linkedTo>o_o</linkedTo>
                   <anchor>3</anchor>
                   <GuitarBendHold>
-                    <eid>SB_SB</eid>
+                    <eid>OB_OB</eid>
                     <anchor>3</anchor>
                     </GuitarBendHold>
                   </GuitarBend>
@@ -643,27 +617,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>TB_TB</eid>
+            <eid>PB_PB</eid>
             <linkedTo>p_p</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>UB_UB</eid>
+              <eid>QB_QB</eid>
               <linkedTo>q_q</linkedTo>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <eid>VB_VB</eid>
-                <linkedTo>r_r</linkedTo>
-                <visible>0</visible>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <eid>WB_WB</eid>
-                <linkedTo>s_s</linkedTo>
-                <visible>0</visible>
-                </Symbol>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>XB_XB</eid>
+                  <eid>RB_RB</eid>
                   <linkedTo>t_t</linkedTo>
                   </Tie>
                 <next>
@@ -686,25 +648,15 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>YB_YB</eid>
+            <eid>SB_SB</eid>
             <linkedTo>u_u</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>ZB_ZB</eid>
+              <eid>TB_TB</eid>
               <linkedTo>v_v</linkedTo>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <eid>aB_aB</eid>
-                <linkedTo>w_w</linkedTo>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <eid>bB_bB</eid>
-                <linkedTo>x_x</linkedTo>
-                </Symbol>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>cB_cB</eid>
+                  <eid>UB_UB</eid>
                   <linkedTo>y_y</linkedTo>
                   </Tie>
                 <next>
@@ -727,22 +679,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>dB_dB</eid>
+            <eid>VB_VB</eid>
             <linkedTo>z_z</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>eB_eB</eid>
+              <eid>WB_WB</eid>
               <linkedTo>0_0</linkedTo>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <eid>fB_fB</eid>
-                <linkedTo>1_1</linkedTo>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
-                <eid>gB_gB</eid>
-                <linkedTo>2_2</linkedTo>
-                </Symbol>
               <Spanner type="Tie">
                 <prev>
                   <location>

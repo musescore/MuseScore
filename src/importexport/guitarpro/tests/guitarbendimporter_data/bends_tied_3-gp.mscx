@@ -344,14 +344,14 @@
               <eid>m_m</eid>
               <linkedTo>W_W</linkedTo>
               <visible>1</visible>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>n_n</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>o_o</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>

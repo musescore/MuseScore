@@ -1255,7 +1255,7 @@ bool FiguredBass::fontData(int nIdx, String* pFamily, String* pDisplayName,
 //   return true if any FiguredBassItem starts with a parenthesis
 //---------------------------------------------------------
 
-bool FiguredBass::hasParentheses() const
+bool FiguredBass::parenthesesMode() const
 {
     for (FiguredBassItem* item : m_items) {
         if (item->startsWithParenthesis()) {

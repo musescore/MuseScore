@@ -742,7 +742,6 @@ void Segment::add(EngravingItem* el)
     case ElementType::FIGURED_BASS:
     case ElementType::FERMATA:
     case ElementType::STICKING:
-    case ElementType::PARENTHESIS:
         m_annotations.push_back(el);
         break;
 
@@ -935,7 +934,6 @@ void Segment::remove(EngravingItem* el)
     case ElementType::TREMOLOBAR:
     case ElementType::FERMATA:
     case ElementType::STICKING:
-    case ElementType::PARENTHESIS:
         removeAnnotation(el);
         break;
 
@@ -2031,7 +2029,6 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
-    case ElementType::PARENTHESIS:
     case ElementType::TEXT:
     case ElementType::TREMOLOBAR:
     case ElementType::TAB_DURATION_SYMBOL:
@@ -2250,7 +2247,6 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::STRING_TUNINGS:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
-    case ElementType::PARENTHESIS:
     case ElementType::IMAGE:
     case ElementType::TEXT:
     case ElementType::TREMOLOBAR:
