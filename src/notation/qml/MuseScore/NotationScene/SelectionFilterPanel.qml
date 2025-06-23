@@ -273,7 +273,7 @@ Item {
             enabled: !root.isNoneSelected
 
             onClicked: {
-                voicesModel.clearAll()
+                //! NOTE: By design voicesModel is exempt from clear/select all
                 notesInChordModel.clearAll()
                 elementsModel.clearAll()
             }
@@ -292,7 +292,7 @@ Item {
             enabled: !root.isAllSelected
 
             onClicked: {
-                voicesModel.selectAll()
+                //! NOTE: By design voicesModel is exempt from clear/select all
                 notesInChordModel.selectAll()
                 elementsModel.selectAll()
             }
