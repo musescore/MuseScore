@@ -3355,20 +3355,14 @@ void Score::cmdAddParentheses()
 
 void Score::cmdAddParentheses(EngravingItem* el)
 {
-    if (el->type() == ElementType::NOTE) {
-        Note* n = toNote(el);
-        n->undoChangeProperty(Pid::HEAD_HAS_PARENTHESES, !n->headHasParentheses());
-    } else if (el->type() == ElementType::ACCIDENTAL) {
+    if (el->type() == ElementType::ACCIDENTAL) {
         Accidental* acc = toAccidental(el);
         acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
-    } else if (el->type() == ElementType::HARMONY) {
-        Harmony* h = toHarmony(el);
-        h->setLeftParen(!h->leftParen());
-        h->setRightParen(!h->rightParen());
-        h->render();
     } else if (el->type() == ElementType::TIMESIG) {
         TimeSig* ts = toTimeSig(el);
         ts->setLargeParentheses(true);
+    } else {
+        el->undoChangeProperty(Pid::HAS_PARENTHESES, !el->hasParentheses());
     }
 }
 

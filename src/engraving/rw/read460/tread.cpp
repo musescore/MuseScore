@@ -546,6 +546,11 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::PLACEMENT)) {
     } else if (tag == "z") {
         item->setZ(e.readInt());
+    } else if (TRead::readProperty(item, tag, e, ctx, Pid::HAS_PARENTHESES)) {
+    } else if (tag == "Parenthesis") {
+        Parenthesis* p = Factory::createParenthesis(item);
+        TRead::read(p, e, ctx);
+        item->add(p);
     } else {
         return false;
     }
@@ -2890,10 +2895,10 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "leftParen") {
-            h->setLeftParen(true);
+            h->setHasLeftParenthesis(true, true, true);
             e.readNext();
         } else if (tag == "rightParen") {
-            h->setRightParen(true);
+            h->setHasRightParenthesis(true, true, true);
             e.readNext();
         } else if (tag == "bassCase") {
             h->setBassCase(static_cast<NoteCaseType>(e.readInt()));

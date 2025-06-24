@@ -524,6 +524,13 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
     writeProperty(item, xml, Pid::POSITION_LINKED_TO_MASTER);
     writeProperty(item, xml, Pid::APPEARANCE_LINKED_TO_MASTER);
     writeProperty(item, xml, Pid::EXCLUDE_FROM_OTHER_PARTS);
+
+    writeProperty(item, xml, Pid::HAS_PARENTHESES);
+    if (item->hasParentheses()) {
+        // Parentheses - should this be elsewhere?
+        writeItem(item->leftParen(), xml, ctx);
+        writeItem(item->rightParen(), xml, ctx);
+    }
 }
 
 void TWrite::write(const Accidental* item, XmlWriter& xml, WriteContext& ctx)

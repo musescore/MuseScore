@@ -251,7 +251,7 @@ static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engravi
                 bend->setEndNotePitch(bend->startNoteOfChain()->pitch() + noteInfo.quarterTones / 2, quarterOff);
                 bend->setStartTimeFactor(noteInfo.startFactor);
                 bend->setEndTimeFactor(noteInfo.endFactor);
-                endNote->setHeadHasParentheses(true);
+                endNote->setHasParentheses(true);
 
                 Tie* tie = startNote->tieFor();
                 if (tie) {
@@ -268,7 +268,7 @@ static void createTiedNotesBends(const BendDataContext& bendDataCtx, mu::engravi
 
                     nextNote->setPitch(endNote->pitch());
                     nextNote->setTpcFromPitch();
-                    nextNote->setHeadHasParentheses(true);
+                    nextNote->setHasParentheses(true);
                     tie = nextNote->tieFor();
                 }
             }

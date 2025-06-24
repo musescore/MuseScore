@@ -37,6 +37,7 @@
 #include "measure.h"
 #include "mscore.h"
 #include "part.h"
+#include "parenthesis.h"
 #include "pitchspelling.h"
 #include "repeatlist.h"
 #include "score.h"
@@ -175,7 +176,7 @@ String Harmony::harmonyName() const
 {
     String name;
 
-    if (m_leftParen) {
+    if (hasParentheses()) {
         name = u"(";
     }
 
@@ -234,7 +235,7 @@ String Harmony::harmonyName() const
         name += s;
     }
 
-    if (m_rightParen) {
+    if (hasParentheses()) {
         name += u")";
     }
 
@@ -304,8 +305,6 @@ Harmony::Harmony(Segment* parent)
     m_rootCase   = NoteCaseType::CAPITAL;
     m_bassCase   = NoteCaseType::CAPITAL;
     m_harmonyType = HarmonyType::STANDARD;
-    m_leftParen  = false;
-    m_rightParen = false;
     m_play = true;
     m_realizedHarmony = RealizedHarmony(this);
     initElementStyle(&chordSymbolStyle);
@@ -316,8 +315,6 @@ Harmony::Harmony(const Harmony& h)
 {
     m_rootCase   = h.m_rootCase;
     m_bassCase   = h.m_bassCase;
-    m_leftParen  = h.m_leftParen;
-    m_rightParen = h.m_rightParen;
     m_bassScale = h.m_bassScale;
     m_degreeList = h.m_degreeList;
     m_harmonyType = h.m_harmonyType;
@@ -355,6 +352,24 @@ int Harmony::id() const
         return -1;
     }
     return m_chords.front()->id();
+}
+
+void Harmony::setHasParentheses(bool v, bool addToLinked, bool generated)
+{
+    EngravingItem::setHasParentheses(v, addToLinked, generated);
+    render();
+}
+
+void Harmony::setHasLeftParenthesis(bool v, bool addToLinked, bool generated)
+{
+    EngravingItem::setHasLeftParenthesis(v, addToLinked, generated);
+    render();
+}
+
+void Harmony::setHasRightParenthesis(bool v, bool addToLinked, bool generated)
+{
+    EngravingItem::setHasRightParenthesis(v, addToLinked, generated);
+    render();
 }
 
 //---------------------------------------------------------
@@ -436,13 +451,15 @@ const std::vector<const ChordDescription*> Harmony::parseHarmony(const String& s
 {
     // pre-process for parentheses
     String s = ss.simplified();
-    if ((m_leftParen = s.startsWith('('))) {
+    if (s.startsWith('(')) {
+        setHasLeftParenthesis(true, true, true);
         s.remove(0, 1);
     }
-    if ((m_rightParen = (s.endsWith(')') && s.count('(') < s.count(')')))) {
+    if (s.endsWith(')') && s.count('(') < s.count(')')) {
+        setHasRightParenthesis(true, true, true);
         s.remove(s.size() - 1, 1);
     }
-    if (m_leftParen || m_rightParen) {
+    if (hasParentheses()) {
         s = s.simplified();         // in case of spaces inside parentheses
     }
 
@@ -1139,15 +1156,7 @@ void Harmony::renderRomanNumeral()
     }
     HarmonyInfo* info = m_chords.front();
 
-    if (m_leftParen) {
-        render(SymId::csymParensLeftTall, ctx);
-    }
-
     render(info->textName(), ctx);
-
-    if (m_rightParen) {
-        render(SymId::csymParensRightTall, ctx);
-    }
 }
 
 //---------------------------------------------------------
@@ -1468,10 +1477,6 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
     NoteCaseType rootCase = rootRenderCase(info);
     NoteCaseType bassCase = bassRenderCase();
 
-    if (m_leftParen) {
-        render(SymId::csymParensLeftTall, ctx);
-    }
-
     NoteSpellingType spelling = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
 
     if (m_harmonyType == HarmonyType::STANDARD && tpcIsValid(info->rootTpc())) {
@@ -1542,10 +1547,6 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
                 = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
             render(bassNoteChordList, ctx, capoBassTpc, spelling, bassCase, m_bassScale);
         }
-        render(SymId::csymParensRightTall, ctx);
-    }
-
-    if (m_rightParen) {
         render(SymId::csymParensRightTall, ctx);
     }
 }

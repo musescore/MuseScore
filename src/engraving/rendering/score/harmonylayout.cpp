@@ -25,6 +25,7 @@
 
 #include "dom/fret.h"
 #include "dom/harmony.h"
+#include "dom/parenthesis.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
@@ -170,4 +171,14 @@ void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldat
     }
 
     ldata->setPos(positionPoint);
+
+    if (Parenthesis* leftParen = item->leftParen()) {
+        TLayout::layoutParenthesis(leftParen);
+        ldata->shape().add(leftParen->shape().translated(leftParen->pos()));
+    }
+
+    if (Parenthesis* rightParen = item->rightParen()) {
+        TLayout::layoutParenthesis(rightParen);
+        ldata->shape().add(rightParen->shape().translated(rightParen->pos()));
+    }
 }

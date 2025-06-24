@@ -44,7 +44,7 @@ void NoteheadSettingsModel::createProperties()
     });
 
     m_isHeadSmall = buildPropertyItem(mu::engraving::Pid::SMALL);
-    m_hasHeadParentheses = buildPropertyItem(mu::engraving::Pid::HEAD_HAS_PARENTHESES);
+    m_hasHeadParentheses = buildPropertyItem(mu::engraving::Pid::HAS_PARENTHESES);
     m_headDirection = buildPropertyItem(mu::engraving::Pid::MIRROR_HEAD);
     m_headGroup = buildPropertyItem(mu::engraving::Pid::HEAD_GROUP);
     m_headType = buildPropertyItem(mu::engraving::Pid::HEAD_TYPE);
@@ -63,7 +63,7 @@ void NoteheadSettingsModel::loadProperties()
     static PropertyIdSet propertyIdSet {
         Pid::VISIBLE,
         Pid::SMALL,
-        Pid::HEAD_HAS_PARENTHESES,
+        Pid::HAS_PARENTHESES,
         Pid::MIRROR_HEAD,
         Pid::HEAD_GROUP,
         Pid::HEAD_TYPE,
@@ -106,7 +106,7 @@ void NoteheadSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& p
         loadPropertyItem(m_isHeadSmall);
     }
 
-    if (muse::contains(propertyIdSet, Pid::HEAD_HAS_PARENTHESES)) {
+    if (muse::contains(propertyIdSet, Pid::HAS_PARENTHESES)) {
         loadPropertyItem(m_hasHeadParentheses);
     }
 

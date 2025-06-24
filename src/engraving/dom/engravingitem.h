@@ -218,7 +218,7 @@ public:
     virtual void setSelected(bool f);
 
     bool visible() const { return !flag(ElementFlag::INVISIBLE); }
-    virtual void setVisible(bool f) { setFlag(ElementFlag::INVISIBLE, !f); }
+    virtual void setVisible(bool f);
 
     bool isInteractionAvailable() const;
 
@@ -494,6 +494,15 @@ public:
     bool colorsInversionEnabled() const;
     void setColorsInverionEnabled(bool enabled);
 
+    virtual void setHasParentheses(bool v, bool addToLinked = true, bool generated = false);
+    virtual void setHasLeftParenthesis(bool v, bool addToLinked = true, bool generated = false);
+    virtual void setHasRightParenthesis(bool v, bool addToLinked = true, bool generated = false);
+    bool hasParentheses() const { return m_leftParenthesis && m_rightParenthesis; }
+    Parenthesis* leftParen() const { return m_leftParenthesis; }
+    Parenthesis* rightParen() const { return m_rightParenthesis; }
+    void setLeftParen(Parenthesis* paren) { m_leftParenthesis = paren; }
+    void setRightParen(Parenthesis* paren) { m_rightParenthesis = paren; }
+
     struct BarBeat
     {
         int bar;
@@ -744,6 +753,9 @@ private:
     bool m_excludeVerticalAlign = false;
 
     mutable LayoutData* m_layoutData = nullptr;
+
+    Parenthesis* m_leftParenthesis = nullptr;
+    Parenthesis* m_rightParenthesis = nullptr;
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;

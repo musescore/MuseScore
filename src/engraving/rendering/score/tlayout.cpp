@@ -4321,9 +4321,9 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         if (item->ghost()) {
-            const_cast<Note*>(item)->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
+            const_cast<Note*>(item)->setHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
         } else {
-            const_cast<Note*>(item)->setHeadHasParentheses(false, /*addToLinked=*/ false, /* generated= */ true);
+            const_cast<Note*>(item)->setHasParentheses(false, /*addToLinked=*/ false, /* generated= */ true);
         }
 
         double w = item->tabHeadWidth(tab);
@@ -4341,9 +4341,9 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 
         if (item->configuration()->shouldAddParenthesisOnStandardStaff()) {
             if (item->ghost()) {
-                const_cast<Note*>(item)->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
+                const_cast<Note*>(item)->setHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
             } else {
-                const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false, /* generated= */ true);
+                const_cast<Note*>(item)->setHasParentheses(false, /* addToLinked= */ false, /* generated= */ true);
             }
         }
 
@@ -4615,7 +4615,7 @@ void TLayout::layoutParenthesis(Parenthesis* item)
         startY = bbox.top() - 0.25 * spatium;
         height = bbox.height() + 0.5 * spatium;
         const double PADDING = spatium * 0.2;
-        xPos = item->direction() == DirectionH::RIGHT ? bbox.right() + PADDING : -PADDING;
+        xPos = item->direction() == DirectionH::RIGHT ? bbox.right() + PADDING : bbox.left() - PADDING;
     }
 
     const double heightInSpatium = height / spatium;

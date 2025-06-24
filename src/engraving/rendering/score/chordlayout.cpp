@@ -3356,14 +3356,14 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
 
     if (useParens) {
         double widthWithoutParens = item->tabHeadWidth(staffType);
-        item->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
+        item->setHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
         double w = item->tabHeadWidth(staffType);
         double xOff = 0.5 * (w - widthWithoutParens);
         ldata->moveX(-xOff);
         ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w,
                        staffType->fretBoxH() * item->magS());
-    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret()) && item->headHasParentheses()) {
-        item->setHeadHasParentheses(false, /*addToLinked=*/ false, /* generated= */ true);
+    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret()) && item->hasParentheses()) {
+        item->setHasParentheses(false, /*addToLinked=*/ false, /* generated= */ true);
     }
     int dots = chord->dots();
     if (dots && !item->dots().empty()) {
@@ -3449,6 +3449,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         if (!paren) {
             return;
         }
+        LOGI() << "layout paren!";
         paren->mutldata()->setMag(item->mag());
         Shape noteShape = item->shape();
         noteShape.remove_if([paren](ShapeElement& s) { return s.item() == paren || s.item()->isBend(); });
