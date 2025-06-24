@@ -635,14 +635,7 @@ void GuitarPro::createBend(Note* note, std::vector<PitchValue>& bendData)
         return;
     }
 
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->collectBend(note, bendData);
-    } else {
-        Bend* bend = Factory::createBend(note);
-        bend->setPoints(bendData);
-        bend->setTrack(note->track());
-        note->add(bend);
-    }
+    m_guitarBendImporter->collectBend(note, bendData);
 }
 
 //---------------------------------------------------------
@@ -1003,6 +996,8 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect, bool& hasVibratoL
 bool GuitarPro1::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
+
     f      = io;
     curPos = 30;
 
@@ -1365,6 +1360,8 @@ void GuitarPro::createSlur(bool hasSlur, staff_idx_t staffIdx, ChordRest* cr)
 bool GuitarPro2::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
+
     f      = io;
     curPos = 30;
 
@@ -2077,6 +2074,8 @@ int GuitarPro1::readBeatEffects(int, Segment*)
 bool GuitarPro3::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
+
     f      = io;
     curPos = 30;
 
@@ -2652,9 +2651,7 @@ bool GuitarPro3::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->applyBendsToChords();
-    }
+    m_guitarBendImporter->applyBendsToChords();
 
     return true;
 }

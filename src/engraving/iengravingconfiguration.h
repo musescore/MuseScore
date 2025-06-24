@@ -131,8 +131,6 @@ public:
 
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
     virtual bool guitarProImportExperimental() const = 0;
-    virtual bool experimentalGuitarBendImport() const = 0;
-    virtual void setExperimentalGuitarBendImport(bool enabled) = 0;
     virtual bool shouldAddParenthesisOnStandardStaff() const = 0;
     virtual bool negativeFretsAllowed() const = 0;
     virtual bool crossNoteHeadAlwaysBlack() const = 0;

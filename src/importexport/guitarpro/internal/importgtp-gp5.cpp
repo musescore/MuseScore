@@ -849,9 +849,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 bool GuitarPro5::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
-    }
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
 
     f = io;
 
@@ -1088,9 +1086,7 @@ bool GuitarPro5::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->applyBendsToChords();
-    }
+    m_guitarBendImporter->applyBendsToChords();
 
     return true;
 }
