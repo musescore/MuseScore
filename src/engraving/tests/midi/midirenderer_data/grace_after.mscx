@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.50">
+  <programVersion>4.5.2</programVersion>
+  <programRevision>ac9d3bc</programRevision>
+  <Score>
+    <eid>yt5AKi/wHjJ_liRy2i93DjH</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2025-05-27</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestra">
+      <name>Orchestra</name>
+      <instrument id="electric-guitar">
+        <family id="guitars">Guitars</family>
+        </instrument>
+      <section id="woodwind" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>tubas</family>
+        <unsorted group="brass"/>
+        </section>
+      <section id="timpani" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <unsorted group="pitched-percussion"/>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        <unsorted group="unpitched-percussion"/>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <unsorted/>
+      <soloists/>
+      <section id="voices" brackets="true" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        <family>voice-groups</family>
+        </section>
+      <section id="strings" brackets="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      </Order>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>G8vb</defaultClef>
+        </Staff>
+      <trackName>Electric Guitar</trackName>
+      <Instrument id="electric-guitar">
+        <longName>Electric Guitar</longName>
+        <shortName>El. Guit.</shortName>
+        <trackName>Electric Guitar</trackName>
+        <minPitchP>40</minPitchP>
+        <maxPitchP>88</maxPitchP>
+        <minPitchA>40</minPitchA>
+        <maxPitchA>86</maxPitchA>
+        <instrumentId>pluck.guitar.electric</instrumentId>
+        <clef>G8vb</clef>
+        <StringData>
+          <frets>24</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
+        <Channel name="open">
+          <program value="27"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="mute">
+          <program value="28"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="jazz">
+          <program value="26"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="harmonics">
+          <program value="31"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="distortion">
+          <program value="30"/>
+          <synti>Fluid</synti>
+          </Channel>
+        <Channel name="overdriven">
+          <program value="29"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>LAFkUJodD+L_Eh3RB0jjFQC</eid>
+        <voice>
+          <KeySig>
+            <eid>GLZk35V53yH_cOXhZHPqJIE</eid>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <eid>hzrE0ai9/hI_VbV6Q8QMIPG</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Tempo>
+            <tempo>0.666667</tempo>
+            <followText>1</followText>
+            <eid>Vuf/kDuCPwB_Jb8oy9BbjlG</eid>
+            <text><sym>metNoteQuarterUp</sym><font face="Edwin"/> = 40</text>
+            </Tempo>
+          <Chord>
+            <eid>7cIv2xMLxaE_ycTETndmGyM</eid>
+            <durationType>eighth</durationType>
+            <grace8after/>
+            <Note>
+              <eid>rbSAtN/r+iH_RFnvcEDhWKF</eid>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>OFoxkqMjbYF_CQ2pxCcPd9D</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>MlIDQk5s2TI_jES2X7KjHfF</eid>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>Ns4fl3Rf2pJ_zk+3F+HGVkB</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>KYK7qVrzU0K_S2JI5E8wy3H</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
