@@ -163,14 +163,16 @@ void BendDataCollector::regroupBendDataByTiedChords()
             tied_chords_bend_data_chunk_t chunk;
             const Note* currentNote = tickInfo.begin()->first;
 
-            ChordImportedBendData chordBendData;
-            chordBendData.chord = currentNote->chord();
+            {
+                ChordImportedBendData chordBendData;
+                chordBendData.chord = currentNote->chord();
 
-            for (Note* note : currentNote->chord()->notes()) {
-                chordBendData.dataByNote[note] = std::move(tickInfo[note]);
+                for (Note* note : currentNote->chord()->notes()) {
+                    chordBendData.dataByNote[note] = std::move(tickInfo[note]);
+                }
+
+                chunk.push_back(std::move(chordBendData));
             }
-
-            chunk.push_back(std::move(chordBendData));
 
             const Tie* tieFor = currentNote->tieFor();
             while (tieFor) {
@@ -257,10 +259,14 @@ void BendDataCollector::moveSegmentsToTiedNotes(tied_chords_bend_data_chunk_t& d
     const size_t segmentsSize = dataForFirstNote.segments.size();
     size_t newSegmentsSize = segmentsSize;
     const Note* note = dataForFirstNote.note;
-    int diff = dataChunk.size() - dataForFirstNote.segments.size();
+    size_t diff = dataChunk.size() - segmentsSize;
 
-    for (int i = 1; (i <= diff + 1) && (newSegmentsSize > 1); i++, newSegmentsSize--) {
-        const bool chordExists = static_cast<size_t>(i) < dataChunk.size();
+    IF_ASSERT_FAILED(dataChunk.size() >= segmentsSize) {
+        return;
+    }
+
+    for (size_t i = 1; newSegmentsSize > 1; i++, newSegmentsSize--) {
+        const bool chordExists = i < dataChunk.size();
         const bool noteExists = chordExists && noteIdx < dataChunk[i].chord->notes().size();
         const Note* nextNote = noteExists ? dataChunk[i].chord->notes()[noteIdx] : nullptr;
         const bool dataExists = noteExists && muse::contains(dataChunk[i].dataByNote, nextNote);
