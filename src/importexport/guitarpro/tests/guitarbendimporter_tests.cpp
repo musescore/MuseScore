@@ -46,24 +46,12 @@ public:
     muse::Inject<mu::engraving::IEngravingConfiguration> engravingConfiguration = { this };
 
     GuitarBendImporter_Tests();
-    void SetUp() override;
-    void TearDown() override;
     void gpReadTest(const String& folderName, const String& extension);
 };
 
 GuitarBendImporter_Tests::GuitarBendImporter_Tests()
     : muse::Injectable(muse::modularity::globalCtx())
 {
-}
-
-void GuitarBendImporter_Tests::SetUp()
-{
-    engravingConfiguration()->setExperimentalGuitarBendImport(true);
-}
-
-void GuitarBendImporter_Tests::TearDown()
-{
-    engravingConfiguration()->setExperimentalGuitarBendImport(false);
 }
 
 void GuitarBendImporter_Tests::gpReadTest(const String& fileName, const String& extension)

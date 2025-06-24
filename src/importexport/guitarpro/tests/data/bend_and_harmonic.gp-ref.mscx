@@ -113,9 +113,44 @@ Cowboys From Hell</text>
             </Spanner>
           <Chord>
             <eid>O_O</eid>
-            <durationType>half</durationType>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <appoggiatura/>
+            <noStem>1</noStem>
             <Note>
               <eid>P_P</eid>
+              <Symbol>
+                <name>noteheadParenthesisLeft</name>
+                <eid>Q_Q</eid>
+                </Symbol>
+              <Symbol>
+                <name>noteheadParenthesisRight</name>
+                <eid>R_R</eid>
+                </Symbol>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              <string>3</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>1</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>S_S</eid>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <notes>1</notes>
+                    </location>
+                  </next>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>T_T</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>U_U</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <play>0</play>
@@ -123,18 +158,19 @@ Cowboys From Hell</text>
               <string>2</string>
               </Note>
             <Note>
-              <eid>Q_Q</eid>
-              <Bend>
-                <point time="0" pitch="50" vibrato="0"/>
-                <point time="30" pitch="50" vibrato="0"/>
-                <point time="60" pitch="50" vibrato="0"/>
-                <eid>R_R</eid>
-                </Bend>
-              <pitch>83</pitch>
-              <tpc>19</tpc>
+              <eid>V_V</eid>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
               <head>diamond</head>
-              <fret>4</fret>
-              <string>2</string>
+              <string>3</string>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    <grace>0</grace>
+                    <notes>-1</notes>
+                    </location>
+                  </prev>
+                </Spanner>
               </Note>
             </Chord>
           <Spanner type="HarmonicMark">
@@ -145,7 +181,7 @@ Cowboys From Hell</text>
               </prev>
             </Spanner>
           <Rest>
-            <eid>S_S</eid>
+            <eid>W_W</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
