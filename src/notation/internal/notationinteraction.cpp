@@ -885,9 +885,18 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
     const Fraction oldStartTick = selection.tickStart();
     const Fraction oldEndTick = selection.tickEnd();
 
+    const staff_idx_t oldStartStaff = selection.staffStart();
+    const staff_idx_t oldEndStaff = selection.staffEnd();
+
     doSelect(elements, type, staffIndex);
 
-    const bool rangeChanged = selection.isRange() && (oldStartTick != selection.tickStart() || oldEndTick != selection.tickEnd());
+    bool rangeChanged = false;
+    if (selection.isRange()) {
+        const bool ticksChanged = oldStartTick != selection.tickStart() || oldEndTick != selection.tickEnd();
+        const bool stavesChanged = oldStartStaff != selection.staffStart() || oldEndStaff != selection.staffEnd();
+        rangeChanged = ticksChanged || stavesChanged;
+    }
+
     if (rangeChanged || oldSelectionState != selection.state() || oldSelectedElements != selection.elements()) {
         notifyAboutSelectionChangedIfNeed();
     } else {
