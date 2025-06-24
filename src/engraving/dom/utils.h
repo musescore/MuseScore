@@ -75,7 +75,6 @@ extern Segment* nextSeg1(Segment* s);
 extern Segment* prevSeg1(Segment* seg);
 
 extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr, const bool disableOverRepeats = true);
-extern Note* searchTieNote114(Note* note);
 
 extern int absStep(int pitch);
 extern int absStep(int tpc, int pitch);

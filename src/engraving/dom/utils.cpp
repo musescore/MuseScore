@@ -873,47 +873,6 @@ Note* searchTieNote(const Note* note, const Segment* nextSegment, const bool dis
 }
 
 //---------------------------------------------------------
-//   searchTieNote114
-//    search Note to tie to "note", tie to next note in
-//    same voice
-//---------------------------------------------------------
-
-Note* searchTieNote114(Note* note)
-{
-    Note* note2  = 0;
-    Chord* chord = note->chord();
-    Segment* seg = chord->segment();
-    Part* part   = chord->part();
-    track_idx_t strack = part->staves().front()->idx() * VOICES;
-    track_idx_t etrack = strack + part->staves().size() * VOICES;
-
-    while ((seg = seg->next1(SegmentType::ChordRest))) {
-        for (track_idx_t track = strack; track < etrack; ++track) {
-            EngravingItem* e = seg->element(track);
-            if (e == 0 || (!e->isChord()) || (e->track() != chord->track())) {
-                continue;
-            }
-            Chord* c = toChord(e);
-            staff_idx_t staffIdx = c->staffIdx() + c->staffMove();
-            if (staffIdx != chord->staffIdx() + chord->staffMove()) {      // cannot happen?
-                continue;
-            }
-            for (Note* n : c->notes()) {
-                if (n->pitch() == note->pitch()) {
-                    if (note2 == 0 || c->track() == chord->track()) {
-                        note2 = n;
-                    }
-                }
-            }
-        }
-        if (note2) {
-            break;
-        }
-    }
-    return note2;
-}
-
-//---------------------------------------------------------
 //   absStep
 ///   Compute absolute step.
 ///   C D E F G A B ....
