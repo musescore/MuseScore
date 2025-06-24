@@ -182,6 +182,9 @@ StyledDialogView {
                 accentButton: true
                 enabled: chooseInstrumentsAndTemplatePage.hasSelection
 
+                navigationPanel: generalInfoView.navigationPanel
+                navigationColumn: 5
+
                 onClicked: {
                     root.onDone()
                 }

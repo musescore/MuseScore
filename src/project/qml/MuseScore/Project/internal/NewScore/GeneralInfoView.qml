@@ -69,9 +69,12 @@ Column {
 
             defaultText: qsTrc("project", "Untitled score")
 
-            navigationPanel: root.navigationPanel
-            navigationColumn: 0
+            TextInputField {
+                navigationPanel: root.navigationPanel
+                navigationColumn: 0
+            }
         }
+
         GeneralInfoItem {
             id: composerInfo
 
@@ -83,8 +86,10 @@ Column {
 
             defaultText: qsTrc("project", "Composer / arranger")
 
-            navigationPanel: root.navigationPanel
-            navigationColumn: 1
+            TextInputField {
+                navigationPanel: root.navigationPanel
+                navigationColumn: 2
+            }
         }
     }
 
@@ -109,8 +114,10 @@ Column {
 
             defaultText: qsTrc("project", "Subtitle")
 
-            navigationPanel: root.navigationPanel
-            navigationColumn: 2
+            TextInputField {
+                navigationPanel: root.navigationPanel
+                navigationColumn: 1
+            }
         }
 
         GeneralInfoItem {
@@ -122,8 +129,10 @@ Column {
 
             title: qsTrc("project", "Lyricist")
 
-            navigationPanel: root.navigationPanel
-            navigationColumn: 3
+            TextInputField {
+                navigationPanel: root.navigationPanel
+                navigationColumn: 3
+            }
         }
     }
 
@@ -137,8 +146,9 @@ Column {
 
         //: The caption of a field to specify copyright information
         title: qsTrc("project", "Copyright")
-
-        navigationPanel: root.navigationPanel
-        navigationColumn: 4
+        TextInputArea {
+            navigationPanel: root.navigationPanel
+            navigationColumn: 4
+        }
     }
 }
