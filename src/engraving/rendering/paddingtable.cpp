@@ -40,16 +40,14 @@ void PaddingTable::createTable(const MStyle& style)
     const double ledgerPad = 0.25 * spatium;
     const double ledgerLength = style.styleMM(Sid::ledgerLineLength);
 
-    /* NOTE: the padding value for note->note is NOT minNoteDistance, because minNoteDistance
-     * should only apply to notes of the same voice. Notes from different voices should be
-     * allowed to get much closer. So we set the general padding at minimumPaddingUnit,
-     * but we introduce an appropriate exception for same-voice cases in Shape::minHorizontalDistance().
-     */
+    // NOTE: we don't set note-note padding to minNoteDistance
+    // because there are cases when they should be allowed to get closer.
+    // minNoteDistance is applied during the padding calculations.
     table[ElementType::NOTE][ElementType::NOTE] = m_minimumPaddingUnit;
     table[ElementType::NOTE][ElementType::LEDGER_LINE] = 0.35 * spatium;
     table[ElementType::NOTE][ElementType::ACCIDENTAL]
         = std::max(static_cast<double>(style.styleMM(Sid::accidentalNoteDistance)), 0.35 * spatium);
-    table[ElementType::NOTE][ElementType::REST] = style.styleMM(Sid::minNoteDistance);
+    table[ElementType::NOTE][ElementType::REST] = 0.5 * spatium;
     table[ElementType::NOTE][ElementType::CLEF] = 0.8 * spatium;
     table[ElementType::NOTE][ElementType::ARPEGGIO] = 0.6 * spatium;
     table[ElementType::NOTE][ElementType::BAR_LINE] = style.styleMM(Sid::noteBarDistance);
@@ -63,8 +61,6 @@ void PaddingTable::createTable(const MStyle& style)
         elem[ElementType::STEM] = elem[ElementType::NOTE];
     }
 
-    table[ElementType::NOTE][ElementType::STEM] = style.styleMM(Sid::minNoteDistance);
-    table[ElementType::STEM][ElementType::NOTE] = style.styleMM(Sid::minNoteDistance);
     table[ElementType::STEM][ElementType::STEM] = 0.85 * spatium;
     table[ElementType::STEM][ElementType::ACCIDENTAL] = 0.35 * spatium;
     table[ElementType::STEM][ElementType::LEDGER_LINE] = 0.35 * spatium;
@@ -114,6 +110,7 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::NOTEDOT][ElementType::PARENTHESIS] = 0.35 * spatium;
 
     table[ElementType::REST][ElementType::NOTE] = table[ElementType::NOTE][ElementType::REST];
+    table[ElementType::REST][ElementType::STEM] = table[ElementType::NOTE][ElementType::STEM];
     table[ElementType::REST][ElementType::LEDGER_LINE]
         = std::max(table[ElementType::REST][ElementType::NOTE] - ledgerLength / 2, ledgerPad);
     table[ElementType::REST][ElementType::ACCIDENTAL] = 0.45 * spatium;

@@ -60,14 +60,13 @@ using namespace muse::ui;
 
 static const QStringList ALL_PAGE_CODES {
     "score",
-    "page",
+    "spacing",
     "sizes",
     "header-and-footer",
     "measure-number",
     "system",
     "clefs-key-and-time-signatures",
     "accidentals",
-    "measure",
     "barlines",
     "notes",
     "rests",
@@ -390,6 +389,7 @@ EditStyle::EditStyle(QWidget* parent)
 
         { StyleId::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
         { StyleId::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
+        { StyleId::spacingDensity,          true,  spacingDensity,          resetSpacingDensity },
         { StyleId::minMeasureWidth,         false, minMeasureWidth_2,       resetMinMeasureWidth },
         { StyleId::measureSpacing,          false, measureSpacing,          resetMeasureSpacing },
         { StyleId::measureRepeatNumberPos,  false, measureRepeatNumberPos,  resetMeasureRepeatNumberPos },
@@ -878,8 +878,8 @@ EditStyle::EditStyle(QWidget* parent)
 
     // Define string here instead of in the .ui file to avoid MSVC compiler warning C4125, which would
     // be triggered by the decimal digit immediately following a non-ASCII character (curly quote).
-    oneMeasureRepeatShow1->setText(muse::qtrc("EditStyleBase", "Show ‘1’ on 1-measure repeats"));
-    singleMMRestShowNumber->setText(muse::qtrc("EditStyleBase", "Show number ‘1’"));
+    oneMeasureRepeatShow1->setText(muse::qtrc("EditStyleBase", "Show â€˜1â€™ on 1-measure repeats"));
+    singleMMRestShowNumber->setText(muse::qtrc("EditStyleBase", "Show number â€˜1â€™"));
 
     // ====================================================
     // BEAMS (QML)
@@ -1473,7 +1473,7 @@ void EditStyle::setHeaderFooterToolTip()
           + QString("</i></td></tr></table><p>")
           + muse::qtrc("notation/editstyle", "Available metadata tags and their current values")
           + QString("<br />")
-          + muse::qtrc("notation/editstyle", "(in File > Project properties…):")
+          + muse::qtrc("notation/editstyle", "(in File > Project propertiesâ€¦):")
           + QString("</p><table>");
 
     // show all tags for current score/part
@@ -1575,7 +1575,7 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "score";
 
     case ElementType::PAGE:
-        return "page";
+        return "spacing";
 
     case ElementType::INSTRUMENT_NAME:
     case ElementType::TEXT:
@@ -1607,7 +1607,7 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "accidentals";
 
     case ElementType::MEASURE:
-        return "measure";
+        return "spacing";
 
     case ElementType::BAR_LINE:
         return "barlines";
