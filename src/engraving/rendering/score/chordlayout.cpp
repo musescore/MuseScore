@@ -3445,39 +3445,12 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         }
     }
 
-    auto layoutParen = [&](Parenthesis* paren) {
-        if (!paren) {
-            return;
-        }
-        LOGI() << "layout paren!";
-        paren->mutldata()->setMag(item->mag());
-        Shape noteShape = item->shape();
-        noteShape.remove_if([paren](ShapeElement& s) { return s.item() == paren || s.item()->isBend(); });
-        LedgerLine* ledger = (item->line() < -1 || item->line() > item->staff()->lines(item->tick())) && !chord->ledgerLines().empty()
-                             ? chord->ledgerLines().front() : nullptr;
-        if (ledger) {
-            noteShape.add(ledger->shape().translate(ledger->pos() - item->pos()));
-        }
-        double right = noteShape.right();
-        double left = noteShape.left();
-        TLayout::layoutParenthesis(paren);
-        double parenthesisPadding = ctx.conf().styleMM(Sid::bracketedAccidentalPadding) * item->mag();
-
-        if (paren->direction() == DirectionH::LEFT) {
-            paren->mutldata()->setPosX(-left - paren->width() - parenthesisPadding);
-        } else if (paren->direction() == DirectionH::RIGHT) {
-            if (isTabStaff) {
-                const Staff* st = item->staff();
-                const StaffType* tab = st->staffTypeForElement(item);
-                right = item->tabHeadWidth(tab);
-            }
-
-            paren->mutldata()->setPosX(right + parenthesisPadding);
-        }
-    };
-
-    layoutParen(item->leftParen());
-    layoutParen(item->rightParen());
+    if (Parenthesis* leftParen = item->leftParen()) {
+        TLayout::layoutParenthesis(leftParen, leftParen->mutldata(), ctx);
+    }
+    if (Parenthesis* rightParen = item->rightParen()) {
+        TLayout::layoutParenthesis(rightParen, rightParen->mutldata(), ctx);
+    }
 }
 
 void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)

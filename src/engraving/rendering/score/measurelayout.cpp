@@ -2093,7 +2093,7 @@ void MeasureLayout::placeParentheses(Segment* segment, track_idx_t trackIdx, Lay
         // 1 parenthesis
         Parenthesis* paren = toParenthesis(parens.front());
         const bool leftBracket = paren->direction() == DirectionH::LEFT;
-        TLayout::layoutParenthesis(paren);
+        TLayout::layoutParenthesis(paren, paren->mutldata(), ctx);
         if (!leftBracket && itemAddToSkyline) {
             // Space against existing segment shape
             const double minDist = HorizontalSpacing::minHorizontalDistance(dummySegShape, paren->shape().translated(
@@ -2123,8 +2123,8 @@ void MeasureLayout::placeParentheses(Segment* segment, track_idx_t trackIdx, Lay
 
     assert(leftParen && rightParen);
 
-    TLayout::layoutParenthesis(toParenthesis(leftParen));
-    TLayout::layoutParenthesis(toParenthesis(rightParen));
+    TLayout::layoutParenthesis(leftParen, leftParen->mutldata(), ctx);
+    TLayout::layoutParenthesis(rightParen, rightParen->mutldata(), ctx);
 
     if (!itemAddToSkyline) {
         return;

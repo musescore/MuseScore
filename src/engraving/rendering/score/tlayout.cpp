@@ -170,6 +170,7 @@
 #include "tappinglayout.h"
 #include "harmonylayout.h"
 #include "markerlayout.h"
+#include "parenthesislayout.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -371,7 +372,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::PALM_MUTE_SEGMENT: layoutPalmMuteSegment(item_cast<PalmMuteSegment*>(item), ctx);
         break;
-    case ElementType::PARENTHESIS:      layoutParenthesis(item_cast<Parenthesis*>(item));
+    case ElementType::PARENTHESIS:      layoutParenthesis(item_cast<Parenthesis*>(item), static_cast<Parenthesis::LayoutData*>(ldata), ctx);
         break;
     case ElementType::PEDAL:            layoutPedal(item_cast<Pedal*>(item), ctx);
         break;
@@ -4580,96 +4581,9 @@ void TLayout::layoutPalmMuteSegment(PalmMuteSegment* item, LayoutContext& ctx)
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
-void TLayout::layoutParenthesis(Parenthesis* item)
+void TLayout::layoutParenthesis(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
 {
-    Parenthesis::LayoutData* ldata = item->mutldata();
-    ldata->setPos(PointF());
-    ldata->reset();
-    ldata->path.reset();
-
-    const Staff* staff = item->staff();
-    const Fraction tick = item->tick();
-    const Fraction tickPrev = tick - Fraction::eps();
-    const double spatium = item->spatium();
-    const double mag = item->mag();
-    const bool leftBracket = item->direction() == DirectionH::LEFT;
-
-    const StaffType* st = staff->staffType(tick);
-    const StaffType* stPrev = !tickPrev.negative() ? item->staff()->staffType(tickPrev) : nullptr;
-
-    double startY = ldata->startY;
-    double height = ldata->height;
-    double xPos = 0.0;
-
-    const Segment* seg = item->segment();
-    const bool isClefSeg = seg ? seg->isType(SegmentType::ClefType) : false;
-    if (isClefSeg && seg->rtick() == seg->measure()->ticks()) {
-        double offset = st->yoffset().val() - (stPrev ? stPrev->yoffset().val() : 0);
-        startY += offset * spatium;
-    }
-
-    if (muse::RealIsNull(height)) {
-        EngravingItem* parent = item->parentItem();
-        RectF bbox = parent->ldata()->bbox();
-
-        startY = bbox.top() - 0.25 * spatium;
-        height = bbox.height() + 0.5 * spatium;
-        const double PADDING = spatium * 0.2;
-        xPos = item->direction() == DirectionH::RIGHT ? bbox.right() + PADDING : bbox.left() - PADDING;
-    }
-
-    const double heightInSpatium = height / spatium;
-    const double shoulderYOffset = 0.2 * height;
-    const double thickness = height / 60 * mag; // 0.1sp for a height of 6sp
-    ldata->thickness.set_value(thickness);
-    const double shoulderX = 0.2 * height * mag;
-
-    PointF start = PointF(xPos, startY);
-    const PointF end = PointF(xPos, start.y() + height);
-    const PointF endNormalised = end - start;
-
-    const int direction = leftBracket ? -1 : 1;
-    const double shoulderForX = direction * shoulderX + thickness * direction;
-    const double shoulderBackX = direction * shoulderX + thickness * direction * -1;
-
-    const PointF bezier1for = PointF(shoulderForX, shoulderYOffset);
-    const PointF bezier2for = PointF(shoulderForX, endNormalised.y() - shoulderYOffset);
-    const PointF bezier1back = PointF(shoulderBackX, endNormalised.y() - shoulderYOffset);
-    const PointF bezier2back = PointF(shoulderBackX, shoulderYOffset);
-
-    PainterPath path = PainterPath();
-    path.moveTo(PointF());
-    path.cubicTo(bezier1for, bezier2for, endNormalised);
-    path.cubicTo(bezier1back, bezier2back, PointF());
-
-    ldata->path = path;
-
-    // Fill shape
-    Shape shape(Shape::Type::Composite);
-
-    PointF startPoint = PointF();
-    double midThickness = 2 * thickness;
-    int nbShapes = round(5.0 * heightInSpatium);
-    nbShapes = std::clamp(nbShapes, 20, 50);
-    PointF bezier1mid = bezier1for - PointF(thickness * direction, 0.0);
-    PointF bezier2mid = bezier2for - PointF(thickness * direction, 0.0);
-    const CubicBezier b(startPoint, bezier1mid, bezier2mid, endNormalised);
-    for (int i = 1; i <= nbShapes; i++) {
-        double percent = pow(sin(0.5 * M_PI * (double(i) / double(nbShapes))), 2);
-        const PointF point = b.pointAtPercent(percent);
-        RectF re = RectF(startPoint, point).normalized();
-        double approxThicknessAtPercent = (1 - 2 * std::abs(0.5 - percent)) * midThickness;
-        if (re.width() < approxThicknessAtPercent) {
-            double adjust = (approxThicknessAtPercent - re.width()) * .5;
-            re.adjust(-adjust, 0.0, adjust, 0.0);
-        }
-        shape.add(re, item);
-        startPoint = point;
-    }
-
-    item->mutldata()->setShape(shape);
-
-    item->setPos(start);
+    ParenthesisLayout::layoutParenthesis(item, ldata, ctx);
 }
 
 void TLayout::layoutPedal(Pedal* item, LayoutContext& ctx)
