@@ -1780,6 +1780,9 @@ void SlurTieLayout::adjustOverlappingSlurs(const std::list<SpannerSegment*>& spa
     auto compare = [fuzzyHorizCompare](double x1, double x2) { return std::abs(x1 - x2) < fuzzyHorizCompare; };
     for (SlurSegment* slur1 : segments) {
         for (SlurSegment* slur2 : segments) {
+            if (slur2 == slur1) {
+                continue;
+            }
             if (slur1->slur()->endChord() == slur2->slur()->startChord()
                 && compare(slur1->ups(Grip::END).p.y(), slur2->ups(Grip::START).p.y())) {
                 slur1->ups(Grip::END).p.rx() -= slurCollisionHorizOffset;
