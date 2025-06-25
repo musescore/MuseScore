@@ -127,7 +127,7 @@
     <shortStemStartLocation>1</shortStemStartLocation>
     <shortestStem>2.5</shortestStem>
     <beginRepeatLeftMargin>1</beginRepeatLeftMargin>
-    <minNoteDistance>0.5</minNoteDistance>
+    <minNoteDistance>0.35</minNoteDistance>
     <barNoteDistance>1.25</barNoteDistance>
     <barAccidentalDistance>0.65</barAccidentalDistance>
     <noteBarDistance>1.5</noteBarDistance>
