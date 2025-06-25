@@ -4152,9 +4152,9 @@ bool NotationInteraction::isTextEditingStarted() const
     return m_editData.element && m_editData.element->isTextBase() && m_editData.editTextualProperties;
 }
 
-bool NotationInteraction::textEditingAllowed(const EngravingItem* element) const
+bool NotationInteraction::textEditingAllowed(const EngravingItem* e) const
 {
-    return element && element->isEditable() && (element->isTextBase() || element->isTBox());
+    return e && e->isEditable() && ((e->isTextBase() && toTextBase(e)->supportsTextualEdit()) || e->isTBox());
 }
 
 void NotationInteraction::startEditText(EngravingItem* element, const PointF& cursorPos)
