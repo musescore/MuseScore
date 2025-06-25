@@ -132,7 +132,6 @@ public:
     virtual bool shouldAddParenthesisOnStandardStaff() const = 0;
     virtual bool negativeFretsAllowed() const = 0;
     virtual bool crossNoteHeadAlwaysBlack() const = 0;
-    virtual bool enableExperimentalFretCircle() const = 0;
     virtual void setGuitarProMultivoiceEnabled(bool multiVoice) = 0;
     virtual bool guitarProMultivoiceEnabled() const = 0;
     virtual bool minDistanceForPartialSkylineCalculated() const = 0;

@@ -36,7 +36,6 @@
 #include "dom/hook.h"
 #include "dom/stem.h"
 #include "dom/tremolotwochord.h"
-#include "dom/fretcircle.h"
 #include "dom/tie.h"
 #include "dom/engravingitem.h"
 #include "dom/measure.h"
@@ -794,24 +793,6 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
 
     if (item->isTappingHalfSlur()) {
         adjustForTappingHalfSlurs(toTappingHalfSlur(item), sp, note2);
-    }
-
-    /// adding extra space above slurs for notes in circles
-    if (item->configuration()->enableExperimentalFretCircle() && item->staff()->staffType()->isCommonTabStaff()) {
-        auto adjustSlur = [](Chord* ch, PointF& coord, bool up) {
-            const Fraction halfFraction = Fraction(1, 2);
-            if (ch && ch->ticks() >= halfFraction) {
-                for (EngravingItem* item : ch->el()) {
-                    if (item && item->isFretCircle()) {
-                        coord += PointF(0, toFretCircle(item)->ldata()->offsetFromUpNote * (up ? -1 : 1));
-                        break;
-                    }
-                }
-            }
-        };
-
-        adjustSlur(sc, sp->p1, item->up());
-        adjustSlur(ec, sp->p2, item->up());
     }
 }
 

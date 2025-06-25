@@ -18,7 +18,6 @@
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/fret.h"
-#include "engraving/dom/fretcircle.h"
 #include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/gradualtempochange.h"
@@ -663,10 +662,6 @@ void GPConverter::convertNotes(const std::vector<std::shared_ptr<GPNote> >& note
     if (cr->isChord()) {
         Chord* ch = static_cast<Chord*>(cr);
         ch->sortNotes();
-        if (engravingConfiguration()->enableExperimentalFretCircle()) {
-            FretCircle* c = Factory::createFretCircle(ch);
-            ch->add(c);
-        }
     }
 }
 

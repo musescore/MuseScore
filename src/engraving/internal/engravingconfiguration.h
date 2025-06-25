@@ -116,7 +116,6 @@ public:
     bool shouldAddParenthesisOnStandardStaff() const override;
     bool negativeFretsAllowed() const override;
     bool crossNoteHeadAlwaysBlack() const override;
-    bool enableExperimentalFretCircle() const override;
     void setGuitarProMultivoiceEnabled(bool multiVoice) override;
     bool guitarProMultivoiceEnabled() const override;
     bool minDistanceForPartialSkylineCalculated() const override;
