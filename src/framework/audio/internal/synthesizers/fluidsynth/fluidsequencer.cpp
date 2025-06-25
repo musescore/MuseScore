@@ -106,6 +106,9 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
     for (const auto& pair : changes) {
         for (const mpe::PlaybackEvent& event : pair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
+                if (std::holds_alternative<mpe::ControllerChangeEvent>(event)) {
+                    appendControlChangeEvent(destination, pair.first, std::get<mpe::ControllerChangeEvent>(event));
+                }
                 continue;
             }
 
@@ -145,7 +148,7 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
                 const mpe::ArticulationMeta& meta = artPair.second.meta;
 
                 if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
-                    appendPitchBend(destination, noteEvent, meta, channelIdx);
+                    appendPitchCurve(destination, noteEvent, meta, channelIdx);
                     continue;
                 }
 
@@ -181,6 +184,31 @@ void FluidSequencer::updateDynamicEvents(EventSequenceMap& destination, const mp
     }
 }
 
+void FluidSequencer::appendControlChangeEvent(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
+                                              const mpe::ControllerChangeEvent& event)
+{
+    const channel_t lastChannelIdx = m_channels.lastIndex();
+
+    for (channel_t channelIdx = 0; channelIdx < lastChannelIdx; ++channelIdx) {
+        switch (event.type) {
+        case mpe::ControllerChangeEvent::Modulation:
+            appendControlChange(destination, timestamp, midi::MODWHEEL_CONTROLLER, channelIdx,
+                                static_cast<uint32_t>(event.val * 127.f));
+            break;
+        case mpe::ControllerChangeEvent::SustainPedalOnOff:
+            appendControlChange(destination, timestamp, midi::SUSTAIN_PEDAL_CONTROLLER, channelIdx,
+                                static_cast<uint32_t>(event.val * 127.f));
+            break;
+        case mpe::ControllerChangeEvent::PitchBend:
+            appendPitchBend(destination, timestamp, channelIdx,
+                            static_cast<uint32_t>(event.val * 16383.f));
+            break;
+        case mpe::ControllerChangeEvent::Undefined:
+            break;
+        }
+    }
+}
+
 void FluidSequencer::appendControlChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
                                          const int midiControlIdx, const channel_t channelIdx, const uint32_t value)
 {
@@ -192,8 +220,8 @@ void FluidSequencer::appendControlChange(EventSequenceMap& destination, const mp
     destination[timestamp].emplace(std::move(cc));
 }
 
-void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
-                                     const mpe::ArticulationMeta& artMeta, const channel_t channelIdx)
+void FluidSequencer::appendPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
+                                      const mpe::ArticulationMeta& artMeta, const channel_t channelIdx)
 {
     if (noteEvent.pitchCtx().pitchCurve.empty()) {
         return;
@@ -202,10 +230,7 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
     const timestamp_t noteTimestampTo = noteEvent.arrangementCtx().actualTimestamp + noteEvent.arrangementCtx().actualDuration;
     const timestamp_t pitchBendTimestampTo = std::min(artMeta.timestamp + artMeta.overallDuration, noteTimestampTo);
 
-    midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
-    event.setChannel(channelIdx);
-    event.setData(8192);
-    destination[pitchBendTimestampTo].insert(event);
+    appendPitchBend(destination, pitchBendTimestampTo, channelIdx, 8192);
 
     auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
     auto nextIt = std::next(currIt);
@@ -238,11 +263,19 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
             int bendValue = static_cast<int>(std::round(point.y));
 
             if (time < pitchBendTimestampTo) {
-                event.setData(bendValue);
-                destination[time].insert(event);
+                appendPitchBend(destination, time, channelIdx, bendValue);
             }
         }
     }
+}
+
+void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
+                                     const midi::channel_t channelIdx, const uint32_t value)
+{
+    midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
+    event.setChannel(channelIdx);
+    event.setData(value);
+    destination[timestamp].insert(event);
 }
 
 void FluidSequencer::appendSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations)

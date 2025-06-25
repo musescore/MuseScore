@@ -156,6 +156,30 @@ void NotationPlayback::triggerCountIn(muse::midi::tick_t tick, muse::secs_t& tot
     totalCountInDuration = audio::microsecsToSecs(durationInMicrosecs);
 }
 
+void NotationPlayback::triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick)
+{
+    if (list.empty()) {
+        return;
+    }
+
+    const Staff* staff = score()->staff(staffIdx);
+    if (!staff) {
+        return;
+    }
+
+    const InstrumentTrackId trackId {
+        staff->part()->id(),
+        staff->part()->instrumentId(Fraction::fromTicks(tick))
+    };
+
+    const mpe::PlaybackEventsMap events {
+        { 0, mpe::PlaybackEventList(list.begin(), list.end()) }
+    };
+
+    mpe::PlaybackData& data = m_playbackModel.resolveTrackPlaybackData(trackId);
+    data.offStream.send(events, {}, false /*flushOffstream*/);
+}
+
 InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const
 {
     return m_playbackModel.existingTrackIdSet();

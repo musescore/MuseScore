@@ -27,6 +27,7 @@
 using namespace muse;
 using namespace muse::vst;
 
+static constexpr ControlIdx MODWHEEL_IDX = static_cast<ControlIdx>(Steinberg::Vst::kCtrlModWheel);
 static constexpr ControlIdx SUSTAIN_IDX = static_cast<ControlIdx>(Steinberg::Vst::kCtrlSustainOnOff);
 static constexpr ControlIdx SOSTENUTO_IDX = static_cast<ControlIdx>(Steinberg::Vst::kCtrlSustenutoOnOff);
 static constexpr ControlIdx PITCH_BEND_IDX = static_cast<ControlIdx>(Steinberg::Vst::kPitchBend);
@@ -103,6 +104,9 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
     for (const auto& evPair : events) {
         for (const mpe::PlaybackEvent& event : evPair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
+                if (std::holds_alternative<mpe::ControllerChangeEvent>(event)) {
+                    appendControlChangeEvent(destination, evPair.first, std::get<mpe::ControllerChangeEvent>(event));
+                }
                 continue;
             }
 
@@ -126,7 +130,7 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
                 const mpe::ArticulationMeta& meta = articPair.second.meta;
 
                 if (muse::contains(BEND_SUPPORTED_TYPES, meta.type)) {
-                    appendPitchBend(destination, noteEvent, meta);
+                    appendPitchCurve(destination, noteEvent, meta);
                     continue;
                 }
 
@@ -157,6 +161,24 @@ void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe:
     }
 }
 
+void VstSequencer::appendControlChangeEvent(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
+                                            const mpe::ControllerChangeEvent& event)
+{
+    switch (event.type) {
+    case mpe::ControllerChangeEvent::Modulation:
+        appendParamChange(destination, timestamp, MODWHEEL_IDX, event.val);
+        break;
+    case mpe::ControllerChangeEvent::SustainPedalOnOff:
+        appendParamChange(destination, timestamp, SUSTAIN_IDX, event.val);
+        break;
+    case mpe::ControllerChangeEvent::PitchBend:
+        appendParamChange(destination, timestamp, PITCH_BEND_IDX, event.val);
+        break;
+    case mpe::ControllerChangeEvent::Undefined:
+        break;
+    }
+}
+
 void VstSequencer::appendParamChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp,
                                      const ControlIdx controlIdx, const PluginParamValue value)
 {
@@ -168,8 +190,8 @@ void VstSequencer::appendParamChange(EventSequenceMap& destination, const mpe::t
     destination[timestamp].emplace(ParamChangeEvent { controlIt->second, value });
 }
 
-void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
-                                   const mpe::ArticulationMeta& artMeta)
+void VstSequencer::appendPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
+                                    const mpe::ArticulationMeta& artMeta)
 {
     auto pitchBendIt = m_mapping.find(PITCH_BEND_IDX);
     if (pitchBendIt == m_mapping.cend() || noteEvent.pitchCtx().pitchCurve.empty()) {

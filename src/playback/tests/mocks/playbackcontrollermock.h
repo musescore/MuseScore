@@ -66,6 +66,8 @@ public:
                 (override));
     MOCK_METHOD(void, playMetronome, (int), (override));
 
+    MOCK_METHOD(void, triggerControllers, (const muse::mpe::ControllerChangeEventList&, notation::staff_idx_t, int), (override));
+
     MOCK_METHOD(void, seekElement, (const notation::EngravingItem*), (override));
     MOCK_METHOD(void, seekBeat, (int, int), (override));
 

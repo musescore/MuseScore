@@ -52,11 +52,16 @@ private:
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes);
     void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& changes);
 
+    void appendControlChangeEvent(EventSequenceMap& destination, const mpe::timestamp_t timestamp, const mpe::ControllerChangeEvent& event);
+
     void appendControlChange(EventSequenceMap& destination, const mpe::timestamp_t timestamp, const int midiControlIdx,
                              const midi::channel_t channelIdx, const uint32_t value);
 
-    void appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationMeta& artMeta,
-                         const midi::channel_t channelIdx);
+    void appendPitchCurve(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationMeta& artMeta,
+                          const midi::channel_t channelIdx);
+
+    void appendPitchBend(EventSequenceMap& destination, const mpe::timestamp_t timestamp, const midi::channel_t channelIdx,
+                         const uint32_t value);
 
     using SostenutoTimeAndDurations = std::map<midi::channel_t, std::vector<mpe::TimestampAndDuration> >;
     void appendSostenutoEvents(EventSequenceMap& destination, const SostenutoTimeAndDurations& sostenutoTimeAndDurations);

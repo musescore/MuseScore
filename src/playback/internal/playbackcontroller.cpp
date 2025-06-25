@@ -389,6 +389,11 @@ void PlaybackController::playMetronome(int tick)
     notationPlayback()->triggerMetronome(tick);
 }
 
+void PlaybackController::triggerControllers(const muse::mpe::ControllerChangeEventList& list, staff_idx_t staffIdx, int tick)
+{
+    notationPlayback()->triggerControllers(list, staffIdx, tick);
+}
+
 void PlaybackController::seekElement(const notation::EngravingItem* element)
 {
     IF_ASSERT_FAILED(element) {

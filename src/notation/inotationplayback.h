@@ -49,6 +49,7 @@ public:
     virtual void triggerEventsForItems(const std::vector<const EngravingItem*>& items, muse::mpe::duration_t duration, bool flushSound) = 0;
     virtual void triggerMetronome(muse::midi::tick_t tick) = 0;
     virtual void triggerCountIn(muse::midi::tick_t tick, muse::secs_t& totalCountInDuration) = 0;
+    virtual void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) = 0;
 
     virtual engraving::InstrumentTrackIdSet existingTrackIdSet() const = 0;
     virtual muse::async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
