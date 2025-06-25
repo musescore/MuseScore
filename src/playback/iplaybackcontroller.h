@@ -88,6 +88,8 @@ public:
                            const PlayParams& params = PlayParams()) = 0;
     virtual void playMetronome(int tick) = 0;
 
+    virtual void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) = 0;
+
     virtual void seekElement(const notation::EngravingItem* element) = 0;
     virtual void seekBeat(int measureIndex, int beatIndex) = 0;
 

@@ -65,6 +65,7 @@ private:
     Note* addNoteToScore(const muse::midi::Event& e);
     Note* makePreviewNote(const muse::midi::Event& e);
 
+    void triggerControllers(const std::map<muse::midi::Event::Opcode, muse::midi::Event>& events);
     void releasePreviewNotes(const std::vector<int>& pitches);
 
     void enableMetronome();

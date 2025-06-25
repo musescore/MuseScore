@@ -196,7 +196,7 @@ public:
 };
 
 namespace mu::playback {
-inline bool operator==(const IPlaybackController::PlayParams& p1 ,const IPlaybackController::PlayParams& p2)
+inline bool operator==(const IPlaybackController::PlayParams& p1, const IPlaybackController::PlayParams& p2)
 {
     return p1.duration == p2.duration && p1.flushSound == p2.flushSound;
 }

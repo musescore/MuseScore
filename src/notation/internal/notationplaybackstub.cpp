@@ -75,6 +75,10 @@ void NotationPlaybackStub::triggerCountIn(muse::midi::tick_t, muse::secs_t&)
 {
 }
 
+void NotationPlaybackStub::triggerControllers(const muse::mpe::ControllerChangeEventList&, notation::staff_idx_t, int)
+{
+}
+
 InstrumentTrackIdSet NotationPlaybackStub::existingTrackIdSet() const
 {
     return engraving::InstrumentTrackIdSet();

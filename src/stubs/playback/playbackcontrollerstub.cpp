@@ -125,6 +125,10 @@ void PlaybackControllerStub::playMetronome(int)
 {
 }
 
+void PlaybackControllerStub::triggerControllers(const muse::mpe::ControllerChangeEventList&, notation::staff_idx_t, int)
+{
+}
+
 void PlaybackControllerStub::seekElement(const notation::EngravingItem*)
 {
 }

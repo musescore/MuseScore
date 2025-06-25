@@ -95,6 +95,8 @@ public:
                    const PlayParams& params = PlayParams()) override;
     void playMetronome(int tick) override;
 
+    void triggerControllers(const muse::mpe::ControllerChangeEventList& list, notation::staff_idx_t staffIdx, int tick) override;
+
     void seekElement(const notation::EngravingItem* element) override;
     void seekBeat(int measureIndex, int beatIndex) override;
 

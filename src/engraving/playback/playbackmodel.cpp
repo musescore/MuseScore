@@ -224,7 +224,7 @@ bool PlaybackModel::hasSoundFlags(const InstrumentTrackId& trackId) const
     return search->second->hasSoundFlags();
 }
 
-const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& trackId)
+PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& trackId)
 {
     auto search = m_playbackDataMap.find(trackId);
 
@@ -244,7 +244,7 @@ const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrac
     return m_playbackDataMap[trackId];
 }
 
-const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, const String& instrumentId)
+PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, const String& instrumentId)
 {
     return resolveTrackPlaybackData(idKey(partId, instrumentId));
 }

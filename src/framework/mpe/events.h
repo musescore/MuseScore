@@ -29,6 +29,7 @@
 #include "async/channel.h"
 #include "realfn.h"
 #include "types/flags.h"
+#include "types/number.h"
 
 #include "mpetypes.h"
 #include "playbacksetupdata.h"
@@ -36,7 +37,8 @@
 namespace muse::mpe {
 struct NoteEvent;
 struct RestEvent;
-using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
+struct ControllerChangeEvent;
+using PlaybackEvent = std::variant<NoteEvent, RestEvent, ControllerChangeEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
 using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
 
@@ -299,6 +301,27 @@ struct RestEvent
 private:
     ArrangementContext m_arrangementCtx;
 };
+
+struct ControllerChangeEvent {
+    enum Type : signed char {
+        Undefined = -1,
+        Modulation,
+        SustainPedalOnOff,
+        PitchBend,
+    };
+
+    using Value = muse::number_t<float>;
+
+    Type type = Undefined;
+    Value val; // [0;1]
+
+    bool operator==(const ControllerChangeEvent& e) const
+    {
+        return type == e.type && val == e.val;
+    }
+};
+
+using ControllerChangeEventList = std::vector<ControllerChangeEvent>;
 
 struct PlaybackParam {
     enum Type : signed char {

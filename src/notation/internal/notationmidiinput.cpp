@@ -65,7 +65,14 @@ void NotationMidiInput::onMidiEventReceived(const muse::midi::Event& event)
         return;
     }
 
-    if (event.opcode() == muse::midi::Event::Opcode::NoteOn || event.opcode() == muse::midi::Event::Opcode::NoteOff) {
+    const static std::unordered_set<muse::midi::Event::Opcode> ACCEPTED_OPCODES {
+        muse::midi::Event::Opcode::NoteOn,
+        muse::midi::Event::Opcode::NoteOff,
+        muse::midi::Event::Opcode::ControlChange,
+        muse::midi::Event::Opcode::PitchBend,
+    };
+
+    if (muse::contains(ACCEPTED_OPCODES, event.opcode())) {
         m_eventsQueue.push_back(event);
 
         if (!m_processTimer.isActive()) {
@@ -128,6 +135,7 @@ void NotationMidiInput::doProcessEvents()
 
     std::vector<const Note*> notesOn;
     std::vector<int> notesOff;
+    std::map<muse::midi::Event::Opcode, muse::midi::Event> controllers;
 
     startNoteInputIfNeed();
     bool isNoteInput = isNoteInputMode();
@@ -140,6 +148,13 @@ void NotationMidiInput::doProcessEvents()
 
     for (size_t i = 0; i < m_eventsQueue.size(); ++i) {
         const muse::midi::Event& event = m_eventsQueue.at(i);
+
+        if (event.opcode() == muse::midi::Event::Opcode::ControlChange
+            || event.opcode() == muse::midi::Event::Opcode::PitchBend) {
+            controllers[event.opcode()] = event; // keep only last received to prevent spam
+            continue;
+        }
+
         const Note* note = isNoteInput ? addNoteToScore(event) : makePreviewNote(event);
         if (note) {
             notesOn.push_back(note);
@@ -157,6 +172,10 @@ void NotationMidiInput::doProcessEvents()
         if (isSoundPreview && noteOff) {
             notesOff.push_back(event.note());
         }
+    }
+
+    if (!controllers.empty()) {
+        triggerControllers(controllers);
     }
 
     if (!notesOn.empty()) {
@@ -330,6 +349,36 @@ Note* NotationMidiInput::makePreviewNote(const muse::midi::Event& e)
     note->setNval(nval);
 
     return note;
+}
+
+void NotationMidiInput::triggerControllers(const std::map<muse::midi::Event::Opcode, muse::midi::Event>& events)
+{
+    muse::mpe::ControllerChangeEventList controllers;
+
+    static const std::unordered_map<int, muse::mpe::ControllerChangeEvent::Type> MIDI_CC_TO_EVENT_TYPE {
+        { muse::midi::MODWHEEL_CONTROLLER, muse::mpe::ControllerChangeEvent::Modulation },
+        { muse::midi::SUSTAIN_PEDAL_CONTROLLER, muse::mpe::ControllerChangeEvent::SustainPedalOnOff },
+    };
+
+    for (const auto& pair : events) {
+        const muse::midi::Event& e = pair.second;
+        muse::mpe::ControllerChangeEvent cc;
+
+        if (pair.first == muse::midi::Event::Opcode::PitchBend) {
+            cc.type = muse::mpe::ControllerChangeEvent::PitchBend;
+            cc.val = static_cast<float>(e.pitchBend14()) / 16383.f;
+        } else {
+            cc.type = muse::value(MIDI_CC_TO_EVENT_TYPE, e.index(), muse::mpe::ControllerChangeEvent::Undefined);
+            cc.val = static_cast<float>(e.data()) / 127.f;
+        }
+
+        if (cc.type != muse::mpe::ControllerChangeEvent::Undefined) {
+            controllers.push_back(cc);
+        }
+    }
+
+    const mu::engraving::InputState& is = score()->inputState();
+    playbackController()->triggerControllers(controllers, is.staffIdx(), is.tick().ticks());
 }
 
 void NotationMidiInput::releasePreviewNotes(const std::vector<int>& pitches)
