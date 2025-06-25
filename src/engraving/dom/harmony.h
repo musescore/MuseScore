@@ -35,6 +35,15 @@
 namespace mu::engraving {
 struct ChordDescription;
 class ParsedChord;
+class Score;
+
+enum class HarmonyType : unsigned char {
+    ///.\{
+    STANDARD,
+    ROMAN,
+    NASHVILLE
+    ///\}
+};
 
 //---------------------------------------------------------
 //   TextSegment

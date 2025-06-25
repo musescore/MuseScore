@@ -835,6 +835,34 @@ enum class TextStyleType : unsigned char {
     IGNORED_TYPES         // used for types no longer relevant (mainly Figured bass text type)
 };
 
+//---------------------------------------------------------
+//   FontStyle
+//---------------------------------------------------------
+
+enum class FontStyle : signed char {
+    Undefined = -1,
+    Normal = 0,
+    Bold = 1 << 0,
+    Italic = 1 << 1,
+    Underline = 1 << 2,
+    Strike = 1 << 3
+};
+
+constexpr FontStyle operator+(FontStyle a1, FontStyle a2)
+{
+    return static_cast<FontStyle>(static_cast<char>(a1) | static_cast<char>(a2));
+}
+
+constexpr FontStyle operator-(FontStyle a1, FontStyle a2)
+{
+    return static_cast<FontStyle>(static_cast<char>(a1) & ~static_cast<char>(a2));
+}
+
+constexpr bool operator&(FontStyle a1, FontStyle a2)
+{
+    return static_cast<bool>(static_cast<char>(a1) & static_cast<char>(a2));
+}
+
 enum class AnnotationCategory : signed char {
     Undefined = -1,
     TempoAnnotation,

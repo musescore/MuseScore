@@ -27,7 +27,6 @@
 #include "engravingitem.h"
 #include "durationtype.h"
 #include "tapping.h"
-#include "types.h"
 
 namespace mu::engraving {
 class Instrument;

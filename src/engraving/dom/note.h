@@ -22,13 +22,9 @@
 
 #pragma once
 
-/**
- \file
- Definition of classes Note and NoteHead.
-*/
-
 #include "containers.h"
 
+#include "accidental.h"
 #include "engravingitem.h"
 #include "noteevent.h"
 #include "noteval.h"
@@ -36,7 +32,6 @@
 #include "symbol.h"
 #include "tie.h"
 #include "tiejumppointlist.h"
-#include "types.h"
 
 namespace mu::engraving {
 class Factory;

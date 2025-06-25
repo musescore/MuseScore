@@ -27,9 +27,21 @@
 #include "line.h"
 #include "property.h"
 #include "textbase.h"
-#include "types.h"
 
 namespace mu::engraving {
+enum class GuitarBendType : unsigned char {
+    BEND,
+    PRE_BEND,
+    GRACE_NOTE_BEND,
+    SLIGHT_BEND,
+};
+
+enum class GuitarBendShowHoldLine : unsigned char {
+    AUTO,
+    SHOW,
+    HIDE,
+};
+
 enum class QuarterOffset : unsigned char {
     QUARTER_FLAT,
     NONE,

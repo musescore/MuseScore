@@ -26,6 +26,17 @@
 #include "systemtext.h"
 
 namespace mu::engraving {
+
+enum class TripletFeelType : unsigned char {
+    NONE,
+    TRIPLET_8TH,
+    TRIPLET_16TH,
+    DOTTED_8TH,
+    DOTTED_16TH,
+    SCOTTISH_8TH,
+    SCOTTISH_16TH
+};
+
 //---------------------------------------------------------
 //   TripletFeel
 //---------------------------------------------------------

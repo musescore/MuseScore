@@ -21,15 +21,13 @@
  */
 #pragma once
 
+#include "accidental.h"
 #include "engravingitem.h"
 
 #include "pitchspelling.h"
 
 #include "../types/dimension.h"
 #include "../types/types.h"
-
-#include "accidental.h"
-#include "types.h"
 
 namespace mu::engraving {
 class Factory;

@@ -20,13 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_FRET_H
-#define MU_ENGRAVING_FRET_H
+#pragma once
 
 #include <vector>
 
 #include "engravingitem.h"
-#include "harmony.h"
 
 #include "draw/types/font.h"
 
@@ -34,6 +32,7 @@ namespace mu::engraving {
 class Factory;
 class StringData;
 class Chord;
+class Harmony;
 
 // Keep this in order - not used directly for comparisons, but the dots will appear in
 // this order in fret multidot mode. See fretproperties.cpp.
@@ -324,6 +323,4 @@ private:
 
 #ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::engraving::FretDiagram*)
-#endif
-
 #endif

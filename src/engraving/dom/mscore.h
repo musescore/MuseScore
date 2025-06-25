@@ -60,8 +60,6 @@ inline constexpr bool isDownVoice(voice_idx_t voiceIdx)
     return voiceIdx & 1;
 }
 
-static constexpr int MAX_TAGS = 32;
-
 static constexpr int MAX_HEADERS = 3;
 static constexpr int MAX_FOOTERS = 3;
 
@@ -117,6 +115,15 @@ enum class SelectType : char {
 
 enum class UpDownMode : char {
     CHROMATIC, OCTAVE, DIATONIC
+};
+
+//---------------------------------------------------------
+//   OffsetType
+//---------------------------------------------------------
+
+enum class OffsetType : unsigned char {
+    ABS,         ///< offset in point units
+    SPATIUM      ///< offset in staff space units
 };
 
 //---------------------------------------------------------

@@ -21,7 +21,6 @@
  */
 
 #pragma once
-#include "types.h"
 
 namespace mu::engraving {
 class ChordRest;

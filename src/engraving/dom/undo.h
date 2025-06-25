@@ -91,6 +91,125 @@ class TremoloBar;
 
 enum class PlayEventType : unsigned char;
 
+enum class CommandType : signed char {
+    Unknown = -1,
+
+    // Parts
+    InsertPart,
+    RemovePart,
+    AddPartToExcerpt,
+    SetSoloist,
+    ChangePart,
+
+    // Staves
+    InsertStaff,
+    RemoveStaff,
+    AddSystemObjectStaff,
+    RemoveSystemObjectStaff,
+    SortStaves,
+    ChangeStaff,
+    ChangeStaffType,
+
+    // MStaves
+    InsertMStaff,
+    RemoveMStaff,
+    InsertStaves,
+    RemoveStaves,
+    ChangeMStaffProperties,
+
+    // Instruments
+    ChangeInstrumentShort,
+    ChangeInstrumentLong,
+    ChangeInstrument,
+    ChangeDrumset,
+
+    // Measures
+    RemoveMeasures,
+    InsertMeasures,
+    ChangeMeasureLen,
+    ChangeMMRest,
+    ChangeMeasureRepeatCount,
+
+    // Elements
+    AddElement,
+    RemoveElement,
+    Unlink,
+    Link,
+    ChangeElement,
+    ChangeParent,
+
+    // Notes
+    ChangePitch,
+    ChangeFretting,
+    ChangeVelocity,
+
+    // ChordRest
+    ChangeChordStaffMove,
+    SwapCR,
+
+    // Brackets
+    RemoveBracket,
+    AddBracket,
+
+    // Fret
+    FretDataChange,
+    FretDot,
+    FretMarker,
+    FretBarre,
+    FretClear,
+    FretLinkHarmony,
+
+    // FBox
+    ReorderFBox,
+    RenameChordFBox,
+    AddChordFBox,
+    RemoveChordFBox,
+
+    // Harmony
+    TransposeHarmony,
+
+    // KeySig
+    ChangeKeySig,
+
+    // Clef
+    ChangeClefType,
+
+    // Tremolo
+    MoveTremolo,
+
+    // Spanners
+    ChangeSpannerElements,
+    InsertTimeUnmanagedSpanner,
+    ChangeStartEndSpanner,
+
+    // Ties
+    ChangeTieEndPointActive,
+
+    // Style
+    ChangeStyle,
+    ChangeStyleValues,
+
+    // Property
+    ChangeProperty,
+
+    // Voices
+    ExchangeVoice,
+    CloneVoice,
+
+    // Excerpts
+    AddExcerpt,
+    RemoveExcerpt,
+    SwapExcerpt,
+    ChangeExcerptTitle,
+
+    // Meta info
+    ChangeMetaInfo,
+
+    // Other
+    InsertTime,
+    ChangeScoreOrder,
+};
+
 #define UNDO_TYPE(t) CommandType type() const override { return t; }
 #define UNDO_NAME(a) const char* name() const override { return a; }
 #define UNDO_CHANGED_OBJECTS(...) std::vector<EngravingObject*> objectItems() const override { return __VA_ARGS__; }

@@ -51,6 +51,7 @@
 #include "../compat/midi/compatmidirenderinternal.h"
 
 #include "chordlist.h"
+#include "guitarbend.h"
 #include "input.h"
 #include "mscore.h"
 #include "property.h"
@@ -59,8 +60,10 @@
 #include "spannermap.h"
 #include "systemlock.h"
 #include "synthesizerstate.h"
+#include "tuplet.h"
 #include "rootitem.h"
 #include "cmd.h"
+#include "undo.h"
 
 namespace mu::engraving {
 class IMimeData;
@@ -186,19 +189,11 @@ enum class Pad : char {
     DOT4
 };
 
-//---------------------------------------------------------
-//   MidiInputEvent
-//---------------------------------------------------------
-
 struct MidiInputEvent {
     int pitch = 0;
     bool chord = false;
     int velocity = 0;
 };
-
-//---------------------------------------------------------
-//   Position
-//---------------------------------------------------------
 
 struct Position {
     Segment* segment = nullptr;
@@ -208,13 +203,14 @@ struct Position {
     PointF pos;
 };
 
-//---------------------------------------------------------
-//   PlayMode
-//---------------------------------------------------------
-
 enum class PlayMode : char {
     SYNTHESIZER,
     AUDIO
+};
+
+struct NoteInputParams {
+    int step = 0;
+    int drumPitch = -1;
 };
 
 struct ShowAnchors {
@@ -261,6 +257,48 @@ struct ShowAnchors {
     Fraction endTickMainRegion = Fraction(-1, 1);
     Fraction startTickExtendedRegion = Fraction(-1, 1);
     Fraction endTickExtendedRegion = Fraction(-1, 1);
+};
+
+struct ScoreChangesRange {
+    int tickFrom = -1;
+    int tickTo = -1;
+    staff_idx_t staffIdxFrom = muse::nidx;
+    staff_idx_t staffIdxTo = muse::nidx;
+
+    std::map<EngravingItem*, std::unordered_set<CommandType> > changedItems;
+    ElementTypeSet changedTypes;
+    PropertyIdSet changedPropertyIdSet;
+    StyleIdSet changedStyleIdSet;
+
+    bool isValidBoundary() const
+    {
+        bool tickRangeValid = (tickFrom != -1 && tickTo != -1);
+        bool staffRangeValid = (staffIdxFrom != muse::nidx && staffIdxTo != muse::nidx);
+
+        return tickRangeValid && staffRangeValid;
+    }
+
+    bool isValid() const
+    {
+        return isValidBoundary() || !changedTypes.empty();
+    }
+
+    void clear()
+    {
+        *this = ScoreChangesRange();
+    }
+
+    void combine(const ScoreChangesRange& r)
+    {
+        tickFrom = std::min(tickFrom, r.tickFrom);
+        tickTo = std::max(tickTo, r.tickTo);
+        staffIdxFrom = std::min(staffIdxFrom, r.staffIdxFrom);
+        staffIdxTo = std::max(staffIdxTo, r.staffIdxTo);
+        changedItems.insert(r.changedItems.begin(), r.changedItems.end());
+        changedTypes.insert(r.changedTypes.begin(), r.changedTypes.end());
+        changedPropertyIdSet.insert(r.changedPropertyIdSet.begin(), r.changedPropertyIdSet.end());
+        changedStyleIdSet.insert(r.changedStyleIdSet.begin(), r.changedStyleIdSet.end());
+    }
 };
 
 //---------------------------------------------------------------------------------------

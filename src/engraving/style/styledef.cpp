@@ -32,7 +32,6 @@
 #include "dom/stafftype.h"
 #include "dom/textbase.h"
 #include "dom/tuplet.h"
-#include "dom/types.h"
 
 using namespace mu;
 using namespace muse::draw;

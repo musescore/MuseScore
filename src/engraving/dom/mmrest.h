@@ -28,7 +28,13 @@
 #include "utils.h"
 
 namespace mu::engraving {
-/// This class implements a multimeasure rest.
+
+enum class MMRestRangeBracketType : unsigned char {
+    ///.\{
+    BRACKETS, PARENTHESES, NONE
+    ///\}
+};
+
 class MMRest final : public Rest
 {
     OBJECT_ALLOCATOR(engraving, MMRest)

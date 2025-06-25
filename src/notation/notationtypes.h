@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONTYPES_H
-#define MU_NOTATION_NOTATIONTYPES_H
+#pragma once
 
 #include <QPixmap>
 #include <QDate>
@@ -35,6 +34,7 @@
 #include "engraving/dom/chord.h"
 #include "engraving/dom/durationtype.h"
 #include "engraving/dom/engravingitem.h"
+#include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/hook.h"
@@ -57,6 +57,7 @@
 #include "engraving/dom/stem.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/dom/tuplet.h"
 
 #include "engraving/rendering/layoutoptions.h"
 
@@ -623,5 +624,3 @@ enum class PercussionPanelAutoShowMode {
     NEVER,
 };
 }
-
-#endif // MU_NOTATION_NOTATIONTYPES_H
