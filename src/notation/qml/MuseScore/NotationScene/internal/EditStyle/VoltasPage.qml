@@ -143,7 +143,8 @@ StyledFlickable {
                     spacing: 16
 
                     StyledImage {
-                        Layout.preferredWidth: 160
+                        horizontalPadding: 0
+                        verticalPadding: 0
                         forceHeight: 96
                         source: voltasPage.voltaAlignStartBeforeKeySig.value === false
                                 ? "voltasImages/voltaAfterKeySig.png"
@@ -176,7 +177,8 @@ StyledFlickable {
                     spacing: 16
 
                     StyledImage {
-                        Layout.preferredWidth: 160
+                        horizontalPadding: 0
+                        verticalPadding: 0
                         forceHeight: 96
                         source: voltasPage.voltaAlignEndLeftOfBarline.value === false
                                 ? "voltasImages/voltaRightOfBarline.png"
