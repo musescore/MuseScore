@@ -62,7 +62,6 @@
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
-#include "engraving/dom/fretcircle.h"
 
 #include "utils.h"
 
@@ -394,11 +393,6 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     int rr = readChar();
     if (cr && cr->isChord()) {
         Chord* chord = toChord(cr);
-
-        if (engravingConfiguration()->enableExperimentalFretCircle()) {
-            FretCircle* c = Factory::createFretCircle(chord);
-            chord->add(c);
-        }
 
         bool hasVibratoLeftHandOnBeat = false;
         bool hasVibratoWTremBarOnBeat = false;

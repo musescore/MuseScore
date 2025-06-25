@@ -59,7 +59,6 @@ class FiguredBassItem;
 class FiguredBass;
 class Fingering;
 class FretDiagram;
-class FretCircle;
 
 class Glissando;
 class GlissandoSegment;
@@ -216,7 +215,6 @@ private:
     static void draw(const FiguredBassItem* item, muse::draw::Painter* painter);
     static void draw(const Fingering* item, muse::draw::Painter* painter);
     static void draw(const FretDiagram* item, muse::draw::Painter* painter);
-    static void draw(const FretCircle* item, muse::draw::Painter* painter);
 
     static void draw(const GlissandoSegment* item, muse::draw::Painter* painter);
     static void draw(const GradualTempoChangeSegment* item, muse::draw::Painter* painter);

@@ -303,7 +303,6 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::BAGPIPE_EMBELLISHMENT, "BagpipeEmbellishment", muse::TranslatableString("engraving", "Bagpipe embellishment") },
     { ElementType::STICKING,             "Sticking",             muse::TranslatableString("engraving", "Sticking") },
     { ElementType::GRACE_NOTES_GROUP,    "GraceNotesGroup",      muse::TranslatableString::untranslatable("Grace notes group") },
-    { ElementType::FRET_CIRCLE,          "FretCircle",           muse::TranslatableString::untranslatable("Fret circle") },
     { ElementType::GUITAR_BEND,          "GuitarBend",           muse::TranslatableString("engraving", "Guitar bend") },
     { ElementType::GUITAR_BEND_SEGMENT,  "GuitarBendSegment",    muse::TranslatableString("engraving", "Guitar bend segment") },
     { ElementType::GUITAR_BEND_HOLD,     "GuitarBendHold",           muse::TranslatableString("engraving", "Guitar bend hold") },

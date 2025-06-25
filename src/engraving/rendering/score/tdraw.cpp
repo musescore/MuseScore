@@ -56,7 +56,6 @@
 #include "dom/figuredbass.h"
 #include "dom/fingering.h"
 #include "dom/fret.h"
-#include "dom/fretcircle.h"
 
 #include "dom/glissando.h"
 #include "dom/gradualtempochange.h"
@@ -223,8 +222,6 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::FINGERING:    draw(item_cast<const Fingering*>(item), painter);
         break;
     case ElementType::FRET_DIAGRAM: draw(item_cast<const FretDiagram*>(item), painter);
-        break;
-    case ElementType::FRET_CIRCLE:  draw(item_cast<const FretCircle*>(item), painter);
         break;
     case ElementType::FSYMBOL:      draw(item_cast<const FSymbol*>(item), painter);
         break;
@@ -1470,17 +1467,6 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     if (item->orientation() == Orientation::HORIZONTAL) {
         painter->restore();
     }
-}
-
-void TDraw::draw(const FretCircle* item, Painter* painter)
-{
-    TRACE_DRAW_ITEM;
-    const FretCircle::LayoutData* ldata = item->ldata();
-    painter->save();
-    painter->setPen(Pen(item->curColor(), item->spatium() * FretCircle::CIRCLE_WIDTH));
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->drawEllipse(ldata->rect);
-    painter->restore();
 }
 
 static void setDashAndGapLen(const SLine* line, double& dash, double& gap, Pen& pen)
