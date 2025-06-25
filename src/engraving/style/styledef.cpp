@@ -548,6 +548,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(slurEndWidth,                               Spatium(.05)),
     styleDef(slurMidWidth,                               Spatium(.21)),
     styleDef(slurDottedWidth,                            Spatium(.10)),
+    styleDef(angleHangingSlursAwayFromStaff,             false),
     styleDef(tieEndWidth,                                Spatium(.05)),
     styleDef(tieMidWidth,                                Spatium(.21)),
     styleDef(tieDottedWidth,                             Spatium(.10)),

@@ -562,6 +562,7 @@ enum class Sid {
     slurEndWidth,
     slurMidWidth,
     slurDottedWidth,
+    angleHangingSlursAwayFromStaff,
     tieEndWidth,
     tieMidWidth,
     tieDottedWidth,

@@ -310,9 +310,36 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         p1 = p2 - PointF(2.5 * item->spatium(), 0.0);
     }
 
+    bool isHangingSlur = sst == SpannerSegmentType::BEGIN || sst == SpannerSegmentType::END || incomingPartialSlur || outgoingPartialSlur;
+    if (isHangingSlur && ctx.conf().styleB(Sid::angleHangingSlursAwayFromStaff)) {
+        adjustSlurFloatingEndPointAngles(slurSegment, p1, p2, incomingPartialSlur, outgoingPartialSlur);
+    }
+
     layoutSegment(slurSegment, ctx, p1, p2);
 
     return slurSegment;
+}
+
+void SlurTieLayout::adjustSlurFloatingEndPointAngles(SlurSegment* slurSeg, PointF& p1, PointF& p2, bool incomingPartial,
+                                                     bool outgoingPartial)
+{
+    bool startIsHanging = slurSeg->spannerSegmentType() == SpannerSegmentType::END || incomingPartial;
+    bool endIsHanging = slurSeg->spannerSegmentType() == SpannerSegmentType::BEGIN || outgoingPartial;
+
+    IF_ASSERT_FAILED(startIsHanging != endIsHanging) {
+        return;
+    }
+
+    bool up = slurSeg->slur()->up();
+    const double heightDiff = 1.0 * slurSeg->spatium();
+
+    if (startIsHanging) {
+        double yCur = p1.y();
+        p1.setY(up ? std::min(yCur, p2.y() - heightDiff) : std::max(yCur, p2.y() + heightDiff));
+    } else if (endIsHanging) {
+        double yCur = p2.y();
+        p2.setY(up ? std::min(yCur, p1.y() - heightDiff) : std::max(yCur, p1.y() + heightDiff));
+    }
 }
 
 //---------------------------------------------------------
