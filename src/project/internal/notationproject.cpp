@@ -227,14 +227,16 @@ Ret NotationProject::doLoad(const muse::io::path_t& path, const muse::io::path_t
     // Load view settings & solo-mute states (needs to be done after notations are created)
     m_masterNotation->notation()->viewState()->read(reader);
     m_masterNotation->notation()->soloMuteState()->read(reader);
+    const int mscVersion = m_masterNotation->mscVersion();
     for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
-        if (!excerpt->hasFileName()) {
+        const INotationPtr excerptNotation = excerpt->notation();
+        if (!excerpt->hasFileName() || mscVersion < 440) {
+            m_masterNotation->initNotationSoloMuteState(excerptNotation);
             continue;
         }
-
         muse::io::path_t ePath = u"Excerpts/" + excerpt->fileName() + u"/";
-        excerpt->notation()->viewState()->read(reader, ePath);
-        excerpt->notation()->soloMuteState()->read(reader, ePath);
+        excerptNotation->viewState()->read(reader, ePath);
+        excerptNotation->soloMuteState()->read(reader, ePath);
     }
 
     // Apply compat audio settings (needs to be done after notations are created)
