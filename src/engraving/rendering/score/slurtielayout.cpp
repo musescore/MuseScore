@@ -2009,7 +2009,8 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
         const double elementWidth = element ? element->width() : 0.0;
         const double elPos = adjSeg->xPosInSystemCoords() + (element ? element->pos().x() + element->shape().bbox().x() : 0.0);
         widthToSegment = outgoing ? elPos - sPos.p1.x() : sPos.p2.x() - (elPos + elementWidth);
-        widthToSegment -= 0.25 * item->spatium();
+        bool incomingFromBarline = !outgoing && element->isBarLine() && toBarLine(element)->barLineType() != BarLineType::START_REPEAT;
+        widthToSegment -= item->style().styleMM(incomingFromBarline ? Sid::barlineToLineStartDistance : Sid::lineEndToBarlineDistance);
     }
 
     if (outgoing) {
