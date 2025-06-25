@@ -51,6 +51,7 @@
 #include "mscore.h"
 #include "page.h"
 #include "score.h"
+#include "system.h"
 #include "textedit.h"
 #include "textline.h"
 #include "undo.h"
@@ -3358,30 +3359,18 @@ bool TextBase::editNonTextual(EditData& ed)
         return false;
     }
 
-    bool leftRightKey = ed.key == Key_Left || ed.key == Key_Right;
-    bool altMod = ed.modifiers & AltModifier;
-    bool shiftMod = ed.modifiers & ShiftModifier;
-
-    bool changeAnchorType = shiftMod && altMod && leftRightKey;
-    if (changeAnchorType) {
-        undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious(), propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
-    }
-    bool doesntNeedMoveSeg = changeAnchorType && ((ed.key == Key_Left && anchorToEndOfPrevious())
-                                                  || (ed.key == Key_Right && !anchorToEndOfPrevious()));
-    if (doesntNeedMoveSeg) {
-        checkMeasureBoundariesAndMoveIfNeed();
-        return true;
-    }
-
-    bool moveSeg = shiftMod && (ed.key == Key_Left || ed.key == Key_Right);
-    if (moveSeg) {
+    Segment* oldSeg = toSegment(parent());
+    if (ed.modifiers & ShiftModifier
+        && (ed.key == Key_Left || ed.key == Key_Right || ed.key == Key_Home || ed.key == Key_End)) {
         bool moved = moveSegment(ed);
-        EditTimeTickAnchors::updateAnchors(this, track());
+        if (oldSeg != toSegment(parent())) {
+            EditTimeTickAnchors::updateAnchors(this, track());
+        }
         checkMeasureBoundariesAndMoveIfNeed();
         return moved;
     }
 
-    if (shiftMod) {
+    if (ed.modifiers & ShiftModifier) {
         return false;
     }
 
@@ -3404,7 +3393,9 @@ bool TextBase::isNonTextualEditAllowed(EditData& ed) const
         Key_Left,
         Key_Right,
         Key_Up,
-        Key_Down
+        Key_Down,
+        Key_Home,
+        Key_End,
     };
 
     bool altKeyWithoutShift = (ed.modifiers & AltModifier) && !(ed.modifiers & ShiftModifier);
@@ -3453,22 +3444,86 @@ bool TextBase::moveSegment(const EditData& ed)
 {
     assert(hasParentSegment());
 
-    bool forward = ed.key == Key_Right;
-    if (!(ed.modifiers & AltModifier)) {
-        if (anchorToEndOfPrevious()) {
-            undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
-            if (forward) {
-                return true;
-            }
-        }
-    }
-
     Segment* curSeg = toSegment(parent());
     IF_ASSERT_FAILED(curSeg) {
         return false;
     }
 
-    Segment* newSeg = forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
+    Segment* newSeg = nullptr;
+
+    bool beforeFirstSeg = false;
+
+    if (anchorToEndOfPrevious()) {
+        if (curSeg->prev1ChordRestOrTimeTick()) {
+            if (ed.key == Key_Right || ed.key == Key_End) {
+                curSeg = curSeg->prev1ChordRestOrTimeTick();
+            }
+        } else {
+            if (ed.key == Key_Left || ed.key == Key_Home) {
+                return true;
+            }
+            beforeFirstSeg = true;
+        }
+    }
+
+    if (ed.modifiers & AltModifier) {
+        undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious(), propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
+    } else {
+        undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
+    }
+
+    if (beforeFirstSeg) {
+        return true;
+    }
+
+    switch (ed.key) {
+    case Key_Left: {
+        if (ed.modifiers & ControlModifier) {
+            Measure* m = curSeg->rtick().isZero() ? curSeg->measure()->prevMeasure() : curSeg->measure();
+            newSeg = m ? m->findFirstR(SegmentType::ChordRest, Fraction(0, 1)) : nullptr;
+        } else {
+            newSeg = curSeg->prev1ChordRestOrTimeTick();
+        }
+        break;
+    }
+    case Key_Right: {
+        if (ed.modifiers & ControlModifier) {
+            Measure* measure = curSeg->measure()->nextMeasure();
+            if (measure) {
+                newSeg = measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+            } else {
+                Measure* m = score()->lastMeasure();
+                EditTimeTickAnchors::updateAnchors(m, staffIdx());
+                newSeg = m->getChordRestOrTimeTickSegment(m->endTick());
+            }
+        } else {
+            newSeg = curSeg->next1ChordRestOrTimeTick();
+        }
+        break;
+    }
+    case Key_Home: {
+        Measure* m = curSeg->measure()->system()->firstMeasure();
+        if (curSeg->rtick() == Fraction(0, 1) && m == curSeg->measure() && m->prevMeasure()) {
+            m = m->prevMeasure()->system()->firstMeasure();
+        }
+        newSeg = m->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+        break;
+    }
+    case Key_End: {
+        Measure* measure = curSeg->measure()->system()->lastMeasure()->nextMeasure();
+        if (measure) {
+            newSeg = measure->findFirstR(SegmentType::ChordRest, Fraction(0, 1));
+        } else {
+            Measure* m = score()->lastMeasure();
+            EditTimeTickAnchors::updateAnchors(m, staffIdx());
+            newSeg = m->getChordRestOrTimeTickSegment(m->endTick());
+        }
+        break;
+    }
+    default:
+        break;
+    }
+
     if (!newSeg) {
         return false;
     }
