@@ -3777,7 +3777,7 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext& ctx)
             t->setGenClef(e.readInt());
         } else if (tag == "stemless") {
             bool val = e.readInt() != 0;
-            t->setStemless(e.readBool());
+            t->setStemless(val);
             t->setShowBackTied(!val);        // for compatibility with 2.0.2 scores where this prop
         }                                 // was lacking and controlled by "slashStyle" instead
         else if (tag == "barlines") {
