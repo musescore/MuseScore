@@ -29,6 +29,7 @@ Item {
     id: root
 
     property var model
+    property string filterText: ""
 
     property alias navigationPanel: view.navigationPanel
 
@@ -48,6 +49,15 @@ Item {
         anchors.leftMargin: prv.sideMargin
 
         spacing: 16
+
+        // New Search Bar
+        TextInputField {
+            id: searchField
+            placeholderText: qsTr("Search part…")
+            text: root.filterText
+            onTextChanged: root.filterText = text
+            Layout.fillWidth: true
+        }
 
         StyledTextLabel {
             width: parent.width
@@ -70,7 +80,12 @@ Item {
 
         spacing: 0
 
-        model: root.model
+        // Filtering the model according to the search
+        model: root.model && root.filterText.length > 0
+            ? root.model.filter(function(part) {
+                return part.title && part.title.toLowerCase().indexOf(root.filterText.toLowerCase()) !== -1
+            })
+            : root.model
 
         interactive: height < contentHeight
 
