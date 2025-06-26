@@ -19,21 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef IMPORTMIDI_INSTRUMENT_NAMES_H
-#define IMPORTMIDI_INSTRUMENT_NAMES_H
+#pragma once
 
 #include <QString>
 
+#include "internal/midishared/generalmidi.h"
+
 namespace mu::iex::midi {
 struct MidiInstrument {
-    int type;
-    int hbank, lbank, patch;
-    int split;
+    int patch;
     const char* name;
 
-    static QString instrName(int type, int hbank, int lbank, int program);
+    static QString instrName(GM1Program);
 };
 }
-
-#endif // IMPORTMIDI_INSTRUMENT_NAMES_H

@@ -204,13 +204,13 @@ const InstrumentTemplate* getPreferredInstrument(const GM1Program sound)
 }
 }
 
-QString instrumentName(MidiType type, GM1Program p, bool isDrumTrack)
+QString instrumentName(GM1Program program, bool isDrumTrack)
 {
     if (isDrumTrack) {
         return "Percussion";
     }
 
-    return MidiInstrument::instrName(int(type), 0, 0, toMidiData(p));
+    return MidiInstrument::instrName(program);
 }
 
 bool isGrandStaff(const MTrack& t1, const MTrack& t2)
@@ -712,11 +712,8 @@ QString msInstrName(int trackIndex)
     if (!instr->longNames.empty()) {
         return instr->longNames.front().name();
     }
-    if (!instr->trackName.isEmpty()) {
-        return instr->trackName;
-    }
 
-    return "";
+    return instr->trackName;
 }
 } // namespace MidiInstr
 } // namespace mu::iex::midi

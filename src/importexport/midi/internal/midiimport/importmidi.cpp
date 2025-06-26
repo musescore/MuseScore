@@ -906,13 +906,12 @@ void createMeasures(const ReducedFraction& firstTick, ReducedFraction& lastTick,
     }
 }
 
-void setTrackInfo(MidiType midiType, MTrack& mt)
+void setTrackInfo(MTrack& mt)
 {
     auto& opers = midiImportOperations;
 
     const int currentTrack = mt.indexOfOperation;
-    const QString instrName = MidiInstr::instrumentName(midiType, mt.program,
-                                                        mt.mtrack->drumTrack());
+    const QString instrName = MidiInstr::instrumentName(mt.program, mt.mtrack->drumTrack());
     if (opers.data()->processingsOfOpenedFile == 0) {
         opers.data()->trackOpers.midiInstrName.setValue(currentTrack, instrName);
         // set channel number (from 1): number = index + 1
@@ -1023,14 +1022,11 @@ void processNonLyricMeta(QList<MTrack>& tracks)
     }
 }
 
-void setTrackInfo(QList<MTrack>& tracks, MidiType midiType)
+void setTrackInfo(QList<MTrack>& tracks)
 {
     for (int i = 0; i < tracks.size(); ++i) {
         MTrack& mt = tracks[i];
-        if (midiType == MidiType::UNKNOWN) {
-            midiType = MidiType::GM;
-        }
-        setTrackInfo(midiType, mt);
+        setTrackInfo(mt);
     }
 }
 
@@ -1218,7 +1214,7 @@ QList<MTrack> convertMidi(Score* score, const MidiFile* mf)
 
     createMeasures(firstTick, lastTick, score);
     processNonLyricMeta(trackList);
-    setTrackInfo(trackList, mf->midiType());
+    setTrackInfo(trackList);
     createKeys(trackList);
     MidiKey::recognizeMainKeySig(trackList);
     createNotes(lastTick, trackList);
@@ -1238,11 +1234,9 @@ QList<MTrack> convertMidi(Score* score, const MidiFile* mf)
 void loadMidiData(MidiFile& mf)
 {
     mf.separateChannel();
-    MidiType mt = MidiType::UNKNOWN;
     for (auto& track: mf.tracks()) {
-        track.mergeNoteOnOffAndFindMidiType(&mt);
+        track.mergeNoteOnOff();
     }
-    mf.setMidiType(mt);
 }
 
 Err importMidi(MasterScore* score, const QString& name)

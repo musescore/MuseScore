@@ -22,7 +22,6 @@
 #pragma once
 
 #include "internal/midishared/generalmidi.h"
-#include "internal/midishared/midifile.h"
 
 class QString;
 
@@ -34,7 +33,7 @@ namespace mu::iex::midi {
 class MTrack;
 
 namespace MidiInstr {
-QString instrumentName(MidiType type, GM1Program, bool isDrumTrack);
+QString instrumentName(GM1Program, bool isDrumTrack);
 QString msInstrName(int trackIndex);
 QString concatenateWithComma(const QString& left, const QString& right);
 bool isGrandStaff(const MTrack& t1, const MTrack& t2);
