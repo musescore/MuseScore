@@ -26,10 +26,13 @@
 #include <string>
 #include <map>
 #include <any>
+#include <optional>
 
 #ifndef NO_QT_SUPPORT
 #include <QString>
 #endif
+
+#include "global/log.h"
 
 namespace muse {
 class Ret
@@ -121,6 +124,38 @@ public:
     const std::string& text() const;
     void setData(const std::string& key, const std::any& val);
     std::any data(const std::string& key) const;
+
+    template<typename DataType>
+    std::optional<DataType> data(const std::string& key, const std::optional<DataType>& defaultValue = std::nullopt) const
+    {
+        static_assert(!std::is_reference_v<DataType>, "DataType must not be a reference");
+        static_assert(!std::is_pointer_v<DataType>, "DataType must not be a pointer");
+
+        const auto it = m_data.find(key);
+        if (it == m_data.end()) {
+            LOGE() << "Ret::data<" << typeid(DataType).name() << ">: key not found: '" << key << "'\n";
+            return defaultValue;
+        }
+
+        if (it->second.type() == typeid(DataType)) {
+            try
+            {
+                return std::any_cast<DataType>(it->second);
+            }
+            catch (const std::bad_any_cast& e)
+            {
+                LOGE() << "Ret::data<" << typeid(DataType).name()
+                       << ">: bad_any_cast for key '" << key
+                       << "': " << e.what() << "\n";
+            }
+        } else {
+            LOGE() << "Ret::data<" << typeid(DataType).name()
+                   << ">: type mismatch for key '" << key
+                   << "', stored type is " << it->second.type().name() << "\n";
+        }
+
+        return defaultValue;
+    }
 
     inline Ret& operator=(int c) { m_code = c; return *this; }
     inline Ret& operator=(bool arg) { m_code = arg ? int(Code::Ok) : int(Code::UnknownError); return *this; }
