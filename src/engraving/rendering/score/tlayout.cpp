@@ -7188,11 +7188,13 @@ double TLayout::voltaMidEndSegmentStartX(Volta* volta, System* system, LayoutCon
     }
 
     KeySig* keySig = toKeySig(refSeg->element(volta->track()));
-    if (!keySig->ldata()->keySymbols.empty()) {
-        KeySym keySym = keySig->ldata()->keySymbols.front();
-        double xCutout = ctx.engravingFont()->smuflAnchor(keySym.sym, SmuflAnchorId::cutOutNW, 1.0).x();
-        return keySig->x() + keySym.xPos + xCutout + refSeg->x() + firstMeasure->x();
+    if (keySig->ldata()->keySymbols.empty()) {
+        return 0.0;
     }
+
+    KeySym keySym = keySig->ldata()->keySymbols.front();
+    double xCutout = ctx.engravingFont()->smuflAnchor(keySym.sym, SmuflAnchorId::cutOutNW, 1.0).x();
+    return keySig->x() + keySym.xPos + xCutout + refSeg->x() + firstMeasure->x();
 }
 
 SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutContext& ctx)
