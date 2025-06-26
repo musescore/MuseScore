@@ -248,7 +248,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         layoutExpression(item_cast<const Expression*>(item), static_cast<Expression::LayoutData*>(ldata));
         break;
     case ElementType::FERMATA:
-        layoutFermata(item_cast<const Fermata*>(item), static_cast<Fermata::LayoutData*>(ldata), ctx.conf());
+        layoutFermata(item_cast<const Fermata*>(item), static_cast<Fermata::LayoutData*>(ldata));
         break;
     case ElementType::FIGURED_BASS:
         layoutFiguredBass(item_cast<const FiguredBass*>(item), static_cast<FiguredBass::LayoutData*>(ldata), ctx);
@@ -1124,7 +1124,7 @@ void TLayout::layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, con
     }
 
     if (Fermata* fermata = toFermata(item->segment()->findAnnotation(ElementType::FERMATA, item->track(), item->track() + VOICES))) {
-        layoutFermata(fermata, fermata->mutldata(), ctx.conf());
+        layoutFermata(fermata, fermata->mutldata());
     }
 }
 
@@ -2128,7 +2128,7 @@ void TLayout::layoutExpression(const Expression* item, Expression::LayoutData* l
     Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
-void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata, const LayoutConfiguration& conf)
+void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
     const StaffType* stType = item->staffType();

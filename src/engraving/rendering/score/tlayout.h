@@ -234,7 +234,7 @@ public:
 
     static void layoutExpression(const Expression* item, Expression::LayoutData* ldata);
 
-    static void layoutFermata(const Fermata* item, Fermata::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void layoutFermata(const Fermata* item, Fermata::LayoutData* ldata);
     static void layoutFiguredBass(const FiguredBass* item, FiguredBass::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutFingering(const Fingering* item, Fingering::LayoutData* ldata);
     static void layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData* ldata, const LayoutContext& ctx);
