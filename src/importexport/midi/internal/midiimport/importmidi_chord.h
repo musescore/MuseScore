@@ -19,13 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef IMPORTMIDI_CHORD_H
-#define IMPORTMIDI_CHORD_H
+#pragma once
+
+#include <map>
+
+#include "importexport/midi/internal/midishared/generalmidi.h"
 
 #include "importmidi_fraction.h"
 #include "importmidi_tuplet.h"
-
-#include <map>
 
 namespace mu::engraving {
 class Tie;
@@ -74,7 +75,7 @@ public:
 class MTrack;
 
 namespace MChord {
-bool isGrandStaffProgram(int program);
+bool isGrandStaffProgram(GM1Program);
 
 std::multimap<ReducedFraction, MidiChord>::iterator
 findFirstChordInRange(std::multimap<ReducedFraction, MidiChord>& chords, const ReducedFraction& startRangeTick,
@@ -161,5 +162,3 @@ bool areBarIndexesSet(const std::multimap<ReducedFraction, MidiChord>& chords);
 #endif
 } // namespace MChord
 } // namespace mu::iex::midi
-
-#endif // IMPORTMIDI_CHORD_H

@@ -55,6 +55,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 
+#include "internal/midishared/generalmidi.h"
 #include "../midishared/midifile.h"
 #include "importmidi_beat.h"
 #include "importmidi_chord.h"
@@ -752,7 +753,8 @@ std::multimap<int, MTrack> createMTrackList(TimeSigMap* sigmap, const MidiFile* 
 
                 track.chords.insert({ tick, c });
             } else if (e.type() == ME_PROGRAM) {
-                track.program = e.dataB();
+                track.program = toGm1Program(e.dataB())
+                                .value_or(GM1Program::AcousticGrandPiano);
             } else if (e.type() == ME_CONTROLLER && e.controller() == CTRL_VOLUME) {
                 track.volumes.insert({ tick, e.value() });
             }
@@ -929,7 +931,7 @@ void setTrackInfo(MidiType midiType, MTrack& mt)
         if (mt.mtrack->drumTrack()) {
             bank = 128;
         }
-        part->setMidiProgram(mt.program & 0x7f, bank);      // only GM
+        part->setMidiProgram(toMidiData(mt.program), bank);
     }
 
     if (mt.name.isEmpty() && !trackInstrName.isEmpty()) {
