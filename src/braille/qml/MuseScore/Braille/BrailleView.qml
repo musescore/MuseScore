@@ -31,6 +31,12 @@ import MuseScore.Braille 1.0
 StyledFlickable {
     id: root
 
+    // Signal pour demander le dock dans la zone dédiée
+    signal requestDockToBrailleZone()
+
+    // Pour suivre l'état flottant/docké
+    property bool isFloating: false
+
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "BrailleView"
         enabled: brailleTextArea.enabled && brailleTextArea.visible
@@ -50,7 +56,6 @@ StyledFlickable {
         onCurrentItemChanged: {
             if(brailleModel.currentItemPositionStart.valueOf() != -1 &&
                     brailleModel.currentItemPositionEnd.valueOf() != -1) {
-                    //brailleTextArea.select(brailleModel.currentItemPositionStart.valueOf(), brailleModel.currentItemPositionEnd.valueOf());
                 if(brailleTextArea.focus) {
                     brailleTextArea.cursorPosition = brailleModel.currentItemPositionEnd.valueOf();
                 }
@@ -70,6 +75,56 @@ StyledFlickable {
                 case 2: {
                     fakeNavCtrl.accessible.setName("Braille: Note input mode");
                     break;
+                }
+            }
+        }
+    }
+
+    // Barre de navigation en haut, style Mixer
+    Row {
+        id: titleBar
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 36
+        spacing: 8
+
+        StyledTextLabel {
+            text: qsTr("Braille")
+            font.pixelSize: 16
+            font.bold: true
+            verticalAlignment: Text.AlignVCenter
+            color: ui.theme.fontPrimaryColor
+            anchors.verticalCenter: parent.verticalCenter
+        }
+
+        Item { Layout.fillWidth: true }
+
+        MenuButton {
+            id: menuButton
+            icon: IconCode.MORE_VERT
+            anchors.verticalCenter: parent.verticalCenter
+
+            Menu {
+                id: brailleMenu
+
+                MenuItem {
+                    text: qsTr("Close")
+                    onTriggered: root.visible = false
+                }
+                MenuItem {
+                    text: root.isFloating ? qsTr("Replacer en bas") : qsTr("Détacher")
+                    onTriggered: {
+                        if (root.isFloating) {
+                            root.requestDockToBrailleZone()
+                            root.isFloating = false
+                        } else {
+                            if (root.parent) {
+                                root.parent.floating = true
+                            }
+                            root.isFloating = true
+                        }
+                    }
                 }
             }
         }
@@ -221,8 +276,6 @@ StyledFlickable {
 
         Keys.onPressed: function(event) {
             if (event.key === Qt.Key_Tab) {
-                //! NOTE: We need to handle Tab key here because https://doc.qt.io/qt-5/qml-qtquick-controls2-textarea.html#tab-focus
-                //!       and we don't use qt navigation system
                 if (textInputModel.handleShortcut(Qt.Key_Tab, Qt.NoModifier)) {
                     brailleTextArea.focus = false;
                     event.accepted = true;
