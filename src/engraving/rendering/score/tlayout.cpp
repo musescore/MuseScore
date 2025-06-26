@@ -4812,15 +4812,16 @@ void TLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Layout
         return;
     }
 
+    if (DeadSlapped* ds = item->deadSlapped()) {
+        LD_INDEPENDENT;
+        layoutDeadSlapped(ds, ds->mutldata());
+        return;
+    }
+
     //! NOTE The types are listed here explicitly to show what types there are (see Rest::add method)
     //! and accordingly show what depends on.
     for (EngravingItem* e : item->el()) {
         switch (e->type()) {
-        case ElementType::DEAD_SLAPPED: {
-            DeadSlapped* ds = item_cast<DeadSlapped*>(e);
-            LD_INDEPENDENT;
-            layoutDeadSlapped(ds, ds->mutldata());
-        } break;
         case ElementType::SYMBOL: {
             Symbol* s = item_cast<Symbol*>(e);
             // LD_X not clear yet
