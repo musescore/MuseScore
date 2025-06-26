@@ -79,6 +79,7 @@ private:
     void changeEvent(QEvent*);
     void keyPressEvent(QKeyEvent* event);
 
+    void resizeDialog();
     void retranslate();
     void setHeaderFooterToolTip();
     void adjustPagesStackSize(int currentPageIndex);
