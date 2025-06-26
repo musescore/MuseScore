@@ -1252,7 +1252,7 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
         setExcludeVerticalAlign(v.toBool());
         break;
     case Pid::HAS_PARENTHESES:
-        setHasParentheses(v.toBool());
+        setHasParentheses(v.value<ParenthesesMode>());
         if (links()) {
             for (EngravingObject* scoreElement : *links()) {
                 Note* note = toNote(scoreElement);
@@ -1601,7 +1601,7 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
     case Pid::EXCLUDE_VERTICAL_ALIGN:
         return false;
     case Pid::HAS_PARENTHESES:
-        return false;
+        return ParenthesesMode::NONE;
     default: {
         PropertyValue v = EngravingObject::propertyDefault(pid);
 
@@ -2428,10 +2428,23 @@ void EngravingItem::setColorsInverionEnabled(bool enabled)
     m_colorsInversionEnabled = enabled;
 }
 
-void EngravingItem::setHasParentheses(bool v, bool addToLinked, bool generated)
+void EngravingItem::setHasParentheses(const ParenthesesMode& v, bool addToLinked, bool generated)
 {
-    setHasLeftParenthesis(v, addToLinked, generated);
-    setHasRightParenthesis(v, addToLinked, generated);
+    setHasLeftParenthesis(v & ParenthesesMode::LEFT, addToLinked, generated);
+    setHasRightParenthesis(v & ParenthesesMode::RIGHT, addToLinked, generated);
+}
+
+ParenthesesMode EngravingItem::hasParentheses() const
+{
+    ParenthesesMode p = ParenthesesMode::NONE;
+    if (m_leftParenthesis) {
+        p |= ParenthesesMode::LEFT;
+    }
+    if (m_leftParenthesis) {
+        p |= ParenthesesMode::RIGHT;
+    }
+
+    return p;
 }
 
 void EngravingItem::setHasLeftParenthesis(bool v, bool addToLinked, bool generated)

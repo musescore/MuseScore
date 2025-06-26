@@ -3356,14 +3356,14 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
 
     if (useParens) {
         double widthWithoutParens = item->tabHeadWidth(staffType);
-        item->setHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
+        item->setHasParentheses(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
         double w = item->tabHeadWidth(staffType);
         double xOff = 0.5 * (w - widthWithoutParens);
         ldata->moveX(-xOff);
         ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w,
                        staffType->fretBoxH() * item->magS());
-    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret()) && item->hasParentheses()) {
-        item->setHasParentheses(false, /*addToLinked=*/ false, /* generated= */ true);
+    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret()) && item->bothParentheses()) {
+        item->setHasParentheses(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
     }
     int dots = chord->dots();
     if (dots && !item->dots().empty()) {

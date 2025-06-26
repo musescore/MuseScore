@@ -459,6 +459,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
     case P_TYPE::PARTIAL_SPANNER_DIRECTION:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), PartialSpannerDirection::OUTGOING));
+    case P_TYPE::PARENTHESES_MODE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), ParenthesesMode::NONE));
     default:
         ASSERT_X("unhandled PID type");
         break;
@@ -2894,13 +2896,7 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        if (tag == "leftParen") {
-            h->setHasLeftParenthesis(true, true, true);
-            e.readNext();
-        } else if (tag == "rightParen") {
-            h->setHasRightParenthesis(true, true, true);
-            e.readNext();
-        } else if (tag == "bassCase") {
+        if (tag == "bassCase") {
             h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));

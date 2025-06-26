@@ -3107,8 +3107,6 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
         return false;
     case Pid::MIRROR_HEAD:
         return DirectionH::AUTO;
-    case Pid::HAS_PARENTHESES:
-        return false;
     case Pid::DOT_POSITION:
         return DirectionV::AUTO;
     case Pid::HEAD_SCHEME:

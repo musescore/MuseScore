@@ -1764,7 +1764,7 @@ void Score::removeElement(EngravingItem* element)
     {
         Note* startNote = toGuitarBend(element)->startNote();
         if (startNote) {
-            startNote->setHasParentheses(false);
+            startNote->setHasParentheses(ParenthesesMode::NONE);
             startNote->chord()->setNoStem(false);
             startNote->chord()->setBeamMode(BeamMode::AUTO);
         }

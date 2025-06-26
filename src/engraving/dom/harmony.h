@@ -199,9 +199,7 @@ public:
     void setRootCase(NoteCaseType c) { m_rootCase = c; }
     NoteCaseType rootCase() const { return m_rootCase; }
 
-    void setHasParentheses(bool v, bool addToLinked = true, bool generated = false) override;
-    void setHasLeftParenthesis(bool v, bool addToLinked = true, bool generated = false) override;
-    void setHasRightParenthesis(bool v, bool addToLinked = true, bool generated = false) override;
+    void setHasParentheses(const ParenthesesMode& v, bool addToLinked = true, bool generated = false) override;
 
     Segment* getParentSeg() const;
     FretDiagram* getParentFretDiagram() const;

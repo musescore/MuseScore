@@ -176,7 +176,7 @@ String Harmony::harmonyName() const
 {
     String name;
 
-    if (hasParentheses()) {
+    if (leftParen()) {
         name = u"(";
     }
 
@@ -235,7 +235,7 @@ String Harmony::harmonyName() const
         name += s;
     }
 
-    if (hasParentheses()) {
+    if (rightParen()) {
         name += u")";
     }
 
@@ -354,21 +354,9 @@ int Harmony::id() const
     return m_chords.front()->id();
 }
 
-void Harmony::setHasParentheses(bool v, bool addToLinked, bool generated)
+void Harmony::setHasParentheses(const ParenthesesMode& v, bool addToLinked, bool generated)
 {
     EngravingItem::setHasParentheses(v, addToLinked, generated);
-    render();
-}
-
-void Harmony::setHasLeftParenthesis(bool v, bool addToLinked, bool generated)
-{
-    EngravingItem::setHasLeftParenthesis(v, addToLinked, generated);
-    render();
-}
-
-void Harmony::setHasRightParenthesis(bool v, bool addToLinked, bool generated)
-{
-    EngravingItem::setHasRightParenthesis(v, addToLinked, generated);
     render();
 }
 
@@ -452,14 +440,14 @@ const std::vector<const ChordDescription*> Harmony::parseHarmony(const String& s
     // pre-process for parentheses
     String s = ss.simplified();
     if (s.startsWith('(')) {
-        setHasLeftParenthesis(true, true, true);
+        setHasParentheses(ParenthesesMode::LEFT, true, true);
         s.remove(0, 1);
     }
     if (s.endsWith(')') && s.count('(') < s.count(')')) {
-        setHasRightParenthesis(true, true, true);
+        setHasParentheses(ParenthesesMode::RIGHT, true, true);
         s.remove(s.size() - 1, 1);
     }
-    if (hasParentheses()) {
+    if (hasParentheses() == ParenthesesMode::BOTH) {
         s = s.simplified();         // in case of spaces inside parentheses
     }
 

@@ -4322,9 +4322,9 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         if (item->ghost()) {
-            const_cast<Note*>(item)->setHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
+            const_cast<Note*>(item)->setHasParentheses(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
         } else {
-            const_cast<Note*>(item)->setHasParentheses(false, /*addToLinked=*/ false, /* generated= */ true);
+            const_cast<Note*>(item)->setHasParentheses(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
         }
 
         double w = item->tabHeadWidth(tab);
@@ -4342,9 +4342,9 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 
         if (item->configuration()->shouldAddParenthesisOnStandardStaff()) {
             if (item->ghost()) {
-                const_cast<Note*>(item)->setHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
+                const_cast<Note*>(item)->setHasParentheses(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
             } else {
-                const_cast<Note*>(item)->setHasParentheses(false, /* addToLinked= */ false, /* generated= */ true);
+                const_cast<Note*>(item)->setHasParentheses(ParenthesesMode::NONE, /* addToLinked= */ false, /* generated= */ true);
             }
         }
 

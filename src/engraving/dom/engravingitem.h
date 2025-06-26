@@ -494,10 +494,9 @@ public:
     bool colorsInversionEnabled() const;
     void setColorsInverionEnabled(bool enabled);
 
-    virtual void setHasParentheses(bool v, bool addToLinked = true, bool generated = false);
-    virtual void setHasLeftParenthesis(bool v, bool addToLinked = true, bool generated = false);
-    virtual void setHasRightParenthesis(bool v, bool addToLinked = true, bool generated = false);
-    bool hasParentheses() const { return m_leftParenthesis && m_rightParenthesis; }
+    virtual void setHasParentheses(const ParenthesesMode& v, bool addToLinked = true, bool generated = false);
+    ParenthesesMode hasParentheses() const;
+    bool bothParentheses() const { return m_leftParenthesis && m_rightParenthesis; }
     Parenthesis* leftParen() const { return m_leftParenthesis; }
     Parenthesis* rightParen() const { return m_rightParenthesis; }
     void setLeftParen(Parenthesis* paren) { m_leftParenthesis = paren; }
@@ -756,6 +755,8 @@ private:
 
     Parenthesis* m_leftParenthesis = nullptr;
     Parenthesis* m_rightParenthesis = nullptr;
+    void setHasLeftParenthesis(bool v, bool addToLinked = true, bool generated = false);
+    void setHasRightParenthesis(bool v, bool addToLinked = true, bool generated = false);
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;
