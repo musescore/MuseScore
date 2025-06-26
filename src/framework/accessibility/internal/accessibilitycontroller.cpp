@@ -166,6 +166,23 @@ void AccessibilityController::unreg(IAccessible* aitem)
     delete item.object;
 }
 
+void AccessibilityController::announce(const QString& message)
+{
+    m_message = message;
+
+    if (m_lastFocused && !message.isEmpty()) {
+        m_lastFocused->accessiblePropertyChanged().send(Property::Name, Val());
+
+        // const Item& item = findItem(m_lastFocused);
+
+        // if (item.isValid() && item.iface) {
+        //     auto event = QAccessibleAnnouncementEvent(item.iface, message);
+        //     event.setPoliteness(QAccessible::AnnouncementPoliteness::Assertive);
+        //     sendEvent(&event);
+        // }
+    }
+}
+
 const IAccessible* AccessibilityController::accessibleRoot() const
 {
     return this;
@@ -174,6 +191,11 @@ const IAccessible* AccessibilityController::accessibleRoot() const
 const IAccessible* AccessibilityController::lastFocused() const
 {
     return m_lastFocused;
+}
+
+const QString& AccessibilityController::message() const
+{
+    return m_message;
 }
 
 bool AccessibilityController::needToVoicePanelInfo() const
@@ -307,6 +329,7 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
 
     if (state == State::Focused) {
         if (arg) {
+            m_message = "";
             cancelPreviousReading();
             savePanelAccessibleName(m_lastFocused, item.item);
 
@@ -504,6 +527,10 @@ int AccessibilityController::childCount(const IAccessible* item) const
 QAccessibleInterface* AccessibilityController::child(const IAccessible* item, int i) const
 {
     IF_ASSERT_FAILED(item) {
+        return nullptr;
+    }
+
+    if (!(0 <= i && i < static_cast<int>(item->accessibleChildCount()))) {
         return nullptr;
     }
 
