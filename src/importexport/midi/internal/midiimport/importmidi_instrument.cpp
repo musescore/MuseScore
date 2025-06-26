@@ -31,9 +31,10 @@
 #include <utility>
 #include <vector>
 
+#include "internal/midishared/generalmidi.h"
+
 #include "importmidi_chord.h"
 #include "importmidi_inner.h"
-#include "importmidi_instrument_names.h"
 #include "importmidi_operations.h"
 
 #include "engraving/dom/drumset.h"
@@ -41,8 +42,6 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
-
-#include "internal/midishared/generalmidi.h"
 
 using namespace std::literals;
 using namespace mu::engraving;
@@ -204,21 +203,13 @@ const InstrumentTemplate* getPreferredInstrument(const GM1Program sound)
 }
 }
 
-QString instrumentName(MidiType type, int program, bool isDrumTrack)
+QString instrumentName(GM1Program program, bool isDrumTrack)
 {
     if (isDrumTrack) {
         return "Percussion";
     }
 
-    int hbank = -1, lbank = -1;
-    if (program == -1) {
-        program = 0;
-    } else {
-        hbank = (program >> 16);
-        lbank = (program >> 8) & 0xff;
-        program = program & 0xff;
-    }
-    return MidiInstrument::instrName(int(type), hbank, lbank, program);
+    return QString::fromUtf8(getMidiName(program));
 }
 
 bool isGrandStaff(const MTrack& t1, const MTrack& t2)
@@ -233,9 +224,10 @@ bool isSameChannel(const MTrack& t1, const MTrack& t2)
     return t1.mtrack->outChannel() == t2.mtrack->outChannel();
 }
 
-bool is3StaffOrgan(int program)
+bool is3StaffOrgan(GM1Program program)
 {
-    return program >= 16 && program <= 20;
+    return program >= GM1Program::DrawbarOrgan
+           && program <= GM1Program::ReedOrgan;
 }
 
 bool areNext2GrandStaff(int currentTrack, const QList<MTrack>& tracks)
@@ -363,7 +355,7 @@ static int countMissingPitches(const std::set<int>& p1, const std::set<int>& p2)
 
 // find instrument with maximum MIDI program
 // that is less than the track MIDI program, i.e. suitable instrument
-static const InstrumentTemplate* findClosestInstrument(const int program, const std::set<int>& pitches,
+static const InstrumentTemplate* findClosestInstrument(const GM1Program program, const std::set<int>& pitches,
                                                        const bool isDrumTrack)
 {
     int maxLessProgram = -1;
@@ -387,7 +379,7 @@ static const InstrumentTemplate* findClosestInstrument(const int program, const 
                 }
 
                 for (const auto& channel: templ->channel) {
-                    if (channel.program() < program
+                    if (channel.program() < toMidiData(program)
                         && missingPitches < minMissingPitches) {
                         maxLessProgram = channel.program();
                         minMissingPitches = missingPitches;
@@ -401,7 +393,7 @@ static const InstrumentTemplate* findClosestInstrument(const int program, const 
             }
 
             for (const auto& channel: templ->channel) {
-                if (channel.program() < program
+                if (channel.program() < toMidiData(program)
                     && channel.program() > maxLessProgram) {
                     maxLessProgram = channel.program();
                     closestTemplate = templ;
@@ -416,10 +408,10 @@ static const InstrumentTemplate* findClosestInstrument(const int program, const 
 static std::vector<const InstrumentTemplate*> findInstrumentsForProgram(const MTrack& track)
 {
     std::vector<const InstrumentTemplate*> suitableTemplates;
-    const int program = track.program;
+    const GM1Program program = track.program;
     const bool isDrumTrack = track.mtrack->drumTrack();
 
-    const InstrumentTemplate* prefInstr = getPreferredInstrument(GM1Program { static_cast<std::uint8_t>(program) });
+    const InstrumentTemplate* prefInstr = getPreferredInstrument(program);
     if (prefInstr && !isDrumTrack) {
         suitableTemplates.push_back(prefInstr);
     }
@@ -448,7 +440,7 @@ static std::vector<const InstrumentTemplate*> findInstrumentsForProgram(const MT
                 }
 
                 for (const auto& channel: templ->channel) {
-                    if (channel.program() == program) {
+                    if (channel.program() == toMidiData(program)) {
                         if (templ->drumset) {
                             if (hasNotDefinedDrumPitch(trackPitches, drumPitches)) {
                                 break;
@@ -463,7 +455,7 @@ static std::vector<const InstrumentTemplate*> findInstrumentsForProgram(const MT
             }
 
             for (const auto& channel: templ->channel) {
-                if (channel.program() == program) {
+                if (channel.program() == toMidiData(program)) {
                     suitableTemplates.push_back(templ);
                     break;
                 }
@@ -475,7 +467,7 @@ static std::vector<const InstrumentTemplate*> findInstrumentsForProgram(const MT
         // Ms instruments with the desired MIDI program were not found
         // so we will find the most matching instrument
 
-        if (program >= 80 && program <= 103) {
+        if (program >= GM1Program::Lead1Square && program <= GM1Program::FX8SciFi) {
             const InstrumentTemplate* instr = nullptr;
             if (track.mtrack->drumTrack()) {
                 instr = findInstrument(u"electronic-instruments", u"percussion-synthesizer");
@@ -485,7 +477,7 @@ static std::vector<const InstrumentTemplate*> findInstrumentsForProgram(const MT
             if (instr) {
                 suitableTemplates.push_back(instr);               // generic synth
             }
-        } else if (program >= 112 && program <= 127) {
+        } else if (program >= GM1Program::TinkleBell) {
             auto instr = findInstrument(u"unpitched-percussion", u"snare-drum");
             if (instr) {
                 suitableTemplates.push_back(instr);               // 1-line percussion staff
@@ -719,11 +711,8 @@ QString msInstrName(int trackIndex)
     if (!instr->longNames.empty()) {
         return instr->longNames.front().name();
     }
-    if (!instr->trackName.isEmpty()) {
-        return instr->trackName;
-    }
 
-    return "";
+    return instr->trackName;
 }
 } // namespace MidiInstr
 } // namespace mu::iex::midi

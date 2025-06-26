@@ -29,48 +29,12 @@
 using namespace mu::engraving;
 
 namespace mu::iex::midi {
-static const uchar gmOnMsg[] = {
-    0x7e,         // Non-Real Time header
-    0x7f,         // ID of target device (7f = all devices)
-    0x09,
-    0x01
-};
-static const uchar gsOnMsg[] = {
-    0x41,         // roland id
-    0x10,         // Id of target device (default = 10h for roland)
-    0x42,         // model id (42h = gs devices)
-    0x12,         // command id (12h = data set)
-    0x40,         // address & value
-    0x00,
-    0x7f,
-    0x00,
-    0x41          // checksum?
-};
-static const uchar xgOnMsg[] = {
-    0x43,         // yamaha id
-    0x10,         // device number (0)
-    0x4c,         // model id
-    0x00,         // address (high, mid, low)
-    0x00,
-    0x7e,
-    0x00          // data
-};
-
-const int gmOnMsgLen = sizeof(gmOnMsg);
-const int gsOnMsgLen = sizeof(gsOnMsg);
-const int xgOnMsgLen = sizeof(xgOnMsg);
-
-//---------------------------------------------------------
-//   MidiFile
-//---------------------------------------------------------
-
 MidiFile::MidiFile()
 {
     fp               = 0;
     _division        = 0;
     _isDivisionInTps = false;
     _format          = 1;
-    _midiType        = MidiType::UNKNOWN;
     _noRunningStatus = false;
 
     status           = 0;
@@ -686,10 +650,9 @@ void MidiTrack::setOutChannel(int n)
 //   mergeNoteOnOffAndFindMidiType
 //    - find matching note on / note off events and merge
 //      into a note event with tick duration
-//    - find MIDI type
 //---------------------------------------------------------
 
-void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType* mt)
+void MidiTrack::mergeNoteOnOff()
 {
     std::multimap<int, MidiEvent> el;
 
@@ -793,33 +756,10 @@ void MidiTrack::mergeNoteOnOffAndFindMidiType(MidiType* mt)
             } else if (ev.type() == ME_SYSEX) {
                 int len = ev.len();
                 const uchar* buffer = ev.edata();
-                if ((len == gmOnMsgLen) && memcmp(buffer, gmOnMsg, gmOnMsgLen) == 0) {
-                    *mt = MidiType::GM;
-                    ev.setType(ME_INVALID);
-                    continue;
-                }
-                if ((len == gsOnMsgLen) && memcmp(buffer, gsOnMsg, gsOnMsgLen) == 0) {
-                    *mt = MidiType::GS;
-                    ev.setType(ME_INVALID);
-                    continue;
-                }
-                if ((len == xgOnMsgLen) && memcmp(buffer, xgOnMsg, xgOnMsgLen) == 0) {
-                    *mt = MidiType::XG;
-                    ev.setType(ME_INVALID);
-                    continue;
-                }
-                if (buffer[0] == 0x43) {            // Yamaha
-                    *mt = MidiType::XG;
+                // Yamaha
+                if (buffer[0] == 0x43) {
                     int type   = buffer[1] & 0xf0;
                     if (type == 0x10) {
-//TODO                                    if (buffer[1] != 0x10) {
-//                                          buffer[1] = 0x10;    // fix to Device 1
-//                                          }
-                        if ((len == xgOnMsgLen) && memcmp(buffer, xgOnMsg, xgOnMsgLen) == 0) {
-                            *mt = MidiType::XG;
-                            ev.setType(ME_INVALID);
-                            continue;
-                        }
                         if (len == 7 && buffer[2] == 0x4c && buffer[3] == 0x08 && buffer[5] == 7) {
                             // part mode
                             // 0 - normal

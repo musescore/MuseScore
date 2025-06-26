@@ -55,6 +55,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 
+#include "internal/midishared/generalmidi.h"
 #include "../midishared/midifile.h"
 #include "importmidi_beat.h"
 #include "importmidi_chord.h"
@@ -752,7 +753,8 @@ std::multimap<int, MTrack> createMTrackList(TimeSigMap* sigmap, const MidiFile* 
 
                 track.chords.insert({ tick, c });
             } else if (e.type() == ME_PROGRAM) {
-                track.program = e.dataB();
+                track.program = toGm1Program(e.dataB())
+                                .value_or(GM1Program::AcousticGrandPiano);
             } else if (e.type() == ME_CONTROLLER && e.controller() == CTRL_VOLUME) {
                 track.volumes.insert({ tick, e.value() });
             }
@@ -904,13 +906,12 @@ void createMeasures(const ReducedFraction& firstTick, ReducedFraction& lastTick,
     }
 }
 
-void setTrackInfo(MidiType midiType, MTrack& mt)
+void setTrackInfo(MTrack& mt)
 {
     auto& opers = midiImportOperations;
 
     const int currentTrack = mt.indexOfOperation;
-    const QString instrName = MidiInstr::instrumentName(midiType, mt.program,
-                                                        mt.mtrack->drumTrack());
+    const QString instrName = MidiInstr::instrumentName(mt.program, mt.mtrack->drumTrack());
     if (opers.data()->processingsOfOpenedFile == 0) {
         opers.data()->trackOpers.midiInstrName.setValue(currentTrack, instrName);
         // set channel number (from 1): number = index + 1
@@ -929,7 +930,7 @@ void setTrackInfo(MidiType midiType, MTrack& mt)
         if (mt.mtrack->drumTrack()) {
             bank = 128;
         }
-        part->setMidiProgram(mt.program & 0x7f, bank);      // only GM
+        part->setMidiProgram(toMidiData(mt.program), bank);
     }
 
     if (mt.name.isEmpty() && !trackInstrName.isEmpty()) {
@@ -1021,14 +1022,11 @@ void processNonLyricMeta(QList<MTrack>& tracks)
     }
 }
 
-void setTrackInfo(QList<MTrack>& tracks, MidiType midiType)
+void setTrackInfo(QList<MTrack>& tracks)
 {
     for (int i = 0; i < tracks.size(); ++i) {
         MTrack& mt = tracks[i];
-        if (midiType == MidiType::UNKNOWN) {
-            midiType = MidiType::GM;
-        }
-        setTrackInfo(midiType, mt);
+        setTrackInfo(mt);
     }
 }
 
@@ -1216,7 +1214,7 @@ QList<MTrack> convertMidi(Score* score, const MidiFile* mf)
 
     createMeasures(firstTick, lastTick, score);
     processNonLyricMeta(trackList);
-    setTrackInfo(trackList, mf->midiType());
+    setTrackInfo(trackList);
     createKeys(trackList);
     MidiKey::recognizeMainKeySig(trackList);
     createNotes(lastTick, trackList);
@@ -1236,11 +1234,9 @@ QList<MTrack> convertMidi(Score* score, const MidiFile* mf)
 void loadMidiData(MidiFile& mf)
 {
     mf.separateChannel();
-    MidiType mt = MidiType::UNKNOWN;
     for (auto& track: mf.tracks()) {
-        track.mergeNoteOnOffAndFindMidiType(&mt);
+        track.mergeNoteOnOff();
     }
-    mf.setMidiType(mt);
 }
 
 Err importMidi(MasterScore* score, const QString& name)
