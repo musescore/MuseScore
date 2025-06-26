@@ -45,9 +45,8 @@ public:
     int lastStaff() const;
 
 private:
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                const mpe::PlaybackParamLayers& params) override;
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
 
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes);
     void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& changes);

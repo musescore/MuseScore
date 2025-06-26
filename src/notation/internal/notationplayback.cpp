@@ -177,7 +177,7 @@ void NotationPlayback::triggerControllers(const muse::mpe::ControllerChangeEvent
     };
 
     mpe::PlaybackData& data = m_playbackModel.resolveTrackPlaybackData(trackId);
-    data.offStream.send(events, {}, false /*flushOffstream*/);
+    data.offStream.send(events, false /*flushOffstream*/);
 }
 
 InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const
