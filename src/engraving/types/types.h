@@ -195,7 +195,6 @@ enum class ElementType : unsigned char {
     BAGPIPE_EMBELLISHMENT,
     STICKING,
     GRACE_NOTES_GROUP,
-    FRET_CIRCLE,
     GUITAR_BEND,
     GUITAR_BEND_SEGMENT,
     GUITAR_BEND_HOLD,

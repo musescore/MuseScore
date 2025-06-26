@@ -191,7 +191,6 @@ class Volta;
 class VoltaSegment;
 class WhammyBar;
 class WhammyBarSegment;
-class FretCircle;
 class ShadowNote;
 
 class LinkedObjects;
@@ -451,7 +450,6 @@ public:
     CONVERT(Lasso,         LASSO)
     CONVERT(Sticking,      STICKING)
     CONVERT(GraceNotesGroup, GRACE_NOTES_GROUP)
-    CONVERT(FretCircle, FRET_CIRCLE)
     CONVERT(StringTunings, STRING_TUNINGS)
     CONVERT(TimeTickAnchor, TIME_TICK_ANCHOR)
     CONVERT(Parenthesis, PARENTHESIS)
@@ -883,7 +881,6 @@ CONVERT(Lasso)
 CONVERT(BagpipeEmbellishment)
 CONVERT(Sticking)
 CONVERT(GraceNotesGroup)
-CONVERT(FretCircle)
 CONVERT(DeadSlapped)
 CONVERT(StringTunings)
 CONVERT(SoundFlag)
