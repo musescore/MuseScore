@@ -180,8 +180,8 @@ private:
     void appendTupletHierarchy(Tuplet* innermostTuplet);
     void appendGuitarBend(GuitarBend* guitarBend);
 
-    ChordRest* firstChordRestInRange(track_idx_t track = muse::nidx) const;
-    ChordRest* lastChordRestInRange(track_idx_t track = muse::nidx) const;
+    ChordRest* firstChordRestInRange(track_idx_t preferredTrack = muse::nidx) const;
+    ChordRest* lastChordRestInRange(track_idx_t preferredTrack = muse::nidx) const;
 
     Score* m_score = nullptr;
     SelState m_state = SelState::NONE;
