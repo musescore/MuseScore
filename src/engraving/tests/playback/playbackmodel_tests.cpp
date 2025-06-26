@@ -848,8 +848,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     EXPECT_EQ(result.originEvents.size(), expectedChangedEventsCount);
 
     // [THEN] Updated events map will match our expectations
-    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&,
-                                                                   const PlaybackParamLayers&) {
+    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&) {
         EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
     });
 
@@ -1131,16 +1130,16 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents,
                                                                          const DynamicLevelLayers& triggeredDynamics,
-                                                                         const PlaybackParamList&, bool flushOffstream) {
+                                                                         bool flushOffstream) {
         ASSERT_EQ(triggeredEvents.size(), 1);
         const PlaybackEventList& eventList = triggeredEvents.at(firstNoteTimestamp);
 
         ASSERT_EQ(eventList.size(), 1);
         const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(eventList.front());
 
-        EXPECT_TRUE(noteEvent.arrangementCtx().actualTimestamp == expectedEvent.arrangementCtx().actualTimestamp);
-        EXPECT_FALSE(noteEvent.expressionCtx() == expectedEvent.expressionCtx());
-        EXPECT_TRUE(noteEvent.pitchCtx() == expectedEvent.pitchCtx());
+        EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedEvent.arrangementCtx().actualTimestamp);
+        EXPECT_EQ(noteEvent.expressionCtx(), expectedEvent.expressionCtx());
+        EXPECT_EQ(noteEvent.pitchCtx(), expectedEvent.pitchCtx());
 
         // Use the score dynamics for offstream playback by default
         ASSERT_EQ(triggeredDynamics.size(), 1);
@@ -1203,7 +1202,6 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents,
                                                       const DynamicLevelLayers& triggeredDynamics,
-                                                      const PlaybackParamList&,
                                                       bool flushOffstream) {
         ASSERT_EQ(triggeredEvents.size(), 1);
         const PlaybackEventList& actualEvents = triggeredEvents.at(0);

@@ -62,10 +62,8 @@ public:
     muse::audio::gain_t currentGain() const;
 
 private:
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                               const mpe::PlaybackParamList& params) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                const mpe::PlaybackParamLayers& params) override;
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
 
     using SostenutoTimeAndDurations = std::vector<mpe::TimestampAndDuration>;
 

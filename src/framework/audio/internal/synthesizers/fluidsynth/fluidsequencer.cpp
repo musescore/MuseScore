@@ -59,8 +59,7 @@ int FluidSequencer::naturalExpressionLevel() const
     return NATURAL_EXP_LVL;
 }
 
-void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                           const PlaybackParamList&)
+void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics)
 {
     addPlaybackEvents(m_offStreamEvents, events);
 
@@ -71,8 +70,7 @@ void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events,
     updateOffSequenceIterator();
 }
 
-void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                            const mpe::PlaybackParamLayers&)
+void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics)
 {
     m_mainStreamEvents.clear();
 

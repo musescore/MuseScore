@@ -360,6 +360,8 @@ void NotationMidiInput::triggerControllers(const std::map<muse::midi::Event::Opc
         { muse::midi::SUSTAIN_PEDAL_CONTROLLER, muse::mpe::ControllerChangeEvent::SustainPedalOnOff },
     };
 
+    const mu::engraving::InputState& is = score()->inputState();
+
     for (const auto& pair : events) {
         const muse::midi::Event& e = pair.second;
         muse::mpe::ControllerChangeEvent cc;
@@ -373,11 +375,11 @@ void NotationMidiInput::triggerControllers(const std::map<muse::midi::Event::Opc
         }
 
         if (cc.type != muse::mpe::ControllerChangeEvent::Undefined) {
+            cc.layerIdx = static_cast<muse::mpe::layer_idx_t>(is.track());
             controllers.push_back(cc);
         }
     }
 
-    const mu::engraving::InputState& is = score()->inputState();
     playbackController()->triggerControllers(controllers, is.staffIdx(), is.tick().ticks());
 }
 

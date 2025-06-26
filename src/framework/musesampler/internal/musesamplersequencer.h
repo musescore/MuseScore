@@ -74,10 +74,8 @@ public:
     void triggerRender();
 
 private:
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                               const mpe::PlaybackParamList& params) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
-                                const mpe::PlaybackParamLayers& params) override;
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
 
     void pollRenderingProgress();
     void doPollProgress();
@@ -85,19 +83,18 @@ private:
     void clearAllTracks();
     void finalizeAllTracks();
 
-    ms_Track resolveTrack(mpe::layer_idx_t layerIdx);
+    ms_Track findOrCreateTrack(mpe::layer_idx_t layerIdx);
     ms_Track findTrack(mpe::layer_idx_t layerIdx) const;
 
     const TrackList& allTracks() const;
 
-    void loadParams(const mpe::PlaybackParamLayers& changes);
-    void loadNoteEvents(const mpe::PlaybackEventsMap& changes);
+    void loadEvents(const mpe::PlaybackEventsMap& changes);
     void loadDynamicEvents(const mpe::DynamicLevelLayers& changes);
 
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
-    void addTextArticulation(const String& articulationCode, long long startUs, ms_Track track);
-    void addPresets(const StringList& presets, long long startUs, ms_Track track);
-    void addSyllable(const String& syllable, bool hyphenedToNext, long long positionUs, ms_Track track);
+    void addTextArticulationEvent(const mpe::TextArticulationEvent& event, long long startUs);
+    void addSoundPresetEvent(const mpe::SoundPresetChangeEvent& event, long long positionUs);
+    void addSyllableEvent(const mpe::SyllableEvent& event, long long positionUs);
     void addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
     void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
 
@@ -117,15 +114,11 @@ private:
 
         void clear()
         {
-            presets.clear();
-            textArticulation.clear();
-            syllable.clear();
-            textArticulationStartsAtNote = false;
-            syllableStartsAtNote = false;
+            *this = OffStreamParams();
         }
     };
 
-    void parseOffStreamParams(const mpe::PlaybackParamList& params, OffStreamParams& out) const;
+    void parseOffstreamParams(const mpe::PlaybackEvent& event, OffStreamParams& out) const;
 
     struct RenderingInfo {
         long long initialChunksDurationUs = 0;
@@ -147,6 +140,7 @@ private:
     IMuseSamplerTracks* m_tracks = nullptr;
 
     std::unordered_map<mpe::layer_idx_t, track_idx_t> m_layerIdxToTrackIdx;
+    std::unordered_map<ms_Track, std::map<long long /*startUs*/, ms_PresetChange> > m_presetChangesByTrack;
 
     std::string m_defaultPresetCode;
     OffStreamParams m_offStreamCache;
