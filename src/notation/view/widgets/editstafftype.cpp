@@ -217,7 +217,7 @@ void EditStaffType::enablePresets()
     fretFontSize->setVisible(true);
     fretY->setVisible(true);
 
-    fretFontName->setCurrentIndex(staffType.fretPresetIdx());
+    fretFontName->setCurrentIndex(static_cast<int>(staffType.fretPresetIdx()));
     fretFontSize->setValue(staffType.fretFontSize());
     fretY->setValue(staffType.fretFontUserY());
 }
