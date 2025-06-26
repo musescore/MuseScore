@@ -3981,7 +3981,7 @@ void MusicXmlParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
     while (m_e.readNextStartElement()) {
         m_defaultY = m_e.asciiAttribute("default-y").toDouble(&m_hasDefaultY) * -0.1;
         m_relativeX = m_e.doubleAttribute("relative-x") / 10 * m_score->style().spatium();
-        m_visible = m_e.asciiAttribute("print-object") != "no";
+        m_visible = m_e.asciiAttribute("print-object") != "no"; // only available for "metronome" and "other-direction"
         const String number = m_e.attribute("number");
         int n = 0;
         if (!number.empty()) {
