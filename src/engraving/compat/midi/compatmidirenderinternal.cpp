@@ -461,15 +461,13 @@ static void collectGuitarBend(const Note* note,
         int duration = note->chord()->actualTicks().ticks();
         if (bendFor) {
             const Note* endNote = bendFor->endNote();
-
             if (!endNote) {
                 return;
             }
 
             bool graceBeforeBend = false;
             if (note->chord()->isGraceBefore() && bendFor) {
-                Note* endNote = bendFor->endNote();
-                if (endNote && endNote->noteType() == NoteType::NORMAL) {
+                if (endNote->noteType() == NoteType::NORMAL) {
                     duration = (previousChordTicks == -1) ? GRACE_BEND_DURATION : std::min(previousChordTicks / 2, GRACE_BEND_DURATION);
                     graceBeforeBend = true;
                 }
