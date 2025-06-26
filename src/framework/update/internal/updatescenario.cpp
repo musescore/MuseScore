@@ -49,28 +49,28 @@ void UpdateScenario::delayedInit()
 
 void UpdateScenario::checkForUpdate()
 {
-    if (isCheckStarted()) {
+    if (isCheckInProgress()) {
         return;
     }
 
     doCheckForUpdate(true);
 }
 
-bool UpdateScenario::isCheckStarted() const
+bool UpdateScenario::isCheckInProgress() const
 {
-    return m_checkProgress;
+    return m_checkInProgress;
 }
 
 void UpdateScenario::doCheckForUpdate(bool manual)
 {
     m_checkProgressChannel = std::make_shared<Progress>();
     m_checkProgressChannel->started().onNotify(this, [this]() {
-        m_checkProgress = true;
+        m_checkInProgress = true;
     });
 
     m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
         DEFER {
-            m_checkProgress = false;
+            m_checkInProgress = false;
         };
 
         bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);

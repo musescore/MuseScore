@@ -52,7 +52,7 @@ void MuseSoundsCheckUpdateScenario::delayedInit()
 
 bool MuseSoundsCheckUpdateScenario::hasUpdate() const
 {
-    if (isCheckStarted() || !service()->needCheckForUpdate()) {
+    if (isCheckInProgress() || !service()->needCheckForUpdate()) {
         return false;
     }
 
@@ -79,9 +79,9 @@ muse::Ret MuseSoundsCheckUpdateScenario::showUpdate()
     return showReleaseInfo(lastCheckResult.val);
 }
 
-bool MuseSoundsCheckUpdateScenario::isCheckStarted() const
+bool MuseSoundsCheckUpdateScenario::isCheckInProgress() const
 {
-    return m_checkProgress;
+    return m_checkInProgress;
 }
 
 bool MuseSoundsCheckUpdateScenario::shouldIgnoreUpdate(const ReleaseInfo& info) const
@@ -98,12 +98,12 @@ void MuseSoundsCheckUpdateScenario::doCheckForUpdate(bool manual)
 {
     m_checkProgressChannel = std::make_shared<Progress>();
     m_checkProgressChannel->started().onNotify(this, [this]() {
-        m_checkProgress = true;
+        m_checkInProgress = true;
     });
 
     m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
         DEFER {
-            m_checkProgress = false;
+            m_checkInProgress = false;
         };
 
         if (!res.ret) {

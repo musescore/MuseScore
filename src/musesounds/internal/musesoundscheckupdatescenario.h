@@ -53,7 +53,7 @@ public:
     muse::Ret showUpdate() override;
 
 private:
-    bool isCheckStarted() const;
+    bool isCheckInProgress() const;
 
     bool shouldIgnoreUpdate(const muse::update::ReleaseInfo& info) const;
     void setIgnoredUpdate(const std::string& version);
@@ -64,7 +64,7 @@ private:
     muse::Ret showReleaseInfo(const muse::update::ReleaseInfo& info);
     void tryOpenMuseHub(muse::ValList actions) const;
 
-    bool m_checkProgress = false;
+    bool m_checkInProgress = false;
     muse::ProgressPtr m_checkProgressChannel = nullptr;
 };
 }
