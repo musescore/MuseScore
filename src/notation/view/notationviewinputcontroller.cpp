@@ -768,7 +768,9 @@ void NotationViewInputController::mousePress_considerSelect(const ClickContext& 
     } else {
         const INotationSelectionPtr selection = viewInteraction()->selection();
 
-        if (selection->isRange() && selection->range()->containsItem(ctx.hitElement, ctx.hitStaff)) {
+        if (selection->isRange()
+            && (selection->range()->containsItem(ctx.hitElement, ctx.hitStaff)
+                || selection->range()->containsPoint(ctx.logicClickPos))) {
             return;
         }
     }
