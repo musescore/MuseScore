@@ -23,6 +23,7 @@
 
 #include <cstdint>
 #include <optional>
+#include <string_view>
 
 namespace mu::iex::midi {
 // General MIDI Level 1 program numbers
@@ -186,4 +187,6 @@ constexpr std::uint8_t toMidiData(const GM1Program p)
 {
     return static_cast<std::uint8_t>(p);
 }
+
+std::string_view getMidiName(GM1Program);
 } // namespace mu::iex::midi

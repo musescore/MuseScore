@@ -31,9 +31,10 @@
 #include <utility>
 #include <vector>
 
+#include "internal/midishared/generalmidi.h"
+
 #include "importmidi_chord.h"
 #include "importmidi_inner.h"
-#include "importmidi_instrument_names.h"
 #include "importmidi_operations.h"
 
 #include "engraving/dom/drumset.h"
@@ -41,8 +42,6 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/staff.h"
-
-#include "internal/midishared/generalmidi.h"
 
 using namespace std::literals;
 using namespace mu::engraving;
@@ -210,7 +209,7 @@ QString instrumentName(GM1Program program, bool isDrumTrack)
         return "Percussion";
     }
 
-    return MidiInstrument::instrName(program);
+    return QString::fromUtf8(getMidiName(program));
 }
 
 bool isGrandStaff(const MTrack& t1, const MTrack& t2)
