@@ -77,6 +77,13 @@ static std::unordered_map<String, std::vector<String> > s_diagramPatternToHarmon
 
 static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH("://data/harmony_to_diagram.xml");
 
+static const String blankPattern(int strings)
+{
+    std::vector<Char> blank(strings, Char('-'));
+    String pattern(blank.data(), blank.size());
+    return pattern;
+}
+
 FretDiagram::FretDiagram(Segment* parent)
     : EngravingItem(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
@@ -613,9 +620,7 @@ String FretDiagram::patternFromDiagram(const FretDiagram* diagram)
     int strings = diagram->strings();
     int offset = diagram->fretOffset();
 
-    std::vector<Char> empty(strings, Char('-'));
-    String emptyPattern(empty.data(), empty.size());
-
+    String emptyPattern = blankPattern(strings);
     String pattern = emptyPattern;
 
     const DotMap& dotsMap = diagram->dots();
@@ -1175,7 +1180,50 @@ bool FretDiagram::isInFretBox() const
     return parent ? parent->isFBox() : false;
 }
 
-void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath)
+bool FretDiagram::isCustom(const String& harmonyNameForCompare) const
+{
+    if (harmonyNameForCompare.empty()) {
+        return false;
+    }
+
+    static const std::list<Pid> props {
+        Pid::FRET_STRINGS,
+        Pid::FRET_FRETS,
+        Pid::FRET_OFFSET,
+        Pid::FRET_NUT,
+        Pid::FRET_FINGERING
+    };
+
+    for (const Pid& pid : props) {
+        if (pid == Pid::FRET_FINGERING) {
+            if (!custom(Pid::FRET_SHOW_FINGERINGS)) {
+                break;
+            }
+        }
+
+        if (custom(pid)) {
+            return true;
+        }
+    }
+
+    String pattern = patternFromDiagram(this);
+    if (pattern == blankPattern(strings())) {
+        return false;
+    }
+
+    if (s_diagramPatternToHarmoniesMap.empty()) {
+        readHarmonyToDiagramFile(HARMONY_TO_DIAGRAM_FILE_PATH);
+    }
+
+    std::vector<String> patternHarmonies = muse::value(s_diagramPatternToHarmoniesMap, pattern);
+    if (patternHarmonies.empty()) {
+        return true;
+    }
+
+    return !muse::contains(patternHarmonies, harmonyNameForCompare.toLower());
+}
+
+void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) const
 {
     TRACEFUNC;
 
