@@ -136,8 +136,7 @@
           <StaffText>
             <eid>G_G</eid>
             <style>instrument_change</style>
-            <text>Simplify tied eighth notes to indicate rhythm in 4/4
-N = 1 eighth note</text>
+            <text>Simplify tied eighth notes to indicate rhythm in 4/4<br/>N = 1 eighth note</text>
             </StaffText>
           <Chord>
             <eid>H_H</eid>

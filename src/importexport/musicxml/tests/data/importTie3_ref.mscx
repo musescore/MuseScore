@@ -186,8 +186,7 @@ Arranged by [Arranger]</metaTag>
         <Text>
           <eid>G_G</eid>
           <style>composer</style>
-          <text>[COMPOSER]
-Arranged by [Arranger]</text>
+          <text>[COMPOSER]<br/>Arranged by [Arranger]</text>
           </Text>
         </VBox>
       <HBox>

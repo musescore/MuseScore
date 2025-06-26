@@ -191,8 +191,7 @@
           <eid>F_F</eid>
           <style>composer</style>
           <family>Times New Roman</family>
-          <text><font size="12"/><font face="Times New Roman"/>Franz Liszt
-(1811 - 1886)</text>
+          <text><font size="12"/><font face="Times New Roman"/>Franz Liszt<br/>(1811 - 1886)</text>
           </Text>
         <Text>
           <eid>G_G</eid>

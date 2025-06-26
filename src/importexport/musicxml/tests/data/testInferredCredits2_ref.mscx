@@ -164,8 +164,7 @@ Words &amp; Music by also Henry Ives (and ampersands)
             </TimeSig>
           <StaffText>
             <eid>M_M</eid>
-            <text>Lyrics to be sung by candlelight
-(and this not to be inferred)</text>
+            <text>Lyrics to be sung by candlelight<br/>(and this not to be inferred)</text>
             </StaffText>
           <Beam>
             <eid>N_N</eid>

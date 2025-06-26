@@ -52,6 +52,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ret_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xmldom_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/xmlstreamreader_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/xmlstreamwriter_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ringqueue_tests.cpp
 )
 

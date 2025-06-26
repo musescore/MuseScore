@@ -526,8 +526,7 @@
         <Text>
           <eid>F_F</eid>
           <style>subtitle</style>
-          <text>The Black Keys
-El Camino</text>
+          <text>The Black Keys<br/>El Camino</text>
           </Text>
         </VBox>
       <Measure>

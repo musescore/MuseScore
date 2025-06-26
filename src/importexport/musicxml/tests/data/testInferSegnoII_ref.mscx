@@ -408,8 +408,7 @@
         <Marker>
           <eid>0_0</eid>
           <style>repeat_right</style>
-          <text>To coda I
-<sym>coda</sym></text>
+          <text>To coda I<br/><sym>coda</sym></text>
           <label>coda</label>
           <markerType>coda</markerType>
           </Marker>
@@ -863,8 +862,7 @@
         <Marker>
           <eid>RC_RC</eid>
           <style>repeat_right</style>
-          <text>To coda II
-<sym>coda</sym><sym>coda</sym></text>
+          <text>To coda II<br/><sym>coda</sym><sym>coda</sym></text>
           <label>codaii</label>
           <markerType>coda</markerType>
           </Marker>
@@ -1711,8 +1709,7 @@
         <Marker>
           <eid>9E_9E</eid>
           <style>repeat_left</style>
-          <text>Coda II
-<sym>coda</sym><sym>coda</sym></text>
+          <text>Coda II<br/><sym>coda</sym><sym>coda</sym></text>
           <label>codabii</label>
           <markerType>codab</markerType>
           </Marker>

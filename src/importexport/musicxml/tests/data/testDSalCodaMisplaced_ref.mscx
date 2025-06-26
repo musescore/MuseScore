@@ -235,8 +235,7 @@
         <Marker>
           <eid>b_b</eid>
           <style>repeat_right</style>
-          <text>To Coda
-<sym>coda</sym></text>
+          <text>To Coda<br/><sym>coda</sym></text>
           <label>coda</label>
           <markerType>coda</markerType>
           </Marker>

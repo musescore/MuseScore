@@ -358,5 +358,7 @@ private:
     static void writeTupletEnd(DurationElement* item, XmlWriter& xml, WriteContext& ctx);
 
     static void writeSystemLock(const SystemLock* systemLock, XmlWriter& xml);
+
+    static void lineBreakToTag(String& str);
 };
 }
