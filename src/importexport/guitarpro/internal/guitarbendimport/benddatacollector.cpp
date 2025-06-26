@@ -265,7 +265,7 @@ void BendDataCollector::moveSegmentsToTiedNotes(tied_chords_bend_data_chunk_t& d
         return;
     }
 
-    for (size_t i = 1; (i <= diff + 1) && (newSegmentsSize > 1); i++, newSegmentsSize--) {
+    for (size_t i = 1; newSegmentsSize > 1; i++, newSegmentsSize--) {
         const bool chordExists = i < dataChunk.size();
         const bool noteExists = chordExists && noteIdx < dataChunk[i].chord->notes().size();
         const Note* nextNote = noteExists ? dataChunk[i].chord->notes()[noteIdx] : nullptr;

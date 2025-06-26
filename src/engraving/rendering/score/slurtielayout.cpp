@@ -36,7 +36,6 @@
 #include "dom/hook.h"
 #include "dom/stem.h"
 #include "dom/tremolotwochord.h"
-#include "dom/fretcircle.h"
 #include "dom/tie.h"
 #include "dom/engravingitem.h"
 #include "dom/measure.h"
@@ -310,9 +309,36 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         p1 = p2 - PointF(2.5 * item->spatium(), 0.0);
     }
 
+    bool isHangingSlur = sst == SpannerSegmentType::BEGIN || sst == SpannerSegmentType::END || incomingPartialSlur || outgoingPartialSlur;
+    if (isHangingSlur && ctx.conf().styleB(Sid::angleHangingSlursAwayFromStaff)) {
+        adjustSlurFloatingEndPointAngles(slurSegment, p1, p2, incomingPartialSlur, outgoingPartialSlur);
+    }
+
     layoutSegment(slurSegment, ctx, p1, p2);
 
     return slurSegment;
+}
+
+void SlurTieLayout::adjustSlurFloatingEndPointAngles(SlurSegment* slurSeg, PointF& p1, PointF& p2, bool incomingPartial,
+                                                     bool outgoingPartial)
+{
+    bool startIsHanging = slurSeg->spannerSegmentType() == SpannerSegmentType::END || incomingPartial;
+    bool endIsHanging = slurSeg->spannerSegmentType() == SpannerSegmentType::BEGIN || outgoingPartial;
+
+    IF_ASSERT_FAILED(startIsHanging != endIsHanging) {
+        return;
+    }
+
+    bool up = slurSeg->slur()->up();
+    const double heightDiff = 1.0 * slurSeg->spatium();
+
+    if (startIsHanging) {
+        double yCur = p1.y();
+        p1.setY(up ? std::min(yCur, p2.y() - heightDiff) : std::max(yCur, p2.y() + heightDiff));
+    } else if (endIsHanging) {
+        double yCur = p2.y();
+        p2.setY(up ? std::min(yCur, p1.y() - heightDiff) : std::max(yCur, p1.y() + heightDiff));
+    }
 }
 
 //---------------------------------------------------------
@@ -794,24 +820,6 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
 
     if (item->isTappingHalfSlur()) {
         adjustForTappingHalfSlurs(toTappingHalfSlur(item), sp, note2);
-    }
-
-    /// adding extra space above slurs for notes in circles
-    if (item->configuration()->enableExperimentalFretCircle() && item->staff()->staffType()->isCommonTabStaff()) {
-        auto adjustSlur = [](Chord* ch, PointF& coord, bool up) {
-            const Fraction halfFraction = Fraction(1, 2);
-            if (ch && ch->ticks() >= halfFraction) {
-                for (EngravingItem* item : ch->el()) {
-                    if (item && item->isFretCircle()) {
-                        coord += PointF(0, toFretCircle(item)->ldata()->offsetFromUpNote * (up ? -1 : 1));
-                        break;
-                    }
-                }
-            }
-        };
-
-        adjustSlur(sc, sp->p1, item->up());
-        adjustSlur(ec, sp->p2, item->up());
     }
 }
 
@@ -1780,6 +1788,9 @@ void SlurTieLayout::adjustOverlappingSlurs(const std::list<SpannerSegment*>& spa
     auto compare = [fuzzyHorizCompare](double x1, double x2) { return std::abs(x1 - x2) < fuzzyHorizCompare; };
     for (SlurSegment* slur1 : segments) {
         for (SlurSegment* slur2 : segments) {
+            if (slur2 == slur1) {
+                continue;
+            }
             if (slur1->slur()->endChord() == slur2->slur()->startChord()
                 && compare(slur1->ups(Grip::END).p.y(), slur2->ups(Grip::START).p.y())) {
                 slur1->ups(Grip::END).p.rx() -= slurCollisionHorizOffset;
@@ -1979,7 +1990,8 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
         const double elementWidth = element ? element->width() : 0.0;
         const double elPos = adjSeg->xPosInSystemCoords() + (element ? element->pos().x() + element->shape().bbox().x() : 0.0);
         widthToSegment = outgoing ? elPos - sPos.p1.x() : sPos.p2.x() - (elPos + elementWidth);
-        widthToSegment -= 0.25 * item->spatium();
+        bool incomingFromBarline = !outgoing && element->isBarLine() && toBarLine(element)->barLineType() != BarLineType::START_REPEAT;
+        widthToSegment -= item->style().styleMM(incomingFromBarline ? Sid::barlineToLineStartDistance : Sid::lineEndToBarlineDistance);
     }
 
     if (outgoing) {

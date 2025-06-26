@@ -74,55 +74,86 @@
             </Tempo>
           <Chord>
             <eid>I_I</eid>
-            <durationType>quarter</durationType>
+            <grace8after/>
             <Note>
               <eid>J_J</eid>
               <Accidental>
+                <role>1</role>
                 <subtype>accidentalSharp</subtype>
                 <eid>K_K</eid>
                 </Accidental>
-              <Bend>
-                <point time="0" pitch="0" vibrato="0"/>
-                <point time="60" pitch="100" vibrato="0"/>
-                <eid>L_L</eid>
-                </Bend>
+              <pitch>68</pitch>
+              <tpc>22</tpc>
+              <fret>4</fret>
+              <string>0</string>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>L_L</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>M_M</eid>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                <eid>N_N</eid>
+                </Accidental>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <fret>2</fret>
               <string>0</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>0</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>O_O</eid>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <grace>0</grace>
+                    </location>
+                  </next>
+                </Spanner>
               </Note>
             </Chord>
           <Rest>
-            <eid>M_M</eid>
+            <eid>P_P</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>N_N</eid>
+            <eid>Q_Q</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>O_O</eid>
+            <eid>R_R</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         <voice>
           <Rest>
-            <eid>P_P</eid>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <eid>Q_Q</eid>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
-            <eid>R_R</eid>
-            <visible>0</visible>
-            <durationType>quarter</durationType>
-            </Rest>
-          <Rest>
             <eid>S_S</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>T_T</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>U_U</eid>
+            <visible>0</visible>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>V_V</eid>
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>

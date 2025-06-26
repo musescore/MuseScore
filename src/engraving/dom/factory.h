@@ -233,9 +233,6 @@ public:
 
     static TripletFeel* createTripletFeel(Segment* parent, TripletFeelType type = TripletFeelType::NONE, bool isAccessibleEnabled = true);
 
-    static FretCircle* createFretCircle(Chord* parent, bool isAccessibleEnabled = true);
-    static FretCircle* copyFretCircle(const FretCircle& src);
-
     static Tuplet* createTuplet(Measure* parent, bool isAccessibleEnabled = true);
     static Tuplet* copyTuplet(const Tuplet& src);
 

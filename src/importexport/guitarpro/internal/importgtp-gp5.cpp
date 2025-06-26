@@ -35,7 +35,6 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fingering.h"
-#include "engraving/dom/fretcircle.h"
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/keysig.h"
@@ -395,11 +394,6 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     int rr = readChar();
     if (cr && cr->isChord()) {
         Chord* chord = toChord(cr);
-
-        if (engravingConfiguration()->enableExperimentalFretCircle()) {
-            FretCircle* c = Factory::createFretCircle(chord);
-            chord->add(c);
-        }
 
         bool hasVibratoLeftHandOnBeat = false;
         bool hasVibratoWTremBarOnBeat = false;
@@ -851,9 +845,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 bool GuitarPro5::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
-    }
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
 
     f = io;
 
@@ -1087,9 +1079,7 @@ bool GuitarPro5::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->applyBendsToChords();
-    }
+    m_guitarBendImporter->applyBendsToChords();
 
     return true;
 }

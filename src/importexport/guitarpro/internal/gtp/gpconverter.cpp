@@ -18,7 +18,6 @@
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/fret.h"
-#include "engraving/dom/fretcircle.h"
 #include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/gradualtempochange.h"
@@ -251,10 +250,7 @@ GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom, cons
     _drumResolver = std::make_unique<GPDrumSetResolver>();
     _drumResolver->initGPDrum();
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(_score);
-
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter = std::make_unique<GuitarBendImporter>(_score);
-    }
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(_score);
 }
 
 const std::unique_ptr<GPDomModel>& GPConverter::gpDom() const
@@ -347,9 +343,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
 
     addTempoMap();
     addInstrumentChanges();
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->applyBendsToChords();
-    }
+    m_guitarBendImporter->applyBendsToChords();
 
     addFermatas();
     addContinuousSlideHammerOn();
@@ -668,10 +662,6 @@ void GPConverter::convertNotes(const std::vector<std::shared_ptr<GPNote> >& note
     if (cr->isChord()) {
         Chord* ch = static_cast<Chord*>(cr);
         ch->sortNotes();
-        if (engravingConfiguration()->enableExperimentalFretCircle()) {
-            FretCircle* c = Factory::createFretCircle(ch);
-            ch->add(c);
-        }
     }
 }
 
@@ -2090,14 +2080,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         return;
     }
 
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->collectBend(note, pitchValues);
-    } else {
-        Bend* bend = Factory::createBend(note);
-        bend->setPoints(pitchValues);
-        bend->setTrack(note->track());
-        note->add(bend);
-    }
+    m_guitarBendImporter->collectBend(note, pitchValues);
 }
 
 void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)

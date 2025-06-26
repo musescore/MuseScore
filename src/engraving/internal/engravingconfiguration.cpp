@@ -158,8 +158,6 @@ void EngravingConfiguration::init()
     settings()->setDefaultValue(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, Val(false));
     settings()->setDescription(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, muse::trc("engraving", "Do not save EIDs"));
     settings()->setCanBeManuallyEdited(DO_NOT_SAVE_EIDS_FOR_BACK_COMPAT, false);
-
-    setExperimentalGuitarBendImport(guitarProImportExperimental());
 }
 
 muse::io::path_t EngravingConfiguration::appDataPath() const
@@ -441,16 +439,6 @@ bool EngravingConfiguration::guitarProImportExperimental() const
     return guitarProConfiguration() ? guitarProConfiguration()->experimental() : false;
 }
 
-bool EngravingConfiguration::experimentalGuitarBendImport() const
-{
-    return m_experimentalGuitarBendImport;
-}
-
-void EngravingConfiguration::setExperimentalGuitarBendImport(bool enabled)
-{
-    m_experimentalGuitarBendImport = enabled;
-}
-
 bool EngravingConfiguration::shouldAddParenthesisOnStandardStaff() const
 {
     return guitarProImportExperimental();
@@ -464,11 +452,6 @@ bool EngravingConfiguration::negativeFretsAllowed() const
 bool EngravingConfiguration::crossNoteHeadAlwaysBlack() const
 {
     return guitarProImportExperimental();
-}
-
-bool EngravingConfiguration::enableExperimentalFretCircle() const
-{
-    return false;
 }
 
 void EngravingConfiguration::setGuitarProMultivoiceEnabled(bool multiVoice)
