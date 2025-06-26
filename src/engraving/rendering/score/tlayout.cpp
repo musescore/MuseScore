@@ -931,17 +931,6 @@ void TLayout::layoutArticulation(const Articulation* item, Articulation::LayoutD
     //! NOTE Must already be set previously
     LD_CONDITION(ldata->symId.has_value());
 
-    RectF bbox;
-
-    if (item->textType() == ArticulationTextType::NO_TEXT) {
-        bbox = item->symBbox(ldata->symId);
-    } else {
-        Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF() * item->magS());
-        FontMetrics fm(scaledFont);
-        bbox = fm.boundingRect(scaledFont, TConv::text(item->textType()));
-    }
-
     fillArticulationShape(item, ldata);
 }
 
@@ -965,8 +954,13 @@ void TLayout::fillArticulationShape(const Articulation* item, Articulation::Layo
         shape.add(tip, item);
         PointF translate(0.0, sym == SymId::articAccentAbove ? -height : 0.0);
         ldata->setShape(shape.translate(translate));
-    } else {
+    } else if (item->textType() == ArticulationTextType::NO_TEXT) {
         ldata->setShape(Shape(item->symBbox(sym), item));
+    } else {
+        Font scaledFont(item->font());
+        FontMetrics fontMetrics(scaledFont);
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * item->magS() * MScore::pixelRatio);
+        ldata->setShape(Shape(fontMetrics.boundingRect(TConv::text(item->textType())), item));
     }
 }
 
