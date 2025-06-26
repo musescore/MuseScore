@@ -55,6 +55,7 @@
       <tupletFrameWidth>0</tupletFrameWidth>
       <textLineFramePadding>0</textLineFramePadding>
       <textLineFrameWidth>0</textLineFrameWidth>
+      <textLinePosition>right</textLinePosition>
       <defaultAlign>left,baseline</defaultAlign>
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
@@ -103,6 +104,7 @@
       <translatorAlign>center,top</translatorAlign>
       <translatorFramePadding>0</translatorFramePadding>
       <translatorFrameWidth>0</translatorFrameWidth>
+      <translatorPosition>center</translatorPosition>
       <systemTextAlign>left,top</systemTextAlign>
       <systemTextFramePadding>0</systemTextFramePadding>
       <systemTextFrameWidth>0</systemTextFrameWidth>
@@ -125,9 +127,11 @@
       <glissandoAlign>center,baseline</glissandoAlign>
       <glissandoFramePadding>0</glissandoFramePadding>
       <glissandoFrameWidth>0</glissandoFrameWidth>
+      <glissandoPosition>center</glissandoPosition>
       <bendAlign>center,center</bendAlign>
       <bendFramePadding>0</bendFramePadding>
       <bendFrameWidth>0</bendFrameWidth>
+      <bendPosition>center</bendPosition>
       <headerFontSize>11</headerFontSize>
       <headerFramePadding>0</headerFramePadding>
       <headerFrameWidth>0</headerFrameWidth>

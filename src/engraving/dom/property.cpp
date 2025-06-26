@@ -200,6 +200,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CONTINUE_AT,             true,  "continueAt",            P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "continue at") },
     { Pid::LABEL,                   true,  "label",                 P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "label") },
     { Pid::MARKER_TYPE,             true,  0,                       P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker type") },
+    { Pid::MARKER_SYMBOL_SIZE,      true,  "markerSymbolSize",      P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker symbol size") },
+    { Pid::MARKER_CENTER_ON_SYMBOL, true,  "markerCenterOnSymbol",  P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker center on symbol") },
     { Pid::ARP_USER_LEN1,           false, 0,                       P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "length 1") },
     { Pid::ARP_USER_LEN2,           false, 0,                       P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "length 2") },
     { Pid::REPEAT_END,              true,  0,                       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      "" },

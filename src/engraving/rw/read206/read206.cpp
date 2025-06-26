@@ -401,6 +401,9 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         case Pid::ALIGN:
             value = PropertyValue::fromValue(align);
             break;
+        case Pid::POSITION:
+            value = PropertyValue::fromValue(align.horizontal);
+            break;
         case Pid::SYSTEM_FLAG:
             value = systemFlag;
             break;

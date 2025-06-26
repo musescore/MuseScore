@@ -384,7 +384,7 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
     case P_TYPE::ALIGN:
         return PropertyValue(TConv::fromXml(e.readText(), Align()));
     case P_TYPE::ALIGN_H:
-        return PropertyValue(TConv::fromXml(e.readText(), AlignH()).horizontal);
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), AlignH::HCENTER));
     case P_TYPE::PLACEMENT_V:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), PlacementV::ABOVE));
     case P_TYPE::PLACEMENT_H:
@@ -1683,6 +1683,8 @@ void TRead::read(Marker* m, XmlReader& e, ReadContext& ctx)
             AsciiStringView s(e.readAsciiText());
             m->setLabel(String::fromAscii(s.ascii()));
             mt = TConv::fromXml(s, MarkerType::USER);
+        } else if (readProperty(m, tag, e, ctx, Pid::MARKER_CENTER_ON_SYMBOL)) {
+        } else if (readProperty(m, tag, e, ctx, Pid::MARKER_SYMBOL_SIZE)) {
         } else if (!readProperties(static_cast<TextBase*>(m), e, ctx)) {
             e.unknown();
         }
@@ -2932,7 +2934,6 @@ void TRead::read(Harmony* h, XmlReader& e, ReadContext& ctx)
                 }
             }
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::POS_ABOVE)) {
-        } else if (TRead::readProperty(h, tag, e, ctx, Pid::POSITION)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_TYPE)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::PLAY)) {
         } else if (TRead::readProperty(h, tag, e, ctx, Pid::HARMONY_VOICE_LITERAL)) {
@@ -4287,6 +4288,7 @@ static constexpr std::array<Pid, 18> TextBasePropertyId { {
     Pid::FRAME_FG_COLOR,
     Pid::FRAME_BG_COLOR,
     Pid::ALIGN,
+    Pid::POSITION,
 } };
 
 bool TRead::readTextProperties(TextBase* t, XmlReader& xml, ReadContext& ctx)
@@ -4301,6 +4303,9 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
     for (Pid i : TextBasePropertyId) {
+        if (i == Pid::POSITION && tag == propertyName(i)) {
+            LOGI() << "read pos";
+        }
         if (TRead::readProperty(t, tag, e, ctx, i)) {
             return true;
         }

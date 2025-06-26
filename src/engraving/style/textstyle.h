@@ -43,6 +43,7 @@ enum class TextStylePropertyType : char {
     FrameBorderColor,
     FrameFillColor,
     MusicalSymbolsScale,
+    Position
 };
 
 struct TextStyleProperty {
@@ -51,7 +52,7 @@ struct TextStyleProperty {
     Pid pid;
 };
 
-constexpr size_t TEXT_STYLE_SIZE = 15;
+constexpr size_t TEXT_STYLE_SIZE = 16;
 
 typedef std::array<TextStyleProperty, TEXT_STYLE_SIZE> TextStyle;
 

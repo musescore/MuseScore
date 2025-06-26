@@ -8340,7 +8340,7 @@
                  <item>
                   <widget class="QLabel" name="label_62">
                    <property name="text">
-                    <string>Placement:</string>
+                    <string>Position:</string>
                    </property>
                   </widget>
                  </item>
@@ -9497,7 +9497,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_124">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>pedalLinePlacement</cstring>
@@ -9726,7 +9726,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_125">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>trillLinePlacement</cstring>
@@ -9862,7 +9862,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_1251">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>vibratoLinePlacement</cstring>
@@ -10328,7 +10328,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_72">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePlacement</cstring>
@@ -10664,7 +10664,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_214">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>textLinePlacement</cstring>
@@ -11410,7 +11410,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_178">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>staffTextPlacement</cstring>
@@ -11675,7 +11675,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="label_128">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>tempoTextPlacement</cstring>
@@ -12217,7 +12217,7 @@
                     </sizepolicy>
                    </property>
                    <property name="text">
-                    <string>Placement:</string>
+                    <string>Position:</string>
                    </property>
                    <property name="buddy">
                     <cstring>lyricsPlacement</cstring>
@@ -12977,7 +12977,7 @@ followed by dashes</string>
            <item row="0" column="0">
             <widget class="QLabel" name="label_152">
              <property name="text">
-              <string>Placement:</string>
+              <string>Position:</string>
              </property>
              <property name="buddy">
               <cstring>rehearsalMarkPlacement</cstring>

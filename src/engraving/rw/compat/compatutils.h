@@ -47,6 +47,8 @@ public:
     static double convertChordExtModUnits(double val);
     static void setHarmonyRootTpcFromFunction(HarmonyInfo* info, const Harmony* h, const muse::String& s);
     static const std::set<SymId> ORNAMENT_IDS;
+    static const std::map<Sid, Sid> ALIGN_VALS_TO_CONVERT;
+    static Sid positionStyleFromAlign(Sid align);
 
 private:
     static void replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score);

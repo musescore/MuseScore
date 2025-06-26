@@ -886,7 +886,7 @@
     <rehearsalMarkPosBelow x="0" y="4"/>
     <rehearsalMarkMinDistance>0.5</rehearsalMarkMinDistance>
     <repeatLeftFontFace>Edwin</repeatLeftFontFace>
-    <repeatLeftFontSize>18</repeatLeftFontSize>
+    <repeatLeftFontSize>10</repeatLeftFontSize>
     <repeatLeftLineSpacing>1</repeatLeftLineSpacing>
     <repeatLeftFontSpatiumDependent>1</repeatLeftFontSpatiumDependent>
     <repeatLeftFontStyle>0</repeatLeftFontStyle>
@@ -900,7 +900,7 @@
     <repeatLeftFrameFgColor r="0" g="0" b="0" a="255"/>
     <repeatLeftFrameBgColor r="255" g="255" b="255" a="0"/>
     <repeatRightFontFace>Edwin</repeatRightFontFace>
-    <repeatRightFontSize>11</repeatRightFontSize>
+    <repeatRightFontSize>10</repeatRightFontSize>
     <repeatRightLineSpacing>1</repeatRightLineSpacing>
     <repeatRightFontSpatiumDependent>1</repeatRightFontSpatiumDependent>
     <repeatRightFontStyle>0</repeatRightFontStyle>

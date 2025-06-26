@@ -149,7 +149,7 @@ Column {
         }
 
         FlatRadioButtonGroupPropertyView {
-            id: positionButtonList
+            id: alignmentButtonList
 
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 4
@@ -157,7 +157,7 @@ Column {
 
             transparent: true
 
-            titleText: qsTrc("inspector", "Position")
+            titleText: qsTrc("inspector", "Alignment to notehead")
             propertyItem: root.model ? root.model.position : null
 
             navigationPanel: root.navigationPanel
