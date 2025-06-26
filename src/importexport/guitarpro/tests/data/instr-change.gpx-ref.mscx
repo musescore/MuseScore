@@ -60,9 +60,7 @@
         <Text>
           <eid>F_F</eid>
           <style>subtitle</style>
-          <text>Rock
-Pink Floyd
-The Wall</text>
+          <text>Rock<br/>Pink Floyd<br/>The Wall</text>
           </Text>
         <Text>
           <eid>G_G</eid>

@@ -3707,6 +3707,11 @@ void TRead::readHopoText(HammerOnPullOffSegment* hopoSeg, XmlReader& xml, ReadCo
     hopoSeg->addHopoText(hopoText);
 }
 
+void TRead::unescapeXmlText(String& str)
+{
+    str.replace(u"<br/>", u"\n");
+}
+
 bool TRead::readProperties(Spanner* s, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
@@ -4308,6 +4313,7 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
 
     if (tag == "text") {
         String str = e.readXml();
+        unescapeXmlText(str);
         t->setXmlText(str);
         t->checkCustomFormatting(str);
     } else if (tag == "bold") {
