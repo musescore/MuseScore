@@ -3228,7 +3228,7 @@ double Measure::firstNoteRestSegmentX(bool leading) const
                     }
                 }
                 if (seg->isStartRepeatBarLineType()) {
-                    margin = style().styleMM(Sid::repeatBarlineDotSeparation);
+                    margin = style().styleMM(Sid::lineEndToBarlineDistance);
                 }
                 return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
             } else if (!isFirstInSystem() && !isFirstInSection() && prevMeasure()) {
@@ -3244,7 +3244,7 @@ double Measure::firstNoteRestSegmentX(bool leading) const
                     width = std::max(width, endBl->pos().x() + endBl->ldata()->bbox().right());
                 }
 
-                const double startBlMargin = style().styleMM(Sid::lineEndToBarlineDistance);
+                const double startBlMargin = style().styleMM(Sid::barlineToLineStartDistance);
 
                 return std::min(endBlSeg->measure()->pos().x() + endBlSeg->pos().x() + width + startBlMargin, noteRestPos);
             } else {

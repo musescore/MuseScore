@@ -562,6 +562,7 @@ enum class Sid {
     slurEndWidth,
     slurMidWidth,
     slurDottedWidth,
+    angleHangingSlursAwayFromStaff,
     tieEndWidth,
     tieMidWidth,
     tieDottedWidth,
@@ -574,6 +575,7 @@ enum class Sid {
     laissezVibMinDistance,
     headerToLineStartDistance,   // determines start point of "dangling" lines (ties, gliss, lyrics...) when preceded by header clefs/timesigs/keysigs
     lineEndToBarlineDistance,  // determines end point of "dangling" lines (ties, gliss, lyrics...) in relation to barlines
+    barlineToLineStartDistance, // determines start point of incoming partial ties and slurs in relation to the preceding barline
 
     tiePlacementSingleNote,
     tiePlacementChord,
