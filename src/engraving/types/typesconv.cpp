@@ -3120,8 +3120,7 @@ struct ArticulationTextTypeItem {
     muse::TranslatableString name;
 };
 
-const std::array<ArticulationTextTypeItem, 3> ARTICULATIONTEXT_TYPES = { {
-    { ArticulationTextType::TAP,    "Tap",  String(u"T"),  muse::TranslatableString("engraving/sym", "Tap") },
+const std::array<ArticulationTextTypeItem, 2> ARTICULATIONTEXT_TYPES = { {
     { ArticulationTextType::SLAP,   "Slap", String(u"S"),  muse::TranslatableString("engraving/sym", "Slap") },
     { ArticulationTextType::POP,    "Pop",  String(u"P"),  muse::TranslatableString("engraving/sym", "Pop") }
 } };

@@ -1065,7 +1065,6 @@ enum class VibratoType : unsigned char {
 
 enum class ArticulationTextType : unsigned char {
     NO_TEXT,
-    TAP,
     SLAP,
     POP
 };

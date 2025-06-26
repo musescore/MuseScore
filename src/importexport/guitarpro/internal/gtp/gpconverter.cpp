@@ -627,6 +627,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
         addGolpe(beat, cr);
         addFretDiagram(beat, cr, ctx);
         addBarre(beat, cr);
+        addTapping(beat, cr);
         addSlapped(beat, cr);
         addPopped(beat, cr);
         addBrush(beat, cr);
@@ -691,7 +692,7 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     addSlide(gpnote, note);
     addPickScrape(gpnote, note);
     collectHammerOn(gpnote, note);
-    addTapping(gpnote, note);
+    addRightHandTapping(gpnote, note);
     addLeftHandTapping(gpnote, note);
     addStringNumber(gpnote, note);
     addOrnament(gpnote, note);
@@ -1914,27 +1915,15 @@ void GPConverter::addAccent(const GPNote* gpnote, Note* note)
 
 void GPConverter::addLeftHandTapping(const GPNote* gpnote, Note* note)
 {
-    if (!gpnote->leftHandTapped()) {
-        return;
-    }
-
-    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
-    art->setSymId(SymId::guitarLeftHandTapping);
-    if (!note->score()->toggleArticulation(note, art)) {
-        delete art;
+    if (gpnote->leftHandTapped() && m_currentGPBeat) {
+        m_currentGPBeat->setTappingHand(GPBeat::TappingHand::Left);
     }
 }
 
-void GPConverter::addTapping(const GPNote* gpnote, Note* note)
+void GPConverter::addRightHandTapping(const GPNote* gpnote, Note* note)
 {
-    if (!gpnote->tapping()) {
-        return;
-    }
-
-    if (Chord* ch = toChord(note->parent())) {
-        Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
-        art->setTextType(ArticulationTextType::TAP);
-        ch->add(art);
+    if (gpnote->rightHandTapping() && m_currentGPBeat) {
+        m_currentGPBeat->setTappingHand(GPBeat::TappingHand::Right);
     }
 }
 
@@ -2469,6 +2458,19 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
     }
 
     cr->segment()->add(fretDiagram);
+}
+
+void GPConverter::addTapping(const GPBeat* beat, ChordRest* cr)
+{
+    if (beat->tappingHand() == GPBeat::TappingHand::None || !cr->isChord()) {
+        return;
+    }
+
+    Chord* chord = toChord(cr);
+    Tapping* tapping = Factory::createTapping(chord);
+    tapping->setTrack(chord->track());
+    tapping->setHand(beat->tappingHand() == GPBeat::TappingHand::Left ? engraving::TappingHand::LEFT : engraving::TappingHand::RIGHT);
+    chord->add(tapping);
 }
 
 void GPConverter::addSlapped(const GPBeat* beat, ChordRest* cr)
