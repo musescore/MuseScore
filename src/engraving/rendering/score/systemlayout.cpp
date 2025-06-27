@@ -1344,39 +1344,52 @@ void SystemLayout::createSkylines(const ElementsToLayout& elementsToLayout, Layo
                         // add element to skyline
                         if (e->addToSkyline()) {
                             const PointF offset = e->staffOffset();
-                            skyline.add(e->shape().translate(e->pos() + p + offset));
+                            Shape shape = e->shape();
                             // add grace notes to skyline
                             if (e->isChord()) {
-                                GraceNotesGroup& graceBefore = toChord(e)->graceNotesBefore();
-                                GraceNotesGroup& graceAfter = toChord(e)->graceNotesAfter();
+                                Chord* chord = toChord(e);
+                                GraceNotesGroup& graceBefore = chord->graceNotesBefore();
+                                GraceNotesGroup& graceAfter = chord->graceNotesAfter();
                                 if (!graceBefore.empty()) {
                                     skyline.add(graceBefore.shape().translate(graceBefore.pos() + p + offset));
                                 }
                                 if (!graceAfter.empty()) {
                                     skyline.add(graceAfter.shape().translate(graceAfter.pos() + p + offset));
                                 }
-                            }
-                            // If present, add ornament cue note to skyline
-                            if (e->isChord()) {
-                                Ornament* ornament = toChord(e)->findOrnament();
+
+                                // If present, add ornament cue note to skyline
+                                Ornament* ornament = chord->findOrnament();
                                 if (ornament) {
                                     Chord* cue = ornament->cueNoteChord();
                                     if (cue && cue->upNote()->visible()) {
                                         skyline.add(cue->shape().translate(cue->pos() + p + cue->staffOffset()));
                                     }
                                 }
+
+                                // Don't include cross-staff arpeggios
+                                shape.remove_if([chord](ShapeElement& s) {
+                                    return s.item()->isArpeggio() && toArpeggio(s.item()) == chord->spanArpeggio();
+                                });
+                                Arpeggio* arp = chord->spanArpeggio();
+                                if (arp) {
+                                    RectF staffBbox = ss->bbox();
+                                    RectF arpBbox = arp->ldata()->bbox().translated(e->pos() + p + offset);
+                                    if (chord->track() == arp->track()) {
+                                        staffBbox.setTop(arpBbox.top());
+                                    } else if (chord->track() == arp->endTrack()) {
+                                        staffBbox.setBottom(arpBbox.bottom());
+                                    }
+                                    shape.add(arpBbox & staffBbox, arp);
+                                }
                             }
+                            skyline.add(shape.translate(e->pos() + p + offset));
                         }
 
                         // add tremolo to skyline
                         if (e->isChord()) {
                             Chord* ch = item_cast<Chord*>(e);
-                            if (ch->tremoloSingleChord()) {
-                                TremoloSingleChord* t = ch->tremoloSingleChord();
-                                if (t->addToSkyline()) {
-                                    skyline.add(t->shape().translate(t->pos() + e->pos() + p));
-                                }
-                            } else if (ch->tremoloTwoChord()) {
+                            // tremoloSingleChord is added directly to chord shape
+                            if (ch->tremoloTwoChord()) {
                                 TremoloTwoChord* t = ch->tremoloTwoChord();
                                 Chord* c1 = t->chord1();
                                 Chord* c2 = t->chord2();
