@@ -69,6 +69,7 @@
 #include "dom/utils.h"
 
 #include "arpeggiolayout.h"
+#include "rendering/score/parenthesislayout.h"
 #include "tlayout.h"
 #include "slurtielayout.h"
 #include "beamlayout.h"
@@ -3445,12 +3446,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         }
     }
 
-    if (Parenthesis* leftParen = item->leftParen()) {
-        TLayout::layoutParenthesis(leftParen, leftParen->mutldata(), ctx);
-    }
-    if (Parenthesis* rightParen = item->rightParen()) {
-        TLayout::layoutParenthesis(rightParen, rightParen->mutldata(), ctx);
-    }
+    ParenthesisLayout::layoutParentheses(item, ctx);
 }
 
 void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
@@ -3654,6 +3650,15 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         }
     }
 
+    const Parenthesis* leftParen = item->leftParen();
+    if (leftParen && leftParen->addToSkyline()) {
+        shape.add(leftParen->ldata()->shape().translated(leftParen->pos()));
+    }
+    const Parenthesis* rightParen = item->rightParen();
+    if (rightParen && rightParen->addToSkyline()) {
+        shape.add(rightParen->ldata()->shape().translated(rightParen->pos()));
+    }
+
     ldata->setShape(shape);
 }
 
@@ -3675,6 +3680,15 @@ void ChordLayout::fillShape(const Rest* item, Rest::LayoutData* ldata)
         if (e->addToSkyline()) {
             shape.add(e->shape().translate(e->pos()));
         }
+    }
+
+    const Parenthesis* leftParen = item->leftParen();
+    if (leftParen && leftParen->addToSkyline()) {
+        shape.add(leftParen->ldata()->shape().translated(leftParen->pos()));
+    }
+    const Parenthesis* rightParen = item->rightParen();
+    if (rightParen && rightParen->addToSkyline()) {
+        shape.add(rightParen->ldata()->shape().translated(rightParen->pos()));
     }
 
     ldata->setShape(shape);

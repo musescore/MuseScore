@@ -21,6 +21,7 @@
  */
 
 #include "harmonylayout.h"
+#include "rendering/score/parenthesislayout.h"
 #include "tlayout.h"
 
 #include "dom/fret.h"
@@ -172,13 +173,5 @@ void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldat
 
     ldata->setPos(positionPoint);
 
-    if (Parenthesis* leftParen = item->leftParen()) {
-        TLayout::layoutParenthesis(leftParen, leftParen->mutldata(), ctx);
-        ldata->shape().add(leftParen->shape().translated(leftParen->pos()));
-    }
-
-    if (Parenthesis* rightParen = item->rightParen()) {
-        TLayout::layoutParenthesis(rightParen, rightParen->mutldata(), ctx);
-        ldata->shape().add(rightParen->shape().translated(rightParen->pos()));
-    }
+    ParenthesisLayout::layoutParentheses(item, ctx);
 }

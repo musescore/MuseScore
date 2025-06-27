@@ -33,15 +33,16 @@ namespace mu::engraving::rendering::score {
 class ParenthesisLayout
 {
 public:
+    static void layoutParentheses(const EngravingItem* parent, const LayoutContext& ctx);
     static void layoutParenthesis(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
 
 private:
-    static void createCurveAndShape(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
+    static void createPathAndShape(Parenthesis* item, Parenthesis::LayoutData* ldata);
 
     static void setLayoutValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
-
-    static void segmentLayout(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
-    static void noteLayout(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
-    static void defaultLayout(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
+    static void setClefValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
+    static void setTimeSigValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
+    static void setNoteValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
+    static void setDefaultValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
 };
 }

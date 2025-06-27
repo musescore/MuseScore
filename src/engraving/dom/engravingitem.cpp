@@ -2815,7 +2815,16 @@ const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
 Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
 {
     //! NOTE Temporary disabled CHECK - a lot of messages
-    const Shape& sh = m_shape.value(LD_ACCESS::MAYBE_NOTINITED);
+    Shape sh = m_shape.value(LD_ACCESS::MAYBE_NOTINITED);
+
+    const Parenthesis* leftParen = m_item->leftParen();
+    if (leftParen && leftParen->addToSkyline()) {
+        sh.add(leftParen->ldata()->shape().translated(leftParen->pos()));
+    }
+    const Parenthesis* rightParen = m_item->rightParen();
+    if (rightParen && rightParen->addToSkyline()) {
+        sh.add(rightParen->ldata()->shape().translated(rightParen->pos()));
+    }
 
     //! NOTE Temporary
     //! Reimplementation: done

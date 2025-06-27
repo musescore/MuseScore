@@ -1977,14 +1977,8 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
     double widthToSegment = 0.0;
     if (adjSeg) {
         EngravingItem* element = adjSeg->element(staff2track(item->vStaffIdx()));
-        track_idx_t strack = track2staff(item->track());
-        track_idx_t etrack = strack + VOICES - 1;
-        for (EngravingItem* paren : adjSeg->findAnnotations(ElementType::PARENTHESIS, strack, etrack)) {
-            if ((outgoing && toParenthesis(paren)->direction() == DirectionH::LEFT)
-                || (!outgoing && toParenthesis(paren)->direction() == DirectionH::RIGHT)) {
-                element = paren;
-                break;
-            }
+        if (Parenthesis* paren = element->paren(outgoing ? DirectionH::LEFT : DirectionH::RIGHT)) {
+            element = paren;
         }
 
         const double elementWidth = element ? element->width() : 0.0;

@@ -496,7 +496,8 @@ public:
 
     virtual void setHasParentheses(const ParenthesesMode& v, bool addToLinked = true, bool generated = false);
     ParenthesesMode hasParentheses() const;
-    bool bothParentheses() const { return m_leftParenthesis && m_rightParenthesis; }
+    inline bool bothParentheses() const { return m_leftParenthesis && m_rightParenthesis; }
+    inline Parenthesis* paren(const DirectionH& dir) const { return dir == DirectionH::LEFT ? m_leftParenthesis : m_rightParenthesis; }
     Parenthesis* leftParen() const { return m_leftParenthesis; }
     Parenthesis* rightParen() const { return m_rightParenthesis; }
     void setLeftParen(Parenthesis* paren) { m_leftParenthesis = paren; }

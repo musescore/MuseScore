@@ -2365,11 +2365,10 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    Segment* seg = item->segment();
-    EngravingItem* segItem = seg ? seg->element(item->track()) : nullptr;
-    TimeSig* segTs = segItem && segItem->isTimeSig() ? toTimeSig(segItem) : nullptr;
+    EngravingItem* parent = item->parentItem();
+    TimeSig* parentTs = parent && parent->isTimeSig() ? toTimeSig(parent) : nullptr;
 
-    if (segTs && !segTs->showOnThisStaff()) {
+    if (parentTs && !parentTs->showOnThisStaff()) {
         return;
     }
 
