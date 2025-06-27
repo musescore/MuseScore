@@ -8895,7 +8895,23 @@
        <layout class="QVBoxLayout" name="verticalLayout_46">
         <item>
          <widget class="QWidget" name="voltasPageWidget" native="true">
-          <layout class="QVBoxLayout" name="voltasPageWidgetLayout"/>
+          <layout class="QVBoxLayout" name="voltasPageWidgetLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+          </layout>
          </widget>
         </item>
        </layout>
@@ -13367,8 +13383,8 @@ followed by dashes</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>624</width>
+             <height>478</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">

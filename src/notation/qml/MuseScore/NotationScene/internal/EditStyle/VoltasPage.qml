@@ -30,7 +30,7 @@ import Muse.Ui 1.0
 StyledFlickable {
     id: root
 
-    contentWidth: column.width
+    contentWidth: parent.width
     contentHeight: column.height
 
     VoltasPageModel {
@@ -39,6 +39,7 @@ StyledFlickable {
 
     ColumnLayout {
         id: column
+        width: parent.width
         spacing: 12
 
         StyledGroupBox {
@@ -101,6 +102,7 @@ StyledFlickable {
                     styleItem: voltasPage.voltaLineStyle
                     label: qsTrc("notation", "Line style:")
                     labelAreaWidth: 160
+                    controlAreaWidth: 276
 
                     model: [
                         { iconCode: IconCode.LINE_NORMAL, value: 0, title: qsTrc("notation", "Normal") },
@@ -138,10 +140,11 @@ StyledFlickable {
                 spacing: 12
 
                 RowLayout {
-                    spacing: 8
+                    spacing: 16
 
                     StyledImage {
-                        Layout.preferredWidth: 160
+                        horizontalPadding: 0
+                        verticalPadding: 0
                         forceHeight: 96
                         source: voltasPage.voltaAlignStartBeforeKeySig.value === false
                                 ? "voltasImages/voltaAfterKeySig.png"
@@ -171,10 +174,11 @@ StyledFlickable {
                 }
 
                 RowLayout {
-                    spacing: 8
+                    spacing: 16
 
                     StyledImage {
-                        Layout.preferredWidth: 160
+                        horizontalPadding: 0
+                        verticalPadding: 0
                         forceHeight: 96
                         source: voltasPage.voltaAlignEndLeftOfBarline.value === false
                                 ? "voltasImages/voltaRightOfBarline.png"

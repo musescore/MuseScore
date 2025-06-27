@@ -1003,7 +1003,7 @@ EditStyle::EditStyle(QWidget* parent)
     auto voltasPage = createQmlWidget(
         voltasPageWidget,
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml")));
-    voltasPage.widget->setMinimumSize(224, 400);
+    voltasPage.widget->setMinimumSize(504, 400);
     voltasPageWidget->layout()->addWidget(voltasPage.widget);
 
     // ====================================================
