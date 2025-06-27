@@ -463,52 +463,42 @@ void BarLine::getY() const
             y2 = (8-_spanTo) * _spatium * .5;
             return;
             }
-      int staffIdx1 = staffIdx();
-      int staffIdx2 = _spanStaff ? nextVisibleSpannedStaff(this) : staffIdx1;
+      int staffIdx1       = staffIdx();
+      const Staff* staff1 = score()->staff(staffIdx1);
+      int staffIdx2       = staffIdx1;
+
+      if (_spanStaff)
+            staffIdx2 = nextVisibleSpannedStaff(this);
+
+      bool isTop = this->isTop();
+      bool isBottom = this->isBottom();
 
       Measure* measure = segment()->measure();
-      System* system   = measure->system();
+      System* system = measure->system();
       if (!system)
             return;
 
-      Fraction tick                = segment()->measure()->tick();
-      const Staff* staff1          = score()->staff(staffIdx1);
+      Fraction tick        = segment()->measure()->tick();
       const StaffType* staffType1  = staff1->staffType(tick);
 
+      int from = isTop ? _spanFrom : 0; // barlines spanned from top always starts at top line
+      int to      = _spanTo;
       int oneLine = staffType1 ->lines() <= 1;
-
-      int from = _spanFrom;
-      int to   = _spanTo;
-
-      if (oneLine && _spanFrom == 0 && _spanTo == 0) {
+      if (oneLine && isTop && _spanFrom == 0)
             from = BARLINE_SPAN_1LINESTAFF_FROM;
-            if (!_spanStaff)
-                  to = BARLINE_SPAN_1LINESTAFF_TO;
-            }
+      if (oneLine && isBottom && _spanTo == 0)
+            to = BARLINE_SPAN_1LINESTAFF_TO;
 
-      qreal spatium1       = staffType1 ->spatium(score());
+      qreal sysStaff1Y = system->staff(staffIdx1)->y();
+      qreal spatium1 = staffType1 ->spatium(score());
       qreal lineDistance   = staffType1 ->lineDistance().val() * spatium1;
-      qreal offset         = staffType1->yoffset().val() * spatium1;
-      qreal lineWidth      = score()->styleS(Sid::staffLineWidth).val() * spatium1 * .5;
-
+      qreal offset = staffType1->yoffset().val() * spatium1;
+      qreal lineWidth  = score()->styleS(Sid::staffLineWidth).val() * spatium1 * .5;
       y1       = offset + from * lineDistance * .5 - lineWidth ;
-      //qreal y2 = offset + (staffType1->lines() * 2 - 2 + to) * lineDistance * .5 + lineWidth;
-
-      if (_spanStaff) {
-            // we need spatium and line distance of bottom staff
-            // as it may be scalled diferently
-            const Staff* staff2 = score()->staff(staffIdx2);
-            const StaffType* staffType2 = staff2 ? staff2->staffType(tick) : staffType1;
-            //double spatium2 = staffType2->spatium(score());
-            //double lineDistance2 = staffType2->lineDistance().val() * spatium2;
-            //double startStaffY = system->staff(staffIdx1)->y();
-
-            y2 = offset + (staffType1 ->lines() * 2 - 2 + to) * lineDistance  * .5 + lineWidth;
-
-            // if bottom staff is single line, set span-to zeropoint to the top of the standard barline
-            if (staffType2->lines() <= 1)
-                  ;//y2 += BARLINE_SPAN_1LINESTAFF_FROM * lineDistance2 * 0.5;
-            }
+      if (isBottom)
+            y2 = offset + (staffType1 ->lines() * 2 - 2 + to) * lineDistance  * .5 + lineWidth ;
+      else // span to top of next staff
+            y2 = measure->staffLines(staffIdx2)->y1() - sysStaff1Y;
       }
 
 //---------------------------------------------------------
