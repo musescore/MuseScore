@@ -164,8 +164,21 @@ Segment* FretDiagram::segment() const
 
 //---------------------------------------------------------
 //   fromString
-///   Create diagram from string like "XO-123"
-///   Always assume barre on the first visible fret
+//   Create diagram from string like "XO-[1-O][1-X,2-O,3-S][3-T];B1[0-5];B..."
+//   - Each character or bracketed block represents a string, from lowest to highest.
+//   - 'X' = muted string (cross marker)
+//   - 'O' = open string (circle marker)
+//   - '-' = empty or unused string
+//   - [fret-type,...] = one or more fretted dots on that string:
+//       • fret is absolute (already includes offset)
+//       • type is:
+//           - O = circle
+//           - X = cross
+//           - S = square
+//           - T = triangle
+//   - Example: [1-X,2-O,3-S] means three dots on frets 1, 2, and 3 with different types
+//   - Barre chords follow after ';', in the format: B{fret}[{start}-{end}]
+//     e.g. B1[0-5] = barre on fret 1 from string 0 to 5
 //---------------------------------------------------------
 
 std::shared_ptr<FretDiagram> FretDiagram::createFromPattern(Score* score, const String& s)
@@ -573,31 +586,77 @@ void FretDiagram::applyDiagramPattern(FretDiagram* diagram, const String& patter
 {
     diagram->clear();
 
-    int strings = static_cast<int>(pattern.size());
+    const std::vector<String> parts = pattern.split(';');
+    if (parts.empty()) {
+        return;
+    }
 
-    diagram->setStrings(strings);
+    const String& mainPart = parts[0];
+    std::vector<String> stringTokens;
+
+    for (size_t i = 0; i < mainPart.size();) {
+        if (mainPart[i] == u'[') {
+            size_t rb = mainPart.indexOf(u']', i);
+            if (rb != muse::nidx) {
+                stringTokens.push_back(mainPart.mid(i, rb - i + 1));
+                i = rb + 1;
+                continue;
+            }
+        }
+        stringTokens.push_back(mainPart.mid(i, 1));
+        ++i;
+    }
+
+    const int stringCount = static_cast<int>(stringTokens.size());
+    diagram->setStrings(stringCount);
     diagram->setFrets(4);
     diagram->setPropertyFlags(Pid::FRET_STRINGS, PropertyFlags::UNSTYLED);
     diagram->setPropertyFlags(Pid::FRET_FRETS,   PropertyFlags::UNSTYLED);
-    int offset = 0;
-    int barreString = -1;
-    std::vector<std::pair<int, int> > dotsToAdd;
 
-    for (int i = 0; i < strings; i++) {
-        Char c = pattern.at(i);
-        if (c == 'X' || c == 'O') {
-            FretMarkerType mt = (c == 'X' ? FretMarkerType::CROSS : FretMarkerType::CIRCLE);
-            diagram->setMarker(i, mt);
-        } else if (c == '-' && barreString == -1) {
-            barreString = i;
-        } else {
-            int fret = c.digitValue();
-            if (fret != -1) {
-                dotsToAdd.push_back(std::make_pair(i, fret));
-                if (fret - 3 > 0 && offset < fret - 3) {
-                    offset = fret - 3;
+    int offset = 0;
+
+    for (int i = 0; i < stringCount; ++i) {
+        const String& token = stringTokens[i];
+
+        if (token == u"-") {
+            continue;
+        }
+
+        if (token.startsWith(u"[") && token.endsWith(u"]")) {
+            // Example: [1-O,2-X,3-S]
+            String inner = token.mid(1, token.size() - 2);
+            std::vector<String> pairs = inner.split(u',');
+
+            for (const String& p : pairs) {
+                int dash = p.indexOf(u'-');
+                if (dash > 0) {
+                    int fret = p.left(dash).toInt();
+                    Char typeChar = p.mid(dash + 1, 1).at(0);
+                    FretDotType dt;
+
+                    switch (typeChar.unicode()) {
+                    case 'X': dt = FretDotType::CROSS;
+                        break;
+                    case 'O': dt = FretDotType::NORMAL;
+                        break;
+                    case 'S': dt = FretDotType::SQUARE;
+                        break;
+                    case 'T': dt = FretDotType::TRIANGLE;
+                        break;
+                    default:  dt = FretDotType::NORMAL;
+                        break;
+                    }
+
+                    diagram->setDot(i, fret - offset, true, dt);
+                    if (fret - 3 > 0 && offset < fret - 3) {
+                        offset = fret - 3;
+                    }
                 }
             }
+        } else if (token == u"X") {
+            diagram->setMarker(i, FretMarkerType::CROSS);
+        } else if (token == u"O") {
+            diagram->setMarker(i, FretMarkerType::CIRCLE);
         }
     }
 
@@ -605,46 +664,106 @@ void FretDiagram::applyDiagramPattern(FretDiagram* diagram, const String& patter
         diagram->setFretOffset(offset);
     }
 
-    for (const std::pair<int, int>& d : dotsToAdd) {
-        diagram->setDot(d.first, d.second - offset, true);
-    }
+    for (size_t i = 1; i < parts.size(); ++i) {
+        const String& barrePart = parts[i];
+        if (!barrePart.startsWith(u'B')) {
+            continue;
+        }
 
-    // This assumes that any barre goes to the end of the fret
-    if (barreString >= 0) {
-        diagram->setBarre(barreString, -1, 1);
+        int lb = barrePart.indexOf(u'[');
+        int rb = barrePart.indexOf(u']');
+        if (lb < 2 || rb < lb) {
+            continue;
+        }
+
+        int fret = barrePart.mid(1, lb - 1).toInt();
+        if (fret <= 0) {
+            continue;
+        }
+
+        String range = barrePart.mid(lb + 1, rb - lb - 1);
+        int dash = range.indexOf('-');
+        if (dash > 0) {
+            int start = range.left(dash).toInt();
+            int end = range.mid(dash + 1).toInt();
+            if (start >= 0 && end >= start && end < stringCount) {
+                diagram->setBarre(start, end, fret - offset);
+            }
+        }
     }
 }
 
 String FretDiagram::patternFromDiagram(const FretDiagram* diagram)
 {
-    int strings = diagram->strings();
-    int offset = diagram->fretOffset();
+    const int strings = diagram->strings();
+    const int offset = diagram->fretOffset();
 
-    String emptyPattern = blankPattern(strings);
-    String pattern = emptyPattern;
-
+    StringList patternParts;
     const DotMap& dotsMap = diagram->dots();
 
     for (int i = 0; i < strings; ++i) {
-        FretItem::Marker marker = diagram->marker(i);
+        const FretItem::Marker marker = diagram->marker(i);
+
         if (marker.mtype == FretMarkerType::CROSS) {
-            pattern[i] = 'X';
+            patternParts.push_back(u"X");
             continue;
         } else if (marker.mtype == FretMarkerType::CIRCLE) {
-            pattern[i] = 'O';
+            patternParts.push_back(u"O");
             continue;
         }
 
-        auto it = dotsMap.find(i);
+        const auto it = dotsMap.find(i);
         if (it != dotsMap.end() && !it->second.empty()) {
-            const FretItem::Dot& d = it->second.front();
-            if (d.fret >= 0) {
-                pattern[i] = '0' + (d.fret + offset);
+            const auto& dotList = it->second;
+            StringList dotDescriptions;
+            for (const auto& dot : dotList) {
+                int actualFret = dot.fret + offset;
+                Char typeChar = u'O';
+
+                switch (dot.dtype) {
+                case FretDotType::NORMAL:   typeChar = u'O';
+                    break;
+                case FretDotType::CROSS:    typeChar = u'X';
+                    break;
+                case FretDotType::SQUARE:   typeChar = u'S';
+                    break;
+                case FretDotType::TRIANGLE: typeChar = u'T';
+                    break;
+                default: break;
+                }
+
+                dotDescriptions.push_back(String::number(actualFret) + u'-' + typeChar);
             }
+
+            patternParts.push_back(u'[' + dotDescriptions.join(u",") + u']');
+        } else {
+            patternParts.push_back(u"-");
         }
     }
 
-    return pattern != emptyPattern ? pattern : String();
+    String pattern = patternParts.join(u"");
+
+    const BarreMap& barres = diagram->barres();
+    StringList barreParts;
+    for (const auto& [fret, b] : barres) {
+        if (!b.exists()) {
+            continue;
+        }
+
+        int adjustedFret = fret + offset;
+        int start = b.startString;
+        int end = (b.endString != -1) ? b.endString : strings - 1;
+
+        barreParts.push_back(u'B' + String::number(adjustedFret)
+                             + u'[' + String::number(start)
+                             + u'-' + String::number(end) + u']');
+    }
+
+    if (!barreParts.empty()) {
+        pattern += u';' + barreParts.join(u";");
+    }
+
+    return pattern;
 }
 
 void FretDiagram::applyAlignmentToHarmony()
@@ -663,8 +782,6 @@ void FretDiagram::applyAlignmentToHarmony()
 
 void FretDiagram::clear()
 {
-    initDefaultValues();
-
     m_barres.clear();
     m_dots.clear();
     m_markers.clear();
