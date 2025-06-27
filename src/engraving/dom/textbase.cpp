@@ -2824,6 +2824,12 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
 
     bool rv = true;
     switch (pid) {
+    case Pid::COLOR:
+        if (color() == frameColor()) {
+            setFrameColor(v.value<Color>());
+        }
+        EngravingItem::setProperty(pid, v);
+        break;
     case Pid::TEXT_STYLE:
         initTextStyleType(v.value<TextStyleType>());
         break;
