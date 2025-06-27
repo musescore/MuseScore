@@ -64,6 +64,8 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
         Parenthesis* paren = leftParen ? leftParen : rightParen;
         const bool leftBracket = paren->direction() == DirectionH::LEFT;
         double minDist = 0.0;
+        // INTERNAL PAREN SPACING - TODO INCORRECT.
+        // We are spacing the parent and the paren here. We should not replace the paren type with the parent type
         if (!leftBracket && itemAddToSkyline) {
             // Space against existing item shape
             minDist = HorizontalSpacing::minHorizontalDistance(dummyItemShape, paren->shape().translated(
@@ -88,6 +90,8 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
     const double itemLeftX = parent->pos().x();
     const double itemRightX = itemLeftX + parent->width();
 
+    // INTERNAL PAREN SPACING - TODO INCORRECT
+    // We are spacing the parent and the paren here. We should not replace the paren type with the parent type
     const double leftParenPadding = HorizontalSpacing::minHorizontalDistance(leftParen->shape().translated(leftParen->pos()),
                                                                              dummyItemShape, leftParen->spatium());
     leftParen->mutldata()->moveX(-leftParenPadding);
@@ -101,7 +105,7 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
     // is larger than the width of the item the parentheses surrounds. In this case, the result is visually unbalanced.  Move both parens
     // to the left (relative to the segment) in order to centre the item: (b  ) -> ( b )
     const double itemWidth = parent->width();
-    const double parenPadding = parent->score()->paddingTable().at(ElementType::PARENTHESIS).at(ElementType::PARENTHESIS);
+    const double parenPadding = parent->score()->paddingTable()->at(ElementType::PARENTHESIS).at(ElementType::PARENTHESIS);
 
     if (itemWidth >= parenPadding) {
         return;

@@ -142,6 +142,7 @@ private:
     static void computeLedgerRestPadding(const Rest* rest2, double& padding);
     static bool isSpecialLyricsPaddingType(ElementType type);
     static void computeLyricsPadding(const Lyrics* lyrics1, const EngravingItem* item2, double& padding);
+    static double computeParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2);
 
     static bool isSameVoiceKerningLimited(const EngravingItem* item);
     static bool isNeverKernable(const EngravingItem* item);

@@ -3256,7 +3256,6 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         Symbol* s = new Symbol(n);
         s->setTrack(n->track());
         TRead::read(s, e, ctx);
-        n->add(s);
     } else if (tag == "Image") {
         if (MScore::noImages) {
             e.skipCurrentElement();

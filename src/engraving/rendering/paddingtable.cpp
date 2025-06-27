@@ -22,16 +22,20 @@
 #include "paddingtable.h"
 
 #include "style/style.h"
+#include "thirdparty/kors_logger/src/log_base.h"
+#include "types/typesconv.h"
 
 using namespace mu::engraving;
 
-void PaddingTable::createTable(const MStyle& style)
+void ElementPaddingTable::createTable(const MStyle& style)
 {
     PaddingTable& table = *this;
 
+    double minPadUnit = minimumPaddingUnit();
+
     for (size_t i=0; i < TOT_ELEMENT_TYPES; ++i) {
         for (size_t j=0; j < TOT_ELEMENT_TYPES; ++j) {
-            table[i][j] = m_minimumPaddingUnit;
+            table[i][j] = minPadUnit;
         }
     }
 
@@ -45,7 +49,7 @@ void PaddingTable::createTable(const MStyle& style)
      * allowed to get much closer. So we set the general padding at minimumPaddingUnit,
      * but we introduce an appropriate exception for same-voice cases in Shape::minHorizontalDistance().
      */
-    table[ElementType::NOTE][ElementType::NOTE] = m_minimumPaddingUnit;
+    table[ElementType::NOTE][ElementType::NOTE] = minPadUnit;
     table[ElementType::NOTE][ElementType::LEDGER_LINE] = 0.35 * spatium;
     table[ElementType::NOTE][ElementType::ACCIDENTAL]
         = std::max(static_cast<double>(style.styleMM(Sid::accidentalNoteDistance)), 0.35 * spatium);
@@ -280,4 +284,123 @@ void PaddingTable::createTable(const MStyle& style)
     for (auto& elem : table) {
         elem[ElementType::TAPPING_HALF_SLUR_SEGMENT] = elem[ElementType::ARTICULATION];
     }
+}
+
+void ParenthesisPaddingTable::createTable(const MStyle& style)
+{
+    PaddingTable& table = *this;
+
+    double minPadUnit = minimumPaddingUnit();
+
+    for (size_t i=0; i < TOT_ELEMENT_TYPES; ++i) {
+        for (size_t j=0; j < TOT_ELEMENT_TYPES; ++j) {
+            table[i][j] = minPadUnit;
+        }
+    }
+
+    double spatium = style.spatium();
+    const double ledgerLength = style.styleMM(Sid::ledgerLineLength);
+    // The elements in this table are the PARENT items
+
+    // CLEF, KEY, TIME SIG PARENS
+    table[ElementType::NOTE][ElementType::CLEF] = style.styleMM(Sid::noteBarDistance);
+    table[ElementType::NOTE][ElementType::KEYSIG] = style.styleMM(Sid::noteBarDistance);
+    table[ElementType::NOTE][ElementType::TIMESIG] = style.styleMM(Sid::noteBarDistance);
+
+    table[ElementType::STEM][ElementType::CLEF] = 0.35 * spatium;
+    table[ElementType::STEM][ElementType::KEYSIG] = 0.35 * spatium;
+    table[ElementType::STEM][ElementType::TIMESIG] = 0.35 * spatium;
+
+    table[ElementType::HOOK][ElementType::CLEF] = 0.35 * spatium;
+    table[ElementType::HOOK][ElementType::KEYSIG] = 0.35 * spatium;
+    table[ElementType::HOOK][ElementType::TIMESIG] = 0.35 * spatium;
+
+    table[ElementType::NOTEDOT][ElementType::CLEF] = 0.35 * spatium;
+    table[ElementType::NOTEDOT][ElementType::KEYSIG] = 0.35 * spatium;
+    table[ElementType::NOTEDOT][ElementType::TIMESIG] = 0.35 * spatium;
+
+    table[ElementType::REST][ElementType::CLEF] = table[ElementType::NOTE][ElementType::CLEF];
+    table[ElementType::REST][ElementType::KEYSIG] = table[ElementType::NOTE][ElementType::KEYSIG];
+    table[ElementType::REST][ElementType::TIMESIG] = table[ElementType::NOTE][ElementType::TIMESIG];
+
+    table[ElementType::CLEF][ElementType::CLEF] = 0.25 * spatium;
+    table[ElementType::CLEF][ElementType::KEYSIG] = 0.25 * spatium;
+    table[ElementType::CLEF][ElementType::TIMESIG] = 0.25 * spatium;
+
+    table[ElementType::BAR_LINE][ElementType::CLEF] = 0.5 * spatium;
+    table[ElementType::BAR_LINE][ElementType::KEYSIG] = 0.5 * spatium;
+    table[ElementType::BAR_LINE][ElementType::TIMESIG] = 0.5 * spatium;
+
+    table[ElementType::KEYSIG][ElementType::CLEF] = 0.25 * spatium;
+    table[ElementType::KEYSIG][ElementType::KEYSIG] = 0.25 * spatium;
+    table[ElementType::KEYSIG][ElementType::TIMESIG] = 0.25 * spatium;
+
+    table[ElementType::TIMESIG][ElementType::CLEF] = 0.25 * spatium;
+    table[ElementType::TIMESIG][ElementType::KEYSIG] = 0.25 * spatium;
+    table[ElementType::TIMESIG][ElementType::TIMESIG] = 0.25 * spatium;
+
+    table[ElementType::CLEF][ElementType::BAR_LINE] = 0.5 * spatium;
+    table[ElementType::CLEF][ElementType::KEYSIG] = 0.35 * spatium;
+    table[ElementType::CLEF][ElementType::TIMESIG] = 0.2 * spatium;
+    table[ElementType::CLEF][ElementType::CLEF] = 0.2 * spatium;
+    table[ElementType::CLEF][ElementType::STEM] = 0.35 * spatium;
+    table[ElementType::CLEF][ElementType::NOTE] = style.styleMM(Sid::barNoteDistance);
+    table[ElementType::CLEF][ElementType::REST] = table[ElementType::CLEF][ElementType::NOTE];
+    table[ElementType::CLEF][ElementType::NOTEDOT] = 0.35 * spatium;
+    table[ElementType::CLEF][ElementType::HOOK] = 0.35 * spatium;
+    table[ElementType::CLEF][ElementType::PARENTHESIS] = 1.0 * spatium;
+
+    table[ElementType::KEYSIG][ElementType::BAR_LINE] = 0.5 * spatium;
+    table[ElementType::KEYSIG][ElementType::KEYSIG] = 0.35 * spatium;
+    table[ElementType::KEYSIG][ElementType::TIMESIG] = 0.2 * spatium;
+    table[ElementType::KEYSIG][ElementType::CLEF] = 0.2 * spatium;
+    table[ElementType::KEYSIG][ElementType::STEM] = 0.35 * spatium;
+    table[ElementType::KEYSIG][ElementType::NOTE] = style.styleMM(Sid::barNoteDistance);
+    table[ElementType::KEYSIG][ElementType::REST] = table[ElementType::KEYSIG][ElementType::NOTE];
+    table[ElementType::KEYSIG][ElementType::NOTEDOT] = 0.35 * spatium;
+    table[ElementType::KEYSIG][ElementType::HOOK] = 0.35 * spatium;
+    table[ElementType::KEYSIG][ElementType::PARENTHESIS] = 1.0 * spatium;
+
+    table[ElementType::TIMESIG][ElementType::BAR_LINE] = 0.5 * spatium;
+    table[ElementType::TIMESIG][ElementType::KEYSIG] = 0.35 * spatium;
+    table[ElementType::TIMESIG][ElementType::TIMESIG] = 0.2 * spatium;
+    table[ElementType::TIMESIG][ElementType::CLEF] = 0.2 * spatium;
+    table[ElementType::TIMESIG][ElementType::STEM] = 0.35 * spatium;
+    table[ElementType::TIMESIG][ElementType::NOTE] = style.styleMM(Sid::barNoteDistance);
+    table[ElementType::TIMESIG][ElementType::REST] = table[ElementType::TIMESIG][ElementType::NOTE];
+    table[ElementType::TIMESIG][ElementType::NOTEDOT] = 0.35 * spatium;
+    table[ElementType::TIMESIG][ElementType::HOOK] = 0.35 * spatium;
+    table[ElementType::TIMESIG][ElementType::PARENTHESIS] = 1.0 * spatium;
+
+    // NOTEHEAD PARENS
+    table[ElementType::NOTE][ElementType::LEDGER_LINE] = 0.35 * spatium;
+    table[ElementType::NOTE][ElementType::ACCIDENTAL]
+        = std::max(static_cast<double>(style.styleMM(Sid::accidentalNoteDistance)), 0.35 * spatium);
+    table[ElementType::NOTE][ElementType::REST] = style.styleMM(Sid::minNoteDistance);
+    table[ElementType::NOTE][ElementType::CLEF] = 0.8 * spatium;
+    table[ElementType::NOTE][ElementType::ARPEGGIO] = 0.6 * spatium;
+    table[ElementType::NOTE][ElementType::BAR_LINE] = style.styleMM(Sid::noteBarDistance);
+    table[ElementType::NOTE][ElementType::KEYSIG] = 0.75 * spatium;
+    table[ElementType::NOTE][ElementType::TIMESIG] = 0.75 * spatium;
+    table[ElementType::NOTE][ElementType::PARENTHESIS] = style.styleMM(Sid::noteBarDistance);
+    table[ElementType::NOTE][ElementType::STEM] = style.styleMM(Sid::minNoteDistance);
+
+    table[ElementType::NOTE][ElementType::NOTE] = 0.35 * spatium;
+
+    table[ElementType::NOTE][ElementType::NOTE]
+        = std::max(static_cast<double>(style.styleMM(Sid::accidentalNoteDistance)), 0.35 * spatium);
+    table[ElementType::STEM][ElementType::NOTE] = 0.35 * spatium;
+    table[ElementType::LEDGER_LINE][ElementType::NOTE]
+        = std::max(static_cast<double>(style.styleMM(
+                                           Sid::accidentalNoteDistance)), table[ElementType::NOTE][ElementType::NOTE] - ledgerLength / 2);
+    table[ElementType::HOOK][ElementType::NOTE] = 0.35 * spatium;
+    table[ElementType::NOTEDOT][ElementType::NOTE] = 0.35 * spatium;
+    table[ElementType::REST][ElementType::NOTE] = 0.45 * spatium;
+    table[ElementType::CLEF][ElementType::NOTE] = 0.6 * spatium;
+    table[ElementType::BAR_LINE][ElementType::NOTE] = style.styleMM(Sid::barAccidentalDistance);
+    table[ElementType::KEYSIG][ElementType::NOTE] = 1.6 * spatium;
+    table[ElementType::TIMESIG][ElementType::NOTE] = 0.8 * spatium;
+    table[ElementType::ARPEGGIO][ElementType::NOTE] = style.styleMM(Sid::arpeggioAccidentalDistance);
+
+    table[ElementType::NOTEDOT][ElementType::NOTE] = 0.2 * spatium;
 }
