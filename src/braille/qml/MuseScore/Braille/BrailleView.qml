@@ -31,10 +31,8 @@ import MuseScore.Braille 1.0
 StyledFlickable {
     id: root
 
-    // Signal pour demander le dock dans la zone dédiée
     signal requestDockToBrailleZone()
 
-    // Pour suivre l'état flottant/docké
     property bool isFloating: false
 
     property NavigationPanel navigationPanel: NavigationPanel {
@@ -80,7 +78,6 @@ StyledFlickable {
         }
     }
 
-    // Barre de navigation en haut, style Mixer
     Row {
         id: titleBar
         anchors.top: parent.top
@@ -299,6 +296,7 @@ StyledFlickable {
                 if (event.modifiers === Qt.AltModifier) {
                     keys = keys === "" ? "Alt" : keys += "+Alt";
                 }
+
                 if (event.modifiers === Qt.ControlModifier) {
                     keys = keys === "" ? "Ctrl" : keys += "+Ctrl";
                 }

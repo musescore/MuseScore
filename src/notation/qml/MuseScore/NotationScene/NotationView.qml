@@ -246,7 +246,7 @@ FocusScope {
                 SplitView.preferredHeight: 50
                 SplitView.minimumHeight: 30
 
-                // PATCH : Ajout de la logique pour replacer Braille dans sa zone dédiée
+                // PATCH : Added logic to place Braille back in its dedicated area
                 sourceComponent: BrailleView {
                     navigationPanel.section: navSec
                     navigationPanel.order: brailleViewLoader.navigationOrder
