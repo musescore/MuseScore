@@ -4289,7 +4289,7 @@ Hairpin* Score::addHairpinToDynamicOnGripDrag(Dynamic* dynamic, bool isLeftGrip,
     constexpr double spacingFactor = 0.5;
 
     // Ensure time tick segments are created
-    EditTimeTickAnchors::updateAnchors(dynamic, track);
+    EditTimeTickAnchors::updateAnchors(dynamic);
 
     // Find segment of type ChordRest or TimeTick near cursor postion
     dragPosition(pos, &staffIndex, &seg, spacingFactor, /*allowTimeAnchor*/ true);

@@ -343,7 +343,6 @@ public:
     void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
 
     bool hasParentSegment() const { return explicitParent() && parent()->isSegment(); }
-    virtual bool needStartEditingAfterSelecting() const override { return hasParentSegment(); }
     virtual bool allowTimeAnchor() const override { return hasParentSegment(); }
     virtual void startEdit(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;

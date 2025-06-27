@@ -4750,6 +4750,18 @@ void NotationInteraction::endEditElement()
     notifyAboutNotationChanged();
 }
 
+void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
+{
+    EngravingItem* selectedElement = m_selection->element();
+    if (selectedElement && selectedElement->allowTimeAnchor() && event->type() == QKeyEvent::Type::KeyPress) {
+        EditTimeTickAnchors::updateAnchors(selectedElement);
+    } else {
+        score()->hideAnchors();
+    }
+
+    apply();
+}
+
 void NotationInteraction::doEndEditElement()
 {
     if (m_editData.element) {

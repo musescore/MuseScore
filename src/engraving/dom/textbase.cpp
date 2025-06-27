@@ -3284,7 +3284,7 @@ void TextBase::editDrag(EditData& ed)
         return;
     }
 
-    EditTimeTickAnchors::updateAnchors(this, track());
+    EditTimeTickAnchors::updateAnchors(this);
 
     KeyboardModifiers km = ed.modifiers;
     if (km & (ShiftModifier | ControlModifier)) {
@@ -3350,16 +3350,6 @@ bool TextBase::editNonTextual(EditData& ed)
         return EngravingItem::edit(ed);
     }
 
-    if (ed.key == Key_Shift) {
-        if (ed.isKeyRelease) {
-            score()->hideAnchors();
-        } else {
-            EditTimeTickAnchors::updateAnchors(this, track());
-        }
-        triggerLayout();
-        return true;
-    }
-
     if (!isEditAllowed(ed)) {
         return false;
     }
@@ -3382,7 +3372,7 @@ bool TextBase::editNonTextual(EditData& ed)
     bool moveSeg = shiftMod && (ed.key == Key_Left || ed.key == Key_Right);
     if (moveSeg) {
         bool moved = moveSegment(ed);
-        EditTimeTickAnchors::updateAnchors(this, track());
+        EditTimeTickAnchors::updateAnchors(this);
         checkMeasureBoundariesAndMoveIfNeed();
         return moved;
     }

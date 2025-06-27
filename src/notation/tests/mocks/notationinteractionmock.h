@@ -136,6 +136,8 @@ public:
     MOCK_METHOD(void, editElement, (QKeyEvent*), (override));
     MOCK_METHOD(void, endEditElement, (), (override));
 
+    MOCK_METHOD(void, updateTimeTickAnchors, (QKeyEvent*), (override));
+
     MOCK_METHOD(void, splitSelectedMeasure, (), (override));
     MOCK_METHOD(void, joinSelectedMeasures, (), (override));
 

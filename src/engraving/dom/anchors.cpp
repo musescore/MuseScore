@@ -39,7 +39,7 @@ namespace mu::engraving {
  * EditTimeTickAnchors
  * ************************************/
 
-void EditTimeTickAnchors::updateAnchors(const EngravingItem* item, track_idx_t track)
+void EditTimeTickAnchors::updateAnchors(const EngravingItem* item)
 {
     if (!item->allowTimeAnchor()) {
         item->score()->hideAnchors();
@@ -56,7 +56,7 @@ void EditTimeTickAnchors::updateAnchors(const EngravingItem* item, track_idx_t t
         return;
     }
 
-    staff_idx_t staff = track2staff(track);
+    staff_idx_t staff = item->staffIdx();
     Measure* startOneBefore = startMeasure->prevMeasure();
     for (MeasureBase* mb = startOneBefore ? startOneBefore : startMeasure; mb && mb->tick() <= endMeasure->tick(); mb = mb->next()) {
         if (!mb->isMeasure()) {
@@ -72,6 +72,8 @@ void EditTimeTickAnchors::updateAnchors(const EngravingItem* item, track_idx_t t
 
     score->setShowAnchors(ShowAnchors(voiceIdx, staff, startTickMainRegion, endTickMainRegion, startTickExtendedRegion,
                                       endTickExtendedRegion));
+
+    item->triggerLayout();
 }
 
 void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx)

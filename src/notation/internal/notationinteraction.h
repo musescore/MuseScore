@@ -180,6 +180,9 @@ public:
     void editElement(QKeyEvent* event) override;
     void endEditElement() override;
 
+    // Anchors edit
+    void updateTimeTickAnchors(QKeyEvent* event) override;
+
     // Measure
     void splitSelectedMeasure() override;
     void joinSelectedMeasures() override;

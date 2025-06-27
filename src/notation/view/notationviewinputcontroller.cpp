@@ -1221,6 +1221,7 @@ void NotationViewInputController::keyPressEvent(QKeyEvent* event)
         viewInteraction()->editElement(event);
     } else if (event->key() == Qt::Key_Shift) {
         updateShadowNotePopupVisibility();
+        viewInteraction()->updateTimeTickAnchors(event);
     }
 
     updateShadowNotePopupVisibility(/*forceHide*/ true);
@@ -1234,6 +1235,7 @@ void NotationViewInputController::keyReleaseEvent(QKeyEvent* event)
 
     viewInteraction()->editElement(event);
     updateShadowNotePopupVisibility(/*forceHide*/ true);
+    viewInteraction()->updateTimeTickAnchors(event);
 }
 
 void NotationViewInputController::inputMethodEvent(QInputMethodEvent* event)

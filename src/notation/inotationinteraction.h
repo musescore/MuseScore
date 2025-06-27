@@ -174,6 +174,9 @@ public:
     virtual void editElement(QKeyEvent* event) = 0;
     virtual void endEditElement() = 0;
 
+    // Anchors edit
+    virtual void updateTimeTickAnchors(QKeyEvent* event) = 0;
+
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;
 
