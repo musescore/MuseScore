@@ -36,8 +36,8 @@ Item {
     property NavigationSection navigationSection: null
     property int navigationOrderStart: 0
 
-    readonly property bool isAllSelected: voicesModel.isAllSelected && notesInChordModel.isAllSelected && elementsModel.isAllSelected
-    readonly property bool isNoneSelected: voicesModel.isNoneSelected && notesInChordModel.isNoneSelected && elementsModel.isNoneSelected
+    readonly property bool isAllSelected: notesInChordModel.isAllSelected && elementsModel.isAllSelected
+    readonly property bool isNoneSelected: notesInChordModel.isNoneSelected && elementsModel.isNoneSelected
 
     StyledFlickable {
         id: flickable
