@@ -98,7 +98,6 @@ bool ScoreComp::compareFiles(const String& fullPath1, const String& fullPath2)
         if (!file.open(QIODevice::Append)) {
             return false;
         }
-        QTextStream out(&file);
         QString pathToPrint = fullPath1.contains(QStringLiteral("_ref")) ? fullPath1 : fullPath2;
         // Extract only the portion after "/src"
         int srcIndex = pathToPrint.indexOf("/src");
