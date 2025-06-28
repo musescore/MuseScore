@@ -19,12 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_BRAILLE_BRAILLE_H
-#define MU_BRAILLE_BRAILLE_H
+#pragma once
 
 #include <QIODevice>
 
-#include "engraving/dom/types.h"
 #include "engraving/types/types.h"
 
 namespace mu::engraving {
@@ -56,6 +54,8 @@ class TempoText;
 class TimeSig;
 class Tuplet;
 class Volta;
+
+enum class AccidentalType : unsigned char;
 
 #define MAX_LIVE_BRAILLE_LENGTH 10240
 
@@ -236,5 +236,3 @@ private:
     QString brailleSlurAfter(ChordRest* chordRest, const std::vector<Slur*>& slur);
 };
 }
-
-#endif // MU_BRAILLE_BRAILLE_H

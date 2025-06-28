@@ -32,7 +32,6 @@
 
 #include "dom/mscore.h"
 #include "dom/pedal.h"
-#include "dom/types.h"
 
 #include "defaultstyle.h"
 

@@ -31,10 +31,8 @@
 #include <set>
 #include <vector>
 
-#include "chordrest.h"
-
 #include "articulation.h"
-#include "types.h"
+#include "chordrest.h"
 
 #include "draw/types/color.h"
 
@@ -50,6 +48,38 @@ class Stem;
 class StemSlash;
 class TremoloTwoChord;
 class TremoloSingleChord;
+
+enum class NoteType : unsigned char {
+    ///.\{
+    NORMAL        = 0,
+    ACCIACCATURA  = 0x1,
+    APPOGGIATURA  = 0x2,         // grace notes
+    GRACE4        = 0x4,
+    GRACE16       = 0x8,
+    GRACE32       = 0x10,
+    GRACE8_AFTER  = 0x20,
+    GRACE16_AFTER = 0x40,
+    GRACE32_AFTER = 0x80,
+    INVALID       = 0xFF
+                    ///\}
+};
+
+constexpr NoteType operator|(NoteType t1, NoteType t2)
+{
+    return static_cast<NoteType>(static_cast<unsigned char>(t1) | static_cast<unsigned char>(t2));
+}
+
+constexpr bool operator&(NoteType t1, NoteType t2)
+{
+    return static_cast<unsigned char>(t1) & static_cast<unsigned char>(t2);
+}
+
+enum class PlayEventType : unsigned char {
+    ///.\{
+    Auto,         ///< Play events for all notes are calculated by MuseScore.
+    User,         ///< Some play events are modified by user. Those events are written into the mscx file.
+    ///.\}
+};
 
 class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
 {
@@ -388,3 +418,8 @@ private:
     std::vector<Articulation*> m_articulations;
 };
 } // namespace mu::engraving
+
+#ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::engraving::NoteType)
+Q_DECLARE_METATYPE(mu::engraving::PlayEventType)
+#endif

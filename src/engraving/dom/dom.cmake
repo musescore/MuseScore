@@ -367,7 +367,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tuplet.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tuplet.h
     ${CMAKE_CURRENT_LIST_DIR}/tupletmap.h
-    ${CMAKE_CURRENT_LIST_DIR}/types.h
     ${CMAKE_CURRENT_LIST_DIR}/undo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/undo.h
     ${CMAKE_CURRENT_LIST_DIR}/unrollrepeats.cpp

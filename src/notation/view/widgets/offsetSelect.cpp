@@ -22,9 +22,9 @@
 
 #include "offsetSelect.h"
 
-#include "engraving/dom/types.h"
-
 using namespace mu::notation;
+
+using muse::PointF;
 
 OffsetSelect::OffsetSelect(QWidget* parent)
     : QWidget(parent)
@@ -33,8 +33,8 @@ OffsetSelect::OffsetSelect(QWidget* parent)
 
     setFocusProxy(xVal);
 
-    connect(xVal, &QDoubleSpinBox::valueChanged, this, &OffsetSelect::_offsetChanged);
-    connect(yVal, &QDoubleSpinBox::valueChanged, this, &OffsetSelect::_offsetChanged);
+    connect(xVal, &QDoubleSpinBox::valueChanged, this, &OffsetSelect::onOffsetChanged);
+    connect(yVal, &QDoubleSpinBox::valueChanged, this, &OffsetSelect::onOffsetChanged);
 }
 
 void OffsetSelect::setSuffix(const QString& s)
@@ -43,14 +43,14 @@ void OffsetSelect::setSuffix(const QString& s)
     yVal->setSuffix(s);
 }
 
-void OffsetSelect::_offsetChanged()
+void OffsetSelect::onOffsetChanged()
 {
-    emit offsetChanged(QPointF(xVal->value(), yVal->value()));
+    emit offsetChanged({ xVal->value(), yVal->value() });
 }
 
-QPointF OffsetSelect::offset() const
+PointF OffsetSelect::offset() const
 {
-    return QPointF(xVal->value(), yVal->value());
+    return { xVal->value(), yVal->value() };
 }
 
 void OffsetSelect::blockOffset(bool val)
@@ -59,7 +59,7 @@ void OffsetSelect::blockOffset(bool val)
     yVal->blockSignals(val);
 }
 
-void OffsetSelect::setOffset(const QPointF& o)
+void OffsetSelect::setOffset(const PointF& o)
 {
     blockOffset(true);
     xVal->setValue(o.x());

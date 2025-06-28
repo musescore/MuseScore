@@ -23,7 +23,7 @@
 
 #include <engraving/types/fraction.h>
 #include <engraving/types/pitchvalue.h>
-#include <engraving/dom/types.h>
+
 #include "benddatacollector.h"
 #include "benddataprocessor.h"
 

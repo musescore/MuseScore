@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TEXTBASE_H
-#define MU_ENGRAVING_TEXTBASE_H
+#pragma once
 
 #include <variant>
 
@@ -32,7 +31,7 @@
 
 #include "engravingitem.h"
 #include "property.h"
-#include "types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class TextBase;
@@ -589,5 +588,3 @@ inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)
     return (key == Key_Space && modifiers != TextEditingControlModifier) || key == Key_Tab;
 }
 } // namespace mu::engraving
-
-#endif

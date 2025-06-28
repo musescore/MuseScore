@@ -22,11 +22,6 @@
 
 #pragma once
 
-/**
- \file
- Definition of classes Note and NoteHead.
-*/
-
 #include "containers.h"
 
 #include "engravingitem.h"
@@ -36,7 +31,6 @@
 #include "symbol.h"
 #include "tie.h"
 #include "tiejumppointlist.h"
-#include "types.h"
 
 namespace mu::engraving {
 class Factory;
@@ -51,6 +45,7 @@ class Spanner;
 class StaffType;
 class NoteEditData;
 enum class AccidentalType : unsigned char;
+enum class NoteType : unsigned char;
 
 static constexpr int MAX_DOTS = 4;
 
@@ -410,7 +405,7 @@ public:
     void setHarmonic(bool val) { m_harmonic = val; }
     bool harmonic() const { return m_harmonic; }
 
-    bool isGrace() const { return noteType() != NoteType::NORMAL; }
+    bool isGrace() const;
 
     bool isPreBendStart() const;
     bool isGraceBendStart() const;

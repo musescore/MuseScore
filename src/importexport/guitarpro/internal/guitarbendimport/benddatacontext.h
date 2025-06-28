@@ -23,7 +23,6 @@
 #pragma once
 
 #include <engraving/types/types.h>
-#include <engraving/dom/types.h>
 
 // if SPLIT_CHORD_DURATIONS is defined: chord with bend is split to several chords, tied chords may be removed or replaced according to new ticks
 // otherwise - "grace note after" is placed where the "small note head" was in guitar pro, and normal note is placed where normal note was in guitar pro

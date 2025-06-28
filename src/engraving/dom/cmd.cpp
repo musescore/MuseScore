@@ -80,7 +80,6 @@
 #include "timesig.h"
 
 #include "tuplet.h"
-#include "types.h"
 #include "undo.h"
 #include "utils.h"
 

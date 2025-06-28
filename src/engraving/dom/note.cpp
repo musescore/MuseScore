@@ -27,10 +27,8 @@
 
 #include "note.h"
 
-#include <assert.h>
+#include <cassert>
 
-#include "dom/noteline.h"
-#include "dom/volta.h"
 #include "translation.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -40,14 +38,11 @@
 #include "accidental.h"
 #include "actionicon.h"
 #include "articulation.h"
-
 #include "bagpembell.h"
-#include "beam.h"
 #include "barline.h"
-
+#include "beam.h"
 #include "chord.h"
 #include "chordline.h"
-
 #include "drumset.h"
 #include "factory.h"
 #include "fingering.h"
@@ -55,9 +50,10 @@
 #include "guitarbend.h"
 #include "laissezvib.h"
 #include "linkedobjects.h"
-#include "marker.h"
 #include "measure.h"
+#include "navigate.h"
 #include "notedot.h"
+#include "noteline.h"
 #include "part.h"
 #include "partialtie.h"
 #include "pitchspelling.h"
@@ -68,16 +64,9 @@
 #include "stafftype.h"
 #include "stringdata.h"
 #include "tie.h"
-
 #include "undo.h"
 #include "utils.h"
-
-#include "navigate.h"
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-#include "accessibility/accessibleitem.h"
-#include "accessibility/accessibleroot.h"
-#endif
+#include "volta.h"
 
 #include "log.h"
 
@@ -3950,6 +3939,11 @@ bool Note::hasSlideToNote() const
 bool Note::hasSlideFromNote() const
 {
     return m_slideFromType != SlideType::Undefined;
+}
+
+bool Note::isGrace() const
+{
+    return noteType() != NoteType::NORMAL;
 }
 
 bool Note::isPreBendStart() const

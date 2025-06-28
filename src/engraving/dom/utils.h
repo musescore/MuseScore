@@ -23,7 +23,6 @@
 #pragma once
 
 #include "../types/types.h"
-#include "types.h"
 
 #include "interval.h"
 

@@ -27,7 +27,6 @@
 #include "engravingitem.h"
 #include "durationtype.h"
 #include "tapping.h"
-#include "types.h"
 
 namespace mu::engraving {
 class Instrument;
@@ -38,6 +37,8 @@ class TremoloSingleChord;
 
 class SoundFlag;
 class SystemLock;
+
+enum class TripletFeelType : unsigned char;
 
 class Factory
 {
@@ -231,7 +232,7 @@ public:
     static TremoloBar* createTremoloBar(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<TremoloBar> makeTremoloBar(EngravingItem* parent);
 
-    static TripletFeel* createTripletFeel(Segment* parent, TripletFeelType type = TripletFeelType::NONE, bool isAccessibleEnabled = true);
+    static TripletFeel* createTripletFeel(Segment* parent, TripletFeelType type, bool isAccessibleEnabled = true);
 
     static Tuplet* createTuplet(Measure* parent, bool isAccessibleEnabled = true);
     static Tuplet* copyTuplet(const Tuplet& src);

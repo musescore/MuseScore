@@ -20,13 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SELECT_H
-#define MU_ENGRAVING_SELECT_H
+#pragma once
 
 #include "durationtype.h"
 #include "mscore.h"
 #include "pitchspelling.h"
-#include "types.h"
+#include "../types/types.h"
 
 #include "selectionfilter.h"
 
@@ -208,4 +207,3 @@ private:
     String m_lockReason;
 };
 } // namespace mu::engraving
-#endif
