@@ -78,7 +78,10 @@ void WidgetDialogAdapter::updateStayOnTopHint()
 bool WidgetDialogAdapter::eventFilter(QObject* watched, QEvent* event)
 {
     if (event->type() == QEvent::Show && m_onShownCallBack) {
-#ifndef Q_OS_MAC
+#ifdef Q_OS_MAC
+        // Declare it as unused, to avoid warning about unused member
+        UNUSED(m_window)
+#else
         if (m_staysOnTop) {
             m_dialog->windowHandle()->setTransientParent(m_window);
         }
