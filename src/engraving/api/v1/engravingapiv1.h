@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_APIV1_ENGRAVINGAPIV1_H
-#define MU_ENGRAVING_APIV1_ENGRAVINGAPIV1_H
+#pragma once
 
 #include "global/api/apiobject.h"
 
@@ -263,6 +262,26 @@ public:
         return api()->fraction(numerator, denominator);
     }
 
+    Q_INVOKABLE apiv1::OrnamentIntervalWrapper* defaultOrnamentInterval() const
+    {
+        return api()->defaultOrnamentInterval();
+    }
+
+    Q_INVOKABLE apiv1::OrnamentIntervalWrapper* ornamentInterval(int step, int type) const
+    {
+        return api()->ornamentInterval(step, type);
+    }
+
+    Q_INVOKABLE apiv1::IntervalWrapper* interval(int diatonic, int chromatic) const
+    {
+        return api()->interval(diatonic, chromatic);
+    }
+
+    Q_INVOKABLE apiv1::IntervalWrapper* intervalFromOrnamentInterval(apiv1::OrnamentIntervalWrapper* o) const
+    {
+        return api()->intervalFromOrnamentInterval(o);
+    }
+
     Q_INVOKABLE void quit() { api()->quit(); }
 
 private:
@@ -270,5 +289,3 @@ private:
     mutable bool m_selfApi = false;
 };
 }
-
-#endif // MU_ENGRAVING_APIV1_ENGRAVINGAPIV1_H

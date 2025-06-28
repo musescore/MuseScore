@@ -46,6 +46,7 @@ class EngravingItem;
 namespace mu::engraving::apiv1 {
 class EngravingItem;
 class FractionWrapper;
+class OrnamentIntervalWrapper;
 class MsProcess;
 class Score;
 
@@ -483,6 +484,11 @@ public:
 
     Q_INVOKABLE apiv1::FractionWrapper* fraction(int numerator, int denominator) const;
 
+    Q_INVOKABLE apiv1::OrnamentIntervalWrapper* ornamentInterval(int step, int type) const;
+
+    Q_INVOKABLE apiv1::IntervalWrapper* interval(int chromatic, int diatonic) const;
+    Q_INVOKABLE apiv1::IntervalWrapper* intervalFromOrnamentInterval(apiv1::OrnamentIntervalWrapper* o) const;
+
     Q_INVOKABLE void quit();
 
     QString pluginType() const;
@@ -518,6 +524,7 @@ public:
     int mscoreMinorVersion() const;
     int mscoreUpdateVersion() const;
     qreal mscoreDPI() const;
+    OrnamentIntervalWrapper* defaultOrnamentInterval() const;
 
 private:
     mu::engraving::Score* currentScore() const;

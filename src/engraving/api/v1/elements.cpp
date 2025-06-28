@@ -26,7 +26,7 @@
 #include "engraving/dom/undo.h"
 
 // api
-#include "fraction.h"
+#include "apistructs.h"
 #include "part.h"
 
 #include "log.h"
