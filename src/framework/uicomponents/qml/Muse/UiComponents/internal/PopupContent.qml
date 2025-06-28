@@ -93,21 +93,22 @@ FocusScope {
         opacity: root.animationEnabled ? 0.5 : 1.0
         transformOrigin: Item.Center
 
-        ItemWithDropShadow {
+        StyledRectangularDropShadow {
+            anchors.fill: contentBackground
+            visible: root.useDropShadow
+
+            blur: root.padding
+            radius: contentBackground.radius
+        }
+
+        Rectangle {
+            id: contentBackground
             anchors.fill: parent
-            shadow.radius: root.padding
 
-            shadow.visible: root.useDropShadow
-
-            Rectangle {
-                id: contentBackground
-                anchors.fill: parent
-
-                color: ui.theme.popupBackgroundColor
-                radius: 4
-                border.width: 1
-                border.color: ui.theme.strokeColor
-            }
+            color: ui.theme.popupBackgroundColor
+            radius: 4
+            border.width: 1
+            border.color: ui.theme.strokeColor
         }
 
         Canvas {
@@ -132,7 +133,7 @@ FocusScope {
                 ctx.strokeStyle = contentBackground.border.color
                 ctx.beginPath();
 
-                if (opensUpward) {
+                if (root.opensUpward) {
                     ctx.moveTo(0, 0);
                     ctx.lineTo(width / 2, height - 1);
                     ctx.lineTo(width, 0);

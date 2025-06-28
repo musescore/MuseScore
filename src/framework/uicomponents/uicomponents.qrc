@@ -20,7 +20,6 @@
         <file>qml/Muse/UiComponents/GridViewSectional.qml</file>
         <file>qml/Muse/UiComponents/IncrementalPropertyControl.qml</file>
         <file>qml/Muse/UiComponents/InfoPanel.qml</file>
-        <file>qml/Muse/UiComponents/ItemWithDropShadow.qml</file>
         <file>qml/Muse/UiComponents/ListItemBlank.qml</file>
         <file>qml/Muse/UiComponents/MenuButton.qml</file>
         <file>qml/Muse/UiComponents/NavigationFocusBorder.qml</file>
@@ -38,7 +37,7 @@
         <file>qml/Muse/UiComponents/SeparatorLine.qml</file>
         <file>qml/Muse/UiComponents/StyledBusyIndicator.qml</file>
         <file>qml/Muse/UiComponents/StyledDialogView.qml</file>
-        <file>qml/Muse/UiComponents/StyledDropShadow.qml</file>
+        <file>qml/Muse/UiComponents/StyledRectangularDropShadow.qml</file>
         <file>qml/Muse/UiComponents/StyledDropdown.qml</file>
         <file>qml/Muse/UiComponents/StyledFlickable.qml</file>
         <file>qml/Muse/UiComponents/StyledGridView.qml</file>
