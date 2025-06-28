@@ -19,7 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
+import QtQuick.Effects
 
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
@@ -130,24 +131,23 @@ Item {
         }
     ]
 
+    MultiEffect {
+        anchors.fill: icon
+        source: icon
 
-    ItemWithDropShadow {
+        shadowEnabled: true
+        shadowVerticalOffset: 1
+        shadowColor: Qt.rgba(0, 0, 0, 0.25)
+        blurMax: 4
+    }
+
+    StyledIconLabel {
+        id: icon
         anchors.centerIn: parent
 
-        implicitWidth: icon.implicitWidth
-        implicitHeight: icon.implicitHeight
-
-        shadow.horizontalOffset: 0
-        shadow.verticalOffset: 1
-        shadow.radius: 4
-
-        StyledIconLabel {
-            id: icon
-
-            iconCode: root.isProgress ? IconCode.STOP_FILL : IconCode.CLOUD_FILL
-            font.pixelSize: root.isProgress ? 12 : 14
-            color: "white"
-        }
+        iconCode: root.isProgress ? IconCode.STOP_FILL : IconCode.CLOUD_FILL
+        font.pixelSize: root.isProgress ? 12 : 14
+        color: "white"
     }
 
     MouseArea {

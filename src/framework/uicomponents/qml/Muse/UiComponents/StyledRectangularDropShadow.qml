@@ -19,13 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+import QtQuick
+import QtQuick.Effects
 
-import Muse.GraphicalEffects 1.0
-
-EffectDropShadow {
-    color: "#40000000"
-    verticalOffset: 4
-    radius: 12
-    samples: 18
+RectangularShadow {
+    offset.x: 0
+    offset.y: 2
+    color: Qt.rgba(0.0, 0.0, 0.0, 0.25)
+    blur: 10
 }
