@@ -1773,7 +1773,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(user11FrameRound,                           0),
     styleDef(user11FrameFgColor,                         PropertyValue::fromValue(Color::BLACK)),
     styleDef(user11FrameBgColor,                         PropertyValue::fromValue(Color::transparent)),
-    styleDef(user1Position,                              AlignH::LEFT),
+    styleDef(user11Position,                             AlignH::LEFT),
 
     styleDef(user12Name,                                 ""),
     styleDef(user12FontFace,                             "Edwin"),
