@@ -319,6 +319,10 @@ EditStyle::EditStyle(QWidget* parent)
     partialSlurAngle->addButton(partialSlursAngleNormal, 0);
     partialSlurAngle->addButton(partialSlursAngleWeird, 1);
 
+    QButtonGroup* tupletRhythmicCenter = new QButtonGroup(this);
+    tupletRhythmicCenter->addButton(tupletNumberGraphicalCenter, 0);
+    tupletRhythmicCenter->addButton(tupletNumberRythmicCenter, 1);
+
     // ====================================================
     // Style widgets
     // ====================================================
@@ -565,6 +569,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::tupletMaxSlope,          false, tupletMaxSlope,          resetTupletMaxSlope },
         { StyleId::tupletOutOfStaff,        false, tupletOutOfStaff,        0 },
         { StyleId::tupletUseSymbols,        false, tupletUseSymbols,        resetTupletUseSymbols },
+        { StyleId::tupletExtendToEndOfDuration, false, tupletExtendBracketToEndOfDuration, 0 },
+        { StyleId::tupletNumberRythmicCenter, false, tupletRhythmicCenter, 0 },
 
         { StyleId::repeatBarTips,            false, showRepeatBarTips,            resetShowRepeatBarTips },
         { StyleId::startBarlineSingle,       false, showStartBarlineSingle,       resetShowStartBarlineSingle },
@@ -2149,6 +2155,7 @@ bool EditStyle::isBoolStyleRepresentedByButtonGroup(StyleId id)
     case StyleId::singleMeasureMMRestUseNormalRest:
     case StyleId::mmRestConstantWidth:
     case StyleId::angleHangingSlursAwayFromStaff:
+    case StyleId::tupletNumberRythmicCenter:
         return true;
     default:
         return false;
