@@ -2,18 +2,17 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
-
 #include <QQuickWindow>
-
-#ifdef QT_CONCURRENT_SUPPORTED
-#include <QThreadPool>
-#endif
 
 #include "appshell/view/internal/splashscreen/splashscreen.h"
 #include "ui/iuiengine.h"
+#include "ui/graphicsapiprovider.h"
 
 #include "muse_framework_config.h"
-#include "ui/graphicsapiprovider.h"
+#include "app_config.h"
+#ifdef QT_CONCURRENT_SUPPORTED
+#include <QThreadPool>
+#endif
 
 #include "log.h"
 
@@ -83,6 +82,7 @@ void GuiApp::perform()
         m->onPreInit(runMode);
     }
 
+#ifdef MUE_ENABLE_SPLASHSCREEN
     SplashScreen* splashScreen = nullptr;
     if (multiInstancesProvider()->isMainInstance()) {
         splashScreen = new SplashScreen(SplashScreen::Default);
@@ -104,6 +104,12 @@ void GuiApp::perform()
     if (splashScreen) {
         splashScreen->show();
     }
+#else
+    struct SplashScreen {
+        void close() {}
+    };
+    SplashScreen* splashScreen = nullptr;
+#endif
 
     // ====================================================
     // Setup modules: onInit
@@ -155,6 +161,7 @@ void GuiApp::perform()
         }
 
         LOGI() << "Using graphics api: " << GraphicsApiProvider::graphicsApiName();
+        LOGI() << "Gui platform: " << QGuiApplication::platformName();
 
         if (GraphicsApiProvider::graphicsApi() == GraphicsApi::Software) {
             gApiProvider->destroy();
@@ -178,14 +185,14 @@ void GuiApp::perform()
 
     QQmlApplicationEngine* engine = ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
-#if defined(Q_OS_WIN)
-    const QString mainQmlFile = "/platform/win/Main.qml";
+#ifdef MUE_CONFIGURATION_IS_APPWEB
+    const QString mainQmlFile = "/Main.qml";
 #elif defined(Q_OS_MACOS)
     const QString mainQmlFile = "/platform/mac/Main.qml";
+#elif defined(Q_OS_WIN)
+    const QString mainQmlFile = "/platform/win/Main.qml";
 #elif defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     const QString mainQmlFile = "/platform/linux/Main.qml";
-#elif defined(Q_OS_WASM)
-    const QString mainQmlFile = "/platform/web/Main.qml";
 #endif
 
 #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE

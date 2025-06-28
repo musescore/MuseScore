@@ -361,27 +361,14 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 }
             } else if (e->isHarmony() && transposeChordNames) {
                 Harmony* h  = toHarmony(e);
-                int rootTpc, baseTpc;
                 Interval kv = e->staff()->transpose(e->tick());
                 Interval iv = e->part()->instrument(e->tick())->transpose();
                 Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
                 if (mode == TransposeMode::DIATONICALLY) {
-                    Fraction tick = Fraction(0, 1);
-                    if (h->explicitParent()->isSegment()) {
-                        tick = toSegment(h->explicitParent())->tick();
-                    } else if (h->explicitParent()->isFretDiagram() && h->explicitParent()->explicitParent()->isSegment()) {
-                        tick = toSegment(h->explicitParent()->explicitParent())->tick();
-                    }
-                    Key key = !h->staff() ? Key::C : h->staff()->key(tick);
-                    rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
-                                                        transposeInterval, key, trKeys, useDoubleSharpsFlats);
-                    baseTpc = transposeTpcDiatonicByKey(h->bassTpc(),
-                                                        transposeInterval, key, trKeys, useDoubleSharpsFlats);
+                    undoTransposeHarmonyDiatonic(h, transposeInterval, useDoubleSharpsFlats, trKeys);
                 } else {
-                    rootTpc = transposeTpc(h->rootTpc(), hInterval, useDoubleSharpsFlats);
-                    baseTpc = transposeTpc(h->bassTpc(), hInterval, useDoubleSharpsFlats);
+                    undoTransposeHarmony(h, hInterval, useDoubleSharpsFlats);
                 }
-                undoTransposeHarmony(h, rootTpc, baseTpc);
             } else if (e->isKeySig() && mode != TransposeMode::DIATONICALLY && trKeys) {
                 // TODO: this currently is disabled in dialog
                 // if we enabled it, then it will need work
@@ -466,15 +453,18 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
 
             if (e->isChord()) {
                 Chord* chord = toChord(e);
-                std::vector<Note*> nl = chord->notes();
-                for (Note* n : nl) {
+                const std::vector<Note*> nl = chord->notes();
+                for (size_t noteIdx = 0; noteIdx < nl.size(); ++noteIdx) {
+                    if (!m_selectionFilter.canSelectNoteIdx(noteIdx, nl.size(), m_selection.rangeContainsMultiNoteChords())) {
+                        continue;
+                    }
+                    Note* note = nl.at(noteIdx);
                     if (mode == TransposeMode::DIATONICALLY) {
-                        n->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
-                    } else {
-                        if (!transpose(n, interval, useDoubleSharpsFlats)) {
-                            result = false;
-                            continue;
-                        }
+                        note->transposeDiatonic(transposeInterval, trKeys, useDoubleSharpsFlats);
+                        continue;
+                    }
+                    if (!transpose(note, interval, useDoubleSharpsFlats)) {
+                        result = false;
                     }
                 }
                 for (Chord* g : chord->graceNotes()) {
@@ -524,24 +514,16 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 Interval hInterval((interval.diatonic - kv.diatonic + iv.diatonic), (interval.chromatic - kv.chromatic + iv.chromatic));
 
                 Harmony* hh  = toHarmony(e);
-                int rootTpc, baseTpc;
                 // undoTransposeHarmony does not do links
                 // because it is also used to handle transposing instruments
                 // and score / parts could be in different concert pitch states
                 for (EngravingObject* se : hh->linkList()) {
                     Harmony* h = toHarmony(se);
                     if (mode == TransposeMode::DIATONICALLY) {
-                        Fraction tick = segment->tick();
-                        Key key = !h->staff() ? Key::C : h->staff()->key(tick);
-                        rootTpc = transposeTpcDiatonicByKey(h->rootTpc(),
-                                                            transposeInterval, key, trKeys, useDoubleSharpsFlats);
-                        baseTpc = transposeTpcDiatonicByKey(h->bassTpc(),
-                                                            transposeInterval, key, trKeys, useDoubleSharpsFlats);
+                        undoTransposeHarmonyDiatonic(h, transposeInterval, useDoubleSharpsFlats, trKeys);
                     } else {
-                        rootTpc = transposeTpc(h->rootTpc(), hInterval, useDoubleSharpsFlats);
-                        baseTpc = transposeTpc(h->bassTpc(), hInterval, useDoubleSharpsFlats);
+                        undoTransposeHarmony(h, hInterval, useDoubleSharpsFlats);
                     }
-                    undoTransposeHarmony(h, rootTpc, baseTpc);
                 }
             }
         }
@@ -844,11 +826,9 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
                         continue;
                     }
                     Harmony* h  = toHarmony(element);
-                    int rootTpc = transposeTpc(h->rootTpc(), diffV, false);
-                    int baseTpc = transposeTpc(h->bassTpc(), diffV, false);
                     for (EngravingObject* scoreElement : h->linkList()) {
                         if (!scoreElement->style().styleB(Sid::concertPitch)) {
-                            undoTransposeHarmony(toHarmony(scoreElement), rootTpc, baseTpc);
+                            undoTransposeHarmony(toHarmony(scoreElement), diffV, false);
                         }
                     }
                 }

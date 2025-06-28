@@ -768,7 +768,9 @@ void NotationViewInputController::mousePress_considerSelect(const ClickContext& 
     } else {
         const INotationSelectionPtr selection = viewInteraction()->selection();
 
-        if (selection->isRange() && selection->range()->containsItem(ctx.hitElement, ctx.hitStaff)) {
+        if (selection->isRange()
+            && (selection->range()->containsItem(ctx.hitElement, ctx.hitStaff)
+                || selection->range()->containsPoint(ctx.logicClickPos))) {
             return;
         }
     }
@@ -1266,7 +1268,7 @@ QVariant NotationViewInputController::inputMethodQuery(Qt::InputMethodQuery quer
 
 void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
 {
-    const QMimeData* mimeData = event->mimeData();
+    const QMimeData* mimeData = dragController()->mimeData(event);
     IF_ASSERT_FAILED(mimeData) {
         return;
     }
@@ -1326,7 +1328,7 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
 
 void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
 {
-    const QMimeData* mimeData = event->mimeData();
+    const QMimeData* mimeData = dragController()->mimeData(event);
     IF_ASSERT_FAILED(mimeData) {
         return;
     }
@@ -1351,33 +1353,67 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
     }
 
     event->setAccepted(isAccepted);
+
+    if (!uiConfiguration()->isSystemDragSupported()) {
+        m_lastDragMoveEvent = {
+            event->position(),
+            event->modifiers(),
+            event->dropAction(),
+            event->source()
+        };
+    }
 }
 
 void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
 {
+    if (!uiConfiguration()->isSystemDragSupported()) {
+        dropEvent(m_lastDragMoveEvent);
+    }
+
     viewInteraction()->endDrop();
 }
 
 void NotationViewInputController::dropEvent(QDropEvent* event)
 {
-    const QMimeData* mimeData = event->mimeData();
-    IF_ASSERT_FAILED(mimeData) {
+    if (!uiConfiguration()->isSystemDragSupported()) {
+        event->setAccepted(false);
         return;
     }
 
-    PointF pos = m_view->toLogical(event->position());
-    Qt::KeyboardModifiers modifiers = event->modifiers();
+    DragMoveEvent de = {
+        event->position(),
+        event->modifiers(),
+        event->dropAction(),
+        event->source()
+    };
+
+    bool isAccepted = dropEvent(de, event->mimeData());
+    event->setAccepted(isAccepted);
+}
+
+bool NotationViewInputController::dropEvent(const DragMoveEvent& event, const QMimeData* mimeData)
+{
+    if (!mimeData) {
+        mimeData = dragController()->mimeData();
+    }
+
+    IF_ASSERT_FAILED(mimeData) {
+        return false;
+    }
+
+    PointF pos = m_view->toLogical(event.position);
+    Qt::KeyboardModifiers modifiers = event.modifiers;
 
     bool isAccepted = false;
     if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
-        bool isInternal = event->source() == m_view->asItem();
-        bool isMove = isInternal && event->dropAction() == Qt::MoveAction;
+        bool isInternal = event.source == m_view->asItem();
+        bool isMove = isInternal && event.dropAction == Qt::MoveAction;
         isAccepted = viewInteraction()->dropRange(mimeData->data(MIME_STAFFLLIST_FORMAT), pos, isMove);
     } else {
         isAccepted = viewInteraction()->dropSingle(pos, modifiers);
     }
 
-    event->setAccepted(isAccepted);
+    return isAccepted;
 }
 
 float NotationViewInputController::hitWidth() const

@@ -31,16 +31,14 @@
           <name>tab6StrSimple</name>
           <lines>6</lines>
           <lineDistance>1.5</lineDistance>
-          <slashStyle>1</slashStyle>
           <stemless>1</stemless>
           <timesig>0</timesig>
           <durations>0</durations>
           <durationFontName>MuseScore Tab Modern</durationFontName>
           <durationFontSize>15</durationFontSize>
           <durationFontY>0</durationFontY>
-          <fretFontName>MuseScore Tab Sans</fretFontName>
-          <fretFontSize>9</fretFontSize>
-          <fretFontY>0</fretFontY>
+          <fretUseTextStyle>1</fretUseTextStyle>
+          <fretTextStyle>37</fretTextStyle>
           <linesThrough>0</linesThrough>
           <minimStyle>0</minimStyle>
           <onLines>1</onLines>
@@ -157,7 +155,7 @@
                 <GuitarBend>
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.5</bendEndTimeFactor>
+                  <bendEndTimeFactor>0.483333</bendEndTimeFactor>
                   <eid>R_R</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
@@ -183,7 +181,7 @@
                 <GuitarBend>
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
-                  <bendEndTimeFactor>0.216667</bendEndTimeFactor>
+                  <bendEndTimeFactor>0.2</bendEndTimeFactor>
                   <eid>T_T</eid>
                   <anchor>3</anchor>
                   </GuitarBend>

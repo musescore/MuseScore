@@ -73,12 +73,15 @@ Rectangle {
         anchors.topMargin: root.topPadding
 
         width: {
+            if (root.model.length === 0) {
+                return 0
+            }
+
             var result = 0
             var children = content.children
 
             for (var i = 0; i < children.length; ++i) {
                 result += children[i].width + spacing
-
             }
 
             if (result > 0) {

@@ -24,12 +24,14 @@
 
 #include <QObject>
 
+#include "global/async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
 #include "iinteractive.h"
 
 namespace mu::appshell {
-class FirstLaunchSetupModel : public QObject, public muse::Injectable
+class FirstLaunchSetupModel : public QObject, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 

@@ -108,6 +108,7 @@
       <translatorAlign>center,top</translatorAlign>
       <translatorFramePadding>0</translatorFramePadding>
       <translatorFrameWidth>0</translatorFrameWidth>
+      <translatorPosition>center</translatorPosition>
       <systemTextFontFace>MuseJazz Text</systemTextFontFace>
       <systemTextFontSize>11</systemTextFontSize>
       <systemTextFramePadding>0</systemTextFramePadding>
@@ -121,6 +122,7 @@
       <rehearsalMarkFontStyle>0</rehearsalMarkFontStyle>
       <rehearsalMarkAlign>right,baseline</rehearsalMarkAlign>
       <rehearsalMarkFramePadding>0.2</rehearsalMarkFramePadding>
+      <rehearsalMarkPosition>right</rehearsalMarkPosition>
       <repeatLeftFontFace>MuseJazz Text</repeatLeftFontFace>
       <repeatLeftFramePadding>0</repeatLeftFramePadding>
       <repeatLeftFrameWidth>0</repeatLeftFrameWidth>
@@ -137,10 +139,12 @@
       <glissandoAlign>center,baseline</glissandoAlign>
       <glissandoFramePadding>0</glissandoFramePadding>
       <glissandoFrameWidth>0</glissandoFrameWidth>
+      <glissandoPosition>center</glissandoPosition>
       <bendFontFace>MuseJazz Text</bendFontFace>
       <bendAlign>center,center</bendAlign>
       <bendFramePadding>0</bendFramePadding>
       <bendFrameWidth>0</bendFrameWidth>
+      <bendPosition>center</bendPosition>
       <headerFontFace>MuseJazz Text</headerFontFace>
       <headerFramePadding>0</headerFramePadding>
       <headerFrameWidth>0</headerFrameWidth>
@@ -403,7 +407,9 @@
         <eid>m_m</eid>
         <voice>
           <Harmony>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>n_n</eid>
             </Harmony>
           <Rest>

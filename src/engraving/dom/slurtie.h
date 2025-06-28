@@ -105,7 +105,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
-    void reset() override;
+    virtual void reset() override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     void move(const PointF& s) override;
     bool isEditable() const override { return true; }
@@ -122,6 +122,8 @@ public:
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::DRAG; }
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
+
+    virtual bool isUserModified() const override;
 
     virtual double endWidth() const = 0;
     virtual double midWidth() const = 0;
@@ -168,7 +170,6 @@ public:
     void setSlurDirection(DirectionV d) { m_slurDirection = d; }
     void undoSetSlurDirection(DirectionV d);
 
-    virtual void layout2(const PointF, int, struct UP&) {}
     virtual bool contains(const PointF&) const { return false; }    // not selectable
 
     SlurStyleType styleType() const { return m_styleType; }

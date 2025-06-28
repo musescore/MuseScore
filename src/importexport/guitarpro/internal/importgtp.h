@@ -140,6 +140,7 @@ protected:
     using Fraction = mu::engraving::Fraction;
     using Measure = mu::engraving::Measure;
     using ChordRest = mu::engraving::ChordRest;
+    using Chord = mu::engraving::Chord;
     using Note = mu::engraving::Note;
 
     enum class TabImportOption {
@@ -154,6 +155,7 @@ protected:
 
     struct ReadNoteResult {
         bool slur = false;
+        bool hammerOnPullOff = false;
         bool letRing = false;
         bool palmMute = false;
         bool trill = false;
@@ -265,7 +267,7 @@ protected:
     GPLyrics gpLyrics;
     int slide = 0;
     int voltaSequence = 0;
-    mu::engraving::Slur** slurs = nullptr;
+    std::vector<mu::engraving::Slur*> slurs;
 
     void skip(int64_t len);
     void read(void* p, int64_t len);
@@ -301,11 +303,12 @@ protected:
     void addPalmMute(ChordRest* cr, bool hasPalmMute);
     void addLetRing(ChordRest* cr, bool hasPalmMute);
     void addTrill(ChordRest* cr, bool hasTrill);
+    void addHammerOnPullOff(ChordRest* cr, bool hasHammerOnPullOff);
     void addRasgueado(ChordRest* cr, bool hasRasgueado);
     void addVibratoLeftHand(ChordRest* cr, bool hasVibratoLeftHand);
     void addVibratoWTremBar(ChordRest* cr, bool hasVibratoWTremBar);
     void addHarmonicMarks(ChordRest* cr, bool hasHarmonicArtificial, bool hasHarmonicPinch, bool hasHarmonicTap, bool hasHarmonicSemi);
-    void addTap(Note*);
+    void addTap(Chord*);
     void addSlap(Note*);
     void addPop(Note*);
     bool createTuningString(int strings, int tuning[]); // returns useFlats
@@ -331,7 +334,7 @@ public:
     };
 
     GuitarPro(mu::engraving::MasterScore*, int v, const muse::modularity::ContextPtr& iocCtx);
-    virtual ~GuitarPro();
+    virtual ~GuitarPro() {}
     virtual bool read(muse::io::IODevice*) = 0;
     muse::String error(GuitarProError n) const { return muse::String::fromUtf8(errmsg[int(n)]); }
 };

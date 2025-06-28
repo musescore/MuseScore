@@ -26,6 +26,7 @@
 
 #include "actionicon.h"
 #include "factory.h"
+#include "harmony.h"
 #include "layoutbreak.h"
 #include "masterscore.h"
 #include "mscore.h"
@@ -478,6 +479,11 @@ void Box::manageExclusionFromParts(bool exclude)
             newFrame->setExcludeFromOtherParts(false);
             // newFrame->setSizeIsSpatiumDependent(!titleFrame);
 
+            // Clear auto generated diagrams inside fret box
+            if (newFrame->isFBox()) {
+                toFBox(newFrame)->clearElements();
+            }
+
             for (EngravingItem* item : el()) {
                 // Don't add instrument name from current part
                 if (item->isText() && toText(item)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
@@ -664,10 +670,6 @@ FBox::FBox(System* parent)
 {
     init();
 
-    //! hack: needed for the case when we need to check whether the height was set by the user
-    //! or we need to take the height that we calculated from the content
-    setBoxHeight(Spatium(-1.0));
-
     resetProperty(Pid::FRET_FRAME_TEXT_SCALE);
     resetProperty(Pid::FRET_FRAME_DIAGRAM_SCALE);
     resetProperty(Pid::FRET_FRAME_COLUMN_GAP);
@@ -683,13 +685,56 @@ FBox::FBox(System* parent)
     resetProperty(Pid::BOTTOM_GAP);
 }
 
+void FBox::init()
+{
+    clearElements();
+
+    std::set<String> usedDiagrams;
+
+    for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
+         segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
+        for (EngravingItem* item : segment->annotations()) {
+            if (!item || !item->part()) {
+                continue;
+            }
+
+            FretDiagram* fretDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(item);
+            if (!fretDiagram) {
+                continue;
+            }
+
+            String harmonyName = fretDiagram->harmony()->harmonyName().toLower();
+            if (muse::contains(usedDiagrams, harmonyName)) {
+                delete fretDiagram;
+                fretDiagram = nullptr;
+
+                continue;
+            }
+
+            add(fretDiagram);
+
+            usedDiagrams.insert(harmonyName);
+        }
+    }
+}
+
 void FBox::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->isFretDiagram()) {
-        FretDiagram* fd = toFretDiagram(e);
-        fd->setFlag(ElementFlag::MOVABLE, false);
-        m_fretDiagrams.push_back(fd);
+        FretDiagram* fretDiagram = toFretDiagram(e);
+        fretDiagram->setFlag(ElementFlag::MOVABLE, false);
+        fretDiagram->setFlag(ElementFlag::ON_STAFF, false);
+
+        Harmony* harmony = fretDiagram->harmony();
+        harmony->setFlag(ElementFlag::MOVABLE, false);
+        harmony->setFlag(ElementFlag::ON_STAFF, false);
+
+        if (!e->eid().isValid()) {
+            e->assignNewEID();
+        }
+
+        VBox::add(e);
     } else {
         LOGD("FBox::add: element not allowed");
         return;
@@ -700,10 +745,6 @@ void FBox::add(EngravingItem* e)
 PropertyValue FBox::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::BOX_HEIGHT: {
-        double boxHeight = this->boxHeight().val();
-        return boxHeight > 0.0 ? boxHeight : propertyDefault(propertyId);
-    }
     case Pid::FRET_FRAME_TEXT_SCALE:
         return m_textScale;
     case Pid::FRET_FRAME_DIAGRAM_SCALE:
@@ -759,56 +800,48 @@ bool FBox::setProperty(Pid propertyId, const PropertyValue& val)
 PropertyValue FBox::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::BOX_HEIGHT:
-        return ldata() && !muse::RealIsNull(ldata()->totalTableHeight)
-               ? std::ceil(ldata()->totalTableHeight / spatium())
-               : PropertyValue();
     case Pid::FRET_FRAME_TEXT_SCALE:
     case Pid::FRET_FRAME_DIAGRAM_SCALE:
         return 1.0;
     case Pid::FRET_FRAME_COLUMN_GAP:
     case Pid::FRET_FRAME_ROW_GAP:
-        return Spatium(4.0);
+        return Spatium(3.0);
     case Pid::FRET_FRAME_CHORDS_PER_ROW:
         return 8;
     case Pid::FRET_FRAME_H_ALIGN:
         return static_cast<int>(AlignH::HCENTER);
     case Pid::TOP_GAP:
     case Pid::BOTTOM_GAP:
-        return 0.0;
+        return 4.0;
     default:
         return VBox::propertyDefault(propertyId);
     }
 }
 
-void FBox::init()
+int FBox::gripsCount() const
 {
-    for (FretDiagram* fretDiagram : m_fretDiagrams) {
-        fretDiagram->deleteLater();
-    }
+    return 0;
+}
 
-    m_fretDiagrams.clear();
+Grip FBox::initialEditModeGrip() const
+{
+    return Grip::NO_GRIP;
+}
 
-    for (mu::engraving::Segment* segment = score()->firstSegment(mu::engraving::SegmentType::ChordRest); segment;
-         segment = segment->next1(mu::engraving::SegmentType::ChordRest)) {
-        for (EngravingItem* item : segment->annotations()) {
-            if (!item || !item->part()) {
-                continue;
-            }
+Grip FBox::defaultGrip() const
+{
+    return Grip::NO_GRIP;
+}
 
-            FretDiagram* fretDiagram = nullptr;
+std::vector<PointF> FBox::gripsPositions(const EditData&) const
+{
+    return {};
+}
 
-            if (item->isHarmony()) {
-                continue; // todo: create new fret diagram and attach harmony
-            } else if (item->isFretDiagram()) {
-                fretDiagram = toFretDiagram(item)->clone();
-                fretDiagram->harmony()->setAutoplace(false);
-                fretDiagram->setAutoplace(false);
-            }
-
-            add(fretDiagram);
-        }
-    }
+void FBox::undoReorderElements(const std::vector<EID>& newOrderElementsIds)
+{
+    score()->undo(new ReorderFBox(this, newOrderElementsIds));
+    triggerLayout();
 }
 
 //---------------------------------------------------------

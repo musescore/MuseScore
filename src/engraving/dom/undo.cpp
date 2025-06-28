@@ -557,8 +557,9 @@ void UndoStack::redo(EditData* ed)
 
 bool UndoMacro::canRecordSelectedElement(const EngravingItem* e)
 {
-    return e->isNote() || (e->isChordRest() && !e->isChord()) || (e->isTextBase() && !e->isInstrumentName()) || e->isFretDiagram()
-           || e->isSoundFlag();
+    return e->isNote() || (e->isChordRest() && !e->isChord())
+           || (e->isTextBase() && !e->isInstrumentName() && !e->isHammerOnPullOffText())
+           || e->isFretDiagram() || e->isSoundFlag();
 }
 
 void UndoMacro::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
@@ -1748,24 +1749,61 @@ void ChangeMeasureLen::flip(EditData*)
 //   TransposeHarmony
 //---------------------------------------------------------
 
-TransposeHarmony::TransposeHarmony(Harmony* h, int rtpc, int btpc)
+TransposeHarmony::TransposeHarmony(Harmony* h, Interval interval, bool doubleSharpsFlats)
 {
-    harmony = h;
-    rootTpc = rtpc;
-    baseTpc = btpc;
+    m_harmony = h;
+    m_interval = interval;
+    m_useDoubleSharpsFlats = doubleSharpsFlats;
 }
 
 void TransposeHarmony::flip(EditData*)
 {
-    harmony->realizedHarmony().setDirty(true);   //harmony should be re-realized after transposition
-    int baseTpc1 = harmony->bassTpc();
-    int rootTpc1 = harmony->rootTpc();
-    harmony->setBassTpc(baseTpc);
-    harmony->setRootTpc(rootTpc);
-    harmony->setXmlText(harmony->harmonyName());
-    harmony->render();
-    rootTpc = rootTpc1;
-    baseTpc = baseTpc1;
+    m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
+
+    for (HarmonyInfo* info : m_harmony->chords()) {
+        info->setRootTpc(transposeTpc(info->rootTpc(), m_interval, m_useDoubleSharpsFlats));
+        info->setBassTpc(transposeTpc(info->bassTpc(), m_interval, m_useDoubleSharpsFlats));
+    }
+
+    m_harmony->setXmlText(m_harmony->harmonyName());
+    m_harmony->render();
+    m_harmony->triggerLayout();
+    m_interval.flip();
+}
+
+//---------------------------------------------------------
+//   TransposeHarmonyDiatonic
+//---------------------------------------------------------
+
+void TransposeHarmonyDiatonic::flip(EditData*)
+{
+    m_harmony->realizedHarmony().setDirty(true);   // harmony should be re-realized after transposition
+
+    Fraction tick = Fraction(0, 1);
+    Segment* seg = toSegment(m_harmony->findAncestor(ElementType::SEGMENT));
+    if (seg) {
+        tick = seg->tick();
+    }
+    Key key = !m_harmony->staff() ? Key::C : m_harmony->staff()->key(tick);
+
+    for (HarmonyInfo* info : m_harmony->chords()) {
+        info->setRootTpc(transposeTpcDiatonicByKey(info->rootTpc(), m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats));
+        info->setBassTpc(transposeTpcDiatonicByKey(info->bassTpc(), m_interval, key, m_transposeKeys, m_useDoubleSharpsFlats));
+    }
+
+    m_harmony->setXmlText(m_harmony->harmonyName());
+    m_harmony->render();
+    m_harmony->triggerLayout();
+
+    m_interval *= -1;
+}
+
+TransposeHarmonyDiatonic::TransposeHarmonyDiatonic(Harmony* h, int interval, bool useDoubleSharpsFlats, bool transposeKeys)
+{
+    m_harmony = h;
+    m_interval = interval;
+    m_useDoubleSharpsFlats = useDoubleSharpsFlats;
+    m_transposeKeys = transposeKeys;
 }
 
 //---------------------------------------------------------
@@ -2037,12 +2075,16 @@ static void changeChordStyle(Score* score)
     double eadjust = style.styleD(Sid::chordExtensionAdjust);
     double mmag = style.styleD(Sid::chordModifierMag);
     double madjust = style.styleD(Sid::chordModifierAdjust);
-    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
+    double stackedmmag = style.styleD(Sid::chordStackedModiferMag);
+    bool mstackModifiers = style.styleB(Sid::verticallyStackModifiers);
+    bool mexcludeModsHAlign = style.styleB(Sid::chordAlignmentExcludeModifiers);
+    String msymbolFont = style.styleSt(Sid::musicalTextFont);
+    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust, stackedmmag, mstackModifiers, mexcludeModsHAlign, msymbolFont);
     if (score->style().styleB(Sid::chordsXmlFile)) {
-        score->chordList()->read(score->configuration()->appDataPath(), u"chords.xml");
+        score->chordList()->read(u"chords.xml");
     }
-    score->chordList()->read(score->configuration()->appDataPath(), style.styleSt(Sid::chordDescriptionFile));
-    score->chordList()->setCustomChordList(style.styleSt(Sid::chordStyle) == "custom");
+    score->chordList()->read(style.styleSt(Sid::chordDescriptionFile));
+    score->chordList()->setCustomChordList(style.styleV(Sid::chordStyle).value<ChordStylePreset>() == ChordStylePreset::CUSTOM);
 }
 
 //---------------------------------------------------------
@@ -2092,7 +2134,10 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
     case Sid::chordExtensionAdjust:
     case Sid::chordModifierMag:
     case Sid::chordModifierAdjust:
-    case Sid::chordDescriptionFile: {
+    case Sid::chordDescriptionFile:
+    case Sid::verticallyStackModifiers:
+    case Sid::chordAlignmentExcludeModifiers:
+    case Sid::musicalTextFont: {
         changeChordStyle(score);
     }
     break;
@@ -3479,5 +3524,438 @@ void FretLinkHarmony::redo(EditData*)
         m_fretDiagram->unlinkHarmony();
     } else {
         m_fretDiagram->linkHarmony(m_harmony);
+    }
+}
+
+static std::vector<Harmony*> findAllHarmonies(Score* score)
+{
+    std::vector<Harmony*> result;
+
+    for (Segment* segment = score->firstSegment(SegmentType::ChordRest); segment;
+         segment = segment->next1(SegmentType::ChordRest)) {
+        for (EngravingItem* item : segment->annotations()) {
+            if (!item || !item->part()) {
+                continue;
+            }
+
+            Harmony* harmony = nullptr;
+            if (item->isHarmony()) {
+                harmony = toHarmony(item);
+            } else if (item->isFretDiagram()) {
+                harmony = toFretDiagram(item)->harmony();
+            }
+
+            if (harmony) {
+                result.emplace_back(harmony);
+            }
+        }
+    }
+
+    return result;
+}
+
+static void addFretDiagramToFretBox(FBox* fretBox, FretDiagram* diagram, size_t index)
+{
+    fretBox->add(diagram);
+
+    //! Move added diagram to the right position
+    ElementList& elements = fretBox->el();
+    EngravingItem* last = elements.back();
+    elements.pop_back();
+    elements.insert(elements.begin() + index, last);
+}
+
+static bool areHarmoniesEqual(const String& name1, const String& name2)
+{
+    return name1.toLower() == name2.toLower();
+}
+
+static std::vector<std::pair<size_t, FretDiagram*> > removeFretDiagramsFromFretBox(FBox* fretBox, size_t fromIndex,
+                                                                                   const String& harmonyName)
+{
+    std::vector<std::pair<size_t, FretDiagram*> > removedDiagrams;
+
+    ElementList& existingDiagramsFromBox = fretBox->el();
+
+    ElementList elementsToRemove;
+    for (size_t i = fromIndex; i < existingDiagramsFromBox.size(); ++i) {
+        FretDiagram* currentFretDiagram = toFretDiagram(existingDiagramsFromBox[i]);
+        if (areHarmoniesEqual(currentFretDiagram->harmony()->harmonyName(), harmonyName)) {
+            removedDiagrams.push_back(std::make_pair(i, currentFretDiagram));
+            elementsToRemove.push_back(currentFretDiagram);
+        }
+    }
+
+    for (EngravingItem* element : elementsToRemove) {
+        existingDiagramsFromBox.remove(element);
+    }
+
+    return removedDiagrams;
+}
+
+static FretDiagram* insertFretDiagramToFretBox(FBox* fretBox, Harmony* harmonyForClone, const String& afterHarmonyName)
+{
+    ElementList& existingDiagramsFromBox = fretBox->el();
+
+    FretDiagram* fretDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(harmonyForClone);
+    if (!fretDiagram) {
+        return nullptr;
+    }
+
+    for (size_t j = 0; j < existingDiagramsFromBox.size(); ++j) {
+        FretDiagram* currentFretDiagram = toFretDiagram(existingDiagramsFromBox[j]);
+        if (areHarmoniesEqual(currentFretDiagram->harmony()->harmonyName(), afterHarmonyName)) {
+            addFretDiagramToFretBox(fretBox, fretDiagram, j + 1);
+            break;
+        }
+    }
+
+    return fretDiagram;
+}
+
+ReorderFBox::ReorderFBox(FBox* box, const std::vector<EID>& newOrderElementsIds)
+{
+    m_fretBox = box;
+    m_orderElementsIds = newOrderElementsIds;
+}
+
+void ReorderFBox::flip(EditData*)
+{
+    ElementList& elements = m_fretBox->el();
+
+    const size_t n = elements.size();
+    if (n != m_orderElementsIds.size()) {
+        return;
+    }
+
+    std::map<std::string, size_t> eidToIndex;
+    for (size_t i = 0; i < n; ++i) {
+        eidToIndex[elements[i]->eid().toStdString()] = i;
+    }
+
+    for (size_t i = 0; i < n; ++i) {
+        const EID& desiredEid = m_orderElementsIds[i];
+
+        size_t correctIndex = muse::value(eidToIndex, desiredEid.toStdString(), muse::nidx);
+        if (correctIndex == muse::nidx) {
+            continue;
+        }
+
+        if (correctIndex == i) {
+            continue;
+        }
+
+        eidToIndex[elements[i]->eid().toStdString()] = correctIndex;
+        eidToIndex[elements[correctIndex]->eid().toStdString()] = i;
+
+        std::swap(elements[i], elements[correctIndex]);
+    }
+}
+
+RenameChordFBox::RenameChordFBox(FBox* box, const Harmony* harmony, const String& oldName)
+{
+    m_fretBox = box;
+    m_harmony = harmony;
+    m_harmonyOldName = oldName;
+}
+
+void RenameChordFBox::undo(EditData*)
+{
+    ElementList& existingDiagramsFromBox = m_fretBox->el();
+
+    if (!m_onlyRemove) {
+        String harmonyName = m_harmony->harmonyName();
+        for (auto it = existingDiagramsFromBox.begin(); it != existingDiagramsFromBox.end(); ++it) {
+            FretDiagram* fd = toFretDiagram(*it);
+
+            if (!areHarmoniesEqual(fd->harmony()->harmonyName(), harmonyName)) {
+                continue;
+            }
+
+            fd->setHarmony(m_harmonyOldName);
+            fd->updateDiagram(m_harmonyOldName);
+        }
+    }
+
+    if (m_diagramForRemove) {
+        existingDiagramsFromBox.remove(m_diagramForRemove);
+    }
+
+    for (auto& diagramInfo : m_diagramsForRestore) {
+        size_t diagramIndex = diagramInfo.first;
+        FretDiagram* diagram = diagramInfo.second;
+
+        //! NOTE: -1 because we removed the chord before it
+        int indexOffset = !m_onlyRemove && m_diagramForRemove ? -1 : 0;
+        existingDiagramsFromBox.insert(existingDiagramsFromBox.begin() + diagramIndex + indexOffset, diagram);
+    }
+
+    m_diagramsForRestore.clear();
+    m_diagramForRemove = nullptr;
+    m_onlyRemove = false;
+
+    m_fretBox->triggerLayout();
+}
+
+void RenameChordFBox::redo(EditData*)
+{
+    //! If old chord symbol still exists, move current symbol after harmony before the next match
+    String harmonyBeforeNextMatch;
+    Harmony* nextMatchHarmonyToReplace = nullptr;
+
+    Fraction currentHarmonyTick = m_harmony->tick();
+    String currentHarmonyName = m_harmony->harmonyName();
+
+    //! If there’s another chord symbol in the score before the one being edited,
+    //! then we don’t need to rename anything in the fretbox,
+    //! we just need to insert a new element at the correct position.
+    bool onlyAddNewDiagram = false;
+
+    std::set<String> usedDiagrams;
+    for (Harmony* harmony: findAllHarmonies(m_fretBox->score())) {
+        String harmonyName = harmony->harmonyName();
+
+        bool isHarmonyWithSameName = areHarmoniesEqual(harmonyName, currentHarmonyName);
+
+        //! If same chord symbol exists before, just remove old chord symbol
+        if (isHarmonyWithSameName && harmony->tick() < currentHarmonyTick) {
+            m_onlyRemove = true;
+        }
+
+        //! If old chord symbol exists before, don't touch old chord symbol in fret box
+        bool isOldHarmony = areHarmoniesEqual(harmonyName, m_harmonyOldName);
+        if (isOldHarmony && harmony->tick() < currentHarmonyTick) {
+            onlyAddNewDiagram = true;
+        }
+
+        if (isHarmonyWithSameName && harmony->tick() == currentHarmonyTick) {
+            nextMatchHarmonyToReplace = harmony;
+            break;
+        }
+
+        if (!muse::contains(usedDiagrams, harmonyName.toLower())) {
+            harmonyBeforeNextMatch = harmonyName;
+            usedDiagrams.insert(harmonyName.toLower());
+        }
+    }
+
+    ElementList& existingDiagramsFromBox = m_fretBox->el();
+
+    for (size_t i = 0; i < existingDiagramsFromBox.size(); ++i) {
+        FretDiagram* fd = toFretDiagram(existingDiagramsFromBox[i]);
+        if (onlyAddNewDiagram) {
+            if (!areHarmoniesEqual(fd->harmony()->harmonyName(), harmonyBeforeNextMatch)) {
+                continue;
+            }
+        } else if (!areHarmoniesEqual(fd->harmony()->harmonyName(), m_harmonyOldName)) {
+            continue;
+        }
+
+        if (m_onlyRemove) {
+            m_diagramsForRestore.push_back(std::make_pair(i, fd));
+
+            m_fretBox->remove(fd);
+        } else if (!onlyAddNewDiagram) {
+            fd->setHarmony(currentHarmonyName);
+            fd->updateDiagram(currentHarmonyName);
+        }
+
+        size_t removeIndex = i + 1;
+        if (nextMatchHarmonyToReplace) {
+            //! Insert new fret diagram after the harmony preceding the next match
+            m_diagramForRemove = insertFretDiagramToFretBox(m_fretBox, nextMatchHarmonyToReplace, harmonyBeforeNextMatch);
+            removeIndex = i + 2;
+        }
+
+        //! Remove all following diagrams with the new harmony name
+        m_diagramsForRestore = removeFretDiagramsFromFretBox(m_fretBox, removeIndex, currentHarmonyName);
+
+        break;
+    }
+}
+
+AddChordFBox::AddChordFBox(FBox* box, const String& chordNewName, const Fraction& tick)
+{
+    m_fretBox = box;
+    m_tick = tick;
+    m_chordNewName = chordNewName;
+}
+
+void AddChordFBox::undo(EditData*)
+{
+    if (!m_added) {
+        return;
+    }
+
+    ElementList& existingDiagramsFromBox = m_fretBox->el();
+    for (auto it = existingDiagramsFromBox.begin(); it != existingDiagramsFromBox.end(); ++it) {
+        FretDiagram* fd = toFretDiagram(*it);
+        if (!fd || !areHarmoniesEqual(fd->harmony()->harmonyName(), m_chordNewName)) {
+            continue;
+        }
+
+        m_fretBox->remove(fd);
+
+        break;
+    }
+
+    for (auto& diagramInfo : m_diagramsForRestore) {
+        size_t diagramIndex = diagramInfo.first;
+        FretDiagram* diagram = diagramInfo.second;
+
+        //! NOTE: -1 - because we removed the added chord
+        int indexOffset = -1;
+        existingDiagramsFromBox.insert(existingDiagramsFromBox.begin() + diagramIndex + indexOffset, diagram);
+    }
+
+    m_diagramsForRestore.clear();
+
+    m_fretBox->triggerLayout();
+}
+
+void AddChordFBox::redo(EditData*)
+{
+    //! Insert new diagram after the matching harmony in the score
+    bool found = false;
+    String harmonyBeforeCurrentHarmony;
+    Harmony* currentHarmonyFromScore = nullptr;
+
+    std::set<String> usedDiagrams;
+    for (Harmony* harmony: findAllHarmonies(m_fretBox->score())) {
+        String harmonyName = harmony->harmonyName();
+        if (areHarmoniesEqual(harmonyName, m_chordNewName)) {
+            if (harmony->tick() < m_tick) {
+                //! NOTE: no need to add because we already have this harmony
+                return;
+            }
+
+            currentHarmonyFromScore = harmony;
+            found = true;
+            break;
+        }
+
+        if (!muse::contains(usedDiagrams, harmonyName.toLower())) {
+            harmonyBeforeCurrentHarmony = harmonyName;
+            usedDiagrams.insert(harmonyName.toLower());
+        }
+    }
+
+    if (!found) {
+        return;
+    }
+
+    ElementList& existingDiagramsFromBox = m_fretBox->el();
+    if (existingDiagramsFromBox.empty()) {
+        FretDiagram* fretDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(currentHarmonyFromScore);
+        addFretDiagramToFretBox(m_fretBox, fretDiagram, 0);
+        m_added = true;
+
+        return;
+    }
+
+    for (size_t i = 0; i < existingDiagramsFromBox.size(); ++i) {
+        FretDiagram* fd = toFretDiagram(existingDiagramsFromBox[i]);
+
+        bool afterHarmony = !harmonyBeforeCurrentHarmony.empty();
+        if (afterHarmony) {
+            if (!areHarmoniesEqual(fd->harmony()->harmonyName(), harmonyBeforeCurrentHarmony)) {
+                continue;
+            }
+        }
+
+        FretDiagram* fretDiagram = FretDiagram::makeFromHarmonyOrFretDiagram(currentHarmonyFromScore);
+        if (!fretDiagram) {
+            continue;
+        }
+
+        size_t addIndex = afterHarmony ? i + 1 : i;
+        addFretDiagramToFretBox(m_fretBox, fretDiagram, addIndex);
+        m_added = true;
+
+        //! Remove the following diagram with the new harmony name
+        //! +1 because we added one more diagram before
+        String harmonyName = currentHarmonyFromScore->harmonyName();
+        m_diagramsForRestore = removeFretDiagramsFromFretBox(m_fretBox, addIndex + 1, harmonyName);
+
+        break;
+    }
+}
+
+RemoveChordFBox::RemoveChordFBox(FBox* box, const String& chordName, const Fraction& tick)
+{
+    m_fretBox = box;
+    m_tick = tick;
+    m_chordName = chordName;
+}
+
+void RemoveChordFBox::undo(EditData*)
+{
+    if (!m_removed) {
+        return;
+    }
+
+    ElementList& existingDiagramsFromBox = m_fretBox->el();
+
+    addFretDiagramToFretBox(m_fretBox, m_removedFretDiagram, m_removedFretDiagramIndex);
+
+    if (m_addedFretDiagram) {
+        existingDiagramsFromBox.remove(m_addedFretDiagram);
+    }
+
+    m_addedFretDiagram = nullptr;
+
+    m_fretBox->triggerLayout();
+}
+
+void RemoveChordFBox::redo(EditData*)
+{
+    //! If old chord symbol still exists, move current symbol after harmony before the next match
+    bool found = false;
+    String harmonyBeforeCurrentHarmony;
+    Harmony* nextMatchHarmonyToReplace = nullptr;
+
+    std::set<String> usedDiagrams;
+    for (Harmony* harmony: findAllHarmonies(m_fretBox->score())) {
+        String harmonyName = harmony->harmonyName();
+        if (areHarmoniesEqual(harmonyName, m_chordName)) {
+            if (harmony->tick() < m_tick) {
+                //! NOTE: no need to change something because we already have this harmony before
+                return;
+            }
+
+            if (harmony->tick() == m_tick) {
+                continue;
+            }
+
+            nextMatchHarmonyToReplace = harmony;
+            found = true;
+            break;
+        }
+
+        if (!muse::contains(usedDiagrams, harmonyName.toLower())) {
+            harmonyBeforeCurrentHarmony = harmonyName;
+            usedDiagrams.insert(harmonyName.toLower());
+        }
+    }
+
+    ElementList& existingDiagramsFromBox = m_fretBox->el();
+    for (auto it = existingDiagramsFromBox.begin(); it != existingDiagramsFromBox.end(); ++it) {
+        FretDiagram* fd = toFretDiagram(*it);
+        if (!fd || !areHarmoniesEqual(fd->harmony()->harmonyName(), m_chordName)) {
+            continue;
+        }
+
+        m_removedFretDiagram = fd;
+        m_removedFretDiagramIndex = std::distance(existingDiagramsFromBox.begin(), it);
+
+        m_fretBox->remove(fd);
+        m_removed = true;
+
+        if (found) {
+            //! Insert new fret diagram after the harmony preceding the next match
+            m_addedFretDiagram = insertFretDiagramToFretBox(m_fretBox, nextMatchHarmonyToReplace, harmonyBeforeCurrentHarmony);
+        }
+
+        break;
     }
 }

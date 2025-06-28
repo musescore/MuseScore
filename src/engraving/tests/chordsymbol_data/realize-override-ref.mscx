@@ -9,6 +9,7 @@
       <pagePrintableWidth>7.4826</pagePrintableWidth>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -108,7 +109,9 @@
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>17</root>
+            <harmonyInfo>
+              <root>17</root>
+              </harmonyInfo>
             <eid>F_F</eid>
             </Harmony>
           <Chord>
@@ -138,7 +141,9 @@
         <eid>L_L</eid>
         <voice>
           <Harmony>
-            <root>12</root>
+            <harmonyInfo>
+              <root>12</root>
+              </harmonyInfo>
             <eid>M_M</eid>
             </Harmony>
           <Chord>
@@ -172,7 +177,9 @@
         <eid>T_T</eid>
         <voice>
           <Harmony>
-            <root>21</root>
+            <harmonyInfo>
+              <root>21</root>
+              </harmonyInfo>
             <eid>U_U</eid>
             </Harmony>
           <Chord>
@@ -206,7 +213,9 @@
         <eid>b_b</eid>
         <voice>
           <Harmony>
-            <root>30</root>
+            <harmonyInfo>
+              <root>30</root>
+              </harmonyInfo>
             <eid>c_c</eid>
             </Harmony>
           <Chord>
@@ -241,7 +250,9 @@
         <eid>j_j</eid>
         <voice>
           <Harmony>
-            <root>4</root>
+            <harmonyInfo>
+              <root>4</root>
+              </harmonyInfo>
             <eid>k_k</eid>
             </Harmony>
           <Chord>
@@ -276,7 +287,9 @@
         <eid>r_r</eid>
         <voice>
           <Harmony>
-            <root>13</root>
+            <harmonyInfo>
+              <root>13</root>
+              </harmonyInfo>
             <eid>s_s</eid>
             </Harmony>
           <Chord>
@@ -306,7 +319,9 @@
         <eid>y_y</eid>
         <voice>
           <Harmony>
-            <root>15</root>
+            <harmonyInfo>
+              <root>15</root>
+              </harmonyInfo>
             <eid>z_z</eid>
             </Harmony>
           <Chord>

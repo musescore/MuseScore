@@ -32,6 +32,9 @@ public:
 
     virtual bool isSelectionTypeFiltered(const SelectionFilterTypesVariant& variant) const = 0;
     virtual void setSelectionTypeFiltered(const SelectionFilterTypesVariant& variant, bool filtered) = 0;
+
+    virtual bool includeSingleNotes() const = 0;
+    virtual void setIncludeSingleNotes(bool include) = 0;
 };
 
 using INotationSelectionFilterPtr = std::shared_ptr<INotationSelectionFilter>;

@@ -9,6 +9,7 @@
       <clefLeftMargin>0.64</clefLeftMargin>
       <clefKeyRightMargin>1.75</clefKeyRightMargin>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <minMMRestWidth>0</minMMRestWidth>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
@@ -99,7 +100,6 @@
             <eid>G_G</eid>
             <durationType>quarter</durationType>
             <Lyrics>
-              <ticks>1440</ticks>
               <ticks_f>3/4</ticks_f>
               <eid>H_H</eid>
               <text>A</text>

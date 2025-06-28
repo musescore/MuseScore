@@ -23,10 +23,11 @@
 #define MUSE_UI_IINTERACTIVEPROVIDER_H
 
 #include "global/modularity/imoduleinterface.h"
-#include "global/iinteractive.h"
+
 #include "global/types/uri.h"
 #include "global/types/retval.h"
-#include "global/progress.h"
+#include "global/types/color.h"
+#include "global/async/promise.h"
 
 class QWindow;
 
@@ -38,36 +39,13 @@ class IInteractiveProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IInteractiveProvider() = default;
 
-    virtual RetVal<Val> question(const std::string& contentTitle, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                                 int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
-                                 const std::string& dialogTitle = "") = 0;
-
-    virtual RetVal<Val> info(const std::string& contentTitle, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                             int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
-                             const std::string& dialogTitle = "") = 0;
-
-    virtual RetVal<Val> warning(const std::string& contentTitle, const IInteractive::Text& text, const std::string& detailedText = {},
-                                const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                                const IInteractive::Options& options = {}, const std::string& dialogTitle = "") = 0;
-
-    virtual RetVal<Val> error(const std::string& contentTitle, const IInteractive::Text& text, const std::string& detailedText = {},
-                              const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                              const IInteractive::Options& options = {}, const std::string& dialogTitle = "") = 0;
-
-    virtual Ret showProgress(const std::string& title, Progress* progress) = 0;
-
-    virtual RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,
-                                                 const std::vector<std::string>& filter) = 0;
-    virtual RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
-                                                bool confirmOverwrite) = 0;
-    virtual RetVal<io::path_t> selectDirectory(const std::string& title, const io::path_t& dir) = 0;
-
     // color
-    virtual RetVal<QColor> selectColor(const QColor& color = Qt::white, const QString& title = "") = 0;
+    virtual async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") = 0;
     virtual bool isSelectColorOpened() const = 0;
 
-    virtual RetVal<Val> open(const UriQuery& uri) = 0;
+    virtual RetVal<Val> openSync(const UriQuery& uri) = 0;
     virtual async::Promise<Val> openAsync(const UriQuery& uri) = 0;
+    virtual async::Promise<Val> openAsync(const Uri& uri, const QVariantMap& params) = 0;
     virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
     virtual RetVal<bool> isOpened(const UriQuery& uri) const = 0;
     virtual async::Channel<Uri> opened() const = 0;

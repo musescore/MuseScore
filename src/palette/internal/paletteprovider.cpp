@@ -42,6 +42,8 @@
 #include "translation.h"
 #include "types/uri.h"
 
+#include "app_config.h"
+
 using namespace muse;
 using namespace mu::palette;
 using namespace mu::engraving;
@@ -893,7 +895,7 @@ void PaletteProvider::doResetPalette(const QModelIndex& index)
 
 QString PaletteProvider::getPaletteFilename(bool open, const QString& name) const
 {
-    QString title;
+    std::string title;
     std::vector<std::string> filter;
 #ifdef WIN_PORTABLE
     QString wd = QDir::cleanPath(QString("%1/../../../Data/settings").arg(QCoreApplication::applicationDirPath()));
@@ -902,10 +904,10 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
                  .arg(QCoreApplication::applicationName());
 #endif
     if (open) {
-        title  = muse::qtrc("palette", "Load palette");
+        title  = muse::trc("palette", "Load palette");
         filter = { muse::trc("palette", "MuseScore Studio palette") + " (*.mpal)" };
     } else {
-        title  = muse::qtrc("palette", "Save palette");
+        title  = muse::trc("palette", "Save palette");
         filter = { muse::trc("palette", "MuseScore Studio palette") + " (*.mpal)" };
     }
 
@@ -922,9 +924,9 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
 
     muse::io::path_t fn;
     if (open) {
-        fn = interactive()->selectOpeningFile(title, defaultPath, filter);
+        fn = interactive()->selectOpeningFileSync(title, defaultPath, filter);
     } else {
-        fn = interactive()->selectSavingFile(title, defaultPath, filter);
+        fn = interactive()->selectSavingFileSync(title, defaultPath, filter);
     }
     return fn.toQString();
 }

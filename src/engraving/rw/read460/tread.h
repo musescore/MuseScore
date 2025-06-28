@@ -52,7 +52,6 @@ class BagpipeEmbellishment;
 class BarLine;
 class Beam;
 class Bend;
-class StretchedBend;
 class Box;
 class HBox;
 class VBox;
@@ -81,6 +80,7 @@ class GuitarBendSegment;
 class GuitarBendHold;
 
 class Hairpin;
+class HammerOnPullOff;
 class Harmony;
 class HarmonicMark;
 class HarpPedalDiagram;
@@ -152,6 +152,7 @@ class SoundFlag;
 class BSymbol;
 class FSymbol;
 
+class Tapping;
 class Text;
 class TextLine;
 class TextLineBase;
@@ -202,7 +203,6 @@ public:
     static void read(BarLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(Beam* b, XmlReader& xml, ReadContext& ctx);
     static void read(Bend* b, XmlReader& xml, ReadContext& ctx);
-    static void read(StretchedBend* b, XmlReader& xml, ReadContext& ctx);
     static void read(Box* b, XmlReader& xml, ReadContext& ctx);
     static void read(HBox* b, XmlReader& xml, ReadContext& ctx);
     static void read(VBox* b, XmlReader& xml, ReadContext& ctx);
@@ -232,6 +232,7 @@ public:
     static void read(GuitarBendHold* h, XmlReader& xml, ReadContext& ctx);
 
     static void read(Hairpin* h, XmlReader& xml, ReadContext& ctx);
+    static void read(HammerOnPullOff* h, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
     static void read(HarpPedalDiagram* h, XmlReader& xml, ReadContext& ctx);
     static void read(HarmonicMark* h, XmlReader& xml, ReadContext& ctx);
@@ -303,6 +304,8 @@ public:
     static void read(SoundFlag* sym, XmlReader& xml, ReadContext& ctx);
     static void read(FSymbol* sym, XmlReader& xml, ReadContext& ctx);
 
+    static void read(Tapping* t, XmlReader& xml, ReadContext& ctx);
+    static void read(TappingHalfSlur* t, XmlReader& xml, ReadContext& ctx);
     static void read(Text* t, XmlReader& xml, ReadContext& ctx);
     static void read(TextLine* l, XmlReader& xml, ReadContext& ctx);
     static void read(TextLineBase* b, XmlReader& xml, ReadContext& ctx);
@@ -387,5 +390,7 @@ private:
     static bool readProperties(StaffTextBase* t, XmlReader& xml, ReadContext& ctx);
 
     static void readSystemLock(Score* score, XmlReader& e);
+
+    static void readHopoText(HammerOnPullOffSegment* hopoSeg, XmlReader& xml, ReadContext& ctx, int idx);
 };
 }

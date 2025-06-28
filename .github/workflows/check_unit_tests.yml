@@ -10,10 +10,13 @@ on:
         default: 'false'
       use_qt69:
         description: 'Use Qt 6.9'
-        default: 'off'
+        default: 'on'
         required: false 
   schedule:
     - cron: "0 3 * * 4" # Every Thursday night at 03:00 for master branch
+
+env:
+  USE_QT69: ${{ inputs.use_qt69 != '' && inputs.use_qt69 || 'on' }}  
 
 jobs:
   run_tests:
@@ -53,10 +56,10 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v4
       with:
-        version: ${{ inputs.use_qt69 == 'on' && '6.9.*' || '6.2.4' }}
+        version: ${{ env.USE_QT69 == 'on' && '6.9.1' || '6.2.4' }}
         host: 'linux'
         target: 'desktop'
-        arch: ${{ inputs.use_qt69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
+        arch: ${{ env.USE_QT69 == 'on' && 'linux_gcc_64' || 'gcc_64' }}
         modules: 'qt5compat qtnetworkauth qtscxml qtshadertools qtwebsockets'
     - name: Setup environment
       run: |

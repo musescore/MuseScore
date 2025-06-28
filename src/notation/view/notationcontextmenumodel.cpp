@@ -179,7 +179,15 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
 {
     MenuItemList items = makeElementItems();
     items << makeSeparator();
-    items << makeMenuItem("add-fretboard-diagram");
+
+    if (const EngravingItem* hitElement = hitElementContext().element) {
+        engraving::EngravingObject* parent = hitElement->isHarmony() ? hitElement->explicitParent() : nullptr;
+        bool hasLinkedFretboardDiagram = parent && parent->isFretDiagram();
+        if (!hasLinkedFretboardDiagram) {
+            items << makeMenuItem("add-fretboard-diagram");
+        }
+    }
+
     items << makeMenuItem("realize-chord-symbols");
 
     return items;
@@ -188,10 +196,10 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
 MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
 {
     MenuItemList items = makeElementItems();
-    items << makeSeparator();
 
     const engraving::FretDiagram* fretDiagram = engraving::toFretDiagram(hitElementContext().element);
     if (!fretDiagram->harmony()) {
+        items << makeSeparator();
         items << makeMenuItem("chord-text", TranslatableString("notation", "Add c&hord symbol"));
     }
 

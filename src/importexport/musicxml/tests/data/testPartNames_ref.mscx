@@ -28,8 +28,6 @@
       <measureNumberFontSize>10</measureNumberFontSize>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
-      <repeatRightFontSize>10</repeatRightFontSize>
       <glissandoFontSize>10</glissandoFontSize>
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
@@ -960,7 +958,6 @@
             <eid>IC_IC</eid>
             <durationType>whole</durationType>
             <Lyrics>
-              <ticks>26880</ticks>
               <ticks_f>56/4</ticks_f>
               <eid>JC_JC</eid>
               <text>yes!</text>
@@ -1416,7 +1413,6 @@
             <eid>4C_4C</eid>
             <durationType>whole</durationType>
             <Lyrics>
-              <ticks>26880</ticks>
               <ticks_f>56/4</ticks_f>
               <eid>5C_5C</eid>
               <text>no</text>

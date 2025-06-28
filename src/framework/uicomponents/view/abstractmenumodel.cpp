@@ -182,7 +182,22 @@ MenuItem& AbstractMenuModel::findItem(const QString& itemId)
 
 MenuItem& AbstractMenuModel::findItem(const ActionCode& actionCode)
 {
-    return item(m_items, actionCode);
+    MenuItemList list = items(m_items, actionCode);
+    if (list.empty()) {
+        static MenuItem dummy;
+        return dummy;
+    }
+
+    if (list.size() > 1) {
+        LOGD() << "There is more than one item for " << actionCode << ", will return the first one found";
+    }
+
+    return *list.front();
+}
+
+MenuItemList AbstractMenuModel::findItems(const ActionCode& actionCode)
+{
+    return items(m_items, actionCode);
 }
 
 MenuItem& AbstractMenuModel::findMenu(const QString& menuId)
@@ -249,9 +264,9 @@ void AbstractMenuModel::onActionsStateChanges(const muse::actions::ActionCodeLis
     }
 
     for (const ActionCode& code : codes) {
-        MenuItem& actionItem = findItem(code);
-        if (actionItem.isValid()) {
-            actionItem.setState(uiActionsRegister()->actionState(code));
+        MenuItemList items = findItems(code);
+        for (MenuItem* item : items) {
+            item->setState(uiActionsRegister()->actionState(code));
         }
     }
 }
@@ -291,28 +306,29 @@ MenuItem& AbstractMenuModel::item(MenuItemList& items, const QString& itemId)
     return dummy;
 }
 
-MenuItem& AbstractMenuModel::item(MenuItemList& items, const ActionCode& actionCode)
+MenuItemList AbstractMenuModel::items(MenuItemList& items, const ActionCode& actionCode)
 {
+    MenuItemList result;
+
     for (MenuItem* menuItem : items) {
         if (!menuItem) {
             continue;
         }
 
         if (menuItem->action().code == actionCode) {
-            return *menuItem;
+            result.append(menuItem);
         }
 
         auto subitems = menuItem->subitems();
         if (!subitems.empty()) {
-            MenuItem& subitem = item(subitems, actionCode);
-            if (subitem.action().code == actionCode) {
-                return subitem;
+            MenuItemList list = this->items(subitems, actionCode);
+            if (!list.empty()) {
+                result.append(list);
             }
         }
     }
 
-    static MenuItem dummy;
-    return dummy;
+    return result;
 }
 
 MenuItem& AbstractMenuModel::menu(MenuItemList& items, const QString& menuId)

@@ -77,25 +77,8 @@ Item {
                     return
                 }
 
-                if (Boolean(data.value("sync")) && data.value("sync") === true) {
-                    dialogObj.object.exec()
-                } else {
-                    dialogObj.object.show()
-                }
+                dialogObj.object.show()
             }
-        }
-
-        function onFireOpenStandardDialog(data) {
-            var dialog = data.data()
-            var dialogObj = root.createDialog("internal/StandardDialog.qml", dialog.params)
-            data.setValue("ret", dialogObj.ret)
-            data.setValue("objectId", dialogObj.object.objectId)
-
-            if (dialogObj.ret.errcode > 0) {
-                return
-            }
-
-            dialogObj.object.exec()
         }
 
         function onFireClose(objectId) {
@@ -111,38 +94,6 @@ Item {
             if (obj) {
                 obj.raise()
             }
-        }
-
-        function onFireOpenFileDialog(data) {
-            var dialog = data.data()
-            var dialogObj = null
-            if (dialog.selectFolder) {
-                dialogObj = root.createDialog("internal/FolderDialog.qml", dialog.params)
-            } else {
-                dialogObj = root.createDialog("internal/FileDialog.qml", dialog.params)
-            }
-
-            data.setValue("ret", dialogObj.ret)
-            data.setValue("objectId", dialogObj.object.objectId)
-
-            if (dialogObj.ret.errcode > 0) {
-                return
-            }
-
-            dialogObj.object.open()
-        }
-
-        function onFireOpenProgressDialog(data) {
-            var dialog = data.data()
-            var dialogObj = createDialog("internal/ProgressDialog.qml", dialog.params)
-            data.setValue("ret", dialogObj.ret)
-            data.setValue("objectId", dialogObj.object.objectId)
-
-            if (dialogObj.ret.errcode > 0) {
-                return
-            }
-
-            dialogObj.object.open()
         }
     }
 

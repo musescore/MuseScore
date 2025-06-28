@@ -4485,12 +4485,12 @@ altura del texto):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8116"/>
         <source>Laissez vibrer</source>
-        <translation>Laissez vibrer</translation>
+        <translation>Dejar vibrar</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8130"/>
         <source>Minimum laissez vibrer length:</source>
-        <translation>Longitud mínima de laissez vibrer:</translation>
+        <translation>Longitud mínima de dejar vibrar:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8193"/>
@@ -8606,7 +8606,7 @@ altura del texto):</translation>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2381"/>
         <source>Add laissez vibrer</source>
-        <translation>Añadir laissez vibrer</translation>
+        <translation>Añadir dejar vibrar</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2387"/>
@@ -11155,7 +11155,7 @@ Publicado bajo la &lt;a href=&quot;%1&quot;&gt;Licencia Pública General de GNU 
         <location filename="../../src/appshell/qml/Preferences/internal/AccentColorsSection.qml" line="63"/>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="47"/>
         <source>Accent color:</source>
-        <translation>Color del acento:</translation>
+        <translation>Color de resalte:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="44"/>
@@ -13414,7 +13414,7 @@ Publicado bajo la &lt;a href=&quot;%1&quot;&gt;Licencia Pública General de GNU 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="178"/>
         <source>Laissez vibrer segment</source>
-        <translation>Segmento de laissez vibrer</translation>
+        <translation>Segmento de dejar vibrar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="250"/>
@@ -13429,7 +13429,7 @@ Publicado bajo la &lt;a href=&quot;%1&quot;&gt;Licencia Pública General de GNU 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="200"/>
         <source>Laissez vibrer</source>
-        <translation>Laissez vibrer</translation>
+        <translation>Dejar vibrar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="179"/>
@@ -17701,12 +17701,12 @@ Traste %1 en cuerdas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3775"/>
         <source>Laissez vibrer (l.v.) above</source>
-        <translation>Laissez vibrer (l.v.) arriba</translation>
+        <translation>Dejar vibrar (l.v.) arriba</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3776"/>
         <source>Laissez vibrer (l.v.) below</source>
-        <translation>Laissez vibrer (l.v.) abajo</translation>
+        <translation>Dejar vibrar (l.v.) abajo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3777"/>
@@ -22076,7 +22076,7 @@ anacrusa</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="53"/>
         <source>Laissez vibrer</source>
-        <translation>Laissez vibrer</translation>
+        <translation>Dejar vibrar</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/slurandtiesettingsmodel.cpp" line="59"/>
@@ -22421,7 +22421,7 @@ anacrusa</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="91"/>
         <source>Laissez vibrer placement</source>
-        <translation>Colocación de laissez vibrer</translation>
+        <translation>Colocación de dejar vibrar</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="98"/>
@@ -31119,7 +31119,7 @@ failed.</source>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="2186"/>
         <source>Toggle laissez vibrer</source>
-        <translation>Alternar laissez vibrer</translation>
+        <translation>Alternar dejar vibrar</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/edit.cpp" line="4221"/>

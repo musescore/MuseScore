@@ -21,6 +21,8 @@
  */
 #include "process.h"
 
+#include "muse_framework_config.h"
+
 #ifdef QT_QPROCESS_SUPPORTED
 #include <QProcess>
 #endif

@@ -24,7 +24,7 @@
 
 #include "mscore.h"
 #include "pitchspelling.h"
-#include "types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------

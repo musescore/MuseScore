@@ -27,8 +27,6 @@
       <measureNumberFontSize>10</measureNumberFontSize>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
-      <repeatRightFontSize>10</repeatRightFontSize>
       <glissandoFontSize>10</glissandoFontSize>
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
@@ -161,7 +159,9 @@
             <text>N.C.</text>
             </StaffText>
           <Harmony>
-            <name>N.C.</name>
+            <harmonyInfo>
+              <name>N.C.</name>
+              </harmonyInfo>
             <eid>M_M</eid>
             </Harmony>
           <Beam>
@@ -291,7 +291,9 @@
             <text>N.C.</text>
             </StaffText>
           <Harmony>
-            <name>N.C.</name>
+            <harmonyInfo>
+              <name>N.C.</name>
+              </harmonyInfo>
             <eid>n_n</eid>
             </Harmony>
           <Beam>
@@ -395,7 +397,9 @@
           </Marker>
         <voice>
           <Harmony>
-            <name>N.C.</name>
+            <harmonyInfo>
+              <name>N.C.</name>
+              </harmonyInfo>
             <eid>8_8</eid>
             </Harmony>
           <Beam>

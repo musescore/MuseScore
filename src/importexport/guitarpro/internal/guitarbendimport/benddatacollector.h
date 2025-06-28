@@ -24,9 +24,10 @@
 
 #include <engraving/types/pitchvalue.h>
 #include <engraving/types/types.h>
-#include <engraving/dom/types.h>
 
 #include "benddatacontext.h"
+#include "guitarbendimporttypes.h"
+#include "splitchord/benddatacollectorsplitchord.h"
 
 namespace mu::engraving {
 class Note;
@@ -41,24 +42,22 @@ public:
     void storeBendData(const mu::engraving::Note* note, const mu::engraving::PitchValues& pitchValues);
     BendDataContext collectBendDataContext();
 
-    struct BendSegment {
-        int startTime = -1;
-        int middleTime = -1;
-        int endTime = -1;
-        int startPitch = -1;
-        int endPitch = -1;
-
-        int pitchDiff() const { return endPitch - startPitch; }
-    };
-
-    struct ImportedBendInfo {
-        const mu::engraving::Note* note = nullptr;
-        int pitchChangesAmount = 0;
-        std::vector<BendSegment> segments;
-    };
-
 private:
     std::unordered_map<mu::engraving::track_idx_t,
-                       std::map<int, std::unordered_map<const mu::engraving::Note*, ImportedBendInfo> > > m_bendInfoForNote;
+                       std::map<mu::engraving::Fraction,
+                                std::unordered_map<const mu::engraving::Note*, ImportedBendInfo> > > m_bendInfoForNote;
+
+    std::unordered_map<mu::engraving::track_idx_t,
+                       std::map<mu::engraving::Fraction, tied_chords_bend_data_chunk_t> > m_regroupedDataByTiedChords;
+
+    std::unique_ptr<BendDataCollectorSplitChord> m_bendDataCollectorSplitChord;
+
+    // converts m_bendInfoForNote to m_regroupedData, leaves m_bendInfoForNote empty
+    // m_bendInfoForNote is needed to store separate bend data for each note, while m_regroupedData stores in format, comfortoble for import
+    void regroupBendDataByTiedChords();
+    void fillBendDataContext(BendDataContext& bendDataCtx);
+
+    // if first chord in chunk has more segments than tied notes, move segments forward to other notes
+    void moveSegmentsToTiedNotes(tied_chords_bend_data_chunk_t& dataChunk, ImportedBendInfo& dataForFirstNote, size_t noteIdx);
 };
 } // mu::iex::guitarpro

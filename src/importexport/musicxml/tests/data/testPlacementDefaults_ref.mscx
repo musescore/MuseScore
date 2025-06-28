@@ -27,8 +27,6 @@
       <measureNumberFontSize>10</measureNumberFontSize>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
-      <repeatRightFontSize>10</repeatRightFontSize>
       <glissandoFontSize>10</glissandoFontSize>
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
@@ -247,7 +245,6 @@
             <eid>O_O</eid>
             <durationType>whole</durationType>
             <Lyrics>
-              <ticks>9600</ticks>
               <ticks_f>20/4</ticks_f>
               <eid>P_P</eid>
               <text>ahh</text>

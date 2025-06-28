@@ -171,6 +171,8 @@ struct HarmonyDesc
     engraving::Harmony* m_harmony;
     engraving::FretDiagram* m_fretDiagram;
 
+    const engraving::ChordDescription* descr() const;
+
     HarmonyDesc(engraving::track_idx_t m_track, engraving::Harmony* m_harmony, engraving::FretDiagram* m_fretDiagram)
         : m_track(m_track), m_harmony(m_harmony),
         m_fretDiagram(m_fretDiagram) {}

@@ -78,8 +78,10 @@
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>14</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>2ouZKn46kzN_2172r0PQ70D</eid>
             </Harmony>
           <Rest>
@@ -91,8 +93,10 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>16</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>Yuk10ASKBUP_+8ntsO5rYwM</eid>
             </Harmony>
           </voice>
@@ -101,8 +105,10 @@
         <eid>t2EsgAFlRbG_srWFIAFV8IB</eid>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>HNKUAccN1ZN_5AYEroiqw3D</eid>
             </Harmony>
           <Rest>
@@ -114,8 +120,10 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>13</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>13</root>
+              </harmonyInfo>
             <eid>Hdip2tX7V0N_7mfGwsTDwZH</eid>
             </Harmony>
           </voice>
@@ -124,8 +132,10 @@
         <eid>4a3b0e0Oc1J_QsDOmoNugxK</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>im85bCtlrwG_QQ5EaQrMipM</eid>
             </Harmony>
           <Rest>
@@ -137,8 +147,10 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>16</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>fk9LxBOi21G_WPlD2rUsy1N</eid>
             </Harmony>
           </voice>
@@ -147,8 +159,10 @@
         <eid>fjri3bmfkuG_C0evuyjKplC</eid>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>FDE8UGsR3gB_YMm5Ha0LORJ</eid>
             </Harmony>
           <Rest>
@@ -160,8 +174,10 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>13</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>13</root>
+              </harmonyInfo>
             <eid>tz1D8nKuwGN_T05YsupAVRM</eid>
             </Harmony>
           </voice>
@@ -170,8 +186,10 @@
         <eid>1O6i8tCHkQI_OARryzikM1K</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>6gvtj2Use0P_6gvtj2Use0P</eid>
             </Harmony>
           <Rest>
@@ -183,8 +201,10 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>16</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>7gvtj2Use0P_7gvtj2Use0P</eid>
             </Harmony>
           </voice>
@@ -193,8 +213,10 @@
         <eid>ls5bzWgvaEF_Zi0FPX5PY4K</eid>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>8gvtj2Use0P_8gvtj2Use0P</eid>
             </Harmony>
           <Rest>
@@ -206,8 +228,10 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>13</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>13</root>
+              </harmonyInfo>
             <eid>9gvtj2Use0P_9gvtj2Use0P</eid>
             </Harmony>
           </voice>
@@ -216,8 +240,10 @@
         <eid>EOFWN6iNyd_0MKatBZXHgC</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>+gvtj2Use0P_+gvtj2Use0P</eid>
             </Harmony>
           <Rest>
@@ -229,8 +255,10 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>16</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>/gvtj2Use0P_/gvtj2Use0P</eid>
             </Harmony>
           </voice>
@@ -239,8 +267,10 @@
         <eid>E/CpwHN3vhK_epOEbf1IRfP</eid>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>Ahvtj2Use0P_Ahvtj2Use0P</eid>
             </Harmony>
           <Rest>
@@ -252,8 +282,10 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>13</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>13</root>
+              </harmonyInfo>
             <eid>Bhvtj2Use0P_Bhvtj2Use0P</eid>
             </Harmony>
           </voice>

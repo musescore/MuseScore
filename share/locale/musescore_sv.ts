@@ -20331,7 +20331,7 @@ upptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="165"/>
         <source>Keep measures on the selected system(s) together and prevent them from reflowing to the next system</source>
-        <translation>Håll ihop takter på de(t) markerade system(en) och hindra dem från att spilla över på nästa system</translation>
+        <translation>Håll ihop takter på det markerade systemet och hindra dem från att spilla över till nästa system</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml" line="187"/>
@@ -31625,7 +31625,7 @@ misslyckades.</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5552"/>
         <source>Add interval</source>
-        <translation>Lägg till interval</translation>
+        <translation>Lägg till intervall</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5559"/>

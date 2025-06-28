@@ -54,7 +54,6 @@
 #include "stafftype.h"
 #include "stem.h"
 #include "stemslash.h"
-#include "stretchedbend.h"
 #include "stringdata.h"
 #include "system.h"
 #include "tie.h"
@@ -353,19 +352,6 @@ Chord::Chord(const Chord& c, bool link)
             if (link) {
                 score()->undo(new Link(ncl, cl));
             }
-        } else if (e->isStretchedBend()) {
-            StretchedBend* sb = toStretchedBend(e);
-            StretchedBend* nsb = Factory::copyStretchedBend(*sb);
-            add(nsb);
-            if (Note* originalNote = sb->note()) {
-                for (Note* note : notes()) {
-                    if (note->pitch() == originalNote->pitch() && note->string() == originalNote->string()) {
-                        nsb->setNote(note);
-                        note->setStretchedBend(nsb);
-                        break;
-                    }
-                }
-            }
         }
     }
 }
@@ -443,61 +429,6 @@ AccessibleItemPtr Chord::createAccessible()
 double Chord::noteHeadWidth() const
 {
     return score()->noteHeadWidth() * mag();
-}
-
-//! Returns Chord coordinates
-double Chord::stemPosX() const
-{
-    const StaffType* staffType = this->staffType();
-    if (staffType && staffType->isTabStaff()) {
-        double xPos = staffType->chordStemPosX(this) * spatium();
-        if (isGraceBendEnd()) {
-            GraceNotesGroup& graceBefore = graceNotesBefore();
-            Chord* grace = graceBefore.empty() ? nullptr : graceBefore.front();
-            if (grace) {
-                xPos += grace->pos().x();
-            }
-        }
-        return xPos;
-    }
-    return ldata()->up ? noteHeadWidth() : 0.0;
-}
-
-//! Returns page coordinates
-PointF Chord::stemPos() const
-{
-    const Staff* staff = this->staff();
-    const StaffType* staffType = staff ? staff->staffTypeForElement(this) : nullptr;
-    if (staffType && staffType->isTabStaff()) {
-        return pagePos() + staffType->chordStemPos(this) * spatium();
-    }
-
-    if (ldata()->up) {
-        const Note* downNote = this->downNote();
-        double nhw = m_notes.size() == 1 ? downNote->bboxRightPos() : noteHeadWidth();
-        return pagePos() + PointF(nhw, downNote->pos().y());
-    }
-
-    return pagePos() + PointF(0.0, upNote()->pos().y());
-}
-
-//! Returns stem position of note on beam side
-//! Returns page coordinates
-PointF Chord::stemPosBeam() const
-{
-    const Staff* stf = this->staff();
-    const StaffType* st = stf ? stf->staffTypeForElement(this) : nullptr;
-
-    if (st && st->isTabStaff()) {
-        return pagePos() + st->chordStemPosBeam(this) * spatium();
-    }
-
-    if (ldata()->up) {
-        double nhw = noteHeadWidth();
-        return pagePos() + PointF(nhw, upNote()->pos().y());
-    }
-
-    return pagePos() + PointF(0, downNote()->pos().y());
 }
 
 //---------------------------------------------------------
@@ -681,9 +612,7 @@ void Chord::add(EngravingItem* e)
     case ElementType::HOOK:
         m_hook = toHook(e);
         break;
-    case ElementType::STRETCHED_BEND:
     case ElementType::CHORDLINE:
-    case ElementType::FRET_CIRCLE:
         addEl(e);
         break;
     case ElementType::STEM_SLASH:
@@ -704,6 +633,7 @@ void Chord::add(EngravingItem* e)
         break;
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     {
         Articulation* a = toArticulation(e);
         if (a->layoutCloseToNote()) {
@@ -754,9 +684,6 @@ void Chord::remove(EngravingItem* e)
             for (Spanner* s : note->spannerFor()) {
                 note->removeSpannerFor(s);
             }
-            if (StretchedBend* stretchedBend = note->stretchedBend()) {
-                removeEl(stretchedBend);
-            }
         } else {
             LOGD("Chord::remove() note %p not found!", e);
         }
@@ -795,19 +722,7 @@ void Chord::remove(EngravingItem* e)
         }
         m_stemSlash = 0;
         break;
-    case ElementType::STRETCHED_BEND:
-    {
-        StretchedBend* stretchedBend = toStretchedBend(e);
-        auto it = std::find_if(m_notes.begin(), m_notes.end(), [stretchedBend](Note* note) {
-                return note->stretchedBend() == stretchedBend;
-            });
-        if (it != m_notes.end()) {
-            (*it)->setStretchedBend(nullptr);
-        }
-    }
-    // fallthrough
     case ElementType::CHORDLINE:
-    case ElementType::FRET_CIRCLE:
         removeEl(e);
         break;
     case ElementType::CHORD:
@@ -820,6 +735,7 @@ void Chord::remove(EngravingItem* e)
     break;
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     {
         Articulation* a = toArticulation(e);
         if (!muse::remove(m_articulations, a)) {
@@ -890,23 +806,31 @@ double Chord::downPos() const
     return downNote()->pos().y();
 }
 
-//---------------------------------------------------------
-//   centerX
-//    return x position for attributes
-//---------------------------------------------------------
-
-double Chord::centerX() const
+bool Chord::allNotesTiedToNext() const
 {
-    // TAB 'notes' are always centered on the stem
-    const Staff* st = staff();
-    const StaffType* stt = st->staffTypeForElement(this);
-    if (stt->isTabStaff()) {
-        return stt->chordStemPosX(this) * spatium();
+    Chord* tiedChord = nullptr;
+    for (Note* note : m_notes) {
+        if (!note->tieFor()) {
+            return false;
+        }
+
+        Note* endNote = note->tieFor()->endNote();
+        Chord* endChord = endNote ? endNote->chord() : nullptr;
+        if (!endChord) {
+            return false;
+        }
+
+        if (!tiedChord) {
+            tiedChord = endChord;
+            continue;
+        }
+
+        if (endChord != tiedChord) {
+            return false;
+        }
     }
 
-    const Note* note = up() ? downNote() : upNote();
-    double x = note->pos().x() + note->noteheadCenterX();
-    return x;
+    return true;
 }
 
 //---------------------------------------------------------
@@ -1407,6 +1331,7 @@ EngravingItem* Chord::drop(EditData& data)
     switch (e->type()) {
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     {
         Articulation* atr = toArticulation(e);
         Articulation* oa = hasArticulation(atr);
@@ -1625,6 +1550,15 @@ PropertyValue Chord::propertyDefault(Pid propertyId) const
     }
 }
 
+bool Chord::isUserModified() const
+{
+    if (showStemSlash() != propertyDefault(Pid::SHOW_STEM_SLASH).toBool()) {
+        return true;
+    }
+
+    return EngravingItem::isUserModified();
+}
+
 //---------------------------------------------------------
 //   setProperty
 //---------------------------------------------------------
@@ -1669,6 +1603,20 @@ Articulation* Chord::hasArticulation(const Articulation* aa)
         }
     }
     return 0;
+}
+
+Tapping* Chord::tapping() const
+{
+    std::vector<Tapping*> tappings;
+    tappings.reserve(1);
+    for (Articulation* a : m_articulations) {
+        if (a->isTapping()) {
+            tappings.push_back(toTapping(a));
+        }
+    }
+    DO_ASSERT(tappings.size() <= 1);
+
+    return tappings.size() > 0 ? tappings.front() : nullptr;
 }
 
 void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, ArticulationsUpdateMode updateMode)

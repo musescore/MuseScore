@@ -131,7 +131,7 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::CLEF][ElementType::STEM] = 0.75 * spatium;
     table[ElementType::CLEF][ElementType::REST] = table[ElementType::CLEF][ElementType::NOTE];
     table[ElementType::CLEF][ElementType::CLEF] = 0.75 * spatium;
-    table[ElementType::CLEF][ElementType::ARPEGGIO] = 1.15 * spatium;
+    table[ElementType::CLEF][ElementType::ARPEGGIO] = 0.65 * spatium;
     table[ElementType::CLEF][ElementType::BAR_LINE] = style.styleMM(Sid::clefBarlineDistance);
     table[ElementType::CLEF][ElementType::KEYSIG] = style.styleMM(Sid::clefKeyDistance);
     table[ElementType::CLEF][ElementType::TIMESIG] = style.styleMM(Sid::clefTimesigDistance);
@@ -270,5 +270,14 @@ void PaddingTable::createTable(const MStyle& style)
     table[ElementType::FERMATA].fill(articulationAndFermataPadding);
     for (auto& elem : table) {
         elem[ElementType::FERMATA] = articulationAndFermataPadding;
+    }
+
+    table[ElementType::TAPPING] = table[ElementType::ARTICULATION];
+    for (auto& elem : table) {
+        elem[ElementType::TAPPING] = elem[ElementType::ARTICULATION];
+    }
+    table[ElementType::TAPPING_HALF_SLUR_SEGMENT] = table[ElementType::ARTICULATION];
+    for (auto& elem : table) {
+        elem[ElementType::TAPPING_HALF_SLUR_SEGMENT] = elem[ElementType::ARTICULATION];
     }
 }

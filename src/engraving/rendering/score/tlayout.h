@@ -95,6 +95,7 @@
 #include "../../dom/systemtext.h"
 #include "../../dom/soundflag.h"
 
+#include "../../dom/tapping.h"
 #include "../../dom/textbase.h"
 #include "../../dom/tempotext.h"
 #include "../../dom/text.h"
@@ -122,6 +123,9 @@ class GradualTempoChange;
 
 class HairpinSegment;
 class Hairpin;
+class HammerOnPullOff;
+class HammerOnPullOffSegment;
+class HammerOnPullOffText;
 class HarmonicMarkSegment;
 
 class LedgerLine;
@@ -152,7 +156,6 @@ class Slur;
 class Spacer;
 class SpannerSegment;
 class StaffLines;
-class StretchedBend;
 class StringTunings;
 
 class BSymbol;
@@ -163,6 +166,7 @@ class SystemDivider;
 class SystemText;
 
 class TabDurationSymbol;
+class Tapping;
 class TempoText;
 class Text;
 class TextLine;
@@ -230,7 +234,7 @@ public:
 
     static void layoutExpression(const Expression* item, Expression::LayoutData* ldata);
 
-    static void layoutFermata(const Fermata* item, Fermata::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void layoutFermata(const Fermata* item, Fermata::LayoutData* ldata);
     static void layoutFiguredBass(const FiguredBass* item, FiguredBass::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutFingering(const Fingering* item, Fingering::LayoutData* ldata);
     static void layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData* ldata, const LayoutContext& ctx);
@@ -247,6 +251,9 @@ public:
 
     static void layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx);
     static void layoutHairpin(Hairpin* item, LayoutContext& ctx);
+    static void layoutHammerOnPullOff(HammerOnPullOff* item, LayoutContext& ctx);
+    static void layoutHammerOnPullOffSegment(HammerOnPullOffSegment* item, LayoutContext& ctx);
+    static void layoutHammerOnPullOffText(HammerOnPullOffText* item, LayoutContext& ctx);
     static void fillHairpinSegmentShape(const HairpinSegment* item, HairpinSegment::LayoutData* ldata);
     static void layoutHarpPedalDiagram(const HarpPedalDiagram* item, HarpPedalDiagram::LayoutData* ldata);
     static void layoutHarmonicMarkSegment(HarmonicMarkSegment* item, LayoutContext& ctx);
@@ -272,7 +279,7 @@ public:
     static void layoutLyricsLine(LyricsLine* item, LayoutContext& ctx);
     static void layoutLyricsLineSegment(LyricsLineSegment* item, LayoutContext& ctx);
 
-    static void layoutMarker(const Marker* item, Marker::LayoutData* ldata);
+    static void layoutMarker(const Marker* item, Marker::LayoutData* ldata, LayoutContext& ctx);
     static void layoutMeasureBase(MeasureBase* item, LayoutContext& ctx); // factory
     static void layoutBaseMeasureBase(const MeasureBase* item, MeasureBase::LayoutData* ldata, const LayoutContext& ctx); // base class
     static void layoutMeasureNumber(const MeasureNumber* item, MeasureNumber::LayoutData* ldata, const LayoutContext& ctx);
@@ -320,8 +327,6 @@ public:
     static void layoutStem(const Stem* item, Stem::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutSticking(const Sticking* item, Sticking::LayoutData* ldata);
-    static void layoutStretchedBend(StretchedBend* item, LayoutContext& ctx);
-    static void layoutStretched(StretchedBend* item, LayoutContext& ctx);
     static void layoutStringTunings(StringTunings* item, LayoutContext& ctx);
     static void layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldata);
 
@@ -332,6 +337,8 @@ public:
     static void layoutSystemText(const SystemText* item, SystemText::LayoutData* ldata);
 
     static void layoutTabDurationSymbol(const TabDurationSymbol* item, TabDurationSymbol::LayoutData* ldata);
+    static void layoutTapping(Tapping* item, Tapping::LayoutData* ldata, LayoutContext& ctx);
+    static void layoutTappingHalfSlur(TappingHalfSlur* item);
     static void layoutTempoText(const TempoText* item, TempoText::LayoutData* ldata);
 
     static void layoutTextBase(TextBase* item, LayoutContext& ctx);                 // factory
@@ -383,6 +390,7 @@ private:
     static void layoutFiguredBassItem(const FiguredBassItem* item, FiguredBassItem::LayoutData* ldata, const LayoutContext& ctx);
 
     static SpannerSegment* layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx);
+    static double voltaMidEndSegmentStartX(Volta* volta, System* system, LayoutContext& ctx);
     static SpannerSegment* getNextLayoutSystemSegment(Spanner* spanner, System* system,
                                                       std::function<SpannerSegment* (System* parent)> createSegment);
 

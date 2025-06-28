@@ -505,7 +505,6 @@ Hairpin::Hairpin(EngravingItem* parent)
 
     m_hairpinCircledTip     = false;
     m_veloChange            = 0;
-    m_dynRange              = DynamicRange::PART;
     m_singleNoteDynamics    = true;
     m_veloChangeMethod      = ChangeMethod::NORMAL;
 }
@@ -588,13 +587,6 @@ LineSegment* Hairpin::createLineSegment(System* parent)
     h->setTrack(track());
     h->initElementStyle(&hairpinSegmentStyle);
     return h;
-}
-
-void Hairpin::setDynRange(DynamicRange range)
-{
-    m_dynRange = range;
-
-    setVoiceAssignment(dynamicRangeToVoiceAssignment(range));
 }
 
 //---------------------------------------------------------

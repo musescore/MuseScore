@@ -922,6 +922,10 @@ Font TextFragment::font(const TextBase* t) const
             fontType = Font::Type::MusicSymbolText;
             // to keep desired size ratio (based on 20pt symbol size to 12pt text size)
             m *= 5.0 / 3.0;
+        } else if (t->isMarker()) {
+            family = t->style().styleSt(Sid::musicalTextFont);
+            fontType = Font::Type::MusicSymbolText;
+            m = t->getProperty(Pid::MARKER_SYMBOL_SIZE).toDouble();
         } else {
             family = t->style().styleSt(Sid::musicalTextFont);
             fontType = Font::Type::MusicSymbolText;
@@ -1001,6 +1005,7 @@ void TextBlock::layout(const TextBase* t)
 
     double layoutWidth = 0;
     EngravingItem* e = t->parentItem();
+    // TODO - remove when position is implemented for all text items
     if (e && t->layoutToParentWidth()) {
         layoutWidth = e->width();
         switch (e->type()) {
@@ -1081,6 +1086,9 @@ void TextBlock::layout(const TextBase* t)
                 x += w;
             }
 
+            double yOffset = musicSymbolBaseLineAdjust(t, f, fi);
+            f.pos.ry() -= yOffset;
+
             RectF textBRect = fm.tightBoundingRect(f.text).translated(f.pos);
             bool useDynamicSymShape = fragmentFont.type() == Font::Type::MusicSymbol && t->isDynamic();
             if (useDynamicSymShape) {
@@ -1094,13 +1102,11 @@ void TextBlock::layout(const TextBase* t)
             } else {
                 m_shape.add(textBRect, t);
             }
-
-            Font font = f.font(t);
-            if (font.type() == Font::Type::MusicSymbol || font.type() == Font::Type::MusicSymbolText) {
+            if (fragmentFont.type() == Font::Type::MusicSymbol || fragmentFont.type() == Font::Type::MusicSymbolText) {
                 // SEMI-HACK: Music fonts can have huge linespacing because of tall symbols, so instead of using the
                 // font linespacing value we just use the height of the individual fragment with some added margin
 
-                m_lineSpacing = std::max(m_lineSpacing, 1.25 * m_shape.bbox().height());
+                m_lineSpacing = std::max(m_lineSpacing, 1.25 * (m_shape.bbox().height() - m_shape.bbox().bottom()) + yOffset);
             } else {
                 m_lineSpacing = std::max(m_lineSpacing, fm.lineSpacing());
             }
@@ -1110,25 +1116,29 @@ void TextBlock::layout(const TextBase* t)
     // Apply style/custom line spacing
     m_lineSpacing *= t->textLineSpacing();
 
-    double rx = 0;
-    AlignH alignH = t->align().horizontal;
-    bool dynamicAlwaysCentered = t->isDynamic() && t->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
+    // OLD ALIGN TEXT
+    // TODO - remove when position is implemented for all text items
+    if (!t->positionSeparateFromAlignment()) {
+        double rx = 0;
+        AlignH alignH = t->align().horizontal;
+        bool dynamicAlwaysCentered = t->isDynamic() && t->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
 
-    RectF bbox = m_shape.bbox();
-    if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
-        rx = (layoutWidth - (bbox.left() + bbox.right())) * .5;
-    } else if (alignH == AlignH::LEFT) {
-        rx = -bbox.left();
-    } else if (alignH == AlignH::RIGHT) {
-        rx = layoutWidth - bbox.right();
+        RectF bbox = m_shape.bbox();
+        if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
+            rx = (layoutWidth - (bbox.left() + bbox.right())) * .5;
+        } else if (alignH == AlignH::LEFT) {
+            rx = -bbox.left();
+        } else if (alignH == AlignH::RIGHT) {
+            rx = layoutWidth - bbox.right();
+        }
+
+        rx += lm;
+
+        for (TextFragment& f : m_fragments) {
+            f.pos.rx() += rx;
+        }
+        m_shape.translate(PointF(rx, 0.0));
     }
-
-    rx += lm;
-
-    for (TextFragment& f : m_fragments) {
-        f.pos.rx() += rx;
-    }
-    m_shape.translate(PointF(rx, 0.0));
 }
 
 //---------------------------------------------------------
@@ -1424,6 +1434,30 @@ void TextBlock::simplify()
         }
         f = &*i;
     }
+}
+
+double TextBlock::musicSymbolBaseLineAdjust(const TextBase* t, const TextFragment& f, const std::list<TextFragment>::iterator fi)
+{
+    Font fragmentFont = f.font(t);
+    FontMetrics fm(fragmentFont);
+    const bool adjustSymbol = fragmentFont.type() == Font::Type::MusicSymbolText && t->isMarker();
+    if (!adjustSymbol) {
+        return 0.0;
+    }
+
+    // Align the x-height of the coda symbol to half the x-height of the surrounding text
+    Font refFont;
+    if (m_fragments.size() == 1) {
+        refFont = t->font();
+    } else {
+        TextFragment& refFragment = fi != m_fragments.begin() ? *(std::prev(fi)) : *(std::next(fi));
+        refFont = refFragment.font(t);
+    }
+    FontMetrics refFm(refFont);
+
+    const double middle = (fm.tightBoundingRect(f.text).height() / 2) - fm.tightBoundingRect(f.text).bottom();
+    const double refXHeight = refFm.capHeight() / 2;
+    return refXHeight - middle;
 }
 
 //---------------------------------------------------------
@@ -2759,6 +2793,8 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
         return PropertyValue::fromValue(bgColor());
     case Pid::ALIGN:
         return PropertyValue::fromValue(align());
+    case Pid::POSITION:
+        return PropertyValue::fromValue(position());
     case Pid::TEXT_SCRIPT_ALIGN:
         return static_cast<int>(m_cursor->selectedFragmentsFormat().valign());
     case Pid::TEXT:
@@ -2788,6 +2824,12 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
 
     bool rv = true;
     switch (pid) {
+    case Pid::COLOR:
+        if (color() == frameColor()) {
+            setFrameColor(v.value<Color>());
+        }
+        EngravingItem::setProperty(pid, v);
+        break;
     case Pid::TEXT_STYLE:
         initTextStyleType(v.value<TextStyleType>());
         break;
@@ -2826,6 +2868,9 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
         break;
     case Pid::ALIGN:
         setAlign(v.value<Align>());
+        break;
+    case Pid::POSITION:
+        setPosition(v.value<AlignH>());
         break;
     case Pid::TEXT_SCRIPT_ALIGN:
         m_cursor->setFormat(FormatId::Valign, v.toInt());

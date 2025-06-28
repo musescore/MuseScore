@@ -83,7 +83,9 @@
             <eid>H_H</eid>
             </Dynamic>
           <Harmony>
-            <root>15</root>
+            <harmonyInfo>
+              <root>15</root>
+              </harmonyInfo>
             <eid>I_I</eid>
             </Harmony>
           <Tempo>

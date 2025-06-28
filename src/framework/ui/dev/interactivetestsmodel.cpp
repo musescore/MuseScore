@@ -26,9 +26,19 @@
 
 #include "async/async.h"
 
+#include "global/progress.h"
+
 #include "log.h"
 
 using namespace muse::ui;
+
+struct ProgressData
+{
+    muse::Progress progress;
+    QTimer timer;
+    int total = 10;
+    int current = 0;
+};
 
 InteractiveTestsModel::InteractiveTestsModel(QObject* parent)
     : QObject(parent), Injectable(muse::iocCtxForQmlObject(this))
@@ -44,7 +54,51 @@ void InteractiveTestsModel::init()
     });
 }
 
-void InteractiveTestsModel::openSampleDialog()
+void InteractiveTestsModel::selectOpeningFile()
+{
+    io::path_t path = interactive()->selectOpeningFileSync("Sample select file", qApp->applicationDirPath(),
+                                                           { "Text files (*.txt)", "Cmake files (*.cmake)" });
+    LOGI() << "path: " << path;
+}
+
+void InteractiveTestsModel::selectSavingFile()
+{
+    io::path_t path = interactive()->selectSavingFileSync("Sample select file", qApp->applicationDirPath(),
+                                                          { "Text files (*.txt)", "Cmake files (*.cmake)" });
+    LOGI() << "path: " << path;
+}
+
+void InteractiveTestsModel::selectDirectory()
+{
+    io::path_t path = interactive()->selectDirectory("Sample select file", qApp->applicationDirPath());
+    LOGI() << "path: " << path;
+}
+
+void InteractiveTestsModel::showProgress()
+{
+    ProgressData* pd = new ProgressData();
+    pd->timer.setInterval(1000);
+    connect(&pd->timer, &QTimer::timeout, [pd]() {
+        pd->current++;
+        pd->progress.progress(pd->current, pd->total, "bla-bla");
+
+        if (pd->current >= pd->total) {
+            pd->timer.stop();
+            pd->progress.finish(ProgressResult::make_ok(Val()));
+
+            async::Async::call(nullptr, [pd]() {
+                delete pd;
+            });
+        }
+    });
+
+    interactive()->showProgress("Progress sample", &pd->progress);
+
+    pd->timer.start();
+    pd->progress.start();
+}
+
+void InteractiveTestsModel::openSampleDialogSync()
 {
     LOGI() << "cpp: before open";
     RetVal<Val> rv = interactive()->openSync("muse://devtools/interactive/sample?color=#474747");
@@ -54,8 +108,8 @@ void InteractiveTestsModel::openSampleDialog()
 void InteractiveTestsModel::openSampleDialogAsync()
 {
     LOGI() << "cpp: before open ";
-    RetVal<Val> rv = interactive()->openSync("muse://devtools/interactive/sample?sync=false&color=#D24373");
-    LOGI() << "cpp: after open ret: " << rv.ret.toString() << ", val: " << rv.val.toString();
+    interactive()->open("muse://devtools/interactive/sample?sync=false&color=#D24373");
+    LOGI() << "cpp: after open";
 }
 
 void InteractiveTestsModel::closeSampleDialog()

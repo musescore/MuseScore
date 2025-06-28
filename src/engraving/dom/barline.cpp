@@ -451,7 +451,7 @@ static size_t nextVisibleSpannedStaff(const BarLine* bl)
 }
 
 //---------------------------------------------------------
-//   getY
+//   calcY
 //---------------------------------------------------------
 
 void BarLine::calcY()
@@ -465,52 +465,55 @@ void BarLine::calcY()
         return;
     }
     staff_idx_t staffIdx1 = staffIdx();
-    const Staff* staff1 = score()->staff(staffIdx1);
-    staff_idx_t staffIdx2 = staffIdx1;
-    size_t nstaves = score()->nstaves();
+    staff_idx_t staffIdx2 = m_spanStaff ? nextVisibleSpannedStaff(this) : staffIdx1;
+
+    bool spanStaff = staffIdx2 != staffIdx1;
 
     Measure* measure = segment()->measure();
-    if (m_spanStaff) {
-        staffIdx2 = nextVisibleSpannedStaff(this);
-    }
-
     System* system = measure->system();
     if (!system) {
         return;
     }
 
-    // test start and end staff visibility
-
-    // base y on top visible staff in barline span
-    // after skipping ones with hideSystemBarLine set
-    // and accounting for staves that are shown but have invisible measures
-
     Fraction tick = segment()->measure()->tick();
+    const Staff* staff1 = score()->staff(staffIdx1);
     const StaffType* staffType1 = staff1->staffType(tick);
+
+    bool oneLine = staffType1->lines() <= 1;
 
     int from = m_spanFrom;
     int to = m_spanTo;
-    bool oneLine = staffType1->lines() <= 1;
-    if (oneLine && m_spanFrom == 0) {
+
+    if (oneLine && m_spanFrom == 0 && m_spanTo == 0) {
         from = BARLINE_SPAN_1LINESTAFF_FROM;
-        if (!m_spanStaff || (staffIdx1 == nstaves - 1)) {
+        if (!spanStaff) {
             to = BARLINE_SPAN_1LINESTAFF_TO;
         }
     }
-    SysStaff* sysStaff1  = system->staff(staffIdx1);
-    double startStaffY = sysStaff1->y();
-    double spatium1 = staffType1->spatium(style());
+
+    double spatium1 = staffType1->spatium();
     double lineDistance = staffType1->lineDistance().val() * spatium1;
     double offset = staffType1->yoffset().val() * spatium1;
     double lineWidth = style().styleS(Sid::staffLineWidth).val() * spatium1 * .5;
 
     double y1 = offset + from * lineDistance * .5 - lineWidth;
-    double y2;
+    double y2 = offset + (staffType1->lines() * 2 - 2 + to) * lineDistance * .5 + lineWidth;
 
-    if (staffIdx2 != staffIdx1) {
-        y2 = measure->staffLines(staffIdx2)->y1() - startStaffY - to * lineDistance * 0.5;
-    } else {
-        y2 = offset + (staffType1->lines() * 2 - 2 + to) * lineDistance * .5 + lineWidth;
+    if (spanStaff) {
+        // we need spatium and line distance of bottom staff
+        // as it may be scalled diferently
+        const Staff* staff2 = score()->staff(staffIdx2);
+        const StaffType* staffType2 = staff2 ? staff2->staffType(tick) : staffType1;
+        double spatium2 = staffType2->spatium();
+        double lineDistance2 = staffType2->lineDistance().val() * spatium2;
+        double startStaffY = system->staff(staffIdx1)->y();
+
+        y2 = measure->staffLines(staffIdx2)->y1() - startStaffY - to * lineDistance2 * 0.5;
+
+        // if bottom staff is single line, set span-to zeropoint to the top of the standard barline
+        if (staffType2->lines() <= 1) {
+            y2 += BARLINE_SPAN_1LINESTAFF_FROM * lineDistance2 * 0.5;
+        }
     }
 
     // if stafftype change in next measure, check new staff positions
@@ -525,13 +528,13 @@ void BarLine::calcY()
                 from = m_spanFrom;
                 to = m_spanTo;
             }
-            if (oneLineNext && m_spanFrom == 0) {
+            if (oneLineNext && m_spanFrom == 0 && m_spanTo == 0) {
                 from = BARLINE_SPAN_1LINESTAFF_FROM;
-                if (!m_spanStaff || (staffIdx1 == nstaves - 1)) {
+                if (!spanStaff) {
                     to = BARLINE_SPAN_1LINESTAFF_TO;
                 }
             }
-            double spatium1Next = staffType1Next->spatium(style());
+            double spatium1Next = staffType1Next->spatium();
             double lineDistanceNext = staffType1Next->lineDistance().val() * spatium1Next;
             double offsetNext = staffType1Next->yoffset().val() * spatium1Next;
             double lineWidthNext = style().styleS(Sid::staffLineWidth).val() * spatium1Next * .5;
@@ -544,7 +547,7 @@ void BarLine::calcY()
                     y1 = y1Next;
                 }
 
-                if (staffIdx2 == staffIdx1) {
+                if (!spanStaff) {
                     double y2Next = offsetNext + (staffType1Next->lines() * 2 - 2 + to) * lineDistanceNext * .5 + lineWidthNext;
                     if (y2Next > y2) {
                         y2 = y2Next;

@@ -259,6 +259,7 @@ public:
     static String fromUtf16BE(const ByteArray& data);
 
     static String fromUtf8(const char* str);
+    static String fromUtf8(std::string_view);
     static String fromUtf8(const ByteArray& data);
     ByteArray toUtf8() const;
 

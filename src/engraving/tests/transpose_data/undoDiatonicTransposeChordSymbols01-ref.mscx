@@ -109,7 +109,9 @@
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>i6JddkooT+K_VCqDglUeMRM</eid>
             </Harmony>
           <Chord>
@@ -125,14 +127,18 @@
             <fractions>-1/4</fractions>
             </location>
           <Harmony>
-            <root>16</root>
+            <harmonyInfo>
+              <root>16</root>
+              </harmonyInfo>
             <eid>SYmKSDioSgJ_3nRLTs3666</eid>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
-            <root>18</root>
+            <harmonyInfo>
+              <root>18</root>
+              </harmonyInfo>
             <eid>mPZO1MniRBK_DR0+zmVAE6N</eid>
             </Harmony>
           <Chord>
@@ -148,7 +154,9 @@
             <fractions>-1/4</fractions>
             </location>
           <Harmony>
-            <root>13</root>
+            <harmonyInfo>
+              <root>13</root>
+              </harmonyInfo>
             <eid>saAjlrm1EO_FhNXvmfkddI</eid>
             </Harmony>
           </voice>
@@ -157,7 +165,9 @@
         <eid>ZuKAVzo7TK_s158BJvRsNN</eid>
         <voice>
           <Harmony>
-            <root>14</root>
+            <harmonyInfo>
+              <root>14</root>
+              </harmonyInfo>
             <eid>dvEMaLQcibK_SEWH/F36llB</eid>
             </Harmony>
           <Chord>
@@ -173,14 +183,18 @@
             <fractions>-1/4</fractions>
             </location>
           <Harmony>
-            <root>16</root>
+            <harmonyInfo>
+              <root>16</root>
+              </harmonyInfo>
             <eid>Ok0ECFxRvuI_2P4foxuqZq</eid>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
-            <root>10</root>
+            <harmonyInfo>
+              <root>10</root>
+              </harmonyInfo>
             <eid>wLPL51aE/ZK_WYJ1s3hVxsG</eid>
             </Harmony>
           <Chord>
@@ -196,7 +210,9 @@
             <fractions>-1/4</fractions>
             </location>
           <Harmony>
-            <root>20</root>
+            <harmonyInfo>
+              <root>20</root>
+              </harmonyInfo>
             <eid>DUSTglH1glB_HnfKXBpuT4K</eid>
             </Harmony>
           </voice>

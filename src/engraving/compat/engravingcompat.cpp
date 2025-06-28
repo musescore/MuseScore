@@ -23,6 +23,7 @@
 #include "engravingcompat.h"
 
 #include "dom/marker.h"
+#include "dom/system.h"
 #include "engraving/dom/beam.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/instrument.h"
@@ -179,16 +180,11 @@ void EngravingCompat::resetMarkerLeftFontSize(MasterScore* masterScore)
 
 void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 {
-    if (score->mscVersion() >= 440) {
-        return;
-    }
-
     bool needRelayout = false;
 
     if (relayoutUserModifiedCrossStaffBeams(score)) {
         needRelayout = true;
     }
-    // As we progress, likely that more things will be done here
 
     if (needRelayout) {
         score->update();
@@ -197,6 +193,9 @@ void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 
 bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
 {
+    if (score->mscVersion() >= 440) {
+        return false;
+    }
     bool found = false;
 
     auto findBeam = [&found](ChordRest* cr) {

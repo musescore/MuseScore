@@ -28,7 +28,7 @@
 namespace mu::iex::midi {
 namespace LRHand {
 bool needToSplit(const std::multimap<ReducedFraction, MidiChord>& chords,
-                 int midiProgram,
+                 GM1Program midiProgram,
                  bool isDrumTrack)
 {
     if (isDrumTrack || !MChord::isGrandStaffProgram(midiProgram)) {

@@ -29,14 +29,12 @@
 #include "ui/imainwindow.h"
 
 #include "../iinteractive.h"
-#include "shortcuts/ishortcutsregister.h"
 
 namespace muse {
 class Interactive : public IInteractive, public Injectable, public async::Asyncable
 {
     Inject<muse::ui::IInteractiveProvider> provider = { this };
     Inject<muse::ui::IMainWindow> mainWindow = { this };
-    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
 
@@ -78,19 +76,21 @@ public:
                                  const std::string& dialogTitle = "") override;
 
     // progress
-    Ret showProgress(const std::string& title, Progress* progress) const override;
+    void showProgress(const std::string& title, Progress* progress) override;
 
     // files
-    io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
-    io::path_t selectSavingFile(const QString& title, const io::path_t& path, const std::vector<std::string>& filter,
-                                bool confirmOverwrite = true) override;
+    async::Promise<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,
+                                                 const std::vector<std::string>& filter) override;
+    io::path_t selectOpeningFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
+    io::path_t selectSavingFileSync(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
+                                    bool confirmOverwrite = true) override;
 
     // dirs
-    io::path_t selectDirectory(const QString& title, const io::path_t& dir) override;
-    io::paths_t selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories) override;
+    io::path_t selectDirectory(const std::string& title, const io::path_t& dir) override;
+    io::paths_t selectMultipleDirectories(const std::string& title, const io::path_t& dir, const io::paths_t& selectedDirectories) override;
 
     // color
-    QColor selectColor(const QColor& color = Qt::white, const QString& title = "") override;
+    async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") override;
     bool isSelectColorOpened() const override;
 
     // custom
@@ -120,9 +120,17 @@ public:
     Ret revealInFileBrowser(const io::path_t& filePath) const override;
 
 private:
-    async::Promise<IInteractive::Result> openStandartAsync(const std::string& type, const std::string& contentTitle, const Text& text,
+    UriQuery makeQuery(const std::string& type, const std::string& contentTitle, const Text& text, const ButtonDatas& buttons, int defBtn,
+                       const Options& options, const std::string& dialogTitle) const;
+
+    IInteractive::Result makeResult(const Val& val) const;
+
+    async::Promise<IInteractive::Result> openStandardAsync(const std::string& type, const std::string& contentTitle, const Text& text,
                                                            const ButtonDatas& buttons, int defBtn, const Options& options,
                                                            const std::string& dialogTitle);
+
+    IInteractive::Result openStandardSync(const std::string& type, const std::string& contentTitle, const Text& text,
+                                          const ButtonDatas& buttons, int defBtn, const Options& options, const std::string& dialogTitle);
 };
 }
 

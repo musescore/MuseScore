@@ -32,6 +32,7 @@
 #include "chord.h"
 #include "durationelement.h"
 #include "fret.h"
+#include "harmony.h"
 #include "hook.h"
 #include "instrumentname.h"
 #include "ledgerline.h"
@@ -54,8 +55,6 @@
 #include "system.h"
 #include "systemdivider.h"
 #include "text.h"
-#include "tie.h"
-
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "trill.h"
@@ -123,11 +122,11 @@ EngravingObjectList System::scanChildren() const
         children.push_back(bracket);
     }
 
-    if (auto dividerLeft = systemDividerLeft()) {
+    if (SystemDivider* dividerLeft = systemDividerLeft()) {
         children.push_back(dividerLeft);
     }
 
-    if (auto dividerRight = systemDividerRight()) {
+    if (SystemDivider* dividerRight = systemDividerRight()) {
         children.push_back(dividerRight);
     }
 
@@ -208,23 +207,23 @@ EngravingObjectList Measure::scanChildren() const
 
     size_t nstaves = score()->nstaves();
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-        if (auto _staffLines = m_mstaves[staffIdx]->lines()) {
+        if (StaffLines* _staffLines = m_mstaves[staffIdx]->lines()) {
             children.push_back(_staffLines);
         }
 
-        if (auto _vspacerUp = vspacerUp(staffIdx)) {
+        if (Spacer* _vspacerUp = vspacerUp(staffIdx)) {
             children.push_back(_vspacerUp);
         }
 
-        if (auto _vspacerDown = vspacerDown(staffIdx)) {
+        if (Spacer* _vspacerDown = vspacerDown(staffIdx)) {
             children.push_back(_vspacerDown);
         }
 
-        if (auto _noText = noText(staffIdx)) {
+        if (MeasureNumber* _noText = noText(staffIdx)) {
             children.push_back(_noText);
         }
 
-        if (auto _mmRangeText = mmRangeText(staffIdx)) {
+        if (MMRestRange* _mmRangeText = mmRangeText(staffIdx)) {
             children.push_back(_mmRangeText);
         }
     }
@@ -663,35 +662,6 @@ EngravingObjectList Trill::scanChildren() const
     }
 
     return children;
-}
-
-//---------------------------------------------------------
-//   FBox
-//---------------------------------------------------------
-
-EngravingObject* FBox::scanParent() const
-{
-    return explicitParent();
-}
-
-EngravingObjectList FBox::scanChildren() const
-{
-    EngravingObjectList children;
-
-    for (FretDiagram* fretDiagram : m_fretDiagrams) {
-        children.push_back(fretDiagram);
-    }
-
-    return children;
-}
-
-void FBox::scanElements(void* data, void (*func)(void*, EngravingItem*), bool all)
-{
-    for (EngravingObject* o : scanChildren()) {
-        o->scanElements(data, func, all);
-    }
-
-    Box::scanElements(data, func, all);
 }
 
 //---------------------------------------------------------

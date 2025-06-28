@@ -297,6 +297,12 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
     }
     t->setOffset(PointF());       // ignore user offsets
     t->setAutoplace(true);
+
+    t->setPosition(t->align().horizontal);
+    if (t->position() != t->propertyDefault(Pid::POSITION).value<AlignH>()) {
+        t->setPropertyFlags(Pid::POSITION, PropertyFlags::UNSTYLED);
+    }
+
     return true;
 }
 
@@ -1386,25 +1392,27 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
         14, 9, 16, 11, 18, 13, 8, 15, 10, 17, 12, 19
     };
 
+    HarmonyInfo* info = new HarmonyInfo(ctx.score());
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "base") {
             if (ctx.mscVersion() >= 106) {
-                h->setBassTpc(e.readInt());
+                info->setBassTpc(e.readInt());
             } else {
-                h->setBassTpc(table[e.readInt() - 1]);
+                info->setBassTpc(table[e.readInt() - 1]);
             }
         } else if (tag == "baseCase") {
             h->setBassCase(static_cast<NoteCaseType>(e.readInt()));
         } else if (tag == "extension") {
-            h->setId(e.readInt());
+            info->setId(e.readInt());
         } else if (tag == "name") {
-            h->setTextName(e.readText());
+            info->setTextName(e.readText());
         } else if (tag == "root") {
             if (ctx.mscVersion() >= 106) {
-                h->setRootTpc(e.readInt());
+                info->setRootTpc(e.readInt());
             } else {
-                h->setRootTpc(table[e.readInt() - 1]);
+                info->setRootTpc(table[e.readInt() - 1]);
             }
         } else if (tag == "rootCase") {
             h->setRootCase(static_cast<NoteCaseType>(e.readInt()));
@@ -1449,40 +1457,9 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
         }
     }
 
-    // TODO: now that we can render arbitrary chords,
-    // we could try to construct a full representation from a degree list.
-    // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0
-    // or constructed in the Chord Symbol Properties dialog.
+    h->addChord(info);
 
-    if (h->rootTpc() != Tpc::TPC_INVALID) {
-        if (h->id() > 0) {
-            // positive id will happen only for scores that were created with explicit chord lists
-            // lookup id in chord list and generate new description if necessary
-            h->getDescription();
-        } else {
-            // default case: look up by name
-            // description will be found for any chord already read in this score
-            // and we will generate a new one if necessary
-            h->getDescription(h->hTextName());
-        }
-    } else if (h->hTextName() == "") {
-        // unrecognized chords prior to 2.0 were stored as text with markup
-        // we need to strip away the markup
-        // this removes any user-applied formatting,
-        // but we no longer support user-applied formatting for chord symbols anyhow
-        // with any luck, the resulting text will be parseable now, so give it a shot
-//            h->createLayout();
-        String s = h->plainText();
-        if (!s.isEmpty()) {
-            h->setHarmony(s);
-            return;
-        }
-        // empty text could also indicate a root-less slash chord ("/E")
-        // we'll fall through and render it normally
-    }
-
-    // render chord from description (or _textName)
-    h->render();
+    h->afterRead();
 }
 
 //---------------------------------------------------------
@@ -2071,7 +2048,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         } else if (tag == "measureNumberMode") {
             m->setMeasureNumberMode(MeasureNumberMode(e.readInt()));
         } else if (tag == "irregular") {
-            m->setIrregular(e.readBool());
+            m->setIrregular(true);
+            e.skipCurrentElement();
         } else if (tag == "breakMultiMeasureRest") {
             m->setBreakMultiMeasureRest(e.readBool());
         } else if (tag == "sysInitBarLineType") {
@@ -2842,12 +2820,6 @@ muse::Ret Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             double sp = masterScore->style().spatium();
             compat::ReadChordListHook clhook(masterScore);
             readStyle(&masterScore->style(), e, clhook);
-            //style()->load(e);
-            // adjust this now so chords render properly on read
-            // other style adjustments can wait until reading is finished
-            if (masterScore->style().styleB(Sid::useGermanNoteNames)) {
-                masterScore->style().set(Sid::useStandardNoteNames, false);
-            }
             if (ctx.overrideSpatium()) {
                 masterScore->style().setSpatium(sp);
             }

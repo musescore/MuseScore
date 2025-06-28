@@ -6,6 +6,7 @@
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -110,8 +111,10 @@
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>14</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>I_I</eid>
             </Harmony>
           <Rest>
@@ -123,8 +126,10 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>16</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>16</root>
+              </harmonyInfo>
             <eid>K_K</eid>
             </Harmony>
           </voice>
@@ -133,8 +138,10 @@
         <eid>L_L</eid>
         <voice>
           <Harmony>
-            <root>18</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>18</root>
+              </harmonyInfo>
             <eid>M_M</eid>
             </Harmony>
           <Rest>
@@ -146,8 +153,10 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>13</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>13</root>
+              </harmonyInfo>
             <eid>O_O</eid>
             </Harmony>
           </voice>

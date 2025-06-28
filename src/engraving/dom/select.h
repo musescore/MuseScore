@@ -20,13 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_SELECT_H
-#define MU_ENGRAVING_SELECT_H
+#pragma once
 
 #include "durationtype.h"
 #include "mscore.h"
 #include "pitchspelling.h"
-#include "types.h"
+#include "../types/types.h"
 
 #include "selectionfilter.h"
 
@@ -126,7 +125,6 @@ public:
     void clear();
     EngravingItem* element() const;
     ChordRest* cr() const;
-    Segment* firstChordRestSegment() const;
     ChordRest* firstChordRest(track_idx_t track = muse::nidx) const;
     ChordRest* lastChordRest(track_idx_t track = muse::nidx) const;
     Measure* findMeasure() const;
@@ -164,19 +162,25 @@ public:
     bool measureRange(Measure** m1, Measure** m2) const;
     void extendRangeSelection(ChordRest* cr);
     void extendRangeSelection(Segment* seg, Segment* segAfter, staff_idx_t staffIdx, const Fraction& tick, const Fraction& etick);
+    bool rangeContainsMultiNoteChords() const;
 
 private:
-
     muse::ByteArray staffMimeData() const;
     muse::ByteArray symbolListMimeData() const;
     SelectionFilter selectionFilter() const;
     bool canSelect(const EngravingItem* e) const { return selectionFilter().canSelect(e); }
+    bool canSelectNoteIdx(size_t noteIdx, size_t totalNotesInChord, bool rangeContainsMultiNoteChords) const;
     bool canSelectVoice(track_idx_t track) const { return selectionFilter().canSelectVoice(track); }
     void appendFiltered(EngravingItem* e);
     void appendChordRest(ChordRest* cr);
     void appendChord(Chord* chord);
+    void appendChordFilteredExtras(Chord* chord);
+    void appendNoteFilteredExtras(Note* note);
     void appendTupletHierarchy(Tuplet* innermostTuplet);
     void appendGuitarBend(GuitarBend* guitarBend);
+
+    ChordRest* firstChordRestInRange(track_idx_t preferredTrack = muse::nidx) const;
+    ChordRest* lastChordRestInRange(track_idx_t preferredTrack = muse::nidx) const;
 
     Score* m_score = nullptr;
     SelState m_state = SelState::NONE;
@@ -198,7 +202,8 @@ private:
     Fraction m_currentTick;    // tracks the most recent selection
     track_idx_t m_currentTrack = 0;
 
+    bool m_rangeContainsMultiNoteChords = false; // cached - calculating this isn't free
+
     String m_lockReason;
 };
 } // namespace mu::engraving
-#endif

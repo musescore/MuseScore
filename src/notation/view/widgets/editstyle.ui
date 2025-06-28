@@ -38,7 +38,7 @@
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <widget class="QListWidget" name="pageList">
       <property name="sizePolicy">
@@ -201,6 +201,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Hammer-ons, pull-offs &amp; tapping</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Fermatas</string>
        </property>
       </item>
@@ -279,7 +284,7 @@
            <item>
             <widget class="QScrollArea" name="scrollArea_score">
              <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
+              <enum>QFrame::Shape::NoFrame</enum>
              </property>
              <property name="widgetResizable">
               <bool>true</bool>
@@ -372,7 +377,7 @@
                  <item row="0" column="3">
                   <spacer name="horizontalSpacer_2">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -537,7 +542,7 @@
                   <item>
                    <spacer name="horizontalSpacer_indentation">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -686,7 +691,7 @@
                     <item row="0" column="5">
                      <spacer name="horizontalSpacer_67">
                       <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
+                       <enum>Qt::Orientation::Horizontal</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -704,10 +709,10 @@
                <item>
                 <spacer name="verticalSpacer_10">
                  <property name="orientation">
-                  <enum>Qt::Vertical</enum>
+                  <enum>Qt::Orientation::Vertical</enum>
                  </property>
                  <property name="sizeType">
-                  <enum>QSizePolicy::Preferred</enum>
+                  <enum>QSizePolicy::Policy::Preferred</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -759,7 +764,7 @@
                     <item>
                      <spacer name="zontalSpacer_16">
                       <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
+                       <enum>Qt::Orientation::Horizontal</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -808,7 +813,7 @@
                     <item>
                      <spacer name="horizontalSpacer_16">
                       <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
+                       <enum>Qt::Orientation::Horizontal</enum>
                       </property>
                       <property name="sizeHint" stdset="0">
                        <size>
@@ -870,7 +875,7 @@
                   <item row="0" column="7">
                    <spacer name="horizontalSpacer_23">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -919,7 +924,7 @@
                   <item row="0" column="3">
                    <spacer name="horizontalSpacer_51">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -935,7 +940,7 @@
                <item>
                 <spacer name="verticalSpacer">
                  <property name="orientation">
-                  <enum>Qt::Vertical</enum>
+                  <enum>Qt::Orientation::Vertical</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -980,7 +985,7 @@
            <item row="0" column="0" colspan="7">
             <widget class="QScrollArea" name="scrollArea_page">
              <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
+              <enum>QFrame::Shape::NoFrame</enum>
              </property>
              <property name="widgetResizable">
               <bool>true</bool>
@@ -1093,7 +1098,7 @@
                   <item row="0" column="3">
                    <spacer name="horizontalSpacer_15">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -1223,7 +1228,7 @@
                   <item row="0" column="7">
                    <spacer name="horizontalSpacer_50">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -1303,7 +1308,7 @@
                <item row="1" column="0" colspan="9">
                 <widget class="Line" name="line_8">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -1363,7 +1368,7 @@
                <item row="7" column="0" colspan="9">
                 <widget class="Line" name="line_6">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -1416,7 +1421,7 @@
                <item row="4" column="0" colspan="9">
                 <widget class="Line" name="line_7">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -1445,7 +1450,7 @@
                <item row="0" column="8">
                 <spacer name="horizontalSpacer_44">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -1493,7 +1498,7 @@
                <item row="0" column="3">
                 <spacer name="horizontalSpacer_11">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -1535,7 +1540,7 @@
                <item row="8" column="0" colspan="8">
                 <spacer name="verticalSpacer_9">
                  <property name="orientation">
-                  <enum>Qt::Vertical</enum>
+                  <enum>Qt::Orientation::Vertical</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -1691,7 +1696,7 @@
                   <item row="0" column="3">
                    <spacer name="horizontalSpacer_13">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -1849,7 +1854,7 @@
                   <item row="4" column="0" colspan="3">
                    <widget class="QLabel" name="label_157">
                     <property name="frameShadow">
-                     <enum>QFrame::Sunken</enum>
+                     <enum>QFrame::Shadow::Sunken</enum>
                     </property>
                     <property name="text">
                      <string>Factor for distance above/below brace:</string>
@@ -1862,7 +1867,7 @@
                   <item row="2" column="0" colspan="3">
                    <widget class="QLabel" name="label_154">
                     <property name="frameShadow">
-                     <enum>QFrame::Sunken</enum>
+                     <enum>QFrame::Shadow::Sunken</enum>
                     </property>
                     <property name="text">
                      <string>Factor for distance above/below bracket:</string>
@@ -1894,7 +1899,7 @@
                   <item row="1" column="2">
                    <spacer name="horizontalSpacer_21">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -1987,7 +1992,7 @@
                   <item row="0" column="0" colspan="3">
                    <widget class="QLabel" name="label_153">
                     <property name="frameShadow">
-                     <enum>QFrame::Sunken</enum>
+                     <enum>QFrame::Shadow::Sunken</enum>
                     </property>
                     <property name="text">
                      <string>Factor for distance between systems:</string>
@@ -2000,7 +2005,7 @@
                   <item row="0" column="7">
                    <spacer name="horizontalSpacer_49">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -2151,7 +2156,7 @@
            <item row="0" column="4">
             <spacer name="horizontalSpacer_24">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -2300,7 +2305,7 @@
         <item>
          <spacer name="verticalSpacer_21">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -2329,7 +2334,7 @@
         <item>
          <widget class="QScrollArea" name="scrollArea_headerFooter">
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="widgetResizable">
            <bool>true</bool>
@@ -2368,7 +2373,7 @@
                  <item>
                   <spacer name="horizontalSpacer_52">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -2391,7 +2396,7 @@
                  <item>
                   <spacer name="horizontalSpacer_4">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -2467,7 +2472,7 @@
                     <string>Left</string>
                    </property>
                    <property name="alignment">
-                    <set>Qt::AlignCenter</set>
+                    <set>Qt::AlignmentFlag::AlignCenter</set>
                    </property>
                   </widget>
                  </item>
@@ -2571,7 +2576,7 @@
                     <string>Middle</string>
                    </property>
                    <property name="alignment">
-                    <set>Qt::AlignCenter</set>
+                    <set>Qt::AlignmentFlag::AlignCenter</set>
                    </property>
                   </widget>
                  </item>
@@ -2638,7 +2643,7 @@
                     <string>Right</string>
                    </property>
                    <property name="alignment">
-                    <set>Qt::AlignCenter</set>
+                    <set>Qt::AlignmentFlag::AlignCenter</set>
                    </property>
                   </widget>
                  </item>
@@ -2671,7 +2676,7 @@
                  <item>
                   <spacer name="horizontalSpacer_53">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -2694,7 +2699,7 @@
                  <item>
                   <spacer name="horizontalSpacer_3">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -2758,7 +2763,7 @@
                     <string>Middle</string>
                    </property>
                    <property name="alignment">
-                    <set>Qt::AlignCenter</set>
+                    <set>Qt::AlignmentFlag::AlignCenter</set>
                    </property>
                   </widget>
                  </item>
@@ -2837,7 +2842,7 @@
                     <string>Left</string>
                    </property>
                    <property name="alignment">
-                    <set>Qt::AlignCenter</set>
+                    <set>Qt::AlignmentFlag::AlignCenter</set>
                    </property>
                   </widget>
                  </item>
@@ -2941,7 +2946,7 @@
                     <string>Right</string>
                    </property>
                    <property name="alignment">
-                    <set>Qt::AlignCenter</set>
+                    <set>Qt::AlignmentFlag::AlignCenter</set>
                    </property>
                   </widget>
                  </item>
@@ -2953,7 +2958,7 @@
             <item>
              <spacer name="verticalSpacer_33">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -2996,7 +3001,7 @@
               <string>Offset above:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="buddy">
               <cstring>measureNumberPosAbove</cstring>
@@ -3036,7 +3041,7 @@
               <string>Offset below:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="buddy">
               <cstring>measureNumberPosBelow</cstring>
@@ -3092,7 +3097,7 @@
            <item row="2" column="4" rowspan="2" colspan="2">
             <widget class="mu::notation::OffsetSelect" name="measureNumberPosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -3109,7 +3114,7 @@
            <item row="4" column="4" rowspan="2" colspan="2">
             <widget class="mu::notation::OffsetSelect" name="measureNumberPosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -3146,7 +3151,7 @@
            <item row="0" column="2">
             <spacer name="horizontalSpacer_18">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -3159,7 +3164,7 @@
            <item row="0" column="7">
             <spacer name="horizontalSpacer_54">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -3197,7 +3202,7 @@
            <item row="3" column="1">
             <widget class="mu::notation::OffsetSelect" name="mmRestRangePosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -3242,7 +3247,7 @@
               <string>Offset above:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="buddy">
               <cstring>mmRestRangePosAbove</cstring>
@@ -3301,7 +3306,7 @@
               <string>Offset below:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="buddy">
               <cstring>mmRestRangePosBelow</cstring>
@@ -3311,7 +3316,7 @@
            <item row="4" column="1">
             <widget class="mu::notation::OffsetSelect" name="mmRestRangePosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -3331,7 +3336,7 @@
            <item row="0" column="3">
             <spacer name="horizontalSpacer_19">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -3347,7 +3352,7 @@
         <item>
          <spacer name="verticalSpacer_27">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -3556,7 +3561,7 @@
            <item row="0" column="3">
             <spacer name="horizontalSpacer_22">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -3569,7 +3574,7 @@
            <item row="0" column="7">
             <spacer name="horizontalSpacer_42">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -3677,7 +3682,7 @@
               <item row="0" column="2">
                <spacer name="horizontalSpacer_37">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -3690,7 +3695,7 @@
               <item row="0" column="5">
                <spacer name="horizontalSpacer_41">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -3792,7 +3797,7 @@
               <item row="0" column="2">
                <spacer name="horizontalSpacer_39">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -3805,7 +3810,7 @@
               <item row="0" column="5">
                <spacer name="horizontalSpacer_40">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -3824,7 +3829,7 @@
         <item>
          <spacer name="verticalSpacer_20">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -3946,7 +3951,7 @@
                <item row="0" column="4" rowspan="2">
                 <spacer name="horizontalSpacer_6">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -4031,7 +4036,7 @@
             <item>
              <spacer name="verticalSpacer_5">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -4056,7 +4061,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <property name="sizeConstraint">
-         <enum>QLayout::SetMinimumSize</enum>
+         <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
         </property>
         <item>
          <widget class="QGroupBox" name="groupBox_measure">
@@ -4079,7 +4084,7 @@
            <item row="0" column="0" rowspan="2" colspan="2">
             <widget class="QScrollArea" name="scrollArea_measure">
              <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
+              <enum>QFrame::Shape::NoFrame</enum>
              </property>
              <property name="widgetResizable">
               <bool>true</bool>
@@ -4088,8 +4093,8 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-171</y>
-                <width>598</width>
+                <y>0</y>
+                <width>243</width>
                 <height>618</height>
                </rect>
               </property>
@@ -4168,7 +4173,7 @@
                <item row="28" column="0">
                 <spacer name="horizontalSpacer_62">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -4191,10 +4196,10 @@
                <item row="0" column="3">
                 <spacer name="horizontalSpacer_57">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                  <property name="sizeType">
-                  <enum>QSizePolicy::Expanding</enum>
+                  <enum>QSizePolicy::Policy::Expanding</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -4249,7 +4254,7 @@
                   <item row="1" column="3">
                    <spacer name="horizontalSpacer_58">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -4272,7 +4277,7 @@
                   <item row="9" column="0" colspan="4">
                    <widget class="Line" name="line_15">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                    </widget>
                   </item>
@@ -4292,7 +4297,7 @@
                   <item row="14" column="0" colspan="4">
                    <widget class="Line" name="line_10">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                    </widget>
                   </item>
@@ -4351,7 +4356,7 @@
                   <item row="17" column="0" colspan="4">
                    <widget class="Line" name="line_11">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                    </widget>
                   </item>
@@ -4610,7 +4615,7 @@
                   <item row="20" column="0" colspan="4">
                    <widget class="Line" name="line_12">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                    </widget>
                   </item>
@@ -4646,7 +4651,7 @@
                      <string>Clef to note:</string>
                     </property>
                     <property name="textFormat">
-                     <enum>Qt::PlainText</enum>
+                     <enum>Qt::TextFormat::PlainText</enum>
                     </property>
                     <property name="buddy">
                      <cstring>clefKeyRightMargin</cstring>
@@ -4787,7 +4792,7 @@
                   <item row="23" column="0">
                    <spacer name="horizontalSpacer_61">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -4891,7 +4896,7 @@
                   <item row="4" column="0">
                    <spacer name="horizontalSpacer_60">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -4904,7 +4909,7 @@
                   <item row="1" column="3">
                    <spacer name="horizontalSpacer_59">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -4941,7 +4946,7 @@
                <item row="29" column="0">
                 <spacer name="verticalSpacer_11">
                  <property name="orientation">
-                  <enum>Qt::Vertical</enum>
+                  <enum>Qt::Orientation::Vertical</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -4973,7 +4978,7 @@
              <x>0</x>
              <y>0</y>
              <width>269</width>
-             <height>496</height>
+             <height>533</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_38">
@@ -5152,7 +5157,7 @@
                <item row="0" column="3">
                 <spacer name="horizontalSpacer_48">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -5388,9 +5393,17 @@
              </widget>
             </item>
             <item>
+             <widget class="QGroupBox" name="repeatBarlinesGroupBox">
+              <property name="title">
+               <string>Left (start) repeat signs</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_46"/>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer_12">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -5428,7 +5441,7 @@
            <item row="1" column="2">
             <spacer name="horizontalSpacer_20">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -5743,7 +5756,7 @@
         <item>
          <spacer name="verticalSpacer_6">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -5931,7 +5944,7 @@
                   <item row="4" column="5">
                    <spacer name="horizontalSpacer_32">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -5991,7 +6004,7 @@
                   <item row="0" column="3">
                    <spacer name="horizontalSpacer_70">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -6112,7 +6125,7 @@
                   <item row="2" column="3">
                    <spacer name="horizontalSpacer_71">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -6143,7 +6156,7 @@
                   <item row="0" column="3">
                    <spacer name="horizontalSpacer_151">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -6396,7 +6409,7 @@
             <item>
              <spacer name="verticalSpacer_34">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -6430,7 +6443,7 @@
            <item row="1" column="3">
             <spacer name="horizontalSpacer_25">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -6482,7 +6495,7 @@
               <item row="0" column="3">
                <spacer name="horizontalSpacer_7">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -6582,7 +6595,7 @@
         <item row="1" column="0">
          <spacer name="verticalSpacer_36">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -6608,7 +6621,7 @@
            <item>
             <spacer name="horizontalSpacer_14">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -6624,7 +6637,7 @@
         <item>
          <spacer name="verticalSpacer_7">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -6659,7 +6672,7 @@
            <item row="0" column="0" rowspan="2" colspan="2">
             <widget class="QScrollArea" name="scrollArea_tuplets">
              <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
+              <enum>QFrame::Shape::NoFrame</enum>
              </property>
              <property name="widgetResizable">
               <bool>true</bool>
@@ -6833,7 +6846,7 @@
                   <item row="0" column="3">
                    <spacer name="horizontalSpacer_28">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -6948,7 +6961,7 @@
                   <item row="0" column="9">
                    <spacer name="horizontalSpacer_26">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -7130,7 +7143,7 @@
                   <item row="0" column="3">
                    <spacer name="horizontalSpacer_55">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -7143,7 +7156,7 @@
                   <item row="2" column="0">
                    <spacer name="verticalSpacer_35">
                     <property name="orientation">
-                     <enum>Qt::Vertical</enum>
+                     <enum>Qt::Orientation::Vertical</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -7363,7 +7376,7 @@
                   <item row="0" column="3">
                    <spacer name="horizontalSpacer_27">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -7379,7 +7392,7 @@
                <item row="3" column="0" colspan="2">
                 <spacer name="verticalSpacer_3">
                  <property name="orientation">
-                  <enum>Qt::Vertical</enum>
+                  <enum>Qt::Orientation::Vertical</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -7415,7 +7428,7 @@
               <string>Hook length:</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
              </property>
              <property name="buddy">
               <cstring>arpeggioHookLen</cstring>
@@ -7500,7 +7513,7 @@
            <item row="0" column="2">
             <spacer name="horizontalSpacer_35">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -7516,7 +7529,7 @@
         <item>
          <spacer name="verticalSpacer_8">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -7540,8 +7553,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>424</width>
-             <height>342</height>
+             <width>612</width>
+             <height>466</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_70">
@@ -7578,6 +7591,16 @@
                   <bool>false</bool>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_3">
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_33">
+                    <property name="text">
+                     <string>Dotted line thickness:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>slurDottedLineWidth</cstring>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_30">
                     <property name="text">
@@ -7620,6 +7643,32 @@
                     </property>
                    </widget>
                   </item>
+                  <item row="3" column="3">
+                   <spacer name="horizontalSpacer">
+                    <property name="orientation">
+                     <enum>Qt::Orientation::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="3" column="2">
+                   <widget class="QToolButton" name="resetSlurMinDistance">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Autoplace min. distance' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="1" column="0">
                    <widget class="QLabel" name="label_31">
                     <property name="text">
@@ -7630,50 +7679,18 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="1">
-                   <widget class="QDoubleSpinBox" name="slurMidLineWidth">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.050000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="2">
-                   <widget class="QToolButton" name="resetSlurMidLineWidth">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Line thickness middle' value</string>
-                    </property>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_158">
                     <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_33">
-                    <property name="text">
-                     <string>Dotted line thickness:</string>
+                     <string>Autoplace min. distance:</string>
                     </property>
                     <property name="buddy">
-                     <cstring>slurDottedLineWidth</cstring>
+                     <cstring>slurMinDistance</cstring>
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="1">
-                   <widget class="QDoubleSpinBox" name="slurDottedLineWidth">
+                  <item row="1" column="1">
+                   <widget class="QDoubleSpinBox" name="slurMidLineWidth">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -7704,13 +7721,35 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_158">
-                    <property name="text">
-                     <string>Autoplace min. distance:</string>
+                  <item row="1" column="2">
+                   <widget class="QToolButton" name="resetSlurMidLineWidth">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
                     </property>
-                    <property name="buddy">
-                     <cstring>slurMinDistance</cstring>
+                    <property name="accessibleName">
+                     <string>Reset 'Line thickness middle' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QDoubleSpinBox" name="slurDottedLineWidth">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="suffix">
+                     <string>sp</string>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.050000000000000</double>
                     </property>
                    </widget>
                   </item>
@@ -7739,31 +7778,39 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="3" column="2">
-                   <widget class="QToolButton" name="resetSlurMinDistance">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
+                  <item row="4" column="0" colspan="4">
+                   <layout class="QVBoxLayout" name="verticalLayout_61">
+                    <property name="spacing">
+                     <number>6</number>
                     </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Autoplace min. distance' value</string>
+                    <property name="topMargin">
+                     <number>2</number>
                     </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="3">
-                   <spacer name="horizontalSpacer">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>0</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </spacer>
+                    <item>
+                     <widget class="QLabel" name="label_40">
+                      <property name="text">
+                       <string>Partial slurs across repeats and breaks:</string>
+                      </property>
+                      <property name="margin">
+                       <number>0</number>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="partialSlursAngleNormal">
+                      <property name="text">
+                       <string>Follow contour of notes</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QRadioButton" name="partialSlursAngleWeird">
+                      <property name="text">
+                       <string>Angle away from staff</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
                   </item>
                  </layout>
                 </widget>
@@ -7780,6 +7827,57 @@
                   <bool>false</bool>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_65">
+                  <item row="0" column="2">
+                   <widget class="QToolButton" name="resetTieEndLineWidth">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Line thickness at end' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QDoubleSpinBox" name="tieMinDistance">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="suffix">
+                     <string>sp</string>
+                    </property>
+                    <property name="decimals">
+                     <number>2</number>
+                    </property>
+                    <property name="minimum">
+                     <double>-100.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.500000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="3">
+                   <spacer name="horizontalSpacer_66">
+                    <property name="orientation">
+                     <enum>Qt::Orientation::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_218">
                     <property name="text">
@@ -7787,6 +7885,19 @@
                     </property>
                     <property name="buddy">
                      <cstring>tieEndLineWidth</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QToolButton" name="resetTieDottedLineWidth">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Dotted line thickness' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
                     </property>
                    </widget>
                   </item>
@@ -7809,16 +7920,23 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="2">
-                   <widget class="QToolButton" name="resetTieEndLineWidth">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Line thickness at end' value</string>
-                    </property>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_217">
                     <property name="text">
-                     <string notr="true"/>
+                     <string>Autoplace min. distance:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>tieMinDistance</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_216">
+                    <property name="text">
+                     <string>Dotted line thickness:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>tieDottedLineWidth</cstring>
                     </property>
                    </widget>
                   </item>
@@ -7832,8 +7950,21 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="1">
-                   <widget class="QDoubleSpinBox" name="tieMidLineWidth">
+                  <item row="3" column="2">
+                   <widget class="QToolButton" name="resetTieMinDistance">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Autoplace min. distance' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QDoubleSpinBox" name="tieDottedLineWidth">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -7864,18 +7995,8 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_216">
-                    <property name="text">
-                     <string>Dotted line thickness:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>tieDottedLineWidth</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QDoubleSpinBox" name="tieDottedLineWidth">
+                  <item row="1" column="1">
+                   <widget class="QDoubleSpinBox" name="tieMidLineWidth">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -7893,76 +8014,15 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="2">
-                   <widget class="QToolButton" name="resetTieDottedLineWidth">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Dotted line thickness' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_217">
-                    <property name="text">
-                     <string>Autoplace min. distance:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>tieMinDistance</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1">
-                   <widget class="QDoubleSpinBox" name="tieMinDistance">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="decimals">
-                     <number>2</number>
-                    </property>
-                    <property name="minimum">
-                     <double>-100.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="2">
-                   <widget class="QToolButton" name="resetTieMinDistance">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Autoplace min. distance' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="3">
-                   <spacer name="horizontalSpacer_66">
+                  <item row="4" column="1">
+                   <spacer name="verticalSpacer_13">
                     <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
+                     <enum>Qt::Orientation::Vertical</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
-                      <width>0</width>
-                      <height>0</height>
+                      <width>20</width>
+                      <height>40</height>
                      </size>
                     </property>
                    </spacer>
@@ -8038,7 +8098,7 @@
                  <item>
                   <spacer name="horizontalSpacer_43">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -8109,7 +8169,7 @@
                  <item>
                   <spacer name="horizontalSpacer_73">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -8124,7 +8184,7 @@
                <item>
                 <widget class="Line" name="line_16">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -8196,7 +8256,7 @@
                  <item>
                   <spacer name="horizontalSpacer_72">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -8221,7 +8281,7 @@
             <item>
              <spacer name="verticalSpacer_4">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -8249,7 +8309,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>459</width>
+             <width>469</width>
              <height>496</height>
             </rect>
            </property>
@@ -8304,7 +8364,7 @@
                  <item>
                   <spacer name="horizontalSpacer_69">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -8537,7 +8597,7 @@
                <item row="5" column="3">
                 <spacer name="horizontalSpacer_30">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -8601,7 +8661,7 @@
                <item row="0" column="1">
                 <widget class="mu::notation::OffsetSelect" name="hairpinPosAbove" native="true">
                  <property name="focusPolicy">
-                  <enum>Qt::StrongFocus</enum>
+                  <enum>Qt::FocusPolicy::StrongFocus</enum>
                  </property>
                 </widget>
                </item>
@@ -8708,7 +8768,7 @@
                <item row="1" column="1">
                 <widget class="mu::notation::OffsetSelect" name="hairpinPosBelow" native="true">
                  <property name="focusPolicy">
-                  <enum>Qt::StrongFocus</enum>
+                  <enum>Qt::FocusPolicy::StrongFocus</enum>
                  </property>
                 </widget>
                </item>
@@ -8799,7 +8859,7 @@
                <item row="0" column="3">
                 <spacer name="horizontalSpacer_671">
                  <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -8815,7 +8875,7 @@
             <item>
              <spacer name="verticalSpacer_22">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -8834,311 +8894,25 @@
       <widget class="QWidget" name="PageVolta">
        <layout class="QVBoxLayout" name="verticalLayout_46">
         <item>
-         <widget class="QGroupBox" name="groupBox_volta">
-          <property name="title">
-           <string>Voltas</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout0">
-           <item row="0" column="2">
-            <widget class="QToolButton" name="resetVoltaPosAbove">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Position' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="mu::notation::OffsetSelect" name="voltaPosAbove" native="true">
-             <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="2">
-            <widget class="QToolButton" name="resetVoltaLineStyleDashSize">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Line style' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0" colspan="4">
-            <widget class="Line" name="line_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetVoltaHook">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Hook height' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label_volta_lineStyle_dashSize">
-             <property name="text">
-              <string>Dash size:</string>
-             </property>
-             <property name="buddy">
-              <cstring>voltaLineStyle</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="voltaHook">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_40">
-             <property name="text">
-              <string>Position:</string>
-             </property>
-             <property name="buddy">
-              <cstring>voltaPosAbove</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QToolButton" name="resetVoltaLineWidth">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Line thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QDoubleSpinBox" name="voltaLineWidth">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.010000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QToolButton" name="resetVoltaLineStyle">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Line style' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_104">
-             <property name="text">
-              <string>Line style:</string>
-             </property>
-             <property name="buddy">
-              <cstring>voltaLineStyle</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="1">
-            <widget class="QDoubleSpinBox" name="voltaLineStyleDashSize">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_42">
-             <property name="text">
-              <string>Hook height:</string>
-             </property>
-             <property name="buddy">
-              <cstring>voltaHook</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_64">
-             <property name="text">
-              <string>Line thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>voltaLineWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="3">
-            <spacer name="horizontalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="4" column="1">
-            <widget class="QComboBox" name="voltaLineStyle">
-             <item>
-              <property name="text">
-               <string>Continuous</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Dashed</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Dotted</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Dash-dotted</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Dash-dot-dotted</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="label_volta_lineStyle_gapSize">
-             <property name="text">
-              <string>Gap size:</string>
-             </property>
-             <property name="buddy">
-              <cstring>voltaLineStyle</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="2">
-            <widget class="QToolButton" name="resetVoltaLineStyleGapSize">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Line style' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="1">
-            <widget class="QDoubleSpinBox" name="voltaLineStyleGapSize">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
+         <widget class="QWidget" name="voltasPageWidget" native="true">
+          <layout class="QVBoxLayout" name="voltasPageWidgetLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
           </layout>
          </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_13">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
@@ -9169,7 +8943,7 @@
            <item row="1" column="0" colspan="8">
             <widget class="Line" name="line_5">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
             </widget>
            </item>
@@ -9374,7 +9148,7 @@
            <item row="0" column="3">
             <spacer name="horizontalSpacer_29">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -9406,14 +9180,14 @@
            <item row="4" column="0" colspan="8">
             <widget class="Line" name="line_4">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
             </widget>
            </item>
            <item row="0" column="7">
             <spacer name="horizontalSpacer_56">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -9426,7 +9200,7 @@
            <item row="3" column="1">
             <widget class="mu::notation::OffsetSelect" name="ottavaPosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -9494,7 +9268,7 @@
            <item row="2" column="1">
             <widget class="mu::notation::OffsetSelect" name="ottavaPosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -9574,7 +9348,7 @@
         <item>
          <spacer name="verticalSpacer_14">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -9703,7 +9477,7 @@
            <item row="2" column="1">
             <widget class="mu::notation::OffsetSelect" name="pedalLinePosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -9775,7 +9549,7 @@
            <item row="1" column="4">
             <spacer name="horizontalSpacer_8">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -9791,7 +9565,7 @@
               <number>0</number>
              </property>
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
             </widget>
            </item>
@@ -9800,15 +9574,12 @@
              <property name="text">
               <string>Dash size:</string>
              </property>
-             <property name="buddy">
-              <cstring>voltaLineStyle</cstring>
-             </property>
             </widget>
            </item>
            <item row="1" column="1">
             <widget class="mu::notation::OffsetSelect" name="pedalLinePosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -9898,7 +9669,7 @@
         <item>
          <spacer name="verticalSpacer_19">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -9931,7 +9702,7 @@
            <item row="1" column="3">
             <spacer name="horizontalSpacer_10">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -10017,14 +9788,14 @@
            <item row="1" column="1">
             <widget class="mu::notation::OffsetSelect" name="trillLinePosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
             <widget class="mu::notation::OffsetSelect" name="trillLinePosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -10034,7 +9805,7 @@
         <item>
          <spacer name="verticalSpacer_18">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -10067,7 +9838,7 @@
            <item row="1" column="3">
             <spacer name="horizontalSpacer_101">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -10153,14 +9924,14 @@
            <item row="1" column="1">
             <widget class="mu::notation::OffsetSelect" name="vibratoLinePosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
             <widget class="mu::notation::OffsetSelect" name="vibratoLinePosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -10170,7 +9941,7 @@
         <item>
          <spacer name="verticalSpacer_181">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -10209,7 +9980,7 @@
         <item>
          <spacer name="verticalSpacer_39">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -10249,7 +10020,7 @@
               <item row="0" column="3">
                <spacer name="horizontalSpacer_64">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -10382,7 +10153,7 @@
               <item row="1" column="6">
                <spacer name="horizontalSpacer_46">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -10449,7 +10220,7 @@
         <item row="3" column="0">
          <spacer name="verticalSpacer_31">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -10583,7 +10354,7 @@
            <item row="1" column="3">
             <spacer name="horizontalSpacer_33">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -10596,14 +10367,14 @@
            <item row="1" column="1">
             <widget class="mu::notation::OffsetSelect" name="textLinePosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
             <widget class="mu::notation::OffsetSelect" name="textLinePosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -10701,7 +10472,7 @@
               <number>0</number>
              </property>
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
             </widget>
            </item>
@@ -10801,7 +10572,7 @@
         <item>
          <spacer name="verticalSpacer_24">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -10919,7 +10690,7 @@
            <item row="1" column="3">
             <spacer name="horizontalSpacer_47">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -10932,14 +10703,14 @@
            <item row="1" column="1">
             <widget class="mu::notation::OffsetSelect" name="systemTextLinePosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
             <widget class="mu::notation::OffsetSelect" name="systemTextLinePosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -11037,7 +10808,7 @@
               <number>0</number>
              </property>
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
             </widget>
            </item>
@@ -11137,7 +10908,7 @@
         <item>
          <spacer name="verticalSpacer_341">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -11269,7 +11040,7 @@
            <item row="1" column="3">
             <spacer name="horizontalSpacer_31">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -11329,10 +11100,10 @@
         <item>
          <spacer name="verticalSpacer_38">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
+           <enum>QSizePolicy::Policy::Fixed</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -11375,10 +11146,10 @@
         <item>
          <spacer name="verticalSpacer_41">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
+           <enum>QSizePolicy::Policy::Fixed</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -11414,10 +11185,10 @@
         <item>
          <spacer name="verticalSpacer_391">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
+           <enum>QSizePolicy::Policy::Fixed</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -11453,7 +11224,7 @@
         <item>
          <spacer name="verticalSpacer_25">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -11462,6 +11233,15 @@
            </size>
           </property>
          </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="PageHopos">
+       <layout class="QVBoxLayout" name="verticalLayout_59">
+        <item>
+         <widget class="QWidget" name="hoposPageWidget" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_60"/>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -11508,7 +11288,7 @@
            <item row="1" column="1">
             <widget class="mu::notation::OffsetSelect" name="fermataPosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -11538,7 +11318,7 @@
            <item row="0" column="1">
             <widget class="mu::notation::OffsetSelect" name="fermataPosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -11581,7 +11361,7 @@
            <item row="0" column="3">
             <spacer name="horizontalSpacer_38">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -11597,7 +11377,7 @@
         <item>
          <spacer name="verticalSpacer_23">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -11620,7 +11400,7 @@
            <item row="1" column="3">
             <spacer name="horizontalSpacer_45">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -11704,7 +11484,7 @@
            <item row="1" column="1">
             <widget class="mu::notation::OffsetSelect" name="staffTextPosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -11724,7 +11504,7 @@
            <item row="2" column="1">
             <widget class="mu::notation::OffsetSelect" name="staffTextPosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -11793,7 +11573,7 @@
         <item row="1" column="0">
          <spacer name="verticalSpacer_30">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -11921,7 +11701,7 @@
            <item row="1" column="3">
             <spacer name="horizontalSpacer_34">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -11972,14 +11752,14 @@
            <item row="1" column="1">
             <widget class="mu::notation::OffsetSelect" name="tempoTextPosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
             <widget class="mu::notation::OffsetSelect" name="tempoTextPosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -11989,7 +11769,7 @@
         <item>
          <spacer name="verticalSpacer_26">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -12024,7 +11804,7 @@
         <item row="0" column="0">
          <widget class="QScrollArea" name="scrollArea_lyrics">
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="widgetResizable">
            <bool>true</bool>
@@ -12034,8 +11814,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>473</width>
-             <height>484</height>
+             <width>483</width>
+             <height>543</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_64" stretch="0,0,2">
@@ -12158,7 +11938,7 @@
                  <item row="3" column="4">
                   <widget class="QLabel" name="label_minDistance">
                    <property name="text">
-                    <string>Min. gap between lyrics:</string>
+                    <string>Min. space between lyrics:</string>
                    </property>
                    <property name="buddy">
                     <cstring>lyricsMinDistance</cstring>
@@ -12293,7 +12073,7 @@
                     </size>
                    </property>
                    <property name="text">
-                    <string>Align verse number</string>
+                    <string>Align verse numbers</string>
                    </property>
                   </widget>
                  </item>
@@ -12338,10 +12118,10 @@
                  <item row="3" column="3">
                   <spacer name="horizontalSpacer_672">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeType">
-                    <enum>QSizePolicy::Minimum</enum>
+                    <enum>QSizePolicy::Policy::Minimum</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -12496,7 +12276,7 @@
               <item>
                <widget class="QGroupBox" name="lyricsDashBox">
                 <property name="title">
-                 <string>Dash</string>
+                 <string>Dashes</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_632">
                  <item>
@@ -12504,22 +12284,33 @@
                    <property name="topMargin">
                     <number>0</number>
                    </property>
-                   <item row="0" column="1">
-                    <widget class="QDoubleSpinBox" name="lyricsDashMinLength">
-                     <property name="keyboardTracking">
-                      <bool>false</bool>
+                   <item row="4" column="0">
+                    <widget class="QLabel" name="label_195">
+                     <property name="text">
+                      <string>Min. space between dash and text:</string>
                      </property>
-                     <property name="suffix">
-                      <string>sp</string>
+                     <property name="buddy">
+                      <cstring>lyricsDashPad</cstring>
                      </property>
-                     <property name="maximum">
-                      <double>9.990000000000000</double>
+                    </widget>
+                   </item>
+                   <item row="8" column="0">
+                    <widget class="QCheckBox" name="limitDashCount">
+                     <property name="text">
+                      <string>Limit number of dashes to:</string>
                      </property>
-                     <property name="singleStep">
-                      <double>0.050000000000000</double>
+                    </widget>
+                   </item>
+                   <item row="4" column="2">
+                    <widget class="QToolButton" name="resetLyricsDashPad">
+                     <property name="toolTip">
+                      <string>Reset to default</string>
                      </property>
-                     <property name="value">
-                      <double>0.400000000000000</double>
+                     <property name="accessibleName">
+                      <string>Reset 'Dash gap' value</string>
+                     </property>
+                     <property name="text">
+                      <string notr="true"/>
                      </property>
                     </widget>
                    </item>
@@ -12542,53 +12333,70 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="4" column="0">
-                    <widget class="QLabel" name="label_121">
-                     <property name="text">
-                      <string>Max. dash gap:</string>
+                   <item row="3" column="1">
+                    <widget class="QDoubleSpinBox" name="lyricsDashYposRatio">
+                     <property name="keyboardTracking">
+                      <bool>false</bool>
                      </property>
-                     <property name="buddy">
-                      <cstring>lyricsDashMaxDistance</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="2">
-                    <widget class="QToolButton" name="resetLyricsDashLineThickness">
-                     <property name="toolTip">
-                      <string>Reset to default</string>
-                     </property>
-                     <property name="accessibleName">
-                      <string>Reset 'Dash thickness' value</string>
-                     </property>
-                     <property name="text">
-                      <string notr="true"/>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="2">
-                    <widget class="QToolButton" name="resetLyricsDashPad">
-                     <property name="toolTip">
-                      <string>Reset to default</string>
-                     </property>
-                     <property name="accessibleName">
-                      <string>Reset 'Dash gap' value</string>
-                     </property>
-                     <property name="text">
-                      <string notr="true"/>
+                     <property name="suffix">
+                      <string notr="true">%</string>
                      </property>
                     </widget>
                    </item>
                    <item row="3" column="0">
-                    <widget class="QLabel" name="label_195">
+                    <widget class="QLabel" name="label_196">
                      <property name="text">
-                      <string>Min. dash gap:</string>
+                      <string>Vertical position (% of 
+text x-height):</string>
                      </property>
                      <property name="buddy">
-                      <cstring>lyricsDashPad</cstring>
+                      <cstring>lyricsDashYposRatio</cstring>
                      </property>
                     </widget>
                    </item>
-                   <item row="3" column="1">
+                   <item row="8" column="2">
+                    <widget class="QToolButton" name="resetLyricsMaxDashCount">
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="2">
+                    <widget class="QToolButton" name="resetLyricsDashYposRatio">
+                     <property name="toolTip">
+                      <string>Reset to default</string>
+                     </property>
+                     <property name="accessibleName">
+                      <string>Reset 'Vertical position (% of text x-height)' value</string>
+                     </property>
+                     <property name="text">
+                      <string notr="true"/>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="1">
+                    <widget class="QDoubleSpinBox" name="lyricsDashMaxDistance">
+                     <property name="keyboardTracking">
+                      <bool>false</bool>
+                     </property>
+                     <property name="suffix">
+                      <string>sp</string>
+                     </property>
+                     <property name="decimals">
+                      <number>0</number>
+                     </property>
+                     <property name="minimum">
+                      <double>1.000000000000000</double>
+                     </property>
+                     <property name="singleStep">
+                      <double>1.000000000000000</double>
+                     </property>
+                     <property name="value">
+                      <double>16.000000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="4" column="1">
                     <widget class="QDoubleSpinBox" name="lyricsDashPad">
                      <property name="keyboardTracking">
                       <bool>false</bool>
@@ -12617,19 +12425,6 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="1" column="2">
-                    <widget class="QToolButton" name="resetLyricsDashMaxLength">
-                     <property name="toolTip">
-                      <string>Reset to default</string>
-                     </property>
-                     <property name="accessibleName">
-                      <string>Reset 'Max. dash length' value</string>
-                     </property>
-                     <property name="text">
-                      <string notr="true"/>
-                     </property>
-                    </widget>
-                   </item>
                    <item row="1" column="1">
                     <widget class="QDoubleSpinBox" name="lyricsDashMaxLength">
                      <property name="keyboardTracking">
@@ -12652,13 +12447,52 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="4" column="2">
-                    <widget class="QToolButton" name="resetLyricsDashMaxDistance">
+                   <item row="0" column="2">
+                    <widget class="QToolButton" name="resetLyricsDashMinLength">
                      <property name="toolTip">
                       <string>Reset to default</string>
                      </property>
                      <property name="accessibleName">
-                      <string>Reset 'Max. dash distance' value</string>
+                      <string>Reset 'Min. dash length' value</string>
+                     </property>
+                     <property name="text">
+                      <string notr="true"/>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="8" column="1">
+                    <widget class="QSpinBox" name="lyricsMaxDashCount">
+                     <property name="minimum">
+                      <number>1</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="QDoubleSpinBox" name="lyricsDashMinLength">
+                     <property name="keyboardTracking">
+                      <bool>false</bool>
+                     </property>
+                     <property name="suffix">
+                      <string>sp</string>
+                     </property>
+                     <property name="maximum">
+                      <double>9.990000000000000</double>
+                     </property>
+                     <property name="singleStep">
+                      <double>0.050000000000000</double>
+                     </property>
+                     <property name="value">
+                      <double>0.400000000000000</double>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="2">
+                    <widget class="QToolButton" name="resetLyricsDashMaxLength">
+                     <property name="toolTip">
+                      <string>Reset to default</string>
+                     </property>
+                     <property name="accessibleName">
+                      <string>Reset 'Max. dash length' value</string>
                      </property>
                      <property name="text">
                       <string notr="true"/>
@@ -12675,28 +12509,6 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="4" column="1">
-                    <widget class="QDoubleSpinBox" name="lyricsDashMaxDistance">
-                     <property name="keyboardTracking">
-                      <bool>false</bool>
-                     </property>
-                     <property name="suffix">
-                      <string>sp</string>
-                     </property>
-                     <property name="decimals">
-                      <number>0</number>
-                     </property>
-                     <property name="minimum">
-                      <double>1.000000000000000</double>
-                     </property>
-                     <property name="singleStep">
-                      <double>1.000000000000000</double>
-                     </property>
-                     <property name="value">
-                      <double>16.000000000000000</double>
-                     </property>
-                    </widget>
-                   </item>
                    <item row="1" column="0">
                     <widget class="QLabel" name="label_120">
                      <property name="text">
@@ -12707,50 +12519,39 @@
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="2">
-                    <widget class="QToolButton" name="resetLyricsDashMinLength">
+                   <item row="6" column="2">
+                    <widget class="QToolButton" name="resetLyricsDashMaxDistance">
                      <property name="toolTip">
                       <string>Reset to default</string>
                      </property>
                      <property name="accessibleName">
-                      <string>Reset 'Min. dash length' value</string>
+                      <string>Reset 'Max. dash distance' value</string>
                      </property>
                      <property name="text">
                       <string notr="true"/>
                      </property>
                     </widget>
                    </item>
-                   <item row="5" column="0">
-                    <widget class="QLabel" name="label_196">
+                   <item row="2" column="2">
+                    <widget class="QToolButton" name="resetLyricsDashLineThickness">
+                     <property name="toolTip">
+                      <string>Reset to default</string>
+                     </property>
+                     <property name="accessibleName">
+                      <string>Reset 'Dash thickness' value</string>
+                     </property>
                      <property name="text">
-                      <string>Vertical position (% of 
-text x-height):</string>
+                      <string notr="true"/>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="0">
+                    <widget class="QLabel" name="label_121">
+                     <property name="text">
+                      <string>Max. space between dashes:</string>
                      </property>
                      <property name="buddy">
-                      <cstring>lyricsDashYposRatio</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="1">
-                    <widget class="QDoubleSpinBox" name="lyricsDashYposRatio">
-                     <property name="keyboardTracking">
-                      <bool>false</bool>
-                     </property>
-                     <property name="suffix">
-                      <string notr="true">%</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="2">
-                    <widget class="QToolButton" name="resetLyricsDashYposRatio">
-                     <property name="toolTip">
-                      <string>Reset to default</string>
-                     </property>
-                     <property name="accessibleName">
-                      <string>Reset 'Vertical position (% of text x-height)' value</string>
-                     </property>
-                     <property name="text">
-                      <string notr="true"/>
+                      <cstring>lyricsDashMaxDistance</cstring>
                      </property>
                     </widget>
                    </item>
@@ -12761,40 +12562,21 @@ text x-height):</string>
                    <property name="topMargin">
                     <number>0</number>
                    </property>
-                   <item row="0" column="0">
-                    <widget class="QCheckBox" name="lyricsDashForce">
-                     <property name="text">
-                      <string>Omit dash when space is limited</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QToolButton" name="resetLyricsShowDashIfSyllableOnFirstNote">
+                   <item row="4" column="1">
+                    <widget class="QToolButton" name="resetLyricsDashStartSystemPlacement">
                      <property name="toolTip">
                       <string>Reset to default</string>
                      </property>
                      <property name="accessibleName">
-                      <string>Reset 'Omit dash when space is limited' value</string>
+                      <string>Reset 'Dash placement at the start of the system' value</string>
                      </property>
                      <property name="text">
                       <string notr="true"/>
                      </property>
                     </widget>
                    </item>
-                   <item row="1" column="0">
-                    <widget class="QCheckBox" name="lyricsShowDashIfSyllableOnFirstNote">
-                     <property name="text">
-                      <string>Restate dash before syllable on 
-first note of the system</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="label_198">
-                     <property name="text">
-                      <string>Dash placement at the start of the system:</string>
-                     </property>
-                    </widget>
+                   <item row="4" column="0">
+                    <widget class="QComboBox" name="lyricsDashStartSystemPlacement"/>
                    </item>
                    <item row="0" column="1">
                     <widget class="QToolButton" name="resetLyricsDashForce">
@@ -12809,19 +12591,53 @@ first note of the system</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="3" column="0">
-                    <widget class="QComboBox" name="lyricsDashStartSystemPlacement"/>
-                   </item>
-                   <item row="3" column="1">
-                    <widget class="QToolButton" name="resetLyricsDashStartSystemPlacement">
+                   <item row="2" column="1">
+                    <widget class="QToolButton" name="resetLyricsShowDashIfSyllableOnFirstNote">
                      <property name="toolTip">
                       <string>Reset to default</string>
                      </property>
                      <property name="accessibleName">
-                      <string>Reset 'Dash placement at the start of the system' value</string>
+                      <string>Reset 'Omit dash when space is limited' value</string>
                      </property>
                      <property name="text">
                       <string notr="true"/>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QCheckBox" name="lyricsDashForce">
+                     <property name="text">
+                      <string>Omit dash when space is limited</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QCheckBox" name="lyricsShowDashIfSyllableOnFirstNote">
+                     <property name="text">
+                      <string>Restate dash before syllable on 
+first note of the system</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QLabel" name="label_198">
+                     <property name="text">
+                      <string>Dash placement at the start of the system:</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QCheckBox" name="lyricsCenterDashedSyllables">
+                     <property name="text">
+                      <string>Never left-align syllables
+followed by dashes</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <widget class="QToolButton" name="lyricsResetCenterDashedSyllables">
+                     <property name="text">
+                      <string/>
                      </property>
                     </widget>
                    </item>
@@ -12833,7 +12649,7 @@ first note of the system</string>
               <item>
                <widget class="QGroupBox" name="lyricsMelismaBox">
                 <property name="title">
-                 <string>Extension line</string>
+                 <string>Extension lines</string>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_66" stretch="0,0,1">
                  <property name="topMargin">
@@ -12990,7 +12806,7 @@ first note of the system</string>
                  <item>
                   <spacer name="verticalSpacer_2">
                    <property name="orientation">
-                    <enum>Qt::Vertical</enum>
+                    <enum>Qt::Orientation::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -13008,7 +12824,7 @@ first note of the system</string>
             <item>
              <spacer name="verticalSpacer_17">
               <property name="orientation">
-               <enum>Qt::Vertical</enum>
+               <enum>Qt::Orientation::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -13042,7 +12858,7 @@ first note of the system</string>
            <item row="0" column="2">
             <spacer name="horizontalSpacer_65">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -13071,7 +12887,7 @@ first note of the system</string>
         <item>
          <spacer name="verticalSpacer_40">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -13225,21 +13041,21 @@ first note of the system</string>
            <item row="1" column="1">
             <widget class="mu::notation::OffsetSelect" name="rehearsalMarkPosAbove" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
             <widget class="mu::notation::OffsetSelect" name="rehearsalMarkPosBelow" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
            <item row="0" column="3">
             <spacer name="horizontalSpacer_36">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -13255,7 +13071,7 @@ first note of the system</string>
         <item>
          <spacer name="verticalSpacer_28">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -13283,7 +13099,7 @@ first note of the system</string>
                 <string>Size:</string>
                </property>
                <property name="textFormat">
-                <enum>Qt::PlainText</enum>
+                <enum>Qt::TextFormat::PlainText</enum>
                </property>
                <property name="buddy">
                 <cstring>doubleSpinFBSize</cstring>
@@ -13319,7 +13135,7 @@ first note of the system</string>
              <item row="0" column="2">
               <spacer name="horizontalSpacer_9">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Orientation::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -13364,7 +13180,7 @@ first note of the system</string>
                 <string>Line height:</string>
                </property>
                <property name="textFormat">
-                <enum>Qt::PlainText</enum>
+                <enum>Qt::TextFormat::PlainText</enum>
                </property>
                <property name="buddy">
                 <cstring>spinFBLineHeight</cstring>
@@ -13399,7 +13215,7 @@ first note of the system</string>
                 <string>Font:</string>
                </property>
                <property name="textFormat">
-                <enum>Qt::PlainText</enum>
+                <enum>Qt::TextFormat::PlainText</enum>
                </property>
                <property name="buddy">
                 <cstring>comboFBFont</cstring>
@@ -13409,7 +13225,7 @@ first note of the system</string>
              <item row="0" column="1">
               <widget class="QComboBox" name="comboFBFont">
                <property name="sizeAdjustPolicy">
-                <enum>QComboBox::AdjustToContents</enum>
+                <enum>QComboBox::SizeAdjustPolicy::AdjustToContents</enum>
                </property>
               </widget>
              </item>
@@ -13419,7 +13235,7 @@ first note of the system</string>
                 <string>Vertical position:</string>
                </property>
                <property name="textFormat">
-                <enum>Qt::PlainText</enum>
+                <enum>Qt::TextFormat::PlainText</enum>
                </property>
                <property name="buddy">
                 <cstring>doubleSpinFBVertPos</cstring>
@@ -13486,7 +13302,7 @@ first note of the system</string>
         <item>
          <spacer name="verticalSpacer_16">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -13501,617 +13317,8 @@ first note of the system</string>
       <widget class="QWidget" name="PageChordSymbols">
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <item>
-         <widget class="QGroupBox" name="groupBox_chordSymbols">
-          <property name="title">
-           <string>Chord symbols</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_13">
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item row="0" column="0" colspan="4">
-            <widget class="QScrollArea" name="scrollArea_chordSymbols">
-             <property name="frameShape">
-              <enum>QFrame::NoFrame</enum>
-             </property>
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="scrollArea_chordSymbols_contents">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>384</width>
-                <height>422</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_55" rowstretch="0,0,0,0,1">
-               <item row="2" column="1">
-                <widget class="QLabel" name="label_60">
-                 <property name="text">
-                  <string extracomment="Capodastro">Capo fret position:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>capoPosition</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QSpinBox" name="capoPosition">
-                 <property name="keyboardTracking">
-                  <bool>false</bool>
-                 </property>
-                 <property name="maximum">
-                  <number>11</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1" colspan="2">
-                <widget class="QGroupBox" name="harmonyPlay">
-                 <property name="title">
-                  <string>Playback</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>false</bool>
-                 </property>
-                 <layout class="QGridLayout" name="gridLayout_47">
-                  <item row="0" column="0">
-                   <widget class="mu::notation::VoicingSelect" name="voicingSelectWidget" native="true"/>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item row="0" column="0" colspan="3">
-                <widget class="QGroupBox" name="harmonyAppearance">
-                 <property name="title">
-                  <string>Appearance</string>
-                 </property>
-                 <layout class="QGridLayout" name="gridLayout_45">
-                  <item row="1" column="4">
-                   <widget class="QDoubleSpinBox" name="modifierMag">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.100000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="4">
-                   <widget class="QDoubleSpinBox" name="modifierAdjust">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="minimum">
-                     <double>-99.989999999999995</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QDoubleSpinBox" name="extensionMag">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.100000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QDoubleSpinBox" name="extensionAdjust">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="minimum">
-                     <double>-99.989999999999995</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="2">
-                   <widget class="QToolButton" name="resetExtensionAdjust">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Extension vertical offset' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="labelExtensionAdjust">
-                    <property name="text">
-                     <string>Extension vertical offset:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>extensionAdjust</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="labelExtensionMag">
-                    <property name="text">
-                     <string>Extension scaling:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>extensionMag</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="2">
-                   <widget class="QToolButton" name="resetExtensionMag">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Extension scaling' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="3">
-                   <widget class="QLabel" name="labelModifierMag">
-                    <property name="text">
-                     <string>Modifier scaling:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>modifierMag</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="3">
-                   <widget class="QLabel" name="labelModifierAdjust">
-                    <property name="text">
-                     <string>Modifier vertical offset:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>modifierAdjust</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="5">
-                   <widget class="QToolButton" name="resetModifierMag">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Modifier scaling' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="5">
-                   <widget class="QToolButton" name="resetModifierAdjust">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Modifier vertical offset' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="0" colspan="6">
-                   <widget class="QGroupBox" name="automaticCapitalization">
-                    <property name="accessibleName">
-                     <string>Automatic capitalization</string>
-                    </property>
-                    <property name="title">
-                     <string>Automatic capitalization</string>
-                    </property>
-                    <property name="checkable">
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_12">
-                     <item>
-                      <widget class="QCheckBox" name="lowerCaseMinorChords">
-                       <property name="text">
-                        <string>Lower case minor chords</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QCheckBox" name="lowerCaseBassNotes">
-                       <property name="text">
-                        <string>Lower case bass notes</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QCheckBox" name="allCapsNoteNames">
-                       <property name="text">
-                        <string>All caps note names</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_17">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>0</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="3" column="0" colspan="6">
-                   <widget class="QGroupBox" name="harmonySpelling">
-                    <property name="accessibleName">
-                     <string>Spelling</string>
-                    </property>
-                    <property name="title">
-                     <string>Spelling</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_6">
-                     <item>
-                      <widget class="QRadioButton" name="useStandardNoteNames">
-                       <property name="toolTip">
-                        <string notr="true">A, B♭, B, C, C♯, …</string>
-                       </property>
-                       <property name="text">
-                        <string comment="chord symbol spelling">Standard</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="useGermanNoteNames">
-                       <property name="toolTip">
-                        <string notr="true">A, B♭, H, C, C♯, …</string>
-                       </property>
-                       <property name="text">
-                        <string>German</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="useFullGermanNoteNames">
-                       <property name="toolTip">
-                        <string notr="true">A, B, H, C, Cis, …</string>
-                       </property>
-                       <property name="text">
-                        <string>Full German</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="useSolfeggioNoteNames">
-                       <property name="toolTip">
-                        <string notr="true">Do, Do♯, Re♭, Re, …</string>
-                       </property>
-                       <property name="text">
-                        <string>Solfeggio</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="useFrenchNoteNames">
-                       <property name="toolTip">
-                        <string notr="true">Do, Do♯, Ré♭, Ré, …</string>
-                       </property>
-                       <property name="text">
-                        <string>French</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <spacer name="horizontalSpacer_12">
-                       <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                       </property>
-                       <property name="sizeHint" stdset="0">
-                        <size>
-                         <width>0</width>
-                         <height>0</height>
-                        </size>
-                       </property>
-                      </spacer>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item row="0" column="0" colspan="6">
-                   <widget class="QGroupBox" name="harmonyStyle">
-                    <property name="accessibleName">
-                     <string>Style</string>
-                    </property>
-                    <property name="title">
-                     <string>Style</string>
-                    </property>
-                    <layout class="QHBoxLayout" name="horizontalLayout_7">
-                     <item>
-                      <widget class="QRadioButton" name="chordsStandard">
-                       <property name="text">
-                        <string comment="chord symbol style">Standard</string>
-                       </property>
-                       <property name="checked">
-                        <bool>true</bool>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="chordsJazz">
-                       <property name="text">
-                        <string>Jazz</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QRadioButton" name="chordsCustom">
-                       <property name="text">
-                        <string>Custom</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QWidget" name="chordDescriptionGroup" native="true">
-                       <layout class="QGridLayout" name="chordDescriptionLayout">
-                        <property name="leftMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="topMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="rightMargin">
-                         <number>0</number>
-                        </property>
-                        <property name="bottomMargin">
-                         <number>0</number>
-                        </property>
-                        <item row="0" column="3">
-                         <widget class="QCheckBox" name="chordsXmlFile">
-                          <property name="text">
-                           <string>Load XML</string>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="0" column="2">
-                         <widget class="QToolButton" name="chordDescriptionFileButton">
-                          <property name="text">
-                           <string notr="true"/>
-                          </property>
-                         </widget>
-                        </item>
-                        <item row="0" column="1">
-                         <widget class="QLineEdit" name="chordDescriptionFile"/>
-                        </item>
-                       </layout>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item row="1" column="0" rowspan="3">
-                <widget class="QGroupBox" name="harmonyPositioning">
-                 <property name="title">
-                  <string>Positioning</string>
-                 </property>
-                 <layout class="QGridLayout" name="gridLayout_15">
-                  <item row="4" column="0">
-                   <widget class="QLabel" name="label_1461">
-                    <property name="text">
-                     <string>Maximum shift below:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>maxChordShiftBelow</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="2">
-                   <widget class="QToolButton" name="resetMaxChordShiftAbove">
-                    <property name="text">
-                     <string notr="true">…</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_79">
-                    <property name="text">
-                     <string>Distance to fretboard diagram:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>harmonyFretDist</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_1231">
-                    <property name="text">
-                     <string>Maximum shift above:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>maxChordShiftAbove</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1">
-                   <widget class="QDoubleSpinBox" name="maxHarmonyBarDistance">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="minimum">
-                     <double>-50.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>50.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>3.000000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_1001">
-                    <property name="text">
-                     <string>Minimum chord spacing:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>minHarmonyDistance</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_1002">
-                    <property name="text">
-                     <string>Maximum barline distance:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>maxHarmonyBarDistance</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="2">
-                   <widget class="QToolButton" name="resetMaxChordShiftBelow">
-                    <property name="text">
-                     <string notr="true">…</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="1">
-                   <widget class="QDoubleSpinBox" name="harmonyFretDist">
-                    <property name="enabled">
-                     <bool>true</bool>
-                    </property>
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string extracomment="spatium unit">sp</string>
-                    </property>
-                    <property name="minimum">
-                     <double>-10000.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>10000.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QDoubleSpinBox" name="minHarmonyDistance">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="minimum">
-                     <double>-50.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>10.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.100000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="4" column="1">
-                   <widget class="QDoubleSpinBox" name="maxChordShiftBelow">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="3" column="1">
-                   <widget class="QDoubleSpinBox" name="maxChordShiftAbove">
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                    <property name="value">
-                     <double>0.000000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item row="4" column="0" colspan="3">
-                <spacer name="verticalSpacer_61">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="3" column="1" colspan="2">
-                <spacer name="verticalSpacer_3411">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
-          </layout>
+         <widget class="QWidget" name="chordSymbolsPage" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_59"/>
          </widget>
         </item>
        </layout>
@@ -14176,8 +13383,8 @@ first note of the system</string>
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>624</width>
+             <height>478</height>
             </rect>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -14410,10 +13617,10 @@ first note of the system</string>
                  <item row="1" column="1">
                   <spacer name="horizontalSpacer_63">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeType">
-                    <enum>QSizePolicy::Minimum</enum>
+                    <enum>QSizePolicy::Policy::Minimum</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -14567,10 +13774,10 @@ first note of the system</string>
                  <item row="1" column="3">
                   <spacer name="horizontalSpacer_661">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeType">
-                    <enum>QSizePolicy::Minimum</enum>
+                    <enum>QSizePolicy::Policy::Minimum</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -14624,10 +13831,10 @@ first note of the system</string>
                  <item row="2" column="2">
                   <spacer name="verticalSpacer_37">
                    <property name="orientation">
-                    <enum>Qt::Vertical</enum>
+                    <enum>Qt::Orientation::Vertical</enum>
                    </property>
                    <property name="sizeType">
-                    <enum>QSizePolicy::Fixed</enum>
+                    <enum>QSizePolicy::Policy::Fixed</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -14728,7 +13935,7 @@ first note of the system</string>
                  <item row="1" column="5">
                   <spacer name="horizontalSpacer_68">
                    <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
+                    <enum>Qt::Orientation::Horizontal</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -14745,7 +13952,7 @@ first note of the system</string>
                  <property name="title">
                   <string>Tied fret marks</string>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_591">
+                 <layout class="QVBoxLayout" name="verticalLayout_5911">
                   <item>
                    <widget class="QRadioButton" name="tabShowTiesAndFret">
                     <property name="text">
@@ -14810,7 +14017,7 @@ first note of the system</string>
                <item>
                 <spacer name="verticalSpacer_29">
                  <property name="orientation">
-                  <enum>Qt::Vertical</enum>
+                  <enum>Qt::Orientation::Vertical</enum>
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
@@ -15060,7 +14267,7 @@ first note of the system</string>
            <item row="12" column="1">
             <widget class="mu::notation::OffsetSelect" name="textStyleOffset" native="true">
              <property name="focusPolicy">
-              <enum>Qt::StrongFocus</enum>
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
              </property>
             </widget>
            </item>
@@ -15388,7 +14595,7 @@ first note of the system</string>
         <item row="1" column="1">
          <spacer name="verticalSpacer_32">
           <property name="orientation">
-           <enum>Qt::Vertical</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -15449,7 +14656,7 @@ first note of the system</string>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
        <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+        <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
        </property>
       </widget>
      </item>
@@ -15480,12 +14687,6 @@ first note of the system</string>
    <class>mu::notation::AlignSelect</class>
    <extends>QWidget</extends>
    <header>notation/view/widgets/alignSelect.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>mu::notation::VoicingSelect</class>
-   <extends>QWidget</extends>
-   <header>notation/view/widgets/voicingSelect.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -15846,18 +15047,6 @@ first note of the system</string>
   <tabstop>resetAutoplaceHairpinDynamicsDistance</tabstop>
   <tabstop>hairpinLineWidth</tabstop>
   <tabstop>resetHairpinLineWidth</tabstop>
-  <tabstop>voltaPosAbove</tabstop>
-  <tabstop>resetVoltaPosAbove</tabstop>
-  <tabstop>voltaHook</tabstop>
-  <tabstop>resetVoltaHook</tabstop>
-  <tabstop>voltaLineWidth</tabstop>
-  <tabstop>resetVoltaLineWidth</tabstop>
-  <tabstop>voltaLineStyle</tabstop>
-  <tabstop>resetVoltaLineStyle</tabstop>
-  <tabstop>voltaLineStyleDashSize</tabstop>
-  <tabstop>resetVoltaLineStyleDashSize</tabstop>
-  <tabstop>voltaLineStyleGapSize</tabstop>
-  <tabstop>resetVoltaLineStyleGapSize</tabstop>
   <tabstop>ottavaNumbersOnly</tabstop>
   <tabstop>resetOttavaNumbersOnly</tabstop>
   <tabstop>ottavaPosAbove</tabstop>
@@ -16006,8 +15195,6 @@ first note of the system</string>
   <tabstop>resetLyricsDashPad</tabstop>
   <tabstop>lyricsDashMaxDistance</tabstop>
   <tabstop>resetLyricsDashMaxDistance</tabstop>
-  <tabstop>lyricsDashYposRatio</tabstop>
-  <tabstop>resetLyricsDashYposRatio</tabstop>
   <tabstop>lyricsDashForce</tabstop>
   <tabstop>resetLyricsDashForce</tabstop>
   <tabstop>lyricsShowDashIfSyllableOnFirstNote</tabstop>
@@ -16040,38 +15227,6 @@ first note of the system</string>
   <tabstop>radioFBBottom</tabstop>
   <tabstop>radioFBModern</tabstop>
   <tabstop>radioFBHistoric</tabstop>
-  <tabstop>scrollArea_chordSymbols</tabstop>
-  <tabstop>chordsStandard</tabstop>
-  <tabstop>chordsJazz</tabstop>
-  <tabstop>chordsCustom</tabstop>
-  <tabstop>chordDescriptionFile</tabstop>
-  <tabstop>chordDescriptionFileButton</tabstop>
-  <tabstop>chordsXmlFile</tabstop>
-  <tabstop>extensionMag</tabstop>
-  <tabstop>resetExtensionMag</tabstop>
-  <tabstop>extensionAdjust</tabstop>
-  <tabstop>resetExtensionAdjust</tabstop>
-  <tabstop>modifierMag</tabstop>
-  <tabstop>resetModifierMag</tabstop>
-  <tabstop>modifierAdjust</tabstop>
-  <tabstop>resetModifierAdjust</tabstop>
-  <tabstop>useStandardNoteNames</tabstop>
-  <tabstop>useGermanNoteNames</tabstop>
-  <tabstop>useFullGermanNoteNames</tabstop>
-  <tabstop>useSolfeggioNoteNames</tabstop>
-  <tabstop>useFrenchNoteNames</tabstop>
-  <tabstop>automaticCapitalization</tabstop>
-  <tabstop>lowerCaseMinorChords</tabstop>
-  <tabstop>lowerCaseBassNotes</tabstop>
-  <tabstop>allCapsNoteNames</tabstop>
-  <tabstop>harmonyFretDist</tabstop>
-  <tabstop>minHarmonyDistance</tabstop>
-  <tabstop>maxHarmonyBarDistance</tabstop>
-  <tabstop>maxChordShiftAbove</tabstop>
-  <tabstop>resetMaxChordShiftAbove</tabstop>
-  <tabstop>maxChordShiftBelow</tabstop>
-  <tabstop>resetMaxChordShiftBelow</tabstop>
-  <tabstop>capoPosition</tabstop>
   <tabstop>scrollArea_2</tabstop>
   <tabstop>scrollArea</tabstop>
   <tabstop>slurShowTabCommon</tabstop>

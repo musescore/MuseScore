@@ -22,6 +22,7 @@
 #include "abstractnotationpaintview.h"
 
 #include <QPainter>
+#include <QMimeData>
 
 #include "actions/actiontypes.h"
 
@@ -79,6 +80,7 @@ void AbstractNotationPaintView::load()
 {
     TRACEFUNC;
 
+    m_loadCalled = true;
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
     m_playbackCursor->setVisible(false);
@@ -114,8 +116,6 @@ void AbstractNotationPaintView::load()
     });
 
     scheduleRedraw();
-
-    m_loaded = true;
 }
 
 void AbstractNotationPaintView::initBackground()
@@ -1226,6 +1226,10 @@ void AbstractNotationPaintView::keyReleaseEvent(QKeyEvent* event)
 
 bool AbstractNotationPaintView::event(QEvent* event)
 {
+    if (!isInited()) {
+        return QQuickPaintedItem::event(event);
+    }
+
     QEvent::Type eventType = event->type();
     auto keyEvent = dynamic_cast<QKeyEvent*>(event);
 
@@ -1299,7 +1303,7 @@ void AbstractNotationPaintView::setNotation(INotationPtr notation)
 {
     m_notation = notation;
 
-    if (m_loaded) {
+    if (m_loadCalled) {
         m_continuousPanel->setNotation(m_notation);
         m_playbackCursor->setNotation(m_notation);
         m_loopInMarker->setNotation(m_notation);

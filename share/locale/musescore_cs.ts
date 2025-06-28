@@ -10905,7 +10905,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
         <source>Video tutorials</source>
-        <translation>Obrazové návody</translation>
+        <translation>Videonávody</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="33"/>
@@ -10975,7 +10975,7 @@ Publikováno pod &lt;a href=&quot;%1&quot;&gt;GNU General Public License verze 3
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="291"/>
         <source>&amp;Add</source>
-        <translation>&amp;Přidání</translation>
+        <translation>&amp;Přidat</translation>
     </message>
 </context>
 <context>
@@ -22367,7 +22367,7 @@ předtaktí</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="189"/>
         <source>Show any alteration</source>
-        <translation>Zobrazovat jen alterace</translation>
+        <translation>Jen posuvky mimo tóninu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="190"/>

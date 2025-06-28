@@ -27,7 +27,6 @@
 #include "../../types/typesconv.h"
 #include "../../types/symnames.h"
 #include "../../style/textstyle.h"
-#include "../../infrastructure/ifileinfoprovider.h"
 #include "../../infrastructure/rtti.h"
 
 #include "dom/score.h"
@@ -50,7 +49,6 @@
 #include "dom/barline.h"
 #include "dom/beam.h"
 #include "dom/bend.h"
-#include "dom/stretchedbend.h"
 #include "dom/box.h"
 #include "dom/bracket.h"
 #include "dom/breath.h"
@@ -75,6 +73,7 @@
 #include "dom/guitarbend.h"
 
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harmony.h"
 #include "dom/harmonicmark.h"
 #include "dom/harppedaldiagram.h"
@@ -141,6 +140,7 @@
 #include "dom/systemtext.h"
 #include "dom/soundflag.h"
 
+#include "dom/tapping.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textbase.h"
@@ -190,8 +190,6 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
         break;
     case ElementType::BEND:         write(item_cast<const Bend*>(item), xml, ctx);
         break;
-    case ElementType::STRETCHED_BEND: write(item_cast<const StretchedBend*>(item), xml, ctx);
-        break;
     case ElementType::HBOX:         write(item_cast<const HBox*>(item), xml, ctx);
         break;
     case ElementType::VBOX:         write(item_cast<const VBox*>(item), xml, ctx);
@@ -231,6 +229,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::GUITAR_BEND:  write(item_cast<const GuitarBend*>(item), xml, ctx);
         break;
     case ElementType::HAIRPIN:      write(item_cast<const Hairpin*>(item), xml, ctx);
+        break;
+    case ElementType::HAMMER_ON_PULL_OFF: write(item_cast<const HammerOnPullOff*>(item), xml, ctx);
         break;
     case ElementType::HARMONY:      write(item_cast<const Harmony*>(item), xml, ctx);
         break;
@@ -333,6 +333,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::SYSTEM_TEXT:  write(item_cast<const SystemText*>(item), xml, ctx);
         break;
     case ElementType::SOUND_FLAG:   write(item_cast<const SoundFlag*>(item), xml, ctx);
+        break;
+    case ElementType::TAPPING:      write(item_cast<const Tapping*>(item), xml, ctx);
         break;
     case ElementType::TEMPO_TEXT:   write(item_cast<const TempoText*>(item), xml, ctx);
         break;
@@ -508,9 +510,6 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         int t = static_cast<int>(item->track()) + ctx.trackDiff();
         xml.tag("track", t);
     }
-    if (ctx.writePosition()) {
-        xml.tagProperty(Pid::POSITION, item->rtick());
-    }
 
     for (Pid pid : { Pid::OFFSET, Pid::COLOR, Pid::VISIBLE, Pid::Z }) {
         if (item->propertyFlags(pid) == PropertyFlags::NOSTYLE) {
@@ -618,7 +617,7 @@ void TWrite::writeProperties(const Articulation* item, XmlWriter& xml, WriteCont
     writeProperty(item, xml, Pid::DIRECTION);
     if (item->textType() != ArticulationTextType::NO_TEXT) {
         xml.tag("subtype", TConv::toXml(item->textType()));
-    } else {
+    } else if (!item->isTapping()) {
         xml.tag("subtype", SymNames::nameForSymId(item->symId()));
     }
 
@@ -735,14 +734,6 @@ void TWrite::write(const Bend* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::PLAY);
     writeItemProperties(item, xml, ctx);
     xml.endElement();
-}
-
-void TWrite::write(const StretchedBend* item, XmlWriter& xml, WriteContext& ctx)
-{
-    UNUSED(item);
-    UNUSED(xml);
-    UNUSED(ctx);
-    // not implemented
 }
 
 void TWrite::write(const Box* item, XmlWriter& xml, WriteContext& ctx)
@@ -862,6 +853,28 @@ void TWrite::write(const Breath* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
 {
+    // HACK: foundNotes is a workaround introduced with the "notes in chords" selection filter. A substantial overhaul of our
+    // copy/paste logic would be required to make this fully compatible with de-selected chords - for now we'll simply replace
+    // these chords with a rest of the same duration...
+    bool foundNotes = false;
+    const size_t noteCount = item->notes().size();
+    for (size_t noteIdx = 0; noteIdx < noteCount; ++noteIdx) {
+        if (ctx.canWriteNoteIdx(noteIdx, noteCount)) {
+            foundNotes = true;
+            break;
+        }
+    }
+    if (!foundNotes) {
+        Rest* dummyRest = Factory::createRest(item->segment());
+        dummyRest->setDurationType(item->durationType());
+        dummyRest->setTuplet(item->tuplet());
+        dummyRest->setTicks(item->ticks());
+        dummyRest->setTrack(item->track());
+        write(dummyRest, xml, ctx);
+        dummyRest->deleteLater();
+        return;
+    }
+
     for (Chord* ch : item->graceNotes()) {
         write(ch, xml, ctx);
     }
@@ -869,7 +882,7 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperties(static_cast<const ChordRest*>(item), xml, ctx);
     for (const Articulation* a : item->articulations()) {
-        write(a, xml, ctx);
+        writeItem(a, xml, ctx);
     }
     switch (item->noteType()) {
     case NoteType::NORMAL:
@@ -917,9 +930,15 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
         write(item->stemSlash(), xml, ctx);
     }
     writeProperty(item, xml, Pid::STEM_DIRECTION);
-    for (Note* n : item->notes()) {
-        write(n, xml, ctx);
+
+    for (size_t noteIdx = 0; noteIdx < noteCount; ++noteIdx) {
+        if (!ctx.canWriteNoteIdx(noteIdx, noteCount)) {
+            continue;
+        }
+        const Note* note = item->notes().at(noteIdx);
+        write(note, xml, ctx);
     }
+
     if (item->arpeggio()) {
         write(item->arpeggio(), xml, ctx);
     }
@@ -1309,6 +1328,7 @@ void TWrite::write(const FretDiagram* item, XmlWriter& xml, WriteContext& ctx)
         Pid::ORIENTATION,
         Pid::FRET_SHOW_FINGERINGS,
         Pid::FRET_FINGERING,
+        Pid::EXCLUDE_VERTICAL_ALIGN
     } };
 
     // Write properties first and only once
@@ -1643,6 +1663,85 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const HammerOnPullOff* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (item->broken()) {
+        return;
+    }
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+
+    xml.startElement(item);
+
+    writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
+
+    writeProperties(static_cast<const Slur*>(item), xml, ctx);
+
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const HammerOnPullOffSegment* seg, XmlWriter& xml, WriteContext& ctx)
+{
+    for (size_t i = 0; i < seg->hopoText().size(); ++i) {
+        HammerOnPullOffText* hopoText = seg->hopoText()[i];
+        if (!hopoText->isUserModified()) {
+            continue;
+        }
+        write(hopoText, xml, ctx, i);
+    }
+}
+
+void TWrite::write(const HammerOnPullOffText* item, XmlWriter& xml, WriteContext& ctx, size_t idx)
+{
+    xml.startElement(item, { { "idx", idx } });
+
+    writeProperties(toTextBase(item), xml, ctx, /*writeText*/ false);
+    xml.endElement();
+}
+
+static void writeHarmonyInfo(const HarmonyInfo* item, const Harmony* h, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement("harmonyInfo");
+    if (item->rootTpc() != Tpc::TPC_INVALID || item->bassTpc() != Tpc::TPC_INVALID) {
+        int rRootTpc = item->rootTpc();
+        int rBassTpc = item->bassTpc();
+        if (h->staff()) {
+            // parent can be a fret diagram
+            const Segment* segment = h->getParentSeg();
+            Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
+            const Interval& interval = h->staff()->transpose(tick);
+            if (ctx.clipboardmode() && !h->score()->style().styleB(Sid::concertPitch) && interval.chromatic) {
+                rRootTpc = transposeTpc(item->rootTpc(), interval, true);
+                rBassTpc = transposeTpc(item->bassTpc(), interval, true);
+            }
+        }
+
+        if (item->id() > 0) {
+            xml.tag("extension", item->id());
+        }
+        // parser uses leading "=" as a hidden specifier for minor
+        // this may or may not currently be incorporated into _textName
+        String writeName = item->textName();
+        if (item->parsedChord() && item->parsedChord()->name().startsWith(u'=') && !writeName.startsWith(u'=')) {
+            writeName = u"=" + writeName;
+        }
+        if (!writeName.isEmpty()) {
+            xml.tag("name", writeName);
+        }
+        if (rRootTpc != Tpc::TPC_INVALID) {
+            xml.tag("root", rRootTpc);
+        }
+        if (rBassTpc != Tpc::TPC_INVALID) {
+            xml.tag("bass", rBassTpc);
+        }
+    } else {
+        xml.tag("name", item->textName());
+    }
+
+    xml.endElement();
+}
+
 void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
 {
     if (!ctx.canWrite(item)) {
@@ -1654,72 +1753,43 @@ void TWrite::write(const Harmony* item, XmlWriter& xml, WriteContext& ctx)
     if (item->leftParen()) {
         xml.tag("leftParen");
     }
-    if (item->rootTpc() != Tpc::TPC_INVALID || item->bassTpc() != Tpc::TPC_INVALID) {
-        int rRootTpc = item->rootTpc();
-        int rBaseTpc = item->bassTpc();
-        if (item->staff()) {
-            // parent can be a fret diagram
-            Segment* segment = item->getParentSeg();
-            Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
-            const Interval& interval = item->staff()->transpose(tick);
-            if (ctx.clipboardmode() && !item->score()->style().styleB(Sid::concertPitch) && interval.chromatic) {
-                rRootTpc = transposeTpc(item->rootTpc(), interval, true);
-                rBaseTpc = transposeTpc(item->bassTpc(), interval, true);
-            }
-        }
-        if (rRootTpc != Tpc::TPC_INVALID) {
-            xml.tag("root", rRootTpc);
-            if (item->rootCase() != NoteCaseType::CAPITAL) {
-                xml.tag("rootCase", static_cast<int>(item->rootCase()));
-            }
-        }
-        if (item->id() > 0) {
-            xml.tag("extension", item->id());
-        }
-        // parser uses leading "=" as a hidden specifier for minor
-        // this may or may not currently be incorporated into _textName
-        String writeName = item->hTextName();
-        if (item->parsedForm() && item->parsedForm()->name().startsWith(u'=') && !writeName.startsWith(u'=')) {
-            writeName = u"=" + writeName;
-        }
-        if (!writeName.isEmpty()) {
-            xml.tag("name", writeName);
-        }
 
-        if (rBaseTpc != Tpc::TPC_INVALID) {
-            xml.tag("base", rBaseTpc);
-            if (item->bassCase() != NoteCaseType::CAPITAL) {
-                xml.tag("baseCase", static_cast<int>(item->bassCase()));
-            }
-        }
-        for (const HDegree& hd : item->degreeList()) {
-            HDegreeType tp = hd.type();
-            if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
-                xml.startElement("degree");
-                xml.tag("degree-value", hd.value());
-                xml.tag("degree-alter", hd.alter());
-                switch (tp) {
-                case HDegreeType::ADD:
-                    xml.tag("degree-type", "add");
-                    break;
-                case HDegreeType::ALTER:
-                    xml.tag("degree-type", "alter");
-                    break;
-                case HDegreeType::SUBTRACT:
-                    xml.tag("degree-type", "subtract");
-                    break;
-                default:
-                    break;
-                }
-                xml.endElement();
-            }
-        }
-    } else {
-        xml.tag("name", item->hTextName());
+    // check tpcs valid?
+    if (item->rootCase() != NoteCaseType::CAPITAL) {
+        xml.tag("rootCase", static_cast<int>(item->rootCase()));
     }
-    if (!item->hFunction().isEmpty()) {
-        xml.tag("function", item->hFunction());
+
+    if (item->bassCase() != NoteCaseType::CAPITAL) {
+        xml.tag("bassCase", static_cast<int>(item->bassCase()));
     }
+
+    for (const HarmonyInfo* info : item->chords()) {
+        writeHarmonyInfo(info, item, xml, ctx);
+    }
+
+    for (const HDegree& hd : item->degreeList()) { // Do we really still need this?
+        HDegreeType tp = hd.type();
+        if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
+            xml.startElement("degree");
+            xml.tag("degree-value", hd.value());
+            xml.tag("degree-alter", hd.alter());
+            switch (tp) {
+            case HDegreeType::ADD:
+                xml.tag("degree-type", "add");
+                break;
+            case HDegreeType::ALTER:
+                xml.tag("degree-type", "alter");
+                break;
+            case HDegreeType::SUBTRACT:
+                xml.tag("degree-type", "subtract");
+                break;
+            default:
+                break;
+            }
+            xml.endElement();
+        }
+    }
+
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, false);
     //Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION
     //written by the above function call because they are part of element style
@@ -2186,7 +2256,6 @@ void TWrite::write(const Lyrics* item, XmlWriter& xml, WriteContext& ctx)
     if (item->syllabic() != LyricsSyllabic::SINGLE) {
         xml.tag("syllabic", TConv::toXml(item->syllabic()));
     }
-    xml.tag("ticks", item->ticks().ticks(), 0);   // pre-3.1 compatibility: write integer ticks under <ticks> tag
     writeProperty(item, xml, Pid::LYRIC_TICKS);
 
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
@@ -2198,6 +2267,8 @@ void TWrite::write(const Marker* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.tag("label", item->label());
+    writeProperty(item, xml, Pid::MARKER_CENTER_ON_SYMBOL);
+    writeProperty(item, xml, Pid::MARKER_SYMBOL_SIZE);
     xml.endElement();
 }
 
@@ -2573,9 +2644,6 @@ void TWrite::write(const Slur* item, XmlWriter& xml, WriteContext& ctx)
         return;
     }
     xml.startElement(item);
-    if (ctx.clipboardmode()) {
-        xml.tag("stemArr", Slur::calcStemArrangement(item->startElement(), item->endElement()));
-    }
 
     writeProperty(item, xml, Pid::PARTIAL_SPANNER_DIRECTION);
 
@@ -2596,14 +2664,7 @@ void TWrite::writeProperties(const SlurTie* item, XmlWriter& xml, WriteContext& 
 
 void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& ctx, int no)
 {
-    if (seg->visible() && seg->autoplace()
-        && (seg->color() == ctx.configuration()->defaultColor())
-        && seg->offset().isNull()
-        && seg->ups(Grip::START).off.isNull()
-        && seg->ups(Grip::BEZIER1).off.isNull()
-        && seg->ups(Grip::BEZIER2).off.isNull()
-        && seg->ups(Grip::END).off.isNull()
-        ) {
+    if (!seg->isUserModified()) {
         return;
     }
 
@@ -2622,6 +2683,11 @@ void TWrite::writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& 
     if (!seg->ups(Grip::END).off.isNull()) {
         xml.tagPoint("o4", seg->ups(Grip::END).off / _spatium);
     }
+
+    if (seg->isHammerOnPullOffSegment()) {
+        writeProperties(toHammerOnPullOffSegment(seg), xml, ctx);
+    }
+
     writeItemProperties(seg, xml, ctx);
     xml.endElement();
 }
@@ -2810,7 +2876,6 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("clef", item->genClef());
     }
     if (item->stemless()) {
-        xml.tag("slashStyle", item->stemless());     // for backwards compatibility
         xml.tag("stemless", item->stemless());
     }
     if (!item->showBarlines()) {
@@ -2840,11 +2905,16 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("durationFontName", item->durationFontName());     // write font names anyway for backward compatibility
         xml.tag("durationFontSize", item->durationFontSize());
         xml.tag("durationFontY",    item->durationFontUserY());
-        xml.tag("fretFontName",     item->fretFontName());
-        xml.tag("fretFontSize",     item->fretFontSize());
-        xml.tag("fretFontY",        item->fretFontUserY());
         if (item->symRepeat() != TablatureSymbolRepeat::NEVER) {
             xml.tag("symbolRepeat", int(item->symRepeat()));
+        }
+        xml.tag("fretUseTextStyle", item->fretUseTextStyle());
+        if (item->fretUseTextStyle()) {
+            xml.tag("fretTextStyle", int(item->fretTextStyle()));
+        } else {
+            xml.tag("fretPresetIdx", item->fretPresetIdx());
+            xml.tag("fretFontSize",  item->fretFontSize());
+            xml.tag("fretFontY",     item->fretFontUserY());
         }
         xml.tag("linesThrough",     item->linesThrough());
         xml.tag("minimStyle",       int(item->minimStyle()));
@@ -3002,6 +3072,33 @@ void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
     }
 
     writeProperty(item, xml, Pid::APPLY_TO_ALL_STAVES);
+
+    xml.endElement();
+}
+
+void TWrite::write(const Tapping* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+
+    xml.tag("hand", TConv::toXml(item->hand()));
+
+    if (item->halfSlurAbove() && item->halfSlurAbove()->isUserModified()) {
+        write(item->halfSlurAbove(), xml, ctx);
+    }
+    if (item->halfSlurBelow() && item->halfSlurBelow()->isUserModified()) {
+        write(item->halfSlurBelow(), xml, ctx);
+    }
+
+    writeProperties(toArticulation(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const TappingHalfSlur* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+
+    xml.tag("isHalfSlurAbove", item->isHalfSlurAbove());
+    writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
 
     xml.endElement();
 }

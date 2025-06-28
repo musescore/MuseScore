@@ -271,7 +271,7 @@ void TextBase::insertSym(EditData& ed, SymId id)
     deleteSelectedText(ed);
     String s = score()->engravingFont()->toString(id);
     cursor->format()->setFontFamily(u"ScoreText");
-    score()->undo(new InsertText(m_cursor, s), &ed);
+    score()->undo(new InsertText(cursor, s), &ed);
 }
 
 //---------------------------------------------------------
@@ -484,23 +484,41 @@ bool TextBase::editTextual(EditData& ed)
 
             return true;
 
-        case Key_Delete:
-            if (!deleteSelectedText(ed)) {
-                // check for move down
-                if (cursor->column() == cursor->columns()) {               // if you are on the end of the line, delete the newline char
-                    size_t cursorRow = cursor->row();
-                    cursor->movePosition(TextCursor::MoveOperation::Down);
-                    if (cursor->row() != cursorRow) {
-                        cursor->movePosition(TextCursor::MoveOperation::StartOfLine);
-                        score()->undo(new JoinText(cursor), &ed);
+        case Key_Delete: {
+            int startPosition = cursor->currentPosition();
+
+            if (ctrlPressed) {
+                // delete next word
+                cursor->movePosition(TextCursor::MoveOperation::NextWord, TextCursor::MoveMode::KeepAnchor);
+                int endPosition = cursor->currentPosition();
+                String text = cursor->selectedText();
+
+                s.clear();
+
+                if (deleteSelectedText(ed)) {
+                    notifyAboutTextRemoved(startPosition, endPosition, text);
+                }
+            } else {
+                String text = cursor->selectedText();
+
+                if (!deleteSelectedText(ed)) {
+                    // if you are on the end of the line, delete the newline char
+                    if (cursor->column() == cursor->columns()) {
+                        size_t cursorRow = cursor->row();
+                        cursor->movePosition(TextCursor::MoveOperation::Down);
+                        if (cursor->row() != cursorRow) {
+                            cursor->movePosition(TextCursor::MoveOperation::StartOfLine);
+                            score()->undo(new JoinText(cursor), &ed);
+                        }
+                    } else {
+                        score()->undo(new RemoveText(cursor, String(cursor->currentCharacter())), &ed);
                     }
                 } else {
-                    score()->undo(new RemoveText(cursor, String(cursor->currentCharacter())), &ed);
+                    notifyAboutTextRemoved(startPosition + 1, startPosition, text);
                 }
-
-//                notifyAboutTextRemoved() // todo
             }
             return true;
+        }
 
         case Key_Backspace: {
             int startPosition = cursor->currentPosition();
@@ -940,6 +958,7 @@ void TextBase::paste(EditData& ed, const String& txt)
                     sym.clear();
                 } else if (token == "/sym") {
                     symState = false;
+                    static_cast<TextEditData*>(ed.getData(this).get())->cursor()->setFormat(format);
                     insertSym(ed, SymNames::symIdByName(sym));
                 } else {
                     prepareFormat(token, format);

@@ -28,6 +28,8 @@
 #include "ui_editstaff.h"
 #include "engraving/dom/stafftype.h"
 
+#include "global/async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "global/iinteractive.h"
@@ -37,7 +39,7 @@
 namespace mu::notation {
 class EditStaffType;
 
-class EditStaff : public QDialog, private Ui::EditStaffBase, public muse::Injectable
+class EditStaff : public QDialog, private Ui::EditStaffBase, public muse::Injectable, public muse::async::Asyncable
 {
     Q_OBJECT
 

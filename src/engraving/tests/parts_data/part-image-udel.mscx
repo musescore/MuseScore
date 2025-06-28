@@ -6,6 +6,7 @@
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
@@ -143,7 +144,7 @@
               <Image>
                 <Image>
                   <eid>M_M</eid>
-                  <z>9199</z>
+                  <z>9099</z>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                   <linkPath>schnee.png</linkPath>
                   </Image>
@@ -835,6 +836,7 @@
       <Style>
         <maskBarlinesForText>0</maskBarlinesForText>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+        <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
         <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
         <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
         <showCourtesiesRepeats>0</showCourtesiesRepeats>
@@ -930,7 +932,7 @@
                 <Image>
                   <Image>
                     <eid>FC_FC</eid>
-                    <z>9199</z>
+                    <z>9099</z>
                     <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                     <linkPath>schnee.png</linkPath>
                     </Image>
@@ -1291,6 +1293,7 @@
       <Style>
         <maskBarlinesForText>0</maskBarlinesForText>
         <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+        <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
         <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
         <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
         <showCourtesiesRepeats>0</showCourtesiesRepeats>

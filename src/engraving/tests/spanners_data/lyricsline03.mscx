@@ -6,6 +6,7 @@
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
       <changesBeforeBarlineOtherJumps>0</changesBeforeBarlineOtherJumps>
       <showCourtesiesRepeats>0</showCourtesiesRepeats>
@@ -105,7 +106,6 @@
             <eid>O_O</eid>
             <durationType>quarter</durationType>
             <Lyrics>
-              <ticks>1440</ticks>
               <ticks_f>3/4</ticks_f>
               <eid>P_P</eid>
               <text>A</text>

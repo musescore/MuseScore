@@ -53,7 +53,6 @@ public:
         return m_progressChanged;
     }
 
-    // finish or cancel
     void finish(const ProgressResult& res)
     {
         m_isStarted = false;

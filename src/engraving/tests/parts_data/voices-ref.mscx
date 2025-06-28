@@ -7,6 +7,7 @@
       <maskBarlinesForText>0</maskBarlinesForText>
       <lastSystemFillLimit>0</lastSystemFillLimit>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -353,8 +354,10 @@
         <eid>p_p</eid>
         <voice>
           <Harmony>
-            <root>11</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>11</root>
+              </harmonyInfo>
             <eid>q_q</eid>
             <offset x="0" y="-3.22581"/>
             </Harmony>
@@ -1400,8 +1403,10 @@
           <eid>QD_QD</eid>
           <voice>
             <Harmony>
-              <root>11</root>
-              <name>7</name>
+              <harmonyInfo>
+                <name>7</name>
+                <root>11</root>
+                </harmonyInfo>
               <eid>RD_RD</eid>
               <linkedTo>q_q</linkedTo>
               </Harmony>

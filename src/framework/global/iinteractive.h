@@ -28,6 +28,7 @@
 #include "types/retval.h"
 #include "types/uri.h"
 #include "types/flags.h"
+#include "types/color.h"
 #include "async/promise.h"
 #include "progress.h"
 
@@ -186,11 +187,12 @@ public:
 
     // warning
     virtual async::Promise<Result> warning(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                                           int defBtn = int(Button::NoButton), const Options& options = {},
+                                           int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
                                            const std::string& dialogTitle = "") = 0;
 
     async::Promise<Result> warning(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                                   Button defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+                                   Button defBtn = Button::NoButton, const Options& options = { WithIcon },
+                                   const std::string& dialogTitle = "")
     {
         return warning(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
@@ -208,19 +210,22 @@ public:
     }
 
     // progress
-    virtual Ret showProgress(const std::string& title, Progress* progress) const = 0;
+    virtual void showProgress(const std::string& title, Progress* progress) = 0;
 
     // files
-    virtual io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) = 0;
-    virtual io::path_t selectSavingFile(const QString& title, const io::path_t& path, const std::vector<std::string>& filter,
-                                        bool confirmOverwrite = true) = 0;
+    virtual async::Promise<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,
+                                                         const std::vector<std::string>& filter) = 0;
+    virtual io::path_t selectOpeningFileSync(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) = 0;
+    virtual io::path_t selectSavingFileSync(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
+                                            bool confirmOverwrite = true) = 0;
 
     // dirs
-    virtual io::path_t selectDirectory(const QString& title, const io::path_t& dir) = 0;
-    virtual io::paths_t selectMultipleDirectories(const QString& title, const io::path_t& dir, const io::paths_t& selectedDirectories) = 0;
+    virtual io::path_t selectDirectory(const std::string& title, const io::path_t& dir) = 0;
+    virtual io::paths_t selectMultipleDirectories(const std::string& title, const io::path_t& dir,
+                                                  const io::paths_t& selectedDirectories) = 0;
 
     // color
-    virtual QColor selectColor(const QColor& color = Qt::white, const QString& title = "") = 0;
+    virtual async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") = 0;
     virtual bool isSelectColorOpened() const = 0;
 
     // custom
@@ -274,12 +279,13 @@ public:
     }
 
     virtual Result warningSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
-                               int defBtn = int(Button::NoButton), const Options& options = {}, const std::string& dialogTitle = "") = 0;
+                               int defBtn = int(Button::NoButton), const Options& options = { WithIcon },
+                               const std::string& dialogTitle = "") = 0;
 
     Result warningSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
-                       const Button& defBtn = Button::NoButton, const Options& options = {}, const std::string& dialogTitle = "")
+                       const Button& defBtn = Button::NoButton, const Options& options = { WithIcon }, const std::string& dialogTitle = "")
     {
-        return infoSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+        return warningSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     virtual Result errorSync(const std::string& contentTitle, const Text& text, const ButtonDatas& buttons = {},
@@ -289,7 +295,7 @@ public:
     Result errorSync(const std::string& contentTitle, const std::string& text, const Buttons& buttons,
                      const Button& defBtn = Button::NoButton, const Options& options = { WithIcon }, const std::string& dialogTitle = "")
     {
-        return infoSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
+        return errorSync(contentTitle, Text(text), buttonDataList(buttons), (int)defBtn, options, dialogTitle);
     }
 
     virtual RetVal<Val> openSync(const UriQuery& uri) = 0;

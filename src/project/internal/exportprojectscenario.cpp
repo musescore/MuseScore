@@ -89,8 +89,8 @@ RetVal<muse::io::path_t> ExportProjectScenario::askExportPath(const INotationPtr
     }
 
     RetVal<muse::io::path_t> exportPath;
-    exportPath.val = interactive()->selectSavingFile(muse::qtrc("project/export", "Export"), defaultPath,
-                                                     exportType.filter(), isCreatingOnlyOneFile);
+    exportPath.val = interactive()->selectSavingFileSync(muse::trc("project/export", "Export"), defaultPath,
+                                                         exportType.filter(), isCreatingOnlyOneFile);
     exportPath.ret = !exportPath.val.empty();
 
     return exportPath;
@@ -444,10 +444,7 @@ void ExportProjectScenario::showExportProgress(bool isAudioExport) const
 {
     std::string title = isAudioExport ? muse::trc("project/export", "Exporting audio…") : muse::trc("project/export", "Exporting…");
 
-    Ret ret = interactive()->showProgress(title, &m_exportProgress);
-    if (!ret) {
-        LOGE() << ret.toString();
-    }
+    interactive()->showProgress(title, &m_exportProgress);
 }
 
 void ExportProjectScenario::openFolder(const muse::io::path_t& path) const

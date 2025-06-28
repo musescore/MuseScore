@@ -26,7 +26,7 @@
 
 #include "engravingitem.h"
 #include "durationtype.h"
-#include "types.h"
+#include "tapping.h"
 
 namespace mu::engraving {
 class Instrument;
@@ -37,6 +37,8 @@ class TremoloSingleChord;
 
 class SoundFlag;
 class SystemLock;
+
+enum class TripletFeelType : unsigned char;
 
 class Factory
 {
@@ -57,6 +59,9 @@ public:
     static Articulation* createArticulation(ChordRest* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Articulation> makeArticulation(ChordRest* parent);
 
+    static Tapping* createTapping(ChordRest* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<Tapping> makeTapping(ChordRest* parent);
+
     static Ornament* createOrnament(ChordRest* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Ornament> makeOrnament(ChordRest* parent);
 
@@ -69,9 +74,6 @@ public:
 
     static Bend* createBend(Note* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Bend> makeBend(Note* parent);
-
-    static StretchedBend* createStretchedBend(Chord* parent, bool isAccessibleEnabled = true);
-    static StretchedBend* copyStretchedBend(const StretchedBend& src);
 
     static Bracket* createBracket(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Bracket> makeBracket(EngravingItem* parent);
@@ -230,16 +232,16 @@ public:
     static TremoloBar* createTremoloBar(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<TremoloBar> makeTremoloBar(EngravingItem* parent);
 
-    static TripletFeel* createTripletFeel(Segment* parent, TripletFeelType type = TripletFeelType::NONE, bool isAccessibleEnabled = true);
-
-    static FretCircle* createFretCircle(Chord* parent, bool isAccessibleEnabled = true);
-    static FretCircle* copyFretCircle(const FretCircle& src);
+    static TripletFeel* createTripletFeel(Segment* parent, TripletFeelType type, bool isAccessibleEnabled = true);
 
     static Tuplet* createTuplet(Measure* parent, bool isAccessibleEnabled = true);
     static Tuplet* copyTuplet(const Tuplet& src);
 
     static Hairpin* createHairpin(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Hairpin> makeHairpin(EngravingItem* parent);
+
+    static HammerOnPullOff* createHammerOnPullOff(EngravingItem* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<HammerOnPullOff> makeHammerOnPullOff(EngravingItem* parent);
 
     static Glissando* createGlissando(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Glissando> makeGlissando(EngravingItem* parent);
@@ -262,6 +264,8 @@ public:
     static Marker* createMarker(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static Marker* createMarker(EngravingItem* parent, TextStyleType tid, bool isAccessibleEnabled = true);
+
+    static std::shared_ptr<Marker> makeMarker(EngravingItem* parent);
 
     static GradualTempoChange* createGradualTempoChange(EngravingItem* parent, bool isAccessibleEnabled = true);
 

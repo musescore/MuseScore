@@ -235,6 +235,9 @@ std::vector<NoteEventList> CompatMidiRender::renderChord(const CompatMidiRendere
         CompatMidiRender::renderChordArticulation(context, chord, ell, gateTime, (double)ontime / NoteEvent::NOTE_LENGTH, tremolo);
     }
 
+    bool chordHasHammer
+        = (context.instrumentsHaveEffects && muse::contains(context.chordsWithHammerOnPullOff, const_cast<const Chord*>(chord)));
+
     // Check each note and apply gateTime
     for (size_t i : getNotesIndexesToRender(chord)) {
         mu::engraving::Note* note = chord->notes()[i];
@@ -258,7 +261,7 @@ std::vector<NoteEventList> CompatMidiRender::renderChord(const CompatMidiRendere
 
         CompatMidiRender::createSlideInNotePlayEvents(note, prevChord, el);
 
-        if (note->isHammerOn() && el->size() == 1) {
+        if (chordHasHammer && el->size() == 1) {
             el->front().setHammerPull(true);
         }
 
@@ -607,7 +610,18 @@ void CompatMidiRender::createGraceNotesPlayEvents(const Score* score, const Frac
 
         on += graceDuration;
     }
-    if (na) {
+
+    bool graceBendAfter = std::any_of(gna.begin(), gna.end(), [](const Chord* graceChord) {
+        for (Note* note : graceChord->notes()) {
+            if (note->bendBack()) {
+                return true;
+            }
+        }
+
+        return false;
+    });
+
+    if (!graceBendAfter && na) {
         if (chord->dots() == 1) {
             trailtime = floor(667 * weighta);
         } else if (chord->dots() == 2) {

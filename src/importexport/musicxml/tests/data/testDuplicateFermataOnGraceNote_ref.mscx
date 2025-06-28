@@ -34,6 +34,7 @@
       <lhGuitarFingeringFontSize>10</lhGuitarFingeringFontSize>
       <rhGuitarFingeringFontFace>FreeSerif</rhGuitarFingeringFontFace>
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
+      <hammerOnPullOffTappingFontFace>FreeSerif</hammerOnPullOffTappingFontFace>
       <stringNumberFontFace>FreeSerif</stringNumberFontFace>
       <stringNumberFontSize>10</stringNumberFontSize>
       <stringTuningsFontSize>10</stringTuningsFontSize>
@@ -60,9 +61,7 @@
       <rehearsalMarkFontFace>FreeSerif</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
       <repeatLeftFontFace>FreeSerif</repeatLeftFontFace>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
       <repeatRightFontFace>FreeSerif</repeatRightFontFace>
-      <repeatRightFontSize>10</repeatRightFontSize>
       <frameFontFace>FreeSerif</frameFontFace>
       <noteLineFontFace>FreeSerif</noteLineFontFace>
       <glissandoFontFace>FreeSerif</glissandoFontFace>

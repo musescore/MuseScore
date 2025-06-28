@@ -34,12 +34,11 @@
 
 using namespace muse;
 using namespace muse::io;
-using namespace tinyxml2;
 
 struct XmlStreamReader::Xml {
-    XMLDocument doc;
-    XMLNode* node = nullptr;
-    XMLError err;
+    tinyxml2::XMLDocument doc;
+    tinyxml2::XMLNode* node = nullptr;
+    tinyxml2::XMLError err;
     String customErr;
 };
 
@@ -83,14 +82,14 @@ void XmlStreamReader::setData(const ByteArray& data_)
     m_token = TokenType::Invalid;
 
     if (data_.size() < 4) {
-        m_xml->err = XML_ERROR_EMPTY_DOCUMENT;
+        m_xml->err = tinyxml2::XML_ERROR_EMPTY_DOCUMENT;
         LOGE() << m_xml->doc.ErrorIDToName(m_xml->err);
         return;
     }
 
     UtfCodec::Encoding enc = UtfCodec::xmlEncoding(data_);
     if (enc == UtfCodec::Encoding::Unknown) {
-        m_xml->err = XML_CAN_NOT_CONVERT_TEXT;
+        m_xml->err = tinyxml2::XML_CAN_NOT_CONVERT_TEXT;
         LOGE() << "unknown encoding";
         return;
     }
@@ -106,7 +105,7 @@ void XmlStreamReader::setData(const ByteArray& data_)
 
     m_xml->err = m_xml->doc.Parse(reinterpret_cast<const char*>(data.constData()), data.size());
 
-    if (m_xml->err == XML_SUCCESS) {
+    if (m_xml->err == tinyxml2::XML_SUCCESS) {
         m_token = TokenType::NoToken;
     } else {
         LOGE() << m_xml->doc.ErrorIDToName(m_xml->err);
@@ -130,7 +129,7 @@ bool XmlStreamReader::atEnd() const
     return m_token == TokenType::EndDocument || m_token == TokenType::Invalid;
 }
 
-static XmlStreamReader::TokenType resolveToken(XMLNode* n, bool isStartElement)
+static XmlStreamReader::TokenType resolveToken(tinyxml2::XMLNode* n, bool isStartElement)
 {
     if (n->ToElement()) {
         return isStartElement ? XmlStreamReader::TokenType::StartElement : XmlStreamReader::TokenType::EndElement;
@@ -148,26 +147,27 @@ static XmlStreamReader::TokenType resolveToken(XMLNode* n, bool isStartElement)
     return XmlStreamReader::TokenType::Unknown;
 }
 
-static std::pair<XMLNode*, XmlStreamReader::TokenType> resolveNode(XMLNode* currentNode, XmlStreamReader::TokenType currentToken)
+static std::pair<tinyxml2::XMLNode*, XmlStreamReader::TokenType>
+resolveNode(tinyxml2::XMLNode* currentNode, XmlStreamReader::TokenType currentToken)
 {
     if (currentToken == XmlStreamReader::TokenType::StartElement) {
-        XMLNode* child = currentNode->FirstChild();
+        tinyxml2::XMLNode* child = currentNode->FirstChild();
         if (child) {
             return { child, resolveToken(child, true) };
         }
 
-        XMLNode* sibling = currentNode->NextSibling();
+        tinyxml2::XMLNode* sibling = currentNode->NextSibling();
         if (!sibling || sibling->ToElement() || sibling->ToText() || sibling->ToComment()) {
             return { currentNode, XmlStreamReader::TokenType::EndElement };
         }
     }
 
-    XMLNode* sibling = currentNode->NextSibling();
+    tinyxml2::XMLNode* sibling = currentNode->NextSibling();
     if (sibling) {
         return { sibling, resolveToken(sibling, true) };
     }
 
-    XMLNode* parent = currentNode->Parent();
+    tinyxml2::XMLNode* parent = currentNode->Parent();
     if (parent) {
         return { parent, resolveToken(parent, false) };
     }
@@ -181,7 +181,7 @@ XmlStreamReader::TokenType XmlStreamReader::readNext()
         return m_token;
     }
 
-    if (m_xml->err != XML_SUCCESS || m_token == EndDocument) {
+    if (m_xml->err != tinyxml2::XML_SUCCESS || m_token == EndDocument) {
         m_xml->node = nullptr;
         m_token = TokenType::Invalid;
         return m_token;
@@ -193,7 +193,7 @@ XmlStreamReader::TokenType XmlStreamReader::readNext()
         return m_token;
     }
 
-    std::pair<XMLNode*, XmlStreamReader::TokenType> p = resolveNode(m_xml->node, m_token);
+    std::pair<tinyxml2::XMLNode*, XmlStreamReader::TokenType> p = resolveNode(m_xml->node, m_token);
 
     m_xml->node = p.first;
     m_token = p.second;
@@ -298,7 +298,7 @@ bool XmlStreamReader::hasAttribute(const char* name) const
         return false;
     }
 
-    XMLElement* e = m_xml->node->ToElement();
+    tinyxml2::XMLElement* e = m_xml->node->ToElement();
     if (!e) {
         return false;
     }
@@ -311,7 +311,7 @@ String XmlStreamReader::attribute(const char* name) const
         return String();
     }
 
-    XMLElement* e = m_xml->node->ToElement();
+    tinyxml2::XMLElement* e = m_xml->node->ToElement();
     if (!e) {
         return String();
     }
@@ -329,7 +329,7 @@ AsciiStringView XmlStreamReader::asciiAttribute(const char* name) const
         return AsciiStringView();
     }
 
-    XMLElement* e = m_xml->node->ToElement();
+    tinyxml2::XMLElement* e = m_xml->node->ToElement();
     if (!e) {
         return AsciiStringView();
     }
@@ -368,12 +368,12 @@ std::vector<XmlStreamReader::Attribute> XmlStreamReader::attributes() const
         return attrs;
     }
 
-    XMLElement* e = m_xml->node->ToElement();
+    tinyxml2::XMLElement* e = m_xml->node->ToElement();
     if (!e) {
         return attrs;
     }
 
-    for (const XMLAttribute* xa = e->FirstAttribute(); xa; xa = xa->Next()) {
+    for (const tinyxml2::XMLAttribute* xa = e->FirstAttribute(); xa; xa = xa->Next()) {
         Attribute a;
         a.name = xa->Name();
         a.value = String::fromUtf8(xa->Value());
@@ -385,9 +385,9 @@ std::vector<XmlStreamReader::Attribute> XmlStreamReader::attributes() const
 String XmlStreamReader::readBody() const
 {
     if (m_xml->node) {
-        XMLPrinter printer;
+        tinyxml2::XMLPrinter printer;
 
-        const XMLElement* child = m_xml->node->FirstChildElement();
+        const tinyxml2::XMLElement* child = m_xml->node->FirstChildElement();
         while (child) {
             child->Accept(&printer);
             child = child->NextSiblingElement();
@@ -492,8 +492,8 @@ XmlStreamReader::Error XmlStreamReader::error() const
         return CustomError;
     }
 
-    XMLError err = m_xml->doc.ErrorID();
-    if (err == XML_SUCCESS) {
+    tinyxml2::XMLError err = m_xml->doc.ErrorID();
+    if (err == tinyxml2::XML_SUCCESS) {
         return NoError;
     }
 

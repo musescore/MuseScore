@@ -26,8 +26,9 @@ df -h .
 
 BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
-PACKARCH="x86_64" # x86_64, armv7l, aarch64
+PACKARCH="x86_64" # x86_64, armv7l, aarch64, wasm
 COMPILER="gcc" # gcc, clang
+EMSDK_VERSION="3.1.70" # for Qt 6.9
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -62,6 +63,7 @@ apt_packages=(
   desktop-file-utils # installs `desktop-file-validate` for appimagetool
   gawk
   git
+  lcov
   libasound2-dev
   libcups2-dev
   libfontconfig1-dev
@@ -163,7 +165,7 @@ fi
 # CMAKE
 # Get newer CMake (only used cached version if it is the same)
 case "$PACKARCH" in
-  x86_64)
+  x86_64 | wasm)
     cmake_version="3.24.0"
     cmake_dir="$BUILD_TOOLS/cmake/${cmake_version}"
     if [[ ! -d "$cmake_dir" ]]; then
@@ -182,7 +184,7 @@ cmake --version
 
 # Ninja
 case "$PACKARCH" in
-  x86_64)
+  x86_64 | wasm)
     echo "Get Ninja"
     ninja_dir=$BUILD_TOOLS/Ninja
     if [[ ! -d "$ninja_dir" ]]; then
@@ -199,6 +201,17 @@ case "$PACKARCH" in
 esac
 echo "ninja version"
 ninja --version
+
+if [[ "$PACKARCH" == "wasm" ]]; then
+  git clone https://github.com/emscripten-core/emsdk.git $BUILD_TOOLS/emsdk
+  origin_dir=$(pwd)
+  cd $BUILD_TOOLS/emsdk
+  git pull
+  ./emsdk install $EMSDK_VERSION
+  ./emsdk activate $EMSDK_VERSION
+  echo "source $BUILD_TOOLS/emsdk/emsdk_env.sh" >> ${ENV_FILE}
+  cd $origin_dir
+fi
 
 ##########################################################################
 # POST INSTALL

@@ -105,6 +105,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/config.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ratio.h
     ${CMAKE_CURRENT_LIST_DIR}/types/secs.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/color.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/color.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/rgba.h
 
     ${CMAKE_CURRENT_LIST_DIR}/io/ioenums.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp

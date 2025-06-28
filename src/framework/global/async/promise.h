@@ -28,8 +28,12 @@ namespace muse::async {
 template<typename ... T>
 using Promise = kors::async::Promise<T...>;
 
+using PromiseType = kors::async::PromiseType;
+
 template<typename ... T>
-constexpr auto make_promise = kors::async::make_promise<T...>;
+auto make_promise = [](typename Promise<T...>::Body f, PromiseType type = PromiseType::AsyncByPromise) {
+    return kors::async::make_promise<T...>(f, type);
+};
 }
 
 #endif // MUSE_ASYNC_PROMISE_H

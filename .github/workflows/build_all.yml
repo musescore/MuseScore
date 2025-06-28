@@ -26,7 +26,7 @@ on:
         required: false
       use_qt69:
         description: 'Use Qt 6.9'
-        default: 'off'
+        default: 'on'
         required: false   
   workflow_call:
     inputs:
@@ -57,7 +57,7 @@ on:
         required: false
       use_qt69:
         description: 'Use Qt 6.9'
-        default: 'off'
+        default: 'on'
         type: string
         required: false  
 

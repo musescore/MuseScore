@@ -786,6 +786,30 @@ INotationPlaybackPtr MasterNotation::playback() const
     return m_notationPlayback;
 }
 
+void MasterNotation::initNotationSoloMuteState(const INotationPtr notation)
+{
+    IF_ASSERT_FAILED(notation) {
+        return;
+    }
+
+    const INotationSoloMuteStatePtr excerptSoloMuteState = notation->soloMuteState();
+
+    // Iterate over all parts (not just the excerpt parts) - tracks that do exist in the master notation but
+    // not in the excerpt should be muted in the excerpt...
+    for (const Part* masterPart : parts()->partList()) {
+        const Part* excerptPart = notation->parts()->part(masterPart->id());
+        const bool shouldMute = !excerptPart || !excerptPart->isVisible();
+        const INotationSoloMuteState::SoloMuteState state = { shouldMute, /*solo*/ false };
+        for (const InstrumentTrackId& trackId : masterPart->instrumentTrackIdSet()) {
+            excerptSoloMuteState->setTrackSoloMuteState(trackId, state);
+        }
+        if (masterPart->hasChordSymbol()) {
+            const InstrumentTrackId& chordsId = playback()->chordSymbolsTrackId(masterPart->id());
+            excerptSoloMuteState->setTrackSoloMuteState(chordsId, state);
+        }
+    }
+}
+
 const ExcerptNotationList& MasterNotation::potentialExcerpts() const
 {
     updatePotentialExcerpts();

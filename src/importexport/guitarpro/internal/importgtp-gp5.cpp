@@ -35,7 +35,6 @@
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fingering.h"
-#include "engraving/dom/fretcircle.h"
 #include "engraving/dom/glissando.h"
 #include "engraving/dom/instrtemplate.h"
 #include "engraving/dom/keysig.h"
@@ -196,6 +195,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     uint8_t beatBits = readUInt8();
     bool dotted    = beatBits & BEAT_DOTTED;
     bool hasSlur = false;
+    bool hasHammerOnPullOff = false;
     bool hasLetRing = false;
     bool hasPalmMute = false;
     bool hasTrill = false;
@@ -345,7 +345,8 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 toChord(cr)->add(note);
 
                 ReadNoteResult readResult = readNote(6 - i, note);
-                hasSlur = readResult.slur;
+                hasSlur = readResult.slur || hasSlur;
+                hasHammerOnPullOff = readResult.hammerOnPullOff || hasHammerOnPullOff;
                 hasLetRing = readResult.letRing || hasLetRing;
                 hasPalmMute = readResult.palmMute || hasPalmMute;
                 hasTrill = readResult.trill || hasTrill;
@@ -394,11 +395,6 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
     if (cr && cr->isChord()) {
         Chord* chord = toChord(cr);
 
-        if (engravingConfiguration()->enableExperimentalFretCircle()) {
-            FretCircle* c = Factory::createFretCircle(chord);
-            chord->add(c);
-        }
-
         bool hasVibratoLeftHandOnBeat = false;
         bool hasVibratoWTremBarOnBeat = false;
 
@@ -423,6 +419,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         addLetRing(cr, hasLetRing);
         addPalmMute(cr, hasPalmMute);
         addTrill(cr, hasTrill);
+        addHammerOnPullOff(cr, hasHammerOnPullOff);
         addRasgueado(cr, m_currentBeatHasRasgueado);
         addVibratoLeftHand(cr, hasVibratoLeftHand);
         addVibratoWTremBar(cr, hasVibratoWTremBar);
@@ -848,9 +845,7 @@ void GuitarPro5::readMeasures(int /*startingTempo*/)
 bool GuitarPro5::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
-    }
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
 
     f = io;
 
@@ -898,10 +893,7 @@ bool GuitarPro5::read(IODevice* io)
         }
     }
 
-    slurs = new Slur*[staves];
-    for (size_t i = 0; i < staves; ++i) {
-        slurs[i] = 0;
-    }
+    slurs.resize(staves, nullptr);
 
     int tnumerator   = 4;
     int tdenominator = 4;
@@ -1087,9 +1079,7 @@ bool GuitarPro5::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->applyBendsToChords();
-    }
+    m_guitarBendImporter->applyBendsToChords();
 
     return true;
 }
@@ -1111,7 +1101,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
         bendParent = note;
     }
     if (modMask1 & EFFECT_HAMMER) {
-        result.slur = true;
+        result.hammerOnPullOff = true;
     }
     if (modMask1 & EFFECT_LET_RING) {
         result.letRing = true;

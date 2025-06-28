@@ -40,8 +40,6 @@ FretboardsPageModel::FretboardsPageModel(QObject* parent)
     StyleId::fretStyleExtended,
     StyleId::fretStringSpacing,
     StyleId::fretFretSpacing,
-    StyleId::maxFretShiftAbove,
-    StyleId::maxFretShiftBelow,
 })
 {
 }
@@ -60,5 +58,3 @@ StyleItem* FretboardsPageModel::fretShowFingerings() const { return styleItem(St
 StyleItem* FretboardsPageModel::fretStyleExtended() const { return styleItem(StyleId::fretStyleExtended); }
 StyleItem* FretboardsPageModel::fretStringSpacing() const { return styleItem(StyleId::fretStringSpacing); }
 StyleItem* FretboardsPageModel::fretFretSpacing() const { return styleItem(StyleId::fretFretSpacing); }
-StyleItem* FretboardsPageModel::maxFretShiftAbove() const { return styleItem(StyleId::maxFretShiftAbove); }
-StyleItem* FretboardsPageModel::maxFretShiftBelow() const { return styleItem(StyleId::maxFretShiftBelow); }

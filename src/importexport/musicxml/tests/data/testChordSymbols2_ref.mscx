@@ -183,9 +183,11 @@
               </string>
             </FretDiagram>
           <Harmony>
-            <root>13</root>
-            <name>add9</name>
-            <base>17</base>
+            <harmonyInfo>
+              <name>add9</name>
+              <root>13</root>
+              <bass>17</bass>
+              </harmonyInfo>
             <eid>L_L</eid>
             </Harmony>
           <Chord>
@@ -239,7 +241,9 @@
               </string>
             </FretDiagram>
           <Harmony>
-            <root>12</root>
+            <harmonyInfo>
+              <root>12</root>
+              </harmonyInfo>
             <eid>Q_Q</eid>
             </Harmony>
           <Chord>
@@ -257,8 +261,10 @@
         <eid>T_T</eid>
         <voice>
           <Harmony>
-            <root>14</root>
-            <name>maj7(no3rd)</name>
+            <harmonyInfo>
+              <name>maj7(no3rd)</name>
+              <root>14</root>
+              </harmonyInfo>
             <eid>U_U</eid>
             </Harmony>
           <Chord>

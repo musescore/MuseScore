@@ -22,7 +22,6 @@
 #pragma once
 
 #include "../xmlreader.h"
-#include "readcontext.h"
 
 namespace mu::engraving::read460 {
 class HarmonyToDiagramReader

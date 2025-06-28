@@ -27,10 +27,8 @@
 
 #include "note.h"
 
-#include <assert.h>
+#include <cassert>
 
-#include "dom/noteline.h"
-#include "dom/volta.h"
 #include "translation.h"
 #include "types/typesconv.h"
 #include "iengravingfont.h"
@@ -40,14 +38,11 @@
 #include "accidental.h"
 #include "actionicon.h"
 #include "articulation.h"
-
 #include "bagpembell.h"
-#include "beam.h"
 #include "barline.h"
-
+#include "beam.h"
 #include "chord.h"
 #include "chordline.h"
-
 #include "drumset.h"
 #include "factory.h"
 #include "fingering.h"
@@ -55,9 +50,10 @@
 #include "guitarbend.h"
 #include "laissezvib.h"
 #include "linkedobjects.h"
-#include "marker.h"
 #include "measure.h"
+#include "navigate.h"
 #include "notedot.h"
+#include "noteline.h"
 #include "part.h"
 #include "partialtie.h"
 #include "pitchspelling.h"
@@ -68,16 +64,9 @@
 #include "stafftype.h"
 #include "stringdata.h"
 #include "tie.h"
-
 #include "undo.h"
 #include "utils.h"
-
-#include "navigate.h"
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-#include "accessibility/accessibleitem.h"
-#include "accessibility/accessibleroot.h"
-#endif
+#include "volta.h"
 
 #include "log.h"
 
@@ -1174,7 +1163,7 @@ double Note::headHeight() const
 double Note::tabHeadHeight(const StaffType* tab) const
 {
     if (tab && m_fret != INVALID_FRET_INDEX && m_string != INVALID_STRING_INDEX) {
-        return tab->fretBoxH(style()) * magS();
+        return tab->fretBoxH() * magS();
     }
     return headHeight();
 }
@@ -1720,6 +1709,7 @@ bool Note::acceptDrop(EditData& data) const
 
     return type == ElementType::ARTICULATION
            || type == ElementType::ORNAMENT
+           || type == ElementType::TAPPING
            || type == ElementType::FERMATA
            || type == ElementType::CHORDLINE
            || type == ElementType::TEXT
@@ -3949,6 +3939,11 @@ bool Note::hasSlideToNote() const
 bool Note::hasSlideFromNote() const
 {
     return m_slideFromType != SlideType::Undefined;
+}
+
+bool Note::isGrace() const
+{
+    return noteType() != NoteType::NORMAL;
 }
 
 bool Note::isPreBendStart() const

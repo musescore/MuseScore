@@ -1194,7 +1194,9 @@ void Staff::staffTypeListChanged(const Fraction& tick)
 
 StaffType* Staff::setStaffType(const Fraction& tick, const StaffType& nst)
 {
-    return m_staffTypeList.setStaffType(tick, nst);
+    StaffType* stt = m_staffTypeList.setStaffType(tick, nst);
+    stt->setScore(score());
+    return stt;
 }
 
 //---------------------------------------------------------

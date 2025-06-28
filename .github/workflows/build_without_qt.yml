@@ -2,6 +2,7 @@ name: 'Build: Without Qt'
 
 on:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   run_tests:

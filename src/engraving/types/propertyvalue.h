@@ -68,6 +68,7 @@ enum class P_TYPE : unsigned char {
 
     // Layout
     ALIGN,
+    ALIGN_H,
     PLACEMENT_V,
     PLACEMENT_H,
     TEXT_PLACE,
@@ -82,6 +83,8 @@ enum class P_TYPE : unsigned char {
     TIMESIG_PLACEMENT,
     TIMESIG_STYLE,
     TIMESIG_MARGIN,
+    NOTE_SPELLING_TYPE,
+    CHORD_PRESET_TYPE,
 
     // Sound
     FRACTION,
@@ -111,6 +114,9 @@ enum class P_TYPE : unsigned char {
     NOTELINE_PLACEMENT_TYPE,
     LYRICS_DASH_SYSTEM_START_TYPE,
     PARTIAL_SPANNER_DIRECTION,
+
+    LH_TAPPING_SYMBOL,
+    RH_TAPPING_SYMBOL,
 
     VOICE_ASSIGNMENT,
     AUTO_ON_OFF,
@@ -192,6 +198,8 @@ public:
     // Layout
     PropertyValue(Align v)
         : m_type(P_TYPE::ALIGN), m_data(make_data<Align>(v)) {}
+    PropertyValue(AlignH v)
+        : m_type(P_TYPE::ALIGN_H), m_data(make_data<AlignH>(v)) {}
 
     PropertyValue(PlacementV v)
         : m_type(P_TYPE::PLACEMENT_V), m_data(make_data<PlacementV>(v)) {}
@@ -229,6 +237,12 @@ public:
 
     PropertyValue(TimeSigVSMargin v)
         : m_type(P_TYPE::TIMESIG_MARGIN), m_data(make_data<TimeSigVSMargin>(v)) {}
+
+    PropertyValue(NoteSpellingType v)
+        : m_type(P_TYPE::NOTE_SPELLING_TYPE), m_data(make_data<NoteSpellingType>(v)) {}
+
+    PropertyValue(const ChordStylePreset& v)
+        : m_type(P_TYPE::CHORD_PRESET_TYPE), m_data(make_data<ChordStylePreset>(v)) {}
 
     // Sound
     PropertyValue(const Fraction& v)
@@ -308,6 +322,12 @@ public:
 
     PropertyValue(const PartialSpannerDirection& v)
         : m_type(P_TYPE::PARTIAL_SPANNER_DIRECTION), m_data(make_data<PartialSpannerDirection>(v)) {}
+
+    PropertyValue(const LHTappingSymbol& v)
+        : m_type(P_TYPE::LH_TAPPING_SYMBOL), m_data(make_data<LHTappingSymbol>(v)) {}
+
+    PropertyValue(const RHTappingSymbol& v)
+        : m_type(P_TYPE::RH_TAPPING_SYMBOL), m_data(make_data<RHTappingSymbol>(v)) {}
 
     PropertyValue(const VoiceAssignment& v)
         : m_type(P_TYPE::VOICE_ASSIGNMENT), m_data(make_data<VoiceAssignment>(v)) {}

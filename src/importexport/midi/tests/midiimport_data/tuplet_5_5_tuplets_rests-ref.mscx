@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <Style>
+      <spatium>1.74978</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="0" visible="1"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <Staff>
+        <eid>D_D</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <defaultClef>F</defaultClef>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>E_E</eid>
+        <voice>
+          <TimeSig>
+            <eid>F_F</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Tuplet>
+            <eid>G_G</eid>
+            <normalNotes>4</normalNotes>
+            <actualNotes>5</actualNotes>
+            <baseNote>16th</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>5</text>
+              </Number>
+            </Tuplet>
+          <Chord>
+            <eid>H_H</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>I_I</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>J_J</eid>
+            <durationType>16th</durationType>
+            </Rest>
+          <Beam>
+            <eid>K_K</eid>
+            <l1>38</l1>
+            <l2>40</l2>
+            </Beam>
+          <Chord>
+            <eid>L_L</eid>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>M_M</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>N_N</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>O_O</eid>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <endTuplet/>
+          <Chord>
+            <eid>P_P</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>Q_Q</eid>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>R_R</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>S_S</eid>
+              <pitch>65</pitch>
+              <tpc>13</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>T_T</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>U_U</eid>
+              <pitch>62</pitch>
+              <tpc>16</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <TimeSig>
+            <eid>V_V</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Tuplet>
+            <eid>W_W</eid>
+            <normalNotes>4</normalNotes>
+            <actualNotes>5</actualNotes>
+            <baseNote>16th</baseNote>
+            <Number>
+              <style>tuplet</style>
+              <text>5</text>
+              </Number>
+            </Tuplet>
+          <Beam>
+            <eid>X_X</eid>
+            <l1>-12</l1>
+            <l2>-12</l2>
+            </Beam>
+          <Chord>
+            <eid>Y_Y</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>Z_Z</eid>
+              <pitch>45</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>a_a</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>b_b</eid>
+              <pitch>52</pitch>
+              <tpc>18</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>c_c</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>d_d</eid>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>e_e</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>f_f</eid>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>g_g</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>h_h</eid>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              <velocity>80</velocity>
+              </Note>
+            <Note>
+              <eid>i_i</eid>
+              <pitch>50</pitch>
+              <tpc>16</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <endTuplet/>
+          <Rest>
+            <eid>j_j</eid>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Rest>
+            <eid>k_k</eid>
+            <durationType>half</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

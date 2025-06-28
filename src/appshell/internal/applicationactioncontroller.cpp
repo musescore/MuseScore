@@ -184,10 +184,7 @@ bool ApplicationActionController::onDropEvent(QDropEvent* event)
         case DragTarget::Extension: {
             muse::io::path_t filePath = url.toLocalFile();
             async::Async::call(this, [this, filePath]() {
-                    Ret ret = extensionInstaller()->installExtension(filePath);
-                    if (!ret) {
-                        LOGE() << ret.toString();
-                    }
+                    extensionInstaller()->installExtension(filePath);
                 });
         } break;
         case DragTarget::Unknown:
@@ -218,7 +215,7 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
         m_quiting = false;
     };
 
-    if (!projectFilesController()->closeOpenedProject()) {
+    if (!projectFilesController()->closeOpenedProject(false)) {
         return false;
     }
 
@@ -244,7 +241,7 @@ bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path
 
 void ApplicationActionController::restart()
 {
-    if (projectFilesController()->closeOpenedProject()) {
+    if (projectFilesController()->closeOpenedProject(false)) {
         if (multiInstancesProvider()->instances().size() == 1) {
             application()->restart();
         } else {

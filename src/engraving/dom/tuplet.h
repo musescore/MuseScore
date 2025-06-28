@@ -20,18 +20,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TUPLET_H
-#define MU_ENGRAVING_TUPLET_H
+#pragma once
 
 #include <set>
 
 #include "durationelement.h"
 #include "property.h"
-#include "types.h"
 
 namespace mu::engraving {
 class Text;
 class Spanner;
+
+enum class TupletNumberType : unsigned char {
+    SHOW_NUMBER, SHOW_RELATION, NO_TEXT
+};
+enum class TupletBracketType : unsigned char {
+    AUTO_BRACKET, SHOW_BRACKET, SHOW_NO_BRACKET
+};
 
 //------------------------------------------------------------------------
 //   @@ Tuplet
@@ -199,5 +204,4 @@ private:
 
     Text* m_number = nullptr;
 };
-} // namespace mu::engraving
-#endif
+}

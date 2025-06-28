@@ -127,8 +127,8 @@ private:
     void setStyleValue(StyleId id, const PropertyValue& value);
 
 private slots:
-    void selectChordDescriptionFile();
-    void setChordStyle(bool);
+    // void selectChordDescriptionFile();
+    // void setChordStyle(bool);
     void enableStyleWidget(const StyleId idx, bool enable);
     void enableVerticalSpreadClicked(bool);
     void disableVerticalSpreadClicked(bool);
@@ -145,7 +145,7 @@ private slots:
     void valueChanged(int);
     void textStyleChanged(int);
     void resetTextStyle(engraving::TextStylePropertyType type);
-    void textStyleValueChanged(engraving::TextStylePropertyType type, QVariant);
+    void textStyleValueChanged(engraving::TextStylePropertyType type, const engraving::PropertyValue& value);
     void on_comboFBFont_currentIndexChanged(int index);
     void on_buttonTogglePagelist_clicked();
     void on_resetStylesButton_clicked();

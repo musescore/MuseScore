@@ -439,7 +439,7 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("add-fretboard-diagram",
              mu::context::UiCtxProjectOpened,
-             mu::context::CTX_NOTATION_OPENED,
+             mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Add &fretboard diagram"),
              TranslatableString("action", "Add fretboard diagram"),
              IconCode::Code::FRETBOARD_DIAGRAM
@@ -750,20 +750,30 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("append-hbox",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Append h&orizontal frame"),
-             TranslatableString("action", "Append horizontal frame")
+             TranslatableString("action", "&Horizontal frame"),
+             TranslatableString("action", "Append horizontal frame"),
+             IconCode::Code::HORIZONTAL_FRAME
              ),
     UiAction("append-vbox",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Append v&ertical frame"),
-             TranslatableString("action", "Append vertical frame")
+             TranslatableString("action", "&Vertical frame"),
+             TranslatableString("action", "Append vertical frame"),
+             IconCode::Code::VERTICAL_FRAME
              ),
     UiAction("append-textframe",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Append te&xt frame"),
-             TranslatableString("action", "Append text frame")
+             TranslatableString("action", "&Text frame"),
+             TranslatableString("action", "Append text frame"),
+             IconCode::Code::TEXT_FRAME
+             ),
+    UiAction("append-fretframe",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "&Fretboard diagram legend"),
+             TranslatableString("action", "Append fretboard diagram legend"),
+             IconCode::Code::FRET_FRAME
              ),
     UiAction("acciaccatura",
              mu::context::UiCtxProjectOpened,
@@ -1875,6 +1885,18 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Toggle turn with slash"),
              TranslatableString("action", "Add ornament: turn with slash")
              ),
+    UiAction("add-turn-up",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Toggle vertical turn"),
+             TranslatableString("action", "Add ornament: vertical turn")
+             ),
+    UiAction("add-turn-inverted-up",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Toggle vertical inverted turn"),
+             TranslatableString("action", "Add ornament: vertical inverted turn")
+             ),
     UiAction("add-trill",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -1892,6 +1914,12 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Toggle mordent"),
              TranslatableString("action", "Add ornament: mordent")
+             ),
+    UiAction("add-haydn",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Toggle Haydn ornament"),
+             TranslatableString("action", "Add ornament: Haydn ornament")
              ),
     UiAction("add-tremblement",
              mu::context::UiCtxProjectOpened,
@@ -2525,6 +2553,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Slight bend"),
              IconCode::Code::GUITAR_SLIGHT_BEND
              ),
+    UiAction("hammer-on-pull-off",
+             mu::context::UiCtxProjectFocused,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Hammer-on/pull-off"),
+             TranslatableString("action", "Add hammer-on/pull-off")
+             )
 };
 
 const UiActionList NotationUiActions::m_scoreConfigActions = {

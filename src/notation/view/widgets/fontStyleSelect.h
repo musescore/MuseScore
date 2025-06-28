@@ -19,12 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_FONTSTYLESELECT_H
-#define MU_NOTATION_FONTSTYLESELECT_H
+#pragma once
+
+#include "ui_font_style_select.h"
 
 #include "modularity/ioc.h"
-#include "ui_font_style_select.h"
-#include "engraving/dom/types.h"
+
+#include "engraving/types/types.h"
 
 namespace mu::notation {
 class FontStyleSelect : public QWidget, public Ui::FontStyleSelect, public muse::Injectable
@@ -40,8 +41,6 @@ signals:
     void fontStyleChanged(mu::engraving::FontStyle);
 
 private slots:
-    void _fontStyleChanged();
+    void onFontStyleChanged();
 };
 }
-
-#endif // MU_NOTATION_FONTSTYLESELECT_H

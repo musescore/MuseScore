@@ -52,6 +52,8 @@ public:
     bool containsPoint(const muse::PointF& point) const override;
     bool containsItem(const EngravingItem* item, engraving::staff_idx_t staffIdx = muse::nidx) const override;
 
+    bool containsMultiNoteChords() const override;
+
 private:
     mu::engraving::Score* score() const;
 

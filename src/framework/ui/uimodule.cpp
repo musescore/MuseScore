@@ -33,6 +33,7 @@
 #include "internal/uiactionsregister.h"
 #include "internal/navigationcontroller.h"
 #include "internal/navigationuiactions.h"
+#include "internal/dragcontroller.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
@@ -48,8 +49,6 @@
 #include "view/mainwindowbridge.h"
 #endif
 
-#include "internal/uiengine.h"
-
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
 #include "view/musicalsymbolcodes.h"
@@ -60,6 +59,7 @@
 #include "view/navigationevent.h"
 #include "view/qmlaccessible.h"
 #include "view/focuslistener.h"
+#include "view/qmldrag.h"
 
 #include "view/internal/errordetailsmodel.h"
 #include "view/internal/progressdialogmodel.h"
@@ -112,6 +112,7 @@ void UiModule::registerExports()
     ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
     ioc()->registerExport<IUiActionsRegister>(moduleName(), m_uiactionsRegister);
     ioc()->registerExport<INavigationController>(moduleName(), m_keyNavigationController);
+    ioc()->registerExport<IDragController>(moduleName(), new DragController());
 }
 
 void UiModule::resolveImports()
@@ -124,6 +125,9 @@ void UiModule::resolveImports()
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("muse://interactive/standard"), "Muse/Ui/internal/StandardDialog.qml");
+        ir->registerQmlUri(Uri("muse://interactive/progress"), "Muse/Ui/internal/ProgressDialog.qml");
+        ir->registerQmlUri(Uri("muse://interactive/selectfile"), "Muse/Ui/internal/FileDialog.qml");
+        ir->registerQmlUri(Uri("muse://interactive/selectdir"), "Muse/Ui/internal/FolderDialog.qml");
 
         ir->registerWidgetUri<TestDialog>(Uri("muse://devtools/interactive/testdialog"));
         ir->registerQmlUri(Uri("muse://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");
@@ -166,6 +170,7 @@ void UiModule::registerUiTypes()
     qmlRegisterType<NavigationControl>("Muse.Ui", 1, 0, "NavigationControl");
     qmlRegisterType<AccessibleItem>("Muse.Ui", 1, 0, "AccessibleItem");
     qmlRegisterUncreatableType<MUAccessible>("Muse.Ui", 1, 0, "MUAccessible", "Cannot create a enum type");
+    qmlRegisterType<QmlDrag>("Muse.Ui", 1, 0, "CppDrag");
 
     qmlRegisterType<FocusListener>("Muse.Ui", 1, 0, "FocusListener");
 

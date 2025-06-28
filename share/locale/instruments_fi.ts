@@ -4045,7 +4045,7 @@
         <source>Keyless single-reed instrument with a cylindrical bore and slightly flared bell, in D.</source>
         <comment>d-xaphoon description</comment>
         <extracomment>description for Pocket Sax; transposition: D; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Avaimeton yksiruokoinen instrumentti, jossa lieriömäinen reikä ja hieman levenevä kello, D-viritys.</translation>
+        <translation>Avaimeton yksiruokoinen soitin, jossa lieriömäinen reikä ja hieman levenevä kello, D-viritys.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1504"/>
@@ -4080,7 +4080,7 @@
         <source>Keyless single-reed instrument with a cylindrical bore and slightly flared bell, in C.</source>
         <comment>xaphoon description</comment>
         <extracomment>description for Pocket Sax; transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Avaimeton yksiruokoinen instrumentti, jossa lieriömäinen reikä ja hieman levenevä kello, C-viritys.</translation>
+        <translation>Avaimeton yksiruokoinen soitin, jossa lieriömäinen reikä ja hieman levenevä kello, C-viritys.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1515"/>
@@ -4115,7 +4115,7 @@
         <source>Keyless single-reed instrument with a cylindrical bore and slightly flared bell, in B♭.</source>
         <comment>bb-xaphoon description</comment>
         <extracomment>description for Pocket Sax; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Avaimeton yksiruokoinen instrumentti, jossa lieriömäinen reikä ja hieman levenevä kello, B♭-viritys.</translation>
+        <translation>Avaimeton yksiruokoinen soitin, jossa lieriömäinen reikä ja hieman levenevä kello, B♭-viritys.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1526"/>
@@ -4150,7 +4150,7 @@
         <source>Keyless single-reed instrument with a cylindrical bore and slightly flared bell, in G.</source>
         <comment>g-xaphoon description</comment>
         <extracomment>description for Pocket Sax; transposition: G; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Avaimeton yksiruokoinen instrumentti, jossa lieriömäinen reikä ja hieman levenevä kello, G-viritys.</translation>
+        <translation>Avaimeton yksiruokoinen soitin, jossa lieriömäinen reikä ja hieman levenevä kello, G-viritys.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1537"/>
@@ -9267,7 +9267,7 @@
         <source>Instrument with a similar range to the contrabass trombone, most commonly encountered in 19th-century Italian opera scores.</source>
         <comment>cimbasso description</comment>
         <extracomment>description for Cimbasso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Instrumentti, jolla on samanlainen äänialue kuin kontrabassopasuunalla, jota tavattiin yleisimmin 1800-luvun italialaisen oopperan partituurissa.</translation>
+        <translation>Soitin, jolla on samanlainen äänialue kuin kontrabassopasuunalla, jota tavattiin yleisimmin 1800-luvun italialaisen oopperan partituurissa.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3149"/>
@@ -10002,7 +10002,7 @@
         <source>Aboriginal Australian drone instrument.</source>
         <comment>didgeridoo description</comment>
         <extracomment>description for Didgeridoo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Aboriginaalien australialainen drone-instrumentti.</translation>
+        <translation>Aboriginaalien australialainen drone-soitin.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3385"/>

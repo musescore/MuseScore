@@ -23,7 +23,6 @@
 #pragma once
 
 #include "../types/types.h"
-#include "types.h"
 
 #include "interval.h"
 
@@ -60,6 +59,7 @@ extern String convertPitchStringFlatsAndSharpsToUnicode(const String& str);
 
 extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval, bool useDoubleSharpsFlats);
 extern int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
+extern int transposeTpcDiatonicByKey(int tpc, int steps, Key key, bool keepAlteredDegrees, bool useDoubleSharpsFlats);
 
 constexpr int intervalListSize = 26;
 extern Interval intervalList[intervalListSize];
@@ -74,7 +74,6 @@ extern Segment* nextSeg1(Segment* s);
 extern Segment* prevSeg1(Segment* seg);
 
 extern Note* searchTieNote(const Note* note, const Segment* nextSegment = nullptr, const bool disableOverRepeats = true);
-extern Note* searchTieNote114(Note* note);
 
 extern int absStep(int pitch);
 extern int absStep(int tpc, int pitch);

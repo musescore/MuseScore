@@ -93,6 +93,7 @@ public:
     bool closable() const;
     bool resizable() const;
     bool separatorsVisible() const;
+    bool defaultVisibility() const;
 
     bool isCompact() const;
     int compactPriorityOrder() const;

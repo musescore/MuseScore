@@ -87,6 +87,10 @@ if(QT_ADD_WEBSOCKET)
     list(APPEND QT_LIBRARIES Qt::WebSockets)
 endif()
 
+if (OS_IS_WASM)
+    set(QT_WASM_EXTRA_EXPORTED_METHODS ccall)
+endif()
+
 find_package(Qt6 6.2 REQUIRED COMPONENTS ${qt_components})
 
 include(QtInstallPaths)

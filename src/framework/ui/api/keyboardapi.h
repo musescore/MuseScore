@@ -28,6 +28,7 @@
 #include "shortcuts/ishortcutscontroller.h"
 #include "ui/imainwindow.h"
 
+class QWindow;
 namespace muse::api {
 class KeyboardApi : public api::ApiObject
 {
@@ -39,9 +40,17 @@ class KeyboardApi : public api::ApiObject
 public:
     explicit KeyboardApi(api::IApiEngine* e);
 
-    Q_INVOKABLE void key(const QString& key);
+    Q_INVOKABLE void key(const QString& key, const QString& mod = QString());
+    Q_INVOKABLE void pressKey(const QString& key, const QString& mod = QString());
+    Q_INVOKABLE void releaseKey(const QString& key, const QString& mod = QString());
     Q_INVOKABLE void repeatKey(const QString& key, int count);
     Q_INVOKABLE void text(const QString& text);
+
+private:
+
+    QWindow* window() const;
+    void doPressKey(QWindow* w, int code, Qt::KeyboardModifier mod, const QString& text);
+    void doReleaseKey(QWindow* w, int key, Qt::KeyboardModifier mod, const QString& text);
 };
 }
 

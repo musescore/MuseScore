@@ -227,8 +227,10 @@
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>21</root>
-            <name>-</name>
+            <harmonyInfo>
+              <name>-</name>
+              <root>21</root>
+              </harmonyInfo>
             <eid>W_W</eid>
             </Harmony>
           <Chord>
@@ -345,8 +347,10 @@
               <sigD>4</sigD>
               </TimeSig>
             <Harmony>
-              <root>21</root>
-              <name>-</name>
+              <harmonyInfo>
+                <name>-</name>
+                <root>21</root>
+                </harmonyInfo>
               <eid>g_g</eid>
               </Harmony>
             <Chord>

@@ -72,8 +72,6 @@ Rectangle {
         anchors.fill: parent
 
         topMargin: 12
-        leftMargin: 12
-        rightMargin: 12
         bottomMargin: 12
 
         spacing: 12
@@ -101,20 +99,22 @@ Rectangle {
         }
 
         delegate: Column {
-            width: ListView.view.width - ListView.view.leftMargin - ListView.view.rightMargin
-
+            width: ListView.view.width
             spacing: sectionList.spacing
 
             property var navigationPanel: _item.navigationPanel
 
             SeparatorLine {
-                anchors.margins: -12
-
                 visible: model.index !== 0
             }
 
             InspectorSectionDelegate {
                 id: _item
+
+                anchors.left: parent.left
+                anchors.leftMargin: 12
+                anchors.right: parent.right
+                anchors.rightMargin: 12
 
                 sectionModel: model.inspectorSectionModel
                 anchorItem: root

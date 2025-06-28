@@ -90,15 +90,15 @@ bool WidgetResizeHandler::eventFilter(QObject *o, QEvent *e)
     if (m_isTopLevelWindowResizer && (!widget->isTopLevel() || o != mTarget))
         return false;
 
-    // Get the window under the cursor and check if it's our target window
-    QWindow *windowUnderCursor = qApp->topLevelAt(QCursor::pos());
-    if (!windowUnderCursor || (windowUnderCursor != widget->window()->windowHandle()))
-        return false;
-
     switch (e->type()) {
     case QEvent::MouseButtonPress: {
         if (mTarget->isMaximized())
             break;
+
+        // Get the window under the cursor and check if it's our target window
+        QWindow *windowUnderCursor = qApp->topLevelAt(QCursor::pos());
+        if (!windowUnderCursor || (windowUnderCursor != widget->window()->windowHandle()))
+            return false;
 
         auto mouseEvent = static_cast<QMouseEvent *>(e);
         auto cursorPos = cursorPosition(Qt5Qt6Compat::eventGlobalPos(mouseEvent));
