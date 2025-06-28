@@ -97,19 +97,20 @@ FocusScope {
         opacity: root.animationEnabled ? 0.5 : 1.0
         transformOrigin: Item.Center
 
-        ItemWithDropShadow {
+        StyledRectangularShadow {
+            anchors.fill: contentBackground
+            visible: root.useDropShadow
+
+            blur: root.padding
+            radius: contentBackground.radius
+        }
+
+        Rectangle {
+            id: contentBackground
             anchors.fill: parent
-            shadow.radius: root.padding
 
-            shadow.visible: root.useDropShadow
-
-            Rectangle {
-                id: contentBackground
-                anchors.fill: parent
-
-                color: ui.theme.popupBackgroundColor
-                radius: 4
-            }
+            color: ui.theme.popupBackgroundColor
+            radius: 4
         }
 
         Item {
@@ -142,11 +143,11 @@ FocusScope {
             id: arrow
 
             height: root.popupPosition & PopupPosition.Vertical
-                ? root.padding
-                : 2 * root.padding;
+                    ? root.padding
+                    : 2 * root.padding;
             width: root.popupPosition & PopupPosition.Vertical
-                ? 2 * root.padding
-                : root.padding;
+                   ? 2 * root.padding
+                   : root.padding;
 
             visible: root.showArrow && arrow.height > 0
             enabled: root.showArrow

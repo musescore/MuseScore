@@ -122,12 +122,12 @@ FocusableControl {
         }
     }
 
-    StyledDropShadow {
+    StyledRectangularShadow {
         id: shadow
 
-        anchors.fill: parent
-        source: background
+        anchors.fill: root.background
         visible: false
+        z: -1
     }
 
     Loader {
