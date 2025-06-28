@@ -36,12 +36,11 @@
 #include "timer.h"
 
 namespace muse::musesampler {
-class MuseSamplerWrapper : public muse::audio::synth::AbstractSynthesizer, public IMuseSamplerTracks,
-    public std::enable_shared_from_this<MuseSamplerWrapper>
+class MuseSamplerWrapper : public muse::audio::synth::AbstractSynthesizer, public IMuseSamplerTracks
 {
 public:
     MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params,
-                       const modularity::ContextPtr& iocCtx);
+                       async::Notification processOnlineSoundsRequested, const modularity::ContextPtr& iocCtx);
     ~MuseSamplerWrapper() override;
 
     void setSampleRate(unsigned int sampleRate) override;
@@ -77,6 +76,8 @@ private:
 
     bool initSampler(const muse::audio::sample_rate_t sampleRate, const muse::audio::samples_t blockSize);
 
+    void setupOnlineSound();
+
     InstrumentInfo resolveInstrument(const mpe::PlaybackSetupData& setupData) const;
     std::string resolveDefaultPresetCode(const InstrumentInfo& instrument) const;
 
@@ -92,6 +93,8 @@ private:
     InstrumentInfo m_instrument;
     TrackList m_tracks;
     ms_OutputBuffer m_bus;
+
+    async::Notification m_processOnlineSoundsRequested;
 
     muse::audio::samples_t m_currentPosition = 0;
     muse::audio::sample_rate_t m_samplerSampleRate = 0;

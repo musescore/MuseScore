@@ -1102,12 +1102,18 @@ staff_idx_t System::firstSysStaffOfPart(const Part* part) const
 staff_idx_t System::firstVisibleSysStaffOfPart(const Part* part) const
 {
     staff_idx_t firstIdx = firstSysStaffOfPart(part);
+    if (firstIdx == muse::nidx) {
+        return muse::nidx;
+    }
+
     for (staff_idx_t idx = firstIdx; idx < firstIdx + part->nstaves(); ++idx) {
-        if (staff(idx)->show()) {
+        const SysStaff* s = staff(idx);
+        if (s && s->show()) {
             return idx;
         }
     }
-    return muse::nidx;   // No visible staves on this part.
+
+    return muse::nidx; // No visible staves on this part.
 }
 
 //---------------------------------------------------------

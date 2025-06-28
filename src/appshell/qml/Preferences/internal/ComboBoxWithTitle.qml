@@ -26,6 +26,8 @@ import Muse.UiComponents 1.0
 Row {
     id: root
 
+    property alias isOpened: comboBox.isOpened
+
     property alias title: titleLabel.text
 
     property real columnWidth: 208

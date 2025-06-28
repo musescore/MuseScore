@@ -30,6 +30,8 @@ namespace mu::notation {
 class NotationConfigurationMock : public INotationConfiguration
 {
 public:
+    MOCK_METHOD(QColor, notationColor, (), (const, override));
+
     MOCK_METHOD(QColor, backgroundColor, (), (const, override));
     MOCK_METHOD(void, setBackgroundColor, (const QColor& color), (override));
 
