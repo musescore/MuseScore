@@ -27,7 +27,7 @@
 
 // api
 #include "apitypes.h"
-#include "fraction.h"
+#include "apistructs.h"
 #include "score.h"
 #include "part.h"
 #include "elements.h"
@@ -86,6 +86,10 @@ QVariant ScoreElement::get(mu::engraving::Pid pid) const
     case P_TYPE::FRACTION: {
         const Fraction f(val.value<Fraction>());
         return QVariant::fromValue(wrap(f));
+    }
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        const OrnamentInterval o(val.value<OrnamentInterval>());
+        return QVariant::fromValue(wrap(o));
     }
     case P_TYPE::POINT:
         return val.value<PointF>().toQPointF() / spatium();
@@ -146,6 +150,15 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
             return;
         }
         newValue = f->fraction();
+    }
+    break;
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        OrnamentIntervalWrapper* o = val.value<OrnamentIntervalWrapper*>();
+        if (!o) {
+            LOGW() << "trying to assign value of wrong type to fractional property";
+            return;
+        }
+        newValue = o->ornamentInterval();
     }
     break;
     case P_TYPE::POINT:

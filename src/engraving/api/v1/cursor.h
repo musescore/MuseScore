@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "fraction.h"
+#include "apistructs.h"
 
 #include "engraving/dom/input.h"
 
