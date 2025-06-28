@@ -25,10 +25,11 @@
 
 #include "dom/dynamic.h"
 #include "dom/expression.h"
+#include "dom/fret.h"
 #include "dom/hairpin.h"
+#include "dom/harmony.h"
 #include "dom/system.h"
 #include "dom/text.h"
-#include "dom/fret.h"
 
 namespace mu::engraving::rendering::score {
 void AlignmentLayout::alignItemsGroup(const std::vector<EngravingItem*>& elements, const System* system)

@@ -203,11 +203,11 @@ public:
 
     Orientation orientation() const { return m_orientation; }
 
-    String harmonyText() const { return m_harmony ? m_harmony->plainText() : String(); }
+    String harmonyText() const;
+    Harmony* harmony() const { return m_harmony; }
     void setHarmony(String harmonyText);
     void linkHarmony(Harmony* harmony);
     void unlinkHarmony();
-    Harmony* harmony() const { return m_harmony; }
 
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
     FretItem::Marker marker(int s) const;

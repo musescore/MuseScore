@@ -22,24 +22,21 @@
 
 #include "styledef.h"
 
-#include "draw/types/geometry.h"
-
-#include "types/constants.h"
-
 #include "dom/articulation.h"
+#include "dom/mmrestrange.h"
 #include "dom/mscore.h"
 #include "dom/realizedharmony.h"
 #include "dom/stafftype.h"
-#include "dom/textbase.h"
 #include "dom/tuplet.h"
 
-using namespace mu;
-using namespace muse::draw;
+#include "types/types.h"
+
 using namespace mu::engraving;
 
-//! Keep in sync with Sid in styledef.h
 // Help keeping Sid names and XML tag texts in sync
 #define styleDef(sidAndXmlTag, property) { Sid::sidAndXmlTag, #sidAndXmlTag, property }
+
+//! Keep in sync with Sid in styledef.h
 const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValues { {
     styleDef(pageWidth,                                  210.0 / INCH),
     styleDef(pageHeight,                                 297.0 / INCH),   // A4

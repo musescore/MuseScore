@@ -26,6 +26,7 @@
 
 #include "actionicon.h"
 #include "factory.h"
+#include "harmony.h"
 #include "layoutbreak.h"
 #include "masterscore.h"
 #include "mscore.h"

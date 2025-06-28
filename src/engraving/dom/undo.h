@@ -38,6 +38,7 @@
 #include "chord.h"
 #include "drumset.h"
 #include "fret.h"
+#include "harmony.h"
 #include "harppedaldiagram.h"
 #include "input.h"
 #include "instrchange.h"

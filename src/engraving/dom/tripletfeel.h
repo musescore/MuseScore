@@ -20,13 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TRIPLETFEEL_H
-#define MU_ENGRAVING_TRIPLETFEEL_H
+#pragma once
 
 #include "systemtext.h"
 
 namespace mu::engraving {
-
 enum class TripletFeelType : unsigned char {
     NONE,
     TRIPLET_8TH,
@@ -68,5 +66,4 @@ private:
 
     TripletFeelType m_tripletFeelType = TripletFeelType::NONE;
 };
-}     // namespace mu::engraving
-#endif
+}

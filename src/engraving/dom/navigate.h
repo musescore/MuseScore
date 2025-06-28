@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include "types/types.h"
+
 namespace mu::engraving {
 class ChordRest;
 class Lyrics;
@@ -34,8 +36,8 @@ struct ChordRestNavigateOptions {
 };
 
 extern int pitch2y(int pitch, int enh, int clefOffset, int key, int& prefix, const char* tversatz);
-extern ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options = ChordRestNavigateOptions());
-extern ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options = ChordRestNavigateOptions());
+extern ChordRest* nextChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options = {});
+extern ChordRest* prevChordRest(const ChordRest* cr, const ChordRestNavigateOptions& options = {});
 extern Lyrics* lastLyricsInMeasure(const Segment* seg, const staff_idx_t staffIdx, const int no, const PlacementV& placement);
 extern Lyrics* prevLyrics(const Lyrics* lyrics);
 extern Lyrics* nextLyrics(const Lyrics* lyrics);

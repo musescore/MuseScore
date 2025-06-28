@@ -28,13 +28,6 @@
 #include "utils.h"
 
 namespace mu::engraving {
-
-enum class MMRestRangeBracketType : unsigned char {
-    ///.\{
-    BRACKETS, PARENTHESES, NONE
-    ///\}
-};
-
 class MMRest final : public Rest
 {
     OBJECT_ALLOCATOR(engraving, MMRest)

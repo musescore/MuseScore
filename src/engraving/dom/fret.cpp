@@ -753,6 +753,11 @@ Font FretDiagram::fingeringFont() const
     return f;
 }
 
+String FretDiagram::harmonyText() const
+{
+    return m_harmony ? m_harmony->plainText() : String();
+}
+
 //---------------------------------------------------------
 //   setHarmony
 ///   if this is being done by the user, use undoSetHarmony instead

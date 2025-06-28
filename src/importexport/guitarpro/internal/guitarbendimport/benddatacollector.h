@@ -24,9 +24,9 @@
 
 #include <engraving/types/pitchvalue.h>
 #include <engraving/types/types.h>
-#include <engraving/dom/types.h>
 
 #include "benddatacontext.h"
+#include "guitarbendimporttypes.h"
 #include "splitchord/benddatacollectorsplitchord.h"
 
 namespace mu::engraving {

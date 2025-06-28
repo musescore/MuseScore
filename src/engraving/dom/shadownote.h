@@ -23,6 +23,8 @@
 #pragma once
 
 #include "engravingitem.h"
+
+#include "accidental.h"
 #include "durationtype.h"
 #include "../types/types.h"
 

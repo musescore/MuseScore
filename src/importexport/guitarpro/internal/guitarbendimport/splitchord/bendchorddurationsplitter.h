@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <engraving/dom/types.h>
+#include <engraving/types/fraction.h>
 
 namespace mu::iex::guitarpro {
 class BendChordDurationSplitter

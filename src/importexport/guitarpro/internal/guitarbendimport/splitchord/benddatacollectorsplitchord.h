@@ -24,7 +24,6 @@
 
 #include <engraving/types/pitchvalue.h>
 #include <engraving/types/types.h>
-#include <engraving/dom/types.h>
 
 #include "benddatacontextsplitchord.h"
 

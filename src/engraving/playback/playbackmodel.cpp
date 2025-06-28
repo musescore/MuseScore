@@ -23,6 +23,7 @@
 #include "playbackmodel.h"
 
 #include "dom/fret.h"
+#include "dom/harmony.h"
 #include "dom/instrument.h"
 #include "dom/masterscore.h"
 #include "dom/measure.h"
@@ -31,7 +32,6 @@
 #include "dom/staff.h"
 #include "dom/repeatlist.h"
 #include "dom/segment.h"
-#include "dom/tempo.h"
 #include "dom/tie.h"
 #include "dom/tremolotwochord.h"
 

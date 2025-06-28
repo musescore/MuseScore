@@ -51,19 +51,18 @@
 #include "../compat/midi/compatmidirenderinternal.h"
 
 #include "chordlist.h"
+#include "cmd.h"
 #include "guitarbend.h"
 #include "input.h"
 #include "mscore.h"
 #include "property.h"
+#include "rootitem.h"
 #include "scoreorder.h"
 #include "select.h"
 #include "spannermap.h"
-#include "systemlock.h"
 #include "synthesizerstate.h"
+#include "systemlock.h"
 #include "tuplet.h"
-#include "rootitem.h"
-#include "cmd.h"
-#include "undo.h"
 
 namespace mu::engraving {
 class IMimeData;
@@ -160,6 +159,7 @@ enum class Voicing : signed char;
 enum class HDuration : signed char;
 enum class AccidentalType : unsigned char;
 enum class LayoutBreakType : unsigned char;
+enum class CommandType : signed char;
 
 enum class LoopBoundaryType : signed char {
     Unknown = -1,
