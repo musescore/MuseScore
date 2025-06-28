@@ -95,11 +95,11 @@ void TappingLayout::layoutLeftHandTapping(Tapping* item, Tapping::LayoutData* ld
         text->setParent(item);
         text->setTrack(item->track());
         text->setXmlText("T");
-        text->setFrameType(FrameType::CIRCLE);
+        text->setBorderType(BorderType::CIRCLE);
         text->setAlign(Align(AlignH::LEFT, item->up() ? AlignV::BASELINE : AlignV::TOP));
         TLayout::layoutBaseTextBase(text, ctx);
         // Move the circle up very slightly to look better centered on the T
-        text->mutldata()->frame.translate(0.0, -0.02 * text->height());
+        text->mutldata()->borderRect.translate(0.0, -0.02 * text->height());
     }
 }
 

@@ -740,12 +740,12 @@ static void addColorAttr(const EngravingItem* el, XmlWriter::Attributes& attrs)
 //   frame2xml
 //---------------------------------------------------------
 
-static String frame2xml(const TextBase* el)
+static String border2xml(const TextBase* el)
 {
-    switch (el->frameType()) {
-    case FrameType::CIRCLE:
+    switch (el->borderType()) {
+    case BorderType::CIRCLE:
         return u" enclosure=\"circle\"";
-    case FrameType::SQUARE:
+    case BorderType::SQUARE:
         return u" enclosure=\"rectangle\"";
     default:
         return String();
@@ -1410,7 +1410,7 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
         xml.tag("line-width", { { "type", "beam" } }, s.styleS(Sid::beamWidth).val() * 10);
         xml.tag("line-width", { { "type", "bracket" } }, s.styleS(Sid::bracketWidth).val() * 10);
         xml.tag("line-width", { { "type", "dashes" } }, s.styleS(Sid::lyricsDashLineThickness).val() * 10);
-        xml.tag("line-width", { { "type", "enclosure" } }, s.styleD(Sid::staffTextFrameWidth) * 10);
+        xml.tag("line-width", { { "type", "enclosure" } }, s.styleD(Sid::staffTextBorderWidth) * 10);
         xml.tag("line-width", { { "type", "ending" } }, s.styleS(Sid::voltaLineWidth).val() * 10);
         xml.tag("line-width", { { "type", "extend" } }, s.styleS(Sid::lyricsLineThickness).val() * 10);
         xml.tag("line-width", { { "type", "leger" } }, s.styleS(Sid::ledgerLineWidth).val() * 10);
@@ -5027,7 +5027,7 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
     } else {
         xml.startElement("direction-type");
         String attr;
-        attr += frame2xml(text);
+        attr += border2xml(text);
         attr += color2xml(text);
         attr += ExportMusicXml::positioningAttributes(text);
         MScoreTextToMusicXml mttm(u"words", attr, defFmt, mtf);
@@ -5228,7 +5228,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx
     m_xml.startElement("direction", { { "placement", (relativePosition.y() < 0) ? "above" : "below" } });
     m_xml.startElement("direction-type");
     String attr;
-    attr += frame2xml(text);
+    attr += border2xml(text);
     attr += ExportMusicXml::positioningAttributesForTboxText(relativePosition, text->spatium());
     attr += u" valign=\"top\"";
     MScoreTextToMusicXml mttm(u"words", attr, defFmt, mtf);
@@ -5254,7 +5254,7 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
     String attr;
     if (rmk->circle()) {
         attr = u" enclosure=\"circle\"";
-    } else if (!rmk->hasFrame()) {
+    } else if (!rmk->hasBorder()) {
         // special default case
         attr = u" enclosure=\"none\"";
     }
@@ -5877,7 +5877,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
     m_xml.startElement("direction-type");
 
     String tagName = u"dynamics";
-    tagName += frame2xml(dyn);
+    tagName += border2xml(dyn);
     tagName += color2xml(dyn);
     tagName += positioningAttributes(dyn);
     m_xml.startElementRaw(tagName);
@@ -8836,7 +8836,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
     if (!h->isStyled(Pid::PLACEMENT)) {
         harmonyAttrs.emplace_back(std::make_pair("placement", (h->placement() == PlacementV::BELOW) ? "below" : "above"));
     }
-    harmonyAttrs.emplace_back(std::make_pair("print-frame", h->hasFrame() ? "yes" : "no"));     // .append(relative));
+    harmonyAttrs.emplace_back(std::make_pair("print-frame", h->hasBorder() ? "yes" : "no"));     // .append(relative));
     if (!h->visible()) {
         harmonyAttrs.emplace_back(std::make_pair("print-object", "no"));
     }

@@ -1778,7 +1778,7 @@ void GPConverter::addStringNumber(const GPNote* gpnote, Note* note)
 
     f->setPlainText(String::number(note->string() + 1));
     f->setTextStyleType(TextStyleType::STRING_NUMBER);
-    f->setFrameType(FrameType::CIRCLE);
+    f->setBorderType(BorderType::CIRCLE);
     note->add(f);
 }
 

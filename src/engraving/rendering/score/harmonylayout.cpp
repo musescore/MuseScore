@@ -165,8 +165,8 @@ void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldat
         }
     }
 
-    if (item->hasFrame()) {
-        item->layoutFrame(ldata);
+    if (item->hasBorder()) {
+        item->layoutBorder(ldata);
     }
 
     ldata->setPos(positionPoint);

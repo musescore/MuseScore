@@ -4165,12 +4165,12 @@ static constexpr std::array<Pid, 18> TextBasePropertyId { {
     Pid::TEXT_LINE_SPACING,
     Pid::FONT_STYLE,
     Pid::COLOR,
-    Pid::FRAME_TYPE,
-    Pid::FRAME_WIDTH,
-    Pid::FRAME_PADDING,
-    Pid::FRAME_ROUND,
-    Pid::FRAME_FG_COLOR,
-    Pid::FRAME_BG_COLOR,
+    Pid::BORDER_TYPE,
+    Pid::BORDER_WIDTH,
+    Pid::BORDER_PADDING,
+    Pid::BORDER_ROUND,
+    Pid::BORDER_FG_COLOR,
+    Pid::BORDER_BG_COLOR,
     Pid::ALIGN,
 } };
 

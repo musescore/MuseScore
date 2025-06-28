@@ -100,8 +100,8 @@ void MaskLayout::maskBarlineForText(BarLine* barline, const std::vector<TextBase
     for (TextBase* text : allSystemText) {
         const double fontSizeScaleFactor = text->size() / 10.0;
         const double collisionPadding = 0.2 * spatium * fontSizeScaleFactor;
-        const bool hasFrame = text->frameType() != FrameType::NO_FRAME;
-        const bool useHighResShape = !text->isDynamic() && !text->hasFrame();
+        const bool hasFrame = text->borderType() != BorderType::NO_BORDER;
+        const bool useHighResShape = !text->isDynamic() && !text->hasBorder();
         const double maskPadding = hasFrame ? 0.0 : std::clamp(0.5 * spatium * fontSizeScaleFactor, 0.1 * spatium, spatium);
 
         PointF textPos = text->pagePos();

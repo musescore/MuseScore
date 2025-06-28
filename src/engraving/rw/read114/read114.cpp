@@ -272,8 +272,8 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
     } else if (tag == "foregroundColor") { // same as "color" ?
         e.skipCurrentElement();
     } else if (tag == "frame") {
-        t->setFrameType(e.readBool() ? FrameType::SQUARE : FrameType::NO_FRAME);
-        t->setPropertyFlags(Pid::FRAME_TYPE, PropertyFlags::UNSTYLED);
+        t->setBorderType(e.readBool() ? BorderType::SQUARE : BorderType::NO_BORDER);
+        t->setPropertyFlags(Pid::BORDER_TYPE, PropertyFlags::UNSTYLED);
     } else if (tag == "halign") {
         Align align = t->align();
         align.horizontal = TConv::fromXml(e.readAsciiText(), AlignH::LEFT);
@@ -501,22 +501,22 @@ static void readFingering114(XmlReader& e, Fingering* fing)
                 fing->setPropertyFlags(Pid::TEXT_STYLE, PropertyFlags::UNSTYLED);
             }
         } else if (tag == "frame") {
-            auto frame = e.readInt();
-            if (frame) {
+            auto border = e.readInt();
+            if (border) {
                 if (isStringNumber) {       //default value is circle for stringnumber, square is set in tag circle
-                    fing->setFrameType(FrameType::CIRCLE);
+                    fing->setBorderType(BorderType::CIRCLE);
                 } else {     //default value is square for stringnumber, circle is set in tag circle
-                    fing->setFrameType(FrameType::SQUARE);
+                    fing->setBorderType(BorderType::SQUARE);
                 }
             } else {
-                fing->setFrameType(FrameType::NO_FRAME);
+                fing->setBorderType(BorderType::NO_BORDER);
             }
         } else if (tag == "circle") {
             auto circle = e.readInt();
             if (circle) {
-                fing->setFrameType(FrameType::CIRCLE);
+                fing->setBorderType(BorderType::CIRCLE);
             } else {
-                fing->setFrameType(FrameType::SQUARE);
+                fing->setBorderType(BorderType::SQUARE);
             }
         } else {
             e.skipCurrentElement();

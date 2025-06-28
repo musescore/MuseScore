@@ -76,17 +76,17 @@ void TextSettingsModel::createProperties()
 
     m_isSizeSpatiumDependent = buildPropertyItem(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT);
 
-    m_frameType = buildPropertyItem(mu::engraving::Pid::FRAME_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_borderType = buildPropertyItem(mu::engraving::Pid::BORDER_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
 
-        updateFramePropertiesAvailability();
+        updateBorderPropertiesAvailability();
     });
 
-    m_frameBorderColor = buildPropertyItem(mu::engraving::Pid::FRAME_FG_COLOR);
-    m_frameFillColor = buildPropertyItem(mu::engraving::Pid::FRAME_BG_COLOR);
-    m_frameThickness = buildPropertyItem(mu::engraving::Pid::FRAME_WIDTH);
-    m_frameMargin = buildPropertyItem(mu::engraving::Pid::FRAME_PADDING);
-    m_frameCornerRadius = buildPropertyItem(mu::engraving::Pid::FRAME_ROUND);
+    m_borderColor = buildPropertyItem(mu::engraving::Pid::BORDER_FG_COLOR);
+    m_borderFillColor = buildPropertyItem(mu::engraving::Pid::BORDER_BG_COLOR);
+    m_borderThickness = buildPropertyItem(mu::engraving::Pid::BORDER_WIDTH);
+    m_borderMargin = buildPropertyItem(mu::engraving::Pid::BORDER_PADDING);
+    m_borderCornerRadius = buildPropertyItem(mu::engraving::Pid::BORDER_ROUND);
 
     m_textType = buildPropertyItem(mu::engraving::Pid::TEXT_STYLE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
@@ -110,12 +110,12 @@ void TextSettingsModel::loadProperties()
         Pid::TEXT_LINE_SPACING,
         Pid::ALIGN,
         Pid::TEXT_SIZE_SPATIUM_DEPENDENT,
-        Pid::FRAME_TYPE,
-        Pid::FRAME_BG_COLOR,
-        Pid::FRAME_FG_COLOR,
-        Pid::FRAME_WIDTH,
-        Pid::FRAME_PADDING,
-        Pid::FRAME_ROUND,
+        Pid::BORDER_TYPE,
+        Pid::BORDER_BG_COLOR,
+        Pid::BORDER_FG_COLOR,
+        Pid::BORDER_WIDTH,
+        Pid::BORDER_PADDING,
+        Pid::BORDER_ROUND,
         Pid::TEXT_STYLE,
         Pid::PLACEMENT,
         Pid::TEXT_SCRIPT_ALIGN
@@ -173,24 +173,24 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         loadPropertyItem(m_isSizeSpatiumDependent);
     }
 
-    if (muse::contains(propertyIdSet, Pid::FRAME_TYPE)) {
-        loadPropertyItem(m_frameType);
+    if (muse::contains(propertyIdSet, Pid::BORDER_TYPE)) {
+        loadPropertyItem(m_borderType);
     }
-    if (muse::contains(propertyIdSet, Pid::FRAME_FG_COLOR)) {
-        loadPropertyItem(m_frameBorderColor);
+    if (muse::contains(propertyIdSet, Pid::BORDER_FG_COLOR)) {
+        loadPropertyItem(m_borderColor);
     }
-    if (muse::contains(propertyIdSet, Pid::FRAME_BG_COLOR)) {
-        loadPropertyItem(m_frameFillColor);
+    if (muse::contains(propertyIdSet, Pid::BORDER_BG_COLOR)) {
+        loadPropertyItem(m_borderFillColor);
     }
 
-    if (muse::contains(propertyIdSet, Pid::FRAME_WIDTH)) {
-        loadPropertyItem(m_frameThickness, formatDoubleFunc);
+    if (muse::contains(propertyIdSet, Pid::BORDER_WIDTH)) {
+        loadPropertyItem(m_borderThickness, formatDoubleFunc);
     }
-    if (muse::contains(propertyIdSet, Pid::FRAME_PADDING)) {
-        loadPropertyItem(m_frameMargin, formatDoubleFunc);
+    if (muse::contains(propertyIdSet, Pid::BORDER_PADDING)) {
+        loadPropertyItem(m_borderMargin, formatDoubleFunc);
     }
-    if (muse::contains(propertyIdSet, Pid::FRAME_ROUND)) {
-        loadPropertyItem(m_frameCornerRadius, formatDoubleFunc);
+    if (muse::contains(propertyIdSet, Pid::BORDER_ROUND)) {
+        loadPropertyItem(m_borderCornerRadius, formatDoubleFunc);
     }
 
     if (muse::contains(propertyIdSet, Pid::TEXT_STYLE)) {
@@ -206,7 +206,7 @@ void TextSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
         });
     }
 
-    updateFramePropertiesAvailability();
+    updateBorderPropertiesAvailability();
     updateStaffPropertiesAvailability();
     updateIsDynamicSpecificSettings();
     updateIsHorizontalAlignmentAvailable();
@@ -220,12 +220,12 @@ void TextSettingsModel::resetProperties()
     m_textLineSpacing->resetToDefault();
     m_isSizeSpatiumDependent->resetToDefault();
 
-    m_frameType->resetToDefault();
-    m_frameBorderColor->resetToDefault();
-    m_frameFillColor->resetToDefault();
-    m_frameThickness->resetToDefault();
-    m_frameMargin->resetToDefault();
-    m_frameCornerRadius->resetToDefault();
+    m_borderType->resetToDefault();
+    m_borderColor->resetToDefault();
+    m_borderFillColor->resetToDefault();
+    m_borderThickness->resetToDefault();
+    m_borderMargin->resetToDefault();
+    m_borderCornerRadius->resetToDefault();
 
     m_textType->resetToDefault();
     m_textPlacement->resetToDefault();
@@ -303,34 +303,34 @@ PropertyItem* TextSettingsModel::isSizeSpatiumDependent() const
     return m_isSizeSpatiumDependent;
 }
 
-PropertyItem* TextSettingsModel::frameType() const
+PropertyItem* TextSettingsModel::borderType() const
 {
-    return m_frameType;
+    return m_borderType;
 }
 
-PropertyItem* TextSettingsModel::frameBorderColor() const
+PropertyItem* TextSettingsModel::borderColor() const
 {
-    return m_frameBorderColor;
+    return m_borderColor;
 }
 
-PropertyItem* TextSettingsModel::frameFillColor() const
+PropertyItem* TextSettingsModel::borderFillColor() const
 {
-    return m_frameFillColor;
+    return m_borderFillColor;
 }
 
-PropertyItem* TextSettingsModel::frameThickness() const
+PropertyItem* TextSettingsModel::borderThickness() const
 {
-    return m_frameThickness;
+    return m_borderThickness;
 }
 
-PropertyItem* TextSettingsModel::frameMargin() const
+PropertyItem* TextSettingsModel::borderMargin() const
 {
-    return m_frameMargin;
+    return m_borderMargin;
 }
 
-PropertyItem* TextSettingsModel::frameCornerRadius() const
+PropertyItem* TextSettingsModel::borderCornerRadius() const
 {
-    return m_frameCornerRadius;
+    return m_borderCornerRadius;
 }
 
 PropertyItem* TextSettingsModel::textType() const
@@ -430,17 +430,17 @@ void TextSettingsModel::setIsHorizontalAlignmentAvailable(bool isHorizontalAlign
     emit isHorizontalAlignmentAvailableChanged(m_isHorizontalAlignmentAvailable);
 }
 
-void TextSettingsModel::updateFramePropertiesAvailability()
+void TextSettingsModel::updateBorderPropertiesAvailability()
 {
-    bool isFrameVisible = static_cast<TextTypes::FrameType>(m_frameType->value().toInt())
-                          != TextTypes::FrameType::FRAME_TYPE_NONE;
+    bool isBorderVisible = static_cast<TextTypes::BorderType>(m_borderType->value().toInt())
+                           != TextTypes::BorderType::BORDER_TYPE_NONE;
 
-    m_frameThickness->setIsEnabled(isFrameVisible);
-    m_frameBorderColor->setIsEnabled(isFrameVisible);
-    m_frameFillColor->setIsEnabled(isFrameVisible);
-    m_frameMargin->setIsEnabled(isFrameVisible);
-    m_frameCornerRadius->setIsEnabled(
-        static_cast<TextTypes::FrameType>(m_frameType->value().toInt()) == TextTypes::FrameType::FRAME_TYPE_SQUARE);
+    m_borderThickness->setIsEnabled(isBorderVisible);
+    m_borderColor->setIsEnabled(isBorderVisible);
+    m_borderFillColor->setIsEnabled(isBorderVisible);
+    m_borderMargin->setIsEnabled(isBorderVisible);
+    m_borderCornerRadius->setIsEnabled(
+        static_cast<TextTypes::BorderType>(m_borderType->value().toInt()) == TextTypes::BorderType::BORDER_TYPE_SQUARE);
 }
 
 void TextSettingsModel::updateStaffPropertiesAvailability()

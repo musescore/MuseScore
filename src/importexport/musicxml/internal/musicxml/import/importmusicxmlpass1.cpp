@@ -2068,7 +2068,7 @@ void MusicXmlParserPass1::setStyle(const String& type, const double val)
     } else if (type == u"dashes") {
         m_score->style().set(Sid::lyricsDashLineThickness, Spatium(val / 10));
     } else if (type == u"enclosure") {
-        m_score->style().set(Sid::staffTextFrameWidth, Spatium(val / 10));
+        m_score->style().set(Sid::staffTextBorderWidth, Spatium(val / 10));
     } else if (type == u"ending") {
         m_score->style().set(Sid::voltaLineWidth, Spatium(val / 10));
     } else if (type == u"extend") {

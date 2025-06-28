@@ -36,12 +36,12 @@ enum class TextStylePropertyType : char {
     Color,
     TextAlign,
     Offset,
-    FrameType,
-    FramePadding,
-    FrameWidth,
-    FrameRound,
-    FrameBorderColor,
-    FrameFillColor,
+    BorderType,
+    BorderPadding,
+    BorderWidth,
+    BorderRound,
+    BorderColor,
+    BorderFillColor,
     MusicalSymbolsScale,
     Position
 };

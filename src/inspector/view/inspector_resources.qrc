@@ -103,7 +103,7 @@
         <file>qml/MuseScore/Inspector/notation/rests/RestSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml</file>
-        <file>qml/MuseScore/Inspector/common/FrameSettings.qml</file>
+        <file>qml/MuseScore/Inspector/common/BorderSettings.qml</file>
         <file>qml/MuseScore/Inspector/common/CheckBoxPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/common/PropertyResetButton.qml</file>
         <file>qml/MuseScore/Inspector/common/PropertyToggle.qml</file>

@@ -39,11 +39,11 @@ class TextBase;
 class TextBlock;
 
 //---------------------------------------------------------
-//   FrameType
+//   BorderType
 //---------------------------------------------------------
 
-enum class FrameType : char {
-    NO_FRAME, SQUARE, CIRCLE
+enum class BorderType : char {
+    NO_BORDER, SQUARE, CIRCLE
 };
 
 //---------------------------------------------------------
@@ -418,9 +418,9 @@ public:
     bool isTextInvalid() const { return m_textInvalid; }
 
     // helper functions
-    bool hasFrame() const { return m_frameType != FrameType::NO_FRAME; }
-    bool circle() const { return m_frameType == FrameType::CIRCLE; }
-    bool square() const { return m_frameType == FrameType::SQUARE; }
+    bool hasBorder() const { return m_borderType != BorderType::NO_BORDER; }
+    bool circle() const { return m_borderType == BorderType::CIRCLE; }
+    bool square() const { return m_borderType == BorderType::SQUARE; }
 
     TextStyleType textStyleType() const { return m_textStyleType; }
     void setTextStyleType(TextStyleType id) { m_textStyleType = id; }
@@ -456,26 +456,26 @@ public:
     using EngravingObject::undoChangeProperty;
 
     Color textColor() const;
-    FrameType frameType() const { return m_frameType; }
-    void setFrameType(FrameType val) { m_frameType = val; }
+    BorderType borderType() const { return m_borderType; }
+    void setBorderType(BorderType val) { m_borderType = val; }
     double textLineSpacing() const { return m_textLineSpacing; }
     void setTextLineSpacing(double val) { m_textLineSpacing = val; }
-    Color bgColor() const { return m_bgColor; }
-    void setBgColor(const Color& val) { m_bgColor = val; }
-    Color frameColor() const { return m_frameColor; }
-    void setFrameColor(const Color& val) { m_frameColor = val; }
-    Spatium frameWidth() const { return m_frameWidth; }
-    void setFrameWidth(Spatium val) { m_frameWidth = val; }
-    Spatium paddingWidth() const { return m_paddingWidth; }
-    void setPaddingWidth(Spatium val) { m_paddingWidth = val; }
-    int frameRound() const { return m_frameRound; }
-    void setFrameRound(int val) { m_frameRound = val; }
+    Color backgroundColor() const { return m_backgroundColor; }
+    void setBackgroundColor(const Color& val) { m_backgroundColor = val; }
+    Color borderColor() const { return m_borderColor; }
+    void setBorderColor(const Color& val) { m_borderColor = val; }
+    Spatium borderThickness() const { return m_borderThickness; }
+    void setBorderThickness(Spatium val) { m_borderThickness = val; }
+    Spatium padding() const { return m_padding; }
+    void setPadding(Spatium val) { m_padding = val; }
+    double borderRadius() const { return m_borderRadius; }
+    void setBorderRadius(int val) { m_borderRadius = val; }
 
     struct LayoutData : public EngravingItem::LayoutData {
         std::vector<TextBlock> blocks;
         bool layoutInvalid = true;
 
-        RectF frame;
+        RectF borderRect;
 
         size_t rows() const { return blocks.size(); }
         const TextBlock& textBlock(size_t i) const { return blocks.at(i); }
@@ -487,8 +487,8 @@ public:
 
     void createBlocks();
     void createBlocks(LayoutData* ldata) const;
-    void layoutFrame();
-    void layoutFrame(LayoutData* ldata) const;
+    void layoutBorder();
+    void layoutBorder(LayoutData* ldata) const;
 
     //! NOTE It can only be set for some types of text, see who has the setter.
     //! At the moment it's: Text, Jump, Marker
@@ -553,16 +553,15 @@ private:
     void notifyAboutTextRemoved(int startPosition, int endPosition, const String& text);
 
     Align m_align;
-
     AlignH m_position = AlignH::LEFT;
 
-    FrameType m_frameType = FrameType::NO_FRAME;
+    BorderType m_borderType = BorderType::NO_BORDER;
     double m_textLineSpacing = 1.0;
-    Color m_bgColor;
-    Color m_frameColor;
-    Spatium m_frameWidth;
-    Spatium m_paddingWidth;
-    int m_frameRound = 0;
+    Color m_backgroundColor;
+    Color m_borderColor;
+    Spatium m_borderThickness;
+    Spatium m_padding;
+    double m_borderRadius = 0;
 
     // there are two representations of text; only one
     // might be valid and the other can be constructed from it
