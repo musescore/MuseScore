@@ -68,6 +68,7 @@ Item {
                     text: qsTr("Close")
                     onTriggered: root.visible = false
                 }
+
                 MenuItem {
                     text: root.isFloating ? qsTr("Dock") : qsTr("Undock")
                     onTriggered: {
@@ -75,9 +76,11 @@ Item {
                             root.requestDockToNavigatorZone()
                             root.isFloating = false
                         } else {
+
                             if (root.parent) {
                                 root.parent.floating = true
                             }
+
                             root.isFloating = true
                         }
                     }
