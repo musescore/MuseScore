@@ -361,23 +361,23 @@ static BendPlaybackInfo getBendPlaybackInfo(const GuitarBend* bend, int bendStar
 }
 
 static void fillBendDurations(const Note* bendStartNote, const std::unordered_set<const Note*>& currentNotes,
-                              std::unordered_map<const Note*, size_t>& durations, bool tiedToNext)
+                              std::unordered_map<const Note*, int>& durations, bool tiedToNext)
 {
     if (!bendStartNote || currentNotes.empty()) {
         return;
     }
 
     size_t bendsAmount = tiedToNext ? currentNotes.size() + 1 : currentNotes.size();
-    size_t eachBendDuration = bendStartNote->chord()->actualTicks().ticks() / bendsAmount;
+    int eachBendDuration = bendStartNote->chord()->actualTicks().ticks() / static_cast<int>(bendsAmount);
 
     for (const Note* note : currentNotes) {
         durations.insert({ note, eachBendDuration });
     }
 }
 
-static std::unordered_map<const Note*, size_t> getGraceNoteBendDurations(const Note* note)
+static std::unordered_map<const Note*, int> getGraceNoteBendDurations(const Note* note)
 {
-    std::unordered_map<const Note*, size_t> durations;
+    std::unordered_map<const Note*, int> durations;
     const Note* bendStartNote = nullptr;
     std::unordered_set<const Note*> currentNotes;
 
@@ -461,15 +461,13 @@ static void collectGuitarBend(const Note* note,
         int duration = note->chord()->actualTicks().ticks();
         if (bendFor) {
             const Note* endNote = bendFor->endNote();
-
             if (!endNote) {
                 return;
             }
 
             bool graceBeforeBend = false;
             if (note->chord()->isGraceBefore() && bendFor) {
-                Note* endNote = bendFor->endNote();
-                if (endNote && endNote->noteType() == NoteType::NORMAL) {
+                if (endNote->noteType() == NoteType::NORMAL) {
                     duration = (previousChordTicks == -1) ? GRACE_BEND_DURATION : std::min(previousChordTicks / 2, GRACE_BEND_DURATION);
                     graceBeforeBend = true;
                 }

@@ -94,8 +94,8 @@ private:
     void addAccent(const GPNote* gpnote, Note* note);
     void addStringNumber(const GPNote* gpnote, Note* note);
     void addTapping(const GPNote* gpnote, Note* note, engraving::TappingHand hand);
-    void addLeftHandTapping(const GPNote* gpnote, Note* note);
-    void addRightHandTapping(const GPNote* gpnote, Note* note);
+    void addLeftHandTapping(const GPNote* gpnote);
+    void addRightHandTapping(const GPNote* gpnote);
     void addSlide(const GPNote* gpnote, Note* note);
     void addSingleSlide(const GPNote* gpnote, Note* note);
     void addPickScrape(const GPNote* gpnote, Note* note);

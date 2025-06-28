@@ -314,7 +314,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         adjustSlurFloatingEndPointAngles(slurSegment, p1, p2, incomingPartialSlur, outgoingPartialSlur);
     }
 
-    layoutSegment(slurSegment, ctx, p1, p2);
+    layoutSegment(slurSegment,  p1, p2);
 
     return slurSegment;
 }
@@ -2878,7 +2878,7 @@ bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutC
     return false;
 }
 
-bool SlurTieLayout::shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx)
+bool SlurTieLayout::shouldHideSlurSegment(SlurSegment* item)
 {
     if (item->configuration()->specificSlursLayoutWorkaround()) {
         Slur* slur = item->slur();
@@ -3084,10 +3084,10 @@ void SlurTieLayout::calculateIsInside(Tie* item)
     }
 }
 
-void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2)
+void SlurTieLayout::layoutSegment(SlurSegment* item, const PointF& p1, const PointF& p2)
 {
     SlurSegment::LayoutData* ldata = item->mutldata();
-    if (shouldHideSlurSegment(item, ctx)) {
+    if (shouldHideSlurSegment(item)) {
         ldata->setIsSkipDraw(true);
         return;
     }

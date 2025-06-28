@@ -217,7 +217,7 @@ void EditStaffType::enablePresets()
     fretFontSize->setVisible(true);
     fretY->setVisible(true);
 
-    fretFontName->setCurrentIndex(staffType.fretPresetIdx());
+    fretFontName->setCurrentIndex(static_cast<int>(staffType.fretPresetIdx()));
     fretFontSize->setValue(staffType.fretFontSize());
     fretY->setValue(staffType.fretFontUserY());
 }
@@ -240,18 +240,18 @@ std::vector<QString> EditStaffType::textStyleNames() const
 {
     std::vector<QString> names;
     for (const TextStyleType& tid : allTextStyles()) {
-        muse::TranslatableString name = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
-        names.push_back(name.qTranslated());
+        muse::TranslatableString styleName = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
+        names.push_back(styleName.qTranslated());
     }
     return names;
 }
 
-TextStyleType EditStaffType::getTextStyle(const QString& name) const
+TextStyleType EditStaffType::getTextStyle(const QString& styleName) const
 {
     for (const TextStyleType& tid : allTextStyles()) {
-        muse::TranslatableString styleName = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
+        muse::TranslatableString textStyleName = staffType.score() ? staffType.score()->getTextStyleUserName(tid) : TConv::userName(tid);
 
-        if (styleName.str == name) {
+        if (textStyleName.str == styleName) {
             return tid;
         }
     }

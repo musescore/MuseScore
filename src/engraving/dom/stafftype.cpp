@@ -821,7 +821,7 @@ TablatureFretFont::TablatureFretFont()
     }
 
     for (size_t i = 0; i < NUM_OF_LETTERFRETS; i++) {
-        displayLetter[i] = Char(97 + i);
+        displayLetter[i] = Char(97 + static_cast<char16_t>(i));
     }
 
     for (size_t i = 0; i < NUM_OF_BASSSTRING_SLASHES; i++) {

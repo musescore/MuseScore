@@ -692,8 +692,8 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
     addSlide(gpnote, note);
     addPickScrape(gpnote, note);
     collectHammerOn(gpnote, note);
-    addRightHandTapping(gpnote, note);
-    addLeftHandTapping(gpnote, note);
+    addRightHandTapping(gpnote);
+    addLeftHandTapping(gpnote);
     addStringNumber(gpnote, note);
     addOrnament(gpnote, note);
     addVibratoLeftHand(gpnote, note);
@@ -1913,14 +1913,14 @@ void GPConverter::addAccent(const GPNote* gpnote, Note* note)
     }
 }
 
-void GPConverter::addLeftHandTapping(const GPNote* gpnote, Note* note)
+void GPConverter::addLeftHandTapping(const GPNote* gpnote)
 {
     if (gpnote->leftHandTapped() && m_currentGPBeat) {
         m_currentGPBeat->setTappingHand(GPBeat::TappingHand::Left);
     }
 }
 
-void GPConverter::addRightHandTapping(const GPNote* gpnote, Note* note)
+void GPConverter::addRightHandTapping(const GPNote* gpnote)
 {
     if (gpnote->rightHandTapping() && m_currentGPBeat) {
         m_currentGPBeat->setTappingHand(GPBeat::TappingHand::Right);

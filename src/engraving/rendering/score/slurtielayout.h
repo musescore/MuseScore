@@ -110,11 +110,11 @@ private:
 
     static bool isDirectionMixture(const Chord* c1, const Chord* c2, LayoutContext& ctx);
 
-    static void layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2);
+    static void layoutSegment(SlurSegment* item, const PointF& p1, const PointF& p2);
 
     static void computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
     static void fillShape(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
-    static bool shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx);
+    static bool shouldHideSlurSegment(SlurSegment* item);
 
     static void addLineAttachPoints(TieSegment* segment);
     static void addLineAttachPoints(PartialTieSegment* segment);
