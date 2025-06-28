@@ -691,6 +691,7 @@ MenuItemList AppMenuModel::makeTextItems()
         makeMenuItem("rehearsalmark-text"),
         makeMenuItem("instrument-change-text"),
         makeMenuItem("fingering-text"),
+        makeMenuItem("footnote-text"),
         makeSeparator(),
         makeMenuItem("sticking-text"),
         makeMenuItem("chord-text"),

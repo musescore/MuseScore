@@ -38,6 +38,7 @@
 #include "clef.h"
 #include "durationelement.h"
 #include "factory.h"
+#include "footnote.h"
 #include "hook.h"
 #include "key.h"
 #include "keysig.h"
@@ -1447,6 +1448,7 @@ EngravingItem* Measure::drop(EditData& data)
 
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
+    case ElementType::FOOTNOTE:
     case ElementType::FRET_DIAGRAM:
         e->setParent(seg);
         e->setTrack(staffIdx * VOICES);

@@ -2989,6 +2989,8 @@ Sid TextBase::offsetSid() const
         return above ? Sid::dynamicsPosAbove : Sid::dynamicsPosBelow;
     case TextStyleType::EXPRESSION:
         return above ? Sid::expressionPosAbove : Sid::expressionPosBelow;
+    case TextStyleType::FOOTNOTE:
+        return above ? Sid::footnotePosAbove : Sid::footnotePosBelow;
     case TextStyleType::LYRICS_ODD:
     case TextStyleType::LYRICS_EVEN:
         return above ? Sid::lyricsPosAbove : Sid::lyricsPosBelow;

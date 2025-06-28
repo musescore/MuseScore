@@ -1539,6 +1539,7 @@ bool NotationInteraction::updateDropSingle(const PointF& pos, Qt::KeyboardModifi
     case ElementType::TEMPO_TEXT:
     case ElementType::ORNAMENT:
     case ElementType::EXPRESSION:
+    case ElementType::FOOTNOTE:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
@@ -1829,6 +1830,7 @@ bool NotationInteraction::dropSingle(const PointF& pos, Qt::KeyboardModifiers mo
     case ElementType::TEMPO_TEXT:
     case ElementType::ORNAMENT:
     case ElementType::EXPRESSION:
+    case ElementType::FOOTNOTE:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
     case ElementType::TRIPLET_FEEL:
@@ -3655,6 +3657,7 @@ bool NotationInteraction::moveSelectionAvailable(MoveSelectionType type) const
         ElementType::STAFF_TEXT,
         ElementType::SYSTEM_TEXT,
         ElementType::EXPRESSION,
+        ElementType::FOOTNOTE,
         ElementType::REHEARSAL_MARK
     };
     if (isTextEditingStarted() && el && allowedTextEditTypes.find(el->type()) != allowedTextEditTypes.end()) {
@@ -5829,6 +5832,7 @@ Ret NotationInteraction::canAddTextToItem(TextStyleType type, const EngravingIte
         TextStyleType::HARMONY_NASHVILLE,
         TextStyleType::LYRICS_ODD,
         TextStyleType::TEMPO,
+        TextStyleType::FOOTNOTE,
     };
 
     if (muse::contains(needSelectNoteOrRestTypes, type)) {

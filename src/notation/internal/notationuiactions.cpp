@@ -1333,6 +1333,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "E&xpression text"),
              TranslatableString("action", "Add text: expression text")
              ),
+    UiAction("footnote-text",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Footnotes"),
+             TranslatableString("action", "Add text: footnote")
+             ),
     UiAction("rehearsalmark-text",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_OPENED,

@@ -1718,6 +1718,9 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
     case ElementType::EXPRESSION:
         return "expression";
 
+    case ElementType::FOOTNOTE:
+        return "footnotes";
+
     case ElementType::DYNAMIC:
         return "dynamics-hairpins";
 
@@ -1819,6 +1822,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::EXPRESSION:
             return "expression";
+
+        case TextStyleType::FOOTNOTE:
+            return "footnote";
 
         case TextStyleType::HAIRPIN:
             return "hairpin";

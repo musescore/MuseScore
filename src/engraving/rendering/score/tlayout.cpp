@@ -61,6 +61,7 @@
 #include "dom/fermata.h"
 #include "dom/figuredbass.h"
 #include "dom/fingering.h"
+#include "dom/footnote.h"
 #include "dom/fret.h"
 
 #include "dom/glissando.h"
@@ -246,6 +247,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::EXPRESSION:
         layoutExpression(item_cast<const Expression*>(item), static_cast<Expression::LayoutData*>(ldata));
+        break;
+    case ElementType::FOOTNOTE:
+        layoutFootnote(item_cast<const Footnote*>(item), static_cast<Footnote::LayoutData*>(ldata));
         break;
     case ElementType::FERMATA:
         layoutFermata(item_cast<const Fermata*>(item), static_cast<Fermata::LayoutData*>(ldata), ctx.conf());
@@ -2124,6 +2128,30 @@ void TLayout::layoutExpression(const Expression* item, Expression::LayoutData* l
     if (item->snapToDynamics()) {
         ldata->connectItemSnappedBefore(dynamic);
     }
+
+    Autoplace::autoplaceSegmentElement(item, ldata);
+}
+
+void TLayout::layoutFootnote(const Footnote* item, Footnote::LayoutData* ldata)
+{
+    LAYOUT_CALL_ITEM(item);
+    IF_ASSERT_FAILED(item->explicitParent()) {
+        return;
+    }
+
+    TLayout::layoutBaseTextBase(item, ldata);
+
+    ldata->disconnectSnappedItems();
+
+    if (!item->autoplace()) {
+        return;
+    }
+
+    const Segment* s = item->segment();
+    const Measure* m = s->measure();
+    LD_CONDITION(ldata->isSetPos());
+    LD_CONDITION(m->ldata()->isSetPos());
+    LD_CONDITION(s->ldata()->isSetPos());
 
     Autoplace::autoplaceSegmentElement(item, ldata);
 }

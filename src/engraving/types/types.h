@@ -108,6 +108,7 @@ enum class ElementType : unsigned char {
     CHORDLINE,
     DYNAMIC,
     EXPRESSION,
+    FOOTNOTE,
     BEAM,
     LYRICS,
     FIGURED_BASS,
@@ -782,6 +783,7 @@ enum class TextStyleType : unsigned char {
     // Staff oriented styles
     STAFF,
     EXPRESSION,
+    FOOTNOTE,
     DYNAMICS,
     HAIRPIN,
     LYRICS_ODD,

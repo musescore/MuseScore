@@ -1740,6 +1740,7 @@ bool Note::acceptDrop(EditData& data) const
            || type == ElementType::HARMONY
            || type == ElementType::DYNAMIC
            || type == ElementType::EXPRESSION
+           || type == ElementType::FOOTNOTE
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::ACCIACCATURA)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::APPOGGIATURA)
            || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE4)

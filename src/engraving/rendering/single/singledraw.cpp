@@ -49,6 +49,7 @@
 #include "dom/dynamic.h"
 
 #include "dom/expression.h"
+#include "dom/footnote.h"
 
 #include "dom/fermata.h"
 #include "dom/figuredbass.h"
@@ -188,6 +189,9 @@ void SingleDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
 
     case ElementType::EXPRESSION:   draw(item_cast<const Expression*>(item), painter);
+        break;
+
+    case ElementType::FOOTNOTE:   draw(item_cast<const Footnote*>(item), painter);
         break;
 
     case ElementType::FERMATA:      draw(item_cast<const Fermata*>(item), painter);
@@ -1076,6 +1080,11 @@ void SingleDraw::draw(const Dynamic* item, Painter* painter)
 }
 
 void SingleDraw::draw(const Expression* item, Painter* painter)
+{
+    drawTextBase(item, painter);
+}
+
+void SingleDraw::draw(const Footnote* item, Painter* painter)
 {
     drawTextBase(item, painter);
 }

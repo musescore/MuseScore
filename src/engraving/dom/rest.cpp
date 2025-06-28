@@ -193,6 +193,7 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::INSTRUMENT_CHANGE)
         || (type == ElementType::DYNAMIC)
         || (type == ElementType::EXPRESSION)
+        || (type == ElementType::FOOTNOTE)
         || (type == ElementType::HARMONY)
         || (type == ElementType::TEMPO_TEXT)
         || (type == ElementType::REHEARSAL_MARK)
