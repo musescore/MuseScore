@@ -37,7 +37,7 @@ MuseScore {
             if (!el || getType(el) == "unknown") {
                 continue
             }
-                
+
             var sendObj = {}
             var add = true
             if (el.type == Element.TUPLET || getChordRest(el).tuplet) {
@@ -78,7 +78,7 @@ MuseScore {
         }
 
         sendObjs.sort(retrogradeSort)
-        
+
         var curTrack = -1
         var cursor = curScore.newCursor()
         for (var i in sendObjs) {
@@ -302,19 +302,60 @@ MuseScore {
             c.element.offsetY = element.offsetY
             c.element.visible = element.visible
         } else {
+            // Remove trailing spanners
+            for (var i in element.notes) {
+                if (element.notes[i].tieBack) {
+                    removeElement(element.notes[i].tieBack)
+                }
+                if (element.notes[i].tieForward) {
+                    removeElement(element.notes[i].tieForward)
+                }
+                for (var j in element.notes[i].spannerForward) {
+                    removeElement(element.notes[i].spannerForward[j])
+                }
+                for (var j in element.notes[i].spannerBack) {
+                    removeElement(element.notes[i].spannerBack[j])
+                }
+            }
             c.rewindToTick(t)
             c.addNote(60)
             c.rewindToTick(t)
-            var toRemove = c.element.notes[0]
-            for (var i in element.notes) {c.element.add(element.notes[i])}
-            removeElement(toRemove)
+            var n = c.element.notes[0]
+            var toRemove = []
+            var chordsToAddTo = []
+            for (n; n.tieForward && n.tieForward.endNote; n = n.tieForward.endNote) {
+                toRemove.push(n)
+                chordsToAddTo.push(n.parent)
+            }
+            toRemove.push(n)
+            chordsToAddTo.push(n.parent)
+            for (var i = 0; i < chordsToAddTo.length; ++i) {
+                for (var j in element.notes) {
+                    chordsToAddTo[i].add(element.notes[j].clone())
+                }
+            }
+
+            storeSelection()
+            for (var i = 0; i < chordsToAddTo.length - 1; ++i) {
+                for (var j in chordsToAddTo[i].notes) {
+                    curScore.selection.select(chordsToAddTo[i].notes[j], false)
+                    cmd("tie")
+                }
+            }
+            retrieveSelection()
+
+            for (var i in toRemove) {
+                removeElement(toRemove[i])
+            }
             c.rewindToTick(t)
             addArticulations(c, element.articulations)
+            // todo: separate front and back grace notes
             addGraceNotes(c.element.notes[0], element.graceNotes)
             for (var i in element.ties) {
                 element.ties[i].startTick = t
                 allTies.push(element.ties[i])
             }
+            c.rewindToTick(getTick(chordsToAddTo[chordsToAddTo.length - 1]))
         }
         c.element.beamMode = element.beamMode
         addAnnotations(c, element.annotations)
@@ -389,7 +430,7 @@ MuseScore {
         var startD = note.parent.duration.denominator
         var endN = targetDuration.numerator
         var endD = targetDuration.denominator
-        
+
         console.log(qsTr("Removing dots..."))
         switch (note.dots.length) {
             case 4:
