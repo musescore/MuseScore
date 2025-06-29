@@ -44,3 +44,9 @@ QPoint DockTitleBar::mapToWindow(QPoint pos) const
 
     return result;
 }
+
+bool DockTitleBar::doubleClicked(const QPoint& /*pos*/)
+{
+    onFloatClicked();
+    return true;
+}
