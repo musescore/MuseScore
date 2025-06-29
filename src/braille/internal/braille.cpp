@@ -2888,12 +2888,12 @@ QString Braille::brailleHairpinBefore(ChordRest* chordRest, const std::vector<Ha
             result += beginTextBraille + BRAILLE_HAIRPIN_DIV_START;
             resetOctave(hairpin->staffIdx());
             break;
-        case HairpinType::DECRESC_HAIRPIN:
+        case HairpinType::DIM_HAIRPIN:
             result += beginTextBraille + BRAILLE_HAIRPIN_CONV_START;
             resetOctave(hairpin->staffIdx());
             break;
         case HairpinType::CRESC_LINE:
-        case HairpinType::DECRESC_LINE:
+        case HairpinType::DIM_LINE:
             result += beginTextBraille + BRAILLE_LINE_CONT_START_1;
             resetOctave(hairpin->staffIdx());
             break;
@@ -2925,12 +2925,12 @@ QString Braille::brailleHairpinAfter(ChordRest* chordRest, const std::vector<Hai
             result += BRAILLE_HAIRPIN_DIV_END;
             resetOctave(hairpin->staffIdx());
             break;
-        case HairpinType::DECRESC_HAIRPIN:
+        case HairpinType::DIM_HAIRPIN:
             result += BRAILLE_HAIRPIN_CONV_END;
             resetOctave(hairpin->staffIdx());
             break;
         case HairpinType::CRESC_LINE:
-        case HairpinType::DECRESC_LINE:
+        case HairpinType::DIM_LINE:
             result += BRAILLE_LINE_CONT_END_1;
             resetOctave(hairpin->staffIdx());
             break;
