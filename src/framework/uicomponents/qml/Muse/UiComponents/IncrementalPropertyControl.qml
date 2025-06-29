@@ -57,6 +57,8 @@ Item {
 
     signal valueEdited(var newValue)
     signal valueEditingFinished(var newValue)
+    signal accepted()
+    signal escaped()
 
     implicitHeight: 30
     implicitWidth: parent.width
@@ -258,6 +260,14 @@ Item {
             }
 
             root.valueEditingFinished(+newVal.toFixed(root.decimals))
+        }
+
+        onAccepted: {
+            root.accepted()
+        }
+
+        onEscaped: {
+            root.escaped()
         }
     }
 
