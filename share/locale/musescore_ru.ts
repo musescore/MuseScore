@@ -21330,7 +21330,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="64"/>
         <source>Show stem slash</source>
-        <translation>Показать зачёркивание штиля</translation>
+        <translation>Перечёркнутый штиль</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="77"/>
@@ -25881,7 +25881,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="386"/>
         <source>Repeats &amp; jumps</source>
-        <translation>Репризы, coda и sengo</translation>
+        <translation>Репризы, coda и segno</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="482"/>

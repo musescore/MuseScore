@@ -6557,7 +6557,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="89"/>
         <source>Publish to MuseScore.com…</source>
-        <translation>发布到MuseScore.com…</translation>
+        <translation>出版到 MuseScore.com…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="95"/>
@@ -10620,7 +10620,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="121"/>
         <source>Publish toolbar</source>
-        <translation>发布工具栏</translation>
+        <translation>出版工具栏</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MainToolBar.qml" line="64"/>
@@ -10817,7 +10817,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="71"/>
         <source>Copyright © 2004-2021 the Contributors to the MusicXML Specification, published by the Music Notation Community Group under the W3C Community Final Specification Agreement (FSA):</source>
-        <translation>版权所有© 2004-2021 MusicXML规范的贡献者，由W3C社区最终规范协议（FSA）下的Music Notation Community Group发布</translation>
+        <translation>版权所有 © 2004-2021 MusicXML 规范的贡献者，由 W3C 社区最终规范协议（FSA）下的Music Notation Community Group 出版</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
@@ -11840,7 +11840,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="30"/>
         <source>Publish to MuseScore.com</source>
-        <translation>发布到MuseScore.com</translation>
+        <translation>出版到 MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="41"/>
