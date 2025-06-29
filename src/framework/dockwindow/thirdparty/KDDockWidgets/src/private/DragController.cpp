@@ -214,7 +214,7 @@ void StatePreDrag::onEntry()
     WidgetResizeHandler::s_disableAllHandlers = true; // Disable the resize handler during dragging
 }
 
-bool StatePreDrag::handleMouseMove(QPoint globalPos)
+bool StatePreDrag::handleMouseMove(QPoint globalPos, int /*modifiers*/)
 {
     if (!q->m_draggableGuard) {
         qWarning() << Q_FUNC_INFO << "Draggable was destroyed, canceling the drag";
@@ -232,7 +232,7 @@ bool StatePreDrag::handleMouseMove(QPoint globalPos)
     return false;
 }
 
-bool StatePreDrag::handleMouseButtonRelease(QPoint)
+bool StatePreDrag::handleMouseButtonRelease(QPoint, int /*modifiers*/)
 {
     Q_EMIT q->dragCanceled();
     return false;
@@ -324,14 +324,16 @@ void StateDragging::onEntry()
     }
 
     Q_EMIT q->isDraggingChanged();
+    qApp->installEventFilter(q);
 }
 
 void StateDragging::onExit()
 {
+    qApp->removeEventFilter(q);
     m_maybeCancelDrag.stop();
 }
 
-bool StateDragging::handleMouseButtonRelease(QPoint globalPos)
+bool StateDragging::handleMouseButtonRelease(QPoint globalPos, int modifiers)
 {
     qCDebug(state) << "StateDragging: handleMouseButtonRelease";
 
@@ -349,7 +351,7 @@ bool StateDragging::handleMouseButtonRelease(QPoint globalPos)
         return true;
     }
 
-    if (q->m_currentDropArea) {
+    if (q->m_currentDropArea && !(modifiers & Qt::KeyboardModifier::ControlModifier)) {
         if (q->m_currentDropArea->drop(q->m_windowBeingDragged.get(), globalPos)) {
             Q_EMIT q->dropped();
         } else {
@@ -363,7 +365,7 @@ bool StateDragging::handleMouseButtonRelease(QPoint globalPos)
     return true;
 }
 
-bool StateDragging::handleMouseMove(QPoint globalPos)
+bool StateDragging::handleMouseMove(QPoint globalPos, int modifiers)
 {
     FloatingWindow *fw = q->m_windowBeingDragged->floatingWindow();
     if (!fw) {
@@ -386,12 +388,14 @@ bool StateDragging::handleMouseMove(QPoint globalPos)
     }
 
     DropArea *dropArea = nullptr;
-    ResolveDropAreaFunc resolveDropArea = q->resolveDropAreaFunc();
+    if (!(modifiers & Qt::KeyboardModifier::ControlModifier)) {
+        ResolveDropAreaFunc resolveDropArea = q->resolveDropAreaFunc();
 
-    if (resolveDropArea) {
-        dropArea = resolveDropArea(globalPos);
-    } else {
-        dropArea = q->dropAreaUnderCursor();
+        if (resolveDropArea) {
+            dropArea = resolveDropArea(globalPos);
+        } else {
+            dropArea = q->dropAreaUnderCursor();
+        }
     }
 
     if (q->m_currentDropArea && dropArea != q->m_currentDropArea)
@@ -421,6 +425,14 @@ bool StateDragging::handleMouseDoubleClick()
     return false;
 }
 
+bool StateDragging::handleKeyboardModifierPressOrRelease(Qt::Key modifier, int modifiers)
+{
+    if (modifier == Qt::Key_Control) {
+        return handleMouseMove(QCursor::pos(), modifiers);
+    }
+    return false;
+}
+
 StateInternalMDIDragging::StateInternalMDIDragging(DragController *parent)
     : StateBase(parent)
 {
@@ -444,13 +456,13 @@ void StateInternalMDIDragging::onEntry()
     Q_EMIT q->isDraggingChanged();
 }
 
-bool StateInternalMDIDragging::handleMouseButtonRelease(QPoint)
+bool StateInternalMDIDragging::handleMouseButtonRelease(QPoint, int /*modifiers*/)
 {
     Q_EMIT q->dragCanceled();
     return false;
 }
 
-bool StateInternalMDIDragging::handleMouseMove(QPoint globalPos)
+bool StateInternalMDIDragging::handleMouseMove(QPoint globalPos, int /*modifiers*/)
 {
     // for MDI we only support dragging via the title bar, other cases don't make sense conceptually
     auto tb = qobject_cast<TitleBar *>(q->m_draggable->asWidget());
@@ -535,7 +547,7 @@ void StateDraggingWayland::onEntry()
         Q_EMIT q->dragCanceled();
 }
 
-bool StateDraggingWayland::handleMouseButtonRelease(QPoint /*globalPos*/)
+bool StateDraggingWayland::handleMouseButtonRelease(QPoint /*globalPos*/, int /*modifiers*/)
 {
     qCDebug(state) << Q_FUNC_INFO;
     Q_EMIT q->dragCanceled();
@@ -553,7 +565,13 @@ bool StateDraggingWayland::handleDragEnter(QDragEnterEvent *ev, DropArea *dropAr
         return true;
     }
 
-    dropArea->hover(q->m_windowBeingDragged.get(), dropArea->mapToGlobal(Qt5Qt6Compat::eventPos(ev)));
+    m_dropArea = dropArea;
+
+    if (ev->modifiers() & Qt::KeyboardModifier::ControlModifier) {
+        dropArea->removeHover();
+    } else {
+        dropArea->hover(q->m_windowBeingDragged.get(), dropArea->mapToGlobal(Qt5Qt6Compat::eventPos(ev)));
+    }
 
     ev->accept();
     return true;
@@ -561,6 +579,9 @@ bool StateDraggingWayland::handleDragEnter(QDragEnterEvent *ev, DropArea *dropAr
 
 bool StateDraggingWayland::handleDragLeave(DropArea *dropArea)
 {
+    if (m_dropArea == dropArea) {
+        m_dropArea = nullptr;
+    }
     dropArea->removeHover();
     return true;
 }
@@ -571,7 +592,9 @@ bool StateDraggingWayland::handleDrop(QDropEvent *ev, DropArea *dropArea)
     if (!mimeData || !q->m_windowBeingDragged)
         return false; // Not for us, some other user drag.
 
-    if (dropArea->drop(q->m_windowBeingDragged.get(), dropArea->mapToGlobal(Qt5Qt6Compat::eventPos(ev)))) {
+    if (!(ev->modifiers() & Qt::KeyboardModifier::ControlModifier)
+        && dropArea->drop(q->m_windowBeingDragged.get(), dropArea->mapToGlobal(Qt5Qt6Compat::eventPos(ev))))
+    {
         ev->setDropAction(Qt::MoveAction);
         ev->accept();
         Q_EMIT q->dropped();
@@ -579,6 +602,7 @@ bool StateDraggingWayland::handleDrop(QDropEvent *ev, DropArea *dropArea)
         Q_EMIT q->dragCanceled();
     }
 
+    m_dropArea = nullptr;
     dropArea->removeHover();
     return true;
 }
@@ -589,9 +613,26 @@ bool StateDraggingWayland::handleDragMove(QDragMoveEvent *ev, DropArea *dropArea
     if (!mimeData || !q->m_windowBeingDragged)
         return false; // Not for us, some other user drag.
 
-    dropArea->hover(q->m_windowBeingDragged.get(), dropArea->mapToGlobal(Qt5Qt6Compat::eventPos(ev)));
+    if (ev->modifiers() & Qt::KeyboardModifier::ControlModifier) {
+        dropArea->removeHover();
+    } else {
+        dropArea->hover(q->m_windowBeingDragged.get(), dropArea->mapToGlobal(Qt5Qt6Compat::eventPos(ev)));
+    }
 
     return true;
+}
+
+bool StateDraggingWayland::handleKeyboardModifierPressOrRelease(Qt::Key modifier, int modifiers)
+{
+    if (modifier == Qt::Key_Control && m_dropArea && q->m_windowBeingDragged) {
+        if (modifiers & Qt::KeyboardModifier::ControlModifier) {
+            m_dropArea->removeHover();
+        } else {
+            m_dropArea->hover(q->m_windowBeingDragged.get(), QCursor::pos());
+        }
+        return true;
+    }
+    return false;
 }
 
 DragController::DragController(QObject *parent)
@@ -710,7 +751,7 @@ bool DragController::eventFilter(QObject *o, QEvent *e)
     if (m_nonClientDrag && e->type() == QEvent::Move) {
         // On Windows, non-client mouse moves are only sent at the end, so we must fake it:
         qCDebug(mouseevents) << "DragController::eventFilter e=" << e->type() << "; o=" << o;
-        activeState()->handleMouseMove(QCursor::pos());
+        activeState()->handleMouseMove(QCursor::pos(), 0);
         return MinimalStateMachine::eventFilter(o, e);
     }
 
@@ -735,6 +776,18 @@ bool DragController::eventFilter(QObject *o, QEvent *e)
                     return true;
                 break;
             }
+        }
+    }
+
+    if (isDragging()) {
+        switch (e->type()) {
+        case QEvent::KeyPress:
+        case QEvent::KeyRelease:
+            QKeyEvent *ke = static_cast<QKeyEvent *>(e);
+            if (ke->key() == Qt::Key_Control || ke->key() == Qt::Key_Shift || ke->key() == Qt::Key_Alt) {
+                return activeState()->handleKeyboardModifierPressOrRelease((Qt::Key)ke->key(), ke->modifiers());
+            }
+            break;
         }
     }
 
@@ -769,10 +822,10 @@ bool DragController::eventFilter(QObject *o, QEvent *e)
             break;
     case QEvent::MouseButtonRelease:
     case QEvent::NonClientAreaMouseButtonRelease:
-        return activeState()->handleMouseButtonRelease(Qt5Qt6Compat::eventGlobalPos(me));
+        return activeState()->handleMouseButtonRelease(Qt5Qt6Compat::eventGlobalPos(me), me->modifiers());
     case QEvent::NonClientAreaMouseMove:
     case QEvent::MouseMove:
-        return activeState()->handleMouseMove(Qt5Qt6Compat::eventGlobalPos(me));
+        return activeState()->handleMouseMove(Qt5Qt6Compat::eventGlobalPos(me), me->modifiers());
     case QEvent::MouseButtonDblClick:
     case QEvent::NonClientAreaMouseButtonDblClick:
         return activeState()->handleMouseDoubleClick();
