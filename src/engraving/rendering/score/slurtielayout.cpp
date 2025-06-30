@@ -23,8 +23,6 @@
 
 #include "iengravingfont.h"
 
-#include "compat/dummyelement.h"
-
 #include "dom/slur.h"
 #include "dom/chord.h"
 #include "dom/score.h"
@@ -43,13 +41,11 @@
 #include "dom/laissezvib.h"
 #include "dom/parenthesis.h"
 #include "dom/partialtie.h"
-#include "dom/hammeronpulloff.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"
 #include "stemlayout.h"
 #include "tremololayout.h"
-#include "../engraving/types/symnames.h"
 
 #include "draw/types/transform.h"
 
