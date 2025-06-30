@@ -71,6 +71,8 @@
 #include "tremolotwochord.h"
 #include "tuplet.h"
 
+#include "utils.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -503,6 +505,47 @@ void Selection::appendFiltered(EngravingItem* e)
     }
 }
 
+void Selection::appendFiltered(const std::unordered_set<EngravingItem*>& elems)
+{
+    IF_ASSERT_FAILED(!isLocked()) {
+        LOGE() << "selection locked, reason: " << lockReason();
+        return;
+    }
+
+    for (EngravingItem* elem : elems) {
+        IF_ASSERT_FAILED(!elem->isSpannerSegment()) {
+            LOGE() << "Append whole spanners instead of spanner segments";
+            continue;
+        }
+
+        // Special handling for bends...
+        if (elem->isGuitarBend()) {
+            GuitarBend* bend = toGuitarBend(elem);
+            appendGuitarBend(bend);
+            continue;
+        }
+
+        // Special handling for spanners...
+        if (elem->isSpanner() && !elem->isPartialTie() && !elem->isLaissezVib()) {
+            const Spanner* spanner = toSpanner(elem);
+            if (!noteAnchoredSpannerIsInRange(spanner, tickStart(), tickEnd())) {
+                continue;
+            }
+            for (SpannerSegment* spannerSeg : spanner->spannerSegments()) {
+                appendFiltered(spannerSeg);
+            }
+            continue;
+        }
+
+        // Special handling for grace notes...
+        if (elem->isChord() && toChord(elem)->isGrace()) {
+            appendChordRest(toChordRest(elem));
+        }
+
+        appendFiltered(elem);
+    }
+}
+
 void Selection::appendChordRest(ChordRest* cr)
 {
     IF_ASSERT_FAILED(!isLocked()) {
@@ -514,11 +557,8 @@ void Selection::appendChordRest(ChordRest* cr)
         return;
     }
 
-    for (EngravingItem* el : cr->lyrics()) {
-        if (el) {
-            appendFiltered(el);
-        }
-    }
+    const std::unordered_set<EngravingItem*> crAnchored = collectElementsAnchoredToChordRest(cr);
+    appendFiltered(crAnchored);
 
     if (cr->isRestFamily()) {
         appendFiltered(cr);
@@ -529,28 +569,11 @@ void Selection::appendChordRest(ChordRest* cr)
         return;
     }
 
+    IF_ASSERT_FAILED(cr->isChord()) {
+        return;
+    }
+
     Chord* chord = toChord(cr);
-    for (Chord* graceNote : chord->graceNotes()) {
-        if (canSelect(graceNote)) {
-            appendChord(graceNote);
-        }
-    }
-
-    appendChord(chord);
-}
-
-void Selection::appendChord(Chord* chord)
-{
-    IF_ASSERT_FAILED(!isLocked()) {
-        LOGE() << "selection locked, reason: " << lockReason();
-        return;
-    }
-
-    if (!canSelectVoice(chord->voice())) {
-        return;
-    }
-
-    appendChordFilteredExtras(chord);
 
     const size_t totalNotesInChord = chord->notes().size();
     const bool isSingleNote = totalNotesInChord == 1;
@@ -559,7 +582,12 @@ void Selection::appendChord(Chord* chord)
     for (size_t noteIdx = 0; noteIdx < totalNotesInChord; ++noteIdx) {
         Note* note = chord->notes().at(noteIdx);
 
-        appendNoteFilteredExtras(note);
+        const std::unordered_set<EngravingItem*> noteAnchored = collectElementsAnchoredToNote(note, true, false);
+        appendFiltered(noteAnchored);
+
+        if (chord->isGrace() && !canSelect(chord)) {
+            continue;
+        }
 
         //! Hack Explainer: Due to the fact that this method is called while we're still in the process of "building" our
         //! selection, we can't know for certain whether the selection as a whole will contain multi-note Chords (and thus
@@ -577,24 +605,14 @@ void Selection::appendChord(Chord* chord)
             m_el.push_back(note->accidental());
         }
         for (EngravingItem* el : note->el()) {
+            if (el->isFingering()) {
+                // Slight hack (already handled, see collectElementsAnchoredToNote)...
+                continue;
+            }
             m_el.push_back(el);
         }
         for (NoteDot* dot : note->dots()) {
             m_el.push_back(dot);
-        }
-        for (Spanner* sp : note->spannerFor()) {
-            if (!sp->endElement()->isNote()) {
-                continue;
-            }
-            const Note* endNote = toNote(sp->endElement());
-            const Segment* endSeg = endNote->chord()->segment();
-            if (!endSeg || endSeg->tick() <= tickEnd()) {
-                if (sp->isGuitarBend()) {
-                    appendGuitarBend(toGuitarBend(sp));
-                    continue;
-                }
-                m_el.push_back(sp);
-            }
         }
     }
 
@@ -613,48 +631,6 @@ void Selection::appendChord(Chord* chord)
     }
     if (chord->stemSlash()) {
         m_el.push_back(chord->stemSlash());
-    }
-}
-
-void Selection::appendChordFilteredExtras(Chord* chord)
-{
-    if (Arpeggio* arp = chord->arpeggio()) {
-        appendFiltered(arp);
-    }
-    if (TremoloTwoChord* tremTwo = chord->tremoloTwoChord()) {
-        appendFiltered(tremTwo);
-    }
-    if (TremoloSingleChord* tremSing = chord->tremoloSingleChord()) {
-        appendFiltered(tremSing);
-    }
-    for (Articulation* art : chord->articulations()) {
-        appendFiltered(art);
-    }
-}
-
-void Selection::appendNoteFilteredExtras(Note* note)
-{
-    LaissezVib* lv = note->laissezVib();
-    if (lv && !lv->segmentsEmpty()) {
-        appendFiltered(lv->frontSegment());
-    }
-    PartialTie* ipt = note->incomingPartialTie();
-    if (ipt && !ipt->segmentsEmpty()) {
-        appendFiltered(ipt->frontSegment());
-    }
-    PartialTie* opt = note->outgoingPartialTie();
-    if (opt && !opt->segmentsEmpty()) {
-        appendFiltered(opt->frontSegment());
-    }
-    const EngravingItem* endElement = note->tieFor() ? note->tieFor()->endElement() : nullptr;
-    if (endElement && endElement->isNote()) {
-        const Note* endNote = toNote(endElement);
-        const Segment* endSeg = endNote->chord()->segment();
-        if (!endSeg || endSeg->tick() <= tickEnd()) {
-            for (SpannerSegment* spannerSeg : note->tieFor()->spannerSegments()) {
-                appendFiltered(spannerSeg);
-            }
-        }
     }
 }
 
@@ -825,9 +801,12 @@ void Selection::updateSelectedElements()
         if (!m_rangeContainsMultiNoteChords || selectionFilter().includeSingleNotes()) {
             appendChordRest(singleNoteChord);
         }
-        // Include the extra notation elements even if the note itself isn't included...
-        appendChordFilteredExtras(singleNoteChord);
-        appendNoteFilteredExtras(singleNoteChord->notes().front());
+        // Include elements anchored to the note even if the note itself isn't included...
+        const Note* note = singleNoteChord->notes().front();
+        const std::unordered_set<EngravingItem*> noteAnchored = collectElementsAnchoredToNote(note, true, false);
+        appendFiltered(noteAnchored);
+        const std::unordered_set<EngravingItem*> crAnchored = collectElementsAnchoredToChordRest(singleNoteChord);
+        appendFiltered(crAnchored);
     }
 
     for (Tuplet* tuplet : innerTuplets) {
@@ -837,7 +816,7 @@ void Selection::updateSelectedElements()
     const Fraction rangeStart = tickStart();
     const Fraction rangeEnd = tickEnd();
 
-    //! NOTE: Ties are NOT handled in here - these are note anchored and handled in appendChord...
+    //! NOTE: Ties are NOT handled in here - these are note anchored and handled in appendChordRest...
     for (auto i = m_score->spanner().begin(); i != m_score->spanner().end(); ++i) {
         Spanner* sp = (*i).second;
         // ignore spanners belonging to other tracks

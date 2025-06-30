@@ -172,10 +172,8 @@ private:
     bool canSelectNoteIdx(size_t noteIdx, size_t totalNotesInChord, bool rangeContainsMultiNoteChords) const;
     bool canSelectVoice(track_idx_t track) const { return selectionFilter().canSelectVoice(track); }
     void appendFiltered(EngravingItem* e);
+    void appendFiltered(const std::unordered_set<EngravingItem*>& elems);
     void appendChordRest(ChordRest* cr);
-    void appendChord(Chord* chord);
-    void appendChordFilteredExtras(Chord* chord);
-    void appendNoteFilteredExtras(Note* note);
     void appendTupletHierarchy(Tuplet* innermostTuplet);
     void appendGuitarBend(GuitarBend* guitarBend);
 
