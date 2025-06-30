@@ -761,6 +761,9 @@ void NavigationController::goToNextPanel()
         if (first) {
             doActivatePanel(first);
             m_navigationChanged.notify();
+        } else {
+            doDeactivateSection(activeSec);
+            doActivateFirst();
         }
         return;
     }
