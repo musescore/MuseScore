@@ -87,6 +87,7 @@
         <file>qml/Preferences/internal/NoteInput/NotePreviewSection.qml</file>
         <file>qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml</file>
         <file>qml/Preferences/internal/NoteInput/NoteColorsSection.qml</file>
+        <file>qml/Preferences/internal/NoteInput/FretboardDiagramsSection.qml</file>
         <file>qml/Preferences/internal/DefaultFilesSection.qml</file>
         <file>qml/Preferences/internal/AutomaticUpdateSection.qml</file>
         <file>qml/platform/win/AppTitleBar.qml</file>
