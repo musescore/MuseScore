@@ -92,6 +92,8 @@ static const Settings::Key IS_LIMIT_CANVAS_SCROLL_AREA_KEY(module_name, "ui/canv
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
 static const Settings::Key WARN_GUITAR_BENDS(module_name, "score/note/warnGuitarBends");
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
+static const Settings::Key PLAY_MIDI_NOTES_WITH_VELOCITY_AND_DURATION_DURING_NOTE_INPUT(module_name,
+                                                                                        "io/midi/playMidiNotesWithVelocityAndDurationDuringNoteInput");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
 
 static const Settings::Key FIRST_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList1");
@@ -303,6 +305,12 @@ void NotationConfiguration::init()
     settings()->valueChanged(REALTIME_DELAY).onReceive(this, [this](const Val& val) {
         m_delayBetweenNotesInRealTimeModeMillisecondsChanged.send(val.toInt());
     });
+
+    settings()->setDefaultValue(PLAY_MIDI_NOTES_WITH_VELOCITY_AND_DURATION_DURING_NOTE_INPUT, Val(true));
+    settings()->valueChanged(PLAY_MIDI_NOTES_WITH_VELOCITY_AND_DURATION_DURING_NOTE_INPUT).onReceive(this, [this](const Val& val) {
+        m_playMidiNotesWithVelocityAndDurationDuringNoteInputChanged.send(val.toBool());
+    });
+
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(500));
     settings()->valueChanged(NOTE_DEFAULT_PLAY_DURATION).onReceive(this, [this](const Val& val) {
         m_notePlayDurationMillisecondsChanged.send(val.toInt());
@@ -1020,6 +1028,21 @@ void NotationConfiguration::setDelayBetweenNotesInRealTimeModeMilliseconds(int d
 async::Channel<int> NotationConfiguration::delayBetweenNotesInRealTimeModeMillisecondsChanged() const
 {
     return m_delayBetweenNotesInRealTimeModeMillisecondsChanged;
+}
+
+bool NotationConfiguration::playMidiNotesWithVelocityAndDurationDuringNoteInput() const
+{
+    return settings()->value(PLAY_MIDI_NOTES_WITH_VELOCITY_AND_DURATION_DURING_NOTE_INPUT).toBool();
+}
+
+void NotationConfiguration::setPlayMidiNotesWithVelocityAndDurationDuringNoteInput(bool value)
+{
+    settings()->setSharedValue(PLAY_MIDI_NOTES_WITH_VELOCITY_AND_DURATION_DURING_NOTE_INPUT, Val(value));
+}
+
+muse::async::Channel<bool> NotationConfiguration::playMidiNotesWithVelocityAndDurationDuringNoteInputChanged() const
+{
+    return m_playMidiNotesWithVelocityAndDurationDuringNoteInputChanged;
 }
 
 int NotationConfiguration::notePlayDurationMilliseconds() const

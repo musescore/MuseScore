@@ -517,6 +517,20 @@ muse::async::Channel<int> NotationConfigurationStub::delayBetweenNotesInRealTime
     return ch;
 }
 
+bool NotationConfigurationStub::playMidiNotesWithVelocityAndDurationDuringNoteInput() const
+{
+    return false;
+}
+
+void NotationConfigurationStub::setPlayMidiNotesWithVelocityAndDurationDuringNoteInput(bool)
+{
+}
+
+muse::async::Channel<bool> NotationConfigurationStub::playMidiNotesWithVelocityAndDurationDuringNoteInputChanged() const
+{
+    return {};
+}
+
 int NotationConfigurationStub::notePlayDurationMilliseconds() const
 {
     return 100;
