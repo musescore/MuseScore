@@ -701,7 +701,16 @@ double TupletLayout::computeRhythmicCenter(Tuplet* item, const ChordRest* endCho
     }
 
     if (refSeg->tick() == center) {
-        return refSeg->x() + 0.5 * (refCR->isChord() ? toChord(refCR)->upNote()->headWidth() : refCR->width());
+        double xRef = 0.0;
+        if (refCR->isChord()) {
+            const Chord* chord = toChord(refCR);
+            bool chordUp = chord->up();
+            bool tupletPlaceAbove = item->isUp();
+            xRef = (chord->stem() && chordUp == tupletPlaceAbove ? 0.75 : 0.5) * chord->upNote()->headWidth();
+        } else {
+            xRef = 0.5 * refCR->width();
+        }
+        return refSeg->x() + xRef;
     }
 
     Fraction refCRTicks = refCR->actualTicks();
