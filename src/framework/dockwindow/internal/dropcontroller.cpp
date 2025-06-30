@@ -307,7 +307,7 @@ DockingHolderView* DropController::resolveDockingHolder(DockType draggedDockType
 
 DockPanelView* DropController::resolvePanelForDrop(const DockPanelView* panel, const QPoint& localPos) const
 {
-    QList<DockPanelView*> panels = currentPage()->possiblePanelsForTab(panel);
+    QList<DockPanelView*> panels = currentPage()->findPanelsForDropping(panel);
 
     for (DockPanelView* p : panels) {
         if (isMouseOverDock(localPos, p)) {

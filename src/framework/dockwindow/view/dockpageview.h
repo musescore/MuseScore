@@ -91,7 +91,9 @@ public:
 
     DockBase* dockByName(const QString& dockName) const;
     DockingHolderView* holder(DockType type, Location location) const;
-    QList<DockPanelView*> possiblePanelsForTab(const DockPanelView* tab) const;
+
+    QList<DockPanelView*> findPanelsForDropping(const DockPanelView* panel) const;
+    DockPanelView* findPanelForTab(const DockPanelView* tab) const;
 
     bool isDockOpenAndCurrentInFrame(const QString& dockName) const;
     void toggleDock(const QString& dockName);
@@ -124,8 +126,6 @@ signals:
 
 private:
     void componentComplete() override;
-
-    DockPanelView* findPanelForTab(const DockPanelView* tab) const;
 
     void reorderSections();
     void doReorderSections();
