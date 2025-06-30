@@ -680,7 +680,7 @@ static void readDrumset206(Drumset* ds, XmlReader& e)
                     ds->drum(pitch).addVariant(div);
                 }
             }
-        } else if (ds->readProperties(e, pitch)) {
+        } else if (ds->readDrumProperties(e, pitch)) {
         } else {
             e.unknown();
         }

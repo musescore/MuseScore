@@ -66,6 +66,7 @@
         <trackName>Percussion</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="27">
           <head>normal</head>
           <line>0</line>

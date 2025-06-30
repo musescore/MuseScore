@@ -68,6 +68,7 @@
         <trackName>Drum Kit</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="35">
           <head>normal</head>
           <line>7</line>
@@ -309,6 +310,7 @@
         <trackName>Percussion</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="27">
           <head>cross</head>
           <line>-1</line>
