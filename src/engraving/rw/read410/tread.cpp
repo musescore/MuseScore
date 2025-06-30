@@ -3558,7 +3558,13 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         Symbol* s = new Symbol(n);
         s->setTrack(n->track());
         TRead::read(s, e, ctx);
-        if (s->sym() != SymId::noteheadParenthesisLeft && s->sym() != SymId::noteheadParenthesisRight) {
+        if (s->sym() == SymId::noteheadParenthesisLeft) {
+            n->setHasParentheses(ParenthesesMode::LEFT);
+            delete s;
+        } else if (s->sym() == SymId::noteheadParenthesisRight) {
+            n->setHasParentheses(ParenthesesMode::RIGHT);
+            delete s;
+        } else {
             n->add(s);
         }
     } else if (tag == "Image") {
