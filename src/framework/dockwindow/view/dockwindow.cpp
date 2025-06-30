@@ -391,14 +391,29 @@ void DockWindow::loadPanels(const DockPageView* page)
 {
     TRACEFUNC;
 
+    DockBase* centralDock = page->centralDock();
+
+    QMap<Location, DockBase*> lastRelativeToByLocation = {
+        { Location::Left, centralDock },
+        { Location::Right, centralDock }
+    };
+
     for (DockPanelView* panel : page->panels()) {
         if (DockPanelView* destinationPanel = findDestinationForPanel(page, panel)) {
             addPanelAsTab(panel, destinationPanel);
             continue;
         }
+
         const Location location = panel->location();
         const bool isSideLocation = location == Location::Left || location == Location::Right;
-        addDock(panel, location, isSideLocation ? page->centralDock() : nullptr);
+
+        DockBase* relativeTo = nullptr;
+        if (isSideLocation) {
+            relativeTo = lastRelativeToByLocation.value(location);
+            lastRelativeToByLocation[location] = panel;
+        }
+
+        addDock(panel, location, relativeTo);
     }
 
     for (Location location : POSSIBLE_LOCATIONS) {
