@@ -153,7 +153,7 @@ QQuickItem *DockWidgetQuick::frameVisualItem() const
 void DockWidgetQuick::onGeometryUpdated()
 {
     if (auto frame = qobject_cast<FrameQuick *>(DockWidgetBase::d->frame())) {
-        frame->updateConstriants();
+        frame->updateConstraints();
         frame->updateGeometry();
     }
 }
