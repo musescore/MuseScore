@@ -101,6 +101,10 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
 {
     SostenutoTimeAndDurations sostenutoTimeAndDurations;
 
+    auto volumeParamIt = m_mapping.find(Steinberg::Vst::kCtrlVolume);
+    bool hasCtrlVolumeMapping = (volumeParamIt != m_mapping.cend());
+    bool volumeForFirstNoteSet = !hasCtrlVolumeMapping;
+
     for (const auto& evPair : events) {
         for (const mpe::PlaybackEvent& event : evPair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
@@ -115,6 +119,13 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
             int32_t noteId = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
             float velocityFraction = noteVelocityFraction(noteEvent);
             float tuning = noteTuning(noteEvent, noteId);
+
+            if (!volumeForFirstNoteSet) {
+                // Put one kCtrlVolume event at the start of the first note when using
+                // kCtrlVolume events, to make sure off stream events are audible.
+                destination[0].emplace(ParamChangeEvent { volumeParamIt->second, velocityFraction });
+                volumeForFirstNoteSet = true;
+            }
 
             destination[timestampFrom].emplace(buildEvent(VstEvent::kNoteOnEvent, noteId, velocityFraction, tuning));
             destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
@@ -147,9 +158,18 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
 
 void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& layers)
 {
+    auto volumeParamIt = m_mapping.find(Steinberg::Vst::kCtrlVolume);
+    bool hasCtrlVolumeMapping = (volumeParamIt != m_mapping.cend());
+
     for (const auto& layer : layers) {
         for (const auto& dynamic : layer.second) {
-            destination[dynamic.first].emplace(expressionLevel(dynamic.second));
+            float level = expressionLevel(dynamic.second);
+
+            if (hasCtrlVolumeMapping) {
+                destination[dynamic.first].emplace(ParamChangeEvent { volumeParamIt->second, level });
+            } else {
+                destination[dynamic.first].emplace(level);
+            }
         }
     }
 }
