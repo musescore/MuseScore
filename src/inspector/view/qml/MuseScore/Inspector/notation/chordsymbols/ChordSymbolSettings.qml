@@ -93,6 +93,7 @@ Column {
     }
 
     FlatButton {
+        id: addFretBoardDiagramButton
         width: parent.width
 
         navigation.name: "AddFretboardDiagram"
@@ -120,7 +121,18 @@ Column {
 
         navigation.name: "Exclude from vertical alignment"
         navigation.panel: root.navigationPanel
-        navigation.row: durationSection.navigationRowEnd + 1
+        navigation.row: addFretBoardDiagramButton.navigationRowEnd + 1
+    }
+
+    PropertyCheckBox {
+        id: doNotStackModifiersCheckBox
+
+        text: qsTrc("inspector", "Do not stack modifiers")
+        propertyItem: root.model ? root.model.doNotStackModifiers : null
+
+        navigation.name: "Do not stack modifiers"
+        navigation.panel: root.navigationPanel
+        navigation.row: verticalAlignCheckBox.navigationRowEnd + 1
     }
 
     Item {
@@ -145,7 +157,7 @@ Column {
 
             navigationName: "Bass note scale"
             navigationPanel: root.navigationPanel
-            navigationRowStart: verticalAlignCheckBox.navigationRowEnd + 1
+            navigationRowStart: doNotStackModifiersCheckBox.navigationRowEnd + 1
         }
 
         FlatRadioButtonGroupPropertyView {

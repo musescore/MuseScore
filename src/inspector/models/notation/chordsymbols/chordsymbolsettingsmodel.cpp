@@ -47,6 +47,7 @@ void ChordSymbolSettingsModel::createProperties()
         updateStyleValue(sid, newValue.toDouble() / 100);
         emit requestReloadPropertyItems();
     });
+    m_doNotStackModifiers = buildPropertyItem(mu::engraving::Pid::HARMONY_DO_NOT_STACK_MODIFIERS);
 }
 
 void ChordSymbolSettingsModel::requestElements()
@@ -68,6 +69,7 @@ void ChordSymbolSettingsModel::loadProperties()
     loadPropertyItem(m_bassScale, [](const QVariant& elementPropertyValue) -> QVariant {
         return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
+    loadPropertyItem(m_doNotStackModifiers);
 }
 
 void ChordSymbolSettingsModel::resetProperties()
@@ -78,6 +80,7 @@ void ChordSymbolSettingsModel::resetProperties()
     m_verticalAlign->resetToDefault();
     m_position->resetToDefault();
     m_bassScale->resetToDefault();
+    m_doNotStackModifiers->resetToDefault();
 }
 
 PropertyItem* ChordSymbolSettingsModel::isLiteral() const
@@ -157,4 +160,9 @@ PropertyItem* ChordSymbolSettingsModel::position() const
 PropertyItem* ChordSymbolSettingsModel::bassScale() const
 {
     return m_bassScale;
+}
+
+PropertyItem* ChordSymbolSettingsModel::doNotStackModifiers() const
+{
+    return m_doNotStackModifiers;
 }

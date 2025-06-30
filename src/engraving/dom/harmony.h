@@ -323,6 +323,7 @@ private:
     bool m_leftParen = false;
     bool m_rightParen = false;                           // include opening and/or closing parenthesis
     bool m_play = true;                                  // whether or not to play back the harmony
+    bool m_doNotStackModifiers = false;
 
     NoteCaseType m_rootCase = NoteCaseType::AUTO;
     NoteCaseType m_bassCase = NoteCaseType::AUTO;        // case as typed

@@ -1516,7 +1516,7 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
 //   position
 //---------------------------------------------------------
 
-double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const
+double ChordList::position(const StringList& names, bool stackModifiers, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const
 {
     String name = names.empty() ? u"" : names.front();
     switch (ctc) {
@@ -1524,7 +1524,7 @@ double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t 
         return m_eadjust;
     case ChordTokenClass::MODIFIER: {
         double yAdj = 0.0;
-        if (m_stackModifiers && nmodifiers > 1) {
+        if (stackModifiers && nmodifiers > 1) {
             static constexpr double LINE_SPACING = 0.4;             // Space between modifiers in units of modiferHeight
             const double modifierHeight = m_mmag * m_stackedmmag;   // Modifier height in units of root capheight
             const double stackHeight = (nmodifiers * modifierHeight) + ((nmodifiers - 1) * modifierHeight * LINE_SPACING); // Height of total modifier stack (bottom baseline to top capheight)
@@ -1550,7 +1550,7 @@ double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t 
 //   renderList
 //---------------------------------------------------------
 
-const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl)
+const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, bool stacked)
 {
     // generate anew on each call,
     // in case chord list has changed since last time
@@ -1560,7 +1560,7 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl)
 
     size_t modIdx = 0;
     const size_t finalModIdx = m_modifierList.size() - 1;
-    const bool stackModifiers = m_modifierList.size() > 1 && cl->stackModifiers();
+    const bool stackModifiers = m_modifierList.size() > 1 && stacked;
 
     bool adjust = cl ? cl->autoAdjust() : false;
     for (const ChordToken& tok : m_tokenList) {
@@ -1593,7 +1593,7 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl)
         }
         // build render list
         // check for adjustments
-        double yAdjust = adjust ? cl->position(tok.names, ctc, finalModIdx - modIdx, m_modifierList.size()) : 0.0;
+        double yAdjust = adjust ? cl->position(tok.names, stackModifiers, ctc, finalModIdx - modIdx, m_modifierList.size()) : 0.0;
 
         // Modifier behaviour
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
@@ -1720,8 +1720,9 @@ void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
         pc->parse(n, cl);
     }
     parsedChords.push_back(*pc);
-    if (renderList.empty() || renderListGenerated) {
-        renderList = pc->renderList(cl);
+    if (renderList.empty() || renderListStacked.empty() || renderListGenerated) {
+        renderList = pc->renderList(cl, false);
+        renderListStacked = pc->renderList(cl, true);
         renderListGenerated = true;
     }
     if (xmlKind.empty()) {

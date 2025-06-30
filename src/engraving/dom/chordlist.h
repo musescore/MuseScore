@@ -313,7 +313,7 @@ public:
 
     bool parse(const String&, const ChordList*, bool syntaxOnly = false, bool preferMinor = false);
     String fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&, const ChordList*);
-    const std::list<RenderActionPtr >& renderList(const ChordList*);
+    const std::list<RenderActionPtr >& renderList(const ChordList* cl, bool stacked);
     bool parseable() const { return m_parseable; }
     bool understandable() const { return m_understandable; }
     const String& name() const { return m_name; }
@@ -376,6 +376,7 @@ struct ChordDescription {
     StringList xmlDegrees;   // MusicXML: list of degrees (if any)
     HChord chord;             // C based chord
     std::list<RenderActionPtr > renderList;
+    std::list<RenderActionPtr > renderListStacked;
     bool generated = false;
     bool renderListGenerated = false;
     bool exportOk = false;
@@ -444,7 +445,7 @@ public:
     double stackedModifierMag() const { return m_stackedmmag; }
     void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0, double stackedmmag = 0.0,
                              bool stackModifiers = false, bool excludeModsHAlign = false, String symbolFont = u"");
-    double position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const;
+    double position(const StringList& names, bool stackModifiers, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const;
 
     void checkChordList(const MStyle& style);
     bool read(const String& name);

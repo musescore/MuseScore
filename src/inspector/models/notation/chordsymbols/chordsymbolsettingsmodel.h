@@ -35,6 +35,7 @@ class ChordSymbolSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * verticalAlign READ verticalAlign CONSTANT)
     Q_PROPERTY(PropertyItem * position READ position CONSTANT)
     Q_PROPERTY(PropertyItem * bassScale READ bassScale CONSTANT)
+    Q_PROPERTY(PropertyItem * doNotStackModifiers READ doNotStackModifiers CONSTANT)
 
     Q_PROPERTY(bool hasLinkedFretboardDiagram READ hasLinkedFretboardDiagram NOTIFY hasLinkedFretboardDiagramChanged FINAL)
 
@@ -52,6 +53,7 @@ public:
     PropertyItem* verticalAlign() const;
     PropertyItem* position() const;
     PropertyItem* bassScale() const;
+    PropertyItem* doNotStackModifiers() const;
 
     bool hasLinkedFretboardDiagram() const;
 
@@ -73,6 +75,7 @@ private:
     PropertyItem* m_verticalAlign = nullptr;
     PropertyItem* m_position = nullptr;
     PropertyItem* m_bassScale = nullptr;
+    PropertyItem* m_doNotStackModifiers = nullptr;
 };
 }
 
