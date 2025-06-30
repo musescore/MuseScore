@@ -3705,6 +3705,12 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
             continue;
         }
 
+        for (EngravingItem* elem : collectElementsAnchoredToChordRest(cr1)) {
+            if (filter.canSelect(elem)) {
+                undoRemoveElement(elem);
+            }
+        }
+
         if (cr1->isRestFamily()) {
             if (cr1->selected()) {
                 restDuration += cr1->ticks();
@@ -3717,49 +3723,25 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
 
         Chord* chord = toChord(cr1);
 
-        // TODO: Not loving the duplication with Selection::appendChord here...
-        Arpeggio* arp = chord->arpeggio();
-        if (arp && filter.canSelect(arp)) {
-            undoRemoveElement(arp);
-        }
-        TremoloTwoChord* tremTwo = chord->tremoloTwoChord();
-        if (tremTwo && filter.canSelect(tremTwo)) {
-            undoRemoveElement(tremTwo);
-        }
-        TremoloSingleChord* tremSing = chord->tremoloSingleChord();
-        if (tremSing && filter.canSelect(tremSing)) {
-            undoRemoveElement(tremSing);
-        }
-        for (Articulation* art : chord->articulations()) {
-            if (filter.canSelect(art)) {
-                undoRemoveElement(art);
-            }
-        }
-
         const std::vector<Note*> allNotes = chord->notes();
         std::unordered_set<Note*> notesToRemove;
         for (size_t noteIdx = 0; noteIdx < allNotes.size(); ++noteIdx) {
             Note* note = allNotes.at(noteIdx);
-
-            // TODO: More duplication here...
-            LaissezVib* lv = note->laissezVib();
-            if (lv && filter.canSelect(lv)) {
-                undoRemoveElement(lv);
+            if (filter.canSelectNoteIdx(noteIdx, allNotes.size(), selectionContainsMultiNoteChords)) {
+                notesToRemove.emplace(note);
+                //! NOTE: Don't need to remove anchored elements - they won't survive the deletion of their parent note...
+                continue;
             }
-            PartialTie* ipt = note->incomingPartialTie();
-            if (ipt && filter.canSelect(ipt)) {
-                undoRemoveElement(lv);
-            }
-            PartialTie* opt = note->outgoingPartialTie();
-            if (opt && filter.canSelect(opt)) {
-                undoRemoveElement(lv);
-            }
-            const EngravingItem* endElement = note->tieFor() ? note->tieFor()->endElement() : nullptr;
-            if (endElement && endElement->isNote()) {
-                const Note* endNote = toNote(endElement);
-                const Segment* endSeg = endNote->chord()->segment();
-                if (!endSeg || endSeg->tick() <= endTick) {
-                    undoRemoveElement(note->tieFor());
+            for (EngravingItem* elem : collectElementsAnchoredToNote(note, true, false)) {
+                if (!filter.canSelect(elem)) {
+                    continue;
+                }
+                if (!elem->isSpanner() || elem->isPartialTie() || elem->isLaissezVib()) {
+                    undoRemoveElement(elem);
+                    continue;
+                }
+                if (noteAnchoredSpannerIsInRange(toSpanner(elem), cr1->tick(), endTick)) {
+                    undoRemoveElement(elem);
                 }
             }
             if (!filter.canSelectNoteIdx(noteIdx, allNotes.size(), selectionContainsMultiNoteChords)) {
