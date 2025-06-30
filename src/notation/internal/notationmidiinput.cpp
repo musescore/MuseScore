@@ -39,6 +39,27 @@ using namespace mu::notation;
 
 static constexpr int PROCESS_INTERVAL = 20;
 
+static mu::playback::IPlaybackController::PlayParams makeNoteOnParams(bool infiniteDuration)
+{
+    mu::playback::IPlaybackController::PlayParams params;
+    params.flushSound = !infiniteDuration;
+
+    if (infiniteDuration) {
+        params.duration = muse::mpe::INFINITE_DURATION; // play note on only
+    }
+
+    return params;
+}
+
+static mu::playback::IPlaybackController::PlayParams makeNoteOffParams()
+{
+    mu::playback::IPlaybackController::PlayParams params;
+    params.flushSound = false;
+    params.duration = 0; // note off only
+
+    return params;
+}
+
 NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationInteractionPtr notationInteraction,
                                      INotationUndoStackPtr undoStack, const muse::modularity::ContextPtr& iocCtx)
     : muse::Injectable(iocCtx), m_getScore(getScore),
@@ -135,7 +156,7 @@ void NotationMidiInput::doProcessEvents()
 
     std::vector<const Note*> notesOn;
     std::vector<int> notesOff;
-    std::map<muse::midi::Event::Opcode, muse::midi::Event> controllers;
+    ControllerEventMap controllers;
 
     startNoteInputIfNeed();
     bool isNoteInput = isNoteInputMode();
@@ -146,30 +167,36 @@ void NotationMidiInput::doProcessEvents()
         return;
     }
 
+    const bool useDurationAndVelocity = isSoundPreview || configuration()->useMidiVelocityAndDurationDuringNoteInput();
+
     for (size_t i = 0; i < m_eventsQueue.size(); ++i) {
         const muse::midi::Event& event = m_eventsQueue.at(i);
+        const muse::midi::Event::Opcode opcode = event.opcode();
 
-        if (event.opcode() == muse::midi::Event::Opcode::ControlChange
-            || event.opcode() == muse::midi::Event::Opcode::PitchBend) {
-            controllers[event.opcode()] = event; // keep only last received to prevent spam
+        if (opcode == muse::midi::Event::Opcode::ControlChange || opcode == muse::midi::Event::Opcode::PitchBend) {
+            controllers[opcode] = event; // keep only last received to prevent spam
             continue;
         }
 
-        const Note* note = isNoteInput ? addNoteToScore(event) : makePreviewNote(event);
+        Note* note = isNoteInput ? addNoteToScore(event) : makePreviewNote(event);
         if (note) {
+            if (useDurationAndVelocity) {
+                note->setUserVelocity(event.velocity7());
+                m_playingNotes[note->pitch()] = note;
+            }
             notesOn.push_back(note);
         }
 
-        bool chord = i != 0;
-        bool noteOn = event.opcode() == midi::Event::Opcode::NoteOn;
+        const bool chord = i != 0;
+        const bool noteOn = opcode == muse::midi::Event::Opcode::NoteOn;
         if (!chord && noteOn && !m_realtimeTimer.isActive() && isRealtimeAuto()) {
             m_extendNoteTimer.start(configuration()->delayBetweenNotesInRealTimeModeMilliseconds());
             enableMetronome();
             doRealtimeAdvance();
         }
 
-        bool noteOff = event.opcode() == midi::Event::Opcode::NoteOff || event.velocity7() == 0;
-        if (isSoundPreview && noteOff) {
+        const bool noteOff = opcode == muse::midi::Event::Opcode::NoteOff || event.velocity7() == 0;
+        if (useDurationAndVelocity && noteOff) {
             notesOff.push_back(event.note());
         }
     }
@@ -179,28 +206,13 @@ void NotationMidiInput::doProcessEvents()
     }
 
     if (!notesOn.empty()) {
-        std::vector<const EngravingItem*> notesItems;
-        for (const Note* note : notesOn) {
-            notesItems.push_back(note);
-
-            if (isSoundPreview) {
-                m_playingPreviewNotes[note->pitch()] = note;
-            }
-        }
-
-        playback::IPlaybackController::PlayParams params;
-        params.flushSound = isNoteInput;
-
-        if (isSoundPreview) {
-            params.duration = muse::mpe::INFINITE_DURATON; // play note on only
-        }
-
-        playbackController()->playElements(notesItems, params, true);
+        std::vector<const EngravingItem*> elements(notesOn.begin(), notesOn.end());
+        playbackController()->playElements(elements, makeNoteOnParams(useDurationAndVelocity), true);
         m_notesReceivedChannel.send(notesOn);
     }
 
     if (!notesOff.empty()) {
-        releasePreviewNotes(notesOff);
+        releasePlayingNotes(notesOff, isSoundPreview);
     }
 }
 
@@ -223,32 +235,57 @@ void NotationMidiInput::addNoteEventsToInputState()
     const NoteInputState& state = noteInput->state();
     const staff_idx_t staffIdx = state.staffIdx();
     const bool useWrittenPitch = configuration()->midiUseWrittenPitch().val;
+    const bool playPreviewNotes = configuration()->isPlayPreviewNotesInInputByDuration();
+    const bool useVelocityAndDuration = playPreviewNotes && configuration()->useMidiVelocityAndDurationDuringNoteInput();
 
-    NoteValList notes;
-    if (m_holdingNotes) {
-        notes = state.notes();
+    NoteValList notesOn;
+    NoteValList notesOff;
+
+    if (m_holdingNotesInInputByDuration) {
+        notesOn = state.notes();
     }
 
+    ControllerEventMap controllers;
+
     for (const muse::midi::Event& event : m_eventsQueue) {
-        if (event.opcode() == muse::midi::Event::Opcode::NoteOn) {
-            notes.push_back(score()->noteVal(event.note(), staffIdx, useWrittenPitch));
-            m_holdingNotes = true;
-        } else if (event.opcode() == muse::midi::Event::Opcode::NoteOff) {
-            m_holdingNotes = false;
+        const muse::midi::Event::Opcode opcode = event.opcode();
+
+        if (opcode == muse::midi::Event::Opcode::NoteOn) {
+            NoteVal nval = score()->noteVal(event.note(), staffIdx, useWrittenPitch);
+            nval.velocityOverride = event.velocity7();
+            notesOn.push_back(nval);
+            m_holdingNotesInInputByDuration = true;
+        } else if (opcode == muse::midi::Event::Opcode::NoteOff) {
+            if (useVelocityAndDuration) {
+                notesOff.push_back(score()->noteVal(event.note(), staffIdx, useWrittenPitch));
+            }
+            m_holdingNotesInInputByDuration = false;
+        } else if (opcode == muse::midi::Event::Opcode::ControlChange || opcode == muse::midi::Event::Opcode::PitchBend) {
+            if (playPreviewNotes) {
+                controllers[opcode] = event; // keep only last received to prevent spam
+            }
         }
     }
 
-    if (!notes.empty()) {
+    if (!controllers.empty()) {
+        triggerControllers(controllers);
+    }
+
+    if (!notesOff.empty()) {
+        playbackController()->playNotes(notesOff, staffIdx, state.segment(), makeNoteOffParams());
+    }
+
+    if (!notesOn.empty()) {
         noteInput->setRestMode(false);
 
-        if (!m_holdingNotes && notes == state.notes()) {
+        if (!m_holdingNotesInInputByDuration && notesOn == state.notes()) {
             return;
         }
 
-        noteInput->setInputNotes(notes);
+        noteInput->setInputNotes(notesOn);
 
-        if (configuration()->isPlayPreviewNotesInInputByDuration()) {
-            playbackController()->playNotes(notes, staffIdx, state.segment());
+        if (playPreviewNotes) {
+            playbackController()->playNotes(notesOn, staffIdx, state.segment(), makeNoteOnParams(useVelocityAndDuration));
         }
     }
 }
@@ -343,7 +380,6 @@ Note* NotationMidiInput::makePreviewNote(const muse::midi::Event& e)
     Note* note = engraving::Factory::createNote(chord);
     note->setParent(chord);
     note->setStaffIdx(staffIdx);
-    note->setUserVelocity(e.velocity7());
 
     engraving::NoteVal nval = score->noteVal(e.note(), staffIdx, configuration()->midiUseWrittenPitch().val);
     note->setNval(nval);
@@ -351,7 +387,7 @@ Note* NotationMidiInput::makePreviewNote(const muse::midi::Event& e)
     return note;
 }
 
-void NotationMidiInput::triggerControllers(const std::map<muse::midi::Event::Opcode, muse::midi::Event>& events)
+void NotationMidiInput::triggerControllers(const ControllerEventMap& events)
 {
     muse::mpe::ControllerChangeEventList controllers;
 
@@ -383,12 +419,8 @@ void NotationMidiInput::triggerControllers(const std::map<muse::midi::Event::Opc
     playbackController()->triggerControllers(controllers, is.staffIdx(), is.tick().ticks());
 }
 
-void NotationMidiInput::releasePreviewNotes(const std::vector<int>& pitches)
+void NotationMidiInput::releasePlayingNotes(const std::vector<int>& pitches, bool deleteNotes)
 {
-    playback::IPlaybackController::PlayParams params;
-    params.flushSound = false;
-    params.duration = 0; // note off only
-
     std::vector<const EngravingItem*> notes;
 
     const staff_idx_t staffIdx = score()->inputState().staffIdx();
@@ -397,17 +429,21 @@ void NotationMidiInput::releasePreviewNotes(const std::vector<int>& pitches)
     for (int pitch : pitches) {
         const NoteVal nval = score()->noteVal(pitch, staffIdx, useWrittenPitch);
 
-        auto it = m_playingPreviewNotes.find(nval.pitch);
-        if (it == m_playingPreviewNotes.end()) {
+        auto it = m_playingNotes.find(nval.pitch);
+        if (it == m_playingNotes.end()) {
             continue;
         }
 
         notes.push_back(it->second);
-        m_playingPreviewNotes.erase(it);
+        it->second->setUserVelocity(0);
+        m_playingNotes.erase(it);
     }
 
-    playbackController()->playElements(notes, params, true /*isMidi*/);
-    muse::DeleteAll(notes);
+    playbackController()->playElements(notes, makeNoteOffParams(), true /*isMidi*/);
+
+    if (deleteNotes) {
+        muse::DeleteAll(notes);
+    }
 }
 
 void NotationMidiInput::enableMetronome()

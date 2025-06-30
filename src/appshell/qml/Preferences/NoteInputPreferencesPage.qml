@@ -95,6 +95,8 @@ PreferencesPage {
         SeparatorLine {}
 
         NotePreviewSection {
+            id: notePreviewSection
+
             playNotesWhenEditing: noteInputModel.playNotesWhenEditing
             playPreviewNotesInInputByDuration: noteInputModel.playPreviewNotesInInputByDuration
             playChordWhenEditing: noteInputModel.playNotesWhenEditing ? noteInputModel.playChordWhenEditing : false
@@ -102,8 +104,9 @@ PreferencesPage {
             notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
             playNotesWithScoreDynamics: noteInputModel.playPreviewNotesWithScoreDynamics
 
-            playNotesOnMidiInput: noteInputModel.playNotesWhenEditing && noteInputModel.midiInputEnabled ? noteInputModel.playNotesOnMidiInput : false
             playNotesOnMidiInputBoxEnabled: noteInputModel.midiInputEnabled && noteInputModel.playNotesWhenEditing
+            playNotesOnMidiInput: notePreviewSection.playNotesOnMidiInputBoxEnabled && noteInputModel.playNotesOnMidiInput
+            useMidiVelocityAndDurationDuringNoteInput: notePreviewSection.playNotesOnMidiInputBoxEnabled && noteInputModel.useMidiVelocityAndDurationDuringNoteInput
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 3
@@ -134,6 +137,10 @@ PreferencesPage {
 
             onPlayNotesOnMidiInputChangeRequested: function(play) {
                 noteInputModel.playNotesOnMidiInput = play
+            }
+
+            onUseMidiVelocityAndDurationDuringNoteInputChangeRequested: function(use) {
+                noteInputModel.useMidiVelocityAndDurationDuringNoteInput = use
             }
         }
 

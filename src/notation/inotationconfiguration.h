@@ -198,6 +198,10 @@ public:
     virtual void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) = 0;
     virtual muse::async::Channel<int> delayBetweenNotesInRealTimeModeMillisecondsChanged() const = 0;
 
+    virtual bool useMidiVelocityAndDurationDuringNoteInput() const = 0;
+    virtual void setUseMidiVelocityAndDurationDuringNoteInput(bool use) = 0;
+    virtual muse::async::Channel<bool> useMidiVelocityAndDurationDuringNoteInputChanged() const = 0;
+
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
     virtual muse::async::Channel<int> notePlayDurationMillisecondsChanged() const = 0;
