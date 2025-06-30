@@ -83,6 +83,7 @@ public:
     virtual void clearSelection() = 0;
     virtual muse::async::Notification selectionChanged() const = 0;
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
+    virtual void findAndSelectChordRest(const Fraction& tick) = 0;
 
     virtual EngravingItem* contextItem() const = 0;
 

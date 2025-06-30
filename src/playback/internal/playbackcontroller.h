@@ -155,9 +155,11 @@ private:
     void togglePlay();
     void rewind(const muse::actions::ActionData& args);
     void play();
-    void pause();
+    void pause(bool select = false);
     void stop();
     void resume();
+
+    void selectAtRawTick(const muse::midi::tick_t& rawTick);
 
     muse::audio::secs_t playbackStartSecs() const;
     muse::audio::secs_t playbackEndSecs() const;
