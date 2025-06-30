@@ -36,8 +36,6 @@ private:
     static void renderPartialTie(const Note* outgoingNote, NominalNoteCtx& outgoingNoteCtx);
     static void renderNormalTie(const Note* firstNote, NominalNoteCtx& firstNoteCtx);
     static void addTiedNote(const NominalNoteCtx& tiedNoteCtx, NominalNoteCtx& firstNoteCtx);
-    static void updateArticulationBoundaries(const muse::mpe::timestamp_t noteTimestamp, const muse::mpe::duration_t noteDuration,
-                                             muse::mpe::ArticulationMap& articulations);
     static void applySwingIfNeed(const Note* note, NominalNoteCtx& noteCtx);
 
     static NominalNoteCtx buildNominalNoteCtx(const Note* note, const RenderingContext& ctx);
