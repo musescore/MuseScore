@@ -1046,18 +1046,17 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         note->add(f);
     } else if (tag == "Symbol") {
         Symbol* s = new Symbol(note);
+        s->setTrack(note->track());
+        read400::TRead::read(s, e, ctx);
         if (s->sym() == SymId::noteheadParenthesisLeft) {
-            note->setHasParentheses(ParenthesesMode::LEFT);
+            note->setHasParentheses(note->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT);
             delete s;
         } else if (s->sym() == SymId::noteheadParenthesisRight) {
-            note->setHasParentheses(ParenthesesMode::RIGHT);
+            note->setHasParentheses(note->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT);
             delete s;
         } else {
             note->add(s);
         }
-        s->setTrack(note->track());
-        read400::TRead::read(s, e, ctx);
-        note->add(s);
     } else if (tag == "Image") {
         if (MScore::noImages) {
             e.skipCurrentElement();

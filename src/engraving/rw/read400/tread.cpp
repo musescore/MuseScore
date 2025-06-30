@@ -3134,10 +3134,10 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
         s->setTrack(n->track());
         TRead::read(s, e, ctx);
         if (s->sym() == SymId::noteheadParenthesisLeft) {
-            n->setHasParentheses(ParenthesesMode::LEFT);
+            n->setHasParentheses(n->rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT);
             delete s;
         } else if (s->sym() == SymId::noteheadParenthesisRight) {
-            n->setHasParentheses(ParenthesesMode::RIGHT);
+            n->setHasParentheses(n->leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT);
             delete s;
         } else {
             n->add(s);
