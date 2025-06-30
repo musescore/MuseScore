@@ -117,10 +117,10 @@ private:
     void loadTopLevelToolBars(const DockPageView* page);
     void alignTopLevelToolBars(const DockPageView* page);
 
-    DockPanelView* findDestinationForPanel(const DockPageView* page, const DockPanelView* panel) const;
+    DockPanelView* findDestinationForPanel(const QList<DockPanelView*>& panels, const DockPanelView* panel, bool allowClosed = false) const;
 
     void addDock(DockBase* dock, Location location = Location::Left, const DockBase* relativeTo = nullptr);
-    void addPanelAsTab(DockPanelView* panel, DockPanelView* destinationPanel);
+    void addPanelAsTab(DockPanelView* panel, DockPanelView* destinationPanel, bool addVisible, int tabIndex);
     void registerDock(DockBase* dock);
 
     void handleUnknownDock(const DockPageView* page, DockBase* unknownDock);
