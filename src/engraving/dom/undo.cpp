@@ -3757,7 +3757,10 @@ void RenameChordFBox::redo(EditData*)
             m_fretBox->remove(fd);
         } else if (!onlyAddNewDiagram) {
             fd->setHarmony(currentHarmonyName);
-            fd->updateDiagram(currentHarmonyName);
+
+            if (fd->configuration()->autoUpdateFretboardDiagrams()) {
+                fd->updateDiagram(currentHarmonyName);
+            }
         }
 
         size_t removeIndex = i + 1;

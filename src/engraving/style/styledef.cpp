@@ -437,7 +437,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(fretMag,                                    PropertyValue(1.0)),
     styleDef(fretPlacement,                              PlacementV::ABOVE),
     styleDef(fretStrings,                                6),
-    styleDef(fretFrets,                                  5),
+    styleDef(fretFrets,                                  4),
     styleDef(fretNut,                                    true),
     styleDef(fretDotSize,                                PropertyValue(1.0)), // DEPRECATED
     styleDef(fretDotSpatiumSize,                         Spatium(0.5)),

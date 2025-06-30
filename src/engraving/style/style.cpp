@@ -591,6 +591,8 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             } else {
                 set(Sid::chordStyle, TConv::fromXml(val, ChordStylePreset::STANDARD));
             }
+        } else if (tag == "fretFrets" && m_version < 460) {
+            e.skipCurrentElement();
         } else if (!readProperties(e)) {
             e.unknown();
         }
