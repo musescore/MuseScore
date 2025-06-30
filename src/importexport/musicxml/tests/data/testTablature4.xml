@@ -66,7 +66,6 @@
           </clef>
         <clef number="2">
           <sign>TAB</sign>
-          <line>5</line>
           </clef>
         <staff-details number="2">
           <staff-lines>6</staff-lines>
@@ -145,7 +144,6 @@
         <staves>2</staves>
         <clef number="1">
           <sign>TAB</sign>
-          <line>5</line>
           </clef>
         <clef number="2">
           <sign>G</sign>
