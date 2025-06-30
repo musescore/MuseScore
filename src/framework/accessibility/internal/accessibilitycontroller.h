@@ -69,8 +69,12 @@ public:
     void reg(IAccessible* item) override;
     void unreg(IAccessible* item) override;
 
+    void announce(const QString& message) override;
+
     const IAccessible* accessibleRoot() const override;
     const IAccessible* lastFocused() const override;
+
+    const QString& message() const override;
 
     bool needToVoicePanelInfo() const override;
     QString currentPanelAccessibleName() const override;
@@ -166,6 +170,7 @@ private:
     async::Channel<QAccessibleEvent*> m_eventSent;
     IAccessible* m_lastFocused = nullptr;
     IAccessible* m_itemForRestoreFocus = nullptr;
+    QString m_message;
 
     bool m_inited = false;
     bool m_enabled = false;

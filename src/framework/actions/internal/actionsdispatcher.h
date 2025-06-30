@@ -26,9 +26,16 @@
 
 #include "../iactionsdispatcher.h"
 
+#include "modularity/ioc.h"
+#include "framework/accessibility/iaccessibilitycontroller.h"
+#include "ui/iuiactionsregister.h"
+
 namespace muse::actions {
-class ActionsDispatcher : public IActionsDispatcher
+class ActionsDispatcher : public IActionsDispatcher, public muse::Injectable
 {
+    muse::Inject<muse::ui::IUiActionsRegister> actionRegister = { this };
+    muse::Inject<muse::accessibility::IAccessibilityController> accessibilityController = { this };
+
 public:
     ActionsDispatcher() = default;
     ~ActionsDispatcher() override;

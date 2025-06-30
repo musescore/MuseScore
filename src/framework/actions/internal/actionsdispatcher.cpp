@@ -28,6 +28,7 @@
 #include "log.h"
 
 using namespace muse::actions;
+using namespace muse::ui;
 
 ActionsDispatcher::~ActionsDispatcher()
 {
@@ -102,6 +103,8 @@ void ActionsDispatcher::dump() const
 
 void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& actionCode, const ActionData& data)
 {
+    const UiAction action = actionRegister.get()->action(actionCode);
+
     int canReceiveCount = 0;
     for (auto cit = clients.cbegin(); cit != clients.cend(); ++cit) {
         const Actionable* client = cit->first;
@@ -113,6 +116,16 @@ void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& act
                 continue;
             }
 
+            if (action.isValid()) {
+                // Make screen readers say the name of the action about to be performed.
+                accessibilityController.get()->announce(action.title.qTranslatedWithoutMnemonic());
+                // NOTE: We perform the action before the screen reader has a chance
+                // to say anything. If the action results in a change of focus, this
+                // speech will be cancelled, and the screen reader will instead say
+                // the name of the new focus object. This is intentional behavior.
+            }
+
+            // Perform the action
             const ActionCallBackWithNameAndData& callback = cbit->second;
             LOGI() << "try call action: " << actionCode;
             callback(actionCode, data);
