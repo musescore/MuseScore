@@ -148,7 +148,7 @@ muse::Ret MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info
     Ret ret = make_ok();
 
     DEFER {
-        if (ret) {
+        if (ret || ret.code() == static_cast<int>(Ret::Code::Cancel)) {
             setIgnoredUpdate(info.version);
         }
     };
