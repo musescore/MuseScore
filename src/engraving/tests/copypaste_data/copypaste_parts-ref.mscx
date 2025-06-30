@@ -115,7 +115,7 @@
             <tempo>1.333333</tempo>
             <followText>1</followText>
             <eid>H_H</eid>
-            <text><sym>metNoteQuarterUp</sym><font face="Edwin"></font> = 80</text>
+            <text><sym>metNoteQuarterUp</sym><font face="Edwin"/> = 80</text>
             </Tempo>
           <Spanner type="Pedal">
             <Pedal>
@@ -922,7 +922,7 @@
               <followText>1</followText>
               <eid>EC_EC</eid>
               <linkedTo>H_H</linkedTo>
-              <text><sym>metNoteQuarterUp</sym><font face="Edwin"></font> = 80</text>
+              <text><sym>metNoteQuarterUp</sym><font face="Edwin"/> = 80</text>
               </Tempo>
             <Spanner type="Pedal">
               <Pedal>
