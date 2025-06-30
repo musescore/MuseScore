@@ -3922,14 +3922,14 @@ void Score::cmdDeleteSelection()
 
             // We can't delete elements inside fret box, instead we hide them
             if (e->isFretDiagram() || e->isHarmony()) {
-                if (e->isFretDiagram() && e->explicitParent()->isFBox()) {
+                if (e->isFretDiagram() && toFretDiagram(e)->isInFretBox()) {
                     undoChangeVisible(e, false);
                     elSelectedAfterDeletion = toFBox(e->explicitParent());
                     continue;
                 } else if (e->isHarmony()) {
                     EngravingObject* parent = toHarmony(e)->explicitParent();
                     FretDiagram* fretDiagram = parent->isFretDiagram() ? toFretDiagram(parent) : nullptr;
-                    if (fretDiagram && fretDiagram->explicitParent()->isFBox()) {
+                    if (fretDiagram && fretDiagram->isInFretBox()) {
                         undoChangeVisible(fretDiagram, false);
                         elSelectedAfterDeletion = toFBox(fretDiagram->explicitParent());
                         continue;
@@ -3945,6 +3945,13 @@ void Score::cmdDeleteSelection()
                     elSelectedAfterDeletion = fretDiagram->segment()->findAnnotation(ElementType::HARMONY,
                                                                                      fretDiagram->track(),
                                                                                      fretDiagram->track());
+                }
+            }
+
+            if (e->isHarmony()) {
+                Harmony* harmony = toHarmony(e);
+                if (harmony->parentItem()->isFretDiagram()) {
+                    elSelectedAfterDeletion = harmony->parentItem();
                 }
             }
 
