@@ -45,6 +45,9 @@ public:
 
     virtual void createTable(const MStyle& style) = 0;
 
+protected:
+    void initPaddingTable();
+
 private:
     double m_minimumPaddingUnit = 0.0;
 };
@@ -52,7 +55,7 @@ private:
 struct ElementPaddingTable : public mu::engraving::PaddingTable {
     void createTable(const MStyle& style) override;
 };
-struct ParenthesisPaddingTable : public mu::engraving::PaddingTable {
+struct ExternalParenthesisPaddingTable : public mu::engraving::PaddingTable {
     void createTable(const MStyle& style) override;
 };
 }

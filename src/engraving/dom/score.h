@@ -1080,7 +1080,7 @@ public:
 
     void createPaddingTables();
     const PaddingTable* paddingTable() const { return &m_paddingTable; }
-    const PaddingTable* parenPaddingTable() const { return &m_parenPaddingTable; }
+    const PaddingTable* parenPaddingTable() const { return &m_externParenPaddingTable; }
 
     void autoUpdateSpatium();
 
@@ -1273,7 +1273,7 @@ private:
     muse::async::Channel<float> m_layoutProgressChannel;
 
     ElementPaddingTable m_paddingTable;
-    ParenthesisPaddingTable m_parenPaddingTable;
+    ExternalParenthesisPaddingTable m_externParenPaddingTable;
     double m_minimumPaddingUnit = 0.0;
 
     bool m_updatesLocked = false;

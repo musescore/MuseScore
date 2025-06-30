@@ -170,7 +170,7 @@ Score::Score(const modularity::ContextPtr& iocCtx)
     //! NOTE Looks like a bug, `minimumPaddingUnit` is set using the default style's spatium value
     //! and does not change if the style or the spatium of this score is changed
     m_paddingTable.setMinimumPaddingUnit(0.1 * style().spatium());
-    m_parenPaddingTable.setMinimumPaddingUnit(0.1 * style().spatium());
+    m_externParenPaddingTable.setMinimumPaddingUnit(0.1 * style().spatium());
     createPaddingTables();
 
     m_shadowNote = new ShadowNote(this);
@@ -6049,7 +6049,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 void Score::createPaddingTables()
 {
     m_paddingTable.createTable(style());
-    m_parenPaddingTable.createTable(style());
+    m_externParenPaddingTable.createTable(style());
 }
 
 //--------------------------------------------------------

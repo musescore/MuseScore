@@ -36,6 +36,9 @@ public:
     static void layoutParentheses(const EngravingItem* parent, const LayoutContext& ctx);
     static void layoutParenthesis(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
 
+    static double computeParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2);
+    static double computeInternalParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2);
+
 private:
     static void createPathAndShape(Parenthesis* item, Parenthesis::LayoutData* ldata);
 

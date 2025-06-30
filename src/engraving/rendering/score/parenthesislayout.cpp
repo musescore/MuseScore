@@ -64,8 +64,6 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
         Parenthesis* paren = leftParen ? leftParen : rightParen;
         const bool leftBracket = paren->direction() == DirectionH::LEFT;
         double minDist = 0.0;
-        // INTERNAL PAREN SPACING - TODO INCORRECT.
-        // We are spacing the parent and the paren here. We should not replace the paren type with the parent type
         if (!leftBracket && itemAddToSkyline) {
             // Space against existing item shape
             minDist = HorizontalSpacing::minHorizontalDistance(dummyItemShape, paren->shape().translated(
@@ -127,12 +125,74 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
 void ParenthesisLayout::layoutParenthesis(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
 {
     ldata->setPos(PointF());
-    ldata->reset();     // Shouldn't reset startY, height, thickness
+    ldata->reset();
     ldata->path.reset();
 
     setLayoutValues(item, ldata, ctx);
 
     createPathAndShape(item, ldata);
+}
+
+double ParenthesisLayout::computeParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2)
+{
+    bool internalPadding = (item1->isParenthesis() && item1->parentItem() == item2)
+                           || (item2->isParenthesis() && item2->parentItem() == item1)
+                           || item1->parentItem() == item2->parentItem();
+
+    if (internalPadding) {
+        return computeInternalParenthesisPadding(item1, item2);
+    }
+
+    const PaddingTable* paddingTable = item1->score()->parenPaddingTable();
+    double scaling = (item1->mag() + item2->mag()) / 2;
+
+    ElementType type1 = item1->isParenthesis() ? item1->parentItem()->type() : item1->type();
+    ElementType type2 = item2->isParenthesis() ? item2->parentItem()->type() : item2->type();
+
+    double padding = paddingTable->at(type1).at(type2);
+
+    padding *= scaling;
+
+    return padding;
+}
+
+double ParenthesisLayout::computeInternalParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2)
+{
+    bool parenFirst = item1->isParenthesis();
+    const EngravingItem* other = item1->isParenthesis() ? item2 : item1;
+    const double spatium = item1->spatium();
+    double padding = 0.0;
+
+    switch (other->type()) {
+    case ElementType::NOTE:
+        padding = 0.35 * spatium;
+        break;
+    case ElementType::NOTEDOT:
+        padding = 0.2 * spatium;
+        break;
+    case ElementType::STEM:
+        padding = 0.35 * spatium;
+        break;
+    case ElementType::HOOK:
+        padding = 0.35 * spatium;
+        break;
+    case ElementType::KEYSIG:
+        padding = (parenFirst ? 0.35 : 0.25) * spatium;
+        break;
+    case ElementType::TIMESIG:
+        padding = (parenFirst ? 0.2 : 0.25) * spatium;
+        break;
+    case ElementType::CLEF:
+        padding = (parenFirst ? 0.2 : 0.25) * spatium;
+        break;
+    default:
+        padding = 0.1 * spatium;
+        break;
+    }
+
+    double scaling = (item1->mag() + item2->mag()) / 2;
+    padding *= scaling;
+    return padding;
 }
 
 void ParenthesisLayout::createPathAndShape(Parenthesis* item, Parenthesis::LayoutData* ldata)

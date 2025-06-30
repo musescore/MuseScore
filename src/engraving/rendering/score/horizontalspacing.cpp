@@ -22,6 +22,7 @@
 #include <cfloat>
 
 #include "horizontalspacing.h"
+#include "parenthesislayout.h"
 
 #include "dom/barline.h"
 #include "dom/beam.h"
@@ -1404,7 +1405,7 @@ double HorizontalSpacing::minLeft(const Segment* seg, const Shape& ls)
 double HorizontalSpacing::computePadding(const EngravingItem* item1, const EngravingItem* item2)
 {
     if (item1->isParenthesis() != item2->isParenthesis()) {
-        return computeParenthesisPadding(item1, item2);
+        return ParenthesisLayout::computeParenthesisPadding(item1, item2);
     }
     const PaddingTable* paddingTable = item1->score()->paddingTable();
     ElementType type1 = item1->type();
@@ -1564,23 +1565,6 @@ void HorizontalSpacing::computeLyricsPadding(const Lyrics* lyrics1, const Engrav
             padding = std::max(padding, spaceForDash);
         }
     }
-}
-
-double HorizontalSpacing::computeParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2)
-{
-    const PaddingTable* paddingTable = item1->score()->parenPaddingTable();
-    double scaling = (item1->mag() + item2->mag()) / 2;
-
-    // 2 parens:
-
-    ElementType type1 = item1->isParenthesis() ? item1->parentItem()->type() : item1->type();
-    ElementType type2 = item2->isParenthesis() ? item2->parentItem()->type() : item2->type();
-
-    double padding = paddingTable->at(type1).at(type2);
-
-    padding *= scaling;
-
-    return padding;
 }
 
 KerningType HorizontalSpacing::computeKerning(const EngravingItem* item1, const EngravingItem* item2)

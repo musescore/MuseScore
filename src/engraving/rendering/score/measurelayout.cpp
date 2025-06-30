@@ -2189,7 +2189,7 @@ void MeasureLayout::addRepeatCourtesyParentheses(Measure* m, const bool continua
             placeParentheses(leftItem, ctx);
         }
 
-        if (rightParen && rightSeg != leftSeg) {
+        if (rightParen && rightItem != leftItem) {
             placeParentheses(rightItem, ctx);
         }
     };
