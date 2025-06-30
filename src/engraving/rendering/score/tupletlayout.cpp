@@ -646,36 +646,29 @@ bool TupletLayout::placeNumberOnRhythmicCenter(Tuplet* item, const ChordRest* cr
 
 bool TupletLayout::isSymmetric(Tuplet* item, const ChordRest* cr1, const ChordRest* cr2)
 {
-    Fraction center = centerTick(item);
     Fraction endTick = cr2->endTick();
 
-    std::vector<Fraction> tickDistancesFromCenter;
-    tickDistancesFromCenter.reserve(item->elements().size());
+    std::vector<Segment*> tupletSegments;
+    tupletSegments.reserve(item->elements().size());
 
     for (Segment* segment = cr1->segment(); segment && segment->tick() < endTick; segment = segment->nextActive()) {
-        if (!segment->isChordRestType()) {
-            continue;
-        }
+        tupletSegments.push_back(segment);
+    }
 
-        Fraction curTick = segment->tick();
-        if (curTick == center) {
-            continue;
+    size_t segmentsCount = tupletSegments.size();
+    for (size_t i = 0; i < segmentsCount; ++i) {
+        size_t j = segmentsCount - 1 - i;
+        if (j <= i) {
+            break;
         }
-
-        if (curTick < center) {
-            // Before the center: collect the list of distances
-            tickDistancesFromCenter.push_back(center - curTick);
-        } else {
-            // After the center: distance must match with the last of the list
-            Fraction curDiff = curTick - center;
-            if (curDiff != tickDistancesFromCenter.back()) {
-                return false;
-            }
-            tickDistancesFromCenter.pop_back();
+        Segment* firstSeg = tupletSegments[i];
+        Segment* secondSeg = tupletSegments[j];
+        if (firstSeg->ticks() != secondSeg->ticks()) {
+            return false;
         }
     }
 
-    return tickDistancesFromCenter.size() == 0; // Every distance had a match
+    return true;
 }
 
 double TupletLayout::computeRhythmicCenter(Tuplet* item, const ChordRest* endChord)
