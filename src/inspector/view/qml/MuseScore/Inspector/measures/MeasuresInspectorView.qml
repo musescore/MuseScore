@@ -82,14 +82,18 @@ InspectorSectionView {
 
                 icon: IconCode.DELETE_TANK
 
-                onClicked: model.deleteSelectedMeasures()
+                onClicked: {
+                    if (root.model) {
+                        root.model.deleteSelectedMeasures()
+                    }
+                }
             }
         }
 
         StyledTextLabel {
             Layout.fillWidth: true
             Layout.topMargin: 12
-            visible: root.model ? model.scoreIsInPageView : false
+            visible: root.model ? root.model.scoreIsInPageView : false
             horizontalAlignment: Qt.AlignLeft
             text: qsTrc("inspector", "Move to system")
         }
@@ -98,7 +102,7 @@ InspectorSectionView {
             id: moveSystemLayout
 
             Layout.topMargin: 8
-            visible: model.scoreIsInPageView
+            visible: root.model ? root.model.scoreIsInPageView : false
 
             width: parent.width
             spacing: 4
@@ -117,9 +121,13 @@ InspectorSectionView {
                 text: qsTrc("inspector", "Previous")
 
                 toolTipTitle: qsTrc("inspector", "Move measure(s) to previous system")
-                toolTipShortcut: model.shortcutMoveMeasureUp
+                toolTipShortcut: root.model ? model.shortcutMoveMeasureUp : ""
 
-                onClicked: model.moveMeasureUp()
+                onClicked: {
+                    if (root.model) {
+                        root.model.moveMeasureUp()
+                    }
+                }
             }
 
             FlatButton {
@@ -136,17 +144,20 @@ InspectorSectionView {
                 text: qsTrc("inspector", "Next")
 
                 toolTipTitle: qsTrc("inspector", "Move measure(s) to next system")
-                toolTipShortcut: model.shortcutMoveMeasureDown
+                toolTipShortcut: root.model ? root.model.shortcutMoveMeasureDown : ""
 
-                onClicked: model.moveMeasureDown()
+                onClicked: {
+                    if (root.model) {
+                        model.moveMeasureDown()
+                    }
+                }
             }
         }
-
 
         FlatButton {
             Layout.topMargin: 12
             Layout.fillWidth: true
-            visible: model.scoreIsInPageView
+            visible: root.model ? root.model.scoreIsInPageView : false
 
             id: toggleSystemLock
 
@@ -157,25 +168,30 @@ InspectorSectionView {
             navigation.row: downSystem.navigation.row + 1
 
             orientation: Qt.Horizontal
-            icon: Boolean(model.allSystemsAreLocked) ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
-            text: Boolean(model.allSystemsAreLocked) ? model.systemCount > 1 ? qsTrc("inspector", "Unlock selected systems")
-                                                                             : qsTrc("inspector", "Unlock selected system")
-                                                     : model.systemCount > 1 ? qsTrc("inspector", "Lock selected systems")
-                                                                             : qsTrc("inspector", "Lock selected system")
+            icon: root.model && root.model.allSystemsAreLocked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
+            text: root.model ? (root.model.allSystemsAreLocked ? root.model.systemCount > 1 ? qsTrc("inspector", "Unlock selected systems")
+                                                                                            : qsTrc("inspector", "Unlock selected system")
+                                                               : root.model.systemCount > 1 ? qsTrc("inspector", "Lock selected systems")
+                                                                                            : qsTrc("inspector", "Lock selected system"))
+                             : ""
 
             toolTipTitle: qsTrc("inspector", "Lock/unlock selected system(s)")
             toolTipDescription: qsTrc("inspector", "Keep measures on the selected system(s) together and prevent them from reflowing to the next system")
-            toolTipShortcut: model.shortcutToggleSystemLock
+            toolTipShortcut: root.model ? root.model.shortcutToggleSystemLock : ""
 
-            accentButton: Boolean(model.allSystemsAreLocked)
+            accentButton: root.model ? root.model.allSystemsAreLocked : false
 
-            onClicked: model.toggleSystemLock()
+            onClicked: {
+                if (root.model) {
+                    root.model.toggleSystemLock()
+                }
+            }
         }
 
         FlatButton {
             id: makeIntoOneSystem
-            visible: model.scoreIsInPageView
-            enabled: root.model ? model.isMakeIntoSystemAvailable : false
+            visible: root.model ? root.model.scoreIsInPageView : false
+            enabled: root.model ? root.model.isMakeIntoSystemAvailable : false
 
             Layout.topMargin: 4
             Layout.fillWidth: true
@@ -190,9 +206,13 @@ InspectorSectionView {
 
             toolTipTitle: qsTrc("inspector", "Create system from selection")
             toolTipDescription: qsTrc("inspector", "Create a system containing only the selected measure(s)")
-            toolTipShortcut: model.shortcutMakeIntoSystem
+            toolTipShortcut: root.model ? root.model.shortcutMakeIntoSystem : ""
 
-            onClicked: model.makeIntoSystem()
+            onClicked: {
+                if (root.model) {
+                    root.model.makeIntoSystem()
+                }
+            }
         }
     }
 }
