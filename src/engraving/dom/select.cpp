@@ -539,9 +539,7 @@ void Selection::appendFiltered(const std::unordered_set<EngravingItem*>& elems)
 
         // Special handling for grace notes...
         if (elem->isChord() && toChord(elem)->isGrace()) {
-            if (canSelect(elem)) {
-                appendChordRest(toChordRest(elem));
-            }
+            appendChordRest(toChordRest(elem));
         }
 
         appendFiltered(elem);
@@ -586,6 +584,10 @@ void Selection::appendChordRest(ChordRest* cr)
 
         const std::unordered_set<EngravingItem*> noteAnchored = collectElementsAnchoredToNote(note, true, false);
         appendFiltered(noteAnchored);
+
+        if (chord->isGrace() && !canSelect(chord)) {
+            continue;
+        }
 
         //! Hack Explainer: Due to the fact that this method is called while we're still in the process of "building" our
         //! selection, we can't know for certain whether the selection as a whole will contain multi-note Chords (and thus

@@ -3530,7 +3530,7 @@ void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fracti
         if (sp->isVolta() || sp->systemFlag()) {
             continue;
         }
-        if (!filter.canSelectVoice(sp->track())) {
+        if (!filter.canSelectVoice(sp->track()) || !filter.canSelect(sp)) {
             continue;
         }
         if (sp->track() >= track1 && sp->track() < track2) {
@@ -3567,7 +3567,7 @@ void Score::deleteSlursFromRange(const Fraction& t1, const Fraction& t2, track_i
         if (!sp->isSlur()) {
             continue;
         }
-        if (!filter.canSelectVoice(sp->track())) {
+        if (!filter.canSelectVoice(sp->track()) || !filter.canSelect(sp)) {
             continue;
         }
 
@@ -3706,8 +3706,26 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
         }
 
         for (EngravingItem* elem : collectElementsAnchoredToChordRest(cr1)) {
-            if (filter.canSelect(elem)) {
-                undoRemoveElement(elem);
+            if (!elem->isChord()) {
+                if (filter.canSelect(elem)) {
+                    undoRemoveElement(elem);
+                }
+                continue;
+            }
+            // Special handling for grace notes...
+            const Chord* chord = toChord(elem);
+            IF_ASSERT_FAILED(chord->isGrace()) {
+                continue;
+            }
+            std::unordered_set<EngravingItem*> anchoredToGrace = collectElementsAnchoredToChordRest(chord);
+            for (const Note* graceNote : chord->notes()) {
+                const std::unordered_set<EngravingItem*> noteAnchored = collectElementsAnchoredToNote(graceNote, true, false);
+                anchoredToGrace.insert(noteAnchored.begin(), noteAnchored.end());
+            }
+            for (EngravingItem* graceElem : anchoredToGrace) {
+                if (filter.canSelect(graceElem)) {
+                    undoRemoveElement(graceElem);
+                }
             }
         }
 
