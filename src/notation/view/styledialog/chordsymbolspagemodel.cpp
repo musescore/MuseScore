@@ -86,6 +86,11 @@ bool ChordSymbolsPageModel::isCustomXml() const
     return chordStylePreset()->value() == mu::engraving::ChordStylePreset::CUSTOM;
 }
 
+bool ChordSymbolsPageModel::isLegacyXml() const
+{
+    return chordStylePreset()->value() == mu::engraving::ChordStylePreset::LEGACY;
+}
+
 void ChordSymbolsPageModel::setChordStyle(mu::engraving::ChordStylePreset selection)
 {
     switch (selection) {
@@ -96,6 +101,7 @@ void ChordSymbolsPageModel::setChordStyle(mu::engraving::ChordStylePreset select
         chordDescriptionFile()->modifyValue("chords_jazz.xml");
         break;
     case mu::engraving::ChordStylePreset::LEGACY:
+        chordBassNoteStagger()->modifyValue(false);
         chordDescriptionFile()->modifyValue("chords_legacy.xml");
         break;
     case mu::engraving::ChordStylePreset::CUSTOM:
