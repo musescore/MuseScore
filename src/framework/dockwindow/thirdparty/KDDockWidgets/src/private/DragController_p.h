@@ -174,7 +174,7 @@ public:
     {
         return false;
     }
-    virtual bool handleKeyboardModifierPressOrRelease(Qt::Key /*modifier*/, int /*modifiers*/)
+    virtual bool handleKeyPressRelease(QKeyEvent *)
     {
         return false;
     }
@@ -237,9 +237,9 @@ public:
     bool handleMouseButtonRelease(QPoint globalPos, int modifiers) override;
     bool handleMouseMove(QPoint globalPos, int modifiers) override;
     bool handleMouseDoubleClick() override;
-    bool handleKeyboardModifierPressOrRelease(Qt::Key modifier, int modifiers) override;
+    bool handleKeyPressRelease(QKeyEvent *ev) override;
 
-    private:
+private:
     QTimer m_maybeCancelDrag;
 };
 
@@ -271,7 +271,7 @@ public:
     bool handleDragMove(QDragMoveEvent *, DropArea *) override;
     bool handleDragLeave(DropArea *) override;
     bool handleDrop(QDropEvent *, DropArea *) override;
-    bool handleKeyboardModifierPressOrRelease(Qt::Key modifier, int modifiers) override;
+    bool handleKeyPressRelease(QKeyEvent *ev) override;
     bool m_inQDrag = false;
 
 private:

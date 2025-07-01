@@ -222,6 +222,12 @@ inline int startDragDistance()
 #ifdef KDDOCKWIDGETS_QTWIDGETS
     return QApplication::startDragDistance();
 #else
+    return 10; // so that small involuntary mouse movements do not start a drag
+#endif
+}
+
+inline int undockDistance()
+{
     //! NOTE: INTERNAL PATCH FOR MU4 ONLY
     //!
     //! Resolves the problem of unintended panel undocking
@@ -229,7 +235,6 @@ inline int startDragDistance()
     //! See:
     //! https://github.com/musescore/MuseScore/pull/16013
     return 40;
-#endif
 }
 
 /// @brief Returns the QWidget or QtQuickItem at the specified position

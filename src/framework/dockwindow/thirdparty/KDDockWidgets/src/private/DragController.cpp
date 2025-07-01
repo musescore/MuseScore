@@ -425,11 +425,16 @@ bool StateDragging::handleMouseDoubleClick()
     return false;
 }
 
-bool StateDragging::handleKeyboardModifierPressOrRelease(Qt::Key modifier, int modifiers)
+bool StateDragging::handleKeyPressRelease(QKeyEvent *ev)
 {
-    if (modifier == Qt::Key_Control) {
+    const Qt::Key key = (Qt::Key)ev->key();
+    const int modifiers = ev->modifiers();
+
+    if (key == Qt::Key_Control) {
+        // Whether Ctrl is pressed or released will be reflected in the modifiers
         return handleMouseMove(QCursor::pos(), modifiers);
     }
+
     return false;
 }
 
@@ -622,17 +627,21 @@ bool StateDraggingWayland::handleDragMove(QDragMoveEvent *ev, DropArea *dropArea
     return true;
 }
 
-bool StateDraggingWayland::handleKeyboardModifierPressOrRelease(Qt::Key modifier, int modifiers)
+bool StateDraggingWayland::handleKeyPressRelease(QKeyEvent *ev)
 {
-    if (modifier == Qt::Key_Control && m_dropArea && q->m_windowBeingDragged) {
-        if (modifiers & Qt::KeyboardModifier::ControlModifier) {
-            m_dropArea->removeHover();
-        } else {
-            m_dropArea->hover(q->m_windowBeingDragged.get(), QCursor::pos());
-        }
-        return true;
+    const Qt::Key key = (Qt::Key)ev->key();
+    const int modifiers = ev->modifiers();
+
+    if (key != Qt::Key_Control || !m_dropArea || !q->m_windowBeingDragged) {
+        return false;
     }
-    return false;
+
+    if (modifiers & Qt::KeyboardModifier::ControlModifier) {
+        m_dropArea->removeHover();
+    } else {
+        m_dropArea->hover(q->m_windowBeingDragged.get(), QCursor::pos());
+    }
+    return true;
 }
 
 DragController::DragController(QObject *parent)
@@ -779,16 +788,15 @@ bool DragController::eventFilter(QObject *o, QEvent *e)
         }
     }
 
-    if (isDragging()) {
-        switch (e->type()) {
-        case QEvent::KeyPress:
-        case QEvent::KeyRelease:
-            QKeyEvent *ke = static_cast<QKeyEvent *>(e);
-            if (ke->key() == Qt::Key_Control || ke->key() == Qt::Key_Shift || ke->key() == Qt::Key_Alt) {
-                return activeState()->handleKeyboardModifierPressOrRelease((Qt::Key)ke->key(), ke->modifiers());
-            }
-            break;
+    switch (e->type()) {
+    case QEvent::KeyPress:
+    case QEvent::KeyRelease:
+        if (activeState()->handleKeyPressRelease(static_cast<QKeyEvent *>(e))) {
+            return true;
         }
+        break;
+    default:
+        break;
     }
 
     QMouseEvent *me = mouseEvent(e);
