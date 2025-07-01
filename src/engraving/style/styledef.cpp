@@ -1197,6 +1197,25 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(measureNumberFrameBgColor,                  PropertyValue::fromValue(Color::transparent)),
     styleDef(measureNumberPosition,                      AlignH::LEFT),
 
+    styleDef(measureNumberTextStyle,                     TextStyleType::MEASURE_NUMBER),
+    styleDef(measureNumberAlignToBarline,                true),
+
+    styleDef(measureNumberAlternateFontFace,             "Edwin"),
+    styleDef(measureNumberAlternateFontSize,             10.0),
+    styleDef(measureNumberAlternateLineSpacing,          1.0),
+    styleDef(measureNumberAlternateFontSpatiumDependent, false),
+    styleDef(measureNumberAlternateFontStyle,            int(FontStyle::Bold | FontStyle::Italic)),
+    styleDef(measureNumberAlternateColor,                PropertyValue::fromValue(Color::BLACK)),
+    styleDef(measureNumberAlternateAlign,                Align(AlignH::LEFT, AlignV::BASELINE)),
+    styleDef(measureNumberAlternatePosAbove,             PointF(0.0, -4.0)),
+    styleDef(measureNumberAlternateFrameType,            int(FrameType::SQUARE)),
+    styleDef(measureNumberAlternateFramePadding,         0.3),
+    styleDef(measureNumberAlternateFrameWidth,           0.1),
+    styleDef(measureNumberAlternateFrameRound,           0),
+    styleDef(measureNumberAlternateFrameFgColor,         PropertyValue::fromValue(Color::BLACK)),
+    styleDef(measureNumberAlternateFrameBgColor,         PropertyValue::fromValue(Color::transparent)),
+    styleDef(measureNumberAlternatePosition,             AlignH::LEFT),
+
     styleDef(mmRestShowMeasureNumberRange,               false),
     styleDef(mmRestRangeBracketType,                     int(MMRestRangeBracketType::BRACKETS)),
 
@@ -1219,6 +1238,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(mmRestRangeFrameBgColor,                    PropertyValue::fromValue(Color::transparent)),
     styleDef(mmRestRangePosition,                        AlignH::HCENTER),
     styleDef(mmRestRangeMinDistance,                     Spatium(0.5)),
+    styleDef(mmRestRangeTextStyle,                       TextStyleType::MMREST_RANGE),
 
     styleDef(translatorFontFace,                         "Edwin"),
     styleDef(translatorFontSize,                         10.0),

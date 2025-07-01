@@ -79,6 +79,8 @@
       <metronomeFontSize>11.9365</metronomeFontSize>
       <measureNumberFontFace>Quicksand</measureNumberFontFace>
       <measureNumberFontSize>11.9365</measureNumberFontSize>
+      <measureNumberAlternateFontFace>Quicksand</measureNumberAlternateFontFace>
+      <measureNumberAlternateFontSize>11.9365</measureNumberAlternateFontSize>
       <mmRestRangeFontFace>Quicksand</mmRestRangeFontFace>
       <mmRestRangeFontSize>11.9365</mmRestRangeFontSize>
       <translatorFontFace>Quicksand</translatorFontFace>

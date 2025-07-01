@@ -29,6 +29,7 @@ namespace mu::instrumentsscene {
 struct SystemObjectsGroup {
     mu::engraving::ElementType type = mu::engraving::ElementType::INVALID;
     std::vector<mu::engraving::EngravingItem*> items;
+    mu::engraving::Staff* staff = nullptr;
 };
 
 using SystemObjectGroups = std::vector<SystemObjectsGroup>;
@@ -53,8 +54,13 @@ inline SystemObjectGroupsByStaff collectSystemObjectGroups(const std::vector<mu:
         if (it != groups.end()) {
             it->items.push_back(obj);
         } else {
-            groups.emplace_back(SystemObjectsGroup { obj->type(), { obj } });
+            groups.emplace_back(SystemObjectsGroup { obj->type(), { obj }, obj->staff() });
         }
+    }
+
+    for (mu::engraving::Staff* staff : staves) {
+        SystemObjectGroups& systemObjectGroups = result[staff];
+        systemObjectGroups.push_back(SystemObjectsGroup { mu::engraving::ElementType::MEASURE_NUMBER, {}, staff });
     }
 
     return result;
@@ -72,6 +78,10 @@ inline SystemObjectGroups collectSystemObjectGroups(const mu::engraving::Staff* 
 
 inline bool isSystemObjectsGroupVisible(const SystemObjectsGroup& group)
 {
+    if (group.type == mu::engraving::ElementType::MEASURE_NUMBER) {
+        return group.staff && group.staff->shouldShowMeasureNumbers();
+    }
+
     for (const mu::engraving::EngravingItem* item : group.items) {
         if (item->visible()) {
             return true;

@@ -46,10 +46,12 @@ protected:
     StyleItem* styleItem(StyleId id) const;
 
     INotationStylePtr currentNotationStyle() const;
+
+    void addStyleId(StyleId id) { m_ids.insert(id); }
+
+    virtual StyleItem* buildStyleItem(StyleId id) const;
+
 private:
-
-    StyleItem* buildStyleItem(StyleId id) const;
-
     QVariant toUiValue(StyleId id, const PropertyValue& logicalValue) const;
     PropertyValue fromUiValue(StyleId id, const QVariant& uiValue) const;
 

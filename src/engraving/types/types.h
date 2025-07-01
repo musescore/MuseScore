@@ -768,6 +768,7 @@ enum class TextStyleType : unsigned char {
 
     // Measure-oriented styles
     MEASURE_NUMBER,
+    MEASURE_NUMBER_ALTERNATE,
     MMREST_RANGE,
 
     // System-level styles
@@ -849,6 +850,11 @@ enum class FontStyle : signed char {
 };
 
 constexpr FontStyle operator+(FontStyle a1, FontStyle a2)
+{
+    return static_cast<FontStyle>(static_cast<char>(a1) | static_cast<char>(a2));
+}
+
+constexpr FontStyle operator|(FontStyle a1, FontStyle a2)
 {
     return static_cast<FontStyle>(static_cast<char>(a1) | static_cast<char>(a2));
 }

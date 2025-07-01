@@ -87,8 +87,8 @@ public:
     void setScore(Score*);
     void setTrack(track_idx_t);
 
-    MeasureNumber* noText() const { return m_noText; }
-    void setNoText(MeasureNumber* t) { m_noText = t; }
+    MeasureNumber* measureNumber() const { return m_measureNumber; }
+    void setMeasureNumber(MeasureNumber* t) { m_measureNumber = t; }
 
     MMRestRange* mmRangeText() const { return m_mmRangeText; }
     void setMMRangeText(MMRestRange* r) { m_mmRangeText = r; }
@@ -117,7 +117,7 @@ public:
     void setMeasureRepeatCount(int n) { m_measureRepeatCount = n; }
 
 private:
-    MeasureNumber* m_noText = nullptr;      // Measure number text object
+    MeasureNumber* m_measureNumber = nullptr;      // Measure number text object
     MMRestRange* m_mmRangeText = nullptr;   // Multi measure rest range text object
     StaffLines* m_lines = nullptr;
     Spacer* m_vspacerUp = nullptr;
@@ -177,8 +177,8 @@ public:
     void setStaffStemless(staff_idx_t staffIdx, bool stemless);
     bool corrupted(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->corrupted(); }
     void setCorrupted(staff_idx_t staffIdx, bool val) { m_mstaves[staffIdx]->setCorrupted(val); }
-    MeasureNumber* noText(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->noText(); }
-    void setNoText(staff_idx_t staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setNoText(t); }
+    MeasureNumber* measureNumber(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->measureNumber(); }
+    void setMeasureNumber(staff_idx_t staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setMeasureNumber(t); }
 
     const std::vector<MStaff*>& mstaves() const { return m_mstaves; }
     std::vector<MStaff*>& mstaves() { return m_mstaves; }

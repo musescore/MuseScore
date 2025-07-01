@@ -64,6 +64,8 @@
       <metronomeFontSize>11.9365</metronomeFontSize>
       <measureNumberFontFace>Plantin MT Std</measureNumberFontFace>
       <measureNumberFontSize>11.9365</measureNumberFontSize>
+      <measureNumberAlternateFontFace>Plantin MT Std</measureNumberAlternateFontFace>
+      <measureNumberAlternateFontSize>11.9365</measureNumberAlternateFontSize>
       <mmRestRangeFontFace>Plantin MT Std</mmRestRangeFontFace>
       <mmRestRangeFontSize>11.9365</mmRestRangeFontSize>
       <translatorFontFace>Plantin MT Std</translatorFontFace>

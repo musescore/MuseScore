@@ -30,7 +30,7 @@
     <number>12</number>
    </property>
    <property name="leftMargin">
-    <number>6</number>
+    <number>4</number>
    </property>
    <property name="topMargin">
     <number>0</number>
@@ -983,8 +983,8 @@
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>-656</y>
-             <width>602</width>
+             <y>0</y>
+             <width>421</width>
              <height>1122</height>
             </rect>
            </property>
@@ -3908,390 +3908,22 @@
       <widget class="QWidget" name="PageMeasureNumbers">
        <layout class="QVBoxLayout" name="verticalLayout_44">
         <item>
-         <widget class="QGroupBox" name="showMeasureNumber">
-          <property name="title">
-           <string>Measure numbers</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-          <layout class="QGridLayout" name="_2">
-           <item row="0" column="0">
-            <widget class="QCheckBox" name="showFirstMeasureNumber">
-             <property name="text">
-              <string>Show first</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="3" rowspan="2">
-            <widget class="QLabel" name="measureNumberPosAboveLabel">
-             <property name="text">
-              <string>Offset above:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-             <property name="buddy">
-              <cstring>measureNumberPosAbove</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0" colspan="2">
-            <layout class="QHBoxLayout" name="horizontalLayout_8">
-             <item>
-              <widget class="QRadioButton" name="showIntervalMeasureNumber">
-               <property name="text">
-                <string>Interval:</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSpinBox" name="intervalMeasureNumber">
-               <property name="keyboardTracking">
-                <bool>false</bool>
-               </property>
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="value">
-                <number>5</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item row="4" column="3" rowspan="2">
-            <widget class="QLabel" name="measureNumberPosBelowLabel">
-             <property name="text">
-              <string>Offset below:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-             <property name="buddy">
-              <cstring>measureNumberPosBelow</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="6" rowspan="2">
-            <widget class="QToolButton" name="resetMeasureNumberPosAbove">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Offset above' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="3">
-            <widget class="QLabel" name="label_921">
-             <property name="text">
-              <string>Vertical position:</string>
-             </property>
-             <property name="buddy">
-              <cstring>measureNumberVPlacement</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="6" rowspan="2">
-            <widget class="QToolButton" name="resetMeasureNumberPosBelow">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Offset below' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="3">
-            <widget class="QLabel" name="label_93">
-             <property name="text">
-              <string>Horizontal position:</string>
-             </property>
-             <property name="buddy">
-              <cstring>measureNumberHPlacement</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="4" rowspan="2" colspan="2">
-            <widget class="mu::notation::OffsetSelect" name="measureNumberPosAbove" native="true">
-             <property name="focusPolicy">
-              <enum>Qt::FocusPolicy::StrongFocus</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="6">
-            <widget class="QToolButton" name="resetMeasureNumberHPlacement">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Horizontal placement' value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="4" rowspan="2" colspan="2">
-            <widget class="mu::notation::OffsetSelect" name="measureNumberPosBelow" native="true">
-             <property name="focusPolicy">
-              <enum>Qt::FocusPolicy::StrongFocus</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QRadioButton" name="showEverySystemMeasureNumber">
-             <property name="text">
-              <string>Every system</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="6">
-            <widget class="QToolButton" name="resetMeasureNumberVPlacement">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Vertical placement' value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="4" colspan="2">
-            <widget class="QComboBox" name="measureNumberHPlacement"/>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="showAllStavesMeasureNumber">
-             <property name="text">
-              <string>All staves</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4" colspan="2">
-            <widget class="QComboBox" name="measureNumberVPlacement"/>
-           </item>
-           <item row="0" column="2">
-            <spacer name="horizontalSpacer_18">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="0" column="7">
-            <spacer name="horizontalSpacer_54">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
+         <widget class="QWidget" name="pageMeasureNumbers" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_76">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
           </layout>
          </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="mmRestShowMeasureNumberRange">
-          <property name="title">
-           <string>Show measure number range at multimeasure rests</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_48">
-           <item row="0" column="2">
-            <widget class="QToolButton" name="resetMmRestRangeBracketType">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string comment="Bracket type for measure number ranges for multi-measure rests">Reset 'Bracket type' value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QComboBox" name="mmRestRangeBracketType"/>
-           </item>
-           <item row="3" column="1">
-            <widget class="mu::notation::OffsetSelect" name="mmRestRangePosAbove" native="true">
-             <property name="focusPolicy">
-              <enum>Qt::FocusPolicy::StrongFocus</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QToolButton" name="resetMMRestRangePosAbove">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Offset above' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_165">
-             <property name="text">
-              <string>Vertical placement:</string>
-             </property>
-             <property name="buddy">
-              <cstring>mmRestRangeVPlacement</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QComboBox" name="mmRestRangeVPlacement"/>
-           </item>
-           <item row="2" column="1">
-            <widget class="QComboBox" name="mmRestRangeHPlacement"/>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="mmRestRangePosAboveLabel">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Offset above:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-             <property name="buddy">
-              <cstring>mmRestRangePosAbove</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_164">
-             <property name="text">
-              <string comment="Bracket type for measure number ranges for multi-measure rests">Bracket type:</string>
-             </property>
-             <property name="buddy">
-              <cstring>mmRestRangeBracketType</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QToolButton" name="resetMmRestRangeVPlacement">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Vertical placement' value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_166">
-             <property name="text">
-              <string>Horizontal placement:</string>
-             </property>
-             <property name="buddy">
-              <cstring>mmRestRangeHPlacement</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetMmRestRangeHPlacement">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Horizontal placement' value</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="mmRestRangePosBelowLabel">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Offset below:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-             <property name="buddy">
-              <cstring>mmRestRangePosBelow</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="mu::notation::OffsetSelect" name="mmRestRangePosBelow" native="true">
-             <property name="focusPolicy">
-              <enum>Qt::FocusPolicy::StrongFocus</enum>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QToolButton" name="resetMMRestRangePosBelow">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Offset below' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="3">
-            <spacer name="horizontalSpacer_19">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_27">
-          <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
@@ -6445,6 +6077,18 @@
       </widget>
       <widget class="QWidget" name="PageMeasureRepeats">
        <layout class="QGridLayout" name="gridLayout_58">
+        <property name="leftMargin">
+         <number>10</number>
+        </property>
+        <property name="topMargin">
+         <number>10</number>
+        </property>
+        <property name="rightMargin">
+         <number>10</number>
+        </property>
+        <property name="bottomMargin">
+         <number>10</number>
+        </property>
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_measure_repeats">
           <property name="title">
@@ -14637,16 +14281,16 @@ followed by dashes</string>
       <number>6</number>
      </property>
      <property name="leftMargin">
-      <number>0</number>
+      <number>10</number>
      </property>
      <property name="topMargin">
       <number>0</number>
      </property>
      <property name="rightMargin">
-      <number>0</number>
+      <number>10</number>
      </property>
      <property name="bottomMargin">
-      <number>0</number>
+      <number>10</number>
      </property>
      <item>
       <widget class="QPushButton" name="buttonTogglePagelist">
@@ -14779,31 +14423,6 @@ followed by dashes</string>
   <tabstop>evenFooterL</tabstop>
   <tabstop>evenFooterC</tabstop>
   <tabstop>evenFooterR</tabstop>
-  <tabstop>showMeasureNumber</tabstop>
-  <tabstop>showFirstMeasureNumber</tabstop>
-  <tabstop>measureNumberVPlacement</tabstop>
-  <tabstop>resetMeasureNumberVPlacement</tabstop>
-  <tabstop>showAllStavesMeasureNumber</tabstop>
-  <tabstop>measureNumberHPlacement</tabstop>
-  <tabstop>resetMeasureNumberHPlacement</tabstop>
-  <tabstop>showEverySystemMeasureNumber</tabstop>
-  <tabstop>measureNumberPosAbove</tabstop>
-  <tabstop>resetMeasureNumberPosAbove</tabstop>
-  <tabstop>showIntervalMeasureNumber</tabstop>
-  <tabstop>intervalMeasureNumber</tabstop>
-  <tabstop>measureNumberPosBelow</tabstop>
-  <tabstop>resetMeasureNumberPosBelow</tabstop>
-  <tabstop>mmRestShowMeasureNumberRange</tabstop>
-  <tabstop>mmRestRangeBracketType</tabstop>
-  <tabstop>resetMmRestRangeBracketType</tabstop>
-  <tabstop>mmRestRangeVPlacement</tabstop>
-  <tabstop>resetMmRestRangeVPlacement</tabstop>
-  <tabstop>mmRestRangeHPlacement</tabstop>
-  <tabstop>resetMmRestRangeHPlacement</tabstop>
-  <tabstop>mmRestRangePosAbove</tabstop>
-  <tabstop>resetMMRestRangePosAbove</tabstop>
-  <tabstop>mmRestRangePosBelow</tabstop>
-  <tabstop>resetMMRestRangePosBelow</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>resetBracketThickness</tabstop>
   <tabstop>akkoladeWidth</tabstop>

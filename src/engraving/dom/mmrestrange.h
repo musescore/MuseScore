@@ -47,7 +47,6 @@ public:
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid id, const PropertyValue& val) override;
-    PropertyValue propertyDefault(Pid id) const override;
 
     void setXmlText(const String&) override;
 };

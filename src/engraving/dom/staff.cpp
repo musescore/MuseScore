@@ -218,6 +218,27 @@ bool Staff::trackHasLinksInVoiceZero(track_idx_t track)
     return false;
 }
 
+void Staff::undoSetShowMeasureNumbers(bool show)
+{
+    bool isTopStave = score()->staves().front() == this;
+    if (show) {
+        undoChangeProperty(Pid::SHOW_MEASURE_NUMBERS, isTopStave ? AutoOnOff::AUTO : AutoOnOff::ON);
+    } else {
+        undoChangeProperty(Pid::SHOW_MEASURE_NUMBERS, isTopStave ? AutoOnOff::OFF : AutoOnOff::AUTO);
+    }
+}
+
+bool Staff::shouldShowMeasureNumbers() const
+{
+    if (style().styleB(Sid::measureNumberAllStaves)) {
+        return true;
+    }
+
+    bool isTopStave = score()->staves().front() == this;
+    bool isSystemObjectStaff = muse::contains(score()->systemObjectStaves(), const_cast<Staff*>(this));
+    return (isTopStave && m_showMeasureNumbers != AutoOnOff::OFF) || (isSystemObjectStaff && m_showMeasureNumbers == AutoOnOff::ON);
+}
+
 //---------------------------------------------------------
 //   fillBrackets
 //    make sure index idx is valid
@@ -1524,6 +1545,8 @@ PropertyValue Staff::getProperty(Pid id) const
         return userDist();
     case Pid::GENERATED:
         return false;
+    case Pid::SHOW_MEASURE_NUMBERS:
+        return m_showMeasureNumbers;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();
@@ -1597,6 +1620,9 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     case Pid::STAFF_USERDIST:
         setUserDist(v.value<Spatium>());
         break;
+    case Pid::SHOW_MEASURE_NUMBERS:
+        m_showMeasureNumbers = v.value<AutoOnOff>();
+        break;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         break;
@@ -1630,6 +1656,8 @@ PropertyValue Staff::propertyDefault(Pid id) const
         return 0;
     case Pid::STAFF_USERDIST:
         return Spatium(0.0);
+    case Pid::SHOW_MEASURE_NUMBERS:
+        return AutoOnOff::AUTO;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();

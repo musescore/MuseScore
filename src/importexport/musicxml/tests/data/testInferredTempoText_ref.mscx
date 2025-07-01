@@ -52,6 +52,7 @@
       <tempoChangeFontFace>Times New Roman</tempoChangeFontFace>
       <metronomeFontFace>Times New Roman</metronomeFontFace>
       <measureNumberFontFace>Times New Roman</measureNumberFontFace>
+      <measureNumberAlternateFontFace>Times New Roman</measureNumberAlternateFontFace>
       <mmRestRangeFontFace>Times New Roman</mmRestRangeFontFace>
       <translatorFontFace>Times New Roman</translatorFontFace>
       <systemTextFontFace>Times New Roman</systemTextFontFace>

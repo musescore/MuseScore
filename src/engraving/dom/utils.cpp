@@ -39,6 +39,7 @@
 #include "repeatlist.h"
 #include "keysig.h"
 #include "measure.h"
+#include "measurenumber.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
