@@ -315,6 +315,7 @@ protected:
     bool createTuningString(int strings, int tuning[]); // returns useFlats
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const { return nullptr; }
     void initDynamics(size_t stavesNum);
+    void addTunings();
 
 public:
     std::vector<std::string> tunings;
@@ -422,7 +423,7 @@ class GuitarPro5 : public GuitarPro
     ReadNoteResult readNote(int string, Note* note);
     bool readMixChange(Measure* measure) override;
     void readMeasure(Measure * measure, int staffIdx, mu::engraving::Tuplet*[], bool mixChange);
-    bool readTracks(std::unordered_map<uint64_t, mu::engraving::StringData>& stringDatas);
+    bool readTracks();
     void readMeasures(int startingTempo);
     Fraction readBeat(const Fraction& tick, int voice, Measure* measure, int staffIdx, mu::engraving::Tuplet** tuplets, bool mixChange);
     ReadNoteResult readNoteEffects(Note*);

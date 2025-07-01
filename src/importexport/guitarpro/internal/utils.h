@@ -21,6 +21,7 @@
  */
 
 #pragma once
+#include <vector>
 
 #include <engraving/types/types.h>
 namespace mu::engraving {

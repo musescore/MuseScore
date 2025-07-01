@@ -13,7 +13,7 @@
 #include "gpdrumsetresolver.h"
 #include "gpmasterbar.h"
 #include "gpmastertracks.h"
-#include "dom/stringdata.h"
+#include "engraving/dom/stringdata.h"
 
 namespace mu::iex::guitarpro {
 class GPScore;
@@ -211,6 +211,5 @@ private:
     std::unique_ptr<GPDrumSetResolver> _drumResolver;
     std::unique_ptr<ContiniousElementsBuilder> m_continiousElementsBuilder;
     std::unique_ptr<GuitarBendImporter> m_guitarBendImporter;
-    std::unordered_map<uint64_t, mu::engraving::StringData> m_stringDatas;
 };
 }

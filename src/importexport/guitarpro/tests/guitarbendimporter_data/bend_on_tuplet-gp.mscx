@@ -35,12 +35,12 @@
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
-          <string>43</string>
-          <string>55</string>
-          <string>60</string>
-          <string>65</string>
-          <string>69</string>
-          <string>74</string>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
+          <string>71</string>
+          <string>76</string>
           </StringData>
         <Channel>
           <program value="30"/>
@@ -74,8 +74,23 @@
             <eid>H_H</eid>
             <text>Moderate <sym>metNoteQuarterUp</sym> = 40</text>
             </Tempo>
-          <Tuplet>
+          <StringTunings>
+            <visibleStrings></visibleStrings>
+            <StringData>
+              <frets>24</frets>
+              <string>43</string>
+              <string>55</string>
+              <string>60</string>
+              <string>65</string>
+              <string>69</string>
+              <string>74</string>
+              </StringData>
             <eid>I_I</eid>
+            <style>string_tunings</style>
+            <text/>
+            </StringTunings>
+          <Tuplet>
+            <eid>J_J</eid>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
             <baseNote>eighth</baseNote>
@@ -85,15 +100,15 @@
               </Number>
             </Tuplet>
           <Beam>
-            <eid>J_J</eid>
+            <eid>K_K</eid>
             <l1>38</l1>
             <l2>38</l2>
             </Beam>
           <Chord>
-            <eid>K_K</eid>
+            <eid>L_L</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -101,10 +116,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             <durationType>16th</durationType>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>7</fret>
@@ -114,7 +129,8 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>O_O</eid>
+                  <eid>P_P</eid>
+                  <anchor>3</anchor>
                   </GuitarBend>
                 <next>
                   <location>
@@ -126,10 +142,10 @@
             </Chord>
           <endTuplet/>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>eighth</durationType>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <parentheses>both</parentheses>
               <pitch>62</pitch>
               <tpc>16</tpc>
@@ -150,11 +166,11 @@
               </NoteParenGroup>
             </Chord>
           <Rest>
-            <eid>R_R</eid>
+            <eid>S_S</eid>
             <durationType>quarter</durationType>
             </Rest>
           <Rest>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

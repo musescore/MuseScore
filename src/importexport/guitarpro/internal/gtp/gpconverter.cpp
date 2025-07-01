@@ -199,6 +199,8 @@ static void setPitchByOttavaType(mu::engraving::Note* note, mu::engraving::Ottav
     note->setPitch(clampPitch(note->pitch() - ottavaDefault[int(type)].shift, true));
 }
 
+static std::unordered_map<uint64_t, mu::engraving::StringData> stringDatas;
+
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom, const muse::modularity::ContextPtr& iocCtx)
     : muse::Contextable(iocCtx), _score(score), _gpDom(std::move(gpDom))
 {
@@ -1059,6 +1061,7 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
 
 void GPConverter::setUpTracks(const std::map<int, std::unique_ptr<GPTrack> >& tracks)
 {
+    stringDatas.clear();
     for (const auto& track : tracks) {
         setUpTrack(track.second);
     }
@@ -1162,7 +1165,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         }
 
         StringData stringData = StringData(fretCount, static_cast<int>(tuning.size()), tuning.data(), useFlats);
-        m_stringDatas.insert_or_assign(part->id().toUint64(), stringData);
+        stringDatas.insert_or_assign(part->id().toUint64(), stringData);
         // We're using Tuning String for non-standard string data
         // Instrument string data should be set to the standard
         tuning = utils::standardTuningFor(programm, (int)tuning.size());
@@ -2088,11 +2091,11 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         //       instead.
         pitch = note->part()->instrument()->channel(0)->program();
     } else {
-        if (m_stringDatas.empty()) {
+        if (stringDatas.empty()) {
             pitch = note->part()->instrument()->stringData()->getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
                                                                        nullptr) + note->part()->instrument()->transpose().chromatic;
         } else {
-            if (const auto sd = m_stringDatas.find(note->part()->id().toUint64()); sd != m_stringDatas.end()) {
+            if (const auto sd = stringDatas.find(note->part()->id().toUint64()); sd != stringDatas.end()) {
                 pitch = sd->second.getPitch(musescoreString, midiPitch.fret + note->part()->capoFret(),
                                             nullptr) + note->part()->instrument()->transpose().chromatic;
             } else {
@@ -2988,11 +2991,11 @@ void GPConverter::addTuning()
                 return;
             }
 
-            if (m_stringDatas.find(p->id().toUint64()) == m_stringDatas.end()) {
+            if (stringDatas.find(p->id().toUint64()) == stringDatas.end()) {
                 continue;
             }
 
-            const StringData sd = m_stringDatas.at(p->id().toUint64());
+            const StringData sd = stringDatas.at(p->id().toUint64());
             std::vector<int> tuning(sd.strings());
             for (size_t i = 0; i < tuning.size(); ++i) {
                 tuning[i] = sd.stringList().at(i).pitch + p->instrument()->transpose().chromatic;

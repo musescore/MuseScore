@@ -93,11 +93,24 @@
             <eid>J_J</eid>
             <text><sym>metNoteQuarterUp</sym> = 120</text>
             </Tempo>
-          <Chord>
+          <StringTunings>
+            <visibleStrings></visibleStrings>
+            <StringData>
+              <frets>24</frets>
+              <string>28</string>
+              <string>33</string>
+              <string>38</string>
+              <string>43</string>
+              </StringData>
             <eid>K_K</eid>
+            <style>string_tunings</style>
+            <text/>
+            </StringTunings>
+          <Chord>
+            <eid>L_L</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>L_L</eid>
+              <eid>M_M</eid>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -105,18 +118,18 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>M_M</eid>
+            <eid>N_N</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>N_N</eid>
+        <eid>O_O</eid>
         <voice>
           <Chord>
-            <eid>O_O</eid>
+            <eid>P_P</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>P_P</eid>
+              <eid>Q_Q</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -124,18 +137,18 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>R_R</eid>
+        <eid>S_S</eid>
         <voice>
           <Chord>
-            <eid>S_S</eid>
+            <eid>T_T</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>T_T</eid>
+              <eid>U_U</eid>
               <pitch>71</pitch>
               <tpc>19</tpc>
               <fret>7</fret>
@@ -143,18 +156,18 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>V_V</eid>
+        <eid>W_W</eid>
         <voice>
           <Chord>
-            <eid>W_W</eid>
+            <eid>X_X</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>X_X</eid>
+              <eid>Y_Y</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               <fret>8</fret>
@@ -168,28 +181,28 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>Y_Y</eid>
+            <eid>Z_Z</eid>
             <concertKey>0</concertKey>
             <mode>major</mode>
             </KeySig>
           <TimeSig>
-            <eid>Z_Z</eid>
+            <eid>a_a</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Rest>
-            <eid>a_a</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          <BarLine>
-            <span>1</span>
+          <StringTunings>
+            <visibleStrings></visibleStrings>
+            <StringData>
+              <frets>24</frets>
+              <string>28</string>
+              <string>33</string>
+              <string>38</string>
+              <string>43</string>
+              </StringData>
             <eid>b_b</eid>
-            </BarLine>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
+            <style>string_tunings</style>
+            <text/>
+            </StringTunings>
           <Rest>
             <eid>c_c</eid>
             <durationType>measure</durationType>
@@ -218,6 +231,19 @@
         <voice>
           <Rest>
             <eid>g_g</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <span>1</span>
+            <eid>h_h</eid>
+            </BarLine>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Rest>
+            <eid>i_i</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

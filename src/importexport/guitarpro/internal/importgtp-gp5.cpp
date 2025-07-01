@@ -61,6 +61,7 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
 #include "engraving/types/symid.h"
+#include "engraving/dom/stringtunings.h"
 
 #include "guitarprodrumset.h"
 #include "utils.h"
@@ -88,6 +89,7 @@ static TremoloType tremoloType(int division)
     return TremoloType::INVALID_TREMOLO;
 }
 
+static std::unordered_map<uint64_t, mu::engraving::StringData> stringDatas;
 //---------------------------------------------------------
 //   readInfo
 //---------------------------------------------------------
@@ -537,8 +539,9 @@ bool GuitarPro5::readMixChange(Measure* measure)
 //   readTracks
 //---------------------------------------------------------
 
-bool GuitarPro5::readTracks(std::unordered_map<uint64_t, mu::engraving::StringData>& stringDatas)
+bool GuitarPro5::readTracks()
 {
+    stringDatas.clear();
     for (size_t i = 0; i < staves; ++i) {
         int tuning[GP_MAX_STRING_NUMBER];
         Staff* staff = score->staff(i);
@@ -967,8 +970,7 @@ bool GuitarPro5::read(IODevice* io)
     }
 
     createMeasures();
-    std::unordered_map<uint64_t, mu::engraving::StringData> stringDatas;
-    if (!readTracks(stringDatas)) {
+    if (!readTracks()) {
         return false;
     }
     readMeasures(tempo);

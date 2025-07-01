@@ -35,10 +35,10 @@
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
-          <string>76</string>
-          <string>69</string>
-          <string>74</string>
-          <string>79</string>
+          <string>52</string>
+          <string>57</string>
+          <string>62</string>
+          <string>67</string>
           <string>71</string>
           <string>76</string>
           </StringData>
@@ -96,14 +96,29 @@
             <eid>M_M</eid>
             <text><sym>metNoteQuarterUp</sym> = 115</text>
             </Tempo>
-          <Chord>
+          <StringTunings>
+            <visibleStrings></visibleStrings>
+            <StringData>
+              <frets>24</frets>
+              <string>76</string>
+              <string>69</string>
+              <string>74</string>
+              <string>79</string>
+              <string>71</string>
+              <string>76</string>
+              </StringData>
             <eid>N_N</eid>
+            <style>string_tunings</style>
+            <text/>
+            </StringTunings>
+          <Chord>
+            <eid>O_O</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
-                <eid>P_P</eid>
+                <eid>Q_Q</eid>
                 </Accidental>
               <pitch>65</pitch>
               <tpc>13</tpc>
@@ -112,7 +127,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>Q_Q</eid>
+            <eid>R_R</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>

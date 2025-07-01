@@ -71,6 +71,7 @@
 #include "engraving/dom/tremolobar.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
+#include "engraving/dom/stringtunings.h"
 
 #include "engraving/types/symid.h"
 
