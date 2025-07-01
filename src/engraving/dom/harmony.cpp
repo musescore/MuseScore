@@ -775,18 +775,14 @@ void Harmony::endEditTextual(EditData& ed)
     bool textChanged = ted != nullptr && ted->oldXmlText != harmonyName();
 
     if (textChanged) {
-        if (configuration()->autoUpdateFretboardDiagrams()) {
-            Segment* parentSegment = getParentSeg();
-            if (parentSegment) {
-                EngravingItem* fretDiagramItem = parentSegment->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
-                if (fretDiagramItem) {
-                    FretDiagram* fretDiagram = toFretDiagram(fretDiagramItem);
-
-                    UndoStack* undo = score()->undoStack();
-                    undo->reopen();
-                    score()->undo(new FretDataChange(fretDiagram, s));
-                    score()->endCmd();
-                }
+        FretDiagram* fretDiagram = explicitParent()->isFretDiagram() ? toFretDiagram(explicitParent()) : nullptr;
+        bool isFretDiagramCustom = fretDiagram ? fretDiagram->isCustom(ted->oldXmlText) : false;
+        if (fretDiagram && configuration()->autoUpdateFretboardDiagrams()) {
+            if (!isFretDiagramCustom) {
+                UndoStack* undo = score()->undoStack();
+                undo->reopen();
+                score()->undo(new FretDataChange(fretDiagram, s));
+                score()->endCmd();
             }
         }
 

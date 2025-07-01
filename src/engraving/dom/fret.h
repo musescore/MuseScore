@@ -247,6 +247,7 @@ public:
     static FretDiagram* makeFromHarmonyOrFretDiagram(const EngravingItem* harmonyOrFretDiagram);
 
     bool isInFretBox() const;
+    bool isCustom(const String& harmonyNameForCompare) const;
 
     friend class FretUndoData;
 
@@ -282,7 +283,7 @@ private:
     FretDiagram(Segment* parent = nullptr);
     FretDiagram(const FretDiagram&);
 
-    void readHarmonyToDiagramFile(const muse::io::path_t& filePath);
+    void readHarmonyToDiagramFile(const muse::io::path_t& filePath) const;
 
     void initDefaultValues();
 

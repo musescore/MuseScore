@@ -142,6 +142,7 @@
             <sigD>4</sigD>
             </TimeSig>
           <FretDiagram>
+            <frets>5</frets>
             <eid>K_K</eid>
             <fretDiagram>
               <string no="0">
@@ -205,6 +206,7 @@
         <eid>O_O</eid>
         <voice>
           <FretDiagram>
+            <frets>5</frets>
             <eid>P_P</eid>
             <fretDiagram>
               <string no="0">

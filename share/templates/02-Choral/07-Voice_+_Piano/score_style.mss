@@ -297,7 +297,7 @@
     <fretMag>1</fretMag>
     <fretPlacement>0</fretPlacement>
     <fretStrings>6</fretStrings>
-    <fretFrets>5</fretFrets>
+    <fretFrets>4</fretFrets>
     <fretNut>1</fretNut>
     <fretDotSize>1</fretDotSize>
     <fretStringSpacing>0.7</fretStringSpacing>
