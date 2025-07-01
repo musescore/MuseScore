@@ -496,15 +496,6 @@
           <stem>1</stem>
           </Drum>
         <singleNoteDynamics>0</singleNoteDynamics>
-        <StringData>
-          <frets>24</frets>
-          <string>0</string>
-          <string>0</string>
-          <string>0</string>
-          <string>0</string>
-          <string>0</string>
-          <string>0</string>
-          </StringData>
         <Channel>
           <controller ctrl="0" value="1"/>
           <program value="0"/>
@@ -646,7 +637,7 @@
             <Note>
               <eid>d_d</eid>
               <pitch>34</pitch>
-              <tpc>24</tpc>
+              <tpc>12</tpc>
               <fret>34</fret>
               <string>0</string>
               </Note>
@@ -829,7 +820,7 @@
             <Note>
               <eid>BB_BB</eid>
               <pitch>46</pitch>
-              <tpc>24</tpc>
+              <tpc>12</tpc>
               <head>xcircle</head>
               <fret>46</fret>
               <string>0</string>
@@ -1017,7 +1008,7 @@
             <Note>
               <eid>lB_lB</eid>
               <pitch>58</pitch>
-              <tpc>24</tpc>
+              <tpc>12</tpc>
               <fret>58</fret>
               <string>0</string>
               </Note>
@@ -1203,7 +1194,7 @@
             <Note>
               <eid>JC_JC</eid>
               <pitch>70</pitch>
-              <tpc>24</tpc>
+              <tpc>12</tpc>
               <fret>70</fret>
               <string>0</string>
               </Note>
@@ -1383,7 +1374,7 @@
             <Note>
               <eid>tC_tC</eid>
               <pitch>82</pitch>
-              <tpc>24</tpc>
+              <tpc>12</tpc>
               <fret>82</fret>
               <string>0</string>
               </Note>

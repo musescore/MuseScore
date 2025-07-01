@@ -22,6 +22,7 @@
 
 #ifndef MU_IMPORTEXPORT_UTILS_H
 #define MU_IMPORTEXPORT_UTILS_H
+#include <vector>
 
 namespace mu::engraving {
 class Note;

@@ -30,6 +30,7 @@
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stringtunings.h"
 
 #include "log.h"
 

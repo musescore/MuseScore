@@ -33,12 +33,12 @@
         <singleNoteDynamics>0</singleNoteDynamics>
         <StringData>
           <frets>24</frets>
-          <string>36</string>
-          <string>43</string>
+          <string>40</string>
+          <string>45</string>
           <string>50</string>
           <string>55</string>
           <string>59</string>
-          <string>62</string>
+          <string>64</string>
           </StringData>
         <Channel>
           <program value="25"/>
@@ -83,25 +83,40 @@
             <velocity>96</velocity>
             <eid>K_K</eid>
             </Dynamic>
-          <Chord>
+          <StringTunings>
+            <visibleStrings></visibleStrings>
+            <StringData>
+              <frets>24</frets>
+              <string>36</string>
+              <string>43</string>
+              <string>50</string>
+              <string>55</string>
+              <string>59</string>
+              <string>62</string>
+              </StringData>
             <eid>L_L</eid>
+            <style>string_tunings</style>
+            <text/>
+            </StringTunings>
+          <Chord>
+            <eid>M_M</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>M_M</eid>
+              <eid>N_N</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
               <string>3</string>
               </Note>
             <Note>
-              <eid>N_N</eid>
+              <eid>O_O</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
               </Note>
             <Note>
-              <eid>O_O</eid>
+              <eid>P_P</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>0</fret>
@@ -109,24 +124,24 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>P_P</eid>
+            <eid>Q_Q</eid>
             <durationType>half</durationType>
             <Note>
-              <eid>Q_Q</eid>
+              <eid>R_R</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <eid>R_R</eid>
+              <eid>S_S</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>
             <Note>
-              <eid>S_S</eid>
+              <eid>T_T</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -136,10 +151,10 @@
           </voice>
         </Measure>
       <Measure>
-        <eid>T_T</eid>
+        <eid>U_U</eid>
         <voice>
           <Rest>
-            <eid>U_U</eid>
+            <eid>V_V</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
