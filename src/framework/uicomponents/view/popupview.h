@@ -63,7 +63,7 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
 
     Q_PROPERTY(bool showArrow READ showArrow WRITE setShowArrow NOTIFY showArrowChanged)
     Q_PROPERTY(int padding READ padding WRITE setPadding NOTIFY paddingChanged)
-    Q_PROPERTY(Placement placement READ placement WRITE setPlacement NOTIFY placementChanged)
+    Q_PROPERTY(PlacementPolicies placementPolicies READ placementPolicies WRITE setPlacementPolicies NOTIFY placementPoliciesChanged)
 
     Q_PROPERTY(QQuickItem * anchorItem READ anchorItem WRITE setAnchorItem NOTIFY anchorItemChanged)
     Q_PROPERTY(bool opensUpward READ opensUpward NOTIFY opensUpwardChanged)
@@ -124,12 +124,14 @@ public:
     Q_DECLARE_FLAGS(FocusPolicies, FocusPolicy)
     Q_FLAG(FocusPolicies)
 
-    enum class Placement {
-        Default,
-        PreferBelow,
-        PreferAbove
+    enum class PlacementPolicy {
+        Default = 0x00000000,
+        PreferBelow = 0x00000001,
+        PreferAbove = 0x00000002,
+        IgnoreFit = 0x00000003
     };
-    Q_ENUM(Placement)
+    Q_DECLARE_FLAGS(PlacementPolicies, PlacementPolicy)
+    Q_FLAG(PlacementPolicies)
 
     QQuickItem* parentItem() const;
 
@@ -155,7 +157,7 @@ public:
 
     OpenPolicies openPolicies() const;
     ClosePolicies closePolicies() const;
-    Placement placement() const;
+    PlacementPolicies placementPolicies() const;
 
     bool activateParentOnClose() const;
     FocusPolicies focusPolicies() const;
@@ -192,7 +194,7 @@ public slots:
     void setLocalY(qreal y);
     void setOpenPolicies(muse::uicomponents::PopupView::OpenPolicies openPolicies);
     void setClosePolicies(muse::uicomponents::PopupView::ClosePolicies closePolicies);
-    void setPlacement(muse::uicomponents::PopupView::Placement newPlacement);
+    void setPlacementPolicies(muse::uicomponents::PopupView::PlacementPolicies placementPolicies);
     void setNavigationParentControl(muse::ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
@@ -221,7 +223,7 @@ signals:
     void yChanged(qreal y);
     void openPoliciesChanged(muse::uicomponents::PopupView::OpenPolicies openPolicies);
     void closePoliciesChanged(muse::uicomponents::PopupView::ClosePolicies closePolicies);
-    void placementChanged(muse::uicomponents::PopupView::Placement placement);
+    void placementPoliciesChanged(muse::uicomponents::PopupView::PlacementPolicies placementPolicies);
     void navigationParentControlChanged(muse::ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
@@ -307,7 +309,7 @@ protected:
     ClosePolicies m_closePolicies = { ClosePolicy::CloseOnPressOutsideParent };
     FocusPolicies m_focusPolicies = { FocusPolicy::DefaultFocus };
 
-    Placement m_placement = { Placement::Default };
+    PlacementPolicies m_placementPolicies = { PlacementPolicy::Default };
 
     bool m_activateParentOnClose = true;
     ui::INavigationControl* m_navigationParentControl = nullptr;
