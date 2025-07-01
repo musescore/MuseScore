@@ -288,38 +288,39 @@ Slider {
             }
         }
 
-        ItemWithDropShadow {
-            anchors.fill: parent
+        StyledRectangularDropShadow {
+            anchors.fill: handleRect
 
-            shadow.color: "#33000000"
-            shadow.radius: 4
-            shadow.verticalOffset: 2
+            blur: 4
+            color: "#33000000"
+            radius: handleRect.radius
+
+        }
+
+        Rectangle {
+            id: handleRect
+            anchors.fill: parent
+            radius: 2
+            color: "white"
 
             Rectangle {
-                id: handleRect
                 anchors.fill: parent
                 radius: 2
-                color: "white"
+
+                color: Utils.colorWithAlpha(ui.theme.popupBackgroundColor, 0.1)
+                border.color: Qt.rgba(0, 0, 0, 0.7)
+                border.width: 1
 
                 Rectangle {
-                    anchors.fill: parent
-                    radius: 2
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.leftMargin: 3
+                    anchors.rightMargin: 3
 
-                    color: Utils.colorWithAlpha(ui.theme.popupBackgroundColor, 0.1)
-                    border.color: Qt.rgba(0, 0, 0, 0.7)
-                    border.width: 1
-
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.leftMargin: 3
-                        anchors.rightMargin: 3
-
-                        height: 1
-                        radius: height / 2
-                        color: "#000000"
-                    }
+                    height: 1
+                    radius: height / 2
+                    color: "#000000"
                 }
             }
         }
