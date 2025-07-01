@@ -1186,6 +1186,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(measureNumberOffsetType,                    int(OffsetType::SPATIUM)),
     styleDef(measureNumberVPlacement,                    PlacementV::ABOVE),
     styleDef(measureNumberHPlacement,                    PlacementH::LEFT),
+    styleDef(measureNumberHPlacementInterval,            PlacementH::CENTER),
     styleDef(measureNumberMinDistance,                   Spatium(0.5)),
     styleDef(measureNumberAlign,                         Align(AlignH::LEFT, AlignV::BASELINE)),
     styleDef(measureNumberFrameType,                     int(FrameType::NO_FRAME)),

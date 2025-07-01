@@ -573,23 +573,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::dividerLeftSym,           false, dividerLeftSym,               0 },
         { StyleId::dividerRightSym,          false, dividerRightSym,              0 },
 
-        { StyleId::showMeasureNumber,        false, showMeasureNumber,            0 },
-        { StyleId::showMeasureNumberOne,     false, showFirstMeasureNumber,       0 },
-        { StyleId::measureNumberInterval,    false, intervalMeasureNumber,        0 },
-        { StyleId::measureNumberSystem,      false, showEverySystemMeasureNumber, 0 },
-        { StyleId::measureNumberAllStaves,   false, showAllStavesMeasureNumber,   0 },
-        { StyleId::measureNumberVPlacement,  false, measureNumberVPlacement,      resetMeasureNumberVPlacement },
-        { StyleId::measureNumberHPlacement,  false, measureNumberHPlacement,      resetMeasureNumberHPlacement },
-        { StyleId::measureNumberPosAbove,    false, measureNumberPosAbove,        resetMeasureNumberPosAbove },
-        { StyleId::measureNumberPosBelow,    false, measureNumberPosBelow,        resetMeasureNumberPosBelow },
-
-        { StyleId::mmRestShowMeasureNumberRange, false, mmRestShowMeasureNumberRange, 0 },
-        { StyleId::mmRestRangeBracketType,   false, mmRestRangeBracketType,       resetMmRestRangeBracketType },
-        { StyleId::mmRestRangeVPlacement,    false, mmRestRangeVPlacement,        resetMmRestRangeVPlacement },
-        { StyleId::mmRestRangeHPlacement,    false, mmRestRangeHPlacement,        resetMmRestRangeHPlacement },
-        { StyleId::mmRestRangePosAbove,      false, mmRestRangePosAbove,          resetMMRestRangePosAbove },
-        { StyleId::mmRestRangePosBelow,      false, mmRestRangePosBelow,          resetMMRestRangePosBelow },
-
         { StyleId::graceNoteMag,             true,  graceNoteSize,                resetGraceNoteSize },
         { StyleId::smallStaffMag,            true,  smallStaffSize,               resetSmallStaffSize },
         { StyleId::smallNoteMag,             true,  smallNoteSize,                resetSmallNoteSize },
@@ -781,8 +764,6 @@ EditStyle::EditStyle(QWidget* parent)
         tempoTextPlacement,
         staffTextPlacement,
         rehearsalMarkPlacement,
-        measureNumberVPlacement,
-        mmRestRangeVPlacement
     };
 
     for (QComboBox* cb : verticalPlacementComboBoxes) {
@@ -791,22 +772,12 @@ EditStyle::EditStyle(QWidget* parent)
         cb->addItem(muse::qtrc("notation/editstyle", "Below"), int(PlacementV::BELOW));
     }
 
-    horizontalPlacementComboBoxes = {
-        measureNumberHPlacement,
-        mmRestRangeHPlacement
-    };
-
     for (QComboBox* cb : horizontalPlacementComboBoxes) {
         cb->clear();
         cb->addItem(muse::qtrc("notation/editstyle", "Left"),   int(PlacementH::LEFT));
         cb->addItem(muse::qtrc("notation/editstyle", "Center"), int(PlacementH::CENTER));
         cb->addItem(muse::qtrc("notation/editstyle", "Right"),  int(PlacementH::RIGHT));
     }
-
-    mmRestRangeBracketType->clear();
-    mmRestRangeBracketType->addItem(muse::qtrc("notation/editstyle", "None"),        int(MMRestRangeBracketType::NONE));
-    mmRestRangeBracketType->addItem(muse::qtrc("notation/editstyle", "Brackets"),    int(MMRestRangeBracketType::BRACKETS));
-    mmRestRangeBracketType->addItem(muse::qtrc("notation/editstyle", "Parentheses"), int(MMRestRangeBracketType::PARENTHESES));
 
     autoplaceVerticalAlignRange->clear();
     autoplaceVerticalAlignRange->addItem(muse::qtrc("notation/editstyle", "Segment"), int(VerticalAlignRange::SEGMENT));
@@ -1005,6 +976,17 @@ EditStyle::EditStyle(QWidget* parent)
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/VoltasPage.qml")));
     voltasPage.widget->setMinimumSize(504, 400);
     voltasPageWidget->layout()->addWidget(voltasPage.widget);
+
+    // ====================================================
+    // Bar Numbers STYLE PAGE (QML)
+    // ====================================================
+
+    auto barNumbersPage = createQmlWidget(
+        barNumbersWidget,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/BarNumbersPage.qml")));
+    barNumbersPage.widget->setMinimumSize(224, 400);
+    barNumbersWidget->layout()->addWidget(barNumbersPage.widget);
+    connect(barNumbersPage.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
 
     // ====================================================
     // Figured Bass
@@ -1375,10 +1357,6 @@ void EditStyle::retranslate()
         cb->setItemText(1, muse::qtrc("notation/editstyle", "Center"));
         cb->setItemText(2, muse::qtrc("notation/editstyle", "Right"));
     }
-
-    mmRestRangeBracketType->setItemText(0, muse::qtrc("notation/editstyle", "None"));
-    mmRestRangeBracketType->setItemText(1, muse::qtrc("notation/editstyle", "Brackets"));
-    mmRestRangeBracketType->setItemText(2, muse::qtrc("notation/editstyle", "Parentheses"));
 
     autoplaceVerticalAlignRange->setItemText(0, muse::qtrc("notation/editstyle", "Segment"));
     autoplaceVerticalAlignRange->setItemText(1, muse::qtrc("notation/editstyle", "Measure"));
@@ -2317,9 +2295,6 @@ void EditStyle::setValues()
             } else {
                 if (!sw.widget->setProperty("checked", value)) {
                     unhandledType(sw);
-                }
-                if (sw.idx == StyleId::measureNumberSystem && !value) {
-                    showIntervalMeasureNumber->setChecked(true);
                 }
             }
         } break;

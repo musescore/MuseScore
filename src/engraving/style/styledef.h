@@ -1204,6 +1204,7 @@ enum class Sid {
     measureNumberOffsetType,
     measureNumberVPlacement,
     measureNumberHPlacement,
+    measureNumberHPlacementInterval,
     measureNumberMinDistance,
     measureNumberAlign,
     measureNumberFrameType,
