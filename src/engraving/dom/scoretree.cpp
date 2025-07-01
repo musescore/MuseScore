@@ -459,10 +459,6 @@ EngravingObjectList Note::scanChildren() const
         children.push_back(noteDot);
     }
 
-    if (m_tieFor) {
-        children.push_back(m_tieFor);
-    }
-
     for (EngravingItem* element : el()) {
         children.push_back(element);
     }

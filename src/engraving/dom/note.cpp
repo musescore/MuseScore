@@ -54,6 +54,7 @@
 #include "navigate.h"
 #include "notedot.h"
 #include "noteline.h"
+#include "parenthesis.h"
 #include "part.h"
 #include "partialtie.h"
 #include "pitchspelling.h"
@@ -2256,7 +2257,12 @@ void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool a
         func(data, dot);
     }
 
-    EngravingItem::scanElements(data, func, all);
+    if (leftParen()) {
+        func(data, leftParen());
+    }
+    if (rightParen()) {
+        func(data, rightParen());
+    }
 }
 
 //---------------------------------------------------------
