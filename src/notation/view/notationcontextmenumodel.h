@@ -50,6 +50,7 @@ private:
     muse::uicomponents::MenuItemList makeInstrumentNameItems();
     muse::uicomponents::MenuItemList makeHarmonyItems();
     muse::uicomponents::MenuItemList makeFretboardDiagramItems();
+    muse::uicomponents::MenuItemList makeElementInFretBoxItems();
     muse::uicomponents::MenuItemList makeSelectItems();
     muse::uicomponents::MenuItemList makeElementItems();
     muse::uicomponents::MenuItemList makeInsertMeasuresItems();
@@ -59,6 +60,8 @@ private:
     muse::uicomponents::MenuItemList makeHorizontalBoxItems();
     muse::uicomponents::MenuItemList makeHairpinItems();
     muse::uicomponents::MenuItemList makeGradualTempoChangeItems();
+
+    muse::uicomponents::MenuItem* makeEditStyle(const EngravingItem* hitElement);
 
     bool isSingleSelection() const;
     bool canSelectSimilarInRange() const;

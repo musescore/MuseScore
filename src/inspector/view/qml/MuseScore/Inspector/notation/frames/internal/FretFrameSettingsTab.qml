@@ -112,7 +112,7 @@ FocusableItem {
             gapBelow: root.model ? root.model.gapBelow : null
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: heightSection.navigationRowEnd + 1
+            navigationRowStart: matchStaffSize.navigationRowEnd + 1
         }
 
         SeparatorLine { anchors.margins: -12 }

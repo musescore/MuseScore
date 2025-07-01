@@ -177,10 +177,15 @@ MenuItemList NotationContextMenuModel::makeInstrumentNameItems()
 
 MenuItemList NotationContextMenuModel::makeHarmonyItems()
 {
+    const EngravingItem* hitElement = hitElementContext().element;
+    if (hitElement && engraving::toHarmony(hitElement)->isInFretBox()) {
+        return makeElementInFretBoxItems();
+    }
+
     MenuItemList items = makeElementItems();
     items << makeSeparator();
 
-    if (const EngravingItem* hitElement = hitElementContext().element) {
+    if (hitElement) {
         engraving::EngravingObject* parent = hitElement->isHarmony() ? hitElement->explicitParent() : nullptr;
         bool hasLinkedFretboardDiagram = parent && parent->isFretDiagram();
         if (!hasLinkedFretboardDiagram) {
@@ -195,6 +200,11 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
 
 MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
 {
+    const EngravingItem* hitElement = hitElementContext().element;
+    if (hitElement && engraving::toFretDiagram(hitElement)->isInFretBox()) {
+        return makeElementInFretBoxItems();
+    }
+
     MenuItemList items = makeElementItems();
 
     const engraving::FretDiagram* fretDiagram = engraving::toFretDiagram(hitElementContext().element);
@@ -202,6 +212,35 @@ MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
         items << makeSeparator();
         items << makeMenuItem("chord-text", TranslatableString("notation", "Add c&hord symbol"));
     }
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
+{
+    MenuItemList items {
+        makeMenuItem("notation-copy")
+    };
+
+    MenuItem* hideItem = makeMenuItem("notation-delete");
+
+    ui::UiAction action = hideItem->action();
+    action.iconCode = ui::IconCode::Code::NONE;
+    action.title = TranslatableString("notation", "Hide");
+    hideItem->setAction(action);
+
+    items << hideItem
+          << makeSeparator();
+
+    MenuItemList selectItems = makeSelectItems();
+
+    if (!selectItems.isEmpty()) {
+        items << makeMenu(TranslatableString("notation", "Select"), selectItems)
+              << makeSeparator();
+    }
+
+    const EngravingItem* hitElement = hitElementContext().element;
+    items << makeEditStyle(hitElement);
 
     return items;
 }
@@ -240,25 +279,8 @@ MenuItemList NotationContextMenuModel::makeElementItems()
         items << makeMenuItem("edit-element");
     }
 
-    items << makeSeparator();
-
-    MenuItem* item = new MenuItem(uiActionsRegister()->action("edit-style"), this);
-    item->setState(uiActionsRegister()->actionState(item->action().code));
-
-    if (hitElement) {
-        QString pageCode = EditStyle::pageCodeForElement(hitElement);
-
-        if (!pageCode.isEmpty()) {
-            QString subPageCode = EditStyle::subPageCodeForElement(hitElement);
-            if (!subPageCode.isEmpty()) {
-                item->setArgs(ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
-            } else {
-                item->setArgs(ActionData::make_arg1<QString>(pageCode));
-            }
-        }
-    }
-
-    items << item;
+    items << makeSeparator()
+          << makeEditStyle(hitElement);
 
     return items;
 }
@@ -369,6 +391,27 @@ MenuItemList NotationContextMenuModel::makeGradualTempoChangeItems()
     items << snapNext;
 
     return items;
+}
+
+MenuItem* NotationContextMenuModel::makeEditStyle(const EngravingItem* hitElement)
+{
+    MenuItem* item = new MenuItem(uiActionsRegister()->action("edit-style"), this);
+    item->setState(uiActionsRegister()->actionState(item->action().code));
+
+    if (hitElement) {
+        QString pageCode = EditStyle::pageCodeForElement(hitElement);
+
+        if (!pageCode.isEmpty()) {
+            QString subPageCode = EditStyle::subPageCodeForElement(hitElement);
+            if (!subPageCode.isEmpty()) {
+                item->setArgs(ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
+            } else {
+                item->setArgs(ActionData::make_arg1<QString>(pageCode));
+            }
+        }
+    }
+
+    return item;
 }
 
 bool NotationContextMenuModel::isSingleSelection() const

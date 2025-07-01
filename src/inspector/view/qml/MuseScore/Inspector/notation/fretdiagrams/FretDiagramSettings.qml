@@ -39,7 +39,7 @@ Item {
 
     objectName: "FretDiagramSettings"
 
-    height: content.implicitHeight
+    implicitHeight: content.implicitHeight
 
     function focusOnFirst() {
         fretDiagramTabPanel.focusOnFirst()
@@ -66,6 +66,8 @@ Item {
             width: parent.width
             spacing: 12
 
+            visible: root.model ? root.model.areSettingsAvailable : false
+
             FretCanvas {
                 id: fretCanvas
 
@@ -73,7 +75,6 @@ Item {
                 isBarreModeOn: root.model ? root.model.isBarreModeOn : false
                 isMultipleDotsModeOn: root.model ? root.model.isMultipleDotsModeOn : false
                 currentFretDotType: root.model ? root.model.currentFretDotType : false
-                visible: root.model ? root.model.areSettingsAvailable : false
                 color: ui.theme.fontPrimaryColor
 
                 width: parent.width
@@ -84,8 +85,6 @@ Item {
             PropertyToggle {
                 id: showFingerings
 
-                visible: root.model ? root.model.areSettingsAvailable : false
-
                 text: qsTrc("inspector", "Show fingerings")
                 propertyItem: root.model ? root.model.showFingerings : null
 
@@ -95,7 +94,7 @@ Item {
             }
 
             GridLayout {
-                visible: root.model ? root.model.areSettingsAvailable && root.model.showFingerings.value : false
+                visible: root.model ? root.model.showFingerings.value : false
                 width: parent.width
                 columns: 6
                 rowSpacing: 12
@@ -176,8 +175,6 @@ Item {
             FlatButton {
                 width: parent.width
 
-                visible: root.model ? root.model.areSettingsAvailable : false
-
                 text: qsTrc("global", "Clear")
 
                 navigation.name: "Clear"
@@ -191,13 +188,5 @@ Item {
                 }
             }
         }
-    }
-
-    StyledTextLabel {
-        anchors.fill: parent
-
-        wrapMode: Text.Wrap
-        text: qsTrc("inspector", "You have multiple fretboard diagrams selected. Select a single diagram to edit its settings.")
-        visible: root.model ? !root.model.areSettingsAvailable &&  fretDiagramTabPanel.isGeneralTabOpen : false
     }
 }
