@@ -318,7 +318,7 @@ MuseScore {
                 }
             }
             c.rewindToTick(t)
-            c.addNote(60)
+            c.addNote(element.notes[0].pitch)
             c.rewindToTick(t)
             var n = c.element.notes[0]
             var toRemove = []
@@ -554,8 +554,13 @@ MuseScore {
         } else {
             curScore.startCmd("Retrograde selection")
         }
-        retrogradeSelection()
-        curScore.endCmd()
+        try {
+            retrogradeSelection()
+            curScore.endCmd()
+        } catch (e) {
+            // if we encounter an error, rollback all changes
+            curScore.endCmd(true)
+        }
         quit()
     }
 }
