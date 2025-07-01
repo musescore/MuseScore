@@ -2868,22 +2868,27 @@ void NotationInteraction::doAddSlur(EngravingItem* firstItem, EngravingItem* sec
         const EngravingItem* otherElement = outgoing ? secondItem : firstItem;
         ChordRest* cr = outgoing ? toChordRest(firstItem) : toChordRest(secondItem);
 
-        const bool hasAdjacentJump = (outgoing && cr->hasFollowingJumpItem()) || (!outgoing && cr->hasPrecedingJumpItem());
-        const bool isNextToBarline = (outgoing ? cr->tick() + cr->actualTicks() : cr->tick()) == otherElement->tick();
+        // Check that cr and otherElement are part of the same repeat section
+        Segment* seg1 = toSegment(firstItem->findAncestor(ElementType::SEGMENT));
+        Segment* seg2 = toSegment(secondItem->findAncestor(ElementType::SEGMENT));
 
-        if (!cr || (!header && (!isNextToBarline || !hasAdjacentJump))) {
+        if (!cr || (!header && segmentsAreInDifferentRepeatSegments(seg1, seg2))) {
             return;
         }
 
         Slur* partialSlur = slurTemplate ? slurTemplate->clone() : Factory::createSlur(score()->dummy());
         if (outgoing) {
             partialSlur->undoSetOutgoing(true);
-            firstChordRest = toChordRest(firstItem);
-            secondChordRest = toChordRest(cr);
+            firstChordRest = toChordRest(cr);
+            const Measure* endMeas = otherElement->findMeasure();
+            ChordRest* endCr = endMeas->lastChordRest(0);
+            secondChordRest = endCr;
         } else {
             partialSlur->undoSetIncoming(true);
-            firstChordRest = toChordRest(cr);
-            secondChordRest = toChordRest(secondItem);
+            secondChordRest = toChordRest(cr);
+            const Measure* startMeas = otherElement->findMeasure();
+            ChordRest* startCr = startMeas->firstChordRest(0);
+            firstChordRest = startCr;
         }
         slurTemplate = partialSlur;
     } else {
