@@ -185,7 +185,7 @@ void InspectorPopupController::closePopupIfNeed(const QPointF& mouseGlobalPos)
     }
 
     QRectF globalNotationViewRect = globalRect(m_notationView);
-    QWindow* windowUnderCursor = qGuiApp->topLevelAt(QCursor::pos());
+    QWindow* windowUnderCursor = qGuiApp->topLevelAt(mouseGlobalPos.toPoint());
     if (windowUnderCursor == mainWindow()->qWindow() && globalNotationViewRect.contains(mouseGlobalPos)) {
         return;
     }
