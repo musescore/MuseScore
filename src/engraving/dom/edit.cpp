@@ -3809,7 +3809,7 @@ std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, track_idx_t
     }
 
     const Fraction startTick = s1->tick();
-    const Fraction endTick = s2 ? s2->tick() : Fraction::max();
+    const Fraction endTick = s2 ? s2->tick() : lastMeasure()->endTick();
 
     deleteOrShortenOutSpannersFromRange(startTick, endTick, track1, track2, filter);
     deleteAnnotationsFromRange(s1, s2, track1, track2, filter);
