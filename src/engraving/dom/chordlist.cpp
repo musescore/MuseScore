@@ -880,6 +880,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
 
     // get modifiers
     bool addPending = false;
+    bool susPending = false;
     m_modifierList.clear();
     while (i < len) {
         // eat leading parens
@@ -910,12 +911,17 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             tok1 = initial;
             tok1L = initial.toLower();
         }
-        // for "add", just add the token and then read argument as a separate modifier
+        // for "add" and "sus", just add the token and then read argument as a separate modifier
         // this allows the argument to itself be a two-part string
         // thus allowing addb9 -> add;b,9
         if (tok1L == "add") {
             addToken(tok1, ChordTokenClass::MODIFIER);
             addPending = true;
+            continue;
+        }
+        if (tok1L == "sus") {
+            addToken(tok1, ChordTokenClass::MODIFIER);
+            susPending = true;
             continue;
         }
         // eat spaces
@@ -957,6 +963,18 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             }
             tok2L = tok1L + tok2L;
             tok1L = u"add";
+        }
+        // re-attach "sus"
+        if (susPending) {
+            if (m_raise.contains(tok1L)) {
+                tok1L = u"#";
+            } else if (m_lower.contains(tok1L)) {
+                tok1L = u"b";
+            } else if (tok1 == "M" || m_major.contains(tok1L)) {
+                tok1L = u"major";
+            }
+            tok2L = tok1L + tok2L;
+            tok1L = u"sus";
         }
         // standardize spelling
         if (tok1 == "M" || m_major.contains(tok1L)) {
@@ -1180,6 +1198,15 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                 } else {
                     hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
                 }
+            } else if (susPending) {
+                degree = u"sus" + tok1L + tok2L;
+                if (m_raise.contains(tok1L)) {
+                    hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
+                } else if (m_lower.contains(tok1L)) {
+                    hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
+                } else {
+                    hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
+                }
             } else if (tok1L.empty() && !tok2L.empty()) {
                 degree = u"add" + tok2L;
                 hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
@@ -1230,6 +1257,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             addToken(String(s.at(i++)), ChordTokenClass::MODIFIER);
         }
         addPending = false;
+        susPending = false;
     }
     if (!syntaxOnly) {
         m_chord.add(hdl);
