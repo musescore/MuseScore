@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <programVersion>4.6.0</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <eid>i2Tf7fN6ezM_hDx2J9pe6pH</eid>
+    <Division>480</Division>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <open>1</open>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Composer</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2025-06-30</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Title</metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>B9cYnCNM4nM_60D5lpap52D</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>Zmb74UtUYDB_uRKkWYBt4GN</eid>
+        <voice>
+          <TimeSig>
+            <eid>ryvwYyyAYjD_qY8AxTSfKtL</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>fmPOBNiMEEH_NMakrR4e0mH</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>+7RAXsGLGnD_K8YuIquyWoD</eid>
+        <voice>
+          <Rest>
+            <eid>qbADNQaz5gM_FKeMYcOdXLL</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>tOitZAcw8oD_RY/P2VZWrnP</eid>
+        <voice>
+          <Rest>
+            <eid>Pr6sHjQvxhD_Xbj02jBlSCI</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>eL+YOyOBSAG_w/J8H29CSfF</eid>
+        <voice>
+          <Rest>
+            <eid>dVBA/OLWd9F_xx//oBiAarI</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>dHouiehxsGC_d0RjdyufrOL</eid>
+        <voice>
+          <Rest>
+            <eid>fRpvqXWJ+tP_P3Zfaj5t4lC</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>t0g3jAj9cMG_yBYDFmy2ijF</eid>
+        <voice>
+          <Rest>
+            <eid>wJ7cyJ83W9_HW5q7pwBzr</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>8DdczDfSnME_oxkVVxDQjrK</eid>
+        <voice>
+          <Rest>
+            <eid>LU8vkeGkwhM_vdfPuZIqjwB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>wM6Orq31J2M_/Mswbt6GWu</eid>
+        <voice>
+          <Rest>
+            <eid>rSmNXuGUhTH_UnsTvGze8hB</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>Pn9q68eLqCH_g51oweNMOXE</eid>
+        <voice>
+          <Rest>
+            <eid>5HFJoQscGRM_NPtUyexDzSJ</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>2ae5WH/5DyE_QtRP7SEnzIM</eid>
+        <voice>
+          <Rest>
+            <eid>YOsXBC9w6VK_EXzP3U/OyLO</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>9yrgL5B+UWJ_N8KSx9AOB1C</eid>
+        <voice>
+          <Rest>
+            <eid>XnpBy/UTI6M_3jBhNFKw5xH</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>rfDxw5s+lQI_QwHtW/8hmDD</eid>
+        <voice>
+          <Rest>
+            <eid>0p5rDesQDAG_XiSW2TMH6/K</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>4Fjt4Z4uhtB_wB/psNxPokH</eid>
+        <voice>
+          <Rest>
+            <eid>Gc3iZIOfpwH_4hZCQfHRhcN</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <eid>oYREbDJ/OTE_m2auUumcv4J</eid>
+        <voice>
+          <Rest>
+            <eid>rIrqLK9Hn1E_LZ+8u0IfkzI</eid>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

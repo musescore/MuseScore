@@ -3637,6 +3637,8 @@ ReorderFBox::ReorderFBox(FBox* box, const std::vector<EID>& newOrderElementsIds)
 
 void ReorderFBox::flip(EditData*)
 {
+    std::vector<EID> currentOrderElementsIds;
+
     ElementList& elements = m_fretBox->el();
 
     const size_t n = elements.size();
@@ -3647,6 +3649,7 @@ void ReorderFBox::flip(EditData*)
     std::map<std::string, size_t> eidToIndex;
     for (size_t i = 0; i < n; ++i) {
         eidToIndex[elements[i]->eid().toStdString()] = i;
+        currentOrderElementsIds.push_back(elements[i]->eid());
     }
 
     for (size_t i = 0; i < n; ++i) {
@@ -3666,6 +3669,8 @@ void ReorderFBox::flip(EditData*)
 
         std::swap(elements[i], elements[correctIndex]);
     }
+
+    m_orderElementsIds = currentOrderElementsIds;
 }
 
 RenameChordFBox::RenameChordFBox(FBox* box, const Harmony* harmony, const String& oldName)
