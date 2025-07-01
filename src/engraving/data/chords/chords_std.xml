@@ -70,6 +70,8 @@
     <sym code="0xED64" name="bb"/>
 
     <sym code="0xE87C" name="dslash"/>
+    <sym code="0xE874" name="-"/>
+    <sym code="0xE872" name="+"/>
     </font>
 
 <!-- Extensions -->
