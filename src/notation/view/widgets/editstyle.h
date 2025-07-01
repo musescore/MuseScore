@@ -68,6 +68,7 @@ public slots:
     void setCurrentPageCode(const QString& code);
     void setCurrentSubPageCode(const QString& code);
     void goToTextStylePage(const QString& code);
+    void goToTextStylePage(int index);
 
 signals:
     void currentPageChanged();
@@ -111,7 +112,6 @@ private:
     std::vector<LineStyleSelect*> m_lineStyleSelects;
 
     std::vector<QComboBox*> verticalPlacementComboBoxes;
-    std::vector<QComboBox*> horizontalPlacementComboBoxes;
 
     QPushButton* buttonApplyToAllParts = nullptr;
 

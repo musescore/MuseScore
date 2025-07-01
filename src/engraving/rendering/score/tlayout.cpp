@@ -170,6 +170,7 @@
 #include "tappinglayout.h"
 #include "harmonylayout.h"
 #include "markerlayout.h"
+#include "measurenumberlayout.h"
 
 using namespace muse;
 using namespace muse::draw;
@@ -3993,71 +3994,7 @@ void TLayout::layoutBaseMeasureBase(const MeasureBase* item, MeasureBase::Layout
 
 void TLayout::layoutMeasureNumber(const MeasureNumber* item, MeasureNumber::LayoutData* ldata, const LayoutContext& ctx)
 {
-    LAYOUT_CALL_ITEM(item);
-    LD_CONDITION(item->measure()->ldata()->isSetBbox()); // layoutMeasureNumberBase
-
-    layoutMeasureNumberBase(item, ldata, ctx);
-}
-
-void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata, const LayoutContext& ctx)
-{
-    IF_ASSERT_FAILED(item->explicitParent()) {
-        return;
-    }
-
-    LD_CONDITION(item->measure()->ldata()->isSetBbox());
-
-    ldata->setPos(PointF());
-
-    layoutBaseTextBase1(item, ldata);
-
-    if (item->placeBelow()) {
-        double yoff = ldata->bbox().height();
-
-        // If there is only one line, the barline spans outside the staff lines, so the default position is not correct.
-        if (item->staff()->constStaffType(item->measure()->tick())->lines() == 1) {
-            yoff += 2.0 * item->spatium();
-        } else {
-            yoff += item->staff()->staffHeight();
-        }
-
-        ldata->setPosY(yoff);
-    } else {
-        double yoff = 0.0;
-
-        // If there is only one line, the barline spans outside the staff lines, so the default position is not correct.
-        if (item->staff()->constStaffType(item->measure()->tick())->lines() == 1) {
-            yoff -= 2.0 * item->spatium();
-        }
-
-        ldata->setPosY(yoff);
-    }
-
-    if (item->hPlacement() == PlacementH::CENTER) {
-        // measure numbers should be centered over where there can be notes.
-        // This means that header and trailing segments should be ignored,
-        // which includes all timesigs, clefs, keysigs, etc.
-        // This is how it should be centered:
-        // |bb 4/4 notes-chords #| other measure |
-        // |      ------18------ | other measure |
-
-        //    x1 - left measure position of free space
-        //    x2 - right measure position of free space
-
-        const Measure* measure = item->measure();
-
-        // find first chordrest
-        const Segment* crSeg = measure->first(SegmentType::ChordRest);
-
-        const MeasureLayout::MeasureStartEndPos measureStartEnd = MeasureLayout::getMeasureStartEndPos(measure, crSeg,
-                                                                                                       item->staffIdx(), true, false, ctx);
-        const double x1 = measureStartEnd.x1;
-        const double x2 = measureStartEnd.x2;
-
-        ldata->setPosX((x1 + x2) * 0.5);
-    } else if (item->hPlacement() == PlacementH::RIGHT) {
-        ldata->setPosX(item->measure()->ldata()->bbox().width());
-    }
+    MeasureNumberLayout::layoutMeasureNumber(item,  ldata, ctx);
 }
 
 void TLayout::layoutMeasureRepeat(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutContext& ctx)
@@ -4277,10 +4214,7 @@ void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const 
 
 void TLayout::layoutMMRestRange(const MMRestRange* item, MMRestRange::LayoutData* ldata, const LayoutContext& ctx)
 {
-    LAYOUT_CALL_ITEM(item);
-    LD_CONDITION(item->measure()->ldata()->isSetBbox()); // layoutMeasureNumberBase
-
-    layoutMeasureNumberBase(item, ldata, ctx);
+    MeasureNumberLayout::layoutMMRestRange(item, ldata, ctx);
 }
 
 void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)

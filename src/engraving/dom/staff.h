@@ -264,6 +264,9 @@ public:
     track_idx_t getLinkedTrackInStaff(const Staff* linkedStaff, const track_idx_t strack) const;
     bool trackHasLinksInVoiceZero(track_idx_t track);
 
+    void undoSetShowMeasureNumbers(bool show);
+    bool shouldShowMeasureNumbers() const;
+
 private:
 
     friend class Factory;
@@ -313,6 +316,8 @@ private:
     PitchList m_pitchOffsets;               // cached value
 
     bool m_reflectTranspositionInLinkedTab = true;
+
+    AutoOnOff m_showMeasureNumbers = AutoOnOff::AUTO;
 };
 } // namespace mu::engraving
 #endif

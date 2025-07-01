@@ -93,7 +93,7 @@ namespace mu::engraving {
 
 MStaff::~MStaff()
 {
-    delete m_noText;
+    delete m_measureNumber;
     delete m_mmRangeText;
     delete m_lines;
     delete m_vspacerUp;
@@ -102,7 +102,7 @@ MStaff::~MStaff()
 
 MStaff::MStaff(const MStaff& m)
 {
-    m_noText    = 0;
+    m_measureNumber    = 0;
     m_mmRangeText = 0;
     m_lines     = Factory::copyStaffLines(*m.m_lines);
     m_hasVoices = m.m_hasVoices;
@@ -131,8 +131,8 @@ void MStaff::setScore(Score* score)
     if (m_vspacerDown) {
         m_vspacerDown->setScore(score);
     }
-    if (m_noText) {
-        m_noText->setScore(score);
+    if (m_measureNumber) {
+        m_measureNumber->setScore(score);
     }
     if (m_mmRangeText) {
         m_mmRangeText->setScore(score);
@@ -154,8 +154,8 @@ void MStaff::setTrack(track_idx_t track)
     if (m_vspacerDown) {
         m_vspacerDown->setTrack(track);
     }
-    if (m_noText) {
-        m_noText->setTrack(track);
+    if (m_measureNumber) {
+        m_measureNumber->setTrack(track);
     }
     if (m_mmRangeText) {
         m_mmRangeText->setTrack(track);
@@ -819,7 +819,7 @@ void Measure::add(EngravingItem* e)
             if (e->isStyled(Pid::OFFSET)) {
                 e->setOffset(e->propertyDefault(Pid::OFFSET).value<PointF>());
             }
-            m_mstaves[e->staffIdx()]->setNoText(toMeasureNumber(e));
+            m_mstaves[e->staffIdx()]->setMeasureNumber(toMeasureNumber(e));
         }
         break;
 
@@ -932,7 +932,7 @@ void Measure::remove(EngravingItem* e)
     break;
 
     case ElementType::MEASURE_NUMBER:
-        m_mstaves[e->staffIdx()]->setNoText(nullptr);
+        m_mstaves[e->staffIdx()]->setMeasureNumber(nullptr);
         break;
 
     case ElementType::MMREST_RANGE:
@@ -2063,10 +2063,15 @@ void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
     MeasureBase::scanElements(data, func, all);
 
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        MStaff* ms = m_mstaves[staffIdx];
+        if (ms->measureNumber()) {
+            func(data, ms->measureNumber());
+        }
+
         if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show()) && !isCutawayClef(staffIdx)) {
             continue;
         }
-        MStaff* ms = m_mstaves[staffIdx];
+
         func(data, ms->lines());
         if (ms->vspacerUp()) {
             func(data, ms->vspacerUp());
@@ -2074,9 +2079,7 @@ void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
         if (ms->vspacerDown()) {
             func(data, ms->vspacerDown());
         }
-        if (ms->noText()) {
-            func(data, ms->noText());
-        }
+
         if (ms->mmRangeText()) {
             func(data, ms->mmRangeText());
         }

@@ -34,8 +34,8 @@ namespace mu::engraving {
 
 static const ElementStyle measureNumberStyle {
     { Sid::measureNumberVPlacement, Pid::PLACEMENT },
-    { Sid::measureNumberHPlacement, Pid::HPLACEMENT },
-    { Sid::measureNumberMinDistance, Pid::MIN_DISTANCE }
+    { Sid::measureNumberMinDistance, Pid::MIN_DISTANCE },
+    { Sid::measureNumberTextStyle, Pid::TEXT_STYLE }
 };
 
 //---------------------------------------------------------
@@ -46,8 +46,6 @@ MeasureNumber::MeasureNumber(Measure* parent, TextStyleType tid)
     : MeasureNumberBase(ElementType::MEASURE_NUMBER, parent, tid)
 {
     initElementStyle(&measureNumberStyle);
-
-    setHPlacement(style().styleV(Sid::measureNumberHPlacement).value<PlacementH>());
 }
 
 //---------------------------------------------------------
@@ -61,6 +59,16 @@ MeasureNumber::MeasureNumber(const MeasureNumber& other)
     initElementStyle(&measureNumberStyle);
 }
 
+PropertyValue MeasureNumber::getProperty(Pid id) const
+{
+    switch (id) {
+    case Pid::HPLACEMENT:
+        return style().styleV(Sid::measureNumberHPlacement);
+    default:
+        return MeasureNumberBase::propertyDefault(id);
+    }
+}
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
@@ -69,7 +77,7 @@ engraving::PropertyValue MeasureNumber::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return TextStyleType::MEASURE_NUMBER;
+        return style().styleV(Sid::measureNumberTextStyle);
     case Pid::PLACEMENT:
         return style().styleV(Sid::measureNumberVPlacement);
     case Pid::HPLACEMENT:

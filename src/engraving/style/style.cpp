@@ -223,6 +223,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::RH_TAPPING_SYMBOL:
                 set(idx, TConv::fromXml(e.readAsciiText(), RHTappingSymbol::T));
                 break;
+            case P_TYPE::TEXT_STYLE:
+                set(idx, TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
@@ -694,6 +697,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(value(idx).value<LHTappingSymbol>()));
         } else if (P_TYPE::RH_TAPPING_SYMBOL == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<RHTappingSymbol>()));
+        } else if (P_TYPE::TEXT_STYLE == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TextStyleType>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility
