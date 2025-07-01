@@ -209,6 +209,15 @@ QAccessible::State AccessibleItemInterface::state() const
     } break;
     }
 
+    if (IAccessible* pretendFocusItem = m_object->controller().lock()->pretendFocusItem()) {
+        if (item == pretendFocusItem) {
+            state.focusable = true;
+            state.focused = true; // pretend to have focus
+        } else {
+            state.focused = false; // pretend to not have focus
+        }
+    }
+
     return state;
 }
 

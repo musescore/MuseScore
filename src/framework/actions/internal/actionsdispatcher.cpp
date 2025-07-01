@@ -27,6 +27,7 @@
 
 #include "log.h"
 
+using namespace muse::accessibility;
 using namespace muse::actions;
 using namespace muse::ui;
 
@@ -104,6 +105,8 @@ void ActionsDispatcher::dump() const
 void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& actionCode, const ActionData& data)
 {
     const UiAction action = actionRegister.get()->action(actionCode);
+    const IAccessible* focusBefore = accessibilityController.get()->lastFocused();
+    const QString nameBefore = focusBefore ? focusBefore->accessibleName() : QString();
 
     int canReceiveCount = 0;
     for (auto cit = clients.cbegin(); cit != clients.cend(); ++cit) {
@@ -116,15 +119,6 @@ void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& act
                 continue;
             }
 
-            if (action.isValid()) {
-                // Make screen readers say the name of the action about to be performed.
-                accessibilityController.get()->announce(action.title.qTranslatedWithoutMnemonic());
-                // NOTE: We perform the action before the screen reader has a chance
-                // to say anything. If the action results in a change of focus, this
-                // speech will be cancelled, and the screen reader will instead say
-                // the name of the new focus object. This is intentional behavior.
-            }
-
             // Perform the action
             const ActionCallBackWithNameAndData& callback = cbit->second;
             LOGI() << "try call action: " << actionCode;
@@ -134,8 +128,19 @@ void ActionsDispatcher::doDispatch(const Clients& clients, const ActionCode& act
 
     if (canReceiveCount == 0) {
         LOGI() << "no one can handle the action: " << actionCode;
-    } else if (canReceiveCount > 1) {
+        return;
+    }
+
+    if (canReceiveCount > 1) {
         LOGW() << "More than one client can handle the action, this is not a typical situation.";
+    }
+
+    const IAccessible* focusAfter = accessibilityController.get()->lastFocused();
+    const QString nameAfter = focusAfter ? focusAfter->accessibleName() : QString();
+
+    if (action.isValid() && focusAfter == focusBefore && nameAfter == nameBefore) {
+        // Make screen readers say the name of the action we just performed.
+        accessibilityController.get()->announce(action.title.qTranslatedWithoutMnemonic());
     }
 }
 
