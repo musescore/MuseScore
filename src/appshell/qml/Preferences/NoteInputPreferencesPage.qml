@@ -149,6 +149,21 @@ PreferencesPage {
 
         SeparatorLine {}
 
+        FretboardDiagramsSection {
+            width: parent.width
+
+            autoUpdateFretboardDiagrams: noteInputModel.autoUpdateFretboardDiagrams
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 5
+
+            onAutoUpdateFretboardDiagramsChangeRequested: function(update) {
+                noteInputModel.autoUpdateFretboardDiagrams = update
+            }
+        }
+
+        SeparatorLine {}
+
         NoteColorsSection {
             width: parent.width
 
@@ -156,7 +171,7 @@ PreferencesPage {
             warnGuitarBends: noteInputModel.warnGuitarBends
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 5
+            navigation.order: root.navigationOrderStart + 6
 
             onColorNotesChangeRequested: function(color) {
                 noteInputModel.colorNotesOutsideOfUsablePitchRange = color
