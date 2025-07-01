@@ -3724,8 +3724,13 @@ void Score::deleteRangeAtTrack(std::vector<ChordRest*>& crsToSelect, const track
             }
             for (EngravingItem* graceElem : anchoredToGrace) {
                 if (filter.canSelect(graceElem)) {
+                    // Delete elements anchored to grace note...
                     undoRemoveElement(graceElem);
                 }
+            }
+            if (filter.canSelect(elem)) {
+                // Delete grace note itself...
+                undoRemoveElement(elem);
             }
         }
 
