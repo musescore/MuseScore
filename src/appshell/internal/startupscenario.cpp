@@ -114,7 +114,7 @@ void StartupScenario::registerAudioPlugins()
     }
 }
 
-void StartupScenario::runAfterSplashScreen()
+void StartupScenario::openStartupPage()
 {
     TRACEFUNC;
 

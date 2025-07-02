@@ -245,7 +245,7 @@ void GuiApp::perform()
         QQuickWindow* w = dynamic_cast<QQuickWindow*>(obj);
         w->setVisible(true);
 
-        startupScenario()->runAfterSplashScreen();
+        startupScenario()->openStartupPage();
     }, Qt::QueuedConnection);
 
     QObject::connect(engine, &QQmlEngine::warnings, [](const QList<QQmlError>& warnings) {

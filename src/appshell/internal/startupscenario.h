@@ -65,7 +65,7 @@ public:
     void checkForUpdates() override;
     void registerAudioPlugins() override;
 
-    void runAfterSplashScreen() override;
+    void openStartupPage() override;
     bool startupCompleted() const override;
 
 private:

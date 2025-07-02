@@ -44,7 +44,7 @@ public:
     virtual void checkForUpdates() = 0;
     virtual void registerAudioPlugins() = 0;
 
-    virtual void runAfterSplashScreen() = 0;
+    virtual void openStartupPage() = 0;
     virtual bool startupCompleted() const = 0;
 };
 }
