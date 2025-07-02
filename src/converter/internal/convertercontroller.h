@@ -72,6 +72,9 @@ public:
     muse::Ret exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
                                    const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
 
+    muse::Ret exportScoreElements(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
+                                  const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
+
     muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out) override;
 
     muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false) override;

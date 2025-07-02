@@ -43,6 +43,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/compat/backendjsonwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/compat/notationmeta.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/compat/notationmeta.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/scoreelementsscanner.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/compat/scoreelementsscanner.h
     )
 
 if (QT_SUPPORT)

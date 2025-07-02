@@ -40,6 +40,7 @@ public:
     void setTechniqueType(const PlayingTechniqueType techniqueType);
 
     PlayTechAnnotation* clone() const override;
+    TranslatableString subtypeUserName() const override;
 
     bool isHandbellsSymbol() const;
     bool isEditable() const override { return !isHandbellsSymbol(); }
@@ -49,7 +50,6 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
 
 private:
-
     PlayingTechniqueType m_techniqueType = PlayingTechniqueType::Undefined;
 };
 }
