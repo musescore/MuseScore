@@ -22,6 +22,8 @@
 
 #include "enums.h"
 
+#include <QVariant>
+
 #include "log.h"
 
 using namespace mu::engraving::apiv1;
@@ -42,8 +44,11 @@ void Enum::add(const QMetaEnum& _enum)
         return;
     }
 
+    QVariantHash enumValues;
     const int nkeys = _enum.keyCount();
     for (int i = 0; i < nkeys; ++i) {
-        insert(_enum.key(i), _enum.value(i));
+        enumValues.insert(_enum.key(i), _enum.value(i));
     }
+
+    insert(enumValues);
 }
