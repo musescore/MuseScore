@@ -24,6 +24,8 @@
 
 #include "segment.h"
 
+#include "types/typesconv.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -54,6 +56,11 @@ void PlayTechAnnotation::setTechniqueType(const PlayingTechniqueType techniqueTy
 PlayTechAnnotation* PlayTechAnnotation::clone() const
 {
     return new PlayTechAnnotation(*this);
+}
+
+TranslatableString PlayTechAnnotation::subtypeUserName() const
+{
+    return TConv::userName(m_techniqueType);
 }
 
 PropertyValue PlayTechAnnotation::getProperty(Pid id) const
