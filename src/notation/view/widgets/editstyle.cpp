@@ -982,10 +982,10 @@ EditStyle::EditStyle(QWidget* parent)
     // ====================================================
 
     auto barNumbersPage = createQmlWidget(
-        barNumbersWidget,
+        PageMeasureNumbers,
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/BarNumbersPage.qml")));
     barNumbersPage.widget->setMinimumSize(224, 400);
-    barNumbersWidget->layout()->addWidget(barNumbersPage.widget);
+    PageMeasureNumbers->layout()->addWidget(barNumbersPage.widget);
     connect(barNumbersPage.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
 
     // ====================================================
