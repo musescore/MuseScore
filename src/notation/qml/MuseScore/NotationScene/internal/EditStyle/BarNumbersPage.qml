@@ -219,8 +219,8 @@ StyledFlickable {
                     }
 
                     RoundedRadioButton {
-                        checked: barNumbersModel.measureNumberAllStaves.value === false
-                        onClicked: barNumbersModel.measureNumberAllStaves.value = false
+                        checked: barNumbersModel.measureNumberAllStaves.value === true
+                        onClicked: barNumbersModel.measureNumberAllStaves.value = true
                         text: qsTrc("notation/editstyle/voltas", "On all staves")
                     }
                 }
@@ -230,29 +230,22 @@ StyledFlickable {
                     spacing: 8
 
                     StyledTextLabel {
-                        text: qsTrc("notation/editstyle/voltas", "Position above:")
+                        text: qsTrc("notation/editstyle/voltas", "Position")
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    RowLayout {
-                        IncrementalPropertyControl {
-                            Layout.preferredWidth: 100
-                            currentValue: barNumbersModel.measureNumberPosAbove.value.y
-                            measureUnitsSymbol: qsTrc("global", "sp")
-                            maxValue: 0
-                            minValue: -100
-                            decimals: 2
-                            step: 0.25
+                    RadioButtonGroup {
+                        model: [
+                            { text: qsTrc("notation/editstyle/voltas", "Above"), value: 0},
+                            { text: qsTrc("notation/editstyle/voltas", "Below"), value: 1},
+                        ]
 
-                            onValueEdited: function(newValue) {
-                                barNumbersModel.measureNumberPosAbove.value.y = newValue
-                            }
-                        }
-
-                        FlatButton {
-                            icon: IconCode.UNDO
-                            enabled: !barNumbersModel.measureNumberPosAbove.isDefault
-                            onClicked: barNumbersModel.measureNumberPosAbove.value = barNumbersModel.measureNumberPosAbove.defaultValue
+                        delegate: FlatRadioButton {
+                            width: 176
+                            height: 30
+                            text: modelData.text
+                            checked: barNumbersModel.measureNumberVPlacement.value === modelData.value
+                            onToggled: barNumbersModel.measureNumberVPlacement.value = modelData.value
                         }
                     }
                 }
@@ -262,30 +255,14 @@ StyledFlickable {
                     spacing: 8
 
                     StyledTextLabel {
-                        text: qsTrc("notation/editstyle/voltas", "Position below:")
+                        text: qsTrc("notation/editstyle/voltas", "Offset")
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    RowLayout {
-                        IncrementalPropertyControl {
-                            Layout.preferredWidth: 100
-                            currentValue: barNumbersModel.measureNumberPosBelow.value.y
-                            measureUnitsSymbol: qsTrc("global", "sp")
-                            maxValue: 100
-                            minValue: 0
-                            decimals: 2
-                            step: 0.25
-
-                            onValueEdited: function(newValue) {
-                                barNumbersModel.measureNumberPosBelow.value.y = newValue
-                            }
-                        }
-
-                        FlatButton {
-                            icon: IconCode.UNDO
-                            enabled: !barNumbersModel.measureNumberPosBelow.isDefault
-                            onClicked: barNumbersModel.measureNumberPosBelow.value = barNumbersModel.measureNumberPosBelow.defaultValue
-                        }
+                    StyledXYControllerWithReset {
+                        styleItem: barNumbersModel.measureNumberVPlacement.value === 0
+                                   ? barNumbersModel.measureNumberPosAbove
+                                   : barNumbersModel.measureNumberPosBelow
                     }
                 }
             }
@@ -433,7 +410,6 @@ StyledFlickable {
                 }
 
                 ColumnLayout {
-                    id: offsetControl
                     enabled: barNumbersModel.mmRestShowMeasureNumberRange.value === true
                     width: parent.width
                     spacing: 8

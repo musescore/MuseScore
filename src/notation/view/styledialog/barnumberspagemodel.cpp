@@ -32,6 +32,7 @@ BarNumbersPageModel::BarNumbersPageModel(QObject* parent)
                                          StyleId::showMeasureNumberOne,
                                          StyleId::measureNumberInterval,
                                          StyleId::measureNumberSystem,
+                                         StyleId::measureNumberVPlacement,
                                          StyleId::measureNumberHPlacement,
                                          StyleId::measureNumberHPlacementInterval,
                                          StyleId::measureNumberAllStaves,
@@ -55,6 +56,7 @@ StyleItem* BarNumbersPageModel::showMeasureNumber() const { return styleItem(Sty
 StyleItem* BarNumbersPageModel::showMeasureNumberOne() const { return styleItem(StyleId::showMeasureNumberOne); }
 StyleItem* BarNumbersPageModel::measureNumberInterval() const { return styleItem(StyleId::measureNumberInterval); }
 StyleItem* BarNumbersPageModel::measureNumberSystem() const { return styleItem(StyleId::measureNumberSystem); }
+StyleItem* BarNumbersPageModel::measureNumberVPlacement() const { return styleItem(StyleId::measureNumberVPlacement); }
 StyleItem* BarNumbersPageModel::measureNumberHPlacement() const { return styleItem(StyleId::measureNumberHPlacement); }
 StyleItem* BarNumbersPageModel::measureNumberHPlacementInterval() const { return styleItem(StyleId::measureNumberHPlacementInterval); }
 StyleItem* BarNumbersPageModel::measureNumberAllStaves() const { return styleItem(StyleId::measureNumberAllStaves); }

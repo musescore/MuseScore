@@ -33,6 +33,7 @@ class BarNumbersPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * showMeasureNumberOne READ showMeasureNumberOne CONSTANT)
     Q_PROPERTY(StyleItem * measureNumberInterval READ measureNumberInterval CONSTANT)
     Q_PROPERTY(StyleItem * measureNumberSystem READ measureNumberSystem CONSTANT)
+    Q_PROPERTY(StyleItem * measureNumberVPlacement READ measureNumberVPlacement CONSTANT)
     Q_PROPERTY(StyleItem * measureNumberHPlacement READ measureNumberHPlacement CONSTANT)
     Q_PROPERTY(StyleItem * measureNumberHPlacementInterval READ measureNumberHPlacementInterval CONSTANT)
     Q_PROPERTY(StyleItem * measureNumberAllStaves READ measureNumberAllStaves CONSTANT)
@@ -57,6 +58,7 @@ public:
     StyleItem* showMeasureNumberOne() const;
     StyleItem* measureNumberInterval() const;
     StyleItem* measureNumberSystem() const;
+    StyleItem* measureNumberVPlacement() const;
     StyleItem* measureNumberHPlacement() const;
     StyleItem* measureNumberHPlacementInterval() const;
     StyleItem* measureNumberAllStaves() const;
