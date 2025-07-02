@@ -39,6 +39,7 @@
 #include "repeatlist.h"
 #include "keysig.h"
 #include "measure.h"
+#include "measurenumber.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
@@ -1423,6 +1424,13 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
                 }
             } else if (measureElement->isTopSystemObject()) {
                 result.push_back(measureElement);
+            }
+        }
+
+        for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            MeasureNumber* measureNum = measure->noText(staffIdx);
+            if (measureNum && measureNum->systemFlag() && muse::contains(staves, measureNum->staff())) {
+                result.push_back(measureNum);
             }
         }
 

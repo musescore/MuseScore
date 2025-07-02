@@ -1223,45 +1223,54 @@ void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
 
 void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
 {
-    bool smn = m->showsMeasureNumber();
+    bool showMeasureNumber = m->showsMeasureNumber();
 
-    String s;
-    if (smn) {
-        s = String::number(m->no() + 1);
+    String stringNum;
+    if (showMeasureNumber) {
+        stringNum = String::number(m->no() + 1);
     }
 
-    unsigned nn = 1;
-    bool nas = ctx.conf().styleB(Sid::measureNumberAllStaves);
+    Score* score = m->score();
+    bool allStaves = ctx.conf().styleB(Sid::measureNumberAllStaves);
 
-    if (!nas) {
-        //find first non invisible staff
-        for (unsigned staffIdx = 0; staffIdx < m->mstaves().size(); ++staffIdx) {
-            if (m->visible(staffIdx)) {
-                nn = staffIdx;
-                break;
-            }
+    std::vector<staff_idx_t> stavesWithMeasureNumber;
+    if (allStaves) {
+        stavesWithMeasureNumber.reserve(score->nstaves());
+        for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            stavesWithMeasureNumber.push_back(staffIdx);
+        }
+    } else {
+        stavesWithMeasureNumber.reserve(score->systemObjectStaves().size() + 1);
+        stavesWithMeasureNumber.push_back(0);
+        for (const Staff* staff : score->systemObjectStaves()) {
+            stavesWithMeasureNumber.push_back(staff->idx());
         }
     }
-    for (unsigned staffIdx = 0; staffIdx < m->mstaves().size(); ++staffIdx) {
-        const MStaff* ms = m->mstaves().at(staffIdx);
-        MeasureNumber* t = ms->noText();
-        if (t) {
-            t->setTrack(staffIdx * VOICES);
+
+    const std::vector<MStaff*>& measureStaves = m->mstaves();
+
+    for (staff_idx_t staffIdx : stavesWithMeasureNumber) {
+        if (staffIdx >= measureStaves.size()) {
+            break;
         }
-        if (smn && ((staffIdx == nn) || nas)) {
-            if (t == 0) {
-                t = new MeasureNumber(m);
-                t->setTrack(staffIdx * VOICES);
-                t->setGenerated(true);
-                t->setParent(m);
-                m->add(t);
+
+        const MStaff* measureStaff = measureStaves[staffIdx];
+        MeasureNumber* measureNumber = measureStaff->noText();
+
+        if (showMeasureNumber) {
+            if (!measureNumber) {
+                measureNumber = new MeasureNumber(m);
+                measureNumber->setTrack(staff2track(staffIdx));
+                measureNumber->setGenerated(true);
+                measureNumber->setParent(m);
+                m->add(measureNumber);
             }
-            t->setXmlText(s);
-            TLayout::layoutMeasureNumber(t, t->mutldata(), ctx);
-        } else {
-            if (t) {
-                ctx.mutDom().doUndoRemoveElement(t);
-            }
+
+            measureNumber->setXmlText(stringNum);
+            measureNumber->setSystemFlag(!allStaves);
+            TLayout::layoutMeasureNumber(measureNumber, measureNumber->mutldata(), ctx);
+        } else if (measureNumber) {
+            ctx.mutDom().doUndoRemoveElement(measureNumber);
         }
     }
 }
