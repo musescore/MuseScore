@@ -134,6 +134,7 @@ private:
     bool writeFermata(const engraving::Fermata* fermata, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const libmei::xsdPositiveInteger_List& staffNs, double tstamp);
     bool writeFing(const engraving::Fingering* fing, const std::string& startid);
+    bool writeGliss(const engraving::Glissando* gliss, const std::string& startid);
     bool writeHairpin(const engraving::Hairpin* hairpin, const std::string& startid);
     bool writeHarm(const engraving::Harmony* harmony, const std::string& startid);
     bool writeHarpPedal(const engraving::HarpPedalDiagram* harpPedalDiagram, const std::string& startid);
