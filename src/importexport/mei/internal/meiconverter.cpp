@@ -1586,7 +1586,7 @@ void Convert::glissFromMEI(engraving::Glissando* gliss, const libmei::Gliss& mei
 libmei::Gliss Convert::glissToMEI(const engraving::Glissando* gliss)
 {
     libmei::Gliss meiGliss;
-    
+
     // @lform
     switch (gliss->glissandoType()) {
     case engraving::GlissandoType::STRAIGHT:
