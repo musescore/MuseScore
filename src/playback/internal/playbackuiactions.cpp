@@ -46,6 +46,13 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              TranslatableString("action", "Stop playback"),
              IconCode::Code::STOP
              ),
+    UiAction("pause-and-select",
+             mu::context::UiCtxProjectOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Pause and select"),
+             TranslatableString("action", "Pause and select playback position"),
+             IconCode::Code::PAUSE
+             ),
     UiAction("rewind",
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
