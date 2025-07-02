@@ -1041,8 +1041,7 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
             item->setDrumset(new Drumset(*smDrumset));
         }
     } else if (tag == "Drum") {
-        // if we see on of this tags, a custom drumset will
-        // be created
+        // if we see one of these tags, a custom drumset will be created
         if (!item->drumset()) {
             item->setDrumset(new Drumset(*smDrumset));
         }
@@ -1050,7 +1049,17 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
             const_cast<Drumset*>(item->drumset())->clear();
             *customDrumset = true;
         }
-        const_cast<Drumset*>(item->drumset())->load(e);
+        const_cast<Drumset*>(item->drumset())->loadDrum(e);
+    } else if (tag == "percussionPanelColumns") {
+        // if we see one of these tags, a custom drumset will be created
+        if (!item->drumset()) {
+            item->setDrumset(new Drumset(*smDrumset));
+        }
+        if (!(*customDrumset)) {
+            const_cast<Drumset*>(item->drumset())->clear();
+            *customDrumset = true;
+        }
+        item->drumset()->setPercussionPanelColumns(e.readInt());
     }
     // support tag "Tablature" for a while for compatibility with existent 2.0 scores
     else if (tag == "Tablature" || tag == "StringData") {

@@ -37,6 +37,7 @@
         <trackName>Slit Drum</trackName>
         <instrumentId>drum.slit-drum</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="77">
           <head>normal</head>
           <line>0</line>

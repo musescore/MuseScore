@@ -37,6 +37,7 @@
         <trackName>Drumset</trackName>
         <instrumentId>drum.group.set</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="35">
           <head>normal</head>
           <line>7</line>
@@ -272,6 +273,7 @@
         <trackName>Snare Drum</trackName>
         <instrumentId>drum.snare-drum</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="48">
           <head>diamond</head>
           <line>0</line>
@@ -405,6 +407,7 @@
         <trackName>Tenor Drums</trackName>
         <instrumentId>drum.tenor-drum</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="24">
           <head>normal</head>
           <line>7</line>
@@ -615,6 +618,7 @@
         <trackName>Bass Drums</trackName>
         <instrumentId>drum.bass-drum</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="1">
           <head>normal</head>
           <line>7</line>

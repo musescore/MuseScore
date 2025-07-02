@@ -1291,6 +1291,7 @@
         <trackName>Percussion 1</trackName>
         <instrumentId>drum.group</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="27">
           <head>slash</head>
           <line>8</line>
@@ -1932,6 +1933,7 @@
         <trackName>Percussion 2</trackName>
         <instrumentId>drum.group</instrumentId>
         <useDrumset>1</useDrumset>
+        <percussionPanelColumns>8</percussionPanelColumns>
         <Drum pitch="27">
           <head>slash</head>
           <line>8</line>

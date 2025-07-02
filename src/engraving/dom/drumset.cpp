@@ -97,6 +97,7 @@ int Drumset::defaultPitchForLine(int val) const
 
 void Drumset::save(XmlWriter& xml) const
 {
+    xml.tag("percussionPanelColumns", m_percussionPanelColumns);
     for (int i = 0; i < DRUM_INSTRUMENTS; ++i) {
         if (!isValid(i)) {
             continue;
@@ -143,7 +144,7 @@ void Drumset::save(XmlWriter& xml) const
     }
 }
 
-bool Drumset::readProperties(XmlReader& e, int pitch)
+bool Drumset::readDrumProperties(XmlReader& e, int pitch)
 {
     if (pitch < 0 || pitch > DRUM_INSTRUMENTS - 1) {
         return false;
@@ -204,7 +205,7 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
 //   load
 //---------------------------------------------------------
 
-void Drumset::load(XmlReader& e)
+void Drumset::loadDrum(XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
     if (pitch < 0 || pitch > DRUM_INSTRUMENTS - 1) {
@@ -212,7 +213,7 @@ void Drumset::load(XmlReader& e)
         return;
     }
     while (e.readNextStartElement()) {
-        if (readProperties(e, pitch)) {
+        if (readDrumProperties(e, pitch)) {
         } else {
             e.unknown();
         }
