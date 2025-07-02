@@ -443,47 +443,38 @@ StyledFlickable {
                                                        : barNumbersModel.mmRestRangePosBelow
 
                     StyledTextLabel {
-                        text: qsTrc("notation/editstyle/voltas", "X offset:")
+                        text: qsTrc("notation/editstyle/voltas", "Offset")
                         horizontalAlignment: Text.AlignLeft
                     }
 
                     RowLayout {
+                        spacing: 6
+
                         IncrementalPropertyControl {
                             Layout.preferredWidth: 100
-                            currentValue: offsetControl.offsetProperty.value.x
-                            measureUnitsSymbol: qsTrc("global", "sp")
-                            maxValue: 100
-                            minValue: -100
                             decimals: 2
-                            step: 0.25
+                            measureUnitsSymbol: 'sp'
+                            prefixIcon: IconCode.HORIZONTAL
+                            minValue: -100
+                            maxValue: 100
+                            step: 0.1
 
+                            currentValue: offsetControl.offsetProperty.value.x
                             onValueEdited: function(newValue) {
                                 offsetControl.offsetProperty.value.x = newValue
                             }
                         }
 
-                        FlatButton {
-                            icon: IconCode.UNDO
-                            enabled: offsetControl.offsetProperty.value.x != offsetControl.offsetProperty.defaultValue.x
-                            onClicked: offsetControl.offsetProperty.value.x = offsetControl.offsetProperty.defaultValue.x
-                        }
-                    }
-
-                    StyledTextLabel {
-                        text: qsTrc("notation/editstyle/voltas", "Y offset:")
-                        horizontalAlignment: Text.AlignLeft
-                    }
-
-                    RowLayout {
                         IncrementalPropertyControl {
                             Layout.preferredWidth: 100
-                            currentValue: offsetControl.offsetProperty.value.y
-                            measureUnitsSymbol: qsTrc("global", "sp")
-                            maxValue: 100
-                            minValue: -100
                             decimals: 2
-                            step: 0.25
+                            measureUnitsSymbol: 'sp'
+                            prefixIcon: IconCode.VERTICAL
+                            minValue: -100
+                            maxValue: 100
+                            step: 0.1
 
+                            currentValue: offsetControl.offsetProperty.value.y
                             onValueEdited: function(newValue) {
                                 offsetControl.offsetProperty.value.y = newValue
                             }
@@ -491,8 +482,8 @@ StyledFlickable {
 
                         FlatButton {
                             icon: IconCode.UNDO
-                            enabled: offsetControl.offsetProperty.value.y != offsetControl.offsetProperty.defaultValue.y
-                            onClicked: offsetControl.offsetProperty.value.y = offsetControl.offsetProperty.defaultValue.y
+                            enabled: !offsetControl.offsetProperty.isDefault
+                            onClicked: offsetControl.offsetProperty.value = offsetControl.offsetProperty.value
                         }
                     }
                 }
