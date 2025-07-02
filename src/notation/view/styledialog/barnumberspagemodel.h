@@ -46,6 +46,10 @@ class BarNumbersPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * mmRestRangeVPlacement READ mmRestRangeVPlacement CONSTANT)
     Q_PROPERTY(StyleItem * mmRestRangeHPlacement READ mmRestRangeHPlacement CONSTANT)
 
+    Q_PROPERTY(QVariantList textStyles READ textStyles)
+    Q_PROPERTY(StyleItem * measureNumberTextStyle READ measureNumberTextStyle CONSTANT)
+    Q_PROPERTY(StyleItem * mmRestRangeTextStyle READ mmRestRangeTextStyle CONSTANT)
+
 public:
     explicit BarNumbersPageModel(QObject* parent = nullptr);
 
@@ -65,5 +69,10 @@ public:
     StyleItem* mmRestRangePosBelow() const;
     StyleItem* mmRestRangeVPlacement() const;
     StyleItem* mmRestRangeHPlacement() const;
+
+    QVariantList textStyles();
+
+    StyleItem* measureNumberTextStyle() const;
+    StyleItem* mmRestRangeTextStyle() const;
 };
 }

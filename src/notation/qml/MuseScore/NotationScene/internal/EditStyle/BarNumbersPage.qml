@@ -88,11 +88,28 @@ StyledFlickable {
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    FlatButton {
-                        text: qsTrc("notation", "Edit text style")
+                    RowLayout {
+                        StyledDropdown {
+                            Layout.preferredWidth: 190
+                            model: barNumbersModel.textStyles
+                            currentIndex: indexOfValue(barNumbersModel.measureNumberTextStyle.value)
+                            onActivated: function(index, value) {
+                                barNumbersModel.measureNumberTextStyle.value = value
+                            }
+                        }
 
-                        onClicked: {
-                            root.goToTextStylePage("measure-number")
+                        FlatButton {
+                            text: qsTrc("notation", "Edit text style")
+
+                            onClicked: {
+                                root.goToTextStylePage("measure-number")
+                            }
+                        }
+
+                        FlatButton {
+                            icon: IconCode.UNDO
+                            enabled: !barNumbersModel.measureNumberTextStyle.isDefault
+                            onClicked: barNumbersModel.measureNumberTextStyle.value = barNumbersModel.measureNumberTextStyle.defaultValue
                         }
                     }
                 }
@@ -307,11 +324,28 @@ StyledFlickable {
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    FlatButton {
-                        text: qsTrc("notation", "Edit text style")
+                    RowLayout {
+                        StyledDropdown {
+                            Layout.preferredWidth: 190
+                            model: barNumbersModel.textStyles
+                            currentIndex: indexOfValue(barNumbersModel.mmRestRangeTextStyle.value)
+                            onActivated: function(index, value) {
+                                barNumbersModel.mmRestRangeTextStyle.value = value
+                            }
+                        }
 
-                        onClicked: {
-                            root.goToTextStylePage("multimeasure-rest-range")
+                        FlatButton {
+                            text: qsTrc("notation", "Edit text style")
+
+                            onClicked: {
+                                root.goToTextStylePage("multimeasure-rest-range")
+                            }
+                        }
+
+                        FlatButton {
+                            icon: IconCode.UNDO
+                            enabled: !barNumbersModel.mmRestRangeTextStyle.isDefault
+                            onClicked: barNumbersModel.mmRestRangeTextStyle.value = barNumbersModel.mmRestRangeTextStyle.defaultValue
                         }
                     }
                 }

@@ -1196,6 +1196,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(measureNumberFrameFgColor,                  PropertyValue::fromValue(Color::BLACK)),
     styleDef(measureNumberFrameBgColor,                  PropertyValue::fromValue(Color::transparent)),
     styleDef(measureNumberPosition,                      AlignH::LEFT),
+    styleDef(measureNumberTextStyle,                     TextStyleType::MEASURE_NUMBER),
 
     styleDef(mmRestShowMeasureNumberRange,               false),
     styleDef(mmRestRangeBracketType,                     int(MMRestRangeBracketType::BRACKETS)),
@@ -1219,6 +1220,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(mmRestRangeFrameBgColor,                    PropertyValue::fromValue(Color::transparent)),
     styleDef(mmRestRangePosition,                        AlignH::HCENTER),
     styleDef(mmRestRangeMinDistance,                     Spatium(0.5)),
+    styleDef(mmRestRangeTextStyle,                       TextStyleType::MMREST_RANGE),
 
     styleDef(translatorFontFace,                         "Edwin"),
     styleDef(translatorFontSize,                         10.0),

@@ -35,7 +35,8 @@ namespace mu::engraving {
 static const ElementStyle measureNumberStyle {
     { Sid::measureNumberVPlacement, Pid::PLACEMENT },
     { Sid::measureNumberHPlacement, Pid::HPLACEMENT },
-    { Sid::measureNumberMinDistance, Pid::MIN_DISTANCE }
+    { Sid::measureNumberMinDistance, Pid::MIN_DISTANCE },
+    { Sid::measureNumberTextStyle, Pid::TEXT_STYLE }
 };
 
 //---------------------------------------------------------
@@ -69,7 +70,7 @@ engraving::PropertyValue MeasureNumber::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
-        return TextStyleType::MEASURE_NUMBER;
+        return style().styleV(Sid::measureNumberTextStyle);
     case Pid::PLACEMENT:
         return style().styleV(Sid::measureNumberVPlacement);
     case Pid::HPLACEMENT:

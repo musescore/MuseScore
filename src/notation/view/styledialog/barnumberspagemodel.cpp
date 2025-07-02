@@ -21,6 +21,9 @@
  */
 #include "barnumberspagemodel.h"
 
+#include "engraving/dom/textbase.h"
+#include "engraving/types/typesconv.h"
+
 using namespace mu::notation;
 using namespace mu::engraving;
 
@@ -41,6 +44,9 @@ BarNumbersPageModel::BarNumbersPageModel(QObject* parent)
                                          StyleId::mmRestRangePosBelow,
                                          StyleId::mmRestRangeVPlacement,
                                          StyleId::mmRestRangeHPlacement,
+
+                                         StyleId::measureNumberTextStyle,
+                                         StyleId::mmRestRangeTextStyle,
                                })
 {
 }
@@ -61,3 +67,21 @@ StyleItem* BarNumbersPageModel::mmRestRangePosAbove() const { return styleItem(S
 StyleItem* BarNumbersPageModel::mmRestRangePosBelow() const { return styleItem(StyleId::mmRestRangePosBelow); }
 StyleItem* BarNumbersPageModel::mmRestRangeVPlacement() const { return styleItem(StyleId::mmRestRangeVPlacement); }
 StyleItem* BarNumbersPageModel::mmRestRangeHPlacement() const { return styleItem(StyleId::mmRestRangeHPlacement); }
+
+StyleItem* BarNumbersPageModel::measureNumberTextStyle() const { return styleItem(StyleId::measureNumberTextStyle); }
+StyleItem* BarNumbersPageModel::mmRestRangeTextStyle() const { return styleItem(StyleId::mmRestRangeTextStyle); }
+
+QVariantList mu::notation::BarNumbersPageModel::textStyles()
+{
+    QVariantList textStyles;
+    textStyles.reserve(int(TextStyleType::TEXT_TYPES));
+
+    for (int t = int(TextStyleType::DEFAULT) + 1; t < int(TextStyleType::TEXT_TYPES); ++t) {
+        QVariantMap style;
+        style["text"] = TConv::userName(static_cast<TextStyleType>(t)).qTranslated();
+        style["value"] = t;
+        textStyles << style;
+    }
+
+    return textStyles;
+}

@@ -1214,6 +1214,7 @@ enum class Sid {
     measureNumberFrameFgColor,
     measureNumberFrameBgColor,
     measureNumberPosition,
+    measureNumberTextStyle,
 
     mmRestShowMeasureNumberRange,
     mmRestRangeBracketType,
@@ -1237,6 +1238,7 @@ enum class Sid {
     mmRestRangeFrameBgColor,
     mmRestRangePosition,
     mmRestRangeMinDistance,
+    mmRestRangeTextStyle,
 
     translatorFontFace,
     translatorFontSize,
