@@ -52,6 +52,9 @@ public:
 
     const muse::RectF& rect() const;
 
+    const bool adjust_nm_rect() const;
+    const muse::RectF& nm_rect() const;
+
     // alex::
     int hit_measure_no();
     Measure* hit_measure();
@@ -83,6 +86,9 @@ private:
 
     bool m_visible = false;
     muse::RectF m_rect;
+    bool m_adjust_nm_rect = false;
+    int m_nm_no = -1;
+    muse::RectF m_nm_rect;
 
     INotationPtr m_notation;
 

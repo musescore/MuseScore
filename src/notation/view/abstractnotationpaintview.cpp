@@ -985,6 +985,66 @@ bool AbstractNotationPaintView::adjustCanvasPosition(const RectF& logicRect, boo
     return moveCanvasToPosition(pos);
 }
 
+bool AbstractNotationPaintView::adjustCanvasPosition1(const RectF& logicRect, const RectF& logicRect1, bool adjustVertically)
+{
+    TRACEFUNC;
+
+    RectF viewRect = viewport();
+
+    double viewArea = viewRect.width() * viewRect.height();
+    double logicRectArea = logicRect1.width() * logicRect1.height();
+
+    if (viewArea < logicRectArea) {
+        return false;
+    }
+
+    if (viewRect.contains(logicRect1)) {
+        return false;
+    }
+
+    constexpr int BORDER_SPACING_RATIO = 3;
+
+    double _spatium = notationStyle()->styleValue(StyleId::spatium).toDouble();
+    qreal border = _spatium * BORDER_SPACING_RATIO;
+    qreal _scale = currentScaling();
+    if (qFuzzyIsNull(_scale)) {
+        _scale = 1;
+    }
+
+    PointF pos = viewRect.topLeft();
+    PointF oldPos = pos;
+
+    RectF showRect = logicRect1;
+
+    bool adjust = false;
+
+    if (adjustVertically) {
+        if (showRect.top() > viewRect.bottom()) {
+            pos.setY(logicRect.bottom() - height() / _scale + border);
+            adjust = true;
+        } else if (viewRect.height() >= showRect.height() && showRect.bottom() > viewRect.bottom()) {
+            pos.setY(logicRect.top() - border);
+            adjust = true;
+        }
+    }
+
+    pos = alignToCurrentPageBorder(logicRect, pos);
+
+    if (adjust) {
+        if (pos.y() - oldPos.y() < showRect.bottom() - viewRect.bottom()) {
+            if (logicRect.top() - viewRect.top() > showRect.bottom() - viewRect.bottom()) {
+                pos.setY(showRect.bottom() - viewRect.bottom() + oldPos.y() - border);
+            }
+        }
+    }
+
+    if (pos == oldPos) {
+        return false;
+    }
+
+    return moveCanvasToPosition(pos);
+}
+
 bool AbstractNotationPaintView::adjustCanvasPositionSmoothPan(const RectF& cursorRect)
 {
     RectF viewRect = viewport();
@@ -1468,6 +1528,14 @@ void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
             bool adjustVertically = needAdjustCanvasVerticallyWhilePlayback(newCursorRect);
             if (adjustCanvasPosition(newCursorRect, adjustVertically)) {
                 return;
+            }
+            const bool m_adjust_nm_rect = m_playbackCursor->adjust_nm_rect();
+            const RectF& newNMCursorRect = m_playbackCursor->nm_rect();
+            if (m_adjust_nm_rect) {
+                adjustVertically = needAdjustCanvasVerticallyWhilePlayback(newNMCursorRect);
+                if (adjustCanvasPosition1(newCursorRect, newNMCursorRect, adjustVertically)) {
+                    return;
+                }
             }
         }
     }
