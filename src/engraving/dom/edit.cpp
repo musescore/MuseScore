@@ -3527,30 +3527,42 @@ void Score::deleteOrShortenOutSpannersFromRange(const Fraction& t1, const Fracti
         Spanner* sp = i.value;
         Fraction spStartTick = sp->tick();
         Fraction spEndTick = sp->tick2();
-        if (sp->isVolta() || sp->systemFlag()) {
+        const bool trackValid = sp->track() >= track1 && sp->track() < track2;
+        if (!trackValid || sp->isVolta() || sp->systemFlag()) {
             continue;
         }
+
+        // Special handling for grace notes...
+        const Chord* startChord = sp->startChord();
+        const bool startChordIsSelectableGrace = startChord && startChord->isGrace() && filter.canSelect(startChord);
+
+        const Chord* endChord = sp->endChord();
+        const bool endChordIsSelectableGrace = endChord && endChord->isGrace() && filter.canSelect(endChord);
+
+        if (startChordIsSelectableGrace || endChordIsSelectableGrace) {
+            undoRemoveElement(sp);
+            continue;
+        }
+
         if (!filter.canSelectVoice(sp->track()) || !filter.canSelect(sp)) {
             continue;
         }
-        if (sp->track() >= track1 && sp->track() < track2) {
-            if (spStartTick >= t1 && spStartTick < t2
-                && spEndTick >= t1 && spEndTick <= t2) {
-                undoRemoveElement(sp);
-            } else if (sp->isSlur() && ((spStartTick >= t1 && spStartTick < t2)
-                                        || (spEndTick >= t1 && spEndTick < t2))) {
-                undoRemoveElement(sp);
-            } else if (muse::contains(SPANNER_TYPES_TO_SHORTEN_OUT, sp->type())) {
-                bool moveStart = spStartTick >= t1 && spStartTick < t2;
-                bool moveEnd = spEndTick > t1 && spEndTick <= t2;
-                if (moveStart) {
-                    Fraction tickDiff = t2 - spStartTick;
-                    sp->undoChangeProperty(Pid::SPANNER_TICK, t2);
-                    sp->undoChangeProperty(Pid::SPANNER_TICKS, sp->ticks() - tickDiff);
-                } else if (moveEnd) {
-                    Fraction tickDiff = spEndTick - t1;
-                    sp->undoChangeProperty(Pid::SPANNER_TICKS, sp->ticks() - tickDiff);
-                }
+        if (spStartTick >= t1 && spStartTick < t2
+            && spEndTick > t1 && spEndTick <= t2) {
+            undoRemoveElement(sp);
+        } else if (sp->isSlur() && ((spStartTick >= t1 && spStartTick < t2)
+                                    || (spEndTick >= t1 && spEndTick < t2))) {
+            undoRemoveElement(sp);
+        } else if (muse::contains(SPANNER_TYPES_TO_SHORTEN_OUT, sp->type())) {
+            bool moveStart = spStartTick >= t1 && spStartTick < t2;
+            bool moveEnd = spEndTick > t1 && spEndTick <= t2;
+            if (moveStart) {
+                Fraction tickDiff = t2 - spStartTick;
+                sp->undoChangeProperty(Pid::SPANNER_TICK, t2);
+                sp->undoChangeProperty(Pid::SPANNER_TICKS, sp->ticks() - tickDiff);
+            } else if (moveEnd) {
+                Fraction tickDiff = spEndTick - t1;
+                sp->undoChangeProperty(Pid::SPANNER_TICKS, sp->ticks() - tickDiff);
             }
         }
     }

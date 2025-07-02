@@ -835,16 +835,8 @@ void Selection::updateSelectedElements()
             continue;
         }
 
-        const EngravingItem* startCR = sp->startCR();
-        const EngravingItem* endCR = sp->endCR();
-
-        const bool canSelectStart = sp->startElement()->isTimeTickAnchor() || sp->startElement()->isSegment() || canSelect(startCR);
-        const bool canSelectEnd = sp->endElement()->isTimeTickAnchor() || sp->endElement()->isSegment() || canSelect(endCR);
-
-        if (canSelectStart && canSelectEnd) {
-            for (auto seg : sp->spannerSegments()) {
-                appendFiltered(seg);
-            }
+        for (auto seg : sp->spannerSegments()) {
+            appendFiltered(seg);
         }
     }
     update();
