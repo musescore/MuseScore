@@ -2305,6 +2305,37 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
     x -= _spatium;
     y -= 3 * _spatium;
 
+    m_adjust_nm_rect = false;
+
+    Measure* next_measure = measure->nextMeasure();
+    if (next_measure && next_measure->no() != m_nm_no) {
+        mu::engraving::System* nm_system = next_measure->system();
+        if (nm_system != system && next_measure->canvasPos().y() > measure->canvasPos().y()) {
+            double nm_y = nm_system->staffYpage(0) + nm_system->page()->pos().y();
+
+            double nm_y2 = 0.0;
+            double nm_h  = 6 * _spatium;
+            
+            for (size_t i = 0; i < score->nstaves(); ++i) {
+                mu::engraving::SysStaff* nm_ss = nm_system->staff(i);
+                if (!nm_ss->show() || !score->staff(i)->show()) {
+                    continue;
+                }
+                nm_y2 = nm_ss->bbox().bottom();
+            }
+
+            mu::engraving::Segment* nm_s = next_measure->first();
+            double nm_x = nm_s->canvasPos().x();
+            nm_h += nm_y2;
+            nm_x -= _spatium;
+            nm_y -= 3 * _spatium;
+
+            m_nm_rect = RectF(nm_x, nm_y, w, nm_h);
+            m_adjust_nm_rect = true;
+            m_nm_no = next_measure->no();
+        }
+    }
+
     return RectF(x, y, w, h);
 }
 
@@ -2322,6 +2353,16 @@ void PlaybackCursor::setVisible(bool arg)
 const muse::RectF& PlaybackCursor::rect() const
 {
     return m_rect;
+}
+
+const bool PlaybackCursor::adjust_nm_rect() const
+{
+    return m_adjust_nm_rect;
+}
+
+const muse::RectF& PlaybackCursor::nm_rect() const
+{
+    return m_nm_rect;
 }
 
 QColor PlaybackCursor::color() const

@@ -247,6 +247,7 @@ private:
     qreal verticalScrollableSize() const;
 
     bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true);
+    bool adjustCanvasPosition1(const muse::RectF& logicRect, const muse::RectF& logicRect1, bool adjustVertically = true);
     bool adjustCanvasPositionSmoothPan(const muse::RectF& cursorRect);
 
     void onNoteInputStateChanged();
