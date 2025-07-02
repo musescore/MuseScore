@@ -392,10 +392,11 @@ void DockWindow::loadPanels(const DockPageView* page)
     TRACEFUNC;
 
     for (DockPanelView* panel : page->panels()) {
-        if (DockPanelView* destinationPanel = findDestinationForPanel(page, panel)) {
+        if (DockPanelView* destinationPanel = page->findPanelForTab(panel)) {
             addPanelAsTab(panel, destinationPanel);
             continue;
         }
+
         const Location location = panel->location();
         const bool isSideLocation = location == Location::Left || location == Location::Right;
         addDock(panel, location, isSideLocation ? page->centralDock() : nullptr);
@@ -462,16 +463,6 @@ void DockWindow::alignTopLevelToolBars(const DockPageView* page)
     lastCentralToolBar->setMinimumWidth(lastCentralToolBar->contentWidth() + deltaForLastCentralToolBar);
 }
 
-DockPanelView* DockWindow::findDestinationForPanel(const DockPageView* page, const DockPanelView* panel) const
-{
-    for (DockPanelView* destinationPanel : page->panels()) {
-        if (destinationPanel->isTabAllowed(panel)) {
-            return destinationPanel;
-        }
-    }
-    return nullptr;
-}
-
 void DockWindow::addDock(DockBase* dock, Location location, const DockBase* relativeTo)
 {
     TRACEFUNC;
@@ -522,7 +513,7 @@ void DockWindow::handleUnknownDock(const DockPageView* page, DockBase* unknownDo
         return;
     }
 
-    if (DockPanelView* destinationPanel = findDestinationForPanel(page, unknownPanel)) {
+    if (DockPanelView* destinationPanel = page->findPanelForTab(unknownPanel)) {
         addPanelAsTab(unknownPanel, destinationPanel);
         return;
     }

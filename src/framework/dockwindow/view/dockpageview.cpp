@@ -180,17 +180,29 @@ DockingHolderView* DockPageView::holder(DockType type, Location location) const
     return nullptr;
 }
 
-QList<DockPanelView*> DockPageView::possiblePanelsForTab(const DockPanelView* tab) const
+QList<DockPanelView*> DockPageView::findPanelsForDropping(const DockPanelView* panel) const
 {
     QList<DockPanelView*> result;
 
-    for (DockPanelView* panel : panels()) {
-        if (panel->isTabAllowed(tab)) {
-            result << panel;
+    for (DockPanelView* destinationPanel : panels()) {
+        if (destinationPanel->isTabAllowed(panel)) {
+            result << destinationPanel;
         }
     }
 
     return result;
+}
+
+DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
+{
+    for (DockPanelView* destinationPanel: panels()) {
+        if (destinationPanel->isTabAllowed(tab)
+            && destinationPanel->location() == tab->location()) {
+            return destinationPanel;
+        }
+    }
+
+    return nullptr;
 }
 
 bool DockPageView::isDockOpenAndCurrentInFrame(const QString& dockName) const
@@ -240,12 +252,6 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
     } else {
         panel->open();
     }
-}
-
-DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
-{
-    QList<DockPanelView*> panels = possiblePanelsForTab(tab);
-    return !panels.isEmpty() ? panels.first() : nullptr;
 }
 
 void DockPageView::reorderSections()
