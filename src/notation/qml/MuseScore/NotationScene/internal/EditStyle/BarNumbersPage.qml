@@ -438,53 +438,15 @@ StyledFlickable {
                     width: parent.width
                     spacing: 8
 
-                    property StyleItem offsetProperty: barNumbersModel.mmRestRangeVPlacement.value === 0
-                                                       ? barNumbersModel.mmRestRangePosAbove
-                                                       : barNumbersModel.mmRestRangePosBelow
-
                     StyledTextLabel {
                         text: qsTrc("notation/editstyle/voltas", "Offset")
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    RowLayout {
-                        spacing: 6
-
-                        IncrementalPropertyControl {
-                            Layout.preferredWidth: 100
-                            decimals: 2
-                            measureUnitsSymbol: 'sp'
-                            prefixIcon: IconCode.HORIZONTAL
-                            minValue: -100
-                            maxValue: 100
-                            step: 0.1
-
-                            currentValue: offsetControl.offsetProperty.value.x
-                            onValueEdited: function(newValue) {
-                                offsetControl.offsetProperty.value.x = newValue
-                            }
-                        }
-
-                        IncrementalPropertyControl {
-                            Layout.preferredWidth: 100
-                            decimals: 2
-                            measureUnitsSymbol: 'sp'
-                            prefixIcon: IconCode.VERTICAL
-                            minValue: -100
-                            maxValue: 100
-                            step: 0.1
-
-                            currentValue: offsetControl.offsetProperty.value.y
-                            onValueEdited: function(newValue) {
-                                offsetControl.offsetProperty.value.y = newValue
-                            }
-                        }
-
-                        FlatButton {
-                            icon: IconCode.UNDO
-                            enabled: !offsetControl.offsetProperty.isDefault
-                            onClicked: offsetControl.offsetProperty.value = offsetControl.offsetProperty.value
-                        }
+                    StyledXYControllerWithReset {
+                        styleItem: barNumbersModel.mmRestRangeVPlacement.value === 0
+                                   ? barNumbersModel.mmRestRangePosAbove
+                                   : barNumbersModel.mmRestRangePosBelow
                     }
                 }
             }
