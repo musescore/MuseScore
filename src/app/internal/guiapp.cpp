@@ -232,7 +232,8 @@ void GuiApp::perform()
             m->onDelayedInit();
         }
 
-        startupScenario()->runOnSplashScreen();
+        startupScenario()->checkForUpdates();
+        startupScenario()->registerAudioPlugins();
 
         if (splashScreen) {
             splashScreen->close();

@@ -85,7 +85,18 @@ void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFi
     m_startupScoreFile = file ? file.value() : project::ProjectFile();
 }
 
-void StartupScenario::runOnSplashScreen()
+void StartupScenario::checkForUpdates()
+{
+    if (appUpdateScenario()) {
+        appUpdateScenario()->checkForUpdate(/*manual*/ false);
+    }
+
+    if (museSoundsUpdateScenario()) {
+        museSoundsUpdateScenario()->checkForUpdate(/*manual*/ false);
+    }
+}
+
+void StartupScenario::registerAudioPlugins()
 {
     if (registerAudioPluginsScenario()) {
         //! NOTE Registering plugins shows a window (dialog) before the main window is shown.
