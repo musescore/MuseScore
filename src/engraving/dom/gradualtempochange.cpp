@@ -28,6 +28,8 @@
 #include "system.h"
 #include "tempotext.h"
 
+#include "types/typesconv.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -259,6 +261,11 @@ Sid GradualTempoChange::getPropertyStyle(Pid id) const
         break;
     }
     return TextLineBase::getPropertyStyle(id);
+}
+
+TranslatableString GradualTempoChange::subtypeUserName() const
+{
+    return TConv::userName(m_tempoChangeType);
 }
 
 void GradualTempoChange::added()
