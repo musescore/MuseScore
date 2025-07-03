@@ -95,6 +95,22 @@ public:
         score->endCmd();
     }
 
+    void removeChord(MasterScore* score, int measureIndex)
+    {
+        Measure* measure = score->firstMeasure();
+        measure = toMeasure(measure->next()); // ignore first one with clef
+        int i = 0;
+        while (i++ < measureIndex) {
+            measure = toMeasure(measure->next());
+        }
+
+        Segment* segment = measure->first(SegmentType::ChordRest);
+
+        score->startCmd(TranslatableString());
+        score->undoRemoveElement(toFretDiagram(segment->annotations().front()), true);
+        score->endCmd();
+    }
+
     void renameChord(MasterScore* score, int measureIndex, const String& newChordName)
     {
         Measure* measure = score->firstMeasure();
@@ -292,6 +308,66 @@ TEST_F(Engraving_FretBoxTests, RemoveChords)
     // [THEN] Check fret box and chords
     //        The "B" should stay in the first position
     checkFretBox(score, { u"A", u"B", u"C", u"D", u"E", u"F" });
+
+    delete score;
+}
+
+TEST_F(Engraving_FretBoxTests, RenameChords)
+{
+    // [GIVEN] Empty score
+    String readFile(FRET_BOX_DATA_DIR + u"empty.mscx");
+    MasterScore* score = ScoreRW::readScore(readFile);
+    EXPECT_TRUE(score);
+
+    score->doLayout();
+
+    // [GIVEN] Add chords to the score
+    addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
+    score->insertBox(mu::engraving::ElementType::FBOX, score->firstMeasure());
+
+    // [WHEN] Rename chord in the score
+    renameChord(score, 2, u"G"); // Rename "B" to "G"
+
+    // -------- Chords in the score: A, G, C, D, E, F --------
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"A", u"G", u"C", u"D", u"E", u"F" });
+
+    // [WHEN] After renaming, there is a few same chords in the score
+    renameChord(score, 4, u"G"); // Rename "C" to "G"
+
+    // -------- Chords in the score: A, G, G, D, E, F --------
+
+    // [THEN] Check fret box and chords
+    //        The second "G" should be ignored
+    checkFretBox(score, { u"A", u"G", u"D", u"E", u"F" });
+
+    // [WHEN] Rename the chord before the same one
+    renameChord(score, 6, u"E"); // Rename "D" to "E"
+
+    // -------- Chords in the score: A, G, G, E, E, F --------
+
+    // [THEN] Check fret box and chords
+    //        There shouldn't be two "E" chords
+    checkFretBox(score, { u"A", u"G", u"E", u"F" });
+
+    // [WHEN] Rename the chord after the same one
+    renameChord(score, 4, u"D"); // Rename second "G" to "D"
+
+    // -------- Chords in the score: A, G, D, E, E, F --------
+
+    // [THEN] Check fret box and chords
+    //        There shouldn't be two "G" chords
+    checkFretBox(score, { u"A", u"G", u"D", u"E", u"F" });
+
+    // [WHEN] Rename the chord to the new chord that already exists
+    renameChord(score, 6, u"F"); // Rename first "E" to "F"
+
+    // -------- Chords in the score: A, G, D, F, E, F --------
+
+    // [THEN] Check fret box and chords
+    //        The second "F" should be ignored
+    checkFretBox(score, { u"A", u"G", u"D", u"F", u"E" });
 
     delete score;
 }
