@@ -37,6 +37,7 @@ namespace muse::audioplugins {
 static const std::map<audio::AudioResourceType, std::string> RESOURCE_TYPE_TO_STRING_MAP {
     { audio::AudioResourceType::VstPlugin, "VstPlugin" },
     { audio::AudioResourceType::Lv2Plugin, "Lv2Plugin" },
+    { audio::AudioResourceType::AudioUnit, "AudioUnit" },
 };
 
 static JsonObject attributesToJson(const AudioResourceAttributes& attributes)
