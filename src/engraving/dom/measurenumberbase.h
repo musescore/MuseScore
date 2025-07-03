@@ -46,12 +46,6 @@ public:
     Measure* measure() const { return toMeasure(explicitParent()); }
 
     bool isEditable() const override { return false; }    // The measure numbers' text should not be editable
-
-    PlacementH hPlacement() const { return m_placementH; }
-    void setHPlacement(PlacementH p) { m_placementH = p; }
-
-private:
-    PlacementH m_placementH = PlacementH::LEFT;
 };
 } // namespace mu::engraving
 

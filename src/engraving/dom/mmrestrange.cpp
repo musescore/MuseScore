@@ -66,6 +66,8 @@ PropertyValue MMRestRange::getProperty(Pid id) const
     switch (id) {
     case Pid::MMREST_RANGE_BRACKET_TYPE:
         return int(bracketType());
+    case Pid::HPLACEMENT:
+        return style().styleV(Sid::mmRestRangeHPlacement);
     default:
         return MeasureNumberBase::getProperty(id);
     }

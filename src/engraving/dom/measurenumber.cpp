@@ -34,7 +34,6 @@ namespace mu::engraving {
 
 static const ElementStyle measureNumberStyle {
     { Sid::measureNumberVPlacement, Pid::PLACEMENT },
-    { Sid::measureNumberHPlacement, Pid::HPLACEMENT },
     { Sid::measureNumberMinDistance, Pid::MIN_DISTANCE },
     { Sid::measureNumberTextStyle, Pid::TEXT_STYLE }
 };
@@ -47,8 +46,6 @@ MeasureNumber::MeasureNumber(Measure* parent, TextStyleType tid)
     : MeasureNumberBase(ElementType::MEASURE_NUMBER, parent, tid)
 {
     initElementStyle(&measureNumberStyle);
-
-    setHPlacement(style().styleV(Sid::measureNumberHPlacement).value<PlacementH>());
 }
 
 //---------------------------------------------------------
@@ -60,6 +57,19 @@ MeasureNumber::MeasureNumber(const MeasureNumber& other)
     : MeasureNumberBase(other)
 {
     initElementStyle(&measureNumberStyle);
+}
+
+PropertyValue MeasureNumber::getProperty(Pid id) const
+{
+    switch (id) {
+    case Pid::HPLACEMENT:
+    {
+        bool intervalType = !style().styleB(Sid::measureNumberSystem);
+        return style().styleV(intervalType ? Sid::measureNumberHPlacementInterval : Sid::measureNumberHPlacement);
+    }
+    default:
+        return MeasureNumberBase::propertyDefault(id);
+    }
 }
 
 //---------------------------------------------------------
@@ -74,7 +84,10 @@ engraving::PropertyValue MeasureNumber::propertyDefault(Pid id) const
     case Pid::PLACEMENT:
         return style().styleV(Sid::measureNumberVPlacement);
     case Pid::HPLACEMENT:
-        return style().styleV(Sid::measureNumberHPlacement);
+    {
+        bool intervalType = !style().styleB(Sid::measureNumberSystem);
+        return style().styleV(intervalType ? Sid::measureNumberHPlacementInterval : Sid::measureNumberHPlacement);
+    }
     default:
         return MeasureNumberBase::propertyDefault(id);
     }

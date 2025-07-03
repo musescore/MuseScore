@@ -4033,20 +4033,12 @@ void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumb
         ldata->setPosY(yoff);
     }
 
-    if (item->hPlacement() == PlacementH::CENTER) {
-        // measure numbers should be centered over where there can be notes.
-        // This means that header and trailing segments should be ignored,
-        // which includes all timesigs, clefs, keysigs, etc.
-        // This is how it should be centered:
-        // |bb 4/4 notes-chords #| other measure |
-        // |      ------18------ | other measure |
-
-        //    x1 - left measure position of free space
-        //    x2 - right measure position of free space
-
+    const RectF& itemBBox = ldata->bbox();
+    bool intervalType = !ctx.conf().styleB(Sid::measureNumberSystem);
+    PlacementH hPlacement
+        = ctx.conf().styleV(intervalType ? Sid::measureNumberHPlacementInterval : Sid::measureNumberHPlacement).value<PlacementH>();
+    if (hPlacement == PlacementH::CENTER) {
         const Measure* measure = item->measure();
-
-        // find first chordrest
         const Segment* crSeg = measure->first(SegmentType::ChordRest);
 
         const MeasureLayout::MeasureStartEndPos measureStartEnd = MeasureLayout::getMeasureStartEndPos(measure, crSeg,
@@ -4054,9 +4046,11 @@ void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumb
         const double x1 = measureStartEnd.x1;
         const double x2 = measureStartEnd.x2;
 
-        ldata->setPosX((x1 + x2) * 0.5);
-    } else if (item->hPlacement() == PlacementH::RIGHT) {
-        ldata->setPosX(item->measure()->ldata()->bbox().width());
+        ldata->setPosX(0.5 * (x1 + x2) - 0.5 * (itemBBox.right() + itemBBox.left()));
+    } else if (hPlacement == PlacementH::RIGHT) {
+        ldata->setPosX(item->measure()->ldata()->bbox().width() - itemBBox.right());
+    } else {
+        ldata->setPosX(-itemBBox.left());
     }
 }
 

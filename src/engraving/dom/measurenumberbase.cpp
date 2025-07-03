@@ -51,7 +51,6 @@ MeasureNumberBase::MeasureNumberBase(const MeasureNumberBase& other)
     : TextBase(other)
 {
     setFlag(ElementFlag::ON_STAFF, true);
-    setHPlacement(other.hPlacement());
 }
 
 //---------------------------------------------------------
@@ -60,12 +59,7 @@ MeasureNumberBase::MeasureNumberBase(const MeasureNumberBase& other)
 
 engraving::PropertyValue MeasureNumberBase::getProperty(Pid id) const
 {
-    switch (id) {
-    case Pid::HPLACEMENT:
-        return int(hPlacement());
-    default:
-        return TextBase::getProperty(id);
-    }
+    return TextBase::getProperty(id);
 }
 
 //---------------------------------------------------------
@@ -74,15 +68,7 @@ engraving::PropertyValue MeasureNumberBase::getProperty(Pid id) const
 
 bool MeasureNumberBase::setProperty(Pid id, const PropertyValue& val)
 {
-    switch (id) {
-    case Pid::HPLACEMENT:
-        setHPlacement(val.value<PlacementH>());
-        mutldata()->layoutInvalid = true;
-        triggerLayout();
-        return true;
-    default:
-        return TextBase::setProperty(id, val);
-    }
+    return TextBase::setProperty(id, val);
 }
 
 //---------------------------------------------------------
