@@ -1215,6 +1215,8 @@ enum class Sid {
     measureNumberFrameBgColor,
     measureNumberPosition,
     measureNumberTextStyle,
+    measureNumberAlignToBarline,
+    measureNumberAlignToBarlineInterval,
 
     mmRestShowMeasureNumberRange,
     mmRestRangeBracketType,

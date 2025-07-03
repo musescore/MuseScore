@@ -176,6 +176,29 @@ StyledFlickable {
                     spacing: 8
 
                     StyledTextLabel {
+                        text: qsTrc("notation/editstyle/voltas", "Align")
+                        horizontalAlignment: Text.AlignLeft
+                    }
+
+                    RoundedRadioButton {
+                        property StyleItem styleItem: barNumbersModel.measureNumberSystem.value === true
+                                                  ? barNumbersModel.measureNumberAlignToBarline
+                                                  : barNumbersModel.measureNumberAlignToBarlineInterval
+                        checked: styleItem.value === true
+                        onClicked: styleItem.value = true
+                        text: qsTrc("notation/editstyle/voltas", "To the barline")
+                    }
+
+                    RoundedRadioButton {
+                        property StyleItem styleItem: barNumbersModel.measureNumberSystem.value === true
+                                                  ? barNumbersModel.measureNumberAlignToBarline
+                                                  : barNumbersModel.measureNumberAlignToBarlineInterval
+                        checked: styleItem.value === false
+                        onClicked: styleItem.value = false
+                        text: qsTrc("notation/editstyle/voltas", "To the measure")
+                    }
+
+                    StyledTextLabel {
                         text: qsTrc("notation/editstyle/voltas", "Alignment")
                         horizontalAlignment: Text.AlignLeft
                     }

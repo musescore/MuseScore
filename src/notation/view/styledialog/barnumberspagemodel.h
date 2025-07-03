@@ -39,6 +39,8 @@ class BarNumbersPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * measureNumberAllStaves READ measureNumberAllStaves CONSTANT)
     Q_PROPERTY(StyleItem * measureNumberPosAbove READ measureNumberPosAbove CONSTANT)
     Q_PROPERTY(StyleItem * measureNumberPosBelow READ measureNumberPosBelow CONSTANT)
+    Q_PROPERTY(StyleItem * measureNumberAlignToBarline READ measureNumberAlignToBarline CONSTANT)
+    Q_PROPERTY(StyleItem * measureNumberAlignToBarlineInterval READ measureNumberAlignToBarlineInterval CONSTANT)
 
     Q_PROPERTY(StyleItem * mmRestShowMeasureNumberRange READ mmRestShowMeasureNumberRange CONSTANT)
     Q_PROPERTY(StyleItem * mmRestRangeBracketType READ mmRestRangeBracketType CONSTANT)
@@ -64,6 +66,8 @@ public:
     StyleItem* measureNumberAllStaves() const;
     StyleItem* measureNumberPosAbove() const;
     StyleItem* measureNumberPosBelow() const;
+    StyleItem* measureNumberAlignToBarline() const;
+    StyleItem* measureNumberAlignToBarlineInterval() const;
 
     StyleItem* mmRestShowMeasureNumberRange() const;
     StyleItem* mmRestRangeBracketType() const;

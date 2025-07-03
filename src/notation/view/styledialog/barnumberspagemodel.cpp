@@ -38,6 +38,8 @@ BarNumbersPageModel::BarNumbersPageModel(QObject* parent)
                                          StyleId::measureNumberAllStaves,
                                          StyleId::measureNumberPosAbove,
                                          StyleId::measureNumberPosBelow,
+                                         StyleId::measureNumberAlignToBarline,
+                                         StyleId::measureNumberAlignToBarlineInterval,
 
                                          StyleId::mmRestShowMeasureNumberRange,
                                          StyleId::mmRestRangeBracketType,
@@ -62,6 +64,11 @@ StyleItem* BarNumbersPageModel::measureNumberHPlacementInterval() const { return
 StyleItem* BarNumbersPageModel::measureNumberAllStaves() const { return styleItem(StyleId::measureNumberAllStaves); }
 StyleItem* BarNumbersPageModel::measureNumberPosAbove() const { return styleItem(StyleId::measureNumberPosAbove); }
 StyleItem* BarNumbersPageModel::measureNumberPosBelow() const { return styleItem(StyleId::measureNumberPosBelow); }
+StyleItem* BarNumbersPageModel::measureNumberAlignToBarline() const { return styleItem(StyleId::measureNumberAlignToBarline); }
+StyleItem* BarNumbersPageModel::measureNumberAlignToBarlineInterval() const
+{
+    return styleItem(StyleId::measureNumberAlignToBarlineInterval);
+}
 
 StyleItem* BarNumbersPageModel::mmRestShowMeasureNumberRange() const { return styleItem(StyleId::mmRestShowMeasureNumberRange); }
 StyleItem* BarNumbersPageModel::mmRestRangeBracketType() const { return styleItem(StyleId::mmRestRangeBracketType); }
