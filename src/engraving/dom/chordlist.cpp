@@ -880,6 +880,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
 
     // get modifiers
     bool addPending = false;
+    bool susPending = false;
     m_modifierList.clear();
     while (i < len) {
         // eat leading parens
@@ -910,12 +911,17 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             tok1 = initial;
             tok1L = initial.toLower();
         }
-        // for "add", just add the token and then read argument as a separate modifier
+        // for "add" and "sus", just add the token and then read argument as a separate modifier
         // this allows the argument to itself be a two-part string
         // thus allowing addb9 -> add;b,9
         if (tok1L == "add") {
             addToken(tok1, ChordTokenClass::MODIFIER);
             addPending = true;
+            continue;
+        }
+        if (tok1L == "sus") {
+            addToken(tok1, ChordTokenClass::MODIFIER);
+            susPending = true;
             continue;
         }
         // eat spaces
@@ -932,6 +938,19 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             }
             tok2.append(s.at(i));
         }
+        // check suffix - 'st', 'nd', 'rd', 'th'
+        String suffix;
+        static const int SUFFIX_LEN = 2;
+        for (int j = 0; j < SUFFIX_LEN && i + j < len; j++) {
+            suffix.append(s.at(i + j));
+        }
+
+        if (suffix.contains(std::wregex(L"st|nd|rd|th"))) {
+            i += SUFFIX_LEN;
+        } else {
+            suffix.clear();
+        }
+
         tok2L = tok2.toLower();
         // re-attach "add"
         if (addPending) {
@@ -944,6 +963,18 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             }
             tok2L = tok1L + tok2L;
             tok1L = u"add";
+        }
+        // re-attach "sus"
+        if (susPending) {
+            if (m_raise.contains(tok1L)) {
+                tok1L = u"#";
+            } else if (m_lower.contains(tok1L)) {
+                tok1L = u"b";
+            } else if (tok1 == "M" || m_major.contains(tok1L)) {
+                tok1L = u"major";
+            }
+            tok2L = tok1L + tok2L;
+            tok1L = u"sus";
         }
         // standardize spelling
         if (tok1 == "M" || m_major.contains(tok1L)) {
@@ -1004,7 +1035,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         } else if (m_raise.contains(tok1L)) {
             tok1L = u"#";
         }
-        String m = tok1L + tok2L;
+        String m = tok1L + tok2L + suffix;
         if (!m.empty()) {
             m_modifierList << m;
         }
@@ -1013,6 +1044,9 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         }
         if (!tok2.empty()) {
             addToken(tok2, ChordTokenClass::MODIFIER);
+        }
+        if (!suffix.empty()) {
+            addToken(suffix, ChordTokenClass::MODIFIER);
         }
         if (!syntaxOnly) {
             int d;
@@ -1164,6 +1198,15 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                 } else {
                     hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
                 }
+            } else if (susPending) {
+                degree = u"sus" + tok1L + tok2L;
+                if (m_raise.contains(tok1L)) {
+                    hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
+                } else if (m_lower.contains(tok1L)) {
+                    hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
+                } else {
+                    hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
+                }
             } else if (tok1L.empty() && !tok2L.empty()) {
                 degree = u"add" + tok2L;
                 hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
@@ -1214,6 +1257,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             addToken(String(s.at(i++)), ChordTokenClass::MODIFIER);
         }
         addPending = false;
+        susPending = false;
     }
     if (!syntaxOnly) {
         m_chord.add(hdl);
@@ -1500,7 +1544,7 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
 //   position
 //---------------------------------------------------------
 
-double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const
+double ChordList::position(const StringList& names, bool stackModifiers, ChordTokenClass ctc, size_t modifierIdx, size_t nmodifiers) const
 {
     String name = names.empty() ? u"" : names.front();
     switch (ctc) {
@@ -1508,7 +1552,7 @@ double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t 
         return m_eadjust;
     case ChordTokenClass::MODIFIER: {
         double yAdj = 0.0;
-        if (m_stackModifiers && nmodifiers > 1) {
+        if (stackModifiers && nmodifiers > 1) {
             static constexpr double LINE_SPACING = 0.4;             // Space between modifiers in units of modiferHeight
             const double modifierHeight = m_mmag * m_stackedmmag;   // Modifier height in units of root capheight
             const double stackHeight = (nmodifiers * modifierHeight) + ((nmodifiers - 1) * modifierHeight * LINE_SPACING); // Height of total modifier stack (bottom baseline to top capheight)
@@ -1534,7 +1578,7 @@ double ChordList::position(const StringList& names, ChordTokenClass ctc, size_t 
 //   renderList
 //---------------------------------------------------------
 
-const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl)
+const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, bool stacked)
 {
     // generate anew on each call,
     // in case chord list has changed since last time
@@ -1542,13 +1586,45 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl)
         m_renderList.clear();
     }
 
+    if (m_tokenList.empty()) {
+        return m_renderList;
+    }
+
     size_t modIdx = 0;
-    const size_t finalModIdx = m_modifierList.size() - 1;
-    const bool stackModifiers = m_modifierList.size() > 1 && cl->stackModifiers();
+    const double modListSize = m_modifierList.size();
+    const size_t finalModIdx = modListSize - 1;
+    const bool stackModifiersEnabled = m_modifierList.size() > 1 && stacked;
+
+    // Special stack layout if there is a single 'add' or 'sus' with multiple degrees
+    // Standard stack layout if there is only one
+    static const std::wregex SUS_ADD_REGEX = std::wregex(L"sus|add");
+    bool stackSusOrAdd = false;
+    for (const String& mod : m_modifierList) {
+        if (!mod.contains(SUS_ADD_REGEX)) {
+            continue;
+        }
+        if (!stackSusOrAdd) {
+            stackSusOrAdd = true;
+        } else {
+            stackSusOrAdd = false;
+            break;
+        }
+    }
 
     bool adjust = cl ? cl->autoAdjust() : false;
     for (const ChordToken& tok : m_tokenList) {
-        String n = tok.names.front();
+        const String n = tok.names.front();
+        if ((n == u"/" || n == u"," || n == u"\\") && stackSusOrAdd) {
+            continue;
+        }
+
+        const bool tokIsSusOrAdd = std::regex_match(n.toStdWString(), SUS_ADD_REGEX);
+        const bool stackModifier = stackModifiersEnabled && !(stackSusOrAdd && tokIsSusOrAdd);
+        String curMod = m_modifierList.size() > 1 ? m_modifierList.at(modIdx) : u"";
+        if (stackSusOrAdd && stackModifier && modIdx == 0) {
+            curMod.remove(SUS_ADD_REGEX);
+        }
+
         std::list<RenderActionPtr > rl;
         std::list<ChordToken> definedTokens;
         bool found = false;
@@ -1575,14 +1651,15 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl)
                 found = true;
             }
         }
+
         // build render list
         // check for adjustments
-        double yAdjust = adjust ? cl->position(tok.names, ctc, modIdx, m_modifierList.size()) : 0.0;
+        double yAdjust = adjust ? cl->position(tok.names, stackModifier, ctc, finalModIdx - modIdx, modListSize) : 0.0;
 
         // Modifier behaviour
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
             // Stop adjusting when first non-adjusted modifier found
-            if (RealIsNull(yAdjust)) {
+            if (RealIsNull(yAdjust) && !(stackSusOrAdd && tokIsSusOrAdd)) {
                 adjust = false;
             }
 
@@ -1592,10 +1669,38 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl)
             }
 
             // Stacked modifiers
-            if (stackModifiers) {
+            if (stackModifier) {
+                auto startsWithAcc = [](const String& s) -> bool {
+                    return s.startsWith(u"b") || s.startsWith(u"#");
+                };
+                auto startsWithSusOrAdd = [](const String& s) -> bool {
+                    return s.startsWith(u"sus") || s.startsWith(u"add");
+                };
                 // Align vertically stacked modifier's x position by pushing it at the start of every modifier and popping at the end
-                if (m_modifierList.at(modIdx).startsWith(n)) {
+                // Make sure degrees are aligned when there are accidentals
+                const String& nextMod = modIdx != finalModIdx ? m_modifierList.at(modIdx + 1) : u"";
+                bool nextModStartsWithAcc = startsWithAcc(nextMod);
+                bool curModStartsWithAcc = startsWithAcc(curMod);
+                bool nIsAcc = startsWithAcc(n);
+                bool curModStartsWithSusOrAdd = startsWithSusOrAdd(curMod);
+                bool nIsSusOrAdd = startsWithSusOrAdd(n);
+
+                if (curModStartsWithSusOrAdd) {                                         // Align sus or add left
+                    if (nIsSusOrAdd) {
+                        m_renderList.emplace_back(new RenderActionPush());
+                    }
+                } else if (nIsAcc && nextModStartsWithAcc) {                            // current line has accidental, next line has accidental -> push before accidental
                     m_renderList.emplace_back(new RenderActionPush());
+                } else if (!curModStartsWithAcc && !nextModStartsWithAcc) {             // current line has no accidental, next line has no accidental -> push before degree
+                    m_renderList.emplace_back(new RenderActionPush());
+                } else if (curModStartsWithAcc && !nextModStartsWithAcc && !nIsAcc) {   // current line has accidental, next line has no accidental ->  push before degree
+                    m_renderList.emplace_back(new RenderActionPush());
+                } else if (!curModStartsWithAcc && nextModStartsWithAcc) {              // current line has no accidental, next line has accidental -> push before degree
+                    m_renderList.emplace_back(new RenderActionPush());                  // and move by next line's accidental's width to align
+                    String nextAcc = nextMod;
+                    static const std::wregex DEGREE_REGEX = std::wregex(L"[0-9]+");
+                    nextAcc.replace(DEGREE_REGEX, u"");
+                    m_renderList.emplace_back(new RenderActionMoveTextWidth(nextAcc));
                 }
 
                 // Set scale
@@ -1621,12 +1726,12 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl)
         }
 
         // Stacked modifiers
-        if (tok.tokenClass == ChordTokenClass::MODIFIER && !n.empty() && stackModifiers) {
+        if (tok.tokenClass == ChordTokenClass::MODIFIER && !n.empty() && stackModifier) {
             // Reset move to x-height
             m_renderList.emplace_back(new RenderActionPopY());
             // Reset scale
             m_renderList.emplace_back(new RenderActionScale(1 / cl->stackedModifierMag()));
-            if (m_modifierList.at(modIdx).endsWith(n) && modIdx != finalModIdx) {
+            if (curMod.endsWith(n) && modIdx != finalModIdx) {
                 modIdx++;
 
                 // Restore x position
@@ -1704,8 +1809,9 @@ void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
         pc->parse(n, cl);
     }
     parsedChords.push_back(*pc);
-    if (renderList.empty() || renderListGenerated) {
-        renderList = pc->renderList(cl);
+    if (renderList.empty() || renderListStacked.empty() || renderListGenerated) {
+        renderList = pc->renderList(cl, false);
+        renderListStacked = pc->renderList(cl, true);
         renderListGenerated = true;
     }
     if (xmlKind.empty()) {

@@ -1433,8 +1433,14 @@ void Harmony::renderActionSet(const RenderActionSetPtr& a, HarmonyRenderCtx& ctx
     }
 
     TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
-    ctx.textList.push_back(ts);
     ctx.movex(ts->width());
+
+    if (a->renderText()) {
+        ctx.textList.push_back(ts);
+        return;
+    }
+
+    delete ts;
 }
 
 void Harmony::renderActionMove(const RenderActionMovePtr& a, HarmonyRenderCtx& ctx)
@@ -1478,7 +1484,8 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
         // render extension
         const ChordDescription* cd = info->getDescription();
         if (cd) {
-            render(cd->renderList, ctx, 0);
+            const bool stackModifiers = style().styleB(Sid::verticallyStackModifiers) && !m_doNotStackModifiers;
+            render(stackModifiers ? cd->renderListStacked : cd->renderList, ctx, 0);
         }
     } else if (m_harmonyType == HarmonyType::NASHVILLE && tpcIsValid(info->rootTpc())) {
         // render function
@@ -1488,7 +1495,8 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
         // render extension
         const ChordDescription* cd = info->getDescription();
         if (cd) {
-            render(cd->renderList, ctx, 0);
+            const bool stackModifiers = style().styleB(Sid::verticallyStackModifiers) && !m_doNotStackModifiers;
+            render(stackModifiers ? cd->renderListStacked : cd->renderList, ctx, 0);
         }
     } else {
         render(info->textName(), ctx);
@@ -1532,7 +1540,8 @@ void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
         // render extension
         const ChordDescription* cd = info->getDescription();
         if (cd) {
-            render(cd->renderList, ctx, 0);
+            const bool stackModifiers = style().styleB(Sid::verticallyStackModifiers) && !m_doNotStackModifiers;
+            render(stackModifiers ? cd->renderListStacked : cd->renderList, ctx, 0);
         }
 
         if (tpcIsValid(capoBassTpc)) {
@@ -1632,7 +1641,7 @@ void Harmony::render()
 
         double lineY = ctx.y() - style().styleS(Sid::polychordDividerSpacing).toMM(spatium())
                        - style().styleS(Sid::polychordDividerThickness).toMM(spatium()) / 2;
-        lineY += ldata()->baseline;
+        // lineY += ldata()->baseline;
         LineF line = LineF(PointF(0.0, lineY), PointF(0.0, lineY));
         mutldata()->polychordDividerLines.mut_value().push_back(line);
 
@@ -1931,6 +1940,8 @@ PropertyValue Harmony::getProperty(Pid pid) const
         return int(m_realizedHarmony.voicing());
     case Pid::HARMONY_DURATION:
         return int(m_realizedHarmony.duration());
+    case Pid::HARMONY_DO_NOT_STACK_MODIFIERS:
+        return m_doNotStackModifiers;
     default:
         return TextBase::getProperty(pid);
     }
@@ -1971,6 +1982,10 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         }
         break;
     }
+    case Pid::HARMONY_DO_NOT_STACK_MODIFIERS:
+        m_doNotStackModifiers = v.toBool();
+        render();
+        break;
     default:
         if (TextBase::setProperty(pid, v)) {
             if (pid == Pid::TEXT) {
@@ -2013,6 +2028,8 @@ PropertyValue Harmony::propertyDefault(Pid id) const
     case Pid::HARMONY_BASS_SCALE:
         v = style().styleV(Sid::chordBassNoteScale).toDouble();
         break;
+    case Pid::HARMONY_DO_NOT_STACK_MODIFIERS:
+        return false;
     case Pid::PLAY:
         v = true;
         break;

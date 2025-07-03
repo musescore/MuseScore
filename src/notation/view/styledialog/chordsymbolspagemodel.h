@@ -62,6 +62,7 @@ class ChordSymbolsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * capoPosition READ capoPosition CONSTANT)
 
     Q_PROPERTY(bool isCustomXml READ isCustomXml NOTIFY changePreset)
+    Q_PROPERTY(bool isLegacyXml READ isLegacyXml NOTIFY changePreset)
 
     muse::Inject<mu::notation::INotationConfiguration> configuration = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
@@ -74,6 +75,7 @@ public:
     StyleItem* chordDescriptionFile() const;
     Q_INVOKABLE QVariantList possiblePresetOptions() const;
     bool isCustomXml() const;
+    bool isLegacyXml() const;
 
     StyleItem* extensionMag() const;
     StyleItem* extensionAdjust() const;

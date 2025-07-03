@@ -123,6 +123,8 @@ void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldat
                 ts->setOffset(PointF(xx, yy));
             }
 
+            ldata->polychordDividerOffset = yy;
+
             ldata->setBbox(bb.translated(xx, yy));
             ldata->harmonyHeight = ldata->bbox().height();
         }

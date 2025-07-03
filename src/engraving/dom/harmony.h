@@ -274,6 +274,7 @@ public:
     struct LayoutData : public TextBase::LayoutData {
         ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };           // used for calculating the height is frame while editing.
         ld_field<std::vector<LineF> > polychordDividerLines = { "[Harmony] polychordDividerLine", std::vector<LineF>() };
+        ld_field<double> polychordDividerOffset = { "[Harmony] polychordDividerOffset", 0.0 };
         ld_field<double> baseline = { "[Harmony] baseline", 0.0 };
     };
     DECLARE_LAYOUTDATA_METHODS(Harmony)
@@ -322,6 +323,7 @@ private:
     bool m_leftParen = false;
     bool m_rightParen = false;                           // include opening and/or closing parenthesis
     bool m_play = true;                                  // whether or not to play back the harmony
+    bool m_doNotStackModifiers = false;
 
     NoteCaseType m_rootCase = NoteCaseType::AUTO;
     NoteCaseType m_bassCase = NoteCaseType::AUTO;        // case as typed

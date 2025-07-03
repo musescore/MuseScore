@@ -430,7 +430,8 @@ StyledFlickable {
                                 RadioButtonGroup {
                                     id: radioButtonGroup
 
-                                    // anchors.fill: parent
+                                    enabled: !chordSymbolsModel.isLegacyXml
+
                                     width: 100
 
                                     model: [

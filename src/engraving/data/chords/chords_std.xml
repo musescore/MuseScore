@@ -70,6 +70,8 @@
     <sym code="0xED64" name="bb"/>
 
     <sym code="0xE87C" name="dslash"/>
+    <sym code="0xE874" name="-"/>
+    <sym code="0xE872" name="+"/>
     </font>
 
 <!-- Extensions -->
@@ -125,13 +127,19 @@
     <sym code="add" name="sadd"/>
     <sym code="sus" name="ssus"/>
     <sym code="no" name="sno"/>
-    <sym code="omit" name="somit"/>
+
+    <sym code="st" name="sst"/>
+    <sym code="nd" name="snd"/>
+    <sym code="rd" name="srd"/>
+    <sym code="th" name="sth"/>
     </font>
 
 <!-- Musical text font -->
 <font class="modifier" family="ScoreText">
     <sym code="0xED60" name="sb"/>
     <sym code="0xED62" name="s#"/>
+    <sym code="0xED63" name="s##"/>
+    <sym code="0xED64" name="sbb"/>
     <sym code="0xE873" name="striangle"/>
     <sym code="0xE875" name="s("/>
     <sym code="0xE876" name="s)"/>
@@ -445,6 +453,16 @@
     <render>ms:0.1:0 s# ms:0.1:0</render>
     </token>
 
+<token class="modifier">
+    <name>bb</name>
+    <render>ms:0.1:0 sbb ms:0.1:0</render>
+    </token>
+
+<token class="modifier">
+    <name>##</name>
+    <render>ms:0.1:0 s## ms:0.1:0</render>
+    </token>
+
   <token class="modifier">
     <name>t</name>
     <name>^</name>
@@ -469,6 +487,26 @@
   <token class="modifier">
     <name>omit</name>
     <render>somit</render>
+    </token>
+
+<token class="modifier">
+    <name>st</name>
+    <render>sst</render>
+    </token>
+
+<token class="modifier">
+    <name>nd</name>
+    <render>snd</render>
+    </token>
+
+<token class="modifier">
+    <name>rd</name>
+    <render>srd</render>
+    </token>
+
+<token class="modifier">
+    <name>th</name>
+    <render>sth</render>
     </token>
 
   <token class="type">
