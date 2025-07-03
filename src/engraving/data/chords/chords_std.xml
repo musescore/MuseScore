@@ -138,6 +138,8 @@
 <font class="modifier" family="ScoreText">
     <sym code="0xED60" name="sb"/>
     <sym code="0xED62" name="s#"/>
+    <sym code="0xED63" name="s##"/>
+    <sym code="0xED64" name="sbb"/>
     <sym code="0xE873" name="striangle"/>
     <sym code="0xE875" name="s("/>
     <sym code="0xE876" name="s)"/>
@@ -449,6 +451,16 @@
   <token class="modifier">
     <name>#</name>
     <render>ms:0.1:0 s# ms:0.1:0</render>
+    </token>
+
+<token class="modifier">
+    <name>bb</name>
+    <render>ms:0.1:0 sbb ms:0.1:0</render>
+    </token>
+
+<token class="modifier">
+    <name>##</name>
+    <render>ms:0.1:0 s## ms:0.1:0</render>
     </token>
 
   <token class="modifier">

@@ -1586,13 +1586,45 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
         m_renderList.clear();
     }
 
+    if (m_tokenList.empty()) {
+        return m_renderList;
+    }
+
     size_t modIdx = 0;
-    const size_t finalModIdx = m_modifierList.size() - 1;
-    const bool stackModifiers = m_modifierList.size() > 1 && stacked;
+    const double modListSize = m_modifierList.size();
+    const size_t finalModIdx = modListSize - 1;
+    const bool stackModifiersEnabled = m_modifierList.size() > 1 && stacked;
+
+    // Special stack layout if there is a single 'add' or 'sus' with multiple degrees
+    // Standard stack layout if there is only one
+    static const std::wregex SUS_ADD_REGEX = std::wregex(L"sus|add");
+    bool stackSusOrAdd = false;
+    for (const String& mod : m_modifierList) {
+        if (!mod.contains(SUS_ADD_REGEX)) {
+            continue;
+        }
+        if (!stackSusOrAdd) {
+            stackSusOrAdd = true;
+        } else {
+            stackSusOrAdd = false;
+            break;
+        }
+    }
 
     bool adjust = cl ? cl->autoAdjust() : false;
     for (const ChordToken& tok : m_tokenList) {
-        String n = tok.names.front();
+        const String n = tok.names.front();
+        if ((n == u"/" || n == u"," || n == u"\\") && stackSusOrAdd) {
+            continue;
+        }
+
+        const bool tokIsSusOrAdd = std::regex_match(n.toStdWString(), SUS_ADD_REGEX);
+        const bool stackModifier = stackModifiersEnabled && !(stackSusOrAdd && tokIsSusOrAdd);
+        String curMod = m_modifierList.size() > 1 ? m_modifierList.at(modIdx) : u"";
+        if (stackSusOrAdd && stackModifier && modIdx == 0) {
+            curMod.remove(SUS_ADD_REGEX);
+        }
+
         std::list<RenderActionPtr > rl;
         std::list<ChordToken> definedTokens;
         bool found = false;
@@ -1619,14 +1651,15 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
                 found = true;
             }
         }
+
         // build render list
         // check for adjustments
-        double yAdjust = adjust ? cl->position(tok.names, stackModifiers, ctc, finalModIdx - modIdx, m_modifierList.size()) : 0.0;
+        double yAdjust = adjust ? cl->position(tok.names, stackModifier, ctc, finalModIdx - modIdx, modListSize) : 0.0;
 
         // Modifier behaviour
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
             // Stop adjusting when first non-adjusted modifier found
-            if (RealIsNull(yAdjust)) {
+            if (RealIsNull(yAdjust) && !(stackSusOrAdd && tokIsSusOrAdd)) {
                 adjust = false;
             }
 
@@ -1636,10 +1669,38 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
             }
 
             // Stacked modifiers
-            if (stackModifiers) {
+            if (stackModifier) {
+                auto startsWithAcc = [](const String& s) -> bool {
+                    return s.startsWith(u"b") || s.startsWith(u"#");
+                };
+                auto startsWithSusOrAdd = [](const String& s) -> bool {
+                    return s.startsWith(u"sus") || s.startsWith(u"add");
+                };
                 // Align vertically stacked modifier's x position by pushing it at the start of every modifier and popping at the end
-                if (m_modifierList.at(modIdx).startsWith(n)) {
+                // Make sure degrees are aligned when there are accidentals
+                const String& nextMod = modIdx != finalModIdx ? m_modifierList.at(modIdx + 1) : u"";
+                bool nextModStartsWithAcc = startsWithAcc(nextMod);
+                bool curModStartsWithAcc = startsWithAcc(curMod);
+                bool nIsAcc = startsWithAcc(n);
+                bool curModStartsWithSusOrAdd = startsWithSusOrAdd(curMod);
+                bool nIsSusOrAdd = startsWithSusOrAdd(n);
+
+                if (curModStartsWithSusOrAdd) {                                         // Align sus or add left
+                    if (nIsSusOrAdd) {
+                        m_renderList.emplace_back(new RenderActionPush());
+                    }
+                } else if (nIsAcc && nextModStartsWithAcc) {                            // current line has accidental, next line has accidental -> push before accidental
                     m_renderList.emplace_back(new RenderActionPush());
+                } else if (!curModStartsWithAcc && !nextModStartsWithAcc) {             // current line has no accidental, next line has no accidental -> push before degree
+                    m_renderList.emplace_back(new RenderActionPush());
+                } else if (curModStartsWithAcc && !nextModStartsWithAcc && !nIsAcc) {   // current line has accidental, next line has no accidental ->  push before degree
+                    m_renderList.emplace_back(new RenderActionPush());
+                } else if (!curModStartsWithAcc && nextModStartsWithAcc) {              // current line has no accidental, next line has accidental -> push before degree
+                    m_renderList.emplace_back(new RenderActionPush());                  // and move by next line's accidental's width to align
+                    String nextAcc = nextMod;
+                    static const std::wregex DEGREE_REGEX = std::wregex(L"[0-9]+");
+                    nextAcc.replace(DEGREE_REGEX, u"");
+                    m_renderList.emplace_back(new RenderActionMoveTextWidth(nextAcc));
                 }
 
                 // Set scale
@@ -1665,12 +1726,12 @@ const std::list<RenderActionPtr >& ParsedChord::renderList(const ChordList* cl, 
         }
 
         // Stacked modifiers
-        if (tok.tokenClass == ChordTokenClass::MODIFIER && !n.empty() && stackModifiers) {
+        if (tok.tokenClass == ChordTokenClass::MODIFIER && !n.empty() && stackModifier) {
             // Reset move to x-height
             m_renderList.emplace_back(new RenderActionPopY());
             // Reset scale
             m_renderList.emplace_back(new RenderActionScale(1 / cl->stackedModifierMag()));
-            if (m_modifierList.at(modIdx).endsWith(n) && modIdx != finalModIdx) {
+            if (curMod.endsWith(n) && modIdx != finalModIdx) {
                 modIdx++;
 
                 // Restore x position

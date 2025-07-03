@@ -202,8 +202,21 @@ struct RenderActionSet : RenderAction
     void print() const override;
 
     const String& text() const { return m_text; }
+    bool renderText() const { return m_renderText; }
+
+protected:
+    RenderActionSet(String s, bool renderText)
+        : m_text(s), m_renderText(renderText) {}
+
 private:
     String m_text;
+    bool m_renderText = true;
+};
+
+struct RenderActionMoveTextWidth : RenderActionSet
+{
+    RenderActionMoveTextWidth(String s)
+        : RenderActionSet(s, false) {}
 };
 
 struct RenderActionPush : RenderAction

@@ -1433,8 +1433,14 @@ void Harmony::renderActionSet(const RenderActionSetPtr& a, HarmonyRenderCtx& ctx
     }
 
     TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
-    ctx.textList.push_back(ts);
     ctx.movex(ts->width());
+
+    if (a->renderText()) {
+        ctx.textList.push_back(ts);
+        return;
+    }
+
+    delete ts;
 }
 
 void Harmony::renderActionMove(const RenderActionMovePtr& a, HarmonyRenderCtx& ctx)

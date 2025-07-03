@@ -194,7 +194,7 @@
           <root-step>E</root-step>
           <root-alter>-1</root-alter>
           </root>
-        <kind text="sus">suspended-fourth</kind>
+        <kind>suspended-fourth</kind>
         <degree>
           <degree-value>7</degree-value>
           <degree-alter>0</degree-alter>
