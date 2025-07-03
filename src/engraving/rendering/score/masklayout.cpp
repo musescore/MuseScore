@@ -191,6 +191,11 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
         if (!mb->isMeasure()) {
             continue;
         }
+        for (const MStaff* mstaff : toMeasure(mb)->mstaves()) {
+            if (MeasureNumber* measureNumber = mstaff->noText()) {
+                allText.push_back((TextBase*)(measureNumber));
+            }
+        }
         for (const Segment& s : toMeasure(mb)->segments()) {
             if (!s.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE) || !s.enabled()) {
                 continue;
