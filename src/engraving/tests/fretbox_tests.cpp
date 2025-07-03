@@ -103,6 +103,22 @@ public:
         score->endCmd();
     }
 
+    void removeChord(MasterScore* score, int measureIndex)
+    {
+        Measure* measure = score->firstMeasure();
+        measure = toMeasure(measure->next()); // ignore first one with clef
+        int i = 0;
+        while (i++ < measureIndex) {
+            measure = toMeasure(measure->next());
+        }
+
+        Segment* segment = measure->first(SegmentType::ChordRest);
+
+        score->startCmd(TranslatableString());
+        score->undoRemoveElement(toFretDiagram(segment->annotations().front()), true);
+        score->endCmd();
+    }
+
     void renameChord(MasterScore* score, int measureIndex, const String& newChordName)
     {
         Measure* measure = score->firstMeasure();
@@ -380,6 +396,169 @@ TEST_F(Engraving_FretBoxTests, RemoveChords_SameChord_RemoveSecond)
 
     // [THEN] Check fret box and chords
     checkFretBox(score, { u"A", u"B", u"C", u"D", u"E", u"F" });
+
+    delete score;
+}
+
+TEST_F(Engraving_FretBoxTests, RenameChords)
+{
+    // [GIVEN] Empty score
+    MasterScore* score = createEmptyScore();
+
+    // [GIVEN] Add chords to the score
+    addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
+    score->insertBox(mu::engraving::ElementType::FBOX, score->firstMeasure());
+
+    // [WHEN] Rename chord in the score
+    renameChord(score, 2, u"G"); // Rename "B" to "G"
+
+    // -------- Chords in the score: A, G, C, D, E, F --------
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"A", u"G", u"C", u"D", u"E", u"F" });
+
+    // [WHEN] Undo the last command
+    undoLastCommand(score);
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"A", u"B", u"C", u"D", u"E", u"F" });
+
+    delete score;
+}
+
+TEST_F(Engraving_FretBoxTests, RenameChords_SameChordBefore)
+{
+    // [GIVEN] Empty score
+    MasterScore* score = createEmptyScore();
+
+    // [GIVEN] Add chords to the score
+    addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
+    score->insertBox(mu::engraving::ElementType::FBOX, score->firstMeasure());
+
+    // [WHEN] After renaming, there is a few same chords in the score
+    renameChord(score, 6, u"B"); // Rename "D" to "B"
+
+    // -------- Chords in the score: A, B, C, B, E, F --------
+
+    // [THEN] Check fret box and chords
+    //        The second "B" should be ignored
+    checkFretBox(score, { u"A", u"B", u"C", u"E", u"F" });
+
+    // [WHEN] Undo the last command
+    undoLastCommand(score);
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"A", u"B", u"C", u"D", u"E", u"F" });
+
+    delete score;
+}
+
+TEST_F(Engraving_FretBoxTests, RenameChords_SameChordAfter)
+{
+    // [GIVEN] Empty score
+    MasterScore* score = createEmptyScore();
+
+    // [GIVEN] Add chords to the score
+    addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
+    score->insertBox(mu::engraving::ElementType::FBOX, score->firstMeasure());
+
+    // [WHEN] Rename the chord before the same one
+    renameChord(score, 2, u"D"); // Rename "B" to "D"
+
+    // -------- Chords in the score: A, D, C, D, E, F --------
+
+    // [THEN] Check fret box and chords
+    //        There shouldn't be two "D" chords
+    checkFretBox(score, { u"A", u"D", u"C", u"E", u"F" });
+
+    // [WHEN] Undo the last command
+    undoLastCommand(score);
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"A", u"B", u"C", u"D", u"E", u"F" });
+
+    delete score;
+}
+
+TEST_F(Engraving_FretBoxTests, RenameChords_SameChordBefore_NoDuplicates)
+{
+    // [GIVEN] Empty score
+    MasterScore* score = createEmptyScore();
+
+    // [GIVEN] Add chords to the score
+    addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
+    score->insertBox(mu::engraving::ElementType::FBOX, score->firstMeasure());
+
+    // [WHEN] Rename the chord after the same one
+    renameChord(score, 6, u"B"); // Rename "D" to "B"
+    renameChord(score, 6, u"G"); // Rename "B" to "G"
+
+    // -------- Chords in the score: A, B, C, G, E, F --------
+
+    // [THEN] Check fret box and chords
+    //        There shouldn't be two "B" chords
+    checkFretBox(score, { u"A", u"B", u"C", u"G", u"E", u"F" });
+
+    // [WHEN] Undo the last command
+    undoLastCommand(score);
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"A", u"B", u"C", u"E", u"F" });
+
+    delete score;
+}
+
+TEST_F(Engraving_FretBoxTests, RenameChords_SameChordAfter_NoDuplicates)
+{
+    // [GIVEN] Empty score
+    MasterScore* score = createEmptyScore();
+
+    // [GIVEN] Add chords to the score
+    addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
+    score->insertBox(mu::engraving::ElementType::FBOX, score->firstMeasure());
+
+    // [WHEN] Rename the chord to the new chord that already exists
+    renameChord(score, 6, u"E"); // Rename first "D" to "E"
+    renameChord(score, 6, u"F"); // Rename first "E" to "F"
+
+    // -------- Chords in the score: A, B, C, F, E, F --------
+
+    // [THEN] Check fret box and chords
+    //        The second "F" should be ignored
+    checkFretBox(score, { u"A", u"B", u"C", u"F", u"E" });
+
+    // [WHEN] Undo the last command
+    undoLastCommand(score);
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"A", u"B", u"C", u"E", u"F" });
+
+    delete score;
+}
+
+TEST_F(Engraving_FretBoxTests, RenameChords_SameChordAfter_NoDuplicates_2)
+{
+    // [GIVEN] Empty score
+    MasterScore* score = createEmptyScore();
+
+    // [GIVEN] Add chords to the score
+    addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
+    score->insertBox(mu::engraving::ElementType::FBOX, score->firstMeasure());
+
+    // [WHEN] Rename the chord to the new chord that already exists
+    renameChord(score, 6, u"A"); // Rename "D" to "A"
+    renameChord(score, 0, u"C"); // Rename first "A" to "C"
+
+    // -------- Chords in the score: A, B, C, F, E, F --------
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"C", u"B", u"A", u"E", u"F" });
+
+    // [WHEN] Undo the last command
+    undoLastCommand(score);
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"A", u"B", u"C", u"E", u"F" });
 
     delete score;
 }

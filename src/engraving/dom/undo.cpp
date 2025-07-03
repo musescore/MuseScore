@@ -3728,7 +3728,7 @@ void RenameChordFBox::redo(EditData*)
     String currentHarmonyName = m_harmony->harmonyName();
 
     //! If there’s another chord symbol in the score before the one being edited,
-    //! then we don’t need to rename anything in the fretbox,
+    //! then we don’t need to rename anything in the fret box,
     //! we just need to insert a new element at the correct position.
     bool onlyAddNewDiagram = false;
 
@@ -3749,9 +3749,17 @@ void RenameChordFBox::redo(EditData*)
             onlyAddNewDiagram = true;
         }
 
-        if (isHarmonyWithSameName && harmony->tick() == currentHarmonyTick) {
+        //! If old chord symbol exists after, we need to restore it in the fret box
+        if (isOldHarmony && harmony->tick() > currentHarmonyTick) {
             nextMatchHarmonyToReplace = harmony;
             break;
+        }
+
+        if (isHarmonyWithSameName && harmony->tick() == currentHarmonyTick) {
+            if (onlyAddNewDiagram) {
+                nextMatchHarmonyToReplace = harmony;
+                break;
+            }
         }
 
         if (!muse::contains(usedDiagrams, harmonyName.toLower())) {
@@ -3773,7 +3781,7 @@ void RenameChordFBox::redo(EditData*)
         }
 
         if (m_onlyRemove) {
-            m_diagramsForRestore.push_back(std::make_pair(i, fd));
+            m_diagramsForRestore.emplace_back(i, fd);
 
             m_fretBox->remove(fd);
         } else if (!onlyAddNewDiagram) {
@@ -3788,11 +3796,15 @@ void RenameChordFBox::redo(EditData*)
         if (nextMatchHarmonyToReplace) {
             //! Insert new fret diagram after the harmony preceding the next match
             m_diagramForRemove = insertFretDiagramToFretBox(m_fretBox, nextMatchHarmonyToReplace, harmonyBeforeNextMatch);
-            removeIndex = i + 2;
+            if (onlyAddNewDiagram) {
+                removeIndex = i + 2;
+            }
         }
 
         //! Remove all following diagrams with the new harmony name
-        m_diagramsForRestore = removeFretDiagramsFromFretBox(m_fretBox, removeIndex, currentHarmonyName);
+        if (!m_onlyRemove) {
+            m_diagramsForRestore = removeFretDiagramsFromFretBox(m_fretBox, removeIndex, currentHarmonyName);
+        }
 
         break;
     }
