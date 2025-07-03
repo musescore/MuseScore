@@ -4040,7 +4040,7 @@ void TLayout::layoutMeasureNumber(const MeasureNumber* item, MeasureNumber::Layo
     } else {
         barlineStaff = staffIdx;
     }
-    if (barlineStaff == muse::nidx || item->score()->staff(barlineStaff)->barLineSpan() < 1) {
+    if (barlineStaff == muse::nidx) {
         return;
     }
 
@@ -4062,7 +4062,7 @@ void TLayout::layoutMeasureNumber(const MeasureNumber* item, MeasureNumber::Layo
             }
         }
     }
-    if (!barlineSeg) {
+    if (!barlineSeg || (barlineSeg->segmentType() != SegmentType::BeginBarLine && item->score()->staff(barlineStaff)->barLineSpan() < 1)) {
         return;
     }
 
