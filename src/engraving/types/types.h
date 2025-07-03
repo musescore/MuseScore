@@ -768,6 +768,7 @@ enum class TextStyleType : unsigned char {
 
     // Measure-oriented styles
     MEASURE_NUMBER,
+    MEASURE_NUMBER_ALTERNATE,
     MMREST_RANGE,
 
     // System-level styles

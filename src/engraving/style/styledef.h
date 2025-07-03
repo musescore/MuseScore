@@ -1218,6 +1218,22 @@ enum class Sid {
     measureNumberAlignToBarline,
     measureNumberAlignToBarlineInterval,
 
+    measureNumberAlternateFontFace,
+    measureNumberAlternateFontSize,
+    measureNumberAlternateLineSpacing,
+    measureNumberAlternateFontSpatiumDependent,
+    measureNumberAlternateFontStyle,
+    measureNumberAlternateColor,
+    measureNumberAlternateAlign,
+    measureNumberAlternatePosAbove,
+    measureNumberAlternateFrameType,
+    measureNumberAlternateFramePadding,
+    measureNumberAlternateFrameWidth,
+    measureNumberAlternateFrameRound,
+    measureNumberAlternateFrameFgColor,
+    measureNumberAlternateFrameBgColor,
+    measureNumberAlternatePosition,
+
     mmRestShowMeasureNumberRange,
     mmRestRangeBracketType,
 
