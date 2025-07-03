@@ -120,6 +120,8 @@ private:
     void updateSoundTitle(const InstrumentTrackId& trackId);
     void setSoundTitle(const QString& soundTitle);
 
+    QVariantMap createColumnSubItem(int numColumns) const;
+
     bool eventFilter(QObject* watched, QEvent* event) override;
 
     void onPadTriggered(int pitch, const PercussionPanelPadModel::PadAction& action);
@@ -133,6 +135,8 @@ private:
     void resetLayout();
     Drumset standardDefaultDrumset() const;
     Drumset museSamplerDefaultDrumset() const;
+
+    void setColumns(int numColumns);
 
     mu::engraving::InstrumentTrackId currentTrackId() const;
 

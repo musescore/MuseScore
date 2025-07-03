@@ -2416,7 +2416,7 @@ static void readDrumset(Drumset* ds, XmlReader& e)
         const AsciiStringView tag(e.name());
         if (tag == "head") {
             ds->drum(pitch).notehead = Read206::convertHeadGroup(e.readInt());
-        } else if (ds->readProperties(e, pitch)) {
+        } else if (ds->readDrumProperties(e, pitch)) {
         } else {
             e.unknown();
         }

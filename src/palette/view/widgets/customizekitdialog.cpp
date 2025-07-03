@@ -592,7 +592,7 @@ void CustomizeKitDialog::updateExample()
 }
 
 //---------------------------------------------------------
-//   load
+//   loadDrum
 //---------------------------------------------------------
 
 void CustomizeKitDialog::load()
@@ -628,7 +628,9 @@ void CustomizeKitDialog::load()
             }
             while (e.readNextStartElement()) {
                 if (e.name() == "Drum") {
-                    m_editedDrumset.load(e);
+                    m_editedDrumset.loadDrum(e);
+                } else if (e.name() == "percussionPanelColumns") {
+                    m_editedDrumset.setPercussionPanelColumns(e.readInt());
                 } else {
                     e.unknown();
                 }

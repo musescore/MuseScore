@@ -37,6 +37,7 @@
 
 static const QString PAD_NAMES_CODE("percussion-pad-names");
 static const QString NOTATION_PREVIEW_CODE("percussion-notation-preview");
+static const QString SET_COLUMNS_CODE("percussion-set-columns");
 static const QString EDIT_LAYOUT_CODE("percussion-edit-layout");
 static const QString RESET_LAYOUT_CODE("percussion-reset-layout");
 
@@ -154,6 +155,14 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
     static constexpr int editLayoutIcon = static_cast<int>(IconCode::Code::CONFIGURE);
     static constexpr int resetLayoutIcon = static_cast<int>(IconCode::Code::UNDO);
 
+    const QVariantList columnsSubmenu = {
+        createColumnSubItem(4),
+        createColumnSubItem(6),
+        createColumnSubItem(8),
+        createColumnSubItem(12),
+        createColumnSubItem(16),
+    };
+
     QList<QVariantMap> menuItems = {
         { { "id", PAD_NAMES_CODE }, { "title", muse::qtrc("notation/percussion", "Pad names") },
             { "checkable", true }, { "checked", !useNotationPreview() }, { "enabled", true } },
@@ -163,6 +172,9 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
 
         { }, // separator
 
+        { { "title", muse::qtrc("notation/percussion",  "%1 columns").arg(m_padListModel->numColumns()) },
+            { "subitems", columnsSubmenu }, { "enabled", true } },
+
         { { "id", EDIT_LAYOUT_CODE },
             { "title", editLayoutTitle }, { "icon", editLayoutIcon }, { "enabled", true } },
 
@@ -171,6 +183,14 @@ QList<QVariantMap> PercussionPanelModel::layoutMenuItems() const
     };
 
     return menuItems;
+}
+
+QVariantMap PercussionPanelModel::createColumnSubItem(int numColumns) const
+{
+    const QString title = QString::number(numColumns);
+    const QString id = SET_COLUMNS_CODE + "-" + title;
+    return { { "id", id }, { "title", title },
+        { "checkable", true }, { "checked", m_padListModel->numColumns() == numColumns }, { "enabled", true } };
 }
 
 void PercussionPanelModel::handleMenuItem(const QString& itemId)
@@ -189,6 +209,11 @@ void PercussionPanelModel::handleMenuItem(const QString& itemId)
         m_padListModel->padFocusRequested(0);
     } else if (itemId == RESET_LAYOUT_CODE) {
         resetLayout();
+    } else if (itemId.contains(SET_COLUMNS_CODE)) {
+        //! NOTE: In this case, the last section of the itemId refers to the number of columns
+        auto stringSection = itemId.section(u'-', -1, -1);
+        const int num = stringSection.toInt();
+        setColumns(num);
     }
 }
 
@@ -571,6 +596,46 @@ Drumset PercussionPanelModel::museSamplerDefaultDrumset() const
     PercussionUtilities::readDrumset(drumMapping, defaultDrumset);
 
     return defaultDrumset;
+}
+
+void PercussionPanelModel::setColumns(int numColumns)
+{
+    IF_ASSERT_FAILED(numColumns > 0) {
+        return;
+    }
+
+    if (numColumns == m_padListModel->numColumns()) {
+        return;
+    }
+
+    if (m_currentPanelMode == PanelMode::Mode::EDIT_LAYOUT) {
+        finishEditing(/*discardChanges*/ true);
+    }
+
+    const std::pair<Instrument*, Part*> instAndPart = getCurrentInstrumentAndPart();
+    Instrument* inst = instAndPart.first;
+    Part* part = instAndPart.second;
+    IF_ASSERT_FAILED(inst && inst->drumset() && part) {
+        return;
+    }
+
+    Drumset updatedDrumset = *m_padListModel->drumset();
+
+    // Calculate new values for panelRow & panelColumn...
+    for (int pitch = 0; pitch < mu::engraving::DRUM_INSTRUMENTS; ++pitch) {
+        if (!updatedDrumset.isValid(pitch)) {
+            continue;
+        }
+        mu::engraving::DrumInstrument& drum = updatedDrumset.drum(pitch);
+        const int index = drum.panelRow * static_cast<int>(updatedDrumset.percussionPanelColumns()) + drum.panelColumn;
+        drum.panelRow = index / numColumns;
+        drum.panelColumn = index % numColumns;
+    }
+
+    updatedDrumset.setPercussionPanelColumns(numColumns);
+
+    const InstrumentKey key = { inst->id(), part->id() };
+    notation()->parts()->replaceDrumset(key, updatedDrumset);
 }
 
 InstrumentTrackId PercussionPanelModel::currentTrackId() const
