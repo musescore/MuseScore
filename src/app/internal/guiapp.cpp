@@ -232,6 +232,12 @@ void GuiApp::perform()
             m->onDelayedInit();
         }
 
+        const Version welcomeDialogLastShownVersion(appshellConfiguration()->welcomeDialogLastShownVersion());
+        if (welcomeDialogLastShownVersion < BaseApplication::appVersion()) {
+            appshellConfiguration()->setWelcomeDialogShowOnStartup(true); // override user preference
+            appshellConfiguration()->setWelcomeDialogLastShownIndex(-1); // reset
+        }
+
         const auto finalizeStartup = [this, obj]() {
             startupScenario()->registerAudioPlugins();
 

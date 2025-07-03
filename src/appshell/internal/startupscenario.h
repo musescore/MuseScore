@@ -80,6 +80,8 @@ private:
     void restoreLastSession();
     void removeProjectsUnsavedChanges(const muse::io::paths_t& projectsPaths);
 
+    void showWelcomeDialog();
+
     std::string m_startupTypeStr;
     project::ProjectFile m_startupScoreFile;
     bool m_startupCompleted = false;

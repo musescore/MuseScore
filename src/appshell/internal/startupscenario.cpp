@@ -34,6 +34,7 @@ using namespace muse;
 using namespace muse::actions;
 
 static const muse::UriQuery FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup?floating=true");
+static const muse::UriQuery WELCOME_DIALOG_URI("musescore://welcomedialog");
 static const muse::Uri HOME_URI("musescore://home");
 static const muse::Uri NOTATION_URI("musescore://notation");
 
@@ -156,6 +157,14 @@ bool StartupScenario::startupCompleted() const
     return m_startupCompleted;
 }
 
+void StartupScenario::showWelcomeDialog()
+{
+    interactive()->open(WELCOME_DIALOG_URI);
+
+    const std::string version = configuration()->museScoreVersion();
+    configuration()->setWelcomeDialogLastShownVersion(version);
+}
+
 void StartupScenario::doCheckForUpdates()
 {
     IF_ASSERT_FAILED(m_checkForUpdatesProgress && m_checkForUpdatesProgress->isStarted()) {
@@ -246,6 +255,8 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
 
     if (!configuration()->hasCompletedFirstLaunchSetup()) {
         interactive()->open(FIRST_LAUNCH_SETUP_URI);
+    } else if (configuration()->welcomeDialogShowOnStartup() && !museSoundsUpdateScenario()->hasUpdate()) {
+        showWelcomeDialog();
     }
 }
 
