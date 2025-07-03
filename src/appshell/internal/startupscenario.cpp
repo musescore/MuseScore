@@ -26,6 +26,7 @@
 
 #include "async/async.h"
 #include "translation.h"
+#include "global/defer.h"
 #include "log.h"
 
 using namespace mu::appshell;
@@ -35,6 +36,8 @@ using namespace muse::actions;
 static const muse::UriQuery FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup?floating=true");
 static const muse::Uri HOME_URI("musescore://home");
 static const muse::Uri NOTATION_URI("musescore://notation");
+
+static const int CHECK_FOR_UPDATES_TIMEOUT(60000);
 
 static StartupModeType modeTypeTromString(const std::string& str)
 {
@@ -55,6 +58,15 @@ static StartupModeType modeTypeTromString(const std::string& str)
     }
 
     return StartupModeType::StartEmpty;
+}
+
+StartupScenario::StartupScenario(const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
+{
+    m_checkForUpdatesProgress = std::make_shared<Progress>();
+    m_checkForUpdatesProgress->started().onNotify(this, [this] {
+        doCheckForUpdates();
+    });
 }
 
 void StartupScenario::setStartupType(const std::optional<std::string>& type)
@@ -83,17 +95,6 @@ const mu::project::ProjectFile& StartupScenario::startupScoreFile() const
 void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFile>& file)
 {
     m_startupScoreFile = file ? file.value() : project::ProjectFile();
-}
-
-void StartupScenario::checkForUpdates()
-{
-    if (appUpdateScenario()) {
-        appUpdateScenario()->checkForUpdate(/*manual*/ false);
-    }
-
-    if (museSoundsUpdateScenario()) {
-        museSoundsUpdateScenario()->checkForUpdate(/*manual*/ false);
-    }
 }
 
 void StartupScenario::registerAudioPlugins()
@@ -153,6 +154,57 @@ void StartupScenario::openStartupPage()
 bool StartupScenario::startupCompleted() const
 {
     return m_startupCompleted;
+}
+
+void StartupScenario::doCheckForUpdates()
+{
+    IF_ASSERT_FAILED(m_checkForUpdatesProgress && m_checkForUpdatesProgress->isStarted()) {
+        return;
+    }
+
+    if (multiInstancesProvider()->instances().size() != 1) {
+        m_checkForUpdatesProgress->finish(make_ret(Ret::Code::Cancel));
+        return;
+    }
+
+    QTimer::singleShot(CHECK_FOR_UPDATES_TIMEOUT, [this]() {
+        if (m_checkForUpdatesProgress && m_checkForUpdatesProgress->isStarted()) {
+            m_checkForUpdatesProgress->finish(make_ret(Ret::Code::UnknownError));
+        }
+    });
+
+    static size_t totalChecksExpected = 0;
+
+    const auto onUpdateCheckCompleted = [this](){
+        static size_t totalChecksReceived = 0;
+
+        const bool checkInProgress = m_checkForUpdatesProgress && m_checkForUpdatesProgress->isStarted();
+        IF_ASSERT_FAILED(checkInProgress && totalChecksReceived < totalChecksExpected) {
+            return;
+        }
+        ++totalChecksReceived;
+
+        // TODO: Could give a specific progress update based on the number of callbacks received, and the
+        // total number of callbacks we're expecting...
+
+        if (totalChecksReceived == totalChecksExpected) {
+            m_checkForUpdatesProgress->finish(make_ret(Ret::Code::Ok));
+        }
+    };
+
+    if (appUpdateScenario()) {
+        ++totalChecksExpected;
+        DEFER {
+            appUpdateScenario()->checkForUpdate(/*manual*/ false, onUpdateCheckCompleted);
+        };
+    }
+
+    if (museSoundsUpdateScenario()) {
+        ++totalChecksExpected;
+        DEFER {
+            museSoundsUpdateScenario()->checkForUpdate(/*manual*/ false, onUpdateCheckCompleted);
+        };
+    }
 }
 
 StartupModeType StartupScenario::resolveStartupModeType() const

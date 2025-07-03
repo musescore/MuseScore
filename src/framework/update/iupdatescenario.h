@@ -30,9 +30,10 @@ class IUpdateScenario : MODULE_EXPORT_INTERFACE
     INTERFACE_ID(IUpdateScenario)
 
 public:
-    virtual ~IUpdateScenario() = default;
+    using CheckForUpdateCompleteCallback = std::function<void ()>;
 
-    virtual void checkForUpdate(bool manual) = 0;
+    virtual ~IUpdateScenario() = default;
+    virtual void checkForUpdate(bool manual, const CheckForUpdateCompleteCallback& callback = nullptr) = 0;
 };
 }
 

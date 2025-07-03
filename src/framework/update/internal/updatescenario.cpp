@@ -38,22 +38,25 @@ using namespace muse;
 using namespace muse::update;
 using namespace muse::actions;
 
-void UpdateScenario::checkForUpdate(bool manual)
+void UpdateScenario::checkForUpdate(bool manual, const CheckForUpdateCompleteCallback& callback)
 {
     if (isCheckInProgress()) {
         return;
     }
 
     if (manual) {
-        doCheckForUpdate(/*manual*/ true);
+        doCheckForUpdate(/*manual*/ true, callback);
         return;
     }
 
-    if (configuration()->needCheckForUpdate() && multiInstancesProvider()->instances().size() == 1) {
-        QTimer::singleShot(AUTO_CHECK_UPDATE_INTERVAL, [this]() {
-            doCheckForUpdate(/*manual*/ false);
-        });
+    if (!configuration()->needCheckForUpdate() || multiInstancesProvider()->instances().size() != 1) {
+        callback();
+        return;
     }
+
+    QTimer::singleShot(AUTO_CHECK_UPDATE_INTERVAL, [this, callback]() {
+        doCheckForUpdate(/*manual*/ false, callback);
+    });
 }
 
 bool UpdateScenario::isCheckInProgress() const
@@ -61,19 +64,22 @@ bool UpdateScenario::isCheckInProgress() const
     return m_checkInProgress;
 }
 
-void UpdateScenario::doCheckForUpdate(bool manual)
+void UpdateScenario::doCheckForUpdate(bool manual, const CheckForUpdateCompleteCallback& callback)
 {
     m_checkProgressChannel = std::make_shared<Progress>();
     m_checkProgressChannel->started().onNotify(this, [this]() {
         m_checkInProgress = true;
     });
 
-    m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
+    m_checkProgressChannel->finished().onReceive(this, [this, manual, callback](const ProgressResult& res) {
         DEFER {
             m_checkInProgress = false;
+            if (callback) {
+                callback();
+            }
         };
 
-        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
+        const bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
         if (!noUpdate && !res.ret) {
             LOGE() << "Unable to check for update, error: " << res.ret.toString();
 
@@ -84,9 +90,9 @@ void UpdateScenario::doCheckForUpdate(bool manual)
             return;
         }
 
-        ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
+        const ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
         if (!manual) {
-            bool shouldIgnoreUpdate = info.version == configuration()->skippedReleaseVersion();
+            const bool shouldIgnoreUpdate = info.version == configuration()->skippedReleaseVersion();
             if (noUpdate || shouldIgnoreUpdate) {
                 return;
             }

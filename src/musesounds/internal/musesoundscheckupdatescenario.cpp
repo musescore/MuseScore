@@ -43,12 +43,13 @@ static const char* DEFAULT_IMAGE_URL = "qrc:/qml/MuseScore/MuseSounds/resources/
 static const TranslatableString DEFAULT_ACTION_TITLE("musesounds", "Take me to MuseHub");
 static const TranslatableString DEFAULT_CANCEL_TITLE("musesounds", "No thanks");
 
-void MuseSoundsCheckUpdateScenario::checkForUpdate(bool manual)
+void MuseSoundsCheckUpdateScenario::checkForUpdate(bool manual, const CheckForUpdateCompleteCallback& callback)
 {
     if (!service()->needCheckForUpdate() || multiInstancesProvider()->instances().size() != 1) {
+        callback();
         return;
     }
-    doCheckForUpdate(manual);
+    doCheckForUpdate(manual, callback);
 }
 
 bool MuseSoundsCheckUpdateScenario::hasUpdate() const
@@ -95,16 +96,19 @@ void MuseSoundsCheckUpdateScenario::setIgnoredUpdate(const std::string& version)
     configuration()->setLastShownMuseSoundsReleaseVersion(version);
 }
 
-void MuseSoundsCheckUpdateScenario::doCheckForUpdate(bool manual)
+void MuseSoundsCheckUpdateScenario::doCheckForUpdate(bool manual, const CheckForUpdateCompleteCallback& callback)
 {
     m_checkProgressChannel = std::make_shared<Progress>();
     m_checkProgressChannel->started().onNotify(this, [this]() {
         m_checkInProgress = true;
     });
 
-    m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
+    m_checkProgressChannel->finished().onReceive(this, [this, manual, callback](const ProgressResult& res) {
         DEFER {
             m_checkInProgress = false;
+            if (callback) {
+                callback();
+            }
         };
 
         if (!res.ret) {
@@ -115,12 +119,12 @@ void MuseSoundsCheckUpdateScenario::doCheckForUpdate(bool manual)
             return;
         }
 
-        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
+        const bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
         if (noUpdate) {
             return;
         }
 
-        ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
+        const ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
         if (shouldIgnoreUpdate(info)) {
             return;
         }

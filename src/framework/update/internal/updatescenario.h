@@ -48,12 +48,12 @@ public:
     UpdateScenario(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    void checkForUpdate(bool manual) override;
+    void checkForUpdate(bool manual, const CheckForUpdateCompleteCallback& callback = nullptr) override;
 
 private:
     bool isCheckInProgress() const;
 
-    void doCheckForUpdate(bool manual);
+    void doCheckForUpdate(bool manual, const CheckForUpdateCompleteCallback& callback);
     void th_checkForUpdate();
 
     void processUpdateResult(int errorCode);

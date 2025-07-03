@@ -47,7 +47,7 @@ public:
     MuseSoundsCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    void checkForUpdate(bool manual) override;
+    void checkForUpdate(bool manual, const CheckForUpdateCompleteCallback& callback = nullptr) override;
 
     bool hasUpdate() const override;
     muse::Ret showUpdate() override;
@@ -58,7 +58,7 @@ private:
     bool shouldIgnoreUpdate(const muse::update::ReleaseInfo& info) const;
     void setIgnoredUpdate(const std::string& version);
 
-    void doCheckForUpdate(bool manual);
+    void doCheckForUpdate(bool manual, const CheckForUpdateCompleteCallback& callback);
     void th_checkForUpdate();
 
     muse::Ret showReleaseInfo(const muse::update::ReleaseInfo& info);

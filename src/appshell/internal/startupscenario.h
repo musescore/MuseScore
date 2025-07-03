@@ -52,8 +52,7 @@ class StartupScenario : public IStartupScenario, public muse::Injectable, public
 
 public:
 
-    StartupScenario(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+    StartupScenario(const muse::modularity::ContextPtr& iocCtx);
 
     void setStartupType(const std::optional<std::string>& type) override;
 
@@ -62,13 +61,15 @@ public:
     const project::ProjectFile& startupScoreFile() const override;
     void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
-    void checkForUpdates() override;
+    muse::ProgressPtr checkForUpdatesProgress() const override { return m_checkForUpdatesProgress; }
     void registerAudioPlugins() override;
 
     void openStartupPage() override;
     bool startupCompleted() const override;
 
 private:
+    void doCheckForUpdates();
+
     void onStartupPageOpened(StartupModeType modeType);
 
     StartupModeType resolveStartupModeType() const;
@@ -82,6 +83,8 @@ private:
     std::string m_startupTypeStr;
     project::ProjectFile m_startupScoreFile;
     bool m_startupCompleted = false;
+
+    muse::ProgressPtr m_checkForUpdatesProgress = nullptr;
 };
 }
 
