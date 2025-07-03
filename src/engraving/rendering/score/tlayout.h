@@ -257,7 +257,7 @@ public:
     static void fillHairpinSegmentShape(const HairpinSegment* item, HairpinSegment::LayoutData* ldata);
     static void layoutHarpPedalDiagram(const HarpPedalDiagram* item, HarpPedalDiagram::LayoutData* ldata);
     static void layoutHarmonicMarkSegment(HarmonicMarkSegment* item, LayoutContext& ctx);
-    static void layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
+    static void layoutHarmony(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutHook(const Hook* item, Hook::LayoutData* ldata);
 
     static void layoutImage(const Image* item, Image::LayoutData* ldata);

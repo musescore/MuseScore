@@ -3366,7 +3366,6 @@ void Score::cmdAddParentheses(EngravingItem* el)
         Harmony* h = toHarmony(el);
         h->setLeftParen(!h->leftParen());
         h->setRightParen(!h->rightParen());
-        h->render();
     } else if (el->type() == ElementType::TIMESIG) {
         TimeSig* ts = toTimeSig(el);
         ts->setLargeParentheses(true);

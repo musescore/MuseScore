@@ -287,7 +287,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         layoutHarpPedalDiagram(item_cast<const HarpPedalDiagram*>(item), static_cast<HarpPedalDiagram::LayoutData*>(ldata));
         break;
     case ElementType::HARMONY:
-        layoutHarmony(item_cast<const Harmony*>(item), static_cast<Harmony::LayoutData*>(ldata), ctx);
+        layoutHarmony(item_cast<Harmony*>(item), static_cast<Harmony::LayoutData*>(ldata), ctx);
         break;
     case ElementType::HARMONIC_MARK_SEGMENT: layoutHarmonicMarkSegment(item_cast<HarmonicMarkSegment*>(item), ctx);
         break;
@@ -1492,7 +1492,7 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
 
         Harmony* harmony = fretDiagram->harmony();
         harmony->setUserMag(item->textScale());
-        harmony->render();
+        layoutHarmony(harmony, harmony->mutldata(), ctx);
 
         layoutItem(fretDiagram, const_cast<LayoutContext&>(ctx));
 
@@ -3403,7 +3403,7 @@ void TLayout::layoutHarmonicMarkSegment(HarmonicMarkSegment* item, LayoutContext
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
-void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx)
+void TLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
     LD_INDEPENDENT;

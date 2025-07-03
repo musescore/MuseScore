@@ -328,11 +328,6 @@ Harmony::Harmony(const Harmony& h)
         HarmonyInfo* newInfo = new HarmonyInfo(*hi);
         m_chords.push_back(newInfo);
     }
-
-    for (const TextSegment* s : h.m_textList) {
-        TextSegment* ns = new TextSegment(*s);
-        m_textList.push_back(ns);
-    }
 }
 
 //---------------------------------------------------------
@@ -341,7 +336,7 @@ Harmony::Harmony(const Harmony& h)
 
 Harmony::~Harmony()
 {
-    for (const TextSegment* ts : m_textList) {
+    for (const TextSegment* ts : mutldata()->textList()) {
         delete ts;
     }
     for (const HarmonyInfo* info : m_chords) {
@@ -421,7 +416,6 @@ void Harmony::afterRead()
     }
 
     // render chord from description (or _textName)
-    render();
     setPlainText(harmonyName());
 }
 
@@ -645,14 +639,14 @@ NoteCaseType Harmony::bassRenderCase() const
 
 void Harmony::startEditTextual(EditData& ed)
 {
-    if (!m_textList.empty()) {
+    if (!ldata()->textList().empty()) {
         // convert chord symbol to plain text
         setPlainText(harmonyName());
         // clear rendering
-        for (const TextSegment* t : m_textList) {
+        for (const TextSegment* t : mutldata()->textList()) {
             delete t;
         }
-        m_textList.clear();
+        mutldata()->textList.mut_value().clear();
     }
 
     // layout as text, without position reset
@@ -862,7 +856,6 @@ void Harmony::setHarmony(const String& s)
             info->setId(-1);
         }
     }
-    render();
 }
 
 //---------------------------------------------------------
@@ -871,7 +864,7 @@ void Harmony::setHarmony(const String& s)
 
 double Harmony::baseLine() const
 {
-    if (m_textList.empty() || !ldata()->baseline.has_value()) {
+    if (ldata()->textList().empty() || !ldata()->baseline.has_value()) {
         return TextBase::baseLine();
     }
 
@@ -1129,25 +1122,6 @@ Color Harmony::curColor() const
     return EngravingItem::curColor();
 }
 
-void Harmony::renderRomanNumeral()
-{
-    HarmonyRenderCtx ctx;
-    if (m_chords.empty()) {
-        return;
-    }
-    HarmonyInfo* info = m_chords.front();
-
-    if (m_leftParen) {
-        render(SymId::csymParensLeftTall, ctx);
-    }
-
-    render(info->textName(), ctx);
-
-    if (m_rightParen) {
-        render(SymId::csymParensRightTall, ctx);
-    }
-}
-
 //---------------------------------------------------------
 //   width
 //---------------------------------------------------------
@@ -1217,480 +1191,12 @@ void TextSegment::setFont(const muse::draw::Font& f)
 }
 
 //---------------------------------------------------------
-//   render
-//---------------------------------------------------------
-
-void Harmony::render(const String& s, HarmonyRenderCtx& ctx)
-{
-    if (s.isEmpty()) {
-        return;
-    }
-
-    Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList.front() : font();
-    TextSegment* ts = new TextSegment(s, f, ctx.x(), ctx.y(), ctx.hAlign);
-    ctx.textList.push_back(ts);
-    ctx.movex(ts->width());
-}
-
-void Harmony::render(SymId sym, HarmonyRenderCtx& ctx)
-{
-    if (sym == SymId::noSym) {
-        return;
-    }
-
-    Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList.front() : font();
-    f.setFamily(style().styleSt(Sid::musicalTextFont), Font::Type::MusicSymbolText);
-
-    String s = score()->engravingFont()->toString(sym);
-
-    TextSegment* ts = new TextSegment(s, f, ctx.x(), ctx.y(), ctx.hAlign);
-    ctx.textList.push_back(ts);
-    ctx.movex(ts->width());
-}
-
-//---------------------------------------------------------
-//   render
-//---------------------------------------------------------
-
-void Harmony::render(const std::list<RenderActionPtr>& renderList, HarmonyRenderCtx& ctx, int tpc,
-                     NoteSpellingType noteSpelling,
-                     NoteCaseType noteCase, double noteMag)
-{
-    ctx.stack = {};
-    ctx.tpc = tpc;
-    ctx.noteSpelling = noteSpelling;
-    ctx.noteCase = noteCase;
-    ctx.scale = noteMag;
-
-    for (const RenderActionPtr& a : renderList) {
-        renderAction(a, ctx);
-    }
-}
-
-void Harmony::renderAction(const RenderActionPtr& a, HarmonyRenderCtx& ctx)
-{
-    switch (a->actionType()) {
-    case RenderAction::RenderActionType::SET:
-        renderActionSet(std::static_pointer_cast<RenderActionSet>(a), ctx);
-        break;
-    case RenderAction::RenderActionType::MOVE:
-        renderActionMove(std::static_pointer_cast<RenderActionMove>(a), ctx);
-        break;
-    case RenderAction::RenderActionType::MOVEXHEIGHT:
-        renderActionMoveXHeight(std::static_pointer_cast<RenderActionMoveXHeight>(a), ctx);
-        break;
-    case RenderAction::RenderActionType::PUSH:
-        renderActionPush(ctx);
-        break;
-    case RenderAction::RenderActionType::POP:
-        renderActionPop(std::static_pointer_cast<RenderActionPop>(a), ctx);
-        break;
-    case RenderAction::RenderActionType::NOTE:
-        renderActionNote(ctx);
-        break;
-    case RenderAction::RenderActionType::ACCIDENTAL:
-        renderActionAcc(ctx);
-        break;
-    case RenderAction::RenderActionType::STOPHALIGN:
-        renderActionAlign(ctx);
-        break;
-    case RenderAction::RenderActionType::SCALE:
-        renderActionScale(std::static_pointer_cast<RenderActionScale>(a), ctx);
-        break;
-    default:
-        LOGD("unknown render action %d", static_cast<int>(a->actionType()));
-    }
-}
-
-void Harmony::renderActionPush(HarmonyRenderCtx& ctx)
-{
-    ctx.stack.push(ctx.pos);
-}
-
-void Harmony::renderActionPop(const RenderActionPopPtr& a, HarmonyRenderCtx& ctx)
-{
-    if (ctx.stack.empty()) {
-        LOGD("RenderAction::RenderActionType::POP: stack empty");
-        return;
-    }
-
-    PointF pt = ctx.stack.top();
-    ctx.stack.pop();
-    ctx.pos = PointF(a->popX() ? pt.x() : ctx.x(), a->popY() ? pt.y() : ctx.y());
-}
-
-void Harmony::renderActionNote(HarmonyRenderCtx& ctx)
-{
-    if (!tpcIsValid(ctx.tpc)) {
-        return;
-    }
-    const ChordList* chordList = score()->chordList();
-    const Staff* st = staff();
-    const Key key = st ? st->key(tick()) : Key::INVALID;
-
-    String c;
-    AccidentalVal acc;
-
-    if (m_harmonyType == HarmonyType::STANDARD) {
-        tpc2name(ctx.tpc, ctx.noteSpelling, ctx.noteCase, c, acc);
-    } else if (m_harmonyType == HarmonyType::NASHVILLE) {
-        String accStr;
-        tpc2Function(ctx.tpc, key, accStr, c);
-    }
-
-    if (c.empty()) {
-        return;
-    }
-
-    String lookup = u"note" + c;
-    ChordSymbol cs = chordList->symbol(lookup);
-    if (!cs.isValid()) {
-        cs = chordList->symbol(c);
-    }
-    String text = cs.isValid() ? cs.value : c;
-    muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
-    font.setPointSizeF(font.pointSizeF() * ctx.scale);
-
-    TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
-    ctx.textList.push_back(ts);
-    ctx.movex(ts->width());
-}
-
-void Harmony::renderActionAcc(HarmonyRenderCtx& ctx)
-{
-    if (!tpcIsValid(ctx.tpc)) {
-        return;
-    }
-    const ChordList* chordList = score()->chordList();
-    const Staff* st = staff();
-    const Key key = st ? st->key(tick()) : Key::INVALID;
-
-    String c;
-    String acc;
-    String context = u"accidental";
-
-    if (m_harmonyType == HarmonyType::STANDARD) {
-        tpc2name(ctx.tpc, ctx.noteSpelling, ctx.noteCase, c, acc);
-    } else if (m_harmonyType == HarmonyType::NASHVILLE) {
-        tpc2Function(ctx.tpc, key, acc, c);
-    }
-
-    if (acc.empty()) {
-        return;
-    }
-
-    // Try to find token & execute renderlist
-    ChordToken tok = chordList->token(acc, ChordTokenClass::ACCIDENTAL);
-    if (tok.isValid()) {
-        for (const RenderActionPtr& a : tok.renderList) {
-            renderAction(a, ctx);
-        }
-        return;
-    }
-
-    // No valid token, find symbol
-
-    // German spelling - use special symbol for accidental in TPC_B_B
-    // to allow it to be rendered as either Bb or B
-    if (ctx.tpc == Tpc::TPC_B_B && ctx.noteSpelling == NoteSpellingType::GERMAN) {
-        context = u"german_B";
-    }
-    String lookup = context + acc;
-    ChordSymbol cs = chordList->symbol(lookup);
-    if (!cs.isValid()) {
-        cs = chordList->symbol(acc);
-    }
-    String text = cs.isValid() ? cs.value : c;
-    muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
-    font.setPointSizeF(font.pointSizeF() * ctx.scale);
-    font.setNoFontMerging(true);
-
-    TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
-    ctx.textList.push_back(ts);
-    ctx.movex(ts->width());
-}
-
-void Harmony::renderActionAlign(HarmonyRenderCtx& ctx)
-{
-    ctx.hAlign = false;
-}
-
-void Harmony::renderActionScale(const RenderActionScalePtr& a, HarmonyRenderCtx& ctx)
-{
-    ctx.scale *= a->scale();
-}
-
-void Harmony::renderActionSet(const RenderActionSetPtr& a, HarmonyRenderCtx& ctx)
-{
-    const ChordList* chordList = score()->chordList();
-    const ChordSymbol cs = chordList->symbol(a->text());
-    const String text = cs.isValid() ? cs.value : a->text();
-    muse::draw::Font font = cs.isValid() ? m_fontList[cs.fontIdx] : m_fontList.front();
-    font.setPointSizeF(font.pointSizeF() * ctx.scale);
-    if (m_harmonyType == HarmonyType::NASHVILLE) {
-        double nmag = chordList->nominalMag();
-        font.setPointSizeF(font.pointSizeF() * nmag);
-    }
-
-    TextSegment* ts = new TextSegment(text, font, ctx.x(), ctx.y(), ctx.hAlign);
-    ctx.movex(ts->width());
-
-    if (a->renderText()) {
-        ctx.textList.push_back(ts);
-        return;
-    }
-
-    delete ts;
-}
-
-void Harmony::renderActionMove(const RenderActionMovePtr& a, HarmonyRenderCtx& ctx)
-{
-    const FontMetrics fm = FontMetrics(font());
-    const double scale = a->scaled() ? ctx.scale : 1.0;
-    ctx.pos = ctx.pos + a->vec() * FontMetrics::capHeight(font()) * scale;
-}
-
-void Harmony::renderActionMoveXHeight(const RenderActionMoveXHeightPtr& a, HarmonyRenderCtx& ctx)
-{
-    const int direction = a->up() ? -1 : 1;
-    const double scale = a->scaled() ? ctx.scale : 1.0;
-    const FontMetrics fm = FontMetrics(font());
-    ctx.movey(direction * fm.xHeight() * scale);
-}
-
-void Harmony::renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx)
-{
-    ctx.hAlign = true;
-
-    int capo = style().styleI(Sid::capoPosition);
-
-    ChordList* chordList = info->chordList();
-    if (!chordList) {
-        return;
-    }
-
-    NoteCaseType rootCase = rootRenderCase(info);
-    NoteCaseType bassCase = bassRenderCase();
-
-    if (m_leftParen) {
-        render(SymId::csymParensLeftTall, ctx);
-    }
-
-    NoteSpellingType spelling = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
-
-    if (m_harmonyType == HarmonyType::STANDARD && tpcIsValid(info->rootTpc())) {
-        // render root
-        render(chordList->renderListRoot, ctx, info->rootTpc(), spelling, rootCase);
-        // render extension
-        const ChordDescription* cd = info->getDescription();
-        if (cd) {
-            const bool stackModifiers = style().styleB(Sid::verticallyStackModifiers) && !m_doNotStackModifiers;
-            render(stackModifiers ? cd->renderListStacked : cd->renderList, ctx, 0);
-        }
-    } else if (m_harmonyType == HarmonyType::NASHVILLE && tpcIsValid(info->rootTpc())) {
-        // render function
-        render(chordList->renderListFunction, ctx, info->rootTpc(), spelling, bassCase);
-        double adjust = chordList->nominalAdjust();
-        ctx.movey(adjust * magS() * spatium() * .2);
-        // render extension
-        const ChordDescription* cd = info->getDescription();
-        if (cd) {
-            const bool stackModifiers = style().styleB(Sid::verticallyStackModifiers) && !m_doNotStackModifiers;
-            render(stackModifiers ? cd->renderListStacked : cd->renderList, ctx, 0);
-        }
-    } else {
-        render(info->textName(), ctx);
-    }
-
-    // render bass
-    if (tpcIsValid(info->bassTpc())) {
-        std::list<RenderActionPtr >& bassNoteChordList
-            = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
-        render(bassNoteChordList, ctx, info->bassTpc(), spelling, bassCase, m_bassScale);
-    }
-
-    if (tpcIsValid(info->rootTpc()) && capo > 0 && capo < 12) {
-        int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
-        int capoRootTpc = info->rootTpc() + tpcOffset[capo];
-        int capoBassTpc = info->bassTpc();
-
-        if (tpcIsValid(capoBassTpc)) {
-            capoBassTpc += tpcOffset[capo];
-        }
-
-        /*
-         * For guitarists, avoid x and bb in Root or Bass,
-         * and also avoid E#, B#, Cb and Fb in Root.
-         */
-        if (capoRootTpc < 8 || (tpcIsValid(capoBassTpc) && capoBassTpc < 6)) {
-            capoRootTpc += 12;
-            if (tpcIsValid(capoBassTpc)) {
-                capoBassTpc += 12;
-            }
-        } else if (capoRootTpc > 24 || (tpcIsValid(capoBassTpc) && capoBassTpc > 26)) {
-            capoRootTpc -= 12;
-            if (tpcIsValid(capoBassTpc)) {
-                capoBassTpc -= 12;
-            }
-        }
-
-        render(SymId::csymParensLeftTall, ctx);
-        render(chordList->renderListRoot, ctx, capoRootTpc, spelling, rootCase);
-
-        // render extension
-        const ChordDescription* cd = info->getDescription();
-        if (cd) {
-            const bool stackModifiers = style().styleB(Sid::verticallyStackModifiers) && !m_doNotStackModifiers;
-            render(stackModifiers ? cd->renderListStacked : cd->renderList, ctx, 0);
-        }
-
-        if (tpcIsValid(capoBassTpc)) {
-            std::list<RenderActionPtr >& bassNoteChordList
-                = style().styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
-            render(bassNoteChordList, ctx, capoBassTpc, spelling, bassCase, m_bassScale);
-        }
-        render(SymId::csymParensRightTall, ctx);
-    }
-
-    if (m_rightParen) {
-        render(SymId::csymParensRightTall, ctx);
-    }
-}
-
-//---------------------------------------------------------
-//   render
-//    construct Chord Symbol
-//---------------------------------------------------------
-
-void Harmony::render()
-{
-    for (const TextSegment* s : m_textList) {
-        delete s;
-    }
-    m_textList.clear();
-    if (m_harmonyType == HarmonyType::ROMAN) {
-        renderRomanNumeral();
-        return;
-    }
-
-    // Render standard or Nashville chords
-
-    ChordList* chordList = score()->chordList();
-
-    m_fontList.clear();
-    for (const ChordFont& cf : chordList->fonts) {
-        Font ff(font());
-        double mag = m_userMag.value_or(cf.mag);
-        ff.setPointSizeF(ff.pointSizeF() * mag);
-        if (cf.musicSymbolText) {
-            ff.setFamily(cf.family, Font::Type::MusicSymbolText);
-        } else if (!(cf.family.isEmpty() || cf.family == "default")) {
-            ff.setFamily(cf.family, Font::Type::Harmony);
-        }
-        m_fontList.push_back(ff);
-    }
-    if (m_fontList.empty()) {
-        m_fontList.push_back(font());
-    }
-
-    mutldata()->polychordDividerLines.reset();
-    HarmonyRenderCtx ctx;
-
-    // Map of text segments and their final width
-    std::multimap<double, std::vector<TextSegment*> > chordTextSegments;
-
-    for (size_t i = m_chords.size(); i > 0; i--) {
-        HarmonyInfo* harmony = m_chords.at(i - 1);
-        renderSingleHarmony(harmony, ctx);
-
-        chordTextSegments.emplace(std::pair<double, std::vector<TextSegment*> > { ctx.x(), ctx.textList });
-        m_textList.insert(m_textList.end(), ctx.textList.begin(), ctx.textList.end());
-
-        // Measure divider spacing from lowest baseline and highest cap-height in segments
-        double rootBaseline = ctx.textList.empty() ? -DBL_MAX : ctx.textList.front()->y();
-        double bottomBaseline = -DBL_MAX;
-        for (const TextSegment* seg : ctx.textList) {
-            bottomBaseline = std::max(bottomBaseline, seg->y());
-        }
-
-        double diff = rootBaseline - bottomBaseline;
-        if (bottomBaseline > rootBaseline) {
-            for (TextSegment* seg : ctx.textList) {
-                seg->movey(diff);
-            }
-        }
-        if (i == m_chords.size()) {
-            // Set baseline for bottom chord
-            mutldata()->baseline = -diff;
-        }
-
-        double topCapHeight = DBL_MAX;
-        for (const TextSegment* seg : ctx.textList) {
-            topCapHeight = std::min(topCapHeight, seg->y() - seg->capHeight());
-        }
-
-        ctx.textList.clear();
-        if (m_chords.size() == 1 || i == 1) {
-            break;
-        }
-
-        assert(!muse::RealIsEqual(topCapHeight, DBL_MAX));
-
-        ctx.setx(0);
-        ctx.sety(topCapHeight);
-
-        double lineY = ctx.y() - style().styleS(Sid::polychordDividerSpacing).toMM(spatium())
-                       - style().styleS(Sid::polychordDividerThickness).toMM(spatium()) / 2;
-        // lineY += ldata()->baseline;
-        LineF line = LineF(PointF(0.0, lineY), PointF(0.0, lineY));
-        mutldata()->polychordDividerLines.mut_value().push_back(line);
-
-        ctx.movey(-style().styleS(Sid::polychordDividerSpacing).toMM(spatium()) * 2.0);
-        ctx.movey(-style().styleS(Sid::polychordDividerThickness).toMM(spatium()));
-    }
-
-    // Align polychords
-
-    if (align() == AlignH::LEFT) {
-        return;
-    }
-
-    double longestLine = 0.0;
-    for (double width : muse::keys(chordTextSegments)) {
-        if (width > longestLine) {
-            longestLine = width;
-        }
-    }
-
-    for (auto& textSegs : chordTextSegments) {
-        double width = textSegs.first;
-        std::vector<TextSegment*>& segs = textSegs.second;
-
-        double diff = longestLine - width;
-
-        if (muse::RealIsNull(diff)) {
-            continue;
-        }
-
-        // For centre align adjust by .5* difference, for right align adjust by full difference
-        if (align() == AlignH::HCENTER) {
-            diff *= 0.5;
-        }
-
-        for (TextSegment* seg : segs) {
-            seg->movex(diff);
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
 
 void Harmony::spatiumChanged(double oldValue, double newValue)
 {
     TextBase::spatiumChanged(oldValue, newValue);
-    render();
 }
 
 //---------------------------------------------------------
@@ -1700,7 +1206,6 @@ void Harmony::spatiumChanged(double oldValue, double newValue)
 void Harmony::localSpatiumChanged(double oldValue, double newValue)
 {
     TextBase::localSpatiumChanged(oldValue, newValue);
-    render();
 }
 
 //---------------------------------------------------------
@@ -1962,7 +1467,6 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
         break;
     case Pid::HARMONY_BASS_SCALE:
         setBassScale(v.toDouble());
-        render();
         break;
     case Pid::HARMONY_VOICE_LITERAL:
         m_realizedHarmony.setLiteral(v.toBool());
@@ -1984,14 +1488,12 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
     }
     case Pid::HARMONY_DO_NOT_STACK_MODIFIERS:
         m_doNotStackModifiers = v.toBool();
-        render();
         break;
     default:
         if (TextBase::setProperty(pid, v)) {
             if (pid == Pid::TEXT) {
                 setHarmony(v.value<String>());
             }
-            render();
             break;
         }
         return false;

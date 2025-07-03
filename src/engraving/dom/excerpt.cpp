@@ -956,14 +956,10 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                         ns->add(ne);
                         // for chord symbols,
                         // re-render with new style settings
-                        if (ne->isHarmony()) {
-                            Harmony* h = toHarmony(ne);
-                            h->render();
-                        } else if (ne->isFretDiagram()) {
+                        if (ne->isFretDiagram()) {
                             Harmony* h = toHarmony(toFretDiagram(ne)->harmony());
                             if (h) {
                                 processLinkedClone(h, score, strack);
-                                h->render();
                             }
                         }
                     }
