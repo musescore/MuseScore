@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_PARTSSETTINGSMODEL_H
-#define MU_INSPECTOR_PARTSSETTINGSMODEL_H
+#pragma once
 
 #include "models/abstractinspectormodel.h"
 
@@ -81,5 +80,3 @@ private:
     bool m_showTextLinkingOption = false;
 };
 }
-
-#endif // MU_INSPECTOR_PARTSSETTINGSMODEL_H

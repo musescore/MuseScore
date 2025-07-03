@@ -157,4 +157,4 @@ private:
     static void computeHangingLineWidth(const Segment* firstSeg, const Segment* nextSeg, double& width, bool systemHeaderGap,
                                         bool systemEnd);
 };
-} // namespace mu::engraving::layout
+}
