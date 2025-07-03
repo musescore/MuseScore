@@ -367,16 +367,18 @@ AccidentalVal Measure::findAccidental(Note* note) const
     AccidentalState tversatz;    // state of already set accidentals for this measure
     tversatz.init(vStaff->keySigEvent(tick()));
 
+    track_idx_t startTrack = vStaff->part()->startTrack();
+    track_idx_t mainTrack = chord->vStaffIdx() * VOICES;
+    track_idx_t endTrack = vStaff->part()->endTrack();
+
     for (Segment* segment = first(); segment; segment = segment->next()) {
-        track_idx_t startTrack = chord->vStaffIdx() * VOICES;
         if (segment->isKeySigType()) {
-            KeySig* ks = toKeySig(segment->element(startTrack));
+            KeySig* ks = toKeySig(segment->element(mainTrack));
             if (!ks) {
                 continue;
             }
             tversatz.init(vStaff->keySigEvent(segment->tick()));
         } else if (segment->segmentType() == SegmentType::ChordRest) {
-            track_idx_t endTrack   = startTrack + VOICES;
             for (track_idx_t track = startTrack; track < endTrack; ++track) {
                 EngravingItem* e = segment->element(track);
                 if (!e || !e->isChord()) {
@@ -384,8 +386,11 @@ AccidentalVal Measure::findAccidental(Note* note) const
                 }
                 Chord* crd = toChord(e);
                 for (Chord* chord1 : crd->graceNotes()) {
+                    if (chord1->vStaffIdx() != chord->vStaffIdx()) {
+                        continue;
+                    }
                     for (Note* note1 : chord1->notes()) {
-                        if (note1->tieBack() && note1->accidental() == 0) {
+                        if (note1->tieBack() && !note1->accidental()) {
                             continue;
                         }
                         //
@@ -400,8 +405,11 @@ AccidentalVal Measure::findAccidental(Note* note) const
                         tversatz.setAccidentalVal(line, tpc2alter(tpc));
                     }
                 }
+                if (crd->vStaffIdx() != chord->vStaffIdx()) {
+                    continue;
+                }
                 for (Note* note1 : crd->notes()) {
-                    if (note1->tieBack() && note1->accidental() == 0) {
+                    if (note1->tieBack() && !note1->accidental()) {
                         continue;
                     }
                     //
@@ -435,8 +443,8 @@ AccidentalVal Measure::findAccidental(Segment* s, staff_idx_t staffIdx, int line
     tversatz.init(staff->keySigEvent(tick()));
 
     SegmentType st = SegmentType::ChordRest;
-    track_idx_t startTrack = staffIdx * VOICES;
-    track_idx_t endTrack   = startTrack + VOICES;
+    track_idx_t startTrack = staff->part()->startTrack();
+    track_idx_t endTrack = staff->part()->endTrack();
     for (Segment* segment = first(st); segment; segment = segment->next(st)) {
         if (segment == s && staff->isPitchedStaff(tick())) {
             ClefType clef = staff->clef(s->tick());
@@ -450,8 +458,11 @@ AccidentalVal Measure::findAccidental(Segment* s, staff_idx_t staffIdx, int line
             }
             Chord* chord = toChord(e);
             for (Chord* chord1 : chord->graceNotes()) {
+                if (chord1->vStaffIdx() != staffIdx) {
+                    continue;
+                }
                 for (Note* note : chord1->notes()) {
-                    if (note->tieBack() && note->accidental() == 0) {
+                    if (note->tieBack() && !note->accidental()) {
                         continue;
                     }
                     int tpc  = note->tpc();
@@ -459,9 +470,11 @@ AccidentalVal Measure::findAccidental(Segment* s, staff_idx_t staffIdx, int line
                     tversatz.setAccidentalVal(l, tpc2alter(tpc));
                 }
             }
-
+            if (chord->vStaffIdx() != staffIdx) {
+                continue;
+            }
             for (Note* note : chord->notes()) {
-                if (note->tieBack() && note->accidental() == 0) {
+                if (note->tieBack() && !note->accidental()) {
                     continue;
                 }
                 int tpc    = note->tpc();
