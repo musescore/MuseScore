@@ -4027,9 +4027,61 @@ void TLayout::layoutMeasureNumber(const MeasureNumber* item, MeasureNumber::Layo
         ldata->moveX(-itemBBox.right());
     }
 
-    if (item->autoplace() && hPlacement != PlacementH::CENTER) {
-        // TODO: move this method out of DynamicsLayout
-        DynamicsLayout::manageBarlineCollisions(item, ldata);
+    // Check collisions against barlines
+    if (hPlacement == PlacementH::CENTER || !item->autoplace()) {
+        return;
+    }
+
+    staff_idx_t staffIdx = item->staffIdx();
+    staff_idx_t barlineStaff = muse::nidx;
+    System* system = item->measure()->system();
+    if (item->getProperty(Pid::PLACEMENT).value<PlacementV>() == PlacementV::ABOVE) {
+        barlineStaff = system->prevVisibleStaff(staffIdx);
+    } else {
+        barlineStaff = staffIdx;
+    }
+    if (barlineStaff == muse::nidx || item->score()->staff(barlineStaff)->barLineSpan() < 1) {
+        return;
+    }
+
+    const double minBarLineDistance = 0.25 * item->spatium();
+    Segment* barlineSeg = nullptr;
+    Measure* measure = item->measure();
+    if (alignToBarline || hPlacement == PlacementH::LEFT) {
+        for (Segment* seg = measure->first(); seg && seg->tick() == measure->tick(); seg = seg->prev1enabled()) {
+            if (seg->isType(SegmentType::BarLineType)) {
+                barlineSeg = seg;
+                break;
+            }
+        }
+    } else {
+        for (Segment* seg = measure->first(SegmentType::ChordRest); seg && seg->tick() <= measure->endTick(); seg = seg->next1enabled()) {
+            if (seg->isType(SegmentType::BarLineType)) {
+                barlineSeg = seg;
+                break;
+            }
+        }
+    }
+    if (!barlineSeg) {
+        return;
+    }
+
+    BarLine* barline = toBarLine(barlineSeg->elementAt(staff2track(barlineStaff)));
+    if (!barline) {
+        return;
+    }
+
+    double xCur = item->pageX();
+    if (hPlacement == PlacementH::LEFT) {
+        double xMin = barline->pageX() + barline->width() - itemBBox.left() + minBarLineDistance;
+        if (xMin > xCur) {
+            ldata->moveX(xMin - xCur);
+        }
+    } else {
+        double xMax = barline->pageX() - itemBBox.right() - minBarLineDistance;
+        if (xMax < xCur) {
+            ldata->moveX(xMax - xCur);
+        }
     }
 }
 
