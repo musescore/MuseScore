@@ -69,8 +69,12 @@ public:
     void reg(IAccessible* item) override;
     void unreg(IAccessible* item) override;
 
+    void announce(const QString& message) override;
+
     const IAccessible* accessibleRoot() const override;
     const IAccessible* lastFocused() const override;
+
+    const QString& message() const override;
 
     bool needToVoicePanelInfo() const override;
     QString currentPanelAccessibleName() const override;
@@ -128,6 +132,7 @@ public:
     int indexOfChild(const IAccessible* item, const QAccessibleInterface* iface) const;
     QAccessibleInterface* focusedChild(const IAccessible* item) const;
 
+    IAccessible* pretendFocusItem() const;
     async::Channel<QAccessibleEvent*> eventSent() const;
 
 private:
@@ -140,7 +145,32 @@ private:
         AccessibleObject* object = nullptr;
         QAccessibleInterface* iface = nullptr;
 
+        // Item() = default;
+
+        // // Item(const Item& other)
+        // //     : item(other.item), object(other.object), iface(other.iface) {}
+
+        // Item(IAccessible* it, std::weak_ptr<AccessibilityController> controller)
+        //     : item(it),
+        //     object(new AccessibleObject(item)),
+        //     iface(QAccessible::queryAccessibleInterface(object))
+        // {
+        //     object->setController(controller);
+        // }
+
         bool isValid() const { return item != nullptr; }
+
+        // bool operator==(const Item& other) const { return item == other.item; }
+
+        // Item& operator=(Item& other)
+        // {
+        //     std::swap(item, other.item);
+        //     std::swap(object, other.object);
+        //     std::swap(iface, other.iface);
+        //     return *this;
+        // }
+
+        //static const Item& null() { static constexpr Item null; return null; }
     };
 
     void init();
@@ -154,11 +184,11 @@ private:
 
     void cancelPreviousReading();
     void savePanelAccessibleName(const IAccessible* oldItem, const IAccessible* newItem);
-    void triggerRevoicingOfChangedName(IAccessible* item);
+    void triggerRevoicingOfChangedName(const Item& item);
 
     const IAccessible* panel(const IAccessible* item) const;
 
-    IAccessible* findSiblingItem(const IAccessible* item, const IAccessible* currentItem) const;
+    const Item& findSiblingItem(const Item& parent, const Item& current) const;
 
     QHash<const IAccessible*, Item> m_allItems;
 
@@ -166,12 +196,15 @@ private:
     async::Channel<QAccessibleEvent*> m_eventSent;
     IAccessible* m_lastFocused = nullptr;
     IAccessible* m_itemForRestoreFocus = nullptr;
+    IAccessible* m_pretendFocusItem = nullptr;
+    QString m_message;
 
     bool m_inited = false;
     bool m_enabled = false;
 
     bool m_ignorePanelChangingVoice = false;
     bool m_needToVoicePanelInfo = false;
+    bool m_clearMessageOnFocusChange = true;
 };
 }
 

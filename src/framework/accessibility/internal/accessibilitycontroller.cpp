@@ -97,7 +97,7 @@ void AccessibilityController::init()
 
 void AccessibilityController::reg(IAccessible* item)
 {
-    if (!m_enabled) {
+    if (!m_enabled || !item) {
         return;
     }
 
@@ -115,12 +115,12 @@ void AccessibilityController::reg(IAccessible* item)
 
     MYLOG() << "item: " << item->accessibleName();
 
+    //Item it(item, weak_from_this());
     Item it;
     it.item = item;
     it.object = new AccessibleObject(item);
     it.object->setController(weak_from_this());
     it.iface = QAccessible::queryAccessibleInterface(it.object);
-
     m_allItems.insert(item, it);
 
     if (item->accessibleParent() == this) {
@@ -166,6 +166,23 @@ void AccessibilityController::unreg(IAccessible* aitem)
     delete item.object;
 }
 
+void AccessibilityController::announce(const QString& message)
+{
+    m_message = message;
+
+    if (m_lastFocused && !message.isEmpty()) {
+        m_lastFocused->accessiblePropertyChanged().send(Property::Name, Val());
+
+        // const Item& item = findItem(m_lastFocused);
+
+        // if (item.isValid() && item.iface) {
+        //     auto event = QAccessibleAnnouncementEvent(item.iface, message);
+        //     event.setPoliteness(QAccessible::AnnouncementPoliteness::Assertive);
+        //     sendEvent(&event);
+        // }
+    }
+}
+
 const IAccessible* AccessibilityController::accessibleRoot() const
 {
     return this;
@@ -174,6 +191,11 @@ const IAccessible* AccessibilityController::accessibleRoot() const
 const IAccessible* AccessibilityController::lastFocused() const
 {
     return m_lastFocused;
+}
+
+const QString& AccessibilityController::message() const
+{
+    return m_message;
 }
 
 bool AccessibilityController::needToVoicePanelInfo() const
@@ -222,7 +244,7 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
 #endif
 
         if (triggerRevoicing) {
-            triggerRevoicingOfChangedName(item);
+            triggerRevoicingOfChangedName(it);
             return;
         } else {
             m_needToVoicePanelInfo = false;
@@ -307,6 +329,10 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
 
     if (state == State::Focused) {
         if (arg) {
+            if (m_clearMessageOnFocusChange) {
+                m_message = "";
+            }
+            m_pretendFocusItem = nullptr;
             cancelPreviousReading();
             savePanelAccessibleName(m_lastFocused, item.item);
 
@@ -359,43 +385,48 @@ void AccessibilityController::savePanelAccessibleName(const IAccessible* oldItem
     m_needToVoicePanelInfo = oldItemPanelName != newItemPanelName;
 }
 
-void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
+void AccessibilityController::triggerRevoicingOfChangedName(const Item& current)
 {
     if (!configuration()->active()) {
         return;
     }
 
-    if (m_lastFocused != item) {
+    if (current.item != m_lastFocused) {
         return;
     }
 
-    const IAccessible* itemPanel = panel(item);
-    if (!itemPanel) {
+    const Item& currentPanel = findItem(panel(current.item));
+    if (!currentPanel.isValid()) {
         return;
     }
 
     m_ignorePanelChangingVoice = true;
 
-    item->setState(State::Focused, false);
+    const Item& sibling = findSiblingItem(currentPanel, current);
+    const Item& pretend = sibling.isValid() ? sibling : currentPanel;
 
-    IAccessible* tmpFocusedItem = findSiblingItem(itemPanel, item);
-    if (!tmpFocusedItem) {
-        tmpFocusedItem = const_cast<IAccessible*>(itemPanel);
-    }
+    QAccessible::State stateFocusedChanged;
+    stateFocusedChanged.focused = true; // focused state has changed (to either true or false)
 
-    tmpFocusedItem->setState(State::Focused, true);
-    m_itemForRestoreFocus = item;
+    m_pretendFocusItem = pretend.item;
+    QAccessibleStateChangeEvent currentChanged(current.object, stateFocusedChanged);
+    QAccessibleStateChangeEvent pretendChanged(pretend.object, stateFocusedChanged);
+    QAccessibleEvent pretendFocused(pretend.object, QAccessible::Focus);
+    sendEvent(&currentChanged);
+    sendEvent(&pretendChanged);
+    sendEvent(&pretendFocused);
 
     //! NOTE: Restore the focused element after some delay(this value was found experimentally)
-    QTimer::singleShot(100, [=]() {
-        if (m_lastFocused) {
-            m_lastFocused->setState(State::Focused, false);
+    QTimer::singleShot(75, [&]() {
+        if (m_pretendFocusItem) {
+            m_pretendFocusItem = nullptr;
+            QAccessibleStateChangeEvent pretendChanged(pretend.object, stateFocusedChanged);
+            QAccessibleStateChangeEvent currentChanged(current.object, stateFocusedChanged);
+            QAccessibleEvent currentFocused(current.object, QAccessible::Focus);
+            sendEvent(&pretendChanged);
+            sendEvent(&currentChanged);
+            sendEvent(&currentFocused);
         }
-
-        if (m_itemForRestoreFocus) {
-            m_itemForRestoreFocus->setState(State::Focused, true);
-        }
-
         m_ignorePanelChangingVoice = false;
     });
 }
@@ -418,31 +449,46 @@ const IAccessible* AccessibilityController::panel(const IAccessible* item) const
     return nullptr;
 }
 
-IAccessible* AccessibilityController::findSiblingItem(const IAccessible* item, const IAccessible* currentItem) const
+const AccessibilityController::Item& AccessibilityController::findSiblingItem(const Item& parent, const Item& current) const
 {
     TRACEFUNC;
-    size_t count = item->accessibleChildCount();
+    const size_t count = parent.item->accessibleChildCount();
+
     for (size_t i = 0; i < count; ++i) {
-        const IAccessible* ch = item->accessibleChild(i);
-        const Item& chIt = findItem(ch);
-        if (!chIt.isValid() || !chIt.iface || chIt.item->accessibleIgnored() || ch == currentItem) {
+        const Item& sibling = findItem(parent.item->accessibleChild(i));
+
+        if (sibling.item == current.item
+            || !sibling.isValid()
+            || !sibling.iface
+            || sibling.item->accessibleIgnored()) {
             continue;
         }
 
-        if (!chIt.iface->state().invisible && ch->accessibleRole() != IAccessible::Group
-            && ch->accessibleRole() != IAccessible::Panel) {
-            return chIt.item;
+        const IAccessible::Role role = sibling.item->accessibleRole();
+
+        if (sibling.item->accessibleState(State::Enabled)
+            && role != IAccessible::Group
+            && role != IAccessible::Panel) {
+            return sibling;
         }
 
-        if (chIt.item->accessibleChildCount() > 0) {
-            IAccessible* subItem = findSiblingItem(chIt.item, currentItem);
-            if (subItem) {
+        if (sibling.item->accessibleChildCount() > 0) {
+            const Item& subItem = findSiblingItem(sibling, current);
+
+            if (subItem.isValid()) {
                 return subItem;
             }
         }
     }
 
-    return nullptr;
+    //return Item::null();
+    static constexpr Item null;
+    return null;
+}
+
+IAccessible* AccessibilityController::pretendFocusItem() const
+{
+    return m_pretendFocusItem;
 }
 
 async::Channel<QAccessibleEvent*> AccessibilityController::eventSent() const
@@ -452,13 +498,21 @@ async::Channel<QAccessibleEvent*> AccessibilityController::eventSent() const
 
 const AccessibilityController::Item& AccessibilityController::findItem(const IAccessible* aitem) const
 {
-    auto it = m_allItems.find(aitem);
-    if (it != m_allItems.end()) {
-        return it.value();
+    static constexpr Item null;
+
+    if (!aitem) {
+        return null;
+        //return Item::null();
     }
 
-    static AccessibilityController::Item null;
-    return null;
+    auto it = m_allItems.find(aitem);
+
+    if (it == m_allItems.end()) {
+        return null;
+        //return Item::null();
+    }
+
+    return it.value();
 }
 
 QAccessibleInterface* AccessibilityController::parentIface(const IAccessible* item) const
@@ -504,6 +558,10 @@ int AccessibilityController::childCount(const IAccessible* item) const
 QAccessibleInterface* AccessibilityController::child(const IAccessible* item, int i) const
 {
     IF_ASSERT_FAILED(item) {
+        return nullptr;
+    }
+
+    if (!(0 <= i && i < static_cast<int>(item->accessibleChildCount()))) {
         return nullptr;
     }
 

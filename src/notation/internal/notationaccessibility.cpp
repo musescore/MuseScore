@@ -115,8 +115,9 @@ void NotationAccessibility::setEnabled(bool enabled)
 void NotationAccessibility::setTriggeredCommand(const std::string& command)
 {
 #ifndef ENGRAVING_NO_ACCESSIBILITY
-    score()->rootItem()->accessible()->accessibleRoot()->setCommandInfo(QString::fromStdString(command));
-    score()->dummy()->rootItem()->accessible()->accessibleRoot()->setCommandInfo(QString::fromStdString(command));
+    const QString message = QString::fromStdString(command);
+    // score()->rootItem()->accessible()->accessibleRoot()->setCommandInfo(message);
+    // score()->dummy()->rootItem()->accessible()->accessibleRoot()->setCommandInfo(message);
 #else
     UNUSED(command)
 #endif
