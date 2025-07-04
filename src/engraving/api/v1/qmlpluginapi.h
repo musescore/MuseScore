@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_APIV1_QMLPLUGINAPI_H
-#define MU_ENGRAVING_APIV1_QMLPLUGINAPI_H
+#pragma once
 
 #include <QQuickItem>
 
@@ -55,8 +53,10 @@ class Score;
     Q_PROPERTY(mu::engraving::apiv1::Enum * qmlName READ get_##cppName CONSTANT) \
     static Enum* cppName; \
     static Enum* get_##cppName() { \
-        if (!cppName) \
-        cppName = wrapEnum<enumName>(); \
+        if (!cppName) { \
+            cppName = wrapEnum<enumName>(); \
+            cppName->freeze(); \
+        } \
         return cppName; \
     }
 
@@ -67,6 +67,7 @@ class Score;
         if (!cppName) { \
             cppName = wrapEnum<enumName1>(); \
             cppName->add(QMetaEnum::fromType<enumName2>()); \
+            cppName->freeze(); \
         } \
         return cppName; \
     }
@@ -351,7 +352,6 @@ private:
     muse::async::Notification m_closeRequested;
 };
 
+#undef DECLARE_API_ENUM2
 #undef DECLARE_API_ENUM
 }
-
-#endif
