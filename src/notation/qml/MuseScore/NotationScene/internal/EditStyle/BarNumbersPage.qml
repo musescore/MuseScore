@@ -30,7 +30,7 @@ import Muse.Ui 1.0
 StyledFlickable {
     id: root
 
-    signal goToTextStylePage(string s)
+    signal goToTextStylePage(int index)
 
     contentWidth: column.width
     contentHeight: column.height
@@ -90,6 +90,7 @@ StyledFlickable {
 
                     RowLayout {
                         StyledDropdown {
+                            id: barNumTextStyleDropdown
                             Layout.preferredWidth: 190
                             model: barNumbersModel.textStyles
                             currentIndex: indexOfValue(barNumbersModel.measureNumberTextStyle.value)
@@ -102,7 +103,7 @@ StyledFlickable {
                             text: qsTrc("notation", "Edit text style")
 
                             onClicked: {
-                                root.goToTextStylePage("measure-number")
+                                root.goToTextStylePage(barNumTextStyleDropdown.currentIndex)
                             }
                         }
 
@@ -326,6 +327,7 @@ StyledFlickable {
 
                     RowLayout {
                         StyledDropdown {
+                            id: mmRestBarRangeTextStyleDropdown
                             Layout.preferredWidth: 190
                             model: barNumbersModel.textStyles
                             currentIndex: indexOfValue(barNumbersModel.mmRestRangeTextStyle.value)
@@ -338,7 +340,7 @@ StyledFlickable {
                             text: qsTrc("notation", "Edit text style")
 
                             onClicked: {
-                                root.goToTextStylePage("multimeasure-rest-range")
+                                root.goToTextStylePage(mmRestBarRangeTextStyleDropdown.currentIndex)
                             }
                         }
 

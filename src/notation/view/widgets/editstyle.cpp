@@ -850,8 +850,8 @@ EditStyle::EditStyle(QWidget* parent)
 
     // Define string here instead of in the .ui file to avoid MSVC compiler warning C4125, which would
     // be triggered by the decimal digit immediately following a non-ASCII character (curly quote).
-    oneMeasureRepeatShow1->setText(muse::qtrc("EditStyleBase", "Show â€˜1â€™ on 1-measure repeats"));
-    singleMMRestShowNumber->setText(muse::qtrc("EditStyleBase", "Show number â€˜1â€™"));
+    oneMeasureRepeatShow1->setText(muse::qtrc("EditStyleBase", "Show ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¹Ã…â€œ1ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ on 1-measure repeats"));
+    singleMMRestShowNumber->setText(muse::qtrc("EditStyleBase", "Show number ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¹Ã…â€œ1ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢"));
 
     // ====================================================
     // BEAMS (QML)
@@ -987,7 +987,7 @@ EditStyle::EditStyle(QWidget* parent)
         QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/BarNumbersPage.qml")));
     barNumbersPage.widget->setMinimumSize(224, 400);
     PageMeasureNumbers->layout()->addWidget(barNumbersPage.widget);
-    connect(barNumbersPage.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
+    connect(barNumbersPage.view->rootObject(), SIGNAL(goToTextStylePage(int)), this, SLOT(goToTextStylePage(int)));
 
     // ====================================================
     // Figured Bass
@@ -1452,7 +1452,7 @@ void EditStyle::setHeaderFooterToolTip()
           + QString("</i></td></tr></table><p>")
           + muse::qtrc("notation/editstyle", "Available metadata tags and their current values")
           + QString("<br />")
-          + muse::qtrc("notation/editstyle", "(in File > Project propertiesâ€¦):")
+          + muse::qtrc("notation/editstyle", "(in File > Project propertiesÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦):")
           + QString("</p><table>");
 
     // show all tags for current score/part
@@ -1984,6 +1984,18 @@ void EditStyle::goToTextStylePage(const QString& code)
 
     textStyles->setCurrentRow(subIndex);
     m_currentSubPageCode = code;
+
+    emit currentPageChanged();
+    emit currentSubPageChanged();
+}
+
+void EditStyle::goToTextStylePage(int index)
+{
+    pageList->setCurrentRow(ALL_PAGE_CODES.indexOf("text-styles"));
+    m_currentPageCode = "text-styles";
+
+    textStyles->setCurrentRow(index);
+    m_currentSubPageCode = ALL_TEXT_STYLE_SUBPAGE_CODES[index];
 
     emit currentPageChanged();
     emit currentSubPageChanged();
