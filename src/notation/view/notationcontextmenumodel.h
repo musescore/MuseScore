@@ -61,7 +61,7 @@ private:
     muse::uicomponents::MenuItemList makeHairpinItems();
     muse::uicomponents::MenuItemList makeGradualTempoChangeItems();
 
-    muse::uicomponents::MenuItem* makeEditStyle(const EngravingItem* hitElement);
+    muse::uicomponents::MenuItem* makeEditStyle(const EngravingItem* element);
 
     bool isSingleSelection() const;
     bool canSelectSimilarInRange() const;
@@ -70,6 +70,8 @@ private:
 
     INotationInteractionPtr interaction() const;
     INotationSelectionPtr selection() const;
+
+    const EngravingItem* currentElement() const;
 
     const INotationInteraction::HitElementContext& hitElementContext() const;
 };
