@@ -438,6 +438,10 @@ QRect NavigableAppMenuModel::openedMenuAreaRect() const
 
 void NavigableAppMenuModel::saveMUNavigationSystemState()
 {
+    if (m_lastActiveMUNavigationState.has_value()) {
+        return;
+    }
+
     bool muNavigationIsHighlight = navigationController()->isHighlight();
     m_needActivateLastMUNavigationControl = muNavigationIsHighlight;
 
