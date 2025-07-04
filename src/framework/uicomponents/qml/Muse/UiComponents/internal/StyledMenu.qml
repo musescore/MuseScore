@@ -100,7 +100,7 @@ MenuView {
 
         // Find the currently active item (if any). The search will start from the item
         // following it and will wrap from the beginning once the last item is reached.
-        let startingIndex = 0;
+        let startingIndex = 0
         for (let i = 0; i < view.count; ++i) {
             let loader = view.itemAtIndex(i)
             if (loader && !loader.isSeparator && loader.item && loader.item.navigation.active) {
@@ -110,30 +110,39 @@ MenuView {
         }
 
         // Find the first menu item that matches the given underlined symbol (letter).
-        let firstMatchingIndex = -1;
+        let firstMatchingIndex = -1
+        let isSingleMatch = true
         for (let j = 0; j < view.count; ++j) {
-            let index = startingIndex + j;
+            let index = startingIndex + j
             if (index >= view.count) {
                 index -= view.count
             }
 
             let item = Boolean(model.get) ? model.get(index).itemRole : model[index]
             if (item && item.enabled && requestingMenuModel.menuItemMatchesSymbol(item, symbol)) {
-                firstMatchingIndex = index
-                break;
+                if (firstMatchingIndex === -1) {
+                    firstMatchingIndex = index
+                } else {
+                    isSingleMatch = false
+                    break
+                }
             }
         }
 
-        // Focus the first matching menu item and click it.
+        // Highlight the first matching menu item. If it is the only match, click it.
+        // Otheriwise do nothing and give the user a chance to navigate to the other matches.
         if (firstMatchingIndex !== -1) {
             let loader = view.itemAtIndex(firstMatchingIndex)
             if (loader) {
                 if (root.subMenuLoader.isMenuOpened && root.subMenuLoader.parent !== loader.item) {
-                    root.subMenuLoader.close();
+                    root.subMenuLoader.close()
                 }
 
                 loader.item.navigation.requestActive()
-                Qt.callLater(loader.item.clicked, null)
+
+                if (isSingleMatch) {
+                    Qt.callLater(loader.item.clicked, null)
+                }
             }
         }
     }
