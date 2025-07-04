@@ -60,11 +60,22 @@ Rectangle {
 
             popupController.visualControl = visualControl
             popupController.popup = newOpenedPopup
+
+            popupController.popup.closed.connect(function() {
+                if (sectionList.contentY + sectionList.height > sectionList.contentHeight) {
+                    var invisibleContentHeight = sectionList.contentY + sectionList.height - sectionList.contentHeight
+                    Qt.callLater(sectionList.ensureContentVisible, -invisibleContentHeight)
+                }
+            })
         }
     }
 
     InspectorPopupController {
         id: popupController
+    }
+
+    Component.onCompleted: {
+        popupController.load()
     }
 
     StyledListView {
