@@ -149,9 +149,9 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
-    int gripsCount() const override { return 2; }
-    Grip initialEditModeGrip() const override { return Grip::END; }
-    Grip defaultGrip() const override { return Grip::START; }
+    int gripsCount() const override;
+    Grip initialEditModeGrip() const override { return Grip::MIDDLE; }
+    Grip defaultGrip() const override { return Grip::MIDDLE; }
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
     void sanitizeTuplet();

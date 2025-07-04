@@ -87,6 +87,11 @@ constexpr bool operator&(const SegmentType t1, const SegmentType t2)
     return static_cast<int>(t1) & static_cast<int>(t2);
 }
 
+constexpr SegmentType operator ~(const SegmentType& t)
+{
+    return static_cast<SegmentType>(~static_cast<int>(t));
+}
+
 //------------------------------------------------------------------------
 //   @@ Segment
 //    A segment holds all vertical aligned staff elements.
