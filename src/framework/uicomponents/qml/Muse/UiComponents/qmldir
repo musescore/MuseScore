@@ -18,6 +18,7 @@ GradientRectangle 1.0 GradientRectangle.qml
 GridViewSectional 1.0 GridViewSectional.qml
 IncrementalPropertyControl 1.0 IncrementalPropertyControl.qml
 InfoPanel 1.0 InfoPanel.qml
+ItemWithDropShadow 1.0 ItemWithDropShadow.qml
 ListItemBlank 1.0 ListItemBlank.qml
 MenuButton 1.0 MenuButton.qml
 NavigationFocusBorder 1.0 NavigationFocusBorder.qml
@@ -36,7 +37,7 @@ SelectMultipleDirectoriesDialog 1.0 SelectMultipleDirectoriesDialog.qml
 SeparatorLine 1.0 SeparatorLine.qml
 StyledBusyIndicator 1.0 StyledBusyIndicator.qml
 StyledDialogView 1.0 StyledDialogView.qml
-StyledRectangularDropShadow 1.0 StyledRectangularDropShadow.qml
+StyledDropShadow 1.0 StyledDropShadow.qml
 StyledDropdown 1.0 StyledDropdown.qml
 StyledFlickable 1.0 StyledFlickable.qml
 StyledGridView 1.0 StyledGridView.qml
