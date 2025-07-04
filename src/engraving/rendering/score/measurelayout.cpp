@@ -1225,39 +1225,22 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
 {
     bool showMeasureNumber = m->showsMeasureNumber();
 
-    String stringNum;
-    if (showMeasureNumber) {
-        stringNum = String::number(m->no() + 1);
-    }
+    String stringNum = String::number(m->no() + 1);
 
     Score* score = m->score();
-    bool allStaves = ctx.conf().styleB(Sid::measureNumberAllStaves);
-
-    std::vector<staff_idx_t> stavesWithMeasureNumber;
-    if (allStaves) {
-        stavesWithMeasureNumber.reserve(score->nstaves());
-        for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            stavesWithMeasureNumber.push_back(staffIdx);
-        }
-    } else {
-        stavesWithMeasureNumber.reserve(score->systemObjectStaves().size() + 1);
-        stavesWithMeasureNumber.push_back(0);
-        for (const Staff* staff : score->systemObjectStaves()) {
-            stavesWithMeasureNumber.push_back(staff->idx());
-        }
-    }
 
     const std::vector<MStaff*>& measureStaves = m->mstaves();
 
-    for (staff_idx_t staffIdx : stavesWithMeasureNumber) {
+    for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         if (staffIdx >= measureStaves.size()) {
             break;
         }
 
+        Staff* staff = score->staff(staffIdx);
         const MStaff* measureStaff = measureStaves[staffIdx];
         MeasureNumber* measureNumber = measureStaff->noText();
 
-        if (showMeasureNumber) {
+        if (showMeasureNumber && staff->shouldShowBarNumbers()) {
             if (!measureNumber) {
                 measureNumber = new MeasureNumber(m);
                 measureNumber->setTrack(staff2track(staffIdx));
@@ -1267,7 +1250,7 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
             }
 
             measureNumber->setXmlText(stringNum);
-            measureNumber->setSystemFlag(!allStaves);
+            measureNumber->setSystemFlag(!score->style().styleB(Sid::measureNumberAllStaves));
             TLayout::layoutMeasureNumber(measureNumber, measureNumber->mutldata(), ctx);
         } else if (measureNumber) {
             ctx.mutDom().doUndoRemoveElement(measureNumber);

@@ -1427,13 +1427,6 @@ std::vector<EngravingItem*> collectSystemObjects(const Score* score, const std::
             }
         }
 
-        for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            MeasureNumber* measureNum = measure->noText(staffIdx);
-            if (measureNum && measureNum->systemFlag() && muse::contains(staves, measureNum->staff())) {
-                result.push_back(measureNum);
-            }
-        }
-
         for (const Segment& seg : measure->segments()) {
             if (seg.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
                 for (EngravingItem* annotation : seg.annotations()) {
