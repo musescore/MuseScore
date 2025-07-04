@@ -2063,10 +2063,15 @@ void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
     MeasureBase::scanElements(data, func, all);
 
     for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        MStaff* ms = m_mstaves[staffIdx];
+        if (ms->noText()) {
+            func(data, ms->noText());
+        }
+
         if (!all && !(visible(staffIdx) && score()->staff(staffIdx)->show()) && !isCutawayClef(staffIdx)) {
             continue;
         }
-        MStaff* ms = m_mstaves[staffIdx];
+
         func(data, ms->lines());
         if (ms->vspacerUp()) {
             func(data, ms->vspacerUp());
@@ -2074,9 +2079,7 @@ void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
         if (ms->vspacerDown()) {
             func(data, ms->vspacerDown());
         }
-        if (ms->noText()) {
-            func(data, ms->noText());
-        }
+
         if (ms->mmRangeText()) {
             func(data, ms->mmRangeText());
         }

@@ -1116,35 +1116,35 @@ static const std::vector<Item<NoteHeadGroup> > NOTEHEAD_GROUPS = {
     { NoteHeadGroup::HEAD_TI_NAME,      "ti-name",  muse::TranslatableString("engraving/noteheadgroup",  "Ti (Name)") },
     { NoteHeadGroup::HEAD_SI_NAME,      "si-name",  muse::TranslatableString("engraving/noteheadgroup",  "Si (Name)") },
 
-    { NoteHeadGroup::HEAD_A_SHARP,      "a-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "A♯ (Name)") },
+    { NoteHeadGroup::HEAD_A_SHARP,      "a-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "AÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ (Name)") },
     { NoteHeadGroup::HEAD_A,            "a-name",       muse::TranslatableString("engraving/noteheadgroup",  "A (Name)") },
-    { NoteHeadGroup::HEAD_A_FLAT,       "a-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "A♭ (Name)") },
-    { NoteHeadGroup::HEAD_B_SHARP,      "b-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "B♯ (Name)") },
+    { NoteHeadGroup::HEAD_A_FLAT,       "a-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "AÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ (Name)") },
+    { NoteHeadGroup::HEAD_B_SHARP,      "b-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "BÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ (Name)") },
     { NoteHeadGroup::HEAD_B,            "b-name",       muse::TranslatableString("engraving/noteheadgroup",  "B (Name)") },
-    { NoteHeadGroup::HEAD_B_FLAT,       "b-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "B♭ (Name)") },
-    { NoteHeadGroup::HEAD_C_SHARP,      "c-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "C♯ (Name)") },
+    { NoteHeadGroup::HEAD_B_FLAT,       "b-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "BÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ (Name)") },
+    { NoteHeadGroup::HEAD_C_SHARP,      "c-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "CÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ (Name)") },
     { NoteHeadGroup::HEAD_C,            "c-name",       muse::TranslatableString("engraving/noteheadgroup",  "C (Name)") },
-    { NoteHeadGroup::HEAD_C_FLAT,       "c-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "C♭ (Name)") },
-    { NoteHeadGroup::HEAD_D_SHARP,      "d-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "D♯ (Name)") },
+    { NoteHeadGroup::HEAD_C_FLAT,       "c-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "CÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ (Name)") },
+    { NoteHeadGroup::HEAD_D_SHARP,      "d-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "DÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ (Name)") },
     { NoteHeadGroup::HEAD_D,            "d-name",       muse::TranslatableString("engraving/noteheadgroup",  "D (Name)") },
-    { NoteHeadGroup::HEAD_D_FLAT,       "d-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "D♭ (Name)") },
-    { NoteHeadGroup::HEAD_E_SHARP,      "e-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "E♯ (Name)") },
+    { NoteHeadGroup::HEAD_D_FLAT,       "d-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "DÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ (Name)") },
+    { NoteHeadGroup::HEAD_E_SHARP,      "e-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "EÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ (Name)") },
     { NoteHeadGroup::HEAD_E,            "e-name",       muse::TranslatableString("engraving/noteheadgroup",  "E (Name)") },
-    { NoteHeadGroup::HEAD_E_FLAT,       "e-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "E♭ (Name)") },
-    { NoteHeadGroup::HEAD_F_SHARP,      "f-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "F♯ (Name)") },
+    { NoteHeadGroup::HEAD_E_FLAT,       "e-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "EÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ (Name)") },
+    { NoteHeadGroup::HEAD_F_SHARP,      "f-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "FÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ (Name)") },
     { NoteHeadGroup::HEAD_F,            "f-name",       muse::TranslatableString("engraving/noteheadgroup",  "F (Name)") },
-    { NoteHeadGroup::HEAD_F_FLAT,       "f-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "F♭ (Name)") },
-    { NoteHeadGroup::HEAD_G_SHARP,      "g-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "G♯ (Name)") },
+    { NoteHeadGroup::HEAD_F_FLAT,       "f-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "FÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ (Name)") },
+    { NoteHeadGroup::HEAD_G_SHARP,      "g-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "GÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ (Name)") },
     { NoteHeadGroup::HEAD_G,            "g-name",       muse::TranslatableString("engraving/noteheadgroup",  "G (Name)") },
-    { NoteHeadGroup::HEAD_G_FLAT,       "g-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "G♭ (Name)") },
+    { NoteHeadGroup::HEAD_G_FLAT,       "g-flat-name",  muse::TranslatableString("engraving/noteheadgroup",  "GÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ (Name)") },
     { NoteHeadGroup::HEAD_H,            "h-name",       muse::TranslatableString("engraving/noteheadgroup",  "H (Name)") },
-    { NoteHeadGroup::HEAD_H_SHARP,      "h-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "H♯ (Name)") },
+    { NoteHeadGroup::HEAD_H_SHARP,      "h-sharp-name", muse::TranslatableString("engraving/noteheadgroup",  "HÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ (Name)") },
 
     // Swiss rudiments
     { NoteHeadGroup::HEAD_SWISS_RUDIMENTS_FLAM,   "swiss-rudiments-flam",   muse::TranslatableString("engraving/noteheadgroup",
                                                                                                      "Swiss Rudiments Flam") },
     { NoteHeadGroup::HEAD_SWISS_RUDIMENTS_DOUBLE, "swiss-rudiments-double", muse::TranslatableString("engraving/noteheadgroup",
-                                                                                                     "Swiss Rudiments Doublé") },
+                                                                                                     "Swiss Rudiments DoublÃƒÆ’Ã‚Â©") },
 
     { NoteHeadGroup::HEAD_CUSTOM,       "custom",       muse::TranslatableString("engraving",  "Custom") }
 };
@@ -1627,6 +1627,8 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::PAGE_NUMBER,       "page_number",          muse::TranslatableString("engraving", "Page number") },
 
     { TextStyleType::MEASURE_NUMBER,    "measure_number",       muse::TranslatableString("engraving", "Measure number") },
+    { TextStyleType::MEASURE_NUMBER_ALTERNATE, "measure_number_alternate",
+      muse::TranslatableString("engraving", "Measure number (alternate)") },
     { TextStyleType::MMREST_RANGE,      "mmrest_range",         muse::TranslatableString("engraving", "Multimeasure rest range") },
 
     { TextStyleType::TEMPO,             "tempo",                muse::TranslatableString("engraving", "Tempo") },
@@ -1889,37 +1891,37 @@ struct AccidentalUnicodeItem {
 static const std::vector<AccidentalUnicodeItem> ACCIDENTALS_NAMES = {
     { AccidentalVal::SHARP3,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
-      QT_TRANSLATE_NOOP("engraving", "triple ♯"),
+      QT_TRANSLATE_NOOP("engraving", "triple ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯"),
       //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "triple sharp") },
     { AccidentalVal::SHARP2,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
-      QT_TRANSLATE_NOOP("engraving", "double ♯"),
+      QT_TRANSLATE_NOOP("engraving", "double ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯"),
       //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "double sharp") },
     { AccidentalVal::SHARP,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
-      QT_TRANSLATE_NOOP("engraving", "♯"),
+      QT_TRANSLATE_NOOP("engraving", "ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯"),
       //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "sharp") },
     { AccidentalVal::NATURAL,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
-      QT_TRANSLATE_NOOP("engraving", "♮"),
+      QT_TRANSLATE_NOOP("engraving", "ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â®"),
       //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "natural") },
     { AccidentalVal::FLAT,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
-      QT_TRANSLATE_NOOP("engraving", "♭"),
+      QT_TRANSLATE_NOOP("engraving", "ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­"),
       //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "flat") },
     { AccidentalVal::FLAT2,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
-      QT_TRANSLATE_NOOP("engraving", "double ♭"),
+      QT_TRANSLATE_NOOP("engraving", "double ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­"),
       //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "double flat") },
     { AccidentalVal::FLAT3,
       //: Visible text in the UI. Please preserve the accidental symbol in the translation
-      QT_TRANSLATE_NOOP("engraving", "triple ♭"),
+      QT_TRANSLATE_NOOP("engraving", "triple ÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­"),
       //: Accessible text for screen readers. Please avoid using accidental symbols in the translation
       QT_TRANSLATE_NOOP("engraving", "triple flat") }
 };
@@ -2004,8 +2006,8 @@ static const std::vector<Item<PlayingTechniqueType> > PLAY_TECH_TYPES = {
     //: For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)
     { PlayingTechniqueType::Mute,          "mute",           muse::TranslatableString("engraving/playtechtype", "Mute") },
     { PlayingTechniqueType::Tremolo,       "tremolo",        muse::TranslatableString("engraving/playtechtype", "Tremolo") },
-    { PlayingTechniqueType::Detache,       "detache",        muse::TranslatableString("engraving/playtechtype", "Détaché") },
-    { PlayingTechniqueType::Martele,       "martele",        muse::TranslatableString("engraving/playtechtype", "Martelé") },
+    { PlayingTechniqueType::Detache,       "detache",        muse::TranslatableString("engraving/playtechtype", "DÃƒÆ’Ã‚Â©tachÃƒÆ’Ã‚Â©") },
+    { PlayingTechniqueType::Martele,       "martele",        muse::TranslatableString("engraving/playtechtype", "MartelÃƒÆ’Ã‚Â©") },
     { PlayingTechniqueType::ColLegno,      "col_legno",      muse::TranslatableString("engraving/playtechtype", "Col legno") },
     { PlayingTechniqueType::SulPonticello, "sul_ponticello", muse::TranslatableString("engraving/playtechtype", "Sul ponticello") },
     { PlayingTechniqueType::SulTasto,      "sul_tasto",      muse::TranslatableString("engraving/playtechtype", "Sul tasto") },
@@ -2884,8 +2886,8 @@ static const std::vector<DrumPitchItem> DRUMPITCHS = {
     { DrumNum(70),       QT_TRANSLATE_NOOP_U16("engraving/drumset", "Maracas") },
     { DrumNum(71),       QT_TRANSLATE_NOOP_U16("engraving/drumset", "Short Whistle") },
     { DrumNum(72),       QT_TRANSLATE_NOOP_U16("engraving/drumset", "Long Whistle") },
-    { DrumNum(73),       QT_TRANSLATE_NOOP_U16("engraving/drumset", "Short Güiro") },
-    { DrumNum(74),       QT_TRANSLATE_NOOP_U16("engraving/drumset", "Long Güiro") },
+    { DrumNum(73),       QT_TRANSLATE_NOOP_U16("engraving/drumset", "Short GÃƒÆ’Ã‚Â¼iro") },
+    { DrumNum(74),       QT_TRANSLATE_NOOP_U16("engraving/drumset", "Long GÃƒÆ’Ã‚Â¼iro") },
     { DrumNum(75),       QT_TRANSLATE_NOOP_U16("engraving/drumset", "Claves") },
     { DrumNum(76),       QT_TRANSLATE_NOOP_U16("engraving/drumset", "Hi Wood Block") },
     { DrumNum(77),       QT_TRANSLATE_NOOP_U16("engraving/drumset", "Low Wood Block") },
@@ -3212,21 +3214,21 @@ LyricsDashSystemStart TConv::fromXml(const AsciiStringView& tag, LyricsDashSyste
 }
 
 const std::array<const muse::TranslatableString, 17 > KEY_NAMES = { {
-    muse::TranslatableString("engraving", "C♭ major, A♭ minor"),
-    muse::TranslatableString("engraving", "G♭ major, E♭ minor"),
-    muse::TranslatableString("engraving", "D♭ major, B♭ minor"),
-    muse::TranslatableString("engraving", "A♭ major, F minor"),
-    muse::TranslatableString("engraving", "E♭ major, C minor"),
-    muse::TranslatableString("engraving", "B♭ major, G minor"),
+    muse::TranslatableString("engraving", "CÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ major, AÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ minor"),
+    muse::TranslatableString("engraving", "GÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ major, EÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ minor"),
+    muse::TranslatableString("engraving", "DÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ major, BÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ minor"),
+    muse::TranslatableString("engraving", "AÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ major, F minor"),
+    muse::TranslatableString("engraving", "EÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ major, C minor"),
+    muse::TranslatableString("engraving", "BÃƒÂ¢Ã¢â€žÂ¢Ã‚Â­ major, G minor"),
     muse::TranslatableString("engraving", "F major, D minor"),
     muse::TranslatableString("engraving", "C major, A minor"),
     muse::TranslatableString("engraving", "G major, E minor"),
     muse::TranslatableString("engraving", "D major, B minor"),
-    muse::TranslatableString("engraving", "A major, F♯ minor"),
-    muse::TranslatableString("engraving", "E major, C♯ minor"),
-    muse::TranslatableString("engraving", "B major, G♯ minor"),
-    muse::TranslatableString("engraving", "F♯ major, D♯ minor"),
-    muse::TranslatableString("engraving", "C♯ major, A♯ minor"),
+    muse::TranslatableString("engraving", "A major, FÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ minor"),
+    muse::TranslatableString("engraving", "E major, CÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ minor"),
+    muse::TranslatableString("engraving", "B major, GÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ minor"),
+    muse::TranslatableString("engraving", "FÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ major, DÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ minor"),
+    muse::TranslatableString("engraving", "CÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ major, AÃƒÂ¢Ã¢â€žÂ¢Ã‚Â¯ minor"),
     muse::TranslatableString("engraving", "Open/Atonal"),
     muse::TranslatableString("engraving", "Custom")
 } };
