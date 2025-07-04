@@ -86,10 +86,18 @@ public:
         SCHEME_SHAPE_NOTE_7_WALKER
     };
 
+    enum class ParenthesesType {
+        NONE = 0x0,
+        LEFT = 0x1,
+        RIGHT = 0x2,
+        BOTH = 0x3
+    };
+
     Q_ENUM(Group)
     Q_ENUM(Type)
     Q_ENUM(NoteDotPosition)
     Q_ENUM(SchemeType)
+    Q_ENUM(ParenthesesType)
 };
 }
 

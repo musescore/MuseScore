@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_PADDINGTABLE_H
-#define MU_ENGRAVING_PADDINGTABLE_H
+#pragma once
 
 #include <array>
 
@@ -44,11 +43,19 @@ public:
     void setMinimumPaddingUnit(double val) { m_minimumPaddingUnit = val; }
     double minimumPaddingUnit() const { return m_minimumPaddingUnit; }
 
-    void createTable(const MStyle& style);
+    virtual void createTable(const MStyle& style) = 0;
+
+protected:
+    void initPaddingTable();
 
 private:
     double m_minimumPaddingUnit = 0.0;
 };
-}
 
-#endif // MU_ENGRAVING_PADDINGTABLE_H
+struct ElementPaddingTable : public mu::engraving::PaddingTable {
+    void createTable(const MStyle& style) override;
+};
+struct ExternalParenthesisPaddingTable : public mu::engraving::PaddingTable {
+    void createTable(const MStyle& style) override;
+};
+}

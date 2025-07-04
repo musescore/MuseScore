@@ -272,5 +272,8 @@ public:
 
     static AsciiStringView toXml(RHTappingSymbol rh);
     static RHTappingSymbol fromXml(const AsciiStringView& str, RHTappingSymbol def);
+
+    static AsciiStringView toXml(ParenthesesMode pm);
+    static ParenthesesMode fromXml(const AsciiStringView& str, ParenthesesMode def);
 };
 }

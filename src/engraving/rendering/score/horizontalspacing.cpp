@@ -22,6 +22,7 @@
 #include <cfloat>
 
 #include "horizontalspacing.h"
+#include "parenthesislayout.h"
 
 #include "dom/barline.h"
 #include "dom/beam.h"
@@ -804,7 +805,7 @@ void HorizontalSpacing::applyCrossBeamSpacingCorrection(Segment* thisSeg, Segmen
     CrossBeamSpacing crossBeamSpacing = computeCrossBeamSpacing(thisSeg, nextSeg);
 
     const Score* score = thisSeg->score();
-    const PaddingTable& paddingTable = score->paddingTable();
+    const PaddingTable* paddingTable = score->paddingTable();
     const MStyle& style = score->style();
 
     double displacement = score->noteHeadWidth() - style.styleMM(Sid::stemWidth);
@@ -819,7 +820,7 @@ void HorizontalSpacing::applyCrossBeamSpacingCorrection(Segment* thisSeg, Segmen
 
     if (crossBeamSpacing.upDown) {
         if (crossBeamSpacing.hasOpposingBeamlets) {
-            double minBeamletClearance = style.styleMM(Sid::beamMinLen) * 2.0 + paddingTable.at(ElementType::BEAM).at(ElementType::BEAM);
+            double minBeamletClearance = style.styleMM(Sid::beamMinLen) * 2.0 + paddingTable->at(ElementType::BEAM).at(ElementType::BEAM);
             width = std::max(width, displacement + minBeamletClearance);
         } else {
             width = std::max(width, 2 * displacement);
@@ -827,11 +828,11 @@ void HorizontalSpacing::applyCrossBeamSpacingCorrection(Segment* thisSeg, Segmen
     }
 
     if (crossBeamSpacing.preventCrossStaffKerning) {
-        double padding = crossBeamSpacing.ensureMinStemDistance ? paddingTable.at(ElementType::STEM).at(ElementType::STEM)
+        double padding = crossBeamSpacing.ensureMinStemDistance ? paddingTable->at(ElementType::STEM).at(ElementType::STEM)
                          : style.styleMM(Sid::minNoteDistance);
         width = std::max(width, score->noteHeadWidth() + padding);
     } else if (crossBeamSpacing.ensureMinStemDistance) {
-        width = std::max(width, score->paddingTable().at(ElementType::STEM).at(ElementType::STEM));
+        width = std::max(width, score->paddingTable()->at(ElementType::STEM).at(ElementType::STEM));
     }
 }
 
@@ -868,7 +869,7 @@ double HorizontalSpacing::minStemDistOnNonAdjacentCross(const Segment* thisSeg, 
         }
 
         double minStemDist = prevChordOnBeam->x() + prevChordOnBeam->stem()->x() - (chord->x() + chord->stem()->x());
-        minStemDist += chord->score()->paddingTable().at(ElementType::STEM).at(ElementType::STEM);
+        minStemDist += chord->score()->paddingTable()->at(ElementType::STEM).at(ElementType::STEM);
 
         dist = std::max(dist, minStemDist);
     }
@@ -1333,11 +1334,11 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
         if (ns->isChordRestType()) {
             double minDist = f->minRight();
             if (f->isClefType()) {
-                minDist += f->score()->paddingTable().at(ElementType::CLEF).at(ElementType::REST);
+                minDist += f->score()->paddingTable()->at(ElementType::CLEF).at(ElementType::REST);
             } else if (f->isKeySigType()) {
-                minDist += f->score()->paddingTable().at(ElementType::KEYSIG).at(ElementType::REST);
+                minDist += f->score()->paddingTable()->at(ElementType::KEYSIG).at(ElementType::REST);
             } else if (f->isTimeSigType()) {
-                minDist += f->score()->paddingTable().at(ElementType::TIMESIG).at(ElementType::REST);
+                minDist += f->score()->paddingTable()->at(ElementType::TIMESIG).at(ElementType::REST);
             }
             w = std::max(w, minDist);
         } else if (f->isChordRestType()) {
@@ -1403,11 +1404,14 @@ double HorizontalSpacing::minLeft(const Segment* seg, const Shape& ls)
 
 double HorizontalSpacing::computePadding(const EngravingItem* item1, const EngravingItem* item2)
 {
-    const PaddingTable& paddingTable = item1->score()->paddingTable();
+    if (item1->isParenthesis() != item2->isParenthesis()) {
+        return ParenthesisLayout::computeParenthesisPadding(item1, item2);
+    }
+    const PaddingTable* paddingTable = item1->score()->paddingTable();
     ElementType type1 = item1->type();
     ElementType type2 = item2->type();
 
-    double padding = paddingTable.at(type1).at(type2);
+    double padding = paddingTable->at(type1).at(type2);
     double scaling = (item1->mag() + item2->mag()) / 2;
 
     if (type1 == ElementType::NOTE && isSpecialNotePaddingType(type2)) {

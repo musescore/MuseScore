@@ -805,9 +805,9 @@ double AccidentalsLayout::computePadding(Accidental* acc, const EngravingItem* c
         return ctx.reducedFlatToNotePadding();
     }
 
-    const PaddingTable& paddingTable = acc->score()->paddingTable();
+    const PaddingTable* paddingTable = acc->score()->paddingTable();
 
-    return paddingTable.at(ElementType::ACCIDENTAL).at(chordElement->type()) * 0.5 * (acc->mag() + chordElement->mag());
+    return paddingTable->at(ElementType::ACCIDENTAL).at(chordElement->type()) * 0.5 * (acc->mag() + chordElement->mag());
 }
 
 double AccidentalsLayout::minAccidentalToAccidentalGroupDistance(Accidental* acc, Shape accShape, const Shape& accidentalsShape,
