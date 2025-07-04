@@ -177,16 +177,16 @@ MenuItemList NotationContextMenuModel::makeInstrumentNameItems()
 
 MenuItemList NotationContextMenuModel::makeHarmonyItems()
 {
-    const EngravingItem* hitElement = hitElementContext().element;
-    if (hitElement && engraving::toHarmony(hitElement)->isInFretBox()) {
+    const EngravingItem* element = currentElement();
+    if (element && engraving::toHarmony(element)->isInFretBox()) {
         return makeElementInFretBoxItems();
     }
 
     MenuItemList items = makeElementItems();
     items << makeSeparator();
 
-    if (hitElement) {
-        engraving::EngravingObject* parent = hitElement->isHarmony() ? hitElement->explicitParent() : nullptr;
+    if (element) {
+        engraving::EngravingObject* parent = element->isHarmony() ? element->explicitParent() : nullptr;
         bool hasLinkedFretboardDiagram = parent && parent->isFretDiagram();
         if (!hasLinkedFretboardDiagram) {
             items << makeMenuItem("add-fretboard-diagram");
@@ -200,14 +200,14 @@ MenuItemList NotationContextMenuModel::makeHarmonyItems()
 
 MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
 {
-    const EngravingItem* hitElement = hitElementContext().element;
-    if (hitElement && engraving::toFretDiagram(hitElement)->isInFretBox()) {
+    const EngravingItem* element = currentElement();
+    if (element && engraving::toFretDiagram(element)->isInFretBox()) {
         return makeElementInFretBoxItems();
     }
 
     MenuItemList items = makeElementItems();
 
-    const engraving::FretDiagram* fretDiagram = engraving::toFretDiagram(hitElementContext().element);
+    const engraving::FretDiagram* fretDiagram = engraving::toFretDiagram(element);
     if (!fretDiagram->harmony()) {
         items << makeSeparator();
         items << makeMenuItem("chord-text", TranslatableString("notation", "Add c&hord symbol"));
@@ -239,8 +239,8 @@ MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
               << makeSeparator();
     }
 
-    const EngravingItem* hitElement = hitElementContext().element;
-    items << makeEditStyle(hitElement);
+    const EngravingItem* element = currentElement();
+    items << makeEditStyle(element);
 
     return items;
 }
@@ -272,15 +272,15 @@ MenuItemList NotationContextMenuModel::makeElementItems()
         items << makeMenu(TranslatableString("notation", "Select"), selectItems);
     }
 
-    const EngravingItem* hitElement = hitElementContext().element;
+    const EngravingItem* element = currentElement();
 
-    if (hitElement && hitElement->isEditable()) {
+    if (element && element->isEditable()) {
         items << makeSeparator();
         items << makeMenuItem("edit-element");
     }
 
     items << makeSeparator()
-          << makeEditStyle(hitElement);
+          << makeEditStyle(element);
 
     return items;
 }
@@ -352,14 +352,14 @@ MenuItemList NotationContextMenuModel::makeHairpinItems()
 {
     MenuItemList items = makeElementItems();
 
-    const EngravingItem* hitElement = hitElementContext().element;
-    if (!hitElement || !hitElement->isHairpinSegment() || !isSingleSelection()) {
+    const EngravingItem* element = currentElement();
+    if (!element || !element->isHairpinSegment() || !isSingleSelection()) {
         return items;
     }
 
     items << makeSeparator();
 
-    const engraving::Hairpin* h = toHairpinSegment(hitElement)->hairpin();
+    const engraving::Hairpin* h = toHairpinSegment(element)->hairpin();
     ui::UiActionState snapPrevState = { true, h->snapToItemBefore() };
     MenuItem* snapPrev = makeMenuItem("toggle-snap-to-previous");
     snapPrev->setState(snapPrevState);
@@ -377,14 +377,14 @@ MenuItemList NotationContextMenuModel::makeGradualTempoChangeItems()
 {
     MenuItemList items = makeElementItems();
 
-    const EngravingItem* hitElement = hitElementContext().element;
-    if (!hitElement || !hitElement->isGradualTempoChangeSegment() || !isSingleSelection()) {
+    const EngravingItem* element = currentElement();
+    if (!element || !element->isGradualTempoChangeSegment() || !isSingleSelection()) {
         return items;
     }
 
     items << makeSeparator();
 
-    const engraving::GradualTempoChange* gtc = toGradualTempoChangeSegment(hitElement)->tempoChange();
+    const engraving::GradualTempoChange* gtc = toGradualTempoChangeSegment(element)->tempoChange();
     ui::UiActionState snapNextState = { true, gtc->snapToItemAfter() };
     MenuItem* snapNext = makeMenuItem("toggle-snap-to-next");
     snapNext->setState(snapNextState);
@@ -393,16 +393,16 @@ MenuItemList NotationContextMenuModel::makeGradualTempoChangeItems()
     return items;
 }
 
-MenuItem* NotationContextMenuModel::makeEditStyle(const EngravingItem* hitElement)
+MenuItem* NotationContextMenuModel::makeEditStyle(const EngravingItem* element)
 {
     MenuItem* item = new MenuItem(uiActionsRegister()->action("edit-style"), this);
     item->setState(uiActionsRegister()->actionState(item->action().code));
 
-    if (hitElement) {
-        QString pageCode = EditStyle::pageCodeForElement(hitElement);
+    if (element) {
+        QString pageCode = EditStyle::pageCodeForElement(element);
 
         if (!pageCode.isEmpty()) {
-            QString subPageCode = EditStyle::subPageCodeForElement(hitElement);
+            QString subPageCode = EditStyle::subPageCodeForElement(element);
             if (!subPageCode.isEmpty()) {
                 item->setArgs(ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
             } else {
@@ -422,7 +422,7 @@ bool NotationContextMenuModel::isSingleSelection() const
 
 bool NotationContextMenuModel::canSelectSimilar() const
 {
-    return hitElementContext().element != nullptr;
+    return currentElement() != nullptr;
 }
 
 bool NotationContextMenuModel::canSelectSimilarInRange() const
@@ -451,6 +451,17 @@ INotationSelectionPtr NotationContextMenuModel::selection() const
 {
     INotationInteractionPtr interaction = this->interaction();
     return interaction ? interaction->selection() : nullptr;
+}
+
+const EngravingItem* NotationContextMenuModel::currentElement() const
+{
+    const EngravingItem* element = hitElementContext().element;
+    if (element) {
+        return element;
+    }
+
+    auto selection = this->selection();
+    return selection && selection->element() ? selection->element() : nullptr;
 }
 
 const INotationInteraction::HitElementContext& NotationContextMenuModel::hitElementContext() const
