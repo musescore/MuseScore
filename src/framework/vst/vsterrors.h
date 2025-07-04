@@ -19,12 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_VST_VSTERRORS_H
-#define MUSE_VST_VSTERRORS_H
+#pragma once
 
 #include "types/ret.h"
-#include "translation.h"
 
 namespace muse::vst {
 enum class Err {
@@ -57,5 +54,3 @@ inline Ret make_ret(Err e)
     return Ret(retCode);
 }
 }
-
-#endif // MUSE_VST_VSTERRORS_H

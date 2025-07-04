@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_GUITARBEND_H
-#define MU_ENGRAVING_GUITARBEND_H
+#pragma once
 
 #include "engravingitem.h"
 #include "line.h"
@@ -266,6 +264,4 @@ public:
 
     bool isEditable() const override { return false; }
 };
-} // namespace mu::engraving
-
-#endif // MU_ENGRAVING_GUITARBEND_H
+}

@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_MIDI_MIDITYPES_H
-#define MUSE_MIDI_MIDITYPES_H
+#pragma once
 
 #include <string>
 #include <cstdint>
@@ -163,5 +161,3 @@ inline std::vector<int> splitDeviceId(const MidiDeviceID& deviceId)
     return result;
 }
 }
-
-#endif // MUSE_MIDI_MIDITYPES_H

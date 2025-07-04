@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_EXPRESSION_H
-#define MU_ENGRAVING_EXPRESSION_H
+#pragma once
 
 #include "textbase.h"
 
@@ -61,5 +60,4 @@ public:
 
     void reset() override;
 };
-} // namespace mu::engraving
-#endif // MU_ENGRAVING_EXPRESSION_H
+}
