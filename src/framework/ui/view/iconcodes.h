@@ -215,6 +215,7 @@ public:
         NOTE_HEAD_HALF = 0xF342,
         NOTE_HEAD_WHOLE = 0xF343,
         NOTE_HEAD_BREVIS = 0xF344,
+        DOUBLE_BAR_LINE = 0xF347,
         NOTE_HEAD = 0xF42F,
         NOTE_HEAD_PARENTHESES = 0xF430,
 
