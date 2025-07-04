@@ -39,6 +39,8 @@ class Segment;
 class Spanner;
 class ScoreRange;
 class ChordRest;
+class Chord;
+class Note;
 class Score;
 class Tie;
 
@@ -51,6 +53,8 @@ class TrackList : public std::vector<EngravingItem*>
     OBJECT_ALLOCATOR(engraving, TrackList)
 
 public:
+    typedef std::map<Chord*, Chord*> ClonedChordMap;
+
     TrackList(ScoreRange* r) { m_range = r; }
     ~TrackList();
 
@@ -77,6 +81,7 @@ private:
     Fraction m_duration;
     ScoreRange* m_range = nullptr;
     track_idx_t m_track = 0;
+    ClonedChordMap m_clonedChord;
 };
 
 //---------------------------------------------------------
