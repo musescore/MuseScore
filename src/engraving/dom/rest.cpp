@@ -683,7 +683,7 @@ void Rest::setAccent(bool flag)
     if (voice() % 2 == 0) {
         if (flag) {
             double yOffset = -(ldata()->bbox().bottom());
-            if (durationType() >= DurationType::V_HALF) {
+            if (durationType() <= DurationType::V_HALF) {
                 yOffset -= staff()->spatium(tick()) * 0.5;
             }
             mutldata()->moveY(yOffset);
