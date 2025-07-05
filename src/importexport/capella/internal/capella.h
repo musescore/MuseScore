@@ -551,12 +551,12 @@ class WedgeObj : public LineObj
 public:
     WedgeObj(Capella* c)
         : LineObj(CapellaType::WEDGE, c), height(32),
-        decresc(false) {}
+        dim(false) {}
     void read();
     void readCapx(engraving::XmlReader& e);
 
     int height;
-    bool decresc;
+    bool dim;
 };
 
 //---------------------------------------------------------
