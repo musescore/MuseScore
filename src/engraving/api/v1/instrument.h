@@ -74,8 +74,8 @@ class Channel : public QObject
 {
     Q_OBJECT
 
-    mu::engraving::InstrChannel* _channel;
-    mu::engraving::Part* _part;
+    mu::engraving::InstrChannel* m_channel;
+    mu::engraving::Part* m_part;
 
     /** Name of this channel */
     Q_PROPERTY(QString name READ name)
@@ -136,17 +136,17 @@ class Channel : public QObject
 public:
     /// \cond MS_INTERNAL
     Channel(mu::engraving::InstrChannel* ch, mu::engraving::Part* p, QObject* parent = nullptr)
-        : QObject(parent), _channel(ch), _part(p) {}
+        : QObject(parent), m_channel(ch), m_part(p) {}
 
-    QString name() const { return _channel->name(); }
+    QString name() const { return m_channel->name(); }
 
-    int volume() const { return _channel->volume(); }
+    int volume() const { return m_channel->volume(); }
     void setVolume(int val) { activeChannel()->setVolume(qBound(0, val, 127)); }
-    int pan() const { return _channel->pan(); }
+    int pan() const { return m_channel->pan(); }
     void setPan(int val) { activeChannel()->setPan(qBound(0, val, 127)); }
-    int chorus() const { return _channel->chorus(); }
+    int chorus() const { return m_channel->chorus(); }
     void setChorus(int val) { activeChannel()->setChorus(qBound(0, val, 127)); }
-    int reverb() const { return _channel->reverb(); }
+    int reverb() const { return m_channel->reverb(); }
     void setReverb(int val) { activeChannel()->setReverb(qBound(0, val, 127)); }
 
     bool mute() const
@@ -162,9 +162,9 @@ public:
         //!@NOTE since MuseScore 4.0 mixer doen/t work via Channel
     }
 
-    int midiProgram() const { return _channel->program(); }
+    int midiProgram() const { return m_channel->program(); }
     void setMidiProgram(int prog);
-    int midiBank() const { return _channel->bank(); }
+    int midiBank() const { return m_channel->bank(); }
     void setMidiBank(int bank);
     /// \endcond
 };
@@ -194,15 +194,15 @@ class StringData : public QObject
     /** Number of frets in this instrument */
     Q_PROPERTY(int frets READ frets)
 
-    mu::engraving::StringData _data;
+    mu::engraving::StringData m_data;
 
 public:
     /// \cond MS_INTERNAL
     StringData(const mu::engraving::StringData* d, QObject* parent = nullptr)
-        : QObject(parent), _data(*d) {}
+        : QObject(parent), m_data(*d) {}
 
     QVariantList stringList() const;
-    int frets() const { return _data.frets(); }
+    int frets() const { return m_data.frets(); }
     /// \endcond
 };
 
@@ -260,18 +260,18 @@ class Instrument : public QObject
 
     Q_PROPERTY(QQmlListProperty<apiv1::Channel> channels READ channels)
 
-    mu::engraving::Instrument* _instrument;
-    mu::engraving::Part* _part;
+    mu::engraving::Instrument* m_instrument;
+    mu::engraving::Part* m_part;
 
 public:
     /// \cond MS_INTERNAL
     Instrument(mu::engraving::Instrument* i, mu::engraving::Part* p)
-        : QObject(), _instrument(i), _part(p) {}
+        : QObject(), m_instrument(i), m_part(p) {}
 
-    mu::engraving::Instrument* instrument() { return _instrument; }
-    const mu::engraving::Instrument* instrument() const { return _instrument; }
+    mu::engraving::Instrument* instrument() { return m_instrument; }
+    const mu::engraving::Instrument* instrument() const { return m_instrument; }
 
-    mu::engraving::Part* part() { return _part; }
+    mu::engraving::Part* part() { return m_part; }
 
     QString instrumentId() const { return instrument()->id(); }
     QString musicXmlId() const { return instrument()->musicXmlId(); }

@@ -33,9 +33,9 @@ using namespace mu::engraving::apiv1;
 //   QmlPlayEventsListAccess::append
 //---------------------------------------------------------
 
-Selection* mu::engraving::apiv1::selectionWrap(mu::engraving::Selection* select)
+Selection* mu::engraving::apiv1::selectionWrap(mu::engraving::Selection* selection)
 {
-    Selection* w = new Selection(select);
+    Selection* w = new Selection(selection);
     // All wrapper objects should belong to JavaScript code.
     QQmlEngine::setObjectOwnership(w, QQmlEngine::JavaScriptOwnership);
     return w;
@@ -47,8 +47,8 @@ Selection* mu::engraving::apiv1::selectionWrap(mu::engraving::Selection* select)
 
 bool Selection::checkSelectionIsNotLocked() const
 {
-    if (_select->isLocked()) {
-        LOGW("Cannot change selection: %s", qPrintable(_select->lockReason()));
+    if (m_selection->isLocked()) {
+        LOGW("Cannot change selection: %s", qPrintable(m_selection->lockReason()));
         return false;
     }
     return true;
@@ -89,7 +89,7 @@ bool Selection::select(EngravingItem* elWrapper, bool add)
         return false;
     }
 
-    if (e->score() != _select->score() || elWrapper->ownership() != Ownership::SCORE) {
+    if (e->score() != m_selection->score() || elWrapper->ownership() != Ownership::SCORE) {
         LOGW("Selection::select: element does not belong to score");
         return false;
     }
@@ -120,7 +120,7 @@ bool Selection::selectRange(int startTick, int endTick, int startStaff, int endS
         return false;
     }
 
-    const int nstaves = static_cast<int>(_select->score()->nstaves());
+    const int nstaves = static_cast<int>(m_selection->score()->nstaves());
 
     startStaff = qBound(0, startStaff, nstaves - 1);
     endStaff = qBound(1, endStaff, nstaves);
@@ -129,17 +129,17 @@ bool Selection::selectRange(int startTick, int endTick, int startStaff, int endS
         return false;
     }
 
-    mu::engraving::Segment* segStart = _select->score()->tick2leftSegmentMM(mu::engraving::Fraction::fromTicks(startTick));
-    mu::engraving::Segment* segEnd = _select->score()->tick2leftSegmentMM(mu::engraving::Fraction::fromTicks(endTick));
+    mu::engraving::Segment* segStart = m_selection->score()->tick2leftSegmentMM(mu::engraving::Fraction::fromTicks(startTick));
+    mu::engraving::Segment* segEnd = m_selection->score()->tick2leftSegmentMM(mu::engraving::Fraction::fromTicks(endTick));
 
     if (!segStart || (segEnd && !((*segEnd) > (*segStart)))) {
         return false;
     }
 
-    if (segEnd && _select->score()->undoStack()->hasActiveCommand()) {
-        _select->setRangeTicks(segStart->tick(), segEnd->tick(), startStaff, endStaff);
+    if (segEnd && m_selection->score()->undoStack()->hasActiveCommand()) {
+        m_selection->setRangeTicks(segStart->tick(), segEnd->tick(), startStaff, endStaff);
     } else {
-        _select->setRange(segStart, segEnd, startStaff, endStaff);
+        m_selection->setRange(segStart, segEnd, startStaff, endStaff);
     }
 
     return true;
@@ -164,7 +164,7 @@ bool Selection::deselect(EngravingItem* elWrapper)
         return false;
     }
 
-    _select->score()->deselect(elWrapper->element());
+    m_selection->score()->deselect(elWrapper->element());
     return true;
 }
 
@@ -183,6 +183,6 @@ bool Selection::clear()
         return false;
     }
 
-    _select->deselectAll();
+    m_selection->deselectAll();
     return true;
 }

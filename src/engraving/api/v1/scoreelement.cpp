@@ -27,7 +27,7 @@
 
 // api
 #include "apitypes.h"
-#include "fraction.h"
+#include "apistructs.h"
 #include "score.h"
 #include "part.h"
 #include "elements.h"
@@ -36,7 +36,7 @@ using namespace mu::engraving::apiv1;
 
 ScoreElement::~ScoreElement()
 {
-    if (_ownership == Ownership::PLUGIN) {
+    if (m_ownership == Ownership::PLUGIN) {
         delete e;
     }
 }
@@ -86,6 +86,10 @@ QVariant ScoreElement::get(mu::engraving::Pid pid) const
     case P_TYPE::FRACTION: {
         const Fraction f(val.value<Fraction>());
         return QVariant::fromValue(wrap(f));
+    }
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        const OrnamentInterval o(val.value<OrnamentInterval>());
+        return QVariant::fromValue(wrap(o));
     }
     case P_TYPE::POINT:
         return val.value<PointF>().toQPointF() / spatium();
@@ -148,6 +152,15 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
         newValue = f->fraction();
     }
     break;
+    case P_TYPE::ORNAMENT_INTERVAL: {
+        OrnamentIntervalWrapper* o = val.value<OrnamentIntervalWrapper*>();
+        if (!o) {
+            LOGW() << "trying to assign value of wrong type to fractional property";
+            return;
+        }
+        newValue = o->ornamentInterval();
+    }
+    break;
     case P_TYPE::POINT:
         newValue = PointF::fromQPointF(val.toPointF() * spatium());
         break;
@@ -168,7 +181,7 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
     const PropertyFlags f = e->propertyFlags(pid);
     const PropertyFlags newFlags = (f == PropertyFlags::NOSTYLE) ? f : PropertyFlags::UNSTYLED;
 
-    if (_ownership == Ownership::SCORE) {
+    if (m_ownership == Ownership::SCORE) {
         e->undoChangeProperty(pid, newValue, newFlags);
     } else { // not added to a score so no need (and dangerous) to deal with undo stack
         e->setProperty(pid, newValue);

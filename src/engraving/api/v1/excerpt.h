@@ -57,8 +57,8 @@ protected:
 
 public:
     /// \cond MS_INTERNAL
-    Excerpt(mu::engraving::Excerpt* _e = nullptr)
-        : QObject(), e(_e) {}
+    Excerpt(mu::engraving::Excerpt* m_e = nullptr)
+        : QObject(), e(m_e) {}
     Excerpt(const Excerpt&) = delete;
     Excerpt& operator=(const Excerpt&) = delete;
     virtual ~Excerpt() {}
