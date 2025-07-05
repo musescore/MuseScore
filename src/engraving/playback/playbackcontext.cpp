@@ -177,7 +177,7 @@ PlaybackParamList PlaybackContext::playbackParams(const track_idx_t trackIdx, co
 
         bool persistent = !startAtNominalTick;
         for (size_t i = result.size() - params.size(); i < result.size(); ++i) {
-            result.at(i).isPersistent = persistent;
+            result.at(i).flags.setFlag(PlaybackParam::IsPersistent, persistent);
         }
     };
 
@@ -246,6 +246,7 @@ void PlaybackContext::update(const ID partId, const Score* score, bool expandRep
     m_dynamicsByTrack.reserve(ntracks);
     m_soundFlagParamsByTrack.reserve(ntracks);
     m_textParamsByTrack.reserve(ntracks);
+    m_currentVerseNumByChordRest.clear();
 
     for (const RepeatSegment* repeatSegment : score->repeatList(expandRepeats)) {
         std::vector<const MeasureRepeat*> measureRepeats;
@@ -282,6 +283,7 @@ void PlaybackContext::clear()
     m_playTechniquesMap.clear();
     m_soundFlagParamsByTrack.clear();
     m_textParamsByTrack.clear();
+    m_currentVerseNumByChordRest.clear();
 }
 
 bool PlaybackContext::hasSoundFlags() const
@@ -422,6 +424,23 @@ void PlaybackContext::updatePlaybackParamsForText(const TextBase* text, const in
     }
 
     PlaybackParam param(PlaybackParam::Syllable, text->plainText());
+    if (param.val.empty()) {
+        return;
+    }
+
+    if (text->isLyrics()) {
+        const Lyrics* lyrics = toLyrics(text);
+
+        switch (lyrics->syllabic()) {
+        case LyricsSyllabic::BEGIN:
+        case LyricsSyllabic::MIDDLE:
+            param.flags.setFlag(PlaybackParam::HyphenedToNext);
+            break;
+        case LyricsSyllabic::SINGLE:
+        case LyricsSyllabic::END:
+            break;
+        }
+    }
 
     staff_idx_t staffIdx = text->staffIdx();
 
@@ -597,7 +616,27 @@ void PlaybackContext::handleSegmentElements(const Segment* segment, const int se
 
         if (item->isChordRest()) {
             const ChordRest* chordRest = toChordRest(item);
-            for (const Lyrics* lyrics : chordRest->lyrics()) {
+            const std::vector<Lyrics*>& lyricsList = chordRest->lyrics();
+            if (lyricsList.empty()) {
+                continue;
+            }
+
+            int verseNum = 0;
+
+            auto verseNumIt = m_currentVerseNumByChordRest.find(chordRest);
+            if (verseNumIt == m_currentVerseNumByChordRest.end()) {
+                m_currentVerseNumByChordRest[chordRest] = 0;
+            } else {
+                verseNumIt->second++;
+                verseNum = verseNumIt->second;
+            }
+
+            const Lyrics* lyrics = chordRest->lyrics(verseNum);
+            if (!lyrics) {
+                lyrics = lyricsList.back();
+            }
+
+            if (lyrics) {
                 updatePlaybackParamsForText(lyrics, segmentPositionTick);
             }
         }

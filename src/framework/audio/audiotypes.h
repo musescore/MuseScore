@@ -34,6 +34,7 @@
 #include "global/realfn.h"
 #include "global/async/channel.h"
 #include "global/io/iodevice.h"
+#include "global/progress.h"
 
 #include "mpe/events.h"
 
@@ -441,6 +442,23 @@ enum class RenderMode {
     RealTimeMode,
     IdleMode,
     OfflineMode
+};
+
+struct InputProcessingProgress {
+    struct ChunkInfo {
+        secs_t start = 0.0;
+        secs_t end = 0.0;
+
+        bool operator==(const ChunkInfo& c) const
+        {
+            return start == c.start && end == c.end;
+        }
+    };
+
+    using ChunkInfoList = std::vector<ChunkInfo>;
+
+    async::Channel<ChunkInfoList> chunksBeingProcessedChannel;
+    Progress progress;
 };
 }
 

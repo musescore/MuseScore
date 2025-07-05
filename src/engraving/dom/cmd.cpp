@@ -130,6 +130,7 @@ static ScoreChangesRange buildChangesRange(const CmdState& cmdState, const UndoM
 
     return { startTick, endTick,
              cmdState.startStaff(), cmdState.endStaff(),
+             changes.isTextEditing,
              std::move(changes.changedItems),
              std::move(changes.changedObjectTypes),
              std::move(changes.changedPropertyIdSet),

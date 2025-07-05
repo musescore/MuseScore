@@ -24,6 +24,9 @@
 
 #include "apitypes.h"
 
+#include "global/timer.h"
+#include "audio/audioerrors.h"
+
 using namespace muse;
 using namespace muse::musesampler;
 using namespace muse::mpe;
@@ -114,6 +117,43 @@ void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSamp
     m_defaultPresetCode = std::move(defaultPresetCode);
 }
 
+void MuseSamplerSequencer::deinit()
+{
+    if (m_renderingProgress && m_renderingProgress->progress.isStarted()) {
+        m_renderingProgress->progress.cancel();
+    }
+
+    if (m_pollRenderingProgressTimer) {
+        m_pollRenderingProgressTimer->stop();
+    }
+
+    m_renderingProgress = nullptr;
+}
+
+void MuseSamplerSequencer::setRenderingProgress(audio::InputProcessingProgress* progress)
+{
+    m_renderingProgress = progress;
+}
+
+void MuseSamplerSequencer::setAutoRenderInterval(double secs)
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
+    m_samplerLib->setAutoRenderInterval(m_sampler, secs);
+}
+
+void MuseSamplerSequencer::triggerRender()
+{
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return;
+    }
+
+    m_samplerLib->triggerRender(m_sampler);
+    pollRenderingProgress();
+}
+
 void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events, const PlaybackParamList& params)
 {
     flushOffstream();
@@ -179,6 +219,101 @@ void MuseSamplerSequencer::updateMainStreamEvents(const PlaybackEventsMap& event
     loadDynamicEvents(dynamics);
 
     finalizeAllTracks();
+    pollRenderingProgress();
+}
+
+void MuseSamplerSequencer::pollRenderingProgress()
+{
+    if (!m_renderingProgress) {
+        return;
+    }
+
+    m_renderingInfo.clear();
+
+    if (!m_pollRenderingProgressTimer) {
+        m_pollRenderingProgressTimer = std::make_unique<Timer>(std::chrono::microseconds(500000)); // poll every 500ms
+        m_pollRenderingProgressTimer->onTimeout(this, [this]() {
+            doPollProgress();
+        });
+    }
+
+    m_pollRenderingProgressTimer->start();
+}
+
+void MuseSamplerSequencer::doPollProgress()
+{
+    const bool progressStarted = m_renderingInfo.initialChunksDurationUs > 0;
+
+    int rangeCount = 0;
+    ms_RenderingRangeList ranges = m_samplerLib->getRenderInfo(m_sampler, &rangeCount);
+
+    audio::InputProcessingProgress::ChunkInfoList chunks;
+    long long chunksDurationUs = 0;
+
+    for (int i = 0; i < rangeCount; ++i) {
+        const ms_RenderRangeInfo info = m_samplerLib->getNextRenderProgressInfo(ranges);
+
+        switch (info._state) {
+        case ms_RenderingState_ErrorNetwork:
+            m_renderingInfo.errorCode = static_cast<int>(muse::audio::Err::OnlineSoundsNetworkError);
+            break;
+        case ms_RenderingState_ErrorRendering:
+        case ms_RenderingState_ErrorFileIO:
+        case ms_RenderingState_ErrorTimeOut:
+            m_renderingInfo.errorCode = static_cast<int>(muse::audio::Err::UnknownError);
+            break;
+        case ms_RenderingState_Rendering:
+            break;
+        }
+
+        if (progressStarted && m_renderingInfo.errorCode != 0) {
+            continue;
+        }
+
+        chunksDurationUs += info._end_us - info._start_us;
+        chunks.push_back({ audio::microsecsToSecs(info._start_us), audio::microsecsToSecs(info._end_us) });
+    }
+
+    // Start progress
+    if (!progressStarted) {
+        if (chunksDurationUs <= 0) {
+            if (m_pollRenderingProgressTimer->secondsSinceStart() >= 10.f) { // timeout
+                m_pollRenderingProgressTimer->stop();
+                m_renderingInfo.clear();
+            }
+
+            return;
+        }
+
+        m_renderingInfo.initialChunksDurationUs = chunksDurationUs;
+
+        if (!m_renderingProgress->progress.isStarted()) {
+            m_renderingProgress->progress.start();
+        }
+    }
+
+    // Send chunks
+    if (m_renderingInfo.lastReceivedChunks != chunks) {
+        m_renderingInfo.lastReceivedChunks = chunks;
+
+        if (!chunks.empty()) {
+            m_renderingProgress->chunksBeingProcessedChannel.send(chunks);
+        }
+    }
+
+    // Update percentage
+    const int64_t percentage = std::lround(100.f - (float)chunksDurationUs / (float)m_renderingInfo.initialChunksDurationUs * 100.f);
+    if (percentage != m_renderingInfo.percentage) {
+        m_renderingInfo.percentage = percentage;
+        m_renderingProgress->progress.progress(std::lround(percentage), 100);
+    }
+
+    // Finish progress
+    if (chunksDurationUs <= 0) {
+        m_pollRenderingProgressTimer->stop();
+        m_renderingProgress->progress.finish(Ret(m_renderingInfo.errorCode));
+        m_renderingInfo.clear();
+    }
 }
 
 void MuseSamplerSequencer::clearAllTracks()
@@ -291,7 +426,7 @@ void MuseSamplerSequencer::loadParams(const PlaybackParamLayers& changes)
                     addTextArticulation(param.val, params.first, track);
                     break;
                 case PlaybackParam::Syllable:
-                    addSyllable(param.val, params.first, track);
+                    addSyllable(param.val, param.flags.testFlag(PlaybackParam::HyphenedToNext), params.first, track);
                     break;
                 case PlaybackParam::Undefined:
                     UNREACHABLE;
@@ -436,7 +571,7 @@ void MuseSamplerSequencer::addPresets(const StringList& presets, long long start
     }
 }
 
-void MuseSamplerSequencer::addSyllable(const String& syllable, long long positionUs, ms_Track track)
+void MuseSamplerSequencer::addSyllable(const String& syllable, bool hyphenedToNext, long long positionUs, ms_Track track)
 {
     if (syllable.empty()) {
         return;
@@ -444,9 +579,10 @@ void MuseSamplerSequencer::addSyllable(const String& syllable, long long positio
 
     std::string str = syllable.toStdString();
 
-    ms_SyllableEvent evt;
+    SyllableEvent evt;
     evt._position_us = positionUs;
     evt._text = str.c_str();
+    evt._hyphened_to_next = hyphenedToNext;
 
     m_samplerLib->addSyllableEvent(m_sampler, track, evt);
 }
@@ -617,11 +753,11 @@ void MuseSamplerSequencer::parseOffStreamParams(const PlaybackParamList& params,
             break;
         case PlaybackParam::PlayingTechnique:
             out.textArticulation = param.val.toStdString();
-            out.textArticulationStartsAtNote = !param.isPersistent.value_or(false);
+            out.textArticulationStartsAtNote = !param.flags.testFlag(PlaybackParam::IsPersistent);
             break;
         case PlaybackParam::Syllable:
             out.syllable = param.val.toStdString();
-            out.syllableStartsAtNote = !param.isPersistent.value_or(false);
+            out.syllableStartsAtNote = !param.flags.testFlag(PlaybackParam::IsPersistent);
             break;
         case PlaybackParam::Undefined:
             UNREACHABLE;
