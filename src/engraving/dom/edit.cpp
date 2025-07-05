@@ -604,7 +604,8 @@ Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental,
 
     if (!chord->staff()->isTabStaff(chord->tick())) {
         NoteEntryMethod entryMethod = is.noteEntryMethod();
-        if (entryMethod != NoteEntryMethod::REALTIME_AUTO && entryMethod != NoteEntryMethod::REALTIME_MANUAL) {
+        if (entryMethod != NoteEntryMethod::REPITCH && entryMethod != NoteEntryMethod::REALTIME_AUTO
+            && entryMethod != NoteEntryMethod::REALTIME_MANUAL) {
             is.moveToNextInputPos();
         }
     }
