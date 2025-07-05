@@ -3024,16 +3024,20 @@ EngravingItem* Score::move(const String& cmd)
         }
     } else if (cmd == u"prev-chord" && cr) {
         // note input cursor
+        bool noteEntryPos = false;
         if (noteEntryMode() && m_is.segment()) {
             Measure* m = m_is.segment()->measure();
             Segment* s = m_is.segment()->prev1(SegmentType::ChordRest);
             track_idx_t track = m_is.track();
             for (; s; s = s->prev1(SegmentType::ChordRest)) {
-                if (s->element(track) || (s->measure() != m && s->rtick().isZero())) {
-                    if (s->element(track)) {
-                        if (s->element(track)->isRest() && toRest(s->element(track))->isGap()) {
-                            continue;
-                        }
+                if (s->measure() != m && s->rtick().isZero()) {
+                    break;
+                }
+                if (s->element(track)) {
+                    el = s->nextChordRest(track, true);
+                    noteEntryPos = true;
+                    if (s->element(track)->isRest() && toRest(s->element(track))->isGap()) {
+                        continue;
                     }
                     break;
                 }
@@ -3044,7 +3048,7 @@ EngravingItem* Score::move(const String& cmd)
         // selection "cursor"
         // find previous chordrest, which might be a grace note
         // this may override note input cursor
-        el = prevChordRest(cr);
+        el = noteEntryPos ? el : prevChordRest(cr);
 
         // Skip gap rests if we're not in note entry mode...
         while (!noteEntryMode() && el && el->isRest() && toRest(el)->isGap()) {
