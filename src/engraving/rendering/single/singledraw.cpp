@@ -1719,12 +1719,11 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    if (item->textList().empty()) {
+    const Harmony::LayoutData* ldata = item->ldata();
+    if (ldata->textList().empty()) {
         drawTextBase(item, painter);
         return;
     }
-
-    const Harmony::LayoutData* ldata = item->ldata();
 
     if (item->hasFrame()) {
         if (!RealIsNull(item->frameWidth().val())) {
@@ -1750,7 +1749,7 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
     Color color = item->textColor();
     painter->setPen(color);
-    for (const TextSegment* ts : item->textList()) {
+    for (const TextSegment* ts : ldata->textList()) {
         Font f(ts->font());
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS

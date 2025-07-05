@@ -2133,7 +2133,6 @@ void OveToMScore::convertHarmonies(Measure* measure, int part, int staff, int tr
         }
 
         harmony->addChord(info);
-        harmony->render();
 
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
         s->add(harmony);

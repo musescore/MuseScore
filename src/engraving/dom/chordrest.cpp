@@ -288,8 +288,6 @@ EngravingItem* ChordRest::drop(EditData& data)
             interval.flip();
             score()->undoTransposeHarmony(harmony, interval);
         }
-        // render
-        harmony->render();
     }
     // fall through
     case ElementType::TEXT:
