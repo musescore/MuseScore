@@ -101,6 +101,7 @@ EngravingItem::EngravingItem(const EngravingItem& e)
     m_z          = e.m_z;
     m_color      = e.m_color;
     m_minDistance = e.m_minDistance;
+    m_excludeVerticalAlign = e.m_excludeVerticalAlign;
     itemDiscovered = false;
 
     m_accessibleEnabled = e.m_accessibleEnabled;
@@ -639,6 +640,25 @@ Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     return normalColor;
 }
 
+PointF EngravingItem::systemPos() const
+{
+    // Returns position in system coordinates. Only applicable to items
+    // that have a System ancestor.
+
+    IF_ASSERT_FAILED(findAncestor(ElementType::SYSTEM)) {
+        return PointF();
+    }
+
+    PointF result = pos();
+    EngravingItem* ancestor = parentItem();
+    while (ancestor && !ancestor->isSystem()) {
+        result += ancestor->pos();
+        ancestor = ancestor->parentItem();
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   pagePos
 //    return position in canvas coordinates
@@ -808,13 +828,6 @@ bool EngravingItem::hitShapeIntersects(const RectF& rr) const
     return hitShape().intersects(rr.translated(-pagePos()));
 }
 
-void EngravingItem::drawAt(muse::draw::Painter* p, const PointF& pt) const
-{
-    p->translate(pt);
-    renderer()->drawItem(this, p);
-    p->translate(-pt);
-}
-
 //---------------------------------------------------------
 //   remove
 ///   Remove \a el from the list. Return true on success.
@@ -863,20 +876,6 @@ Compound::Compound(const Compound& c)
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void Compound::draw(Painter* painter) const
-{
-    for (EngravingItem* e : m_elements) {
-        PointF pt(e->pos());
-        painter->translate(pt);
-        renderer()->drawItem(e, painter);
-        painter->translate(-pt);
-    }
-}
-
-//---------------------------------------------------------
 //   addElement
 //---------------------------------------------------------
 
@@ -889,16 +888,6 @@ void Compound::addElement(EngravingItem* e, double x, double y)
     e->setPos(x, y);
     e->setParent(this);
     m_elements.push_back(e);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Compound::layout()
-{
-    UNREACHABLE;
-    setbbox(RectF());
 }
 
 //---------------------------------------------------------
@@ -1113,8 +1102,6 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
         return track();
     case Pid::VOICE:
         return voice();
-    case Pid::POSITION:
-        return rtick();
     case Pid::GENERATED:
         return generated();
     case Pid::COLOR:
@@ -1143,6 +1130,8 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
         return _isAppearanceLinkedToMaster;
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
         return _excludeFromOtherParts;
+    case Pid::EXCLUDE_VERTICAL_ALIGN:
+        return m_excludeVerticalAlign;
     default:
         if (explicitParent()) {
             return explicitParent()->getProperty(propertyId);
@@ -1218,6 +1207,9 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
         setExcludeFromOtherParts(v.toBool());
+        break;
+    case Pid::EXCLUDE_VERTICAL_ALIGN:
+        setExcludeVerticalAlign(v.toBool());
         break;
     default:
         if (explicitParent()) {
@@ -1553,6 +1545,8 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
     case Pid::APPEARANCE_LINKED_TO_MASTER:
         return true;
     case Pid::EXCLUDE_FROM_OTHER_PARTS:
+        return false;
+    case Pid::EXCLUDE_VERTICAL_ALIGN:
         return false;
     default: {
         PropertyValue v = EngravingObject::propertyDefault(pid);
@@ -2092,25 +2086,6 @@ void EngravingItem::triggerLayoutToEnd() const
 void EditData::addData(std::shared_ptr<ElementEditData> ed)
 {
     m_data.push_back(ed);
-}
-
-//---------------------------------------------------------
-//   drawEditMode
-//---------------------------------------------------------
-
-void EngravingItem::drawEditMode(Painter* p, EditData& ed, double /*currentViewScaling*/)
-{
-    using namespace muse::draw;
-    Pen pen(configuration()->defaultColor(), 0.0);
-    p->setPen(pen);
-    for (int i = 0; i < ed.grips; ++i) {
-        if (Grip(i) == ed.curGrip) {
-            p->setBrush(configuration()->scoreGreyColor());
-        } else {
-            p->setBrush(BrushStyle::NoBrush);
-        }
-        p->drawRect(ed.grip[i]);
-    }
 }
 
 //---------------------------------------------------------

@@ -53,10 +53,15 @@ public:
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
 
     void seek(const msecs_t newPositionMsecs) override;
+    void flush() override;
 
     const AudioInputParams& inputParams() const override;
     void applyInputParams(const AudioInputParams& requiredParams) override;
     async::Channel<AudioInputParams> inputParamsChanged() const override;
+
+    void prepareToPlay() override;
+    bool readyToPlay() const override;
+    async::Notification readyToPlayChanged() const override;
 
 private:
     struct SynthCtx

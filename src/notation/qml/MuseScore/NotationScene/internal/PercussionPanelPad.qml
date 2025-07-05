@@ -23,7 +23,6 @@ import QtQuick 2.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import Muse.GraphicalEffects 1.0
 import MuseScore.NotationScene 1.0
 
 DropArea {
@@ -186,19 +185,11 @@ DropArea {
             // Loads either an empty slot or the pad content
             id: padLoader
 
+            readonly property real cornerRadius: swappableArea.radius - padLoader.anchors.margins
+
             anchors.fill: parent
             // Defined as 1 in the spec, but causes some aliasing in practice...
             anchors.margins: 2 + swappableArea.border.width
-
-            // Can't simply use clip as this won't take into account radius...
-            layer.enabled: ui.isEffectsAllowed
-            layer.effect: EffectOpacityMask {
-                maskSource: Rectangle {
-                    width: padLoader.width
-                    height: padLoader.height
-                    radius: swappableArea.radius - padLoader.anchors.margins
-                }
-            }
 
             sourceComponent: Boolean(root.padModel) ? padContentComponent : emptySlotComponent
 
@@ -217,6 +208,8 @@ DropArea {
 
                     padSwapActive: dragHandler.active
 
+                    cornerRadius: padLoader.cornerRadius
+
                     Connections {
                         target: footerNavCtrl
                         function onTriggered() {
@@ -232,6 +225,7 @@ DropArea {
                 Rectangle {
                     id: emptySlotBackground
                     color: root.panelEnabled ? prv.enabledBackgroundColor : prv.disabledBackgroundColor
+                    radius: padLoader.cornerRadius
                 }
             }
         }

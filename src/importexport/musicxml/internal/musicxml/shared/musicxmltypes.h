@@ -34,11 +34,12 @@ namespace mu::iex::musicxml {
 const int MAX_NUMBER_LEVEL = 16; // maximum number of overlapping MusicXML objects
 
 enum class MusicXmlExporterSoftware : char {
-    SIBELIUS,
     DOLET6,
     DOLET8,
+    DORICO,
     FINALE,
     NOTEFLIGHT,
+    SIBELIUS,
     OTHER
 };
 

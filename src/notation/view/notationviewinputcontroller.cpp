@@ -596,8 +596,7 @@ void NotationViewInputController::wheelEvent(QWheelEvent* event)
 
 void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 {
-    PointF logicPos = PointF(m_view->toLogical(event->pos()));
-    Qt::KeyboardModifiers keyState = event->modifiers();
+    PointF logicPos = m_view->toLogical(event->pos());
     Qt::MouseButton button = event->button();
 
     m_mouseDownInfo = {
@@ -605,6 +604,9 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         /*.physicalBeginPoint =*/ event->pos(),
         /*.logicalBeginPoint =*/ logicPos
     };
+
+    m_shouldStartEditOnLeftClickRelease = false;
+    m_shouldTogglePopupOnLeftClickRelease = false;
 
     // When using MiddleButton, just start moving the canvas
     if (button == Qt::MiddleButton) {
@@ -635,17 +637,11 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     // note enter mode
     if (m_view->isNoteEnterMode()) {
-        if (button == Qt::RightButton) {
-            dispatcher()->dispatch("remove-note", ActionData::make_arg1<PointF>(logicPos));
-            return;
-        }
-
-        bool replace = keyState & Qt::ShiftModifier;
-        bool insert = keyState & Qt::ControlModifier;
-        dispatcher()->dispatch("put-note", ActionData::make_arg3<PointF, bool, bool>(logicPos, replace, insert));
+        handleClickInNoteInputMode(event);
         return;
     }
 
+    // triple click
     if (m_tripleClickPending) {
         if (viewInteraction()->isTextEditingStarted()) {
             viewInteraction()->selectText(mu::engraving::SelectTextType::All);
@@ -657,22 +653,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
-    if (keyState == (Qt::ShiftModifier | Qt::ControlModifier)) {
-        m_mouseDownInfo.dragAction = viewInteraction()->isOutgoingDragElementAllowed(hitElement)
-                                     ? MouseDownInfo::DragOutgoingElement
-                                     : MouseDownInfo::Nothing;
-        return;
-    }
-
-    if (button == Qt::LeftButton && (!hitElement || hitElement->isMeasure())) {
-        INotationSelectionPtr selection = viewInteraction()->selection();
-
-        if (selection->isRange() && selection->range()->containsPoint(logicPos)) {
-            m_mouseDownInfo.dragAction = MouseDownInfo::DragOutgoingRange;
-            return;
-        }
-    }
-
     ClickContext ctx;
     ctx.logicClickPos = logicPos;
     ctx.hitElement = hitElement;
@@ -680,56 +660,33 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     ctx.isHitGrip = viewInteraction()->isHitGrip(logicPos);
     ctx.event = event;
 
-    m_shouldTogglePopupOnLeftClickRelease = hitElement && hitElement->selected();
-
-    if (needSelect(ctx)) {
-        SelectType selectType = SelectType::SINGLE;
-        if (keyState == Qt::NoModifier) {
-            selectType = SelectType::SINGLE;
-        } else if (keyState & Qt::ShiftModifier) {
-            selectType = SelectType::RANGE;
-        } else if (keyState & Qt::ControlModifier) {
-            selectType = SelectType::ADD;
-        }
-
-        std::vector<EngravingItem*> hitElements = viewInteraction()->hitElements(ctx.logicClickPos, hitWidth());
-        size_t numHitElements = hitElements.size();
-
-        // overlapping elements with ctrl modifier
-        if (numHitElements > 1 && (keyState & Qt::ControlModifier)) {
-            size_t currTop = numHitElements - 1;
-            EngravingItem* e = hitElements[currTop];
-            std::set<EngravingItem*> selectedAtPosition;
-            bool found = false;
-
-            // e is the topmost element in stacking order,
-            // but we want to replace it with "first non-measure element after a selected element"
-            // (if such an element exists)
-            for (size_t i = 0; i <= numHitElements; ++i) {
-                if (found) {
-                    e = hitElements[currTop];
-                    if (!e->isMeasure()) {
-                        break;
-                    }
-                } else if (hitElements[currTop]->selected()) {
-                    found = true;
-                    selectedAtPosition.emplace(hitElements[currTop]);
-                    e = nullptr;
-                }
-                currTop = (currTop + 1) % numHitElements;
-            }
-
-            if (e && !e->selected()) {
-                for (EngravingItem* selectedElem : selectedAtPosition) {
-                    selectedElem->score()->deselect(selectedElem);
-                }
-                viewInteraction()->select({ e }, SelectType::ADD, hitStaffIndex);
-            }
-        } else {
-            viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
-        }
+    // Grip
+    bool consumed = mousePress_considerGrip(ctx);
+    if (consumed) {
+        return;
     }
 
+    // End editing
+    if (!ctx.hitElement) {
+        viewInteraction()->endEditElement();
+    }
+
+    // Drag outgoing: element
+    consumed = mousePress_considerDragOutgoingElement(ctx);
+    if (consumed) {
+        return;
+    }
+
+    // Select
+    mousePress_considerSelect(ctx);
+
+    // Drag outgoing: range
+    consumed = mousePress_considerDragOutgoingRange(ctx);
+    if (consumed) {
+        return;
+    }
+
+    // Misc
     if (button == Qt::LeftButton) {
         handleLeftClick(ctx);
     } else if (button == Qt::RightButton) {
@@ -737,26 +694,137 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     }
 }
 
-bool NotationViewInputController::needSelect(const ClickContext& ctx) const
+void NotationViewInputController::handleClickInNoteInputMode(QMouseEvent* event)
+{
+    const PointF logicPos = m_view->toLogical(event->pos());
+
+    if (event->button() == Qt::RightButton) {
+        dispatcher()->dispatch("remove-note", ActionData::make_arg1<PointF>(logicPos));
+        return;
+    }
+
+    const Qt::KeyboardModifiers keyState = event->modifiers();
+    const bool replace = keyState & Qt::ShiftModifier;
+    const bool insert = keyState & Qt::ControlModifier;
+    dispatcher()->dispatch("put-note", ActionData::make_arg3<PointF, bool, bool>(logicPos, replace, insert));
+}
+
+bool NotationViewInputController::mousePress_considerGrip(const ClickContext& ctx)
 {
     if (ctx.isHitGrip && ctx.event->button() == Qt::LeftButton) {
+        viewInteraction()->startEditGrip(ctx.logicClickPos);
+        return true;
+    } else if (viewInteraction()->isGripEditStarted()) {
+        viewInteraction()->endEditGrip();
+    }
+
+    return false;
+}
+
+bool NotationViewInputController::mousePress_considerDragOutgoingElement(const ClickContext& ctx)
+{
+    if (ctx.event->button() != Qt::LeftButton
+        || ctx.event->modifiers() != (Qt::ShiftModifier | Qt::ControlModifier)) {
         return false;
     }
 
+    if (!ctx.hitElement || !viewInteraction()->isOutgoingDragElementAllowed(ctx.hitElement)) {
+        return false;
+    }
+
+    viewInteraction()->select({ ctx.hitElement }, SelectType::SINGLE, ctx.hitStaff);
+    m_mouseDownInfo.dragAction = MouseDownInfo::DragOutgoingElement;
+    return true;
+}
+
+void NotationViewInputController::mousePress_considerSelect(const ClickContext& ctx)
+{
     if (!ctx.hitElement) {
+        return;
+    }
+
+    if (ctx.event->button() == Qt::LeftButton) {
+        if (ctx.event->modifiers() & Qt::ControlModifier) {
+            const std::vector<EngravingItem*> overlappingHitElements = viewInteraction()->hitElements(ctx.logicClickPos, hitWidth());
+            if (overlappingHitElements.size() > 1) {
+                cycleOverlappingHitElements(overlappingHitElements, ctx.hitStaff);
+                return;
+            }
+        } else if (ctx.hitElement->selected()) {
+            m_shouldTogglePopupOnLeftClickRelease = true;
+            return;
+        }
+    } else if (ctx.event->button() == Qt::RightButton) {
+        if (ctx.hitElement->selected()) {
+            return;
+        }
+    }
+
+    SelectType selectType = SelectType::SINGLE;
+    if (ctx.event->modifiers() & Qt::ShiftModifier) {
+        selectType = SelectType::RANGE;
+    } else if (ctx.event->modifiers() & Qt::ControlModifier) {
+        selectType = SelectType::ADD;
+    } else {
+        const INotationSelectionPtr selection = viewInteraction()->selection();
+
+        if (selection->isRange()
+            && (selection->range()->containsItem(ctx.hitElement, ctx.hitStaff)
+                || selection->range()->containsPoint(ctx.logicClickPos))) {
+            return;
+        }
+    }
+
+    viewInteraction()->select({ ctx.hitElement }, selectType, ctx.hitStaff);
+}
+
+void NotationViewInputController::cycleOverlappingHitElements(const std::vector<EngravingItem*>& hitElements,
+                                                              staff_idx_t hitStaffIndex)
+{
+    const size_t numHitElements = hitElements.size();
+    size_t currTop = numHitElements - 1;
+    EngravingItem* e = hitElements[currTop];
+    std::set<EngravingItem*> selectedAtPosition;
+    bool found = false;
+
+    // e is the topmost element in stacking order,
+    // but we want to replace it with "first non-measure element after a selected element"
+    // (if such an element exists)
+    for (size_t i = 0; i <= numHitElements; ++i) {
+        if (found) {
+            e = hitElements[currTop];
+            if (!e->isMeasure()) {
+                break;
+            }
+        } else if (hitElements[currTop]->selected()) {
+            found = true;
+            selectedAtPosition.emplace(hitElements[currTop]);
+            e = nullptr;
+        }
+        currTop = (currTop + 1) % numHitElements;
+    }
+
+    if (e && !e->selected()) {
+        for (EngravingItem* selectedElem : selectedAtPosition) {
+            selectedElem->score()->deselect(selectedElem);
+        }
+        viewInteraction()->select({ e }, SelectType::ADD, hitStaffIndex);
+    }
+}
+
+bool NotationViewInputController::mousePress_considerDragOutgoingRange(const ClickContext& ctx)
+{
+    if (ctx.event->button() != Qt::LeftButton) {
         return false;
     }
 
-    INotationSelectionPtr selection = viewInteraction()->selection();
+    if (!ctx.hitElement || ctx.hitElement->isMeasure()) {
+        const INotationSelectionPtr selection = viewInteraction()->selection();
 
-    if (ctx.event->button() == Qt::LeftButton && ctx.event->modifiers() & Qt::ControlModifier) {
-        return true;
-    } else if (ctx.event->button() == Qt::LeftButton && ctx.event->modifiers() & Qt::ShiftModifier) {
-        return !selection->isRange() || !selection->range()->containsItem(ctx.hitElement, ctx.hitStaff);
-    } else if (ctx.event->button() == Qt::RightButton && selection->isRange()) {
-        return !selection->range()->containsItem(ctx.hitElement, ctx.hitStaff);
-    } else if (!ctx.hitElement->selected()) {
-        return true;
+        if (selection->isRange() && selection->range()->containsPoint(ctx.logicClickPos)) {
+            m_mouseDownInfo.dragAction = MouseDownInfo::DragOutgoingRange;
+            return true;
+        }
     }
 
     return false;
@@ -764,26 +832,20 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
 
 void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 {
-    if (ctx.isHitGrip) {
-        viewInteraction()->startEditGrip(ctx.logicClickPos);
+    if (!ctx.hitElement) {
         return;
-    } else {
-        viewInteraction()->endEditGrip();
     }
 
-    INotationSelectionPtr selection = viewInteraction()->selection();
+    const INotationSelectionPtr selection = viewInteraction()->selection();
+    const bool needStartEditing = ctx.hitElement->selected()
+                                  && ctx.hitElement->needStartEditingAfterSelecting();
 
-    if (!selection->isRange() && ctx.hitElement && ctx.hitElement->needStartEditingAfterSelecting()) {
+    if (!selection->isRange() && needStartEditing) {
         if (ctx.hitElement->hasGrips() && !ctx.hitElement->isImage() && selection->elements().size() == 1) {
             viewInteraction()->startEditGrip(ctx.hitElement, ctx.hitElement->defaultGrip());
         } else {
             viewInteraction()->startEditElement(ctx.hitElement, false);
         }
-    }
-
-    if (!ctx.hitElement) {
-        viewInteraction()->endEditElement();
-        return;
     }
 
     if (ctx.hitElement->isPlayable()) {
@@ -797,12 +859,14 @@ void NotationViewInputController::handleLeftClick(const ClickContext& ctx)
 
 void NotationViewInputController::handleRightClick(const ClickContext& ctx)
 {
-    m_view->showContextMenu(selectionType(), ctx.event->pos());
+    m_mouseDownInfo.dragAction = MouseDownInfo::Nothing;
 
-    if (!ctx.hitElement) {
-        viewInteraction()->endEditElement();
-        return;
-    }
+#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+    UNUSED(ctx);
+    // See also AbstractNotationPaintView::event for context menu event handling
+#else
+    m_view->showContextMenu(selectionType(), ctx.event->pos());
+#endif
 }
 
 bool NotationViewInputController::startTextEditingAllowed() const
@@ -1206,7 +1270,7 @@ QVariant NotationViewInputController::inputMethodQuery(Qt::InputMethodQuery quer
 
 void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
 {
-    const QMimeData* mimeData = event->mimeData();
+    const QMimeData* mimeData = dragController()->mimeData(event);
     IF_ASSERT_FAILED(mimeData) {
         return;
     }
@@ -1266,20 +1330,9 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
 
 void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
 {
-    const QMimeData* mimeData = event->mimeData();
+    const QMimeData* mimeData = dragController()->mimeData(event);
     IF_ASSERT_FAILED(mimeData) {
         return;
-    }
-
-    if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
-        bool isInternal = event->source() == m_view->asItem();
-        if (!isInternal || event->modifiers() & Qt::AltModifier) {
-            event->setDropAction(Qt::CopyAction);
-        } else {
-            event->setDropAction(Qt::MoveAction);
-        }
-    } else {
-        event->setDropAction(Qt::CopyAction);
     }
 
     PointF pos = m_view->toLogical(event->position());
@@ -1287,39 +1340,82 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
 
     bool isAccepted = false;
     if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
-        isAccepted = viewInteraction()->isDropRangeAccepted(pos);
+        bool isInternal = event->source() == m_view->asItem();
+        if (!isInternal || modifiers & Qt::AltModifier) {
+            event->setDropAction(Qt::CopyAction);
+        } else {
+            event->setDropAction(Qt::MoveAction);
+        }
+
+        isAccepted = viewInteraction()->updateDropRange(pos);
     } else {
-        isAccepted = viewInteraction()->isDropSingleAccepted(pos, modifiers);
+        event->setDropAction(Qt::CopyAction);
+
+        isAccepted = viewInteraction()->updateDropSingle(pos, modifiers);
     }
 
     event->setAccepted(isAccepted);
+
+    if (!uiConfiguration()->isSystemDragSupported()) {
+        m_lastDragMoveEvent = {
+            event->position(),
+            event->modifiers(),
+            event->dropAction(),
+            event->source()
+        };
+    }
 }
 
 void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
 {
+    if (!uiConfiguration()->isSystemDragSupported()) {
+        dropEvent(m_lastDragMoveEvent);
+    }
+
     viewInteraction()->endDrop();
 }
 
 void NotationViewInputController::dropEvent(QDropEvent* event)
 {
-    const QMimeData* mimeData = event->mimeData();
-    IF_ASSERT_FAILED(mimeData) {
+    if (!uiConfiguration()->isSystemDragSupported()) {
+        event->setAccepted(false);
         return;
     }
 
-    PointF pos = m_view->toLogical(event->position());
-    Qt::KeyboardModifiers modifiers = event->modifiers();
+    DragMoveEvent de = {
+        event->position(),
+        event->modifiers(),
+        event->dropAction(),
+        event->source()
+    };
+
+    bool isAccepted = dropEvent(de, event->mimeData());
+    event->setAccepted(isAccepted);
+}
+
+bool NotationViewInputController::dropEvent(const DragMoveEvent& event, const QMimeData* mimeData)
+{
+    if (!mimeData) {
+        mimeData = dragController()->mimeData();
+    }
+
+    IF_ASSERT_FAILED(mimeData) {
+        return false;
+    }
+
+    PointF pos = m_view->toLogical(event.position);
+    Qt::KeyboardModifiers modifiers = event.modifiers;
 
     bool isAccepted = false;
     if (mimeData->hasFormat(MIME_STAFFLLIST_FORMAT)) {
-        bool isInternal = event->source() == m_view->asItem();
-        bool isMove = isInternal && event->dropAction() == Qt::MoveAction;
+        bool isInternal = event.source == m_view->asItem();
+        bool isMove = isInternal && event.dropAction == Qt::MoveAction;
         isAccepted = viewInteraction()->dropRange(mimeData->data(MIME_STAFFLLIST_FORMAT), pos, isMove);
     } else {
         isAccepted = viewInteraction()->dropSingle(pos, modifiers);
     }
 
-    event->setAccepted(isAccepted);
+    return isAccepted;
 }
 
 float NotationViewInputController::hitWidth() const

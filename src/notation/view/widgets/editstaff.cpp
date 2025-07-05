@@ -119,7 +119,6 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     }
 
     Part* part = m_orgStaff->part();
-    mu::engraving::Score* score = part->score();
 
     auto it = muse::findLessOrEqual(part->instruments(), tick.ticks());
     if (it == part->instruments().cend()) {
@@ -160,7 +159,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     }
 
     // set dlg controls
-    spinExtraDistance->setValue(s->userDist() / score->style().spatium());
+    spinExtraDistance->setValue(s->userDist().val());
     invisible->setChecked(stt->invisible());
     isSmallCheckbox->setChecked(stt->isSmall());
     color->setColor(stt->color().toQColor());
@@ -502,7 +501,7 @@ void EditStaff::applyStaffProperties()
     StaffConfig config;
     config.visible = m_orgStaff->visible();
 
-    config.userDistance = spinExtraDistance->value() * m_orgStaff->style().spatium();
+    config.userDistance = Spatium(spinExtraDistance->value());
     config.cutaway = cutaway->isChecked();
     config.showIfEmpty = showIfEmpty->isChecked();
     config.hideSystemBarline = hideSystemBarLine->isChecked();
@@ -579,22 +578,19 @@ void EditStaff::applyPartProperties()
 
 void EditStaff::showReplaceInstrumentDialog()
 {
-    RetVal<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(m_instrumentKey);
-    if (!templ.ret) {
-        LOGE() << templ.ret.toString();
-        return;
-    }
+    async::Promise<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(m_instrumentKey);
+    templ.onResolve(this, [this](const InstrumentTemplate& val) {
+        const StaffType* staffType = val.staffTypePreset;
+        if (!staffType) {
+            staffType = StaffType::getDefaultPreset(StaffGroup::STANDARD);
+        }
 
-    const StaffType* staffType = templ.val.staffTypePreset;
-    if (!staffType) {
-        staffType = StaffType::getDefaultPreset(StaffGroup::STANDARD);
-    }
+        m_instrument = Instrument::fromTemplate(&val);
+        m_staff->setStaffType(Fraction(0, 1), *staffType);
 
-    m_instrument = Instrument::fromTemplate(&templ.val);
-    m_staff->setStaffType(Fraction(0, 1), *staffType);
-
-    updateInstrument();
-    updateStaffType(*staffType);
+        updateInstrument();
+        updateStaffType(*staffType);
+    });
 }
 
 void EditStaff::editStringDataClicked()

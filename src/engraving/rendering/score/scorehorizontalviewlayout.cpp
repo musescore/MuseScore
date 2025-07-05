@@ -294,7 +294,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
     std::set<Measure*> measuresToLayout;
 
     while (ctx.state().curMeasure()) {
-        if (ctx.state().curMeasure()->isVBox() || ctx.state().curMeasure()->isTBox()) {
+        if (ctx.state().curMeasure()->isVBox() || ctx.state().curMeasure()->isTBox() || ctx.state().curMeasure()->isFBox()) {
             ctx.mutState().curMeasure()->resetExplicitParent();
             MeasureLayout::getNextMeasure(ctx);
             continue;

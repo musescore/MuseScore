@@ -234,20 +234,17 @@ void PartTreeItem::replaceInstrument()
     instrumentKey.instrumentId = instrumentId();
     instrumentKey.tick = Part::MAIN_INSTRUMENT_TICK;
 
-    RetVal<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(instrumentKey);
-    if (!templ.ret) {
-        LOGE() << templ.ret.toString();
-        return;
-    }
+    async::Promise<InstrumentTemplate> templ = selectInstrumentsScenario()->selectInstrument(instrumentKey);
+    templ.onResolve(this, [this, instrumentKey](const InstrumentTemplate& val) {
+        Instrument instrument = Instrument::fromTemplate(&val);
 
-    Instrument instrument = Instrument::fromTemplate(&templ.val);
+        const StaffType* staffType = val.staffTypePreset;
+        if (!staffType) {
+            staffType = StaffType::getDefaultPreset(val.staffGroup);
+        }
 
-    const StaffType* staffType = templ.val.staffTypePreset;
-    if (!staffType) {
-        staffType = StaffType::getDefaultPreset(templ.val.staffGroup);
-    }
-
-    masterNotation()->parts()->replaceInstrument(instrumentKey, instrument, staffType);
+        masterNotation()->parts()->replaceInstrument(instrumentKey, instrument, staffType);
+    });
 }
 
 void PartTreeItem::resetAllFormatting()
@@ -255,15 +252,14 @@ void PartTreeItem::resetAllFormatting()
     std::string title = muse::trc("layoutpanel", "Are you sure you want to reset all formatting?");
     std::string body = muse::trc("layoutpanel", "This action can not be undone");
 
-    IInteractive::Button button = interactive()->question(title, body, {
+    interactive()->question(title, body, {
         IInteractive::Button::No,
         IInteractive::Button::Yes
-    }).standardButton();
-
-    if (button != IInteractive::Button::Yes) {
-        return;
-    }
-
-    const Part* masterPart = masterNotation()->parts()->part(id());
-    notation()->parts()->replacePart(id(), masterPart->clone());
+    })
+    .onResolve(this, [this](const IInteractive::Result& res) {
+        if (res.isButton(IInteractive::Button::Yes)) {
+            const Part* masterPart = masterNotation()->parts()->part(id());
+            notation()->parts()->replacePart(id(), masterPart->clone());
+        }
+    });
 }

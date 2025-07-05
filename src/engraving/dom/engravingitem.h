@@ -131,10 +131,11 @@ enum class KerningType : unsigned char
 {
     KERNING,
     NON_KERNING,
-    LIMITED_KERNING,
+    KERN_UNTIL_LEFT_EDGE,
+    KERN_UNTIL_CENTER,
+    KERN_UNTIL_RIGHT_EDGE,
     SAME_VOICE_LIMIT,
     ALLOW_COLLISION,
-    NOT_SET,
 };
 
 class EngravingItemList : public std::list<EngravingItem*>
@@ -237,6 +238,7 @@ public:
     Spatium minDistance() const { return m_minDistance; }
     void setMinDistance(Spatium v) { m_minDistance = v; }
 
+    PointF systemPos() const;
     virtual PointF pagePos() const;            ///< position in page coordinates
     virtual PointF canvasPos() const;          ///< position in canvas coordinates
     double pageX() const;
@@ -270,8 +272,6 @@ public:
     bool hitShapeIntersects(const RectF& rr) const;
 
     virtual int subtype() const { return -1; }                    // for select gui
-
-    void drawAt(muse::draw::Painter* p, const PointF& pt) const;
 
 //       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
     virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> /*isDragged*/)
@@ -358,7 +358,7 @@ public:
 
     virtual void setColor(const Color& c);
     virtual Color color() const;
-    Color curColor() const;
+    virtual Color curColor() const;
     Color curColor(bool isVisible) const;
     Color curColor(bool isVisible, Color normalColor) const;
 
@@ -405,7 +405,7 @@ public:
     double magS() const;
 
     bool isPrintable() const;
-    bool isPlayable() const;
+    virtual bool isPlayable() const;
     virtual double absoluteFromSpatium(const Spatium& sp) const { return sp.val() * spatium(); }
 
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }
@@ -434,6 +434,9 @@ public:
     bool autoplace() const;
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
     bool addToSkyline() const { return !(m_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)) && !ldata()->isSkipDraw(); }
+
+    bool excludeVerticalAlign() const { return m_excludeVerticalAlign; }
+    void setExcludeVerticalAlign(bool v) { m_excludeVerticalAlign = v; }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
@@ -485,7 +488,6 @@ public:
     virtual void triggerLayout() const;
     virtual void triggerLayoutAll() const;
     virtual void triggerLayoutToEnd() const;
-    virtual void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling);
 
     double styleP(Sid idx) const;
 
@@ -739,6 +741,8 @@ private:
 
     bool m_colorsInversionEnabled = true;
 
+    bool m_excludeVerticalAlign = false;
+
     mutable LayoutData* m_layoutData = nullptr;
 };
 
@@ -809,12 +813,10 @@ public:
     Compound(const ElementType& type, Score*);
     Compound(const Compound&);
 
-    virtual void draw(muse::draw::Painter*) const;
     virtual void addElement(EngravingItem*, double x, double y);
     void clear();
     virtual void setSelected(bool f);
     virtual void setVisible(bool);
-    virtual void layout();
 
 protected:
     const std::list<EngravingItem*>& getElements() const { return m_elements; }

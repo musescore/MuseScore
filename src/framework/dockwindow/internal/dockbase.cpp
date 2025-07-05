@@ -191,6 +191,11 @@ bool DockBase::separatorsVisible() const
     return m_properties.separatorsVisible;
 }
 
+bool DockBase::defaultVisibility() const
+{
+    return m_defaultVisibility;
+}
+
 bool DockBase::isCompact() const
 {
     return m_isCompact;
@@ -449,8 +454,8 @@ void DockBase::open()
         return;
     }
 
-    m_dockWidget->show();
     setVisible(true);
+    m_dockWidget->show();
 
     applySizeConstraints();
 }
@@ -629,12 +634,18 @@ void DockBase::componentComplete()
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::widthChanged, this, [this]() {
         if (m_dockWidget) {
             setWidth(m_dockWidget->width());
+            if (inited()) {
+                applySizeConstraints();
+            }
         }
     });
 
     connect(m_dockWidget, &KDDockWidgets::DockWidgetQuick::heightChanged, this, [this]() {
         if (m_dockWidget) {
             setHeight(m_dockWidget->height());
+            if (inited()) {
+                applySizeConstraints();
+            }
         }
     });
 

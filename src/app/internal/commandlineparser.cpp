@@ -26,6 +26,8 @@
 #include "global/io/dir.h"
 #include "global/internal/baseapplication.h"
 
+#include "app_config.h"
+
 #include "log.h"
 
 using namespace muse;
@@ -110,7 +112,7 @@ void CommandLineParser::init()
 
     m_parser.addOption(QCommandLineOption("sound-profile",
                                           "Use with '-o <file>.mp3' or with '-j <file>', override the sound profile in the given score(s). "
-                                          "Possible values: \"MuseScore Basic\", \"Muse Sounds\"", "sound-profile"));
+                                          "Possible values: \"MuseScore Basic\", \"MuseSounds\"", "sound-profile"));
 
     m_parser.addOption(QCommandLineOption("transpose",
                                           "Transpose the given score before executing the '-o' options",

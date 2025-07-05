@@ -292,7 +292,6 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
 
     score->masterScore()->rebuildMidiMapping();
     score->masterScore()->updateChannel();
-    score->masterScore()->rebuildFretDiagramLegend();
 
     for (Staff* staff : score->staves()) {
         staff->updateOttava();
@@ -598,9 +597,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                     Interval interval = staffDest->transpose(tick);
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
-                        int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
-                        int baseTpc = transposeTpc(harmony->bassTpc(), interval, true);
-                        score->undoTransposeHarmony(harmony, rootTpc, baseTpc);
+                        score->undoTransposeHarmony(harmony, interval);
                     }
 
                     // remove pre-existing chords on this track
@@ -964,9 +961,7 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                     Interval interval = staffDest->transpose(destTick);
                     if (!ctx.style().styleB(Sid::concertPitch) && !interval.isZero()) {
                         interval.flip();
-                        int rootTpc = transposeTpc(el->rootTpc(), interval, true);
-                        int baseTpc = transposeTpc(el->bassTpc(), interval, true);
-                        score->undoTransposeHarmony(el, rootTpc, baseTpc);
+                        score->undoTransposeHarmony(el, interval);
                     }
                     el->setParent(seg);
                     score->undoAddElement(el);

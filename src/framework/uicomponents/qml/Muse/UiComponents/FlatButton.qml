@@ -114,6 +114,10 @@ FocusScope {
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
+    function doClicked(mouse) {
+        Qt.callLater(root.clicked, mouse)
+    }
+
     NavigationControl {
         id: navCtrl
         name: root.objectName !== "" ? root.objectName : "FlatButton"
@@ -127,7 +131,7 @@ FocusScope {
 
         onTriggered: {
             if (navCtrl.enabled && root.isClickOnKeyNavTriggered) {
-                root.clicked(null)
+                root.doClicked(null)
                 navCtrl.notifyAboutControlWasTriggered()
             }
         }
@@ -307,7 +311,7 @@ FocusScope {
             navigation.requestActiveByInteraction()
             navigation.notifyAboutControlWasTriggered()
 
-            root.clicked(mouse)
+            root.doClicked(mouse)
         }
 
         onPressed: {

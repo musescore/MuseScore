@@ -27,6 +27,14 @@
 #cmakedefine MUSE_APP_INSTALL_PREFIX ${MUSE_APP_INSTALL_PREFIX}
 #cmakedefine MUSE_APP_INSTALL_NAME ${MUSE_APP_INSTALL_NAME}
 
+#cmakedefine WIN_PORTABLE 1
+
+/* ============================================== */
+/* Qt Subsystem                                   */
+/* ============================================== */
+#cmakedefine QT_QPROCESS_SUPPORTED 1
+#cmakedefine QT_CONCURRENT_SUPPORTED 1
+
 /* ============================================== */
 /* Modules                                        */
 /* ============================================== */
@@ -59,6 +67,10 @@
 #cmakedefine MUSE_MODULE_DIAGNOSTICS_TESTS 1
 #cmakedefine MUSE_MODULE_DIAGNOSTICS_API 1
 #cmakedefine MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT 1
+
+#cmakedefine MUSE_MODULE_DOCKWINDOW 1
+#cmakedefine MUSE_MODULE_DOCKWINDOW_TESTS 1
+#cmakedefine MUSE_MODULE_DOCKWINDOW_API 1
 
 #cmakedefine MUSE_MODULE_DRAW 1
 #cmakedefine MUSE_MODULE_DRAW_TESTS 1
@@ -114,6 +126,8 @@
 #cmakedefine MUSE_MODULE_UI_TESTS 1
 #cmakedefine MUSE_MODULE_UI_API 1
 #cmakedefine MUSE_MODULE_UI_DISABLE_MODALITY 1
+#cmakedefine MUSE_MODULE_UI_SYSTEMDRAG_SUPPORTED 1
+#cmakedefine MUSE_MODULE_UI_SYNCINTERACTIVE_SUPPORTED 1
 
 #cmakedefine MUSE_MODULE_UPDATE 1
 #cmakedefine MUSE_MODULE_UPDATE_TESTS 1

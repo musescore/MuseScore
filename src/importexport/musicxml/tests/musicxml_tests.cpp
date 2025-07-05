@@ -133,12 +133,12 @@ void MusicXml_Tests::musicXmlIoTest(const char* file, bool exportLayout)
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual));
     setValue(PREF_IMPORT_MUSICXML_IMPORTBREAKS, Val(true));
     setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(exportLayout));
-    setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
+    setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(false));
     setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".xml");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     fixupScore(score);
     score->doLayout();
     EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u".xml"));
@@ -162,7 +162,7 @@ void MusicXml_Tests::musicXmlIoTestRef(const char* file)
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".xml");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     fixupScore(score);
     score->doLayout();
     EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_ref.xml"));
@@ -186,21 +186,21 @@ void MusicXml_Tests::musicXmlIoTestRefBreaks(const char* file)
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".xml");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     fixupScore(score);
     score->doLayout();
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::No));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_no_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_no.xml", XML_IO_DATA_DIR + fileName + u"_no_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_manual.xml", XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::All));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_all_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_all.xml", XML_IO_DATA_DIR + fileName + u"_all_ref.xml"));
     delete score;
 }
 
@@ -220,7 +220,7 @@ void MusicXml_Tests::musicXmlMscxExportTestRef(const char* file, bool exportLayo
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     fixupScore(score);
     score->doLayout();
 
@@ -245,21 +245,21 @@ void MusicXml_Tests::musicXmlMscxExportTestRefBreaks(const char* file)
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     fixupScore(score);
     score->doLayout();
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::No));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_no_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_no.xml", XML_IO_DATA_DIR + fileName + u"_no_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::Manual));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_manual.xml", XML_IO_DATA_DIR + fileName + u"_manual_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicXmlExportBreaksType::All));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_all_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_all.xml", XML_IO_DATA_DIR + fileName + u"_all_ref.xml"));
     delete score;
 }
 
@@ -273,17 +273,17 @@ void MusicXml_Tests::musicXmlMscxExportTestRefInvisibleElements(const char* file
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     fixupScore(score);
     score->doLayout();
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_invisible_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_invisible.xml", XML_IO_DATA_DIR + fileName + u"_invisible_ref.xml"));
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(false));
 
-    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u".xml", XML_IO_DATA_DIR + fileName + u"_noinvisible_ref.xml"));
+    EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_noinvisible.xml", XML_IO_DATA_DIR + fileName + u"_noinvisible_ref.xml"));
 
     delete score;
 }
@@ -304,7 +304,7 @@ void MusicXml_Tests::musicXmlReadTestCompr(const char* file)
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mxl");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     fixupScore(score);
     score->doLayout();
     EXPECT_TRUE(saveCompareMusicXmlScore(score, fileName + u"_mxl_read.xml", XML_IO_DATA_DIR + fileName + u".xml"));
@@ -329,7 +329,7 @@ void MusicXml_Tests::musicXmlReadWriteTestCompr(const char* file)
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".xml");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     fixupScore(score);
     score->doLayout();
     // write mxl
@@ -360,7 +360,7 @@ void MusicXml_Tests::musicXmlImportTestRef(const char* file)
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".xml");
-    EXPECT_TRUE(score);
+    ASSERT_TRUE(score);
     fixupScore(score);
     score->doLayout();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, fileName + u".mscx", XML_IO_DATA_DIR + fileName + u"_ref.mscx"));
@@ -445,10 +445,10 @@ TEST_F(MusicXml_Tests, breaksImplExpl) {
 TEST_F(MusicXml_Tests, breaksMMRest) {
     musicXmlMscxExportTestRefBreaks("testBreaksMMRest");
 }
-TEST_F(MusicXml_Tests, DISABLED_breaksManual) { // fail after sync with 3.x
+TEST_F(MusicXml_Tests, breaksManual) {
     musicXmlIoTestRefBreaks("testBreaksManual");
 }
-TEST_F(MusicXml_Tests, DISABLED_breaksPage) { // fail after sync with 3.x
+TEST_F(MusicXml_Tests, breaksPage) {
     musicXmlMscxExportTestRefBreaks("testBreaksPage");
 }
 TEST_F(MusicXml_Tests, breaksSystem) {
@@ -704,8 +704,8 @@ TEST_F(MusicXml_Tests, harmony4) {
     musicXmlIoTest("testHarmony4");
 }
 TEST_F(MusicXml_Tests, harmony5) {
-    musicXmlIoTest("testHarmony5");
-}                                                                      // chordnames without chordrest
+    musicXmlIoTest("testHarmony5"); // chordnames without chordrest
+}
 TEST_F(MusicXml_Tests, harmony6) {
     musicXmlMscxExportTestRef("testHarmony6");
 }
@@ -716,8 +716,8 @@ TEST_F(MusicXml_Tests, harmony8) {
     musicXmlIoTest("testHarmony8");
 }
 TEST_F(MusicXml_Tests, harmony9) {
-    musicXmlIoTest("testHarmony9");
-}                                                                      // chordnames without chordrest
+    musicXmlIoTest("testHarmony9"); // chordnames without chordrest
+}
 TEST_F(MusicXml_Tests, harmonMutes) {
     musicXmlIoTest("testHarmonMutes");
 }
@@ -785,7 +785,7 @@ TEST_F(MusicXml_Tests, inferredDynamicsExpression) {
 TEST_F(MusicXml_Tests, inferredRights) {
     musicXmlImportTestRef("testInferredRights");
 }
-TEST_F(MusicXml_Tests, DISABLED_inferredTechnique) {
+TEST_F(MusicXml_Tests, inferredTechnique) {
     musicXmlImportTestRef("testInferredTechnique");
 }
 TEST_F(MusicXml_Tests, inferredTempoText) {
@@ -812,14 +812,14 @@ TEST_F(MusicXml_Tests, invalidLayout) {
 TEST_F(MusicXml_Tests, invalidTimesig) {
     musicXmlIoTestRef("testInvalidTimesig");
 }
-TEST_F(MusicXml_Tests, invisibleDirection) {
-    musicXmlIoTest("testInvisibleDirection");
-}
 TEST_F(MusicXml_Tests, invisibleElements) {
     musicXmlIoTest("testInvisibleElements");
 }
 TEST_F(MusicXml_Tests, invisibleNote) {
     musicXmlMscxExportTestRef("testInvisibleNote");
+}
+TEST_F(MusicXml_Tests, invisibleTempo) {
+    musicXmlIoTest("testInvisibleTempo");
 }
 TEST_F(MusicXml_Tests, keysig1) {
     musicXmlIoTest("testKeysig1");
@@ -956,14 +956,14 @@ TEST_F(MusicXml_Tests, nonUniqueThings) {
 TEST_F(MusicXml_Tests, noteAttributes1) {
     musicXmlIoTest("testNoteAttributes1");
 }
-TEST_F(MusicXml_Tests, noteAttributes2) {
+TEST_F(MusicXml_Tests, noteAttributes2Import) {
+    musicXmlImportTestRef("testNoteAttributes2");
+}
+TEST_F(MusicXml_Tests, noteAttributes2io) {
     musicXmlIoTestRef("testNoteAttributes2");
 }
 TEST_F(MusicXml_Tests, noteAttributes3) {
     musicXmlIoTest("testNoteAttributes3");
-}
-TEST_F(MusicXml_Tests, DISABLED_noteAttributes4) {
-    musicXmlImportTestRef("testNoteAttributes2");
 }
 TEST_F(MusicXml_Tests, noteColor) {
     musicXmlIoTest("testNoteColor");
@@ -1122,7 +1122,11 @@ TEST_F(MusicXml_Tests, DISABLED_EXCEPT_ON_LINUX(systemDistance)) {
     musicXmlMscxExportTestRef("testSystemDistance", true);
 }
 TEST_F(MusicXml_Tests, DISABLED_EXCEPT_ON_LINUX(systemDividers)) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    musicXmlIoTest("testSystemDividers-Qt68", true);
+#else
     musicXmlIoTest("testSystemDividers", true);
+#endif
 }
 TEST_F(MusicXml_Tests, systemObjectStaves) {
     musicXmlImportTestRef("testSystemObjectStaves");

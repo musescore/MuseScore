@@ -9080,7 +9080,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="145"/>
         <source>Se&amp;lection filter</source>
-        <translation>Se&amp;lection filter</translation>
+        <translation>S&amp;election filter</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="146"/>

@@ -153,7 +153,7 @@ void PianoKeyboardController::sendNoteOn(piano_key_t key)
     ev.setMessageType(muse::midi::Event::MessageType::ChannelVoice10);
     ev.setOpcode(muse::midi::Event::Opcode::NoteOn);
     ev.setNote(key);
-    ev.setVelocity(80);
+    ev.setVelocity7(80);
 
     notation->midiInput()->onMidiEventReceived(ev);
 }

@@ -21,9 +21,8 @@
  */
 #pragma once
 
-#include <vector>
-
 #include "layoutcontext.h"
+#include "dom/harmony.h"
 
 namespace mu::engraving {
 class Segment;
@@ -34,9 +33,6 @@ namespace mu::engraving::rendering::score {
 class HarmonyLayout
 {
 public:
-
-    static void autoplaceHarmonies(const std::vector<Segment*>& sl);
-    static void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove,
-                               const double maxShiftBelow);
+    static void layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
 };
 }

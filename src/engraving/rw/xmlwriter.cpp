@@ -211,6 +211,10 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
         element(name, TConv::toXml(data.value<Align>()));
     }
     break;
+    case P_TYPE::ALIGN_H: {
+        element(name, TConv::toXml(data.value<AlignH>()));
+    }
+    break;
     case P_TYPE::PLACEMENT_V: {
         element(name, TConv::toXml(data.value<PlacementV>()));
     }

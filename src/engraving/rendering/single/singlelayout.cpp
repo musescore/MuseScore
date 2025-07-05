@@ -29,6 +29,8 @@
 
 #include "compat/dummyelement.h"
 
+#include "dom/factory.h"
+
 #include "dom/engravingitem.h"
 #include "dom/score.h"
 
@@ -53,6 +55,7 @@
 #include "dom/gradualtempochange.h"
 #include "dom/guitarbend.h"
 #include "dom/hairpin.h"
+#include "dom/hammeronpulloff.h"
 #include "dom/harppedaldiagram.h"
 #include "dom/instrchange.h"
 #include "dom/jump.h"
@@ -79,6 +82,7 @@
 #include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/systemtext.h"
+#include "dom/tapping.h"
 #include "dom/tempotext.h"
 #include "dom/text.h"
 #include "dom/textline.h"
@@ -157,6 +161,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::HAIRPIN:      layout(toHairpin(item), ctx);
         break;
+    case ElementType::HAMMER_ON_PULL_OFF: layout(toHammerOnPullOff(item), ctx);
+        break;
     case ElementType::HARP_DIAGRAM: layout(toHarpPedalDiagram(item), ctx);
         break;
     case ElementType::IMAGE:        layout(toImage(item), ctx);
@@ -212,6 +218,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::SYSTEM_TEXT:  layout(toSystemText(item), ctx);
         break;
     case ElementType::SOUND_FLAG:   layout(item_cast<SoundFlag*>(item), ctx);
+        break;
+    case ElementType::TAPPING:      layout(toTapping(item), ctx);
         break;
     case ElementType::TEMPO_TEXT:   layout(toTempoText(item), ctx);
         break;
@@ -786,7 +794,7 @@ void SingleLayout::layout(Chord* item, const Context& ctx)
     ChordLayout::computeUp(item, tctx);
     ChordLayout::layout(item, tctx);
     ChordLayout::layoutStem(item, tctx);
-    ChordLayout::layoutLedgerLines({ item });
+    ChordLayout::layoutLedgerLines({ item }, tctx);
 }
 
 void SingleLayout::layout(ChordLine* item, const Context& ctx)
@@ -992,6 +1000,59 @@ void SingleLayout::layout(Hairpin* item, const Context& ctx)
 {
     item->setPos(0.0, 0.0);
     layoutLine(item, ctx);
+}
+
+void SingleLayout::layout(HammerOnPullOff* item, const Context& ctx)
+{
+    double spatium = item->spatium();
+    HammerOnPullOffSegment* s = nullptr;
+    if (item->spannerSegments().empty()) {
+        s = new HammerOnPullOffSegment(ctx.dummyParent()->system());
+        s->setTrack(item->track());
+        item->add(s);
+    } else {
+        s = toHammerOnPullOffSegment(item->frontSegment());
+    }
+
+    s->setSpannerSegmentType(SpannerSegmentType::SINGLE);
+
+    s->setPos(PointF());
+    s->ups(Grip::START).p = PointF(0, 0);
+    s->ups(Grip::END).p   = PointF(spatium * 6, 0);
+    s->setExtraHeight(0.0);
+
+    SlurTieLayout::computeBezier(s);
+
+    layout(s, ctx);
+
+    item->setbbox(s->ldata()->bbox());
+}
+
+void SingleLayout::layout(HammerOnPullOffSegment* item, const Context& ctx)
+{
+    const std::vector<HammerOnPullOffText*>& hopoTexts = item->hopoText();
+    if (item->hopoText().empty()) {
+        item->addHopoText(new HammerOnPullOffText(item));
+    }
+
+    HammerOnPullOffText* hopoText = hopoTexts.front();
+    hopoText->setParent(item);
+    hopoText->setXmlText("H/P");
+
+    Align align;
+    align.vertical = AlignV::BASELINE;
+    align.horizontal = AlignH::HCENTER;
+    hopoText->setAlign(align);
+    layoutTextBase(hopoText, ctx, hopoText->mutldata());
+
+    RectF bbox = item->ldata()->bbox();
+    double x = 0.5 * (bbox.left() + bbox.right());
+    double y = bbox.top() - 0.5 * item->spatium();
+    hopoText->mutldata()->setPos(x, y);
+
+    Shape itemShape = item->mutldata()->shape();
+    itemShape.add(hopoText->shape().translated(hopoText->pos()));
+    item->mutldata()->setShape(itemShape);
 }
 
 void SingleLayout::layout(HairpinSegment* item, const Context& ctx)
@@ -1494,6 +1555,26 @@ void SingleLayout::layout(Symbol* item, const Context&)
 void SingleLayout::layout(SystemText* item, const Context& ctx)
 {
     layoutTextBase(item, ctx, item->mutldata());
+}
+
+void SingleLayout::layout(Tapping* item, const Context& ctx)
+{
+    TappingText* text = item->text();
+
+    if (!text) {
+        text = new TappingText(item);
+    }
+
+    text->setParent(item);
+    item->setText(text);
+    text->setTrack(item->track());
+    DO_ASSERT(item->hand() != TappingHand::INVALID);
+    text->setXmlText(item->hand() == TappingHand::LEFT ? "l.h. tap" : "r.h. tap");
+    text->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
+
+    layoutTextBase(text, ctx, text->mutldata());
+
+    item->setbbox(text->ldata()->bbox());
 }
 
 void SingleLayout::layout(SoundFlag* item, const Context& ctx)

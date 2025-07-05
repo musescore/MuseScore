@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -31,14 +33,16 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -62,264 +66,330 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>E_E</eid>
         <voice>
           <KeySig>
+            <eid>F_F</eid>
             <concertKey>1</concertKey>
             <mode>dorian</mode>
             </KeySig>
           <TimeSig>
+            <eid>G_G</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>H_H</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>I_I</eid>
         <voice>
           <Rest>
+            <eid>J_J</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>K_K</eid>
         <voice>
           <Rest>
+            <eid>L_L</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>M_M</eid>
         <voice>
           <Rest>
+            <eid>N_N</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>O_O</eid>
         <voice>
           <Rest>
+            <eid>P_P</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>Q_Q</eid>
         <voice>
           <Rest>
+            <eid>R_R</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>S_S</eid>
         <voice>
           <Rest>
+            <eid>T_T</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>U_U</eid>
         <voice>
           <Rest>
+            <eid>V_V</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>W_W</eid>
         <voice>
           <Rest>
+            <eid>X_X</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>Y_Y</eid>
         <voice>
           <Rest>
+            <eid>Z_Z</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>a_a</eid>
         <voice>
           <Rest>
+            <eid>b_b</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>c_c</eid>
         <voice>
           <Rest>
+            <eid>d_d</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>e_e</eid>
         <voice>
           <Rest>
+            <eid>f_f</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>g_g</eid>
         <voice>
           <Rest>
+            <eid>h_h</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>i_i</eid>
         <voice>
           <Rest>
+            <eid>j_j</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>k_k</eid>
         <voice>
           <Rest>
+            <eid>l_l</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>m_m</eid>
         <voice>
           <Rest>
+            <eid>n_n</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>o_o</eid>
         <voice>
           <Rest>
+            <eid>p_p</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>q_q</eid>
         <voice>
           <Rest>
+            <eid>r_r</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>s_s</eid>
         <voice>
           <Rest>
+            <eid>t_t</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>u_u</eid>
         <voice>
           <Rest>
+            <eid>v_v</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>w_w</eid>
         <voice>
           <Rest>
+            <eid>x_x</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>y_y</eid>
         <voice>
           <Rest>
+            <eid>z_z</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>0_0</eid>
         <voice>
           <Rest>
+            <eid>1_1</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>2_2</eid>
         <voice>
           <Rest>
+            <eid>3_3</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>4_4</eid>
         <voice>
           <Rest>
+            <eid>5_5</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>6_6</eid>
         <voice>
           <Rest>
+            <eid>7_7</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>8_8</eid>
         <voice>
           <Rest>
+            <eid>9_9</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>+_+</eid>
         <voice>
           <Rest>
+            <eid>/_/</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>AB_AB</eid>
         <voice>
           <Rest>
+            <eid>BB_BB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>CB_CB</eid>
         <voice>
           <Rest>
+            <eid>DB_DB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>EB_EB</eid>
         <voice>
           <Rest>
+            <eid>FB_FB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -330,13 +400,16 @@
       <Measure>
         <voice>
           <KeySig>
+            <eid>GB_GB</eid>
             <concertKey>1</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>HB_HB</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>IB_IB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -345,6 +418,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>JB_JB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -353,6 +427,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>KB_KB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -361,6 +436,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>LB_LB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -369,6 +445,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>MB_MB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -377,6 +454,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>NB_NB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -385,6 +463,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>OB_OB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -393,6 +472,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>PB_PB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -401,6 +481,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>QB_QB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -409,6 +490,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>RB_RB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -417,6 +499,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>SB_SB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -425,6 +508,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>TB_TB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -433,6 +517,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>UB_UB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -441,6 +526,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>VB_VB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -449,6 +535,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>WB_WB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -457,6 +544,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>XB_XB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -465,6 +553,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>YB_YB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -473,6 +562,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>ZB_ZB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -481,6 +571,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>aB_aB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -489,6 +580,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>bB_bB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -497,6 +589,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>cB_cB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -505,6 +598,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>dB_dB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -513,6 +607,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>eB_eB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -521,6 +616,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>fB_fB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -529,6 +625,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>gB_gB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -537,6 +634,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>hB_hB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -545,6 +643,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>iB_iB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -553,6 +652,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>jB_jB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -561,6 +661,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>kB_kB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -569,6 +670,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>lB_lB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -577,6 +679,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>mB_mB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -585,6 +688,7 @@
       <Measure>
         <voice>
           <Rest>
+            <eid>nB_nB</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

@@ -23,6 +23,7 @@
 #pragma once
 
 #include "benddatacontext.h"
+#include "splitchord/benddataprocessorsplitchord.h"
 
 namespace mu::engraving {
 class Note;
@@ -38,5 +39,6 @@ public:
 
 private:
     mu::engraving::Score* m_score = nullptr;
+    std::unique_ptr<BendDataProcessorSplitChord> m_bendDataProcessorSplitChord;
 };
 } // mu::iex::guitarpro

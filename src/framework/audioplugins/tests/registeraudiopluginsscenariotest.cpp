@@ -58,7 +58,9 @@ protected:
         m_knownPlugins = std::make_shared<KnownAudioPluginsRegisterMock>();
         m_scanners = { std::make_shared<AudioPluginsScannerMock>() };
         m_metaReaderRegister = std::make_shared<AudioPluginMetaReaderRegisterMock>();
-        m_metaReaders = { std::make_shared<AudioPluginMetaReaderMock>() };
+
+        const auto metaReaderMock = std::make_shared<AudioPluginMetaReaderMock>();
+        m_metaReaders = { metaReaderMock };
 
         m_scenario->globalConfiguration.set(m_globalConfiguration);
         m_scenario->interactive.set(m_interactive);
@@ -75,6 +77,12 @@ protected:
 
         ON_CALL(*m_metaReaderRegister, readers())
         .WillByDefault(ReturnRef(m_metaReaders));
+
+        ON_CALL(*metaReaderMock, metaType())
+        .WillByDefault(Return(AudioResourceType::VstPlugin));
+
+        ON_CALL(*metaReaderMock, canReadMeta(_))
+        .WillByDefault(Return(true));
     }
 
     std::shared_ptr<RegisterAudioPluginsScenario> m_scenario;
@@ -155,7 +163,7 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterNewPlugins)
 
     // [THEN] The progress bar is shown
     EXPECT_CALL(*m_interactive, showProgress(muse::trc("audio", "Scanning audio plugins"), _))
-    .WillOnce(Return(muse::make_ok()));
+    .Times(1);
 
     // [THEN] Processes started only for unregistered plugins
     for (const path_t& pluginPath : foundPluginPaths) {
@@ -255,9 +263,6 @@ TEST_F(AudioPlugins_RegisterAudioPluginsScenarioTest, RegisterPlugin)
     ASSERT_FALSE(m_metaReaders.empty());
     AudioPluginMetaReaderMock* mock = dynamic_cast<AudioPluginMetaReaderMock*>(m_metaReaders[0].get());
     ASSERT_TRUE(mock);
-
-    ON_CALL(*mock, canReadMeta(pluginPath))
-    .WillByDefault(Return(true));
 
     ON_CALL(*mock, readMeta(pluginPath))
     .WillByDefault(Return(RetVal<AudioResourceMetaList>::make_ok(metaList)));

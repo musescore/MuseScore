@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_UICOMPONENTS_POPUPVIEW_H
-#define MUSE_UICOMPONENTS_POPUPVIEW_H
+#pragma once
 
 #include <QQuickItem>
 #include <QQmlParserStatus>
@@ -153,8 +151,6 @@ public:
     Q_INVOKABLE void close(bool force = false);
     Q_INVOKABLE void toggleOpened();
 
-    Q_INVOKABLE void setParentWindow(QWindow* window);
-
     Q_INVOKABLE QRectF anchorGeometry() const;
 
     OpenPolicies openPolicies() const;
@@ -197,7 +193,7 @@ public slots:
     void setOpenPolicies(muse::uicomponents::PopupView::OpenPolicies openPolicies);
     void setClosePolicies(muse::uicomponents::PopupView::ClosePolicies closePolicies);
     void setPlacement(muse::uicomponents::PopupView::Placement newPlacement);
-    void setNavigationParentControl(ui::INavigationControl* parentNavigationControl);
+    void setNavigationParentControl(muse::ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
     void setModal(bool modal);
@@ -213,7 +209,7 @@ public slots:
     void setAnchorItem(QQuickItem* anchorItem);
 
     void setActivateParentOnClose(bool activateParentOnClose);
-    void setFocusPolicies(const FocusPolicies& policies);
+    void setFocusPolicies(const muse::uicomponents::PopupView::FocusPolicies& policies);
 
 signals:
     void parentItemChanged();
@@ -226,7 +222,7 @@ signals:
     void openPoliciesChanged(muse::uicomponents::PopupView::OpenPolicies openPolicies);
     void closePoliciesChanged(muse::uicomponents::PopupView::ClosePolicies closePolicies);
     void placementChanged(muse::uicomponents::PopupView::Placement placement);
-    void navigationParentControlChanged(ui::INavigationControl* navigationParentControl);
+    void navigationParentControlChanged(muse::ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
     void modalChanged(bool modal);
@@ -273,6 +269,10 @@ protected:
     void repositionWindowIfNeed();
 
     void setErrCode(Ret::Code code);
+
+    QWindow* parentWindow() const;
+    void setParentWindow(QWindow* window);
+    void resolveParentWindow();
 
     virtual QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
@@ -327,5 +327,3 @@ protected:
     bool m_forceClosed = false;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_POPUPVIEW_H

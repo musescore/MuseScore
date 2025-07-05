@@ -26,6 +26,7 @@ import Muse.UiComponents 1.0
 Rectangle {
 
     property var navigationSection
+    property int contentNavigationPanelOrderStart: 1
 
     signal resizeRequested(int newWidth, int newHeight)
 

@@ -44,7 +44,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>First system (no frames above)</words>
           </direction-type>
@@ -57,7 +57,7 @@
       </measure>
     <measure number="2">
       <print new-page="yes"/>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After page break</words>
           </direction-type>
@@ -72,10 +72,10 @@
       <print new-page="yes"/>
       <direction placement="below">
         <direction-type>
-          <words valign="top">Tframe</words>
+          <words valign="top" font-size="12">Tframe</words>
           </direction-type>
         </direction>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After page break in vframe</words>
           </direction-type>
@@ -88,7 +88,7 @@
       </measure>
     <measure number="4">
       <print new-page="yes"/>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After page break in tframe</words>
           </direction-type>
@@ -101,7 +101,7 @@
       </measure>
     <measure number="5">
       <print new-page="yes"/>
-      <direction>
+      <direction placement="above" system="only-top">
         <direction-type>
           <words>After page break in hframe</words>
           </direction-type>

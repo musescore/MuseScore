@@ -404,7 +404,7 @@ Err importBB(MasterScore* score, const QString& name)
         return engraving::Err::FileOpenError;
     }
     score->style().set(Sid::chordsXmlFile, true);
-    score->chordList()->read(score->configuration()->appDataPath(), u"chords.xml");
+    score->chordList()->read(u"chords.xml");
     *(score->sigmap()) = bb.siglist();
 
     QList<BBTrack*>* tracks = bb.tracks();
@@ -430,7 +430,7 @@ Err importBB(MasterScore* score, const QString& name)
         Fraction ts = score->sigmap()->timesig(tick.ticks()).timesig();
         measure->setTimesig(ts);
         measure->setTicks(ts);
-        score->measures()->add(measure);
+        score->measures()->append(measure);
     }
 
     //---------------------------------------------------
@@ -488,7 +488,7 @@ Err importBB(MasterScore* score, const QString& name)
     if (measureB->type() != ElementType::VBOX) {
         measureB = Factory::createTitleVBox(score->dummy()->system());
         measureB->setNext(score->first());
-        score->measures()->add(measureB);
+        score->measures()->append(measureB);
     }
     measureB->add(text);
 
@@ -510,15 +510,17 @@ Err importBB(MasterScore* score, const QString& name)
         }
         Segment* s = m->getSegment(SegmentType::ChordRest, tick);
         Harmony* h = Factory::createHarmony(s);
+        HarmonyInfo* info = new HarmonyInfo(score);
         h->setTrack(0);
-        h->setRootTpc(table[c.root - 1]);
+        info->setRootTpc(table[c.root - 1]);
         if (c.bass > 0) {
-            h->setBassTpc(table[c.bass - 1]);
+            info->setBassTpc(table[c.bass - 1]);
         } else {
-            h->setBassTpc(Tpc::TPC_INVALID);
+            info->setBassTpc(Tpc::TPC_INVALID);
         }
-        h->setId(c.extension);
-        h->getDescription();
+        info->setId(c.extension);
+        h->addChord(info);
+
         h->render();
         s->add(h);
     }

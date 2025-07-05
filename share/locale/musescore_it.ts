@@ -23753,7 +23753,7 @@ Inoltre, Mastering MuseScore offre una communità di musicisti di supporto, con 
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="243"/>
         <source>Name already exists</source>
-        <translation>Il nome esiste già</translation>
+        <translation>Nome già esistente</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="284"/>
@@ -28874,7 +28874,7 @@ non riuscita.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1744"/>
         <source>This file was saved using a newer version of MuseScore Studio. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;MuseScore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Questo file è stato salvato utilizzando una versione più recente di MuseScore Studio. Prego, visita&lt;a href=&quot;https://musescore.org&quot;&gt;MuseScore.org&lt;/a&gt; per ottenere l&apos;ultima versione.</translation>
+        <translation>Questo file è stato salvato utilizzando una versione più recente di MuseScore Studio. Prego, visita &lt;a href=&quot;https://musescore.org&quot;&gt;MuseScore.org&lt;/a&gt; per ottenere l&apos;ultima versione.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1766"/>

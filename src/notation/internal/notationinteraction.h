@@ -28,6 +28,7 @@
 #include "async/asyncable.h"
 #include "iinteractive.h"
 #include "engraving/rendering/isinglerenderer.h"
+#include "engraving/rendering/ieditmoderenderer.h"
 
 #include "../inotationinteraction.h"
 #include "../inotationconfiguration.h"
@@ -55,6 +56,7 @@ class NotationInteraction : public INotationInteraction, public muse::Injectable
     muse::Inject<ISelectInstrumentsScenario> selectInstrumentScenario = { this };
     muse::Inject<muse::IInteractive> interactive = { this };
     muse::Inject<engraving::rendering::ISingleRenderer> engravingRenderer = { this };
+    muse::Inject<engraving::rendering::IEditModeRenderer> editModeRenderer = { this };
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
@@ -117,8 +119,8 @@ public:
     bool startDropSingle(const QByteArray& edata) override;
     bool startDropRange(const QByteArray& data) override;
     bool startDropImage(const QUrl& url) override;
-    bool isDropSingleAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
-    bool isDropRangeAccepted(const muse::PointF& pos) override;
+    bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool updateDropRange(const muse::PointF& pos) override;
     bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) override;
     void setDropTarget(EngravingItem* item, bool notify = true) override;
@@ -155,7 +157,7 @@ public:
     bool textEditingAllowed(const EngravingItem* element) const override;
     void startEditText(EngravingItem* element, const muse::PointF& cursorPos = muse::PointF()) override;
     void editText(QInputMethodEvent* event) override;
-    void endEditText() override;
+    void endEditText(bool startNonTextualEdit = true) override;
     void changeTextCursorPosition(const muse::PointF& newCursorPos) override;
     void selectText(mu::engraving::SelectTextType type) override;
     const TextBase* editedText() const override;
@@ -197,6 +199,7 @@ public:
     void addLaissezVibToSelection() override;
     void addTiedNoteToChord() override;
     void addSlurToSelection() override;
+    void addHammerOnPullOffToSelection() override;
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinOnGripDrag(engraving::EditData& ed, bool isLeftGrip) override;
     void addHairpinsToSelection(HairpinType type) override;
@@ -296,6 +299,9 @@ public:
     muse::Ret canAddGuitarBend() const override;
     void addGuitarBend(GuitarBendType bendType) override;
 
+    muse::Ret canAddFretboardDiagram() const override;
+    void addFretboardDiagram() override;
+
     void toggleBold() override;
     void toggleItalic() override;
     void toggleUnderline() override;
@@ -344,6 +350,12 @@ private:
     void doEndEditElement();
     void doEndDrag();
 
+    //! NOTE: Helper methods for applyPaletteElement
+    void applyPaletteElementToList(EngravingItem* element, bool isMeasureAnchoredElement, mu::engraving::Score* score,
+                                   const mu::engraving::Selection& sel, Qt::KeyboardModifiers modifiers = {});
+    void applyPaletteElementToRange(EngravingItem* element, bool isMeasureAnchoredElement, mu::engraving::Score* score,
+                                    const mu::engraving::Selection& sel, Qt::KeyboardModifiers modifiers = {});
+
     bool doDropStandard();
     bool doDropTextBaseAndSymbols(const muse::PointF& pos, bool applyUserOffset);
 
@@ -367,7 +379,8 @@ private:
     void toggleVerticalAlignment(mu::engraving::VerticalAlignment);
     void navigateToLyrics(bool, bool, bool);
 
-    mu::engraving::Harmony* editedHarmony() const;
+    Harmony* editedHarmony() const;
+    Segment* harmonySegment(const Harmony* harmony) const;
     mu::engraving::Harmony* findHarmonyInSegment(const mu::engraving::Segment* segment, engraving::track_idx_t track,
                                                  mu::engraving::TextStyleType textStyleType) const;
     mu::engraving::Harmony* createHarmony(mu::engraving::Segment* segment, engraving::track_idx_t track,
@@ -414,6 +427,8 @@ private:
     bool prepareDropTimeAnchorElement(const muse::PointF& pos);
     bool dropCanvas(EngravingItem* e);
     void resetDropData();
+
+    void doFinishAddFretboardDiagram();
 
     bool selectInstrument(mu::engraving::InstrumentChange* instrumentChange);
     void cleanupDrumsetChanges(mu::engraving::InstrumentChange* instrumentChange) const;

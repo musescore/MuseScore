@@ -248,6 +248,9 @@ void Score::startCmd(const QString& qActionName)
                                           : TranslatableString::untranslatable(qActionName);
 
     undoStack()->prepareChanges(actionName);
+    // Lock the undo stack, so that all changes made by the plugin,
+    // including PluginAPI::cmd(), are committed as a single command.
+    undoStack()->lock();
 }
 
 void Score::endCmd(bool rollback)
@@ -255,6 +258,8 @@ void Score::endCmd(bool rollback)
     IF_ASSERT_FAILED(undoStack()) {
         return;
     }
+
+    undoStack()->unlock();
 
     if (rollback) {
         undoStack()->rollbackChanges();

@@ -91,7 +91,9 @@ public:
 
     DockBase* dockByName(const QString& dockName) const;
     DockingHolderView* holder(DockType type, Location location) const;
-    QList<DockPanelView*> possiblePanelsForTab(const DockPanelView* tab) const;
+
+    QList<DockPanelView*> findPanelsForDropping(const DockPanelView* panel) const;
+    DockPanelView* findPanelForTab(const DockPanelView* tab) const;
 
     bool isDockOpenAndCurrentInFrame(const QString& dockName) const;
     void toggleDock(const QString& dockName);
@@ -101,6 +103,8 @@ public:
     void toggleDockFloating(const QString& dockName);
 
     Q_INVOKABLE void setDefaultNavigationControl(muse::ui::NavigationControl* control);
+
+    Q_INVOKABLE void forceLayout();
 
     QVariant tours() const;
     void setTours(const QVariant& newTours);
@@ -118,11 +122,10 @@ signals:
     void statusBarChanged(DockStatusBarView* statusBar);
 
     void toursChanged();
+    void layoutRequested();
 
 private:
     void componentComplete() override;
-
-    DockPanelView* findPanelForTab(const DockPanelView* tab) const;
 
     void reorderSections();
     void doReorderSections();

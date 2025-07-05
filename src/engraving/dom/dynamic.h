@@ -76,8 +76,6 @@ public:
 
     void setVelocity(int v) { m_velocity = v; }
     int velocity() const;
-    DynamicRange dynRange() const { return m_dynRange; }
-    void setDynRange(DynamicRange t);
 
     int changeInVelocity() const;
     void setChangeInVelocity(int val);
@@ -118,7 +116,6 @@ public:
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
     void editDrag(EditData& editData) override;
     void endEditDrag(EditData&) override;
-    void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
     bool isTextualEditAllowed(EditData&) const override;
 
@@ -152,7 +149,6 @@ private:
 
     mutable PointF m_dragOffset;
     int m_velocity = -1;           // associated midi velocity 0-127
-    DynamicRange m_dynRange = DynamicRange::PART; // STAFF, PART, SYSTEM
 
     int m_changeInVelocity = 128;
     DynamicSpeed m_velChangeSpeed = DynamicSpeed::NORMAL;

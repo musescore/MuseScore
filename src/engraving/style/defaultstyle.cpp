@@ -29,6 +29,7 @@ using namespace mu;
 using namespace muse::io;
 using namespace mu::engraving;
 
+static const int LEGACY_MSC_VERSION_V450 = 450;
 static const int LEGACY_MSC_VERSION_V302 = 302;
 static const int LEGACY_MSC_VERSION_V3 = 301;
 static const int LEGACY_MSC_VERSION_V2 = 206;
@@ -38,6 +39,7 @@ static const String LEGACY_MSS_V1_PATH(u":/engraving/styles/legacy-style-default
 static const String LEGACY_MSS_V2_PATH(u":/engraving/styles/legacy-style-defaults-v2.mss");
 static const String LEGACY_MSS_V3_PATH(u":/engraving/styles/legacy-style-defaults-v3.mss");
 static const String LEGACY_MSS_V302_PATH(u":/engraving/styles/legacy-style-defaults-v302.mss");
+static const String LEGACY_MSS_V450_PATH(u":/engraving/styles/legacy-style-defaults-v450.mss");
 
 DefaultStyle* DefaultStyle::instance()
 {
@@ -128,6 +130,11 @@ const MStyle& DefaultStyle::resolveStyleDefaults(const int defaultsVersion)
     };
 
     switch (defaultsVersion) {
+    case LEGACY_MSC_VERSION_V450: {
+        static MStyle style_v450;
+        static bool loaded_v450 = false;
+        return loadedStyle(style_v450, LEGACY_MSS_V450_PATH, loaded_v450);
+    } break;
     case LEGACY_MSC_VERSION_V302: {
         static MStyle style_v302;
         static bool loaded_v302 = false;

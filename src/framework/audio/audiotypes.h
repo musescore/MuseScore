@@ -128,6 +128,8 @@ enum class AudioResourceType {
     VstPlugin,
     MusePlugin,
     MuseSamplerSoundPack,
+    Lv2Plugin,
+    AudioUnit,
 };
 
 struct AudioResourceMeta {
@@ -215,6 +217,8 @@ struct AudioFxParams {
         switch (resourceMeta.type) {
         case AudioResourceType::VstPlugin: return AudioFxType::VstFx;
         case AudioResourceType::MusePlugin: return AudioFxType::MuseFx;
+        case AudioResourceType::AudioUnit:
+        case AudioResourceType::Lv2Plugin:
         case AudioResourceType::FluidSoundfont:
         case AudioResourceType::MuseSamplerSoundPack:
         case AudioResourceType::Undefined: break;
@@ -303,6 +307,8 @@ inline AudioSourceType sourceTypeFromResourceType(AudioResourceType type)
     case AudioResourceType::FluidSoundfont: return AudioSourceType::Fluid;
     case AudioResourceType::VstPlugin: return AudioSourceType::Vsti;
     case AudioResourceType::MuseSamplerSoundPack: return AudioSourceType::MuseSampler;
+    case AudioResourceType::AudioUnit:
+    case AudioResourceType::Lv2Plugin:
     case AudioResourceType::MusePlugin:
     case AudioResourceType::Undefined: break;
     }

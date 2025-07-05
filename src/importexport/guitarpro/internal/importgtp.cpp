@@ -41,6 +41,7 @@
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/glissando.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/instrtemplate.h"
@@ -103,11 +104,6 @@ GuitarPro::GuitarPro(MasterScore* s, int v, const modularity::ContextPtr& iocCtx
     version = v;
     voltaSequence = 1;
     tempo = -1;
-}
-
-GuitarPro::~GuitarPro()
-{
-    delete[] slurs;
 }
 
 //---------------------------------------------------------
@@ -322,6 +318,16 @@ void GuitarPro::addTrill(ChordRest* cr, bool hasTrill)
 }
 
 //---------------------------------------------------------
+//   addHammerOnPullOff
+//---------------------------------------------------------
+
+void GuitarPro::addHammerOnPullOff(ChordRest* cr, bool hasHammerOnPullOff)
+{
+    m_continiousElementsBuilder->buildContiniousElement(cr, ElementType::HAMMER_ON_PULL_OFF,
+                                                        ContiniousElementsBuilder::ImportType::HAMMER_ON_PULL_OFF, hasHammerOnPullOff);
+}
+
+//---------------------------------------------------------
 //   addRasgueado
 //---------------------------------------------------------
 
@@ -381,9 +387,12 @@ void GuitarPro::addHarmonicMarks(ChordRest* cr, bool hasHarmonicArtificial, bool
 //   addTap
 //---------------------------------------------------------
 
-void GuitarPro::addTap(Note* note)
+void GuitarPro::addTap(Chord* chord)
 {
-    addTextArticulation(note, ArticulationTextType::TAP);
+    Tapping* tapping = Factory::createTapping(chord);
+    tapping->setTrack(chord->track());
+    tapping->setHand(TappingHand::RIGHT);
+    chord->add(tapping);
 }
 
 //---------------------------------------------------------
@@ -631,14 +640,7 @@ void GuitarPro::createBend(Note* note, std::vector<PitchValue>& bendData)
         return;
     }
 
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->collectBend(note, bendData);
-    } else {
-        Bend* bend = Factory::createBend(note);
-        bend->setPoints(bendData);
-        bend->setTrack(note->track());
-        note->add(bend);
-    }
+    m_guitarBendImporter->collectBend(note, bendData);
 }
 
 //---------------------------------------------------------
@@ -935,7 +937,7 @@ void GuitarPro::createMeasures()
             }
         }
 
-        score->measures()->add(m);
+        score->measures()->append(m);
         tick += nts;
         ts = nts;
     }
@@ -947,9 +949,9 @@ void GuitarPro::createMeasures()
 
 void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect, bool& hasVibratoLeftHand, bool& hasVibratoWTremBar)
 {
-    /* tap/slap/pop implemented as text until SMuFL has
+    /* slap/pop implemented as text until SMuFL has
      * specifications and we can add them to fonts. Note that
-     * tap/slap/pop are just added to the top note in the chord,
+     * slap/pop are just added to the top note in the chord,
      * technically these can be applied to individual notes on the
      * UI, but Guitar Pro has no way to express that on the
      * score. To get the same result, we should just add the marking
@@ -957,7 +959,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect, bool& hasVibratoL
      */
     if (beatEffect == 1) {
         if (version > 300) {
-            addTap(chord->upNote());
+            addTap(chord);
         } else {
             hasVibratoLeftHand = true;
         }
@@ -999,6 +1001,8 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect, bool& hasVibratoL
 bool GuitarPro1::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
+
     f      = io;
     curPos = 30;
 
@@ -1015,14 +1019,7 @@ bool GuitarPro1::read(IODevice* io)
         key = readInt();        // key
     }
     staves  = version > 102 ? 8 : 1;
-
-    slurs = new Slur*[staves];
-    for (size_t i = 0; i < staves; ++i) {
-        slurs[i] = nullptr;
-    }
-
-    //int tnumerator   = 4;
-    //int tdenominator = 4;
+    slurs.resize(staves, nullptr);
 
     //
     // create a part for every staff
@@ -1047,7 +1044,6 @@ bool GuitarPro1::read(IODevice* io)
             tuning[j] = readInt();
         }
         std::vector<int> tuning2(strings);
-        //int tuning2[strings];
         for (int k = 0; k < strings; ++k) {
             tuning2[strings - k - 1] = tuning[k];
         }
@@ -1082,7 +1078,7 @@ bool GuitarPro1::read(IODevice* io)
             }
         }
 
-        score->measures()->add(m);
+        score->measures()->append(m);
         tick += nts;
         ts = nts;
     }
@@ -1101,7 +1097,6 @@ bool GuitarPro1::read(IODevice* io)
             segment->add(s);
         }
         std::vector<Tuplet*> tuplets(staves);
-        //Tuplet* tuplets[staves];
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
             tuplets[staffIdx] = 0;
         }
@@ -1361,6 +1356,8 @@ void GuitarPro::createSlur(bool hasSlur, staff_idx_t staffIdx, ChordRest* cr)
 bool GuitarPro2::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
+
     f      = io;
     curPos = 30;
 
@@ -1475,7 +1472,7 @@ bool GuitarPro2::read(IODevice* io)
             }
         }
 
-        score->measures()->add(m);
+        score->measures()->append(m);
         tick += nts;
         ts = nts;
     }
@@ -2073,6 +2070,8 @@ int GuitarPro1::readBeatEffects(int, Segment*)
 bool GuitarPro3::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
+
     f      = io;
     curPos = 30;
 
@@ -2115,10 +2114,7 @@ bool GuitarPro3::read(IODevice* io)
     staves = readInt();
     initDynamics(staves);
 
-    slurs = new Slur*[staves];
-    for (size_t i = 0; i < staves; ++i) {
-        slurs[i] = nullptr;
-    }
+    slurs.resize(staves, nullptr);
 
     int tnumerator   = 4;
     int tdenominator = 4;
@@ -2224,7 +2220,7 @@ bool GuitarPro3::read(IODevice* io)
             }
         }
 
-        score->measures()->add(m);
+        score->measures()->append(m);
         tick += nts;
         ts = nts;
     }
@@ -2648,9 +2644,7 @@ bool GuitarPro3::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->applyBendsToChords();
-    }
+    m_guitarBendImporter->applyBendsToChords();
 
     return true;
 }
@@ -2746,7 +2740,7 @@ static void addMetaInfo(MasterScore* score, GuitarPro* gp, bool experimental)
     MeasureBase* m = nullptr;
     if (!score->measures()->first()) {
         m = Factory::createTitleVBox(score->dummy()->system());
-        score->addMeasure(m, 0);
+        score->measures()->append(m);
     } else {
         m = score->measures()->first();
         if (!m->isVBox()) {
@@ -2903,11 +2897,6 @@ static Err importScore(MasterScore* score, muse::io::IODevice* io, const muse::m
 {
     if (!io->open(IODevice::ReadOnly)) {
         return Err::FileOpenError;
-    }
-
-    score->loadStyle(u":/engraving/styles/gp-style.mss");
-    if (experimental) {
-        score->loadStyle(u":/engraving/styles/gp-style-experimental.mss");
     }
 
     score->checkChordList();

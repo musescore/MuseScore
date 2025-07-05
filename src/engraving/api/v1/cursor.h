@@ -19,14 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_APIV1_CURSOR_H
-#define MU_ENGRAVING_APIV1_CURSOR_H
+#pragma once
 
 #include "fraction.h"
 
 #include "engraving/dom/input.h"
-#include "engraving/dom/types.h"
 
 Q_MOC_INCLUDE("engraving/api/v1/elements.h")
 Q_MOC_INCLUDE("engraving/api/v1/score.h")
@@ -209,5 +206,3 @@ public:
     Q_INVOKABLE void setDuration(int z, int n);
 };
 }
-
-#endif

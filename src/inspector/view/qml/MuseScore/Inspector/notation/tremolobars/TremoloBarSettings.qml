@@ -37,7 +37,7 @@ Item {
 
     objectName: "TremoloBarSettings"
 
-    height: content.implicitHeight
+    implicitHeight: content.implicitHeight
 
     function focusOnFirst() {
         tremoloBarTypeSection.focusOnFirst()

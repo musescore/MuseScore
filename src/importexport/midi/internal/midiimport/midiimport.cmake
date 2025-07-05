@@ -18,8 +18,6 @@ set (MIDIIMPORT_SRC
     ${CMAKE_CURRENT_LIST_DIR}/importmidi_inner.h
     ${CMAKE_CURRENT_LIST_DIR}/importmidi_instrument.cpp
     ${CMAKE_CURRENT_LIST_DIR}/importmidi_instrument.h
-    ${CMAKE_CURRENT_LIST_DIR}/importmidi_instrument_names.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/importmidi_instrument_names.h
     ${CMAKE_CURRENT_LIST_DIR}/importmidi_key.cpp
     ${CMAKE_CURRENT_LIST_DIR}/importmidi_key.h
     ${CMAKE_CURRENT_LIST_DIR}/importmidi_lrhand.cpp

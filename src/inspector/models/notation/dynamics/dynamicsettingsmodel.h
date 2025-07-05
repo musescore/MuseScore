@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_DYNAMICSETTINGSMODEL_H
-#define MU_INSPECTOR_DYNAMICSETTINGSMODEL_H
+#pragma once
 
 #include "models/inspectormodelwithvoiceandpositionoptions.h"
 
@@ -76,5 +75,3 @@ private:
     PropertyItem* m_frameCornerRadius = nullptr;
 };
 }
-
-#endif // MU_INSPECTOR_DYNAMICSETTINGSMODEL_H

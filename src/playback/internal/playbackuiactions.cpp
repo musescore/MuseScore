@@ -141,14 +141,14 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              IconCode::Code::PAN_SCORE,
              Checkable::Yes
              ),
-//    UiAction("countin",                                      // See #14807
-//             mu::context::UiCtxAny,
-//             mu::context::CTX_ANY,
-//             TranslatableString("action", "Enable count-in when playing"),
-//             TranslatableString("action", "Enable count-in when playing"),
-//             IconCode::Code::COUNT_IN,
-//             Checkable::Yes
-//             ),
+    UiAction("countin",
+             mu::context::UiCtxAny,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Enable count-in when playing"),
+             TranslatableString("action", "Enable count-in when playing"),
+             IconCode::Code::COUNT_IN,
+             Checkable::Yes
+             ),
 };
 
 const UiActionList PlaybackUiActions::m_loopBoundaryActions = {

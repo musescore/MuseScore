@@ -31,8 +31,9 @@
 #include "dom/staff.h"
 #include "dom/measure.h"
 
-#include "chordlayout.h"
 #include "beamtremololayout.h"
+#include "chordlayout.h"
+#include "stemlayout.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
@@ -91,7 +92,7 @@ void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
         }
 
         if (hasMirroredNote) {
-            x = item->chord()->stemPosX();
+            x = StemLayout::StemLayout::stemPosX(item->chord());
         }
 
         y = anchor1->y();
@@ -110,7 +111,7 @@ void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutC
     const StaffType* staffType = item->staffType();
 
     if (staffType && staffType->isTabStaff()) {
-        x = item->chord()->centerX();
+        x = ChordLayout::centerX(item->chord());
     }
 
     double staveOffset = item->staffOffsetY();
@@ -309,7 +310,7 @@ std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(Tremo
     const double sgn1 = c1->up() ? -1.0 : 1.0;
     const double sgn2 = c2->up() ? -1.0 : 1.0;
     const double stemTipDistance = (s1 && s2) ? (s2->pagePos().y() + stemLen2) - (s1->pagePos().y() + stemLen1)
-                                   : (c2->stemPos().y() + (sgn2 * stemLen2)) - (c1->stemPos().y() + (sgn1 * stemLen1));
+                                   : (StemLayout::stemPos(c2).y() + (sgn2 * stemLen2)) - (StemLayout::stemPos(c1).y() + (sgn1 * stemLen1));
 
     // same staff & same direction: extend one of the stems
     if (c1->staffMove() == c2->staffMove() && c1->up() == c2->up()) {

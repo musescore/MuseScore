@@ -162,15 +162,17 @@ private:
     muse::audio::secs_t playbackStartSecs() const;
     muse::audio::secs_t playbackEndSecs() const;
 
+    muse::audio::secs_t playbackDelay(const muse::secs_t countInDuration) const;
+
     notation::InstrumentTrackIdSet instrumentTrackIdSetForRangePlayback() const;
 
     void togglePlayRepeats();
     void togglePlayChordSymbols();
     void toggleAutomaticallyPan();
     void toggleMetronome();
+    void toggleCountIn();
     void toggleMidiInput();
     void setMidiUseWrittenPitch(bool useWrittenPitch);
-    void toggleCountIn();
     void toggleLoopPlayback();
     void toggleHearPlaybackWhenEditing();
 
@@ -194,8 +196,6 @@ private:
     void subscribeOnAudioParamsChanges();
     void setupSequenceTracks();
     void setupSequencePlayer();
-
-    void initMuteStates();
 
     void updateSoloMuteStates();
     void updateAuxMuteStates();

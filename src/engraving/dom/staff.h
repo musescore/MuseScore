@@ -216,10 +216,9 @@ public:
     Staff* primaryStaff() const;
     bool isPrimaryStaff() const;
 
-    Millimetre userDist() const { return m_userDist; }
-    void setUserDist(Millimetre val) { m_userDist = val; }
+    Spatium userDist() const { return m_userDist; }
+    void setUserDist(Spatium val) { m_userDist = val; }
 
-    void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
     void setLocalSpatium(double oldVal, double newVal, Fraction tick);
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;
@@ -301,7 +300,7 @@ private:
     HideMode m_hideWhenEmpty = HideMode::AUTO;      // hide empty staves
 
     Color m_color;
-    Millimetre m_userDist     { Millimetre(0.0) };           ///< user edited extra distance
+    Spatium m_userDist     { Spatium(0.0) };           ///< user edited extra distance
 
     StaffTypeList m_staffTypeList;
 

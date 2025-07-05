@@ -1194,7 +1194,9 @@ void Staff::staffTypeListChanged(const Fraction& tick)
 
 StaffType* Staff::setStaffType(const Fraction& tick, const StaffType& nst)
 {
-    return m_staffTypeList.setStaffType(tick, nst);
+    StaffType* stt = m_staffTypeList.setStaffType(tick, nst);
+    stt->setScore(score());
+    return stt;
 }
 
 //---------------------------------------------------------
@@ -1289,15 +1291,6 @@ void Staff::initFromStaffType(const StaffType* staffType)
 
     // use selected staff type
     setStaffType(Fraction(0, 1), *staffType);
-}
-
-//---------------------------------------------------------
-//   spatiumChanged
-//---------------------------------------------------------
-
-void Staff::spatiumChanged(double oldValue, double newValue)
-{
-    m_userDist = (m_userDist / oldValue) * newValue;
 }
 
 //---------------------------------------------------------
@@ -1602,7 +1595,7 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
         setBarLineTo(v.toInt());
         break;
     case Pid::STAFF_USERDIST:
-        setUserDist(v.value<Millimetre>());
+        setUserDist(v.value<Spatium>());
         break;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
@@ -1636,7 +1629,7 @@ PropertyValue Staff::propertyDefault(Pid id) const
     case Pid::STAFF_BARLINE_SPAN_TO:
         return 0;
     case Pid::STAFF_USERDIST:
-        return Millimetre(0.0);
+        return Spatium(0.0);
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();

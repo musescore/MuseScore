@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_UICOMPONENTS_DROPDOWNVIEW_H
-#define MUSE_UICOMPONENTS_DROPDOWNVIEW_H
+#pragma once
 
 #include "popupview.h"
 
@@ -50,5 +48,3 @@ private:
     int m_focusItemY = -1;
 };
 }
-
-#endif // MUSE_UICOMPONENTS_DROPDOWNVIEW_H

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27007</pageWidth>
@@ -54,6 +55,7 @@
       <tupletFrameWidth>0</tupletFrameWidth>
       <textLineFramePadding>0</textLineFramePadding>
       <textLineFrameWidth>0</textLineFrameWidth>
+      <textLinePosition>right</textLinePosition>
       <defaultAlign>left,baseline</defaultAlign>
       <defaultFramePadding>0</defaultFramePadding>
       <defaultFrameWidth>0</defaultFrameWidth>
@@ -102,6 +104,7 @@
       <translatorAlign>center,top</translatorAlign>
       <translatorFramePadding>0</translatorFramePadding>
       <translatorFrameWidth>0</translatorFrameWidth>
+      <translatorPosition>center</translatorPosition>
       <systemTextAlign>left,top</systemTextAlign>
       <systemTextFramePadding>0</systemTextFramePadding>
       <systemTextFrameWidth>0</systemTextFrameWidth>
@@ -124,9 +127,11 @@
       <glissandoAlign>center,baseline</glissandoAlign>
       <glissandoFramePadding>0</glissandoFramePadding>
       <glissandoFrameWidth>0</glissandoFrameWidth>
+      <glissandoPosition>center</glissandoPosition>
       <bendAlign>center,center</bendAlign>
       <bendFramePadding>0</bendFramePadding>
       <bendFrameWidth>0</bendFrameWidth>
+      <bendPosition>center</bendPosition>
       <headerFontSize>11</headerFontSize>
       <headerFramePadding>0</headerFramePadding>
       <headerFrameWidth>0</headerFrameWidth>
@@ -170,7 +175,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           </StaffType>
         </Staff>
@@ -192,11 +198,14 @@
         <topMargin>3</topMargin>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>frame</style>
           <text>îèéààéà</text>
           </Text>
         <Text>
+          <eid>F_F</eid>
           <style>frame</style>
           <offset x="55" y="0.5"/>
           <text>éééàè</text>
@@ -206,11 +215,14 @@
         <height>47.762</height>
         <topGap>10</topGap>
         <boxAutoSize>0</boxAutoSize>
+        <eid>G_G</eid>
         <Text>
+          <eid>H_H</eid>
           <style>frame</style>
           <text>êêàééééç*éô</text>
           </Text>
         <Text>
+          <eid>I_I</eid>
           <style>frame</style>
           <offset x="55" y="0.5"/>
           <text>àéùééé</text>

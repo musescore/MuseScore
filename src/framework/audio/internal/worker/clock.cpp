@@ -42,6 +42,14 @@ void Clock::forward(const msecs_t nextMsecs)
         return;
     }
 
+    if (m_countDown > nextMsecs) {
+        m_countDown -= nextMsecs;
+        return;
+    } else if (m_countDown != 0) {
+        m_countDown = 0;
+        m_countDownEnded.notify();
+    }
+
     msecs_t newTime = m_currentTime + nextMsecs;
 
     if (m_timeLoopStart < m_timeLoopEnd && newTime >= m_timeLoopEnd) {
@@ -80,12 +88,14 @@ void Clock::reset()
 {
     seek(0);
     resetTimeLoop();
+    m_countDown = 0;
 }
 
 void Clock::stop()
 {
     m_status.set(PlaybackStatus::Stopped);
     seek(0);
+    m_countDown = 0;
 }
 
 void Clock::pause()
@@ -135,6 +145,16 @@ void Clock::resetTimeLoop()
 {
     m_timeLoopStart = 0;
     m_timeLoopEnd = 0;
+}
+
+void Clock::setCountDown(const msecs_t duration)
+{
+    m_countDown = duration;
+}
+
+async::Notification Clock::countDownEnded() const
+{
+    return m_countDownEnded;
 }
 
 bool Clock::isRunning() const

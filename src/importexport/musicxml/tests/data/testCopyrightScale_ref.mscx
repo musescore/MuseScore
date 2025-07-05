@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>2.05</pageWidth>
@@ -27,8 +28,6 @@
       <measureNumberFontSize>10</measureNumberFontSize>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
-      <repeatRightFontSize>10</repeatRightFontSize>
       <glissandoFontSize>10</glissandoFontSize>
       <bendFontSize>10</bendFontSize>
       <headerFontSize>10</headerFontSize>
@@ -55,7 +54,8 @@ copyright copyright</metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Title title title title title title title title title title title title title title title title title title title title title title title</metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -120,7 +120,9 @@ copyright copyright</metaTag>
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <Text>
+          <eid>E_E</eid>
           <style>title</style>
           <size>2.3</size>
           <align>right,top</align>
@@ -128,22 +130,27 @@ copyright copyright</metaTag>
           </Text>
         </VBox>
       <Measure>
+        <eid>F_F</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>G_G</eid>
             </Clef>
           <TimeSig>
+            <eid>H_H</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
+            <eid>I_I</eid>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>J_J</eid>
             </BarLine>
           </voice>
         </Measure>

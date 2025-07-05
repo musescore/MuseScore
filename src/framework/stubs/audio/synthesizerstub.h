@@ -50,6 +50,10 @@ public:
     msecs_t playbackPosition() const override;
     void setPlaybackPosition(const msecs_t newPosition) override;
 
+    void prepareToPlay() override;
+    bool readyToPlay() const override;
+    async::Notification readyToPlayChanged() const override;
+
     void revokePlayingNotes() override;
     void flushSound() override;
 

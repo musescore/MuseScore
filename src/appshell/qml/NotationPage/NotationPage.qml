@@ -139,6 +139,7 @@ DockPage {
 
             separatorsVisible: false
             alignment: DockToolBarAlignment.Right
+            resizable: !floating
 
             contentBottomPadding: floating ? 8 : 2
             contentTopPadding: floating ? 8 : 0
@@ -160,7 +161,7 @@ DockPage {
         DockToolBar {
             id: extDockToolBar
 
-            objectName: "extensionsToolBar"
+            objectName: root.pageModel.extensionsToolBarName()
             title: qsTrc("appshell", "Extensions toolbar")
 
             separatorsVisible: false
@@ -182,34 +183,6 @@ DockPage {
 
                 navigationPanel.section: extDockToolBar.navigationSection
                 navigationPanel.order: 4
-
-                function updateVisible() {
-                    if (!extDockToolBar.inited) {
-                        return;
-                    }
-
-                    if (!root.visible) {
-                        return;
-                    }
-
-                    if (extToolBar.isEmpty) {
-                        extDockToolBar.close()
-                    } else {
-                        extDockToolBar.open()
-                    }
-                }
-
-                onIsEmptyChanged: extToolBar.updateVisible()
-
-                Connections {
-                    target: extDockToolBar
-                    function onInitedChanged() { extToolBar.updateVisible() }
-                }
-
-                Connections {
-                    target: root
-                    function onVisibleChanged() { extToolBar.updateVisible() }
-                }
             }
         },
 
@@ -251,6 +224,7 @@ DockPage {
             ]
 
             thickness: orientation === Qt.Horizontal ? 40 : 76
+            resizable: !floating
 
             navigationSection: root.noteInputKeyNavSec
 

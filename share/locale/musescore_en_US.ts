@@ -4942,7 +4942,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14458"/>
         <source>Frame:</source>
-        <translation>Border:</translation>
+        <translation>Frame:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12082"/>
@@ -4999,7 +4999,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14490"/>
         <source>Reset &apos;Frame&apos; value</source>
-        <translation>Reset &apos;Border&apos; value</translation>
+        <translation>Reset &apos;Frame&apos; value</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14518"/>
@@ -9080,7 +9080,7 @@ text x-height):</translation>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="145"/>
         <source>Se&amp;lection filter</source>
-        <translation>Se&amp;lection filter</translation>
+        <translation>S&amp;election filter</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="146"/>

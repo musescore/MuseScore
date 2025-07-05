@@ -489,6 +489,8 @@ void System::add(EngravingItem* el)
     case ElementType::PICK_SCRAPE_SEGMENT:
     case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GUITAR_BEND_HOLD_SEGMENT:
+    case ElementType::HAMMER_ON_PULL_OFF_SEGMENT:
+    case ElementType::TAPPING_HALF_SLUR_SEGMENT:
     {
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG
@@ -913,10 +915,10 @@ double System::spacerDistance(bool up) const
             Spacer* sp = up ? m->vspacerUp(staff) : m->vspacerDown(staff);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = sp->gap();
+                    dist = sp->absoluteGap();
                     break;
                 } else {
-                    dist = std::max(dist, sp->gap().val());
+                    dist = std::max(dist, sp->absoluteGap());
                 }
             }
         }
@@ -1003,7 +1005,7 @@ double System::firstNoteRestSegmentX(bool leading) const
             break;
         }
     }
-    LOGD("firstNoteRestSegmentX: did not find segment");
+
     return margin;
 }
 

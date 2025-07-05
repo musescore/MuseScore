@@ -213,6 +213,7 @@
     <chordSymbolAFrameRound>0</chordSymbolAFrameRound>
     <chordSymbolAFrameFgColor r="0" g="0" b="0" a="255"/>
     <chordSymbolAFrameBgColor r="255" g="255" b="255" a="0"/>
+    <chordSymbolAAlign>left,baseline</chordSymbolAAlign>
     <chordSymbolBFontFace>FreeSerif</chordSymbolBFontFace>
     <chordSymbolBFontSize>12</chordSymbolBFontSize>
     <chordSymbolBFontSpatiumDependent>1</chordSymbolBFontSpatiumDependent>
@@ -224,6 +225,7 @@
     <chordSymbolBFrameRound>0</chordSymbolBFrameRound>
     <chordSymbolBFrameFgColor r="0" g="0" b="0" a="255"/>
     <chordSymbolBFrameBgColor r="255" g="255" b="255" a="0"/>
+    <chordSymbolBAlign>left,baseline</chordSymbolBAlign>
     <romanNumeralFontFace>Campania</romanNumeralFontFace>
     <romanNumeralFontSize>12</romanNumeralFontSize>
     <romanNumeralFontSpatiumDependent>1</romanNumeralFontSpatiumDependent>

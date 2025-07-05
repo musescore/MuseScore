@@ -135,3 +135,8 @@ double FontMetrics::ascent(const Font& f)
 {
     return FontMetrics(f).ascent();
 }
+
+double FontMetrics::capHeight(const Font& f)
+{
+    return FontMetrics(f).capHeight();
+}

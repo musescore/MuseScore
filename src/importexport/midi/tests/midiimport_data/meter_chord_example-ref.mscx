@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.60">
+  <Score>
+    <eid>B_B</eid>
+    <Division>480</Division>
+    <Style>
+      <spatium>1.74978</spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer"></metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle"></metaTag>
+    <Part id="1">
+      <Staff>
+        <eid>C_C</eid>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <eid>D_D</eid>
+        <voice>
+          <TimeSig>
+            <eid>E_E</eid>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <eid>F_F</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Beam>
+            <eid>G_G</eid>
+            <l1>40</l1>
+            <l2>40</l2>
+            </Beam>
+          <Chord>
+            <eid>H_H</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>I_I</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>J_J</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/16</fractions>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>K_K</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>L_L</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/16</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              <velocity>80</velocity>
+              </Note>
+            <Note>
+              <eid>M_M</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>N_N</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/16</fractions>
+                    <notes>-1</notes>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <velocity>80</velocity>
+              </Note>
+            <Note>
+              <eid>O_O</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>P_P</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/16</fractions>
+                    <notes>-1</notes>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              </Note>
+            <Note>
+              <eid>Q_Q</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>R_R</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/16</fractions>
+                    <notes>-1</notes>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>86</pitch>
+              <tpc>16</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Beam>
+            <eid>S_S</eid>
+            <l1>32</l1>
+            <l2>30</l2>
+            </Beam>
+          <Chord>
+            <eid>T_T</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>U_U</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/16</fractions>
+                    <notes>1</notes>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              <velocity>80</velocity>
+              </Note>
+            <Note>
+              <eid>V_V</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/16</fractions>
+                    <notes>1</notes>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              </Note>
+            <Note>
+              <eid>W_W</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>X_X</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/16</fractions>
+                    <notes>-2</notes>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/16</fractions>
+                    <notes>1</notes>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>86</pitch>
+              <tpc>16</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>Y_Y</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>Z_Z</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/16</fractions>
+                    <notes>2</notes>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>86</pitch>
+              <tpc>16</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>a_a</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <eid>b_b</eid>
+            <durationType>16th</durationType>
+            </Rest>
+          <Chord>
+            <eid>c_c</eid>
+            <dots>1</dots>
+            <durationType>eighth</durationType>
+            <Note>
+              <eid>d_d</eid>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              </Note>
+            <Note>
+              <eid>e_e</eid>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              <velocity>80</velocity>
+              </Note>
+            <Note>
+              <eid>f_f</eid>
+              <pitch>77</pitch>
+              <tpc>13</tpc>
+              <velocity>80</velocity>
+              </Note>
+            <Note>
+              <eid>g_g</eid>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              <velocity>80</velocity>
+              </Note>
+            <Note>
+              <eid>h_h</eid>
+              <Spanner type="Tie">
+                <Tie>
+                  <eid>i_i</eid>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>3/16</fractions>
+                    <notes>-4</notes>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>j_j</eid>
+            <durationType>16th</durationType>
+            <Note>
+              <eid>k_k</eid>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-3/16</fractions>
+                    <notes>4</notes>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              <velocity>80</velocity>
+              </Note>
+            </Chord>
+          <Rest>
+            <eid>l_l</eid>
+            <durationType>16th</durationType>
+            </Rest>
+          <Rest>
+            <eid>m_m</eid>
+            <durationType>eighth</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

@@ -72,7 +72,7 @@ const UiActionList ProjectUiActions::m_actions = {
     UiAction("file-save-selection",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Save se&lection…"),
+             TranslatableString("action", "Save s&election…"),
              TranslatableString("action", "Save selection…")
              ),
     UiAction("file-save-to-cloud",
@@ -99,7 +99,7 @@ const UiActionList ProjectUiActions::m_actions = {
     UiAction("file-export",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "&Export…"),
+             TranslatableString("action", "E&xport…"),
              TranslatableString("action", "Export…"),
              IconCode::Code::SHARE_FILE
              ),
@@ -126,8 +126,8 @@ const UiActionList ProjectUiActions::m_actions = {
     UiAction("clear-recent",
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
-             TranslatableString("action", "&Clear recent files"),
-             TranslatableString("action", "Clear recent files")
+             TranslatableString("action", "&Clear list of recent files"),
+             TranslatableString("action", "Clear list of recent files")
              )
 };
 

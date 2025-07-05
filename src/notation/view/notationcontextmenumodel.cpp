@@ -28,6 +28,7 @@
 #include "view/widgets/editstyle.h"
 
 #include "engraving/dom/gradualtempochange.h"
+#include "engraving/dom/fret.h"
 
 using namespace mu::notation;
 using namespace muse;
@@ -58,6 +59,8 @@ MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elemen
         return makeInstrumentNameItems();
     case ElementType::HARMONY:
         return makeHarmonyItems();
+    case ElementType::FRET_DIAGRAM:
+        return makeFretboardDiagramItems();
     case ElementType::INSTRUMENT_CHANGE:
         return makeChangeInstrumentItems();
     case ElementType::VBOX:
@@ -174,9 +177,70 @@ MenuItemList NotationContextMenuModel::makeInstrumentNameItems()
 
 MenuItemList NotationContextMenuModel::makeHarmonyItems()
 {
+    const EngravingItem* element = currentElement();
+    if (element && engraving::toHarmony(element)->isInFretBox()) {
+        return makeElementInFretBoxItems();
+    }
+
     MenuItemList items = makeElementItems();
     items << makeSeparator();
+
+    if (element) {
+        engraving::EngravingObject* parent = element->isHarmony() ? element->explicitParent() : nullptr;
+        bool hasLinkedFretboardDiagram = parent && parent->isFretDiagram();
+        if (!hasLinkedFretboardDiagram) {
+            items << makeMenuItem("add-fretboard-diagram");
+        }
+    }
+
     items << makeMenuItem("realize-chord-symbols");
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeFretboardDiagramItems()
+{
+    const EngravingItem* element = currentElement();
+    if (element && engraving::toFretDiagram(element)->isInFretBox()) {
+        return makeElementInFretBoxItems();
+    }
+
+    MenuItemList items = makeElementItems();
+
+    const engraving::FretDiagram* fretDiagram = engraving::toFretDiagram(element);
+    if (!fretDiagram->harmony()) {
+        items << makeSeparator();
+        items << makeMenuItem("chord-text", TranslatableString("notation", "Add c&hord symbol"));
+    }
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeElementInFretBoxItems()
+{
+    MenuItemList items {
+        makeMenuItem("notation-copy")
+    };
+
+    MenuItem* hideItem = makeMenuItem("notation-delete");
+
+    ui::UiAction action = hideItem->action();
+    action.iconCode = ui::IconCode::Code::NONE;
+    action.title = TranslatableString("notation", "Hide");
+    hideItem->setAction(action);
+
+    items << hideItem
+          << makeSeparator();
+
+    MenuItemList selectItems = makeSelectItems();
+
+    if (!selectItems.isEmpty()) {
+        items << makeMenu(TranslatableString("notation", "Select"), selectItems)
+              << makeSeparator();
+    }
+
+    const EngravingItem* element = currentElement();
+    items << makeEditStyle(element);
 
     return items;
 }
@@ -208,32 +272,15 @@ MenuItemList NotationContextMenuModel::makeElementItems()
         items << makeMenu(TranslatableString("notation", "Select"), selectItems);
     }
 
-    const EngravingItem* hitElement = hitElementContext().element;
+    const EngravingItem* element = currentElement();
 
-    if (hitElement && hitElement->isEditable()) {
+    if (element && element->isEditable()) {
         items << makeSeparator();
         items << makeMenuItem("edit-element");
     }
 
-    items << makeSeparator();
-
-    MenuItem* item = new MenuItem(uiActionsRegister()->action("edit-style"), this);
-    item->setState(uiActionsRegister()->actionState(item->action().code));
-
-    if (hitElement) {
-        QString pageCode = EditStyle::pageCodeForElement(hitElement);
-
-        if (!pageCode.isEmpty()) {
-            QString subPageCode = EditStyle::subPageCodeForElement(hitElement);
-            if (!subPageCode.isEmpty()) {
-                item->setArgs(ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
-            } else {
-                item->setArgs(ActionData::make_arg1<QString>(pageCode));
-            }
-        }
-    }
-
-    items << item;
+    items << makeSeparator()
+          << makeEditStyle(element);
 
     return items;
 }
@@ -305,14 +352,14 @@ MenuItemList NotationContextMenuModel::makeHairpinItems()
 {
     MenuItemList items = makeElementItems();
 
-    const EngravingItem* hitElement = hitElementContext().element;
-    if (!hitElement || !hitElement->isHairpinSegment() || !isSingleSelection()) {
+    const EngravingItem* element = currentElement();
+    if (!element || !element->isHairpinSegment() || !isSingleSelection()) {
         return items;
     }
 
     items << makeSeparator();
 
-    const engraving::Hairpin* h = toHairpinSegment(hitElement)->hairpin();
+    const engraving::Hairpin* h = toHairpinSegment(element)->hairpin();
     ui::UiActionState snapPrevState = { true, h->snapToItemBefore() };
     MenuItem* snapPrev = makeMenuItem("toggle-snap-to-previous");
     snapPrev->setState(snapPrevState);
@@ -330,20 +377,41 @@ MenuItemList NotationContextMenuModel::makeGradualTempoChangeItems()
 {
     MenuItemList items = makeElementItems();
 
-    const EngravingItem* hitElement = hitElementContext().element;
-    if (!hitElement || !hitElement->isGradualTempoChangeSegment() || !isSingleSelection()) {
+    const EngravingItem* element = currentElement();
+    if (!element || !element->isGradualTempoChangeSegment() || !isSingleSelection()) {
         return items;
     }
 
     items << makeSeparator();
 
-    const engraving::GradualTempoChange* gtc = toGradualTempoChangeSegment(hitElement)->tempoChange();
+    const engraving::GradualTempoChange* gtc = toGradualTempoChangeSegment(element)->tempoChange();
     ui::UiActionState snapNextState = { true, gtc->snapToItemAfter() };
     MenuItem* snapNext = makeMenuItem("toggle-snap-to-next");
     snapNext->setState(snapNextState);
     items << snapNext;
 
     return items;
+}
+
+MenuItem* NotationContextMenuModel::makeEditStyle(const EngravingItem* element)
+{
+    MenuItem* item = new MenuItem(uiActionsRegister()->action("edit-style"), this);
+    item->setState(uiActionsRegister()->actionState(item->action().code));
+
+    if (element) {
+        QString pageCode = EditStyle::pageCodeForElement(element);
+
+        if (!pageCode.isEmpty()) {
+            QString subPageCode = EditStyle::subPageCodeForElement(element);
+            if (!subPageCode.isEmpty()) {
+                item->setArgs(ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
+            } else {
+                item->setArgs(ActionData::make_arg1<QString>(pageCode));
+            }
+        }
+    }
+
+    return item;
 }
 
 bool NotationContextMenuModel::isSingleSelection() const
@@ -354,7 +422,7 @@ bool NotationContextMenuModel::isSingleSelection() const
 
 bool NotationContextMenuModel::canSelectSimilar() const
 {
-    return hitElementContext().element != nullptr;
+    return currentElement() != nullptr;
 }
 
 bool NotationContextMenuModel::canSelectSimilarInRange() const
@@ -383,6 +451,17 @@ INotationSelectionPtr NotationContextMenuModel::selection() const
 {
     INotationInteractionPtr interaction = this->interaction();
     return interaction ? interaction->selection() : nullptr;
+}
+
+const EngravingItem* NotationContextMenuModel::currentElement() const
+{
+    const EngravingItem* element = hitElementContext().element;
+    if (element) {
+        return element;
+    }
+
+    auto selection = this->selection();
+    return selection && selection->element() ? selection->element() : nullptr;
 }
 
 const INotationInteraction::HitElementContext& NotationContextMenuModel::hitElementContext() const

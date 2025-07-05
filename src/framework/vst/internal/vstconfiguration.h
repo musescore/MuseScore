@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_VST_VSTCONFIGURATION_H
-#define MUSE_VST_VSTCONFIGURATION_H
+#pragma once
 
 #include "ivstconfiguration.h"
 
@@ -43,5 +41,3 @@ private:
     async::Channel<io::paths_t> m_userVstDirsChanged;
 };
 }
-
-#endif // MUSE_VST_VSTCONFIGURATION_H

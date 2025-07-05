@@ -96,20 +96,6 @@ void MasterScore::splitMeasure(const Fraction& tick)
         }
     }
 
-    // Make sure ties to the beginning of the split measure are restored.
-    std::vector<Tie*> ties;
-    for (size_t track = 0; track < ntracks(); track++) {
-        Chord* chord = measure->findChord(stick, static_cast<int>(track));
-        if (chord) {
-            for (Note* note : chord->notes()) {
-                Tie* tie = note->tieBack();
-                if (tie) {
-                    ties.push_back(tie->clone());
-                }
-            }
-        }
-    }
-
     MeasureBase* nm = measure->next();
 
     // create empty measures:
@@ -180,12 +166,6 @@ void MasterScore::splitMeasure(const Fraction& tick)
     }
 
     range.write(this, m1->tick());
-
-    // Restore ties to the beginning of the split measure.
-    for (auto tie : ties) {
-        tie->setEndNote(searchTieNote(tie->startNote()));
-        undoAddElement(tie);
-    }
 
     for (auto i : sl) {
         Spanner* s      = std::get<0>(i);

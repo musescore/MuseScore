@@ -21,14 +21,14 @@
  */
 #include "baseapplication.h"
 
+#include "types/version.h"
+
+#include "muse_framework_config.h"
+
 #ifndef NO_QT_SUPPORT
 #include <QApplication>
 #include <QProcess>
 #endif
-
-#include "types/version.h"
-
-#include "muse_framework_config.h"
 
 #include "log.h"
 
@@ -156,7 +156,7 @@ Qt::KeyboardModifiers BaseApplication::keyboardModifiers() const
 
 void BaseApplication::restart()
 {
-#ifndef NO_QT_SUPPORT
+#ifdef QT_QPROCESS_SUPPORTED
     QString program = qApp->arguments()[0];
 
     // NOTE: remove the first argument - the program name

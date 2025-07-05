@@ -40,6 +40,7 @@ class Spanner;
 class ScoreRange;
 class ChordRest;
 class Score;
+class Tie;
 
 //---------------------------------------------------------
 //   TrackList
@@ -113,6 +114,7 @@ private:
     friend class TrackList;
 
     std::list<TrackList*> m_tracks;
+    std::vector<Tie*> m_startTies;
     Segment* m_first = nullptr;
     Segment* m_last = nullptr;
 };

@@ -103,6 +103,10 @@ if (OS_IS_LIN)
         )
 endif()
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Qml Qt::Widgets)
+endif()
+
 setup_module()
 
 target_no_warning(${MODULE} -Wno-deprecated-declarations)

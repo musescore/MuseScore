@@ -58,6 +58,7 @@ void DiagnosticAccessibleModel::init()
 #endif
 }
 
+#ifdef MUSE_MODULE_ACCESSIBILITY
 static void debug_dumpItem(QAccessibleInterface* item, QTextStream& stream, QString& level)
 {
     QAccessibleInterface* prn = item->parent();
@@ -87,7 +88,6 @@ static void debug_dumpItem(QAccessibleInterface* item, QTextStream& stream, QStr
     level.chop(2);
 }
 
-#ifdef MUSE_MODULE_ACCESSIBILITY
 static void debug_dumpTree(QAccessibleInterface* item)
 {
     QString str;

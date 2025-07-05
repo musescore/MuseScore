@@ -54,6 +54,9 @@ void DockPageView::init()
     TRACEFUNC;
 
     for (DockBase* dock : allDocks()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+        dock->setParentItem(this);
+#endif
         dock->init();
 
         connect(dock, &DockBase::floatingChanged, [this](){
@@ -177,17 +180,29 @@ DockingHolderView* DockPageView::holder(DockType type, Location location) const
     return nullptr;
 }
 
-QList<DockPanelView*> DockPageView::possiblePanelsForTab(const DockPanelView* tab) const
+QList<DockPanelView*> DockPageView::findPanelsForDropping(const DockPanelView* panel) const
 {
     QList<DockPanelView*> result;
 
-    for (DockPanelView* panel : panels()) {
-        if (panel->isTabAllowed(tab)) {
-            result << panel;
+    for (DockPanelView* destinationPanel : panels()) {
+        if (destinationPanel->isTabAllowed(panel)) {
+            result << destinationPanel;
         }
     }
 
     return result;
+}
+
+DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
+{
+    for (DockPanelView* destinationPanel: panels()) {
+        if (destinationPanel->isTabAllowed(tab)
+            && destinationPanel->location() == tab->location()) {
+            return destinationPanel;
+        }
+    }
+
+    return nullptr;
 }
 
 bool DockPageView::isDockOpenAndCurrentInFrame(const QString& dockName) const
@@ -239,12 +254,6 @@ void DockPageView::setDockOpen(const QString& dockName, bool open)
     }
 }
 
-DockPanelView* DockPageView::findPanelForTab(const DockPanelView* tab) const
-{
-    QList<DockPanelView*> panels = possiblePanelsForTab(tab);
-    return !panels.isEmpty() ? panels.first() : nullptr;
-}
-
 void DockPageView::reorderSections()
 {
     //! NOTE: In some cases, such as setting visible true,
@@ -292,6 +301,10 @@ void DockPageView::reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks
 {
     std::sort(sectionDocks.begin(), sectionDocks.end(), [](DockBase* dock1, DockBase* dock2) {
         if (!dock1->navigationSection() || !dock2->navigationSection()) {
+            return false;
+        }
+
+        if (dock1 == dock2) {
             return false;
         }
 
@@ -425,6 +438,11 @@ void DockPageView::setDefaultNavigationControl(muse::ui::NavigationControl* cont
 {
     muse::ui::INavigationControl* _control = dynamic_cast<muse::ui::INavigationControl*>(control);
     navigationController()->setDefaultNavigationControl(_control);
+}
+
+void DockPageView::forceLayout()
+{
+    emit layoutRequested();
 }
 
 QVariant DockPageView::tours() const

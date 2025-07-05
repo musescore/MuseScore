@@ -286,9 +286,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         Interval interval = staff()->transpose(tick());
         if (!style().styleB(Sid::concertPitch) && !interval.isZero()) {
             interval.flip();
-            int rootTpc = transposeTpc(harmony->rootTpc(), interval, true);
-            int baseTpc = transposeTpc(harmony->bassTpc(), interval, true);
-            score()->undoTransposeHarmony(harmony, rootTpc, baseTpc);
+            score()->undoTransposeHarmony(harmony, interval);
         }
         // render
         harmony->render();
@@ -936,6 +934,7 @@ EngravingItem* ChordRest::nextElement()
     switch (e->type()) {
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     case ElementType::LYRICS: {
         EngravingItem* next = nextArticulationOrLyric(e);
         if (next) {
@@ -971,6 +970,7 @@ EngravingItem* ChordRest::prevElement()
     switch (e->type()) {
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
+    case ElementType::TAPPING:
     case ElementType::LYRICS: {
         EngravingItem* prev = prevArticulationOrLyric(e);
         if (prev) {

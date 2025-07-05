@@ -1119,7 +1119,7 @@ bool MeiImporter::readPgHead(pugi::xml_node pgHeadNode)
     }
 
     if (vBox) {
-        m_score->measures()->add(vBox);
+        m_score->measures()->append(vBox);
     }
 
     return true;
@@ -1233,16 +1233,30 @@ bool MeiImporter::readStaffDefs(pugi::xml_node parentNode)
         }
         //m_clefs[meiStaffDef.GetN()] = staff->defaultClefType();
 
+        // try to import MEI from other applications
+        pugi::xml_node meterSigNode = staffDefXpathNode.node().select_node(".//meterSig").node();
+        if (meterSigNode) {
+            meiStaffDef.SetMeterCount(meiStaffDef.AttMeterSigDefaultLog::StrToMetercountPair(meterSigNode.attribute("count").value()));
+            meiStaffDef.SetMeterUnit(meterSigNode.attribute("unit").as_int());
+            meiStaffDef.SetMeterSym(meiStaffDef.AttMeterSigDefaultLog::StrToMetersign(meterSigNode.attribute("sym").value()));
+        }
         if (meiStaffDef.HasMeterSym() || meiStaffDef.HasMeterCount()) {
             m_timeSigs[staffIdx] = Convert::meterFromMEI(meiStaffDef, warning);
             if (warning) {
                 this->addLog("meter signature", staffDefXpathNode.node());
             }
         }
+
         if (meiStaffDef.HasKeysig()) {
             m_keySigs[staffIdx] = Convert::keyFromMEI(meiStaffDef.GetKeysig(), warning);
             if (warning) {
                 this->addLog("key signature", staffDefXpathNode.node());
+            }
+        } else if (pugi::xml_node keySigNode = staffDefXpathNode.node().select_node(".//keySig").node()) {
+            m_keySigs[staffIdx] = Convert::keyFromMEI(
+                meiStaffDef.AttKeySigDefaultLog::StrToKeysignature(keySigNode.attribute("sig").value()), warning);
+            if (warning) {
+                this->addLog("key signature", keySigNode);
             }
         }
     }
@@ -1269,7 +1283,13 @@ bool MeiImporter::readStaffGrps(pugi::xml_node parentNode, int& staffSpan, int c
             Staff* staff = m_score->staff(idx);
             libmei::StaffGrp meiStaffGrp;
             meiStaffGrp.Read(child.node());
-            Convert::BracketStruct bracketSt = Convert::bracketFromMEI(meiStaffGrp);
+            Convert::BracketStruct bracketSt = Convert::staffGrpFromMEI(meiStaffGrp);
+            if (!meiStaffGrp.HasSymbol()) {
+                bracketSt.bracketType = Convert::symbolFromMEI(
+                    meiStaffGrp.AttStaffGroupingSym::StrToStaffGroupingSymSymbol(
+                        child.node().child("grpSym").attribute("symbol").value()));
+            }
+
             staff->setBracketType(column, bracketSt.bracketType);
 
             int childStaffSpan = 0;
@@ -1444,7 +1464,7 @@ bool MeiImporter::readMeasure(pugi::xml_node measureNode)
         measure->setRepeatCount(measureSt.repeatCount);
     }
 
-    m_score->measures()->add(measure);
+    m_score->measures()->append(measure);
     m_ticks += measure->ticks();
 
     m_lastMeasure = measure;
@@ -1993,6 +2013,10 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     int tpc1 = mu::engraving::transposeTpc(pitchSt.tpc2, interval, true);
     note->setPitch(pitchSt.pitch, tpc1, pitchSt.tpc2);
 
+    if (meiNote.HasVel()) {
+        note->setUserVelocity(meiNote.GetVel());
+    }
+
     Accidental* accid = Factory::createAccidental(note);
     Convert::colorFromMEI(accid, meiAccid);
     this->readXmlId(accid, meiAccid.m_xmlId);
@@ -2209,6 +2233,7 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
 
     lyrics->setXmlText(syllable);
     lyrics->setNo(no);
+    lyrics->initTextStyleType(lyrics->isEven() ? TextStyleType::LYRICS_EVEN : TextStyleType::LYRICS_ODD, /*preserveDifferent*/ true);
     lyrics->setTrack(chord->track());
     chord->add(lyrics);
 
@@ -2343,7 +2368,7 @@ bool MeiImporter::readBreath(pugi::xml_node breathNode, Measure* measure)
 }
 
 /**
- * Read a caesura (
+ * Read a caesura
  */
 
 bool MeiImporter::readCaesura(pugi::xml_node caesuraNode, Measure* measure)
@@ -3196,7 +3221,7 @@ bool MeiImporter::buildTextFrame()
 
     if (vBox) {
         vBox->setTick(Fraction(0, 1));
-        m_score->measures()->add(vBox);
+        m_score->measures()->append(vBox);
     }
 
     return true;

@@ -57,7 +57,10 @@ else()
     )
 endif()
 
+qt_wrap_ui(GENERATED_UI_HEADERS ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.ui)
+
 set(MODULE_SRC
+    ${GENERATED_UI_HEADERS}
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiengine.h
@@ -73,6 +76,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iuicontextresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/inavigation.h
     ${CMAKE_CURRENT_LIST_DIR}/inavigationcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/idragcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/graphicsapiprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphicsapiprovider.h
 
@@ -102,6 +106,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/navigationuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiarrangement.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiarrangement.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dragcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dragcontroller.h
     ${PLATFORM_THEME_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.cpp
@@ -141,11 +147,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetutils.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmldataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmldataformatter.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/qmldrag.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/qmldrag.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/errordetailsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/errordetailsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/progressdialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/progressdialogmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/widgetdialogadapter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/widgetdialogadapter.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h
@@ -153,14 +163,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dev/testdialog.h
     )
 
+if (QT_SUPPORT)
+    list(APPEND MODULE_LINK Qt::Quick Qt::Widgets)
+
+    if (OS_IS_LIN)
+        list(APPEND MODULE_LINK Qt::DBus)
+    endif()
+endif()
+
 if (OS_IS_MAC)
     find_library(AppKit NAMES AppKit)
     set(MODULE_LINK ${MODULE_LINK} ${AppKit})
 endif()
-
-set(MODULE_LINK ${MODULE_LINK}
-    muse::tours
-)
 
 setup_module()
 

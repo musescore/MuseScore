@@ -1201,7 +1201,7 @@ void SvgPaintEngine::updateState(const QPaintEngineState& s)
     // Translations, SVG transform="translate()", are handled separately from
     // other transformations such as rotation. Qt translates everything, but
     // other transformations do occur, and must be handled here.
-    QTransform t = s.transform();
+    QTransform t = s.painter()->transform();
 
     // Tablature Note Text:
     // m11 and m22 have floating point flotsam, for example: 1.000000629

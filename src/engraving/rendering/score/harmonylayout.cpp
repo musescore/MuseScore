@@ -19,200 +19,157 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "harmonylayout.h"
-
-#include <map>
-#include <vector>
-
-#include "realfn.h"
-#include "containers.h"
+#include "tlayout.h"
 
 #include "dom/fret.h"
 #include "dom/harmony.h"
-#include "dom/measurebase.h"
-#include "dom/segment.h"
-#include "dom/system.h"
-
-#include "tlayout.h"
-#include "autoplace.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
 
-void HarmonyLayout::autoplaceHarmonies(const std::vector<Segment*>& sl)
+void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata,
+                                  const LayoutContext& ctx)
 {
-    for (const Segment* s : sl) {
-        for (EngravingItem* e : s->annotations()) {
-            if (e->isHarmony()) {
-                Autoplace::autoplaceSegmentElement(e, e->mutldata());
-            }
-        }
+    if (!item->explicitParent()) {
+        ldata->setPos(0.0, 0.0);
+        const_cast<Harmony*>(item)->setOffset(0.0, 0.0);
     }
-}
 
-void HarmonyLayout::alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const double maxShiftAbove,
-                                   const double maxShiftBelow)
-{
-    // Help class.
-    // Contains harmonies/fretboard per segment.
-    class HarmonyList : public std::vector<EngravingItem*>
+    if (ldata->layoutInvalid) {
+        item->createBlocks(ldata);
+    }
+
+    if (ldata->blocks.empty()) {
+        ldata->blocks.push_back(TextBlock());
+    }
+
+    auto calculateBoundingRect = [](const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx) -> PointF
     {
-        OBJECT_ALLOCATOR(engraving, HarmonyList)
+        const double ypos = (item->placeBelow() && item->staff()) ? item->staff()->staffHeight(item->tick()) : 0.0;
+        const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
+                                ? toFretDiagram(item->explicitParent())
+                                : nullptr;
 
-        std::map<const Segment*, std::vector<EngravingItem*> > elements;
-        std::vector<EngravingItem*> modified;
+        const double cw = item->symWidth(SymId::noteheadBlack);
 
-        EngravingItem* getReferenceElement(const Segment* s, bool above, bool visible) const
-        {
-            // Returns the reference element for aligning.
-            // When a segments contains multiple harmonies/fretboard, the lowest placed
-            // element (for placement above, otherwise the highest placed element) is
-            // used for alignment.
-            EngravingItem* element { nullptr };
-            for (EngravingItem* e : elements.at(s)) {
-                // Only chord symbols have styled offset, fretboards don't.
-                if (!e->autoplace() || (e->isHarmony() && !e->isStyled(Pid::OFFSET)) || (visible && !e->visible())) {
-                    continue;
-                }
-                if (!element) {
-                    element = e;
-                } else {
-                    if ((e->placeAbove() && above && (element->y() < e->y()))
-                        || (e->placeBelow() && !above && (element->y() > e->y()))) {
-                        element = e;
-                    }
+        double newPosX = 0.0;
+        double newPosY = 0.0;
+
+        if (item->textList().empty()) {
+            TLayout::layoutBaseTextBase1(item, ldata);
+
+            if (fd) {
+                newPosY = ldata->pos().y();
+            } else {
+                newPosY = ypos - ((item->align() == AlignV::BOTTOM) ? -ldata->bbox().height() : 0.0);
+            }
+        } else {
+            RectF bb;
+            RectF hAlignBox;
+            for (TextSegment* ts : item->textList()) {
+                RectF tsBbox = ts->tightBoundingRect().translated(ts->x(), ts->y());
+                bb.unite(tsBbox);
+
+                if (ts->align()) {
+                    hAlignBox.unite(tsBbox);
                 }
             }
-            return element;
-        }
 
-    public:
-        HarmonyList()
-        {
-            elements.clear();
-            modified.clear();
-        }
-
-        void append(const Segment* s, EngravingItem* e)
-        {
-            elements[s].push_back(e);
-        }
-
-        double getReferenceHeight(bool above) const
-        {
-            // The reference height is the height of
-            //    the lowest element if placed above
-            // or
-            //    the highest element if placed below.
-            bool first { true };
-            double ref { 0.0 };
-            for (auto s : muse::keys(elements)) {
-                EngravingItem* e { getReferenceElement(s, above, true) };
-                if (!e) {
-                    continue;
+            double xx = 0.0;
+            if (fd) {
+                switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
+                case AlignH::LEFT:
+                    xx = -hAlignBox.left();
+                    break;
+                case AlignH::HCENTER:
+                    xx = -(hAlignBox.center().x());
+                    break;
+                case AlignH::RIGHT:
+                    xx = -hAlignBox.right();
+                    break;
                 }
-                if (e->placeAbove() && above) {
-                    ref = first ? e->y() : std::min(ref, e->y());
-                    first = false;
-                } else if (e->placeBelow() && !above) {
-                    ref = first ? e->y() : std::max(ref, e->y());
-                    first = false;
+            } else {
+                switch (item->position()) {
+                case AlignH::LEFT:
+                    xx = -hAlignBox.left();
+                    break;
+                case AlignH::HCENTER:
+                    xx = -(hAlignBox.center().x());
+                    break;
+                case AlignH::RIGHT:
+                    xx = -hAlignBox.right();
+                    break;
                 }
             }
-            return ref;
-        }
 
-        bool align(bool above, double reference, double maxShift)
-        {
-            // Align the elements. If a segment contains multiple elements,
-            // only the reference elements is used in the algorithm. All other
-            // elements will remain their original placement with respect to
-            // the reference element.
-            bool moved { false };
-            if (muse::RealIsNull(reference)) {
-                return moved;
+            double yy = -bb.y();      // Align::TOP
+            if (item->align() == AlignV::VCENTER) {
+                yy = -bb.y() / 2.0;
+            } else if (item->align() == AlignV::BASELINE) {
+                yy = item->baseLine();
+            } else if (item->align() == AlignV::BOTTOM) {
+                yy = -bb.height() - bb.y();
             }
 
-            for (auto s : muse::keys(elements)) {
-                std::list<EngravingItem*> handled;
-                EngravingItem* be = getReferenceElement(s, above, false);
-                if (!be) {
-                    // If there are only invisible elements, we have to use an invisible
-                    // element for alignment reference.
-                    be = getReferenceElement(s, above, true);
-                }
-                if (be && ((above && (be->y() < (reference + maxShift))) || ((!above && (be->y() > (reference - maxShift)))))) {
-                    double shift = be->ldata()->pos().y();
-                    be->mutldata()->setPosY(reference - be->ryoffset());
-                    shift -= be->ldata()->pos().y();
-                    for (EngravingItem* e : elements[s]) {
-                        if ((above && e->placeBelow()) || (!above && e->placeAbove())) {
-                            continue;
-                        }
-                        modified.push_back(e);
-                        handled.push_back(e);
-                        moved = true;
-                        if (e != be) {
-                            e->mutldata()->moveY(-shift);
-                        }
-                    }
-                    for (auto e : handled) {
-                        muse::remove(elements[s], e);
-                    }
-                }
+            if (fd) {
+                newPosY = ypos - yy - ctx.conf().styleMM(Sid::harmonyFretDist);
+            } else {
+                newPosY = ypos;
             }
-            return moved;
+
+            for (TextSegment* ts : item->textList()) {
+                ts->setOffset(PointF(xx, yy));
+            }
+
+            ldata->polychordDividerOffset = yy;
+
+            ldata->setBbox(bb.translated(xx, yy));
+            ldata->harmonyHeight = ldata->bbox().height();
         }
 
-        void addToSkyline(const System* system)
-        {
-            for (EngravingItem* e : modified) {
-                const Segment* s = toSegment(e->explicitParent());
-                const MeasureBase* m = toMeasureBase(s->explicitParent());
-                system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));
-                if (e->isFretDiagram()) {
-                    FretDiagram* fd = toFretDiagram(e);
-                    Harmony* h = fd->harmony();
-                    if (h) {
-                        system->staff(e->staffIdx())->skyline().add(h->shape().translated(h->pos() + fd->pos() + s->pos() + m->pos()));
-                    } else {
-                        system->staff(e->staffIdx())->skyline().add(fd->shape().translated(fd->pos() + s->pos() + m->pos()));
-                    }
-                }
+        if (fd) {
+            switch (ctx.conf().styleV(Sid::chordAlignmentToFretboard).value<AlignH>()) {
+            case AlignH::LEFT:
+                newPosX = 0.0;
+                break;
+            case AlignH::HCENTER:
+                newPosX = 0.5 * fd->mainWidth();
+                break;
+            case AlignH::RIGHT:
+                newPosX = fd->mainWidth();
+                break;
+            }
+        } else {
+            switch (item->position()) {
+            case AlignH::LEFT:
+                newPosX = 0.0;
+                break;
+            case AlignH::HCENTER:
+                newPosX = cw * 0.5;
+                break;
+            case AlignH::RIGHT:
+                newPosX = cw;
+                break;
             }
         }
+
+        return PointF(newPosX, newPosY);
     };
 
-    if (muse::RealIsNull(maxShiftAbove) && muse::RealIsNull(maxShiftBelow)) {
-        return;
-    }
+    auto positionPoint = calculateBoundingRect(item, ldata, ctx);
 
-    // Collect all fret diagrams and chord symbol and store them per staff.
-    // In the same pass, the maximum height is collected.
-    std::map<staff_idx_t, HarmonyList> staves;
-    for (const Segment* s : sl) {
-        for (EngravingItem* e : s->annotations()) {
-            if ((harmony && e->isHarmony()) || (!harmony && e->isFretDiagram())) {
-                staves[e->staffIdx()].append(s, e);
-            }
+    if (item->isPolychord()) {
+        for (LineF& line : ldata->polychordDividerLines.mut_value()) {
+            line.setP1(PointF(ldata->bbox().left(), line.y1()));
+            line.setP2(PointF(ldata->bbox().right(), line.y2()));
         }
     }
 
-    for (staff_idx_t idx : muse::keys(staves)) {
-        // Align the objects.
-        // Algorithm:
-        //    - Find highest placed harmony/fretdiagram.
-        //    - Align all harmony/fretdiagram objects placed between height and height-maxShiftAbove.
-        //    - Repeat for all harmony/fretdiagram objects below height-maxShiftAbove.
-        bool moved { true };
-        int pass { 0 };
-        while (moved && (pass++ < 10)) {
-            moved = false;
-            moved |= staves[idx].align(true, staves[idx].getReferenceHeight(true), maxShiftAbove);
-            moved |= staves[idx].align(false, staves[idx].getReferenceHeight(false), maxShiftBelow);
-        }
-
-        // Add all aligned objects to the sky line.
-        staves[idx].addToSkyline(system);
+    if (item->hasFrame()) {
+        item->layoutFrame(ldata);
     }
+
+    ldata->setPos(positionPoint);
 }

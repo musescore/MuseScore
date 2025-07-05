@@ -3643,7 +3643,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7042"/>
         <source>Bracket hook height:</source>
         <comment>Tuplet bracket</comment>
-        <translation>括線高度：</translation>
+        <translation>連音括線高度：</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7061"/>

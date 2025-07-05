@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <maskBarlinesForText>0</maskBarlinesForText>
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
+      <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>
@@ -30,7 +32,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -78,23 +81,31 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>D_D</eid>
         <voice>
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>E_E</eid>
             </Clef>
           <TimeSig>
+            <eid>F_F</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>14</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>14</root>
+              </harmonyInfo>
+            <eid>G_G</eid>
             </Harmony>
           <Chord>
+            <eid>H_H</eid>
             <durationType>whole</durationType>
             <Note>
+              <eid>I_I</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -103,14 +114,19 @@
             <fractions>-1/2</fractions>
             </location>
           <Harmony>
-            <root>16</root>
-            <name>7</name>
+            <harmonyInfo>
+              <name>7</name>
+              <root>16</root>
+              </harmonyInfo>
+            <eid>J_J</eid>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
+        <eid>K_K</eid>
         <voice>
           <Rest>
+            <eid>L_L</eid>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>

@@ -209,8 +209,6 @@ PropertyValue TimeSig::getProperty(Pid propertyId) const
         return groups().nodes();
     case Pid::TIMESIG:
         return PropertyValue::fromValue(m_sig);
-    case Pid::TIMESIG_GLOBAL:
-        return PropertyValue::fromValue(globalSig());
     case Pid::TIMESIG_STRETCH:
         return PropertyValue::fromValue(stretch());
     case Pid::TIMESIG_TYPE:
@@ -250,9 +248,6 @@ bool TimeSig::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::TIMESIG:
         setSig(v.value<Fraction>());
         break;
-    case Pid::TIMESIG_GLOBAL:
-        setGlobalSig(v.value<Fraction>());
-        break;
     case Pid::TIMESIG_STRETCH:
         setStretch(v.value<Fraction>());
         break;
@@ -291,8 +286,6 @@ PropertyValue TimeSig::propertyDefault(Pid id) const
         return String();
     case Pid::TIMESIG:
         return PropertyValue::fromValue(Fraction(4, 4));
-    case Pid::TIMESIG_GLOBAL:
-        return PropertyValue::fromValue(Fraction(1, 1));
     case Pid::TIMESIG_TYPE:
         return int(TimeSigType::NORMAL);
     case Pid::PLACEMENT:

@@ -51,6 +51,7 @@
 #include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
+#include "engraving/dom/hammeronpulloff.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/jump.h"
@@ -199,7 +200,7 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newHarpPalette());
     defaultPalette->append(newGuitarPalette(true));
     defaultPalette->append(newFingeringPalette(true));
-    defaultPalette->append(newFretboardDiagramPalette());
+    defaultPalette->append(newFretboardDiagramPalette(true));
     defaultPalette->append(newAccordionPalette());
     defaultPalette->append(newBagpipeEmbellishmentPalette());
     defaultPalette->append(newBeamPalette());
@@ -412,7 +413,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
     }
 
     const std::vector<MarkerType> defaultMarkers = {
-        MarkerType::SEGNO, MarkerType::CODA, MarkerType::FINE, MarkerType::TOCODA
+        MarkerType::SEGNO, MarkerType::CODA, MarkerType::FINE, MarkerType::TOCODA, MarkerType::TOCODASYM
     };
 
     const std::vector<MarkerType> allMarkers = {
@@ -558,7 +559,7 @@ PalettePtr PaletteCreator::newLayoutPalette(bool defaultPalette)
     for (SpacerType spacerType : spacers) {
         auto spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
         spacer->setSpacerType(spacerType);
-        spacer->setGap(Millimetre(3 * gpaletteScore->style().spatium()));
+        spacer->setGap(Spatium(3));
         PaletteCellPtr cell = sp->appendElement(spacer, spacer->subtypeUserName());
         cell->mag = .7;
     }
@@ -802,9 +803,12 @@ PalettePtr PaletteCreator::newOrnamentsPalette(bool defaultPalette)
         SymId::ornamentTurn,
         SymId::ornamentTurnInverted,
         SymId::ornamentTurnSlash,
+        SymId::ornamentTurnUp,
+        SymId::ornamentTurnUpS,
         SymId::ornamentTrill,
         SymId::ornamentShortTrill,
         SymId::ornamentMordent,
+        SymId::ornamentHaydn,
         SymId::ornamentTremblement,
         SymId::ornamentPrallMordent,
         SymId::ornamentUpPrall,
@@ -1687,7 +1691,7 @@ PalettePtr PaletteCreator::newTimePalette(bool defaultPalette)
     return sp;
 }
 
-PalettePtr PaletteCreator::newFretboardDiagramPalette()
+PalettePtr PaletteCreator::newFretboardDiagramPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::FretboardDiagram);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Fretboard diagrams"));
@@ -1702,6 +1706,8 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     };
 
     static const std::vector<FretDiagramInfo> fretboardDiagrams = {
+        { u"------", u"",  muse::TranslatableString("palette", "Blank") },
+
         { u"X32O1O", u"C",  muse::TranslatableString("palette", "C") },
         { u"X-554-", u"Cm", muse::TranslatableString("palette", "Cm") },
         { u"X3231O", u"C7", muse::TranslatableString("palette", "C7") },
@@ -1732,9 +1738,18 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     };
 
     for (const FretDiagramInfo& fretboardDiagram : fretboardDiagrams) {
-        auto fret = FretDiagram::createFromString(gpaletteScore, fretboardDiagram.diagram);
+        auto fret = FretDiagram::createFromPattern(gpaletteScore, fretboardDiagram.diagram);
         fret->setHarmony(fretboardDiagram.harmony);
+
+        if (fretboardDiagram.harmony.empty()) {
+            fret->clear();
+        }
+
         sp->appendElement(fret, fretboardDiagram.userName);
+    }
+
+    if (!defaultPalette) {
+        sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
     }
 
     return sp;
@@ -1819,6 +1834,17 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "String number %1"));
     }
 
+    auto lhTapping = Factory::makeTapping(gpaletteScore->dummy()->chord());
+    lhTapping->setHand(TappingHand::LEFT);
+    sp->appendElement(lhTapping, QT_TRANSLATE_NOOP("palette", "Left-hand tapping"), 1.0);
+
+    auto rhTapping = Factory::makeTapping(gpaletteScore->dummy()->chord());
+    rhTapping->setHand(TappingHand::RIGHT);
+    sp->appendElement(rhTapping, QT_TRANSLATE_NOOP("palette", "Right-hand tapping"), 1.0);
+
+    auto hopo = Factory::makeHammerOnPullOff(gpaletteScore->dummy());
+    sp->appendElement(hopo, QT_TRANSLATE_NOOP("palette", "Hammer-on / pull-off"), 0.8);
+
     static const SymIdList luteSymbols {
         SymId::stringsThumbPosition,
         SymId::luteFingeringRHThumb, SymId::luteFingeringRHFirst,
@@ -1850,6 +1876,8 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         pta->setTechniqueType(playTechAnnotation.playTechType);
         sp->appendElement(pta, TConv::userName(playTechAnnotation.playTechType), 0.8)->setElementTranslated(true);
     }
+
+    sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
 
     return sp;
 }

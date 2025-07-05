@@ -155,7 +155,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::USER_LEN,                false, "userLen",               P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "length") },
     { Pid::SHOW_STEM_SLASH,         true,  "showStemSlash",         P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "show stem slash") },
 
-    { Pid::SPACE,                   false, "space",                 P_TYPE::MILLIMETRE,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "space") },
+    { Pid::SPACE,                   false, "space",                 P_TYPE::SPATIUM,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "space") },
     { Pid::TEMPO,                   true,  "tempo",                 P_TYPE::TEMPO,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tempo") },
     { Pid::TEMPO_FOLLOW_TEXT,       true,  "followText",            P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "following text") },
     { Pid::TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK, false, "tempoAlignRightOfRehearsalMark", P_TYPE::BOOL, PropertyGroup::APPEARANCE, DUMMY_QT_TR_NOOP("propertyName", "tempo align right of rehearsal mark") },
@@ -200,6 +200,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CONTINUE_AT,             true,  "continueAt",            P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "continue at") },
     { Pid::LABEL,                   true,  "label",                 P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "label") },
     { Pid::MARKER_TYPE,             true,  0,                       P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker type") },
+    { Pid::MARKER_SYMBOL_SIZE,      true,  "markerSymbolSize",      P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker symbol size") },
+    { Pid::MARKER_CENTER_ON_SYMBOL, true,  "markerCenterOnSymbol",  P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "marker center on symbol") },
     { Pid::ARP_USER_LEN1,           false, 0,                       P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "length 1") },
     { Pid::ARP_USER_LEN2,           false, 0,                       P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "length 2") },
     { Pid::REPEAT_END,              true,  0,                       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      "" },
@@ -227,7 +229,6 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::START_ON_UPPER_NOTE,     true,  "startOnUpperNote",      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "start on upper note") },
 
     { Pid::TIMESIG,                 false, "timesig",               P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "time signature") },
-    { Pid::TIMESIG_GLOBAL,          false, 0,                       P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "global time signature") },
     { Pid::TIMESIG_STRETCH,         false, 0,                       P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "time signature stretch") },
     { Pid::TIMESIG_TYPE,            true,  "subtype",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "subtype") },
     { Pid::SPANNER_TICK,            true,  "tick",                  P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tick") },
@@ -270,12 +271,14 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::FRET_OFFSET,             true,  "fretOffset",            P_TYPE::INT,                PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "fret offset") },
     { Pid::FRET_NUM_POS,            true,  "fretNumPos",            P_TYPE::INT,                PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "fret number position") },
     { Pid::ORIENTATION,             true,  "orientation",           P_TYPE::ORIENTATION,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "orientation") },
-    { Pid::FRET_SHOW_FINGERINGS,     true,  "fretShowFingering",     P_TYPE::BOOL       ,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "fretShowFingering") },
+    { Pid::FRET_SHOW_FINGERINGS,    true,  "fretShowFingering",     P_TYPE::BOOL       ,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "fretShowFingering") },
     { Pid::FRET_FINGERING,          true,  "fretFingering",         P_TYPE::INT_VEC,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "fretFingering") },
 
     { Pid::HARMONY_VOICE_LITERAL,   true,  "harmonyVoiceLiteral",   P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony voice literal") },
     { Pid::HARMONY_VOICING,         true,  "harmonyVoicing",        P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony voicing") },
     { Pid::HARMONY_DURATION,        true,  "harmonyDuration",       P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony duration") },
+    { Pid::HARMONY_BASS_SCALE,      true,  "harmonyBassScale",      P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony bass scale") },
+    { Pid::HARMONY_DO_NOT_STACK_MODIFIERS,      true,  "harmonyDoNotStackModifiers",      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony do not stack modifiers") },
 
     { Pid::SYSTEM_BRACKET,          false, "type",                  P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "type") },
     { Pid::GAP,                     false, 0,                       P_TYPE::BOOL,               PropertyGroup::NONE,      DUMMY_QT_TR_NOOP("propertyName", "gap") },
@@ -305,7 +308,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::STAFF_GEN_TIMESIG,       false, "",                      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "generating time signature") },
     { Pid::STAFF_GEN_KEYSIG,        false, "",                      P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "generating key signature") },
     { Pid::STAFF_YOFFSET,           false, "",                      P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "y-offset") },
-    { Pid::STAFF_USERDIST,          false, "distOffset",            P_TYPE::MILLIMETRE,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "distance offset") },
+    { Pid::STAFF_USERDIST,          false, "distOffset",            P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "distance offset") },
     { Pid::STAFF_BARLINE_SPAN,      false, "barLineSpan",           P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "barline span") },
     { Pid::STAFF_BARLINE_SPAN_FROM, false, "barLineSpanFrom",       P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "barline span from") },
     { Pid::STAFF_BARLINE_SPAN_TO,   false, "barLineSpanTo",         P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "barline span to") },
@@ -385,7 +388,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::LOCATION_NOTE,           false, "note",                  P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "note index") },
 
     { Pid::VOICE,                   true,  "voice",                 P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "voice") },
-    { Pid::POSITION,                false, "position",              P_TYPE::FRACTION,           PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "position") },
+    { Pid::POSITION,                false, "position",              P_TYPE::ALIGN_H,            PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "position") },
 
     { Pid::CLEF_TYPE_CONCERT,       true,  "concertClefType",       P_TYPE::CLEF_TYPE,          PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "concert clef type") },
     { Pid::CLEF_TYPE_TRANSPOSING,   true,  "transposingClefType",   P_TYPE::CLEF_TYPE,          PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "transposing clef type") },
@@ -457,6 +460,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::APPLY_TO_ALL_STAVES,     false, "applyToAllStaves",      P_TYPE::BOOL,               PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "apply to all staves") },
     { Pid::IS_COURTESY,             false, "isCourtesy",            P_TYPE::BOOL,               PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "is courtesy") },
+    { Pid::EXCLUDE_VERTICAL_ALIGN,  false, "excludeVerticalAlign",  P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "exclude vertical align") },
 
     { Pid::END,                     false, "++end++",               P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };

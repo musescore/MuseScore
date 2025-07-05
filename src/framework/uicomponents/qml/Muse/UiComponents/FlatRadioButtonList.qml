@@ -33,6 +33,7 @@ RadioButtonGroup {
     property int navigationRowStart: 0
     readonly property int navigationRowEnd: root.navigationRowStart + root.count
     property string accessibleName: ""
+    property bool transparent: false
 
     property int iconFontSize: 0
 
@@ -54,6 +55,8 @@ RadioButtonGroup {
         text: modelData.text ?? ""
         iconCode: modelData.iconCode ?? IconCode.NONE
         iconFontSize: root.iconFontSize != 0 ? root.iconFontSize : ui.theme.iconsFont.pixelSize
+
+        transparent: root.transparent
 
         navigation.name: "FlatRadioButtonList_" + (Boolean(text) ? text : modelData.title)
         navigation.panel: root.navigationPanel

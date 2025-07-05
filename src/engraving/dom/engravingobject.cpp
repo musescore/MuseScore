@@ -533,11 +533,7 @@ void EngravingObject::linkTo(EngravingObject* element)
         setLinks(element->m_links);
         assert(m_links->contains(element));
     } else {
-        if (isStaff()) {
-            setLinks(new LinkedObjects(score(), -1));       // don’t use lid
-        } else {
-            setLinks(new LinkedObjects(score()));
-        }
+        setLinks(new LinkedObjects());
         m_links->push_back(element);
         element->setLinks(m_links);
     }
@@ -697,7 +693,7 @@ const char* EngravingObject::typeName() const
 
 TranslatableString EngravingObject::typeUserName() const
 {
-    return TConv::userName(type());
+    return TConv::capitalizedUserName(type());
 }
 
 String EngravingObject::translatedTypeUserName() const
@@ -761,7 +757,8 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::MMREST_RANGE
            || type() == ElementType::STICKING
            || type() == ElementType::HARP_DIAGRAM
-           || type() == ElementType::GUITAR_BEND_TEXT;
+           || type() == ElementType::GUITAR_BEND_TEXT
+           || type() == ElementType::HAMMER_ON_PULL_OFF_TEXT;
 }
 
 //---------------------------------------------------------

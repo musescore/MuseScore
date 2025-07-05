@@ -47,6 +47,8 @@ Column {
     PlacementSection {
         id: placementSection
 
+        enabled: root.model ? root.model.isPlacementAvailable : null
+
         titleText: qsTrc("inspector", "Placement")
         propertyItem: root.model ? root.model.placement : null
 

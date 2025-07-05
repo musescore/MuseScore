@@ -31,10 +31,8 @@
 #include <set>
 #include <vector>
 
-#include "chordrest.h"
-
 #include "articulation.h"
-#include "types.h"
+#include "chordrest.h"
 
 #include "draw/types/color.h"
 
@@ -48,9 +46,40 @@ class Note;
 class NoteEventList;
 class Stem;
 class StemSlash;
-class StretchedBend;
 class TremoloTwoChord;
 class TremoloSingleChord;
+
+enum class NoteType : unsigned char {
+    ///.\{
+    NORMAL        = 0,
+    ACCIACCATURA  = 0x1,
+    APPOGGIATURA  = 0x2,         // grace notes
+    GRACE4        = 0x4,
+    GRACE16       = 0x8,
+    GRACE32       = 0x10,
+    GRACE8_AFTER  = 0x20,
+    GRACE16_AFTER = 0x40,
+    GRACE32_AFTER = 0x80,
+    INVALID       = 0xFF
+                    ///\}
+};
+
+constexpr NoteType operator|(NoteType t1, NoteType t2)
+{
+    return static_cast<NoteType>(static_cast<unsigned char>(t1) | static_cast<unsigned char>(t2));
+}
+
+constexpr bool operator&(NoteType t1, NoteType t2)
+{
+    return static_cast<unsigned char>(t1) & static_cast<unsigned char>(t2);
+}
+
+enum class PlayEventType : unsigned char {
+    ///.\{
+    Auto,         ///< Play events for all notes are calculated by MuseScore.
+    User,         ///< Some play events are modified by user. Those events are written into the mscx file.
+    ///.\}
+};
 
 class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
 {
@@ -123,8 +152,8 @@ public:
     void setIsUiItem(bool val) { m_isUiItem = val; }
 
     const std::vector<LedgerLine*>& ledgerLines() const { return m_ledgerLines; }
+    std::vector<LedgerLine*>& ledgerLines() { return m_ledgerLines; }
     void resizeLedgerLinesTo(size_t newSize);
-    void updateLedgerLines();
 
     double defaultStemLength() const { return m_defaultStemLength; }
     void setDefaultStemLength(double l) { m_defaultStemLength = l; }
@@ -191,9 +220,6 @@ public:
     int line() const { return ldata()->up ? upLine() : downLine(); }
     int upLine() const;
     int downLine() const;
-    PointF stemPos() const override;            ///< page coordinates
-    PointF stemPosBeam() const override;        ///< page coordinates
-    double stemPosX() const override;
     double rightEdge() const override;
 
     bool underBeam() const;
@@ -251,6 +277,7 @@ public:
     const std::vector<Articulation*>& articulations() const { return m_articulations; }
     std::set<SymId> articulationSymbolIds() const;
     Articulation* hasArticulation(const Articulation*);
+    Tapping* tapping() const;
     bool hasSingleArticulation() const { return m_articulations.size() == 1; }
 
     void updateArticulations(const std::set<SymId>& newArticulationIds,
@@ -260,6 +287,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+    bool isUserModified() const override;
 
     void reset() override;
 
@@ -312,7 +340,6 @@ public:
 
     double upPos()   const override;
     double downPos() const override;
-    double centerX() const;
 
     struct StartEndSlurs {
         bool startUp = false;
@@ -329,6 +356,8 @@ public:
     };
 
     StartEndSlurs& startEndSlurs() { return m_startEndSlurs; }
+
+    bool allNotesTiedToNext() const;
 
 private:
 
@@ -389,3 +418,8 @@ private:
     std::vector<Articulation*> m_articulations;
 };
 } // namespace mu::engraving
+
+#ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::engraving::NoteType)
+Q_DECLARE_METATYPE(mu::engraving::PlayEventType)
+#endif

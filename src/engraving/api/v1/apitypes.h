@@ -24,8 +24,9 @@
 
 #include <QObject>
 
+#include "engraving/dom/accidental.h"
+#include "engraving/dom/harmony.h"
 #include "engraving/types/types.h"
-#include "engraving/dom/types.h"
 
 namespace mu::engraving::apiv1::enums {
 Q_NAMESPACE;
@@ -270,7 +271,6 @@ enum class ElementType {
     HARMONY               = int(mu::engraving::ElementType::HARMONY),
     FRET_DIAGRAM          = int(mu::engraving::ElementType::FRET_DIAGRAM),
     BEND                  = int(mu::engraving::ElementType::BEND),
-    STRETCHED_BEND        = int(mu::engraving::ElementType::STRETCHED_BEND),
     TREMOLOBAR            = int(mu::engraving::ElementType::TREMOLOBAR),
     VOLTA                 = int(mu::engraving::ElementType::VOLTA),
     HAIRPIN_SEGMENT       = int(mu::engraving::ElementType::HAIRPIN_SEGMENT),

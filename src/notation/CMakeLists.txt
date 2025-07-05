@@ -126,8 +126,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscoreerrorscontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontscontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontscontroller.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abstractnotationpaintview.h
@@ -191,6 +189,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/abstractselectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/voicesselectionfiltermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/voicesselectionfiltermodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/notesinchordselectionfiltermodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/notesinchordselectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/elementsselectionfiltermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfilter/elementsselectionfiltermodel.h
 
@@ -226,12 +226,23 @@ set(MODULE_SRC
     ${STYLEDIALOG_SRC}
     )
 
+if (NOT OS_IS_WASM)
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontscontroller.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/engravingfontscontroller.h
+    )
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_BUILD_ENGRAVING_FONTSCONTROLLER)
+endif()
+
 set(MODULE_LINK
     muse::draw
     engraving
     commonscene
     muse::uicomponents
     muse::ui
+    Qt::Quick
+    Qt::StateMachine
+    Qt::Widgets
     )
 
 if (MUE_BUILD_NOTATION_TESTS)
@@ -241,9 +252,5 @@ endif()
 if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")
 endif (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
-
-if (MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
-endif (MSVC)
 
 setup_module()

@@ -3032,7 +3032,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10450"/>
         <source>Use cue sized numbers for grace note bends</source>
-        <translation>Bruk cue-størrelse på tall for forslagsnote-bends</translation>
+        <translation>Bruk signalnote-størrelser for forslagsnote-bending</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11660"/>
@@ -3706,7 +3706,7 @@ på første note i et system</translation>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10216"/>
         <source>Bends</source>
-        <translation>Bends</translation>
+        <translation>Bending</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="189"/>
@@ -4510,7 +4510,7 @@ tekstens x-høyde):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11036"/>
         <source>Trill cue note</source>
-        <translation type="unfinished"/>
+        <translation>Trille på signalnote</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11042"/>
@@ -11436,7 +11436,7 @@ Publisert under &lt;a href=&quot;%1&quot;&gt;GNU General Public License versjon 
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/NoteColorsSection.qml" line="58"/>
         <source>Color guitar bends outside of playable range</source>
-        <translation>Fargelegg bøyninger utenfor spilleområdet</translation>
+        <translation>Fargelegg bends som ligger utenfor registeret</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="50"/>
@@ -13254,7 +13254,7 @@ Publisert under &lt;a href=&quot;%1&quot;&gt;GNU General Public License versjon 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="308"/>
         <source>Guitar bend</source>
-        <translation>Gitar bend</translation>
+        <translation>Gitarbend</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="309"/>
@@ -13274,7 +13274,7 @@ Publisert under &lt;a href=&quot;%1&quot;&gt;GNU General Public License versjon 
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="313"/>
         <source>Guitar bend text</source>
-        <translation>Gitar bend tekst</translation>
+        <translation>Tekst på gitarbend</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="590"/>
@@ -20097,7 +20097,7 @@ opptakt</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="76"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="48"/>
         <source>Cue size</source>
-        <translation>Cue-størrelse</translation>
+        <translation>Signalnote-størrelse</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/GeneralInspectorView.qml" line="89"/>
@@ -20529,7 +20529,7 @@ opptakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/bends/bendsettingsmodel.cpp" line="61"/>
         <source>Bend</source>
-        <translation>Bøy</translation>
+        <translation>Bend</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/bends/bendsettingsmodel.cpp" line="167"/>
@@ -20560,7 +20560,7 @@ opptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="81"/>
         <source>Customize bend</source>
-        <translation>Tilpass bøy</translation>
+        <translation>Tilpass bend</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="104"/>
@@ -22375,7 +22375,7 @@ opptakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="198"/>
         <source>Cue note visibility</source>
-        <translation type="unfinished"/>
+        <translation>Synlighet på signalnote</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="219"/>
@@ -23292,7 +23292,7 @@ I tillegg inkluderer kurset et støttende samfunn av musikere, med diskusjonsrom
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="42"/>
         <source>Voices visible on this staff</source>
-        <translation type="unfinished"/>
+        <translation>Synlige stemmer på dette notesystemet</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/VoicesPopup.qml" line="55"/>
@@ -31190,7 +31190,7 @@ før lukking?</translation>
     <message>
         <location filename="../../src/inspector/models/notation/bends/bendsettingsmodel.cpp" line="277"/>
         <source>Edit bend curve</source>
-        <translation type="unfinished"/>
+        <translation>Rediger bend-kurven</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/stems/stemsettingsmodel.cpp" line="114"/>
@@ -31806,7 +31806,7 @@ før lukking?</translation>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7397"/>
         <source>Enter guitar bend</source>
-        <translation type="unfinished"/>
+        <translation>Legg til gitarbend</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="7507"/>

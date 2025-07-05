@@ -80,7 +80,6 @@
 #include "timesig.h"
 
 #include "tuplet.h"
-#include "types.h"
 #include "undo.h"
 #include "utils.h"
 
@@ -1368,11 +1367,15 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
             Fraction tick = cr->tick() + actualTicks(sd, tuplet, timeStretch);
 
             std::vector<TDuration> dList;
-            if (tuplet || staff(track / VOICES)->isLocalTimeSignature(tick)) {
+            if (tuplet) {
                 dList = toDurationList(rd, false);
                 std::reverse(dList.begin(), dList.end());
             } else {
-                dList = toRhythmicDurationList(rd, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, 0);
+                Staff* stf = staff(track2staff(track));
+                TimeSig* timeSig = stf->timeSig(tick);
+                TimeSigFrac refTimeSig = timeSig ? timeSig->sig() : sigmap()->timesig(tick).nominal();
+                Fraction rTickStart = (tick - measure->tick()) * stf->timeStretch(tick);
+                dList = toRhythmicDurationList(rd, true, rTickStart, refTimeSig, measure, 0);
             }
             if (dList.empty()) {
                 break;
@@ -2405,6 +2408,13 @@ bool Score::toggleArticulation(EngravingItem* el, Articulation* a)
         return false;
     }
 
+    Tapping* tap = c->tapping();
+    if (tap) {
+        // If we got here it means that the user is entering a tap
+        // of different hand, so replace the old one
+        undoRemoveElement(tap);
+    }
+
     if (!a->isDouble()) {
         a->setParent(c);
         a->setTrack(c->track());
@@ -2597,11 +2607,7 @@ void Score::cmdResetToDefaultLayout()
         Sid::genCourtesyClef,
         Sid::swingRatio,
         Sid::swingUnit,
-        Sid::useStandardNoteNames,
-        Sid::useGermanNoteNames,
-        Sid::useFullGermanNoteNames,
-        Sid::useSolfeggioNoteNames,
-        Sid::useFrenchNoteNames,
+        Sid::chordSymbolSpelling,
         Sid::automaticCapitalization,
         Sid::lowerCaseMinorChords,
         Sid::lowerCaseBassNotes,
@@ -2699,10 +2705,13 @@ void Score::cmdResetBeamMode()
         return;
     }
 
-    Fraction endTick = selection().tickEnd();
+    const staff_idx_t staffStart = selection().staffStart();
+    const staff_idx_t staffEnd = selection().staffEnd();
+    const Fraction endTick = selection().tickEnd();
 
-    for (Segment* seg = selection().firstChordRestSegment(); seg && seg->tick() < endTick; seg = seg->next1(SegmentType::ChordRest)) {
-        for (track_idx_t track = selection().staffStart() * VOICES; track < selection().staffEnd() * VOICES; ++track) {
+    for (track_idx_t track = staff2track(staffStart); track < staff2track(staffEnd); ++track) {
+        ChordRest* firstCR = selection().firstChordRest(track);
+        for (Segment* seg = firstCR->segment(); seg && seg->tick() < endTick; seg = seg->next1(SegmentType::ChordRest)) {
             ChordRest* cr = toChordRest(seg->element(track));
             if (!cr) {
                 continue;
@@ -2718,6 +2727,7 @@ void Score::cmdResetBeamMode()
             }
         }
     }
+
     if (noSelection) {
         deselectAll();
     }
@@ -3291,18 +3301,17 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
     ChordRest* cr = toChordRest(el);
 
     // if measure rest is selected as input, then the correct initialDuration will be the
-    // duration of the measure's time signature, else is just the input state's duration
-    TDuration initialDuration;
-    if (cr->durationType() == DurationType::V_MEASURE) {
+    // duration of the measure's time signature, else is just the ChordRest's duration
+    TDuration initialDuration = cr->durationType();
+    if (initialDuration == DurationType::V_MEASURE) {
         initialDuration = TDuration(cr->measure()->timesig(), true);
 
         if (initialDuration.fraction() < cr->measure()->timesig() && nSteps > 0) {
             // Duration already shortened by truncation; shorten one step less
             --nSteps;
         }
-    } else {
-        initialDuration = m_is.duration();
     }
+
     TDuration d = (nSteps != 0) ? initialDuration.shiftRetainDots(nSteps, stepDotted) : initialDuration;
     if (!d.isValid()) {
         return;
@@ -3354,8 +3363,8 @@ void Score::cmdAddParentheses(EngravingItem* el)
         acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
     } else if (el->type() == ElementType::HARMONY) {
         Harmony* h = toHarmony(el);
-        h->setLeftParen(true);
-        h->setRightParen(true);
+        h->setLeftParen(!h->leftParen());
+        h->setRightParen(!h->rightParen());
         h->render();
     } else if (el->type() == ElementType::TIMESIG) {
         TimeSig* ts = toTimeSig(el);

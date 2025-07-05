@@ -115,11 +115,12 @@ private:
     void chordTie();
     void addLaissezVib();
     void addSlur();
+    void addHammerOnPullOff();
     void addFret(int num);
 
     void insertClef(mu::engraving::ClefType type);
 
-    muse::IInteractive::Result showErrorMessage(const std::string& message) const;
+    muse::async::Promise<muse::IInteractive::Result> showErrorMessage(const std::string& message);
 
     bool isElementsSelected(const std::vector<ElementType>& elementsTypes) const;
 
@@ -127,6 +128,7 @@ private:
     void addImage();
     void addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);
+    void addFretboardDiagram();
 
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();
@@ -235,6 +237,10 @@ private:
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
     void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(MoveDirection, bool), MoveDirection, bool,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotEditingElement);
+    void registerAction(const muse::actions::ActionCode&, void (NotationActionController::*)(),
+                        muse::Ret (INotationInteraction::*)() const);
+    void registerAction(const muse::actions::ActionCode&, std::function<void()>,
+                        muse::Ret (INotationInteraction::*)() const);
 
     void registerNoteInputAction(const muse::actions::ActionCode&, NoteInputMethod inputMethod);
     void registerNoteAction(const muse::actions::ActionCode&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);

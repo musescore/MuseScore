@@ -219,6 +219,7 @@ bool Rest::acceptDrop(EditData& data) const
     // prevent 'hanging' slurs, avoid crash on tie
     static const std::set<ElementType> ignoredTypes {
         ElementType::SLUR,
+        ElementType::HAMMER_ON_PULL_OFF,
         ElementType::TIE,
         ElementType::GLISSANDO
     };
@@ -455,9 +456,9 @@ int Rest::computeVoiceOffset(int lines, LayoutData* ldata) const
             EngravingItem* e = s->element(baseTrack + v);
             // try to find match in any other voice
             if (e) {
-                if (e->type() == ElementType::REST) {
+                if (e->isRest()) {
                     Rest* r = toRest(e);
-                    if (r->globalTicks() == globalTicks()) {
+                    if (r->globalTicks() == globalTicks() && r->durationType() == durationType()) {
                         matchFound = true;
                         ldata->mergedRests.push_back(r);
                         continue;
@@ -645,46 +646,6 @@ double Rest::intrinsicMag() const
         m *= style().styleD(Sid::smallNoteMag);
     }
     return m;
-}
-
-//---------------------------------------------------------
-//   stemPos
-//    point to connect stem
-//---------------------------------------------------------
-
-PointF Rest::stemPos() const
-{
-    return pagePos();
-}
-
-//---------------------------------------------------------
-//   stemPosBeam
-//    return stem position of note on beam side
-//    return canvas coordinates
-//---------------------------------------------------------
-
-PointF Rest::stemPosBeam() const
-{
-    PointF p(pagePos());
-    if (ldata()->up) {
-        p.ry() += ldata()->bbox().top() + spatium() * 1.5;
-    } else {
-        p.ry() += ldata()->bbox().bottom() - spatium() * 1.5;
-    }
-    return p;
-}
-
-//---------------------------------------------------------
-//   stemPosX
-//---------------------------------------------------------
-
-double Rest::stemPosX() const
-{
-    if (ldata()->up) {
-        return ldata()->bbox().right();
-    } else {
-        return ldata()->bbox().left();
-    }
 }
 
 //---------------------------------------------------------

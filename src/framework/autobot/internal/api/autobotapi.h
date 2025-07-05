@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "project/iprojectfilescontroller.h"
+#include "actions/iactionsdispatcher.h"
 #include "autobot/iautobot.h"
 #include "autobot/iautobotconfiguration.h"
 #include "global/iinteractive.h"
@@ -42,7 +42,7 @@ class AutobotApi : public muse::api::ApiObject, public async::Asyncable
 
     Inject<autobot::IAutobot> autobot = { this };
     Inject<autobot::IAutobotConfiguration> autobotConfiguration = { this };
-    Inject<mu::project::IProjectFilesController> projectFilesController = { this };
+    Inject<actions::IActionsDispatcher> dispatcher = { this };
     Inject<IInteractive> interactive = { this };
     Inject<io::IFileSystem> fileSystem = { this };
     Inject<muse::ui::IMainWindow> mainWindow = { this };

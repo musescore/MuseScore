@@ -32,5 +32,16 @@
     <tabShowTiedFret>1</tabShowTiedFret>
     <tabParenthesizeTiedFret>1</tabParenthesizeTiedFret>
     <parenthesizeTiedFretIfArticulation>1</parenthesizeTiedFretIfArticulation>
-  </Style>
+    <hopoShowOnStandardStaves>0</hopoShowOnStandardStaves>
+    <hopoShowOnTabStaves>1</hopoShowOnTabStaves>
+    <hopoUpperCase>1</hopoUpperCase>
+    <hopoShowAll>0</hopoShowAll>
+    <lhTappingSymbolNormalStave>circledT</lhTappingSymbolNormalStave>
+    <lhTappingSymbolTab>circledT</lhTappingSymbolTab>
+    <lhTappingShowItemsNormalStave>0</lhTappingShowItemsNormalStave>
+    <lhTappingShowItemsTab>2</lhTappingShowItemsTab>
+    <lhTappingSlurTopAndBottomNoteOnTab>1</lhTappingSlurTopAndBottomNoteOnTab>
+    <rhTappingSymbolNormalStave>T</rhTappingSymbolNormalStave>
+    <rhTappingSymbolTab>T</rhTappingSymbolTab>
+    </Style>
 </museScore>

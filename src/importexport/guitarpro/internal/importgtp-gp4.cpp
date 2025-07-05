@@ -293,7 +293,7 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
             readBend(note);
         }
         if (modMask1 & EFFECT_HAMMER) {
-            readResult.slur = true;
+            readResult.hammerOnPullOff = true;
         }
         if (modMask1 & EFFECT_LET_RING) {
             readResult.letRing = true;
@@ -615,9 +615,7 @@ int GuitarPro4::convertGP4SlideNum(int sl)
 bool GuitarPro4::read(IODevice* io)
 {
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(score);
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
-    }
+    m_guitarBendImporter = std::make_unique<GuitarBendImporter>(score);
 
     f      = io;
     curPos = 30;
@@ -817,13 +815,10 @@ bool GuitarPro4::read(IODevice* io)
         // missing: phase, tremolo
     }
 
-    slurs = new Slur*[staves];
+    slurs.resize(staves, nullptr);
     tupleKind.resize(staves);
     for (auto& i : tupleKind) {
         i = 0;
-    }
-    for (size_t i = 0; i < staves; ++i) {
-        slurs[i] = 0;
     }
 
     Measure* measure = score->firstMeasure();
@@ -975,6 +970,7 @@ bool GuitarPro4::read(IODevice* io)
                 Staff* staff   = cr->staff();
                 size_t numStrings = staff->part()->instrument()->stringData()->strings();
                 bool hasSlur   = false;
+                bool hasHammerOnPullOff = false;
                 bool hasLetRing = false;
                 bool hasPalmMute = false;
                 bool hasTrill = false;
@@ -1003,6 +999,7 @@ bool GuitarPro4::read(IODevice* io)
 
                             ReadNoteResult readResult = readNote(6 - i, static_cast<int>(staffIdx), note);
                             hasSlur = readResult.slur || hasSlur;
+                            hasHammerOnPullOff = readResult.hammerOnPullOff || hasHammerOnPullOff;
                             hasLetRing = readResult.letRing || hasLetRing;
                             hasPalmMute = readResult.palmMute || hasPalmMute;
                             hasTrill = readResult.trill || hasTrill;
@@ -1031,6 +1028,7 @@ bool GuitarPro4::read(IODevice* io)
                     addLetRing(cr, hasLetRing);
                     addPalmMute(cr, hasPalmMute);
                     addTrill(cr, hasTrill);
+                    addHammerOnPullOff(cr, hasHammerOnPullOff);
                     addVibratoLeftHand(cr, hasVibratoLeftHand);
                     addVibratoWTremBar(cr, hasVibratoWTremBar);
                     addHarmonicMarks(cr, hasHarmonicArtificial, hasHarmonicPinch, hasHarmonicTap, hasHarmonicSemi);
@@ -1191,10 +1189,7 @@ bool GuitarPro4::read(IODevice* io)
     }
 
     m_continiousElementsBuilder->addElementsToScore();
-
-    if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        m_guitarBendImporter->applyBendsToChords();
-    }
+    m_guitarBendImporter->applyBendsToChords();
 
     return true;
 }

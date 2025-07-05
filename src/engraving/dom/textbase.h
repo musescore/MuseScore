@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TEXTBASE_H
-#define MU_ENGRAVING_TEXTBASE_H
+#pragma once
 
 #include <variant>
 
@@ -32,7 +31,7 @@
 
 #include "engravingitem.h"
 #include "property.h"
-#include "types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class TextBase;
@@ -255,6 +254,7 @@ public:
     std::list<TextFragment>& fragments() { return m_fragments; }
     std::list<TextFragment> fragmentsWithoutEmpty();
     const Shape& shape() const { return m_shape; }
+    Shape& shape() { return m_shape; }
     const RectF& boundingRect() const { return m_shape.bbox(); }
     RectF boundingRect(int col1, int col2, const TextBase*) const;
     size_t columns() const;
@@ -279,6 +279,7 @@ public:
 
 private:
     void simplify();
+    double musicSymbolBaseLineAdjust(const TextBase* t, const TextFragment& f, const std::list<TextFragment>::iterator fi);
 
     std::list<TextFragment> m_fragments;
     double m_y = 0.0;
@@ -305,11 +306,12 @@ public:
 
     Text& operator=(const Text&) = delete;
 
-    virtual void drawEditMode(muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
-    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
-
     Align align() const { return m_align; }
     void setAlign(Align a) { m_align = a; }
+    AlignH position() const { return m_position; }
+    void setPosition(AlignH val) { m_position = val; }
+
+    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const PointF& pos, const String& text);
 
     static String plainToXmlText(const String& s) { return s.toXmlEscaped(); }
     void setPlainText(const String& t) { setXmlText(plainToXmlText(t)); }
@@ -428,6 +430,9 @@ public:
     static const String UNDEFINED_FONT_FAMILY;
     static const double UNDEFINED_FONT_SIZE;
 
+    static bool isSorted(size_t r1, size_t c1, size_t r2, size_t c2);
+    static void sort(size_t& r1, size_t& c1, size_t& r2, size_t& c2);
+
     bool bold() const { return fontStyle() & FontStyle::Bold; }
     bool italic() const { return fontStyle() & FontStyle::Italic; }
     bool underline() const { return fontStyle() & FontStyle::Underline; }
@@ -487,6 +492,7 @@ public:
     //! NOTE It can only be set for some types of text, see who has the setter.
     //! At the moment it's: Text, Jump, Marker
     bool layoutToParentWidth() const { return m_layoutToParentWidth; }
+    virtual bool positionSeparateFromAlignment() const { return false; }
 
     void setVoiceAssignment(VoiceAssignment v) { m_voiceAssignment = v; }
     VoiceAssignment voiceAssignment() const { return m_voiceAssignment; }
@@ -525,8 +531,6 @@ protected:
     bool m_layoutToParentWidth = false;
 
 private:
-
-    void drawSelection(muse::draw::Painter*, const RectF&) const;
     void insert(TextCursor*, char32_t code, LayoutData* ldata) const;
     String genText(const LayoutData* ldata) const;
 
@@ -537,6 +541,8 @@ private:
     static String getHtmlStartTag(double, double&, const String&, String&, FontStyle, VerticalAlignment);
     static String getHtmlEndTag(FontStyle, VerticalAlignment);
 
+    static void swap(size_t& r1, size_t& c1, size_t& r2, size_t& c2);
+
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif
@@ -546,6 +552,8 @@ private:
     void notifyAboutTextRemoved(int startPosition, int endPosition, const String& text);
 
     Align m_align;
+
+    AlignH m_position = AlignH::LEFT;
 
     FrameType m_frameType = FrameType::NO_FRAME;
     double m_textLineSpacing = 1.0;
@@ -580,5 +588,3 @@ inline bool isTextNavigationKey(int key, KeyboardModifiers modifiers)
     return (key == Key_Space && modifiers != TextEditingControlModifier) || key == Key_Tab;
 }
 } // namespace mu::engraving
-
-#endif

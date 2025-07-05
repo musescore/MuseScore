@@ -23,6 +23,7 @@
 #include "playbackmodel.h"
 
 #include "dom/fret.h"
+#include "dom/harmony.h"
 #include "dom/instrument.h"
 #include "dom/masterscore.h"
 #include "dom/measure.h"
@@ -31,7 +32,6 @@
 #include "dom/staff.h"
 #include "dom/repeatlist.h"
 #include "dom/segment.h"
-#include "dom/tempo.h"
 #include "dom/tie.h"
 #include "dom/tremolotwochord.h"
 
@@ -155,6 +155,21 @@ void PlaybackModel::setPlayChordSymbols(const bool isEnabled)
     m_playChordSymbols = isEnabled;
 }
 
+bool PlaybackModel::isMetronomeEnabled() const
+{
+    return m_metronomeEnabled;
+}
+
+void PlaybackModel::setIsMetronomeEnabled(const bool isEnabled)
+{
+    if (m_metronomeEnabled == isEnabled) {
+        return;
+    }
+
+    m_metronomeEnabled = isEnabled;
+    reloadMetronomeEvents();
+}
+
 const InstrumentTrackId& PlaybackModel::metronomeTrackId() const
 {
     return METRONOME_TRACK_ID;
@@ -270,6 +285,20 @@ void PlaybackModel::triggerMetronome(int tick)
 
     PlaybackEventsMap result;
     m_renderer.renderMetronome(m_score, tick, 0, profile, result);
+    trackPlaybackData->second.offStream.send(std::move(result), {});
+}
+
+void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& totalCountInDuration)
+{
+    auto trackPlaybackData = m_playbackDataMap.find(METRONOME_TRACK_ID);
+    if (trackPlaybackData == m_playbackDataMap.cend()) {
+        return;
+    }
+
+    const ArticulationsProfilePtr profile = defaultActiculationProfile(METRONOME_TRACK_ID);
+
+    PlaybackEventsMap result;
+    m_renderer.renderCountIn(m_score, tick, 0, profile, result, totalCountInDuration);
     trackPlaybackData->second.offStream.send(std::move(result), {});
 }
 
@@ -485,6 +514,7 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
     });
 
     const ArticulationsProfilePtr metronomeProfile = defaultActiculationProfile(METRONOME_TRACK_ID);
+    PlaybackEventsMap& metronomeEvents = m_playbackDataMap[METRONOME_TRACK_ID].originEvents;
 
     for (const RepeatSegment* repeatSegment : repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
@@ -524,11 +554,42 @@ void PlaybackModel::updateEvents(const int tickFrom, const int tickTo, const tra
                 processSegment(tickPositionOffset, segment, staffToProcessIdxSet, chordRestSegmentNum == 0, trackChanges);
             }
 
-            m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
-                                       metronomeProfile, m_playbackDataMap[METRONOME_TRACK_ID].originEvents);
-            collectChangesTracks(METRONOME_TRACK_ID, trackChanges);
+            if (m_metronomeEnabled) {
+                m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
+                                           metronomeProfile, metronomeEvents);
+                collectChangesTracks(METRONOME_TRACK_ID, trackChanges);
+            }
         }
     }
+}
+
+void PlaybackModel::reloadMetronomeEvents()
+{
+    TRACEFUNC;
+
+    PlaybackData& metronomeData = m_playbackDataMap[METRONOME_TRACK_ID];
+    metronomeData.originEvents.clear();
+
+    if (!m_metronomeEnabled) {
+        metronomeData.mainStream.send(metronomeData.originEvents, metronomeData.dynamics, metronomeData.params);
+        return;
+    }
+
+    const ArticulationsProfilePtr metronomeProfile = defaultActiculationProfile(METRONOME_TRACK_ID);
+
+    for (const RepeatSegment* repeatSegment : repeatList()) {
+        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
+
+        for (const Measure* measure : repeatSegment->measureList()) {
+            int measureStartTick = measure->tick().ticks();
+            int measureEndTick = measure->endTick().ticks();
+
+            m_renderer.renderMetronome(m_score, measureStartTick, measureEndTick, tickPositionOffset,
+                                       metronomeProfile, metronomeData.originEvents);
+        }
+    }
+
+    metronomeData.mainStream.send(metronomeData.originEvents, metronomeData.dynamics, metronomeData.params);
 }
 
 bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) const
@@ -695,7 +756,9 @@ void mu::engraving::PlaybackModel::removeEventsFromRange(const track_idx_t track
         removeTrackEvents(chordSymbolsTrackId(part->id()), timestampFrom, timestampTo);
     }
 
-    removeTrackEvents(METRONOME_TRACK_ID, timestampFrom, timestampTo);
+    if (m_metronomeEnabled) {
+        removeTrackEvents(METRONOME_TRACK_ID, timestampFrom, timestampTo);
+    }
 }
 
 void PlaybackModel::clearExpiredEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo)

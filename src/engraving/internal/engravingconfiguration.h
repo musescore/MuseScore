@@ -87,6 +87,10 @@ public:
     void setDynamicsApplyToAllVoices(bool v) override;
     muse::async::Channel<bool> dynamicsApplyToAllVoicesChanged() const override;
 
+    bool autoUpdateFretboardDiagrams() const override;
+    void setAutoUpdateFretboardDiagrams(bool v) override;
+    muse::async::Channel<bool> autoUpdateFretboardDiagramsChanged() const override;
+
     muse::async::Notification scoreInversionChanged() const override;
 
     Color formattingColor() const override;
@@ -113,12 +117,9 @@ public:
     void setDoNotSaveEIDsForBackCompat(bool doNotSave) override;
 
     bool guitarProImportExperimental() const override;
-    bool experimentalGuitarBendImport() const override;
-    void setExperimentalGuitarBendImport(bool enabled) override;
     bool shouldAddParenthesisOnStandardStaff() const override;
     bool negativeFretsAllowed() const override;
     bool crossNoteHeadAlwaysBlack() const override;
-    bool enableExperimentalFretCircle() const override;
     void setGuitarProMultivoiceEnabled(bool multiVoice) override;
     bool guitarProMultivoiceEnabled() const override;
     bool minDistanceForPartialSkylineCalculated() const override;
@@ -128,6 +129,7 @@ private:
     muse::async::Channel<voice_idx_t, Color> m_voiceColorChanged;
     muse::async::Notification m_scoreInversionChanged;
     muse::async::Channel<bool> m_dynamicsApplyToAllVoicesChanged;
+    muse::async::Channel<bool> m_fretboardDiagramsAutoUpdateChanged;
     muse::async::Channel<Color> m_formattingColorChanged;
     muse::async::Channel<Color> m_frameColorChanged;
     muse::async::Channel<Color> m_invisibleColorChanged;
@@ -138,7 +140,6 @@ private:
     muse::ValNt<DebuggingOptions> m_debuggingOptions;
 
     bool m_multiVoice = false;
-    bool m_experimentalGuitarBendImport = false;
 };
 }
 

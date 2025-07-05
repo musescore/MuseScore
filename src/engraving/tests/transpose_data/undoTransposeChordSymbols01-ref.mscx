@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>2kOmbTnFT2K_1Ffu11EvJBD</eid>
     <Division>480</Division>
     <Style>
       <spatium>1.74978</spatium>
@@ -70,7 +71,8 @@
         </section>
       </Order>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>gHTzGDb6kWP_gHTzGDb6kWP</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -95,20 +97,28 @@
       </Part>
     <Staff id="1">
       <Measure>
+        <eid>IbIByf9V45G_n1FatmQDVWL</eid>
         <voice>
           <KeySig>
+            <eid>EXMLx/3R3qJ_c7cWKj13N+H</eid>
             <concertKey>2</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>J0Rmy10EtIN_1Pc/Cz+r81</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Harmony>
-            <root>16</root>
+            <harmonyInfo>
+              <root>16</root>
+              </harmonyInfo>
+            <eid>i6JddkooT+K_VCqDglUeMRM</eid>
             </Harmony>
           <Chord>
+            <eid>HzvSPszx2NI_lxchTRPN6iO</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>9v0GXubQFuD_28VjANAW6QP</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -117,17 +127,25 @@
             <fractions>-1/4</fractions>
             </location>
           <Harmony>
-            <root>18</root>
+            <harmonyInfo>
+              <root>18</root>
+              </harmonyInfo>
+            <eid>SYmKSDioSgJ_3nRLTs3666</eid>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
-            <root>20</root>
+            <harmonyInfo>
+              <root>20</root>
+              </harmonyInfo>
+            <eid>mPZO1MniRBK_DR0+zmVAE6N</eid>
             </Harmony>
           <Chord>
+            <eid>lNT7H0p9/lF_SLiwqKlD1UD</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>9i1YoWhQ61M_QDmwLNAB6eJ</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -136,18 +154,27 @@
             <fractions>-1/4</fractions>
             </location>
           <Harmony>
-            <root>15</root>
+            <harmonyInfo>
+              <root>15</root>
+              </harmonyInfo>
+            <eid>saAjlrm1EO_FhNXvmfkddI</eid>
             </Harmony>
           </voice>
         </Measure>
       <Measure>
+        <eid>ZuKAVzo7TK_s158BJvRsNN</eid>
         <voice>
           <Harmony>
-            <root>16</root>
+            <harmonyInfo>
+              <root>16</root>
+              </harmonyInfo>
+            <eid>dvEMaLQcibK_SEWH/F36llB</eid>
             </Harmony>
           <Chord>
+            <eid>/Sa4VlGGHaH_eEnHBeShepD</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>3Hmm8a/YfmO_gfnHMV576XE</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -156,17 +183,25 @@
             <fractions>-1/4</fractions>
             </location>
           <Harmony>
-            <root>18</root>
+            <harmonyInfo>
+              <root>18</root>
+              </harmonyInfo>
+            <eid>Ok0ECFxRvuI_2P4foxuqZq</eid>
             </Harmony>
           <location>
             <fractions>1/4</fractions>
             </location>
           <Harmony>
-            <root>12</root>
+            <harmonyInfo>
+              <root>12</root>
+              </harmonyInfo>
+            <eid>wLPL51aE/ZK_WYJ1s3hVxsG</eid>
             </Harmony>
           <Chord>
+            <eid>weLPdp/TOPE_HveOwApPWWC</eid>
             <durationType>half</durationType>
             <Note>
+              <eid>fHTzGDb6kWP_AT+2b8DnxsG</eid>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -175,7 +210,10 @@
             <fractions>-1/4</fractions>
             </location>
           <Harmony>
-            <root>22</root>
+            <harmonyInfo>
+              <root>22</root>
+              </harmonyInfo>
+            <eid>DUSTglH1glB_HnfKXBpuT4K</eid>
             </Harmony>
           </voice>
         </Measure>

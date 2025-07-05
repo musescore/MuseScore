@@ -89,7 +89,7 @@ RetVal<SaveLocation> OpenSaveProjectScenario::askSaveLocation(INotationProjectPt
 
 RetVal<muse::io::path_t> OpenSaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
 {
-    QString dialogTitle = muse::qtrc("project/save", "Save score");
+    std::string dialogTitle = muse::trc("project/save", "Save score");
     std::string filenameAddition;
 
     if (saveMode == SaveMode::SaveCopy) {
@@ -112,7 +112,7 @@ RetVal<muse::io::path_t> OpenSaveProjectScenario::askLocalPath(INotationProjectP
 #endif
     };
 
-    muse::io::path_t selectedPath = interactive()->selectSavingFile(dialogTitle, defaultPath, filter);
+    muse::io::path_t selectedPath = interactive()->selectSavingFileSync(dialogTitle, defaultPath, filter);
 
     if (selectedPath.empty()) {
         return make_ret(Ret::Code::Cancel);
@@ -148,7 +148,7 @@ RetVal<SaveLocationType> OpenSaveProjectScenario::askSaveLocationType() const
     bool shouldAsk = configuration()->shouldAskSaveLocationType();
     query.addParam("askAgain", Val(shouldAsk));
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         return rv.ret;
     }
@@ -199,7 +199,7 @@ RetVal<CloudAudioInfo> OpenSaveProjectScenario::askShareAudioLocation(INotationP
         query.addParam("existingScoreOrAudioUrl", Val(uploadUrl.toString()));
     }
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         return rv.ret;
     }
@@ -289,7 +289,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
     query.addParam("existingScoreOrAudioUrl", Val(existingProjectInfo.sourceUrl.toString()));
     query.addParam("cloudCode", Val(cloud::MUSESCORE_COM_CLOUD_CODE));
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         return rv.ret;
     }
@@ -355,7 +355,7 @@ bool OpenSaveProjectScenario::warnBeforePublishing(bool isPublishShare, cloud::V
         return true;
     }
 
-    IInteractive::Result result = interactive()->warning(title, message, buttons, int(IInteractive::Button::Ok), options);
+    IInteractive::Result result = interactive()->warningSync(title, message, buttons, int(IInteractive::Button::Ok), options);
 
     bool ok = result.standardButton() == IInteractive::Button::Ok;
     if (ok && !result.showAgain()) {
@@ -376,7 +376,7 @@ bool OpenSaveProjectScenario::warnBeforeSavingToExistingPubliclyVisibleCloudProj
         IInteractive::ButtonData(IInteractive::Button::Ok, muse::trc("project/save", "Publish"), true)
     };
 
-    IInteractive::Result result = interactive()->warning(
+    IInteractive::Result result = interactive()->warningSync(
         muse::trc("project/save", "Publish changes online?"),
         muse::trc("project/save", "Your saved changes will be publicly visible. We will also "
                                   "need to generate a new MP3 for public playback."),
@@ -388,8 +388,8 @@ bool OpenSaveProjectScenario::warnBeforeSavingToExistingPubliclyVisibleCloudProj
 Ret OpenSaveProjectScenario::warnCloudNotAvailableForUploading(bool isPublishShare) const
 {
     if (isPublishShare) {
-        interactive()->warning(muse::trc("project/save", "Unable to connect to MuseScore.com"),
-                               muse::trc("project/save", "Please check your internet connection or try again later."));
+        interactive()->warningSync(muse::trc("project/save", "Unable to connect to MuseScore.com"),
+                                   muse::trc("project/save", "Please check your internet connection or try again later."));
         return make_ret(Ret::Code::Cancel);
     }
 
@@ -398,10 +398,10 @@ Ret OpenSaveProjectScenario::warnCloudNotAvailableForUploading(bool isPublishSha
         IInteractive::ButtonData(IInteractive::Button::Ok, muse::trc("project/save", "Save to computer"), true)
     };
 
-    IInteractive::Result result = interactive()->warning(muse::trc("project/save", "Unable to connect to the cloud"),
-                                                         muse::trc("project/save",
-                                                                   "Please check your internet connection or try again later."),
-                                                         buttons, int(IInteractive::Button::Ok));
+    IInteractive::Result result = interactive()->warningSync(muse::trc("project/save", "Unable to connect to the cloud"),
+                                                             muse::trc("project/save",
+                                                                       "Please check your internet connection or try again later."),
+                                                             buttons, int(IInteractive::Button::Ok));
 
     if (result.standardButton() == IInteractive::Button::Ok) {
         return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
@@ -412,8 +412,8 @@ Ret OpenSaveProjectScenario::warnCloudNotAvailableForUploading(bool isPublishSha
 
 Ret OpenSaveProjectScenario::warnCloudNotAvailableForSharingAudio() const
 {
-    interactive()->warning(muse::trc("project/save", "Unable to connect to Audio.com"),
-                           muse::trc("project/save", "Please check your internet connection or try again later."));
+    interactive()->warningSync(muse::trc("project/save", "Unable to connect to Audio.com"),
+                               muse::trc("project/save", "Please check your internet connection or try again later."));
     return make_ret(Ret::Code::Cancel);
 }
 
@@ -601,7 +601,7 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
         break;
     }
 
-    IInteractive::Result result = interactive()->warning(title, msg, buttons, defaultButtonCode);
+    IInteractive::Result result = interactive()->warningSync(title, msg, buttons, defaultButtonCode);
     switch (result.button()) {
     case helpBtnCode:
         interactive()->openUrl(configuration()->supportForumUrl());

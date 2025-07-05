@@ -441,13 +441,12 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     QSplitter* ws = new QSplitter;
     m_lws = new QListWidget;
 
-    QStringList keys;
-    std::vector<String> symbols = muse::keys(Smufl::smuflRanges());
-    for (const String& s : symbols) {
-        keys << s.toQString();
+    QStringList smuflRangeNames;
+    for (const auto& pair: Smufl::smuflRanges()) {
+        smuflRangeNames << pair.first.toQString();
     }
 
-    m_lws->addItems(keys);
+    m_lws->addItems(smuflRangeNames);
     m_lws->setCurrentRow(0);
 
     ws->addWidget(m_lws);
@@ -685,14 +684,12 @@ void SpecialCharactersDialog::populateCommon()
 
 void SpecialCharactersDialog::populateSmufl()
 {
-    int row = m_lws->currentRow();
-
-    QString key = muse::keys(Smufl::smuflRanges()).at(row).toQString();
-    QStringList smuflNames = Smufl::smuflRanges().at(key).toQStringList();
-
     m_pSmufl->clear();
-    for (const QString& name : smuflNames) {
-        auto symId = SymNames::symIdByName(name);
+
+    int row = m_lws->currentRow();
+    std::vector<SymId> symIds = std::next(Smufl::smuflRanges().begin(), row)->second;
+
+    for (SymId symId : symIds) {
         std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gpaletteScore->dummy());
         s->setSym(symId, gpaletteScore->engravingFont());
         m_pSmufl->appendElement(s, SymNames::translatedUserNameForSymId(symId));
@@ -712,7 +709,7 @@ void SpecialCharactersDialog::populateUnicode()
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore->dummy());
         fs->setCode(code);
         fs->setFont(m_font);
-        m_pUnicode->appendElement(fs, QString("0x%1").arg(code, 5, 16, QLatin1Char('0')));
+        m_pUnicode->appendElement(fs, QString("0x%1").arg(static_cast<int>(code), 5, 16, QLatin1Char('0')));
     }
 }
 

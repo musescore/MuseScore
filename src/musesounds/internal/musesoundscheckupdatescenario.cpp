@@ -148,7 +148,7 @@ muse::Ret MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info
     Ret ret = make_ok();
 
     DEFER {
-        if (ret) {
+        if (ret || ret.code() == static_cast<int>(Ret::Code::Cancel)) {
             setIgnoredUpdate(info.version);
         }
     };
@@ -175,7 +175,7 @@ muse::Ret MuseSoundsCheckUpdateScenario::showReleaseInfo(const ReleaseInfo& info
         query.addParam("imageUrl", Val(QString::fromStdString(info.imageUrl)));
     }
 
-    RetVal<Val> rv = interactive()->open(query);
+    RetVal<Val> rv = interactive()->openSync(query);
     if (!rv.ret) {
         LOGD() << rv.ret.toString();
         ret = rv.ret;

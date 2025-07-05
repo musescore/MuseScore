@@ -108,8 +108,8 @@ public:
     virtual bool startDropSingle(const QByteArray& edata) = 0;
     virtual bool startDropRange(const QByteArray& data) = 0;
     virtual bool startDropImage(const QUrl& url) = 0;
-    virtual bool isDropSingleAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
-    virtual bool isDropRangeAccepted(const muse::PointF& pos) = 0;
+    virtual bool updateDropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
+    virtual bool updateDropRange(const muse::PointF& pos) = 0;
     virtual bool dropSingle(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
     virtual bool dropRange(const QByteArray& data, const muse::PointF& pos, bool deleteSourceMaterial) = 0;
     virtual void setDropTarget(EngravingItem* item, bool notify = true) = 0;
@@ -148,7 +148,7 @@ public:
     virtual bool textEditingAllowed(const EngravingItem* element) const = 0;
     virtual void startEditText(EngravingItem* element, const muse::PointF& elementPos = muse::PointF()) = 0;
     virtual void editText(QInputMethodEvent* event) = 0;
-    virtual void endEditText() = 0;
+    virtual void endEditText(bool startNonTextualEdit = true) = 0;
     virtual void changeTextCursorPosition(const muse::PointF& newCursorPos) = 0;
     virtual void selectText(mu::engraving::SelectTextType type) = 0;
     virtual const TextBase* editedText() const = 0;
@@ -192,6 +192,7 @@ public:
     virtual void addTiedNoteToChord() = 0;
     virtual void addLaissezVibToSelection() = 0;
     virtual void addSlurToSelection() = 0;
+    virtual void addHammerOnPullOffToSelection() = 0;
     virtual void addOttavaToSelection(OttavaType type) = 0;
     virtual void addHairpinOnGripDrag(engraving::EditData& ed, bool isLeftGrip) = 0;
     virtual void addHairpinsToSelection(HairpinType type) = 0;
@@ -239,6 +240,9 @@ public:
 
     virtual muse::Ret canAddFiguredBass() const = 0;
     virtual void addFiguredBass() = 0;
+
+    virtual muse::Ret canAddFretboardDiagram() const = 0;
+    virtual void addFretboardDiagram() = 0;
 
     virtual void addStretch(qreal value) = 0;
 

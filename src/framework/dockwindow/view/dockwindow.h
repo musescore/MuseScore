@@ -117,8 +117,6 @@ private:
     void loadTopLevelToolBars(const DockPageView* page);
     void alignTopLevelToolBars(const DockPageView* page);
 
-    DockPanelView* findDestinationForPanel(const DockPageView* page, const DockPanelView* panel) const;
-
     void addDock(DockBase* dock, Location location = Location::Left, const DockBase* relativeTo = nullptr);
     void addPanelAsTab(DockPanelView* panel, DockPanelView* destinationPanel);
     void registerDock(DockBase* dock);
@@ -136,10 +134,11 @@ private:
     void reloadCurrentPage();
     bool restoreLayout(const QByteArray& layout, bool restoreRelativeToMainWindow = false);
     bool checkLayoutIsCorrupted() const;
+    void forceLayout();
 
     void initDocks(DockPageView* page);
 
-    void adjustContentForAvailableSpace();
+    void adjustContentForAvailableSpace(DockPageView* page);
 
     void notifyAboutDocksOpenStatus();
 
@@ -150,6 +149,9 @@ private:
     uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
     uicomponents::QmlListProperty<DockPageView> m_pages;
     async::Channel<QStringList> m_docksOpenStatusChanged;
+
+    class UniqueConnectionHolder;
+    QHash<DockPageView*, UniqueConnectionHolder*> m_pageConnections;
 
     bool m_hasGeometryBeenRestored = false;
     bool m_reloadCurrentPageAllowed = false;

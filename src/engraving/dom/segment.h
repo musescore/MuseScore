@@ -24,8 +24,6 @@
 
 #include "engravingitem.h"
 
-#include "types.h"
-
 namespace mu::engraving {
 class Factory;
 class Measure;
@@ -33,6 +31,61 @@ class Segment;
 class ChordRest;
 class Spanner;
 class System;
+
+//-------------------------------------------------------------------
+//   SegmentType
+//
+//    Type values determine the order of segments for a given tick
+//-------------------------------------------------------------------
+
+enum class SegmentType {
+    ///.\{
+    Invalid               = 0x0,
+    BeginBarLine          = 0x1,
+    HeaderClef            = 0x2,
+    KeySig                = 0x4,
+    Ambitus               = 0x8,
+    TimeSig               = 0x10,
+    StartRepeatBarLine    = 0x20,
+    ClefStartRepeatAnnounce    = 0x40,
+    KeySigStartRepeatAnnounce  = 0x80,
+    TimeSigStartRepeatAnnounce = 0x100,
+    Clef                  = 0x200,
+    BarLine               = 0x400,
+    Breath                = 0x800,
+    //--
+    TimeTick              = 0x1000,
+    ChordRest             = 0x2000,
+    //--
+    ClefRepeatAnnounce    = 0x4000,
+    KeySigRepeatAnnounce  = 0x8000,
+    TimeSigRepeatAnnounce = 0x10000,
+    //--
+    EndBarLine            = 0x20000,
+    KeySigAnnounce        = 0x40000,
+    TimeSigAnnounce       = 0x80000,
+    //--
+    All                   = -1,   ///< Includes all barline types
+    /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
+    BarLineType           = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine,
+    CourtesyTimeSigType   = TimeSigAnnounce | TimeSigRepeatAnnounce | TimeSigStartRepeatAnnounce,
+    CourtesyKeySigType    = KeySigAnnounce | KeySigRepeatAnnounce | KeySigStartRepeatAnnounce,
+    CourtesyClefType      = ClefRepeatAnnounce | ClefStartRepeatAnnounce,
+    TimeSigType           = TimeSig | CourtesyTimeSigType,
+    KeySigType            = KeySig | CourtesyKeySigType,
+    ClefType              = Clef | HeaderClef | CourtesyClefType,
+    ///\}
+};
+
+constexpr SegmentType operator|(const SegmentType t1, const SegmentType t2)
+{
+    return static_cast<SegmentType>(static_cast<int>(t1) | static_cast<int>(t2));
+}
+
+constexpr bool operator&(const SegmentType t1, const SegmentType t2)
+{
+    return static_cast<int>(t1) & static_cast<int>(t2);
+}
 
 //------------------------------------------------------------------------
 //   @@ Segment
@@ -101,6 +154,7 @@ public:
     Segment* next1(SegmentType) const;
     Segment* next1ChordRestOrTimeTick() const;
     Segment* next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest) const;
+    Segment* next1WithElemsOnTrack(track_idx_t trackIdx, SegmentType segType = SegmentType::ChordRest) const;
     Segment* next1MM(SegmentType) const;
 
     Segment* prev1() const;
@@ -300,6 +354,8 @@ public:
     bool isInsideTupletOnStaff(staff_idx_t staffIdx) const;
 
 private:
+
+    void addArticulationsToShape(const Chord* chord, Shape& shape);
 
     friend class Factory;
     Segment(Measure* m = 0);

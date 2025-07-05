@@ -1,18 +1,18 @@
 name: "Build: Nightly"
-run-name: "${{ github.event.schedule == '0 3 * * *' && 'Build: Nightly - master branch' || 'Build: Nightly - current release branch' }}"
+run-name: "${{ format('Build: Nightly - {0}', github.ref_name) }}"
 
 on:
   schedule:
     - cron: "0 3 * * *" # Every night at 03:00 for master branch
-    - cron: "0 4 * * *" # Every night at 04:00 for current release branch
+    # - cron: "0 4 * * *" # Every night at 04:00 for current release branch
   workflow_dispatch:
 
 permissions:
   actions: write
 
-env:
-  CURRENT_RELEASE_BRANCH: 4.5.2
-  IS_CURRENT_RELEASE_BRANCH: ${{ github.event.schedule == '0 4 * * *' && 'true' || 'false' }}
+# env:
+#   CURRENT_RELEASE_BRANCH: 4.5.2
+#   IS_CURRENT_RELEASE_BRANCH: ${{ github.event.schedule == '0 4 * * *' && 'true' || 'false' }}
 
 jobs:
   trigger_nightly:
@@ -48,6 +48,7 @@ jobs:
                 platforms: 'linux_arm32 linux_arm64 linux_x64 macos windows_x64 windows_portable',
                 build_mode: 'nightly',
                 publish: 'on',
-                sentry_project: 'sandbox'
+                sentry_project: 'sandbox',
+                use_qt69: 'on'
               }
             })

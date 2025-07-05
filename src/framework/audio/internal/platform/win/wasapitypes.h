@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_AUDIO_WASAPITYPES_H
-#define MUSE_AUDIO_WASAPITYPES_H
+#pragma once
 
 #include <windows.h>
 #include <hstring.h>
@@ -132,5 +130,3 @@ struct EmbeddedMFAsyncCallback : ::IMFAsyncCallback
 
 typedef std::function<void (void* userdata, uint8_t* stream, int len)> SampleRequestCallback;
 }
-
-#endif // MUSE_AUDIO_WASAPITYPES_H

@@ -259,6 +259,7 @@ public:
     static String fromUtf16BE(const ByteArray& data);
 
     static String fromUtf8(const char* str);
+    static String fromUtf8(std::string_view);
     static String fromUtf8(const ByteArray& data);
     ByteArray toUtf8() const;
 
@@ -311,6 +312,7 @@ public:
     String& insert(size_t position, const String& str);
     String& remove(const String& str) { return replace(str, String()); }
     String& remove(const std::regex& rx) { return replace(rx, String()); }
+    String& remove(const std::wregex& rx) { return replace(rx, String()); }
     String& remove(const Char& ch);
     String& remove(char16_t ch);
     String& remove(size_t position, size_t n = muse::nidx);

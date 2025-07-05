@@ -164,7 +164,7 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
 
         // avoid division by zero for zero-length beams (can exist as a pre-layout state used
         // for horizontal spacing computations)
-        if (endX != startX) {
+        if (!muse::RealIsEqual(endX, startX)) {
             const double proportionAlongX = (anchor.x() - startX) / (endX - startX);
             while (true) {
                 const int slope = std::abs(dictator - pointer);
@@ -959,11 +959,11 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
             // we can't rely on comparing topFirst and bottomFirst ->tick() because beamed
             // graces have the same tick
             if (ldata->elements[0] == topFirst) {
-                yFirst = topFirst->stemPos().y();
-                yLast = bottomFirst->stemPos().y();
+                yFirst = StemLayout::stemPos(topFirst).y();
+                yLast = StemLayout::stemPos(bottomFirst).y();
             } else {
-                yFirst = bottomFirst->stemPos().y();
-                yLast = topFirst->stemPos().y();
+                yFirst = StemLayout::stemPos(bottomFirst).y();
+                yLast = StemLayout::stemPos(topFirst).y();
             }
             int desiredSlant = round((yFirst - yLast) / spatium);
             int slant = std::min(std::abs(desiredSlant), getMaxSlope(ldata));
@@ -1281,13 +1281,13 @@ int BeamTremoloLayout::getBeamCount(const BeamBase::LayoutData* ldata, const std
 double BeamTremoloLayout::chordBeamAnchorX(const BeamBase::LayoutData* ldata, const ChordRest* cr, ChordBeamAnchorType anchorType)
 {
     double pagePosX = ldata->trem ? ldata->trem->pagePos().x() : ldata->beam ? ldata->beam->pagePos().x() : 0.0;
-    double stemPosX = cr->stemPosX() + cr->pagePos().x() - pagePosX;
+    double stemPosX = StemLayout::stemPosX(cr) + cr->pagePos().x() - pagePosX;
 
     if (!cr->isChord() || !toChord(cr)->stem()) {
         if (!ldata->up) {
             // rests always return the right side of the glyph as their stemPosX
             // so we need to adjust back to the left side if stems are down
-            stemPosX -= cr->stemPosX();
+            stemPosX -= StemLayout::stemPosX(cr);
         }
         return stemPosX;
     }
@@ -1343,8 +1343,8 @@ double BeamTremoloLayout::chordBeamAnchorY(const BeamBase::LayoutData* ldata, co
     double beamOffset = ldata->beamWidth / 2 * upValue;
 
     if (ldata->isBesideTabStaff) {
-        double stemLength = ldata->tab->chordStemLength(chord) * (ldata->up ? -1 : 1);
-        double y = ldata->tab->chordRestStemPosY(chord) + stemLength;
+        double stemLength = StemLayout::tabStemLength(chord, ldata->tab) * (ldata->up ? -1 : 1);
+        double y = StemLayout::tabRestStemPosY(chord, ldata->tab) + stemLength;
         y *= ldata->spatium;
         y -= beamOffset;
         return y + chord->pagePos().y();

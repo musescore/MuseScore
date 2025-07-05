@@ -33,7 +33,7 @@ ConverterApi::ConverterApi(muse::api::IApiEngine* e)
 
 QString ConverterApi::selectDir(const QString& title, const QString& dir) const
 {
-    io::path_t path = interactive()->selectDirectory(title, dir);
+    io::path_t path = interactive()->selectDirectory(title.toStdString(), dir);
     return path.toQString();
 }
 

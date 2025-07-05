@@ -61,12 +61,7 @@ int FluidSequencer::naturalExpressionLevel() const
 
 void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const PlaybackParamList&)
 {
-    m_offStreamEvents.clear();
-
-    if (m_onOffStreamFlushed) {
-        m_onOffStreamFlushed();
-    }
-
+    flushOffstream();
     updatePlaybackEvents(m_offStreamEvents, events);
     updateOffSequenceIterator();
 }
@@ -131,7 +126,7 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
             midi::Event noteOn(Event::Opcode::NoteOn, Event::MessageType::ChannelVoice20);
             noteOn.setChannel(channelIdx);
             noteOn.setNote(noteIdx);
-            noteOn.setVelocity(velocity);
+            noteOn.setVelocity16(velocity);
             noteOn.setPitchNote(noteIdx, tuning);
 
             destination[timestampFrom].emplace(std::move(noteOn));

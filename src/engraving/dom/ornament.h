@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_ORNAMENT_H
-#define MU_ENGRAVING_ORNAMENT_H
+#pragma once
 
 #include "articulation.h"
 
@@ -99,5 +97,4 @@ private:
 
     Accidental* m_trillOldCompatAccidental = nullptr; // used temporarily to map old (i.e. pre-4.1) trill accidentals
 };
-} // namespace mu::engraving
-#endif // MU_ENGRAVING_ORNAMENT_H
+}

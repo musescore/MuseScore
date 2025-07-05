@@ -26,13 +26,15 @@
 #include <QVariant>
 #include <QMap>
 #include <QStack>
-#include <QEventLoop>
+
+#include "global/async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "../iinteractiveprovider.h"
 #include "../iinteractiveuriregister.h"
 #include "../imainwindow.h"
 #include "extensions/iextensionsprovider.h"
+#include "shortcuts/ishortcutsregister.h"
 #include "types/retval.h"
 
 namespace muse::ui {
@@ -50,44 +52,24 @@ private:
     QVariantMap m_data;
 };
 
-class InteractiveProvider : public QObject, public IInteractiveProvider, public Injectable
+class InteractiveProvider : public QObject, public IInteractiveProvider, public Injectable, public async::Asyncable
 {
     Q_OBJECT
 
     Inject<IInteractiveUriRegister> uriRegister = { this };
     Inject<IMainWindow> mainWindow = { this };
     Inject<muse::extensions::IExtensionsProvider> extensionsProvider = { this };
+    Inject<shortcuts::IShortcutsRegister> shortcutsRegister = { this };
 
 public:
     explicit InteractiveProvider(const modularity::ContextPtr& iocCtx);
 
-    RetVal<Val> question(const std::string& contentTitle, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                         int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
-                         const std::string& dialogTitle = "") override;
-
-    RetVal<Val> info(const std::string& contentTitle, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                     int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
-                     const std::string& dialogTitle = "") override;
-
-    RetVal<Val> warning(const std::string& contentTitle, const IInteractive::Text& text, const std::string& detailedText = {},
-                        const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                        const IInteractive::Options& options = {}, const std::string& dialogTitle = "") override;
-
-    RetVal<Val> error(const std::string& contentTitle, const IInteractive::Text& text, const std::string& detailedText = {},
-                      const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                      const IInteractive::Options& options = {}, const std::string& dialogTitle = "") override;
-
-    Ret showProgress(const std::string& title, Progress* progress) override;
-
-    RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
-    RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
-                                        bool confirmOverwrite) override;
-    RetVal<io::path_t> selectDirectory(const std::string& title, const io::path_t& dir) override;
-
-    RetVal<QColor> selectColor(const QColor& color = Qt::white, const QString& title = "") override;
+    async::Promise<Color> selectColor(const Color& color = Color::WHITE, const std::string& title = "") override;
     bool isSelectColorOpened() const override;
 
-    RetVal<Val> open(const UriQuery& uri) override;
+    RetVal<Val> openSync(const UriQuery& uri) override;
+    async::Promise<Val> openAsync(const UriQuery& uri) override;
+    async::Promise<Val> openAsync(const Uri& uri, const QVariantMap& params) override;
     RetVal<bool> isOpened(const Uri& uri) const override;
     RetVal<bool> isOpened(const UriQuery& uri) const override;
     async::Channel<Uri> opened() const override;
@@ -116,54 +98,34 @@ signals:
     void fireClose(QVariant data);
     void fireRaise(QVariant data);
 
-    void fireOpenStandardDialog(muse::ui::QmlLaunchData* data);
-    void fireOpenFileDialog(muse::ui::QmlLaunchData* data);
-    void fireOpenProgressDialog(muse::ui::QmlLaunchData* data);
-
 private:
-    struct OpenData
-    {
-        bool sync = false;
+    struct OpenData {
         QString objectId;
     };
 
-    struct ObjectInfo
-    {
-        UriQuery uriQuery;
+    struct ObjectInfo {
+        UriQuery query;
+        async::Promise<Val>::Resolve resolve;
+        async::Promise<Val>::Reject reject;
         QVariant objectId;
         QObject* window = nullptr;
     };
 
-    enum class FileDialogType {
-        SelectOpenningFile,
-        SelectSavingFile,
-        SelectDirectory
-    };
+    async::Promise<Val>::Body openFunc(const UriQuery& q);
+    async::Promise<Val>::Body openFunc(const UriQuery& q, const QVariantMap& params);
 
     void raiseWindowInStack(QObject* newActiveWindow);
 
-    void fillExtData(QmlLaunchData* data, const UriQuery& q) const;
-    void fillData(QmlLaunchData* data, const UriQuery& q) const;
-    void fillData(QObject* object, const UriQuery& q) const;
-    void fillStandardDialogData(QmlLaunchData* data, const QString& type, const std::string& contentTitle, const IInteractive::Text& text,
-                                const std::string& detailedText, const IInteractive::ButtonDatas& buttons, int defBtn,
-                                const IInteractive::Options& options, const std::string& dialogTitle) const;
-    void fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& path,
-                            const std::vector<std::string>& filter = {}, bool confirmOverwrite = true) const;
+    void fillExtData(QmlLaunchData* data, const UriQuery& q, const QVariantMap& params) const;
+    void fillData(QmlLaunchData* data, const Uri& uri, const QVariantMap& params) const;
+    void fillData(QObject* object, const QVariantMap& params) const;
 
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
 
-    RetVal<OpenData> openExtensionDialog(const UriQuery& q);
-    RetVal<OpenData> openWidgetDialog(const UriQuery& q);
-    RetVal<OpenData> openQml(const UriQuery& q);
-    RetVal<Val> openStandardDialog(const QString& type, const std::string& contentTitle, const IInteractive::Text& text,
-                                   const std::string& detailedText = {}, const IInteractive::ButtonDatas& buttons = {},
-                                   int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {},
-                                   const std::string& dialogTitle = "");
-
-    RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
-                                      const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);
+    RetVal<OpenData> openExtensionDialog(const UriQuery& q, const QVariantMap& params);
+    RetVal<OpenData> openWidgetDialog(const Uri& uri, const QVariantMap& params);
+    RetVal<OpenData> openQml(const Uri& uri, const QVariantMap& params);
 
     void closeObject(const ObjectInfo& obj);
 
@@ -175,17 +137,14 @@ private:
     void notifyAboutCurrentUriChanged();
     void notifyAboutCurrentUriWillBeChanged();
 
-    UriQuery m_openingUriQuery;
+    ObjectInfo m_openingObject;
 
     QStack<ObjectInfo> m_stack;
     std::vector<ObjectInfo> m_floatingObjects;
 
     async::Channel<Uri> m_currentUriChanged;
     async::Notification m_currentUriAboutToBeChanged;
-    QMap<QString, RetVal<Val> > m_retvals;
     async::Channel<Uri> m_opened;
-
-    QEventLoop m_fileDialogEventLoop;
 
     bool m_isSelectColorOpened = false;
 };

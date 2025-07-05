@@ -10555,7 +10555,7 @@
         <source>Mrm.</source>
         <comment>marimba shortName</comment>
         <extracomment>shortName for Marimba (grand staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mrm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3566"/>
@@ -10583,7 +10583,7 @@
         <source>Mrm.</source>
         <comment>marimba-single shortName</comment>
         <extracomment>shortName for Marimba (single staff); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mrm.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3575"/>

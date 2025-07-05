@@ -614,7 +614,7 @@ bool MeiExporter::writeStaffGrpStart(const Staff* staff, std::vector<int>& ends,
 
     for (size_t j = 0; j < staff->bracketLevels() + 1; j++) {
         if (staff->bracketType(j) != BracketType::NO_BRACKET) {
-            libmei::StaffGrp meiStaffGrp = Convert::bracketToMEI(staff->bracketType(j), staff->barLineSpan());
+            libmei::StaffGrp meiStaffGrp = Convert::staffGrpToMEI(staff->bracketType(j), staff->barLineSpan());
             // mark at which staff we will need to close the staffGrp
             int end = static_cast<int>(staff->idx() + staff->bracketSpan(j)) - 1;
             // Something is wrong, maybe a staff was delete in the MuseScore file?
@@ -1334,6 +1334,10 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         this->writeArtics(chord);
         this->writeVerses(chord);
     }
+    const int velocity = note->userVelocity();
+    if (velocity != 0) {
+        meiNote.SetVel(velocity);
+    }
     Convert::colorToMEI(note, meiNote);
     std::string xmlId = this->getXmlIdFor(note, 'n');
     meiNote.Write(m_currentNode, xmlId);
@@ -1710,7 +1714,7 @@ bool MeiExporter::writeF(const FiguredBassItem* figuredBassItem)
 }
 
 /**
- * Write a fb (FigureBass).
+ * Write a fb (figured bass).
  */
 
 bool MeiExporter::writeFb(const FiguredBass* figuredBass, const std::string& startid)

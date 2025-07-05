@@ -25,6 +25,7 @@
 #include <QKeyEvent>
 #include <QWindow>
 #include <QKeySequence>
+#include <QTimer>
 
 #include "log.h"
 
@@ -35,33 +36,110 @@ KeyboardApi::KeyboardApi(api::IApiEngine* e)
 {
 }
 
-void KeyboardApi::key(const QString& key)
+static int keyCode(const QString& key)
 {
-    LOGD() << key;
-    int code = QKeySequence::fromString(key.toUpper())[0].toCombined();
+    QKeySequence seq = QKeySequence::fromString(key.toUpper());
+    if (seq.count() == 0) {
+        LOGE() << "not recognized key: " << key;
+        return -1;
+    }
+    int code = seq[0].toCombined();
+    return code;
+}
 
+static Qt::KeyboardModifier keyMod(const QString& key)
+{
+    static QMap<QString, Qt::KeyboardModifier> map = {
+        { "SHIFT", Qt::ShiftModifier },
+        { "CTRL", Qt::ControlModifier },
+        { "ALT", Qt::AltModifier },
+        { "META", Qt::MetaModifier },
+        { "KEYPAD", Qt::KeypadModifier },
+        { "GROUPSWITCH", Qt::GroupSwitchModifier }
+    };
+
+    return map.value(key.toUpper(), Qt::NoModifier);
+}
+
+QWindow* KeyboardApi::window() const
+{
     QWindow* w = qApp->focusWindow();
     if (!w) {
         w = mainWindow()->qWindow();
     }
 
-    QKeyEvent pressEvent(QEvent::KeyPress, code, Qt::NoModifier, key);
-    qApp->sendEvent(w, &pressEvent);
+    return w;
+}
 
-    QKeyEvent* releaseEvent = new QKeyEvent(QEvent::KeyRelease, code, Qt::NoModifier, key);
+void KeyboardApi::doPressKey(QWindow* w, int key, Qt::KeyboardModifier mod, const QString& text)
+{
+    QKeyEvent pressEvent(QEvent::KeyPress, key, mod, text);
+    qApp->sendEvent(w, &pressEvent);
+}
+
+void KeyboardApi::doReleaseKey(QWindow* w, int key, Qt::KeyboardModifier mod, const QString& text)
+{
+    QKeyEvent* releaseEvent = new QKeyEvent(QEvent::KeyRelease, key, mod, text);
     qApp->postEvent(w, releaseEvent);
+}
+
+void KeyboardApi::key(const QString& key, const QString& mod)
+{
+    LOGD() << key;
+
+    int code = keyCode(key);
+    if (code < 0) {
+        return;
+    }
+
+    QWindow* w = window();
+
+    doPressKey(w, code, keyMod(mod), key);
+    doReleaseKey(w, code, keyMod(mod), key);
+}
+
+void KeyboardApi::pressKey(const QString& key, const QString& mod)
+{
+    LOGD() << key;
+
+    int code = keyCode(key);
+    if (code < 0) {
+        return;
+    }
+
+    QWindow* w = window();
+
+    doPressKey(w, code, keyMod(mod), key);
+}
+
+void KeyboardApi::releaseKey(const QString& key, const QString& mod)
+{
+    LOGD() << key;
+
+    int code = keyCode(key);
+    if (code < 0) {
+        return;
+    }
+
+    QWindow* w = window();
+
+    doReleaseKey(w, code, keyMod(mod), key);
 }
 
 void KeyboardApi::repeatKey(const QString& k, int count)
 {
     for (int i = 0; i < count; ++i) {
-        key(k);
+        QTimer::singleShot(10, this, [this, k]() {
+            key(k);
+        });
     }
 }
 
 void KeyboardApi::text(const QString& text)
 {
     for (const QChar& ch : text) {
-        key(ch);
+        QTimer::singleShot(10, this, [this, ch]() {
+            key(ch);
+        });
     }
 }

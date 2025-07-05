@@ -414,3 +414,99 @@ TEST_F(Engraving_TimesigTests, timesig_11)
 
     delete score;
 }
+
+TEST_F(Engraving_TimesigTests, endOfMeasureTimeSigChange)
+{
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"endOfMeasureChange.mscz");
+    EXPECT_TRUE(score);
+
+    // Check underlying measures in all scores are the lengths expected
+
+    std::array<Fraction, 5> expectedTimeSigs = { Fraction(4, 4), Fraction(4, 4), Fraction(3, 4), Fraction(4, 4), Fraction(4, 4) };
+
+    for (Score* partScore : score->scoreList()) {
+        for (Measure* m = partScore->firstMeasure(); m; m = m->nextMeasure()) {
+            EXPECT_TRUE(m->timesig() == expectedTimeSigs.at(m->measureIndex()));
+        }
+    }
+
+    // Check measures with MMRests turned on in the part are the lengths expected
+
+    Score* part = score->scoreList().back();
+    EXPECT_TRUE(part);
+    std::array<Fraction, 3> expectedTimeSigsMM = { Fraction(4, 4), Fraction(3, 4), Fraction(4, 4) };
+
+    size_t measureCount = 0;
+    for (MeasureBase* mb = part->firstMM(); mb; mb = mb->nextMM()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+
+        Measure* m = toMeasure(mb);
+        EXPECT_TRUE(m->timesig() == expectedTimeSigsMM.at(measureCount));
+        measureCount++;
+    }
+
+    MScore::useRead302InTestMode = useRead302;
+}
+
+TEST_F(Engraving_TimesigTests, endOfMeasureTie) {
+    bool useRead302 = MScore::useRead302InTestMode;
+    MScore::useRead302InTestMode = false;
+    MasterScore* score = ScoreRW::readScore(TIMESIG_DATA_DIR + u"endOfMeasureTie.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    EXPECT_TRUE(m1);
+
+    Segment* tieSeg = score->tick2segment(Fraction(3, 4), true, SegmentType::ChordRest);
+    EXPECT_TRUE(tieSeg);
+
+    Chord* tieChord = toChord(tieSeg->element(0));
+    EXPECT_TRUE(tieChord);
+
+    Note* tieNote = tieChord->upNote();
+    EXPECT_TRUE(tieNote);
+
+    Tie* tie = tieNote->tieFor();
+    EXPECT_TRUE(tie);
+    EXPECT_TRUE(tie->endNote());
+
+    score->startCmd(TranslatableString::untranslatable("TimesigTests"));
+    TimeSig* newSig = Factory::createTimeSig(score->dummy()->segment());
+    newSig->setSig(Fraction(3, 4));
+    score->cmdAddTimeSig(m1, 0, newSig, false);
+    score->endCmd();
+
+    // No suitable note to tie to after time sig has been changed, no tie should be present
+
+    Segment* noTieSeg = score->tick2segment(Fraction(3, 4), true, SegmentType::ChordRest);
+    EXPECT_TRUE(noTieSeg);
+
+    Chord* noTieChord = toChord(noTieSeg->element(0));
+    EXPECT_TRUE(noTieChord);
+
+    Note* noTieNote = noTieChord->upNote();
+    EXPECT_TRUE(noTieNote);
+
+    EXPECT_FALSE(noTieNote->tieFor());
+
+    score->undoRedo(true, nullptr);
+
+    Segment* undoTieSeg = score->tick2segment(Fraction(3, 4), true, SegmentType::ChordRest);
+    EXPECT_TRUE(undoTieSeg);
+
+    Chord* undoTieChord = toChord(undoTieSeg->element(0));
+    EXPECT_TRUE(undoTieChord);
+
+    Note* undoTieNote = tieChord->upNote();
+    EXPECT_TRUE(undoTieNote);
+
+    Tie* undoTie = undoTieNote->tieFor();
+    EXPECT_TRUE(undoTie);
+    EXPECT_TRUE(undoTie->endNote());
+
+    MScore::useRead302InTestMode = useRead302;
+}

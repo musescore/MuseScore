@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H
-#define MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H
+#pragma once
 
 namespace mu::engraving {
 class MasterScore;
@@ -43,5 +42,3 @@ private:
     static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
 };
 } // namespace mu::engraving::compat
-
-#endif // MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H

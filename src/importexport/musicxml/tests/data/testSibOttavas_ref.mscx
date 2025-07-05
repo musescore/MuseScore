@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.5</pageWidth>
@@ -56,6 +57,7 @@
       <lhGuitarFingeringFontSize>11.9365</lhGuitarFingeringFontSize>
       <rhGuitarFingeringFontFace>Quicksand</rhGuitarFingeringFontFace>
       <rhGuitarFingeringFontSize>11.9365</rhGuitarFingeringFontSize>
+      <hammerOnPullOffTappingFontFace>Quicksand</hammerOnPullOffTappingFontFace>
       <stringNumberFontFace>Quicksand</stringNumberFontFace>
       <stringNumberFontSize>11.9365</stringNumberFontSize>
       <stringTuningsFontSize>11.9365</stringTuningsFontSize>
@@ -145,6 +147,7 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="encoder">James Mizen</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
@@ -153,7 +156,8 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -212,27 +216,34 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>D_D</eid>
         <LayoutBreak>
+          <eid>E_E</eid>
           <subtype>page</subtype>
           </LayoutBreak>
         </VBox>
       <HBox>
         <width>5</width>
+        <eid>F_F</eid>
         </HBox>
       <Measure>
+        <eid>G_G</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>H_H</eid>
             </Clef>
           <TimeSig>
+            <eid>I_I</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Spanner type="Ottava">
             <Ottava>
               <subtype>8va</subtype>
+              <eid>J_J</eid>
               </Ottava>
             <next>
               <location>
@@ -241,19 +252,23 @@
               </next>
             </Spanner>
           <Chord>
+            <eid>K_K</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>L_L</eid>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
             </Chord>
           <Chord>
+            <eid>M_M</eid>
             <dots>1</dots>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>N_N</eid>
               <pitch>77</pitch>
               <tpc>13</tpc>
               </Note>
@@ -268,6 +283,7 @@
           <Spanner type="Ottava">
             <Ottava>
               <subtype>8vb</subtype>
+              <eid>O_O</eid>
               </Ottava>
             <next>
               <location>
@@ -276,11 +292,14 @@
               </next>
             </Spanner>
           <Chord>
+            <eid>P_P</eid>
             <durationType>half</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>Q_Q</eid>
               <Spanner type="Tie">
                 <Tie>
+                  <eid>R_R</eid>
                   <up>down</up>
                   </Tie>
                 <next>
@@ -297,11 +316,14 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>S_S</eid>
         <voice>
           <Chord>
+            <eid>T_T</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>U_U</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -315,9 +337,11 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>V_V</eid>
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <eid>W_W</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               </Note>
@@ -330,10 +354,12 @@
               </prev>
             </Spanner>
           <Rest>
+            <eid>X_X</eid>
             <durationType>half</durationType>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>Y_Y</eid>
             </BarLine>
           </voice>
         </Measure>

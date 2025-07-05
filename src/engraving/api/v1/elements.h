@@ -19,9 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MU_ENGRAVING_APIV1_ELEMENTS_H
-#define MU_ENGRAVING_APIV1_ELEMENTS_H
+#pragma once
 
 #include "scoreelement.h"
 
@@ -43,7 +41,6 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/undo.h"
-#include "engraving/dom/types.h"
 
 #include "playevent.h"
 
@@ -159,7 +156,16 @@ class EngravingItem : public apiv1::ScoreElement
      */
     Q_PROPERTY(QRectF bbox READ bbox)
 
-    API_PROPERTY(subtype,                 SUBTYPE)
+    /**
+     * Subtype of this element.
+     * \since MuseScore 4.6
+     */
+    Q_PROPERTY(int subtype READ subtype)
+    /**
+     * Unlike the name might suggest, this property no longer returns the subtype and is scarcely used.
+     * Named 'subtype' prior to MuseScore 4.6
+     */
+    API_PROPERTY(subType,                 SUBTYPE)
     API_PROPERTY_READ_ONLY_T(bool, selected, SELECTED)
     API_PROPERTY_READ_ONLY_T(bool, generated, GENERATED)
     /**
@@ -287,7 +293,6 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(timeStretch,             TIME_STRETCH)
     API_PROPERTY(ornamentStyle,           ORNAMENT_STYLE)
     API_PROPERTY(timesig,                 TIMESIG)
-    API_PROPERTY(timesigGlobal,           TIMESIG_GLOBAL)
     API_PROPERTY(timesigStretch,          TIMESIG_STRETCH)
     API_PROPERTY(timesigType,             TIMESIG_TYPE)
     API_PROPERTY(spannerTick,             SPANNER_TICK)
@@ -387,7 +392,7 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(endTextOffset,           END_TEXT_OFFSET)
     API_PROPERTY(posAbove,                POS_ABOVE)
     API_PROPERTY_T(int, voice,            VOICE)
-    API_PROPERTY_READ_ONLY(position,      POSITION)                      // TODO: needed?
+    API_PROPERTY(position,                POSITION)
     /**
      * For chord symbols, chord symbol type, one of
      * PluginAPI::PluginAPI::HarmonyType values.
@@ -409,6 +414,8 @@ class EngravingItem : public apiv1::ScoreElement
     Staff* staff() { return wrap<Staff>(element()->staff()); }
 
     QRectF bbox() const;
+
+    int subtype() const { return element()->subtype(); }
 
 public:
     /// \cond MS_INTERNAL
@@ -450,6 +457,13 @@ class Note : public EngravingItem
     /// to see meaningful data in the PlayEvent lists.
     /// \since MuseScore 3.3
     Q_PROPERTY(QQmlListProperty<apiv1::PlayEvent> playEvents READ playEvents)
+    /// List of spanners attached to and starting on this note
+    /// e.g. glissandos, guitar bends
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> spannerForward READ spannerFor)
+    /// List of spanners attached to and ending on this note
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> spannerBack READ spannerBack)
 //       Q_PROPERTY(int                            fret              READ fret               WRITE undoSetFret)
 //       Q_PROPERTY(bool                           ghost             READ ghost              WRITE undoSetGhost)
 //       Q_PROPERTY(mu::engraving::NoteHead::Group            headGroup         READ headGroup          WRITE undoSetHeadGroup)
@@ -520,10 +534,7 @@ public:
     int tpc() const { return note()->tpc(); }
     void setTpc(int val);
 
-    apiv1::Tie* tieBack()    const
-    {
-        return note()->tieBack() != nullptr ? tieWrap(note()->tieBack()) : nullptr;
-    }
+    apiv1::Tie* tieBack() const { return note()->tieBack() != nullptr ? tieWrap(note()->tieBack()) : nullptr; }
 
     apiv1::Tie* tieForward() const { return note()->tieFor() != nullptr ? tieWrap(note()->tieFor()) : nullptr; }
 
@@ -533,6 +544,16 @@ public:
     QQmlListProperty<EngravingItem> dots() { return wrapContainerProperty<EngravingItem>(this, note()->dots()); }
     QQmlListProperty<EngravingItem> elements() { return wrapContainerProperty<EngravingItem>(this, note()->el()); }
     QQmlListProperty<PlayEvent> playEvents() { return wrapPlayEventsContainerProperty(this, note()->playEvents()); }
+
+    QQmlListProperty<EngravingItem> spannerFor()
+    {
+        return wrapContainerProperty<EngravingItem>(this, note()->spannerFor());
+    }
+
+    QQmlListProperty<EngravingItem> spannerBack()
+    {
+        return wrapContainerProperty<EngravingItem>(this, note()->spannerBack());
+    }
 
     EngravingItem* accidental() { return wrap<EngravingItem>(note()->accidental()); }
 
@@ -689,6 +710,9 @@ class Chord : public ChordRest
     Q_PROPERTY(QQmlListProperty<apiv1::Chord> graceNotes READ graceNotes)
     /// List of notes belonging to this chord.
     Q_PROPERTY(QQmlListProperty<apiv1::Note> notes READ notes)
+    /// List of articulations belonging to this chord.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> articulations READ articulations)
     /// Stem of this chord, if exists. \since MuseScore 3.6
     Q_PROPERTY(apiv1::EngravingItem * stem READ stem)
     /// Stem slash of this chord, if exists. Stem slashes are present in grace notes of type acciaccatura.
@@ -713,6 +737,7 @@ public:
 
     QQmlListProperty<Chord> graceNotes() { return wrapContainerProperty<Chord>(this, chord()->graceNotes()); }
     QQmlListProperty<Note> notes() { return wrapContainerProperty<Note>(this, chord()->notes()); }
+    QQmlListProperty<EngravingItem> articulations() { return wrapContainerProperty<EngravingItem>(this, chord()->articulations()); }
     EngravingItem* stem() { return wrap(chord()->stem()); }
     EngravingItem* stemSlash() { return wrap(chord()->stemSlash()); }
     EngravingItem* hook() { return wrap(chord()->hook()); }
@@ -951,5 +976,3 @@ public:
 #undef API_PROPERTY_READ_ONLY
 #undef API_PROPERTY_READ_ONLY_T
 }
-
-#endif

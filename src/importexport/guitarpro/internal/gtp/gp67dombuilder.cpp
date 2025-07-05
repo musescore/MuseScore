@@ -427,7 +427,7 @@ std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(XmlDomNode* 
     std::unique_ptr<GPBar> bar = std::make_unique<GPBar>();
 
     auto innerNode = barNode->firstChild();
-    int barIdx = barNode->attribute("id").toInt();
+    int barIdx = barNode->toElement().attribute("id").value().toInt();
     bar->setId(barIdx);
 
     while (!innerNode.isNull()) {
@@ -469,7 +469,7 @@ std::pair<int, std::unique_ptr<GPVoice> > GP67DomBuilder::createGPVoice(XmlDomNo
     std::unique_ptr<GPVoice> voice = std::make_unique<GPVoice>();
 
     XmlDomNode innerNode = voiceNode->firstChild();
-    int voiceIdx = voiceNode->attribute("id").toInt();
+    int voiceIdx = voiceNode->toElement().attribute("id").value().toInt();
     voice->setId(voiceIdx);
 
     while (!innerNode.isNull()) {
@@ -600,7 +600,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(XmlDomNode
     std::shared_ptr<GPBeat> beat = std::make_shared<GPBeat>();
 
     auto innerNode = beatNode->firstChild();
-    int beatIdx = beatNode->attribute("id").toInt();
+    int beatIdx = beatNode->toElement().attribute("id").value().toInt();
     beat->setId(beatIdx);
 
     while (!innerNode.isNull()) {
@@ -610,12 +610,12 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(XmlDomNode
             GPBeat::DynamicType dynamic = dynamicType(innerNode.toElement().text());
             beat->setDynamic(dynamic);
         } else if (nodeName == u"Legato") {
-            String origin = innerNode.attribute("origin");
-            String destination = innerNode.attribute("destination");
+            String origin = innerNode.toElement().attribute("origin").value();
+            String destination = innerNode.toElement().attribute("destination").value();
             GPBeat::LegatoType legato = legatoType(origin, destination);
             beat->setLegatoType(legato);
         } else if (nodeName == u"Rhythm") {
-            int rIdx = innerNode.attribute("ref").toInt();
+            int rIdx = innerNode.toElement().attribute("ref").value().toInt();
             beat->addGPRhythm(_rhythms.at(rIdx));
         } else if (nodeName == u"Notes") {
             String notesStr = innerNode.toElement().text();
@@ -720,7 +720,7 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(XmlDomNode
     };
 
     auto note = std::make_shared<GPNote>();
-    int noteIdx = noteNode->attribute("id").toInt();
+    int noteIdx = noteNode->toElement().attribute("id").value().toInt();
     note->setId(noteIdx);
 
     auto innerNode = noteNode->firstChild();
@@ -751,8 +751,8 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(XmlDomNode
             readNoteXProperties(innerNode, note.get());
         }
         if (nodeName == u"Tie") {
-            String origin = innerNode.attribute("origin");
-            String destination = innerNode.attribute("destination");
+            String origin = innerNode.toElement().attribute("origin").value();
+            String destination = innerNode.toElement().attribute("destination").value();
             GPNote::TieType tie = tieType(origin, destination);
             note->setTieType(tie);
         }
@@ -817,7 +817,7 @@ std::pair<int, std::shared_ptr<GPRhythm> > GP67DomBuilder::createGPRhythm(XmlDom
     std::shared_ptr<GPRhythm> rhythm = std::make_shared<GPRhythm>();
 
     auto innerNode = rhythmNode->firstChild();
-    int rhythmIdx = rhythmNode->attribute("id").toInt();
+    int rhythmIdx = rhythmNode->toElement().attribute("id").value().toInt();
     while (!innerNode.isNull()) {
         String nodeName = innerNode.nodeName();
         if (nodeName == u"NoteValue") {
@@ -825,10 +825,10 @@ std::pair<int, std::shared_ptr<GPRhythm> > GP67DomBuilder::createGPRhythm(XmlDom
             rhythm->setRhytm(rhType);
         }
         if (nodeName == u"AugmentationDot") {
-            rhythm->setDotCount(innerNode.attribute("count").toInt());
+            rhythm->setDotCount(innerNode.toElement().attribute("count").value().toInt());
         } else if (nodeName == u"PrimaryTuplet") {
-            int num = innerNode.attribute("num").toInt();
-            int denom = innerNode.attribute("den").toInt();
+            int num = innerNode.toElement().attribute("num").value().toInt();
+            int denom = innerNode.toElement().attribute("den").value().toInt();
             rhythm->setTuplet({ num, denom });
         }
 
@@ -897,7 +897,7 @@ void GP67DomBuilder::readNoteXProperties(const XmlDomNode& propertiesNode, GPNot
     auto propertyNode = propertiesNode.firstChild();
 
     while (!propertyNode.isNull()) {
-        int propertyId = propertyNode.attribute("id").toInt();
+        int propertyId = propertyNode.toElement().attribute("id").value().toInt();
 
         if (propertyId == 688062467) {
             note->setTrillSpeed(propertyNode.firstChild().toElement().text().toInt());
@@ -914,7 +914,7 @@ void GP67DomBuilder::readNoteProperties(XmlDomNode* propertiesNode, GPNote* note
     auto propertyNode = propertiesNode->firstChild();
 
     while (!propertyNode.isNull()) {
-        auto propertyName = propertyNode.attribute("name");
+        auto propertyName = propertyNode.toElement().attribute("name").value();
 
         if (propertyName == u"Midi") {
             int midi = propertyNode.firstChild().toElement().text().toInt();
@@ -994,7 +994,7 @@ void GP67DomBuilder::readNoteProperties(XmlDomNode* propertiesNode, GPNote* note
             note->setHammerOn(GPNote::HammerOn::Start);
         } else if (propertyName == u"Tapped") {
             if (propertyNode.firstChild().nodeName() == "Enable") {
-                note->setTapping(true);
+                note->setRightHandTapping(true);
             }
         } else if (propertyName == u"LeftHandTapped") {
             if (propertyNode.firstChild().nodeName() == "Enable") {
@@ -1020,7 +1020,7 @@ void GP67DomBuilder::readBeatXProperties(const XmlDomNode& propertiesNode, GPBea
     bool joinedBeams = false;
 
     while (!propertyNode.isNull()) {
-        int propertyId = propertyNode.attribute("id").toInt();
+        int propertyId = propertyNode.toElement().attribute("id").value().toInt();
 
         if (propertyId == 687931393 || propertyId == 687935489) {
             // arpeggio/brush ticks
@@ -1058,7 +1058,7 @@ std::unique_ptr<GPNote::Bend> GP67DomBuilder::createBend(XmlDomNode* propertyNod
 
     auto currentNode = propertyNode->nextSibling();
     while (!currentNode.isNull()) {
-        String propertyName = currentNode.attribute("name");
+        String propertyName = currentNode.toElement().attribute("name").value();
         if (propertyName == u"BendDestinationOffset") {
             bend->destinationOffset = currentNode.firstChild().toElement().text().toFloat();
         } else if (propertyName == u"BendDestinationValue") {
@@ -1099,7 +1099,7 @@ void GP67DomBuilder::readHarmonic(XmlDomNode* propertyNode, GPNote* note) const
         }
     };
 
-    String propertyName = propertyNode->attribute("name");
+    String propertyName = propertyNode->toElement().attribute("name").value();
     if (propertyName == u"HarmonicFret") {
         note->setHarmonicFret(propertyNode->firstChild().toElement().text().toFloat());
     } else if (propertyName == u"HarmonicType") {
@@ -1177,7 +1177,7 @@ void GP67DomBuilder::readBeatProperties(const XmlDomNode& propertiesNode, GPBeat
     auto propertyNode = propertiesNode.firstChild();
 
     while (!propertyNode.isNull()) {
-        String propertyName = propertyNode.attribute("name");
+        String propertyName = propertyNode.toElement().attribute("name").value();
 
         if (propertyName == u"Popped") {
             if (propertyNode.firstChild().nodeName() == "Enable") {
@@ -1223,7 +1223,7 @@ void GP67DomBuilder::readTrackProperties(XmlDomNode* propertiesNode, GPTrack* tr
     auto propertyNode = propertiesNode->firstChild();
 
     while (!propertyNode.isNull()) {
-        String propertyName = propertyNode.attribute("name");
+        String propertyName = propertyNode.toElement().attribute("name").value();
 
         if (propertyName == u"CapoFret") {
             property.capoFret = propertyNode.firstChild().toElement().text().toInt();
@@ -1257,19 +1257,19 @@ void GP67DomBuilder::readDiagram(const XmlDomNode& items, GPTrack* track) const
     while (!item.isNull()) {
         GPTrack::Diagram diagram;
 
-        diagram.id = item.attribute("id").toInt();
-        diagram.name = item.attribute("name");
+        diagram.id = item.toElement().attribute("id").value().toInt();
+        diagram.name = item.toElement().attribute("name").value();
 
         auto diagramNode = item.firstChild();
-        diagram.stringCount = diagramNode.attribute("stringCount").toInt();
-        diagram.fretCount = diagramNode.attribute("fretCount").toInt();
-        diagram.baseFret = diagramNode.attribute("baseFret").toInt();
+        diagram.stringCount = diagramNode.toElement().attribute("stringCount").value().toInt();
+        diagram.fretCount = diagramNode.toElement().attribute("fretCount").value().toInt();
+        diagram.baseFret = diagramNode.toElement().attribute("baseFret").value().toInt();
 
         auto fretNode = diagramNode.firstChild();
         while (!fretNode.isNull()) {
             if (fretNode.nodeName() == "Fret") {
-                int string = fretNode.attribute("string").toInt();
-                int fret = fretNode.attribute("fret").toInt();
+                int string = fretNode.toElement().attribute("string").value().toInt();
+                int fret = fretNode.toElement().attribute("fret").value().toInt();
                 diagram.frets[string] = fret;
             }
 
@@ -1326,9 +1326,9 @@ GPMasterBar::Repeat GP67DomBuilder::readRepeat(XmlDomNode* repeatNode) const
         return GPMasterBar::Repeat::Type::None;
     };
 
-    String start = repeatNode->attribute("start");
-    String end = repeatNode->attribute("end");
-    int count = repeatNode->attribute("count").toInt();
+    String start = repeatNode->toElement().attribute("start").value();
+    String end = repeatNode->toElement().attribute("end").value();
+    int count = repeatNode->toElement().attribute("count").value().toInt();
 
     GPMasterBar::Repeat repeat{ repeatType(start, end), count };
     return repeat;

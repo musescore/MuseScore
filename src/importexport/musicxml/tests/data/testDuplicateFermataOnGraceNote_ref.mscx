@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.50">
+<museScore version="4.60">
   <Score>
+    <eid>B_B</eid>
     <Division>480</Division>
     <Style>
       <pageWidth>8.26774</pageWidth>
@@ -33,6 +34,7 @@
       <lhGuitarFingeringFontSize>10</lhGuitarFingeringFontSize>
       <rhGuitarFingeringFontFace>FreeSerif</rhGuitarFingeringFontFace>
       <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
+      <hammerOnPullOffTappingFontFace>FreeSerif</hammerOnPullOffTappingFontFace>
       <stringNumberFontFace>FreeSerif</stringNumberFontFace>
       <stringNumberFontSize>10</stringNumberFontSize>
       <stringTuningsFontSize>10</stringTuningsFontSize>
@@ -59,9 +61,7 @@
       <rehearsalMarkFontFace>FreeSerif</rehearsalMarkFontFace>
       <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
       <repeatLeftFontFace>FreeSerif</repeatLeftFontFace>
-      <repeatLeftFontSize>10</repeatLeftFontSize>
       <repeatRightFontFace>FreeSerif</repeatRightFontFace>
-      <repeatRightFontSize>10</repeatRightFontSize>
       <frameFontFace>FreeSerif</frameFontFace>
       <noteLineFontFace>FreeSerif</noteLineFontFace>
       <glissandoFontFace>FreeSerif</glissandoFontFace>
@@ -107,14 +107,16 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <Part id="1">
-      <Staff id="1">
+      <Staff>
+        <eid>C_C</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
-      <Staff id="2">
+      <Staff>
+        <eid>D_D</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
@@ -178,19 +180,23 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <eid>E_E</eid>
         <Text>
+          <eid>F_F</eid>
           <style>composer</style>
           <family>Times New Roman</family>
           <text><font size="12"/><font face="Times New Roman"/>Franz Liszt
 (1811 - 1886)</text>
           </Text>
         <Text>
+          <eid>G_G</eid>
           <style>title</style>
           <family>Times New Roman</family>
           <offset x="0" y="-0.172872"/>
           <text><font size="24"/><font face="Times New Roman"/>Mephisto Waltz No. 1</text>
           </Text>
         <Text>
+          <eid>H_H</eid>
           <style>subtitle</style>
           <family>Times New Roman</family>
           <offset x="0" y="9.82548"/>
@@ -198,34 +204,43 @@
           </Text>
         </VBox>
       <Measure len="4/8">
+        <eid>I_I</eid>
         <voice>
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>J_J</eid>
             </Clef>
           <KeySig>
+            <eid>K_K</eid>
             <concertKey>1</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>L_L</eid>
             <sigN>3</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Fermata>
             <subtype>fermataAbove</subtype>
+            <eid>M_M</eid>
             </Fermata>
           <Fermata>
             <subtype>fermataAbove</subtype>
+            <eid>N_N</eid>
             </Fermata>
           <Tempo>
             <tempo>3.233333</tempo>
+            <eid>O_O</eid>
             <family>Times New Roman</family>
             <text><font size="12"/><font face="Times New Roman"/><b>Allegro vivace (quasi presto)</b></text>
             </Tempo>
           <Chord>
+            <eid>P_P</eid>
             <durationType>16th</durationType>
             <grace16/>
             <Note>
+              <eid>Q_Q</eid>
               <Events>
                 <Event>
                   <len>0</len>
@@ -236,15 +251,18 @@
               </Note>
             </Chord>
           <Chord>
+            <eid>R_R</eid>
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <eid>S_S</eid>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <BarLine>
             <subtype>end</subtype>
+            <eid>T_T</eid>
             </BarLine>
           </voice>
         </Measure>
@@ -256,21 +274,26 @@
             <concertClefType>F</concertClefType>
             <transposingClefType>F</transposingClefType>
             <isHeader>1</isHeader>
+            <eid>U_U</eid>
             </Clef>
           <KeySig>
+            <eid>V_V</eid>
             <concertKey>1</concertKey>
             </KeySig>
           <TimeSig>
+            <eid>W_W</eid>
             <sigN>3</sigN>
             <sigD>8</sigD>
             </TimeSig>
           <Rest>
+            <eid>X_X</eid>
             <visible>0</visible>
             <durationType>measure</durationType>
             <duration>4/8</duration>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <eid>Y_Y</eid>
             </BarLine>
           </voice>
         </Measure>

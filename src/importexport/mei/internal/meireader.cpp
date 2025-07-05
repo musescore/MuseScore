@@ -74,10 +74,14 @@ Err MeiReader::import(MasterScore* score, const muse::io::path_t& path, const Op
 /**
  * Show a dialog displaying the MEI import problem(s) and ask whether to load or cancel.
  */
-bool MeiReader::askToLoadDespiteWarnings(const String& text, const String& detailedText)
+bool MeiReader::askToLoadDespiteWarnings(const String& title, const String& detailedText)
 {
-    IInteractive::Button btn = interactive()->warning(
-        text.toStdString(), muse::trc("iex_mei", "Do you want to try to load this MEI file anyway?"), detailedText.toStdString(), {
+    IInteractive::Text t;
+    t.text = muse::trc("iex_mei", "Do you want to try to load this MEI file anyway?");
+    t.detailedText = detailedText.toStdString();
+
+    IInteractive::Button btn = interactive()->warningSync(
+        title.toStdString(), t, {
         interactive()->buttonData(IInteractive::Button::Cancel),
         interactive()->buttonData(IInteractive::Button::Yes)
     }, (int)IInteractive::Button::Yes).standardButton();

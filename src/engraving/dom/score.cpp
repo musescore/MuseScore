@@ -450,6 +450,8 @@ void Score::setUpTempoMap()
         tick += measureTicks;
     }
 
+    m_measures.updateTickIndex();
+
     if (isMaster()) {
         for (const auto& pair : spanner()) {
             const Spanner* spannerItem = pair.second;
@@ -1450,6 +1452,15 @@ void Score::styleChanged()
             footerText(i)->styleChanged();
         }
     }
+    for (Staff* staff : staves()) {
+        for (int tick = 0; tick != -1; tick = staff->staffTypeRange(Fraction::fromTicks(tick + 1)).second) {
+            StaffType* st = staff->staffType(Fraction::fromTicks(tick));
+            if (!st) {
+                continue;
+            }
+            st->styleChanged();
+        }
+    }
     createPaddingTable();
     setLayoutAll();
 }
@@ -1472,7 +1483,7 @@ Measure* Score::getCreateMeasure(const Fraction& tick)
             m->setTick(lastTick);
             m->setTimesig(ts);
             m->setTicks(ts);
-            measures()->add(toMeasureBase(m));
+            measures()->append(toMeasureBase(m));
             lastTick += Fraction::fromTicks(ts.ticks());
         }
     }
@@ -1526,6 +1537,7 @@ void Score::addElement(EngravingItem* element)
     break;
 
     case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF:
         addLayoutFlags(LayoutFlag::PLAY_EVENTS);
     // fall through
 
@@ -1720,6 +1732,7 @@ void Score::removeElement(EngravingItem* element)
         break;
 
     case ElementType::SLUR:
+    case ElementType::HAMMER_ON_PULL_OFF:
         addLayoutFlags(LayoutFlag::PLAY_EVENTS);
     // fall through
 
@@ -2179,7 +2192,6 @@ bool Score::appendScore(Score* score, bool addPageBreak, bool addSectionBreak)
 bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick)
 {
     Fraction tickOfAppend = last()->endTick();
-    MeasureBase* pmb = last();
     TieMap tieMap;
 
     MeasureBase* fmb = score->tick2measureBase(startTick);
@@ -2195,13 +2207,8 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
             nmb = static_cast<MeasureBase*>(cmb->clone());
         }
 
-        addMeasure(nmb, 0);
-        nmb->setNext(0);
-        nmb->setPrev(pmb);
         nmb->setScore(this);
-
-        pmb->setNext(nmb);
-        pmb = nmb;
+        measures()->append(nmb);
     }
 
     Measure* firstAppendedMeasure = tick2measure(tickOfAppend);
@@ -2348,7 +2355,6 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
     clef->setParent(seg);
     clef->setIsHeader(true);
     undoAddElement(clef);
-    renderer()->layoutItem(clef);
 
     undoChangeKeySig(ns, Fraction(0, 1), st->keySigEvent(Fraction(0, 1)));
 
@@ -3062,14 +3068,12 @@ void Score::cmdConcertPitchChanged(bool flag)
                     continue;
                 }
                 Harmony* h  = toHarmony(e);
-                int rootTpc = transposeTpc(h->rootTpc(), interval, true);
-                int baseTpc = transposeTpc(h->bassTpc(), interval, true);
                 for (EngravingObject* se : h->linkList()) {
                     // don't transpose all links
                     // just ones resulting from mmrests
                     Harmony* he = toHarmony(se);              // toHarmony() does not work as e is an ScoreElement
                     if (he->staff() == h->staff()) {
-                        undoTransposeHarmony(he, rootTpc, baseTpc);
+                        undoTransposeHarmony(he, interval);
                     }
                 }
                 //realized harmony should be invalid after a transpose command
@@ -4460,24 +4464,6 @@ void Score::undo(UndoCommand* cmd, EditData* ed) const
 }
 
 //---------------------------------------------------------
-//   linkId
-//---------------------------------------------------------
-
-int Score::linkId()
-{
-    return (masterScore()->m_linkId)++;
-}
-
-// val is a used link id
-void Score::linkId(int val)
-{
-    Score* s = masterScore();
-    if (val >= s->m_linkId) {
-        s->m_linkId = val + 1;       // update unused link id
-    }
-}
-
-//---------------------------------------------------------
 //   scoreList
 //    return a list of scores containing the root score
 //    and all part scores (if there are any)
@@ -5739,7 +5725,7 @@ void Score::setStyle(const MStyle& s, const bool overlap)
 //   getTextStyleUserName
 //---------------------------------------------------------
 
-TranslatableString Score::getTextStyleUserName(TextStyleType tid)
+TranslatableString Score::getTextStyleUserName(TextStyleType tid) const
 {
     if (int(tid) >= int(TextStyleType::USER1) && int(tid) <= int(TextStyleType::USER12)) {
         int idx = int(tid) - int(TextStyleType::USER1);
@@ -5923,69 +5909,71 @@ void Score::connectTies(bool silent)
         return;
     }
 
-    SegmentType st = SegmentType::ChordRest;
-    for (Segment* s = m->first(st); s; s = s->next1(st)) {
-        for (track_idx_t i = 0; i < tracks; ++i) {
-            EngravingItem* e = s->element(i);
-            if (e == 0 || !e->isChord()) {
+    auto connectTiesForChord = [silent](Chord* c, Segment* s, track_idx_t track) -> void {
+        for (Note* n : c->notes()) {
+            if (n->laissezVib()) {
                 continue;
             }
-            Chord* c = toChord(e);
-            for (Note* n : c->notes()) {
-                if (n->laissezVib()) {
-                    continue;
+            // connect a tie without end note
+            Tie* tie = n->tieFor();
+            if (tie) {
+                tie->updatePossibleJumpPoints();
+            }
+            if (tie && !tie->isPartialTie() && !tie->endNote()) {
+                Note* nnote;
+                nnote = searchTieNote(n);
+                if (nnote == 0) {
+                    if (!silent) {
+                        LOGD("next note at %d track %zu for tie not found", s->tick().ticks(), track);
+                        delete tie;
+                        n->setTieFor(0);
+                    }
+                } else {
+                    tie->setEndNote(nnote);
+                    nnote->setTieBack(tie);
                 }
-                // connect a tie without end note
-                Tie* tie = n->tieFor();
-                if (tie) {
-                    tie->updatePossibleJumpPoints();
-                }
-                if (tie && !tie->isPartialTie() && !tie->endNote()) {
-                    Note* nnote;
-                    if (m_mscVersion <= 114) {
-                        nnote = searchTieNote114(n);
+            }
+            // connect a glissando without initial note (old glissando format)
+            for (Spanner* spanner : n->spannerBack()) {
+                if (spanner->isGlissando() && !spanner->startElement()) {
+                    Note* initialNote = Glissando::guessInitialNote(n->chord());
+                    n->removeSpannerBack(spanner);
+                    if (initialNote) {
+                        spanner->setStartElement(initialNote);
+                        spanner->setEndElement(n);
+                        spanner->setTick(initialNote->chord()->tick());
+                        spanner->setTick2(n->chord()->tick());
+                        spanner->setTrack(n->track());
+                        spanner->setTrack2(n->track());
+                        spanner->setParent(initialNote);
+                        initialNote->add(spanner);
                     } else {
-                        nnote = searchTieNote(n);
-                    }
-                    if (nnote == 0) {
-                        if (!silent) {
-                            LOGD("next note at %d track %zu for tie not found (version %d)", s->tick().ticks(), i, m_mscVersion);
-                            delete tie;
-                            n->setTieFor(0);
-                        }
-                    } else {
-                        tie->setEndNote(nnote);
-                        nnote->setTieBack(tie);
-                    }
-                }
-                // connect a glissando without initial note (old glissando format)
-                for (Spanner* spanner : n->spannerBack()) {
-                    if (spanner->isGlissando() && !spanner->startElement()) {
-                        Note* initialNote = Glissando::guessInitialNote(n->chord());
-                        n->removeSpannerBack(spanner);
-                        if (initialNote) {
-                            spanner->setStartElement(initialNote);
-                            spanner->setEndElement(n);
-                            spanner->setTick(initialNote->chord()->tick());
-                            spanner->setTick2(n->chord()->tick());
-                            spanner->setTrack(n->track());
-                            spanner->setTrack2(n->track());
-                            spanner->setParent(initialNote);
-                            initialNote->add(spanner);
-                        } else {
-                            delete spanner;
-                        }
-                    }
-                }
-                // spanner with no end element can happen during copy/paste
-                for (Spanner* spanner : n->spannerFor()) {
-                    if (spanner->endElement() == nullptr) {
-                        n->removeSpannerFor(spanner);
                         delete spanner;
                     }
                 }
             }
+            // spanner with no end element can happen during copy/paste
+            for (Spanner* spanner : n->spannerFor()) {
+                if (spanner->endElement() == nullptr) {
+                    n->removeSpannerFor(spanner);
+                    delete spanner;
+                }
+            }
+        }
+    };
+
+    SegmentType st = SegmentType::ChordRest;
+    for (Segment* s = m->first(st); s; s = s->next1(st)) {
+        for (track_idx_t track = 0; track < tracks; ++track) {
+            EngravingItem* e = s->element(track);
+            if (e == 0 || !e->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(e);
+            connectTiesForChord(c, s, track);
             for (Chord* gc : c->graceNotes()) {
+                connectTiesForChord(gc, s, track);
+
                 for (Note* n : gc->notes()) {
                     // spanner with no end element apparently happens when reading some 206 files
                     // (and possibly in other situations too)

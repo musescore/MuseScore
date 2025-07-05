@@ -25,24 +25,11 @@
 
 #include "importmidi_operations.h"
 #include "importmidi_chord.h"
-#include "../midishared/midifile.h"
 
 #include "engraving/dom/durationtype.h"
 #include "engraving/dom/sig.h"
 
 namespace mu::iex::midi {
-MTrack::MTrack()
-    : program(0)
-    , staff(nullptr)
-    , mtrack(nullptr)
-    , hasKey(false)
-    , indexOfOperation(0)
-    , division(0)
-    , isDivisionInTps(false)
-    , hadInitialNotes(false)
-{
-}
-
 MTrack::MTrack(const MTrack& other)
     : program(other.program)
     , staff(other.staff)
