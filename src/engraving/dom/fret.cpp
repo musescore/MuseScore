@@ -628,7 +628,7 @@ void FretDiagram::applyDiagramPattern(FretDiagram* diagram, const String& patter
             std::vector<String> pairs = inner.split(u',');
 
             for (const String& p : pairs) {
-                int dash = p.indexOf(u'-');
+                size_t dash = p.indexOf(u'-');
                 if (dash > 0) {
                     int fret = p.left(dash).toInt();
                     Char typeChar = p.mid(dash + 1, 1).at(0);
@@ -670,8 +670,8 @@ void FretDiagram::applyDiagramPattern(FretDiagram* diagram, const String& patter
             continue;
         }
 
-        int lb = barrePart.indexOf(u'[');
-        int rb = barrePart.indexOf(u']');
+        size_t lb = barrePart.indexOf(u'[');
+        size_t rb = barrePart.indexOf(u']');
         if (lb < 2 || rb < lb) {
             continue;
         }
@@ -682,7 +682,7 @@ void FretDiagram::applyDiagramPattern(FretDiagram* diagram, const String& patter
         }
 
         String range = barrePart.mid(lb + 1, rb - lb - 1);
-        int dash = range.indexOf('-');
+        size_t dash = range.indexOf('-');
         if (dash > 0) {
             int start = range.left(dash).toInt();
             int end = range.mid(dash + 1).toInt();
