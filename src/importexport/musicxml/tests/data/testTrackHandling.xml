@@ -1070,6 +1070,7 @@
         </note>
       </measure>
     <measure number="14">
+      <print page-number="2"/>
       <note>
         <pitch>
           <step>D</step>
@@ -1240,7 +1241,6 @@
         </note>
       </measure>
     <measure number="16">
-      <print page-number="2"/>
       <note>
         <pitch>
           <step>D</step>
@@ -2063,6 +2063,7 @@
         </note>
       </measure>
     <measure number="14">
+      <print page-number="2"/>
       <note>
         <pitch>
           <step>D</step>
@@ -2291,7 +2292,6 @@
         </note>
       </measure>
     <measure number="16">
-      <print page-number="2"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -2654,6 +2654,7 @@
         </note>
       </measure>
     <measure number="14">
+      <print page-number="2"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -2668,7 +2669,6 @@
         </note>
       </measure>
     <measure number="16">
-      <print page-number="2"/>
       <note>
         <pitch>
           <step>D</step>

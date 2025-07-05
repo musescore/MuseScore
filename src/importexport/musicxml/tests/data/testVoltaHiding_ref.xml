@@ -540,6 +540,7 @@
         </note>
       </measure>
     <measure number="25">
+      <print page-number="2"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -637,7 +638,6 @@
         </note>
       </measure>
     <measure number="32">
-      <print page-number="2"/>
       <note>
         <pitch>
           <step>D</step>
@@ -2055,6 +2055,7 @@
         </note>
       </measure>
     <measure number="25">
+      <print page-number="2"/>
       <note>
         <rest measure="yes"/>
         <duration>4</duration>
@@ -2311,7 +2312,6 @@
         </note>
       </measure>
     <measure number="32">
-      <print page-number="2"/>
       <note>
         <pitch>
           <step>B</step>
