@@ -1002,12 +1002,43 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         }
     }
 
-    // move canvas
     if (!isNoteEnterMode || isMiddleButton) {
+        // move canvas
         PointF logicalDragDelta = logicPos - m_mouseDownInfo.logicalBeginPoint;
         m_view->moveCanvas(logicalDragDelta.x(), logicalDragDelta.y());
-
         m_isCanvasDragged = true;
+
+        // wrap mouse over the edge of the canvas
+        QPoint newPos = event->pos();
+
+        int right = m_view->width();
+        int bottom = m_view->height();
+
+        int padding = 2; // This is the minimum magic number to get the cursor to wrap over the right edge when muse score is fullscreen on X11
+        if (newPos.x() < padding) {
+            newPos.setX(right - padding);
+        } else if (newPos.x() + padding > right) {
+            newPos.setX(padding);
+        }
+        if (newPos.y() < padding) {
+            newPos.setY(bottom - padding);
+        } else if (newPos.y() + padding > bottom) {
+            newPos.setY(padding);
+        }
+
+        QPoint delta = newPos - event->pos();
+        if (delta.x() != 0 || delta.y() != 0) {
+            QPoint newCursorPos = QCursor::pos() + delta;
+            QCursor::setPos(newCursorPos);
+            QPoint cursorDelta = QCursor::pos() - newCursorPos;
+
+            // do not update the mouse down info if the mouse did not move because setting the mouse position is not possible on some targets (including wayland)
+            // allow some margin for error because sometimes the user moves the mouse between the call to `setPos` and the call to `cursor.pos`
+            if (-15 < cursorDelta.x() && cursorDelta.x() < 15 && -15 < cursorDelta.y() && cursorDelta.y() < 15) {
+                m_mouseDownInfo.physicalBeginPoint = newPos;
+                m_mouseDownInfo.logicalBeginPoint = m_view->toLogical(newPos);
+            }
+        }
     }
 }
 
