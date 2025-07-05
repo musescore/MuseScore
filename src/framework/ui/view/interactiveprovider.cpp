@@ -566,8 +566,8 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
     //! NOTE Will be deleted with the dialog
     WidgetDialogAdapter* adapter = new WidgetDialogAdapter(dialog, mainWindow()->qWindow());
-    adapter->onShow([this, objectId]() {
-        onOpen(ContainerType::QWidgetDialog, objectId);
+    adapter->onShow([this, objectId, dialog]() {
+        onOpen(ContainerType::QWidgetDialog, objectId, dialog->window());
     })
     .onHide([this, objectId, dialog]() {
         QDialog::DialogCode dialogCode = static_cast<QDialog::DialogCode>(dialog->result());
