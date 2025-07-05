@@ -289,7 +289,7 @@ bool TextBase::isTextualEditAllowed(EditData& ed) const
 {
     // Keep this method closely in sync with TextBase::edit()!
 
-    if (ed.key == Key_Shift || ed.key == Key_Escape) {
+    if (ed.key == Key_Shift || ed.key == Key_Escape || ed.key == Key_Tab) {
         return false;
     }
 
@@ -338,7 +338,6 @@ bool TextBase::isTextualEditAllowed(EditData& ed) const
     case Key_Down:
     case Key_Home:
     case Key_End:
-    case Key_Tab:
     case Key_Space:
     case Key_Minus:
     case Key_Underscore:
@@ -627,11 +626,6 @@ bool TextBase::editTextual(EditData& ed)
 
             notifyAboutTextCursorChanged();
 
-            break;
-
-        case Key_Tab:
-            s = u" ";
-            ed.modifiers = {};
             break;
 
         case Key_Space:
