@@ -4134,7 +4134,7 @@ void MusicXmlParserDirection::harpPedal()
 
     HarpPedalDiagram* hpd = Factory::createHarpPedalDiagram(m_score->dummy()->segment());
     while (m_e.readNextStartElement()) {
-        int stepIndex;
+        int stepIndex = 0;
         PedalPosition pedpos = PedalPosition::UNSET;
         while (m_e.readNextStartElement()) {
             if (m_e.name() == "pedal-step") {
