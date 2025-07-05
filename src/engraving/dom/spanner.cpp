@@ -982,7 +982,9 @@ void Spanner::setNoteSpan(Note* startNote, Note* endNote)
 
 Chord* Spanner::startChord()
 {
-    assert(m_anchor == Anchor::CHORD);
+    if (m_anchor != Anchor::CHORD) {
+        return nullptr;
+    }
     if (!m_startElement) {
         m_startElement = findStartChord();
     }
@@ -1000,7 +1002,9 @@ Chord* Spanner::startChord()
 
 Chord* Spanner::endChord()
 {
-    assert(m_anchor == Anchor::CHORD);
+    if (m_anchor != Anchor::CHORD) {
+        return nullptr;
+    }
     if (!m_endElement && type() == ElementType::SLUR) {
         m_endElement = findEndChord();
     }

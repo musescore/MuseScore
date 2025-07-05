@@ -318,7 +318,7 @@ void Engraving_SelectionFilterTests::testNotesInChordsAction(void (*action)(Scor
 }
 
 /**
- * @brief Engraving_VoiceSwitchingTests_notesInChordsDeleteRange
+ * @brief Engraving_SelectionFilterTests_notesInChordsDeleteRange
  * @details See Engraving_SelectionFilterTests::testNotesInChordsAction
  */
 TEST_F(Engraving_SelectionFilterTests, notesInChordsDeleteRange)
@@ -333,7 +333,7 @@ TEST_F(Engraving_SelectionFilterTests, notesInChordsDeleteRange)
 }
 
 /**
- * @brief Engraving_VoiceSwitchingTests_notesInChordsCopyPaste
+ * @brief Engraving_SelectionFilterTests_notesInChordsCopyPaste
  * @details See Engraving_SelectionFilterTests::testNotesInChordsAction
  */
 TEST_F(Engraving_SelectionFilterTests, notesInChordsCopyPaste)
@@ -351,4 +351,77 @@ TEST_F(Engraving_SelectionFilterTests, notesInChordsCopyPaste)
     };
 
     testNotesInChordsAction(copyPasteAction, SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_notesinchords_copypaste-ref.mscx"));
+}
+
+/**
+ * @brief Engraving_VoiceSwitchingTests_gracesAndSlurs
+ * @details Start with a score containing a mixture of grace notes and slurs. Iterate through each measure, modify the selection
+ *          filter, and perform a range delete over that measure. Check the result against the reference.
+ */
+TEST_F(Engraving_SelectionFilterTests, gracesAndSlurs)
+{
+    //! [GIVEN] A score with a grace notes and slurs
+    MasterScore* score = ScoreRW::readScore(SELECTIONFILTER_DATA_DIR + String(u"selectionfilter_gracesandslurs.mscx"));
+    EXPECT_TRUE(score);
+
+    // Clear selection filter...
+    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::ALL, false);
+    score->selectionFilter().setFiltered(engraving::NotesInChordSelectionFilterTypes::ALL, false);
+    score->selectionFilter().setIncludeSingleNotes(false);
+
+    // Measure 1
+    //! [WHEN] Performing a delete with nothing filtered...
+    MeasureBase* currentMeasure = score->measure(0);
+    EXPECT_TRUE(currentMeasure);
+    score->deselectAll();
+    score->select(currentMeasure, SelectType::SINGLE);
+
+    score->startCmd(TranslatableString::untranslatable("Selection filter - delete range test"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    // Measure 2
+    //! [WHEN] Performing a delete with graces & slurs filtered...
+    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::SLUR, true);
+    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::GRACE_NOTE, true);
+
+    currentMeasure = score->measure(1);
+    EXPECT_TRUE(currentMeasure);
+    score->deselectAll();
+    score->select(currentMeasure, SelectType::SINGLE);
+
+    score->startCmd(TranslatableString::untranslatable("Selection filter - delete range test"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    // Measure 3
+    //! [WHEN] Performing a delete with graces only filtered...
+    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::SLUR, false);
+
+    currentMeasure = score->measure(2);
+    EXPECT_TRUE(currentMeasure);
+    score->deselectAll();
+    score->select(currentMeasure, SelectType::SINGLE);
+
+    score->startCmd(TranslatableString::untranslatable("Selection filter - delete range test"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    // Measure 4
+    //! [WHEN] Performing a delete with slurs only filtered...
+    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::GRACE_NOTE, false);
+    score->selectionFilter().setFiltered(engraving::ElementsSelectionFilterTypes::SLUR, true);
+
+    currentMeasure = score->measure(3);
+    EXPECT_TRUE(currentMeasure);
+    score->deselectAll();
+    score->select(currentMeasure, SelectType::SINGLE);
+
+    score->startCmd(TranslatableString::untranslatable("Selection filter - delete range test"));
+    score->cmdDeleteSelection();
+    score->endCmd();
+
+    //! [EXPECT] The result matches the given reference...
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"selectionfilter_gracesandslurs.mscx.mscx"),
+                                            SELECTIONFILTER_DATA_DIR + String("selectionfilter_gracesandslurs-ref.mscx")));
 }
