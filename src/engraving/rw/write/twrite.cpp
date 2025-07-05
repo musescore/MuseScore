@@ -481,6 +481,11 @@ void TWrite::writeSystemLock(const SystemLock* systemLock, XmlWriter& xml)
     xml.endElement();
 }
 
+void TWrite::escapeXmlText(String& str)
+{
+    str.replace(u"\n", u"<br/>");
+}
+
 void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 {
     for (const StyledProperty& spp : *item->styledProperties()) {
@@ -1220,7 +1225,9 @@ void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext&
         writeProperty(item, xml, spp.pid);
     }
     if (writeText) {
-        xml.writeXml(u"text", item->xmlText());
+        String xmlStr = item->xmlText();
+        escapeXmlText(xmlStr);
+        xml.writeXml(u"text", xmlStr);
     }
 
     writeProperty(item, xml, Pid::TEXT_LINKED_TO_MASTER);

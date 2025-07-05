@@ -392,5 +392,7 @@ private:
     static void readSystemLock(Score* score, XmlReader& e);
 
     static void readHopoText(HammerOnPullOffSegment* hopoSeg, XmlReader& xml, ReadContext& ctx, int idx);
+
+    static void unescapeXmlText(String& str);
 };
 }
