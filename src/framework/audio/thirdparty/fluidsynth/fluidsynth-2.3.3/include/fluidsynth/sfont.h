@@ -132,6 +132,7 @@ FLUIDSYNTH_API fluid_sfloader_t *new_fluid_sfloader(fluid_sfloader_load_t load, 
 FLUIDSYNTH_API void delete_fluid_sfloader(fluid_sfloader_t *loader);
 
 FLUIDSYNTH_API fluid_sfloader_t *new_fluid_defsfloader(fluid_settings_t *settings);
+FLUIDSYNTH_API fluid_sfloader_t *new_fluid_instpatch_loader(fluid_settings_t *settings);
 /** @endlifecycle */
 
 /**
