@@ -51,7 +51,6 @@
           </clef>
         <clef number="2">
           <sign>TAB</sign>
-          <line>5</line>
           </clef>
         <staff-details number="2">
           <staff-type>alternate</staff-type>
