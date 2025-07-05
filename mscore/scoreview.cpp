@@ -4486,9 +4486,10 @@ void ScoreView::setControlCursorVisible(bool v)
 
 void ScoreView::cmdTuplet(int n, ChordRest* cr)
       {
-      if ((cr->durationType() < TDuration(TDuration::DurationType::V_512TH) && cr->durationType() != TDuration(TDuration::DurationType::V_MEASURE))
-          || (cr->durationType() < TDuration(TDuration::DurationType::V_256TH) && n > 3)
-          || (cr->durationType() < TDuration(TDuration::DurationType::V_128TH) && n > 7)
+      if (cr->durationType() != TDuration(TDuration::DurationType::V_MEASURE) &&
+          ((cr->durationType() < TDuration(TDuration::DurationType::V_512TH)) ||
+           (cr->durationType() < TDuration(TDuration::DurationType::V_256TH) && n > 3) ||
+           (cr->durationType() < TDuration(TDuration::DurationType::V_128TH) && n > 7))
           ) {
             mscore->noteTooShortForTupletDialog();
             return;
