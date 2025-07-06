@@ -10817,7 +10817,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="71"/>
         <source>Copyright © 2004-2021 the Contributors to the MusicXML Specification, published by the Music Notation Community Group under the W3C Community Final Specification Agreement (FSA):</source>
-        <translation>版权所有 © 2004-2021 MusicXML 规范的贡献者，由 W3C 社区最终规范协议（FSA）下的Music Notation Community Group 出版</translation>
+        <translation>版权所有 © 2004-2021 MusicXML 规范的贡献者，由 W3C 社区最终规范协议（FSA）下的 Music Notation Community Group 出版</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
@@ -11845,7 +11845,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="41"/>
         <source>Always prompt to share on Audio.com after publishing to MuseScore.com</source>
-        <translation>在发布到MuseScore.com后总是提示分享到Audio.com</translation>
+        <translation>在出版到 MuseScore.com 后总是提示共享到 Audio.com 上</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/braillepreferencesmodel.cpp" line="75"/>
@@ -30221,7 +30221,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
         <source>Log in to MuseScore.com to publish this score.</source>
-        <translation>登录MuseScore.com以发布此乐谱。</translation>
+        <translation>登录到 MuseScore.com 以出版此乐谱。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="347"/>
@@ -30356,12 +30356,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="560"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or publish this as a new score to avoid losing changes in the current online version.</source>
-        <translation>您可以替换已有的 &lt;a href=&quot;%1&quot;&gt;在线乐谱&lt;/a&gt;, 或将其作为新乐谱发布以免丢失当前在线版本中的更改。</translation>
+        <translation>您可以替换已有的 &lt;a href=&quot;%1&quot;&gt;联机乐谱&lt;/a&gt;, 或将其出版为新乐谱以避免丢失当前在线版本中的改动。</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="566"/>
         <source>Publish as new score</source>
-        <translation>作为新乐谱发布</translation>
+        <translation>出版为新乐谱</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="567"/>
@@ -30469,7 +30469,7 @@ failed.</source>
     <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishToolBar.qml" line="31"/>
         <source>Publish toolbar</source>
-        <translation>发布工具栏</translation>
+        <translation>出版工具栏</translation>
     </message>
 </context>
 <context>

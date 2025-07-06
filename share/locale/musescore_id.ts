@@ -42,7 +42,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="14"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Birama per sistem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
@@ -1122,7 +1122,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="372"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Mati</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="393"/>
@@ -1278,13 +1278,13 @@
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1034"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1037"/>
         <source>Apply and go to previous staff</source>
-        <translation type="unfinished"/>
+        <translation>Terapkan dan pergi ke paranada sebelumnya</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1053"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1056"/>
         <source>Apply and go to next staff</source>
-        <translation type="unfinished"/>
+        <translation>Terapkan dan pergi ke paranada berikutnya</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="458"/>
@@ -1606,7 +1606,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1037"/>
         <source>Through staff</source>
-        <translation>Melewati Paranada</translation>
+        <translation>Melewati paranada</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1087"/>
@@ -1632,7 +1632,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1179"/>
         <source>None</source>
         <comment>neither short nor slashed stem</comment>
-        <translation>kosong/tidak ada</translation>
+        <translation>Tidak ada</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1195"/>
@@ -1821,7 +1821,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="302"/>
         <source>Musical symbols font:</source>
-        <translation type="unfinished"/>
+        <translation>Font simbol musik:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="365"/>
@@ -2232,7 +2232,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="738"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Mati</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="779"/>
@@ -4454,19 +4454,19 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12574"/>
         <source>Omit extension line when space is limited</source>
-        <translation type="unfinished"/>
+        <translation>Hilangkan garis ekstensi apabila spasi dibatasi</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12584"/>
         <source>Reset &apos;Omit extension line when space is limited&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang nilai &quot;Hilangkan garis ekstensi apabila spasi dibatasi&quot;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3062"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6048"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13022"/>
         <source>Vertical position:</source>
-        <translation type="unfinished"/>
+        <translation>Posisi vertikal:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8043"/>
@@ -4486,12 +4486,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8130"/>
         <source>Minimum laissez vibrer length:</source>
-        <translation type="unfinished"/>
+        <translation>Panjang minimum laissez vibrer:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8193"/>
         <source>Use SMuFL symbols</source>
-        <translation type="unfinished"/>
+        <translation>Gunakan simbol SMuFL</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10169"/>
@@ -5018,12 +5018,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14574"/>
         <source>Corner radius:</source>
-        <translation type="unfinished"/>
+        <translation>Radius pojok:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14627"/>
         <source>Border:</source>
-        <translation type="unfinished"/>
+        <translation>Garis:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="14637"/>
@@ -5825,7 +5825,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="67"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Mati</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="80"/>
@@ -9193,7 +9193,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="131"/>
         <source>&amp;Layout</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Tata letak</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="132"/>
@@ -10573,7 +10573,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="301"/>
         <source>Layout</source>
-        <translation type="unfinished"/>
+        <translation>Tata letak</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="327"/>
@@ -11266,7 +11266,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/KeyboardLayoutsSection.qml" line="31"/>
         <source>Keyboard layout</source>
-        <translation type="unfinished"/>
+        <translation>Tata letak keyboard</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="31"/>
@@ -11827,7 +11827,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MeiSection.qml" line="40"/>
         <source>Import MEI layout</source>
-        <translation type="unfinished"/>
+        <translation>Impor tata letak MEI</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="30"/>
@@ -13024,7 +13024,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="255"/>
         <source>Layout break</source>
-        <translation type="unfinished"/>
+        <translation>Jeda tata letak</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="257"/>
@@ -19471,7 +19471,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/SoundFlag/ParamsGridView.qml" line="127"/>
         <source>Off</source>
         <extracomment>as opposed to On</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mati</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="126"/>
@@ -22511,7 +22511,7 @@ Ruas birama jemputan</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="202"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="207"/>
         <source>Off</source>
-        <translation type="unfinished"/>
+        <translation>Mati</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml" line="82"/>
@@ -25373,7 +25373,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="232"/>
         <source>Layout</source>
-        <translation type="unfinished"/>
+        <translation>Tata letak</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PercussionPanelToolBar.qml" line="253"/>
@@ -25413,7 +25413,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/percussionpanel/percussionpanelmodel.cpp" line="168"/>
         <source>Reset layout</source>
-        <translation type="unfinished"/>
+        <translation>Atur ulang tata letak</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/percussionpreferencesmodel.cpp" line="135"/>
@@ -25881,7 +25881,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="530"/>
         <source>Layout</source>
         <extracomment>The name of a palette</extracomment>
-        <translation type="unfinished"/>
+        <translation>Tata letak</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="591"/>
@@ -31582,7 +31582,7 @@ failed.</source>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5490"/>
         <source>Measures per system</source>
-        <translation type="unfinished"/>
+        <translation>Birama per sistem</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationinteraction.cpp" line="5497"/>
