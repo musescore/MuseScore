@@ -539,7 +539,7 @@ void NotationConfiguration::resetForeground()
     settings()->setSharedValue(FOREGROUND_USE_COLOR, settings()->defaultValue(FOREGROUND_USE_COLOR));
     settings()->setSharedValue(FOREGROUND_WALLPAPER_PATH, settings()->defaultValue(FOREGROUND_WALLPAPER_PATH));
 
-    engravingConfiguration()->setScoreInversionEnabled(false);
+    engravingConfiguration()->setScoreInversionMode(mu::engraving::ScoreInversionMode::Disabled);
 }
 
 muse::async::Notification NotationConfiguration::foregroundChanged() const
