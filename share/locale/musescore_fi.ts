@@ -5536,7 +5536,7 @@ x-korkeudesta):</translation>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="205"/>
         <source>Staff space (sp):</source>
-        <translation>Viivastoviivojen väli (sp):</translation>
+        <translation>Viivaston väli (sp):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="246"/>

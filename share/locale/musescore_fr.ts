@@ -6532,7 +6532,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="75"/>
         <source>Save se&amp;lection…</source>
-        <translation>Enregistrer la sé&amp;lection…</translation>
+        <translation>Enregistrer la sél&amp;ection…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="76"/>
@@ -6568,7 +6568,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="102"/>
         <source>&amp;Export…</source>
-        <translation>&amp;Exporter…</translation>
+        <translation>E&amp;xporter…</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="103"/>
@@ -6603,7 +6603,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="129"/>
         <source>&amp;Clear recent files</source>
-        <translation>&amp;Effacer la liste des partitions récentes</translation>
+        <translation>Effa&amp;cer la liste des partitions récentes</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="130"/>
@@ -7982,7 +7982,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1339"/>
         <source>C&amp;hord symbol</source>
-        <translation>Symbole d&apos;accor&amp;d</translation>
+        <translation>Symbole d&apos;a&amp;ccord</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1340"/>
@@ -8052,7 +8052,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1417"/>
         <source>&amp;Nonuplet</source>
-        <translation>Nonolet</translation>
+        <translation>&amp;Nonolet</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1418"/>
@@ -8663,12 +8663,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2565"/>
         <source>Show element bounding rectangles</source>
-        <translation>Afficher les element bounding rectangles</translation>
+        <translation>Afficher les bounding rectangles des éléments</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2566"/>
         <source>Show/hide element bounding rectangles</source>
-        <translation>Afficher / Masquer les éléments bounding rectangles</translation>
+        <translation>Afficher / Masquer les bounding rectangles des éléments</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2572"/>
@@ -8915,7 +8915,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2556"/>
         <source>Mark irregular measures</source>
-        <translation>Marquer les mesures irrégulières</translation>
+        <translation>Indiquer les mesures irrégulières</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1629"/>
@@ -9080,7 +9080,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="145"/>
         <source>Se&amp;lection filter</source>
-        <translation>Filtre de sé&amp;lection</translation>
+        <translation>Filtre de sél&amp;ection</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="146"/>
@@ -9120,7 +9120,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="179"/>
         <source>Tim&amp;eline</source>
-        <translation>Tim&amp;eline</translation>
+        <translation>Time&amp;line</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="180"/>
@@ -9605,22 +9605,22 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="589"/>
         <source>Exchange voice &amp;1-2</source>
-        <translation>Échanger les voix 1-2</translation>
+        <translation>Échanger les voix &amp;1-2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="601"/>
         <source>Exchange voice 1-&amp;4</source>
-        <translation>Échanger les voix 1-4</translation>
+        <translation>Échanger les voix 1-&amp;4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="607"/>
         <source>Exchange voice &amp;2-3</source>
-        <translation>Échanger les voix 2-3</translation>
+        <translation>Échanger les voix &amp;2-3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="619"/>
         <source>Exchange voice &amp;3-4</source>
-        <translation>Échanger les voix 3-4</translation>
+        <translation>Échanger les voix &amp;3-4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="657"/>
@@ -9641,32 +9641,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="718"/>
         <source>Insert &amp;horizontal frame</source>
-        <translation>Insérer un cadre horizontal</translation>
+        <translation>Insérer un cadre &amp;horizontal</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="725"/>
         <source>Insert &amp;vertical frame</source>
-        <translation>Insérer un cadre vertical</translation>
+        <translation>Insérer un cadre &amp;vertical</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="732"/>
         <source>Insert &amp;text frame</source>
-        <translation>Insérer un cadre de texte</translation>
+        <translation>Insérer un cadre de &amp;texte</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="739"/>
         <source>Append h&amp;orizontal frame</source>
-        <translation>Ajouter un cadre horizontal</translation>
+        <translation>Ajouter un cadre h&amp;orizontal</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="745"/>
         <source>Append v&amp;ertical frame</source>
-        <translation>Ajouter un cadre vertical</translation>
+        <translation>Ajouter un cadre v&amp;ertical</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="751"/>
         <source>Append te&amp;xt frame</source>
-        <translation>Ajouter un cadre de texte</translation>
+        <translation>Ajouter un cadre de te&amp;xte</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="896"/>
@@ -9751,7 +9751,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1214"/>
         <source>Ottava 8va &amp;alta</source>
-        <translation>Ligne d&apos;octave 8va alta</translation>
+        <translation>Ligne d&apos;octave 8va &amp;alta</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1215"/>
@@ -9761,7 +9761,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1220"/>
         <source>Ottava 8va &amp;bassa</source>
-        <translation>Ligne d&apos;octave 8va bassa</translation>
+        <translation>Ligne d&apos;octave 8va &amp;bassa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1221"/>
@@ -9776,7 +9776,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1232"/>
         <source>&amp;Crescendo</source>
-        <translation>Crescendo</translation>
+        <translation>&amp;Crescendo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1238"/>
@@ -9796,42 +9796,42 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1273"/>
         <source>&amp;Composer</source>
-        <translation>Compositeur</translation>
+        <translation>&amp;Compositeur</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1279"/>
         <source>&amp;Lyricist</source>
-        <translation>Parolier</translation>
+        <translation>&amp;Parolier</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1285"/>
         <source>&amp;Part name</source>
-        <translation>Nom de la partie</translation>
+        <translation>Nom de la p&amp;artie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1297"/>
         <source>Syst&amp;em text</source>
-        <translation>Texte de système</translation>
+        <translation>Texte de syst&amp;ème</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1303"/>
         <source>St&amp;aff text</source>
-        <translation>Texte de portée</translation>
+        <translation>Texte de port&amp;ée</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1309"/>
         <source>E&amp;xpression text</source>
-        <translation>Texte d&apos;expression</translation>
+        <translation>Texte d&apos;e&amp;xpression</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1315"/>
         <source>&amp;Rehearsal mark</source>
-        <translation>Repère</translation>
+        <translation>&amp;Repère</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1321"/>
         <source>&amp;Instrument change</source>
-        <translation>Changement d&apos;instrument</translation>
+        <translation>Changement d&apos;&amp;instrument</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1327"/>
@@ -9841,12 +9841,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1333"/>
         <source>Stic&amp;king</source>
-        <translation>Doigtés de batterie</translation>
+        <translation>Doigtés de ba&amp;tterie</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1345"/>
         <source>R&amp;oman numeral analysis</source>
-        <translation>Chiffre Romain d&apos;analyse</translation>
+        <translation>Chiffre R&amp;omain d&apos;analyse</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1351"/>
@@ -9866,7 +9866,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1369"/>
         <source>Tempo &amp;marking</source>
-        <translation>Indication de tempo</translation>
+        <translation>Indication de te&amp;mpo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1375"/>
@@ -9881,32 +9881,32 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1387"/>
         <source>&amp;Quadruplet</source>
-        <translation>Quartolet</translation>
+        <translation>&amp;Quartolet</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1393"/>
         <source>Q&amp;uintuplet</source>
-        <translation>Quintolet</translation>
+        <translation>Q&amp;uintolet</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1399"/>
         <source>Se&amp;xtuplet</source>
-        <translation>Sextolet</translation>
+        <translation>Se&amp;xtolet</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1405"/>
         <source>Se&amp;ptuplet</source>
-        <translation>Septolet</translation>
+        <translation>Se&amp;ptolet</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1411"/>
         <source>&amp;Octuplet</source>
-        <translation>Octolet</translation>
+        <translation>&amp;Octolet</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1423"/>
         <source>Othe&amp;r…</source>
-        <translation>Autres…</translation>
+        <translation>Aut&amp;res…</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1429"/>
@@ -10307,13 +10307,13 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2555"/>
         <source>Mark i&amp;rregular measures</source>
-        <translation>Marquer les mesures i&amp;rrégulières</translation>
+        <translation>Indiquer les mesures i&amp;rrégulières</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2612"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2613"/>
         <source>Mark corrupted measures</source>
-        <translation>Marquer les mesures corrompues</translation>
+        <translation>Indiquer les mesures corrompues</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2619"/>
@@ -10401,12 +10401,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="42"/>
         <source>Show p&amp;aths…</source>
-        <translation>Afficher les chemins d&apos;accès…</translation>
+        <translation>Afficher les chemins d&apos;&amp;accès…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="47"/>
         <source>Show pr&amp;ofiler…</source>
-        <translation>Afficher le profileur…</translation>
+        <translation>Afficher le pr&amp;ofiler…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="52"/>
@@ -10416,27 +10416,27 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="57"/>
         <source>Show &amp;navigation tree…</source>
-        <translation>Afficher l&apos;arbre de navigation…</translation>
+        <translation>Afficher l&apos;arbre de &amp;navigation…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="62"/>
         <source>Show &amp;accessibility tree…</source>
-        <translation>Afficher l&apos;&amp;accessibility tree…</translation>
+        <translation>Afficher l&apos;arbre d&apos;&amp;accessibilité…</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="67"/>
         <source>&amp;Dump accessibility tree to console</source>
-        <translation>&amp;Dump l&apos;accessibility tree vers la console</translation>
+        <translation>&amp;Dumper l&apos;arbre d&apos;accessibilité vers la console</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="72"/>
         <source>Show engraving &amp;elements</source>
-        <translation>Afficher les engraving elements</translation>
+        <translation>Afficher les élém&amp;ents de gravure</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="77"/>
         <source>Show &amp;actions list</source>
-        <translation>Afficher la liste d&apos;&amp;actions</translation>
+        <translation>Afficher la liste des &amp;actions</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="82"/>
@@ -10446,12 +10446,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="87"/>
         <source>Test query action with params 1</source>
-        <translation>Test query action with params 1</translation>
+        <translation>Test query action avec params 1</translation>
     </message>
     <message>
         <location filename="../../src/framework/diagnostics/internal/diagnosticsactions.cpp" line="92"/>
         <source>Test query action with params 2</source>
-        <translation>Test query action with params 2</translation>
+        <translation>Test query action avec params 2</translation>
     </message>
     <message>
         <location filename="../../src/framework/multiinstances/internal/multiinstancesuiactions.cpp" line="37"/>
@@ -11001,7 +11001,7 @@ Publié sous licence &lt;a href=&quot;%1&quot;&gt;GNU General Public License. ve
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="487"/>
         <source>&amp;Engraving</source>
-        <translation>&amp;Gravure</translation>
+        <translation>Gravur&amp;e</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="488"/>
@@ -11684,7 +11684,7 @@ Publié sous licence &lt;a href=&quot;%1&quot;&gt;GNU General Public License. ve
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="166"/>
         <source>Save &amp; publish</source>
-        <translation>Sauvegarder et publier</translation>
+        <translation>Enregistrer et publier</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="175"/>
@@ -18620,22 +18620,22 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1973"/>
         <source>Eighth through stem</source>
-        <translation>Une barre oblique de trémolo sur la hampe</translation>
+        <translation>Hampe avec trémolo en croches</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1974"/>
         <source>16th through stem</source>
-        <translation>Deux barres obliques de trémolo sur la hampe</translation>
+        <translation>Hampe avec trémolo en doubles croches</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1975"/>
         <source>32nd through stem</source>
-        <translation>Trois barres obliques de trémolo sur la hampe</translation>
+        <translation>Hampe avec trémolo en triples croches</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1976"/>
         <source>64th through stem</source>
-        <translation>Quatre barres obliques de trémolo sur la hampe</translation>
+        <translation>Hampe avec trémolo en quadruple croches</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1977"/>
@@ -18645,22 +18645,22 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1978"/>
         <source>Eighth between notes</source>
-        <translation>Une barre oblique de trémolo entre les notes</translation>
+        <translation>Trémolo en croches entre deux notes</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1979"/>
         <source>16th between notes</source>
-        <translation>Deux barres obliques de trémolo entre les notes</translation>
+        <translation>Trémolo en doubles croches entre deux notes</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1980"/>
         <source>32nd between notes</source>
-        <translation>Trois barres obliques de trémolo entre les notes</translation>
+        <translation>Trémolo en triples croches entre deux notes</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1981"/>
         <source>64th between notes</source>
-        <translation>Quatre barres obliques de trémolo entre les notes</translation>
+        <translation>Trémolo en quadruples croches entre deux notes</translation>
     </message>
 </context>
 <context>
@@ -19690,32 +19690,32 @@ Frette %1 sur les cordes %2</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="380"/>
         <source>2-plets</source>
-        <translation>2-olets</translation>
+        <translation>Duolets</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="381"/>
         <source>3-plets</source>
-        <translation>3-olets</translation>
+        <translation>Triolets</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="382"/>
         <source>4-plets</source>
-        <translation>4-tolets</translation>
+        <translation>Quartolets</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="383"/>
         <source>5-plets</source>
-        <translation>5-olets</translation>
+        <translation>Quintolets</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="384"/>
         <source>7-plets</source>
-        <translation>7-olets</translation>
+        <translation>Septolets</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="385"/>
         <source>9-plets</source>
-        <translation>9-olets</translation>
+        <translation>Nonolets</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="391"/>
@@ -20220,7 +20220,7 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GradualTempoChangeBlank.qml" line="65"/>
         <source>Easing method</source>
-        <translation>Méthode de lissage</translation>
+        <translation>Méthode de fondu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="73"/>
@@ -20240,7 +20240,7 @@ l&apos;anacrouse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="81"/>
         <source>Ease in and out</source>
-        <translation>Entrée et sortie progressive</translation>
+        <translation>Fondu en entrée et en sortie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml" line="83"/>
@@ -21868,13 +21868,13 @@ l&apos;anacrouse</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="79"/>
         <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="53"/>
         <source>Ease in</source>
-        <translation>Entrée progressive</translation>
+        <translation>Fondu en entrée</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="80"/>
         <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="54"/>
         <source>Ease out</source>
-        <translation>Sortie progressive</translation>
+        <translation>Fondu en sortie</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/noteplaybackmodel.cpp" line="32"/>
@@ -24104,22 +24104,22 @@ Remarque : Maitriser MuseScore est disponible principalement en anglais (Certain
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="612"/>
         <source>Insert &amp;after selection…</source>
-        <translation>Insérer après la sélection…</translation>
+        <translation>Insérer a&amp;près la sélection…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="613"/>
         <source>Insert &amp;before selection…</source>
-        <translation>Insérer avant la sélection…</translation>
+        <translation>Insérer a&amp;vant la sélection…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="615"/>
         <source>Insert at &amp;start of score…</source>
-        <translation>Insérer au début de la partition…</translation>
+        <translation>Insérer au &amp;début de la partition…</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="616"/>
         <source>Insert at &amp;end of score…</source>
-        <translation>Insérer à la fin de la partition…</translation>
+        <translation>Insérer à la &amp;fin de la partition…</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationerrors.h" line="49"/>
@@ -25752,7 +25752,7 @@ les portées :</translation>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="174"/>
         <source>Save palette…</source>
-        <translation>Sauvegarder la palette…</translation>
+        <translation>Enregistrer la palette…</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/TreePaletteHeader.qml" line="175"/>
@@ -26676,7 +26676,7 @@ les portées :</translation>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.cpp" line="629"/>
         <source>Save drumset</source>
-        <translation>Sauvegarder le set de batterie</translation>
+        <translation>Enregistrer le set de batterie</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/customizekitdialog.cpp" line="637"/>
@@ -28265,7 +28265,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="393"/>
         <source>Chess Symbols</source>
-        <translation>Symboles d&apos;échecs</translation>
+        <translation>Symboles de jeu d&apos;échecs</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="394"/>
@@ -29123,7 +29123,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="131"/>
         <source>Scores will appear here when you save a file to the cloud, or publish a score on &lt;a href=&quot;https://musescore.com&quot;&gt;MuseScore.com&lt;/a&gt;.</source>
-        <translation>Les partitions apparaîtront lorsque vous sauvegarderez un fichier dans le cloud ou lorsque vous le publierez sur le site &lt;a href=&quot;https://musescore.com&quot;&gt;MuseScore.com&lt;/a&gt;.</translation>
+        <translation>Les partitions apparaîtront lorsque vous enregistrez un fichier dans le cloud ou lorsque vous le publierez sur le site &lt;a href=&quot;https://musescore.com&quot;&gt;MuseScore.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/framework/cloud/qml/Muse/Cloud/CloudScoresView.qml" line="156"/>
@@ -30308,7 +30308,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1623"/>
         <source>To preserve your score, try saving it again. If this message still appears, please save your score as new copy. You can also get help for this issue on %1.&lt;br/&gt;&lt;br/&gt;Error details (please cite when asking for support): %2</source>
-        <translation>Pour proteger votre partition, essayez de la sauvegarder de nouveau. Si ce message apparaît encore, sauvegardez votre partition en tant que nouvelle copie. Vous pouvez aussi trouver de l&apos;aide pour ce problème sur %1.&lt;br/&gt;&lt;br/&gt; Détails de l&apos;erreur, (veuillez les citer lorsque vous demandez de l&apos;aide) : %2</translation>
+        <translation>Pour proteger votre partition, essayez de l&apos;enregistrer de nouveau. Si ce message apparaît encore, enregistrez votre partition en tant que nouvelle copie. Vous pouvez aussi trouver de l&apos;aide pour ce problème sur %1.&lt;br/&gt;&lt;br/&gt; Détails de l&apos;erreur, (veuillez les citer lorsque vous demandez de l&apos;aide) : %2</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="182"/>
@@ -30374,7 +30374,7 @@ a échoué.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="571"/>
         <source>You can replace the &lt;a href=&quot;%1&quot;&gt;online score&lt;/a&gt;, or save this as a new file to avoid losing changes in the current online version.</source>
-        <translation>Vous pouvez remplacer la &lt;a href=&quot;%1&quot;&gt;partition en ligne&lt;/a&gt; ou la sauvegarder comme nouveau fichier afin d&apos;éviter de perdre les modifications dans l&apos;actuelle version en ligne.</translation>
+        <translation>Vous pouvez remplacer la &lt;a href=&quot;%1&quot;&gt;partition en ligne&lt;/a&gt; ou l&apos;enregistrer comme nouveau fichier afin d&apos;éviter de perdre les modifications dans l&apos;actuelle version en ligne.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="577"/>

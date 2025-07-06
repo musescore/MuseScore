@@ -2212,7 +2212,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="556"/>
         <source>Hide empty staves within systems</source>
-        <translation>段内で空の譜表を隠す</translation>
+        <translation>段内の空の譜表を隠す</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="575"/>
@@ -2237,7 +2237,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="779"/>
         <source>Select swing ratio:</source>
-        <translation>スウィングの比を選択:</translation>
+        <translation>スウィング比率を選択:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="829"/>
@@ -2317,7 +2317,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1551"/>
         <source>Enable vertical justification of staves</source>
-        <translation>譜表の縦方向の自動位置調整を有効化</translation>
+        <translation>譜表の縦方向の均等配置を有効化</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1576"/>
@@ -2338,7 +2338,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1665"/>
         <source>Reset &apos;Factor for distance above/below bracket&apos; value</source>
-        <translation>「角括弧 上/下間隔のファクター」の値をリセット</translation>
+        <translation>「角括弧上/下の距離の調整係数」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1710"/>
@@ -2348,12 +2348,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1720"/>
         <source>Max. page fill distance:</source>
-        <translation>最大のページ余白間隔:</translation>
+        <translation>ページ埋め時の譜表間隔の最大拡張量:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1733"/>
         <source>Reset &apos;Factor for distance above/below brace&apos; value</source>
-        <translation>「波括弧 上/下間隔のファクター」の値をリセット</translation>
+        <translation>「波括弧上/下の距離の調整係数」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1746"/>
@@ -2385,12 +2385,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1855"/>
         <source>Factor for distance above/below brace:</source>
-        <translation>波括弧上/下の間隔のファクター:</translation>
+        <translation>波括弧上/下の距離の調整係数:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1868"/>
         <source>Factor for distance above/below bracket:</source>
-        <translation>角括弧上/下の間隔のファクター:</translation>
+        <translation>角括弧上/下の距離の調整係数:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1086"/>
@@ -2401,22 +2401,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1939"/>
         <source>Reset &apos;Max. page fill distance&apos; value</source>
-        <translation>「最大のページ余白間隔」の値をリセット</translation>
+        <translation>「ページ埋め時の譜表間隔の最大拡張量」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1980"/>
         <source>Reset &apos;Factor for distance between systems&apos; value</source>
-        <translation>「段間隔のファクター」の値をリセット</translation>
+        <translation>「段間隔の調整係数」の値をリセット</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1993"/>
         <source>Factor for distance between systems:</source>
-        <translation>段間隔のファクター:</translation>
+        <translation>段間隔の調整係数:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1001"/>
         <source>Disable vertical justification of staves</source>
-        <translation>譜表の縦方向の自動位置調整を無効化</translation>
+        <translation>譜表の縦方向の均等配置を無効化</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="362"/>
@@ -2917,7 +2917,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4806"/>
         <source>Spacing ratio:</source>
-        <translation>スペーシング比:</translation>
+        <translation>スペーシング比率:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5312"/>
@@ -5356,7 +5356,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="348"/>
         <source>Layout stretch factor</source>
-        <translation>レイアウトストレッチのファクター</translation>
+        <translation>レイアウトストレッチの調整係数</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="351"/>
@@ -5843,7 +5843,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.ui" line="112"/>
         <source>Select swing ratio:</source>
-        <translation>スウィング比率:</translation>
+        <translation>スウィング比率を選択:</translation>
     </message>
 </context>
 <context>
