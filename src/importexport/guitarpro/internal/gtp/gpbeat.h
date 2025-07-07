@@ -37,7 +37,7 @@ public:
         None, FadeIn, FadeOut, VolumeSwell
     };
     enum class Hairpin {
-        None, Crescendo, Diminuendo
+        None, Crescendo, Decrescendo
     };
     enum class PickStroke {
         None, Up, Down

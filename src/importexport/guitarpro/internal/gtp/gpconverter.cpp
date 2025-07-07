@@ -180,7 +180,7 @@ static ContiniousElementsBuilder::ImportType hairpinToImportType(GPBeat::Hairpin
 {
     static const std::map<GPBeat::Hairpin, ContiniousElementsBuilder::ImportType> types {
         { GPBeat::Hairpin::Crescendo, ContiniousElementsBuilder::ImportType::HAIRPIN_CRESCENDO },
-        { GPBeat::Hairpin::Diminuendo, ContiniousElementsBuilder::ImportType::HAIRPIN_DIMINUENDO }
+        { GPBeat::Hairpin::Decrescendo, ContiniousElementsBuilder::ImportType::HAIRPIN_DIMINUENDO }
     };
 
     auto it = types.find(t);

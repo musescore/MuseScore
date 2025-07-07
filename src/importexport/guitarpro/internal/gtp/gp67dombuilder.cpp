@@ -558,8 +558,8 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(XmlDomNode
     auto hairpinType = [](const String& str) {
         if (str == u"Crescendo") {
             return GPBeat::Hairpin::Crescendo;
-        } else if (str == u"Decrescendo") { // this is what GTP calls it internally
-            return GPBeat::Hairpin::Diminuendo;
+        } else if (str == u"Decrescendo") {
+            return GPBeat::Hairpin::Decrescendo;
         }
         return GPBeat::Hairpin::None;
     };
