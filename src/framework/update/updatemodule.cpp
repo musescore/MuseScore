@@ -101,8 +101,3 @@ void UpdateModule::onInit(const IApplication::RunMode& mode)
     m_appUpdateService->init();
     m_actionController->init();
 }
-
-void UpdateModule::onDelayedInit()
-{
-    m_scenario->checkForUpdate(/*manual*/ false);
-}
