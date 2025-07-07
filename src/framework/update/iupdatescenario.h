@@ -32,7 +32,7 @@ class IUpdateScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUpdateScenario() = default;
 
-    virtual void checkForUpdate() = 0;
+    virtual void checkForUpdate(bool manual) = 0;
 };
 }
 
