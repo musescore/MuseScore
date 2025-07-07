@@ -38,22 +38,22 @@ using namespace muse;
 using namespace muse::update;
 using namespace muse::actions;
 
-void UpdateScenario::delayedInit()
-{
-    if (configuration()->needCheckForUpdate() && multiInstancesProvider()->instances().size() == 1) {
-        QTimer::singleShot(AUTO_CHECK_UPDATE_INTERVAL, [this]() {
-            doCheckForUpdate(false);
-        });
-    }
-}
-
-void UpdateScenario::checkForUpdate()
+void UpdateScenario::checkForUpdate(bool manual)
 {
     if (isCheckInProgress()) {
         return;
     }
 
-    doCheckForUpdate(true);
+    if (manual) {
+        doCheckForUpdate(/*manual*/ true);
+        return;
+    }
+
+    if (configuration()->needCheckForUpdate() && multiInstancesProvider()->instances().size() == 1) {
+        QTimer::singleShot(AUTO_CHECK_UPDATE_INTERVAL, [this]() {
+            doCheckForUpdate(/*manual*/ false);
+        });
+    }
 }
 
 bool UpdateScenario::isCheckInProgress() const

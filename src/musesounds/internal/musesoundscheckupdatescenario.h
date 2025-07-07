@@ -47,7 +47,7 @@ public:
     MuseSoundsCheckUpdateScenario(const muse::modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    void delayedInit();
+    void checkForUpdate(bool manual) override;
 
     bool hasUpdate() const override;
     muse::Ret showUpdate() override;

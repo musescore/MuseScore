@@ -99,5 +99,5 @@ void MuseSoundsModule::onInit(const IApplication::RunMode& mode)
 
 void MuseSoundsModule::onDelayedInit()
 {
-    m_museSoundsCheckUpdateScenario->delayedInit();
+    m_museSoundsCheckUpdateScenario->checkForUpdate(/*manual*/ false);
 }

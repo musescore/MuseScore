@@ -104,5 +104,5 @@ void UpdateModule::onInit(const IApplication::RunMode& mode)
 
 void UpdateModule::onDelayedInit()
 {
-    m_scenario->delayedInit();
+    m_scenario->checkForUpdate(/*manual*/ false);
 }
