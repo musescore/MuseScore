@@ -33,6 +33,7 @@ using namespace muse;
 using namespace muse::actions;
 
 static const muse::UriQuery FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup?floating=true");
+static const muse::UriQuery WELCOME_DIALOG_URI("musescore://welcomedialog");
 static const muse::Uri HOME_URI("musescore://home");
 static const muse::Uri NOTATION_URI("musescore://notation");
 
@@ -232,6 +233,52 @@ bool StartupScenario::startupCompleted() const
     return m_startupCompleted;
 }
 
+QList<QVariantMap> StartupScenario::welcomeDialogData() const
+{
+    // TODO: Placeholder info
+    QVariantMap item1;
+    item1.insert("title", muse::qtrc("appshell", "What’s new in MuseScore Studio"));
+    item1.insert("imageUrl", "https://i.ytimg.com/vi/-I-InDHIzdQ/hq720.jpg");
+    item1.insert("description", muse::qtrc("appshell",
+                                           "Includes a new system for dynamics, a new input mode, the ability to add system markings anywhere on a score and much more."));
+    item1.insert("buttonText", muse::qtrc("appshell", "Watch video"));
+    item1.insert("destinationUrl", "https://www.youtube.com/watch?v=-I-InDHIzdQ");
+
+    QVariantMap item2;
+    item2.insert("title", "Get amazing playback with MuseSounds!");
+    item2.insert("imageUrl", "https://i.ytimg.com/vi/n7UgN69e2Y8/hq720.jpg");
+    item2.insert("description", muse::qtrc("appshell",
+                                           "Get free MuseSounds for orchestra, guitars & drumline, plus pro libraries from Spitfire, VSL, Berlin, Audio Imperia & more."));
+    item2.insert("buttonText", muse::qtrc("appshell", "Get it on MuseHub"));
+    item2.insert("destinationUrl", "https://www.musehub.com/");
+
+    QVariantMap item3;
+    item3.insert("title",
+                 "Placeholder title on two lines - an example where the source text is is extremely long and gets truncated before it can finish.");
+    item3.insert("imageUrl", "https://i.ytimg.com/vi/-I-InDHIzdQ/hq720.jpg");
+    item3.insert("description",
+                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+    item3.insert("buttonText", muse::qtrc("appshell", "Button text"));
+
+    QVariantMap item4;
+    item4.insert("title", muse::qtrc("appshell", "Never lose your work with free cloud storage!"));
+    item4.insert("imageUrl", "qrc:/SaveToCloud/images/Cloud.png");
+    item4.insert("description", muse::qtrc("appshell",
+                                           "While working on your score, your progress is backed up on MuseScore.com"));
+    item4.insert("buttonText", muse::qtrc("appshell", "Get free cloud storage now"));
+    item4.insert("destinationUrl", "https://musescore.com/");
+
+    return { item1, item2, item3, item4 };
+}
+
+void StartupScenario::showWelcomeDialog()
+{
+    interactive()->open(WELCOME_DIALOG_URI);
+
+    const std::string version = configuration()->museScoreVersion();
+    configuration()->setWelcomeDialogLastShownVersion(version);
+}
+
 StartupModeType StartupScenario::resolveStartupModeType() const
 {
     if (m_startupScoreFile.isValid()) {
@@ -269,8 +316,17 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
     } break;
     }
 
+    const Version welcomeDialogLastShownVersion(configuration()->welcomeDialogLastShownVersion());
+    const Version currentMuseScoreVersion(configuration()->museScoreVersion());
+    if (welcomeDialogLastShownVersion < currentMuseScoreVersion) {
+        configuration()->setWelcomeDialogShowOnStartup(true); // override user preference
+        configuration()->setWelcomeDialogLastShownIndex(-1); // reset
+    }
+
     if (!configuration()->hasCompletedFirstLaunchSetup()) {
         interactive()->open(FIRST_LAUNCH_SETUP_URI);
+    } else if (configuration()->welcomeDialogShowOnStartup() && !museSoundsUpdateScenario()->hasUpdate()) {
+        showWelcomeDialog();
     }
 }
 

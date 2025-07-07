@@ -44,6 +44,8 @@ public:
     virtual muse::ProgressPtr splashScreenProgress() = 0;
     virtual void runAfterSplashScreen() = 0;
     virtual bool startupCompleted() const = 0;
+
+    virtual QList<QVariantMap> welcomeDialogData() const = 0;
 };
 }
 
