@@ -1700,49 +1700,50 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette(bool defaultPalette)
     sp->setVisible(false);
 
     struct FretDiagramInfo {
-        String diagram;
         String harmony;
         muse::TranslatableString userName;
     };
 
     static const std::vector<FretDiagramInfo> fretboardDiagrams = {
-        { u"------", u"",  muse::TranslatableString("palette", "Blank") },
+        { u"",  muse::TranslatableString("palette", "Blank") },
 
-        { u"X32O1O", u"C",  muse::TranslatableString("palette", "C") },
-        { u"X-554-", u"Cm", muse::TranslatableString("palette", "Cm") },
-        { u"X3231O", u"C7", muse::TranslatableString("palette", "C7") },
+        { u"C",  muse::TranslatableString("palette", "C") },
+        { u"Cm", muse::TranslatableString("palette", "Cm") },
+        { u"C7", muse::TranslatableString("palette", "C7") },
 
-        { u"XXO232", u"D",  muse::TranslatableString("palette", "D") },
-        { u"XXO231", u"Dm", muse::TranslatableString("palette", "Dm") },
-        { u"XXO212", u"D7", muse::TranslatableString("palette", "D7") },
+        { u"D",  muse::TranslatableString("palette", "D") },
+        { u"Dm", muse::TranslatableString("palette", "Dm") },
+        { u"D7", muse::TranslatableString("palette", "D7") },
 
-        { u"O221OO", u"E",  muse::TranslatableString("palette", "E") },
-        { u"O22OOO", u"Em", muse::TranslatableString("palette", "Em") },
-        { u"O2O1OO", u"E7", muse::TranslatableString("palette", "E7") },
+        { u"E",  muse::TranslatableString("palette", "E") },
+        { u"Em", muse::TranslatableString("palette", "Em") },
+        { u"E7", muse::TranslatableString("palette", "E7") },
 
-        { u"-332--", u"F",  muse::TranslatableString("palette", "F") },
-        { u"-33---", u"Fm", muse::TranslatableString("palette", "Fm") },
-        { u"-3-2--", u"F7", muse::TranslatableString("palette", "F7") },
+        { u"F",  muse::TranslatableString("palette", "F") },
+        { u"Fm", muse::TranslatableString("palette", "Fm") },
+        { u"F7", muse::TranslatableString("palette", "F7") },
 
-        { u"32OOO3", u"G",  muse::TranslatableString("palette", "G") },
-        { u"-55---", u"Gm", muse::TranslatableString("palette", "Gm") },
-        { u"32OOO1", u"G7", muse::TranslatableString("palette", "G7") },
+        { u"G",  muse::TranslatableString("palette", "G") },
+        { u"Gm", muse::TranslatableString("palette", "Gm") },
+        { u"G7", muse::TranslatableString("palette", "G7") },
 
-        { u"XO222O", u"A",  muse::TranslatableString("palette", "A") },
-        { u"XO221O", u"Am", muse::TranslatableString("palette", "Am") },
-        { u"XO2O2O", u"A7", muse::TranslatableString("palette", "A7") },
+        { u"A",  muse::TranslatableString("palette", "A") },
+        { u"Am", muse::TranslatableString("palette", "Am") },
+        { u"A7", muse::TranslatableString("palette", "A7") },
 
-        { u"X-444-", u"B",  muse::TranslatableString("palette", "B") },
-        { u"X-443-", u"Bm", muse::TranslatableString("palette", "Bm") },
-        { u"X212O2", u"B7", muse::TranslatableString("palette", "B7") }
+        { u"B",  muse::TranslatableString("palette", "B") },
+        { u"Bm", muse::TranslatableString("palette", "Bm") },
+        { u"B7", muse::TranslatableString("palette", "B7") }
     };
 
     for (const FretDiagramInfo& fretboardDiagram : fretboardDiagrams) {
-        auto fret = FretDiagram::createFromPattern(gpaletteScore, fretboardDiagram.diagram);
-        fret->setHarmony(fretboardDiagram.harmony);
+        auto fret = Factory::makeFretDiagram(gpaletteScore->dummy()->segment());
 
         if (fretboardDiagram.harmony.empty()) {
             fret->clear();
+        } else {
+            fret->setHarmony(fretboardDiagram.harmony);
+            fret->updateDiagram(fretboardDiagram.harmony);
         }
 
         sp->appendElement(fret, fretboardDiagram.userName);
