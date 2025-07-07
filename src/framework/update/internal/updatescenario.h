@@ -48,9 +48,7 @@ public:
     UpdateScenario(const modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    void delayedInit();
-
-    void checkForUpdate() override;
+    void checkForUpdate(bool manual) override;
 
 private:
     bool isCheckInProgress() const;

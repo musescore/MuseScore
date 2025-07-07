@@ -23,6 +23,6 @@
 
 using namespace muse::update;
 
-void UpdateScenarioStub::checkForUpdate()
+void UpdateScenarioStub::checkForUpdate(bool)
 {
 }

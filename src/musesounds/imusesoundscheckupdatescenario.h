@@ -33,6 +33,8 @@ class IMuseSoundsCheckUpdateScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMuseSoundsCheckUpdateScenario() = default;
 
+    virtual void checkForUpdate(bool manual) = 0;
+
     virtual bool hasUpdate() const = 0;
     virtual muse::Ret showUpdate() = 0;
 };

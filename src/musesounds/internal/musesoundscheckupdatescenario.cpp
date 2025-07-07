@@ -43,11 +43,12 @@ static const char* DEFAULT_IMAGE_URL = "qrc:/qml/MuseScore/MuseSounds/resources/
 static const TranslatableString DEFAULT_ACTION_TITLE("musesounds", "Take me to MuseHub");
 static const TranslatableString DEFAULT_CANCEL_TITLE("musesounds", "No thanks");
 
-void MuseSoundsCheckUpdateScenario::delayedInit()
+void MuseSoundsCheckUpdateScenario::checkForUpdate(bool manual)
 {
-    if (service()->needCheckForUpdate() && multiInstancesProvider()->instances().size() == 1) {
-        doCheckForUpdate(false);
+    if (!service()->needCheckForUpdate() || multiInstancesProvider()->instances().size() != 1) {
+        return;
     }
+    doCheckForUpdate(manual);
 }
 
 bool MuseSoundsCheckUpdateScenario::hasUpdate() const
