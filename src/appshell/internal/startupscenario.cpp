@@ -101,6 +101,14 @@ void StartupScenario::runOnSplashScreen()
 
         qApp->setQuitLockEnabled(true);
     }
+
+    if (appUpdateScenario()) {
+        appUpdateScenario()->checkForUpdate(/*manual*/ false);
+    }
+
+    if (museSoundsUpdateScenario()) {
+        museSoundsUpdateScenario()->checkForUpdate(/*manual*/ false);
+    }
 }
 
 void StartupScenario::runAfterSplashScreen()

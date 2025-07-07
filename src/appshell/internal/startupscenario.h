@@ -34,6 +34,8 @@
 #include "isessionsmanager.h"
 #include "project/iprojectautosaver.h"
 #include "audioplugins/iregisteraudiopluginsscenario.h"
+#include "update/iupdatescenario.h"
+#include "musesounds/imusesoundscheckupdatescenario.h"
 
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public muse::Injectable, public muse::async::Asyncable
@@ -45,6 +47,8 @@ class StartupScenario : public IStartupScenario, public muse::Injectable, public
     muse::Inject<ISessionsManager> sessionsManager = { this };
     muse::Inject<project::IProjectAutoSaver> projectAutoSaver = { this };
     muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
+    muse::Inject<muse::update::IUpdateScenario> appUpdateScenario = { this };
+    muse::Inject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
 
 public:
 
