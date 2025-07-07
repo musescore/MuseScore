@@ -254,7 +254,7 @@ io::paths_t WebInteractive::selectMultipleDirectories(const std::string& title, 
 #endif
 }
 
-QColor WebInteractive::selectColor(const QColor& color, const std::string& title)
+muse::async::Promise<muse::Color> WebInteractive::selectColor(const muse::Color& color, const std::string& title)
 {
     return m_origin->selectColor(color, title);
 }
