@@ -38,67 +38,61 @@ using namespace muse;
 using namespace muse::update;
 using namespace muse::actions;
 
-void UpdateScenario::checkForUpdate(bool manual)
+muse::async::Promise<Ret> UpdateScenario::checkForUpdate(bool manual)
 {
-    if (isCheckInProgress()) {
-        return;
-    }
+    return async::make_promise<Ret>([this, manual](auto resolve, auto) {
+        if (isCheckInProgress()) {
+            LOGE() << "Check already in progress";
+            const Ret ret = muse::make_ret(Ret::Code::UnknownError);
+            return resolve(ret);
+        }
 
-    if (manual) {
-        doCheckForUpdate(/*manual*/ true);
-        return;
-    }
-
-    if (configuration()->needCheckForUpdate() && multiInstancesProvider()->instances().size() == 1) {
-        QTimer::singleShot(AUTO_CHECK_UPDATE_INTERVAL, [this]() {
-            doCheckForUpdate(/*manual*/ false);
+        m_checkProgressChannel = std::make_shared<Progress>();
+        m_checkProgressChannel->started().onNotify(this, [this]() {
+            m_checkInProgress = true;
         });
-    }
+
+        m_checkProgressChannel->finished().onReceive(this, [this, manual, resolve](const ProgressResult& res) {
+            Ret ret = muse::make_ok();
+            DEFER {
+                m_checkInProgress = false;
+                (void)resolve(ret);
+            };
+
+            const bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
+            if (!noUpdate && !res.ret) {
+                LOGE() << "Unable to check for update, error: " << res.ret.toString();
+                ret = muse::make_ret(Ret::Code::UnknownError);
+
+                if (manual) {
+                    showServerErrorMsg();
+                }
+
+                return;
+            }
+
+            const ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
+            if (!manual) {
+                const bool shouldIgnoreUpdate = info.version == configuration()->skippedReleaseVersion();
+                if (noUpdate || shouldIgnoreUpdate) {
+                    return;
+                }
+            } else if (noUpdate) {
+                showNoUpdateMsg();
+                return;
+            }
+
+            showReleaseInfo(info);
+        });
+
+        Concurrent::run(this, &UpdateScenario::th_checkForUpdate);
+        return muse::async::Promise<Ret>::dummy_result();
+    });
 }
 
 bool UpdateScenario::isCheckInProgress() const
 {
     return m_checkInProgress;
-}
-
-void UpdateScenario::doCheckForUpdate(bool manual)
-{
-    m_checkProgressChannel = std::make_shared<Progress>();
-    m_checkProgressChannel->started().onNotify(this, [this]() {
-        m_checkInProgress = true;
-    });
-
-    m_checkProgressChannel->finished().onReceive(this, [this, manual](const ProgressResult& res) {
-        DEFER {
-            m_checkInProgress = false;
-        };
-
-        bool noUpdate = res.ret.code() == static_cast<int>(Err::NoUpdate);
-        if (!noUpdate && !res.ret) {
-            LOGE() << "Unable to check for update, error: " << res.ret.toString();
-
-            if (manual) {
-                showServerErrorMsg();
-            }
-
-            return;
-        }
-
-        ReleaseInfo info = releaseInfoFromValMap(res.val.toMap());
-        if (!manual) {
-            bool shouldIgnoreUpdate = info.version == configuration()->skippedReleaseVersion();
-            if (noUpdate || shouldIgnoreUpdate) {
-                return;
-            }
-        } else if (noUpdate) {
-            showNoUpdateMsg();
-            return;
-        }
-
-        showReleaseInfo(info);
-    });
-
-    Concurrent::run(this, &UpdateScenario::th_checkForUpdate);
 }
 
 void UpdateScenario::th_checkForUpdate()

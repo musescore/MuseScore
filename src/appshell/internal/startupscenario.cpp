@@ -36,6 +36,9 @@ static const muse::UriQuery FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup
 static const muse::Uri HOME_URI("musescore://home");
 static const muse::Uri NOTATION_URI("musescore://notation");
 
+static constexpr int AUTO_CHECK_UPDATE_INTERVAL(1000);
+static constexpr int CHECK_FOR_UPDATES_TIMEOUT(60000);
+
 static StartupModeType modeTypeTromString(const std::string& str)
 {
     if ("start-empty" == str) {
@@ -55,6 +58,15 @@ static StartupModeType modeTypeTromString(const std::string& str)
     }
 
     return StartupModeType::StartEmpty;
+}
+
+StartupScenario::StartupScenario(const modularity::ContextPtr& iocCtx)
+    : muse::Injectable(iocCtx)
+{
+    m_splashScreenProgress = std::make_shared<Progress>();
+    m_splashScreenProgress->started().onNotify(this, [this] {
+        runOnSplashScreen();
+    });
 }
 
 void StartupScenario::setStartupType(const std::optional<std::string>& type)
@@ -87,28 +99,96 @@ void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFi
 
 void StartupScenario::runOnSplashScreen()
 {
-    if (registerAudioPluginsScenario()) {
-        //! NOTE Registering plugins shows a window (dialog) before the main window is shown.
-        //! After closing it, the application may in a state where there are no open windows,
-        //! which leads to automatic exit from the application.
-        //! (Thanks to the splashscreen, but this is not an obvious detail)
-        qApp->setQuitLockEnabled(false);
+    IF_ASSERT_FAILED(m_splashScreenProgress && m_splashScreenProgress->isStarted()) {
+        return;
+    }
 
-        Ret ret = registerAudioPluginsScenario()->registerNewPlugins();
-        if (!ret) {
-            LOGE() << ret.toString();
+    registerAudioPlugins();
+
+    if (multiInstancesProvider()->instances().size() != 1) {
+        m_splashScreenProgress->finish(make_ret(Ret::Code::Cancel));
+        return;
+    }
+
+    QTimer::singleShot(CHECK_FOR_UPDATES_TIMEOUT, [this]() { // TODO: Check the connection first...
+        if (m_splashScreenProgress && m_splashScreenProgress->isStarted()) {
+            m_splashScreenProgress->finish(make_ret(Ret::Code::UnknownError));
         }
+    });
 
-        qApp->setQuitLockEnabled(true);
+    static size_t totalChecksExpected = 0;
+
+    const auto onUpdateCheckCompleted = [this](){
+        static size_t totalChecksReceived = 0;
+
+        const bool checkInProgress = m_splashScreenProgress && m_splashScreenProgress->isStarted();
+        IF_ASSERT_FAILED(checkInProgress && totalChecksReceived < totalChecksExpected) {
+            return;
+        }
+        ++totalChecksReceived;
+
+        // TODO: Could give a specific progress update based on the number of checks completed and the
+        // total number of checks we're expecting...
+
+        if (totalChecksReceived == totalChecksExpected) {
+            m_splashScreenProgress->finish(make_ret(Ret::Code::Ok));
+        }
+    };
+
+    const bool canCheckAppUpdate = appUpdateScenario() && appUpdateConfiguration()
+                                   && appUpdateConfiguration()->needCheckForUpdate();
+    if (canCheckAppUpdate) {
+        ++totalChecksExpected;
     }
 
-    if (appUpdateScenario()) {
-        appUpdateScenario()->checkForUpdate(/*manual*/ false);
+    const bool canCheckMuseSoundsUpdate = museSoundsUpdateScenario() && museSoundsUpdateService()
+                                          && museSoundsUpdateService()->needCheckForUpdate();
+    if (canCheckMuseSoundsUpdate) {
+        ++totalChecksExpected;
     }
 
-    if (museSoundsUpdateScenario()) {
-        museSoundsUpdateScenario()->checkForUpdate(/*manual*/ false);
+    //! NOTE: Only start the checks once we know the total number of expected checks...
+
+    if (canCheckAppUpdate) {
+        QTimer::singleShot(AUTO_CHECK_UPDATE_INTERVAL, [this, onUpdateCheckCompleted]() {
+            muse::async::Promise<Ret> promise = appUpdateScenario()->checkForUpdate(/*manual*/ false);
+            promise.onResolve(this, [onUpdateCheckCompleted](Ret) {
+                onUpdateCheckCompleted();
+            });
+        });
     }
+
+    if (canCheckMuseSoundsUpdate) {
+        muse::async::Promise<Ret> promise = museSoundsUpdateScenario()->checkForUpdate(/*manual*/ false);
+        promise.onResolve(this, [onUpdateCheckCompleted](Ret) {
+            onUpdateCheckCompleted();
+        });
+    }
+}
+
+void StartupScenario::registerAudioPlugins()
+{
+    if (!registerAudioPluginsScenario()) {
+        return;
+    }
+
+    //! NOTE Registering plugins shows a window (dialog) before the main window is shown.
+    //! After closing it, the application may in a state where there are no open windows,
+    //! which leads to automatic exit from the application.
+    //! (Thanks to the splashscreen, but this is not an obvious detail)
+    qApp->setQuitLockEnabled(false);
+
+    Ret ret = registerAudioPluginsScenario()->registerNewPlugins();
+    if (!ret) {
+        LOGE() << ret.toString();
+    }
+
+    qApp->setQuitLockEnabled(true);
+}
+
+muse::ProgressPtr StartupScenario::splashScreenProgress()
+{
+    return m_splashScreenProgress;
 }
 
 void StartupScenario::runAfterSplashScreen()

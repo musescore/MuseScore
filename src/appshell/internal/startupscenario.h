@@ -34,7 +34,11 @@
 #include "isessionsmanager.h"
 #include "project/iprojectautosaver.h"
 #include "audioplugins/iregisteraudiopluginsscenario.h"
+
+#include "update/iupdateconfiguration.h"
 #include "update/iupdatescenario.h"
+
+#include "musesounds/imusesoundscheckupdateservice.h"
 #include "musesounds/imusesoundscheckupdatescenario.h"
 
 namespace mu::appshell {
@@ -47,13 +51,16 @@ class StartupScenario : public IStartupScenario, public muse::Injectable, public
     muse::Inject<ISessionsManager> sessionsManager = { this };
     muse::Inject<project::IProjectAutoSaver> projectAutoSaver = { this };
     muse::Inject<muse::audioplugins::IRegisterAudioPluginsScenario> registerAudioPluginsScenario = { this };
+
+    muse::Inject<muse::update::IUpdateConfiguration> appUpdateConfiguration = { this };
     muse::Inject<muse::update::IUpdateScenario> appUpdateScenario = { this };
+
+    muse::Inject<mu::musesounds::IMuseSoundsCheckUpdateService> museSoundsUpdateService = { this };
     muse::Inject<mu::musesounds::IMuseSoundsCheckUpdateScenario> museSoundsUpdateScenario = { this };
 
 public:
 
-    StartupScenario(const muse::modularity::ContextPtr& iocCtx)
-        : muse::Injectable(iocCtx) {}
+    StartupScenario(const muse::modularity::ContextPtr& iocCtx);
 
     void setStartupType(const std::optional<std::string>& type) override;
 
@@ -62,11 +69,14 @@ public:
     const project::ProjectFile& startupScoreFile() const override;
     void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
-    void runOnSplashScreen() override;
+    muse::ProgressPtr splashScreenProgress() override;
     void runAfterSplashScreen() override;
     bool startupCompleted() const override;
 
 private:
+    void runOnSplashScreen();
+    void registerAudioPlugins();
+
     void onStartupPageOpened(StartupModeType modeType);
 
     StartupModeType resolveStartupModeType() const;
@@ -80,6 +90,8 @@ private:
     std::string m_startupTypeStr;
     project::ProjectFile m_startupScoreFile;
     bool m_startupCompleted = false;
+
+    muse::ProgressPtr m_splashScreenProgress = nullptr;
 };
 }
 
