@@ -301,6 +301,16 @@ Part* Staff::part()
 }
 
 //---------------------------------------------------------
+//   Staff::clefAtTick
+//---------------------------------------------------------
+
+mu::engraving::apiv1::enums::ClefType Staff::clefAtTick(int tick)
+{
+    mu::engraving::ClefType clefType = staff()->clef(mu::engraving::Fraction::fromTicks(tick));
+    return static_cast<apiv1::enums::ClefType>(clefType);
+}
+
+//---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond
 ///   Wraps mu::engraving::EngravingItem choosing the correct wrapper type

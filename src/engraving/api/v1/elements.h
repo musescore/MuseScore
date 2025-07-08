@@ -42,6 +42,7 @@
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/undo.h"
 
+#include "apitypes.h"
 #include "playevent.h"
 
 Q_MOC_INCLUDE("engraving/api/v1/part.h")
@@ -1220,6 +1221,12 @@ public:
 
     Part* part();
     /// \endcond
+
+    /// Returns the clef type in effect at the given \p tick.
+    /// \param tick MIDI tick to query
+    /// \returns ClefType in effect at the specified tick
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::enums::ClefType clefAtTick(int tick);
 };
 
 #undef API_PROPERTY
