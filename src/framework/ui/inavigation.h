@@ -157,7 +157,10 @@ public:
         Regular = 0,
         //! NOTE If activated exclusive section, we shouldn't navigate to another section.
         //! Typically exclusive section - this is dialog
-        Exclusive
+        Exclusive,
+        //! NOTE If the type is Ignore, then the section is ignored (not registered),
+        //! usually it is necessary to remove sections from diagnostics
+        Ignore
     };
 
     virtual Type type() const = 0;
