@@ -3810,7 +3810,7 @@ void TRead::read(StaffType* t, XmlReader& e, ReadContext& ctx)
         } else if (tag == "fretUseTextStyle") {
             t->setFretUseTextStyle(e.readBool());
         } else if (tag == "fretTextStyle") {
-            t->setFretTextStyle(TextStyleType(e.readInt()));
+            t->setFretTextStyle(TextStyleType(TConv::fromXml(e.readAsciiText(), TextStyleType::TAB_FRET_NUMBER)));
         } else if (tag == "symbolRepeat") {
             t->setSymbolRepeat((TablatureSymbolRepeat)e.readInt());
         } else if (tag == "linesThrough") {
