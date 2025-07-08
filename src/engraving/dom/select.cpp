@@ -824,27 +824,22 @@ void Selection::updateSelectedElements()
             continue;
         }
 
-        if (!canSelectVoice(sp->track()) || sp->isVolta()) {
-            continue;
-        }
-
-        // ignore if start & end elements are not calculated yet, or if spanner is outside selection range
-        const bool isInRange = rangeStart < sp->tick2() && rangeEnd > sp->tick();
         const bool startAndEndCalculated = sp->startElement() && sp->endElement();
-        if (!isInRange || !startAndEndCalculated) {
+        if (!startAndEndCalculated || !canSelectVoice(sp->track()) || sp->isVolta()) {
             continue;
         }
 
-        const EngravingItem* startCR = sp->startCR();
-        const EngravingItem* endCR = sp->endCR();
+        //! NOTE: isZeroLengthAtStart (for lack of a better name) covers an edge case that may occur if sp spans from
+        //! a grace note to its parent note or vice versa. In this scenario sp->tick == sp->tick2 == rangeStart and
+        //! we should include the spanner in our selection...
+        const bool overlapsSelectionRange = rangeStart < sp->tick2() && rangeEnd > sp->tick();
+        const bool isZeroLengthAtStart = sp->tick() == sp->tick2() && sp->tick() == rangeStart;
+        if (!overlapsSelectionRange && !isZeroLengthAtStart) {
+            continue;
+        }
 
-        const bool canSelectStart = sp->startElement()->isTimeTickAnchor() || sp->startElement()->isSegment() || canSelect(startCR);
-        const bool canSelectEnd = sp->endElement()->isTimeTickAnchor() || sp->endElement()->isSegment() || canSelect(endCR);
-
-        if (canSelectStart && canSelectEnd) {
-            for (auto seg : sp->spannerSegments()) {
-                appendFiltered(seg);
-            }
+        for (auto seg : sp->spannerSegments()) {
+            appendFiltered(seg);
         }
     }
     update();
