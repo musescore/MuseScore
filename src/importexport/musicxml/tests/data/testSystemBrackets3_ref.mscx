@@ -111,7 +111,7 @@ Vocals</longName>
           <durationFontSize>15</durationFontSize>
           <durationFontY>0</durationFontY>
           <fretUseTextStyle>1</fretUseTextStyle>
-          <fretTextStyle>37</fretTextStyle>
+          <fretTextStyle>tab_fret_number</fretTextStyle>
           <linesThrough>0</linesThrough>
           <minimStyle>1</minimStyle>
           <onLines>1</onLines>
@@ -242,7 +242,7 @@ Gtr. 1</shortName>
           <durationFontSize>15</durationFontSize>
           <durationFontY>0</durationFontY>
           <fretUseTextStyle>1</fretUseTextStyle>
-          <fretTextStyle>37</fretTextStyle>
+          <fretTextStyle>tab_fret_number</fretTextStyle>
           <linesThrough>0</linesThrough>
           <minimStyle>1</minimStyle>
           <onLines>1</onLines>
@@ -373,7 +373,7 @@ Gtr. 2</shortName>
           <durationFontSize>15</durationFontSize>
           <durationFontY>0</durationFontY>
           <fretUseTextStyle>1</fretUseTextStyle>
-          <fretTextStyle>37</fretTextStyle>
+          <fretTextStyle>tab_fret_number</fretTextStyle>
           <linesThrough>0</linesThrough>
           <minimStyle>1</minimStyle>
           <onLines>1</onLines>

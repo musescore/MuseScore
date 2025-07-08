@@ -2911,7 +2911,7 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext& ctx)
         }
         xml.tag("fretUseTextStyle", item->fretUseTextStyle());
         if (item->fretUseTextStyle()) {
-            xml.tag("fretTextStyle", int(item->fretTextStyle()));
+            xml.tag("fretTextStyle", TConv::toXml(item->fretTextStyle()));
         } else {
             xml.tag("fretPresetIdx", item->fretPresetIdx());
             xml.tag("fretFontSize",  item->fretFontSize());
