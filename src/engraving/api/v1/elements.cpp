@@ -512,6 +512,11 @@ Part* Staff::part()
     return wrap<Part>(staff()->part());
 }
 
+int Staff::clefType(FractionWrapper* tick)
+{
+    return int(staff()->clef(tick->fraction()));
+}
+
 FractionWrapper* Staff::timeStretch(FractionWrapper* tick)
 {
     return wrap(staff()->timeStretch(tick->fraction()));
