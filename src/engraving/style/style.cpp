@@ -616,6 +616,10 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             AlignH val = value(st.styleIdx()).value<Align>().horizontal;
             set(positionSid, val);
         }
+
+        if (value(Sid::measureNumberHPlacement).value<PlacementH>() != PlacementH::LEFT) {
+            set(Sid::measureNumberAlignToBarline, false);
+        }
     }
 
     if (m_version < 450) {
