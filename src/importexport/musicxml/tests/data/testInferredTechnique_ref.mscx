@@ -300,7 +300,6 @@
         <eid>o_o</eid>
         <voice>
           <PlayTechAnnotation>
-            <playTechType>mute</playTechType>
             <eid>p_p</eid>
             <text>con sord</text>
             </PlayTechAnnotation>
@@ -319,7 +318,6 @@
         <eid>s_s</eid>
         <voice>
           <PlayTechAnnotation>
-            <playTechType>mute</playTechType>
             <eid>t_t</eid>
             <text>senza sord</text>
             </PlayTechAnnotation>
