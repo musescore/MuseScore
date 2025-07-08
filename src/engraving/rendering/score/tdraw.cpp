@@ -2217,7 +2217,7 @@ void TDraw::draw(const Note* item, Painter* painter)
         Font f(tab->fretFont());
         f.setPointSizeF(f.pointSizeF() * item->magS() * MScore::pixelRatio);
         painter->setFont(f);
-        painter->setPen(tab->fretColor());
+        painter->setPen(c);
         double startPosX = ldata->bbox().x();
 
         double yOffset = tab->fretFontYOffset();
