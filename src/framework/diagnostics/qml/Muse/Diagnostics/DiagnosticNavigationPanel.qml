@@ -210,6 +210,7 @@ Rectangle {
                                 anchors.fill: parent
 
                                 enabled: gridItem.enabled
+                                acceptedButtons: Qt.LeftButton | Qt.RightButton
                                 hoverEnabled: true
                                 onContainsMouseChanged: {
                                     if (containsMouse) {
@@ -223,9 +224,16 @@ Rectangle {
                                     }
                                 }
 
-                                onClicked: {
-                                    control.requestActive()
-                                    control.trigger()
+                                onClicked: function(e) {
+                                    switch (e.button) {
+                                    case Qt.LeftButton: {
+                                        control.requestActive()
+                                        control.trigger()
+                                    } break;
+                                    case Qt.RightButton: {
+                                        keynavModel.copyToClipboard(item.section, subitem.panel, gridItem.control)
+                                    } break;
+                                    }
                                 }
                             }
                         }
