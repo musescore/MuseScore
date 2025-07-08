@@ -39,7 +39,7 @@ void MeasureNumberLayout::layoutMeasureNumber(const MeasureNumber* item, Measure
     const RectF& itemBBox = ldata->bbox();
 
     bool alignToBarline = ctx.conf().styleB(Sid::measureNumberAlignToBarline);
-    PlacementH hPlacement = item->getProperty(Pid::HPLACEMENT).value<PlacementH>();
+    PlacementH hPlacement = ctx.conf().styleV(Sid::measureNumberHPlacement).value<PlacementH>();
     const Segment* barlineSeg = refBarlineSegment(item, alignToBarline, hPlacement);
     const BarLine* refBarline = barlineSeg ? toBarLine(barlineSeg->element(item->track())) : nullptr;
 
@@ -98,7 +98,7 @@ void MeasureNumberLayout::layoutMMRestRange(const MMRestRange* item, MMRestRange
         = MeasureLayout::getMeasureStartEndPos(measure, crSeg, item->staffIdx(), true, false, ctx);
 
     const RectF& itemBBox = ldata->bbox();
-    PlacementH hPlacement = item->getProperty(Pid::HPLACEMENT).value<PlacementH>();
+    PlacementH hPlacement = ctx.conf().styleV(Sid::mmRestRangeHPlacement).value<PlacementH>();
     if (hPlacement == PlacementH::CENTER) {
         const double x1 = measureStartEnd.x1;
         const double x2 = measureStartEnd.x2;

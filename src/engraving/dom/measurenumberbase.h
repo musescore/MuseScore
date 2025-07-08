@@ -39,10 +39,6 @@ public:
     MeasureNumberBase(const ElementType& type, Measure* parent = nullptr, TextStyleType = TextStyleType::DEFAULT);
     MeasureNumberBase(const MeasureNumberBase& other);
 
-    PropertyValue getProperty(Pid id) const override;
-    bool setProperty(Pid id, const PropertyValue& val) override;
-    PropertyValue propertyDefault(Pid id) const override;
-
     Measure* measure() const { return toMeasure(explicitParent()); }
 
     bool isEditable() const override { return false; }    // The measure numbers' text should not be editable

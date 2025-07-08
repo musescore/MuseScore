@@ -52,36 +52,4 @@ MeasureNumberBase::MeasureNumberBase(const MeasureNumberBase& other)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }
-
-//---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-engraving::PropertyValue MeasureNumberBase::getProperty(Pid id) const
-{
-    return TextBase::getProperty(id);
-}
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool MeasureNumberBase::setProperty(Pid id, const PropertyValue& val)
-{
-    return TextBase::setProperty(id, val);
-}
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
-{
-    switch (id) {
-    case Pid::TEXT_STYLE:
-        return TextStyleType::DEFAULT;
-    default:
-        return TextBase::propertyDefault(id);
-    }
-}
 } // namespace MS

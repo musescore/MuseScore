@@ -58,32 +58,4 @@ MeasureNumber::MeasureNumber(const MeasureNumber& other)
 {
     initElementStyle(&measureNumberStyle);
 }
-
-PropertyValue MeasureNumber::getProperty(Pid id) const
-{
-    switch (id) {
-    case Pid::HPLACEMENT:
-        return style().styleV(Sid::measureNumberHPlacement);
-    default:
-        return MeasureNumberBase::propertyDefault(id);
-    }
-}
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-engraving::PropertyValue MeasureNumber::propertyDefault(Pid id) const
-{
-    switch (id) {
-    case Pid::TEXT_STYLE:
-        return style().styleV(Sid::measureNumberTextStyle);
-    case Pid::PLACEMENT:
-        return style().styleV(Sid::measureNumberVPlacement);
-    case Pid::HPLACEMENT:
-        return style().styleV(Sid::measureNumberHPlacement);
-    default:
-        return MeasureNumberBase::propertyDefault(id);
-    }
-}
 } // namespace MS

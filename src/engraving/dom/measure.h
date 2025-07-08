@@ -177,8 +177,8 @@ public:
     void setStaffStemless(staff_idx_t staffIdx, bool stemless);
     bool corrupted(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->corrupted(); }
     void setCorrupted(staff_idx_t staffIdx, bool val) { m_mstaves[staffIdx]->setCorrupted(val); }
-    MeasureNumber* noText(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->measureNumber(); }
-    void setNoText(staff_idx_t staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setMeasureNumber(t); }
+    MeasureNumber* measureNumber(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->measureNumber(); }
+    void setMeasureNumber(staff_idx_t staffIdx, MeasureNumber* t) { m_mstaves[staffIdx]->setMeasureNumber(t); }
 
     const std::vector<MStaff*>& mstaves() const { return m_mstaves; }
     std::vector<MStaff*>& mstaves() { return m_mstaves; }
