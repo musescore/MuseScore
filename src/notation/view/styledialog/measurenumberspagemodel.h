@@ -36,7 +36,7 @@ class MeasureNumbersPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * measureNumberVPlacement READ measureNumberVPlacement CONSTANT)
     Q_PROPERTY(StyleItem * measureNumberHPlacement READ measureNumberHPlacement CONSTANT)
     Q_PROPERTY(StyleItem * measureNumberAllStaves READ measureNumberAllStaves CONSTANT)
-    Q_PROPERTY(StyleItem * measureNumberPosAbove READ measureNumberPosAbove CONSTANT)
+    Q_PROPERTY(StyleItem * measureNumberPosAbove READ measureNumberPosAbove NOTIFY measureNumberPosAboveChanged FINAL)
     Q_PROPERTY(StyleItem * measureNumberPosBelow READ measureNumberPosBelow CONSTANT)
     Q_PROPERTY(StyleItem * measureNumberAlignToBarline READ measureNumberAlignToBarline CONSTANT)
 
@@ -50,6 +50,9 @@ class MeasureNumbersPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(QVariantList textStyles READ textStyles)
     Q_PROPERTY(StyleItem * measureNumberTextStyle READ measureNumberTextStyle CONSTANT)
     Q_PROPERTY(StyleItem * mmRestRangeTextStyle READ mmRestRangeTextStyle CONSTANT)
+
+signals:
+    void measureNumberPosAboveChanged() const;
 
 public:
     explicit MeasureNumbersPageModel(QObject* parent = nullptr);
@@ -76,5 +79,8 @@ public:
 
     StyleItem* measureNumberTextStyle() const;
     StyleItem* mmRestRangeTextStyle() const;
+
+private:
+    StyleItem* buildStyleItem(StyleId id) const override;
 };
 }
