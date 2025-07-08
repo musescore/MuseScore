@@ -88,7 +88,7 @@ StyleItem* MeasureNumbersPageModel::mmRestRangeHPlacement() const { return style
 StyleItem* MeasureNumbersPageModel::measureNumberTextStyle() const { return styleItem(StyleId::measureNumberTextStyle); }
 StyleItem* MeasureNumbersPageModel::mmRestRangeTextStyle() const { return styleItem(StyleId::mmRestRangeTextStyle); }
 
-StyleItem *MeasureNumbersPageModel::buildStyleItem(StyleId id) const
+StyleItem* MeasureNumbersPageModel::buildStyleItem(StyleId id) const
 {
     StyleItem* item = AbstractStyleDialogModel::buildStyleItem(id);
 
