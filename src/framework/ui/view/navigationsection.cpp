@@ -50,6 +50,11 @@ void NavigationSection::componentComplete()
         return;
     }
 
+    if (type() == INavigationSection::Type::Ignore) {
+        LOGW() << "section is ignored, name: " << m_name;
+        return;
+    }
+
     navigationController()->reg(this);
 }
 
