@@ -51,7 +51,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
     <SystemObjects>
-      <Instance staffId="4" barNumbers="false"/>
+      <Instance staffId="4"/>
       </SystemObjects>
     <Part id="1">
       <Staff>

@@ -71,6 +71,8 @@
       <metronomeFontSize>22</metronomeFontSize>
       <measureNumberFontFace>Palatino,serif</measureNumberFontFace>
       <measureNumberFontSize>22</measureNumberFontSize>
+      <measureNumberAlternateFontFace>Palatino,serif</measureNumberAlternateFontFace>
+      <measureNumberAlternateFontSize>22</measureNumberAlternateFontSize>
       <mmRestRangeFontFace>Palatino,serif</mmRestRangeFontFace>
       <mmRestRangeFontSize>22</mmRestRangeFontSize>
       <translatorFontFace>Palatino,serif</translatorFontFace>

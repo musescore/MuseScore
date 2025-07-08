@@ -69,6 +69,8 @@
       <metronomeFontSize>10.25</metronomeFontSize>
       <measureNumberFontFace>Times New Roman</measureNumberFontFace>
       <measureNumberFontSize>10.25</measureNumberFontSize>
+      <measureNumberAlternateFontFace>Times New Roman</measureNumberAlternateFontFace>
+      <measureNumberAlternateFontSize>10.25</measureNumberAlternateFontSize>
       <mmRestRangeFontFace>Times New Roman</mmRestRangeFontFace>
       <mmRestRangeFontSize>10.25</mmRestRangeFontSize>
       <translatorFontFace>Times New Roman</translatorFontFace>
