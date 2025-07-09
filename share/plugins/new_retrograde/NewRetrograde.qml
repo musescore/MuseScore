@@ -34,7 +34,7 @@ MuseScore {
         var parsedCRs = []
         for (var i in curScore.selection.elements) {
             var el = curScore.selection.elements[i]
-            if (!el || getType(el) == "unknown") {
+            if (!el || !typeIsValid(el)) {
                 continue
             }
 
@@ -72,8 +72,6 @@ MuseScore {
                     continue
                 }
             }
-            console.log("logging " + sendObj.type + ": Tick " + sendObj.startTick + ", voice " + (sendObj.track % 4 + 1) + ", staff "
-                + Math.ceil((sendObj.track + 1) / 4) + ", duration: " + sendObj.duration.numerator + "/" + sendObj.duration.denominator)
             sendObjs.push(sendObj)
         }
 
@@ -92,7 +90,7 @@ MuseScore {
             if (cursor.element && cursor.element.tuplet) {
                 removeElement(getMotherTuplet(cursor.element))
             }
-            if (el.type == "tuplet") {
+            if (el.type == Element.TUPLET) {
                 addTupletObj(el, cursor)
             } else {
                 addChordRestObj(el, cursor)
@@ -109,7 +107,7 @@ MuseScore {
             notes: getNotes(element),
             startTick: getTick(element),
             track: element.track,
-            type: getType(element),
+            type: element.type,
             annotations: getAnnotations(element),
             articulations: getArticulations(element),
             graceNotes: getGraceNotes(element),
@@ -242,7 +240,7 @@ MuseScore {
     function getTupletObj(tuplet) {
         return {
             duration: getDuration(tuplet),
-            type: getType(tuplet),
+            type: tuplet.type,
             startTick: getTick(tuplet),
             track: tuplet.track,
             elements: getTupletElements(tuplet),
@@ -260,7 +258,7 @@ MuseScore {
     function getTupletElements(tuplet) {
         var elementsArray = []
         for (var i in tuplet.elements) {
-            if (getType(tuplet.elements[i]) == "tuplet") {
+            if (tuplet.elements[i].type == Element.TUPLET) {
                 elementsArray.push(getTupletObj(tuplet.elements[i]))
             } else {
                 elementsArray.push(getChordRestObj(tuplet.elements[i]))
@@ -269,14 +267,14 @@ MuseScore {
         elementsArray.sort(retrogradeSort)
         return elementsArray
     }
-    //returns a readable 'type' property for elements
-    function getType(element) {
+    // checks whether the element type is one to track in the retrograde
+    function typeIsValid(element) {
         switch (element.type) {
             case Element.NOTE:
-            case Element.CHORD:   return "note"
-            case Element.REST:    return "rest"
-            case Element.TUPLET:  return "tuplet"
-            default:              return "unknown"
+            case Element.CHORD:
+            case Element.REST:
+            case Element.TUPLET:  return true
+            default:              return false
         }
     }
     //adds chordrests to the score
@@ -288,7 +286,7 @@ MuseScore {
             c.rewindToTick(t)
         }
         c.setDuration(element.duration.numerator, element.duration.denominator)
-        if (element.type == "rest") {
+        if (element.type == Element.REST) {
             c.addRest()
             c.rewindToTick(t)
             //check for full measure rest
@@ -331,7 +329,7 @@ MuseScore {
             chordsToAddTo.push(n.parent)
             for (var i = 0; i < chordsToAddTo.length; ++i) {
                 for (var j in element.notes) {
-                    chordsToAddTo[i].add(element.notes[j].clone())
+                    chordsToAddTo[i].add(element.notes[j])
                 }
             }
 
@@ -370,12 +368,12 @@ MuseScore {
         c.addTuplet(fraction(element.ratio.numerator, element.ratio.denominator), fraction(element.duration.numerator, element.duration.denominator))
         c.rewindToTick(t)
         console.log("Adding tuplet at tick " + t)
-        if (!c.element.tuplet) {
-            console.log("could not add tuplet. Adding as regular notes instead.")
-        } else {
+        if (c.element.tuplet) {
             c.element.tuplet.bracketType = element.bracketType
             c.element.tuplet.numberType = element.numberType
             c.element.tuplet.visible = element.visible
+        } else {
+            console.log("could not add tuplet. Adding as regular notes instead.")
         }
         for (var i in element.elements) {
             if (element.elements[i].type == "tuplet") addTupletObj(element.elements[i], c)
