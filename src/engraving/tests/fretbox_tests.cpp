@@ -49,7 +49,7 @@ public:
         return score;
     }
 
-    void addChords(MasterScore* score, const std::vector<String>& chords)
+    void addChords(MasterScore* score, const StringList& chords)
     {
         Measure* measure = score->firstMeasure();
         measure = toMeasure(measure->next()); // ignore first one with clef
@@ -153,7 +153,7 @@ public:
         return eids;
     }
 
-    void checkFretBox(MasterScore* score, const std::vector<String>& chords)
+    void checkFretBox(MasterScore* score, const StringList& chords)
     {
         ASSERT_TRUE(!score->measures()->empty());
         ASSERT_TRUE(score->measure(0)->type() == ElementType::FBOX);
@@ -161,10 +161,11 @@ public:
         FBox* fretBox = toFBox(score->measure(0));
         ASSERT_TRUE(fretBox);
 
-        EXPECT_EQ(fretBox->el().size(), chords.size());
+        const ElementList& elements = fretBox->orderedElements();
+        EXPECT_EQ(elements.size(), chords.size());
 
         for (size_t i = 0; i < chords.size(); ++i) {
-            FretDiagram* diagram = toFretDiagram(fretBox->el()[i]);
+            FretDiagram* diagram = toFretDiagram(elements[i]);
             ASSERT_TRUE(diagram);
             LOGD() << "Checking chord: " << chords[i].toStdString()
                    << ", diagram: " << diagram->harmonyText().toStdString();
@@ -173,7 +174,7 @@ public:
         }
     }
 
-    void reorderElements(MasterScore* score, const std::vector<EID>& newOrder)
+    void reorderElements(MasterScore* score, const StringList& newOrder)
     {
         FBox* fretBox = toFBox(score->measure(0));
         ASSERT_TRUE(fretBox);
@@ -218,8 +219,7 @@ TEST_F(Engraving_FretBoxTests, ReorderChords)
     score->insertBox(mu::engraving::ElementType::FBOX, score->firstMeasure());
 
     // [WHEN] Reorder chords in the fret box
-    std::vector<EID> eids = chordsEIDs(score);
-    std::vector<EID> newOrder = { eids[0], eids[2], eids[1], eids[3] };
+    StringList newOrder = { u"A", u"C", u"B", u"D" };
     reorderElements(score, newOrder);
 
     // [THEN] Check reordered fret box and diagrams
@@ -559,6 +559,43 @@ TEST_F(Engraving_FretBoxTests, RenameChords_SameChordAfter_NoDuplicates_2)
 
     // [THEN] Check fret box and chords
     checkFretBox(score, { u"A", u"B", u"C", u"E", u"F" });
+
+    delete score;
+}
+
+TEST_F(Engraving_FretBoxTests, RenameChords_AfterMoving)
+{
+    // [GIVEN] Empty score
+    MasterScore* score = createEmptyScore();
+
+    // [GIVEN] Add chords to the score
+    addChords(score, { u"A" /*0*/, u"B" /*2*/, u"C" /*4*/, u"D" /*6*/, u"E" /*8*/, u"F" /*10*/ });
+    score->insertBox(mu::engraving::ElementType::FBOX, score->firstMeasure());
+
+    StringList newOrder = { u"B", u"C", u"D", u"E", u"F", u"A" };
+    reorderElements(score, newOrder);
+
+    // [WHEN] Rename the chord to the new chord that already exists
+    renameChord(score, 0, u"C"); // Rename "A" to "C"
+
+    // -------- Chords in the score: C, B, C, D, E, F --------
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"B", u"C", u"D", u"E", u"F" });
+
+    // [WHEN] Rename the chord to the new chord that doesn't exist
+    renameChord(score, 0, u"C1"); // Rename "C" to "C1"
+
+    // -------- Chords in the score: C1, B, C, D, E, F --------
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"C1", u"B", u"C", u"D", u"E", u"F" });
+
+    // [WHEN] Undo the last command
+    undoLastCommand(score);
+
+    // [THEN] Check fret box and chords
+    checkFretBox(score, { u"B", u"C", u"D", u"E", u"F" });
 
     delete score;
 }
