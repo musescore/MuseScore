@@ -411,7 +411,7 @@ void Ornament::updateCueNote()
     if (!m_cueNoteChord) {
         m_cueNoteChord = Factory::createChord(parentChord->segment());
         m_cueNoteChord->setSmall(true);
-        cueNote->setHeadHasParentheses(true);
+        cueNote->setParenthesesMode(ParenthesesMode::BOTH);
         cueNote->setHeadType(NoteHeadType::HEAD_QUARTER);
         m_cueNoteChord->add(cueNote);
         cueNote->setParent(m_cueNoteChord);

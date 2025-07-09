@@ -21,10 +21,12 @@
  */
 
 #include "harmonylayout.h"
+#include "rendering/score/parenthesislayout.h"
 #include "tlayout.h"
 
 #include "dom/fret.h"
 #include "dom/harmony.h"
+#include "dom/parenthesis.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::score;
@@ -172,4 +174,6 @@ void HarmonyLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldat
     }
 
     ldata->setPos(positionPoint);
+
+    ParenthesisLayout::layoutParentheses(item, ctx);
 }

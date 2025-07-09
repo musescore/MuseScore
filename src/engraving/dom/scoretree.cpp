@@ -55,6 +55,7 @@
 #include "system.h"
 #include "systemdivider.h"
 #include "text.h"
+
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "trill.h"
@@ -456,10 +457,6 @@ EngravingObjectList Note::scanChildren() const
 
     for (NoteDot* noteDot : m_dots) {
         children.push_back(noteDot);
-    }
-
-    if (m_tieFor) {
-        children.push_back(m_tieFor);
     }
 
     for (EngravingItem* element : el()) {

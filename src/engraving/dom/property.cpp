@@ -89,7 +89,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SLUR_DIRECTION,          false, "up",                    P_TYPE::DIRECTION_V,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "up") },
     { Pid::LEADING_SPACE,           false, "leadingSpace",          P_TYPE::SPATIUM,            PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "leading space") },
     { Pid::MIRROR_HEAD,             false, "mirror",                P_TYPE::DIRECTION_H,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "mirror") },
-    { Pid::HEAD_HAS_PARENTHESES,    true , "parentheses",           P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "parentheses") },
+    { Pid::HAS_PARENTHESES,         true , "parentheses",           P_TYPE::PARENTHESES_MODE,   PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "parentheses") },
     { Pid::DOT_POSITION,            false, "dotPosition",           P_TYPE::DIRECTION_V,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "dot position") },
     { Pid::COMBINE_VOICE,           true,  "combineVoice",          P_TYPE::AUTO_ON_OFF,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "combine voice") },
     { Pid::TUNING,                  false, "tuning",                P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tuning") },

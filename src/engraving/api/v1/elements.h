@@ -649,6 +649,8 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(bool, isCourtesy,      IS_COURTESY)
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, excludeVerticalAlign, EXCLUDE_VERTICAL_ALIGN)
+    ///\since MuseScore 4.6
+    API_PROPERTY(hasParentheses, HAS_PARENTHESES)
 
     //  API_PROPERTY(end,                     END)
 
@@ -776,8 +778,6 @@ class Note : public EngravingItem
     API_PROPERTY_T(int, string,           STRING)
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, dead,            DEAD)
-    ///\since MuseScore 4.6
-    API_PROPERTY_T(bool, headHasParentheses, HEAD_HAS_PARENTHESES)
 
 public:
     /// \cond MS_INTERNAL

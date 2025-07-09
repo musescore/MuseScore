@@ -2365,11 +2365,10 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    Segment* seg = item->segment();
-    EngravingItem* segItem = seg ? seg->element(item->track()) : nullptr;
-    TimeSig* segTs = segItem && segItem->isTimeSig() ? toTimeSig(segItem) : nullptr;
+    EngravingItem* parent = item->parentItem();
+    TimeSig* parentTs = parent && parent->isTimeSig() ? toTimeSig(parent) : nullptr;
 
-    if (segTs && !segTs->showOnThisStaff()) {
+    if (parentTs && !parentTs->showOnThisStaff()) {
         return;
     }
 
@@ -2378,10 +2377,15 @@ void TDraw::draw(const Parenthesis* item, muse::draw::Painter* painter)
     Pen pen(penColor);
     double mag = item->staff() ? item->staff()->staffMag(item->tick()) : 1.0;
 
+    if (item->ldata()->symId != SymId::noSym) {
+        item->drawSymbol(item->ldata()->symId, painter);
+        return;
+    }
+
     painter->setBrush(Brush(pen.color()));
     pen.setCapStyle(PenCapStyle::RoundCap);
     pen.setJoinStyle(PenJoinStyle::RoundJoin);
-    pen.setWidthF(Parenthesis::PARENTHESIS_END_WIDTH * item->spatium() * mag);
+    pen.setWidthF(item->ldata()->endPointThickness * item->spatium() * mag);
 
     painter->setPen(pen);
     painter->drawPath(item->ldata()->path());
@@ -2824,24 +2828,6 @@ void TDraw::draw(const Symbol* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     bool tabStaff = item->staff() ? item->staff()->isTabStaff(item->tick()) : false;
-    if (tabStaff && (item->sym() == SymId::noteheadParenthesisLeft || item->sym() == SymId::noteheadParenthesisRight)) {
-        // Draw background for parentheses on TAB staves
-        auto config = item->configuration();
-        const Symbol::LayoutData* ldata = item->ldata();
-        double d = item->style().styleS(Sid::tabFretPadding).val() * item->spatium();
-        RectF bb = RectF(ldata->bbox().x() - d,
-                         ldata->bbox().y() - d,
-                         ldata->bbox().width() + 2 * d,
-                         ldata->bbox().height() + 2 * d
-                         );
-        if (!item->score()->getViewer().empty()) {
-            for (MuseScoreView* view : item->score()->getViewer()) {
-                view->drawBackground(painter, bb);
-            }
-        } else {
-            painter->fillRect(bb, config->noteBackgroundColor());
-        }
-    }
 
     if (!item->isNoteDot() || !tabStaff) {
         painter->setPen(item->curColor());

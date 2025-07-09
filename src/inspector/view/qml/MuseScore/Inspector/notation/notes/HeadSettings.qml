@@ -56,8 +56,8 @@ FocusableItem {
             navigationRowStart: root.navigationRowStart + 1
 
             model: [
-                { iconCode: IconCode.NOTE_HEAD, value: false, title: qsTrc("inspector", "Normal notehead") },
-                { iconCode: IconCode.NOTE_HEAD_PARENTHESES, value: true, title: qsTrc("inspector", "Notehead with parentheses") }
+                { iconCode: IconCode.NOTE_HEAD, value: NoteHead.PAREN_NONE, title: qsTrc("inspector", "Normal notehead") },
+                { iconCode: IconCode.NOTE_HEAD_PARENTHESES, value: NoteHead.PAREN_BOTH, title: qsTrc("inspector", "Notehead with parentheses") }
             ]
         }
 

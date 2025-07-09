@@ -464,14 +464,14 @@
               <eid>0_0</eid>
               <linkedTo>O_O</linkedTo>
               <visible>1</visible>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>1_1</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>2_2</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -557,21 +557,21 @@
             <Note>
               <eid>+_+</eid>
               <linkedTo>W_W</linkedTo>
+              <parentheses>both</parentheses>
+              <Parenthesis>
+                <eid>/_/</eid>
+                <visible>0</visible>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
+                <eid>AB_AB</eid>
+                <visible>0</visible>
+                </Parenthesis>
               <Accidental>
                 <role>1</role>
                 <subtype>accidentalSharp</subtype>
-                <eid>/_/</eid>
-                </Accidental>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
-                <eid>AB_AB</eid>
-                <visible>0</visible>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
                 <eid>BB_BB</eid>
-                <visible>0</visible>
-                </Symbol>
+                </Accidental>
               <pitch>61</pitch>
               <tpc>21</tpc>
               <fret>1</fret>
@@ -662,16 +662,16 @@
             <Note>
               <eid>KB_KB</eid>
               <linkedTo>g_g</linkedTo>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>LB_LB</eid>
                 <visible>0</visible>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>MB_MB</eid>
                 <visible>0</visible>
-                </Symbol>
+                </Parenthesis>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -762,16 +762,16 @@
             <Note>
               <eid>VB_VB</eid>
               <linkedTo>q_q</linkedTo>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>WB_WB</eid>
                 <visible>0</visible>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>XB_XB</eid>
                 <visible>0</visible>
-                </Symbol>
+                </Parenthesis>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>

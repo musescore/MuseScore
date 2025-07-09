@@ -119,14 +119,14 @@ Cowboys From Hell</text>
             <noStem>1</noStem>
             <Note>
               <eid>P_P</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>Q_Q</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>R_R</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>83</pitch>
               <tpc>19</tpc>
               <string>3</string>

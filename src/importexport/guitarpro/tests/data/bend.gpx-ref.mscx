@@ -119,14 +119,14 @@
             <durationType>eighth</durationType>
             <Note>
               <eid>P_P</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>Q_Q</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>R_R</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>67</pitch>
               <tpc>15</tpc>
               <fret>6</fret>
@@ -314,14 +314,14 @@
             <noStem>1</noStem>
             <Note>
               <eid>n_n</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>o_o</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>p_p</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>5</fret>
@@ -384,14 +384,14 @@
             <noStem>1</noStem>
             <Note>
               <eid>w_w</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>x_x</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>y_y</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>2</fret>
