@@ -1198,9 +1198,16 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
     }
 }
 
+bool NotationViewInputController::anchorEditingKeysFound(QKeyEvent* event) const
+{
+    return (event->key() == Qt::Key_Left || event->key() == Qt::Key_Right) && event->modifiers() & Qt::ShiftModifier;
+}
+
 bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
 {
-    const bool editTextKeysFound = event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter;
+    auto key = event->key();
+
+    const bool editTextKeysFound = key == Qt::Key_Return || key == Qt::Key_Enter;
     if (editTextKeysFound && startTextEditingAllowed()) {
         return true;
     }
@@ -1209,19 +1216,27 @@ bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
         return viewInteraction()->isEditAllowed(event);
     }
 
+    if (anchorEditingKeysFound(event)) {
+        EngravingItem* element = viewInteraction()->selection()->element();
+        return element && element->allowTimeAnchor();
+    }
+
     return tryPercussionShortcut(event);
 }
 
 void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
+    auto key = event->key();
     if (startTextEditingAllowed() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
         dispatcher()->dispatch("edit-text");
         event->accept();
     } else if (viewInteraction()->isElementEditStarted()) {
         viewInteraction()->editElement(event);
-    } else if (event->key() == Qt::Key_Shift) {
+    } else if (key == Qt::Key_Shift) {
         updateShadowNotePopupVisibility();
         viewInteraction()->updateTimeTickAnchors(event);
+    } else if (anchorEditingKeysFound(event)) {
+        viewInteraction()->moveElementAnchors(event);
     }
 
     updateShadowNotePopupVisibility(/*forceHide*/ true);

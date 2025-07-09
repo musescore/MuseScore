@@ -4762,6 +4762,18 @@ void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
     apply();
 }
 
+void NotationInteraction::moveElementAnchors(QKeyEvent* event)
+{
+    EngravingItem* element = selection()->element();
+    IF_ASSERT_FAILED(element) {
+        return;
+    }
+
+    EditTimeTickAnchors::moveElementAnchors(element, KeyboardKey(event->key()), keyboardModifier(event->modifiers()));
+
+    apply();
+}
+
 void NotationInteraction::doEndEditElement()
 {
     if (m_editData.element) {

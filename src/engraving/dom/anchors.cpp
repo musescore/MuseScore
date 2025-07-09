@@ -147,6 +147,103 @@ void EditTimeTickAnchors::updateLayout(Measure* measure)
     MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 }
 
+void EditTimeTickAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod)
+{
+    IF_ASSERT_FAILED(element && element->allowTimeAnchor()) {
+        return;
+    }
+
+    Segment* segment = element->parentItem() && element->parentItem()->isSegment() ? toSegment(element->parentItem()) : nullptr;
+    if (!segment) {
+        return;
+    }
+
+    bool leftRightKey = key == Key_Left || key == Key_Right;
+    bool altMod = mod & AltModifier;
+    bool shiftMod = mod & ShiftModifier;
+
+    bool changeAnchorType = shiftMod && altMod && leftRightKey && canAnchorToEndOfPrevious(element);
+    bool anchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
+    if (changeAnchorType) {
+        element->undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious,
+                                    element->propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
+
+        bool doesntNeedMoveSeg = ((key == Key_Left && anchorToEndOfPrevious) || (key == Key_Right && !anchorToEndOfPrevious));
+        if (doesntNeedMoveSeg) {
+            checkMeasureBoundariesAndMoveIfNeed(element);
+            return;
+        }
+    }
+
+    moveSegment(element, /*forward*/ key == Key_Right);
+    updateAnchors(element);
+    checkMeasureBoundariesAndMoveIfNeed(element);
+}
+
+bool EditTimeTickAnchors::canAnchorToEndOfPrevious(const EngravingItem* element)
+{
+    switch (element->type()) {
+    case ElementType::HARMONY:
+    case ElementType::FRET_DIAGRAM:
+        return false;
+    default:
+        return true;
+    }
+}
+
+void EditTimeTickAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* element)
+{
+    Segment* curSeg = toSegment(element->parent());
+    Fraction curTick = curSeg->tick();
+    Measure* curMeasure = curSeg->measure();
+    Measure* prevMeasure = curMeasure->prevMeasure();
+    bool anchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
+    bool needMoveToNext = curTick == curMeasure->endTick() && anchorToEndOfPrevious;
+    bool needMoveToPrevious = curSeg->rtick().isZero() && anchorToEndOfPrevious && prevMeasure;
+
+    if (!needMoveToPrevious && !needMoveToNext) {
+        return;
+    }
+
+    Segment* newSeg = nullptr;
+    if (needMoveToPrevious) {
+        newSeg = prevMeasure->findSegment(SegmentType::TimeTick, curSeg->tick());
+        if (!newSeg) {
+            TimeTickAnchor* anchor = createTimeTickAnchor(prevMeasure, curTick - prevMeasure->tick(), element->staffIdx());
+            EditTimeTickAnchors::updateLayout(prevMeasure);
+            newSeg = anchor->segment();
+        }
+    } else {
+        newSeg = curSeg->next1(SegmentType::ChordRest);
+    }
+
+    if (newSeg && newSeg->tick() == curTick) {
+        if (element->isTextBase()) {
+            // TODO: generalize to non-TextBase
+            toTextBase(element)->undoMoveSegment(newSeg, Fraction(0, 1));
+        }
+    }
+}
+
+void EditTimeTickAnchors::moveSegment(EngravingItem* element, bool forward)
+{
+    bool cachedAnchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
+    element->undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
+    if (cachedAnchorToEndOfPrevious && forward) {
+        return;
+    }
+
+    Segment* curSeg = toSegment(element->parentItem());
+    Segment* newSeg = forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
+
+    if (newSeg) {
+        if (element->isTextBase()) {
+            // TODO: generalize to non-TextBase
+            toTextBase(element)->undoMoveSegment(newSeg, newSeg->tick() - curSeg->tick());
+        }
+    }
+}
+
 /********************************************
  * TimeTickAnchor
  * *****************************************/

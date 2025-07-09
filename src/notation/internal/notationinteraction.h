@@ -182,6 +182,7 @@ public:
 
     // Anchors edit
     void updateTimeTickAnchors(QKeyEvent* event) override;
+    void moveElementAnchors(QKeyEvent* event) override;
 
     // Measure
     void splitSelectedMeasure() override;

@@ -36,6 +36,13 @@ public:
     static void updateAnchors(Measure* measure, staff_idx_t staffIdx);
     static TimeTickAnchor* createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx);
     static void updateLayout(Measure* measure);
+
+    static void moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod);
+
+private:
+    static bool canAnchorToEndOfPrevious(const EngravingItem* element);
+    static void checkMeasureBoundariesAndMoveIfNeed(EngravingItem* element);
+    static void moveSegment(EngravingItem* element, bool forward);
 };
 
 class TimeTickAnchor : public EngravingItem
