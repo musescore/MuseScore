@@ -59,8 +59,6 @@ public:
     void reg(INavigationSection* section) override;
     void unreg(INavigationSection* section) override;
 
-    const std::set<INavigationSection*>& sections() const override;
-
     bool requestActivateByName(const std::string& section, const std::string& panel, const std::string& controlName) override;
     bool requestActivateByIndex(const std::string& section, const std::string& panel, const INavigation::Index& controlIndex) override;
 
@@ -68,7 +66,10 @@ public:
     INavigationPanel* activePanel() const override;
     INavigationControl* activeControl() const override;
 
-    const INavigationControl* findControl(const std::string& section, const std::string& panel,
+    const std::set<INavigationSection*>& sections() const override;
+    const INavigationSection* findSection(const std::string& sectionName) const override;
+    const INavigationPanel* findPanel(const std::string& sectionName, const std::string& panelName) const override;
+    const INavigationControl* findControl(const std::string& sectionName, const std::string& panelName,
                                           const std::string& controlName) const override;
 
     void setDefaultNavigationControl(INavigationControl* control) override;
