@@ -363,6 +363,7 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+    void styleChanged() override;
 
     bool mark() const { return m_mark; }
     void setMark(bool v) const { m_mark = v; }

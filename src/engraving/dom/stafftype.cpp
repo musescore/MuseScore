@@ -211,7 +211,6 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (m_fretUseTextStyle == st.m_fretUseTextStyle);
     equal &= (m_fretTextStyle == st.m_fretTextStyle);
     equal &= (m_fretPresetIdx == st.m_fretPresetIdx);
-    equal &= (m_fretColor == st.m_fretColor);
 
     return equal;
 }
@@ -376,9 +375,6 @@ void StaffType::setFretTextStyle(const TextStyleType& val)
             PointF offset = style().styleV(property.sid).value<PointF>();
             setFretFontUserY(offset.y());
         } break;
-        case TextStylePropertyType::Color: {
-            setFretColor(style().styleV(property.sid).value<Color>());
-        } break;
         case TextStylePropertyType::FontStyle: {
             FontStyle fStyle = style().styleV(property.sid).value<FontStyle>();
             m_fretFont.setBold(fStyle & FontStyle::Bold);
@@ -409,7 +405,6 @@ void StaffType::setFretPresetIdx(size_t idx)
     m_fretFont.setFamily(m_fretFontInfo.family, Font::Type::Tablature);
     setFretFontSize(m_fretFontInfo.defSize);
     setFretFontUserY(m_fretFontInfo.defYOffset);
-    setFretColor(Color::BLACK);
     setFretMetrics();
 }
 

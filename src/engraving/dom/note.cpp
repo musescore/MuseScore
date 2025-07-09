@@ -1599,6 +1599,11 @@ void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
         }
     }
 
+    const StaffType* st = staffType();
+    if (st && st->isTabStaff() && st->fretUseTextStyle() && color() == configuration()->defaultColor()) {
+        setColor(propertyDefault(Pid::COLOR).value<Color>());
+    }
+
     for (EngravingItem* item : m_el) {
         if (!item->isSymbol()) {
             continue;
@@ -3254,10 +3259,26 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
             return false;
         }
         return EngravingItem::propertyDefault(propertyId);
+    case Pid::COLOR: {
+        const StaffType* st = staffType();
+        if (st && st->isTabStaff() && st->fretUseTextStyle()) {
+            return style().styleV(Sid::tabFretNumberColor);
+        }
+        return EngravingItem::propertyDefault(propertyId);
+    }
     default:
         break;
     }
     return EngravingItem::propertyDefault(propertyId);
+}
+
+void Note::styleChanged()
+{
+    const StaffType* st = staffType();
+    if (st->isTabStaff() && st->fretUseTextStyle()) {
+        setProperty(Pid::COLOR, style().styleV(Sid::tabFretNumberColor));
+    }
+    EngravingItem::styleChanged();
 }
 
 //---------------------------------------------------------
