@@ -273,9 +273,9 @@ public:
 
     void setSelected(bool f) override;
     void setVisible(bool f) override;
-    void startEditTextual(EditData& ed) override;
-    bool isTextualEditAllowed(EditData&) const override;
-    void endEditTextual(EditData&) override;
+    void startEdit(EditData& ed) override;
+    bool isEditAllowed(EditData&) const override;
+    void endEdit(EditData&) override;
     void regenerateText();
 
     void undoMoveSegment(Segment* newSeg, Fraction tickDiff) override;

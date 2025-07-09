@@ -346,7 +346,6 @@ public:
     virtual bool allowTimeAnchor() const override { return hasParentSegment(); }
     virtual void startEdit(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;
-    virtual bool supportsNonTextualEdit() const;
     virtual bool edit(EditData&) override;
     virtual void editCut(EditData&) override;
     virtual void editCopy(EditData&) override;
@@ -507,14 +506,6 @@ protected:
     TextBase(const ElementType& type, EngravingItem* parent, ElementFlags);
     TextBase(const TextBase&);
 
-    virtual void startEditTextual(EditData&);
-    virtual void startEditNonTextual(EditData&);
-    virtual bool editTextual(EditData&);
-    virtual bool editNonTextual(EditData&);
-    virtual void endEditNonTextual(EditData&);
-    virtual void endEditTextual(EditData&);
-    virtual bool isNonTextualEditAllowed(EditData&) const;
-    virtual bool isTextualEditAllowed(EditData&) const;
     bool nudge(const EditData& ed);
 
     virtual bool moveSegment(const EditData&);

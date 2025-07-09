@@ -577,13 +577,13 @@ String Dynamic::screenReaderInfo() const
 }
 }
 
-bool Dynamic::isTextualEditAllowed(EditData& ed) const
+bool Dynamic::isEditAllowed(EditData& ed) const
 {
     if (ed.key == Key_Tab) {
         return false;
     }
 
-    return TextBase::isTextualEditAllowed(ed);
+    return TextBase::isEditAllowed(ed);
 }
 
 //---------------------------------------------------------

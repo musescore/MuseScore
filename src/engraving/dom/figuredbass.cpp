@@ -702,14 +702,14 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
     return EngravingItem::getPropertyStyle(id);
 }
 
-void FiguredBass::startEditTextual(EditData& ed)
+void FiguredBass::startEdit(EditData& ed)
 {
     clearItems();
     renderer()->layoutText1(this);   // re-layout without F.B.-specific formatting.
-    TextBase::startEditTextual(ed);
+    TextBase::startEdit(ed);
 }
 
-bool FiguredBass::isTextualEditAllowed(EditData& ed) const
+bool FiguredBass::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
         return false;
@@ -719,12 +719,12 @@ bool FiguredBass::isTextualEditAllowed(EditData& ed) const
         return false;
     }
 
-    return TextBase::isTextualEditAllowed(ed);
+    return TextBase::isEditAllowed(ed);
 }
 
-void FiguredBass::endEditTextual(EditData& ed)
+void FiguredBass::endEdit(EditData& ed)
 {
-    TextBase::endEditTextual(ed);
+    TextBase::endEdit(ed);
     regenerateText();
 }
 

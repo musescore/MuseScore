@@ -117,7 +117,7 @@ public:
     void editDrag(EditData& editData) override;
     void endEditDrag(EditData&) override;
 
-    bool isTextualEditAllowed(EditData&) const override;
+    bool isEditAllowed(EditData&) const override;
 
     Hairpin* leftHairpin() const { return m_leftHairpin; }
     Hairpin* rightHairpin() const { return m_rightHairpin; }

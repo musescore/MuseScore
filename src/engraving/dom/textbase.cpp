@@ -3236,42 +3236,6 @@ void TextBase::initTextStyleType(TextStyleType tid)
     }
 }
 
-void TextBase::startEdit(EditData& ed)
-{
-    if (ed.editTextualProperties) {
-        startEditTextual(ed);
-    } else {
-        startEditNonTextual(ed);
-    }
-}
-
-bool TextBase::isEditAllowed(EditData& ed) const
-{
-    if (ed.editTextualProperties) {
-        return isTextualEditAllowed(ed);
-    } else {
-        return isNonTextualEditAllowed(ed);
-    }
-}
-
-bool TextBase::edit(EditData& ed)
-{
-    if (ed.editTextualProperties) {
-        return editTextual(ed);
-    } else {
-        return editNonTextual(ed);
-    }
-}
-
-void TextBase::endEdit(EditData& ed)
-{
-    if (ed.editTextualProperties) {
-        endEditTextual(ed);
-    } else {
-        endEditNonTextual(ed);
-    }
-}
-
 void TextBase::editDrag(EditData& ed)
 {
     Segment* segment = explicitParent() ? toSegment(parent()) : nullptr;
@@ -3332,80 +3296,6 @@ void TextBase::shiftInitOffset(EditData& ed, const PointF& offsetShift)
             }
         }
     }
-}
-
-bool TextBase::supportsNonTextualEdit() const
-{
-    return hasParentSegment() && !m_text.empty();
-}
-
-void TextBase::startEditNonTextual(EditData& ed)
-{
-    EngravingItem::startEdit(ed);
-}
-
-bool TextBase::editNonTextual(EditData& ed)
-{
-    if (!hasParentSegment()) {
-        return EngravingItem::edit(ed);
-    }
-
-    if (!isEditAllowed(ed)) {
-        return false;
-    }
-
-    bool leftRightKey = ed.key == Key_Left || ed.key == Key_Right;
-    bool altMod = ed.modifiers & AltModifier;
-    bool shiftMod = ed.modifiers & ShiftModifier;
-
-    bool changeAnchorType = shiftMod && altMod && leftRightKey;
-    if (changeAnchorType) {
-        undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious(), propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
-    }
-    bool doesntNeedMoveSeg = changeAnchorType && ((ed.key == Key_Left && anchorToEndOfPrevious())
-                                                  || (ed.key == Key_Right && !anchorToEndOfPrevious()));
-    if (doesntNeedMoveSeg) {
-        checkMeasureBoundariesAndMoveIfNeed();
-        return true;
-    }
-
-    bool moveSeg = shiftMod && (ed.key == Key_Left || ed.key == Key_Right);
-    if (moveSeg) {
-        bool moved = moveSegment(ed);
-        EditTimeTickAnchors::updateAnchors(this);
-        checkMeasureBoundariesAndMoveIfNeed();
-        return moved;
-    }
-
-    if (shiftMod) {
-        return false;
-    }
-
-    if (!nudge(ed)) {
-        return false;
-    }
-
-    triggerLayout();
-    return true;
-}
-
-void TextBase::endEditNonTextual(EditData& ed)
-{
-    EngravingItem::endEdit(ed);
-}
-
-bool TextBase::isNonTextualEditAllowed(EditData& ed) const
-{
-    static const std::set<KeyboardKey> ARROW_KEYS {
-        Key_Left,
-        Key_Right,
-        Key_Up,
-        Key_Down
-    };
-
-    bool altKeyWithoutShift = (ed.modifiers & AltModifier) && !(ed.modifiers & ShiftModifier);
-
-    return muse::contains(ARROW_KEYS, static_cast<KeyboardKey>(ed.key)) && !altKeyWithoutShift;
 }
 
 void TextBase::checkMeasureBoundariesAndMoveIfNeed()

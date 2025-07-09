@@ -186,10 +186,10 @@ public:
     const RealizedHarmony& getRealizedHarmony() const;
 
     bool isEditable() const override { return !isInFretBox(); }
-    void startEditTextual(EditData&) override;
-    bool isTextualEditAllowed(EditData&) const override;
-    bool editTextual(EditData&) override;
-    void endEditTextual(EditData&) override;
+    void startEdit(EditData&) override;
+    bool isEditAllowed(EditData&) const override;
+    bool edit(EditData&) override;
+    void endEdit(EditData&) override;
 
     bool isPlayable() const override;
 

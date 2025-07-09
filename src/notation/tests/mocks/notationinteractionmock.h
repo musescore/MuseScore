@@ -114,7 +114,7 @@ public:
     MOCK_METHOD(bool, textEditingAllowed, (const EngravingItem*), (const, override));
     MOCK_METHOD(void, startEditText, (EngravingItem*, const muse::PointF&), (override));
     MOCK_METHOD(void, editText, (QInputMethodEvent*), (override));
-    MOCK_METHOD(void, endEditText, (bool), (override));
+    MOCK_METHOD(void, endEditText, (), (override));
     MOCK_METHOD(void, changeTextCursorPosition, (const muse::PointF&), (override));
     MOCK_METHOD(void, selectText, (mu::engraving::SelectTextType), (override));
     MOCK_METHOD(const TextBase*, editedText, (), (const, override));
