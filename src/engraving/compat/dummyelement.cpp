@@ -30,6 +30,7 @@
 #include "dom/chord.h"
 #include "dom/note.h"
 #include "dom/bracketItem.h"
+#include "dom/barline.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -45,6 +46,7 @@ DummyElement::DummyElement(EngravingObject* parent)
 
 DummyElement::~DummyElement()
 {
+    delete m_barline;
     delete m_bracketItem;
     delete m_note;
     delete m_chord;
@@ -88,6 +90,9 @@ void DummyElement::init()
 
     m_bracketItem = Factory::createBracketItem(m_system);
     m_bracketItem->setParent(m_system);
+
+    m_barline = Factory::createBarLine(m_segment);
+    m_barline->setParent(m_segment);
 }
 
 RootItem* DummyElement::rootItem()
@@ -128,6 +133,11 @@ Note* DummyElement::note()
 BracketItem* DummyElement::bracketItem()
 {
     return m_bracketItem;
+}
+
+BarLine* DummyElement::barline()
+{
+    return m_barline;
 }
 
 EngravingItem* DummyElement::clone() const

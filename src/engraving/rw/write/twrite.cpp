@@ -294,6 +294,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
         break;
     case ElementType::PICK_SCRAPE:  write(item_cast<const PickScrape*>(item), xml, ctx);
         break;
+    case ElementType::PLAY_COUNT_TEXT: write(item_cast<const PlayCountText*>(item), xml, ctx);
+        break;
     case ElementType::PLAYTECH_ANNOTATION: write(item_cast<const PlayTechAnnotation*>(item), xml, ctx);
         break;
     case ElementType::RASGUEADO:    write(item_cast<const Rasgueado*>(item), xml, ctx);
@@ -689,6 +691,9 @@ void TWrite::write(const BarLine* item, XmlWriter& xml, WriteContext& ctx)
 
     for (const EngravingItem* e : *item->el()) {
         writeItem(e, xml, ctx);
+    }
+    if (item->playCountText()) {
+        writeItem(item->playCountText(), xml, ctx);
     }
     writeItemProperties(item, xml, ctx);
     xml.endElement();
@@ -2566,6 +2571,13 @@ void TWrite::write(const PickScrape* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const PlayCountText* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 

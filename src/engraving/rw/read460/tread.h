@@ -275,6 +275,7 @@ public:
     static void read(PartialLyricsLine* p, XmlReader& xml, ReadContext& ctx);
     static void read(PartialTie* p, XmlReader& xml, ReadContext& ctx);
     static void read(Pedal* p, XmlReader& xml, ReadContext& ctx);
+    static void read(PlayCountText* a, XmlReader& xml, ReadContext& ctx);
     static void read(PlayTechAnnotation* a, XmlReader& xml, ReadContext& ctx);
 
     static void read(Rasgueado* r, XmlReader& xml, ReadContext& ctx);

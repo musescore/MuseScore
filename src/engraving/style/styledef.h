@@ -1362,6 +1362,25 @@ enum class Sid {
     rehearsalMarkPosBelow,
     rehearsalMarkMinDistance,
 
+    repeatPlayCountFontFace,
+    repeatPlayCountFontSize,
+    repeatPlayCountLineSpacing,
+    repeatPlayCountFontSpatiumDependent,
+    repeatPlayCountFontStyle,
+    repeatPlayCountColor,
+    repeatPlayCountAlign,
+    repeatPlayCountPlacement,
+    repeatPlayCountFrameType,
+    repeatPlayCountFramePadding,
+    repeatPlayCountFrameWidth,
+    repeatPlayCountFrameRound,
+    repeatPlayCountFrameFgColor,
+    repeatPlayCountFrameBgColor,
+    repeatPlayCountPosition,
+    repeatPlayCountPosAbove,
+    repeatPlayCountPosBelow,
+    repeatPlayCountMinDistance,
+
     repeatLeftFontFace,
     repeatLeftFontSize,
     repeatLeftLineSpacing,
@@ -1964,6 +1983,10 @@ enum class Sid {
     useParensOtherJumpCourtesiesAfterCancelling,
 
     smallParens,
+
+    repeatPlayCountPreset,
+    repeatPlayCountShow,
+    repeatPlayCountShowSingleRepeats,
 
     STYLES
     ///\}

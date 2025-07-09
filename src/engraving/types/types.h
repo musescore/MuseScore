@@ -211,6 +211,7 @@ enum class ElementType : unsigned char {
     TAPPING_HALF_SLUR,
     TAPPING_HALF_SLUR_SEGMENT,
     TAPPING_TEXT,
+    PLAY_COUNT_TEXT,
 
     ROOT_ITEM,
     DUMMY,
@@ -334,6 +335,12 @@ enum class AutoOnOff : unsigned char {
     AUTO,
     ON,
     OFF
+};
+
+enum class AutoCustomHide : unsigned char {
+    AUTO,
+    CUSTOM,
+    HIDE
 };
 
 //! Note: from lowest to highest priority
@@ -771,6 +778,14 @@ constexpr void operator&=(ParenthesesMode& t1, const ParenthesesMode& t2)
     t1 = ParenthesesMode(t1i);
 }
 
+enum RepeatPlayCountPreset : unsigned char {
+    X_N,
+    N_X,
+    PLAY_N_TIMES,
+    REPEAT_N_TIMES,
+    N_REPEATS
+};
+
 //-------------------------------------------------------------------
 //   Tid
 ///   Enumerates the list of built-in text substyles
@@ -806,6 +821,7 @@ enum class TextStyleType : unsigned char {
     TEMPO,
     TEMPO_CHANGE,
     METRONOME,
+    REPEAT_PLAY_COUNT,
     REPEAT_LEFT,       // align to start of measure
     REPEAT_RIGHT,      // align to end of measure
     REHEARSAL_MARK,

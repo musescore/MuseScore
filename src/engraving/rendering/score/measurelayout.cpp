@@ -52,6 +52,7 @@
 #include "dom/trill.h"
 #include "dom/undo.h"
 #include "dom/utils.h"
+#include "types/typesconv.h"
 
 #include "tlayout.h"
 #include "layoutcontext.h"
@@ -1219,6 +1220,43 @@ void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
             TLayout::layoutStaffLines(ms->lines(), ctx);
         }
         staffIdx += 1;
+    }
+}
+
+void MeasureLayout::layoutPlayCountNumber(Measure* m, LayoutContext& ctx)
+{
+    if (!m->repeatEnd()) {
+        return;
+    }
+
+    Score* score = m->score();
+    const std::vector<MStaff*>& measureStaves = m->mstaves();
+
+    for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        if (staffIdx >= measureStaves.size()) {
+            break;
+        }
+
+        Segment* endBarSeg = m->last(SegmentType::BarLineType);
+        BarLine* bl = endBarSeg ? toBarLine(endBarSeg->element(staff2track(staffIdx))) : nullptr;
+        PlayCountText* playCount = bl ? bl->playCountText() : nullptr;
+        if (!playCount) {
+            continue;
+        }
+
+        String text;
+        if (bl->playCountTextSetting() == AutoCustomHide::CUSTOM) {
+            text = bl->playCountCustomText();
+        } else {
+            Measure* m = playCount->findMeasure();
+            int repeatCount = m->repeatCount();
+            text = TConv::translatedUserName(ctx.conf().styleV(Sid::repeatPlayCountPreset).value<RepeatPlayCountPreset>()).arg(
+                repeatCount);
+        }
+
+        playCount->setXmlText(text);
+
+        TLayout::layoutPlayCountText(playCount, ctx);
     }
 }
 

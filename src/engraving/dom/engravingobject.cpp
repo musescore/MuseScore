@@ -758,7 +758,8 @@ bool EngravingObject::isTextBase() const
            || type() == ElementType::STICKING
            || type() == ElementType::HARP_DIAGRAM
            || type() == ElementType::GUITAR_BEND_TEXT
-           || type() == ElementType::HAMMER_ON_PULL_OFF_TEXT;
+           || type() == ElementType::HAMMER_ON_PULL_OFF_TEXT
+           || type() == ElementType::PLAY_COUNT_TEXT;
 }
 
 //---------------------------------------------------------

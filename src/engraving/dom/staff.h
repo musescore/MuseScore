@@ -266,6 +266,7 @@ public:
 
     void undoSetShowMeasureNumbers(bool show);
     bool shouldShowMeasureNumbers() const;
+    bool shouldShowPlayCount() const;
 
 private:
 

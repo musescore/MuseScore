@@ -271,6 +271,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
         break;
     case ElementType::PEDAL: read(item_cast<Pedal*>(item), xml, ctx);
         break;
+    case ElementType::PLAY_COUNT_TEXT: read(item_cast<PlayCountText*>(item), xml, ctx);
+        break;
     case ElementType::PLAYTECH_ANNOTATION: read(item_cast<PlayTechAnnotation*>(item), xml, ctx);
         break;
     case ElementType::RASGUEADO: read(item_cast<Rasgueado*>(item), xml, ctx);
@@ -461,6 +463,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), PartialSpannerDirection::OUTGOING));
     case P_TYPE::PARENTHESES_MODE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), ParenthesesMode::NONE));
+    case P_TYPE::AUTO_CUSTOM_HIDE:
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), AutoCustomHide::AUTO));
     default:
         ASSERT_X("unhandled PID type");
         break;
@@ -2020,6 +2024,10 @@ void TRead::read(BarLine* b, XmlReader& e, ReadContext& ctx)
                 TRead::read(image, e, ctx);
                 b->add(image);
             }
+        } else if (tag == "PlayCountText") {
+            PlayCountText* p = Factory::createPlayCountText(b);
+            TRead::read(p, e, ctx);
+            b->add(p);
         } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }
@@ -3541,6 +3549,15 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
             }
         } else if (!readProperties(static_cast<TextLineBase*>(p), e, ctx)) {
             e.unknown();
+        }
+    }
+}
+
+void TRead::read(PlayCountText* t, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        if (!readProperties(static_cast<TextBase*>(t), xml, ctx)) {
+            xml.unknown();
         }
     }
 }

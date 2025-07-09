@@ -904,6 +904,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
         MeasureLayout::layoutMeasureNumber(measure, ctx);
         MeasureLayout::layoutMMRestRange(measure, ctx);
+        MeasureLayout::layoutPlayCountNumber(measure, ctx);
         MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 
         collectElementsToLayout(measure, elementsToLayout, ctx);

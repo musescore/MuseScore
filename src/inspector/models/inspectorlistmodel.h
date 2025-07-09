@@ -57,6 +57,7 @@ private:
     void listenSelectionChanged();
     void updateElementList();
 
+    bool alwaysUpdateModelList(const QList<mu::engraving::EngravingItem*>& selectedElementList);
     void setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
                         notation::SelectionState selectionState = notation::SelectionState::NONE);
 

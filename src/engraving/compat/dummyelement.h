@@ -48,6 +48,7 @@ public:
     Chord* chord();
     Note* note();
     BracketItem* bracketItem();
+    BarLine* barline();
 
     EngravingItem* clone() const override;
 
@@ -67,6 +68,7 @@ private:
     Chord* m_chord = nullptr;
     Note* m_note = nullptr;
     BracketItem* m_bracketItem = nullptr;
+    BarLine* m_barline = nullptr;
 };
 }
 

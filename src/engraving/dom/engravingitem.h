@@ -216,6 +216,7 @@ public:
 
     bool selected() const;
     virtual void setSelected(bool f);
+    virtual EngravingItem* selectionDelegate() const { return nullptr; }
 
     bool visible() const { return !flag(ElementFlag::INVISIBLE); }
     virtual void setVisible(bool f);

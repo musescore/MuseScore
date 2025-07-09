@@ -304,6 +304,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::AUTO_ON_OFF: {
         element(name, TConv::toXml(data.value<AutoOnOff>()));
     } break;
+    case P_TYPE::AUTO_CUSTOM_HIDE: {
+        element(name, TConv::toXml(data.value<AutoCustomHide>()));
+    } break;
     case P_TYPE::INT_VEC: {
         element(name, TConv::toXml(data.value<std::vector<int> >()));
     } break;

@@ -1007,6 +1007,13 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
             selectElementsWithSameTypeOnSegment(element->type(), segment);
             return;
         }
+
+        if (EngravingItem* delegate = element->selectionDelegate()) {
+            std::vector<EngravingItem*> elementsToSelect;
+            elementsToSelect.push_back(delegate);
+            score()->select(elementsToSelect, SelectType::SINGLE, staffIndex);
+            return;
+        }
     }
 
     score()->select(elements, type, staffIndex);

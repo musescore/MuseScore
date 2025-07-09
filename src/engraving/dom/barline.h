@@ -23,6 +23,7 @@
 #ifndef MU_ENGRAVING_BARLINE_H
 #define MU_ENGRAVING_BARLINE_H
 
+#include "dom/playcounttext.h"
 #include "engravingitem.h"
 
 namespace mu::engraving {
@@ -132,6 +133,9 @@ public:
     bool isTop() const;
     bool isBottom() const;
 
+    void setPlayCountTextSetting(const AutoCustomHide& v) { m_playCountTextSetting = v; }
+    AutoCustomHide playCountTextSetting() const { return m_playCountTextSetting; }
+
     int subtype() const override { return int(m_barLineType); }
     TranslatableString subtypeUserName() const override;
 
@@ -140,18 +144,29 @@ public:
     PropertyValue propertyDefault(Pid propertyId) const override;
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
+    EngravingItem* propertyDelegate(Pid) override;
+    void undoChangeBarLineType(BarLineType barType, bool allStaves, bool replaceExistingRepeat = false);
+
+    PlayCountText* playCountText() const { return m_playCountText; }
+    void setPlayCountText(PlayCountText* text);
+    String playCountCustomText() const { return m_playCountCustomText; }
 
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
+    void triggerLayout() const override;
+
     String accessibleInfo() const override;
     String accessibleExtraInfo() const override;
 
+    void setSelected(bool f) override;
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<PointF> gripsPositions(const EditData&) const override;
+
+    void styleChanged() override;
 
     static const std::vector<BarLineTableItem> barLineTable;
 
@@ -176,6 +191,12 @@ private:
     BarLineType m_barLineType = BarLineType::NORMAL;
 
     ElementList m_el;          ///< fermata or other articulations
+
+    void undoUpdatePlayCountText();
+
+    PlayCountText* m_playCountText = nullptr;     // Play count text for barlines on system object staves
+    AutoCustomHide m_playCountTextSetting = AutoCustomHide::AUTO;
+    String m_playCountCustomText = u"";
 };
 } // namespace mu::engraving
 
