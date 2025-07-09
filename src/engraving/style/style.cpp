@@ -596,6 +596,12 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             }
         } else if (tag == "fretFrets" && m_version < 460) {
             e.skipCurrentElement();
+        } else if (tag == "measureNumberHPlacement" && m_version < 460) {
+            set(Sid::measureNumberHPlacement, e.readInt());
+            if (value(Sid::measureNumberHPlacement).value<PlacementH>() != PlacementH::LEFT) {
+                // In this case it was assumed to be centered on the measure
+                set(Sid::measureNumberAlignToBarline, false);
+            }
         } else if (!readProperties(e)) {
             e.unknown();
         }
@@ -617,8 +623,8 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             set(positionSid, val);
         }
 
-        if (value(Sid::measureNumberHPlacement).value<PlacementH>() != PlacementH::LEFT) {
-            set(Sid::measureNumberAlignToBarline, false);
+        if (value(Sid::measureNumberPosition).value<AlignH>() == AlignH::HCENTER) {
+            set(Sid::measureNumberHPlacement, PlacementH::CENTER);
         }
     }
 
