@@ -57,6 +57,10 @@ public:
     Q_INVOKABLE QString activePanel() const;
     Q_INVOKABLE QString activeControl() const;
 
+    Q_INVOKABLE QJSValue sections() const;                          // array of sections
+    Q_INVOKABLE QJSValue panels(const QString& sectionName) const;  // array of panels
+    Q_INVOKABLE QJSValue controls(const QString& sectionName, const QString& panelName) const;  // array of controls
+
     Q_INVOKABLE void dump() const;
 };
 }

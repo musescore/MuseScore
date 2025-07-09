@@ -648,11 +648,24 @@ INavigationControl* NavigationController::activeControl() const
     return findActive(activePanel->controls());
 }
 
-const INavigationControl* NavigationController::findControl(const std::string& section, const std::string& panel,
+const INavigationSection* NavigationController::findSection(const std::string& sectionName) const
+{
+    const INavigationSection* sec = findByName(m_sections, QString::fromStdString(sectionName));
+    return sec;
+}
+
+const INavigationPanel* NavigationController::findPanel(const std::string& sectionName, const std::string& panelName) const
+{
+    const INavigationSection* sec = findByName(m_sections, QString::fromStdString(sectionName));
+    const INavigationPanel* pnl = sec ? findByName(sec->panels(), QString::fromStdString(panelName)) : nullptr;
+    return pnl;
+}
+
+const INavigationControl* NavigationController::findControl(const std::string& sectionName, const std::string& panelName,
                                                             const std::string& controlName) const
 {
-    const INavigationSection* sec = findByName(m_sections, QString::fromStdString(section));
-    const INavigationPanel* pnl = sec ? findByName(sec->panels(), QString::fromStdString(panel)) : nullptr;
+    const INavigationSection* sec = findByName(m_sections, QString::fromStdString(sectionName));
+    const INavigationPanel* pnl = sec ? findByName(sec->panels(), QString::fromStdString(panelName)) : nullptr;
     const INavigationControl* ctrl = pnl ? findByName(pnl->controls(), QString::fromStdString(controlName)) : nullptr;
 
     return ctrl;
