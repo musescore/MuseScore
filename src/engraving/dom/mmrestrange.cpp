@@ -66,8 +66,6 @@ PropertyValue MMRestRange::getProperty(Pid id) const
     switch (id) {
     case Pid::MMREST_RANGE_BRACKET_TYPE:
         return int(bracketType());
-    case Pid::HPLACEMENT:
-        return style().styleV(Sid::mmRestRangeHPlacement);
     default:
         return MeasureNumberBase::getProperty(id);
     }
@@ -83,18 +81,6 @@ bool MMRestRange::setProperty(Pid id, const PropertyValue& val)
         return true;
     default:
         return MeasureNumberBase::setProperty(id, val);
-    }
-}
-
-PropertyValue MMRestRange::propertyDefault(Pid id) const
-{
-    switch (id) {
-    case Pid::PLACEMENT:
-        return style().styleV(Sid::mmRestRangeVPlacement);
-    case Pid::HPLACEMENT:
-        return style().styleV(Sid::mmRestRangeHPlacement);
-    default:
-        return MeasureNumberBase::propertyDefault(id);
     }
 }
 

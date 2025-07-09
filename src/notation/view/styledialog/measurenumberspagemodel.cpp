@@ -99,7 +99,7 @@ StyleItem* MeasureNumbersPageModel::buildStyleItem(StyleId id) const
     return item;
 }
 
-QVariantList mu::notation::MeasureNumbersPageModel::textStyles()
+QVariantList MeasureNumbersPageModel::textStyles()
 {
     QVariantList textStyles;
     textStyles.reserve(int(TextStyleType::TEXT_TYPES));
