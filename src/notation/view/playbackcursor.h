@@ -54,7 +54,7 @@ public:
 
     const bool adjust_nm_rect() const;
     const muse::RectF& nm_rect() const;
-    
+
     int hit_measure_no();
     Measure* hit_measure();
 
