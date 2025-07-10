@@ -698,10 +698,6 @@ void DockBase::applySizeConstraints()
         QRect winRect(window->dragRect().topLeft(), winSize);
 
         window->setGeometry(winRect);
-
-        if (KDDockWidgets::LayoutWidget* layout = window->layoutWidget()) {
-            layout->setLayoutSize(winSize);
-        }
     }
 
     if (!frame || !m_inited) {
