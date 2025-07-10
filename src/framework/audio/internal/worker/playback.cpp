@@ -131,13 +131,6 @@ IPlayerPtr Playback::player(const TrackSequenceId id) const
     return p;
 }
 
-IAudioOutputPtr Playback::audioOutput() const
-{
-    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
-
-    return m_audioOutputPtr;
-}
-
 ITrackSequencePtr Playback::sequence(const TrackSequenceId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -151,7 +144,7 @@ ITrackSequencePtr Playback::sequence(const TrackSequenceId id) const
     return nullptr;
 }
 
-// ITracks
+// 2. Setup tracks for Sequence
 async::Promise<TrackIdList> Playback::trackIdList(const TrackSequenceId sequenceId) const
 {
     return m_trackHandlersPtr->trackIdList(sequenceId);
@@ -230,4 +223,75 @@ void Playback::clearSources()
     m_trackHandlersPtr->clearSources();
 }
 
-// ===
+// 4. Adjust a Sequence output
+
+async::Promise<AudioOutputParams> Playback::outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
+{
+    return m_audioOutputPtr->outputParams(sequenceId, trackId);
+}
+
+void Playback::setOutputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioOutputParams& params)
+{
+    m_audioOutputPtr->setOutputParams(sequenceId, trackId, params);
+}
+
+async::Channel<TrackSequenceId, TrackId, AudioOutputParams> Playback::outputParamsChanged() const
+{
+    return m_audioOutputPtr->outputParamsChanged();
+}
+
+async::Promise<AudioOutputParams> Playback::masterOutputParams() const
+{
+    return m_audioOutputPtr->masterOutputParams();
+}
+
+void Playback::setMasterOutputParams(const AudioOutputParams& params)
+{
+    m_audioOutputPtr->setMasterOutputParams(params);
+}
+
+void Playback::clearMasterOutputParams()
+{
+    m_audioOutputPtr->clearMasterOutputParams();
+}
+
+async::Channel<AudioOutputParams> Playback::masterOutputParamsChanged() const
+{
+    return m_audioOutputPtr->masterOutputParamsChanged();
+}
+
+async::Promise<AudioResourceMetaList> Playback::availableOutputResources() const
+{
+    return m_audioOutputPtr->availableOutputResources();
+}
+
+async::Promise<AudioSignalChanges> Playback::signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const
+{
+    return m_audioOutputPtr->signalChanges(sequenceId, trackId);
+}
+
+async::Promise<AudioSignalChanges> Playback::masterSignalChanges() const
+{
+    return m_audioOutputPtr->masterSignalChanges();
+}
+
+async::Promise<bool> Playback::saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
+                                              const SoundTrackFormat& format)
+{
+    return m_audioOutputPtr->saveSoundTrack(sequenceId, destination, format);
+}
+
+void Playback::abortSavingAllSoundTracks()
+{
+    m_audioOutputPtr->abortSavingAllSoundTracks();
+}
+
+Progress Playback::saveSoundTrackProgress(const TrackSequenceId sequenceId)
+{
+    return m_audioOutputPtr->saveSoundTrackProgress(sequenceId);
+}
+
+void Playback::clearAllFx()
+{
+    m_audioOutputPtr->clearAllFx();
+}
