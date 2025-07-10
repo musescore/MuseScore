@@ -62,6 +62,8 @@ private:
 
     FretFrameChordItem* modelIndexToItem(const QModelIndex& index) const;
 
+    void saveOrder();
+
     engraving::FBox* m_fretBox = nullptr;
 };
 }

@@ -785,15 +785,6 @@ void Harmony::endEditTextual(EditData& ed)
                 score()->endCmd();
             }
         }
-
-        UndoStack* undo = score()->undoStack();
-        undo->reopen();
-        if (ted->oldXmlText.empty()) {
-            score()->undoAddChordToFretBox(this);
-        } else {
-            score()->undoRenameChordInFretBox(this, ted->oldXmlText);
-        }
-        score()->endCmd();
     }
 
     if (links()) {
@@ -863,6 +854,8 @@ void Harmony::setHarmony(const String& s)
         }
     }
     render();
+
+    score()->rebuildFretBox();
 }
 
 //---------------------------------------------------------
