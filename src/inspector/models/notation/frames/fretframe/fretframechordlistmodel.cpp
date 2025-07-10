@@ -42,7 +42,7 @@ void FretFrameChordListModel::load(FBox* box)
 
     QList<Item*> items;
 
-    for (EngravingItem* element : m_fretBox->el()) {
+    for (EngravingItem* element : m_fretBox->orderedElements()) {
         FretDiagram* diagram = toFretDiagram(element);
         auto chordItem = new FretFrameChordItem(this);
         chordItem->setId(QString::fromStdString(diagram->eid().toStdString()));
@@ -84,7 +84,7 @@ void FretFrameChordListModel::setChordVisible(int index, bool visible)
         return;
     }
 
-    ElementList diagrams = m_fretBox->el();
+    ElementList diagrams = m_fretBox->orderedElements();
     if (index < 0 || index >= static_cast<int>(diagrams.size())) {
         return;
     }
@@ -120,20 +120,12 @@ void FretFrameChordListModel::moveSelectionUp()
         return;
     }
 
-    const muse::TranslatableString actionName = muse::TranslatableString("undoableAction", "Move chord(s) up");
-
-    notation->undoStack()->prepareChanges(actionName);
-
     SelectableItemListModel::moveSelectionUp();
 
-    std::vector<EID> newOrderElementsIds;
+    const muse::TranslatableString actionName = muse::TranslatableString("undoableAction", "Move chord(s) up");
+    notation->undoStack()->prepareChanges(actionName);
 
-    for (const Item* item: items()) {
-        const FretFrameChordItem* chordItem = dynamic_cast<const FretFrameChordItem*>(item);
-        newOrderElementsIds.push_back(EID::fromStdString(chordItem->id().toStdString()));
-    }
-
-    m_fretBox->undoReorderElements(newOrderElementsIds);
+    saveOrder();
 
     notation->undoStack()->commitChanges();
     notation->notationChanged().notify();
@@ -150,20 +142,12 @@ void FretFrameChordListModel::moveSelectionDown()
         return;
     }
 
-    const muse::TranslatableString actionName = muse::TranslatableString("undoableAction", "Move chord(s) down");
-
-    notation->undoStack()->prepareChanges(actionName);
-
     SelectableItemListModel::moveSelectionDown();
 
-    std::vector<EID> newOrderElementsIds;
+    const muse::TranslatableString actionName = muse::TranslatableString("undoableAction", "Move chord(s) down");
+    notation->undoStack()->prepareChanges(actionName);
 
-    for (const Item* item: items()) {
-        const FretFrameChordItem* chordItem = dynamic_cast<const FretFrameChordItem*>(item);
-        newOrderElementsIds.push_back(EID::fromStdString(chordItem->id().toStdString()));
-    }
-
-    m_fretBox->undoReorderElements(newOrderElementsIds);
+    saveOrder();
 
     notation->undoStack()->commitChanges();
     notation->notationChanged().notify();
@@ -177,4 +161,16 @@ QItemSelectionModel* FretFrameChordListModel::selectionModel() const
 FretFrameChordItem* FretFrameChordListModel::modelIndexToItem(const QModelIndex& index) const
 {
     return dynamic_cast<FretFrameChordItem*>(item(index));
+}
+
+void FretFrameChordListModel::saveOrder()
+{
+    StringList newOrder;
+
+    for (const Item* item: items()) {
+        const FretFrameChordItem* chordItem = dynamic_cast<const FretFrameChordItem*>(item);
+        newOrder.push_back(String::fromQString(chordItem->title()));
+    }
+
+    m_fretBox->undoReorderElements(newOrder);
 }
