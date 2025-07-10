@@ -182,7 +182,7 @@ void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events
             AuditionStartNoteEvent noteOn;
             pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, noteOn.msEvent._pitch, noteOn.msEvent._offset_cents);
             parseArticulations(noteEvent.expressionCtx().articulations, noteOn.msEvent._articulation, noteOn.msEvent._notehead);
-            noteOn.msEvent._dynamics = 0.5;
+            noteOn.msEvent._dynamics = dynamicLevelRatio(noteEvent.expressionCtx().nominalDynamicLevel);
             noteOn.msEvent._active_presets = presets_cstr;
             noteOn.msEvent._active_text_articulation = textArticulation_cstr;
             noteOn.msEvent._active_syllable = syllable_cstr;

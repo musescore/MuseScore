@@ -155,6 +155,10 @@ public:
     MOCK_METHOD(void, setIsPlayPreviewNotesInInputByDuration, (bool), (override));
     MOCK_METHOD(muse::async::Notification, isPlayPreviewNotesInInputByDurationChanged, (), (const, override));
 
+    MOCK_METHOD(bool, playPreviewNotesWithScoreDynamics, (), (const, override));
+    MOCK_METHOD(void, setPlayPreviewNotesWithScoreDynamics, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, playPreviewNotesWithScoreDynamicsChanged, (), (const, override));
+
     MOCK_METHOD(bool, isMetronomeEnabled, (), (const, override));
     MOCK_METHOD(void, setIsMetronomeEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, isMetronomeEnabledChanged, (), (const, override));

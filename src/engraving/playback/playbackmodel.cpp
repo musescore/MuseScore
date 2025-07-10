@@ -173,6 +173,16 @@ void PlaybackModel::setPlayChordSymbols(const bool isEnabled)
     m_playChordSymbols = isEnabled;
 }
 
+bool PlaybackModel::useScoreDynamicsForOffstreamPlayback() const
+{
+    return m_useScoreDynamicsForOffstreamPlayback;
+}
+
+void PlaybackModel::setUseScoreDynamicsForOffstreamPlayback(bool use)
+{
+    m_useScoreDynamicsForOffstreamPlayback = use;
+}
+
 bool PlaybackModel::isMetronomeEnabled() const
 {
     return m_metronomeEnabled;
@@ -266,25 +276,27 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     PlaybackEventsMap result;
 
     const RepeatList& repeats = repeatList();
-
-    constexpr timestamp_t actualTimestamp = 0;
-    constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(muse::mpe::DynamicType::Natural);
-    duration_t actualDuration = MScore::defaultPlayDuration * 1000;
-
     const PlaybackContextPtr ctx = playbackCtx(trackId);
 
+    constexpr timestamp_t timestamp = 0;
+    dynamic_level_t dynamicLevel = dynamicLevelFromType(muse::mpe::DynamicType::Natural);
+    duration_t duration = MScore::defaultPlayDuration * 1000;
     int minTick = std::numeric_limits<int>::max();
 
     for (const EngravingItem* item : playableItems) {
         if (item->isHarmony()) {
-            m_renderer.renderChordSymbol(toHarmony(item), actualTimestamp, actualDuration, profile, result);
+            m_renderer.renderChordSymbol(toHarmony(item), timestamp, duration, profile, result);
             continue;
         }
 
         int utick = repeats.tick2utick(item->tick().ticks());
         minTick = std::min(utick, minTick);
 
-        m_renderer.render(item, actualTimestamp, actualDuration, actualDynamicLevel, ctx->persistentArticulationType(utick), profile,
+        if (m_useScoreDynamicsForOffstreamPlayback) {
+            dynamicLevel = ctx->appliableDynamicLevel(item->track(), utick);
+        }
+
+        m_renderer.render(item, timestamp, duration, dynamicLevel, ctx->persistentArticulationType(utick), profile,
                           result);
     }
 
