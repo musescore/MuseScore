@@ -59,7 +59,7 @@ muse::async::Notification PianoKeyboardController::keyStatesChanged() const
     return m_keyStatesChanged;
 }
 
-KeyState PianoKeyboardController::playbackKeyState(piano_key_t key) const 
+KeyState PianoKeyboardController::playbackKeyState(piano_key_t key) const
 {
     if (m_righthand_keys.find(key) != m_righthand_keys.cend()) {
         return KeyState::RightHand;
@@ -72,7 +72,7 @@ KeyState PianoKeyboardController::playbackKeyState(piano_key_t key) const
     return KeyState::None;
 }
 
-bool PianoKeyboardController::playbackKeyHitStartTick(piano_key_t key)  
+bool PianoKeyboardController::playbackKeyHitStartTick(piano_key_t key)
 {
     if (m_righthand_keys_hit_ts[key]) {
         if (trillKeyState(key) != KeyState::None) {
@@ -95,7 +95,7 @@ bool PianoKeyboardController::playbackKeyHitStartTick(piano_key_t key)
     return false;
 }
 
-KeyState PianoKeyboardController::glissandoKeyState(piano_key_t key) const 
+KeyState PianoKeyboardController::glissandoKeyState(piano_key_t key) const
 {
     if (m_glissando_curr_ticks == m_glissando_ticks) {
         if (key == m_glissando_note_key) {
@@ -123,16 +123,17 @@ KeyState PianoKeyboardController::glissandoKeyState(piano_key_t key) const
     return KeyState::None;
 }
 
-bool compare_by_note(piano_key_t a, piano_key_t b) 
+bool compare_by_note(piano_key_t a, piano_key_t b)
 {
     return a < b;
 }
-bool compare_by_note_reverse(piano_key_t a, piano_key_t b) 
+
+bool compare_by_note_reverse(piano_key_t a, piano_key_t b)
 {
     return a > b;
 }
 
-KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const 
+KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const
 {
     if (m_arpeggio_notes_keys.empty()) {
         return KeyState::None;
@@ -177,7 +178,7 @@ KeyState PianoKeyboardController::arpeggioKeyState(piano_key_t key) const
     return KeyState::None;
 }
 
-KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const 
+KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
 {
     if (m_trill_duration_ticks == 0) {
         return KeyState::None;
@@ -205,12 +206,12 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
                     frequency *= 4;
                 } else if (noteDurationtype <= mu::engraving::DurationType::V_WHOLE) {
                     frequency *= 2;
-                } 
+                }
                 int _ratio_count = static_cast<int>(frequency * ratio);
                 int _int_note_key = static_cast<int>(m_trill_note_key);
                 if (_ratio_count % 2 == 1) {
                     _int_note_key += 1;
-                } 
+                }
                 if (key == (piano_key_t)_int_note_key) {
                     return KeyState::Trill;
                 }
@@ -235,7 +236,6 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
                 int _int_note_key = static_cast<int>(m_trill_note_key);
                 if (m_trill_type == 2215) {
                     if (ratio < 0.25) {
-
                     } else if (ratio >= 0.25 && ratio < 0.5) {
                         _int_note_key -= 1;
                     } else if (ratio >= 0.5 && ratio < 0.75) {
@@ -249,7 +249,6 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
                     } else if (ratio >= 0.25 && ratio < 0.5) {
                         _int_note_key -= 2;
                     } else if (ratio >= 0.5 && ratio < 0.75) {
-                        
                     } else {
                         _int_note_key -= 1;
                     }
@@ -268,7 +267,8 @@ KeyState PianoKeyboardController::trillKeyState(piano_key_t key) const
     }
     return KeyState::None;
 }
-KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const 
+
+KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const
 {
     if (m_trill_duration_ticks1 == 0) {
         return KeyState::None;
@@ -294,12 +294,12 @@ KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const
                     frequency *= 4;
                 } else if (noteDurationtype == mu::engraving::DurationType::V_HALF) {
                     frequency *= 2;
-                } 
+                }
                 int _ratio_count = static_cast<int>(frequency * ratio);
                 int _int_note_key = static_cast<int>(m_trill_note_key1);
                 if (_ratio_count % 2 == 1) {
                     _int_note_key += 1;
-                } 
+                }
                 if (key == (piano_key_t)_int_note_key) {
                     return KeyState::Trill;
                 }
@@ -324,7 +324,6 @@ KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const
                 int _int_note_key = static_cast<int>(m_trill_note_key1);
                 if (m_trill_type1 == 2215) {
                     if (ratio < 0.25) {
-
                     } else if (ratio >= 0.25 && ratio < 0.5) {
                         _int_note_key -= 1;
                     } else if (ratio >= 0.5 && ratio < 0.75) {
@@ -338,7 +337,6 @@ KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const
                     } else if (ratio >= 0.25 && ratio < 0.5) {
                         _int_note_key -= 2;
                     } else if (ratio >= 0.5 && ratio < 0.75) {
-                        
                     } else {
                         _int_note_key -= 1;
                     }
@@ -358,7 +356,7 @@ KeyState PianoKeyboardController::trillKeyState1(piano_key_t key) const
     return KeyState::None;
 }
 
-bool PianoKeyboardController::playbackKeyStatesEmpty() const 
+bool PianoKeyboardController::playbackKeyStatesEmpty() const
 {
     if (m_righthand_keys.empty()) {
         return true;
@@ -371,26 +369,28 @@ muse::async::Notification PianoKeyboardController::playbackKeyStatesChanged() co
     return m_playbackKeyStatesChanged;
 }
 
-muse::async::Notification PianoKeyboardController::glissandoEndNotesChanged() const 
+muse::async::Notification PianoKeyboardController::glissandoEndNotesChanged() const
 {
     return m_glissandoEndNotesChanged;
 }
-muse::async::Notification PianoKeyboardController::glissandoTickChanged() const 
+
+muse::async::Notification PianoKeyboardController::glissandoTickChanged() const
 {
     return m_glissandoTickChanged;
 }
 
-muse::async::Notification PianoKeyboardController::clefKeySigsKeysChanged() const 
+muse::async::Notification PianoKeyboardController::clefKeySigsKeysChanged() const
 {
     return m_clefKeySigsKeysChanged;
 }
 
-std::set<uint> PianoKeyboardController::clefKeySigsKeys() const 
+std::set<uint> PianoKeyboardController::clefKeySigsKeys() const
 {
     return m_clefKeySigsKeys;
 }
 
-void PianoKeyboardController::updatePianoKeyboardKeys(piano_key_t _lowestKey, piano_key_t _numKeys) {
+void PianoKeyboardController::updatePianoKeyboardKeys(piano_key_t _lowestKey, piano_key_t _numKeys)
+{
     lowestKey = _lowestKey;
     numKeys = _numKeys;
 }
@@ -400,14 +400,15 @@ bool PianoKeyboardController::isFromMidi() const
     return m_isFromMidi;
 }
 
-bool PianoKeyboardController::isPlaying() const 
+bool PianoKeyboardController::isPlaying() const
 {
     if (auto notation = currentNotation()) {
         return notation->interaction()->isPlaying();
     }
     return false;
 }
-bool PianoKeyboardController::islastMeasure() const 
+
+bool PianoKeyboardController::islastMeasure() const
 {
     if (auto notation = currentNotation()) {
         return notation->interaction()->islastMeasure();
@@ -548,17 +549,15 @@ void PianoKeyboardController::onNotationChanged()
             m_trill_note_hastie = notation->interaction()->trillNoteHasTie();
             m_trill_duration_ticks = notation->interaction()->trillNoteDurationticks();
             m_trill_trill_duration_ticks = notation->interaction()->trillTrillNoteDurationticks();
-            
-            Note *receivedNote = notation->interaction()->trillNote();
+
+            Note* receivedNote = notation->interaction()->trillNote();
             m_trill_type = notation->interaction()->trillType();
 
             receive_note = receivedNote;
             if (receivedNote) {
                 const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
                 m_trill_note_key = static_cast<piano_key_t>(useWrittenPitch ? receivedNote->epitch() : receivedNote->ppitch());
-
                 int _noteOttavaType = notation->interaction()->noteOttavaType(receivedNote);
-                
                 if (_noteOttavaType > 0) {
                     int __key = static_cast<int>(m_trill_note_key);
                     if (_noteOttavaType == 100) {
@@ -600,15 +599,15 @@ void PianoKeyboardController::onNotationChanged()
             m_trill_note1_hastie = notation->interaction()->trillNote1HasTie();
             m_trill_duration_ticks1 = notation->interaction()->trillNoteDurationticks1();
             m_trill_trill_duration_ticks1 = notation->interaction()->trillTrillNoteDurationticks1();
-            
-            Note *receivedNote = notation->interaction()->trillNote1();
+
+            Note* receivedNote = notation->interaction()->trillNote1();
             m_trill_type1 = notation->interaction()->trillType1();
 
             receive_note1 = receivedNote;
             if (receivedNote) {
                 const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
                 m_trill_note_key1 = static_cast<piano_key_t>(useWrittenPitch ? receivedNote->epitch() : receivedNote->ppitch());
-                
+
                 int _noteOttavaType = notation->interaction()->noteOttavaType(receivedNote);
 
                 if (_noteOttavaType > 0) {
@@ -674,19 +673,6 @@ void PianoKeyboardController::onNotationChanged()
             m_clefKeySigsKeysChanged.notify();
         });
 
-        notation->interaction()->clefKeySigsKeysChanged().onNotify(this, [this]() {
-            auto notation = currentNotation();
-            if (!notation) {
-                return;
-            }
-            for (auto key : notation->interaction()->clefKeySigsKeys()) {
-                m_clefKeySigsKeys.insert(key);
-            }
-            notation->interaction()->clearClefKeySigsKeys();
-
-            m_clefKeySigsKeysChanged.notify();
-        });
-
         notation->midiInput()->notesReceived().onReceive(this, [this](const std::vector<const Note*>& notes) {
             m_isFromMidi = true;
             updateNotesKeys(notes);
@@ -698,7 +684,6 @@ void PianoKeyboardController::updateNotesKeys(const std::vector<const Note*>& re
 {
     std::unordered_set<piano_key_t> newKeys;
     std::unordered_set<piano_key_t> newOtherNotesInChord;
-
     DEFER {
         if (newKeys != m_keys
             || newOtherNotesInChord != m_otherNotesInChord) {
@@ -719,7 +704,8 @@ void PianoKeyboardController::updateNotesKeys(const std::vector<const Note*>& re
     }
 }
 
-void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes, std::map<const Note*, bool> hitTsMap) 
+void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes,
+                                                      std::map<const Note*, bool> hitTsMap)
 {
     std::unordered_set<piano_key_t> newKeys;
     m_righthand_keys_hit_ts.clear();
@@ -736,7 +722,6 @@ void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const No
 
     for (const mu::engraving::Note* note : receivedNotes) {
         piano_key_t _key = static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch());
-        
         int _noteOttavaType = currentNotation()->interaction()->noteOttavaType(note);
         if (_noteOttavaType > 0) {
             int __key = static_cast<int>(_key);
@@ -777,7 +762,8 @@ void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const No
     }
 }
 
-void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const Note*>& receivedNotes, const mu::engraving::Note* glissandoNote) 
+void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const Note*>& receivedNotes,
+                                                       const mu::engraving::Note* glissandoNote)
 {
     std::unordered_set<piano_key_t> newKeys;
 
@@ -802,7 +788,6 @@ void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const N
 
     const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
     m_glissando_note_key = static_cast<piano_key_t>(useWrittenPitch ? glissandoNote->epitch() : glissandoNote->ppitch());
-    
     int _noteOttavaType = currentNotation()->interaction()->noteOttavaType(glissandoNote);
     if (_noteOttavaType > 0) {
         int __key = static_cast<int>(m_glissando_note_key);
@@ -831,11 +816,10 @@ void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const N
             __key = static_cast<int>(lowestKey + numKeys) - 1;
         }
         m_glissando_note_key = (piano_key_t)__key;
-    } 
+    }
 
     for (const mu::engraving::Note* note : receivedNotes) {
         piano_key_t _key = static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch());
-        
         int noteOttavaType = currentNotation()->interaction()->noteOttavaType(note);
         if (noteOttavaType > 0) {
             int __key = static_cast<int>(_key);
@@ -870,7 +854,7 @@ void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const N
     }
 }
 
-void PianoKeyboardController::updateArpeggioNotesKeys(const std::vector<const Note*>& receivedNotes) 
+void PianoKeyboardController::updateArpeggioNotesKeys(const std::vector<const Note*>& receivedNotes)
 {
     std::unordered_set<piano_key_t> newKeys;
 
@@ -884,7 +868,6 @@ void PianoKeyboardController::updateArpeggioNotesKeys(const std::vector<const No
 
     for (const mu::engraving::Note* note : receivedNotes) {
         piano_key_t _key = static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch());
-        
         int _noteOttavaType = currentNotation()->interaction()->noteOttavaType(note);
         if (_noteOttavaType > 0) {
             int __key = static_cast<int>(_key);

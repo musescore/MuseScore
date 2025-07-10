@@ -56,13 +56,12 @@ public:
 
     const bool adjust_nm_rect() const;
     const muse::RectF& nm_rect() const;
-    
+
     int hit_measure_no();
     Measure* hit_measure();
 
     void setHitMeasureNo(int m_no);
     void setHitMeasure(Measure* m);
-    
     Q_OBJECT
 signals:
     void lingeringCursorUpdate(double x, double y, double width, double height) const;
@@ -96,8 +95,8 @@ private:
     Measure* m_hit_measure = nullptr;
     std::map<const Note*, int> ottava_map;
     std::map<EngravingItem*, EngravingItem*> chordrest_fermata_map;
-    std::map<int, std::set<EngravingItem*>> measure_spanner_map;
-    std::map<EngravingItem*, std::map<int, int>> spanner_ticks_map;
+    std::map<int, std::set<EngravingItem*> > measure_spanner_map;
+    std::map<EngravingItem*, std::map<int, int> > spanner_ticks_map;
 
     std::map<EngravingItem*, Note*> score_trill_map;
     std::map<EngravingItem*, int> score_trill_type_map;
@@ -116,7 +115,7 @@ private:
     std::map<EngravingItem*, int> score_trill_ot_map1;
     std::map<Note*, bool> score_trill_tie_map1;
 
-    std::map<EngravingItem*, std::vector<Note*>> score_arpeggio_map;
+    std::map<EngravingItem*, std::vector<Note*> > score_arpeggio_map;
     std::map<EngravingItem*, int> score_arpeggio_st_map;
     std::map<EngravingItem*, int> score_arpeggio_dt_map;
     std::map<EngravingItem*, int> score_arpeggio_ot_map;
@@ -125,7 +124,7 @@ private:
     std::map<EngravingItem*, int> score_glissando_st_map;
     std::map<EngravingItem*, int> score_glissando_dt_map;
     std::map<EngravingItem*, int> score_glissando_ot_map;
-    std::map<EngravingItem*, std::vector<Note*>> score_glissando_endnotes_map;
+    std::map<EngravingItem*, std::vector<Note*> > score_glissando_endnotes_map;
 
     std::future<void> m_ottavaProcessFuture;
     std::atomic<bool> m_isOttavaProcessed{ false };
@@ -135,7 +134,7 @@ private:
 
     std::future<void> m_cursorNoteRenderRecoverFuture;
 
-    std::map<int, std::set<uint>> clefKeySigsKeysMap;
+    std::map<int, std::set<uint> > clefKeySigsKeysMap;
 
     std::map<int, int> mnRestSTicksMap;
     std::map<int, int> mnRestETicksMap;

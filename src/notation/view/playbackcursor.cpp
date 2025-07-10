@@ -115,7 +115,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
         int x1 = s->canvasPos().x();
         qreal x2 = 0.0;
         Fraction t2;
-
         mu::engraving::Segment* ns = s->next(mu::engraving::SegmentType::ChordRest);
         while (ns && !ns->visible()) {
             ns = ns->next(mu::engraving::SegmentType::ChordRest);
@@ -157,7 +156,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
     // set cursor height for whole system
     //
     double y2 = 0.0;
-
     for (size_t i = 0; i < score->nstaves(); ++i) {
         mu::engraving::SysStaff* ss = system->staff(i);
         if (!ss->show() || !score->staff(i)->show()) {
@@ -172,11 +170,14 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
 
     return RectF(x, y, w, h);
 }
-bool compare_by_chord_x(Chord* a, Chord* b) {
+
+bool compare_by_chord_x(Chord* a, Chord* b)
+{
     return a->canvasPos().x() < b->canvasPos().x();
 }
 
-void PlaybackCursor::processOttava(mu::engraving::Score* score, bool isPlaying) {
+void PlaybackCursor::processOttava(mu::engraving::Score* score, bool isPlaying)
+{
     if (m_isOttavaProcessed && isPlaying) {
         return;
     }
@@ -189,7 +190,8 @@ void PlaybackCursor::processOttava(mu::engraving::Score* score, bool isPlaying) 
     });
 }
 
-void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
+void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score)
+{
     std::map<int, int> staff_stick_map;
     std::map<int, int> staff_etick_map;
     std::map<int, int> staff_ottatype_map;
@@ -200,7 +202,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 EngravingItem* engravingItem = engravingItemList[i];
                 if (engravingItem == nullptr) {
                     continue;
-                }  
+                }
                 EngravingItemList itemList = engravingItem->childrenItems(false);
                 for (size_t j = 0; j < itemList.size(); j++) {
                     EngravingItem* item_ = itemList.at(j);
@@ -238,8 +240,10 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     }
                                     if (forward_item->type() == mu::engraving::ElementType::NOTE) {
                                         Note* forward_note = toNote(forward_item);
-                                        if (forward_note->staff()->idx() == noteStaffIndex && forward_note->canvasPos().x() <= note_->canvasPos().x()) {
-                                            if (forward_note->tick().ticks() >= startTicks && forward_note->tick().ticks() <= endTicks) {
+                                        if (forward_note->staff()->idx() == noteStaffIndex
+                                            && forward_note->canvasPos().x() <= note_->canvasPos().x()) {
+                                            if (forward_note->tick().ticks() >= startTicks
+                                                && forward_note->tick().ticks() <= endTicks) {
                                                 ottava_map[forward_note] = _ottavaType;
                                                 if (forward_note->chord()) {
                                                     std::vector<Note*> chordNotes = forward_note->chord()->notes();
@@ -281,8 +285,10 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     }
                                     if (backward_item->type() == mu::engraving::ElementType::NOTE) {
                                         Note* backward_note = toNote(backward_item);
-                                        if (backward_note->staff()->idx() == noteStaffIndex && backward_note->canvasPos().x() >= note_->canvasPos().x()) {
-                                            if (backward_note->tick().ticks() >= startTicks && backward_note->tick().ticks() <= endTicks) {
+                                        if (backward_note->staff()->idx() == noteStaffIndex
+                                            && backward_note->canvasPos().x() >= note_->canvasPos().x()) {
+                                            if (backward_note->tick().ticks() >= startTicks
+                                                && backward_note->tick().ticks() <= endTicks) {
                                                 ottava_map[backward_note] = _ottavaType;
                                                 if (backward_note->chord()) {
                                                     std::vector<Note*> chordNotes = backward_note->chord()->notes();
@@ -298,8 +304,10 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                             }
                         }
 
-                        if (!isOttavaStartd && staff_stick_map[noteStaffIndex] > 0 && staff_etick_map[noteStaffIndex] > 0) {
-                            if (note_->tick().ticks() >= staff_stick_map[noteStaffIndex] && note_->tick().ticks() <= staff_etick_map[noteStaffIndex]) {
+                        if (!isOttavaStartd && staff_stick_map[noteStaffIndex] > 0
+                            && staff_etick_map[noteStaffIndex] > 0) {
+                            if (note_->tick().ticks() >= staff_stick_map[noteStaffIndex]
+                                && note_->tick().ticks() <= staff_etick_map[noteStaffIndex]) {
                                 int _ottavaType = staff_ottatype_map[noteStaffIndex];
                                 ottava_map[note_] = _ottavaType;
                                 if (note_->chord()) {
@@ -331,7 +339,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 EngravingItem* engravingItem = engravingItemList[i];
                 if (engravingItem == nullptr) {
                     continue;
-                }  
+                }
                 EngravingItemList itemList = engravingItem->childrenItems(false);
                 for (size_t j = 0; j < itemList.size(); j++) {
                     EngravingItem* item_ = itemList.at(j);
@@ -371,8 +379,10 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     }
                                     if (backward_item->type() == mu::engraving::ElementType::NOTE) {
                                         Note* backward_note = toNote(backward_item);
-                                        if (backward_note->staff()->idx() == noteStaffIndex && backward_note->canvasPos().x() >= note_->canvasPos().x()) {
-                                            if (backward_note->tick().ticks() >= startTicks && backward_note->tick().ticks() <= endTicks) {
+                                        if (backward_note->staff()->idx() == noteStaffIndex
+                                            && backward_note->canvasPos().x() >= note_->canvasPos().x()) {
+                                            if (backward_note->tick().ticks() >= startTicks
+                                                && backward_note->tick().ticks() <= endTicks) {
                                                 ottava_map[backward_note] = _ottavaType;
                                                 if (backward_note->chord()) {
                                                     std::vector<Note*> chordNotes = backward_note->chord()->notes();
@@ -387,8 +397,6 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                 break;
                             }
                         }
-                        
-
                         const std::set<Spanner*> starttingSpanners_ = note_->chord()->startingSpanners();
                         for (const Spanner* _spanner : starttingSpanners_) {
                             if (_spanner->isOttava()) {
@@ -417,8 +425,10 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     }
                                     if (forward_item->type() == mu::engraving::ElementType::NOTE) {
                                         Note* forward_note = toNote(forward_item);
-                                        if (forward_note->staff()->idx() == noteStaffIndex && forward_note->canvasPos().x() <= note_->canvasPos().x()) {
-                                            if (forward_note->tick().ticks() >= startTicks && forward_note->tick().ticks() <= endTicks) {
+                                        if (forward_note->staff()->idx() == noteStaffIndex
+                                            && forward_note->canvasPos().x() <= note_->canvasPos().x()) {
+                                            if (forward_note->tick().ticks() >= startTicks
+                                                && forward_note->tick().ticks() <= endTicks) {
                                                 ottava_map[forward_note] = _ottavaType;
                                                 if (forward_note->chord()) {
                                                     std::vector<Note*> chordNotes = forward_note->chord()->notes();
@@ -434,8 +444,10 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                             }
                         }
 
-                        if (!isOttavaStartd && staff_stick_map[noteStaffIndex] > 0 && staff_etick_map[noteStaffIndex] > 0) {
-                            if (note_->tick().ticks() >= staff_stick_map[noteStaffIndex] && note_->tick().ticks() <= staff_etick_map[noteStaffIndex]) {
+                        if (!isOttavaStartd && staff_stick_map[noteStaffIndex] > 0
+                            && staff_etick_map[noteStaffIndex] > 0) {
+                            if (note_->tick().ticks() >= staff_stick_map[noteStaffIndex]
+                                && note_->tick().ticks() <= staff_etick_map[noteStaffIndex]) {
                                 int _ottavaType = staff_ottatype_map[noteStaffIndex];
                                 ottava_map[note_] = _ottavaType;
                                 if (note_->chord()) {
@@ -463,10 +475,8 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
             measure_spanner_map[measure->no()] = {};
         }
         EngravingItemList measure_children = measure->childrenItems(true);
-        
         int min_ticks = 0;
         int max_ticks = 0;
-        
         for (size_t m_k = 0; m_k < measure_children.size(); m_k++) {
             EngravingItem* measure_item = measure_children.at(m_k);
             if (min_ticks == 0) {
@@ -481,7 +491,6 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
             if (measure_item->tick().ticks() > max_ticks) {
                 max_ticks = measure_item->tick().ticks();
             }
-
             if (measure_item->type() == mu::engraving::ElementType::NOTE) {
                 Note* note_item = toNote(measure_item);
                 Tie* _tieBack = note_item->tieBack();
@@ -492,10 +501,8 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                         if (spanner_ticks_map.find((EngravingItem*)_tieBack) == spanner_ticks_map.end()) {
                             spanner_ticks_map[(EngravingItem*)_tieBack] = {};
                         }
-
                         Note* _startNote = _tieBack->startNote();
                         Note* _endNote = _tieBack->endNote();
-                        
                         spanner_ticks_map[(EngravingItem*)_tieBack][0] = _startNote->tick().ticks();
                         spanner_ticks_map[(EngravingItem*)_tieBack][1] = _endNote->tick().ticks();
                     }
@@ -628,11 +635,9 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 Trill* _trill = toTrill(measure_item);
                 if (_trill) {
                     Note* note = orn->noteAbove();
-                    
                     if (spanner_ticks_map.find((EngravingItem*)_trill) != spanner_ticks_map.end()) {
                         _measure_trill_notes_trill_map[note] = (EngravingItem*)_trill;
                     }
-                    
                     if (note) {
                         _measure_trill_notes.insert(note);
                         _measure_trill_notes_trill_type_map[note] = orn->subtype();
@@ -677,7 +682,6 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                             leftNote = leftLastNote;
                         }
                         _measure_trill_notes.insert(leftNote);
-                        
                         Note* rightFirstNote = chord2->notes()[0];
                         Note* rightLastNote = chord2->notes()[chord2->notes().size() - 1];
                         Note* rightNote = rightFirstNote;
@@ -696,12 +700,11 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                         if (_firstNote->canvasPos().y() < _lastNote->canvasPos().y()) {
                             _note = _lastNote;
                         }
-                        _measure_trill_notes.insert(_note); 
+                        _measure_trill_notes.insert(_note);
                     }
                 }
             }
         }
-
         for (mu::engraving::Segment* s = measure->first(mu::engraving::SegmentType::ChordRest); s;) {
             EngravingItemList _list = s->childrenItems(true);
             std::map<int, EngravingItem*> staff_fermata_map;
@@ -715,23 +718,20 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
             std::vector<EngravingItem*> engravingItemList = s->elist();
             bool _arpeggio_seg_checked = false;
             bool _glissando_seg_checked = false;
-            
             bool _trill_note_checked = false;
             bool _trill_note1_checked = false;
             for (size_t i = 0; i < engravingItemList.size(); i++) {
                 EngravingItem* engravingItem = engravingItemList[i];
                 if (engravingItem == nullptr) {
                     continue;
-                } 
+                }
                 int staff_idx = engravingItem->staff()->idx();
                 if (staff_fermata_map.find(staff_idx) != staff_fermata_map.end()) {
                     chordrest_fermata_map[engravingItem] = staff_fermata_map[staff_idx];
                 }
-                ChordRest *chordRest = toChordRest(engravingItem);
+                ChordRest* chordRest = toChordRest(engravingItem);
                 int duration_ticks = chordRest->durationTypeTicks().ticks();
-                
                 EngravingItemList itemList = engravingItem->childrenItems(true);
-                
                 for (size_t j = 0; j < itemList.size(); j++) {
                     EngravingItem* item = itemList.at(j);
                     if (item == nullptr) {
@@ -768,7 +768,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     if (_measure_trill_notes_trill_type_map.find(mnote) != _measure_trill_notes_trill_type_map.end()) {
                                         trill_type = _measure_trill_notes_trill_type_map[mnote];
                                     }
-                                    
+
                                     score_trill_map[engravingItem] = mnote;
                                     score_trill_type_map[engravingItem] = trill_type;
                                     score_trill_st_map[engravingItem] = mnote->tick().ticks();
@@ -781,7 +781,6 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                         EngravingItem* __trill = _measure_trill_notes_trill_map[mnote];
                                         score_trill_tdt_map[engravingItem] = spanner_ticks_map[__trill][1] - spanner_ticks_map[__trill][0];
                                     }
-                                    
                                 } else if (_trill_note_checked && !_trill_note1_checked) {
                                     _trill_note1_checked = true;
                                     int logic_tremoloType = 0;
@@ -825,7 +824,6 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                 }
                             }
                         }
-                        
                     } else if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
                         std::map<int, bool> seg_arpeggio_staffindex;
                         if (!_arpeggio_seg_checked) {
@@ -843,7 +841,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                 }
                                 if (___item->type() == mu::engraving::ElementType::FERMATA) {
                                     isFermataTag = true;
-                                    mu::engraving::Fermata *fermata = toFermata(___item);
+                                    mu::engraving::Fermata* fermata = toFermata(___item);
                                     fermata_stretch = fermata->timeStretch();
                                     if (___item->tick().ticks() >= measure->last(mu::engraving::SegmentType::ChordRest)->tick().ticks()) {
                                         isFermataAtLastSegment = true;
@@ -851,36 +849,37 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     chordrest_fermata_map[engravingItem] = ___item;
                                 }
                             }
-
                             EngravingItemList _itemList = s->childrenItems(true);
                             for (size_t k = 0; k < _itemList.size(); k++) {
                                 EngravingItem* _item = _itemList.at(k);
-                                    if (_item == nullptr) {
-                                        continue;
-                                    }
-                                    if (_item->type() == mu::engraving::ElementType::ARPEGGIO) {
+                                if (_item == nullptr) {
+                                    continue;
+                                }
+                                if (_item->type() == mu::engraving::ElementType::ARPEGGIO) {
+                                    Staff* arpeggioStaff = _item->staff();
+                                    int arpeggioStaffIndex = arpeggioStaff->idx();
+                                    seg_arpeggio_staffindex[arpeggioStaffIndex] = true;
+                                } else if (_item->type() == mu::engraving::ElementType::NOTE) {
+                                    if (_item->canvasBoundingRect().y() >= item->canvasBoundingRect().y()
+                                        && _item->canvasBoundingRect().y()
+                                        <= item->canvasBoundingRect().y() + item->canvasBoundingRect().height()) {
                                         Staff* arpeggioStaff = _item->staff();
                                         int arpeggioStaffIndex = arpeggioStaff->idx();
                                         seg_arpeggio_staffindex[arpeggioStaffIndex] = true;
-                                    } else if (_item->type() == mu::engraving::ElementType::NOTE) {
-                                        if (_item->canvasBoundingRect().y() >= item->canvasBoundingRect().y() && _item->canvasBoundingRect().y() <= item->canvasBoundingRect().y() + item->canvasBoundingRect().height()) {
-                                            Staff* arpeggioStaff = _item->staff();
-                                            int arpeggioStaffIndex = arpeggioStaff->idx();
-                                            seg_arpeggio_staffindex[arpeggioStaffIndex] = true;
-                                        }
                                     }
+                                }
                             }
-                            
                             bool _arpeggio_duration_check = false;
                             bool arpeggio_whole = false;
                             int arpeggio_duration_ticks = 0;
                             if (arpeggio->type() == mu::engraving::ElementType::CHORD) {
-                                mu::engraving::Chord *arpeggioChord = toChord(arpeggio);
+                                mu::engraving::Chord* arpeggioChord = toChord(arpeggio);
                                 arpeggio_duration_ticks = arpeggioChord->durationTypeTicks().ticks();
                                 if (arpeggioChord->durationType().type() <= mu::engraving::DurationType::V_HALF) {
                                     if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_HALF) {
                                         arpeggio_duration_ticks /= 3;
-                                    } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_WHOLE) {
+                                    } else if (arpeggioChord->durationType().type()
+                                               == mu::engraving::DurationType::V_WHOLE) {
                                         arpeggio_whole = true;
                                         arpeggio_duration_ticks /= 4;
                                     }
@@ -893,7 +892,8 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     } else {
                                         arpeggio_duration_ticks /= 2;
                                     }
-                                } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_QUARTER) {
+                                } else if (arpeggioChord->durationType().type()
+                                           == mu::engraving::DurationType::V_QUARTER) {
                                     if (isFermataTag) {
                                         if (fermata_stretch > 1) {
                                             arpeggio_duration_ticks /= fermata_stretch;
@@ -903,9 +903,10 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     } else {
                                         arpeggio_duration_ticks /= 4;
                                     }
-                                } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_EIGHTH) {
+                                } else if (arpeggioChord->durationType().type()
+                                           == mu::engraving::DurationType::V_EIGHTH) {
                                     arpeggio_duration_ticks /= 2;
-                                    
+
                                     // if (isFermataTag && isFermataAtLastSegment) {
                                     //    arpeggio_duration_ticks /= 10;
                                     // }
@@ -919,8 +920,6 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                 }
                                 _arpeggio_duration_check = true;
                             }
-                            
-
                             for (size_t k = 0; k < _itemList.size(); k++) {
                                 EngravingItem* _item = _itemList.at(k);
                                 if (_item == nullptr) {
@@ -932,20 +931,20 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     if (seg_arpeggio_staffindex[arpeggioStaffIndex]) {
                                         EngravingItem* _itemParent = _item->parentItem();
                                         if (_itemParent->type() == mu::engraving::ElementType::CHORD) {
-                                            mu::engraving::Chord *_itemParentChord = toChord(_itemParent);
+                                            mu::engraving::Chord* _itemParentChord = toChord(_itemParent);
                                             Note* _note = toNote(_item);
 
                                             if (score_arpeggio_map.find(engravingItem) == score_arpeggio_map.end()) {
                                                 score_arpeggio_map[engravingItem] = {};
                                             }
-
                                             if (!_arpeggio_duration_check) {
-                                                mu::engraving::Chord *arpeggioChord = _note->chord();
+                                                mu::engraving::Chord* arpeggioChord = _note->chord();
                                                 arpeggio_duration_ticks = arpeggioChord->durationTypeTicks().ticks();
                                                 if (arpeggioChord->durationType().type() <= mu::engraving::DurationType::V_HALF) {
                                                     if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_HALF) {
                                                         arpeggio_duration_ticks /= 3;
-                                                    } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_WHOLE) {
+                                                    } else if (arpeggioChord->durationType().type()
+                                                               == mu::engraving::DurationType::V_WHOLE) {
                                                         arpeggio_whole = true;
                                                         arpeggio_duration_ticks /= 4;
                                                     }
@@ -958,7 +957,8 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                                     } else {
                                                         arpeggio_duration_ticks /= 2;
                                                     }
-                                                } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_QUARTER) {
+                                                } else if (arpeggioChord->durationType().type()
+                                                           == mu::engraving::DurationType::V_QUARTER) {
                                                     if (isFermataTag) {
                                                         if (fermata_stretch > 1) {
                                                             arpeggio_duration_ticks /= fermata_stretch;
@@ -968,7 +968,8 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                                     } else {
                                                         arpeggio_duration_ticks /= 4;
                                                     }
-                                                } else if (arpeggioChord->durationType().type() == mu::engraving::DurationType::V_EIGHTH) {
+                                                } else if (arpeggioChord->durationType().type()
+                                                           == mu::engraving::DurationType::V_EIGHTH) {
                                                     arpeggio_duration_ticks /= 2;
                                                     // if (isFermataTag && isFermataAtLastSegment) {
                                                     //     arpeggio_duration_ticks /= 10;
@@ -982,7 +983,9 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                                     }
                                                 }
                                                 for (Note* note_ : _note->chord()->notes()) {
-                                                    if (std::find(score_arpeggio_map[engravingItem].begin(), score_arpeggio_map[engravingItem].end(), note_) == score_arpeggio_map[engravingItem].end()) {
+                                                    if (std::find(score_arpeggio_map[engravingItem].begin(),
+                                                                  score_arpeggio_map[engravingItem].end(),
+                                                                  note_) == score_arpeggio_map[engravingItem].end()) {
                                                         score_arpeggio_map[engravingItem].push_back(note_);
                                                         score_arpeggio_st_map[engravingItem] = _itemParentChord->tick().ticks();
                                                         score_arpeggio_ot_map[engravingItem] = ottava_map[note_];
@@ -991,19 +994,20 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
 
                                                         if (arpeggio_whole && score_arpeggio_map[engravingItem].size() >= 8) {
                                                             if (score_arpeggio_map[engravingItem].size() == 8) {
-                                                                
                                                             } else if (score_arpeggio_map[engravingItem].size() >= 12) {
                                                                 ___arpeggio_duration_ticks = 2.4 * arpeggio_duration_ticks;
                                                             } else if (score_arpeggio_map[engravingItem].size() >= 16) {
                                                                 ___arpeggio_duration_ticks = 4 * arpeggio_duration_ticks;
                                                             }
-                                                        } 
+                                                        }
                                                         score_arpeggio_dt_map[engravingItem] = ___arpeggio_duration_ticks;
                                                     }
                                                 }
                                                 _arpeggio_duration_check = true;
                                             } else {
-                                                if (std::find(score_arpeggio_map[engravingItem].begin(), score_arpeggio_map[engravingItem].end(), _note) == score_arpeggio_map[engravingItem].end()) {
+                                                if (std::find(score_arpeggio_map[engravingItem].begin(),
+                                                              score_arpeggio_map[engravingItem].end(),
+                                                              _note) == score_arpeggio_map[engravingItem].end()) {
                                                     score_arpeggio_map[engravingItem].push_back(_note);
                                                     score_arpeggio_st_map[engravingItem] = _itemParentChord->tick().ticks();
                                                     score_arpeggio_ot_map[engravingItem] = ottava_map[_note];
@@ -1012,13 +1016,12 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
 
                                                     if (arpeggio_whole && score_arpeggio_map[engravingItem].size() >= 8) {
                                                         if (score_arpeggio_map[engravingItem].size() == 8) {
-                                                            
                                                         } else if (score_arpeggio_map[engravingItem].size() >= 12) {
                                                             ___arpeggio_duration_ticks = 2.4 * arpeggio_duration_ticks;
                                                         } else if (score_arpeggio_map[engravingItem].size() >= 16) {
                                                             ___arpeggio_duration_ticks = 4 * arpeggio_duration_ticks;
                                                         }
-                                                    } 
+                                                    }
                                                     score_arpeggio_dt_map[engravingItem] = ___arpeggio_duration_ticks;
                                                 }
                                             }
@@ -1031,7 +1034,8 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                     } else if (item->type() == mu::engraving::ElementType::GLISSANDO) {
                         if (!_glissando_seg_checked) {
                             EngravingItem* glissandoNote = item->parentItem();
-                            if (glissandoNote->type() != mu::engraving::ElementType::NOTE && glissandoNote->parentItem()->type() == mu::engraving::ElementType::NOTE) {
+                            if (glissandoNote->type() != mu::engraving::ElementType::NOTE
+                                && glissandoNote->parentItem()->type() == mu::engraving::ElementType::NOTE) {
                                 glissandoNote = glissandoNote->parentItem();
                             }
                             if (glissandoNote->type() == mu::engraving::ElementType::NOTE) {
@@ -1053,19 +1057,20 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                     if (__item__->type() == mu::engraving::ElementType::NOTE) {
                                         if (__item__->tick().ticks() >= glissandoNote->tick().ticks() + duration_ticks / 10) {
                                             Note* _note = toNote(__item__);
-                                            if (std::find(score_glissando_endnotes_map[engravingItem].begin(), score_glissando_endnotes_map[engravingItem].end(), _note) == score_glissando_endnotes_map[engravingItem].end()) {
+                                            if (std::find(score_glissando_endnotes_map[engravingItem].begin(),
+                                                          score_glissando_endnotes_map[engravingItem].end(),
+                                                          _note) == score_glissando_endnotes_map[engravingItem].end()) {
                                                 score_glissando_endnotes_map[engravingItem].push_back(_note);
                                             }
                                         }
-                                    } 
+                                    }
                                 }
-                            } 
+                            }
                             _glissando_seg_checked = true;
                         }
-                    } 
+                    }
                 }
             }
-            
             mu::engraving::Segment* ns = s->next(mu::engraving::SegmentType::ChordRest);
             while (ns && !ns->visible()) {
                 ns = ns->next(mu::engraving::SegmentType::ChordRest);
@@ -1077,15 +1082,14 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
     if (!pianoKeyboardPlaybackEnable) {
         return;
     }
+    std::map<int, std::vector<std::map<int, ClefType> > > _clef_staff_map;
+    std::map<int, std::map<int, std::map<int, ClefType> > > _clef_staff_map_extend;
 
-    std::map<int, std::vector<std::map<int, ClefType>>> _clef_staff_map;
-    std::map<int, std::map<int, std::map<int, ClefType>>> _clef_staff_map_extend;
+    std::map<int, std::map<int, ClefType> > _score_staff_clef_map;
+    std::map<int, std::vector<int> > _score_clef_index_map;
 
-    std::map<int, std::map<int, ClefType>> _score_staff_clef_map;
-    std::map<int, std::vector<int>> _score_clef_index_map;
-
-    std::map<int, std::unordered_set<ClefType>> score_clef_map;
-    std::map<int, std::set<mu::engraving::Key>> score_keysig_map;
+    std::map<int, std::unordered_set<ClefType> > score_clef_map;
+    std::map<int, std::set<mu::engraving::Key> > score_keysig_map;
 
     int staff_count = 0;
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
@@ -1099,31 +1103,32 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 Clef* clef = toClef(clefItem);
                 ClefType clefType = clef->clefType();
 
-                if (clefType == mu::engraving::ClefType::G || clefType == mu::engraving::ClefType::F 
-                    || clefType == mu::engraving::ClefType::G8_VA || clefType == mu::engraving::ClefType::G15_MA 
+                if (clefType == mu::engraving::ClefType::G
+                    || clefType == mu::engraving::ClefType::F
+                    || clefType == mu::engraving::ClefType::G8_VA
+                    || clefType == mu::engraving::ClefType::G15_MA
                     || clefType == mu::engraving::ClefType::G8_VB
-                    || clefType == mu::engraving::ClefType::F_8VA || clefType == mu::engraving::ClefType::F8_VB) {
-
+                    || clefType == mu::engraving::ClefType::F_8VA
+                    || clefType == mu::engraving::ClefType::F8_VB) {
                     Staff* clefStaff = clef->staff();
                     int clefStaffIndex = clefStaff->idx();
                     if (clefStaffIndex + 1 > staff_count) {
                         staff_count = clefStaffIndex + 1;
                     }
-
                     if (_clef_staff_map.find(clefStaffIndex) == _clef_staff_map.end()) {
                         _clef_staff_map[clefStaffIndex] = {};
                     }
-
                     if (_score_clef_index_map.find(clefStaffIndex) == _score_clef_index_map.end()) {
                         _score_clef_index_map[clefStaffIndex] = {};
                     }
-                    if (_score_clef_index_map[clefStaffIndex].size() == 0 
-                    || _score_clef_index_map[clefStaffIndex][_score_clef_index_map[clefStaffIndex].size() - 1] != measure->no()) {
+                    if (_score_clef_index_map[clefStaffIndex].size() == 0
+                        || _score_clef_index_map[clefStaffIndex][_score_clef_index_map[clefStaffIndex].size() - 1]
+                        != measure->no()) {
                         _score_clef_index_map[clefStaffIndex].push_back(measure->no());
                         _clef_staff_map[clefStaffIndex].push_back({});
                     }
                     _clef_staff_map[clefStaffIndex][_clef_staff_map[clefStaffIndex].size() - 1].insert({ clef->tick().ticks(), clefType });
-                }   
+                }
             }
             mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ClefType);
             segment = next_segment;
@@ -1150,8 +1155,9 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 int __index = __index_map[staffIndex];
 
                 struct Lower {
-                    bool operator()(const int& a, const int& b) const {
-                        return a < b; 
+                    bool operator()(const int& a, const int& b) const
+                    {
+                        return a < b;
                     }
                 };
 
@@ -1183,7 +1189,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                         }
                         if (measure->no() == _score_clef_index_map[staffIndex][__index]) {
                             int _no = _score_clef_index_map[staffIndex][__index];
-                            
+
                             std::map<int, ClefType> __ts_clef_map = _clef_staff_map[staffIndex][__index];
                             std::map<int, ClefType, Lower> _ts_clef_map;
                             _ts_clef_map.insert(__ts_clef_map.begin(), __ts_clef_map.end());
@@ -1193,7 +1199,8 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                 if (segment->tick().ticks() >= _ticks) {
                                     ___clefType = _clefType;
                                 } else if (segment == measure->last(mu::engraving::SegmentType::ChordRest)) {
-                                    if (std::find(_score_clef_index_map[staffIndex].begin(), _score_clef_index_map[staffIndex].end(), _no + 1) == _score_clef_index_map[staffIndex].end()) {
+                                    if (std::find(_score_clef_index_map[staffIndex].begin(), _score_clef_index_map[staffIndex].end(),
+                                                  _no + 1) == _score_clef_index_map[staffIndex].end()) {
                                         if (_clef_staff_map_extend.find(staffIndex) == _clef_staff_map_extend.end()) {
                                             _clef_staff_map_extend[staffIndex] = {};
                                         }
@@ -1232,8 +1239,9 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                             }
                         }
                         if (measure->no() < _score_clef_index_map[staffIndex][__index] && __index >= 1) {
-                            if (_score_staff_clef_map.find(staffIndex) == _score_staff_clef_map.end() 
-                            || _score_staff_clef_map[staffIndex].find(segment->tick().ticks()) == _score_staff_clef_map[staffIndex].end()) {
+                            if (_score_staff_clef_map.find(staffIndex) == _score_staff_clef_map.end()
+                                || _score_staff_clef_map[staffIndex].find(segment->tick().ticks())
+                                == _score_staff_clef_map[staffIndex].end()) {
                                 int index__ = __index - 1;
                                 std::map<int, ClefType> __ts_clef_map = _clef_staff_map[staffIndex][index__];
                                 std::map<int, ClefType, Lower> _ts_clef_map;
@@ -1293,65 +1301,64 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                     seg_clefTypes.insert(stashed_staff_clef[i]);
                 }
             }
-            
             if (seg_clefTypes.size() > 0) {
-                if (seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend() 
+                if (seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::G8_VA) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::G8_VB) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::G);
-                } 
-                if (seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend() 
+                }
+                if (seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::G8_VA) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::G15_MA) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::G8_VA);
-                } 
-                if (seg_clefTypes.find(mu::engraving::ClefType::F) != seg_clefTypes.cend() 
-                    && seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend() 
+                }
+                if (seg_clefTypes.find(mu::engraving::ClefType::F) != seg_clefTypes.cend()
+                    && seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::F8_VB) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::G8_VB) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::F);
                     seg_clefTypes.erase(mu::engraving::ClefType::G);
-                } 
-                if (seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend() 
+                }
+                if (seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::G8_VB) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::F) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::G8_VB);
                 }
-                if (seg_clefTypes.find(mu::engraving::ClefType::F) != seg_clefTypes.cend()  
+                if (seg_clefTypes.find(mu::engraving::ClefType::F) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::F8_VB) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::G8_VB) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::F);
-                } 
-                if (seg_clefTypes.find(mu::engraving::ClefType::G8_VA) != seg_clefTypes.cend() 
+                }
+                if (seg_clefTypes.find(mu::engraving::ClefType::G8_VA) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::G15_MA) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::G15_MA);
                 }
-                if (seg_clefTypes.find(mu::engraving::ClefType::G8_VB) != seg_clefTypes.cend() 
+                if (seg_clefTypes.find(mu::engraving::ClefType::G8_VB) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::G);
                 }
-                if (seg_clefTypes.find(mu::engraving::ClefType::G8_VA) != seg_clefTypes.cend() 
+                if (seg_clefTypes.find(mu::engraving::ClefType::G8_VA) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::G);
                 }
-                if (seg_clefTypes.find(mu::engraving::ClefType::F) != seg_clefTypes.cend() 
+                if (seg_clefTypes.find(mu::engraving::ClefType::F) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::F_8VA) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::F8_VB) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::F);
                 }
-                if (seg_clefTypes.find(mu::engraving::ClefType::F_8VA) != seg_clefTypes.cend() 
+                if (seg_clefTypes.find(mu::engraving::ClefType::F_8VA) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::F) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::F);
                 }
-                if (seg_clefTypes.find(mu::engraving::ClefType::F8_VB) != seg_clefTypes.cend() 
+                if (seg_clefTypes.find(mu::engraving::ClefType::F8_VB) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::F) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::F);
                 }
-                if (seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend() 
+                if (seg_clefTypes.find(mu::engraving::ClefType::G) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::F_8VA) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::G);
                 }
-                if (seg_clefTypes.find(mu::engraving::ClefType::F) != seg_clefTypes.cend() 
+                if (seg_clefTypes.find(mu::engraving::ClefType::F) != seg_clefTypes.cend()
                     && seg_clefTypes.find(mu::engraving::ClefType::G8_VB) != seg_clefTypes.cend()) {
                     seg_clefTypes.erase(mu::engraving::ClefType::F);
                 }
@@ -1361,8 +1368,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                     }
                     score_clef_map[_ticks].insert(_clefType);
                 }
-            } 
-        
+            }
             mu::engraving::Segment* next_segment = segment->next(mu::engraving::SegmentType::ChordRest);
             segment = next_segment;
         }
@@ -1370,7 +1376,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
 
     std::set<mu::engraving::Key> last_keySigKeys;
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
-        std::vector<std::set<mu::engraving::Key>> seg_keySigKeys;
+        std::vector<std::set<mu::engraving::Key> > seg_keySigKeys;
         std::vector<int> seg_tag_ticks;
         for (mu::engraving::Segment* segment = measure->first(mu::engraving::SegmentType::KeySigType); segment;) {
             std::vector<EngravingItem*> keySigItemList = segment->elist();
@@ -1380,12 +1386,11 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 if (keySigItem == nullptr) {
                     continue;
                 }
-                
                 if (segment->tick().ticks() == measure->tick().ticks()) {
-                    mu::engraving::KeySig *keySig = toKeySig(keySigItem);
+                    mu::engraving::KeySig* keySig = toKeySig(keySigItem);
                     mu::engraving::Key key = keySig->key();
                     seg_keySigKeys[seg_keySigKeys.size() - 1].insert(key);
-                } 
+                }
             }
             seg_tag_ticks.push_back(segment->tick().ticks());
 
@@ -1406,7 +1411,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 last_keySigKeys.insert(mu::engraving::Key::C);
                 seg_tag_ticks.push_back(0);
             }
-        } 
+        }
 
         if (!seg_keySigKeys.empty() && last_keySigKeys.empty()) {
             for (const auto& _key : seg_keySigKeys[0]) {
@@ -1484,7 +1489,6 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
             }
         }
     }
-    
     for (const auto& [_ticks, _clefTypes] : score_clef_map) {
         if (score_keysig_map.find(_ticks) == score_keysig_map.end()) {
             continue;
@@ -1587,11 +1591,12 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 if (_item == nullptr) {
                     continue;
                 }
-                if (!isNotesExist && (_item->type() == mu::engraving::ElementType::MMREST || _item->type() == mu::engraving::ElementType::REST)) {
+                if (!isNotesExist
+                    && (_item->type() == mu::engraving::ElementType::MMREST || _item->type() == mu::engraving::ElementType::REST)) {
                     Rest* rest = toRest(_item);
                     int sTicks = rest->tick().ticks();
                     int eTicks = rest->endTick().ticks();
-                    
+
                     if (sTicks == msTicks && eTicks == meTicks) {
                         isMultimeasure = true;
                         if (!multimeasureRestsFlag) {
@@ -1600,7 +1605,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                             multimeasureRestsStartSystem = _preSystem;
                             multimeasureStartNo = _measure->no();
                         }
-                        
+
                         double y = 0;
                         if (__system) {
                             y = __system->staffYpage(0) + __system->page()->pos().y();
@@ -1614,7 +1619,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                             mu::engraving::SysStaff* ss;
                             if (__system) {
                                 ss = __system->staff(i);
-                            } 
+                            }
                             if (ss) {
                                 if (!ss->show() || !score->staff(i)->show()) {
                                     continue;
@@ -1640,11 +1645,12 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                     multimeasureRestsFlag = false;
                     int multimeasureEndNo = _measure->no() - 1;
                     int multimeasuresCount = multimeasureEndNo - multimeasureStartNo + 1;
-                    
+
                     int _x = multimeasureRestsStartPreMeasureRect.x() + multimeasureRestsStartPreMeasureRect.width();
-                    int _dwidth = _measure->canvasBoundingRect().x() - _x; 
+                    int _dwidth = _measure->canvasBoundingRect().x() - _x;
                     if (_dwidth < 0 && multimeasureRestsStartSystem) {
-                        _dwidth = multimeasureRestsStartSystem->canvasBoundingRect().x() + multimeasureRestsStartSystem->canvasBoundingRect().width() - _x;
+                        _dwidth = multimeasureRestsStartSystem->canvasBoundingRect().x()
+                                  + multimeasureRestsStartSystem->canvasBoundingRect().width() - _x;
                     }
                     for (int _no = multimeasureStartNo; _no <= multimeasureEndNo; _no++) {
                         int __x = _x + (_no - multimeasureStartNo) * _dwidth / multimeasuresCount;
@@ -1660,7 +1666,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 if (_measure == score->lastMeasure()) {
                     int multimeasureEndNo = _measure->no();
                     int multimeasuresCount = multimeasureEndNo - multimeasureStartNo + 1;
-                    
+
                     int _x = multimeasureRestsStartPreMeasureRect.x() + multimeasureRestsStartPreMeasureRect.width();
                     int _dwidth = __system->canvasBoundingRect().x() + __system->canvasBoundingRect().width() - _x;
                     for (int _no = multimeasureStartNo; _no <= multimeasureEndNo; _no++) {
@@ -1678,7 +1684,8 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
     }
 }
 
-void PlaybackCursor::processCursorSpannerRenderStatus(Measure* measure, Fraction tick, bool recover, bool isPlaying) {
+void PlaybackCursor::processCursorSpannerRenderStatus(Measure* measure, Fraction tick, bool recover, bool isPlaying)
+{
     if (m_cursorSpannerRenderStatusProcessFuture.valid()) {
         m_cursorSpannerRenderStatusProcessFuture.wait();
     }
@@ -1687,12 +1694,13 @@ void PlaybackCursor::processCursorSpannerRenderStatus(Measure* measure, Fraction
     });
 }
 
-void PlaybackCursor::processCursorSpannerRenderStatusAsync(Measure* measure, Fraction tick, bool recover, bool isPlaying) {
+void PlaybackCursor::processCursorSpannerRenderStatusAsync(Measure* measure, Fraction tick, bool recover, bool isPlaying)
+{
     for (EngravingItem* _item : measure_spanner_map[measure->no()]) {
         int max_rollback_measures = 4;
         if (recover) {
             max_rollback_measures = 8;
-        } 
+        }
         if (spanner_ticks_map.find(_item) != spanner_ticks_map.end()) {
             if (recover) {
                 _item->setColor(muse::draw::Color::BLACK);
@@ -1730,7 +1738,8 @@ void PlaybackCursor::processCursorSpannerRenderStatusAsync(Measure* measure, Fra
     }
 }
 
-void PlaybackCursor::processCursorNoteRenderStatus(Measure* measure, int curr_ticks) {
+void PlaybackCursor::processCursorNoteRenderStatus(Measure* measure, int curr_ticks)
+{
     if (m_cursorNoteRenderStatusProcessFuture.valid()) {
         m_cursorNoteRenderStatusProcessFuture.wait();
     }
@@ -1739,7 +1748,8 @@ void PlaybackCursor::processCursorNoteRenderStatus(Measure* measure, int curr_ti
     });
 }
 
-void PlaybackCursor::processCursorNoteRenderStatusAsync(Measure* measure, int curr_ticks) {
+void PlaybackCursor::processCursorNoteRenderStatusAsync(Measure* measure, int curr_ticks)
+{
     for (mu::engraving::Segment* segment = measure->first(mu::engraving::SegmentType::ChordRest); segment;) {
         std::vector<EngravingItem*> engravingItemListOfPrevMeasure = segment->elist();
         size_t prev_len = engravingItemListOfPrevMeasure.size();
@@ -1759,12 +1769,11 @@ void PlaybackCursor::processCursorNoteRenderStatusAsync(Measure* measure, int cu
                 if (item == nullptr) {
                     continue;
                 }
-                
                 if (item->type() == mu::engraving::ElementType::NOTE) {
-                    Note *_pre_note = toNote(item);
+                    Note* _pre_note = toNote(item);
                     if (_pre_note->isGrace()) {
                         _pre_note->setColor(muse::draw::Color::BLACK);
-                    } 
+                    }
                     for (int k = 0; k < _pre_note->qmlDotsCount(); k++) {
                         _pre_note->dot(k)->setColor(muse::draw::Color::BLACK);
                     }
@@ -1809,7 +1818,8 @@ void PlaybackCursor::processCursorNoteRenderStatusAsync(Measure* measure, int cu
     }
 }
 
-void PlaybackCursor::processCursorNoteRenderRecover(EngravingItem* engravingItem, int curr_ticks) {
+void PlaybackCursor::processCursorNoteRenderRecover(EngravingItem* engravingItem, int curr_ticks)
+{
     if (m_cursorNoteRenderRecoverFuture.valid()) {
         m_cursorNoteRenderRecoverFuture.wait();
     }
@@ -1818,15 +1828,17 @@ void PlaybackCursor::processCursorNoteRenderRecover(EngravingItem* engravingItem
     });
 }
 
-void PlaybackCursor::processCursorNoteRenderRecoverAsync(EngravingItem* engravingItem, int curr_ticks) {
-    ChordRest *chordRest = toChordRest(engravingItem);
+void PlaybackCursor::processCursorNoteRenderRecoverAsync(EngravingItem* engravingItem, int curr_ticks)
+{
+    ChordRest* chordRest = toChordRest(engravingItem);
     int duration_ticks = chordRest->durationTypeTicks().ticks();
     if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
-        mu::engraving::Fermata *fermata = toFermata(chordrest_fermata_map[engravingItem]);
+        mu::engraving::Fermata* fermata = toFermata(chordrest_fermata_map[engravingItem]);
         double stretch = fermata->timeStretch();
-        if (chordRest->tick().ticks() + duration_ticks * stretch > curr_ticks)
-        if (curr_ticks < chordRest->tick().ticks() || curr_ticks >= chordRest->tick().ticks() + duration_ticks * stretch) {
-            chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
+        if (chordRest->tick().ticks() + duration_ticks * stretch > curr_ticks) {
+            if (curr_ticks < chordRest->tick().ticks() || curr_ticks >= chordRest->tick().ticks() + duration_ticks * stretch) {
+                chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
+            }
         }
     }
     engravingItem->setColor(muse::draw::Color::BLACK);
@@ -1837,9 +1849,8 @@ void PlaybackCursor::processCursorNoteRenderRecoverAsync(EngravingItem* engravin
         if (item == nullptr) {
             continue;
         }
-        
         if (item->type() == mu::engraving::ElementType::NOTE) {
-            Note *_pre_note = toNote(item);
+            Note* _pre_note = toNote(item);
             // check grace
             bool is_grace = _pre_note->isGrace();
             if (is_grace) {
@@ -1884,7 +1895,8 @@ void PlaybackCursor::processCursorNoteRenderRecoverAsync(EngravingItem* engravin
     }
 }
 
-muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, bool isPlaying) {
+muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, bool isPlaying)
+{
     Fraction tick = Fraction::fromTicks(_tick);
     if (!m_notation) {
         return RectF();
@@ -1933,7 +1945,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
         int x1 = s->canvasPos().x();
         qreal x2 = 0.0;
         Fraction t2;
-        
         if (isPlaying) {
             std::vector<EngravingItem*> engravingItemList = s->elist();
             size_t len = engravingItemList.size();
@@ -1942,7 +1953,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                 if (engravingItem == nullptr) {
                     continue;
                 }
-                ChordRest *chordRest = toChordRest(engravingItem);
+                ChordRest* chordRest = toChordRest(engravingItem);
                 // mu::engraving::TDuration duration = chordRest->durationType();
                 // int duration_ticks = duration.ticks().ticks();
                 int duration_ticks = chordRest->durationTypeTicks().ticks();
@@ -1955,7 +1966,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                             if (clefKeySigsKeysMap.find(curr_seg_ticks) != clefKeySigsKeysMap.end()) {
                                 if (clefKeySigsKeysMap[curr_seg_ticks].size() > 0) {
                                     m_notation->interaction()->addClefKeySigsKeysSet(clefKeySigsKeysMap[curr_seg_ticks]);
-                                    m_notation->interaction()->notifyClefKeySigsKeysChange();    
+                                    m_notation->interaction()->notifyClefKeySigsKeysChange();
                                 }
                             }
                         }
@@ -1967,27 +1978,36 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
 
                     if (pianoKeyboardPlaybackEnable) {
                         if (score_trill_map[engravingItem]) {
-                            m_notation->interaction()->addTrillNote(score_trill_map[engravingItem], score_trill_type_map[engravingItem], score_trill_st_map[engravingItem], 
-                                score_trill_dt_map[engravingItem], score_trill_tdt_map[engravingItem], score_trill_tt_map[engravingItem], score_trill_ot_map[engravingItem], 
-                                score_trill_tie_map[score_trill_map[engravingItem]]);
+                            m_notation->interaction()->addTrillNote(score_trill_map[engravingItem], score_trill_type_map[engravingItem],
+                                                                    score_trill_st_map[engravingItem],
+                                                                    score_trill_dt_map[engravingItem], score_trill_tdt_map[engravingItem],
+                                                                    score_trill_tt_map[engravingItem], score_trill_ot_map[engravingItem],
+                                                                    score_trill_tie_map[score_trill_map[engravingItem]]);
                             m_notation->interaction()->trillNoteUpdate();
                         }
                         if (score_trill_map1[engravingItem]) {
-                            m_notation->interaction()->addTrillNote1(score_trill_map1[engravingItem], score_trill_type_map1[engravingItem], score_trill_st_map1[engravingItem], 
-                                score_trill_dt_map1[engravingItem], score_trill_tdt_map1[engravingItem], score_trill_tt_map1[engravingItem], score_trill_ot_map1[engravingItem], 
-                                score_trill_tie_map1[score_trill_map1[engravingItem]]);
+                            m_notation->interaction()->addTrillNote1(score_trill_map1[engravingItem], score_trill_type_map1[engravingItem],
+                                                                     score_trill_st_map1[engravingItem],
+                                                                     score_trill_dt_map1[engravingItem],
+                                                                     score_trill_tdt_map1[engravingItem],
+                                                                     score_trill_tt_map1[engravingItem], score_trill_ot_map1[engravingItem],
+                                                                     score_trill_tie_map1[score_trill_map1[engravingItem]]);
                             m_notation->interaction()->trillNoteUpdate1();
                         }
 
                         if (score_arpeggio_map.find(engravingItem) != score_arpeggio_map.end()) {
-                            m_notation->interaction()->addArpeggioNotes(score_arpeggio_map[engravingItem], score_arpeggio_st_map[engravingItem], score_arpeggio_dt_map[engravingItem], score_arpeggio_ot_map[engravingItem]);
+                            m_notation->interaction()->addArpeggioNotes(score_arpeggio_map[engravingItem],
+                                                                        score_arpeggio_st_map[engravingItem],
+                                                                        score_arpeggio_dt_map[engravingItem],
+                                                                        score_arpeggio_ot_map[engravingItem]);
                             m_notation->interaction()->arpeggioNotesUpdate(false);
                         }
 
                         if (score_glissando_endnotes_map.find(engravingItem) != score_glissando_endnotes_map.end()) {
-                            m_notation->interaction()->addGlissandoNote(score_glissando_startnote_map[engravingItem], 
-                                        score_glissando_st_map[engravingItem], score_glissando_dt_map[engravingItem], 
-                                        score_glissando_ot_map[engravingItem]);
+                            m_notation->interaction()->addGlissandoNote(score_glissando_startnote_map[engravingItem],
+                                                                        score_glissando_st_map[engravingItem],
+                                                                        score_glissando_dt_map[engravingItem],
+                                                                        score_glissando_ot_map[engravingItem]);
                             std::vector<Note*> _endNotes = score_glissando_endnotes_map[engravingItem];
                             for (Note* _note : _endNotes) {
                                 m_notation->interaction()->addGlissandoEndNote(_note, ottava_map[_note]);
@@ -2015,16 +2035,17 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                 if (_pre_note->chord()->durationType().type() == mu::engraving::DurationType::V_HALF) {
                                     note_dt /= 2;
                                 }
-                                if (_pre_note->chord()->durationType().type() >= mu::engraving::DurationType::V_EIGHTH 
-                                && _pre_note->chord()->durationType().type() <= mu::engraving::DurationType::V_1024TH) {
+                                if (_pre_note->chord()->durationType().type()
+                                    >= mu::engraving::DurationType::V_EIGHTH
+                                    && _pre_note->chord()->durationType().type()
+                                    <= mu::engraving::DurationType::V_1024TH) {
                                     note_dt *= 4;
                                 }
                                 if (ticks_dis >= 0 && ticks_dis <= note_dt / 8) {
                                     note_hit_ts = true;
                                 }
                             }
-                            
-                            int _pre_note_ottavaType = ottava_map[_pre_note];  
+                            int _pre_note_ottavaType = ottava_map[_pre_note];
                             // check grace
                             bool is_grace = _pre_note->isGrace();
                             if (!is_grace) {
@@ -2050,8 +2071,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                         grace_duration_ticks /= 2;
                                     } else if (_pre_note->chord()->durationType().type() >= mu::engraving::DurationType::V_64TH) {
                                         grace_duration_ticks /= 2;
-                                    } 
-                                    
+                                    }
+
                                     std::vector<Chord*> graceChords;
                                     for (auto& _g : _graceChords) {
                                         graceChords.push_back(_g);
@@ -2061,7 +2082,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                     if (grace_before) {
                                         if (ticks_dis < grace_duration_ticks) {
                                             for (size_t grace_i = 0; grace_i < gracechords_size; ++grace_i) {
-                                                if (ticks_dis >= single_grace_duration_ticks * grace_i && ticks_dis <= single_grace_duration_ticks * (grace_i + 1)) {
+                                                if (ticks_dis >= single_grace_duration_ticks * grace_i
+                                                    && ticks_dis <= single_grace_duration_ticks * (grace_i + 1)) {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::RED);
                                                     for (Note* choreNote : graceChords[grace_i]->notes()) {
                                                         if (choreNote->accidental()) {
@@ -2104,7 +2126,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                                     }
                                                     Beam* _beam = graceChords[grace_i]->beam();
                                                     if (_beam) {
-                                                        if (tick.ticks() < _beam->tick().ticks() || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
+                                                        if (tick.ticks() < _beam->tick().ticks()
+                                                            || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
                                                             _beam->setColor(muse::draw::Color::BLACK);
                                                         }
                                                     }
@@ -2134,13 +2157,14 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                                 }
                                                 Beam* _beam = _pre_note->chord()->beam();
                                                 if (_beam) {
-                                                    if (tick.ticks() < _beam->tick().ticks() || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
+                                                    if (tick.ticks() < _beam->tick().ticks()
+                                                        || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
                                                         _beam->setColor(muse::draw::Color::BLACK);
                                                     }
                                                 }
                                             }
                                         } else {
-                                            for (Chord *_chord : _graceChords) {
+                                            for (Chord* _chord : _graceChords) {
                                                 _chord->setColor(muse::draw::Color::BLACK);
                                                 for (Note* choreNote : _chord->notes()) {
                                                     if (choreNote->accidental()) {
@@ -2157,7 +2181,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                                 }
                                                 Beam* _beam = _chord->beam();
                                                 if (_beam) {
-                                                    if (tick.ticks() < _beam->tick().ticks() || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
+                                                    if (tick.ticks() < _beam->tick().ticks()
+                                                        || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
                                                         _beam->setColor(muse::draw::Color::BLACK);
                                                     }
                                                 }
@@ -2198,7 +2223,10 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                         int _pre_note_duration_ticks = _pre_note->chord()->durationTypeTicks().ticks();
                                         if (ticks_dis + grace_duration_ticks > _pre_note_duration_ticks) {
                                             for (size_t grace_i = 0; grace_i < gracechords_size; ++grace_i) {
-                                                if (ticks_dis >= _pre_note_duration_ticks - single_grace_duration_ticks * (gracechords_size - grace_i) && ticks_dis <= _pre_note_duration_ticks - single_grace_duration_ticks * (gracechords_size - grace_i - 1)) {
+                                                if (ticks_dis >= _pre_note_duration_ticks - single_grace_duration_ticks
+                                                    * (gracechords_size - grace_i)
+                                                    && ticks_dis <= _pre_note_duration_ticks - single_grace_duration_ticks
+                                                    * (gracechords_size - grace_i - 1)) {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::RED);
                                                     for (Note* choreNote : graceChords[grace_i]->notes()) {
                                                         if (choreNote->accidental()) {
@@ -2220,7 +2248,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                                     if (pianoKeyboardPlaybackEnable) {
                                                         for (Note* _note_item : graceChords[grace_i]->notes()) {
                                                             int _note_item_ottavaType = ottava_map[_note_item];
-                                                            m_notation->interaction()->addPlaybackNote(_note_item, _note_item_ottavaType, false);
+                                                            m_notation->interaction()->addPlaybackNote(_note_item, _note_item_ottavaType,
+                                                                                                       false);
                                                         }
                                                     }
                                                 } else {
@@ -2240,7 +2269,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                                     }
                                                     Beam* _beam = graceChords[grace_i]->beam();
                                                     if (_beam) {
-                                                        if (tick.ticks() < _beam->tick().ticks() || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
+                                                        if (tick.ticks() < _beam->tick().ticks()
+                                                            || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
                                                             _beam->setColor(muse::draw::Color::BLACK);
                                                         }
                                                     }
@@ -2269,14 +2299,15 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                                     }
                                                     Beam* _beam = _pre_note->chord()->beam();
                                                     if (_beam) {
-                                                        if (tick.ticks() < _beam->tick().ticks() || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
+                                                        if (tick.ticks() < _beam->tick().ticks()
+                                                            || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
                                                             _beam->setColor(muse::draw::Color::BLACK);
                                                         }
                                                     }
                                                 }
                                             }
                                         } else {
-                                            for (Chord *_chord : _graceChords) {
+                                            for (Chord* _chord : _graceChords) {
                                                 _chord->setColor(muse::draw::Color::BLACK);
                                                 for (Note* choreNote : _chord->notes()) {
                                                     if (choreNote->accidental()) {
@@ -2293,7 +2324,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                                 }
                                                 Beam* _beam = _chord->beam();
                                                 if (_beam) {
-                                                    if (tick.ticks() < _beam->tick().ticks() || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
+                                                    if (tick.ticks() < _beam->tick().ticks()
+                                                        || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
                                                         _beam->setColor(muse::draw::Color::BLACK);
                                                     }
                                                 }
@@ -2338,7 +2370,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                     if (_pre_note->accidental()) {
                                         _pre_note->accidental()->setColor(muse::draw::Color::RED);
                                     }
-                                    
                                     if (_pre_note->chord()) {
                                         if (_pre_note->chord()->articulations().size() > 0) {
                                             std::vector<Articulation*> mArticulations = _pre_note->chord()->articulations();
@@ -2366,13 +2397,12 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                                     }
                                 }
                             }
-                        } 
+                        }
 
                         if (item->type() == mu::engraving::ElementType::ARPEGGIO) {
                             item->setColor(muse::draw::Color::RED);
                         }
                     }
-
                 }
             }
         }
@@ -2421,7 +2451,7 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
         setHitMeasureNo(measureNo);
         setHitMeasure(measure);
     }
-    
+
     if (pianoKeyboardPlaybackEnable) {
         m_notation->interaction()->notifyPianoKeyboardNotesChanged();
     }
@@ -2446,9 +2476,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                     if (item == nullptr) {
                         continue;
                     }
-                    
                     if (item->type() == mu::engraving::ElementType::NOTE) {
-                        Note *_pre_note = toNote(item);
+                        Note* _pre_note = toNote(item);
                         if (_pre_note->isGrace()) {
                             _pre_note->setColor(muse::draw::Color::BLACK);
                         }
@@ -2476,7 +2505,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
                             }
                             Beam* _beam = _pre_note->chord()->beam();
                             if (_beam) {
-                                if (tick.ticks() < _beam->tick().ticks() || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
+                                if (tick.ticks() < _beam->tick().ticks()
+                                    || tick.ticks() >= _beam->tick().ticks() + _beam->ticks().ticks()) {
                                     _beam->setColor(muse::draw::Color::BLACK);
                                 }
                             }
@@ -2494,7 +2524,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
             }
             segment = next_segment;
         }
-
         processCursorSpannerRenderStatus(hit_measure(), tick, true, isPlaying);
     }
     if (pianoKeyboardPlaybackEnable) {
@@ -2548,7 +2577,6 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
 
             double nm_y2 = 0.0;
             double nm_h  = 6 * _spatium;
-            
             for (size_t i = 0; i < score->nstaves(); ++i) {
                 mu::engraving::SysStaff* nm_ss = nm_system->staff(i);
                 if (!nm_ss->show() || !score->staff(i)->show()) {
@@ -2568,10 +2596,8 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, b
             m_nm_no = next_measure->no();
         }
     }
-
     return RectF(x, y, w, h);
 }
-
 
 bool PlaybackCursor::visible() const
 {
@@ -2603,19 +2629,22 @@ QColor PlaybackCursor::color() const
     return configuration()->playbackCursorColor();
 }
 
-int PlaybackCursor::hit_measure_no() 
-{ 
-    return m_hit_measure_no; 
+int PlaybackCursor::hit_measure_no()
+{
+    return m_hit_measure_no;
 }
-Measure* PlaybackCursor::hit_measure() 
+
+Measure* PlaybackCursor::hit_measure()
 {
     return m_hit_measure;
 }
-void PlaybackCursor::setHitMeasureNo(int m_no) 
-{ 
-    m_hit_measure_no = m_no; 
+
+void PlaybackCursor::setHitMeasureNo(int m_no)
+{
+    m_hit_measure_no = m_no;
 }
-void PlaybackCursor::setHitMeasure(Measure* m) 
+
+void PlaybackCursor::setHitMeasure(Measure* m)
 {
     m_hit_measure = m;
 }

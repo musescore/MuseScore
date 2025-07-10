@@ -371,7 +371,7 @@ void NotationInteraction::notifyAboutSelectionChangedIfNeed()
     m_selectionChanged.notify();
 }
 
-void NotationInteraction::notifyAboutPianoKeyboardNotesChanged() 
+void NotationInteraction::notifyAboutPianoKeyboardNotesChanged()
 {
     TRACEFUNC;
 
@@ -1128,21 +1128,22 @@ muse::async::Notification NotationInteraction::selectionChanged() const
     return m_selectionChanged;
 }
 
-muse::async::Notification NotationInteraction::playbackNotesChanged() const 
+muse::async::Notification NotationInteraction::playbackNotesChanged() const
 {
     return m_playbackNotesChanged;
 }
 
-std::vector<mu::engraving::Note*> NotationInteraction::playbackNotes() const 
+std::vector<mu::engraving::Note*> NotationInteraction::playbackNotes() const
 {
     return m_playback_notes;
 }
-std::map<const Note*, bool> NotationInteraction::playbackNotesHitTsMap() const 
+
+std::map<const Note*, bool> NotationInteraction::playbackNotesHitTsMap() const
 {
     return m_playback_notes_hit_ts;
 }
 
-void NotationInteraction::addPlaybackNote(Note* note, int ottavaType, bool hit_ts) 
+void NotationInteraction::addPlaybackNote(Note* note, int ottavaType, bool hit_ts)
 {
     if (ottavaType > 0) {
         m_ottava_map[note] = ottavaType;
@@ -1153,7 +1154,7 @@ void NotationInteraction::addPlaybackNote(Note* note, int ottavaType, bool hit_t
     }
 }
 
-int NotationInteraction::noteOttavaType(const mu::engraving::Note* note) 
+int NotationInteraction::noteOttavaType(const mu::engraving::Note* note)
 {
     if (m_ottava_map.find(note) != m_ottava_map.end()) {
         return m_ottava_map[note];
@@ -1161,7 +1162,7 @@ int NotationInteraction::noteOttavaType(const mu::engraving::Note* note)
     return 0;
 }
 
-void NotationInteraction::addGlissandoNote(mu::engraving::Note* note, int ticks, int duration_ticks, int ottavaType) 
+void NotationInteraction::addGlissandoNote(mu::engraving::Note* note, int ticks, int duration_ticks, int ottavaType)
 {
     glissando_endnotes.clear();
     glissando_note = note;
@@ -1172,55 +1173,66 @@ void NotationInteraction::addGlissandoNote(mu::engraving::Note* note, int ticks,
         m_ottava_map[note] = ottavaType;
     }
 }
-void NotationInteraction::addGlissandoEndNote(mu::engraving::Note* note, int ottavaType) 
+
+void NotationInteraction::addGlissandoEndNote(mu::engraving::Note* note, int ottavaType)
 {
     glissando_endnotes.push_back(note);
     if (ottavaType > 0) {
         m_ottava_map[note] = ottavaType;
     }
 }
-int NotationInteraction::glissandoNoteTicks() const {
+
+int NotationInteraction::glissandoNoteTicks() const
+{
     return glissando_ticks;
 }
-int NotationInteraction::glissandoNoteDurationticks() const {
+
+int NotationInteraction::glissandoNoteDurationticks() const
+{
     return glissando_duration_ticks;
 }
-int NotationInteraction::glissandoCurrticks() const 
+
+int NotationInteraction::glissandoCurrticks() const
 {
     return glissando_curr_ticks;
 }
-void NotationInteraction::glissandoEndNotesUpdate() 
+
+void NotationInteraction::glissandoEndNotesUpdate()
 {
     m_glissandoEndNotesChanged.notify();
 }
-muse::async::Notification NotationInteraction::glissandoEndNotesChanged() 
+
+muse::async::Notification NotationInteraction::glissandoEndNotesChanged()
 {
     return m_glissandoEndNotesChanged;
 }
 
-mu::engraving::Note *NotationInteraction::glissandoNote() const 
+mu::engraving::Note* NotationInteraction::glissandoNote() const
 {
     return glissando_note;
 }
-std::vector<mu::engraving::Note*> NotationInteraction::glissandoEndNotes() const 
+
+std::vector<mu::engraving::Note*> NotationInteraction::glissandoEndNotes() const
 {
     return glissando_endnotes;
 }
-void NotationInteraction::glissandoTick(int ticks) 
+
+void NotationInteraction::glissandoTick(int ticks)
 {
     glissando_curr_ticks = ticks;
     m_glissandoTickChanged.notify();
 }
-muse::async::Notification NotationInteraction::glissandoTickChanged() 
+
+muse::async::Notification NotationInteraction::glissandoTickChanged()
 {
     return m_glissandoTickChanged;
 }
 
-void NotationInteraction::addArpeggioNotes(std::vector<mu::engraving::Note*> notes, int ticks, int duration_ticks, int ottavaType) 
+void NotationInteraction::addArpeggioNotes(std::vector<mu::engraving::Note*> notes, int ticks, int duration_ticks, int ottavaType)
 {
     arpeggio_notes.clear();
     for (const auto& note : notes) {
-        arpeggio_notes.push_back(note);  
+        arpeggio_notes.push_back(note);
         if (ottavaType > 0) {
             m_ottava_map[note] = ottavaType;
         }
@@ -1229,40 +1241,49 @@ void NotationInteraction::addArpeggioNotes(std::vector<mu::engraving::Note*> not
     arpeggio_curr_ticks = ticks;
     arpeggio_duration_ticks = duration_ticks;
 }
-void NotationInteraction::updateArpeggioDuration(int duration_ticks) 
+
+void NotationInteraction::updateArpeggioDuration(int duration_ticks)
 {
     arpeggio_duration_ticks = duration_ticks;
 }
-int NotationInteraction::arpeggioNoteTicks() const 
+
+int NotationInteraction::arpeggioNoteTicks() const
 {
     return arpeggio_ticks;
 }
-int NotationInteraction::arpeggioNoteDurationticks() const 
+
+int NotationInteraction::arpeggioNoteDurationticks() const
 {
     return arpeggio_duration_ticks;
 }
-int NotationInteraction::arpeggioCurrticks() const 
+
+int NotationInteraction::arpeggioCurrticks() const
 {
     return arpeggio_curr_ticks;
 }
-muse::async::Notification NotationInteraction::arpeggioNotesChanged() 
+
+muse::async::Notification NotationInteraction::arpeggioNotesChanged()
 {
     return m_arpeggioNotesChanged;
 }
-std::vector<mu::engraving::Note*> NotationInteraction::arpeggioNotes() const 
+
+std::vector<mu::engraving::Note*> NotationInteraction::arpeggioNotes() const
 {
     return arpeggio_notes;
 }
-bool NotationInteraction::arpeggioIsDown() const 
+
+bool NotationInteraction::arpeggioIsDown() const
 {
     return arpeggio_is_down;
 }
-void NotationInteraction::arpeggioNotesUpdate(bool isDown) 
+
+void NotationInteraction::arpeggioNotesUpdate(bool isDown)
 {
     arpeggio_is_down = isDown;
     m_arpeggioNotesChanged.notify();
 }
-void NotationInteraction::arpeggioTick(int ticks) 
+
+void NotationInteraction::arpeggioTick(int ticks)
 {
     if (arpeggio_duration_ticks == 0) {
         arpeggio_curr_ticks = ticks;
@@ -1277,12 +1298,14 @@ void NotationInteraction::arpeggioTick(int ticks)
     arpeggio_curr_ticks = ticks;
     m_arpeggioTickChanged.notify();
 }
-muse::async::Notification NotationInteraction::arpeggioTickChanged() 
+
+muse::async::Notification NotationInteraction::arpeggioTickChanged()
 {
     return m_arpeggioTickChanged;
 }
 
-void NotationInteraction::addTrillNote(mu::engraving::Note* note, int _trill_type, int ticks, int duration_ticks, int _trill_duration_ticks, int tremolo_type, int ottavaType, bool hasTie) 
+void NotationInteraction::addTrillNote(mu::engraving::Note* note, int _trill_type, int ticks, int duration_ticks, int _trill_duration_ticks,
+                                       int tremolo_type, int ottavaType, bool hasTie)
 {
     trill_note = note;
     trill_type = _trill_type;
@@ -1295,7 +1318,9 @@ void NotationInteraction::addTrillNote(mu::engraving::Note* note, int _trill_typ
         m_ottava_map[note] = ottavaType;
     }
 }
-void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int _trill_type, int ticks, int duration_ticks, int _trill_duration_ticks, int tremolo_type, int ottavaType, bool hasTie) 
+
+void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int _trill_type, int ticks, int duration_ticks,
+                                        int _trill_duration_ticks, int tremolo_type, int ottavaType, bool hasTie)
 {
     trill_note1 = note;
     trill_type1 = _trill_type;
@@ -1308,79 +1333,98 @@ void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int _trill_ty
         m_ottava_map[note] = ottavaType;
     }
 }
-int NotationInteraction::trillNoteTicks() const 
+
+int NotationInteraction::trillNoteTicks() const
 {
     return trill_ticks;
 }
-int NotationInteraction::trillNoteTicks1() const 
+
+int NotationInteraction::trillNoteTicks1() const
 {
     return trill_ticks1;
 }
-bool NotationInteraction::trillNoteHasTie() const 
+
+bool NotationInteraction::trillNoteHasTie() const
 {
     return till_note_hastie;
 }
-bool NotationInteraction::trillNote1HasTie() const 
+
+bool NotationInteraction::trillNote1HasTie() const
 {
     return till_note1_hastie;
 }
-int NotationInteraction::trillNoteDurationticks() const 
+
+int NotationInteraction::trillNoteDurationticks() const
 {
     return trill_duration_ticks;
 }
-int NotationInteraction::trillNoteDurationticks1() const 
+
+int NotationInteraction::trillNoteDurationticks1() const
 {
     return trill_duration_ticks1;
 }
-int NotationInteraction::trillTrillNoteDurationticks() const 
+
+int NotationInteraction::trillTrillNoteDurationticks() const
 {
     return trill_trill_duration_ticks;
 }
-int NotationInteraction::trillTrillNoteDurationticks1() const 
+
+int NotationInteraction::trillTrillNoteDurationticks1() const
 {
     return trill_trill_duration_ticks1;
 }
-int NotationInteraction::trillNoteTremolotype() const 
+
+int NotationInteraction::trillNoteTremolotype() const
 {
     return trill_tremolo_type;
 }
-int NotationInteraction::trillNoteTremolotype1() const 
+
+int NotationInteraction::trillNoteTremolotype1() const
 {
     return trill_tremolo_type1;
 }
-int NotationInteraction::trillCurrticks() const 
+
+int NotationInteraction::trillCurrticks() const
 {
     return trill_curr_ticks;
 }
-int NotationInteraction::trillCurrticks1() const 
+
+int NotationInteraction::trillCurrticks1() const
 {
     return trill_curr_ticks1;
 }
-void NotationInteraction::trillNoteUpdate() 
+
+void NotationInteraction::trillNoteUpdate()
 {
     m_trillNoteChanged.notify();
 }
-void NotationInteraction::trillNoteUpdate1() 
+
+void NotationInteraction::trillNoteUpdate1()
 {
     m_trillNoteChanged1.notify();
 }
-mu::engraving::Note* NotationInteraction::trillNote() const 
+
+mu::engraving::Note* NotationInteraction::trillNote() const
 {
     return trill_note;
 }
-int NotationInteraction::trillType() const 
+
+int NotationInteraction::trillType() const
 {
     return trill_type;
 }
-mu::engraving::Note* NotationInteraction::trillNote1() const 
+
+mu::engraving::Note* NotationInteraction::trillNote1() const
 {
     return trill_note1;
 }
-int NotationInteraction::trillType1() const 
+
+int NotationInteraction::trillType1() const
 {
     return trill_type1;
 }
-bool NotationInteraction::trillTick(int ticks) 
+
+bool NotationInteraction::trillTick(int ticks)
 {
     if (trill_duration_ticks == 0) {
         trill_curr_ticks = ticks;
@@ -1396,8 +1440,7 @@ bool NotationInteraction::trillTick(int ticks)
             }
         }
     }
-    if (ticks < trill_ticks || ticks > trill_ticks + _trill_duration_ticks) 
-    {
+    if (ticks < trill_ticks || ticks > trill_ticks + _trill_duration_ticks) {
         trill_curr_ticks = ticks;
         trill_ticks = 0;
         trill_duration_ticks = 0;
@@ -1406,12 +1449,13 @@ bool NotationInteraction::trillTick(int ticks)
         trill_note = nullptr;
         m_trillTickChanged.notify();
         return true;
-    } 
+    }
     trill_curr_ticks = ticks;
     m_trillTickChanged.notify();
     return false;
 }
-bool NotationInteraction::trillTick1(int ticks) 
+
+bool NotationInteraction::trillTick1(int ticks)
 {
     if (trill_duration_ticks1 == 0) {
         trill_curr_ticks1 = ticks;
@@ -1427,8 +1471,7 @@ bool NotationInteraction::trillTick1(int ticks)
             }
         }
     }
-    if (ticks < trill_ticks1 || ticks > trill_ticks1 + _trill_duration_ticks) 
-    {
+    if (ticks < trill_ticks1 || ticks > trill_ticks1 + _trill_duration_ticks) {
         trill_curr_ticks1 = ticks;
         trill_ticks1 = 0;
         trill_duration_ticks1 = 0;
@@ -1437,24 +1480,28 @@ bool NotationInteraction::trillTick1(int ticks)
         trill_note1 = nullptr;
         m_trillTickChanged1.notify();
         return true;
-    } 
+    }
     trill_curr_ticks1 = ticks;
     m_trillTickChanged1.notify();
     return false;
 }
-muse::async::Notification NotationInteraction::trillNoteChanged() 
+
+muse::async::Notification NotationInteraction::trillNoteChanged()
 {
     return m_trillNoteChanged;
 }
-muse::async::Notification NotationInteraction::trillNoteChanged1() 
+
+muse::async::Notification NotationInteraction::trillNoteChanged1()
 {
     return m_trillNoteChanged1;
 }
-muse::async::Notification NotationInteraction::trillTickChanged() 
+
+muse::async::Notification NotationInteraction::trillTickChanged()
 {
     return m_trillTickChanged;
 }
-muse::async::Notification NotationInteraction::trillTickChanged1() 
+
+muse::async::Notification NotationInteraction::trillTickChanged1()
 {
     return m_trillTickChanged1;
 }
@@ -1463,33 +1510,34 @@ bool NotationInteraction::islastMeasure() const
 {
     return m_islastMeasure;
 }
-void NotationInteraction::lastMeasure(bool islastMeasure) 
+
+void NotationInteraction::lastMeasure(bool islastMeasure)
 {
     m_islastMeasure = islastMeasure;
     m_lastMeasureChanged.notify();
 }
+
 muse::async::Notification NotationInteraction::lastMeasureChanged()
 {
     return m_lastMeasureChanged;
 }
 
-
-void NotationInteraction::notifyClefKeySigsKeysChanged() 
+void NotationInteraction::notifyClefKeySigsKeysChanged()
 {
     m_clefKeySigsKeysChanged.notify();
 }
 
-muse::async::Notification NotationInteraction::clefKeySigsKeysChanged() const 
+muse::async::Notification NotationInteraction::clefKeySigsKeysChanged() const
 {
     return m_clefKeySigsKeysChanged;
 }
 
-std::set<uint> NotationInteraction::clefKeySigsKeys() const 
+std::set<uint> NotationInteraction::clefKeySigsKeys() const
 {
     return m_clefKeySigsKeys;
 }
 
-void NotationInteraction::addClefKeySigsKeysSet(std::set<uint> clefKeySigsKeys) 
+void NotationInteraction::addClefKeySigsKeysSet(std::set<uint> clefKeySigsKeys)
 {
     m_clefKeySigsKeys.clear();
     for (auto key : clefKeySigsKeys) {
@@ -1497,7 +1545,7 @@ void NotationInteraction::addClefKeySigsKeysSet(std::set<uint> clefKeySigsKeys)
     }
 }
 
-void NotationInteraction::notifyClefKeySigsKeysChange() 
+void NotationInteraction::notifyClefKeySigsKeysChange()
 {
     if (m_clefKeySigsKeys.empty()) {
         return;
@@ -1505,24 +1553,23 @@ void NotationInteraction::notifyClefKeySigsKeysChange()
     m_clefKeySigsKeysChanged.notify();
 }
 
-void NotationInteraction::playingChang(bool is_playing) 
+void NotationInteraction::playingChang(bool is_playing)
 {
     m_isplaying = is_playing;
 }
 
-bool NotationInteraction::isPlaying() const 
+bool NotationInteraction::isPlaying() const
 {
     return m_isplaying;
 }
 
-void NotationInteraction::clearPlaybackNotes() 
+void NotationInteraction::clearPlaybackNotes()
 {
     m_playback_notes.clear();
     m_playback_notes_hit_ts.clear();
-
 }
 
-void NotationInteraction::notifyPianoKeyboardNotesChanged() 
+void NotationInteraction::notifyPianoKeyboardNotesChanged()
 {
     // m_playback_selection
     notifyAboutPianoKeyboardNotesChanged();

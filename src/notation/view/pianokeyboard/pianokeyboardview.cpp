@@ -86,10 +86,8 @@ void PianoKeyboardView::init()
         update();
     });
     // m_controller->glissandoEndNotesChanged().onNotify(this, [this]() {
-        
     // });
     // m_controller->glissandoTickChanged().onNotify(this, [this]() {
-        
     // });
     m_controller->keyStatesChanged().onNotify(this, [this]() {
         updateKeyStateColors();
@@ -163,7 +161,7 @@ void PianoKeyboardView::calculateKeyRects()
     adjustKeysAreaPosition();
 }
 
-bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key) 
+bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
 {
     // offset
     // G#8va    120x1
@@ -179,7 +177,7 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
             }
         }
         return false;
-    } 
+    }
 
     if (keyIndex / 120 == 1) {
         keyIndex -= 120;
@@ -189,7 +187,7 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
             }
         }
         return false;
-    } 
+    }
     if (keyIndex / 120 == 2) {
         keyIndex -= 240;
         for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
@@ -198,7 +196,7 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
             }
         }
         return false;
-    } 
+    }
     if (keyIndex / 120 == 3) {
         keyIndex -= 360;
         for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
@@ -207,7 +205,7 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
             }
         }
         return false;
-    } 
+    }
     if (keyIndex / 120 == 4) {
         keyIndex -= 480;
         for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
@@ -216,7 +214,7 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
             }
         }
         return false;
-    } 
+    }
     if (keyIndex / 120 == 5) {
         keyIndex -= 600;
         for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
@@ -244,7 +242,6 @@ void PianoKeyboardView::adjustKeysAreaPosition()
     if (_height > screenHeight) {
         _height = screenHeight;
     }
-
     qreal keysAreaTop = (_height - m_keysAreaRect.height()) / 2;
 
     qreal minScrollOffset = std::min(_width - m_keysAreaRect.width(), (_width - m_keysAreaRect.width()) / 2);
@@ -256,7 +253,8 @@ void PianoKeyboardView::adjustKeysAreaPosition()
     updateScrollBar();
 }
 
-void PianoKeyboardView::checkResponseKeyOccluded() {
+void PianoKeyboardView::checkResponseKeyOccluded()
+{
     if (!m_controller->isPlaying()) {
         return;
     }
@@ -279,7 +277,7 @@ void PianoKeyboardView::checkResponseKeyOccluded() {
                 m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
                 updateScrollBar();
             }
-        } 
+        }
         return;
     }
 
@@ -294,7 +292,6 @@ void PianoKeyboardView::checkResponseKeyOccluded() {
     if (_height > screenHeight) {
         _height = screenHeight;
     }
-    
     // piano_key_t minKey =  m_check_rects.begin()->first;
     QRectF minRect = m_check_rects.begin()->second;
     // piano_key_t maxKey =  m_check_rects.begin()->first;
@@ -322,11 +319,11 @@ void PianoKeyboardView::checkResponseKeyOccluded() {
             qreal offset = m_scrollOffset + maxRect.x() + maxRect.width() - _width;
             if (maxRect.x() + 2 * maxRect.width() <= m_keysAreaRect.width()) {
                 offset += maxRect.width();
-            } 
+            }
             m_scrollOffset -= offset;
             m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
             updateScrollBar();
-        } 
+        }
     }
 }
 
@@ -365,7 +362,7 @@ void PianoKeyboardView::updateKeyStateColors()
     m_blackKeyBottomPieceStateColors[KeyState::Played] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 1.0);
 }
 
-void PianoKeyboardView::updatePlaybackKeyStateColors() 
+void PianoKeyboardView::updatePlaybackKeyStateColors()
 {
     if (!m_isInitialized) {
         return;
@@ -430,16 +427,21 @@ void PianoKeyboardView::updatePlaybackKeyStateColors()
     m_blackKeyBottomClefSigColor = mixedColors(blackKeyBottomPieceBaseColor, Qt::green, 0.4);
 
     QColor blackKeyRightHandBottomPieceHitColor(255, 100, 0);
-    m_blackKeyBottomPieceStateHitColors[KeyState::RightHand] = mixedColors(blackKeyBottomPieceBaseColor, blackKeyRightHandBottomPieceHitColor, 1.0);
+    m_blackKeyBottomPieceStateHitColors[KeyState::RightHand] = mixedColors(blackKeyBottomPieceBaseColor,
+                                                                           blackKeyRightHandBottomPieceHitColor, 1.0);
 
     QColor blackKeyTrillBottomPieceColor(255, 255, 0);
-    m_blackKeyBottomPieceStateColors[KeyState::Trill] = mixedColors(blackKeyBottomPieceBaseColor, blackKeyTrillBottomPieceColor, 0.8);
+    m_blackKeyBottomPieceStateColors[KeyState::Trill]
+        = mixedColors(blackKeyBottomPieceBaseColor,
+                      blackKeyTrillBottomPieceColor, 0.8);
 
     QColor blackKeyArpeggioBottomPieceColor(255, 255, 0);
-    m_blackKeyBottomPieceStateColors[KeyState::Arpeggio] = mixedColors(blackKeyBottomPieceBaseColor, blackKeyArpeggioBottomPieceColor, 0.8);
+    m_blackKeyBottomPieceStateColors[KeyState::Arpeggio]
+        = mixedColors(blackKeyBottomPieceBaseColor, blackKeyArpeggioBottomPieceColor, 0.8);
 
     QColor blackKeyGlissandoBottomPieceColor(255, 255, 0);
-    m_blackKeyBottomPieceStateColors[KeyState::Glissando] = mixedColors(blackKeyBottomPieceBaseColor, blackKeyGlissandoBottomPieceColor, 0.8);
+    m_blackKeyBottomPieceStateColors[KeyState::Glissando]
+        = mixedColors(blackKeyBottomPieceBaseColor, blackKeyGlissandoBottomPieceColor, 0.8);
 }
 
 void PianoKeyboardView::paint(QPainter* painter)
@@ -711,7 +713,6 @@ void PianoKeyboardView::setNumberOfKeys(int number)
     if (m_numberOfKeys == number) {
         return;
     }
-
     switch (number) {
     case 128:
         m_lowestKey = 0;
@@ -867,8 +868,8 @@ std::optional<piano_key_t> PianoKeyboardView::keyAt(const QPointF& position) con
     return std::nullopt;
 }
 
-void PianoKeyboardView::shiftCheckRects() 
-{   
+void PianoKeyboardView::shiftCheckRects()
+{
     m_check_rects.clear();
 }
 

@@ -112,7 +112,6 @@ public:
     std::vector<mu::engraving::Note*> glissandoEndNotes() const override;
     void glissandoTick(int ticks) override;
     muse::async::Notification glissandoTickChanged() override;
-    
     void addArpeggioNotes(std::vector<mu::engraving::Note*>, int, int, int) override;
     void updateArpeggioDuration(int) override;
     int arpeggioNoteTicks() const override;
@@ -141,9 +140,9 @@ public:
     int trillCurrticks1() const override;
     void trillNoteUpdate() override;
     void trillNoteUpdate1() override;
-    mu::engraving::Note *trillNote() const override;
+    mu::engraving::Note* trillNote() const override;
     int trillType() const override;
-    mu::engraving::Note *trillNote1() const override;
+    mu::engraving::Note* trillNote1() const override;
     int trillType1() const override;
     bool trillTick(int) override;
     bool trillTick1(int) override;
@@ -589,7 +588,6 @@ private:
     std::vector<Note*> m_playback_notes;
     std::map<const Note*, bool> m_playback_notes_hit_ts;
     std::map<const Note*, int> m_ottava_map;
-    
     Note* glissando_note = nullptr;
     int glissando_ticks = 0;
     int glissando_duration_ticks = 0;
