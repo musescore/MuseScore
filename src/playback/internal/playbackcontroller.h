@@ -33,8 +33,11 @@
 #include "notation/inotationplayback.h"
 #include "audio/iplayer.h"
 #include "audio/iplayback.h"
+#include "audio/iaudioconfiguration.h"
 #include "audio/audiotypes.h"
 #include "iinteractive.h"
+#include "tours/itoursservice.h"
+
 #include "drumsetloader.h"
 
 #include "../iplaybackcontroller.h"
@@ -49,8 +52,10 @@ class PlaybackController : public IPlaybackController, public muse::actions::Act
     INJECT_STATIC(IPlaybackConfiguration, configuration)
     INJECT_STATIC(notation::INotationConfiguration, notationConfiguration)
     INJECT_STATIC(muse::audio::IPlayback, playback)
+    INJECT_STATIC(muse::audio::IAudioConfiguration, audioConfiguration)
     INJECT_STATIC(ISoundProfilesRepository, profilesRepo)
     INJECT_STATIC(muse::IInteractive, interactive)
+    INJECT_STATIC(muse::tours::IToursService, tours)
 
 public:
     void init();
@@ -115,6 +120,10 @@ public:
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
+    const std::set<muse::audio::TrackId>& onlineSounds() const override;
+    muse::async::Notification onlineSoundsChanged() const override;
+    muse::Progress onlineSoundsProcessingProgress() const override;
+
 private:
     muse::audio::IPlayerPtr currentPlayer() const;
 
@@ -144,10 +153,10 @@ private:
     void seekListSelection();
     void seekRangeSelection();
 
-    void onAudioResourceChanged(const mu::engraving::InstrumentTrackId& trackId, const muse::audio::AudioResourceMeta& oldMeta,
-                                const muse::audio::AudioResourceMeta& newMeta);
+    void onAudioResourceChanged(const muse::audio::TrackId trackId, const mu::engraving::InstrumentTrackId& instrumentTrackId,
+                                const muse::audio::AudioResourceMeta& oldMeta, const muse::audio::AudioResourceMeta& newMeta);
 
-    bool shouldLoadDrumset(const engraving::InstrumentTrackId& trackId, const muse::audio::AudioResourceMeta& oldMeta,
+    bool shouldLoadDrumset(const engraving::InstrumentTrackId& instrumentTrackId, const muse::audio::AudioResourceMeta& oldMeta,
                            const muse::audio::AudioResourceMeta& newMeta) const;
 
     void addSoundFlagsIfNeed(const std::vector<engraving::EngravingItem*>& selection);
@@ -216,6 +225,13 @@ private:
 
     void onTrackNewlyAdded(const engraving::InstrumentTrackId& instrumentTrackId);
 
+    void addToOnlineSounds(const muse::audio::TrackId trackId);
+    void removeFromOnlineSounds(const muse::audio::TrackId trackId);
+    void listenOnlineSoundsProcessingProgress(const muse::audio::TrackId trackId);
+    void listenAutoProcessOnlineSoundsInBackgroundChanged();
+    bool shouldShowOnlineSoundsConnectionWarning() const;
+    void showOnlineSoundsConnectionWarning();
+
     muse::audio::secs_t playedTickToSecs(int tick) const;
 
     notation::INotationPtr m_notation;
@@ -252,6 +268,12 @@ private:
     DrumsetLoader m_drumsetLoader;
 
     bool m_measureInputLag = false;
+
+    std::set<muse::audio::TrackId> m_onlineSounds;
+    std::set<muse::audio::TrackId> m_onlineSoundsBeingProcessed;
+    muse::async::Notification m_onlineSoundsChanged;
+    muse::Progress m_onlineSoundsProcessingProgress;
+    int m_onlineSoundsProcessingErrorCode = 0;
 };
 }
 

@@ -80,6 +80,8 @@ public:
     virtual void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) = 0;
     virtual async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const = 0;
 
+    virtual async::Promise<InputProcessingProgress> inputProcessingProgress(const TrackSequenceId sequenceId, const TrackId id) const = 0;
+
     virtual void clearSources() = 0;
 
     // 3. Play Sequence

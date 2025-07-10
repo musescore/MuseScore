@@ -683,6 +683,8 @@ UndoMacro::ChangesInfo UndoMacro::changesInfo(bool undo) const
             for (const auto& pair : changeStyle->values()) {
                 result.changedStyleIdSet.insert(pair.first);
             }
+        } else if (type == CommandType::TextEdit) {
+            result.isTextEditing |= static_cast<const TextEditUndoCommand*>(command)->cursor().editing();
         }
 
         if (undo) {

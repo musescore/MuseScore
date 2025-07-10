@@ -40,6 +40,8 @@ class INotationConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~INotationConfiguration() = default;
 
+    virtual QColor notationColor() const = 0;
+
     virtual QColor backgroundColor() const = 0;
     virtual void setBackgroundColor(const QColor& color) = 0;
 

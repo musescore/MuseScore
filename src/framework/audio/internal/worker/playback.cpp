@@ -218,6 +218,11 @@ async::Channel<TrackSequenceId, TrackId, AudioInputParams> Playback::inputParams
     return m_trackHandlersPtr->inputParamsChanged();
 }
 
+muse::async::Promise<InputProcessingProgress> Playback::inputProcessingProgress(const TrackSequenceId sequenceId, const TrackId id) const
+{
+    return m_trackHandlersPtr->inputProcessingProgress(sequenceId, id);
+}
+
 void Playback::clearSources()
 {
     m_trackHandlersPtr->clearSources();

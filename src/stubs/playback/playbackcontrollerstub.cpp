@@ -197,3 +197,19 @@ void PlaybackControllerStub::setNotation(notation::INotationPtr)
 void PlaybackControllerStub::setIsExportingAudio(bool)
 {
 }
+
+const std::set<muse::audio::TrackId>& PlaybackControllerStub::onlineSounds() const
+{
+    static const std::set<muse::audio::TrackId> dummy;
+    return dummy;
+}
+
+muse::async::Notification PlaybackControllerStub::onlineSoundsChanged() const
+{
+    return {};
+}
+
+muse::Progress PlaybackControllerStub::onlineSoundsProcessingProgress() const
+{
+    return {};
+}

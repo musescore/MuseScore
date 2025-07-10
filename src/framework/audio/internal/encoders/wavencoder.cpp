@@ -112,7 +112,7 @@ size_t WavEncoder::encode(samples_t samplesPerChannel, const float* input)
         }
 
         if (progressValues.contains(sampleIdx)) {
-            m_progress.progress(sampleIdx, total, "");
+            m_progress.progress(sampleIdx, total);
         }
     }
 

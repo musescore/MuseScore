@@ -140,6 +140,20 @@ async::Channel<io::paths_t> AudioConfigurationStub::soundFontDirectoriesChanged(
     return async::Channel<io::paths_t>();
 }
 
+bool AudioConfigurationStub::autoProcessOnlineSoundsInBackground() const
+{
+    return false;
+}
+
+void AudioConfigurationStub::setAutoProcessOnlineSoundsInBackground(bool)
+{
+}
+
+async::Channel<bool> AudioConfigurationStub::autoProcessOnlineSoundsInBackgroundChanged() const
+{
+    return {};
+}
+
 bool AudioConfigurationStub::shouldMeasureInputLag() const
 {
     return false;

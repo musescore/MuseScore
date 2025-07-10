@@ -29,6 +29,8 @@
 #include "internal/apitypes.h"
 #include "internal/libhandler.h"
 
+#include "global/timer.h"
+
 typedef typename std::variant<muse::mpe::NoteEvent, muse::musesampler::AuditionStartNoteEvent,
                               muse::musesampler::AuditionStopNoteEvent> MuseSamplerEvent;
 
@@ -65,11 +67,19 @@ class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mpe::Not
 {
 public:
     void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracks* tracks, std::string&& defaultPresetCode);
+    void deinit();
+
+    void setRenderingProgress(audio::InputProcessingProgress* progress);
+    void setAutoRenderInterval(double secs);
+    void triggerRender();
 
 private:
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) override;
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
                                 const mpe::PlaybackParamLayers& params) override;
+
+    void pollRenderingProgress();
+    void doPollProgress();
 
     void clearAllTracks();
     void finalizeAllTracks();
@@ -86,7 +96,7 @@ private:
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
     void addTextArticulation(const String& articulationCode, long long startUs, ms_Track track);
     void addPresets(const StringList& presets, long long startUs, ms_Track track);
-    void addSyllable(const String& syllable, long long positionUs, ms_Track track);
+    void addSyllable(const String& syllable, bool hyphenedToNext, long long positionUs, ms_Track track);
     void addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
     void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
 
@@ -116,6 +126,21 @@ private:
 
     void parseOffStreamParams(const mpe::PlaybackParamList& params, OffStreamParams& out) const;
 
+    struct RenderingInfo {
+        long long initialChunksDurationUs = 0;
+        int errorCode = 0;
+        int64_t percentage = 0;
+        audio::InputProcessingProgress::ChunkInfoList lastReceivedChunks;
+
+        void clear()
+        {
+            initialChunksDurationUs = 0;
+            errorCode = 0;
+            percentage = 0;
+            lastReceivedChunks.clear();
+        }
+    };
+
     MuseSamplerLibHandlerPtr m_samplerLib = nullptr;
     ms_MuseSampler m_sampler = nullptr;
     IMuseSamplerTracks* m_tracks = nullptr;
@@ -124,6 +149,10 @@ private:
 
     std::string m_defaultPresetCode;
     OffStreamParams m_offStreamCache;
+
+    std::unique_ptr<Timer> m_pollRenderingProgressTimer;
+    audio::InputProcessingProgress* m_renderingProgress = nullptr;
+    RenderingInfo m_renderingInfo;
 };
 }
 

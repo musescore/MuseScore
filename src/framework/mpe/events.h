@@ -28,6 +28,7 @@
 
 #include "async/channel.h"
 #include "realfn.h"
+#include "types/flags.h"
 
 #include "mpetypes.h"
 #include "playbacksetupdata.h"
@@ -297,21 +298,26 @@ struct PlaybackParam {
         Syllable,
     };
 
+    enum FlagType : signed char {
+        NoFlags = 0,
+        IsPersistent,
+        HyphenedToNext,
+    };
+
     using Value = String;
 
     Type type = Undefined;
     Value val;
+    Flags<FlagType> flags;
 
-    std::optional<bool> isPersistent;
-
-    PlaybackParam(Type t, Value v)
-        : type(t), val(std::move(v))
+    PlaybackParam(Type t, Value v, const Flags<FlagType>& f = {})
+        : type(t), val(std::move(v)), flags(f)
     {
     }
 
     bool operator==(const PlaybackParam& other) const
     {
-        return type == other.type && val == other.val;
+        return type == other.type && val == other.val && flags == other.flags;
     }
 };
 

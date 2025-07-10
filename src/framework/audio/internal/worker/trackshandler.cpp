@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2025 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -243,6 +243,25 @@ Channel<TrackSequenceId, TrackId, AudioInputParams> TracksHandler::inputParamsCh
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 
     return m_inputParamsChanged;
+}
+
+muse::async::Promise<InputProcessingProgress> TracksHandler::inputProcessingProgress(const TrackSequenceId sequenceId,
+                                                                                     const TrackId trackId) const
+{
+    return Promise<InputProcessingProgress>([this, sequenceId, trackId](auto resolve, auto reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        const ITrackSequencePtr s = sequence(sequenceId);
+        if (!s) {
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+        }
+
+        if (!s->audioIO()->hasTrack(trackId)) {
+            return reject(static_cast<int>(Err::InvalidTrackId), "no track");
+        }
+
+        return resolve(s->audioIO()->inputProcessingProgress(trackId));
+    }, AudioThread::ID);
 }
 
 void TracksHandler::clearSources()

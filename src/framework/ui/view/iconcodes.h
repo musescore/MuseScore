@@ -324,6 +324,7 @@ public:
         PAN_SCORE = 0xF3B0,
         COUNT_IN = 0xF3B1,
 
+        INSIGHT = 0xF3B5,
         GLOBE = 0xF3B6,
         PRINT = 0xF3B7,
 
@@ -452,6 +453,8 @@ public:
         BPM = 0xF474,
         CLOCK = 0xF475,
 
+        TICK_RIGHT_ANGLE_THICK = 0xF477,
+
         PLAYHEAD = 0xF478,
         PLAYHEAD_FILLED = 0xF47A,
 
@@ -488,6 +491,7 @@ public:
 
         FRET_FRAME = 0xF491,
         DURATION_CURSOR = 0xF492,
+        WARNING_SMALL = 0xF493,
 
         NOTE_ALIGN_LEFT = 0xF4A3,
         NOTE_ALIGN_CENTER = 0xF4A4,

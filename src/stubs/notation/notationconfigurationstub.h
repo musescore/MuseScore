@@ -30,6 +30,8 @@ class NotationConfigurationStub : public INotationConfiguration
 public:
     NotationConfigurationStub() = default;
 
+    QColor notationColor() const override;
+
     QColor backgroundColor() const override;
     void setBackgroundColor(const QColor& color)  override;
 

@@ -339,9 +339,48 @@ typedef const char*(* ms_get_drum_mapping)(int instrument_id);
 typedef ms_Result (* ms_reload_all_instruments)(); // Useful for sound developers
 typedef ms_Result (* ms_MuseSampler_start_audition_note_4)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_4 evt);
 typedef ms_Result (* ms_MuseSampler_add_track_syllable_event)(ms_MuseSampler ms, ms_Track track, ms_SyllableEvent evt);
+// ------------------------------------------------------------
 
 // Added in 0.101
 typedef bool (* ms_MuseSampler_ready_to_play)(ms_MuseSampler ms);
+// ------------------------------------------------------------
+
+// Added in 0.102
+typedef bool (* ms_Instrument_is_online)(ms_InstrumentInfo);
+
+typedef struct ms_SyllableEvent2
+{
+    const char* _text;
+    long long _position_us;
+    bool _hyphened_to_next;
+} ms_SyllableEvent2;
+
+typedef ms_Result (* ms_MuseSampler_add_track_syllable_event_2)(ms_MuseSampler ms, ms_Track track, ms_SyllableEvent2 evt);
+
+typedef enum ms_RenderingState
+{
+    ms_RenderingState_Rendering,
+    ms_RenderingState_ErrorRendering,
+    ms_RenderingState_ErrorNetwork,
+    ms_RenderingState_ErrorFileIO,
+    ms_RenderingState_ErrorTimeOut,
+} ms_RenderingState;
+
+typedef struct ms_RenderProgressInfo
+{
+    long long _start_us;
+    long long _end_us;
+    ms_RenderingState _state;
+} ms_RenderRangeInfo;
+
+typedef void* ms_RenderingRangeList;
+
+typedef ms_RenderingRangeList (* ms_MuseSampler_get_render_info)(ms_MuseSampler ms, int* num_ranges);
+typedef ms_RenderRangeInfo (* ms_RenderProgressInfo_get_next)(ms_RenderingRangeList range_list);
+
+typedef void (* ms_MuseSampler_set_auto_render_interval)(ms_MuseSampler ms, double interval_seconds);
+typedef void (* ms_MuseSampler_trigger_render)(ms_MuseSampler ms);
+// ------------------------------------------------------------
 
 namespace muse::musesampler {
 using track_idx_t = size_t;
@@ -368,6 +407,7 @@ struct AuditionStopNoteEvent {
 };
 
 using NoteEvent = ms_NoteEvent_4;
+using SyllableEvent = ms_SyllableEvent2;
 }
 
 #endif // MUSE_MUSESAMPLER_APITYPES_H

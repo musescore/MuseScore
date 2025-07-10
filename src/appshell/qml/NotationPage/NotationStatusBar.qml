@@ -98,6 +98,16 @@ Item {
             visible: !hiddenControlsMenuButton.visible
         }
 
+        OnlineSoundsStatusView {
+            id: onlineSoundsStatusView
+
+            Layout.alignment: Qt.AlignVCenter
+            Layout.preferredHeight: 28
+
+            navigationPanel: navPanel
+            navigationOrder: 1
+        }
+
         SeparatorLine { orientation: Qt.Vertical; visible: workspaceControl.visible }
 
         FlatButton {
@@ -113,7 +123,7 @@ Item {
             visible: statusBarRow.remainingSpace > width + concertPitchControl.width
 
             navigation.panel: navPanel
-            navigation.order: 1
+            navigation.order: 2
 
             onClicked: {
                 menuLoader.toggleOpened(model.currentWorkspaceItem.subitems)
@@ -144,7 +154,7 @@ Item {
             visible: statusBarRow.remainingSpace > width
 
             navigation.panel: navPanel
-            navigation.order: 2
+            navigation.order: 3
 
             onToggleConcertPitchRequested: {
                 model.toggleConcertPitch()
@@ -162,7 +172,7 @@ Item {
             availableViewModeList: model.availableViewModeList
 
             navigation.panel: navPanel
-            navigation.order: 3
+            navigation.order: 4
 
             onChangeCurrentViewModeRequested: function(newViewMode) {
                 model.setCurrentViewMode(newViewMode)
@@ -181,7 +191,7 @@ Item {
             availableZoomList: model.availableZoomList
 
             navigationPanel: navPanel
-            navigationOrderMin: 4
+            navigationOrderMin: 5
 
             onChangeZoomPercentageRequested: function(newZoomPercentage) {
                 model.currentZoomPercentage = newZoomPercentage
