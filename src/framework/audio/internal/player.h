@@ -26,7 +26,7 @@
 #include "iplayer.h"
 #include "global/async/asyncable.h"
 
-#include "igettracksequence.h"
+#include "worker/igettracksequence.h"
 
 namespace muse::audio {
 class Player : public IPlayer, public async::Asyncable

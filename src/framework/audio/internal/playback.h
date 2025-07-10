@@ -22,27 +22,24 @@
 #ifndef MUSE_AUDIO_SEQUENCER_H
 #define MUSE_AUDIO_SEQUENCER_H
 
-#include <map>
-
-#include "modularity/ioc.h"
+#include "../iplayback.h"
 #include "global/async/asyncable.h"
 
+#include "modularity/ioc.h"
+#include "worker/iworkerplayback.h"
+
 #include "iplayer.h"
-#include "itracks.h"
-#include "iaudiooutput.h"
-#include "igettracksequence.h"
-#include "iplayback.h"
 
 namespace muse::audio {
-class Playback : public IPlayback, public IGetTrackSequence, public Injectable, public async::Asyncable
+class Playback : public IPlayback, public Injectable, public async::Asyncable
 {
+    Inject<worker::IWorkerPlayback> workerPlayback;
 public:
     Playback(const muse::modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    void init() override;
-    void deinit() override;
-    bool isInited() const override;
+    void init();
+    void deinit();
 
     // 1. Add Sequence
     async::Promise<TrackSequenceId> addSequence() override;
@@ -107,18 +104,13 @@ public:
 
     void clearAllFx() override;
 
-protected:
-    // IGetTrackSequence
-    ITrackSequencePtr sequence(const TrackSequenceId id) const override;
-
 private:
-    ITracksPtr m_trackHandlersPtr = nullptr;
-    IAudioOutputPtr m_audioOutputPtr = nullptr;
-
-    std::map<TrackSequenceId, ITrackSequencePtr> m_sequences;
-
     async::Channel<TrackSequenceId> m_sequenceAdded;
     async::Channel<TrackSequenceId> m_sequenceRemoved;
+
+    async::Channel<TrackSequenceId, TrackId> m_trackAdded;
+    async::Channel<TrackSequenceId, TrackId> m_trackRemoved;
+    async::Channel<TrackSequenceId, TrackId, AudioInputParams> m_inputParamsChanged;
 };
 }
 

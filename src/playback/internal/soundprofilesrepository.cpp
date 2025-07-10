@@ -22,7 +22,6 @@
 
 #include "soundprofilesrepository.h"
 
-#include "audio/itracks.h"
 #include "log.h"
 
 using namespace mu::playback;

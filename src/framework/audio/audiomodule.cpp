@@ -32,7 +32,9 @@
 #include "internal/audiooutputdevicecontroller.h"
 
 #include "internal/worker/audioengine.h"
-#include "internal/worker/playback.h"
+
+#include "internal/playback.h"
+#include "internal/worker/workerplayback.h"
 
 #include "internal/soundfontrepository.h"
 
@@ -115,7 +117,8 @@ void AudioModule::registerExports()
     m_audioOutputController = std::make_shared<AudioOutputDeviceController>(iocContext());
     m_fxResolver = std::make_shared<FxResolver>();
     m_synthResolver = std::make_shared<SynthResolver>();
-    m_playbackFacade = std::make_shared<Playback>(iocContext());
+    m_mainPlayback = std::make_shared<Playback>(iocContext());
+    m_workerPlayback = std::make_shared<worker::WorkerPlayback>(iocContext());
     m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
 
 #if defined(MUSE_MODULE_AUDIO_JACK)
@@ -146,7 +149,8 @@ void AudioModule::registerExports()
     ioc()->registerExport<IAudioEngine>(moduleName(), m_audioEngine);
     ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
     ioc()->registerExport<IAudioDriver>(moduleName(), m_audioDriver);
-    ioc()->registerExport<IPlayback>(moduleName(), m_playbackFacade);
+    ioc()->registerExport<IPlayback>(moduleName(), m_mainPlayback);
+    ioc()->registerExport<worker::IWorkerPlayback>(moduleName(), m_workerPlayback);
 
     ioc()->registerExport<ISynthResolver>(moduleName(), m_synthResolver);
     ioc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);
@@ -214,6 +218,8 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
     m_audioOutputController->init();
 
+    m_mainPlayback->init();
+
     // Setup audio driver
     setupAudioDriver(mode);
 
@@ -229,6 +235,8 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
 void AudioModule::onDeinit()
 {
+    m_mainPlayback->deinit();
+
     if (m_audioDriver->isOpened()) {
         m_audioDriver->close();
     }
@@ -241,7 +249,7 @@ void AudioModule::onDestroy()
     if (m_audioWorker->isRunning()) {
         m_audioWorker->stop([this]() {
             ONLY_AUDIO_WORKER_THREAD;
-            m_playbackFacade->deinit();
+            m_workerPlayback->deinit();
             m_audioEngine->deinit();
         });
     }
@@ -309,8 +317,8 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         m_synthResolver->registerResolver(AudioSourceType::Fluid, fluidResolver);
         m_synthResolver->init(m_configuration->defaultAudioInputParams());
 
-        // Initialize IPlayback facade and make sure that it's initialized after the audio-engine
-        m_playbackFacade->init();
+        // Initialize IWorkerPlayback facade and make sure that it's initialized after the audio-engine
+        m_workerPlayback->init();
     };
 
     auto workerLoopBody = [this]() {

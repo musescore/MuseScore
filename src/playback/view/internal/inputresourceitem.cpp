@@ -30,7 +30,6 @@
 #include "translation.h"
 #include "types/string.h"
 
-#include "audio/itracks.h"
 #include "audio/soundfonttypes.h"
 #include "audio/audioutils.h"
 
