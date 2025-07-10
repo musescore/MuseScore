@@ -26,7 +26,11 @@
 #include "../types/types.h"
 
 namespace mu::engraving {
+class EngravingItem;
 class MStyle;
+struct ParenPaddingTable;
+
+using ParenPaddingTablePtr = std::unique_ptr<mu::engraving::ParenPaddingTable>;
 
 template<typename T>
 struct PaddingVector : std::array<T, TOT_ELEMENT_TYPES>
@@ -43,19 +47,46 @@ public:
     void setMinimumPaddingUnit(double val) { m_minimumPaddingUnit = val; }
     double minimumPaddingUnit() const { return m_minimumPaddingUnit; }
 
+    void createTable(const MStyle& style);
+
+private:
+    void initPaddingTable();
+    double m_minimumPaddingUnit = 0.0;
+};
+
+struct ParenPaddingTable
+{
+public:
+    void setMinimumPaddingUnit(double val) { m_minimumPaddingUnit = val; }
+    double minimumPaddingUnit() const { return m_minimumPaddingUnit; }
+
     virtual void createTable(const MStyle& style) = 0;
+    double padding(ElementType type1, ElementType type2);
+
+    static ParenPaddingTablePtr getPaddingTable(const EngravingItem* parent);
 
 protected:
     void initPaddingTable();
+    PaddingVector<double> m_parenBefore;
+    PaddingVector<double> m_parenAfter;
 
 private:
     double m_minimumPaddingUnit = 0.0;
 };
 
-struct ElementPaddingTable : public mu::engraving::PaddingTable {
+struct NoteParenPaddingTable : public ParenPaddingTable {
     void createTable(const MStyle& style) override;
 };
-struct ExternalParenthesisPaddingTable : public mu::engraving::PaddingTable {
+
+struct KeySigParenPaddingTable : public ParenPaddingTable {
+    void createTable(const MStyle& style) override;
+};
+
+struct TimeSigParenPaddingTable : public ParenPaddingTable {
+    void createTable(const MStyle& style) override;
+};
+
+struct ClefParenPaddingTable : public ParenPaddingTable {
     void createTable(const MStyle& style) override;
 };
 }

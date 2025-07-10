@@ -1068,9 +1068,8 @@ public:
     void cmdToggleVisible();
     void forAllLyrics(std::function<void(Lyrics*)> f);
 
-    void createPaddingTables();
-    const ElementPaddingTable paddingTable() const { return m_paddingTable; }
-    const ExternalParenthesisPaddingTable& parenPaddingTable() const { return m_externParenPaddingTable; }
+    void createPaddingTable();
+    const PaddingTable paddingTable() const { return m_paddingTable; }
 
     void autoUpdateSpatium();
 
@@ -1262,8 +1261,7 @@ private:
 
     muse::async::Channel<float> m_layoutProgressChannel;
 
-    ElementPaddingTable m_paddingTable;
-    ExternalParenthesisPaddingTable m_externParenPaddingTable;
+    PaddingTable m_paddingTable;
     double m_minimumPaddingUnit = 0.0;
 
     bool m_updatesLocked = false;

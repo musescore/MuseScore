@@ -162,23 +162,29 @@ bool ParenthesisLayout::isInternalParenPadding(const EngravingItem* item1, const
     return internalPadding;
 }
 
+double ParenthesisLayout::computeExternalParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2)
+{
+    EngravingItem* parent = item1->isParenthesis() ? item1->parentItem() : item2->parentItem();
+
+    ElementType type1 = item1->type();
+    ElementType type2 = item2->type();
+
+    ParenPaddingTablePtr paddingTable = ParenPaddingTable::getPaddingTable(parent);
+
+    double padding = paddingTable->padding(type1, type2);
+
+    double scaling = (item1->mag() + item2->mag()) / 2;
+    padding *= scaling;
+    return padding;
+}
+
 double ParenthesisLayout::computeParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2)
 {
     if (isInternalParenPadding(item1, item2)) {
         return computeInternalParenthesisPadding(item1, item2);
     }
 
-    const ExternalParenthesisPaddingTable& paddingTable = item1->score()->parenPaddingTable();
-    double scaling = (item1->mag() + item2->mag()) / 2;
-
-    ElementType type1 = item1->isParenthesis() ? item1->parentItem()->type() : item1->type();
-    ElementType type2 = item2->isParenthesis() ? item2->parentItem()->type() : item2->type();
-
-    double padding = paddingTable.at(type1).at(type2);
-
-    padding *= scaling;
-
-    return padding;
+    return computeExternalParenthesisPadding(item1, item2);
 }
 
 double ParenthesisLayout::computeInternalParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2)
