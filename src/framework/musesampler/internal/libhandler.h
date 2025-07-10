@@ -178,6 +178,7 @@ public:
 
         bool at_least_v_0_100 = (versionMajor == 0 && versionMinor >= 100) || versionMajor > 0;
         bool at_least_v_0_101 = (versionMajor == 0 && versionMinor >= 101) || versionMajor > 0;
+        bool at_least_v_0_102 = (versionMajor == 0 && versionMinor >= 102) || versionMajor > 0;
         m_supportsReinit = at_least_v_0_100;
 
         containsInstrument = (ms_contains_instrument)muse::getLibFunc(m_lib, "ms_contains_instrument");
@@ -274,7 +275,7 @@ public:
             return startLivePlayNoteInternal2(ms, track, evt) == ms_Result_OK;
         };
 
-        if (at_least_v_0_101) {
+        if (at_least_v_0_102) {
             addSyllableEventInternal2 = (ms_MuseSampler_add_track_syllable_event_2)muse::getLibFunc(m_lib,
                                                                                                     "ms_MuseSampler_add_track_syllable_event_2");
 
@@ -325,6 +326,11 @@ public:
 
         if (at_least_v_0_101) {
             readyToPlay = (ms_MuseSampler_ready_to_play)muse::getLibFunc(m_lib, "ms_MuseSampler_ready_to_play");
+        } else {
+            readyToPlay = [](ms_MuseSampler) { return true; };
+        }
+
+        if (at_least_v_0_102) {
             isOnlineInstrument = (ms_Instrument_is_online)muse::getLibFunc(m_lib, "ms_Instrument_is_online");
             getRenderInfo = (ms_MuseSampler_get_render_info)muse::getLibFunc(m_lib, "ms_MuseSampler_get_render_info");
             getNextRenderProgressInfo = (ms_RenderProgressInfo_get_next)muse::getLibFunc(m_lib, "ms_RenderProgressInfo_get_next");
@@ -332,7 +338,6 @@ public:
                                                                                               "ms_MuseSampler_set_auto_render_interval");
             triggerRender = (ms_MuseSampler_trigger_render)muse::getLibFunc(m_lib, "ms_MuseSampler_trigger_render");
         } else {
-            readyToPlay = [](ms_MuseSampler) { return true; };
             isOnlineInstrument = [](ms_InstrumentInfo) { return false; };
             getRenderInfo = [](ms_MuseSampler, int*) { return ms_RenderingRangeList(); };
             getNextRenderProgressInfo = [](ms_RenderingRangeList) { return ms_RenderRangeInfo { 0, 0, ms_RenderingState_ErrorRendering }; };

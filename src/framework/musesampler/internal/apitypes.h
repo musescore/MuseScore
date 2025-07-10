@@ -343,6 +343,9 @@ typedef ms_Result (* ms_MuseSampler_add_track_syllable_event)(ms_MuseSampler ms,
 
 // Added in 0.101
 typedef bool (* ms_MuseSampler_ready_to_play)(ms_MuseSampler ms);
+// ------------------------------------------------------------
+
+// Added in 0.102
 typedef bool (* ms_Instrument_is_online)(ms_InstrumentInfo);
 
 typedef struct ms_SyllableEvent2
