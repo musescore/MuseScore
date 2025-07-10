@@ -41,12 +41,16 @@ class FretFrameChordsSettingsModel : public AbstractInspectorModel, public muse:
 
     Q_PROPERTY(FretFrameChordListModel * chordListModel READ chordListModel CONSTANT)
 
+    Q_PROPERTY(PropertyItem * listOrder READ listOrder CONSTANT)
+
     muse::Inject<context::IGlobalContext> globalContext = { this };
 
 public:
     explicit FretFrameChordsSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     FretFrameChordListModel* chordListModel() const;
+
+    PropertyItem* listOrder() const;
 
 private:
     engraving::FBox* fretBox() const;
@@ -61,5 +65,7 @@ private:
     void loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet);
 
     std::shared_ptr<FretFrameChordListModel> m_chordListModel;
+
+    PropertyItem* m_listOrder = nullptr;
 };
 }

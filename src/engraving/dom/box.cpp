@@ -791,7 +791,7 @@ PropertyValue FBox::getProperty(Pid propertyId) const
     case Pid::RIGHT_MARGIN:
         return m_contentAlignmentH == AlignH::RIGHT ? VBox::getProperty(propertyId) : PropertyValue();
     case Pid::FRET_FRAME_DIAGRAMS_ORDER:
-        return m_diagramsOrder.join(FRET_BOX_DIAGRAMS_ORDER_SEPARATOR);
+        return !m_diagramsOrder.empty() ? m_diagramsOrder.join(FRET_BOX_DIAGRAMS_ORDER_SEPARATOR) : PropertyValue();
     default:
         return VBox::getProperty(propertyId);
     }
@@ -847,6 +847,8 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
     case Pid::TOP_GAP:
     case Pid::BOTTOM_GAP:
         return 4.0;
+    case Pid::FRET_FRAME_DIAGRAMS_ORDER:
+        return PropertyValue();
     default:
         return VBox::propertyDefault(propertyId);
     }

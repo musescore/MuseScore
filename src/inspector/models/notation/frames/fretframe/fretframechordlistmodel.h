@@ -44,7 +44,9 @@ class FretFrameChordListModel : public muse::uicomponents::SelectableItemListMod
 public:
     explicit FretFrameChordListModel(QObject* parent);
 
-    void load(engraving::FBox* box);
+    void load();
+
+    void setFBox(engraving::FBox* box);
 
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
