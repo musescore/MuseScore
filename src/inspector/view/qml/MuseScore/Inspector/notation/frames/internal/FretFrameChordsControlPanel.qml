@@ -25,12 +25,18 @@ import QtQuick.Layouts 1.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
+import MuseScore.Inspector 1.0
+
+import "../../../common"
+
 RowLayout {
     id: root
 
+    property PropertyItem listOrderItem: null
+
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0
-    property int navigationRowEnd: downButton.navigation.row
+    property int navigationRowEnd: resetButton.navigation.row
 
     property bool isMovingUpAvailable: false
     property bool isMovingDownAvailable: false
@@ -43,12 +49,14 @@ RowLayout {
     signal moveSelectionDownRequested()
 
     FlatButton {
+        id: upBotton
+
         Layout.fillWidth: true
 
         icon: IconCode.ARROW_UP
         enabled: root.isMovingUpAvailable
 
-        navigation.name: text
+        navigation.name: "MoveUpButton"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart
         navigation.accessible.name: qsTrc("inspector", "Move up")
@@ -66,13 +74,28 @@ RowLayout {
         icon: IconCode.ARROW_DOWN
         enabled: root.isMovingDownAvailable
 
-        navigation.name: text
+        navigation.name: "MoveDownButton"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowStart
+        navigation.row: upBotton.navigation.row + 1
         navigation.accessible.name: qsTrc("inspector", "Move down")
 
         onClicked: {
             root.moveSelectionDownRequested()
+        }
+    }
+
+    PropertyResetButton {
+        id: resetButton
+
+        navigation.name: "ResetButton"
+        navigation.panel: root.navigationPanel
+        navigation.row: downButton.navigation.row + 1
+        navigation.accessible.name: qsTrc("inspector", "Reset chord list")
+
+        enabled: root.listOrderItem.isModified
+
+        onClicked: {
+            root.listOrderItem.resetToDefault()
         }
     }
 }

@@ -36,9 +36,11 @@ FretFrameChordListModel::FretFrameChordListModel(QObject* parent)
 {
 }
 
-void FretFrameChordListModel::load(FBox* box)
+void FretFrameChordListModel::load()
 {
-    m_fretBox = box;
+    if (!m_fretBox) {
+        return;
+    }
 
     QList<Item*> items;
 
@@ -53,6 +55,11 @@ void FretFrameChordListModel::load(FBox* box)
     }
 
     setItems(items);
+}
+
+void FretFrameChordListModel::setFBox(engraving::FBox* box)
+{
+    m_fretBox = box;
 }
 
 QVariant FretFrameChordListModel::data(const QModelIndex& index, int role) const
