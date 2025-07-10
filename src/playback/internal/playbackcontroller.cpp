@@ -30,8 +30,6 @@
 #include "audio/audioutils.h"
 #include "audio/audioerrors.h"
 #include "audio/devtools/inputlag.h"
-#include "audio/iaudiooutput.h"
-#include "audio/itracks.h"
 
 #include "containers.h"
 #include "defer.h"

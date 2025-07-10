@@ -37,6 +37,10 @@ namespace muse::audio::synth  {
 class SynthResolver;
 }
 
+namespace muse::audio::worker  {
+class WorkerPlayback;
+}
+
 namespace muse::audio {
 class AudioConfiguration;
 class AudioEngine;
@@ -75,7 +79,8 @@ private:
     std::shared_ptr<fx::FxResolver> m_fxResolver;
     std::shared_ptr<synth::SynthResolver> m_synthResolver;
 
-    std::shared_ptr<Playback> m_playbackFacade;
+    std::shared_ptr<Playback> m_mainPlayback; // facade
+    std::shared_ptr<worker::WorkerPlayback> m_workerPlayback;
 
     std::shared_ptr<SoundFontRepository> m_soundFontRepository;
 

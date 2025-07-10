@@ -22,8 +22,6 @@
 
 #include "notationregionsbeingprocessedmodel.h"
 
-#include "audio/itracks.h"
-
 using namespace muse::audio;
 using namespace mu::playback;
 using namespace mu::engraving;

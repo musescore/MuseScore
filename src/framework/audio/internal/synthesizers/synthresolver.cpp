@@ -128,7 +128,7 @@ void SynthResolver::registerResolver(const AudioSourceType type, IResolverPtr re
 
 void SynthResolver::clearSources()
 {
-    ONLY_AUDIO_MAIN_THREAD;
+    ONLY_AUDIO_WORKER_THREAD;
 
     std::lock_guard lock(m_mutex);
 

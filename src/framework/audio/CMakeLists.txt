@@ -90,7 +90,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/audioutils.h
     ${CMAKE_CURRENT_LIST_DIR}/iplayer.h
-    ${CMAKE_CURRENT_LIST_DIR}/itracks.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiooutput.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/ifxresolver.h
@@ -102,6 +101,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/devtools/inputlag.h
 
     # Common internal
+    ${CMAKE_CURRENT_LIST_DIR}/internal/playback.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/playback.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/player.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/player.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothreadsecurer.cpp
@@ -124,8 +127,11 @@ set(MODULE_SRC
     ${DRIVER_SRC}
 
     # Worker
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/playback.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/playback.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iworkerplayback.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workerplayback.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workerplayback.h
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/player.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/internal/player.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudiosource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/samplerateconvertor.cpp
@@ -152,10 +158,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/clock.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/equaliser.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/trackshandler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/trackshandler.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/player.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/player.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiooutputhandler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/audiooutputhandler.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/itracksequence.h
