@@ -148,8 +148,8 @@ private:
 
     piano_key_t m_clefKeySigs[240] = {
         60, 62, 64, 65, 67, 69, 71, 72, // 0 0: G-Clef # sharp  keys  key / 12 - 1 == 4 (C4-C5)
-        67, 69, 71, 72, 74, 76, 78, 79, 
-        62, 64, 66, 67, 69, 71, 73, 74, 
+        67, 69, 71, 72, 74, 76, 78, 79,
+        62, 64, 66, 67, 69, 71, 73, 74,
         69, 71, 73, 74, 76, 78, 80, 81,
         64, 66, 68, 69, 71, 73, 75, 76,
         71, 73, 75, 76, 78, 80, 82, 83,
@@ -190,10 +190,8 @@ private:
     QColor m_blackKeyBottomClefSigColor;
 
     std::map<KeyState, QColor> m_whiteKeyHitColors;
-
     std::map<KeyState, QColor> m_blackKeyTopPieceStateHitColors;
     std::map<KeyState, QColor> m_blackKeyBottomPieceStateHitColors;
-    
     std::map<piano_key_t, QRectF> m_check_rects;
 
     qreal m_keyWidthScaling = 1.0;

@@ -652,7 +652,6 @@ void PlaybackController::play()
     IF_ASSERT_FAILED(currentPlayer()) {
         return;
     }
-
     if (isLoopEnabled()) {
         secs_t startSecs = playbackStartSecs();
         seek(startSecs);
@@ -666,7 +665,6 @@ void PlaybackController::play()
             delay = playbackDelay(countInDuration);
         }
     }
-    
     currentPlayer()->play(delay);
 }
 
