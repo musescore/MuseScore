@@ -44,7 +44,7 @@ public:
     void deinit() override;
     bool isInited() const override;
 
-    // IPlayback
+    // 1. Add Sequence
     async::Promise<TrackSequenceId> addSequence() override;
     async::Promise<TrackSequenceIdList> sequenceIdList() const override;
     void removeSequence(const TrackSequenceId id) override;
@@ -52,7 +52,7 @@ public:
     async::Channel<TrackSequenceId> sequenceAdded() const override;
     async::Channel<TrackSequenceId> sequenceRemoved() const override;
 
-    // ITracks
+    // 2. Setup tracks for Sequence
     async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const override;
     async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const override;
 
@@ -78,10 +78,32 @@ public:
     async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const override;
 
     void clearSources() override;
-    // ===
 
+    // 3. Play Sequence
     IPlayerPtr player(const TrackSequenceId id) const override;
-    IAudioOutputPtr audioOutput() const override;
+
+    // 4. Adjust a Sequence output
+    async::Promise<AudioOutputParams> outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+    void setOutputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioOutputParams& params) override;
+    async::Channel<TrackSequenceId, TrackId, AudioOutputParams> outputParamsChanged() const override;
+
+    async::Promise<AudioOutputParams> masterOutputParams() const override;
+    void setMasterOutputParams(const AudioOutputParams& params) override;
+    void clearMasterOutputParams() override;
+    async::Channel<AudioOutputParams> masterOutputParamsChanged() const override;
+
+    async::Promise<AudioResourceMetaList> availableOutputResources() const override;
+
+    async::Promise<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+    async::Promise<AudioSignalChanges> masterSignalChanges() const override;
+
+    async::Promise<bool> saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
+                                        const SoundTrackFormat& format) override;
+    void abortSavingAllSoundTracks() override;
+
+    Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) override;
+
+    void clearAllFx() override;
 
 protected:
     // IGetTrackSequence

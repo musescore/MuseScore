@@ -996,10 +996,10 @@ void PlaybackController::resetCurrentSequence()
     playback()->clearSources();
     playback()->inputParamsChanged().resetOnReceive(this);
 
-    playback()->audioOutput()->clearAllFx();
-    playback()->audioOutput()->outputParamsChanged().resetOnReceive(this);
-    playback()->audioOutput()->masterOutputParamsChanged().resetOnReceive(this);
-    playback()->audioOutput()->clearMasterOutputParams();
+    playback()->clearAllFx();
+    playback()->outputParamsChanged().resetOnReceive(this);
+    playback()->masterOutputParamsChanged().resetOnReceive(this);
+    playback()->clearMasterOutputParams();
 
     m_currentTick = 0;
 
@@ -1185,7 +1185,7 @@ void PlaybackController::setTrackActivity(const engraving::InstrumentTrackId& in
     outParams.muted = !isActive;
 
     audio::TrackId trackId = m_instrumentTrackIdMap[instrumentTrackId];
-    playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(outParams));
+    playback()->setOutputParams(m_currentSequenceId, trackId, std::move(outParams));
 }
 
 AudioOutputParams PlaybackController::trackOutputParams(const InstrumentTrackId& instrumentTrackId) const
@@ -1294,7 +1294,7 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
     }
 
     const audio::AudioOutputParams& masterOutputParams = audioSettings()->masterAudioOutputParams();
-    playback()->audioOutput()->setMasterOutputParams(masterOutputParams);
+    playback()->setMasterOutputParams(masterOutputParams);
 
     subscribeOnAudioParamsChanges();
     setupSequenceTracks();
@@ -1305,7 +1305,7 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
 
 void PlaybackController::subscribeOnAudioParamsChanges()
 {
-    playback()->audioOutput()->masterOutputParamsChanged().onReceive(this, [this](const audio::AudioOutputParams& params) {
+    playback()->masterOutputParamsChanged().onReceive(this, [this](const audio::AudioOutputParams& params) {
         audioSettings()->setMasterAudioOutputParams(params);
     });
 
@@ -1329,10 +1329,10 @@ void PlaybackController::subscribeOnAudioParamsChanges()
         }
     });
 
-    playback()->audioOutput()->outputParamsChanged().onReceive(this,
-                                                               [this](const TrackSequenceId sequenceId,
-                                                                      const TrackId trackId,
-                                                                      const AudioOutputParams& params) {
+    playback()->outputParamsChanged().onReceive(this,
+                                                [this](const TrackSequenceId sequenceId,
+                                                       const TrackId trackId,
+                                                       const AudioOutputParams& params) {
         if (sequenceId != m_currentSequenceId) {
             return;
         }
@@ -1508,7 +1508,7 @@ void PlaybackController::updateSoloMuteStates()
         params.forceMute = shouldForceMute;
 
         audio::TrackId trackId = m_instrumentTrackIdMap.at(instrumentTrackId);
-        playback()->audioOutput()->setOutputParams(m_currentSequenceId, trackId, std::move(params));
+        playback()->setOutputParams(m_currentSequenceId, trackId, std::move(params));
     }
 
     updateAuxMuteStates();
@@ -1525,7 +1525,7 @@ void PlaybackController::updateAuxMuteStates()
         }
 
         params.muted = soloMuteState.mute;
-        playback()->audioOutput()->setOutputParams(m_currentSequenceId, pair.second, std::move(params));
+        playback()->setOutputParams(m_currentSequenceId, pair.second, std::move(params));
     }
 }
 

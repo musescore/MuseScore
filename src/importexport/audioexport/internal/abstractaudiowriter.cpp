@@ -80,7 +80,7 @@ Ret AbstractAudioWriter::writeList(const INotationPtrList&, io::IODevice&, const
 
 void AbstractAudioWriter::abort()
 {
-    playback()->audioOutput()->abortSavingAllSoundTracks();
+    playback()->abortSavingAllSoundTracks();
 }
 
 muse::Progress* AbstractAudioWriter::progress()
@@ -117,12 +117,12 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
         m_progress.start();
 
         for (const TrackSequenceId sequenceId : sequenceIdList) {
-            playback()->audioOutput()->saveSoundTrackProgress(sequenceId).progressChanged()
+            playback()->saveSoundTrackProgress(sequenceId).progressChanged()
             .onReceive(this, [this](int64_t current, int64_t total, std::string title) {
                 m_progress.progress(current, total, title);
             });
 
-            playback()->audioOutput()->saveSoundTrack(sequenceId, muse::io::path_t(path), std::move(format))
+            playback()->saveSoundTrack(sequenceId, muse::io::path_t(path), std::move(format))
             .onResolve(this, [this, path](const bool /*result*/) {
                 LOGD() << "Successfully saved sound track by path: " << path;
                 m_writeRet = muse::make_ok();

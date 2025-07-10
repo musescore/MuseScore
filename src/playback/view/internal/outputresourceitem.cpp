@@ -27,7 +27,7 @@ OutputResourceItem::OutputResourceItem(QObject* parent, const audio::AudioFxPara
 
 void OutputResourceItem::requestAvailableResources()
 {
-    playback()->audioOutput()->availableOutputResources()
+    playback()->availableOutputResources()
     .onResolve(this, [this](const AudioResourceMetaList& availableFxResources) {
         updateAvailableFxVendorsMap(availableFxResources);
 
