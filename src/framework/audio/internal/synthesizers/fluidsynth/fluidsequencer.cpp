@@ -70,19 +70,18 @@ void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events
                                             const mpe::PlaybackParamLayers&)
 {
     m_mainStreamEvents.clear();
-    m_dynamicEvents.clear();
 
     if (m_onMainStreamFlushed) {
         m_onMainStreamFlushed();
     }
 
     updatePlaybackEvents(m_mainStreamEvents, events);
-    updateMainSequenceIterator();
 
     if (m_useDynamicEvents) {
-        updateDynamicEvents(m_dynamicEvents, dynamics);
-        updateDynamicChangesIterator();
+        updateDynamicEvents(m_mainStreamEvents, dynamics);
     }
+
+    updateMainSequenceIterator();
 }
 
 muse::async::Channel<channel_t, Program> FluidSequencer::channelAdded() const

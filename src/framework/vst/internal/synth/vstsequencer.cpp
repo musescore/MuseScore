@@ -72,19 +72,18 @@ void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, 
     }
 
     m_mainStreamEvents.clear();
-    m_dynamicEvents.clear();
 
     if (m_onMainStreamFlushed) {
         m_onMainStreamFlushed();
     }
 
     updatePlaybackEvents(m_mainStreamEvents, events);
-    updateMainSequenceIterator();
 
     if (m_useDynamicEvents) {
-        updateDynamicEvents(m_dynamicEvents, dynamics);
-        updateDynamicChangesIterator();
+        updateDynamicEvents(m_mainStreamEvents, dynamics);
     }
+
+    updateMainSequenceIterator();
 }
 
 muse::audio::gain_t VstSequencer::currentGain() const
