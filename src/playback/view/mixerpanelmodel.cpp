@@ -263,7 +263,7 @@ void MixerPanelModel::setupConnections()
         }
     });
 
-    playback()->tracks()->inputParamsChanged().onReceive(
+    playback()->inputParamsChanged().onReceive(
         this, [this](const TrackSequenceId sequenceId, const TrackId trackId, AudioInputParams params) {
         if (m_currentTrackSequenceId != sequenceId) {
             return;
@@ -410,7 +410,7 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
     item->setPanelSection(m_navigationSection);
     item->loadSoloMuteState(controller()->trackSoloMuteState(instrumentTrackId));
 
-    playback()->tracks()->inputParams(m_currentTrackSequenceId, trackId)
+    playback()->inputParams(m_currentTrackSequenceId, trackId)
     .onResolve(this, [this, trackId](AudioInputParams inParams) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
             item->loadInputParams(std::move(inParams));
@@ -421,7 +421,7 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
                << ", " << text;
     });
 
-    playback()->tracks()->trackName(m_currentTrackSequenceId, trackId)
+    playback()->trackName(m_currentTrackSequenceId, trackId)
     .onResolve(this, [this, trackId](const TrackName& trackName) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
             item->setTitle(QString::fromStdString(trackName));
@@ -455,7 +455,7 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trac
     });
 
     connect(item, &MixerChannelItem::inputParamsChanged, this, [this, trackId](const AudioInputParams& params) {
-        playback()->tracks()->setInputParams(m_currentTrackSequenceId, trackId, params);
+        playback()->setInputParams(m_currentTrackSequenceId, trackId, params);
     });
 
     connect(item, &MixerChannelItem::outputParamsChanged, this, [this, trackId](const AudioOutputParams& params) {
@@ -483,7 +483,7 @@ MixerChannelItem* MixerPanelModel::buildAuxChannelItem(aux_channel_idx_t index, 
     item->setPanelSection(m_navigationSection);
     item->loadSoloMuteState(audioSettings()->auxSoloMuteState(index));
 
-    playback()->tracks()->trackName(m_currentTrackSequenceId, trackId)
+    playback()->trackName(m_currentTrackSequenceId, trackId)
     .onResolve(this, [this, trackId](const TrackName& trackName) {
         if (MixerChannelItem* item = findChannelItem(trackId)) {
             item->setTitle(QString::fromStdString(trackName));

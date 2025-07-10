@@ -296,7 +296,7 @@ Promise<SoundPresetList> PlaybackController::availableSoundPresets(const Instrum
     }
 
     const AudioInputParams& params = audioSettings()->trackInputParams(instrumentTrackId);
-    return playback()->tracks()->availableSoundPresets(params.resourceMeta);
+    return playback()->availableSoundPresets(params.resourceMeta);
 }
 
 mu::notation::INotationSoloMuteState::SoloMuteState PlaybackController::trackSoloMuteState(const InstrumentTrackId& trackId) const
@@ -993,8 +993,8 @@ void PlaybackController::resetCurrentSequence()
         currentPlayer()->playbackStatusChanged().resetOnReceive(this);
     }
 
-    playback()->tracks()->clearSources();
-    playback()->tracks()->inputParamsChanged().resetOnReceive(this);
+    playback()->clearSources();
+    playback()->inputParamsChanged().resetOnReceive(this);
 
     playback()->audioOutput()->clearAllFx();
     playback()->audioOutput()->outputParamsChanged().resetOnReceive(this);
@@ -1093,7 +1093,7 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
 
     uint64_t playbackKey = notationPlaybackKey();
 
-    playback()->tracks()->addTrack(m_currentSequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
+    playback()->addTrack(m_currentSequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
     .onResolve(this, [this, instrumentTrackId, playbackKey, onFinished, originMeta](const TrackId trackId,
                                                                                     const AudioParams& appliedParams) {
         //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
@@ -1148,7 +1148,7 @@ void PlaybackController::addAuxTrack(aux_channel_idx_t index, const TrackAddFini
     std::string title = resolveAuxTrackTitle(index, outParams, false);
     uint64_t playbackKey = notationPlaybackKey();
 
-    playback()->tracks()->addAuxTrack(m_currentSequenceId, title, outParams)
+    playback()->addAuxTrack(m_currentSequenceId, title, outParams)
     .onResolve(this, [this, playbackKey, index, onFinished](const TrackId trackId, const AudioOutputParams& appliedParams) {
         //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
         //! This situation can be if the notation was opened and immediately closed.
@@ -1254,7 +1254,7 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
         return;
     }
 
-    playback()->tracks()->removeTrack(m_currentSequenceId, search->second);
+    playback()->removeTrack(m_currentSequenceId, search->second);
     audioSettings()->removeTrackParams(instrumentTrackId);
 
     m_masterNotation->notation()->soloMuteState()->removeTrackSoloMuteState(instrumentTrackId);
@@ -1283,7 +1283,7 @@ void PlaybackController::onTrackNewlyAdded(const InstrumentTrackId& instrumentTr
 
 void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceId)
 {
-    playback()->tracks()->removeAllTracks(m_currentSequenceId);
+    playback()->removeAllTracks(m_currentSequenceId);
 
     m_currentSequenceId = sequenceId;
     m_player = playback()->player(sequenceId);
@@ -1309,10 +1309,10 @@ void PlaybackController::subscribeOnAudioParamsChanges()
         audioSettings()->setMasterAudioOutputParams(params);
     });
 
-    playback()->tracks()->inputParamsChanged().onReceive(this,
-                                                         [this](const TrackSequenceId sequenceId,
-                                                                const TrackId trackId,
-                                                                const AudioInputParams& params) {
+    playback()->inputParamsChanged().onReceive(this,
+                                               [this](const TrackSequenceId sequenceId,
+                                                      const TrackId trackId,
+                                                      const AudioInputParams& params) {
         if (sequenceId != m_currentSequenceId) {
             return;
         }
@@ -1650,7 +1650,7 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
         const mpe::PlaybackData& playbackData = notationPlayback()->trackPlaybackData(pair.first);
         AudioInputParams newInputParams { profile.findResource(playbackData.setupData), {} };
 
-        playback()->tracks()->setInputParams(m_currentSequenceId, pair.second, std::move(newInputParams));
+        playback()->setInputParams(m_currentSequenceId, pair.second, std::move(newInputParams));
     }
 
     audioSettingsPtr->setActiveSoundProfile(profileName);

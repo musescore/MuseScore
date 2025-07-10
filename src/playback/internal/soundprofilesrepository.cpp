@@ -44,7 +44,7 @@ void SoundProfilesRepository::init()
 
 void SoundProfilesRepository::refresh()
 {
-    playback()->tracks()->availableInputResources()
+    playback()->availableInputResources()
     .onResolve(this, [this](const AudioResourceMetaList& availableResources) {
         SoundProfile& basicProfile = m_profilesMap.at(config()->basicSoundProfileName());
         SoundProfile& museProfile = m_profilesMap.at(config()->museSoundsProfileName());
