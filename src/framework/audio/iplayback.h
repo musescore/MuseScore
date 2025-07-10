@@ -55,7 +55,31 @@ public:
     virtual async::Channel<TrackSequenceId> sequenceRemoved() const = 0;
 
     // 2. Setup tracks for Sequence
-    virtual std::shared_ptr<ITracks> tracks() const = 0;
+    virtual async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const = 0;
+    virtual async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
+
+    virtual async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                          io::IODevice* playbackData, AudioParams&& params) = 0;
+    virtual async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                          const mpe::PlaybackData& playbackData, AudioParams&& params) = 0;
+
+    virtual async::Promise<TrackId, AudioOutputParams> addAuxTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                                   const AudioOutputParams& outputParams) = 0;
+
+    virtual void removeTrack(const TrackSequenceId sequenceId, const TrackId trackId) = 0;
+    virtual void removeAllTracks(const TrackSequenceId sequenceId) = 0;
+
+    virtual async::Channel<TrackSequenceId, TrackId> trackAdded() const = 0;
+    virtual async::Channel<TrackSequenceId, TrackId> trackRemoved() const = 0;
+
+    virtual async::Promise<AudioResourceMetaList> availableInputResources() const = 0;
+    virtual async::Promise<SoundPresetList> availableSoundPresets(const AudioResourceMeta& resourceMeta) const = 0;
+
+    virtual async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
+    virtual void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) = 0;
+    virtual async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const = 0;
+
+    virtual void clearSources() = 0;
 
     // 3. Play Sequence
     virtual std::shared_ptr<IPlayer> player(const TrackSequenceId id) const = 0;

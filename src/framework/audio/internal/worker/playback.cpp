@@ -131,13 +131,6 @@ IPlayerPtr Playback::player(const TrackSequenceId id) const
     return p;
 }
 
-ITracksPtr Playback::tracks() const
-{
-    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
-
-    return m_trackHandlersPtr;
-}
-
 IAudioOutputPtr Playback::audioOutput() const
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
@@ -157,3 +150,84 @@ ITrackSequencePtr Playback::sequence(const TrackSequenceId id) const
 
     return nullptr;
 }
+
+// ITracks
+async::Promise<TrackIdList> Playback::trackIdList(const TrackSequenceId sequenceId) const
+{
+    return m_trackHandlersPtr->trackIdList(sequenceId);
+}
+
+async::Promise<TrackName> Playback::trackName(const TrackSequenceId sequenceId, const TrackId trackId) const
+{
+    return m_trackHandlersPtr->trackName(sequenceId, trackId);
+}
+
+async::Promise<TrackId, AudioParams> Playback::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                        io::IODevice* playbackData, AudioParams&& params)
+{
+    return m_trackHandlersPtr->addTrack(sequenceId, trackName, playbackData, std::move(params));
+}
+
+async::Promise<TrackId, AudioParams> Playback::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                        const mpe::PlaybackData& playbackData, AudioParams&& params)
+{
+    return m_trackHandlersPtr->addTrack(sequenceId, trackName, playbackData, std::move(params));
+}
+
+async::Promise<TrackId, AudioOutputParams> Playback::addAuxTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                                 const AudioOutputParams& outputParams)
+{
+    return m_trackHandlersPtr->addAuxTrack(sequenceId, trackName, outputParams);
+}
+
+void Playback::removeTrack(const TrackSequenceId sequenceId, const TrackId trackId)
+{
+    m_trackHandlersPtr->removeTrack(sequenceId, trackId);
+}
+
+void Playback::removeAllTracks(const TrackSequenceId sequenceId)
+{
+    m_trackHandlersPtr->removeAllTracks(sequenceId);
+}
+
+async::Channel<TrackSequenceId, TrackId> Playback::trackAdded() const
+{
+    return m_trackHandlersPtr->trackAdded();
+}
+
+async::Channel<TrackSequenceId, TrackId> Playback::trackRemoved() const
+{
+    return m_trackHandlersPtr->trackRemoved();
+}
+
+async::Promise<AudioResourceMetaList> Playback::availableInputResources() const
+{
+    return m_trackHandlersPtr->availableInputResources();
+}
+
+async::Promise<SoundPresetList> Playback::availableSoundPresets(const AudioResourceMeta& resourceMeta) const
+{
+    return m_trackHandlersPtr->availableSoundPresets(resourceMeta);
+}
+
+async::Promise<AudioInputParams> Playback::inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
+{
+    return m_trackHandlersPtr->inputParams(sequenceId, trackId);
+}
+
+void Playback::setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params)
+{
+    m_trackHandlersPtr->setInputParams(sequenceId, trackId, params);
+}
+
+async::Channel<TrackSequenceId, TrackId, AudioInputParams> Playback::inputParamsChanged() const
+{
+    return m_trackHandlersPtr->inputParamsChanged();
+}
+
+void Playback::clearSources()
+{
+    m_trackHandlersPtr->clearSources();
+}
+
+// ===

@@ -52,8 +52,35 @@ public:
     async::Channel<TrackSequenceId> sequenceAdded() const override;
     async::Channel<TrackSequenceId> sequenceRemoved() const override;
 
+    // ITracks
+    async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const override;
+    async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+
+    async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                  io::IODevice* playbackData, AudioParams&& params) override;
+    async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                  const mpe::PlaybackData& playbackData, AudioParams&& params) override;
+
+    async::Promise<TrackId, AudioOutputParams> addAuxTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                           const AudioOutputParams& outputParams) override;
+
+    void removeTrack(const TrackSequenceId sequenceId, const TrackId trackId) override;
+    void removeAllTracks(const TrackSequenceId sequenceId) override;
+
+    async::Channel<TrackSequenceId, TrackId> trackAdded() const override;
+    async::Channel<TrackSequenceId, TrackId> trackRemoved() const override;
+
+    async::Promise<AudioResourceMetaList> availableInputResources() const override;
+    async::Promise<SoundPresetList> availableSoundPresets(const AudioResourceMeta& resourceMeta) const override;
+
+    async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+    void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) override;
+    async::Channel<TrackSequenceId, TrackId, AudioInputParams> inputParamsChanged() const override;
+
+    void clearSources() override;
+    // ===
+
     IPlayerPtr player(const TrackSequenceId id) const override;
-    ITracksPtr tracks() const override;
     IAudioOutputPtr audioOutput() const override;
 
 protected:

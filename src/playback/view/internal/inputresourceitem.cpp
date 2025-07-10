@@ -79,7 +79,7 @@ InputResourceItem::InputResourceItem(QObject* parent)
 
 void InputResourceItem::requestAvailableResources()
 {
-    playback()->tracks()->availableInputResources()
+    playback()->availableInputResources()
     .onResolve(this, [this](const AudioResourceMetaList& availableResources) {
         updateAvailableResources(availableResources);
 
