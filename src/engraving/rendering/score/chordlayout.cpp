@@ -57,7 +57,6 @@
 #include "dom/staff.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
-#include "dom/stretchedbend.h"
 #include "dom/system.h"
 #include "dom/tie.h"
 #include "dom/slur.h"
@@ -3089,25 +3088,6 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
     }
     for (staff_idx_t staffIdx : shapesToRecreate) {
         segment->createShape(staffIdx);
-    }
-}
-
-void ChordLayout::layoutStretchedBends(Chord* chord, LayoutContext& ctx)
-{
-    if (!chord->configuration()->experimentalGuitarBendImport()) {
-        return;
-    }
-
-    for (EngravingItem* item : chord->el()) {
-        if (item && item->isStretchedBend()) {
-            toStretchedBend(item)->adjustBendInChord();
-        }
-    }
-
-    for (EngravingItem* item : chord->el()) {
-        if (item && item->isStretchedBend()) {
-            TLayout::layoutStretched(toStretchedBend(item), ctx);
-        }
     }
 }
 

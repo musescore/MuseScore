@@ -38,7 +38,6 @@
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stafftext.h"
-#include "engraving/dom/stretchedbend.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/tie.h"
@@ -253,9 +252,9 @@ GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom, cons
     _drumResolver->initGPDrum();
     m_continiousElementsBuilder = std::make_unique<ContiniousElementsBuilder>(_score);
 
-    // if (engravingConfiguration()->experimentalGuitarBendImport()) {
-    //     m_guitarBendImporter = std::make_unique<GuitarBendImporter>(_score);
-    // }
+    if (engravingConfiguration()->experimentalGuitarBendImport()) {
+        m_guitarBendImporter = std::make_unique<GuitarBendImporter>(_score);
+    }
 }
 
 const std::unique_ptr<GPDomModel>& GPConverter::gpDom() const
@@ -349,8 +348,7 @@ void GPConverter::convert(const std::vector<std::unique_ptr<GPMasterBar> >& mast
     addTempoMap();
     addInstrumentChanges();
     if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        // m_guitarBendImporter->applyBendsToChords();
-        StretchedBend::prepareBends(m_stretchedBends);
+        m_guitarBendImporter->applyBendsToChords();
     }
 
     addFermatas();
@@ -2095,16 +2093,7 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
     }
 
     if (engravingConfiguration()->experimentalGuitarBendImport()) {
-        // /m_guitarBendImporter->collectBend(note, pitchValues);
-        Chord* chord = toChord(note->parent());
-        StretchedBend* stretchedBend = Factory::createStretchedBend(chord);
-        stretchedBend->setPitchValues(pitchValues);
-        stretchedBend->setTrack(note->track());
-        stretchedBend->setNote(note);
-        note->setStretchedBend(stretchedBend);
-
-        chord->add(stretchedBend);
-        m_stretchedBends.push_back(stretchedBend);
+        m_guitarBendImporter->collectBend(note, pitchValues);
     } else {
         Bend* bend = Factory::createBend(note);
         bend->setPoints(pitchValues);
