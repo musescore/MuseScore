@@ -162,7 +162,7 @@ void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events
         for (const auto& event : pair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
                 if (std::holds_alternative<mpe::ControllerChangeEvent>(event)) {
-                    NOT_IMPLEMENTED;
+                    addAuditionCCEvent(std::get<mpe::ControllerChangeEvent>(event), pair.first);
                 } else {
                     parseOffstreamParams(event, m_offStreamCache);
                 }
@@ -633,6 +633,30 @@ void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long
     vibrato._depth_cents = VIBRATO_DEPTH_CENTS;
 
     m_samplerLib->addVibrato(m_sampler, track, vibrato);
+}
+
+void MuseSamplerSequencer::addAuditionCCEvent(const mpe::ControllerChangeEvent& event, long long positionUs)
+{
+    const std::map<mpe::ControllerChangeEvent::Type, int> TYPE_TO_CC {
+        { mpe::ControllerChangeEvent::Modulation, 1 },
+        { mpe::ControllerChangeEvent::SustainPedalOnOff, 64 },
+        { mpe::ControllerChangeEvent::PitchBend, 128 },
+    };
+
+    auto ccIt = TYPE_TO_CC.find(event.type);
+    if (ccIt == TYPE_TO_CC.end()) {
+        return;
+    }
+
+    AuditionCCEvent ccEvent;
+    ccEvent.cc = ccIt->second;
+    ccEvent.value = event.val;
+    ccEvent.msTrack = findOrCreateTrack(event.layerIdx);
+    IF_ASSERT_FAILED(ccEvent.msTrack) {
+        return;
+    }
+
+    m_offStreamEvents[positionUs].insert(ccEvent);
 }
 
 void MuseSamplerSequencer::pitchAndTuning(const pitch_level_t nominalPitch, int& pitch, int& centsOffset) const

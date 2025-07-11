@@ -380,6 +380,8 @@ typedef ms_RenderRangeInfo (* ms_RenderProgressInfo_get_next)(ms_RenderingRangeL
 
 typedef void (* ms_MuseSampler_set_auto_render_interval)(ms_MuseSampler ms, double interval_seconds);
 typedef void (* ms_MuseSampler_trigger_render)(ms_MuseSampler ms);
+
+typedef ms_Result (* ms_MuseSampler_add_audition_cc_event)(ms_MuseSampler ms, ms_Track track, int cc, float value);
 // ------------------------------------------------------------
 
 namespace muse::musesampler {
@@ -403,6 +405,12 @@ struct AuditionStartNoteEvent {
 
 struct AuditionStopNoteEvent {
     ms_AuditionStopNoteEvent msEvent;
+    ms_Track msTrack = nullptr;
+};
+
+struct AuditionCCEvent {
+    int cc = 0;
+    float value = 0.f;
     ms_Track msTrack = nullptr;
 };
 
