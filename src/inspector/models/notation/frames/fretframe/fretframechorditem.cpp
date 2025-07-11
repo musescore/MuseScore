@@ -45,7 +45,7 @@ void FretFrameChordItem::setId(const QString& id)
 
 QString FretFrameChordItem::title() const
 {
-    return m_title.toUpper();
+    return m_title;
 }
 
 void FretFrameChordItem::setTitle(const QString& title)
