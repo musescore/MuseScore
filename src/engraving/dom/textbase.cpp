@@ -3236,23 +3236,25 @@ void TextBase::initTextStyleType(TextStyleType tid)
     }
 }
 
-void TextBase::editDrag(EditData& ed)
+RectF TextBase::drag(EditData& ed)
 {
+    RectF result = EngravingItem::drag(ed);
+
     Segment* segment = explicitParent() ? toSegment(parent()) : nullptr;
     if (!segment) {
-        return EngravingItem::editDrag(ed);
+        return result;
     }
 
     ElementEditDataPtr eed = ed.getData(this);
     if (!eed) {
-        return;
+        return result;
     }
 
     EditTimeTickAnchors::updateAnchors(this);
 
     KeyboardModifiers km = ed.modifiers;
     if (km & (ShiftModifier | ControlModifier)) {
-        return;
+        return result;
     }
 
     staff_idx_t si = staffIdx();
@@ -3264,6 +3266,8 @@ void TextBase::editDrag(EditData& ed)
         PointF offsetShift = newSeg->pagePos() - segment->pagePos();
         shiftInitOffset(ed, offsetShift);
     }
+
+    return result;
 }
 
 void TextBase::endDrag(EditData& ed)
