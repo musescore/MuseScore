@@ -765,7 +765,8 @@ EngravingItem* Score::nextElement()
             HammerOnPullOffSegment* hopoSeg = toHammerOnPullOffSegment(e);
             if (!hopoSeg->hopoText().empty()) {
                 return hopoSeg->hopoText().front();
-            } // else fallthrough:
+            }
+            [[fallthrough]];
         }
         case ElementType::TAPPING_HALF_SLUR_SEGMENT:
         {
@@ -773,7 +774,8 @@ EngravingItem* Score::nextElement()
             Tapping* tapping = halfSlur->tapping();
             if (halfSlur->isHalfSlurAbove() && tapping->halfSlurBelow()) {
                 return tapping->halfSlurBelow()->frontSegment();
-            } // else fallthrough:
+            }
+            [[fallthrough]];
         }
         case ElementType::VOLTA_SEGMENT:
         case ElementType::SLUR_SEGMENT:
