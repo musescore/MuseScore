@@ -687,6 +687,12 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->endEditElement();
     }
 
+    // Alt+click paste range
+    consumed = mousePress_considerPasteRange(ctx);
+    if (consumed) {
+        return;
+    }
+
     // Drag outgoing: element
     consumed = mousePress_considerDragOutgoingElement(ctx);
     if (consumed) {
@@ -751,6 +757,32 @@ bool NotationViewInputController::mousePress_considerDragOutgoingElement(const C
     viewInteraction()->select({ ctx.hitElement }, SelectType::SINGLE, ctx.hitStaff);
     m_mouseDownInfo.dragAction = MouseDownInfo::DragOutgoingElement;
     return true;
+}
+
+bool NotationViewInputController::mousePress_considerPasteRange(const ClickContext& ctx)
+{
+    // Check if this is a left click with Alt modifier
+    if (ctx.event->button() != Qt::LeftButton || !(ctx.event->modifiers() & Qt::AltModifier)) {
+        return false;
+    }
+
+    // Check if we have a range selection that can be copied
+    const INotationSelectionPtr selection = viewInteraction()->selection();
+    if (!selection->isRange() || !selection->canCopy()) {
+        return false;
+    }
+
+    // Get the MIME data for the current selection
+    muse::ByteArray rangeData = selection->mimeData();
+    if (rangeData.empty()) {
+        return false;
+    }
+
+    // Perform the paste operation at the click position
+    QByteArray qRangeData = rangeData.toQByteArrayNoCopy();
+    bool success = viewInteraction()->pasteRange(qRangeData, ctx.logicClickPos);
+
+    return success;
 }
 
 void NotationViewInputController::mousePress_considerSelect(const ClickContext& ctx)

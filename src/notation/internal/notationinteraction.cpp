@@ -1432,7 +1432,7 @@ void NotationInteraction::startOutgoingDragRange(QObject* dragSource)
         return;
     }
 
-    QMimeData* mimeData = selection()->mimeData();
+    QMimeData* mimeData = selection()->qMimeData();
     if (!mimeData) {
         return;
     }
@@ -2133,6 +2133,51 @@ bool NotationInteraction::dropRange(const QByteArray& data, const PointF& pos, b
     }
 
     endDrop();
+    apply();
+
+    MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+
+    return true;
+}
+
+bool NotationInteraction::pasteRange(const QByteArray& data, const PointF& pos)
+{
+    Fraction tickLength;
+    size_t numStaves = 0;
+
+    mu::engraving::XmlReader reader(data);
+    while (reader.readNextStartElement()) {
+        if (reader.name() == "StaffList") {
+            tickLength = Fraction::fromString(reader.attribute("len"));
+            numStaves = reader.intAttribute("staves", 0);
+            break;
+        }
+    }
+
+    if (tickLength.isZero() || numStaves == 0) {
+        return false;
+    }
+
+    // Find the target position
+    staff_idx_t staffIdx = muse::nidx;
+    Segment* segment = nullptr;
+
+    const bool ok = dropRangePosition(score(), pos, tickLength, numStaves, &staffIdx, &segment);
+    if (!ok) {
+        return false;
+    }
+
+    if (segment->isTupletSubdivision() || segment->isInsideTupletOnStaff(staffIdx)) {
+        MScore::setError(MsError::DEST_TUPLET);
+        MScoreErrorsController(iocContext()).checkAndShowMScoreError();
+        return false;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Paste range"));
+
+    XmlReader pasteReader(data);
+    score()->pasteStaff(pasteReader, segment, staffIdx);
+
     apply();
 
     MScoreErrorsController(iocContext()).checkAndShowMScoreError();
@@ -5037,7 +5082,7 @@ void NotationInteraction::copySelection()
             QGuiApplication::clipboard()->setMimeData(mimeData);
         }
     } else {
-        QMimeData* mimeData = selection()->mimeData();
+        QMimeData* mimeData = selection()->qMimeData();
         if (!mimeData) {
             return;
         }
@@ -5172,7 +5217,7 @@ void NotationInteraction::swapSelection()
     QString mimeType = selection.mimeType();
 
     if (mimeType == mu::engraving::mimeStaffListFormat) { // determine size of clipboard selection
-        const QMimeData* mimeData = this->selection()->mimeData();
+        const QMimeData* mimeData = this->selection()->qMimeData();
         QByteArray data = mimeData ? mimeData->data(mu::engraving::mimeStaffListFormat) : QByteArray();
         mu::engraving::XmlReader reader(data);
         reader.readNextStartElement();

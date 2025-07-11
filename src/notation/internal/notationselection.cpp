@@ -69,7 +69,12 @@ Ret NotationSelection::canCopy() const
     return muse::make_ok();
 }
 
-QMimeData* NotationSelection::mimeData() const
+muse::ByteArray NotationSelection::mimeData() const
+{
+    return score()->selection().mimeData();
+}
+
+QMimeData* NotationSelection::qMimeData() const
 {
     QString mimeType = score()->selection().mimeType();
     if (mimeType.isEmpty()) {

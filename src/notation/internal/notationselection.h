@@ -43,7 +43,8 @@ public:
     SelectionState state() const override;
 
     muse::Ret canCopy() const override;
-    QMimeData* mimeData() const override;
+    muse::ByteArray mimeData() const override;
+    QMimeData* qMimeData() const override;
 
     EngravingItem* element() const override;
     const std::vector<EngravingItem*>& elements() const override;
