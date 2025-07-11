@@ -141,6 +141,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::FRET_FRAME_ROW_GAP,                  false, "fretFrameRowGap",               P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "row gap") },
     { Pid::FRET_FRAME_CHORDS_PER_ROW,           false, "fretFrameChordsPerRow",         P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "chords per row") },
     { Pid::FRET_FRAME_H_ALIGN,                  false, "fretFrameHorizontalAlign",      P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "horizontal alignment") },
+    { Pid::FRET_FRAME_DIAGRAMS_ORDER,           false, "fretFrameDiagramsOrder",        P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "diagrams order") },
 
     { Pid::SCALE,                   false, "scale",                 P_TYPE::SCALE,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "scale") },
     { Pid::LOCK_ASPECT_RATIO,       false, "lockAspectRatio",       P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "aspect ratio locked") },

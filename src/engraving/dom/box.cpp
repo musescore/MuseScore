@@ -51,6 +51,8 @@ static const ElementStyle boxStyle {
 static const ElementStyle hBoxStyle {
 };
 
+static const String FRET_BOX_DIAGRAMS_ORDER_SEPARATOR = u",";
+
 Box::Box(const ElementType& type, System* parent)
     : MeasureBase(type, parent)
 {
@@ -704,16 +706,43 @@ void FBox::init()
             }
 
             String harmonyName = fretDiagram->harmony()->harmonyName().toLower();
-            if (muse::contains(usedDiagrams, harmonyName)) {
+            if (muse::contains(usedDiagrams, harmonyName) || harmonyName.empty()) {
                 delete fretDiagram;
-                fretDiagram = nullptr;
-
                 continue;
             }
 
             add(fretDiagram);
 
             usedDiagrams.insert(harmonyName);
+        }
+    }
+
+    if (m_diagramsOrder.empty()) {
+        return;
+    }
+
+    std::vector<String /*harmonyName*/> currentDiagramsOrder;
+    for (EngravingItem* item : el()) {
+        currentDiagramsOrder.push_back(toFretDiagram(item)->harmony()->harmonyName().toLower());
+    }
+
+    if (currentDiagramsOrder != m_diagramsOrder) {
+        m_diagramsOrder.erase(std::remove_if(m_diagramsOrder.begin(), m_diagramsOrder.end(),
+                                             [&](const String& harmonyName) { return !muse::contains(currentDiagramsOrder, harmonyName); }),
+                              m_diagramsOrder.end());
+
+        String previousHarmonyName;
+        for (const String& harmonyName : currentDiagramsOrder) {
+            if (!muse::contains(m_diagramsOrder, harmonyName)) {
+                size_t index = 0;
+                if (!previousHarmonyName.empty()) {
+                    index = std::find(m_diagramsOrder.begin(), m_diagramsOrder.end(), previousHarmonyName) - m_diagramsOrder.begin() + 1;
+                }
+
+                m_diagramsOrder.insert(m_diagramsOrder.begin() + index, harmonyName);
+            }
+
+            previousHarmonyName = harmonyName;
         }
     }
 }
@@ -761,6 +790,8 @@ PropertyValue FBox::getProperty(Pid propertyId) const
         return m_contentAlignmentH == AlignH::LEFT ? VBox::getProperty(propertyId) : PropertyValue();
     case Pid::RIGHT_MARGIN:
         return m_contentAlignmentH == AlignH::RIGHT ? VBox::getProperty(propertyId) : PropertyValue();
+    case Pid::FRET_FRAME_DIAGRAMS_ORDER:
+        return !m_diagramsOrder.empty() ? m_diagramsOrder.join(FRET_BOX_DIAGRAMS_ORDER_SEPARATOR) : PropertyValue();
     default:
         return VBox::getProperty(propertyId);
     }
@@ -789,6 +820,9 @@ bool FBox::setProperty(Pid propertyId, const PropertyValue& val)
         resetProperty(Pid::LEFT_MARGIN);
         resetProperty(Pid::RIGHT_MARGIN);
         break;
+    case Pid::FRET_FRAME_DIAGRAMS_ORDER:
+        m_diagramsOrder = val.value<String>().split(FRET_BOX_DIAGRAMS_ORDER_SEPARATOR); // todo
+        break;
     default:
         return VBox::setProperty(propertyId, val);
     }
@@ -813,6 +847,8 @@ PropertyValue FBox::propertyDefault(Pid propertyId) const
     case Pid::TOP_GAP:
     case Pid::BOTTOM_GAP:
         return 4.0;
+    case Pid::FRET_FRAME_DIAGRAMS_ORDER:
+        return PropertyValue();
     default:
         return VBox::propertyDefault(propertyId);
     }
@@ -838,10 +874,36 @@ std::vector<PointF> FBox::gripsPositions(const EditData&) const
     return {};
 }
 
-void FBox::undoReorderElements(const std::vector<EID>& newOrderElementsIds)
+void FBox::undoReorderElements(const StringList& newOrder)
 {
-    score()->undo(new ReorderFBox(this, newOrderElementsIds));
+    StringList order;
+    for (const String& harmonyName : newOrder) {
+        order.push_back(harmonyName.toLower());
+    }
+
+    undoChangeProperty(Pid::FRET_FRAME_DIAGRAMS_ORDER, order.join(FRET_BOX_DIAGRAMS_ORDER_SEPARATOR));
     triggerLayout();
+}
+
+ElementList FBox::orderedElements() const
+{
+    ElementList elements = el();
+    std::vector<String> diagramsOrder = this->diagramsOrder();
+
+    std::sort(elements.begin(), elements.end(), [&diagramsOrder](const EngravingItem* a, const EngravingItem* b) {
+        const FretDiagram* diagramA = toFretDiagram(a);
+        const String diagramAHarmonyName = diagramA->harmony()->harmonyName().toLower();
+
+        const FretDiagram* diagramB = toFretDiagram(b);
+        const String diagramBHarmonyName = diagramB->harmony()->harmonyName().toLower();
+
+        auto itA = std::find(diagramsOrder.begin(), diagramsOrder.end(), diagramAHarmonyName);
+        auto itB = std::find(diagramsOrder.begin(), diagramsOrder.end(), diagramBHarmonyName);
+
+        return itA < itB;
+    });
+
+    return elements;
 }
 
 //---------------------------------------------------------

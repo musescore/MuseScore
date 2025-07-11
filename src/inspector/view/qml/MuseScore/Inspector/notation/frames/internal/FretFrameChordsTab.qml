@@ -54,6 +54,8 @@ FocusableItem {
             anchors.right: parent.right
             anchors.rightMargin: root.sideMargin
 
+            listOrderItem: root.model ? root.model.listOrder : null
+
             isMovingUpAvailable: view.model ? view.model.isMovingUpAvailable : false
             isMovingDownAvailable: view.model ? view.model.isMovingDownAvailable : false
 

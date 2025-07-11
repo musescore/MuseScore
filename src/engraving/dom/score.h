@@ -1089,9 +1089,7 @@ public:
     void removeSystemLocksContainingMMRests();
     void updateSystemLocksOnCreateMMRests(Measure* first, Measure* last);
 
-    void undoRenameChordInFretBox(const Harmony* harmony, const String& oldName);
-    void undoAddChordToFretBox(const EngravingItem* harmonyOrFretDiagram);
-    void undoRemoveChordFromFretBox(const EngravingItem* harmonyOrFretDiagram);
+    void rebuildFretBox();
 
     friend class Chord;
 
