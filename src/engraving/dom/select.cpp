@@ -924,7 +924,7 @@ void Selection::update()
         // Use the top selected note in the chord...
         const std::vector<Note*> notes = toChord(cr)->notes();
         const size_t noteCount = notes.size();
-        for (size_t noteIdx = noteCount - 1; noteIdx >= 0 && noteIdx < noteCount; --noteIdx) {
+        for (size_t noteIdx = noteCount - 1; noteIdx < noteCount; --noteIdx) {
             Note* note = notes.at(noteIdx);
             if (selectionFilter().canSelectNoteIdx(noteIdx, notes.size(), rangeContainsMultiNoteChords())) {
                 toSelectAgain = note;
