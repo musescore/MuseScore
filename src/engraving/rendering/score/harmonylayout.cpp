@@ -203,7 +203,7 @@ void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, const Layo
     ldata->fontList.mut_value().clear();
     for (const ChordFont& cf : chordList->fonts) {
         Font ff(item->font());
-        double mag = item->userMag().value_or(cf.mag);
+        double mag = item->mag() * cf.mag;
         ff.setPointSizeF(ff.pointSizeF() * mag);
         if (cf.musicSymbolText) {
             ff.setFamily(cf.family, Font::Type::MusicSymbolText);

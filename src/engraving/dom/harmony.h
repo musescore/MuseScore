@@ -232,8 +232,6 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
 
     double mag() const override;
-    void setUserMag(double m) { m_userMag = m; }
-    const std::optional<double>& userMag() const { return m_userMag; }
 
     double bassScale() const { return m_bassScale; }
     void setBassScale(double v) { m_bassScale = v; }
@@ -282,7 +280,6 @@ private:
     NoteCaseType m_rootCase = NoteCaseType::AUTO;
     NoteCaseType m_bassCase = NoteCaseType::AUTO;        // case as typed
 
-    std::optional<double> m_userMag;
     double m_bassScale = 1.0;
 };
 } // namespace mu::engraving

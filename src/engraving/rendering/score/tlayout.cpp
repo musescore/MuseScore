@@ -1491,7 +1491,7 @@ void TLayout::layoutFBox(const FBox* item, FBox::LayoutData* ldata, const Layout
         fretDiagram->setUserMag(item->diagramScale());
 
         Harmony* harmony = fretDiagram->harmony();
-        harmony->setUserMag(item->textScale());
+        harmony->mutldata()->setMag(item->textScale());
         layoutHarmony(harmony, harmony->mutldata(), ctx);
 
         layoutItem(fretDiagram, const_cast<LayoutContext&>(ctx));

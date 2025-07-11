@@ -1582,10 +1582,6 @@ Sid Harmony::getPropertyStyle(Pid pid) const
 
 double Harmony::mag() const
 {
-    if (m_userMag.has_value()) {
-        return m_userMag.value();
-    }
-
     return EngravingItem::mag();
 }
 
