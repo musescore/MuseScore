@@ -5065,7 +5065,11 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
                 NoteVal nval2 = noteValForPosition(pos, AccidentalType::NONE, error);
                 forceAccidental = (nval.pitch == nval2.pitch);
             }
-            addNote(chord, nval, forceAccidental, m_is.articulationIds());
+            if (inputState().usingNoteEntryMethod(NoteEntryMethod::REPITCH)) {
+                addPitchToChord(nval, chord, /* externalInputState */ nullptr, forceAccidental);
+            } else {
+                addNote(chord, nval, forceAccidental, m_is.articulationIds());
+            }
             m_is.setAccidentalType(AccidentalType::NONE);
             return;
         }
