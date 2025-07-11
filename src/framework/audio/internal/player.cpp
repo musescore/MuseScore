@@ -33,8 +33,8 @@ using namespace muse;
 using namespace muse::async;
 using namespace muse::audio;
 
-Player::Player(const IGetTrackSequence* getSeq, const TrackSequenceId sequenceId)
-    : m_getSequence(getSeq), m_sequenceId(sequenceId)
+Player::Player(const TrackSequenceId sequenceId)
+    : m_sequenceId(sequenceId)
 {
 }
 
@@ -55,31 +55,18 @@ void Player::init()
     Async::call(this, [this]() {
         ONLY_AUDIO_WORKER_THREAD;
 
-        ITrackSequencePtr s = seq();
-
         //! NOTE Send initial state
-        m_playbackStatusChanged.send(s->player()->playbackStatus());
-        s->player()->playbackStatusChanged().onReceive(this, [this](const PlaybackStatus newStatus) {
+        m_playbackStatusChanged.send(workerPlayback()->playbackStatus(m_sequenceId));
+        workerPlayback()->playbackStatusChanged(m_sequenceId).onReceive(this, [this](const PlaybackStatus newStatus) {
             m_playbackStatusChanged.send(newStatus);
         });
 
         //! NOTE Send initial state
-        m_playbackPositionChanged.send(s->player()->playbackPosition());
-        s->player()->playbackPositionChanged().onReceive(this, [this](const secs_t newPos) {
+        m_playbackPositionChanged.send(workerPlayback()->playbackPosition(m_sequenceId));
+        workerPlayback()->playbackPositionChanged(m_sequenceId).onReceive(this, [this](const secs_t newPos) {
             m_playbackPositionChanged.send(newPos);
         });
     }, AudioThread::ID);
-}
-
-ITrackSequencePtr Player::seq() const
-{
-    ONLY_AUDIO_WORKER_THREAD;
-
-    IF_ASSERT_FAILED(m_getSequence) {
-        return nullptr;
-    }
-
-    return m_getSequence->sequence(m_sequenceId);
 }
 
 TrackSequenceId Player::sequenceId() const
@@ -94,10 +81,7 @@ void Player::play(const secs_t delay)
 
     Async::call(this, [this, delay]() {
         ONLY_AUDIO_WORKER_THREAD;
-        ITrackSequencePtr s = seq();
-        if (s) {
-            s->player()->play(delay);
-        }
+        workerPlayback()->play(m_sequenceId, delay);
     }, AudioThread::ID);
 }
 
@@ -107,10 +91,7 @@ void Player::seek(const secs_t newPosition)
 
     Async::call(this, [this, newPosition]() {
         ONLY_AUDIO_WORKER_THREAD;
-        ITrackSequencePtr s = seq();
-        if (s) {
-            s->player()->seek(newPosition);
-        }
+        workerPlayback()->seek(m_sequenceId, newPosition);
     }, AudioThread::ID);
 }
 
@@ -120,10 +101,7 @@ void Player::stop()
 
     Async::call(this, [this]() {
         ONLY_AUDIO_WORKER_THREAD;
-        ITrackSequencePtr s = seq();
-        if (s) {
-            s->player()->stop();
-        }
+        workerPlayback()->stop(m_sequenceId);
     }, AudioThread::ID);
 }
 
@@ -133,10 +111,7 @@ void Player::pause()
 
     Async::call(this, [this]() {
         ONLY_AUDIO_WORKER_THREAD;
-        ITrackSequencePtr s = seq();
-        if (s) {
-            s->player()->pause();
-        }
+        workerPlayback()->pause(m_sequenceId);
     }, AudioThread::ID);
 }
 
@@ -146,10 +121,7 @@ void Player::resume(const secs_t delay)
 
     Async::call(this, [this, delay]() {
         ONLY_AUDIO_WORKER_THREAD;
-        ITrackSequencePtr s = seq();
-        if (s) {
-            s->player()->resume(delay);
-        }
+        workerPlayback()->resume(m_sequenceId, delay);
     }, AudioThread::ID);
 }
 
@@ -159,10 +131,7 @@ void Player::setDuration(const msecs_t durationMsec)
 
     Async::call(this, [this, durationMsec]() {
         ONLY_AUDIO_WORKER_THREAD;
-        ITrackSequencePtr s = seq();
-        if (s) {
-            s->player()->setDuration(durationMsec);
-        }
+        workerPlayback()->setDuration(m_sequenceId, durationMsec);
     }, AudioThread::ID);
 }
 
@@ -173,18 +142,12 @@ async::Promise<bool> Player::setLoop(const msecs_t fromMsec, const msecs_t toMse
     return Promise<bool>([this, fromMsec, toMsec](auto resolve, auto reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
-        ITrackSequencePtr s = seq();
-
-        if (!s) {
-            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+        Ret ret = workerPlayback()->setLoop(m_sequenceId, fromMsec, toMsec);
+        if (ret) {
+            return resolve(true);
+        } else {
+            return reject(ret.code(), ret.text());
         }
-
-        Ret result = s->player()->setLoop(fromMsec, toMsec);
-        if (!result) {
-            return reject(result.code(), result.text());
-        }
-
-        return resolve(result);
     }, AudioThread::ID);
 }
 
@@ -194,10 +157,7 @@ void Player::resetLoop()
 
     Async::call(this, [this]() {
         ONLY_AUDIO_WORKER_THREAD;
-        ITrackSequencePtr s = seq();
-        if (s) {
-            s->player()->resetLoop();
-        }
+        workerPlayback()->resetLoop(m_sequenceId);
     }, AudioThread::ID);
 }
 

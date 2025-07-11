@@ -25,8 +25,9 @@
 
 #include "global/async/async.h"
 
-#include "internal/audiothread.h"
-#include "internal/audiosanitizer.h"
+#include "audiothread.h"
+#include "audiosanitizer.h"
+#include "player.h"
 
 #include "log.h"
 
@@ -124,7 +125,9 @@ Channel<TrackSequenceId> Playback::sequenceRemoved() const
 
 IPlayerPtr Playback::player(const TrackSequenceId id) const
 {
-    return workerPlayback()->player(id);
+    std::shared_ptr<Player> p = std::make_shared<Player>(id);
+    p->init();
+    return p;
 }
 
 // 2. Setup tracks for Sequence

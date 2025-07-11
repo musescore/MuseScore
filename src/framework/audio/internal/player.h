@@ -26,13 +26,15 @@
 #include "iplayer.h"
 #include "global/async/asyncable.h"
 
-#include "worker/igettracksequence.h"
+#include "modularity/ioc.h"
+#include "worker/iworkerplayback.h"
 
 namespace muse::audio {
 class Player : public IPlayer, public async::Asyncable
 {
+    Inject<worker::IWorkerPlayback> workerPlayback;
 public:
-    Player(const IGetTrackSequence* getSeq, const TrackSequenceId sequenceId);
+    Player(const TrackSequenceId sequenceId);
 
     void init();
 
@@ -56,9 +58,6 @@ public:
 
 private:
 
-    ITrackSequencePtr seq() const;
-
-    const IGetTrackSequence* m_getSequence = nullptr;
     TrackSequenceId m_sequenceId = -1;
     PlaybackStatus m_playbackStatus = PlaybackStatus::Stopped;
     async::Channel<PlaybackStatus> m_playbackStatusChanged;
