@@ -459,7 +459,7 @@ void PianoKeyboardView::paint(QPainter* painter)
     QPointF pos = m_keysAreaRect.topLeft();
     painter->translate(pos);
 
-    QRectF viewport = QRectF(0.0, 0.0, width(), height()).translated(-pos);
+    QRectF viewport = QRectF(0.0, 0.0, m_keysAreaRect.width(), height()).translated(-pos);
 
     shiftCheckRects();
 
