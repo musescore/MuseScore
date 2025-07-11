@@ -878,8 +878,8 @@ EditStyle::EditStyle(QWidget* parent)
 
     // Define string here instead of in the .ui file to avoid MSVC compiler warning C4125, which would
     // be triggered by the decimal digit immediately following a non-ASCII character (curly quote).
-    oneMeasureRepeatShow1->setText(muse::qtrc("EditStyleBase", "Show â€˜1â€™ on 1-measure repeats"));
-    singleMMRestShowNumber->setText(muse::qtrc("EditStyleBase", "Show number â€˜1â€™"));
+    oneMeasureRepeatShow1->setText(muse::qtrc("EditStyleBase", "Show ‘1’ on 1-measure repeats"));
+    singleMMRestShowNumber->setText(muse::qtrc("EditStyleBase", "Show number ‘1’"));
 
     // ====================================================
     // BEAMS (QML)
@@ -1473,7 +1473,7 @@ void EditStyle::setHeaderFooterToolTip()
           + QString("</i></td></tr></table><p>")
           + muse::qtrc("notation/editstyle", "Available metadata tags and their current values")
           + QString("<br />")
-          + muse::qtrc("notation/editstyle", "(in File > Project propertiesâ€¦):")
+          + muse::qtrc("notation/editstyle", "(in File > Project properties…):")
           + QString("</p><table>");
 
     // show all tags for current score/part
