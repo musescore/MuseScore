@@ -32,7 +32,6 @@
 #include "global/iglobalconfiguration.h"
 #include "iinteractive.h"
 
-#include "audio/iaudiooutput.h"
 #include "audio/iplayback.h"
 #include "audio/audiotypes.h"
 

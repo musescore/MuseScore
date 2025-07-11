@@ -111,6 +111,8 @@ private:
     async::Channel<TrackSequenceId, TrackId> m_trackAdded;
     async::Channel<TrackSequenceId, TrackId> m_trackRemoved;
     async::Channel<TrackSequenceId, TrackId, AudioInputParams> m_inputParamsChanged;
+    async::Channel<TrackSequenceId, TrackId, AudioOutputParams> m_outputParamsChanged;
+    async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
 };
 }
 
