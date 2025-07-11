@@ -36,7 +36,7 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Play"),
-             TranslatableString("action", "Play"),
+             TranslatableString("action", "Toggle playback"),
              IconCode::Code::PLAY
              ),
     UiAction("stop",
@@ -57,7 +57,7 @@ const UiActionList PlaybackUiActions::m_mainActions = {
              mu::context::UiCtxProjectOpened,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Rewind"),
-             TranslatableString("action", "Rewind"),
+             TranslatableString("action", "Rewind playback"),
              IconCode::Code::REWIND
              ),
     UiAction("loop",
@@ -120,7 +120,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              mu::context::UiCtxAny,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Play repeats"),
-             TranslatableString("action", "Play repeats"),
+             TranslatableString("action", "Toggle ‘Play repeats’"),
              IconCode::Code::PLAY_REPEATS,
              Checkable::Yes
              ),
@@ -128,7 +128,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              mu::context::UiCtxAny,
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Play chord symbols"),
-             TranslatableString("action", "Play chord symbols"),
+             TranslatableString("action", "Toggle ‘Play chord symbols’"),
              IconCode::Code::CHORD_SYMBOL,
              Checkable::Yes
              ),
@@ -152,7 +152,7 @@ const UiActionList PlaybackUiActions::m_settingsActions = {
              mu::context::UiCtxAny,
              mu::context::CTX_ANY,
              TranslatableString("action", "Enable count-in when playing"),
-             TranslatableString("action", "Enable count-in when playing"),
+             TranslatableString("action", "Toggle count-in when playing"),
              IconCode::Code::COUNT_IN,
              Checkable::Yes
              ),
