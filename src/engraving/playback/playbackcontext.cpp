@@ -517,7 +517,7 @@ void PlaybackContext::handleHairpin(const Hairpin* hairpin, const int tickPositi
     const dynamic_level_t nominalLevelTo = findNominalEndDynamicLevel(hairpin);
     const bool hasNominalLevelTo = nominalLevelTo != NATURAL_DYNAMIC_LEVEL;
 
-    // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs decresc.)
+    // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs dim.)
     const bool isCrescendo = hairpin->isCrescendo();
     const bool useNominalLevelTo = hasNominalLevelTo && (isCrescendo
                                                          ? nominalLevelTo > levelFrom

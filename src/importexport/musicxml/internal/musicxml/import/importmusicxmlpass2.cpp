@@ -4454,7 +4454,7 @@ void MusicXmlParserDirection::textToCrescLine(String& text)
     text.clear();
     Hairpin* line = Factory::createHairpin(m_score->dummy()->segment());
 
-    line->setHairpinType(cresc ? HairpinType::CRESC_LINE : HairpinType::DECRESC_LINE);
+    line->setHairpinType(cresc ? HairpinType::CRESC_LINE : HairpinType::DIM_LINE);
     line->setBeginText(simplifiedText);
     line->setContinueText(u"");
     line->setProperty(Pid::LINE_VISIBLE, false);
@@ -5338,7 +5338,7 @@ void MusicXmlParserDirection::wedge(const String& type, const int number,
     if (type == "crescendo" || type == "diminuendo") {
         Hairpin* h = spdesc.isStopped ? toHairpin(spdesc.sp) : Factory::createHairpin(m_score->dummy()->segment());
         h->setHairpinType(type == "crescendo"
-                          ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
+                          ? HairpinType::CRESC_HAIRPIN : HairpinType::DIM_HAIRPIN);
         if (niente == "yes") {
             h->setHairpinCircledTip(true);
         }

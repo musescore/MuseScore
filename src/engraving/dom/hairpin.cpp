@@ -166,7 +166,7 @@ std::vector<PointF> HairpinSegment::gripsPositions(const EditData&) const
         if (hairpin()->hairpinType() == HairpinType::CRESC_HAIRPIN) {
             lineApertureX = len - offsetX;                  // End of CRESCENDO - Offset
         } else {
-            lineApertureX = offsetX;                        // Begin of DECRESCENDO + Offset
+            lineApertureX = offsetX;                        // Begin of DIMINUENDO + Offset
         }
         double lineApertureH = (len - offsetX) * h1 / len;   // Vertical position for y grip
         gripLineAperturePoint.setX(lineApertureX);
@@ -263,7 +263,7 @@ Sid HairpinSegment::getPropertyStyle(Pid pid) const
             return Sid::hairpinText;
         case HairpinType::CRESC_LINE:
             return Sid::hairpinCrescText;
-        case HairpinType::DECRESC_LINE:
+        case HairpinType::DIM_LINE:
             return Sid::hairpinDecrescText;
         }
         break;
@@ -273,7 +273,7 @@ Sid HairpinSegment::getPropertyStyle(Pid pid) const
             return Sid::hairpinText;
         case HairpinType::CRESC_LINE:
             return Sid::hairpinCrescContText;
-        case HairpinType::DECRESC_LINE:
+        case HairpinType::DIM_LINE:
             return Sid::hairpinDecrescContText;
         }
         break;
@@ -458,7 +458,7 @@ Sid Hairpin::getPropertyStyle(Pid pid) const
             return Sid::hairpinText;
         case HairpinType::CRESC_LINE:
             return Sid::hairpinCrescText;
-        case HairpinType::DECRESC_LINE:
+        case HairpinType::DIM_LINE:
             return Sid::hairpinDecrescText;
         }
         break;
@@ -468,7 +468,7 @@ Sid Hairpin::getPropertyStyle(Pid pid) const
             return Sid::hairpinText;
         case HairpinType::CRESC_LINE:
             return Sid::hairpinCrescContText;
-        case HairpinType::DECRESC_LINE:
+        case HairpinType::DIM_LINE:
             return Sid::hairpinDecrescContText;
         }
         break;
@@ -521,7 +521,7 @@ DynamicType Hairpin::dynamicTypeFrom() const
 
 DynamicType Hairpin::dynamicTypeTo() const
 {
-    if (m_hairpinType == HairpinType::DECRESC_HAIRPIN && hairpinCircledTip()) {
+    if (m_hairpinType == HairpinType::DIM_HAIRPIN && hairpinCircledTip()) {
         return DynamicType::N;
     }
 
@@ -693,7 +693,7 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
         if (m_hairpinType == HairpinType::CRESC_LINE) {
             return style().styleV(Sid::hairpinCrescText);
         }
-        if (m_hairpinType == HairpinType::DECRESC_LINE) {
+        if (m_hairpinType == HairpinType::DIM_LINE) {
             return style().styleV(Sid::hairpinDecrescText);
         }
         return String();
@@ -702,7 +702,7 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
         if (m_hairpinType == HairpinType::CRESC_LINE) {
             return style().styleV(Sid::hairpinCrescContText);
         }
-        if (m_hairpinType == HairpinType::DECRESC_LINE) {
+        if (m_hairpinType == HairpinType::DIM_LINE) {
             return style().styleV(Sid::hairpinDecrescContText);
         }
         return String();
@@ -809,12 +809,12 @@ muse::TranslatableString Hairpin::subtypeUserName() const
     switch (hairpinType()) {
     case HairpinType::CRESC_HAIRPIN:
         return TranslatableString("engraving/hairpintype", "Crescendo hairpin");
-    case HairpinType::DECRESC_HAIRPIN:
-        return TranslatableString("engraving/hairpintype", "Decrescendo hairpin");
+    case HairpinType::DIM_HAIRPIN:
+        return TranslatableString("engraving/hairpintype", "Diminuendo hairpin");
     case HairpinType::CRESC_LINE:
         return TranslatableString("engraving/hairpintype", "Crescendo line");
-    case HairpinType::DECRESC_LINE:
-        return TranslatableString("engraving/hairpintype", "Decrescendo line");
+    case HairpinType::DIM_LINE:
+        return TranslatableString("engraving/hairpintype", "Diminuendo line");
     default:
         return TranslatableString("engraving/hairpintype", "Custom");
     }

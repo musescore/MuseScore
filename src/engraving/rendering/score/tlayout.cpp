@@ -3116,7 +3116,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
             }
         }
         break;
-        case HairpinType::DECRESC_HAIRPIN: {
+        case HairpinType::DIM_HAIRPIN: {
             switch (item->spannerSegmentType()) {
             case SpannerSegmentType::SINGLE:
             case SpannerSegmentType::END: {
@@ -3155,7 +3155,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
 
         item->joinedHairpinRef().clear();
         if (item->spannerSegmentType() != SpannerSegmentType::MIDDLE) {
-            if (type == HairpinType::DECRESC_HAIRPIN && item->spannerSegmentType() != SpannerSegmentType::BEGIN) {
+            if (type == HairpinType::DIM_HAIRPIN && item->spannerSegmentType() != SpannerSegmentType::BEGIN) {
                 item->joinedHairpinRef() << item->pointsRef()[0] << item->pointsRef()[1] << item->pointsRef()[2]; // [top-left, joint, bottom-left]
             } else if (type == HairpinType::CRESC_HAIRPIN && item->spannerSegmentType() != SpannerSegmentType::END) {
                 item->joinedHairpinRef() << item->pointsRef()[1] << item->pointsRef()[0] << item->pointsRef()[3]; // [top-right, joint, bottom-right]
@@ -3351,10 +3351,10 @@ void TLayout::fillHairpinSegmentShape(const HairpinSegment* item, HairpinSegment
     Shape sh;
     switch (item->hairpin()->hairpinType()) {
     case HairpinType::CRESC_HAIRPIN:
-    case HairpinType::DECRESC_HAIRPIN:
+    case HairpinType::DIM_HAIRPIN:
         sh = Shape(item->ldata()->bbox(), item);
         break;
-    case HairpinType::DECRESC_LINE:
+    case HairpinType::DIM_LINE:
     case HairpinType::CRESC_LINE:
     default:
         sh = textLineBaseSegmentShape(item);
