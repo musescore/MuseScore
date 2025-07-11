@@ -344,6 +344,24 @@ int Dynamic::dynamicVelocity(DynamicType t)
     return DYN_LIST[int(t)].velocity;
 }
 
+void Dynamic::startEdit(EditData& ed)
+{
+    if (ed.curGrip != Grip::NO_GRIP) {
+        EngravingItem::startEdit(ed);
+    } else {
+        TextBase::startEdit(ed);
+    }
+}
+
+void Dynamic::endEdit(EditData& ed)
+{
+    if (cursor() && cursor()->editing()) {
+        TextBase::endEdit(ed);
+    } else {
+        EngravingItem::endEdit(ed);
+    }
+}
+
 TranslatableString Dynamic::subtypeUserName() const
 {
     if (dynamicType() == DynamicType::OTHER) {

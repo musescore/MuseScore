@@ -3544,6 +3544,12 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
     }
 
     mu::engraving::EngravingItem* editedElement = m_editData.element;
+    if (!editedElement) {
+        EngravingItem* selectedElement = m_selection->element();
+        if (selectedElement && selectedElement->isDynamic()) {
+            editedElement = selectedElement;
+        }
+    }
 
     if (editedElement && editedElement->isDynamic()) {
         toDynamic(editedElement)->findAdjacentHairpins();
@@ -4222,7 +4228,8 @@ bool NotationInteraction::isTextSelected() const
 
 bool NotationInteraction::isTextEditingStarted() const
 {
-    return m_editData.element && m_editData.element->isTextBase();
+    EngravingItem* element = m_editData.element;
+    return element && element->isTextBase() && toTextBase(element)->cursor() && toTextBase(element)->cursor()->editing();
 }
 
 bool NotationInteraction::textEditingAllowed(const EngravingItem* element) const

@@ -112,6 +112,8 @@ public:
 
     bool hasVoiceAssignmentProperties() const override { return true; }
 
+    void startEdit(EditData&) override;
+    void endEdit(EditData&) override;
     int gripsCount() const override;
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
     void editDrag(EditData& editData) override;
