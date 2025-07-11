@@ -63,8 +63,6 @@ struct ReleaseInfo {
     }
 };
 
-static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
-
 static ValList releasesNotesToValList(const PrevReleasesNotesList& list)
 {
     ValList valList;

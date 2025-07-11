@@ -41,9 +41,11 @@ public:
     virtual const project::ProjectFile& startupScoreFile() const = 0;
     virtual void setStartupScoreFile(const std::optional<project::ProjectFile>& file) = 0;
 
-    virtual void runOnSplashScreen() = 0;
+    virtual muse::ProgressPtr splashScreenProgress() = 0;
     virtual void runAfterSplashScreen() = 0;
     virtual bool startupCompleted() const = 0;
+
+    virtual QList<QVariantMap> welcomeDialogData() const = 0;
 };
 }
 
