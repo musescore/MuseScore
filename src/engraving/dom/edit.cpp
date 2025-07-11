@@ -6388,8 +6388,23 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         if (lb->layoutBreakType() == LayoutBreakType::SECTION) {
             doUndoAddElement(lb);
             MeasureBase* m = lb->measure();
+
+            // add Key Signature on Section Break
+            // operate on master score to be sure all staves are included
+            Fraction tick = m->endTick();
+            int ticks = tick.ticks();
+            for (Staff* staff : masterScore()->staves()) {
+                KeyList* kl = staff->keyList();
+                KeySigEvent ks = kl->key(ticks);
+                if (kl->currentKeyTick(ticks) != ticks || ks.forInstrumentChange()) {
+                    ks.setForInstrumentChange(false);
+                    ks.setForSectionBreak(true);
+                    masterScore()->undoChangeKeySig(staff, tick, ks);
+                }
+            }
+
+            // for frames, use linked frames
             if (m->isBox()) {
-                // for frames, use linked frames
                 LinkedObjects* links = m->links();
                 if (links) {
                     for (EngravingObject* lo : *links) {
@@ -7275,8 +7290,12 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
         return;
     }
     std::list<Segment*> segments;
+    EngravingItem* masterElement = element;
     for (EngravingObject* ee : element->linkList()) {
         EngravingItem* e = static_cast<EngravingItem*>(ee);
+        if (ee->score()->isMaster()) {
+            masterElement = e;
+        }
         if (e == element || removeLinked) {
             if (e->isHarmony() || e->isFretDiagram()) {
                 undoRemoveChordFromFretBox(e);
@@ -7305,6 +7324,45 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
             for (int i = 0; i < repeat->numMeasures(); ++i) {
                 undoChangeMeasureRepeatCount(measure, 0, staffIdx);
                 measure = measure->nextMeasure();
+            }
+        }
+    }
+
+    // remove section break key signatures
+    // operate on master score, to be sure, all signatures are included
+    if (masterElement->isLayoutBreak() && toLayoutBreak(masterElement)->isSectionBreak()) {
+        MeasureBase* mb = masterElement->findMeasureBase();
+        Measure* nextMeasure = mb ? mb->nextMeasure() : nullptr;
+        if (nextMeasure && nextMeasure->isMMRest()) {
+            nextMeasure = nextMeasure->mmRestFirst();
+        }
+        Segment* keySeg = nextMeasure ? nextMeasure->findFirstR(SegmentType::KeySig, Fraction(0, 1)) : nullptr;
+        if (keySeg) {
+            for (staff_idx_t i = 0; i <= masterScore()->nstaves(); i++) {
+                KeySig* ks = toKeySig(keySeg->element(i * VOICES));
+                if (ks && ks->forSectionBreak()) {
+                    Staff* staff = ks->staff();
+                    Fraction tick = ks->tick();
+                    KeySigEvent actualKey = ks->keySigEvent();
+                    KeySigEvent prevKey = staff->prevKey(tick);
+
+                    // do not remove keysig on first measure, or if signatures differ
+                    bool isFirst = ks->tick().isZero(); // this should never happen, but to be sure
+
+                    // if previous signature is "forInstrumentChange",
+                    // comparation returns false, even if they are otherwise identical
+                    // (because one is forInstrumentChange and second not)
+                    // so we need to remove "forInstrumentChange" flag first
+                    if (prevKey.forInstrumentChange()) {
+                        prevKey.setForInstrumentChange(false);
+                    }
+
+                    if (isFirst || actualKey != prevKey) {
+                        ks->setForSectionBreak(false);
+                    } else {
+                        masterScore()->deleteItem(ks);
+                    }
+                }
             }
         }
     }
