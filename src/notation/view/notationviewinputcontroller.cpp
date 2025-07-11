@@ -1227,11 +1227,15 @@ bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
 void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
     auto key = event->key();
+
     if (startTextEditingAllowed() && (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
         dispatcher()->dispatch("edit-text");
         event->accept();
     } else if (viewInteraction()->isElementEditStarted()) {
         viewInteraction()->editElement(event);
+        if (key == Qt::Key_Shift) {
+            viewInteraction()->updateTimeTickAnchors(event);
+        }
     } else if (key == Qt::Key_Shift) {
         updateShadowNotePopupVisibility();
         viewInteraction()->updateTimeTickAnchors(event);

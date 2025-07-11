@@ -4748,7 +4748,7 @@ void NotationInteraction::endEditElement()
 void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
 {
     EngravingItem* selectedElement = m_selection->element();
-    if (selectedElement && selectedElement->allowTimeAnchor() && event->type() == QKeyEvent::Type::KeyPress) {
+    if (selectedElement && selectedElement->allowTimeAnchor() && event->type() == QKeyEvent::Type::KeyPress && !isTextEditingStarted()) {
         EditTimeTickAnchors::updateAnchors(selectedElement);
     } else {
         score()->hideAnchors();
