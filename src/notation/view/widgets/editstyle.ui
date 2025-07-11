@@ -983,7 +983,7 @@
            <property name="geometry">
             <rect>
              <x>0</x>
-             <y>-186</y>
+             <y>-656</y>
              <width>602</width>
              <height>1122</height>
             </rect>
@@ -14747,10 +14747,10 @@ followed by dashes</string>
   <tabstop>resetAutoplaceVerticalAlignRange</tabstop>
   <tabstop>minVerticalDistance</tabstop>
   <tabstop>resetMinVerticalDistance</tabstop>
-  <tabstop>staffDistance</tabstop>
-  <tabstop>resetStaffDistance</tabstop>
-  <tabstop>akkoladeDistance</tabstop>
-  <tabstop>resetAkkoladeDistance</tabstop>
+  <tabstop>maskBarlines</tabstop>
+  <tabstop>partialSlursAngleNormal</tabstop>
+  <tabstop>resetMaskBarlines</tabstop>
+  <tabstop>partialSlursAngleWeird</tabstop>
   <tabstop>smallStaffSize</tabstop>
   <tabstop>resetSmallStaffSize</tabstop>
   <tabstop>smallClefSize</tabstop>
@@ -15243,6 +15243,96 @@ followed by dashes</string>
   <tabstop>resetTextStyleFrameBorderRadius</tabstop>
   <tabstop>buttonTogglePagelist</tabstop>
   <tabstop>resetStylesButton</tabstop>
+  <tabstop>spacingScrollArea</tabstop>
+  <tabstop>staffUpperBorder</tabstop>
+  <tabstop>resetStaffUpperBorder</tabstop>
+  <tabstop>staffLowerBorder</tabstop>
+  <tabstop>resetStaffLowerBorder</tabstop>
+  <tabstop>enableVerticalSpread</tabstop>
+  <tabstop>spreadSystem</tabstop>
+  <tabstop>resetSpreadSystem</tabstop>
+  <tabstop>spreadSquareBracket</tabstop>
+  <tabstop>resetSpreadSquareBracket</tabstop>
+  <tabstop>spreadCurlyBracket</tabstop>
+  <tabstop>resetSpreadCurlyBracket</tabstop>
+  <tabstop>minSystemSpread</tabstop>
+  <tabstop>resetMinSystemSpread</tabstop>
+  <tabstop>maxSystemSpread</tabstop>
+  <tabstop>resetMaxSystemSpread</tabstop>
+  <tabstop>minStaffSpread</tabstop>
+  <tabstop>resetMinStaffSpread</tabstop>
+  <tabstop>maxStaffSpread</tabstop>
+  <tabstop>resetMaxStaffSpread</tabstop>
+  <tabstop>maxAkkoladeDistance</tabstop>
+  <tabstop>resetMaxAkkoladeDistance</tabstop>
+  <tabstop>maxPageFillSpread</tabstop>
+  <tabstop>resetMaxPageFillSpread</tabstop>
+  <tabstop>disableVerticalSpread</tabstop>
+  <tabstop>staffDistance</tabstop>
+  <tabstop>resetStaffDistance</tabstop>
+  <tabstop>akkoladeDistance</tabstop>
+  <tabstop>resetAkkoladeDistance</tabstop>
+  <tabstop>minSystemDistance</tabstop>
+  <tabstop>resetMinSystemDistance</tabstop>
+  <tabstop>maxSystemDistance</tabstop>
+  <tabstop>resetMaxSystemDistance</tabstop>
+  <tabstop>systemFrameDistance</tabstop>
+  <tabstop>resetSystemFrameDistance</tabstop>
+  <tabstop>frameSystemDistance</tabstop>
+  <tabstop>resetFrameSystemDistance</tabstop>
+  <tabstop>spacingDensity</tabstop>
+  <tabstop>resetSpacingDensity</tabstop>
+  <tabstop>measureSpacing</tabstop>
+  <tabstop>resetMeasureSpacing</tabstop>
+  <tabstop>minMeasureWidth_2</tabstop>
+  <tabstop>resetMinMeasureWidth</tabstop>
+  <tabstop>lastSystemFillThreshold</tabstop>
+  <tabstop>resetLastSystemFillThreshold</tabstop>
+  <tabstop>clefKeyDistance</tabstop>
+  <tabstop>resetClefKeyDistance</tabstop>
+  <tabstop>clefTimesigDistance</tabstop>
+  <tabstop>resetClefTimesigDistance</tabstop>
+  <tabstop>keyTimesigDistance</tabstop>
+  <tabstop>resetKeyTimesigDistance</tabstop>
+  <tabstop>clefKeyRightMargin</tabstop>
+  <tabstop>resetClefKeyRightMargin</tabstop>
+  <tabstop>minNoteDistance</tabstop>
+  <tabstop>resetMinNoteDistance</tabstop>
+  <tabstop>noteBarDistance</tabstop>
+  <tabstop>resetNoteBarDistance</tabstop>
+  <tabstop>barNoteDistance</tabstop>
+  <tabstop>resetBarNoteDistance</tabstop>
+  <tabstop>barAccidentalDistance</tabstop>
+  <tabstop>resetBarAccidentalDistance</tabstop>
+  <tabstop>barGraceDistance</tabstop>
+  <tabstop>resetBarGraceDistance</tabstop>
+  <tabstop>clefLeftMargin</tabstop>
+  <tabstop>resetClefLeftMargin</tabstop>
+  <tabstop>clefBarlineDistance</tabstop>
+  <tabstop>resetClefBarlineDistance</tabstop>
+  <tabstop>keysigLeftMargin</tabstop>
+  <tabstop>resetKeysigLeftMargin</tabstop>
+  <tabstop>keyBarlineDistance</tabstop>
+  <tabstop>resetKeyBarlineDistance</tabstop>
+  <tabstop>timesigLeftMargin</tabstop>
+  <tabstop>resetTimesigLeftMargin</tabstop>
+  <tabstop>timesigBarlineDistance</tabstop>
+  <tabstop>resetTimesigBarlineDistance</tabstop>
+  <tabstop>systemHeaderDistance</tabstop>
+  <tabstop>resetSystemHeaderDistance</tabstop>
+  <tabstop>systemHeaderTimeSigDistance</tabstop>
+  <tabstop>resetSystemHeaderTimeSigDistance</tabstop>
+  <tabstop>systemHeaderMinStartOfSystemDistance</tabstop>
+  <tabstop>resetSystemHeaderMinStartOfSystemDistance</tabstop>
+  <tabstop>lyricsAvoidBarlines</tabstop>
+  <tabstop>resetLyricsAvoidBarlines</tabstop>
+  <tabstop>limitDashCount</tabstop>
+  <tabstop>lyricsDashYposRatio</tabstop>
+  <tabstop>resetLyricsMaxDashCount</tabstop>
+  <tabstop>resetLyricsDashYposRatio</tabstop>
+  <tabstop>lyricsMaxDashCount</tabstop>
+  <tabstop>lyricsCenterDashedSyllables</tabstop>
+  <tabstop>lyricsResetCenterDashedSyllables</tabstop>
  </tabstops>
  <resources/>
  <connections/>
