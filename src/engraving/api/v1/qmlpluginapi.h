@@ -29,8 +29,16 @@
 #include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "global/iapplication.h"
+#include "engraving/iengraving.h"
 
 #include "enums.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/types.h"
+#include "engraving/types/types.h"
+#include "project/iexportprojectscenario.h"
+#include "project/inotationwritersregister.h"
+#include "project/iprojectfilescontroller.h"
+
 #include "apitypes.h"
 #include "cursor.h"
 
@@ -133,6 +141,7 @@ public:
     muse::Inject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
     muse::Inject<mu::context::IGlobalContext> context = { this };
     muse::Inject<muse::IApplication> application = { this };
+    muse::Inject<mu::engraving::IEngraving> engravingInterface = { this };
 
 public:
     // Should be initialized in qmlpluginapi.cpp
@@ -474,7 +483,8 @@ public:
     Q_INVOKABLE apiv1::MsProcess* newQProcess();
     Q_INVOKABLE bool writeScore(apiv1::Score*, const QString& name, const QString& ext);
     Q_INVOKABLE apiv1::Score* readScore(const QString& name, bool noninteractive = false);
-    Q_INVOKABLE void closeScore(apiv1::Score*);
+    Q_INVOKABLE void closeScore(apiv1::Score* score);
+    Q_INVOKABLE void closeScore();
 
     Q_INVOKABLE void log(const QString&);
     Q_INVOKABLE void logn(const QString&);
