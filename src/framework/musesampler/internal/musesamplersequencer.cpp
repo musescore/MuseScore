@@ -156,62 +156,16 @@ void MuseSamplerSequencer::triggerRender()
 
 void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events, const DynamicLevelLayers&)
 {
-    m_offStreamCache.clear();
+    m_auditionParamsCache.clear();
 
     for (const auto& pair : events) {
         for (const auto& event : pair.second) {
-            if (!std::holds_alternative<mpe::NoteEvent>(event)) {
-                if (std::holds_alternative<mpe::ControllerChangeEvent>(event)) {
-                    NOT_IMPLEMENTED;
-                } else {
-                    parseOffstreamParams(event, m_offStreamCache);
-                }
-
-                continue;
-            }
-
-            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
-            const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
-
-            layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, arrangementCtx.voiceLayerIndex);
-            ms_Track track = findOrCreateTrack(layerIdx);
-            IF_ASSERT_FAILED(track) {
-                continue;
-            }
-
-            int pitch = 0, offsetCents = 0;
-            pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, pitch, offsetCents);
-
-            if (arrangementCtx.hasStart()) {
-                AuditionStartNoteEvent noteOn;
-                parseArticulations(noteEvent.expressionCtx().articulations, noteOn.msEvent._articulation, noteOn.msEvent._notehead);
-                noteOn.msEvent._pitch = pitch;
-                noteOn.msEvent._offset_cents = offsetCents;
-
-                if (noteEvent.expressionCtx().velocityOverride.has_value()) {
-                    noteOn.msEvent._dynamics = noteEvent.expressionCtx().velocityOverride.value();
-                } else {
-                    noteOn.msEvent._dynamics = dynamicLevelRatio(noteEvent.expressionCtx().nominalDynamicLevel);
-                }
-
-                noteOn.msEvent._active_presets = m_offStreamCache.presets.empty() ? m_defaultPresetCode.c_str()
-                                                 : m_offStreamCache.presets.c_str();
-                noteOn.msEvent._active_text_articulation = m_offStreamCache.textArticulation.c_str();
-                noteOn.msEvent._active_syllable = m_offStreamCache.syllable.c_str();
-                noteOn.msEvent._articulation_text_starts_at_note = m_offStreamCache.textArticulationStartsAtNote;
-                noteOn.msEvent._syllable_starts_at_note = m_offStreamCache.syllableStartsAtNote;
-                noteOn.msTrack = track;
-
-                m_offStreamEvents[arrangementCtx.actualTimestamp].insert(noteOn);
-            }
-
-            if (arrangementCtx.hasEnd()) {
-                AuditionStopNoteEvent noteOff;
-                noteOff.msEvent = { pitch };
-                noteOff.msTrack = track;
-
-                timestamp_t timestampTo = arrangementCtx.actualTimestamp + arrangementCtx.actualDuration;
-                m_offStreamEvents[timestampTo].emplace(std::move(noteOff));
+            if (std::holds_alternative<mpe::NoteEvent>(event)) {
+                addAuditionNoteEvent(std::get<mpe::NoteEvent>(event));
+            } else if (std::holds_alternative<mpe::ControllerChangeEvent>(event)) {
+                addAuditionCCEvent(std::get<mpe::ControllerChangeEvent>(event), pair.first);
+            } else {
+                parseAuditionParams(event, m_auditionParamsCache);
             }
         }
     }
@@ -528,7 +482,8 @@ void MuseSamplerSequencer::addTextArticulationEvent(const mpe::TextArticulationE
         return;
     }
 
-    std::string str = event.text.toStdString();
+    // Make sure that the string exists long enough
+    const std::string str = event.text.toStdString();
 
     ms_TextArticulationEvent evt;
     evt._start_us = startUs;
@@ -564,7 +519,8 @@ void MuseSamplerSequencer::addSoundPresetEvent(const mpe::SoundPresetChangeEvent
         presetChange = it->second;
     }
 
-    std::string code = event.code.toStdString();
+    // Make sure that the string exists long enough
+    const std::string code = event.code.toStdString();
     m_samplerLib->addPreset(m_sampler, track, presetChange, code.c_str());
 }
 
@@ -579,7 +535,8 @@ void MuseSamplerSequencer::addSyllableEvent(const mpe::SyllableEvent& event, lon
         return;
     }
 
-    std::string str = event.text.toStdString();
+    // Make sure that the string exists long enough
+    const std::string str = event.text.toStdString();
 
     SyllableEvent evt;
     evt._position_us = positionUs;
@@ -591,7 +548,7 @@ void MuseSamplerSequencer::addSyllableEvent(const mpe::SyllableEvent& event, lon
 
 void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
 {
-    duration_t duration = noteEvent.arrangementCtx().actualDuration;
+    const duration_t duration = noteEvent.arrangementCtx().actualDuration;
     const PitchCurve& pitchCurve = noteEvent.pitchCtx().pitchCurve;
 
     for (auto it = pitchCurve.begin(); it != pitchCurve.end(); ++it) {
@@ -604,8 +561,8 @@ void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long l
             continue;
         }
 
-        long long currOffsetStart = duration * percentageToFactor(it->first);
-        long long nextOffsetStart = duration * percentageToFactor(nextIt->first);
+        const long long currOffsetStart = duration * percentageToFactor(it->first);
+        const long long nextOffsetStart = duration * percentageToFactor(nextIt->first);
 
         ms_PitchBendInfo pitchBend;
         pitchBend.event_id = noteEventId;
@@ -620,7 +577,7 @@ void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long l
 
 void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
 {
-    duration_t duration = noteEvent.arrangementCtx().actualDuration;
+    const duration_t duration = noteEvent.arrangementCtx().actualDuration;
     // stand-in data before actual mpe support
     constexpr auto MAX_VIBRATO_STARTOFFSET_US = (int64_t)0.1 * 1000000;
     // stand-in data before actual mpe support
@@ -633,6 +590,76 @@ void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long
     vibrato._depth_cents = VIBRATO_DEPTH_CENTS;
 
     m_samplerLib->addVibrato(m_sampler, track, vibrato);
+}
+
+void MuseSamplerSequencer::addAuditionNoteEvent(const mpe::NoteEvent& noteEvent)
+{
+    const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+
+    layer_idx_t layerIdx = makeLayerIdx(arrangementCtx.staffLayerIndex, arrangementCtx.voiceLayerIndex);
+    ms_Track track = findOrCreateTrack(layerIdx);
+    IF_ASSERT_FAILED(track) {
+        return;
+    }
+
+    int pitch = 0, offsetCents = 0;
+    pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, pitch, offsetCents);
+
+    if (arrangementCtx.hasStart()) {
+        AuditionStartNoteEvent noteOn;
+        parseArticulations(noteEvent.expressionCtx().articulations, noteOn.msEvent._articulation, noteOn.msEvent._notehead);
+        noteOn.msEvent._pitch = pitch;
+        noteOn.msEvent._offset_cents = offsetCents;
+
+        if (noteEvent.expressionCtx().velocityOverride.has_value()) {
+            noteOn.msEvent._dynamics = noteEvent.expressionCtx().velocityOverride.value();
+        } else {
+            noteOn.msEvent._dynamics = dynamicLevelRatio(noteEvent.expressionCtx().nominalDynamicLevel);
+        }
+
+        noteOn.msEvent._active_presets = m_auditionParamsCache.presets.empty() ? m_defaultPresetCode.c_str()
+                                         : m_auditionParamsCache.presets.c_str();
+        noteOn.msEvent._active_text_articulation = m_auditionParamsCache.textArticulation.c_str();
+        noteOn.msEvent._active_syllable = m_auditionParamsCache.syllable.c_str();
+        noteOn.msEvent._articulation_text_starts_at_note = m_auditionParamsCache.textArticulationStartsAtNote;
+        noteOn.msEvent._syllable_starts_at_note = m_auditionParamsCache.syllableStartsAtNote;
+        noteOn.msTrack = track;
+
+        m_offStreamEvents[arrangementCtx.actualTimestamp].insert(noteOn);
+    }
+
+    if (arrangementCtx.hasEnd()) {
+        AuditionStopNoteEvent noteOff;
+        noteOff.msEvent = { pitch };
+        noteOff.msTrack = track;
+
+        timestamp_t timestampTo = arrangementCtx.actualTimestamp + arrangementCtx.actualDuration;
+        m_offStreamEvents[timestampTo].emplace(std::move(noteOff));
+    }
+}
+
+void MuseSamplerSequencer::addAuditionCCEvent(const mpe::ControllerChangeEvent& event, long long positionUs)
+{
+    const std::map<mpe::ControllerChangeEvent::Type, int> TYPE_TO_CC {
+        { mpe::ControllerChangeEvent::Modulation, 1 },
+        { mpe::ControllerChangeEvent::SustainPedalOnOff, 64 },
+        { mpe::ControllerChangeEvent::PitchBend, 128 },
+    };
+
+    auto ccIt = TYPE_TO_CC.find(event.type);
+    if (ccIt == TYPE_TO_CC.end()) {
+        return;
+    }
+
+    AuditionCCEvent ccEvent;
+    ccEvent.cc = ccIt->second;
+    ccEvent.value = event.val;
+    ccEvent.msTrack = findOrCreateTrack(event.layerIdx);
+    IF_ASSERT_FAILED(ccEvent.msTrack) {
+        return;
+    }
+
+    m_offStreamEvents[positionUs].insert(ccEvent);
 }
 
 void MuseSamplerSequencer::pitchAndTuning(const pitch_level_t nominalPitch, int& pitch, int& centsOffset) const
@@ -738,7 +765,7 @@ void MuseSamplerSequencer::parseArticulations(const ArticulationMap& articulatio
     articulationFlag = static_cast<ms_NoteArticulation>(artFlag);
 }
 
-void MuseSamplerSequencer::parseOffstreamParams(const mpe::PlaybackEvent& event, OffStreamParams& out) const
+void MuseSamplerSequencer::parseAuditionParams(const mpe::PlaybackEvent& event, AuditionParams& out) const
 {
     if (std::holds_alternative<mpe::TextArticulationEvent>(event)) {
         const mpe::TextArticulationEvent& artEvent = std::get<mpe::TextArticulationEvent>(event);

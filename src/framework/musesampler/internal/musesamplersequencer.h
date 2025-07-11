@@ -31,8 +31,10 @@
 
 #include "global/timer.h"
 
-typedef typename std::variant<muse::mpe::NoteEvent, muse::musesampler::AuditionStartNoteEvent,
-                              muse::musesampler::AuditionStopNoteEvent> MuseSamplerEvent;
+typedef typename std::variant<muse::mpe::NoteEvent,
+                              muse::musesampler::AuditionStartNoteEvent,
+                              muse::musesampler::AuditionStopNoteEvent,
+                              muse::musesampler::AuditionCCEvent> MuseSamplerEvent;
 
 template<>
 struct std::less<MuseSamplerEvent>
@@ -45,8 +47,8 @@ struct std::less<MuseSamplerEvent>
         }
 
         if (std::holds_alternative<muse::musesampler::AuditionStartNoteEvent>(first)) {
-            auto& e1 = std::get<muse::musesampler::AuditionStartNoteEvent>(first);
-            auto& e2 = std::get<muse::musesampler::AuditionStartNoteEvent>(second);
+            const auto& e1 = std::get<muse::musesampler::AuditionStartNoteEvent>(first);
+            const auto& e2 = std::get<muse::musesampler::AuditionStartNoteEvent>(second);
             if (e1.msEvent._pitch == e2.msEvent._pitch) {
                 return e1.msEvent._offset_cents < e2.msEvent._offset_cents;
             }
@@ -58,12 +60,22 @@ struct std::less<MuseSamplerEvent>
                    < std::get<muse::musesampler::AuditionStopNoteEvent>(second).msEvent._pitch;
         }
 
+        if (std::holds_alternative<muse::musesampler::AuditionCCEvent>(first)) {
+            const auto& e1 = std::get<muse::musesampler::AuditionCCEvent>(first);
+            const auto& e2 = std::get<muse::musesampler::AuditionCCEvent>(second);
+            if (e1.cc == e2.cc) {
+                return e1.value < e2.value;
+            }
+            return e1.cc < e2.cc;
+        }
+
         return false;
     }
 };
 
 namespace muse::musesampler {
-class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent>
+class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent,
+                                                                        AuditionCCEvent>
 {
 public:
     void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracks* tracks, std::string&& defaultPresetCode);
@@ -98,6 +110,9 @@ private:
     void addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
     void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
 
+    void addAuditionNoteEvent(const mpe::NoteEvent& noteEvent);
+    void addAuditionCCEvent(const mpe::ControllerChangeEvent& event, long long positionUs);
+
     void pitchAndTuning(const mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const;
     int pitchLevelToCents(const mpe::pitch_level_t pitchLevel) const;
     double dynamicLevelRatio(const mpe::dynamic_level_t level) const;
@@ -105,7 +120,7 @@ private:
     ms_NoteArticulation convertArticulationType(mpe::ArticulationType articulation) const;
     void parseArticulations(const mpe::ArticulationMap& articulations, ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const;
 
-    struct OffStreamParams {
+    struct AuditionParams {
         std::string presets;
         std::string textArticulation;
         std::string syllable;
@@ -114,11 +129,11 @@ private:
 
         void clear()
         {
-            *this = OffStreamParams();
+            *this = AuditionParams();
         }
     };
 
-    void parseOffstreamParams(const mpe::PlaybackEvent& event, OffStreamParams& out) const;
+    void parseAuditionParams(const mpe::PlaybackEvent& event, AuditionParams& out) const;
 
     struct RenderingInfo {
         long long initialChunksDurationUs = 0;
@@ -143,7 +158,7 @@ private:
     std::unordered_map<ms_Track, std::map<long long /*startUs*/, ms_PresetChange> > m_presetChangesByTrack;
 
     std::string m_defaultPresetCode;
-    OffStreamParams m_offStreamCache;
+    AuditionParams m_auditionParamsCache;
 
     std::unique_ptr<Timer> m_pollRenderingProgressTimer;
     audio::InputProcessingProgress* m_renderingProgress = nullptr;
