@@ -68,7 +68,20 @@ public:
     virtual void clearSources() = 0;
 
     // 3. Play Sequence
-    virtual IPlayerPtr player(const TrackSequenceId id) const = 0;
+    virtual void play(TrackSequenceId sequenceId, const secs_t delay = 0.0) = 0;
+    virtual void seek(TrackSequenceId sequenceId, const secs_t newPosition) = 0;
+    virtual void stop(TrackSequenceId sequenceId) = 0;
+    virtual void pause(TrackSequenceId sequenceId) = 0;
+    virtual void resume(TrackSequenceId sequenceId, const secs_t delay = 0.0) = 0;
+
+    virtual void setDuration(TrackSequenceId sequenceId, const msecs_t durationMsec) = 0;
+    virtual Ret setLoop(TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec) = 0;
+    virtual void resetLoop(TrackSequenceId sequenceId) = 0;
+
+    virtual PlaybackStatus playbackStatus(TrackSequenceId sequenceId) const = 0;
+    virtual async::Channel<PlaybackStatus> playbackStatusChanged(TrackSequenceId sequenceId) const = 0;
+    virtual secs_t playbackPosition(TrackSequenceId sequenceId) const = 0;
+    virtual async::Channel<secs_t> playbackPositionChanged(TrackSequenceId sequenceId) const = 0;
 
     // 4. Adjust a Sequence output
     virtual RetVal<AudioOutputParams> outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;

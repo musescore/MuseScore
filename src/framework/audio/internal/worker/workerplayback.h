@@ -92,7 +92,20 @@ public:
     void clearSources() override;
 
     // 3. Play Sequence
-    IPlayerPtr player(const TrackSequenceId id) const override;
+    void play(TrackSequenceId sequenceId, const secs_t delay = 0.0) override;
+    void seek(TrackSequenceId sequenceId, const secs_t newPosition) override;
+    void stop(TrackSequenceId sequenceId) override;
+    void pause(TrackSequenceId sequenceId) override;
+    void resume(TrackSequenceId sequenceId, const secs_t delay = 0.0) override;
+
+    void setDuration(TrackSequenceId sequenceId, const msecs_t durationMsec) override;
+    Ret setLoop(TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec) override;
+    void resetLoop(TrackSequenceId sequenceId) override;
+
+    PlaybackStatus playbackStatus(TrackSequenceId sequenceId) const override;
+    async::Channel<PlaybackStatus> playbackStatusChanged(TrackSequenceId sequenceId) const override;
+    secs_t playbackPosition(TrackSequenceId sequenceId) const override;
+    async::Channel<secs_t> playbackPositionChanged(TrackSequenceId sequenceId) const override;
 
     // 4. Adjust a Sequence output
     RetVal<AudioOutputParams> outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;

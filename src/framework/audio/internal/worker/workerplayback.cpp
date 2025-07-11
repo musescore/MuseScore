@@ -335,11 +335,130 @@ void WorkerPlayback::clearSources()
 }
 
 // 3. Play Sequence
-IPlayerPtr WorkerPlayback::player(const TrackSequenceId id) const
+void WorkerPlayback::play(TrackSequenceId sequenceId, const secs_t delay)
 {
-    std::shared_ptr<Player> p = std::make_shared<Player>(this, id);
-    p->init();
-    return p;
+    ONLY_AUDIO_WORKER_THREAD;
+    ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+    s->player()->play(delay);
+}
+
+void WorkerPlayback::seek(TrackSequenceId sequenceId, const secs_t newPosition)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+    s->player()->seek(newPosition);
+}
+
+void WorkerPlayback::stop(TrackSequenceId sequenceId)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+    s->player()->stop();
+}
+
+void WorkerPlayback::pause(TrackSequenceId sequenceId)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+    s->player()->pause();
+}
+
+void WorkerPlayback::resume(TrackSequenceId sequenceId, const secs_t delay)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+    s->player()->resume(delay);
+}
+
+void WorkerPlayback::setDuration(TrackSequenceId sequenceId, const msecs_t durationMsec)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+    s->player()->setDuration(durationMsec);
+}
+
+Ret WorkerPlayback::setLoop(TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    ITrackSequencePtr s = sequence(sequenceId);
+    if (!s) {
+        return make_ret(Err::InvalidSequenceId, "invalid sequence id");
+    }
+
+    return s->player()->setLoop(fromMsec, toMsec);
+}
+
+void WorkerPlayback::resetLoop(TrackSequenceId sequenceId)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return;
+    }
+    s->player()->resetLoop();
+}
+
+PlaybackStatus WorkerPlayback::playbackStatus(TrackSequenceId sequenceId) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return PlaybackStatus::Stopped;
+    }
+
+    return s->player()->playbackStatus();
+}
+
+async::Channel<PlaybackStatus> WorkerPlayback::playbackStatusChanged(TrackSequenceId sequenceId) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return async::Channel<PlaybackStatus>();
+    }
+
+    return s->player()->playbackStatusChanged();
+}
+
+secs_t WorkerPlayback::playbackPosition(TrackSequenceId sequenceId) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return 0.0;
+    }
+
+    return s->player()->playbackPosition();
+}
+
+async::Channel<secs_t> WorkerPlayback::playbackPositionChanged(TrackSequenceId sequenceId) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    ITrackSequencePtr s = sequence(sequenceId);
+    IF_ASSERT_FAILED(s) {
+        return async::Channel<secs_t>();
+    }
+
+    return s->player()->playbackPositionChanged();
 }
 
 // 4. Adjust a Sequence output
