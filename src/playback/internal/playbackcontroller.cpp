@@ -321,7 +321,7 @@ void PlaybackController::setTrackSoloMuteState(const InstrumentTrackId& trackId,
     m_notation->soloMuteState()->setTrackSoloMuteState(trackId, state);
 }
 
-void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements, bool isMidi)
+void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements, const PlayParams& params, bool isMidi)
 {
     IF_ASSERT_FAILED(notationPlayback()) {
         return;
@@ -356,10 +356,13 @@ void PlaybackController::playElements(const std::vector<const notation::Engravin
         elementsForPlaying.push_back(element);
     }
 
-    notationPlayback()->triggerEventsForItems(elementsForPlaying);
+    const mpe::duration_t duration = params.duration.has_value() ? params.duration.value()
+                                     : notationConfiguration()->notePlayDurationMilliseconds() * 1000;
+
+    notationPlayback()->triggerEventsForItems(elementsForPlaying, duration, params.flushSound);
 }
 
-void PlaybackController::playNotes(const NoteValList& notes, const staff_idx_t staffIdx, const Segment* segment)
+void PlaybackController::playNotes(const NoteValList& notes, staff_idx_t staffIdx, const Segment* segment, const PlayParams& params)
 {
     Segment* seg = const_cast<Segment*>(segment);
     Chord* chord = engraving::Factory::createChord(seg);
@@ -375,7 +378,7 @@ void PlaybackController::playNotes(const NoteValList& notes, const staff_idx_t s
         elements.push_back(note);
     }
 
-    playElements(elements);
+    playElements(elements, params);
 
     delete chord;
     DeleteAll(elements);
@@ -384,6 +387,11 @@ void PlaybackController::playNotes(const NoteValList& notes, const staff_idx_t s
 void PlaybackController::playMetronome(int tick)
 {
     notationPlayback()->triggerMetronome(tick);
+}
+
+void PlaybackController::triggerControllers(const muse::mpe::ControllerChangeEventList& list, staff_idx_t staffIdx, int tick)
+{
+    notationPlayback()->triggerControllers(list, staffIdx, tick);
 }
 
 void PlaybackController::seekElement(const notation::EngravingItem* element)

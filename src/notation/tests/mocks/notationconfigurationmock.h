@@ -184,6 +184,10 @@ public:
     MOCK_METHOD(void, setDelayBetweenNotesInRealTimeModeMilliseconds, (int), (override));
     MOCK_METHOD((muse::async::Channel<int>), delayBetweenNotesInRealTimeModeMillisecondsChanged, (), (const, override));
 
+    MOCK_METHOD(bool, playMidiNotesWithVelocityAndDurationDuringNoteInput, (), (const, override));
+    MOCK_METHOD(void, setPlayMidiNotesWithVelocityAndDurationDuringNoteInput, (bool), (override));
+    MOCK_METHOD(muse::async::Channel<bool>, playMidiNotesWithVelocityAndDurationDuringNoteInputChanged, (), (const, override));
+
     MOCK_METHOD(int, notePlayDurationMilliseconds, (), (const, override));
     MOCK_METHOD(void, setNotePlayDurationMilliseconds, (int), (override));
     MOCK_METHOD((muse::async::Channel<int>), notePlayDurationMillisecondsChanged, (), (const, override));

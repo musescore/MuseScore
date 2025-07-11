@@ -63,7 +63,7 @@ const muse::mpe::PlaybackData& NotationPlaybackStub::trackPlaybackData(const eng
     return dummy;
 }
 
-void NotationPlaybackStub::triggerEventsForItems(const std::vector<const EngravingItem*>&)
+void NotationPlaybackStub::triggerEventsForItems(const std::vector<const EngravingItem*>&, muse::mpe::duration_t, bool)
 {
 }
 
@@ -72,6 +72,10 @@ void NotationPlaybackStub::triggerMetronome(muse::midi::tick_t)
 }
 
 void NotationPlaybackStub::triggerCountIn(muse::midi::tick_t, muse::secs_t&)
+{
+}
+
+void NotationPlaybackStub::triggerControllers(const muse::mpe::ControllerChangeEventList&, notation::staff_idx_t, int)
 {
 }
 

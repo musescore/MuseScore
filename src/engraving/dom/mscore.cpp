@@ -62,7 +62,6 @@ int MScore::pedalEventsMinTicks;
 double MScore::nudgeStep;
 double MScore::nudgeStep10;
 double MScore::nudgeStep50;
-int MScore::defaultPlayDuration;
 
 bool MScore::noExcerpts = false;
 bool MScore::noImages = false;
