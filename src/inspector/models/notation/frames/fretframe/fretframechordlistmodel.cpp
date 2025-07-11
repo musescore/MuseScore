@@ -44,11 +44,20 @@ void FretFrameChordListModel::load()
 
     QList<Item*> items;
 
+    auto harmonyName = [](const Harmony* harmony) {
+        QString name;
+        for (const TextSegment* segment : harmony->ldata()->textList()) {
+            name += segment->text();
+        }
+
+        return name;
+    };
+
     for (EngravingItem* element : m_fretBox->orderedElements()) {
         FretDiagram* diagram = toFretDiagram(element);
         auto chordItem = new FretFrameChordItem(this);
         chordItem->setId(QString::fromStdString(diagram->eid().toStdString()));
-        chordItem->setTitle(diagram->harmony()->plainText());
+        chordItem->setTitle(harmonyName(diagram->harmony()));
         chordItem->setIsVisible(diagram->visible());
 
         items << chordItem;
