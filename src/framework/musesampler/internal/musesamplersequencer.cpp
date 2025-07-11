@@ -154,7 +154,8 @@ void MuseSamplerSequencer::triggerRender()
     pollRenderingProgress();
 }
 
-void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events, const PlaybackParamList& params)
+void MuseSamplerSequencer::updateOffStreamEvents(const PlaybackEventsMap& events, const DynamicLevelLayers&,
+                                                 const PlaybackParamList& params)
 {
     flushOffstream();
 

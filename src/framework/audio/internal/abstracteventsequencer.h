@@ -69,8 +69,10 @@ public:
             }
         });
 
-        m_playbackData.offStream.onReceive(this, [this](const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) {
-            updateOffStreamEvents(events, params);
+        m_playbackData.offStream.onReceive(this, [this](const mpe::PlaybackEventsMap& events,
+                                                        const mpe::DynamicLevelLayers& dynamics,
+                                                        const mpe::PlaybackParamList& params) {
+            updateOffStreamEvents(events, dynamics, params);
         });
 
         updateMainStreamEvents(data.originEvents, data.dynamics, data.params);
@@ -203,7 +205,8 @@ public:
     }
 
 protected:
-    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamList& params) = 0;
+    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
+                                       const mpe::PlaybackParamList& params) = 0;
     virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics,
                                         const mpe::PlaybackParamLayers& params) = 0;
 

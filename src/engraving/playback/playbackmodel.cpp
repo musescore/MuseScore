@@ -273,7 +273,8 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
         return;
     }
 
-    PlaybackEventsMap result;
+    PlaybackEventsMap events;
+    DynamicLevelLayers dynamics;
 
     const RepeatList& repeats = repeatList();
     const PlaybackContextPtr ctx = playbackCtx(trackId);
@@ -285,7 +286,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     for (const EngravingItem* item : playableItems) {
         if (item->isHarmony()) {
-            m_renderer.renderChordSymbol(toHarmony(item), timestamp, duration, profile, result);
+            m_renderer.renderChordSymbol(toHarmony(item), timestamp, duration, profile, events);
             continue;
         }
 
@@ -294,14 +295,15 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
         if (m_useScoreDynamicsForOffstreamPlayback) {
             dynamicLevel = ctx->appliableDynamicLevel(item->track(), utick);
+            dynamics[static_cast<muse::mpe::layer_idx_t>(item->track())][timestamp] = dynamicLevel;
         }
 
         m_renderer.render(item, timestamp, duration, dynamicLevel, ctx->persistentArticulationType(utick), profile,
-                          result);
+                          events);
     }
 
     PlaybackParamList params = ctx->playbackParams(playableItems.front()->track(), minTick);
-    trackPlaybackData.offStream.send(std::move(result), std::move(params));
+    trackPlaybackData.offStream.send(std::move(events), std::move(dynamics), std::move(params));
 }
 
 void PlaybackModel::triggerMetronome(int tick)
@@ -315,7 +317,7 @@ void PlaybackModel::triggerMetronome(int tick)
 
     PlaybackEventsMap result;
     m_renderer.renderMetronome(m_score, tick, 0, profile, result);
-    trackPlaybackData->second.offStream.send(std::move(result), {});
+    trackPlaybackData->second.offStream.send(std::move(result), {}, {});
 }
 
 void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& totalCountInDuration)
@@ -329,7 +331,7 @@ void PlaybackModel::triggerCountIn(int tick, muse::mpe::duration_t& totalCountIn
 
     PlaybackEventsMap result;
     m_renderer.renderCountIn(m_score, tick, 0, profile, result, totalCountInDuration);
-    trackPlaybackData->second.offStream.send(std::move(result), {});
+    trackPlaybackData->second.offStream.send(std::move(result), {}, {});
 }
 
 InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const

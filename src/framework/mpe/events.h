@@ -49,7 +49,7 @@ using PlaybackParamMap = std::map<timestamp_t, PlaybackParamList>;
 using PlaybackParamLayers = std::map<layer_idx_t, PlaybackParamMap>;
 
 using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamLayers>;
-using OffStreamChanges = async::Channel<PlaybackEventsMap, PlaybackParamList>;
+using OffStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelLayers, PlaybackParamList>;
 
 struct ArrangementContext
 {
