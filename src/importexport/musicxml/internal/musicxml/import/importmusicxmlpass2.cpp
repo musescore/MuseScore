@@ -7860,7 +7860,6 @@ void MusicXmlParserPass2::harmony(const String& partId, Measure* measure, const 
         info->setTextName(textName);
     }
     ha->addChord(info);
-    ha->render();
 
     ha->setVisible(printObject);
     if (placement == u"below") {

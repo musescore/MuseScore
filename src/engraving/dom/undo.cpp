@@ -1768,7 +1768,6 @@ void TransposeHarmony::flip(EditData*)
     }
 
     m_harmony->setXmlText(m_harmony->harmonyName());
-    m_harmony->render();
     m_harmony->triggerLayout();
     m_interval.flip();
 }
@@ -1794,7 +1793,6 @@ void TransposeHarmonyDiatonic::flip(EditData*)
     }
 
     m_harmony->setXmlText(m_harmony->harmonyName());
-    m_harmony->render();
     m_harmony->triggerLayout();
 
     m_interval *= -1;

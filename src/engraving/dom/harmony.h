@@ -82,34 +82,6 @@ private:
     bool m_hAlign = true;
 };
 
-//---------------------------------------------------------
-//   HarmonyRenderCtx
-//---------------------------------------------------------
-
-struct HarmonyRenderCtx {
-    PointF pos = PointF();
-    std::vector<TextSegment*> textList;
-
-    // Reset every single chord
-    bool hAlign = true;
-
-    // Reset every render() call
-    std::stack<PointF> stack;
-    int tpc = Tpc::TPC_INVALID;
-    NoteSpellingType noteSpelling = NoteSpellingType::STANDARD;
-    NoteCaseType noteCase = NoteCaseType::AUTO;
-    double scale = 1.0;
-
-    double x() const { return pos.x(); }
-    double y() const { return pos.y(); }
-
-    void setx(double v) { pos.setX(v); }
-    void movex(double v) { pos.setX(pos.x() + v); }
-    void sety(double v) { pos.setY(v); }
-    void movey(double v) { pos.setY(pos.y() + v); }
-};
-
-struct RenderAction;
 class HDegree;
 
 //---------------------------------------------------------
@@ -233,8 +205,6 @@ public:
 
     const ParsedChord* parsedForm() const;                                             // WILL BE DEPRECATED AFTER RelaizedHarmony IS UPDATED
 
-    const std::vector<TextSegment*>& textList() const { return m_textList; }
-
     void afterRead();
     void render();
 
@@ -262,7 +232,6 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
 
     double mag() const override;
-    void setUserMag(double m) { m_userMag = m; }
 
     double bassScale() const { return m_bassScale; }
     void setBassScale(double v) { m_bassScale = v; }
@@ -271,11 +240,18 @@ public:
 
     Color curColor() const override;
 
+    bool doNotStackModifiers() const { return m_doNotStackModifiers; }
+
+    NoteCaseType rootRenderCase(HarmonyInfo* info) const;
+    NoteCaseType bassRenderCase() const;
+
     struct LayoutData : public TextBase::LayoutData {
-        ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };           // used for calculating the height is frame while editing.
+        ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };    // used for calculating the height is frame while editing.
         ld_field<std::vector<LineF> > polychordDividerLines = { "[Harmony] polychordDividerLine", std::vector<LineF>() };
         ld_field<double> polychordDividerOffset = { "[Harmony] polychordDividerOffset", 0.0 };
         ld_field<double> baseline = { "[Harmony] baseline", 0.0 };
+        ld_field<std::vector<muse::draw::Font> > fontList = "[Harmony] fontList";          // temp values used in render()
+        ld_field<std::vector<TextSegment*> > textList = "[Harmony] textList";              // rendered chord
     };
     DECLARE_LAYOUTDATA_METHODS(Harmony)
 
@@ -284,28 +260,6 @@ private:
 
     const std::vector<const ChordDescription*> parseHarmony(const String& s, bool syntaxOnly = false);
     const ChordDescription* parseSingleHarmony(const String& s, HarmonyInfo* info, bool syntaxOnly = false);
-
-    NoteCaseType rootRenderCase(HarmonyInfo* info) const;
-    NoteCaseType bassRenderCase() const;
-
-    // TODO - move harmony rendering into a layout class
-    void renderSingleHarmony(HarmonyInfo* info, HarmonyRenderCtx& ctx);
-    void renderRomanNumeral();
-    void render(const String&, HarmonyRenderCtx& ctx);
-    void render(SymId, HarmonyRenderCtx& ctx);
-    void render(const std::list<RenderActionPtr>& renderList, HarmonyRenderCtx& ctx, int tpc,
-                NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO,
-                double noteMag = 1.0);
-    void renderAction(const RenderActionPtr& a, HarmonyRenderCtx& ctx);
-    void renderActionSet(const RenderActionSetPtr& a, HarmonyRenderCtx& ctx);
-    void renderActionMove(const RenderActionMovePtr& a, HarmonyRenderCtx& ctx);
-    void renderActionMoveXHeight(const RenderActionMoveXHeightPtr& a, HarmonyRenderCtx& ctx);
-    void renderActionPush(HarmonyRenderCtx& ctx);
-    void renderActionPop(const RenderActionPopPtr& a, HarmonyRenderCtx& ctx);
-    void renderActionNote(HarmonyRenderCtx& ctx);
-    void renderActionAcc(HarmonyRenderCtx& ctx);
-    void renderActionAlign(HarmonyRenderCtx& ctx);
-    void renderActionScale(const RenderActionScalePtr& a, HarmonyRenderCtx& ctx);
 
     Sid getPropertyStyle(Pid) const override;
 
@@ -317,8 +271,6 @@ private:
     mutable RealizedHarmony m_realizedHarmony;           // the realized harmony used for playback
 
     std::vector<HDegree> m_degreeList;
-    std::vector<muse::draw::Font> m_fontList;            // temp values used in render()
-    std::vector<TextSegment*> m_textList;                // rendered chord
 
     bool m_leftParen = false;
     bool m_rightParen = false;                           // include opening and/or closing parenthesis
@@ -328,7 +280,6 @@ private:
     NoteCaseType m_rootCase = NoteCaseType::AUTO;
     NoteCaseType m_bassCase = NoteCaseType::AUTO;        // case as typed
 
-    std::optional<double> m_userMag;
     double m_bassScale = 1.0;
 };
 } // namespace mu::engraving

@@ -521,7 +521,6 @@ Err importBB(MasterScore* score, const QString& name)
         info->setId(c.extension);
         h->addChord(info);
 
-        h->render();
         s->add(h);
     }
 

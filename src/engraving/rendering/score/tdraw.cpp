@@ -1817,7 +1817,7 @@ void TDraw::draw(const Harmony* item, Painter* painter)
 
     const Harmony::LayoutData* ldata = item->ldata();
 
-    if (item->textList().empty()) {
+    if (ldata->textList().empty()) {
         drawTextBase(item, painter);
         return;
     }
@@ -1846,7 +1846,7 @@ void TDraw::draw(const Harmony* item, Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
     Color color = item->textColor();
     painter->setPen(color);
-    for (const TextSegment* ts : item->textList()) {
+    for (const TextSegment* ts : ldata->textList()) {
         Font f(ts->font());
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
@@ -1862,7 +1862,7 @@ void TDraw::draw(const Harmony* item, Painter* painter)
         pen.setWidthF(item->style().styleS(Sid::polychordDividerThickness).toMM(item->spatium()));
         pen.setColor(color);
         painter->setPen(pen);
-        for (const LineF& line : ldata->polychordDividerLines.value()) {
+        for (const LineF& line : ldata->polychordDividerLines()) {
             painter->drawLine(line.translated(PointF(0.0, ldata->polychordDividerOffset)));
         }
     }
