@@ -51,6 +51,15 @@ void Playback::init()
                                                                       const AudioInputParams& params) {
             m_inputParamsChanged.send(sequenceId, trackId, params);
         });
+
+        workerPlayback()->outputParamsChanged().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId,
+                                                                       const AudioOutputParams& params) {
+            m_outputParamsChanged.send(sequenceId, trackId, params);
+        });
+
+        workerPlayback()->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
+            m_masterOutputParamsChanged.send(params);
+        });
     }, AudioThread::ID);
 }
 
@@ -61,6 +70,7 @@ void Playback::deinit()
         workerPlayback()->trackAdded().resetOnReceive(this);
         workerPlayback()->trackRemoved().resetOnReceive(this);
         workerPlayback()->inputParamsChanged().resetOnReceive(this);
+        workerPlayback()->outputParamsChanged().resetOnReceive(this);
     }, AudioThread::ID);
 }
 
@@ -289,71 +299,137 @@ void Playback::clearSources()
 
 async::Promise<AudioOutputParams> Playback::outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
-    return workerPlayback()->audioOutput()->outputParams(sequenceId, trackId);
+    return Promise<AudioOutputParams>([this, sequenceId, trackId](auto resolve, auto reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        RetVal<AudioOutputParams> ret = workerPlayback()->outputParams(sequenceId, trackId);
+        if (ret.ret) {
+            return resolve(ret.val);
+        } else {
+            return reject(ret.ret.code(), ret.ret.text());
+        }
+    }, AudioThread::ID);
 }
 
 void Playback::setOutputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioOutputParams& params)
 {
-    workerPlayback()->audioOutput()->setOutputParams(sequenceId, trackId, params);
+    Async::call(this, [this, sequenceId, trackId, params]() {
+        ONLY_AUDIO_WORKER_THREAD;
+        workerPlayback()->setOutputParams(sequenceId, trackId, params);
+    }, AudioThread::ID);
 }
 
 async::Channel<TrackSequenceId, TrackId, AudioOutputParams> Playback::outputParamsChanged() const
 {
-    return workerPlayback()->audioOutput()->outputParamsChanged();
+    return m_outputParamsChanged;
 }
 
 async::Promise<AudioOutputParams> Playback::masterOutputParams() const
 {
-    return workerPlayback()->audioOutput()->masterOutputParams();
+    return Promise<AudioOutputParams>([this](auto resolve, auto reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        RetVal<AudioOutputParams> ret = workerPlayback()->masterOutputParams();
+        if (ret.ret) {
+            return resolve(ret.val);
+        } else {
+            return reject(ret.ret.code(), ret.ret.text());
+        }
+    }, AudioThread::ID);
 }
 
 void Playback::setMasterOutputParams(const AudioOutputParams& params)
 {
-    workerPlayback()->audioOutput()->setMasterOutputParams(params);
+    Async::call(this, [this, params]() {
+        ONLY_AUDIO_WORKER_THREAD;
+        workerPlayback()->setMasterOutputParams(params);
+    }, AudioThread::ID);
 }
 
 void Playback::clearMasterOutputParams()
 {
-    workerPlayback()->audioOutput()->clearMasterOutputParams();
+    Async::call(this, [this]() {
+        ONLY_AUDIO_WORKER_THREAD;
+        workerPlayback()->clearMasterOutputParams();
+    }, AudioThread::ID);
 }
 
 async::Channel<AudioOutputParams> Playback::masterOutputParamsChanged() const
 {
-    return workerPlayback()->audioOutput()->masterOutputParamsChanged();
+    return m_masterOutputParamsChanged;
 }
 
 async::Promise<AudioResourceMetaList> Playback::availableOutputResources() const
 {
-    return workerPlayback()->audioOutput()->availableOutputResources();
+    return Promise<AudioResourceMetaList>([this](auto resolve, auto /*reject*/) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        AudioResourceMetaList res = workerPlayback()->availableOutputResources();
+        return resolve(res);
+    }, AudioThread::ID);
 }
 
 async::Promise<AudioSignalChanges> Playback::signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
-    return workerPlayback()->audioOutput()->signalChanges(sequenceId, trackId);
+    return Promise<AudioSignalChanges>([this, sequenceId, trackId](auto resolve, auto reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        RetVal<AudioSignalChanges> ret = workerPlayback()->signalChanges(sequenceId, trackId);
+        if (ret.ret) {
+            return resolve(ret.val);
+        } else {
+            return reject(ret.ret.code(), ret.ret.text());
+        }
+    }, AudioThread::ID);
 }
 
 async::Promise<AudioSignalChanges> Playback::masterSignalChanges() const
 {
-    return workerPlayback()->audioOutput()->masterSignalChanges();
+    return Promise<AudioSignalChanges>([this](auto resolve, auto reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        RetVal<AudioSignalChanges> ret = workerPlayback()->masterSignalChanges();
+        if (ret.ret) {
+            return resolve(ret.val);
+        } else {
+            return reject(ret.ret.code(), ret.ret.text());
+        }
+    }, AudioThread::ID);
 }
 
 async::Promise<bool> Playback::saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination,
                                               const SoundTrackFormat& format)
 {
-    return workerPlayback()->audioOutput()->saveSoundTrack(sequenceId, destination, format);
+    return Promise<bool>([this, sequenceId, destination, format](auto resolve, auto reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        Ret ret = workerPlayback()->saveSoundTrack(sequenceId, destination, format);
+        if (ret) {
+            return resolve(true);
+        } else {
+            return reject(ret.code(), ret.text());
+        }
+    }, AudioThread::ID);
 }
 
 void Playback::abortSavingAllSoundTracks()
 {
-    workerPlayback()->audioOutput()->abortSavingAllSoundTracks();
+    Async::call(this, [this]() {
+        ONLY_AUDIO_WORKER_THREAD;
+        workerPlayback()->abortSavingAllSoundTracks();
+    }, AudioThread::ID);
 }
 
 Progress Playback::saveSoundTrackProgress(const TrackSequenceId sequenceId)
 {
-    return workerPlayback()->audioOutput()->saveSoundTrackProgress(sequenceId);
+    //! FIXME
+    return workerPlayback()->saveSoundTrackProgress(sequenceId);
 }
 
 void Playback::clearAllFx()
 {
-    workerPlayback()->audioOutput()->clearAllFx();
+    Async::call(this, [this]() {
+        ONLY_AUDIO_WORKER_THREAD;
+        workerPlayback()->clearAllFx();
+    }, AudioThread::ID);
 }

@@ -26,7 +26,6 @@
 #include "global/types/retval.h"
 
 #include "iplayer.h"
-#include "iaudiooutput.h"
 #include "audiotypes.h"
 
 namespace muse::audio::worker {
@@ -68,8 +67,28 @@ public:
 
     virtual void clearSources() = 0;
 
-    // temporary
+    // 3. Play Sequence
     virtual IPlayerPtr player(const TrackSequenceId id) const = 0;
-    virtual IAudioOutputPtr audioOutput() const = 0;
+
+    // 4. Adjust a Sequence output
+    virtual RetVal<AudioOutputParams> outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
+    virtual void setOutputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioOutputParams& params) = 0;
+    virtual async::Channel<TrackSequenceId, TrackId, AudioOutputParams> outputParamsChanged() const = 0;
+
+    virtual RetVal<AudioOutputParams> masterOutputParams() const = 0;
+    virtual void setMasterOutputParams(const AudioOutputParams& params) = 0;
+    virtual void clearMasterOutputParams() = 0;
+    virtual async::Channel<AudioOutputParams> masterOutputParamsChanged() const = 0;
+
+    virtual AudioResourceMetaList availableOutputResources() const = 0;
+
+    virtual RetVal<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
+    virtual RetVal<AudioSignalChanges> masterSignalChanges() const = 0;
+
+    virtual Ret saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination, const SoundTrackFormat& format) = 0;
+    virtual void abortSavingAllSoundTracks() = 0;
+    virtual Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) = 0;
+
+    virtual void clearAllFx() = 0;
 };
 }

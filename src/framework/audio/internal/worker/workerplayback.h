@@ -27,15 +27,27 @@
 
 #include "global/modularity/ioc.h"
 #include "isynthresolver.h"
+#include "ifxresolver.h"
+#include "iaudioengine.h"
 
 #include "iplayer.h"
-#include "iaudiooutput.h"
 #include "igettracksequence.h"
+
+namespace muse::audio {
+class Mixer;
+
+namespace soundtrack {
+class SoundTrackWriter;
+using SoundTrackWriterPtr = std::shared_ptr<SoundTrackWriter>;
+}
+}
 
 namespace muse::audio::worker {
 class WorkerPlayback : public IWorkerPlayback, public IGetTrackSequence, public Injectable, public async::Asyncable
 {
     Inject<synth::ISynthResolver> synthResolver = { this };
+    Inject<fx::IFxResolver> fxResolver = { this };
+    Inject<IAudioEngine> audioEngine = { this };
 
 public:
     WorkerPlayback(const muse::modularity::ContextPtr& iocCtx)
@@ -79,20 +91,46 @@ public:
 
     void clearSources() override;
 
-    // temporary
+    // 3. Play Sequence
     IPlayerPtr player(const TrackSequenceId id) const override;
-    IAudioOutputPtr audioOutput() const override;
+
+    // 4. Adjust a Sequence output
+    RetVal<AudioOutputParams> outputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+    void setOutputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioOutputParams& params) override;
+    async::Channel<TrackSequenceId, TrackId, AudioOutputParams> outputParamsChanged() const override;
+
+    RetVal<AudioOutputParams> masterOutputParams() const override;
+    void setMasterOutputParams(const AudioOutputParams& params) override;
+    void clearMasterOutputParams() override;
+    async::Channel<AudioOutputParams> masterOutputParamsChanged() const override;
+
+    AudioResourceMetaList availableOutputResources() const override;
+
+    RetVal<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const override;
+    RetVal<AudioSignalChanges> masterSignalChanges() const override;
+
+    Ret saveSoundTrack(const TrackSequenceId sequenceId, const io::path_t& destination, const SoundTrackFormat& format) override;
+    void abortSavingAllSoundTracks() override;
+    Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) override;
+
+    void clearAllFx() override;
 
 private:
 
+    std::shared_ptr<Mixer> mixer() const;
+
     void ensureSubscriptions(const ITrackSequencePtr s);
+    void ensureMixerSubscriptions();
 
     async::Channel<TrackSequenceId, TrackId> m_trackAdded;
     async::Channel<TrackSequenceId, TrackId> m_trackRemoved;
     async::Channel<TrackSequenceId, TrackId, AudioInputParams> m_inputParamsChanged;
-
-    IAudioOutputPtr m_audioOutputPtr = nullptr;
+    async::Channel<TrackSequenceId, TrackId, AudioOutputParams> m_outputParamsChanged;
+    async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
 
     std::map<TrackSequenceId, ITrackSequencePtr> m_sequences;
+
+    std::unordered_map<TrackSequenceId, Progress> m_saveSoundTracksProgressMap;
+    std::unordered_map<TrackSequenceId, soundtrack::SoundTrackWriterPtr> m_saveSoundTracksWritersMap;
 };
 }
