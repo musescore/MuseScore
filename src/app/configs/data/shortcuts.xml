@@ -31,7 +31,7 @@
     <SC>
         <key>nav-prev-section</key>
         <seq>Shift+F6</seq>
-        <seq>Shift+`</seq>
+        <seq>"</seq><!-- possible conflict with 'pad-note32-TAB' on a German keyboard -->
     </SC>
     <SC>
         <key>nav-next-panel</key>
@@ -352,7 +352,7 @@
     </SC>
   <SC>
     <key>stretch+</key>
-    <seq>}</seq>
+    <seq>}</seq><!-- same as 'Ctrl+Alt+0' for 'voice-assignment-all-in-instrument' on German keyboards! -->
     </SC>
   <SC>
     <key>stretch-</key>
@@ -548,11 +548,11 @@
     </SC>
   <SC>
     <key>add-hairpin</key>
-    <seq>Shift+,</seq>
+    <seq>&gt;</seq><!-- but see also 'next-beat-TEXT' -->
     </SC>
   <SC>
     <key>add-hairpin-reverse</key>
-    <seq>Shift+.</seq>
+    <seq>&lt;</seq><!-- but see also 'prev-beat-TEXT' -->
     </SC>
   <SC>
     <key>notation-escape</key>
@@ -699,7 +699,7 @@
     </SC>
   <SC>
     <key>voice-assignment-all-in-instrument</key>
-    <seq>Ctrl+Alt+0</seq>
+    <seq>Ctrl+Alt+0</seq><!-- conflicts with 'stretch+' on German keyboards! -->
     </SC>
   <SC>
     <key>voice-assignment-all-in-staff</key>
@@ -970,7 +970,7 @@
   </SC>
   <SC>
     <key>add-melisma</key>
-    <seq>Shift+-</seq>
+    <seq>_</seq>
   </SC>
   <SC>
     <key>next-lyric-verse</key>
@@ -1004,52 +1004,52 @@
 <!-- TAB specific shortcuts -->
   <SC>
     <key>note-longa-TAB</key>
-    <seq>Shift+9</seq>
+    <seq>Shift+9</seq><!-- '(', ')' on a German keyboard -->
     <seq>Num+9</seq>
     </SC>
   <SC>
     <key>note-breve-TAB</key>
-    <seq>Shift+8</seq>
+    <seq>Shift+8</seq><!-- '*', '(' on a German keyboard-->
     <seq>Num+8</seq>
     </SC>
   <SC>
     <key>pad-note-1-TAB</key>
-    <seq>Shift+7</seq>
+    <seq>Shift+7</seq> <!-- '&' or rather '&amp;', '/' on a German keyboard -->
     <seq>Num+7</seq>
     </SC>
   <SC>
     <key>pad-note-2-TAB</key>
-    <seq>Shift+6</seq>
+    <seq>Shift+6</seq><!-- '^', '&' on a German keyboard -->
     <seq>Num+6</seq>
     </SC>
   <SC>
     <key>pad-note-4-TAB</key>
-    <seq>Shift+5</seq>
+    <seq>Shift+5</seq><!-- '%' -->
     <seq>Num+5</seq>
     </SC>
   <SC>
     <key>pad-note-8-TAB</key>
-    <seq>Shift+4</seq>
+    <seq>Shift+4</seq><!-- '$' -->
     <seq>Num+4</seq>
     </SC>
   <SC>
     <key>pad-note-16-TAB</key>
-    <seq>Shift+3</seq>
+    <seq>Shift+3</seq><!-- '#', possible conflict with 'sharp', '§' on a German keyboard -->
     <seq>Num+3</seq>
     </SC>
   <SC>
     <key>pad-note-32-TAB</key>
-    <seq>Shift+2</seq>
+    <seq>Shift+2</seq><!-- '@', '"' on a German keyboard, possible conflict with 'nav-prev-section' there -->
     <seq>Num+2</seq>
     </SC>
   <SC>
     <key>pad-note-64-TAB</key>
-    <seq>Shift+1</seq>
+    <seq>Shift+1</seq><!-- '!' --> 
     <seq>Num+1</seq>
     </SC>
   <SC>
     <key>pad-note-128-TAB</key>
-    <seq>Shift+0</seq>
+    <seq>Shift+0</seq><!-- ')', '=' on a German keyboard, possible conflict with 'nat' there -->
     <seq>Num+0</seq>
     </SC>
   <SC>
@@ -1168,15 +1168,15 @@
     </SC>
   <SC>
     <key>prev-beat-TEXT</key>
-    <seq>Shift+;</seq>
+    <seq>:</seq><!-- 'Shift+.' on a German keyboard, possible conflict with 'add-hairpin-reverse' there (without the change further up) -->
     </SC>
   <SC>
     <key>next-beat-TEXT</key>
-    <seq>;</seq>
+    <seq>;</seq><!-- 'Shift+,' on a German keyboard, possible conflict with 'add-hairpin' and 'prev-beat-TEXT' there (without the changes further up) -->
     </SC>
   <SC>
     <key>add-parentheses</key>
-    <seq>Shift+9</seq>
+    <seq>Shift+9</seq><!-- '(', ')' on a German keyboard -->
     </SC>
   <SC>
     <key>toggle-mmrest</key>
@@ -1225,11 +1225,11 @@
     </SC>
   <SC>
     <key>zoom-in-vert-pre</key>
-    <seq>Ctrl+Shift++</seq>
+    <seq>Ctrl+Shift++</seq><!-- '*' on a German keyboard, 'Ctrl++' there would conflict with 'zoom-in-horiz-pre' -->
     </SC>
   <SC>
     <key>zoom-out-vert-pre</key>
-    <seq>Ctrl+Shift+-</seq>
+    <seq>Ctrl+Shift+-</seq><!-- '_' on a German keyboard, 'Ctrl++' there would conflict with 'zoom-out-horiz-pre' -->
     </SC>
   <SC>
     <key>notation-context-menu</key>
