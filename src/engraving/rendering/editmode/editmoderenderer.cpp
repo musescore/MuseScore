@@ -166,7 +166,7 @@ void EditModeRenderer::drawBarline(BarLine* item, muse::draw::Painter* painter, 
 
 void EditModeRenderer::drawDynamic(Dynamic* item, muse::draw::Painter* painter, EditData& ed, double currentViewScaling)
 {
-    if (ed.editTextualProperties) {
+    if (item->cursor() && item->cursor()->editing()) {
         drawTextBase(item, painter, ed, currentViewScaling);
         return;
     }

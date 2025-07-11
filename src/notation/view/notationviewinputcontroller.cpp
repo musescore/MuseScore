@@ -1132,10 +1132,6 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
     if (interaction->isTextEditingStarted()) {
         return;
     }
-
-    if (interaction->textEditingAllowed(ctx.element)) {
-        interaction->startEditText(ctx.element, m_mouseDownInfo.logicalBeginPoint);
-    }
 }
 
 void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)

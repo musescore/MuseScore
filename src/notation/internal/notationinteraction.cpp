@@ -4222,7 +4222,7 @@ bool NotationInteraction::isTextSelected() const
 
 bool NotationInteraction::isTextEditingStarted() const
 {
-    return m_editData.element && m_editData.element->isTextBase() && m_editData.editTextualProperties;
+    return m_editData.element && m_editData.element->isTextBase();
 }
 
 bool NotationInteraction::textEditingAllowed(const EngravingItem* element) const
@@ -4244,7 +4244,6 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
         m_editData.element = element;
     }
 
-    m_editData.editTextualProperties = true;
     m_editData.startMove = bindCursorPosToText(cursorPos, m_editData.element);
     m_editData.element->startEdit(m_editData);
 
@@ -4504,7 +4503,6 @@ void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::G
 
     m_editData.element = element;
     m_editData.curGrip = grip;
-    m_editData.editTextualProperties = false;
 
     updateGripAnchorLines();
     m_editData.element->startEdit(m_editData);
@@ -4573,7 +4571,6 @@ void NotationInteraction::startEditElement(EngravingItem* element, bool editText
     if (element->isTextBase() && editTextualProperties) {
         startEditText(element);
     } else if (element->isEditable()) {
-        m_editData.editTextualProperties = false;
         element->startEdit(m_editData);
         m_editData.element = element;
     }
@@ -4710,7 +4707,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
                 } else {
                     updateGripAnchorLines();
                 }
-            } else if (isElementEditStarted() && !m_editData.editTextualProperties) {
+            } else if (isElementEditStarted()) {
                 updateDragAnchorLines();
             }
         }
