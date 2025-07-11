@@ -66,17 +66,12 @@ PreferencesPage {
 
         ScrollPagesSection {
             orientation: preferencesModel.scrollPagesOrientation
-            limitScrollArea: preferencesModel.limitScrollArea
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
             onOrientationChangeRequested: function(orientation) {
                 preferencesModel.scrollPagesOrientation = orientation
-            }
-
-            onLimitScrollAreaChangeRequested: function(limit) {
-                preferencesModel.limitScrollArea = limit
             }
         }
 
