@@ -165,7 +165,6 @@ public:
 
     Segment* segment() const;
 
-    static std::shared_ptr<FretDiagram> createFromPattern(Score* score, const String& s);
     static String patternFromDiagram(const FretDiagram* diagram);
 
     void updateDiagram(const String& harmonyName);
