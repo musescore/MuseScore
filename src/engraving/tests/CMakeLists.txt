@@ -92,6 +92,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/changevisibility_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreutils_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/voiceswitching_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/engraving_xml_tests.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/mocks/engravingconfigurationmock.h
 )
