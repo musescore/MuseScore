@@ -37,6 +37,7 @@
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/figuredbass.h"
 #include "engraving/dom/fingering.h"
+#include "engraving/dom/glissando.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/jump.h"
@@ -1557,6 +1558,52 @@ libmei::Fing Convert::fingToMEI(const engraving::Fingering* fing, StringList& me
     Convert::colorToMEI(fing, meiFing);
 
     return meiFing;
+}
+
+void Convert::glissFromMEI(engraving::Glissando* gliss, const libmei::Gliss& meiGliss, bool& warning)
+{
+    warning = false;
+
+    // @lform
+    bool lineWarning;
+    switch (meiGliss.GetLform()) {
+    case libmei::LINEFORM_dotted:
+    case libmei::LINEFORM_dashed:
+    case libmei::LINEFORM_solid:
+        gliss->setGlissandoType(engraving::GlissandoType::STRAIGHT);
+        gliss->setLineStyle(Convert::lineFromMEI(meiGliss.GetLform(), lineWarning));
+        break;
+    case libmei::LINEFORM_wavy:
+    default:
+        gliss->setGlissandoType(engraving::GlissandoType::WAVY);
+        break;
+    }
+
+    // @color
+    Convert::colorlineFromMEI(gliss, meiGliss);
+}
+
+libmei::Gliss Convert::glissToMEI(const engraving::Glissando* gliss)
+{
+    libmei::Gliss meiGliss;
+
+    // @lform
+    switch (gliss->glissandoType()) {
+    case engraving::GlissandoType::STRAIGHT:
+        meiGliss.SetLform(Convert::lineToMEI(gliss->lineStyle()));
+        break;
+    case engraving::GlissandoType::WAVY:
+        meiGliss.SetLform(libmei::LINEFORM_wavy);
+        break;
+    default:
+        meiGliss.SetLform(libmei::LINEFORM_NONE);
+        break;
+    }
+
+    // @color
+    Convert::colorlineToMEI(gliss, meiGliss);
+
+    return meiGliss;
 }
 
 std::pair<bool, engraving::NoteType> Convert::gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach, const libmei::data_GRACE meiGrace,

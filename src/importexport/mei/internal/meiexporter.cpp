@@ -38,6 +38,7 @@
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/figuredbass.h"
 #include "engraving/dom/fingering.h"
+#include "engraving/dom/glissando.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/harppedaldiagram.h"
@@ -870,6 +871,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeFb(dynamic_cast<const FiguredBass*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isFingering()) {
             success = success && this->writeFing(dynamic_cast<const Fingering*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isGlissando()) {
+            success = success && this->writeGliss(dynamic_cast<const Glissando*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHairpin()) {
             success = success && this->writeHairpin(dynamic_cast<const Hairpin*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHarmony()) {
@@ -1352,6 +1355,17 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         m_endingControlEventMap[note->tieBack()] = "#" + xmlId;
     }
 
+    for (Spanner* spanner : note->spannerFor()) {
+        if (spanner->isGlissando()) {
+            m_startingControlEventList.push_back(std::make_pair(spanner, "#" + xmlId));
+        }
+    }
+    for (Spanner* spanner : note->spannerBack()) {
+        if (spanner->isGlissando()) {
+            m_endingControlEventMap[spanner] = "#" + xmlId;
+        }
+    }
+
     for (const EngravingItem* element : note->el()) {
         if (element->isFingering()) {
             m_startingControlEventList.push_back(std::make_pair(element, "#" + xmlId));
@@ -1809,6 +1823,32 @@ bool MeiExporter::writeFing(const Fingering* fing, const std::string& startid)
 }
 
 /**
+ * Write a gliss and its text content.
+ */
+
+bool MeiExporter::writeGliss(const Glissando* gliss, const std::string& startid)
+{
+    IF_ASSERT_FAILED(gliss) {
+        return false;
+    }
+
+    pugi::xml_node glissNode = m_currentNode.append_child();
+    String text = gliss->text();
+    libmei::Gliss meiGliss = Convert::glissToMEI(gliss);
+    meiGliss.SetStartid(startid);
+    meiGliss.Write(glissNode, this->getXmlIdFor(gliss, 'g'));
+
+    if (text.size() > 0) {
+        glissNode.text().set(text.toStdString().c_str());
+    }
+
+    // Add the node to the map of open control events
+    this->addNodeToOpenControlEvents(glissNode, gliss, startid);
+
+    return true;
+}
+
+/**
  * Write a hairpin.
  */
 
@@ -2251,7 +2291,7 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
             m_startingControlEventList.push_back(std::make_pair(element, "#" + xmlId));
         }
     }
-    // Breath a handled differently
+    // Breath is handled differently
     const Breath* breath = chordRest->hasBreathMark();
     if (breath) {
         m_startingControlEventList.push_back(std::make_pair(breath, "#" + xmlId));
