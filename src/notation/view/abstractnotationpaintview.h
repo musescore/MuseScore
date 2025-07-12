@@ -199,6 +199,8 @@ protected:
 
 protected slots:
     virtual void onViewSizeChanged();
+    void handleLingeringCursorUpdate(double x, double y, double width, double height);
+    void handleLingeringCursorUpdate1();
 
 private:
     INotationNoteInputPtr notationNoteInput() const;
@@ -245,6 +247,7 @@ private:
     qreal verticalScrollableSize() const;
 
     bool adjustCanvasPosition(const muse::RectF& logicRect, bool adjustVertically = true);
+    bool adjustCanvasPosition1(const muse::RectF& logicRect, const muse::RectF& logicRect1, bool adjustVertically = true);
     bool adjustCanvasPositionSmoothPan(const muse::RectF& cursorRect);
 
     void onNoteInputStateChanged();
