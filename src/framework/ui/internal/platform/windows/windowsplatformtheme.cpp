@@ -21,82 +21,61 @@
  */
 
 #include "windowsplatformtheme.h"
-#include "log.h"
 
-#include <Windows.h>
+#include <winrt/windows.foundation.h>
+#include <winrt/windows.ui.h>
 
 using namespace muse::ui;
 using namespace muse::async;
 
-static const std::wstring windowsThemesKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes";
-static const std::wstring windowsThemesPersonalizeKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
-static const std::wstring windowsThemesPersonalizeSubkey = L"AppsUseLightTheme";
+using namespace winrt;
+using namespace Windows::Foundation;
+using namespace Windows::UI::ViewManagement;
 
-HKEY hKey = nullptr;
-
-HANDLE hThemeChangeEvent = nullptr;
-HANDLE hStopListeningEvent = nullptr;
+static bool isColorLight(const Windows::UI::Color& c)
+{
+    return ((5 * c.G) + (2 * c.R) + c.B) > (8 * 128);
+}
 
 WindowsPlatformTheme::WindowsPlatformTheme()
 {
-    using fnRtlGetNtVersionNumbers = void(WINAPI*)(LPDWORD major, LPDWORD minor, LPDWORD build);
+    m_isSystemThemeDark.val = isSystemThemeCurrentlyDark();
+}
 
-    // The (void*) cast silences an unnecessary MinGW warning about incompatible function cast
-    auto rtlGetNtVersionNumbers
-        = reinterpret_cast<fnRtlGetNtVersionNumbers>((void*)GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "RtlGetNtVersionNumbers"));
-    if (rtlGetNtVersionNumbers) {
-        DWORD buildNumber;
-        rtlGetNtVersionNumbers(NULL, NULL, &buildNumber);
-        m_buildNumber = buildNumber & ~0xF0000000;
-    } else {
-        LOGE() << "Could not get Windows build number";
-    }
+WindowsPlatformTheme::~WindowsPlatformTheme()
+{
+    stopListening();
 }
 
 void WindowsPlatformTheme::startListening()
 {
-    if (m_isListening) {
-        return;
-    }
-
-    m_isListening = true;
-    m_isSystemThemeDark.val = isSystemThemeCurrentlyDark();
-
-    if (RegOpenKeyExW(HKEY_CURRENT_USER, windowsThemesKey.c_str(), 0,
-                      KEY_NOTIFY | KEY_CREATE_SUB_KEY | KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE | KEY_WOW64_64KEY,
-                      &hKey) == ERROR_SUCCESS) {
-        m_listenThread = std::thread([this]() { th_listen(); });
-    } else {
-        LOGW() << "Failed opening key for listening dark theme changes.";
+    if (!m_uiColorValuesChangedToken) {
+        m_uiColorValuesChangedToken = m_uiSettings.ColorValuesChanged(
+            [this](const UISettings&, const IInspectable&) {
+            const bool isDarkTheme = isSystemThemeCurrentlyDark();
+            if (isDarkTheme != m_isSystemThemeDark.val) {
+                m_isSystemThemeDark.set(isDarkTheme);
+            }
+        });
     }
 }
 
 void WindowsPlatformTheme::stopListening()
 {
-    if (!m_isListening) {
-        return;
+    if (m_uiColorValuesChangedToken) {
+        m_uiSettings.ColorValuesChanged(m_uiColorValuesChangedToken);
+        m_uiColorValuesChangedToken = {};
     }
-
-    m_isListening = false;
-
-    // The following _might_ fail; in that case, the app won't respond
-    // for max. 4000 ms (or whatever value is specified in th_listen()).
-    SetEvent(hStopListeningEvent);
-    m_listenThread.join();
 }
 
 bool WindowsPlatformTheme::isFollowSystemThemeAvailable() const
 {
-    return m_buildNumber >= 17763; // Dark theme was introduced in Windows 1809
+    return true;
 }
 
 bool WindowsPlatformTheme::isSystemThemeDark() const
 {
-    if (m_isListening) {
-        return m_isSystemThemeDark.val;
-    }
-
-    return isSystemThemeCurrentlyDark();
+    return m_isSystemThemeDark.val;
 }
 
 bool WindowsPlatformTheme::isGlobalMenuAvailable() const
@@ -109,58 +88,17 @@ Notification WindowsPlatformTheme::platformThemeChanged() const
     return m_isSystemThemeDark.notification;
 }
 
-bool WindowsPlatformTheme::isSystemThemeCurrentlyDark() const
-{
-    DWORD data {};
-    DWORD datasize = sizeof(data);
-
-    if (RegGetValue(HKEY_CURRENT_USER, windowsThemesPersonalizeKey.c_str(), windowsThemesPersonalizeSubkey.c_str(),
-                    RRF_RT_REG_DWORD, nullptr, &data, &datasize) == ERROR_SUCCESS) {
-        return data == 0;
-    }
-
-    return false;
-}
-
-void WindowsPlatformTheme::th_listen()
-{
-    static const DWORD dwFilter = REG_NOTIFY_CHANGE_NAME
-                                  | REG_NOTIFY_CHANGE_ATTRIBUTES
-                                  | REG_NOTIFY_CHANGE_LAST_SET
-                                  | REG_NOTIFY_CHANGE_SECURITY;
-
-    while (m_isListening) {
-        hStopListeningEvent = CreateEvent(NULL, FALSE, TRUE, TEXT("StopListening"));
-        hThemeChangeEvent = CreateEvent(NULL, FALSE, TRUE, TEXT("ThemeSettingChange"));
-
-        if (RegNotifyChangeKeyValue(hKey, TRUE, dwFilter, hThemeChangeEvent, TRUE) == ERROR_SUCCESS) {
-            HANDLE handles[2] = { hStopListeningEvent, hThemeChangeEvent };
-            DWORD dwRet = WaitForMultipleObjects(2, handles, FALSE, 4000);
-
-            if (dwRet != WAIT_TIMEOUT && dwRet != WAIT_FAILED) {
-                if (m_isListening) {
-                    //! NOTE There might be some delay before `isSystemHighContrast` returns the correct value
-                    Sleep(100);
-
-                    bool newIsDark = isSystemThemeCurrentlyDark();
-                    if (newIsDark != m_isSystemThemeDark.val) {
-                        m_isSystemThemeDark.set(newIsDark);
-                    }
-                }
-                // Else, the received event must have been a stop event
-            }
-        } else {
-            LOGD() << "Failed registering for dark theme change notifications.";
-        }
-    }
-
-    RegCloseKey(hKey);
-}
-
 void WindowsPlatformTheme::applyPlatformStyleOnAppForTheme(const ThemeCode&)
 {
 }
 
 void WindowsPlatformTheme::applyPlatformStyleOnWindowForTheme(QWindow*, const ThemeCode&)
 {
+}
+
+bool WindowsPlatformTheme::isSystemThemeCurrentlyDark() const
+{
+    // https://learn.microsoft.com/en-us/windows/apps/desktop/modernize/ui/apply-windows-themes#know-when-dark-mode-is-enabled
+    const Windows::UI::Color foregroundColor = m_uiSettings.GetColorValue(UIColorType::Foreground);
+    return isColorLight(foregroundColor);
 }

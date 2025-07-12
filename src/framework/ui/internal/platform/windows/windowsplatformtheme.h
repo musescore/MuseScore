@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef MUSE_UI_WINDOWSPLATFORMTHEME_H
-#define MUSE_UI_WINDOWSPLATFORMTHEME_H
+#pragma once
 
 #include "internal/iplatformtheme.h"
+
+#include <winrt/windows.ui.viewmanagement.h>
 
 #include "types/retval.h"
 
@@ -32,6 +32,13 @@ class WindowsPlatformTheme : public IPlatformTheme
 {
 public:
     WindowsPlatformTheme();
+    WindowsPlatformTheme(const WindowsPlatformTheme&) = delete;
+    WindowsPlatformTheme(WindowsPlatformTheme&&) = delete;
+
+    ~WindowsPlatformTheme() override;
+
+    WindowsPlatformTheme& operator=(const WindowsPlatformTheme&) = delete;
+    WindowsPlatformTheme& operator=(WindowsPlatformTheme&&) = delete;
 
     void startListening() override;
     void stopListening() override;
@@ -47,17 +54,12 @@ public:
     void applyPlatformStyleOnWindowForTheme(QWindow* window, const ThemeCode& themeCode) override;
 
 private:
-    bool isSystemThemeCurrentlyDark() const;
+    using UISettings = winrt::Windows::UI::ViewManagement::UISettings;
 
-    void th_listen();
-
-    int m_buildNumber = 0;
-
-    std::atomic<bool> m_isListening = false;
-    std::thread m_listenThread;
-
+    UISettings m_uiSettings{};
+    winrt::event_token m_uiColorValuesChangedToken;
     ValNt<bool> m_isSystemThemeDark;
+
+    bool isSystemThemeCurrentlyDark() const;
 };
 }
-
-#endif // MUSE_UI_WINDOWSPLATFORMTHEME_H
