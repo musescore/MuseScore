@@ -287,7 +287,8 @@ else ()
         find_library(CoreAudio NAMES CoreAudio)
         set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox} ${CoreAudio})
     elseif (OS_IS_WIN)
-        set(MODULE_LINK ${MODULE_LINK} winmm mmdevapi mfplat)
+        set(MODULE_LINK ${MODULE_LINK} winmm mmdevapi mfplat
+            WindowsApp) # needed for C++/WinRT
     elseif (OS_IS_LIN)
         find_package(ALSA REQUIRED)
         set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${ALSA_INCLUDE_DIRS} )
