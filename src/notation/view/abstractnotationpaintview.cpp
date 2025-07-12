@@ -79,11 +79,10 @@ AbstractNotationPaintView::~AbstractNotationPaintView()
 void AbstractNotationPaintView::load()
 {
     TRACEFUNC;
-
+    
     m_loadCalled = true;
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
-    
     QObject::connect(m_playbackCursor.get(), SIGNAL(lingeringCursorUpdate(double,double,double,double)),
                      this, SLOT(handleLingeringCursorUpdate(double,double,double,double)));
     QObject::connect(m_playbackCursor.get(), SIGNAL(lingeringCursorUpdate1()),
@@ -124,7 +123,7 @@ void AbstractNotationPaintView::load()
     scheduleRedraw();
 }
 
-void AbstractNotationPaintView::handleLingeringCursorUpdate(double x, double y, double width, double height) 
+void AbstractNotationPaintView::handleLingeringCursorUpdate(double x, double y, double width, double height)
 {
     if (playbackController()->isPlaying()) {
         if (x <= 1) {
@@ -1650,9 +1649,6 @@ void AbstractNotationPaintView::setPlaybackCursorItem(QQuickItem* cursor)
         m_playbackCursorItem->setVisible(playbackController()->isPlaying());
         m_playbackCursorItem->setEnabled(false); // ignore mouse & keyboard events
         m_playbackCursorItem->setProperty("color", configuration()->playbackCursorColor());
-
-
-
         connect(m_playbackCursorItem, &QObject::destroyed, this, [this]() {
             m_playbackCursorItem = nullptr;
         });
