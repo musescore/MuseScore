@@ -293,6 +293,8 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     case P_TYPE::TIMESIG_MARGIN:   return PropertyValue(TimeSigVSMargin(v.toInt()));
     case P_TYPE::NOTE_SPELLING_TYPE:   return PropertyValue(NoteSpellingType(v.toInt()));
     case P_TYPE::CHORD_PRESET_TYPE:   return PropertyValue(ChordStylePreset(v.toInt()));
+    case P_TYPE::LH_TAPPING_SYMBOL: return PropertyValue(LHTappingSymbol(v.toInt()));
+    case P_TYPE::RH_TAPPING_SYMBOL: return PropertyValue(RHTappingSymbol(v.toInt()));
 
     // Other
     case P_TYPE::GROUPS: {
