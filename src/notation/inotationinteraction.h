@@ -161,7 +161,7 @@ public:
     {
         return muse::async::Notification();
     }
-    
+
     virtual void addArpeggioNotes(std::vector<mu::engraving::Note*>, int, int, int)
     {
     }
@@ -218,7 +218,7 @@ public:
     }
 
     virtual void addTrillNote1(mu::engraving::Note*, int, int, int, int, int, bool)
-    {   
+    {
     }
 
     virtual int trillNoteTicks() const
@@ -342,7 +342,7 @@ public:
     {
         return muse::async::Notification();
     }
-    
+
     virtual void notifyClefKeySigsKeysChanged()
     {
     }
@@ -351,7 +351,7 @@ public:
     {
         return muse::async::Notification();
     }
-    
+
     virtual std::set<uint> clefKeySigsKeys() const
     {
         return {};
