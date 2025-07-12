@@ -31,7 +31,7 @@ using namespace muse;
 using namespace muse::musesampler;
 using namespace muse::mpe;
 
-static const std::unordered_map<ArticulationType, ms_NoteArticulation> ARTICULATION_TYPES = {
+static const std::unordered_map<ArticulationType, ms_NoteArticulation> ARTICULATION_TYPES {
     { ArticulationType::Standard, ms_NoteArticulation_None },
     { ArticulationType::Staccato, ms_NoteArticulation_Staccato },
     { ArticulationType::Staccatissimo, ms_NoteArticulation_Staccatissimo },
@@ -84,9 +84,12 @@ static const std::unordered_map<ArticulationType, ms_NoteArticulation> ARTICULAT
     { ArticulationType::SulPont, ms_NoteArticulation_SulPonticello },
 
     { ArticulationType::LaissezVibrer, ms_NoteArticulation_LaissezVibrer },
+
+    { ArticulationType::LeftHandTapping, ms_NoteArticulation_LeftHandTapping },
+    { ArticulationType::RightHandTapping, ms_NoteArticulation_RightHandTapping },
 };
 
-static const std::unordered_map<ArticulationType, ms_NoteHead> NOTEHEAD_TYPES = {
+static const std::unordered_map<ArticulationType, ms_NoteHead> NOTEHEAD_TYPES {
     { ArticulationType::CrossNote, ms_NoteHead_XNote },
     { ArticulationType::CrossLargeNote, ms_NoteHead_LargeX },
     { ArticulationType::CrossOrnateNote, ms_NoteHead_OrnateXNote },

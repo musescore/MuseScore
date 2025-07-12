@@ -30,6 +30,7 @@
 #include "dom/spanner.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
+#include "dom/tapping.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/filters/spannerfilter.h"
@@ -86,6 +87,7 @@ void ChordArticulationsParser::doParse(const EngravingItem* item, const Renderin
     parseGraceNotes(chord, ctx, result);
     parseChordLine(chord, ctx, result);
     parseArticulationSymbols(chord, ctx, result);
+    parseTapping(chord, ctx, result);
 }
 
 void ChordArticulationsParser::parseSpanners(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
@@ -196,4 +198,36 @@ void ChordArticulationsParser::parseChordLine(const Chord* chord, const Renderin
     }
 
     ChordLineMetaParser::parse(chordLine, ctx, result);
+}
+
+void ChordArticulationsParser::parseTapping(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    const Tapping* tapping = chord->tapping();
+    if (!tapping || !tapping->playArticulation()) {
+        return;
+    }
+
+    mpe::ArticulationType type = mpe::ArticulationType::Undefined;
+
+    switch (tapping->hand()) {
+    case TappingHand::LEFT:
+        type = mpe::ArticulationType::LeftHandTapping;
+        break;
+    case TappingHand::RIGHT:
+        type = mpe::ArticulationType::RightHandTapping;
+        break;
+    case TappingHand::INVALID:
+        break;
+    }
+
+    if (type == mpe::ArticulationType::Undefined) {
+        return;
+    }
+
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(type);
+    if (pattern.empty()) {
+        return;
+    }
+
+    appendArticulationData(mpe::ArticulationMeta(type, pattern, ctx.nominalTimestamp, ctx.nominalDuration), result);
 }
