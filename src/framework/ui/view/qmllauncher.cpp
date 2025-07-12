@@ -34,6 +34,12 @@ bool QmlLauncher::open(const QString& uri)
     return true;
 }
 
+bool QmlLauncher::openApp(const QString& uri)
+{
+    interactive()->openApp(Uri(uri));
+    return true;
+}
+
 bool QmlLauncher::openUrl(const QString& url)
 {
     return interactive()->openUrl(QUrl(url));

@@ -24,31 +24,18 @@
 #include <winrt/Windows.System.h>
 #include <winrt/Windows.Foundation.h>
 
+#include "platform/win/async.h"
+#include "types/uri.h"
+
 using namespace muse;
 using namespace muse::async;
 
+using namespace winrt;
+using namespace Windows::System;
+
 async::Promise<Ret> WinInteractiveHelper::openApp(const Uri& uri)
 {
-    return Promise<Ret>([&uri](auto resolve, auto reject) {
-        using namespace winrt::Windows;
-        using namespace winrt::Windows::System;
+    const Windows::Foundation::Uri wUri(winrt::to_hstring(uri.toString()));
 
-        std::string sUri = uri.toString();
-        std::wstring wsUri = std::wstring(sUri.begin(), sUri.end());
-
-        Foundation::Uri wUri(wsUri.c_str());
-
-        auto asyncOperation = Launcher::LaunchUriAsync(wUri);
-        asyncOperation.Completed([=](Foundation::IAsyncOperation<bool> const&,
-                                     Foundation::AsyncStatus const asyncStatus) {
-            if (asyncStatus == Foundation::AsyncStatus::Error) {
-                Ret ret = make_ret(Ret::Code::InternalError);
-                (void)reject(ret.code(), ret.text());
-            } else {
-                (void)resolve(make_ok());
-            }
-        });
-
-        return Promise<Ret>::Result::unchecked();
-    });
+    return toPromise<Ret>(Launcher::LaunchUriAsync(wUri));
 }

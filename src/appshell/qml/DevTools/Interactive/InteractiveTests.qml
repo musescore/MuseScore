@@ -180,6 +180,16 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
+            navigation.row: 6
+            text: "Open MuseHub"
+            onClicked: {
+                api.launcher.openApp("musehub://?from=musescore")
+            }
+        }
+
+        FlatButton {
+            width: 200
+            navigation.panel: navPanel
             navigation.row: 7
             text: "Question"
             onClicked: testModel.question()

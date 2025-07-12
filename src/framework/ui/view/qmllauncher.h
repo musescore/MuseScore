@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MUSE_UI_QMLLAUNCHER_H
-#define MUSE_UI_QMLLAUNCHER_H
+#pragma once
 
 #include <QObject>
 
@@ -38,8 +37,7 @@ public:
     QmlLauncher(QObject* parent, const modularity::ContextPtr& iocCtx);
 
     Q_INVOKABLE bool open(const QString& uri);
+    Q_INVOKABLE bool openApp(const QString& uri);
     Q_INVOKABLE bool openUrl(const QString& url);
 };
 }
-
-#endif // MUSE_UI_QMLLAUNCHER_H
