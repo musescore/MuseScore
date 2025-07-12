@@ -254,7 +254,8 @@ void PianoKeyboardView::adjustKeysAreaPosition()
     updateScrollBar();
 }
 
-void PianoKeyboardView::checkResponseKeyOccluded() {
+void PianoKeyboardView::checkResponseKeyOccluded()
+{
     if (!m_controller->isPlaying()) {
         return;
     }
@@ -277,7 +278,7 @@ void PianoKeyboardView::checkResponseKeyOccluded() {
                 m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
                 updateScrollBar();
             }
-        } 
+        }
         return;
     }
 
@@ -324,7 +325,7 @@ void PianoKeyboardView::checkResponseKeyOccluded() {
             m_scrollOffset -= offset;
             m_keysAreaRect.moveTo(QPointF(m_scrollOffset, keysAreaTop));
             updateScrollBar();
-        } 
+        }
     }
 }
 
@@ -363,7 +364,7 @@ void PianoKeyboardView::updateKeyStateColors()
     m_blackKeyBottomPieceStateColors[KeyState::Played] = mixedColors(blackKeyBottomPieceBaseColor, accentColor, 1.0);
 }
 
-void PianoKeyboardView::updatePlaybackKeyStateColors() 
+void PianoKeyboardView::updatePlaybackKeyStateColors()
 {
     if (!m_isInitialized) {
         return;
@@ -709,7 +710,7 @@ void PianoKeyboardView::setNumberOfKeys(int number)
     if (m_numberOfKeys == number) {
         return;
     }
-
+    
     switch (number) {
     case 128:
         m_lowestKey = 0;

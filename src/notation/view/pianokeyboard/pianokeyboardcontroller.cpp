@@ -508,7 +508,7 @@ void PianoKeyboardController::onNotationChanged()
             m_trill_note_hastie = notation->interaction()->trillNoteHasTie();
             m_trill_duration_ticks = notation->interaction()->trillNoteDurationticks();
             m_trill_trill_duration_ticks = notation->interaction()->trillTrillNoteDurationticks();
-            
+
             Note* receivedNote = notation->interaction()->trillNote();
 
             receive_note = receivedNote;
@@ -558,13 +558,13 @@ void PianoKeyboardController::onNotationChanged()
             m_trill_duration_ticks1 = notation->interaction()->trillNoteDurationticks1();
             m_trill_trill_duration_ticks1 = notation->interaction()->trillTrillNoteDurationticks1();
             
-            Note *receivedNote = notation->interaction()->trillNote1();
+            Note* receivedNote = notation->interaction()->trillNote1();
 
             receive_note1 = receivedNote;
             if (receivedNote) {
                 const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
                 m_trill_note_key1 = static_cast<piano_key_t>(useWrittenPitch ? receivedNote->epitch() : receivedNote->ppitch());
-                
+
                 int _noteOttavaType = notation->interaction()->noteOttavaType(receivedNote);
 
                 if (_noteOttavaType > 0) {
@@ -641,7 +641,7 @@ void PianoKeyboardController::updateNotesKeys(const std::vector<const Note*>& re
 {
     std::unordered_set<piano_key_t> newKeys;
     std::unordered_set<piano_key_t> newOtherNotesInChord;
-
+    
     DEFER {
         if (newKeys != m_keys
             || newOtherNotesInChord != m_otherNotesInChord) {
@@ -663,7 +663,7 @@ void PianoKeyboardController::updateNotesKeys(const std::vector<const Note*>& re
 }
 
 void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes, 
-    std::map<const Note*, bool> hitTsMap) 
+    std::map<const Note*, bool> hitTsMap)
 {
     std::unordered_set<piano_key_t> newKeys;
     m_righthand_keys_hit_ts.clear();
@@ -776,7 +776,7 @@ void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const N
             __key = static_cast<int>(lowestKey + numKeys) - 1;
         }
         m_glissando_note_key = (piano_key_t)__key;
-    } 
+    }
 
     for (const mu::engraving::Note* note : receivedNotes) {
         piano_key_t _key = static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch());

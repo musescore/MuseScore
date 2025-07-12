@@ -147,11 +147,13 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick) co
 
     return RectF(x, y, w, h);
 }
-bool compare_by_chord_x(Chord* a, Chord* b) {
+bool compare_by_chord_x(Chord* a, Chord* b)
+{
     return a->canvasPos().x() < b->canvasPos().x();
 }
 
-void PlaybackCursor::processOttava(mu::engraving::Score* score, bool isPlaying) {
+void PlaybackCursor::processOttava(mu::engraving::Score* score, bool isPlaying)
+{
     if (m_isOttavaProcessed && isPlaying) {
         return;
     }
@@ -164,7 +166,8 @@ void PlaybackCursor::processOttava(mu::engraving::Score* score, bool isPlaying) 
     });
 }
 
-void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
+void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score)
+{
     std::map<int, int> staff_stick_map;
     std::map<int, int> staff_etick_map;
     std::map<int, int> staff_ottatype_map;
@@ -1477,10 +1480,10 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
             }
         }
     }
-
 }
 
-void PlaybackCursor::processCursorSpannerRenderStatus(Measure* measure, Fraction tick, bool recover, bool isPlaying) {
+void PlaybackCursor::processCursorSpannerRenderStatus(Measure* measure, Fraction tick, bool recover, bool isPlaying)
+{
     if (m_cursorSpannerRenderStatusProcessFuture.valid()) {
         m_cursorSpannerRenderStatusProcessFuture.wait();
     }
@@ -1489,7 +1492,8 @@ void PlaybackCursor::processCursorSpannerRenderStatus(Measure* measure, Fraction
     });
 }
 
-void PlaybackCursor::processCursorSpannerRenderStatusAsync(Measure* measure, Fraction tick, bool recover, bool isPlaying) {
+void PlaybackCursor::processCursorSpannerRenderStatusAsync(Measure* measure, Fraction tick, bool recover, bool isPlaying)
+{
     for (EngravingItem* _item : measure_spanner_map[measure->no()]) {
         int max_rollback_measures = 4;
         if (recover) {
@@ -1532,7 +1536,8 @@ void PlaybackCursor::processCursorSpannerRenderStatusAsync(Measure* measure, Fra
     }
 }
 
-void PlaybackCursor::processCursorNoteRenderStatus(Measure* measure, int curr_ticks) {
+void PlaybackCursor::processCursorNoteRenderStatus(Measure* measure, int curr_ticks)
+{
     if (m_cursorNoteRenderStatusProcessFuture.valid()) {
         m_cursorNoteRenderStatusProcessFuture.wait();
     }
@@ -1541,7 +1546,8 @@ void PlaybackCursor::processCursorNoteRenderStatus(Measure* measure, int curr_ti
     });
 }
 
-void PlaybackCursor::processCursorNoteRenderStatusAsync(Measure* measure, int curr_ticks) {
+void PlaybackCursor::processCursorNoteRenderStatusAsync(Measure* measure, int curr_ticks)
+{
     for (mu::engraving::Segment* segment = measure->first(mu::engraving::SegmentType::ChordRest); segment;) {
         std::vector<EngravingItem*> engravingItemListOfPrevMeasure = segment->elist();
         size_t prev_len = engravingItemListOfPrevMeasure.size();
@@ -1611,7 +1617,8 @@ void PlaybackCursor::processCursorNoteRenderStatusAsync(Measure* measure, int cu
     }
 }
 
-void PlaybackCursor::processCursorNoteRenderRecover(EngravingItem* engravingItem, int curr_ticks) {
+void PlaybackCursor::processCursorNoteRenderRecover(EngravingItem* engravingItem, int curr_ticks)
+{
     if (m_cursorNoteRenderRecoverFuture.valid()) {
         m_cursorNoteRenderRecoverFuture.wait();
     }
@@ -1620,7 +1627,8 @@ void PlaybackCursor::processCursorNoteRenderRecover(EngravingItem* engravingItem
     });
 }
 
-void PlaybackCursor::processCursorNoteRenderRecoverAsync(EngravingItem* engravingItem, int curr_ticks) {
+void PlaybackCursor::processCursorNoteRenderRecoverAsync(EngravingItem* engravingItem, int curr_ticks)
+{
     if (chordrest_fermata_map.find(engravingItem) != chordrest_fermata_map.end()) {
         chordrest_fermata_map[engravingItem]->setColor(muse::draw::Color::BLACK);
     }
@@ -1679,7 +1687,8 @@ void PlaybackCursor::processCursorNoteRenderRecoverAsync(EngravingItem* engravin
     }
 }
 
-muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bool isPlaying) {
+muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bool isPlaying)
+{
     if (!m_notation) {
         return RectF();
     }
@@ -2363,19 +2372,19 @@ QColor PlaybackCursor::color() const
     return configuration()->playbackCursorColor();
 }
 
-int PlaybackCursor::hit_measure_no() 
+int PlaybackCursor::hit_measure_no()
 { 
     return m_hit_measure_no; 
 }
-Measure* PlaybackCursor::hit_measure() 
+Measure* PlaybackCursor::hit_measure()
 {
     return m_hit_measure;
 }
-void PlaybackCursor::setHitMeasureNo(int m_no) 
+void PlaybackCursor::setHitMeasureNo(int m_no)
 { 
     m_hit_measure_no = m_no; 
 }
-void PlaybackCursor::setHitMeasure(Measure* m) 
+void PlaybackCursor::setHitMeasure(Measure* m)
 {
     m_hit_measure = m;
 }

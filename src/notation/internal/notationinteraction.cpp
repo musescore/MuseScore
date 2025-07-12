@@ -1207,7 +1207,7 @@ muse::async::Notification NotationInteraction::glissandoEndNotesChanged()
     return m_glissandoEndNotesChanged;
 }
 
-mu::engraving::Note *NotationInteraction::glissandoNote() const
+mu::engraving::Note* NotationInteraction::glissandoNote() const
 {
     return glissando_note;
 }
@@ -1304,8 +1304,9 @@ muse::async::Notification NotationInteraction::arpeggioTickChanged()
     return m_arpeggioTickChanged;
 }
 
-void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int duration_ticks, 
-    int _trill_duration_ticks, int tremolo_type, int ottavaType, bool hasTie)
+void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, 
+    int duration_ticks, int _trill_duration_ticks, int tremolo_type, 
+    int ottavaType, bool hasTie)
 {
     trill_note = note;
     till_note_hastie = hasTie;
@@ -1318,8 +1319,9 @@ void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int
     }
 }
 
-void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int ticks, int duration_ticks, 
-    int _trill_duration_ticks, int tremolo_type, int ottavaType, bool hasTie)
+void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int ticks, 
+    int duration_ticks, int _trill_duration_ticks, int tremolo_type, 
+    int ottavaType, bool hasTie)
 {
     trill_note1 = note;
     till_note1_hastie = hasTie;
@@ -1437,7 +1439,7 @@ bool NotationInteraction::trillTick(int ticks)
         trill_note = nullptr;
         m_trillTickChanged.notify();
         return true;
-    } 
+    }
     trill_curr_ticks = ticks;
     m_trillTickChanged.notify();
     return false;
