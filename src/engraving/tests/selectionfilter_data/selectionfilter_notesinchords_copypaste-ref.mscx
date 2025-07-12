@@ -499,7 +499,7 @@
           <Beam>
             <eid>RB_RB</eid>
             <l1>-32</l1>
-            <l2>-28</l2>
+            <l2>-26</l2>
             </Beam>
           <Chord>
             <eid>SB_SB</eid>
@@ -545,7 +545,7 @@
           <Beam>
             <eid>bB_bB</eid>
             <l1>-24</l1>
-            <l2>-22</l2>
+            <l2>-20</l2>
             </Beam>
           <Chord>
             <eid>cB_cB</eid>
@@ -579,7 +579,7 @@
           <Beam>
             <eid>iB_iB</eid>
             <l1>52</l1>
-            <l2>48</l2>
+            <l2>46</l2>
             </Beam>
           <Chord>
             <eid>jB_jB</eid>
@@ -625,7 +625,7 @@
           <Beam>
             <eid>sB_sB</eid>
             <l1>44</l1>
-            <l2>42</l2>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <eid>tB_tB</eid>

@@ -545,7 +545,7 @@
             </Rest>
           <Beam>
             <eid>eB_eB</eid>
-            <l1>42</l1>
+            <l1>38</l1>
             <l2>44</l2>
             </Beam>
           <Chord>
@@ -1201,7 +1201,7 @@
               </Rest>
             <Beam>
               <eid>CD_CD</eid>
-              <l1>42</l1>
+              <l1>38</l1>
               <l2>44</l2>
               </Beam>
             <Chord>
