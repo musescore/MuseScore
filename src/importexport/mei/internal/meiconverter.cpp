@@ -1417,6 +1417,9 @@ std::pair<libmei::Harm, libmei::Fb> Convert::fbToMEI(const engraving::FiguredBas
     libmei::Harm meiHarm;
     libmei::Fb meiFb;
 
+    // @staff
+    Convert::staffIdentToMEI(figuredBass, meiHarm);
+
     // @color
     Convert::colorToMEI(figuredBass, meiHarm);
 
@@ -1750,6 +1753,9 @@ libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& m
     if (harmony->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
         meiHarm.SetPlace(Convert::placeToMEI(harmony->placement()));
     }
+
+    // @staff
+    Convert::staffIdentToMEI(harmony, meiHarm);
 
     // @color
     Convert::colorToMEI(harmony, meiHarm);
