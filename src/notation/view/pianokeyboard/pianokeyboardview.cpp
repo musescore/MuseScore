@@ -86,10 +86,8 @@ void PianoKeyboardView::init()
         update();
     });
     // m_controller->glissandoEndNotesChanged().onNotify(this, [this]() {
-        
     // });
     // m_controller->glissandoTickChanged().onNotify(this, [this]() {
-        
     // });
     m_controller->keyStatesChanged().onNotify(this, [this]() {
         updateKeyStateColors();
@@ -163,7 +161,7 @@ void PianoKeyboardView::calculateKeyRects()
     adjustKeysAreaPosition();
 }
 
-bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key) 
+bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
 {
     // offset
     // G#8va    120x1
@@ -179,7 +177,7 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
             }
         }
         return false;
-    } 
+    }
 
     if (keyIndex / 120 == 1) {
         keyIndex -= 120;
@@ -189,7 +187,7 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
             }
         }
         return false;
-    } 
+    }
     if (keyIndex / 120 == 2) {
         keyIndex -= 240;
         for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
@@ -198,7 +196,7 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
             }
         }
         return false;
-    } 
+    }
     if (keyIndex / 120 == 3) {
         keyIndex -= 360;
         for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
@@ -207,7 +205,7 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
             }
         }
         return false;
-    } 
+    }
     if (keyIndex / 120 == 4) {
         keyIndex -= 480;
         for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {
@@ -216,7 +214,7 @@ bool PianoKeyboardView::containsKey(uint keyIndex, piano_key_t key)
             }
         }
         return false;
-    } 
+    }
     if (keyIndex / 120 == 5) {
         keyIndex -= 600;
         for (uint i = 8 * keyIndex; i < 8 * (keyIndex + 1); i++) {

@@ -68,7 +68,6 @@ public:
 
     muse::async::Notification clefKeySigsKeysChanged() const;
     std::set<uint> clefKeySigsKeys() const;
-    
     void updatePianoKeyboardKeys(piano_key_t _lowestKey, piano_key_t _numKeys);
 
 private:

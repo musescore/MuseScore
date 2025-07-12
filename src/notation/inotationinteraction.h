@@ -289,12 +289,12 @@ public:
     {
     }
 
-    virtual mu::engraving::Note *trillNote() const
+    virtual mu::engraving::Note* trillNote() const
     {
         return nullptr;
     }
 
-    virtual mu::engraving::Note *trillNote1() const
+    virtual mu::engraving::Note* trillNote1() const
     {
         return nullptr;
     }
@@ -360,7 +360,7 @@ public:
     virtual void addClefKeySigsKeysSet(std::set<uint>)
     {
     }
-    
+
     virtual void notifyClefKeySigsKeysChange()
     {
     }

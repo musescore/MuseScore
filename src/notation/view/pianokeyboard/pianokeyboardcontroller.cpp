@@ -651,7 +651,7 @@ void PianoKeyboardController::updateNotesKeys(const std::vector<const Note*>& re
     };
 
     const bool useWrittenPitch = notationConfiguration()->midiUseWrittenPitch().val;
-
+    
     for (const mu::engraving::Note* note : receivedNotes) {
         newKeys.insert(static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch()));
         for (const mu::engraving::Note* otherNote : note->chord()->notes()) {
@@ -677,7 +677,7 @@ void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const No
 
     for (const mu::engraving::Note* note : receivedNotes) {
         piano_key_t _key = static_cast<piano_key_t>(useWrittenPitch ? note->epitch() : note->ppitch());
-        
+
         int _noteOttavaType = currentNotation()->interaction()->noteOttavaType(note);
         if (_noteOttavaType > 0) {
             int __key = static_cast<int>(_key);
