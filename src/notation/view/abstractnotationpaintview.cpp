@@ -79,7 +79,6 @@ AbstractNotationPaintView::~AbstractNotationPaintView()
 void AbstractNotationPaintView::load()
 {
     TRACEFUNC;
-    
     m_loadCalled = true;
     m_inputController = std::make_unique<NotationViewInputController>(this, iocContext());
     m_playbackCursor = std::make_unique<PlaybackCursor>(iocContext());
@@ -134,7 +133,7 @@ void AbstractNotationPaintView::handleLingeringCursorUpdate(double x, double y, 
     }
 }
 
-void AbstractNotationPaintView::handleLingeringCursorUpdate1() 
+void AbstractNotationPaintView::handleLingeringCursorUpdate1()
 {
     if (playbackController()->isPlaying()) {
         scheduleRedraw();

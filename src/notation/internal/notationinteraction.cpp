@@ -371,7 +371,7 @@ void NotationInteraction::notifyAboutSelectionChangedIfNeed()
     m_selectionChanged.notify();
 }
 
-void NotationInteraction::notifyAboutPianoKeyboardNotesChanged() 
+void NotationInteraction::notifyAboutPianoKeyboardNotesChanged()
 {
     TRACEFUNC;
 
@@ -1304,7 +1304,8 @@ muse::async::Notification NotationInteraction::arpeggioTickChanged()
     return m_arpeggioTickChanged;
 }
 
-void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int duration_ticks, int _trill_duration_ticks, int tremolo_type, int ottavaType, bool hasTie)
+void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int duration_ticks, 
+    int _trill_duration_ticks, int tremolo_type, int ottavaType, bool hasTie)
 {
     trill_note = note;
     till_note_hastie = hasTie;
@@ -1317,7 +1318,8 @@ void NotationInteraction::addTrillNote(mu::engraving::Note* note, int ticks, int
     }
 }
 
-void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int ticks, int duration_ticks, int _trill_duration_ticks, int tremolo_type, int ottavaType, bool hasTie)
+void NotationInteraction::addTrillNote1(mu::engraving::Note* note, int ticks, int duration_ticks, 
+    int _trill_duration_ticks, int tremolo_type, int ottavaType, bool hasTie)
 {
     trill_note1 = note;
     till_note1_hastie = hasTie;
@@ -1457,8 +1459,7 @@ bool NotationInteraction::trillTick1(int ticks)
             }
         }
     }
-    if (ticks < trill_ticks1 || ticks > trill_ticks1 + _trill_duration_ticks)
-    {
+    if (ticks < trill_ticks1 || ticks > trill_ticks1 + _trill_duration_ticks) {
         trill_curr_ticks1 = ticks;
         trill_ticks1 = 0;
         trill_duration_ticks1 = 0;

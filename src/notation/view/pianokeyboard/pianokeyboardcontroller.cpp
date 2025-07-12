@@ -127,6 +127,7 @@ bool compare_by_note(piano_key_t a, piano_key_t b)
 {
     return a < b;
 }
+
 bool compare_by_note_reverse(piano_key_t a, piano_key_t b)
 {
     return a > b;
@@ -331,6 +332,7 @@ muse::async::Notification PianoKeyboardController::glissandoEndNotesChanged() co
 {
     return m_glissandoEndNotesChanged;
 }
+
 muse::async::Notification PianoKeyboardController::glissandoTickChanged() const
 {
     return m_glissandoTickChanged;
@@ -364,6 +366,7 @@ bool PianoKeyboardController::isPlaying() const
     }
     return false;
 }
+
 bool PianoKeyboardController::islastMeasure() const
 {
     if (auto notation = currentNotation()) {
@@ -659,7 +662,8 @@ void PianoKeyboardController::updateNotesKeys(const std::vector<const Note*>& re
     }
 }
 
-void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes, std::map<const Note*, bool> hitTsMap) 
+void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const Note*>& receivedNotes, 
+    std::map<const Note*, bool> hitTsMap) 
 {
     std::unordered_set<piano_key_t> newKeys;
     m_righthand_keys_hit_ts.clear();
@@ -717,7 +721,8 @@ void PianoKeyboardController::updatePlaybackNotesKeys(const std::vector<const No
     }
 }
 
-void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const Note*>& receivedNotes, const mu::engraving::Note* glissandoNote) 
+void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const Note*>& receivedNotes, 
+    const mu::engraving::Note* glissandoNote)
 {
     std::unordered_set<piano_key_t> newKeys;
 
@@ -810,7 +815,7 @@ void PianoKeyboardController::updateGlissandoNotesKeys(const std::vector<const N
     }
 }
 
-void PianoKeyboardController::updateArpeggioNotesKeys(const std::vector<const Note*>& receivedNotes) 
+void PianoKeyboardController::updateArpeggioNotesKeys(const std::vector<const Note*>& receivedNotes)
 {
     std::unordered_set<piano_key_t> newKeys;
 

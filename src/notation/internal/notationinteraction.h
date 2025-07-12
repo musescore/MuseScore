@@ -140,8 +140,8 @@ public:
     int trillCurrticks1() const override;
     void trillNoteUpdate() override;
     void trillNoteUpdate1() override;
-    mu::engraving::Note *trillNote() const override;
-    mu::engraving::Note *trillNote1() const override;
+    mu::engraving::Note* trillNote() const override;
+    mu::engraving::Note* trillNote1() const override;
     bool trillTick(int) override;
     bool trillTick1(int) override;
     muse::async::Notification trillNoteChanged() override;
