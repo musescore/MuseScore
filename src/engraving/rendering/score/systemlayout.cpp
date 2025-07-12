@@ -1097,14 +1097,15 @@ void SystemLayout::collectElementsToLayout(Measure* measure, ElementsToLayout& e
 
     System* system = elements.system;
     for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
+        MeasureNumber* mno = measure->measureNumber(staffIdx);
+        if (mno) {
+            elements.measureNumbers.push_back(mno);
+        }
+
         if (!system->staff(staffIdx)->show()) {
             continue;
         }
 
-        MeasureNumber* mno = measure->noText(staffIdx);
-        if (mno && mno->addToSkyline()) {
-            elements.measureNumbers.push_back(mno);
-        }
         MMRestRange* mmrr = measure->mmRangeText(staffIdx);
         if (mmrr && mmrr->addToSkyline()) {
             elements.mmrRanges.push_back(mmrr);

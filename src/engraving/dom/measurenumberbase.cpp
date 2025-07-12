@@ -51,51 +51,5 @@ MeasureNumberBase::MeasureNumberBase(const MeasureNumberBase& other)
     : TextBase(other)
 {
     setFlag(ElementFlag::ON_STAFF, true);
-    setHPlacement(other.hPlacement());
-}
-
-//---------------------------------------------------------
-//   getProperty
-//---------------------------------------------------------
-
-engraving::PropertyValue MeasureNumberBase::getProperty(Pid id) const
-{
-    switch (id) {
-    case Pid::HPLACEMENT:
-        return int(hPlacement());
-    default:
-        return TextBase::getProperty(id);
-    }
-}
-
-//---------------------------------------------------------
-//   setProperty
-//---------------------------------------------------------
-
-bool MeasureNumberBase::setProperty(Pid id, const PropertyValue& val)
-{
-    switch (id) {
-    case Pid::HPLACEMENT:
-        setHPlacement(val.value<PlacementH>());
-        mutldata()->layoutInvalid = true;
-        triggerLayout();
-        return true;
-    default:
-        return TextBase::setProperty(id, val);
-    }
-}
-
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
-
-PropertyValue MeasureNumberBase::propertyDefault(Pid id) const
-{
-    switch (id) {
-    case Pid::TEXT_STYLE:
-        return TextStyleType::DEFAULT;
-    default:
-        return TextBase::propertyDefault(id);
-    }
 }
 } // namespace MS

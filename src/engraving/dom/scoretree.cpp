@@ -219,7 +219,7 @@ EngravingObjectList Measure::scanChildren() const
             children.push_back(_vspacerDown);
         }
 
-        if (MeasureNumber* _noText = noText(staffIdx)) {
+        if (MeasureNumber* _noText = measureNumber(staffIdx)) {
             children.push_back(_noText);
         }
 

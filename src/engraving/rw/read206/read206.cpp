@@ -3012,7 +3012,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             readText206(e, ctx, noText, m);
             noText->setTrack(ctx.track());
             noText->setParent(m);
-            m->setNoText(noText->staffIdx(), noText);
+            m->setMeasureNumber(noText->staffIdx(), noText);
         } else if (tag == "SystemDivider") {
             SystemDivider* sd = new SystemDivider(ctx.dummy()->system());
             read400::TRead::read(sd, e, ctx);

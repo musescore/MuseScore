@@ -181,14 +181,10 @@ bool Read460::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
                 score->setScoreOrder(order);
             }
         } else if (tag == "SystemObjects") {
-            // the staves to show system objects
             score->clearSystemObjectStaves();
             while (e.readNextStartElement()) {
                 if (e.name() == "Instance") {
                     int staffIdx = e.attribute("staffId").toInt() - 1;
-                    // TODO: read the other attributes from this element when we begin treating different classes
-                    // of system objects differently. ex:
-                    // bool showBarNumbers = !(e.hasAttribute("barNumbers") && e.attribute("barNumbers") == "false");
                     if (staffIdx > 0) {
                         sysStaves.push_back(staffIdx);
                     }

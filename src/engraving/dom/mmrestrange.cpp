@@ -40,7 +40,8 @@ static const ElementStyle mmRestRangeStyle {
     { Sid::mmRestRangeBracketType, Pid::MMREST_RANGE_BRACKET_TYPE },
     { Sid::mmRestRangeVPlacement,  Pid::PLACEMENT },
     { Sid::mmRestRangeHPlacement,  Pid::HPLACEMENT },
-    { Sid::mmRestRangeMinDistance, Pid::MIN_DISTANCE }
+    { Sid::mmRestRangeMinDistance, Pid::MIN_DISTANCE },
+    { Sid::mmRestRangeTextStyle, Pid::TEXT_STYLE }
 };
 
 MMRestRange::MMRestRange(Measure* parent)
@@ -80,20 +81,6 @@ bool MMRestRange::setProperty(Pid id, const PropertyValue& val)
         return true;
     default:
         return MeasureNumberBase::setProperty(id, val);
-    }
-}
-
-PropertyValue MMRestRange::propertyDefault(Pid id) const
-{
-    switch (id) {
-    case Pid::TEXT_STYLE:
-        return TextStyleType::MMREST_RANGE;
-    case Pid::PLACEMENT:
-        return style().styleV(Sid::mmRestRangeVPlacement);
-    case Pid::HPLACEMENT:
-        return style().styleV(Sid::mmRestRangeHPlacement);
-    default:
-        return MeasureNumberBase::propertyDefault(id);
     }
 }
 

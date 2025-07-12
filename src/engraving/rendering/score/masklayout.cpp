@@ -26,6 +26,7 @@
 #include "dom/chord.h"
 #include "dom/lyrics.h"
 #include "dom/measure.h"
+#include "dom/measurenumber.h"
 #include "dom/note.h"
 #include "dom/segment.h"
 #include "dom/staff.h"
@@ -190,6 +191,11 @@ std::vector<TextBase*> MaskLayout::collectAllSystemText(const System* system)
     for (const MeasureBase* mb : system->measures()) {
         if (!mb->isMeasure()) {
             continue;
+        }
+        for (const MStaff* mstaff : toMeasure(mb)->mstaves()) {
+            if (MeasureNumber* measureNumber = mstaff->measureNumber()) {
+                allText.push_back(measureNumber);
+            }
         }
         for (const Segment& s : toMeasure(mb)->segments()) {
             if (!s.isType(Segment::CHORD_REST_OR_TIME_TICK_TYPE) || !s.enabled()) {

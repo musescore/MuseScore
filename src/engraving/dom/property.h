@@ -472,6 +472,8 @@ enum class Pid {
 
     EXCLUDE_VERTICAL_ALIGN,
 
+    SHOW_MEASURE_NUMBERS,
+
     END
 };
 
