@@ -83,16 +83,16 @@ public:
     virtual void clearSelection() = 0;
     virtual muse::async::Notification selectionChanged() const = 0;
 
-    virtual muse::async::Notification playbackNotesChanged() const 
+    virtual muse::async::Notification playbackNotesChanged() const
     {
         return muse::async::Notification();
     }
 
-    virtual void notifyPianoKeyboardNotesChanged() 
+    virtual void notifyPianoKeyboardNotesChanged()
     {
     }
 
-    virtual std::vector<mu::engraving::Note*> playbackNotes() const 
+    virtual std::vector<mu::engraving::Note*> playbackNotes() const
     {
         return {};
     }
@@ -102,131 +102,131 @@ public:
         return {};
     }
 
-    virtual void addPlaybackNote(mu::engraving::Note*, int, bool) 
+    virtual void addPlaybackNote(mu::engraving::Note*, int, bool)
     {
     }
 
-    virtual int noteOttavaType(const mu::engraving::Note*) 
-    {
-        return 0;
-    }
-
-    virtual void addGlissandoNote(mu::engraving::Note*, int, int, int) 
-    {
-    }
-
-    virtual void addGlissandoEndNote(mu::engraving::Note*, int) 
-    {
-    }
-
-    virtual int glissandoNoteTicks() const 
+    virtual int noteOttavaType(const mu::engraving::Note*)
     {
         return 0;
     }
 
-    virtual int glissandoNoteDurationticks() const 
+    virtual void addGlissandoNote(mu::engraving::Note*, int, int, int)
+    {
+    }
+
+    virtual void addGlissandoEndNote(mu::engraving::Note*, int)
+    {
+    }
+
+    virtual int glissandoNoteTicks() const
     {
         return 0;
     }
 
-    virtual int glissandoCurrticks() const 
+    virtual int glissandoNoteDurationticks() const
     {
         return 0;
     }
 
-    virtual void glissandoEndNotesUpdate() 
+    virtual int glissandoCurrticks() const
+    {
+        return 0;
+    }
+
+    virtual void glissandoEndNotesUpdate()
     {
     }
 
-    virtual muse::async::Notification glissandoEndNotesChanged() 
+    virtual muse::async::Notification glissandoEndNotesChanged()
     {
         return muse::async::Notification();
     }
 
-    virtual mu::engraving::Note* glissandoNote() const 
+    virtual mu::engraving::Note* glissandoNote() const
     {
         return nullptr;
     }
 
-    virtual std::vector<mu::engraving::Note*> glissandoEndNotes() const 
+    virtual std::vector<mu::engraving::Note*> glissandoEndNotes() const
     {
         return {};
     }
 
-    virtual void glissandoTick(int) 
+    virtual void glissandoTick(int)
     {
     }
 
-    virtual muse::async::Notification glissandoTickChanged() 
+    virtual muse::async::Notification glissandoTickChanged()
     {
         return muse::async::Notification();
     }
     
-    virtual void addArpeggioNotes(std::vector<mu::engraving::Note*>, int, int, int) 
+    virtual void addArpeggioNotes(std::vector<mu::engraving::Note*>, int, int, int)
     {
     }
 
-    virtual void updateArpeggioDuration(int) 
+    virtual void updateArpeggioDuration(int)
     {
     }
 
-    virtual int arpeggioNoteTicks() const 
-    {
-        return 0;
-    }
-
-    virtual int arpeggioNoteDurationticks() const 
+    virtual int arpeggioNoteTicks() const
     {
         return 0;
     }
 
-    virtual int arpeggioCurrticks() const 
+    virtual int arpeggioNoteDurationticks() const
     {
         return 0;
     }
 
-    virtual muse::async::Notification arpeggioNotesChanged() 
+    virtual int arpeggioCurrticks() const
+    {
+        return 0;
+    }
+
+    virtual muse::async::Notification arpeggioNotesChanged()
     {
         return muse::async::Notification();
     }
 
-    virtual std::vector<mu::engraving::Note*> arpeggioNotes() const 
+    virtual std::vector<mu::engraving::Note*> arpeggioNotes() const
     {
         return {};
     }
 
-    virtual bool arpeggioIsDown() const 
+    virtual bool arpeggioIsDown() const
     {
         return false;
     }
 
-    virtual void arpeggioNotesUpdate(bool) 
+    virtual void arpeggioNotesUpdate(bool)
     {
     }
 
-    virtual void arpeggioTick(int) 
+    virtual void arpeggioTick(int)
     {
     }
 
-    virtual muse::async::Notification arpeggioTickChanged() 
+    virtual muse::async::Notification arpeggioTickChanged()
     {
         return muse::async::Notification();
     }
 
-    virtual void addTrillNote(mu::engraving::Note*, int, int, int, int, int, bool) 
+    virtual void addTrillNote(mu::engraving::Note*, int, int, int, int, int, bool)
     {
     }
 
-    virtual void addTrillNote1(mu::engraving::Note*, int, int, int, int, int, bool) 
+    virtual void addTrillNote1(mu::engraving::Note*, int, int, int, int, int, bool)
     {   
     }
 
-    virtual int trillNoteTicks() const 
+    virtual int trillNoteTicks() const
     {
         return 0;
     }
 
-    virtual int trillNoteTicks1() const 
+    virtual int trillNoteTicks1() const
     {
         return 0;
     }
@@ -241,12 +241,12 @@ public:
         return false;
     }
 
-    virtual int trillNoteDurationticks() const 
+    virtual int trillNoteDurationticks() const
     {
         return 0;
     }
 
-    virtual int trillNoteDurationticks1() const 
+    virtual int trillNoteDurationticks1() const
     {
         return 0;
     }
@@ -256,7 +256,7 @@ public:
         return 0;
     }
 
-    virtual int trillTrillNoteDurationticks1() const 
+    virtual int trillTrillNoteDurationticks1() const
     {
         return 0;
     }
@@ -271,110 +271,110 @@ public:
         return 0;
     }
 
-    virtual int trillCurrticks() const 
+    virtual int trillCurrticks() const
     {
         return 0;
     }
 
-    virtual int trillCurrticks1() const 
+    virtual int trillCurrticks1() const
     {
         return 0;
     }
 
-    virtual void trillNoteUpdate() 
+    virtual void trillNoteUpdate()
     {
     }
 
-    virtual void trillNoteUpdate1() 
+    virtual void trillNoteUpdate1()
     {
     }
 
-    virtual mu::engraving::Note *trillNote() const 
+    virtual mu::engraving::Note *trillNote() const
     {
         return nullptr;
     }
 
-    virtual mu::engraving::Note *trillNote1() const 
+    virtual mu::engraving::Note *trillNote1() const
     {
         return nullptr;
     }
 
-    virtual bool trillTick(int) 
+    virtual bool trillTick(int)
     {
         return false;
     }
 
-    virtual bool trillTick1(int) 
+    virtual bool trillTick1(int)
     {
         return false;
     }
 
-    virtual muse::async::Notification trillNoteChanged() 
+    virtual muse::async::Notification trillNoteChanged()
     {
         return muse::async::Notification();
     }
 
-    virtual muse::async::Notification trillNoteChanged1() 
+    virtual muse::async::Notification trillNoteChanged1()
     {
         return muse::async::Notification();
     }
 
-    virtual muse::async::Notification trillTickChanged() 
+    virtual muse::async::Notification trillTickChanged()
     {
         return muse::async::Notification();
     }
 
-    virtual muse::async::Notification trillTickChanged1() 
+    virtual muse::async::Notification trillTickChanged1()
     {
         return muse::async::Notification();
     }
 
-    virtual bool islastMeasure() const 
+    virtual bool islastMeasure() const
     {
         return false;
     }
 
-    virtual void lastMeasure(bool) 
+    virtual void lastMeasure(bool)
     {
     }
 
-    virtual muse::async::Notification lastMeasureChanged() 
+    virtual muse::async::Notification lastMeasureChanged()
     {
         return muse::async::Notification();
     }
     
-    virtual void notifyClefKeySigsKeysChanged() 
+    virtual void notifyClefKeySigsKeysChanged()
     {
     }
 
-    virtual muse::async::Notification clefKeySigsKeysChanged() const 
+    virtual muse::async::Notification clefKeySigsKeysChanged() const
     {
         return muse::async::Notification();
     }
     
-    virtual std::set<uint> clefKeySigsKeys() const 
+    virtual std::set<uint> clefKeySigsKeys() const
     {
         return {};
     }
 
-    virtual void addClefKeySigsKeysSet(std::set<uint>) 
+    virtual void addClefKeySigsKeysSet(std::set<uint>)
     {
     }
     
-    virtual void notifyClefKeySigsKeysChange() 
+    virtual void notifyClefKeySigsKeysChange()
     {
     }
 
-    virtual void playingChang(bool) 
+    virtual void playingChang(bool)
     {
     }
 
-    virtual bool isPlaying() const 
+    virtual bool isPlaying() const
     {
         return false;
     }
 
-    virtual void clearPlaybackNotes() 
+    virtual void clearPlaybackNotes()
     {
     }
     
