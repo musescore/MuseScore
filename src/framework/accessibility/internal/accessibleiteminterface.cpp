@@ -209,6 +209,15 @@ QAccessible::State AccessibleItemInterface::state() const
     } break;
     }
 
+    if (IAccessible* pretendFocusItem = m_object->controller().lock()->pretendFocusItem()) {
+        if (item == pretendFocusItem) {
+            state.focusable = true;
+            state.focused = true; // pretend to have focus
+        } else {
+            state.focused = false; // pretend to not have focus
+        }
+    }
+
     return state;
 }
 
@@ -266,6 +275,10 @@ QString AccessibleItemInterface::text(QAccessible::Text textType) const
 {
     switch (textType) {
     case QAccessible::Name: {
+        QString message = m_object->controller().lock()->message();
+        if (!message.isEmpty()) {
+            return message;
+        }
         QString name = m_object->item()->accessibleName();
 #if defined(Q_OS_MACOS)
         // VoiceOver doesn't speak descriptions so add it to name instead.
