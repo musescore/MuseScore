@@ -55,7 +55,6 @@ class Staff;
 class Tie;
 class Tuplet;
 
-extern Tie* tieWrap(mu::engraving::Tie* tie);
 
 //---------------------------------------------------------
 //   wrap
@@ -326,12 +325,6 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(int, markerType,       MARKER_TYPE)
     API_PROPERTY(arpUserLen1,             ARP_USER_LEN1)
     API_PROPERTY(arpUserLen2,             ARP_USER_LEN2)
-    ///\since MuseScore 4.6
-    API_PROPERTY_T(bool, repeatEnd,       REPEAT_END)
-    ///\since MuseScore 4.6
-    API_PROPERTY_T(bool, repeatStart,     REPEAT_START)
-    ///\since MuseScore 4.6
-    API_PROPERTY_T(bool, repeatJump,      REPEAT_JUMP)
 
     API_PROPERTY_T(int, glissType,        GLISS_TYPE)
     API_PROPERTY(glissText,               GLISS_TEXT)
@@ -374,8 +367,6 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY(measureRepeatNumberPos,  MEASURE_REPEAT_NUMBER_POS)
 
-    API_PROPERTY_T(int, noOffset,         NO_OFFSET)
-    API_PROPERTY_T(bool, irregular,       IRREGULAR)
     API_PROPERTY_T(int, anchor,           ANCHOR)
     API_PROPERTY_T(QPointF, slurUoff1,    SLUR_UOFF1)
     API_PROPERTY_T(QPointF, slurUoff2,    SLUR_UOFF2)
@@ -1123,20 +1114,46 @@ public:
 };
 
 //---------------------------------------------------------
-//   Measure
-//    Measure wrapper
+//   MeasureBase
+//    MeasureBase wrapper (Measures, frames)
 //---------------------------------------------------------
 
-class Measure : public EngravingItem
+class MeasureBase : public EngravingItem
 {
     Q_OBJECT
-    /// The first segment of this measure
-    Q_PROPERTY(apiv1::Segment * firstSegment READ firstSegment)
-    /// The last segment of this measure
-    Q_PROPERTY(apiv1::Segment * lastSegment READ lastSegment)
 
-    // TODO: to MeasureBase?
-//       Q_PROPERTY(bool         lineBreak         READ lineBreak   WRITE undoSetLineBreak)
+    API_PROPERTY_T(bool, repeatEnd,       REPEAT_END)
+    API_PROPERTY_T(bool, repeatStart,     REPEAT_START)
+    API_PROPERTY_T(bool, repeatJump,      REPEAT_JUMP)
+    API_PROPERTY_T(int, noOffset,         NO_OFFSET)
+    API_PROPERTY_T(bool, irregular,       IRREGULAR)
+
+    /// \brief Measure number, counting from 1.
+    /// Number of this measure in the score counting from 1, i.e.
+    /// for the first measure its \p no value will be equal to 1.
+    /// User-visible measure number can be calculated as
+    /// \code
+    /// measure.no + measure.noOffset
+    /// \endcode
+    /// where \p measure is the relevant \ref Measure object.
+    /// \since MuseScore 4.6
+    /// \see ScoreElement::noOffset
+    Q_PROPERTY(int no READ no)
+    /// \brief Current tick for this measure
+    /// \returns Tick of this measure, i.e. number of ticks from the beginning
+    /// of the score to this measure, as a fraction.
+    /// \see \ref ticklength
+    Q_PROPERTY(apiv1::FractionWrapper * tick READ tick)
+    /// \brief Length of this measure in ticks.
+    /// \returns Length of this measure, i.e. number of ticks from its beginning
+    /// to its end, as a fraction.
+    /// \see \ref ticklength
+    Q_PROPERTY(apiv1::FractionWrapper * ticks READ ticks)
+    /// List of measure-related elements: layout breaks, jump/repeat markings etc.
+    /// For frames (since MuseScore 4.6), also contains their text elements.
+    /// \since MuseScore 3.3
+    Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> elements READ elements)
+
     /// Next measure.
     Q_PROPERTY(apiv1::Measure * nextMeasure READ nextMeasure)
     /// Next measure, accounting for multimeasure rests.
@@ -1149,7 +1166,6 @@ class Measure : public EngravingItem
     /// \see \ref Score.firstMeasureMM
     /// \since MuseScore 3.6
     Q_PROPERTY(apiv1::Measure * nextMeasureMM READ nextMeasureMM)
-//       Q_PROPERTY(bool         pageBreak         READ pageBreak   WRITE undoSetPageBreak)
     /// Previous measure.
     Q_PROPERTY(apiv1::Measure * prevMeasure READ prevMeasure)
     /// Previous measure, accounting for multimeasure rests.
@@ -1157,37 +1173,151 @@ class Measure : public EngravingItem
     /// \see \ref Score.lastMeasureMM
     /// \since MuseScore 3.6
     Q_PROPERTY(apiv1::Measure * prevMeasureMM READ prevMeasureMM)
+    /// Next measure or frame.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::MeasureBase * next READ next)
+    /// Next measure or frame, accounting for multimeasure rests.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::MeasureBase * nextMM READ nextMM)
+    /// Next measure or frame.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::MeasureBase * prev READ prev)
+    /// Next measure or frame, accounting for multimeasure rests.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::MeasureBase * prevMM READ prevMM)
 
-    /// List of measure-related elements: layout breaks, jump/repeat markings etc.
-    /// \since MuseScore 3.3
-    Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> elements READ elements)
+public:
+    /// \cond MS_INTERNAL
+    MeasureBase(mu::engraving::MeasureBase* mb = nullptr, Ownership own = Ownership::SCORE)
+        : EngravingItem(mb, own) {}
+
+    mu::engraving::MeasureBase* measureBase() { return toMeasureBase(e); }
+    const mu::engraving::MeasureBase* measureBase() const { return toMeasureBase(e); }
+
+    int no() { return measureBase()->no(); }
+
+    FractionWrapper* tick() const;
+    FractionWrapper* ticks() const;
+
+    Measure* prevMeasure() { return wrap<Measure>(measureBase()->prevMeasure(), Ownership::SCORE); }
+    Measure* nextMeasure() { return wrap<Measure>(measureBase()->nextMeasure(), Ownership::SCORE); }
+    Measure* prevMeasureMM() { return wrap<Measure>(measureBase()->prevMeasureMM(), Ownership::SCORE); }
+    Measure* nextMeasureMM() { return wrap<Measure>(measureBase()->nextMeasureMM(), Ownership::SCORE); }
+
+    MeasureBase* prev() { return wrap<MeasureBase>(measureBase()->prev(), Ownership::SCORE); }
+    MeasureBase* next() { return wrap<MeasureBase>(measureBase()->next(), Ownership::SCORE); }
+    MeasureBase* prevMM() { return wrap<MeasureBase>(measureBase()->prevMM(), Ownership::SCORE); }
+    MeasureBase* nextMM() { return wrap<MeasureBase>(measureBase()->nextMM(), Ownership::SCORE); }
+
+    QQmlListProperty<EngravingItem> elements() { return wrapContainerProperty<EngravingItem>(this, measureBase()->el()); }
+
+    static void addInternal(mu::engraving::MeasureBase* measureBase, mu::engraving::EngravingItem* el);
+    /// \endcond
+
+    /// Add to a MeasureBases's elements.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE void add(apiv1::EngravingItem* wrapped);
+    /// Remove a MeasureBase's element.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE void remove(apiv1::EngravingItem* wrapped);
+};
+
+//---------------------------------------------------------
+//   Measure
+//    Measure wrapper
+//---------------------------------------------------------
+
+class Measure : public MeasureBase
+{
+    Q_OBJECT
+    /// The first segment of this measure
+    Q_PROPERTY(apiv1::Segment * firstSegment READ firstSegment)
+    /// The last segment of this measure
+    Q_PROPERTY(apiv1::Segment * lastSegment READ lastSegment)
+
+//       Q_PROPERTY(bool         lineBreak         READ lineBreak   WRITE undoSetLineBreak)
+//       Q_PROPERTY(bool         pageBreak         READ pageBreak   WRITE undoSetPageBreak)
 
     API_PROPERTY(timesigNominal,          TIMESIG_NOMINAL)
     API_PROPERTY(timesigActual,           TIMESIG_ACTUAL)
-    ///\since MuseScore 4.6
+
+    /// \since MuseScore 4.6
     API_PROPERTY_T(int, measureNumberMode, MEASURE_NUMBER_MODE)
+    /// Whether this measure displays a measure number when
+    /// \ref measureNumberMode is set to AUTO.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool showsMeasureNumberInAutoMode READ showsMeasureNumberInAutoMode)
+
     API_PROPERTY_T(bool, breakMmr,        BREAK_MMR)
     API_PROPERTY_T(int, repeatCount,      REPEAT_COUNT)
     API_PROPERTY_T(qreal, userStretch,    USER_STRETCH)
 
+    /// If this measure is part of a multimeasure rest,
+    /// returns the first measure included in it.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::Measure * mmRest READ mmRest)
+    /// If this measure is the first measure of a multimeasure rest.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool isMMRestStart READ isMMRest)
+
+    /// List of segments in the measure.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::Segment> segments READ segments)
+
 public:
     /// \cond MS_INTERNAL
     Measure(mu::engraving::Measure* m = nullptr, Ownership own = Ownership::SCORE)
-        : EngravingItem(m, own) {}
+        : MeasureBase(m, own) {}
 
     mu::engraving::Measure* measure() { return toMeasure(e); }
     const mu::engraving::Measure* measure() const { return toMeasure(e); }
 
+    bool showsMeasureNumberInAutoMode() { return measure()->showsMeasureNumberInAutoMode(); }
+
     Segment* firstSegment() { return wrap<Segment>(measure()->firstEnabled(), Ownership::SCORE); }
     Segment* lastSegment() { return wrap<Segment>(measure()->last(), Ownership::SCORE); }
 
-    Measure* prevMeasure() { return wrap<Measure>(measure()->prevMeasure(), Ownership::SCORE); }
-    Measure* nextMeasure() { return wrap<Measure>(measure()->nextMeasure(), Ownership::SCORE); }
+    bool isMMRest() const { return measure()->isMMRest(); }
+    Measure* mmRest() const { return wrap<Measure>(measure()->mmRest(), Ownership::SCORE); }
 
-    Measure* prevMeasureMM() { return wrap<Measure>(measure()->prevMeasureMM(), Ownership::SCORE); }
-    Measure* nextMeasureMM() { return wrap<Measure>(measure()->nextMeasureMM(), Ownership::SCORE); }
+    QQmlListProperty<Segment> segments() { return wrapContainerProperty<Segment>(this, measure()->segments()); }
+    /// \endcond
 
-    QQmlListProperty<EngravingItem> elements() { return wrapContainerProperty<EngravingItem>(this, measure()->el()); }
+    /// Up spacer for a given staff.
+    /// \param staffIdx staff to retrieve the spacer from
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::EngravingItem* vspacerUp(int staffIdx);
+    /// Down spacer for a given staff.
+    /// \param staffIdx staff to retrieve the spacer from
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::EngravingItem* vspacerDown(int staffIdx);
+    /// Measure number object at a given staff.
+    /// \param staffIdx staff to retrieve the object from
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::EngravingItem* noText(int staffIdx);
+    /// The mmRestRange object at a given staff.
+    /// \param staffIdx staff to retrieve the object from
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::EngravingItem* mmRangeText(int staffIdx);
+    /// Whether the measure is corrupted at a given staff.
+    /// \param staffIdx staff to check if corrupted
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool corrupted(int staffIdx);
+    /// Whether the measure is visible at a given staff.
+    /// \note This option does not override a staff's visibility
+    /// setting, so a measure may not necessarily be visible.
+    /// \param staffIdx staff to check if visible
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool visible(int staffIdx);
+    /// Whether the measure is stemless at a given staff.
+    /// \note This option does not override a staff's stemless
+    /// setting, so a measure may actually be stemless.
+    /// \param staffIdx staff to check if stemless
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool stemless(int staffIdx);
+};
+
+
     /// \endcond
 };
 

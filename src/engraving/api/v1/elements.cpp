@@ -337,6 +337,86 @@ void Chord::remove(apiv1::EngravingItem* wrapped)
     }
 }
 
+EngravingItem* Measure::vspacerUp(int staffIdx)
+{
+    return wrap(measure()->vspacerUp(static_cast<staff_idx_t>(staffIdx)));
+}
+
+EngravingItem* Measure::vspacerDown(int staffIdx)
+{
+    return wrap(measure()->vspacerDown(static_cast<staff_idx_t>(staffIdx)));
+}
+
+EngravingItem* Measure::noText(int staffIdx)
+{
+    return wrap(measure()->noText(static_cast<staff_idx_t>(staffIdx)));
+}
+
+EngravingItem* Measure::mmRangeText(int staffIdx)
+{
+    return wrap(measure()->mmRangeText(static_cast<staff_idx_t>(staffIdx)));
+}
+
+bool Measure::corrupted(int staffIdx)
+{
+    return measure()->corrupted(static_cast<staff_idx_t>(staffIdx));
+}
+
+bool Measure::visible(int staffIdx)
+{
+    return measure()->visible(static_cast<staff_idx_t>(staffIdx));
+}
+
+bool Measure::stemless(int staffIdx)
+{
+    return measure()->stemless(static_cast<staff_idx_t>(staffIdx));
+}
+
+FractionWrapper* MeasureBase::tick() const
+{
+    return wrap(measureBase()->tick());
+}
+
+FractionWrapper* MeasureBase::ticks() const
+{
+    return wrap(measureBase()->ticks());
+}
+
+void MeasureBase::add(apiv1::EngravingItem* wrapped)
+{
+    mu::engraving::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
+    if (s) {
+        // Ensure that the object has the expected ownership
+        if (wrapped->ownership() == Ownership::SCORE) {
+            LOGW("MeasureBase::add: Cannot add this element. The element is already part of the score.");
+            return;              // Don't allow operation.
+        }
+        // Score now owns the object.
+        wrapped->setOwnership(Ownership::SCORE);
+
+        addInternal(measureBase(), s);
+    }
+}
+
+void MeasureBase::addInternal(mu::engraving::MeasureBase* measureBase, mu::engraving::EngravingItem* s)
+{
+    s->setScore(measureBase->score());
+    s->setParent(measureBase);
+    measureBase->score()->undoAddElement(s);
+}
+
+void MeasureBase::remove(apiv1::EngravingItem* wrapped)
+{
+    mu::engraving::EngravingItem* s = wrapped->element();
+    if (!s) {
+        LOGW("PluginAPI::MeasureBase::remove: Unable to retrieve element. %s", qPrintable(wrapped->name()));
+    } else if (s->explicitParent() != measureBase()) {
+        LOGW("PluginAPI::MeasureBase::remove: The element is not a child of this measure base. Use removeElement() instead.");
+    } else {
+        measureBase()->score()->deleteItem(s);     // Create undo op and remove the element.
+    }
+}
+
 //---------------------------------------------------------
 //   Staff::part
 //---------------------------------------------------------
@@ -371,6 +451,13 @@ EngravingItem* mu::engraving::apiv1::wrap(mu::engraving::EngravingItem* e, Owner
         return wrap<Segment>(toSegment(e), own);
     case ElementType::MEASURE:
         return wrap<Measure>(toMeasure(e), own);
+    case ElementType::HBOX:
+    case ElementType::VBOX:
+    case ElementType::TBOX:
+    case ElementType::FBOX:
+        return wrap<MeasureBase>(toMeasureBase(e), own);
+    case ElementType::SYSTEM:
+        return wrap<System>(toSystem(e), own);
     case ElementType::PAGE:
         return wrap<Page>(toPage(e), own);
     default:
