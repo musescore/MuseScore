@@ -20,9 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_APIV1_INSTRUMENT_H
-#define MU_ENGRAVING_APIV1_INSTRUMENT_H
+#pragma once
 
+#include "engraving/dom/drumset.h"
 #include "engraving/dom/instrument.h"
 
 #include <QQmlListProperty>
@@ -79,6 +79,10 @@ class Channel : public QObject
 
     /** Name of this channel */
     Q_PROPERTY(QString name READ name)
+    /** Whether this channel controls playback of chord symbols
+     * \since MuseScore 4.6
+     */
+    Q_PROPERTY(bool isHarmonyChannel READ isHarmonyChannel)
 
     /**
      * Channel volume, from 0 to 127.
@@ -139,6 +143,7 @@ public:
         : QObject(parent), m_channel(ch), m_part(p) {}
 
     QString name() const { return m_channel->name(); }
+    bool isHarmonyChannel() const { return m_channel->isHarmonyChannel(); }
 
     int volume() const { return m_channel->volume(); }
     void setVolume(int val) { activeChannel()->setVolume(qBound(0, val, 127)); }
@@ -207,6 +212,113 @@ public:
 };
 
 //---------------------------------------------------------
+//   Drumset
+///   \since MuseScore 4.6
+//---------------------------------------------------------
+
+class Drumset : public QObject
+{
+    Q_OBJECT
+
+    mu::engraving::Drumset* m_drumset;
+
+public:
+    /// \cond MS_INTERNAL
+    Drumset(mu::engraving::Drumset* d, QObject* parent = nullptr)
+        : QObject(parent), m_drumset(d) {}
+
+    mu::engraving::Drumset* drumset() { return m_drumset; }
+    const mu::engraving::Drumset* drumset() const { return m_drumset; }
+    /// \endcond
+
+    /// Whether the given MIDI pitch corresponds to a note in the drumset.
+    /// \param pitch The pitch to test for.
+    Q_INVOKABLE bool isValid(int pitch) { return drumset()->isValid(pitch); }
+
+    /// The notehead group for the given pitch, corresponding to one of the
+    /// PluginAPI::PluginAPI::NoteHeadGroup values. If the value corresponds to
+    /// NoteHeadGroup.HEAD_CUSTOM, the actual notehead must be found using
+    /// PluginAPI::Drumset::noteHeads(pitch, NoteHeadType)
+    /// \see PluginAPI::PluginAPI::NoteHeadGroup
+    /// \see PluginAPI::Drumset::noteHeads
+    /// \param pitch The pitch to find the notehead group for.
+    Q_INVOKABLE int noteHead(int pitch) { return int(drumset()->noteHead(pitch)); }
+
+    /// The notehead symbol for the given pitch and NoteHeadType, corresponding to
+    /// one of the PluginAPI::PluginAPI::SymId values.
+    /// \see PluginAPI::PluginAPI::SymId
+    /// \see PluginAPI::PluginAPI::NoteHeadType
+    /// \param pitch The pitch to find the notehead symbol for.
+    /// \param type The NoteHeadType to find the notehead symbol for.
+    Q_INVOKABLE int noteHeads(int pitch, int type)
+    {
+        return int(drumset()->noteHeads(pitch, mu::engraving::NoteHeadType(type)));
+    }
+
+    /// The line a note with the given pitch would be displayed on.
+    /// \param pitch The pitch of the note to find the line for.
+    Q_INVOKABLE int line(int pitch) { return drumset()->line(pitch); }
+
+    /// The voice a note with the given pitch would be added to.
+    /// \param pitch The pitch of the note to find the voice for.
+    Q_INVOKABLE int voice(int pitch) { return drumset()->voice(pitch); }
+
+    /// The default stem direction a note with the given pitch would have.
+    /// One of the PluginAPI::PluginAPI::Direction values
+    /// \see PluginAPI::PluginAPI::Direction
+    /// \param pitch The pitch to find the stem direction for.
+    Q_INVOKABLE int stemDirection(int pitch) { return int(drumset()->stemDirection(pitch)); }
+
+    /// The name (untranslated) of the drumset note for a given pitch.
+    /// \param pitch The pitch of the note to find the name for.
+    Q_INVOKABLE QString name(int pitch) { return drumset()->name(pitch); }
+
+    /// The translated name of the drumset note for a given pitch.
+    /// \param pitch The pitch of the note to find the name for.
+    Q_INVOKABLE QString translatedName(int pitch) { return drumset()->translatedName(pitch); }
+
+    /// The shortcut of the drumset note for a given pitch.
+    /// \param pitch The pitch of the note to find the shortcut for.
+    Q_INVOKABLE QString shortcut(int pitch) { return drumset()->shortcut(pitch); }
+
+    /// List of variants for a given pitch in this drumset.
+    /// \returns A list of objects representing variants.
+    /// Each object has the following fields:
+    /// - \p pitch - pitch of this variant.
+    /// - \p tremolo - tremolo type of this variant, one of
+    ///             PluginAPI::PLUGIN_API::TremoloType values.
+    /// - \p articulationName - the name of the articulation
+    ///             for this variant.
+    /// \param pitch Pitch to find variants for.
+    Q_INVOKABLE QVariantList variants(int pitch);
+
+    /// The row the given pitch appears in in the percussion panel.
+    /// \param pitch The pitch of the note to find the row for.
+    Q_INVOKABLE int panelRow(int pitch) { return drumset()->panelRow(pitch); }
+
+    /// The column the given pitch appears in in the percussion panel.
+    /// \param pitch The pitch of the note to find the column for.
+    Q_INVOKABLE int panelColumn(int pitch) { return drumset()->panelColumn(pitch); }
+
+    /// Tries to find the pitch of a normal notehead at "line". If a
+    /// normal notehead can't be found it will instead return the
+    /// "first valid pitch" (i.e. the lowest used midi note) in the drumset.
+    /// \param line The line to find the default pitch on.
+    Q_INVOKABLE int defaultPitchForLine(int line) { return drumset()->defaultPitchForLine(line); }
+
+    /// The next used pitch from a given starting point.
+    /// \param pitch The pitch from which to find the next used pitch from.
+    Q_INVOKABLE int nextPitch(int pitch) { return drumset()->nextPitch(pitch); }
+
+    /// The previous used pitch from a given starting point.
+    /// \param pitch The pitch from which to find the previous used pitch from.
+    Q_INVOKABLE int prevPitch(int pitch) { return drumset()->prevPitch(pitch); }
+
+    /// Checks whether two drumsets represent the same object.
+    Q_INVOKABLE bool is(apiv1::Drumset* other) { return other && drumset() == other->drumset(); }
+};
+
+//---------------------------------------------------------
 //   ChannelListProperty
 ///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
@@ -256,6 +368,13 @@ class Instrument : public QObject
      */
     Q_PROPERTY(apiv1::StringData * stringData READ stringData)
 
+    /**
+     * For unpitched percussion instruments, information about
+     * this instrument's percussion.
+     * \since MuseScore 4.6
+     */
+    Q_PROPERTY(apiv1::Drumset * drumset READ drumset)
+
     // TODO: a property for drumset?
 
     Q_PROPERTY(QQmlListProperty<apiv1::Channel> channels READ channels)
@@ -280,6 +399,8 @@ public:
 
     apiv1::StringData* stringData() { return customWrap<StringData>(instrument()->stringData()); }
 
+    apiv1::Drumset* drumset() { return customWrap<Drumset>(instrument()->drumset()); }
+
     ChannelListProperty channels();
     /// \endcond
 
@@ -287,5 +408,3 @@ public:
     Q_INVOKABLE bool is(apiv1::Instrument* other) { return other && instrument() == other->instrument(); }
 };
 }
-
-#endif
