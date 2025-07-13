@@ -476,6 +476,10 @@ EngravingItem* mu::engraving::apiv1::wrap(mu::engraving::EngravingItem* e, Owner
 
     using mu::engraving::ElementType;
     switch (e->type()) {
+    case ElementType::TIE:
+    case ElementType::PARTIAL_TIE:
+    case ElementType::LAISSEZ_VIB:
+        return wrap<Tie>(toTie(e), own);
     case ElementType::NOTE:
         return wrap<Note>(toNote(e), own);
     case ElementType::CHORD:
@@ -501,6 +505,12 @@ EngravingItem* mu::engraving::apiv1::wrap(mu::engraving::EngravingItem* e, Owner
                 return wrap<ChordRest>(toChordRest(e), own);
             }
             return wrap<DurationElement>(toDurationElement(e), own);
+        }
+        if (e->isSpannerSegment()) {
+            return wrap<SpannerSegment>(toSpannerSegment(e), own);
+        }
+        if (e->isSpanner()) {
+            return wrap<Spanner>(toSpanner(e), own);
         }
         break;
     }

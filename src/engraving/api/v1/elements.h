@@ -35,28 +35,30 @@
 #include "engraving/dom/notedot.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
 #include "engraving/dom/stem.h"
 #include "engraving/dom/stemslash.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/systemdivider.h"
 #include "engraving/dom/tuplet.h"
+#include "engraving/dom/tie.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/undo.h"
 
 #include "playevent.h"
 
 Q_MOC_INCLUDE("engraving/api/v1/part.h")
-Q_MOC_INCLUDE("engraving/api/v1/tie.h")
 
 namespace mu::engraving::apiv1 {
 class FractionWrapper;
 class EngravingItem;
 class Part;
+class Spanner;
 class Staff;
+class System;
 class Tie;
 class Tuplet;
-
 
 //---------------------------------------------------------
 //   wrap
@@ -355,10 +357,6 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(timesig,                 TIMESIG)
     API_PROPERTY(timesigStretch,          TIMESIG_STRETCH)
     API_PROPERTY_T(int, timesigType,      TIMESIG_TYPE)
-    API_PROPERTY(spannerTick,             SPANNER_TICK)
-    API_PROPERTY(spannerTicks,            SPANNER_TICKS)
-    API_PROPERTY_T(int, spannerTrack2,    SPANNER_TRACK2)
-    API_PROPERTY_T(QPointF, userOff2,     OFFSET2)
     ///\since MuseScore 4.6
     API_PROPERTY(mmRestNumberPos,         MMREST_NUMBER_POS)
     ///\since MuseScore 4.6
@@ -369,11 +367,6 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY(measureRepeatNumberPos,  MEASURE_REPEAT_NUMBER_POS)
 
-    API_PROPERTY_T(int, anchor,           ANCHOR)
-    API_PROPERTY_T(QPointF, slurUoff1,    SLUR_UOFF1)
-    API_PROPERTY_T(QPointF, slurUoff2,    SLUR_UOFF2)
-    API_PROPERTY_T(QPointF, slurUoff3,    SLUR_UOFF3)
-    API_PROPERTY_T(QPointF, slurUoff4,    SLUR_UOFF4)
     API_PROPERTY_T(int, verse,            VERSE)
 
     API_PROPERTY_T(int, syllabic,         SYLLABIC)
@@ -828,9 +821,9 @@ public:
     int tpc() const { return note()->tpc(); }
     void setTpc(int val);
 
-    apiv1::Tie* tieBack() const { return note()->tieBack() != nullptr ? tieWrap(note()->tieBack()) : nullptr; }
 
-    apiv1::Tie* tieForward() const { return note()->tieFor() != nullptr ? tieWrap(note()->tieFor()) : nullptr; }
+    apiv1::Tie* tieBack() const { return wrap<Tie>(note()->tieBack()); }
+    apiv1::Tie* tieForward() const { return wrap<Tie>(note()->tieFor()); }
 
     apiv1::Note* firstTiedNote() { return wrap<Note>(note()->firstTiedNote()); }
     apiv1::Note* lastTiedNote() { return wrap<Note>(note()->lastTiedNote()); }
@@ -1466,6 +1459,134 @@ public:
     const mu::engraving::Staff* staff() const { return toStaff(e); }
 
     Part* part();
+    /// \endcond
+};
+
+//---------------------------------------------------------
+//   SpannerSegment
+///  Provides access to internal mu::engraving::SpannerSegment objects.
+///  \since MuseScore 4.6
+//---------------------------------------------------------
+
+class SpannerSegment : public EngravingItem
+{
+    Q_OBJECT
+    /// The spanner object of this spanner segment.
+    /// \see PluginAPI::Spanner
+    Q_PROPERTY(apiv1::Spanner * spanner READ spanner)
+    /// The spanner segment type of this spanner segment,
+    /// one of PluginAPI::PluginAPI::SpannerSegmentType values.
+    Q_PROPERTY(int spannerSegmentType READ spannerSegmentType)
+    /// Position of the spanner segment's end part,
+    /// including manual offset through \ref userOff2.
+    /// \see EngravingItem::userOff2
+    Q_PROPERTY(QPointF pos2 READ pos2)
+
+    /// \cond MS_INTERNAL
+
+public:
+    SpannerSegment(mu::engraving::SpannerSegment* spannerSegment, Ownership own = Ownership::PLUGIN)
+        : EngravingItem(spannerSegment, own) {}
+
+    mu::engraving::SpannerSegment* spannerSegment() { return toSpannerSegment(e); }
+    const mu::engraving::SpannerSegment* spannerSegment() const { return toSpannerSegment(e); }
+
+    Spanner* spanner() { return wrap<Spanner>(spannerSegment()->spanner()); }
+    int spannerSegmentType() { return int(spannerSegment()->spannerSegmentType()); }
+    QPointF pos2() const { return PointF(spannerSegment()->pos2() / spannerSegment()->spatium()).toQPointF(); }
+
+    /// \endcond
+};
+
+//---------------------------------------------------------
+//   Spanner
+///  Provides access to internal mu::engraving::Spanner objects.
+///  \since MuseScore 4.6
+//---------------------------------------------------------
+
+class Spanner : public EngravingItem
+{
+    Q_OBJECT
+    /// The tick this spanner starts at.
+    API_PROPERTY(spannerTick,             SPANNER_TICK)
+    /// The tick this spanner end at.
+    API_PROPERTY(spannerTicks,            SPANNER_TICKS)
+    /// The track this spanner end at.
+    API_PROPERTY_T(int, spannerTrack2,    SPANNER_TRACK2)
+
+    /// The Anchor type for this spanner,
+    /// one of PluginAPI::PluginAPI::Anchor values.
+    API_PROPERTY_T(int, anchor,           ANCHOR)
+    /// For slur and tie segments:
+    /// The manual offset applied to the first point.
+    API_PROPERTY_T(QPointF, slurUoff1,    SLUR_UOFF1)
+    /// For slur and tie segments:
+    /// The manual offset applied to the second point.
+    API_PROPERTY_T(QPointF, slurUoff2,    SLUR_UOFF2)
+    /// For slur and tie segments:
+    /// The manual offset applied to the third point.
+    API_PROPERTY_T(QPointF, slurUoff3,    SLUR_UOFF3)
+    /// For slur and tie segments:
+    /// The manual offset applied to the fourth point.
+    API_PROPERTY_T(QPointF, slurUoff4,    SLUR_UOFF4)
+
+    /// The starting element of the spanner.
+    Q_PROPERTY(apiv1::EngravingItem * startElement READ startElement)
+    /// The ending note of the tie.
+    Q_PROPERTY(apiv1::EngravingItem * endElement READ endElement)
+    /// List of spanner segments belonging to this spanner.
+    Q_PROPERTY(QQmlListProperty<apiv1::SpannerSegment> spannerSegments READ spannerSegments)
+
+    /// \cond MS_INTERNAL
+
+public:
+    Spanner(mu::engraving::Spanner* spanner, Ownership own = Ownership::PLUGIN)
+        : EngravingItem(spanner, own) {}
+
+    mu::engraving::Spanner* spanner() { return toSpanner(e); }
+    const mu::engraving::Spanner* spanner() const { return toSpanner(e); }
+
+    EngravingItem* startElement() const { return wrap(spanner()->startElement()); }
+    EngravingItem* endElement() const { return wrap(spanner()->startElement()); }
+
+    QQmlListProperty<SpannerSegment> spannerSegments()
+    {
+        return wrapContainerProperty<SpannerSegment>(this, spanner()->spannerSegments());
+    }
+
+    /// \endcond
+};
+
+//---------------------------------------------------------
+//   Tie
+///  Provides access to internal mu::engraving::Tie objects.
+///  \since MuseScore 3.3
+//---------------------------------------------------------
+
+class Tie : public Spanner
+{
+    Q_OBJECT
+    /// The starting note of the tie.
+    Q_PROPERTY(apiv1::Note * startNote READ startNote)
+    /// The ending note of the tie.
+    Q_PROPERTY(apiv1::Note * endNote READ endNote)
+    /// Whether the placement is inside.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool isInside READ isInside)
+
+    /// \cond MS_INTERNAL
+
+public:
+    Tie(mu::engraving::Tie* tie, Ownership own = Ownership::PLUGIN)
+        : Spanner(tie, own) {}
+
+    mu::engraving::Tie* tie() { return toTie(e); }
+    const mu::engraving::Tie* tie() const { return toTie(e); }
+
+    Note* startNote() const { return wrap<Note>(tie()->startNote()); }
+    Note* endNote() const { return wrap<Note>(tie()->startNote()); }
+    bool isInside() const { return tie()->isInside(); }
+
     /// \endcond
 };
 

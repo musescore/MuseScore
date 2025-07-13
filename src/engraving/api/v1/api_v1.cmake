@@ -28,6 +28,4 @@ set(API_V1_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playevent.h
     ${CMAKE_CURRENT_LIST_DIR}/selection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selection.h
-    ${CMAKE_CURRENT_LIST_DIR}/tie.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tie.h
 )
