@@ -62,12 +62,11 @@ class Tuplet;
 
 extern EngravingItem* wrap(mu::engraving::EngravingItem* se, Ownership own = Ownership::SCORE);
 
-// TODO: add RESET functions
 #define API_PROPERTY(name, pid) \
-    Q_PROPERTY(QVariant name READ get_##name WRITE set_##name) \
-    QVariant get_##name() const { return get(mu::engraving::Pid::pid); \
-    }  \
-    void set_##name(QVariant val) { set(mu::engraving::Pid::pid, val); }
+    Q_PROPERTY(QVariant name READ get_##name WRITE set_##name RESET reset_##name) \
+    QVariant get_##name() const { return get(mu::engraving::Pid::pid); }  \
+    void set_##name(QVariant val) { set(mu::engraving::Pid::pid, val); }  \
+    void reset_##name() { reset(mu::engraving::Pid::pid); }
 
 /**
  * API_PROPERTY flavor which allows to define the property type.
@@ -76,9 +75,10 @@ extern EngravingItem* wrap(mu::engraving::EngravingItem* se, Ownership own = Own
  * value to be exposed to QML in case of invalid property.
  */
 #define API_PROPERTY_T(type, name, pid) \
-    Q_PROPERTY(type name READ get_##name WRITE set_##name) \
+    Q_PROPERTY(type name READ get_##name WRITE set_##name RESET reset_##name) \
     type get_##name() const { return get(mu::engraving::Pid::pid).value<type>(); }  \
-    void set_##name(type val) { set(mu::engraving::Pid::pid, QVariant::fromValue(val)); }
+    void set_##name(type val) { set(mu::engraving::Pid::pid, QVariant::fromValue(val)); }  \
+    void reset_##name() { reset(mu::engraving::Pid::pid); }
 
 #define API_PROPERTY_READ_ONLY(name, pid) \
     Q_PROPERTY(QVariant name READ get_##name) \

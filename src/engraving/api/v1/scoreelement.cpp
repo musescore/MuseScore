@@ -189,6 +189,19 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
     }
 }
 
+void ScoreElement::reset(mu::engraving::Pid pid)
+{
+    if (!e) {
+        return;
+    }
+
+    if (m_ownership == Ownership::SCORE) {
+        e->undoResetProperty(pid);
+    } else {
+        e->resetProperty(pid);
+    }
+}
+
 //---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond

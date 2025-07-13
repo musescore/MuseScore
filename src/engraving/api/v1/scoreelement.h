@@ -95,6 +95,7 @@ public:
 
     QVariant get(mu::engraving::Pid pid) const;
     void set(mu::engraving::Pid pid, const QVariant& val);
+    void reset(mu::engraving::Pid pid);
     /// \endcond
 
     Q_INVOKABLE QString userName() const;
