@@ -202,7 +202,6 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(horizontalDirection,     HORIZONTAL_DIRECTION)
     API_PROPERTY(stemDirection,           STEM_DIRECTION)
     API_PROPERTY(slurDirection,           SLUR_DIRECTION)
-    API_PROPERTY(leadingSpace,            LEADING_SPACE)
     API_PROPERTY(mirrorHead,              MIRROR_HEAD)
     API_PROPERTY_T(qreal,  pause,         PAUSE)
 
@@ -1150,6 +1149,8 @@ public:
 class Segment : public EngravingItem
 {
     Q_OBJECT
+    /// The added space preceding this segment.
+    API_PROPERTY(leadingSpace,            LEADING_SPACE)
     /// The list of annotations. Articulations, staff/system/expression
     /// text are examples of what is considered to be segment annotations.
     Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> annotations READ annotations)
@@ -1173,7 +1174,7 @@ class Segment : public EngravingItem
     // Allowing plugins to change random segments types doesn't seem to be a
     // good idea though.
     /// Type of this segment, one of PluginAPI::PluginAPI::Segment values.
-    Q_PROPERTY(mu::engraving::SegmentType segmentType READ segmentType)
+    Q_PROPERTY(int segmentType READ segmentType)
     /// \brief Current tick for this segment
     /// \returns Tick of this segment, i.e. number of ticks from the beginning
     /// of the score to this segment.
@@ -1199,7 +1200,7 @@ public:
     int tick() const { return segment()->tick().ticks(); }
     FractionWrapper* fraction() const;
 
-    mu::engraving::SegmentType segmentType() const { return segment()->segmentType(); }
+    int segmentType() const { return int(segment()->segmentType()); }
 
     Segment* nextInScore() { return wrap<Segment>(segment()->next1()); }
     Segment* nextInMeasure() { return wrap<Segment>(segment()->next()); }
@@ -1208,7 +1209,7 @@ public:
     QQmlListProperty<EngravingItem> annotations() { return wrapContainerProperty<EngravingItem>(this, segment()->annotations()); }
     /// \endcond
 
-    /// \return EngravingItem at the given \p track (null if there is no such an element)
+    /// \returns Element at the given \p track (null if there is no such an element)
     /// \param track track number
     Q_INVOKABLE apiv1::EngravingItem* elementAt(int track);
 };
