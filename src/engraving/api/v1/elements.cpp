@@ -237,6 +237,33 @@ void Note::remove(apiv1::EngravingItem* wrapped)
 }
 
 //---------------------------------------------------------
+//   DurationElement::ticks
+//---------------------------------------------------------
+
+FractionWrapper* DurationElement::ticks() const
+{
+    return wrap(durationElement()->ticks());
+}
+
+//---------------------------------------------------------
+//   DurationElement::changeCRlen
+//---------------------------------------------------------
+
+void DurationElement::changeCRlen(FractionWrapper* len)
+{
+    if (!durationElement()->isChordRest()) {
+        LOGW("DurationElement::changeCRlen: can only change length for chords or rests");
+        return;
+    }
+    const mu::engraving::Fraction f = len->fraction();
+    if (!f.isValid() || f.isZero() || f.negative()) {
+        LOGW("DurationElement::changeCRlen: invalid parameter values: %s", qPrintable(f.toString()));
+        return;
+    }
+    durationElement()->score()->changeCRlen(toChordRest(durationElement()), f);
+}
+
+//---------------------------------------------------------
 //   DurationElement::globalDuration
 //---------------------------------------------------------
 

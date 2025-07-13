@@ -63,6 +63,7 @@ class Staff;
 class System;
 class Tie;
 class Tuplet;
+class Measure;
 
 //---------------------------------------------------------
 //   wrap
@@ -884,7 +885,9 @@ class DurationElement : public EngravingItem
 
     /// Nominal duration of this element.
     /// The duration is represented as a fraction of whole note length.
-    API_PROPERTY_READ_ONLY(duration, DURATION)
+    /// This property can be modified for chords and rests since MuseScore 4.6
+    //  prior to 4.6 this was called as API_PROPERTY_READ_ONLY(duration, DURATION).
+    Q_PROPERTY(apiv1::FractionWrapper * duration READ ticks WRITE changeCRlen)
 
     /// Global duration of this element, taking into account ratio of
     /// parent tuplets if there are any.
@@ -900,6 +903,14 @@ class DurationElement : public EngravingItem
     /// \since MuseScore 3.5
     Q_PROPERTY(apiv1::Tuplet * tuplet READ parentTuplet)
 
+    /// Outermost tuplet which this element belongs to. If there is no parent tuplet, returns null.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::Tuplet * topTuplet READ topTuplet)
+
+    /// Measure which this element belongs to.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::Measure * measure READ parentMeasure)
+
 public:
     /// \cond MS_INTERNAL
     DurationElement(mu::engraving::DurationElement* de = nullptr, Ownership own = Ownership::PLUGIN)
@@ -908,10 +919,15 @@ public:
     mu::engraving::DurationElement* durationElement() { return toDurationElement(e); }
     const mu::engraving::DurationElement* durationElement() const { return toDurationElement(e); }
 
+    FractionWrapper* ticks() const;
+    void changeCRlen(FractionWrapper* len);
     FractionWrapper* globalDuration() const;
     FractionWrapper* actualDuration() const;
 
     Tuplet* parentTuplet();
+    Tuplet* topTuplet() { return wrap<Tuplet>(durationElement()->topTuplet(), Ownership::SCORE); }
+
+    Measure* parentMeasure() { return wrap<Measure>(durationElement()->measure(), Ownership::SCORE); }
     /// \endcond
 };
 
