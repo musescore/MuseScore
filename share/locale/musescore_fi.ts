@@ -18811,7 +18811,7 @@ Otenauha %1 kielissä %2</translation>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="76"/>
         <source>The plugin “%1” is currently disabled. Do you want to enable it now?</source>
-        <translation>Liitännäinen “%1” on tällä hetkellä poissa käytöstä. Haluatko ottaa sen käyttöön nyt?</translation>
+        <translation>Lisäosa “%1” on tällä hetkellä poissa käytöstä. Haluatko ottaa sen käyttöön nyt?</translation>
     </message>
     <message>
         <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="77"/>
@@ -31095,7 +31095,7 @@ Haluatko korvata sen?</translation>
     <message>
         <location filename="../../src/engraving/api/v1/score.cpp" line="247"/>
         <source>Plugin edit</source>
-        <translation>Liitännäisen muokkaus</translation>
+        <translation>Lisäosan muokkaus</translation>
     </message>
     <message>
         <location filename="../../src/engraving/devtools/corruptscoredevtoolsmodel.cpp" line="44"/>
