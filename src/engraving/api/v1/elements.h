@@ -133,6 +133,11 @@ class EngravingItem : public apiv1::ScoreElement
     /// Position of this element in page coordinates, in spatium units.
     /// \since MuseScore 3.5
     Q_PROPERTY(QPointF pagePos READ pagePos)
+    /**
+     * Position of this element relative to the canvas (user interface), in spatium units.
+     * \since MuseScore 4.6
+     */
+    Q_PROPERTY(QPointF canvasPos READ canvasPos)
 
     /// Bounding box of this element.
     ///
@@ -143,6 +148,24 @@ class EngravingItem : public apiv1::ScoreElement
     /// Subtype of this element.
     /// \since MuseScore 4.6
     Q_PROPERTY(int subtype READ subtype)
+
+    /// Staff index for this element.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(int staffIdx READ staffIdx)
+    /// Effective staff index for this element. Used by system objects,
+    /// as they may not always appear at their staffIdx
+    /// \since MuseScore 4.6
+    Q_PROPERTY(int effectiveStaffIdx READ effectiveStaffIdx)
+    /// Staff index for this element, accounting for cross-staffing.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(int vStaffIdx READ vStaffIdx)
+
+    /// If the element points upwards.
+    /// Valid for: Chords, stems, beams, ties, slurs,
+    /// guitar bends, tuplets, tremolos, articulations
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool up READ up)
+
     /// Unlike the name might suggest, this property no longer returns the subtype and is scarcely used.
     /// Named 'subtype' prior to MuseScore 4.6
     API_PROPERTY(subType,                 SUBTYPE)
@@ -661,6 +684,7 @@ class EngravingItem : public apiv1::ScoreElement
     qreal posY() const { return element()->pos().y() / element()->spatium(); }
 
     QPointF pagePos() const { return PointF(element()->pagePos() / element()->spatium()).toQPointF(); }
+    QPointF canvasPos() const { return PointF(element()->canvasPos() / element()->spatium()).toQPointF(); }
 
     apiv1::EngravingItem* parent() const { return wrap(element()->parentItem()); }
     Staff* staff() { return wrap<Staff>(element()->staff()); }
@@ -668,6 +692,12 @@ class EngravingItem : public apiv1::ScoreElement
     QRectF bbox() const;
 
     int subtype() const { return element()->subtype(); }
+
+    int staffIdx() const { return int(element()->staffIdx()); }
+    int effectiveStaffIdx() const { return int(element()->effectiveStaffIdx()); }
+    int vStaffIdx() const { return int(element()->vStaffIdx()); }
+
+    bool up() const;
 
 public:
     /// \cond MS_INTERNAL
@@ -680,6 +710,9 @@ public:
     const mu::engraving::EngravingItem* element() const { return toEngravingItem(e); }
     /// \}
     /// \endcond
+
+    /// Returns if an element has a given flag
+    Q_INVOKABLE bool flag(mu::engraving::ElementFlag f) { return element()->flag(f); }
 
     /// Create a copy of the element
     Q_INVOKABLE apiv1::EngravingItem* clone() const { return wrap(element()->clone(), Ownership::PLUGIN); }

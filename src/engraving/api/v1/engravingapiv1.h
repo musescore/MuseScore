@@ -125,6 +125,7 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
     Q_PROPERTY(apiv1::Enum * Key READ keyEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * UpdateMode READ updateModeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * LayoutFlag READ layoutFlagEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * ElementFlag READ elementFlagEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * SymId READ symIdEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * Cursor READ cursorEnum CONSTANT)
 
@@ -228,6 +229,7 @@ public:
     apiv1::Enum* keyEnum() const { return api()->get_keyEnum(); }
     apiv1::Enum* updateModeEnum() const { return api()->get_updateModeEnum(); }
     apiv1::Enum* layoutFlagEnum() const { return api()->get_layoutFlagEnum(); }
+    apiv1::Enum* elementFlagEnum() const { return api()->get_elementFlagEnum(); }
     apiv1::Enum* symIdEnum() const { return api()->get_symIdEnum(); }
     apiv1::Enum* cursorEnum() const { return api()->get_cursorEnum(); }
 

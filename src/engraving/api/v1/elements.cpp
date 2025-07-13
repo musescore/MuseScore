@@ -65,6 +65,34 @@ QRectF EngravingItem::bbox() const
     return QRectF(bbox.x() / spatium, bbox.y() / spatium, bbox.width() / spatium, bbox.height() / spatium);
 }
 
+bool EngravingItem::up() const
+{
+    if (element()->isChordRest()) {
+        return toChordRest(element())->ldata()->up;
+    } else if (element()->isStem()) {
+        return toStem(element())->up();
+    } else if (element()->isSlur()) {
+        return toSlur(element())->up();
+    } else if (element()->isTie()) {
+        return toTie(element())->up();
+    } else if (element()->isSlurTieSegment()) {
+        return toSlurTieSegment(element())->slurTie()->up();
+    } else if (element()->isArticulation()) {
+        return toArticulation(element())->ldata()->up;
+    } else if (element()->isGuitarBend()) {
+        return toGuitarBend(element())->ldata()->up();
+    } else if (element()->isGuitarBendSegment()) {
+        return toGuitarBendSegment(element())->guitarBend()->ldata()->up();
+    } else if (element()->isBeam()) {
+        return toBeam(element())->up();
+    } else if (element()->isTuplet()) {
+        return toTuplet(element())->isUp();
+    } else if (element()->type() == mu::engraving::ElementType::TREMOLO_TWOCHORD) {
+        return item_cast<const TremoloTwoChord*>(element())->up();
+    }
+    return false;
+}
+
 //---------------------------------------------------------
 //   Segment::elementAt
 //---------------------------------------------------------
