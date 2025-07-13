@@ -117,6 +117,7 @@ enum class CommandType : signed char {
     InsertStaves,
     RemoveStaves,
     ChangeMStaffProperties,
+    ChangeMStaffHideIfEmpty,
 
     // Instruments
     ChangeInstrumentShort,
@@ -1087,17 +1088,35 @@ class ChangeMStaffProperties : public UndoCommand
     OBJECT_ALLOCATOR(engraving, ChangeMStaffProperties)
 
     Measure* measure = nullptr;
-    int staffIdx = 0;
+    staff_idx_t staffIdx = 0;
     bool visible = false;
     bool stemless = false;
 
     void flip(EditData*) override;
 
 public:
-    ChangeMStaffProperties(Measure*, int staffIdx, bool visible, bool stemless);
+    ChangeMStaffProperties(Measure*, staff_idx_t staffIdx, bool visible, bool stemless);
 
     UNDO_TYPE(CommandType::ChangeMStaffProperties)
     UNDO_NAME("ChangeMStaffProperties")
+    UNDO_CHANGED_OBJECTS({ measure })
+};
+
+class ChangeMStaffHideIfEmpty : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeMStaffHideIfEmpty)
+
+    Measure* measure = nullptr;
+    staff_idx_t staffIdx = 0;
+    AutoOnOff hideIfEmpty = AutoOnOff::AUTO;
+
+    void flip(EditData*) override;
+
+public:
+    ChangeMStaffHideIfEmpty(Measure*, staff_idx_t staffIdx, AutoOnOff hideIfEmpty);
+
+    UNDO_TYPE(CommandType::ChangeMStaffHideIfEmpty)
+    UNDO_NAME("ChangeMStaffHideIfEmpty")
     UNDO_CHANGED_OBJECTS({ measure })
 };
 
