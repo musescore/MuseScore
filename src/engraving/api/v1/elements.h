@@ -939,8 +939,16 @@ class Tuplet : public DurationElement
 {
     Q_OBJECT
 
+    /// The number type of this tuplet, one of
+    /// PluginAPI::PluginAPI::TupletNumberType values.
     API_PROPERTY_T(int, numberType, NUMBER_TYPE)
+    /// The bracket type of this tuplet, one of
+    /// PluginAPI::PluginAPI::TupletBracketType values.
     API_PROPERTY_T(int, bracketType, BRACKET_TYPE)
+
+    /// Whether this tuplet has a bracket.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool hasBracket READ hasBracket)
 
     /// Actual number of notes of base nominal length in this tuplet.
     API_PROPERTY_READ_ONLY_T(int, actualNotes, ACTUAL_NOTES)
@@ -949,8 +957,17 @@ class Tuplet : public DurationElement
     /// to this tuplet's duration.
     API_PROPERTY_READ_ONLY_T(int, normalNotes, NORMAL_NOTES)
 
+    /// The user offset for the left point of this tuplet, in spatium units.
     API_PROPERTY_T(QPointF, p1, P1)
+    /// The user offset for the right point of this tuplet, in spatium units.
     API_PROPERTY_T(QPointF, p2, P2)
+
+    /// The actual position of the left point of this tuplet, in spatium units.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QPointF defaultP1 READ defaultP1)
+    /// The actual position of the right point of this tuplet, in spatium units.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QPointF defaultP2 READ defaultP2)
 
     /// List of elements which belong to this tuplet.
     /// \since MuseScore 3.5
@@ -963,6 +980,11 @@ public:
 
     mu::engraving::Tuplet* tuplet() { return toTuplet(e); }
     const mu::engraving::Tuplet* tuplet() const { return toTuplet(e); }
+
+    bool hasBracket() { return tuplet()->hasBracket(); }
+
+    QPointF defaultP1() const { return PointF(tuplet()->p1() / tuplet()->spatium()).toQPointF(); }
+    QPointF defaultP2() const { return PointF(tuplet()->p2() / tuplet()->spatium()).toQPointF(); }
 
     QQmlListProperty<EngravingItem> elements() { return wrapContainerProperty<EngravingItem>(this, tuplet()->elements()); }
     /// \endcond
