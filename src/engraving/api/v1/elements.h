@@ -26,6 +26,8 @@
 #include <QQmlListProperty>
 
 #include "engraving/dom/engravingitem.h"
+#include "engraving/dom/arpeggio.h"
+#include "engraving/dom/barline.h"
 #include "engraving/dom/beam.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/hook.h"
@@ -41,6 +43,8 @@
 #include "engraving/dom/stemslash.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/systemdivider.h"
+#include "engraving/dom/tremolosinglechord.h"
+#include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/accidental.h"
@@ -199,7 +203,6 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(slurDirection,           SLUR_DIRECTION)
     API_PROPERTY(leadingSpace,            LEADING_SPACE)
     API_PROPERTY(mirrorHead,              MIRROR_HEAD)
-    API_PROPERTY(dotPosition,             DOT_POSITION)
     API_PROPERTY_T(qreal,  pause,         PAUSE)
 
     API_PROPERTY(barlineType,             BARLINE_TYPE)
@@ -794,6 +797,9 @@ class Note : public EngravingItem
 //       Q_PROPERTY(qreal                          tuning            READ tuning             WRITE undoSetTuning)
 //       Q_PROPERTY(mu::engraving::MScore::Direction          userDotPosition   READ userDotPosition    WRITE undoSetUserDotPosition)
 //       Q_PROPERTY(mu::engraving::DirectionH         userMirror        READ userMirror         WRITE undoSetUserMirror)
+    /// The position of a note's dot, one of
+    /// PluginAPI::PluginAPI::Direction values.
+    API_PROPERTY(dotPosition,             DOT_POSITION)
     /// See PluginAPI::PluginAPI::NoteValueType
     API_PROPERTY(veloType,                VELO_TYPE)
     API_PROPERTY_T(int,    userVelocity,  USER_VELOCITY)
@@ -809,6 +815,9 @@ class Note : public EngravingItem
     API_PROPERTY_T(bool, dead,            DEAD)
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, headHasParentheses, HEAD_HAS_PARENTHESES)
+    /// If the note is a trill cue note (used in ornaments and trills)
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool isTrillCueNote READ isTrillCueNote)
 
 public:
     /// \cond MS_INTERNAL
@@ -821,6 +830,7 @@ public:
     int tpc() const { return note()->tpc(); }
     void setTpc(int val);
 
+    bool isTrillCueNote() { return note()->isTrillCueNote(); }
 
     apiv1::Tie* tieBack() const { return wrap<Tie>(note()->tieBack()); }
     apiv1::Tie* tieForward() const { return wrap<Tie>(note()->tieFor()); }
@@ -983,6 +993,12 @@ class Chord : public ChordRest
     Q_OBJECT
     /// List of grace notes (grace chords) belonging to this chord.
     Q_PROPERTY(QQmlListProperty<apiv1::Chord> graceNotes READ graceNotes)
+    /// List of grace notes (grace chords) placed before this chord.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::Chord> graceNotesBefore READ graceNotesBefore)
+    /// List of grace notes (grace chords) placed after this chord.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::Chord> graceNotesAfter READ graceNotesAfter)
     /// List of notes belonging to this chord.
     Q_PROPERTY(QQmlListProperty<apiv1::Note> notes READ notes)
     /// List of articulations belonging to this chord.
@@ -1007,6 +1023,27 @@ class Chord : public ChordRest
     API_PROPERTY_T(bool, showStemSlash,   SHOW_STEM_SLASH)
     ///\since MuseScore 4.6
     API_PROPERTY(combineVoice,            COMBINE_VOICE)
+    /// If the note is a trill cue note (used in ornaments and trills)
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool isTrillCueNote READ isTrillCueNote)
+    /// The top note in this chord.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::Note * upNote READ upNote)
+    /// The bottom note in this chord.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::Note * downNote READ downNote)
+    /// The arpeggio attached to this chord, if it exists.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::EngravingItem * arpeggio READ arpeggio)
+    /// The cross-voice arpeggio for this chord, if it exists.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::EngravingItem * spanArpeggio READ spanArpeggio)
+    /// The single-chord tremolo for this chord, if it exists.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::EngravingItem * tremoloSingleChord READ tremoloTwoChord)
+    /// The two-chord tremolo for this chord, if it exists.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::EngravingItem * tremoloTwoChord READ tremoloSingleChord)
 
 public:
     /// \cond MS_INTERNAL
@@ -1017,6 +1054,8 @@ public:
     const mu::engraving::Chord* chord() const { return toChord(e); }
 
     QQmlListProperty<Chord> graceNotes() { return wrapContainerProperty<Chord>(this, chord()->graceNotes()); }
+    QQmlListProperty<Chord> graceNotesBefore() { return wrapContainerProperty<Chord>(this, chord()->graceNotesBefore()); }
+    QQmlListProperty<Chord> graceNotesAfter() { return wrapContainerProperty<Chord>(this, chord()->graceNotesAfter()); }
     QQmlListProperty<Note> notes() { return wrapContainerProperty<Note>(this, chord()->notes()); }
     QQmlListProperty<EngravingItem> articulations() { return wrapContainerProperty<EngravingItem>(this, chord()->articulations()); }
     EngravingItem* stem() { return wrap(chord()->stem()); }
@@ -1025,6 +1064,15 @@ public:
     mu::engraving::NoteType noteType() { return chord()->noteType(); }
     mu::engraving::PlayEventType playEventType() { return chord()->playEventType(); }
     void setPlayEventType(mu::engraving::PlayEventType v);
+
+    bool isTrillCueNote() { return chord()->isTrillCueNote(); }
+
+    Note* upNote() { return wrap<Note>(chord()->upNote()); }
+    Note* downNote() { return wrap<Note>(chord()->downNote()); }
+    EngravingItem* arpeggio() { return wrap(chord()->arpeggio()); }
+    EngravingItem* spanArpeggio() { return wrap(chord()->spanArpeggio()); }
+    EngravingItem* tremoloSingleChord() { return wrap(chord()->tremoloSingleChord()); }
+    EngravingItem* tremoloTwoChord() { return wrap(chord()->tremoloTwoChord()); }
 
     static void addInternal(mu::engraving::Chord* chord, mu::engraving::EngravingItem* el);
     /// \endcond
