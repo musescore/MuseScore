@@ -111,7 +111,7 @@ Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
     if (onlineSoundsProcessing.isStarted()) {
         m_progress.start();
 
-        const std::string onlineSoundsMsg = trc("iex audio", "Processing online sounds…");
+        const std::string onlineSoundsMsg = trc("iex_audio", "Processing online sounds…");
         onlineSoundsProcessing.progressChanged().onReceive(this, [this, onlineSoundsMsg](int64_t current, int64_t total,
                                                                                          const std::string&) {
             m_progress.progress(current, total, onlineSoundsMsg);

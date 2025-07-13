@@ -103,8 +103,10 @@ Item {
     StyledTextLabel {
         id: textLabel
 
+        //: %1 will be replaced with percentage (i.e. if it is replaced with 50, the string will read "Processing 50%…")
         readonly property string longText: qsTrc("global", "Processing %1%…")
         readonly property string longTextNoPercent: qsTrc("global", "Processing…")
+        //: %1 will be replaced with percentage (i.e. if it is replaced with 50, the string will read "50%")
         readonly property string shortText: qsTrc("global", "%1%")
         readonly property bool empty: textLabel.text.length === 0
 
