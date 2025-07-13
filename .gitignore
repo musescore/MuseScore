@@ -80,3 +80,5 @@ __pycache__/
 # User overrides of SetupBuildEnvironment
 /buildscripts/cmake/SetupBuildEnvironment.user.cmake
 
+# CMake User presets
+CMakeUserPresets.json
