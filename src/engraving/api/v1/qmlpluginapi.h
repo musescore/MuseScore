@@ -387,6 +387,9 @@ public:
     /// Contains mu::engraving::ElementFlag enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(ElementFlag, elementFlagEnum, mu::engraving::apiv1::enums::ElementFlag)
+    /// Contains mu::engraving::LayoutMode enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(LayoutMode, layoutModeEnum, mu::engraving::apiv1::enums::LayoutMode)
     /// Contains mu::engraving::SymId enumeration values
     /// \since MuseScore 3.5
     DECLARE_API_ENUM(SymId, symIdEnum, mu::engraving::apiv1::enums::SymId)

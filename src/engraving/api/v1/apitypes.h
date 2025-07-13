@@ -33,6 +33,7 @@
 #include "engraving/dom/staff.h"
 #include "engraving/dom/tripletfeel.h"
 #include "engraving/types/types.h"
+#include "engraving/rendering/layoutoptions.h"
 
 namespace mu::engraving::apiv1::enums {
 Q_NAMESPACE;
@@ -1383,6 +1384,15 @@ enum class ElementFlag {
     END_OF_MEASURE_CHANGE  = int(mu::engraving::ElementFlag::END_OF_MEASURE_CHANGE),
 };
 Q_ENUM_NS(ElementFlag);
+
+enum class LayoutMode {
+    PAGE             = int(mu::engraving::LayoutMode::PAGE),
+    FLOAT            = int(mu::engraving::LayoutMode::FLOAT),
+    LINE             = int(mu::engraving::LayoutMode::LINE),
+    SYSTEM           = int(mu::engraving::LayoutMode::SYSTEM),
+    HORIZONTAL_FIXED = int(mu::engraving::LayoutMode::HORIZONTAL_FIXED),
+};
+Q_ENUM_NS(LayoutMode);
 
 enum class SymId {
     noSym = int(mu::engraving::SymId::noSym),
@@ -4468,4 +4478,5 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Key);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::UpdateMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LayoutFlag);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ElementFlag);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LayoutMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SymId);
