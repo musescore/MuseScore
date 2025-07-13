@@ -646,6 +646,8 @@ EngravingItem* mu::engraving::apiv1::wrap(mu::engraving::EngravingItem* e, Owner
     case ElementType::PARTIAL_TIE:
     case ElementType::LAISSEZ_VIB:
         return wrap<Tie>(toTie(e), own);
+    case ElementType::ORNAMENT:
+        return wrap<Ornament>(toOrnament(e), own);
     case ElementType::NOTE:
         return wrap<Note>(toNote(e), own);
     case ElementType::CHORD:

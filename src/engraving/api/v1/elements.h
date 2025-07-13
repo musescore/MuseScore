@@ -35,6 +35,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/notedot.h"
+#include "engraving/dom/ornament.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/spanner.h"
@@ -1514,6 +1515,36 @@ public:
     int pagenumber() const;
 
     QQmlListProperty<System> systems() { return wrapContainerProperty<System>(this, page()->systems()); }
+    /// \endcond
+};
+
+//---------------------------------------------------------
+//   Ornament
+///    \since MuseScore 4.6
+//---------------------------------------------------------
+
+class Ornament : public EngravingItem
+{
+    Q_OBJECT
+    Q_PROPERTY(bool hasIntervalAbove READ hasIntervalAbove)
+    Q_PROPERTY(bool hasIntervalBelow READ hasIntervalBelow)
+    Q_PROPERTY(bool showCueNote READ showCueNote)
+    Q_PROPERTY(apiv1::EngravingItem * accidentalAbove READ accidentalAbove)
+    Q_PROPERTY(apiv1::EngravingItem * accidentalBelow READ accidentalBelow)
+
+public:
+    /// \cond MS_INTERNAL
+    Ornament(mu::engraving::Ornament* o = nullptr, Ownership own = Ownership::SCORE)
+        : EngravingItem(o, own) {}
+
+    mu::engraving::Ornament* ornament() { return toOrnament(e); }
+    const mu::engraving::Ornament* ornament() const { return toOrnament(e); }
+
+    bool hasIntervalAbove() const { return ornament()->hasIntervalAbove(); }
+    bool hasIntervalBelow() const { return ornament()->hasIntervalBelow(); }
+    bool showCueNote() { return ornament()->showCueNote(); }
+    EngravingItem* accidentalAbove() const { return wrap<EngravingItem>(ornament()->accidentalAbove()); }
+    EngravingItem* accidentalBelow() const { return wrap<EngravingItem>(ornament()->accidentalBelow()); }
     /// \endcond
 };
 
