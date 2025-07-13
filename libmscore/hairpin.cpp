@@ -305,8 +305,7 @@ void HairpinSegment::layout()
                   rypos() += yd;
                   }
 
-            if (hairpin()->addToSkyline() && !hairpin()->lineVisible()
-                && !hairpin()->diagonal()) {
+            if (hairpin()->addToSkyline() && !hairpin()->diagonal()) {
                   // align dynamics with hairpin
                   if (sd && sd->autoplace() && sd->placement() == hairpin()->placement()
                       && (hairpin()->lineVisible() || !_text->empty())){
