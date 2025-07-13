@@ -1798,7 +1798,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8535"/>
         <source>Hairpins</source>
-        <translation>Crescendo/Decrescendo</translation>
+        <translation>Sinais de dinâmica</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="204"/>
@@ -2322,7 +2322,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1576"/>
         <source>Max. grand staff distance:</source>
-        <translation>Distância Máxima de pauta dupla:</translation>
+        <translation>Distância máxima de pauta dupla:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1614"/>
@@ -2338,7 +2338,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1665"/>
         <source>Reset &apos;Factor for distance above/below bracket&apos; value</source>
-        <translation>Redefinir valor &quot;Fator para distância sobre/abaixo colchete&apos;</translation>
+        <translation>Redefinir valor &apos;Fator para distância sobre/abaixo colchete&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1710"/>
@@ -2353,7 +2353,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1733"/>
         <source>Reset &apos;Factor for distance above/below brace&apos; value</source>
-        <translation>Redefinir valor &quot;Fator para distância sobre/abaixo sistema&apos;</translation>
+        <translation>Redefinir valor &apos;Fator para distância sobre/abaixo sistema&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1746"/>
@@ -2363,7 +2363,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1756"/>
         <source>Reset &apos;Max. grand staff distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância Máxima de pauta dupla&apos;</translation>
+        <translation>Redefinir valor &apos;Distância máxima de pauta dupla&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1766"/>
@@ -2426,7 +2426,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1044"/>
         <source>Reset &apos;Grand staff distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância entre Sistemas&apos;</translation>
+        <translation>Redefinir valor &apos;Distância de pauta dupla&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1060"/>
@@ -2441,7 +2441,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1216"/>
         <source>Grand staff distance:</source>
-        <translation>Distância do sistema duplo:</translation>
+        <translation>Distância de pauta dupla</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2128"/>
@@ -2680,12 +2680,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="654"/>
         <source>On subsequent systems:</source>
-        <translation type="unfinished"/>
+        <translation>Em sistemas subsequentes:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="661"/>
         <source>On first system of sections:</source>
-        <translation type="unfinished"/>
+        <translation>No primeiro sistema de seções:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="668"/>
@@ -2746,7 +2746,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4026"/>
         <source>Multiple accidentals in chords</source>
-        <translation type="unfinished"/>
+        <translation>Acidentes múltiplos em acordes</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4236"/>
@@ -2767,12 +2767,12 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4285"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6504"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância da  fórmula de compasso à barra de compasso&apos;</translation>
+        <translation>Redefinir valor &apos;Distância entre fórmula e barra de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4305"/>
         <source>Reset &apos;Note to barline distance&apos; value</source>
-        <translation>Redefinir valoe de &apos;Distância da nota à barra de compasso&apos;</translation>
+        <translation>Redefinir valor &apos;Distância entre nota e barra de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4331"/>
@@ -2812,7 +2812,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4469"/>
         <source>Barline to grace note:</source>
-        <translation>Barra de compasso para apojatura:</translation>
+        <translation>Barra de compasso para apogiatura:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4479"/>
@@ -2827,7 +2827,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4515"/>
         <source>Note to barline:</source>
-        <translation>Nota à barra de compasso:</translation>
+        <translation>Nota para barra de compasso:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4528"/>
@@ -2837,22 +2837,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4538"/>
         <source>Barline to note:</source>
-        <translation>Barra de compasso à nota:</translation>
+        <translation>Barra de compasso para nota:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4551"/>
         <source>Reset &apos;Key signature left margin&apos; value</source>
-        <translation>Redefinir valor &apos;margem à esquerda da armadura de clave&apos;</translation>
+        <translation>Redefinir valor &apos;Margem à esquerda da armadura de clave&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4577"/>
         <source>Reset &apos;Clef/Key right margin&apos; value</source>
-        <translation>Redefinir valor &apos;margem direita Clave/Fórmula de compasso&apos;</translation>
+        <translation>Redefinir valor &apos;Margem direita Clave/Fórmula de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4603"/>
         <source>Reset &apos;Key to barline distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância da armadura à barra de compasso&apos;</translation>
+        <translation>Redefinir valor &apos;Distância entre armadura e barra de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4646"/>
@@ -2867,7 +2867,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4669"/>
         <source>Key signature to barline:</source>
-        <translation>Armadura de clave à barra de compasso:</translation>
+        <translation>Armadura de clave para barra de compasso:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4695"/>
@@ -2877,7 +2877,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4705"/>
         <source>Barline to accidental:</source>
-        <translation>Barra de compasso ao acidente:</translation>
+        <translation>Barra de compasso para acidente:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4718"/>
@@ -2887,7 +2887,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4744"/>
         <source>Reset &apos;Barline to grace note distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância da barra de compasso à apojatura/acicatura&apos;</translation>
+        <translation>Redefinir valor &apos;Distância entre barra de compasso e apogiatura&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4780"/>
@@ -2922,7 +2922,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5312"/>
         <source>Use double barlines before key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Usar barras de compasso duplas antes das armaduras de clave</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5318"/>
@@ -2939,32 +2939,32 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5332"/>
         <source>Only before courtesy key signatures</source>
-        <translation type="unfinished"/>
+        <translation>Somente antes das armaduras de clave de cortesia</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5342"/>
         <source>Use double barlines before time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Usar barras de compasso duplas antes das fórmulas de compasso</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5362"/>
         <source>Only before courtesy time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Somente antes dos compassos de cortesia</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5616"/>
         <source>Accidental to accidental distance:</source>
-        <translation type="unfinished"/>
+        <translation>Distância entre acidentes:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5696"/>
         <source>Alignment in chords</source>
-        <translation type="unfinished"/>
+        <translation>Alinhamento em acordes</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5702"/>
         <source>Combine voices that share the same stem direction</source>
-        <translation type="unfinished"/>
+        <translation>Combine vozes que compartilham a mesma direção da haste</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5769"/>
@@ -2997,22 +2997,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8251"/>
         <source>Default positions of dynamics and hairpins</source>
-        <translation type="unfinished"/>
+        <translation>Posições padrão de dinâmica e sinais de dinâmica</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8279"/>
         <source>Voices 1 &amp; 3 above staff, voices 2 &amp; 4 below staff</source>
-        <translation type="unfinished"/>
+        <translation>Vozes 1 e 3 acima da pauta, vozes 2 e 4 abaixo da pauta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8314"/>
         <source>Place above the staff on vocal instruments</source>
-        <translation type="unfinished"/>
+        <translation>Posicionar acima da pauta em instrumentos vocais</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8321"/>
         <source>Center on grand staff instruments automatically</source>
-        <translation type="unfinished"/>
+        <translation>Centralize automaticamente os instrumentos da pauta dupla</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10208"/>
@@ -3042,22 +3042,22 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11764"/>
         <source>Min. gap between lyrics:</source>
-        <translation type="unfinished"/>
+        <translation>Intervalo mínimo entre as letras:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11861"/>
         <source>Min. margin to current staff:</source>
-        <translation type="unfinished"/>
+        <translation>Margem mínima para a pauta atual:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11813"/>
         <source>Min. margin to other staves:</source>
-        <translation type="unfinished"/>
+        <translation>Margem mínima para outras pautas:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11972"/>
         <source>Line height (% of text size):</source>
-        <translation type="unfinished"/>
+        <translation>Altura da linha (% do tamanho do texto):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12102"/>
@@ -3067,28 +3067,29 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12151"/>
         <source>Max. dash gap:</source>
-        <translation type="unfinished"/>
+        <translation>Distância máxima do traço:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12187"/>
         <source>Min. dash gap:</source>
-        <translation type="unfinished"/>
+        <translation>Distância mínima do traço:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12370"/>
         <source>Omit dash when space is limited</source>
-        <translation type="unfinished"/>
+        <translation>Omitir traço quando o espaço for limitado</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12390"/>
         <source>Restate dash before syllable on 
 first note of the system</source>
-        <translation type="unfinished"/>
+        <translation>Repetir traço antes da sílaba na
+primeira nota do sistema</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12398"/>
         <source>Dash placement at the start of the system:</source>
-        <translation type="unfinished"/>
+        <translation>Posicionamento do traço no início do sistema:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8487"/>
@@ -3126,17 +3127,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Glissandos &amp; note-anchored lines</source>
-        <translation type="unfinished"/>
+        <translation>Glissandos e linhas ancoradas em notas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
         <source>Cue sizes</source>
-        <translation type="unfinished"/>
+        <translation>Tamanho menor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2064"/>
         <source>Reduce rhythmic spacing for small notes</source>
-        <translation type="unfinished"/>
+        <translation>Reduzir espaçamento rítmico para notas pequenas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3436"/>
@@ -3171,7 +3172,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4884"/>
         <source>Reset &apos;System header with time signature distance&apos; value</source>
-        <translation>Redefinir valor &quot;Cabeçalho do sistema com distância da fórmula de compasso&quot;</translation>
+        <translation>Redefinir valor &apos;Cabeçalho do sistema com distância da fórmula de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4897"/>
@@ -3191,7 +3192,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5193"/>
         <source>Thin barline thickness:</source>
-        <translation>Espessura da barra vertical delgada</translation>
+        <translation>Espessura da barra vertical fina</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5213"/>
@@ -3216,17 +3217,17 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5173"/>
         <source>Thick barline distance:</source>
-        <translation>Distância da barra vertical espessa</translation>
+        <translation>Distância da barra de compasso grossa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5203"/>
         <source>Scale barlines to staff size</source>
-        <translation>Espessura da pauta musical</translation>
+        <translation>Escalar barras de compasso de acordo com tamanho da pauta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5006"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
-        <translation>Redefinir valor &apos;Distância dupla da barra de compasso&apos;</translation>
+        <translation>Redefinir valor de &apos;Distância da barra de compasso dupla&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5150"/>
@@ -3236,7 +3237,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5163"/>
         <source>Reset &apos;Scale barlines to staff size&apos; value</source>
-        <translation>Redefinir valor &apos;Reduzir barras de compasso para o tamanho da pauta&apos;</translation>
+        <translation>Redefinir valor &apos;Escalar barras de compasso de acordo com tamanho da pauta&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5078"/>
@@ -3246,7 +3247,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5124"/>
         <source>Thick barline thickness:</source>
-        <translation>Espessura da barra vertical espessa</translation>
+        <translation>Espessura da barra de compasso grossa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5183"/>
@@ -3271,7 +3272,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="94"/>
         <source>Clefs, key &amp; time signatures</source>
-        <translation type="unfinished"/>
+        <translation>Claves, armaduras e fórmulas de compasso</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2996"/>
@@ -3290,7 +3291,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12033"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12760"/>
         <source>Offset above:</source>
-        <translation type="unfinished"/>
+        <translation>Deslocamento acima:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3036"/>
@@ -3309,7 +3310,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11780"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12710"/>
         <source>Offset below:</source>
-        <translation type="unfinished"/>
+        <translation>Deslocamento abaixo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3052"/>
@@ -3329,7 +3330,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11754"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12773"/>
         <source>Reset &apos;Offset above&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Redefinir valor do &apos;Deslocamento acima&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3075"/>
@@ -3349,22 +3350,22 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11826"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12750"/>
         <source>Reset &apos;Offset below&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Redefinir valor &apos;Deslocamento abaixo&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3085"/>
         <source>Horizontal position:</source>
-        <translation type="unfinished"/>
+        <translation>Posição horizontal:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5292"/>
         <source>Mask barlines</source>
-        <translation type="unfinished"/>
+        <translation>Mascarar barras de compasso</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5295"/>
         <source>Mask barlines when intersecting text</source>
-        <translation type="unfinished"/>
+        <translation>Mascarar barras de compasso ao cruzar texto</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5393"/>
@@ -3481,7 +3482,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6274"/>
         <source>Reset &apos;Margin within barlines&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>Redefinir valor &apos;Margem dentro das barras de compasso&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6323"/>
@@ -3572,12 +3573,12 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6863"/>
         <source>Reset &apos;Number type&apos; value</source>
-        <translation>Redefinir o valor &quot;Tipo de número&quot;</translation>
+        <translation>Redefinir o valor &apos;Tipo de número&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6882"/>
         <source>Reset &apos;Direction&apos; value</source>
-        <translation>Redefinir o valor &quot;Direção&quot;</translation>
+        <translation>Redefinir o valor &apos;Direção&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6893"/>
@@ -3755,7 +3756,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3190"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for measure number ranges for multi-measure rests</comment>
-        <translation>Redefinir o valor &quot;Tipo de colchete&quot;</translation>
+        <translation>Redefinir o valor &apos;Tipo de colchete&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3255"/>
@@ -3813,7 +3814,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6284"/>
         <source>Margin within barlines:</source>
-        <translation type="unfinished"/>
+        <translation>Margem dentro das barras de compasso:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6294"/>
@@ -3829,7 +3830,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6962"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for tuplets</comment>
-        <translation>Redefinir o valor &quot;Tipo de colchete&quot;</translation>
+        <translation>Redefinir o valor &apos;Tipo de colchete&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="6972"/>
@@ -3952,19 +3953,19 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7595"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7797"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
-        <translation>Redefinir o valor &quot;Espessura da linha no fim&quot;</translation>
+        <translation>Redefinir o valor &apos;Espessura da linha no fim&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7637"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7839"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
-        <translation>Redefinir o valor &quot;Espessura da linha no meio&quot;</translation>
+        <translation>Redefinir o valor &apos;Espessura da linha no meio&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7679"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7881"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
-        <translation>Redefinir o valor &quot;Espessura da linha pontilhada&apos;</translation>
+        <translation>Redefinir o valor &apos;Espessura da linha pontilhada&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8010"/>
@@ -4009,7 +4010,7 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9734"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12466"/>
         <source>Reset &apos;Line thickness&apos; value</source>
-        <translation>Redefinir o valor &quot;Espessura da linha&quot;</translation>
+        <translation>Redefinir o valor &apos;Espessura da linha&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8302"/>
@@ -4037,14 +4038,14 @@ first note of the system</source>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9848"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9867"/>
         <source>Reset &apos;Line style&apos; value</source>
-        <translation>Redefinir o valor &quot;Estilo da linha&quot;</translation>
+        <translation>Redefinir o valor &apos;Estilo da linha&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8885"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9239"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9317"/>
         <source>Reset &apos;Hook height&apos; value</source>
-        <translation>Redefinir o valor &apos; Altura da bandeirola&apos;</translation>
+        <translation>Redefinir o valor &apos;Altura da bandeirola&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8895"/>
@@ -4140,7 +4141,7 @@ first note of the system</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9378"/>
         <source>Reset &apos;Numbers only&apos; value</source>
-        <translation>Redefinir o valor &quot;Apenas números&quot;</translation>
+        <translation>Redefinir o valor &apos;Apenas números&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10222"/>
@@ -4508,7 +4509,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11036"/>
         <source>Trill cue note</source>
-        <translation type="unfinished"/>
+        <translation>Trinado de notas pequenas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11042"/>
@@ -4560,7 +4561,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13229"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
-        <translation>Redefinir valor &quot;Deslocamento vertical de extensão&quot;</translation>
+        <translation>Redefinir valor &apos;Deslocamento vertical de extensão&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13239"/>
@@ -4575,7 +4576,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13262"/>
         <source>Reset &apos;Extension scaling&apos; value</source>
-        <translation>Redefinir valor &quot;Escala de extensão&quot;</translation>
+        <translation>Redefinir valor &apos;Escala de extensão&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13272"/>
@@ -4590,12 +4591,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13295"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
-        <translation>Redefinir valor &quot;Escala do modificador&quot;</translation>
+        <translation>Redefinir valor &apos;Escala do modificador&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13308"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
-        <translation>Redefinir valor &quot;Deslocamento vertical do modificador&quot;</translation>
+        <translation>Redefinir valor &apos;Deslocamento vertical do modificador&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="13330"/>
@@ -4773,12 +4774,12 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5065"/>
         <source>Reset &apos;Show repeat barline tips (“winged” repeats)&apos; value</source>
-        <translation>Redefinir valor &apos;Mostrar pontas de barras de repetição (repetições &quot;aladas&quot;)&apos;</translation>
+        <translation>Redefinir valor &apos;Mostrar barra de repetição (ritornelo com aletas)&apos;</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5249"/>
         <source>Show repeat barline tips (“winged” repeats)</source>
-        <translation>Mostrar dicas de ritornelos (ritornelos &quot;com aletas&quot;)</translation>
+        <translation>Mostrar barra de repetição (ritornelo com aletas)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5785"/>
@@ -7184,7 +7185,7 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1867"/>
         <source>Toggle trill</source>
-        <translation>Trilo</translation>
+        <translation>Alternar trinado</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2394"/>
@@ -10032,17 +10033,17 @@ text x-height):</source>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1868"/>
         <source>Add ornament: trill</source>
-        <translation type="unfinished"/>
+        <translation>Adicionar ornamento: trinado</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1873"/>
         <source>Toggle short trill</source>
-        <translation type="unfinished"/>
+        <translation>Trinado curto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1874"/>
         <source>Add ornament: short trill</source>
-        <translation type="unfinished"/>
+        <translation>Adicionar ornamento: trinado curto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1879"/>
@@ -11883,7 +11884,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="39"/>
         <source>When entered, dynamics and hairpins should affect:</source>
-        <translation type="unfinished"/>
+        <translation>Quando inseridas, as dinâmicas e os sinais de dinâmica devem afetar:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInput/VoiceAssignmentSection.qml" line="46"/>
@@ -13118,7 +13119,7 @@ Publicado sob a licença &lt;a href=&quot;%1&quot;&gt;GNU General Public License
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="273"/>
         <source>Trill</source>
-        <translation>Trilo</translation>
+        <translation>Trinado</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="274"/>
@@ -18257,7 +18258,7 @@ Traste %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5388"/>
         <source>Trill</source>
-        <translation>Trilo</translation>
+        <translation>Trinado</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5389"/>
@@ -18664,7 +18665,7 @@ Traste %1 nas cordas %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2650"/>
         <source>Trill line</source>
-        <translation>Linha de trilo</translation>
+        <translation>Linha de trinado</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2651"/>
@@ -20656,7 +20657,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="55"/>
         <source>Show courtesy clef</source>
-        <translation>Mostrar clave de precaução</translation>
+        <translation>Mostrar clave de cortesia</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="63"/>
@@ -20899,7 +20900,7 @@ anacruse</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar armadura de clave de cortesia</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
@@ -23835,7 +23836,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="173"/>
         <source>Hairpins</source>
-        <translation>Crescendo/Decrescendo</translation>
+        <translation>Sinais de dinâmica</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="175"/>
@@ -25069,22 +25070,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="88"/>
         <source>Show all clefs on every system</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar todas as claves em todos os sistemas</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="89"/>
         <source>Hide all clefs after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar todas as claves após o primeiro sistema em que elas aparecem</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="101"/>
         <source>Hide tab clefs after the first system where they appear</source>
-        <translation type="unfinished"/>
+        <translation>Ocultar claves de partitura após o primeiro sistema em que elas aparecem</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="108"/>
         <source>Show courtesy clefs</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar claves de cortesia</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/ClefKeyTimeSigPage.qml" line="115"/>

@@ -15637,14 +15637,14 @@
         <source>Acoustic Guitar</source>
         <comment>guitar-steel longName</comment>
         <extracomment>longName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Фолк-гитара</translation>
+        <translation>Акустическая гитара</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5152"/>
         <source>Guit.</source>
         <comment>guitar-steel shortName</comment>
         <extracomment>shortName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Гит. (фолк)</translation>
+        <translation>Гит.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5154"/>
@@ -15672,21 +15672,21 @@
         <source>Acoustic Guitar (treble clef)</source>
         <comment>guitar-steel-treble-clef trackName</comment>
         <extracomment>trackName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Фолк-гитара (скрипичный ключ)</translation>
+        <translation>Акустическая гитара (скрипичный ключ)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5165"/>
         <source>Guitar</source>
         <comment>guitar-steel-treble-clef longName</comment>
         <extracomment>longName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Фолк-гитара</translation>
+        <translation>Гитара</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5167"/>
         <source>Guit.</source>
         <comment>guitar-steel-treble-clef shortName</comment>
         <extracomment>shortName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Гит. (фолк)</translation>
+        <translation>Гит.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5172"/>
