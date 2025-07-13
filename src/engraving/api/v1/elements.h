@@ -380,6 +380,7 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(volta_ending,            VOLTA_ENDING)
     API_PROPERTY_T(bool, lineVisible,     LINE_VISIBLE)
     API_PROPERTY_T(qreal, mag,            MAG)
+    /// For parts: Whether this part uses a drumset.
     API_PROPERTY_T(int, useDrumset,       USE_DRUMSET)
     API_PROPERTY(role,                    ACCIDENTAL_ROLE)
     API_PROPERTY_T(int, track,            TRACK) // does conversion work from P_TYPE::SIZE_T ?
@@ -602,6 +603,8 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY(path,                    PATH)
 
+    /// For parts: Whether this part prefers sharps or flats,
+    /// one of PluginAPI::PluginAPI::PreferSharpFlat values.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, preferSharpFlat,  PREFER_SHARP_FLAT)
 
