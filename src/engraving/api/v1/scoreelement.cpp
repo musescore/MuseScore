@@ -22,6 +22,8 @@
 
 #include "scoreelement.h"
 
+#include "engraving/dom/measure.h"
+#include "engraving/dom/range.h"
 #include "engraving/dom/engravingobject.h"
 #include "engraving/dom/score.h"
 
@@ -147,6 +149,18 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
         FractionWrapper* f = val.value<FractionWrapper*>();
         if (!f) {
             LOGW() << "trying to assign value of wrong type to fractional property";
+            return;
+        }
+        // Pid::TIMESIG_ACTUAL is only set when we change the time signature,
+        // aside from that it's read-only. What the user intends to do here is
+        // change the actual length of the measure, so we do that instead.
+        if (pid == Pid::TIMESIG_ACTUAL && e->isMeasure() && m_ownership == Ownership::SCORE) {
+            mu::engraving::Measure* m = toMeasure(e);
+            if (m->ticks() != f->fraction()) {
+                mu::engraving::ScoreRange range;
+                range.read(m->first(), m->last());
+                m->adjustToLen(f->fraction());
+            }
             return;
         }
         newValue = f->fraction();
