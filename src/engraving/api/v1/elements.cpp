@@ -512,6 +512,121 @@ Part* Staff::part()
     return wrap<Part>(staff()->part());
 }
 
+FractionWrapper* Staff::timeStretch(FractionWrapper* tick)
+{
+    return wrap(staff()->timeStretch(tick->fraction()));
+}
+
+EngravingItem* Staff::timeSig(FractionWrapper* tick)
+{
+    return wrap(staff()->timeSig(tick->fraction()));
+}
+
+int Staff::key(FractionWrapper* tick)
+{
+    return int(staff()->key(tick->fraction()));
+}
+
+IntervalWrapper* Staff::transpose(FractionWrapper* tick)
+{
+    return wrap(staff()->transpose(tick->fraction()));
+}
+
+QVariantMap Staff::swing(FractionWrapper* f)
+{
+    mu::engraving::SwingParameters swingParams = staff()->swing(f->fraction());
+    QVariantMap pluginSwingParams;
+    pluginSwingParams["swingUnit"] = swingParams.swingUnit;
+    pluginSwingParams["swingRatio"] = swingParams.swingRatio;
+    pluginSwingParams["isOn"] = swingParams.isOn();
+    return pluginSwingParams;
+}
+
+QVariantMap Staff::capo(FractionWrapper* f)
+{
+    const mu::engraving::CapoParams& capoParams = staff()->capo(f->fraction());
+    QVariantMap pluginCapoParams;
+    pluginCapoParams["active"] = capoParams.active;
+    pluginCapoParams["fretPosition"] = capoParams.fretPosition;
+    QVariantList ignoredStrings;
+    ignoredStrings.reserve(static_cast<int>(capoParams.ignoredStrings.size()));
+    for (size_t string : capoParams.ignoredStrings) {
+        ignoredStrings.append(static_cast<int>(string));
+    }
+    pluginCapoParams["ignoredStrings"] = ignoredStrings;
+    return pluginCapoParams;
+}
+
+bool Staff::stemless(FractionWrapper* tick)
+{
+    return staff()->stemless(tick->fraction());
+}
+
+qreal Staff::staffHeight(FractionWrapper* tick)
+{
+    return staff()->staffHeight(tick->fraction());
+}
+
+bool Staff::isPitchedStaff(FractionWrapper* tick)
+{
+    return staff()->isPitchedStaff(tick->fraction());
+}
+
+bool Staff::isTabStaff(FractionWrapper* tick)
+{
+    return staff()->isTabStaff(tick->fraction());
+}
+
+bool Staff::isDrumStaff(FractionWrapper* tick)
+{
+    return staff()->isDrumStaff(tick->fraction());
+}
+
+int Staff::lines(FractionWrapper* tick)
+{
+    return staff()->lines(tick->fraction());
+}
+
+qreal Staff::lineDistance(FractionWrapper* tick)
+{
+    return staff()->lineDistance(tick->fraction());
+}
+
+bool Staff::isLinesInvisible(FractionWrapper* tick)
+{
+    return staff()->isLinesInvisible(tick->fraction());
+}
+
+int Staff::middleLine(FractionWrapper* tick)
+{
+    return staff()->middleLine(tick->fraction());
+}
+
+int Staff::bottomLine(FractionWrapper* tick)
+{
+    return staff()->bottomLine(tick->fraction());
+}
+
+qreal Staff::staffMag(FractionWrapper* tick)
+{
+    return staff()->staffMag(tick->fraction());
+}
+
+qreal Staff::spatium(FractionWrapper* tick)
+{
+    return staff()->spatium(tick->fraction());
+}
+
+int Staff::pitchOffset(FractionWrapper* tick)
+{
+    return staff()->pitchOffset(tick->fraction());
+}
+
+bool Staff::isVoiceVisible(int voice)
+{
+    return staff()->isVoiceVisible(voice);
+}
+
 //---------------------------------------------------------
 //   wrap
 ///   \cond PLUGIN_API \private \endcond

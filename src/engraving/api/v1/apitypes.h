@@ -30,6 +30,7 @@
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/mmrestrange.h"
 #include "engraving/dom/spacer.h"
+#include "engraving/dom/staff.h"
 #include "engraving/dom/tripletfeel.h"
 #include "engraving/types/types.h"
 
@@ -1214,6 +1215,14 @@ enum class StaffGroup {
     TAB        = int(mu::engraving::StaffGroup::TAB),
 };
 Q_ENUM_NS(StaffGroup);
+
+enum class HideMode {
+    AUTO       = int(mu::engraving::Staff::HideMode::AUTO),
+    ALWAYS     = int(mu::engraving::Staff::HideMode::ALWAYS),
+    NEVER      = int(mu::engraving::Staff::HideMode::NEVER),
+    INSTRUMENT = int(mu::engraving::Staff::HideMode::INSTRUMENT),
+};
+Q_ENUM_NS(HideMode);
 
 enum class TrillType {
     TRILL_LINE      = int(mu::engraving::TrillType::TRILL_LINE),
@@ -4442,6 +4451,7 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::BracketType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::JumpType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::MarkerType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::StaffGroup);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::HideMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TrillType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::VibratoType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ArticulationTextType);

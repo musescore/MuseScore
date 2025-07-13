@@ -43,6 +43,7 @@
 #include "engraving/dom/stemslash.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/systemdivider.h"
+#include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tuplet.h"
@@ -56,6 +57,7 @@ Q_MOC_INCLUDE("engraving/api/v1/part.h")
 
 namespace mu::engraving::apiv1 {
 class FractionWrapper;
+class IntervalWrapper;
 class EngravingItem;
 class Part;
 class Spanner;
@@ -1543,6 +1545,7 @@ class Staff : public ScoreElement
     API_PROPERTY_T(int, staffBarlineSpanFrom, STAFF_BARLINE_SPAN_FROM)
     API_PROPERTY_T(int, staffBarlineSpanTo,   STAFF_BARLINE_SPAN_TO)
 
+    /// Controls whether the staff lines are visible.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, staffInvisible,  STAFF_INVISIBLE)
 
@@ -1556,6 +1559,43 @@ class Staff : public ScoreElement
     /// Part which this staff belongs to.
     Q_PROPERTY(apiv1::Part * part READ part);
 
+    /// The index of this staff.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(int idx READ idx)
+
+    /// Whether the staff is visible.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool show READ show)
+    /// Whether this is a cutaway staff, which hides itself
+    /// mid-system when measures are empty.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool cutaway READ cutaway)
+    /// Whether to not hide if the system is empty.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool showIfEmpty READ showIfEmpty)
+    /// Whether to display the system barline (leftmost barline).
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool hideSystemBarLine READ hideSystemBarLine)
+    /// Whether to hide this staff when empty (on a per-system basis).
+    /// One of PluginAPI::PluginAPI::HideMode values.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(int hideWhenEmpty READ hideWhenEmpty)
+    /// Whether to merge matching rests across voices.
+    /// One of PluginAPI::PluginAPI::AutoOnOff values.
+    /// If Auto, determined by the global style setting \p mergeMatchingRests .
+    /// \since MuseScore 4.6
+    Q_PROPERTY(int mergeMatchingRests READ mergeMatchingRests)
+    /// Whether matching rests are to be merged.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool shouldMergeMatchingRests READ shouldMergeMatchingRests)
+    /// The primary (not linked) staff of this staff.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::Staff * primaryStaff READ primaryStaff)
+
+    /// List of bracket items for this staff.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> brackets READ brackets)
+
 public:
     /// \cond MS_INTERNAL
     Staff(mu::engraving::Staff* staff, Ownership own = Ownership::PLUGIN)
@@ -1565,7 +1605,116 @@ public:
     const mu::engraving::Staff* staff() const { return toStaff(e); }
 
     Part* part();
+    int idx() { return int(staff()->idx()); }
+    bool show() { return staff()->show(); }
+    bool cutaway() { return staff()->cutaway(); }
+    bool showIfEmpty() { return staff()->showIfEmpty(); }
+    bool hideSystemBarLine() { return staff()->hideSystemBarLine(); }
+    int hideWhenEmpty() { return int(staff()->hideWhenEmpty()); }
+    int mergeMatchingRests() { return int(staff()->mergeMatchingRests()); }
+    bool shouldMergeMatchingRests() { return staff()->shouldMergeMatchingRests(); }
+    Staff* primaryStaff() { return wrap<Staff>(staff()->primaryStaff()); }
+    QQmlListProperty<EngravingItem> brackets() { return wrapContainerProperty<EngravingItem>(this, staff()->brackets()); }
     /// \endcond
+
+    /// The current timestretch factor at a given tick in the score, i.e. the
+    /// ratio of the local time signature over the global time signature.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::FractionWrapper* timeStretch(apiv1::FractionWrapper* tick);
+    /// The currently active time signature at a given tick in the score.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE EngravingItem* timeSig(apiv1::FractionWrapper* tick);
+    /// The current written key at a given tick in the score, one of
+    /// PluginAPI::PLuginAPI::Key values.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \see PluginAPI::PLuginAPI::Key
+    /// \since MuseScore 4.6
+    Q_INVOKABLE int key(apiv1::FractionWrapper* tick);
+    /// The transposition at a given tick in the score, active if the
+    /// score is not in concert pitch.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \see PluginAPI::IntervalWrapper
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::IntervalWrapper* transpose(apiv1::FractionWrapper* tick);
+
+    /// The swing settings at a given tick.
+    /// \returns An object with the following fields:
+    /// - \p swingUnit - raw tick length value of the swing unit
+    /// - \p swingRatio - value of the ratio, percentage.
+    /// - \p isOn - whether swing is active.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE QVariantMap swing(apiv1::FractionWrapper* tick);
+    /// The capo settings at a given tick.
+    /// \returns An object with the following fields:
+    /// - \p active - whether there is a capo active.
+    /// - \p fretPosition - the fret of the capo
+    /// - \p ignoredStrings - list of strings not affected by the capo.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE QVariantMap capo(apiv1::FractionWrapper* tick);
+
+    /// Whether the notes at a given tick are stemless
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool stemless(apiv1::FractionWrapper* tick);
+    /// The staff height at a given tick in spatium units.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE qreal staffHeight(apiv1::FractionWrapper* tick);
+    // StaffType helper functions
+    /// Whether the staff is a pitched staff at a given tick.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool isPitchedStaff(apiv1::FractionWrapper* tick);
+    /// Whether the staff is a tab staff at a given tick.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool isTabStaff(apiv1::FractionWrapper* tick);
+    /// Whether the staff is a drum staff at a given tick.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool isDrumStaff(apiv1::FractionWrapper* tick);
+    /// The number of staff lines at a given tick.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE int lines(apiv1::FractionWrapper* tick);
+    /// The distance between staff lines at a given tick, in spatium units.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE qreal lineDistance(apiv1::FractionWrapper* tick);
+    /// Whether the staff lines are invisible at a given tick.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool isLinesInvisible(apiv1::FractionWrapper* tick);
+    /// The middle line of this staff at a given tick.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE int middleLine(apiv1::FractionWrapper* tick);
+    /// The bottom line of this staff at a given tick.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE int bottomLine(apiv1::FractionWrapper* tick);
+    /// The staff scaling at a given tick.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE qreal staffMag(apiv1::FractionWrapper* tick);
+    /// The spatium value at a given tick.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE qreal spatium(apiv1::FractionWrapper* tick);
+    /// The pitch offset value at a given tick, determined by active ottavas.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE int pitchOffset(apiv1::FractionWrapper* tick);
+
+    /// For staves in part scores: Whether the given voice
+    /// is displayed in the score.
+    /// \param voice The voice number (0-3) to check.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE bool isVoiceVisible(int voice);
 };
 
 //---------------------------------------------------------

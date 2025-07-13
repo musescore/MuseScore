@@ -336,6 +336,9 @@ public:
     /// Contains mu::engraving::StaffGroup enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(StaffGroup, staffGroupEnum, mu::engraving::apiv1::enums::StaffGroup)
+    /// Contains mu::engraving::HideMode enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(HideMode, hideModeEnum, mu::engraving::apiv1::enums::HideMode)
     /// Contains mu::engraving::TrillType enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(TrillType, trillTypeEnum, mu::engraving::apiv1::enums::TrillType)

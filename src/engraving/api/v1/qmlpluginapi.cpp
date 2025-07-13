@@ -110,6 +110,7 @@ Enum* PluginAPI::bracketTypeEnum = nullptr;
 Enum* PluginAPI::jumpTypeEnum = nullptr;
 Enum* PluginAPI::markerTypeEnum = nullptr;
 Enum* PluginAPI::staffGroupEnum = nullptr;
+Enum* PluginAPI::hideModeEnum = nullptr;
 Enum* PluginAPI::trillTypeEnum = nullptr;
 Enum* PluginAPI::vibratoTypeEnum = nullptr;
 Enum* PluginAPI::articulationTextTypeEnum = nullptr;

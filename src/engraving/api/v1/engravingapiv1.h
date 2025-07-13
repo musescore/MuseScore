@@ -110,6 +110,7 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
     Q_PROPERTY(apiv1::Enum * JumpType READ jumpTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * MarkerType READ markerTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * StaffGroup READ staffGroupEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * HideMode READ hideModeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * TrillType READ trillTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * VibratoType READ vibratoTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * ArticulationTextType READ articulationTextTypeEnum CONSTANT)
@@ -214,6 +215,7 @@ public:
     apiv1::Enum* jumpTypeEnum() const { return api()->get_jumpTypeEnum(); }
     apiv1::Enum* markerTypeEnum() const { return api()->get_markerTypeEnum(); }
     apiv1::Enum* staffGroupEnum() const { return api()->get_staffGroupEnum(); }
+    apiv1::Enum* hideModeEnum() const { return api()->get_hideModeEnum(); }
     apiv1::Enum* trillTypeEnum() const { return api()->get_trillTypeEnum(); }
     apiv1::Enum* vibratoTypeEnum() const { return api()->get_vibratoTypeEnum(); }
     apiv1::Enum* articulationTextTypeEnum() const { return api()->get_articulationTextTypeEnum(); }
