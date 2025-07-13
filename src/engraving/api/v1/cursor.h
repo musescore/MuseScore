@@ -66,66 +66,55 @@ class Staff;
 class Cursor : public QObject
 {
     Q_OBJECT
-    /** Current track */
+    /// Current track
     Q_PROPERTY(int track READ track WRITE setTrack)
-    /** Current staff number (#track / 4) */
+    /// Current staff number (#track / 4)
     Q_PROPERTY(int staffIdx READ staffIdx WRITE setStaffIdx)
-    /**
-     * Current \ref Staff the cursor is on.
-     * \since MuseScore 4.6
-     */
+    /// Current \ref Staff the cursor is on.
+    /// \since MuseScore 4.6
     Q_PROPERTY(apiv1::Staff * staff READ staff WRITE setStaff)
-    /** Current voice (#track % 4) */
+    /// Current voice (#track % 4)
     Q_PROPERTY(int voice READ voice WRITE setVoice)
-    /**
-     * Segment type filter, a bitmask from
-     * PluginAPI::PluginAPI::Segment values.
-     * Determines which segments this cursor will move to
-     * on next() and nextMeasure() operations. The default
-     * value is mu::engraving::SegmentType::ChordRest so only segments
-     * containing chords and rests are handled by default.
-     */
+    /// Segment type filter, a bitmask from
+    /// PluginAPI::PluginAPI::Segment values.
+    /// Determines which segments this cursor will move to
+    /// on next() and nextMeasure() operations. The default
+    /// value is mu::engraving::SegmentType::ChordRest so only segments
+    /// containing chords and rests are handled by default.
     Q_PROPERTY(int filter READ filter WRITE setFilter)
 
-    /** MIDI tick position, read only
-     * As of MuseScore 4.6, this property is deprecated and should
-     * not be used to read the cursor position. Use \ref cursor.fraction
-     * instead. However, this property can still sometimes be useful to
-     * compare position values using operators.
-     */
+    /// MIDI tick position, read only
+    /// As of MuseScore 4.6, this property is deprecated and should
+    /// not be used to read the cursor position. Use \ref cursor.fraction
+    /// instead. However, this property can still sometimes be useful to
+    /// compare position values using operators.
     Q_PROPERTY(int tick READ tick)
-    /**
-     * MIDI tick position, accounting for repeats.
-     * \since MuseScore 4.6
-     */
+    /// MIDI tick position, accounting for repeats.
+    /// \since MuseScore 4.6
     Q_PROPERTY(int utick READ utick)
-    /**
-     * Time position in this score, measured as a fraction of a
-     * whole note (the same units MuseScore's code uses internally).
-     * \since MuseScore 4.6
-     */
+    /// Time position in this score, measured as a fraction of a
+    /// whole note (the same units MuseScore's code uses internally).
+    /// \since MuseScore 4.6
     Q_PROPERTY(apiv1::FractionWrapper * fraction READ qmlFraction)
 
-    /** Tempo at current tick, read only */
+    /// Tempo at current tick, read only
     Q_PROPERTY(qreal tempo READ tempo)
 
-    /** Key signature of current staff at tick pos. (read only) */
+    /// Key signature of current staff at tick pos. (read only)
     Q_PROPERTY(int keySignature READ qmlKeySignature)
-    /** Associated score */
+    /// Associated score
     Q_PROPERTY(apiv1::Score * score READ score WRITE setScore)
 
-    /** Current element at track, read only */
+    /// Current element at track, read only
     Q_PROPERTY(apiv1::EngravingItem * element READ element) //todo set
-    /** Current segment, read only */
+    /// Current segment, read only
     Q_PROPERTY(apiv1::Segment * segment READ qmlSegment)
-    /** Current measure, read only */
+    /// Current measure, read only
     Q_PROPERTY(apiv1::Measure * measure READ measure)
-    /**
-     * A physical string number where this cursor currently at. This is useful
-     * in conjunction with \ref InputStateMode.INPUT_STATE_SYNC_WITH_SCORE
-     * cursor mode.
-     * \since MuseScore 3.5
-     */
+    /// A physical string number where this cursor currently at. This is useful
+    /// in conjunction with \ref InputStateMode.INPUT_STATE_SYNC_WITH_SCORE
+    /// cursor mode.
+    /// \since MuseScore 3.5
     Q_PROPERTY(int stringNumber READ inputStateString WRITE setInputStateString)
 
 public:
@@ -136,7 +125,7 @@ public:
     };
     Q_ENUM(RewindMode);
 
-    /** \since MuseScore 3.5 */
+    /// \since MuseScore 3.5
     enum InputStateMode {
         INPUT_STATE_INDEPENDENT,     ///< Input state of cursor is independent of score input state (default)
         INPUT_STATE_SYNC_WITH_SCORE     ///< Input state of cursor is synchronized with score input state
@@ -144,12 +133,10 @@ public:
     Q_ENUM(InputStateMode);
 
 private:
-    /**
-     * Behavior of input state (position, notes duration etc.) of this cursor
-     * with respect to input state of the score. By default any changes in
-     * score and in this Cursor are not synchronized.
-     * \since MuseScore 3.5
-     */
+    /// Behavior of input state (position, notes duration etc.) of this cursor
+    /// with respect to input state of the score. By default any changes in
+    /// score and in this Cursor are not synchronized.
+    /// \since MuseScore 3.5
     Q_PROPERTY(InputStateMode inputStateMode READ inputStateMode WRITE setInputStateMode)
 
     mu::engraving::Score* m_score = nullptr;

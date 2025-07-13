@@ -64,75 +64,69 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
 {
     Q_OBJECT
 
-    /** Composer of the score, as taken from the score properties (read only).\n \since MuseScore 3.2 */
+    /// Composer of the score, as taken from the score properties (read only).\n \since MuseScore 3.2
     Q_PROPERTY(QString composer READ composer)
-    /** Duration of score in seconds (read only).\n \since MuseScore 3.2 */
+    /// Duration of score in seconds (read only).\n \since MuseScore 3.2
     Q_PROPERTY(int duration READ duration)
-    /** List of the excerpts (linked parts) (read only) */
+    /// List of the excerpts (linked parts) (read only)
     Q_PROPERTY(QQmlListProperty<apiv1::Excerpt> excerpts READ excerpts)
-    /** First measure of the score (read only) */
+    /// First measure of the score (read only)
     Q_PROPERTY(apiv1::Measure * firstMeasure READ firstMeasure)
-    /**
-     * First multimeasure rest measure of the score (read only).
-     * \see \ref Measure.nextMeasureMM
-     * \since MuseScore 3.2
-     */
+    /// First multimeasure rest measure of the score (read only).
+    /// \see \ref Measure.nextMeasureMM
+    /// \since MuseScore 3.2
     Q_PROPERTY(apiv1::Measure * firstMeasureMM READ firstMeasureMM)
-    /** Number of harmony items (chord symbols) in the score (read only).\n \since MuseScore 3.2 */
+    /// Number of harmony items (chord symbols) in the score (read only).\n \since MuseScore 3.2
     Q_PROPERTY(int harmonyCount READ harmonyCount)
-    /** Whether score has harmonies (chord symbols) (read only).\n \since MuseScore 3.2 */
+    /// Whether score has harmonies (chord symbols) (read only).\n \since MuseScore 3.2
     Q_PROPERTY(bool hasHarmonies READ hasHarmonies)
-    /** Whether score has lyrics (read only).\n \since MuseScore 3.2 */
+    /// Whether score has lyrics (read only).\n \since MuseScore 3.2
     Q_PROPERTY(bool hasLyrics READ hasLyrics)
     /// Key signature at the start of the score, in number of accidentals,
     /// negative for flats, positive for sharps (read only).\n \since MuseScore 3.2
     Q_PROPERTY(int keysig READ keysig)
-    /** Last measure of the score (read only) */
+    /// Last measure of the score (read only)
     Q_PROPERTY(apiv1::Measure * lastMeasure READ lastMeasure)
-    /**
-     * Last multimeasure rest measure of the score (read only).
-     * \see \ref Measure.prevMeasureMM
-     * \since MuseScore 3.2
-     */
+    /// Last multimeasure rest measure of the score (read only).
+    /// \see \ref Measure.prevMeasureMM
+    /// \since MuseScore 3.2
     Q_PROPERTY(apiv1::Measure * lastMeasureMM READ lastMeasureMM)
-    /** Last score segment (read only) */
+    /// Last score segment (read only)
     Q_PROPERTY(apiv1::Segment * lastSegment READ lastSegment)                // TODO: make it function? Was property in 2.X, but firstSegment is a function...
-    /** Number of lyrics items (syllables) in the score (read only).\n \since MuseScore 3.2 */
+    /// Number of lyrics items (syllables) in the score (read only).\n \since MuseScore 3.2
     Q_PROPERTY(int lyricCount READ lyricCount)
-    /** Name of the score, without path leading to it and extension.\n \since MuseScore 3.2 */
+    /// Name of the score, without path leading to it and extension.\n \since MuseScore 3.2
     Q_PROPERTY(QString scoreName READ name WRITE setName)
-    /** Number of measures (read only) */
+    /// Number of measures (read only)
     Q_PROPERTY(int nmeasures READ nmeasures)
-    /** Number of pages (read only) */
+    /// Number of pages (read only)
     Q_PROPERTY(int npages READ npages)
-    /** Number of staves (read only) */
+    /// Number of staves (read only)
     Q_PROPERTY(int nstaves READ nstaves)
-    /** Number of tracks (#nstaves * 4) (read only) */
+    /// Number of tracks (#nstaves * 4) (read only)
     Q_PROPERTY(int ntracks READ ntracks)
 //      Q_PROPERTY(mu::engraving::PageFormat*                pageFormat        READ pageFormat     WRITE undoChangePageFormat)
-    /** The list of parts */
+    /// The list of parts
     Q_PROPERTY(QQmlListProperty<apiv1::Part> parts READ parts)
-    /** Lyricist of score, as taken from the score properties.\n \since MuseScore 3.2 */
+    /// Lyricist of score, as taken from the score properties.\n \since MuseScore 3.2
     Q_PROPERTY(QString lyricist READ lyricist)
 //      Q_PROPERTY(QString                        subtitle          READ subtitle)
-    /** Title of score, as taken from the score properties' workTitle (read only).\n \since MuseScore 3.2 */
+    /// Title of score, as taken from the score properties' workTitle (read only).\n \since MuseScore 3.2
     Q_PROPERTY(QString title READ title)
-    /** MuseScore version the score has been last saved with (includes autosave) (read only) */
+    /// MuseScore version the score has been last saved with (includes autosave) (read only)
     Q_PROPERTY(QString mscoreVersion READ mscoreVersion)
-    /** MuseScore revision the score has been last saved with (includes autosave) (read only) */
+    /// MuseScore revision the score has been last saved with (includes autosave) (read only)
     Q_PROPERTY(QString mscoreRevision READ mscoreRevision)
-    /** Current selections for the score. \since MuseScore 3.3 */
+    /// Current selections for the score. \since MuseScore 3.3
     Q_PROPERTY(apiv1::Selection * selection READ selection)
-    /** Style settings for this score. \since MuseScore 3.5 */
+    /// Style settings for this score. \since MuseScore 3.5
     Q_PROPERTY(apiv1::MStyle * style READ style)
-    /**
-     * Page numbering offset. The user-visible number of the given \p page is defined as
-     * \code
-     * page.pagenumber + 1 + score.pageNumberOffset
-     * \endcode
-     * \since MuseScore 3.5
-     * \see Page::pagenumber
-     */
+    /// Page numbering offset. The user-visible number of the given \p page is defined as
+    /// \code
+    /// page.pagenumber + 1 + score.pageNumberOffset
+    /// \endcode
+    /// \since MuseScore 3.5
+    /// \see Page::pagenumber
     Q_PROPERTY(int pageNumberOffset READ pageNumberOffset WRITE setPageNumberOffset)
 
     /// The current layout mode, a PluginAPI::LayoutMode value.
@@ -162,10 +156,8 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
     /// Whether instrument names are displayed
     /// \since MuseScore 4.6
     Q_PROPERTY(bool showInstrumentNames READ showInstrumentNames WRITE setShowInstrumentNames)
-    /**
-     * List of staves in this score.
-     * \since MuseScore 3.6.3
-     */
+    /// List of staves in this score.
+    /// \since MuseScore 3.6.3
     Q_PROPERTY(QQmlListProperty<apiv1::Staff> staves READ staves)
     /// List of pages in this score.
     /// \since MuseScore 4.6
@@ -226,24 +218,20 @@ public:
     /// Sets the metatag named \p tag to \p val
     Q_INVOKABLE void setMetaTag(const QString& tag, const QString& val) { score()->setMetaTag(tag, val); }
 
-    /**
-     * Appends a part with the instrument defined by \p instrumentId
-     * to this score.
-     * \param instrumentId - ID of the instrument to be added, as listed in
-     * [`instruments.xml`](https://github.com/musescore/MuseScore/blob/3.x/share/instruments/instruments.xml)
-     * file.
-     * \since MuseScore 3.5
-     */
+    /// Appends a part with the instrument defined by \p instrumentId
+    /// to this score.
+    /// \param instrumentId - ID of the instrument to be added, as listed in
+    /// [`instruments.xml`](https://github.com/musescore/MuseScore/blob/3.x/share/instruments/instruments.xml)
+    /// file.
+    /// \since MuseScore 3.5
     Q_INVOKABLE void appendPart(const QString& instrumentId);
-    /**
-     * Appends a part with the instrument defined by the given MusicXML ID
-     * to this score.
-     * \param instrumentMusicXmlId -
-     * [MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/)
-     * of the instrument to be added.
-     * \see \ref apiv1::Part::instrumentId, \ref apiv1::Instrument::instrumentId
-     * \since MuseScore 3.5
-     */
+    /// Appends a part with the instrument defined by the given MusicXML ID
+    /// to this score.
+    /// \param instrumentMusicXmlId -
+    /// [MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/)
+    /// of the instrument to be added.
+    /// \see \ref apiv1::Part::instrumentId, \ref apiv1::Instrument::instrumentId
+    /// \since MuseScore 3.5
     Q_INVOKABLE void appendPartByMusicXmlId(const QString& instrumentMusicXmlId);
 
     /// Appends a number of measures to this score.
@@ -291,31 +279,25 @@ public:
     int ntracks() const { return static_cast<int>(score()->ntracks()); }
     /// \endcond
 
-    /**
-     * For MuseScore 4 and for "dock" type plugins: to be used before score
-     * modifications to make them undoable, and to avoid corruptions or crashes.
-     * Starts an undoable command. Must be accompanied by
-     * a corresponding endCmd() call.
-     * \param qActionName - Optional action name that appears in Undo/Redo
-     * menus, palettes, and lists.
-     */
+    /// For MuseScore 4 and for "dock" type plugins: to be used before score
+    /// modifications to make them undoable, and to avoid corruptions or crashes.
+    /// Starts an undoable command. Must be accompanied by
+    /// a corresponding endCmd() call.
+    /// \param qActionName - Optional action name that appears in Undo/Redo
+    /// menus, palettes, and lists.
     Q_INVOKABLE void startCmd(const QString& qActionName = {});
-    /**
-     * For MuseScore 4 and for "dock" type plugins: to be used after score
-     * modifications to make them undoable, and to avoid corruptions or crashes.
-     * Ends an undoable command.
-     * \param rollback If true, reverts all the changes
-     * made since the last startCmd() invocation.
-     */
+    /// For MuseScore 4 and for "dock" type plugins: to be used after score
+    /// modifications to make them undoable, and to avoid corruptions or crashes.
+    /// Ends an undoable command.
+    /// \param rollback If true, reverts all the changes
+    /// made since the last startCmd() invocation.
     Q_INVOKABLE void endCmd(bool rollback = false);
 
-    /**
-     * Create PlayEvents for all notes based on ornamentation.
-     * You need to call this if you are manipulating PlayEvent's
-     * so that all ornamentations are populated into Note's
-     * PlayEvent lists.
-     * \since 3.3
-     */
+    /// Create PlayEvents for all notes based on ornamentation.
+    /// You need to call this if you are manipulating PlayEvent's
+    /// so that all ornamentations are populated into Note's
+    /// PlayEvent lists.
+    /// \since 3.3
     Q_INVOKABLE void createPlayEvents();
 
     /// \brief Force the score to layout itself.

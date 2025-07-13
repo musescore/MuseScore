@@ -45,9 +45,9 @@ class Score;
 class Excerpt : public QObject
 {
     Q_OBJECT
-    /** The score object for this part */
+    /// The score object for this part
     Q_PROPERTY(apiv1::Score * partScore READ partScore)
-    /** The title of this part */
+    /// The title of this part
     Q_PROPERTY(QString title READ title)
 
 protected:
@@ -116,7 +116,7 @@ public:
     }
 };
 
-/** \cond PLUGIN_API \private \endcond */
+/// \cond PLUGIN_API \private \endcond
 template<typename T, class Container>
 QmlExcerptsListAccess<T, Container> wrapExcerptsContainerProperty(QObject* obj, Container& c)
 {

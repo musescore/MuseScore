@@ -40,39 +40,29 @@ class Selection : public QObject
     /// \since MuseScore 3.3
     Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> elements READ elements)
 
-    /**
-     * Whether this selection covers a range of a score, as opposed to
-     * a list of distinct elements.
-     * \since MuseScore 3.5
-     */
+    /// Whether this selection covers a range of a score, as opposed to
+    /// a list of distinct elements.
+    /// \since MuseScore 3.5
     Q_PROPERTY(bool isRange READ isRange)
-    /**
-     * Start segment of selection, included. This property is valid
-     * only for range selection.
-     * \since MuseScore 3.5
-     * \see \ref isRange
-     */
+    /// Start segment of selection, included. This property is valid
+    /// only for range selection.
+    /// \since MuseScore 3.5
+    /// \see \ref isRange
     Q_PROPERTY(apiv1::Segment * startSegment READ startSegment)
-    /**
-     * End segment of selection, excluded. This property is valid
-     * only for range selection.
-     * \since MuseScore 3.5
-     * \see \ref isRange
-     */
+    /// End segment of selection, excluded. This property is valid
+    /// only for range selection.
+    /// \since MuseScore 3.5
+    /// \see \ref isRange
     Q_PROPERTY(apiv1::Segment * endSegment READ endSegment)
-    /**
-     * First staff of selection, included. This property is valid
-     * only for range selection.
-     * \since MuseScore 3.5
-     * \see \ref isRange
-     */
+    /// First staff of selection, included. This property is valid
+    /// only for range selection.
+    /// \since MuseScore 3.5
+    /// \see \ref isRange
     Q_PROPERTY(int startStaff READ startStaff)
-    /**
-     * End staff of selection, included. This property is valid
-     * only for range selection.
-     * \since MuseScore 3.5
-     * \see \ref isRange
-     */
+    /// End staff of selection, included. This property is valid
+    /// only for range selection.
+    /// \since MuseScore 3.5
+    /// \see \ref isRange
     Q_PROPERTY(int endStaff READ endStaff)
 
 protected:

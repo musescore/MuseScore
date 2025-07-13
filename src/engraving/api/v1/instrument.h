@@ -77,60 +77,45 @@ class Channel : public QObject
     mu::engraving::InstrChannel* m_channel;
     mu::engraving::Part* m_part;
 
-    /** Name of this channel */
+    /// Name of this channel
     Q_PROPERTY(QString name READ name)
-    /** Whether this channel controls playback of chord symbols
-     * \since MuseScore 4.6
-     */
+    /// Whether this channel controls playback of chord symbols
+    /// \since MuseScore 4.6
     Q_PROPERTY(bool isHarmonyChannel READ isHarmonyChannel)
 
-    /**
-     * Channel volume, from 0 to 127.
-     * \note Changing this property is **not** revertable with a standard "undo"
-     * action. Plugins may need to handle reverting this property change if
-     * necessary.
-     */
+    /// Channel volume, from 0 to 127.
+    /// \note Changing this property is **not** revertable with a standard "undo"
+    /// action. Plugins may need to handle reverting this property change if
+    /// necessary.
     Q_PROPERTY(int volume READ volume WRITE setVolume)
-    /**
-     * Channel pan, from 0 to 127.
-     * \note Changing this property is **not** revertable with a standard "undo"
-     * action. Plugins may need to handle reverting this property change if
-     * necessary.
-     */
+    /// Channel pan, from 0 to 127.
+    /// \note Changing this property is **not** revertable with a standard "undo"
+    /// action. Plugins may need to handle reverting this property change if
+    /// necessary.
     Q_PROPERTY(int pan READ pan WRITE setPan)
-    /**
-     * Channel chorus, from 0 to 127.
-     * \note Changing this property is **not** revertable with a standard "undo"
-     * action. Plugins may need to handle reverting this property change if
-     * necessary.
-     */
+    /// Channel chorus, from 0 to 127.
+    /// \note Changing this property is **not** revertable with a standard "undo"
+    /// action. Plugins may need to handle reverting this property change if
+    /// necessary.
     Q_PROPERTY(int chorus READ chorus WRITE setChorus)
-    /**
-     * Channel reverb, from 0 to 127.
-     * \note Changing this property is **not** revertable with a standard "undo"
-     * action. Plugins may need to handle reverting this property change if
-     * necessary.
-     */
+    /// Channel reverb, from 0 to 127.
+    /// \note Changing this property is **not** revertable with a standard "undo"
+    /// action. Plugins may need to handle reverting this property change if
+    /// necessary.
     Q_PROPERTY(int reverb READ reverb WRITE setReverb)
-    /**
-     * Whether this channel is muted.
-     * \note Changing this property is **not** revertable with a standard "undo"
-     * action. Plugins may need to handle reverting this property change if
-     * necessary.
-     */
+    /// Whether this channel is muted.
+    /// \note Changing this property is **not** revertable with a standard "undo"
+    /// action. Plugins may need to handle reverting this property change if
+    /// necessary.
     Q_PROPERTY(bool mute READ mute WRITE setMute)
 
-    /**
-     * MIDI program number, from 0 to 127. Changing this property is recorded
-     * to the program's undo stack and can be reverted with a standard "undo"
-     * action.
-     */
+    /// MIDI program number, from 0 to 127. Changing this property is recorded
+    /// to the program's undo stack and can be reverted with a standard "undo"
+    /// action.
     Q_PROPERTY(int midiProgram READ midiProgram WRITE setMidiProgram)
-    /**
-     * MIDI patch bank number. Changing this property is recorded
-     * to the program's undo stack and can be reverted with a standard "undo"
-     * action.
-     */
+    /// MIDI patch bank number. Changing this property is recorded
+    /// to the program's undo stack and can be reverted with a standard "undo"
+    /// action.
     Q_PROPERTY(int midiBank READ midiBank WRITE setMidiBank)
 
     mu::engraving::InstrChannel* activeChannel();
@@ -183,20 +168,18 @@ class StringData : public QObject
 {
     Q_OBJECT
 
-    /**
-     * List of strings in this instrument.
-     * \returns A list of objects representing strings. Each
-     * object has the following fields:
-     * - \p pitch - pitch of this string on fret 0 (integer).
-     * - \p open - if \p true, this string is not fretted and
-     *             always open. If \p false, the string **is**
-     *             fretted. For example, for classical guitar
-     *             all strings are fretted, and for them
-     *             \p open value will always be \p false.
-     */
+    /// List of strings in this instrument.
+    /// \returns A list of objects representing strings. Each
+    /// object has the following fields:
+    /// - \p pitch - pitch of this string on fret 0 (integer).
+    /// - \p open - if \p true, this string is not fretted and
+    ///             always open. If \p false, the string **is**
+    ///             fretted. For example, for classical guitar
+    ///             all strings are fretted, and for them
+    ///             \p open value will always be \p false.
     Q_PROPERTY(QVariantList strings READ stringList)
 
-    /** Number of frets in this instrument */
+    /// Number of frets in this instrument
     Q_PROPERTY(int frets READ frets)
 
     mu::engraving::StringData m_data;
@@ -341,38 +324,30 @@ class Instrument : public QObject
 {
     Q_OBJECT
 
-    /**
-     * The MuseScore string identifier
-     * for this instrument.
-     * \see \ref apiv1::Part::instrumentId "Part.instrumentId"
-     */
+    /// The MuseScore string identifier
+    /// for this instrument.
+    /// \see \ref apiv1::Part::instrumentId "Part.instrumentId"
     Q_PROPERTY(QString instrumentId READ instrumentId)
-    /**
-     * The string identifier
-     * ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
-     * for this instrument.
-     * \see \ref apiv1::Part::musicXmlId "Part.musicXmlId"
-     */
+    /// The string identifier
+    /// ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
+    /// for this instrument.
+    /// \see \ref apiv1::Part::musicXmlId "Part.musicXmlId"
     Q_PROPERTY(QString musicXmlId READ musicXmlId)
     // mu::engraving::Instrument supports multiple short/long names (for aeolus instruments?)
     // but in practice only one is actually used. If this gets changed this API could
     // be expanded.
-    /** The long name for this instrument. */
+    /// The long name for this instrument.
     Q_PROPERTY(QString longName READ longName)
-    /** The short name for this instrument. */
+    /// The short name for this instrument.
     Q_PROPERTY(QString shortName READ shortName)
 
-    /**
-     * For fretted instruments, an information about this
-     * instrument's strings.
-     */
+    /// For fretted instruments, an information about this
+    /// instrument's strings.
     Q_PROPERTY(apiv1::StringData * stringData READ stringData)
 
-    /**
-     * For unpitched percussion instruments, information about
-     * this instrument's percussion.
-     * \since MuseScore 4.6
-     */
+    /// For unpitched percussion instruments, information about
+    /// this instrument's percussion.
+    /// \since MuseScore 4.6
     Q_PROPERTY(apiv1::Drumset * drumset READ drumset)
 
     // TODO: a property for drumset?
@@ -404,7 +379,7 @@ public:
     ChannelListProperty channels();
     /// \endcond
 
-    /** Checks whether two variables represent the same object. */
+    /// Checks whether two variables represent the same object.
     Q_INVOKABLE bool is(apiv1::Instrument* other) { return other && instrument() == other->instrument(); }
 };
 }

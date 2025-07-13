@@ -144,10 +144,8 @@ class EngravingItem : public apiv1::ScoreElement
     /// Position of this element in page coordinates, in spatium units.
     /// \since MuseScore 3.5
     Q_PROPERTY(QPointF pagePos READ pagePos)
-    /**
-     * Position of this element relative to the canvas (user interface), in spatium units.
-     * \since MuseScore 4.6
-     */
+    /// Position of this element relative to the canvas (user interface), in spatium units.
+    /// \since MuseScore 4.6
     Q_PROPERTY(QPointF canvasPos READ canvasPos)
 
     /// Bounding box of this element.
@@ -694,14 +692,12 @@ class EngravingItem : public apiv1::ScoreElement
 
     bool up() const;
 
-    /**
-     * \brief Current tick for this element
-     * \returns Tick of this element, i.e. fraction of ticks from the beginning
-     * of the score to this element. Not valid for all elements.
-     * For the integer value, call \ref fraction.ticks
-     * \see \ref ticklength
-     * \since MuseScore 4.6
-     */
+    /// \brief Current tick for this element
+    /// \returns Tick of this element, i.e. fraction of ticks from the beginning
+    /// of the score to this element. Not valid for all elements.
+    /// For the integer value, call \ref fraction.ticks
+    /// \see \ref ticklength
+    /// \since MuseScore 4.6
     Q_PROPERTY(apiv1::FractionWrapper * fraction READ tick)
 
 public:
@@ -1566,13 +1562,13 @@ class Staff : public ScoreElement
     /// for the reference on color type in QML.
     API_PROPERTY_T(QColor, color,         STAFF_COLOR)
 
-    /** Whether voice 1 participates in playback. */
+    /// Whether voice 1 participates in playback.
     API_PROPERTY_T(bool, playbackVoice1,  PLAYBACK_VOICE1)
-    /** Whether voice 2 participates in playback. */
+    /// Whether voice 2 participates in playback.
     API_PROPERTY_T(bool, playbackVoice2,  PLAYBACK_VOICE2)
-    /** Whether voice 3 participates in playback. */
+    /// Whether voice 3 participates in playback.
     API_PROPERTY_T(bool, playbackVoice3,  PLAYBACK_VOICE3)
-    /** Whether voice 4 participates in playback. */
+    /// Whether voice 4 participates in playback.
     API_PROPERTY_T(bool, playbackVoice4,  PLAYBACK_VOICE4)
 
     API_PROPERTY_T(int, staffBarlineSpan,     STAFF_BARLINE_SPAN)

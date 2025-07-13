@@ -89,44 +89,42 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
 {
     Q_OBJECT
 
-    /** Path where the plugin is placed in menu */
+    /// Path where the plugin is placed in menu
     Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
-    /** Title of this plugin */
+    /// Title of this plugin
     Q_PROPERTY(QString title READ title WRITE setTitle)
-    // /** Source file path, without the file name (read only) */
+    // /// Source file path, without the file name (read only)
     // Q_PROPERTY(QString filePath READ filePath)
-    /** Version of this plugin */
+    /// Version of this plugin
     Q_PROPERTY(QString version READ version WRITE setVersion)
-    /** Human-readable plugin description, displayed in Plugin Manager */
+    /// Human-readable plugin description, displayed in Plugin Manager
     Q_PROPERTY(QString description READ description WRITE setDescription)
-    /** Type may be dialog or not defined */
+    /// Type may be dialog or not defined
     Q_PROPERTY(QString pluginType READ pluginType WRITE setPluginType)
-    /** Where to dock on main screen. Possible values: left, top, bottom, right */
+    /// Where to dock on main screen. Possible values: left, top, bottom, right
     Q_PROPERTY(QString dockArea READ dockArea WRITE setDockArea)
-    /** Whether the plugin requires an existing score to run, default is `true` */
+    /// Whether the plugin requires an existing score to run, default is `true`
     Q_PROPERTY(bool requiresScore READ requiresScore WRITE setRequiresScore)
-    /** The name of the thumbnail that should be next to the plugin */
+    /// The name of the thumbnail that should be next to the plugin
     Q_PROPERTY(QString thumbnailName READ thumbnailName WRITE setThumbnailName)
-    /** The code of the category */
+    /// The code of the category
     Q_PROPERTY(QString categoryCode READ categoryCode WRITE setCategoryCode)
-    /**
-     * \brief Number of MIDI ticks for 1/4 note (read only)
-     * \see \ref ticklength
-     */
+    /// \brief Number of MIDI ticks for 1/4 note (read only)
+    /// \see \ref ticklength
     Q_PROPERTY(int division READ division CONSTANT)
-    /** Complete version number of MuseScore in the form: MMmmuu (read only) */
+    /// Complete version number of MuseScore in the form: MMmmuu (read only)
     Q_PROPERTY(int mscoreVersion READ mscoreVersion CONSTANT)
-    /** 1st part of the MuseScore version (read only) */
+    /// 1st part of the MuseScore version (read only)
     Q_PROPERTY(int mscoreMajorVersion READ mscoreMajorVersion CONSTANT)
-    /** 2nd part of the MuseScore version (read only)*/
+    /// 2nd part of the MuseScore version (read only)
     Q_PROPERTY(int mscoreMinorVersion READ mscoreMinorVersion CONSTANT)
-    /** 3rd part of the MuseScore version (read only) */
+    /// 3rd part of the MuseScore version (read only)
     Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion CONSTANT)
-    /** (read-only) */
+    /// (read-only)
     Q_PROPERTY(qreal mscoreDPI READ mscoreDPI CONSTANT)
-    /** Current score, if any (read only) */
+    /// Current score, if any (read only)
     Q_PROPERTY(mu::engraving::apiv1::Score * curScore READ curScore CONSTANT)
-    /** List of currently open scores (read only).\n \since MuseScore 3.2 */
+    /// List of currently open scores (read only).\n \since MuseScore 3.2
     Q_PROPERTY(QQmlListProperty<mu::engraving::apiv1::Score> scores READ scores)
 
 public:
@@ -403,60 +401,58 @@ signals:
 
     void closeRequested();
 
-    /**
-     * Notifies plugin about changes in score state.
-     * Called after each user (or plugin) action which may have changed a
-     * score. Implement \p onScoreStateChanged() function in your plugin to
-     * handle this signal.
-     *
-     * \p state variable is available within the handler with following
-     * fields:
-     *
-     * - \p selectionChanged
-     * - \p excerptsChanged
-     * - \p instrumentsChanged
-     * - \p startLayoutTick
-     * - \p endLayoutTick
-     * - \p undoRedo - whether this onScoreStateChanged invocation results
-     *   from user undo/redo action. It is usually not recommended to modify
-     *   score from plugins in this case. Available since MuseScore 3.5.
-     *
-     * If a plugin modifies score in this handler, then it should:
-     * 1. enclose all modifications within Score::startCmd() / Score::endCmd()
-     * 2. take care of preventing an infinite recursion, as plugin-originated
-     *    changes will trigger this signal again after calling Score::endCmd()
-     *
-     * Example:
-     * \code
-     * import QtQuick 2.0
-     * import MuseScore 3.0
-     *
-     * MuseScore {
-     *     pluginType: "dialog"
-     *     implicitHeight: 75 // necessary for dock widget to appear with nonzero height
-     *     implicitWidth: 150
-     *
-     *     Text {
-     *        // A label which will display pitch of the currently selected note
-     *        id: pitchLabel
-     *        anchors.fill: parent
-     *     }
-     *
-     *     onScoreStateChanged: {
-     *         if (state.selectionChanged) {
-     *             var el = curScore ? curScore.selection.elements[0] : null;
-     *             if (el && el.type == EngravingItem.NOTE)
-     *                 pitchLabel.text = el.pitch;
-     *             else
-     *                 pitchLabel.text = "no note selected";
-     *         }
-     *     }
-     * }
-     * \endcode
-     * \warning This functionality is considered experimental.
-     * This API may change in future versions of MuseScore.
-     * \since MuseScore 3.3
-     */
+    /// Notifies plugin about changes in score state.
+    /// Called after each user (or plugin) action which may have changed a
+    /// score. Implement \p onScoreStateChanged() function in your plugin to
+    /// handle this signal.
+    ///
+    /// \p state variable is available within the handler with following
+    /// fields:
+    ///
+    /// - \p selectionChanged
+    /// - \p excerptsChanged
+    /// - \p instrumentsChanged
+    /// - \p startLayoutTick
+    /// - \p endLayoutTick
+    /// - \p undoRedo - whether this onScoreStateChanged invocation results
+    ///   from user undo/redo action. It is usually not recommended to modify
+    ///   score from plugins in this case. Available since MuseScore 3.5.
+    ///
+    /// If a plugin modifies score in this handler, then it should:
+    /// 1. enclose all modifications within Score::startCmd() / Score::endCmd()
+    /// 2. take care of preventing an infinite recursion, as plugin-originated
+    ///    changes will trigger this signal again after calling Score::endCmd()
+    ///
+    /// Example:
+    /// \code
+    /// import QtQuick 2.0
+    /// import MuseScore 3.0
+    ///
+    /// MuseScore {
+    ///     pluginType: "dialog"
+    ///     implicitHeight: 75 // necessary for dock widget to appear with nonzero height
+    ///     implicitWidth: 150
+    ///
+    ///     Text {
+    ///        // A label which will display pitch of the currently selected note
+    ///        id: pitchLabel
+    ///        anchors.fill: parent
+    ///     }
+    ///
+    ///     onScoreStateChanged: {
+    ///         if (state.selectionChanged) {
+    ///             var el = curScore ? curScore.selection.elements[0] : null;
+    ///             if (el && el.type == EngravingItem.NOTE)
+    ///                 pitchLabel.text = el.pitch;
+    ///             else
+    ///                 pitchLabel.text = "no note selected";
+    ///         }
+    ///     }
+    /// }
+    /// \endcode
+    /// \warning This functionality is considered experimental.
+    /// This API may change in future versions of MuseScore.
+    /// \since MuseScore 3.3
     void scoreStateChanged(const QMap<QString, QVariant>& state);
 
 public:
@@ -479,7 +475,7 @@ public:
     Q_INVOKABLE apiv1::EngravingItem* newElement(int);
     Q_INVOKABLE void removeElement(apiv1::EngravingItem* wrapped);
     Q_INVOKABLE void cmd(const QString&);
-    /** \cond PLUGIN_API \private \endcond */
+    /// \cond PLUGIN_API \private \endcond
     Q_INVOKABLE apiv1::MsProcess* newQProcess();
     Q_INVOKABLE bool writeScore(apiv1::Score*, const QString& name, const QString& ext);
     Q_INVOKABLE apiv1::Score* readScore(const QString& name, bool noninteractive = false);

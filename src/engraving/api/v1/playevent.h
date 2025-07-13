@@ -131,7 +131,7 @@ public:
     static void append(QQmlListProperty<PlayEvent>* l, PlayEvent* v);
 };
 
-/** \cond PLUGIN_API \private \endcond */
+/// \cond PLUGIN_API \private \endcond
 inline QmlPlayEventsListAccess wrapPlayEventsContainerProperty(QObject* obj, engraving::NoteEventList& c)
 {
     return QmlPlayEventsListAccess(obj, c);

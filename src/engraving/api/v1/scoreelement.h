@@ -55,21 +55,15 @@ enum class Ownership {
 class ScoreElement : public QObject
 {
     Q_OBJECT
-    /**
-     * Type of this element. See PluginAPI::PluginAPI::EngravingItem
-     * for the list of possible values.
-     */
+    /// Type of this element. See PluginAPI::PluginAPI::EngravingItem
+    /// for the list of possible values.
     Q_PROPERTY(int type READ type)
-    /**
-     * Name of this element's type, not localized.
-     * Use ScoreElement::userName() to obtain a localized
-     * element name suitable for usage in a user interface.
-     */
+    /// Name of this element's type, not localized.
+    /// Use ScoreElement::userName() to obtain a localized
+    /// element name suitable for usage in a user interface.
     Q_PROPERTY(QString name READ name)
-    /**
-     * The size of a spatium for a given element.
-     * \since MuseScore 4.6
-     */
+    /// The size of a spatium for a given element.
+    /// \since MuseScore 4.6
     Q_PROPERTY(qreal spatium READ spatium)
     /// The EID of this element.
     /// \since MuseScore 4.6
@@ -187,7 +181,7 @@ public:
     /// \endcond
 };
 
-/** \cond PLUGIN_API \private \endcond */
+/// \cond PLUGIN_API \private \endcond
 template<typename T, class Container>
 QmlListAccess<T, Container> wrapContainerProperty(QObject* obj, Container& c)
 {
