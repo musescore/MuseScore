@@ -264,6 +264,11 @@ public:
         return api()->fraction(numerator, denominator);
     }
 
+    Q_INVOKABLE apiv1::FractionWrapper* fractionFromTicks(int ticks) const
+    {
+        return api()->fractionFromTicks(ticks);
+    }
+
     Q_INVOKABLE apiv1::OrnamentIntervalWrapper* defaultOrnamentInterval() const
     {
         return api()->defaultOrnamentInterval();

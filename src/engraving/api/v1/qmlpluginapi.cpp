@@ -411,6 +411,11 @@ FractionWrapper* PluginAPI::fraction(int num, int den) const
     return wrap(mu::engraving::Fraction(num, den));
 }
 
+FractionWrapper* PluginAPI::fractionFromTicks(int ticks) const
+{
+    return wrap(mu::engraving::Fraction::fromTicks(ticks));
+}
+
 void PluginAPI::quit()
 {
     emit closeRequested();

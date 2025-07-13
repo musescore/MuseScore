@@ -22,7 +22,15 @@
 
 #include "elements.h"
 
+#include "engraving/dom/chord.h"
+#include "engraving/dom/guitarbend.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/measurenumber.h"
+#include "engraving/dom/mmrestrange.h"
 #include "engraving/dom/property.h"
+#include "engraving/dom/slur.h"
+#include "engraving/dom/spacer.h"
+#include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/undo.h"
 
 // api
@@ -93,6 +101,11 @@ bool EngravingItem::up() const
     return false;
 }
 
+FractionWrapper* EngravingItem::tick() const
+{
+    return wrap(element()->tick());
+}
+
 //---------------------------------------------------------
 //   Segment::elementAt
 //---------------------------------------------------------
@@ -104,6 +117,11 @@ EngravingItem* Segment::elementAt(int track)
         return nullptr;
     }
     return wrap(el, Ownership::SCORE);
+}
+
+FractionWrapper* Segment::fraction() const
+{
+    return wrap(segment()->tick());
 }
 
 //---------------------------------------------------------

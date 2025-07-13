@@ -699,6 +699,16 @@ class EngravingItem : public apiv1::ScoreElement
 
     bool up() const;
 
+    /**
+     * \brief Current tick for this element
+     * \returns Tick of this element, i.e. fraction of ticks from the beginning
+     * of the score to this element. Not valid for all elements.
+     * For the integer value, call \ref fraction.ticks
+     * \see \ref ticklength
+     * \since MuseScore 4.6
+     */
+    Q_PROPERTY(apiv1::FractionWrapper * fraction READ tick)
+
 public:
     /// \cond MS_INTERNAL
     EngravingItem(mu::engraving::EngravingItem* e = nullptr, Ownership own = Ownership::PLUGIN)
@@ -720,6 +730,8 @@ public:
     Q_INVOKABLE QString subtypeName() const { return element()->translatedSubtypeUserName().toQString(); }
     /// Deprecated: same as ScoreElement::name. Left for compatibility purposes.
     Q_INVOKABLE QString _name() const { return name(); }
+
+    FractionWrapper* tick() const;
 };
 
 //---------------------------------------------------------
@@ -1077,6 +1089,13 @@ class Segment : public EngravingItem
     /// \see \ref ticklength
     Q_PROPERTY(int tick READ tick)                               // TODO: revise engraving (or this API):
                                                                  // Pid::TICK is relative or absolute in different contexts
+    /// \brief Current tick fraction for this element
+    /// \returns Tick of this element, i.e. fraction of ticks from the beginning
+    /// of the score to this element. Not valid for all elements.
+    /// For the integer value, call \ref fraction.ticks
+    /// \see \ref ticklength
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::FractionWrapper * fraction READ fraction)
 
 public:
     /// \cond MS_INTERNAL
@@ -1087,6 +1106,7 @@ public:
     const mu::engraving::Segment* segment() const { return toSegment(e); }
 
     int tick() const { return segment()->tick().ticks(); }
+    FractionWrapper* fraction() const;
 
     mu::engraving::SegmentType segmentType() const { return segment()->segmentType(); }
 

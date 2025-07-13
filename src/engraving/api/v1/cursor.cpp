@@ -20,17 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "apistructs.h"
 #include "cursor.h"
 #include "elements.h"
 #include "score.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/anchors.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/repeatlist.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
+#include "engraving/dom/score.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/timesig.h"
@@ -151,6 +155,7 @@ void Cursor::rewind(RewindMode mode)
 //---------------------------------------------------------
 //   rewindToTick
 ///   Rewind cursor to a position defined by tick.
+///   To avoid rounding errors, use \ref rewindToFraction.
 ///   \param tick Determines the position where to move
 ///   this cursor.
 ///   \see \ref mu::plugins::api::Segment::tick "Segment.tick"
@@ -170,6 +175,34 @@ void Cursor::rewindToTick(int tick)
 
     setSegment(seg);
     nextInTrack();
+}
+
+void Cursor::rewindToFraction(FractionWrapper* f)
+{
+    const mu::engraving::Fraction fraction = f->fraction();
+    if (!fraction.isValid() || fraction.negative()) {
+        return;
+    }
+
+    // Since we are now dealing with precise tick values, we don't need to call tick2leftSegment.
+    // We just search for a valid segment at the given tick, and if none exist, do nothing.
+    mu::engraving::Segment* seg = m_score->tick2segment(fraction, /* first */ true, m_filter);
+
+    // Exception for TimeTick segments, since here the user may want to create a new anchor.
+    if (!seg && m_filter & mu::engraving::SegmentType::TimeTick) {
+        mu::engraving::Measure* measure = m_score->tick2measure(fraction);
+        if (measure) {
+            mu::engraving::TimeTickAnchor* anchor = mu::engraving::EditTimeTickAnchors::createTimeTickAnchor(measure,
+                                                                                                             fraction - measure->tick(),
+                                                                                                             track2staff(track()));
+            mu::engraving::EditTimeTickAnchors::updateLayout(measure);
+            seg = anchor->segment();
+        } else {
+            LOGW("Cursor::rewindToFraction: Cannot create TimeTickAnchor at provided tick.");
+        }
+    }
+
+    setSegment(seg);
 }
 
 //---------------------------------------------------------
@@ -237,6 +270,7 @@ bool Cursor::nextMeasure()
 
 void Cursor::add(EngravingItem* wrapped)
 {
+    using mu::engraving::SegmentType;
     mu::engraving::EngravingItem* s = wrapped ? wrapped->element() : nullptr;
     if (!segment() || !s) {
         return;
@@ -258,114 +292,139 @@ void Cursor::add(EngravingItem* wrapped)
 
     if (s->isChordRest()) {
         s->score()->undoAddCR(toChordRest(s), _segment->measure(), _segment->tick());
-    } else if (s->type() == ElementType::KEYSIG) {
+        return;
+    }
+    switch (s->type()) {
+    case ElementType::KEYSIG: {
         mu::engraving::Segment* ns = _segment->measure()->undoGetSegment(SegmentType::KeySig, _segment->tick());
         s->setParent(ns);
         m_score->undoAddElement(s);
-    } else if (s->type() == ElementType::TIMESIG) {
+        break;
+    }
+    case ElementType::TIMESIG: {
         mu::engraving::Measure* m = _segment->measure();
         Fraction tick = m->tick();
         m_score->cmdAddTimeSig(m, m_track, toTimeSig(s), false);
         m = m_score->tick2measure(tick);
         _segment = m->first(m_filter);
         nextInTrack();
-    } else {
-        switch (s->type()) {
-        // To be added at measure level
-        case ElementType::MEASURE_NUMBER:
-        case ElementType::SPACER:
-        case ElementType::JUMP:
-        case ElementType::MARKER:
-        case ElementType::HBOX:
-        case ElementType::STAFFTYPE_CHANGE:
-        case ElementType::LAYOUT_BREAK: {
-            mu::engraving::Measure* m = _segment->measure();
-            s->setParent(m);
+        break;
+    }
+
+    // To be added at measurebase level
+    case ElementType::LAYOUT_BREAK: {
+        MeasureBase::addInternal(_segment->measure(), s);
+        break;
+    }
+    // To be added at measure level
+    // todo: insert boxes before/after other boxes correctly
+    case ElementType::MEASURE_NUMBER:
+    case ElementType::SPACER:
+    case ElementType::JUMP:
+    case ElementType::MARKER:
+    case ElementType::HBOX:
+    case ElementType::STAFFTYPE_CHANGE: {
+        mu::engraving::Measure* m = _segment->measure();
+        s->setParent(m);
+        m_score->undoAddElement(s);
+        break;
+    }
+
+    // To be added at chord level
+    case ElementType::NOTE:
+    case ElementType::ARPEGGIO:
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
+    case ElementType::CHORDLINE:
+    case ElementType::ORNAMENT:
+    case ElementType::ARTICULATION: {
+        mu::engraving::EngravingItem* curElement = currentElement();
+        if (curElement->isChord()) {
+            // call Chord::addInternal() (i.e. do the same as a call to Chord.add())
+            Chord::addInternal(toChord(curElement), s);
+        }
+        break;
+    }
+
+    // To be added at chord/rest level
+    case ElementType::LYRICS: {
+        mu::engraving::EngravingItem* curElement = currentElement();
+        if (curElement->isChordRest()) {
+            s->setParent(curElement);
+            m_score->undoAddElement(s);
+        }
+        break;
+    }
+
+    // To be added to a note (and in case of SYMBOL also to a rest)
+    case ElementType::SYMBOL: {
+        mu::engraving::EngravingItem* curElement = currentElement();
+        if (curElement->isRest()) {
+            s->setParent(curElement);
+            m_score->undoAddElement(s);
+        }
+    } // FALLTHROUGH
+    case ElementType::FINGERING:
+    case ElementType::BEND:
+    case ElementType::NOTEHEAD: {
+        mu::engraving::EngravingItem* curElement = currentElement();
+        if (curElement->isChord()) {
+            mu::engraving::Chord* chord = toChord(curElement);
+            if (!chord->notes().empty()) {
+                // Get first note from chord to add element
+                mu::engraving::Note* note = chord->notes().front();
+                Note::addInternal(note, s);
+            }
+        }
+        break;
+    }
+
+    // To be added to a segment (clef subtype)
+    case ElementType::CLEF: {
+        mu::engraving::Clef* clef = toClef(s);
+        if (clef->clefType() == mu::engraving::ClefType::INVALID) {
+            clef->setClefType(mu::engraving::ClefType::G);
+        }
+        SegmentType st = SegmentType::Clef;
+        mu::engraving::Measure* measure = _segment->measure();
+        mu::engraving::Fraction rt = _segment->rtick();
+        if (rt == Fraction(0, 1)) {
+            mu::engraving::Measure* prevMeasure = measure->prevMeasure();
+            if (prevMeasure && !prevMeasure->sectionBreak()) {
+                measure = measure->prevMeasure();
+                rt      = measure->ticks();
+            } else {
+                st = SegmentType::HeaderClef;
+            }
+        }
+        mu::engraving::Segment* destSeg = measure->undoGetSegmentR(st, rt);
+        clef->setParent(destSeg);
+        clef->setTrack(m_track);
+        clef->setIsHeader(st == SegmentType::HeaderClef);
+        m_score->undoAddElement(clef);
+        break;
+    }
+    // To be added to a segment (clef subtype)
+    case ElementType::AMBITUS: {
+        // Find backwards first measure containing a clef
+        mu::engraving::Segment* parent = nullptr;
+        for (mu::engraving::Measure* m = _segment->measure(); m; m = m->prevMeasure()) {
+            mu::engraving::Segment* seg = m->findSegment(SegmentType::Clef | SegmentType::HeaderClef, m->tick());
+            if (!seg) {
+                continue;
+            }
+            parent = m->undoGetSegmentR(SegmentType::Ambitus, Fraction(0, 1));
+            s->setParent(parent);
+            s->setTrack(m_track);
             m_score->undoAddElement(s);
             break;
         }
+        break;
+    }
 
-        // To be added at chord level
-        case ElementType::NOTE:
-        case ElementType::ARPEGGIO:
-        case ElementType::TREMOLO_SINGLECHORD:
-        case ElementType::TREMOLO_TWOCHORD:
-        case ElementType::CHORDLINE:
-        case ElementType::ORNAMENT:
-        case ElementType::ARTICULATION: {
-            mu::engraving::EngravingItem* curElement = currentElement();
-            if (curElement->isChord()) {
-                // call Chord::addInternal() (i.e. do the same as a call to Chord.add())
-                Chord::addInternal(toChord(curElement), s);
-            }
-            break;
-            break;
-        }
-
-        // To be added at chord/rest level
-        case ElementType::LYRICS: {
-            mu::engraving::EngravingItem* curElement = currentElement();
-            if (curElement->isChordRest()) {
-                s->setParent(curElement);
-                m_score->undoAddElement(s);
-            }
-            break;
-        }
-
-        // To be added to a note (and in case of SYMBOL also to a rest)
-        case ElementType::SYMBOL: {
-            mu::engraving::EngravingItem* curElement = currentElement();
-            if (curElement->isRest()) {
-                s->setParent(curElement);
-                m_score->undoAddElement(s);
-            }
-        } // FALLTHROUGH
-        case ElementType::FINGERING:
-        case ElementType::BEND:
-        case ElementType::NOTEHEAD: {
-            mu::engraving::EngravingItem* curElement = currentElement();
-            if (curElement->isChord()) {
-                mu::engraving::Chord* chord = toChord(curElement);
-                if (!chord->notes().empty()) {
-                    // Get first note from chord to add element
-                    mu::engraving::Note* note = chord->notes().front();
-                    Note::addInternal(note, s);
-                }
-            }
-            break;
-        }
-
-        // To be added to a segment (clef subtype)
-        case ElementType::CLEF:
-        case ElementType::AMBITUS: {
-            mu::engraving::EngravingItem* parent = nullptr;
-            // Find backwards first measure containing a clef
-            for (mu::engraving::Measure* m = _segment->measure(); m; m = m->prevMeasure()) {
-                mu::engraving::Segment* seg = m->findSegment(SegmentType::Clef | SegmentType::HeaderClef, m->tick());
-                if (!seg) {
-                    continue;
-                }
-                parent = m->undoGetSegmentR(s->isAmbitus() ? SegmentType::Ambitus : seg->segmentType(), Fraction(0, 1));
-                break;
-            }
-            if (parent && parent->isSegment()) {
-                if (s->isClef()) {
-                    mu::engraving::Clef* clef = toClef(s);
-                    if (clef->clefType() == mu::engraving::ClefType::INVALID) {
-                        clef->setClefType(mu::engraving::ClefType::G);
-                    }
-                }
-                s->setParent(parent);
-                s->setTrack(m_track);
-                m_score->undoAddElement(s);
-            }
-            break;
-        }
-
-        default:           // All others will be added to the current segment
-            m_score->undoAddElement(s);
-            break;
-        }
+    default:           // All others will be added to the current segment
+        m_score->undoAddElement(s);
+        break;
     }
 }
 
@@ -536,13 +595,31 @@ int Cursor::tick()
     return seg ? seg->tick().ticks() : 0;
 }
 
+int Cursor::utick()
+{
+    return m_score->repeatList(true).tick2utick(tick());
+}
+
+mu::engraving::Fraction Cursor::fraction() const
+{
+    const mu::engraving::Segment* seg = segment();
+    return seg ? seg->tick() : Fraction(0, 1);
+}
+
+FractionWrapper* Cursor::qmlFraction() const
+{
+    return wrap(fraction());
+}
+
 //---------------------------------------------------------
 //   time
+/// Time at tick position, read only
+/// \param includeRepeats since 4.6
 //---------------------------------------------------------
 
-double Cursor::time()
+double Cursor::time(bool includeRepeats)
 {
-    return m_score->utick2utime(tick()) * 1000;
+    return m_score->utick2utime(includeRepeats ? utick() : tick()) * 1000;
 }
 
 //---------------------------------------------------------
@@ -551,7 +628,7 @@ double Cursor::time()
 
 qreal Cursor::tempo()
 {
-    return m_score->tempo(Fraction::fromTicks(tick())).val;
+    return m_score->tempo(fraction()).val;
 }
 
 //---------------------------------------------------------
@@ -748,7 +825,7 @@ void Cursor::nextInTrack()
 
 int Cursor::qmlKeySignature()
 {
-    return static_cast<int>(inputState().staff()->key(Fraction::fromTicks(tick())));
+    return static_cast<int>(inputState().staff()->key(fraction()));
 }
 
 //---------------------------------------------------------
