@@ -25,6 +25,7 @@
         <file>qml/MuseScore/Inspector/general/appearance/internal/VerticalSpacingSection.qml</file>
         <file>qml/MuseScore/Inspector/measures/MeasuresInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/measures/InsertMeasuresPopup.qml</file>
+        <file>qml/MuseScore/Inspector/emptystaves/EmptyStavesVisibilityInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/common/PopupViewButton.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorTabBar.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorTabButton.qml</file>
