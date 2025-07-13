@@ -47,6 +47,8 @@ namespace mu::engraving::apiv1 {
 class Cursor;
 class Segment;
 class Measure;
+class Page;
+class System;
 class Selection;
 class Score;
 class Staff;
@@ -137,6 +139,12 @@ class Score : public apiv1::ScoreElement, public muse::Injectable
      * \since MuseScore 3.6.3
      */
     Q_PROPERTY(QQmlListProperty<apiv1::Staff> staves READ staves)
+    /// List of pages in this score.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::Page> pages READ pages)
+    /// List of systems in this score.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::System> systems READ systems)
 
     muse::Inject<mu::context::IGlobalContext> context = { this };
 
@@ -249,6 +257,18 @@ public:
      */
     Q_INVOKABLE void createPlayEvents();
 
+    /// Add or remove system locks to the current selection.
+    /// \param interval Specifies after how many measures locks should be added.
+    /// \param lock If \p true, adds locks, else removes them.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE void addRemoveSystemLocks(int interval, bool lock) { score()->addRemoveSystemLocks(interval, lock); }
+
+    /// Create a (locked) system from two \ref MeasureBase objects.
+    /// \param first The first MeasureBase in the system.
+    /// \param last The last MeasureBase in the system.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE void makeIntoSystem(apiv1::MeasureBase* first, apiv1::MeasureBase* last);
+
     /// \cond MS_INTERNAL
     QString mscoreVersion() { return score()->mscoreVersion(); }
     QString mscoreRevision() { return QString::number(score()->mscoreRevision(), /* base */ 16); }
@@ -260,6 +280,8 @@ public:
     }
 
     QQmlListProperty<apiv1::Staff> staves();
+    QQmlListProperty<apiv1::Page> pages();
+    QQmlListProperty<apiv1::System> systems();
 
     static const mu::engraving::InstrumentTemplate* instrTemplateFromName(const QString& name);   // used by PluginAPI::newScore()
     /// \endcond

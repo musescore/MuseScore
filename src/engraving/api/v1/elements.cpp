@@ -30,6 +30,7 @@
 #include "engraving/dom/property.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/spacer.h"
+#include "engraving/dom/system.h"
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/undo.h"
 
@@ -61,6 +62,11 @@ void EngravingItem::setOffsetY(qreal offY)
     set(mu::engraving::Pid::OFFSET, QPointF(offX, offY));
 }
 
+static QRectF scaleRect(const mu::engraving::RectF& rect, double spatium)
+{
+    return QRectF(rect.x() / spatium, rect.y() / spatium, rect.width() / spatium, rect.height() / spatium);
+}
+
 //---------------------------------------------------------
 //   EngravingItem::bbox
 //   return the element bbox in spatium units, rather than in raster units as stored internally
@@ -68,9 +74,7 @@ void EngravingItem::setOffsetY(qreal offY)
 
 QRectF EngravingItem::bbox() const
 {
-    RectF bbox = element()->ldata()->bbox();
-    qreal spatium = element()->spatium();
-    return QRectF(bbox.x() / spatium, bbox.y() / spatium, bbox.width() / spatium, bbox.height() / spatium);
+    return scaleRect(element()->ldata()->bbox(), element()->spatium());
 }
 
 bool EngravingItem::up() const
@@ -311,15 +315,6 @@ void Chord::addInternal(mu::engraving::Chord* chord, mu::engraving::EngravingIte
 }
 
 //---------------------------------------------------------
-//   Page::pagenumber
-//---------------------------------------------------------
-
-int Page::pagenumber() const
-{
-    return static_cast<int>(page()->no());
-}
-
-//---------------------------------------------------------
 //   Chord::remove
 //---------------------------------------------------------
 
@@ -415,6 +410,46 @@ void MeasureBase::remove(apiv1::EngravingItem* wrapped)
     } else {
         measureBase()->score()->deleteItem(s);     // Create undo op and remove the element.
     }
+}
+
+QRectF System::bbox(int staffIdx)
+{
+    mu::engraving::SysStaff* ss = muse::value(system()->staves(), static_cast<staff_idx_t>(staffIdx));
+    return ss ? scaleRect(ss->bbox(), system()->spatium()) : QRectF();
+}
+
+qreal System::yOffset(int staffIdx)
+{
+    mu::engraving::SysStaff* ss = muse::value(system()->staves(), static_cast<staff_idx_t>(staffIdx));
+    return ss ? ss->yOffset() / system()->spatium() : 0.0;
+}
+
+bool System::show(int staffIdx)
+{
+    mu::engraving::SysStaff* ss = muse::value(system()->staves(), static_cast<staff_idx_t>(staffIdx));
+    return ss ? ss->show() : false;
+}
+
+void System::setIsLocked(bool locked)
+{
+    if (locked == isLocked()) {
+        return;
+    }
+    const mu::engraving::SystemLock* currentLock = system()->systemLock();
+    if (currentLock && !locked) {
+        system()->score()->undoRemoveSystemLock(currentLock);
+    } else if (!currentLock && locked) {
+        system()->score()->undoAddSystemLock(new mu::engraving::SystemLock(system()->first(), system()->last()));
+    }
+}
+
+//---------------------------------------------------------
+//   Page::pagenumber
+//---------------------------------------------------------
+
+int Page::pagenumber() const
+{
+    return static_cast<int>(page()->no());
 }
 
 //---------------------------------------------------------

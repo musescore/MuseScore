@@ -234,6 +234,24 @@ QQmlListProperty<Staff> Score::staves()
 }
 
 //---------------------------------------------------------
+//   Score::pages
+//---------------------------------------------------------
+
+QQmlListProperty<Page> Score::pages()
+{
+    return wrapContainerProperty<Page>(this, score()->pages());
+}
+
+//---------------------------------------------------------
+//   Score::systems
+//---------------------------------------------------------
+
+QQmlListProperty<System> Score::systems()
+{
+    return wrapContainerProperty<System>(this, score()->systems());
+}
+
+//---------------------------------------------------------
 //   Score::startCmd
 //---------------------------------------------------------
 
@@ -268,4 +286,17 @@ void Score::endCmd(bool rollback)
     }
 
     notation()->notationChanged().notify();
+}
+
+void Score::makeIntoSystem(apiv1::MeasureBase* first, apiv1::MeasureBase* last)
+{
+    score()->makeIntoSystem(first->measureBase(), last->measureBase());
+}
+
+void Score::showElementInScore(apiv1::EngravingItem* wrappedElement, int staffIdx)
+{
+    if (!wrappedElement->element()) {
+        return;
+    }
+    notation()->interaction()->showItem(wrappedElement->element(), staffIdx);
 }
