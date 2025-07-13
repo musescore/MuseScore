@@ -27,10 +27,16 @@
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/guitarbend.h"
+#include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/mmrestrange.h"
+#include "engraving/dom/ottava.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/spacer.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/textbase.h"
+#include "engraving/dom/timesig.h"
+#include "engraving/dom/tremolobar.h"
 #include "engraving/dom/tripletfeel.h"
 #include "engraving/types/types.h"
 #include "engraving/rendering/layoutoptions.h"
@@ -217,6 +223,14 @@ enum class AccidentalType {
 ///\}
 };
 Q_ENUM_NS(AccidentalType);
+
+enum class AccidentalBracket {
+    NONE        = int(mu::engraving::AccidentalBracket::NONE),
+    PARENTHESIS = int(mu::engraving::AccidentalBracket::PARENTHESIS),
+    BRACKET     = int(mu::engraving::AccidentalBracket::BRACKET),
+    BRACE       = int(mu::engraving::AccidentalBracket::BRACE),
+};
+Q_ENUM_NS(AccidentalBracket);
 
 enum class ElementType {
     ///.\{
@@ -535,6 +549,60 @@ enum class HarmonyType {
                 ///\}
 };
 Q_ENUM_NS(HarmonyType);
+
+enum class HarmonyVoicing {
+    INVALID    = int(mu::engraving::Voicing::INVALID),
+    AUTO       = int(mu::engraving::Voicing::AUTO),
+    ROOT_ONLY  = int(mu::engraving::Voicing::ROOT_ONLY),
+    CLOSE      = int(mu::engraving::Voicing::CLOSE),
+    DROP_2     = int(mu::engraving::Voicing::DROP_2),
+    SIX_NOTE   = int(mu::engraving::Voicing::SIX_NOTE),
+    FOUR_NOTE  = int(mu::engraving::Voicing::FOUR_NOTE),
+    THREE_NOTE = int(mu::engraving::Voicing::THREE_NOTE),
+};
+Q_ENUM_NS(HarmonyVoicing);
+
+enum class HDuration {
+    INVALID                 = int(mu::engraving::HDuration::INVALID),
+    UNTIL_NEXT_CHORD_SYMBOL = int(mu::engraving::HDuration::UNTIL_NEXT_CHORD_SYMBOL),
+    STOP_AT_MEASURE_END     = int(mu::engraving::HDuration::STOP_AT_MEASURE_END),
+    SEGMENT_DURATION        = int(mu::engraving::HDuration::SEGMENT_DURATION),
+};
+Q_ENUM_NS(HDuration);
+
+enum class FrameType {
+    NO_FRAME = int(mu::engraving::FrameType::NO_FRAME),
+    SQUARE   = int(mu::engraving::FrameType::SQUARE),
+    CIRCLE   = int(mu::engraving::FrameType::CIRCLE),
+};
+Q_ENUM_NS(FrameType);
+
+enum class VerticalAlignment {
+    AlignUndefined   = int(mu::engraving::VerticalAlignment::AlignUndefined),
+    AlignNormal       = int(mu::engraving::VerticalAlignment::AlignNormal),
+    AlignSuperScript = int(mu::engraving::VerticalAlignment::AlignSuperScript),
+    AlignSubScript   = int(mu::engraving::VerticalAlignment::AlignSubScript),
+};
+Q_ENUM_NS(VerticalAlignment);
+
+enum class TremoloBarType {
+    DIP          = int(mu::engraving::TremoloBarType::DIP),
+    DIVE         = int(mu::engraving::TremoloBarType::DIVE),
+    RELEASE_UP   = int(mu::engraving::TremoloBarType::RELEASE_UP),
+    INVERTED_DIP = int(mu::engraving::TremoloBarType::INVERTED_DIP),
+    RETURN       = int(mu::engraving::TremoloBarType::RETURN),
+    RELEASE_DOWN = int(mu::engraving::TremoloBarType::RELEASE_DOWN),
+    CUSTOM       = int(mu::engraving::TremoloBarType::CUSTOM),
+};
+Q_ENUM_NS(TremoloBarType);
+
+enum class PreferSharpFlat {
+    NONE   = int(mu::engraving::PreferSharpFlat::NONE),
+    SHARPS = int(mu::engraving::PreferSharpFlat::SHARPS),
+    FLATS  = int(mu::engraving::PreferSharpFlat::FLATS),
+    AUTO   = int(mu::engraving::PreferSharpFlat::AUTO),
+};
+Q_ENUM_NS(PreferSharpFlat);
 
 enum class NoteHeadType {
     HEAD_AUTO    = int(mu::engraving::NoteHeadType::HEAD_AUTO),
@@ -1210,6 +1278,13 @@ enum class MarkerType {
 };
 Q_ENUM_NS(MarkerType);
 
+enum class MeasureNumberMode {
+    AUTO = int(mu::engraving::MeasureNumberMode::AUTO),
+    SHOW = int(mu::engraving::MeasureNumberMode::SHOW),
+    HIDE = int(mu::engraving::MeasureNumberMode::HIDE),
+};
+Q_ENUM_NS(MeasureNumberMode);
+
 enum class StaffGroup {
     STANDARD   = int(mu::engraving::StaffGroup::STANDARD),
     PERCUSSION = int(mu::engraving::StaffGroup::PERCUSSION),
@@ -1224,6 +1299,25 @@ enum class HideMode {
     INSTRUMENT = int(mu::engraving::Staff::HideMode::INSTRUMENT),
 };
 Q_ENUM_NS(HideMode);
+
+enum class OttavaType {
+    OTTAVA_8VA  = int(mu::engraving::OttavaType::OTTAVA_8VA),
+    OTTAVA_8VB  = int(mu::engraving::OttavaType::OTTAVA_8VB),
+    OTTAVA_15MA = int(mu::engraving::OttavaType::OTTAVA_15MA),
+    OTTAVA_15MB = int(mu::engraving::OttavaType::OTTAVA_15MB),
+    OTTAVA_22MA = int(mu::engraving::OttavaType::OTTAVA_22MA),
+    OTTAVA_22MB = int(mu::engraving::OttavaType::OTTAVA_22MB),
+};
+Q_ENUM_NS(OttavaType);
+
+enum class HairpinType {
+    INVALID         = int(mu::engraving::HairpinType::INVALID),
+    CRESC_HAIRPIN   = int(mu::engraving::HairpinType::CRESC_HAIRPIN),
+    DECRESC_HAIRPIN = int(mu::engraving::HairpinType::DECRESC_HAIRPIN),
+    CRESC_LINE      = int(mu::engraving::HairpinType::CRESC_LINE),
+    DECRESC_LINE    = int(mu::engraving::HairpinType::DECRESC_LINE),
+};
+Q_ENUM_NS(HairpinType);
 
 enum class TrillType {
     TRILL_LINE      = int(mu::engraving::TrillType::TRILL_LINE),
@@ -1282,6 +1376,15 @@ enum class TieDotsPlacement {
     AFTER_DOTS  = int(mu::engraving::TieDotsPlacement::AFTER_DOTS),
 };
 Q_ENUM_NS(TieDotsPlacement);
+
+enum class TimeSigType {
+    NORMAL     = int(mu::engraving::TimeSigType::NORMAL),
+    FOUR_FOUR  = int(mu::engraving::TimeSigType::FOUR_FOUR),
+    ALLA_BREVE = int(mu::engraving::TimeSigType::ALLA_BREVE),
+    CUT_BACH   = int(mu::engraving::TimeSigType::CUT_BACH),
+    CUT_TRIPLE = int(mu::engraving::TimeSigType::CUT_TRIPLE),
+};
+Q_ENUM_NS(TimeSigType);
 
 enum class TimeSigPlacement {
     NORMAL        = int(mu::engraving::TimeSigPlacement::NORMAL),
@@ -4415,6 +4518,12 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::BeamMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::GlissandoType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::GlissandoStyle);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::HarmonyType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::HarmonyVoicing);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::HDuration);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::FrameType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::VerticalAlignment);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TremoloBarType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::PreferSharpFlat);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::NoteHeadType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::NoteHeadScheme);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::NoteHeadGroup);
@@ -4460,6 +4569,7 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TremoloChordType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::BracketType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::JumpType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::MarkerType);
+Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::MeasureNumberMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::StaffGroup);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::HideMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::TrillType);

@@ -46,6 +46,7 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
 
     Q_PROPERTY(apiv1::Enum * Element READ elementTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * Accidental READ accidentalTypeEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * AccidentalBracket READ accidentalBracketEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * OrnamentStyle READ ornamentStyleEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * Align READ alignEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * Placement READ placementEnum CONSTANT)
@@ -64,6 +65,12 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
     Q_PROPERTY(apiv1::Enum * Glissando READ glissandoTypeEnum CONSTANT) // was probably absent in 2.X
     Q_PROPERTY(apiv1::Enum * GlissandoStyle READ glissandoStyleEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * HarmonyType READ harmonyTypeEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * HarmonyVoicing READ harmonyVoicingEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * HDuration READ hDurationEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * FrameType READ frameTypeEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * VerticalAlignment READ verticalAlignmentEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * TremoloBarType READ tremoloBarTypeEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * PreferSharpFlat READ preferSharpFlatEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * NoteHeadType READ noteHeadTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * NoteHeadScheme READ noteHeadSchemeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * NoteHeadGroup READ noteHeadGroupEnum CONSTANT)
@@ -109,8 +116,11 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
     Q_PROPERTY(apiv1::Enum * BracketType READ bracketTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * JumpType READ jumpTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * MarkerType READ markerTypeEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * MeasureNumberMode READ measureNumberModeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * StaffGroup READ staffGroupEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * HideMode READ hideModeEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * OttavaType READ ottavaTypeEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * HairpinType READ hairpinTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * TrillType READ trillTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * VibratoType READ vibratoTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * ArticulationTextType READ articulationTextTypeEnum CONSTANT)
@@ -119,6 +129,7 @@ class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::api
     Q_PROPERTY(apiv1::Enum * SpannerSegmentType READ spannerSegmentTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * TiePlacement READ tiePlacementEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * TieDotsPlacement READ tieDotsPlacementEnum CONSTANT)
+    Q_PROPERTY(apiv1::Enum * TimeSigType READ timeSigTypeEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * TimeSigPlacement READ timeSigPlacementEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * TimeSigStyle READ timeSigStyleEnum CONSTANT)
     Q_PROPERTY(apiv1::Enum * TimeSigVSMargin READ timeSigVSMarginEnum CONSTANT)
@@ -152,6 +163,7 @@ public:
 
     apiv1::Enum* elementTypeEnum() const { return api()->get_elementTypeEnum(); }
     apiv1::Enum* accidentalTypeEnum() const { return api()->get_accidentalTypeEnum(); }
+    apiv1::Enum* accidentalBracketEnum() const { return api()->get_accidentalBracketEnum(); }
     apiv1::Enum* ornamentStyleEnum() const { return api()->get_ornamentStyleEnum(); }
     apiv1::Enum* alignEnum() const { return api()->get_alignEnum(); }
     apiv1::Enum* placementEnum() const { return api()->get_placementEnum(); }
@@ -170,6 +182,12 @@ public:
     apiv1::Enum* glissandoTypeEnum() const { return api()->get_glissandoTypeEnum(); }
     apiv1::Enum* glissandoStyleEnum() const { return api()->get_glissandoStyleEnum(); }
     apiv1::Enum* harmonyTypeEnum() const { return api()->get_harmonyTypeEnum(); }
+    apiv1::Enum* harmonyVoicingEnum() const { return api()->get_harmonyVoicingEnum(); }
+    apiv1::Enum* hDurationEnum() const { return api()->get_hDurationEnum(); }
+    apiv1::Enum* frameTypeEnum() const { return api()->get_frameTypeEnum(); }
+    apiv1::Enum* verticalAlignmentEnum() const { return api()->get_verticalAlignmentEnum(); }
+    apiv1::Enum* tremoloBarTypeEnum() const { return api()->get_tremoloBarTypeEnum(); }
+    apiv1::Enum* preferSharpFlatEnum() const { return api()->get_preferSharpFlatEnum(); }
     apiv1::Enum* noteHeadTypeEnum() const { return api()->get_noteHeadTypeEnum(); }
     apiv1::Enum* noteHeadSchemeEnum() const { return api()->get_noteHeadSchemeEnum(); }
     apiv1::Enum* noteHeadGroupEnum() const { return api()->get_noteHeadGroupEnum(); }
@@ -215,8 +233,11 @@ public:
     apiv1::Enum* bracketTypeEnum() const { return api()->get_bracketTypeEnum(); }
     apiv1::Enum* jumpTypeEnum() const { return api()->get_jumpTypeEnum(); }
     apiv1::Enum* markerTypeEnum() const { return api()->get_markerTypeEnum(); }
+    apiv1::Enum* measureNumberModeEnum() const { return api()->get_measureNumberModeEnum(); }
     apiv1::Enum* staffGroupEnum() const { return api()->get_staffGroupEnum(); }
     apiv1::Enum* hideModeEnum() const { return api()->get_hideModeEnum(); }
+    apiv1::Enum* ottavaTypeEnum() const { return api()->get_ottavaTypeEnum(); }
+    apiv1::Enum* hairpinTypeEnum() const { return api()->get_hairpinTypeEnum(); }
     apiv1::Enum* trillTypeEnum() const { return api()->get_trillTypeEnum(); }
     apiv1::Enum* vibratoTypeEnum() const { return api()->get_vibratoTypeEnum(); }
     apiv1::Enum* articulationTextTypeEnum() const { return api()->get_articulationTextTypeEnum(); }
@@ -225,6 +246,7 @@ public:
     apiv1::Enum* spannerSegmentTypeEnum() const { return api()->get_spannerSegmentTypeEnum(); }
     apiv1::Enum* tiePlacementEnum() const { return api()->get_tiePlacementEnum(); }
     apiv1::Enum* tieDotsPlacementEnum() const { return api()->get_tieDotsPlacementEnum(); }
+    apiv1::Enum* timeSigTypeEnum() const { return api()->get_timeSigTypeEnum(); }
     apiv1::Enum* timeSigPlacementEnum() const { return api()->get_timeSigPlacementEnum(); }
     apiv1::Enum* timeSigStyleEnum() const { return api()->get_timeSigStyleEnum(); }
     apiv1::Enum* timeSigVSMarginEnum() const { return api()->get_timeSigVSMarginEnum(); }

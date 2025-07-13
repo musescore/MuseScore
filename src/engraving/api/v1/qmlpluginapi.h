@@ -138,6 +138,9 @@ public:
     DECLARE_API_ENUM(Element,          elementTypeEnum,        mu::engraving::apiv1::enums::ElementType)
     /// Contains mu::engraving::AccidentalType enumeration values
     DECLARE_API_ENUM(Accidental,       accidentalTypeEnum,     mu::engraving::apiv1::enums::AccidentalType)
+    /// Contains mu::engraving::AccidentalBracket enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(AccidentalBracket, accidentalBracketEnum, mu::engraving::apiv1::enums::AccidentalBracket)
     /// Contains mu::engraving::OrnamentStyle enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.DEFAULT, MScore.BAROQUE.
@@ -196,6 +199,24 @@ public:
     /// Contains mu::engraving::HarmonyType enumeration values
     /// \since MuseScore 3.5
     DECLARE_API_ENUM(HarmonyType, harmonyTypeEnum, mu::engraving::apiv1::enums::HarmonyType)
+    /// Contains mu::engraving::HarmonyVoicing enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(HarmonyVoicing, harmonyVoicingEnum, mu::engraving::apiv1::enums::HarmonyVoicing)
+    /// Contains mu::engraving::HDuration enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(HDuration, hDurationEnum, mu::engraving::apiv1::enums::HDuration)
+    /// Contains mu::engraving::FrameType enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(FrameType, frameTypeEnum, mu::engraving::apiv1::enums::FrameType)
+    /// Contains mu::engraving::VerticalAlignment enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(VerticalAlignment, verticalAlignmentEnum, mu::engraving::apiv1::enums::VerticalAlignment)
+    /// Contains mu::engraving::TremoloBarType enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(TremoloBarType, tremoloBarTypeEnum, mu::engraving::apiv1::enums::TremoloBarType)
+    /// Contains mu::engraving::PreferSharpFlat enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(PreferSharpFlat, preferSharpFlatEnum, mu::engraving::apiv1::enums::PreferSharpFlat)
     /// Contains mu::engraving::NoteHead::Type enumeration values
     /// \note In MuseScore 2.X this enumeration was available in
     /// NoteHead class (e.g. NoteHead.HEAD_QUARTER).
@@ -331,12 +352,21 @@ public:
     /// Contains mu::engraving::MarkerType enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(MarkerType, markerTypeEnum, mu::engraving::apiv1::enums::MarkerType)
+    /// Contains mu::engraving::MeasureNumberMode enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(MeasureNumberMode, measureNumberModeEnum, mu::engraving::apiv1::enums::MeasureNumberMode)
     /// Contains mu::engraving::StaffGroup enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(StaffGroup, staffGroupEnum, mu::engraving::apiv1::enums::StaffGroup)
     /// Contains mu::engraving::HideMode enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(HideMode, hideModeEnum, mu::engraving::apiv1::enums::HideMode)
+    /// Contains mu::engraving::OttavaType enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(OttavaType, ottavaTypeEnum, mu::engraving::apiv1::enums::OttavaType)
+    /// Contains mu::engraving::HairpinType enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(HairpinType, hairpinTypeEnum, mu::engraving::apiv1::enums::HairpinType)
     /// Contains mu::engraving::TrillType enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(TrillType, trillTypeEnum, mu::engraving::apiv1::enums::TrillType)
@@ -361,6 +391,9 @@ public:
     /// Contains mu::engraving::TieDotsPlacement enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(TieDotsPlacement, tieDotsPlacementEnum, mu::engraving::apiv1::enums::TieDotsPlacement)
+    /// Contains mu::engraving::TimeSigType enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(TimeSigType, timeSigTypeEnum, mu::engraving::apiv1::enums::TimeSigType)
     /// Contains mu::engraving::TimeSigPlacement enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(TimeSigPlacement, timeSigPlacementEnum, mu::engraving::apiv1::enums::TimeSigPlacement)
