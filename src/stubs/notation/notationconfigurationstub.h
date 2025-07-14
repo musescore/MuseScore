@@ -132,9 +132,9 @@ public:
     void setIsMidiInputEnabled(bool enabled)  override;
     muse::async::Notification isMidiInputEnabledChanged() const override;
 
-    bool startNoteInputAtSelectionWhenPressingMidiKey() const override;
-    void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value) override;
-    muse::async::Notification startNoteInputAtSelectionWhenPressingMidiKeyChanged() const override;
+    bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const override;
+    void setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value) override;
+    muse::async::Notification startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const override;
 
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled)  override;

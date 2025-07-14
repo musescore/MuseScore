@@ -143,9 +143,9 @@ public:
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
     virtual muse::async::Notification isMidiInputEnabledChanged() const = 0;
 
-    virtual bool startNoteInputAtSelectionWhenPressingMidiKey() const = 0;
-    virtual void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value) = 0;
-    virtual muse::async::Notification startNoteInputAtSelectionWhenPressingMidiKeyChanged() const = 0;
+    virtual bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const = 0;
+    virtual void setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value) = 0;
+    virtual muse::async::Notification startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const = 0;
 
     virtual bool isAutomaticallyPanEnabled() const = 0;
     virtual void setIsAutomaticallyPanEnabled(bool enabled) = 0;

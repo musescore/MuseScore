@@ -68,7 +68,7 @@ PreferencesPage {
 
         MidiInputSection {
             midiInputEnabled: noteInputModel.midiInputEnabled
-            startNoteInputWhenPressingKey: noteInputModel.startNoteInputAtSelectionWhenPressingMidiKey
+            startNoteInputWhenPressingKey: noteInputModel.startNoteInputAtSelectedNoteRestWhenPressingMidiKey
             advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
             delayBetweenNotes: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
 
@@ -80,7 +80,7 @@ PreferencesPage {
             }
 
             onStartNoteInputWhenPressingKeyChangeRequested: function(start) {
-                noteInputModel.startNoteInputAtSelectionWhenPressingMidiKey = start
+                noteInputModel.startNoteInputAtSelectedNoteRestWhenPressingMidiKey = start
             }
 
             onAdvanceToNextNoteChangeRequested: function(advance) {

@@ -169,7 +169,7 @@ void NotationMidiInput::startNoteInputIfNeed()
         return;
     }
 
-    if (configuration()->startNoteInputAtSelectionWhenPressingMidiKey()) {
+    if (configuration()->startNoteInputAtSelectedNoteRestWhenPressingMidiKey()) {
         if (m_notationInteraction->selection()->elementsSelected(NOTE_REST_TYPES)) {
             dispatcher()->dispatch("note-input");
         }

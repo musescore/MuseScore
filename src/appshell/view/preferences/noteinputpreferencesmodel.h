@@ -47,7 +47,7 @@ class NoteInputPreferencesModel : public QObject, public muse::Injectable, publi
 
     Q_PROPERTY(bool midiInputEnabled READ midiInputEnabled WRITE setMidiInputEnabled NOTIFY midiInputEnabledChanged)
     Q_PROPERTY(
-        bool startNoteInputAtSelectionWhenPressingMidiKey READ startNoteInputAtSelectionWhenPressingMidiKey WRITE setStartNoteInputAtSelectionWhenPressingMidiKey NOTIFY startNoteInputAtSelectionWhenPressingMidiKeyChanged)
+        bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey READ startNoteInputAtSelectedNoteRestWhenPressingMidiKey WRITE setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey NOTIFY startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged)
     Q_PROPERTY(
         bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)
     Q_PROPERTY(
@@ -91,7 +91,7 @@ public:
     bool useNoteInputCursorInInputByDuration() const;
 
     bool midiInputEnabled() const;
-    bool startNoteInputAtSelectionWhenPressingMidiKey() const;
+    bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const;
     bool advanceToNextNoteOnKeyRelease() const;
     int delayBetweenNotesInRealTimeModeMilliseconds() const;
 
@@ -115,7 +115,7 @@ public slots:
     void setUseNoteInputCursorInInputByDuration(bool value);
 
     void setMidiInputEnabled(bool value);
-    void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value);
+    void setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value);
     void setAdvanceToNextNoteOnKeyRelease(bool value);
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delay);
 
@@ -139,7 +139,7 @@ signals:
     void useNoteInputCursorInInputByDurationChanged(bool value);
 
     void midiInputEnabledChanged(bool value);
-    void startNoteInputAtSelectionWhenPressingMidiKeyChanged(bool value);
+    void startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged(bool value);
     void advanceToNextNoteOnKeyReleaseChanged(bool value);
     void delayBetweenNotesInRealTimeModeMillisecondsChanged(int delay);
 
