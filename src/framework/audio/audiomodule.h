@@ -23,6 +23,7 @@
 #define MUSE_AUDIO_AUDIOMODULE_H
 
 #include <memory>
+#include <QTimer>
 
 #include "modularity/imodulesetup.h"
 #include "global/async/asyncable.h"
@@ -39,6 +40,12 @@ class SynthResolver;
 
 namespace muse::audio::worker  {
 class WorkerPlayback;
+class WorkerChannel;
+class WorkerChannelController;
+}
+
+namespace muse::audio::rpc  {
+class GeneralRpcChannel;
 }
 
 namespace muse::audio {
@@ -81,6 +88,10 @@ private:
 
     std::shared_ptr<Playback> m_mainPlayback; // facade
     std::shared_ptr<worker::WorkerPlayback> m_workerPlayback;
+    std::shared_ptr<worker::WorkerChannelController> m_workerChannelController;
+
+    QTimer m_rpcTimer;
+    std::shared_ptr<rpc::GeneralRpcChannel> m_rpcChannel;
 
     std::shared_ptr<SoundFontRepository> m_soundFontRepository;
 

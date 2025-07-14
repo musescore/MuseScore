@@ -27,6 +27,7 @@
 
 #include "modularity/ioc.h"
 #include "worker/iworkerplayback.h"
+#include "rpc/irpcchannel.h"
 
 #include "iplayer.h"
 
@@ -34,6 +35,8 @@ namespace muse::audio {
 class Playback : public IPlayback, public Injectable, public async::Asyncable
 {
     Inject<worker::IWorkerPlayback> workerPlayback;
+    Inject<rpc::IRpcChannel> channel;
+
 public:
     Playback(const muse::modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}

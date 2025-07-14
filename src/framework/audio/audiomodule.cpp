@@ -35,6 +35,8 @@
 
 #include "internal/playback.h"
 #include "internal/worker/workerplayback.h"
+#include "internal/rpc/platform/general/generalrpcchannel.h"
+#include "internal/worker/workerchannelcontroller.h"
 
 #include "internal/soundfontrepository.h"
 
@@ -119,6 +121,8 @@ void AudioModule::registerExports()
     m_synthResolver = std::make_shared<SynthResolver>();
     m_mainPlayback = std::make_shared<Playback>(iocContext());
     m_workerPlayback = std::make_shared<worker::WorkerPlayback>(iocContext());
+    m_workerChannelController  = std::make_shared<worker::WorkerChannelController>();
+    m_rpcChannel = std::make_shared<rpc::GeneralRpcChannel>();
     m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
 
 #if defined(MUSE_MODULE_AUDIO_JACK)
@@ -151,6 +155,7 @@ void AudioModule::registerExports()
     ioc()->registerExport<IAudioDriver>(moduleName(), m_audioDriver);
     ioc()->registerExport<IPlayback>(moduleName(), m_mainPlayback);
     ioc()->registerExport<worker::IWorkerPlayback>(moduleName(), m_workerPlayback);
+    ioc()->registerExport<rpc::IRpcChannel>(moduleName(), m_rpcChannel);
 
     ioc()->registerExport<ISynthResolver>(moduleName(), m_synthResolver);
     ioc()->registerExport<IFxResolver>(moduleName(), m_fxResolver);
@@ -217,6 +222,12 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
     m_audioBuffer->init(m_configuration->audioChannelsCount());
 
     m_audioOutputController->init();
+
+    m_rpcTimer.setInterval(16);
+    QObject::connect(&m_rpcTimer, &QTimer::timeout, [this]() {
+        m_rpcChannel->process();
+    });
+    m_rpcTimer.start();
 
     // Setup audio driver
     setupAudioDriver(mode);
@@ -319,11 +330,15 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 
         // Playback must be inited after the audio thread is created
         m_mainPlayback->initOnWorker();
+
+        m_rpcChannel->initOnWorker();
+        m_workerChannelController->initOnWroker(m_workerPlayback);
     };
 
     auto workerLoopBody = [this]() {
         ONLY_AUDIO_WORKER_THREAD;
         m_audioBuffer->forward();
+        m_rpcChannel->process();
     };
 
     msecs_t interval = m_configuration->audioWorkerInterval(activeSpec.samples, activeSpec.sampleRate);
