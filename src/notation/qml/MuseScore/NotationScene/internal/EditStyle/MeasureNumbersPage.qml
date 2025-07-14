@@ -82,12 +82,12 @@ StyledFlickable {
                     RowLayout {
                         spacing: 4
 
-                        StyledDropdown {
+                        ComboBoxDropdown {
                             id: barNumTextStyleDropdown
                             Layout.preferredWidth: 190
                             model: barNumbersModel.textStyles
-                            currentIndex: indexOfValue(barNumbersModel.measureNumberTextStyle.value)
-                            onActivated: function(index, value) {
+                            styleItem: barNumbersModel.measureNumberTextStyle
+                            onHandleItem: function(value) {
                                 barNumbersModel.measureNumberTextStyle.value = value
                             }
                         }
@@ -299,13 +299,13 @@ StyledFlickable {
                         horizontalAlignment: Text.AlignLeft
                     }
 
-                    RowLayout {
-                        StyledDropdown {
+                    RowLayout {                       
+                        ComboBoxDropdown {
                             id: mmRestBarRangeTextStyleDropdown
                             Layout.preferredWidth: 190
                             model: barNumbersModel.textStyles
-                            currentIndex: indexOfValue(barNumbersModel.mmRestRangeTextStyle.value)
-                            onActivated: function(index, value) {
+                            styleItem: barNumbersModel.mmRestRangeTextStyle
+                            onHandleItem: function(value) {
                                 barNumbersModel.mmRestRangeTextStyle.value = value
                             }
                         }
