@@ -93,6 +93,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/scoreutils_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/voiceswitching_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fretbox_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fretdiagram_tests.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/mocks/engravingconfigurationmock.h
 )

@@ -298,8 +298,12 @@ void HChord::add(const std::vector<HDegree>& degreeList)
     };
     // factor in the degrees
     for (const HDegree& d : degreeList) {
-        int dv  = degreeTable[(d.value() - 1) % 7] + d.alter();
-        int dv1 = degreeTable[(d.value() - 1) % 7];
+        int i = (d.value() - 1) % 7;
+        if (i < 0) {
+            continue; // ?
+        }
+        int dv  = degreeTable[i] + d.alter();
+        int dv1 = degreeTable[i];
 
         if (d.value() == 7 && d.alter() == 0) {
             dv -= 1;

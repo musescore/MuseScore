@@ -73,8 +73,29 @@ static const ElementStyle fretStyle {
 //   FretDiagram
 //---------------------------------------------------------
 
-static std::unordered_map<String, String> s_harmonyToDiagramMap;
-static std::unordered_map<String, std::vector<String> > s_diagramPatternToHarmoniesMap;
+struct HarmonyMapKey
+{
+    HarmonyMapKey() {}
+    HarmonyMapKey(int k, int r, int b)
+        : keys(k), rootTpc(r), bassTpc(b) {}
+
+    int keys = 0;
+    int rootTpc = Tpc::TPC_INVALID;
+    int bassTpc = Tpc::TPC_INVALID;
+
+    bool operator<(const HarmonyMapKey& other) const
+    {
+        return std::tie(keys, rootTpc, bassTpc) < std::tie(other.keys, other.rootTpc, other.bassTpc);
+    }
+
+    bool operator==(const HarmonyMapKey& other) const
+    {
+        return std::tie(keys, rootTpc, bassTpc) == std::tie(other.keys, other.rootTpc, other.bassTpc);
+    }
+};
+
+static std::map<HarmonyMapKey /*key*/, String /*harmonyXml*/> s_harmonyToDiagramMap;
+static std::unordered_map<String /*pattern*/, std::vector<String /*harmonyName*/> > s_diagramPatternToHarmoniesMap;
 
 static const muse::io::path_t HARMONY_TO_DIAGRAM_FILE_PATH("://data/harmony_to_diagram.xml");
 
@@ -83,6 +104,26 @@ static const String blankPattern(int strings)
     std::vector<Char> blank(strings, Char('-'));
     String pattern(blank.data(), blank.size());
     return pattern;
+}
+
+static HarmonyMapKey createHarmonyMapKey(const String& harmony, const ParsedChord& chord, const MStyle& style)
+{
+    NoteCaseType noteCase;
+    size_t idx;
+    NoteSpellingType spellingType = style.styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
+    int rootTpc = convertNote(harmony, spellingType, noteCase, idx);
+
+    size_t slash = harmony.lastIndexOf(u'/');
+    int bassTpc = Tpc::TPC_INVALID;
+    if (slash != muse::nidx) {
+        String bs = harmony.mid(slash + 1).simplified();
+        size_t idx2 = 0;
+        convertNote(bs, spellingType, noteCase, idx2);
+    }
+
+    int keys = chord.keys();
+
+    return HarmonyMapKey(keys, rootTpc, bassTpc);
 }
 
 FretDiagram::FretDiagram(Segment* parent)
@@ -181,7 +222,15 @@ void FretDiagram::updateDiagram(const String& harmonyName)
         _harmonyName = tpc2name(tpc, NoteSpellingType::STANDARD, noteCase) + acc;
     }
 
-    String diagramXml = muse::value(s_harmonyToDiagramMap, _harmonyName.toLower());
+    ParsedChord chord;
+    HarmonyMapKey key;
+    if (chord.parse(_harmonyName, score()->chordList())) {
+        key = createHarmonyMapKey(_harmonyName, chord, style());
+    } else {
+        LOGE() << "Error parse " << _harmonyName;
+    }
+
+    String diagramXml = muse::value(s_harmonyToDiagramMap, key);
 
     if (diagramXml.empty()) {
         return;
@@ -1345,8 +1394,20 @@ void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) con
                        read460::HarmonyToDiagramReader::FretDiagramInfo> harmonyToDiagramMap
         = read460::HarmonyToDiagramReader::read(reader);
 
+    const ChordList* chordList = score()->chordList();
+
     for (auto& [key, value] : harmonyToDiagramMap) {
-        s_harmonyToDiagramMap.insert({ key, value.xml });
+        String harmonyKey = key;
+
+        ParsedChord chord;
+        HarmonyMapKey mapKey;
+        if (chord.parse(key, chordList)) {
+            mapKey = createHarmonyMapKey(key, chord, style());
+        } else {
+            LOGE() << "Error parse " << key;
+        }
+
+        s_harmonyToDiagramMap.insert({ mapKey, value.xml });
         s_diagramPatternToHarmoniesMap[value.pattern].push_back(key);
     }
 }
