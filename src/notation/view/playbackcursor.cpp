@@ -1488,6 +1488,121 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
         }
     }
 
+    mu::engraving::System* __system;
+    bool multimeasureRestsFlag = false;
+    muse::RectF multimeasureRestsStartPreMeasureRect;
+    muse::RectF _preMeasureRect = RectF(0, 0, 0, 0);
+    int multimeasureStartNo = -1;
+    for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (Measure* _measure = measure; _measure; _measure = _measure->nextMeasure()) {
+            EngravingItemList _itemList = _measure->childrenItems(true);
+            int msTicks = _measure->tick().ticks();
+            int meTicks = _measure->tick().ticks() + _measure->ticks().ticks();
+            mu::engraving::System* system = _measure->system();
+            if (system) {
+                __system = system;
+            }
+            bool isNotesExist = false;
+            for (size_t j = 0; j < _itemList.size(); j++) {
+                EngravingItem* _item = _itemList.at(j);
+                if (_item == nullptr) {
+                    continue;
+                }
+                if (_item->type() == mu::engraving::ElementType::NOTE) {
+                    isNotesExist = true;
+                    break;
+                }
+            }
+            bool isMultimeasure = false;
+            for (size_t j = 0; j < _itemList.size(); j++) {
+                EngravingItem* _item = _itemList.at(j);
+                if (_item == nullptr) {
+                    continue;
+                }
+                if (!isNotesExist && (_item->type() == mu::engraving::ElementType::MMREST || _item->type() == mu::engraving::ElementType::REST)) {
+                    Rest* rest = toRest(_item);
+                    int sTicks = rest->tick().ticks();
+                    int eTicks = rest->endTick().ticks();
+                    
+                    if (sTicks == msTicks && eTicks == meTicks) {
+                        isMultimeasure = true;
+                        if (!multimeasureRestsFlag) {
+                            multimeasureRestsFlag = true;
+                            multimeasureRestsStartPreMeasureRect = _preMeasureRect;
+                            multimeasureStartNo = _measure->no();
+                        }
+                        
+                        double y = 0;
+                        if (__system) {
+                            y = __system->staffYpage(0) + __system->page()->pos().y();
+                        }
+                        double _spatium = score->style().spatium();
+
+                        double cursorW  = 8;
+                        double h  = 6 * _spatium;
+                        double y2 = 0;
+                        for (size_t i = 0; i < score->nstaves(); ++i) {
+                            mu::engraving::SysStaff* ss;
+                            if (__system) {
+                                ss = __system->staff(i);
+                            } 
+                            if (ss) {
+                                if (!ss->show() || !score->staff(i)->show()) {
+                                    continue;
+                                }
+                                y2 = ss->bbox().bottom();
+                            }
+                        }
+
+                        h += y2;
+                        y -= 3 * _spatium;
+                        mnRestSTicksMap.insert({ _measure->no(), sTicks });
+                        mnRestETicksMap.insert({ _measure->no(), eTicks });
+                        mnRestRectFMap.insert({ _measure->no(), RectF(0, y, 0, h) });
+                        mnCursorWidthMap.insert({ _measure->no(), cursorW });
+                        mnSpatiumMap.insert({ _measure->no(), _spatium });
+                    }
+                }
+            }
+            _preMeasureRect = _measure->canvasBoundingRect();
+            if (!isMultimeasure) {
+                if (multimeasureRestsFlag) {
+                    multimeasureRestsFlag = false;
+                    int multimeasureEndNo = _measure->no() - 1;
+                    int multimeasuresCount = multimeasureEndNo - multimeasureStartNo + 1;
+                    
+                    int _x = multimeasureRestsStartPreMeasureRect.x() + multimeasureRestsStartPreMeasureRect.width();
+                    int _dwidth = _measure->canvasBoundingRect().x() - _x;
+                    for (int _no = multimeasureStartNo; _no <= multimeasureEndNo; _no++) {
+                        int __x = _x + (_no - multimeasureStartNo) * _dwidth / multimeasuresCount;
+                        int __y = mnRestRectFMap[_no].y();
+                        int __width = _dwidth / multimeasuresCount;
+                        int __height = mnRestRectFMap[_no].height();
+                        mnRestRectFMap[_no] = RectF(__x, __y, __width, __height);
+                    }
+                    measure = _measure;
+                    break;
+                }
+            } else {
+                if (_measure == score->lastMeasure()) {
+                    int multimeasureEndNo = _measure->no();
+                    int multimeasuresCount = multimeasureEndNo - multimeasureStartNo + 1;
+                    
+                    int _x = multimeasureRestsStartPreMeasureRect.x() + multimeasureRestsStartPreMeasureRect.width();
+                    int _dwidth = __system->canvasBoundingRect().x() + __system->canvasBoundingRect().width() - _x;
+                    for (int _no = multimeasureStartNo; _no <= multimeasureEndNo; _no++) {
+                        int __x = _x + (_no - multimeasureStartNo) * _dwidth / multimeasuresCount;
+                        int __y = mnRestRectFMap[_no].y();
+                        int __width = _dwidth / multimeasuresCount;
+                        int __height = mnRestRectFMap[_no].height();
+                        mnRestRectFMap[_no] = RectF(__x, __y, __width, __height);
+                    }
+                    measure = _measure;
+                    break;
+                }
+            }
+        }
+    }
 }
 
 void PlaybackCursor::processCursorSpannerRenderStatus(Measure* measure, Fraction tick, bool recover, bool isPlaying) {
@@ -1690,21 +1805,37 @@ void PlaybackCursor::processCursorNoteRenderRecoverAsync(EngravingItem* engravin
 }
 
 muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bool isPlaying) {
+    Fraction tick = Fraction::fromTicks(_tick);
     if (!m_notation) {
         return RectF();
     }
 
     mu::engraving::Score* score = m_notation->elements()->msScore();
     processOttava(score, isPlaying);
-    Fraction tick = Fraction::fromTicks(_tick);
 
     Measure* measure = score->tick2measureMM(tick);
     if (!measure) {
+        for (const auto& pair : mnRestSTicksMap) {
+            if (tick.ticks() >= pair.second && tick.ticks() < mnRestETicksMap[pair.first]) {
+                muse::RectF mRect = mnRestRectFMap[pair.first];
+                double dt = mnRestETicksMap[pair.first] - pair.second;
+                double x = mRect.x() + mRect.width() * (tick.ticks() - pair.second) / dt;
+                return RectF(x, mRect.y(), mnCursorWidthMap[pair.first], mRect.height());
+            }
+        }
         return RectF();
     }
 
     mu::engraving::System* system = measure->system();
     if (!system) {
+        for (const auto& pair : mnRestSTicksMap) {
+            if (tick.ticks() >= pair.second && tick.ticks() < mnRestETicksMap[pair.first]) {
+                muse::RectF mRect = mnRestRectFMap[pair.first];
+                double dt = mnRestETicksMap[pair.first] - pair.second;
+                double x = mRect.x() + mRect.width() * (tick.ticks() - pair.second) / dt;
+                return RectF(x, mRect.y(), mnCursorWidthMap[pair.first], mRect.height());
+            }
+        }
         return RectF();
     }
 
