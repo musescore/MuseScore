@@ -745,7 +745,7 @@ static String frame2xml(const TextBase* el)
     switch (el->frameType()) {
     case FrameType::CIRCLE:
         return u" enclosure=\"circle\"";
-    case FrameType::SQUARE:
+    case FrameType::RECTANGLE:
         return u" enclosure=\"rectangle\"";
     default:
         return String();
