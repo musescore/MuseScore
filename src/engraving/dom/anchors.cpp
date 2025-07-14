@@ -24,11 +24,15 @@
 
 #include "anchors.h"
 #include "factory.h"
+#include "figuredbass.h"
+#include "fret.h"
+#include "harmony.h"
 #include "page.h"
 #include "score.h"
 #include "spanner.h"
 #include "staff.h"
 #include "system.h"
+#include "textline.h"
 
 #include "rendering/score/measurelayout.h"
 
@@ -216,10 +220,7 @@ void MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* elem
     }
 
     if (newSeg && newSeg->tick() == curTick) {
-        if (element->isTextBase()) {
-            // TODO: generalize to non-TextBase
-            toTextBase(element)->undoMoveSegment(newSeg, Fraction(0, 1));
-        }
+        moveSegment(element, newSeg, Fraction(0, 1));
     }
 }
 
@@ -234,12 +235,177 @@ void MoveElementAnchors::moveSegment(EngravingItem* element, bool forward)
     }
 
     Segment* curSeg = toSegment(element->parentItem());
-    Segment* newSeg = forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
+    Segment* newSeg = getNewSegment(element, curSeg, forward);
 
     if (newSeg) {
-        if (element->isTextBase()) {
-            // TODO: generalize to non-TextBase
-            toTextBase(element)->undoMoveSegment(newSeg, newSeg->tick() - curSeg->tick());
+        moveSegment(element, newSeg, newSeg->tick() - curSeg->tick());
+    }
+}
+
+Segment* MoveElementAnchors::getNewSegment(EngravingItem* element, Segment* curSeg, bool forward)
+{
+    switch (element->type()) {
+    case ElementType::REHEARSAL_MARK:
+    {
+        Measure* measure = curSeg->measure();
+        Measure* newMeasure = forward ? measure->nextMeasureMM() : measure->prevMeasureMM();
+        return newMeasure ? newMeasure->first(SegmentType::ChordRest) : nullptr;
+    }
+    default:
+        return forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
+    }
+}
+
+void MoveElementAnchors::moveSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff)
+{
+    switch (element->type()) {
+    case ElementType::FIGURED_BASS:
+        doMoveSegment(toFiguredBass(element), newSeg, tickDiff);
+        break;
+    case ElementType::HARMONY:
+        doMoveSegment(toHarmony(element), newSeg, tickDiff);
+        break;
+    case ElementType::FRET_DIAGRAM:
+        doMoveSegment(toFretDiagram(element), newSeg, tickDiff);
+        break;
+    default:
+        doMoveSegment(toEngravingItem(element), newSeg, tickDiff);
+        break;
+    }
+}
+
+void MoveElementAnchors::doMoveSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff)
+{
+    IF_ASSERT_FAILED(element->parent() && element->parent()->isSegment()) {
+        return;
+    }
+
+    // NOTE: when creating mmRests, we clone text elements from the underlying measure onto the
+    // mmRest measure. This creates lots of additional linked copies which are hard to manage
+    // and can result in duplicates. Here we need to remove copies on mmRests because they are invalidated
+    // when moving segments (and if needed will be recreated at the next layout). In future we need to
+    // change approach and *move* elements onto the mmRests, not clone them. [M.S.]
+
+    Score* score = element->score();
+    std::list<EngravingObject*> linkedElements = element->linkList();
+    for (EngravingObject* linkedElement : linkedElements) {
+        if (linkedElement == element) {
+            continue;
+        }
+        Segment* curParent = toSegment(linkedElement->parent());
+        bool isOnMMRest = curParent->parent() && toMeasure(curParent->parent())->isMMRest();
+        if (isOnMMRest) {
+            linkedElement->undoUnlink();
+            score->undoRemoveElement(static_cast<EngravingItem*>(linkedElement));
+        }
+    }
+
+    score->undoChangeParent(element, newSeg, element->staffIdx());
+    moveSnappedItems(element, newSeg, tickDiff);
+}
+
+void MoveElementAnchors::doMoveSegment(FiguredBass* element, Segment* newSeg, Fraction tickDiff)
+{
+    IF_ASSERT_FAILED(element->parent() && element->parent()->isSegment()) {
+        return;
+    }
+
+    Segment* oldSeg = element->segment();
+
+    doMoveSegment(toEngravingItem(element), newSeg, tickDiff);
+
+    track_idx_t startTrack = staff2track(element->staffIdx());
+    track_idx_t endTrack = startTrack + VOICES;
+
+    // Shorten this if needed
+    if (newSeg->tick() > oldSeg->tick()) {
+        FiguredBass* nextFB = nullptr;
+        Fraction endTick = newSeg->tick() + element->ticks();
+        for (Segment* seg = newSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); seg && seg->tick() <= endTick;
+             seg = seg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+            nextFB = toFiguredBass(seg->findAnnotation(ElementType::FIGURED_BASS, startTrack, endTrack));
+            if (nextFB) {
+                break;
+            }
+        }
+        if (nextFB) {
+            element->setTicks(nextFB->tick() - newSeg->tick());
+        }
+    }
+
+    // Shorten previous if needed
+    if (newSeg->tick() < oldSeg->tick()) {
+        FiguredBass* prevFB = nullptr;
+        for (Segment* seg = newSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); seg && seg->measure()->isAfterOrEqual(newSeg->measure());
+             seg = seg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
+            prevFB = (FiguredBass*)(seg->findAnnotation(ElementType::FIGURED_BASS, startTrack, endTrack));
+            if (prevFB) {
+                break;
+            }
+        }
+        if (prevFB) {
+            prevFB->setTicks(std::min(prevFB->ticks(), newSeg->tick() - prevFB->tick()));
+        }
+    }
+}
+
+void MoveElementAnchors::doMoveSegment(Harmony* element, Segment* newSeg, Fraction tickDiff)
+{
+    if (newSeg->isTimeTickType()) {
+        Measure* measure = newSeg->measure();
+        Segment* chordRestSegAtSameTick = measure->undoGetSegment(SegmentType::ChordRest, newSeg->tick());
+        newSeg = chordRestSegAtSameTick;
+    }
+
+    Segment* oldSegment = toSegment(element->parent());
+    doMoveSegment(toEngravingItem(element), newSeg, tickDiff);
+
+    oldSegment->checkEmpty();
+    if (oldSegment->empty()) {
+        element->score()->undoRemoveElement(oldSegment);
+    }
+}
+
+void MoveElementAnchors::doMoveSegment(FretDiagram* element, Segment* newSeg, Fraction tickDiff)
+{
+    if (newSeg->isTimeTickType()) {
+        Measure* measure = newSeg->measure();
+        Segment* chordRestSegAtSameTick = measure->undoGetSegment(SegmentType::ChordRest, newSeg->tick());
+        newSeg = chordRestSegAtSameTick;
+    }
+
+    Segment* oldSegment = toSegment(element->parent());
+    doMoveSegment(toEngravingItem(element), newSeg, tickDiff);
+
+    oldSegment->checkEmpty();
+    if (oldSegment->empty()) {
+        element->score()->undoRemoveElement(oldSegment);
+    }
+}
+
+void MoveElementAnchors::moveSnappedItems(EngravingItem* element, Segment* newSeg, Fraction tickDiff)
+{
+    if (EngravingItem* itemAfter = element->mutldata()->itemSnappedAfter()) {
+        if (itemAfter->isTextBase() && itemAfter->parent() != newSeg) {
+            element->score()->undoChangeParent(itemAfter, newSeg, itemAfter->staffIdx());
+            moveSnappedItems(itemAfter, newSeg, tickDiff);
+        } else if (itemAfter->isTextLineBaseSegment()) {
+            TextLineBase* textLine = ((TextLineBaseSegment*)itemAfter)->textLineBase();
+            if (textLine->tick() != newSeg->tick()) {
+                textLine->undoMoveStart(tickDiff);
+            }
+        }
+    }
+
+    if (EngravingItem* itemBefore = element->mutldata()->itemSnappedBefore()) {
+        if (itemBefore->isTextBase() && itemBefore->parent() != newSeg) {
+            element->score()->undoChangeParent(itemBefore, newSeg, itemBefore->staffIdx());
+            moveSnappedItems(itemBefore, newSeg, tickDiff);
+        } else if (itemBefore->isTextLineBaseSegment()) {
+            TextLineBase* textLine = ((TextLineBaseSegment*)itemBefore)->textLineBase();
+            if (textLine->tick2() != newSeg->tick()) {
+                textLine->undoMoveEnd(tickDiff);
+            }
         }
     }
 }

@@ -236,8 +236,6 @@ public:
     double bassScale() const { return m_bassScale; }
     void setBassScale(double v) { m_bassScale = v; }
 
-    void undoMoveSegment(Segment* newSeg, Fraction tickDiff) override;
-
     Color curColor() const override;
 
     bool doNotStackModifiers() const { return m_doNotStackModifiers; }

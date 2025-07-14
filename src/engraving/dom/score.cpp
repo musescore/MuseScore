@@ -1638,7 +1638,7 @@ void Score::addElement(EngravingItem* element)
     }
 
     if (element->isTextBase() && toTextBase(element)->hasParentSegment()) {
-        toTextBase(element)->checkMeasureBoundariesAndMoveIfNeed();
+        MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(element);
     }
 
     element->triggerLayout();

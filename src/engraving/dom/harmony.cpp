@@ -1585,27 +1585,6 @@ double Harmony::mag() const
     return EngravingItem::mag();
 }
 
-void Harmony::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
-{
-    IF_ASSERT_FAILED(parentItem()->isSegment()) {
-        return;
-    }
-
-    if (newSeg->isTimeTickType()) {
-        Measure* measure = newSeg->measure();
-        Segment* chordRestSegAtSameTick = measure->undoGetSegment(SegmentType::ChordRest, newSeg->tick());
-        newSeg = chordRestSegAtSameTick;
-    }
-
-    Segment* oldSegment = toSegment(parent());
-    TextBase::undoMoveSegment(newSeg, tickDiff);
-
-    oldSegment->checkEmpty();
-    if (oldSegment->empty()) {
-        score()->undoRemoveElement(oldSegment);
-    }
-}
-
 HarmonyInfo::HarmonyInfo(const HarmonyInfo& h)
 {
     m_id = h.m_id;

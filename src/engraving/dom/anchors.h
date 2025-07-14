@@ -42,11 +42,20 @@ class MoveElementAnchors
 {
 public:
     static void moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod);
+    static void moveSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
+    static void checkMeasureBoundariesAndMoveIfNeed(EngravingItem* element);
 
 private:
     static bool canAnchorToEndOfPrevious(const EngravingItem* element);
-    static void checkMeasureBoundariesAndMoveIfNeed(EngravingItem* element);
     static void moveSegment(EngravingItem* element, bool forward);
+    static Segment* getNewSegment(EngravingItem* element, Segment* curSeg, bool forward);
+
+    static void doMoveSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
+    static void doMoveSegment(FiguredBass* element, Segment* newSeg, Fraction tickDiff);
+    static void doMoveSegment(Harmony* element, Segment* newSeg, Fraction tickDiff);
+    static void doMoveSegment(FretDiagram* element, Segment* newSeg, Fraction tickDiff);
+
+    static void moveSnappedItems(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
 };
 
 class TimeTickAnchor : public EngravingItem

@@ -354,9 +354,6 @@ public:
     virtual void endDrag(EditData&) override;
     void movePosition(EditData&, TextCursor::MoveOperation);
 
-    virtual void undoMoveSegment(Segment* newSeg, Fraction tickDiff);
-    void checkMeasureBoundariesAndMoveIfNeed();
-
     bool deleteSelectedText(EditData&);
 
     void selectAll(TextCursor*);
@@ -508,8 +505,6 @@ protected:
 
     bool nudge(const EditData& ed);
 
-    virtual bool moveSegment(const EditData&);
-    void moveSnappedItems(Segment* newSeg, Fraction tickDiff) const;
     void shiftInitOffset(EditData& ed, const PointF& offsetShift);
 
     void insertSym(EditData& ed, SymId id);

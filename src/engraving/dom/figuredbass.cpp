@@ -772,47 +772,6 @@ void FiguredBass::regenerateText()
     score()->endCmd();
 }
 
-void FiguredBass::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
-{
-    Segment* oldSeg = segment();
-
-    TextBase::undoMoveSegment(newSeg, tickDiff);
-
-    track_idx_t startTrack = staff2track(staffIdx());
-    track_idx_t endTrack = startTrack + VOICES;
-
-    // Shorten this if needed
-    if (newSeg->tick() > oldSeg->tick()) {
-        FiguredBass* nextFB = nullptr;
-        Fraction endTick = newSeg->tick() + m_ticks;
-        for (Segment* seg = newSeg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); seg && seg->tick() <= endTick;
-             seg = seg->next1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
-            nextFB = toFiguredBass(seg->findAnnotation(ElementType::FIGURED_BASS, startTrack, endTrack));
-            if (nextFB) {
-                break;
-            }
-        }
-        if (nextFB) {
-            setTicks(nextFB->tick() - newSeg->tick());
-        }
-    }
-
-    // Shorten previous if needed
-    if (newSeg->tick() < oldSeg->tick()) {
-        FiguredBass* prevFB = nullptr;
-        for (Segment* seg = newSeg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE); seg && seg->measure()->isAfterOrEqual(newSeg->measure());
-             seg = seg->prev1(Segment::CHORD_REST_OR_TIME_TICK_TYPE)) {
-            prevFB = (FiguredBass*)(seg->findAnnotation(ElementType::FIGURED_BASS, startTrack, endTrack));
-            if (prevFB) {
-                break;
-            }
-        }
-        if (prevFB) {
-            prevFB->setTicks(std::min(prevFB->ticks(), newSeg->tick() - prevFB->tick()));
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   setSelected /setVisible
 //

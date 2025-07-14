@@ -278,8 +278,6 @@ public:
     void endEdit(EditData&) override;
     void regenerateText();
 
-    void undoMoveSegment(Segment* newSeg, Fraction tickDiff) override;
-
     bool onNote() const { return m_onNote; }
     void setOnNote(bool val) { m_onNote = val; }
     Segment* segment() const { return (Segment*)(explicitParent()); }

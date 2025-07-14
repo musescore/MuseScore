@@ -2594,7 +2594,7 @@ String TextBase::accessibleInfo() const
     String s = plainText().simplified();
     if (s.size() > 20) {
         s.truncate(20);
-        s += u"…";
+        s += u"ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦";
     }
     return String(u"%1: %2").arg(rez, s);
 }
@@ -3262,7 +3262,7 @@ RectF TextBase::drag(EditData& ed)
     static constexpr double spacingFactor = 0.5;
     score()->dragPosition(canvasPos(), &si, &newSeg, spacingFactor, allowTimeAnchor());
     if (newSeg && (newSeg != segment || staffIdx() != si)) {
-        undoMoveSegment(newSeg, newSeg->tick() - segment->tick());
+        MoveElementAnchors::moveSegment(this, newSeg, newSeg->tick() - segment->tick());
         PointF offsetShift = newSeg->pagePos() - segment->pagePos();
         shiftInitOffset(ed, offsetShift);
     }
@@ -3297,123 +3297,6 @@ void TextBase::shiftInitOffset(EditData& ed, const PointF& offsetShift)
             ElementEditDataPtr eedAfter = ed.getData(itemAfter);
             if (eedAfter) {
                 eedAfter->initOffset -= offsetShift;
-            }
-        }
-    }
-}
-
-void TextBase::checkMeasureBoundariesAndMoveIfNeed()
-{
-    assert(hasParentSegment());
-
-    /* TextBase elements are always assigned to a ChordRest segment if available at this tick,
-     * EXCEPT if we are at a measure boundary. In this case, if anchorToEndOfPrevious()
-     * we must assign to a TimeTick segment at the end of previous measure, otherwise to a
-     * ChordRest segment at the start of the next measure. */
-
-    Segment* curSeg = toSegment(parent());
-    Fraction curTick = curSeg->tick();
-    Measure* curMeasure = curSeg->measure();
-    Measure* prevMeasure = curMeasure->prevMeasure();
-    bool needMoveToNext = curTick == curMeasure->endTick() && !anchorToEndOfPrevious();
-    bool needMoveToPrevious = curSeg->rtick().isZero() && anchorToEndOfPrevious() && prevMeasure;
-
-    if (!needMoveToPrevious && !needMoveToNext) {
-        return;
-    }
-
-    Segment* newSeg = nullptr;
-    if (needMoveToPrevious) {
-        newSeg = prevMeasure->findSegment(SegmentType::TimeTick, curSeg->tick());
-        if (!newSeg) {
-            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(prevMeasure, curTick - prevMeasure->tick(), staffIdx());
-            EditTimeTickAnchors::updateLayout(prevMeasure);
-            newSeg = anchor->segment();
-        }
-    } else {
-        newSeg = curSeg->next1(SegmentType::ChordRest);
-    }
-
-    if (newSeg && newSeg->tick() == curTick) {
-        undoMoveSegment(newSeg, Fraction(0, 1));
-    }
-}
-
-bool TextBase::moveSegment(const EditData& ed)
-{
-    assert(hasParentSegment());
-
-    bool forward = ed.key == Key_Right;
-    if (!(ed.modifiers & AltModifier)) {
-        if (anchorToEndOfPrevious()) {
-            undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
-            if (forward) {
-                return true;
-            }
-        }
-    }
-
-    Segment* curSeg = toSegment(parent());
-    IF_ASSERT_FAILED(curSeg) {
-        return false;
-    }
-
-    Segment* newSeg = forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
-    if (!newSeg) {
-        return false;
-    }
-
-    undoMoveSegment(newSeg, newSeg->tick() - curSeg->tick());
-
-    return true;
-}
-
-void TextBase::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
-{
-    // NOTE: when creating mmRests, we clone text elements from the underlying measure onto the
-    // mmRest measure. This creates lots of additional linked copies which are hard to manage
-    // and can result in duplicates. Here we need to remove copies on mmRests because they are invalidated
-    // when moving segments (and if needed will be recreated at the next layout). In future we need to
-    // change approach and *move* elements onto the mmRests, not clone them. [M.S.]
-    std::list<EngravingObject*> linkedElements = linkList();
-    for (EngravingObject* linkedElement : linkedElements) {
-        if (linkedElement == this) {
-            continue;
-        }
-        Segment* curParent = toSegment(linkedElement->parent());
-        bool isOnMMRest = curParent->parent() && toMeasure(curParent->parent())->isMMRest();
-        if (isOnMMRest) {
-            linkedElement->undoUnlink();
-            score()->undoRemoveElement(static_cast<EngravingItem*>(linkedElement));
-        }
-    }
-
-    score()->undoChangeParent(this, newSeg, staffIdx());
-    moveSnappedItems(newSeg, tickDiff);
-}
-
-void TextBase::moveSnappedItems(Segment* newSeg, Fraction tickDiff) const
-{
-    if (EngravingItem* itemAfter = ldata()->itemSnappedAfter()) {
-        if (itemAfter->isTextBase() && itemAfter->parent() != newSeg) {
-            score()->undoChangeParent(itemAfter, newSeg, itemAfter->staffIdx());
-            toTextBase(itemAfter)->moveSnappedItems(newSeg, tickDiff);
-        } else if (itemAfter->isTextLineBaseSegment()) {
-            TextLineBase* textLine = ((TextLineBaseSegment*)itemAfter)->textLineBase();
-            if (textLine->tick() != newSeg->tick()) {
-                textLine->undoMoveStart(tickDiff);
-            }
-        }
-    }
-
-    if (EngravingItem* itemBefore = ldata()->itemSnappedBefore()) {
-        if (itemBefore->isTextBase() && itemBefore->parent() != newSeg) {
-            score()->undoChangeParent(itemBefore, newSeg, itemBefore->staffIdx());
-            toTextBase(itemBefore)->moveSnappedItems(newSeg, tickDiff);
-        } else if (itemBefore->isTextLineBaseSegment()) {
-            TextLineBase* textLine = ((TextLineBaseSegment*)itemBefore)->textLineBase();
-            if (textLine->tick2() != newSeg->tick()) {
-                textLine->undoMoveEnd(tickDiff);
             }
         }
     }
