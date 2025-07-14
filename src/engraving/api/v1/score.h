@@ -270,6 +270,7 @@ public:
     /// \since MuseScore 4.6
     Q_INVOKABLE apiv1::Segment* findSegmentAtTick(int types, apiv1::FractionWrapper* tick);
 
+    /// Extracts all lyrics in the score and returns them in a single string.
     Q_INVOKABLE QString extractLyrics() { return score()->extractLyrics(); }
 
     /// \cond MS_INTERNAL
@@ -297,6 +298,7 @@ public:
     /// You need to call this if you are manipulating PlayEvent's
     /// so that all ornamentations are populated into Note's
     /// PlayEvent lists.
+    /// \note PlayEvents don't have a playback effect in MuseScore 4.
     /// \since 3.3
     Q_INVOKABLE void createPlayEvents();
 

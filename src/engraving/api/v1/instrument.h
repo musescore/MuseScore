@@ -350,8 +350,7 @@ class Instrument : public QObject
     /// \since MuseScore 4.6
     Q_PROPERTY(apiv1::Drumset * drumset READ drumset)
 
-    // TODO: a property for drumset?
-
+    /// The list of channels for this instrument.
     Q_PROPERTY(QQmlListProperty<apiv1::Channel> channels READ channels)
 
     mu::engraving::Instrument* m_instrument;
@@ -379,7 +378,7 @@ public:
     ChannelListProperty channels();
     /// \endcond
 
-    /// Checks whether two variables represent the same object.
+    /// Checks whether two instruments represent the same object.
     Q_INVOKABLE bool is(apiv1::Instrument* other) { return other && instrument() == other->instrument(); }
 };
 }

@@ -62,7 +62,7 @@ class ScoreElement : public QObject
     /// Use ScoreElement::userName() to obtain a localized
     /// element name suitable for usage in a user interface.
     Q_PROPERTY(QString name READ name)
-    /// The size of a spatium for a given element.
+    /// The size of a spatium for this element.
     /// \since MuseScore 4.6
     Q_PROPERTY(qreal spatium READ spatium)
     /// The EID of this element.

@@ -435,6 +435,12 @@ FractionWrapper* PluginAPI::fraction(int num, int den) const
     return wrap(mu::engraving::Fraction(num, den));
 }
 
+//---------------------------------------------------------
+//   PluginAPI::fractionFromTicks
+///  Converts an integer tick value to an equivalent fraction.
+/// \since MuseScore 4.6
+//---------------------------------------------------------
+
 FractionWrapper* PluginAPI::fractionFromTicks(int ticks) const
 {
     return wrap(mu::engraving::Fraction::fromTicks(ticks));

@@ -186,10 +186,17 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(bool,   visible,       VISIBLE)
     /// Stacking order of this element
     API_PROPERTY_T(int,    z,             Z)
+    /// Whether this element is cue size.
     API_PROPERTY_T(bool,   small,         SMALL)
+    /// For clefs, key signatures, time signatures and
+    /// system breaks: Whether to generate courtesy objects.
     API_PROPERTY(showCourtesy,            SHOW_COURTESY)
+    /// For key signatures: The key signature mode.
+    /// One of PluginAPI::PluginAPI::KeyMode values.
     ///\since MuseScore 4.6
     API_PROPERTY(keysig_mode,             KEYSIG_MODE)
+    /// For slurs & ties: The line style of the slur /tie.
+    /// One of PluginAPI::PluginAPI::SlurStyleType values.
     API_PROPERTY(lineType,                SLUR_STYLE_TYPE)
 
     /// Notehead type, one of PluginAPI::PluginAPI::NoteHeadType values
@@ -198,18 +205,39 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY(headGroup,               HEAD_GROUP)
     API_PROPERTY(articulationAnchor,      ARTICULATION_ANCHOR)
 
+    /// The direction of this element,
+    /// one of PluginAPI::PluginAPI::Direction values.
     API_PROPERTY(direction,               DIRECTION)
+    /// For parentheses: The horizontal direction.
+    /// One of PluginAPI::PluginAPI::DirectionH values.
     ///\since MuseScore 4.6
     API_PROPERTY(horizontalDirection,     HORIZONTAL_DIRECTION)
+    /// For chords, stems, beams and two-chord tremolos: The stem direction.
+    /// One of PluginAPI::PluginAPI::Direction values.
     API_PROPERTY(stemDirection,           STEM_DIRECTION)
+    /// For chords, stems, beams and two-chord tremolos: The stem direction.
+    /// One of PluginAPI::PluginAPI::Direction values.
     API_PROPERTY(slurDirection,           SLUR_DIRECTION)
+    /// For notes: The horizontal direction of the notehead.
+    /// One of PluginAPI::PluginAPI::DirectionH values.
+    ///\since MuseScore 4.6
     API_PROPERTY(mirrorHead,              MIRROR_HEAD)
+    /// For breath marks and section breaks: The amount to
+    /// pause playback by, in seconds.
     API_PROPERTY_T(qreal,  pause,         PAUSE)
 
+    /// For barlines: The barline type.
     API_PROPERTY(barlineType,             BARLINE_TYPE)
+    /// For barlines: Whether the barline spans to the next stave.
     API_PROPERTY(barlineSpan,             BARLINE_SPAN)
+    /// For barlines: The offset of the start of this barline from the
+    /// default position. Measured in steps equivalent to half a spatium.
     API_PROPERTY_T(int, barlineSpanFrom,  BARLINE_SPAN_FROM)
+    /// For barlines: The offset of the end of this barline from the
+    /// default position. Measured in steps equivalent to half a spatium.
     API_PROPERTY_T(int, barlineSpanTo,    BARLINE_SPAN_TO)
+    /// For repeat barlines: Whether they display winged tips.
+    /// \note this property controls the global style setting \p repeatBarTips
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, barlineShowTips, BARLINE_SHOW_TIPS)
 
@@ -221,69 +249,116 @@ class EngravingItem : public apiv1::ScoreElement
     API_PROPERTY_T(QPointF, offset,       OFFSET)
     API_PROPERTY_T(bool, ghost,           GHOST)
     API_PROPERTY_T(bool, play,            PLAY)
+    /// For beams: The feathering on its left side.
     API_PROPERTY(growLeft,                GROW_LEFT)
+    /// For beams: The feathering on its right side.
     API_PROPERTY(growRight,               GROW_RIGHT)
 
+    /// For vertical frames and text frames: Their height.
     API_PROPERTY(boxHeight,               BOX_HEIGHT)
+    /// For horizontal frames: Its width.
     API_PROPERTY(boxWidth,                BOX_WIDTH)
+    /// Whether frames should autosize themselves to their
+    /// contents, rather than use their set height / width.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, boxAutoSize,     BOX_AUTOSIZE)
+
+    /// The top padding for a given frame. Affects the
+    /// positioning of its contents.
     API_PROPERTY(topGap,                  TOP_GAP)
+    /// The bottom padding for a given frame.
     API_PROPERTY(bottomGap,               BOTTOM_GAP)
+    /// The left padding for a given frame.
     API_PROPERTY(leftMargin,              LEFT_MARGIN)
+    /// The right padding for a given frame.
     API_PROPERTY(rightMargin,             RIGHT_MARGIN)
+    /// The top gap for a given frame. Affects the positioning
+    /// of the frame relative to surrounding elements.
     API_PROPERTY(topMargin,               TOP_MARGIN)
+    /// The bottom gap for a given frame.
     API_PROPERTY(bottomMargin,            BOTTOM_MARGIN)
+    /// For layout breaks: The layout break type.
+    /// One of PluginAPI::PluginAPI::LayoutBreakType values
     API_PROPERTY(layoutBreakType,         LAYOUT_BREAK)
+    /// For images attached to frames: Whether they
+    /// scale themselves to the frame's size.
     API_PROPERTY_T(bool, autoscale,       AUTOSCALE)
+    /// For images: The size of an image.
     API_PROPERTY(size,                    SIZE)
 
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, imageHeight,    IMAGE_HEIGHT)
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, imageWidth,     IMAGE_WIDTH)
+    /// For images: Whether this image is part of a frame.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, imageFramed,     IMAGE_FRAMED)
 
+    /// For fretboard diagram legends: The text (chord symbols) scale.
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, fretFrameTextScale, FRET_FRAME_TEXT_SCALE)
+    /// For fretboard diagram legends: The fretboard diagram scale.
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, fretFrameDiagramScale, FRET_FRAME_DIAGRAM_SCALE)
+    /// For fretboard diagram legends: The gap between columns, in spatiums.
     ///\since MuseScore 4.6
     API_PROPERTY(fretFrameColumnGap,      FRET_FRAME_COLUMN_GAP)
+    /// For fretboard diagram legends: The gap between rows, in spatiums.
     ///\since MuseScore 4.6
     API_PROPERTY(fretFrameRowGap,         FRET_FRAME_ROW_GAP)
+    /// For fretboard diagram legends: The number of chords per row.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, fretFrameChordPerRow, FRET_FRAME_CHORDS_PER_ROW)
+    /// For fretboard diagram legends: The horizontal alignment of its contents.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, fretFrameHAlign,  FRET_FRAME_H_ALIGN)
 
+    /// For time signatures: Their scale.
     API_PROPERTY(scale,                   SCALE)
+    /// For images: Whether the aspect ratio is locked.
     API_PROPERTY_T(bool, lockAspectRatio, LOCK_ASPECT_RATIO)
+    /// For images: Whether their size is measured in spatiums.
     API_PROPERTY_T(bool, sizeIsSpatium,   SIZE_IS_SPATIUM)
+    /// For text based elements.
     API_PROPERTY(text,                    TEXT)
     ///\since MuseScore 4.6
     API_PROPERTY(htmlText,                HTML_TEXT)
+    /// For beams and two-chord tremolos: Whether their
+    /// position has been modified by the user.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, userModified,    USER_MODIFIED)
+    /// For beams and two-chord tremolos: Their position.
     API_PROPERTY(beamPos,                 BEAM_POS)
+    /// For beams and two-chord tremolos: Whether they are forcibly horizontal.
     API_PROPERTY_T(bool, beamNoSlope,     BEAM_NO_SLOPE)
+    /// For cross-staff beams: Their positioning relative to the staves.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, crossStaffMove,   BEAM_CROSS_STAFF_MOVE)
+    /// For stems: The user-added length offset.
     API_PROPERTY(userLen,                 USER_LEN)
 
     /// For spacers: amount of space between staves.
     API_PROPERTY(space,                   SPACE)
+    /// For tempo text: The tempo
     API_PROPERTY(tempo,                   TEMPO)
+    /// For tempo text: Whether the tempo follows the written value.
     API_PROPERTY_T(bool, tempoFollowText, TEMPO_FOLLOW_TEXT)
+    /// For tempo text: Whether the tempo is aligned right of rehearsal marks.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, tempoAlignRightOfRehearsalMark, TEMPO_ALIGN_RIGHT_OF_REHEARSAL_MARK)
+    /// For accidentals: Controls what type of brackets to show.
+    /// One of PluginAPI::PluginAPI::AccidentalBracket values
     API_PROPERTY_T(int, accidentalBracket, ACCIDENTAL_BRACKET)
+    /// For accidentals: Controls the type of accidental.
+    /// One of PluginAPI::PluginAPI::AccidentalType values
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, accidentalType,   ACCIDENTAL_TYPE)
+    /// For accidentals: The vertical order relative to other accidentals.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, stackingOrderOffset, ACCIDENTAL_STACKING_ORDER_OFFSET)
+    /// For time signatures: Custom numerator text to override the default.
     API_PROPERTY(numeratorString,         NUMERATOR_STRING)
+    /// For time signatures: Custom denominator text to override the default.
     API_PROPERTY(denominatorString,       DENOMINATOR_STRING)
     API_PROPERTY_T(int, fbprefix,         FBPREFIX)
     API_PROPERTY_T(int, fbdigit,          FBDIGIT)
@@ -301,219 +376,405 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, fbparenthesis5,   FBPARENTHESIS5)
 
+    /// For ottavas: Their type, one of PluginAPI::PluginAPI::OttavaType values.
     API_PROPERTY_T(int, ottavaType,       OTTAVA_TYPE)
+    /// For ottavas: Whether they display numbers or numbers and text.
     API_PROPERTY_T(bool, numbersOnly,     NUMBERS_ONLY)
+    /// For trills: Their type, one of PluginAPI::PluginAPI::TrillType.
     API_PROPERTY_T(int, trillType,        TRILL_TYPE)
+    /// For vibratos: Their type, one of PluginAPI::PluginAPI::VibratoType.
     API_PROPERTY_T(int, vibratoType,      VIBRATO_TYPE)
+    /// For hairpins: Whether their tip is circled.
     API_PROPERTY_T(bool, hairpinCircledTip, HAIRPIN_CIRCLEDTIP)
 
+    /// For hairpins: Their type, one of PluginAPI::PluginAPI::HairpinType values.
     API_PROPERTY_T(int, hairpinType,      HAIRPIN_TYPE)
+    /// For hairpins: The height of the hairpin.
     API_PROPERTY(hairpinHeight,           HAIRPIN_HEIGHT)
+    /// For hairpins: The height of the hairpin when continuing onto a new system.
     API_PROPERTY(hairpinContHeight,       HAIRPIN_CONT_HEIGHT)
+    /// For hairpins: The velocity change.
     API_PROPERTY_T(int, veloChange,       VELO_CHANGE)
+    /// The way a hairpin interpolates between values.
+    /// one of PluginAPI::PluginAPI::ChangeMethod values
     API_PROPERTY(veloChangeMethod,        VELO_CHANGE_METHOD)
+    /// For dynamics such as fp: How fast to change dynamics.
     API_PROPERTY(veloChangeSpeed,         VELO_CHANGE_SPEED)
+    /// For dynamics: Their type, one of PluginAPI::PluginAPI::DynamicType values.
     ///\since MuseScore 4.6
     API_PROPERTY(dynamicType,             DYNAMIC_TYPE)
 
+    /// For hairpins: Whether to use single note dynamics
+    /// (not change dynamic during individual notes).
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, singleNoteDynamics, SINGLE_NOTE_DYNAMICS)
     ///    The way a ramp interpolates between values.
     ///    \since MuseScore 3.5
     API_PROPERTY(changeMethod,            CHANGE_METHOD)
+    /// For text-based elements: The text placement,
+    /// one of PluginAPI::PluginAPI::Placement values.
     API_PROPERTY(placement,               PLACEMENT)
+    /// For multimeasure rest ranges and measure numbers:
+    /// The horizontal placement, one of PluginAPI::PluginAPI::PlacementH values.
     ///\since MuseScore 4.6
     API_PROPERTY(hPlacement,              HPLACEMENT)
+    /// For multimeasure rest ranges: The bracket type,
+    /// one of PluginAPI::PluginAPI::MMRestRangeBracketType values.
     API_PROPERTY_T(int, mmRestRangeBracketType, MMREST_RANGE_BRACKET_TYPE)
+    /// For dynamics: Their velocity
     API_PROPERTY_T(int, velocity,         VELOCITY)
+    /// For jumps: Which marker to jump to.
     API_PROPERTY(jumpTo,                  JUMP_TO)
+    /// For jumps: Which marker to play until.
     API_PROPERTY(playUntil,               PLAY_UNTIL)
+    /// For jumps: Which marker to continue at.
     API_PROPERTY(continueAt,              CONTINUE_AT)
+    /// For markers: Their label, used by jumps.
     API_PROPERTY(label,                   LABEL)
+    /// For markers: The marker type,
+    /// one of PluginAPI::PluginAPI::MarkerType values.
     API_PROPERTY_T(int, markerType,       MARKER_TYPE)
-    API_PROPERTY(arpUserLen1,             ARP_USER_LEN1)
-    API_PROPERTY(arpUserLen2,             ARP_USER_LEN2)
+    /// For arpeggios: The position of the top handle.
+    API_PROPERTY_T(qreal, arpUserLen1,    ARP_USER_LEN1)
+    /// For arpeggios: The position of the bottom handle.
+    API_PROPERTY_T(qreal, arpUserLen2,    ARP_USER_LEN2)
 
+    /// For glissandos: Their type,
+    /// one of PluginAPI::PluginAPI::GlissandoType values.
     API_PROPERTY_T(int, glissType,        GLISS_TYPE)
+    /// For glissandos: The text they display.
     API_PROPERTY(glissText,               GLISS_TEXT)
+    /// For glissandos: Whether they display text.
     API_PROPERTY_T(bool, glissShowText,   GLISS_SHOW_TEXT)
+    /// For glissandos: The play style,
+    /// one of PluginAPI::PluginAPI::GlissandoStyle values.
     API_PROPERTY(glissandoStyle,          GLISS_STYLE)
+    /// For glissandos: The amount to ease in by on playback.
     API_PROPERTY_T(int, glissEaseIn,      GLISS_EASEIN)
+    /// For glissandos: The amount to ease out by on playback.
     API_PROPERTY_T(int, glissEaseOut,     GLISS_EASEOUT)
+    /// For lines: Whether they can be diagonal,
+    /// as opposed to locked horizontal.
     API_PROPERTY_T(bool, diagonal,        DIAGONAL)
+    /// For time signatures: Their rhythmic groups.
     API_PROPERTY(groups,                  GROUP_NODES)
+    /// For lines: Their line style,
+    /// one of PluginAPI::PluginAPI::LineType values.
     API_PROPERTY(lineStyle,               LINE_STYLE)
+    /// For lines: The color of the line.
     API_PROPERTY(lineColor,               COLOR)
+    /// For lines: The width of the line.
     API_PROPERTY(lineWidth,               LINE_WIDTH)
+    /// For fermatas and arpeggios: How much to stretch
+    /// their playback by.
     API_PROPERTY_T(qreal, timeStretch,    TIME_STRETCH)
+    ///For trills and articulation: The ornament style,
+    /// one of PluginAPI::PluginAPI::OrnamentStyle values
     API_PROPERTY(ornamentStyle,           ORNAMENT_STYLE)
+    /// For ornaments: Their interval above. To check if
+    /// this ornament actually has an interval above,
+    /// use ornament.hasIntervalAbove
     ///\since MuseScore 4.6
     API_PROPERTY(intervalAbove,           INTERVAL_ABOVE)
+    /// For ornaments: Their interval below. To check if
+    /// this ornament actually has an interval above,
+    /// use ornament.hasIntervalBelow
     ///\since MuseScore 4.6
     API_PROPERTY(intervalBelow,           INTERVAL_BELOW)
+    /// For ornaments: Controls whether this ornament shows an accidental,
+    /// one of PluginAPI::PluginAPI::OrnamentShowAccidental values.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, ornamentShowAccidental, ORNAMENT_SHOW_ACCIDENTAL)
+    /// For ornaments: Controls whether this ornament shows a cue note,
+    /// one of PluginAPI::PluginAPI::AutoOnOff values.
     ///\since MuseScore 4.6
     API_PROPERTY(ornamentShowCueNote,     ORNAMENT_SHOW_CUE_NOTE)
+    /// Whether this ornament starts on the upper note.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, startOnUpperNote, START_ON_UPPER_NOTE)
 
+    /// For time signatures: The time signature as a fraction.
     API_PROPERTY(timesig,                 TIMESIG)
+    /// For local time signatures: The ratio between the
+    /// local time signature and the global time signature.
     API_PROPERTY(timesigStretch,          TIMESIG_STRETCH)
+    /// For time signatures:  The time signature type,
+    /// one of PluginAPI::PluginAPI::TimeSigType values.
     API_PROPERTY_T(int, timesigType,      TIMESIG_TYPE)
     ///\since MuseScore 4.6
     API_PROPERTY(mmRestNumberPos,         MMREST_NUMBER_POS)
+    /// For multimeasure rests: The offset of the number.
     ///\since MuseScore 4.6
     API_PROPERTY(mmRestNumberOffset,      MMREST_NUMBER_OFFSET)
+    /// For multimeasure rests: Whether the number is visible
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, mmRestNumberVisible, MMREST_NUMBER_VISIBLE)
 
+    /// For measure repeats: The position of the number.
     ///\since MuseScore 4.6
     API_PROPERTY(measureRepeatNumberPos,  MEASURE_REPEAT_NUMBER_POS)
 
     API_PROPERTY_T(int, verse,            VERSE)
 
+    /// For lyrics: The syllabic, one of
+    /// PluginAPI::PluginAPI::Syllabic values.
     API_PROPERTY_T(int, syllabic,         SYLLABIC)
+    /// The tick length of a lyrics object.
     API_PROPERTY(lyricTicks,              LYRIC_TICKS)
+    /// For voltas: The list of passes to play the underlying measures.
     API_PROPERTY(volta_ending,            VOLTA_ENDING)
+    /// For line elements: Controls the visibility of the line.
     API_PROPERTY_T(bool, lineVisible,     LINE_VISIBLE)
+    /// Controls the scale of various elements.
     API_PROPERTY_T(qreal, mag,            MAG)
     /// For parts: Whether this part uses a drumset.
     API_PROPERTY_T(int, useDrumset,       USE_DRUMSET)
+    /// For accidentals: Whether this accidental was added by
+    /// the user or generated by the score layout, one of
+    /// PluginAPI::PluginAPI::AccidentalRole values
     API_PROPERTY(role,                    ACCIDENTAL_ROLE)
+    /// The track of a given element.
     API_PROPERTY_T(int, track,            TRACK) // does conversion work from P_TYPE::SIZE_T ?
 
+    /// For fretboard diagrams: The number of strings to display.
     API_PROPERTY_T(int, fretStrings,      FRET_STRINGS)
+    /// For fretboard diagrams: The number of frets to display.
     API_PROPERTY_T(int, fretFrets,        FRET_FRETS)
-    /*API_PROPERTY( fretBarre,               FRET_BARRE                )*/
+    /// For fretboard diagrams: Whether to show the nut.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, showNut,         FRET_NUT)
+    /// For fretboard diagrams: The fret number to start the diagram from.
     API_PROPERTY_T(int, fretOffset,       FRET_OFFSET)
+    /// For fretboard diagrams: The position of the fret number.
     API_PROPERTY_T(int, fretNumPos,       FRET_NUM_POS)
+    /// For fretboard diagrams: The orientation, one of
+    /// PluginAPI::PluginAPI::Orientation values
     ///\since MuseScore 4.6
     API_PROPERTY(orientation,             ORIENTATION)
+    /// For fretboard diagrams: Whether fingerings are displayed.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, fretShowFingering, FRET_SHOW_FINGERINGS)
+    /// For fretboard diagrams: The fingering data.
     ///\since MuseScore 4.6
     API_PROPERTY(fretFingering,           FRET_FINGERING)
 
+    /// Whether this chord symbol is voiced literally.
     ///\since MuseScore 4.6
-    API_PROPERTY(harmonyVoiceLiteral,     HARMONY_VOICE_LITERAL)
+    API_PROPERTY_T(bool, harmonyVoiceLiteral, HARMONY_VOICE_LITERAL)
+    /// The voicing for this chord symbol, one of
+    /// PluginAPI::PluginAPI::HarmonyVoicing values.
     ///\since MuseScore 4.6
     API_PROPERTY(harmonyVoicing,          HARMONY_VOICING)
+    /// The duration to play this chord symbol for, one of
+    /// PluginAPI::PluginAPI::HDuration values.
     ///\since MuseScore 4.6
     API_PROPERTY(harmonyDuration,         HARMONY_DURATION)
+    /// The scale of the bass component of a chord symbol.
     ///\since MuseScore 4.6
     API_PROPERTY(harmonyBassScale,        HARMONY_BASS_SCALE)
 
+    /// For brackets: The bracket type, one of
+    /// PluginAPI::PluginAPI::BracketType values.
     API_PROPERTY_T(int, systemBracket,    SYSTEM_BRACKET)
+    /// For rests in voice 2+: Controls whether they are
+    /// displayed in the score.
     API_PROPERTY_T(bool, gap,             GAP)
     /// Whether this element participates in autoplacement
     API_PROPERTY_T(bool, autoplace,       AUTOPLACE)
+    /// For lines: The length of the dashes for dashed lines,
+    /// in multiples of the line width.
     API_PROPERTY_T(qreal, dashLineLen,    DASH_LINE_LEN)
+    /// For lines: The length of the gaps between dashes
+    /// for dashed lines, in multiples of the line width.
     API_PROPERTY_T(qreal, dashGapLen,     DASH_GAP_LEN)
 //       API_PROPERTY_READ_ONLY( tick,          TICK                      ) // wasn't available in 2.X, disabled due to fractions transition
     /// Symbol ID of this element (if appropriate),
     /// one of PluginAPI::PluginAPI::SymId values.
+    /// Valid for symbols, articulation, fermatas and breaths.
     API_PROPERTY(symbol,                  SYMBOL)
+    /// For jumps: Whether to play repeats.
     API_PROPERTY_T(bool, playRepeats,     PLAY_REPEATS)
+    /// For horizontal frames: Whether to generate brackets,
+    /// clefs, and key signatures in the next measure.
     API_PROPERTY_T(bool, createSystemHeader, CREATE_SYSTEM_HEADER)
+    /// For stafftype changes: The new number of lines for the staff.
     API_PROPERTY_T(int, staffLines,       STAFF_LINES)
+    /// For stafftype changes: The new distance between lines of the staff.
     API_PROPERTY(lineDistance,            LINE_DISTANCE)
+    /// For stafftype changes: The new offset for staff contents, in half spaces.
     API_PROPERTY_T(int, stepOffset,       STEP_OFFSET)
+    /// For stafftype changes: Whether the staff displays barlines.
     API_PROPERTY_T(bool, staffShowBarlines, STAFF_SHOW_BARLINES)
+    /// For stafftype changes: Whether the staff displays ledger lines.
     API_PROPERTY_T(bool, staffShowLedgerlines, STAFF_SHOW_LEDGERLINES)
+    /// For stafftype changes: Whether notes on the staff are stemless.
     API_PROPERTY_T(bool, staffStemless,   STAFF_STEMLESS)
+    /// For staves and stafftype changes: Whether the staff lines are invisible.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, staffInvisible,  STAFF_INVISIBLE)
+    /// For staves and stafftype changes: The color of the staff lines.
     ///\since MuseScore 4.6
     API_PROPERTY_T(QColor, staffColor,    STAFF_COLOR)
 
     /// Notehead scheme, one of PluginAPI::PluginAPI::NoteHeadScheme values.
     /// \since MuseScore 3.5
     API_PROPERTY(headScheme,              HEAD_SCHEME)
+    /// For stafftype changes: Whether the staff displays clefs.
     API_PROPERTY_T(bool, staffGenClef,    STAFF_GEN_CLEF)
+    /// For stafftype changes: Whether the staff displays time signatures.
     API_PROPERTY_T(bool, staffGenTimesig, STAFF_GEN_TIMESIG)
+    /// For stafftype changes: Whether the staff displays key signatures.
     API_PROPERTY_T(bool, staffGenKeysig,  STAFF_GEN_KEYSIG)
+    /// For stafftype changes: The vertical offset relative to the previous stafftype.
     API_PROPERTY(staffYoffset,            STAFF_YOFFSET)
+    /// For bracket items: The number of staves they span.
     API_PROPERTY_T(int, bracketSpan,      BRACKET_SPAN)
 
+    /// For bracket items: The column they occupy.
     API_PROPERTY_T(int, bracketColumn,    BRACKET_COLUMN)
+    /// For instrument names: Their layout position.
     API_PROPERTY_T(int, inameLayoutPosition, INAME_LAYOUT_POSITION)
+    /// For text-based elements: The text style they use.
+    /// One of PluginAPI::PluginAPI::Tid values
     API_PROPERTY(subStyle,                TEXT_STYLE)
+    /// For text-based elements: The font face they use.
     API_PROPERTY(fontFace,                FONT_FACE)
+    /// For text-based elements: The font size they use.
     API_PROPERTY_T(qreal, fontSize,       FONT_SIZE)
+    /// For text-based elements: The font style they use.
     API_PROPERTY_T(int, fontStyle,        FONT_STYLE)
+    /// For text-based elements: The line spacing they use.
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, lineSpacing,    TEXT_LINE_SPACING)
 
+    /// For text-based elements: Their border type,
+    /// one of PluginAPI::PluginAPI::FrameType values.
     API_PROPERTY_T(int, frameType,        FRAME_TYPE)
+    /// For text-based elements: The width of their border.
     API_PROPERTY(frameWidth,              FRAME_WIDTH)
+    /// For text-based elements: The padding of their border.
     API_PROPERTY(framePadding,            FRAME_PADDING)
+    /// For text-based elements: The radius of their border.
     API_PROPERTY_T(int, frameRound,       FRAME_ROUND)
+    /// For text-based elements: The outline color of their border.
     API_PROPERTY_T(QColor, frameFgColor,  FRAME_FG_COLOR)
+    /// For text-based elements: The fill color of their border.
     API_PROPERTY_T(QColor, frameBgColor,  FRAME_BG_COLOR)
+    /// Whether an element is sized relative to its spatium size.
     API_PROPERTY_T(bool, sizeSpatiumDependent, SIZE_SPATIUM_DEPENDENT)
+    /// For text lines: Whether their text is sized relative to its spatium size.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, textSizeSpatiumDependent, TEXT_SIZE_SPATIUM_DEPENDENT)
+    /// The scale of musical symbols in text.
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, musicalSymbolsScale, MUSICAL_SYMBOLS_SCALE)
+    /// For text-based elements: Their text alignment.
     API_PROPERTY(align,                   ALIGN)
+    /// For text-based elements: Their text's vertical alignment,
+    /// used in sub- or superscript.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, textScriptAlign,  TEXT_SCRIPT_ALIGN)
+    /// Whether this element is displayed above the system
+    /// rather than the staff.
     API_PROPERTY_T(bool, systemFlag,      SYSTEM_FLAG)
 
+    /// For text-line-based elements, the text to begin the line.
     API_PROPERTY(beginText,               BEGIN_TEXT)
+    /// For text-line-based elements, the alignment of the beginning text.
     API_PROPERTY(beginTextAlign,          BEGIN_TEXT_ALIGN)
+    /// For text-line-based elements, the placement of the beginning text,
+    /// one of PluginAPI::PluginAPI::TextPlacement values.
     API_PROPERTY(beginTextPlace,          BEGIN_TEXT_PLACE)
+    /// For text-line-based elements, the hook type at their beginning,
+    /// one of PluginAPI::PluginAPI::HookType values.
     API_PROPERTY(beginHookType,           BEGIN_HOOK_TYPE)
+    /// For text-line-based elements, the height of the hook at their beginning.
     API_PROPERTY(beginHookHeight,         BEGIN_HOOK_HEIGHT)
+    /// For text-line-based elements, the font face of the beginning text.
     API_PROPERTY(beginFontFace,           BEGIN_FONT_FACE)
+    /// For text-line-based elements, the font size of the beginning text.
     API_PROPERTY_T(qreal, beginFontSize,  BEGIN_FONT_SIZE)
+    /// For text-line-based elements, the font style of the beginning text.
     API_PROPERTY_T(int, beginFontStyle,   BEGIN_FONT_STYLE)
+    /// For text-line-based elements, the offset face of the beginning text.
     API_PROPERTY_T(QPointF, beginTextOffset, BEGIN_TEXT_OFFSET)
+    /// For text-line-based elements, the distance between the line and text components.
     ///\since MuseScore 4.6
     API_PROPERTY(gapBetweenTextAndLine,   GAP_BETWEEN_TEXT_AND_LINE)
 
+    /// For text-line-based elements, the text on new systems.
     API_PROPERTY(continueText,            CONTINUE_TEXT)
+    /// For text-line-based elements, the alignment of the continuation text.
     API_PROPERTY(continueTextAlign,       CONTINUE_TEXT_ALIGN)
+    /// For text-line-based elements, the placement of the continuation text,
+    /// one of PluginAPI::PluginAPI::TextPlacement values.
     API_PROPERTY(continueTextPlace,       CONTINUE_TEXT_PLACE)
+    /// For text-line-based elements, the font face of the continuation text.
     API_PROPERTY(continueFontFace,        CONTINUE_FONT_FACE)
+    /// For text-line-based elements, the font size of the continuation text.
     API_PROPERTY_T(qreal, continueFontSize, CONTINUE_FONT_SIZE)
+    /// For text-line-based elements, the font style of the continuation text.
     API_PROPERTY_T(int, continueFontStyle, CONTINUE_FONT_STYLE)
+    /// For text-line-based elements, the offset face of the continuation text.
     API_PROPERTY_T(QPointF, continueTextOffset, CONTINUE_TEXT_OFFSET)
 
+    /// For text-line-based elements, the text at the end of the line.
     API_PROPERTY(endText,                 END_TEXT)
+    /// For text-line-based elements, the alignment of the ending text.
     API_PROPERTY(endTextAlign,            END_TEXT_ALIGN)
+    /// For text-line-based elements, the placement of the ending text,
+    /// one of PluginAPI::PluginAPI::TextPlacement values.
     API_PROPERTY(endTextPlace,            END_TEXT_PLACE)
+    /// For text-line-based elements, the hook type at their end,
+    /// one of PluginAPI::PluginAPI::HookType values.
     API_PROPERTY(endHookType,             END_HOOK_TYPE)
+    /// For text-line-based elements, the height of the hook at their end.
     API_PROPERTY(endHookHeight,           END_HOOK_HEIGHT)
+    /// For text-line-based elements, the font face of the ending text.
     API_PROPERTY(endFontFace,             END_FONT_FACE)
+    /// For text-line-based elements, the font size of the ending text.
     API_PROPERTY_T(qreal, endFontSize,    END_FONT_SIZE)
+    /// For text-line-based elements, the font style of the ending text.
     API_PROPERTY_T(int, endFontStyle,     END_FONT_STYLE)
+    /// For text-line-based elements, the offset face of the ending text.
     API_PROPERTY_T(QPointF, endTextOffset, END_TEXT_OFFSET)
 
+    /// For note-anchored-lines: Controls their placement relative to notes.
+    /// One of PluginAPI::PluginAPI::NoteLineEndPlacement values.
     ///\since MuseScore 4.6
     API_PROPERTY(notelinePlacement,       NOTELINE_PLACEMENT)
 
+    /// For lyrics and dynamics: Whether they avoid barlines on layout.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, avoidBarLines,   AVOID_BARLINES)
+    /// For dynamics: Their scale.
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, dynamicsSize,   DYNAMICS_SIZE)
+    /// For dynamics: Whether they center on the notehead
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, centerOnNotehead, CENTER_ON_NOTEHEAD)
+    /// For dynamics: Whether they anchor to end of the preceding segment.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, anchorToEndOfPrevious, ANCHOR_TO_END_OF_PREVIOUS)
 
+    /// For expressions: Whether they align themselves to an accompanying dynamic
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, snapToDynamics,  SNAP_TO_DYNAMICS)
+    /// For hairpins and gradual tempo changes:
+    /// Whether they snap to the preceding element.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, snapBefore,      SNAP_BEFORE)
+    /// For hairpins and gradual tempo changes:
+    /// Whether they snap to the succeeding element.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, snapAfter,       SNAP_AFTER)
 
+    /// The voice assignment properties for this element,
+    /// one of PluginAPI::PluginAPI::VoiceAssignment values.
     ///\since MuseScore 4.6
     API_PROPERTY(voiceAssignment,         VOICE_ASSIGNMENT)
+    /// Whether this element centers itself between staves,
+    /// one of PluginAPI::PluginAPI::AutoOnOff values.
     ///\since MuseScore 4.6
     API_PROPERTY(centerBetweenStaves,     CENTER_BETWEEN_STAVES)
 
@@ -532,37 +793,56 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, locationNote,     LOCATION_NOTE)
 
+    /// The voice of this element.
     API_PROPERTY_T(int, voice,            VOICE)
 
     API_PROPERTY(position,                POSITION)
 
+    /// For clefs: The clef type in concert pitch.
     ///\since MuseScore 4.6
     API_PROPERTY(concertClefType,         CLEF_TYPE_CONCERT)
+    /// For clefs: The clef type in transposed pitch.
     ///\since MuseScore 4.6
     API_PROPERTY(transposingClefType,     CLEF_TYPE_TRANSPOSING)
+    /// For clefs: The position relative to the barline,
+    /// one of PluginAPI::PluginAPI::ClefToBarlinePosition values.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, clefToBarlinePos, CLEF_TO_BARLINE_POS)
+    /// Whether this clef is a header clef.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, isHeader,        IS_HEADER)
+    /// For key signatures: The key in concert pitch.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, concertKey,       KEY_CONCERT)
+    /// For key signatures: The actual key.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, actualKey,        KEY)
     ///\since MuseScore 4.6
     API_PROPERTY(action,                  ACTION)
+    /// The minimum vertical distance between this element and other elements.
     ///\since MuseScore 4.6
     API_PROPERTY(minDistance,             MIN_DISTANCE)
 
+    /// For arpeggios: The arpeggio type, one of
+    /// PluginAPI::PluginAPI::ArpeggioType values.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, arpeggioType,     ARPEGGIO_TYPE)
+    /// For chord lines: The chord line type, one of
+    /// PluginAPI::PluginAPI::ChordLineType values.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, chordLineType,    CHORD_LINE_TYPE)
+    /// Whether this chord line is straight.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, chordLineStraight, CHORD_LINE_STRAIGHT)
+    /// Whether this chord line is wavy.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, chordLineWavy,   CHORD_LINE_WAVY)
+    /// For tremolos: The tremolo type, one of
+    /// PluginAPI::PluginAPI::TremoloType values.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, tremoloType,      TREMOLO_TYPE)
+    /// For half-note two-chord tremolos: The tremolo style.
+    /// One of PluginAPI::PluginAPI::TremoloStyle values.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, tremoloStrokeStyle, TREMOLO_STYLE)
     /// For chord symbols, chord symbol type, one of
@@ -570,34 +850,49 @@ class EngravingItem : public apiv1::ScoreElement
     /// \since MuseScore 3.6
     API_PROPERTY_T(int, harmonyType,      HARMONY_TYPE)
 
+    /// For arpeggios: The number of tracks it spans.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, arpeggioSpan,     ARPEGGIO_SPAN)
 
+    /// For (obsolete) bends: The bend type.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, bendType,         BEND_TYPE)
+    /// For (obsolete) bends: The bend curve.
     ///\since MuseScore 4.6
     API_PROPERTY(bendCurve,               BEND_CURVE)
+    /// For guitar bends: The offset for the bend's midpoint.
     ///\since MuseScore 4.6
     API_PROPERTY_T(QPointF, bendVertexOffset, BEND_VERTEX_OFF)
+    /// For gutar bends: Whether to show the hold line,
+    /// one of PluginAPI::PluginAPI::GuitarBendShowHoldLine values.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, bendShowHoldLine, BEND_SHOW_HOLD_LINE)
+    /// For guitar bends: When to start the bend.
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, bendStartTimeFactor, BEND_START_TIME_FACTOR)
+    /// For guitar bends: When to end the bend.
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, bendEndTimeFactor, BEND_END_TIME_FACTOR)
 
+    /// For tremolo bars: The tremolo bar type,
+    /// one of PluginAPI::PluginAPI::TremoloBarType values.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, tremoloBarType,   TREMOLOBAR_TYPE)
+    /// For tremolo bars: The tremolo bar curve.
     ///\since MuseScore 4.6
     API_PROPERTY(tremoloBarCurve,         TREMOLOBAR_CURVE)
 
+    /// For section breaks: Whether to start the next measure with long names
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, startWithLongNames, START_WITH_LONG_NAMES)
+    /// For section breaks: Whether to reset the measure number for the next measure
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, startWithMeasureOne, START_WITH_MEASURE_ONE)
+    /// For section breaks: Whether to add an indentation before the next measure
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, firstSystemIndentation, FIRST_SYSTEM_INDENTATION)
 
+    /// For chord lines: Their line path.
     ///\since MuseScore 4.6
     API_PROPERTY(path,                    PATH)
 
@@ -606,63 +901,96 @@ class EngravingItem : public apiv1::ScoreElement
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, preferSharpFlat,  PREFER_SHARP_FLAT)
 
+    /// For playing technique annotations: Their type,
+    /// one of PluginAPI::PluginAPI::PlayingTechniqueType values.
     ///\since MuseScore 4.6
     API_PROPERTY(playTechType,            PLAY_TECH_TYPE)
 
+    /// For gradual tempo changes: Their type,
+    /// one of PluginAPI::PluginAPI::GradualTempoChangeType values.
     ///\since MuseScore 4.6
     API_PROPERTY(tempoChangeType,         TEMPO_CHANGE_TYPE)
+    /// The way a gradual tempo change interpolates between values.
+    /// one of PluginAPI::PluginAPI::ChangeMethod values
     ///\since MuseScore 4.6
     API_PROPERTY(tempoEasingMethod,       TEMPO_EASING_METHOD)
+    /// For gradual tempo changes: The factor by which to change
+    /// the tempo, relative to the old tempo.
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, tempoChangeFactor, TEMPO_CHANGE_FACTOR)
 
+    /// For harp diagrams: Whether this diagram is a diagram,
+    /// as opposed to text.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, isDiagram,       HARP_IS_DIAGRAM)
 
+    /// For capos: Whether a capo is active and affects the sore.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, active,          ACTIVE)
 
+    /// For capos: The fret position of the capo.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, fretPosition,     CAPO_FRET_POSITION)
+    /// For capos: The ignored strings of the capo.
     ///\since MuseScore 4.6
     API_PROPERTY(ignoredStrings,          CAPO_IGNORED_STRINGS)
+    /// For capos: If the capo should automatically generate text.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, generateText,    CAPO_GENERATE_TEXT)
 
+    /// For tie elements: Their tie placement, one of
+    /// PluginAPI::PluginAPI::TiePlacement values.
     ///\since MuseScore 4.6
     API_PROPERTY(tiePlacement,            TIE_PLACEMENT)
+    /// For laissez vibrer elements: Their minimum length in spatiums.
     ///\since MuseScore 4.6
     API_PROPERTY(minLength,               MIN_LENGTH)
+    /// For partial ties and slurs: Their partial spanner direction,
+    /// one of PluginAPI::PluginAPI::PartialSpannerDirection alues.
     ///\since MuseScore 4.6
     API_PROPERTY(partialSpannerDirection, PARTIAL_SPANNER_DIRECTION)
 
+    /// If the position of this part score element is linked to the main score.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, positionLinkedToMaster, POSITION_LINKED_TO_MASTER)
+    /// If the appearance of this part score element is linked to the main score.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, appearanceLinkedToMaster, APPEARANCE_LINKED_TO_MASTER)
+    /// If the text of this part score element is linked to the main score.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, textLinkedToMaster, TEXT_LINKED_TO_MASTER)
+    /// If this element is included in the main score as well as the part score.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, excludeFromParts,  EXCLUDE_FROM_OTHER_PARTS)
 
+    /// For string tunings: The number of strings to tune.
     ///\since MuseScore 4.6
     API_PROPERTY_T(int, stringsCount,     STRINGTUNINGS_STRINGS_COUNT)
+    /// For string tunings: The active preset tuning setting.
     ///\since MuseScore 4.6
     API_PROPERTY(preset,                  STRINGTUNINGS_PRESET)
+    /// For string tunings: Which tuned strings to display in the score.
     ///\since MuseScore 4.6
     API_PROPERTY(visibleStrings,          STRINGTUNINGS_VISIBLE_STRINGS)
 
+    /// For symbols: Their musical symbols font face.
     ///\since MuseScore 4.6
     API_PROPERTY(scoreFont,               SCORE_FONT)
+    /// For symbols: Their scale.
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, symbolsSize,    SYMBOLS_SIZE)
+    /// For symbols: Their rotation angle.
     ///\since MuseScore 4.6
     API_PROPERTY_T(qreal, symbolAngle,    SYMBOL_ANGLE)
 
+    /// For sound flags: Whether they apply to all staves.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, applyToAllStaves, APPLY_TO_ALL_STAVES)
+    /// For key signatures, clefs, and time signatures:
+    /// Whether this element is a courtesy element.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, isCourtesy,      IS_COURTESY)
+    /// Whether this fretboard diagram is excluded from vertical alignnment.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, excludeVerticalAlign, EXCLUDE_VERTICAL_ALIGN)
 
@@ -752,15 +1080,11 @@ class Note : public EngravingItem
     /// List of spanners attached to and ending on this note
     /// \since MuseScore 4.6
     Q_PROPERTY(QQmlListProperty<apiv1::EngravingItem> spannerBack READ spannerBack)
-//       Q_PROPERTY(int                            fret              READ fret               WRITE undoSetFret)
 //       Q_PROPERTY(bool                           ghost             READ ghost              WRITE undoSetGhost)
 //       Q_PROPERTY(mu::engraving::NoteHead::Group            headGroup         READ headGroup          WRITE undoSetHeadGroup)
 //       Q_PROPERTY(mu::engraving::NoteHead::Type             headType          READ headType           WRITE undoSetHeadType)
 //       Q_PROPERTY(bool                           hidden            READ hidden)
-//       Q_PROPERTY(int                            line              READ line)
 //       Q_PROPERTY(bool                           mirror            READ mirror)
-//       Q_PROPERTY(int                            pitch             READ pitch              WRITE undoSetPitch)
-//       Q_PROPERTY(bool                           play              READ play               WRITE undoSetPlay)
 //       Q_PROPERTY(int                            ppitch            READ ppitch)
 //       Q_PROPERTY(bool                           small             READ isSmall            WRITE undoSetSmall)
 //       Q_PROPERTY(int                            string            READ string             WRITE undoSetString)
@@ -796,22 +1120,28 @@ class Note : public EngravingItem
     /// as per current "Concert Pitch" setting value.
     /// \see \ref tpc
     Q_PROPERTY(int tpc READ tpc WRITE setTpc)
-//       Q_PROPERTY(qreal                          tuning            READ tuning             WRITE undoSetTuning)
-//       Q_PROPERTY(mu::engraving::MScore::Direction          userDotPosition   READ userDotPosition    WRITE undoSetUserDotPosition)
-//       Q_PROPERTY(mu::engraving::DirectionH         userMirror        READ userMirror         WRITE undoSetUserMirror)
     /// The position of a note's dot, one of
     /// PluginAPI::PluginAPI::Direction values.
     API_PROPERTY(dotPosition,             DOT_POSITION)
     /// See PluginAPI::PluginAPI::NoteValueType
     API_PROPERTY(veloType,                VELO_TYPE)
+    /// The velocity of this note.
     API_PROPERTY_T(int,    userVelocity,  USER_VELOCITY)
+    /// The tuning of this note, in cents.
     API_PROPERTY_T(qreal,  tuning,        TUNING)
 
+    /// For notes on non-tab staves: the line this note is on.
     API_PROPERTY_T(int,    line,          LINE)
+    /// For notes on non-tab staves: Whether this note is
+    /// fixed to a specific line, irrespective of its pitch.
     API_PROPERTY_T(bool,   fixed,         FIXED)
+    /// For notes on non-tab staves: if \p fixed is true,
+    /// the line this note is fixed to.
     API_PROPERTY_T(int,    fixedLine,     FIXED_LINE)
 
+    /// For notes on tab staves: The fret this note is on.
     API_PROPERTY_T(int, fret,             FRET)
+    /// For notes on tab staves: The string this note is on.
     API_PROPERTY_T(int, string,           STRING)
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, dead,            DEAD)
@@ -1009,8 +1339,12 @@ class ChordRest : public DurationElement
     /// \since MuseScore 4.6
     Q_PROPERTY(bool isFullMeasureRest READ isFullMeasureRest)
 
+    /// For cross-staff chords and rests; The amount of staves this
+    /// chord or rest has been moved by.
     API_PROPERTY_T(int, staffMove,        STAFF_MOVE)
     API_PROPERTY(durationTypeWithDots,    DURATION_TYPE_WITH_DOTS)
+    /// The beam mode for this chord or rest, one of
+    /// PluginAPI::PluginAPI::BeamMode values.
     API_PROPERTY(beamMode,                BEAM_MODE)
 
     /// List of elements attached to this chord or rest,
@@ -1076,6 +1410,8 @@ class Chord : public ChordRest
     /// \since MuseScore 3.3
     Q_PROPERTY(mu::engraving::PlayEventType playEventType READ playEventType WRITE setPlayEventType)
 
+    /// Whether this chord is stemless. Does not override
+    /// its measure's or staff's stemless settings.
     API_PROPERTY(noStem,                  NO_STEM)
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, showStemSlash,   SHOW_STEM_SLASH)
@@ -1225,10 +1561,15 @@ class MeasureBase : public EngravingItem
 {
     Q_OBJECT
 
+    /// Whether a repeat ends on this measureBase
     API_PROPERTY_T(bool, repeatEnd,       REPEAT_END)
+    /// Whether a repeat starts on this measureBase
     API_PROPERTY_T(bool, repeatStart,     REPEAT_START)
+    /// Whether this measureBase contaions a jump.
     API_PROPERTY_T(bool, repeatJump,      REPEAT_JUMP)
+    /// The measure number offset of this measureBase.
     API_PROPERTY_T(int, noOffset,         NO_OFFSET)
+    /// Whether this measureBase is included in the measure count.
     API_PROPERTY_T(bool, irregular,       IRREGULAR)
 
     /// \brief Measure number, counting from 1.
@@ -1341,9 +1682,13 @@ class Measure : public MeasureBase
 //       Q_PROPERTY(bool         lineBreak         READ lineBreak   WRITE undoSetLineBreak)
 //       Q_PROPERTY(bool         pageBreak         READ pageBreak   WRITE undoSetPageBreak)
 
+    /// The nominal (written) time signature for this measure.
     API_PROPERTY(timesigNominal,          TIMESIG_NOMINAL)
+    /// The actual time signature / duration of this measure.
     API_PROPERTY(timesigActual,           TIMESIG_ACTUAL)
 
+    /// Controls whether this measure displays a measure number,
+    /// one of PluginAPI::PluginAPI::MeasureNumberMode values.
     /// \since MuseScore 4.6
     API_PROPERTY_T(int, measureNumberMode, MEASURE_NUMBER_MODE)
     /// Whether this measure displays a measure number when
@@ -1351,8 +1696,13 @@ class Measure : public MeasureBase
     /// \since MuseScore 4.6
     Q_PROPERTY(bool showsMeasureNumberInAutoMode READ showsMeasureNumberInAutoMode)
 
+    /// Whether this measure explicitly breaks a multimeasure rest.
+    /// The multimeasure rest may still be broken by measure contents.
     API_PROPERTY_T(bool, breakMmr,        BREAK_MMR)
+    /// For measures before repeats: How many times
+    /// the repeat is to be played.
     API_PROPERTY_T(int, repeatCount,      REPEAT_COUNT)
+    /// The spacing ratio for this measure.
     API_PROPERTY_T(qreal, userStretch,    USER_STRETCH)
 
     /// If this measure is part of a multimeasure rest,
@@ -1525,10 +1875,15 @@ public:
 class Ornament : public EngravingItem
 {
     Q_OBJECT
+    /// Whether this ornament has an interval above the attached note.
     Q_PROPERTY(bool hasIntervalAbove READ hasIntervalAbove)
+    /// Whether this ornament has an interval below the attached note.
     Q_PROPERTY(bool hasIntervalBelow READ hasIntervalBelow)
+    /// Whether this ornament displays a cue note.
     Q_PROPERTY(bool showCueNote READ showCueNote)
+    /// The accidental for the interval above the attached note.
     Q_PROPERTY(apiv1::EngravingItem * accidentalAbove READ accidentalAbove)
+    /// The accidental for the interval below the attached note.
     Q_PROPERTY(apiv1::EngravingItem * accidentalBelow READ accidentalBelow)
 
 public:
@@ -1766,6 +2121,8 @@ class SpannerSegment : public EngravingItem
     /// including manual offset through \ref userOff2.
     /// \see EngravingItem::userOff2
     Q_PROPERTY(QPointF pos2 READ pos2)
+    /// The manual offset of the spanner segment's end part.
+    API_PROPERTY_T(QPointF, userOff2,     OFFSET2)
 
     /// \cond MS_INTERNAL
 
@@ -1817,7 +2174,7 @@ class Spanner : public EngravingItem
 
     /// The starting element of the spanner.
     Q_PROPERTY(apiv1::EngravingItem * startElement READ startElement)
-    /// The ending note of the tie.
+    /// The ending element of the spanner.
     Q_PROPERTY(apiv1::EngravingItem * endElement READ endElement)
     /// List of spanner segments belonging to this spanner.
     Q_PROPERTY(QQmlListProperty<apiv1::SpannerSegment> spannerSegments READ spannerSegments)

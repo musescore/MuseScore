@@ -58,7 +58,9 @@ public:
 class Part : public ScoreElement
 {
     Q_OBJECT
+    /// The first track in this part.
     Q_PROPERTY(int startTrack READ startTrack)
+    /// The last track of the next part + 1.
     Q_PROPERTY(int endTrack READ endTrack)
     /// The MuseScore string identifier
     /// for the first instrument in this part.

@@ -144,7 +144,7 @@ inline OrnamentIntervalWrapper* wrap(mu::engraving::OrnamentInterval o)
 ///   Use PluginAPI::PluginAPI::interval to create an
 ///   interval for usage within your plugin:
 ///   \code
-///   var interval = interval(6, 9); // Major 6th
+///   var interval = interval(5, 9); // Major 6th
 ///   \endcode
 //---------------------------------------------------------
 
