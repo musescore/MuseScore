@@ -1589,6 +1589,17 @@ std::list<Note*> Selection::uniqueNotes(track_idx_t track) const
     return l;
 }
 
+bool Selection::elementsSelected(const ElementTypeSet& types) const
+{
+    for (const EngravingItem* element : m_el) {
+        if (muse::contains(types, element->type())) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 //---------------------------------------------------------
 //   extendRangeSelection
 //    Extends the range selection to contain the given

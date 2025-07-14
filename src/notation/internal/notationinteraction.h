@@ -451,8 +451,6 @@ private:
     void resetGripEdit();
     void resetHitElementContext();
 
-    bool elementsSelected(const std::set<ElementType>& elementsTypes) const;
-
     template<typename P>
     void execute(void (mu::engraving::Score::* function)(P), P param, const muse::TranslatableString& actionName);
 

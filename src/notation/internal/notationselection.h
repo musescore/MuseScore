@@ -62,6 +62,8 @@ public:
     mu::engraving::MeasureBase* endMeasureBase() const override;
     std::vector<mu::engraving::System*> selectedSystems() const override;
 
+    bool elementsSelected(const mu::engraving::ElementTypeSet& types) const override;
+
 private:
     mu::engraving::Score* score() const;
     EngravingItem* m_lastElementHit;

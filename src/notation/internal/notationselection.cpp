@@ -159,3 +159,8 @@ EngravingItem* NotationSelection::lastElementHit() const
 {
     return m_lastElementHit;
 }
+
+bool NotationSelection::elementsSelected(const mu::engraving::ElementTypeSet& types) const
+{
+    return score()->selection().elementsSelected(types);
+}

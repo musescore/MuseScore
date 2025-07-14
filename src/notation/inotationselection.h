@@ -57,6 +57,8 @@ public:
     virtual mu::engraving::MeasureBase* startMeasureBase() const = 0;
     virtual mu::engraving::MeasureBase* endMeasureBase() const = 0;
     virtual std::vector<mu::engraving::System*> selectedSystems() const = 0;
+
+    virtual bool elementsSelected(const mu::engraving::ElementTypeSet& types) const = 0;
 };
 
 using INotationSelectionPtr = std::shared_ptr<INotationSelection>;
