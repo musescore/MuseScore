@@ -25,6 +25,7 @@
 
 #include "global/async/async.h"
 
+#include "rpc/rpcpacker.h"
 #include "audiothread.h"
 #include "audiosanitizer.h"
 #include "player.h"
@@ -33,6 +34,7 @@
 
 using namespace muse;
 using namespace muse::audio;
+using namespace muse::audio::rpc;
 using namespace muse::async;
 
 void Playback::initOnWorker()
@@ -74,49 +76,65 @@ void Playback::deinitOnWorker()
 
 Promise<TrackSequenceId> Playback::addSequence()
 {
-    return Promise<TrackSequenceId>([this](auto resolve, auto /*reject*/) {
-        ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_MAIN_THREAD;
+    return make_promise<TrackSequenceId>([this](auto resolve, auto /*reject*/) {
+        ONLY_AUDIO_MAIN_THREAD;
+        Msg msg = rpc::make_request(Method::AddSequence);
+        channel()->send(msg, [this, resolve](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            TrackSequenceId seqId;
+            RpcPacker::unpack(res.data, seqId);
+            m_sequenceAdded.send(seqId);
+            (void)resolve(seqId);
+        });
 
-        TrackSequenceId newId = workerPlayback()->addSequence();
-        m_sequenceAdded.send(newId);
-
-        return resolve(newId);
-    }, AudioThread::ID);
+        return Promise<TrackSequenceId>::dummy_result();
+    }, PromiseType::AsyncByBody);
 }
 
 Promise<TrackSequenceIdList> Playback::sequenceIdList() const
 {
-    return Promise<TrackSequenceIdList>([this](auto resolve, auto /*reject*/) {
-        ONLY_AUDIO_WORKER_THREAD;
-
-        TrackSequenceIdList result = workerPlayback()->sequenceIdList();
-
-        return resolve(std::move(result));
-    }, AudioThread::ID);
+    ONLY_AUDIO_MAIN_THREAD;
+    return make_promise<TrackSequenceIdList>([this](auto resolve, auto /*reject*/) {
+        ONLY_AUDIO_MAIN_THREAD;
+        Msg msg = rpc::make_request(Method::GetSequenceIdList);
+        channel()->send(msg, [resolve](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            TrackSequenceIdList list;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, list)) {
+                return;
+            }
+            (void)resolve(list);
+        });
+        return Promise<TrackSequenceIdList>::dummy_result();
+    }, PromiseType::AsyncByBody);
 }
 
 void Playback::removeSequence(const TrackSequenceId id)
 {
-    Async::call(this, [this, id]() {
-        ONLY_AUDIO_WORKER_THREAD;
-
-        workerPlayback()->removeSequence(id);
-
-        m_sequenceRemoved.send(id);
-    }, AudioThread::ID);
+    ONLY_AUDIO_MAIN_THREAD;
+    Msg msg = rpc::make_request(Method::RemoveSequence, RpcPacker::pack(id));
+    channel()->send(msg, [this, id](const Msg& res) {
+        ONLY_AUDIO_MAIN_THREAD;
+        bool ok = false;
+        IF_ASSERT_FAILED(RpcPacker::unpack(res.data, ok)) {
+            return;
+        }
+        if (ok) {
+            m_sequenceRemoved.send(id);
+        }
+    });
 }
 
 Channel<TrackSequenceId> Playback::sequenceAdded() const
 {
-    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
-
+    ONLY_AUDIO_MAIN_THREAD;
     return m_sequenceAdded;
 }
 
 Channel<TrackSequenceId> Playback::sequenceRemoved() const
 {
-    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
-
+    ONLY_AUDIO_MAIN_THREAD;
     return m_sequenceRemoved;
 }
 
@@ -130,16 +148,24 @@ IPlayerPtr Playback::player(const TrackSequenceId id) const
 // 2. Setup tracks for Sequence
 async::Promise<TrackIdList> Playback::trackIdList(const TrackSequenceId sequenceId) const
 {
-    return Promise<TrackIdList>([this, sequenceId](auto resolve, auto reject) {
-        ONLY_AUDIO_WORKER_THREAD;
-
-        RetVal<TrackIdList> ret = workerPlayback()->trackIdList(sequenceId);
-        if (ret.ret) {
-            return resolve(ret.val);
-        } else {
-            return reject(ret.ret.code(), ret.ret.text());
-        }
-    }, AudioThread::ID);
+    ONLY_AUDIO_MAIN_THREAD;
+    return make_promise<TrackIdList>([this, sequenceId](auto resolve, auto reject) {
+        ONLY_AUDIO_MAIN_THREAD;
+        Msg msg = rpc::make_request(Method::GetTrackIdList, RpcPacker::pack(sequenceId));
+        channel()->send(msg, [resolve, reject](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            RetVal<TrackIdList> ret;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, ret)) {
+                return;
+            }
+            if (ret.ret) {
+                (void)resolve(ret.val);
+            } else {
+                (void)reject(ret.ret.code(), ret.ret.text());
+            }
+        });
+        return Promise<TrackSequenceIdList>::dummy_result();
+    }, PromiseType::AsyncByBody);
 }
 
 async::Promise<TrackName> Playback::trackName(const TrackSequenceId sequenceId, const TrackId trackId) const

@@ -125,12 +125,19 @@ set(MODULE_SRC
     # Driver
     ${DRIVER_SRC}
 
+    # Rpc
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/irpcchannel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcpacker.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcpacker.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/platform/general/generalrpcchannel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/platform/general/generalrpcchannel.h
+
     # Worker
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/iworkerplayback.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workerplayback.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workerplayback.h
-    # ${CMAKE_CURRENT_LIST_DIR}/internal/player.cpp
-    # ${CMAKE_CURRENT_LIST_DIR}/internal/player.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workerchannelcontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/workerchannelcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudiosource.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudiosource.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/samplerateconvertor.cpp
