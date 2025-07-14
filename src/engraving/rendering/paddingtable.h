@@ -30,7 +30,7 @@ class EngravingItem;
 class MStyle;
 struct ParenPaddingTable;
 
-using ParenPaddingTablePtr = std::unique_ptr<mu::engraving::ParenPaddingTable>;
+using ParenPaddingTablePtr = std::unique_ptr<ParenPaddingTable>;
 
 template<typename T>
 struct PaddingVector : std::array<T, TOT_ELEMENT_TYPES>

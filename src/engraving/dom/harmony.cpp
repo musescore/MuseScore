@@ -349,12 +349,6 @@ int Harmony::id() const
     return m_chords.front()->id();
 }
 
-void Harmony::setParenthesesMode(const ParenthesesMode& v, bool addToLinked, bool generated)
-{
-    EngravingItem::setParenthesesMode(v, addToLinked, generated);
-    render();
-}
-
 //---------------------------------------------------------
 //   getParentSeg
 ///   gets the parent segment of this harmony
@@ -434,11 +428,11 @@ const std::vector<const ChordDescription*> Harmony::parseHarmony(const String& s
     // pre-process for parentheses
     String s = ss.simplified();
     if (s.startsWith('(')) {
-        setParenthesesMode(ParenthesesMode::LEFT, true, true);
+        setParenthesesMode(rightParen() ? ParenthesesMode::BOTH : ParenthesesMode::LEFT, true, true);
         s.remove(0, 1);
     }
     if (s.endsWith(')') && s.count('(') < s.count(')')) {
-        setParenthesesMode(ParenthesesMode::RIGHT, true, true);
+        setParenthesesMode(leftParen() ? ParenthesesMode::BOTH : ParenthesesMode::RIGHT, true, true);
         s.remove(s.size() - 1, 1);
     }
     if (parenthesesMode() == ParenthesesMode::BOTH) {
@@ -652,6 +646,13 @@ void Harmony::startEditTextual(EditData& ed)
             delete t;
         }
         mutldata()->textList.mut_value().clear();
+    }
+
+    if (leftParen()) {
+        leftParen()->mutldata()->reset();
+    }
+    if (rightParen()) {
+        rightParen()->mutldata()->reset();
     }
 
     // layout as text, without position reset

@@ -95,7 +95,7 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
         return;
     }
 
-    const double itemLeftX = parent->pos().x();
+    const double itemLeftX = dummyItemShape.bbox().x();
     const double itemRightX = itemLeftX + parent->width();
 
     const double leftParenPadding = HorizontalSpacing::minHorizontalDistance(leftParen->shape().translated(leftParen->pos()),

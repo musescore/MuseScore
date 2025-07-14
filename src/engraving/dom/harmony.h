@@ -171,8 +171,6 @@ public:
     void setRootCase(NoteCaseType c) { m_rootCase = c; }
     NoteCaseType rootCase() const { return m_rootCase; }
 
-    void setParenthesesMode(const ParenthesesMode& v, bool addToLinked = true, bool generated = false) override;
-
     Segment* getParentSeg() const;
     FretDiagram* getParentFretDiagram() const;
     Harmony* findNext() const;

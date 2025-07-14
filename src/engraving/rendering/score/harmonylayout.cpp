@@ -165,7 +165,7 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
         return PointF(newPosX, newPosY);
     };
 
-    auto positionPoint = calculateBoundingRect(item, ldata, ctx);
+    PointF positionPoint = calculateBoundingRect(item, ldata, ctx);
 
     if (item->isPolychord()) {
         for (LineF& line : ldata->polychordDividerLines.mut_value()) {
@@ -180,7 +180,9 @@ void HarmonyLayout::layoutHarmony(Harmony* item, Harmony::LayoutData* ldata,
 
     ldata->setPos(positionPoint);
 
-    ParenthesisLayout::layoutParentheses(item, ctx);
+    if (!item->cursor()->editing()) {
+        ParenthesisLayout::layoutParentheses(item, ctx);
+    }
 }
 
 //---------------------------------------------------------
@@ -195,7 +197,7 @@ void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, const Layo
     }
     ldata->textList.mut_value().clear();
     if (item->harmonyType() == HarmonyType::ROMAN) {
-        renderRomanNumeral(item, ldata, ctx);
+        renderRomanNumeral(item, ldata);
         return;
     }
 
@@ -308,7 +310,7 @@ void HarmonyLayout::render(Harmony* item, Harmony::LayoutData* ldata, const Layo
     }
 }
 
-void HarmonyLayout::renderRomanNumeral(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx)
+void HarmonyLayout::renderRomanNumeral(Harmony* item, Harmony::LayoutData* ldata)
 {
     HarmonyRenderCtx harmonyCtx;
     if (item->chords().empty()) {
@@ -316,15 +318,9 @@ void HarmonyLayout::renderRomanNumeral(Harmony* item, Harmony::LayoutData* ldata
     }
     HarmonyInfo* info = item->chords().front();
 
-    if (item->leftParen()) {
-        render(item, ldata, SymId::csymParensLeftTall, harmonyCtx, ctx);
-    }
-
     render(item, ldata, info->textName(), harmonyCtx);
-
-    if (item->rightParen()) {
-        render(item, ldata, SymId::csymParensRightTall, harmonyCtx, ctx);
-    }
+    ldata->textList.mut_value().insert(ldata->textList.mut_value().end(), harmonyCtx.textList.begin(), harmonyCtx.textList.end());
+    ldata->baseline = 0.0;
 }
 
 void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx,
@@ -344,10 +340,6 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
 
     NoteCaseType rootCase = item->rootRenderCase(info);
     NoteCaseType bassCase = item->bassRenderCase();
-
-    if (item->leftParen()) {
-        render(item, ldata, SymId::csymParensLeftTall, harmonyCtx, ctx);
-    }
 
     NoteSpellingType spelling = style.styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
 
@@ -422,10 +414,6 @@ void HarmonyLayout::renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldat
                 = style.styleB(Sid::chordBassNoteStagger) ? chordList->renderListBassOffset : chordList->renderListBass;
             render(item, ldata, bassNoteChordList, harmonyCtx, capoBassTpc, spelling, bassCase, item->bassScale());
         }
-        render(item, ldata, SymId::csymParensRightTall, harmonyCtx, ctx);
-    }
-
-    if (item->rightParen()) {
         render(item, ldata, SymId::csymParensRightTall, harmonyCtx, ctx);
     }
 }
