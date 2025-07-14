@@ -1213,8 +1213,7 @@ bool NotationViewInputController::shortcutOverrideEvent(QKeyEvent* event)
     }
 
     if (anchorEditingKeysFound(event)) {
-        EngravingItem* element = viewInteraction()->selection()->element();
-        return element && element->allowTimeAnchor();
+        return true;
     }
 
     return tryPercussionShortcut(event);

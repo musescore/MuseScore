@@ -149,10 +149,6 @@ void EditTimeTickAnchors::updateLayout(Measure* measure)
 
 void EditTimeTickAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod)
 {
-    IF_ASSERT_FAILED(element && element->allowTimeAnchor()) {
-        return;
-    }
-
     Segment* segment = element->parentItem() && element->parentItem()->isSegment() ? toSegment(element->parentItem()) : nullptr;
     if (!segment) {
         return;
@@ -185,6 +181,7 @@ bool EditTimeTickAnchors::canAnchorToEndOfPrevious(const EngravingItem* element)
     switch (element->type()) {
     case ElementType::HARMONY:
     case ElementType::FRET_DIAGRAM:
+    case ElementType::REHEARSAL_MARK:
         return false;
     default:
         return true;
@@ -227,10 +224,12 @@ void EditTimeTickAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* ele
 
 void EditTimeTickAnchors::moveSegment(EngravingItem* element, bool forward)
 {
-    bool cachedAnchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
-    element->undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
-    if (cachedAnchorToEndOfPrevious && forward) {
-        return;
+    if (canAnchorToEndOfPrevious(element)) {
+        bool cachedAnchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
+        element->undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
+        if (cachedAnchorToEndOfPrevious && forward) {
+            return;
+        }
     }
 
     Segment* curSeg = toSegment(element->parentItem());

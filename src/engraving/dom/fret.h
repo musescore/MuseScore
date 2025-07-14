@@ -249,6 +249,8 @@ public:
     bool isInFretBox() const;
     bool isCustom(const String& harmonyNameForCompare) const;
 
+    bool allowTimeAnchor() const { return true; }
+
     friend class FretUndoData;
 
     struct FingeringItem {
