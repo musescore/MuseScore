@@ -45,14 +45,15 @@ protected:
         MScore::useRead302InTestMode = m_use302;
     }
 
+    void testChordSymToFretDiagram(MasterScore* score);
+
 private:
+
     bool m_use302 = false;
 };
 
-TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagram)
+void Engraving_FretDiagramTests::testChordSymToFretDiagram(MasterScore* score)
 {
-    MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
-
     EXPECT_TRUE(score);
     Measure* measure = score->firstMeasure();
     EXPECT_TRUE(measure);
@@ -67,10 +68,28 @@ TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagram)
 
         FretDiagram* diagram = Factory::createFretDiagram(score->dummy()->segment());
         EXPECT_TRUE(diagram);
-        diagram->updateDiagram(harmony->plainText());
+        diagram->updateDiagram(harmony->harmonyName());
         String pattern = FretDiagram::patternFromDiagram(diagram);
         EXPECT_EQ(pattern, FRET_PATTERN_REF);
         measure = measure->nextMeasure();
         delete diagram;
     }
+}
+
+TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagram)
+{
+    MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
+
+    testChordSymToFretDiagram(score);
+}
+
+TEST_F(Engraving_FretDiagramTests, harmonyToFretDiagramSolfeggio)
+{
+    MasterScore* score = ScoreRW::readScore(FRETDIAGRAM_DATA_DIR + u"harmonytofrettest.mscx");
+
+    score->startCmd(TranslatableString::untranslatable("Fret diagram tests"));
+    score->undoChangeStyleVal(Sid::chordSymbolSpelling, NoteSpellingType::SOLFEGGIO);
+    score->endCmd();
+
+    testChordSymToFretDiagram(score);
 }

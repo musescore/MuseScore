@@ -106,11 +106,10 @@ static const String blankPattern(int strings)
     return pattern;
 }
 
-static HarmonyMapKey createHarmonyMapKey(const String& harmony, const ParsedChord& chord, const MStyle& style)
+static HarmonyMapKey createHarmonyMapKey(const String& harmony, const ParsedChord& chord, const NoteSpellingType& spellingType)
 {
     NoteCaseType noteCase;
     size_t idx;
-    NoteSpellingType spellingType = style.styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
     int rootTpc = convertNote(harmony, spellingType, noteCase, idx);
 
     size_t slash = harmony.lastIndexOf(u'/');
@@ -213,19 +212,11 @@ void FretDiagram::updateDiagram(const String& harmonyName)
     String _harmonyName = harmonyName;
 
     NoteSpellingType spellingType = style().styleV(Sid::chordSymbolSpelling).value<NoteSpellingType>();
-    if (spellingType != NoteSpellingType::STANDARD) {
-        NoteCaseType noteCase;
-        size_t idx;
-        int tpc = convertNote(harmonyName, spellingType, noteCase, idx);
-        String acc = _harmonyName.mid(idx);
-
-        _harmonyName = tpc2name(tpc, NoteSpellingType::STANDARD, noteCase) + acc;
-    }
 
     ParsedChord chord;
     HarmonyMapKey key;
     if (chord.parse(_harmonyName, score()->chordList())) {
-        key = createHarmonyMapKey(_harmonyName, chord, style());
+        key = createHarmonyMapKey(_harmonyName, chord, spellingType);
     } else {
         LOGE() << "Error parse " << _harmonyName;
     }
@@ -1395,14 +1386,13 @@ void FretDiagram::readHarmonyToDiagramFile(const muse::io::path_t& filePath) con
         = read460::HarmonyToDiagramReader::read(reader);
 
     const ChordList* chordList = score()->chordList();
+    const NoteSpellingType spellingType = NoteSpellingType::STANDARD;
 
     for (auto& [key, value] : harmonyToDiagramMap) {
-        String harmonyKey = key;
-
         ParsedChord chord;
         HarmonyMapKey mapKey;
         if (chord.parse(key, chordList)) {
-            mapKey = createHarmonyMapKey(key, chord, style());
+            mapKey = createHarmonyMapKey(key, chord, spellingType);
         } else {
             LOGE() << "Error parse " << key;
         }
