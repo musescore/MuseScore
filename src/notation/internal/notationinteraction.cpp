@@ -4657,14 +4657,6 @@ void NotationInteraction::editElement(QKeyEvent* event)
     m_editData.key = event->key();
     m_editData.s = event->text();
 
-    bool isShiftRelease = event->type() == QKeyEvent::Type::KeyRelease;
-    if (isShiftRelease) {
-        m_editData.isKeyRelease = true;
-        resetAnchorLines();
-    } else {
-        m_editData.isKeyRelease = false;
-    }
-
     // Brackets may be deleted and replaced
     bool isBracket = m_editData.element->isBracket();
     const mu::engraving::System* system = nullptr;
@@ -4707,16 +4699,14 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
         apply();
 
-        if (!isShiftRelease) {
-            if (isGripEditStarted()) {
-                if (m_editData.element->isDynamic() && !m_editData.isStartEndGrip()) {
-                    updateDragAnchorLines();
-                } else {
-                    updateGripAnchorLines();
-                }
-            } else if (isElementEditStarted()) {
+        if (isGripEditStarted()) {
+            if (m_editData.element->isDynamic() && !m_editData.isStartEndGrip()) {
                 updateDragAnchorLines();
+            } else {
+                updateGripAnchorLines();
             }
+        } else if (isElementEditStarted()) {
+            updateDragAnchorLines();
         }
     } else {
         rollback();
