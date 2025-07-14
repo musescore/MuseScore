@@ -30,7 +30,6 @@
 #include "ifxresolver.h"
 #include "iaudioengine.h"
 
-#include "iplayer.h"
 #include "igettracksequence.h"
 
 namespace muse::audio {
