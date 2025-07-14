@@ -217,11 +217,12 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     styleDef(shortestStem,                               PropertyValue(2.5)),
     styleDef(combineVoice,                               true),
     styleDef(beginRepeatLeftMargin,                      Spatium(1.0)),
-    styleDef(minNoteDistance,                            Spatium(0.5)),
+    styleDef(minNoteDistance,                            Spatium(0.35)),
     styleDef(barNoteDistance,                            Spatium(1.25)),   // was 1.2
 
     styleDef(barAccidentalDistance,                      Spatium(0.65)),
     styleDef(noteBarDistance,                            Spatium(1.5)),
+    styleDef(spacingDensity,                             1.0),
     styleDef(measureSpacing,                             1.5),
     styleDef(measureRepeatNumberPos,                     Spatium(-0.5)),
     styleDef(mrNumberSeries,                             false),

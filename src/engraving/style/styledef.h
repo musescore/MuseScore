@@ -238,7 +238,8 @@ enum class Sid {
     barAccidentalDistance,
     noteBarDistance,
 
-    measureSpacing,
+    spacingDensity,
+    measureSpacing, // At some point we should rename this. This name is a legacy relic. This is now the spacing ratio.
     measureRepeatNumberPos,
     mrNumberSeries,
     mrNumberEveryXMeasures,

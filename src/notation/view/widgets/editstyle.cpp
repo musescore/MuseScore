@@ -60,14 +60,13 @@ using namespace muse::ui;
 
 static const QStringList ALL_PAGE_CODES {
     "score",
-    "page",
+    "spacing",
     "sizes",
     "header-and-footer",
     "measure-number",
     "system",
     "clefs-key-and-time-signatures",
     "accidentals",
-    "measure",
     "barlines",
     "notes",
     "rests",
@@ -390,6 +389,7 @@ EditStyle::EditStyle(QWidget* parent)
 
         { StyleId::systemFrameDistance,     false, systemFrameDistance,     resetSystemFrameDistance },
         { StyleId::frameSystemDistance,     false, frameSystemDistance,     resetFrameSystemDistance },
+        { StyleId::spacingDensity,          true,  spacingDensity,          resetSpacingDensity },
         { StyleId::minMeasureWidth,         false, minMeasureWidth_2,       resetMinMeasureWidth },
         { StyleId::measureSpacing,          false, measureSpacing,          resetMeasureSpacing },
         { StyleId::measureRepeatNumberPos,  false, measureRepeatNumberPos,  resetMeasureRepeatNumberPos },
@@ -1575,7 +1575,7 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "score";
 
     case ElementType::PAGE:
-        return "page";
+        return "spacing";
 
     case ElementType::INSTRUMENT_NAME:
     case ElementType::TEXT:
@@ -1607,7 +1607,7 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "accidentals";
 
     case ElementType::MEASURE:
-        return "measure";
+        return "spacing";
 
     case ElementType::BAR_LINE:
         return "barlines";

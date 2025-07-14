@@ -615,6 +615,11 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         }
     }
 
+    if (m_version == 450) {
+        // 450 spacing was a bit narrower
+        set(Sid::spacingDensity, 1.30);
+    }
+
     if (m_version < 450) {
         // Didn't exist before 4.5. Default to false for compatibility.
         set(Sid::scaleRythmicSpacingForSmallNotes, false);
