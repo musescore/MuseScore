@@ -1491,7 +1491,9 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
     mu::engraving::System* __system;
     bool multimeasureRestsFlag = false;
     muse::RectF multimeasureRestsStartPreMeasureRect;
+    mu::engraving::System* multimeasureRestsStartSystem;
     muse::RectF _preMeasureRect = RectF(0, 0, 0, 0);
+    mu::engraving::System* _preSystem;
     int multimeasureStartNo = -1;
     for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
         for (Measure* _measure = measure; _measure; _measure = _measure->nextMeasure()) {
@@ -1529,6 +1531,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                         if (!multimeasureRestsFlag) {
                             multimeasureRestsFlag = true;
                             multimeasureRestsStartPreMeasureRect = _preMeasureRect;
+                            multimeasureRestsStartSystem = _preSystem;
                             multimeasureStartNo = _measure->no();
                         }
                         
@@ -1565,6 +1568,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                 }
             }
             _preMeasureRect = _measure->canvasBoundingRect();
+            _preSystem = _measure->system();
             if (!isMultimeasure) {
                 if (multimeasureRestsFlag) {
                     multimeasureRestsFlag = false;
@@ -1572,7 +1576,10 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                     int multimeasuresCount = multimeasureEndNo - multimeasureStartNo + 1;
                     
                     int _x = multimeasureRestsStartPreMeasureRect.x() + multimeasureRestsStartPreMeasureRect.width();
-                    int _dwidth = _measure->canvasBoundingRect().x() - _x;
+                    int _dwidth = _measure->canvasBoundingRect().x() - _x; 
+                    if (_dwidth < 0 && multimeasureRestsStartSystem) {
+                        _dwidth = multimeasureRestsStartSystem->canvasBoundingRect().x() + multimeasureRestsStartSystem->canvasBoundingRect().width() - _x;
+                    }
                     for (int _no = multimeasureStartNo; _no <= multimeasureEndNo; _no++) {
                         int __x = _x + (_no - multimeasureStartNo) * _dwidth / multimeasuresCount;
                         int __y = mnRestRectFMap[_no].y();
