@@ -19,26 +19,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SYSTEMLAYOUT_DEV_H
-#define MU_ENGRAVING_SYSTEMLAYOUT_DEV_H
+#pragma once
 
 #include <vector>
-
-#include "../dom/measure.h"
 
 #include "../layoutoptions.h"
 #include "layoutcontext.h"
 
+#include "../../dom/measure.h"
+#include "../../dom/segment.h"
+
 namespace mu::engraving {
-class Chord;
-class Score;
-class Segment;
-class Spanner;
-class System;
-class Measure;
+class BarLine;
 class Bracket;
 class BracketItem;
+class Chord;
+class Dynamic;
+class Expression;
+class FiguredBass;
+class FretDiagram;
+class Harmony;
+class HarpPedalDiagram;
+class Image;
+class InstrumentChange;
+class Measure;
+class MeasureNumber;
+class MMRest;
+class MMRestRange;
+class Parenthesis;
+class RehearsalMark;
+class Score;
+class Segment;
 class SkylineLine;
+class Spanner;
+class StaffText;
+class Sticking;
+class System;
+class SystemText;
+class TempoText;
+class TimeSig;
 }
 
 namespace mu::engraving::rendering::score {
@@ -195,5 +214,3 @@ private:
     static void layoutHarmonies(const std::vector<Harmony*> harmonies, System* system, bool verticalAlign, LayoutContext& ctx);
 };
 }
-
-#endif // MU_ENGRAVING_SYSTEMLAYOUT_DEV_H

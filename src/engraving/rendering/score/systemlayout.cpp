@@ -41,6 +41,7 @@
 #include "dom/lyrics.h"
 #include "dom/measure.h"
 #include "dom/measurenumber.h"
+#include "dom/mmrest.h"
 #include "dom/mmrestrange.h"
 #include "dom/note.h"
 #include "dom/ornament.h"
