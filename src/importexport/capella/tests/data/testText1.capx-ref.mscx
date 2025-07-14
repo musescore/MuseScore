@@ -209,8 +209,7 @@
             </Chord>
           <StaffText>
             <eid>o_o</eid>
-            <text>MuseScore testfile
-Leon Vinken</text>
+            <text>MuseScore testfile<br/>Leon Vinken</text>
             </StaffText>
           <Chord>
             <eid>p_p</eid>

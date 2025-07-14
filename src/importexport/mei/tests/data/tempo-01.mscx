@@ -633,8 +633,7 @@
           <Tempo>
             <tempo>2.4</tempo>
             <eid>/B_/B</eid>
-            <text>Allegro
-molto</text>
+            <text>Allegro<br/>molto</text>
             </Tempo>
           <Chord>
             <eid>AC_AC</eid>
