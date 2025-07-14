@@ -137,6 +137,12 @@ private:
 
     std::map<int, std::set<uint>> clefKeySigsKeysMap;
 
+    std::map<int, int> mnRestSTicksMap;
+    std::map<int, int> mnRestETicksMap;
+    std::map<int, muse::RectF> mnRestRectFMap;
+    std::map<int, double> mnCursorWidthMap;
+    std::map<int, double> mnSpatiumMap;
+
     int curr_seg_ticks = 0;
     bool pianoKeyboardPlaybackEnable = true;
 };
