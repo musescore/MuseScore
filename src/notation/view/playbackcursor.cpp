@@ -56,6 +56,11 @@ void PlaybackCursor::setNotation(INotationPtr notation)
     m_notation = notation;
 }
 
+void PlaybackCursor::enableKeyboardPlay(bool enable)
+{
+    pianoKeyboardPlaybackEnable = enable;
+}
+
 void PlaybackCursor::move(muse::midi::tick_t tick, bool isPlaying)
 {
     // LOGALEX();
@@ -1003,6 +1008,10 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
         }
     }
 
+    if (!pianoKeyboardPlaybackEnable) {
+        return;
+    }
+
     std::map<int, std::vector<std::map<int, ClefType>>> _clef_staff_map;
     std::map<int, std::map<int, std::map<int, ClefType>>> _clef_staff_map_extend;
 
@@ -1013,7 +1022,6 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
     std::map<int, std::set<mu::engraving::Key>> score_keysig_map;
 
     int staff_count = 0;
-
     for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
         for (mu::engraving::Segment* segment = measure->first(mu::engraving::SegmentType::ClefType); segment;) {
             std::vector<EngravingItem*> clefItemList = segment->elist();
@@ -1081,91 +1089,21 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                     }
                 };
 
-                if (_score_clef_index_map[staffIndex].size() <= __index) {
-                    if (traverse_measure_index_map.find(staffIndex) != traverse_measure_index_map.end()) {
-                        __index = traverse_measure_index_map[staffIndex];
-                    }
-                }
-
-                if (_score_clef_index_map[staffIndex].size() > __index) {
-                    if (_clef_staff_map_extend.find(staffIndex) != _clef_staff_map_extend.end()) {
-                        std::map<int, ClefType> __extend_ts_clef_map = _clef_staff_map_extend[staffIndex][measure->no()];
-                        std::map<int, ClefType, Lower> _extend_ts_clef_map;
-                        _extend_ts_clef_map.insert(__extend_ts_clef_map.begin(), __extend_ts_clef_map.end());
-
-                        ClefType ___clefType = ClefType::INVALID;
-                        for (const auto& [_ticks, _clefType] : _extend_ts_clef_map) {
-                            if (segment->tick().ticks() >= _ticks) {
-                                ___clefType = _clefType;
-                            }
-                        }
-                        if (___clefType != ClefType::INVALID) {
-                            if (_score_staff_clef_map.find(staffIndex) == _score_staff_clef_map.end()) {
-                                _score_staff_clef_map[staffIndex] = {};
-                            }
-                            _score_staff_clef_map[staffIndex].insert({ segment->tick().ticks(), ___clefType });
+                if (_score_clef_index_map.find(staffIndex) != _score_clef_index_map.end()) {
+                    if (_score_clef_index_map[staffIndex].size() <= __index) {
+                        if (traverse_measure_index_map.find(staffIndex) != traverse_measure_index_map.end()) {
+                            __index = traverse_measure_index_map[staffIndex];
                         }
                     }
-                    if (measure->no() == _score_clef_index_map[staffIndex][__index]) {
-                        int _no = _score_clef_index_map[staffIndex][__index];
-                        
-                        std::map<int, ClefType> __ts_clef_map = _clef_staff_map[staffIndex][__index];
-                        std::map<int, ClefType, Lower> _ts_clef_map;
-                        _ts_clef_map.insert(__ts_clef_map.begin(), __ts_clef_map.end());
 
-                        ClefType ___clefType = ClefType::INVALID;
-                        for (const auto& [_ticks, _clefType] : _ts_clef_map) {
-                            if (segment->tick().ticks() >= _ticks) {
-                                ___clefType = _clefType;
-                            } else if (segment == measure->last(mu::engraving::SegmentType::ChordRest)) {
-                                if (std::find(_score_clef_index_map[staffIndex].begin(), _score_clef_index_map[staffIndex].end(), _no + 1) == _score_clef_index_map[staffIndex].end()) {
-                                    if (_clef_staff_map_extend.find(staffIndex) == _clef_staff_map_extend.end()) {
-                                        _clef_staff_map_extend[staffIndex] = {};
-                                    }
-                                    if (_clef_staff_map_extend[staffIndex].find(_no + 1) == _clef_staff_map_extend[staffIndex].end()) {
-                                        _clef_staff_map_extend[staffIndex][_no + 1] = {};
-                                    }
-                                    _clef_staff_map_extend[staffIndex][_no + 1].insert({ _ticks, _clefType });
-                                } else {
-                                    _clef_staff_map[staffIndex][__index + 1].insert({ _ticks, _clefType });
-                                }
-                            }
-                        }
-                        if (___clefType != ClefType::INVALID) {
-                            if (_score_staff_clef_map.find(staffIndex) == _score_staff_clef_map.end()) {
-                                _score_staff_clef_map[staffIndex] = {};
-                            }
-                            _score_staff_clef_map[staffIndex].insert({ segment->tick().ticks(), ___clefType });
-                        } else if (__index >= 1) {
-                            int index__ = __index - 1;
-                            std::map<int, ClefType> __ts_clef_map = _clef_staff_map[staffIndex][index__];
-                            std::map<int, ClefType, Lower> _ts_clef_map;
-                            _ts_clef_map.insert(__ts_clef_map.begin(), __ts_clef_map.end());
-
-                            ClefType ___clefType___ = ClefType::INVALID;
-                            for (const auto& [_ticks, _clefType] : _ts_clef_map) {
-                                if (segment->tick().ticks() >= _ticks) {
-                                    ___clefType___ = _clefType;
-                                }
-                            }
-                            if (___clefType___ != ClefType::INVALID) {
-                                if (_score_staff_clef_map.find(staffIndex) == _score_staff_clef_map.end()) {
-                                    _score_staff_clef_map[staffIndex] = {};
-                                }
-                                _score_staff_clef_map[staffIndex].insert({ segment->tick().ticks(), ___clefType___ });
-                            }
-                        }
-                    }
-                    if (measure->no() < _score_clef_index_map[staffIndex][__index]) {
-                        if (_score_staff_clef_map.find(staffIndex) == _score_staff_clef_map.end() 
-                        || _score_staff_clef_map[staffIndex].find(segment->tick().ticks()) == _score_staff_clef_map[staffIndex].end()) {
-                            int index__ = __index - 1;
-                            std::map<int, ClefType> __ts_clef_map = _clef_staff_map[staffIndex][index__];
-                            std::map<int, ClefType, Lower> _ts_clef_map;
-                            _ts_clef_map.insert(__ts_clef_map.begin(), __ts_clef_map.end());
+                    if (_score_clef_index_map[staffIndex].size() > __index) {
+                        if (_clef_staff_map_extend.find(staffIndex) != _clef_staff_map_extend.end()) {
+                            std::map<int, ClefType> __extend_ts_clef_map = _clef_staff_map_extend[staffIndex][measure->no()];
+                            std::map<int, ClefType, Lower> _extend_ts_clef_map;
+                            _extend_ts_clef_map.insert(__extend_ts_clef_map.begin(), __extend_ts_clef_map.end());
 
                             ClefType ___clefType = ClefType::INVALID;
-                            for (const auto& [_ticks, _clefType] : _ts_clef_map) {
+                            for (const auto& [_ticks, _clefType] : _extend_ts_clef_map) {
                                 if (segment->tick().ticks() >= _ticks) {
                                     ___clefType = _clefType;
                                 }
@@ -1177,11 +1115,82 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
                                 _score_staff_clef_map[staffIndex].insert({ segment->tick().ticks(), ___clefType });
                             }
                         }
-                    }
+                        if (measure->no() == _score_clef_index_map[staffIndex][__index]) {
+                            int _no = _score_clef_index_map[staffIndex][__index];
+                            
+                            std::map<int, ClefType> __ts_clef_map = _clef_staff_map[staffIndex][__index];
+                            std::map<int, ClefType, Lower> _ts_clef_map;
+                            _ts_clef_map.insert(__ts_clef_map.begin(), __ts_clef_map.end());
 
-                    if (measure->no() > _score_clef_index_map[staffIndex][__index]) {
-                        traverse_measure_index_map[staffIndex] = __index;
-                        __index_map[staffIndex] = __index + 1;
+                            ClefType ___clefType = ClefType::INVALID;
+                            for (const auto& [_ticks, _clefType] : _ts_clef_map) {
+                                if (segment->tick().ticks() >= _ticks) {
+                                    ___clefType = _clefType;
+                                } else if (segment == measure->last(mu::engraving::SegmentType::ChordRest)) {
+                                    if (std::find(_score_clef_index_map[staffIndex].begin(), _score_clef_index_map[staffIndex].end(), _no + 1) == _score_clef_index_map[staffIndex].end()) {
+                                        if (_clef_staff_map_extend.find(staffIndex) == _clef_staff_map_extend.end()) {
+                                            _clef_staff_map_extend[staffIndex] = {};
+                                        }
+                                        if (_clef_staff_map_extend[staffIndex].find(_no + 1) == _clef_staff_map_extend[staffIndex].end()) {
+                                            _clef_staff_map_extend[staffIndex][_no + 1] = {};
+                                        }
+                                        _clef_staff_map_extend[staffIndex][_no + 1].insert({ _ticks, _clefType });
+                                    } else {
+                                        _clef_staff_map[staffIndex][__index + 1].insert({ _ticks, _clefType });
+                                    }
+                                }
+                            }
+                            if (___clefType != ClefType::INVALID) {
+                                if (_score_staff_clef_map.find(staffIndex) == _score_staff_clef_map.end()) {
+                                    _score_staff_clef_map[staffIndex] = {};
+                                }
+                                _score_staff_clef_map[staffIndex].insert({ segment->tick().ticks(), ___clefType });
+                            } else if (__index >= 1) {
+                                int index__ = __index - 1;
+                                std::map<int, ClefType> __ts_clef_map = _clef_staff_map[staffIndex][index__];
+                                std::map<int, ClefType, Lower> _ts_clef_map;
+                                _ts_clef_map.insert(__ts_clef_map.begin(), __ts_clef_map.end());
+
+                                ClefType ___clefType___ = ClefType::INVALID;
+                                for (const auto& [_ticks, _clefType] : _ts_clef_map) {
+                                    if (segment->tick().ticks() >= _ticks) {
+                                        ___clefType___ = _clefType;
+                                    }
+                                }
+                                if (___clefType___ != ClefType::INVALID) {
+                                    if (_score_staff_clef_map.find(staffIndex) == _score_staff_clef_map.end()) {
+                                        _score_staff_clef_map[staffIndex] = {};
+                                    }
+                                    _score_staff_clef_map[staffIndex].insert({ segment->tick().ticks(), ___clefType___ });
+                                }
+                            }
+                        }
+                        if (measure->no() < _score_clef_index_map[staffIndex][__index] && __index >= 1) {
+                            if (_score_staff_clef_map.find(staffIndex) == _score_staff_clef_map.end() 
+                            || _score_staff_clef_map[staffIndex].find(segment->tick().ticks()) == _score_staff_clef_map[staffIndex].end()) {
+                                int index__ = __index - 1;
+                                std::map<int, ClefType> __ts_clef_map = _clef_staff_map[staffIndex][index__];
+                                std::map<int, ClefType, Lower> _ts_clef_map;
+                                _ts_clef_map.insert(__ts_clef_map.begin(), __ts_clef_map.end());
+
+                                ClefType ___clefType = ClefType::INVALID;
+                                for (const auto& [_ticks, _clefType] : _ts_clef_map) {
+                                    if (segment->tick().ticks() >= _ticks) {
+                                        ___clefType = _clefType;
+                                    }
+                                }
+                                if (___clefType != ClefType::INVALID) {
+                                    if (_score_staff_clef_map.find(staffIndex) == _score_staff_clef_map.end()) {
+                                        _score_staff_clef_map[staffIndex] = {};
+                                    }
+                                    _score_staff_clef_map[staffIndex].insert({ segment->tick().ticks(), ___clefType });
+                                }
+                            }
+                        }
+                        if (measure->no() > _score_clef_index_map[staffIndex][__index]) {
+                            traverse_measure_index_map[staffIndex] = __index;
+                            __index_map[staffIndex] = __index + 1;
+                        }
                     }
                 }
             }
@@ -1324,7 +1333,7 @@ void PlaybackCursor::processOttavaAsync(mu::engraving::Score* score) {
 
         if (seg_keySigKeys.empty()) {
             mu::engraving::System* system = measure->system();
-            if (measure == system->firstMeasure()) {
+            if (system && measure == system->firstMeasure()) {
                 seg_keySigKeys.push_back({});
                 seg_keySigKeys[0].insert(mu::engraving::Key::C);
                 last_keySigKeys.clear();
@@ -1730,12 +1739,14 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                 if (t1.ticks() + duration_ticks < tick.ticks()) {
                     processCursorNoteRenderRecover(engravingItem, tick.ticks());
                 } else {
-                    if (s->tick().ticks() != curr_seg_ticks) {
-                        curr_seg_ticks = s->tick().ticks();
-                        if (clefKeySigsKeysMap.find(curr_seg_ticks) != clefKeySigsKeysMap.end()) {
-                            if (clefKeySigsKeysMap[curr_seg_ticks].size() > 0) {
-                                m_notation->interaction()->addClefKeySigsKeysSet(clefKeySigsKeysMap[curr_seg_ticks]);
-                                m_notation->interaction()->notifyClefKeySigsKeysChange();    
+                    if (pianoKeyboardPlaybackEnable) {
+                        if (s->tick().ticks() != curr_seg_ticks) {
+                            curr_seg_ticks = s->tick().ticks();
+                            if (clefKeySigsKeysMap.find(curr_seg_ticks) != clefKeySigsKeysMap.end()) {
+                                if (clefKeySigsKeysMap[curr_seg_ticks].size() > 0) {
+                                    m_notation->interaction()->addClefKeySigsKeysSet(clefKeySigsKeysMap[curr_seg_ticks]);
+                                    m_notation->interaction()->notifyClefKeySigsKeysChange();    
+                                }
                             }
                         }
                     }
@@ -1744,33 +1755,35 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                     }
                     engravingItem->setColor(muse::draw::Color::RED);
 
-                    if (score_trill_map[engravingItem]) {
-                        m_notation->interaction()->addTrillNote(score_trill_map[engravingItem], score_trill_st_map[engravingItem], 
-                            score_trill_dt_map[engravingItem], score_trill_tdt_map[engravingItem], score_trill_tt_map[engravingItem], score_trill_ot_map[engravingItem], 
-                            score_trill_tie_map[score_trill_map[engravingItem]]);
-                        m_notation->interaction()->trillNoteUpdate();
-                    }
-                    if (score_trill_map1[engravingItem]) {
-                        m_notation->interaction()->addTrillNote1(score_trill_map1[engravingItem], score_trill_st_map1[engravingItem], 
-                            score_trill_dt_map1[engravingItem], score_trill_tdt_map1[engravingItem], score_trill_tt_map1[engravingItem], score_trill_ot_map1[engravingItem], 
-                            score_trill_tie_map1[score_trill_map1[engravingItem]]);
-                        m_notation->interaction()->trillNoteUpdate1();
-                    }
-
-                    if (score_arpeggio_map.find(engravingItem) != score_arpeggio_map.end()) {
-                        m_notation->interaction()->addArpeggioNotes(score_arpeggio_map[engravingItem], score_arpeggio_st_map[engravingItem], score_arpeggio_dt_map[engravingItem], score_arpeggio_ot_map[engravingItem]);
-                        m_notation->interaction()->arpeggioNotesUpdate(false);
-                    }
-
-                    if (score_glissando_endnotes_map.find(engravingItem) != score_glissando_endnotes_map.end()) {
-                        m_notation->interaction()->addGlissandoNote(score_glissando_startnote_map[engravingItem], 
-                                    score_glissando_st_map[engravingItem], score_glissando_dt_map[engravingItem], 
-                                    score_glissando_ot_map[engravingItem]);
-                        std::vector<Note*> _endNotes = score_glissando_endnotes_map[engravingItem];
-                        for (Note* _note : _endNotes) {
-                            m_notation->interaction()->addGlissandoEndNote(_note, ottava_map[_note]);
+                    if (pianoKeyboardPlaybackEnable) {
+                        if (score_trill_map[engravingItem]) {
+                            m_notation->interaction()->addTrillNote(score_trill_map[engravingItem], score_trill_st_map[engravingItem], 
+                                score_trill_dt_map[engravingItem], score_trill_tdt_map[engravingItem], score_trill_tt_map[engravingItem], score_trill_ot_map[engravingItem], 
+                                score_trill_tie_map[score_trill_map[engravingItem]]);
+                            m_notation->interaction()->trillNoteUpdate();
                         }
-                        m_notation->interaction()->glissandoEndNotesUpdate();
+                        if (score_trill_map1[engravingItem]) {
+                            m_notation->interaction()->addTrillNote1(score_trill_map1[engravingItem], score_trill_st_map1[engravingItem], 
+                                score_trill_dt_map1[engravingItem], score_trill_tdt_map1[engravingItem], score_trill_tt_map1[engravingItem], score_trill_ot_map1[engravingItem], 
+                                score_trill_tie_map1[score_trill_map1[engravingItem]]);
+                            m_notation->interaction()->trillNoteUpdate1();
+                        }
+
+                        if (score_arpeggio_map.find(engravingItem) != score_arpeggio_map.end()) {
+                            m_notation->interaction()->addArpeggioNotes(score_arpeggio_map[engravingItem], score_arpeggio_st_map[engravingItem], score_arpeggio_dt_map[engravingItem], score_arpeggio_ot_map[engravingItem]);
+                            m_notation->interaction()->arpeggioNotesUpdate(false);
+                        }
+
+                        if (score_glissando_endnotes_map.find(engravingItem) != score_glissando_endnotes_map.end()) {
+                            m_notation->interaction()->addGlissandoNote(score_glissando_startnote_map[engravingItem], 
+                                        score_glissando_st_map[engravingItem], score_glissando_dt_map[engravingItem], 
+                                        score_glissando_ot_map[engravingItem]);
+                            std::vector<Note*> _endNotes = score_glissando_endnotes_map[engravingItem];
+                            for (Note* _note : _endNotes) {
+                                m_notation->interaction()->addGlissandoEndNote(_note, ottava_map[_note]);
+                            }
+                            m_notation->interaction()->glissandoEndNotesUpdate();
+                        }
                     }
 
                     EngravingItemList itemList = engravingItem->childrenItems(true);
@@ -1858,10 +1871,12 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                     if (_beam) {
                                                         _beam->setColor(muse::draw::Color::RED);
                                                     }
-                                                    std::vector<Note*> _notesList = graceChords[grace_i]->notes();
-                                                    for (Note* __note__ : _notesList) {
-                                                        int __note__ottavaType = ottava_map[__note__];
-                                                        m_notation->interaction()->addPlaybackNote(__note__, __note__ottavaType, false);
+                                                    if (pianoKeyboardPlaybackEnable) {
+                                                        std::vector<Note*> _notesList = graceChords[grace_i]->notes();
+                                                        for (Note* __note__ : _notesList) {
+                                                            int __note__ottavaType = ottava_map[__note__];
+                                                            m_notation->interaction()->addPlaybackNote(__note__, __note__ottavaType, false);
+                                                        }
                                                     }
                                                 } else {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::BLACK);
@@ -1966,7 +1981,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                     _beam->setColor(muse::draw::Color::RED);
                                                 }
                                             }
-                                            m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType, note_hit_ts);
+                                            if (pianoKeyboardPlaybackEnable) {
+                                                m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType, note_hit_ts);
+                                            }
                                         }
                                     } else {
                                         int _pre_note_duration_ticks = _pre_note->chord()->durationTypeTicks().ticks();
@@ -1991,9 +2008,11 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                     if (_beam) {
                                                         _beam->setColor(muse::draw::Color::RED);
                                                     }
-                                                    for (Note* _note_item : graceChords[grace_i]->notes()) {
-                                                        int _note_item_ottavaType = ottava_map[_note_item];
-                                                        m_notation->interaction()->addPlaybackNote(_note_item, _note_item_ottavaType, false);
+                                                    if (pianoKeyboardPlaybackEnable) {
+                                                        for (Note* _note_item : graceChords[grace_i]->notes()) {
+                                                            int _note_item_ottavaType = ottava_map[_note_item];
+                                                            m_notation->interaction()->addPlaybackNote(_note_item, _note_item_ottavaType, false);
+                                                        }
                                                     }
                                                 } else {
                                                     graceChords[grace_i]->setColor(muse::draw::Color::BLACK);
@@ -2098,7 +2117,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                                     _beam->setColor(muse::draw::Color::RED);
                                                 }
                                             }
-                                            m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType, note_hit_ts);
+                                            if (pianoKeyboardPlaybackEnable) {
+                                                m_notation->interaction()->addPlaybackNote(_pre_note, _pre_note_ottavaType, note_hit_ts);
+                                            }
                                         }
                                     }
                                 } else {
@@ -2131,7 +2152,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
                                             _beam->setColor(muse::draw::Color::RED);
                                         }
                                     }
-                                    m_notation->interaction()->addPlaybackNote(_pre_note, ottava_map[_pre_note], note_hit_ts);
+                                    if (pianoKeyboardPlaybackEnable) {
+                                        m_notation->interaction()->addPlaybackNote(_pre_note, ottava_map[_pre_note], note_hit_ts);
+                                    }
                                 }
                             }
                         } 
@@ -2192,7 +2215,9 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
         setHitMeasure(measure);
     }
     
-    m_notation->interaction()->notifyPianoKeyboardNotesChanged();
+    if (pianoKeyboardPlaybackEnable) {
+        m_notation->interaction()->notifyPianoKeyboardNotesChanged();
+    }
 
     if (tick.ticks() == 0 && !isPlaying) {
         for (mu::engraving::Segment* segment = score->lastMeasure()->first(mu::engraving::SegmentType::ChordRest); segment;) {
@@ -2265,12 +2290,13 @@ muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bo
 
         processCursorSpannerRenderStatus(hit_measure(), tick, true, isPlaying);
     }
-    
-    m_notation->interaction()->arpeggioTick(tick.ticks());
-    m_notation->interaction()->trillTick(tick.ticks());
-    m_notation->interaction()->trillTick1(tick.ticks());
-    m_notation->interaction()->glissandoTick(tick.ticks());
-    m_notation->interaction()->lastMeasure(measure == score->lastMeasure());
+    if (pianoKeyboardPlaybackEnable) {
+        m_notation->interaction()->arpeggioTick(tick.ticks());
+        m_notation->interaction()->trillTick(tick.ticks());
+        m_notation->interaction()->trillTick1(tick.ticks());
+        m_notation->interaction()->glissandoTick(tick.ticks());
+        m_notation->interaction()->lastMeasure(measure == score->lastMeasure());
+    }
 
     // if (measureNo < 2) {
     //     emit lingeringCursorUpdate(0.0, measureRect.y(), measureRect.width(), measureRect.height());
