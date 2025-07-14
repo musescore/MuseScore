@@ -273,6 +273,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>mid</string>
+				<string>midi</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
 			<array>
