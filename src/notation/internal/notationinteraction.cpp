@@ -4768,7 +4768,7 @@ void NotationInteraction::moveElementAnchors(QKeyEvent* event)
         return;
     }
 
-    EditTimeTickAnchors::moveElementAnchors(element, KeyboardKey(event->key()), keyboardModifier(event->modifiers()));
+    MoveElementAnchors::moveElementAnchors(element, KeyboardKey(event->key()), keyboardModifier(event->modifiers()));
 
     apply();
 }

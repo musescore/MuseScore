@@ -36,7 +36,11 @@ public:
     static void updateAnchors(Measure* measure, staff_idx_t staffIdx);
     static TimeTickAnchor* createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx);
     static void updateLayout(Measure* measure);
+};
 
+class MoveElementAnchors
+{
+public:
     static void moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod);
 
 private:

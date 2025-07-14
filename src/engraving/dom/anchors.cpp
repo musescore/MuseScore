@@ -147,7 +147,7 @@ void EditTimeTickAnchors::updateLayout(Measure* measure)
     MeasureLayout::layoutTimeTickAnchors(measure, ctx);
 }
 
-void EditTimeTickAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod)
+void MoveElementAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey key, KeyboardModifier mod)
 {
     Segment* segment = element->parentItem() && element->parentItem()->isSegment() ? toSegment(element->parentItem()) : nullptr;
     if (!segment) {
@@ -172,11 +172,11 @@ void EditTimeTickAnchors::moveElementAnchors(EngravingItem* element, KeyboardKey
     }
 
     moveSegment(element, /*forward*/ key == Key_Right);
-    updateAnchors(element);
+    EditTimeTickAnchors::updateAnchors(element);
     checkMeasureBoundariesAndMoveIfNeed(element);
 }
 
-bool EditTimeTickAnchors::canAnchorToEndOfPrevious(const EngravingItem* element)
+bool MoveElementAnchors::canAnchorToEndOfPrevious(const EngravingItem* element)
 {
     switch (element->type()) {
     case ElementType::HARMONY:
@@ -188,7 +188,7 @@ bool EditTimeTickAnchors::canAnchorToEndOfPrevious(const EngravingItem* element)
     }
 }
 
-void EditTimeTickAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* element)
+void MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* element)
 {
     Segment* curSeg = toSegment(element->parent());
     Fraction curTick = curSeg->tick();
@@ -206,7 +206,8 @@ void EditTimeTickAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* ele
     if (needMoveToPrevious) {
         newSeg = prevMeasure->findSegment(SegmentType::TimeTick, curSeg->tick());
         if (!newSeg) {
-            TimeTickAnchor* anchor = createTimeTickAnchor(prevMeasure, curTick - prevMeasure->tick(), element->staffIdx());
+            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(prevMeasure, curTick - prevMeasure->tick(),
+                                                                               element->staffIdx());
             EditTimeTickAnchors::updateLayout(prevMeasure);
             newSeg = anchor->segment();
         }
@@ -222,7 +223,7 @@ void EditTimeTickAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* ele
     }
 }
 
-void EditTimeTickAnchors::moveSegment(EngravingItem* element, bool forward)
+void MoveElementAnchors::moveSegment(EngravingItem* element, bool forward)
 {
     if (canAnchorToEndOfPrevious(element)) {
         bool cachedAnchorToEndOfPrevious = element->getProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS).toBool();
