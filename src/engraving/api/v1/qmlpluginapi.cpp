@@ -167,6 +167,8 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<EngravingItem>("MuseScore", 3);
     qmlRegisterAnonymousType<Chord>("MuseScore", 3);
     qmlRegisterAnonymousType<Note>("MuseScore", 3);
+    qmlRegisterAnonymousType<Tuplet>("MuseScore", 3);
+    qmlRegisterAnonymousType<DurationElement>("MuseScore", 3);
     qmlRegisterAnonymousType<Segment>("MuseScore", 3);
     qmlRegisterAnonymousType<Measure>("MuseScore", 3);
     qmlRegisterAnonymousType<Part>("MuseScore", 3);
@@ -177,10 +179,20 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<Excerpt>("MuseScore", 3);
     qmlRegisterAnonymousType<Selection>("MuseScore", 3);
     qmlRegisterAnonymousType<Tie>("MuseScore", 3);
+    qmlRegisterAnonymousType<Drumset>("MuseScore", 3);
+    qmlRegisterAnonymousType<MeasureBase>("MuseScore", 3);
+    qmlRegisterAnonymousType<System>("MuseScore", 3);
+    qmlRegisterAnonymousType<Spanner>("MuseScore", 3);
+    qmlRegisterAnonymousType<SpannerSegment>("MuseScore", 3);
+    qmlRegisterAnonymousType<Ornament>("MuseScore", 3);
     qmlRegisterType<PlayEvent>("MuseScore", 3, 0, "PlayEvent");
 
     qmlRegisterAnonymousType<FractionWrapper>("MuseScore", 3);
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
+    qmlRegisterAnonymousType<IntervalWrapper>("MuseScore", 3);
+    qRegisterMetaType<IntervalWrapper*>("IntervalWrapper*");
+    qmlRegisterAnonymousType<OrnamentIntervalWrapper>("MuseScore", 3);
+    qRegisterMetaType<OrnamentIntervalWrapper*>("OrnamentIntervalWrapper*");
 
     qmlTypesRegistered = true;
 }
