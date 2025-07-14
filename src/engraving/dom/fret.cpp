@@ -26,6 +26,7 @@
 
 #include "io/file.h"
 
+#include "anchors.h"
 #include "chord.h"
 #include "factory.h"
 #include "harmony.h"
@@ -970,6 +971,40 @@ void FretDiagram::remove(EngravingItem* e)
     }
 }
 
+RectF FretDiagram::drag(EditData& ed)
+{
+    RectF result = EngravingItem::drag(ed);
+
+    Segment* segment = explicitParent() ? toSegment(parent()) : nullptr;
+    if (!segment) {
+        return result;
+    }
+
+    ElementEditDataPtr eed = ed.getData(this);
+    if (!eed) {
+        return result;
+    }
+
+    EditTimeTickAnchors::updateAnchors(this);
+
+    KeyboardModifiers km = ed.modifiers;
+    if (km & (ShiftModifier | ControlModifier)) {
+        return result;
+    }
+
+    staff_idx_t si = staffIdx();
+    Segment* newSeg = nullptr;     // don't prefer any segment while dragging, just snap to the closest
+    static constexpr double spacingFactor = 0.5;
+    score()->dragPosition(canvasPos(), &si, &newSeg, spacingFactor, allowTimeAnchor());
+    if (newSeg && (newSeg != segment || staffIdx() != si)) {
+        MoveElementAnchors::moveSegment(this, newSeg, newSeg->tick() - segment->tick());
+        PointF offsetShift = newSeg->pagePos() - segment->pagePos();
+        eed->initOffset -= offsetShift;
+    }
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   acceptDrop
 //---------------------------------------------------------
@@ -1122,17 +1157,6 @@ void FretDiagram::setTrack(track_idx_t val)
     if (m_harmony) {
         m_harmony->setTrack(val);
     }
-}
-
-//---------------------------------------------------------
-//   endEditDrag
-//---------------------------------------------------------
-
-void FretDiagram::endEditDrag(EditData& editData)
-{
-    EngravingItem::endEditDrag(editData);
-
-    triggerLayout();
 }
 
 //---------------------------------------------------------

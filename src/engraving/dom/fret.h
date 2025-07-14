@@ -224,10 +224,10 @@ public:
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
 
+    RectF drag(EditData&) override;
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
-    void endEditDrag(EditData& editData) override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -249,7 +249,7 @@ public:
     bool isInFretBox() const;
     bool isCustom(const String& harmonyNameForCompare) const;
 
-    bool allowTimeAnchor() const { return true; }
+    bool allowTimeAnchor() const { return explicitParent() && parent()->isSegment(); }
 
     friend class FretUndoData;
 
