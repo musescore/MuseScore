@@ -29,6 +29,10 @@
 #include <pthread_np.h> // Needed for pthread_setname_np on FreeBSD
 #endif
 
+#ifdef Q_OS_LINUX
+#include "log.h"
+#endif
+
 static thread_local std::string s_threadName;
 
 void muse::runtime::setThreadName(const std::string& name)

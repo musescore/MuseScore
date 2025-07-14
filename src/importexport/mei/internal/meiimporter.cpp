@@ -36,6 +36,7 @@
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/figuredbass.h"
 #include "engraving/dom/fingering.h"
+#include "engraving/dom/glissando.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/harppedaldiagram.h"
