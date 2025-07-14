@@ -4768,6 +4768,8 @@ void NotationInteraction::moveElementAnchors(QKeyEvent* event)
         return;
     }
 
+    startEdit(TranslatableString("undoableAction", "Move element anchors"));
+
     MoveElementAnchors::moveElementAnchors(element, KeyboardKey(event->key()), keyboardModifier(event->modifiers()));
 
     apply();
