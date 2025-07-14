@@ -45,6 +45,7 @@ public:
     void paint(muse::draw::Painter* painter);
 
     void setNotation(INotationPtr notation);
+    void enableKeyboardPlay(bool enable);
     void move(muse::midi::tick_t tick, bool isPlaying = true);
 
     bool visible() const;
@@ -137,6 +138,7 @@ private:
     std::map<int, std::set<uint>> clefKeySigsKeysMap;
 
     int curr_seg_ticks = 0;
+    bool pianoKeyboardPlaybackEnable = true;
 };
 }
 
