@@ -25,7 +25,7 @@
 #include "noterenderer.h"
 #include "gracechordcontext.h"
 
-#include "playback/metaparsers/internal/gracenotesmetaparser.h"
+#include "playback/metaparsers/chordarticulationsparser.h"
 #include "playback/utils/expressionutils.h"
 
 #include "dom/note.h"
@@ -33,6 +33,18 @@
 
 using namespace mu::engraving;
 using namespace muse;
+
+static const Chord* principalChord(const Chord* chord)
+{
+    if (chord->isGrace()) {
+        const EngravingItem* parent = chord->parentItem();
+        if (parent && parent->isChord()) {
+            return toChord(parent);
+        }
+    }
+
+    return chord;
+}
 
 bool BendsRenderer::isMultibendPart(const Note* note)
 {
@@ -92,26 +104,19 @@ void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContex
 
     while (currNote) {
         RenderingContext currNoteCtx = buildRenderingContext(currNote, startNoteCtx);
-        appendBendTimeFactors(currNoteCtx.score, currBend, bendTimeFactorMap);
+        renderNote(currNote, currNoteCtx, bendEvents);
 
-        if (currNote->isGrace()) {
-            IF_ASSERT_FAILED(currBend) {
-                break;
+        if (currNote->tieFor()) {
+            currBend = currNote->lastTiedNote(false)->bendFor();
+        }
+
+        if (!bendEvents.empty() && currBend) {
+            const mpe::PlaybackEvent& newEvent = bendEvents.back();
+            if (std::holds_alternative<mpe::NoteEvent>(newEvent)) {
+                const mpe::ArrangementContext& arrangementCtx = std::get<mpe::NoteEvent>(newEvent).arrangementCtx();
+                const mpe::timestamp_t timestampTo = arrangementCtx.actualTimestamp + arrangementCtx.actualDuration;
+                appendBendTimeFactors(currBend, timestampTo, bendTimeFactorMap);
             }
-
-            const Note* principalNote = currBend->endNote();
-            IF_ASSERT_FAILED(principalNote) {
-                break;
-            }
-
-            renderGraceAndPrincipalNotes(currNote, principalNote, currNoteCtx, bendEvents);
-
-            // Skip the principal note, it's already been rendered
-            currNote = principalNote;
-            currBend = principalNote->bendFor();
-            appendBendTimeFactors(currNoteCtx.score, currBend, bendTimeFactorMap);
-        } else {
-            NoteRenderer::render(currNote, currNoteCtx, bendEvents);
         }
 
         if (currBend) {
@@ -119,11 +124,6 @@ void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContex
                 bendEvents.emplace_back(buildSlightNoteEvent(currNote, currNoteCtx));
                 break;
             }
-        }
-
-        if (currNote->tieFor()) {
-            currBend = currNote->lastTiedNote(false)->bendFor();
-            appendBendTimeFactors(currNoteCtx.score, currBend, bendTimeFactorMap);
         }
 
         currNote = currBend ? currBend->endNote() : nullptr;
@@ -136,30 +136,26 @@ void BendsRenderer::renderMultibend(const Note* startNote, const RenderingContex
     }
 }
 
-void BendsRenderer::renderGraceAndPrincipalNotes(const Note* graceNote, const Note* principalNote, const RenderingContext& ctx,
-                                                 mpe::PlaybackEventList& result)
+void BendsRenderer::renderNote(const Note* note, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result)
 {
-    IF_ASSERT_FAILED(graceNote && graceNote->isGrace() && principalNote) {
-        return;
-    }
-
     for (const auto& pair : ctx.commonArticulations) {
         if (!muse::contains(GRACE_NOTE_ARTICULATION_TYPES, pair.first)) {
             continue;
         }
 
-        GraceChordCtx graceCtx = GraceChordCtx::buildCtx(principalNote->chord(), pair.first, ctx);
+        // This note is either a grace note or a principal note for other grace notes
+        const GraceChordCtx graceCtx = GraceChordCtx::buildCtx(principalChord(note->chord()), pair.first, ctx);
 
-        if (isGraceNotePlacedBeforePrincipalNote(pair.first)) {
-            renderGraceNote(graceNote, graceCtx, result);
-            NoteRenderer::render(principalNote, graceCtx.principalChordCtx, result);
+        if (note->isGrace()) {
+            renderGraceNote(note, graceCtx, result);
         } else {
-            NoteRenderer::render(principalNote, graceCtx.principalChordCtx, result);
-            renderGraceNote(graceNote, graceCtx, result);
+            NoteRenderer::render(note, graceCtx.principalChordCtx, result);
         }
 
         return;
     }
+
+    NoteRenderer::render(note, ctx, result);
 }
 
 void BendsRenderer::renderGraceNote(const Note* note, const GraceChordCtx& ctx, muse::mpe::PlaybackEventList& result)
@@ -174,7 +170,7 @@ void BendsRenderer::renderGraceNote(const Note* note, const GraceChordCtx& ctx, 
     }
 }
 
-void BendsRenderer::appendBendTimeFactors(const Score* score, const GuitarBend* bend, BendTimeFactorMap& timeFactorMap)
+void BendsRenderer::appendBendTimeFactors(const GuitarBend* bend, const mpe::timestamp_t timestamp, BendTimeFactorMap& timeFactorMap)
 {
     if (!bend) {
         return;
@@ -183,36 +179,24 @@ void BendsRenderer::appendBendTimeFactors(const Score* score, const GuitarBend* 
     const float startFactor = std::clamp(bend->startTimeFactor(), 0.f, 1.f);
     const float endFactor = std::clamp(bend->endTimeFactor(), 0.f, 1.f);
 
-    const Note* endNote = bend->endNote();
-    const mpe::timestamp_t endNoteTime = timestampFromTicks(score, endNote->tick().ticks());
-
     IF_ASSERT_FAILED(RealIsEqualOrLess(startFactor, endFactor)) {
-        timeFactorMap.insert_or_assign(endNoteTime, BendTimeFactors { 0.f, 1.f });
+        timeFactorMap.insert_or_assign(timestamp, BendTimeFactors { 0.f, 1.f });
         return;
     }
 
-    timeFactorMap.insert_or_assign(endNoteTime, BendTimeFactors { startFactor, endFactor });
+    timeFactorMap.insert_or_assign(timestamp, BendTimeFactors { startFactor, endFactor });
 }
 
 RenderingContext BendsRenderer::buildRenderingContext(const Note* note, const RenderingContext& initialCtx)
 {
-    const Chord* chord = note->chord();
-
-    if (chord->isGrace()) {
-        // Use the principal chord to build the context
-        const EngravingItem* parent = chord->parentItem();
-        if (parent && parent->isChord()) {
-            chord = toChord(parent);
-        }
-    }
+    // Use the principal chord to build the context
+    const Chord* chord = principalChord(note->chord());
 
     RenderingContext ctx = engraving::buildRenderingCtx(chord, initialCtx.positionTickOffset,
                                                         initialCtx.profile, initialCtx.playbackCtx,
                                                         initialCtx.commonArticulations);
 
-    if (note->isGrace()) {
-        GraceNotesMetaParser::parse(note->chord(), ctx, ctx.commonArticulations);
-    }
+    ChordArticulationsParser::buildChordArticulationMap(chord, ctx, ctx.commonArticulations);
 
     return ctx;
 }
