@@ -56,6 +56,7 @@
 #include "../dom/tempotext.h"
 #include "../dom/image.h"
 
+#include "../types/typesconv.h"
 #include "tread.h"
 
 #include "log.h"
@@ -160,6 +161,8 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
             measure->m_mstaves[staffIdx]->setVisible(e.readInt());
         } else if (tag == "stemless") {
             measure->m_mstaves[staffIdx]->setStemless(e.readInt());
+        } else if (tag == "hideIfEmpty") {
+            measure->m_mstaves[staffIdx]->setHideIfEmpty(TConv::fromXml(e.readAsciiText(), AutoOnOff::AUTO));
         } else if (tag == "measureRepeatCount") {
             measure->setMeasureRepeatCount(e.readInt(), staffIdx);
         } else if (tag == "SystemDivider") {

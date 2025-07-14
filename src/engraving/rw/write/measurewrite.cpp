@@ -27,6 +27,7 @@
 #include "dom/spacer.h"
 #include "dom/textlinebase.h"
 
+#include "types/typesconv.h"
 #include "twrite.h"
 
 using namespace mu::engraving;
@@ -92,6 +93,9 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
     }
     if (mstaff->stemless()) {
         xml.tag("stemless", mstaff->stemless());
+    }
+    if (mstaff->hideIfEmpty() != AutoOnOff::AUTO) {
+        xml.tag("hideIfEmpty", TConv::toXml(mstaff->hideIfEmpty()));
     }
     if (mstaff->measureRepeatCount()) {
         xml.tag("measureRepeatCount", mstaff->measureRepeatCount());
