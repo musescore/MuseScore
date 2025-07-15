@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.40">
-  <programVersion>4.5.0</programVersion>
-  <programRevision></programRevision>
-  <LastEID>996</LastEID>
+<museScore version="4.60">
+  <programVersion>4.6.0</programVersion>
+  <programRevision>19453a3</programRevision>
   <Score>
+    <eid>jX6Hg1A1QjP_lJdETfjNgpM</eid>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -27,26 +27,27 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
     <Part id="1">
-      <Staff id="1">
-        <linkedTo>2</linkedTo>
+      <Staff>
+        <eid>29kqYa16EVN_ecFkluHPKJB</eid>
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
-      <Staff id="2">
-        <linkedTo>1</linkedTo>
+      <Staff>
+        <eid>rKJwlC9TipO_1hnTJKIQ6dB</eid>
+        <linkedTo>29kqYa16EVN_ecFkluHPKJB</linkedTo>
         <StaffType group="tablature">
           <name>tab6StrSimple</name>
           <lines>6</lines>
           <lineDistance>1.5</lineDistance>
-          <stemless>1</stemless>
           <timesig>0</timesig>
           <durations>0</durations>
           <durationFontName>MuseScore Tab Modern</durationFontName>
           <durationFontSize>15</durationFontSize>
           <durationFontY>0</durationFontY>
-          <fretFontName>MuseScore Tab Sans</fretFontName>
+          <fretUseTextStyle>0</fretUseTextStyle>
+          <fretPresetIdx>0</fretPresetIdx>
           <fretFontSize>9</fretFontSize>
           <fretFontY>0</fretFontY>
           <linesThrough>0</linesThrough>
@@ -57,6 +58,7 @@
           <stemsThrough>0</stemsThrough>
           <upsideDown>0</upsideDown>
           <useNumbers>1</useNumbers>
+          <showBackTied>0</showBackTied>
           </StaffType>
         <defaultClef>G8vb</defaultClef>
         </Staff>
@@ -139,46 +141,44 @@
         <height>5.01466</height>
         <boxAutoSize>0</boxAutoSize>
         <sizeIsSpatiumDependent>1</sizeIsSpatiumDependent>
-        <eid>4294967417</eid>
+        <eid>OUSWDiwUMAG_VZHv9Y1b7U</eid>
         <Text>
-          <eid>8589934598</eid>
+          <eid>B4SZl3XldnB_V/9fMesEmsD</eid>
           <style>title</style>
           <text>Guitar bends</text>
           </Text>
         </VBox>
       <Measure>
+        <eid>opsijaka8GM_nlZV1f13g7B</eid>
         <voice>
           <KeySig>
-            <eid>12884901910</eid>
+            <eid>CXtbWtcPmMP_hJ0ukNnSr8</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>17179869208</eid>
+            <eid>HFej5hPZJHF_C8k0vUhKbeM</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>21474836505</eid>
-            <linkedMain/>
+            <eid>P5FSxgf5koL_mCeE8ewKTYB</eid>
             <durationType>quarter</durationType>
             </Rest>
           <StaffText>
-            <eid>322122547247</eid>
+            <eid>CGuS0Jz0WxJ_boTo/7ZlvQF</eid>
             <offset x="0.142528" y="-2.31299"/>
             <text>Multibend</text>
             </StaffText>
           <PlayTechAnnotation>
             <playTechType>distortion</playTechType>
-            <eid>167503724594</eid>
+            <eid>lzeF2G9p5bJ_pKqx7B3qyxJ</eid>
             <text>distort</text>
             </PlayTechAnnotation>
           <Chord>
-            <eid>25769803890</eid>
-            <linkedMain/>
+            <eid>+QCwOMbk7EG_RbzWCa6uXmC</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>30064771092</eid>
-              <linkedMain/>
+              <eid>HVxg+/3znTH_P6p7puRdQyD</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
@@ -188,8 +188,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>34359738498</eid>
-                  <linkedMain/>
+                  <eid>Q1qJFYSIfbL_2BSx6kQxmXN</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -201,12 +200,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>38654705778</eid>
-            <linkedMain/>
+            <eid>1+hwZO5yZJO_GUYB3PjNZYE</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>42949672980</eid>
-              <linkedMain/>
+              <eid>mkZVdjVoS/D_BPzEjBGzGhL</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -216,8 +213,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>47244640386</eid>
-                  <linkedMain/>
+                  <eid>uPvE3TLxgHN_M8vZ1pOTer</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -236,12 +232,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>51539607666</eid>
-            <linkedMain/>
+            <eid>cNWaKrKOBBE_jR35jQPjcsN</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>55834574868</eid>
-              <linkedMain/>
+              <eid>Nh1PN1oDXCO_WvfE8s0DktL</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
@@ -251,8 +245,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>60129542274</eid>
-                  <linkedMain/>
+                  <eid>a/YTvtwHXoD_Ke4+HUInaB</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -275,17 +268,16 @@
           </voice>
         </Measure>
       <Measure>
+        <eid>Fr0lKp23AiK_9TePamPAMWC</eid>
         <voice>
           <Chord>
-            <eid>64424509554</eid>
-            <linkedMain/>
+            <eid>cyGexBuFHNE_uJgNv2cMzLL</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>68719476756</eid>
-              <linkedMain/>
+              <eid>LVaOUN165cF_/mBsSoi7VvC</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -295,8 +287,7 @@
                   <guitarBendType>2</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>73014444162</eid>
-                  <linkedMain/>
+                  <eid>aiQHNOWyTjO_aLQRp/p05n</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -315,16 +306,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>77309411442</eid>
-            <linkedMain/>
+            <eid>juNoYnmTRaL_to25mAwD4EL</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>81604378644</eid>
-              <linkedMain/>
+              <eid>wgvGso7zM6B_rsfJeH4NGWC</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>85899345950</eid>
-                  <linkedMain/>
+                  <eid>YX6z99BwqvO_SqDMoRk5viP</eid>
                   </Tie>
                 <next>
                   <location>
@@ -346,12 +334,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>90194313330</eid>
-            <linkedMain/>
+            <eid>p0AN5qwFMuC_30qPrz4SdzI</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>94489280532</eid>
-              <linkedMain/>
+              <eid>51tiudJVgy_aAkmAJAKjDJ</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -368,8 +354,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>167503724674</eid>
-                  <linkedMain/>
+                  <eid>Rsn6OrOgcTK_mLzClY9c0iB</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -381,16 +366,81 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>171798691954</eid>
-            <linkedMain/>
-            <durationType>quarter</durationType>
+            <eid>Mu1bVqexYaC_jcEF9p6qPVO</eid>
+            <durationType>eighth</durationType>
+            <grace8after/>
             <Note>
-              <eid>176093659156</eid>
-              <linkedMain/>
+              <eid>Y2fSkBql8TI_9M80WD3IvEM</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
               <string>2</string>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    <grace>1</grace>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>ksGTdUjC9gI_qhcbrL3lb+I</eid>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <grace8after/>
+            <noStem>1</noStem>
+            <Note>
+              <eid>wJfoQcJt5LO_WNVFVFHQs0K</eid>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>2</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>xnxxPHnaHKG_vUeEDyYCAuC</eid>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <grace>0</grace>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>CtgW00nY54O_THIEyGopfZB</eid>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>9KYiaa0A4oN_LuQHfNgThTL</eid>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>0</fret>
+              <string>2</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>0</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>Trm4VHAK4CC_noUZBCrFvCI</eid>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <grace>1</grace>
+                    </location>
+                  </next>
+                </Spanner>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -401,26 +451,24 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>180388626457</eid>
-            <linkedMain/>
+            <eid>Vze60pJsxWH_597AQuYSiAE</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>31OwOvPXCTC_RwYi+bBMZRC</eid>
         <voice>
           <StaffText>
-            <eid>322122547247</eid>
+            <eid>4AuYVNHQimI_SFI0cVu7NUN</eid>
             <offset x="-1.4035" y="-2.13112"/>
             <text>2 bends 1 chord</text>
             </StaffText>
           <Chord>
-            <eid>103079215218</eid>
-            <linkedMain/>
+            <eid>Zz0XhYV6HbD_Z1i5fN0sm4O</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>107374182420</eid>
-              <linkedMain/>
+              <eid>1ZECDGz+uvF_fkVcVz2foJG</eid>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -430,8 +478,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>111669149826</eid>
-                  <linkedMain/>
+                  <eid>jwjA2FwaxOD_WhFlJCxZyy</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -442,8 +489,7 @@
                 </Spanner>
               </Note>
             <Note>
-              <eid>115964117012</eid>
-              <linkedMain/>
+              <eid>jtHZhslQtcD_G4gYe7iTjBH</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -453,8 +499,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>120259084418</eid>
-                  <linkedMain/>
+                  <eid>ie7qDIKxkQC_iASQvUG7WSI</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -465,8 +510,7 @@
                 </Spanner>
               </Note>
             <Note>
-              <eid>124554051604</eid>
-              <linkedMain/>
+              <eid>sapLdWTlIED_DR9Dsd2gfDM</eid>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -474,12 +518,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>128849018994</eid>
-            <linkedMain/>
+            <eid>C86kCEjY6JD_3/Avf5LlkkE</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>133143986196</eid>
-              <linkedMain/>
+              <eid>50/qmVmaa5G_cCzYDTqH8tL</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -493,8 +535,7 @@
                 </Spanner>
               </Note>
             <Note>
-              <eid>137438953492</eid>
-              <linkedMain/>
+              <eid>+BD9CMlafG_NIaamU4RgCK</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -509,36 +550,34 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>141733920793</eid>
-            <linkedMain/>
+            <eid>VTrN5RVloiM_KXYZ2IcTvFF</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>OglARhzeRpP_jjodfIXHR4H</eid>
         <voice>
           <StaffText>
-            <eid>322122547247</eid>
+            <eid>GVotMDeEhkM_KpImvOv11QD</eid>
             <offset x="-1.42528" y="-2.27794"/>
             <text>Pre-bend</text>
             </StaffText>
           <Chord>
-            <eid>107374182514</eid>
-            <linkedMain/>
+            <eid>VZG6AgNhyIE_lM30tnxE8kH</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>111669149716</eid>
-              <linkedMain/>
+              <eid>YuMX1bcId4B_WbXzBoxut5I</eid>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
-                <eid>115964116997</eid>
+                <eid>d3bnFafRrWK_suMjxwzwEMG</eid>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
-                <eid>120259084293</eid>
+                <eid>GDeJlqAAcPN_0bIr9ZF5gNN</eid>
                 </Symbol>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -549,8 +588,7 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>124554051714</eid>
-                  <linkedMain/>
+                  <eid>Jc6rTdgm+nH_BjssbD6qWwH</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -561,16 +599,13 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>167503724658</eid>
-            <linkedMain/>
+            <eid>SKrYq3TKE7M_/oc5Cpd1OrH</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>171798691860</eid>
-              <linkedMain/>
+              <eid>6v/Cpoj4MTK_oMAo48wjHoF</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>1730871820318</eid>
-                  <linkedMain/>
+                  <eid>OQ7CZSc0AWL_KNY+iKSeoYK</eid>
                   </Tie>
                 <next>
                   <location>
@@ -592,12 +627,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>146028888178</eid>
-            <linkedMain/>
+            <eid>tjOj+CtHKyM_oPTgddlt+PE</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>150323855380</eid>
-              <linkedMain/>
+              <eid>8xkgZsah2UM_agjw4Iphd4N</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -614,8 +647,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>1756641624195</eid>
-                  <linkedMain/>
+                  <eid>cf4Wu6vDXCE_3v0hI84AvuH</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -627,12 +659,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>1692217114739</eid>
-            <linkedMain/>
+            <eid>fh18ZV95oFE_NbI3uNXcS0O</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>1687922147348</eid>
-              <linkedMain/>
+              <eid>G1EHV+ajCfC_Y5P+KUbHuCP</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -647,26 +677,24 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>1675037245465</eid>
-            <linkedMain/>
+            <eid>D8Eh2vwCHfC_oEqxJTGucDB</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>A0sL0jb6uOJ_OP06TVhqp8P</eid>
         <voice>
           <StaffText>
-            <eid>322122547247</eid>
+            <eid>Q12qAbwTjvP_PKf2sNg4CqK</eid>
             <offset x="-0.570112" y="-2.13541"/>
             <text>Slight bend</text>
             </StaffText>
           <Chord>
-            <eid>184683593842</eid>
-            <linkedMain/>
+            <eid>wCRK6r46lKF_Xk2oXg9WctD</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>188978561044</eid>
-              <linkedMain/>
+              <eid>MGCkTEkryvN_6biZ9Ed67g</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -676,8 +704,7 @@
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>193273528450</eid>
-                  <linkedMain/>
+                  <eid>pc09/cCmJbK_xRfHRac1JOE</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -694,12 +721,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>107374182514</eid>
-            <linkedMain/>
+            <eid>M6U+QFNNVMN_Z0iJp5FViNG</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>111669149716</eid>
-              <linkedMain/>
+              <eid>udaSJLjoVtH_NKSHVJLd0bK</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -709,8 +734,7 @@
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>115964117122</eid>
-                  <linkedMain/>
+                  <eid>FGe0zvoFx+L_YUUdW7WM+5I</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -727,29 +751,27 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>201863462937</eid>
-            <linkedMain/>
+            <eid>/vZ0yuDcL/J_JqJX2zbuqwN</eid>
             <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>YgJHoMihjoM_FY2KzaIWdGK</eid>
         <voice>
           <StaffText>
-            <eid>322122547247</eid>
+            <eid>TVL3dg0+DIC_AM+HUpM7nRL</eid>
             <offset x="-0.877068" y="-1.7649"/>
             <text>Custom time offsets</text>
             </StaffText>
           <Chord>
-            <eid>81604378738</eid>
-            <linkedMain/>
+            <eid>eM5JdgOCMV_/CUYihKw2ON</eid>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>85899345940</eid>
-              <linkedMain/>
+              <eid>rsq6NTI2gpH_QFAZbVT2cPN</eid>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -759,8 +781,7 @@
                   <guitarBendType>2</guitarBendType>
                   <bendStartTimeFactor>0.25</bendStartTimeFactor>
                   <bendEndTimeFactor>0.75</bendEndTimeFactor>
-                  <eid>90194313346</eid>
-                  <linkedMain/>
+                  <eid>7WLv1EPebiJ_f06j+Gr456E</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -771,12 +792,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>4294967410</eid>
-            <linkedMain/>
+            <eid>5A0o2pqTuaL_RC4lENLVT2H</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>8589934612</eid>
-              <linkedMain/>
+              <eid>CtaAykPZ/eB_xnOOSiB/mzB</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
@@ -786,8 +805,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0.5</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>12884902018</eid>
-                  <linkedMain/>
+                  <eid>8SEeoD8bRZK_hGvRIB+/hgP</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -806,12 +824,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>17179869298</eid>
-            <linkedMain/>
+            <eid>cLwka3jk/AG_ZKEe9/QoAyB</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>21474836500</eid>
-              <linkedMain/>
+              <eid>R0TPtYejsTE_d5jgR/QhMpH</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -821,8 +837,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0.25</bendStartTimeFactor>
                   <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                  <eid>25769803906</eid>
-                  <linkedMain/>
+                  <eid>eBs3Pnc55hO_CDb7gw2YbIM</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -841,12 +856,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>30064771186</eid>
-            <linkedMain/>
+            <eid>aPeiLINTLuK_Thxjc9FvUdJ</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>34359738388</eid>
-              <linkedMain/>
+              <eid>cKWz5E9de5P_BPghC15OEOL</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -861,25 +874,22 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>38654705689</eid>
-            <linkedMain/>
+            <eid>zYQD1VPlabL_vylDwZViXiK</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
       <Measure>
+        <eid>IwxiA+zeb/N_HAuZnrVDLLB</eid>
         <voice>
           <Chord>
-            <eid>3740916514930</eid>
-            <linkedMain/>
+            <eid>3YyeoX7BwK_awtR7OiEHeH</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>3736621547540</eid>
-              <linkedMain/>
+              <eid>gy+1B+ToUxP_aBSrTOmb2AO</eid>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>4157528342559</eid>
-                  <linkedMain/>
+                  <eid>URr1L8wyfHH_f503OAFr34D</eid>
                   </Tie>
                 <next>
                   <location>
@@ -894,12 +904,10 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>3835405795442</eid>
-            <linkedMain/>
+            <eid>Z2dJjB/F2iP_qX6xyYXW5YM</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>3831110828052</eid>
-              <linkedMain/>
+              <eid>AwA3PWLXNrK_xmnhQ4VpimK</eid>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -916,8 +924,7 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>4196183048322</eid>
-                  <linkedMain/>
+                  <eid>NRgHcaV1EgG_lSrSrtxHSlI</eid>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -929,16 +936,14 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>4080218931314</eid>
-            <linkedMain/>
+            <eid>77xvLpXq6FK_n/XqzSux20</eid>
             <durationType>quarter</durationType>
             <Note>
-              <eid>4075923963924</eid>
-              <linkedMain/>
+              <eid>TCUQPq3Z2YK_EWLQDKptz7J</eid>
               <pitch>59</pitch>
               <tpc>19</tpc>
-              <fret>4</fret>
-              <string>2</string>
+              <fret>0</fret>
+              <string>1</string>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -949,8 +954,7 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>4063039062042</eid>
-            <linkedMain/>
+            <eid>IynT2/aJKQK_ui/34fKe+ZB</eid>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
@@ -960,29 +964,26 @@
       <Measure>
         <voice>
           <KeySig>
-            <eid>210453397526</eid>
+            <eid>VS/G2pV0C7J_IgojHeZLFzH</eid>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
-            <eid>214748364824</eid>
+            <eid>xjAn2Ysqk+O_l8AjkJFtBcJ</eid>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Rest>
-            <eid>219043332121</eid>
-            <linked>
-              </linked>
+            <eid>tv13sadfCsM_fMNxlqV6AnF</eid>
+            <linkedTo>P5FSxgf5koL_mCeE8ewKTYB</linkedTo>
             <durationType>quarter</durationType>
             </Rest>
           <Chord>
-            <eid>223338299506</eid>
-            <linked>
-              </linked>
+            <eid>C3iwjcKuosI_SKtYQiwXmHH</eid>
+            <linkedTo>+QCwOMbk7EG_RbzWCa6uXmC</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>227633266708</eid>
-              <linked>
-                </linked>
+              <eid>ke6WYN8ab1E_74ie17SuL3P</eid>
+              <linkedTo>HVxg+/3znTH_P6p7puRdQyD</linkedTo>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
@@ -992,9 +993,8 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>231928234114</eid>
-                  <linked>
-                    </linked>
+                  <eid>3qwJWVXt/dK_VEBtGiOHP5J</eid>
+                  <linkedTo>Q1qJFYSIfbL_2BSx6kQxmXN</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1006,14 +1006,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>236223201394</eid>
-            <linked>
-              </linked>
+            <eid>TVHJButURJD_FHXQa6dxAOK</eid>
+            <linkedTo>1+hwZO5yZJO_GUYB3PjNZYE</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>240518168596</eid>
-              <linked>
-                </linked>
+              <eid>l3grW50DPQP_/RxSG+REi2E</eid>
+              <linkedTo>mkZVdjVoS/D_BPzEjBGzGhL</linkedTo>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -1023,9 +1021,8 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>244813136002</eid>
-                  <linked>
-                    </linked>
+                  <eid>jxHvbp8Ee9E_7ASpiRjZPvK</eid>
+                  <linkedTo>uPvE3TLxgHN_M8vZ1pOTer</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1044,22 +1041,20 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>249108103282</eid>
-            <linked>
-              </linked>
+            <eid>P6A7M/z0amN_W+7Kza2M9hI</eid>
+            <linkedTo>cNWaKrKOBBE_jR35jQPjcsN</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>253403070484</eid>
-              <linked>
-                </linked>
+              <eid>ZSHC83EpAsG_oTXyaR6diWE</eid>
+              <linkedTo>Nh1PN1oDXCO_WvfE8s0DktL</linkedTo>
               <visible>1</visible>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
-                <eid>2929167695893</eid>
+                <eid>vvyzQ5HhgNB_jJrQ9Q7GywD</eid>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
-                <eid>2933462663189</eid>
+                <eid>c1n8O6W/gNN_apz3zdnkM7E</eid>
                 </Symbol>
               <pitch>53</pitch>
               <tpc>13</tpc>
@@ -1071,9 +1066,8 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>257698037890</eid>
-                  <linked>
-                    </linked>
+                  <eid>YAcch6iNX3L_LZuFTFTrgJI</eid>
+                  <linkedTo>a/YTvtwHXoD_Ke4+HUInaB</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1098,17 +1092,15 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>261993005170</eid>
-            <linked>
-              </linked>
+            <eid>Yp5AOVViTgO_QcOCHV631rL</eid>
+            <linkedTo>cyGexBuFHNE_uJgNv2cMzLL</linkedTo>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>266287972372</eid>
-              <linked>
-                </linked>
+              <eid>bDWQobLgXCH_SSJG1e0u/kE</eid>
+              <linkedTo>LVaOUN165cF_/mBsSoi7VvC</linkedTo>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>3</fret>
@@ -1118,12 +1110,11 @@
                   <guitarBendType>2</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>270582939778</eid>
-                  <linked>
-                    </linked>
+                  <eid>bTOTrAsImyK_Zao8nN2imWC</eid>
+                  <linkedTo>aiQHNOWyTjO_aLQRp/p05n</linkedTo>
                   <anchor>3</anchor>
                   <GuitarBendHold>
-                    <eid>274877907076</eid>
+                    <eid>G5KIgRJCiTM_bcJcG2u6TYG</eid>
                     <anchor>3</anchor>
                     </GuitarBendHold>
                   </GuitarBend>
@@ -1143,19 +1134,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>279172874354</eid>
-            <linked>
-              </linked>
+            <eid>eB3guZygOMM_prlO79UuoOO</eid>
+            <linkedTo>juNoYnmTRaL_to25mAwD4EL</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>283467841556</eid>
-              <linked>
-                </linked>
+              <eid>bp4uapwxNoF_R5zS9MipyaF</eid>
+              <linkedTo>wgvGso7zM6B_rsfJeH4NGWC</linkedTo>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>287762808862</eid>
-                  <linked>
-                    </linked>
+                  <eid>cwgZpqhIzsN_ywQNDeufvhO</eid>
+                  <linkedTo>YX6z99BwqvO_SqDMoRk5viP</linkedTo>
                   </Tie>
                 <next>
                   <location>
@@ -1177,14 +1165,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>292057776242</eid>
-            <linked>
-              </linked>
+            <eid>Q1wGvBKGXAF_Dm0s2WLpVlC</eid>
+            <linkedTo>p0AN5qwFMuC_30qPrz4SdzI</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>296352743444</eid>
-              <linked>
-                </linked>
+              <eid>XDefDgycYIL_m30vJ8n+GnO</eid>
+              <linkedTo>51tiudJVgy_aAkmAJAKjDJ</linkedTo>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -1201,9 +1187,8 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>184683593858</eid>
-                  <linked>
-                    </linked>
+                  <eid>ZWjCvunanWP_2DC8B1krbpH</eid>
+                  <linkedTo>Rsn6OrOgcTK_mLzClY9c0iB</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1215,22 +1200,89 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>188978561138</eid>
-            <linked>
-              </linked>
-            <durationType>quarter</durationType>
+            <eid>27E379ukCpD_W9o0ROBpJWH</eid>
+            <linkedTo>Mu1bVqexYaC_jcEF9p6qPVO</linkedTo>
+            <durationType>eighth</durationType>
+            <grace8after/>
             <Note>
-              <eid>193273528340</eid>
-              <linked>
-                </linked>
+              <eid>eTcq/+FGwSL_xnsFoIApp/B</eid>
+              <linkedTo>Y2fSkBql8TI_9M80WD3IvEM</linkedTo>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
-                <eid>3040836845589</eid>
+                <eid>XIik2jf2lnO_mLftaeOwv0C</eid>
                 <visible>0</visible>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
-                <eid>3045131812885</eid>
+                <eid>tfhKbaKYNRJ_MB8gCxpMKvI</eid>
+                <visible>0</visible>
+                </Symbol>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              <fret>2</fret>
+              <string>2</string>
+              <ghost>1</ghost>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    <grace>1</grace>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>dnJAena3Yk_cWYnyLKz3tF</eid>
+            <linkedTo>ksGTdUjC9gI_qhcbrL3lb+I</linkedTo>
+            <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
+            <grace8after/>
+            <noStem>1</noStem>
+            <Note>
+              <eid>MKQGIsYR7rE_sF6ti6QqsJM</eid>
+              <linkedTo>wJfoQcJt5LO_WNVFVFHQs0K</linkedTo>
+              <pitch>57</pitch>
+              <tpc>17</tpc>
+              <fret>0</fret>
+              <string>2</string>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>2</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>Y5aJT6qRNkI_oU0qYI8GTEL</eid>
+                  <linkedTo>xnxxPHnaHKG_vUeEDyYCAuC</linkedTo>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <grace>0</grace>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="GuitarBend">
+                <prev>
+                  <location>
+                    </location>
+                  </prev>
+                </Spanner>
+              </Note>
+            </Chord>
+          <Chord>
+            <eid>yvgz+w/4+vP_Z8iYll76lmE</eid>
+            <linkedTo>CtgW00nY54O_THIEyGopfZB</linkedTo>
+            <durationType>quarter</durationType>
+            <Note>
+              <eid>LooB1p109W_0jK2h/+eANG</eid>
+              <linkedTo>9KYiaa0A4oN_LuQHfNgThTL</linkedTo>
+              <Symbol>
+                <name>noteheadParenthesisLeft</name>
+                <eid>D1YSWJs+aUM_Udox8y4qsGJ</eid>
+                <visible>0</visible>
+                </Symbol>
+              <Symbol>
+                <name>noteheadParenthesisRight</name>
+                <eid>KPHzRVlhbNI_6Xggf28c/rH</eid>
                 <visible>0</visible>
                 </Symbol>
               <pitch>55</pitch>
@@ -1238,6 +1290,21 @@
               <fret>3</fret>
               <string>3</string>
               <ghost>1</ghost>
+              <Spanner type="GuitarBend">
+                <GuitarBend>
+                  <guitarBendType>0</guitarBendType>
+                  <bendStartTimeFactor>0</bendStartTimeFactor>
+                  <bendEndTimeFactor>1</bendEndTimeFactor>
+                  <eid>WLmzCQ9uzhL_o45T2GdjBSC</eid>
+                  <linkedTo>Trm4VHAK4CC_noUZBCrFvCI</linkedTo>
+                  <anchor>3</anchor>
+                  </GuitarBend>
+                <next>
+                  <location>
+                    <grace>1</grace>
+                    </location>
+                  </next>
+                </Spanner>
               <Spanner type="GuitarBend">
                 <prev>
                   <location>
@@ -1248,9 +1315,8 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>197568495641</eid>
-            <linked>
-              </linked>
+            <eid>U4TMujsc85P_xvPTDuZkRDD</eid>
+            <linkedTo>Vze60pJsxWH_597AQuYSiAE</linkedTo>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
@@ -1258,14 +1324,12 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>304942678130</eid>
-            <linked>
-              </linked>
+            <eid>zGiNsvsY7EO_WTaU26rkXOD</eid>
+            <linkedTo>Zz0XhYV6HbD_Z1i5fN0sm4O</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>309237645332</eid>
-              <linked>
-                </linked>
+              <eid>b4rHtK1hjpG_etxf/FYOkOG</eid>
+              <linkedTo>1ZECDGz+uvF_fkVcVz2foJG</linkedTo>
               <pitch>50</pitch>
               <tpc>16</tpc>
               <fret>5</fret>
@@ -1275,9 +1339,8 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>313532612738</eid>
-                  <linked>
-                    </linked>
+                  <eid>r78/6w+l+tO_T2sn4raDik</eid>
+                  <linkedTo>jwjA2FwaxOD_WhFlJCxZyy</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1288,9 +1351,8 @@
                 </Spanner>
               </Note>
             <Note>
-              <eid>317827579924</eid>
-              <linked>
-                </linked>
+              <eid>4pPe9J7p+AD_ihsbLLoBUKI</eid>
+              <linkedTo>jtHZhslQtcD_G4gYe7iTjBH</linkedTo>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -1300,9 +1362,8 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>322122547330</eid>
-                  <linked>
-                    </linked>
+                  <eid>m9RH8Tb+jlG_hzMFM6kiIzJ</eid>
+                  <linkedTo>ie7qDIKxkQC_iASQvUG7WSI</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1313,9 +1374,8 @@
                 </Spanner>
               </Note>
             <Note>
-              <eid>326417514516</eid>
-              <linked>
-                </linked>
+              <eid>IqQCRUwd1cK_eCzl7ABCAMC</eid>
+              <linkedTo>sapLdWTlIED_DR9Dsd2gfDM</linkedTo>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -1323,14 +1383,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>330712481906</eid>
-            <linked>
-              </linked>
+            <eid>AQpoK++4wLD_m0vEMD4gMeJ</eid>
+            <linkedTo>C86kCEjY6JD_3/Avf5LlkkE</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>335007449108</eid>
-              <linked>
-                </linked>
+              <eid>Kn8xq4ioyRB_rzfvEQszsUF</eid>
+              <linkedTo>50/qmVmaa5G_cCzYDTqH8tL</linkedTo>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>5</fret>
@@ -1344,9 +1402,8 @@
                 </Spanner>
               </Note>
             <Note>
-              <eid>339302416404</eid>
-              <linked>
-                </linked>
+              <eid>8GhMvjyQWtP_TphInGNNFJF</eid>
+              <linkedTo>+BD9CMlafG_NIaamU4RgCK</linkedTo>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>0</fret>
@@ -1361,9 +1418,8 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>343597383705</eid>
-            <linked>
-              </linked>
+            <eid>y1m47rCw3yO_WSIMdwVA4LK</eid>
+            <linkedTo>VTrN5RVloiM_KXYZ2IcTvFF</linkedTo>
             <durationType>half</durationType>
             </Rest>
           </voice>
@@ -1371,17 +1427,15 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>128849018994</eid>
-            <linked>
-              </linked>
+            <eid>Ykl+Ibuwk9E_i3oygDiMi+D</eid>
+            <linkedTo>VZG6AgNhyIE_lM30tnxE8kH</linkedTo>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>133143986196</eid>
-              <linked>
-                </linked>
+              <eid>DqpcLqVGxpF_c/KP/MAdwhP</eid>
+              <linkedTo>YuMX1bcId4B_WbXzBoxut5I</linkedTo>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>
@@ -1391,12 +1445,11 @@
                   <guitarBendType>1</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>137438953602</eid>
-                  <linked>
-                    </linked>
+                  <eid>+5OI6R5q2hH_NO/XNRvYd+I</eid>
+                  <linkedTo>Jc6rTdgm+nH_BjssbD6qWwH</linkedTo>
                   <anchor>3</anchor>
                   <GuitarBendHold>
-                    <eid>1743756722309</eid>
+                    <eid>7E1wgiwmIKB_hx8hZNhQn7P</eid>
                     <anchor>3</anchor>
                     </GuitarBendHold>
                   </GuitarBend>
@@ -1408,19 +1461,16 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>360777252978</eid>
-            <linked>
-              </linked>
+            <eid>24p0e2U15fJ_TtPP5QhOwBL</eid>
+            <linkedTo>SKrYq3TKE7M_/oc5Cpd1OrH</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>365072220180</eid>
-              <linked>
-                </linked>
+              <eid>tbD4UO81AK_y/7TOfWgM1E</eid>
+              <linkedTo>6v/Cpoj4MTK_oMAo48wjHoF</linkedTo>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>1735166787614</eid>
-                  <linked>
-                    </linked>
+                  <eid>2XDZBJkaiiM_B4U6n9ZwzhL</eid>
+                  <linkedTo>OQ7CZSc0AWL_KNY+iKSeoYK</linkedTo>
                   </Tie>
                 <next>
                   <location>
@@ -1442,14 +1492,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>158913790066</eid>
-            <linked>
-              </linked>
+            <eid>6wCGN1iirID_/XU2XRFzRyM</eid>
+            <linkedTo>tjOj+CtHKyM_oPTgddlt+PE</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>163208757268</eid>
-              <linked>
-                </linked>
+              <eid>qvpbXy0JVJJ_mCwjOxKU+0E</eid>
+              <linkedTo>8xkgZsah2UM_agjw4Iphd4N</linkedTo>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -1466,9 +1514,8 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>1760936591491</eid>
-                  <linked>
-                    </linked>
+                  <eid>nsl79jR9l9E_mdPfjACSKOP</eid>
+                  <linkedTo>cf4Wu6vDXCE_3v0hI84AvuH</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1480,22 +1527,20 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>1709396983923</eid>
-            <linked>
-              </linked>
+            <eid>ggGHPNrVTSH_7o7/6ZZXMPH</eid>
+            <linkedTo>fh18ZV95oFE_NbI3uNXcS0O</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>1722281885716</eid>
-              <linked>
-                </linked>
+              <eid>IBTatGV2MsH_cGPIL3R7PpI</eid>
+              <linkedTo>G1EHV+ajCfC_Y5P+KUbHuCP</linkedTo>
               <visible>1</visible>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
-                <eid>3191160700949</eid>
+                <eid>ZvpBsIzUPJM_r6NkSx+F4hJ</eid>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
-                <eid>3195455668245</eid>
+                <eid>5y6qLAF4qOI_yAbkoTrXeOE</eid>
                 </Symbol>
               <pitch>55</pitch>
               <tpc>15</tpc>
@@ -1512,9 +1557,8 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>1683627180057</eid>
-            <linked>
-              </linked>
+            <eid>PO7zDs9YhDL_czxLs8hwbeD</eid>
+            <linkedTo>D8Eh2vwCHfC_oEqxJTGucDB</linkedTo>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
@@ -1522,14 +1566,12 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>377957122162</eid>
-            <linked>
-              </linked>
+            <eid>QmJRSGtbx5G_JWy6FFj56lK</eid>
+            <linkedTo>wCRK6r46lKF_Xk2oXg9WctD</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>382252089364</eid>
-              <linked>
-                </linked>
+              <eid>x3sX6WAaqNE_wvcGIxCM7sB</eid>
+              <linkedTo>MGCkTEkryvN_6biZ9Ed67g</linkedTo>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -1539,9 +1581,8 @@
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>386547056770</eid>
-                  <linked>
-                    </linked>
+                  <eid>p/9tn4MtAgO_unG0EoiDjaM</eid>
+                  <linkedTo>pc09/cCmJbK_xRfHRac1JOE</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1558,14 +1599,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>120259084402</eid>
-            <linked>
-              </linked>
+            <eid>EpJU+LGIsCB_7/tQ4EM5rLE</eid>
+            <linkedTo>M6U+QFNNVMN_Z0iJp5FViNG</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>124554051604</eid>
-              <linked>
-                </linked>
+              <eid>L53DePGfvLE_9VnrW0C3bBH</eid>
+              <linkedTo>udaSJLjoVtH_NKSHVJLd0bK</linkedTo>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>0</fret>
@@ -1575,9 +1614,8 @@
                   <guitarBendType>3</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>128849019010</eid>
-                  <linked>
-                    </linked>
+                  <eid>3aT11NYe94M_D0+2zG2Y+SD</eid>
+                  <linkedTo>FGe0zvoFx+L_YUUdW7WM+5I</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1594,9 +1632,8 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>395136991257</eid>
-            <linked>
-              </linked>
+            <eid>HoHCszVPLAD_h3Uepye+5gN</eid>
+            <linkedTo>/vZ0yuDcL/J_JqJX2zbuqwN</linkedTo>
             <durationType>half</durationType>
             </Rest>
           </voice>
@@ -1604,17 +1641,15 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>94489280626</eid>
-            <linked>
-              </linked>
+            <eid>sLh2cWzC5bH_6HRtvCcfFnH</eid>
+            <linkedTo>eM5JdgOCMV_/CUYihKw2ON</linkedTo>
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <appoggiatura/>
             <noStem>1</noStem>
             <Note>
-              <eid>98784247828</eid>
-              <linked>
-                </linked>
+              <eid>qtxCqgEx/PC_qzZgdXmQsUF</eid>
+              <linkedTo>rsq6NTI2gpH_QFAZbVT2cPN</linkedTo>
               <pitch>52</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
@@ -1624,9 +1659,8 @@
                   <guitarBendType>2</guitarBendType>
                   <bendStartTimeFactor>0.25</bendStartTimeFactor>
                   <bendEndTimeFactor>0.75</bendEndTimeFactor>
-                  <eid>103079215234</eid>
-                  <linked>
-                    </linked>
+                  <eid>qV6o3fGna/K_WsNR5bnypsD</eid>
+                  <linkedTo>7WLv1EPebiJ_f06j+Gr456E</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1637,14 +1671,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>42949673074</eid>
-            <linked>
-              </linked>
+            <eid>WWDpP8ZKFtK_XEPs2bU2CEN</eid>
+            <linkedTo>5A0o2pqTuaL_RC4lENLVT2H</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>47244640276</eid>
-              <linked>
-                </linked>
+              <eid>PawHa0tMgiC_r1cTi25sfrE</eid>
+              <linkedTo>CtaAykPZ/eB_xnOOSiB/mzB</linkedTo>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>2</fret>
@@ -1654,9 +1686,8 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0.5</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>51539607682</eid>
-                  <linked>
-                    </linked>
+                  <eid>9+jJqY/JByM_lt6bB5cNGE</eid>
+                  <linkedTo>8SEeoD8bRZK_hGvRIB+/hgP</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1675,14 +1706,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>55834574962</eid>
-            <linked>
-              </linked>
+            <eid>FQz7jj6wx9K_tEKSH649pAK</eid>
+            <linkedTo>cLwka3jk/AG_ZKEe9/QoAyB</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>60129542164</eid>
-              <linked>
-                </linked>
+              <eid>K2hsiXeL+4_2V6JRu2ChQC</eid>
+              <linkedTo>R0TPtYejsTE_d5jgR/QhMpH</linkedTo>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -1692,9 +1721,8 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0.25</bendStartTimeFactor>
                   <bendEndTimeFactor>0.5</bendEndTimeFactor>
-                  <eid>64424509570</eid>
-                  <linked>
-                    </linked>
+                  <eid>oZRFgDQz+ZJ_CcEyQ4wgufG</eid>
+                  <linkedTo>eBs3Pnc55hO_CDb7gw2YbIM</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1713,22 +1741,20 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>68719476850</eid>
-            <linked>
-              </linked>
+            <eid>56PjUBA2IIE_qqFbNMIMjSE</eid>
+            <linkedTo>aPeiLINTLuK_Thxjc9FvUdJ</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>73014444052</eid>
-              <linked>
-                </linked>
+              <eid>2kJXkyoRMKG_Y16Hwi0QqmG</eid>
+              <linkedTo>cKWz5E9de5P_BPghC15OEOL</linkedTo>
               <Symbol>
                 <name>noteheadParenthesisLeft</name>
-                <eid>3324304687125</eid>
+                <eid>sSd3VaYpL4D_z0NCrHNxgQK</eid>
                 <visible>0</visible>
                 </Symbol>
               <Symbol>
                 <name>noteheadParenthesisRight</name>
-                <eid>3328599654421</eid>
+                <eid>i4V2WOtp0vN_msKMfJrTtj</eid>
                 <visible>0</visible>
                 </Symbol>
               <pitch>55</pitch>
@@ -1746,9 +1772,8 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>77309411353</eid>
-            <linked>
-              </linked>
+            <eid>8Ge0vzEcurB_L09To3cz6iF</eid>
+            <linkedTo>zYQD1VPlabL_vylDwZViXiK</linkedTo>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
@@ -1756,19 +1781,16 @@
       <Measure>
         <voice>
           <Chord>
-            <eid>3758096384114</eid>
-            <linked>
-              </linked>
+            <eid>zWGvV+DifXC_aR+XhQJUXXD</eid>
+            <linkedTo>3YyeoX7BwK_awtR7OiEHeH</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>3770981285908</eid>
-              <linked>
-                </linked>
+              <eid>G21QvPoh3EO_KSJeZZXU5TL</eid>
+              <linkedTo>gy+1B+ToUxP_aBSrTOmb2AO</linkedTo>
               <Spanner type="Tie">
                 <Tie>
-                  <eid>4161823309855</eid>
-                  <linked>
-                    </linked>
+                  <eid>1Chn01IvZ1L_vzOo19FLDeH</eid>
+                  <linkedTo>URr1L8wyfHH_f503OAFr34D</linkedTo>
                   </Tie>
                 <next>
                   <location>
@@ -1783,14 +1805,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>3852585664626</eid>
-            <linked>
-              </linked>
+            <eid>6ZnnpbaQ6iK_r34g7YtY3ND</eid>
+            <linkedTo>Z2dJjB/F2iP_qX6xyYXW5YM</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>3865470566420</eid>
-              <linked>
-                </linked>
+              <eid>qMYFUriTINK_Et7z/S81lLP</eid>
+              <linkedTo>AwA3PWLXNrK_xmnhQ4VpimK</linkedTo>
               <Spanner type="Tie">
                 <prev>
                   <location>
@@ -1807,9 +1827,8 @@
                   <guitarBendType>0</guitarBendType>
                   <bendStartTimeFactor>0</bendStartTimeFactor>
                   <bendEndTimeFactor>1</bendEndTimeFactor>
-                  <eid>4200478015618</eid>
-                  <linked>
-                    </linked>
+                  <eid>3ZhFmYnmM4F_jv8dL16CjKF</eid>
+                  <linkedTo>NRgHcaV1EgG_lSrSrtxHSlI</linkedTo>
                   <anchor>3</anchor>
                   </GuitarBend>
                 <next>
@@ -1821,14 +1840,12 @@
               </Note>
             </Chord>
           <Chord>
-            <eid>4097398800498</eid>
-            <linked>
-              </linked>
+            <eid>mDqxVX3x6S_PI5HeJBzhJB</eid>
+            <linkedTo>77xvLpXq6FK_n/XqzSux20</linkedTo>
             <durationType>quarter</durationType>
             <Note>
-              <eid>4110283702292</eid>
-              <linked>
-                </linked>
+              <eid>233JuMDpNMG_P7vuRQKfikG</eid>
+              <linkedTo>TCUQPq3Z2YK_EWLQDKptz7J</linkedTo>
               <pitch>59</pitch>
               <tpc>19</tpc>
               <fret>2</fret>
@@ -1843,9 +1860,8 @@
               </Note>
             </Chord>
           <Rest>
-            <eid>4071628996634</eid>
-            <linked>
-              </linked>
+            <eid>Yc3sC5xT+nG_lvZMX7m7L/G</eid>
+            <linkedTo>IynT2/aJKQK_ui/34fKe+ZB</linkedTo>
             <durationType>quarter</durationType>
             </Rest>
           </voice>
