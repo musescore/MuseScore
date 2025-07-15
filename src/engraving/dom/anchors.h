@@ -45,6 +45,8 @@ public:
     static void moveSegment(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
     static void checkMeasureBoundariesAndMoveIfNeed(EngravingItem* element);
 
+    static void moveElementAnchorsOnDrag(EngravingItem* element, EditData& ed);
+
 private:
     static bool canAnchorToEndOfPrevious(const EngravingItem* element);
     static void moveSegment(EngravingItem* element, bool forward);
@@ -56,6 +58,7 @@ private:
     static void doMoveSegment(FretDiagram* element, Segment* newSeg, Fraction tickDiff);
 
     static void moveSnappedItems(EngravingItem* element, Segment* newSeg, Fraction tickDiff);
+    static void rebaseOffsetOnMoveSegment(EngravingItem* element, const PointF& curOffset, Segment* newSeg, Segment* oldSeg);
 };
 
 class TimeTickAnchor : public EngravingItem

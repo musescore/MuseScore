@@ -505,8 +505,6 @@ protected:
 
     bool nudge(const EditData& ed);
 
-    void shiftInitOffset(EditData& ed, const PointF& offsetShift);
-
     void insertSym(EditData& ed, SymId id);
     void prepareFormat(const String& token, TextCursor& cursor);
     bool prepareFormat(const String& token, CharFormat& format);

@@ -224,6 +224,31 @@ void MoveElementAnchors::checkMeasureBoundariesAndMoveIfNeed(EngravingItem* elem
     }
 }
 
+void MoveElementAnchors::moveElementAnchorsOnDrag(EngravingItem* element, EditData& ed)
+{
+    Segment* segment = element->explicitParent() && element->parent()->isSegment() ? toSegment(element->parent()) : nullptr;
+    if (!segment) {
+        return;
+    }
+
+    KeyboardModifiers km = ed.modifiers;
+    if (km & (ShiftModifier | ControlModifier)) {
+        return;
+    }
+
+    EditTimeTickAnchors::updateAnchors(element);
+
+    staff_idx_t si = element->staffIdx();
+    Segment* newSeg = nullptr;     // don't prefer any segment while dragging, just snap to the closest
+    static constexpr double spacingFactor = 0.5;
+    element->score()->dragPosition(element->canvasPos(), &si, &newSeg, spacingFactor, element->allowTimeAnchor());
+    if (newSeg && (newSeg != segment || element->staffIdx() != si)) {
+        PointF curOffset = element->offset();
+        moveSegment(element, newSeg, newSeg->tick() - segment->tick());
+        rebaseOffsetOnMoveSegment(element, curOffset, newSeg, segment);
+    }
+}
+
 void MoveElementAnchors::moveSegment(EngravingItem* element, bool forward)
 {
     if (canAnchorToEndOfPrevious(element)) {
@@ -406,6 +431,24 @@ void MoveElementAnchors::moveSnappedItems(EngravingItem* element, Segment* newSe
             if (textLine->tick2() != newSeg->tick()) {
                 textLine->undoMoveEnd(tickDiff);
             }
+        }
+    }
+}
+
+void MoveElementAnchors::rebaseOffsetOnMoveSegment(EngravingItem* element, const PointF& curOffset, Segment* newSeg, Segment* oldSeg)
+{
+    PointF offsetShift = newSeg->pagePos() - oldSeg->pagePos();
+    element->setOffset(curOffset - offsetShift);
+
+    if (EngravingItem* itemBefore = element->mutldata()->itemSnappedBefore()) {
+        if (itemBefore->isTextBase()) {
+            itemBefore->setOffset(itemBefore->offset() - offsetShift);
+        }
+    }
+
+    if (EngravingItem* itemAfter = element->mutldata()->itemSnappedAfter()) {
+        if (itemAfter->isTextBase()) {
+            itemAfter->setOffset(itemAfter->offset() - offsetShift);
         }
     }
 }

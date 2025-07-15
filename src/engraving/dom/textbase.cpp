@@ -3240,32 +3240,7 @@ RectF TextBase::drag(EditData& ed)
 {
     RectF result = EngravingItem::drag(ed);
 
-    Segment* segment = explicitParent() ? toSegment(parent()) : nullptr;
-    if (!segment) {
-        return result;
-    }
-
-    ElementEditDataPtr eed = ed.getData(this);
-    if (!eed) {
-        return result;
-    }
-
-    EditTimeTickAnchors::updateAnchors(this);
-
-    KeyboardModifiers km = ed.modifiers;
-    if (km & (ShiftModifier | ControlModifier)) {
-        return result;
-    }
-
-    staff_idx_t si = staffIdx();
-    Segment* newSeg = nullptr;     // don't prefer any segment while dragging, just snap to the closest
-    static constexpr double spacingFactor = 0.5;
-    score()->dragPosition(canvasPos(), &si, &newSeg, spacingFactor, allowTimeAnchor());
-    if (newSeg && (newSeg != segment || staffIdx() != si)) {
-        MoveElementAnchors::moveSegment(this, newSeg, newSeg->tick() - segment->tick());
-        PointF offsetShift = newSeg->pagePos() - segment->pagePos();
-        shiftInitOffset(ed, offsetShift);
-    }
+    MoveElementAnchors::moveElementAnchorsOnDrag(this, ed);
 
     return result;
 }
@@ -3276,30 +3251,6 @@ void TextBase::endDrag(EditData& ed)
         return;
     }
     EngravingItem::endDrag(ed);
-}
-
-void TextBase::shiftInitOffset(EditData& ed, const PointF& offsetShift)
-{
-    ElementEditDataPtr eedThis = ed.getData(this);
-    eedThis->initOffset -= offsetShift;
-
-    if (EngravingItem* itemBefore = ldata()->itemSnappedBefore()) {
-        if (itemBefore->isTextBase()) {
-            ElementEditDataPtr eedBefore = ed.getData(itemBefore);
-            if (eedBefore) {
-                eedBefore->initOffset -= offsetShift;
-            }
-        }
-    }
-
-    if (EngravingItem* itemAfter = ldata()->itemSnappedAfter()) {
-        if (itemAfter->isTextBase()) {
-            ElementEditDataPtr eedAfter = ed.getData(itemAfter);
-            if (eedAfter) {
-                eedAfter->initOffset -= offsetShift;
-            }
-        }
-    }
 }
 
 //---------------------------------------------------------
