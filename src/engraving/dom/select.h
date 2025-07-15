@@ -118,6 +118,7 @@ public:
     std::list<Note*> uniqueNotes(track_idx_t track = muse::nidx) const;
 
     bool isSingle() const { return (m_state == SelState::LIST) && (m_el.size() == 1); }
+    bool elementsSelected(const ElementTypeSet& types) const;
 
     void add(EngravingItem*);
     void deselectAll();

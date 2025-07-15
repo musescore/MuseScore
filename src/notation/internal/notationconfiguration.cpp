@@ -72,8 +72,8 @@ static const Settings::Key ADD_ACCIDENTAL_ARTICULATIONS_DOTS_TO_NEXT_NOTE_ENTERE
                                                                                   "score/addAccidentalDotsArticulationsToNextNoteEntered");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
-static const Settings::Key START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY(module_name,
-                                                                                "score/startNoteInputAtSelectionWhenPressingMidiKey");
+static const Settings::Key START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY(module_name,
+                                                                                         "score/startNoteInputAtSelectionWhenPressingMidiKey");
 static const Settings::Key USE_MIDI_INPUT_WRITTEN_PITCH(module_name, "io/midi/useWrittenPitch");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
 static const Settings::Key PLAYBACK_SMOOTH_PANNING(module_name, "application/playback/smoothPan");
@@ -252,9 +252,9 @@ void NotationConfiguration::init()
         m_isMidiInputEnabledChanged.notify();
     });
 
-    settings()->setDefaultValue(START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY, Val(true));
-    settings()->valueChanged(START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY).onReceive(this, [this](const Val&) {
-        m_startNoteInputAtSelectionWhenPressingMidiKeyChanged.notify();
+    settings()->setDefaultValue(START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY, Val(true));
+    settings()->valueChanged(START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY).onReceive(this, [this](const Val&) {
+        m_startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged.notify();
     });
 
     settings()->setDefaultValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(true));
@@ -827,19 +827,19 @@ async::Notification NotationConfiguration::isMidiInputEnabledChanged() const
     return m_isMidiInputEnabledChanged;
 }
 
-bool NotationConfiguration::startNoteInputAtSelectionWhenPressingMidiKey() const
+bool NotationConfiguration::startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const
 {
-    return settings()->value(START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY).toBool();
+    return settings()->value(START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY).toBool();
 }
 
-void NotationConfiguration::setStartNoteInputAtSelectionWhenPressingMidiKey(bool value)
+void NotationConfiguration::setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value)
 {
-    settings()->setSharedValue(START_NOTE_INPUT_AT_SELECTION_WHEN_PRESSING_MIDI_KEY, Val(value));
+    settings()->setSharedValue(START_NOTE_INPUT_AT_SELECTED_NOTE_REST_WHEN_PRESSING_MIDI_KEY, Val(value));
 }
 
-async::Notification NotationConfiguration::startNoteInputAtSelectionWhenPressingMidiKeyChanged() const
+async::Notification NotationConfiguration::startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const
 {
-    return m_startNoteInputAtSelectionWhenPressingMidiKeyChanged;
+    return m_startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged;
 }
 
 bool NotationConfiguration::isAutomaticallyPanEnabled() const

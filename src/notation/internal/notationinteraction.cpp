@@ -6014,14 +6014,14 @@ void NotationInteraction::addImageToItem(const muse::io::path_t& imagePath, Engr
 
 Ret NotationInteraction::canAddFiguredBass() const
 {
-    static const std::set<ElementType> requiredTypes {
+    static const ElementTypeSet REQUIRED_TYPES {
         ElementType::NOTE,
         ElementType::FIGURED_BASS,
         ElementType::REST
     };
 
-    bool isNoteOrRestSelected = elementsSelected(requiredTypes);
-    return isNoteOrRestSelected ? muse::make_ok() : make_ret(Err::NoteOrFiguredBassIsNotSelected);
+    bool selected = m_selection->elementsSelected(REQUIRED_TYPES);
+    return selected ? muse::make_ok() : make_ret(Err::NoteOrFiguredBassIsNotSelected);
 }
 
 void NotationInteraction::addFiguredBass()
@@ -6368,30 +6368,6 @@ void NotationInteraction::resetGripEdit()
 void NotationInteraction::resetHitElementContext()
 {
     setHitElementContext(HitElementContext());
-}
-
-bool NotationInteraction::elementsSelected(const std::set<ElementType>& elementsTypes) const
-{
-    auto selection = this->selection();
-    if (!selection || selection->isNone()) {
-        return false;
-    }
-
-    std::vector<EngravingItem*> selectedElements;
-
-    if (EngravingItem* element = selection->element()) {
-        selectedElements = { element };
-    } else {
-        selectedElements = selection->elements();
-    }
-
-    for (const EngravingItem* element: selectedElements) {
-        if (element && muse::contains(elementsTypes, element->type())) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 //! NOTE: Copied from ScoreView::lyricsTab
@@ -7725,7 +7701,7 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
 
 muse::Ret NotationInteraction::canAddFretboardDiagram() const
 {
-    bool canAdd = elementsSelected({ ElementType::HARMONY, ElementType::NOTE, ElementType::REST });
+    bool canAdd = m_selection->elementsSelected({ ElementType::HARMONY, ElementType::NOTE, ElementType::REST });
     return canAdd ? muse::make_ok() : make_ret(Err::NoteOrRestOrHarmonyIsNotSelected);
 }
 

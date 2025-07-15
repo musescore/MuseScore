@@ -133,9 +133,9 @@ public:
     MOCK_METHOD(void, setIsMidiInputEnabled, (bool), (override));
     MOCK_METHOD(muse::async::Notification, isMidiInputEnabledChanged, (), (const, override));
 
-    MOCK_METHOD(bool, startNoteInputAtSelectionWhenPressingMidiKey, (), (const, override));
-    MOCK_METHOD(void, setStartNoteInputAtSelectionWhenPressingMidiKey, (bool), (override));
-    MOCK_METHOD(muse::async::Notification, startNoteInputAtSelectionWhenPressingMidiKeyChanged, (), (const, override));
+    MOCK_METHOD(bool, startNoteInputAtSelectedNoteRestWhenPressingMidiKey, (), (const, override));
+    MOCK_METHOD(void, setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey, (bool), (override));
+    MOCK_METHOD(muse::async::Notification, startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged, (), (const, override));
 
     MOCK_METHOD(bool, isAutomaticallyPanEnabled, (), (const, override));
     MOCK_METHOD(void, setIsAutomaticallyPanEnabled, (bool), (override));

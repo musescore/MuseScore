@@ -147,9 +147,9 @@ public:
     void setIsMidiInputEnabled(bool enabled) override;
     muse::async::Notification isMidiInputEnabledChanged() const override;
 
-    bool startNoteInputAtSelectionWhenPressingMidiKey() const override;
-    void setStartNoteInputAtSelectionWhenPressingMidiKey(bool value) override;
-    muse::async::Notification startNoteInputAtSelectionWhenPressingMidiKeyChanged() const override;
+    bool startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const override;
+    void setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value) override;
+    muse::async::Notification startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const override;
 
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled) override;
@@ -289,7 +289,7 @@ private:
     muse::async::Notification m_addAccidentalDotsArticulationsToNextNoteEnteredChanged;
     muse::async::Notification m_useNoteInputCursorInInputByDurationChanged;
     muse::async::Notification m_isMidiInputEnabledChanged;
-    muse::async::Notification m_startNoteInputAtSelectionWhenPressingMidiKeyChanged;
+    muse::async::Notification m_startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged;
 
     muse::async::Notification m_defaultZoomChanged;
     muse::async::Notification m_mouseZoomPrecisionChanged;

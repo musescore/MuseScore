@@ -49,8 +49,8 @@ void NoteInputPreferencesModel::load()
         emit midiInputEnabledChanged(midiInputEnabled());
     });
 
-    notationConfiguration()->startNoteInputAtSelectionWhenPressingMidiKeyChanged().onNotify(this, [this]() {
-        emit startNoteInputAtSelectionWhenPressingMidiKeyChanged(startNoteInputAtSelectionWhenPressingMidiKey());
+    notationConfiguration()->startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged().onNotify(this, [this]() {
+        emit startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged(startNoteInputAtSelectedNoteRestWhenPressingMidiKey());
     });
 
     playbackConfiguration()->playNotesWhenEditingChanged().onNotify(this, [this]() {
@@ -146,9 +146,9 @@ bool NoteInputPreferencesModel::midiInputEnabled() const
     return notationConfiguration()->isMidiInputEnabled();
 }
 
-bool NoteInputPreferencesModel::startNoteInputAtSelectionWhenPressingMidiKey() const
+bool NoteInputPreferencesModel::startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const
 {
-    return notationConfiguration()->startNoteInputAtSelectionWhenPressingMidiKey();
+    return notationConfiguration()->startNoteInputAtSelectedNoteRestWhenPressingMidiKey();
 }
 
 bool NoteInputPreferencesModel::advanceToNextNoteOnKeyRelease() const
@@ -242,13 +242,13 @@ void NoteInputPreferencesModel::setMidiInputEnabled(bool value)
     notationConfiguration()->setIsMidiInputEnabled(value);
 }
 
-void NoteInputPreferencesModel::setStartNoteInputAtSelectionWhenPressingMidiKey(bool value)
+void NoteInputPreferencesModel::setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool value)
 {
-    if (value == startNoteInputAtSelectionWhenPressingMidiKey()) {
+    if (value == startNoteInputAtSelectedNoteRestWhenPressingMidiKey()) {
         return;
     }
 
-    notationConfiguration()->setStartNoteInputAtSelectionWhenPressingMidiKey(value);
+    notationConfiguration()->setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(value);
 }
 
 void NoteInputPreferencesModel::setAdvanceToNextNoteOnKeyRelease(bool value)

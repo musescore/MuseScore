@@ -359,16 +359,16 @@ muse::async::Notification NotationConfigurationStub::isMidiInputEnabledChanged()
     return n;
 }
 
-bool NotationConfigurationStub::startNoteInputAtSelectionWhenPressingMidiKey() const
+bool NotationConfigurationStub::startNoteInputAtSelectedNoteRestWhenPressingMidiKey() const
 {
     return false;
 }
 
-void NotationConfigurationStub::setStartNoteInputAtSelectionWhenPressingMidiKey(bool)
+void NotationConfigurationStub::setStartNoteInputAtSelectedNoteRestWhenPressingMidiKey(bool)
 {
 }
 
-muse::async::Notification NotationConfigurationStub::startNoteInputAtSelectionWhenPressingMidiKeyChanged() const
+muse::async::Notification NotationConfigurationStub::startNoteInputAtSelectedNoteRestWhenPressingMidiKeyChanged() const
 {
     static muse::async::Notification n;
     return n;
