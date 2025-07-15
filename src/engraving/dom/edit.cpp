@@ -2006,7 +2006,8 @@ void Score::cmdAddTie(bool addToChord)
     }
 
     startCmd(TranslatableString("undoableAction", "Add tie"));
-    Chord* lastAddedChord = 0;
+    Chord* lastAddedChord = nullptr;
+
     for (Note* note : noteList) {
         if (note->tieFor()) {
             LOGD("cmdAddTie: note %p has already tie? noteFor: %p", note, note->tieFor());
@@ -2020,6 +2021,7 @@ void Score::cmdAddTie(bool addToChord)
         if (noteEntryMode()) {
             ChordRest* cr = nullptr;
             Chord* c = note->chord();
+            int staffMove = c->staffMove();
 
             // set cursor at position after note
             if (c->isGraceBefore()) {
@@ -2031,12 +2033,12 @@ void Score::cmdAddTie(bool addToChord)
                 m_is.moveToNextInputPos();
                 m_is.setLastSegment(m_is.segment());
 
-                if (m_is.cr() == 0) {
+                if (!m_is.cr()) {
                     expandVoice();
                 }
                 cr = m_is.cr();
             }
-            if (cr == 0) {
+            if (!cr) {
                 break;
             }
 
@@ -2058,6 +2060,9 @@ void Score::cmdAddTie(bool addToChord)
             NoteVal nval(note->noteVal());
             if (!n) {
                 n = addPitch(nval, addFlag);
+                if (staffMove != 0) {
+                    undo(new ChangeChordStaffMove(n->chord(), staffMove));
+                }
             } else {
                 select(n);
             }
@@ -2082,6 +2087,11 @@ void Score::cmdAddTie(bool addToChord)
                         note = nnote;
                         m_is.setLastSegment(m_is.segment());
                         nnote = addPitch(nval, true);
+                    }
+                }
+                if (staffMove != 0) {
+                    for (Note* tiedNote : n->tiedNotes()) {
+                        undo(new ChangeChordStaffMove(tiedNote->chord(), staffMove));
                     }
                 }
             }
