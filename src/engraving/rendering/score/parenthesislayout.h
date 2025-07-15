@@ -27,7 +27,7 @@
 namespace mu::engraving {
 class Segment;
 class System;
-class ParenPaddingTable;
+struct ParenPaddingTable;
 }
 
 namespace mu::engraving::rendering::score {

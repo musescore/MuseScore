@@ -57,6 +57,8 @@ private:
 struct ParenPaddingTable
 {
 public:
+    virtual ~ParenPaddingTable() = default;
+
     void setMinimumPaddingUnit(double val) { m_minimumPaddingUnit = val; }
     double minimumPaddingUnit() const { return m_minimumPaddingUnit; }
 
