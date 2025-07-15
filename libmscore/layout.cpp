@@ -4474,6 +4474,24 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             }
 
       //-------------------------------------------------------------
+      // layout articulations
+      //-------------------------------------------------------------
+
+      for (Segment* s : sl) {
+            for (Element* e : s->elist()) {
+                  if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show())
+                        continue;
+                  ChordRest* cr = toChordRest(e);
+                  // articulations
+                  if (cr->isChord()) {
+                        Chord* c = toChord(cr);
+                        c->layoutArticulations();
+                        c->layoutArticulations2();
+                        }
+                  }
+            }
+
+      //-------------------------------------------------------------
       // layout fingerings, add beams to skylines
       //-------------------------------------------------------------
 
@@ -4527,24 +4545,6 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   }
             for (auto staffIdx : recreateShapes)
                   s->createShape(staffIdx);
-            }
-
-      //-------------------------------------------------------------
-      // layout articulations
-      //-------------------------------------------------------------
-
-      for (Segment* s : sl) {
-            for (Element* e : s->elist()) {
-                  if (!e || !e->isChordRest() || !score()->staff(e->staffIdx())->show())
-                        continue;
-                  ChordRest* cr = toChordRest(e);
-                  // articulations
-                  if (cr->isChord()) {
-                        Chord* c = toChord(cr);
-                        c->layoutArticulations();
-                        c->layoutArticulations2();
-                        }
-                  }
             }
 
       //-------------------------------------------------------------
