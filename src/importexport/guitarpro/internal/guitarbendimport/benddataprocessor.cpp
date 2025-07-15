@@ -188,6 +188,12 @@ static void createGraceAfterBends(const BendDataContext& bendDataCtx, mu::engrav
                     Chord* graceChord = Factory::createChord(score->dummy()->segment());
                     graceChord->setTrack(track);
                     graceChord->setNoteType(NoteType::GRACE8_AFTER);
+                    graceChord->setNoStem(true);
+
+                    TDuration dur;
+                    dur.setVal(mu::engraving::Constants::DIVISION / 2);
+                    graceChord->setDurationType(dur);
+                    graceChord->setTicks(dur.fraction());
 
                     Note* graceNote = Factory::createNote(graceChord);
                     graceNote->setPitch(currentNote->pitch() + graceInfo.quarterTones / 2);

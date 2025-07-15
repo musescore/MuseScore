@@ -74,7 +74,9 @@
             </Tempo>
           <Chord>
             <eid>I_I</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>J_J</eid>
               <Accidental>

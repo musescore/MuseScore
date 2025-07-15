@@ -118,7 +118,9 @@
             </Tempo>
           <Chord>
             <eid>N_N</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>O_O</eid>
               <pitch>62</pitch>
@@ -160,7 +162,9 @@
             </Chord>
           <Chord>
             <eid>S_S</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>T_T</eid>
               <Accidental>
@@ -207,7 +211,9 @@
             </Chord>
           <Chord>
             <eid>Y_Y</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>Z_Z</eid>
               <Accidental>
@@ -254,7 +260,9 @@
             </Chord>
           <Chord>
             <eid>e_e</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>f_f</eid>
               <Accidental>
@@ -314,7 +322,9 @@
           <Chord>
             <eid>l_l</eid>
             <linkedTo>N_N</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>m_m</eid>
               <linkedTo>O_O</linkedTo>
@@ -361,7 +371,9 @@
           <Chord>
             <eid>q_q</eid>
             <linkedTo>S_S</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>r_r</eid>
               <linkedTo>T_T</linkedTo>
@@ -413,7 +425,9 @@
           <Chord>
             <eid>w_w</eid>
             <linkedTo>Y_Y</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>x_x</eid>
               <linkedTo>Z_Z</linkedTo>
@@ -465,7 +479,9 @@
           <Chord>
             <eid>2_2</eid>
             <linkedTo>e_e</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>3_3</eid>
               <linkedTo>f_f</linkedTo>

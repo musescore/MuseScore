@@ -143,7 +143,9 @@
             </Chord>
           <Chord>
             <eid>Q_Q</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>R_R</eid>
               <pitch>60</pitch>
@@ -245,7 +247,9 @@
           <Chord>
             <eid>c_c</eid>
             <linkedTo>Q_Q</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>d_d</eid>
               <linkedTo>R_R</linkedTo>

@@ -118,7 +118,9 @@
             </Tempo>
           <Chord>
             <eid>N_N</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>O_O</eid>
               <pitch>60</pitch>
@@ -137,6 +139,7 @@
           <Chord>
             <eid>P_P</eid>
             <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
@@ -194,7 +197,9 @@
             </Chord>
           <Chord>
             <eid>V_V</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>W_W</eid>
               <Accidental>
@@ -218,6 +223,7 @@
           <Chord>
             <eid>Y_Y</eid>
             <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
@@ -280,7 +286,9 @@
             </Chord>
           <Chord>
             <eid>f_f</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>g_g</eid>
               <pitch>60</pitch>
@@ -299,6 +307,7 @@
           <Chord>
             <eid>h_h</eid>
             <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
@@ -365,7 +374,9 @@
             </Chord>
           <Chord>
             <eid>p_p</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>q_q</eid>
               <pitch>60</pitch>
@@ -384,6 +395,7 @@
           <Chord>
             <eid>r_r</eid>
             <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
@@ -459,7 +471,9 @@
           <Chord>
             <eid>z_z</eid>
             <linkedTo>N_N</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>0_0</eid>
               <linkedTo>O_O</linkedTo>
@@ -490,6 +504,7 @@
             <eid>3_3</eid>
             <linkedTo>P_P</linkedTo>
             <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
@@ -553,7 +568,9 @@
           <Chord>
             <eid>9_9</eid>
             <linkedTo>V_V</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>+_+</eid>
               <linkedTo>W_W</linkedTo>
@@ -590,6 +607,7 @@
             <eid>CB_CB</eid>
             <linkedTo>Y_Y</linkedTo>
             <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
@@ -658,7 +676,9 @@
           <Chord>
             <eid>JB_JB</eid>
             <linkedTo>f_f</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>KB_KB</eid>
               <linkedTo>g_g</linkedTo>
@@ -690,6 +710,7 @@
             <eid>NB_NB</eid>
             <linkedTo>h_h</linkedTo>
             <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
@@ -758,7 +779,9 @@
           <Chord>
             <eid>UB_UB</eid>
             <linkedTo>p_p</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>VB_VB</eid>
               <linkedTo>q_q</linkedTo>
@@ -790,6 +813,7 @@
             <eid>YB_YB</eid>
             <linkedTo>r_r</linkedTo>
             <BeamMode>no</BeamMode>
+            <durationType>eighth</durationType>
             <grace8after/>
             <noStem>1</noStem>
             <Note>
