@@ -25,7 +25,7 @@ import QtQuick.Controls 2.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
-Rectangle {
+Item {
     id: root
 
     property alias model: repeater.model
@@ -55,8 +55,6 @@ Rectangle {
 
     width: content.width + leftPadding + rightPadding
     height: content.height + topPadding + bottomPadding
-
-    color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
         if (root.model) {
