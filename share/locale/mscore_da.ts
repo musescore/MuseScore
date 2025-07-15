@@ -12325,18 +12325,18 @@ tuplet vil krydse takt</translation>
         <translation>Revision: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/musescoredialogs.cpp" line="177"/>
+        <location filename="../../mscore/musescoredialogs.cpp" line="174"/>
         <source>Build date: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/musescoredialogs.cpp" line="181"/>
+        <location filename="../../mscore/musescoredialogs.cpp" line="178"/>
         <source>Visit %1 for new versions and more information.
 Get %2help%3 with the program or %4contribute%5 to its development.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/musescoredialogs.cpp" line="187"/>
+        <location filename="../../mscore/musescoredialogs.cpp" line="184"/>
         <source>Copyright &amp;copy; 1999-2025 MuseScore BVBA and others.
 Published under the %1GNU General Public License version 2%2.</source>
         <translation>Copyright &amp;copy; 1999-2025 MuseScore BVBA og andre.
@@ -12346,7 +12346,7 @@ Publiceret i henhold til %1GNU General Public License version 2%2.</translation>
 <context>
     <name>Ms::AboutMusicXMLBoxDialog</name>
     <message>
-        <location filename="../../mscore/musescoredialogs.cpp" line="229"/>
+        <location filename="../../mscore/musescoredialogs.cpp" line="226"/>
         <source>MusicXML is an open file format for exchanging digital sheet music,
 supported by many applications.
 Copyright © 2004-2017 the Contributors to the MusicXML
@@ -13104,23 +13104,23 @@ slog fejl: %2</translation>
 <context>
     <name>Ms::InspectorAccidental</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1050"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1048"/>
         <source>None</source>
         <comment>no accidental bracket type</comment>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1051"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1049"/>
         <source>Parenthesis</source>
         <translation>Parentes</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1052"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1050"/>
         <source>Bracket</source>
         <translation>Klamme</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1053"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1051"/>
         <source>Brace</source>
         <translation>Akkolade</translation>
     </message>
@@ -13187,12 +13187,12 @@ slog fejl: %2</translation>
 <context>
     <name>Ms::InspectorCaesura</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1329"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1327"/>
         <source>Caesura</source>
         <translation>Cæsur</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1329"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1327"/>
         <source>Breath</source>
         <translation>Vejrtrækning</translation>
     </message>
@@ -13271,57 +13271,57 @@ slog fejl: %2</translation>
 <context>
     <name>Ms::InspectorKeySig</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="984"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="982"/>
         <source>Unknown</source>
         <translation>Ukendt</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="985"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="983"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="986"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="984"/>
         <source>Major</source>
         <translation>Dur</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="987"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="985"/>
         <source>Minor</source>
         <translation>Mol</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="988"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="986"/>
         <source>Dorian</source>
         <translation>Dorisk</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="989"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="987"/>
         <source>Phrygian</source>
         <translation>Frygisk</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="990"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="988"/>
         <source>Lydian</source>
         <translation>Lydisk</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="991"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="989"/>
         <source>Mixolydian</source>
         <translation>Mixolydisk</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="992"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="990"/>
         <source>Aeolian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="993"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="991"/>
         <source>Ionian</source>
         <translation>Jonisk</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="994"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="992"/>
         <source>Locrian</source>
         <translation>Lokrisk</translation>
     </message>
@@ -13371,12 +13371,12 @@ slog fejl: %2</translation>
 <context>
     <name>Ms::InspectorSlurTie</name>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1282"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1280"/>
         <source>Slur</source>
         <translation>Legatobue</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1282"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1280"/>
         <source>Tie</source>
         <translation>Bindebue</translation>
     </message>
@@ -13938,7 +13938,7 @@ før lukning?</translation>
     </message>
     <message>
         <location filename="../../mscore/file.cpp" line="286"/>
-        <location filename="../../mscore/file.cpp" line="2577"/>
+        <location filename="../../mscore/file.cpp" line="2578"/>
         <source>All Supported Files</source>
         <translation>Alle understøttede filer</translation>
     </message>
@@ -14008,229 +14008,229 @@ før lukning?</translation>
         <translation>Indlæs nodeark</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="530"/>
-        <location filename="../../mscore/file.cpp" line="2447"/>
-        <location filename="../../mscore/file.cpp" line="2525"/>
+        <location filename="../../mscore/file.cpp" line="531"/>
+        <location filename="../../mscore/file.cpp" line="2448"/>
+        <location filename="../../mscore/file.cpp" line="2526"/>
         <source>MuseScore 3 File</source>
         <translation>MuseScore 3 fil</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="531"/>
-        <location filename="../../mscore/file.cpp" line="2448"/>
-        <location filename="../../mscore/file.cpp" line="2526"/>
+        <location filename="../../mscore/file.cpp" line="532"/>
+        <location filename="../../mscore/file.cpp" line="2449"/>
+        <location filename="../../mscore/file.cpp" line="2527"/>
         <source>Uncompressed MuseScore 3 File</source>
         <translation>Ukomprimeret MuseScore 3 fil</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="545"/>
+        <location filename="../../mscore/file.cpp" line="546"/>
         <source>Music Recognition MuseScore 3 File</source>
         <translation>Musikgenkendelse MuseScore 3 fil</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="558"/>
+        <location filename="../../mscore/file.cpp" line="559"/>
         <source>Save Score</source>
         <translation>Gem nodeark</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="566"/>
-        <location filename="../../mscore/file.cpp" line="573"/>
+        <location filename="../../mscore/file.cpp" line="567"/>
+        <location filename="../../mscore/file.cpp" line="574"/>
         <source>Save File</source>
         <translation>Gem fil</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="600"/>
+        <location filename="../../mscore/file.cpp" line="601"/>
         <source>Untitled</source>
         <translation>Uden titel</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1239"/>
-        <location filename="../../mscore/file.cpp" line="1266"/>
+        <location filename="../../mscore/file.cpp" line="1240"/>
+        <location filename="../../mscore/file.cpp" line="1267"/>
         <location filename="../../mscore/musescore.cpp" line="6479"/>
         <source>Load Style</source>
         <translation>Indlæs layoutstandard</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1241"/>
+        <location filename="../../mscore/file.cpp" line="1242"/>
         <source>MuseScore Styles</source>
         <translation>MuseScore layoutstandarder</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1246"/>
-        <location filename="../../mscore/file.cpp" line="1283"/>
-        <location filename="../../mscore/file.cpp" line="1366"/>
+        <location filename="../../mscore/file.cpp" line="1247"/>
+        <location filename="../../mscore/file.cpp" line="1284"/>
+        <location filename="../../mscore/file.cpp" line="1367"/>
         <location filename="../../mscore/musescore.cpp" line="6470"/>
         <source>Save Style</source>
         <translation>Gem layoutstandard</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1248"/>
-        <location filename="../../mscore/file.cpp" line="1267"/>
-        <location filename="../../mscore/file.cpp" line="1284"/>
+        <location filename="../../mscore/file.cpp" line="1249"/>
+        <location filename="../../mscore/file.cpp" line="1268"/>
+        <location filename="../../mscore/file.cpp" line="1285"/>
         <source>MuseScore Style File</source>
         <translation>MuseScore layoutstandard</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1308"/>
+        <location filename="../../mscore/file.cpp" line="1309"/>
         <source>Chord Symbols Style File</source>
         <translation>Akkordsymbol layoutfil</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1319"/>
-        <location filename="../../mscore/file.cpp" line="1347"/>
+        <location filename="../../mscore/file.cpp" line="1320"/>
+        <location filename="../../mscore/file.cpp" line="1348"/>
         <source>Load Chord Symbols Style</source>
         <translation>Indlæs akkordsymbollayout</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1326"/>
+        <location filename="../../mscore/file.cpp" line="1327"/>
         <source>Save Chord Symbols Style</source>
         <translation>Gem akkordsymbollayout</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1390"/>
+        <location filename="../../mscore/file.cpp" line="1391"/>
         <source>PDF Scan File</source>
         <translation>PDF scan fil</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1395"/>
-        <location filename="../../mscore/file.cpp" line="1406"/>
+        <location filename="../../mscore/file.cpp" line="1396"/>
+        <location filename="../../mscore/file.cpp" line="1407"/>
         <source>Choose PDF Scan</source>
         <translation>Vælg PDF scan</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1436"/>
+        <location filename="../../mscore/file.cpp" line="1437"/>
         <source>Ogg Audio File</source>
         <translation>Ogg audio fil</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1441"/>
+        <location filename="../../mscore/file.cpp" line="1442"/>
         <source>Choose Audio File</source>
         <translation>Vælg audio fil</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1452"/>
+        <location filename="../../mscore/file.cpp" line="1453"/>
         <source>Choose Ogg Audio File</source>
         <translation>Vælg Ogg audio fil</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1482"/>
+        <location filename="../../mscore/file.cpp" line="1483"/>
         <source>Save Image</source>
         <translation>Gem billede</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1574"/>
+        <location filename="../../mscore/file.cpp" line="1575"/>
         <source>Load Palette</source>
         <translation>Indlæs palette</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1575"/>
-        <location filename="../../mscore/file.cpp" line="1579"/>
+        <location filename="../../mscore/file.cpp" line="1576"/>
+        <location filename="../../mscore/file.cpp" line="1580"/>
         <source>MuseScore Palette</source>
         <translation>MuseScore palette</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1578"/>
+        <location filename="../../mscore/file.cpp" line="1579"/>
         <source>Save Palette</source>
         <translation>Gem palette</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1655"/>
+        <location filename="../../mscore/file.cpp" line="1656"/>
         <source>Load Plugin</source>
         <translation>Indlæs programudvidelse</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1656"/>
+        <location filename="../../mscore/file.cpp" line="1657"/>
         <source>MuseScore Plugin</source>
         <translation>MuseScore programudvidelse</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1659"/>
-        <location filename="../../mscore/file.cpp" line="1709"/>
+        <location filename="../../mscore/file.cpp" line="1660"/>
+        <location filename="../../mscore/file.cpp" line="1710"/>
         <source>Save Plugin</source>
         <translation>Gem programudvidelse</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1660"/>
+        <location filename="../../mscore/file.cpp" line="1661"/>
         <source>MuseScore Plugin File</source>
         <translation>MuseScore programudvidelsesfil</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1738"/>
+        <location filename="../../mscore/file.cpp" line="1739"/>
         <source>Load Drumset</source>
         <translation>Indlæs trommesæt</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1739"/>
+        <location filename="../../mscore/file.cpp" line="1740"/>
         <source>MuseScore Drumset</source>
         <translation>MuseScore trommesæt</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1742"/>
+        <location filename="../../mscore/file.cpp" line="1743"/>
         <source>Save Drumset</source>
         <translation>Gem trommesæt</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1743"/>
+        <location filename="../../mscore/file.cpp" line="1744"/>
         <source>MuseScore Drumset File</source>
         <translation>MuseScore trommesætfil</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2581"/>
+        <location filename="../../mscore/file.cpp" line="2582"/>
         <source>Bitmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2582"/>
+        <location filename="../../mscore/file.cpp" line="2583"/>
         <source>TIFF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="3506"/>
+        <location filename="../../mscore/file.cpp" line="3507"/>
         <source>Error: Saving scores online is disabled in this unstable prerelease version of MuseScore.</source>
         <translation>Fejl: Det er ikke muligt at gemme nodeark online i denne ustabile testversion af MuseScore.</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="3515"/>
+        <location filename="../../mscore/file.cpp" line="3516"/>
         <source>Error: %1</source>
         <translation>Fejl: %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="3534"/>
+        <location filename="../../mscore/file.cpp" line="3535"/>
         <source>Error: &apos;%1&apos; tag missing or malformed in %2</source>
         <translation>Fejl: &apos;%1&apos; mærke mangler eller har forkert format i %2</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="3540"/>
+        <location filename="../../mscore/file.cpp" line="3541"/>
         <source>Error: You are not the owner of the online score for %1</source>
         <translation>Fejl: Du er ikke ejer af online nodearket %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="3561"/>
+        <location filename="../../mscore/file.cpp" line="3562"/>
         <source>Uploaded score</source>
         <translation>Nodeark gemt online</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2580"/>
+        <location filename="../../mscore/file.cpp" line="2581"/>
         <source>PNG Bitmap Graphic</source>
         <translation>PNG bitmap graphic</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2578"/>
+        <location filename="../../mscore/file.cpp" line="2579"/>
         <source>Scalable Vector Graphics</source>
         <translation>Skalerbar vektorgrafik</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2507"/>
-        <location filename="../../mscore/file.cpp" line="2553"/>
+        <location filename="../../mscore/file.cpp" line="2508"/>
+        <location filename="../../mscore/file.cpp" line="2554"/>
         <source>Cannot determine file type</source>
         <translation>Kan ikke fastslå filtype</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2893"/>
+        <location filename="../../mscore/file.cpp" line="2894"/>
         <source>Confirm Replace</source>
         <translation>Bekræft erstat</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2894"/>
+        <location filename="../../mscore/file.cpp" line="2895"/>
         <source>&quot;%1&quot; already exists.
 Do you want to replace it?
 </source>
@@ -14239,82 +14239,82 @@ Vil du erstatte den?
 </translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2896"/>
+        <location filename="../../mscore/file.cpp" line="2897"/>
         <source>Replace</source>
         <translation>Erstat</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2897"/>
+        <location filename="../../mscore/file.cpp" line="2898"/>
         <source>Skip</source>
         <translation>Spring over</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2898"/>
+        <location filename="../../mscore/file.cpp" line="2899"/>
         <source>Replace All</source>
         <translation>Erstat alle</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2899"/>
+        <location filename="../../mscore/file.cpp" line="2900"/>
         <source>Skip All</source>
         <translation>Spring alle over</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="1942"/>
-        <location filename="../../mscore/file.cpp" line="2450"/>
-        <location filename="../../mscore/file.cpp" line="2507"/>
+        <location filename="../../mscore/file.cpp" line="1943"/>
+        <location filename="../../mscore/file.cpp" line="2451"/>
+        <location filename="../../mscore/file.cpp" line="2508"/>
         <source>Save As</source>
         <translation>Gem som</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2023"/>
+        <location filename="../../mscore/file.cpp" line="2024"/>
         <source>MuseScore:</source>
         <translation>MuseScore:</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2023"/>
+        <location filename="../../mscore/file.cpp" line="2024"/>
         <source>Cannot write into %1</source>
         <translation>Kan ikke skrive til %1</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2449"/>
+        <location filename="../../mscore/file.cpp" line="2450"/>
         <source>Save a Copy</source>
         <translation>Gem en kopi</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2521"/>
-        <location filename="../../mscore/file.cpp" line="2527"/>
-        <location filename="../../mscore/file.cpp" line="2553"/>
+        <location filename="../../mscore/file.cpp" line="2522"/>
+        <location filename="../../mscore/file.cpp" line="2528"/>
+        <location filename="../../mscore/file.cpp" line="2554"/>
         <source>Save Selection</source>
         <translation>Gem det valgte</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2521"/>
+        <location filename="../../mscore/file.cpp" line="2522"/>
         <source>Please select one or more measures</source>
         <translation>Vælg én eller flere takter</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2562"/>
+        <location filename="../../mscore/file.cpp" line="2563"/>
         <source>Save Selected</source>
         <translation>Gem det valgte</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2575"/>
+        <location filename="../../mscore/file.cpp" line="2576"/>
         <source>Insert Image</source>
         <translation>Indsæt billede</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2579"/>
+        <location filename="../../mscore/file.cpp" line="2580"/>
         <source>JPEG</source>
         <translation>JPEG</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2835"/>
+        <location filename="../../mscore/file.cpp" line="2836"/>
         <source>Images</source>
         <translation>Billeder</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2583"/>
-        <location filename="../../mscore/file.cpp" line="2835"/>
+        <location filename="../../mscore/file.cpp" line="2584"/>
+        <location filename="../../mscore/file.cpp" line="2836"/>
         <source>All</source>
         <translation>Alle</translation>
     </message>
@@ -16453,7 +16453,7 @@ slog fejl: %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="4972"/>
+        <location filename="../../mscore/scoreview.cpp" line="4973"/>
         <source>No staves found:
 Please use the instruments dialog to
 first create some staves</source>
@@ -16479,7 +16479,7 @@ Please select a range of measures to join and try again</source>
 Vælg en serie af takter som skal slås sammen og prøv igen</translation>
     </message>
     <message>
-        <location filename="../../mscore/scoreview.cpp" line="5054"/>
+        <location filename="../../mscore/scoreview.cpp" line="5055"/>
         <source>No measure selected:
 Please select a measure and try again</source>
         <translation>Ingen takt valgt:
@@ -20779,7 +20779,7 @@ slog fejl:%2</translation>
     </message>
     <message>
         <location filename="../../libmscore/durationtype.cpp" line="795"/>
-        <location filename="../../libmscore/hairpin.cpp" line="901"/>
+        <location filename="../../libmscore/hairpin.cpp" line="900"/>
         <location filename="../../libmscore/jump.cpp" line="95"/>
         <location filename="../../libmscore/scoreOrder.cpp" line="397"/>
         <source>Custom</source>
@@ -21124,7 +21124,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>%1; Øvre tonehøjde: %2%3; Nedre tonehøjde: %4%5</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="1777"/>
+        <location filename="../../libmscore/barline.cpp" line="1773"/>
         <location filename="../../libmscore/chordrest.cpp" line="1216"/>
         <location filename="../../libmscore/chordrest.cpp" line="1226"/>
         <location filename="../../libmscore/note.cpp" line="3185"/>
@@ -21133,7 +21133,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>%1 Start af %2</translation>
     </message>
     <message>
-        <location filename="../../libmscore/barline.cpp" line="1779"/>
+        <location filename="../../libmscore/barline.cpp" line="1775"/>
         <location filename="../../libmscore/chordrest.cpp" line="1218"/>
         <location filename="../../libmscore/chordrest.cpp" line="1228"/>
         <location filename="../../libmscore/note.cpp" line="3188"/>
@@ -21241,12 +21241,12 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>Strengnummer</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="895"/>
+        <location filename="../../libmscore/hairpin.cpp" line="894"/>
         <source>Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../libmscore/hairpin.cpp" line="898"/>
+        <location filename="../../libmscore/hairpin.cpp" line="897"/>
         <source>Decrescendo</source>
         <translation>Decrescendo</translation>
     </message>
@@ -21426,18 +21426,18 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>node</translation>
     </message>
     <message>
-        <location filename="../../libmscore/timesig.cpp" line="576"/>
+        <location filename="../../libmscore/timesig.cpp" line="569"/>
         <source>%1/%2 time</source>
         <translation>%1/%2 tid</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1141"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1139"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="41"/>
         <source>Above</source>
         <translation>Over</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="1142"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="1140"/>
         <location filename="../../mscore/inspector/inspectorTextLineBase.cpp" line="42"/>
         <source>Below</source>
         <translation>Under</translation>
@@ -21956,34 +21956,34 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
         <translation>Importér capella</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2255"/>
+        <location filename="../../mscore/file.cpp" line="2256"/>
         <source>Install SoundFont</source>
         <translation>Installér SoundFont</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2256"/>
+        <location filename="../../mscore/file.cpp" line="2257"/>
         <source>Do you want to install the SoundFont %1?</source>
         <translation>Ønsker du at installere SoundFont %1?</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2271"/>
+        <location filename="../../mscore/file.cpp" line="2272"/>
         <source>Overwrite?</source>
         <translation>Overskriv?</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2272"/>
+        <location filename="../../mscore/file.cpp" line="2273"/>
         <source>%1 already exists.
 Do you want to overwrite it?</source>
         <translation>%1 findes allerede.
 Vil du overskrive?</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2280"/>
+        <location filename="../../mscore/file.cpp" line="2281"/>
         <source>SoundFont installed</source>
         <translation>SoundFont er installeret</translation>
     </message>
     <message>
-        <location filename="../../mscore/file.cpp" line="2280"/>
+        <location filename="../../mscore/file.cpp" line="2281"/>
         <source>SoundFont installed. Please go to View &gt; Synthesizer to add it and View &gt; Mixer to choose an instrument sound.</source>
         <translation>SoundFont er installeret. Gå til Vis &gt; Synthesizer for at tilføje den og Vis &gt; Mixer for at vælge en instrumentlyd.</translation>
     </message>
@@ -34461,28 +34461,28 @@ This score already has part scores. Changing local time signatures while part sc
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5804"/>
-        <location filename="../../libmscore/timesig.cpp" line="564"/>
+        <location filename="../../libmscore/timesig.cpp" line="557"/>
         <location filename="../../mscore/menus.cpp" line="1759"/>
         <source>Common time</source>
         <translation>4/4 takt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5807"/>
-        <location filename="../../libmscore/timesig.cpp" line="570"/>
+        <location filename="../../libmscore/timesig.cpp" line="563"/>
         <location filename="../../mscore/menus.cpp" line="1764"/>
         <source>Cut time (Bach)</source>
         <translation>Alla breve (Bach)</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5808"/>
-        <location filename="../../libmscore/timesig.cpp" line="573"/>
+        <location filename="../../libmscore/timesig.cpp" line="566"/>
         <location filename="../../mscore/menus.cpp" line="1765"/>
         <source>Cut triple time (9/8)</source>
         <translation>9/8 takt</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="5809"/>
-        <location filename="../../libmscore/timesig.cpp" line="567"/>
+        <location filename="../../libmscore/timesig.cpp" line="560"/>
         <location filename="../../mscore/menus.cpp" line="1760"/>
         <source>Cut time</source>
         <translation>Alla breve</translation>
