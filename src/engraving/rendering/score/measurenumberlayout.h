@@ -36,8 +36,8 @@ public:
 private:
     static void layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata);
 
-    static const Segment* refBarlineSegment(const MeasureNumber* item, bool alignToBarline, PlacementH hPlacement);
-    static void checkBarlineCollisions(const MeasureNumber* item, const Segment* barlineSeg, PlacementH hPlacement,
+    static const Segment* refBarlineSegment(const MeasureNumber* item, bool alignToBarline, AlignH hPlacement);
+    static void checkBarlineCollisions(const MeasureNumber* item, const Segment* barlineSeg, AlignH hPlacement,
                                        MeasureNumber::LayoutData* ldata);
 };
 }

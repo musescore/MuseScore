@@ -193,9 +193,9 @@ StyledFlickable {
 
                     RadioButtonGroup {
                         model: [
-                            { iconCode: IconCode.ALIGN_LEFT, value: 0},
-                            { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, value: 1},
-                            { iconCode: IconCode.ALIGN_RIGHT, value: 2 }
+                            { iconCode: IconCode.ALIGN_LEFT, value: 0 },
+                            { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, value: 2 },
+                            { iconCode: IconCode.ALIGN_RIGHT, value: 1 }
                         ]
 
                         delegate: FlatRadioButton {
@@ -363,9 +363,9 @@ StyledFlickable {
 
                     RadioButtonGroup {
                         model: [
-                            { iconCode: IconCode.ALIGN_LEFT, value: 0},
-                            { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, value: 1},
-                            { iconCode: IconCode.ALIGN_RIGHT, value: 2 }
+                            { iconCode: IconCode.ALIGN_LEFT, value: 0 },
+                            { iconCode: IconCode.ALIGN_HORIZONTAL_CENTER, value: 2 },
+                            { iconCode: IconCode.ALIGN_RIGHT, value: 1 }
                         ]
 
                         delegate: FlatRadioButton {

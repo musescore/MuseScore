@@ -39,7 +39,7 @@ void MeasureNumberLayout::layoutMeasureNumber(const MeasureNumber* item, Measure
     const RectF& itemBBox = ldata->bbox();
 
     bool alignToBarline = ctx.conf().styleB(Sid::measureNumberAlignToBarline);
-    PlacementH hPlacement = ctx.conf().styleV(Sid::measureNumberHPlacement).value<PlacementH>();
+    AlignH hPlacement = ctx.conf().styleV(Sid::measureNumberHPlacement).value<AlignH>();
     const Segment* barlineSeg = refBarlineSegment(item, alignToBarline, hPlacement);
     const BarLine* refBarline = barlineSeg ? toBarLine(barlineSeg->element(item->track())) : nullptr;
 
@@ -48,7 +48,7 @@ void MeasureNumberLayout::layoutMeasureNumber(const MeasureNumber* item, Measure
     if (alignToBarline) {
         if (refBarline) {
             double xRef = refBarline->pageX() - measure->pageX();
-            xRef += (hPlacement == PlacementH::RIGHT ? 1.0 : hPlacement == PlacementH::CENTER ? 0.5 : 0.0) * refBarline->width();
+            xRef += (hPlacement == AlignH::RIGHT ? 1.0 : hPlacement == AlignH::HCENTER ? 0.5 : 0.0) * refBarline->width();
             ldata->setPosX(xRef);
         } else {
             ldata->setPosX(0.0);
@@ -58,14 +58,14 @@ void MeasureNumberLayout::layoutMeasureNumber(const MeasureNumber* item, Measure
         MeasureLayout::MeasureStartEndPos measureStartEndPos
             = MeasureLayout::getMeasureStartEndPos(measure, firstCRSeg, item->staffIdx(), false, false, ctx);
 
-        if (hPlacement == PlacementH::LEFT) {
+        if (hPlacement == AlignH::LEFT) {
             if (measure->header()) {
                 ldata->setPosX(measure->firstNoteRestSegmentX(true) - measure->systemPos().x());
             } else {
                 double xRef = refBarline->pageX() - measure->pageX();
                 ldata->setPosX(xRef);
             }
-        } else if (hPlacement == PlacementH::CENTER) {
+        } else if (hPlacement == AlignH::HCENTER) {
             ldata->setPosX(0.5 * (measureStartEndPos.x1 + measureStartEndPos.x2));
         } else {
             if (refBarline) {
@@ -77,9 +77,9 @@ void MeasureNumberLayout::layoutMeasureNumber(const MeasureNumber* item, Measure
         }
     }
 
-    if (hPlacement == PlacementH::LEFT) {
+    if (hPlacement == AlignH::LEFT) {
         ldata->moveX(-itemBBox.left());
-    } else if (hPlacement == PlacementH::CENTER) {
+    } else if (hPlacement == AlignH::HCENTER) {
         ldata->moveX(-0.5 * (itemBBox.right() + itemBBox.left()));
     } else {
         ldata->moveX(-itemBBox.right());
@@ -98,12 +98,12 @@ void MeasureNumberLayout::layoutMMRestRange(const MMRestRange* item, MMRestRange
         = MeasureLayout::getMeasureStartEndPos(measure, crSeg, item->staffIdx(), true, false, ctx);
 
     const RectF& itemBBox = ldata->bbox();
-    PlacementH hPlacement = ctx.conf().styleV(Sid::mmRestRangeHPlacement).value<PlacementH>();
-    if (hPlacement == PlacementH::CENTER) {
+    AlignH hPlacement = ctx.conf().styleV(Sid::mmRestRangeHPlacement).value<AlignH>();
+    if (hPlacement == AlignH::HCENTER) {
         const double x1 = measureStartEnd.x1;
         const double x2 = measureStartEnd.x2;
         ldata->setPosX(0.5 * (x1 + x2) - 0.5 * (itemBBox.right() + itemBBox.left()));
-    } else if (hPlacement == PlacementH::RIGHT) {
+    } else if (hPlacement == AlignH::RIGHT) {
         ldata->setPosX(item->measure()->ldata()->bbox().width() - itemBBox.right());
     } else {
         ldata->setPosX(measureStartEnd.x1 - itemBBox.left());
@@ -139,11 +139,11 @@ void MeasureNumberLayout::layoutMeasureNumberBase(const MeasureNumberBase* item,
     }
 }
 
-const Segment* MeasureNumberLayout::refBarlineSegment(const MeasureNumber* item, bool alignToBarline, PlacementH hPlacement)
+const Segment* MeasureNumberLayout::refBarlineSegment(const MeasureNumber* item, bool alignToBarline, AlignH hPlacement)
 {
     Segment* barlineSeg = nullptr;
     Measure* measure = item->measure();
-    if (alignToBarline || hPlacement == PlacementH::LEFT) {
+    if (alignToBarline || hPlacement == AlignH::LEFT) {
         for (Segment* seg = measure->first(); seg && seg->tick() == measure->tick() && seg->system() == measure->system();
              seg = seg->prev1enabled()) {
             if (seg->isType(SegmentType::BarLineType) && seg->isActive()) {
@@ -164,10 +164,10 @@ const Segment* MeasureNumberLayout::refBarlineSegment(const MeasureNumber* item,
     return barlineSeg;
 }
 
-void MeasureNumberLayout::checkBarlineCollisions(const MeasureNumber* item, const Segment* barlineSeg, PlacementH hPlacement,
+void MeasureNumberLayout::checkBarlineCollisions(const MeasureNumber* item, const Segment* barlineSeg, AlignH hPlacement,
                                                  MeasureNumber::LayoutData* ldata)
 {
-    if (hPlacement == PlacementH::CENTER || !item->autoplace()) {
+    if (hPlacement == AlignH::HCENTER || !item->autoplace()) {
         return;
     }
 
@@ -195,7 +195,7 @@ void MeasureNumberLayout::checkBarlineCollisions(const MeasureNumber* item, cons
     }
 
     double xCur = item->pageX();
-    if (hPlacement == PlacementH::LEFT) {
+    if (hPlacement == AlignH::LEFT) {
         double xMin = barline->pageX() + barline->width() - itemBBox.left() + minBarLineDistance;
         if (xMin > xCur) {
             ldata->moveX(xMin - xCur);

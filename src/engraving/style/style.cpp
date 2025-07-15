@@ -597,8 +597,14 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         } else if (tag == "fretFrets" && m_version < 460) {
             e.skipCurrentElement();
         } else if (tag == "measureNumberHPlacement" && m_version < 460) {
-            set(Sid::measureNumberHPlacement, e.readInt());
-            if (value(Sid::measureNumberHPlacement).value<PlacementH>() != PlacementH::LEFT) {
+            // Before 460 PlacementH was used instead of AlignH, and was written as integer.
+            // We can't directly map the integer to AlignH because it's enumerated differently.
+            PlacementH hPlacement = PlacementH(e.readInt());
+            AlignH hAlign = hPlacement == PlacementH::LEFT ? AlignH::LEFT
+                            : hPlacement == PlacementH::CENTER ? AlignH::HCENTER : AlignH::RIGHT;
+            set(Sid::measureNumberHPlacement, hAlign);
+
+            if (value(Sid::measureNumberHPlacement).value<AlignH>() != AlignH::LEFT) {
                 // In this case it was assumed to be centered on the measure
                 set(Sid::measureNumberAlignToBarline, false);
             }
@@ -624,7 +630,7 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         }
 
         if (value(Sid::measureNumberPosition).value<AlignH>() == AlignH::HCENTER) {
-            set(Sid::measureNumberHPlacement, PlacementH::CENTER);
+            set(Sid::measureNumberHPlacement, AlignH::HCENTER);
         }
     }
 
