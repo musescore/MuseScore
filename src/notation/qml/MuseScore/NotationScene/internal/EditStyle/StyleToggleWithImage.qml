@@ -26,7 +26,7 @@ import MuseScore.NotationScene 1.0
 import Muse.UiComponents 1.0
 import Muse.Ui 1.0
 
-ColumnLayout{
+ColumnLayout {
     id: column
 
     required property StyleItem styleItem

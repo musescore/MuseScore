@@ -41,7 +41,6 @@ FlatRadioButton {
     width: Math.min(200, implicitContentWidth)
 
     RowLayout {
-        id: contentRow
         anchors.fill: parent
         spacing: 4
 

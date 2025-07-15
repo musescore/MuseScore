@@ -218,12 +218,8 @@ StyledFlickable {
                                 delegate: FlatRadioButton {
                                     width: 40
 
-                                    StyledIconLabel {
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        iconCode: modelData.iconCode
-                                        font.pixelSize: 16
-                                    }
+                                    iconCode: modelData.iconCode
+                                    iconFontSize: 16
 
                                     checked: root.numeralStyle.value === modelData.value
                                     onToggled: root.numeralStyle.value = modelData.value
@@ -266,15 +262,11 @@ StyledFlickable {
                                 delegate: FlatRadioButton {
                                     width: 28
 
-                                    StyledIconLabel {
-                                        anchors.horizontalCenter: parent.horizontalCenter
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        iconCode: modelData.iconCode
-                                        font.pixelSize: 16
-                                    }
+                                    iconCode: modelData.iconCode
+                                    iconFontSize: 16
 
                                     checked: root.timeSigAlignment ? root.timeSigAlignment.value === modelData.value : false
-                                    onToggled: function() {
+                                    onToggled: {
                                         if (root.timeSigAlignment) {
                                             root.timeSigAlignment.value = modelData.value
                                         }

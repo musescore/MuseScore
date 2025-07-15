@@ -40,15 +40,13 @@ FocusableItem {
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
 
-    implicitHeight: contentColumn.height
+    implicitHeight: contentColumn.implicitHeight
     width: parent.width
 
     Column {
         id: contentColumn
 
-        height: implicitHeight
         width: root.width
-
         spacing: 12
 
         PropertyCheckBox {
@@ -83,7 +81,6 @@ FocusableItem {
 
         Column {
             width: parent.width
-            height: childrenRect.height
             spacing: 8
 
             StyledTextLabel {
@@ -117,7 +114,6 @@ FocusableItem {
 
                     Column {
                         anchors.centerIn: parent
-                        height: childrenRect.height
                         spacing: 8
 
                         StyledIconLabel {
