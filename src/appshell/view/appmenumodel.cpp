@@ -311,7 +311,7 @@ MenuItem* AppMenuModel::makeAddMenu()
         makeSeparator(),
         makeMenu(TranslatableString("appshell/menu/add", "&Measures"), makeMeasuresItems(), "menu-measures"),
         makeMenu(TranslatableString("appshell/menu/add", "&Frames"), makeFramesItems(), "menu-frames"),
-        makeMenu(TranslatableString("appshell/menu/add", "&Text"), makeTextItems(), "menu-notes"),
+        makeMenu(TranslatableString("appshell/menu/add", "&Text"), makeTextItems(), "menu-text"),
         makeMenu(TranslatableString("appshell/menu/add", "&Lines"), makeLinesItems(), "menu-lines"),
         makeMenu(TranslatableString("appshell/menu/add", "&Chords and fretboard diagrams"),
                  makeChordAndFretboardDiagramsItems(), "menu-chord-and-frets"),
