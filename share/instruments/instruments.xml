@@ -8473,6 +8473,45 @@
                   </Channel>
                   <genre>classroom</genre>
             </Instrument>
+            <Instrument id="agogo-bells">
+                  <family>unpitched-metal-percussion</family>
+                  <trackName>Agogô Bells</trackName>
+                  <longName>Agogô Bells</longName>
+                  <shortName>Agogô</shortName>
+                  <description>Agogô bells.</description>
+                  <musicXMLid>metal.bells.agogo</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="68"> <!--Low Agogô-->
+                        <head>normal</head>
+                        <line>1</line>
+                        <voice>0</voice>
+                        <name>Low Agogô</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="67"> <!--High Agogô-->
+                        <head>normal</head>
+                        <line>-1</line>
+                        <voice>0</voice>
+                        <name>High Agogô</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
             <Instrument id="crash-cymbal">
                   <family>unpitched-metal-percussion</family>
                   <trackName>Suspended Cymbal</trackName>
@@ -9133,6 +9172,77 @@
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
+            <Instrument id="log-drum">
+                  <family>unpitched-wooden-percussion</family>
+                  <trackName>Log Drum</trackName>
+                  <longName>Log Drum</longName>
+                  <shortName>Log D.</shortName>
+                  <description>Log drum or slit drum</description>
+                  <musicXMLid>drum.log-drum</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc5Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="58"> <!--Vibra Slap-->
+                        <head>normal</head>
+                        <line>8</line>
+                        <voice>0</voice>
+                        <name>Low Sound</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Drum pitch="59"> <!--Ride Cymbal 2-->
+                        <head>normal</head>
+                        <line>6</line>
+                        <voice>0</voice>
+                        <name>Low-Mid  Sound</name>
+                        <stem>1</stem>
+                        <shortcut>B</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>1</panelColumn>
+                  </Drum>
+                  <Drum pitch="60"> <!--High Bongo-->
+                        <head>normal</head>
+                        <line>4</line>
+                        <voice>0</voice>
+                        <name>Mid  Sound</name>
+                        <stem>1</stem>
+                        <shortcut>C</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>2</panelColumn>
+                  </Drum>
+                  <Drum pitch="61"> <!--Low Bongo-->
+                        <head>normal</head>
+                        <line>2</line>
+                        <voice>0</voice>
+                        <name>High-Mid  Sound</name>
+                        <stem>1</stem>
+                        <shortcut>D</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>3</panelColumn>
+                  </Drum>
+                  <Drum pitch="62"> <!--Mute High Conga-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>High  Sound</name>
+                        <stem>1</stem>
+                        <shortcut>E</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>4</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 1, Prog 115; MS General: Temple Blocks-->
+                        <controller ctrl="32" value="1"/> <!--Bank LSB-->
+                        <program value="115"/> <!--Non-GS drum kit-->
+                  </Channel>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+            </Instrument>
             <Instrument id="wood-blocks">
                   <family>unpitched-wooden-percussion</family>
                   <trackName>Wood Blocks</trackName>
@@ -9384,6 +9494,7 @@
                   <longName>Shaker</longName>
                   <shortName>Sh.</shortName>
                   <description>Shaker.</description>
+                  <musicXMLid>rattle.shaker</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
@@ -9393,6 +9504,33 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Shaker</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="shekere">
+                  <family>other-percussion</family>
+                  <trackName>Shekere</trackName>
+                  <longName>Shekere</longName>
+                  <shortName>Shkre.</shortName>
+                  <description>West African gourd instrument covered with beads woven in a net.</description>
+                  <musicXMLid>rattle.shekere</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <Drum pitch="82"> <!--Shaker-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Shake</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
@@ -9628,6 +9766,63 @@
                   <Channel>
                         <!--MIDI: Bank 0, Prog 127; MS General: Gunshot-->
                         <program value="127"/> <!--CM-64/CM-32L Kit-->
+                  </Channel>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+            </Instrument>
+            <Instrument id="bird-call">
+                  <family>other-percussion</family>
+                  <trackName>Bird Call</trackName>
+                  <longName>Bird Call</longName>
+                  <shortName>Bird</shortName>
+                  <description>Bird call.</description>
+                  <musicXMLid>effect.bird</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="50"> <!--High Tom-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Bird Call</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 123; MS General: Bird Tweet-->
+                        <program value="123"/> <!--Non-GS drum kit-->
+                  </Channel>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+            </Instrument>
+            <Instrument id="ocean-drum">
+                  <family>other-percussion</family>
+                  <trackName>Ocean Drum</trackName>
+                  <longName>Ocean Drum</longName>
+                  <shortName>O.Drm.</shortName>
+                  <description>Ocean drum.</description>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="48"> <!--Hi-Mid Tom-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Ocean Sound</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 122; MS General: Seashore-->
+                        <program value="122"/> <!--Non-GS drum kit-->
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
@@ -10469,6 +10664,33 @@
                   <Articulation name="sforzato">
                         <velocity>130</velocity>
                   </Articulation>
+                  <genre>marching</genre>
+            </Instrument>
+            <Instrument id="marching-show-tenors">
+                  <family>batterie</family>
+                  <trackName>Show-Style Tenors</trackName>
+                  <longName>Show Tenors</longName>
+                  <shortName>T.</shortName>
+                  <description>Marching show-style tenor drum.</description>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="50"> <!--High Tom-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Hit</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
                   <genre>marching</genre>
             </Instrument>
             <Instrument id="marching-bass-drums">

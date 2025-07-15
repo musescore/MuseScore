@@ -4051,6 +4051,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Cowbell", "cowbell longName"),
 //: shortName for Cowbell; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cwb.", "cowbell shortName"),
 
+//: description for Agogô Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Agogô bells.", "agogo-bells description"),
+//: trackName for Agogô Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Agogô Bells", "agogo-bells trackName"),
+//: longName for Agogô Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Agogô Bells", "agogo-bells longName"),
+//: shortName for Agogô Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Agogô", "agogo-bells shortName"),
+
 //: description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Suspended Cymbal.", "crash-cymbal description"),
 //: trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -4222,6 +4231,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Temple Blocks", "temple-blocks long
 //: shortName for Temple Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Tmp. Bl.", "temple-blocks shortName"),
 
+//: description for Log Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Log drum or slit drum", "log-drum description"),
+//: trackName for Log Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Log Drum", "log-drum trackName"),
+//: longName for Log Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Log Drum", "log-drum longName"),
+//: shortName for Log Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Log D.", "log-drum shortName"),
+
 //: description for Wood Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Wood blocks.", "wood-blocks description"),
 //: trackName for Wood Blocks; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -4303,6 +4321,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Shaker", "shaker longName"),
 //: shortName for Shaker; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Sh.", "shaker shortName"),
 
+//: description for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "West African gourd instrument covered with beads woven in a net.", "shekere description"),
+//: trackName for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Shekere", "shekere trackName"),
+//: longName for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Shekere", "shekere longName"),
+//: shortName for Shekere; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Shkre.", "shekere shortName"),
+
 //: description for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Shell wind chimes.", "shell-wind-chimes description"),
 //: trackName for Shell Wind Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -4366,6 +4393,24 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Cannon", "cannon longName"),
 //: shortName for Cannon; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cn.", "cannon shortName"),
 
+//: description for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bird call.", "bird-call description"),
+//: trackName for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bird Call", "bird-call trackName"),
+//: longName for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bird Call", "bird-call longName"),
+//: shortName for Bird Call; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Bird", "bird-call shortName"),
+
+//: description for Ocean Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Ocean drum.", "ocean-drum description"),
+//: trackName for Ocean Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Ocean Drum", "ocean-drum trackName"),
+//: longName for Ocean Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Ocean Drum", "ocean-drum longName"),
+//: shortName for Ocean Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "O.Drm.", "ocean-drum shortName"),
+
 //: description for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "General MIDI percussion kit with Level 2 extensions.", "percussion-synthesizer description"),
 //: trackName for General MIDI Percussion; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -4404,6 +4449,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Marching Tenor Drums", "marching-te
 QT_TRANSLATE_NOOP3("engraving/instruments", "Tenor Drums", "marching-tenor-drums longName"),
 //: shortName for Marching Tenor Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "T.D.", "marching-tenor-drums shortName"),
+
+//: description for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Marching show-style tenor drum.", "marching-show-tenors description"),
+//: trackName for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Show-Style Tenors", "marching-show-tenors trackName"),
+//: longName for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Show Tenors", "marching-show-tenors longName"),
+//: shortName for Show-Style Tenors; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "T.", "marching-show-tenors shortName"),
 
 //: description for Marching Bass Drums; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Marching bass drums.", "marching-bass-drums description"),
