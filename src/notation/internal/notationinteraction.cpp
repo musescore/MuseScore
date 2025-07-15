@@ -4748,7 +4748,8 @@ void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
         score()->hideAnchors();
     }
 
-    apply();
+    score()->update();
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::moveElementAnchors(QKeyEvent* event)

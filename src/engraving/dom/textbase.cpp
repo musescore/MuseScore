@@ -2594,7 +2594,7 @@ String TextBase::accessibleInfo() const
     String s = plainText().simplified();
     if (s.size() > 20) {
         s.truncate(20);
-        s += u"ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â¦";
+        s += u"…";
     }
     return String(u"%1: %2").arg(rez, s);
 }

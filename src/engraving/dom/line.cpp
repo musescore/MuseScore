@@ -214,7 +214,7 @@ void LineSegment::startEditDrag(EditData& ed)
         setAutoplace(false);
     }
 
-    updateAnchors(ed);
+    EditTimeTickAnchors::updateAnchors(this);
 }
 
 bool LineSegment::isEditAllowed(EditData& ed) const
@@ -801,16 +801,9 @@ void LineSegment::editDrag(EditData& ed)
         }
     }
 
-    updateAnchors(ed);
+    EditTimeTickAnchors::updateAnchors(this);
 
     triggerLayout();
-}
-
-void LineSegment::updateAnchors(EditData& ed) const
-{
-    if (line()->allowTimeAnchor()) {
-        EditTimeTickAnchors::updateAnchors(this);
-    }
 }
 
 //---------------------------------------------------------
