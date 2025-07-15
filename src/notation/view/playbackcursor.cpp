@@ -54,6 +54,16 @@ void PlaybackCursor::paint(muse::draw::Painter* painter)
 void PlaybackCursor::setNotation(INotationPtr notation)
 {
     m_notation = notation;
+    mu::engraving::Score* score = m_notation->elements()->msScore();
+    if (score->nstaves() > 6) {
+        preProcessScore = true;
+        processOttava(score, false);
+    }
+}
+
+void PlaybackCursor::enableHighlightCursorNote(bool highlight)
+{
+    highlightCursorNote = highlight;
 }
 
 void PlaybackCursor::enableKeyboardPlay(bool enable)
@@ -64,8 +74,11 @@ void PlaybackCursor::enableKeyboardPlay(bool enable)
 void PlaybackCursor::move(muse::midi::tick_t tick, bool isPlaying)
 {
     // LOGALEX();
-    // m_rect = resolveCursorRectByTick(tick);
-    m_rect = resolveCursorRectByTick(tick, isPlaying);
+    if (highlightCursorNote) {
+        m_rect = resolveCursorRectByTick1(tick, isPlaying);
+    } else {
+        m_rect = resolveCursorRectByTick(tick);
+    }
 }
 
 //! NOTE Copied from ScoreView::moveCursor(const Fraction& tick)
@@ -1811,14 +1824,16 @@ void PlaybackCursor::processCursorNoteRenderRecoverAsync(EngravingItem* engravin
     }
 }
 
-muse::RectF PlaybackCursor::resolveCursorRectByTick(muse::midi::tick_t _tick, bool isPlaying) {
+muse::RectF PlaybackCursor::resolveCursorRectByTick1(muse::midi::tick_t _tick, bool isPlaying) {
     Fraction tick = Fraction::fromTicks(_tick);
     if (!m_notation) {
         return RectF();
     }
 
     mu::engraving::Score* score = m_notation->elements()->msScore();
-    processOttava(score, isPlaying);
+    if (!preProcessScore) {
+        processOttava(score, isPlaying);
+    }
 
     Measure* measure = score->tick2measureMM(tick);
     if (!measure) {
