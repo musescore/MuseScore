@@ -54,10 +54,14 @@ void PlaybackCursor::paint(muse::draw::Painter* painter)
 void PlaybackCursor::setNotation(INotationPtr notation)
 {
     m_notation = notation;
-    mu::engraving::Score* score = m_notation->elements()->msScore();
-    if (score->nstaves() > 6) {
-        preProcessScore = true;
-        processOttava(score, false);
+    if (m_notation) {
+        mu::engraving::Score* score = m_notation->elements()->msScore();
+        if (score) {
+            if (score->nstaves() > 6) {
+                preProcessScore = true;
+                processOttava(score, false);
+            }
+        }
     }
 }
 
