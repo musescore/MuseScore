@@ -39,7 +39,8 @@ ScoresGridView {
 
     Connections {
         target: root.model
-        onStateChanged: {
+
+        function onStateChanged() {
             if (root.model.state === CloudScoresModel.Fine) {
                 // After the model has loaded more, check if even more is needed
                 prv.updateDesiredRowCount();
