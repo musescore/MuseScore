@@ -608,6 +608,13 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
                 // In this case it was assumed to be centered on the measure
                 set(Sid::measureNumberAlignToBarline, false);
             }
+        } else if (tag == "mmRestRangeHPlacement" && m_version < 460) {
+            // Before 460 PlacementH was used instead of AlignH, and was written as integer.
+            // We can't directly map the integer to AlignH because it's enumerated differently.
+            PlacementH hPlacement = PlacementH(e.readInt());
+            AlignH hAlign = hPlacement == PlacementH::LEFT ? AlignH::LEFT
+                            : hPlacement == PlacementH::CENTER ? AlignH::HCENTER : AlignH::RIGHT;
+            set(Sid::mmRestRangeHPlacement, hAlign);
         } else if (!readProperties(e)) {
             e.unknown();
         }

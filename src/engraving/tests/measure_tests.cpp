@@ -513,7 +513,7 @@ TEST_F(Engraving_MeasureTests, measureNumbers)
 
     // center measure numbers
     score->startCmd(TranslatableString::untranslatable("Engraving measure tests"));
-    score->undoChangeStyleVal(Sid::measureNumberHPlacement, PlacementH::CENTER);
+    score->undoChangeStyleVal(Sid::measureNumberHPlacement, AlignH::HCENTER);
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-2.mscx", MEASURE_DATA_DIR + u"measurenumber-2-ref.mscx"));
