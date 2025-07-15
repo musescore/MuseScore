@@ -1455,39 +1455,6 @@ enum class LayoutFlag {
 };
 Q_ENUM_NS(LayoutFlag);
 
-enum class ElementFlag {
-    NOTHING                = int(mu::engraving::ElementFlag::NOTHING),
-    DROP_TARGET            = int(mu::engraving::ElementFlag::DROP_TARGET),
-    NOT_SELECTABLE         = int(mu::engraving::ElementFlag::NOT_SELECTABLE),
-    MOVABLE                = int(mu::engraving::ElementFlag::MOVABLE),
-    COMPOSITION            = int(mu::engraving::ElementFlag::COMPOSITION),
-    HAS_TAG                = int(mu::engraving::ElementFlag::HAS_TAG),
-    ON_STAFF               = int(mu::engraving::ElementFlag::ON_STAFF),
-    SELECTED               = int(mu::engraving::ElementFlag::SELECTED),
-    GENERATED              = int(mu::engraving::ElementFlag::GENERATED),
-    INVISIBLE              = int(mu::engraving::ElementFlag::INVISIBLE),
-    NO_AUTOPLACE           = int(mu::engraving::ElementFlag::NO_AUTOPLACE),
-    SYSTEM                 = int(mu::engraving::ElementFlag::SYSTEM),
-    PLACE_ABOVE            = int(mu::engraving::ElementFlag::PLACE_ABOVE),
-    SIZE_SPATIUM_DEPENDENT = int(mu::engraving::ElementFlag::SIZE_SPATIUM_DEPENDENT),
-    REPEAT_START           = int(mu::engraving::ElementFlag::REPEAT_START),
-    REPEAT_JUMP            = int(mu::engraving::ElementFlag::REPEAT_JUMP),
-    IRREGULAR              = int(mu::engraving::ElementFlag::IRREGULAR),
-    LINE_BREAK             = int(mu::engraving::ElementFlag::LINE_BREAK),
-    PAGE_BREAK             = int(mu::engraving::ElementFlag::PAGE_BREAK),
-    SECTION_BREAK          = int(mu::engraving::ElementFlag::SECTION_BREAK),
-    NO_BREAK               = int(mu::engraving::ElementFlag::NO_BREAK),
-    HEADER                 = int(mu::engraving::ElementFlag::HEADER),
-    TRAILER                = int(mu::engraving::ElementFlag::TRAILER),
-    COURTESY_KEYSIG        = int(mu::engraving::ElementFlag::COURTESY_KEYSIG),
-    COURTESY_TIMESIG       = int(mu::engraving::ElementFlag::COURTESY_TIMESIG),
-    COURTESY_CLEF          = int(mu::engraving::ElementFlag::COURTESY_CLEF),
-    EMPTY                  = int(mu::engraving::ElementFlag::EMPTY),
-    WRITTEN                = int(mu::engraving::ElementFlag::WRITTEN),
-    END_OF_MEASURE_CHANGE  = int(mu::engraving::ElementFlag::END_OF_MEASURE_CHANGE),
-};
-Q_ENUM_NS(ElementFlag);
-
 enum class LayoutMode {
     PAGE             = int(mu::engraving::LayoutMode::PAGE),
     FLOAT            = int(mu::engraving::LayoutMode::FLOAT),
@@ -4587,6 +4554,5 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::NoteSpellingType);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Key);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::UpdateMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LayoutFlag);
-Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::ElementFlag);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::LayoutMode);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SymId);

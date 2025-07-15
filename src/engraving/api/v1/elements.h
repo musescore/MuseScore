@@ -175,6 +175,23 @@ class EngravingItem : public apiv1::ScoreElement
     /// \since MuseScore 4.6
     Q_PROPERTY(bool up READ up)
 
+    /// The header element flag.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool header READ header)
+    /// The trailer element flag.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool trailer READ trailer)
+    /// The isMovable element flag.
+    /// Controls whether this element can be dragged by the mouse.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool isMovable READ isMovable)
+    /// The enabled element flag.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool enabled READ enabled)
+    /// Whether this element is accounted for in layout calculations.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool addToSkyline READ addToSkyline)
+
     /// Unlike the name might suggest, this property no longer returns the subtype and is scarcely used.
     /// Named 'subtype' prior to MuseScore 4.6
     API_PROPERTY(subType,                 SUBTYPE)
@@ -1038,10 +1055,14 @@ public:
     mu::engraving::EngravingItem* element() { return toEngravingItem(e); }
     const mu::engraving::EngravingItem* element() const { return toEngravingItem(e); }
     /// \}
-    /// \endcond
 
-    /// Returns if an element has a given flag
-    Q_INVOKABLE bool flag(mu::engraving::ElementFlag f) { return element()->flag(f); }
+    bool header() { return element()->header(); }
+    bool trailer() { return element()->trailer(); }
+    virtual bool isMovable() { return element()->isMovable(); }
+    bool enabled() { return element()->enabled(); }
+    bool addToSkyline() { return element()->addToSkyline(); }
+    bool generated() { return element()->generated(); }
+    /// \endcond
 
     /// Create a copy of the element
     Q_INVOKABLE apiv1::EngravingItem* clone() const { return wrap(element()->clone(), Ownership::PLUGIN); }
