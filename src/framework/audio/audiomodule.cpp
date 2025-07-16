@@ -218,8 +218,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
     m_audioOutputController->init();
 
-    m_mainPlayback->init();
-
     // Setup audio driver
     setupAudioDriver(mode);
 
@@ -235,8 +233,6 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
 void AudioModule::onDeinit()
 {
-    m_mainPlayback->deinit();
-
     if (m_audioDriver->isOpened()) {
         m_audioDriver->close();
     }
@@ -250,6 +246,7 @@ void AudioModule::onDestroy()
         m_audioWorker->stop([this]() {
             ONLY_AUDIO_WORKER_THREAD;
             m_workerPlayback->deinit();
+            m_mainPlayback->deinitOnWorker();
             m_audioEngine->deinit();
         });
     }
@@ -319,6 +316,9 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
 
         // Initialize IWorkerPlayback facade and make sure that it's initialized after the audio-engine
         m_workerPlayback->init();
+
+        // Playback must be inited after the audio thread is created
+        m_mainPlayback->initOnWorker();
     };
 
     auto workerLoopBody = [this]() {

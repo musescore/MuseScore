@@ -38,8 +38,8 @@ public:
     Playback(const muse::modularity::ContextPtr& iocCtx)
         : Injectable(iocCtx) {}
 
-    void init();
-    void deinit();
+    void initOnWorker();
+    void deinitOnWorker();
 
     // 1. Add Sequence
     async::Promise<TrackSequenceId> addSequence() override;
