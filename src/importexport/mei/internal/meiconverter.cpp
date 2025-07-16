@@ -1661,6 +1661,11 @@ void Convert::hairpinFromMEI(engraving::Hairpin* hairpin, const libmei::Hairpin&
         warning = (warning || lformWarning);
     }
 
+    // @niente
+    if (meiHairpin.HasNiente()) {
+        hairpin->setHairpinCircledTip(meiHairpin.GetNiente() == libmei::BOOLEAN_true);
+    }
+
     // @color
     Convert::colorlineFromMEI(hairpin, meiHairpin);
 
@@ -1685,6 +1690,11 @@ libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
     // @lform
     if (hairpin->lineStyle() != engraving::LineType::SOLID) {
         meiHairpin.SetLform(Convert::lineToMEI(hairpin->lineStyle()));
+    }
+
+    // @niente
+    if (hairpin->hairpinCircledTip()) {
+        meiHairpin.SetNiente(libmei::BOOLEAN_true);
     }
 
     // @color
