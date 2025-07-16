@@ -1069,7 +1069,7 @@ public:
     void forAllLyrics(std::function<void(Lyrics*)> f);
 
     void createPaddingTable();
-    const PaddingTable paddingTable() const { return m_paddingTable; }
+    const PaddingTable& paddingTable() const { return m_paddingTable; }
 
     void autoUpdateSpatium();
 

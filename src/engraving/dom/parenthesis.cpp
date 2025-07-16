@@ -28,7 +28,7 @@
 using namespace mu::engraving;
 
 Parenthesis::Parenthesis(EngravingItem* parent)
-    : EngravingItem(ElementType::PARENTHESIS, parent, ElementFlag::ON_STAFF | ElementFlag::GENERATED)
+    : EngravingItem(ElementType::PARENTHESIS, parent, ElementFlag::GENERATED)
 {
 }
 
@@ -74,30 +74,4 @@ PropertyValue Parenthesis::propertyDefault(Pid pid) const
 String Parenthesis::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), TConv::translatedUserName(direction()));
-}
-
-PointF Parenthesis::pagePos() const
-{
-    PointF p(pos());
-    if (explicitParent() == nullptr) {
-        return p;
-    }
-
-    if (explicitParent()->explicitParent()) {
-        p += parentItem()->pagePos();
-    }
-    return p;
-}
-
-PointF Parenthesis::canvasPos() const
-{
-    PointF p(pos());
-    if (explicitParent() == nullptr) {
-        return p;
-    }
-
-    if (explicitParent()->explicitParent()) {
-        p += parentItem()->canvasPos();
-    }
-    return p;
 }

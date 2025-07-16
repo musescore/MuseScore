@@ -113,11 +113,6 @@ EngravingItem::~EngravingItem()
     Score::onElementDestruction(this);
 
     delete m_layoutData;
-
-    delete m_leftParenthesis;
-    delete m_rightParenthesis;
-    m_leftParenthesis = nullptr;
-    m_rightParenthesis = nullptr;
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY

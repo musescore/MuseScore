@@ -44,9 +44,6 @@ public:
 
     String accessibleInfo() const override;
 
-    PointF pagePos() const override;
-    PointF canvasPos() const override;
-
     struct LayoutData : public EngravingItem::LayoutData
     {
         ld_field<muse::draw::PainterPath> path = "[Parenthesis] path";
