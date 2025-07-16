@@ -115,6 +115,7 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
         { "daluo", { SoundId::Daluo, SoundCategory::Percussions } },
         { "xiaoluo", { SoundId::Xiaoluo, SoundCategory::Percussions } },
         { "bo", { SoundId::Bo, SoundCategory::Percussions } },
+        { "ban", { SoundId::Ban, SoundCategory::Percussions } },
         { "dabo", { SoundId::Dabo, SoundCategory::Percussions } },
         { "dabo", { SoundId::Dabo, SoundCategory::Percussions } },
         { "naobo", { SoundId::Naobo, SoundCategory::Percussions } },

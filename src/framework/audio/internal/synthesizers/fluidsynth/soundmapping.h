@@ -658,6 +658,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::Daluo,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Xiaoluo,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Bo,  {} }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Ban,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Dabo,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Naobo,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Bangzi,  {} }, { midi::Program(128, 48) } },
