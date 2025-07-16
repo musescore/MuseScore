@@ -212,7 +212,7 @@
                            <note xml:id="ntcvrux" dur="4" pname="d" oct="3" />
                         </layer>
                      </staff>
-                     <hairpin xml:id="heiz76k" form="cres" staff="2" startid="#n1ahnf5i" place="above" endid="#nsqyndt" />
+                     <hairpin xml:id="heiz76k" form="cres" niente="true" staff="2" startid="#n1ahnf5i" place="above" endid="#nsqyndt" />
                   </measure>
                   <measure xml:id="mjmh4f6" n="12">
                      <staff xml:id="m12s1" n="1">

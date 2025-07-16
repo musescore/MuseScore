@@ -760,6 +760,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <hairpinCircledTip>1</hairpinCircledTip>
               <direction>up</direction>
               <eid>+B_+B</eid>
               </HairPin>
