@@ -791,7 +791,7 @@
     <measureNumberOffset x="0" y="-2"/>
     <measureNumberOffsetType>1</measureNumberOffsetType>
     <measureNumberVPlacement>0</measureNumberVPlacement>
-    <measureNumberHPlacement>0</measureNumberHPlacement>
+    <measureNumberHPlacement>left</measureNumberHPlacement>
     <measureNumberAlign>left,baseline</measureNumberAlign>
     <measureNumberFrameType>0</measureNumberFrameType>
     <measureNumberFramePadding>0.2</measureNumberFramePadding>
@@ -810,7 +810,7 @@
     <measureNumberPosBelow x="0" y="2"/>
     <mmRestRangeOffsetType>1</mmRestRangeOffsetType>
     <mmRestRangeVPlacement>1</mmRestRangeVPlacement>
-    <mmRestRangeHPlacement>1</mmRestRangeHPlacement>
+    <mmRestRangeHPlacement>center</mmRestRangeHPlacement>
     <mmRestRangeAlign>center,baseline</mmRestRangeAlign>
     <mmRestRangeFrameType>0</mmRestRangeFrameType>
     <mmRestRangeFramePadding>0.2</mmRestRangeFramePadding>

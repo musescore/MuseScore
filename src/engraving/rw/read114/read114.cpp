@@ -2115,7 +2115,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             readText114(e, ctx, noText, m);
             noText->setTrack(ctx.track());
             noText->setParent(m);
-            m->setNoText(noText->staffIdx(), noText);
+            m->setMeasureNumber(noText->staffIdx(), noText);
         } else if (tag == "multiMeasureRest") {
             m->setMMRestCount(e.readInt());
             // set tick to previous measure

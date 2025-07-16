@@ -535,6 +535,25 @@ const TextStyle measureNumberTextStyle { {
     { TextStylePropertyType::Position,             Sid::measureNumberPosition,                  Pid::POSITION },
 } };
 
+const TextStyle measureNumberAlternateTextStyle { {
+    { TextStylePropertyType::FontFace,             Sid::measureNumberAlternateFontFace,                  Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::measureNumberAlternateFontSize,                  Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::measureNumberAlternateLineSpacing,               Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::measureNumberAlternateFontSpatiumDependent,      Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::measureNumberAlternateFontStyle,                 Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::measureNumberAlternateColor,                     Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::measureNumberAlternateAlign,                     Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::measureNumberAlternatePosAbove,                  Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::measureNumberAlternateFrameType,                 Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::measureNumberAlternateFramePadding,              Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::measureNumberAlternateFrameWidth,                Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::measureNumberAlternateFrameRound,                Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::measureNumberAlternateFrameFgColor,              Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::measureNumberAlternateFrameBgColor,              Pid::FRAME_BG_COLOR },
+    { TextStylePropertyType::MusicalSymbolsScale,  Sid::dummyMusicalSymbolsScale,               Pid::MUSICAL_SYMBOLS_SCALE },
+    { TextStylePropertyType::Position,             Sid::measureNumberAlternatePosition,                  Pid::POSITION },
+} };
+
 const TextStyle mmRestRangeTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::mmRestRangeFontFace,                    Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::mmRestRangeFontSize,                    Pid::FONT_SIZE },
@@ -1332,6 +1351,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::PAGE_NUMBER: return &pageNumberTextStyle;
 
     case TextStyleType::MEASURE_NUMBER: return &measureNumberTextStyle;
+    case TextStyleType::MEASURE_NUMBER_ALTERNATE: return &measureNumberAlternateTextStyle;
     case TextStyleType::MMREST_RANGE: return &mmRestRangeTextStyle;
 
     case TextStyleType::TEMPO: return &tempoTextStyle;
@@ -1414,6 +1434,7 @@ static const std::vector<TextStyleType> _primaryTextStyles = {
     TextStyleType::COPYRIGHT,
     TextStyleType::PAGE_NUMBER,
     TextStyleType::MEASURE_NUMBER,
+    TextStyleType::MEASURE_NUMBER_ALTERNATE,
     TextStyleType::MMREST_RANGE,
     TextStyleType::TEMPO,
     TextStyleType::REPEAT_LEFT,

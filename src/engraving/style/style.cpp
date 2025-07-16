@@ -223,6 +223,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::RH_TAPPING_SYMBOL:
                 set(idx, TConv::fromXml(e.readAsciiText(), RHTappingSymbol::T));
                 break;
+            case P_TYPE::TEXT_STYLE:
+                set(idx, TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
@@ -593,6 +596,25 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             }
         } else if (tag == "fretFrets" && m_version < 460) {
             e.skipCurrentElement();
+        } else if (tag == "measureNumberHPlacement" && m_version < 460) {
+            // Before 460 PlacementH was used instead of AlignH, and was written as integer.
+            // We can't directly map the integer to AlignH because it's enumerated differently.
+            PlacementH hPlacement = PlacementH(e.readInt());
+            AlignH hAlign = hPlacement == PlacementH::LEFT ? AlignH::LEFT
+                            : hPlacement == PlacementH::CENTER ? AlignH::HCENTER : AlignH::RIGHT;
+            set(Sid::measureNumberHPlacement, hAlign);
+
+            if (value(Sid::measureNumberHPlacement).value<AlignH>() != AlignH::LEFT) {
+                // In this case it was assumed to be centered on the measure
+                set(Sid::measureNumberAlignToBarline, false);
+            }
+        } else if (tag == "mmRestRangeHPlacement" && m_version < 460) {
+            // Before 460 PlacementH was used instead of AlignH, and was written as integer.
+            // We can't directly map the integer to AlignH because it's enumerated differently.
+            PlacementH hPlacement = PlacementH(e.readInt());
+            AlignH hAlign = hPlacement == PlacementH::LEFT ? AlignH::LEFT
+                            : hPlacement == PlacementH::CENTER ? AlignH::HCENTER : AlignH::RIGHT;
+            set(Sid::mmRestRangeHPlacement, hAlign);
         } else if (!readProperties(e)) {
             e.unknown();
         }
@@ -612,6 +634,10 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             }
             AlignH val = value(st.styleIdx()).value<Align>().horizontal;
             set(positionSid, val);
+        }
+
+        if (value(Sid::measureNumberPosition).value<AlignH>() == AlignH::HCENTER) {
+            set(Sid::measureNumberHPlacement, AlignH::HCENTER);
         }
     }
 
@@ -699,6 +725,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(value(idx).value<LHTappingSymbol>()));
         } else if (P_TYPE::RH_TAPPING_SYMBOL == type) {
             xml.tag(st.name(), TConv::toXml(value(idx).value<RHTappingSymbol>()));
+        } else if (P_TYPE::TEXT_STYLE == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TextStyleType>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

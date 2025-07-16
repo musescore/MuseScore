@@ -1223,45 +1223,37 @@ void MeasureLayout::layoutStaffLines(Measure* m, LayoutContext& ctx)
 
 void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
 {
-    bool smn = m->showsMeasureNumber();
+    bool showMeasureNumber = m->showsMeasureNumber();
 
-    String s;
-    if (smn) {
-        s = String::number(m->no() + 1);
-    }
+    String stringNum = String::number(m->no() + 1);
 
-    unsigned nn = 1;
-    bool nas = ctx.conf().styleB(Sid::measureNumberAllStaves);
+    Score* score = m->score();
 
-    if (!nas) {
-        //find first non invisible staff
-        for (unsigned staffIdx = 0; staffIdx < m->mstaves().size(); ++staffIdx) {
-            if (m->visible(staffIdx)) {
-                nn = staffIdx;
-                break;
-            }
+    const std::vector<MStaff*>& measureStaves = m->mstaves();
+
+    for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        if (staffIdx >= measureStaves.size()) {
+            break;
         }
-    }
-    for (unsigned staffIdx = 0; staffIdx < m->mstaves().size(); ++staffIdx) {
-        const MStaff* ms = m->mstaves().at(staffIdx);
-        MeasureNumber* t = ms->noText();
-        if (t) {
-            t->setTrack(staffIdx * VOICES);
-        }
-        if (smn && ((staffIdx == nn) || nas)) {
-            if (t == 0) {
-                t = new MeasureNumber(m);
-                t->setTrack(staffIdx * VOICES);
-                t->setGenerated(true);
-                t->setParent(m);
-                m->add(t);
+
+        Staff* staff = score->staff(staffIdx);
+        const MStaff* measureStaff = measureStaves[staffIdx];
+        MeasureNumber* measureNumber = measureStaff->measureNumber();
+
+        if (showMeasureNumber && staff->shouldShowMeasureNumbers()) {
+            if (!measureNumber) {
+                measureNumber = new MeasureNumber(m);
+                measureNumber->setTrack(staff2track(staffIdx));
+                measureNumber->setGenerated(true);
+                measureNumber->setParent(m);
+                m->add(measureNumber);
             }
-            t->setXmlText(s);
-            TLayout::layoutMeasureNumber(t, t->mutldata(), ctx);
-        } else {
-            if (t) {
-                ctx.mutDom().doUndoRemoveElement(t);
-            }
+
+            measureNumber->setXmlText(stringNum);
+            measureNumber->setSystemFlag(!score->style().styleB(Sid::measureNumberAllStaves));
+            TLayout::layoutMeasureNumber(measureNumber, measureNumber->mutldata(), ctx);
+        } else if (measureNumber) {
+            ctx.mutDom().doUndoRemoveElement(measureNumber);
         }
     }
 }

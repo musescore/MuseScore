@@ -69,8 +69,8 @@ void MeasureWrite::writeMeasure(const Measure* measure, XmlWriter& xml, WriteCon
         TWrite::writeProperty(measure, xml, Pid::MEASURE_NUMBER_MODE);
     }
     MStaff* mstaff = measure->m_mstaves[staff];
-    if (mstaff->noText() && !mstaff->noText()->generated()) {
-        TWrite::write(mstaff->noText(), xml, ctx);
+    if (mstaff->measureNumber() && !mstaff->measureNumber()->generated()) {
+        TWrite::write(mstaff->measureNumber(), xml, ctx);
     }
 
     if (mstaff->mmRangeText() && !mstaff->mmRangeText()->generated()) {

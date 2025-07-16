@@ -70,6 +70,8 @@
       <metronomeFontSize>7.4</metronomeFontSize>
       <measureNumberFontFace>Times</measureNumberFontFace>
       <measureNumberFontSize>7.4</measureNumberFontSize>
+      <measureNumberAlternateFontFace>Times</measureNumberAlternateFontFace>
+      <measureNumberAlternateFontSize>7.4</measureNumberAlternateFontSize>
       <mmRestRangeFontFace>Times</mmRestRangeFontFace>
       <mmRestRangeFontSize>7.4</mmRestRangeFontSize>
       <translatorFontFace>Times</translatorFontFace>
@@ -146,12 +148,12 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
     <SystemObjects>
-      <Instance staffId="1" barNumbers="false"/>
-      <Instance staffId="4" barNumbers="false"/>
-      <Instance staffId="8" barNumbers="false"/>
-      <Instance staffId="11" barNumbers="false"/>
-      <Instance staffId="14" barNumbers="false"/>
-      <Instance staffId="17" barNumbers="false"/>
+      <Instance staffId="1"/>
+      <Instance staffId="4"/>
+      <Instance staffId="8"/>
+      <Instance staffId="11"/>
+      <Instance staffId="14"/>
+      <Instance staffId="17"/>
       </SystemObjects>
     <Part id="1">
       <Staff>

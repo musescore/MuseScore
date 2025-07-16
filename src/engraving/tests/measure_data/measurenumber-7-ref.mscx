@@ -11,7 +11,7 @@
       <scaleRythmicSpacingForSmallNotes>0</scaleRythmicSpacingForSmallNotes>
       <verticallyAlignChordSymbols>0</verticallyAlignChordSymbols>
       <measureNumberVPlacement>1</measureNumberVPlacement>
-      <measureNumberHPlacement>1</measureNumberHPlacement>
+      <measureNumberHPlacement>center</measureNumberHPlacement>
       <pageNumberFontSize>9</pageNumberFontSize>
       <pageNumberFontStyle>0</pageNumberFontStyle>
       <changesBeforeBarlineRepeats>0</changesBeforeBarlineRepeats>

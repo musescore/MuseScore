@@ -53,6 +53,7 @@
       <metronomeFontSize>10</metronomeFontSize>
       <measureNumberFontFace>FreeSerif</measureNumberFontFace>
       <measureNumberFontSize>10</measureNumberFontSize>
+      <measureNumberAlternateFontFace>FreeSerif</measureNumberAlternateFontFace>
       <mmRestRangeFontFace>FreeSerif</mmRestRangeFontFace>
       <mmRestRangeFontSize>10</mmRestRangeFontSize>
       <translatorFontFace>FreeSerif</translatorFontFace>
