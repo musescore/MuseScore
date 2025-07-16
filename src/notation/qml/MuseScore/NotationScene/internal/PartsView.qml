@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
@@ -30,6 +31,8 @@ Item {
 
     property var model
 
+    property string filterText: ""
+
     property alias navigationPanel: view.navigationPanel
 
     QtObject {
@@ -37,6 +40,16 @@ Item {
 
         readonly property int sideMargin: 36
         property string currentItemNavigationName: ""
+    }
+
+    // Timer pour appliquer le filtre après un court délai (debounce)
+    Timer {
+        id: debounceTimer
+        interval: 300
+        repeat: false
+        onTriggered: {
+            root.filterText = searchField.text
+        }
     }
 
     Column {
@@ -48,6 +61,15 @@ Item {
         anchors.leftMargin: prv.sideMargin
 
         spacing: 16
+
+        // New part search field
+        TextInputField {
+            id: searchField
+            placeholderText: qsTr("Search part...")
+            text: root.filterText
+            onTextChanged: debounceTimer.restart()
+            Layout.fillWidth: true
+        }
 
         StyledTextLabel {
             width: parent.width
@@ -70,7 +92,38 @@ Item {
 
         spacing: 0
 
-        model: root.model
+        // Apply the filter to the model
+        model: root.model && root.filterText.length > 0
+            ? root.model.filter(function(part) {
+                if (!part.title)
+                    return false;
+
+                // Remove accents from the title for comparison
+                function removeAccents(str) {
+                    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                }
+
+                // Detect if a term has accents
+                function hasAccent(str) {
+                    return /[àâäéèêëîïôöùûüç]/i.test(str);
+                }
+
+                let title = part.title.toLowerCase();
+                let titleNoAccents = removeAccents(title);
+                let terms = root.filterText.toLowerCase().trim().split(/\s+/);
+
+                return terms.every(function(term) {
+                    if (hasAccent(term)) {
+                        // If the term has accents, search in the title with accents
+                        return title.indexOf(term) !== -1;
+                    } else {
+                        // If the term has no accents, search in the title terms with and without accents
+                        return titleNoAccents.indexOf(term) !== -1;
+                    }
+                });
+            })
+            : root.model
+
 
         interactive: height < contentHeight
 

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
@@ -226,10 +227,14 @@ FocusScope {
                 SplitView.minimumHeight: 30
 
                 sourceComponent: notationNavigator.visible ? navigatorComp : null
+            }
 
-                function setCursorRect(viewport) {
-                    if (notationNavigator.item) {
-                        notationNavigator.item.setCursorRect(viewport)
+            Component {
+                id: navigatorComp
+
+                NavigatorPanel {
+                    onRequestDockToNavigatorZone: {
+                        dockPanel.dockWidget(this, "bottom")
                     }
                 }
             }
@@ -259,22 +264,13 @@ FocusScope {
                 }
             }
 
-            Component {
-                id: navigatorComp
-
-                NotationNavigator {
-
-                    property bool isVertical: orientation === Qt.Vertical
-
-                    objectName: root.name + "Navigator"
-
-                    Component.onCompleted: {
-                        load()
+            onRequestDockToBrailleZone: {
+                if (root && brailleViewLoader) {
+                    if (typeof isFloating !== "undefined") {
+                        isFloating = false;
                     }
-
-                    onMoveNotationRequested: function(dx, dy) {
-                        notationView.moveCanvas(dx, dy)
-                    }
+                    brailleViewLoader.active = true;
+                    brailleViewLoader.visible = true;
                 }
             }
 
