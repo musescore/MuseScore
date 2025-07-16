@@ -4705,7 +4705,7 @@ void NotationInteraction::editElement(QKeyEvent* event)
             } else {
                 updateGripAnchorLines();
             }
-        } else if (isElementEditStarted()) {
+        } else if (isElementEditStarted() && !m_editData.element->isTextBase()) {
             updateDragAnchorLines();
         }
     } else {
@@ -4744,8 +4744,10 @@ void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
     EngravingItem* selectedElement = m_selection->element();
     if (selectedElement && selectedElement->allowTimeAnchor() && event->type() == QKeyEvent::Type::KeyPress && !isTextEditingStarted()) {
         EditTimeTickAnchors::updateAnchors(selectedElement);
+        updateDragAnchorLines();
     } else {
         score()->hideAnchors();
+        resetAnchorLines();
     }
 
     score()->update();
@@ -4764,6 +4766,8 @@ void NotationInteraction::moveElementAnchors(QKeyEvent* event)
     MoveElementAnchors::moveElementAnchors(element, KeyboardKey(event->key()), keyboardModifier(event->modifiers()));
 
     apply();
+
+    updateDragAnchorLines();
 }
 
 void NotationInteraction::doEndEditElement()
