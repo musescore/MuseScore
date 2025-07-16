@@ -1265,6 +1265,7 @@ void Score::cmdAddTie(bool addToChord)
             if (noteEntryMode()) {
                   ChordRest* cr = nullptr;
                   Chord* c = note->chord();
+                  int staffMove = c->staffMove();
 
                   // set cursor at position after note
                   if (c->isGraceBefore()) {
@@ -1299,8 +1300,12 @@ void Score::cmdAddTie(bool addToChord)
 
                   // if no note to re-use, create one
                   NoteVal nval(note->noteVal());
-                  if (!n)
+                  if (!n) {
                         n = addPitch(nval, addFlag);
+                        if (staffMove) {
+                              undo(new ChangeChordStaffMove(n->chord(), staffMove));
+                              }
+                        }
                   else
                         select(n);
 
@@ -1329,6 +1334,11 @@ void Score::cmdAddTie(bool addToChord)
                                     note = nnote;
                                     _is.setLastSegment(_is.segment());
                                     nnote = addPitch(nval, true);
+                                    }
+                              }
+                        if (staffMove) {
+                              for (Note* tiedNote : n->tiedNotes()) {
+                                    undo(new ChangeChordStaffMove(tiedNote->chord(), staffMove));
                                     }
                               }
                         }
