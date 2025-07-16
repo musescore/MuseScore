@@ -4312,6 +4312,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Claves", "claves longName"),
 //: shortName for Claves; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Clv.", "claves shortName"),
 
+//: description for Ban; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese clappers.", "ban description"),
+//: trackName for Ban; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Ban", "ban trackName"),
+//: longName for Ban; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Ban", "ban longName"),
+//: shortName for Ban; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Ban", "ban shortName"),
+
 //: description for Güiro; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Güiro.", "guiro description"),
 //: trackName for Güiro; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
