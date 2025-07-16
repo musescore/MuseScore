@@ -377,6 +377,9 @@ MenuItem* AppMenuModel::makeToolsMenu()
         makeMenuItem("slash-rhythm"),
         makeSeparator(),
         makeMenuItem("pitch-spell"),
+        makeMenuItem("pitch-spell-sharps"),
+        makeMenuItem("pitch-spell-flats"),
+        makeSeparator(),
         makeMenuItem("reset-groupings"),
         makeMenuItem("resequence-rehearsal-marks"),
         /*

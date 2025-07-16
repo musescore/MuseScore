@@ -386,6 +386,8 @@ void NotationActionController::init()
     registerAction("slash-fill", &Interaction::fillSelectionWithSlashes);
     registerAction("slash-rhythm", &Interaction::replaceSelectedNotesWithSlashes);
     registerAction("pitch-spell", &Interaction::spellPitches);
+    registerAction("pitch-spell-sharps", &Interaction::spellPitchesWithSharps);
+    registerAction("pitch-spell-flats", &Interaction::spellPitchesWithFlats);
     registerAction("reset-groupings", &Interaction::regroupNotesAndRests);
     registerAction("resequence-rehearsal-marks", &Interaction::resequenceRehearsalMarks);
 
