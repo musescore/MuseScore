@@ -56,9 +56,12 @@ public:
     int alignment() const;
 
     Q_INVOKABLE void setDraggableMouseArea(QQuickItem* mouseArea);
+    Q_INVOKABLE void onGripDoubleClicked();
 
     void init() override;
     void resetToDefault() override;
+
+    void toggleFloating();
 
 public slots:
     void setOrientation(Qt::Orientation orientation);

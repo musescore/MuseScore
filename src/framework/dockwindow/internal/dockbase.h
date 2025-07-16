@@ -185,6 +185,8 @@ protected:
     DockType type() const;
     KDDockWidgets::DockWidgetQuick* dockWidget() const;
 
+    void doSetFloating(bool floating);
+
 protected slots:
     void applySizeConstraints();
 
@@ -194,7 +196,6 @@ private slots:
 
 private:
     void setUpFrameConnections();
-    void doSetFloating(bool floating);
 
     void writeProperties();
 

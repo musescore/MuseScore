@@ -53,6 +53,12 @@ Rectangle {
         }
     }
 
+    function doubleClicked(pos) {
+        if (root.tabBarCpp) {
+            root.tabBarCpp.doubleClicked(pos)
+        }
+    }
+
     onTabBarCppChanged: { updateMouseArea() }
     onDraggingTabsAllowedChanged: { updateMouseArea() }
 
