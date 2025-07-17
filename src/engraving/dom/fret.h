@@ -249,7 +249,7 @@ public:
     bool isInFretBox() const;
     bool isCustom(const String& harmonyNameForCompare) const;
 
-    bool allowTimeAnchor() const { return explicitParent() && parent()->isSegment(); }
+    bool allowTimeAnchor() const override { return explicitParent() && parent()->isSegment(); }
 
     friend class FretUndoData;
 
