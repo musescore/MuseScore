@@ -24,7 +24,7 @@
 namespace kors::msgpack {
 class Packer;
 class UnPacker;
-class Cursor;
+struct Cursor;
 }
 
 namespace muse::msgpack {
