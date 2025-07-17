@@ -64,8 +64,6 @@ EditStringData::EditStringData(QWidget* parent, const std::vector<instrString>& 
 
     init();
 
-    WidgetStateStore::restoreGeometry(this);
-
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
 
@@ -82,9 +80,11 @@ int EditStringData::frets() const
     return _frets;
 }
 
-//---------------------------------------------------------
-//   hideEvent
-//---------------------------------------------------------
+void EditStringData::showEvent(QShowEvent* event)
+{
+    WidgetStateStore::restoreGeometry(this);
+    QDialog::showEvent(event);
+}
 
 void EditStringData::hideEvent(QHideEvent* ev)
 {

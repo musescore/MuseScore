@@ -171,8 +171,6 @@ EditStaffType::EditStaffType(QWidget* parent)
 
     addToTemplates->setVisible(false);
 
-    WidgetStateStore::restoreGeometry(this);
-
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
 }
@@ -283,6 +281,16 @@ Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const muse::io::
     score->update();
 
     return score->sanityCheck();
+}
+
+//---------------------------------------------------------
+//   showEvent
+//---------------------------------------------------------
+
+void EditStaffType::showEvent(QShowEvent* ev)
+{
+    WidgetStateStore::restoreGeometry(this);
+    QDialog::showEvent(ev);
 }
 
 //---------------------------------------------------------

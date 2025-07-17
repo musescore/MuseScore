@@ -154,13 +154,17 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
         g = Groups::endings(m_editedTimeSig->sig()); // initialize with default
     }
     groups->setSig(m_editedTimeSig->sig(), g, m_editedTimeSig->numeratorString(), m_editedTimeSig->denominatorString());
-
-    WidgetStateStore::restoreGeometry(this);
 }
 
 TimeSignaturePropertiesDialog::~TimeSignaturePropertiesDialog()
 {
     delete m_editedTimeSig;
+}
+
+void TimeSignaturePropertiesDialog::showEvent(QShowEvent* event)
+{
+    WidgetStateStore::restoreGeometry(this);
+    QDialog::showEvent(event);
 }
 
 void TimeSignaturePropertiesDialog::hideEvent(QHideEvent* event)

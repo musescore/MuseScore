@@ -53,8 +53,6 @@ PageSettings::PageSettings(QWidget* parent)
         inchButton->setChecked(true);
     }
 
-    WidgetStateStore::restoreGeometry(this);
-
     for (int i = 0; i < QPageSize::LastPageSize; ++i) {
         pageGroup->addItem(QPageSize::name(QPageSize::PageSizeId(i)), i);
     }
@@ -100,6 +98,8 @@ void PageSettings::showEvent(QShowEvent* event)
 {
     globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Edit page settings"));
     updateValues();
+
+    WidgetStateStore::restoreGeometry(this);
     QWidget::showEvent(event);
 }
 

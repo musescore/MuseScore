@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_TUPLETDIALOG_H
-#define MU_NOTATION_TUPLETDIALOG_H
+#pragma once
 
 #include "ui_tupletdialog.h"
 
@@ -36,7 +35,8 @@ class TupletDialog : public QDialog, Ui::TupletDialog, public muse::Injectable
     muse::Inject<context::IGlobalContext> globalContext = { this };
     muse::Inject<muse::actions::IActionsDispatcher> dispatcher = { this };
 
-    virtual void hideEvent(QHideEvent*);
+    void showEvent(QShowEvent*) override;
+    void hideEvent(QHideEvent*) override;
 
 public:
     TupletDialog(QWidget* parent = nullptr);
@@ -55,5 +55,3 @@ private slots:
     void bboxClicked(QAbstractButton* button);
 };
 }
-
-#endif // MU_NOTATION_TUPLETDIALOG_H

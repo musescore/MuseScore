@@ -47,6 +47,7 @@ class EditStaffType : public QDialog, private Ui::EditStaffType, public muse::In
 
     mu::engraving::StaffType staffType;
 
+    virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
     void blockSignals(bool block);
 

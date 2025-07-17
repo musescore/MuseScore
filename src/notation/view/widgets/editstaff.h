@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_EDITSTAFF_H
-#define MU_NOTATION_EDITSTAFF_H
+#pragma once
 
 #include <QDialog>
 
@@ -52,6 +51,7 @@ public:
     EditStaff(QWidget* parent = nullptr);
 
 private:
+    void showEvent(QShowEvent*) override;
     void hideEvent(QHideEvent*) override;
     void apply();
     void setStaff(mu::engraving::Staff*, const mu::engraving::Fraction& tick);
@@ -112,5 +112,3 @@ private:
     EditStaffType* editStaffTypeDialog = nullptr;
 };
 }
-
-#endif

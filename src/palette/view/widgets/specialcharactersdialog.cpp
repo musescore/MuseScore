@@ -492,8 +492,12 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
         const TextBase* editedText = interaction->editedText();
         setFont(editedText->font());
     }
+}
 
+void SpecialCharactersDialog::showEvent(QShowEvent* event)
+{
     WidgetStateStore::restoreGeometry(this);
+    TopLevelDialog::showEvent(event);
 }
 
 void SpecialCharactersDialog::hideEvent(QHideEvent* event)
