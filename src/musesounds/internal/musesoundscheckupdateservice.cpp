@@ -43,6 +43,10 @@ using namespace muse::network;
 
 muse::Ret MuseSoundsCheckUpdateService::needCheckForUpdate() const
 {
+    if (!configuration()->needCheckForUpdate()) {
+        return false;
+    }
+
 #ifdef Q_OS_WIN
     return true;
 #elif defined(Q_OS_MAC)

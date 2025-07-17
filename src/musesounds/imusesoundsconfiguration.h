@@ -21,12 +21,11 @@
  */
 #pragma once
 
-#include "types/string.h"
-
-#include "modularity/imoduleinterface.h"
-
+#include "global/types/string.h"
 #include "global/types/uri.h"
 #include "network/networktypes.h"
+
+#include "modularity/imoduleinterface.h"
 
 namespace mu::musesounds {
 class IMuseSoundsConfiguration : MODULE_EXPORT_INTERFACE
@@ -40,6 +39,8 @@ public:
 
     virtual muse::UriQuery soundsUri() const = 0;
     virtual muse::UriQuery soundPageUri(const muse::String& soundCode) const = 0;
+
+    virtual bool needCheckForUpdate() const = 0;
 
     virtual muse::UriQuery checkForMuseSoundsUpdateUrl() = 0;
 
