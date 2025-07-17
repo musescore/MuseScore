@@ -936,8 +936,6 @@ bool unpack_type(Cursor& cursor, T& value) {
             return unpack_custom(cursor, value);
         }
     }
-
-    return false;
 }
 
 class Packer
