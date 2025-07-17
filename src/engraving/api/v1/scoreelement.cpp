@@ -22,6 +22,8 @@
 
 #include "scoreelement.h"
 
+#include "engraving/dom/measure.h"
+#include "engraving/dom/range.h"
 #include "engraving/dom/engravingobject.h"
 #include "engraving/dom/score.h"
 
@@ -149,6 +151,18 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
             LOGW() << "trying to assign value of wrong type to fractional property";
             return;
         }
+        // Pid::TIMESIG_ACTUAL is only set when we change the time signature,
+        // aside from that it's read-only. What the user intends to do here is
+        // change the actual length of the measure, so we do that instead.
+        if (pid == Pid::TIMESIG_ACTUAL && e->isMeasure() && m_ownership == Ownership::SCORE) {
+            mu::engraving::Measure* m = toMeasure(e);
+            if (m->ticks() != f->fraction()) {
+                mu::engraving::ScoreRange range;
+                range.read(m->first(), m->last());
+                m->adjustToLen(f->fraction());
+            }
+            return;
+        }
         newValue = f->fraction();
     }
     break;
@@ -186,6 +200,19 @@ void ScoreElement::set(mu::engraving::Pid pid, const QVariant& val)
     } else { // not added to a score so no need (and dangerous) to deal with undo stack
         e->setProperty(pid, newValue);
         e->setPropertyFlags(pid, newFlags);
+    }
+}
+
+void ScoreElement::reset(mu::engraving::Pid pid)
+{
+    if (!e) {
+        return;
+    }
+
+    if (m_ownership == Ownership::SCORE) {
+        e->undoResetProperty(pid);
+    } else {
+        e->resetProperty(pid);
     }
 }
 

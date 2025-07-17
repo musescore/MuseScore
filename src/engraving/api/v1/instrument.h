@@ -20,9 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_APIV1_INSTRUMENT_H
-#define MU_ENGRAVING_APIV1_INSTRUMENT_H
+#pragma once
 
+#include "engraving/dom/drumset.h"
 #include "engraving/dom/instrument.h"
 
 #include <QQmlListProperty>
@@ -77,56 +77,45 @@ class Channel : public QObject
     mu::engraving::InstrChannel* m_channel;
     mu::engraving::Part* m_part;
 
-    /** Name of this channel */
+    /// Name of this channel
     Q_PROPERTY(QString name READ name)
+    /// Whether this channel controls playback of chord symbols
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool isHarmonyChannel READ isHarmonyChannel)
 
-    /**
-     * Channel volume, from 0 to 127.
-     * \note Changing this property is **not** revertable with a standard "undo"
-     * action. Plugins may need to handle reverting this property change if
-     * necessary.
-     */
+    /// Channel volume, from 0 to 127.
+    /// \note Changing this property is **not** revertable with a standard "undo"
+    /// action. Plugins may need to handle reverting this property change if
+    /// necessary.
     Q_PROPERTY(int volume READ volume WRITE setVolume)
-    /**
-     * Channel pan, from 0 to 127.
-     * \note Changing this property is **not** revertable with a standard "undo"
-     * action. Plugins may need to handle reverting this property change if
-     * necessary.
-     */
+    /// Channel pan, from 0 to 127.
+    /// \note Changing this property is **not** revertable with a standard "undo"
+    /// action. Plugins may need to handle reverting this property change if
+    /// necessary.
     Q_PROPERTY(int pan READ pan WRITE setPan)
-    /**
-     * Channel chorus, from 0 to 127.
-     * \note Changing this property is **not** revertable with a standard "undo"
-     * action. Plugins may need to handle reverting this property change if
-     * necessary.
-     */
+    /// Channel chorus, from 0 to 127.
+    /// \note Changing this property is **not** revertable with a standard "undo"
+    /// action. Plugins may need to handle reverting this property change if
+    /// necessary.
     Q_PROPERTY(int chorus READ chorus WRITE setChorus)
-    /**
-     * Channel reverb, from 0 to 127.
-     * \note Changing this property is **not** revertable with a standard "undo"
-     * action. Plugins may need to handle reverting this property change if
-     * necessary.
-     */
+    /// Channel reverb, from 0 to 127.
+    /// \note Changing this property is **not** revertable with a standard "undo"
+    /// action. Plugins may need to handle reverting this property change if
+    /// necessary.
     Q_PROPERTY(int reverb READ reverb WRITE setReverb)
-    /**
-     * Whether this channel is muted.
-     * \note Changing this property is **not** revertable with a standard "undo"
-     * action. Plugins may need to handle reverting this property change if
-     * necessary.
-     */
+    /// Whether this channel is muted.
+    /// \note Changing this property is **not** revertable with a standard "undo"
+    /// action. Plugins may need to handle reverting this property change if
+    /// necessary.
     Q_PROPERTY(bool mute READ mute WRITE setMute)
 
-    /**
-     * MIDI program number, from 0 to 127. Changing this property is recorded
-     * to the program's undo stack and can be reverted with a standard "undo"
-     * action.
-     */
+    /// MIDI program number, from 0 to 127. Changing this property is recorded
+    /// to the program's undo stack and can be reverted with a standard "undo"
+    /// action.
     Q_PROPERTY(int midiProgram READ midiProgram WRITE setMidiProgram)
-    /**
-     * MIDI patch bank number. Changing this property is recorded
-     * to the program's undo stack and can be reverted with a standard "undo"
-     * action.
-     */
+    /// MIDI patch bank number. Changing this property is recorded
+    /// to the program's undo stack and can be reverted with a standard "undo"
+    /// action.
     Q_PROPERTY(int midiBank READ midiBank WRITE setMidiBank)
 
     mu::engraving::InstrChannel* activeChannel();
@@ -139,6 +128,7 @@ public:
         : QObject(parent), m_channel(ch), m_part(p) {}
 
     QString name() const { return m_channel->name(); }
+    bool isHarmonyChannel() const { return m_channel->isHarmonyChannel(); }
 
     int volume() const { return m_channel->volume(); }
     void setVolume(int val) { activeChannel()->setVolume(qBound(0, val, 127)); }
@@ -178,20 +168,18 @@ class StringData : public QObject
 {
     Q_OBJECT
 
-    /**
-     * List of strings in this instrument.
-     * \returns A list of objects representing strings. Each
-     * object has the following fields:
-     * - \p pitch - pitch of this string on fret 0 (integer).
-     * - \p open - if \p true, this string is not fretted and
-     *             always open. If \p false, the string **is**
-     *             fretted. For example, for classical guitar
-     *             all strings are fretted, and for them
-     *             \p open value will always be \p false.
-     */
+    /// List of strings in this instrument.
+    /// \returns A list of objects representing strings. Each
+    /// object has the following fields:
+    /// - \p pitch - pitch of this string on fret 0 (integer).
+    /// - \p open - if \p true, this string is not fretted and
+    ///             always open. If \p false, the string **is**
+    ///             fretted. For example, for classical guitar
+    ///             all strings are fretted, and for them
+    ///             \p open value will always be \p false.
     Q_PROPERTY(QVariantList strings READ stringList)
 
-    /** Number of frets in this instrument */
+    /// Number of frets in this instrument
     Q_PROPERTY(int frets READ frets)
 
     mu::engraving::StringData m_data;
@@ -204,6 +192,113 @@ public:
     QVariantList stringList() const;
     int frets() const { return m_data.frets(); }
     /// \endcond
+};
+
+//---------------------------------------------------------
+//   Drumset
+///   \since MuseScore 4.6
+//---------------------------------------------------------
+
+class Drumset : public QObject
+{
+    Q_OBJECT
+
+    mu::engraving::Drumset* m_drumset;
+
+public:
+    /// \cond MS_INTERNAL
+    Drumset(mu::engraving::Drumset* d, QObject* parent = nullptr)
+        : QObject(parent), m_drumset(d) {}
+
+    mu::engraving::Drumset* drumset() { return m_drumset; }
+    const mu::engraving::Drumset* drumset() const { return m_drumset; }
+    /// \endcond
+
+    /// Whether the given MIDI pitch corresponds to a note in the drumset.
+    /// \param pitch The pitch to test for.
+    Q_INVOKABLE bool isValid(int pitch) { return drumset()->isValid(pitch); }
+
+    /// The notehead group for the given pitch, corresponding to one of the
+    /// PluginAPI::PluginAPI::NoteHeadGroup values. If the value corresponds to
+    /// NoteHeadGroup.HEAD_CUSTOM, the actual notehead must be found using
+    /// PluginAPI::Drumset::noteHeads(pitch, NoteHeadType)
+    /// \see PluginAPI::PluginAPI::NoteHeadGroup
+    /// \see PluginAPI::Drumset::noteHeads
+    /// \param pitch The pitch to find the notehead group for.
+    Q_INVOKABLE int noteHead(int pitch) { return int(drumset()->noteHead(pitch)); }
+
+    /// The notehead symbol for the given pitch and NoteHeadType, corresponding to
+    /// one of the PluginAPI::PluginAPI::SymId values.
+    /// \see PluginAPI::PluginAPI::SymId
+    /// \see PluginAPI::PluginAPI::NoteHeadType
+    /// \param pitch The pitch to find the notehead symbol for.
+    /// \param type The NoteHeadType to find the notehead symbol for.
+    Q_INVOKABLE int noteHeads(int pitch, int type)
+    {
+        return int(drumset()->noteHeads(pitch, mu::engraving::NoteHeadType(type)));
+    }
+
+    /// The line a note with the given pitch would be displayed on.
+    /// \param pitch The pitch of the note to find the line for.
+    Q_INVOKABLE int line(int pitch) { return drumset()->line(pitch); }
+
+    /// The voice a note with the given pitch would be added to.
+    /// \param pitch The pitch of the note to find the voice for.
+    Q_INVOKABLE int voice(int pitch) { return drumset()->voice(pitch); }
+
+    /// The default stem direction a note with the given pitch would have.
+    /// One of the PluginAPI::PluginAPI::Direction values
+    /// \see PluginAPI::PluginAPI::Direction
+    /// \param pitch The pitch to find the stem direction for.
+    Q_INVOKABLE int stemDirection(int pitch) { return int(drumset()->stemDirection(pitch)); }
+
+    /// The name (untranslated) of the drumset note for a given pitch.
+    /// \param pitch The pitch of the note to find the name for.
+    Q_INVOKABLE QString name(int pitch) { return drumset()->name(pitch); }
+
+    /// The translated name of the drumset note for a given pitch.
+    /// \param pitch The pitch of the note to find the name for.
+    Q_INVOKABLE QString translatedName(int pitch) { return drumset()->translatedName(pitch); }
+
+    /// The shortcut of the drumset note for a given pitch.
+    /// \param pitch The pitch of the note to find the shortcut for.
+    Q_INVOKABLE QString shortcut(int pitch) { return drumset()->shortcut(pitch); }
+
+    /// List of variants for a given pitch in this drumset.
+    /// \returns A list of objects representing variants.
+    /// Each object has the following fields:
+    /// - \p pitch - pitch of this variant.
+    /// - \p tremolo - tremolo type of this variant, one of
+    ///             PluginAPI::PLUGIN_API::TremoloType values.
+    /// - \p articulationName - the name of the articulation
+    ///             for this variant.
+    /// \param pitch Pitch to find variants for.
+    Q_INVOKABLE QVariantList variants(int pitch);
+
+    /// The row the given pitch appears in in the percussion panel.
+    /// \param pitch The pitch of the note to find the row for.
+    Q_INVOKABLE int panelRow(int pitch) { return drumset()->panelRow(pitch); }
+
+    /// The column the given pitch appears in in the percussion panel.
+    /// \param pitch The pitch of the note to find the column for.
+    Q_INVOKABLE int panelColumn(int pitch) { return drumset()->panelColumn(pitch); }
+
+    /// Tries to find the pitch of a normal notehead at "line". If a
+    /// normal notehead can't be found it will instead return the
+    /// "first valid pitch" (i.e. the lowest used midi note) in the drumset.
+    /// \param line The line to find the default pitch on.
+    Q_INVOKABLE int defaultPitchForLine(int line) { return drumset()->defaultPitchForLine(line); }
+
+    /// The next used pitch from a given starting point.
+    /// \param pitch The pitch from which to find the next used pitch from.
+    Q_INVOKABLE int nextPitch(int pitch) { return drumset()->nextPitch(pitch); }
+
+    /// The previous used pitch from a given starting point.
+    /// \param pitch The pitch from which to find the previous used pitch from.
+    Q_INVOKABLE int prevPitch(int pitch) { return drumset()->prevPitch(pitch); }
+
+    /// Checks whether two drumsets represent the same object.
+    Q_INVOKABLE bool is(apiv1::Drumset* other) { return other && drumset() == other->drumset(); }
 };
 
 //---------------------------------------------------------
@@ -229,35 +324,33 @@ class Instrument : public QObject
 {
     Q_OBJECT
 
-    /**
-     * The MuseScore string identifier
-     * for this instrument.
-     * \see \ref apiv1::Part::instrumentId "Part.instrumentId"
-     */
+    /// The MuseScore string identifier
+    /// for this instrument.
+    /// \see \ref apiv1::Part::instrumentId "Part.instrumentId"
     Q_PROPERTY(QString instrumentId READ instrumentId)
-    /**
-     * The string identifier
-     * ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
-     * for this instrument.
-     * \see \ref apiv1::Part::musicXmlId "Part.musicXmlId"
-     */
+    /// The string identifier
+    /// ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
+    /// for this instrument.
+    /// \see \ref apiv1::Part::musicXmlId "Part.musicXmlId"
     Q_PROPERTY(QString musicXmlId READ musicXmlId)
     // mu::engraving::Instrument supports multiple short/long names (for aeolus instruments?)
     // but in practice only one is actually used. If this gets changed this API could
     // be expanded.
-    /** The long name for this instrument. */
+    /// The long name for this instrument.
     Q_PROPERTY(QString longName READ longName)
-    /** The short name for this instrument. */
+    /// The short name for this instrument.
     Q_PROPERTY(QString shortName READ shortName)
 
-    /**
-     * For fretted instruments, an information about this
-     * instrument's strings.
-     */
+    /// For fretted instruments, an information about this
+    /// instrument's strings.
     Q_PROPERTY(apiv1::StringData * stringData READ stringData)
 
-    // TODO: a property for drumset?
+    /// For unpitched percussion instruments, information about
+    /// this instrument's percussion.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::Drumset * drumset READ drumset)
 
+    /// The list of channels for this instrument.
     Q_PROPERTY(QQmlListProperty<apiv1::Channel> channels READ channels)
 
     mu::engraving::Instrument* m_instrument;
@@ -280,12 +373,12 @@ public:
 
     apiv1::StringData* stringData() { return customWrap<StringData>(instrument()->stringData()); }
 
+    apiv1::Drumset* drumset() { return customWrap<Drumset>(instrument()->drumset()); }
+
     ChannelListProperty channels();
     /// \endcond
 
-    /** Checks whether two variables represent the same object. */
+    /// Checks whether two instruments represent the same object.
     Q_INVOKABLE bool is(apiv1::Instrument* other) { return other && instrument() == other->instrument(); }
 };
 }
-
-#endif

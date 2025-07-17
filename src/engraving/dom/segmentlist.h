@@ -44,6 +44,8 @@ public:
     SegmentList clone() const;
     int size() const { return m_size; }
 
+    Segment* at(int index) const;
+
     Segment* first() const { return m_first; }
     Segment* firstActive() const;
     Segment* first(SegmentType) const;

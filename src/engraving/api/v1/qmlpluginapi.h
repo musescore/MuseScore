@@ -89,44 +89,42 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
 {
     Q_OBJECT
 
-    /** Path where the plugin is placed in menu */
+    /// Path where the plugin is placed in menu
     Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
-    /** Title of this plugin */
+    /// Title of this plugin
     Q_PROPERTY(QString title READ title WRITE setTitle)
-    // /** Source file path, without the file name (read only) */
+    // /// Source file path, without the file name (read only)
     // Q_PROPERTY(QString filePath READ filePath)
-    /** Version of this plugin */
+    /// Version of this plugin
     Q_PROPERTY(QString version READ version WRITE setVersion)
-    /** Human-readable plugin description, displayed in Plugin Manager */
+    /// Human-readable plugin description, displayed in Plugin Manager
     Q_PROPERTY(QString description READ description WRITE setDescription)
-    /** Type may be dialog or not defined */
+    /// Type may be dialog or not defined
     Q_PROPERTY(QString pluginType READ pluginType WRITE setPluginType)
-    /** Where to dock on main screen. Possible values: left, top, bottom, right */
+    /// Where to dock on main screen. Possible values: left, top, bottom, right
     Q_PROPERTY(QString dockArea READ dockArea WRITE setDockArea)
-    /** Whether the plugin requires an existing score to run, default is `true` */
+    /// Whether the plugin requires an existing score to run, default is `true`
     Q_PROPERTY(bool requiresScore READ requiresScore WRITE setRequiresScore)
-    /** The name of the thumbnail that should be next to the plugin */
+    /// The name of the thumbnail that should be next to the plugin
     Q_PROPERTY(QString thumbnailName READ thumbnailName WRITE setThumbnailName)
-    /** The code of the category */
+    /// The code of the category
     Q_PROPERTY(QString categoryCode READ categoryCode WRITE setCategoryCode)
-    /**
-     * \brief Number of MIDI ticks for 1/4 note (read only)
-     * \see \ref ticklength
-     */
+    /// \brief Number of MIDI ticks for 1/4 note (read only)
+    /// \see \ref ticklength
     Q_PROPERTY(int division READ division CONSTANT)
-    /** Complete version number of MuseScore in the form: MMmmuu (read only) */
+    /// Complete version number of MuseScore in the form: MMmmuu (read only)
     Q_PROPERTY(int mscoreVersion READ mscoreVersion CONSTANT)
-    /** 1st part of the MuseScore version (read only) */
+    /// 1st part of the MuseScore version (read only)
     Q_PROPERTY(int mscoreMajorVersion READ mscoreMajorVersion CONSTANT)
-    /** 2nd part of the MuseScore version (read only)*/
+    /// 2nd part of the MuseScore version (read only)
     Q_PROPERTY(int mscoreMinorVersion READ mscoreMinorVersion CONSTANT)
-    /** 3rd part of the MuseScore version (read only) */
+    /// 3rd part of the MuseScore version (read only)
     Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion CONSTANT)
-    /** (read-only) */
+    /// (read-only)
     Q_PROPERTY(qreal mscoreDPI READ mscoreDPI CONSTANT)
-    /** Current score, if any (read only) */
+    /// Current score, if any (read only)
     Q_PROPERTY(mu::engraving::apiv1::Score * curScore READ curScore CONSTANT)
-    /** List of currently open scores (read only).\n \since MuseScore 3.2 */
+    /// List of currently open scores (read only).\n \since MuseScore 3.2
     Q_PROPERTY(QQmlListProperty<mu::engraving::apiv1::Score> scores READ scores)
 
 public:
@@ -140,6 +138,9 @@ public:
     DECLARE_API_ENUM(Element,          elementTypeEnum,        mu::engraving::apiv1::enums::ElementType)
     /// Contains mu::engraving::AccidentalType enumeration values
     DECLARE_API_ENUM(Accidental,       accidentalTypeEnum,     mu::engraving::apiv1::enums::AccidentalType)
+    /// Contains mu::engraving::AccidentalBracket enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(AccidentalBracket, accidentalBracketEnum, mu::engraving::apiv1::enums::AccidentalBracket)
     /// Contains mu::engraving::OrnamentStyle enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
     /// MScore.DEFAULT, MScore.BAROQUE.
@@ -198,6 +199,24 @@ public:
     /// Contains mu::engraving::HarmonyType enumeration values
     /// \since MuseScore 3.5
     DECLARE_API_ENUM(HarmonyType, harmonyTypeEnum, mu::engraving::apiv1::enums::HarmonyType)
+    /// Contains mu::engraving::HarmonyVoicing enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(HarmonyVoicing, harmonyVoicingEnum, mu::engraving::apiv1::enums::HarmonyVoicing)
+    /// Contains mu::engraving::HDuration enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(HDuration, hDurationEnum, mu::engraving::apiv1::enums::HDuration)
+    /// Contains mu::engraving::FrameType enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(FrameType, frameTypeEnum, mu::engraving::apiv1::enums::FrameType)
+    /// Contains mu::engraving::VerticalAlignment enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(VerticalAlignment, verticalAlignmentEnum, mu::engraving::apiv1::enums::VerticalAlignment)
+    /// Contains mu::engraving::TremoloBarType enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(TremoloBarType, tremoloBarTypeEnum, mu::engraving::apiv1::enums::TremoloBarType)
+    /// Contains mu::engraving::PreferSharpFlat enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(PreferSharpFlat, preferSharpFlatEnum, mu::engraving::apiv1::enums::PreferSharpFlat)
     /// Contains mu::engraving::NoteHead::Type enumeration values
     /// \note In MuseScore 2.X this enumeration was available in
     /// NoteHead class (e.g. NoteHead.HEAD_QUARTER).
@@ -333,9 +352,21 @@ public:
     /// Contains mu::engraving::MarkerType enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(MarkerType, markerTypeEnum, mu::engraving::apiv1::enums::MarkerType)
+    /// Contains mu::engraving::MeasureNumberMode enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(MeasureNumberMode, measureNumberModeEnum, mu::engraving::apiv1::enums::MeasureNumberMode)
     /// Contains mu::engraving::StaffGroup enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(StaffGroup, staffGroupEnum, mu::engraving::apiv1::enums::StaffGroup)
+    /// Contains mu::engraving::HideMode enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(HideMode, hideModeEnum, mu::engraving::apiv1::enums::HideMode)
+    /// Contains mu::engraving::OttavaType enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(OttavaType, ottavaTypeEnum, mu::engraving::apiv1::enums::OttavaType)
+    /// Contains mu::engraving::HairpinType enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(HairpinType, hairpinTypeEnum, mu::engraving::apiv1::enums::HairpinType)
     /// Contains mu::engraving::TrillType enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(TrillType, trillTypeEnum, mu::engraving::apiv1::enums::TrillType)
@@ -360,6 +391,9 @@ public:
     /// Contains mu::engraving::TieDotsPlacement enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(TieDotsPlacement, tieDotsPlacementEnum, mu::engraving::apiv1::enums::TieDotsPlacement)
+    /// Contains mu::engraving::TimeSigType enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(TimeSigType, timeSigTypeEnum, mu::engraving::apiv1::enums::TimeSigType)
     /// Contains mu::engraving::TimeSigPlacement enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(TimeSigPlacement, timeSigPlacementEnum, mu::engraving::apiv1::enums::TimeSigPlacement)
@@ -381,6 +415,9 @@ public:
     /// Contains mu::engraving::LayoutFlag enumeration values
     /// \since MuseScore 4.6
     DECLARE_API_ENUM(LayoutFlag, layoutFlagEnum, mu::engraving::apiv1::enums::LayoutFlag)
+    /// Contains mu::engraving::LayoutMode enumeration values
+    /// \since MuseScore 4.6
+    DECLARE_API_ENUM(LayoutMode, layoutModeEnum, mu::engraving::apiv1::enums::LayoutMode)
     /// Contains mu::engraving::SymId enumeration values
     /// \since MuseScore 3.5
     DECLARE_API_ENUM(SymId, symIdEnum, mu::engraving::apiv1::enums::SymId)
@@ -394,60 +431,58 @@ signals:
 
     void closeRequested();
 
-    /**
-     * Notifies plugin about changes in score state.
-     * Called after each user (or plugin) action which may have changed a
-     * score. Implement \p onScoreStateChanged() function in your plugin to
-     * handle this signal.
-     *
-     * \p state variable is available within the handler with following
-     * fields:
-     *
-     * - \p selectionChanged
-     * - \p excerptsChanged
-     * - \p instrumentsChanged
-     * - \p startLayoutTick
-     * - \p endLayoutTick
-     * - \p undoRedo - whether this onScoreStateChanged invocation results
-     *   from user undo/redo action. It is usually not recommended to modify
-     *   score from plugins in this case. Available since MuseScore 3.5.
-     *
-     * If a plugin modifies score in this handler, then it should:
-     * 1. enclose all modifications within Score::startCmd() / Score::endCmd()
-     * 2. take care of preventing an infinite recursion, as plugin-originated
-     *    changes will trigger this signal again after calling Score::endCmd()
-     *
-     * Example:
-     * \code
-     * import QtQuick 2.0
-     * import MuseScore 3.0
-     *
-     * MuseScore {
-     *     pluginType: "dialog"
-     *     implicitHeight: 75 // necessary for dock widget to appear with nonzero height
-     *     implicitWidth: 150
-     *
-     *     Text {
-     *        // A label which will display pitch of the currently selected note
-     *        id: pitchLabel
-     *        anchors.fill: parent
-     *     }
-     *
-     *     onScoreStateChanged: {
-     *         if (state.selectionChanged) {
-     *             var el = curScore ? curScore.selection.elements[0] : null;
-     *             if (el && el.type == EngravingItem.NOTE)
-     *                 pitchLabel.text = el.pitch;
-     *             else
-     *                 pitchLabel.text = "no note selected";
-     *         }
-     *     }
-     * }
-     * \endcode
-     * \warning This functionality is considered experimental.
-     * This API may change in future versions of MuseScore.
-     * \since MuseScore 3.3
-     */
+    /// Notifies plugin about changes in score state.
+    /// Called after each user (or plugin) action which may have changed a
+    /// score. Implement \p onScoreStateChanged() function in your plugin to
+    /// handle this signal.
+    ///
+    /// \p state variable is available within the handler with following
+    /// fields:
+    ///
+    /// - \p selectionChanged
+    /// - \p excerptsChanged
+    /// - \p instrumentsChanged
+    /// - \p startLayoutTick
+    /// - \p endLayoutTick
+    /// - \p undoRedo - whether this onScoreStateChanged invocation results
+    ///   from user undo/redo action. It is usually not recommended to modify
+    ///   score from plugins in this case. Available since MuseScore 3.5.
+    ///
+    /// If a plugin modifies score in this handler, then it should:
+    /// 1. enclose all modifications within Score::startCmd() / Score::endCmd()
+    /// 2. take care of preventing an infinite recursion, as plugin-originated
+    ///    changes will trigger this signal again after calling Score::endCmd()
+    ///
+    /// Example:
+    /// \code
+    /// import QtQuick 2.0
+    /// import MuseScore 3.0
+    ///
+    /// MuseScore {
+    ///     pluginType: "dialog"
+    ///     implicitHeight: 75 // necessary for dock widget to appear with nonzero height
+    ///     implicitWidth: 150
+    ///
+    ///     Text {
+    ///        // A label which will display pitch of the currently selected note
+    ///        id: pitchLabel
+    ///        anchors.fill: parent
+    ///     }
+    ///
+    ///     onScoreStateChanged: {
+    ///         if (state.selectionChanged) {
+    ///             var el = curScore ? curScore.selection.elements[0] : null;
+    ///             if (el && el.type == EngravingItem.NOTE)
+    ///                 pitchLabel.text = el.pitch;
+    ///             else
+    ///                 pitchLabel.text = "no note selected";
+    ///         }
+    ///     }
+    /// }
+    /// \endcode
+    /// \warning This functionality is considered experimental.
+    /// This API may change in future versions of MuseScore.
+    /// \since MuseScore 3.3
     void scoreStateChanged(const QMap<QString, QVariant>& state);
 
 public:
@@ -470,7 +505,7 @@ public:
     Q_INVOKABLE apiv1::EngravingItem* newElement(int);
     Q_INVOKABLE void removeElement(apiv1::EngravingItem* wrapped);
     Q_INVOKABLE void cmd(const QString&);
-    /** \cond PLUGIN_API \private \endcond */
+    /// \cond PLUGIN_API \private \endcond
     Q_INVOKABLE apiv1::MsProcess* newQProcess();
     Q_INVOKABLE bool writeScore(apiv1::Score*, const QString& name, const QString& ext);
     Q_INVOKABLE apiv1::Score* readScore(const QString& name, bool noninteractive = false);
@@ -483,6 +518,7 @@ public:
     Q_INVOKABLE void closeLog();
 
     Q_INVOKABLE apiv1::FractionWrapper* fraction(int numerator, int denominator) const;
+    Q_INVOKABLE apiv1::FractionWrapper* fractionFromTicks(int ticks) const;
 
     Q_INVOKABLE apiv1::OrnamentIntervalWrapper* ornamentInterval(int step, int type) const;
 

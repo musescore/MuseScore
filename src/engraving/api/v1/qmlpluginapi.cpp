@@ -37,7 +37,6 @@
 #include "instrument.h"
 #include "cursor.h"
 #include "elements.h"
-#include "tie.h"
 #include "selection.h"
 
 #include "log.h"
@@ -47,6 +46,7 @@ using namespace mu::engraving::apiv1;
 
 Enum* PluginAPI::elementTypeEnum = nullptr;
 Enum* PluginAPI::accidentalTypeEnum = nullptr;
+Enum* PluginAPI::accidentalBracketEnum = nullptr;
 Enum* PluginAPI::ornamentStyleEnum = nullptr;
 Enum* PluginAPI::alignEnum = nullptr;
 Enum* PluginAPI::placementEnum = nullptr;
@@ -65,6 +65,12 @@ Enum* PluginAPI::beamModeEnum = nullptr;
 Enum* PluginAPI::glissandoTypeEnum = nullptr;
 Enum* PluginAPI::glissandoStyleEnum = nullptr;
 Enum* PluginAPI::harmonyTypeEnum = nullptr;
+Enum* PluginAPI::harmonyVoicingEnum = nullptr;
+Enum* PluginAPI::hDurationEnum = nullptr;
+Enum* PluginAPI::frameTypeEnum = nullptr;
+Enum* PluginAPI::verticalAlignmentEnum = nullptr;
+Enum* PluginAPI::tremoloBarTypeEnum = nullptr;
+Enum* PluginAPI::preferSharpFlatEnum = nullptr;
 Enum* PluginAPI::noteHeadTypeEnum = nullptr;
 Enum* PluginAPI::noteHeadSchemeEnum = nullptr;
 Enum* PluginAPI::noteHeadGroupEnum = nullptr;
@@ -110,7 +116,11 @@ Enum* PluginAPI::tremoloChordTypeEnum = nullptr;
 Enum* PluginAPI::bracketTypeEnum = nullptr;
 Enum* PluginAPI::jumpTypeEnum = nullptr;
 Enum* PluginAPI::markerTypeEnum = nullptr;
+Enum* PluginAPI::measureNumberModeEnum = nullptr;
 Enum* PluginAPI::staffGroupEnum = nullptr;
+Enum* PluginAPI::hideModeEnum = nullptr;
+Enum* PluginAPI::ottavaTypeEnum = nullptr;
+Enum* PluginAPI::hairpinTypeEnum = nullptr;
 Enum* PluginAPI::trillTypeEnum = nullptr;
 Enum* PluginAPI::vibratoTypeEnum = nullptr;
 Enum* PluginAPI::articulationTextTypeEnum = nullptr;
@@ -119,6 +129,7 @@ Enum* PluginAPI::noteLineEndPlacementEnum = nullptr;
 Enum* PluginAPI::spannerSegmentTypeEnum = nullptr;
 Enum* PluginAPI::tiePlacementEnum = nullptr;
 Enum* PluginAPI::tieDotsPlacementEnum = nullptr;
+Enum* PluginAPI::timeSigTypeEnum = nullptr;
 Enum* PluginAPI::timeSigPlacementEnum = nullptr;
 Enum* PluginAPI::timeSigStyleEnum = nullptr;
 Enum* PluginAPI::timeSigVSMarginEnum = nullptr;
@@ -126,6 +137,7 @@ Enum* PluginAPI::noteSpellingTypeEnum = nullptr;
 Enum* PluginAPI::keyEnum = nullptr;
 Enum* PluginAPI::updateModeEnum = nullptr;
 Enum* PluginAPI::layoutFlagEnum = nullptr;
+Enum* PluginAPI::layoutModeEnum = nullptr;
 Enum* PluginAPI::symIdEnum = nullptr;
 Enum* PluginAPI::cursorEnum = nullptr;
 
@@ -154,6 +166,8 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<EngravingItem>("MuseScore", 3);
     qmlRegisterAnonymousType<Chord>("MuseScore", 3);
     qmlRegisterAnonymousType<Note>("MuseScore", 3);
+    qmlRegisterAnonymousType<Tuplet>("MuseScore", 3);
+    qmlRegisterAnonymousType<DurationElement>("MuseScore", 3);
     qmlRegisterAnonymousType<Segment>("MuseScore", 3);
     qmlRegisterAnonymousType<Measure>("MuseScore", 3);
     qmlRegisterAnonymousType<Part>("MuseScore", 3);
@@ -164,10 +178,20 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<Excerpt>("MuseScore", 3);
     qmlRegisterAnonymousType<Selection>("MuseScore", 3);
     qmlRegisterAnonymousType<Tie>("MuseScore", 3);
+    qmlRegisterAnonymousType<Drumset>("MuseScore", 3);
+    qmlRegisterAnonymousType<MeasureBase>("MuseScore", 3);
+    qmlRegisterAnonymousType<System>("MuseScore", 3);
+    qmlRegisterAnonymousType<Spanner>("MuseScore", 3);
+    qmlRegisterAnonymousType<SpannerSegment>("MuseScore", 3);
+    qmlRegisterAnonymousType<Ornament>("MuseScore", 3);
     qmlRegisterType<PlayEvent>("MuseScore", 3, 0, "PlayEvent");
 
     qmlRegisterAnonymousType<FractionWrapper>("MuseScore", 3);
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
+    qmlRegisterAnonymousType<IntervalWrapper>("MuseScore", 3);
+    qRegisterMetaType<IntervalWrapper*>("IntervalWrapper*");
+    qmlRegisterAnonymousType<OrnamentIntervalWrapper>("MuseScore", 3);
+    qRegisterMetaType<OrnamentIntervalWrapper*>("OrnamentIntervalWrapper*");
 
     qmlTypesRegistered = true;
 }
@@ -408,6 +432,17 @@ MsProcess* PluginAPI::newQProcess()
 FractionWrapper* PluginAPI::fraction(int num, int den) const
 {
     return wrap(mu::engraving::Fraction(num, den));
+}
+
+//---------------------------------------------------------
+//   PluginAPI::fractionFromTicks
+///  Converts an integer tick value to an equivalent fraction.
+/// \since MuseScore 4.6
+//---------------------------------------------------------
+
+FractionWrapper* PluginAPI::fractionFromTicks(int ticks) const
+{
+    return wrap(mu::engraving::Fraction::fromTicks(ticks));
 }
 
 void PluginAPI::quit()

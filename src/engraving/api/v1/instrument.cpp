@@ -23,6 +23,7 @@
 #include "instrument.h"
 
 #include "engraving/compat/midi/midipatch.h"
+#include "engraving/dom/drumset.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/undo.h"
@@ -100,6 +101,23 @@ QVariantList StringData::stringList() const
         pluginStringsList.append(pluginStringData);
     }
     return pluginStringsList;
+}
+
+//---------------------------------------------------------
+//   Drumset::variants
+//---------------------------------------------------------
+
+QVariantList Drumset::variants(int pitch)
+{
+    QVariantList drumInstrumentVariantList;
+    for (DrumInstrumentVariant div : m_drumset->variants(pitch)) {
+        QVariantMap pluginDivData;
+        pluginDivData["pitch"] = div.pitch;
+        pluginDivData["tremolo"] = int(div.tremolo);
+        pluginDivData["articulationName"] = div.articulationName.toQString();
+        drumInstrumentVariantList.append(pluginDivData);
+    }
+    return drumInstrumentVariantList;
 }
 
 //---------------------------------------------------------

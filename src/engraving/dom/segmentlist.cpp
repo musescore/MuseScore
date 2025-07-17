@@ -46,6 +46,18 @@ SegmentList SegmentList::clone() const
     return dl;
 }
 
+Segment* SegmentList::at(int index) const
+{
+    Segment* s = m_first;
+    for (int i = 0; i < m_size; ++i) {
+        if (i == index) {
+            return s;
+        }
+        s = s->next();
+    }
+    return nullptr;
+}
+
 Segment* SegmentList::firstActive() const
 {
     if (Segment* segment = m_first) {

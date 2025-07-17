@@ -43,16 +43,14 @@ namespace mu::engraving::apiv1 {
 class FractionWrapper : public QObject
 {
     Q_OBJECT
-    /** Fraction numerator */
+    /// Fraction numerator
     Q_PROPERTY(int numerator READ numerator)
-    /** Fraction denominator */
+    /// Fraction denominator
     Q_PROPERTY(int denominator READ denominator)
-    /**
-     * MIDI ticks number equal to the number of the whole
-     * notes represented by this fraction.
-     */
+    /// MIDI ticks number equal to the number of the whole
+    /// notes represented by this fraction.
     Q_PROPERTY(int ticks READ ticks)   // FIXME: fraction transition
-    /** String representation of this fraction */
+    /// String representation of this fraction
     Q_PROPERTY(QString str READ toString)
 
     mu::engraving::Fraction f;
@@ -146,7 +144,7 @@ inline OrnamentIntervalWrapper* wrap(mu::engraving::OrnamentInterval o)
 ///   Use PluginAPI::PluginAPI::interval to create an
 ///   interval for usage within your plugin:
 ///   \code
-///   var interval = interval(6, 9); // Major 6th
+///   var interval = interval(5, 9); // Major 6th
 ///   \endcode
 //---------------------------------------------------------
 

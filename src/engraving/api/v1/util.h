@@ -67,7 +67,7 @@ class FileIO : public QObject
     Q_OBJECT
 
 public:
-    /** Path to the file which is operated on */
+    /// Path to the file which is operated on
     Q_PROPERTY(QString source
                READ source
                WRITE setSource
@@ -75,28 +75,24 @@ public:
     /// \cond PLUGIN_API \private \endcond
     explicit FileIO(QObject* parent = 0);
 
-    /**
-     * Reads file contents and returns a string.
-     * In case error occurs, error() signal is emitted
-     * and an empty string is returned.
-     */
+    /// Reads file contents and returns a string.
+    /// In case error occurs, error() signal is emitted
+    /// and an empty string is returned.
     Q_INVOKABLE QString read();
-    /** muse::Returns true if the file exists */
+    /// muse::Returns true if the file exists
     Q_INVOKABLE bool exists();
-    /**
-     * Writes a string to the file.
-     * \warning This function overwrites all the contents of
-     * the file pointed by FileIO::source so it becomes lost.
-     * \returns `true` if an operation finished successfully.
-     */
+    /// Writes a string to the file.
+    /// \warning This function overwrites all the contents of
+    /// the file pointed by FileIO::source so it becomes lost.
+    /// \returns `true` if an operation finished successfully.
     Q_INVOKABLE bool write(const QString& data);
-    /** Removes the file */
+    /// Removes the file
     Q_INVOKABLE bool remove();
-    /** muse::Returns user's home directory */
+    /// muse::Returns user's home directory
     Q_INVOKABLE QString homePath() { QDir dir; return dir.homePath(); }
-    /** muse::Returns a path suitable for a temporary file */
+    /// muse::Returns a path suitable for a temporary file
     Q_INVOKABLE QString tempPath() { QDir dir; return dir.tempPath(); }
-    /** muse::Returns the file's last modification time */
+    /// muse::Returns the file's last modification time
     Q_INVOKABLE int modifiedTime();
 
     /// \cond MS_INTERNAL
@@ -107,11 +103,9 @@ public slots:
     /// \endcond
 
 signals:
-    /**
-     * Emitted on file operations errors.
-     * Implement onError() in your FileIO object to handle this signal.
-     * \param msg A short textual description of the error occurred.
-     */
+    /// Emitted on file operations errors.
+    /// Implement onError() in your FileIO object to handle this signal.
+    /// \param msg A short textual description of the error occurred.
     void error(const QString& msg);
 
 private:
@@ -136,18 +130,14 @@ public:
         : QProcess(parent) {}
 
 public slots:
-    /**
-     * Execute an external command.
-     * \param command A command line to execute.
-     * \warning This function is deprecated. Use \ref startWithArgs instead.
-     */
+    /// Execute an external command.
+    /// \param command A command line to execute.
+    /// \warning This function is deprecated. Use \ref startWithArgs instead.
     Q_INVOKABLE void start(const QString& command);
-    /**
-     * Execute an external command.
-     * \param program A program to execute.
-     * \param args An array of arguments passed to the program.
-     * \since MuseScore 4.3
-     */
+    /// Execute an external command.
+    /// \param program A program to execute.
+    /// \param args An array of arguments passed to the program.
+    /// \since MuseScore 4.3
     Q_INVOKABLE void startWithArgs(const QString& program, const QStringList& args);
     //@ --
     Q_INVOKABLE bool waitForFinished(int msecs = 30000) { return QProcess::waitForFinished(msecs); }
@@ -163,9 +153,9 @@ public slots:
 class ScoreView : public uicomponents::QuickPaintedView, public engraving::MuseScoreView
 {
     Q_OBJECT
-    /** Background color */
+    /// Background color
     Q_PROPERTY(QColor color READ color WRITE setColor)
-    /** Scaling factor */
+    /// Scaling factor
     Q_PROPERTY(qreal scale READ scale WRITE setScale)
 
     mu::engraving::Score* score;

@@ -31,8 +31,11 @@
 #include "scoreelement.h"
 
 namespace mu::engraving::apiv1 {
+class EngravingItem;
+class FractionWrapper;
 class Instrument;
 class Part;
+class Staff;
 
 //---------------------------------------------------------
 //   InstrumentListProperty
@@ -55,26 +58,27 @@ public:
 class Part : public ScoreElement
 {
     Q_OBJECT
+    /// The first track in this part.
     Q_PROPERTY(int startTrack READ startTrack)
+    /// The last track of the next part + 1.
     Q_PROPERTY(int endTrack READ endTrack)
-    /**
-     * The MuseScore string identifier
-     * for the first instrument in this part.
-     * \see \ref mu::plugins::api::Instrument::instrumentId "Instrument.instrumentId"
-     * \since MuseScore 4.6
-     */
+    /// The MuseScore string identifier
+    /// for the first instrument in this part.
+    /// \see \ref mu::plugins::api::Instrument::instrumentId "Instrument.instrumentId"
+    /// \since MuseScore 4.6
     Q_PROPERTY(QString instrumentId READ instrumentId)
-    /**
-     * The string identifier
-     * ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
-     * for the first instrument in this part.
-     * Was called using \ref instrumentId prior to 4.6
-     * \see \ref mu::plugins::api::Instrument::musicXmlId "Instrument.musicXmlId"
-     * \since MuseScore 3.2
-     */
+    /// The string identifier
+    /// ([MusicXML Sound ID](https://www.musicxml.com/for-developers/standard-sounds/))
+    /// for the first instrument in this part.
+    /// Was called using \ref instrumentId prior to 4.6
+    /// \see \ref mu::plugins::api::Instrument::musicXmlId "Instrument.musicXmlId"
+    /// \since MuseScore 3.2
     Q_PROPERTY(QString musicXmlId READ musicXmlId)
     /// The number of Chord Symbols. \since MuseScore 3.2.1
     Q_PROPERTY(int harmonyCount READ harmonyCount)
+    /// Whether this part has chord symbols.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(bool hasChordSymbol READ hasChordSymbol)
     /// Whether it is a percussion staff. \since MuseScore 3.2.1
     Q_PROPERTY(bool hasDrumStaff READ hasDrumStaff)
     /// Whether it is a 'normal' staff with notes. \since MuseScore 3.2.1
@@ -106,11 +110,16 @@ class Part : public ScoreElement
     /// \since MuseScore 3.2.1
     Q_PROPERTY(bool show READ show WRITE setShow)
 
-    /**
-     * List of instruments in this part.
-     * \since MuseScore 3.5
-     */
+    /// List of instruments in this part.
+    /// \since MuseScore 3.5
     Q_PROPERTY(QQmlListProperty<apiv1::Instrument> instruments READ instruments);
+
+    /// List of staves belonging to this part.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QQmlListProperty<apiv1::Staff> staves READ staves);
+    /// The part object of this part in the main score.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(apiv1::Part * masterPart READ masterPart);
 
 public:
     /// \cond MS_INTERNAL
@@ -125,6 +134,7 @@ public:
     QString instrumentId() const { return part()->instrument()->id(); }
     QString musicXmlId() const { return part()->instrument()->musicXmlId(); }
     int harmonyCount() const { return part()->harmonyCount(); }
+    bool hasChordSymbol() { return part()->hasChordSymbol(); }
     bool hasPitchedStaff() const { return part()->hasPitchedStaff(); }
     bool hasTabStaff() const { return part()->hasTabStaff(); }
     bool hasDrumStaff() const { return part()->hasDrumStaff(); }
@@ -136,15 +146,48 @@ public:
     QString partName() const { return part()->partName(); }
     bool show() const { return part()->show(); }
     void setShow(bool val) { set(engraving::Pid::VISIBLE, val); }
+    apiv1::Part* masterPart() { return wrap<apiv1::Part>(part()->masterPart()); }
 
     InstrumentListProperty instruments();
+    QQmlListProperty<apiv1::Staff> staves();
     /// \endcond
 
-    /**
-     * Finds an instrument that is active in this part at the given \p tick.
-     * \since MuseScore 3.5
-     */
+    /// Finds an instrument that is active in this part at the given \p tick.
+    /// \since MuseScore 3.5
     Q_INVOKABLE apiv1::Instrument* instrumentAtTick(int tick);
+
+    /// The long name of the part at a given tick in the score.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE QString longNameAtTick(apiv1::FractionWrapper* tick);
+    /// The short name of the part at a given tick in the score.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE QString shortNameAtTick(apiv1::FractionWrapper* tick);
+    /// The name of the part's instrument at a given tick in the score.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE QString instrumentNameAtTick(apiv1::FractionWrapper* tick);
+    /// The ID of the part's instrument at a given tick in the score.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE QString instrumentIdAtTick(apiv1::FractionWrapper* tick);
+    /// The currently active harp pedal diagram at a given tick in the score.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::EngravingItem* currentHarpDiagramAtTick(apiv1::FractionWrapper* tick);
+    /// The next active harp pedal diagram at a given tick in the score.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::EngravingItem* nextHarpDiagramFromTick(apiv1::FractionWrapper* tick);
+    /// The previous active harp pedal diagram at a given tick in the score.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::EngravingItem* prevHarpDiagramFromTick(apiv1::FractionWrapper* tick);
+    /// The tick of the currently active harp pedal diagram at a given tick in the score.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \since MuseScore 4.6
+    Q_INVOKABLE apiv1::FractionWrapper* tickOfCurrentHarpDiagram(apiv1::FractionWrapper* tick);
 };
 }
 

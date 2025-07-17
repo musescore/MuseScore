@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_APIV1_SCOREELEMENT_H
-#define MU_ENGRAVING_APIV1_SCOREELEMENT_H
+#pragma once
 
 #include <QQmlEngine>
 #include <QQmlListProperty>
 #include <QVariant>
 
+#include "engraving/dom/engravingobject.h"
 #include "engraving/dom/property.h"
 
 namespace mu::engraving {
@@ -55,17 +55,19 @@ enum class Ownership {
 class ScoreElement : public QObject
 {
     Q_OBJECT
-    /**
-     * Type of this element. See PluginAPI::PluginAPI::EngravingItem
-     * for the list of possible values.
-     */
+    /// Type of this element. See PluginAPI::PluginAPI::EngravingItem
+    /// for the list of possible values.
     Q_PROPERTY(int type READ type)
-    /**
-     * Name of this element's type, not localized.
-     * Use ScoreElement::userName() to obtain a localized
-     * element name suitable for usage in a user interface.
-     */
+    /// Name of this element's type, not localized.
+    /// Use ScoreElement::userName() to obtain a localized
+    /// element name suitable for usage in a user interface.
     Q_PROPERTY(QString name READ name)
+    /// The size of a spatium for this element.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(qreal spatium READ spatium)
+    /// The EID of this element.
+    /// \since MuseScore 4.6
+    Q_PROPERTY(QString eid READ eid)
 
     Ownership m_ownership;
 
@@ -93,8 +95,12 @@ public:
     QString name() const;
     int type() const;
 
+    QString eid() const { return QString::fromStdString(element()->eid().toStdString()); }
+
     QVariant get(mu::engraving::Pid pid) const;
     void set(mu::engraving::Pid pid, const QVariant& val);
+    void reset(mu::engraving::Pid pid);
+
     /// \endcond
 
     Q_INVOKABLE QString userName() const;
@@ -175,12 +181,10 @@ public:
     /// \endcond
 };
 
-/** \cond PLUGIN_API \private \endcond */
+/// \cond PLUGIN_API \private \endcond
 template<typename T, class Container>
 QmlListAccess<T, Container> wrapContainerProperty(QObject* obj, Container& c)
 {
     return QmlListAccess<T, Container>(obj, c);
 }
 }
-
-#endif
