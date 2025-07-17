@@ -103,6 +103,7 @@ protected:
 private:
 
     IAccessible::TextBoundaryType muBoundaryType(QAccessible::TextBoundaryType qtBoundaryType) const;
+    QString announcement() const;
 
     AccessibleObject* m_object = nullptr;
 };

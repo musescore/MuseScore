@@ -638,13 +638,8 @@ void NotationBraille::setKeys(const QString& sequence)
         }
         case BieSequencePatternType::Tuplet: case BieSequencePatternType::Tuplet3: {
             LOGD() << "tuplet";
-            std::string stateTuplet;
-            stateTuplet = "Tuplet " + std::to_string(brailleInput()->tupletNumber());
-            auto notationAccessibility = notation()->accessibility();
-            if (!notationAccessibility) {
-                return;
-            }
-            notationAccessibility->setTriggeredCommand(stateTuplet);
+            QString stateTuplet = muse::qtrc("notation", "Tuplet %1").arg(brailleInput()->tupletNumber());
+            accessibilityController.get()->announce(stateTuplet);
             break;
         }
         case BieSequencePatternType::Tie: {
@@ -868,8 +863,6 @@ void NotationBraille::setMode(const BrailleMode mode)
 
 void NotationBraille::toggleMode()
 {
-    std::string stateTitle;
-
     switch ((BrailleMode)mode().val) {
     case BrailleMode::Undefined:
     case BrailleMode::Navigation:
@@ -882,17 +875,11 @@ void NotationBraille::toggleMode()
 
     dispatcher()->dispatch("note-input");
 
-    if (interaction()->noteInput()->isNoteInputMode()) {
-        stateTitle = muse::trc("notation", "Note input mode");
-    } else {
-        stateTitle = muse::trc("notation", "Normal mode");
-    }
+    QString stateTitle = interaction()->noteInput()->isNoteInputMode()
+                         ? muse::qtrc("notation", "Note input mode")
+                         : muse::qtrc("notation", "Normal mode");
 
-    auto notationAccessibility = notation()->accessibility();
-    if (!notationAccessibility) {
-        return;
-    }
-    notationAccessibility->setTriggeredCommand(stateTitle);
+    accessibilityController.get()->announce(stateTitle);
 }
 
 bool NotationBraille::isNavigationMode()

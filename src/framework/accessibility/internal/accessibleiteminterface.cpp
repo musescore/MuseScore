@@ -125,7 +125,7 @@ QAccessible::State AccessibleItemInterface::state() const
         return state;
     }
 
-    IAccessible::Role r = m_object->item()->accessibleRole();
+    IAccessible::Role r = item->accessibleRole();
     switch (r) {
     case IAccessible::Role::NoRole: break;
     case IAccessible::Role::Application: {
@@ -209,6 +209,15 @@ QAccessible::State AccessibleItemInterface::state() const
     } break;
     }
 
+    if (IAccessible* pretendFocusItem = m_object->controller().lock()->pretendFocusItem()) {
+        if (item == pretendFocusItem) {
+            state.focusable = true;
+            state.focused = true; // pretend to have focus
+        } else {
+            state.focused = false; // pretend to not have focus
+        }
+    }
+
     return state;
 }
 
@@ -266,29 +275,40 @@ QString AccessibleItemInterface::text(QAccessible::Text textType) const
 {
     switch (textType) {
     case QAccessible::Name: {
+        QString a = announcement();
+        if (!a.isEmpty()) {
+            return a;
+        }
         QString name = m_object->item()->accessibleName();
 #if defined(Q_OS_MACOS)
         // VoiceOver doesn't speak descriptions so add it to name instead.
         QString description = m_object->item()->accessibleDescription();
-        if (!description.isEmpty() && description != name) {
+        if (!description.isEmpty() && !name.contains(description, Qt::CaseInsensitive)) {
             name += ", " + description;
         }
 #endif
         if (m_object->controller().lock()->needToVoicePanelInfo()) {
             QString panelName = m_object->controller().lock()->currentPanelAccessibleName();
             if (!panelName.isEmpty()) {
-                name.prepend(panelName + " " + muse::qtrc("accessibility", "Panel") + ", ");
+                name.prepend(panelName + " " + muse::qtrc("accessibility", "panel") + ", ");
             }
         }
         return name;
     }
+#if !defined(Q_OS_MACOS) // Give description separately to name.
 #if defined(Q_OS_WINDOWS)
     // Narrator doesn't read descriptions but it does read accelerators.
-    // NVDA reads both so it should be safe to give just an Accelerator.
-    case QAccessible::Accelerator: return m_object->item()->accessibleDescription();
-#elif !defined(Q_OS_MACOS)
+    // NVDA reads both so it should be safe to give just an accelerator.
+    case QAccessible::Accelerator: {
+#else
     //  Orca on Linux does read descriptions.
-    case QAccessible::Description: return m_object->item()->accessibleDescription();
+    case QAccessible::Description: {
+#endif
+        if (!announcement().isEmpty()) {
+            break; // Don't say description after an announcement.
+        }
+        return m_object->item()->accessibleDescription();
+    }
 #endif
     default: break;
     }
@@ -498,4 +518,15 @@ IAccessible::TextBoundaryType AccessibleItemInterface::muBoundaryType(QAccessibl
     }
 
     return IAccessible::NoBoundary;
+}
+
+QString AccessibleItemInterface::announcement() const
+{
+    auto controller = *m_object->controller().lock();
+
+    if (m_object->item() == controller.lastFocused()) {
+        return controller.announcement(); // Can be empty.
+    }
+
+    return QString();
 }
