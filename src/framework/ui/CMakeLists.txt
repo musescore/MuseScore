@@ -45,6 +45,12 @@ elseif(OS_IS_WIN)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsplatformtheme.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsplatformtheme.h
     )
+    # Exclude from Unity Build to avoid Error C2872: 'Uri': ambiguous symbol
+    set_source_files_properties(
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsplatformtheme.cpp
+        PROPERTIES
+        SKIP_UNITY_BUILD_INCLUSION ON
+        )
 elseif(OS_IS_LIN)
     set(PLATFORM_THEME_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/linux/linuxplatformtheme.cpp
