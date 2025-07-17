@@ -43,11 +43,11 @@ public:
 
 private:
 
-    using MQ = std::queue<Msg>;
+    using MsgQueue = std::queue<Msg>;
 
     struct RpcData {
         std::mutex mutex;
-        MQ queue;
+        MsgQueue queue;
         Handler listenerAll;
         std::map<Method, Handler> onMethods;
         std::map<CallId, Handler> onResponses;
@@ -57,7 +57,7 @@ private:
     void doProcessRPC(RpcData& from, RpcData& to) const;
 
     std::thread::id m_workerThreadID;
-    RpcData m_workerTh;
-    RpcData m_mainTh;
+    RpcData m_workerRpcData;
+    RpcData m_mainRpcData;
 };
 }

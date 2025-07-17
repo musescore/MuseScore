@@ -320,5 +320,5 @@ endif()
 setup_module()
 
 if (MUSE_MODULE_AUDIO_TESTS)
-    #add_subdirectory(tests) no tests
+    add_subdirectory(tests)
 endif()

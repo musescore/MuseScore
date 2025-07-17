@@ -21,52 +21,6 @@
  */
 #include "rpcpacker.h"
 
-#include "global/serialization/msgpack.h"
-
 using namespace muse;
 using namespace muse::audio;
 using namespace muse::audio::rpc;
-
-ByteArray RpcPacker::pack(const bool& in)
-{
-    return MsgPack::pack(in);
-}
-
-bool RpcPacker::unpack(const ByteArray& data, bool& out)
-{
-    return MsgPack::unpack(data, out);
-}
-
-ByteArray RpcPacker::pack(const TrackSequenceId& in)
-{
-    return MsgPack::pack(in);
-}
-
-bool RpcPacker::unpack(const ByteArray& data, TrackSequenceId& out)
-{
-    return MsgPack::unpack(data, out);
-}
-
-ByteArray RpcPacker::pack(const TrackSequenceIdList& in)
-{
-    return MsgPack::pack(in);
-}
-
-bool RpcPacker::unpack(const ByteArray& data, TrackSequenceIdList& out)
-{
-    return MsgPack::unpack(data, out);
-}
-
-ByteArray RpcPacker::pack(const RetVal<TrackIdList>& rv)
-{
-    return MsgPack::pack(rv.ret.code(), rv.ret.text(), rv.val);
-}
-
-bool RpcPacker::unpack(const ByteArray& data, RetVal<TrackIdList>& out)
-{
-    int code = -1;
-    std::string text;
-    bool ok = MsgPack::unpack(data, code, text, out.val);
-    out.ret = Ret(code, text);
-    return ok;
-}
