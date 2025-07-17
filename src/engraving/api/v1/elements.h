@@ -1010,6 +1010,8 @@ class EngravingItem : public apiv1::ScoreElement
     /// Whether this fretboard diagram is excluded from vertical alignnment.
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, excludeVerticalAlign, EXCLUDE_VERTICAL_ALIGN)
+    ///\since MuseScore 4.6
+    API_PROPERTY(hasParentheses, HAS_PARENTHESES)
 
     //  API_PROPERTY(end,                     END)
 
@@ -1166,8 +1168,6 @@ class Note : public EngravingItem
     API_PROPERTY_T(int, string,           STRING)
     ///\since MuseScore 4.6
     API_PROPERTY_T(bool, dead,            DEAD)
-    ///\since MuseScore 4.6
-    API_PROPERTY_T(bool, headHasParentheses, HEAD_HAS_PARENTHESES)
     /// If the note is a trill cue note (used in ornaments and trills)
     /// \since MuseScore 4.6
     Q_PROPERTY(bool isTrillCueNote READ isTrillCueNote)

@@ -218,7 +218,7 @@ public:
     virtual void setSelected(bool f);
 
     bool visible() const { return !flag(ElementFlag::INVISIBLE); }
-    virtual void setVisible(bool f) { setFlag(ElementFlag::INVISIBLE, !f); }
+    virtual void setVisible(bool f);
 
     bool isInteractionAvailable() const;
 
@@ -494,6 +494,15 @@ public:
     bool colorsInversionEnabled() const;
     void setColorsInverionEnabled(bool enabled);
 
+    virtual void setParenthesesMode(const ParenthesesMode& v, bool addToLinked = true, bool generated = false);
+    ParenthesesMode parenthesesMode() const;
+    inline bool bothParentheses() const { return m_leftParenthesis && m_rightParenthesis; }
+    inline Parenthesis* paren(const DirectionH& dir) const { return dir == DirectionH::LEFT ? m_leftParenthesis : m_rightParenthesis; }
+    Parenthesis* leftParen() const { return m_leftParenthesis; }
+    Parenthesis* rightParen() const { return m_rightParenthesis; }
+    void setLeftParen(Parenthesis* paren) { m_leftParenthesis = paren; }
+    void setRightParen(Parenthesis* paren) { m_rightParenthesis = paren; }
+
     struct BarBeat
     {
         int bar;
@@ -744,6 +753,11 @@ private:
     bool m_excludeVerticalAlign = false;
 
     mutable LayoutData* m_layoutData = nullptr;
+
+    Parenthesis* m_leftParenthesis = nullptr;
+    Parenthesis* m_rightParenthesis = nullptr;
+    void setHasLeftParenthesis(bool v, bool addToLinked = true, bool generated = false);
+    void setHasRightParenthesis(bool v, bool addToLinked = true, bool generated = false);
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;

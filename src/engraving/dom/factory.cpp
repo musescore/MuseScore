@@ -240,7 +240,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::LAISSEZ_VIB:       return new LaissezVib(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::PARTIAL_TIE:       return new PartialTie(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::PARTIAL_LYRICSLINE: return new PartialLyricsLine(parent);
-    case ElementType::PARENTHESIS:       return new Parenthesis(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::PARENTHESIS:       return new Parenthesis(parent);
 
     case ElementType::LYRICSLINE:
     case ElementType::TEXTLINE_BASE:
@@ -788,5 +788,5 @@ SystemLockIndicator* Factory::createSystemLockIndicator(System * parent, const S
 
 COPY_ITEM_IMPL(SystemLockIndicator)
 
-CREATE_ITEM_IMPL(Parenthesis, ElementType::PARENTHESIS, Segment, isAccessibleEnabled);
+CREATE_ITEM_IMPL(Parenthesis, ElementType::PARENTHESIS, EngravingItem, isAccessibleEnabled);
 COPY_ITEM_IMPL(Parenthesis)

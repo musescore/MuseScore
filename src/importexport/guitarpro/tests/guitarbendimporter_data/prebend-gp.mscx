@@ -124,14 +124,14 @@
             <noStem>1</noStem>
             <Note>
               <eid>O_O</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>P_P</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>Q_Q</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>
@@ -177,14 +177,14 @@
             <noStem>1</noStem>
             <Note>
               <eid>V_V</eid>
-              <Symbol>
-                <name>noteheadParenthesisLeft</name>
+              <parentheses>both</parentheses>
+              <Parenthesis>
                 <eid>W_W</eid>
-                </Symbol>
-              <Symbol>
-                <name>noteheadParenthesisRight</name>
+                </Parenthesis>
+              <Parenthesis>
+                <horizontalDirection>right</horizontalDirection>
                 <eid>X_X</eid>
-                </Symbol>
+                </Parenthesis>
               <pitch>60</pitch>
               <tpc>14</tpc>
               <fret>1</fret>

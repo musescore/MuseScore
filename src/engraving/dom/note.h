@@ -370,9 +370,6 @@ public:
     void setScore(Score* s) override;
     void setDotRelativeLine(int);
 
-    void setHeadHasParentheses(bool hasParentheses, bool addToLinked = true, bool generated = false);
-    bool headHasParentheses() const { return m_hasUserParentheses; }
-
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType);
     NoteVal noteVal() const;
@@ -524,11 +521,6 @@ private:
 
     Tie* m_tieFor = nullptr;
     Tie* m_tieBack = nullptr;
-
-    Symbol* m_leftParenthesis = nullptr;
-    Symbol* m_rightParenthesis = nullptr;
-    bool m_hasUserParentheses = false;
-    bool m_hasGeneratedParens = false;
 
     bool m_harmonic = false;
 

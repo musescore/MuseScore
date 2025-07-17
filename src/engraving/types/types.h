@@ -740,6 +740,37 @@ enum ChordStylePreset : unsigned char {
     CUSTOM
 };
 
+// P_TYPE::PARENTHESES_MODE
+enum class ParenthesesMode : unsigned char {
+    NONE = 0x0,
+    LEFT = 0x1,
+    RIGHT = 0x2,
+    BOTH = 0x3,
+};
+constexpr bool operator&(const ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    return static_cast<int>(t1) & static_cast<int>(t2);
+}
+
+constexpr bool operator|(const ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    return static_cast<int>(t1) | static_cast<int>(t2);
+}
+
+constexpr void operator|=(ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    int t1i = static_cast<int>(t1);
+    t1i |= static_cast<int>(t2);
+    t1 = ParenthesesMode(t1i);
+}
+
+constexpr void operator&=(ParenthesesMode& t1, const ParenthesesMode& t2)
+{
+    int t1i = static_cast<int>(t1);
+    t1i &= static_cast<int>(t2);
+    t1 = ParenthesesMode(t1i);
+}
+
 //-------------------------------------------------------------------
 //   Tid
 ///   Enumerates the list of built-in text substyles

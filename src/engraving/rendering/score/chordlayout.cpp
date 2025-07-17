@@ -50,6 +50,7 @@
 
 #include "dom/ornament.h"
 #include "dom/page.h"
+#include "dom/parenthesis.h"
 #include "dom/part.h"
 #include "dom/rest.h"
 #include "dom/score.h"
@@ -68,6 +69,7 @@
 #include "dom/utils.h"
 
 #include "arpeggiolayout.h"
+#include "rendering/score/parenthesislayout.h"
 #include "tlayout.h"
 #include "slurtielayout.h"
 #include "beamlayout.h"
@@ -3355,14 +3357,14 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
 
     if (useParens) {
         double widthWithoutParens = item->tabHeadWidth(staffType);
-        item->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
+        item->setParenthesesMode(ParenthesesMode::BOTH, /* addToLinked= */ false, /* generated= */ true);
         double w = item->tabHeadWidth(staffType);
         double xOff = 0.5 * (w - widthWithoutParens);
         ldata->moveX(-xOff);
         ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w,
                        staffType->fretBoxH() * item->magS());
-    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret()) && item->headHasParentheses()) {
-        item->setHeadHasParentheses(false, /*addToLinked=*/ false, /* generated= */ true);
+    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret()) && item->bothParentheses()) {
+        item->setParenthesesMode(ParenthesesMode::NONE, /*addToLinked=*/ false, /* generated= */ true);
     }
     int dots = chord->dots();
     if (dots && !item->dots().empty()) {
@@ -3426,29 +3428,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     for (EngravingItem* e : item->el()) {
         if (e->isSymbol()) {
             e->mutldata()->setMag(item->mag());
-            Shape noteShape = item->shape();
-            noteShape.remove_if([e](ShapeElement& s) { return s.item() == e || s.item()->isBend(); });
-            LedgerLine* ledger = (item->line() < -1 || item->line() > item->staff()->lines(item->tick())) && !chord->ledgerLines().empty()
-                                 ? chord->ledgerLines().front() : nullptr;
-            if (ledger) {
-                noteShape.add(ledger->shape().translate(ledger->pos() - item->pos()));
-            }
-            double right = noteShape.right();
-            double left = noteShape.left();
-            Symbol* sym = toSymbol(e);
             TLayout::layoutItem(e, ctx);
-            double parenthesisPadding = ctx.conf().styleMM(Sid::bracketedAccidentalPadding) * item->mag();
-            if (sym->sym() == SymId::noteheadParenthesisRight) {
-                if (isTabStaff) {
-                    const Staff* st = item->staff();
-                    const StaffType* tab = st->staffTypeForElement(item);
-                    right = item->tabHeadWidth(tab);
-                }
-
-                e->mutldata()->setPosX(right + parenthesisPadding);
-            } else if (sym->sym() == SymId::noteheadParenthesisLeft) {
-                e->mutldata()->setPosX(-left - e->width() - parenthesisPadding);
-            }
         } else if (e->isFingering()) {
             // don't set mag; fingerings should not scale with note
             Fingering* f = toFingering(e);
@@ -3465,6 +3445,8 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             TLayout::layoutItem(e, ctx);
         }
     }
+
+    ParenthesisLayout::layoutParentheses(item, ctx);
 }
 
 void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
@@ -3668,6 +3650,15 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
         }
     }
 
+    const Parenthesis* leftParen = item->leftParen();
+    if (leftParen && leftParen->addToSkyline()) {
+        shape.add(leftParen->ldata()->shape().translated(leftParen->pos()));
+    }
+    const Parenthesis* rightParen = item->rightParen();
+    if (rightParen && rightParen->addToSkyline()) {
+        shape.add(rightParen->ldata()->shape().translated(rightParen->pos()));
+    }
+
     ldata->setShape(shape);
 }
 
@@ -3689,6 +3680,15 @@ void ChordLayout::fillShape(const Rest* item, Rest::LayoutData* ldata)
         if (e->addToSkyline()) {
             shape.add(e->shape().translate(e->pos()));
         }
+    }
+
+    const Parenthesis* leftParen = item->leftParen();
+    if (leftParen && leftParen->addToSkyline()) {
+        shape.add(leftParen->ldata()->shape().translated(leftParen->pos()));
+    }
+    const Parenthesis* rightParen = item->rightParen();
+    if (rightParen && rightParen->addToSkyline()) {
+        shape.add(rightParen->ldata()->shape().translated(rightParen->pos()));
     }
 
     ldata->setShape(shape);

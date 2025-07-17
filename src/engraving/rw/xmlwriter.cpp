@@ -310,6 +310,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::PARTIAL_SPANNER_DIRECTION: {
         element(name, TConv::toXml(data.value<PartialSpannerDirection>()));
     } break;
+    case P_TYPE::PARENTHESES_MODE: {
+        element(name, TConv::toXml(data.value<ParenthesesMode>()));
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }

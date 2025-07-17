@@ -248,7 +248,7 @@ double ArpeggioLayout::insetDistance(const Arpeggio* item, const LayoutContext& 
 
     const Segment* seg = item->chord()->segment();
     Chord* endChord = item->chord();
-    const PaddingTable paddingTable = item->score()->paddingTable();
+    const PaddingTable& paddingTable = item->score()->paddingTable();
     if (EngravingItem* e = seg->element(item->endTrack())) {
         endChord = e->isChord() ? toChord(e) : endChord;
     }

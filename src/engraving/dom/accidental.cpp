@@ -266,7 +266,7 @@ SymId Accidental::symId() const
 
 bool Accidental::parentNoteHasParentheses() const
 {
-    return explicitParent() && parentItem()->isNote() ? toNote(parentItem())->headHasParentheses() : false;
+    return explicitParent() && parentItem()->isNote() ? toNote(parentItem())->bothParentheses() : false;
 }
 
 //---------------------------------------------------------

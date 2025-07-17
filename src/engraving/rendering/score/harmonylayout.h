@@ -38,7 +38,7 @@ public:
 private:
 
     struct HarmonyRenderCtx {
-        PointF pos = PointF();
+        PointF pos = PointF(0.0, 0.0);
         std::vector<TextSegment*> textList;
 
         // Reset every single chord
@@ -63,7 +63,7 @@ private:
 
     static void render(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
     static void renderSingleHarmony(Harmony* item, Harmony::LayoutData* ldata, HarmonyRenderCtx& harmonyCtx, const LayoutContext& ctx);
-    static void renderRomanNumeral(Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
+    static void renderRomanNumeral(Harmony* item, Harmony::LayoutData* ldata);
     static void render(Harmony* item, Harmony::LayoutData* ldata, const String& str, HarmonyRenderCtx& harmonyCtx);
     static void render(Harmony* item, Harmony::LayoutData* ldata, SymId sym, HarmonyRenderCtx& harmonyCtx, const LayoutContext& ctx);
     static void render(Harmony* item, Harmony::LayoutData* ldata, const std::list<RenderActionPtr>& renderList, HarmonyRenderCtx& ctx,

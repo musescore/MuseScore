@@ -1973,19 +1973,13 @@ void SlurTieLayout::setPartialTieEndPos(PartialTie* item, SlurTiePos& sPos)
     double widthToSegment = 0.0;
     if (adjSeg) {
         EngravingItem* element = adjSeg->element(staff2track(item->vStaffIdx()));
-        track_idx_t strack = track2staff(item->track());
-        track_idx_t etrack = strack + VOICES - 1;
-        for (EngravingItem* paren : adjSeg->findAnnotations(ElementType::PARENTHESIS, strack, etrack)) {
-            if ((outgoing && toParenthesis(paren)->direction() == DirectionH::LEFT)
-                || (!outgoing && toParenthesis(paren)->direction() == DirectionH::RIGHT)) {
-                element = paren;
-                break;
-            }
-        }
 
-        const double elementWidth = element ? element->width() : 0.0;
-        const double elPos = adjSeg->xPosInSystemCoords() + (element ? element->pos().x() + element->shape().bbox().x() : 0.0);
-        widthToSegment = outgoing ? elPos - sPos.p1.x() : sPos.p2.x() - (elPos + elementWidth);
+        const Shape& elemShape = element->shape();
+        double elPos = element->pos().x() + elemShape.bbox().x();
+
+        const double elementWidth = element ? elemShape.bbox().width() : 0.0;
+        const double elPosInSystemCoords = adjSeg->xPosInSystemCoords() + elPos;
+        widthToSegment = outgoing ? elPosInSystemCoords - sPos.p1.x() : sPos.p2.x() - (elPosInSystemCoords + elementWidth);
         bool incomingFromBarline = !outgoing && element->isBarLine() && toBarLine(element)->barLineType() != BarLineType::START_REPEAT;
         widthToSegment -= item->style().styleMM(incomingFromBarline ? Sid::barlineToLineStartDistance : Sid::lineEndToBarlineDistance);
     }

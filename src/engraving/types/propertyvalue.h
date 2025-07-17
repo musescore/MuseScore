@@ -85,6 +85,7 @@ enum class P_TYPE : unsigned char {
     TIMESIG_MARGIN,
     NOTE_SPELLING_TYPE,
     CHORD_PRESET_TYPE,
+    PARENTHESES_MODE,
 
     // Sound
     FRACTION,
@@ -243,6 +244,9 @@ public:
 
     PropertyValue(const ChordStylePreset& v)
         : m_type(P_TYPE::CHORD_PRESET_TYPE), m_data(make_data<ChordStylePreset>(v)) {}
+
+    PropertyValue(const ParenthesesMode& v)
+        : m_type(P_TYPE::PARENTHESES_MODE), m_data(make_data<ParenthesesMode>(v)) {}
 
     // Sound
     PropertyValue(const Fraction& v)

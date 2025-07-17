@@ -1447,10 +1447,10 @@ static void readHarmony114(XmlReader& e, ReadContext& ctx, Harmony* h)
                 }
             }
         } else if (tag == "leftParen") {
-            h->setLeftParen(true);
+            h->setParenthesesMode(ParenthesesMode::LEFT, true, true);
             e.readNext();
         } else if (tag == "rightParen") {
-            h->setRightParen(true);
+            h->setParenthesesMode(ParenthesesMode::RIGHT, true, true);
             e.readNext();
         } else if (!readTextProperties(e, ctx, h, h)) {
             e.unknown();

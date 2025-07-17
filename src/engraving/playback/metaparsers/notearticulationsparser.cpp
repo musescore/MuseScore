@@ -151,7 +151,7 @@ void NoteArticulationsParser::parsePersistentMeta(const RenderingContext& ctx, m
 
 void NoteArticulationsParser::parseGhostNote(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    if (!note->ghost() && !note->headHasParentheses()) {
+    if (!note->ghost() && !note->bothParentheses()) {
         return;
     }
 

@@ -145,7 +145,7 @@ public:
 
     static Page* createPage(RootItem* parent, bool isAccessibleEnabled = true);
 
-    static Parenthesis* createParenthesis(Segment* parent, bool isAccessibleEnabled = true);
+    static Parenthesis* createParenthesis(EngravingItem* parent, bool isAccessibleEnabled = true);
     static Parenthesis* copyParenthesis(const Parenthesis& src);
 
     static PartialTie* createPartialTie(Note* parent, bool isAccessibleEnabled = true);

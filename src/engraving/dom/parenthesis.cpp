@@ -27,8 +27,8 @@
 
 using namespace mu::engraving;
 
-Parenthesis::Parenthesis(Segment* parent)
-    : EngravingItem(ElementType::PARENTHESIS, parent, ElementFlag::ON_STAFF | ElementFlag::GENERATED)
+Parenthesis::Parenthesis(EngravingItem* parent)
+    : EngravingItem(ElementType::PARENTHESIS, parent, ElementFlag::GENERATED)
 {
 }
 

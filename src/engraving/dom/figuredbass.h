@@ -300,7 +300,7 @@ public:
     // the array of configured fonts
     static const std::vector<FiguredBassFont>& FBFonts();
 
-    bool hasParentheses() const;       // read / write MusicXML support
+    bool parenthesesMode() const;       // read / write MusicXML support
 
     struct LayoutData : public TextBase::LayoutData {
         std::vector<double> lineLengths;               // lengths of duration indicator lines (in raster units)
