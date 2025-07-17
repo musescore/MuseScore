@@ -42,7 +42,7 @@ enum Format : uint8_t {
     fixstr = 0xa0,   //0xa0 - 0xbf
     // negative fixint = 0xe0 - 0xff
 
-    nil = 0xc0,
+    nil_marker = 0xc0,
     false_bool = 0xc2,
     true_bool = 0xc3,
     bin8 = 0xc4,
@@ -84,7 +84,7 @@ struct Cursor {
         : current(start), end(start + size) {}
 
     inline size_t remain() const {
-        return end - current;
+        return size_t(end - current);
     }
 
     inline const uint8_t* pdata() {
@@ -103,8 +103,8 @@ struct Cursor {
         return 0;
     }
 
-    inline void next(int64_t bytes = 1) {
-        if (static_cast<int64_t>(remain()) >= bytes) {
+    inline void next(size_t bytes = 1) {
+        if (remain() >= bytes) {
             current += bytes;
         } else {
             error = true;
@@ -226,9 +226,14 @@ struct has_func_unpack_custom_unpacker<T,
            std::void_t<decltype(unpack_custom(std::declval<UnPacker&>(), std::declval<T&>()))>
        > : std::true_type {};
 
+template<class T>
+void pack_type(std::vector<uint8_t>& data, const T& value);
+template<class T>
+bool unpack_type(Cursor& cursor, T& value);
+
 // Nil
 inline void pack_type(std::vector<uint8_t>& data, const std::nullptr_t&/*value*/) {
-    data.emplace_back(nil);
+    data.emplace_back(nil_marker);
 }
 
 inline bool unpack_type(Cursor& cursor, std::nullptr_t& /*value*/) {
@@ -893,7 +898,12 @@ template <typename T>
 bool unpack_custom_unpacker(Cursor& cursor, T& value);
 
 template<class T>
-void pack_type(std::vector<uint8_t>& data, const T& value) {
+inline void do_pack_type(std::vector<uint8_t>& data, const T& value) {
+    pack_type(data, value);
+}
+
+template<class T>
+inline void pack_type(std::vector<uint8_t>& data, const T& value) {
 
     if constexpr(is_map<T>::value) {
         pack_map(data, value);
@@ -916,7 +926,13 @@ void pack_type(std::vector<uint8_t>& data, const T& value) {
 }
 
 template<class T>
-bool unpack_type(Cursor& cursor, T& value) {
+inline bool do_unpack_type(Cursor& cursor, T& value) {
+    bool ok = unpack_type(cursor, value);
+    return ok;
+}
+
+template<class T>
+inline bool unpack_type(Cursor& cursor, T& value) {
 
     if constexpr(is_map<T>::value) {
         return unpack_map(cursor, value);
@@ -970,7 +986,7 @@ public:
 private:
     template<class ... Types>
     static void do_pack(std::vector<uint8_t>& data, const Types &... args) {
-        (pack_type(data, std::forward<const Types &>(args)), ...);
+        (do_pack_type(data, std::forward<const Types &>(args)), ...);
     }
 
     std::vector<uint8_t> m_data;
@@ -1018,12 +1034,13 @@ public:
         return success();
     }
 
+    Cursor& cursor() { return m_cursor; }
     bool success() const { return m_success; }
 
 private:
     template<class ... Types>
     static bool do_unpack(Cursor& c, Types&... args) {
-        bool ok = (unpack_type(c, std::forward<Types&>(args)), ...);
+        bool ok = (do_unpack_type(c, std::forward<Types&>(args)), ...);
         return ok && !c.error;
     }
 
@@ -1073,6 +1090,7 @@ inline bool unpack_custom_unpacker(Cursor& cursor, T& value)
 {
     UnPacker u(cursor);
     unpack_custom(u, value);
+    cursor = u.cursor();
     return u.success();
 }
 }

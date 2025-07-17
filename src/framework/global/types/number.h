@@ -83,6 +83,7 @@ public:
     static T cast(V v) { return static_cast<T>(v); }
 
     inline constexpr T raw() const { return m_val; }
+    inline T& raw() { return m_val; }
     inline double to_double() const { return static_cast<double>(m_val); }
     inline number_t<T> operator-() const { return number_t<T>(-m_val); }
 

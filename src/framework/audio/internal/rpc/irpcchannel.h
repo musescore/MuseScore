@@ -33,13 +33,49 @@ using CallId = uint64_t;
 enum class Method {
     Undefined = 0,
 
+    // Sequences
     AddSequence,
     RemoveSequence,
     GetSequenceIdList,
 
+    // Tracks
+    RemoveTrack,
+    RemoveAllTracks,
     GetTrackIdList,
+    GetTrackName,
+    AddAuxTrack,
 
-    Play
+    GetAvailableInputResources,
+    GetAvailableSoundPresets,
+
+    GetInputParams,
+    SetInputParams,
+
+    ClearSources,
+
+    // Play
+    Play,
+    Seek,
+    Stop,
+    Pause,
+    Resume,
+    SetDuration,
+    SetLoop,
+    ResetLoop,
+
+    // Output
+    GetOutputParams,
+    SetOutputParams,
+    GetMasterOutputParams,
+    SetMasterOutputParams,
+    ClearMasterOutputParams,
+
+    GetAvailableOutputResources,
+
+    SaveSoundTrack,
+    AbortSavingAllSoundTracks,
+
+    ClearAllFx
 };
 
 enum class MsgType {
@@ -69,7 +105,7 @@ public:
     virtual void listenAll(Handler h) = 0;
 };
 
-inline CallId newCallId()
+inline CallId new_call_id()
 {
     static CallId lastId = 0;
     ++lastId;
@@ -79,7 +115,7 @@ inline CallId newCallId()
 inline Msg make_request(Method m, const ByteArray& data = ByteArray())
 {
     Msg msg;
-    msg.callId = newCallId();
+    msg.callId = new_call_id();
     msg.method = m;
     msg.type = MsgType::Request;
     msg.data = data;

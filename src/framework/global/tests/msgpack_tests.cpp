@@ -64,6 +64,8 @@ struct ObjectWithPack {
     bool b = false;
     std::vector<int> vi;
     std::map<std::string, int> map;
+    String mustr;
+    number_t<float> mureal;
 
     template<class T>
     void pack(T& pack)
@@ -121,6 +123,8 @@ TEST_F(Global_Ser_Msgpack, ObjectWithPack)
         obj.b = true;
         obj.vi = { 4, 2 };
         obj.map = { { "42", 42 } };
+        obj.mustr = "mu 42";
+        obj.mureal = 42.0;
 
         data = msgpack::pack(obj);
     }
@@ -142,6 +146,8 @@ TEST_F(Global_Ser_Msgpack, ObjectWithPack)
         EXPECT_EQ(obj.vi.at(1), 2);
         EXPECT_EQ(obj.map.size(), 1);
         EXPECT_EQ(obj.map["42"], 42);
+        EXPECT_EQ(obj.mustr, "mu 42");
+        EXPECT_FLOAT_EQ(obj.mureal, 42.0);
     }
 }
 

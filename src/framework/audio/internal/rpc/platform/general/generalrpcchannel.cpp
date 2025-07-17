@@ -23,10 +23,13 @@
 
 #include <thread>
 
+#include "../../../audiosanitizer.h"
+
 using namespace muse::audio::rpc;
 
 void GeneralRpcChannel::initOnWorker()
 {
+    ONLY_AUDIO_WORKER_THREAD;
     m_workerThreadID = std::this_thread::get_id();
 }
 
@@ -38,15 +41,15 @@ bool GeneralRpcChannel::isWorkerThread() const
 void GeneralRpcChannel::process()
 {
     if (isWorkerThread()) {
-        doProcessRPC(m_mainTh, m_workerTh);
+        doProcessRPC(m_mainRpcData, m_workerRpcData);
     } else {
-        doProcessRPC(m_workerTh, m_mainTh);
+        doProcessRPC(m_workerRpcData, m_mainRpcData);
     }
 }
 
 void GeneralRpcChannel::doProcessRPC(RpcData& from, RpcData& to) const
 {
-    MQ fromMQ;
+    MsgQueue fromMQ;
     {
         std::scoped_lock<std::mutex> lock(from.mutex);
         fromMQ.swap(from.queue);
@@ -63,7 +66,7 @@ void GeneralRpcChannel::doProcessRPC(RpcData& from, RpcData& to) const
         // by method
         {
             auto it = to.onMethods.find(m.method);
-            if (it != to.onMethods.end()) {
+            if (it != to.onMethods.end() && it->second) {
                 it->second(m);
             }
         }
@@ -71,7 +74,7 @@ void GeneralRpcChannel::doProcessRPC(RpcData& from, RpcData& to) const
         // by callId (response)
         if (m.type == MsgType::Response) {
             auto it = to.onResponses.find(m.callId);
-            if (it != to.onResponses.end()) {
+            if (it != to.onResponses.end() && it->second) {
                 it->second(m);
                 to.onResponses.erase(it);
             }
@@ -84,18 +87,18 @@ void GeneralRpcChannel::doProcessRPC(RpcData& from, RpcData& to) const
 void GeneralRpcChannel::send(const Msg& msg, const Handler& onResponse)
 {
     if (isWorkerThread()) {
-        std::scoped_lock<std::mutex> lock(m_workerTh.mutex);
-        m_workerTh.queue.push(msg);
+        std::scoped_lock<std::mutex> lock(m_workerRpcData.mutex);
+        m_workerRpcData.queue.push(msg);
 
         if (onResponse) {
-            m_workerTh.onResponses[msg.callId] = onResponse;
+            m_workerRpcData.onResponses[msg.callId] = onResponse;
         }
     } else {
-        std::scoped_lock<std::mutex> lock(m_mainTh.mutex);
-        m_mainTh.queue.push(msg);
+        std::scoped_lock<std::mutex> lock(m_mainRpcData.mutex);
+        m_mainRpcData.queue.push(msg);
 
         if (onResponse) {
-            m_mainTh.onResponses[msg.callId] = onResponse;
+            m_mainRpcData.onResponses[msg.callId] = onResponse;
         }
     }
 }
@@ -103,17 +106,17 @@ void GeneralRpcChannel::send(const Msg& msg, const Handler& onResponse)
 void GeneralRpcChannel::onMethod(Method method, Handler h)
 {
     if (isWorkerThread()) {
-        m_workerTh.onMethods[method] = h;
+        m_workerRpcData.onMethods[method] = h;
     } else {
-        m_mainTh.onMethods[method] = h;
+        m_mainRpcData.onMethods[method] = h;
     }
 }
 
 void GeneralRpcChannel::listenAll(Handler h)
 {
     if (isWorkerThread()) {
-        m_workerTh.listenerAll = h;
+        m_workerRpcData.listenerAll = h;
     } else {
-        m_mainTh.listenerAll = h;
+        m_mainRpcData.listenerAll = h;
     }
 }

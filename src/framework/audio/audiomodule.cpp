@@ -223,7 +223,7 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
     m_audioOutputController->init();
 
-    m_rpcTimer.setInterval(16);
+    m_rpcTimer.setInterval(16); // corresponding to 60 fps
     QObject::connect(&m_rpcTimer, &QTimer::timeout, [this]() {
         m_rpcChannel->process();
     });
@@ -244,6 +244,8 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
 
 void AudioModule::onDeinit()
 {
+    m_rpcTimer.stop();
+
     if (m_audioDriver->isOpened()) {
         m_audioDriver->close();
     }
@@ -256,6 +258,7 @@ void AudioModule::onDestroy()
     if (m_audioWorker->isRunning()) {
         m_audioWorker->stop([this]() {
             ONLY_AUDIO_WORKER_THREAD;
+            m_workerChannelController->deinitOnWorker();
             m_workerPlayback->deinit();
             m_mainPlayback->deinitOnWorker();
             m_audioEngine->deinit();
@@ -332,7 +335,7 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         m_mainPlayback->initOnWorker();
 
         m_rpcChannel->initOnWorker();
-        m_workerChannelController->initOnWroker(m_workerPlayback);
+        m_workerChannelController->initOnWorker(m_workerPlayback);
     };
 
     auto workerLoopBody = [this]() {
