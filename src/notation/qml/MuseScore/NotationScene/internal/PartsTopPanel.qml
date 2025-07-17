@@ -83,6 +83,8 @@ Item {
             onTextChanged: debounceTimer.restart()
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
+            navigation.panel: root.navigationPanel
+            navigation.column: 0
         }
 
         FlatButton {
@@ -91,7 +93,7 @@ Item {
 
             navigation.name: "CreateNewPartButton"
             navigation.panel: root.navigationPanel
-            navigation.column: 0
+            navigation.column: 1
 
             onClicked: {
                 root.createNewPartRequested()

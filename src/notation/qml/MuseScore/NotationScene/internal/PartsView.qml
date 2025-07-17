@@ -115,7 +115,8 @@ Item {
             canDelete: model.isCustom
 
             navigation.name: model.title + model.index
-            navigation.panel: view.navigationPanel
+            navigation.panel: root.navigationPanel
+            navigation.column: (model.isSelected && root.model.hasSelection) ? 4 : -1
             navigation.row: model.index
             navigation.onActiveChanged: {
                 if (navigation.active) {

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
@@ -53,7 +54,7 @@ RowLayout {
 
         navigation.name: "CloseButton"
         navigation.panel: root.navigationPanel
-        navigation.column: 0
+        navigation.column: 2
 
         onClicked: {
             root.closeRequested()
@@ -81,8 +82,9 @@ RowLayout {
         accentButton: true
 
         navigation.name: "OpenSelectedButton"
+        enabled: root.model.hasSelection
         navigation.panel: root.navigationPanel
-        navigation.column: 2
+        navigation.column: root.model.hasSelection ? 3 : -1
 
         onClicked: {
             root.openSelectedPartsRequested()
