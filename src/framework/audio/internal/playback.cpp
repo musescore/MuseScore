@@ -35,44 +35,41 @@ using namespace muse;
 using namespace muse::audio;
 using namespace muse::async;
 
-void Playback::init()
+void Playback::initOnWorker()
 {
-    Async::call(this, [this]() {
-        ONLY_AUDIO_WORKER_THREAD;
+    ONLY_AUDIO_WORKER_THREAD;
 
-        workerPlayback()->trackAdded().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId) {
-            m_trackAdded.send(sequenceId, trackId);
-        });
+    workerPlayback()->trackAdded().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId) {
+        m_trackAdded.send(sequenceId, trackId);
+    });
 
-        workerPlayback()->trackRemoved().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId) {
-            m_trackRemoved.send(sequenceId, trackId);
-        });
+    workerPlayback()->trackRemoved().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId) {
+        m_trackRemoved.send(sequenceId, trackId);
+    });
 
-        workerPlayback()->inputParamsChanged().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId,
-                                                                      const AudioInputParams& params) {
-            m_inputParamsChanged.send(sequenceId, trackId, params);
-        });
+    workerPlayback()->inputParamsChanged().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId,
+                                                                  const AudioInputParams& params) {
+        m_inputParamsChanged.send(sequenceId, trackId, params);
+    });
 
-        workerPlayback()->outputParamsChanged().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId,
-                                                                       const AudioOutputParams& params) {
-            m_outputParamsChanged.send(sequenceId, trackId, params);
-        });
+    workerPlayback()->outputParamsChanged().onReceive(this, [this](TrackSequenceId sequenceId, TrackId trackId,
+                                                                   const AudioOutputParams& params) {
+        m_outputParamsChanged.send(sequenceId, trackId, params);
+    });
 
-        workerPlayback()->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
-            m_masterOutputParamsChanged.send(params);
-        });
-    }, AudioThread::ID);
+    workerPlayback()->masterOutputParamsChanged().onReceive(this, [this](const AudioOutputParams& params) {
+        m_masterOutputParamsChanged.send(params);
+    });
 }
 
-void Playback::deinit()
+void Playback::deinitOnWorker()
 {
-    Async::call(this, [this]() {
-        ONLY_AUDIO_WORKER_THREAD;
-        workerPlayback()->trackAdded().resetOnReceive(this);
-        workerPlayback()->trackRemoved().resetOnReceive(this);
-        workerPlayback()->inputParamsChanged().resetOnReceive(this);
-        workerPlayback()->outputParamsChanged().resetOnReceive(this);
-    }, AudioThread::ID);
+    ONLY_AUDIO_WORKER_THREAD;
+
+    workerPlayback()->trackAdded().resetOnReceive(this);
+    workerPlayback()->trackRemoved().resetOnReceive(this);
+    workerPlayback()->inputParamsChanged().resetOnReceive(this);
+    workerPlayback()->outputParamsChanged().resetOnReceive(this);
 }
 
 Promise<TrackSequenceId> Playback::addSequence()
