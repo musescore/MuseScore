@@ -333,8 +333,8 @@ Harmony::Harmony(const Harmony& h)
 
 Harmony::~Harmony()
 {
-    for (const TextSegment* ts : mutldata()->textList()) {
-        delete ts;
+    for (const HarmonyRenderItem* renderItem : mutldata()->renderItemList()) {
+        delete renderItem;
     }
     for (const HarmonyInfo* info : m_chords) {
         delete info;
@@ -644,14 +644,14 @@ NoteCaseType Harmony::bassRenderCase() const
 
 void Harmony::startEdit(EditData& ed)
 {
-    if (!ldata()->textList().empty()) {
+    if (!ldata()->renderItemList().empty()) {
         // convert chord symbol to plain text
         setPlainText(harmonyName());
         // clear rendering
-        for (const TextSegment* t : mutldata()->textList()) {
-            delete t;
+        for (const HarmonyRenderItem* renderItem : mutldata()->renderItemList()) {
+            delete renderItem;
         }
-        mutldata()->textList.mut_value().clear();
+        mutldata()->renderItemList.mut_value().clear();
     }
 
     if (leftParen()) {
@@ -867,7 +867,7 @@ void Harmony::setHarmony(const String& s)
 
 double Harmony::baseLine() const
 {
-    if (ldata()->textList().empty() || !ldata()->baseline.has_value()) {
+    if (ldata()->renderItemList().empty() || !ldata()->baseline.has_value()) {
         return TextBase::baseLine();
     }
 
@@ -1140,19 +1140,10 @@ double TextSegment::capHeight() const
 }
 
 //---------------------------------------------------------
-//   boundingRect
-//---------------------------------------------------------
-
-RectF TextSegment::boundingRect() const
-{
-    return FontMetrics::boundingRect(m_font, m_text);
-}
-
-//---------------------------------------------------------
 //   tightBoundingRect
 //---------------------------------------------------------
 
-RectF TextSegment::tightBoundingRect() const
+RectF TextSegment::boundingRect() const
 {
     return FontMetrics::tightBoundingRect(m_font, m_text);
 }

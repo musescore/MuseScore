@@ -138,11 +138,6 @@ void ParenthesisLayout::layoutParentheses(const EngravingItem* parent, const Lay
 
 void ParenthesisLayout::layoutParenthesis(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx)
 {
-    ldata->setPos(PointF());
-    ldata->reset();
-    ldata->path.reset();
-    ldata->symId.reset();
-
     setLayoutValues(item, ldata, ctx);
 
     if (ldata->symId == SymId::noSym) {
@@ -313,6 +308,11 @@ void ParenthesisLayout::setLayoutValues(Parenthesis* item, Parenthesis::LayoutDa
     if (!item->parentItem()) {
         return;
     }
+
+    ldata->setPos(PointF());
+    ldata->reset();
+    ldata->path.reset();
+    ldata->symId.reset();
 
     // Set ldata values based on parent
     switch (item->parentItem()->type()) {
