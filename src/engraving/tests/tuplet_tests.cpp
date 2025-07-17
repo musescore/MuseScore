@@ -48,7 +48,7 @@ public:
 
 bool Engraving_TupletTests::createTuplet(int n, ChordRest* cr)
 {
-    if (cr->durationType() < TDuration(DurationType::V_128TH)) {
+    if (cr->durationType() > TDuration(DurationType::V_128TH)) {
         return false;
     }
 
