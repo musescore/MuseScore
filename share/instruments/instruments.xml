@@ -7428,11 +7428,7 @@
                         <controller ctrl="0" value="1"/> <!--Bank MSB-->
                         <program value="48"/> <!--Orchestra Kit-->
                   </Channel>
-                  <genre>popular</genre>
-                  <genre>jazz</genre>
-                  <genre>orchestra</genre>
-                  <genre>concertband</genre>
-                  <genre>marching</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="xiaogu">
                   <family>drums</family>
@@ -8269,7 +8265,7 @@
                   <trackName>Bangu</trackName>
                   <longName>Bangu</longName>
                   <shortName>Bgu.</shortName>
-                  <description>Chinese frame drum.</description>
+                  <description>Chinese high-pitch frame drum.</description>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
@@ -8482,7 +8478,7 @@
                   <trackName>Tsuri-Daiko</trackName>
                   <longName>Tsuri-Daiko</longName>
                   <shortName>T-Daiko</shortName>
-                  <description>Robust, barrel shaped Japanese drum.</description>
+                  <description>Traditionally ornate Japanese drum hung on circular frame.</description>
                   <musicXMLid>drum.taiko</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -8511,7 +8507,7 @@
                   <trackName>Miya Daiko</trackName>
                   <longName>Miya Daiko</longName>
                   <shortName>M-Daiko</shortName>
-                  <description>Japanese drum hung on circular frame.  Also known as nagadou, they are the most common taiko.</description>
+                  <description>Robust, barrel shaped Japanese drum. Also known as nagadou, they are the most common taiko.</description>
                   <musicXMLid>drum.nagado-daiko</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -8618,7 +8614,7 @@
                         <controller ctrl="0" value="1"/> <!--Bank MSB-->
                         <program value="48"/> <!--Orchestra Kit-->
                   </Channel>
-                  <genre>orchestra</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="kane">
                   <family>unpitched-metal-percussion</family>
@@ -8646,7 +8642,7 @@
                         <controller ctrl="0" value="1"/> <!--Bank MSB-->
                         <program value="48"/> <!--Orchestra Kit-->
                   </Channel>
-                  <genre>orchestra</genre>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="bell-plate">
                   <family>unpitched-metal-percussion</family>
@@ -9364,7 +9360,8 @@
                         <controller ctrl="0" value="1"/> <!--Bank MSB-->
                         <program value="0"/> <!--Standard Kit-->
                   </Channel>
-                  <genre>classroom</genre>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
             </Instrument>
             <Instrument id="splash-cymbal">
                   <family>unpitched-metal-percussion</family>
@@ -9731,14 +9728,13 @@
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
-                  <genre>marching</genre>
             </Instrument>
             <Instrument id="log-drum">
                   <family>unpitched-wooden-percussion</family>
                   <trackName>Log Drum</trackName>
                   <longName>Log Drum</longName>
                   <shortName>Log D.</shortName>
-                  <description>Log drum or slit drum</description>
+                  <description>Log drum or slit drum.</description>
                   <musicXMLid>drum.log-drum</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>
@@ -9802,7 +9798,6 @@
                   </Channel>
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
-                  <genre>marching</genre>
             </Instrument>
             <Instrument id="wood-blocks">
                   <family>unpitched-wooden-percussion</family>
