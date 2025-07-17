@@ -56,9 +56,11 @@ EditPitch::EditPitch(QWidget* parent, int midiCode)
     tableWidget->setCurrentCell(tableWidget->rowCount() - 1 - (midiCode / 12), midiCode % 12);
 }
 
-//---------------------------------------------------------
-//   hideEvent
-//---------------------------------------------------------
+void EditPitch::showEvent(QShowEvent* event)
+{
+    WidgetStateStore::restoreGeometry(this);
+    QWidget::showEvent(event);
+}
 
 void EditPitch::hideEvent(QHideEvent* ev)
 {
@@ -85,8 +87,6 @@ void EditPitch::setup()
 {
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-    WidgetStateStore::restoreGeometry(this);
 
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();

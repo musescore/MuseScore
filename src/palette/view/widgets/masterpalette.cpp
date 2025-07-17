@@ -157,8 +157,6 @@ MasterPalette::MasterPalette(QWidget* parent)
     connect(treeWidget, &QTreeWidget::currentItemChanged, this, &MasterPalette::currentChanged);
     connect(treeWidget, &QTreeWidget::itemClicked, this, &MasterPalette::clicked);
     retranslate(true);
-
-    WidgetStateStore::restoreGeometry(this);
 }
 
 //---------------------------------------------------------
@@ -218,6 +216,12 @@ void MasterPalette::clicked(QTreeWidgetItem* item, int)
 //---------------------------------------------------------
 //   closeEvent
 //---------------------------------------------------------
+
+void MasterPalette::showEvent(QShowEvent* event)
+{
+    WidgetStateStore::restoreGeometry(this);
+    TopLevelDialog::showEvent(event);
+}
 
 void MasterPalette::closeEvent(QCloseEvent* event)
 {

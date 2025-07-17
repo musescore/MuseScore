@@ -1283,8 +1283,6 @@ EditStyle::EditStyle(QWidget* parent)
     });
 
     adjustPagesStackSize(0);
-
-    WidgetStateStore::restoreGeometry(this);
 }
 
 //---------------------------------------------------------
@@ -1297,6 +1295,8 @@ void EditStyle::showEvent(QShowEvent* ev)
     pageList->setFocus();
     globalContext()->currentNotation()->undoStack()->prepareChanges(muse::TranslatableString("undoableAction", "Edit style"));
     buttonApplyToAllParts->setEnabled(globalContext()->currentNotation()->style()->canApplyToAllParts());
+
+    WidgetStateStore::restoreGeometry(this);
     QWidget::showEvent(ev);
 }
 

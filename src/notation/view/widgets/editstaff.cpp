@@ -100,8 +100,6 @@ EditStaff::EditStaff(QWidget* parent)
     WidgetUtils::setWidgetIcon(minPitchPSelect, IconCode::Code::EDIT);
     WidgetUtils::setWidgetIcon(maxPitchPSelect, IconCode::Code::EDIT);
 
-    WidgetStateStore::restoreGeometry(this);
-
     //! NOTE: It is necessary for the correct start of navigation in the dialog
     setFocus();
 }
@@ -175,6 +173,12 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     updateStaffType(*stt);
     updateInstrument();
     updateNextPreviousButtons();
+}
+
+void EditStaff::showEvent(QShowEvent* event)
+{
+    WidgetStateStore::restoreGeometry(this);
+    QDialog::showEvent(event);
 }
 
 void EditStaff::hideEvent(QHideEvent* ev)

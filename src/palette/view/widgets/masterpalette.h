@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MASTERPALETTE_H__
-#define __MASTERPALETTE_H__
+#pragma once
 
 #include "ui_masterpalette.h"
 
@@ -56,6 +55,7 @@ private slots:
     void clicked(QTreeWidgetItem*, int);
 
     void changeEvent(QEvent* event) override;
+    void showEvent(QShowEvent*) override;
     void closeEvent(QCloseEvent* event) override;
 
 private:
@@ -71,6 +71,4 @@ private:
     int m_idxAllSymbols = -1;
     QHash<int, SymbolDialog*> m_symbolWidgets;
 };
-} // namespace Ms
-
-#endif
+}
