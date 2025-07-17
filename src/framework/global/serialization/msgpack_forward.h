@@ -19,4 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "msgpack.h"
+#pragma once
+
+namespace kors::msgpack {
+class Packer;
+class UnPacker;
+class Cursor;
+}
+
+namespace muse::msgpack {
+using Packer = kors::msgpack::Packer;
+using UnPacker = kors::msgpack::UnPacker;
+using Cursor = kors::msgpack::Cursor;
+}
