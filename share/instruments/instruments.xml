@@ -7041,6 +7041,64 @@
                   <genre>marching</genre>
                   <genre>classroom</genre>
             </Instrument>
+            <Instrument id="ko-tsuzumi">
+                  <family>drums</family>
+                  <trackName>Ko-Tsuzumi</trackName>
+                  <longName>Ko-Tsuzumi</longName>
+                  <shortName>K-Tszmi.</shortName>
+                  <description>Japanese hourglass-shaped drum. Smaller and lower-pitched than the o-tsuzumi. One head is struck while the other is squeezed/released to change pitch.</description>
+                  <musicXMLid>drum.tsuzumi</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="61"> <!--Low Bongo-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Ko-Tsuzumi</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="48"/> <!--Orchestra Kit-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="o-tsuzumi">
+                  <family>drums</family>
+                  <trackName>O-Tsuzumi</trackName>
+                  <longName>O-Tsuzumi</longName>
+                  <shortName>O-Tszmi.</shortName>
+                  <description>Japanese hourglass-shaped drum. Larger and higher-pitched than the ko-tsuzumi. One head is struck while the other is squeezed/released to change pitch.</description>
+                  <musicXMLid>drum.tsuzumi</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="60"> <!--High Bongo-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>O-Tsuzumi</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="48"/> <!--Orchestra Kit-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
             <Instrument id="chinese-tom-toms">
                   <family>drums</family>
                   <trackName>Chinese Tom-Toms</trackName>
@@ -7101,6 +7159,35 @@
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
+            </Instrument>
+            <Instrument id="okedo-daiko">
+                  <family>drums</family>
+                  <trackName>Okedo-Daiko</trackName>
+                  <longName>Okedo-Daiko</longName>
+                  <shortName>O-Dko.</shortName>
+                  <description>Japanese bucket-shaped, lace-headed drum.</description>
+                  <musicXMLid>drum.okedo-daiko</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="36"> <!--Electric Bass Drum-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Okedo-Daiko</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="48"/> <!--Orchestra Kit-->
+                  </Channel>
+                  <genre>world</genre>
             </Instrument>
             <Instrument id="snare-drum">
                   <family>drums</family>
@@ -7285,13 +7372,42 @@
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
-            <Instrument id="xiaogu">
+            <Instrument id="shime-daiko">
                   <family>drums</family>
-                  <trackName>Xiaogu</trackName>
-                  <longName>Xiaogu</longName>
-                  <shortName>Xiaogu</shortName>
-                  <description>Medium Chinese drum.</description>
-                  <musicXMLid>drum.conga</musicXMLid>
+                  <trackName>Shime-Daiko</trackName>
+                  <longName>Shime-Daiko</longName>
+                  <shortName>S-Dko.</shortName>
+                  <description>High-pitch, shallow body taiko drum.</description>
+                  <musicXMLid>drum.shime-daiko</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="63"> <!--Open High Conga-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Shime-Daiko</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="48"/> <!--Orchestra Kit-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="kakko">
+                  <family>drums</family>
+                  <trackName>Kakko</trackName>
+                  <longName>Kakko</longName>
+                  <shortName>Kakko</shortName>
+                  <description>Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played infront of a kneeling performer.</description>
+                  <musicXMLid>drum.kakko</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
                   <barlineSpan>1</barlineSpan>
@@ -7299,7 +7415,39 @@
                   <singleNoteDynamics>0</singleNoteDynamics>
                   <Drum pitch="64"> <!--Low Conga-->
                         <head>normal</head>
-                        <line>1</line>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Kakko</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="48"/> <!--Orchestra Kit-->
+                  </Channel>
+                  <genre>popular</genre>
+                  <genre>jazz</genre>
+                  <genre>orchestra</genre>
+                  <genre>concertband</genre>
+                  <genre>marching</genre>
+            </Instrument>
+            <Instrument id="xiaogu">
+                  <family>drums</family>
+                  <trackName>Xiaogu</trackName>
+                  <longName>Xiaogu</longName>
+                  <shortName>Xiaogu</shortName>
+                  <description>Medium Chinese drum.</description>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="64"> <!--Low Conga-->
+                        <head>normal</head>
+                        <line>0</line>
                         <voice>0</voice>
                         <name>Xiaogu</name>
                         <stem>1</stem>
@@ -8295,7 +8443,7 @@
                   <trackName>Taiko</trackName>
                   <longName>Taiko</longName>
                   <shortName>Taiko</shortName>
-                  <description>Large Japanese drum.</description>
+                  <description>Generic Japanese drum.</description>
                   <musicXMLid>drum.taiko</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -8317,6 +8465,64 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Taiko</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="tsuri-daiko">
+                  <family>drums</family>
+                  <trackName>Tsuri-Daiko</trackName>
+                  <longName>Tsuri-Daiko</longName>
+                  <shortName>T-Daiko</shortName>
+                  <description>Robust, barrel shaped Japanese drum.</description>
+                  <musicXMLid>drum.taiko</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="87"> <!--Open Surdo-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Tsuri-Daiko</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="0"/> <!--Standard Kit-->
+                  </Channel>
+                  <genre>world</genre>
+            </Instrument>
+            <Instrument id="miya-daiko">
+                  <family>drums</family>
+                  <trackName>Miya Daiko</trackName>
+                  <longName>Miya Daiko</longName>
+                  <shortName>M-Daiko</shortName>
+                  <description>Japanese drum hung on circular frame.  Also known as nagadou, they are the most common taiko.</description>
+                  <musicXMLid>drum.nagado-daiko</musicXMLid>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="87"> <!--Open Surdo-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Miya-Daiko</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
@@ -8374,6 +8580,62 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Anvil</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="48"/> <!--Orchestra Kit-->
+                  </Channel>
+                  <genre>orchestra</genre>
+            </Instrument>
+            <Instrument id="shoko">
+                  <family>unpitched-metal-percussion</family>
+                  <trackName>Shōko</trackName>
+                  <longName>Shōko</longName>
+                  <shortName>Shōko</shortName>
+                  <description>Small Japanese bronz gong.</description>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="68"> <!--Low Agogô-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Shōko</name>
+                        <stem>1</stem>
+                        <shortcut>A</shortcut>
+                        <panelRow>0</panelRow>
+                        <panelColumn>0</panelColumn>
+                  </Drum>
+                  <Channel>
+                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
+                        <program value="48"/> <!--Orchestra Kit-->
+                  </Channel>
+                  <genre>orchestra</genre>
+            </Instrument>
+            <Instrument id="kane">
+                  <family>unpitched-metal-percussion</family>
+                  <trackName>Kane</trackName>
+                  <longName>Kane</longName>
+                  <shortName>Kane</shortName>
+                  <description>Small Japanese saucer-shaped bell</description>
+                  <clef>PERC</clef>
+                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
+                  <barlineSpan>1</barlineSpan>
+                  <drumset>1</drumset>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Drum pitch="67"> <!--High Agogô-->
+                        <head>normal</head>
+                        <line>0</line>
+                        <voice>0</voice>
+                        <name>Kane</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
@@ -8530,36 +8792,6 @@
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
-            <Instrument id="chinese-cymbal">
-                  <family>unpitched-metal-percussion</family>
-                  <trackName>Chinese Cymbal</trackName>
-                  <longName>Chinese Cymbal</longName>
-                  <shortName>Ch. Cym.</shortName>
-                  <description>Chinese cymbal.</description>
-                  <musicXMLid>metal.cymbal.chinese</musicXMLid>
-                  <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
-                  <barlineSpan>1</barlineSpan>
-                  <drumset>1</drumset>
-                  <singleNoteDynamics>0</singleNoteDynamics>
-                  <Drum pitch="52"> <!--Chinese Cymbal-->
-                        <head>normal</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Chinese Cymbal</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
-                        <panelRow>0</panelRow>
-                        <panelColumn>0</panelColumn>
-                  </Drum>
-                  <Channel>
-                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
-                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
-                        <program value="0"/> <!--Standard Kit-->
-                  </Channel>
-                  <genre>orchestra</genre>
-                  <genre>concertband</genre>
-            </Instrument>
             <Instrument id="opera-gong">
                   <family>unpitched-metal-percussion</family>
                   <trackName>Opera Gong</trackName>
@@ -8667,36 +8899,6 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Xiaoluo</name>
-                        <stem>1</stem>
-                        <shortcut>A</shortcut>
-                        <panelRow>0</panelRow>
-                        <panelColumn>0</panelColumn>
-                  </Drum>
-                  <Channel>
-                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
-                        <controller ctrl="0" value="1"/> <!--Bank MSB-->
-                        <program value="0"/> <!--Standard Kit-->
-                  </Channel>
-                  <genre>orchestra</genre>
-                  <genre>concertband</genre>
-            </Instrument>
-            <Instrument id="bo">
-                  <family>unpitched-metal-percussion</family>
-                  <trackName>Bo</trackName>
-                  <longName>Bo</longName>
-                  <shortName>Bo</shortName>
-                  <description>Chinese cymbal.</description>
-                  <musicXMLid>metal.gong.luo</musicXMLid>
-                  <clef>PERC</clef>
-                  <stafftype staffTypePreset="perc1Line">percussion</stafftype>
-                  <barlineSpan>1</barlineSpan>
-                  <drumset>1</drumset>
-                  <singleNoteDynamics>0</singleNoteDynamics>
-                  <Drum pitch="52"> <!--Chinese Cymbal-->
-                        <head>normal</head>
-                        <line>0</line>
-                        <voice>0</voice>
-                        <name>Bo</name>
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                         <panelRow>0</panelRow>
