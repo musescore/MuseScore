@@ -41,11 +41,11 @@ public:
     // 2. Setup tracks for Sequence
     virtual RetVal<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const = 0;
     virtual RetVal<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
-    virtual RetVal2<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
-                                                   io::IODevice* playbackData, const AudioParams& params) = 0;
-    virtual RetVal2<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+    virtual RetVal2<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const TrackName& trackName, io::IODevice* playbackData,
+                                                   const AudioParams& params) = 0;
+    virtual RetVal2<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const TrackName& trackName,
                                                    const mpe::PlaybackData& playbackData, const AudioParams& params) = 0;
-    virtual RetVal2<TrackId, AudioOutputParams> addAuxTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+    virtual RetVal2<TrackId, AudioOutputParams> addAuxTrack(const TrackSequenceId sequenceId, const TrackName& trackName,
                                                             const AudioOutputParams& outputParams) = 0;
 
     virtual void removeTrack(const TrackSequenceId sequenceId, const TrackId trackId) = 0;

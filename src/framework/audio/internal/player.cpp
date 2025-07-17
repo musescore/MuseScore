@@ -23,15 +23,16 @@
 
 #include "global/async/async.h"
 
-#include "internal/audiosanitizer.h"
-#include "internal/audiothread.h"
-#include "audioerrors.h"
+#include "rpc/rpcpacker.h"
+#include "audiosanitizer.h"
+#include "audiothread.h"
 
 #include "log.h"
 
 using namespace muse;
 using namespace muse::async;
 using namespace muse::audio;
+using namespace muse::audio::rpc;
 
 Player::Player(const TrackSequenceId sequenceId)
     : m_sequenceId(sequenceId)
@@ -78,87 +79,73 @@ TrackSequenceId Player::sequenceId() const
 void Player::play(const secs_t delay)
 {
     ONLY_AUDIO_MAIN_THREAD;
-
-    Async::call(this, [this, delay]() {
-        ONLY_AUDIO_WORKER_THREAD;
-        workerPlayback()->play(m_sequenceId, delay);
-    }, AudioThread::ID);
+    Msg msg = rpc::make_request(Method::Play, RpcPacker::pack(m_sequenceId, delay));
+    channel()->send(msg);
 }
 
 void Player::seek(const secs_t newPosition)
 {
     ONLY_AUDIO_MAIN_THREAD;
-
-    Async::call(this, [this, newPosition]() {
-        ONLY_AUDIO_WORKER_THREAD;
-        workerPlayback()->seek(m_sequenceId, newPosition);
-    }, AudioThread::ID);
+    Msg msg = rpc::make_request(Method::Seek, RpcPacker::pack(m_sequenceId, newPosition));
+    channel()->send(msg);
 }
 
 void Player::stop()
 {
     ONLY_AUDIO_MAIN_THREAD;
-
-    Async::call(this, [this]() {
-        ONLY_AUDIO_WORKER_THREAD;
-        workerPlayback()->stop(m_sequenceId);
-    }, AudioThread::ID);
+    Msg msg = rpc::make_request(Method::Stop, RpcPacker::pack(m_sequenceId));
+    channel()->send(msg);
 }
 
 void Player::pause()
 {
     ONLY_AUDIO_MAIN_THREAD;
-
-    Async::call(this, [this]() {
-        ONLY_AUDIO_WORKER_THREAD;
-        workerPlayback()->pause(m_sequenceId);
-    }, AudioThread::ID);
+    Msg msg = rpc::make_request(Method::Pause, RpcPacker::pack(m_sequenceId));
+    channel()->send(msg);
 }
 
 void Player::resume(const secs_t delay)
 {
     ONLY_AUDIO_MAIN_THREAD;
-
-    Async::call(this, [this, delay]() {
-        ONLY_AUDIO_WORKER_THREAD;
-        workerPlayback()->resume(m_sequenceId, delay);
-    }, AudioThread::ID);
+    Msg msg = rpc::make_request(Method::Resume, RpcPacker::pack(m_sequenceId, delay));
+    channel()->send(msg);
 }
 
 void Player::setDuration(const msecs_t durationMsec)
 {
     ONLY_AUDIO_MAIN_THREAD;
-
-    Async::call(this, [this, durationMsec]() {
-        ONLY_AUDIO_WORKER_THREAD;
-        workerPlayback()->setDuration(m_sequenceId, durationMsec);
-    }, AudioThread::ID);
+    Msg msg = rpc::make_request(Method::SetDuration, RpcPacker::pack(m_sequenceId, durationMsec));
+    channel()->send(msg);
 }
 
 async::Promise<bool> Player::setLoop(const msecs_t fromMsec, const msecs_t toMsec)
 {
     ONLY_AUDIO_MAIN_THREAD;
+    return make_promise<bool>([this, fromMsec, toMsec](auto resolve, auto reject) {
+        ONLY_AUDIO_MAIN_THREAD;
+        Msg msg = rpc::make_request(Method::SetLoop, RpcPacker::pack(m_sequenceId, fromMsec, toMsec));
+        channel()->send(msg, [resolve, reject](const Msg& res) {
+            ONLY_AUDIO_MAIN_THREAD;
+            Ret ret;
+            IF_ASSERT_FAILED(RpcPacker::unpack(res.data, ret)) {
+                return;
+            }
 
-    return Promise<bool>([this, fromMsec, toMsec](auto resolve, auto reject) {
-        ONLY_AUDIO_WORKER_THREAD;
-
-        Ret ret = workerPlayback()->setLoop(m_sequenceId, fromMsec, toMsec);
-        if (ret) {
-            return resolve(true);
-        } else {
-            return reject(ret.code(), ret.text());
-        }
-    }, AudioThread::ID);
+            if (ret) {
+                (void)resolve(true);
+            } else {
+                (void)reject(ret.code(), ret.text());
+            }
+        });
+        return Promise<bool>::dummy_result();
+    }, PromiseType::AsyncByBody);
 }
 
 void Player::resetLoop()
 {
     ONLY_AUDIO_MAIN_THREAD;
-
-    Async::call(this, [this]() {
-        ONLY_AUDIO_WORKER_THREAD;
-        workerPlayback()->resetLoop(m_sequenceId);
-    }, AudioThread::ID);
+    Msg msg = rpc::make_request(Method::ResetLoop, RpcPacker::pack(m_sequenceId));
+    channel()->send(msg);
 }
 
 secs_t Player::playbackPosition() const

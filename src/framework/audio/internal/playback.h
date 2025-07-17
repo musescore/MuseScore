@@ -56,12 +56,12 @@ public:
     async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const override;
     async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const override;
 
-    async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
-                                                  io::IODevice* playbackData, AudioParams&& params) override;
-    async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+    async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const TrackName& trackName, io::IODevice* playbackData,
+                                                  AudioParams&& params) override;
+    async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const TrackName& trackName,
                                                   const mpe::PlaybackData& playbackData, AudioParams&& params) override;
 
-    async::Promise<TrackId, AudioOutputParams> addAuxTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+    async::Promise<TrackId, AudioOutputParams> addAuxTrack(const TrackSequenceId sequenceId, const TrackName& trackName,
                                                            const AudioOutputParams& outputParams) override;
 
     void removeTrack(const TrackSequenceId sequenceId, const TrackId trackId) override;
