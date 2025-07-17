@@ -40,8 +40,8 @@ public:
     static double computeParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2);
     static double computeInternalParenthesisPadding(const EngravingItem* item1, const EngravingItem* item2);
 
-private:
     static void createPathAndShape(Parenthesis* item, Parenthesis::LayoutData* ldata);
+private:
 
     static void setLayoutValues(Parenthesis* item, Parenthesis::LayoutData* ldata, const LayoutContext& ctx);
     static void setClefValues(Parenthesis* item, Parenthesis::LayoutData* ldata);
