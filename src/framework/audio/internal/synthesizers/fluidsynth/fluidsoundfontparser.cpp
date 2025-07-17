@@ -23,6 +23,7 @@
 #include "fluidsoundfontparser.h"
 
 #include <fluidsynth.h>
+#include <fluid_instpatch.h>
 #include <sfloader/fluid_sfont.h>
 #include <sfloader/fluid_defsfont.h>
 
@@ -36,17 +37,17 @@ RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& 
     fluid_settings_t* settings = nullptr;
     fluid_sfloader_t* loader = nullptr;
     fluid_sfont_t* sfont = nullptr;
+    fluid_synth_t* synth = nullptr;
 
     DEFER {
         if (sfont) {
-            fluid_defsfont_sfont_delete(sfont);
+            sfont->free(sfont);
         }
         if (loader) {
-            delete_fluid_sfloader(loader);
+            loader->free(loader);
         }
-        if (settings) {
-            delete_fluid_settings(settings);
-        }
+        delete_fluid_synth(synth);
+        delete_fluid_settings(settings);
     };
 
     settings = new_fluid_settings();
@@ -56,7 +57,33 @@ RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& 
 
     fluid_settings_setint(settings, "synth.dynamic-sample-loading", 1);
 
-    loader = new_fluid_defsfloader(settings);
+#if defined(LIBINSTPATCH_SUPPORT)
+    // Try DLS first
+
+    // call new_fluid_synth() to invoke not exported
+    // fluid_instpatch_init() / fluid_instpatch_supports_multi_init()
+    synth = new_fluid_synth(settings);
+    if (!synth) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    loader = new_fluid_instpatch_loader(settings);
+    if (loader) {
+        sfont = fluid_sfloader_load(loader, path.c_str());
+        if (sfont) {
+            goto skip_sfloader;
+        } else {
+            loader->free(loader);
+            loader = nullptr;
+        }
+    }
+#endif
+
+    if (!sfont) {
+        // Then try SoundFont
+        loader = new_fluid_defsfloader(settings);
+    }
+
     if (!loader) {
         return make_ret(Ret::Code::UnknownError);
     }
@@ -66,16 +93,17 @@ RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& 
         return make_ret(Ret::Code::UnknownError);
     }
 
+skip_sfloader:
     SoundFontMeta meta;
     meta.path = path;
 
-    fluid_defsfont_sfont_iteration_start(sfont);
+    sfont->iteration_start(sfont);
 
     fluid_preset_t* fluid_preset;
-    while ((fluid_preset = fluid_defsfont_sfont_iteration_next(sfont))) {
-        int bank = fluid_defpreset_preset_get_banknum(fluid_preset);
-        int program = fluid_defpreset_preset_get_num(fluid_preset);
-        const char* name = fluid_defpreset_preset_get_name(fluid_preset);
+    while ((fluid_preset = sfont->iteration_next(sfont))) {
+        int bank = fluid_preset->get_banknum(fluid_preset);
+        int program = fluid_preset->get_num(fluid_preset);
+        const char* name = fluid_preset->get_name(fluid_preset);
 
         SoundFontPreset preset;
         preset.program = midi::Program(bank, program);

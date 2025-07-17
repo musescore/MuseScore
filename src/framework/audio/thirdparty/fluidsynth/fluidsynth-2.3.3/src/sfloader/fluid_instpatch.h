@@ -7,7 +7,6 @@
 
 void fluid_instpatch_init(void);
 void fluid_instpatch_deinit(void);
-fluid_sfloader_t *new_fluid_instpatch_loader(fluid_settings_t *settings);
 
 int fluid_instpatch_supports_multi_init(void);
 

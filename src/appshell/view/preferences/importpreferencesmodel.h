@@ -53,6 +53,8 @@ class ImportPreferencesModel : public QObject, public muse::Injectable, public m
 
     Q_PROPERTY(int currentShortestNote READ currentShortestNote WRITE setCurrentShortestNote NOTIFY currentShortestNoteChanged)
 
+    Q_PROPERTY(bool currentChannel9isDrum READ currentChannel9isDrum WRITE setCurrentChannel9isDrum NOTIFY currentChannel9isDrumChanged)
+
     Q_PROPERTY(
         bool needAskAboutApplyingNewStyle READ needAskAboutApplyingNewStyle WRITE setNeedAskAboutApplyingNewStyle NOTIFY needAskAboutApplyingNewStyleChanged)
 
@@ -83,6 +85,7 @@ public:
     bool inferTextType() const;
 
     int currentShortestNote() const;
+    bool currentChannel9isDrum() const;
 
     bool needAskAboutApplyingNewStyle() const;
 
@@ -98,6 +101,7 @@ public slots:
     void setInferTextType(bool value);
 
     void setCurrentShortestNote(int note);
+    void setCurrentChannel9isDrum(bool isDrum);
 
     void setNeedAskAboutApplyingNewStyle(bool value);
 
@@ -111,6 +115,7 @@ signals:
     void needUseDefaultFontChanged(bool needUseDefaultFont);
     void inferTextTypeChanged(bool inferTextType);
     void currentShortestNoteChanged(int currentShortestNote);
+    void currentChannel9isDrumChanged(bool currentChannel9isDrum);
     void needAskAboutApplyingNewStyleChanged(bool needAskAboutApplyingNewStyle);
     void meiImportLayoutChanged(bool importLayout);
 };

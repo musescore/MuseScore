@@ -49,6 +49,12 @@
 /* SCHED_FIFO priority for high priority timer threads */
 #define FLUID_SYS_TIMER_HIGH_PRIO_LEVEL         10
 
+#ifndef NO_THREADS
+#ifndef _WIN32
+#include <unistd.h>
+#endif
+#endif // NO_THREADS
+
 
 typedef struct
 {
