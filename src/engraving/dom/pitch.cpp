@@ -20,10 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <algorithm>
-
-#include "containers.h"
-
 #include "pitch.h"
 
 namespace mu::engraving {
@@ -34,16 +30,10 @@ namespace mu::engraving {
 
 int PitchList::pitchOffset(int tick) const
 {
-    if (empty()) {
+    const auto it = upper_bound(tick);
+    if (it == cbegin()) {
         return 0;
     }
-
-    std::vector<int> ticks = muse::keys(*this);
-    auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick);
-    if (it == ticks.cbegin()) {
-        return 0;
-    }
-    --it;
-    return at(*it);
+    return it->second;
 }
 }
