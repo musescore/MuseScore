@@ -256,8 +256,17 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
     cloud::Visibility defaultVisibility = isPublishShare ? cloud::Visibility::Public : cloud::Visibility::Private;
     const CloudProjectInfo existingProjectInfo = project->cloudInfo();
 
-    if (!existingProjectInfo.sourceUrl.isEmpty()) {
-        RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(existingProjectInfo.sourceUrl);
+    QUrl existingScoreUrl = existingProjectInfo.sourceUrl;
+
+    if (!existingScoreUrl.isEmpty()) {
+        RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(existingScoreUrl);
+
+        if (scoreInfo.val.isValid()) {
+            ValCh<cloud::AccountInfo> accountInfo = museScoreComService()->authorization()->accountInfo();
+            if (accountInfo.val.id.toInt() != scoreInfo.val.owner.id) {
+                existingScoreUrl = QUrl();
+            }
+        }
 
         switch (scoreInfo.ret.code()) {
         case int(Ret::Code::Ok):
@@ -286,7 +295,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
     query.addParam("isPublishShare", Val(isPublishShare));
     query.addParam("name", Val(defaultName));
     query.addParam("visibility", Val(defaultVisibility));
-    query.addParam("existingScoreOrAudioUrl", Val(existingProjectInfo.sourceUrl.toString()));
+    query.addParam("existingScoreOrAudioUrl", Val(existingScoreUrl.toString()));
     query.addParam("cloudCode", Val(cloud::MUSESCORE_COM_CLOUD_CODE));
 
     RetVal<Val> rv = interactive()->openSync(query);
