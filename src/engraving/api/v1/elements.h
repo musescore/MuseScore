@@ -1768,7 +1768,7 @@ public:
     /// Measure number object at a given staff.
     /// \param staffIdx staff to retrieve the object from
     /// \since MuseScore 4.6
-    Q_INVOKABLE apiv1::EngravingItem* noText(int staffIdx);
+    Q_INVOKABLE apiv1::EngravingItem* measureNumber(int staffIdx);
     /// The mmRestRange object at a given staff.
     /// \param staffIdx staff to retrieve the object from
     /// \since MuseScore 4.6

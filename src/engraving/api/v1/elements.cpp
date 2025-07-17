@@ -393,9 +393,9 @@ EngravingItem* Measure::vspacerDown(int staffIdx)
     return wrap(measure()->vspacerDown(static_cast<staff_idx_t>(staffIdx)));
 }
 
-EngravingItem* Measure::noText(int staffIdx)
+EngravingItem* Measure::measureNumber(int staffIdx)
 {
-    return wrap(measure()->noText(static_cast<staff_idx_t>(staffIdx)));
+    return wrap(measure()->measureNumber(static_cast<staff_idx_t>(staffIdx)));
 }
 
 EngravingItem* Measure::mmRangeText(int staffIdx)
