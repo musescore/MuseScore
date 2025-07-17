@@ -3817,6 +3817,24 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Bongos", "bongos longName"),
 //: shortName for Bongos; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bon.", "bongos shortName"),
 
+//: description for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Japanese hourglass-shaped drum. Smaller and lower-pitched than the o-tsuzumi. One head is struck while the other is squeezed/released to change pitch.", "ko-tsuzumi description"),
+//: trackName for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Ko-Tsuzumi", "ko-tsuzumi trackName"),
+//: longName for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Ko-Tsuzumi", "ko-tsuzumi longName"),
+//: shortName for Ko-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "K-Tszmi.", "ko-tsuzumi shortName"),
+
+//: description for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Japanese hourglass-shaped drum. Larger and higher-pitched than the ko-tsuzumi. One head is struck while the other is squeezed/released to change pitch.", "o-tsuzumi description"),
+//: trackName for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "O-Tsuzumi", "o-tsuzumi trackName"),
+//: longName for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "O-Tsuzumi", "o-tsuzumi longName"),
+//: shortName for O-Tsuzumi; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "O-Tszmi.", "o-tsuzumi shortName"),
+
 //: description for Chinese Tom-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese tom-toms.", "chinese-tom-toms description"),
 //: trackName for Chinese Tom-Toms; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -3834,6 +3852,15 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Bass Drum", "bass-drum trackName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bass Drum", "bass-drum longName"),
 //: shortName for Bass Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "BD", "bass-drum shortName"),
+
+//: description for Okedo-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Japanese bucket-shaped, lace-headed drum.", "okedo-daiko description"),
+//: trackName for Okedo-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Okedo-Daiko", "okedo-daiko trackName"),
+//: longName for Okedo-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Okedo-Daiko", "okedo-daiko longName"),
+//: shortName for Okedo-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "O-Dko.", "okedo-daiko shortName"),
 
 //: description for Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Snare drum, also known as side drum.", "snare-drum description"),
@@ -3861,6 +3888,24 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Congas", "congas trackName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Congas", "congas longName"),
 //: shortName for Congas; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Con.", "congas shortName"),
+
+//: description for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "High-pitch, shallow body taiko drum.", "shime-daiko description"),
+//: trackName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Shime-Daiko", "shime-daiko trackName"),
+//: longName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Shime-Daiko", "shime-daiko longName"),
+//: shortName for Shime-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "S-Dko.", "shime-daiko shortName"),
+
+//: description for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Small Japanese cylindrical drum with two oversized hoop heads. It is traditionally played infront of a kneeling performer.", "kakko description"),
+//: trackName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Kakko", "kakko trackName"),
+//: longName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Kakko", "kakko longName"),
+//: shortName for Kakko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Kakko", "kakko shortName"),
 
 //: description for Xiaogu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Medium Chinese drum.", "xiaogu description"),
@@ -3998,13 +4043,31 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Timbales", "timbales longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Timb.", "timbales shortName"),
 
 //: description for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Large Japanese drum.", "taiko description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Generic Japanese drum.", "taiko description"),
 //: trackName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Taiko", "taiko trackName"),
 //: longName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Taiko", "taiko longName"),
 //: shortName for Taiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Taiko", "taiko shortName"),
+
+//: description for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Robust, barrel shaped Japanese drum.", "tsuri-daiko description"),
+//: trackName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tsuri-Daiko", "tsuri-daiko trackName"),
+//: longName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tsuri-Daiko", "tsuri-daiko longName"),
+//: shortName for Tsuri-Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "T-Daiko", "tsuri-daiko shortName"),
+
+//: description for Miya Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Japanese drum hung on circular frame.  Also known as nagadou, they are the most common taiko.", "miya-daiko description"),
+//: trackName for Miya Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Miya Daiko", "miya-daiko trackName"),
+//: longName for Miya Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Miya Daiko", "miya-daiko longName"),
+//: shortName for Miya Daiko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "M-Daiko", "miya-daiko shortName"),
 
 //: description for Dagu; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Large Chinese drum.", "dagu description"),
@@ -4023,6 +4086,24 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Anvil", "anvil trackName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Anvil", "anvil longName"),
 //: shortName for Anvil; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Anv.", "anvil shortName"),
+
+//: description for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Small Japanese bronz gong.", "shoko description"),
+//: trackName for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Shōko", "shoko trackName"),
+//: longName for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Shōko", "shoko longName"),
+//: shortName for Shōko; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Shōko", "shoko shortName"),
+
+//: description for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Small Japanese saucer-shaped bell", "kane description"),
+//: trackName for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Kane", "kane trackName"),
+//: longName for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Kane", "kane longName"),
+//: shortName for Kane; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Kane", "kane shortName"),
 
 //: description for Bell Plate; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bell plate.", "bell-plate description"),
@@ -4069,15 +4150,6 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "China Cymbal", "china-cymbal longNa
 //: shortName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Ch. Cym.", "china-cymbal shortName"),
 
-//: description for Chinese Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese cymbal.", "chinese-cymbal description"),
-//: trackName for Chinese Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese Cymbal", "chinese-cymbal trackName"),
-//: longName for Chinese Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese Cymbal", "chinese-cymbal longName"),
-//: shortName for Chinese Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Ch. Cym.", "chinese-cymbal shortName"),
-
 //: description for Opera Gong; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Opera gong.", "opera-gong description"),
 //: trackName for Opera Gong; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -4113,15 +4185,6 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Xiaoluo", "xiaoluo trackName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Xiaoluo", "xiaoluo longName"),
 //: shortName for Xiaoluo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Xluo.", "xiaoluo shortName"),
-
-//: description for Bo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese cymbal.", "bo description"),
-//: trackName for Bo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Bo", "bo trackName"),
-//: longName for Bo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Bo", "bo longName"),
-//: shortName for Bo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Bo", "bo shortName"),
 
 //: description for Dabo; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese cymbal.", "dabo description"),
