@@ -149,7 +149,7 @@ public:
     virtual bool textEditingAllowed(const EngravingItem* element) const = 0;
     virtual void startEditText(EngravingItem* element, const muse::PointF& elementPos = muse::PointF()) = 0;
     virtual void editText(QInputMethodEvent* event) = 0;
-    virtual void endEditText(bool startNonTextualEdit = true) = 0;
+    virtual void endEditText() = 0;
     virtual void changeTextCursorPosition(const muse::PointF& newCursorPos) = 0;
     virtual void selectText(mu::engraving::SelectTextType type) = 0;
     virtual const TextBase* editedText() const = 0;
@@ -173,6 +173,10 @@ public:
     virtual bool isEditAllowed(QKeyEvent* event) = 0;
     virtual void editElement(QKeyEvent* event) = 0;
     virtual void endEditElement() = 0;
+
+    // Anchors edit
+    virtual void updateTimeTickAnchors(QKeyEvent* event) = 0;
+    virtual void moveElementAnchors(QKeyEvent* event) = 0;
 
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;

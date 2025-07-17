@@ -637,7 +637,7 @@ NoteCaseType Harmony::bassRenderCase() const
 //   startEdit
 //---------------------------------------------------------
 
-void Harmony::startEditTextual(EditData& ed)
+void Harmony::startEdit(EditData& ed)
 {
     if (!ldata()->textList().empty()) {
         // convert chord symbol to plain text
@@ -653,10 +653,10 @@ void Harmony::startEditTextual(EditData& ed)
     renderer()->layoutText1(this, true);
     triggerLayout();
 
-    TextBase::startEditTextual(ed);
+    TextBase::startEdit(ed);
 }
 
-bool Harmony::isTextualEditAllowed(EditData& ed) const
+bool Harmony::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
         return false;
@@ -675,20 +675,20 @@ bool Harmony::isTextualEditAllowed(EditData& ed) const
         return true;
     }
 
-    return TextBase::isTextualEditAllowed(ed);
+    return TextBase::isEditAllowed(ed);
 }
 
 //---------------------------------------------------------
 //   edit
 //---------------------------------------------------------
 
-bool Harmony::editTextual(EditData& ed)
+bool Harmony::edit(EditData& ed)
 {
     if (!isEditAllowed(ed)) {
         return false;
     }
 
-    bool rv = TextBase::editTextual(ed);
+    bool rv = TextBase::edit(ed);
 
     // layout as text, without position reset
     renderer()->layoutText1(this, true);
@@ -726,7 +726,7 @@ bool Harmony::editTextual(EditData& ed)
 //   endEdit
 //---------------------------------------------------------
 
-void Harmony::endEditTextual(EditData& ed)
+void Harmony::endEdit(EditData& ed)
 {
     // get plain text
     String s = plainText();
@@ -763,7 +763,7 @@ void Harmony::endEditTextual(EditData& ed)
     // disable spell check
     m_isMisspelled = false;
 
-    TextBase::endEditTextual(ed);
+    TextBase::endEdit(ed);
 
     TextEditData* ted = dynamic_cast<TextEditData*>(ed.getData(this).get());
     bool textChanged = ted != nullptr && ted->oldXmlText != harmonyName();
@@ -1583,27 +1583,6 @@ Sid Harmony::getPropertyStyle(Pid pid) const
 double Harmony::mag() const
 {
     return EngravingItem::mag();
-}
-
-void Harmony::undoMoveSegment(Segment* newSeg, Fraction tickDiff)
-{
-    IF_ASSERT_FAILED(parentItem()->isSegment()) {
-        return;
-    }
-
-    if (newSeg->isTimeTickType()) {
-        Measure* measure = newSeg->measure();
-        Segment* chordRestSegAtSameTick = measure->undoGetSegment(SegmentType::ChordRest, newSeg->tick());
-        newSeg = chordRestSegAtSameTick;
-    }
-
-    Segment* oldSegment = toSegment(parent());
-    TextBase::undoMoveSegment(newSeg, tickDiff);
-
-    oldSegment->checkEmpty();
-    if (oldSegment->empty()) {
-        score()->undoRemoveElement(oldSegment);
-    }
 }
 
 HarmonyInfo::HarmonyInfo(const HarmonyInfo& h)

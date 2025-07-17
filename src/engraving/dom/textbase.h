@@ -343,21 +343,16 @@ public:
     void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
 
     bool hasParentSegment() const { return explicitParent() && parent()->isSegment(); }
-    virtual bool needStartEditingAfterSelecting() const override { return hasParentSegment(); }
     virtual bool allowTimeAnchor() const override { return hasParentSegment(); }
     virtual void startEdit(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;
-    virtual bool supportsNonTextualEdit() const;
     virtual bool edit(EditData&) override;
     virtual void editCut(EditData&) override;
     virtual void editCopy(EditData&) override;
     virtual void endEdit(EditData&) override;
-    virtual void editDrag(EditData&) override;
+    virtual RectF drag(EditData&) override;
     virtual void endDrag(EditData&) override;
     void movePosition(EditData&, TextCursor::MoveOperation);
-
-    virtual void undoMoveSegment(Segment* newSeg, Fraction tickDiff);
-    void checkMeasureBoundariesAndMoveIfNeed();
 
     bool deleteSelectedText(EditData&);
 
@@ -508,19 +503,7 @@ protected:
     TextBase(const ElementType& type, EngravingItem* parent, ElementFlags);
     TextBase(const TextBase&);
 
-    virtual void startEditTextual(EditData&);
-    virtual void startEditNonTextual(EditData&);
-    virtual bool editTextual(EditData&);
-    virtual bool editNonTextual(EditData&);
-    virtual void endEditNonTextual(EditData&);
-    virtual void endEditTextual(EditData&);
-    virtual bool isNonTextualEditAllowed(EditData&) const;
-    virtual bool isTextualEditAllowed(EditData&) const;
     bool nudge(const EditData& ed);
-
-    virtual bool moveSegment(const EditData&);
-    void moveSnappedItems(Segment* newSeg, Fraction tickDiff) const;
-    void shiftInitOffset(EditData& ed, const PointF& offsetShift);
 
     void insertSym(EditData& ed, SymId id);
     void prepareFormat(const String& token, TextCursor& cursor);

@@ -158,7 +158,7 @@ public:
     bool textEditingAllowed(const EngravingItem* element) const override;
     void startEditText(EngravingItem* element, const muse::PointF& cursorPos = muse::PointF()) override;
     void editText(QInputMethodEvent* event) override;
-    void endEditText(bool startNonTextualEdit = true) override;
+    void endEditText() override;
     void changeTextCursorPosition(const muse::PointF& newCursorPos) override;
     void selectText(mu::engraving::SelectTextType type) override;
     const TextBase* editedText() const override;
@@ -179,6 +179,10 @@ public:
     bool isEditAllowed(QKeyEvent* event) override;
     void editElement(QKeyEvent* event) override;
     void endEditElement() override;
+
+    // Anchors edit
+    void updateTimeTickAnchors(QKeyEvent* event) override;
+    void moveElementAnchors(QKeyEvent* event) override;
 
     // Measure
     void splitSelectedMeasure() override;

@@ -971,7 +971,7 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
     TRACEFUNC;
 
     if (needEndTextEditing(elements)) {
-        endEditText(/*startNonTextualEdit*/ false);
+        endEditText();
     } else if (needEndElementEditing(elements)) {
         endEditElement();
     }
@@ -3544,6 +3544,12 @@ void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
     }
 
     mu::engraving::EngravingItem* editedElement = m_editData.element;
+    if (!editedElement) {
+        EngravingItem* selectedElement = m_selection->element();
+        if (selectedElement && selectedElement->isDynamic()) {
+            editedElement = selectedElement;
+        }
+    }
 
     if (editedElement && editedElement->isDynamic()) {
         toDynamic(editedElement)->findAdjacentHairpins();
@@ -4222,7 +4228,8 @@ bool NotationInteraction::isTextSelected() const
 
 bool NotationInteraction::isTextEditingStarted() const
 {
-    return m_editData.element && m_editData.element->isTextBase() && m_editData.editTextualProperties;
+    EngravingItem* element = m_editData.element;
+    return element && element->isTextBase() && toTextBase(element)->cursor() && toTextBase(element)->cursor()->editing();
 }
 
 bool NotationInteraction::textEditingAllowed(const EngravingItem* element) const
@@ -4244,7 +4251,6 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
         m_editData.element = element;
     }
 
-    m_editData.editTextualProperties = true;
     m_editData.startMove = bindCursorPosToText(cursorPos, m_editData.element);
     m_editData.element->startEdit(m_editData);
 
@@ -4376,7 +4382,7 @@ bool NotationInteraction::handleKeyPress(QKeyEvent* event)
     return true;
 }
 
-void NotationInteraction::endEditText(bool startNonTextualEdit)
+void NotationInteraction::endEditText()
 {
     if (!isTextEditingStarted()) {
         return;
@@ -4385,11 +4391,6 @@ void NotationInteraction::endEditText(bool startNonTextualEdit)
     TextBase* editedElement = toTextBase(m_editData.element);
     doEndEditElement();
     notifyAboutTextEditingEnded(editedElement);
-
-    // When textual edit is finished, non-textual edit can still happen, so we need to start the non-textual edit mode here
-    if (startNonTextualEdit && editedElement->supportsNonTextualEdit()) {
-        startEditElement(editedElement, false);
-    }
 
     notifyAboutTextEditingChanged();
     notifyAboutSelectionChangedIfNeed();
@@ -4509,7 +4510,6 @@ void NotationInteraction::startEditGrip(EngravingItem* element, mu::engraving::G
 
     m_editData.element = element;
     m_editData.curGrip = grip;
-    m_editData.editTextualProperties = false;
 
     updateGripAnchorLines();
     m_editData.element->startEdit(m_editData);
@@ -4578,7 +4578,6 @@ void NotationInteraction::startEditElement(EngravingItem* element, bool editText
     if (element->isTextBase() && editTextualProperties) {
         startEditText(element);
     } else if (element->isEditable()) {
-        m_editData.editTextualProperties = false;
         element->startEdit(m_editData);
         m_editData.element = element;
     }
@@ -4658,14 +4657,6 @@ void NotationInteraction::editElement(QKeyEvent* event)
     m_editData.key = event->key();
     m_editData.s = event->text();
 
-    bool isShiftRelease = event->type() == QKeyEvent::Type::KeyRelease;
-    if (isShiftRelease) {
-        m_editData.isKeyRelease = true;
-        resetAnchorLines();
-    } else {
-        m_editData.isKeyRelease = false;
-    }
-
     // Brackets may be deleted and replaced
     bool isBracket = m_editData.element->isBracket();
     const mu::engraving::System* system = nullptr;
@@ -4708,16 +4699,14 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
         apply();
 
-        if (!isShiftRelease) {
-            if (isGripEditStarted()) {
-                if (m_editData.element->isDynamic() && !m_editData.isStartEndGrip()) {
-                    updateDragAnchorLines();
-                } else {
-                    updateGripAnchorLines();
-                }
-            } else if (isElementEditStarted() && !m_editData.editTextualProperties) {
+        if (isGripEditStarted()) {
+            if (m_editData.element->isDynamic() && !m_editData.isStartEndGrip()) {
                 updateDragAnchorLines();
+            } else {
+                updateGripAnchorLines();
             }
+        } else if (isElementEditStarted() && !m_editData.element->isTextBase()) {
+            updateDragAnchorLines();
         }
     } else {
         rollback();
@@ -4748,6 +4737,37 @@ void NotationInteraction::endEditElement()
     resetAnchorLines();
 
     notifyAboutNotationChanged();
+}
+
+void NotationInteraction::updateTimeTickAnchors(QKeyEvent* event)
+{
+    EngravingItem* selectedElement = m_selection->element();
+    if (selectedElement && selectedElement->allowTimeAnchor() && event->type() == QKeyEvent::Type::KeyPress && !isTextEditingStarted()) {
+        EditTimeTickAnchors::updateAnchors(selectedElement);
+        updateDragAnchorLines();
+    } else {
+        score()->hideAnchors();
+        resetAnchorLines();
+    }
+
+    score()->update();
+    notifyAboutNotationChanged();
+}
+
+void NotationInteraction::moveElementAnchors(QKeyEvent* event)
+{
+    EngravingItem* element = selection()->element();
+    IF_ASSERT_FAILED(element) {
+        return;
+    }
+
+    startEdit(TranslatableString("undoableAction", "Move element anchors"));
+
+    MoveElementAnchors::moveElementAnchors(element, KeyboardKey(event->key()), keyboardModifier(event->modifiers()));
+
+    apply();
+
+    updateDragAnchorLines();
 }
 
 void NotationInteraction::doEndEditElement()
@@ -6425,7 +6445,7 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
         return;
     }
 
-    endEditText(/*startNonTextualEdit*/ false);
+    endEditText();
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // if we are skipping several chords with spaces
@@ -6575,7 +6595,7 @@ void NotationInteraction::navigateToNextSyllable()
         return;
     }
 
-    endEditText(/*startNonTextualEdit*/ false);
+    endEditText();
 
     // look for the lyrics we are moving from; may be the current lyrics or a previous one
     // we are extending with several dashes
@@ -6819,7 +6839,7 @@ void NotationInteraction::navigateToLyricsVerse(MoveDirection direction)
         }
     }
 
-    endEditText(/*startNonTextualEdit*/ false);
+    endEditText();
 
     lyrics = cr->lyrics(verse, placement);
     if (!lyrics) {
@@ -7413,7 +7433,7 @@ void NotationInteraction::addMelisma()
     FontStyle fStyle = lyrics->fontStyle();
     PropertyFlags fFlags = lyrics->propertyFlags(Pid::FONT_STYLE);
     Fraction endTick = segment->tick(); // a previous melisma cannot extend beyond this point
-    endEditText(/*startNonTextualEdit*/ false);
+    endEditText();
 
     // search next chord
     Segment* nextSegment = segment;
@@ -7618,7 +7638,7 @@ void NotationInteraction::addLyricsVerse()
     mu::engraving::FontStyle fStyle = oldLyrics->fontStyle();
     mu::engraving::PropertyFlags fFlags = oldLyrics->propertyFlags(mu::engraving::Pid::FONT_STYLE);
 
-    endEditText(/*startNonTextualEdit*/ false);
+    endEditText();
 
     score()->startCmd(TranslatableString("undoableAction", "Add lyrics verse"));
     int newVerse = oldLyrics->no() + 1;

@@ -26,6 +26,7 @@
 
 #include "io/file.h"
 
+#include "anchors.h"
 #include "chord.h"
 #include "factory.h"
 #include "harmony.h"
@@ -970,6 +971,15 @@ void FretDiagram::remove(EngravingItem* e)
     }
 }
 
+RectF FretDiagram::drag(EditData& ed)
+{
+    RectF result = EngravingItem::drag(ed);
+
+    MoveElementAnchors::moveElementAnchorsOnDrag(this, ed);
+
+    return result;
+}
+
 //---------------------------------------------------------
 //   acceptDrop
 //---------------------------------------------------------
@@ -1122,17 +1132,6 @@ void FretDiagram::setTrack(track_idx_t val)
     if (m_harmony) {
         m_harmony->setTrack(val);
     }
-}
-
-//---------------------------------------------------------
-//   endEditDrag
-//---------------------------------------------------------
-
-void FretDiagram::endEditDrag(EditData& editData)
-{
-    EngravingItem::endEditDrag(editData);
-
-    triggerLayout();
 }
 
 //---------------------------------------------------------

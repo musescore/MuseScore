@@ -105,7 +105,7 @@ void TextBase::editInsertText(TextCursor* cursor, const String& s)
 //   startEdit
 //---------------------------------------------------------
 
-void TextBase::startEditTextual(EditData& ed)
+void TextBase::startEdit(EditData& ed)
 {
     std::shared_ptr<TextEditData> ted = std::make_shared<TextEditData>(this);
     ted->e = this;
@@ -135,7 +135,7 @@ void TextBase::startEditTextual(EditData& ed)
 //   endEdit
 //---------------------------------------------------------
 
-void TextBase::endEditTextual(EditData& ed)
+void TextBase::endEdit(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this).get());
     IF_ASSERT_FAILED(ted && ted->cursor()) {
@@ -285,7 +285,7 @@ void TextBase::insertText(EditData& ed, const String& s)
     score()->undo(new InsertText(cursor, s), &ed);
 }
 
-bool TextBase::isTextualEditAllowed(EditData& ed) const
+bool TextBase::isEditAllowed(EditData& ed) const
 {
     // Keep this method closely in sync with TextBase::edit()!
 
@@ -409,7 +409,7 @@ bool TextBase::isTextualEditAllowed(EditData& ed) const
 //   edit
 //---------------------------------------------------------
 
-bool TextBase::editTextual(EditData& ed)
+bool TextBase::edit(EditData& ed)
 {
     // Keep this method closely in sync with TextBase::isEditAllowed()!
 

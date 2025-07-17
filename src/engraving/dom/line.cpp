@@ -214,7 +214,7 @@ void LineSegment::startEditDrag(EditData& ed)
         setAutoplace(false);
     }
 
-    updateAnchors(ed);
+    EditTimeTickAnchors::updateAnchors(this);
 }
 
 bool LineSegment::isEditAllowed(EditData& ed) const
@@ -235,18 +235,6 @@ bool LineSegment::edit(EditData& ed)
     LineSegment* ls       = 0;
     SpannerSegmentType st = spannerSegmentType();   // may change later
     SLine* l              = line();
-    track_idx_t track = l->track();
-    track_idx_t track2 = l->track2();      // assumed to be same as track
-
-    if (ed.key == KeyboardKey::Key_Shift) {
-        if (ed.isKeyRelease) {
-            score()->hideAnchors();
-        } else {
-            EditTimeTickAnchors::updateAnchors(this, moveStart ? track : track2);
-        }
-        triggerLayout();
-        return true;
-    }
 
     if (!isEditAllowed(ed)) {
         return false;
@@ -279,7 +267,7 @@ bool LineSegment::edit(EditData& ed)
 
         undoMoveStartEndAndSnappedItems(moveStart, moveEnd, s1, s2);
 
-        EditTimeTickAnchors::updateAnchors(this, moveStart ? track : track2);
+        EditTimeTickAnchors::updateAnchors(this);
     }
     break;
     case Spanner::Anchor::NOTE:
@@ -813,16 +801,9 @@ void LineSegment::editDrag(EditData& ed)
         }
     }
 
-    updateAnchors(ed);
+    EditTimeTickAnchors::updateAnchors(this);
 
     triggerLayout();
-}
-
-void LineSegment::updateAnchors(EditData& ed) const
-{
-    if (line()->allowTimeAnchor()) {
-        EditTimeTickAnchors::updateAnchors(this, ed.curGrip == Grip::START ? line()->track() : line()->track2());
-    }
 }
 
 //---------------------------------------------------------
@@ -911,8 +892,7 @@ void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, 
         Fraction tickDiff = s1->tick() - thisLine->tick();
         if (EngravingItem* itemSnappedBefore = ldata()->itemSnappedBefore()) {
             if (itemSnappedBefore->isTextBase()) {
-                // Let the TextBase manage the move
-                toTextBase(itemSnappedBefore)->undoMoveSegment(s1, tickDiff);
+                MoveElementAnchors::moveSegment(itemSnappedBefore, s1, tickDiff);
             } else if (itemSnappedBefore->isLineSegment()) {
                 toLineSegment(itemSnappedBefore)->line()->undoMoveEnd(tickDiff);
                 thisLine->undoMoveStart(tickDiff);
@@ -925,8 +905,7 @@ void LineSegment::undoMoveStartEndAndSnappedItems(bool moveStart, bool moveEnd, 
         Fraction tickDiff = s2->tick() - thisLine->tick2();
         if (EngravingItem* itemSnappedAfter = thisLine->backSegment()->ldata()->itemSnappedAfter()) {
             if (itemSnappedAfter->isTextBase()) {
-                // Let the TextBase manage the move
-                toTextBase(itemSnappedAfter)->undoMoveSegment(s2, tickDiff);
+                MoveElementAnchors::moveSegment(itemSnappedAfter, s2, tickDiff);
             } else if (itemSnappedAfter->isLineSegment()) {
                 toLineSegment(itemSnappedAfter)->line()->undoMoveStart(tickDiff);
                 thisLine->undoMoveEnd(tickDiff);

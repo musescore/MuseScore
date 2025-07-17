@@ -2102,7 +2102,6 @@ void EngravingItem::startDrag(EditData& ed)
     eed->e = this;
     eed->pushProperty(Pid::OFFSET);
     eed->pushProperty(Pid::AUTOPLACE);
-    eed->initOffset = offset();
     ed.addData(eed);
     if (ed.modifiers & AltModifier) {
         setAutoplace(false);
@@ -2122,9 +2121,7 @@ RectF EngravingItem::drag(EditData& ed)
 
     const RectF r0(canvasBoundingRect());
 
-    const ElementEditDataPtr eed = ed.getData(this);
-
-    const PointF offset0 = ed.moveDelta + eed->initOffset;
+    const PointF offset0 = ed.evtDelta + offset();
     double x = offset0.x();
     double y = offset0.y();
 

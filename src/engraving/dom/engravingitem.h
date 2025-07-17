@@ -777,7 +777,6 @@ class ElementEditData
 public:
     EngravingItem* e = nullptr;
     std::list<PropertyData> propertyData;
-    PointF initOffset;   ///< for dragging: difference between actual offset and editData.moveDelta
 
     virtual ~ElementEditData() = default;
     void pushProperty(Pid pid)
