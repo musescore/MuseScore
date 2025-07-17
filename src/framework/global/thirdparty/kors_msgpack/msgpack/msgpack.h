@@ -104,7 +104,7 @@ struct Cursor {
     }
 
     inline void next(int64_t bytes = 1) {
-        if (remain() >= bytes) {
+        if (static_cast<int64_t>(remain()) >= bytes) {
             current += bytes;
         } else {
             error = true;
