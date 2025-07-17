@@ -23,6 +23,8 @@
 
 #include <QTimer>
 
+#include "global/internal/loopwait.h"
+
 #include "log.h"
 
 using namespace muse::uicomponents;
@@ -124,6 +126,8 @@ void PopupWindow_QQuickView::setContent(QQmlComponent* component, QQuickItem* it
     });
 
     connect(item, &QQuickItem::implicitHeightChanged, this, [this, item]() {
+        LOGDA() << "implicitHeightChanged: " << item->implicitHeight();
+        LoopWait::wait(5000);
         if (!m_view->isVisible()) {
             return;
         }
