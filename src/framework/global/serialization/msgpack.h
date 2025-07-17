@@ -21,30 +21,77 @@
  */
 #pragma once
 
-#include "../thirdparty/cppack/msgpack.hpp"
+#include "msgpack_forward.h"
 #include "../types/bytearray.h"
+#include "../types/string.h"
+#include "../types/number.h"
 
-namespace muse {
-class MsgPack
+void pack_custom(std::vector<uint8_t>& data, const muse::String& value);
+bool unpack_custom(muse::msgpack::Cursor& cursor, muse::String& value);
+
+template<typename T>
+void pack_custom(std::vector<uint8_t>& data, const muse::number_t<T>& value);
+template<typename T>
+bool unpack_custom(muse::msgpack::Cursor& cursor, muse::number_t<T>& value);
+
+#include "../thirdparty/kors_msgpack/msgpack/msgpack.h"
+
+// muse standart types
+inline void pack_custom(std::vector<uint8_t>& data, const muse::String& value)
 {
-public:
-    MsgPack() = default;
+    muse::msgpack::Packer::pack(data, value.toStdString());
+}
 
-    template<class ... Types>
-    static ByteArray pack(const Types&... args)
-    {
-        msgpack::Packer p;
-        p.process(args ...);
-        const std::vector<uint8_t>& d = p.vector();
-        return ByteArray(&d[0], d.size());
-    }
+inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::String& value)
+{
+    std::string str;
+    bool ok = muse::msgpack::UnPacker::unpack(cursor, str);
+    value = muse::String::fromStdString(str);
+    return ok;
+}
 
-    template<class ... Types>
-    static bool unpack(const ByteArray& data, Types&... args)
-    {
-        auto unpacker = msgpack::Unpacker(data.constData(), data.size());
-        unpacker.process(args ...);
-        return unpacker.ec != msgpack::UnpackerError::OutOfRange;
-    }
-};
+template<typename T>
+inline void pack_custom(std::vector<uint8_t>& data, const muse::number_t<T>& value)
+{
+    muse::msgpack::Packer::pack(data, value.raw());
+}
+
+template<typename T>
+inline bool unpack_custom(muse::msgpack::Cursor& cursor, muse::number_t<T>& value)
+{
+    T val = {};
+    bool ok = muse::msgpack::UnPacker::unpack(cursor, val);
+    value = muse::number_t<T>(val);
+    return ok;
+}
+
+// pack / unpack
+namespace muse::msgpack {
+template<class ... Types>
+static inline void pack(std::vector<uint8_t>& data, const Types&... args)
+{
+    Packer::pack(data, args ...);
+}
+
+template<class ... Types>
+static inline ByteArray pack(const Types&... args)
+{
+    ByteArray ba;
+    std::vector<uint8_t>& vdata = ba.vdata();
+    vdata.clear();
+    Packer::pack(vdata, args ...);
+    return ba;
+}
+
+template<class ... Types>
+static inline bool unpack(muse::msgpack::Cursor& cursor, Types&... args)
+{
+    return UnPacker::unpack(cursor, args ...);
+}
+
+template<class ... Types>
+static inline bool unpack(const ByteArray& data, Types&... args)
+{
+    return UnPacker::unpack(data.constVData(), args ...);
+}
 }

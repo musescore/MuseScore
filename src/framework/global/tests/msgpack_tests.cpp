@@ -24,67 +24,117 @@
 #include <string>
 #include <vector>
 
+namespace muse {
+struct ObjectCustom {
+    int32_t i32 = 0;
+    std::string str;
+};
+}
+
+#include "serialization/msgpack_forward.h"
+
+void pack_custom(std::vector<uint8_t>& data, const muse::ObjectCustom& value);
+bool unpack_custom(muse::msgpack::Cursor& cursor, muse::ObjectCustom& value);
+
 #include "serialization/msgpack.h"
-#include "types/bytearray.h"
+
+void pack_custom(std::vector<uint8_t>& data, const muse::ObjectCustom& value)
+{
+    muse::msgpack::pack(data, value.i32, value.str);
+}
+
+bool unpack_custom(muse::msgpack::Cursor& cursor, muse::ObjectCustom& value)
+{
+    return muse::msgpack::unpack(cursor, value.i32, value.str);
+}
 
 using namespace muse;
 
-class Global_Ser_MsgPack : public ::testing::Test
+class Global_Ser_Msgpack : public ::testing::Test
 {
 public:
 };
 
-struct Object {
+struct ObjectWithPack {
+    int32_t i32 = 0;
     uint64_t ui64 = 0;
-    double real = 0.0;
+    float float32 = 0.0;
+    double float64 = 0.0;
     std::string str;
     bool b = false;
     std::vector<int> vi;
     std::map<std::string, int> map;
 
-    // origin way
     template<class T>
     void pack(T& pack)
     {
-        pack(ui64, real, str, b, vi, map);
+        pack(i32, ui64, float32, float64, str, b, vi, map);
     }
 };
 
-TEST_F(Global_Ser_MsgPack, WriteRead)
+TEST_F(Global_Ser_Msgpack, String)
+{
+    String str1 = u"Hello World!";
+
+    ByteArray data = msgpack::pack(str1);
+
+    String str2;
+
+    bool ok = msgpack::unpack(data, str2);
+
+    EXPECT_TRUE(ok);
+    EXPECT_EQ(str1, str2);
+}
+
+TEST_F(Global_Ser_Msgpack, Number)
+{
+    number_t<float> num1_1 = 0.34f;
+    number_t<double> num1_2 = 46.0;
+    number_t<int> num1_3 = 57;
+
+    ByteArray data = msgpack::pack(num1_1, num1_2, num1_3);
+
+    number_t<float> num2_1;
+    number_t<double> num2_2;
+    number_t<int> num2_3;
+
+    bool ok = msgpack::unpack(data, num2_1, num2_2, num2_3);
+
+    EXPECT_TRUE(ok);
+    EXPECT_EQ(num1_1, num2_1);
+    EXPECT_EQ(num1_2, num2_2);
+    EXPECT_EQ(num1_3, num2_3);
+}
+
+TEST_F(Global_Ser_Msgpack, ObjectWithPack)
 {
     ByteArray data;
 
     // Write
     {
-        Object obj;
+        ObjectWithPack obj;
+        obj.i32 = 12;
         obj.ui64 = 42;
-        obj.real = 4.2;
+        obj.float32 = 0.42f;
+        obj.float64 = 42.42;
         obj.str = "42";
-        obj.vi = { 4, 2 };
         obj.b = true;
+        obj.vi = { 4, 2 };
         obj.map = { { "42", 42 } };
 
-        // origin
-        std::vector<uint8_t> vd = msgpack::pack(obj);
-
-        // muse wrap
-        data = MsgPack::pack(obj.ui64, obj.real, obj.str, obj.b, obj.vi, obj.map);
-
-        EXPECT_TRUE(data == ByteArray::fromRawData(&vd[0], vd.size()));
+        data = msgpack::pack(obj);
     }
 
     // Read
     {
-        // origin
-        // Object obj = msgpack::unpack<Object>(data.constData(), data.size());
-
-        // muse wrap
-        Object obj;
-        bool ok = MsgPack::unpack(data, obj.ui64, obj.real, obj.str, obj.b, obj.vi, obj.map);
+        ObjectWithPack obj;
+        bool ok = msgpack::unpack(data, obj);
         EXPECT_TRUE(ok);
 
+        EXPECT_EQ(obj.i32, 12);
         EXPECT_EQ(obj.ui64, 42);
-        EXPECT_DOUBLE_EQ(obj.real, 4.2);
+        EXPECT_FLOAT_EQ(obj.float32, 0.42f);
+        EXPECT_DOUBLE_EQ(obj.float64, 42.42);
         EXPECT_EQ(obj.str, "42");
         EXPECT_EQ(obj.b, true);
         EXPECT_EQ(obj.vi.size(), 2);
@@ -92,5 +142,29 @@ TEST_F(Global_Ser_MsgPack, WriteRead)
         EXPECT_EQ(obj.vi.at(1), 2);
         EXPECT_EQ(obj.map.size(), 1);
         EXPECT_EQ(obj.map["42"], 42);
+    }
+}
+
+TEST_F(Global_Ser_Msgpack, ObjectCustom)
+{
+    ByteArray data;
+
+    // Write
+    {
+        ObjectCustom obj;
+        obj.i32 = 12;
+        obj.str = "ha ha ha";
+
+        data = msgpack::pack(obj);
+    }
+
+    // Read
+    {
+        ObjectCustom obj;
+        bool ok = msgpack::unpack(data, obj);
+        EXPECT_TRUE(ok);
+
+        EXPECT_EQ(obj.i32, 12);
+        EXPECT_EQ(obj.str, "ha ha ha");
     }
 }
