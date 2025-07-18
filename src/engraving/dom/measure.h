@@ -110,6 +110,9 @@ public:
     bool stemless() const { return m_stemless; }
     void setStemless(bool val) { m_stemless = val; }
 
+    AutoOnOff hideIfEmpty() const { return m_hideIfEmpty; }
+    void setHideIfEmpty(AutoOnOff val) { m_hideIfEmpty = val; }
+
     bool corrupted() const { return m_corrupted; }
     void setCorrupted(bool val) { m_corrupted = val; }
 
@@ -124,8 +127,12 @@ private:
     Spacer* m_vspacerDown = nullptr;
     bool m_hasVoices = false;               // indicates that MStaff contains more than one voice,
                                             // this changes some layout rules
+
     bool m_visible = true;
     bool m_stemless = false;
+    AutoOnOff m_hideIfEmpty = AutoOnOff::AUTO; // whether this MStaff wants its staff to be hidden on its system
+                                               // when the staff is empty on that system
+
     bool m_corrupted = false;
     int m_measureRepeatCount = 0;
 };
@@ -175,6 +182,8 @@ public:
     Spacer* vspacerUp(staff_idx_t staffIdx) const;
     void setStaffVisible(staff_idx_t staffIdx, bool visible);
     void setStaffStemless(staff_idx_t staffIdx, bool stemless);
+    AutoOnOff hideStaffIfEmpty(staff_idx_t staffIdx) const;
+    void setHideStaffIfEmpty(staff_idx_t staffIdx, AutoOnOff hideIfEmpty);
     bool corrupted(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->corrupted(); }
     void setCorrupted(staff_idx_t staffIdx, bool val) { m_mstaves[staffIdx]->setCorrupted(val); }
     MeasureNumber* measureNumber(staff_idx_t staffIdx) const { return m_mstaves[staffIdx]->measureNumber(); }
@@ -348,6 +357,7 @@ public:
     bool endBarLineVisible() const;
     const BarLine* startBarLine() const;
     void triggerLayout() const override;
+    void triggerLayout(staff_idx_t staffIdx) const;
 
     void checkHeader();
     void checkTrailer();

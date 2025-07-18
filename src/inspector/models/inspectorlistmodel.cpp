@@ -23,6 +23,7 @@
 
 #include "general/generalsettingsmodel.h"
 #include "measures/measuressettingsmodel.h"
+#include "emptystaves/emptystavesvisiblitysettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
 #include "parts/partssettingsmodel.h"
 #include "text/textsettingsmodel.h"
@@ -182,6 +183,9 @@ void InspectorListModel::createModelsBySectionType(const InspectorSectionTypeSet
             break;
         case InspectorSectionType::SECTION_MEASURES:
             newModel = new MeasuresSettingsModel(this, m_repository);
+            break;
+        case InspectorSectionType::SECTION_EMPTY_STAVES:
+            newModel = new EmptyStavesVisibilitySettingsModel(this, m_repository);
             break;
         case InspectorSectionType::SECTION_NOTATION:
             newModel = new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);

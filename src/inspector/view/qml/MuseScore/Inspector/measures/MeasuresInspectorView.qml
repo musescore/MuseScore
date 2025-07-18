@@ -31,15 +31,13 @@ import "../common"
 InspectorSectionView {
     id: root
 
-    implicitHeight: contentColumn.height
+    implicitHeight: contentColumn.implicitHeight
 
-    ColumnLayout {
+    Column {
         id: contentColumn
 
-        height: implicitHeight
         width: parent.width
-
-        spacing: 0
+        spacing: 12
 
         RowLayout {
             width: parent.width
@@ -90,77 +88,77 @@ InspectorSectionView {
             }
         }
 
-        StyledTextLabel {
-            Layout.fillWidth: true
-            Layout.topMargin: 12
-            visible: root.model ? root.model.scoreIsInPageView : false
-            horizontalAlignment: Qt.AlignLeft
-            text: qsTrc("inspector", "Move to system")
-        }
-
-        RowLayout {
-            id: moveSystemLayout
-
-            Layout.topMargin: 8
-            visible: root.model ? root.model.scoreIsInPageView : false
-
+        Column {
             width: parent.width
-            spacing: 4
+            spacing: 8
 
-            FlatButton {
-                id: upSystem
-
-                Layout.preferredWidth: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
-
-                navigation.panel: root.navigationPanel
-                navigation.name: "SystemUp"
-                navigation.row: deleteButton.navigation.row + 1
-
-                orientation: Qt.Horizontal
-                icon: IconCode.ARROW_UP
-                text: qsTrc("inspector", "Previous")
-
-                toolTipTitle: qsTrc("inspector", "Move measure(s) to previous system")
-                toolTipShortcut: root.model ? model.shortcutMoveMeasureUp : ""
-
-                onClicked: {
-                    if (root.model) {
-                        root.model.moveMeasureUp()
-                    }
-                }
+            StyledTextLabel {
+                width: parent.width
+                visible: root.model ? root.model.scoreIsInPageView : false
+                horizontalAlignment: Qt.AlignLeft
+                text: qsTrc("inspector", "Move to system")
             }
 
-            FlatButton {
-                id: downSystem
+            Row {
+                id: moveSystemLayout
 
-                Layout.preferredWidth: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
+                visible: root.model ? root.model.scoreIsInPageView : false
 
-                navigation.panel: root.navigationPanel
-                navigation.name: "SystemDown"
-                navigation.row: upSystem.navigation.row + 1
+                width: parent.width
+                spacing: 4
 
-                orientation: Qt.Horizontal
-                icon: IconCode.ARROW_DOWN
-                text: qsTrc("inspector", "Next")
+                FlatButton {
+                    id: upSystem
 
-                toolTipTitle: qsTrc("inspector", "Move measure(s) to next system")
-                toolTipShortcut: root.model ? root.model.shortcutMoveMeasureDown : ""
+                    width: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
 
-                onClicked: {
-                    if (root.model) {
-                        model.moveMeasureDown()
+                    navigation.panel: root.navigationPanel
+                    navigation.name: "SystemUp"
+                    navigation.row: deleteButton.navigation.row + 1
+
+                    orientation: Qt.Horizontal
+                    icon: IconCode.ARROW_UP
+                    text: qsTrc("inspector", "Previous")
+
+                    toolTipTitle: qsTrc("inspector", "Move measure(s) to previous system")
+                    toolTipShortcut: root.model ? model.shortcutMoveMeasureUp : ""
+
+                    onClicked: {
+                        if (root.model) {
+                            root.model.moveMeasureUp()
+                        }
+                    }
+                }
+
+                FlatButton {
+                    id: downSystem
+
+                    width: (moveSystemLayout.width - moveSystemLayout.spacing) / 2
+
+                    navigation.panel: root.navigationPanel
+                    navigation.name: "SystemDown"
+                    navigation.row: upSystem.navigation.row + 1
+
+                    orientation: Qt.Horizontal
+                    icon: IconCode.ARROW_DOWN
+                    text: qsTrc("inspector", "Next")
+
+                    toolTipTitle: qsTrc("inspector", "Move measure(s) to next system")
+                    toolTipShortcut: root.model ? root.model.shortcutMoveMeasureDown : ""
+
+                    onClicked: {
+                        if (root.model) {
+                            model.moveMeasureDown()
+                        }
                     }
                 }
             }
         }
 
         FlatButton {
-            Layout.topMargin: 12
-            Layout.fillWidth: true
-            visible: root.model ? root.model.scoreIsInPageView : false
-
             id: toggleSystemLock
-
+            visible: root.model ? root.model.scoreIsInPageView : false
+            
             width: parent.width
 
             navigation.panel: root.navigationPanel
@@ -193,8 +191,7 @@ InspectorSectionView {
             visible: root.model ? root.model.scoreIsInPageView : false
             enabled: root.model ? root.model.isMakeIntoSystemAvailable : false
 
-            Layout.topMargin: 4
-            Layout.fillWidth: true
+            width: parent.width
 
             navigation.panel: root.navigationPanel
             navigation.name: "MakeSystem"
