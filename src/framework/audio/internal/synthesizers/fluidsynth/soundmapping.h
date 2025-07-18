@@ -659,6 +659,10 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
         { { mpe::SoundId::OkedoDaiko,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Kane,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Shoko,  {} }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Janggu,  {} }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Buk,  {} }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Kkwaenggwari,  {} }, { midi::Program(128, 48) } },
+        { { mpe::SoundId::Jing,  {} }, { midi::Program(128, 48) } },
 
         { { mpe::SoundId::Conga,  {} }, { midi::Program(128, 48) } },
         { { mpe::SoundId::Xiaogu,  {} }, { midi::Program(128, 48) } },
