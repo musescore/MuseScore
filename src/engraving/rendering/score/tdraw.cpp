@@ -322,6 +322,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
     case ElementType::PICK_SCRAPE_SEGMENT:  draw(item_cast<const PickScrapeSegment*>(item), painter);
         break;
+    case ElementType::PLAY_COUNT_TEXT:      draw(item_cast<const PlayCountText*>(item), painter);
+        break;
     case ElementType::PLAYTECH_ANNOTATION:  draw(item_cast<const PlayTechAnnotation*>(item), painter);
         break;
 
@@ -2412,6 +2414,11 @@ void TDraw::draw(const PickScrapeSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void TDraw::draw(const PlayCountText* item, muse::draw::Painter* painter)
+{
+    drawTextBase(item, painter);
 }
 
 void TDraw::draw(const PlayTechAnnotation* item, Painter* painter)

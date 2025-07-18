@@ -143,10 +143,19 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            <subtype>end-repeat</subtype>
+            <PlayCountText>
+              <eid>T_T</eid>
+              <style>repeat_play_count</style>
+              <text>3x</text>
+              </PlayCountText>
+            <eid>U_U</eid>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>T_T</eid>
+        <eid>V_V</eid>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -158,7 +167,7 @@
           <Spanner type="Volta">
             <Volta>
               <beginText>3</beginText>
-              <eid>U_U</eid>
+              <eid>W_W</eid>
               <endings>3</endings>
               </Volta>
             <next>
@@ -168,24 +177,24 @@
               </next>
             </Spanner>
           <Chord>
-            <eid>V_V</eid>
+            <eid>X_X</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>W_W</eid>
+              <eid>Y_Y</eid>
               <pitch>48</pitch>
               <tpc>14</tpc>
               <fret>3</fret>
               <string>4</string>
               </Note>
             <Note>
-              <eid>X_X</eid>
+              <eid>Z_Z</eid>
               <pitch>53</pitch>
               <tpc>13</tpc>
               <fret>3</fret>
               <string>3</string>
               </Note>
             <Note>
-              <eid>Y_Y</eid>
+              <eid>a_a</eid>
               <pitch>57</pitch>
               <tpc>17</tpc>
               <fret>2</fret>
@@ -193,12 +202,12 @@
               </Note>
             </Chord>
           <BarLine>
-            <eid>Z_Z</eid>
+            <eid>b_b</eid>
             </BarLine>
           </voice>
         </Measure>
       <Measure>
-        <eid>a_a</eid>
+        <eid>c_c</eid>
         <voice>
           <Spanner type="Volta">
             <prev>
@@ -208,10 +217,10 @@
               </prev>
             </Spanner>
           <Chord>
-            <eid>b_b</eid>
+            <eid>d_d</eid>
             <durationType>whole</durationType>
             <Note>
-              <eid>c_c</eid>
+              <eid>e_e</eid>
               <pitch>55</pitch>
               <tpc>15</tpc>
               <fret>5</fret>

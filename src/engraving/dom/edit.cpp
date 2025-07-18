@@ -2949,6 +2949,9 @@ void Score::deleteItem(EngravingItem* el)
                         lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
                     }
                 }
+                if (!bl->generated()) {
+                    undoRemoveElement(el);
+                }
             } else if (bl->barLineType() == BarLineType::END_REPEAT) {
                 Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
                 for (Score* lscore : score()->scoreList()) {
@@ -2956,6 +2959,9 @@ void Score::deleteItem(EngravingItem* el)
                     if (lmeasure) {
                         lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
                     }
+                }
+                if (!bl->generated()) {
+                    undoRemoveElement(el);
                 }
             } else {
                 bl->undoChangeProperty(Pid::BARLINE_TYPE, PropertyValue::fromValue(BarLineType::NORMAL));

@@ -53,8 +53,9 @@ using namespace mu::engraving::read400;
 //   undoChangeBarLineType
 //---------------------------------------------------------
 
-static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves)
+void BarLine::undoChangeBarLineType(BarLineType barType, bool allStaves, bool replaceExistingRepeat)
 {
+    BarLine* bl = this;
     if (barType == bl->barLineType()) {
         return;
     }
@@ -235,6 +236,10 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
             Measure* lmeasure = lscore->tick2measure(m2->tick());
             if (lmeasure) {
                 lmeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                lmeasure = lmeasure->prevMeasure();
+                if (lmeasure && replaceExistingRepeat) {
+                    lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
+                }
             }
         }
     }
@@ -250,6 +255,10 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
             Measure* lmeasure = lscore->tick2measure(m2->tick());
             if (lmeasure) {
                 lmeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                lmeasure = lmeasure->nextMeasure();
+                if (lmeasure && replaceExistingRepeat) {
+                    lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
+                }
             }
         }
     }
@@ -328,6 +337,56 @@ BarLine::BarLine(const BarLine& bl)
 
     for (EngravingItem* e : bl.m_el) {
         add(e->clone());
+    }
+}
+
+void BarLine::undoUpdatePlayCountText()
+{
+    if (!explicitParent()) {
+        return;
+    }
+    Measure* m = measure();
+    Score* s = score();
+    if (!m->repeatEnd()) {
+        return;
+    }
+    const MStyle& style = s->style();
+    const bool showText = style.styleB(Sid::repeatPlayCountShow);
+    const bool singleRepeats = style.styleB(Sid::repeatPlayCountShowSingleRepeats);
+    const int playCount = m->repeatCount();
+    const bool showPlayCount = showText && (playCount == 2 ? singleRepeats : true);
+
+    const std::vector<MStaff*>& measureStaves = m->mstaves();
+
+    for (staff_idx_t staffIdx = 0; staffIdx < s->nstaves(); ++staffIdx) {
+        if (staffIdx >= measureStaves.size()) {
+            break;
+        }
+        Staff* staff = s->staff(staffIdx);
+
+        Segment* endBarSeg = m->last(SegmentType::BarLineType);
+        BarLine* bl = endBarSeg ? toBarLine(endBarSeg->element(staff2track(staffIdx))) : nullptr;
+        if (!bl) {
+            continue;
+        }
+        PlayCountText* playCount = bl->playCountText();
+
+        bool blShowPlayCount = (showPlayCount && bl->playCountTextSetting() == AutoCustomHide::AUTO)
+                               || bl->playCountTextSetting() == AutoCustomHide::CUSTOM;
+
+        if (blShowPlayCount && staff->shouldShowPlayCount()) {
+            if (!playCount) {
+                playCount = Factory::createPlayCountText(bl);
+                playCount->setTrack(staff2track(staffIdx));
+                playCount->setParent(bl);
+                playCount->setGenerated(true);
+                s->doUndoAddElement(playCount);
+                playCount->setSystemFlag(true);
+                playCount->setSelected(bl->selected());
+            }
+        } else if (playCount) {
+            s->doUndoRemoveElement(playCount);
+        }
     }
 }
 
@@ -663,10 +722,10 @@ EngravingItem* BarLine::drop(EditData& data)
             }
             // if drop refers to subtype, update this bar line subtype
             else {
-                undoChangeBarLineType(this, st, false);
+                undoChangeBarLineType(st, false);
             }
         } else {
-            undoChangeBarLineType(this, st, true);
+            undoChangeBarLineType(st, true);
         }
         delete e;
     } else if (e->isArticulationFamily()) {
@@ -747,6 +806,14 @@ std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
         //PointF(lw * .5, y1 + bed->yoff1) + pp,
         PointF(lw * .5, ldata()->y2 + bed->yoff2) + pp
     };
+}
+
+void BarLine::styleChanged()
+{
+    if (m_barLineType == BarLineType::END_REPEAT) {
+        undoUpdatePlayCountText();
+    }
+    EngravingItem::styleChanged();
 }
 
 //---------------------------------------------------------
@@ -923,6 +990,10 @@ void BarLine::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
     for (EngravingItem* e : m_el) {
         e->scanElements(data, func, all);
     }
+
+    if (m_playCountText) {
+        m_playCountText->scanElements(data, func, all);
+    }
 }
 
 //---------------------------------------------------------
@@ -952,6 +1023,9 @@ void BarLine::add(EngravingItem* e)
         setGenerated(false);
         e->added();
         break;
+    case ElementType::PLAY_COUNT_TEXT:
+        setPlayCountText(toPlayCountText(e));
+        break;
     default:
         LOGD("BarLine::add() not impl. %s", e->typeName());
         delete e;
@@ -975,6 +1049,9 @@ void BarLine::remove(EngravingItem* e)
             e->removed();
         }
         break;
+    case ElementType::PLAY_COUNT_TEXT:
+        m_playCountText = nullptr;
+        break;
     default:
         LOGD("BarLine::remove() not impl. %s", e->typeName());
         return;
@@ -987,6 +1064,10 @@ void BarLine::remove(EngravingItem* e)
 
 PropertyValue BarLine::getProperty(Pid id) const
 {
+    if (EngravingItem* e = const_cast<BarLine*>(this)->propertyDelegate(id)) {
+        return e->getProperty(id);
+    }
+
     switch (id) {
     case Pid::BARLINE_TYPE:
         return PropertyValue::fromValue(m_barLineType);
@@ -998,6 +1079,10 @@ PropertyValue BarLine::getProperty(Pid id) const
         return int(spanTo());
     case Pid::BARLINE_SHOW_TIPS:
         return showTips();
+    case Pid::PLAY_COUNT_TEXT_SETTING:
+        return m_playCountTextSetting;
+    case Pid::PLAY_COUNT_TEXT:
+        return m_playCountCustomText;
     default:
         break;
     }
@@ -1010,6 +1095,15 @@ PropertyValue BarLine::getProperty(Pid id) const
 
 bool BarLine::setProperty(Pid id, const PropertyValue& v)
 {
+    if (EngravingItem* e = propertyDelegate(id)) {
+        bool success = e->setProperty(id, v);
+
+        if (id == Pid::REPEAT_COUNT) {
+            undoUpdatePlayCountText();
+        }
+        return success;
+    }
+
     switch (id) {
     case Pid::BARLINE_TYPE:
         setBarLineType(v.value<BarLineType>());
@@ -1026,6 +1120,14 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
     case Pid::BARLINE_SHOW_TIPS:
         setShowTips(v.toBool());
         break;
+    case Pid::PLAY_COUNT_TEXT_SETTING:
+        m_playCountTextSetting = v.value<AutoCustomHide>();
+        undoUpdatePlayCountText();
+        break;
+    case Pid::PLAY_COUNT_TEXT:
+        m_playCountCustomText = v.value<String>();
+        undoUpdatePlayCountText();
+        break;
     default:
         return EngravingItem::setProperty(id, v);
     }
@@ -1041,20 +1143,26 @@ bool BarLine::setProperty(Pid id, const PropertyValue& v)
 void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::BARLINE_TYPE && segment()) {
-        const BarLine* bl = this;
-        BarLineType blType = v.value<BarLineType>();
-        if (blType == BarLineType::START_REPEAT) {     // change next measures endBarLine
-            if (bl->measure()->nextMeasure()) {
-                bl = bl->measure()->nextMeasure()->endBarLine();
-            } else {
-                bl = 0;
-            }
-        }
-        if (bl) {
-            undoChangeBarLineType(const_cast<BarLine*>(bl), v.value<BarLineType>(), true);
-        }
+        undoChangeBarLineType(v.value<BarLineType>(), true, true);
     } else {
         EngravingObject::undoChangeProperty(id, v, ps);
+    }
+}
+
+EngravingItem* BarLine::propertyDelegate(Pid pid)
+{
+    if (pid == Pid::REPEAT_COUNT) {
+        return measure();
+    }
+
+    return EngravingItem::propertyDelegate(pid);
+}
+
+void BarLine::setPlayCountText(PlayCountText* text)
+{
+    m_playCountText = text;
+    if (m_playCountText != nullptr) {
+        setGenerated(false);
     }
 }
 
@@ -1064,6 +1172,10 @@ void BarLine::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags p
 
 PropertyValue BarLine::propertyDefault(Pid propertyId) const
 {
+    if (EngravingItem* e = const_cast<BarLine*>(this)->propertyDelegate(propertyId)) {
+        return e->propertyDefault(propertyId);
+    }
+
     switch (propertyId) {
     case Pid::BARLINE_TYPE:
 // dynamic default values are a bad idea: writing to xml the value maybe omitted resulting in
@@ -1083,6 +1195,13 @@ PropertyValue BarLine::propertyDefault(Pid propertyId) const
 
     case Pid::BARLINE_SHOW_TIPS:
         return false;
+
+    case Pid::PLAY_COUNT_TEXT_SETTING:
+        return AutoCustomHide::AUTO;
+
+    case Pid::PLAY_COUNT_TEXT:
+        return String();
+
     default:
         break;
     }
@@ -1105,6 +1224,14 @@ EngravingItem* BarLine::nextSegmentElement()
 EngravingItem* BarLine::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());       //score()->inputState().prevTrack() / VOICES);
+}
+
+void BarLine::triggerLayout() const
+{
+    if (m_playCountText) {
+        m_playCountText->triggerLayout();
+    }
+    EngravingItem::triggerLayout();
 }
 
 //---------------------------------------------------------

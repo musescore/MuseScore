@@ -36,6 +36,11 @@ bool ScoreComp::saveCompareScore(Score* score, const String& saveName, const Str
         return false;
     }
 
+    if (!compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName)) {
+        copyFile(saveName, ScoreRW::rootPath() + u"/" + compareWithLocalPath);
+        return false;
+    }
+
     return compareFiles(ScoreRW::rootPath() + u"/" + compareWithLocalPath, saveName);
 }
 
@@ -95,5 +100,32 @@ bool ScoreComp::compareFiles(const String& fullPath1, const String& fullPath2)
         return false;
     }
 
+    return true;
+}
+
+bool ScoreComp::copyFile(const String& fullPath1, const String& fullPath2)
+{
+    QString cmd = "cp";
+    QStringList args;
+    args.append(fullPath1);
+    args.append(fullPath2);
+
+    QProcess p;
+    p.start(cmd, args);
+    if (!p.waitForFinished()) {
+        QTextStream outputText(stdout);
+        outputText << "copy failed finished";
+        return false;
+    }
+
+    int code = p.exitCode();
+    if (code) {
+        QByteArray ba = p.readAll();
+        QTextStream outputText(stdout);
+        outputText << String(ba);
+        outputText << String("   <cp %1 %2 failed, code: %3 \n").arg(fullPath1, fullPath2).arg(code);
+        return false;
+    }
+    LOGI() << "Copy succeeded: " << String("   <cp %1 %2>\n").arg(fullPath1, fullPath2).arg(code);
     return true;
 }

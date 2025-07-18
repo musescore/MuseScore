@@ -104,6 +104,7 @@
 #include "view/styledialog/chordsymbolspagemodel.h"
 #include "view/styledialog/voltaspagemodel.h"
 #include "view/styledialog/measurenumberspagemodel.h"
+#include "view/styledialog/repeatplaycounttextmodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -242,6 +243,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<ChordSymbolsPageModel>("MuseScore.NotationScene", 1, 0, "ChordSymbolsPageModel");
     qmlRegisterType<VoltasPageModel>("MuseScore.NotationScene", 1, 0, "VoltasPageModel");
     qmlRegisterType<MeasureNumbersPageModel>("MuseScore.NotationScene", 1, 0, "MeasureNumbersPageModel");
+    qmlRegisterType<RepeatPlayCountTextModel>("MuseScore.NotationScene", 1, 0, "RepeatPlayCountTextModel");
 
     qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 

@@ -121,6 +121,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "tempo",
     "tempo-change",
     "metronome",
+    "repeat-play-count",
     "repeat-text-left",
     "repeat-text-right",
     "rehearsal-mark",
@@ -983,6 +984,17 @@ EditStyle::EditStyle(QWidget* parent)
     connect(barNumbersPage.view->rootObject(), SIGNAL(goToTextStylePage(int)), this, SLOT(goToTextStylePage(int)));
 
     // ====================================================
+    // REPEAT PLAY COUNT SECTION (QML)
+    // ====================================================
+
+    auto repeatPlayCountSection = createQmlWidget(
+        repeatPlayCount_groupBox,
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/RepeatPlayCountSection.qml")));
+    repeatPlayCountSection.widget->setMinimumSize(224, 125);
+    connect(repeatPlayCountSection.view->rootObject(), SIGNAL(goToTextStylePage(QString)), this, SLOT(goToTextStylePage(QString)));
+    repeatPlayCount_groupBox->layout()->addWidget(repeatPlayCountSection.widget);
+
+    // ====================================================
     // Figured Bass
     // ====================================================
 
@@ -992,31 +1004,6 @@ EditStyle::EditStyle(QWidget* parent)
     }
     comboFBFont->setCurrentIndex(0);
     connect(comboFBFont, &QComboBox::currentIndexChanged, this, &EditStyle::on_comboFBFont_currentIndexChanged);
-
-    // ====================================================
-    // Chord Symbols
-    // ====================================================
-
-    // voicingSelectWidget->interpretBox->clear();
-    // voicingSelectWidget->interpretBox->addItem(muse::qtrc("notation/editstyle", "Jazz"), int(0));   // two-item combobox for boolean style variant
-    // voicingSelectWidget->interpretBox->addItem(muse::qtrc("notation/editstyle", "Literal"), int(1));   // true = literal
-
-    // voicingSelectWidget->voicingBox->clear();
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Automatic"), int(Voicing::AUTO));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Root only"), int(Voicing::ROOT_ONLY));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Close"), int(Voicing::CLOSE));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Drop two"), int(Voicing::DROP_2));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Six note"), int(Voicing::SIX_NOTE));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Four note"), int(Voicing::FOUR_NOTE));
-    // voicingSelectWidget->voicingBox->addItem(muse::qtrc("notation/editstyle", "Three note"), int(Voicing::THREE_NOTE));
-
-    // voicingSelectWidget->durationBox->clear();
-    // voicingSelectWidget->durationBox->addItem(muse::qtrc("notation/editstyle", "Until next chord symbol"),
-    //                                           int(HDuration::UNTIL_NEXT_CHORD_SYMBOL));
-    // voicingSelectWidget->durationBox->addItem(muse::qtrc("notation/editstyle", "Until end of measure"),
-    //                                           int(HDuration::STOP_AT_MEASURE_END));
-    // voicingSelectWidget->durationBox->addItem(muse::qtrc("notation/editstyle", "Chord/rest duration"),
-    //                                           int(HDuration::SEGMENT_DURATION));
 
     // ====================================================
     // Miscellaneous
@@ -1770,6 +1757,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::METRONOME:
             return "metronome";
+
+        case TextStyleType::REPEAT_PLAY_COUNT:
+            return "repeat-play-count";
 
         case TextStyleType::REPEAT_LEFT:
             return "repeat-text-left";

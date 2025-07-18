@@ -141,7 +141,7 @@ public:
         TYPE_REST_BEAM,
         TYPE_STRING_TUNINGS,
         TYPE_SYMBOL,
-        TYPE_NOTELINE,
+        TYPE_NOTELINE
     };
     Q_ENUM(InspectorModelType)
 
@@ -187,6 +187,8 @@ signals:
     void isEmptyChanged();
 
     void requestReloadPropertyItems();
+
+    void requestReloadInspectorListModel();
 
 protected:
     void setElementType(mu::engraving::ElementType type);
