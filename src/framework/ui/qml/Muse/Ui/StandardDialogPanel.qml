@@ -47,6 +47,12 @@ RowLayout {
 
     signal clicked(int buttonId, bool showAgain)
 
+   // height: 115
+
+    onHeightChanged: {
+        console.log("StandardDialogPanel RowLayout onHeightChanged: ", root.height)
+    }
+
     onCustomButtonsChanged: {
         if (!root.customButtons) {
             return
@@ -169,6 +175,10 @@ RowLayout {
         Layout.preferredWidth: Math.max(buttons.implicitWidth, textsImplicitWidthBounded)
 
         spacing: 18
+
+        onHeightChanged: {
+            console.log("StandardDialogPanel Column onHeightChanged: ", height)
+        }
 
         Column {
             width: parent.width

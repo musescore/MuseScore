@@ -76,8 +76,8 @@ class PopupView : public QObject, public QQmlParserStatus, public Injectable, pu
 
     Q_PROPERTY(ClosePolicies closePolicies READ closePolicies WRITE setClosePolicies NOTIFY closePoliciesChanged)
 
-    Q_PROPERTY(
-        bool activateParentOnClose READ activateParentOnClose WRITE setActivateParentOnClose NOTIFY activateParentOnCloseChanged)
+    Q_PROPERTY(bool activateParentOnClose READ activateParentOnClose WRITE setActivateParentOnClose
+               NOTIFY activateParentOnCloseChanged)
 
     Q_PROPERTY(FocusPolicies focusPolicies READ focusPolicies WRITE setFocusPolicies NOTIFY focusPoliciesChanged)
 

@@ -58,6 +58,10 @@ StyledDialogView {
     contentWidth: mainPanel.implicitWidth
     contentHeight: content.implicitHeight
 
+    onContentHeightChanged: {
+        console.log("onContentHeightChanged: ", root.contentHeight)
+    }
+
     margins: 16
 
     onDetailedTextChanged: {
@@ -90,6 +94,10 @@ StyledDialogView {
 
         StandardDialogPanel {
             id: mainPanel
+
+            onHeightChanged: {
+                console.log("StandardDialogPanel onHeightChanged: ", mainPanel.height)
+            }
 
             navigation.section: root.navigationSection
             navigation.order: 1

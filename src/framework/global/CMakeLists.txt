@@ -193,6 +193,8 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/process.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/loopwait.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/loopwait.h
 
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.cpp
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h
