@@ -294,6 +294,32 @@ void MasterNotationParts::moveSystemObjects(const muse::ID& sourceStaffId, const
     endGlobalEdit();
 }
 
+void MasterNotationParts::moveSystemObjectLayerBelowBottomStaff()
+{
+    IF_ASSERT_FAILED(score()->nstaves() > 1) {
+        return;
+    }
+
+    startGlobalEdit(TranslatableString("undoableAction", "Add system object layer below the bottom staff"));
+
+    NotationParts::moveSystemObjectLayerBelowBottomStaff();
+
+    endGlobalEdit();
+}
+
+void MasterNotationParts::moveSystemObjectLayerAboveBottomStaff()
+{
+    IF_ASSERT_FAILED(score()->nstaves() > 1) {
+        return;
+    }
+
+    startGlobalEdit(TranslatableString("undoableAction", "Remove system object layer below the bottom staff"));
+
+    NotationParts::moveSystemObjectLayerAboveBottomStaff();
+
+    endGlobalEdit();
+}
+
 std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const
 {
     std::vector<INotationPartsPtr> result;

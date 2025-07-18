@@ -866,6 +866,24 @@ void NotationParts::moveSystemObjects(const ID& sourceStaffId, const ID& destina
     apply();
 }
 
+void NotationParts::moveSystemObjectLayerBelowBottomStaff()
+{
+    startEdit(TranslatableString("undoableAction", "Add system object layer below the bottom staff"));
+
+    score()->staves().back()->undoChangeProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF, true);
+
+    apply();
+}
+
+void NotationParts::moveSystemObjectLayerAboveBottomStaff()
+{
+    startEdit(TranslatableString("undoableAction", "Remove system object layer below the bottom staff"));
+
+    score()->staves().back()->undoChangeProperty(Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF, false);
+
+    apply();
+}
+
 Notification NotationParts::partsChanged() const
 {
     return m_partsChanged;

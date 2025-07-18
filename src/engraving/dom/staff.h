@@ -267,6 +267,9 @@ public:
     void undoSetShowMeasureNumbers(bool show);
     bool shouldShowMeasureNumbers() const;
 
+    void setSystemObjectsBelowBottomStaff(bool v) { m_systemObjectsBelowBottomStaff = v; }
+    bool systemObjectsBelowBottomStaff() const { return m_systemObjectsBelowBottomStaff; }
+
 private:
 
     friend class Factory;
@@ -318,6 +321,7 @@ private:
     bool m_reflectTranspositionInLinkedTab = true;
 
     AutoOnOff m_showMeasureNumbers = AutoOnOff::AUTO;
+    bool m_systemObjectsBelowBottomStaff = false;
 };
 } // namespace mu::engraving
 #endif

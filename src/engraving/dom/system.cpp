@@ -367,6 +367,27 @@ staff_idx_t System::prevVisibleStaff(staff_idx_t startStaffIdx) const
     return muse::nidx;
 }
 
+staff_idx_t System::lastVisibleStaff() const
+{
+    size_t nstaves = score()->nstaves();
+    if (nstaves < 1) {
+        return muse::nidx;
+    }
+
+    for (staff_idx_t i = nstaves - 1; ; --i) {
+        Staff* staff = score()->staff(i);
+        SysStaff* sysStaff = m_staves[i];
+        if (staff->show() && sysStaff->show()) {
+            return i;
+        }
+        if (i == 0) {
+            break;
+        }
+    }
+
+    return muse::nidx;
+}
+
 //---------------------------------------------------------
 //   firstVisibleStaff
 //---------------------------------------------------------

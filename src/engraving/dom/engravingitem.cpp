@@ -265,6 +265,11 @@ bool EngravingItem::offsetIsSpatiumDependent() const
     return sizeIsSpatiumDependent() || (m_flags & ElementFlag::ON_STAFF);
 }
 
+PlacementV EngravingItem::placement() const
+{
+    return flag(ElementFlag::PLACE_ABOVE) && !isSystemObjectBelowBottomStaff() ? PlacementV::ABOVE : PlacementV::BELOW;
+}
+
 //---------------------------------------------------------
 //   magS
 //---------------------------------------------------------
@@ -453,6 +458,10 @@ staff_idx_t EngravingItem::effectiveStaffIdx() const
     const System* system = toSystem(findAncestor(ElementType::SYSTEM));
     if (!system || system->vbox()) {
         return vStaffIdx();
+    }
+
+    if (isSystemObjectBelowBottomStaff()) {
+        return system->lastVisibleStaff();
     }
 
     staff_idx_t originalStaffIdx = staffIdx();
@@ -1659,6 +1668,11 @@ bool EngravingItem::isPlayable() const
     default:
         return false;
     }
+}
+
+bool EngravingItem::isSystemObjectBelowBottomStaff() const
+{
+    return systemFlag() && staff() && staff()->systemObjectsBelowBottomStaff();
 }
 
 //---------------------------------------------------------

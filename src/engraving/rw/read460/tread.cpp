@@ -3934,6 +3934,7 @@ bool TRead::readProperties(Staff* s, XmlReader& e, ReadContext& ctx)
     } else if (tag == "playbackVoice4") {
         s->setPlaybackVoice(3, e.readInt());
     } else if (TRead::readProperty(s, tag, e, ctx, Pid::SHOW_MEASURE_NUMBERS)) {
+    } else if (TRead::readProperty(s, tag, e, ctx, Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF)) {
     } else {
         return false;
     }

@@ -1547,6 +1547,8 @@ PropertyValue Staff::getProperty(Pid id) const
         return false;
     case Pid::SHOW_MEASURE_NUMBERS:
         return m_showMeasureNumbers;
+    case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
+        return m_systemObjectsBelowBottomStaff;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();
@@ -1623,6 +1625,9 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     case Pid::SHOW_MEASURE_NUMBERS:
         m_showMeasureNumbers = v.value<AutoOnOff>();
         break;
+    case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
+        m_systemObjectsBelowBottomStaff = v.toBool();
+        break;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         break;
@@ -1658,6 +1663,8 @@ PropertyValue Staff::propertyDefault(Pid id) const
         return Spatium(0.0);
     case Pid::SHOW_MEASURE_NUMBERS:
         return AutoOnOff::AUTO;
+    case Pid::SYSTEM_OBJECTS_BELOW_BOTTOM_STAFF:
+        return false;
     default:
         LOGD("unhandled id <%s>", propertyName(id));
         return PropertyValue();

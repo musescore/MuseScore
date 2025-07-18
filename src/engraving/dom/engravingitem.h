@@ -121,7 +121,7 @@ enum class ElementFlag {
     ENABLED                = 0x04000000,      // used for segments
     EMPTY                  = 0x08000000,
     WRITTEN                = 0x10000000,
-    END_OF_MEASURE_CHANGE         = 0x20000000
+    END_OF_MEASURE_CHANGE  = 0x20000000,
 };
 
 typedef muse::Flags<ElementFlag> ElementFlags;
@@ -226,7 +226,7 @@ public:
     void setSizeIsSpatiumDependent(bool v) { setFlag(ElementFlag::SIZE_SPATIUM_DEPENDENT, !v); }
     bool offsetIsSpatiumDependent() const override;
 
-    PlacementV placement() const { return PlacementV(!flag(ElementFlag::PLACE_ABOVE)); }
+    PlacementV placement() const;
     void setPlacement(PlacementV val) { setFlag(ElementFlag::PLACE_ABOVE, !bool(val)); }
     bool placeAbove() const { return placement() == PlacementV::ABOVE; }
     bool placeBelow() const { return placement() == PlacementV::BELOW; }
@@ -410,6 +410,8 @@ public:
 
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }
     void setSystemFlag(bool v) const { setFlag(ElementFlag::SYSTEM, v); }
+
+    bool isSystemObjectBelowBottomStaff() const;
 
     bool header() const { return flag(ElementFlag::HEADER); }
     void setHeader(bool v) { setFlag(ElementFlag::HEADER, v); }

@@ -22,6 +22,7 @@
 #include "roottreeitem.h"
 
 #include "parttreeitem.h"
+#include "stafftreeitem.h"
 #include "systemobjectslayertreeitem.h"
 
 using namespace mu::instrumentsscene;
@@ -73,7 +74,11 @@ void RootTreeItem::moveChildren(int sourceRow, int count, AbstractLayoutPanelTre
 void RootTreeItem::moveChildrenOnScore(const MoveParams& params)
 {
     if (params.objectsType == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER && !params.destinationObjectId.isValid()) {
-        notation()->parts()->removeSystemObjects(params.objectIdListToMove);
+        if (params.moveSysObjBelowBottomStaff) {
+            notation()->parts()->moveSystemObjectLayerBelowBottomStaff();
+        } else {
+            notation()->parts()->removeSystemObjects(params.objectIdListToMove);
+        }
         return;
     }
 
@@ -87,9 +92,15 @@ void RootTreeItem::moveChildrenOnScore(const MoveParams& params)
 
         const Staff* dstStaff = notation()->parts()->staff(params.destinationObjectId);
 
-        if (systemObjectsLayerItem && dstStaff) {
+        if (systemObjectsLayerItem && dstStaff && systemObjectsLayerItem->staff() != dstStaff) {
             notation()->parts()->moveSystemObjects(systemObjectsLayerItem->staff()->id(), dstStaff->id());
             systemObjectsLayerItem->setStaff(dstStaff);
+        }
+
+        if (params.moveSysObjBelowBottomStaff) {
+            notation()->parts()->moveSystemObjectLayerBelowBottomStaff();
+        } else if (params.moveSysObjAboveBottomStaff) {
+            notation()->parts()->moveSystemObjectLayerAboveBottomStaff();
         }
     } else {
         notation()->parts()->moveParts(params.objectIdListToMove, params.destinationObjectId, params.insertMode);
@@ -142,12 +153,27 @@ MoveParams RootTreeItem::buildSystemObjectsMoveParams(int sourceRow, int count, 
 {
     const AbstractLayoutPanelTreeItem* srcItem = childAtRow(sourceRow);
     const AbstractLayoutPanelTreeItem* dstItem = childAtRow(destinationRow);
-    if (!srcItem || !dstItem) {
+    if (!srcItem) {
         return {};
     }
 
     const Staff* srcStaff = nullptr;
     const Staff* dstStaff = nullptr;
+
+    if (srcItem->type() == LayoutPanelItemType::SYSTEM_OBJECTS_LAYER && destinationRow >= children().size()) {
+        srcStaff = static_cast<const SystemObjectsLayerTreeItem*>(srcItem)->staff();
+        dstStaff = srcStaff->score()->staves().back();
+        MoveParams moveParams;
+        moveParams.objectsType = LayoutPanelItemType::SYSTEM_OBJECTS_LAYER;
+        moveParams.objectIdListToMove.push_back(srcStaff->id());
+        moveParams.destinationObjectId = dstStaff->id();
+        moveParams.moveSysObjBelowBottomStaff = true;
+        return moveParams;
+    }
+
+    if (!dstItem) {
+        return {};
+    }
 
     auto resolveDstStaff = [](const AbstractLayoutPanelTreeItem* item) -> const Staff* {
         if (item) {
@@ -183,6 +209,9 @@ MoveParams RootTreeItem::buildSystemObjectsMoveParams(int sourceRow, int count, 
     moveParams.objectIdListToMove.push_back(srcStaff->id());
     if (dstStaff) {
         moveParams.destinationObjectId = dstStaff->id();
+    }
+    if (srcStaff->systemObjectsBelowBottomStaff() && destinationRow < sourceRow) {
+        moveParams.moveSysObjAboveBottomStaff = true;
     }
 
     return moveParams;

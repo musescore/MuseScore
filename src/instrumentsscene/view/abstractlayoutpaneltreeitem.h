@@ -37,10 +37,13 @@ struct MoveParams {
     muse::ID destinationObjectId;
     LayoutPanelItemType::ItemType objectsType = LayoutPanelItemType::UNDEFINED;
     notation::INotationParts::InsertMode insertMode = notation::INotationParts::InsertMode::Before;
+    bool moveSysObjBelowBottomStaff = false;
+    bool moveSysObjAboveBottomStaff = false;
 
     bool isValid() const
     {
-        return !objectIdListToMove.empty() && destinationObjectId.isValid() && objectsType != LayoutPanelItemType::UNDEFINED;
+        return !objectIdListToMove.empty() && (destinationObjectId.isValid() || moveSysObjBelowBottomStaff)
+               && objectsType != LayoutPanelItemType::UNDEFINED;
     }
 };
 
