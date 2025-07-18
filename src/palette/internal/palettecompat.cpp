@@ -103,6 +103,23 @@ void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* pa
         element.reset(newPedal);
         return;
     }
+
+    if (item->isFretDiagram()) {
+        FretDiagram* newFretDiagram = Factory::createFretDiagram(paletteScore->dummy()->segment());
+        FretDiagram* oldFretDiagram = toFretDiagram(item);
+
+        String harmonyName = oldFretDiagram->harmonyText();
+
+        if (harmonyName.empty()) {
+            newFretDiagram->clear();
+        } else {
+            newFretDiagram->setHarmony(harmonyName);
+            newFretDiagram->updateDiagram(harmonyName);
+        }
+
+        element.reset(newFretDiagram);
+        return;
+    }
 }
 
 void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
