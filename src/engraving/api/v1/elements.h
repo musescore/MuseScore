@@ -2023,6 +2023,12 @@ public:
     QQmlListProperty<EngravingItem> brackets() { return wrapContainerProperty<EngravingItem>(this, staff()->brackets()); }
     /// \endcond
 
+    /// The current clef type at a given tick in the score, one of
+    /// PluginAPI::PluginAPI::ClefType values.
+    /// \param tick Tick location in the score, as a fraction.
+    /// \see PluginAPI::PluginAPI::ClefType
+    /// \since MuseScore 4.6
+    Q_INVOKABLE int clefType(apiv1::FractionWrapper* tick);
     /// The current timestretch factor at a given tick in the score, i.e. the
     /// ratio of the local time signature over the global time signature.
     /// \param tick Tick location in the score, as a fraction.
@@ -2033,9 +2039,9 @@ public:
     /// \since MuseScore 4.6
     Q_INVOKABLE EngravingItem* timeSig(apiv1::FractionWrapper* tick);
     /// The current written key at a given tick in the score, one of
-    /// PluginAPI::PLuginAPI::Key values.
+    /// PluginAPI::PluginAPI::Key values.
     /// \param tick Tick location in the score, as a fraction.
-    /// \see PluginAPI::PLuginAPI::Key
+    /// \see PluginAPI::PluginAPI::Key
     /// \since MuseScore 4.6
     Q_INVOKABLE int key(apiv1::FractionWrapper* tick);
     /// The transposition at a given tick in the score, active if the
