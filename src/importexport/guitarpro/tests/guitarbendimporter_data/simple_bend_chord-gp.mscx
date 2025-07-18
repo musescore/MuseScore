@@ -118,7 +118,9 @@
             </Tempo>
           <Chord>
             <eid>N_N</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>O_O</eid>
               <Accidental>
@@ -141,7 +143,9 @@
             </Chord>
           <Chord>
             <eid>Q_Q</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>R_R</eid>
               <Accidental>
@@ -169,7 +173,9 @@
             </Beam>
           <Chord>
             <eid>U_U</eid>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>V_V</eid>
               <pitch>62</pitch>
@@ -276,7 +282,9 @@
           <Chord>
             <eid>g_g</eid>
             <linkedTo>N_N</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>h_h</eid>
               <linkedTo>O_O</linkedTo>
@@ -301,7 +309,9 @@
           <Chord>
             <eid>j_j</eid>
             <linkedTo>Q_Q</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>k_k</eid>
               <linkedTo>R_R</linkedTo>
@@ -326,7 +336,9 @@
           <Chord>
             <eid>m_m</eid>
             <linkedTo>U_U</linkedTo>
+            <durationType>eighth</durationType>
             <grace8after/>
+            <noStem>1</noStem>
             <Note>
               <eid>n_n</eid>
               <linkedTo>V_V</linkedTo>

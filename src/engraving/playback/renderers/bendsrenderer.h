@@ -46,11 +46,10 @@ private:
     using BendTimeFactorMap = std::map<muse::mpe::timestamp_t, BendTimeFactors>;
 
     static void renderMultibend(const Note* startNote, const RenderingContext& startNoteCtx, muse::mpe::PlaybackEventList& result);
-    static void renderGraceAndPrincipalNotes(const Note* graceNote, const Note* principalNote, const RenderingContext& ctx,
-                                             muse::mpe::PlaybackEventList& result);
+    static void renderNote(const Note* note, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result);
     static void renderGraceNote(const Note* note, const GraceChordCtx& ctx, muse::mpe::PlaybackEventList& result);
 
-    static void appendBendTimeFactors(const Score* score, const GuitarBend* bend, BendTimeFactorMap& timeFactorMap);
+    static void appendBendTimeFactors(const GuitarBend* bend, const muse::mpe::timestamp_t timestamp, BendTimeFactorMap& timeFactorMap);
 
     static RenderingContext buildRenderingContext(const Note* note, const RenderingContext& initialCtx);
     static muse::mpe::NoteEvent buildSlightNoteEvent(const Note* note, const RenderingContext& ctx);
